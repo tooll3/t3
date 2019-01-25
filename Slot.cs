@@ -1,6 +1,6 @@
 using System;
-using System.Data;
-using System.Linq;
+using SharpDX;
+
 
 namespace Tooll.Core.PullVariant
 {
@@ -9,64 +9,80 @@ namespace Tooll.Core.PullVariant
     {
     }
 
-    class Slot<T>
+//    public abstract class OperatorBaseAttribute : Attribute
+//    {
+//    }
+
+    public class OperatorAttribute : Attribute
+    {
+        public enum OperatorType
+        {
+            Input,
+            Output
+        }
+
+        public OperatorAttribute(Type type)
+        {
+            Type = type;
+        }
+
+        protected OperatorAttribute()
+        {
+        }
+
+        public Type Type { get; set; }
+
+    }
+
+    public class Slot<T>
     {
         protected static Action<EvaluationContext> EmptyUpdateAction = delegate { };
-        //public event EventHandler<bool> ChangedEvent;
-/*
-        public Slot()
-        {
-            _updateAction = _emptyUpdateAction;
-        }
-*/
+
+        public T Value;// { get; set; }
+        public string Name { get; set; }
+        public bool IsDirty { get; set; } = true;
+
+        public Slot() { }
 
         public Slot(Action<EvaluationContext> updateAction)
         {
             UpdateAction = updateAction;
         }
 
+        public Slot(Action<EvaluationContext> updateAction, T defaultValue)
+        {
+            UpdateAction = updateAction;
+            Value = defaultValue;
+        }
+
         public Slot(T defaultValue)
         {
+            UpdateAction = EmptyUpdateAction;
             Value = defaultValue;
         }
 
         public T GetValue(EvaluationContext context)
         {
-            UpdateAction(context);
+            if (IsDirty)
+            {
+                UpdateAction(context);
+                IsDirty = false;
+            }
             return Value;
         }
 
-        //private bool _changed;
-        //public bool Changed
-        //{
-        //    get { return _changed; }
-        //    set
-        //    {
-        //        _changed = value;
-        //        if (Changed && ChangedEvent != null)
-        //        {
-        //            ChangedEvent(this, true);
-        //        }
-        //    }
-        //}
-
-        protected Action<EvaluationContext> UpdateAction;
-        private T _value;
-
-        public T Value
-        {
-            get => _value;
-            set
-            {
-                _value = value;
-                //Changed = true;
-            }
-        }
+        public Action<EvaluationContext> UpdateAction;
     }
 
 
-    class InputSlot<T> : Slot<T>
+    interface IInputSlot
     {
+    }
+
+
+    public class InputSlot<T> : Slot<T>, IInputSlot
+    {
+
         public InputSlot(T defaultValue)
             : base(defaultValue)
         {
@@ -81,40 +97,64 @@ namespace Tooll.Core.PullVariant
             }
         }
 
-        public Slot<T> Input { get; set; }
+        private Slot<T> _input;
+        public Slot<T> Input
+        {
+            get => _input;
+            set
+            {
+                _input = value;
+                IsDirty = true;
+            }
+        }
     }
 
-    class TestOperator
-    {
-        //
-        public Slot<float> Result { get; }
 
-        public TestOperator()
+    public class Size2Slot : InputSlot<Size2>
+    {
+        public Size2Slot(Size2 defaultValue)
+            : base(defaultValue)
         {
-            Result = new Slot<float>(Update) { Value = 17.0f };
-            Count = new InputSlot<int>(1);
-            Bla = new InputSlot<string>("hahaha");
-            IntArray = new InputSlot<int[]>(new [] {1,2,3,4,5,6});
+            UpdateAction = Update;
         }
+
+        public new void Update(EvaluationContext context)
+        {
+            if (Input != null)
+                Value = Input.GetValue(context);
+            else
+            {
+                if (Width.Input != null)
+                    Value.Width = Width.GetValue(context);
+                if (Height.Input != null)
+                    Value.Height = Height.GetValue(context);
+            }
+        }
+
+        public InputSlot<int> Width  = new InputSlot<int>(0);
+        public InputSlot<int> Height = new InputSlot<int>(0);
+    }
+
+
+    public class ConverterSlot<TFrom, TTo> : Slot<TTo> 
+    {
+        readonly Func<TFrom, TTo> _converterFunc;
+
+        public ConverterSlot(Slot<TFrom> sourceSlot, Func<TFrom, TTo> converterFunc)                                                                            
+        {
+            UpdateAction = Update;
+            SourceSlot = sourceSlot;
+            //var floatToInt = new Converter2<float, int>(f => (int)f);
+            _converterFunc = converterFunc;
+        }
+
+        private Slot<TFrom> SourceSlot { get; }
 
         public void Update(EvaluationContext context)
         {
-            // Result.Value = Count.GetValue(context) * (Bla.GetValue(context) == "Hallo" ? 1 : 2)*IntArray.GetValue(context).Sum();
-            // or
-            Count.Update(context);
-            Bla.Update(context);
-            IntArray.Update(context);
-            Result.Value = Count.Value*(Bla.Value == "Hallo" ? 1 : 2)*IntArray.Value.Sum();
+            Value = _converterFunc(SourceSlot.GetValue(context));
         }
-
-        //[Operator.Input]
-        public InputSlot<int> Count { get; }
-
-        //[Operator.Input]
-        public InputSlot<string> Bla { get; }
-
-        //[Operator.Input]
-        public InputSlot<int[]> IntArray { get; }
     }
+
 
 }
