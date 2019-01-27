@@ -97,9 +97,9 @@ namespace OperatorTests
         {
             public struct Ring
             {
-                public float Thickness;
-                public float Radius;
-                public int Count;
+                //public float Thickness;
+                //public float Radius;
+                //public int Count;
             }
 
             public enum RingAttributes
@@ -381,7 +381,7 @@ namespace OperatorTests
 
             public InputSlot<AttributeList> AttributeListInput = new InputSlot<AttributeList>(null);
             public InputSlot<string> AttributeName = new InputSlot<string>("<new attribute>");
-            private int _attributeIndex = -1;
+            //private int _attributeIndex = -1;
             public InputSlot<Action<AttributeList>> AttributeValueSetter = new InputSlot<Action<AttributeList>>(default);
         }
 
@@ -415,7 +415,6 @@ namespace OperatorTests
 
             EvaluationContext context = new EvaluationContext();
             var value = setAttrOp.Output.GetValue(context);
-            int blal = 0;
         }
 
     }
