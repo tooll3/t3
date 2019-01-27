@@ -137,12 +137,12 @@ namespace T3Tests
         private ResourceManager(Device device)
         {
             _device = device;
-            _hlslFileWatcher = new FileSystemWatcher(@"c:\Users\cynic\dev\t3-tests", "*.hlsl");
+            _hlslFileWatcher = new FileSystemWatcher(@"..\..\Resources", "*.hlsl");
             _hlslFileWatcher.Changed += OnChanged;
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // creation time needed for visual studio (2017)
             _hlslFileWatcher.EnableRaisingEvents = true;
 
-            _textureFileWatcher = new FileSystemWatcher(@"c:\Users\cynic\dev\t3-tests", "*.jpg");//"*.png|*.jpg|*.dds|*.tiff");
+            _textureFileWatcher = new FileSystemWatcher(@"..\..\Resources", "*.jpg");//"*.png|*.jpg|*.dds|*.tiff");
             _textureFileWatcher.Changed += OnChanged;
             _textureFileWatcher.Created += OnChanged;
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;

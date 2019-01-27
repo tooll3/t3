@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
@@ -302,11 +303,13 @@ namespace T3Tests
 
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
-            //resourceManager.CreateVertexShader(@"c:\Users\cynic\dev\t3-tests\vs-fullscreen-tri-pos-only.hlsl", "main", "vs-fullscreen-tri-pos-only");
-            //resourceManager.CreatePixelShader(@"c:\Users\cynic\dev\t3-tests\ps-pos-only-fixed-color.hlsl", "main", "ps-pos-only-fixed-color");
-            Guid vsId = resourceManager.CreateVertexShader(@"c:\Users\cynic\dev\t3-tests\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture");
-            Guid psId = resourceManager.CreatePixelShader(@"c:\Users\cynic\dev\t3-tests\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture");
-            (Guid texId, Guid srvId) = resourceManager.CreateTextureFromFile(@"c:\Users\cynic\dev\t3-tests\chipmunk.jpg");
+            //resourceManager.CreateVertexShader(@"..\..\Resources\\vs-fullscreen-tri-pos-only.hlsl", "main", "vs-fullscreen-tri-pos-only");
+            //resourceManager.CreatePixelShader(@"..\..\Resources\\ps-pos-only-fixed-color.hlsl", "main", "ps-pos-only-fixed-color");
+            var di = new DirectoryInfo(".");
+            System.Console.WriteLine(di.FullName);
+            Guid vsId = resourceManager.CreateVertexShader(@"..\..\Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture");
+            Guid psId = resourceManager.CreatePixelShader(@"..\..\Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture");
+            (Guid texId, Guid srvId) = resourceManager.CreateTextureFromFile(@"..\..\Resources\chipmunk.jpg");
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
