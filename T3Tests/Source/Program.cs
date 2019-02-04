@@ -22,6 +22,9 @@ using Device = SharpDX.Direct3D11.Device;
 using Tooll.Core.PullVariant;
 using Color = SharpDX.Color;
 using Vector3 = SharpDX.Vector3;
+using Vector2 = System.Numerics.Vector2;
+using Vector4 = System.Numerics.Vector4;
+using t3.graph;
 
 namespace T3Tests
 {
@@ -37,18 +40,18 @@ namespace T3Tests
         public void Update(EvaluationContext context)
         {
             var desc = new Texture2DDescription()
-                       {
-                           Width = Size.GetValue(context).Width,
-                           Height = Size.GetValue(context).Height,
-                           MipLevels = MipLevels.GetValue(context),
-                           ArraySize = ArraySize.GetValue(context),
-                           Format = Format.GetValue(context),
-                           SampleDescription = new SampleDescription(SampleCount.GetValue(context), SampleQuality.GetValue(context)),
-                           Usage = Usage.GetValue(context),
-                           BindFlags = BindFlags.GetValue(context),
-                           CpuAccessFlags = CpuAccessFlags.GetValue(context),
-                           OptionFlags = OptionFlags.GetValue(context)
-                       };
+            {
+                Width = Size.GetValue(context).Width,
+                Height = Size.GetValue(context).Height,
+                MipLevels = MipLevels.GetValue(context),
+                ArraySize = ArraySize.GetValue(context),
+                Format = Format.GetValue(context),
+                SampleDescription = new SampleDescription(SampleCount.GetValue(context), SampleQuality.GetValue(context)),
+                Usage = Usage.GetValue(context),
+                BindFlags = BindFlags.GetValue(context),
+                CpuAccessFlags = CpuAccessFlags.GetValue(context),
+                OptionFlags = OptionFlags.GetValue(context)
+            };
 
             ResourceManager.Instance().CreateTexture(desc, "OpName", ref _textureResourceId, ref Result.Value);
         }
@@ -109,36 +112,36 @@ namespace T3Tests
                 case WM_RBUTTONDBLCLK:
                 case WM_MBUTTONDOWN:
                 case WM_MBUTTONDBLCLK:
-                {
-                    int button = 0;
-                    if (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_LBUTTONDBLCLK) button = 0;
-                    if (m.Msg == WM_RBUTTONDOWN || m.Msg == WM_RBUTTONDBLCLK) button = 1;
-                    if (m.Msg == WM_MBUTTONDOWN || m.Msg == WM_MBUTTONDBLCLK) button = 2;
-                    // TODO
-                    //if (!ImGui.IsAnyMouseDown() && ::GetCapture() == NULL)
-                    //    ::SetCapture(hwnd);
-                    io.MouseDown[button] = true;
-                    return;
-                }
+                    {
+                        int button = 0;
+                        if (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_LBUTTONDBLCLK) button = 0;
+                        if (m.Msg == WM_RBUTTONDOWN || m.Msg == WM_RBUTTONDBLCLK) button = 1;
+                        if (m.Msg == WM_MBUTTONDOWN || m.Msg == WM_MBUTTONDBLCLK) button = 2;
+                        // TODO
+                        //if (!ImGui.IsAnyMouseDown() && ::GetCapture() == NULL)
+                        //    ::SetCapture(hwnd);
+                        io.MouseDown[button] = true;
+                        return;
+                    }
                 case WM_LBUTTONUP:
                 case WM_RBUTTONUP:
                 case WM_MBUTTONUP:
-                {
-                    int button = 0;
-                    if (m.Msg == WM_LBUTTONUP) button = 0;
-                    if (m.Msg == WM_RBUTTONUP) button = 1;
-                    if (m.Msg == WM_MBUTTONUP) button = 2;
-                    io.MouseDown[button] = false;
-                    // TODO
-                    //if (!ImGui::IsAnyMouseDown() && ::GetCapture() == hwnd)
-                    //    ::ReleaseCapture();
-                    return;
-                }
+                    {
+                        int button = 0;
+                        if (m.Msg == WM_LBUTTONUP) button = 0;
+                        if (m.Msg == WM_RBUTTONUP) button = 1;
+                        if (m.Msg == WM_MBUTTONUP) button = 2;
+                        io.MouseDown[button] = false;
+                        // TODO
+                        //if (!ImGui::IsAnyMouseDown() && ::GetCapture() == hwnd)
+                        //    ::ReleaseCapture();
+                        return;
+                    }
                 case WM_MOUSEWHEEL:
-                    io.MouseWheel += (short)(((uint)m.WParam >> 16) & 0xffff)/120.0f; // TODO (float)WHEEL_DELTA;
+                    io.MouseWheel += (short)(((uint)m.WParam >> 16) & 0xffff) / 120.0f; // TODO (float)WHEEL_DELTA;
                     return;
                 case WM_MOUSEHWHEEL:
-                    io.MouseWheelH += (short)(((uint)m.WParam >> 16) & 0xffff)/120.0f; // TODO (float)WHEEL_DELTA;
+                    io.MouseWheelH += (short)(((uint)m.WParam >> 16) & 0xffff) / 120.0f; // TODO (float)WHEEL_DELTA;
                     return;
                 case WM_KEYDOWN:
                 case WM_SYSKEYDOWN:
@@ -167,7 +170,7 @@ namespace T3Tests
             ImGuiIOPtr io = ImGui.GetIO();
             if (((uint)io.ConfigFlags & (uint)ImGuiConfigFlags.NoMouseCursorChange) > 0)
                 return false;
-            
+
             ImGuiMouseCursor imgui_cursor = ImGui.GetMouseCursor();
             if (imgui_cursor == ImGuiMouseCursor.None || io.MouseDrawCursor)
             {
@@ -187,7 +190,7 @@ namespace T3Tests
                     case ImGuiMouseCursor.ResizeNESW: Cursor.Current = Cursors.SizeNESW; break;
                     case ImGuiMouseCursor.ResizeNWSE: Cursor.Current = Cursors.SizeNWSE; break;
                     case ImGuiMouseCursor.Hand: Cursor.Current = Cursors.Hand; break;
-                }               
+                }
             }
             return true;
         }
@@ -203,7 +206,7 @@ namespace T3Tests
             public int Y;
         }
 
-        public static int LocalFunc(Globals g) { return g.X*100*g.Y; }
+        public static int LocalFunc(Globals g) { return g.X * 100 * g.Y; }
 
         public static void TestScriptDelegateWithVariables()
         {
@@ -251,26 +254,26 @@ namespace T3Tests
         [STAThread]
         private static void Main()
         {
-//             for (int bla = 0; bla < 10; bla++)
-//             {
-//                 TestScriptDelegateWithVariables();
-//                 TestScriptDelegateWithVariablesComparison();
-//             }
+            //             for (int bla = 0; bla < 10; bla++)
+            //             {
+            //                 TestScriptDelegateWithVariables();
+            //                 TestScriptDelegateWithVariablesComparison();
+            //             }
 
-            var form = new ImGuiDx11RenderForm("T3 ImGui Test") {ClientSize = new Size(1920, 1080)};
+            var form = new ImGuiDx11RenderForm("T3 ImGui Test") { ClientSize = new Size(1920, 1080) };
 
             // SwapChain description
             var desc = new SwapChainDescription()
-                       {
-                           BufferCount = 1,
-                           ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
+            {
+                BufferCount = 1,
+                ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
                                                                  new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                           IsWindowed = true,
-                           OutputHandle = form.Handle,
-                           SampleDescription = new SampleDescription(1, 0),
-                           SwapEffect = SwapEffect.Discard,
-                           Usage = Usage.RenderTargetOutput
-                       };
+                IsWindowed = true,
+                OutputHandle = form.Handle,
+                SampleDescription = new SampleDescription(1, 0),
+                SwapEffect = SwapEffect.Discard,
+                Usage = Usage.RenderTargetOutput
+            };
 
             // Create Device and SwapChain
             Device device;
@@ -292,6 +295,7 @@ namespace T3Tests
             context.OutputMerger.SetTargets(renderView);
 
             _controller = new ImGuiDx11Impl(device, form.Width, form.Height);
+
             form.ResizeEnd += (sender, args) =>
                               {
                                   renderView.Dispose();
@@ -319,9 +323,11 @@ namespace T3Tests
             RenderLoop.Run(form, () =>
                                  {
                                      Int64 ticks = stopwatch.ElapsedTicks;
-                                     ImGui.GetIO().DeltaTime = (float)(ticks)/Stopwatch.Frequency;
+                                     ImGui.GetIO().DeltaTime = (float)(ticks) / Stopwatch.Frequency;
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
                                      stopwatch.Restart();
+                                     InitStyle();
+
                                      ImGui.NewFrame();
 
                                      context.OutputMerger.SetTargets(renderView);
@@ -333,7 +339,9 @@ namespace T3Tests
                                          context.PixelShader.Set(psr.PixelShader);
                                      if (resourceManager.Resources[srvId] is ShaderResourceViewResource srvr)
                                          context.PixelShader.SetShaderResource(0, srvr.ShaderResourceView);
-                                    context.Draw(3, 0);
+                                     context.Draw(3, 0);
+
+                                     DrawUI();
 
                                      SubmitUI();
                                      ImGui.Render();
@@ -354,6 +362,54 @@ namespace T3Tests
             factory.Dispose();
         }
 
+
+        private static unsafe void DrawUI()
+        {
+            //ImGui.Checkbox("Override Stlye", ref _overrideStyle);
+            TableView.DrawTableView(ref _tableViewOpened);
+            canvas.Draw(ref _graphUIOpened);
+
+            if (_showDemoWindow)
+            {
+                ImGui.ShowDemoWindow(ref _showDemoWindow);
+            }
+        }
+
+        private static bool _tableViewOpened = true;
+        private static bool _graphUIOpened = true;
+        private static bool _showDemoWindow = true;
+        private static GraphCanvas canvas = new GraphCanvas();
+
+        private static unsafe void InitStyle()
+        {
+            var style = ImGui.GetStyle();
+            style.WindowRounding = 0;
+
+            style.FramePadding = new Vector2(7, 4);
+            style.ItemSpacing = new Vector2(4, 3);
+            style.ItemInnerSpacing = new Vector2(3, 2);
+            style.GrabMinSize = 2;
+            style.FrameBorderSize = 0;
+            style.WindowRounding = 3;
+            style.ChildRounding = 1;
+            style.ScrollbarRounding = 3;
+
+            style.WindowRounding = 5.3f;
+            style.FrameRounding = 2.3f;
+            style.ScrollbarRounding = 0;
+
+            style.Colors[(int)ImGuiCol.Text] = new Vector4(1, 1, 1, 0.85f);
+            style.Colors[(int)ImGuiCol.Border] = new Vector4(0, 0.00f, 0.00f, 0.97f);
+            style.Colors[(int)ImGuiCol.BorderShadow] = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
+            style.Colors[(int)ImGuiCol.FrameBg] = new Vector4(0.13f, 0.13f, 0.13f, 0.80f);
+            style.Colors[(int)ImGuiCol.FrameBgHovered] = new Vector4(0.38f, 0.38f, 0.38f, 0.40f);
+            style.Colors[(int)ImGuiCol.FrameBgActive] = new Vector4(0.00f, 0.55f, 0.8f, 1.00f);
+            style.Colors[(int)ImGuiCol.ScrollbarBg] = new Vector4(0.12f, 0.12f, 0.12f, 0.53f);
+            style.Colors[(int)ImGuiCol.ScrollbarGrab] = new Vector4(0.31f, 0.31f, 0.31f, 0.33f);
+            style.Colors[(int)ImGuiCol.ResizeGrip] = new Vector4(0.00f, 0.00f, 0.00f, 0.25f);
+        }
+
+
         private static Vector3 _clearColor = new Vector3(0.45f, 0.55f, 0.6f);
         private static bool _vsync = true;
 
@@ -362,7 +418,7 @@ namespace T3Tests
             {
                 ImGui.Begin("Stats");
                 float framerate = ImGui.GetIO().Framerate;
-                ImGui.Text($"Application average {1000.0f/framerate:0.00} ms/frame ({framerate:0.0} FPS)");
+                ImGui.Text($"Application average {1000.0f / framerate:0.00} ms/frame ({framerate:0.0} FPS)");
                 ImGui.Checkbox("VSync", ref _vsync);
                 ImGui.End();
             }
@@ -448,7 +504,7 @@ namespace T3Tests
         private static readonly byte[] _vertexShaderName = new byte[NameEditFieldSize];
         private static readonly byte[] _vertexShaderEntryPoint = new byte[NameEditFieldSize];
         private static string _vertexShaderSourceFile = string.Empty;
-        
+
         private static bool _openPixelShaderCreation = true;
         private static readonly byte[] _pixelShaderName = new byte[NameEditFieldSize];
         private static readonly byte[] _pixelShaderEntryPoint = new byte[NameEditFieldSize];
@@ -481,7 +537,7 @@ namespace T3Tests
 
                 if (ImGui.Button("New Vertex Shader"))
                 {
-                     ImGui.OpenPopup("Create Vertex Shader");
+                    ImGui.OpenPopup("Create Vertex Shader");
                     _openVertexShaderCreation = true;
                 }
 
@@ -581,7 +637,7 @@ namespace T3Tests
                 {
                     ImGui.Text(srvResource.Name);
                 }
- 
+
                 #region create shader resource view
                 if (ImGui.Button("New Shader Resource View"))
                 {
@@ -661,7 +717,7 @@ namespace T3Tests
                 {
                     ImGui.InputText("Name", _createTexture2dName, NameEditFieldSize);
                     ImGui.DragInt2("Width/Height", ref _createTexture2dDescription.Width);
-                    ImGui.DragInt("Mip Levels", ref _createTexture2dDescription.MipLevels, 1.0f, 0, (int)Math.Max(Math.Log(_createTexture2dDescription.Width)/Math.Log(2.0), Math.Log(_createTexture2dDescription.Height)/Math.Log(2.0)));
+                    ImGui.DragInt("Mip Levels", ref _createTexture2dDescription.MipLevels, 1.0f, 0, (int)Math.Max(Math.Log(_createTexture2dDescription.Width) / Math.Log(2.0), Math.Log(_createTexture2dDescription.Height) / Math.Log(2.0)));
                     ImGui.DragInt("Array Size", ref _createTexture2dDescription.ArraySize, 1.0f, 1, 2048); //D3D11_REQ_TEXTURE2D_ARRAY_AXIS_DIMENSION
                     //ImGui::Combo("Format", (int*)&textureDesc.Format, formats, IM_ARRAYSIZE(formats));
                     ImGui.DragInt("Sample Count", ref _createTexture2dDescription.SampleDescription.Count, 1.0f, 1, 16);

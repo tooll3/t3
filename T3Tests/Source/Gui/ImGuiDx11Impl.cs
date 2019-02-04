@@ -54,12 +54,15 @@ namespace T3Tests
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
 
-            ImGui.GetIO().Fonts.AddFontDefault();
+            //ImGui.GetIO().Fonts.AddFontDefault();
+            ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Fonts/Roboto-Regular.ttf", 15f);
+            ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Fonts/Roboto-Black.ttf", 14f);
+
 
             CreateDeviceObjects();
             SetKeyMappings();
 
-            SetPerFrameImGuiData(1f/60f);
+            SetPerFrameImGuiData(1f / 60f);
 
             ImGui.NewFrame();
             _frameBegun = true;
@@ -85,7 +88,7 @@ namespace T3Tests
                 _vb = new Buffer(_device,
                                  new BufferDescription()
                                  {
-                                     SizeInBytes = _vertexBufferSize*Unsafe.SizeOf<ImDrawVert>(),
+                                     SizeInBytes = _vertexBufferSize * Unsafe.SizeOf<ImDrawVert>(),
                                      Usage = ResourceUsage.Dynamic,
                                      BindFlags = BindFlags.VertexBuffer,
                                      CpuAccessFlags = CpuAccessFlags.Write
@@ -99,7 +102,7 @@ namespace T3Tests
                 _ib = new Buffer(_device,
                                  new BufferDescription()
                                  {
-                                     SizeInBytes = _indexBufferSize*Unsafe.SizeOf<ushort>(),
+                                     SizeInBytes = _indexBufferSize * Unsafe.SizeOf<ushort>(),
                                      Usage = ResourceUsage.Dynamic,
                                      BindFlags = BindFlags.IndexBuffer,
                                      CpuAccessFlags = CpuAccessFlags.Write
@@ -113,8 +116,8 @@ namespace T3Tests
             for (int n = 0; n < draw_data.CmdListsCount; n++)
             {
                 ImDrawListPtr cmd_list = draw_data.CmdListsRange[n];
-                vbStream.WriteRange(cmd_list.VtxBuffer.Data, (uint)(cmd_list.VtxBuffer.Size*Unsafe.SizeOf<ImDrawVert>()));
-                ibStream.WriteRange(cmd_list.IdxBuffer.Data, (uint)(cmd_list.IdxBuffer.Size*Unsafe.SizeOf<ushort>()));
+                vbStream.WriteRange(cmd_list.VtxBuffer.Data, (uint)(cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>()));
+                ibStream.WriteRange(cmd_list.IdxBuffer.Data, (uint)(cmd_list.IdxBuffer.Size * Unsafe.SizeOf<ushort>()));
             }
 
             vbStream.Dispose();
@@ -234,19 +237,19 @@ namespace T3Tests
 
             // Upload texture to graphics system
             var textureDesc = new Texture2DDescription()
-                              {
-                                  Width = width,
-                                  Height = height,
-                                  MipLevels = 1,
-                                  ArraySize = 1,
-                                  Format = Format.R8G8B8A8_UNorm,
-                                  SampleDescription = new SampleDescription() {Count = 1, Quality = 0},
-                                  Usage = ResourceUsage.Default,
-                                  BindFlags = BindFlags.ShaderResource,
-                                  CpuAccessFlags = CpuAccessFlags.None
-                              };
-            SharpDX.DataBox box = new SharpDX.DataBox((IntPtr)pixels, width*4, 0);
-            Texture2D texture = new Texture2D(_device, textureDesc, new[] {box});
+            {
+                Width = width,
+                Height = height,
+                MipLevels = 1,
+                ArraySize = 1,
+                Format = Format.R8G8B8A8_UNorm,
+                SampleDescription = new SampleDescription() { Count = 1, Quality = 0 },
+                Usage = ResourceUsage.Default,
+                BindFlags = BindFlags.ShaderResource,
+                CpuAccessFlags = CpuAccessFlags.None
+            };
+            SharpDX.DataBox box = new SharpDX.DataBox((IntPtr)pixels, width * 4, 0);
+            Texture2D texture = new Texture2D(_device, textureDesc, new[] { box });
             texture.DebugName = "FImgui Font Atlas";
             _fontTextureView = new ShaderResourceView(_device, texture);
             texture.Dispose();
@@ -255,16 +258,16 @@ namespace T3Tests
             io.Fonts.TexID = (IntPtr)_fontTextureView;
 
             var samplerDesc = new SamplerStateDescription()
-                              {
-                                  Filter = Filter.MinMagMipLinear,
-                                  AddressU = TextureAddressMode.Wrap,
-                                  AddressV = TextureAddressMode.Wrap,
-                                  AddressW = TextureAddressMode.Wrap,
-                                  MipLodBias = 0.0f,
-                                  ComparisonFunction = Comparison.Always,
-                                  MinimumLod = 0.0f,
-                                  MaximumLod = 0.0f
-                              };
+            {
+                Filter = Filter.MinMagMipLinear,
+                AddressU = TextureAddressMode.Wrap,
+                AddressV = TextureAddressMode.Wrap,
+                AddressW = TextureAddressMode.Wrap,
+                MipLodBias = 0.0f,
+                ComparisonFunction = Comparison.Always,
+                MinimumLod = 0.0f,
+                MaximumLod = 0.0f
+            };
             _fontSampler = new SamplerState(_device, samplerDesc);
         }
 
@@ -324,7 +327,7 @@ namespace T3Tests
             _vertexContantBuffer = new Buffer(_device,
                                               new BufferDescription()
                                               {
-                                                  SizeInBytes = 4*4*4 /*TODO sizeof(Matrix4x4)*/,
+                                                  SizeInBytes = 4 * 4 * 4 /*TODO sizeof(Matrix4x4)*/,
                                                   Usage = ResourceUsage.Dynamic,
                                                   BindFlags = BindFlags.ConstantBuffer,
                                                   CpuAccessFlags = CpuAccessFlags.Write
@@ -354,7 +357,7 @@ namespace T3Tests
                 return false;
 
             // Create the blending setup
-            var blendDesc = new BlendStateDescription() {AlphaToCoverageEnable = false, IndependentBlendEnable = false};
+            var blendDesc = new BlendStateDescription() { AlphaToCoverageEnable = false, IndependentBlendEnable = false };
             blendDesc.RenderTarget[0].IsBlendEnabled = true;
             blendDesc.RenderTarget[0].SourceBlend = BlendOption.SourceAlpha;
             blendDesc.RenderTarget[0].DestinationBlend = BlendOption.InverseSourceAlpha;
@@ -367,22 +370,22 @@ namespace T3Tests
 
             // Create the rasterizer state
             var rasterizerDesc = new RasterizerStateDescription()
-                                 {
-                                     FillMode = FillMode.Solid,
-                                     CullMode = CullMode.None,
-                                     IsScissorEnabled = true,
-                                     IsDepthClipEnabled = true
-                                 };
+            {
+                FillMode = FillMode.Solid,
+                CullMode = CullMode.None,
+                IsScissorEnabled = true,
+                IsDepthClipEnabled = true
+            };
             _rasterizerState = new RasterizerState(_device, rasterizerDesc);
 
             // Create depth-stencil State
             var depthStencilDesc = new DepthStencilStateDescription()
-                                   {
-                                       IsDepthEnabled = false,
-                                       DepthWriteMask = DepthWriteMask.All,
-                                       DepthComparison = Comparison.Always,
-                                       IsStencilEnabled = false
-                                   };
+            {
+                IsDepthEnabled = false,
+                DepthWriteMask = DepthWriteMask.All,
+                DepthComparison = Comparison.Always,
+                IsStencilEnabled = false
+            };
             depthStencilDesc.FrontFace.FailOperation =
                 depthStencilDesc.FrontFace.DepthFailOperation = depthStencilDesc.FrontFace.PassOperation = StencilOperation.Keep;
             depthStencilDesc.BackFace = depthStencilDesc.FrontFace;
@@ -422,7 +425,7 @@ namespace T3Tests
         private void SetPerFrameImGuiData(float deltaSeconds)
         {
             ImGuiIOPtr io = ImGui.GetIO();
-            io.DisplaySize = new Vector2(_windowWidth/_scaleFactor.X, _windowHeight/_scaleFactor.Y);
+            io.DisplaySize = new Vector2(_windowWidth / _scaleFactor.X, _windowHeight / _scaleFactor.Y);
             io.DisplayFramebufferScale = _scaleFactor;
             io.DeltaTime = deltaSeconds; // DeltaTime is in seconds.
         }
