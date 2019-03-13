@@ -278,7 +278,7 @@
     <Compile Include="Source\Gui\graph\Node.cs" />
     <Compile Include="Source\Gui\graph\NodeLink.cs" />
     <Compile Include="Source\Gui\ImGuiDx11Impl.cs" />
-    <Compile Include="Source\Core\Operator.cs" />
+    <Compile Include="Source\Core\Instance.cs" />
     <Compile Include="Source\Gui\iuhelpers\Color.cs" />
     <Compile Include="Source\Gui\iuhelpers\Helpers.cs" />
     <Compile Include="Source\Gui\tableview\TableView.cs" />
