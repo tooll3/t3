@@ -1,8 +1,7 @@
 using System;
 using SharpDX;
 
-
-namespace Tooll.Core.PullVariant
+namespace T3.Core.Operator
 {
 
     public class EvaluationContext
@@ -34,28 +33,41 @@ namespace Tooll.Core.PullVariant
 
     }
 
-    public class Slot<T>
+    public class Slot
+    {
+        public string Name { get; set; } = String.Empty;
+        public Type Type { get; protected set; }
+    }
+
+    public class ValueHolder<T>
+    {
+        public T Value;
+    }
+
+    public class Slot<T> : Slot
     {
         protected static Action<EvaluationContext> EmptyUpdateAction = delegate { };
 
         public T Value;// { get; set; }
-        public string Name { get; set; }
         public bool IsDirty { get; set; } = true;
 
-        public Slot() { }
+        public Slot() 
+        { 
+            Type = typeof(T);
+        }
 
-        public Slot(Action<EvaluationContext> updateAction)
+        public Slot(Action<EvaluationContext> updateAction) : this()
         {
             UpdateAction = updateAction;
         }
 
-        public Slot(Action<EvaluationContext> updateAction, T defaultValue)
+        public Slot(Action<EvaluationContext> updateAction, T defaultValue) : this()
         {
             UpdateAction = updateAction;
             Value = defaultValue;
         }
 
-        public Slot(T defaultValue)
+        public Slot(T defaultValue) : this()
         {
             UpdateAction = EmptyUpdateAction;
             Value = defaultValue;

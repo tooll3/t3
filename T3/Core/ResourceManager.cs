@@ -7,7 +7,7 @@ using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.WIC;
 
-namespace T3Tests
+namespace T3
 {
     class Resource
     {

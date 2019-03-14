@@ -1,32 +1,8 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Security.RightsManagement;
-using System.Text;
-using System.Threading.Tasks;
-using Tooll.Core.PullVariant;
 
-namespace T3Tests
+namespace T3.Core.Operator
 {
-    public class OperatorDefinitionManager : IDisposable
-    {
-        public static OperatorDefinitionManager Instance => _instance ?? (_instance = new OperatorDefinitionManager());
-        public Dictionary<Guid, Symbol> Definitions { get; } = new Dictionary<Guid, Symbol>();
-
-        public void Dispose()
-        {
-            foreach (var entry in Definitions)
-            {
-                entry.Value.Dispose();
-            }
-        }
-
-
-        private static OperatorDefinitionManager _instance;
-    }
-
     public class Symbol : IDisposable
     {
         public Guid Id { get; set; }
@@ -76,40 +52,14 @@ namespace T3Tests
 
     public class InstanceDefinition
     {
-        public Guid SymbolId { get; set; }
         public Guid InstanceId { get; set; }
         public string Name { get; set; } = string.Empty;
         public Symbol Symbol { get; internal set; }
-        public Vector2 Position { get; set; } = Vector2.Zero;
-        public Vector2 Size { get; set; } = new Vector2(100, 30);
     }
 
     public class InputDefinition : InstanceDefinition
     {
         // relevance: required, relevant, optional
         public Type Type { get; set; }
-    }
-
-    public abstract class InputAnnotation
-    {
-        public abstract void RenderImgui();
-    }
-
-    public class FloatInputAnnotation : InputAnnotation
-    {
-        public override void RenderImgui()
-        {
-        }
-    }
-
-    public class Instance : IDisposable
-    {
-        public Instance Parent { get; internal set; }
-
-        public void Dispose()
-        {
-        }
-
-        public List<Instance> Operators { get; } = new List<Instance>();
     }
 }

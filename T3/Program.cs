@@ -18,15 +18,14 @@ using SharpDX.Windows;
 using ImGuiNET;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
-
-using Tooll.Core.PullVariant;
 using Color = SharpDX.Color;
 using Vector3 = SharpDX.Vector3;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
 using t3.graph;
+using T3.Core.Operator;
 
-namespace T3Tests
+namespace T3
 {
     public class Texture2dOperator
     {

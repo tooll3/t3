@@ -11,7 +11,7 @@ using Device = SharpDX.Direct3D11.Device;
 using ImGuiNET;
 using SharpDX;
 
-namespace T3Tests
+namespace T3
 {
     public class ImGuiDx11Impl : IDisposable
     {
