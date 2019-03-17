@@ -1,6 +1,6 @@
-using System.Numerics;
 using ImGuiNET;
-using t3.graph;
+using System.Numerics;
+using t3.iuhelpers;
 
 namespace imHelpers
 {
@@ -17,31 +17,43 @@ namespace imHelpers
     /// </summary>
     class THelpers
     {
-        public static ImDrawListPtr OutlinedRect(ref ImDrawListPtr drawList, Vector2 position, Vector2 size, uint background, uint outline, float cornerRadius = 4)
+        public static ImDrawListPtr OutlinedRect(ref ImDrawListPtr drawList, Vector2 position, Vector2 size, uint fill, uint outline, float cornerRadius = 4)
         {
-            drawList.AddRectFilled(position, position + size, background, cornerRadius);
+            drawList.AddRectFilled(position, position + size, fill, cornerRadius);
             drawList.AddRect(position, position + size, outline, cornerRadius);
             return drawList;
         }
 
-
-        public static void DebugRect(Vector2 min, Vector2 max, string label = "", uint color = 0x88ffff80)
+        public static ImDrawListPtr OutlinedRect(ref ImDrawListPtr drawList, Vector2 position, Vector2 size, Color fill, Color outline, float cornerRadius = 4)
         {
-            //var overlayDrawlist = ImGui.GetOverlayDrawList();
-            //overlayDrawlist.AddRect(min, max, color);
-            //overlayDrawlist.AddText(new Vector2(min.X, max.Y), color, label);
+            drawList.AddRectFilled(position, position + size, fill.UInt, cornerRadius);
+            drawList.AddRect(position, position + size, outline.UInt, cornerRadius);
+            return drawList;
         }
 
-        public static void DebugItemRect(string label = "item", uint color = 0xff20ff80)
+        /// <summary>
+        /// Draws an overlay rectangle in screen space
+        /// </summary>
+        public static void DebugRect(Vector2 screenMin, Vector2 screenMax, string label = "", uint color = 0x88ffff80)
         {
-            // DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), label, color);
+            var overlayDrawlist = ImGui.GetOverlayDrawList();
+            overlayDrawlist.AddRect(screenMin, screenMax, color);
+            overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), color, label);
         }
 
-        public static void DebugWindowRect(string label = "window", uint color = 0xffff2080)
+        /// <summary>
+        /// Draws an outline of the current (last) Imgui item
+        /// </summary>
+        public static void DebugItemRect(string label = "", uint color = 0xff20ff80)
         {
-            // DebugRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), label, color);
+            DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), label, color);
         }
-        
+
+
+        public static void DebugWindowRect(string label = "", uint color = 0xffff2080)
+        {
+            DebugRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), label, color);
+        }
     }
 
     /// <summary>
@@ -220,8 +232,18 @@ namespace imHelpers
         }
 
         public static float Lerp(float a, float b, float t) { return (float)(a + (b - a) * t); }
+        public static Vector2 Lerp(Vector2 a, Vector2 b, float t)
+        {
+            return new Vector2(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t);
+        }
         public static double Lerp(double a, double b, double t) { return (double)(a + (b - a) * t); }
         public static int Lerp(int a, int b, float t) { return (int)(a + (b - a) * t); }
         public static void Swap<T>(ref T a, ref T b) { T tmp = a; a = b; b = tmp; }
+    }
+
+    public enum Channels
+    {
+        Background = 1,
+        Foreground = 0,
     }
 }
