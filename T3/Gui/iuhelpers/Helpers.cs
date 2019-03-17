@@ -12,6 +12,9 @@ namespace imHelpers
         public static uint ToUint(int r, int g, int b, int a = 255) { var sc = 1 / 255f; return ImGui.GetColorU32(new Vector4(r * sc, g * sc, b * sc, a * sc)); }
     }
 
+    /// <summary>
+    /// A collection of helper and debug function for IMGUI development
+    /// </summary>
     class THelpers
     {
         public static ImDrawListPtr OutlinedRect(ref ImDrawListPtr drawList, Vector2 position, Vector2 size, uint background, uint outline, float cornerRadius = 4)
@@ -24,10 +27,9 @@ namespace imHelpers
 
         public static void DebugRect(Vector2 min, Vector2 max, string label = "", uint color = 0x88ffff80)
         {
-            return;
-            var overlayDrawlist = ImGui.GetOverlayDrawList();
-            overlayDrawlist.AddRect(min, max, color);
-            overlayDrawlist.AddText(new Vector2(min.X, max.Y), color, label);
+            //var overlayDrawlist = ImGui.GetOverlayDrawList();
+            //overlayDrawlist.AddRect(min, max, color);
+            //overlayDrawlist.AddText(new Vector2(min.X, max.Y), color, label);
         }
 
         public static void DebugItemRect(string label = "item", uint color = 0xff20ff80)
@@ -39,70 +41,18 @@ namespace imHelpers
         {
             // DebugRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), label, color);
         }
-
-        // public static void DebugWindowRect(string label = "window", uint color = 0xffff2080)
-        // {
-        //     DebugRect(ImGui.GetFrameHeight(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), label, color);
-        // }
-
-        /*
-                  public static Vector2 HandleDrag(Rect clipRect, int objectId, int button = 0, Action<Vector2> OnDragStart = null, Action<Vector2, Vector2> OnDrag = null, Action<Vector2> OnRelease = null)
-                  {
-                      var delta = Vector2.zero;
-                      var e = Event.current;
-                      if (e.button != button)
-                          return delta;
-
-                      switch (e.type)
-                      {
-                          case EventType.MouseDown:
-                              if (clipRect.Contains(e.mousePosition))
-                              {
-                                  OnDragStart?.Invoke(e.mousePosition);
-                                  _draggedObjecId = objectId;
-                                  _dragStartPosition = e.mousePosition;
-                                  e.Use();
-                              }
-
-                              break;
-
-                          case EventType.MouseDrag:
-                              if (_draggedObjecId == objectId)
-                              {
-                                  delta = e.delta;
-                                  OnDrag?.Invoke(e.mousePosition - _dragStartPosition, e.delta);
-                                  e.Use();
-                              }
-
-                              break;
-
-                          case EventType.MouseUp:
-                              if (_draggedObjecId == objectId)
-                              {
-                                  OnRelease?.Invoke(e.mousePosition - _dragStartPosition);
-
-                                  _draggedObjecId = 0;
-                                  e.Use();
-                              }
-                              break;
-                      }
-
-                      return delta;
-                  }
-
-                  private static int _draggedObjecId = 0;
-                   */
+        
     }
 
     /// <summary>
-    ///2D axis aligned bounding-box
+    /// 2D axis aligned bounding-box. It's a port of IMGUIs internal class.
+    /// FIXME: this should be replaced with a .net Rect-Class
     /// </summary>
     struct ImRect
     {
         public Vector2 Min;    // Upper-left
         public Vector2 Max;    // Lower-right
 
-        //ImRect() : Min(FLT_MAX, FLT_MAX), Max(-FLT_MAX,-FLT_MAX) { }
         public ImRect(Vector2 min, Vector2 max)
         {
             Min = min; Max = max;

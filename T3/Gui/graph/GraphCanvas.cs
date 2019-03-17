@@ -1,8 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
 using ImGuiNET;
 using imHelpers;
+using System.Collections.Generic;
+using System.Numerics;
 using t3.iuhelpers;
 
 namespace t3.graph
@@ -12,28 +11,6 @@ namespace t3.graph
     /// </summary>
     class GraphCanvas
     {
-        bool _contextMenuOpened = false;
-
-        List<Node> _nodes = new List<Node>();
-        List<NodeLink> _links = new List<NodeLink>();
-
-        bool _initialized = false;
-        bool _gridVisible = true;
-        ImDrawListPtr _overlayDrawList;
-        Vector2 _size;
-        Vector2 _mouse;
-
-        public ImDrawListPtr _drawList;
-        private Vector2 _scroll = new Vector2(0.0f, 0.0f);
-        public Vector2 _canvasPos;
-        public float _scale = 1; //the damped scale factor {read only}
-        float _scaleTarget = 1;
-
-        bool _debugFlag;
-        string _debugMessages = "";
-        ImGuiIOPtr _io;
-
-
         public void Draw(ref bool opened)
         {
             if (!ImGui.Begin("Example", ref opened)) { ImGui.End(); return; }
@@ -80,7 +57,6 @@ namespace t3.graph
             ImGui.EndChild();
         }
 
-        private NodeLink _linkUnderConstruction;
 
         public void StartLinkFromInput(Node nodeWithInput, int inputSlotIndex)
         {
@@ -325,6 +301,7 @@ namespace t3.graph
             return posOnCanvas * _scale + _scroll + _canvasPos;
         }
 
+
         public Vector2 GetChildPosFrom(Vector2 posOnCanvas)
         {
             return posOnCanvas * _scale + _scroll;
@@ -371,7 +348,28 @@ namespace t3.graph
             _links.Add(new NodeLink(1, 0, 2, 1));
             _initialized = true;
         }
+
+        private NodeLink _linkUnderConstruction;
+
+        bool _contextMenuOpened = false;
+
+        List<Node> _nodes = new List<Node>();
+        List<NodeLink> _links = new List<NodeLink>();
+
+        bool _initialized = false;
+        bool _gridVisible = true;
+        ImDrawListPtr _overlayDrawList;
+        Vector2 _size;
+        Vector2 _mouse;
+
+        public ImDrawListPtr _drawList;
+        private Vector2 _scroll = new Vector2(0.0f, 0.0f);
+        public Vector2 _canvasPos;
+        public float _scale = 1; //the damped scale factor {read only}
+        float _scaleTarget = 1;
+
+        bool _debugFlag;
+        string _debugMessages = "";
+        ImGuiIOPtr _io;
     }
 }
-
-
