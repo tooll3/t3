@@ -1,7 +1,7 @@
-using System;
-using System.Numerics;
 using ImGuiNET;
 using imHelpers;
+using System;
+using System.Numerics;
 using t3.iuhelpers;
 
 namespace t3.graph
@@ -10,26 +10,29 @@ namespace t3.graph
     {
         public static void DrawOnCanvas(Node node, GraphCanvas canvas)
         {
-            canvas._drawList.ChannelsSplit(2);
-            canvas._drawList.ChannelsSetCurrent(1); // Foreground
-            var NODE_WINDOW_PADDING = new Vector2(10.0f, 2.0f);
-
             ImGui.PushID(node.ID);
+            canvas._drawList.ChannelsSplit(2);
+            canvas._drawList.ChannelsSetCurrent((int)Channels.Foreground);
 
-            var minPos = canvas.GetChildPosFrom(node.Pos);
+            var nodeTopLeft = canvas.GetChildPosFrom(node.Pos);
 
-            ImGui.SetCursorPos(minPos);
+            ImGui.SetCursorPos(nodeTopLeft);
             ImGui.Text(String.Format($"{node.Name}"));
 
-            canvas._drawList.ChannelsSetCurrent(0); // Background
+            canvas._drawList.ChannelsSetCurrent((int)Channels.Background);
 
             DrawSlots(node, canvas);
 
-            ImGui.SetCursorPos(minPos);
-
-
+            ImGui.SetCursorPos(nodeTopLeft);
             ImGui.InvisibleButton("node", node.Size * canvas._scale);
+            THelpers.OutlinedRect(ref canvas._drawList, nodeTopLeft + canvas._canvasPos, node.Size * canvas._scale,
+                fill: new Color(node.IsSelected || ImGui.IsItemHovered() ? 0.3f : 0.2f),
+                outline: node.IsSelected ? Color.White : Color.Black);
 
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            }
 
             if (ImGui.IsItemActive())
             {
@@ -37,13 +40,8 @@ namespace t3.graph
                 {
                     node.Pos = node.Pos + ImGui.GetIO().MouseDelta;
                 }
-                // node.IsSelected = true;
+                node.IsSelected = true;
             }
-
-            THelpers.OutlinedRect(ref canvas._drawList, minPos + canvas._canvasPos, node.Size * canvas._scale,
-                background: node.IsSelected ? new Color(0.3f).ToUint() : new Color(0.2f).ToUint(),
-                outline: node.IsSelected ? Color.Blue.ToUint() : Color.Black.ToUint());
-
 
             ImGui.PopID();
             canvas._drawList.ChannelsMerge();
@@ -60,7 +58,6 @@ namespace t3.graph
                 var itemPos = canvas.GetChildPosFrom(pOnCanvas);
                 ImGui.SetCursorPos(itemPos);
                 ImGui.InvisibleButton("input" + slot_idx, new Vector2(10, 10));
-                THelpers.DebugItemRect();
 
                 if (ImGui.IsItemHovered() && ImGui.IsItemClicked(0))
                 {
@@ -72,7 +69,6 @@ namespace t3.graph
                     canvas.CompleteLinkToInput(node, slot_idx);
                 }
 
-
                 var col = ImGui.IsItemHovered() ? TColors.ToUint(150, 150, 150, 150) : Color.Red.ToUint();
                 canvas._drawList.AddCircleFilled(canvas.GetScreenPosFrom(pOnCanvas), NODE_SLOT_RADIUS, col);
             }
@@ -83,7 +79,7 @@ namespace t3.graph
                 var itemPos = canvas.GetChildPosFrom(pOnCanvas);
                 ImGui.SetCursorPos(itemPos);
                 ImGui.InvisibleButton("input" + slot_idx, new Vector2(10, 10));
-                THelpers.DebugItemRect();
+                //THelpers.DebugItemRect();
 
                 if (ImGui.IsItemHovered() && ImGui.IsItemClicked(0))
                 {
@@ -99,5 +95,53 @@ namespace t3.graph
                 canvas._drawList.AddCircleFilled(canvas.GetScreenPosFrom(pOnCanvas), NODE_SLOT_RADIUS, col);
             }
         }
+
+
+        // // Open context menu
+        // if (!ImGui.IsAnyItemHovered() && ImGui.IsWindowHovered() && ImGui.IsMouseClicked(1))
+        // {
+        //     _selectedNodeID = _hoveredListNodeIndex = _hoveredSceneNodeIndex = -1;
+        //     _contextMenuOpened = true;
+        // }
+
+        // if (_contextMenuOpened)
+        // {
+        //     ImGui.OpenPopup("context_menu");
+        //     if (_hoveredListNodeIndex != -1)
+        //         _selectedNodeID = _hoveredListNodeIndex;
+
+        //     if (_hoveredSceneNodeIndex != -1)
+        //         _selectedNodeID = _hoveredSceneNodeIndex;
+        // }
+
+        // // Draw context menu
+        // ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
+        // if (ImGui.BeginPopup("context_menu"))
+        // {
+        //     Vector2 scene_pos = ImGui.GetMousePosOnOpeningCurrentPopup() - scrollOffset;
+        //     var isANodeSelected = _selectedNodeID != -1;
+        //     if (isANodeSelected)
+        //     {
+        //         var node = _nodes[_selectedNodeID];
+        //         ImGui.Text("Node '{node.Name}'");
+        //         ImGui.Separator();
+        //         if (ImGui.MenuItem("Rename..", null, false, false)) { }
+        //         if (ImGui.MenuItem("Delete", null, false, false)) { }
+        //         if (ImGui.MenuItem("Copy", null, false, false)) { }
+        //     }
+        //     else
+        //     {
+        //         if (ImGui.MenuItem("Add")) { _nodes.Add(new Node(_nodes.Count, "New node", scene_pos, 0.5f, new Vector4(0.5f, 0.5f, 0.5f, 1), 2, 2)); }
+        //         if (ImGui.MenuItem("Paste", null, false, false)) { }
+        //     }
+        //     ImGui.EndPopup();
+        // }
+        // ImGui.PopStyleVar();
+
+        // Scrolling
+        // if (ImGui.IsWindowHovered() && !ImGui.IsAnyItemActive() && ImGui.IsMouseDragging(2, 0.0f))
+        //     _scroll = _scroll + ImGui.GetIO().MouseDelta;
+
+        // ImGui.PopItemWidth();
     }
 }

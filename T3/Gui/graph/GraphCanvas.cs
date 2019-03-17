@@ -122,7 +122,9 @@ namespace t3.graph
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
                 ImGui.PushStyleColor(ImGuiCol.WindowBg, TColors.ToUint(60, 60, 70, 200));
 
-                _scale = Im.Lerp(_scale, _scaleTarget, _io.DeltaTime * 5);
+                // Damp scaling
+                _scale = Im.Lerp(_scale, _scaleTarget, _io.DeltaTime * 20);
+                _scroll = Im.Lerp(_scroll, _scrollTarget, _io.DeltaTime * 20);
 
                 THelpers.DebugWindowRect("window");
                 ImGui.BeginChild("scrolling_region", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
@@ -135,31 +137,34 @@ namespace t3.graph
                     // Canvas interaction --------------
                     if (ImGui.IsWindowHovered())
                     {
-                        if (ImGui.IsMouseDragging(0))
-                            _scroll += _io.MouseDelta;
+                        if (ImGui.IsMouseDragging(1))
+                        {
+                            _scrollTarget += _io.MouseDelta;
+                        }
 
                         // Zoom with mouse wheel
+                        if (_io.MouseWheel != 0)
                         {
-                            Vector2 focusCenter = (_mouse - _scroll - _canvasPos) / _scale;
+                            const float zoomSpeed = 1.2f;
+                            var focusCenter = (_mouse - _scroll - _canvasPos) / _scale;
+
                             _overlayDrawList.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.Red.ToUint());
 
                             if (_io.MouseWheel < 0.0f)
-                                for (float zoom = _io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
-                                    _scaleTarget = Im.Max(0.3f, _scaleTarget / 1.05f);
+                            {
+                                _scaleTarget = Im.Max(0.3f, _scaleTarget / zoomSpeed);
+                            }
 
                             if (_io.MouseWheel > 0.0f)
-                                for (float zoom = _io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
-                                    _scaleTarget = Im.Min(3.0f, _scaleTarget * 1.05f);
+                            {
+                                _scaleTarget = Im.Min(3.0f, _scaleTarget * zoomSpeed);
+                            }
 
-                            Vector2 shift = _scroll + (focusCenter * _scale);
-                            _scroll += _mouse - shift - _canvasPos;
-
-                            ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
+                            Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
+                            _scrollTarget += _mouse - shift - _canvasPos;
                         }
 
-                        // if (ImGui.IsMouseReleased(1))
-                        //     if (_io.MouseDragMaxDistanceSqr[1] < (_io.MouseDragThreshold * _io.MouseDragThreshold))
-                        //         ImGui.OpenPopup("NodesContextMenu");
+                        ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
                     }
 
                     // Draw Grid ------------
@@ -185,67 +190,17 @@ namespace t3.graph
                     // Draw links
                     DrawLinks();
 
-                    // ImGui.PushItemWidth(120.0f);
                     // Draw nodes
                     foreach (var node in _nodes)
                     {
                         GraphNode.DrawOnCanvas(node, this);
                     }
 
-                    THelpers.DebugItemRect("Last Node");
-                    THelpers.DebugRect(ImGui.GetWindowContentRegionMin(), ImGui.GetWindowContentRegionMax(), "contentRegion");
-
                     _debugMessages += ImGui.IsAnyItemHovered() ? "anyItemHovered " : "";
                     _debugMessages += ImGui.IsWindowHovered() ? "isWindowHovered " : "";
                     _debugMessages += ImGui.IsItemHovered() ? "isWindowHovered " : "";
 
 
-                    // // Open context menu
-                    // if (!ImGui.IsAnyItemHovered() && ImGui.IsWindowHovered() && ImGui.IsMouseClicked(1))
-                    // {
-                    //     _selectedNodeID = _hoveredListNodeIndex = _hoveredSceneNodeIndex = -1;
-                    //     _contextMenuOpened = true;
-                    // }
-
-                    // if (_contextMenuOpened)
-                    // {
-                    //     ImGui.OpenPopup("context_menu");
-                    //     if (_hoveredListNodeIndex != -1)
-                    //         _selectedNodeID = _hoveredListNodeIndex;
-
-                    //     if (_hoveredSceneNodeIndex != -1)
-                    //         _selectedNodeID = _hoveredSceneNodeIndex;
-                    // }
-
-                    // // Draw context menu
-                    // ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
-                    // if (ImGui.BeginPopup("context_menu"))
-                    // {
-                    //     Vector2 scene_pos = ImGui.GetMousePosOnOpeningCurrentPopup() - scrollOffset;
-                    //     var isANodeSelected = _selectedNodeID != -1;
-                    //     if (isANodeSelected)
-                    //     {
-                    //         var node = _nodes[_selectedNodeID];
-                    //         ImGui.Text("Node '{node.Name}'");
-                    //         ImGui.Separator();
-                    //         if (ImGui.MenuItem("Rename..", null, false, false)) { }
-                    //         if (ImGui.MenuItem("Delete", null, false, false)) { }
-                    //         if (ImGui.MenuItem("Copy", null, false, false)) { }
-                    //     }
-                    //     else
-                    //     {
-                    //         if (ImGui.MenuItem("Add")) { _nodes.Add(new Node(_nodes.Count, "New node", scene_pos, 0.5f, new Vector4(0.5f, 0.5f, 0.5f, 1), 2, 2)); }
-                    //         if (ImGui.MenuItem("Paste", null, false, false)) { }
-                    //     }
-                    //     ImGui.EndPopup();
-                    // }
-                    // ImGui.PopStyleVar();
-
-                    // Scrolling
-                    // if (ImGui.IsWindowHovered() && !ImGui.IsAnyItemActive() && ImGui.IsMouseDragging(2, 0.0f))
-                    //     _scroll = _scroll + ImGui.GetIO().MouseDelta;
-
-                    // ImGui.PopItemWidth();
                     _drawList.PopClipRect();
                 }
                 ImGui.EndChild();
@@ -296,12 +251,17 @@ namespace t3.graph
         }
 
 
+        /// <summary>
+        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
         public Vector2 GetScreenPosFrom(Vector2 posOnCanvas)
         {
             return posOnCanvas * _scale + _scroll + _canvasPos;
         }
 
-
+        /// <summary>
+        /// Get relative position with canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
         public Vector2 GetChildPosFrom(Vector2 posOnCanvas)
         {
             return posOnCanvas * _scale + _scroll;
@@ -357,18 +317,18 @@ namespace t3.graph
         List<NodeLink> _links = new List<NodeLink>();
 
         bool _initialized = false;
-        bool _gridVisible = true;
         ImDrawListPtr _overlayDrawList;
         Vector2 _size;
         Vector2 _mouse;
 
         public ImDrawListPtr _drawList;
         private Vector2 _scroll = new Vector2(0.0f, 0.0f);
+        private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
+
         public Vector2 _canvasPos;
         public float _scale = 1; //the damped scale factor {read only}
         float _scaleTarget = 1;
 
-        bool _debugFlag;
         string _debugMessages = "";
         ImGuiIOPtr _io;
     }
