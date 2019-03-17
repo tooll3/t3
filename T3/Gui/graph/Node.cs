@@ -2,6 +2,9 @@ using System.Numerics;
 
 namespace t3.graph
 {
+    /// <summary>
+    /// A mock representation of a graph node. This will be replaced with proper operators.
+    /// </summary>
     class Node
     {
         public int ID;

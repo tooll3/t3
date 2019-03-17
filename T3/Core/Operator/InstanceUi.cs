@@ -2,9 +2,9 @@
 
 namespace T3.Core.Operator
 {
-    /*
-     * Properties needed for visual representation of an instance. Should later be moved to gui component.
-     */
+    /// <summary>
+    /// Properties needed for visual representation of an instance. Should later be moved to gui component.
+    /// </summary>
     public class InstanceUi
     {
         public Vector2 Position = Vector2.Zero;
