@@ -241,9 +241,4 @@ namespace imHelpers
         public static void Swap<T>(ref T a, ref T b) { T tmp = a; a = b; b = tmp; }
     }
 
-    public enum Channels
-    {
-        Background = 1,
-        Foreground = 0,
-    }
 }

@@ -1,29 +1,26 @@
-﻿using System;
+﻿using ImGuiNET;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+using SharpDX;
+using SharpDX.Direct3D;
+using SharpDX.Direct3D11;
+using SharpDX.DXGI;
+using SharpDX.Windows;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
 using System.Windows.Forms;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
-using SharpDX;
-using SharpDX.D3DCompiler;
-using SharpDX.Direct3D;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using SharpDX.Windows;
-using ImGuiNET;
-using Buffer = SharpDX.Direct3D11.Buffer;
-using Device = SharpDX.Direct3D11.Device;
-using Color = SharpDX.Color;
-using Vector3 = SharpDX.Vector3;
-using Vector2 = System.Numerics.Vector2;
-using Vector4 = System.Numerics.Vector4;
 using t3.graph;
 using T3.Core.Operator;
+using Color = SharpDX.Color;
+using Device = SharpDX.Direct3D11.Device;
+using Vector2 = System.Numerics.Vector2;
+using Vector3 = SharpDX.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3
 {
@@ -111,31 +108,31 @@ namespace T3
                 case WM_RBUTTONDBLCLK:
                 case WM_MBUTTONDOWN:
                 case WM_MBUTTONDBLCLK:
-                    {
-                        int button = 0;
-                        if (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_LBUTTONDBLCLK) button = 0;
-                        if (m.Msg == WM_RBUTTONDOWN || m.Msg == WM_RBUTTONDBLCLK) button = 1;
-                        if (m.Msg == WM_MBUTTONDOWN || m.Msg == WM_MBUTTONDBLCLK) button = 2;
-                        // TODO
-                        //if (!ImGui.IsAnyMouseDown() && ::GetCapture() == NULL)
-                        //    ::SetCapture(hwnd);
-                        io.MouseDown[button] = true;
-                        return;
-                    }
+                {
+                    int button = 0;
+                    if (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_LBUTTONDBLCLK) button = 0;
+                    if (m.Msg == WM_RBUTTONDOWN || m.Msg == WM_RBUTTONDBLCLK) button = 1;
+                    if (m.Msg == WM_MBUTTONDOWN || m.Msg == WM_MBUTTONDBLCLK) button = 2;
+                    // TODO
+                    //if (!ImGui.IsAnyMouseDown() && ::GetCapture() == NULL)
+                    //    ::SetCapture(hwnd);
+                    io.MouseDown[button] = true;
+                    return;
+                }
                 case WM_LBUTTONUP:
                 case WM_RBUTTONUP:
                 case WM_MBUTTONUP:
-                    {
-                        int button = 0;
-                        if (m.Msg == WM_LBUTTONUP) button = 0;
-                        if (m.Msg == WM_RBUTTONUP) button = 1;
-                        if (m.Msg == WM_MBUTTONUP) button = 2;
-                        io.MouseDown[button] = false;
-                        // TODO
-                        //if (!ImGui::IsAnyMouseDown() && ::GetCapture() == hwnd)
-                        //    ::ReleaseCapture();
-                        return;
-                    }
+                {
+                    int button = 0;
+                    if (m.Msg == WM_LBUTTONUP) button = 0;
+                    if (m.Msg == WM_RBUTTONUP) button = 1;
+                    if (m.Msg == WM_MBUTTONUP) button = 2;
+                    io.MouseDown[button] = false;
+                    // TODO
+                    //if (!ImGui::IsAnyMouseDown() && ::GetCapture() == hwnd)
+                    //    ::ReleaseCapture();
+                    return;
+                }
                 case WM_MOUSEWHEEL:
                     io.MouseWheel += (short)(((uint)m.WParam >> 16) & 0xffff) / 120.0f; // TODO (float)WHEEL_DELTA;
                     return;
@@ -318,6 +315,10 @@ namespace T3
             stopwatch.Start();
 
 
+            // Generate mock data
+
+
+
             // Main loop
             RenderLoop.Run(form, () =>
                                  {
@@ -361,12 +362,13 @@ namespace T3
             factory.Dispose();
         }
 
+        private static bool _view2Opened = true;
 
         private static unsafe void DrawUI()
         {
-            //ImGui.Checkbox("Override Stlye", ref _overrideStyle);
             TableView.DrawTableView(ref _tableViewOpened);
-            canvas.Draw(ref _graphUIOpened);
+            canvas1.Draw(ref _graphUIOpened, _mockModel.MainOp, "View1");
+            canvas2.Draw(ref _view2Opened, _mockModel.MainOp, "View2");
 
             if (_showDemoWindow)
             {
@@ -377,7 +379,8 @@ namespace T3
         private static bool _tableViewOpened = true;
         private static bool _graphUIOpened = true;
         private static bool _showDemoWindow = true;
-        private static GraphCanvas canvas = new GraphCanvas();
+        private static GraphCanvas canvas1 = new GraphCanvas();
+        private static GraphCanvas canvas2 = new GraphCanvas();
 
         private static unsafe void InitStyle()
         {
@@ -847,6 +850,8 @@ namespace T3
 
             ImGui.End();
         }
+
+        private static MockModel _mockModel = new MockModel();
 
     }
 
