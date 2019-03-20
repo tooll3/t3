@@ -7,11 +7,11 @@ namespace T3.Core.Operator
     /// </summary>
     public class InstanceUi
     {
+        public Instance Instance;
         public Vector2 Position = Vector2.Zero;
         public Vector2 Size = new Vector2(100, 30);
         public bool Visible = true;
         public bool Selected = false;
-        public Instance Instance;
         public string Name { get; set; } = string.Empty;
         public string ReadableName
         {
