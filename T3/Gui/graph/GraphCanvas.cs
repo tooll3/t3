@@ -1,7 +1,9 @@
 using ImGuiNET;
+using imHelpers;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using t3.iuhelpers;
 using T3.Core.Operator;
 
 namespace t3.graph
@@ -50,7 +52,7 @@ namespace t3.graph
                     var instanceUi = pair.Value;
                     ImGui.PushID(pair.Key.ToString());
                     {
-                        var name = symbol._children.Find(entry => entry.InstanceId == pair.Key).ReadableName;
+                        var name = instanceUi.ReadableName;
                         if (ImGui.Selectable(name, ref instanceUi.Selected))
                         {
                             // Change selection 
@@ -125,103 +127,102 @@ namespace t3.graph
 
         private void DrawCanvas()
         {
+            ImGui.BeginGroup();
+            {
+                ImGui.Text(_debugMessages); _debugMessages = "";
 
-            //ImGui.BeginGroup();
-            //{
-            //    ImGui.Text(_debugMessages); _debugMessages = "";
+                _mouse = ImGui.GetMousePos();
+                _io = ImGui.GetIO();
+                ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(1, 1));
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
+                ImGui.PushStyleColor(ImGuiCol.WindowBg, TColors.ToUint(60, 60, 70, 200));
 
-            //    _mouse = ImGui.GetMousePos();
-            //    _io = ImGui.GetIO();
-            //    ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(1, 1));
-            //    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
-            //    ImGui.PushStyleColor(ImGuiCol.WindowBg, TColors.ToUint(60, 60, 70, 200));
+                // Damp scaling
+                _scale = Im.Lerp(_scale, _scaleTarget, _io.DeltaTime * 20);
+                _scroll = Im.Lerp(_scroll, _scrollTarget, _io.DeltaTime * 20);
 
-            //    // Damp scaling
-            //    _scale = Im.Lerp(_scale, _scaleTarget, _io.DeltaTime * 20);
-            //    _scroll = Im.Lerp(_scroll, _scrollTarget, _io.DeltaTime * 20);
+                THelpers.DebugWindowRect("window");
+                ImGui.BeginChild("scrolling_region", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+                {
+                    THelpers.DebugWindowRect("window.scrollingRegion");
+                    _canvasPos = ImGui.GetWindowPos();
+                    _size = ImGui.GetWindowSize();
+                    _drawList.PushClipRect(_canvasPos, _canvasPos + _size);
 
-            //    THelpers.DebugWindowRect("window");
-            //    ImGui.BeginChild("scrolling_region", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
-            //    {
-            //        THelpers.DebugWindowRect("window.scrollingRegion");
-            //        _canvasPos = ImGui.GetWindowPos();
-            //        _size = ImGui.GetWindowSize();
-            //        _drawList.PushClipRect(_canvasPos, _canvasPos + _size);
+                    // Canvas interaction --------------
+                    if (ImGui.IsWindowHovered())
+                    {
+                        if (ImGui.IsMouseDragging(1))
+                        {
+                            _scrollTarget += _io.MouseDelta;
+                        }
 
-            //        // Canvas interaction --------------
-            //        if (ImGui.IsWindowHovered())
-            //        {
-            //            if (ImGui.IsMouseDragging(1))
-            //            {
-            //                _scrollTarget += _io.MouseDelta;
-            //            }
+                        // Zoom with mouse wheel
+                        if (_io.MouseWheel != 0)
+                        {
+                            const float zoomSpeed = 1.2f;
+                            var focusCenter = (_mouse - _scroll - _canvasPos) / _scale;
 
-            //            // Zoom with mouse wheel
-            //            if (_io.MouseWheel != 0)
-            //            {
-            //                const float zoomSpeed = 1.2f;
-            //                var focusCenter = (_mouse - _scroll - _canvasPos) / _scale;
+                            _overlayDrawList.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.Red.ToUint());
 
-            //                _overlayDrawList.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.Red.ToUint());
+                            if (_io.MouseWheel < 0.0f)
+                            {
+                                _scaleTarget = Im.Max(0.3f, _scaleTarget / zoomSpeed);
+                            }
 
-            //                if (_io.MouseWheel < 0.0f)
-            //                {
-            //                    _scaleTarget = Im.Max(0.3f, _scaleTarget / zoomSpeed);
-            //                }
+                            if (_io.MouseWheel > 0.0f)
+                            {
+                                _scaleTarget = Im.Min(3.0f, _scaleTarget * zoomSpeed);
+                            }
 
-            //                if (_io.MouseWheel > 0.0f)
-            //                {
-            //                    _scaleTarget = Im.Min(3.0f, _scaleTarget * zoomSpeed);
-            //                }
+                            Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
+                            _scrollTarget += _mouse - shift - _canvasPos;
+                        }
 
-            //                Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
-            //                _scrollTarget += _mouse - shift - _canvasPos;
-            //            }
+                        ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
+                    }
 
-            //            ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
-            //        }
+                    // Draw Grid ------------
+                    {
+                        var gridSize = 64.0f * _scale;
+                        for (float x = _scroll.X % gridSize; x < _size.X; x += gridSize)
+                        {
+                            _drawList.AddLine(
+                                new Vector2(x, 0.0f) + _canvasPos,
+                                new Vector2(x, _size.Y) + _canvasPos,
+                                new Color(0.5f, 0.5f, 0.5f, 0.1f).ToUint());
+                        }
 
-            //        // Draw Grid ------------
-            //        {
-            //            var gridSize = 64.0f * _scale;
-            //            for (float x = _scroll.X % gridSize; x < _size.X; x += gridSize)
-            //            {
-            //                _drawList.AddLine(
-            //                    new Vector2(x, 0.0f) + _canvasPos,
-            //                    new Vector2(x, _size.Y) + _canvasPos,
-            //                    new Color(0.5f, 0.5f, 0.5f, 0.1f).ToUint());
-            //            }
+                        for (float y = _scroll.Y % gridSize; y < _size.Y; y += gridSize)
+                        {
+                            _drawList.AddLine(
+                                new Vector2(0.0f, y) + _canvasPos,
+                                new Vector2(_size.X, y) + _canvasPos,
+                                new Color(0.5f, 0.5f, 0.5f, 0.1f).ToUint());
+                        }
+                    }
 
-            //            for (float y = _scroll.Y % gridSize; y < _size.Y; y += gridSize)
-            //            {
-            //                _drawList.AddLine(
-            //                    new Vector2(0.0f, y) + _canvasPos,
-            //                    new Vector2(_size.X, y) + _canvasPos,
-            //                    new Color(0.5f, 0.5f, 0.5f, 0.1f).ToUint());
-            //            }
-            //        }
+                    // Draw links
+                    DrawLinks();
 
-            //        // Draw links
-            //        DrawLinks();
+                    // Draw nodes
+                    foreach (var instanceUi in InstanceUiRegistry.Instance.UiEntries[_mainOp.Symbol.Id].Values)
+                    {
+                        GraphNode.DrawOnCanvas(instanceUi, this);
+                    }
 
-            //        // Draw nodes
-            //        foreach (var node in _nodes)
-            //        {
-            //            GraphNode.DrawOnCanvas(node, this);
-            //        }
-
-            //        _debugMessages += ImGui.IsAnyItemHovered() ? "anyItemHovered " : "";
-            //        _debugMessages += ImGui.IsWindowHovered() ? "isWindowHovered " : "";
-            //        _debugMessages += ImGui.IsItemHovered() ? "isWindowHovered " : "";
+                    _debugMessages += ImGui.IsAnyItemHovered() ? "anyItemHovered " : "";
+                    _debugMessages += ImGui.IsWindowHovered() ? "isWindowHovered " : "";
+                    _debugMessages += ImGui.IsItemHovered() ? "isWindowHovered " : "";
 
 
-            //        _drawList.PopClipRect();
-            //    }
-            //    ImGui.EndChild();
-            //    ImGui.PopStyleColor();
-            //    ImGui.PopStyleVar(2);
-            //}
-            //ImGui.EndGroup();
+                    _drawList.PopClipRect();
+                }
+                ImGui.EndChild();
+                ImGui.PopStyleColor();
+                ImGui.PopStyleVar(2);
+            }
+            ImGui.EndGroup();
         }
 
         private void DrawLinks()
@@ -303,19 +304,17 @@ namespace t3.graph
                     new InstanceDefinition()
                     {
                         InstanceId = Guid.NewGuid(),
-                        Name="Cube1",
+
                         Symbol = _cubeSymbol,
                     },
                     new InstanceDefinition()
                     {
                         InstanceId = Guid.NewGuid(),
-                        Name="",
                         Symbol = _cubeSymbol,
                     },
                     new InstanceDefinition()
                     {
                         InstanceId = Guid.NewGuid(),
-                        Name="Group",
                         Symbol = _groupSymbol,
                     },
                 }
@@ -339,12 +338,14 @@ namespace t3.graph
                      Parent = _projectOp,
                      Symbol = _cubeSymbol,
                      Id = _exampleProject._children[0].InstanceId,
+                     //InstanceDefinition = _exampleProject._children[0],
                  },
                  new Instance()
                  {
                      Parent = _projectOp,
                      Symbol = _cubeSymbol,
-                     Id = _exampleProject._children[1].InstanceId,
+                     Id= _exampleProject._children[1].InstanceId,
+                     //InstanceDefinition = _exampleProject._children[1],
                  },
                 new Instance()
                  {
@@ -360,9 +361,9 @@ namespace t3.graph
             var uiEntries = InstanceUiRegistry.Instance.UiEntries;
             uiEntries.Add(_exampleProject.Id, new Dictionary<Guid, InstanceUi>()
                 {
-                    {_projectOp.Children[0].Id, new InstanceUi() { Instance =_projectOp.Children[0] } },
+                    {_projectOp.Children[0].Id, new InstanceUi() { Instance =_projectOp.Children[0], Name="Cube1" } },
                     {_projectOp.Children[1].Id, new InstanceUi() { Instance =_projectOp.Children[1] } },
-                    {_projectOp.Children[2].Id, new InstanceUi() { Instance =_projectOp.Children[2] } },
+                    {_projectOp.Children[2].Id, new InstanceUi() { Instance =_projectOp.Children[2], Name="MyGroup" } },
                 });
 
             //_nodes.Add(new Node()
@@ -405,9 +406,11 @@ namespace t3.graph
             _mainOp = _projectOp;
         }
 
+        Instance _mainOp;
+
         private NodeLink _linkUnderConstruction;
 
-        Instance _mainOp;
+
 
         bool _contextMenuOpened = false;
 

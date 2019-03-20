@@ -53,14 +53,6 @@ namespace T3.Core.Operator
     public class InstanceDefinition
     {
         public Guid InstanceId { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string ReadableName
-        {
-            get
-            {
-                return String.IsNullOrEmpty(Name) ? Symbol.SymbolName : Name;
-            }
-        }
         public Symbol Symbol { get; internal set; }
     }
 

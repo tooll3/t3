@@ -3,31 +3,33 @@ using imHelpers;
 using System;
 using System.Numerics;
 using t3.iuhelpers;
+using T3.Core.Operator;
 
 namespace t3.graph
 {
     static class GraphNode
     {
-        public static void DrawOnCanvas(Node node, GraphCanvas canvas)
+        public static void DrawOnCanvas(InstanceUi instanceUi, GraphCanvas canvas)
         {
-            ImGui.PushID(node.ID);
+            //var instanceDef = instanceUi.Instance.InstanceDefinition;
+            ImGui.PushID(instanceUi.Instance.Id.ToString());
             canvas._drawList.ChannelsSplit(2);
             canvas._drawList.ChannelsSetCurrent((int)Channels.Foreground);
 
-            var nodeTopLeft = canvas.GetChildPosFrom(node.Pos);
+            var nodeTopLeft = canvas.GetChildPosFrom(instanceUi.Position);
 
             ImGui.SetCursorPos(nodeTopLeft);
-            ImGui.Text(String.Format($"{node.Name}"));
+            ImGui.Text(String.Format($"{instanceUi.ReadableName}"));
 
             canvas._drawList.ChannelsSetCurrent((int)Channels.Background);
 
-            DrawSlots(node, canvas);
+            //DrawSlots(instanceUi, canvas);
 
             ImGui.SetCursorPos(nodeTopLeft);
-            ImGui.InvisibleButton("node", node.Size * canvas._scale);
-            THelpers.OutlinedRect(ref canvas._drawList, nodeTopLeft + canvas._canvasPos, node.Size * canvas._scale,
-                fill: new Color(node.IsSelected || ImGui.IsItemHovered() ? 0.3f : 0.2f),
-                outline: node.IsSelected ? Color.White : Color.Black);
+            ImGui.InvisibleButton("node", instanceUi.Size * canvas._scale);
+            THelpers.OutlinedRect(ref canvas._drawList, nodeTopLeft + canvas._canvasPos, instanceUi.Size * canvas._scale,
+                fill: new Color(instanceUi.Selected || ImGui.IsItemHovered() ? 0.3f : 0.2f),
+                outline: instanceUi.Selected ? Color.White : Color.Black);
 
             if (ImGui.IsItemHovered())
             {
@@ -38,9 +40,9 @@ namespace t3.graph
             {
                 if (ImGui.IsMouseDragging(0))
                 {
-                    node.Pos = node.Pos + ImGui.GetIO().MouseDelta;
+                    instanceUi.Position = instanceUi.Position + ImGui.GetIO().MouseDelta;
                 }
-                node.IsSelected = true;
+                instanceUi.Selected = true;
             }
 
             ImGui.PopID();
