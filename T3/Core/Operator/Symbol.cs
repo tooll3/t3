@@ -40,9 +40,9 @@ namespace T3.Core.Operator
             _instancesOfSymbol.Remove(op);
         }
 
-        private readonly List<Instance> _instancesOfSymbol = new List<Instance>();
-        private readonly List<Connection> _connections = new List<Connection>();
-        private readonly List<InstanceDefinition> _children = new List<InstanceDefinition>();
+        public readonly List<Instance> _instancesOfSymbol = new List<Instance>();
+        public readonly List<Connection> _connections = new List<Connection>();
+        public readonly List<InstanceDefinition> _children = new List<InstanceDefinition>();
 
         public void Dispose()
         {
@@ -54,6 +54,13 @@ namespace T3.Core.Operator
     {
         public Guid InstanceId { get; set; }
         public string Name { get; set; } = string.Empty;
+        public string ReadableName
+        {
+            get
+            {
+                return String.IsNullOrEmpty(Name) ? Symbol.SymbolName : Name;
+            }
+        }
         public Symbol Symbol { get; internal set; }
     }
 
