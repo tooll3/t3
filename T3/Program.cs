@@ -236,6 +236,8 @@ namespace T3
                                      ImGuiResearch.DrawResourceWindow();
                                      ImGuiResearch.DrawParameterView();
 
+                                     _t3ui.DrawSelectionParameters();
+
                                      ImGui.Render();
                                      _controller.RenderImDrawData(ImGui.GetDrawData());
                                      swapChain.Present(UiSettings.UseVSync ? 1 : 0, PresentFlags.None);

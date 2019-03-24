@@ -1,7 +1,9 @@
-﻿using ImGuiNET;
+﻿using System;
+using ImGuiNET;
 using System.Collections.Generic;
 using System.Numerics;
 using t3.graph;
+using T3.Core.Operator;
 
 namespace T3.Gui
 {
@@ -43,6 +45,29 @@ namespace T3.Gui
             }
             if (obsoleteGraphWindow != null)
                 _graphCanvasWindows.Remove(obsoleteGraphWindow);
+        }
+
+        public void DrawSelectionParameters()
+        {
+//            ImGui.BeginChild("ParameterView", new Vector2(100.0f, 40.0f));
+            ImGui.Begin("ParameterView");
+            foreach (var pair in InstanceUiRegistry.Instance.UiEntries[_mockModel.MainOp.Symbol.Id])
+            {
+                var instanceUi = pair.Value;
+                if (instanceUi.Selected)
+                {
+                    var instance = instanceUi.Instance;
+                    foreach (var inputSlot in instance.Inputs)
+                    {
+                        var inputUi = InputUiRegistry.Entries[inputSlot.Type];
+                        inputUi.DrawInputEdit(inputSlot);
+                    }
+
+                    break; // only first selected atm
+                }
+            }
+            ImGui.End();
+//             ImGui.EndChild();
         }
 
         public unsafe void InitStyle()

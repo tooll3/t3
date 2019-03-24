@@ -39,8 +39,17 @@ namespace T3.Core.Operator
         public Type Type { get; protected set; }
     }
 
-    public class InputValue<T>
+    public abstract class InputValue
     {
+        public Type ValueType;
+    }
+
+    public class InputValue<T> : InputValue
+    {
+        public InputValue(T value)
+        {
+            Value = value;
+        }
         public T Value;
     }
 
@@ -78,7 +87,7 @@ namespace T3.Core.Operator
             if (IsDirty)
             {
                 UpdateAction(context);
-                IsDirty = false;
+//                 IsDirty = false;
             }
             return Value;
         }
@@ -89,24 +98,25 @@ namespace T3.Core.Operator
 
     interface IInputSlot
     {
+        InputValue InputValue { get; set; }
     }
-
 
     public class InputSlot<T> : Slot<T>, IInputSlot
     {
-
-        public InputSlot(T defaultValue)
-            : base(defaultValue)
+        public InputSlot(InputValue<T> typedInputValue)
         {
             UpdateAction = Update;
+            TypedInputValue = typedInputValue;
+        }
+
+        public InputSlot(T defaultValue)
+            : this(new InputValue<T>(defaultValue))
+        {
         }
 
         public void Update(EvaluationContext context)
         {
-            if (Input != null)
-            {
-                Value = Input.GetValue(context);
-            }
+            Value = Input != null ? Input.GetValue(context) : TypedInputValue.Value;
         }
 
         private Slot<T> _input;
@@ -119,13 +129,26 @@ namespace T3.Core.Operator
                 IsDirty = true;
             }
         }
+
+        public InputValue<T> TypedInputValue;
+        public InputValue InputValue
+        {
+            get => TypedInputValue;
+            set => TypedInputValue = (InputValue<T>)value;
+        }
     }
 
 
     public class Size2Slot : InputSlot<Size2>
     {
         public Size2Slot(Size2 defaultValue)
-            : base(defaultValue)
+        : base(defaultValue)
+        {
+            UpdateAction = Update;
+        }
+
+        public Size2Slot(InputValue<Size2> typedInputValue)
+            : base(typedInputValue)
         {
             UpdateAction = Update;
         }
@@ -143,8 +166,8 @@ namespace T3.Core.Operator
             }
         }
 
-        public InputSlot<int> Width  = new InputSlot<int>(0);
-        public InputSlot<int> Height = new InputSlot<int>(0);
+        public InputSlot<int> Width  = new InputSlot<int>(new InputValue<int>(0));
+        public InputSlot<int> Height = new InputSlot<int>(new InputValue<int>(0));
     }
 
 
