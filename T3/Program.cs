@@ -232,13 +232,13 @@ namespace T3
 
                                      _t3ui.DrawUI();
 
-                                     ImGuiResearch.DrawFramerateWindow();
+                                     UiSettings.DrawUiSettings();
                                      ImGuiResearch.DrawResourceWindow();
                                      ImGuiResearch.DrawParameterView();
 
                                      ImGui.Render();
                                      _controller.RenderImDrawData(ImGui.GetDrawData());
-                                     swapChain.Present(ImGuiResearch.UseVSync ? 1 : 0, PresentFlags.None);
+                                     swapChain.Present(UiSettings.UseVSync ? 1 : 0, PresentFlags.None);
                                  });
 
             _controller.Dispose();
