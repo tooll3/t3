@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tooll.Core.PullVariant;
+using T3.Core.Operator;
 
 namespace OperatorTests
 {
