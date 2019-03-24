@@ -116,20 +116,7 @@ namespace T3
         #region early experiments
 
 
-        //private static Vector3 _clearColor = new Vector3(0.45f, 0.55f, 0.6f);
-        public static bool UseVSync => _vsync;
-        private static bool _vsync = true;
 
-        public static unsafe void DrawFramerateWindow()
-        {
-            ImGui.Begin("Stats");
-            {
-                float framerate = ImGui.GetIO().Framerate;
-                ImGui.Text($"Application average {1000.0f / framerate:0.00} ms/frame ({framerate:0.0} FPS)");
-                ImGui.Checkbox("VSync", ref _vsync);
-            }
-            ImGui.End();
-        }
 
 
 

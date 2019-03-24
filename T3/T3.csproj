@@ -312,6 +312,7 @@
     <Compile Include="Gui\iuhelpers\Helpers.cs" />
     <Compile Include="Gui\T3UI.cs" />
     <Compile Include="Gui\tableview\TableView.cs" />
+    <Compile Include="Gui\UiSettings.cs" />
     <Compile Include="ImGuiResearch.cs" />
     <Compile Include="MockModel.cs" />
     <Compile Include="Program.cs">

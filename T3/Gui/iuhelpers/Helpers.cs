@@ -1,6 +1,7 @@
 using ImGuiNET;
 using System.Numerics;
 using t3.iuhelpers;
+using T3.Gui;
 
 namespace imHelpers
 {
@@ -46,13 +47,15 @@ namespace imHelpers
         /// </summary>
         public static void DebugItemRect(string label = "", uint color = 0xff20ff80)
         {
-            DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), label, color);
+            if (UiSettings.ItemRegionsVisible)
+                DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), label, color);
         }
 
 
         public static void DebugWindowRect(string label = "", uint color = 0xffff2080)
         {
-            DebugRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), label, color);
+            if (UiSettings.WindowRegionsVisible)
+                DebugRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), label, color);
         }
     }
 
