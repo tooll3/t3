@@ -302,7 +302,8 @@
     <Compile Include="Core\Operator\SymbolRegistry.cs" />
     <Compile Include="Core\Operator\InstanceUi.cs" />
     <Compile Include="Core\Operator\InstanceUiRegistry.cs" />
-    <Compile Include="Gui\graph\GraphCanvas.cs" />
+    <Compile Include="Gui\graph\CreateOperatorWindow.cs" />
+    <Compile Include="Gui\graph\GraphCanvasWindow.cs" />
     <Compile Include="Gui\graph\GraphNode.cs" />
     <Compile Include="Gui\graph\Node.cs" />
     <Compile Include="Gui\graph\NodeLink.cs" />

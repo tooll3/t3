@@ -8,7 +8,7 @@ namespace t3.graph
 {
     static class GraphNode
     {
-        public static void DrawOnCanvas(InstanceUi instanceUi, GraphCanvas canvas)
+        public static void DrawOnCanvas(InstanceUi instanceUi, GraphCanvasWindow canvas)
         {
             ImGui.PushID(instanceUi.Instance.Id.ToString());
             {
@@ -48,7 +48,7 @@ namespace t3.graph
         }
 
 
-        private static void DrawSlots(Node node, GraphCanvas canvas)
+        private static void DrawSlots(Node node, GraphCanvasWindow canvas)
         {
             //const float NODE_SLOT_RADIUS = 4.0f;
 
