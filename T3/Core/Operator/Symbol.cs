@@ -30,9 +30,24 @@ namespace T3.Core.Operator
             }
         }
 
-        Instance CreateInstance()
+        public Instance CreateInstance()
         {
-            return null;
+            var newInstance = new Instance() { Symbol = this };
+
+            foreach (var childInstanceDef in _children)
+            {
+                var childInstance = new Instance()
+                                    {
+                                        Id = childInstanceDef.InstanceId,
+                                        Parent = newInstance,
+                                        Symbol = childInstanceDef.Symbol
+                                    };
+                newInstance.Children.Add(childInstance);
+            }
+
+            _instancesOfSymbol.Add(newInstance);
+
+            return newInstance;
         }
 
         void DeleteInstance(Instance op)
@@ -42,7 +57,7 @@ namespace T3.Core.Operator
 
         public readonly List<Instance> _instancesOfSymbol = new List<Instance>();
         public readonly List<Connection> _connections = new List<Connection>();
-        public readonly List<InstanceDefinition> _children = new List<InstanceDefinition>();
+        public readonly List<SymbolChild> _children = new List<SymbolChild>();
 
         public void Dispose()
         {
@@ -50,13 +65,13 @@ namespace T3.Core.Operator
         }
     }
 
-    public class InstanceDefinition
+    public class SymbolChild
     {
         public Guid InstanceId { get; set; }
         public Symbol Symbol { get; internal set; }
     }
 
-    public class InputDefinition : InstanceDefinition
+    public class InputDefinition : SymbolChild
     {
         // relevance: required, relevant, optional
         public Type Type { get; set; }
