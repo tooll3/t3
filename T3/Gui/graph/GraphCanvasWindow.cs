@@ -1,5 +1,6 @@
 using ImGuiNET;
 using imHelpers;
+using System;
 using System.Numerics;
 using t3.iuhelpers;
 using T3.Core.Operator;
@@ -9,13 +10,28 @@ namespace t3.graph
     /// <summary>
     /// A mock implementation of a future graph renderer
     /// </summary>
-    class GraphCanvas
+    class GraphCanvasWindow
     {
-        public void Draw(ref bool opened, Instance compositionOp, string viewName = "Composition")
+        public GraphCanvasWindow(Instance opInstance, string windowTitle = "Graph windows")
         {
-            if (ImGui.Begin(viewName, ref opened))
+            _compositionOp = opInstance;
+            _windowTitle = windowTitle;
+        }
+
+        private Guid _windowGui = Guid.NewGuid();
+
+        /// <summary>
+        /// Renders a canvas window
+        /// </summary>
+        /// <returns>false if closed</returns>
+        public bool Draw()
+        {
+            bool opened = true;
+            //var compOpUi = InstanceUiRegistry.Instance.UiEntries[_compositionOp.Id];
+            var uniqueTitle = _windowTitle + "##" + _windowGui;
+
+            if (ImGui.Begin(uniqueTitle, ref opened))
             {
-                _compositionOp = compositionOp;
                 _drawList = ImGui.GetWindowDrawList();
                 _overlayDrawList = ImGui.GetOverlayDrawList();
 
@@ -24,8 +40,10 @@ namespace t3.graph
                 DrawCanvas();
             }
             ImGui.End();
+            return opened;
         }
 
+        private string _windowTitle;
         private Instance _compositionOp;
 
 
@@ -40,7 +58,6 @@ namespace t3.graph
                 var symbol = _compositionOp.Symbol;
                 //var allUiEntriesForChildrenOfSymbol = InstanceUiRegistry.Instance.UiEntries[symbol.Id];
                 //var uiEntryForASpecificInstance = allUiEntriesForChildrenOfSymbol[instance.Id];
-
 
                 foreach (var pair in InstanceUiRegistry.Instance.UiEntries[symbol.Id])
                 {

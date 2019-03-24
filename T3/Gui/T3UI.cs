@@ -1,34 +1,49 @@
 ﻿using ImGuiNET;
+using System.Collections.Generic;
 using System.Numerics;
 using t3.graph;
 
 namespace T3.Gui
 {
     /// <summary>
-    /// capsule T3 UI functionality from imgui-clutter in Program.cs
+    /// A singleton capsule T3 UI functionality from imgui-clutter in Program.cs
     /// </summary>
     public class T3UI
     {
-        private static bool _view2Opened = true;
+        public T3UI()
+        {
+            _instance = this;
+
+            // Open a default Window
+            OpenNewGraphWindow();
+        }
+
+        private static T3UI _instance = null;
+
+        public static void OpenNewGraphWindow()
+        {
+            _instance._graphCanvasWindows.Add(new GraphCanvasWindow(_mockModel.MainOp));
+        }
+
 
         public unsafe void DrawUI()
         {
-            TableView.DrawTableView(ref _tableViewOpened);
-            canvas1.Draw(ref _graphUIOpened, _mockModel.MainOp, "View1");
-            canvas2.Draw(ref _view2Opened, _mockModel.MainOp, "View2");
-
-            if (_showDemoWindow)
-            {
-                ImGui.ShowDemoWindow(ref _showDemoWindow);
-            }
+            DrawGraphCanvasWindows();
+            if (UiSettings.DemoWindowVisible)
+                ImGui.ShowDemoWindow(ref UiSettings.DemoWindowVisible);
         }
 
-        private static bool _tableViewOpened = true;
-        private static bool _graphUIOpened = true;
-        private static bool _showDemoWindow = true;
-        private static GraphCanvas canvas1 = new GraphCanvas();
-        private static GraphCanvas canvas2 = new GraphCanvas();
-
+        private unsafe void DrawGraphCanvasWindows()
+        {
+            GraphCanvasWindow obsoleteGraphWindow = null;
+            foreach (var g in _graphCanvasWindows)
+            {
+                if (!g.Draw())
+                    obsoleteGraphWindow = g;   // we assume that only one window can be close in per frame
+            }
+            if (obsoleteGraphWindow != null)
+                _graphCanvasWindows.Remove(obsoleteGraphWindow);
+        }
 
         public unsafe void InitStyle()
         {
@@ -59,7 +74,7 @@ namespace T3.Gui
             style.Colors[(int)ImGuiCol.ResizeGrip] = new Vector4(0.00f, 0.00f, 0.00f, 0.25f);
         }
 
+        private List<GraphCanvasWindow> _graphCanvasWindows = new List<GraphCanvasWindow>();
         private static MockModel _mockModel = new MockModel();
-
     }
 }
