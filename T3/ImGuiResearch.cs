@@ -26,18 +26,18 @@ namespace T3
         public void Update(EvaluationContext context)
         {
             var desc = new Texture2DDescription()
-            {
-                Width = Size.GetValue(context).Width,
-                Height = Size.GetValue(context).Height,
-                MipLevels = MipLevels.GetValue(context),
-                ArraySize = ArraySize.GetValue(context),
-                Format = Format.GetValue(context),
-                SampleDescription = new SampleDescription(SampleCount.GetValue(context), SampleQuality.GetValue(context)),
-                Usage = Usage.GetValue(context),
-                BindFlags = BindFlags.GetValue(context),
-                CpuAccessFlags = CpuAccessFlags.GetValue(context),
-                OptionFlags = OptionFlags.GetValue(context)
-            };
+                       {
+                           Width = Size.GetValue(context).Width,
+                           Height = Size.GetValue(context).Height,
+                           MipLevels = MipLevels.GetValue(context),
+                           ArraySize = ArraySize.GetValue(context),
+                           Format = Format.GetValue(context),
+                           SampleDescription = new SampleDescription(SampleCount.GetValue(context), SampleQuality.GetValue(context)),
+                           Usage = Usage.GetValue(context),
+                           BindFlags = BindFlags.GetValue(context),
+                           CpuAccessFlags = CpuAccessFlags.GetValue(context),
+                           OptionFlags = OptionFlags.GetValue(context)
+                       };
 
             ResourceManager.Instance().CreateTexture(desc, "OpName", ref _textureResourceId, ref Result.Value);
         }

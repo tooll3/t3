@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace T3.Core.Operator
 {
@@ -32,16 +35,27 @@ namespace T3.Core.Operator
 
         public Instance CreateInstance()
         {
-            var newInstance = new Instance() { Symbol = this };
+            var newInstance = Activator.CreateInstance(InstanceType) as Instance;
+            Debug.Assert(newInstance != null);
+            newInstance.Symbol = this;
 
+            // Link inputs to default input values
+            for (int i = 0; i < InputDefinitions.Count; i++)
+            {
+                Debug.Assert(i < newInstance.Inputs.Count);
+                if (newInstance.Inputs[i] is IInputSlot input)
+                {
+                    input.InputValue = InputDefinitions[i].InputValue;
+                }
+            }
+
+            // create children
             foreach (var childInstanceDef in _children)
             {
-                var childInstance = new Instance()
-                                    {
-                                        Id = childInstanceDef.InstanceId,
-                                        Parent = newInstance,
-                                        Symbol = childInstanceDef.Symbol
-                                    };
+                var childInstance = childInstanceDef.Symbol.CreateInstance();
+                childInstance.Id = childInstanceDef.InstanceId;
+                childInstance.Parent = newInstance;
+
                 newInstance.Children.Add(childInstance);
             }
 
@@ -55,9 +69,31 @@ namespace T3.Core.Operator
             _instancesOfSymbol.Remove(op);
         }
 
+        InputValue GetInputValue(Guid childInstanceId, Guid inputId)
+        {
+            var inputValue = (from child in _children
+                              where child.InstanceId == childInstanceId
+                              from input in child.Inputs
+                              where input.Id == inputId
+                              select input.InputValue).Single();
+            return inputValue;
+        }
+
+        InputValue GetInputDefaultValue(Guid inputId)
+        {
+            var inputDefaultValue = (from input in InputDefinitions
+                                     where input.Id == inputId
+                                     select input.InputValue).Single();
+            return inputDefaultValue;
+        }
+
         public readonly List<Instance> _instancesOfSymbol = new List<Instance>();
         public readonly List<Connection> _connections = new List<Connection>();
         public readonly List<SymbolChild> _children = new List<SymbolChild>();
+
+        // Inputs of this symbol, input values are the default values (exist only once per symbol)
+        public readonly List<InputDefinition> InputDefinitions = new List<InputDefinition>();
+        public Type InstanceType { get; set; }
 
         public void Dispose()
         {
@@ -67,13 +103,15 @@ namespace T3.Core.Operator
 
     public class SymbolChild
     {
-        public Guid InstanceId { get; set; }
         public Symbol Symbol { get; internal set; }
+        public Guid InstanceId { get; set; }
+        public List<InputDefinition> Inputs { get; set; } = new List<InputDefinition>();
     }
 
-    public class InputDefinition : SymbolChild
+    public class InputDefinition 
     {
         // relevance: required, relevant, optional
-        public Type Type { get; set; }
+        public Guid Id { get; set; }
+        public InputValue InputValue { get; set; }
     }
 }
