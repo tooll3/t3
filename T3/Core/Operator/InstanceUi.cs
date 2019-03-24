@@ -13,12 +13,6 @@ namespace T3.Core.Operator
         public bool Visible = true;
         public bool Selected = false;
         public string Name { get; set; } = string.Empty;
-        public string ReadableName
-        {
-            get
-            {
-                return string.IsNullOrEmpty(Name) ? Instance.Symbol.SymbolName : Name;
-            }
-        }
+        public string ReadableName => string.IsNullOrEmpty(Name) ? Instance.Symbol.SymbolName : Name;
     }
 }

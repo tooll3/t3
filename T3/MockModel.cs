@@ -13,86 +13,38 @@ namespace T3
 
         private void Init()
         {
-            Symbol _cubeSymbol = new Symbol()
-            {
-                Id = Guid.NewGuid(),
-                SymbolName = "Cube",
-            };
+            var cubeSymbol = new Symbol() { Id = Guid.NewGuid(), SymbolName = "Cube", };
+            var groupSymbol = new Symbol() { Id = Guid.NewGuid(), SymbolName = "Group", };
+            var projectSymbol = new Symbol()
+                                {
+                                    Id = Guid.NewGuid(),
+                                    _children =
+                                    {
+                                        new SymbolChild() { InstanceId = Guid.NewGuid(), Symbol = cubeSymbol, },
+                                        new SymbolChild() { InstanceId = Guid.NewGuid(), Symbol = cubeSymbol, },
+                                        new SymbolChild() { InstanceId = Guid.NewGuid(), Symbol = groupSymbol },
+                                    }
+                                };
 
-            Symbol _groupSymbol = new Symbol()
-            {
-                Id = Guid.NewGuid(),
-                SymbolName = "Group",
-            };
-
-            Symbol _exampleProject = new Symbol()
-            {
-                Id = Guid.NewGuid(),
-                _children = {
-                    new InstanceDefinition()
-                    {
-                        InstanceId = Guid.NewGuid(),
-
-                        Symbol = _cubeSymbol,
-                    },
-                    new InstanceDefinition()
-                    {
-                        InstanceId = Guid.NewGuid(),
-                        Symbol = _cubeSymbol,
-                    },
-                    new InstanceDefinition()
-                    {
-                        InstanceId = Guid.NewGuid(),
-                        Symbol = _groupSymbol,
-                    },
-                }
-            };
-
+            // register the symbols globally
             var symbols = SymbolRegistry.Instance.Definitions;
-            symbols.Add(_cubeSymbol.Id, _cubeSymbol);
-            symbols.Add(_groupSymbol.Id, _groupSymbol);
-            symbols.Add(_exampleProject.Id, _exampleProject);
+            symbols.Add(cubeSymbol.Id, cubeSymbol);
+            symbols.Add(groupSymbol.Id, groupSymbol);
+            symbols.Add(projectSymbol.Id, projectSymbol);
 
-            Instance _projectOp = new Instance()
-            {
-                Parent = null,
-                Symbol = _exampleProject,
-            };
-            _exampleProject._instancesOfSymbol.Add(_projectOp);
+            // create instance of project op, all children are create automatically
+            Instance projectOp = projectSymbol.CreateInstance();
 
-            _projectOp.Children = new List<Instance>(){
-                 new Instance()
-                 {
-                     Parent = _projectOp,
-                     Symbol = _cubeSymbol,
-                     Id = _exampleProject._children[0].InstanceId,
-                     //InstanceDefinition = _exampleProject._children[0],
-                 },
-                 new Instance()
-                 {
-                     Parent = _projectOp,
-                     Symbol = _cubeSymbol,
-                     Id= _exampleProject._children[1].InstanceId,
-                     //InstanceDefinition = _exampleProject._children[1],
-                 },
-                new Instance()
-                 {
-                     Parent = _projectOp,
-                     Symbol = _groupSymbol,
-                     Id = _exampleProject._children[2].InstanceId,
-                 },
-            };
-            _cubeSymbol._instancesOfSymbol.Add(_projectOp.Children[0]);
-            _cubeSymbol._instancesOfSymbol.Add(_projectOp.Children[1]);
-            _groupSymbol._instancesOfSymbol.Add(_projectOp.Children[2]);
-
+            // create ui data for project symbol
             var uiEntries = InstanceUiRegistry.Instance.UiEntries;
-            uiEntries.Add(_exampleProject.Id, new Dictionary<Guid, InstanceUi>()
-                {
-                    {_projectOp.Children[0].Id, new InstanceUi() { Instance =_projectOp.Children[0], Name="Cube1" } },
-                    {_projectOp.Children[1].Id, new InstanceUi() { Instance =_projectOp.Children[1] } },
-                    {_projectOp.Children[2].Id, new InstanceUi() { Instance =_projectOp.Children[2], Name="MyGroup" } },
-                });
+            uiEntries.Add(projectSymbol.Id, new Dictionary<Guid, InstanceUi>()
+                                            {
+                                                { projectOp.Children[0].Id, new InstanceUi { Instance = projectOp.Children[0], Name = "Cube1" } },
+                                                { projectOp.Children[1].Id, new InstanceUi { Instance = projectOp.Children[1] } },
+                                                { projectOp.Children[2].Id, new InstanceUi { Instance = projectOp.Children[2], Name = "MyGroup" } },
+                                            });
+            _initialized = true;
+            MainOp = projectOp;
 
             //_nodes.Add(new Node()
             //{
@@ -130,8 +82,6 @@ namespace T3
 
             //_links.Add(new NodeLink(0, 0, 2, 0));
             //_links.Add(new NodeLink(1, 0, 2, 1));
-            _initialized = true;
-            MainOp = _projectOp;
         }
 
         public Instance MainOp;

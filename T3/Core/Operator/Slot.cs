@@ -39,7 +39,7 @@ namespace T3.Core.Operator
         public Type Type { get; protected set; }
     }
 
-    public class ValueHolder<T>
+    public class InputValue<T>
     {
         public T Value;
     }
