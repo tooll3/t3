@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharpDX;
-using Tooll.Core.PullVariant;
+using T3.Core.Operator;
 
 namespace OperatorTests
 {
@@ -58,7 +58,7 @@ namespace OperatorTests
 
         public class Size2InputOp
         {
-            public Size2Slot Size { get; } = new Size2Slot(new Size2(128,128));
+            public Size2Slot Size { get; } = new Size2Slot(new InputValue<Size2>{Value = Size2(128,128)});
         }
         #endregion
 
