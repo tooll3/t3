@@ -4,6 +4,7 @@ using System;
 using System.Numerics;
 using t3.iuhelpers;
 using T3.Core.Operator;
+using T3.Gui.graph;
 
 namespace t3.graph
 {
@@ -169,6 +170,11 @@ namespace t3.graph
                             _scrollTarget += _io.MouseDelta;
                         }
 
+                        if (ImGui.IsMouseDoubleClicked(0))
+                        {
+                            QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), _compositionOp.Symbol, GetCanvasPosFromScreenPos(ImGui.GetMousePos()));
+                        }
+
                         // Zoom with mouse wheel
                         if (_io.MouseWheel != 0)
                         {
@@ -281,6 +287,14 @@ namespace t3.graph
 
             //    node.Pos += delta;
             //}
+        }
+
+        /// <summary>
+        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public Vector2 GetCanvasPosFromScreenPos(Vector2 screenPos)
+        {
+            return screenPos / _scale - _scroll - _canvasWindowPos;
         }
 
 

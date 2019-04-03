@@ -1,9 +1,9 @@
-﻿using System;
-using ImGuiNET;
+﻿using ImGuiNET;
 using System.Collections.Generic;
 using System.Numerics;
 using t3.graph;
 using T3.Core.Operator;
+using T3.Gui.graph;
 
 namespace T3.Gui
 {
@@ -18,7 +18,11 @@ namespace T3.Gui
 
             // Open a default Window
             OpenNewGraphWindow();
+            _quickCreateWindow = new QuickCreateWindow();
         }
+
+        QuickCreateWindow _quickCreateWindow = null;
+
 
         private static T3UI _instance = null;
 
@@ -30,6 +34,7 @@ namespace T3.Gui
 
         public unsafe void DrawUI()
         {
+            _quickCreateWindow.Draw();
             DrawGraphCanvasWindows();
             if (UiSettings.DemoWindowVisible)
                 ImGui.ShowDemoWindow(ref UiSettings.DemoWindowVisible);
@@ -49,7 +54,7 @@ namespace T3.Gui
 
         public void DrawSelectionParameters()
         {
-//            ImGui.BeginChild("ParameterView", new Vector2(100.0f, 40.0f));
+            //            ImGui.BeginChild("ParameterView", new Vector2(100.0f, 40.0f));
             ImGui.Begin("ParameterView");
             foreach (var pair in InstanceUiRegistry.Instance.UiEntries[_mockModel.MainOp.Symbol.Id])
             {
@@ -67,7 +72,7 @@ namespace T3.Gui
                 }
             }
             ImGui.End();
-//             ImGui.EndChild();
+            //             ImGui.EndChild();
         }
 
         public unsafe void InitStyle()

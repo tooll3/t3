@@ -307,6 +307,7 @@
     <Compile Include="Gui\graph\GraphNode.cs" />
     <Compile Include="Gui\graph\Node.cs" />
     <Compile Include="Gui\graph\NodeLink.cs" />
+    <Compile Include="Gui\QuickCreateWindow.cs" />
     <Compile Include="Gui\ImGuiDx11Impl.cs" />
     <Compile Include="Core\Operator\Instance.cs" />
     <Compile Include="Gui\iuhelpers\Color.cs" />
