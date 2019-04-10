@@ -12,8 +12,8 @@ namespace t3.graph
         {
             ImGui.PushID(instanceUi.SymbolChild.InstanceId.ToString());
             {
-                var posInWindow = canvas.GetChildPosFrom(instanceUi.Position);
-                var posInApp = canvas.GetScreenPosFrom(instanceUi.Position);
+                var posInWindow = canvas.ChildPosFromCanvas(instanceUi.Position);
+                var posInApp = canvas.ScreenPosFromCanvas(instanceUi.Position);
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
