@@ -107,11 +107,11 @@ namespace T3
 
             // create ui data for project symbol
             var uiEntries = InstanceUiRegistry.Instance.UiEntries;
-            uiEntries.Add(projectSymbol.Id, new Dictionary<Guid, InstanceUi>()
+            uiEntries.Add(projectSymbol.Id, new Dictionary<Guid, SymbolChildUi>()
                                             {
-                                                { projectOp.Children[0].Id, new InstanceUi { SymbolChild = projectSymbol._children[0], Name = "Add1" } },
-                                                { projectOp.Children[1].Id, new InstanceUi { SymbolChild = projectSymbol._children[1] } },
-                                                { projectOp.Children[2].Id, new InstanceUi { SymbolChild = projectSymbol._children[2], Name = "Random" } },
+                                                { projectOp.Children[0].Id, new SymbolChildUi { SymbolChild = projectSymbol._children[0], Name = "Add1" } },
+                                                { projectOp.Children[1].Id, new SymbolChildUi { SymbolChild = projectSymbol._children[1] } },
+                                                { projectOp.Children[2].Id, new SymbolChildUi { SymbolChild = projectSymbol._children[2], Name = "Random" } },
                                             });
 
             // create and register input controls

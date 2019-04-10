@@ -8,7 +8,7 @@ namespace t3.graph
 {
     static class GraphNode
     {
-        public static void DrawOnCanvas(InstanceUi instanceUi, GraphCanvasWindow canvas)
+        public static void DrawOnCanvas(SymbolChildUi instanceUi, GraphCanvasWindow canvas)
         {
             ImGui.PushID(instanceUi.SymbolChild.InstanceId.ToString());
             {

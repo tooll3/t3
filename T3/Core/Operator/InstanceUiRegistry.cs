@@ -14,7 +14,7 @@ namespace T3.Core.Operator
          */
         public static InstanceUiRegistry Instance => _instance ?? (_instance = new InstanceUiRegistry());
         // symbol id -> (instance id -> instance ui entry)
-        public Dictionary<Guid, Dictionary<Guid, InstanceUi>> UiEntries { get; } = new Dictionary<Guid, Dictionary<Guid, InstanceUi>>();
+        public Dictionary<Guid, Dictionary<Guid, SymbolChildUi>> UiEntries { get; } = new Dictionary<Guid, Dictionary<Guid, SymbolChildUi>>();
 
         private static InstanceUiRegistry _instance;
     }
