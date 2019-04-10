@@ -129,6 +129,7 @@ namespace T3.Core.Operator
     {
         // relevance: required, relevant, optional
         public Guid Id { get; set; }
+        public string Name { get; set; }
         public InputValue InputValue { get; set; }
     }
 }

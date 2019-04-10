@@ -69,8 +69,8 @@ namespace T3
                                 InstanceType = typeof(AddOperator),
                                 InputDefinitions =
                                 {
-                                    new InputDefinition { Id = Guid.NewGuid(), InputValue = new InputValue<float>(5.0f) },
-                                    new InputDefinition { Id = Guid.NewGuid(), InputValue = new InputValue<float>(10.0f) }
+                                    new InputDefinition { Id = Guid.NewGuid(), Name = "Value1", InputValue = new InputValue<float>(5.0f) },
+                                    new InputDefinition { Id = Guid.NewGuid(), Name = "Value1", InputValue = new InputValue<float>(10.0f) }
                                 }
                             };
             var randomSymbol = new Symbol()
@@ -80,7 +80,7 @@ namespace T3
                                    InstanceType = typeof(RandomOperator),
                                    InputDefinitions =
                                    {
-                                       new InputDefinition { Id = Guid.NewGuid(), InputValue = new InputValue<int>(42) }
+                                       new InputDefinition { Id = Guid.NewGuid(), Name = "Seed", InputValue = new InputValue<int>(42) }
                                    }
                                };
             var projectSymbol = new Symbol()
