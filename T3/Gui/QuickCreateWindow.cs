@@ -48,7 +48,7 @@ namespace T3.Gui.graph
         {
             ImGui.Separator();
 
-            foreach (var symbol in SymbolRegistry.Instance.Definitions.Values)
+            foreach (var symbol in SymbolRegistry.Entries.Values)
             {
                 ImGui.PushID(symbol.Id.ToString());
                 {
