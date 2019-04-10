@@ -76,7 +76,7 @@ namespace T3
             var randomSymbol = new Symbol()
                                {
                                    Id = Guid.NewGuid(),
-                                   SymbolName = "Group",
+                                   SymbolName = "Random",
                                    InstanceType = typeof(RandomOperator),
                                    InputDefinitions =
                                    {
@@ -109,9 +109,9 @@ namespace T3
             var uiEntries = InstanceUiRegistry.Instance.UiEntries;
             uiEntries.Add(projectSymbol.Id, new Dictionary<Guid, InstanceUi>()
                                             {
-                                                { projectOp.Children[0].Id, new InstanceUi { Instance = projectOp.Children[0], Name = "Add1" } },
-                                                { projectOp.Children[1].Id, new InstanceUi { Instance = projectOp.Children[1] } },
-                                                { projectOp.Children[2].Id, new InstanceUi { Instance = projectOp.Children[2], Name = "Random" } },
+                                                { projectOp.Children[0].Id, new InstanceUi { SymbolChild = projectSymbol._children[0], Name = "Add1" } },
+                                                { projectOp.Children[1].Id, new InstanceUi { SymbolChild = projectSymbol._children[1] } },
+                                                { projectOp.Children[2].Id, new InstanceUi { SymbolChild = projectSymbol._children[2], Name = "Random" } },
                                             });
 
             // create and register input controls

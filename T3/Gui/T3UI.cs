@@ -61,12 +61,12 @@ namespace T3.Gui
                 var instanceUi = pair.Value;
                 if (instanceUi.Selected)
                 {
-                    var instance = instanceUi.Instance;
-                    foreach (var inputSlot in instance.Inputs)
-                    {
-                        var inputUi = InputUiRegistry.Entries[inputSlot.Type];
-                        inputUi.DrawInputEdit(inputSlot);
-                    }
+//                     var instance = instanceUi.Instance;
+//                     foreach (var inputSlot in instance.Inputs)
+//                     {
+//                         var inputUi = InputUiRegistry.Entries[inputSlot.Type];
+//                         inputUi.DrawInputEdit(inputSlot);
+//                     }
 
                     break; // only first selected atm
                 }
