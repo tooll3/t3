@@ -1,7 +1,6 @@
-﻿
-
-using ImGuiNET;
+﻿using ImGuiNET;
 using imHelpers;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Windows.Input;
@@ -10,11 +9,13 @@ using T3.Gui.Selection;
 
 namespace T3.Gui.Graph
 {
+    /// <summary>
+    /// Handles the selection by dragging a fence
+    /// </summary>
     public class SelectionFence
     {
-        public SelectionFence(SelectionHandler sh, GraphCanvasWindow canvas)
+        public SelectionFence(GraphCanvasWindow canvas)
         {
-            _selectionHandler = sh;
             _canvas = canvas;
         }
 
@@ -42,6 +43,12 @@ namespace T3.Gui.Graph
 
                 var drawList = ImGui.GetWindowDrawList();
                 drawList.AddRectFilled(_bounds.Min, _bounds.Max, TColors.ToUint(1, 1, 1, 0.5f), 1);
+            }
+
+            if (ImGui.IsKeyPressed((int)Key.Delete))
+            {
+                // TODO: Implement Key Detection and delete command
+                Console.WriteLine("Would delete stuff:" + _canvas.SelectionHandler.SelectedElements);
             }
         }
 
@@ -82,12 +89,12 @@ namespace T3.Gui.Graph
                 _dragThresholdExceeded = true;
                 if (_selectMode == SelectMode.Replace)
                 {
-                    if (_selectionHandler != null)
-                        _selectionHandler.Clear();
+                    if (_canvas.SelectionHandler != null)
+                        _canvas.SelectionHandler.Clear();
                 }
             }
 
-            if (_selectionHandler != null)
+            if (_canvas.SelectionHandler != null)
             {
                 List<ISelectable> elementsToSelect = new List<ISelectable>();
                 foreach (var child in _canvas.UiChildrenById.Values)
@@ -106,15 +113,15 @@ namespace T3.Gui.Graph
                 switch (_selectMode)
                 {
                     case SelectMode.Add:
-                        _selectionHandler.AddElements(elementsToSelect);
+                        _canvas.SelectionHandler.AddElements(elementsToSelect);
                         break;
 
                     case SelectMode.Remove:
-                        _selectionHandler.RemoveElements(elementsToSelect);
+                        _canvas.SelectionHandler.RemoveElements(elementsToSelect);
                         break;
 
                     case SelectMode.Replace:
-                        _selectionHandler.SetElements(elementsToSelect);
+                        _canvas.SelectionHandler.SetElements(elementsToSelect);
                         break;
                 }
             }
@@ -128,7 +135,7 @@ namespace T3.Gui.Graph
             var hasOnlyClicked = delta.LengthSquared() < 4f;
             if (hasOnlyClicked)
             {
-                _selectionHandler.Clear();
+                _canvas.SelectionHandler.Clear();
             }
             isVisible = false;
         }
@@ -143,7 +150,6 @@ namespace T3.Gui.Graph
 
 
         private bool isVisible = false;
-        private SelectionHandler _selectionHandler;
         ImRect _bounds { get { return ImRect.RectBetweenPoints(_startPositionInScreen, _dragPositionInScreen); } }
         private Vector2 _startPositionInScreen;
         private Vector2 _dragPositionInScreen;
