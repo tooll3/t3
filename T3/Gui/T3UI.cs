@@ -54,25 +54,25 @@ namespace T3.Gui
 
         public void DrawSelectionParameters()
         {
-            //            ImGui.BeginChild("ParameterView", new Vector2(100.0f, 40.0f));
             ImGui.Begin("ParameterView");
             foreach (var pair in InstanceUiRegistry.Instance.UiEntries[_mockModel.MainOp.Symbol.Id])
             {
                 var instanceUi = pair.Value;
                 if (instanceUi.Selected)
                 {
-//                     var instance = instanceUi.Instance;
-//                     foreach (var inputSlot in instance.Inputs)
-//                     {
-//                         var inputUi = InputUiRegistry.Entries[inputSlot.Type];
-//                         inputUi.DrawInputEdit(inputSlot);
-//                     }
+                    var symbolChild = instanceUi.SymbolChild.Symbol;
+                    foreach (var inputDefinition in symbolChild.InputDefinitions)
+                    {
+                        ImGui.PushID(inputDefinition.Id.GetHashCode());
+                        var inputUi = InputUiRegistry.Entries[inputDefinition.InputValue.ValueType];
+                        inputUi.DrawInputEdit(inputDefinition.Name, inputDefinition.InputValue);
+                        ImGui.PopID();
+                    }
 
                     break; // only first selected atm
                 }
             }
             ImGui.End();
-            //             ImGui.EndChild();
         }
 
         public unsafe void InitStyle()

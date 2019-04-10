@@ -21,19 +21,18 @@ namespace T3.Core.Operator
         public string ReadableName => string.IsNullOrEmpty(Name) ? SymbolChild.Symbol.SymbolName : Name;
     }
 
-    public interface InputUi
+    public interface IInputUi
     {
-        void DrawInputEdit(Slot inputValue);
+        void DrawInputEdit(string name, InputValue inputValue);
     }
 
-    public class FloatInputUi : InputUi
+    public class FloatInputUi : IInputUi
     {
-        public void DrawInputEdit(Slot inputSlot)
+        public void DrawInputEdit(string name, InputValue inputValue)
         {
-            if (inputSlot is InputSlot<float> floatSlot)
+            if (inputValue is InputValue<float> floatValue)
             {
-                ImGui.DragFloat(floatSlot.Name, ref floatSlot.TypedInputValue.Value);
-                //ImGui.InputFloat("bla", ref floatValue.Value);
+                ImGui.DragFloat(name, ref floatValue.Value);
             }
             else
             {
@@ -42,13 +41,13 @@ namespace T3.Core.Operator
         }
     }
 
-    public class IntInputUi : InputUi
+    public class IntInputUi : IInputUi
     {
-        public void DrawInputEdit(Slot inputSlot)
+        public void DrawInputEdit(string name, InputValue inputValue)
         {
-            if (inputSlot is InputSlot<int> intSlot)
+            if (inputValue is InputValue<int> intValue)
             {
-                ImGui.DragInt(intSlot.Name, ref intSlot.TypedInputValue.Value);
+                ImGui.DragInt(name, ref intValue.Value);
             }
             else
             {
@@ -59,7 +58,7 @@ namespace T3.Core.Operator
 
     public static class InputUiRegistry
     {
-        public static Dictionary<Type, InputUi> Entries { get; } = new Dictionary<Type, InputUi>();
+        public static Dictionary<Type, IInputUi> Entries { get; } = new Dictionary<Type, IInputUi>();
     }
 
 }

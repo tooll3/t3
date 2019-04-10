@@ -49,6 +49,7 @@ namespace T3.Core.Operator
         public InputValue(T value)
         {
             Value = value;
+            ValueType = typeof(T);
         }
         public T Value;
     }
