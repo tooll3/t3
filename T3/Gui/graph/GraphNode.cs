@@ -8,16 +8,16 @@ namespace t3.graph
 {
     static class GraphNode
     {
-        public static void DrawOnCanvas(SymbolChildUi instanceUi, GraphCanvasWindow canvas)
+        public static void DrawOnCanvas(SymbolChildUi childUi, GraphCanvasWindow canvas)
         {
-            ImGui.PushID(instanceUi.SymbolChild.InstanceId.ToString());
+            ImGui.PushID(childUi.SymbolChild.InstanceId.ToString());
             {
-                var posInWindow = canvas.ChildPosFromCanvas(instanceUi.Position);
-                var posInApp = canvas.ScreenPosFromCanvas(instanceUi.Position);
+                var posInWindow = canvas.ChildPosFromCanvas(childUi.Position);
+                var posInApp = canvas.ScreenPosFromCanvas(childUi.Position);
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
-                ImGui.InvisibleButton("node", instanceUi.Size * canvas._scale);
+                ImGui.InvisibleButton("node", childUi.Size * canvas._scale);
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -27,20 +27,28 @@ namespace t3.graph
                 {
                     if (ImGui.IsMouseDragging(0))
                     {
-                        instanceUi.Position = instanceUi.Position + ImGui.GetIO().MouseDelta;
+                        if (!canvas.SelectionHandler.SelectedElements.Contains(childUi))
+                        {
+                            canvas.SelectionHandler.SetElement(childUi);
+                        }
+
+                        foreach (var e in canvas.SelectionHandler.SelectedElements)
+                        {
+                            e.Position += ImGui.GetIO().MouseDelta;
+                        }
                     }
-                    instanceUi.IsSelected = true;
+                    childUi.IsSelected = true;
                 }
 
                 // Rendering
                 canvas._drawList.ChannelsSplit(2);
                 canvas._drawList.ChannelsSetCurrent(1);
-                canvas._drawList.AddText(posInApp, Color.White.UInt, String.Format($"{instanceUi.ReadableName}"));
+                canvas._drawList.AddText(posInApp, Color.White.UInt, String.Format($"{childUi.ReadableName}"));
 
                 canvas._drawList.ChannelsSetCurrent(0);
-                THelpers.OutlinedRect(ref canvas._drawList, posInApp, instanceUi.Size * canvas._scale,
-                    fill: new Color(instanceUi.IsSelected || ImGui.IsItemHovered() ? 0.3f : 0.2f),
-                    outline: instanceUi.IsSelected ? Color.White : Color.Black);
+                THelpers.OutlinedRect(ref canvas._drawList, posInApp, childUi.Size * canvas._scale,
+                    fill: new Color(childUi.IsSelected || ImGui.IsItemHovered() ? 0.3f : 0.2f),
+                    outline: childUi.IsSelected ? Color.White : Color.Black);
 
                 canvas._drawList.ChannelsMerge();
             }

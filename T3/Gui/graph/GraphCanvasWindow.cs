@@ -19,10 +19,10 @@ namespace t3.graph
         {
             _compositionOp = opInstance;
             _windowTitle = windowTitle;
-            _selectionFence = new SelectionFence(_selectionHandler, this);
+            _selectionFence = new SelectionFence(this);
         }
 
-        SelectionHandler _selectionHandler = new SelectionHandler();
+        public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
         SelectionFence _selectionFence;
 
         /// <summary>
