@@ -97,7 +97,7 @@ namespace T3
                                 };
 
             // register the symbols globally
-            var symbols = SymbolRegistry.Instance.Definitions;
+            var symbols = SymbolRegistry.Entries;
             symbols.Add(addSymbol.Id, addSymbol);
             symbols.Add(randomSymbol.Id, randomSymbol);
             symbols.Add(projectSymbol.Id, projectSymbol);
