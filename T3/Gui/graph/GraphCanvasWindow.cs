@@ -330,8 +330,8 @@ namespace t3.graph
         private string _windowTitle;
         private Instance _compositionOp;
 
-        public Dictionary<Guid, InstanceUi> UiChildrenById => _uiChildren;
-        private Dictionary<Guid, InstanceUi> _uiChildren;
+        public Dictionary<Guid, SymbolChildUi> UiChildrenById => _uiChildren;
+        private Dictionary<Guid, SymbolChildUi> _uiChildren;
 
 
         //        private NodeLink _linkUnderConstruction;

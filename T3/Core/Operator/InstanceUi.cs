@@ -10,7 +10,7 @@ namespace T3.Core.Operator
     /// <summary>
     /// Properties needed for visual representation of an instance. Should later be moved to gui component.
     /// </summary>
-    public class InstanceUi : ISelectable
+    public class SymbolChildUi : ISelectable
     {
         public SymbolChild SymbolChild;
         public Vector2 Position { get; set; } = Vector2.Zero;
