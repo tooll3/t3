@@ -175,7 +175,7 @@ namespace t3.graph
 
                         if (ImGui.IsMouseDoubleClicked(0))
                         {
-                            QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), _compositionOp.Symbol, GetCanvasPosFromScreenPos(ImGui.GetMousePos()));
+                            QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), _compositionOp.Symbol, CanvasPosFromScreen(ImGui.GetMousePos()));
                         }
 
                         // Zoom with mouse wheel
@@ -302,24 +302,30 @@ namespace t3.graph
         /// <summary>
         /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public Vector2 GetCanvasPosFromScreenPos(Vector2 screenPos)
+        public Vector2 CanvasPosFromScreen(Vector2 screenPos)
         {
-            return screenPos / _scale - _scroll - _canvasWindowPos;
+            return (screenPos - _scroll - _canvasWindowPos) / _scale;
         }
 
 
         /// <summary>
         /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public Vector2 GetScreenPosFrom(Vector2 posOnCanvas)
+        public Vector2 ScreenPosFromCanvas(Vector2 posOnCanvas)
         {
             return posOnCanvas * _scale + _scroll + _canvasWindowPos;
         }
 
+        public ImRect CanvasRectFromScreen(ImRect screenRect)
+        {
+            return new ImRect(CanvasPosFromScreen(screenRect.Min), CanvasPosFromScreen(screenRect.Max));
+        }
+
+
         /// <summary>
-        /// Get relative position with canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Get relative position within canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public Vector2 GetChildPosFrom(Vector2 posOnCanvas)
+        public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
         {
             return posOnCanvas * _scale + _scroll;
         }

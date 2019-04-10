@@ -22,7 +22,9 @@ namespace T3.Gui.Graph
         {
             if (!isVisible)
             {
-                if (ImGui.IsMouseClicked(0))
+                if (!ImGui.IsAnyItemHovered()
+                    && ImGui.IsWindowHovered()
+                    && ImGui.IsMouseClicked(0))
                 {
                     HandleDragStarted();
                 }
@@ -37,10 +39,12 @@ namespace T3.Gui.Graph
                 {
                     HandleDragCompleted();
                 }
+
                 var drawList = ImGui.GetWindowDrawList();
-                drawList.AddRectFilled(_startPositionInScreen, _dragPositionInScreen, TColors.ToUint(1, 1, 1, 0.5f), 1);
+                drawList.AddRectFilled(_bounds.Min, _bounds.Max, TColors.ToUint(1, 1, 1, 0.5f), 1);
             }
         }
+
 
         public void HandleDragStarted()
         {
@@ -54,13 +58,12 @@ namespace T3.Gui.Graph
 
         public void HandleDragDelta()
         {
-            var _selectMode = SelectMode.Replace;
             _dragPositionInScreen = ImGui.GetMousePos();
             var delta = _startPositionInScreen - _dragPositionInScreen;
-            var bounds = ImRect.RectBetweenPoints(_startPositionInScreen, _dragPositionInScreen);
-            var boundsInCanvas = bounds; //ToDo: Implement!
 
+            var boundsInCanvas = _canvas.CanvasRectFromScreen(_bounds);
 
+            var _selectMode = SelectMode.Replace;
             if (ImGui.IsKeyPressed((int)Key.LeftShift))
             {
                 _selectMode = SelectMode.Add;
@@ -71,12 +74,12 @@ namespace T3.Gui.Graph
             }
 
 
-            if (!_selectionStarted)
+            if (!_dragThresholdExceeded)
             {
                 if (_dragPositionInScreen == _startPositionInScreen)
                     return;
 
-                _selectionStarted = true;
+                _dragThresholdExceeded = true;
                 if (_selectMode == SelectMode.Replace)
                 {
                     if (_selectionHandler != null)
@@ -119,10 +122,10 @@ namespace T3.Gui.Graph
 
         public void HandleDragCompleted()
         {
-            _selectionStarted = false;
+            _dragThresholdExceeded = false;
             var newPosition = ImGui.GetMousePos();
             var delta = _startPositionInScreen - newPosition;
-            var hasOnlyClicked = delta.LengthSquared() > 4f;
+            var hasOnlyClicked = delta.LengthSquared() < 4f;
             if (hasOnlyClicked)
             {
                 _selectionHandler.Clear();
@@ -141,9 +144,10 @@ namespace T3.Gui.Graph
 
         private bool isVisible = false;
         private SelectionHandler _selectionHandler;
+        ImRect _bounds { get { return ImRect.RectBetweenPoints(_startPositionInScreen, _dragPositionInScreen); } }
         private Vector2 _startPositionInScreen;
         private Vector2 _dragPositionInScreen;
         private GraphCanvasWindow _canvas;
-        private bool _selectionStarted = false; // Set to true after DragThreshold reached
+        private bool _dragThresholdExceeded = false; // Set to true after DragThreshold reached
     }
 }
