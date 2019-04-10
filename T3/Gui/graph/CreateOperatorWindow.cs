@@ -1,6 +1,6 @@
 ﻿using ImGuiNET;
 
-namespace T3.Gui.graph
+namespace T3.Gui.Graph
 {
     /// <summary>
     /// Provides a list of operators

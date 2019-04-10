@@ -63,7 +63,7 @@ namespace imHelpers
     /// 2D axis aligned bounding-box. It's a port of IMGUIs internal class.
     /// FIXME: this should be replaced with a .net Rect-Class
     /// </summary>
-    struct ImRect
+    public struct ImRect
     {
         public Vector2 Min;    // Upper-left
         public Vector2 Max;    // Lower-right
@@ -176,6 +176,15 @@ namespace imHelpers
         public void TranslateY(float dy)
         {
             Min.Y += dy; Max.Y += dy;
+        }
+
+        public static ImRect RectBetweenPoints(Vector2 a, Vector2 b)
+        {
+            return new ImRect(
+                x1: Im.Min(a.X, b.X),
+                y1: Im.Min(a.Y, b.Y),
+                x2: Im.Max(a.X, b.X),
+                y2: Im.Max(a.Y, b.Y));
         }
 
         // Simple version, may lead to an inverted rectangle, which is fine for Contains/Overlaps test but not for display.

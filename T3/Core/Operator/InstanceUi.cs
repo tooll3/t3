@@ -1,22 +1,22 @@
-﻿using System;
+﻿using ImGuiNET;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
-using ImGuiNET;
+using T3.Gui.Selection;
 
 namespace T3.Core.Operator
 {
     /// <summary>
     /// Properties needed for visual representation of an instance. Should later be moved to gui component.
     /// </summary>
-    public class InstanceUi
+    public class InstanceUi : ISelectable
     {
-        //public Instance Instance;
         public SymbolChild SymbolChild;
-        public Vector2 Position = Vector2.Zero;
-        public Vector2 Size = new Vector2(100, 30);
-        public bool Visible = true;
-        public bool Selected = false;
+        public Vector2 Position { get; set; } = Vector2.Zero;
+        public Vector2 Size { get; set; } = new Vector2(100, 30);
+        public bool IsVisible { get; set; } = true;
+        public bool IsSelected { get; set; } = false;
         public string Name { get; set; } = string.Empty;
         public string ReadableName => string.IsNullOrEmpty(Name) ? SymbolChild.Symbol.SymbolName : Name;
     }

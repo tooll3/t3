@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using t3.graph;
 using T3.Core.Operator;
-using T3.Gui.graph;
+using T3.Gui.Graph;
 
 namespace T3.Gui
 {
@@ -58,7 +58,7 @@ namespace T3.Gui
             foreach (var pair in InstanceUiRegistry.Instance.UiEntries[_mockModel.MainOp.Symbol.Id])
             {
                 var instanceUi = pair.Value;
-                if (instanceUi.Selected)
+                if (instanceUi.IsSelected)
                 {
                     var symbolChild = instanceUi.SymbolChild.Symbol;
                     foreach (var inputDefinition in symbolChild.InputDefinitions)
