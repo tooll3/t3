@@ -64,6 +64,23 @@ namespace T3.Core.Operator
             return newInstance;
         }
 
+        public Guid AddChild(Symbol symbol)
+        {
+            var newChild = new SymbolChild { InstanceId = Guid.NewGuid(), Symbol = symbol, };
+            _children.Add(newChild);
+
+            foreach (var instance in _instancesOfSymbol)
+            {
+                var childInstance = symbol.CreateInstance();
+                childInstance.Id = newChild.InstanceId;
+                childInstance.Parent = instance;
+
+                instance.Children.Add(childInstance);
+            }
+
+            return newChild.InstanceId;
+        }
+
         void DeleteInstance(Instance op)
         {
             _instancesOfSymbol.Remove(op);

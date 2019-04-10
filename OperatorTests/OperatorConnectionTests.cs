@@ -58,7 +58,7 @@ namespace OperatorTests
 
         public class Size2InputOp
         {
-            public Size2Slot Size { get; } = new Size2Slot(new InputValue<Size2>{Value = Size2(128,128)});
+//             public Size2Slot Size { get; } = new Size2Slot(new InputValue<Size2>{Value = Size2(128,128)});
         }
         #endregion
 
@@ -88,15 +88,15 @@ namespace OperatorTests
         {
             var op = new Size2InputOp();
             var op2 = new IntOutputOp();
-            var result = op.Size.Value;
-            Assert.AreEqual(new Size2(128, 128), result);
-            result = op.Size.GetValue(new EvaluationContext());
-            Assert.AreEqual(new Size2(128, 128), result);
-
-            op.Size.Height.Input = op2.IntOutput;
-            op.Size.IsDirty = true;
-            result = op.Size.GetValue(new EvaluationContext());
-            Assert.AreEqual(new Size2(128, 64), result);
+//             var result = op.Size.Value;
+//             Assert.AreEqual(new Size2(128, 128), result);
+//             result = op.Size.GetValue(new EvaluationContext());
+//             Assert.AreEqual(new Size2(128, 128), result);
+// 
+//             op.Size.Height.Input = op2.IntOutput;
+//             op.Size.IsDirty = true;
+//             result = op.Size.GetValue(new EvaluationContext());
+//             Assert.AreEqual(new Size2(128, 64), result);
         }
 
         [TestMethod]

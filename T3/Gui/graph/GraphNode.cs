@@ -10,7 +10,7 @@ namespace t3.graph
     {
         public static void DrawOnCanvas(InstanceUi instanceUi, GraphCanvasWindow canvas)
         {
-            ImGui.PushID(instanceUi.Instance.Id.ToString());
+            ImGui.PushID(instanceUi.SymbolChild.InstanceId.ToString());
             {
                 var posInWindow = canvas.GetChildPosFrom(instanceUi.Position);
                 var posInApp = canvas.GetScreenPosFrom(instanceUi.Position);

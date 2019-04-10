@@ -286,7 +286,7 @@ namespace OperatorTests
             }
 
             public InputSlot<int> Count = new InputSlot<int>(0);
-            public InputSlot<List<IAttributeColumn>> Columns = new InputSlot<List<IAttributeColumn>>(null);
+             public InputSlot<List<IAttributeColumn>> Columns;// = new InputSlot<List<IAttributeColumn>>(null);
         }
 
         public class SetAttributeOperator
@@ -336,10 +336,10 @@ namespace OperatorTests
                 setter?.Invoke(Output.Value.Columns[_attributeIndex]);
             }
 
-            public InputSlot<AttributeList> AttributeListInput = new InputSlot<AttributeList>(null);
+            public InputSlot<AttributeList> AttributeListInput;// = new InputSlot<AttributeList>(null);
             public InputSlot<string> AttributeName = new InputSlot<string>(string.Empty);
             private int _attributeIndex = -1;
-            public InputSlot<Action<IAttributeColumn>> AttributeValueSetter = new InputSlot<Action<IAttributeColumn>>(default);
+            public InputSlot<Action<IAttributeColumn>> AttributeValueSetter;// = new InputSlot<Action<IAttributeColumn>>(default);
         }
 
         public class AttributeRandomColumn
@@ -378,10 +378,10 @@ namespace OperatorTests
 
             public abstract void Update(EvaluationContext context);
 
-            public InputSlot<AttributeList> AttributeListInput = new InputSlot<AttributeList>(null);
+            public InputSlot<AttributeList> AttributeListInput;//= new InputSlot<AttributeList>(null);
             public InputSlot<string> AttributeName = new InputSlot<string>("<new attribute>");
             //private int _attributeIndex = -1;
-            public InputSlot<Action<AttributeList>> AttributeValueSetter = new InputSlot<Action<AttributeList>>(default);
+            public InputSlot<Action<AttributeList>> AttributeValueSetter;// = new InputSlot<Action<AttributeList>>(default);
         }
 
         public class AccumulateAndNormalize : AddAttributeOperator

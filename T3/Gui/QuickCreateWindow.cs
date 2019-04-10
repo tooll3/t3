@@ -15,6 +15,7 @@ namespace T3.Gui.graph
             _instance = this;
         }
 
+
         public bool Draw()
         {
             if (_refocus)
@@ -22,9 +23,7 @@ namespace T3.Gui.graph
                 ImGui.SetNextWindowFocus();
             }
 
-
-
-            if (_opened && ImGui.Begin(_windowTitle, ref _opened))
+            if (_opened && ImGui.Begin(WindowTitle, ref _opened))
             {
                 if (_refocus)
                     ImGui.SetKeyboardFocusHere(0);
@@ -54,8 +53,11 @@ namespace T3.Gui.graph
                 {
                     if (ImGui.Selectable(symbol.SymbolName, symbol == _selectedSymbol))
                     {
-                        var newChild = new SymbolChild() { InstanceId = Guid.NewGuid(), Symbol = symbol };
-                        symbol._children.Add(newChild);
+                        Guid newInstanceId = _compositionOp.AddChild(symbol);
+                        // create and register ui info for new op
+                        var uiEntriesForCompositionOp = InstanceUiRegistry.Instance.UiEntries[_compositionOp.Id];
+                        uiEntriesForCompositionOp.Add(_compositionOp.Id, new InstanceUi { SymbolChild = _compositionOp._children.Find(entry => entry.InstanceId == newInstanceId)});
+
                         _opened = false;
                     }
                 }
@@ -64,21 +66,17 @@ namespace T3.Gui.graph
         }
 
 
-        static public void OpenAtPosition(Vector2 position, Symbol homeOp, Vector2 positionInOp)
+        public static void OpenAtPosition(Vector2 position, Symbol compositionOp, Vector2 positionInOp)
         {
-            if (_instance == null)
-            {
-                throw (new NotImplementedException("Quick Create window hasn't be initialized"));
-            }
-            ImGui.SetWindowPos(_instance._windowTitle, position);
+            ImGui.SetWindowPos(_instance.WindowTitle, position);
             _instance._refocus = true;
-            _instance._parentOp = homeOp;
+            _instance._compositionOp = compositionOp;
             _instance._positionInOp = positionInOp;
             _opened = true;
         }
 
-        private string _windowTitle { get { return "Find Operator##" + _windowGui; } }
-        private Symbol _parentOp = null;
+        private string WindowTitle => "Find Operator##" + _windowGui;
+        private Symbol _compositionOp = null;
         private Vector2 _positionInOp;
         private Symbol _selectedSymbol;
 

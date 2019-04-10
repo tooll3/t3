@@ -11,13 +11,14 @@ namespace T3.Core.Operator
     /// </summary>
     public class InstanceUi
     {
-        public Instance Instance;
+        //public Instance Instance;
+        public SymbolChild SymbolChild;
         public Vector2 Position = Vector2.Zero;
         public Vector2 Size = new Vector2(100, 30);
         public bool Visible = true;
         public bool Selected = false;
         public string Name { get; set; } = string.Empty;
-        public string ReadableName => string.IsNullOrEmpty(Name) ? Instance.Symbol.SymbolName : Name;
+        public string ReadableName => string.IsNullOrEmpty(Name) ? SymbolChild.Symbol.SymbolName : Name;
     }
 
     public interface InputUi
