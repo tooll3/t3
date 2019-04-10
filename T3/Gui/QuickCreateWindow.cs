@@ -3,7 +3,7 @@ using System;
 using System.Numerics;
 using T3.Core.Operator;
 
-namespace T3.Gui.graph
+namespace T3.Gui.Graph
 {
     /// <summary>
     /// Shows quick search for creating a new Operator <see cref="Instance"/>

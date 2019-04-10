@@ -1,25 +1,29 @@
 using ImGuiNET;
 using imHelpers;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using t3.iuhelpers;
 using T3.Core.Operator;
-using T3.Gui.graph;
+using T3.Gui.Graph;
+using T3.Gui.Selection;
 
 namespace t3.graph
 {
     /// <summary>
     /// A mock implementation of a future graph renderer
     /// </summary>
-    class GraphCanvasWindow
+    public class GraphCanvasWindow
     {
         public GraphCanvasWindow(Instance opInstance, string windowTitle = "Graph windows")
         {
             _compositionOp = opInstance;
             _windowTitle = windowTitle;
+            _selectionFence = new SelectionFence(_selectionHandler, this);
         }
 
-        private Guid _windowGui = Guid.NewGuid();
+        SelectionHandler _selectionHandler = new SelectionHandler();
+        SelectionFence _selectionFence;
 
         /// <summary>
         /// Renders a canvas window
@@ -33,6 +37,7 @@ namespace t3.graph
 
             if (ImGui.Begin(uniqueTitle, ref opened))
             {
+                _uiChildren = InstanceUiRegistry.Instance.UiEntries[_compositionOp.Symbol.Id];
                 _drawList = ImGui.GetWindowDrawList();
                 _overlayDrawList = ImGui.GetOverlayDrawList();
 
@@ -44,8 +49,6 @@ namespace t3.graph
             return opened;
         }
 
-        private string _windowTitle;
-        private Instance _compositionOp;
 
 
         private void DrawNodeList()
@@ -56,25 +59,25 @@ namespace t3.graph
                 ImGui.Text("Nodes");
                 ImGui.Separator();
 
-                var symbol = _compositionOp.Symbol;
+
                 //var allUiEntriesForChildrenOfSymbol = InstanceUiRegistry.Instance.UiEntries[symbol.Id];
                 //var uiEntryForASpecificInstance = allUiEntriesForChildrenOfSymbol[instance.Id];
 
-                foreach (var pair in InstanceUiRegistry.Instance.UiEntries[symbol.Id])
+                foreach (var pair in _uiChildren)
                 {
                     var instanceUi = pair.Value;
-                    ImGui.PushID(pair.Key.ToString());
+                    ImGui.PushID(pair.Key.GetHashCode());
                     {
                         var name = instanceUi.ReadableName;
-                        if (ImGui.Selectable(name, ref instanceUi.Selected))
+                        if (ImGui.Selectable(name, instanceUi.IsSelected))
                         {
                             // Change selection 
-                            foreach (var nodePair in InstanceUiRegistry.Instance.UiEntries[symbol.Id])
+                            foreach (var nodePair in _uiChildren)
                             {
                                 var node2 = nodePair.Value;
-                                if (node2.Selected && node2 != instanceUi)
+                                if (node2.IsSelected && node2 != instanceUi)
                                 {
-                                    node2.Selected = false;
+                                    node2.IsSelected = false;
                                 }
                             }
                         }
@@ -86,56 +89,56 @@ namespace t3.graph
         }
 
 
-        public void StartLinkFromInput(Node nodeWithInput, int inputSlotIndex)
-        {
-            _linkUnderConstruction = new NodeLink()
-            {
-                OutputNodeIndex = -1,
-                OutputSlotIndex = -1,
-                InputSlotIndex = inputSlotIndex,
-                InputNodeIndex = nodeWithInput.ID,
-            };
-        }
+        //public void StartLinkFromInput(Node nodeWithInput, int inputSlotIndex)
+        //{
+        //    _linkUnderConstruction = new NodeLink()
+        //    {
+        //        OutputNodeIndex = -1,
+        //        OutputSlotIndex = -1,
+        //        InputSlotIndex = inputSlotIndex,
+        //        InputNodeIndex = nodeWithInput.ID,
+        //    };
+        //}
 
 
-        public void StartLinkFromOutput(Node nodeWithOutput, int outputSlotIndex)
-        {
-            _linkUnderConstruction = new NodeLink()
-            {
-                OutputSlotIndex = outputSlotIndex,
-                OutputNodeIndex = nodeWithOutput.ID,
-                InputNodeIndex = -1,
-                InputSlotIndex = -1,
-            };
-        }
+        //public void StartLinkFromOutput(Node nodeWithOutput, int outputSlotIndex)
+        //{
+        //    _linkUnderConstruction = new NodeLink()
+        //    {
+        //        OutputSlotIndex = outputSlotIndex,
+        //        OutputNodeIndex = nodeWithOutput.ID,
+        //        InputNodeIndex = -1,
+        //        InputSlotIndex = -1,
+        //    };
+        //}
 
-        public void CompleteLinkToOutput(Node nodeWithOutput, int outputSlotIndex)
-        {
-            //if (_linkUnderConstruction == null)
-            //    return;
+        //public void CompleteLinkToOutput(Node nodeWithOutput, int outputSlotIndex)
+        //{
+        //    //if (_linkUnderConstruction == null)
+        //    //    return;
 
-            //_linkUnderConstruction.OutputSlotIndex = outputSlotIndex;
-            //_linkUnderConstruction.OutputNodeIndex = nodeWithOutput.ID;
-            //_links.Add(_linkUnderConstruction);
-            //_linkUnderConstruction = null;
-        }
+        //    //_linkUnderConstruction.OutputSlotIndex = outputSlotIndex;
+        //    //_linkUnderConstruction.OutputNodeIndex = nodeWithOutput.ID;
+        //    //_links.Add(_linkUnderConstruction);
+        //    //_linkUnderConstruction = null;
+        //}
 
-        public void CompleteLinkToInput(Node nodeWithInput, int inputSlotIndex)
-        {
-            //if (_linkUnderConstruction == null)
-            //    return;
+        //public void CompleteLinkToInput(Node nodeWithInput, int inputSlotIndex)
+        //{
+        //    //if (_linkUnderConstruction == null)
+        //    //    return;
 
-            //_linkUnderConstruction.InputSlotIndex = inputSlotIndex;
-            //_linkUnderConstruction.InputNodeIndex = nodeWithInput.ID;
-            //_links.Add(_linkUnderConstruction);
-            //_linkUnderConstruction = null;
-        }
+        //    //_linkUnderConstruction.InputSlotIndex = inputSlotIndex;
+        //    //_linkUnderConstruction.InputNodeIndex = nodeWithInput.ID;
+        //    //_links.Add(_linkUnderConstruction);
+        //    //_linkUnderConstruction = null;
+        //}
 
 
-        public void CancelLink()
-        {
-            _linkUnderConstruction = null;
-        }
+        //public void CancelLink()
+        //{
+        //    _linkUnderConstruction = null;
+        //}
 
 
         private void DrawCanvas()
@@ -240,11 +243,18 @@ namespace t3.graph
                     _debugMessages += ImGui.IsItemHovered() ? "isWindowHovered " : "";
 
 
+
+                    _selectionFence.Draw();
+
                     _drawList.PopClipRect();
+
+
                 }
                 ImGui.EndChild();
                 ImGui.PopStyleColor();
                 ImGui.PopStyleVar(2);
+
+
             }
             ImGui.EndGroup();
         }
@@ -315,7 +325,16 @@ namespace t3.graph
         }
 
 
-        private NodeLink _linkUnderConstruction;
+
+        private Guid _windowGui = Guid.NewGuid();
+        private string _windowTitle;
+        private Instance _compositionOp;
+
+        public Dictionary<Guid, InstanceUi> UiChildrenById => _uiChildren;
+        private Dictionary<Guid, InstanceUi> _uiChildren;
+
+
+        //        private NodeLink _linkUnderConstruction;
 
 
 
