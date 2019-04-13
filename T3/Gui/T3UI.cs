@@ -1,9 +1,10 @@
 ﻿using ImGuiNET;
 using System.Collections.Generic;
 using System.Numerics;
-using t3.graph;
 using T3.Core.Operator;
+using T3.graph;
 using T3.Gui.Graph;
+using T3.Logging;
 
 namespace T3.Gui
 {
@@ -21,10 +22,8 @@ namespace T3.Gui
             _quickCreateWindow = new QuickCreateWindow();
         }
 
-        QuickCreateWindow _quickCreateWindow = null;
 
 
-        private static T3UI _instance = null;
 
         public static void OpenNewGraphWindow()
         {
@@ -36,8 +35,11 @@ namespace T3.Gui
         {
             _quickCreateWindow.Draw();
             DrawGraphCanvasWindows();
-            if (UiSettings.DemoWindowVisible)
-                ImGui.ShowDemoWindow(ref UiSettings.DemoWindowVisible);
+            if (UiSettingsWindow.DemoWindowVisible)
+                ImGui.ShowDemoWindow(ref UiSettingsWindow.DemoWindowVisible);
+
+            if (UiSettingsWindow.ConsoleWindowVisible)
+                _consoleWindow.Draw(ref UiSettingsWindow.ConsoleWindowVisible);
         }
 
         private unsafe void DrawGraphCanvasWindows()
@@ -75,6 +77,7 @@ namespace T3.Gui
             ImGui.End();
         }
 
+
         public unsafe void InitStyle()
         {
             var style = ImGui.GetStyle();
@@ -106,5 +109,8 @@ namespace T3.Gui
 
         private List<GraphCanvasWindow> _graphCanvasWindows = new List<GraphCanvasWindow>();
         private static MockModel _mockModel = new MockModel();
+        private ConsoleLogWindow _consoleWindow = new ConsoleLogWindow();
+        private static T3UI _instance = null;
+        private QuickCreateWindow _quickCreateWindow = null;
     }
 }

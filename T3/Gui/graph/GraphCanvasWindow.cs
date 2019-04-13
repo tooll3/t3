@@ -3,12 +3,12 @@ using imHelpers;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using t3.iuhelpers;
 using T3.Core.Operator;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
+using T3.UiHelpers;
 
-namespace t3.graph
+namespace T3.graph
 {
     /// <summary>
     /// A mock implementation of a future graph renderer

@@ -2,7 +2,7 @@ using System;
 using System.Numerics;
 using ImGuiNET;
 
-namespace t3.graph
+namespace T3.graph
 {
     public static class TableView
     {

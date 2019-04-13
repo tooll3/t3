@@ -232,7 +232,7 @@ namespace T3
 
                                      _t3ui.DrawUI();
 
-                                     UiSettings.DrawUiSettings();
+                                     UiSettingsWindow.DrawUiSettings();
                                      ImGuiResearch.DrawResourceWindow();
                                      ImGuiResearch.DrawParameterView();
 
@@ -240,7 +240,7 @@ namespace T3
 
                                      ImGui.Render();
                                      _controller.RenderImDrawData(ImGui.GetDrawData());
-                                     swapChain.Present(UiSettings.UseVSync ? 1 : 0, PresentFlags.None);
+                                     swapChain.Present(UiSettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
                                  });
 
             _controller.Dispose();
