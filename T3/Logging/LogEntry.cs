@@ -1,0 +1,69 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace T3.Logging
+{
+    public struct LogEntry
+    {
+        [Flags]
+        public enum EntryLevel
+        {
+            Debug = 1,
+            Info = 2,
+            Warning = 4,
+            Error = 8,
+            ALL = Debug | Info | Warning | Error
+        }
+
+        public DateTime TimeStamp { get; private set; }
+        public EntryLevel Level { get; private set; }
+        public String Message { get; private set; }
+        public Guid Source { get; private set; }
+
+        public LogEntry(EntryLevel level, Guid sourceId, String message)
+        {
+            TimeStamp = DateTime.Now;
+            Level = level;
+            Source = sourceId;
+            Message = message;
+        }
+
+        public LogEntry(EntryLevel level, String message)
+        {
+            TimeStamp = DateTime.Now;
+            Level = level;
+            Message = message;
+            Source = Guid.Empty;
+        }
+
+        public LogEntry(EntryLevel level, String message, DateTime timeStamp)
+        {
+            TimeStamp = timeStamp;
+            Level = level;
+            Message = message;
+            Source = Guid.Empty;
+        }
+
+        /**
+         * Special method to clone an existing entry with a new lineMessage.
+         * This is required for implementing splitting multiline-messages
+         */
+        public LogEntry(LogEntry original, String lineMessage)
+        {
+            TimeStamp = original.TimeStamp;
+            Level = original.Level;
+            Message = lineMessage;
+            Source = original.Source;
+        }
+
+        public List<LogEntry> SplitIntoSingleLineEntries()
+        {
+            var result = new List<LogEntry>();
+            foreach (var line in Message.Replace("\r", "").Split('\n'))
+            {
+                result.Add(new LogEntry(this, line));
+            }
+            return result;
+        }
+    }
+}

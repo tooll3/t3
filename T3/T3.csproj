@@ -292,9 +292,14 @@
     <Compile Include="Core\Operator\SymbolRegistry.cs" />
     <Compile Include="Core\Operator\InstanceUi.cs" />
     <Compile Include="Core\Operator\InstanceUiRegistry.cs" />
+    <Compile Include="Logging\ConsoleLogWindow.cs" />
+    <Compile Include="Logging\Log.cs" />
+    <Compile Include="Logging\LogEntry.cs" />
+    <Compile Include="Logging\ILogWriter.cs" />
+    <Compile Include="Logging\LogWriter.cs" />
     <Compile Include="Gui\graph\CreateOperatorWindow.cs" />
     <Compile Include="Gui\graph\GraphCanvasWindow.cs" />
-    <Compile Include="Gui\graph\GraphNode.cs" />
+    <Compile Include="Gui\graph\GraphOperator.cs" />
     <Compile Include="Gui\graph\SelectionFence.cs" />
     <Compile Include="Gui\QuickCreateWindow.cs" />
     <Compile Include="Gui\ImGuiDx11Impl.cs" />
@@ -323,6 +328,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="cimgui.dll" />
+    <Content Include="ImGui\imgui.cpp" />
+    <Content Include="ImGui\imgui.h" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
@@ -335,6 +342,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logging\Console\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
