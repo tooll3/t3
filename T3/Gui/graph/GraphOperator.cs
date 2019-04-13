@@ -1,13 +1,17 @@
 using ImGuiNET;
 using imHelpers;
 using System;
-using t3.iuhelpers;
+using System.Numerics;
 using T3.Core.Operator;
-
-namespace t3.graph
+using T3.Logging;
+using T3.UiHelpers;
+namespace T3.graph
 {
     static class GraphOperator
     {
+        /// <summary>
+        /// This does something 
+        /// </summary>
         public static void DrawOnCanvas(SymbolChildUi childUi, GraphCanvasWindow canvas)
         {
             ImGui.PushID(childUi.SymbolChild.InstanceId.ToString());
@@ -36,6 +40,17 @@ namespace t3.graph
                         {
                             e.Position += ImGui.GetIO().MouseDelta;
                         }
+                        Log.Debug("Draw op " + childUi.Position);
+                    }
+                    else
+                    {
+                        Log.Debug("Acitve but not clicked");
+                        canvas.SelectionHandler.SetElement(childUi);
+                    }
+                    ImGui.Dummy(Vector2.Zero);
+                    if (ImGui.IsItemClicked(0))
+                    {
+                        canvas.SelectionHandler.SetElement(childUi);
                     }
                     childUi.IsSelected = true;
                 }

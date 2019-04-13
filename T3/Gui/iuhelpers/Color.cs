@@ -1,7 +1,7 @@
 using ImGuiNET;
 using System.Numerics;
 
-namespace t3.iuhelpers
+namespace T3.UiHelpers
 {
     /// <summary>
     /// Simplifieds defining and converting colors from float -> uint

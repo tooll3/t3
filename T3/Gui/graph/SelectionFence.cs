@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Windows.Input;
-using t3.graph;
+using T3.graph;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Graph
