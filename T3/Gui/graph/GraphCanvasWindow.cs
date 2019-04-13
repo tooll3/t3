@@ -235,7 +235,7 @@ namespace t3.graph
                     // Draw nodes
                     foreach (var instanceUi in InstanceUiRegistry.Instance.UiEntries[_compositionOp.Symbol.Id].Values)
                     {
-                        GraphNode.DrawOnCanvas(instanceUi, this);
+                        GraphOperator.DrawOnCanvas(instanceUi, this);
                     }
 
                     _debugMessages += ImGui.IsAnyItemHovered() ? "anyItemHovered " : "";
