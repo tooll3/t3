@@ -1,15 +1,14 @@
-﻿using System;
-using System.Numerics;
-using System.Windows.Forms;
-using System.Runtime.CompilerServices;
+﻿using ImGuiNET;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using Vector2 = System.Numerics.Vector2;
+using System;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
-using ImGuiNET;
-using SharpDX;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3
 {
@@ -55,8 +54,8 @@ namespace T3
             ImGui.SetCurrentContext(context);
 
             //ImGui.GetIO().Fonts.AddFontDefault();
-            ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Fonts/Roboto-Regular.ttf", 15f);
-            ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Fonts/Roboto-Black.ttf", 14f);
+            ImGui.GetIO().Fonts.AddFontFromFileTTF(@"../../../Fonts/Roboto-Regular.ttf", 15f);
+            ImGui.GetIO().Fonts.AddFontFromFileTTF(@"../../../Fonts/Roboto-Black.ttf", 14f);
 
 
             CreateDeviceObjects();

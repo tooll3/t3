@@ -1,6 +1,6 @@
 ﻿using ImGuiNET;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
+//using Microsoft.CodeAnalysis.CSharp.Scripting;
+//using Microsoft.CodeAnalysis.Scripting;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -26,18 +26,18 @@ namespace T3
         public void Update(EvaluationContext context)
         {
             var desc = new Texture2DDescription()
-                       {
-                           Width = Size.GetValue(context).Width,
-                           Height = Size.GetValue(context).Height,
-                           MipLevels = MipLevels.GetValue(context),
-                           ArraySize = ArraySize.GetValue(context),
-                           Format = Format.GetValue(context),
-                           SampleDescription = new SampleDescription(SampleCount.GetValue(context), SampleQuality.GetValue(context)),
-                           Usage = Usage.GetValue(context),
-                           BindFlags = BindFlags.GetValue(context),
-                           CpuAccessFlags = CpuAccessFlags.GetValue(context),
-                           OptionFlags = OptionFlags.GetValue(context)
-                       };
+            {
+                Width = Size.GetValue(context).Width,
+                Height = Size.GetValue(context).Height,
+                MipLevels = MipLevels.GetValue(context),
+                ArraySize = ArraySize.GetValue(context),
+                Format = Format.GetValue(context),
+                SampleDescription = new SampleDescription(SampleCount.GetValue(context), SampleQuality.GetValue(context)),
+                Usage = Usage.GetValue(context),
+                BindFlags = BindFlags.GetValue(context),
+                CpuAccessFlags = CpuAccessFlags.GetValue(context),
+                OptionFlags = OptionFlags.GetValue(context)
+            };
 
             ResourceManager.Instance().CreateTexture(desc, "OpName", ref _textureResourceId, ref Result.Value);
         }
@@ -68,30 +68,30 @@ namespace T3
         public static int LocalFunc(Globals g) { return g.X * 100 * g.Y; }
 
 
-        public static void TestScriptDelegateWithVariables()
-        {
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-            var script = CSharpScript.Create<int>("X*100*Y", globalsType: typeof(Globals));
-            ScriptRunner<int> runner = script.CreateDelegate();
-            watch.Stop();
-            Console.WriteLine($"compilation took: {(double)watch.ElapsedTicks / Stopwatch.Frequency}s");
-            Console.WriteLine($"compilation took: {watch.ElapsedMilliseconds}ms");
-            var globals = new Globals();
-            int sum = 0;
-            watch.Reset();
-            watch.Restart();
-            for (int i = 0; i < 100; i++)
-            {
-                globals.X = i;
-                globals.Y = i;
-                sum += runner(globals).Result;
-            }
-            watch.Stop();
-            Console.WriteLine($"sum: {sum}");
-            Console.WriteLine($"calling took: {(double)watch.ElapsedTicks / Stopwatch.Frequency / 100.0}s");
-            Console.WriteLine($"calling took: {(double)watch.ElapsedMilliseconds / 100.0}ms");
-        }
+        //public static void TestScriptDelegateWithVariables()
+        //{
+        //    Stopwatch watch = new Stopwatch();
+        //    watch.Start();
+        //    var script = CSharpScript.Create<int>("X*100*Y", globalsType: typeof(Globals));
+        //    ScriptRunner<int> runner = script.CreateDelegate();
+        //    watch.Stop();
+        //    Console.WriteLine($"compilation took: {(double)watch.ElapsedTicks / Stopwatch.Frequency}s");
+        //    Console.WriteLine($"compilation took: {watch.ElapsedMilliseconds}ms");
+        //    var globals = new Globals();
+        //    int sum = 0;
+        //    watch.Reset();
+        //    watch.Restart();
+        //    for (int i = 0; i < 100; i++)
+        //    {
+        //        globals.X = i;
+        //        globals.Y = i;
+        //        sum += runner(globals).Result;
+        //    }
+        //    watch.Stop();
+        //    Console.WriteLine($"sum: {sum}");
+        //    Console.WriteLine($"calling took: {(double)watch.ElapsedTicks / Stopwatch.Frequency / 100.0}s");
+        //    Console.WriteLine($"calling took: {(double)watch.ElapsedMilliseconds / 100.0}ms");
+        //}
 
         public static void TestScriptDelegateWithVariablesComparison()
         {
