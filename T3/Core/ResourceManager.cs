@@ -1,11 +1,11 @@
-﻿using System;
+﻿using SharpDX.D3DCompiler;
+using SharpDX.Direct3D11;
+using SharpDX.WIC;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using SharpDX.D3DCompiler;
-using SharpDX.Direct3D11;
-using SharpDX.WIC;
 
 namespace T3
 {
@@ -137,12 +137,12 @@ namespace T3
         private ResourceManager(Device device)
         {
             _device = device;
-            _hlslFileWatcher = new FileSystemWatcher(@"..\..\Resources", "*.hlsl");
+            _hlslFileWatcher = new FileSystemWatcher(@"..\..\..\Resources", "*.hlsl");
             _hlslFileWatcher.Changed += OnChanged;
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // creation time needed for visual studio (2017)
             _hlslFileWatcher.EnableRaisingEvents = true;
 
-            _textureFileWatcher = new FileSystemWatcher(@"..\..\Resources", "*.jpg");//"*.png|*.jpg|*.dds|*.tiff");
+            _textureFileWatcher = new FileSystemWatcher(@"..\..\..\Resources", "*.jpg");//"*.png|*.jpg|*.dds|*.tiff");
             _textureFileWatcher.Changed += OnChanged;
             _textureFileWatcher.Created += OnChanged;
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
@@ -248,7 +248,7 @@ namespace T3
             PixelShaders.Add(resourceEntry);
             if (fileResource == null)
             {
-                fileResource = new FileResource(srcFile, new[] {resourceEntry.Id});
+                fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
                 FileResources.Add(srcFile, fileResource);
             }
             else
@@ -290,24 +290,24 @@ namespace T3
         private static Texture2D CreateTexture2DFromBitmap(Device device, BitmapSource bitmapSource)
         {
             // Allocate DataStream to receive the WIC image pixels
-            int stride = bitmapSource.Size.Width*4;
-            using (var buffer = new SharpDX.DataStream(bitmapSource.Size.Height*stride, true, true))
+            int stride = bitmapSource.Size.Width * 4;
+            using (var buffer = new SharpDX.DataStream(bitmapSource.Size.Height * stride, true, true))
             {
                 // Copy the content of the WIC to the buffer
                 bitmapSource.CopyPixels(stride, buffer);
                 return new Texture2D(device, new Texture2DDescription()
-                                             {
-                                                 Width = bitmapSource.Size.Width,
-                                                 Height = bitmapSource.Size.Height,
-                                                 ArraySize = 1,
-                                                 BindFlags = BindFlags.ShaderResource,
-                                                 Usage = ResourceUsage.Immutable,
-                                                 CpuAccessFlags = CpuAccessFlags.None,
-                                                 Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
-                                                 MipLevels = 1,
-                                                 OptionFlags = ResourceOptionFlags.None,
-                                                 SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
-                                             }, 
+                {
+                    Width = bitmapSource.Size.Width,
+                    Height = bitmapSource.Size.Height,
+                    ArraySize = 1,
+                    BindFlags = BindFlags.ShaderResource,
+                    Usage = ResourceUsage.Immutable,
+                    CpuAccessFlags = CpuAccessFlags.None,
+                    Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
+                    MipLevels = 1,
+                    OptionFlags = ResourceOptionFlags.None,
+                    SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
+                },
                                      new SharpDX.DataRectangle(buffer.DataPointer, stride));
             }
         }
@@ -345,7 +345,7 @@ namespace T3
                 if (resource is TextureResource textureResource)
                 {
                     shaderResourceView?.Dispose();
-                    shaderResourceView = new ShaderResourceView(_device, textureResource.Texture) {DebugName = name};
+                    shaderResourceView = new ShaderResourceView(_device, textureResource.Texture) { DebugName = name };
                     Console.WriteLine($"Created shader resource view '{name}' for texture '{textureResource.Name}'.");
                 }
                 else
@@ -386,7 +386,7 @@ namespace T3
 
             Guid shaderResourceViewId = CreateShaderResourceView(textureResourceEntry.Id, name);
 
-            var fileResource = new FileResource(filename, new[] {textureResourceEntry.Id, shaderResourceViewId});
+            var fileResource = new FileResource(filename, new[] { textureResourceEntry.Id, shaderResourceViewId });
             FileResources.Add(filename, fileResource);
 
             return (textureResourceEntry.Id, shaderResourceViewId);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+//using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace T3.Core.Operator
 {
@@ -125,7 +125,7 @@ namespace T3.Core.Operator
         public List<InputDefinition> Inputs { get; set; } = new List<InputDefinition>();
     }
 
-    public class InputDefinition 
+    public class InputDefinition
     {
         // relevance: required, relevant, optional
         public Guid Id { get; set; }
