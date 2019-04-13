@@ -6,7 +6,7 @@ using T3.Core.Operator;
 
 namespace t3.graph
 {
-    static class GraphNode
+    static class GraphOperator
     {
         public static void DrawOnCanvas(SymbolChildUi childUi, GraphCanvasWindow canvas)
         {
