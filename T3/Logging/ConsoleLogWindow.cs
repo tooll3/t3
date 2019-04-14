@@ -34,8 +34,6 @@ namespace T3.Logging
                 ImGui.SameLine();
                 ImGui.InputText("##Filter", ref _filterString, 100);
                 ImGui.Separator();
-                ImGui.Text("" + ImGui.GetWindowPos());
-                ImGui.Separator();
                 ImGui.BeginChild("scrolling");
                 {
                     foreach (var entry in _logEntries)
@@ -75,10 +73,12 @@ namespace T3.Logging
         private static bool IsLineHovered()
         {
             var min = new Vector2(ImGui.GetWindowPos().X, ImGui.GetItemRectMin().Y);
-            var size = new Vector2(ImGui.GetWindowWidth(), ImGui.GetFrameHeight());
+            var size = new Vector2(ImGui.GetWindowWidth(), ImGui.GetItemRectSize().Y + LINE_PADDING);
             var lineRect = new ImRect(min, min + size);
             return lineRect.Contains(ImGui.GetMousePos());
         }
+
+
 
         private Dictionary<LogEntry.EntryLevel, Vector4> _colorForLogLevel = new Dictionary<LogEntry.EntryLevel, Vector4>()
         {
@@ -103,10 +103,11 @@ namespace T3.Logging
             _logEntries = null;
         }
 
-        private bool _filterIsActive { get { return !string.IsNullOrEmpty(_filterString); } }
 
         public LogEntry.EntryLevel Filter { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        private bool _filterIsActive { get { return !string.IsNullOrEmpty(_filterString); } }
+        private const float LINE_PADDING = 3;
         private StringBuilder _stringBuilder = new StringBuilder();
         private List<LogEntry> _logEntries = new List<LogEntry>();
         private bool _shouldScrollToBottom = true;
