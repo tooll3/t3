@@ -25,7 +25,7 @@ namespace T3.Gui
 
         public static void OpenNewGraphWindow()
         {
-            _instance._graphCanvasWindows.Add(new GraphCanvasWindow(_mockModel.MainOp));
+            _instance._graphCanvasWindows.Add(new GraphCanvasWindow(_mockModel.MainOp, "Composition View " + _instance._graphCanvasWindows.Count));
         }
 
 
