@@ -31,13 +31,14 @@ namespace T3.Gui
 
         public unsafe void DrawUI()
         {
-            _quickCreateWindow.Draw();
             DrawGraphCanvasWindows();
             if (UiSettingsWindow.DemoWindowVisible)
                 ImGui.ShowDemoWindow(ref UiSettingsWindow.DemoWindowVisible);
 
             if (UiSettingsWindow.ConsoleWindowVisible)
                 _consoleWindow.Draw(ref UiSettingsWindow.ConsoleWindowVisible);
+
+            _quickCreateWindow.Draw();
 
             SwapHoveringBuffers();
         }
