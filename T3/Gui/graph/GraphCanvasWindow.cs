@@ -32,10 +32,8 @@ namespace T3.graph
         public bool Draw()
         {
             bool opened = true;
-            //var compOpUi = InstanceUiRegistry.Instance.UiEntries[_compositionOp.Id];
-            var uniqueTitle = _windowTitle + "##" + _windowGui;
 
-            if (ImGui.Begin(uniqueTitle, ref opened))
+            if (ImGui.Begin(_windowTitle, ref opened))
             {
                 _uiChildren = InstanceUiRegistry.Instance.UiEntries[_compositionOp.Symbol.Id];
                 _drawList = ImGui.GetWindowDrawList();
