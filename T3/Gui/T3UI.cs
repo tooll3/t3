@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using T3.Core.Operator;
@@ -22,9 +23,6 @@ namespace T3.Gui
             _quickCreateWindow = new QuickCreateWindow();
         }
 
-
-
-
         public static void OpenNewGraphWindow()
         {
             _instance._graphCanvasWindows.Add(new GraphCanvasWindow(_mockModel.MainOp));
@@ -40,7 +38,10 @@ namespace T3.Gui
 
             if (UiSettingsWindow.ConsoleWindowVisible)
                 _consoleWindow.Draw(ref UiSettingsWindow.ConsoleWindowVisible);
+
+            SwapHoveringBuffers();
         }
+
 
         private unsafe void DrawGraphCanvasWindows()
         {
@@ -53,6 +54,7 @@ namespace T3.Gui
             if (obsoleteGraphWindow != null)
                 _graphCanvasWindows.Remove(obsoleteGraphWindow);
         }
+
 
         public void DrawSelectionParameters()
         {
@@ -77,6 +79,20 @@ namespace T3.Gui
             ImGui.End();
         }
 
+
+        public static void AddHoveredId(Guid id)
+        {
+            _hoveredIdsForNextFrame.Add(id);
+        }
+
+        public void SwapHoveringBuffers()
+        {
+            HoveredIdsLastFrame = _hoveredIdsForNextFrame;
+            _hoveredIdsForNextFrame = new HashSet<Guid>();
+        }
+
+        public static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
+        public static HashSet<Guid> HoveredIdsLastFrame { get; set; } = new HashSet<Guid>();
 
         public unsafe void InitStyle()
         {

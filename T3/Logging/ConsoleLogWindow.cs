@@ -1,8 +1,10 @@
 ﻿using ImGuiNET;
+using imHelpers;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using T3.Gui;
 
 namespace T3.Logging
 {
@@ -31,7 +33,8 @@ namespace T3.Logging
 
                 ImGui.SameLine();
                 ImGui.InputText("##Filter", ref _filterString, 100);
-
+                ImGui.Separator();
+                ImGui.Text("" + ImGui.GetWindowPos());
                 ImGui.Separator();
                 ImGui.BeginChild("scrolling");
                 {
@@ -40,10 +43,19 @@ namespace T3.Logging
                         if (_filterIsActive && !entry.Message.Contains(_filterString))
                             continue;
 
-                        ImGui.PushStyleColor(ImGuiCol.Text, _colorForLogLevel[entry.Level]);
-                        ImGui.Text(string.Format("{0:0.000}", (entry.TimeStamp - _startTime).Milliseconds / 1000f));
+                        var colorHoveredElements = T3UI.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f;
+
+                        var color = _colorForLogLevel[entry.Level];
+                        color.W = colorHoveredElements;
+                        ImGui.PushStyleColor(ImGuiCol.Text, color);
+                        ImGui.Text(string.Format("{0:0.000}", (entry.TimeStamp - _startTime).Ticks / 10000000f));
                         ImGui.SameLine(50);
                         ImGui.Text(entry.Message);
+
+                        if (IsLineHovered())
+                        {
+                            T3UI.AddHoveredId(entry.SourceId);
+                        }
                         ImGui.PopStyleColor();
                     }
 
@@ -58,6 +70,14 @@ namespace T3.Logging
             }
             ImGui.End();
             return isOpen;
+        }
+
+        private static bool IsLineHovered()
+        {
+            var min = new Vector2(ImGui.GetWindowPos().X, ImGui.GetItemRectMin().Y);
+            var size = new Vector2(ImGui.GetWindowWidth(), ImGui.GetFrameHeight());
+            var lineRect = new ImRect(min, min + size);
+            return lineRect.Contains(ImGui.GetMousePos());
         }
 
         private Dictionary<LogEntry.EntryLevel, Vector4> _colorForLogLevel = new Dictionary<LogEntry.EntryLevel, Vector4>()

@@ -18,13 +18,13 @@ namespace T3.Logging
         public DateTime TimeStamp { get; private set; }
         public EntryLevel Level { get; private set; }
         public String Message { get; private set; }
-        public Guid Source { get; private set; }
+        public Guid SourceId { get; private set; }
 
         public LogEntry(EntryLevel level, Guid sourceId, String message)
         {
             TimeStamp = DateTime.Now;
             Level = level;
-            Source = sourceId;
+            SourceId = sourceId;
             Message = message;
         }
 
@@ -33,7 +33,7 @@ namespace T3.Logging
             TimeStamp = DateTime.Now;
             Level = level;
             Message = message;
-            Source = Guid.Empty;
+            SourceId = Guid.Empty;
         }
 
         public LogEntry(EntryLevel level, String message, DateTime timeStamp)
@@ -41,7 +41,7 @@ namespace T3.Logging
             TimeStamp = timeStamp;
             Level = level;
             Message = message;
-            Source = Guid.Empty;
+            SourceId = Guid.Empty;
         }
 
         /**
@@ -53,7 +53,7 @@ namespace T3.Logging
             TimeStamp = original.TimeStamp;
             Level = original.Level;
             Message = lineMessage;
-            Source = original.Source;
+            SourceId = original.SourceId;
         }
 
         public List<LogEntry> SplitIntoSingleLineEntries()
