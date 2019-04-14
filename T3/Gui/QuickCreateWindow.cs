@@ -49,14 +49,14 @@ namespace T3.Gui.Graph
 
             foreach (var symbol in SymbolRegistry.Entries.Values)
             {
-                ImGui.PushID(symbol.Id.ToString());
+                ImGui.PushID(symbol.Id.GetHashCode());
                 {
                     if (ImGui.Selectable(symbol.SymbolName, symbol == _selectedSymbol))
                     {
                         Guid newInstanceId = _compositionOp.AddChild(symbol);
-                        // create and register ui info for new op
+                        // Create and register ui info for new op
                         var uiEntriesForCompositionOp = InstanceUiRegistry.Instance.UiEntries[_compositionOp.Id];
-                        uiEntriesForCompositionOp.Add(_compositionOp.Id, new SymbolChildUi { SymbolChild = _compositionOp._children.Find(entry => entry.InstanceId == newInstanceId)});
+                        uiEntriesForCompositionOp.Add(_compositionOp.Id, new SymbolChildUi { SymbolChild = _compositionOp._children.Find(entry => entry.Id == newInstanceId) });
 
                         _opened = false;
                     }

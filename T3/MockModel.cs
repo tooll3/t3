@@ -90,9 +90,9 @@ namespace T3
                                     InstanceType = typeof(ProjectOperator),
                                     _children =
                                     {
-                                        new SymbolChild() { InstanceId = Guid.NewGuid(), Symbol = addSymbol, },
-                                        new SymbolChild() { InstanceId = Guid.NewGuid(), Symbol = addSymbol, },
-                                        new SymbolChild() { InstanceId = Guid.NewGuid(), Symbol = randomSymbol },
+                                        new SymbolChild() { Id = Guid.NewGuid(), Symbol = addSymbol, },
+                                        new SymbolChild() { Id = Guid.NewGuid(), Symbol = addSymbol, },
+                                        new SymbolChild() { Id = Guid.NewGuid(), Symbol = randomSymbol },
                                     }
                                 };
 

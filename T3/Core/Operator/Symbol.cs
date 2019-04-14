@@ -53,7 +53,7 @@ namespace T3.Core.Operator
             foreach (var childInstanceDef in _children)
             {
                 var childInstance = childInstanceDef.Symbol.CreateInstance();
-                childInstance.Id = childInstanceDef.InstanceId;
+                childInstance.Id = childInstanceDef.Id;
                 childInstance.Parent = newInstance;
 
                 newInstance.Children.Add(childInstance);
@@ -66,19 +66,19 @@ namespace T3.Core.Operator
 
         public Guid AddChild(Symbol symbol)
         {
-            var newChild = new SymbolChild { InstanceId = Guid.NewGuid(), Symbol = symbol, };
+            var newChild = new SymbolChild { Id = Guid.NewGuid(), Symbol = symbol, };
             _children.Add(newChild);
 
             foreach (var instance in _instancesOfSymbol)
             {
                 var childInstance = symbol.CreateInstance();
-                childInstance.Id = newChild.InstanceId;
+                childInstance.Id = newChild.Id;
                 childInstance.Parent = instance;
 
                 instance.Children.Add(childInstance);
             }
 
-            return newChild.InstanceId;
+            return newChild.Id;
         }
 
         void DeleteInstance(Instance op)
@@ -89,7 +89,7 @@ namespace T3.Core.Operator
         InputValue GetInputValue(Guid childInstanceId, Guid inputId)
         {
             var inputValue = (from child in _children
-                              where child.InstanceId == childInstanceId
+                              where child.Id == childInstanceId
                               from input in child.Inputs
                               where input.Id == inputId
                               select input.InputValue).Single();
@@ -121,7 +121,7 @@ namespace T3.Core.Operator
     public class SymbolChild
     {
         public Symbol Symbol { get; internal set; }
-        public Guid InstanceId { get; set; }
+        public Guid Id { get; set; }
         public List<InputDefinition> Inputs { get; set; } = new List<InputDefinition>();
     }
 
