@@ -16,17 +16,23 @@ namespace T3.Gui.Graph
         }
 
 
-        public bool Draw()
+        public void Draw()
         {
-            if (_refocus)
-            {
-                ImGui.SetNextWindowFocus();
-            }
+            if (!_opened)
+                return;
 
-            if (_opened && ImGui.Begin(WindowTitle, ref _opened))
+
+            // Pushing window to front has to be done before Begin()
+            if (_bringWindowToFront)
+                ImGui.SetNextWindowFocus();
+
+            if (ImGui.Begin(WindowTitle, ref _opened))
             {
-                if (_refocus)
+                if (_bringWindowToFront)
+                {
                     ImGui.SetKeyboardFocusHere(0);
+                    ImGui.SetWindowPos(_instance.WindowTitle, _positionInScreen); // Setting its position, after Begin()
+                }
 
                 if (ImGui.InputText("Search", ref _searchInput, maxLength: 20))
                 {
@@ -34,12 +40,9 @@ namespace T3.Gui.Graph
                 }
 
                 DrawOpList();
-
-                _refocus = false;
-                ImGui.End();
+                _bringWindowToFront = false;
             }
-
-            return _opened;
+            ImGui.End();
         }
 
 
@@ -68,23 +71,25 @@ namespace T3.Gui.Graph
 
         public static void OpenAtPosition(Vector2 position, Symbol compositionOp, Vector2 positionInOp)
         {
-            ImGui.SetWindowPos(_instance.WindowTitle, position);
-            _instance._refocus = true;
+            _instance._bringWindowToFront = true;
+            _instance._positionInScreen = position;
             _instance._compositionOp = compositionOp;
             _instance._positionInOp = positionInOp;
             _opened = true;
         }
 
-        private string WindowTitle => "Find Operator##" + _windowGui;
+        private string WindowTitle => "Find Operator";
         private Symbol _compositionOp = null;
         private Vector2 _positionInOp;
-        private Symbol _selectedSymbol;
+        private Symbol _selectedSymbol = null;
+        private Vector2 _positionInScreen;
 
 
         private static bool _opened = false;
-        public bool _refocus = false;
+        public bool _bringWindowToFront = false;
         private string _searchInput = "";
-        private Guid _windowGui = Guid.NewGuid();
+
+        //private Guid _windowGui = Guid.NewGuid();
         private static QuickCreateWindow _instance = null;
     }
 }
