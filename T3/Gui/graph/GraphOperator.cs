@@ -1,10 +1,8 @@
 using ImGuiNET;
 using imHelpers;
 using System;
-using System.Numerics;
 using T3.Core.Operator;
 using T3.Gui;
-using T3.Logging;
 using T3.UiHelpers;
 namespace T3.graph
 {
@@ -33,31 +31,22 @@ namespace T3.graph
 
                 if (ImGui.IsItemActive())
                 {
-                    if (ImGui.IsMouseDragging(0))
+                    if (ImGui.IsItemClicked(0))
                     {
                         if (!canvas.SelectionHandler.SelectedElements.Contains(childUi))
                         {
                             canvas.SelectionHandler.SetElement(childUi);
                         }
-
+                    }
+                    if (ImGui.IsMouseDragging(0))
+                    {
                         foreach (var e in canvas.SelectionHandler.SelectedElements)
                         {
                             e.Position += ImGui.GetIO().MouseDelta;
                         }
-                        Log.Debug($"Draw op {childUi.ReadableName}" + childUi.Position);
                     }
-                    else
-                    {
-                        Log.Debug("Active but not clicked " + childUi.ReadableName, childUi.SymbolChild.InstanceId);
-                        canvas.SelectionHandler.SetElement(childUi);
-                    }
-                    ImGui.Dummy(Vector2.Zero);
-                    if (ImGui.IsItemClicked(0))
-                    {
-                        canvas.SelectionHandler.SetElement(childUi);
-                    }
-                    childUi.IsSelected = true;
                 }
+
 
                 // Rendering
                 canvas._drawList.ChannelsSplit(2);
