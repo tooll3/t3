@@ -3,6 +3,7 @@ using imHelpers;
 using System;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Gui;
 using T3.Logging;
 using T3.UiHelpers;
 namespace T3.graph
@@ -27,6 +28,9 @@ namespace T3.graph
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                 }
 
+                if (ImGui.IsItemHovered())
+                    T3UI.AddHoveredId(childUi.SymbolChild.InstanceId);
+
                 if (ImGui.IsItemActive())
                 {
                     if (ImGui.IsMouseDragging(0))
@@ -40,11 +44,11 @@ namespace T3.graph
                         {
                             e.Position += ImGui.GetIO().MouseDelta;
                         }
-                        Log.Debug("Draw op " + childUi.Position);
+                        Log.Debug($"Draw op {childUi.ReadableName}" + childUi.Position);
                     }
                     else
                     {
-                        Log.Debug("Acitve but not clicked");
+                        Log.Debug("Active but not clicked " + childUi.ReadableName, childUi.SymbolChild.InstanceId);
                         canvas.SelectionHandler.SetElement(childUi);
                     }
                     ImGui.Dummy(Vector2.Zero);
@@ -61,8 +65,10 @@ namespace T3.graph
                 canvas._drawList.AddText(posInApp, Color.White.UInt, String.Format($"{childUi.ReadableName}"));
 
                 canvas._drawList.ChannelsSetCurrent(0);
+
+                var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.InstanceId) ? 1.2f : 0.8f;
                 THelpers.OutlinedRect(ref canvas._drawList, posInApp, childUi.Size * canvas._scale,
-                    fill: new Color(childUi.IsSelected || ImGui.IsItemHovered() ? 0.3f : 0.2f),
+                    fill: new Color((childUi.IsSelected || ImGui.IsItemHovered() ? 0.3f : 0.2f) * hoveredFactor),
                     outline: childUi.IsSelected ? Color.White : Color.Black);
 
                 canvas._drawList.ChannelsMerge();

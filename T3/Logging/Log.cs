@@ -34,14 +34,24 @@ namespace T3.Logging
 
 
         #region API for logging
-        public static void Debug(String message, params object[] args)
+        public static void Debug(String message)
+        {
+            AddEntry(new LogEntry(LogEntry.EntryLevel.Debug, message));
+        }
+
+        public static void Debug(String message, Guid sourceId)
+        {
+            AddEntry(new LogEntry(LogEntry.EntryLevel.Debug, sourceId, message));
+        }
+
+        public static void DebugFormat(String message, params object[] args)
         {
             var messageString = FormatMessageWithArguments(message, args);
             AddEntry(new LogEntry(LogEntry.EntryLevel.Debug, messageString));
         }
 
 
-        public static void Info(String message, params object[] args)
+        public static void InfoFormat(String message, params object[] args)
         {
             var messageString = FormatMessageWithArguments(message, args);
             AddEntry(new LogEntry(LogEntry.EntryLevel.Info, messageString));
@@ -55,7 +65,7 @@ namespace T3.Logging
             _accumulatedInfoLine.Append(c);
             if (_accumulatedInfoLine.Length > lineLength)
             {
-                Info(_accumulatedInfoLine.ToString());
+                InfoFormat(_accumulatedInfoLine.ToString());
                 _accumulatedInfoLine.Clear();
             }
         }
