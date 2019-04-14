@@ -13,7 +13,7 @@ namespace T3.graph
         /// </summary>
         public static void DrawOnCanvas(SymbolChildUi childUi, GraphCanvasWindow canvas)
         {
-            ImGui.PushID(childUi.SymbolChild.InstanceId.ToString());
+            ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
                 var posInWindow = canvas.ChildPosFromCanvas(childUi.Position);
                 var posInApp = canvas.ScreenPosFromCanvas(childUi.Position);
@@ -27,7 +27,7 @@ namespace T3.graph
                 }
 
                 if (ImGui.IsItemHovered())
-                    T3UI.AddHoveredId(childUi.SymbolChild.InstanceId);
+                    T3UI.AddHoveredId(childUi.SymbolChild.Id);
 
                 if (ImGui.IsItemActive())
                 {
@@ -55,7 +55,7 @@ namespace T3.graph
 
                 canvas._drawList.ChannelsSetCurrent(0);
 
-                var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.InstanceId) ? 1.2f : 0.8f;
+                var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.Id) ? 1.2f : 0.8f;
                 THelpers.OutlinedRect(ref canvas._drawList, posInApp, childUi.Size * canvas._scale,
                     fill: new Color((childUi.IsSelected || ImGui.IsItemHovered() ? 0.3f : 0.2f) * hoveredFactor),
                     outline: childUi.IsSelected ? Color.White : Color.Black);

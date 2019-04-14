@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
 using T3.Gui.Selection;
-//using T3.Logging;/
 
 namespace T3.Core.Operator
 {
