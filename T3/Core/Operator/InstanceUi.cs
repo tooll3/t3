@@ -23,35 +23,37 @@ namespace T3.Core.Operator
 
     public interface IInputUi
     {
-        void DrawInputEdit(string name, InputValue inputValue);
+        bool DrawInputEdit(string name, InputValue inputValue);
     }
 
     public class FloatInputUi : IInputUi
     {
-        public void DrawInputEdit(string name, InputValue inputValue)
+        public bool DrawInputEdit(string name, InputValue inputValue)
         {
             if (inputValue is InputValue<float> floatValue)
             {
-                ImGui.DragFloat(name, ref floatValue.Value);
+                return ImGui.DragFloat(name, ref floatValue.Value);
             }
             else
             {
                 Debug.Assert(false);
+                return false;
             }
         }
     }
 
     public class IntInputUi : IInputUi
     {
-        public void DrawInputEdit(string name, InputValue inputValue)
+        public bool DrawInputEdit(string name, InputValue inputValue)
         {
             if (inputValue is InputValue<int> intValue)
             {
-                ImGui.DragInt(name, ref intValue.Value);
+                return ImGui.DragInt(name, ref intValue.Value);
             }
             else
             {
                 Debug.Assert(false);
+                return false;
             }
         }
     }

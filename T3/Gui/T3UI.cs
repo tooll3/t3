@@ -65,12 +65,16 @@ namespace T3.Gui
                 var instanceUi = pair.Value;
                 if (instanceUi.IsSelected)
                 {
-                    var symbolChild = instanceUi.SymbolChild.Symbol;
-                    foreach (var inputDefinition in symbolChild.InputDefinitions)
+                    var symbolChild = instanceUi.SymbolChild;
+                    foreach (var inputDefinition in symbolChild.Symbol.InputDefinitions)
                     {
                         ImGui.PushID(inputDefinition.Id.GetHashCode());
-                        var inputUi = InputUiRegistry.Entries[inputDefinition.DefaultValue.ValueType];
-                        inputUi.DrawInputEdit(inputDefinition.Name, inputDefinition.DefaultValue);
+                        var input = symbolChild.InputValues[inputDefinition.Id];
+                        var inputUi = InputUiRegistry.Entries[input.Value.ValueType];
+                        ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? new Vector4(0.4f,0.4f,0.4f,1.0f) : Vector4.One);
+                        bool valueModified = inputUi.DrawInputEdit(inputDefinition.Name, input.Value);
+                        input.IsDefault &= !valueModified; 
+                        ImGui.PopStyleColor();
                         ImGui.PopID();
                     }
 
