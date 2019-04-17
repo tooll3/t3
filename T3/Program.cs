@@ -197,13 +197,13 @@ namespace T3
 
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
-            //resourceManager.CreateVertexShader(@"..\..\Resources\\vs-fullscreen-tri-pos-only.hlsl", "main", "vs-fullscreen-tri-pos-only");
-            //resourceManager.CreatePixelShader(@"..\..\Resources\\ps-pos-only-fixed-color.hlsl", "main", "ps-pos-only-fixed-color");
+            //resourceManager.CreateVertexShader(@"Resources\\vs-fullscreen-tri-pos-only.hlsl", "main", "vs-fullscreen-tri-pos-only");
+            //resourceManager.CreatePixelShader(@"Resources\\ps-pos-only-fixed-color.hlsl", "main", "ps-pos-only-fixed-color");
             var di = new DirectoryInfo(".");
             System.Console.WriteLine(di.FullName);
-            Guid vsId = resourceManager.CreateVertexShader(@"..\..\..\Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture");
-            Guid psId = resourceManager.CreatePixelShader(@"..\..\..\Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture");
-            (Guid texId, Guid srvId) = resourceManager.CreateTextureFromFile(@"..\..\..\Resources\chipmunk.jpg");
+            Guid vsId = resourceManager.CreateVertexShader(@"Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture");
+            Guid psId = resourceManager.CreatePixelShader(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture");
+            (Guid texId, Guid srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg");
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -231,12 +231,9 @@ namespace T3
                                      context.Draw(3, 0);
 
                                      _t3ui.DrawUI();
+                                     _t3ui.DrawSelectionParameters();
 
                                      UiSettingsWindow.DrawUiSettings();
-                                     ImGuiResearch.DrawResourceWindow();
-                                     ImGuiResearch.DrawParameterView();
-
-                                     _t3ui.DrawSelectionParameters();
 
                                      ImGui.Render();
                                      _controller.RenderImDrawData(ImGui.GetDrawData());
