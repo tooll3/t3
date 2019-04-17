@@ -69,8 +69,8 @@ namespace T3.Gui
                     foreach (var inputDefinition in symbolChild.InputDefinitions)
                     {
                         ImGui.PushID(inputDefinition.Id.GetHashCode());
-                        var inputUi = InputUiRegistry.Entries[inputDefinition.InputValue.ValueType];
-                        inputUi.DrawInputEdit(inputDefinition.Name, inputDefinition.InputValue);
+                        var inputUi = InputUiRegistry.Entries[inputDefinition.DefaultValue.ValueType];
+                        inputUi.DrawInputEdit(inputDefinition.Name, inputDefinition.DefaultValue);
                         ImGui.PopID();
                     }
 
