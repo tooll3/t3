@@ -45,7 +45,7 @@ namespace T3.Core.Operator
                 Debug.Assert(i < newInstance.Inputs.Count);
                 if (newInstance.Inputs[i] is IInputSlot input)
                 {
-                    input.InputValue = InputDefinitions[i].InputValue;
+                    input.InputValue = InputDefinitions[i].DefaultValue;
                 }
             }
 
@@ -90,9 +90,9 @@ namespace T3.Core.Operator
         {
             var inputValue = (from child in _children
                               where child.Id == childInstanceId
-                              from input in child.Inputs
-                              where input.Id == inputId
-                              select input.InputValue).Single();
+                              from input in child.InputValues
+                              where input.Key == inputId
+                              select input.Value).Single();
             return inputValue;
         }
 
@@ -100,7 +100,7 @@ namespace T3.Core.Operator
         {
             var inputDefaultValue = (from input in InputDefinitions
                                      where input.Id == inputId
-                                     select input.InputValue).Single();
+                                     select input.DefaultValue).Single();
             return inputDefaultValue;
         }
 
@@ -122,7 +122,8 @@ namespace T3.Core.Operator
     {
         public Symbol Symbol { get; internal set; }
         public Guid Id { get; set; }
-        public List<InputDefinition> Inputs { get; set; } = new List<InputDefinition>();
+        // map input id to actual input value
+        public Dictionary<Guid, InputValue> InputValues { get; set; } = new Dictionary<Guid, InputValue>();
     }
 
     public class InputDefinition
@@ -130,6 +131,6 @@ namespace T3.Core.Operator
         // relevance: required, relevant, optional
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public InputValue InputValue { get; set; }
+        public InputValue DefaultValue { get; set; }
     }
 }
