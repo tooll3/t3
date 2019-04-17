@@ -319,6 +319,21 @@ namespace T3.graph
             return new ImRect(CanvasPosFromScreen(screenRect.Min), CanvasPosFromScreen(screenRect.Max));
         }
 
+        public ImRect ScreenRectFromCanvas(ImRect canvasRect)
+        {
+            return new ImRect(ScreenPosFromCanvas(canvasRect.Min), ScreenPosFromCanvas(canvasRect.Max));
+        }
+
+        public void DrawRect(ImRect rectOnCanvas, Color color)
+        {
+            _drawList.AddRect(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color.UInt);
+        }
+
+        public void DrawRectFilled(ImRect rectOnCanvas, Color color)
+        {
+            _drawList.AddRectFilled(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color.UInt);
+        }
+
 
         /// <summary>
         /// Get relative position within canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
