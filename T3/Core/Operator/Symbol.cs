@@ -66,7 +66,7 @@ namespace T3.Core.Operator
 
         public Guid AddChild(Symbol symbol)
         {
-            var newChild = new SymbolChild { Id = Guid.NewGuid(), Symbol = symbol, };
+            var newChild = new SymbolChild(symbol);
             _children.Add(newChild);
 
             foreach (var instance in _instancesOfSymbol)
@@ -86,23 +86,23 @@ namespace T3.Core.Operator
             _instancesOfSymbol.Remove(op);
         }
 
-        InputValue GetInputValue(Guid childInstanceId, Guid inputId)
-        {
-            var inputValue = (from child in _children
-                              where child.Id == childInstanceId
-                              from input in child.InputValues
-                              where input.Key == inputId
-                              select input.Value).Single();
-            return inputValue;
-        }
-
-        InputValue GetInputDefaultValue(Guid inputId)
-        {
-            var inputDefaultValue = (from input in InputDefinitions
-                                     where input.Id == inputId
-                                     select input.DefaultValue).Single();
-            return inputDefaultValue;
-        }
+//         InputValue GetInputValue(Guid childInstanceId, Guid inputId)
+//         {
+//             var inputValue = (from child in _children
+//                               where child.Id == childInstanceId
+//                               from input in child.InputValues
+//                               where input.Key == inputId
+//                               select input.Value).Single();
+//             return inputValue;
+//         }
+// 
+//         InputValue GetInputDefaultValue(Guid inputId)
+//         {
+//             var inputDefaultValue = (from input in InputDefinitions
+//                                      where input.Id == inputId
+//                                      select input.DefaultValue).Single();
+//             return inputDefaultValue;
+//         }
 
         public readonly List<Instance> _instancesOfSymbol = new List<Instance>();
         public readonly List<Connection> _connections = new List<Connection>();
@@ -120,10 +120,48 @@ namespace T3.Core.Operator
 
     public class SymbolChild
     {
-        public Symbol Symbol { get; internal set; }
-        public Guid Id { get; set; }
+        public class Input
+        {
+            public Input(InputValue defaultValue)
+            {
+                DefaultValue = defaultValue;
+                Value = defaultValue.Clone();
+                IsDefault = true;
+            }
+
+            // reference to the default value defined in corresponding symbol
+            public InputValue DefaultValue { get; }
+            // the input value used for this symbol child
+            public InputValue Value { get; }
+            public bool IsDefault { get; set; }
+
+            public void SetCurrentValueAsDefault()
+            {
+                DefaultValue.Assign(Value);
+                IsDefault = true;
+            }
+
+            public void ResetToDefault()
+            {
+                Value.Assign(DefaultValue);
+                IsDefault = true;
+            }
+        }
+
+        public SymbolChild(Symbol symbol)
+        {
+            Symbol = symbol;
+            Id = Guid.NewGuid();
+            foreach (var symbolInput in symbol.InputDefinitions)
+            {
+                InputValues.Add(symbolInput.Id, new Input(symbolInput.DefaultValue));
+            }
+        }
+
+        public Symbol Symbol { get; }
+        public Guid Id { get; }
         // map input id to actual input value
-        public Dictionary<Guid, InputValue> InputValues { get; set; } = new Dictionary<Guid, InputValue>();
+        public Dictionary<Guid, Input> InputValues { get; } = new Dictionary<Guid, Input>();
     }
 
     public class InputDefinition

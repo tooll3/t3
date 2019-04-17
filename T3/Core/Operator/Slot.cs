@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Reflection;
 using SharpDX;
 
 namespace T3.Core.Operator
@@ -42,6 +44,8 @@ namespace T3.Core.Operator
     public abstract class InputValue
     {
         public Type ValueType;
+        public abstract InputValue Clone();
+        public abstract void Assign(InputValue otherValue);
     }
 
     public class InputValue<T> : InputValue
@@ -51,6 +55,24 @@ namespace T3.Core.Operator
             Value = value;
             ValueType = typeof(T);
         }
+
+        public override InputValue Clone()
+        {
+            return new InputValue<T>(Value);
+        }
+
+        public override void Assign(InputValue otherValue)
+        {
+            if (otherValue is InputValue<T> otherTypedValue)
+            {
+                Value = otherTypedValue.Value;
+            }
+            else
+            {
+                Debug.Assert(false); // trying to assign different types of input values
+            }
+        }
+
         public T Value;
     }
 
