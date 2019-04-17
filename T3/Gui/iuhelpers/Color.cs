@@ -6,7 +6,7 @@ namespace T3.UiHelpers
     /// <summary>
     /// Simplifieds defining and converting colors from float -> uint
     /// </summary>
-    struct Color
+    public struct Color
     {
         public Vector4 Values;
 

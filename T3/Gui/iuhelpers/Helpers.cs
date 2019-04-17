@@ -1,7 +1,7 @@
 using ImGuiNET;
 using System.Numerics;
-using T3.UiHelpers;
 using T3.Gui;
+using T3.UiHelpers;
 
 namespace imHelpers
 {
@@ -186,6 +186,12 @@ namespace imHelpers
                 x2: Im.Max(a.X, b.X),
                 y2: Im.Max(a.Y, b.Y));
         }
+
+        public static ImRect RectWithSize(Vector2 position, Vector2 size)
+        {
+            return new ImRect(position, position + size);
+        }
+
 
         // Simple version, may lead to an inverted rectangle, which is fine for Contains/Overlaps test but not for display.
         public void ClipWith(ImRect r)
