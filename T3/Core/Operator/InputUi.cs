@@ -22,6 +22,15 @@ namespace T3.Gui
                 // draw control
                 ImGui.PushItemWidth(200.0f);
                 ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? Color.Gray.Rgba : Color.White.Rgba);
+                if (input.IsDefault)
+                {
+                    // handling default values is a bit tricky with ImGui as we want to show the default
+                    // value when this is set, but we never want to default value to be modified. But as
+                    // editing is already done when the return value of the ImGui edit control tells us
+                    // that editing has happened this here is a simple way to ensure that the default value
+                    // is always correct but edition is only happening on the input value.
+                    input.Value.Assign(input.DefaultValue);
+                }
                 bool valueModified = DrawEditControl(name, ref typedValue.Value);
                 input.IsDefault &= !valueModified;
                 ImGui.PopStyleColor();
