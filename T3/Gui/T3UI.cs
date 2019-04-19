@@ -64,26 +64,30 @@ namespace T3.Gui
             {
                 var symbolChildUi = pair.Value;
                 if (!symbolChildUi.IsSelected)
-                {
-                    var symbolChild = symbolChildUi.SymbolChild;
-                    foreach (var inputDefinition in symbolChild.Symbol.InputDefinitions)
-                    {
-                        ImGui.PushID(inputDefinition.Id.GetHashCode());
-                        var input = symbolChild.InputValues[inputDefinition.Id];
-                        var inputUi = InputUiRegistry.Entries[input.Value.ValueType];
-                        ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? new Vector4(0.4f,0.4f,0.4f,1.0f) : Vector4.One);
-                        bool valueModified = inputUi.DrawInputEdit(inputDefinition.Name, input.Value);
-                        input.IsDefault &= !valueModified; 
-                        ImGui.PopStyleColor();
-                        ImGui.PopID();
-                    }
+                    continue;
 
-                    break; // only first selected atm
+                var symbolChild = symbolChildUi.SymbolChild;
+                foreach (var inputDefinition in symbolChild.Symbol.InputDefinitions)
+                {
+                    DrawParameterViewEntry(inputDefinition, symbolChild);
                 }
+
+                break; // only first selected atm
             }
             ImGui.End();
         }
 
+        private static void DrawParameterViewEntry(InputDefinition inputDefinition, SymbolChild symbolChild)
+        {
+            ImGui.PushID(inputDefinition.Id.GetHashCode());
+            var input = symbolChild.InputValues[inputDefinition.Id];
+            var inputUi = InputUiRegistry.Entries[input.Value.ValueType];
+            ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? new Vector4(0.4f, 0.4f, 0.4f, 1.0f) : Vector4.One);
+            bool valueModified = inputUi.DrawInputEdit(inputDefinition.Name, input.Value);
+            input.IsDefault &= !valueModified;
+            ImGui.PopStyleColor();
+            ImGui.PopID();
+        }
 
         public static void AddHoveredId(Guid id)
         {
