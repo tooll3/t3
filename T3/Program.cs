@@ -205,8 +205,11 @@ namespace T3
             Guid psId = resourceManager.CreatePixelShader(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture");
             (Guid texId, Guid srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg");
 
+
             var stopwatch = new Stopwatch();
             stopwatch.Start();
+
+            ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
 
             // Main loop
             RenderLoop.Run(form, () =>
@@ -215,6 +218,8 @@ namespace T3
                                      ImGui.GetIO().DeltaTime = (float)(ticks) / Stopwatch.Frequency;
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
                                      stopwatch.Restart();
+
+                                     Metrics.UiRenderingStarted();
                                      _t3ui.InitStyle();
 
                                      ImGui.NewFrame();
@@ -237,6 +242,9 @@ namespace T3
 
                                      ImGui.Render();
                                      _controller.RenderImDrawData(ImGui.GetDrawData());
+
+                                     Metrics.UiRenderingCompleted();
+
                                      swapChain.Present(UiSettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
                                  });
 

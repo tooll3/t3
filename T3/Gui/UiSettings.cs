@@ -17,8 +17,7 @@ namespace T3.Gui
         {
             ImGui.Begin("Stats");
             {
-                float framerate = ImGui.GetIO().Framerate;
-                ImGui.Text($"Application average {1000.0f / framerate:0.00} ms/frame ({framerate:0.0} FPS)");
+                Metrics.Draw();
                 ImGui.Checkbox("VSync", ref _vsync);
                 ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
                 ImGui.Checkbox("Show Item Regions", ref ItemRegionsVisible);
@@ -32,5 +31,6 @@ namespace T3.Gui
             }
             ImGui.End();
         }
+
     }
 }
