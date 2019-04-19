@@ -293,6 +293,7 @@
     <Compile Include="Core\Operator\SymbolRegistry.cs" />
     <Compile Include="Core\Operator\SymbolChildUi.cs" />
     <Compile Include="Core\Operator\SymbolChildUiRegistry.cs" />
+    <Compile Include="Gui\Metrics.cs" />
     <Compile Include="Logging\ConsoleLogWindow.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\LogEntry.cs" />
