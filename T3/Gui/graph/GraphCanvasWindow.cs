@@ -258,10 +258,10 @@ namespace T3.graph
 
         private void DrawConnections()
         {
-            foreach (var c in _compositionOp.Symbol._connections)
+            foreach (var c in _compositionOp.Symbol.Connections)
             {
-                var source = UiChildrenById[c.SourceInstanceId];
-                var target = UiChildrenById[c.TargetInstanceId];
+                var source = UiChildrenById[c.SourceChildId];
+                var target = UiChildrenById[c.TargetChildId];
                 var sourcePos = ScreenPosFromCanvas(source.Position);
                 var targetPos = ScreenPosFromCanvas(target.Position + new Vector2(0, target.Size.Y));
 
@@ -383,6 +383,8 @@ namespace T3.graph
         public Vector2 _canvasWindowPos;    // Position of the canvas window-panel within Application window
         public float _scale = 1;            //The damped scale factor {read only}
         float _scaleTarget = 1;
+
+        public const float GridSize = 20f;
 
         string _debugMessages = "";
         ImGuiIOPtr _io;

@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 //using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace T3.Core.Operator
 {
+    /// <summary>
+    /// Represents the definition of an operator. It can include:
+    /// - <see cref="SymbolChild"/>s that references other Symbols
+    /// - <see cref="Connection"/>s that connect these children
+    /// </summary>
+    /// <remarks>
+    /// - There can be multiple <see cref="Instance"/>s of a symbol.
+    /// </remarks>
     public class Symbol : IDisposable
     {
         public Guid Id { get; set; }
@@ -13,29 +20,32 @@ namespace T3.Core.Operator
         public string SymbolName { get; set; }
         public string Namespace { get; set; }
 
+        public readonly List<Instance> _instancesOfSymbol = new List<Instance>();
+        public readonly List<SymbolChild> Children = new List<SymbolChild>();
+        public readonly List<Connection> Connections = new List<Connection>();
+
+        /// <summary>
+        /// Inputs of this symbol. input values are the default values (exist only once per symbol)
+        /// </summary>
+        public readonly List<InputDefinition> InputDefinitions = new List<InputDefinition>();
+
+        public Type SymbolType { get; set; }
+
+
+        #region public API =======================================================================
+        public void Dispose()
+        {
+            _instancesOfSymbol.ForEach(instance => instance.Dispose());
+        }
+
         public Symbol()
         {
         }
 
-        public class Connection
-        {
-            public Guid SourceInstanceId { get; }
-            public Guid SourceSlotId { get; }
-            public Guid TargetInstanceId { get; }
-            public Guid TargetSlotId { get; }
-
-            public Connection(Guid sourceInstanceId, Guid sourceSlotId, Guid targetInstanceId, Guid targetSlotId)
-            {
-                SourceInstanceId = sourceInstanceId;
-                SourceSlotId = sourceSlotId;
-                TargetInstanceId = targetInstanceId;
-                TargetSlotId = targetSlotId;
-            }
-        }
 
         public Instance CreateInstance()
         {
-            var newInstance = Activator.CreateInstance(InstanceType) as Instance;
+            var newInstance = Activator.CreateInstance(SymbolType) as Instance;
             Debug.Assert(newInstance != null);
             newInstance.Symbol = this;
 
@@ -50,7 +60,7 @@ namespace T3.Core.Operator
             }
 
             // create children
-            foreach (var childInstanceDef in _children)
+            foreach (var childInstanceDef in Children)
             {
                 var childInstance = childInstanceDef.Symbol.CreateInstance();
                 childInstance.Id = childInstanceDef.Id;
@@ -67,7 +77,7 @@ namespace T3.Core.Operator
         public Guid AddChild(Symbol symbol)
         {
             var newChild = new SymbolChild(symbol);
-            _children.Add(newChild);
+            Children.Add(newChild);
 
             foreach (var instance in _instancesOfSymbol)
             {
@@ -86,89 +96,62 @@ namespace T3.Core.Operator
             _instancesOfSymbol.Remove(op);
         }
 
-//         InputValue GetInputValue(Guid childInstanceId, Guid inputId)
-//         {
-//             var inputValue = (from child in _children
-//                               where child.Id == childInstanceId
-//                               from input in child.InputValues
-//                               where input.Key == inputId
-//                               select input.Value).Single();
-//             return inputValue;
-//         }
-// 
-//         InputValue GetInputDefaultValue(Guid inputId)
-//         {
-//             var inputDefaultValue = (from input in InputDefinitions
-//                                      where input.Id == inputId
-//                                      select input.DefaultValue).Single();
-//             return inputDefaultValue;
-//         }
+        //         InputValue GetInputValue(Guid childInstanceId, Guid inputId)
+        //         {
+        //             var inputValue = (from child in _children
+        //                               where child.Id == childInstanceId
+        //                               from input in child.InputValues
+        //                               where input.Key == inputId
+        //                               select input.Value).Single();
+        //             return inputValue;
+        //         }
+        // 
+        //         InputValue GetInputDefaultValue(Guid inputId)
+        //         {
+        //             var inputDefaultValue = (from input in InputDefinitions
+        //                                      where input.Id == inputId
+        //                                      select input.DefaultValue).Single();
+        //             return inputDefaultValue;
+        //         }
+        #endregion
 
-        public readonly List<Instance> _instancesOfSymbol = new List<Instance>();
-        public readonly List<Connection> _connections = new List<Connection>();
-        public readonly List<SymbolChild> _children = new List<SymbolChild>();
+        #region sub classses =============================================================================
 
-        // Inputs of this symbol, input values are the default values (exist only once per symbol)
-        public readonly List<InputDefinition> InputDefinitions = new List<InputDefinition>();
-        public Type InstanceType { get; set; }
-
-        public void Dispose()
+        /// <summary>
+        /// Options on the visual presentation of <see cref="Symbol"/> input.
+        /// </summary>
+        public class InputDefinition
         {
-            _instancesOfSymbol.ForEach(instance => instance.Dispose());
-        }
-    }
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public InputValue DefaultValue { get; set; }
 
-    public class SymbolChild
-    {
-        public class Input
-        {
-            public Input(InputValue defaultValue)
+            public Relevancy Relevance;
+            public enum Relevancy
             {
-                DefaultValue = defaultValue;
-                Value = defaultValue.Clone();
-                IsDefault = true;
+                Required,
+                Relevant,
+                Optional
             }
 
-            // reference to the default value defined in corresponding symbol
-            public InputValue DefaultValue { get; }
-            // the input value used for this symbol child
-            public InputValue Value { get; }
-            public bool IsDefault { get; set; }
-
-            public void SetCurrentValueAsDefault()
-            {
-                DefaultValue.Assign(Value);
-                IsDefault = true;
-            }
-
-            public void ResetToDefault()
-            {
-                Value.Assign(DefaultValue);
-                IsDefault = true;
-            }
+            //TODO: how do we handle MultiInputs?
         }
 
-        public SymbolChild(Symbol symbol)
+        public class Connection
         {
-            Symbol = symbol;
-            Id = Guid.NewGuid();
-            foreach (var symbolInput in symbol.InputDefinitions)
+            public Guid SourceChildId { get; }
+            public Guid OutputDefinitionId { get; }
+            public Guid TargetChildId { get; }
+            public Guid InputDefinitionId { get; }
+
+            public Connection(Guid sourceInstanceId, Guid outputDefinitionId, Guid targetInstanceId, Guid inputDefinitionId)
             {
-                InputValues.Add(symbolInput.Id, new Input(symbolInput.DefaultValue));
+                SourceChildId = sourceInstanceId;
+                OutputDefinitionId = outputDefinitionId;
+                TargetChildId = targetInstanceId;
+                InputDefinitionId = inputDefinitionId;
             }
         }
-
-        public Symbol Symbol { get; }
-        public Guid Id { get; }
-        // map input id to actual input value
-        public Dictionary<Guid, Input> InputValues { get; } = new Dictionary<Guid, Input>();
-    }
-
-    public class InputDefinition
-    {
-        // relevance: required, relevant, optional
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public InputValue DefaultValue { get; set; }
+        #endregion
     }
 }
