@@ -106,7 +106,7 @@ namespace T3
             Instance projectOp = projectSymbol.CreateInstance();
 
             // create ui data for project symbol
-            var uiEntries = InstanceUiRegistry.Instance.UiEntries;
+            var uiEntries = SymbolChildUiRegistry.Instance.UiEntries;
             uiEntries.Add(projectSymbol.Id, new Dictionary<Guid, SymbolChildUi>()
                                             {
                                                 { projectOp.Children[0].Id, new SymbolChildUi { SymbolChild = projectSymbol._children[0], Name = "Add1" } },

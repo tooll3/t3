@@ -60,12 +60,12 @@ namespace T3.Gui
         public void DrawSelectionParameters()
         {
             ImGui.Begin("ParameterView");
-            foreach (var pair in InstanceUiRegistry.Instance.UiEntries[_mockModel.MainOp.Symbol.Id])
+            foreach (var pair in SymbolChildUiRegistry.Instance.UiEntries[_mockModel.MainOp.Symbol.Id])
             {
-                var instanceUi = pair.Value;
-                if (instanceUi.IsSelected)
+                var symbolChildUi = pair.Value;
+                if (!symbolChildUi.IsSelected)
                 {
-                    var symbolChild = instanceUi.SymbolChild;
+                    var symbolChild = symbolChildUi.SymbolChild;
                     foreach (var inputDefinition in symbolChild.Symbol.InputDefinitions)
                     {
                         ImGui.PushID(inputDefinition.Id.GetHashCode());
