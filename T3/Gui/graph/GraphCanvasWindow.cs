@@ -35,7 +35,7 @@ namespace T3.graph
 
             if (ImGui.Begin(_windowTitle, ref opened))
             {
-                _uiChildren = SymbolChildUiRegistry.Instance.UiEntries[_compositionOp.Symbol.Id];
+                _uiChildren = SymbolChildUiRegistry.Entries[_compositionOp.Symbol.Id];
                 _drawList = ImGui.GetWindowDrawList();
                 _overlayDrawList = ImGui.GetOverlayDrawList();
 
@@ -231,7 +231,7 @@ namespace T3.graph
                     DrawLinks();
 
                     // Draw nodes
-                    foreach (var symbolChildUi in SymbolChildUiRegistry.Instance.UiEntries[_compositionOp.Symbol.Id].Values)
+                    foreach (var symbolChildUi in SymbolChildUiRegistry.Entries[_compositionOp.Symbol.Id].Values)
                     {
                         GraphOperator.DrawOnCanvas(symbolChildUi, this);
                     }
