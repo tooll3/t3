@@ -289,10 +289,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Operator\InputAnnotation.cs" />
+    <Compile Include="Core\Operator\InputUi.cs" />
     <Compile Include="Core\Operator\Symbol.cs" />
+    <Compile Include="Core\Operator\SymbolChild.cs" />
     <Compile Include="Core\Operator\SymbolRegistry.cs" />
     <Compile Include="Core\Operator\SymbolChildUi.cs" />
     <Compile Include="Core\Operator\SymbolChildUiRegistry.cs" />
+    <Compile Include="Gui\graph\ConnectionLine.cs" />
+    <Compile Include="Gui\graph\OperatorInputZone.cs" />
+    <Compile Include="Gui\graph\SnapHandler.cs" />
     <Compile Include="Gui\Metrics.cs" />
     <Compile Include="Gui\Color.cs" />
     <Compile Include="Logging\ConsoleLogWindow.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using T3.Core.Operator;
+using T3.Gui;
 using Random = System.Random;
 
 namespace T3
@@ -65,40 +66,40 @@ namespace T3
             {
                 Id = Guid.NewGuid(),
                 SymbolName = "Add",
-                InstanceType = typeof(AddOperator),
+                SymbolType = typeof(AddOperator),
                 InputDefinitions =
                                 {
-                                    new InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(5.0f) },
-                                    new InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(10.0f) }
+                                    new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(5.0f) },
+                                    new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(10.0f) }
                                 }
             };
             var randomSymbol = new Symbol()
             {
                 Id = Guid.NewGuid(),
                 SymbolName = "Random",
-                InstanceType = typeof(RandomOperator),
+                SymbolType = typeof(RandomOperator),
                 InputDefinitions =
                                    {
-                                       new InputDefinition { Id = Guid.NewGuid(), Name = "Seed", DefaultValue = new InputValue<int>(42) }
+                                       new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Seed", DefaultValue = new InputValue<int>(42) }
                                    }
             };
             var projectSymbol = new Symbol()
             {
                 Id = Guid.NewGuid(),
                 SymbolName = "Project",
-                InstanceType = typeof(ProjectOperator),
-                _children =
+                SymbolType = typeof(ProjectOperator),
+                Children =
                                     {
                                         new SymbolChild(addSymbol),
                                         new SymbolChild(addSymbol),
                                         new SymbolChild(randomSymbol),
                                     }
             };
-            projectSymbol._connections.Add(new Symbol.Connection(
-                sourceInstanceId: projectSymbol._children[2].Id,    // from Random
-                sourceSlotId: projectSymbol._children[2].Symbol.InputDefinitions[0].Id,
-                targetInstanceId: projectSymbol._children[0].Id,    // to Add
-                targetSlotId: Guid.Empty
+            projectSymbol.Connections.Add(new Symbol.Connection(
+                sourceInstanceId: projectSymbol.Children[2].Id,    // from Random
+                outputDefinitionId: projectSymbol.Children[2].Symbol.InputDefinitions[0].Id,
+                targetInstanceId: projectSymbol.Children[0].Id,    // to Add
+                inputDefinitionId: Guid.Empty
             ));
 
             // register the symbols globally
@@ -114,9 +115,9 @@ namespace T3
             var uiEntries = SymbolChildUiRegistry.Entries;
             uiEntries.Add(projectSymbol.Id, new Dictionary<Guid, SymbolChildUi>()
                                             {
-                                                { projectOp.Children[0].Id, new SymbolChildUi { SymbolChild = projectSymbol._children[0], Name = "Add1" } },
-                                                { projectOp.Children[1].Id, new SymbolChildUi { SymbolChild = projectSymbol._children[1] } },
-                                                { projectOp.Children[2].Id, new SymbolChildUi { SymbolChild = projectSymbol._children[2], Name = "Random" } },
+                                                { projectOp.Children[0].Id, new SymbolChildUi { SymbolChild = projectSymbol.Children[0], Name = "Add1" } },
+                                                { projectOp.Children[1].Id, new SymbolChildUi { SymbolChild = projectSymbol.Children[1] } },
+                                                { projectOp.Children[2].Id, new SymbolChildUi { SymbolChild = projectSymbol.Children[2], Name = "Random" } },
                                             });
 
             // create and register input controls

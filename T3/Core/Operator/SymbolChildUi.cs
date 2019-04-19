@@ -1,8 +1,8 @@
-﻿using ImGuiNET;
-using System;
+﻿using imHelpers;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Numerics;
+using T3.graph;
+using T3.Gui.graph;
 using T3.Gui.Selection;
 
 namespace T3.Core.Operator
@@ -10,7 +10,7 @@ namespace T3.Core.Operator
     /// <summary>
     /// Properties needed for visual representation of an instance. Should later be moved to gui component.
     /// </summary>
-    public class SymbolChildUi : ISelectable
+    public class SymbolChildUi : IStackable, IConnectionSource, IConnectionTarget
     {
         public SymbolChild SymbolChild;
         public Vector2 Position { get; set; } = Vector2.Zero;
@@ -19,69 +19,195 @@ namespace T3.Core.Operator
         public bool IsSelected { get; set; } = false;
         public string Name { get; set; } = string.Empty;
         public string ReadableName => string.IsNullOrEmpty(Name) ? SymbolChild.Symbol.SymbolName : Name;
-    }
 
-    public interface IInputUi
-    {
-        void DrawInputEdit(string name, SymbolChild.Input input);
-    }
+        public bool IsStackableAbove => true; // { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsStackableBelow => true; //{ get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-    public abstract class InputValueUi<T> : IInputUi where T : struct
-    {
-        public abstract bool DrawEditControl(string name, ref T value);
+        // These could be stateless and initialized by a helper
+        public List<ConnectionLine> ConnectionLinesOut { get; set; } = new List<ConnectionLine>();
+        public List<ConnectionLine> ConnectionLinesIn { get; set; } = new List<ConnectionLine>();
 
-        public void DrawInputEdit(string name, SymbolChild.Input input)
+
+        public float GetHorizontalOverlapWith(ISelectable element)
         {
-            if (input.Value is InputValue<T> typedValue)
+            //ToDo: Implement
+            return 1;
+        }
+
+        public List<IConnectable> GetOpsConnectedToInputs()
+        {
+            // FIXME: convert to lync
+            var r = new List<IConnectable>();
+            foreach (var c in ConnectionLinesIn)
             {
-                // draw control
-                ImGui.PushItemWidth(200.0f);
-                ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? new Vector4(0.4f, 0.4f, 0.4f, 1.0f) : Vector4.One);
-                bool valueModified = DrawEditControl(name, ref typedValue.Value);
-                input.IsDefault &= !valueModified;
-                ImGui.PopStyleColor();
-                ImGui.PopItemWidth();
+                r.Add(c.SourceItem);
+            }
+            return r;
+        }
 
-                // draw reset button
-                ImGui.SameLine(200.0f, 130.0f);
-                if (ImGui.Button("Reset To Default"))
-                {
-                    input.ResetToDefault();
-                }
+        public List<IConnectable> GetOpsConnectedToOutputs()
+        {
+            // FIXME: convert to lync
+            var r = new List<IConnectable>();
+            foreach (var c in ConnectionLinesOut)
+            {
+                r.Add(c.TargetItem);
+            }
+            return r;
+        }
 
-                // draw set as default button
-                ImGui.SameLine(330.0f, 130.0f);
-                if (ImGui.Button("Set As Default"))
+
+        public ImRect GetRangeForInputConnectionLine(SymbolChild.Input input, int multiInputIndex, bool insertConnection = false)
+        {
+            var slots = GetVisibileInputSlots();
+
+            VisibleInputSlot matchingSlot = null;
+            foreach (var slot in slots)
+            {
+                if (slot.Input == input && slot.MultiInputIndex == multiInputIndex)
                 {
-                    input.SetCurrentValueAsDefault();
+                    if (!insertConnection && slot.InsertAtMultiInputIndex)
+                        continue;
+
+                    matchingSlot = slot;
+                    break;
                 }
             }
-            else
+
+            // Animations on non-relevant paraemters don't have a matching zone...
+            if (matchingSlot == null)
             {
-                Debug.Assert(false);
+                return new ImRect(0, 0, 0, 0);
             }
-        }
-    }
 
-    public class FloatInputUi : InputValueUi<float>
-    {
-        public override bool DrawEditControl(string name, ref float value)
+            var minX = matchingSlot.XInItem;
+            var maxX = matchingSlot.XInItem + matchingSlot.Width;
+            return new ImRect(minX, GraphCanvasWindow.GridSize, maxX - minX, 0);
+        }
+
+
+        public List<VisibleInputSlot> GetVisibileInputSlots()
         {
-            return ImGui.DragFloat(name, ref value);
-        }
-    }
+            var zones = new List<VisibleInputSlot>();
 
-    public class IntInputUi : InputValueUi<int>
-    {
-        public override bool DrawEditControl(string name, ref int value)
+            // First collect inputs that are relevant or connected
+            var relevantOrConnectedInputs = new List<SymbolChild.Input>();
+            foreach (var i in this.SymbolChild.InputValues.Values)
+            {
+                if (i.SymbolInputDef.Relevance == Symbol.InputDefinition.Relevancy.Required
+                || i.SymbolInputDef.Relevance == Symbol.InputDefinition.Relevancy.Relevant)
+                {
+                    relevantOrConnectedInputs.Add(i);
+                }
+                // Show non-relevant but animated inputs...
+                //else
+                //{
+                //    if (i.Connections.Count() > 0)
+                //    {
+                //        var animationConnection = Animation.GetRegardingAnimationOpPart(i.Connections[0]);
+                //        if (animationConnection == null)
+                //        {
+                //            // Add non-animated connections
+                //            relevantOrConnectedInputs.Add(i);
+                //        }
+                //    }
+                //}
+            }
+
+            const float WIDTH_OF_MULTIINPUT_ZONES = 1.0f / 3.0f;
+
+            /* Roll out zones multi-inputs and the slots for prepending
+             * a connection at the first field or inserting connections
+             * between existing connections.
+             *
+             */
+            foreach (var input in relevantOrConnectedInputs)
+            {
+                //var metaInput = input. .Parent.GetMetaInput(input);
+                //if (metaInput.IsMultiInput)
+                //{
+                //    if (!input.Connections.Any())
+                //    {
+                //        // empty multi-input
+                //        zones.Add(new VisibleInputArea()
+                //        {
+                //            InputDefinition = input,
+                //            MetaInput = metaInput,
+                //            InsertAtMultiInputIndex = true,
+                //        });
+                //    }
+                //    else
+                //    {
+                //        zones.Add(new VisibleInputArea()
+                //        {
+                //            InputDefinition = input,
+                //            MetaInput = metaInput,
+                //            InsertAtMultiInputIndex = true,
+                //            Width = WIDTH_OF_MULTIINPUT_ZONES,
+                //            MultiInputIndex = 0,
+                //        });
+
+                //        for (var multiInputIndex = 0; multiInputIndex < input.Connections.Count; ++multiInputIndex)
+                //        {
+                //            var connectedTo = input.Connections[multiInputIndex];
+
+                //            // multi-input connection
+                //            zones.Add(new VisibleInputArea()
+                //            {
+                //                InputDefinition = input,
+                //                MetaInput = metaInput,
+                //                Width = WIDTH_OF_MULTIINPUT_ZONES,
+                //                MultiInputIndex = multiInputIndex,
+                //            });
+                //            zones.Add(new VisibleInputArea()
+                //            {
+                //                InputDefinition = input,
+                //                MetaInput = metaInput,
+                //                Width = WIDTH_OF_MULTIINPUT_ZONES,
+                //                MultiInputIndex = multiInputIndex + 1,
+                //                InsertAtMultiInputIndex = true
+                //            });
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                // Normal input
+                zones.Add(new VisibleInputSlot()
+                {
+                    Input = input,
+                    Width = 1,
+                });
+                //}
+            }
+
+            // Now distibute the width to the width of the operator
+            float widthSum = 0;
+            foreach (var zone in zones)
+            {
+                widthSum += zone.Width;
+            }
+
+            var x = 0f;
+            for (var i = 0; i < zones.Count; ++i)
+            {
+                var widthInsideOp = zones[i].Width / widthSum * Size.X;
+                zones[i].Width = widthInsideOp - 1; // requires zones to be a class
+                zones[i].XInItem = x;
+                x += widthInsideOp;
+            }
+
+            return zones;
+        }
+
+        public List<ConnectionLine> GetInputConnections()
         {
-            return ImGui.DragInt(name, ref value);
+            return new List<ConnectionLine>();
+        }
+
+        public List<ConnectionLine> GetOutputConnections()
+        {
+            return new List<ConnectionLine>();
         }
     }
-
-    public static class InputUiRegistry
-    {
-        public static Dictionary<Type, IInputUi> Entries { get; } = new Dictionary<Type, IInputUi>();
-    }
-
 }

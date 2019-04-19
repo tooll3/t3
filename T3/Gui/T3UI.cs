@@ -77,7 +77,7 @@ namespace T3.Gui
             ImGui.End();
         }
 
-        private static void DrawParameterViewEntry(InputDefinition inputDefinition, SymbolChild symbolChild)
+        private static void DrawParameterViewEntry(Symbol.InputDefinition inputDefinition, SymbolChild symbolChild)
         {
             ImGui.PushID(inputDefinition.Id.GetHashCode());
             SymbolChild.Input input = symbolChild.InputValues[inputDefinition.Id];
