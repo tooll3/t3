@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Gui;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
-using T3.UiHelpers;
 
 namespace T3.graph
 {
@@ -149,7 +149,7 @@ namespace T3.graph
                 _io = ImGui.GetIO();
                 ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(1, 1));
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
-                ImGui.PushStyleColor(ImGuiCol.WindowBg, TColors.ToUint(60, 60, 70, 200));
+                ImGui.PushStyleColor(ImGuiCol.WindowBg, new Color(60, 60, 70, 200).Rgba);
 
                 // Damp scaling
                 _scale = Im.Lerp(_scale, _scaleTarget, _io.DeltaTime * 20);
@@ -182,7 +182,7 @@ namespace T3.graph
                             const float zoomSpeed = 1.2f;
                             var focusCenter = (_mouse - _scroll - _canvasWindowPos) / _scale;
 
-                            _overlayDrawList.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.Red.ToUint());
+                            _overlayDrawList.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.TRed);
 
                             if (_io.MouseWheel < 0.0f)
                             {
@@ -215,7 +215,7 @@ namespace T3.graph
                             _drawList.AddLine(
                                 new Vector2(x, 0.0f) + _canvasWindowPos,
                                 new Vector2(x, _size.Y) + _canvasWindowPos,
-                                new Color(0.5f, 0.5f, 0.5f, 0.1f).ToUint());
+                                new Color(0.5f, 0.5f, 0.5f, 0.1f));
                         }
 
                         for (float y = _scroll.Y % gridSize; y < _size.Y; y += gridSize)
@@ -223,12 +223,10 @@ namespace T3.graph
                             _drawList.AddLine(
                                 new Vector2(0.0f, y) + _canvasWindowPos,
                                 new Vector2(_size.X, y) + _canvasWindowPos,
-                                new Color(0.5f, 0.5f, 0.5f, 0.1f).ToUint());
+                                new Color(0.5f, 0.5f, 0.5f, 0.1f));
                         }
                     }
 
-                    // Draw links
-                    DrawLinks();
 
                     // Draw nodes
                     foreach (var symbolChildUi in SymbolChildUiRegistry.Entries[_compositionOp.Symbol.Id].Values)
@@ -236,11 +234,12 @@ namespace T3.graph
                         GraphOperator.DrawOnCanvas(symbolChildUi, this);
                     }
 
+                    // Draw links
+                    DrawConnections();
+
                     _debugMessages += ImGui.IsAnyItemHovered() ? "anyItemHovered " : "";
                     _debugMessages += ImGui.IsWindowHovered() ? "isWindowHovered " : "";
                     _debugMessages += ImGui.IsItemHovered() ? "isWindowHovered " : "";
-
-
 
                     _selectionFence.Draw();
 
@@ -257,8 +256,29 @@ namespace T3.graph
             ImGui.EndGroup();
         }
 
-        private void DrawLinks()
+        private void DrawConnections()
         {
+            foreach (var c in _compositionOp.Symbol._connections)
+            {
+                var source = UiChildrenById[c.SourceInstanceId];
+                var target = UiChildrenById[c.TargetInstanceId];
+                var sourcePos = ScreenPosFromCanvas(source.Position);
+                var targetPos = ScreenPosFromCanvas(target.Position + new Vector2(0, target.Size.Y));
+
+
+                _drawList.AddBezierCurve(
+                    sourcePos,
+                    sourcePos + new Vector2(0, -50),
+                    targetPos + new Vector2(0, 50),
+                    targetPos,
+                    Color.White, 3f);
+
+                _drawList.AddTriangleFilled(
+                    targetPos + new Vector2(0, -3),
+                    targetPos + new Vector2(4, 2),
+                    targetPos + new Vector2(-4, 2),
+                    Color.White);
+            }
             //foreach (var link in _links)
             //{
             //    var node_inp = _nodes[link.OutputNodeIndex];
@@ -326,12 +346,12 @@ namespace T3.graph
 
         public void DrawRect(ImRect rectOnCanvas, Color color)
         {
-            _drawList.AddRect(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color.UInt);
+            _drawList.AddRect(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
         }
 
         public void DrawRectFilled(ImRect rectOnCanvas, Color color)
         {
-            _drawList.AddRectFilled(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color.UInt);
+            _drawList.AddRectFilled(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
         }
 
 
@@ -352,17 +372,6 @@ namespace T3.graph
         public Dictionary<Guid, SymbolChildUi> UiChildrenById => _uiChildren;
         private Dictionary<Guid, SymbolChildUi> _uiChildren;
 
-
-        //        private NodeLink _linkUnderConstruction;
-
-
-
-        bool _contextMenuOpened = false;
-
-        //List<Node> _nodes = new List<Node>();
-        //List<NodeLink> _links = new List<NodeLink>();
-
-        bool _initialized = false;
         ImDrawListPtr _overlayDrawList;
         Vector2 _size;
         Vector2 _mouse;
@@ -371,11 +380,8 @@ namespace T3.graph
         private Vector2 _scroll = new Vector2(0.0f, 0.0f);
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
 
-        /// <summary>
-        /// The position of the canvas window-panel within Application window
-        /// </summary>
-        public Vector2 _canvasWindowPos;
-        public float _scale = 1; //the damped scale factor {read only}
+        public Vector2 _canvasWindowPos;    // Position of the canvas window-panel within Application window
+        public float _scale = 1;            //The damped scale factor {read only}
         float _scaleTarget = 1;
 
         string _debugMessages = "";

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using T3.Core.Operator;
 using Random = System.Random;
 
@@ -63,38 +62,44 @@ namespace T3
         private void Init()
         {
             var addSymbol = new Symbol()
-                            {
-                                Id = Guid.NewGuid(),
-                                SymbolName = "Add",
-                                InstanceType = typeof(AddOperator),
-                                InputDefinitions =
+            {
+                Id = Guid.NewGuid(),
+                SymbolName = "Add",
+                InstanceType = typeof(AddOperator),
+                InputDefinitions =
                                 {
                                     new InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(5.0f) },
                                     new InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(10.0f) }
                                 }
-                            };
+            };
             var randomSymbol = new Symbol()
-                               {
-                                   Id = Guid.NewGuid(),
-                                   SymbolName = "Random",
-                                   InstanceType = typeof(RandomOperator),
-                                   InputDefinitions =
+            {
+                Id = Guid.NewGuid(),
+                SymbolName = "Random",
+                InstanceType = typeof(RandomOperator),
+                InputDefinitions =
                                    {
                                        new InputDefinition { Id = Guid.NewGuid(), Name = "Seed", DefaultValue = new InputValue<int>(42) }
                                    }
-                               };
+            };
             var projectSymbol = new Symbol()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    SymbolName = "Project",
-                                    InstanceType = typeof(ProjectOperator),
-                                    _children =
+            {
+                Id = Guid.NewGuid(),
+                SymbolName = "Project",
+                InstanceType = typeof(ProjectOperator),
+                _children =
                                     {
                                         new SymbolChild(addSymbol),
                                         new SymbolChild(addSymbol),
                                         new SymbolChild(randomSymbol),
                                     }
-                                };
+            };
+            projectSymbol._connections.Add(new Symbol.Connection(
+                sourceInstanceId: projectSymbol._children[2].Id,    // from Random
+                sourceSlotId: projectSymbol._children[2].Symbol.InputDefinitions[0].Id,
+                targetInstanceId: projectSymbol._children[0].Id,    // to Add
+                targetSlotId: Guid.Empty
+            ));
 
             // register the symbols globally
             var symbols = SymbolRegistry.Entries;

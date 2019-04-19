@@ -42,7 +42,7 @@ namespace T3.Gui.Graph
                 }
 
                 var drawList = ImGui.GetWindowDrawList();
-                drawList.AddRectFilled(_bounds.Min, _bounds.Max, TColors.ToUint(1, 1, 1, 0.5f), 1);
+                drawList.AddRectFilled(_bounds.Min, _bounds.Max, new Color(0.5f), 1);
             }
 
             if (ImGui.IsKeyPressed((int)Key.Delete))

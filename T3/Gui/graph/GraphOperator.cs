@@ -4,7 +4,7 @@ using System;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.Gui;
-using T3.UiHelpers;
+
 namespace T3.graph
 {
     /// <summary>
@@ -15,6 +15,7 @@ namespace T3.graph
 
         public static void DrawOnCanvas(SymbolChildUi childUi, GraphCanvasWindow canvas)
         {
+
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
                 var posInWindow = canvas.ChildPosFromCanvas(childUi.Position);
@@ -54,13 +55,15 @@ namespace T3.graph
                 // Rendering
                 canvas._drawList.ChannelsSplit(2);
                 canvas._drawList.ChannelsSetCurrent(1);
-                canvas._drawList.AddText(posInApp, Color.White.UInt, String.Format($"{childUi.ReadableName}"));
+
+                canvas._drawList.AddText(posInApp, Color.White, String.Format($"{childUi.ReadableName}"));
 
                 canvas._drawList.ChannelsSetCurrent(0);
 
                 var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.Id) ? 1.2f : 0.8f;
                 THelpers.OutlinedRect(ref canvas._drawList, posInApp, childUi.Size * canvas._scale,
-                    fill: new Color((childUi.IsSelected || ImGui.IsItemHovered() ? 0.3f : 0.2f) * hoveredFactor),
+                    fill: new Color(
+                            ((childUi.IsSelected || ImGui.IsItemHovered()) ? 0.3f : 0.2f) * hoveredFactor),
                     outline: childUi.IsSelected ? Color.White : Color.Black);
 
                 DrawSlots(childUi);
@@ -85,7 +88,7 @@ namespace T3.graph
             var rInScreen = _canvas.ScreenRectFromCanvas(rInCanvas);
 
             var hovered = rInScreen.Contains(ImGui.GetMousePos());
-            _canvas.DrawRectFilled(rInCanvas, hovered ? Color.White : Color.Red);
+            _canvas.DrawRectFilled(rInCanvas, hovered ? Color.White : Color.TRed);
         }
 
 

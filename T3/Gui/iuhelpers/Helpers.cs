@@ -1,17 +1,10 @@
 using ImGuiNET;
 using System.Numerics;
 using T3.Gui;
-using T3.UiHelpers;
 
 namespace imHelpers
 {
-    static class TColors
-    {
-        public readonly static Vector4 White = new Vector4(1, 1, 1, 1);
-        public readonly static Vector4 Black = new Vector4(0, 0, 0, 1);
-        public static uint ToUint(float r, float g, float b, float a = 1) { return ImGui.GetColorU32(new Vector4(r, g, b, a)); }
-        public static uint ToUint(int r, int g, int b, int a = 255) { var sc = 1 / 255f; return ImGui.GetColorU32(new Vector4(r * sc, g * sc, b * sc, a * sc)); }
-    }
+
 
     /// <summary>
     /// A collection of helper and debug function for IMGUI development
@@ -27,20 +20,29 @@ namespace imHelpers
 
         public static ImDrawListPtr OutlinedRect(ref ImDrawListPtr drawList, Vector2 position, Vector2 size, Color fill, Color outline, float cornerRadius = 4)
         {
-            drawList.AddRectFilled(position, position + size, fill.UInt, cornerRadius);
-            drawList.AddRect(position, position + size, outline.UInt, cornerRadius);
+            drawList.AddRectFilled(position, position + size, fill, cornerRadius);
+            drawList.AddRect(position, position + size, outline, cornerRadius);
             return drawList;
         }
 
         /// <summary>
         /// Draws an overlay rectangle in screen space
         /// </summary>
-        public static void DebugRect(Vector2 screenMin, Vector2 screenMax, string label = "", uint color = 0x88ffff80)
+        public static void DebugRect(Vector2 screenMin, Vector2 screenMax, string label = "")
+        {
+            var overlayDrawlist = ImGui.GetOverlayDrawList();
+            overlayDrawlist.AddRect(screenMin, screenMax, Color.TGreen);
+            overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), Color.TGreen, label);
+        }
+
+        public static void DebugRect(Vector2 screenMin, Vector2 screenMax, Color color, string label = "")
         {
             var overlayDrawlist = ImGui.GetOverlayDrawList();
             overlayDrawlist.AddRect(screenMin, screenMax, color);
             overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), color, label);
         }
+
+
 
         /// <summary>
         /// Draws an outline of the current (last) Imgui item
@@ -48,14 +50,14 @@ namespace imHelpers
         public static void DebugItemRect(string label = "", uint color = 0xff20ff80)
         {
             if (UiSettingsWindow.ItemRegionsVisible)
-                DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), label, color);
+                DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color, label);
         }
 
 
         public static void DebugWindowRect(string label = "", uint color = 0xffff2080)
         {
             if (UiSettingsWindow.WindowRegionsVisible)
-                DebugRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), label, color);
+                DebugRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), color, label);
         }
     }
 

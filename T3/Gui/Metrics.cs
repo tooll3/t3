@@ -14,7 +14,7 @@ namespace T3.Gui
         public static void UiRenderingCompleted()
         {
             _watchImgRenderTime.Stop();
-            _uiRenderDurationMs = ((float)_watchImgRenderTime.ElapsedTicks / Stopwatch.Frequency) * 1000;
+            _uiRenderDurationMs = (float)((double)_watchImgRenderTime.ElapsedTicks / Stopwatch.Frequency * 1000.0);
         }
 
         public static void Draw()
