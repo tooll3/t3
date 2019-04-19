@@ -294,6 +294,7 @@
     <Compile Include="Core\Operator\SymbolChildUi.cs" />
     <Compile Include="Core\Operator\SymbolChildUiRegistry.cs" />
     <Compile Include="Gui\Metrics.cs" />
+    <Compile Include="Gui\Color.cs" />
     <Compile Include="Logging\ConsoleLogWindow.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\LogEntry.cs" />
@@ -306,7 +307,6 @@
     <Compile Include="Gui\QuickCreateWindow.cs" />
     <Compile Include="Gui\ImGuiDx11Impl.cs" />
     <Compile Include="Core\Operator\Instance.cs" />
-    <Compile Include="Gui\iuhelpers\Color.cs" />
     <Compile Include="Gui\iuhelpers\Helpers.cs" />
     <Compile Include="Gui\selection\ISelectable.cs" />
     <Compile Include="Gui\selection\SelectionHandler.cs" />
