@@ -80,12 +80,9 @@ namespace T3.Gui
         private static void DrawParameterViewEntry(InputDefinition inputDefinition, SymbolChild symbolChild)
         {
             ImGui.PushID(inputDefinition.Id.GetHashCode());
-            var input = symbolChild.InputValues[inputDefinition.Id];
-            var inputUi = InputUiRegistry.Entries[input.Value.ValueType];
-            ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? new Vector4(0.4f, 0.4f, 0.4f, 1.0f) : Vector4.One);
-            bool valueModified = inputUi.DrawInputEdit(inputDefinition.Name, input.Value);
-            input.IsDefault &= !valueModified;
-            ImGui.PopStyleColor();
+            SymbolChild.Input input = symbolChild.InputValues[inputDefinition.Id];
+            IInputUi inputUi = InputUiRegistry.Entries[input.Value.ValueType];
+            inputUi.DrawInputEdit(inputDefinition.Name, input);
             ImGui.PopID();
         }
 
