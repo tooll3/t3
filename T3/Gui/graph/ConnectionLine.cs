@@ -76,7 +76,7 @@ namespace T3.Gui.graph
         {
             foreach (var area in TargetItem.GetVisibileInputSlots())
             {
-                if (area.Input.SymbolInputDef.Id == Connection.InputDefinitionId)
+                if (area.InputDefinition.Id == Connection.InputDefinitionId)
                     return area;
             }
             return null;
