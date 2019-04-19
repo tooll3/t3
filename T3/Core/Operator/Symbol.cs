@@ -38,11 +38,6 @@ namespace T3.Core.Operator
             _instancesOfSymbol.ForEach(instance => instance.Dispose());
         }
 
-        public Symbol()
-        {
-        }
-
-
         public Instance CreateInstance()
         {
             var newInstance = Activator.CreateInstance(SymbolType) as Instance;
@@ -96,23 +91,6 @@ namespace T3.Core.Operator
             _instancesOfSymbol.Remove(op);
         }
 
-        //         InputValue GetInputValue(Guid childInstanceId, Guid inputId)
-        //         {
-        //             var inputValue = (from child in _children
-        //                               where child.Id == childInstanceId
-        //                               from input in child.InputValues
-        //                               where input.Key == inputId
-        //                               select input.Value).Single();
-        //             return inputValue;
-        //         }
-        // 
-        //         InputValue GetInputDefaultValue(Guid inputId)
-        //         {
-        //             var inputDefaultValue = (from input in InputDefinitions
-        //                                      where input.Id == inputId
-        //                                      select input.DefaultValue).Single();
-        //             return inputDefaultValue;
-        //         }
         #endregion
 
         #region sub classses =============================================================================

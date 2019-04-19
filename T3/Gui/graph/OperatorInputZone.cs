@@ -17,7 +17,7 @@ namespace T3.Gui.graph
     /// </summary>
     public class VisibleInputSlot
     {
-        public SymbolChild.Input Input;
+        public Symbol.InputDefinition InputDefinition;
         public float XInItem;
         public float Width = 1;
         //public ImRect AreaInItem;

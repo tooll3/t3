@@ -57,14 +57,14 @@ namespace T3.Core.Operator
         }
 
 
-        public ImRect GetRangeForInputConnectionLine(SymbolChild.Input input, int multiInputIndex, bool insertConnection = false)
+        public ImRect GetRangeForInputConnectionLine(Symbol.InputDefinition input, int multiInputIndex, bool insertConnection = false)
         {
             var slots = GetVisibileInputSlots();
 
             VisibleInputSlot matchingSlot = null;
             foreach (var slot in slots)
             {
-                if (slot.Input == input && slot.MultiInputIndex == multiInputIndex)
+                if (slot.InputDefinition == input && slot.MultiInputIndex == multiInputIndex)
                 {
                     if (!insertConnection && slot.InsertAtMultiInputIndex)
                         continue;
@@ -91,13 +91,13 @@ namespace T3.Core.Operator
             var zones = new List<VisibleInputSlot>();
 
             // First collect inputs that are relevant or connected
-            var relevantOrConnectedInputs = new List<SymbolChild.Input>();
-            foreach (var i in this.SymbolChild.InputValues.Values)
+            var relevantOrConnectedInputs = new List<Symbol.InputDefinition>();
+            foreach (var inputDefinition in SymbolChild.Symbol.InputDefinitions)
             {
-                if (i.SymbolInputDef.Relevance == Symbol.InputDefinition.Relevancy.Required
-                || i.SymbolInputDef.Relevance == Symbol.InputDefinition.Relevancy.Relevant)
+                if (inputDefinition.Relevance == Symbol.InputDefinition.Relevancy.Required
+                    || inputDefinition.Relevance == Symbol.InputDefinition.Relevancy.Relevant)
                 {
-                    relevantOrConnectedInputs.Add(i);
+                    relevantOrConnectedInputs.Add(inputDefinition);
                 }
                 // Show non-relevant but animated inputs...
                 //else
@@ -175,7 +175,7 @@ namespace T3.Core.Operator
                 // Normal input
                 zones.Add(new VisibleInputSlot()
                 {
-                    Input = input,
+                    InputDefinition = input,
                     Width = 1,
                 });
                 //}

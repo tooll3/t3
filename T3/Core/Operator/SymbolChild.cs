@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using InputDefinitionId = System.Guid;
+
 namespace T3.Core.Operator
 {
     /// <summary>
@@ -17,19 +19,17 @@ namespace T3.Core.Operator
         /// <summary>
         /// Map input id to actual input value 
         /// </summary>
-        /// 
-        //TODO: It would by much desired to store this as list, because we frequently
-        // have to iterate this list to draw inputs
-        public Dictionary<Guid, Input> InputValues { get; } = new Dictionary<Guid, Input>();
+        //TODO: It would by much desired to store this as list, because we frequently have to iterate this list to draw inputs
+        public Dictionary<InputDefinitionId, Input> InputValues { get; } = new Dictionary<Guid, Input>();
 
         public SymbolChild(Symbol symbol)
         {
             Symbol = symbol;
             Id = Guid.NewGuid();
 
-            foreach (var symbolInputDef in symbol.InputDefinitions)
+            foreach (var inputDefinition in symbol.InputDefinitions)
             {
-                InputValues.Add(symbolInputDef.Id, new Input(symbolInputDef));
+                InputValues.Add(inputDefinition.Id, new Input(inputDefinition.DefaultValue));
             }
         }
 
@@ -47,12 +47,9 @@ namespace T3.Core.Operator
             public InputValue Value { get; }
             public bool IsDefault { get; set; }
 
-            public Symbol.InputDefinition SymbolInputDef { get; set; }
-
-            public Input(Symbol.InputDefinition inputDef)
+            public Input(InputValue defaultValue)
             {
-                SymbolInputDef = inputDef;
-                DefaultValue = inputDef.DefaultValue;
+                DefaultValue = defaultValue;
                 Value = DefaultValue.Clone();
                 IsDefault = true;
             }
