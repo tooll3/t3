@@ -11,7 +11,6 @@ namespace T3.Gui.Graph
     /// </summary>
     static class GraphOperator
     {
-
         public static void DrawOnCanvas(SymbolChildUi childUi, GraphCanvas canvas)
         {
 
@@ -56,7 +55,6 @@ namespace T3.Gui.Graph
                 canvas._drawList.ChannelsSetCurrent(1);
 
                 canvas._drawList.AddText(posInApp, Color.White, String.Format($"{childUi.ReadableName}"));
-
                 canvas._drawList.ChannelsSetCurrent(0);
 
                 var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.Id) ? 1.2f : 0.8f;
@@ -73,29 +71,16 @@ namespace T3.Gui.Graph
         }
 
 
-        private static void DrawInputRect(SymbolChildUi ui, int inputIndex)
-        {
-            var inputCount = ui.SymbolChild.Symbol.InputDefinitions.Count;
-            var inputWidth = inputCount == 0 ? ui.Size.X
-                : ui.Size.X / inputCount;
-
-
-            var rInCanvas = ImRect.RectWithSize(
-                new Vector2(ui.Position.X + inputWidth * inputIndex + 1, ui.Position.Y + ui.Size.Y - 3),
-                new Vector2(inputWidth - 2, 3));
-
-            var rInScreen = _canvas.ScreenRectFromCanvas(rInCanvas);
-
-            var hovered = rInScreen.Contains(ImGui.GetMousePos());
-            _canvas.DrawRectFilled(rInCanvas, hovered ? Color.White : Color.TRed);
-        }
-
-
         private static void DrawSlots(SymbolChildUi symbolChildUi)
         {
+            for (int slot_idx = 0; slot_idx < symbolChildUi.SymbolChild.Symbol.OutputDefinitions.Count; slot_idx++)
+            {
+                DrawOutputSlot(symbolChildUi, slot_idx);
+            }
+
             for (int slot_idx = 0; slot_idx < symbolChildUi.SymbolChild.Symbol.InputDefinitions.Count; slot_idx++)
             {
-                DrawInputRect(symbolChildUi, slot_idx);
+                DrawInputSlot(symbolChildUi, slot_idx);
             }
 
             //    var pOnCanvas = node.GetInputSlotPos(slot_idx);
@@ -139,6 +124,81 @@ namespace T3.Gui.Graph
             //    canvas._drawList.AddCircleFilled(canvas.GetScreenPosFrom(pOnCanvas), NODE_SLOT_RADIUS, col);
             //}
         }
+
+        private static void DrawOutputSlot(SymbolChildUi ui, int outputIndex)
+        {
+            var outputCount = ui.SymbolChild.Symbol.OutputDefinitions.Count;
+            var outputDef = ui.SymbolChild.Symbol.InputDefinitions[outputIndex];
+            var inputWidth = ui.Size.X / outputCount;   // size count must be non-zero in this method
+
+            var mouseRectInCanvas = ImRect.RectWithSize(
+    new Vector2(ui.Position.X + inputWidth * outputIndex + 1, ui.Position.Y - 3),
+    new Vector2(inputWidth - 2, 6));
+
+            var rInScreen = _canvas.ScreenRectFromCanvas(mouseRectInCanvas);
+
+            var hovered = rInScreen.Contains(ImGui.GetMousePos());
+            if (hovered)
+            {
+                _canvas.DrawRectFilled(mouseRectInCanvas, Color.White);
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
+                ImGui.PushStyleColor(ImGuiCol.PopupBg, new Color(0.2f).Rgba);
+                ImGui.BeginTooltip();
+                ImGui.Text($"-> .{outputDef.Name}");
+                ImGui.EndTooltip();
+                ImGui.PopStyleColor();
+                ImGui.PopStyleVar();
+            }
+            else
+            {
+                _canvas.DrawRectFilled(
+                    ImRect.RectWithSize(
+                        new Vector2(ui.Position.X + inputWidth * outputIndex + 1 + 3, ui.Position.Y - 1),
+                        new Vector2(inputWidth - 2 - 6, 3))
+                    , Color.Gray);
+            }
+        }
+
+
+
+
+        private static void DrawInputSlot(SymbolChildUi ui, int inputIndex)
+        {
+            var inputCount = ui.SymbolChild.Symbol.InputDefinitions.Count;
+            var inputDef = ui.SymbolChild.Symbol.InputDefinitions[inputIndex];
+            var inputWidth = inputCount == 0 ? ui.Size.X
+                : ui.Size.X / inputCount;
+
+            var mouseRectInCanvas = ImRect.RectWithSize(
+                new Vector2(ui.Position.X + inputWidth * inputIndex + 1, ui.Position.Y + ui.Size.Y - 6),
+                new Vector2(inputWidth - 2, 6));
+
+            var rInScreen = _canvas.ScreenRectFromCanvas(mouseRectInCanvas);
+
+            var hovered = rInScreen.Contains(ImGui.GetMousePos());
+            if (hovered)
+            {
+                _canvas.DrawRectFilled(mouseRectInCanvas, Color.White);
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
+                ImGui.PushStyleColor(ImGuiCol.PopupBg, new Color(0.2f).Rgba);
+                ImGui.BeginTooltip();
+                ImGui.Text($"-> .{inputDef.Name}");
+                ImGui.EndTooltip();
+                ImGui.PopStyleColor();
+                ImGui.PopStyleVar();
+            }
+            else
+            {
+                _canvas.DrawRectFilled(
+                    ImRect.RectWithSize(
+                        new Vector2(ui.Position.X + inputWidth * inputIndex + 1 + 3, ui.Position.Y + ui.Size.Y - 6),
+                        new Vector2(inputWidth - 2 - 6, 3))
+                    , Color.Gray);
+            }
+        }
+
+
+
 
 
         static private GraphCanvas _canvas = null;
