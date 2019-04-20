@@ -9,6 +9,7 @@ namespace T3.Gui
     public interface IInputUi
     {
         void DrawInputEdit(string name, SymbolChild.Input input);
+        Color Color { get; }
     }
 
     public abstract class InputValueUi<T> : IInputUi where T : struct
@@ -54,7 +55,10 @@ namespace T3.Gui
             {
                 Debug.Assert(false);
             }
+
         }
+
+        public Color Color { get; } = Color.TGreen;
     }
 
     public class FloatInputUi : InputValueUi<float>
@@ -63,6 +67,7 @@ namespace T3.Gui
         {
             return ImGui.DragFloat(name, ref value);
         }
+        new public Color Color { get; } = Color.Gray;
     }
 
     public class IntInputUi : InputValueUi<int>
@@ -71,6 +76,7 @@ namespace T3.Gui
         {
             return ImGui.DragInt(name, ref value);
         }
+        new public Color Color { get; } = Color.TBlue;
     }
 
     public static class InputUiRegistry

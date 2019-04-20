@@ -22,7 +22,7 @@ namespace T3.Gui.Graph
         {
             if (!isVisible)
             {
-                if (!ImGui.IsAnyItemHovered()
+                if (!ImGui.IsAnyItemHovered()   // Don't start dragging a fence if above an item or output
                     && ImGui.IsWindowHovered()
                     && ImGui.IsMouseClicked(0))
                 {

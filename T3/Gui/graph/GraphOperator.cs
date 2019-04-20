@@ -3,6 +3,7 @@ using imHelpers;
 using System;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Logging;
 
 namespace T3.Gui.Graph
 {
@@ -16,13 +17,14 @@ namespace T3.Gui.Graph
 
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-                var posInWindow = canvas.ChildPosFromCanvas(childUi.Position);
+                var posInWindow = canvas.ChildPosFromCanvas(childUi.Position + new Vector2(0, 3));
                 var posInApp = canvas.ScreenPosFromCanvas(childUi.Position);
                 _canvas = canvas;
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
-                ImGui.InvisibleButton("node", childUi.Size * canvas._scale);
+                ImGui.InvisibleButton("node", (childUi.Size - new Vector2(0, 6)) * canvas._scale);
+                THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -125,20 +127,32 @@ namespace T3.Gui.Graph
             //}
         }
 
+        static private Symbol.OutputDefinition _draftConnectionOutput = null;
+
         private static void DrawOutputSlot(SymbolChildUi ui, int outputIndex)
         {
             var outputCount = ui.SymbolChild.Symbol.OutputDefinitions.Count;
-            var outputDef = ui.SymbolChild.Symbol.InputDefinitions[outputIndex];
-            var inputWidth = ui.Size.X / outputCount;   // size count must be non-zero in this method
+            var outputDef = ui.SymbolChild.Symbol.OutputDefinitions[outputIndex];
+            var width = ui.Size.X / outputCount;   // size count must be non-zero in this method
+
 
             var mouseRectInCanvas = ImRect.RectWithSize(
-    new Vector2(ui.Position.X + inputWidth * outputIndex + 1, ui.Position.Y - 3),
-    new Vector2(inputWidth - 2, 6));
+                    new Vector2(ui.Position.X + width * outputIndex + 1, ui.Position.Y - 3),
+                    new Vector2(width - 2, 6));
 
             var rInScreen = _canvas.ScreenRectFromCanvas(mouseRectInCanvas);
 
+            ImGui.SetCursorScreenPos(rInScreen.Min);
+            ImGui.InvisibleButton("output", rInScreen.GetSize());
+            THelpers.DebugItemRect();
+
+            if (ImGui.IsItemHovered())
+            {
+                Log.Debug("Item hovered" + outputDef);
+            }
+
             var hovered = rInScreen.Contains(ImGui.GetMousePos());
-            if (hovered)
+            if (hovered || outputDef == _draftConnectionOutput)
             {
                 _canvas.DrawRectFilled(mouseRectInCanvas, Color.White);
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
@@ -148,18 +162,38 @@ namespace T3.Gui.Graph
                 ImGui.EndTooltip();
                 ImGui.PopStyleColor();
                 ImGui.PopStyleVar();
+
+                if (ImGui.IsItemClicked(0))
+                {
+                    _canvas.StartNewConnection(new Symbol.Connection(
+                        sourceChildId: ui.SymbolChild.Id,
+                        outputDefinitionId: outputDef.Id,
+                        targetChildId: Guid.Empty,
+                        inputDefinitionId: Guid.Empty
+                    ));
+                    _draftConnectionOutput = outputDef;
+                }
+
+                if (ImGui.IsMouseDragging(0))
+                {
+                    _canvas.UpdateNewConnection();
+                }
+
+                if (ImGui.IsMouseReleased(0))
+                {
+                    _draftConnectionOutput = null;
+                    _canvas.CompleteNewConnection();
+                }
             }
             else
             {
                 _canvas.DrawRectFilled(
                     ImRect.RectWithSize(
-                        new Vector2(ui.Position.X + inputWidth * outputIndex + 1 + 3, ui.Position.Y - 1),
-                        new Vector2(inputWidth - 2 - 6, 3))
+                        new Vector2(ui.Position.X + width * outputIndex + 1 + 3, ui.Position.Y - 1),
+                        new Vector2(width - 2 - 6, 3))
                     , Color.Gray);
             }
         }
-
-
 
 
         private static void DrawInputSlot(SymbolChildUi ui, int inputIndex)
@@ -170,35 +204,32 @@ namespace T3.Gui.Graph
                 : ui.Size.X / inputCount;
 
             var mouseRectInCanvas = ImRect.RectWithSize(
-                new Vector2(ui.Position.X + inputWidth * inputIndex + 1, ui.Position.Y + ui.Size.Y - 6),
+                new Vector2(ui.Position.X + inputWidth * inputIndex + 1, ui.Position.Y + ui.Size.Y - 3),
                 new Vector2(inputWidth - 2, 6));
 
             var rInScreen = _canvas.ScreenRectFromCanvas(mouseRectInCanvas);
 
+
+            var valueType = inputDef.DefaultValue.ValueType;
+            var color = InputUiRegistry.Entries[valueType].Color;
+
             var hovered = rInScreen.Contains(ImGui.GetMousePos());
             if (hovered)
             {
-                _canvas.DrawRectFilled(mouseRectInCanvas, Color.White);
+                _canvas.DrawRectFilled(mouseRectInCanvas, color);
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
-                ImGui.PushStyleColor(ImGuiCol.PopupBg, new Color(0.2f).Rgba);
-                ImGui.BeginTooltip();
-                ImGui.Text($"-> .{inputDef.Name}");
-                ImGui.EndTooltip();
-                ImGui.PopStyleColor();
+                ImGui.SetTooltip($"-> .{inputDef.Name}");
                 ImGui.PopStyleVar();
             }
             else
             {
                 _canvas.DrawRectFilled(
                     ImRect.RectWithSize(
-                        new Vector2(ui.Position.X + inputWidth * inputIndex + 1 + 3, ui.Position.Y + ui.Size.Y - 6),
+                        new Vector2(ui.Position.X + inputWidth * inputIndex + 1 + 3, ui.Position.Y + ui.Size.Y - 3),
                         new Vector2(inputWidth - 2 - 6, 3))
-                    , Color.Gray);
+                    , color);
             }
         }
-
-
-
 
 
         static private GraphCanvas _canvas = null;
