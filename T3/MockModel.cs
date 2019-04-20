@@ -58,50 +58,48 @@ namespace T3
 
         class ProjectOperator : Instance
         {
-
         }
 
         private void Init()
         {
             var addSymbol = new Symbol()
-            {
-                Id = Guid.NewGuid(),
-                SymbolName = "Add",
-                SymbolType = typeof(AddOperator),
-                InputDefinitions =
+                            {
+                                Id = Guid.NewGuid(),
+                                SymbolName = "Add",
+                                InstanceType = typeof(AddOperator),
+                                InputDefinitions =
                                 {
                                     new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(5.0f) },
                                     new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(10.0f) }
                                 }
-            };
+                            };
             var randomSymbol = new Symbol()
-            {
-                Id = Guid.NewGuid(),
-                SymbolName = "Random",
-                SymbolType = typeof(RandomOperator),
-                InputDefinitions =
+                               {
+                                   Id = Guid.NewGuid(),
+                                   SymbolName = "Random",
+                                   InstanceType = typeof(RandomOperator),
+                                   InputDefinitions =
                                    {
                                        new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Seed", DefaultValue = new InputValue<int>(42) }
                                    }
-            };
+                               };
             var projectSymbol = new Symbol()
-            {
-                Id = Guid.NewGuid(),
-                SymbolName = "Project",
-                SymbolType = typeof(ProjectOperator),
-                Children =
+                                {
+                                    Id = Guid.NewGuid(),
+                                    SymbolName = "Project",
+                                    InstanceType = typeof(ProjectOperator),
+                                    Children =
                                     {
                                         new SymbolChild(addSymbol),
                                         new SymbolChild(addSymbol),
                                         new SymbolChild(randomSymbol),
                                     }
-            };
-            projectSymbol.Connections.Add(new Symbol.Connection(
-                sourceInstanceId: projectSymbol.Children[2].Id,    // from Random
-                outputDefinitionId: projectSymbol.Children[2].Symbol.InputDefinitions[0].Id,
-                targetInstanceId: projectSymbol.Children[0].Id,    // to Add
-                inputDefinitionId: Guid.Empty
-            ));
+                                };
+
+            projectSymbol.Connections.Add(new Symbol.Connection(sourceChildId: projectSymbol.Children[2].Id, // from Random
+                                                                outputDefinitionId: projectSymbol.Children[2].Symbol.InputDefinitions[0].Id,
+                                                                targetChildId: projectSymbol.Children[0].Id, // to Add
+                                                                inputDefinitionId: Guid.Empty));
 
             // register the symbols globally
             var symbols = SymbolRegistry.Entries;

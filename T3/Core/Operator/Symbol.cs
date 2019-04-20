@@ -21,7 +21,7 @@ namespace T3.Core.Operator
         public string SymbolName { get; set; }
         public string Namespace { get; set; }
 
-        public readonly List<Instance> _instancesOfSymbol = new List<Instance>();
+        private readonly List<Instance> _instancesOfSymbol = new List<Instance>();
         public readonly List<SymbolChild> Children = new List<SymbolChild>();
         public readonly List<Connection> Connections = new List<Connection>();
 
@@ -30,10 +30,11 @@ namespace T3.Core.Operator
         /// </summary>
         public readonly List<InputDefinition> InputDefinitions = new List<InputDefinition>();
 
-        public Type SymbolType { get; set; }
+        public Type InstanceType { get; set; }
 
 
         #region public API =======================================================================
+
         public void Dispose()
         {
             _instancesOfSymbol.ForEach(instance => instance.Dispose());
@@ -41,26 +42,26 @@ namespace T3.Core.Operator
 
         public Instance CreateInstance()
         {
-            var newInstance = Activator.CreateInstance(SymbolType) as Instance;
+            var newInstance = Activator.CreateInstance(InstanceType) as Instance;
             Debug.Assert(newInstance != null);
             newInstance.Symbol = this;
 
-            // Link inputs to default input values
-            for (int i = 0; i < InputDefinitions.Count; i++)
+            // create child instances
+            foreach (var symbolChild in Children)
             {
-                Debug.Assert(i < newInstance.Inputs.Count);
-                if (newInstance.Inputs[i] is IInputSlot input)
-                {
-                    input.InputValue = InputDefinitions[i].DefaultValue;
-                }
-            }
-
-            // create children
-            foreach (var childInstanceDef in Children)
-            {
-                var childInstance = childInstanceDef.Symbol.CreateInstance();
-                childInstance.Id = childInstanceDef.Id;
+                var childInstance = symbolChild.Symbol.CreateInstance();
+                childInstance.Id = symbolChild.Id;
                 childInstance.Parent = newInstance;
+
+                // set up the inputs for the child instance
+                for (int i = 0; i < InputDefinitions.Count; i++)
+                {
+                    Debug.Assert(i < newInstance.Inputs.Count);
+                    if (newInstance.Inputs[i] is IInputSlot inputSlot)
+                    {
+                        inputSlot.Input = symbolChild.InputValues[InputDefinitions[i].Id];
+                    }
+                }
 
                 newInstance.Children.Add(childInstance);
             }
@@ -134,11 +135,11 @@ namespace T3.Core.Operator
             public Guid TargetChildId { get; }
             public Guid InputDefinitionId { get; }
 
-            public Connection(Guid sourceInstanceId, Guid outputDefinitionId, Guid targetInstanceId, Guid inputDefinitionId)
+            public Connection(Guid sourceChildId, Guid outputDefinitionId, Guid targetChildId, Guid inputDefinitionId)
             {
-                SourceChildId = sourceInstanceId;
+                SourceChildId = sourceChildId;
                 OutputDefinitionId = outputDefinitionId;
-                TargetChildId = targetInstanceId;
+                TargetChildId = targetChildId;
                 InputDefinitionId = inputDefinitionId;
             }
         }
