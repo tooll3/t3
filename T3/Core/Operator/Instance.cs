@@ -15,6 +15,6 @@ namespace T3.Core.Operator
 
         public List<Slot> Outputs { get; set; } = new List<Slot>();
         public List<Instance> Children { get; set; } = new List<Instance>();
-        public List<Slot> Inputs { get; set; } = new List<Slot>();
+        public List<IInputSlot> Inputs { get; set; } = new List<IInputSlot>();
     }
 }

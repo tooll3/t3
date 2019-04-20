@@ -37,6 +37,7 @@ namespace T3.Core.Operator
 
     public class Slot
     {
+        public Guid Id { get; set; }
         public string Name { get; set; } = String.Empty;
         public Type Type { get; protected set; }
     }
@@ -119,11 +120,13 @@ namespace T3.Core.Operator
     }
 
 
-    interface IInputSlot
+    public interface IInputSlot
     {
 //         InputValue InputValue { get; set; }
 //         InputValue DefaultValue { get; set; }
+        Guid Id { get; set; }
         SymbolChild.Input Input { set; }
+        void AddConnection(Slot slot);
     }
 
     public class InputSlot<T> : Slot<T>, IInputSlot
@@ -144,6 +147,11 @@ namespace T3.Core.Operator
             Value = InputConnection != null ? InputConnection.GetValue(context)
                                             : Input.IsDefault ? TypedDefaultValue.Value
                                                               : TypedInputValue.Value;
+        }
+
+        public void AddConnection(Slot slot)
+        {
+            InputConnection = (Slot<T>)slot;
         }
 
         private Slot<T> _inputConnection;
@@ -171,12 +179,6 @@ namespace T3.Core.Operator
 
         public InputValue<T> TypedInputValue;
         public InputValue<T> TypedDefaultValue;
-
-        //         public InputValue InputValue
-        //         {
-        //             get => TypedInputValue;
-        //             set => TypedInputValue = (InputValue<T>)value;
-        //         }
     }
 
     public class Size2Slot : InputSlot<Size2>
