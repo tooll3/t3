@@ -3,9 +3,8 @@ using imHelpers;
 using System;
 using System.Numerics;
 using T3.Core.Operator;
-using T3.Gui;
 
-namespace T3.graph
+namespace T3.Gui.Graph
 {
     /// <summary>
     /// Renders a graphic representation of a <see cref="SymbolChild"/> within the current <see cref="GraphCanvasWindow"/>
@@ -13,7 +12,7 @@ namespace T3.graph
     static class GraphOperator
     {
 
-        public static void DrawOnCanvas(SymbolChildUi childUi, GraphCanvasWindow canvas)
+        public static void DrawOnCanvas(SymbolChildUi childUi, GraphCanvas canvas)
         {
 
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
@@ -142,7 +141,7 @@ namespace T3.graph
         }
 
 
-        static private GraphCanvasWindow _canvas = null;
+        static private GraphCanvas _canvas = null;
 
         // // Open context menu
         // if (!ImGui.IsAnyItemHovered() && ImGui.IsWindowHovered() && ImGui.IsMouseClicked(1))

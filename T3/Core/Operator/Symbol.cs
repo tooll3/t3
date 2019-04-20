@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 //using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace T3.Core.Operator
@@ -89,6 +90,17 @@ namespace T3.Core.Operator
         void DeleteInstance(Instance op)
         {
             _instancesOfSymbol.Remove(op);
+        }
+
+        public Symbol.Connection GetConnectionForInput(Symbol.InputDefinition input)
+        {
+            return Connections.FirstOrDefault(c => c.TargetChildId == input.Id);
+        }
+
+        // Fix me: Use OutputDefinition once it's available
+        public Symbol.Connection GetConnectionForOutput(Symbol.InputDefinition output)
+        {
+            return Connections.FirstOrDefault(c => c.SourceChildId == output.Id);
         }
 
         #endregion

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using T3.graph;
 using T3.Gui.Selection;
 
-namespace T3.Gui.graph
+namespace T3.Gui.Graph
 {
     /// <summary>
     /// This handler provides the snapping functionality for OperatorWidgets. The heart of this
@@ -139,7 +138,7 @@ namespace T3.Gui.graph
             var op = (from opAbove in GetOpsConnectedAbove(src)
                       where !dragGroup.Contains(opAbove) &&
                             !IsElementDragged(opAbove) &&
-                            (Math.Abs(opAbove.Position.Y + GraphCanvasWindow.GridSize - src.Position.Y) < VERTICAL_DISTANCE_SNAP_THRESHOLD) &&
+                            (Math.Abs(opAbove.Position.Y + GraphCanvas.GridSize - src.Position.Y) < VERTICAL_DISTANCE_SNAP_THRESHOLD) &&
                             (src.GetHorizontalOverlapWith(opAbove) > HORIZONTAL_OVERLAP_SNAP_THRESHOD)
                       select opAbove).FirstOrDefault();
 
@@ -148,8 +147,8 @@ namespace T3.Gui.graph
 
             var dx = src.Position.X - op.Position.X;
             src.Position = new Vector2(
-                src.Position.X - ((dx + 0.5f * GraphCanvasWindow.GridSize) % GraphCanvasWindow.GridSize) + 0.5f * GraphCanvasWindow.GridSize,
-                op.Position.Y + GraphCanvasWindow.GridSize);
+                src.Position.X - ((dx + 0.5f * GraphCanvas.GridSize) % GraphCanvas.GridSize) + 0.5f * GraphCanvas.GridSize,
+                op.Position.Y + GraphCanvas.GridSize);
             return true;
         }
 
@@ -158,7 +157,7 @@ namespace T3.Gui.graph
             var op = (from opBelow in GetOpsConnectedBelow(target)
                       where !dragGroup.Contains(opBelow)
                         && !IsElementDragged(opBelow)
-                        && Math.Abs(target.Position.Y + GraphCanvasWindow.GridSize - opBelow.Position.Y) < VERTICAL_DISTANCE_SNAP_THRESHOLD
+                        && Math.Abs(target.Position.Y + GraphCanvas.GridSize - opBelow.Position.Y) < VERTICAL_DISTANCE_SNAP_THRESHOLD
                         && target.GetHorizontalOverlapWith(opBelow) > HORIZONTAL_OVERLAP_SNAP_THRESHOD
                       select opBelow).FirstOrDefault();
 
@@ -167,11 +166,11 @@ namespace T3.Gui.graph
 
             var dx = target.Position.X - op.Position.X;
             var gridAlignedX = target.Position.X
-                            - ((dx + 0.5f * GraphCanvasWindow.GridSize) % GraphCanvasWindow.GridSize)
-                            + 0.5f * GraphCanvasWindow.GridSize;
+                            - ((dx + 0.5f * GraphCanvas.GridSize) % GraphCanvas.GridSize)
+                            + 0.5f * GraphCanvas.GridSize;
             target.Position = new Vector2(
                 gridAlignedX,
-                op.Position.Y - GraphCanvasWindow.GridSize);
+                op.Position.Y - GraphCanvas.GridSize);
             return true;
         }
 
@@ -240,10 +239,10 @@ namespace T3.Gui.graph
 
         #region constants
         private const double SNAP_RANGE = 15;
-        private const double VERTICAL_OVERLAP_SNAP_THRESHOLD = 0.4f * GraphCanvasWindow.GridSize;
-        private const double HORIZONTAL_OVERLAP_SNAP_THRESHOLD = 0.4f * GraphCanvasWindow.GridSize;
-        private const double HORIZONTAL_OVERLAP_SNAP_THRESHOD = 1f * GraphCanvasWindow.GridSize;
-        private const double VERTICAL_DISTANCE_SNAP_THRESHOLD = 0.4f * GraphCanvasWindow.GridSize;
+        private const double VERTICAL_OVERLAP_SNAP_THRESHOLD = 0.4f * GraphCanvas.GridSize;
+        private const double HORIZONTAL_OVERLAP_SNAP_THRESHOLD = 0.4f * GraphCanvas.GridSize;
+        private const double HORIZONTAL_OVERLAP_SNAP_THRESHOD = 1f * GraphCanvas.GridSize;
+        private const double VERTICAL_DISTANCE_SNAP_THRESHOLD = 0.4f * GraphCanvas.GridSize;
         #endregion
 
         //private UpdateOperatorPropertiesCommand _updateOperatorPropertiesCommand;
