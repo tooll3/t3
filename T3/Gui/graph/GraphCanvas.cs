@@ -25,8 +25,6 @@ namespace T3.Gui.Graph
 
             ImGui.BeginGroup();
             {
-                //ImGui.Text(_debugMessages); _debugMessages = "";
-
                 _mouse = ImGui.GetMousePos();
                 ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(1, 1));
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
@@ -133,33 +131,80 @@ namespace T3.Gui.Graph
         }
 
 
+        #region Connections ======================================================================
+
+        private Symbol.Connection _draftConnection = null;
+        public Symbol.Connection _draftConnectionType = null;
+
+        public void StartNewConnection(Symbol.Connection newConnection)
+        {
+            _draftConnection = newConnection;
+        }
+
+        public void UpdateNewConnection()
+        {
+
+        }
+
+        public void CompleteNewConnection()
+        {
+            _draftConnection = null;
+        }
+
+
         private void DrawConnections()
         {
             foreach (var c in _compositionOp.Symbol.Connections)
             {
-                var source = UiChildrenById[c.SourceChildId];
-                var target = UiChildrenById[c.TargetChildId];
-                var sourcePos = ScreenPosFromCanvas(source.Position);
-                var targetPos = ScreenPosFromCanvas(target.Position + new Vector2(0, target.Size.Y));
-
-
-                _drawList.AddBezierCurve(
-                    sourcePos,
-                    sourcePos + new Vector2(0, -50),
-                    targetPos + new Vector2(0, 50),
-                    targetPos,
-                    Color.White, 3f);
-
-                _drawList.AddTriangleFilled(
-                    targetPos + new Vector2(0, -3),
-                    targetPos + new Vector2(4, 2),
-                    targetPos + new Vector2(-4, 2),
-                    Color.White);
+                DrawConnection(c);
             }
+
+            if (_draftConnection != null)
+                DrawConnection(_draftConnection);
+
         }
 
+        private void DrawConnection(Symbol.Connection c)
+        {
+            Vector2 sourcePos;
+            if (c.SourceChildId == Guid.Empty)
+            {
+                sourcePos = ImGui.GetMousePos();
+            }
+            else
+            {
+                var source = UiChildrenById[c.SourceChildId];
+                sourcePos = ScreenPosFromCanvas(source.Position);
+            }
 
-        #region canvas scaling conversion
+            Vector2 targetPos;
+            if (c.TargetChildId == Guid.Empty)
+            {
+                targetPos = ImGui.GetMousePos();
+            }
+            else
+            {
+                var target = UiChildrenById[c.TargetChildId];
+                targetPos = ScreenPosFromCanvas(target.Position + new Vector2(0, target.Size.Y));
+            }
+
+            _drawList.AddBezierCurve(
+                sourcePos,
+                sourcePos + new Vector2(0, -50),
+                targetPos + new Vector2(0, 50),
+                targetPos,
+                Color.White, 3f);
+
+            _drawList.AddTriangleFilled(
+                targetPos + new Vector2(0, -3),
+                targetPos + new Vector2(4, 2),
+                targetPos + new Vector2(-4, 2),
+                Color.White);
+        }
+        #endregion
+
+
+        #region canvas scaling conversion =================================================================
         /// <summary>
         /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
