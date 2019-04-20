@@ -100,10 +100,10 @@ namespace T3
                                     }
                                 };
 
-            projectSymbol.Connections.Add(new Symbol.Connection(sourceChildId: projectSymbol.Children[2].Id, // from Random
-                                                                outputDefinitionId: randomSymbol.OutputDefinitions[0].Id,
-                                                                targetChildId: projectSymbol.Children[0].Id, // to Add
-                                                                inputDefinitionId: addSymbol.InputDefinitions[0].Id));
+            projectSymbol.AddConnection(new Symbol.Connection(sourceChildId: projectSymbol.Children[2].Id, // from Random
+                                                              outputDefinitionId: randomSymbol.OutputDefinitions[0].Id,
+                                                              targetChildId: projectSymbol.Children[0].Id, // to Add
+                                                              inputDefinitionId: addSymbol.InputDefinitions[0].Id));
 
             // register the symbols globally
             var symbols = SymbolRegistry.Entries;
