@@ -295,7 +295,6 @@
     <Compile Include="Core\Operator\SymbolRegistry.cs" />
     <Compile Include="Core\Operator\SymbolChildUi.cs" />
     <Compile Include="Core\Operator\SymbolChildUiRegistry.cs" />
-    <Compile Include="Gui\graph\AutoLayouting.cs" />
     <Compile Include="Gui\graph\ConnectionLine.cs" />
     <Compile Include="Gui\graph\GraphCanvas.cs" />
     <Compile Include="Gui\graph\OperatorInputZone.cs" />
