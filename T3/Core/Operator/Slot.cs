@@ -121,7 +121,9 @@ namespace T3.Core.Operator
 
     interface IInputSlot
     {
-        InputValue InputValue { get; set; }
+//         InputValue InputValue { get; set; }
+//         InputValue DefaultValue { get; set; }
+        SymbolChild.Input Input { set; }
     }
 
     public class InputSlot<T> : Slot<T>, IInputSlot
@@ -139,28 +141,43 @@ namespace T3.Core.Operator
 
         public void Update(EvaluationContext context)
         {
-            Value = Input != null ? Input.GetValue(context) : TypedInputValue.Value;
+            Value = InputConnection != null ? InputConnection.GetValue(context)
+                                            : Input.IsDefault ? TypedDefaultValue.Value
+                                                              : TypedInputValue.Value;
         }
 
-        private Slot<T> _input;
-        public Slot<T> Input
+        private Slot<T> _inputConnection;
+        public Slot<T> InputConnection
+        {
+            get => _inputConnection;
+            set
+            {
+                _inputConnection = value;
+                IsDirty = true;
+            }
+        }
+
+        private SymbolChild.Input _input;
+        public SymbolChild.Input Input
         {
             get => _input;
             set
             {
                 _input = value;
-                IsDirty = true;
+                TypedInputValue = (InputValue<T>)value.Value;
+                TypedDefaultValue = (InputValue<T>)value.DefaultValue;
             }
         }
 
         public InputValue<T> TypedInputValue;
-        public InputValue InputValue
-        {
-            get => TypedInputValue;
-            set => TypedInputValue = (InputValue<T>)value;
-        }
-    }
+        public InputValue<T> TypedDefaultValue;
 
+        //         public InputValue InputValue
+        //         {
+        //             get => TypedInputValue;
+        //             set => TypedInputValue = (InputValue<T>)value;
+        //         }
+    }
 
     public class Size2Slot : InputSlot<Size2>
     {
@@ -178,13 +195,13 @@ namespace T3.Core.Operator
 
         public new void Update(EvaluationContext context)
         {
-            if (Input != null)
-                Value = Input.GetValue(context);
+            if (InputConnection != null)
+                Value = InputConnection.GetValue(context);
             else
             {
-                if (Width.Input != null)
+                if (Width.InputConnection != null)
                     Value.Width = Width.GetValue(context);
-                if (Height.Input != null)
+                if (Height.InputConnection != null)
                     Value.Height = Height.GetValue(context);
             }
         }

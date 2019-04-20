@@ -68,7 +68,7 @@ namespace OperatorTests
         {
             var op = new IntInputOp();
             var op2 = new FloatOutputOp();
-            op.IntInput.Input = new ConverterSlot<float, int>(op2.FloatOutput, f => (int)f);
+            op.IntInput.InputConnection = new ConverterSlot<float, int>(op2.FloatOutput, f => (int)f);
             var result = op.IntInput.GetValue(new EvaluationContext());
             Assert.AreEqual(104, result);
         }
@@ -78,7 +78,7 @@ namespace OperatorTests
         {
             var op = new StringInputOp();
             var op2 = new FloatOutputOp();
-            op.StringInput.Input = new ConverterSlot<float, string>(op2.FloatOutput, f => f.ToString());
+            op.StringInput.InputConnection = new ConverterSlot<float, string>(op2.FloatOutput, f => f.ToString());
             var result = op.StringInput.GetValue(new EvaluationContext());
             Assert.AreEqual("104", result);
         }
@@ -108,12 +108,12 @@ namespace OperatorTests
             Assert.AreEqual(0, result);
 
             op.MyMultiInput.Add(new InputSlot<int>(0));
-            op.MyMultiInput[0].Input = op2.IntOutput;
+            op.MyMultiInput[0].InputConnection = op2.IntOutput;
             result = op.Result.GetValue(new EvaluationContext());
             Assert.AreEqual(64, result);
 
             op.MyMultiInput.Add(new InputSlot<int>(0));
-            op.MyMultiInput[1].Input = op2.IntOutput;
+            op.MyMultiInput[1].InputConnection = op2.IntOutput;
             op.Result.IsDirty = true;
             result = op.Result.GetValue(new EvaluationContext());
             Assert.AreEqual(128, result);

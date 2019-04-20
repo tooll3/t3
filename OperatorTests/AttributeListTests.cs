@@ -409,8 +409,8 @@ namespace OperatorTests
                                       };
 
             setAttrOp.AttributeName.Value = "Thickness";
-            setAttrOp.AttributeValueSetter.Input = randomAttributeSetter.Output;
-            setAttrOp.AttributeListInput.Input = genAttrOp.Output;
+            setAttrOp.AttributeValueSetter.InputConnection = randomAttributeSetter.Output;
+            setAttrOp.AttributeListInput.InputConnection = genAttrOp.Output;
 
             EvaluationContext context = new EvaluationContext();
             var value = setAttrOp.Output.GetValue(context);
