@@ -290,6 +290,7 @@
   <ItemGroup>
     <Compile Include="Core\Operator\InputAnnotation.cs" />
     <Compile Include="Core\Operator\InputUi.cs" />
+    <Compile Include="Core\Operator\OutputUi.cs" />
     <Compile Include="Core\Operator\Symbol.cs" />
     <Compile Include="Core\Operator\SymbolChild.cs" />
     <Compile Include="Core\Operator\SymbolRegistry.cs" />

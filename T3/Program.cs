@@ -237,6 +237,7 @@ namespace T3
 
                                      _t3ui.DrawUI();
                                      _t3ui.DrawSelectionParameters();
+                                     _t3ui.DrawSelectedOutput();
 
                                      UiSettingsWindow.DrawUiSettings();
 

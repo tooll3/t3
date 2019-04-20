@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.graph;
@@ -84,6 +85,28 @@ namespace T3.Gui
             IInputUi inputUi = InputUiRegistry.Entries[input.Value.ValueType];
             inputUi.DrawInputEdit(inputDefinition.Name, input);
             ImGui.PopID();
+        }
+
+        public void DrawSelectedOutput()
+        {
+            ImGui.Begin("SelectionView");
+            var compositionOp = _mockModel.MainOp;
+            foreach (var pair in SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id])
+            {
+                var symbolChildUi = pair.Value;
+                if (!symbolChildUi.IsSelected)
+                    continue;
+
+                var symbolChild = symbolChildUi.SymbolChild;
+                var selectedInstance = compositionOp.Children.Single(child => child.Id == symbolChild.Id);
+
+                var firstOutput = selectedInstance.Outputs[0];
+                IOutputUi outputUi = OutputUiRegistry.Entries[firstOutput.Type];
+                outputUi.Draw(firstOutput);
+
+                break; // only first selected atm
+            }
+            ImGui.End();
         }
 
         public static void AddHoveredId(Guid id)
