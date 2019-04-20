@@ -108,7 +108,7 @@ namespace T3.Core.Operator
 
         public T GetValue(EvaluationContext context)
         {
-            if (IsDirty)
+//             if (IsDirty)
             {
                 UpdateAction(context);
 //                 IsDirty = false;

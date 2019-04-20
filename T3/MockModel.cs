@@ -146,6 +146,8 @@ namespace T3
             // create and register input controls
             InputUiRegistry.Entries.Add(typeof(float), new FloatInputUi());
             InputUiRegistry.Entries.Add(typeof(int), new IntInputUi());
+            OutputUiRegistry.Entries.Add(typeof(float), new FloatOutputUi());
+            OutputUiRegistry.Entries.Add(typeof(int), new IntOutputUi());
 
             _initialized = true;
             MainOp = projectOp;

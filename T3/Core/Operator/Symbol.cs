@@ -52,28 +52,7 @@ namespace T3.Core.Operator
             // create child instances
             foreach (var symbolChild in Children)
             {
-                var childSymbol = symbolChild.Symbol;
-                var childInstance = childSymbol.CreateInstance();
-                childInstance.Id = symbolChild.Id;
-                childInstance.Parent = newInstance;
-
-                // set up the inputs for the child instance
-                for (int i = 0; i < symbolChild.Symbol.InputDefinitions.Count; i++)
-                {
-                    Debug.Assert(i < childInstance.Inputs.Count);
-                    Guid inputDefinitionId = childSymbol.InputDefinitions[i].Id;
-                    childInstance.Inputs[i].Input = symbolChild.InputValues[inputDefinitionId];
-                    childInstance.Inputs[i].Id = inputDefinitionId;
-                }
-
-                // set up the outputs for the child instance
-                for (int i = 0; i < symbolChild.Symbol.OutputDefinitions.Count; i++)
-                {
-                    Debug.Assert(i < childInstance.Outputs.Count);
-                    childInstance.Outputs[i].Id = childSymbol.OutputDefinitions[i].Id;
-                }
-
-                newInstance.Children.Add(childInstance);
+                CreateNewChildInstance(symbolChild, newInstance);
             }
 
             // connect instances
@@ -114,6 +93,32 @@ namespace T3.Core.Operator
             return newInstance;
         }
 
+        private static void CreateNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
+        {
+            var childSymbol = symbolChild.Symbol;
+            var childInstance = childSymbol.CreateInstance();
+            childInstance.Id = symbolChild.Id;
+            childInstance.Parent = parentInstance;
+
+            // set up the inputs for the child instance
+            for (int i = 0; i < symbolChild.Symbol.InputDefinitions.Count; i++)
+            {
+                Debug.Assert(i < childInstance.Inputs.Count);
+                Guid inputDefinitionId = childSymbol.InputDefinitions[i].Id;
+                childInstance.Inputs[i].Input = symbolChild.InputValues[inputDefinitionId];
+                childInstance.Inputs[i].Id = inputDefinitionId;
+            }
+
+            // set up the outputs for the child instance
+            for (int i = 0; i < symbolChild.Symbol.OutputDefinitions.Count; i++)
+            {
+                Debug.Assert(i < childInstance.Outputs.Count);
+                childInstance.Outputs[i].Id = childSymbol.OutputDefinitions[i].Id;
+            }
+
+            parentInstance.Children.Add(childInstance);
+        }
+
         public Guid AddChild(Symbol symbol)
         {
             var newChild = new SymbolChild(symbol);
@@ -121,11 +126,7 @@ namespace T3.Core.Operator
 
             foreach (var instance in _instancesOfSymbol)
             {
-                var childInstance = symbol.CreateInstance();
-                childInstance.Id = newChild.Id;
-                childInstance.Parent = instance;
-
-                instance.Children.Add(childInstance);
+                CreateNewChildInstance(newChild, instance);
             }
 
             return newChild.Id;
@@ -136,12 +137,12 @@ namespace T3.Core.Operator
             _instancesOfSymbol.Remove(op);
         }
 
-        public Symbol.Connection GetConnectionForInput(Symbol.InputDefinition input)
+        public Connection GetConnectionForInput(InputDefinition input)
         {
             return Connections.FirstOrDefault(c => c.TargetChildId == input.Id);
         }
 
-        public Symbol.Connection GetConnectionForOutput(Symbol.OutputDefinition output)
+        public Connection GetConnectionForOutput(OutputDefinition output)
         {
             return Connections.FirstOrDefault(c => c.SourceChildId == output.Id);
         }
