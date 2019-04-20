@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Gui;
 using Random = System.Random;
@@ -115,9 +116,12 @@ namespace T3
             var uiEntries = SymbolChildUiRegistry.Entries;
             uiEntries.Add(projectSymbol.Id, new Dictionary<Guid, SymbolChildUi>()
                                             {
-                                                { projectOp.Children[0].Id, new SymbolChildUi { SymbolChild = projectSymbol.Children[0], Name = "Add1" } },
-                                                { projectOp.Children[1].Id, new SymbolChildUi { SymbolChild = projectSymbol.Children[1] } },
-                                                { projectOp.Children[2].Id, new SymbolChildUi { SymbolChild = projectSymbol.Children[2], Name = "Random" } },
+                                                { projectOp.Children[0].Id, new SymbolChildUi {
+                                                    SymbolChild = projectSymbol.Children[0], Name = "Add1", Position=new Vector2(100,100) } },
+                                                { projectOp.Children[1].Id, new SymbolChildUi {
+                                                    SymbolChild = projectSymbol.Children[1], Position=new Vector2(50,200) } },
+                                                { projectOp.Children[2].Id, new SymbolChildUi {
+                                                    SymbolChild = projectSymbol.Children[2], Name = "Random", Position=new Vector2(250,200) } },
                                             });
 
             // create and register input controls

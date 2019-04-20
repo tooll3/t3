@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 using System.Numerics;
-using T3.Gui.graph;
+using T3.Gui.Graph;
 
 namespace T3.Gui.Selection
 {

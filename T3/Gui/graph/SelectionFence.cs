@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Windows.Input;
-using T3.graph;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Graph
@@ -14,7 +13,7 @@ namespace T3.Gui.Graph
     /// </summary>
     public class SelectionFence
     {
-        public SelectionFence(GraphCanvasWindow canvas)
+        public SelectionFence(GraphCanvas canvas)
         {
             _canvas = canvas;
         }
@@ -153,7 +152,7 @@ namespace T3.Gui.Graph
         ImRect _bounds { get { return ImRect.RectBetweenPoints(_startPositionInScreen, _dragPositionInScreen); } }
         private Vector2 _startPositionInScreen;
         private Vector2 _dragPositionInScreen;
-        private GraphCanvasWindow _canvas;
+        private GraphCanvas _canvas;
         private bool _dragThresholdExceeded = false; // Set to true after DragThreshold reached
     }
 }

@@ -1,8 +1,7 @@
 ﻿using imHelpers;
 using System.Collections.Generic;
 using System.Numerics;
-using T3.graph;
-using T3.Gui.graph;
+using T3.Gui.Graph;
 using T3.Gui.Selection;
 
 namespace T3.Core.Operator
@@ -34,28 +33,6 @@ namespace T3.Core.Operator
             return 1;
         }
 
-        public List<IConnectable> GetOpsConnectedToInputs()
-        {
-            // FIXME: convert to lync
-            var r = new List<IConnectable>();
-            foreach (var c in ConnectionLinesIn)
-            {
-                r.Add(c.SourceItem);
-            }
-            return r;
-        }
-
-        public List<IConnectable> GetOpsConnectedToOutputs()
-        {
-            // FIXME: convert to lync
-            var r = new List<IConnectable>();
-            foreach (var c in ConnectionLinesOut)
-            {
-                r.Add(c.TargetItem);
-            }
-            return r;
-        }
-
 
         public ImRect GetRangeForInputConnectionLine(Symbol.InputDefinition input, int multiInputIndex, bool insertConnection = false)
         {
@@ -82,7 +59,7 @@ namespace T3.Core.Operator
 
             var minX = matchingSlot.XInItem;
             var maxX = matchingSlot.XInItem + matchingSlot.Width;
-            return new ImRect(minX, GraphCanvasWindow.GridSize, maxX - minX, 0);
+            return new ImRect(minX, GraphCanvas.GridSize, maxX - minX, 0);
         }
 
 
@@ -208,6 +185,22 @@ namespace T3.Core.Operator
         public List<ConnectionLine> GetOutputConnections()
         {
             return new List<ConnectionLine>();
+        }
+
+
+        public List<Symbol.InputDefinition> GetVisibleInputs(Symbol parent)
+        {
+            var visibleInputs = new List<Symbol.InputDefinition>();
+            foreach (var inputDef in parent.InputDefinitions)
+            {
+                var c = parent.GetConnectionForInput(inputDef);
+                var inputIsVisible = inputDef.Relevance != Symbol.InputDefinition.Relevancy.Optional || c != null;
+                if (!inputIsVisible)
+                    continue;
+                visibleInputs.Add(inputDef);
+            }
+
+            return visibleInputs;
         }
     }
 }

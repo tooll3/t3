@@ -1,6 +1,6 @@
 ﻿using T3.Core.Operator;
 
-namespace T3.Gui.graph
+namespace T3.Gui.Graph
 {
     /// <summary>
     /// 

@@ -1,10 +1,9 @@
 ﻿using imHelpers;
 using System;
 using T3.Core.Operator;
-using T3.graph;
 using T3.Gui.Selection;
 
-namespace T3.Gui.graph
+namespace T3.Gui.Graph
 {
     /// <summary>
     /// Converts the elements of an Symbol into Connections, 
@@ -30,7 +29,7 @@ namespace T3.Gui.graph
             if (TargetItem == null || SourceItem == null)
                 return false;
 
-            float targetY = TargetItem.Position.Y + GraphCanvasWindow.GridSize + 1.0f;
+            float targetY = TargetItem.Position.Y + GraphCanvas.GridSize + 1.0f;
             float sourceY = SourceItem.Position.Y + 1.0f;
 
             float targetX = TargetItem.Position.X;
@@ -40,7 +39,7 @@ namespace T3.Gui.graph
             //var range = Target.GetRangeForInputConnectionLine(Input, index, false);
             var inputSlot = FindConnectionInputSlot();
             float targetXmin = targetX + inputSlot.XInItem;
-            float targetXmax = targetX + inputSlot.XInItem+inputSlot.Width;
+            float targetXmax = targetX + inputSlot.XInItem + inputSlot.Width;
             float targetXcenter = targetXmin + 0.5f * (targetXmax - targetXmin);
 
             int outputCount = 1;    // Todo: needs implementation
