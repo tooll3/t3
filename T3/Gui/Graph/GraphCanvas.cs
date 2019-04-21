@@ -12,13 +12,13 @@ namespace T3.Gui.Graph
     {
         public GraphCanvas(Instance opInstance)
         {
-            _compositionOp = opInstance;
+            CompositionOp = opInstance;
             _selectionFence = new SelectionFence(this);
         }
 
         public void Draw()
         {
-            UiChildrenById = SymbolChildUiRegistry.Entries[_compositionOp.Symbol.Id];
+            UiChildrenById = SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id];
             _drawList = ImGui.GetWindowDrawList();
             _overlayDrawList = ImGui.GetOverlayDrawList();
             _io = ImGui.GetIO();
@@ -52,7 +52,7 @@ namespace T3.Gui.Graph
 
                         if (ImGui.IsMouseDoubleClicked(0))
                         {
-                            QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), _compositionOp.Symbol, CanvasPosFromScreen(ImGui.GetMousePos()));
+                            QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, CanvasPosFromScreen(ImGui.GetMousePos()));
                         }
 
                         // Zoom with mouse wheel
@@ -187,7 +187,7 @@ namespace T3.Gui.Graph
 
         private void DrawConnections()
         {
-            foreach (var c in _compositionOp.Symbol.Connections)
+            foreach (var c in CompositionOp.Symbol.Connections)
             {
                 DrawConnection(c);
             }
@@ -303,7 +303,7 @@ namespace T3.Gui.Graph
         private SelectionFence _selectionFence;
 
         private ImGuiIOPtr _io;
-        private Instance _compositionOp;
+        public Instance CompositionOp { get; private set; }
 
         public Dictionary<Guid, SymbolChildUi> UiChildrenById { get; private set; }
     }

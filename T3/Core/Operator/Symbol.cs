@@ -179,7 +179,7 @@ namespace T3.Core.Operator
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public Type Type { get; set; }
+            public Type ValueType { get; set; }
         }
 
         public class Connection
