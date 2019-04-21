@@ -25,7 +25,7 @@ namespace T3.Gui
         public static Color Black = new Color(0, 0, 0, 1f);
         public static Color TRed = new Color(1f, 0.2f, 0.2f, 1f);
         public static Color TGreen = new Color(0.2f, 0.9f, 0.2f);
-        public static Color TBlue = new Color(0.2f, 0.9f, 0.2f, 1);
+        public static Color TBlue = new Color(0.2f, 0.2f, 0.9f, 1);
 
         /// <summary>
         /// Creates white transparent color

@@ -26,16 +26,18 @@ namespace T3.Gui
                 if (input.IsDefault)
                 {
                     // handling default values is a bit tricky with ImGui as we want to show the default
-                    // value when this is set, but we never want to default value to be modified. But as
+                    // value when this is set, but we never want the default value to be modified. But as
                     // editing is already done when the return value of the ImGui edit control tells us
                     // that editing has happened this here is a simple way to ensure that the default value
-                    // is always correct but edition is only happening on the input value.
+                    // is always correct but editing is only happening on the input value.
                     input.Value.Assign(input.DefaultValue);
                 }
                 bool valueModified = DrawEditControl(name, ref typedValue.Value);
                 input.IsDefault &= !valueModified;
                 ImGui.PopStyleColor();
                 ImGui.PopItemWidth();
+
+//                 T3.Logging.Log.Info($"Color is {Color}");
 
                 // draw reset button
                 ImGui.SameLine(200.0f, 130.0f);
@@ -58,7 +60,7 @@ namespace T3.Gui
 
         }
 
-        public Color Color { get; } = Color.TGreen;
+        public virtual Color Color { get; } = Color.TGreen;
     }
 
     public class FloatInputUi : InputValueUi<float>
@@ -67,7 +69,8 @@ namespace T3.Gui
         {
             return ImGui.DragFloat(name, ref value);
         }
-        new public Color Color { get; } = Color.Gray;
+
+        public override Color Color { get; } = Color.Gray;
     }
 
     public class IntInputUi : InputValueUi<int>
@@ -76,7 +79,8 @@ namespace T3.Gui
         {
             return ImGui.DragInt(name, ref value);
         }
-        new public Color Color { get; } = Color.TBlue;
+
+        public override Color Color { get; } = Color.TBlue;
     }
 
     public static class InputUiRegistry
