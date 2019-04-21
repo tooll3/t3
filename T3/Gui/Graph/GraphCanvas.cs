@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.Gui.Selection;
+using T3.Logging;
 
 namespace T3.Gui.Graph
 {
@@ -18,6 +19,12 @@ namespace T3.Gui.Graph
 
         public void Draw()
         {
+            if (!SymbolChildUiRegistry.Entries.ContainsKey(CompositionOp.Symbol.Id))
+            {
+                SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id] = new Dictionary<Guid, SymbolChildUi>();
+                Log.Debug("Added Op to UI Registry " + CompositionOp.Symbol.SymbolName);
+            }
+
             UiChildrenById = SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id];
             DrawList = ImGui.GetWindowDrawList();
             _overlayDrawList = ImGui.GetOverlayDrawList();
@@ -50,7 +57,7 @@ namespace T3.Gui.Graph
                             _scrollTarget += _io.MouseDelta;
                         }
 
-                        if (ImGui.IsMouseDoubleClicked(0))
+                        if (!ImGui.IsAnyItemHovered() && ImGui.IsMouseDoubleClicked(0))
                         {
                             QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, CanvasPosFromScreen(ImGui.GetMousePos()));
                         }
@@ -208,7 +215,7 @@ namespace T3.Gui.Graph
         private SelectionFence _selectionFence;
 
         private ImGuiIOPtr _io;
-        public Instance CompositionOp { get; private set; }
+        public Instance CompositionOp { get; set; }
 
         public Dictionary<Guid, SymbolChildUi> UiChildrenById { get; private set; }
     }
