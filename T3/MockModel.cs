@@ -70,6 +70,25 @@ namespace T3
             public readonly InputSlot<string> InputString = new InputSlot<string>(string.Empty);
         }
 
+        class StringConcatOperator : Instance<StringConcatOperator>
+        {
+            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            public readonly Slot<string> Result = new Slot<string>();
+
+            public StringConcatOperator()
+            {
+                Result.UpdateAction = Update;
+            }
+
+            private void Update(EvaluationContext context)
+            {
+                Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
+            }
+
+            public readonly InputSlot<string> Input1 = new InputSlot<string>(string.Empty);
+            public readonly InputSlot<string> Input2 = new InputSlot<string>(string.Empty);
+        }
+
         class ProjectOperator : Instance<ProjectOperator>
         {
         }
@@ -110,6 +129,18 @@ namespace T3
                                          },
                                          OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Length", ValueType = typeof(int) } }
                                      };
+            var stringConcatSymbol = new Symbol()
+                                     {
+                                         Id = Guid.NewGuid(),
+                                         SymbolName = "StringConcat",
+                                         InstanceType = typeof(StringConcatOperator),
+                                         InputDefinitions =
+                                         {
+                                             new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Input1", DefaultValue = new InputValue<string>(string.Empty) },
+                                             new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Input2", DefaultValue = new InputValue<string>(string.Empty) }
+                                         },
+                                         OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Result", ValueType = typeof(string) } }
+                                     };
             var projectSymbol = new Symbol()
                                 {
                                     Id = Guid.NewGuid(),
@@ -133,6 +164,7 @@ namespace T3
             symbols.Add(addSymbol.Id, addSymbol);
             symbols.Add(randomSymbol.Id, randomSymbol);
             symbols.Add(stringLengthSymbol.Id, stringLengthSymbol);
+            symbols.Add(stringConcatSymbol.Id, stringConcatSymbol);
             symbols.Add(projectSymbol.Id, projectSymbol);
 
             // create instance of project op, all children are create automatically
@@ -173,6 +205,7 @@ namespace T3
             InputUiRegistry.Entries.Add(typeof(string), new StringInputUi());
             OutputUiRegistry.Entries.Add(typeof(float), new FloatOutputUi());
             OutputUiRegistry.Entries.Add(typeof(int), new IntOutputUi());
+            OutputUiRegistry.Entries.Add(typeof(string), new StringOutputUi());
 
             _initialized = true;
             MainOp = projectOp;

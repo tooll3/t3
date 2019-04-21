@@ -11,36 +11,33 @@ namespace T3.Core.Operator
     {
         void Draw(Slot slot);
     }
-    public class FloatOutputUi : IOutputUi
-    {
-        public void Draw(Slot slot)
-        {
-            if (slot is Slot<float> floatSlot)
-            {
-                floatSlot.UpdateAction(new EvaluationContext());
-                ImGui.Text($"{floatSlot.Value}");
-            }
-            else
-            {
-                Debug.Assert(false); 
-            }
-        }
-    }
 
-    public class IntOutputUi : IOutputUi
+    public class ValueOutputUi<T> : IOutputUi
     {
         public void Draw(Slot slot)
         {
-            if (slot is Slot<int> intSlot)
+            if (slot is Slot<T> typedSlot)
             {
-                intSlot.UpdateAction(new EvaluationContext());
-                ImGui.Text($"{intSlot.Value}");
+                typedSlot.UpdateAction(new EvaluationContext());
+                ImGui.Text($"{typedSlot.Value}");
             }
             else
             {
                 Debug.Assert(false);
             }
         }
+    }
+
+    public class FloatOutputUi : ValueOutputUi<float>
+    {
+    }
+
+    public class IntOutputUi : ValueOutputUi<int>
+    {
+    }
+
+    public class StringOutputUi : ValueOutputUi<string>
+    {
     }
 
     public static class OutputUiRegistry
