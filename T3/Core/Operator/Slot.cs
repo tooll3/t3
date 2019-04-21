@@ -128,12 +128,11 @@ namespace T3.Core.Operator
 
     public interface IInputSlot
     {
-//         InputValue InputValue { get; set; }
-//         InputValue DefaultValue { get; set; }
         Guid Id { get; set; }
-        SymbolChild.Input Input { set; }
+        SymbolChild.Input Input { get; set; }
         void AddConnection(Slot slot);
         void RemoveConnection();
+        bool IsConnected { get; }
     }
 
     public class InputSlot<T> : Slot<T>, IInputSlot
@@ -165,6 +164,8 @@ namespace T3.Core.Operator
         {
             InputConnection = null;
         }
+
+        public bool IsConnected => InputConnection != null;
 
         private Slot<T> _inputConnection;
         public Slot<T> InputConnection
