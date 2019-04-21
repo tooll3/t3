@@ -53,16 +53,14 @@ namespace T3.Gui.Graph
             foreach (var symbol in SymbolRegistry.Entries.Values)
             {
                 ImGui.PushID(symbol.Id.GetHashCode());
+                if (ImGui.Selectable(symbol.SymbolName, symbol == _selectedSymbol))
                 {
-                    if (ImGui.Selectable(symbol.SymbolName, symbol == _selectedSymbol))
-                    {
-                        Guid newInstanceId = _compositionOp.AddChild(symbol);
-                        // Create and register ui info for new op
-                        var uiEntriesForChildrenOfSymbol = SymbolChildUiRegistry.Entries[_compositionOp.Id];
-                        uiEntriesForChildrenOfSymbol.Add(newInstanceId, new SymbolChildUi { SymbolChild = _compositionOp.Children.Find(entry => entry.Id == newInstanceId) });
+                    Guid newSymbolChildId = _compositionOp.AddChild(symbol);
+                    // Create and register ui info for new child
+                    var uiEntriesForChildrenOfSymbol = SymbolChildUiRegistry.Entries[_compositionOp.Id];
+                    uiEntriesForChildrenOfSymbol.Add(newSymbolChildId, new SymbolChildUi { SymbolChild = _compositionOp.Children.Find(entry => entry.Id == newSymbolChildId) });
 
-                        _opened = false;
-                    }
+                    _opened = false;
                 }
                 ImGui.PopID();
             }
