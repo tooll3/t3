@@ -292,7 +292,7 @@ namespace T3
                                                 });
             outputUis.Add(stringConcatSymbol.Id, new Dictionary<Guid, IOutputUi>()
                                                  {
-                                                     { stringConcatSymbol.OutputDefinitions[0].Id, new IntOutputUi() }
+                                                     { stringConcatSymbol.OutputDefinitions[0].Id, new StringOutputUi() }
                                                  });
 
             // time
