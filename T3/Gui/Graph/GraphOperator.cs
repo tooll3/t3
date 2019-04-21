@@ -143,9 +143,9 @@ namespace T3.Gui.Graph
             ImGui.SetCursorScreenPos(rInScreen.Min);
             ImGui.InvisibleButton("output", rInScreen.GetSize());
             THelpers.DebugItemRect();
+            var color = ColorForType(outputDef);
 
-
-            if (DraftConnection.IsDraftConnectionSource(ui, outputIndex))
+            if (DraftConnection.IsCurrentSourceOutput(ui, outputIndex))
             {
                 _canvas.DrawRectFilled(mouseRectInCanvas, ColorForType(outputDef));
 
@@ -172,7 +172,7 @@ namespace T3.Gui.Graph
 
                 if (ImGui.IsItemClicked(0))
                 {
-                    DraftConnection.StartFromOutput(ui, outputIndex);
+                    DraftConnection.StartFromOutput(_canvas.CompositionOp.Symbol, ui, outputIndex);
                 }
             }
             else
@@ -181,7 +181,7 @@ namespace T3.Gui.Graph
                     ImRect.RectWithSize(
                         new Vector2(ui.Position.X + width * outputIndex + 1 + 3, ui.Position.Y - 1),
                         new Vector2(width - 2 - 6, 3))
-                    , Color.Gray);
+                    , DraftConnection.IsMatchingOutput(outputDef) ? Color.White : color);
             }
         }
 
@@ -196,32 +196,49 @@ namespace T3.Gui.Graph
         }
 
 
-        private static void DrawInputSlot(SymbolChildUi ui, int inputIndex)
+        private static void DrawInputSlot(SymbolChildUi targetUi, int inputIndex)
         {
-            var inputCount = ui.SymbolChild.Symbol.InputDefinitions.Count;
-            var inputDef = ui.SymbolChild.Symbol.InputDefinitions[inputIndex];
-            var inputWidth = inputCount == 0 ? ui.Size.X
-                : ui.Size.X / inputCount;
+            var inputCount = targetUi.SymbolChild.Symbol.InputDefinitions.Count;
+            var inputDef = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex];
+            var inputWidth = inputCount == 0 ? targetUi.Size.X
+                : targetUi.Size.X / inputCount;
 
             var mouseRectInCanvas = ImRect.RectWithSize(
-                new Vector2(ui.Position.X + inputWidth * inputIndex + 1, ui.Position.Y + ui.Size.Y - 3),
+                new Vector2(targetUi.Position.X + inputWidth * inputIndex + 1, targetUi.Position.Y + targetUi.Size.Y - 3),
                 new Vector2(inputWidth - 2, 6));
 
             var rInScreen = _canvas.ScreenRectFromCanvas(mouseRectInCanvas);
+            ImGui.SetCursorScreenPos(rInScreen.Min);
+            ImGui.InvisibleButton("input", rInScreen.GetSize());
+            THelpers.DebugItemRect();
 
             var valueType = inputDef.DefaultValue.ValueType;
-            var color = InputUiRegistry.Entries[valueType].Color;
+            var color = ColorForType(inputDef);
 
-            var hovered = rInScreen.Contains(ImGui.GetMousePos());
+            var hovered = rInScreen.Contains(ImGui.GetMousePos()); // TODO: check why ImGui.IsItemHovered() is not working
 
-            if (hovered)
+            if (DraftConnection.IsCurrentTargetInput(targetUi, inputIndex))
+            {
+                _canvas.DrawRectFilled(mouseRectInCanvas, ColorForType(inputDef));
+
+                if (ImGui.IsMouseDragging(0))
+                {
+                    DraftConnection.Update();
+                }
+
+                if (ImGui.IsMouseReleased(0))
+                {
+                    DraftConnection.Cancel();
+                }
+            }
+            else if (hovered)
             {
                 if (DraftConnection.IsMatchingInput(inputDef))
                 {
                     _canvas.DrawRectFilled(mouseRectInCanvas, color);
                     if (ImGui.IsMouseReleased(0))
                     {
-                        DraftConnection.CompleteToInput(_canvas.CompositionOp.Symbol, ui, inputIndex);
+                        DraftConnection.CompleteAtInput(_canvas.CompositionOp.Symbol, targetUi, inputIndex);
                     }
                 }
                 else
@@ -230,14 +247,18 @@ namespace T3.Gui.Graph
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     ImGui.SetTooltip($"-> .{inputDef.Name}");
                     ImGui.PopStyleVar();
+                    if (ImGui.IsItemClicked())
+                    {
+                        DraftConnection.StartFromInput(_canvas.CompositionOp.Symbol, targetUi, inputIndex);
+                    }
                 }
             }
             else
             {
                 _canvas.DrawRectFilled(
                     ImRect.RectWithSize(
-                        new Vector2(ui.Position.X + inputWidth * inputIndex + 1 + 3,
-                                    ui.Position.Y + ui.Size.Y - SlotConfig.VisibleSlotHeight),
+                        new Vector2(targetUi.Position.X + inputWidth * inputIndex + 1 + 3,
+                                    targetUi.Position.Y + targetUi.Size.Y - SlotConfig.VisibleSlotHeight),
                         new Vector2(inputWidth - 2 - 6,
                                     SlotConfig.VisibleSlotHeight))
                     , color: DraftConnection.IsMatchingInput(inputDef) ? Color.White : color);
