@@ -43,29 +43,29 @@ namespace T3.Gui
             Rgba.W = a;
         }
 
-
         public Color(int r, int g, int b, int a = 255)
         {
             float sc = 1.0f / 255.0f;
-            Rgba.X = (float)r * sc;
-            Rgba.Y = (float)g * sc;
-            Rgba.Z = (float)b * sc;
-            Rgba.W = (float)a * sc;
+            Rgba.X = r * sc;
+            Rgba.Y = g * sc;
+            Rgba.Z = b * sc;
+            Rgba.W = a * sc;
         }
 
-
-        public Color(uint uint_)
+        public Color(uint @uint)
         {
-            Rgba = ImGui.ColorConvertU32ToFloat4(uint_);
+            Rgba = ImGui.ColorConvertU32ToFloat4(@uint);
         }
 
-
-
-        public Color(Vector4 col)
+        public Color(Vector4 color)
         {
-            Rgba = col;
+            Rgba = color;
         }
 
+        public override string ToString()
+        {
+            return Rgba.ToString();
+        }
 
         static Color FromHSV(float h, float s, float v, float a = 1.0f)
         {
@@ -73,21 +73,19 @@ namespace T3.Gui
             return new Color(r, g, b, a);
         }
 
-
-        public static implicit operator uint(Color v)
+        public static implicit operator uint(Color color)
         {
-            return ImGui.ColorConvertFloat4ToU32(v.Rgba);
+            return ImGui.ColorConvertFloat4ToU32(color.Rgba);
         }
 
-        public static implicit operator Color(uint ui)
+        public static implicit operator Color(uint @uint)
         {
-            return new Color(ImGui.ColorConvertU32ToFloat4(ui));
+            return new Color(ImGui.ColorConvertU32ToFloat4(@uint));
         }
 
-
-        public static implicit operator Vector4(Color v)
+        public static implicit operator Vector4(Color color)
         {
-            return v.Rgba;
+            return color.Rgba;
         }
     };
 }
