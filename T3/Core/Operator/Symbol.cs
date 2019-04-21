@@ -52,10 +52,10 @@ namespace T3.Core.Operator
             // create child instances
             foreach (var symbolChild in Children)
             {
-                CreateNewChildInstance(symbolChild, newInstance);
+                CreateAndAddNewChildInstance(symbolChild, newInstance);
             }
 
-            // connect instances
+            // create connections between instances
             foreach (var connection in Connections)
             {
                 newInstance.AddConnection(connection);
@@ -66,7 +66,7 @@ namespace T3.Core.Operator
             return newInstance;
         }
 
-        private static void CreateNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
+        private static void CreateAndAddNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
         {
             var childSymbol = symbolChild.Symbol;
             var childInstance = childSymbol.CreateInstance();
@@ -129,7 +129,7 @@ namespace T3.Core.Operator
 
             foreach (var instance in _instancesOfSymbol)
             {
-                CreateNewChildInstance(newChild, instance);
+                CreateAndAddNewChildInstance(newChild, instance);
             }
 
             return newChild.Id;
