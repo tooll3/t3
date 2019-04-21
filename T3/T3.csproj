@@ -299,6 +299,7 @@
     <Compile Include="Gui\Graph\ConnectionLine.cs" />
     <Compile Include="Gui\Graph\DraftConnection.cs" />
     <Compile Include="Gui\Graph\Canvas.cs" />
+    <Compile Include="Gui\Graph\InputNodes.cs" />
     <Compile Include="Gui\Graph\OperatorInputZone.cs" />
     <Compile Include="Gui\Graph\Slots.cs" />
     <Compile Include="Gui\Metrics.cs" />

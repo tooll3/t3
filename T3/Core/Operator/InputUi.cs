@@ -4,15 +4,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Gui.Selection;
 
 namespace T3.Gui
 {
-    public interface IInputUi
+    public interface IInputUi : ISelectable
     {
         void DrawInputEdit(string name, IInputSlot input);
         Color Color { get; }
-        Vector2 Position { get; set; }
-        Vector2 Size { get; set; }
     }
 
     public abstract class InputValueUi<T> : IInputUi
@@ -80,6 +79,7 @@ namespace T3.Gui
         public virtual Color Color { get; } = Color.TGreen;
         public Vector2 Position { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
+        public bool IsSelected { get; set; }
     }
 
     public class FloatInputUi : InputValueUi<float>
@@ -129,6 +129,9 @@ namespace T3.Gui
 
     public static class InputUiRegistry
     {
+        /// <summary>
+        /// Provides a dictionary of <see cref="Symbol.InputDefinition.id"/> -> <see cref="IInputUi"/>s for a <see cref="Symbol"/>
+        /// </summary>
         public static Dictionary<Guid, Dictionary<Guid, IInputUi>> Entries { get; } = new Dictionary<Guid, Dictionary<Guid, IInputUi>>();
 
         public static Dictionary<Type, IInputUi> EntriesByType { get; } = new Dictionary<Type, IInputUi>();
