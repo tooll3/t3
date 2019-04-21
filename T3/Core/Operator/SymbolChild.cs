@@ -23,7 +23,7 @@ namespace T3.Core.Operator
 
             foreach (var inputDefinition in symbol.InputDefinitions)
             {
-                InputValues.Add(inputDefinition.Id, new Input(inputDefinition.DefaultValue));
+                InputValues.Add(inputDefinition.Id, new Input(inputDefinition));
             }
         }
 
@@ -31,17 +31,18 @@ namespace T3.Core.Operator
 
         public class Input
         {
-            /// <summary>A reference to the default value defined in corresponding <see cref="Symbol"/></summary>
-            public InputValue DefaultValue { get; }
+            public Symbol.InputDefinition InputDefinition { get; }
+
+            public InputValue DefaultValue => InputDefinition.DefaultValue;
 
             /// <summary>The input value used for this symbol child</summary>
             public InputValue Value { get; }
 
             public bool IsDefault { get; set; }
 
-            public Input(InputValue defaultValue)
+            public Input(Symbol.InputDefinition inputDefinition)
             {
-                DefaultValue = defaultValue;
+                InputDefinition = inputDefinition;
                 Value = DefaultValue.Clone();
                 IsDefault = true;
             }

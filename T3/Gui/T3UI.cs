@@ -61,30 +61,25 @@ namespace T3.Gui
         public void DrawSelectionParameters()
         {
             ImGui.Begin("ParameterView");
-            foreach (var pair in SymbolChildUiRegistry.Entries[_mockModel.MainOp.Symbol.Id])
+            var compositionOp = _mockModel.MainOp;
+            var uiEntriesForCompositionOp = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
+            foreach (var child in compositionOp.Children)
             {
-                var symbolChildUi = pair.Value;
+                var symbolChildUi = uiEntriesForCompositionOp[child.Id];
                 if (!symbolChildUi.IsSelected)
                     continue;
 
-                var symbolChild = symbolChildUi.SymbolChild;
-                foreach (var inputDefinition in symbolChild.Symbol.InputDefinitions)
+                foreach (var input in child.Inputs)
                 {
-                    DrawParameterViewEntry(inputDefinition, symbolChild);
+                    ImGui.PushID(input.Id.GetHashCode());
+                    IInputUi inputUi = InputUiRegistry.Entries[input.Input.DefaultValue.ValueType];//todo: fix me
+                    inputUi.DrawInputEdit(input.Input.InputDefinition.Name, input);
+                    ImGui.PopID();
                 }
 
                 break; // only first selected atm
             }
             ImGui.End();
-        }
-
-        private static void DrawParameterViewEntry(Symbol.InputDefinition inputDefinition, SymbolChild symbolChild)
-        {
-            ImGui.PushID(inputDefinition.Id.GetHashCode());
-            SymbolChild.Input input = symbolChild.InputValues[inputDefinition.Id];
-            IInputUi inputUi = InputUiRegistry.Entries[input.Value.ValueType];
-            inputUi.DrawInputEdit(inputDefinition.Name, input);
-            ImGui.PopID();
         }
 
         public void DrawSelectedOutput()
