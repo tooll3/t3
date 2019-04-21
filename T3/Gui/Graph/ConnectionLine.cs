@@ -7,7 +7,7 @@ namespace T3.Gui.Graph
 {
     public static class ConnectionLine
     {
-        public static void DrawAll(GraphCanvas canvas)
+        public static void DrawAll(Canvas canvas)
         {
             _canvas = canvas;
 
@@ -20,7 +20,7 @@ namespace T3.Gui.Graph
                 DrawConnection(DraftConnection.TempConnection);
         }
 
-        private static GraphCanvas _canvas;
+        private static Canvas _canvas;
 
         private static void DrawConnection(Symbol.Connection c)
         {
@@ -35,8 +35,8 @@ namespace T3.Gui.Graph
                 var sourceUi = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.SourceChildId];
                 var outputIndex = sourceUi.SymbolChild.Symbol.OutputDefinitions.FindIndex(outputDef => outputDef.Id == c.OutputDefinitionId);
 
-                var r = GraphOperator.GetOutputSlotSizeInCanvas(sourceUi, outputIndex);
-                sourcePos = _canvas.ScreenPosFromCanvas(r.GetCenter());
+                var r = Slots.GetOutputSlotSizeInCanvas(sourceUi, outputIndex);
+                sourcePos = Canvas.ScreenPosFromCanvas(r.GetCenter());
                 color = InputUiRegistry.EntriesByType[sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex].ValueType].Color;
             }
 
@@ -49,8 +49,8 @@ namespace T3.Gui.Graph
             {
                 var targetUi = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.TargetChildId];
                 var inputIndex = targetUi.SymbolChild.Symbol.InputDefinitions.FindIndex(inputDef => inputDef.Id == c.InputDefinitionId);
-                var r = GraphOperator.GetInputSlotSizeInCanvas(targetUi, inputIndex);
-                targetPos = _canvas.ScreenPosFromCanvas(r.GetCenter());
+                var r = Slots.GetInputSlotSizeInCanvas(targetUi, inputIndex);
+                targetPos = Canvas.ScreenPosFromCanvas(r.GetCenter());
                 color = InputUiRegistry.EntriesByType[targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].DefaultValue.ValueType].Color;
             }
 

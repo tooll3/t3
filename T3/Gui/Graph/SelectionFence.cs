@@ -13,7 +13,7 @@ namespace T3.Gui.Graph
     /// </summary>
     public class SelectionFence
     {
-        public SelectionFence(GraphCanvas canvas)
+        public SelectionFence(Canvas canvas)
         {
             _canvas = canvas;
         }
@@ -67,7 +67,7 @@ namespace T3.Gui.Graph
             _dragPositionInScreen = ImGui.GetMousePos();
             var delta = _startPositionInScreen - _dragPositionInScreen;
 
-            var boundsInCanvas = _canvas.CanvasRectFromScreen(_bounds);
+            var boundsInCanvas = Canvas.CanvasRectFromScreen(_bounds);
 
             var _selectMode = SelectMode.Replace;
             if (ImGui.IsKeyPressed((int)Key.LeftShift))
@@ -152,7 +152,7 @@ namespace T3.Gui.Graph
         ImRect _bounds { get { return ImRect.RectBetweenPoints(_startPositionInScreen, _dragPositionInScreen); } }
         private Vector2 _startPositionInScreen;
         private Vector2 _dragPositionInScreen;
-        private GraphCanvas _canvas;
+        private Canvas _canvas;
         private bool _dragThresholdExceeded = false; // Set to true after DragThreshold reached
     }
 }
