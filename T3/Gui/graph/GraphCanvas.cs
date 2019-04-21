@@ -132,24 +132,57 @@ namespace T3.Gui.Graph
 
 
         #region Connections ======================================================================
+        //public static class DraftConnection
+        //{
+        //    public static Symbol.Connection NewConnection = null;
+        //    //public Symbol.Connection _draftConnectionType = null;
+        //    private static SymbolChildUi _draftConnectionSource = null;
+        //    private static int _draftConnectionIndex = 0;
+        //    private static Type _draftConnectionType = null;
 
-        private Symbol.Connection _draftConnection = null;
-        public Symbol.Connection _draftConnectionType = null;
+        //    public static bool IsInputMatchingDraftConnection(Symbol.InputDefinition inputDef)
+        //    {
+        //        return inputDef.DefaultValue.ValueType == _draftConnectionType;
+        //    }
 
-        public void StartNewConnection(Symbol.Connection newConnection)
-        {
-            _draftConnection = newConnection;
-        }
+        //    public static bool IsOutputMatchingDraftConnection(Symbol.InputDefinition outputDef)
+        //    {
+        //        return outputDef.DefaultValue.ValueType == _draftConnectionType;
+        //    }
 
-        public void UpdateNewConnection()
-        {
+        //    public static bool IsDraftConnectionSource(SymbolChildUi childUi, int outputIndex)
+        //    {
+        //        return _draftConnectionSource == childUi && _draftConnectionIndex == outputIndex;
+        //    }
 
-        }
 
-        public void CompleteNewConnection()
-        {
-            _draftConnection = null;
-        }
+        //    public static void StartNewConnection(Symbol.Connection newConnection)
+        //    {
+        //        NewConnection = newConnection;
+        //    }
+
+        //    public static void StartConnectionFromOutput(SymbolChildUi ui, int outputIndex)
+        //    {
+        //        NewConnection = new Symbol.Connection(
+        //            sourceChildId: ui.SymbolChild.Id,
+        //            outputDefinitionId: ui.SymbolChild.Symbol.OutputDefinitions[outputIndex].Id,
+        //            targetChildId: Guid.Empty,
+        //            inputDefinitionId: Guid.Empty
+        //        );
+        //        _draftConnectionSource = ui;
+
+        //    }
+
+        //    public static void UpdateNewConnection()
+        //    {
+
+        //    }
+
+        //    public static void CompleteNewConnection()
+        //    {
+        //        NewConnection = null;
+        //    }
+        //}
 
 
         private void DrawConnections()
@@ -159,8 +192,8 @@ namespace T3.Gui.Graph
                 DrawConnection(c);
             }
 
-            if (_draftConnection != null)
-                DrawConnection(_draftConnection);
+            if (DraftConnection.TempConnection != null)
+                DrawConnection(DraftConnection.TempConnection);
 
         }
 

@@ -296,10 +296,9 @@
     <Compile Include="Core\Operator\SymbolRegistry.cs" />
     <Compile Include="Core\Operator\SymbolChildUi.cs" />
     <Compile Include="Core\Operator\SymbolChildUiRegistry.cs" />
-    <Compile Include="Gui\graph\ConnectionLine.cs" />
+    <Compile Include="Gui\graph\DraftConnection.cs" />
     <Compile Include="Gui\graph\GraphCanvas.cs" />
     <Compile Include="Gui\graph\OperatorInputZone.cs" />
-    <Compile Include="Gui\graph\SnapHandler.cs" />
     <Compile Include="Gui\Metrics.cs" />
     <Compile Include="Gui\Color.cs" />
     <Compile Include="Logging\ConsoleLogWindow.cs" />

@@ -19,8 +19,8 @@ namespace T3.Gui.Selection
     {
         //List<IStackable> GetOpsConnectedToInputs();
         //List<IStackable> GetOpsConnectedToOutputs();
-        List<ConnectionLine> GetOutputConnections();
-        List<ConnectionLine> GetInputConnections();
+        //List<ConnectionLine> GetOutputConnections();
+        //List<ConnectionLine> GetInputConnections();
     }
 
     public interface IConnectionTarget : IConnectable
