@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
@@ -30,7 +31,10 @@ namespace T3
                 Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
             }
 
+            [FloatInput(DefaultValue = 20.0f)]
             public readonly InputSlot<float> Input1 = new InputSlot<float>(5.0f);
+
+            [FloatInput(DefaultValue = 23.0f)]
             public readonly InputSlot<float> Input2 = new InputSlot<float>(10.0f);
         }
 
@@ -50,6 +54,7 @@ namespace T3
                 Result.Value = (float)random.NextDouble();
             }
 
+            [IntInput(DefaultValue = 3)]
             public readonly InputSlot<int> Seed = new InputSlot<int>(0);
         }
 
@@ -68,6 +73,7 @@ namespace T3
                 Output.Value = Input.GetValue(context).ToString();
             }
 
+            [FloatInput(DefaultValue = 3.0f)]
             public readonly InputSlot<float> Input = new InputSlot<float>(3.0f);
         }
 
@@ -86,6 +92,7 @@ namespace T3
                 Length.Value = InputString.GetValue(context).Length;
             }
 
+            [StringInput(DefaultValue = "Aber Hallo")]
             public readonly InputSlot<string> InputString = new InputSlot<string>(string.Empty);
         }
 
@@ -104,7 +111,10 @@ namespace T3
                 Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
             }
 
+            [StringInput(DefaultValue = "")]
             public readonly InputSlot<string> Input1 = new InputSlot<string>(string.Empty);
+
+            [StringInput(DefaultValue = "")]
             public readonly InputSlot<string> Input2 = new InputSlot<string>(string.Empty);
         }
 
@@ -134,6 +144,7 @@ namespace T3
 
 
 
+            [FloatInput(DefaultValue = 3.0f)]
             public readonly InputSlot<float> Input = new InputSlot<float>(0.0f);
         }
 
@@ -145,28 +156,13 @@ namespace T3
         private void Init()
         {
             var addSymbol = new Symbol(typeof(Add));
-            addSymbol.InputDefinitions[0].DefaultValue = new InputValue<float>(5.0f);
-            addSymbol.InputDefinitions[1].DefaultValue = new InputValue<float>(10.0f);
-
             var randomSymbol = new Symbol(typeof(Random));
-            randomSymbol.InputDefinitions[0].DefaultValue = new InputValue<int>(42);
-
             var floatFormatSymbol = new Symbol(typeof(FloatFormat));
-            floatFormatSymbol.InputDefinitions[0].DefaultValue = new InputValue<float>(1.0f);
-
             var stringLengthSymbol = new Symbol(typeof(StringLength));
-            stringLengthSymbol.InputDefinitions[0].DefaultValue = new InputValue<string>(string.Empty);
-
             var stringConcatSymbol = new Symbol(typeof(StringConcat));
-            stringConcatSymbol.InputDefinitions[0].DefaultValue = new InputValue<string>(string.Empty);
-            stringConcatSymbol.InputDefinitions[1].DefaultValue = new InputValue<string>(string.Empty);
-
             var timeSymbol = new Symbol(typeof(Time));
-
             var projectSymbol = new Symbol(typeof(Project));
-            projectSymbol.InputDefinitions[0].DefaultValue = new InputValue<float>(1.0f);
             projectSymbol.Children.AddRange(new[] { new SymbolChild(addSymbol), new SymbolChild(addSymbol), new SymbolChild(randomSymbol) });
-
             var dashboardSymbol = new Symbol(typeof(Dashboard))
                                   {
                                       Children =
