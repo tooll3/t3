@@ -52,8 +52,6 @@ namespace T3.Gui
                     ImGui.PopStyleColor();
                     ImGui.PopItemWidth();
 
-                    //                 T3.Logging.Log.Info($"Color is {Color}");
-
                     // draw reset button
                     ImGui.SameLine(200.0f, 130.0f);
                     if (ImGui.Button("Reset To Default"))

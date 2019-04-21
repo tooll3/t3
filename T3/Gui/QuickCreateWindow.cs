@@ -59,7 +59,7 @@ namespace T3.Gui.Graph
                         Guid newInstanceId = _compositionOp.AddChild(symbol);
                         // Create and register ui info for new op
                         var uiEntriesForChildrenOfSymbol = SymbolChildUiRegistry.Entries[_compositionOp.Id];
-                        uiEntriesForChildrenOfSymbol.Add(_compositionOp.Id, new SymbolChildUi { SymbolChild = _compositionOp.Children.Find(entry => entry.Id == newInstanceId) });
+                        uiEntriesForChildrenOfSymbol.Add(newInstanceId, new SymbolChildUi { SymbolChild = _compositionOp.Children.Find(entry => entry.Id == newInstanceId) });
 
                         _opened = false;
                     }
