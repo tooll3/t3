@@ -34,7 +34,7 @@ namespace T3.Core.Operator
 
             // outputs identified by attribute
             var outputs = (from field in Type.GetFields()
-                          let attributes = field.GetCustomAttributes(typeof(OperatorAttribute), false)
+                          let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
                           from attr in attributes
                           select field).ToArray();
             foreach (var output in outputs)

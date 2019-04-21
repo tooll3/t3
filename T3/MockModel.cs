@@ -18,7 +18,7 @@ namespace T3
 
         class Add : Instance<Add>
         {
-            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            [Output]
             public readonly Slot<float> Result = new Slot<float>();
 
             public Add()
@@ -40,7 +40,7 @@ namespace T3
 
         class Random : Instance<Random>
         {
-            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            [Output]
             public readonly Slot<float> Result = new Slot<float>();
 
             public Random()
@@ -60,7 +60,7 @@ namespace T3
 
         class FloatFormat : Instance<FloatFormat>
         {
-            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            [Output]
             public readonly Slot<string> Output = new Slot<string>();
 
             public FloatFormat()
@@ -79,7 +79,7 @@ namespace T3
 
         class StringLength : Instance<StringLength>
         {
-            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            [Output]
             public readonly Slot<int> Length = new Slot<int>();
 
             public StringLength()
@@ -98,7 +98,7 @@ namespace T3
 
         class StringConcat : Instance<StringConcat>
         {
-            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            [Output]
             public readonly Slot<string> Result = new Slot<string>();
 
             public StringConcat()
@@ -120,7 +120,7 @@ namespace T3
 
         class Time : Instance<Time>
         {
-            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            [Output]
             public readonly Slot<float> TimeInSeconds = new Slot<float>();
 
             public Time()
@@ -139,7 +139,7 @@ namespace T3
 
         class Project : Instance<Project>
         {
-            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            [Output]
             public readonly Slot<string> Output = new Slot<string>("Project Output");
 
 
