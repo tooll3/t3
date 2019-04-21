@@ -31,6 +31,5 @@ namespace T3.Gui
             }
             ImGui.End();
         }
-
     }
 }
