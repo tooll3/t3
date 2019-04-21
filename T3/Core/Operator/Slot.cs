@@ -22,7 +22,7 @@ namespace T3.Core.Operator
             Output
         }
 
-        public OperatorAttribute(Type type)
+        public OperatorAttribute(OperatorType type)
         {
             Type = type;
         }
@@ -31,7 +31,7 @@ namespace T3.Core.Operator
         {
         }
 
-        public Type Type { get; set; }
+        public OperatorType Type { get; set; }
 
     }
 
@@ -117,6 +117,12 @@ namespace T3.Core.Operator
         }
 
         public Action<EvaluationContext> UpdateAction;
+    }
+
+    public interface IOutputSlot
+    {
+        Guid Id { get; }
+
     }
 
 
