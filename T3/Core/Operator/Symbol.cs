@@ -1,7 +1,9 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 //using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -51,15 +53,27 @@ namespace T3.Core.Operator
                              select field;
             foreach (var inputInfo in inputInfos)
             {
-                // the commented code below creates a default value on the fly, but e.g. string ctor needs a parameter,
-                // so this done outside atm, has be decided where to store the default values, perhaps serializing them
-                // is the better way
-                //var valueType = inputInfo.FieldType.GenericTypeArguments[0];
-                //var inputValueType = typeof(InputValue<>);
-                //var typeToCreate = inputValueType.MakeGenericType(valueType);
-                //var value = Activator.CreateInstance(valueType);
-                //var inputValue = (InputValue)Activator.CreateInstance(typeToCreate, value);
-                InputDefinitions.Add(new InputDefinition() { Id = Guid.NewGuid(), Name = inputInfo.Name });
+                var customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false);
+                Debug.Assert(customAttributes.Length == 1);
+                var attribute = (InputAttribute)customAttributes[0];
+                InputValue defaultValue = null;
+                if (attribute is IntInput intAttribute)
+                {
+                    defaultValue = new InputValue<int>(intAttribute.DefaultValue);
+                }
+                else if (attribute is FloatInput floatAttribute)
+                {
+                    defaultValue = new InputValue<float>(floatAttribute.DefaultValue);
+                }
+                else if (attribute is StringInput stringAttribute)
+                {
+                    defaultValue = new InputValue<string>(stringAttribute.DefaultValue);
+                }
+                else
+                {
+                    Debug.Assert(false);
+                }
+                InputDefinitions.Add(new InputDefinition() { Id = Guid.NewGuid(), Name = inputInfo.Name, DefaultValue = defaultValue });
             }
 
             // outputs identified by attribute

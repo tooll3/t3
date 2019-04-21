@@ -35,6 +35,25 @@ namespace T3.Core.Operator
 
     }
 
+    public class InputAttribute : Attribute
+    {
+    }
+
+    public class FloatInput : InputAttribute
+    {
+        public float DefaultValue { get; set; }
+    }
+
+    public class StringInput : InputAttribute
+    {
+        public string DefaultValue { get; set; }
+    }
+
+    public class IntInput : InputAttribute
+    {
+        public int DefaultValue { get; set; }
+    }
+
     public class Slot
     {
         public Guid Id { get; set; }
