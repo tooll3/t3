@@ -52,6 +52,24 @@ namespace T3
             public readonly InputSlot<int> Seed = new InputSlot<int>(0);
         }
 
+        class FloatFormatOperator : Instance<FloatFormatOperator>
+        {
+            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            public readonly Slot<string> Output = new Slot<string>();
+
+            public FloatFormatOperator()
+            {
+                Output.UpdateAction = Update;
+            }
+
+            private void Update(EvaluationContext context)
+            {
+                Output.Value = Input.GetValue(context).ToString();
+            }
+
+            public readonly InputSlot<float> Input = new InputSlot<float>(3.0f);
+        }
+
         class StringLengthOperator : Instance<StringLengthOperator>
         {
             [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
@@ -91,6 +109,12 @@ namespace T3
 
         class ProjectOperator : Instance<ProjectOperator>
         {
+            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            public readonly Slot<string> Output = new Slot<string>();
+
+
+
+            public readonly InputSlot<float> Input = new InputSlot<float>(0.0f);
         }
 
         private void Init()
@@ -118,6 +142,17 @@ namespace T3
                                    },
                                    OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Random Value", ValueType = typeof(float) } }
                                };
+            var floatFormatSymbol = new Symbol()
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        SymbolName = "FloatFormat",
+                                        InstanceType = typeof(FloatFormatOperator),
+                                        InputDefinitions =
+                                        {
+                                            new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Input", DefaultValue = new InputValue<float>(1.0f) }
+                                        },
+                                        OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Output", ValueType = typeof(string) } }
+                                    };
             var stringLengthSymbol = new Symbol()
                                      {
                                          Id = Guid.NewGuid(),
@@ -146,6 +181,11 @@ namespace T3
                                     Id = Guid.NewGuid(),
                                     SymbolName = "Project",
                                     InstanceType = typeof(ProjectOperator),
+                                    InputDefinitions =
+                                    {
+                                        new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Input", DefaultValue = new InputValue<float>(1.0f) }
+                                    },
+                                    OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Output", ValueType = typeof(float) } },
                                     Children =
                                     {
                                         new SymbolChild(addSymbol),
@@ -163,6 +203,7 @@ namespace T3
             var symbols = SymbolRegistry.Entries;
             symbols.Add(addSymbol.Id, addSymbol);
             symbols.Add(randomSymbol.Id, randomSymbol);
+            symbols.Add(floatFormatSymbol.Id, floatFormatSymbol);
             symbols.Add(stringLengthSymbol.Id, stringLengthSymbol);
             symbols.Add(stringConcatSymbol.Id, stringConcatSymbol);
             symbols.Add(projectSymbol.Id, projectSymbol);
