@@ -13,7 +13,7 @@ namespace T3.Gui.Graph
         {
             //_compositionOp = opInstance;
             _windowTitle = windowTitle;
-            _canvas = new GraphCanvas(opInstance);
+            Canvas = new GraphCanvas(opInstance);
         }
 
 
@@ -24,8 +24,9 @@ namespace T3.Gui.Graph
             if (ImGui.Begin(_windowTitle, ref opened))
             {
                 DrawBreadcrumbs();
-                _canvas.Draw();
+                Canvas.Draw();
             }
+
             ImGui.End();
             return opened;
         }
@@ -33,7 +34,7 @@ namespace T3.Gui.Graph
         private void DrawBreadcrumbs()
         {
             var parents = new List<Instance>();
-            var op = _canvas.CompositionOp;
+            var op = Canvas.CompositionOp;
             while (op.Parent != null)
             {
                 op = op.Parent;
@@ -45,21 +46,24 @@ namespace T3.Gui.Graph
                 ImGui.PushID(p.Id.GetHashCode());
                 if (ImGui.Button(p.Symbol.SymbolName))
                 {
-                    _canvas.CompositionOp = p;
+                    Canvas.CompositionOp = p;
                 }
+
                 ImGui.SameLine();
                 ImGui.PopID();
                 ImGui.Text("/");
                 ImGui.SameLine();
             }
+
             ImGui.PushStyleColor(ImGuiCol.Button, Color.White.Rgba);
             ImGui.PushStyleColor(ImGuiCol.Text, Color.Black.Rgba);
-            ImGui.Button(_canvas.CompositionOp.Symbol.SymbolName);
+            ImGui.Button(Canvas.CompositionOp.Symbol.SymbolName);
             ImGui.PopStyleColor(2);
         }
 
 
         private string _windowTitle;
-        private GraphCanvas _canvas = null;
+
+        public GraphCanvas Canvas { get; private set; }
     }
 }
