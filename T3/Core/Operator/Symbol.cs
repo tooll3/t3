@@ -38,6 +38,42 @@ namespace T3.Core.Operator
 
         #region public API =======================================================================
 
+        public Symbol(Type instanceType)
+        {
+            InstanceType = instanceType;
+            SymbolName = instanceType.Name;
+            Id = Guid.NewGuid();
+
+            // input identified by base interface
+            Type inputSlotType = typeof(IInputSlot);
+            var inputInfos = from field in instanceType.GetFields()
+                             where inputSlotType.IsAssignableFrom(field.FieldType)
+                             select field;
+            foreach (var inputInfo in inputInfos)
+            {
+                // the commented code below creates a default value on the fly, but e.g. string ctor needs a parameter,
+                // so this done outside atm, has be decided where to store the default values, perhaps serializing them
+                // is the better way
+                //var valueType = inputInfo.FieldType.GenericTypeArguments[0];
+                //var inputValueType = typeof(InputValue<>);
+                //var typeToCreate = inputValueType.MakeGenericType(valueType);
+                //var value = Activator.CreateInstance(valueType);
+                //var inputValue = (InputValue)Activator.CreateInstance(typeToCreate, value);
+                InputDefinitions.Add(new InputDefinition() { Id = Guid.NewGuid(), Name = inputInfo.Name });
+            }
+
+            // outputs identified by attribute
+            var outputs = (from field in instanceType.GetFields()
+                           let attributes = field.GetCustomAttributes(typeof(OperatorAttribute), false)
+                           from attr in attributes
+                           select field).ToArray();
+            foreach (var output in outputs)
+            {
+                var valueType = output.FieldType.GenericTypeArguments[0];
+                OutputDefinitions.Add(new OutputDefinition() { Id = Guid.NewGuid(), Name = output.Name, ValueType = valueType });
+            }
+        }
+
         public void Dispose()
         {
             _instancesOfSymbol.ForEach(instance => instance.Dispose());
