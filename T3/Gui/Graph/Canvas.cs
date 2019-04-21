@@ -186,8 +186,10 @@ namespace T3.Gui.Graph
         {
             foreach (var symbolChildUi in UiChildrenById.Values)
             {
-                GraphOperator.DrawOnCanvas(symbolChildUi, this);
+                GraphOperator.Draw(symbolChildUi);
             }
+
+            InputNodes.DrawAll();
         }
 
 
@@ -222,28 +224,28 @@ namespace T3.Gui.Graph
         /// <summary>
         /// Get relative position within canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
+        public static Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
         {
-            return posOnCanvas * _scale + _scroll;
+            return posOnCanvas * Current._scale + Current._scroll;
         }
         #endregion
 
 
         public static void DrawRect(ImRect rectOnCanvas, Color color)
         {
-            Current.DrawList.AddRect(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
+            Canvas.DrawList.AddRect(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
         }
 
         public static void DrawRectFilled(ImRect rectOnCanvas, Color color)
         {
-            Current.DrawList.AddRectFilled(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
+            Canvas.DrawList.AddRectFilled(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
         }
 
         private ImDrawListPtr _overlayDrawList;
         private Vector2 _size;
         private Vector2 _mouse;
 
-        public ImDrawListPtr DrawList;
+        public static ImDrawListPtr DrawList;
         private Vector2 _scroll = new Vector2(0.0f, 0.0f);
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
 
@@ -256,6 +258,11 @@ namespace T3.Gui.Graph
 
         private ImGuiIOPtr _io;
         public Instance CompositionOp { get; set; }
+
+        /// <summary>
+        /// The canvas that is currently being drawn from the UI.
+        /// Note that <see cref="Canvas"/> is NOT a singleton so you can't rely on this to be valid outside of the Drawing() context.
+        /// </summary>
         public static Canvas Current { get; private set; }
 
         public Dictionary<Guid, SymbolChildUi> UiChildrenById { get; private set; }

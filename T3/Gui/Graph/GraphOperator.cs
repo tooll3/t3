@@ -11,16 +11,16 @@ namespace T3.Gui.Graph
     /// </summary>
     static class GraphOperator
     {
-        public static void DrawOnCanvas(SymbolChildUi childUi, Canvas canvas)
+        public static void Draw(SymbolChildUi childUi)
         {
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-                var posInWindow = canvas.ChildPosFromCanvas(childUi.Position + new Vector2(0, 3));
+                var posInWindow = Canvas.ChildPosFromCanvas(childUi.Position + new Vector2(0, 3));
                 var posInApp = Canvas.ScreenPosFromCanvas(childUi.Position);
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
-                ImGui.InvisibleButton("node", (childUi.Size - new Vector2(0, 6)) * canvas._scale);
+                ImGui.InvisibleButton("node", (childUi.Size - new Vector2(0, 6)) * Canvas.Current._scale);
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
                 {
@@ -32,14 +32,14 @@ namespace T3.Gui.Graph
                 {
                     if (ImGui.IsItemClicked(0))
                     {
-                        if (!canvas.SelectionHandler.SelectedElements.Contains(childUi))
+                        if (!Canvas.Current.SelectionHandler.SelectedElements.Contains(childUi))
                         {
-                            canvas.SelectionHandler.SetElement(childUi);
+                            Canvas.Current.SelectionHandler.SetElement(childUi);
                         }
                     }
                     if (ImGui.IsMouseDragging(0))
                     {
-                        foreach (var e in canvas.SelectionHandler.SelectedElements)
+                        foreach (var e in Canvas.Current.SelectionHandler.SelectedElements)
                         {
                             e.Position += ImGui.GetIO().MouseDelta;
                         }
@@ -54,21 +54,21 @@ namespace T3.Gui.Graph
 
 
                 // Rendering
-                canvas.DrawList.ChannelsSplit(2);
-                canvas.DrawList.ChannelsSetCurrent(1);
+                Canvas.DrawList.ChannelsSplit(2);
+                Canvas.DrawList.ChannelsSetCurrent(1);
 
-                canvas.DrawList.AddText(posInApp, Color.White, String.Format($"{childUi.ReadableName}"));
-                canvas.DrawList.ChannelsSetCurrent(0);
+                Canvas.DrawList.AddText(posInApp, Color.White, String.Format($"{childUi.ReadableName}"));
+                Canvas.DrawList.ChannelsSetCurrent(0);
 
                 var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.Id) ? 1.2f : 0.8f;
-                THelpers.OutlinedRect(ref canvas.DrawList, posInApp, childUi.Size * canvas._scale,
+                THelpers.OutlinedRect(ref Canvas.DrawList, posInApp, childUi.Size * Canvas.Current._scale,
                     fill: new Color(
                             ((childUi.IsSelected || ImGui.IsItemHovered()) ? 0.3f : 0.2f) * hoveredFactor),
                     outline: childUi.IsSelected ? Color.White : Color.Black);
 
                 DrawSlots(childUi);
 
-                canvas.DrawList.ChannelsMerge();
+                Canvas.DrawList.ChannelsMerge();
             }
             ImGui.PopID();
         }

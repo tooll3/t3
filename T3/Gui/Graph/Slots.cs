@@ -55,6 +55,7 @@ namespace T3.Gui.Graph
             }
         }
 
+
         public static ImRect GetOutputSlotSizeInCanvas(SymbolChildUi sourceUi, int outputIndex)
         {
             var outputCount = sourceUi.SymbolChild.Symbol.OutputDefinitions.Count;
@@ -80,7 +81,6 @@ namespace T3.Gui.Graph
 
             var hovered = rInScreen.Contains(ImGui.GetMousePos()); // TODO: check why ImGui.IsItemHovered() is not working
 
-
             if (DraftConnection.IsCurrentTargetInput(targetUi, inputIndex))
             {
                 Canvas.DrawRectFilled(virtualRectInCanvas, ColorForType(inputDef));
@@ -92,7 +92,6 @@ namespace T3.Gui.Graph
             }
             else if (hovered)
             {
-                //Log.Debug("Is Mouse hovered " + targetUi.ReadableName);
                 if (DraftConnection.IsMatchingInput(inputDef))
                 {
                     Canvas.DrawRectFilled(virtualRectInCanvas, color);

@@ -26,9 +26,17 @@ namespace T3.Gui.Graph
         {
             Vector2 sourcePos;
             Color color = Color.White;
-            if (c.SourceChildId == Guid.Empty)
+            if (c.SourceChildId == DraftConnection.NotConnected)
             {
                 sourcePos = ImGui.GetMousePos();
+            }
+            // Start at input node
+            else if (c.SourceChildId == Guid.Empty)
+            {
+                var inputsForSymbol = InputUiRegistry.Entries[Canvas.Current.CompositionOp.Symbol.Id];
+                var inputUi = inputsForSymbol[c.OutputDefinitionId];
+
+                sourcePos = Canvas.ScreenPosFromCanvas(inputUi.Position);
             }
             else
             {
@@ -41,27 +49,37 @@ namespace T3.Gui.Graph
             }
 
             Vector2 targetPos;
-            if (c.TargetChildId == Guid.Empty)
+            if (c.TargetChildId == DraftConnection.NotConnected)
             {
                 targetPos = ImGui.GetMousePos();
             }
+            // Output node
+            else if (c.TargetChildId == Guid.Empty)
+            {
+                targetPos = new Vector2(200, 200);
+                //var targetUi = InputUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.TargetChildId];
+                //var inputIndex = targetUi.SymbolChild.Symbol.InputDefinitions.FindIndex(inputDef => inputDef.Id == c.InputDefinitionId);
+                //var r = Slots.GetInputSlotSizeInCanvas(targetUi, inputIndex);
+                //targetPos = Canvas.ScreenPosFromCanvas(r.GetCenter());
+            }
             else
             {
-                var targetUi = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.TargetChildId];
+                var uiChildrenFromCurrentOp = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id];
+                var targetUi = uiChildrenFromCurrentOp[c.TargetChildId];
                 var inputIndex = targetUi.SymbolChild.Symbol.InputDefinitions.FindIndex(inputDef => inputDef.Id == c.InputDefinitionId);
                 var r = Slots.GetInputSlotSizeInCanvas(targetUi, inputIndex);
                 targetPos = Canvas.ScreenPosFromCanvas(r.GetCenter());
                 color = InputUiRegistry.EntriesByType[targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].DefaultValue.ValueType].Color;
             }
 
-            _canvas.DrawList.AddBezierCurve(
+            Canvas.DrawList.AddBezierCurve(
                 sourcePos,
                 sourcePos + new Vector2(0, -50),
                 targetPos + new Vector2(0, 50),
                 targetPos,
                 color, 3f);
 
-            _canvas.DrawList.AddTriangleFilled(
+            Canvas.DrawList.AddTriangleFilled(
                 targetPos + new Vector2(0, -3),
                 targetPos + new Vector2(4, 2),
                 targetPos + new Vector2(-4, 2),
