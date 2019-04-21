@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.Gui;
@@ -107,6 +108,25 @@ namespace T3
             public readonly InputSlot<string> Input2 = new InputSlot<string>(string.Empty);
         }
 
+        class TimeOperator : Instance<TimeOperator>
+        {
+            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            public readonly Slot<float> Time = new Slot<float>();
+
+            public TimeOperator()
+            {
+                Time.UpdateAction = Update;
+                _watch.Start();
+            }
+
+            private void Update(EvaluationContext context)
+            {
+                Time.Value = _watch.ElapsedMilliseconds/1000.0f;
+            }
+
+            private Stopwatch _watch = new Stopwatch();
+        }
+
         class ProjectOperator : Instance<ProjectOperator>
         {
             [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
@@ -181,6 +201,13 @@ namespace T3
                                          },
                                          OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Result", ValueType = typeof(string) } }
                                      };
+            var timeSymbol = new Symbol()
+                             {
+                                 Id = Guid.NewGuid(),
+                                 SymbolName = "Time",
+                                 InstanceType = typeof(TimeOperator),
+                                 OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Time", ValueType = typeof(float) } }
+                             };
             var projectSymbol = new Symbol()
                                 {
                                     Id = Guid.NewGuid(),
@@ -221,6 +248,7 @@ namespace T3
             symbols.Add(floatFormatSymbol.Id, floatFormatSymbol);
             symbols.Add(stringLengthSymbol.Id, stringLengthSymbol);
             symbols.Add(stringConcatSymbol.Id, stringConcatSymbol);
+            symbols.Add(timeSymbol.Id, timeSymbol);
             symbols.Add(projectSymbol.Id, projectSymbol);
             symbols.Add(dashboardSymbol.Id, dashboardSymbol);
 
@@ -321,6 +349,12 @@ namespace T3
                                                  {
                                                      { stringConcatSymbol.OutputDefinitions[0].Id, new IntOutputUi() }
                                                  });
+
+            // time
+            outputUis.Add(timeSymbol.Id, new Dictionary<Guid, IOutputUi>()
+                                         {
+                                             { timeSymbol.OutputDefinitions[0].Id, new FloatOutputUi() }
+                                         });
 
             // project
             inputUis.Add(projectSymbol.Id, new Dictionary<Guid, IInputUi>()
