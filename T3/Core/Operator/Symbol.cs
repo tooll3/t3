@@ -58,58 +58,13 @@ namespace T3.Core.Operator
             // connect instances
             foreach (var connection in Connections)
             {
-                AddInstanceConnection(newInstance, connection);
+                newInstance.AddConnection(connection);
             }
 
             _instancesOfSymbol.Add(newInstance);
 
             return newInstance;
         }
-
-        private static void AddInstanceConnection(Instance parentInstance, Connection connection)
-        {
-            (_, Slot sourceOutput, _, IInputSlot targetInput) = GetInstancesForConnection(parentInstance, connection);
-            targetInput.AddConnection(sourceOutput);
-        }
-
-        private static void RemoveInstanceConnection(Instance parentInstance, Connection connection)
-        {
-            (_, _, _, IInputSlot targetInput) = GetInstancesForConnection(parentInstance, connection);
-            targetInput.RemoveConnection();
-        }
-
-        private static (Instance, Slot, Instance, IInputSlot) GetInstancesForConnection(Instance parentInstance, Connection connection)
-        {
-            var sourceInstance = (from instance in parentInstance.Children
-                                  where instance.Id == connection.SourceChildId
-                                  select instance).SingleOrDefault();
-
-            if (sourceInstance == null)
-            {
-                Debug.Assert(connection.SourceChildId == Guid.Empty);
-                sourceInstance = parentInstance;
-            }
-
-            var sourceOutput = (from output in sourceInstance.Outputs
-                                where output.Id == connection.OutputDefinitionId
-                                select output).Single();
-
-            var targetInstance = (from instance in parentInstance.Children
-                                  where instance.Id == connection.TargetChildId
-                                  select instance).SingleOrDefault();
-            if (targetInstance == null)
-            {
-                Debug.Assert(connection.TargetChildId == Guid.Empty);
-                targetInstance = parentInstance;
-            }
-
-            var targetInput = (from input in targetInstance.Inputs
-                               where input.Id == connection.InputDefinitionId
-                               select input).Single();
-
-            return (sourceInstance, sourceOutput, targetInstance, targetInput);
-        }
-
 
         private static void CreateNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
         {
@@ -150,7 +105,7 @@ namespace T3.Core.Operator
             Connections.Add(connection);
             foreach (var instance in _instancesOfSymbol)
             {
-                AddInstanceConnection(instance, connection);
+                instance.AddConnection(connection);
             }
         }
 
@@ -162,7 +117,7 @@ namespace T3.Core.Operator
                 Connections.RemoveAt(index);
                 foreach (var instance in _instancesOfSymbol)
                 {
-                    RemoveInstanceConnection(instance, connection);
+                    instance.RemoveConnection(connection);
                 }
             }
         }

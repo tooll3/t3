@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace T3.Core.Operator
@@ -41,6 +42,53 @@ namespace T3.Core.Operator
                 Outputs.Add((Slot)output.GetValue(this));
             }
         }
+
+        public void AddConnection(Symbol.Connection connection)
+        {
+            (_, Slot sourceOutput, _, IInputSlot targetInput) = GetInstancesForConnection(connection);
+            targetInput.AddConnection(sourceOutput);
+        }
+
+        public void RemoveConnection(Symbol.Connection connection)
+        {
+            (_, _, _, IInputSlot targetInput) = GetInstancesForConnection(connection);
+            targetInput.RemoveConnection();
+        }
+
+        private (Instance, Slot, Instance, IInputSlot) GetInstancesForConnection(Symbol.Connection connection)
+        {
+            Instance compositionInstance = this;
+
+            var sourceInstance = (from instance in compositionInstance.Children
+                                  where instance.Id == connection.SourceChildId
+                                  select instance).SingleOrDefault();
+
+            if (sourceInstance == null)
+            {
+                Debug.Assert(connection.SourceChildId == Guid.Empty);
+                sourceInstance = compositionInstance;
+            }
+
+            var sourceOutput = (from output in sourceInstance.Outputs
+                                where output.Id == connection.OutputDefinitionId
+                                select output).Single();
+
+            var targetInstance = (from instance in compositionInstance.Children
+                                  where instance.Id == connection.TargetChildId
+                                  select instance).SingleOrDefault();
+            if (targetInstance == null)
+            {
+                Debug.Assert(connection.TargetChildId == Guid.Empty);
+                targetInstance = compositionInstance;
+            }
+
+            var targetInput = (from input in targetInstance.Inputs
+                               where input.Id == connection.InputDefinitionId
+                               select input).Single();
+
+            return (sourceInstance, sourceOutput, targetInstance, targetInput);
+        }
+
     }
 
     public class Instance<T> : Instance
