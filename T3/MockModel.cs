@@ -14,18 +14,14 @@ namespace T3
             Init();
         }
 
-        class AddOperator : Instance
+        class AddOperator : Instance<AddOperator>
         {
-            public readonly Slot<float> Result;
+            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            public readonly Slot<float> Result = new Slot<float>();
 
             public AddOperator()
             {
-                Result = new Slot<float>(Update);
-                Outputs.Add(Result);
-                Input1.Name = "Input1";
-                Inputs.Add(Input1);
-                Input2.Name = "Input2";
-                Inputs.Add(Input2);
+                Result.UpdateAction = Update;
             }
 
             private void Update(EvaluationContext context)
@@ -37,16 +33,14 @@ namespace T3
             public readonly InputSlot<float> Input2 = new InputSlot<float>(10.0f);
         }
 
-        class RandomOperator : Instance
+        class RandomOperator : Instance<RandomOperator>
         {
-            public readonly Slot<float> Result;
+            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            public readonly Slot<float> Result = new Slot<float>();
 
             public RandomOperator()
             {
-                Result = new Slot<float>(Update);
-                Outputs.Add(Result);
-                Seed.Name = "Seed";
-                Inputs.Add(Seed);
+                Result.UpdateAction = Update;
             }
 
             private void Update(EvaluationContext context)
@@ -58,7 +52,7 @@ namespace T3
             public readonly InputSlot<int> Seed = new InputSlot<int>(0);
         }
 
-        class ProjectOperator : Instance
+        class ProjectOperator : Instance<ProjectOperator>
         {
         }
 
