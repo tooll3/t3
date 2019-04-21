@@ -19,7 +19,7 @@ namespace T3.Gui.Graph
         public void Draw()
         {
             UiChildrenById = SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id];
-            _drawList = ImGui.GetWindowDrawList();
+            DrawList = ImGui.GetWindowDrawList();
             _overlayDrawList = ImGui.GetOverlayDrawList();
             _io = ImGui.GetIO();
 
@@ -40,7 +40,7 @@ namespace T3.Gui.Graph
                     THelpers.DebugWindowRect("window.scrollingRegion");
                     _canvasWindowPos = ImGui.GetWindowPos();
                     _size = ImGui.GetWindowSize();
-                    _drawList.PushClipRect(_canvasWindowPos, _canvasWindowPos + _size);
+                    DrawList.PushClipRect(_canvasWindowPos, _canvasWindowPos + _size);
 
                     // Canvas interaction --------------
                     if (ImGui.IsWindowHovered())
@@ -88,7 +88,7 @@ namespace T3.Gui.Graph
 
                     DrawGrid();
                     DrawNodes();
-                    DrawConnections();
+                    ConnectionLine.DrawAll(this);
 
                     if (ImGui.IsMouseReleased(0))
                     {
@@ -96,7 +96,7 @@ namespace T3.Gui.Graph
                     }
 
                     _selectionFence.Draw();
-                    _drawList.PopClipRect();
+                    DrawList.PopClipRect();
                 }
                 ImGui.EndChild();
                 ImGui.PopStyleColor();
@@ -112,7 +112,7 @@ namespace T3.Gui.Graph
             var gridSize = 64.0f * _scale;
             for (float x = _scroll.X % gridSize; x < _size.X; x += gridSize)
             {
-                _drawList.AddLine(
+                DrawList.AddLine(
                     new Vector2(x, 0.0f) + _canvasWindowPos,
                     new Vector2(x, _size.Y) + _canvasWindowPos,
                     new Color(0.5f, 0.5f, 0.5f, 0.1f));
@@ -120,7 +120,7 @@ namespace T3.Gui.Graph
 
             for (float y = _scroll.Y % gridSize; y < _size.Y; y += gridSize)
             {
-                _drawList.AddLine(
+                DrawList.AddLine(
                     new Vector2(0.0f, y) + _canvasWindowPos,
                     new Vector2(_size.X, y) + _canvasWindowPos,
                     new Color(0.5f, 0.5f, 0.5f, 0.1f));
@@ -138,108 +138,7 @@ namespace T3.Gui.Graph
 
 
         #region Connections ======================================================================
-        //public static class DraftConnection
-        //{
-        //    public static Symbol.Connection NewConnection = null;
-        //    //public Symbol.Connection _draftConnectionType = null;
-        //    private static SymbolChildUi _draftConnectionSource = null;
-        //    private static int _draftConnectionIndex = 0;
-        //    private static Type _draftConnectionType = null;
 
-        //    public static bool IsInputMatchingDraftConnection(Symbol.InputDefinition inputDef)
-        //    {
-        //        return inputDef.DefaultValue.ValueType == _draftConnectionType;
-        //    }
-
-        //    public static bool IsOutputMatchingDraftConnection(Symbol.InputDefinition outputDef)
-        //    {
-        //        return outputDef.DefaultValue.ValueType == _draftConnectionType;
-        //    }
-
-        //    public static bool IsDraftConnectionSource(SymbolChildUi childUi, int outputIndex)
-        //    {
-        //        return _draftConnectionSource == childUi && _draftConnectionIndex == outputIndex;
-        //    }
-
-
-        //    public static void StartNewConnection(Symbol.Connection newConnection)
-        //    {
-        //        NewConnection = newConnection;
-        //    }
-
-        //    public static void StartConnectionFromOutput(SymbolChildUi ui, int outputIndex)
-        //    {
-        //        NewConnection = new Symbol.Connection(
-        //            sourceChildId: ui.SymbolChild.Id,
-        //            outputDefinitionId: ui.SymbolChild.Symbol.OutputDefinitions[outputIndex].Id,
-        //            targetChildId: Guid.Empty,
-        //            inputDefinitionId: Guid.Empty
-        //        );
-        //        _draftConnectionSource = ui;
-
-        //    }
-
-        //    public static void UpdateNewConnection()
-        //    {
-
-        //    }
-
-        //    public static void CompleteNewConnection()
-        //    {
-        //        NewConnection = null;
-        //    }
-        //}
-
-
-        private void DrawConnections()
-        {
-            foreach (var c in CompositionOp.Symbol.Connections)
-            {
-                DrawConnection(c);
-            }
-
-            if (DraftConnection.TempConnection != null)
-                DrawConnection(DraftConnection.TempConnection);
-
-        }
-
-        private void DrawConnection(Symbol.Connection c)
-        {
-            Vector2 sourcePos;
-            if (c.SourceChildId == Guid.Empty)
-            {
-                sourcePos = ImGui.GetMousePos();
-            }
-            else
-            {
-                var source = UiChildrenById[c.SourceChildId];
-                sourcePos = ScreenPosFromCanvas(source.Position);
-            }
-
-            Vector2 targetPos;
-            if (c.TargetChildId == Guid.Empty)
-            {
-                targetPos = ImGui.GetMousePos();
-            }
-            else
-            {
-                var target = UiChildrenById[c.TargetChildId];
-                targetPos = ScreenPosFromCanvas(target.Position + new Vector2(0, target.Size.Y));
-            }
-
-            _drawList.AddBezierCurve(
-                sourcePos,
-                sourcePos + new Vector2(0, -50),
-                targetPos + new Vector2(0, 50),
-                targetPos,
-                Color.White, 3f);
-
-            _drawList.AddTriangleFilled(
-                targetPos + new Vector2(0, -3),
-                targetPos + new Vector2(4, 2),
-                targetPos + new Vector2(-4, 2),
-                Color.White);
-        }
         #endregion
 
 
@@ -283,19 +182,19 @@ namespace T3.Gui.Graph
 
         public void DrawRect(ImRect rectOnCanvas, Color color)
         {
-            _drawList.AddRect(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
+            DrawList.AddRect(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
         }
 
         public void DrawRectFilled(ImRect rectOnCanvas, Color color)
         {
-            _drawList.AddRectFilled(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
+            DrawList.AddRectFilled(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
         }
 
         private ImDrawListPtr _overlayDrawList;
         private Vector2 _size;
         private Vector2 _mouse;
 
-        public ImDrawListPtr _drawList;
+        public ImDrawListPtr DrawList;
         private Vector2 _scroll = new Vector2(0.0f, 0.0f);
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
 
