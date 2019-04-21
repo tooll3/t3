@@ -258,6 +258,12 @@ namespace T3
 
             // create ui data for project symbol
             var uiEntries = SymbolChildUiRegistry.Entries;
+            uiEntries.Add(addSymbol.Id, new Dictionary<Guid, SymbolChildUi>());
+            uiEntries.Add(randomSymbol.Id, new Dictionary<Guid, SymbolChildUi>());
+            uiEntries.Add(floatFormatSymbol.Id, new Dictionary<Guid, SymbolChildUi>());
+            uiEntries.Add(stringLengthSymbol.Id, new Dictionary<Guid, SymbolChildUi>());
+            uiEntries.Add(stringConcatSymbol.Id, new Dictionary<Guid, SymbolChildUi>());
+            uiEntries.Add(timeSymbol.Id, new Dictionary<Guid, SymbolChildUi>());
             uiEntries.Add(projectSymbol.Id, new Dictionary<Guid, SymbolChildUi>()
                                             {
                                                 {

@@ -62,7 +62,7 @@ namespace T3.Gui
         {
             ImGui.Begin("ParameterView");
 
-            var compositionOp = _mockModel.MainOp;
+            var compositionOp = _instance._graphCanvasWindows[0].Canvas.CompositionOp; // todo: fix
             Instance selectedInstance = compositionOp;
             var childUiEntries = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
             var selectedChildUi = (from childUi in childUiEntries
@@ -89,7 +89,7 @@ namespace T3.Gui
         {
             ImGui.Begin("SelectionView");
 
-            var compositionOp = _mockModel.MainOp;
+            var compositionOp = _instance._graphCanvasWindows[0].Canvas.CompositionOp; // todo: fix
             Instance selectedInstance = compositionOp;
             var childUiEntries = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
             var selectedChildUi = (from childUi in childUiEntries
