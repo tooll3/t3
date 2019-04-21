@@ -13,7 +13,6 @@ namespace T3.Gui.Graph
     {
         public static void DrawOnCanvas(SymbolChildUi childUi, GraphCanvas canvas)
         {
-
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
                 var posInWindow = canvas.ChildPosFromCanvas(childUi.Position + new Vector2(0, 3));
@@ -148,7 +147,7 @@ namespace T3.Gui.Graph
 
             if (DraftConnection.IsDraftConnectionSource(ui, outputIndex))
             {
-                _canvas.DrawRectFilled(mouseRectInCanvas, Color.White);
+                _canvas.DrawRectFilled(mouseRectInCanvas, ColorForType(outputDef));
 
                 if (ImGui.IsMouseDragging(0))
                 {
@@ -157,7 +156,7 @@ namespace T3.Gui.Graph
 
                 if (ImGui.IsMouseReleased(0))
                 {
-                    DraftConnection.Complete();
+                    DraftConnection.Cancel();
                 }
             }
             else if (ImGui.IsItemHovered())
@@ -191,10 +190,10 @@ namespace T3.Gui.Graph
             return InputUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
         }
 
-        //private static Color ColorForType(Symbol.OutputDefinition outputDef)
-        //{
-        //    return InputUiRegistry.Entries[outputDef..DefaultValue.ValueType].Color;
-        //}
+        private static Color ColorForType(Symbol.OutputDefinition outputDef)
+        {
+            return InputUiRegistry.Entries[outputDef.ValueType].Color;
+        }
 
 
         private static void DrawInputSlot(SymbolChildUi ui, int inputIndex)
@@ -214,12 +213,24 @@ namespace T3.Gui.Graph
             var color = InputUiRegistry.Entries[valueType].Color;
 
             var hovered = rInScreen.Contains(ImGui.GetMousePos());
+
             if (hovered)
             {
-                _canvas.DrawRectFilled(mouseRectInCanvas, color);
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
-                ImGui.SetTooltip($"-> .{inputDef.Name}");
-                ImGui.PopStyleVar();
+                if (DraftConnection.IsMatchingInput(inputDef))
+                {
+                    _canvas.DrawRectFilled(mouseRectInCanvas, color);
+                    if (ImGui.IsMouseReleased(0))
+                    {
+                        DraftConnection.CompleteToInput(_canvas.CompositionOp.Symbol, ui, inputIndex);
+                    }
+                }
+                else
+                {
+                    _canvas.DrawRectFilled(mouseRectInCanvas, color);
+                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
+                    ImGui.SetTooltip($"-> .{inputDef.Name}");
+                    ImGui.PopStyleVar();
+                }
             }
             else
             {
@@ -229,7 +240,7 @@ namespace T3.Gui.Graph
                                     ui.Position.Y + ui.Size.Y - SlotConfig.VisibleSlotHeight),
                         new Vector2(inputWidth - 2 - 6,
                                     SlotConfig.VisibleSlotHeight))
-                    , color: DraftConnection.IsInputMatchingDraftConnection(inputDef) ? Color.White : color);
+                    , color: DraftConnection.IsMatchingInput(inputDef) ? Color.White : color);
             }
         }
 
