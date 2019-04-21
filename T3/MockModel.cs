@@ -302,6 +302,9 @@ namespace T3
                                                 { projectSymbol.OutputDefinitions[0].Id, new StringOutputUi { Position = new Vector2(40.0f, 0.0f) } }
                                             });
 
+            // dashboard
+            inputUis.Add(dashboardSymbol.Id, new Dictionary<Guid, IInputUi>());
+            outputUis.Add(dashboardSymbol.Id, new Dictionary<Guid, IOutputUi>());
 
 
             // create and register input controls by type
