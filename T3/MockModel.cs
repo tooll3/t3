@@ -15,12 +15,12 @@ namespace T3
             Init();
         }
 
-        class AddOperator : Instance<AddOperator>
+        class Add : Instance<Add>
         {
             [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
             public readonly Slot<float> Result = new Slot<float>();
 
-            public AddOperator()
+            public Add()
             {
                 Result.UpdateAction = Update;
             }
@@ -34,31 +34,31 @@ namespace T3
             public readonly InputSlot<float> Input2 = new InputSlot<float>(10.0f);
         }
 
-        class RandomOperator : Instance<RandomOperator>
+        class Random : Instance<Random>
         {
             [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
             public readonly Slot<float> Result = new Slot<float>();
 
-            public RandomOperator()
+            public Random()
             {
                 Result.UpdateAction = Update;
             }
 
             private void Update(EvaluationContext context)
             {
-                var random = new Random(Seed.GetValue(context));
+                var random = new System.Random(Seed.GetValue(context));
                 Result.Value = (float)random.NextDouble();
             }
 
             public readonly InputSlot<int> Seed = new InputSlot<int>(0);
         }
 
-        class FloatFormatOperator : Instance<FloatFormatOperator>
+        class FloatFormat : Instance<FloatFormat>
         {
             [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
             public readonly Slot<string> Output = new Slot<string>();
 
-            public FloatFormatOperator()
+            public FloatFormat()
             {
                 Output.UpdateAction = Update;
             }
@@ -71,12 +71,12 @@ namespace T3
             public readonly InputSlot<float> Input = new InputSlot<float>(3.0f);
         }
 
-        class StringLengthOperator : Instance<StringLengthOperator>
+        class StringLength : Instance<StringLength>
         {
             [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
             public readonly Slot<int> Length = new Slot<int>();
 
-            public StringLengthOperator()
+            public StringLength()
             {
                 Length.UpdateAction = Update;
             }
@@ -89,12 +89,12 @@ namespace T3
             public readonly InputSlot<string> InputString = new InputSlot<string>(string.Empty);
         }
 
-        class StringConcatOperator : Instance<StringConcatOperator>
+        class StringConcat : Instance<StringConcat>
         {
             [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
             public readonly Slot<string> Result = new Slot<string>();
 
-            public StringConcatOperator()
+            public StringConcat()
             {
                 Result.UpdateAction = Update;
             }
@@ -108,26 +108,26 @@ namespace T3
             public readonly InputSlot<string> Input2 = new InputSlot<string>(string.Empty);
         }
 
-        class TimeOperator : Instance<TimeOperator>
+        class Time : Instance<Time>
         {
             [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
-            public readonly Slot<float> Time = new Slot<float>();
+            public readonly Slot<float> TimeInSeconds = new Slot<float>();
 
-            public TimeOperator()
+            public Time()
             {
-                Time.UpdateAction = Update;
+                TimeInSeconds.UpdateAction = Update;
                 _watch.Start();
             }
 
             private void Update(EvaluationContext context)
             {
-                Time.Value = _watch.ElapsedMilliseconds/1000.0f;
+                TimeInSeconds.Value = _watch.ElapsedMilliseconds/1000.0f;
             }
 
             private Stopwatch _watch = new Stopwatch();
         }
 
-        class ProjectOperator : Instance<ProjectOperator>
+        class Project : Instance<Project>
         {
             [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
             public readonly Slot<string> Output = new Slot<string>("Project Output");
@@ -137,99 +137,38 @@ namespace T3
             public readonly InputSlot<float> Input = new InputSlot<float>(0.0f);
         }
 
-        class DashboardOperator : Instance<DashboardOperator>
+        class Dashboard : Instance<Dashboard>
         {
 
         }
 
         private void Init()
         {
-            var addSymbol = new Symbol()
-                            {
-                                Id = Guid.NewGuid(),
-                                SymbolName = "Add",
-                                InstanceType = typeof(AddOperator),
-                                InputDefinitions =
-                                {
-                                    new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(5.0f) },
-                                    new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(10.0f) }
-                                },
-                                OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Result", ValueType = typeof(float) } }
-                            };
-            var randomSymbol = new Symbol()
-                               {
-                                   Id = Guid.NewGuid(),
-                                   SymbolName = "Random",
-                                   InstanceType = typeof(RandomOperator),
-                                   InputDefinitions =
-                                   {
-                                       new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Seed", DefaultValue = new InputValue<int>(42) }
-                                   },
-                                   OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Random Value", ValueType = typeof(float) } }
-                               };
-            var floatFormatSymbol = new Symbol()
-                                    {
-                                        Id = Guid.NewGuid(),
-                                        SymbolName = "FloatFormat",
-                                        InstanceType = typeof(FloatFormatOperator),
-                                        InputDefinitions =
-                                        {
-                                            new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Input", DefaultValue = new InputValue<float>(1.0f) }
-                                        },
-                                        OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Output", ValueType = typeof(string) } }
-                                    };
-            var stringLengthSymbol = new Symbol()
-                                     {
-                                         Id = Guid.NewGuid(),
-                                         SymbolName = "StringLength",
-                                         InstanceType = typeof(StringLengthOperator),
-                                         InputDefinitions =
-                                         {
-                                             new Symbol.InputDefinition() { Id = Guid.NewGuid(), Name = "InputString", DefaultValue = new InputValue<string>(string.Empty) } 
-                                         },
-                                         OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Length", ValueType = typeof(int) } }
-                                     };
-            var stringConcatSymbol = new Symbol()
-                                     {
-                                         Id = Guid.NewGuid(),
-                                         SymbolName = "StringConcat",
-                                         InstanceType = typeof(StringConcatOperator),
-                                         InputDefinitions =
-                                         {
-                                             new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Input1", DefaultValue = new InputValue<string>(string.Empty) },
-                                             new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Input2", DefaultValue = new InputValue<string>(string.Empty) }
-                                         },
-                                         OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Result", ValueType = typeof(string) } }
-                                     };
-            var timeSymbol = new Symbol()
-                             {
-                                 Id = Guid.NewGuid(),
-                                 SymbolName = "Time",
-                                 InstanceType = typeof(TimeOperator),
-                                 OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Time", ValueType = typeof(float) } }
-                             };
-            var projectSymbol = new Symbol()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    SymbolName = "Project",
-                                    InstanceType = typeof(ProjectOperator),
-                                    InputDefinitions =
-                                    {
-                                        new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Input", DefaultValue = new InputValue<float>(1.0f) }
-                                    },
-                                    OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Output", ValueType = typeof(float) } },
-                                    Children =
-                                    {
-                                        new SymbolChild(addSymbol),
-                                        new SymbolChild(addSymbol),
-                                        new SymbolChild(randomSymbol),
-                                    }
-                                };
-            var dashboardSymbol = new Symbol()
+            var addSymbol = new Symbol(typeof(Add));
+            addSymbol.InputDefinitions[0].DefaultValue = new InputValue<float>(5.0f);
+            addSymbol.InputDefinitions[1].DefaultValue = new InputValue<float>(10.0f);
+
+            var randomSymbol = new Symbol(typeof(Random));
+            randomSymbol.InputDefinitions[0].DefaultValue = new InputValue<int>(42);
+
+            var floatFormatSymbol = new Symbol(typeof(FloatFormat));
+            floatFormatSymbol.InputDefinitions[0].DefaultValue = new InputValue<float>(1.0f);
+
+            var stringLengthSymbol = new Symbol(typeof(StringLength));
+            stringLengthSymbol.InputDefinitions[0].DefaultValue = new InputValue<string>(string.Empty);
+
+            var stringConcatSymbol = new Symbol(typeof(StringConcat));
+            stringConcatSymbol.InputDefinitions[0].DefaultValue = new InputValue<string>(string.Empty);
+            stringConcatSymbol.InputDefinitions[1].DefaultValue = new InputValue<string>(string.Empty);
+
+            var timeSymbol = new Symbol(typeof(Time));
+
+            var projectSymbol = new Symbol(typeof(Project));
+            projectSymbol.InputDefinitions[0].DefaultValue = new InputValue<float>(1.0f);
+            projectSymbol.Children.AddRange(new[] { new SymbolChild(addSymbol), new SymbolChild(addSymbol), new SymbolChild(randomSymbol) });
+
+            var dashboardSymbol = new Symbol(typeof(Dashboard))
                                   {
-                                      Id = Guid.NewGuid(),
-                                      SymbolName = "Dashboard",
-                                      InstanceType = typeof(DashboardOperator),
                                       Children =
                                       {
                                           new SymbolChild(projectSymbol),
