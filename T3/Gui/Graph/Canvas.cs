@@ -9,9 +9,9 @@ using T3.Logging;
 
 namespace T3.Gui.Graph
 {
-    public class GraphCanvas
+    public class Canvas
     {
-        public GraphCanvas(Instance opInstance)
+        public Canvas(Instance opInstance)
         {
             CompositionOp = opInstance;
             _selectionFence = new SelectionFence(this);
@@ -19,6 +19,7 @@ namespace T3.Gui.Graph
 
         public void Draw()
         {
+            Current = this;
             if (!SymbolChildUiRegistry.Entries.ContainsKey(CompositionOp.Symbol.Id))
             {
                 SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id] = new Dictionary<Guid, SymbolChildUi>();
@@ -195,26 +196,25 @@ namespace T3.Gui.Graph
         /// <summary>
         /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public Vector2 CanvasPosFromScreen(Vector2 screenPos)
+        public static Vector2 CanvasPosFromScreen(Vector2 screenPos)
         {
-            return (screenPos - _scroll - _canvasWindowPos) / _scale;
+            return (screenPos - Current._scroll - Current._canvasWindowPos) / Current._scale;
         }
-
 
         /// <summary>
         /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public Vector2 ScreenPosFromCanvas(Vector2 posOnCanvas)
+        public static Vector2 ScreenPosFromCanvas(Vector2 posOnCanvas)
         {
-            return posOnCanvas * _scale + _scroll + _canvasWindowPos;
+            return posOnCanvas * Current._scale + Current._scroll + Current._canvasWindowPos;
         }
 
-        public ImRect CanvasRectFromScreen(ImRect screenRect)
+        public static ImRect CanvasRectFromScreen(ImRect screenRect)
         {
             return new ImRect(CanvasPosFromScreen(screenRect.Min), CanvasPosFromScreen(screenRect.Max));
         }
 
-        public ImRect ScreenRectFromCanvas(ImRect canvasRect)
+        public static ImRect ScreenRectFromCanvas(ImRect canvasRect)
         {
             return new ImRect(ScreenPosFromCanvas(canvasRect.Min), ScreenPosFromCanvas(canvasRect.Max));
         }
@@ -229,14 +229,14 @@ namespace T3.Gui.Graph
         #endregion
 
 
-        public void DrawRect(ImRect rectOnCanvas, Color color)
+        public static void DrawRect(ImRect rectOnCanvas, Color color)
         {
-            DrawList.AddRect(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
+            Current.DrawList.AddRect(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
         }
 
-        public void DrawRectFilled(ImRect rectOnCanvas, Color color)
+        public static void DrawRectFilled(ImRect rectOnCanvas, Color color)
         {
-            DrawList.AddRectFilled(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
+            Current.DrawList.AddRectFilled(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
         }
 
         private ImDrawListPtr _overlayDrawList;
@@ -256,6 +256,7 @@ namespace T3.Gui.Graph
 
         private ImGuiIOPtr _io;
         public Instance CompositionOp { get; set; }
+        public static Canvas Current { get; private set; }
 
         public Dictionary<Guid, SymbolChildUi> UiChildrenById { get; private set; }
     }
