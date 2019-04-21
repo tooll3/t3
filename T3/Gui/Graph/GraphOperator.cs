@@ -153,11 +153,6 @@ namespace T3.Gui.Graph
                 {
                     DraftConnection.Update();
                 }
-
-                if (ImGui.IsMouseReleased(0))
-                {
-                    DraftConnection.Cancel();
-                }
             }
             else if (ImGui.IsItemHovered())
             {
@@ -217,6 +212,7 @@ namespace T3.Gui.Graph
 
             var hovered = rInScreen.Contains(ImGui.GetMousePos()); // TODO: check why ImGui.IsItemHovered() is not working
 
+
             if (DraftConnection.IsCurrentTargetInput(targetUi, inputIndex))
             {
                 _canvas.DrawRectFilled(mouseRectInCanvas, ColorForType(inputDef));
@@ -225,17 +221,14 @@ namespace T3.Gui.Graph
                 {
                     DraftConnection.Update();
                 }
-
-                if (ImGui.IsMouseReleased(0))
-                {
-                    DraftConnection.Cancel();
-                }
             }
             else if (hovered)
             {
+                //Log.Debug("Is Mouse hovered " + targetUi.ReadableName);
                 if (DraftConnection.IsMatchingInput(inputDef))
                 {
                     _canvas.DrawRectFilled(mouseRectInCanvas, color);
+
                     if (ImGui.IsMouseReleased(0))
                     {
                         DraftConnection.CompleteAtInput(_canvas.CompositionOp.Symbol, targetUi, inputIndex);
