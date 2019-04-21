@@ -139,6 +139,14 @@ namespace T3.Core.Operator
 
         public void AddConnection(Connection connection)
         {
+            // check if another connection is already existing to the target input, ignoring multi inputs for now
+            var existingConnection = Connections.FirstOrDefault(c => c.TargetChildId == connection.TargetChildId &&
+                                                                     c.InputDefinitionId == connection.InputDefinitionId);
+            if (existingConnection != null)
+            {
+                RemoveConnection(existingConnection);
+            }
+
             Connections.Add(connection);
             foreach (var instance in _instancesOfSymbol)
             {
