@@ -50,6 +50,15 @@ namespace T3.Logging
             AddEntry(new LogEntry(LogEntry.EntryLevel.Debug, messageString));
         }
 
+        public static void Info(String message)
+        {
+            AddEntry(new LogEntry(LogEntry.EntryLevel.Info, message));
+        }
+
+        public static void Info(String message, Guid sourceId)
+        {
+            AddEntry(new LogEntry(LogEntry.EntryLevel.Info, sourceId, message));
+        }
 
         public static void InfoFormat(String message, params object[] args)
         {
@@ -57,9 +66,20 @@ namespace T3.Logging
             AddEntry(new LogEntry(LogEntry.EntryLevel.Info, messageString));
         }
 
+        public static void Warning(String message, params object[] args)
+        {
+            var messageString = FormatMessageWithArguments(message, args);
+            AddEntry(new LogEntry(LogEntry.EntryLevel.Warning, messageString));
+        }
+
+        public static void Error(String message, params object[] args)
+        {
+            var messageString = FormatMessageWithArguments(message, args);
+            AddEntry(new LogEntry(LogEntry.EntryLevel.Error, messageString));
+        }
 
         private const int DEFAULT_LINE_LENGTH = 100;
-        static StringBuilder _accumulatedInfoLine = new StringBuilder(String.Empty, DEFAULT_LINE_LENGTH);
+        private static readonly StringBuilder _accumulatedInfoLine = new StringBuilder(String.Empty, DEFAULT_LINE_LENGTH);
         public static void AccumulateAsInfoLine(String c, int lineLength = DEFAULT_LINE_LENGTH)
         {
             _accumulatedInfoLine.Append(c);
@@ -70,21 +90,7 @@ namespace T3.Logging
             }
         }
 
-        public static void Warning(String message, params object[] args)
-        {
-            var messageString = FormatMessageWithArguments(message, args);
-            AddEntry(new LogEntry(LogEntry.EntryLevel.Warning, messageString));
-        }
-
-
-        public static void Error(String message, params object[] args)
-        {
-            var messageString = FormatMessageWithArguments(message, args);
-            AddEntry(new LogEntry(LogEntry.EntryLevel.Error, messageString));
-        }
-
         #endregion
-
 
         private static string FormatMessageWithArguments(string messageString, object[] args)
         {
@@ -98,7 +104,6 @@ namespace T3.Logging
             }
             return messageString;
         }
-
 
         private static void LogDebug(LogEntry.EntryLevel level, String message)
         {
