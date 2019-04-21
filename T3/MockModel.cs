@@ -68,7 +68,7 @@ namespace T3
                                     new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(5.0f) },
                                     new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Value1", DefaultValue = new InputValue<float>(10.0f) }
                                 },
-                                OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Result" } }
+                                OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Result", Type = typeof(float) } }
                             };
             var randomSymbol = new Symbol()
                                {
@@ -79,7 +79,7 @@ namespace T3
                                    {
                                        new Symbol.InputDefinition { Id = Guid.NewGuid(), Name = "Seed", DefaultValue = new InputValue<int>(42) }
                                    },
-                                   OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Random Value" } }
+                                   OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Random Value", Type = typeof(float) } }
                                };
             var projectSymbol = new Symbol()
                                 {
