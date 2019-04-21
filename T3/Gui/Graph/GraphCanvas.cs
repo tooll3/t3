@@ -89,6 +89,12 @@ namespace T3.Gui.Graph
                     DrawGrid();
                     DrawNodes();
                     DrawConnections();
+
+                    if (ImGui.IsMouseReleased(0))
+                    {
+                        DraftConnection.Cancel();
+                    }
+
                     _selectionFence.Draw();
                     _drawList.PopClipRect();
                 }
