@@ -58,7 +58,7 @@ namespace T3.Core.Operator
             // connect instances
             foreach (var connection in Connections)
             {
-                ConnectInstance(newInstance, connection);
+                AddInstanceConnection(newInstance, connection);
             }
 
             _instancesOfSymbol.Add(newInstance);
@@ -66,7 +66,19 @@ namespace T3.Core.Operator
             return newInstance;
         }
 
-        private static void ConnectInstance(Instance parentInstance, Connection connection)
+        private static void AddInstanceConnection(Instance parentInstance, Connection connection)
+        {
+            (_, Slot sourceOutput, _, IInputSlot targetInput) = GetInstancesForConnection(parentInstance, connection);
+            targetInput.AddConnection(sourceOutput);
+        }
+
+        private static void RemoveInstanceConnection(Instance parentInstance, Connection connection)
+        {
+            (_, _, _, IInputSlot targetInput) = GetInstancesForConnection(parentInstance, connection);
+            targetInput.RemoveConnection();
+        }
+
+        private static (Instance, Slot, Instance, IInputSlot) GetInstancesForConnection(Instance parentInstance, Connection connection)
         {
             var sourceInstance = (from instance in parentInstance.Children
                                   where instance.Id == connection.SourceChildId
@@ -95,8 +107,9 @@ namespace T3.Core.Operator
                                where input.Id == connection.InputDefinitionId
                                select input).Single();
 
-            targetInput.AddConnection(sourceOutput);
+            return (sourceInstance, sourceOutput, targetInstance, targetInput);
         }
+
 
         private static void CreateNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
         {
@@ -129,7 +142,20 @@ namespace T3.Core.Operator
             Connections.Add(connection);
             foreach (var instance in _instancesOfSymbol)
             {
-                ConnectInstance(instance, connection);
+                AddInstanceConnection(instance, connection);
+            }
+        }
+
+        public void RemoveConnection(Connection connection)
+        {
+            var index = Connections.FindIndex(storedConnection => storedConnection.Equals(connection));
+            if (index != -1)
+            {
+                Connections.RemoveAt(index);
+                foreach (var instance in _instancesOfSymbol)
+                {
+                    RemoveInstanceConnection(instance, connection);
+                }
             }
         }
 
@@ -206,6 +232,21 @@ namespace T3.Core.Operator
                 TargetChildId = targetChildId;
                 InputDefinitionId = inputDefinitionId;
             }
+
+            public override int GetHashCode()
+            {
+                int hash = SourceChildId.GetHashCode();
+                hash = hash*31 + OutputDefinitionId.GetHashCode();
+                hash = hash*31 + TargetChildId.GetHashCode();
+                hash = hash*31 + InputDefinitionId.GetHashCode();
+                return hash;
+            }
+
+            public override bool Equals(object other)
+            {
+                return GetHashCode() == other?.GetHashCode();
+            }
+
         }
         #endregion
     }
