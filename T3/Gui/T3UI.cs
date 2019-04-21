@@ -101,9 +101,12 @@ namespace T3.Gui
                 selectedInstance = compositionOp.Children.Single(child => child.Id == symbolChild.Id);
             }
 
-            var firstOutput = selectedInstance.Outputs[0];
-            IOutputUi outputUi = OutputUiRegistry.Entries[selectedInstance.Symbol.Id][firstOutput.Id];
-            outputUi.DrawValue(firstOutput);
+            if (selectedInstance.Outputs.Count > 0)
+            {
+                var firstOutput = selectedInstance.Outputs[0];
+                IOutputUi outputUi = OutputUiRegistry.Entries[selectedInstance.Symbol.Id][firstOutput.Id];
+                outputUi.DrawValue(firstOutput);
+            }
 
             ImGui.End();
         }
