@@ -32,10 +32,10 @@ namespace T3
             }
 
             [FloatInput(DefaultValue = 20.0f)]
-            public readonly InputSlot<float> Input1 = new InputSlot<float>(5.0f);
+            public readonly InputSlot<float> Input1 = new InputSlot<float>();
 
             [FloatInput(DefaultValue = 23.0f)]
-            public readonly InputSlot<float> Input2 = new InputSlot<float>(10.0f);
+            public readonly InputSlot<float> Input2 = new InputSlot<float>();
         }
 
         class Random : Instance<Random>
@@ -55,7 +55,7 @@ namespace T3
             }
 
             [IntInput(DefaultValue = 3)]
-            public readonly InputSlot<int> Seed = new InputSlot<int>(0);
+            public readonly InputSlot<int> Seed = new InputSlot<int>();
         }
 
         class FloatFormat : Instance<FloatFormat>
@@ -74,7 +74,7 @@ namespace T3
             }
 
             [FloatInput(DefaultValue = 3.0f)]
-            public readonly InputSlot<float> Input = new InputSlot<float>(3.0f);
+            public readonly InputSlot<float> Input = new InputSlot<float>();
         }
 
         class StringLength : Instance<StringLength>
@@ -93,7 +93,7 @@ namespace T3
             }
 
             [StringInput(DefaultValue = "Aber Hallo")]
-            public readonly InputSlot<string> InputString = new InputSlot<string>(string.Empty);
+            public readonly InputSlot<string> InputString = new InputSlot<string>();
         }
 
         class StringConcat : Instance<StringConcat>
@@ -112,10 +112,10 @@ namespace T3
             }
 
             [StringInput(DefaultValue = "")]
-            public readonly InputSlot<string> Input1 = new InputSlot<string>(string.Empty);
+            public readonly InputSlot<string> Input1 = new InputSlot<string>();
 
             [StringInput(DefaultValue = "")]
-            public readonly InputSlot<string> Input2 = new InputSlot<string>(string.Empty);
+            public readonly InputSlot<string> Input2 = new InputSlot<string>();
         }
 
         class Time : Instance<Time>
@@ -145,7 +145,7 @@ namespace T3
 
 
             [FloatInput(DefaultValue = 3.0f)]
-            public readonly InputSlot<float> Input = new InputSlot<float>(0.0f);
+            public readonly InputSlot<float> Input = new InputSlot<float>();
         }
 
         class Dashboard : Instance<Dashboard>
@@ -161,15 +161,12 @@ namespace T3
             var stringLengthSymbol = new Symbol(typeof(StringLength));
             var stringConcatSymbol = new Symbol(typeof(StringConcat));
             var timeSymbol = new Symbol(typeof(Time));
+
             var projectSymbol = new Symbol(typeof(Project));
             projectSymbol.Children.AddRange(new[] { new SymbolChild(addSymbol), new SymbolChild(addSymbol), new SymbolChild(randomSymbol) });
-            var dashboardSymbol = new Symbol(typeof(Dashboard))
-                                  {
-                                      Children =
-                                      {
-                                          new SymbolChild(projectSymbol),
-                                      }
-                                  };
+
+            var dashboardSymbol = new Symbol(typeof(Dashboard));
+            dashboardSymbol.Children.Add(new SymbolChild(projectSymbol));
 
             projectSymbol.AddConnection(new Symbol.Connection(sourceChildId: projectSymbol.Children[2].Id, // from Random
                                                               outputDefinitionId: randomSymbol.OutputDefinitions[0].Id,

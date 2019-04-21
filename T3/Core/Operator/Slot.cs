@@ -70,6 +70,11 @@ namespace T3.Core.Operator
 
     public class InputValue<T> : InputValue
     {
+        public InputValue()
+            : this(default(T))
+        {
+        }
+
         public InputValue(T value)
         {
             Value = value;
@@ -162,8 +167,13 @@ namespace T3.Core.Operator
             TypedInputValue = typedInputValue;
         }
 
-        public InputSlot(T defaultValue)
-            : this(new InputValue<T>(defaultValue))
+        public InputSlot()
+            : this(default(T))
+        {
+        }
+
+        public InputSlot(T value)
+            : this(new InputValue<T>(value))
         {
         }
 
