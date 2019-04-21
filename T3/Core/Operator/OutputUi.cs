@@ -18,8 +18,8 @@ namespace T3.Core.Operator
         {
             if (slot is Slot<T> typedSlot)
             {
-                typedSlot.UpdateAction(new EvaluationContext());
-                ImGui.Text($"{typedSlot.Value}");
+                var value = typedSlot.GetValue(new EvaluationContext());
+                ImGui.Text($"{value}");
             }
             else
             {

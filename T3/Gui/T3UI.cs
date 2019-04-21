@@ -61,46 +61,50 @@ namespace T3.Gui
         public void DrawSelectionParameters()
         {
             ImGui.Begin("ParameterView");
+
             var compositionOp = _mockModel.MainOp;
-            var uiEntriesForCompositionOp = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
-            foreach (var child in compositionOp.Children)
+            Instance selectedInstance = compositionOp;
+            var childUiEntries = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
+            var selectedChildUi = (from childUi in childUiEntries
+                                   where childUi.Value.IsSelected
+                                   select childUi).FirstOrDefault().Value;
+            if (selectedChildUi != null)
             {
-                var symbolChildUi = uiEntriesForCompositionOp[child.Id];
-                if (!symbolChildUi.IsSelected)
-                    continue;
-
-                foreach (var input in child.Inputs)
-                {
-                    ImGui.PushID(input.Id.GetHashCode());
-                    IInputUi inputUi = InputUiRegistry.Entries[input.Input.DefaultValue.ValueType];//todo: fix me
-                    inputUi.DrawInputEdit(input.Input.InputDefinition.Name, input);
-                    ImGui.PopID();
-                }
-
-                break; // only first selected atm
+                var symbolChild = selectedChildUi.SymbolChild;
+                selectedInstance = compositionOp.Children.Single(child => child.Id == symbolChild.Id);
             }
+
+            foreach (var input in selectedInstance.Inputs)
+            {
+                ImGui.PushID(input.Id.GetHashCode());
+                IInputUi inputUi = InputUiRegistry.Entries[input.Input.DefaultValue.ValueType];//todo: fix me
+                inputUi.DrawInputEdit(input.Input.InputDefinition.Name, input);
+                ImGui.PopID();
+            }
+
             ImGui.End();
         }
 
         public void DrawSelectedOutput()
         {
             ImGui.Begin("SelectionView");
+
             var compositionOp = _mockModel.MainOp;
-            foreach (var pair in SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id])
+            Instance selectedInstance = compositionOp;
+            var childUiEntries = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
+            var selectedChildUi = (from childUi in childUiEntries
+                                 where childUi.Value.IsSelected
+                                 select childUi).FirstOrDefault().Value;
+            if (selectedChildUi != null)
             {
-                var symbolChildUi = pair.Value;
-                if (!symbolChildUi.IsSelected)
-                    continue;
-
-                var symbolChild = symbolChildUi.SymbolChild;
-                var selectedInstance = compositionOp.Children.Single(child => child.Id == symbolChild.Id);
-
-                var firstOutput = selectedInstance.Outputs[0];
-                IOutputUi outputUi = OutputUiRegistry.Entries[firstOutput.Type];
-                outputUi.Draw(firstOutput);
-
-                break; // only first selected atm
+                var symbolChild = selectedChildUi.SymbolChild;
+                selectedInstance = compositionOp.Children.Single(child => child.Id == symbolChild.Id);
             }
+
+            var firstOutput = selectedInstance.Outputs[0];
+            IOutputUi outputUi = OutputUiRegistry.Entries[firstOutput.Type];
+            outputUi.Draw(firstOutput);
+
             ImGui.End();
         }
 
