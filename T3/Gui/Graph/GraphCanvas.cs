@@ -49,7 +49,7 @@ namespace T3.Gui.Graph
                     _size = ImGui.GetWindowSize();
                     DrawList.PushClipRect(_canvasWindowPos, _canvasWindowPos + _size);
 
-                    // Canvas interaction --------------
+                    // Canvas interaction --------------------------------------------
                     if (ImGui.IsWindowHovered())
                     {
                         if (ImGui.IsMouseDragging(1))
@@ -104,15 +104,68 @@ namespace T3.Gui.Graph
 
                     _selectionFence.Draw();
                     DrawList.PopClipRect();
+                    DrawContextMenu();
                 }
                 ImGui.EndChild();
                 ImGui.PopStyleColor();
                 ImGui.PopStyleVar(2);
-
-
             }
             ImGui.EndGroup();
         }
+
+
+        private void DrawContextMenu()
+        {
+            // Open context menu
+            if (!ImGui.IsAnyItemHovered() && ImGui.IsWindowHovered() && ImGui.IsMouseClicked(1))
+            {
+                _contextMenuOpened = true;
+            }
+
+            // Draw context menu
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
+            if (ImGui.BeginPopupContextWindow("context_menu"))
+            {
+                Vector2 scene_pos = ImGui.GetMousePosOnOpeningCurrentPopup();// - scrollOffset;
+
+
+                // Todo: Convert to linc
+                var selectedChildren = new List<SymbolChildUi>();
+                foreach (var x in SelectionHandler.SelectedElements)
+                {
+                    var childUi = x as SymbolChildUi;
+                    if (childUi != null)
+                    {
+                        selectedChildren.Add(childUi);
+                    }
+                }
+
+                if (selectedChildren.Count > 0)
+                {
+                    var label = selectedChildren.Count == 1
+                        ? $"{selectedChildren[0].ReadableName} Item..." : $"{selectedChildren.Count} Items...";
+
+                    ImGui.Text(label);
+                    if (ImGui.MenuItem(" Rename..", null, false, false)) { }
+                    if (ImGui.MenuItem(" Delete", null))
+                    {
+                        Log.Warning("Not implemented yet");
+                        foreach (var x in selectedChildren)
+                        {
+                            // TODO: Add implementation
+                        }
+                    }
+                    if (ImGui.MenuItem(" Copy", null, false, false)) { }
+                    ImGui.Separator();
+                }
+                if (ImGui.MenuItem("Rename..", null, false, false)) { }
+                if (ImGui.MenuItem("Add")) { }
+                if (ImGui.MenuItem("Paste", null, false, false)) { }
+                ImGui.EndPopup();
+            }
+            ImGui.PopStyleVar();
+        }
+
 
         private void DrawGrid()
         {
@@ -143,10 +196,6 @@ namespace T3.Gui.Graph
             }
         }
 
-
-        #region Connections ======================================================================
-
-        #endregion
 
 
         #region canvas scaling conversion =================================================================

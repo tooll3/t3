@@ -86,51 +86,8 @@ namespace T3.Gui.Graph
             {
                 DrawInputSlot(symbolChildUi, slot_idx);
             }
-
-            //    var pOnCanvas = node.GetInputSlotPos(slot_idx);
-            //    var itemPos = canvas.GetChildPosFrom(pOnCanvas);
-            //    ImGui.SetCursorPos(itemPos);
-            //    ImGui.InvisibleButton("input" + slot_idx, new Vector2(10, 10));
-
-            //    if (ImGui.IsItemHovered() && ImGui.IsItemClicked(0))
-            //    {
-            //        canvas.StartLinkFromInput(node, slot_idx);
-            //    }
-
-            //    if (ImGui.IsItemHovered() && ImGui.IsMouseReleased(0))
-            //    {
-            //        canvas.CompleteLinkToInput(node, slot_idx);
-            //    }
-
-            //    var col = ImGui.IsItemHovered() ? TColors.ToUint(150, 150, 150, 150) : Color.Red.ToUint();
-            //    canvas._drawList.AddCircleFilled(canvas.GetScreenPosFrom(pOnCanvas), NODE_SLOT_RADIUS, col);
-            //}
-
-            //for (int slot_idx = 0; slot_idx < node.OutputsCount; slot_idx++)
-            //{
-            //    var pOnCanvas = node.GetOutputSlotPos(slot_idx);
-            //    var itemPos = canvas.GetChildPosFrom(pOnCanvas);
-            //    ImGui.SetCursorPos(itemPos);
-            //    ImGui.InvisibleButton("input" + slot_idx, new Vector2(10, 10));
-            //    //THelpers.DebugItemRect();
-
-            //    if (ImGui.IsItemHovered() && ImGui.IsItemClicked(0))
-            //    {
-            //        canvas.StartLinkFromOutput(node, slot_idx);
-            //    }
-
-            //    if (ImGui.IsItemHovered() && ImGui.IsMouseReleased(0))
-            //    {
-            //        canvas.CompleteLinkToOutput(node, slot_idx);
-            //    }
-
-            //    var col = ImGui.IsItemHovered() ? TColors.ToUint(150, 150, 150, 150) : Color.Red.ToUint();
-            //    canvas._drawList.AddCircleFilled(canvas.GetScreenPosFrom(pOnCanvas), NODE_SLOT_RADIUS, col);
-            //}
         }
 
-
-        //static private SymbolChildUi _childUi;
 
         private static void DrawOutputSlot(SymbolChildUi ui, int outputIndex)
         {
@@ -285,12 +242,7 @@ namespace T3.Gui.Graph
 
         static private GraphCanvas _canvas = null;
 
-        // // Open context menu
-        // if (!ImGui.IsAnyItemHovered() && ImGui.IsWindowHovered() && ImGui.IsMouseClicked(1))
-        // {
-        //     _selectedNodeID = _hoveredListNodeIndex = _hoveredSceneNodeIndex = -1;
-        //     _contextMenuOpened = true;
-        // }
+
 
         // if (_contextMenuOpened)
         // {
@@ -302,29 +254,6 @@ namespace T3.Gui.Graph
         //         _selectedNodeID = _hoveredSceneNodeIndex;
         // }
 
-        // // Draw context menu
-        // ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
-        // if (ImGui.BeginPopup("context_menu"))
-        // {
-        //     Vector2 scene_pos = ImGui.GetMousePosOnOpeningCurrentPopup() - scrollOffset;
-        //     var isANodeSelected = _selectedNodeID != -1;
-        //     if (isANodeSelected)
-        //     {
-        //         var node = _nodes[_selectedNodeID];
-        //         ImGui.Text("Node '{node.Name}'");
-        //         ImGui.Separator();
-        //         if (ImGui.MenuItem("Rename..", null, false, false)) { }
-        //         if (ImGui.MenuItem("Delete", null, false, false)) { }
-        //         if (ImGui.MenuItem("Copy", null, false, false)) { }
-        //     }
-        //     else
-        //     {
-        //         if (ImGui.MenuItem("Add")) { _nodes.Add(new Node(_nodes.Count, "New node", scene_pos, 0.5f, new Vector4(0.5f, 0.5f, 0.5f, 1), 2, 2)); }
-        //         if (ImGui.MenuItem("Paste", null, false, false)) { }
-        //     }
-        //     ImGui.EndPopup();
-        // }
-        // ImGui.PopStyleVar();
 
         // Scrolling
         // if (ImGui.IsWindowHovered() && !ImGui.IsAnyItemActive() && ImGui.IsMouseDragging(2, 0.0f))
