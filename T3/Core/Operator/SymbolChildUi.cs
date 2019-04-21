@@ -23,8 +23,8 @@ namespace T3.Core.Operator
         public bool IsStackableBelow => true; //{ get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         // These could be stateless and initialized by a helper
-        public List<ConnectionLine> ConnectionLinesOut { get; set; } = new List<ConnectionLine>();
-        public List<ConnectionLine> ConnectionLinesIn { get; set; } = new List<ConnectionLine>();
+        //public List<ConnectionLine> ConnectionLinesOut { get; set; } = new List<ConnectionLine>();
+        //public List<ConnectionLine> ConnectionLinesIn { get; set; } = new List<ConnectionLine>();
 
 
         public float GetHorizontalOverlapWith(ISelectable element)
@@ -91,7 +91,7 @@ namespace T3.Core.Operator
                 //}
             }
 
-            const float WIDTH_OF_MULTIINPUT_ZONES = 1.0f / 3.0f;
+            //const float WIDTH_OF_MULTIINPUT_ZONES = 1.0f / 3.0f;
 
             /* Roll out zones multi-inputs and the slots for prepending
              * a connection at the first field or inserting connections
@@ -177,15 +177,15 @@ namespace T3.Core.Operator
             return zones;
         }
 
-        public List<ConnectionLine> GetInputConnections()
-        {
-            return new List<ConnectionLine>();
-        }
+        //public List<ConnectionLine> GetInputConnections()
+        //{
+        //    return new List<ConnectionLine>();
+        //}
 
-        public List<ConnectionLine> GetOutputConnections()
-        {
-            return new List<ConnectionLine>();
-        }
+        //public List<ConnectionLine> GetOutputConnections()
+        //{
+        //    return new List<ConnectionLine>();
+        //}
 
 
         public List<Symbol.InputDefinition> GetVisibleInputs(Symbol parent)

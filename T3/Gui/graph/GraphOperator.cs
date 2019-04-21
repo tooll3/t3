@@ -3,7 +3,6 @@ using imHelpers;
 using System;
 using System.Numerics;
 using T3.Core.Operator;
-using T3.Logging;
 
 namespace T3.Gui.Graph
 {
@@ -127,14 +126,14 @@ namespace T3.Gui.Graph
             //}
         }
 
-        static private Symbol.OutputDefinition _draftConnectionOutput = null;
+
+        //static private SymbolChildUi _childUi;
 
         private static void DrawOutputSlot(SymbolChildUi ui, int outputIndex)
         {
             var outputCount = ui.SymbolChild.Symbol.OutputDefinitions.Count;
             var outputDef = ui.SymbolChild.Symbol.OutputDefinitions[outputIndex];
             var width = ui.Size.X / outputCount;   // size count must be non-zero in this method
-
 
             var mouseRectInCanvas = ImRect.RectWithSize(
                     new Vector2(ui.Position.X + width * outputIndex + 1, ui.Position.Y - 3),
@@ -146,13 +145,22 @@ namespace T3.Gui.Graph
             ImGui.InvisibleButton("output", rInScreen.GetSize());
             THelpers.DebugItemRect();
 
-            if (ImGui.IsItemHovered())
-            {
-                Log.Debug("Item hovered" + outputDef);
-            }
 
-            var hovered = rInScreen.Contains(ImGui.GetMousePos());
-            if (hovered || outputDef == _draftConnectionOutput)
+            if (DraftConnection.IsDraftConnectionSource(ui, outputIndex))
+            {
+                _canvas.DrawRectFilled(mouseRectInCanvas, Color.White);
+
+                if (ImGui.IsMouseDragging(0))
+                {
+                    DraftConnection.Update();
+                }
+
+                if (ImGui.IsMouseReleased(0))
+                {
+                    DraftConnection.Complete();
+                }
+            }
+            else if (ImGui.IsItemHovered())
             {
                 _canvas.DrawRectFilled(mouseRectInCanvas, Color.White);
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
@@ -165,24 +173,7 @@ namespace T3.Gui.Graph
 
                 if (ImGui.IsItemClicked(0))
                 {
-                    _canvas.StartNewConnection(new Symbol.Connection(
-                        sourceChildId: ui.SymbolChild.Id,
-                        outputDefinitionId: outputDef.Id,
-                        targetChildId: Guid.Empty,
-                        inputDefinitionId: Guid.Empty
-                    ));
-                    _draftConnectionOutput = outputDef;
-                }
-
-                if (ImGui.IsMouseDragging(0))
-                {
-                    _canvas.UpdateNewConnection();
-                }
-
-                if (ImGui.IsMouseReleased(0))
-                {
-                    _draftConnectionOutput = null;
-                    _canvas.CompleteNewConnection();
+                    DraftConnection.StartFromOutput(ui, outputIndex);
                 }
             }
             else
@@ -194,6 +185,16 @@ namespace T3.Gui.Graph
                     , Color.Gray);
             }
         }
+
+        private static Color ColorForType(Symbol.InputDefinition inputDef)
+        {
+            return InputUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
+        }
+
+        //private static Color ColorForType(Symbol.OutputDefinition outputDef)
+        //{
+        //    return InputUiRegistry.Entries[outputDef..DefaultValue.ValueType].Color;
+        //}
 
 
         private static void DrawInputSlot(SymbolChildUi ui, int inputIndex)
@@ -208,7 +209,6 @@ namespace T3.Gui.Graph
                 new Vector2(inputWidth - 2, 6));
 
             var rInScreen = _canvas.ScreenRectFromCanvas(mouseRectInCanvas);
-
 
             var valueType = inputDef.DefaultValue.ValueType;
             var color = InputUiRegistry.Entries[valueType].Color;
@@ -225,12 +225,21 @@ namespace T3.Gui.Graph
             {
                 _canvas.DrawRectFilled(
                     ImRect.RectWithSize(
-                        new Vector2(ui.Position.X + inputWidth * inputIndex + 1 + 3, ui.Position.Y + ui.Size.Y - 3),
-                        new Vector2(inputWidth - 2 - 6, 3))
-                    , color);
+                        new Vector2(ui.Position.X + inputWidth * inputIndex + 1 + 3,
+                                    ui.Position.Y + ui.Size.Y - SlotConfig.VisibleSlotHeight),
+                        new Vector2(inputWidth - 2 - 6,
+                                    SlotConfig.VisibleSlotHeight))
+                    , color: DraftConnection.IsInputMatchingDraftConnection(inputDef) ? Color.White : color);
             }
         }
 
+
+        static class SlotConfig
+        {
+            public const float Height = GraphCanvas.GridSize;
+            public const float VirtuaoSlotHeight = 5;
+            public const float VisibleSlotHeight = 3;
+        }
 
         static private GraphCanvas _canvas = null;
 
