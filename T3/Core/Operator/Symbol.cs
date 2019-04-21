@@ -57,15 +57,15 @@ namespace T3.Core.Operator
                 Debug.Assert(customAttributes.Length == 1);
                 var attribute = (InputAttribute)customAttributes[0];
                 InputValue defaultValue = null;
-                if (attribute is IntInput intAttribute)
+                if (attribute is IntInputAttribute intAttribute)
                 {
                     defaultValue = new InputValue<int>(intAttribute.DefaultValue);
                 }
-                else if (attribute is FloatInput floatAttribute)
+                else if (attribute is FloatInputAttribute floatAttribute)
                 {
                     defaultValue = new InputValue<float>(floatAttribute.DefaultValue);
                 }
-                else if (attribute is StringInput stringAttribute)
+                else if (attribute is StringInputAttribute stringAttribute)
                 {
                     defaultValue = new InputValue<string>(stringAttribute.DefaultValue);
                 }
@@ -78,7 +78,7 @@ namespace T3.Core.Operator
 
             // outputs identified by attribute
             var outputs = (from field in instanceType.GetFields()
-                           let attributes = field.GetCustomAttributes(typeof(OperatorAttribute), false)
+                           let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
                            from attr in attributes
                            select field).ToArray();
             foreach (var output in outputs)

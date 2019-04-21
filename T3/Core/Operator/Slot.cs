@@ -10,46 +10,25 @@ namespace T3.Core.Operator
     {
     }
 
-//    public abstract class OperatorBaseAttribute : Attribute
-//    {
-//    }
-
-    public class OperatorAttribute : Attribute
+    public class OutputAttribute : Attribute
     {
-        public enum OperatorType
-        {
-            Input,
-            Output
-        }
-
-        public OperatorAttribute(OperatorType type)
-        {
-            Type = type;
-        }
-
-        protected OperatorAttribute()
-        {
-        }
-
-        public OperatorType Type { get; set; }
-
     }
 
     public class InputAttribute : Attribute
     {
     }
 
-    public class FloatInput : InputAttribute
+    public class FloatInputAttribute : InputAttribute
     {
         public float DefaultValue { get; set; }
     }
 
-    public class StringInput : InputAttribute
+    public class StringInputAttribute : InputAttribute
     {
         public string DefaultValue { get; set; }
     }
 
-    public class IntInput : InputAttribute
+    public class IntInputAttribute : InputAttribute
     {
         public int DefaultValue { get; set; }
     }
