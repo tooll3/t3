@@ -110,7 +110,7 @@ namespace T3.Core.Operator
         {
 //             if (IsDirty)
             {
-                UpdateAction(context);
+                UpdateAction?.Invoke(context);
 //                 IsDirty = false;
             }
             return Value;

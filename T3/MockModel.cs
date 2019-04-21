@@ -110,11 +110,16 @@ namespace T3
         class ProjectOperator : Instance<ProjectOperator>
         {
             [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
-            public readonly Slot<string> Output = new Slot<string>();
+            public readonly Slot<string> Output = new Slot<string>("Project Output");
 
 
 
             public readonly InputSlot<float> Input = new InputSlot<float>(0.0f);
+        }
+
+        class DashboardOperator : Instance<DashboardOperator>
+        {
+
         }
 
         private void Init()
@@ -193,6 +198,16 @@ namespace T3
                                         new SymbolChild(randomSymbol),
                                     }
                                 };
+            var dashboardSymbol = new Symbol()
+                                  {
+                                      Id = Guid.NewGuid(),
+                                      SymbolName = "Dashboard",
+                                      InstanceType = typeof(DashboardOperator),
+                                      Children =
+                                      {
+                                          new SymbolChild(projectSymbol),
+                                      }
+                                  };
 
             projectSymbol.AddConnection(new Symbol.Connection(sourceChildId: projectSymbol.Children[2].Id, // from Random
                                                               outputDefinitionId: randomSymbol.OutputDefinitions[0].Id,
@@ -207,9 +222,11 @@ namespace T3
             symbols.Add(stringLengthSymbol.Id, stringLengthSymbol);
             symbols.Add(stringConcatSymbol.Id, stringConcatSymbol);
             symbols.Add(projectSymbol.Id, projectSymbol);
+            symbols.Add(dashboardSymbol.Id, dashboardSymbol);
 
             // create instance of project op, all children are create automatically
-            Instance projectOp = projectSymbol.CreateInstance();
+            var dashboard = dashboardSymbol.CreateInstance();
+            Instance projectOp = dashboard.Children[0];
 
             // create ui data for project symbol
             var uiEntries = SymbolChildUiRegistry.Entries;
