@@ -21,12 +21,11 @@ namespace T3.Gui.Graph
         }
 
         private static GraphCanvas _canvas;
-        private static Symbol _parent;
-
 
         private static void DrawConnection(Symbol.Connection c)
         {
             Vector2 sourcePos;
+            Color color = Color.White;
             if (c.SourceChildId == Guid.Empty)
             {
                 sourcePos = ImGui.GetMousePos();
@@ -34,7 +33,11 @@ namespace T3.Gui.Graph
             else
             {
                 var sourceUi = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.SourceChildId];
-                sourcePos = _canvas.ScreenPosFromCanvas(sourceUi.Position);
+                var outputIndex = sourceUi.SymbolChild.Symbol.OutputDefinitions.FindIndex(outputDef => outputDef.Id == c.OutputDefinitionId);
+
+                var r = GraphOperator.GetOutputSlotSizeInCanvas(sourceUi, outputIndex);
+                sourcePos = _canvas.ScreenPosFromCanvas(r.GetCenter());
+                color = InputUiRegistry.Entries[sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex].ValueType].Color;
             }
 
             Vector2 targetPos;
@@ -45,12 +48,10 @@ namespace T3.Gui.Graph
             else
             {
                 var targetUi = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.TargetChildId];
-
                 var inputIndex = targetUi.SymbolChild.Symbol.InputDefinitions.FindIndex(inputDef => inputDef.Id == c.InputDefinitionId);
-                var r = GraphOperator.GetImputSlotSizeInCanvas(targetUi, inputIndex);
-
+                var r = GraphOperator.GetInputSlotSizeInCanvas(targetUi, inputIndex);
                 targetPos = _canvas.ScreenPosFromCanvas(r.GetCenter());
-                //targetPos = _canvas.ScreenPosFromCanvas(targetUi.Position + new Vector2(0, targetUi.Size.Y));
+                color = InputUiRegistry.Entries[targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].DefaultValue.ValueType].Color;
             }
 
             _canvas.DrawList.AddBezierCurve(
@@ -58,13 +59,13 @@ namespace T3.Gui.Graph
                 sourcePos + new Vector2(0, -50),
                 targetPos + new Vector2(0, 50),
                 targetPos,
-                Color.White, 3f);
+                color, 3f);
 
             _canvas.DrawList.AddTriangleFilled(
                 targetPos + new Vector2(0, -3),
                 targetPos + new Vector2(4, 2),
                 targetPos + new Vector2(-4, 2),
-                Color.White);
+                color);
         }
     }
 }
