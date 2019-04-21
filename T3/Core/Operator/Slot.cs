@@ -133,6 +133,7 @@ namespace T3.Core.Operator
         Guid Id { get; set; }
         SymbolChild.Input Input { set; }
         void AddConnection(Slot slot);
+        void RemoveConnection();
     }
 
     public class InputSlot<T> : Slot<T>, IInputSlot
@@ -158,6 +159,11 @@ namespace T3.Core.Operator
         public void AddConnection(Slot slot)
         {
             InputConnection = (Slot<T>)slot;
+        }
+
+        public void RemoveConnection()
+        {
+            InputConnection = null;
         }
 
         private Slot<T> _inputConnection;
