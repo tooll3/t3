@@ -51,21 +51,21 @@ namespace T3.Gui.Graph
 
 
                 // Rendering
-                canvas._drawList.ChannelsSplit(2);
-                canvas._drawList.ChannelsSetCurrent(1);
+                canvas.DrawList.ChannelsSplit(2);
+                canvas.DrawList.ChannelsSetCurrent(1);
 
-                canvas._drawList.AddText(posInApp, Color.White, String.Format($"{childUi.ReadableName}"));
-                canvas._drawList.ChannelsSetCurrent(0);
+                canvas.DrawList.AddText(posInApp, Color.White, String.Format($"{childUi.ReadableName}"));
+                canvas.DrawList.ChannelsSetCurrent(0);
 
                 var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.Id) ? 1.2f : 0.8f;
-                THelpers.OutlinedRect(ref canvas._drawList, posInApp, childUi.Size * canvas._scale,
+                THelpers.OutlinedRect(ref canvas.DrawList, posInApp, childUi.Size * canvas._scale,
                     fill: new Color(
                             ((childUi.IsSelected || ImGui.IsItemHovered()) ? 0.3f : 0.2f) * hoveredFactor),
                     outline: childUi.IsSelected ? Color.White : Color.Black);
 
                 DrawSlots(childUi);
 
-                canvas._drawList.ChannelsMerge();
+                canvas.DrawList.ChannelsMerge();
             }
             ImGui.PopID();
         }
@@ -190,18 +190,21 @@ namespace T3.Gui.Graph
             return InputUiRegistry.Entries[outputDef.ValueType].Color;
         }
 
-
-        private static void DrawInputSlot(SymbolChildUi targetUi, int inputIndex)
+        public static ImRect GetImputSlotSizeInCanvas(SymbolChildUi targetUi, int inputIndex)
         {
             var inputCount = targetUi.SymbolChild.Symbol.InputDefinitions.Count;
-            var inputDef = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex];
             var inputWidth = inputCount == 0 ? targetUi.Size.X
                 : targetUi.Size.X / inputCount;
 
-            var mouseRectInCanvas = ImRect.RectWithSize(
+            return ImRect.RectWithSize(
                 new Vector2(targetUi.Position.X + inputWidth * inputIndex + 1, targetUi.Position.Y + targetUi.Size.Y - 3),
                 new Vector2(inputWidth - 2, 6));
+        }
 
+        private static void DrawInputSlot(SymbolChildUi targetUi, int inputIndex)
+        {
+            var inputDef = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex];
+            var mouseRectInCanvas = GetImputSlotSizeInCanvas(targetUi, inputIndex);
             var rInScreen = _canvas.ScreenRectFromCanvas(mouseRectInCanvas);
             ImGui.SetCursorScreenPos(rInScreen.Min);
             ImGui.InvisibleButton("input", rInScreen.GetSize());
@@ -250,9 +253,9 @@ namespace T3.Gui.Graph
             {
                 _canvas.DrawRectFilled(
                     ImRect.RectWithSize(
-                        new Vector2(targetUi.Position.X + inputWidth * inputIndex + 1 + 3,
+                        new Vector2(targetUi.Position.X + mouseRectInCanvas.GetWidth() * inputIndex + 1 + 3,
                                     targetUi.Position.Y + targetUi.Size.Y - SlotConfig.VisibleSlotHeight),
-                        new Vector2(inputWidth - 2 - 6,
+                        new Vector2(mouseRectInCanvas.GetWidth() - 2 - 6,
                                     SlotConfig.VisibleSlotHeight))
                     , color: DraftConnection.IsMatchingInput(inputDef) ? Color.White : color);
             }
