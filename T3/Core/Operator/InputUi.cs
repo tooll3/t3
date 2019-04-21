@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
 using T3.Core.Operator;
 
 namespace T3.Gui
@@ -10,6 +11,8 @@ namespace T3.Gui
     {
         void DrawInputEdit(string name, IInputSlot input);
         Color Color { get; }
+        Vector2 Position { get; set; }
+        Vector2 Size { get; set; }
     }
 
     public abstract class InputValueUi<T> : IInputUi
@@ -75,6 +78,8 @@ namespace T3.Gui
         }
 
         public virtual Color Color { get; } = Color.TGreen;
+        public Vector2 Position { get; set; } = Vector2.Zero;
+        public Vector2 Size { get; set; } = new Vector2(100, 30);
     }
 
     public class FloatInputUi : InputValueUi<float>
@@ -124,6 +129,8 @@ namespace T3.Gui
 
     public static class InputUiRegistry
     {
-        public static Dictionary<Type, IInputUi> Entries { get; } = new Dictionary<Type, IInputUi>();
+        public static Dictionary<Guid, Dictionary<Guid, IInputUi>> Entries { get; } = new Dictionary<Guid, Dictionary<Guid, IInputUi>>();
+
+        public static Dictionary<Type, IInputUi> EntriesByType { get; } = new Dictionary<Type, IInputUi>();
     }
 }

@@ -255,12 +255,12 @@ namespace T3.Gui.Graph
 
         private static Color ColorForType(Symbol.InputDefinition inputDef)
         {
-            return InputUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
+            return InputUiRegistry.EntriesByType[inputDef.DefaultValue.ValueType].Color;
         }
 
         private static Color ColorForType(Symbol.OutputDefinition outputDef)
         {
-            return InputUiRegistry.Entries[outputDef.ValueType].Color;
+            return InputUiRegistry.EntriesByType[outputDef.ValueType].Color;
         }
 
         public static ImRect GetInputSlotSizeInCanvas(SymbolChildUi targetUi, int inputIndex)

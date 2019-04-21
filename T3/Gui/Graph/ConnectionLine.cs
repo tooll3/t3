@@ -37,7 +37,7 @@ namespace T3.Gui.Graph
 
                 var r = GraphOperator.GetOutputSlotSizeInCanvas(sourceUi, outputIndex);
                 sourcePos = _canvas.ScreenPosFromCanvas(r.GetCenter());
-                color = InputUiRegistry.Entries[sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex].ValueType].Color;
+                color = InputUiRegistry.EntriesByType[sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex].ValueType].Color;
             }
 
             Vector2 targetPos;
@@ -51,7 +51,7 @@ namespace T3.Gui.Graph
                 var inputIndex = targetUi.SymbolChild.Symbol.InputDefinitions.FindIndex(inputDef => inputDef.Id == c.InputDefinitionId);
                 var r = GraphOperator.GetInputSlotSizeInCanvas(targetUi, inputIndex);
                 targetPos = _canvas.ScreenPosFromCanvas(r.GetCenter());
-                color = InputUiRegistry.Entries[targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].DefaultValue.ValueType].Color;
+                color = InputUiRegistry.EntriesByType[targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].DefaultValue.ValueType].Color;
             }
 
             _canvas.DrawList.AddBezierCurve(

@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
 using ImGuiNET;
 using T3.Gui;
 
 namespace T3.Core.Operator
 {
-
     public interface IOutputUi
     {
-        void Draw(Slot slot);
+        void DrawValue(Slot slot);
+
+        Vector2 Position { get; set; }
+        Vector2 Size { get; set; }
     }
 
     public class ValueOutputUi<T> : IOutputUi
     {
-        public void Draw(Slot slot)
+        public void DrawValue(Slot slot)
         {
             if (slot is Slot<T> typedSlot)
             {
@@ -26,6 +29,9 @@ namespace T3.Core.Operator
                 Debug.Assert(false);
             }
         }
+
+        public Vector2 Position { get; set; } = Vector2.Zero;
+        public Vector2 Size { get; set; } = new Vector2(100, 30);
     }
 
     public class FloatOutputUi : ValueOutputUi<float>
@@ -42,7 +48,9 @@ namespace T3.Core.Operator
 
     public static class OutputUiRegistry
     {
-        public static Dictionary<Type, IOutputUi> Entries { get; } = new Dictionary<Type, IOutputUi>();
+        public static Dictionary<Guid, Dictionary<Guid, IOutputUi>> Entries { get; } = new Dictionary<Guid, Dictionary<Guid, IOutputUi>>();
+
+        public static Dictionary<Type, IOutputUi> EntriesByType { get; } = new Dictionary<Type, IOutputUi>();
     }
 
 }

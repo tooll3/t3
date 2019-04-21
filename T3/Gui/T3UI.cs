@@ -77,7 +77,7 @@ namespace T3.Gui
             foreach (var input in selectedInstance.Inputs)
             {
                 ImGui.PushID(input.Id.GetHashCode());
-                IInputUi inputUi = InputUiRegistry.Entries[input.Input.DefaultValue.ValueType];//todo: fix me
+                IInputUi inputUi = InputUiRegistry.Entries[selectedInstance.Symbol.Id][input.Id];
                 inputUi.DrawInputEdit(input.Input.InputDefinition.Name, input);
                 ImGui.PopID();
             }
@@ -93,8 +93,8 @@ namespace T3.Gui
             Instance selectedInstance = compositionOp;
             var childUiEntries = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
             var selectedChildUi = (from childUi in childUiEntries
-                                 where childUi.Value.IsSelected
-                                 select childUi).FirstOrDefault().Value;
+                                   where childUi.Value.IsSelected
+                                   select childUi).FirstOrDefault().Value;
             if (selectedChildUi != null)
             {
                 var symbolChild = selectedChildUi.SymbolChild;
@@ -102,8 +102,8 @@ namespace T3.Gui
             }
 
             var firstOutput = selectedInstance.Outputs[0];
-            IOutputUi outputUi = OutputUiRegistry.Entries[firstOutput.Type];
-            outputUi.Draw(firstOutput);
+            IOutputUi outputUi = OutputUiRegistry.Entries[selectedInstance.Symbol.Id][firstOutput.Id];
+            outputUi.DrawValue(firstOutput);
 
             ImGui.End();
         }

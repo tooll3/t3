@@ -256,14 +256,91 @@ namespace T3
                                                                               }
                                                 },
                                             });
+            uiEntries.Add(dashboardSymbol.Id, new Dictionary<Guid, SymbolChildUi>()
+                                              {
+                                                  {
+                                                      dashboardSymbol.Children[0].Id, new SymbolChildUi()
+                                                                                      {
+                                                                                          SymbolChild = dashboardSymbol.Children[0],
+                                                                                          Name = "Project Op",
+                                                                                          Position = new Vector2(100, 100)
+                                                                                      }
+                                                  }
+                                              });
 
-            // create and register input controls
-            InputUiRegistry.Entries.Add(typeof(float), new FloatInputUi());
-            InputUiRegistry.Entries.Add(typeof(int), new IntInputUi());
-            InputUiRegistry.Entries.Add(typeof(string), new StringInputUi());
-            OutputUiRegistry.Entries.Add(typeof(float), new FloatOutputUi());
-            OutputUiRegistry.Entries.Add(typeof(int), new IntOutputUi());
-            OutputUiRegistry.Entries.Add(typeof(string), new StringOutputUi());
+            var outputUis = OutputUiRegistry.Entries;
+            var inputUis = InputUiRegistry.Entries;
+            // add
+            inputUis.Add(addSymbol.Id, new Dictionary<Guid, IInputUi>()
+                                       {
+                                           { addSymbol.InputDefinitions[0].Id, new FloatInputUi() },
+                                           { addSymbol.InputDefinitions[1].Id, new FloatInputUi() }
+                                       });
+            outputUis.Add(addSymbol.Id, new Dictionary<Guid, IOutputUi>()
+                                        {
+                                            { addSymbol.OutputDefinitions[0].Id, new FloatOutputUi() },
+                                        });
+            
+            // random
+            inputUis.Add(randomSymbol.Id, new Dictionary<Guid, IInputUi>()
+                                          {
+                                              { randomSymbol.InputDefinitions[0].Id, new IntInputUi() }
+                                          });
+            outputUis.Add(randomSymbol.Id, new Dictionary<Guid, IOutputUi>()
+                                           {
+                                               { randomSymbol.OutputDefinitions[0].Id, new FloatOutputUi() }
+                                           });
+
+            // float format
+            inputUis.Add(floatFormatSymbol.Id, new Dictionary<Guid, IInputUi>()
+                                               {
+                                                   { floatFormatSymbol.InputDefinitions[0].Id, new FloatInputUi() }
+                                               });
+            outputUis.Add(floatFormatSymbol.Id, new Dictionary<Guid, IOutputUi>()
+                                                {
+                                                    { floatFormatSymbol.OutputDefinitions[0].Id, new StringOutputUi() }
+                                                });
+
+            // string length
+            inputUis.Add(stringLengthSymbol.Id, new Dictionary<Guid, IInputUi>()
+                                                {
+                                                    { stringLengthSymbol.InputDefinitions[0].Id, new StringInputUi() }
+                                                });
+            outputUis.Add(stringLengthSymbol.Id, new Dictionary<Guid, IOutputUi>()
+                                                 {
+                                                     { stringLengthSymbol.OutputDefinitions[0].Id, new IntOutputUi() }
+                                                 });
+
+            // string concat
+            inputUis.Add(stringConcatSymbol.Id, new Dictionary<Guid, IInputUi>()
+                                                {
+                                                    { stringConcatSymbol.InputDefinitions[0].Id, new StringInputUi() },
+                                                    { stringConcatSymbol.InputDefinitions[1].Id, new StringInputUi() }
+                                                });
+            outputUis.Add(stringConcatSymbol.Id, new Dictionary<Guid, IOutputUi>()
+                                                 {
+                                                     { stringConcatSymbol.OutputDefinitions[0].Id, new IntOutputUi() }
+                                                 });
+
+            // project
+            inputUis.Add(projectSymbol.Id, new Dictionary<Guid, IInputUi>()
+                                           {
+                                               { projectSymbol.InputDefinitions[0].Id, new FloatInputUi { Position = Vector2.Zero } }
+                                           });
+            outputUis.Add(projectSymbol.Id, new Dictionary<Guid, IOutputUi>()
+                                            {
+                                                { projectSymbol.OutputDefinitions[0].Id, new StringOutputUi { Position = new Vector2(0.0f, 300.0f) } }
+                                            });
+
+
+
+            // create and register input controls by type
+            InputUiRegistry.EntriesByType.Add(typeof(float), new FloatInputUi());
+            InputUiRegistry.EntriesByType.Add(typeof(int), new IntInputUi());
+            InputUiRegistry.EntriesByType.Add(typeof(string), new StringInputUi());
+            OutputUiRegistry.EntriesByType.Add(typeof(float), new FloatOutputUi());
+            OutputUiRegistry.EntriesByType.Add(typeof(int), new IntOutputUi());
+            OutputUiRegistry.EntriesByType.Add(typeof(string), new StringOutputUi());
 
             _initialized = true;
             MainOp = projectOp;
