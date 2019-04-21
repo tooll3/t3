@@ -52,6 +52,24 @@ namespace T3
             public readonly InputSlot<int> Seed = new InputSlot<int>(0);
         }
 
+        class StringLengthOperator : Instance<StringLengthOperator>
+        {
+            [OperatorAttribute(OperatorAttribute.OperatorType.Output)]
+            public readonly Slot<int> Length = new Slot<int>();
+
+            public StringLengthOperator()
+            {
+                Length.UpdateAction = Update;
+            }
+
+            private void Update(EvaluationContext context)
+            {
+                Length.Value = InputString.GetValue(context).Length;
+            }
+
+            public readonly InputSlot<string> InputString = new InputSlot<string>(string.Empty);
+        }
+
         class ProjectOperator : Instance<ProjectOperator>
         {
         }
@@ -81,6 +99,17 @@ namespace T3
                                    },
                                    OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Random Value", ValueType = typeof(float) } }
                                };
+            var stringLengthSymbol = new Symbol()
+                                     {
+                                         Id = Guid.NewGuid(),
+                                         SymbolName = "StringLength",
+                                         InstanceType = typeof(StringLengthOperator),
+                                         InputDefinitions =
+                                         {
+                                             new Symbol.InputDefinition() { Id = Guid.NewGuid(), Name = "InputString", DefaultValue = new InputValue<string>(string.Empty) } 
+                                         },
+                                         OutputDefinitions = { new Symbol.OutputDefinition { Id = Guid.NewGuid(), Name = "Length", ValueType = typeof(int) } }
+                                     };
             var projectSymbol = new Symbol()
                                 {
                                     Id = Guid.NewGuid(),
@@ -103,6 +132,7 @@ namespace T3
             var symbols = SymbolRegistry.Entries;
             symbols.Add(addSymbol.Id, addSymbol);
             symbols.Add(randomSymbol.Id, randomSymbol);
+            symbols.Add(stringLengthSymbol.Id, stringLengthSymbol);
             symbols.Add(projectSymbol.Id, projectSymbol);
 
             // create instance of project op, all children are create automatically
@@ -140,6 +170,7 @@ namespace T3
             // create and register input controls
             InputUiRegistry.Entries.Add(typeof(float), new FloatInputUi());
             InputUiRegistry.Entries.Add(typeof(int), new IntInputUi());
+            InputUiRegistry.Entries.Add(typeof(string), new StringInputUi());
             OutputUiRegistry.Entries.Add(typeof(float), new FloatOutputUi());
             OutputUiRegistry.Entries.Add(typeof(int), new IntOutputUi());
 

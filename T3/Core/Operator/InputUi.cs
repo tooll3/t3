@@ -12,7 +12,7 @@ namespace T3.Gui
         Color Color { get; }
     }
 
-    public abstract class InputValueUi<T> : IInputUi where T : struct
+    public abstract class InputValueUi<T> : IInputUi
     {
         public abstract bool DrawEditControl(string name, ref T value);
         public abstract void DrawValueDisplay(string name, ref T value);
@@ -105,6 +105,21 @@ namespace T3.Gui
         }
 
         public override Color Color { get; } = Color.TBlue;
+    }
+
+    public class StringInputUi : InputValueUi<string>
+    {
+        private const int MAX_STRING_LENGTH = 255;
+
+        public override bool DrawEditControl(string name, ref string value)
+        {
+            return ImGui.InputText(name, ref value, MAX_STRING_LENGTH);
+        }
+
+        public override void DrawValueDisplay(string name, ref string value)
+        {
+            DrawEditControl(name, ref value);
+        }
     }
 
     public static class InputUiRegistry
