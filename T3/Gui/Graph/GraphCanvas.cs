@@ -116,13 +116,6 @@ namespace T3.Gui.Graph
 
         private void DrawContextMenu()
         {
-            // Open context menu
-            if (!ImGui.IsAnyItemHovered() && ImGui.IsWindowHovered() && ImGui.IsMouseClicked(1))
-            {
-                _contextMenuOpened = true;
-            }
-
-            // Draw context menu
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             if (ImGui.BeginPopupContextWindow("context_menu"))
             {
@@ -257,8 +250,6 @@ namespace T3.Gui.Graph
         public Vector2 _canvasWindowPos;    // Position of the canvas window-panel within Application window
         public float _scale = 1;            // The damped scale factor {read only}
         float _scaleTarget = 1;
-
-        public const float GridSize = 20f;
 
         public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
         private SelectionFence _selectionFence;

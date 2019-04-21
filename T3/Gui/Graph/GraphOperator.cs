@@ -202,9 +202,9 @@ namespace T3.Gui.Graph
                 _canvas.DrawRectFilled(
                     ImRect.RectWithSize(
                         new Vector2(targetUi.Position.X + virtualRectInCanvas.GetWidth() * inputIndex + 1 + 3,
-                                    targetUi.Position.Y + targetUi.Size.Y - SlotConfig.VisibleSlotHeight),
+                                    targetUi.Position.Y + targetUi.Size.Y - T3Style.VisibleSlotHeight),
                         new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6,
-                                    SlotConfig.VisibleSlotHeight))
+                                    T3Style.VisibleSlotHeight))
                     , color: DraftConnection.IsMatchingInput(inputDef) ? Color.White : color);
             }
         }
@@ -233,32 +233,6 @@ namespace T3.Gui.Graph
 
 
 
-        static class SlotConfig
-        {
-            public const float Height = GraphCanvas.GridSize;
-            public const float VirtuaoSlotHeight = 5;
-            public const float VisibleSlotHeight = 3;
-        }
-
         static private GraphCanvas _canvas = null;
-
-
-
-        // if (_contextMenuOpened)
-        // {
-        //     ImGui.OpenPopup("context_menu");
-        //     if (_hoveredListNodeIndex != -1)
-        //         _selectedNodeID = _hoveredListNodeIndex;
-
-        //     if (_hoveredSceneNodeIndex != -1)
-        //         _selectedNodeID = _hoveredSceneNodeIndex;
-        // }
-
-
-        // Scrolling
-        // if (ImGui.IsWindowHovered() && !ImGui.IsAnyItemActive() && ImGui.IsMouseDragging(2, 0.0f))
-        //     _scroll = _scroll + ImGui.GetIO().MouseDelta;
-
-        // ImGui.PopItemWidth();
     }
 }

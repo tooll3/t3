@@ -302,6 +302,7 @@
     <Compile Include="Gui\Graph\OperatorInputZone.cs" />
     <Compile Include="Gui\Metrics.cs" />
     <Compile Include="Gui\Color.cs" />
+    <Compile Include="Gui\T3Style.cs" />
     <Compile Include="Logging\ConsoleLogWindow.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\LogEntry.cs" />
