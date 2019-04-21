@@ -26,10 +26,8 @@ namespace T3.Gui.Graph
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                }
-
-                if (ImGui.IsItemHovered())
                     T3UI.AddHoveredId(childUi.SymbolChild.Id);
+                }
 
                 if (ImGui.IsItemActive())
                 {
@@ -46,6 +44,12 @@ namespace T3.Gui.Graph
                         {
                             e.Position += ImGui.GetIO().MouseDelta;
                         }
+                    }
+                    if (ImGui.IsMouseDoubleClicked(0))
+                    {
+                        //Logging.Log.Debug("Doubble clickked");
+                        var instance = _canvas.CompositionOp.Children.Find(c => c.Symbol == childUi.SymbolChild.Symbol);
+                        _canvas.CompositionOp = instance;
                     }
                 }
 
