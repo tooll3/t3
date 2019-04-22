@@ -1,11 +1,9 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.Gui;
-using Random = System.Random;
 
 namespace T3
 {
@@ -131,7 +129,7 @@ namespace T3
 
             private void Update(EvaluationContext context)
             {
-                TimeInSeconds.Value = _watch.ElapsedMilliseconds/1000.0f;
+                TimeInSeconds.Value = _watch.ElapsedMilliseconds / 1000.0f;
             }
 
             private Stopwatch _watch = new Stopwatch();
@@ -246,7 +244,7 @@ namespace T3
                                         {
                                             { addSymbol.OutputDefinitions[0].Id, new FloatOutputUi() },
                                         });
-            
+
             // random
             inputUis.Add(randomSymbol.Id, new Dictionary<Guid, IInputUi>()
                                           {
@@ -297,11 +295,11 @@ namespace T3
             // project
             inputUis.Add(projectSymbol.Id, new Dictionary<Guid, IInputUi>()
                                            {
-                                               { projectSymbol.InputDefinitions[0].Id, new FloatInputUi { Position = Vector2.Zero } }
+                                               { projectSymbol.InputDefinitions[0].Id, new FloatInputUi { Position = new Vector2(40.0f, 300.0f) } }
                                            });
             outputUis.Add(projectSymbol.Id, new Dictionary<Guid, IOutputUi>()
                                             {
-                                                { projectSymbol.OutputDefinitions[0].Id, new StringOutputUi { Position = new Vector2(0.0f, 300.0f) } }
+                                                { projectSymbol.OutputDefinitions[0].Id, new StringOutputUi { Position = new Vector2(40.0f, 0.0f) } }
                                             });
 
 

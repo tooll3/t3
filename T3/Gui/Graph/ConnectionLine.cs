@@ -5,6 +5,9 @@ using T3.Core.Operator;
 
 namespace T3.Gui.Graph
 {
+    /// <summary>
+    /// Renders connection lines between <see cref="GraphOperator"/>s and <see cref="InputNodes"/>s and <see cref="OutputNodes"/>s.
+    /// </summary>
     public static class ConnectionLine
     {
         public static void DrawAll(Canvas canvas)
@@ -20,7 +23,6 @@ namespace T3.Gui.Graph
                 DrawConnection(DraftConnection.TempConnection);
         }
 
-        private static Canvas _canvas;
 
         private static void DrawConnection(Symbol.Connection c)
         {
@@ -53,14 +55,12 @@ namespace T3.Gui.Graph
             {
                 targetPos = ImGui.GetMousePos();
             }
-            // Output node
+            // Ends at symbol output node
             else if (c.TargetChildId == Guid.Empty)
             {
-                targetPos = new Vector2(200, 200);
-                //var targetUi = InputUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.TargetChildId];
-                //var inputIndex = targetUi.SymbolChild.Symbol.InputDefinitions.FindIndex(inputDef => inputDef.Id == c.InputDefinitionId);
-                //var r = Slots.GetInputSlotSizeInCanvas(targetUi, inputIndex);
-                //targetPos = Canvas.ScreenPosFromCanvas(r.GetCenter());
+                var outputsForSymbol = OutputUiRegistry.Entries[Canvas.Current.CompositionOp.Symbol.Id];
+                var outputUi = outputsForSymbol[c.InputDefinitionId];
+                targetPos = Canvas.ScreenPosFromCanvas(outputUi.Position + outputUi.Size / 2);
             }
             else
             {
@@ -85,5 +85,7 @@ namespace T3.Gui.Graph
                 targetPos + new Vector2(-4, 2),
                 color);
         }
+
+        private static Canvas _canvas;
     }
 }

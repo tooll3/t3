@@ -1,18 +1,15 @@
-﻿using System;
+﻿using ImGuiNET;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
-using ImGuiNET;
-using T3.Gui;
+using T3.Gui.Selection;
 
 namespace T3.Core.Operator
 {
-    public interface IOutputUi
+    public interface IOutputUi : ISelectable
     {
         void DrawValue(Slot slot);
-
-        Vector2 Position { get; set; }
-        Vector2 Size { get; set; }
     }
 
     public class ValueOutputUi<T> : IOutputUi
@@ -32,6 +29,7 @@ namespace T3.Core.Operator
 
         public Vector2 Position { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
+        public bool IsSelected { get; set; }
     }
 
     public class FloatOutputUi : ValueOutputUi<float>
