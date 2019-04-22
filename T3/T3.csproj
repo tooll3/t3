@@ -301,6 +301,7 @@
     <Compile Include="Gui\Graph\Canvas.cs" />
     <Compile Include="Gui\Graph\InputNodes.cs" />
     <Compile Include="Gui\Graph\OperatorInputZone.cs" />
+    <Compile Include="Gui\Graph\OutputNodes.cs" />
     <Compile Include="Gui\Graph\Slots.cs" />
     <Compile Include="Gui\Metrics.cs" />
     <Compile Include="Gui\Color.cs" />

@@ -11,33 +11,50 @@ namespace T3.Gui.Graph
     {
         public static Symbol.Connection TempConnection = null;
 
-        public static bool IsMatchingInput(Symbol.InputDefinition inputDef)
+        //public static bool IsMatchingInputType(Symbol.InputDefinition inputDef)
+        public static bool IsMatchingInputType(Type valueType)
         {
             return TempConnection != null
                 && TempConnection.InputDefinitionId == NotConnected
-                && inputDef.DefaultValue.ValueType == _draftConnectionType;
+                //&& inputDef.DefaultValue.ValueType == _draftConnectionType;
+                && _draftConnectionType == valueType;
         }
 
-        public static bool IsMatchingOutput(Symbol.OutputDefinition outputDef)
+        //public static bool IsMatchingOutputType(Symbol.OutputDefinition outputDef)
+        public static bool IsMatchingOutputType(Type valueType)
         {
             return TempConnection != null
                 && TempConnection.OutputDefinitionId == NotConnected
-                && outputDef.ValueType == _draftConnectionType;
+                && _draftConnectionType == valueType;
         }
 
-        public static bool IsCurrentSourceOutput(SymbolChildUi sourceUi, int outputIndex)
+        public static bool IsOutputSlotCurrentConnectionSource(SymbolChildUi sourceUi, int outputIndex)
         {
             return TempConnection != null
-                && sourceUi.SymbolChild.Id == TempConnection.SourceChildId
-                && sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex].Id == TempConnection.OutputDefinitionId;
+                && TempConnection.SourceChildId == sourceUi.SymbolChild.Id
+                && TempConnection.OutputDefinitionId == sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex].Id;
+        }
+
+        public static bool IsInputSlotCurrentConnectionTarget(SymbolChildUi targetUi, int inputIndex)
+        {
+            return TempConnection != null
+                && TempConnection.TargetChildId == targetUi.SymbolChild.Id
+                && TempConnection.InputDefinitionId == targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].Id;
         }
 
         public static bool IsInputNodeCurrentConnectionSource(Symbol.InputDefinition inputDef)
         {
             return TempConnection != null
-                && UseSymbolContainer == TempConnection.SourceChildId
-                && inputDef.Id == TempConnection.OutputDefinitionId;
+                && TempConnection.SourceChildId == UseSymbolContainer
+                && TempConnection.OutputDefinitionId == inputDef.Id;
 
+        }
+
+        public static bool IsOutputNodeCurrentConnectionTarget(Symbol.OutputDefinition outputDef)
+        {
+            return TempConnection != null
+                && TempConnection.TargetChildId == UseSymbolContainer
+                && TempConnection.InputDefinitionId == outputDef.Id;
         }
 
         //public static bool IsCurrentSourceOutput(IConnectionSource connectionSource, int outputIndex)
@@ -47,15 +64,7 @@ namespace T3.Gui.Graph
         //        && connectionSource.SymbolChild.Symbol.OutputDefinitions[outputIndex].Id == TempConnection.OutputDefinitionId;
         //}
 
-        public static bool IsCurrentTargetInput(SymbolChildUi targetUi, int inputIndex)
-        {
-            return TempConnection != null
-                && targetUi.SymbolChild.Id == TempConnection.TargetChildId
-                && targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].Id == TempConnection.InputDefinitionId;
-        }
-
-
-        public static void StartFromOutput(Symbol parentSymbol, SymbolChildUi sourceUi, int outputIndex)
+        public static void StartFromOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, int outputIndex)
         {
             var outputDef = sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex];
             var existingConnections = FindConnectionsFromOutput(parentSymbol, sourceUi, outputIndex);
@@ -89,7 +98,7 @@ namespace T3.Gui.Graph
         }
 
 
-        public static void StartFromInput(Symbol parentSymbol, SymbolChildUi targetUi, int inputIndex)
+        public static void StartFromInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, int inputIndex)
         {
             var existingConnection = FindConnectionToInput(parentSymbol, targetUi, inputIndex);
             var inputDef = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex];
@@ -117,8 +126,10 @@ namespace T3.Gui.Graph
             Logging.Log.Debug("Start connection from input of type" + _draftConnectionType.Name);
         }
 
+
         public static void StartFromInputNode(Symbol.InputDefinition inputDef)
         {
+            // Fixme: Relinking existing connections should be possible
             //var existingConnection = FindConnectionToInput(parentSymbol, targetUi, inputIndex);
             //var inputDef = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex];
             //if (existingConnection != null)
@@ -142,10 +153,36 @@ namespace T3.Gui.Graph
             );
             //}
             _draftConnectionType = inputDef.DefaultValue.ValueType;
-            Logging.Log.Debug("Start connection from input of type" + _draftConnectionType.Name);
         }
 
 
+        public static void StartFromOutputNode(Symbol.OutputDefinition outputDef)
+        {
+            // Fixme: Relinking existing connections should be possible
+            //var existingConnection = FindConnectionToInput(parentSymbol, targetUi, inputIndex);
+            //var inputDef = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex];
+            //if (existingConnection != null)
+            //{
+            //    parentSymbol.RemoveConnection(existingConnection);
+
+            //    TempConnection = new Symbol.Connection(
+            //        sourceChildId: existingConnection.SourceChildId,
+            //        outputDefinitionId: existingConnection.OutputDefinitionId,
+            //        targetChildId: NotConnected,
+            //        inputDefinitionId: NotConnected
+            //    );
+            //}
+            //else
+            //{
+            TempConnection = new Symbol.Connection(
+                sourceChildId: NotConnected,
+                outputDefinitionId: NotConnected,
+                targetChildId: UseSymbolContainer,
+                inputDefinitionId: outputDef.Id
+            );
+            //}
+            _draftConnectionType = outputDef.ValueType;
+        }
 
 
         public static void Update()
@@ -159,7 +196,21 @@ namespace T3.Gui.Graph
             _draftConnectionType = null;
         }
 
-        public static void CompleteAtOutput(Symbol parentSymbol, SymbolChildUi sourceUi, int outputIndex)
+        public static void CompleteAtInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, int inputIndex)
+        {
+            var newConnection =
+                new Symbol.Connection(
+                sourceChildId: TempConnection.SourceChildId,
+                outputDefinitionId: TempConnection.OutputDefinitionId,
+                targetChildId: targetUi.SymbolChild.Id,
+                inputDefinitionId: targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].Id
+            );
+            parentSymbol.AddConnection(newConnection);
+            TempConnection = null;
+        }
+
+
+        public static void CompleteAtOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, int outputIndex)
         {
             var newConnection =
                 new Symbol.Connection(
@@ -187,18 +238,19 @@ namespace T3.Gui.Graph
         }
 
 
-        public static void CompleteAtInput(Symbol parentSymbol, SymbolChildUi targetUi, int inputIndex)
+        public static void CompleteAtSymbolOutputNode(Symbol parentSymbol, Symbol.OutputDefinition outputDef)
         {
             var newConnection =
                 new Symbol.Connection(
                 sourceChildId: TempConnection.SourceChildId,
                 outputDefinitionId: TempConnection.OutputDefinitionId,
-                targetChildId: targetUi.SymbolChild.Id,
-                inputDefinitionId: targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].Id
+                targetChildId: UseSymbolContainer,
+                inputDefinitionId: outputDef.Id
             );
             parentSymbol.AddConnection(newConnection);
             TempConnection = null;
         }
+
 
 
         private static List<Symbol.Connection> FindConnectionsFromOutput(Symbol parentSymbol, SymbolChildUi sourceUi, int outputIndex)
@@ -218,8 +270,19 @@ namespace T3.Gui.Graph
                 c.TargetChildId == targetUi.SymbolChild.Id);
         }
 
+        /// <summary>
+        /// This is a cached value to highlight matching inputs or outputs
+        /// </summary>
         private static Type _draftConnectionType = null;
+
+        /// <summary>
+        /// A spectial Id the flags a connection as incomplete because either the source or the target is not yet connected.
+        /// </summary>
         public static Guid NotConnected = Guid.NewGuid();
+
+        /// <summary>
+        /// 
+        /// </summary>
         private static Guid UseSymbolContainer = Guid.Empty;
     }
 }

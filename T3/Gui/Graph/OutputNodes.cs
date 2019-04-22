@@ -1,9 +1,9 @@
-﻿
-using ImGuiNET;
+﻿using ImGuiNET;
 using imHelpers;
 using System;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Logging;
 
 namespace T3.Gui.Graph
 {
@@ -11,31 +11,31 @@ namespace T3.Gui.Graph
     /// Draws published input parameters of a <see cref="Symbol"/> and uses <see cref="DraftConnection"/> 
     /// create new connections with it.
     /// </summary>
-    static class InputNodes
+    static class OutputNodes
     {
         public static void DrawAll()
         {
-            var inputUisForSymbol = InputUiRegistry.Entries[Canvas.Current.CompositionOp.Symbol.Id];
+            var outputUisForSymbol = OutputUiRegistry.Entries[Canvas.Current.CompositionOp.Symbol.Id];
             var index = 0;
-            foreach (var inputDef in Canvas.Current.CompositionOp.Symbol.InputDefinitions)
+            foreach (var outputDef in Canvas.Current.CompositionOp.Symbol.OutputDefinitions)
             {
-                var inputUi = inputUisForSymbol[inputDef.Id];
-                Draw(inputDef, inputUi);
+                var outputUi = outputUisForSymbol[outputDef.Id];
+                Draw(outputDef, outputUi);
                 index++;
             }
         }
 
 
-        private static void Draw(Symbol.InputDefinition inputDef, IInputUi inputUi)
+        private static void Draw(Symbol.OutputDefinition outputDef, IOutputUi outputUi)
         {
-            ImGui.PushID(inputDef.Id.GetHashCode());
+            ImGui.PushID(outputDef.Id.GetHashCode());
             {
-                var posInWindow = Canvas.ChildPosFromCanvas(inputUi.Position + new Vector2(0, 3));
-                var posInApp = Canvas.ScreenPosFromCanvas(inputUi.Position);
+                var posInWindow = Canvas.ChildPosFromCanvas(outputUi.Position + new Vector2(0, 3));
+                var posInApp = Canvas.ScreenPosFromCanvas(outputUi.Position);
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
-                ImGui.InvisibleButton("node", (inputUi.Size - new Vector2(0, 6)) * Canvas.Current._scale);
+                ImGui.InvisibleButton("node", (outputUi.Size - new Vector2(0, 6)) * Canvas.Current._scale);
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -45,9 +45,9 @@ namespace T3.Gui.Graph
                 {
                     if (ImGui.IsItemClicked(0))
                     {
-                        if (!Canvas.Current.SelectionHandler.SelectedElements.Contains(inputUi))
+                        if (!Canvas.Current.SelectionHandler.SelectedElements.Contains(outputUi))
                         {
-                            Canvas.Current.SelectionHandler.SetElement(inputUi);
+                            Canvas.Current.SelectionHandler.SetElement(outputUi);
                         }
                     }
                     if (ImGui.IsMouseDragging(0))
@@ -64,30 +64,25 @@ namespace T3.Gui.Graph
                 Canvas.DrawList.ChannelsSplit(2);
                 Canvas.DrawList.ChannelsSetCurrent(1);
 
-                Canvas.DrawList.AddText(posInApp, Color.White, String.Format($"{inputDef.Name}"));
+                Canvas.DrawList.AddText(posInApp, Color.White, String.Format($"{outputDef.Name}"));
                 Canvas.DrawList.ChannelsSetCurrent(0);
-
-                //THelpers.OutlinedRect(ref Canvas.DrawList, posInApp, inputUi.Size * Canvas.Current._scale,
-                //    fill: new Color(
-                //            ((inputUi.IsSelected || ImGui.IsItemHovered()) ? 0.3f : 0.2f)),
-                //    outline: inputUi.IsSelected ? Color.White : Color.Black);
-
 
                 // Draw slot 
                 {
                     var virtualRectInCanvas = ImRect.RectWithSize(
-                        new Vector2(inputUi.Position.X + 1, inputUi.Position.Y - 3),
-                        new Vector2(inputUi.Size.X - 2, 6));
+                        new Vector2(outputUi.Position.X + 1, outputUi.Position.Y + outputUi.Size.Y),
+                        new Vector2(outputUi.Size.X - 2, 6));
 
                     var rInScreen = Canvas.ScreenRectFromCanvas(virtualRectInCanvas);
 
                     ImGui.SetCursorScreenPos(rInScreen.Min);
                     ImGui.InvisibleButton("output", rInScreen.GetSize());
                     THelpers.DebugItemRect();
-                    var color = InputUiRegistry.EntriesByType[inputDef.DefaultValue.ValueType].Color;
+                    var color = InputUiRegistry.EntriesByType[outputDef.ValueType].Color;
 
-                    if (DraftConnection.IsInputNodeCurrentConnectionSource(inputDef))
+                    if (DraftConnection.IsOutputNodeCurrentConnectionTarget(outputDef))
                     {
+                        Log.Debug("current connection target");
                         Canvas.DrawRectFilled(virtualRectInCanvas, color);
 
                         if (ImGui.IsMouseDragging(0))
@@ -95,15 +90,18 @@ namespace T3.Gui.Graph
                             DraftConnection.Update();
                         }
                     }
-                    else if (ImGui.IsItemHovered())
+                    //else if (ImGui.IsItemHovered())   // ToDo: Find out, why IsItemHovered is not working during drag
+                    else if (rInScreen.Contains(ImGui.GetMousePos()))
                     {
-                        if (DraftConnection.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                        Log.Debug("hovered ");
+                        if (DraftConnection.IsMatchingInputType(outputDef.ValueType))
                         {
+                            Log.Debug("is matching inputtype");
                             Canvas.DrawRectFilled(virtualRectInCanvas, color);
 
                             if (ImGui.IsMouseReleased(0))
                             {
-                                DraftConnection.CompleteAtSymbolInputNode(Canvas.Current.CompositionOp.Symbol, inputDef);
+                                DraftConnection.CompleteAtSymbolOutputNode(Canvas.Current.CompositionOp.Symbol, outputDef);
                             }
                         }
                         else
@@ -111,7 +109,7 @@ namespace T3.Gui.Graph
                             Canvas.DrawRectFilled(virtualRectInCanvas, Color.White);
                             if (ImGui.IsItemClicked(0))
                             {
-                                DraftConnection.StartFromInputNode(inputDef);
+                                DraftConnection.StartFromOutputNode(outputDef);
                             }
                         }
                     }
@@ -119,9 +117,9 @@ namespace T3.Gui.Graph
                     {
                         Canvas.DrawRectFilled(
                             ImRect.RectWithSize(
-                                new Vector2(inputUi.Position.X + 1 + 3, inputUi.Position.Y - 1),
+                                new Vector2(outputUi.Position.X + 1 + 3, outputUi.Position.Y + outputUi.Size.Y - 1),
                                 new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3))
-                            , color);
+                            , DraftConnection.IsMatchingInputType(outputDef.ValueType) ? Color.White : color);
                     }
                 }
 

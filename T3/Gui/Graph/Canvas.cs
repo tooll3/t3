@@ -190,6 +190,7 @@ namespace T3.Gui.Graph
             }
 
             InputNodes.DrawAll();
+            OutputNodes.DrawAll();
         }
 
 
