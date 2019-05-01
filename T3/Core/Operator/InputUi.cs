@@ -134,6 +134,7 @@ namespace T3.Gui
         /// </summary>
         public static Dictionary<Guid, Dictionary<Guid, IInputUi>> Entries { get; } = new Dictionary<Guid, Dictionary<Guid, IInputUi>>();
 
+        // todo: remove entries by type, having the dict above should be sufficient
         public static Dictionary<Type, IInputUi> EntriesByType { get; } = new Dictionary<Type, IInputUi>();
     }
 }

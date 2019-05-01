@@ -47,8 +47,6 @@ namespace T3.Core.Operator
     public static class OutputUiRegistry
     {
         public static Dictionary<Guid, Dictionary<Guid, IOutputUi>> Entries { get; } = new Dictionary<Guid, Dictionary<Guid, IOutputUi>>();
-
-        public static Dictionary<Type, IOutputUi> EntriesByType { get; } = new Dictionary<Type, IOutputUi>();
     }
 
 }

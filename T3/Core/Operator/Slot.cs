@@ -39,19 +39,18 @@ namespace T3.Core.Operator
 
     public interface IConnectableTarget
     {
-        void AddConnectionSource(IConnectableSource sourceSlot);
-        void RemoveConnectionSource();
+        void AddConnection(IConnectableSource source);
+        void RemoveConnection();
         bool IsConnected { get; }
     }
 
     public abstract class Slot : IConnectableSource, IConnectableTarget
     {
         public Guid Id { get; set; }
-        public string Name { get; set; } = String.Empty;
         public Type Type { get; protected set; }
 
-        public abstract void AddConnectionSource(IConnectableSource sourceSlot);
-        public abstract void RemoveConnectionSource();
+        public abstract void AddConnection(IConnectableSource source);
+        public abstract void RemoveConnection();
         public abstract bool IsConnected { get; }
     }
 
@@ -136,12 +135,12 @@ namespace T3.Core.Operator
             return Value;
         }
 
-        public override void AddConnectionSource(IConnectableSource sourceSlot)
+        public override void AddConnection(IConnectableSource sourceSlot)
         {
             InputConnection = (Slot<T>)sourceSlot;
         }
 
-        public override void RemoveConnectionSource()
+        public override void RemoveConnection()
         {
             InputConnection = null;
         }
@@ -173,9 +172,6 @@ namespace T3.Core.Operator
     {
         Guid Id { get; set; }
         SymbolChild.Input Input { get; set; }
-//         void AddConnection(Slot slot);
-//         void RemoveConnection();
-//         bool IsConnected { get; }
     }
 
     public class InputSlot<T> : Slot<T>, IInputSlot
@@ -196,7 +192,7 @@ namespace T3.Core.Operator
         {
         }
 
-        public void Update(EvaluationContext context)
+        public new void Update(EvaluationContext context)
         {
             Value = InputConnection != null ? InputConnection.GetValue(context)
                                             : Input.IsDefault ? TypedDefaultValue.Value
@@ -265,7 +261,7 @@ namespace T3.Core.Operator
 
         private Slot<TFrom> SourceSlot { get; }
 
-        public void Update(EvaluationContext context)
+        public new void Update(EvaluationContext context)
         {
             Value = _converterFunc(SourceSlot.GetValue(context));
         }

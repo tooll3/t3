@@ -46,13 +46,13 @@ namespace T3.Core.Operator
         public void AddConnection(Symbol.Connection connection)
         {
             var (_, sourceSlot, _, targetSlot) = GetInstancesForConnection(connection);
-            targetSlot.AddConnectionSource(sourceSlot);
+            targetSlot.AddConnection(sourceSlot);
         }
 
         public void RemoveConnection(Symbol.Connection connection)
         {
             var (_, _, _, targetSlot) = GetInstancesForConnection(connection);
-            targetSlot.RemoveConnectionSource();
+            targetSlot.RemoveConnection();
         }
 
         private (Instance, IConnectableSource, Instance, IConnectableTarget) GetInstancesForConnection(Symbol.Connection connection)
