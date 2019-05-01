@@ -1,7 +1,8 @@
 ﻿using System.Numerics;
+using T3.Core.Operator;
 using T3.Gui.Selection;
 
-namespace T3.Core.Operator
+namespace T3.Gui
 {
     /// <summary>
     /// Properties needed for visual representation of an instance. Should later be moved to gui component.

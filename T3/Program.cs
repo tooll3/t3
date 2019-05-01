@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using T3.Core;
 using T3.Gui;
 using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
