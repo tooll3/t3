@@ -215,9 +215,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\T3\T3.csproj">
-      <Project>{6E6E8E1A-D5F1-417F-9B4F-0758A935BF89}</Project>
-      <Name>T3</Name>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{ce3c1bd6-89b6-4fd9-83f7-cd17d033f783}</Project>
+      <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

@@ -290,9 +290,6 @@
   <ItemGroup>
     <Compile Include="Gui\InputUi.cs" />
     <Compile Include="Gui\OutputUi.cs" />
-    <Compile Include="Core\Operator\Symbol.cs" />
-    <Compile Include="Core\Operator\SymbolChild.cs" />
-    <Compile Include="Core\Operator\SymbolRegistry.cs" />
     <Compile Include="Gui\SymbolChildUi.cs" />
     <Compile Include="Gui\SymbolChildUiRegistry.cs" />
     <Compile Include="Gui\Graph\ConnectionLine.cs" />
@@ -316,7 +313,6 @@
     <Compile Include="Gui\Graph\SelectionFence.cs" />
     <Compile Include="Gui\QuickCreateWindow.cs" />
     <Compile Include="Gui\ImGuiDx11Impl.cs" />
-    <Compile Include="Core\Operator\Instance.cs" />
     <Compile Include="Gui\iuhelpers\Helpers.cs" />
     <Compile Include="Gui\Selection\ISelectable.cs" />
     <Compile Include="Gui\Selection\SelectionHandler.cs" />
@@ -330,7 +326,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\ResourceManager.cs" />
-    <Compile Include="Core\Operator\Slot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -357,6 +352,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logging\Console\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{ce3c1bd6-89b6-4fd9-83f7-cd17d033f783}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
