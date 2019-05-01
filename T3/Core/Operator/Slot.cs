@@ -33,11 +33,26 @@ namespace T3.Core.Operator
         public int DefaultValue { get; set; }
     }
 
-    public class Slot
+    public interface IConnectableSource
+    {
+    }
+
+    public interface IConnectableTarget
+    {
+        void AddConnectionSource(IConnectableSource sourceSlot);
+        void RemoveConnectionSource();
+        bool IsConnected { get; }
+    }
+
+    public abstract class Slot : IConnectableSource, IConnectableTarget
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = String.Empty;
         public Type Type { get; protected set; }
+
+        public abstract void AddConnectionSource(IConnectableSource sourceSlot);
+        public abstract void RemoveConnectionSource();
+        public abstract bool IsConnected { get; }
     }
 
     public abstract class InputValue
@@ -82,13 +97,12 @@ namespace T3.Core.Operator
 
     public class Slot<T> : Slot
     {
-        protected static Action<EvaluationContext> EmptyUpdateAction = delegate { };
-
         public T Value;// { get; set; }
         public bool IsDirty { get; set; } = true;
 
-        public Slot() 
-        { 
+        public Slot()
+        {
+            UpdateAction = Update;
             Type = typeof(T);
         }
 
@@ -105,18 +119,44 @@ namespace T3.Core.Operator
 
         public Slot(T defaultValue) : this()
         {
-            UpdateAction = EmptyUpdateAction;
             Value = defaultValue;
+        }
+
+        public void Update(EvaluationContext context)
+        {
+            if (InputConnection != null)
+            {
+                Value = InputConnection.GetValue(context);
+            }
         }
 
         public T GetValue(EvaluationContext context)
         {
-//             if (IsDirty)
-            {
-                UpdateAction?.Invoke(context);
-//                 IsDirty = false;
-            }
+            UpdateAction?.Invoke(context); // no caching atm
             return Value;
+        }
+
+        public override void AddConnectionSource(IConnectableSource sourceSlot)
+        {
+            InputConnection = (Slot<T>)sourceSlot;
+        }
+
+        public override void RemoveConnectionSource()
+        {
+            InputConnection = null;
+        }
+
+        public override bool IsConnected => InputConnection != null;
+
+        private Slot<T> _inputConnection;
+        public Slot<T> InputConnection
+        {
+            get => _inputConnection;
+            set
+            {
+                _inputConnection = value;
+                IsDirty = true;
+            }
         }
 
         public Action<EvaluationContext> UpdateAction;
@@ -129,13 +169,13 @@ namespace T3.Core.Operator
     }
 
 
-    public interface IInputSlot
+    public interface IInputSlot : IConnectableSource, IConnectableTarget
     {
         Guid Id { get; set; }
         SymbolChild.Input Input { get; set; }
-        void AddConnection(Slot slot);
-        void RemoveConnection();
-        bool IsConnected { get; }
+//         void AddConnection(Slot slot);
+//         void RemoveConnection();
+//         bool IsConnected { get; }
     }
 
     public class InputSlot<T> : Slot<T>, IInputSlot
@@ -161,29 +201,6 @@ namespace T3.Core.Operator
             Value = InputConnection != null ? InputConnection.GetValue(context)
                                             : Input.IsDefault ? TypedDefaultValue.Value
                                                               : TypedInputValue.Value;
-        }
-
-        public void AddConnection(Slot slot)
-        {
-            InputConnection = (Slot<T>)slot;
-        }
-
-        public void RemoveConnection()
-        {
-            InputConnection = null;
-        }
-
-        public bool IsConnected => InputConnection != null;
-
-        private Slot<T> _inputConnection;
-        public Slot<T> InputConnection
-        {
-            get => _inputConnection;
-            set
-            {
-                _inputConnection = value;
-                IsDirty = true;
-            }
         }
 
         private SymbolChild.Input _input;
