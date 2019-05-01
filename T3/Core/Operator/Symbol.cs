@@ -146,7 +146,7 @@ namespace T3.Core.Operator
         {
             // check if another connection is already existing to the target input, ignoring multi inputs for now
             var existingConnection = Connections.FirstOrDefault(c => c.TargetChildId == connection.TargetChildId &&
-                                                                     c.InputDefinitionId == connection.InputDefinitionId);
+                                                                     c.TargetDefinitionId == connection.TargetDefinitionId);
             if (existingConnection != null)
             {
                 RemoveConnection(existingConnection);
@@ -235,24 +235,24 @@ namespace T3.Core.Operator
         public class Connection
         {
             public Guid SourceChildId { get; }
-            public Guid OutputDefinitionId { get; }
+            public Guid SourceDefinitionId { get; }
             public Guid TargetChildId { get; }
-            public Guid InputDefinitionId { get; }
+            public Guid TargetDefinitionId { get; }
 
-            public Connection(Guid sourceChildId, Guid outputDefinitionId, Guid targetChildId, Guid inputDefinitionId)
+            public Connection(Guid sourceChildId, Guid sourceDefinitionId, Guid targetChildId, Guid targetDefinitionId)
             {
                 SourceChildId = sourceChildId;
-                OutputDefinitionId = outputDefinitionId;
+                SourceDefinitionId = sourceDefinitionId;
                 TargetChildId = targetChildId;
-                InputDefinitionId = inputDefinitionId;
+                TargetDefinitionId = targetDefinitionId;
             }
 
             public override int GetHashCode()
             {
                 int hash = SourceChildId.GetHashCode();
-                hash = hash*31 + OutputDefinitionId.GetHashCode();
+                hash = hash*31 + SourceDefinitionId.GetHashCode();
                 hash = hash*31 + TargetChildId.GetHashCode();
-                hash = hash*31 + InputDefinitionId.GetHashCode();
+                hash = hash*31 + TargetDefinitionId.GetHashCode();
                 return hash;
             }
 

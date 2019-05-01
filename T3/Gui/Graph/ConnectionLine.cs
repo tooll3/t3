@@ -36,14 +36,14 @@ namespace T3.Gui.Graph
             else if (c.SourceChildId == Guid.Empty)
             {
                 var inputsForSymbol = InputUiRegistry.Entries[Canvas.Current.CompositionOp.Symbol.Id];
-                var inputUi = inputsForSymbol[c.OutputDefinitionId];
+                var inputUi = inputsForSymbol[c.SourceDefinitionId];
 
                 sourcePos = Canvas.ScreenPosFromCanvas(inputUi.Position);
             }
             else
             {
                 var sourceUi = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.SourceChildId];
-                var outputIndex = sourceUi.SymbolChild.Symbol.OutputDefinitions.FindIndex(outputDef => outputDef.Id == c.OutputDefinitionId);
+                var outputIndex = sourceUi.SymbolChild.Symbol.OutputDefinitions.FindIndex(outputDef => outputDef.Id == c.SourceDefinitionId);
 
                 var r = Slots.GetOutputSlotSizeInCanvas(sourceUi, outputIndex);
                 sourcePos = Canvas.ScreenPosFromCanvas(r.GetCenter());
@@ -59,14 +59,14 @@ namespace T3.Gui.Graph
             else if (c.TargetChildId == Guid.Empty)
             {
                 var outputsForSymbol = OutputUiRegistry.Entries[Canvas.Current.CompositionOp.Symbol.Id];
-                var outputUi = outputsForSymbol[c.InputDefinitionId];
+                var outputUi = outputsForSymbol[c.TargetDefinitionId];
                 targetPos = Canvas.ScreenPosFromCanvas(outputUi.Position + outputUi.Size / 2);
             }
             else
             {
                 var uiChildrenFromCurrentOp = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id];
                 var targetUi = uiChildrenFromCurrentOp[c.TargetChildId];
-                var inputIndex = targetUi.SymbolChild.Symbol.InputDefinitions.FindIndex(inputDef => inputDef.Id == c.InputDefinitionId);
+                var inputIndex = targetUi.SymbolChild.Symbol.InputDefinitions.FindIndex(inputDef => inputDef.Id == c.TargetDefinitionId);
                 var r = Slots.GetInputSlotSizeInCanvas(targetUi, inputIndex);
                 targetPos = Canvas.ScreenPosFromCanvas(r.GetCenter());
                 color = InputUiRegistry.EntriesByType[targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].DefaultValue.ValueType].Color;

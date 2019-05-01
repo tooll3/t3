@@ -45,50 +45,48 @@ namespace T3.Core.Operator
 
         public void AddConnection(Symbol.Connection connection)
         {
-            (_, Slot sourceOutput, _, IInputSlot targetInput) = GetInstancesForConnection(connection);
-            targetInput.AddConnection(sourceOutput);
+            var (_, sourceSlot, _, targetSlot) = GetInstancesForConnection(connection);
+            targetSlot.AddConnectionSource(sourceSlot);
         }
 
         public void RemoveConnection(Symbol.Connection connection)
         {
-            (_, _, _, IInputSlot targetInput) = GetInstancesForConnection(connection);
-            targetInput.RemoveConnection();
+            var (_, _, _, targetSlot) = GetInstancesForConnection(connection);
+            targetSlot.RemoveConnectionSource();
         }
 
-        private (Instance, Slot, Instance, IInputSlot) GetInstancesForConnection(Symbol.Connection connection)
+        private (Instance, IConnectableSource, Instance, IConnectableTarget) GetInstancesForConnection(Symbol.Connection connection)
         {
             Instance compositionInstance = this;
 
-            var sourceInstance = (from instance in compositionInstance.Children
-                                  where instance.Id == connection.SourceChildId
-                                  select instance).SingleOrDefault();
-
-            if (sourceInstance == null)
+            var sourceInstance = compositionInstance.Children.SingleOrDefault(child => child.Id == connection.SourceChildId);
+            IConnectableSource sourceSlot;
+            if (sourceInstance != null)
+            {
+                sourceSlot = sourceInstance.Outputs.Single(output => output.Id == connection.SourceDefinitionId);
+            }
+            else
             {
                 Debug.Assert(connection.SourceChildId == Guid.Empty);
                 sourceInstance = compositionInstance;
+                sourceSlot = sourceInstance.Inputs.Single(input => input.Id == connection.SourceDefinitionId);
             }
 
-            var sourceOutput = (from output in sourceInstance.Outputs
-                                where output.Id == connection.OutputDefinitionId
-                                select output).Single();
-
-            var targetInstance = (from instance in compositionInstance.Children
-                                  where instance.Id == connection.TargetChildId
-                                  select instance).SingleOrDefault();
-            if (targetInstance == null)
+            var targetInstance = compositionInstance.Children.SingleOrDefault(child => child.Id == connection.TargetChildId);
+            IConnectableTarget targetSlot;
+            if (targetInstance != null)
+            {
+                targetSlot = targetInstance.Inputs.Single(e => e.Id == connection.TargetDefinitionId);
+            }
+            else
             {
                 Debug.Assert(connection.TargetChildId == Guid.Empty);
                 targetInstance = compositionInstance;
+                targetSlot = targetInstance.Outputs.Single(e => e.Id == connection.TargetDefinitionId);
             }
 
-            var targetInput = (from input in targetInstance.Inputs
-                               where input.Id == connection.InputDefinitionId
-                               select input).Single();
-
-            return (sourceInstance, sourceOutput, targetInstance, targetInput);
+            return (sourceInstance, sourceSlot, targetInstance, targetSlot);
         }
-
     }
 
     public class Instance<T> : Instance
