@@ -311,52 +311,10 @@ namespace T3
             InputUiRegistry.EntriesByType.Add(typeof(float), new FloatInputUi());
             InputUiRegistry.EntriesByType.Add(typeof(int), new IntInputUi());
             InputUiRegistry.EntriesByType.Add(typeof(string), new StringInputUi());
-            OutputUiRegistry.EntriesByType.Add(typeof(float), new FloatOutputUi());
-            OutputUiRegistry.EntriesByType.Add(typeof(int), new IntOutputUi());
-            OutputUiRegistry.EntriesByType.Add(typeof(string), new StringOutputUi());
 
-            _initialized = true;
             MainOp = projectOp;
-
-            //_nodes.Add(new Node()
-            //{
-            //    ID = 0,
-            //    Name = "MainTex",
-            //    Pos = new Vector2(40, 50),
-            //    Value = 0.5f,
-            //    Color = TColors.White,
-            //    InputsCount = 1,
-            //    OutputsCount = 1,
-            //}
-            //);
-            //_nodes.Add(new Node()
-            //{
-            //    ID = 1,
-            //    Name = "MainTex2",
-            //    Pos = new Vector2(140, 50),
-            //    Value = 0.5f,
-            //    Color = TColors.White,
-            //    InputsCount = 1,
-            //    OutputsCount = 1
-            //}
-            //);
-            //_nodes.Add(new Node()
-            //{
-            //    ID = 2,
-            //    Name = "MainTex3",
-            //    Pos = new Vector2(240, 50),
-            //    Value = 0.5f,
-            //    Color = TColors.White,
-            //    InputsCount = 1,
-            //    OutputsCount = 1
-            //}
-            //);
-
-            //_links.Add(new NodeLink(0, 0, 2, 0));
-            //_links.Add(new NodeLink(1, 0, 2, 1));
         }
 
         public Instance MainOp;
-        private bool _initialized;
     }
 }

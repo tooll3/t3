@@ -1,7 +1,4 @@
-﻿// Copyright (c) 2016 Framefield. All rights reserved.
-// Released under the MIT license. (see LICENSE.txt)
-
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace T3.Gui.Selection
 {
