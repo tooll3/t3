@@ -1,11 +1,12 @@
-﻿using ImGuiNET;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
+using ImGuiNET;
+using T3.Core.Operator;
 using T3.Gui.Selection;
 
-namespace T3.Core.Operator
+namespace T3.Gui
 {
     public interface IOutputUi : ISelectable
     {

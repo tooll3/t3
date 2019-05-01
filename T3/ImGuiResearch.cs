@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using T3.Core;
 using T3.Core.Operator;
 
 namespace T3

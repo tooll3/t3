@@ -1,13 +1,13 @@
-﻿using SharpDX.D3DCompiler;
-using SharpDX.Direct3D11;
-using SharpDX.WIC;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using SharpDX.D3DCompiler;
+using SharpDX.Direct3D11;
+using SharpDX.WIC;
 
-namespace T3
+namespace T3.Core
 {
     class Resource
     {

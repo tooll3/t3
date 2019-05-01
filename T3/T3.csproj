@@ -288,14 +288,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Operator\InputAnnotation.cs" />
-    <Compile Include="Core\Operator\InputUi.cs" />
-    <Compile Include="Core\Operator\OutputUi.cs" />
+    <Compile Include="Gui\InputUi.cs" />
+    <Compile Include="Gui\OutputUi.cs" />
     <Compile Include="Core\Operator\Symbol.cs" />
     <Compile Include="Core\Operator\SymbolChild.cs" />
     <Compile Include="Core\Operator\SymbolRegistry.cs" />
-    <Compile Include="Core\Operator\SymbolChildUi.cs" />
-    <Compile Include="Core\Operator\SymbolChildUiRegistry.cs" />
+    <Compile Include="Gui\SymbolChildUi.cs" />
+    <Compile Include="Gui\SymbolChildUiRegistry.cs" />
     <Compile Include="Gui\Graph\ConnectionLine.cs" />
     <Compile Include="Gui\Graph\DraftConnection.cs" />
     <Compile Include="Gui\Graph\Canvas.cs" />

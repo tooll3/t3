@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace T3.Core.Operator
+namespace T3.Gui
 {
     public static class SymbolChildUiRegistry
     {
