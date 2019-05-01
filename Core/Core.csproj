@@ -44,11 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Operator\Types\Add.cs" />
+    <Compile Include="Operator\Types\FloatFormat.cs" />
     <Compile Include="Operator\Instance.cs" />
+    <Compile Include="Operator\Types\Project.cs" />
+    <Compile Include="Operator\Types\Random.cs" />
     <Compile Include="Operator\Slot.cs" />
+    <Compile Include="Operator\Types\StringConcat.cs" />
+    <Compile Include="Operator\Types\StringLength.cs" />
     <Compile Include="Operator\Symbol.cs" />
     <Compile Include="Operator\SymbolChild.cs" />
     <Compile Include="Operator\SymbolRegistry.cs" />
+    <Compile Include="Operator\Types\Time.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Core.Operator.Types;
 using T3.Gui;
 
 namespace T3
@@ -14,138 +14,6 @@ namespace T3
             Init();
         }
 
-        class Add : Instance<Add>
-        {
-            [Output]
-            public readonly Slot<float> Result = new Slot<float>();
-
-            public Add()
-            {
-                Result.UpdateAction = Update;
-            }
-
-            private void Update(EvaluationContext context)
-            {
-                Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
-            }
-
-            [FloatInput(DefaultValue = 20.0f)]
-            public readonly InputSlot<float> Input1 = new InputSlot<float>();
-
-            [FloatInput(DefaultValue = 23.0f)]
-            public readonly InputSlot<float> Input2 = new InputSlot<float>();
-        }
-
-        class Random : Instance<Random>
-        {
-            [Output]
-            public readonly Slot<float> Result = new Slot<float>();
-
-            public Random()
-            {
-                Result.UpdateAction = Update;
-            }
-
-            private void Update(EvaluationContext context)
-            {
-                var random = new System.Random(Seed.GetValue(context));
-                Result.Value = (float)random.NextDouble();
-            }
-
-            [IntInput(DefaultValue = 3)]
-            public readonly InputSlot<int> Seed = new InputSlot<int>();
-        }
-
-        class FloatFormat : Instance<FloatFormat>
-        {
-            [Output]
-            public readonly Slot<string> Output = new Slot<string>();
-
-            public FloatFormat()
-            {
-                Output.UpdateAction = Update;
-            }
-
-            private void Update(EvaluationContext context)
-            {
-                Output.Value = Input.GetValue(context).ToString();
-            }
-
-            [FloatInput(DefaultValue = 3.0f)]
-            public readonly InputSlot<float> Input = new InputSlot<float>();
-        }
-
-        class StringLength : Instance<StringLength>
-        {
-            [Output]
-            public readonly Slot<int> Length = new Slot<int>();
-
-            public StringLength()
-            {
-                Length.UpdateAction = Update;
-            }
-
-            private void Update(EvaluationContext context)
-            {
-                Length.Value = InputString.GetValue(context).Length;
-            }
-
-            [StringInput(DefaultValue = "Aber Hallo")]
-            public readonly InputSlot<string> InputString = new InputSlot<string>();
-        }
-
-        class StringConcat : Instance<StringConcat>
-        {
-            [Output]
-            public readonly Slot<string> Result = new Slot<string>();
-
-            public StringConcat()
-            {
-                Result.UpdateAction = Update;
-            }
-
-            private void Update(EvaluationContext context)
-            {
-                Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
-            }
-
-            [StringInput(DefaultValue = "")]
-            public readonly InputSlot<string> Input1 = new InputSlot<string>();
-
-            [StringInput(DefaultValue = "")]
-            public readonly InputSlot<string> Input2 = new InputSlot<string>();
-        }
-
-        class Time : Instance<Time>
-        {
-            [Output]
-            public readonly Slot<float> TimeInSeconds = new Slot<float>();
-
-            public Time()
-            {
-                TimeInSeconds.UpdateAction = Update;
-                _watch.Start();
-            }
-
-            private void Update(EvaluationContext context)
-            {
-                TimeInSeconds.Value = _watch.ElapsedMilliseconds / 1000.0f;
-            }
-
-            private Stopwatch _watch = new Stopwatch();
-        }
-
-        class Project : Instance<Project>
-        {
-            [Output]
-            public readonly Slot<string> Output = new Slot<string>("Project Output");
-
-
-
-            [FloatInput(DefaultValue = 3.0f)]
-            public readonly InputSlot<float> Input = new InputSlot<float>();
-        }
-
         class Dashboard : Instance<Dashboard>
         {
 
@@ -154,7 +22,7 @@ namespace T3
         private void Init()
         {
             var addSymbol = new Symbol(typeof(Add));
-            var randomSymbol = new Symbol(typeof(Random));
+            var randomSymbol = new Symbol(typeof(Core.Operator.Types.Random));
             var floatFormatSymbol = new Symbol(typeof(FloatFormat));
             var stringLengthSymbol = new Symbol(typeof(StringLength));
             var stringConcatSymbol = new Symbol(typeof(StringConcat));
