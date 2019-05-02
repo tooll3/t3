@@ -93,6 +93,41 @@ namespace T3.Core.Operator
             _instancesOfSymbol.ForEach(instance => instance.Dispose());
         }
 
+        public void SetInstanceType(Type instanceType)
+        {
+            InstanceType = instanceType;
+            List<(SymbolChild, Instance, List<Connection>)> newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<Connection>)>();
+
+            foreach (var instance in _instancesOfSymbol)
+            {
+                var parent = instance.Parent;
+                var parentSymbol = parent.Symbol;
+                // get all connections that belong to this instance
+                var connectionsToReplace = parentSymbol.Connections.FindAll(c => c.SourceChildId == instance.Id ||
+                                                                            c.TargetChildId == instance.Id);
+                foreach (var connection in connectionsToReplace)
+                {
+                    parent.RemoveConnection(connection);
+                }
+
+                var symbolChild = parentSymbol.Children.Single(child => child.Id == instance.Id);
+                newInstanceSymbolChildren.Add((symbolChild, parent, connectionsToReplace));
+
+                parent.Children.Remove(instance);
+                instance.Dispose();
+            }
+
+            _instancesOfSymbol.Clear();
+            foreach (var (symbolChild, parent, connectionsToReplace) in newInstanceSymbolChildren)
+            {
+                CreateAndAddNewChildInstance(symbolChild, parent);
+                foreach (var connection in connectionsToReplace)
+                {
+                    parent.AddConnection(connection);
+                }
+            }
+        }
+
         public Instance CreateInstance()
         {
             var newInstance = Activator.CreateInstance(InstanceType) as Instance;

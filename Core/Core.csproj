@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Operator\Types\Mul.cs" />
     <Compile Include="Operator\Types\Add.cs" />
     <Compile Include="Operator\Types\FloatFormat.cs" />
     <Compile Include="Operator\Instance.cs" />

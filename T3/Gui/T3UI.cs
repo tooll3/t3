@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Core.Operator.Types;
 using T3.graph;
 using T3.Gui.Graph;
 using T3.Logging;
@@ -92,9 +93,7 @@ namespace T3.Gui
             var compositionOp = _instance._graphCanvasWindows[0].Canvas.CompositionOp; // todo: fix
             Instance selectedInstance = compositionOp;
             var childUiEntries = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
-            var selectedChildUi = (from childUi in childUiEntries
-                                   where childUi.Value.IsSelected
-                                   select childUi).FirstOrDefault().Value;
+            var selectedChildUi = childUiEntries.SingleOrDefault(childUi => childUi.Value.IsSelected).Value;
             if (selectedChildUi != null)
             {
                 var symbolChild = selectedChildUi.SymbolChild;
@@ -106,6 +105,11 @@ namespace T3.Gui
                 var firstOutput = selectedInstance.Outputs[0];
                 IOutputUi outputUi = OutputUiRegistry.Entries[selectedInstance.Symbol.Id][firstOutput.Id];
                 outputUi.DrawValue(firstOutput);
+            }
+
+            if (ImGui.Button("Test"))
+            {
+                selectedInstance.Symbol.SetInstanceType(typeof(Mul));//selectedInstance.Symbol.InstanceType);
             }
 
             ImGui.End();
