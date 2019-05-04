@@ -73,18 +73,19 @@ namespace T3.Core.Operator
                 {
                     Debug.Assert(false);
                 }
-                InputDefinitions.Add(new InputDefinition() { Id = Guid.NewGuid(), Name = inputInfo.Name, DefaultValue = defaultValue });
+                InputDefinitions.Add(new InputDefinition() { Id = attribute.Id, Name = inputInfo.Name, DefaultValue = defaultValue });
             }
 
             // outputs identified by attribute
             var outputs = (from field in instanceType.GetFields()
                            let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
                            from attr in attributes
-                           select field).ToArray();
-            foreach (var output in outputs)
+                           select (field, attributes)).ToArray();
+            foreach (var (output, attributes) in outputs)
             {
                 var valueType = output.FieldType.GenericTypeArguments[0];
-                OutputDefinitions.Add(new OutputDefinition() { Id = Guid.NewGuid(), Name = output.Name, ValueType = valueType });
+                var attribute = (OutputAttribute)attributes.First();
+                OutputDefinitions.Add(new OutputDefinition() { Id = attribute.Id, Name = output.Name, ValueType = valueType });
             }
         }
 

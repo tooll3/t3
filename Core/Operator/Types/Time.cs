@@ -4,7 +4,7 @@ namespace T3.Core.Operator.Types
 {
     public class Time : Instance<Time>
     {
-        [Output]
+        [Output(Guid = "{1C34D39C-0BEF-4C4A-A3E4-DCB8D5664F3B}")]
         public readonly Slot<float> TimeInSeconds = new Slot<float>();
 
         public Time()
