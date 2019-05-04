@@ -1,8 +1,10 @@
-﻿namespace T3.Core.Operator.Types
+﻿using System;
+
+namespace T3.Core.Operator.Types
 {
     public class Add : Instance<Add>
     {
-        [Output]
+        [Output(Guid = "{5CE9C625-F890-4620-9747-C98EAB4B9447}")]
         public readonly Slot<float> Result = new Slot<float>();
 
         public Add()
@@ -15,10 +17,10 @@
             Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
         }
 
-        [FloatInput(DefaultValue = 20.0f)]
+        [FloatInput(DefaultValue = 20.0f, Guid = "{E3550929-8905-4CDF-BC85-C31E97DA4BAA}")]
         public readonly InputSlot<float> Input1 = new InputSlot<float>();
 
-        [FloatInput(DefaultValue = 23.0f)]
+        [FloatInput(DefaultValue = 23.0f, Guid = "{993D59BB-1FC0-4857-A36D-629B0E7AA0D2}")]
         public readonly InputSlot<float> Input2 = new InputSlot<float>();
     }
 }

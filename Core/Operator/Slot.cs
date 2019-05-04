@@ -10,11 +10,17 @@ namespace T3.Core.Operator
     {
     }
 
-    public class OutputAttribute : Attribute
+    public class OperatorAttribute : Attribute
+    {
+        public Guid Id { get; set; }
+        public string Guid { get => Id.ToString(); set => Id = System.Guid.Parse(value); }
+    }
+
+    public class OutputAttribute : OperatorAttribute
     {
     }
 
-    public class InputAttribute : Attribute
+    public class InputAttribute : OperatorAttribute
     {
     }
 

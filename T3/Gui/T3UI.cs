@@ -107,11 +107,6 @@ namespace T3.Gui
                 outputUi.DrawValue(firstOutput);
             }
 
-            if (ImGui.Button("Test"))
-            {
-                selectedInstance.Symbol.SetInstanceType(typeof(Mul));//selectedInstance.Symbol.InstanceType);
-            }
-
             ImGui.End();
         }
 
