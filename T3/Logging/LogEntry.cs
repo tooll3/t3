@@ -12,7 +12,7 @@ namespace T3.Logging
             Info = 2,
             Warning = 4,
             Error = 8,
-            ALL = Debug | Info | Warning | Error
+            All = Debug | Info | Warning | Error
         }
 
         public DateTime TimeStamp { get; private set; }

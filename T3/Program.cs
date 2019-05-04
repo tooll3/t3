@@ -8,9 +8,13 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using T3.Core;
+using T3.Core.Operator;
 using T3.Gui;
+using T3.Logging;
 using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
 
@@ -205,6 +209,8 @@ namespace T3
             Guid vsId = resourceManager.CreateVertexShader(@"Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture");
             Guid psId = resourceManager.CreatePixelShader(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture");
             (Guid texId, Guid srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg");
+            var addId = resourceManager.CreateOperatorEntry(@"..\Core\Operator\Types\Add.cs", "Add");
+            Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
 
 
             var stopwatch = new Stopwatch();
@@ -219,6 +225,18 @@ namespace T3
                                      ImGui.GetIO().DeltaTime = (float)(ticks) / Stopwatch.Frequency;
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
                                      stopwatch.Restart();
+
+                                     if (resourceManager.Resources[addId] is OperatorResource opResource)
+                                     {
+                                         if (opResource.Updated)
+                                         {
+                                             Type type = opResource.OperatorAssembly.ExportedTypes.First();
+                                             var addSymbol = SymbolRegistry.Entries.First(e => e.Value.SymbolName == "Add").Value;
+                                             addSymbol.SetInstanceType(type);
+                                             opResource.Updated = false;
+                                             Log.Info($"type updating took: {(double)stopwatch.ElapsedTicks/Stopwatch.Frequency}s");
+                                         }
+                                     }
 
                                      Metrics.UiRenderingStarted();
                                      _t3ui.InitStyle();

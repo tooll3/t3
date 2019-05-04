@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.WIC;
@@ -38,6 +41,56 @@ namespace T3.Core
     public interface IUpdateable
     {
         void Update(string path);
+    }
+
+    public class OperatorResource : Resource, IUpdateable
+    {
+        public Assembly OperatorAssembly { get; private set; }
+        public bool Updated { get; set; } = false;
+
+        public OperatorResource(Guid id, string name, Assembly operatorAssembly)
+            : base(id, name)
+        {
+            OperatorAssembly = operatorAssembly;
+        }
+
+        public void Update(string path)
+        {
+            Console.WriteLine($"Operator source '{path}' changed.");
+            Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
+
+            string source = File.ReadAllText(path);
+            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+
+            CSharpCompilation compilation = CSharpCompilation.Create("assemblyName",
+                                                                     new[] { syntaxTree },
+                                                                     new[]
+                                                                     {
+                                                                         MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                                                                         MetadataReference.CreateFromFile(typeof(Resource).Assembly.Location)
+                                                                     },
+                                                                     new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+            using (var dllStream = new MemoryStream())
+            using (var pdbStream = new MemoryStream())
+            {
+                var emitResult = compilation.Emit(dllStream, pdbStream);
+                Console.WriteLine($"compilation results of '{path}':");
+                if (!emitResult.Success)
+                {
+                    foreach (var entry in emitResult.Diagnostics)
+                    {
+                        Console.WriteLine(entry.GetMessage());
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("successful");
+                    OperatorAssembly = Assembly.Load(dllStream.GetBuffer());
+                    Updated = true;
+                }
+            }
+        }
     }
 
     public abstract class ShaderResource : Resource, IUpdateable
@@ -147,6 +200,11 @@ namespace T3.Core
             _textureFileWatcher.Created += OnChanged;
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
             _textureFileWatcher.EnableRaisingEvents = true;
+
+            _csFileWatcher = new FileSystemWatcher(@"..\Core\Operator\Types", "*.cs");
+            _csFileWatcher.Changed += OnChanged;
+            _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
+            _csFileWatcher.EnableRaisingEvents = true;
         }
 
         internal void CompileShader<TShader>(string srcFile, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
@@ -246,6 +304,40 @@ namespace T3.Core
             var resourceEntry = new PixelShaderResource(Guid.NewGuid(), name, entryPoint, blob, shader);
             Resources.Add(resourceEntry.Id, resourceEntry);
             PixelShaders.Add(resourceEntry);
+            if (fileResource == null)
+            {
+                fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
+                FileResources.Add(srcFile, fileResource);
+            }
+            else
+            {
+                // file resource already exists, so just add the id of the new type resource
+                fileResource.ResourceIds.Add(resourceEntry.Id);
+            }
+
+            return resourceEntry.Id;
+        }
+
+        public Guid CreateOperatorEntry(string srcFile, string name)
+        {
+            // todo: code below is redundant with all file resources -> refactor
+            bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
+            if (foundFileEntryForPath)
+            {
+                foreach (var id in fileResource.ResourceIds)
+                {
+                    if (Resources[id] is PixelShaderResource)
+                    {
+                        // if file resource already exists then it must be a different type
+                        Console.WriteLine($"Warning: trying to create an already existing file resource ('{srcFile}'");
+                        return id;
+                    }
+                }
+            }
+
+            var resourceEntry = new OperatorResource(Guid.NewGuid(), name, null);
+            Resources.Add(resourceEntry.Id, resourceEntry);
+            Operators.Add(resourceEntry);
             if (fileResource == null)
             {
                 fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
@@ -424,8 +516,10 @@ namespace T3.Core
         internal List<PixelShaderResource> PixelShaders = new List<PixelShaderResource>();
         internal List<TextureResource> Textures = new List<TextureResource>();
         internal List<ShaderResourceViewResource> ShaderResourceViews = new List<ShaderResourceViewResource>();
+        internal List<OperatorResource> Operators = new List<OperatorResource>(100);
         private readonly Device _device;
         private readonly FileSystemWatcher _hlslFileWatcher;
         private readonly FileSystemWatcher _textureFileWatcher;
+        private readonly FileSystemWatcher _csFileWatcher;
     }
 }
