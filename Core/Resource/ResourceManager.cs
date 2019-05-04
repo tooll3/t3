@@ -9,7 +9,7 @@ using SharpDX.WIC;
 
 namespace T3.Core
 {
-    class Resource
+    public class Resource
     {
         public Resource(Guid id, string name)
         {
@@ -35,12 +35,12 @@ namespace T3.Core
         public DateTime LastWriteReferenceTime;
     }
 
-    interface IUpdateable
+    public interface IUpdateable
     {
         void Update(string path);
     }
 
-    abstract class ShaderResource : Resource, IUpdateable
+    public abstract class ShaderResource : Resource, IUpdateable
     {
         protected ShaderResource(Guid id, string name, string entryPoint, ShaderBytecode blob)
             : base(id, name)
@@ -55,7 +55,7 @@ namespace T3.Core
         public ShaderBytecode Blob;// { get; internal set; }
     }
 
-    class VertexShaderResource : ShaderResource
+    public class VertexShaderResource : ShaderResource
     {
         public VertexShaderResource(Guid id, string name, string entryPoint, ShaderBytecode blob, VertexShader vertexShader)
             : base(id, name, entryPoint, blob)
@@ -71,7 +71,7 @@ namespace T3.Core
         public VertexShader VertexShader;
     }
 
-    class PixelShaderResource : ShaderResource
+    public class PixelShaderResource : ShaderResource
     {
         public PixelShaderResource(Guid id, string name, string entryPoint, ShaderBytecode blob, PixelShader pixelShader)
             : base(id, name, entryPoint, blob)
@@ -86,7 +86,7 @@ namespace T3.Core
         }
     }
 
-    class TextureResource : Resource, IUpdateable
+    public class TextureResource : Resource, IUpdateable
     {
         public TextureResource(Guid id, string name, Texture2D texture)
             : base(id, name)
@@ -102,7 +102,7 @@ namespace T3.Core
         public Texture2D Texture;
     }
 
-    class ShaderResourceViewResource : Resource, IUpdateable
+    public class ShaderResourceViewResource : Resource, IUpdateable
     {
         public ShaderResourceViewResource(Guid id, string name, ShaderResourceView srv, Guid textureId)
             : base(id, name)
@@ -120,7 +120,7 @@ namespace T3.Core
         public Guid TextureId;
     }
 
-    class ResourceManager
+    public class ResourceManager
     {
         public static ResourceManager Instance()
         {
@@ -418,7 +418,7 @@ namespace T3.Core
         }
 
 
-        internal Dictionary<Guid, Resource> Resources = new Dictionary<Guid, Resource>();
+        public Dictionary<Guid, Resource> Resources = new Dictionary<Guid, Resource>();
         internal Dictionary<string, FileResource> FileResources = new Dictionary<string, FileResource>();
         internal List<VertexShaderResource> VertexShaders = new List<VertexShaderResource>();
         internal List<PixelShaderResource> PixelShaders = new List<PixelShaderResource>();
