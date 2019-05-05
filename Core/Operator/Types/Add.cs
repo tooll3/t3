@@ -7,6 +7,9 @@ namespace T3.Core.Operator.Types
         [Output(Guid = "{5CE9C625-F890-4620-9747-C98EAB4B9447}")]
         public readonly Slot<float> Result = new Slot<float>();
 
+//         [Output(Guid = "{DF114783-6C8D-47E2-99B0-8C97217657A5}")]
+//         public readonly Slot<float> Result2 = new Slot<float>();
+
         public Add()
         {
             Result.UpdateAction = Update;
