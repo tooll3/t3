@@ -48,32 +48,13 @@ namespace T3.Core.Operator
 
             // input identified by base interface
             Type inputSlotType = typeof(IInputSlot);
-            var inputInfos = from field in instanceType.GetFields()
-                             where inputSlotType.IsAssignableFrom(field.FieldType)
-                             select field;
+            var inputInfos = instanceType.GetFields().Where(f => inputSlotType.IsAssignableFrom(f.FieldType));
             foreach (var inputInfo in inputInfos)
             {
                 var customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false);
                 Debug.Assert(customAttributes.Length == 1);
                 var attribute = (InputAttribute)customAttributes[0];
-                InputValue defaultValue = null;
-                if (attribute is IntInputAttribute intAttribute)
-                {
-                    defaultValue = new InputValue<int>(intAttribute.DefaultValue);
-                }
-                else if (attribute is FloatInputAttribute floatAttribute)
-                {
-                    defaultValue = new InputValue<float>(floatAttribute.DefaultValue);
-                }
-                else if (attribute is StringInputAttribute stringAttribute)
-                {
-                    defaultValue = new InputValue<string>(stringAttribute.DefaultValue);
-                }
-                else
-                {
-                    Debug.Assert(false);
-                }
-                InputDefinitions.Add(new InputDefinition() { Id = attribute.Id, Name = inputInfo.Name, DefaultValue = defaultValue });
+                InputDefinitions.Add(CreateInputDefinition(attribute, inputInfo));
             }
 
             // outputs identified by attribute
@@ -99,19 +80,53 @@ namespace T3.Core.Operator
             InstanceType = instanceType;
             List<(SymbolChild, Instance, List<Connection>)> newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<Connection>)>();
 
+            // check if inputs have changed
+            Type inputSlotType = typeof(IInputSlot);
+            var inputInfos = instanceType.GetFields().Where(f => inputSlotType.IsAssignableFrom(f.FieldType));
+            var inputs = (from inputInfo in inputInfos
+                                   let customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false)
+                                   where customAttributes.Any()
+                                   select (inputInfo, (InputAttribute)customAttributes[0])).ToArray();
+            var oldInputDefinitions = new List<InputDefinition>(InputDefinitions);
+            InputDefinitions.Clear();
+            foreach (var (info, attribute) in inputs)
+            {
+                var alreadyExistingInput = oldInputDefinitions.FirstOrDefault(i => i.Id == attribute.Id);
+                InputDefinitions.Add(alreadyExistingInput ?? CreateInputDefinition(attribute, info));
+            }
+
+            // check if outputs have changed
+
+
             foreach (var instance in _instancesOfSymbol)
             {
                 var parent = instance.Parent;
                 var parentSymbol = parent.Symbol;
                 // get all connections that belong to this instance
                 var connectionsToReplace = parentSymbol.Connections.FindAll(c => c.SourceChildId == instance.Id ||
-                                                                            c.TargetChildId == instance.Id);
+                                                                                 c.TargetChildId == instance.Id);
                 foreach (var connection in connectionsToReplace)
                 {
                     parent.RemoveConnection(connection);
                 }
 
                 var symbolChild = parentSymbol.Children.Single(child => child.Id == instance.Id);
+
+                // update inputs of symbol child
+                var oldChildInputs = new Dictionary<Guid, SymbolChild.Input>(symbolChild.InputValues);
+                symbolChild.InputValues.Clear();
+                foreach (var inputDefinition in InputDefinitions)
+                {
+                    if (oldChildInputs.TryGetValue(inputDefinition.Id, out var input))
+                    {
+                        symbolChild.InputValues.Add(inputDefinition.Id, input);
+                    }
+                    else
+                    {
+                        symbolChild.InputValues.Add(inputDefinition.Id, new SymbolChild.Input(inputDefinition));
+                    }
+                }
+
                 newInstanceSymbolChildren.Add((symbolChild, parent, connectionsToReplace));
 
                 parent.Children.Remove(instance);
@@ -127,6 +142,30 @@ namespace T3.Core.Operator
                     parent.AddConnection(connection);
                 }
             }
+        }
+
+        private static InputDefinition CreateInputDefinition(InputAttribute attribute, FieldInfo info)
+        {
+            // create new input definition
+            InputValue defaultValue = null;
+            if (attribute is IntInputAttribute intAttribute)
+            {
+                defaultValue = new InputValue<int>(intAttribute.DefaultValue);
+            }
+            else if (attribute is FloatInputAttribute floatAttribute)
+            {
+                defaultValue = new InputValue<float>(floatAttribute.DefaultValue);
+            }
+            else if (attribute is StringInputAttribute stringAttribute)
+            {
+                defaultValue = new InputValue<string>(stringAttribute.DefaultValue);
+            }
+            else
+            {
+                Debug.Assert(false);
+            }
+
+            return new InputDefinition() { Id = attribute.Id, Name = info.Name, DefaultValue = defaultValue };
         }
 
         public Instance CreateInstance()
