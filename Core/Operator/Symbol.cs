@@ -93,7 +93,15 @@ namespace T3.Core.Operator
             foreach (var (info, attribute) in inputs)
             {
                 var alreadyExistingInput = oldInputDefinitions.FirstOrDefault(i => i.Id == attribute.Id);
-                InputDefinitions.Add(alreadyExistingInput ?? CreateInputDefinition(attribute, info));
+                if (alreadyExistingInput != null)
+                {
+                    InputDefinitions.Add(alreadyExistingInput);
+                    oldInputDefinitions.Remove(alreadyExistingInput);
+                }
+                else
+                {
+                    InputDefinitions.Add(CreateInputDefinition(attribute, info));
+                }
             }
 
             // check if outputs have changed
@@ -109,6 +117,7 @@ namespace T3.Core.Operator
                 if (alreadyExistingOutput != null)
                 {
                     OutputDefinitions.Add(alreadyExistingOutput);
+                    oldOutputDefinitions.Remove(alreadyExistingOutput);
                 }
                 else
                 {
@@ -116,7 +125,6 @@ namespace T3.Core.Operator
                     OutputDefinitions.Add(new OutputDefinition() { Id = attribute.Id, Name = output.Name, ValueType = valueType });
                 }
             }
-
 
             // first remove relevant connections from instances and update symbol child input values if needed
             foreach (var instance in _instancesOfSymbol)
@@ -128,8 +136,12 @@ namespace T3.Core.Operator
                                                                                  c.TargetChildId == instance.Id);
                 foreach (var connection in connectionsToReplace)
                 {
-                    parent.RemoveConnection(connection);
+                    parentSymbol.RemoveConnection(connection);
                 }
+
+                // filter out the connections where no inputs/output exist anymore
+                connectionsToReplace.RemoveAll(c => oldOutputDefinitions.FirstOrDefault(output => output.Id == c.SourceDefinitionId || output.Id == c.TargetDefinitionId) != null ||
+                                                    oldInputDefinitions.FirstOrDefault(input => input.Id == c.SourceDefinitionId || input.Id == c.TargetDefinitionId) != null);
 
                 var symbolChild = parentSymbol.Children.Single(child => child.Id == instance.Id);
 
@@ -170,7 +182,7 @@ namespace T3.Core.Operator
             {
                 foreach (var connection in connectionsToReplace)
                 {
-                    parent.AddConnection(connection);
+                    parent.Symbol.AddConnection(connection);
                 }
             }
         }
