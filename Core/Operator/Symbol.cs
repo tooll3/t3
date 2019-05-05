@@ -84,9 +84,10 @@ namespace T3.Core.Operator
             Type inputSlotType = typeof(IInputSlot);
             var inputInfos = instanceType.GetFields().Where(f => inputSlotType.IsAssignableFrom(f.FieldType));
             var inputs = (from inputInfo in inputInfos
-                                   let customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false)
-                                   where customAttributes.Any()
-                                   select (inputInfo, (InputAttribute)customAttributes[0])).ToArray();
+                          let customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false)
+                          where customAttributes.Any()
+                          select (inputInfo, (InputAttribute)customAttributes[0])).ToArray();
+            // todo: it's probably better to first check if there's a change and only then allocate
             var oldInputDefinitions = new List<InputDefinition>(InputDefinitions);
             InputDefinitions.Clear();
             foreach (var (info, attribute) in inputs)
@@ -96,6 +97,26 @@ namespace T3.Core.Operator
             }
 
             // check if outputs have changed
+            var outputs = (from field in instanceType.GetFields()
+                           let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
+                           where attributes.Any()
+                           select (field, (OutputAttribute)attributes[0])).ToArray();
+            var oldOutputDefinitions = new List<OutputDefinition>(OutputDefinitions);
+            OutputDefinitions.Clear();
+            foreach (var (output, attribute) in outputs)
+            {
+                var alreadyExistingOutput = oldOutputDefinitions.FirstOrDefault(o => o.Id == attribute.Id);
+                if (alreadyExistingOutput != null)
+                {
+                    OutputDefinitions.Add(alreadyExistingOutput);
+                }
+                else
+                {
+                    var valueType = output.FieldType.GenericTypeArguments[0];
+                    OutputDefinitions.Add(new OutputDefinition() { Id = attribute.Id, Name = output.Name, ValueType = valueType });
+                }
+            }
+
 
 
             foreach (var instance in _instancesOfSymbol)
