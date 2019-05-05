@@ -118,7 +118,7 @@ namespace T3.Core.Operator
             }
 
 
-
+            // first remove relevant connections from instances and update symbol child input values if needed
             foreach (var instance in _instancesOfSymbol)
             {
                 var parent = instance.Parent;
@@ -149,15 +149,25 @@ namespace T3.Core.Operator
                 }
 
                 newInstanceSymbolChildren.Add((symbolChild, parent, connectionsToReplace));
-
-                parent.Children.Remove(instance);
-                instance.Dispose();
             }
 
+            // now remove the old instances itself...
+            foreach (var instance in _instancesOfSymbol)
+            {
+                instance.Parent.Children.Remove(instance);
+                instance.Dispose();
+            }
             _instancesOfSymbol.Clear();
-            foreach (var (symbolChild, parent, connectionsToReplace) in newInstanceSymbolChildren)
+
+            // ... and create the new ones...
+            foreach (var (symbolChild, parent, _) in newInstanceSymbolChildren)
             {
                 CreateAndAddNewChildInstance(symbolChild, parent);
+            }
+
+            // ... and add the connections again
+            foreach (var (_, parent, connectionsToReplace) in newInstanceSymbolChildren)
+            {
                 foreach (var connection in connectionsToReplace)
                 {
                     parent.AddConnection(connection);
