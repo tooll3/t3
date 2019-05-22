@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.Gui.Selection;
+using T3.Logging;
 
 namespace T3.Gui
 {
@@ -50,6 +51,19 @@ namespace T3.Gui
                     }
 
                     bool valueModified = DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
+                    if (ImGui.IsItemClicked())
+                    {
+                        Log.Debug($"focused  {name}");
+                    }
+                    if (valueModified)
+                    {
+                        Log.Debug($"modified {typedInputSlot.TypedInputValue.Value}");
+                    }
+
+                    if (ImGui.IsItemDeactivatedAfterEdit())
+                    {
+                        Log.Debug($"Edit {name} completed with {typedInputSlot.TypedInputValue.Value}");
+                    }
                     input.IsDefault &= !valueModified;
                     ImGui.PopStyleColor();
                     ImGui.PopItemWidth();

@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Operator;
-using T3.Core.Operator.Types;
-using T3.graph;
 using T3.Gui.Graph;
 using T3.Logging;
 
@@ -59,7 +57,7 @@ namespace T3.Gui
         }
 
 
-        public void DrawSelectionParameters()
+        public void DrawParameterView()
         {
             ImGui.Begin("ParameterView");
 
@@ -80,6 +78,7 @@ namespace T3.Gui
                 ImGui.PushID(input.Id.GetHashCode());
                 IInputUi inputUi = InputUiRegistry.Entries[selectedInstance.Symbol.Id][input.Id];
                 inputUi.DrawInputEdit(input.Input.InputDefinition.Name, input);
+
                 ImGui.PopID();
             }
 
