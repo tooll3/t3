@@ -209,7 +209,8 @@ namespace T3
             Guid vsId = resourceManager.CreateVertexShader(@"Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture");
             Guid psId = resourceManager.CreatePixelShader(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture");
             (Guid texId, Guid srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg");
-            var addId = resourceManager.CreateOperatorEntry(@"..\Core\Operator\Types\Add.cs", "Add");
+            resourceManager.CreateOperatorEntry(@"..\Core\Operator\Types\Add.cs", "Add");
+            //resourceManager.CreateOperatorEntry(@"..\Core\Operator\Types\Add.cs", "Add");
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
 
 
@@ -226,17 +227,7 @@ namespace T3
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
                                      stopwatch.Restart();
 
-                                     if (resourceManager.Resources[addId] is OperatorResource opResource)
-                                     {
-                                         if (opResource.Updated)
-                                         {
-                                             Type type = opResource.OperatorAssembly.ExportedTypes.First();
-                                             var addSymbol = SymbolRegistry.Entries.First(e => e.Value.SymbolName == "Add").Value;
-                                             addSymbol.SetInstanceType(type);
-                                             opResource.Updated = false;
-                                             Log.Info($"type updating took: {(double)stopwatch.ElapsedTicks/Stopwatch.Frequency}s");
-                                         }
-                                     }
+                                     resourceManager.UpdateChangedOperatorTypes();
 
                                      Metrics.UiRenderingStarted();
                                      _t3ui.InitStyle();
