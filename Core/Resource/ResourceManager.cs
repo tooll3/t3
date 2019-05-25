@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.WIC;
+using T3.Core.Operator;
 
 namespace T3.Core
 {
@@ -59,17 +61,33 @@ namespace T3.Core
             Console.WriteLine($"Operator source '{path}' changed.");
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
 
-            string source = File.ReadAllText(path);
-            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+            string source = string.Empty;
+            try
+            {
+                source = File.ReadAllText(path);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error opening file '{path}");
+                Console.WriteLine(e.Message);
+                return;
+            }
 
-            CSharpCompilation compilation = CSharpCompilation.Create("assemblyName",
-                                                                     new[] { syntaxTree },
-                                                                     new[]
-                                                                     {
-                                                                         MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                                                                         MetadataReference.CreateFromFile(typeof(Resource).Assembly.Location)
-                                                                     },
-                                                                     new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+            if (string.IsNullOrEmpty(source))
+            {
+                Console.WriteLine("Source was empty, skip compilation.");
+                return;
+            }
+
+            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+            var compilation = CSharpCompilation.Create("assemblyName",
+                                                       new[] { syntaxTree },
+                                                       new[]
+                                                       {
+                                                           MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                                                           MetadataReference.CreateFromFile(typeof(Resource).Assembly.Location)
+                                                       },
+                                                       new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
             using (var dllStream = new MemoryStream())
             using (var pdbStream = new MemoryStream())
@@ -86,8 +104,16 @@ namespace T3.Core
                 else
                 {
                     Console.WriteLine("successful");
-                    OperatorAssembly = Assembly.Load(dllStream.GetBuffer());
-                    Updated = true;
+                    var newAssembly = Assembly.Load(dllStream.GetBuffer());
+                    if (newAssembly.ExportedTypes.Any())
+                    {
+                        OperatorAssembly = newAssembly;
+                        Updated = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: new compiled Assembly had no exported type.");
+                    }
                 }
             }
         }
@@ -203,7 +229,7 @@ namespace T3.Core
 
             _csFileWatcher = new FileSystemWatcher(@"..\Core\Operator\Types", "*.cs");
             _csFileWatcher.Changed += OnChanged;
-            _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
+            _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite;// | NotifyFilters.CreationTime;
             _csFileWatcher.EnableRaisingEvents = true;
         }
 
@@ -509,6 +535,36 @@ namespace T3.Core
             id = textureResource.Id;
         }
 
+        private readonly Stopwatch _operatorUpdateStopwatch = new Stopwatch();
+        public void UpdateChangedOperatorTypes()
+        {
+            foreach (var opResource in Operators)
+            {
+                if (opResource.Updated)
+                {
+                    Type type = opResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
+                    if (type == null)
+                    {
+                        Console.WriteLine("Error updateable operator had not exported type");
+                        continue;
+                    }
+                    var symbolEntry = SymbolRegistry.Entries.FirstOrDefault(e => e.Value.SymbolName == opResource.Name);// todo: name -> no good idea, use id
+                    if (symbolEntry.Value != null)
+                    {
+                        _operatorUpdateStopwatch.Restart();
+                        symbolEntry.Value.SetInstanceType(type);
+                        opResource.Updated = false;
+                        _operatorUpdateStopwatch.Stop();
+                        Console.WriteLine($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error replacing symbol type '{opResource.Name}");
+                    }
+                }
+            }
+
+        }
 
         public Dictionary<Guid, Resource> Resources = new Dictionary<Guid, Resource>();
         internal Dictionary<string, FileResource> FileResources = new Dictionary<string, FileResource>();
@@ -516,7 +572,7 @@ namespace T3.Core
         internal List<PixelShaderResource> PixelShaders = new List<PixelShaderResource>();
         internal List<TextureResource> Textures = new List<TextureResource>();
         internal List<ShaderResourceViewResource> ShaderResourceViews = new List<ShaderResourceViewResource>();
-        internal List<OperatorResource> Operators = new List<OperatorResource>(100);
+        public List<OperatorResource> Operators = new List<OperatorResource>(100);
         private readonly Device _device;
         private readonly FileSystemWatcher _hlslFileWatcher;
         private readonly FileSystemWatcher _textureFileWatcher;
