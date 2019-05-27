@@ -92,7 +92,7 @@ namespace T3.Gui
             var compositionOp = _instance._graphCanvasWindows[0].Canvas.CompositionOp; // todo: fix
             Instance selectedInstance = compositionOp;
             var childUiEntries = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
-            var selectedChildUi = childUiEntries.SingleOrDefault(childUi => childUi.Value.IsSelected).Value;
+            var selectedChildUi = childUiEntries.FirstOrDefault(childUi => childUi.Value.IsSelected).Value;
             if (selectedChildUi != null)
             {
                 var symbolChild = selectedChildUi.SymbolChild;
