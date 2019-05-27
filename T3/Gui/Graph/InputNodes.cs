@@ -31,7 +31,7 @@ namespace T3.Gui.Graph
             ImGui.PushID(inputDef.Id.GetHashCode());
             {
                 var posInWindow = Canvas.ChildPosFromCanvas(inputUi.Position + new Vector2(0, 3));
-                var posInApp = Canvas.ScreenPosFromCanvas(inputUi.Position);
+                var posInApp = Canvas.TransformPosition(inputUi.Position);
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
@@ -79,7 +79,7 @@ namespace T3.Gui.Graph
                         new Vector2(inputUi.Position.X + 1, inputUi.Position.Y - 3),
                         new Vector2(inputUi.Size.X - 2, 6));
 
-                    var rInScreen = Canvas.ScreenRectFromCanvas(virtualRectInCanvas);
+                    var rInScreen = Canvas.TransformRect(virtualRectInCanvas);
 
                     ImGui.SetCursorScreenPos(rInScreen.Min);
                     ImGui.InvisibleButton("output", rInScreen.GetSize());

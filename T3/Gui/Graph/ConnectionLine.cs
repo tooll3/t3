@@ -38,7 +38,7 @@ namespace T3.Gui.Graph
                 var inputsForSymbol = InputUiRegistry.Entries[Canvas.Current.CompositionOp.Symbol.Id];
                 var inputUi = inputsForSymbol[c.SourceDefinitionId];
 
-                sourcePos = Canvas.ScreenPosFromCanvas(inputUi.Position);
+                sourcePos = Canvas.TransformPosition(inputUi.Position);
             }
             else
             {
@@ -46,7 +46,7 @@ namespace T3.Gui.Graph
                 var outputIndex = sourceUi.SymbolChild.Symbol.OutputDefinitions.FindIndex(outputDef => outputDef.Id == c.SourceDefinitionId);
 
                 var r = Slots.GetOutputSlotSizeInCanvas(sourceUi, outputIndex);
-                sourcePos = Canvas.ScreenPosFromCanvas(r.GetCenter());
+                sourcePos = Canvas.TransformPosition(r.GetCenter());
                 color = InputUiRegistry.EntriesByType[sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex].ValueType].Color;
             }
 
@@ -60,7 +60,7 @@ namespace T3.Gui.Graph
             {
                 var outputsForSymbol = OutputUiRegistry.Entries[Canvas.Current.CompositionOp.Symbol.Id];
                 var outputUi = outputsForSymbol[c.TargetDefinitionId];
-                targetPos = Canvas.ScreenPosFromCanvas(outputUi.Position + outputUi.Size / 2);
+                targetPos = Canvas.TransformPosition(outputUi.Position + outputUi.Size / 2);
             }
             else
             {
@@ -68,7 +68,7 @@ namespace T3.Gui.Graph
                 var targetUi = uiChildrenFromCurrentOp[c.TargetChildId];
                 var inputIndex = targetUi.SymbolChild.Symbol.InputDefinitions.FindIndex(inputDef => inputDef.Id == c.TargetDefinitionId);
                 var r = Slots.GetInputSlotSizeInCanvas(targetUi, inputIndex);
-                targetPos = Canvas.ScreenPosFromCanvas(r.GetCenter());
+                targetPos = Canvas.TransformPosition(r.GetCenter());
                 color = InputUiRegistry.EntriesByType[targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].DefaultValue.ValueType].Color;
             }
 

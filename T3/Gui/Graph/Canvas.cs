@@ -60,7 +60,7 @@ namespace T3.Gui.Graph
 
                         if (!ImGui.IsAnyItemHovered() && ImGui.IsMouseDoubleClicked(0))
                         {
-                            QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, CanvasPosFromScreen(ImGui.GetMousePos()));
+                            QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, InverseTransformPosition(ImGui.GetMousePos()));
                         }
 
                         // Zoom with mouse wheel
@@ -160,7 +160,6 @@ namespace T3.Gui.Graph
             ImGui.PopStyleVar();
         }
 
-
         private void DrawGrid()
         {
             var gridSize = 64.0f * _scale;
@@ -199,27 +198,45 @@ namespace T3.Gui.Graph
         /// <summary>
         /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public static Vector2 CanvasPosFromScreen(Vector2 screenPos)
+        public static Vector2 InverseTransformPosition(Vector2 screenPos)
         {
             return (screenPos - Current._scroll - Current._canvasWindowPos) / Current._scale;
         }
 
         /// <summary>
+        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
+        /// </summary>
+        public static Vector2 InverseTransformDirection(Vector2 vectorInScreen)
+        {
+            return vectorInScreen / Current._scale;
+        }
+
+
+        /// <summary>
+        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
+        /// </summary>
+        public static Vector2 TransformDirection(Vector2 vectorInCanvas)
+        {
+            return vectorInCanvas * Current._scale;
+        }
+
+
+        /// <summary>
         /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public static Vector2 ScreenPosFromCanvas(Vector2 posOnCanvas)
+        public static Vector2 TransformPosition(Vector2 posOnCanvas)
         {
             return posOnCanvas * Current._scale + Current._scroll + Current._canvasWindowPos;
         }
 
-        public static ImRect CanvasRectFromScreen(ImRect screenRect)
+        public static ImRect InverseTransformRect(ImRect screenRect)
         {
-            return new ImRect(CanvasPosFromScreen(screenRect.Min), CanvasPosFromScreen(screenRect.Max));
+            return new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
         }
 
-        public static ImRect ScreenRectFromCanvas(ImRect canvasRect)
+        public static ImRect TransformRect(ImRect canvasRect)
         {
-            return new ImRect(ScreenPosFromCanvas(canvasRect.Min), ScreenPosFromCanvas(canvasRect.Max));
+            return new ImRect(TransformPosition(canvasRect.Min), TransformPosition(canvasRect.Max));
         }
 
         /// <summary>
@@ -234,12 +251,12 @@ namespace T3.Gui.Graph
 
         public static void DrawRect(ImRect rectOnCanvas, Color color)
         {
-            Canvas.DrawList.AddRect(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
+            Canvas.DrawList.AddRect(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
         }
 
         public static void DrawRectFilled(ImRect rectOnCanvas, Color color)
         {
-            Canvas.DrawList.AddRectFilled(ScreenPosFromCanvas(rectOnCanvas.Min), ScreenPosFromCanvas(rectOnCanvas.Max), color);
+            Canvas.DrawList.AddRectFilled(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
         }
 
         private ImDrawListPtr _overlayDrawList;
