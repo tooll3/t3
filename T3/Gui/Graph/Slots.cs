@@ -13,7 +13,7 @@ namespace T3.Gui.Graph
 
             var virtualRectInCanvas = GetOutputSlotSizeInCanvas(ui, outputIndex);
 
-            var rInScreen = Canvas.ScreenRectFromCanvas(virtualRectInCanvas);
+            var rInScreen = Canvas.TransformRect(virtualRectInCanvas);
 
             ImGui.SetCursorScreenPos(rInScreen.Min);
             ImGui.InvisibleButton("output", rInScreen.GetSize());
@@ -71,7 +71,7 @@ namespace T3.Gui.Graph
         {
             var inputDef = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex];
             var virtualRectInCanvas = GetInputSlotSizeInCanvas(targetUi, inputIndex);
-            var rInScreen = Canvas.ScreenRectFromCanvas(virtualRectInCanvas);
+            var rInScreen = Canvas.TransformRect(virtualRectInCanvas);
             ImGui.SetCursorScreenPos(rInScreen.Min);
             ImGui.InvisibleButton("input", rInScreen.GetSize());
             THelpers.DebugItemRect();
