@@ -1,8 +1,13 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Text;
+using Newtonsoft.Json;
+using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Animation;
 using T3.Gui.Graph;
@@ -26,7 +31,7 @@ namespace T3.Gui
 
         public static void OpenNewGraphWindow()
         {
-            _instance._graphCanvasWindows.Add(new GraphCanvasWindow(_mockModel.MainOp, "Composition View " + _instance._graphCanvasWindows.Count));
+            _instance._graphCanvasWindows.Add(new GraphCanvasWindow(_uiModel.MainOp, "Composition View " + _instance._graphCanvasWindows.Count));
         }
 
 
@@ -80,9 +85,6 @@ namespace T3.Gui
                 _graphCanvasWindows.Remove(obsoleteGraphWindow);
         }
 
-
-
-
         public void DrawSelectedOutput()
         {
             ImGui.Begin("SelectionView");
@@ -104,6 +106,11 @@ namespace T3.Gui
                     IOutputUi outputUi = OutputUiRegistry.Entries[selectedInstance.Symbol.Id][firstOutput.Id];
                     outputUi.DrawValue(firstOutput);
                 }
+            }
+
+            if (ImGui.Button("serialize"))
+            {
+                _uiModel.Save();
             }
 
             ImGui.End();
@@ -153,7 +160,7 @@ namespace T3.Gui
         }
 
         private List<GraphCanvasWindow> _graphCanvasWindows = new List<GraphCanvasWindow>();
-        public static MockModel _mockModel = new MockModel();
+        public static UiModel _uiModel = new UiModel();
         private ConsoleLogWindow _consoleWindow = new ConsoleLogWindow();
         private CurveEditor _curveEditor = new CurveEditor();
         private static T3UI _instance = null;

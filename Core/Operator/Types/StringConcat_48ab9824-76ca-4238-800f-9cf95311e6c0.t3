@@ -1,0 +1,7 @@
+{
+  "Name": "StringConcat",
+  "Id": "48ab9824-76ca-4238-800f-9cf95311e6c0",
+  "InstanceType": "T3.Core.Operator.Types.StringConcat",
+  "Children": [],
+  "Connections": []
+}

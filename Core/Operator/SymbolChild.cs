@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace T3.Core.Operator
 {
@@ -14,12 +15,17 @@ namespace T3.Core.Operator
         public Symbol Symbol { get; }
 
         public Guid Id { get; }
+
+        public string Name { get; set; } = string.Empty;
+
+        public string ReadableName => string.IsNullOrEmpty(Name) ? Symbol.Name : Name;
+
         public Dictionary<InputDefinitionId, Input> InputValues { get; } = new Dictionary<InputDefinitionId, Input>();
 
-        public SymbolChild(Symbol symbol)
+        public SymbolChild(Symbol symbol, Guid childId)
         {
             Symbol = symbol;
-            Id = Guid.NewGuid();
+            Id = childId;
 
             foreach (var inputDefinition in symbol.InputDefinitions)
             {
@@ -32,8 +38,9 @@ namespace T3.Core.Operator
         public class Input
         {
             public Symbol.InputDefinition InputDefinition { get; }
-
             public InputValue DefaultValue => InputDefinition.DefaultValue;
+
+            public string Name => InputDefinition.Name;
 
             /// <summary>The input value used for this symbol child</summary>
             public InputValue Value { get; }

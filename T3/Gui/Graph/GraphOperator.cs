@@ -66,7 +66,7 @@ namespace T3.Gui.Graph
                 dl.ChannelsSplit(2);
                 dl.ChannelsSetCurrent(1);
 
-                dl.AddText(posInApp, Color.White, String.Format($"{childUi.ReadableName}"));
+                dl.AddText(posInApp, Color.White, string.Format($"{childUi.SymbolChild.ReadableName}"));
                 dl.ChannelsSetCurrent(0);
 
                 var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.Id) ? 1.2f : 0.8f;

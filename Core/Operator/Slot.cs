@@ -1,7 +1,11 @@
 using System;
+using System.CodeDom;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
+using Newtonsoft.Json;
+using T3.Core.Logging;
 using SharpDX;
+using static System.Single;
 
 namespace T3.Core.Operator
 {
@@ -60,13 +64,22 @@ namespace T3.Core.Operator
         public abstract bool IsConnected { get; }
     }
 
-    public abstract class InputValue
+    public abstract class InputValue 
     {
         public Type ValueType;
         public abstract InputValue Clone();
         public abstract void Assign(InputValue otherValue);
+        public abstract void ToJson(JsonTextWriter writer);
+        public abstract void SetValueFromJson(string json);
     }
 
+    public static class ExtBla
+    {
+        public static T ChangeType<T>(this object obj)
+        {
+            return (T)Convert.ChangeType(obj, typeof(T));
+        }
+    }
     public class InputValue<T> : InputValue
     {
         public InputValue()
@@ -94,6 +107,30 @@ namespace T3.Core.Operator
             else
             {
                 Debug.Assert(false); // trying to assign different types of input values
+            }
+        }
+
+        public override void ToJson(JsonTextWriter writer)
+        {
+            if (TypeValueToJsonConverters.Entries.TryGetValue(ValueType, out var converterFunc))
+            {
+                converterFunc(writer, Value);
+            }
+            else
+            {
+                Log.Error("Trying to convert an input value of type '{ValueType}' but no converter registered in TypeValueToJsonConverters. Returning empty string.");
+            }
+        }
+
+        public override void SetValueFromJson(string json)
+        {
+            if (JsonToTypeValueConverters.Entries.TryGetValue(ValueType, out var converterFunc))
+            {
+                Value = (T)converterFunc(json);
+            }
+            else
+            {
+                Log.Error("Trying to read a json value for type '{ValueType}' but no converter registered in JsonToTypeValueConverters. Skipping value reading.");
             }
         }
 

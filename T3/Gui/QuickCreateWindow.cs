@@ -57,19 +57,19 @@ namespace T3.Gui.Graph
                 ImGui.PushID(symbol.Id.GetHashCode());
 
                 var flags = parentSymbols.Contains(symbol)
-                    ? ImGuiSelectableFlags.Disabled
-                    : ImGuiSelectableFlags.None;
+                                ? ImGuiSelectableFlags.Disabled
+                                : ImGuiSelectableFlags.None;
 
-                if (ImGui.Selectable(symbol.SymbolName, symbol == _selectedSymbol, flags))
+                if (ImGui.Selectable(symbol.Name, symbol == _selectedSymbol, flags))
                 {
                     Guid newSymbolChildId = _compositionOp.AddChild(symbol);
                     // Create and register ui info for new child
                     var uiEntriesForChildrenOfSymbol = SymbolChildUiRegistry.Entries[_compositionOp.Id];
                     uiEntriesForChildrenOfSymbol.Add(newSymbolChildId, new SymbolChildUi
-                    {
-                        SymbolChild = _compositionOp.Children.Find(entry => entry.Id == newSymbolChildId),
-                        PosOnCanvas = _positionInOp
-                    });
+                                                                       {
+                                                                           SymbolChild = _compositionOp.Children.Find(entry => entry.Id == newSymbolChildId),
+                                                                           PosOnCanvas = _positionInOp
+                                                                       });
 
                     _opened = false;
                 }

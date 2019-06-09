@@ -2,17 +2,24 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Numerics;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Selection;
 
 namespace T3.Gui
 {
+
     public interface IInputUi : ISelectable
     {
-        void DrawInputEdit(string name, IInputSlot input);
         Type Type { get; }
+
+        void DrawInputEdit(string name, IInputSlot input);
     }
 
     public abstract class InputValueUi<T> : IInputUi
@@ -142,10 +149,99 @@ namespace T3.Gui
         /// <summary>
         /// Provides a dictionary of <see cref="Symbol.InputDefinition.id"/> -> <see cref="IInputUi"/>s for a <see cref="Symbol"/>
         /// </summary>
-        public static Dictionary<Guid, Dictionary<Guid, IInputUi>> Entries { get; } = new Dictionary<Guid, Dictionary<Guid, IInputUi>>();
+        public static Dictionary<Guid, Dictionary<Guid, IInputUi>> Entries { get; set; } = new Dictionary<Guid, Dictionary<Guid, IInputUi>>();
 
-        // todo: remove entries by type, having the dict above should be sufficient
-        public static Dictionary<Type, IInputUi> EntriesByType { get; } = new Dictionary<Type, IInputUi>();
+        public static void Load()
+        {
+            if (!File.Exists(FilePath))
+            {
+                Log.Error($"Couldn't open File '{FilePath} for loading the input ui infos.");
+                return;
+            }
+
+            var vector2Converter = JsonToTypeValueConverters.Entries[typeof(Vector2)];
+
+            using (var streamReader = new StreamReader(FilePath))
+            using (var jsonTextReader = new JsonTextReader(streamReader))
+            {
+                var mainObject = (JObject)JToken.ReadFrom(jsonTextReader);
+                var entries = (JArray)mainObject["Entries"];
+                foreach (var symbolEntry in entries)
+                {
+                    var symbolId = Guid.Parse(symbolEntry["SymbolId"].Value<string>());
+                    var inputDict = new Dictionary<Guid, IInputUi>();
+                    foreach (var uiInputEntry in (JArray)symbolEntry["InputUis"])
+                    {
+                        var inputId = Guid.Parse(uiInputEntry["InputId"].Value<string>());
+                        var typeName = uiInputEntry["Type"].Value<string>();
+                        Type type = typeof(float).Assembly.GetTypes().First(t => t.FullName == typeName);
+                        if (InputUiFactory.Entries.TryGetValue(type, out var inputCreator))
+                        {
+                            var inputUi = inputCreator();
+                            JToken positionToken = uiInputEntry["Position"];
+                            inputUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
+                            //JToken sizeToken = uiInputEntry["Size"];
+                            //inputUi.Size = (Vector2)vector2Converter(sizeString);
+
+                            inputDict.Add(inputId, inputUi);
+                        }
+                        else
+                        {
+                            Log.Error($"Error creating input ui for non registered type '{typeName}'.");
+                        }
+                    }
+                    Entries.Add(symbolId, inputDict);
+                }
+            }
+        }
+
+        public static void Save()
+        {
+            //todo: code here is nearly the same as in OutputUiRegistry.Save() 
+            var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
+
+            using (var streamWriter = new StreamWriter(FilePath))
+            using (var jsonTextWriter = new JsonTextWriter(streamWriter))
+            {
+                jsonTextWriter.Formatting = Formatting.Indented;
+                jsonTextWriter.WriteStartObject(); // root object 
+                jsonTextWriter.WritePropertyName("Entries");
+                jsonTextWriter.WriteStartArray();
+
+                foreach (var entry in Entries.OrderBy(i => i.Key))
+                {
+                    var symbol = SymbolRegistry.Entries[entry.Key];
+                    jsonTextWriter.WriteStartObject(); // symbol entry
+                    jsonTextWriter.WriteValue("SymbolId", entry.Key);
+                    jsonTextWriter.WriteComment(symbol.Name);
+                    jsonTextWriter.WritePropertyName("InputUis");
+                    jsonTextWriter.WriteStartArray();
+
+                    foreach (var inputEntry in entry.Value.OrderBy(i => i.Key))
+                    {
+                        jsonTextWriter.WriteStartObject(); // input entry
+                        jsonTextWriter.WriteValue("InputId", inputEntry.Key);
+                        var inputUi = inputEntry.Value;
+                        var inputName = symbol.InputDefinitions.Single(inputDef => inputDef.Id == inputEntry.Key).Name;
+                        jsonTextWriter.WriteComment(inputName);
+                        jsonTextWriter.WriteValue("Type", inputUi.Type);
+                        jsonTextWriter.WritePropertyName("Position");
+                        vec2Writer(jsonTextWriter, inputUi.PosOnCanvas);
+
+                        //jsonTextWriter.WriteValue("Size", inputUi.Size); //todo: check if needed
+                        jsonTextWriter.WriteEndObject();
+                    }
+
+                    jsonTextWriter.WriteEndArray();
+                    jsonTextWriter.WriteEndObject();
+                }
+
+                jsonTextWriter.WriteEndArray();
+                jsonTextWriter.WriteEndObject();
+            }
+        }
+
+        private static string FilePath = "InputUiRegistry.json";
     }
 
     public static class InputUiFactory

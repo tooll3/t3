@@ -38,7 +38,7 @@ namespace T3.Gui.Graph
             foreach (var p in parents)
             {
                 ImGui.PushID(p.Id.GetHashCode());
-                if (ImGui.Button(p.Symbol.SymbolName))
+                if (ImGui.Button(p.Symbol.Name))
                 {
                     Canvas.CompositionOp = p;
                 }
@@ -51,7 +51,7 @@ namespace T3.Gui.Graph
 
             ImGui.PushStyleColor(ImGuiCol.Button, Color.White.Rgba);
             ImGui.PushStyleColor(ImGuiCol.Text, Color.Black.Rgba);
-            ImGui.Button(Canvas.CompositionOp.Symbol.SymbolName);
+            ImGui.Button(Canvas.CompositionOp.Symbol.Name);
             ImGui.PopStyleColor(2);
         }
 

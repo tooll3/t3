@@ -14,8 +14,6 @@ namespace T3.Gui
         public Vector2 Size { get; set; } = new Vector2(100, 30);
         public bool IsVisible { get; set; } = true;
         public bool IsSelected { get; set; } = false;
-        public string Name { get; set; } = string.Empty;
-        public string ReadableName => string.IsNullOrEmpty(Name) ? SymbolChild.Symbol.SymbolName : Name;
 
     }
 }

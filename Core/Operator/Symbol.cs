@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 
 //using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -17,14 +18,15 @@ namespace T3.Core.Operator
     /// <remarks>
     /// - There can be multiple <see cref="Instance"/>s of a symbol.
     /// </remarks>
+    [JsonObject(MemberSerialization.OptIn)]
     public class Symbol : IDisposable
     {
         public Guid Id { get; set; }
         public string SourcePath { get; set; }
-        public string SymbolName { get; set; }
+        public string Name { get; set; }
         public string Namespace { get; set; }
 
-        private readonly List<Instance> _instancesOfSymbol = new List<Instance>();
+        public readonly List<Instance> _instancesOfSymbol = new List<Instance>();
         public readonly List<SymbolChild> Children = new List<SymbolChild>();
         public readonly List<Connection> Connections = new List<Connection>();
 
@@ -40,11 +42,17 @@ namespace T3.Core.Operator
 
         #region public API =======================================================================
 
-        public Symbol(Type instanceType)
+        internal Symbol(Type instanceType, Guid id, IEnumerable<SymbolChild> children)
+            : this(instanceType, id)
+        {
+            Children.AddRange(children);
+        }
+
+        public Symbol(Type instanceType, Guid id)
         {
             InstanceType = instanceType;
-            SymbolName = instanceType.Name;
-            Id = Guid.NewGuid();
+            Name = instanceType.Name;
+            Id = id;
 
             // input identified by base interface
             Type inputSlotType = typeof(IInputSlot);
@@ -211,11 +219,24 @@ namespace T3.Core.Operator
             return new InputDefinition() { Id = attribute.Id, Name = info.Name, DefaultValue = defaultValue };
         }
 
-        public Instance CreateInstance()
+        public Instance CreateInstance(Guid id)
         {
             var newInstance = Activator.CreateInstance(InstanceType) as Instance;
             Debug.Assert(newInstance != null);
+            newInstance.Id = id;
             newInstance.Symbol = this;
+
+            int numInputs = newInstance.Inputs.Count;
+            for (int i = 0; i < numInputs; i++)
+            {
+                newInstance.Inputs[i].Id = InputDefinitions[i].Id;
+            }
+
+            int numOutputs = newInstance.Outputs.Count;
+            for (int i = 0; i < numOutputs; i++)
+            {
+                newInstance.Outputs[i].Id = OutputDefinitions[i].Id;
+            }
 
             // create child instances
             foreach (var symbolChild in Children)
@@ -237,8 +258,7 @@ namespace T3.Core.Operator
         private static void CreateAndAddNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
         {
             var childSymbol = symbolChild.Symbol;
-            var childInstance = childSymbol.CreateInstance();
-            childInstance.Id = symbolChild.Id;
+            var childInstance = childSymbol.CreateInstance(symbolChild.Id);
             childInstance.Parent = parentInstance;
 
             // set up the inputs for the child instance
@@ -292,7 +312,7 @@ namespace T3.Core.Operator
 
         public Guid AddChild(Symbol symbol)
         {
-            var newChild = new SymbolChild(symbol);
+            var newChild = new SymbolChild(symbol, Guid.NewGuid());
             Children.Add(newChild);
 
             foreach (var instance in _instancesOfSymbol)
@@ -331,14 +351,6 @@ namespace T3.Core.Operator
             public Guid Id { get; set; }
             public string Name { get; set; }
             public InputValue DefaultValue { get; set; }
-
-            public Relevancy Relevance;
-            public enum Relevancy
-            {
-                Required,
-                Relevant,
-                Optional
-            }
 
             //TODO: how do we handle MultiInputs?
         }

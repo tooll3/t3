@@ -28,7 +28,7 @@ namespace T3.Gui.Graph
             if (!SymbolChildUiRegistry.Entries.ContainsKey(CompositionOp.Symbol.Id))
             {
                 SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id] = new Dictionary<Guid, SymbolChildUi>();
-                Log.Debug("Added Op to UI Registry " + CompositionOp.Symbol.SymbolName);
+                Log.Debug("Added Op to UI Registry " + CompositionOp.Symbol.Name);
             }
 
             UiChildrenById = SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id];
@@ -180,7 +180,7 @@ namespace T3.Gui.Graph
                 if (selectedChildren.Count > 0)
                 {
                     var label = selectedChildren.Count == 1
-                        ? $"{selectedChildren[0].ReadableName} Item..." : $"{selectedChildren.Count} Items...";
+                        ? $"{selectedChildren[0].SymbolChild.ReadableName} Item..." : $"{selectedChildren.Count} Items...";
 
                     ImGui.Text(label);
                     if (ImGui.MenuItem(" Rename..", null, false, false)) { }
