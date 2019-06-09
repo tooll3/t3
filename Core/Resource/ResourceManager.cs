@@ -536,8 +536,9 @@ namespace T3.Core
         }
 
         private readonly Stopwatch _operatorUpdateStopwatch = new Stopwatch();
-        public void UpdateChangedOperatorTypes()
+        public List<Symbol> UpdateChangedOperatorTypes()
         {
+            var modifiedSymbols = new List<Symbol>();
             foreach (var opResource in Operators)
             {
                 if (opResource.Updated)
@@ -556,6 +557,7 @@ namespace T3.Core
                         opResource.Updated = false;
                         _operatorUpdateStopwatch.Stop();
                         Console.WriteLine($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
+                        modifiedSymbols.Add(symbolEntry.Value);
                     }
                     else
                     {
@@ -564,6 +566,7 @@ namespace T3.Core
                 }
             }
 
+            return modifiedSymbols;
         }
 
         public Dictionary<Guid, Resource> Resources = new Dictionary<Guid, Resource>();

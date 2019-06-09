@@ -153,7 +153,7 @@ namespace T3.Gui
         }
 
         private List<GraphCanvasWindow> _graphCanvasWindows = new List<GraphCanvasWindow>();
-        private static MockModel _mockModel = new MockModel();
+        public static MockModel _mockModel = new MockModel();
         private ConsoleLogWindow _consoleWindow = new ConsoleLogWindow();
         private static T3UI _instance = null;
         private QuickCreateWindow _quickCreateWindow = null;
