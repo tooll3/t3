@@ -10,7 +10,7 @@ using T3.Core.Animation.Curve;
 namespace T3.Gui.Animation
 {
     /// <summary>
-    /// A graphical representation of a <see cref="_curve"/>. Handles style and selection states.
+    /// A graphical representation of a <see cref="Curve"/>. Handles style and selection states.
     /// </summary>
     public class CurveUi
     {
@@ -60,24 +60,26 @@ namespace T3.Gui.Animation
 
             //PathGeometry myPathGeometry = new PathGeometry();
             //PathFigure pathFigure2 = new PathFigure();
-
-            int steps = (int)(ImGui.GetWindowWidth());
-
-            //Vector2[] polyLinePointArray = new Vector2[steps];
+            var step = 3f;
+            var width = (float)ImGui.GetWindowWidth();
 
             Vector2 lastPoint = Vector2.Zero;
             Vector2 point;
-            for (int x = 0; x < steps; x++)
-            {
-                double u = _curveEditor.xToU(x);
-                double v = _curve.GetSampledValue(u);
-                float y = (float)_curveEditor.vToY(v);
-                point = new Vector2((float)x, (float)y) + _curveEditor.WindowPos;
-                if (x > 0)
-                    _curveEditor.DrawList.AddLine(lastPoint, point, Color.White);
-                lastPoint = point;
+            double dU = _curveEditor.xToU((double)step) - _curveEditor.xToU(0);
+            double u = _curveEditor.xToU(1);
 
-                //polyLinePointArray[i] = new Vector2(i * SAMPLE_STEP, (float)_curveEditor.vToY(v));
+            for (float x = 0; x < width; x += step)
+            {
+                point = new Vector2(
+                    x,
+                    _curveEditor.vToY((float)_curve.GetSampledValue(u))
+                    ) + _curveEditor.WindowPos;
+
+                if (x > 0)
+                    _curveEditor.DrawList.AddLine(lastPoint, point, Color.Gray);
+
+                u += dU;
+                lastPoint = point;
             }
 
             //if (steps == 0)
