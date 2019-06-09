@@ -43,11 +43,12 @@ namespace T3.Gui.Graph
             else
             {
                 var sourceUi = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.SourceChildId];
-                var outputIndex = sourceUi.SymbolChild.Symbol.OutputDefinitions.FindIndex(outputDef => outputDef.Id == c.SourceDefinitionId);
+                var outputDefinitions = sourceUi.SymbolChild.Symbol.OutputDefinitions;
+                var outputIndex = outputDefinitions.FindIndex(outputDef => outputDef.Id == c.SourceDefinitionId);
 
                 var r = Slots.GetOutputSlotSizeInCanvas(sourceUi, outputIndex);
                 sourcePos = Canvas.TransformPosition(r.GetCenter());
-                color = InputUiRegistry.EntriesByType[sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex].ValueType].Color;
+                color = TypeUiRegistry.Entries[outputDefinitions[outputIndex].ValueType].Color;
             }
 
             Vector2 targetPos;
@@ -66,10 +67,11 @@ namespace T3.Gui.Graph
             {
                 var uiChildrenFromCurrentOp = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id];
                 var targetUi = uiChildrenFromCurrentOp[c.TargetChildId];
-                var inputIndex = targetUi.SymbolChild.Symbol.InputDefinitions.FindIndex(inputDef => inputDef.Id == c.TargetDefinitionId);
+                var inputDefinitions = targetUi.SymbolChild.Symbol.InputDefinitions;
+                var inputIndex = inputDefinitions.FindIndex(inputDef => inputDef.Id == c.TargetDefinitionId);
                 var r = Slots.GetInputSlotSizeInCanvas(targetUi, inputIndex);
                 targetPos = Canvas.TransformPosition(r.GetCenter());
-                color = InputUiRegistry.EntriesByType[targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].DefaultValue.ValueType].Color;
+                color = TypeUiRegistry.Entries[inputDefinitions[inputIndex].DefaultValue.ValueType].Color;
             }
 
             Canvas.DrawList.AddBezierCurve(
