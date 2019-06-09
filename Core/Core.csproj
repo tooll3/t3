@@ -106,6 +106,7 @@
     <Compile Include="Logging\LogEntry.cs" />
     <Compile Include="Logging\FileWriter.cs" />
     <Compile Include="Operator\Types\Add.cs" />
+    <Compile Include="Operator\Types\Dashboard.cs" />
     <Compile Include="Operator\Types\FloatFormat.cs" />
     <Compile Include="Operator\Instance.cs" />
     <Compile Include="Operator\Types\Project.cs" />
