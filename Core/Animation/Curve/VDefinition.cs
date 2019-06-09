@@ -1,6 +1,3 @@
-// Copyright (c) 2016 Framefield. All rights reserved.
-// Released under the MIT license. (see LICENSE.txt)
-
 using System;
 
 namespace T3.Core.Animation.Curve
@@ -26,9 +23,9 @@ namespace T3.Core.Animation.Curve
 
         public double U { get; set; }
         public double Value { get; set; }
-        public double Tension { get; set; }
-        public double Bias { get; set; }
-        public double Continuity { get; set; }
+        //public double Tension { get; set; }
+        //public double Bias { get; set; }
+        //public double Continuity { get; set; }
         public Interpolation InType { get; set; }
         public Interpolation OutType { get; set; }
 
@@ -43,11 +40,13 @@ namespace T3.Core.Animation.Curve
         public VDefinition()
         {
             Value = 0.0;
-            Tension = 0.0;
-            Bias = 0.0;
-            Continuity = 0.0;
-            InType = Interpolation.Linear;
-            OutType = Interpolation.Linear;
+            //Tension = 0.0;
+            //Continuity = 0.0;
+            //Bias = 0.0;
+            InType = Interpolation.Spline;
+            OutType = Interpolation.Spline;
+            InEditMode = EditMode.Smooth;
+            OutEditMode = EditMode.Smooth;
             InTangentAngle = 0.0;
             OutTangentAngle = 0.0;
         }
@@ -57,9 +56,10 @@ namespace T3.Core.Animation.Curve
             return new VDefinition()
             {
                 Value = Value,
-                Tension = Tension,
-                Bias = Bias,
-                Continuity = Continuity,
+                U = U,
+                //Tension = Tension,
+                //Bias = Bias,
+                //Continuity = Continuity,
                 InType = InType,
                 OutType = OutType,
                 InEditMode = InEditMode,
@@ -114,5 +114,4 @@ namespace T3.Core.Animation.Curve
             length = 0;
         }
     };
-
 }

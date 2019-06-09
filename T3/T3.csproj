@@ -291,7 +291,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gui\Animation\Curve\CurveEditorWindow.cs" />
-    <Compile Include="Gui\Animation\Curve\CurvePointControl.cs" />
+    <Compile Include="Gui\Animation\Curve\CurvePointUi.cs" />
+    <Compile Include="Gui\Animation\Curve\CurveUi.cs" />
     <Compile Include="Gui\Graph\GraphWidgets.cs" />
     <Compile Include="Gui\InputUi.cs" />
     <Compile Include="Gui\OutputUi.cs" />

@@ -73,9 +73,9 @@ namespace T3.Core.Animation.Curve
 
         public void AddOrUpdateV(double u, VDefinition key)
         {
-            var state = State;
-            state.Table[u] = key.Clone();
-            SplineInterpolator.UpdateTangents(state.Table.ToList());
+            key.U = u;
+            State.Table[u] = key;
+            SplineInterpolator.UpdateTangents(State.Table.ToList());
 
             //TriggerChangedEventIfEnabled();
         }
