@@ -28,21 +28,29 @@ namespace T3.Gui.Animation
     {
         public CurveEditor()
         {
-            InitiailizeMockCurve();
+            InitiailizeMockCurves();
+            _SelectionFence = new SelectionFence(this);
+            //_curveEditBox = new CurveEditBox(_SelectionHandler, this);
+
+            //_SelectionHandler.SelectionChanged += SelectionChangedHandler;
+
+            //_USnapHandler.AddSnapAttractor(XHorizontalScaleLines);
+            //_ValueSnapHandler.AddSnapAttractor(XVerticalScaleLines);
+            //_ValueSnapHandler.SnappedEvent += ValueSnapHandler_SnappedEventHandler;
         }
 
         public List<ISelectable> SelectableChildren { get; set; }
+        //class CurveEditBox { }
 
-        private void DrawCurve()
-        {
-            foreach (var keyPair in _mockCurve.GetPoints())
-            {
-                var t = keyPair.Key;
-                var def = keyPair.Value;
-                var p = new Vector2((float)t, (float)def.Value) + _canvasWindowPos;
-                DrawList.AddRectFilled(p, p + new Vector2(10, 10), Color.White);
-            }
-        }
+        private Dictionary<Curve, CurveUi> _curvesWithUi = new Dictionary<Curve, CurveUi>();
+        //private SortedList<Curve, List<CurvePointUi>> _curvesWithCurvePointUi = new SortedList<Curve, List<CurvePointUi>>();
+
+        public SelectionHandler _SelectionHandler = new SelectionHandler();
+        private List<CurvePointUi> _pointControlRecyclePool = new List<CurvePointUi>();
+
+        private SelectionFence _SelectionFence;
+        //private CurveEditBox _curveEditBox;
+
 
 
         public bool Draw(ref bool opened)
@@ -59,17 +67,25 @@ namespace T3.Gui.Animation
 
                     // Damp scaling
                     _scale = Im.Lerp(_scale, _scaleTarget, _io.DeltaTime * 20);
+                    UScale = _scale;
                     _scroll = Im.Lerp(_scroll, _scrollTarget, _io.DeltaTime * 20);
+                    UOffset = -_scroll.X;
 
                     THelpers.DebugWindowRect("window");
                     ImGui.BeginChild("scrolling_region", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                     {
+                        var pos = ImGui.GetIO().MousePos - WindowPos;
+                        var uv = new Vector2((float)xToU(pos.X), (float)yToV(pos.Y));
+                        var pp = new Vector2((float)UToX(uv.X), (float)vToY(uv.Y));
+
+                        ImGui.Text($"dX:{_scrollTarget.X} sX:{_scaleTarget}     x:{pos.X} u:{uv.X} x:{pp.X}");
+
                         DrawList = ImGui.GetWindowDrawList();
 
                         THelpers.DebugWindowRect("window.scrollingRegion");
-                        _canvasWindowPos = ImGui.GetWindowPos();
+                        WindowPos = ImGui.GetWindowPos();
                         _size = ImGui.GetWindowSize();
-                        DrawList.PushClipRect(_canvasWindowPos, _canvasWindowPos + _size);
+                        DrawList.PushClipRect(WindowPos, WindowPos + _size);
 
                         // Canvas interaction --------------------------------------------
                         if (ImGui.IsWindowHovered())
@@ -83,9 +99,9 @@ namespace T3.Gui.Animation
                             if (_io.MouseWheel != 0)
                             {
                                 const float zoomSpeed = 1.2f;
-                                var focusCenter = (_mouse - _scroll - _canvasWindowPos) / _scale;
+                                var focusCenter = (_mouse - _scroll - WindowPos) / _scale;
 
-                                _foreground.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.TRed);
+                                //_foreground.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.TRed);
 
                                 if (_io.MouseWheel < 0.0f)
                                 {
@@ -104,7 +120,7 @@ namespace T3.Gui.Animation
                                 }
 
                                 Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
-                                _scrollTarget += _mouse - shift - _canvasWindowPos;
+                                _scrollTarget += _mouse - shift - WindowPos;
                             }
 
                             ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
@@ -112,7 +128,7 @@ namespace T3.Gui.Animation
 
 
                         ////_selectionFence.Draw();
-                        DrawCurve();
+                        DrawCurves();
                         DrawList.PopClipRect();
                     }
                     ImGui.EndChild();
@@ -126,48 +142,49 @@ namespace T3.Gui.Animation
             return opened;
         }
 
-        private void InitiailizeMockCurve()
+
+        private void DrawCurves()
         {
-            _mockCurve = new Curve();
-            for (int i = 0; i < 10; i++)
+            foreach (var c in _curvesWithUi.Values)
             {
-                _mockCurve.AddOrUpdateV(i * 20, new VDefinition()
+                c.Draw();
+            }
+        }
+
+
+        private void InitiailizeMockCurves()
+        {
+            //_curvesWithCurvePointUi = new SortedList<Curve, List<CurvePointUi>>();
+            _curvesWithUi = new Dictionary<Curve, CurveUi>();
+            var random = new Random();
+
+            for (int u = 0; u < 5; u++)
+            {
+                var newCurve = new Curve();
+                for (int i = 3; i < 100; i++)
                 {
-                    Value = random.NextDouble() * 50,
-                    InTangentAngle = 0.0,
-                    OutTangentAngle = 0.0,
-                });
+                    newCurve.AddOrUpdateV(i * 20, new VDefinition()
+                    {
+                        Value = random.NextDouble() * 10,
+                        InType = VDefinition.Interpolation.Spline,
+                        OutType = VDefinition.Interpolation.Spline,
+
+                        //U = i * 20,
+                        InTangentAngle = 30.0,
+                        OutTangentAngle = 20.0,
+                    });
+                }
+
+                var newCurveUi = new CurveUi(newCurve, this);
+                //_curvesWithCurvePointUi[newCurve]
+                _curvesWithUi[newCurve] = newCurveUi;
             }
         }
 
         //-------------------------------------------------------------------------------------
-        class Path { }
 
-        class CurveEditBox { }
 
-        private SortedList<Curve, Path> _curvesWithPaths = new SortedList<Curve, Path>();
-        private SortedList<Curve, List<CurvePointControl>> _curvesWithPointControls = new SortedList<Curve, List<CurvePointControl>>();
 
-        public SelectionHandler _SelectionHandler = new SelectionHandler();
-        private List<CurvePointControl> _pointControlRecyclePool = new List<CurvePointControl>();
-
-        private SelectionFence _SelectionFence;
-        private CurveEditBox _curveEditBox;
-
-        public void InitCurveEditor()
-        {
-            //InitializeComponent();
-
-            _SelectionFence = new SelectionFence(this);
-            //_SelectionHandler.SelectionChanged += SelectionChangedHandler;
-
-            //_curveEditBox = new CurveEditBox(_SelectionHandler, this);
-            //XFenceCanvas.Children.Add(_curveEditBox);
-
-            //_USnapHandler.AddSnapAttractor(XHorizontalScaleLines);
-            //_ValueSnapHandler.AddSnapAttractor(XVerticalScaleLines);
-            //_ValueSnapHandler.SnappedEvent += ValueSnapHandler_SnappedEventHandler;
-        }
 
         //void SelectionChangedHandler(object sender, SelectionHandler.SelectionChangedEventArgs e)
         //{
@@ -224,8 +241,8 @@ namespace T3.Gui.Animation
 
             _SelectionHandler.SelectedElements.Clear();
 
-            _curvesWithPaths.Clear();
-            _curvesWithPointControls.Clear();
+            _curvesWithUi.Clear();
+            //_curvesWithCurvePointUi.Clear();
             //XCurveLineCanvas.Children.Clear();
 
             // Show optimization dialog for curves with too many keys...
@@ -277,7 +294,7 @@ namespace T3.Gui.Animation
         {
             // Copy list first, because RebuildCurve modifies the collection
             var curvesToRebuild = new List<Curve>();
-            foreach (var curve in _curvesWithPaths.Keys)
+            foreach (var curve in _curvesWithUi.Keys)
             {
                 curvesToRebuild.Add(curve);
             }
@@ -334,7 +351,7 @@ namespace T3.Gui.Animation
             var selectedKeys = new List<Tuple<Curve, double>>();
             foreach (var e in _SelectionHandler.SelectedElements)
             {
-                if (!(e is CurvePointControl cpc))
+                if (!(e is CurvePointUi cpc))
                     continue;
 
                 selectedKeys.Add(new Tuple<Curve, double>(cpc.Curve, cpc.Key.U));
@@ -453,7 +470,7 @@ namespace T3.Gui.Animation
             //XCurveLineCanvas.Children.Add(newPath);
 
             //UpdateCurveHighlight();
-            UpdateLine(curve);
+            //UpdateLine(curve);
         }
 
 
@@ -478,7 +495,7 @@ namespace T3.Gui.Animation
 
             if (_SelectionHandler.SelectedElements.Count == 0)
             {
-                foreach (var pair in _curvesWithPaths)
+                foreach (var pair in _curvesWithUi)
                 {
                     Curve curve = pair.Key;
 
@@ -498,14 +515,14 @@ namespace T3.Gui.Animation
             {
                 foreach (var element in _SelectionHandler.SelectedElements)
                 {
-                    var cpc = element as CurvePointControl;
+                    var cpc = element as CurvePointUi;
                     if (cpc != null)
                     {
                         numPoints++;
                         minU = Math.Min(minU, cpc.Key.U);
                         maxU = Math.Max(maxU, cpc.Key.U);
-                        minV = Math.Min(minV, cpc.m_vdef.Value);
-                        maxV = Math.Max(maxV, cpc.m_vdef.Value);
+                        minV = Math.Min(minV, cpc.Key.Value);
+                        maxV = Math.Max(maxV, cpc.Key.Value);
                     }
                 }
             }
@@ -560,10 +577,10 @@ namespace T3.Gui.Animation
 
         public void UpdateLines()
         {
-            foreach (var pair in _curvesWithPointControls)
-            {
-                UpdateLine(pair.Key);
-            }
+            //foreach (var pair in _curvesWithCurvePointUi)
+            //{
+            //    UpdateLine(pair.Key);
+            //}
         }
 
         public void UpdateEditBox()
@@ -575,80 +592,23 @@ namespace T3.Gui.Animation
 
         private System.Diagnostics.Stopwatch m_Stopwatch = new System.Diagnostics.Stopwatch();
 
-        public void UpdateLine(Curve curve)
-        {
-            //m_Stopwatch.Restart();
 
-            //foreach (var cpc in _curvesWithPointControls[curve])
-            //{
-            //    cpc.UpdateControlTangents();
-            //}
-            ////m_Stopwatch.Stop();
-            //m_Stopwatch.Restart();
-
-            //var path = _curvesWithPaths[curve];
-
-            //PathGeometry myPathGeometry = new PathGeometry();
-            //PathFigure pathFigure2 = new PathFigure();
-
-            const int SAMPLE_STEP = 1;
-            int steps = (int)(ImGui.GetWindowWidth() / SAMPLE_STEP);
-
-            Vector2[] polyLinePointArray = new Vector2[steps];
-            for (int i = 0; i < steps; i++)
-            {
-                double u = xToU(i * SAMPLE_STEP);
-                double v = curve.GetSampledValue(u);
-                polyLinePointArray[i] = new Vector2(i * SAMPLE_STEP, (float)vToY(v));
-            }
-            if (steps == 0)
-            {
-                return;
-            }
-            //pathFigure2.StartPoint = polyLinePointArray[0];
-            //PolyLineSegment myPolyLineSegment = new PolyLineSegment();
-
-            //myPolyLineSegment.Points = new PointCollection(polyLinePointArray);
-            //pathFigure2.Segments.Add(myPolyLineSegment);
-            //myPathGeometry.Figures.Add(pathFigure2);
-            //path.Data = myPathGeometry;
-            //m_Stopwatch.Stop();
-        }
 
         public float ActualHeight { get { return ImGui.GetWindowHeight(); } }
         public float ActualWidth { get { return ImGui.GetWindowWidth(); } }
 
-        public double yToV(double y)
-        {
-            double v = (ActualHeight - y) * (MaxV - MinV) / ActualHeight + MinV;
-            return v;
-        }
-
-        public double dyToV(double dy)
-        {
-            return -dy / ActualHeight * (MaxV - MinV);
-        }
-
-        public double vToY(double v)
-        {
-            double y = ActualHeight - (v - MinV) / (MaxV - MinV) * ActualHeight;
-            return y;
-        }
-
-        public double xToU(double x)
-        {
-            return x / UScale + UOffset;
-        }
-
-        public double dxToU(double dx)
-        {
-            return dx / UScale;
-        }
-
-        public double UToX(double t)
-        {
-            return (t - UOffset) * UScale;
-        }
+        public double yToV(double y) { return (ActualHeight - y) * (MaxV - MinV) / ActualHeight + MinV; }
+        public float yToV(float y) { return (ActualHeight - y) * (MaxV - MinV) / ActualHeight + MinV; }
+        public double dyToV(double dy) { return -dy / ActualHeight * (MaxV - MinV); }
+        public float dyToV(float dy) { return -dy / ActualHeight * (MaxV - MinV); }
+        public double vToY(double v) { return ActualHeight - (v - MinV) / (MaxV - MinV) * ActualHeight; }
+        public float vToY(float v) { return ActualHeight - (v - MinV) / (MaxV - MinV) * ActualHeight; }
+        public double xToU(double x) { return x / UScale + UOffset; }
+        public float xToU(float x) { return x / UScale + UOffset; }
+        public double dxToU(double dx) { return dx / UScale; }
+        public float dxToU(float dx) { return dx / UScale; }
+        public double UToX(double t) { return (t - UOffset) * UScale; }
+        public float UToX(float t) { return (t - UOffset) * UScale; }
         #endregion
 
 
@@ -826,7 +786,7 @@ namespace T3.Gui.Animation
             var curvesToUpdate = new List<Curve>();
 
             //_updatingCurveEnabled = false;
-            foreach (var curve in _curvesWithPointControls.Keys)
+            foreach (var curve in _curvesWithUi.Keys)
             {
                 if (!curve.HasVAt(u))
                 {
@@ -1120,15 +1080,14 @@ namespace T3.Gui.Animation
                 var curve = curveUListPair.Key;
                 var uList = curveUListPair.Value;
 
-                foreach (var cpc in _curvesWithPointControls[curve])
+                foreach (var curvePoint in _curvesWithUi[curve].CurvePoints)
                 {
-                    if (uList.Contains(cpc.Key.U))
+                    if (uList.Contains(curvePoint.Key.U))
                     {
-                        _SelectionHandler.AddElement(cpc);
+                        _SelectionHandler.AddElement(curvePoint);
                     }
                 }
             }
-
         }
 
 
@@ -1137,27 +1096,27 @@ namespace T3.Gui.Animation
         /// This is currently used by get KeyFramesFromLogfile but might also be a first stup of copy/pasting keyframes.
         /// </summary>
         /// <param name="valuesOverTime"></param>
-        public void AddKeyframesToFirstCurve(List<KeyValuePair<double, float>> valuesOverTime)
-        {
-            if (_curvesWithPointControls.Keys.Count == 0)
-            {
-                //UIHelper.ShowErrorMessageBox("To add keyframes to a curve, you have to selected an animated operator.", "Cannot paste keyframes.");
-                return;
-            }
+        //public void AddKeyframesToFirstCurve(List<KeyValuePair<double, float>> valuesOverTime)
+        //{
+        //    if (_curvesWithCurvePointUi.Keys.Count == 0)
+        //    {
+        //        //UIHelper.ShowErrorMessageBox("To add keyframes to a curve, you have to selected an animated operator.", "Cannot paste keyframes.");
+        //        return;
+        //    }
 
-            //_updatingCurveEnabled = false;
-            var curve = _curvesWithPointControls.Keys[0];
+        //    //_updatingCurveEnabled = false;
+        //    var curve = _curvesWithCurvePointUi.Keys[0];
 
-            foreach (var valueAndTime in valuesOverTime)
-            {
-                double time = valueAndTime.Key;
-                float value = valueAndTime.Value;
+        //    foreach (var valueAndTime in valuesOverTime)
+        //    {
+        //        double time = valueAndTime.Key;
+        //        float value = valueAndTime.Value;
 
-                curve.AddOrUpdateV(time, new VDefinition() { Value = value });
-            }
-            //_updatingCurveEnabled = true;
-            RebuildCurrentCurves();
-        }
+        //        curve.AddOrUpdateV(time, new VDefinition() { Value = value });
+        //    }
+        //    //_updatingCurveEnabled = true;
+        //    RebuildCurrentCurves();
+        //}
 
 
         #endregion
@@ -1167,7 +1126,7 @@ namespace T3.Gui.Animation
             List<Curve> curves = new List<Curve>();
             if (_SelectionHandler.SelectedElements.Count == 0)
             {
-                foreach (var curve in _curvesWithPaths.Keys)
+                foreach (var curve in _curvesWithUi.Keys)
                 {
                     curves.Add(curve);
                 }
@@ -1176,7 +1135,7 @@ namespace T3.Gui.Animation
             {
                 foreach (var el in _SelectionHandler.SelectedElements)
                 {
-                    var cpc = el as CurvePointControl;
+                    var cpc = el as CurvePointUi;
                     if (cpc != null)
                     {
                         curves.Add(cpc.Curve);
@@ -1204,7 +1163,7 @@ namespace T3.Gui.Animation
 
             if (_SelectionHandler.SelectedElements.Count > 0)
             {
-                foreach (CurvePointControl cp in _SelectionHandler.SelectedElements)
+                foreach (CurvePointUi cp in _SelectionHandler.SelectedElements)
                 {
 
                     if (curveUs.ContainsKey(cp.Curve))
@@ -1221,7 +1180,7 @@ namespace T3.Gui.Animation
             }
             else
             {
-                foreach (var curve in _curvesWithPointControls.Keys)
+                foreach (var curve in _curvesWithUi.Keys)
                 {
                     var list = new List<double>();
 
@@ -1294,40 +1253,25 @@ namespace T3.Gui.Animation
 
         private void OnOptimizeKeyframes()
         {
-            var curves = _curvesWithPaths.Select(pair => pair.Key).OfType<Curve>().ToList();
+            var curves = _curvesWithUi.Select(pair => pair.Key).OfType<Curve>().ToList();
             var optimizer = new CurveOptimizer(curves);
             optimizer.OptimizeCurves(30);
         }
 
 
 
-
-
-
-        //---------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
         private Curve _mockCurve = new Curve();
-        private Random random = new Random();
 
 
         private ImDrawListPtr _foreground;
         private Vector2 _size;
         private Vector2 _mouse;
 
-        public static ImDrawListPtr DrawList;
+        public ImDrawListPtr DrawList;
         private Vector2 _scroll = new Vector2(0.0f, 0.0f);
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
 
-        public Vector2 _canvasWindowPos;    // Position of the canvas window-panel within Application window
+        public Vector2 WindowPos;    // Position of the canvas window-panel within Application window
         public float _scale = 1;            // The damped scale factor {read only}
         float _scaleTarget = 1;
 
@@ -1338,22 +1282,6 @@ namespace T3.Gui.Animation
         private SelectionFence _selectionFence;
 
         private ImGuiIOPtr _io;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }

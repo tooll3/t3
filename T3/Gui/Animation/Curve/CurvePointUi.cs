@@ -12,29 +12,20 @@ namespace T3.Gui.Animation
     /// <summary>
     /// Interaction logic for CurvePointControl.xaml
     /// </summary>
-
-    /**
-     * NOTE: In the long run this class should be refactored MVVM wise into a viewmodel and a UserControl
-     * 
-     */
-    public class CurvePointControl : ISelectable
+    public class CurvePointUi : ISelectable
     {
-        public Vector2 Size { get; } = new Vector2(10, 10);
+        public Vector2 Size { get; } = new Vector2(6, 6);
         public bool IsSelected { get; set; }
-        public Curve Curve;
-        //public double U;
-        public VDefinition m_vdef;
-
-
         public VDefinition Key;
-        //public Curve Curve { get; set; }
+        public Curve Curve { get; set; }
 
         public static int createCount = 0;
         private const float NON_WEIGHT_TANGENT_LENGTH = 50;
 
-        public CurvePointControl(VDefinition vdef, Curve curve, CurveEditor ce)
+        public CurvePointUi(VDefinition key, Curve curve, CurveEditor curveEditor)
         {
-            _curveEditor = ce;
+            Key = key;
+            _curveEditor = curveEditor;
             //U = defaultU;
             //InitFromVDefinition(vdef);
             Curve = curve;
@@ -42,6 +33,12 @@ namespace T3.Gui.Animation
             //createBindingsForPositioning();
         }
 
+
+        public void Draw()
+        {
+            var p = Position + _curveEditor.WindowPos - Size / 2;
+            _curveEditor.DrawList.AddRectFilled(p, p + Size, Color.White);
+        }
 
         //static VToYConverter m_VToYConverter = new VToYConverter();
         //static UToXConverter m_UToXConverter = new UToXConverter();
