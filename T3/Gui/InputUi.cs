@@ -13,6 +13,7 @@ namespace T3.Gui
     {
         void DrawInputEdit(string name, IInputSlot input);
         Color Color { get; }
+        Type Type { get; }
     }
 
     public abstract class InputValueUi<T> : IInputUi
@@ -91,6 +92,7 @@ namespace T3.Gui
         }
 
         public virtual Color Color { get; } = Color.TGreen;
+        public Type Type { get; } = typeof(T);
         public Vector2 Position { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
         public bool IsSelected { get; set; }
