@@ -151,4 +151,9 @@ namespace T3.Gui
         // todo: remove entries by type, having the dict above should be sufficient
         public static Dictionary<Type, IInputUi> EntriesByType { get; } = new Dictionary<Type, IInputUi>();
     }
+
+    public static class InputUiFactory
+    {
+        public static Dictionary<Type, Func<IInputUi>> Entries { get; } = new Dictionary<Type, Func<IInputUi>>();
+    }
 }
