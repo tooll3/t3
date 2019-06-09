@@ -100,10 +100,11 @@
     <Compile Include="Animation\Curve\SplineInterpolator.cs" />
     <Compile Include="Animation\Curve\Utils.cs" />
     <Compile Include="Animation\Curve\VDefinition.cs" />
+    <Compile Include="Logging\ConsoleWriter.cs" />
     <Compile Include="Logging\ILogWriter.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\LogEntry.cs" />
-    <Compile Include="Logging\LogWriter.cs" />
+    <Compile Include="Logging\FileWriter.cs" />
     <Compile Include="Operator\Types\Add.cs" />
     <Compile Include="Operator\Types\FloatFormat.cs" />
     <Compile Include="Operator\Instance.cs" />

@@ -36,46 +36,46 @@ namespace T3.Core.Logging
         #region API for logging
         public static void Debug(String message)
         {
-            AddEntry(new LogEntry(LogEntry.EntryLevel.Debug, message));
+            DoLog(new LogEntry(LogEntry.EntryLevel.Debug, message));
         }
 
         public static void Debug(String message, Guid sourceId)
         {
-            AddEntry(new LogEntry(LogEntry.EntryLevel.Debug, sourceId, message));
+            DoLog(new LogEntry(LogEntry.EntryLevel.Debug, sourceId, message));
         }
 
         public static void DebugFormat(String message, params object[] args)
         {
             var messageString = FormatMessageWithArguments(message, args);
-            AddEntry(new LogEntry(LogEntry.EntryLevel.Debug, messageString));
+            DoLog(new LogEntry(LogEntry.EntryLevel.Debug, messageString));
         }
 
         public static void Info(String message)
         {
-            AddEntry(new LogEntry(LogEntry.EntryLevel.Info, message));
+            DoLog(new LogEntry(LogEntry.EntryLevel.Info, message));
         }
 
         public static void Info(String message, Guid sourceId)
         {
-            AddEntry(new LogEntry(LogEntry.EntryLevel.Info, sourceId, message));
+            DoLog(new LogEntry(LogEntry.EntryLevel.Info, sourceId, message));
         }
 
         public static void InfoFormat(String message, params object[] args)
         {
             var messageString = FormatMessageWithArguments(message, args);
-            AddEntry(new LogEntry(LogEntry.EntryLevel.Info, messageString));
+            DoLog(new LogEntry(LogEntry.EntryLevel.Info, messageString));
         }
 
         public static void Warning(String message, params object[] args)
         {
             var messageString = FormatMessageWithArguments(message, args);
-            AddEntry(new LogEntry(LogEntry.EntryLevel.Warning, messageString));
+            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, messageString));
         }
 
         public static void Error(String message, params object[] args)
         {
             var messageString = FormatMessageWithArguments(message, args);
-            AddEntry(new LogEntry(LogEntry.EntryLevel.Error, messageString));
+            DoLog(new LogEntry(LogEntry.EntryLevel.Error, messageString));
         }
 
         private const int DEFAULT_LINE_LENGTH = 100;
@@ -100,27 +100,14 @@ namespace T3.Core.Logging
             }
             catch (FormatException)
             {
-                AddEntry(new LogEntry(LogEntry.EntryLevel.Info, "Ignoring arguments mal-formated debug message. Did you mess with curly braces?"));
+                DoLog(new LogEntry(LogEntry.EntryLevel.Info, "Ignoring arguments mal-formated debug message. Did you mess with curly braces?"));
             }
             return messageString;
         }
 
         private static void LogDebug(LogEntry.EntryLevel level, String message)
         {
-            AddEntry(new LogEntry(level, Guid.Empty, message));
-        }
-
-        private static void AddEntry(LogEntry entry)
-        {
-            ////if (_instance._mainThreadDispatcher == null || _instance._mainThreadDispatcher.CheckAccess())
-            //{
-            DoLog(entry);
-            //}
-            //else
-            //{
-            //Action action = () => DoLog(entry);
-            //_instance._mainThreadDispatcher.BeginInvoke(action, DispatcherPriority.Background);
-            //}
+            DoLog(new LogEntry(level, Guid.Empty, message));
         }
 
         private static void DoLog(LogEntry entry)
@@ -128,10 +115,8 @@ namespace T3.Core.Logging
             _instance._logWriters.ForEach(writer => writer.ProcessEntry(entry));
         }
 
-
-        //private Dispatcher _mainThreadDispatcher;
-        private static Log _instance = new Log();
-        private List<ILogWriter> _logWriters = new List<ILogWriter>();
+        private static readonly Log _instance = new Log();
+        private readonly List<ILogWriter> _logWriters = new List<ILogWriter>();
 
         private Log() { }   // Prevent construction
     }
