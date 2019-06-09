@@ -20,7 +20,11 @@ namespace T3.Gui.Graph
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
+
+
                 ImGui.InvisibleButton("node", (childUi.Size - new Vector2(0, 6)) * Canvas.Current._scale);
+
+
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
                 {
@@ -52,6 +56,10 @@ namespace T3.Gui.Graph
                     }
                 }
 
+                if (ImGui.IsItemHovered())
+                {
+                    //GraphWidgets.Draw(childUi);
+                }
 
                 // Rendering
                 Canvas.DrawList.ChannelsSplit(2);
@@ -71,6 +79,8 @@ namespace T3.Gui.Graph
                 Canvas.DrawList.ChannelsMerge();
             }
             ImGui.PopID();
+
+
         }
 
         private static void DrawSlots(SymbolChildUi symbolChildUi)

@@ -30,14 +30,14 @@ namespace imHelpers
         /// </summary>
         public static void DebugRect(Vector2 screenMin, Vector2 screenMax, string label = "")
         {
-            var overlayDrawlist = ImGui.GetOverlayDrawList();
+            var overlayDrawlist = ImGui.GetForegroundDrawList();
             overlayDrawlist.AddRect(screenMin, screenMax, Color.TGreen);
             overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), Color.TGreen, label);
         }
 
         public static void DebugRect(Vector2 screenMin, Vector2 screenMax, Color color, string label = "")
         {
-            var overlayDrawlist = ImGui.GetOverlayDrawList();
+            var overlayDrawlist = ImGui.GetForegroundDrawList();
             overlayDrawlist.AddRect(screenMin, screenMax, color);
             overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), color, label);
         }

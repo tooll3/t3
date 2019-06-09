@@ -28,7 +28,7 @@ namespace T3.Gui.Graph
 
             UiChildrenById = SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id];
             DrawList = ImGui.GetWindowDrawList();
-            _overlayDrawList = ImGui.GetOverlayDrawList();
+            _overlayDrawList = ImGui.GetForegroundDrawList();
             _io = ImGui.GetIO();
 
             ImGui.BeginGroup();
