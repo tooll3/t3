@@ -7,7 +7,7 @@ using T3.Gui;
 
 namespace T3
 {
-    class MockModel
+    public class MockModel
     {
         public MockModel()
         {
@@ -143,6 +143,13 @@ namespace T3
                 outputDict.Add(output.Id, outputUiCreator());
             }
             OutputUiRegistry.Entries.Add(symbol.Id, outputDict);
+        }
+
+        public void UpdateUiEntriesForSymbol(Symbol symbol)
+        {
+            InputUiRegistry.Entries.Remove(symbol.Id);
+            OutputUiRegistry.Entries.Remove(symbol.Id);
+            CreateUiEntriesForSymbol(symbol);
         }
 
         public Instance MainOp;

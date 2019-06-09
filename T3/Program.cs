@@ -227,7 +227,11 @@ namespace T3
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
                                      stopwatch.Restart();
 
-                                     resourceManager.UpdateChangedOperatorTypes();
+                                     var modifiedSymbols = resourceManager.UpdateChangedOperatorTypes();
+                                     foreach (var symbol in modifiedSymbols)
+                                     {
+                                         T3UI._mockModel.UpdateUiEntriesForSymbol(symbol);
+                                     }
 
                                      Metrics.UiRenderingStarted();
                                      _t3ui.InitStyle();
