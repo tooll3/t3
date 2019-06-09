@@ -290,6 +290,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gui\Animation\Curve\CurveEditorWindow.cs" />
     <Compile Include="Gui\Graph\GraphWidgets.cs" />
     <Compile Include="Gui\InputUi.cs" />
     <Compile Include="Gui\OutputUi.cs" />
@@ -306,10 +307,6 @@
     <Compile Include="Gui\Color.cs" />
     <Compile Include="Gui\T3Style.cs" />
     <Compile Include="Logging\ConsoleLogWindow.cs" />
-    <Compile Include="Logging\Log.cs" />
-    <Compile Include="Logging\LogEntry.cs" />
-    <Compile Include="Logging\ILogWriter.cs" />
-    <Compile Include="Logging\LogWriter.cs" />
     <Compile Include="Gui\Graph\CreateOperatorWindow.cs" />
     <Compile Include="Gui\Graph\GraphCanvasWindow.cs" />
     <Compile Include="Gui\Graph\GraphOperator.cs" />

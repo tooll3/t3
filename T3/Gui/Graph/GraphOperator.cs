@@ -58,7 +58,7 @@ namespace T3.Gui.Graph
 
                 if (ImGui.IsItemHovered())
                 {
-                    //GraphWidgets.Draw(childUi);
+                    GraphWidgets.Draw(childUi);
                 }
 
                 // Rendering

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Gui.Animation.Curve;
 using T3.Gui.Graph;
 using T3.Logging;
 
@@ -38,10 +39,15 @@ namespace T3.Gui
             if (UiSettingsWindow.ConsoleWindowVisible)
                 _consoleWindow.Draw(ref UiSettingsWindow.ConsoleWindowVisible);
 
+            if (UiSettingsWindow.CurveEditorVisible)
+                _curveEditor.Draw(ref UiSettingsWindow.CurveEditorVisible);
+
             _quickCreateWindow.Draw();
 
             SwapHoveringBuffers();
         }
+
+
 
 
         private unsafe void DrawGraphCanvasWindows()
@@ -155,6 +161,7 @@ namespace T3.Gui
         private List<GraphCanvasWindow> _graphCanvasWindows = new List<GraphCanvasWindow>();
         public static MockModel _mockModel = new MockModel();
         private ConsoleLogWindow _consoleWindow = new ConsoleLogWindow();
+        private CurveEditorWindow _curveEditor = new CurveEditorWindow();
         private static T3UI _instance = null;
         private QuickCreateWindow _quickCreateWindow = null;
     }

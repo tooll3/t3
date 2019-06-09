@@ -12,6 +12,7 @@ namespace T3.Gui
         public static bool ItemRegionsVisible;
         public static bool DemoWindowVisible;
         public static bool ConsoleWindowVisible = true;
+        public static bool CurveEditorVisible = true;
 
         public static unsafe void DrawUiSettings()
         {
@@ -23,6 +24,7 @@ namespace T3.Gui
                 ImGui.Checkbox("Show Item Regions", ref ItemRegionsVisible);
                 ImGui.Checkbox("Demo Window Visible", ref DemoWindowVisible);
                 ImGui.Checkbox("Console Window Visible", ref ConsoleWindowVisible);
+                ImGui.Checkbox("Curve Editor Visible", ref CurveEditorVisible);
 
                 if (ImGui.Button("Open new Graph Canvas"))
                 {

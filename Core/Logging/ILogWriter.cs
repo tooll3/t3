@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace T3.Logging
+namespace T3.Core.Logging
 {
     public interface ILogWriter : IDisposable
     {

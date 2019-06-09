@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using T3.Core.Logging;
 using T3.Core.Operator;
+
 
 namespace T3.Gui.Graph
 {
@@ -93,7 +95,7 @@ namespace T3.Gui.Graph
                 );
             }
             _draftConnectionType = outputDef.ValueType;
-            Logging.Log.Debug("Start connection from output of type" + _draftConnectionType.Name);
+            Log.Debug("Start connection from output of type" + _draftConnectionType.Name);
 
         }
 
@@ -123,7 +125,7 @@ namespace T3.Gui.Graph
                 );
             }
             _draftConnectionType = inputDef.DefaultValue.ValueType;
-            Logging.Log.Debug("Start connection from input of type" + _draftConnectionType.Name);
+            Log.Debug("Start connection from input of type" + _draftConnectionType.Name);
         }
 
 
