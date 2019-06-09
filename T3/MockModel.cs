@@ -118,9 +118,9 @@ namespace T3
             CreateUiEntriesForSymbol(dashboardSymbol);
 
             // create and register input controls by type
-            InputUiRegistry.EntriesByType.Add(typeof(float), new FloatInputUi());
-            InputUiRegistry.EntriesByType.Add(typeof(int), new IntInputUi());
-            InputUiRegistry.EntriesByType.Add(typeof(string), new StringInputUi());
+            TypeUiRegistry.Entries.Add(typeof(float), new FloatUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(int), new IntUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(string), new StringUiProperties());
 
             MainOp = projectOp;
         }

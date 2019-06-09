@@ -84,7 +84,7 @@ namespace T3.Gui.Graph
                     ImGui.SetCursorScreenPos(rInScreen.Min);
                     ImGui.InvisibleButton("output", rInScreen.GetSize());
                     THelpers.DebugItemRect();
-                    var color = InputUiRegistry.EntriesByType[inputDef.DefaultValue.ValueType].Color;
+                    var color = TypeUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
 
                     if (DraftConnection.IsInputNodeCurrentConnectionSource(inputDef))
                     {

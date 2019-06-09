@@ -12,7 +12,6 @@ namespace T3.Gui
     public interface IInputUi : ISelectable
     {
         void DrawInputEdit(string name, IInputSlot input);
-        Color Color { get; }
         Type Type { get; }
     }
 
@@ -91,7 +90,6 @@ namespace T3.Gui
 
         }
 
-        public virtual Color Color { get; } = Color.TGreen;
         public Type Type { get; } = typeof(T);
         public Vector2 Position { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
@@ -109,8 +107,6 @@ namespace T3.Gui
         {
             ImGui.InputFloat(name, ref value, 0.0f, 0.0f, "%f", ImGuiInputTextFlags.ReadOnly);
         }
-
-        public override Color Color { get; } = Color.Gray;
     }
 
     public class IntInputUi : InputValueUi<int>
@@ -124,8 +120,6 @@ namespace T3.Gui
         {
             ImGui.InputInt(name, ref value, 0, 0, ImGuiInputTextFlags.ReadOnly);
         }
-
-        public override Color Color { get; } = Color.TBlue;
     }
 
     public class StringInputUi : InputValueUi<string>
@@ -157,5 +151,30 @@ namespace T3.Gui
     public static class InputUiFactory
     {
         public static Dictionary<Type, Func<IInputUi>> Entries { get; } = new Dictionary<Type, Func<IInputUi>>();
+    }
+
+    public interface ITypeUiProperties
+    {
+        Color Color { get; }
+    }
+
+    public class FloatUiProperties : ITypeUiProperties
+    {
+        public Color Color { get; } = Color.Gray;
+    }
+
+    public class StringUiProperties : ITypeUiProperties
+    {
+        public Color Color { get; } = Color.TGreen;
+    }
+
+    public class IntUiProperties : ITypeUiProperties
+    {
+        public Color Color { get; } = Color.TBlue;
+    }
+
+    public static class TypeUiRegistry
+    {
+        public static Dictionary<Type, ITypeUiProperties> Entries { get; } = new Dictionary<Type, ITypeUiProperties>();
     }
 }
