@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using T3.Core.Logging;
 using T3.Gui;
 
 namespace T3.Logging

@@ -87,6 +87,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animation\Curve\ConstantCurveMapper.cs" />
+    <Compile Include="Animation\Curve\ConstInterpolator.cs" />
+    <Compile Include="Animation\Curve\Curve.cs" />
+    <Compile Include="Animation\Curve\CurveOptimizer.cs" />
+    <Compile Include="Animation\Curve\CurveState.cs" />
+    <Compile Include="Animation\Curve\CycleCurveMapper.cs" />
+    <Compile Include="Animation\Curve\CycleWithOffsetCurveMapper.cs" />
+    <Compile Include="Animation\Curve\IOutsideCurveMapper.cs" />
+    <Compile Include="Animation\Curve\LinearInterpolator.cs" />
+    <Compile Include="Animation\Curve\OscillateCurveMapper.cs" />
+    <Compile Include="Animation\Curve\SplineInterpolator.cs" />
+    <Compile Include="Animation\Curve\Utils.cs" />
+    <Compile Include="Animation\Curve\VDefinition.cs" />
+    <Compile Include="Logging\ILogWriter.cs" />
+    <Compile Include="Logging\Log.cs" />
+    <Compile Include="Logging\LogEntry.cs" />
+    <Compile Include="Logging\LogWriter.cs" />
     <Compile Include="Operator\Types\Add.cs" />
     <Compile Include="Operator\Types\FloatFormat.cs" />
     <Compile Include="Operator\Instance.cs" />

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Threading;
+//using System.Windows.Threading;
 
-namespace T3.Logging
+namespace T3.Core.Logging
 {
     /// <summary>
     /// A singleton that allows to log messages that are forwarded to <see cref="ILogWriter"/>s.
@@ -11,10 +11,10 @@ namespace T3.Logging
     public class Log
     {
         #region API for setup
-        public static void Initialize(Dispatcher dispatcher)
-        {
-            _instance._mainThreadDispatcher = dispatcher;
-        }
+        //public static void Initialize(Dispatcher dispatcher)
+        //{
+        //_instance._mainThreadDispatcher = dispatcher;
+        //}
 
 
         public static void Dispose()
@@ -112,15 +112,15 @@ namespace T3.Logging
 
         private static void AddEntry(LogEntry entry)
         {
-            if (_instance._mainThreadDispatcher == null || _instance._mainThreadDispatcher.CheckAccess())
-            {
-                DoLog(entry);
-            }
-            else
-            {
-                Action action = () => DoLog(entry);
-                _instance._mainThreadDispatcher.BeginInvoke(action, DispatcherPriority.Background);
-            }
+            ////if (_instance._mainThreadDispatcher == null || _instance._mainThreadDispatcher.CheckAccess())
+            //{
+            DoLog(entry);
+            //}
+            //else
+            //{
+            //Action action = () => DoLog(entry);
+            //_instance._mainThreadDispatcher.BeginInvoke(action, DispatcherPriority.Background);
+            //}
         }
 
         private static void DoLog(LogEntry entry)
@@ -129,7 +129,7 @@ namespace T3.Logging
         }
 
 
-        private Dispatcher _mainThreadDispatcher;
+        //private Dispatcher _mainThreadDispatcher;
         private static Log _instance = new Log();
         private List<ILogWriter> _logWriters = new List<ILogWriter>();
 
