@@ -21,41 +21,53 @@ namespace T3.Logging
 
         public bool Draw(ref bool isOpen)
         {
-            while (_logEntries.Count > 1000)
+            lock (_logEntries)
             {
-                _logEntries.RemoveAt(0);
+                while (_logEntries.Count > 1000)
+                {
+                    _logEntries.RemoveAt(0);
+                }
             }
 
             if (ImGui.Begin("Console", ref isOpen))
             {
                 ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
                 if (ImGui.Button("Clear"))
-                    _logEntries.Clear();
+                {
+                    lock (_logEntries)
+                    {
+                        _logEntries.Clear();
+                    }
+                }
 
                 ImGui.SameLine();
                 ImGui.InputText("##Filter", ref _filterString, 100);
                 ImGui.Separator();
                 ImGui.BeginChild("scrolling");
                 {
-                    foreach (var entry in _logEntries)
+                    lock (_logEntries)
                     {
-                        if (_filterIsActive && !entry.Message.Contains(_filterString))
-                            continue;
-
-                        var colorHoveredElements = T3UI.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f;
-
-                        var color = _colorForLogLevel[entry.Level];
-                        color.W = colorHoveredElements;
-                        ImGui.PushStyleColor(ImGuiCol.Text, color);
-                        ImGui.Text(string.Format("{0:0.000}", (entry.TimeStamp - _startTime).Ticks / 10000000f));
-                        ImGui.SameLine(50);
-                        ImGui.Text(entry.Message);
-
-                        if (IsLineHovered())
+                        foreach (var entry in _logEntries)
                         {
-                            T3UI.AddHoveredId(entry.SourceId);
+                            if (FilterIsActive && !entry.Message.Contains(_filterString))
+                                continue;
+
+                            var colorHoveredElements = T3UI.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f;
+
+                            var color = _colorForLogLevel[entry.Level];
+                            color.W = colorHoveredElements;
+                            ImGui.PushStyleColor(ImGuiCol.Text, color);
+                            ImGui.Text(string.Format("{0:0.000}", (entry.TimeStamp - _startTime).Ticks/10000000f));
+                            ImGui.SameLine(50);
+                            ImGui.Text(entry.Message);
+
+                            if (IsLineHovered())
+                            {
+                                T3UI.AddHoveredId(entry.SourceId);
+                            }
+
+                            ImGui.PopStyleColor();
                         }
-                        ImGui.PopStyleColor();
                     }
 
                     _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - 5;
@@ -92,7 +104,11 @@ namespace T3.Logging
 
         public void ProcessEntry(LogEntry entry)
         {
-            _logEntries.Add(entry);
+            lock (_logEntries)
+            {
+                _logEntries.Add(entry);
+            }
+
             if (_isAtBottom)
             {
                 _shouldScrollToBottom = true;
@@ -107,14 +123,13 @@ namespace T3.Logging
 
         public LogEntry.EntryLevel Filter { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        private bool _filterIsActive { get { return !string.IsNullOrEmpty(_filterString); } }
+        private bool FilterIsActive => !string.IsNullOrEmpty(_filterString);
         private const float LINE_PADDING = 3;
-        private StringBuilder _stringBuilder = new StringBuilder();
         private List<LogEntry> _logEntries = new List<LogEntry>();
         private bool _shouldScrollToBottom = true;
         private string _filterString = "";
         private bool _isAtBottom = true;
-        private DateTime _startTime = DateTime.Now;
+        private readonly DateTime _startTime = DateTime.Now;
     }
 }
 
