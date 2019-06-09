@@ -28,7 +28,7 @@ namespace T3.Gui.Graph
 
             UiChildrenById = SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id];
             DrawList = ImGui.GetWindowDrawList();
-            _overlayDrawList = ImGui.GetForegroundDrawList();
+            _foreground = ImGui.GetForegroundDrawList();
             _io = ImGui.GetIO();
 
             ImGui.BeginGroup();
@@ -69,7 +69,7 @@ namespace T3.Gui.Graph
                             const float zoomSpeed = 1.2f;
                             var focusCenter = (_mouse - _scroll - _canvasWindowPos) / _scale;
 
-                            _overlayDrawList.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.TRed);
+                            _foreground.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.TRed);
 
                             if (_io.MouseWheel < 0.0f)
                             {
@@ -159,6 +159,7 @@ namespace T3.Gui.Graph
             }
             ImGui.PopStyleVar();
         }
+
 
         private void DrawGrid()
         {
@@ -259,7 +260,7 @@ namespace T3.Gui.Graph
             Canvas.DrawList.AddRectFilled(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
         }
 
-        private ImDrawListPtr _overlayDrawList;
+        private ImDrawListPtr _foreground;
         private Vector2 _size;
         private Vector2 _mouse;
 
