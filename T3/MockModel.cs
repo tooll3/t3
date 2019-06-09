@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Types;
@@ -147,9 +148,29 @@ namespace T3
 
         public void UpdateUiEntriesForSymbol(Symbol symbol)
         {
-            InputUiRegistry.Entries.Remove(symbol.Id);
-            OutputUiRegistry.Entries.Remove(symbol.Id);
-            CreateUiEntriesForSymbol(symbol);
+            var inputDict = InputUiRegistry.Entries[symbol.Id];
+            var inputUiFactory = InputUiFactory.Entries;
+            foreach (var input in symbol.InputDefinitions)
+            {
+                if (!inputDict.TryGetValue(input.Id, out var value) || (value.Type != input.DefaultValue.ValueType))
+                {
+                    inputDict.Remove(input.Id);
+                    var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
+                    inputDict.Add(input.Id, inputCreator());
+                }
+            }
+
+            var outputDict = OutputUiRegistry.Entries[symbol.Id];
+            var outputUiFactory = OutputUiFactory.Entries;
+            foreach (var output in symbol.OutputDefinitions)
+            {
+                if (!outputDict.TryGetValue(output.Id, out var value) || (value.Type != output.ValueType))
+                {
+                    outputDict.Remove(output.Id);
+                    var outputUiCreator = outputUiFactory[output.ValueType];
+                    outputDict.Add(output.Id, outputUiCreator());
+                }
+            }
         }
 
         public Instance MainOp;
