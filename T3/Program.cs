@@ -230,7 +230,7 @@ namespace T3
                                      var modifiedSymbols = resourceManager.UpdateChangedOperatorTypes();
                                      foreach (var symbol in modifiedSymbols)
                                      {
-                                         T3UI._mockModel.UpdateUiEntriesForSymbol(symbol);
+                                         T3UI._uiModel.UpdateUiEntriesForSymbol(symbol);
                                      }
 
                                      Metrics.UiRenderingStarted();

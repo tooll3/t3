@@ -1,0 +1,106 @@
+{
+  "Entries": [
+    {
+      "SymbolId": "10673c38-8c7e-4aa1-8dcd-3f2711c709b5"/*Random*/,
+      "InputUis": [
+        {
+          "InputId": "f2513ead-7022-4774-8767-7f33d1b92b26"/*Seed*/,
+          "Type": "System.Int32",
+          "Position": {
+            "X": "0",
+            "Y": "0"
+          }
+        }
+      ]
+    },
+    {
+      "SymbolId": "39c96cfd-dedf-4f76-a471-d1c26c9ba9fa"/*FloatFormat*/,
+      "InputUis": [
+        {
+          "InputId": "f36e4078-2608-4308-ab5f-077c05b1181a"/*Input*/,
+          "Type": "System.Single",
+          "Position": {
+            "X": "0",
+            "Y": "0"
+          }
+        }
+      ]
+    },
+    {
+      "SymbolId": "48ab9824-76ca-4238-800f-9cf95311e6c0"/*StringConcat*/,
+      "InputUis": [
+        {
+          "InputId": "56098b5b-fe9f-41b8-9be3-f133a5309689"/*Input1*/,
+          "Type": "System.String",
+          "Position": {
+            "X": "0",
+            "Y": "0"
+          }
+        },
+        {
+          "InputId": "6e9e070f-8700-4522-be4e-477fb0d1a71f"/*Input2*/,
+          "Type": "System.String",
+          "Position": {
+            "X": "0",
+            "Y": "0"
+          }
+        }
+      ]
+    },
+    {
+      "SymbolId": "4c496e8d-2a83-4493-a7a4-fdad29ef3f7d"/*StringLength*/,
+      "InputUis": [
+        {
+          "InputId": "5794d63a-3ef7-42c5-b726-e814ea9093e3"/*InputString*/,
+          "Type": "System.String",
+          "Position": {
+            "X": "0",
+            "Y": "0"
+          }
+        }
+      ]
+    },
+    {
+      "SymbolId": "862de1a8-f630-4823-8860-7afa918bb1bc"/*Time*/,
+      "InputUis": []
+    },
+    {
+      "SymbolId": "c160f925-0a66-4505-a569-cadd878dbb6f"/*Add*/,
+      "InputUis": [
+        {
+          "InputId": "993d59bb-1fc0-4857-a36d-629b0e7aa0d2"/*Input2*/,
+          "Type": "System.Single",
+          "Position": {
+            "X": "197",
+            "Y": "328"
+          }
+        },
+        {
+          "InputId": "e3550929-8905-4cdf-bc85-c31e97da4baa"/*Input1*/,
+          "Type": "System.Single",
+          "Position": {
+            "X": "36",
+            "Y": "334"
+          }
+        }
+      ]
+    },
+    {
+      "SymbolId": "c9a7e71c-7311-4d1e-8508-cd580d7a0b8d"/*Project*/,
+      "InputUis": [
+        {
+          "InputId": "9bf87c5f-2dfe-482e-8be7-18fc4d6072e4"/*Input*/,
+          "Type": "System.Single",
+          "Position": {
+            "X": "126",
+            "Y": "470"
+          }
+        }
+      ]
+    },
+    {
+      "SymbolId": "dab61a12-9996-401e-9aa6-328dd6292beb"/*Dashboard*/,
+      "InputUis": []
+    }
+  ]
+}

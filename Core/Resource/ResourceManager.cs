@@ -550,7 +550,7 @@ namespace T3.Core
                         Log.Error("Error updateable operator had not exported type");
                         continue;
                     }
-                    var symbolEntry = SymbolRegistry.Entries.FirstOrDefault(e => e.Value.SymbolName == opResource.Name);// todo: name -> no good idea, use id
+                    var symbolEntry = SymbolRegistry.Entries.FirstOrDefault(e => e.Value.Name == opResource.Name);// todo: name -> no good idea, use id
                     if (symbolEntry.Value != null)
                     {
                         _operatorUpdateStopwatch.Restart();
