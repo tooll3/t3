@@ -30,7 +30,7 @@ namespace T3.Core.Logging
         {
             lock (_fileWriter)
             {
-                _fileWriter.Write("{0} ({1}): {2}", entry.TimeStamp.ToString("HH:mm:ss.fff"), entry.Level.ToString(), entry.Message + "\n");
+                _fileWriter.Write("{0:HH:mm:ss.fff} ({1}): {2}", entry.TimeStamp, entry.Level.ToString(), entry.Message + "\n");
             }
         }
 

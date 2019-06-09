@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.WIC;
+using T3.Core.Logging;
 using T3.Core.Operator;
 
 namespace T3.Core
@@ -58,8 +59,8 @@ namespace T3.Core
 
         public void Update(string path)
         {
-            Console.WriteLine($"Operator source '{path}' changed.");
-            Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
+            Log.Info($"Operator source '{path}' changed.");
+            Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
 
             string source = string.Empty;
             try
@@ -68,14 +69,14 @@ namespace T3.Core
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error opening file '{path}");
-                Console.WriteLine(e.Message);
+                Log.Error($"Error opening file '{path}");
+                Log.Error(e.Message);
                 return;
             }
 
             if (string.IsNullOrEmpty(source))
             {
-                Console.WriteLine("Source was empty, skip compilation.");
+                Log.Info("Source was empty, skip compilation.");
                 return;
             }
 
@@ -93,17 +94,17 @@ namespace T3.Core
             using (var pdbStream = new MemoryStream())
             {
                 var emitResult = compilation.Emit(dllStream, pdbStream);
-                Console.WriteLine($"compilation results of '{path}':");
+                Log.Info($"compilation results of '{path}':");
                 if (!emitResult.Success)
                 {
                     foreach (var entry in emitResult.Diagnostics)
                     {
-                        Console.WriteLine(entry.GetMessage());
+                        Log.Info(entry.GetMessage());
                     }
                 }
                 else
                 {
-                    Console.WriteLine("successful");
+                    Log.Info("successful");
                     var newAssembly = Assembly.Load(dllStream.GetBuffer());
                     if (newAssembly.ExportedTypes.Any())
                     {
@@ -112,7 +113,7 @@ namespace T3.Core
                     }
                     else
                     {
-                        Console.WriteLine("Error: new compiled Assembly had no exported type.");
+                        Log.Error("New compiled Assembly had no exported type.");
                     }
                 }
             }
@@ -243,7 +244,7 @@ namespace T3.Core
             }
             catch (Exception ce)
             {
-                Console.WriteLine($"Failed to compile shader '{name}': {ce.Message}\nUsing previous resource state.");
+                Log.Info($"Failed to compile shader '{name}': {ce.Message}\nUsing previous resource state.");
                 return;
             }
 
@@ -257,7 +258,7 @@ namespace T3.Core
             PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
             debugNameInfo?.SetValue(shader, name);
 
-            Console.WriteLine($"Successfully compiled shader '{name}' from '{srcFile}'");
+            Log.Info($"Successfully compiled shader '{name}' from '{srcFile}'");
         }
 
         public Guid CreateVertexShader(string srcFile, string entryPoint, string name)
@@ -270,7 +271,7 @@ namespace T3.Core
                     if (Resources[id] is VertexShaderResource)
                     {
                         // if file resource already exists then it must be a different type
-                        Console.WriteLine($"Warning: trying to create an already existing file resource ('{srcFile}'");
+                        Log.Warning($"Trying to create an already existing file resource ('{srcFile}'");
                         return id;
                     }
                 }
@@ -281,7 +282,7 @@ namespace T3.Core
             CompileShader(srcFile, entryPoint, name, "vs_5_0", ref vertexShader, ref blob);
             if (vertexShader == null)
             {
-                Console.WriteLine("Failed to create vertex shader '{name}'.");
+                Log.Info("Failed to create vertex shader '{name}'.");
                 return Guid.Empty;
             }
 
@@ -312,7 +313,7 @@ namespace T3.Core
                     if (Resources[id] is PixelShaderResource)
                     {
                         // if file resource already exists then it must be a different type
-                        Console.WriteLine($"Warning: trying to create an already existing file resource ('{srcFile}'");
+                        Log.Warning($"Trying to create an already existing file resource ('{srcFile}'");
                         return id;
                     }
                 }
@@ -323,7 +324,7 @@ namespace T3.Core
             CompileShader(srcFile, entryPoint, name, "ps_5_0", ref shader, ref blob);
             if (shader == null)
             {
-                Console.WriteLine("Failed to create pixel shader '{name}'.");
+                Log.Info("Failed to create pixel shader '{name}'.");
                 return Guid.Empty;
             }
 
@@ -355,7 +356,7 @@ namespace T3.Core
                     if (Resources[id] is PixelShaderResource)
                     {
                         // if file resource already exists then it must be a different type
-                        Console.WriteLine($"Warning: trying to create an already existing file resource ('{srcFile}'");
+                        Log.Warning($"Trying to create an already existing file resource ('{srcFile}'");
                         return id;
                     }
                 }
@@ -385,7 +386,7 @@ namespace T3.Core
                 DateTime lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
                 if (lastWriteTime != fileResource.LastWriteReferenceTime)
                 {
-                    Console.WriteLine($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
+                    Log.Info($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
                     foreach (var id in fileResource.ResourceIds)
                     {
                         // update all resources that depend from this file
@@ -396,7 +397,7 @@ namespace T3.Core
                         }
                         else
                         {
-                            Console.WriteLine($"Warning: trying to update a non existing file resource '{fileResource.Path}'.");
+                            Log.Warning($"Trying to update a non existing file resource '{fileResource.Path}'.");
                         }
                     }
                     fileResource.LastWriteReferenceTime = lastWriteTime;
@@ -448,11 +449,11 @@ namespace T3.Core
                 bitmapDecoder.Dispose();
                 formatConverter.Dispose();
                 factory.Dispose();
-                Console.WriteLine($"Created texture '{name}' from '{filename}'");
+                Log.Info($"Created texture '{name}' from '{filename}'");
             }
             catch (Exception)
             {
-                Console.WriteLine($"Info: couldn't access file '{filename}' as it was locked.");
+                Log.Info($"Info: couldn't access file '{filename}' as it was locked.");
             }
         }
 
@@ -464,16 +465,16 @@ namespace T3.Core
                 {
                     shaderResourceView?.Dispose();
                     shaderResourceView = new ShaderResourceView(_device, textureResource.Texture) { DebugName = name };
-                    Console.WriteLine($"Created shader resource view '{name}' for texture '{textureResource.Name}'.");
+                    Log.Info($"Created shader resource view '{name}' for texture '{textureResource.Name}'.");
                 }
                 else
                 {
-                    Console.WriteLine("Error: trying to generate shader resource view from a resource that's not a texture resource");
+                    Log.Error("Trying to generate shader resource view from a resource that's not a texture resource");
                 }
             }
             else
             {
-                Console.WriteLine($"Error: trying to look up texture resource with id {textureId} but did not found it.");
+                Log.Error($"Trying to look up texture resource with id {textureId} but did not found it.");
             }
         }
 
@@ -491,7 +492,7 @@ namespace T3.Core
         {
             if (FileResources.TryGetValue(filename, out var existingFileResource))
             {
-                Console.WriteLine($"Error: trying to create an already existing file resource ('{filename}'");
+                Log.Error($"Trying to create an already existing file resource ('{filename}'");
                 return (existingFileResource.ResourceIds.First(), Guid.Empty);
             }
 
@@ -546,7 +547,7 @@ namespace T3.Core
                     Type type = opResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
                     if (type == null)
                     {
-                        Console.WriteLine("Error updateable operator had not exported type");
+                        Log.Error("Error updateable operator had not exported type");
                         continue;
                     }
                     var symbolEntry = SymbolRegistry.Entries.FirstOrDefault(e => e.Value.SymbolName == opResource.Name);// todo: name -> no good idea, use id
@@ -556,12 +557,12 @@ namespace T3.Core
                         symbolEntry.Value.SetInstanceType(type);
                         opResource.Updated = false;
                         _operatorUpdateStopwatch.Stop();
-                        Console.WriteLine($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
+                        Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
                         modifiedSymbols.Add(symbolEntry.Value);
                     }
                     else
                     {
-                        Console.WriteLine($"Error replacing symbol type '{opResource.Name}");
+                        Log.Info($"Error replacing symbol type '{opResource.Name}");
                     }
                 }
             }
