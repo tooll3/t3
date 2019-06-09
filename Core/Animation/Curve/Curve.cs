@@ -5,7 +5,7 @@ using T3.Core.Logging;
 
 namespace T3.Core.Animation.Curve
 {
-    public abstract class Curve
+    public class Curve
     {
         public const int CURVE_U_PRECISION_DIGITS = 6;
 
@@ -190,7 +190,7 @@ namespace T3.Core.Animation.Curve
         //    }
         //}
 
-        protected CurveState State { get; set; }
+        protected CurveState State { get; set; } = new CurveState();
         //{
         //    get
         //    {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Operator;
-using T3.Gui.Animation.Curve;
+using T3.Gui.Animation;
 using T3.Gui.Graph;
 using T3.Logging;
 
