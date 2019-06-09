@@ -50,4 +50,8 @@ namespace T3.Gui
         public static Dictionary<Guid, Dictionary<Guid, IOutputUi>> Entries { get; } = new Dictionary<Guid, Dictionary<Guid, IOutputUi>>();
     }
 
+    public static class OutputUiFactory
+    {
+        public static Dictionary<Type, Func<IOutputUi>> Entries { get; } = new Dictionary<Type, Func<IOutputUi>>();
+    }
 }
