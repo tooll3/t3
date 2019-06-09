@@ -24,6 +24,7 @@ namespace T3.Core.Animation.Curve
             Cubic,
         }
 
+        public double U { get; set; }
         public double Value { get; set; }
         public double Tension { get; set; }
         public double Bias { get; set; }

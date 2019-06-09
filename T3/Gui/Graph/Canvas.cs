@@ -9,13 +9,29 @@ using T3.Gui.Selection;
 
 namespace T3.Gui.Graph
 {
-    public class Canvas
+    public interface ICanvas
+    {
+        IEnumerable<ISelectable> SelectableChildren { get; }
+        SelectionHandler SelectionHandler { get; }
+    }
+
+    public class Canvas : ICanvas
     {
         public Canvas(Instance opInstance)
         {
             CompositionOp = opInstance;
             _selectionFence = new SelectionFence(this);
         }
+
+
+        public IEnumerable<ISelectable> SelectableChildren
+        {
+            get
+            {
+                return UiChildrenById.Values;
+            }
+        }
+
 
         public void Draw()
         {
