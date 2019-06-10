@@ -15,9 +15,9 @@ namespace T3.Gui.Graph
     {
         public static void DrawAll()
         {
-            var outputUisForSymbol = OutputUiRegistry.Entries[Canvas.Current.CompositionOp.Symbol.Id];
+            var outputUisForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
             var index = 0;
-            foreach (var outputDef in Canvas.Current.CompositionOp.Symbol.OutputDefinitions)
+            foreach (var outputDef in GraphCanvas.Current.CompositionOp.Symbol.OutputDefinitions)
             {
                 var outputUi = outputUisForSymbol[outputDef.Id];
                 Draw(outputDef, outputUi);
@@ -30,12 +30,12 @@ namespace T3.Gui.Graph
         {
             ImGui.PushID(outputDef.Id.GetHashCode());
             {
-                var posInWindow = Canvas.ChildPosFromCanvas(outputUi.Position + new Vector2(0, 3));
-                var posInApp = Canvas.TransformPosition(outputUi.Position);
+                var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(outputUi.Position + new Vector2(0, 3));
+                var posInApp = GraphCanvas.Current.TransformPosition(outputUi.Position);
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
-                ImGui.InvisibleButton("node", (outputUi.Size - new Vector2(0, 6)) * Canvas.Current._scale);
+                ImGui.InvisibleButton("node", (outputUi.Size - new Vector2(0, 6)) * GraphCanvas.Current.Scale);
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -45,14 +45,14 @@ namespace T3.Gui.Graph
                 {
                     if (ImGui.IsItemClicked(0))
                     {
-                        if (!Canvas.Current.SelectionHandler.SelectedElements.Contains(outputUi))
+                        if (!GraphCanvas.Current.SelectionHandler.SelectedElements.Contains(outputUi))
                         {
-                            Canvas.Current.SelectionHandler.SetElement(outputUi);
+                            GraphCanvas.Current.SelectionHandler.SetElement(outputUi);
                         }
                     }
                     if (ImGui.IsMouseDragging(0))
                     {
-                        foreach (var e in Canvas.Current.SelectionHandler.SelectedElements)
+                        foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)
                         {
                             e.Position += ImGui.GetIO().MouseDelta;
                         }
@@ -61,11 +61,11 @@ namespace T3.Gui.Graph
 
 
                 // Rendering
-                Canvas.DrawList.ChannelsSplit(2);
-                Canvas.DrawList.ChannelsSetCurrent(1);
+                GraphCanvas.DrawList.ChannelsSplit(2);
+                GraphCanvas.DrawList.ChannelsSetCurrent(1);
 
-                Canvas.DrawList.AddText(posInApp, Color.White, String.Format($"{outputDef.Name}"));
-                Canvas.DrawList.ChannelsSetCurrent(0);
+                GraphCanvas.DrawList.AddText(posInApp, Color.White, String.Format($"{outputDef.Name}"));
+                GraphCanvas.DrawList.ChannelsSetCurrent(0);
 
                 // Draw slot 
                 {
@@ -73,7 +73,7 @@ namespace T3.Gui.Graph
                         new Vector2(outputUi.Position.X + 1, outputUi.Position.Y + outputUi.Size.Y),
                         new Vector2(outputUi.Size.X - 2, 6));
 
-                    var rInScreen = Canvas.TransformRect(virtualRectInCanvas);
+                    var rInScreen = GraphCanvas.Current.TransformRect(virtualRectInCanvas);
 
                     ImGui.SetCursorScreenPos(rInScreen.Min);
                     ImGui.InvisibleButton("output", rInScreen.GetSize());
@@ -83,7 +83,7 @@ namespace T3.Gui.Graph
                     if (DraftConnection.IsOutputNodeCurrentConnectionTarget(outputDef))
                     {
                         Log.Debug("current connection target");
-                        Canvas.DrawRectFilled(virtualRectInCanvas, color);
+                        GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                         if (ImGui.IsMouseDragging(0))
                         {
@@ -97,16 +97,16 @@ namespace T3.Gui.Graph
                         if (DraftConnection.IsMatchingInputType(outputDef.ValueType))
                         {
                             Log.Debug("is matching inputtype");
-                            Canvas.DrawRectFilled(virtualRectInCanvas, color);
+                            GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                             if (ImGui.IsMouseReleased(0))
                             {
-                                DraftConnection.CompleteAtSymbolOutputNode(Canvas.Current.CompositionOp.Symbol, outputDef);
+                                DraftConnection.CompleteAtSymbolOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
                             }
                         }
                         else
                         {
-                            Canvas.DrawRectFilled(virtualRectInCanvas, Color.White);
+                            GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, Color.White);
                             if (ImGui.IsItemClicked(0))
                             {
                                 DraftConnection.StartFromOutputNode(outputDef);
@@ -115,7 +115,7 @@ namespace T3.Gui.Graph
                     }
                     else
                     {
-                        Canvas.DrawRectFilled(
+                        GraphCanvas.Current.DrawRectFilled(
                             ImRect.RectWithSize(
                                 new Vector2(outputUi.Position.X + 1 + 3, outputUi.Position.Y + outputUi.Size.Y - 1),
                                 new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3))
@@ -123,7 +123,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                Canvas.DrawList.ChannelsMerge();
+                GraphCanvas.DrawList.ChannelsMerge();
             }
             ImGui.PopID();
         }

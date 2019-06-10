@@ -10,7 +10,7 @@ namespace T3.Gui.Graph
     /// </summary>
     public static class ConnectionLine
     {
-        public static void DrawAll(Canvas canvas)
+        public static void DrawAll(GraphCanvas canvas)
         {
             _canvas = canvas;
 
@@ -35,10 +35,10 @@ namespace T3.Gui.Graph
             // Start at input node
             else if (c.SourceChildId == Guid.Empty)
             {
-                var inputsForSymbol = InputUiRegistry.Entries[Canvas.Current.CompositionOp.Symbol.Id];
+                var inputsForSymbol = InputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                 var inputUi = inputsForSymbol[c.SourceDefinitionId];
 
-                sourcePos = Canvas.TransformPosition(inputUi.Position);
+                sourcePos = GraphCanvas.Current.TransformPosition(inputUi.Position);
             }
             else
             {
@@ -47,7 +47,7 @@ namespace T3.Gui.Graph
                 var outputIndex = outputDefinitions.FindIndex(outputDef => outputDef.Id == c.SourceDefinitionId);
 
                 var r = Slots.GetOutputSlotSizeInCanvas(sourceUi, outputIndex);
-                sourcePos = Canvas.TransformPosition(r.GetCenter());
+                sourcePos = GraphCanvas.Current.TransformPosition(r.GetCenter());
                 color = TypeUiRegistry.Entries[outputDefinitions[outputIndex].ValueType].Color;
             }
 
@@ -59,9 +59,9 @@ namespace T3.Gui.Graph
             // Ends at symbol output node
             else if (c.TargetChildId == Guid.Empty)
             {
-                var outputsForSymbol = OutputUiRegistry.Entries[Canvas.Current.CompositionOp.Symbol.Id];
+                var outputsForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                 var outputUi = outputsForSymbol[c.TargetDefinitionId];
-                targetPos = Canvas.TransformPosition(outputUi.Position + outputUi.Size / 2);
+                targetPos = GraphCanvas.Current.TransformPosition(outputUi.Position + outputUi.Size / 2);
             }
             else
             {
@@ -70,24 +70,24 @@ namespace T3.Gui.Graph
                 var inputDefinitions = targetUi.SymbolChild.Symbol.InputDefinitions;
                 var inputIndex = inputDefinitions.FindIndex(inputDef => inputDef.Id == c.TargetDefinitionId);
                 var r = Slots.GetInputSlotSizeInCanvas(targetUi, inputIndex);
-                targetPos = Canvas.TransformPosition(r.GetCenter());
+                targetPos = GraphCanvas.Current.TransformPosition(r.GetCenter());
                 color = TypeUiRegistry.Entries[inputDefinitions[inputIndex].DefaultValue.ValueType].Color;
             }
 
-            Canvas.DrawList.AddBezierCurve(
+            GraphCanvas.DrawList.AddBezierCurve(
                 sourcePos,
                 sourcePos + new Vector2(0, -50),
                 targetPos + new Vector2(0, 50),
                 targetPos,
                 color, 3f);
 
-            Canvas.DrawList.AddTriangleFilled(
+            GraphCanvas.DrawList.AddTriangleFilled(
                 targetPos + new Vector2(0, -3),
                 targetPos + new Vector2(4, 2),
                 targetPos + new Vector2(-4, 2),
                 color);
         }
 
-        private static Canvas _canvas;
+        private static GraphCanvas _canvas;
     }
 }
