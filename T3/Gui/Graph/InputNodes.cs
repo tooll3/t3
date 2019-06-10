@@ -15,6 +15,7 @@ namespace T3.Gui.Graph
     {
         public static void DrawAll()
         {
+            _drawList = ImGui.GetWindowDrawList();
             var inputUisForSymbol = InputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
             var index = 0;
             foreach (var inputDef in GraphCanvas.Current.CompositionOp.Symbol.InputDefinitions)
@@ -25,6 +26,7 @@ namespace T3.Gui.Graph
             }
         }
 
+        private static ImDrawListPtr _drawList;
 
         private static void Draw(Symbol.InputDefinition inputDef, IInputUi inputUi)
         {
@@ -61,11 +63,11 @@ namespace T3.Gui.Graph
 
 
                 // Rendering
-                GraphCanvas.DrawList.ChannelsSplit(2);
-                GraphCanvas.DrawList.ChannelsSetCurrent(1);
+                _drawList.ChannelsSplit(2);
+                _drawList.ChannelsSetCurrent(1);
 
-                GraphCanvas.DrawList.AddText(posInApp, Color.White, String.Format($"{inputDef.Name}"));
-                GraphCanvas.DrawList.ChannelsSetCurrent(0);
+                _drawList.AddText(posInApp, Color.White, String.Format($"{inputDef.Name}"));
+                _drawList.ChannelsSetCurrent(0);
 
                 //THelpers.OutlinedRect(ref Canvas.DrawList, posInApp, inputUi.Size * Canvas.Current._scale,
                 //    fill: new Color(
@@ -125,7 +127,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                GraphCanvas.DrawList.ChannelsMerge();
+                _drawList.ChannelsMerge();
             }
             ImGui.PopID();
         }

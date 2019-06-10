@@ -61,11 +61,12 @@ namespace T3.Gui.Graph
 
 
                 // Rendering
-                GraphCanvas.DrawList.ChannelsSplit(2);
-                GraphCanvas.DrawList.ChannelsSetCurrent(1);
+                var dl = ImGui.GetWindowDrawList();
+                dl.ChannelsSplit(2);
+                dl.ChannelsSetCurrent(1);
 
-                GraphCanvas.DrawList.AddText(posInApp, Color.White, String.Format($"{outputDef.Name}"));
-                GraphCanvas.DrawList.ChannelsSetCurrent(0);
+                dl.AddText(posInApp, Color.White, String.Format($"{outputDef.Name}"));
+                dl.ChannelsSetCurrent(0);
 
                 // Draw slot 
                 {
@@ -123,7 +124,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                GraphCanvas.DrawList.ChannelsMerge();
+                dl.ChannelsMerge();
             }
             ImGui.PopID();
         }
