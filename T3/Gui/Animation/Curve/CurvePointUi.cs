@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using T3.Core.Animation.Curve;
+using T3.Core.Logging;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Animation
@@ -37,12 +38,13 @@ namespace T3.Gui.Animation
 
         public void Draw()
         {
-            var posInWindow = Position - Size / 2;
-            if (posInWindow.X < -3
-                || posInWindow.Y < -3
-                || posInWindow.X > _curveEditor.ActualWidth + 3
-                || posInWindow.Y > _curveEditor.ActualHeight + 3)
-                return;
+            var posInWindow = _curveEditor.TransformPosition(PosOnCanvas) - Size / 2;
+
+            //if (posInWindow.X < -3
+            //    || posInWindow.Y < -3
+            //    || posInWindow.X > _curveEditor.ActualWidth + 3
+            //    || posInWindow.Y > _curveEditor.ActualHeight + 3)
+            //    return;
 
             var p = posInWindow + _curveEditor.WindowPos;
             _curveEditor.DrawList.AddRectFilled(p, p + Size,
@@ -56,26 +58,166 @@ namespace T3.Gui.Animation
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
             }
 
-            if (ImGui.IsItemActive())
+            HandleInteraction();
+        }
+
+
+        private void HandleInteraction()
+        {
+            if (!ImGui.IsItemActive())
+                return;
+
+            if (ImGui.IsItemClicked(0))
             {
-                if (ImGui.IsItemClicked(0))
+                // TODO: add modifier keys...
+                if (!_curveEditor.SelectionHandler.SelectedElements.Contains(this))
                 {
-                    if (!_curveEditor.SelectionHandler.SelectedElements.Contains(this))
-                    {
-                        _curveEditor.SelectionHandler.SetElement(this);
-                    }
-                }
-                if (ImGui.IsMouseDragging(0))
-                {
-                    foreach (var e in _curveEditor.SelectionHandler.SelectedElements)
-                    {
-                        e.Position += new Vector2(
-                            _curveEditor.dxToU(ImGui.GetIO().MouseDelta.X),
-                            _curveEditor.dyToV(-ImGui.GetIO().MouseDelta.Y));
-                    }
+                    _curveEditor.SelectionHandler.SetElement(this);
                 }
             }
+
+            if (ImGui.IsMouseDragging(0))
+            {
+                foreach (var e in _curveEditor.SelectionHandler.SelectedElements)
+                {
+                    //e.Position += new Vector2(
+                    //    _curveEditor.dxToU(ImGui.GetIO().MouseDelta.X),
+                    //    _curveEditor.dyToV(-ImGui.GetIO().MouseDelta.Y));
+                    Log.Debug($"Drag  p:{e.PosOnCanvas} dMouse:{ImGui.GetIO().MouseDelta}");
+                    e.PosOnCanvas += ImGui.GetIO().MouseDelta;
+                }
+                //_curveEditor.RebuildCurrentCurves();
+            }
         }
+
+        private Vector2 LeftTangentPosition { get; set; }
+        private Vector2 RightTangentPosition { get; set; }
+
+        public Vector2 PosOnCanvas
+        {
+            get
+            {
+                return new Vector2(
+                    (float)Key.U,
+                    (float)Key.Value
+                );
+            }
+            set
+            {
+                Key.U = value.X;
+                Key.Value = value.Y;
+            }
+        }
+
+
+        //public Vector2 PosOnCanvas
+        //{
+        //    get
+        //    {
+        //        return new Vector2(
+        //            (float)_curveEditor.UToX(Key.U),
+        //            (float)_curveEditor.vToY(Key.Value)
+        //        );
+        //    }
+        //    set
+        //    {
+        //        Key.U = _curveEditor.xToU(value.X);
+        //        Key.Value = _curveEditor.yToV(value.Y);
+        //    }
+        //}
+
+
+        #region moving event handlers
+
+
+        private enum MoveDirection
+        {
+            Undecided = 0,
+            Vertical,
+            Horizontal,
+            Both
+        }
+        private MoveDirection m_MoveDirection = MoveDirection.Undecided;
+
+
+
+
+
+        public void ManipulateV(double newV)
+        {
+            Key.Value = newV;
+        }
+
+        /// <summary>
+        /// Important: the caller has to handle undo/redo and make sure to remove/restore potentially overwritten keyframes
+        /// </summary>
+        public void ManipulateU(double newU)
+        {
+            var newURounded = RoundU(newU);
+            Key.U = newURounded;
+        }
+
+        private static double RoundU(double u)
+        {
+            return Math.Round(u, 6);
+        }
+        private Vector2 LimitWeightTanget(Vector2 tangent)
+        {
+            var s = (1f / tangent.Length() * NON_WEIGHT_TANGENT_LENGTH);
+            return tangent * s;
+        }
+
+        #endregion
+
+
+        /**
+         * Update tanget orientation after changing the scale of the CurveEditor
+         */
+        public void UpdateControlTangents()
+        {
+            if (_curveEditor == null)
+                return;
+
+            var normVector = new Vector2((float)-Math.Cos(Key.InTangentAngle),
+                                          (float)Math.Sin(Key.InTangentAngle));
+
+            var scaleCorrectedVector = LimitWeightTanget(
+                                            new Vector2(
+                                                normVector.X * _curveEditor.UScale,
+                                                _curveEditor.vToY(0f) - _curveEditor.vToY(normVector.Y))
+                                            );
+            LeftTangentPosition = new Vector2(scaleCorrectedVector.X, scaleCorrectedVector.Y);
+
+            normVector = new Vector2((float)-Math.Cos(Key.OutTangentAngle), (float)Math.Sin(Key.OutTangentAngle));
+            scaleCorrectedVector = LimitWeightTanget(new Vector2(normVector.X * _curveEditor.UScale,
+                (float)(_curveEditor.vToY(0) - _curveEditor.vToY(normVector.Y))));
+            RightTangentPosition = new Vector2(scaleCorrectedVector.X, scaleCorrectedVector.Y);
+
+            //LeftInterpolationType = Key.InEditMode;
+            //RightInterpolationType = Key.OutEditMode;
+        }
+
+        //#region dirty stuff
+        //private TimeView m_TV;
+        //public TimeView TV
+        //{
+        //    get
+        //    {
+        //        if (m_TV == null)
+        //            m_TV = UIHelper.FindParent<TimeView>(this);
+        //        return m_TV;
+        //    }
+        //}
+
+        //private CurveEditor m_CE;
+        public CurveEditor _curveEditor;
+        //#endregion
+
+
+
+
+
+        #region ==== T2 legacy dumpster ====================================
 
         //static VToYConverter m_VToYConverter = new VToYConverter();
         //static UToXConverter m_UToXConverter = new UToXConverter();
@@ -127,11 +269,9 @@ namespace T3.Gui.Animation
 
         //private static readonly DependencyProperty LeftTangentPositionProperty = DependencyProperty.Register("LeftTangentPosition", typeof(Point), typeof(CurvePointControl), new UIPropertyMetadata(new Point(-NON_WEIGHT_TANGENT_LENGTH, 0)));
         //public Point LeftTangentPosition { get { return (Point)GetValue(LeftTangentPositionProperty); } set { SetValue(LeftTangentPositionProperty, value); } }
-        private Vector2 LeftTangentPosition { get; set; }
 
         //private static readonly DependencyProperty RightTangentPositionProperty = DependencyProperty.Register("RightTangentPosition", typeof(Point), typeof(CurvePointControl), new UIPropertyMetadata(new Point(NON_WEIGHT_TANGENT_LENGTH, 0)));
         //public Point RightTangentPosition { get { return (Point)GetValue(RightTangentPositionProperty); } set { SetValue(RightTangentPositionProperty, value); } }
-        private Vector2 RightTangentPosition { get; set; }
 
         //private static readonly DependencyProperty LeftInterpolationTypeProperty = DependencyProperty.Register("LeftInterpolationType", typeof(VDefinition.EditMode), typeof(CurvePointControl), new UIPropertyMetadata(VDefinition.EditMode.Linear));
         //public VDefinition.EditMode LeftInterpolationType { get { return (VDefinition.EditMode)GetValue(LeftInterpolationTypeProperty); } set { SetValue(LeftInterpolationTypeProperty, value); } }
@@ -150,39 +290,6 @@ namespace T3.Gui.Animation
         //    UpdateControlTangents();
         //}
 
-
-        /**
-         * For now, this is only required to fulfill ISelectable interface. Later this can be used to implement fenceSelection
-         */
-        public Vector2 Position
-        {
-            get
-            {
-                return new Vector2(
-                    (float)_curveEditor.UToX(Key.U),
-                    (float)_curveEditor.vToY(Key.Value)
-                );
-            }
-            set
-            {
-                Key.U = _curveEditor.xToU(value.X);
-                Key.Value = _curveEditor.yToV(value.Y);
-            }
-        }
-
-        //public double U { get { return key.U; } }
-
-        #region moving event handlers
-
-
-        private enum MoveDirection
-        {
-            Undecided = 0,
-            Vertical,
-            Horizontal,
-            Both
-        }
-        private MoveDirection m_MoveDirection = MoveDirection.Undecided;
 
 
         //private void OnDragStart(object sender, DragStartedEventArgs e)
@@ -280,27 +387,6 @@ namespace T3.Gui.Animation
         //        //CurveEditor.UpdateEditBox();
         //    }
         //}
-
-
-        public void ManipulateV(double newV)
-        {
-            Key.Value = newV;
-        }
-
-        /// <summary>
-        /// Important: the caller has to handle undo/redo and make sure to remove/restore potentially overwritten keyframes
-        /// </summary>
-        public void ManipulateU(double newU)
-        {
-            var newURounded = RoundU(newU);
-            Key.U = newURounded;
-        }
-
-        private static double RoundU(double u)
-        {
-            return Math.Round(u, 6);
-        }
-
         //private void OnDragCompleted(object sender, DragCompletedEventArgs e)
         //{
         //    XCenterThumb.Cursor = Cursors.Arrow;
@@ -317,11 +403,6 @@ namespace T3.Gui.Animation
         //    m_CE.RebuildCurrentCurves();
         //}
 
-        private Vector2 LimitWeightTanget(Vector2 tangent)
-        {
-            var s = (1f / tangent.Length() * NON_WEIGHT_TANGENT_LENGTH);
-            return tangent * s;
-        }
 
 
         //private void OnDragTangentDeltaStarted(object sender, DragStartedEventArgs e)
@@ -405,190 +486,151 @@ namespace T3.Gui.Animation
         //    App.Current.UndoRedoStack.Add(_addOrUpdateKeyframeCommand);
         //    _addOrUpdateKeyframeCommand = null;
         //}
-        #endregion
 
 
-        /**
-         * Update tanget orientation after changing the scale of the CurveEditor
-         */
-        public void UpdateControlTangents()
-        {
-            if (_curveEditor == null)
-                return;
 
-            var normVector = new Vector2(
-                (float)-Math.Cos(Key.InTangentAngle),
-                (float)Math.Sin(Key.InTangentAngle));
-            var scaleCorrectedVector = LimitWeightTanget(
-                new Vector2(normVector.X * _curveEditor.UScale,
-                (float)(_curveEditor.vToY(0f) - _curveEditor.vToY(normVector.Y)))
-                );
-            LeftTangentPosition = new Vector2(scaleCorrectedVector.X, scaleCorrectedVector.Y);
 
-            normVector = new Vector2((float)-Math.Cos(Key.OutTangentAngle), (float)Math.Sin(Key.OutTangentAngle));
-            scaleCorrectedVector = LimitWeightTanget(new Vector2(normVector.X * _curveEditor.UScale,
-                (float)(_curveEditor.vToY(0) - _curveEditor.vToY(normVector.Y))));
-            RightTangentPosition = new Vector2(scaleCorrectedVector.X, scaleCorrectedVector.Y);
 
-            //LeftInterpolationType = Key.InEditMode;
-            //RightInterpolationType = Key.OutEditMode;
-        }
-
-        //#region dirty stuff
-        //private TimeView m_TV;
-        //public TimeView TV
+        //#region Value converter
+        //public class UToXConverter : IMultiValueConverter
         //{
-        //    get
+        //    public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         //    {
-        //        if (m_TV == null)
-        //            m_TV = UIHelper.FindParent<TimeView>(this);
-        //        return m_TV;
+        //        if (values.Count() != 3 || values.Contains(DependencyProperty.UnsetValue))
+        //        {
+        //            return 0.0;
+        //        }
+
+        //        double u = (double)values[0];
+        //        double timeScale = (double)values[1];
+        //        double timeOffset = (double)values[2];
+        //        return (u - timeOffset) * timeScale;
+        //    }
+
+        //    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
+        //    {
+        //        throw new NotImplementedException();
         //    }
         //}
 
-        //private CurveEditor m_CE;
-        public CurveEditor _curveEditor;
-        //#endregion
 
+        ///**
+        // * Binds U, minY, maxY and actualHeight
+        // */
+        //public class VToYConverter : IMultiValueConverter
+        //{
+        //    public object Convert(object[] values, Type targetType, object parameter,
+        //        System.Globalization.CultureInfo culture)
+        //    {
+        //        if (values.Count() != 4 || values.Contains(DependencyProperty.UnsetValue))
+        //        {
+        //            return 10.0;
+        //        }
+
+        //        double v = (double)values[0];
+        //        double minV = (double)values[1];
+        //        double maxV = (double)values[2];
+        //        double height = (double)values[3];
+        //        double y = height - (v - minV) / (maxV - minV) * height;
+        //        return y;
+        //    }
+
+        //    public object[] ConvertBack(object value, Type[] targetTypes, object parameter,
+        //        System.Globalization.CultureInfo culture)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
+
+
+
+        //public class SelectedToVisibilityConverter : IValueConverter
+        //{
+        //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        //    {
+        //        if ((bool)value == true)
+        //        {
+        //            return Visibility.Visible;
+        //        }
+        //        else
+        //        {
+        //            return Visibility.Hidden;
+        //        }
+        //    }
+
+        //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        //    {
+        //        if ((Visibility)value == Visibility.Visible)
+        //        {
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //}
+
+
+        //public class LeftInterpolationTypeToPathDataConverter : IValueConverter
+        //{
+        //    static private Geometry linearFace = Geometry.Parse("M 0, 5 L -5,0 0,-5");
+        //    static private Geometry splineFace = Geometry.Parse("M 0, 5 L -3.4,3.4 -5,0 -3.4,-3.4 0,-5");
+        //    static private Geometry horizontalFace = Geometry.Parse("M 0, 5 L -5,5 -5,-5 0,-5 ");
+
+        //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        //    {
+        //        VDefinition.EditMode type = (VDefinition.EditMode)value;
+        //        switch (type)
+        //        {
+        //            case VDefinition.EditMode.Linear:
+        //                return linearFace;
+        //            case VDefinition.EditMode.Tangent:
+        //            case VDefinition.EditMode.Smooth:
+        //                return splineFace;
+        //            default:
+        //                return horizontalFace;
+        //        }
+        //    }
+
+        //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        //    {
+        //        return VDefinition.Interpolation.Linear;
+        //    }
+
+        //}
+
+        //public class RightInterpolationTypeToPathDataConverter : IValueConverter
+        //{
+        //    static private Geometry linearFace = Geometry.Parse("M 0, 5 L 5,0 0,-5");
+        //    static private Geometry splineFace = Geometry.Parse("M 0, 5 L 3.4,3.4   5,0   3.4,-3.4   0,-5");
+        //    static private Geometry horizontalFace = Geometry.Parse("M 0, 5 L 5,5 5,-5 0,-5 ");
+
+        //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        //    {
+        //        VDefinition.EditMode type = (VDefinition.EditMode)value;
+        //        switch (type)
+        //        {
+        //            case VDefinition.EditMode.Linear:
+        //                return linearFace;
+        //            case VDefinition.EditMode.Tangent:
+        //            case VDefinition.EditMode.Smooth:
+        //                return splineFace;
+        //            default:
+        //                return horizontalFace;
+        //        }
+        //    }
+
+        //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        //    {
+        //        return VDefinition.Interpolation.Linear;
+        //    }
+
+        //}
+
+        //#endregion
+        #endregion
 
     }
 
-    //#region Value converter
-    //public class UToXConverter : IMultiValueConverter
-    //{
-    //    public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        if (values.Count() != 3 || values.Contains(DependencyProperty.UnsetValue))
-    //        {
-    //            return 0.0;
-    //        }
-
-    //        double u = (double)values[0];
-    //        double timeScale = (double)values[1];
-    //        double timeOffset = (double)values[2];
-    //        return (u - timeOffset) * timeScale;
-    //    }
-
-    //    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
-
-
-    ///**
-    // * Binds U, minY, maxY and actualHeight
-    // */
-    //public class VToYConverter : IMultiValueConverter
-    //{
-    //    public object Convert(object[] values, Type targetType, object parameter,
-    //        System.Globalization.CultureInfo culture)
-    //    {
-    //        if (values.Count() != 4 || values.Contains(DependencyProperty.UnsetValue))
-    //        {
-    //            return 10.0;
-    //        }
-
-    //        double v = (double)values[0];
-    //        double minV = (double)values[1];
-    //        double maxV = (double)values[2];
-    //        double height = (double)values[3];
-    //        double y = height - (v - minV) / (maxV - minV) * height;
-    //        return y;
-    //    }
-
-    //    public object[] ConvertBack(object value, Type[] targetTypes, object parameter,
-    //        System.Globalization.CultureInfo culture)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
-
-
-
-    //public class SelectedToVisibilityConverter : IValueConverter
-    //{
-    //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        if ((bool)value == true)
-    //        {
-    //            return Visibility.Visible;
-    //        }
-    //        else
-    //        {
-    //            return Visibility.Hidden;
-    //        }
-    //    }
-
-    //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        if ((Visibility)value == Visibility.Visible)
-    //        {
-    //            return true;
-    //        }
-    //        else
-    //        {
-    //            return false;
-    //        }
-    //    }
-    //}
-
-
-    //public class LeftInterpolationTypeToPathDataConverter : IValueConverter
-    //{
-    //    static private Geometry linearFace = Geometry.Parse("M 0, 5 L -5,0 0,-5");
-    //    static private Geometry splineFace = Geometry.Parse("M 0, 5 L -3.4,3.4 -5,0 -3.4,-3.4 0,-5");
-    //    static private Geometry horizontalFace = Geometry.Parse("M 0, 5 L -5,5 -5,-5 0,-5 ");
-
-    //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        VDefinition.EditMode type = (VDefinition.EditMode)value;
-    //        switch (type)
-    //        {
-    //            case VDefinition.EditMode.Linear:
-    //                return linearFace;
-    //            case VDefinition.EditMode.Tangent:
-    //            case VDefinition.EditMode.Smooth:
-    //                return splineFace;
-    //            default:
-    //                return horizontalFace;
-    //        }
-    //    }
-
-    //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        return VDefinition.Interpolation.Linear;
-    //    }
-
-    //}
-
-    //public class RightInterpolationTypeToPathDataConverter : IValueConverter
-    //{
-    //    static private Geometry linearFace = Geometry.Parse("M 0, 5 L 5,0 0,-5");
-    //    static private Geometry splineFace = Geometry.Parse("M 0, 5 L 3.4,3.4   5,0   3.4,-3.4   0,-5");
-    //    static private Geometry horizontalFace = Geometry.Parse("M 0, 5 L 5,5 5,-5 0,-5 ");
-
-    //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        VDefinition.EditMode type = (VDefinition.EditMode)value;
-    //        switch (type)
-    //        {
-    //            case VDefinition.EditMode.Linear:
-    //                return linearFace;
-    //            case VDefinition.EditMode.Tangent:
-    //            case VDefinition.EditMode.Smooth:
-    //                return splineFace;
-    //            default:
-    //                return horizontalFace;
-    //        }
-    //    }
-
-    //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        return VDefinition.Interpolation.Linear;
-    //    }
-
-    //}
-
-    //#endregion
 }

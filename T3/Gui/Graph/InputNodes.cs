@@ -30,8 +30,8 @@ namespace T3.Gui.Graph
         {
             ImGui.PushID(inputDef.Id.GetHashCode());
             {
-                var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(inputUi.Position + new Vector2(0, 3));
-                var posInApp = GraphCanvas.Current.TransformPosition(inputUi.Position);
+                var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(inputUi.PosOnCanvas + new Vector2(0, 3));
+                var posInApp = GraphCanvas.Current.TransformPosition(inputUi.PosOnCanvas);
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
@@ -54,7 +54,7 @@ namespace T3.Gui.Graph
                     {
                         foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)
                         {
-                            e.Position += ImGui.GetIO().MouseDelta;
+                            e.PosOnCanvas += ImGui.GetIO().MouseDelta;
                         }
                     }
                 }
@@ -76,7 +76,7 @@ namespace T3.Gui.Graph
                 // Draw slot 
                 {
                     var virtualRectInCanvas = ImRect.RectWithSize(
-                        new Vector2(inputUi.Position.X + 1, inputUi.Position.Y - 3),
+                        new Vector2(inputUi.PosOnCanvas.X + 1, inputUi.PosOnCanvas.Y - 3),
                         new Vector2(inputUi.Size.X - 2, 6));
 
                     var rInScreen = GraphCanvas.Current.TransformRect(virtualRectInCanvas);
@@ -119,7 +119,7 @@ namespace T3.Gui.Graph
                     {
                         GraphCanvas.Current.DrawRectFilled(
                             ImRect.RectWithSize(
-                                new Vector2(inputUi.Position.X + 1 + 3, inputUi.Position.Y - 1),
+                                new Vector2(inputUi.PosOnCanvas.X + 1 + 3, inputUi.PosOnCanvas.Y - 1),
                                 new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3))
                             , color);
                     }

@@ -38,7 +38,7 @@ namespace T3.Gui.Graph
                 var inputsForSymbol = InputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                 var inputUi = inputsForSymbol[c.SourceDefinitionId];
 
-                sourcePos = GraphCanvas.Current.TransformPosition(inputUi.Position);
+                sourcePos = GraphCanvas.Current.TransformPosition(inputUi.PosOnCanvas);
             }
             else
             {
@@ -61,7 +61,7 @@ namespace T3.Gui.Graph
             {
                 var outputsForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                 var outputUi = outputsForSymbol[c.TargetDefinitionId];
-                targetPos = GraphCanvas.Current.TransformPosition(outputUi.Position + outputUi.Size / 2);
+                targetPos = GraphCanvas.Current.TransformPosition(outputUi.PosOnCanvas + outputUi.Size / 2);
             }
             else
             {

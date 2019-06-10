@@ -49,7 +49,7 @@ namespace T3.Gui.Graph
             {
                 GraphCanvas.Current.DrawRectFilled(
                     ImRect.RectWithSize(
-                        new Vector2(ui.Position.X + virtualRectInCanvas.GetWidth() * outputIndex + 1 + 3, ui.Position.Y - 1),
+                        new Vector2(ui.PosOnCanvas.X + virtualRectInCanvas.GetWidth() * outputIndex + 1 + 3, ui.PosOnCanvas.Y - 1),
                         new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3))
                     , DraftConnection.IsMatchingOutputType(outputDef.ValueType) ? Color.White : color);
             }
@@ -62,7 +62,7 @@ namespace T3.Gui.Graph
             var inputWidth = sourceUi.Size.X / outputCount;   // size count must be non-zero in this method
 
             return ImRect.RectWithSize(
-                new Vector2(sourceUi.Position.X + inputWidth * outputIndex + 1, sourceUi.Position.Y - 3),
+                new Vector2(sourceUi.PosOnCanvas.X + inputWidth * outputIndex + 1, sourceUi.PosOnCanvas.Y - 3),
                 new Vector2(inputWidth - 2, 6));
         }
 
@@ -117,8 +117,8 @@ namespace T3.Gui.Graph
             {
                 GraphCanvas.Current.DrawRectFilled(
                     ImRect.RectWithSize(
-                        new Vector2(targetUi.Position.X + virtualRectInCanvas.GetWidth() * inputIndex + 1 + 3,
-                                    targetUi.Position.Y + targetUi.Size.Y - T3Style.VisibleSlotHeight),
+                        new Vector2(targetUi.PosOnCanvas.X + virtualRectInCanvas.GetWidth() * inputIndex + 1 + 3,
+                                    targetUi.PosOnCanvas.Y + targetUi.Size.Y - T3Style.VisibleSlotHeight),
                         new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6,
                                     T3Style.VisibleSlotHeight))
                     , color: DraftConnection.IsMatchingInputType(inputDef.DefaultValue.ValueType) ? Color.White : color);
@@ -143,7 +143,7 @@ namespace T3.Gui.Graph
                 : targetUi.Size.X / inputCount;
 
             return ImRect.RectWithSize(
-                new Vector2(targetUi.Position.X + inputWidth * inputIndex + 1, targetUi.Position.Y + targetUi.Size.Y - 3),
+                new Vector2(targetUi.PosOnCanvas.X + inputWidth * inputIndex + 1, targetUi.PosOnCanvas.Y + targetUi.Size.Y - 3),
                 new Vector2(inputWidth - 2, 6));
         }
 

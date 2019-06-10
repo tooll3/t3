@@ -62,7 +62,7 @@ namespace T3
             uiEntries[dashboardSymbol.Id].Add(dashboardSymbol.Children[0].Id, new SymbolChildUi()
                                                                               {
                                                                                   SymbolChild = dashboardSymbol.Children[0],
-                                                                                  Position = new Vector2(100, 100)
+                                                                                  PosOnCanvas = new Vector2(100, 100)
                                                                               });
 
             MainOp = projectOp;

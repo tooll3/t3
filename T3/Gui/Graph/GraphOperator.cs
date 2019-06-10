@@ -15,8 +15,8 @@ namespace T3.Gui.Graph
         {
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-                var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(childUi.Position + new Vector2(0, 3));
-                var posInApp = GraphCanvas.Current.TransformPosition(childUi.Position);
+                var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(childUi.PosOnCanvas + new Vector2(0, 3));
+                var posInApp = GraphCanvas.Current.TransformPosition(childUi.PosOnCanvas);
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
@@ -45,7 +45,7 @@ namespace T3.Gui.Graph
                     {
                         foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)
                         {
-                            e.Position += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+                            e.PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
                         }
                     }
                     if (ImGui.IsMouseDoubleClicked(0))

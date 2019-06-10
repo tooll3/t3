@@ -111,7 +111,10 @@ namespace T3.Core.Animation.Curve
         {
             var points = new List<KeyValuePair<double, VDefinition>>();
             foreach (var item in State.Table)
-                points.Add(new KeyValuePair<double, VDefinition>(item.Key, item.Value.Clone()));
+            {
+                //points.Add(new KeyValuePair<double, VDefinition>(item.Key, item.Value.Clone()));
+                points.Add(new KeyValuePair<double, VDefinition>(item.Key, item.Value));
+            }
             return points;
         }
 

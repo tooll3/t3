@@ -30,7 +30,7 @@ namespace T3.Gui
         }
 
         public Type Type { get; } = typeof(T);
-        public Vector2 Position { get; set; } = Vector2.Zero;
+        public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
         public bool IsSelected { get; set; }
     }
