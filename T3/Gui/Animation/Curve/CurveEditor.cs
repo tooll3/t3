@@ -56,28 +56,19 @@ namespace T3.Gui.Animation
                     THelpers.DebugWindowRect("window");
                     ImGui.BeginChild("scrolling_region", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                     {
-                        var mousePosInWindow = ImGui.GetIO().MousePos - WindowPos;
-                        var uv = new Vector2((float)xToU(mousePosInWindow.X), (float)yToV(mousePosInWindow.Y));
-                        var duv = new Vector2((float)dxToU(1), (float)dyToV(1));
-
-                        ImGui.Text($"dX:{_scrollTarget.X:0.00} sX:{_scaleTarget:0.00}   x:{mousePosInWindow.X:0.00} u:{uv.X:0.00} dU:{duv.X:0.00}  dV:{duv.Y:0.00}");
+                        //var mousePosInWindow = ImGui.GetIO().MousePos - WindowPos;
+                        //var uv = new Vector2((float)xToU(mousePosInWindow.X), (float)yToV(mousePosInWindow.Y));
+                        //var duv = new Vector2((float)dxToU(1), (float)dyToV(1));
+                        //ImGui.Text($"dX:{_scrollTarget.X:0.00} sX:{_scaleTarget:0.00}   x:{mousePosInWindow.X:0.00} u:{uv.X:0.00} dU:{duv.X:0.00}  dV:{duv.Y:0.00}");
 
                         DrawList = ImGui.GetWindowDrawList();
 
                         THelpers.DebugWindowRect("window.scrollingRegion");
                         WindowPos = ImGui.GetWindowPos();
-                        _size = ImGui.GetWindowSize();
-                        DrawList.PushClipRect(WindowPos, WindowPos + _size);
+                        WindowSize = ImGui.GetWindowSize();
+                        DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
-                        // Canvas interaction --------------------------------------------
-                        if (ImGui.IsWindowHovered())
-                        {
-                            if (ImGui.IsMouseDragging(1))
-                                _scrollTarget.X -= dxToU(_io.MouseDelta.X);
-
-                            if (_io.MouseWheel != 0)
-                                HandleZoomViewWithMouseWheel();
-                        }
+                        HandleInteraction();
 
                         _selectionFence.Draw();
                         DrawCurves();
@@ -93,6 +84,19 @@ namespace T3.Gui.Animation
             ImGui.End();
             return opened;
         }
+
+        private void HandleInteraction()
+        {
+            if (!ImGui.IsWindowHovered())
+                return;
+
+            if (ImGui.IsMouseDragging(1))
+                _scrollTarget += InverseTransformDirection(_io.MouseDelta);
+
+            if (_io.MouseWheel != 0)
+                HandleZoomViewWithMouseWheel();
+        }
+
 
         private void HandleZoomViewWithMouseWheel()
         {
@@ -115,12 +119,12 @@ namespace T3.Gui.Animation
             }
             zoomSum = Im.Clamp(zoomSum, 0.01f, 100f);
 
-            var luWindow = (xToU(_size.X) - xToU(0));
-            var luMouse = xToU(_mouse.X);
-            var dx = (1 - zoomSum) * luWindow * _mouse.X / _size.X;
+            var luWindow = (InverseTransformPosition(WindowSize) - InverseTransformPosition(Vector2.Zero));
+            var luMouse = InverseTransformPosition(_mouse);
+            var delta = (1 - zoomSum) * luWindow * _mouse.X / WindowSize.X;
 
-            _scrollTarget.X -= dx;
-            _scrollTarget.X -= 10f * _mouse.X / _size.X;    // Weird offset hack to prevent slipping.
+            _scrollTarget.X -= delta.X;
+            _scrollTarget.X -= 10f * _mouse.X / WindowSize.X;    // Weird offset hack to prevent slipping.
             _scaleTarget *= zoomSum;
         }
 
@@ -132,6 +136,97 @@ namespace T3.Gui.Animation
                 c.Draw();
             }
         }
+
+
+
+
+        #region implement ICanvas =================================================================
+
+        /// <summary>
+        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public Vector2 TransformPosition(Vector2 posOnCanvas)
+        {
+            return posOnCanvas * _scale + _scroll + WindowPos;
+        }
+
+        /// <summary>
+        /// Convert screen position to canvas position
+        /// </summary>
+        public Vector2 InverseTransformPosition(Vector2 screenPos)
+        {
+            return (screenPos - _scroll - WindowPos) / _scale;
+        }
+
+
+        /// <summary>
+        /// Convert direction on canvas to delta in screen space
+        /// </summary>
+        public Vector2 TransformDirection(Vector2 vectorInCanvas)
+        {
+            return vectorInCanvas * _scale;
+        }
+
+
+        /// <summary>
+        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
+        /// </summary>
+        public Vector2 InverseTransformDirection(Vector2 vectorInScreen)
+        {
+            return vectorInScreen / _scale;
+        }
+
+
+        public ImRect TransformRect(ImRect canvasRect)
+        {
+            return new ImRect(TransformPosition(canvasRect.Min), TransformPosition(canvasRect.Max));
+        }
+
+        public ImRect InverseTransformRect(ImRect screenRect)
+        {
+            return new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
+        }
+
+
+        /// <summary>
+        /// Get relative position within canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
+        {
+            return posOnCanvas * _scale + _scroll;
+        }
+
+
+        IEnumerable<ISelectable> ICanvas.SelectableChildren
+        {
+            get
+            {
+                List<ISelectable> result = new List<ISelectable>();
+                foreach (var curveUi in _curvesWithUi.Values)
+                {
+                    result.AddRange(curveUi.CurvePoints);
+                }
+                return result;
+            }
+        }
+
+
+        public bool IsRectVisible(Vector2 pos, Vector2 size)
+        {
+            return pos.X + size.X >= WindowPos.X
+                && pos.Y + size.Y >= WindowPos.Y
+                && pos.X < WindowPos.X + WindowSize.X
+                && pos.Y < WindowPos.Y + WindowSize.Y;
+        }
+
+        #endregion
+
+
+
+
+
+
+
 
 
         private void InitiailizeMockCurves()
@@ -284,18 +379,18 @@ namespace T3.Gui.Animation
         public float ActualHeight { get { return ImGui.GetWindowHeight(); } }
         public float ActualWidth { get { return ImGui.GetWindowWidth(); } }
 
-        public double yToV(double y) { return (ActualHeight - y) * (MaxV - MinV) / ActualHeight + MinV; }
-        public float yToV(float y) { return (ActualHeight - y) * (MaxV - MinV) / ActualHeight + MinV; }
-        public double dyToV(double dy) { return -dy / ActualHeight * (MaxV - MinV); }
-        public float dyToV(float dy) { return -dy / ActualHeight * (MaxV - MinV); }
-        public double vToY(double v) { return ActualHeight - (v - MinV) / (MaxV - MinV) * ActualHeight; }
-        public float vToY(float v) { return ActualHeight - (v - MinV) / (MaxV - MinV) * ActualHeight; }
-        public double xToU(double x) { return x / UScale + UOffset; }
-        public float xToU(float x) { return x / UScale + UOffset; }
-        public double dxToU(double dx) { return dx / UScale; }
-        public float dxToU(float dx) { return dx / UScale; }
-        public double UToX(double t) { return (t - UOffset) * UScale; }
-        public float UToX(float t) { return (t - UOffset) * UScale; }
+        //public double yToV(double y) { return (ActualHeight - y) * (MaxV - MinV) / ActualHeight + MinV; }
+        //public float yToV(float y) { return (ActualHeight - y) * (MaxV - MinV) / ActualHeight + MinV; }
+        //public double dyToV(double dy) { return -dy / ActualHeight * (MaxV - MinV); }
+        //public float dyToV(float dy) { return -dy / ActualHeight * (MaxV - MinV); }
+        //public double vToY(double v) { return ActualHeight - (v - MinV) / (MaxV - MinV) * ActualHeight; }
+        //public float vToY(float v) { return ActualHeight - (v - MinV) / (MaxV - MinV) * ActualHeight; }
+        //public double xToU(double x) { return x / UScale + UOffset; }
+        //public float xToU(float x) { return x / UScale + UOffset; }
+        //public double dxToU(double dx) { return dx / UScale; }
+        //public float dxToU(float dx) { return dx / UScale; }
+        //public double UToX(double t) { return (t - UOffset) * UScale; }
+        //public float UToX(float t) { return (t - UOffset) * UScale; }
         #endregion
 
 
@@ -655,77 +750,6 @@ namespace T3.Gui.Animation
 
 
 
-        #region implement ICanvas =================================================================
-
-        /// <summary>
-        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        public Vector2 TransformPosition(Vector2 posOnCanvas)
-        {
-            return posOnCanvas * _scale + _scroll + WindowPos;
-        }
-
-        /// <summary>
-        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        public Vector2 InverseTransformPosition(Vector2 screenPos)
-        {
-            return (screenPos - _scroll - WindowPos) / _scale;
-        }
-
-
-        /// <summary>
-        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
-        /// </summary>
-        public Vector2 TransformDirection(Vector2 vectorInCanvas)
-        {
-            return vectorInCanvas * _scale;
-        }
-
-
-        /// <summary>
-        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
-        /// </summary>
-        public Vector2 InverseTransformDirection(Vector2 vectorInScreen)
-        {
-            return vectorInScreen / _scale;
-        }
-
-
-        public ImRect TransformRect(ImRect canvasRect)
-        {
-            return new ImRect(TransformPosition(canvasRect.Min), TransformPosition(canvasRect.Max));
-        }
-
-        public ImRect InverseTransformRect(ImRect screenRect)
-        {
-            return new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
-        }
-
-
-        /// <summary>
-        /// Get relative position within canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
-        {
-            return posOnCanvas * _scale + _scroll;
-        }
-
-
-        IEnumerable<ISelectable> ICanvas.SelectableChildren
-        {
-            get
-            {
-                List<ISelectable> result = new List<ISelectable>();
-                foreach (var curveUi in _curvesWithUi.Values)
-                {
-                    result.AddRange(curveUi.CurvePoints);
-                }
-                return result;
-            }
-        }
-        #endregion
-
         public ImDrawListPtr DrawList;
         public Vector2 WindowPos;    // Position of the canvas window-panel within Application window
 
@@ -738,7 +762,7 @@ namespace T3.Gui.Animation
         private SelectionFence _selectionFence;
         private ImGuiIOPtr _io;
 
-        private Vector2 _size;
+        private Vector2 WindowSize;
         private Vector2 _mouse;
 
         private Vector2 _scroll = new Vector2(0.0f, 0.0f);

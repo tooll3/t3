@@ -46,8 +46,10 @@ namespace T3.Gui.Animation
             var step = 3f;
             var width = (float)ImGui.GetWindowWidth();
 
-            double dU = _curveEditor.xToU((double)step) - _curveEditor.xToU(0);
-            double u = _curveEditor.xToU(1);
+            //double dU = _curveEditor.xToU(step) - _curveEditor.xToU(0);
+            double dU = _curveEditor.InverseTransformDirection(new Vector2(step, 0)).X;
+            //double u = _curveEditor.xToU(1);
+            double u = _curveEditor.InverseTransformPosition(Vector2.Zero).X;
             float x = 0;
 
             var steps = (int)(width / step);
@@ -60,8 +62,9 @@ namespace T3.Gui.Animation
             {
                 _points[i] = new Vector2(
                     x,
-                    _curveEditor.vToY((float)_curve.GetSampledValue(u))
-                    ) + _curveEditor.WindowPos;
+                    //_curveEditor.vToY((float)_curve.GetSampledValue(u))
+                    _curveEditor.TransformPosition(new Vector2(0, (float)_curve.GetSampledValue(u))).Y
+                    );
 
                 u += dU;
                 x += step;

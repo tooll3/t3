@@ -54,49 +54,7 @@ namespace T3.Gui.Graph
                     _size = ImGui.GetWindowSize();
                     DrawList.PushClipRect(WindowPos, WindowPos + _size);
 
-                    // Canvas interaction --------------------------------------------
-                    if (ImGui.IsWindowHovered())
-                    {
-                        if (ImGui.IsMouseDragging(1))
-                        {
-                            _scrollTarget += _io.MouseDelta;
-                        }
-
-                        if (!ImGui.IsAnyItemHovered() && ImGui.IsMouseDoubleClicked(0))
-                        {
-                            QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, InverseTransformPosition(ImGui.GetMousePos()));
-                        }
-
-                        // Zoom with mouse wheel
-                        if (_io.MouseWheel != 0)
-                        {
-                            const float zoomSpeed = 1.2f;
-                            var focusCenter = (_mouse - _scroll - WindowPos) / Scale;
-
-                            _foreground.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.TRed);
-
-                            if (_io.MouseWheel < 0.0f)
-                            {
-                                for (float zoom = _io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
-                                {
-                                    _scaleTarget = Im.Max(0.3f, _scaleTarget / zoomSpeed);
-                                }
-                            }
-
-                            if (_io.MouseWheel > 0.0f)
-                            {
-                                for (float zoom = _io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
-                                {
-                                    _scaleTarget = Im.Min(3.0f, _scaleTarget * zoomSpeed);
-                                }
-                            }
-
-                            Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
-                            _scrollTarget += _mouse - shift - WindowPos;
-                        }
-
-                        ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
-                    }
+                    HandleInteraction();
 
                     DrawGrid();
                     DrawNodes();
@@ -118,6 +76,57 @@ namespace T3.Gui.Graph
             ImGui.EndGroup();
         }
 
+
+        private void HandleInteraction()
+        {
+            if (!ImGui.IsWindowHovered())
+                return;
+
+            if (ImGui.IsMouseDragging(1))
+            {
+                _scrollTarget += _io.MouseDelta;
+            }
+
+            if (!ImGui.IsAnyItemHovered() && ImGui.IsMouseDoubleClicked(0))
+            {
+                QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, InverseTransformPosition(ImGui.GetMousePos()));
+            }
+
+            HandleZoomInteraction();
+
+            ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
+        }
+
+
+        private void HandleZoomInteraction()
+        {
+            if (_io.MouseWheel == 0)
+                return;
+
+            const float zoomSpeed = 1.2f;
+            var focusCenter = (_mouse - _scroll - WindowPos) / Scale;
+
+            _foreground.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.TRed);
+
+            if (_io.MouseWheel < 0.0f)
+            {
+                for (float zoom = _io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
+                {
+                    _scaleTarget = Im.Max(0.3f, _scaleTarget / zoomSpeed);
+                }
+            }
+
+            if (_io.MouseWheel > 0.0f)
+            {
+                for (float zoom = _io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
+                {
+                    _scaleTarget = Im.Min(3.0f, _scaleTarget * zoomSpeed);
+                }
+            }
+
+            Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
+            _scrollTarget += _mouse - shift - WindowPos;
+        }
 
         private void DrawContextMenu()
         {
