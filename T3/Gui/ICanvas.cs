@@ -1,4 +1,5 @@
-﻿using imHelpers;
+﻿using ImGuiNET;
+using imHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,5 +41,11 @@ namespace T3.Gui.Graph
         ImRect TransformRect(ImRect canvasRect);
 
         ImRect InverseTransformRect(ImRect screenRect);
+
+        Vector2 Scale { get; }
+        Vector2 Scroll { get; }
+        Vector2 WindowSize { get; }
+        Vector2 WindowPos { get; }
+        //ImDrawListPtr DrawList { get; }
     }
 }

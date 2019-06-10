@@ -13,6 +13,7 @@ namespace T3.Gui.Graph
         public static void DrawAll(GraphCanvas canvas)
         {
             _canvas = canvas;
+            _drawlist = ImGui.GetWindowDrawList();
 
             foreach (var c in _canvas.CompositionOp.Symbol.Connections)
             {
@@ -23,6 +24,7 @@ namespace T3.Gui.Graph
                 DrawConnection(DraftConnection.TempConnection);
         }
 
+        private static ImDrawListPtr _drawlist;
 
         private static void DrawConnection(Symbol.Connection c)
         {
@@ -74,14 +76,14 @@ namespace T3.Gui.Graph
                 color = TypeUiRegistry.Entries[inputDefinitions[inputIndex].DefaultValue.ValueType].Color;
             }
 
-            GraphCanvas.DrawList.AddBezierCurve(
+            _drawlist.AddBezierCurve(
                 sourcePos,
                 sourcePos + new Vector2(0, -50),
                 targetPos + new Vector2(0, 50),
                 targetPos,
                 color, 3f);
 
-            GraphCanvas.DrawList.AddTriangleFilled(
+            _drawlist.AddTriangleFilled(
                 targetPos + new Vector2(0, -3),
                 targetPos + new Vector2(4, 2),
                 targetPos + new Vector2(-4, 2),

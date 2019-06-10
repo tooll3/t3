@@ -62,21 +62,23 @@ namespace T3.Gui.Graph
                 }
 
                 // Rendering
-                GraphCanvas.DrawList.ChannelsSplit(2);
-                GraphCanvas.DrawList.ChannelsSetCurrent(1);
+                var dl = GraphCanvas.Current.DrawList;
+                dl.ChannelsSplit(2);
+                dl.ChannelsSetCurrent(1);
 
-                GraphCanvas.DrawList.AddText(posInApp, Color.White, String.Format($"{childUi.ReadableName}"));
-                GraphCanvas.DrawList.ChannelsSetCurrent(0);
+                dl.AddText(posInApp, Color.White, String.Format($"{childUi.ReadableName}"));
+                dl.ChannelsSetCurrent(0);
 
                 var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.Id) ? 1.2f : 0.8f;
-                THelpers.OutlinedRect(ref GraphCanvas.DrawList, posInApp, childUi.Size * GraphCanvas.Current.Scale,
+
+                THelpers.OutlinedRect(ref dl, posInApp, childUi.Size * GraphCanvas.Current.Scale,
                     fill: new Color(
                             ((childUi.IsSelected || ImGui.IsItemHovered()) ? 0.3f : 0.2f) * hoveredFactor),
                     outline: childUi.IsSelected ? Color.White : Color.Black);
 
                 DrawSlots(childUi);
 
-                GraphCanvas.DrawList.ChannelsMerge();
+                dl.ChannelsMerge();
             }
             ImGui.PopID();
 

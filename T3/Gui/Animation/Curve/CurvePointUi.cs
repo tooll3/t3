@@ -16,10 +16,12 @@ namespace T3.Gui.Animation
     /// </summary>
     public class CurvePointUi : ISelectable
     {
-        public Vector2 Size { get; } = new Vector2(12, 12);
+        public Vector2 Size { get; } = new Vector2(0, 0);
+        private Vector2 ControlSize = new Vector2(6, 6);
         public bool IsSelected { get; set; }
         public VDefinition Key;
         public Curve Curve { get; set; }
+        public Guid Id { get; private set; } = Guid.NewGuid();
 
         public static int createCount = 0;
         private const float NON_WEIGHT_TANGENT_LENGTH = 50;
@@ -40,17 +42,17 @@ namespace T3.Gui.Animation
 
         public void Draw()
         {
-            var posInScreen = _curveEditor.TransformPosition(PosOnCanvas) - Size / 2;
+            var posInScreen = _curveEditor.TransformPosition(PosOnCanvas) - ControlSize / 2;
 
-            if (!_curveEditor.IsRectVisible(posInScreen, Size))
+            if (!_curveEditor.IsRectVisible(posInScreen, ControlSize))
                 return;
 
-            _curveEditor.DrawList.AddRectFilled(posInScreen, posInScreen + Size,
+            _curveEditor.DrawList.AddRectFilled(posInScreen, posInScreen + ControlSize,
                 IsSelected ? Color.White : Color.TBlue);
 
             // Interaction
             ImGui.SetCursorPos(posInScreen - _curveEditor.WindowPos);
-            ImGui.InvisibleButton("key", Size);
+            ImGui.InvisibleButton("key" + Id.GetHashCode(), ControlSize);
             imHelpers.THelpers.DebugItemRect();
             if (ImGui.IsItemHovered())
             {
@@ -77,15 +79,16 @@ namespace T3.Gui.Animation
 
             if (ImGui.IsMouseDragging(0))
             {
-                foreach (var e in _curveEditor.SelectionHandler.SelectedElements)
+                if (ImGui.GetIO().MouseDelta.Length() > 0)
                 {
-                    //e.Position += new Vector2(
-                    //    _curveEditor.dxToU(ImGui.GetIO().MouseDelta.X),
-                    //    _curveEditor.dyToV(-ImGui.GetIO().MouseDelta.Y));
-                    Log.Debug($"Drag  p:{e.PosOnCanvas} dMouse:{ImGui.GetIO().MouseDelta}");
-                    e.PosOnCanvas += ImGui.GetIO().MouseDelta;
+                    var dInScreen = ImGui.GetIO().MouseDelta;
+                    var dInCanvas = _curveEditor.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+
+                    foreach (var e in _curveEditor.SelectionHandler.SelectedElements)
+                    {
+                        e.PosOnCanvas += dInCanvas;
+                    }
                 }
-                //_curveEditor.RebuildCurrentCurves();
             }
         }
 

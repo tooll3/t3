@@ -31,6 +31,7 @@ namespace T3.Gui.Animation
         {
             InitiailizeMockCurves();
             _selectionFence = new SelectionFence(this);
+            _horizontalScaleLines = new HorizontalScaleLines(this);
         }
 
 
@@ -47,31 +48,27 @@ namespace T3.Gui.Animation
                     ImGui.PushStyleColor(ImGuiCol.WindowBg, new Color(60, 60, 70, 200).Rgba);
 
                     // Damp scaling
-                    const float _dampSpeed = 20f;
-                    _scale = Im.Lerp(_scale, _scaleTarget, _io.DeltaTime * _dampSpeed);
-                    UScale = _scale;
-                    _scroll = Im.Lerp(_scroll, _scrollTarget, _io.DeltaTime * _dampSpeed);
-                    UOffset = _scroll.X;
+                    const float _dampSpeed = 30f;
+                    Scale = Im.Lerp(Scale, _scaleTarget, _io.DeltaTime * _dampSpeed);
+                    Scroll = Im.Lerp(Scroll, _scrollTarget, _io.DeltaTime * _dampSpeed);
 
                     THelpers.DebugWindowRect("window");
                     ImGui.BeginChild("scrolling_region", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                     {
-                        //var mousePosInWindow = ImGui.GetIO().MousePos - WindowPos;
-                        //var uv = new Vector2((float)xToU(mousePosInWindow.X), (float)yToV(mousePosInWindow.Y));
-                        //var duv = new Vector2((float)dxToU(1), (float)dyToV(1));
-                        //ImGui.Text($"dX:{_scrollTarget.X:0.00} sX:{_scaleTarget:0.00}   x:{mousePosInWindow.X:0.00} u:{uv.X:0.00} dU:{duv.X:0.00}  dV:{duv.Y:0.00}");
-
                         DrawList = ImGui.GetWindowDrawList();
 
                         THelpers.DebugWindowRect("window.scrollingRegion");
                         WindowPos = ImGui.GetWindowPos();
                         WindowSize = ImGui.GetWindowSize();
                         DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
+                        {
 
-                        HandleInteraction();
-
-                        _selectionFence.Draw();
-                        DrawCurves();
+                            HandleInteraction();
+                            _horizontalScaleLines.Draw();
+                            DrawCurves();
+                            DrawCurrentTimeMarker();
+                            _selectionFence.Draw();
+                        }
                         DrawList.PopClipRect();
                     }
                     ImGui.EndChild();
@@ -91,7 +88,7 @@ namespace T3.Gui.Animation
                 return;
 
             if (ImGui.IsMouseDragging(1))
-                _scrollTarget += InverseTransformDirection(_io.MouseDelta);
+                _scrollTarget -= InverseTransformDirection(_io.MouseDelta);
 
             if (_io.MouseWheel != 0)
                 HandleZoomViewWithMouseWheel();
@@ -100,7 +97,31 @@ namespace T3.Gui.Animation
 
         private void HandleZoomViewWithMouseWheel()
         {
-            const float zoomSpeed = 1.1f;
+            float zoomDelta = ComputeZoomDeltaFromMouseWheel();
+
+            var uAtTopLeft = InverseTransformPosition(WindowPos);
+            var uAtMouse = InverseTransformDirection(_mouse - WindowPos);
+            var u = uAtMouse - uAtTopLeft;
+            var uScaled = uAtMouse / zoomDelta;
+            var deltaU = uScaled - uAtMouse;
+
+            if (_io.KeyShift)
+            {
+                _scrollTarget.Y -= deltaU.Y;
+                _scaleTarget.Y *= zoomDelta;
+            }
+            else
+            {
+
+                _scrollTarget.X -= deltaU.X;
+                _scaleTarget.X *= zoomDelta;
+            }
+        }
+
+
+        private float ComputeZoomDeltaFromMouseWheel()
+        {
+            const float zoomSpeed = 1.2f;
             var zoomSum = 1f;
             if (_io.MouseWheel < 0.0f)
             {
@@ -118,16 +139,8 @@ namespace T3.Gui.Animation
                 }
             }
             zoomSum = Im.Clamp(zoomSum, 0.01f, 100f);
-
-            var luWindow = (InverseTransformPosition(WindowSize) - InverseTransformPosition(Vector2.Zero));
-            var luMouse = InverseTransformPosition(_mouse);
-            var delta = (1 - zoomSum) * luWindow * _mouse.X / WindowSize.X;
-
-            _scrollTarget.X -= delta.X;
-            _scrollTarget.X -= 10f * _mouse.X / WindowSize.X;    // Weird offset hack to prevent slipping.
-            _scaleTarget *= zoomSum;
+            return zoomSum;
         }
-
 
         private void DrawCurves()
         {
@@ -135,6 +148,14 @@ namespace T3.Gui.Animation
             {
                 c.Draw();
             }
+        }
+
+        private void DrawCurrentTimeMarker()
+        {
+            var p1 = new Vector2(_mouse.X, WindowPos.Y);
+            DrawList.AddText(p1, Color.TRed, $"{InverseTransformPosition(_mouse).X:0.00}");
+
+            DrawList.AddRectFilled(p1, new Vector2(_mouse.X + 1, WindowPos.Y + WindowSize.Y), Color.TRed);
         }
 
 
@@ -147,15 +168,15 @@ namespace T3.Gui.Animation
         /// </summary>
         public Vector2 TransformPosition(Vector2 posOnCanvas)
         {
-            return posOnCanvas * _scale + _scroll + WindowPos;
+            return (posOnCanvas - Scroll) * Scale + WindowPos;
         }
 
         /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
-        public Vector2 InverseTransformPosition(Vector2 screenPos)
+        public Vector2 InverseTransformPosition(Vector2 posOnScreen)
         {
-            return (screenPos - _scroll - WindowPos) / _scale;
+            return (posOnScreen - WindowPos) / Scale + Scroll;
         }
 
 
@@ -164,7 +185,7 @@ namespace T3.Gui.Animation
         /// </summary>
         public Vector2 TransformDirection(Vector2 vectorInCanvas)
         {
-            return vectorInCanvas * _scale;
+            return vectorInCanvas * Scale;
         }
 
 
@@ -173,7 +194,7 @@ namespace T3.Gui.Animation
         /// </summary>
         public Vector2 InverseTransformDirection(Vector2 vectorInScreen)
         {
-            return vectorInScreen / _scale;
+            return vectorInScreen / Scale;
         }
 
 
@@ -193,7 +214,7 @@ namespace T3.Gui.Animation
         /// </summary>
         public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
         {
-            return posOnCanvas * _scale + _scroll;
+            return posOnCanvas * Scale - Scroll;
         }
 
 
@@ -222,16 +243,8 @@ namespace T3.Gui.Animation
         #endregion
 
 
-
-
-
-
-
-
-
         private void InitiailizeMockCurves()
         {
-            //_curvesWithCurvePointUi = new SortedList<Curve, List<CurvePointUi>>();
             _curvesWithUi = new Dictionary<Curve, CurveUi>();
             var random = new Random();
 
@@ -245,15 +258,12 @@ namespace T3.Gui.Animation
                         Value = random.NextDouble() * 10,
                         InType = VDefinition.Interpolation.Spline,
                         OutType = VDefinition.Interpolation.Spline,
-
-                        //U = i * 20,
                         InTangentAngle = 30.0,
                         OutTangentAngle = 20.0,
                     });
                 }
 
                 var newCurveUi = new CurveUi(newCurve, this);
-                //_curvesWithCurvePointUi[newCurve]
                 _curvesWithUi[newCurve] = newCurveUi;
             }
         }
@@ -286,12 +296,12 @@ namespace T3.Gui.Animation
         const float CURVE_VALUE_PADDING = 0.6f;
 
 
-        public void FitValueRange()
-        {
-            ViewAllKeys(KeeyURange: true);
-        }
+        //public void FitValueRange()
+        //{
+        //    ViewAllKeys(KeeyURange: true);
+        //}
 
-
+        /*
         private void ViewAllKeys(bool KeeyURange = false)
         {
             double minU = double.PositiveInfinity;
@@ -343,7 +353,7 @@ namespace T3.Gui.Animation
                 maxU = 10;
             }
 
-            double scaleV = ActualHeight / (maxV - minV);
+            double scaleV = WindowSize.Y / (maxV - minV);
 
             if (minV != maxV)
             {
@@ -368,29 +378,13 @@ namespace T3.Gui.Animation
                     UOffset = (float)(0.5f * (minU + maxU));
                 }
             }
-        }
+        }*/
 
-        public float MinV = -20;
-        public float MaxV = 20;
-        public float UScale = 1;
-        public float UOffset = 0;
+        //public float MinV = -20;
+        //public float MaxV = 20;
+        //public float UScale = 1;
+        //public float UOffset = 0;
 
-
-        public float ActualHeight { get { return ImGui.GetWindowHeight(); } }
-        public float ActualWidth { get { return ImGui.GetWindowWidth(); } }
-
-        //public double yToV(double y) { return (ActualHeight - y) * (MaxV - MinV) / ActualHeight + MinV; }
-        //public float yToV(float y) { return (ActualHeight - y) * (MaxV - MinV) / ActualHeight + MinV; }
-        //public double dyToV(double dy) { return -dy / ActualHeight * (MaxV - MinV); }
-        //public float dyToV(float dy) { return -dy / ActualHeight * (MaxV - MinV); }
-        //public double vToY(double v) { return ActualHeight - (v - MinV) / (MaxV - MinV) * ActualHeight; }
-        //public float vToY(float v) { return ActualHeight - (v - MinV) / (MaxV - MinV) * ActualHeight; }
-        //public double xToU(double x) { return x / UScale + UOffset; }
-        //public float xToU(float x) { return x / UScale + UOffset; }
-        //public double dxToU(double dx) { return dx / UScale; }
-        //public float dxToU(float dx) { return dx / UScale; }
-        //public double UToX(double t) { return (t - UOffset) * UScale; }
-        //public float UToX(float t) { return (t - UOffset) * UScale; }
         #endregion
 
 
@@ -747,29 +741,39 @@ namespace T3.Gui.Animation
             optimizer.OptimizeCurves(30);
         }
 
+        public ImDrawListPtr DrawList { get; private set; }
 
+        public Vector2 WindowSize { get; private set; }
 
-
-        public ImDrawListPtr DrawList;
-        public Vector2 WindowPos;    // Position of the canvas window-panel within Application window
+        /// <summary>
+        /// Position of the canvas window-panel within Application window
+        /// </summary>
+        public Vector2 WindowPos { get; private set; }
 
         public List<ISelectable> SelectableChildren { get; set; }
         public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
 
+
+        /// <summary>
+        /// Damped scale factors for u and v
+        /// </summary>
+        public Vector2 Scale { get; set; } = Vector2.One;
+
+
         private Dictionary<Curve, CurveUi> _curvesWithUi = new Dictionary<Curve, CurveUi>();
         private List<CurvePointUi> _pointControlRecyclePool = new List<CurvePointUi>();
+        private HorizontalScaleLines _horizontalScaleLines;
 
         private SelectionFence _selectionFence;
         private ImGuiIOPtr _io;
 
-        private Vector2 WindowSize;
         private Vector2 _mouse;
 
-        private Vector2 _scroll = new Vector2(0.0f, 0.0f);
+        public Vector2 Scroll { get; set; } = new Vector2(0.0f, 0.0f);
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
 
-        private float _scale = 1;            // The damped scale factor {read only}
-        private float _scaleTarget = 1;
+
+        private Vector2 _scaleTarget = new Vector2(1, 20);
 
 
         #region t2 legacy dumpster ===================================================

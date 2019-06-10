@@ -44,15 +44,15 @@ namespace T3.Gui.Graph
 
                 // Damp scaling
                 Scale = Im.Lerp(Scale, _scaleTarget, _io.DeltaTime * 20);
-                _scroll = Im.Lerp(_scroll, _scrollTarget, _io.DeltaTime * 20);
+                Scroll = Im.Lerp(Scroll, _scrollTarget, _io.DeltaTime * 20);
 
                 THelpers.DebugWindowRect("window");
                 ImGui.BeginChild("scrolling_region", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                 {
                     THelpers.DebugWindowRect("window.scrollingRegion");
                     WindowPos = ImGui.GetWindowPos();
-                    _size = ImGui.GetWindowSize();
-                    DrawList.PushClipRect(WindowPos, WindowPos + _size);
+                    WindowSize = ImGui.GetWindowSize();
+                    DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                     HandleInteraction();
 
@@ -104,15 +104,17 @@ namespace T3.Gui.Graph
                 return;
 
             const float zoomSpeed = 1.2f;
-            var focusCenter = (_mouse - _scroll - WindowPos) / Scale;
+            var focusCenter = (_mouse - Scroll - WindowPos) / Scale;
 
             _foreground.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.TRed);
+
+            var zoomDelta = 1f;
 
             if (_io.MouseWheel < 0.0f)
             {
                 for (float zoom = _io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
                 {
-                    _scaleTarget = Im.Max(0.3f, _scaleTarget / zoomSpeed);
+                    zoomDelta /= zoomSpeed;
                 }
             }
 
@@ -120,9 +122,10 @@ namespace T3.Gui.Graph
             {
                 for (float zoom = _io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
                 {
-                    _scaleTarget = Im.Min(3.0f, _scaleTarget * zoomSpeed);
+                    zoomDelta *= zoomSpeed;
                 }
             }
+            Scale *= zoomDelta;
 
             Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
             _scrollTarget += _mouse - shift - WindowPos;
@@ -176,20 +179,20 @@ namespace T3.Gui.Graph
 
         private void DrawGrid()
         {
-            var gridSize = 64.0f * Scale;
-            for (float x = _scroll.X % gridSize; x < _size.X; x += gridSize)
+            var gridSize = 64.0f * Scale.X;
+            for (float x = Scroll.X % gridSize; x < WindowSize.X; x += gridSize)
             {
                 DrawList.AddLine(
                     new Vector2(x, 0.0f) + WindowPos,
-                    new Vector2(x, _size.Y) + WindowPos,
+                    new Vector2(x, WindowSize.Y) + WindowPos,
                     new Color(0.5f, 0.5f, 0.5f, 0.1f));
             }
 
-            for (float y = _scroll.Y % gridSize; y < _size.Y; y += gridSize)
+            for (float y = Scroll.Y % gridSize; y < WindowSize.Y; y += gridSize)
             {
                 DrawList.AddLine(
                     new Vector2(0.0f, y) + WindowPos,
-                    new Vector2(_size.X, y) + WindowPos,
+                    new Vector2(WindowSize.X, y) + WindowPos,
                     new Color(0.5f, 0.5f, 0.5f, 0.1f));
             }
         }
@@ -222,7 +225,7 @@ namespace T3.Gui.Graph
         /// </summary>
         public Vector2 TransformPosition(Vector2 posOnCanvas)
         {
-            return posOnCanvas * Scale + _scroll + WindowPos;
+            return posOnCanvas * Scale + Scroll + WindowPos;
         }
 
         /// <summary>
@@ -230,7 +233,7 @@ namespace T3.Gui.Graph
         /// </summary>
         public Vector2 InverseTransformPosition(Vector2 screenPos)
         {
-            return (screenPos - _scroll - WindowPos) / Scale;
+            return (screenPos - Scroll - WindowPos) / Scale;
         }
 
 
@@ -268,7 +271,7 @@ namespace T3.Gui.Graph
         /// </summary>
         public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
         {
-            return posOnCanvas * Scale + _scroll;
+            return posOnCanvas * Scale + Scroll;
         }
         #endregion
 
@@ -276,12 +279,12 @@ namespace T3.Gui.Graph
         #region public API
         public void DrawRect(ImRect rectOnCanvas, Color color)
         {
-            GraphCanvas.DrawList.AddRect(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
+            GraphCanvas.Current.DrawList.AddRect(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
         }
 
         public void DrawRectFilled(ImRect rectOnCanvas, Color color)
         {
-            GraphCanvas.DrawList.AddRectFilled(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
+            GraphCanvas.Current.DrawList.AddRectFilled(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
         }
 
         /// <summary>
@@ -290,32 +293,33 @@ namespace T3.Gui.Graph
         /// </summary>
         public static GraphCanvas Current { get; private set; }
 
-        public static ImDrawListPtr DrawList;
+        public ImDrawListPtr DrawList { get; private set; }
         public Instance CompositionOp { get; set; }
 
         /// <summary>
         /// Position of the canvas window-panel within Application window
         /// </summary>
-        public Vector2 WindowPos;
+        public Vector2 WindowPos { get; private set; }
         public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
 
         /// <summary>
         /// The damped scale factor {read only}
         /// </summary>
-        public float Scale = 1;
+        public Vector2 Scale { get; set; } = Vector2.One;
 
         #endregion
 
         #region private members ------
         private ImDrawListPtr _foreground;
-        private Vector2 _size;
+        public Vector2 WindowSize { get; private set; }
         private Vector2 _mouse;
 
 
-        private Vector2 _scroll = new Vector2(0.0f, 0.0f);
+        public Vector2 Scroll { get; private set; } = new Vector2(0.0f, 0.0f);
+
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
 
-        private float _scaleTarget = 1;
+        private Vector2 _scaleTarget = Vector2.One;
 
         private SelectionFence _selectionFence;
         private ImGuiIOPtr _io;
