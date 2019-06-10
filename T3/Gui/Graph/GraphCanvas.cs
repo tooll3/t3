@@ -274,7 +274,6 @@ namespace T3.Gui.Graph
         {
             GraphCanvas.DrawList.AddRectFilled(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
         }
-        #endregion
 
         /// <summary>
         /// The canvas that is currently being drawn from the UI.
@@ -284,8 +283,19 @@ namespace T3.Gui.Graph
 
         public static ImDrawListPtr DrawList;
         public Instance CompositionOp { get; set; }
-        public Vector2 WindowPos;    // Position of the canvas window-panel within Application window
+
+        /// <summary>
+        /// Position of the canvas window-panel within Application window
+        /// </summary>
+        public Vector2 WindowPos;
         public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
+
+        /// <summary>
+        /// The damped scale factor {read only}
+        /// </summary>
+        public float Scale = 1;
+
+        #endregion
 
         #region private members ------
         private ImDrawListPtr _foreground;
@@ -296,7 +306,6 @@ namespace T3.Gui.Graph
         private Vector2 _scroll = new Vector2(0.0f, 0.0f);
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
 
-        public float Scale = 1;            // The damped scale factor {read only}
         private float _scaleTarget = 1;
 
         private SelectionFence _selectionFence;

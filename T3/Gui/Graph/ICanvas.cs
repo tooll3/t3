@@ -1,4 +1,5 @@
-﻿using System;
+﻿using imHelpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -35,5 +36,9 @@ namespace T3.Gui.Graph
         /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
         /// </summary>
         Vector2 InverseTransformDirection(Vector2 vectorInScreen);
+
+        ImRect TransformRect(ImRect canvasRect);
+
+        ImRect InverseTransformRect(ImRect screenRect);
     }
 }

@@ -69,7 +69,7 @@ namespace T3.Gui.Graph
             _dragPositionInScreen = ImGui.GetMousePos();
             var delta = _startPositionInScreen - _dragPositionInScreen;
 
-            var boundsInCanvas = GraphCanvas.Current.InverseTransformRect(_bounds);
+            var boundsInCanvas = _canvas.InverseTransformRect(_bounds);
 
             var _selectMode = SelectMode.Replace;
             if (ImGui.IsKeyPressed((int)Key.LeftShift))
@@ -103,7 +103,7 @@ namespace T3.Gui.Graph
                     var selectableWidget = child as ISelectable;
                     if (selectableWidget != null)
                     {
-                        var rect = new ImRect(child.Position, child.Position + child.Size);
+                        var rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size);
                         if (rect.Overlaps(boundsInCanvas))
                         {
                             elementsToSelect.Add(selectableWidget);

@@ -30,8 +30,8 @@ namespace T3.Gui.Graph
         {
             ImGui.PushID(outputDef.Id.GetHashCode());
             {
-                var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(outputUi.Position + new Vector2(0, 3));
-                var posInApp = GraphCanvas.Current.TransformPosition(outputUi.Position);
+                var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(outputUi.PosOnCanvas + new Vector2(0, 3));
+                var posInApp = GraphCanvas.Current.TransformPosition(outputUi.PosOnCanvas);
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
@@ -54,7 +54,7 @@ namespace T3.Gui.Graph
                     {
                         foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)
                         {
-                            e.Position += ImGui.GetIO().MouseDelta;
+                            e.PosOnCanvas += ImGui.GetIO().MouseDelta;
                         }
                     }
                 }
@@ -70,7 +70,7 @@ namespace T3.Gui.Graph
                 // Draw slot 
                 {
                     var virtualRectInCanvas = ImRect.RectWithSize(
-                        new Vector2(outputUi.Position.X + 1, outputUi.Position.Y + outputUi.Size.Y),
+                        new Vector2(outputUi.PosOnCanvas.X + 1, outputUi.PosOnCanvas.Y + outputUi.Size.Y),
                         new Vector2(outputUi.Size.X - 2, 6));
 
                     var rInScreen = GraphCanvas.Current.TransformRect(virtualRectInCanvas);
@@ -117,7 +117,7 @@ namespace T3.Gui.Graph
                     {
                         GraphCanvas.Current.DrawRectFilled(
                             ImRect.RectWithSize(
-                                new Vector2(outputUi.Position.X + 1 + 3, outputUi.Position.Y + outputUi.Size.Y - 1),
+                                new Vector2(outputUi.PosOnCanvas.X + 1 + 3, outputUi.PosOnCanvas.Y + outputUi.Size.Y - 1),
                                 new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3))
                             , DraftConnection.IsMatchingInputType(outputDef.ValueType) ? Color.White : color);
                     }
