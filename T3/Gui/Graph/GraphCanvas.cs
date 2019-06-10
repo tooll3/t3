@@ -9,30 +9,18 @@ using T3.Gui.Selection;
 
 namespace T3.Gui.Graph
 {
-    public interface ICanvas
+    /// <summary>
+    /// A <see cref="ICanvas"/> that displays the graph of an Operator.
+    /// </summary>
+    public class GraphCanvas : ICanvas
     {
-        IEnumerable<ISelectable> SelectableChildren { get; }
-        SelectionHandler SelectionHandler { get; }
-    }
-
-    public class Canvas : ICanvas
-    {
-        public Canvas(Instance opInstance)
+        public GraphCanvas(Instance opInstance)
         {
             CompositionOp = opInstance;
             _selectionFence = new SelectionFence(this);
         }
 
-
-        public IEnumerable<ISelectable> SelectableChildren
-        {
-            get
-            {
-                return UiChildrenById.Values;
-            }
-        }
-
-
+        #region drawing UI ====================================================================
         public void Draw()
         {
             Current = this;
@@ -55,16 +43,16 @@ namespace T3.Gui.Graph
                 ImGui.PushStyleColor(ImGuiCol.WindowBg, new Color(60, 60, 70, 200).Rgba);
 
                 // Damp scaling
-                _scale = Im.Lerp(_scale, _scaleTarget, _io.DeltaTime * 20);
+                Scale = Im.Lerp(Scale, _scaleTarget, _io.DeltaTime * 20);
                 _scroll = Im.Lerp(_scroll, _scrollTarget, _io.DeltaTime * 20);
 
                 THelpers.DebugWindowRect("window");
                 ImGui.BeginChild("scrolling_region", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                 {
                     THelpers.DebugWindowRect("window.scrollingRegion");
-                    _canvasWindowPos = ImGui.GetWindowPos();
+                    WindowPos = ImGui.GetWindowPos();
                     _size = ImGui.GetWindowSize();
-                    DrawList.PushClipRect(_canvasWindowPos, _canvasWindowPos + _size);
+                    DrawList.PushClipRect(WindowPos, WindowPos + _size);
 
                     // Canvas interaction --------------------------------------------
                     if (ImGui.IsWindowHovered())
@@ -83,7 +71,7 @@ namespace T3.Gui.Graph
                         if (_io.MouseWheel != 0)
                         {
                             const float zoomSpeed = 1.2f;
-                            var focusCenter = (_mouse - _scroll - _canvasWindowPos) / _scale;
+                            var focusCenter = (_mouse - _scroll - WindowPos) / Scale;
 
                             _foreground.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.TRed);
 
@@ -104,7 +92,7 @@ namespace T3.Gui.Graph
                             }
 
                             Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
-                            _scrollTarget += _mouse - shift - _canvasWindowPos;
+                            _scrollTarget += _mouse - shift - WindowPos;
                         }
 
                         ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
@@ -179,20 +167,20 @@ namespace T3.Gui.Graph
 
         private void DrawGrid()
         {
-            var gridSize = 64.0f * _scale;
+            var gridSize = 64.0f * Scale;
             for (float x = _scroll.X % gridSize; x < _size.X; x += gridSize)
             {
                 DrawList.AddLine(
-                    new Vector2(x, 0.0f) + _canvasWindowPos,
-                    new Vector2(x, _size.Y) + _canvasWindowPos,
+                    new Vector2(x, 0.0f) + WindowPos,
+                    new Vector2(x, _size.Y) + WindowPos,
                     new Color(0.5f, 0.5f, 0.5f, 0.1f));
             }
 
             for (float y = _scroll.Y % gridSize; y < _size.Y; y += gridSize)
             {
                 DrawList.AddLine(
-                    new Vector2(0.0f, y) + _canvasWindowPos,
-                    new Vector2(_size.X, y) + _canvasWindowPos,
+                    new Vector2(0.0f, y) + WindowPos,
+                    new Vector2(_size.X, y) + WindowPos,
                     new Color(0.5f, 0.5f, 0.5f, 0.1f));
             }
         }
@@ -208,98 +196,112 @@ namespace T3.Gui.Graph
             InputNodes.DrawAll();
             OutputNodes.DrawAll();
         }
+        #endregion
 
 
-
-        #region canvas scaling conversion =================================================================
-        /// <summary>
-        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        public static Vector2 InverseTransformPosition(Vector2 screenPos)
+        #region implement ICanvas =================================================================
+        public IEnumerable<ISelectable> SelectableChildren
         {
-            return (screenPos - Current._scroll - Current._canvasWindowPos) / Current._scale;
+            get
+            {
+                return UiChildrenById.Values;
+            }
         }
-
-        /// <summary>
-        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
-        /// </summary>
-        public static Vector2 InverseTransformDirection(Vector2 vectorInScreen)
-        {
-            return vectorInScreen / Current._scale;
-        }
-
-
-        /// <summary>
-        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
-        /// </summary>
-        public static Vector2 TransformDirection(Vector2 vectorInCanvas)
-        {
-            return vectorInCanvas * Current._scale;
-        }
-
 
         /// <summary>
         /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public static Vector2 TransformPosition(Vector2 posOnCanvas)
+        public Vector2 TransformPosition(Vector2 posOnCanvas)
         {
-            return posOnCanvas * Current._scale + Current._scroll + Current._canvasWindowPos;
+            return posOnCanvas * Scale + _scroll + WindowPos;
         }
 
-        public static ImRect InverseTransformRect(ImRect screenRect)
+        /// <summary>
+        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public Vector2 InverseTransformPosition(Vector2 screenPos)
         {
-            return new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
+            return (screenPos - _scroll - WindowPos) / Scale;
         }
 
-        public static ImRect TransformRect(ImRect canvasRect)
+
+        /// <summary>
+        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
+        /// </summary>
+        public Vector2 TransformDirection(Vector2 vectorInCanvas)
+        {
+            return vectorInCanvas * Scale;
+        }
+
+
+        /// <summary>
+        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
+        /// </summary>
+        public Vector2 InverseTransformDirection(Vector2 vectorInScreen)
+        {
+            return vectorInScreen / Scale;
+        }
+
+
+        public ImRect TransformRect(ImRect canvasRect)
         {
             return new ImRect(TransformPosition(canvasRect.Min), TransformPosition(canvasRect.Max));
         }
 
+        public ImRect InverseTransformRect(ImRect screenRect)
+        {
+            return new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
+        }
+
+
         /// <summary>
         /// Get relative position within canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public static Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
+        public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
         {
-            return posOnCanvas * Current._scale + Current._scroll;
+            return posOnCanvas * Scale + _scroll;
         }
         #endregion
 
 
-        public static void DrawRect(ImRect rectOnCanvas, Color color)
+        #region public API
+        public void DrawRect(ImRect rectOnCanvas, Color color)
         {
-            Canvas.DrawList.AddRect(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
+            GraphCanvas.DrawList.AddRect(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
         }
 
-        public static void DrawRectFilled(ImRect rectOnCanvas, Color color)
+        public void DrawRectFilled(ImRect rectOnCanvas, Color color)
         {
-            Canvas.DrawList.AddRectFilled(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
+            GraphCanvas.DrawList.AddRectFilled(TransformPosition(rectOnCanvas.Min), TransformPosition(rectOnCanvas.Max), color);
         }
+        #endregion
 
+        /// <summary>
+        /// The canvas that is currently being drawn from the UI.
+        /// Note that <see cref="GraphCanvas"/> is NOT a singleton so you can't rely on this to be valid outside of the Drawing() context.
+        /// </summary>
+        public static GraphCanvas Current { get; private set; }
+
+        public static ImDrawListPtr DrawList;
+        public Instance CompositionOp { get; set; }
+        public Vector2 WindowPos;    // Position of the canvas window-panel within Application window
+        public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
+
+        #region private members ------
         private ImDrawListPtr _foreground;
         private Vector2 _size;
         private Vector2 _mouse;
 
-        public static ImDrawListPtr DrawList;
+
         private Vector2 _scroll = new Vector2(0.0f, 0.0f);
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
 
-        public Vector2 _canvasWindowPos;    // Position of the canvas window-panel within Application window
-        public float _scale = 1;            // The damped scale factor {read only}
-        float _scaleTarget = 1;
+        public float Scale = 1;            // The damped scale factor {read only}
+        private float _scaleTarget = 1;
 
-        public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
         private SelectionFence _selectionFence;
-
         private ImGuiIOPtr _io;
-        public Instance CompositionOp { get; set; }
-
-        /// <summary>
-        /// The canvas that is currently being drawn from the UI.
-        /// Note that <see cref="Canvas"/> is NOT a singleton so you can't rely on this to be valid outside of the Drawing() context.
-        /// </summary>
-        public static Canvas Current { get; private set; }
-
-        public Dictionary<Guid, SymbolChildUi> UiChildrenById { get; private set; }
+        private Dictionary<Guid, SymbolChildUi> UiChildrenById { get; set; }
+        #endregion
     }
 }

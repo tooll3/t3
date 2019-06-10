@@ -69,7 +69,7 @@ namespace T3.Gui.Graph
             _dragPositionInScreen = ImGui.GetMousePos();
             var delta = _startPositionInScreen - _dragPositionInScreen;
 
-            var boundsInCanvas = Canvas.InverseTransformRect(_bounds);
+            var boundsInCanvas = GraphCanvas.Current.InverseTransformRect(_bounds);
 
             var _selectMode = SelectMode.Replace;
             if (ImGui.IsKeyPressed((int)Key.LeftShift))

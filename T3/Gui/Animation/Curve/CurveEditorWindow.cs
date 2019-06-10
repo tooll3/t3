@@ -15,12 +15,13 @@ namespace T3.Gui.Animation
     /// A stub window to collect curve editing functionality during implementation.
     /// ToDo:
     /// [x] Generate a mock curve with some random keyframes
-    /// [ ] Render Curve
-    /// [ ] Render time-line ticks
-    /// [ ] Zoom and pan timeline-range
+    /// [x] Render Curve
+    /// [X] Zoom and pan timeline-range
+    /// [x] Mock random-keyframes
     /// [ ] Render value area
-    /// [ ] Mock random-keyframes
+    /// [ ] Render time-line ticks
     /// [ ] Selection of keyframes
+    /// [ ] Select with Fence
     /// [ ] Edit Keyframes-tangent editing
     /// [ ] Implement Curve-Edit-Box
     /// </summary>
@@ -29,7 +30,7 @@ namespace T3.Gui.Animation
         public CurveEditor()
         {
             InitiailizeMockCurves();
-            _SelectionFence = new SelectionFence(this);
+            _selectionFence = new SelectionFence(this);
             //_curveEditBox = new CurveEditBox(_SelectionHandler, this);
 
             //_SelectionHandler.SelectionChanged += SelectionChangedHandler;
@@ -45,13 +46,14 @@ namespace T3.Gui.Animation
         private Dictionary<Curve, CurveUi> _curvesWithUi = new Dictionary<Curve, CurveUi>();
         //private SortedList<Curve, List<CurvePointUi>> _curvesWithCurvePointUi = new SortedList<Curve, List<CurvePointUi>>();
 
-        public SelectionHandler _SelectionHandler = new SelectionHandler();
+        public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
         private List<CurvePointUi> _pointControlRecyclePool = new List<CurvePointUi>();
 
-        private SelectionFence _SelectionFence;
+        //private SelectionFence _SelectionFence;
         //private CurveEditBox _curveEditBox;
 
 
+        private const float _dampSpeed = 20f;
 
         public bool Draw(ref bool opened)
         {
@@ -66,19 +68,19 @@ namespace T3.Gui.Animation
                     ImGui.PushStyleColor(ImGuiCol.WindowBg, new Color(60, 60, 70, 200).Rgba);
 
                     // Damp scaling
-                    _scale = Im.Lerp(_scale, _scaleTarget, _io.DeltaTime * 20);
+                    _scale = Im.Lerp(_scale, _scaleTarget, _io.DeltaTime * _dampSpeed);
                     UScale = _scale;
-                    _scroll = Im.Lerp(_scroll, _scrollTarget, _io.DeltaTime * 20);
-                    UOffset = -_scroll.X;
+                    _scroll = Im.Lerp(_scroll, _scrollTarget, _io.DeltaTime * _dampSpeed);
+                    UOffset = _scroll.X;
 
                     THelpers.DebugWindowRect("window");
                     ImGui.BeginChild("scrolling_region", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                     {
-                        var pos = ImGui.GetIO().MousePos - WindowPos;
-                        var uv = new Vector2((float)xToU(pos.X), (float)yToV(pos.Y));
-                        var pp = new Vector2((float)UToX(uv.X), (float)vToY(uv.Y));
+                        var mousePosInWindow = ImGui.GetIO().MousePos - WindowPos;
+                        var uv = new Vector2((float)xToU(mousePosInWindow.X), (float)yToV(mousePosInWindow.Y));
+                        var duv = new Vector2((float)dxToU(1), (float)dyToV(1));
 
-                        ImGui.Text($"dX:{_scrollTarget.X} sX:{_scaleTarget}     x:{pos.X} u:{uv.X} x:{pp.X}");
+                        ImGui.Text($"dX:{_scrollTarget.X:0.00} sX:{_scaleTarget:0.00}   x:{mousePosInWindow.X:0.00} u:{uv.X:0.00} dU:{duv.X:0.00}  dV:{duv.Y:0.00}");
 
                         DrawList = ImGui.GetWindowDrawList();
 
@@ -91,43 +93,13 @@ namespace T3.Gui.Animation
                         if (ImGui.IsWindowHovered())
                         {
                             if (ImGui.IsMouseDragging(1))
-                            {
-                                _scrollTarget += _io.MouseDelta;
-                            }
+                                _scrollTarget.X -= dxToU(_io.MouseDelta.X);
 
-                            // Zoom with mouse wheel
                             if (_io.MouseWheel != 0)
-                            {
-                                const float zoomSpeed = 1.2f;
-                                var focusCenter = (_mouse - _scroll - WindowPos) / _scale;
-
-                                //_foreground.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.TRed);
-
-                                if (_io.MouseWheel < 0.0f)
-                                {
-                                    for (float zoom = _io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
-                                    {
-                                        _scaleTarget = Im.Max(0.3f, _scaleTarget / zoomSpeed);
-                                    }
-                                }
-
-                                if (_io.MouseWheel > 0.0f)
-                                {
-                                    for (float zoom = _io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
-                                    {
-                                        _scaleTarget = Im.Min(3.0f, _scaleTarget * zoomSpeed);
-                                    }
-                                }
-
-                                Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
-                                _scrollTarget += _mouse - shift - WindowPos;
-                            }
-
-                            ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
+                                ZoomViewWithMouseWheel();
                         }
 
-
-                        ////_selectionFence.Draw();
+                        _selectionFence.Draw();
                         DrawCurves();
                         DrawList.PopClipRect();
                     }
@@ -142,6 +114,42 @@ namespace T3.Gui.Animation
             return opened;
         }
 
+        private void ZoomViewWithMouseWheel()
+        {
+            const float zoomSpeed = 1.1f;
+            var zoomSum = 1f;
+            if (_io.MouseWheel < 0.0f)
+            {
+                for (float zoom = _io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
+                {
+                    zoomSum /= zoomSpeed;
+                }
+            }
+
+            if (_io.MouseWheel > 0.0f)
+            {
+                for (float zoom = _io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
+                {
+                    zoomSum *= zoomSpeed;
+                }
+            }
+            zoomSum = Im.Clamp(zoomSum, 0.01f, 100f);
+
+            //var dx = (_scaleTarget - 1.0f) * (xToU(ActualWidth) - xToU(0f)) * (mousePosInWindow.X / ActualWidth);
+            //var u2 = xToU(mousePosInWindow.X);
+            //var u1 = xToU(0);
+            //var du = u2 - u1;
+            //var duScaled = du * zoomSum;
+            //var dx = du - duScaled;
+
+            var luWindow = (xToU(_size.X) - xToU(0));
+            var luMouse = xToU(_mouse.X);
+            var dx = (1 - zoomSum) * luWindow * _mouse.X / _size.X;
+
+            _scrollTarget.X -= dx;
+            _scrollTarget.X -= 10f * _mouse.X / _size.X;    // Weird offset hack to prevent slipping.
+            _scaleTarget *= zoomSum;
+        }
 
         private void DrawCurves()
         {
@@ -158,10 +166,10 @@ namespace T3.Gui.Animation
             _curvesWithUi = new Dictionary<Curve, CurveUi>();
             var random = new Random();
 
-            for (int u = 0; u < 5; u++)
+            for (int u = 0; u < 1; u++)
             {
                 var newCurve = new Curve();
-                for (int i = 3; i < 100; i++)
+                for (int i = 0; i < 100; i++)
                 {
                     newCurve.AddOrUpdateV(i * 20, new VDefinition()
                     {
@@ -239,7 +247,7 @@ namespace T3.Gui.Animation
             //foreach (var curve in _curvesWithPaths.Keys)
             //    curve.ChangedEvent -= CurveChangedHandler;
 
-            _SelectionHandler.SelectedElements.Clear();
+            SelectionHandler.SelectedElements.Clear();
 
             _curvesWithUi.Clear();
             //_curvesWithCurvePointUi.Clear();
@@ -349,7 +357,7 @@ namespace T3.Gui.Animation
 
             // Keep original selection
             var selectedKeys = new List<Tuple<Curve, double>>();
-            foreach (var e in _SelectionHandler.SelectedElements)
+            foreach (var e in SelectionHandler.SelectedElements)
             {
                 if (!(e is CurvePointUi cpc))
                     continue;
@@ -357,7 +365,7 @@ namespace T3.Gui.Animation
                 selectedKeys.Add(new Tuple<Curve, double>(cpc.Curve, cpc.Key.U));
             }
 
-            _SelectionHandler.Clear();
+            SelectionHandler.Clear();
 
             //if (!_curvesWithPointControls.ContainsKey(curve))
             //    _curvesWithPointControls[curve] = new List<CurvePointControl>();
@@ -493,7 +501,7 @@ namespace T3.Gui.Animation
             int numPoints = 0;
 
 
-            if (_SelectionHandler.SelectedElements.Count == 0)
+            if (SelectionHandler.SelectedElements.Count == 0)
             {
                 foreach (var pair in _curvesWithUi)
                 {
@@ -513,7 +521,7 @@ namespace T3.Gui.Animation
             }
             else
             {
-                foreach (var element in _SelectionHandler.SelectedElements)
+                foreach (var element in SelectionHandler.SelectedElements)
                 {
                     var cpc = element as CurvePointUi;
                     if (cpc != null)
@@ -563,8 +571,8 @@ namespace T3.Gui.Animation
             UpdateCurveLinesAndEditBox();
         }
 
-        public float MinV = -10;
-        public float MaxV = 10;
+        public float MinV = -20;
+        public float MaxV = 20;
         public float UScale = 1;
         public float UOffset = 0;
 
@@ -1074,7 +1082,7 @@ namespace T3.Gui.Animation
             RebuildCurrentCurves();
 
             // select new keys
-            _SelectionHandler.SelectedElements.Clear();
+            SelectionHandler.SelectedElements.Clear();
             foreach (var curveUListPair in newCurveUPoints)
             {
                 var curve = curveUListPair.Key;
@@ -1084,7 +1092,7 @@ namespace T3.Gui.Animation
                 {
                     if (uList.Contains(curvePoint.Key.U))
                     {
-                        _SelectionHandler.AddElement(curvePoint);
+                        SelectionHandler.AddElement(curvePoint);
                     }
                 }
             }
@@ -1124,7 +1132,7 @@ namespace T3.Gui.Animation
         private List<Curve> AllOrSelectedCurves()
         {
             List<Curve> curves = new List<Curve>();
-            if (_SelectionHandler.SelectedElements.Count == 0)
+            if (SelectionHandler.SelectedElements.Count == 0)
             {
                 foreach (var curve in _curvesWithUi.Keys)
                 {
@@ -1133,7 +1141,7 @@ namespace T3.Gui.Animation
             }
             else
             {
-                foreach (var el in _SelectionHandler.SelectedElements)
+                foreach (var el in SelectionHandler.SelectedElements)
                 {
                     var cpc = el as CurvePointUi;
                     if (cpc != null)
@@ -1161,9 +1169,9 @@ namespace T3.Gui.Animation
         {
             var curveUs = new Dictionary<Curve, List<double>>();
 
-            if (_SelectionHandler.SelectedElements.Count > 0)
+            if (SelectionHandler.SelectedElements.Count > 0)
             {
-                foreach (CurvePointUi cp in _SelectionHandler.SelectedElements)
+                foreach (CurvePointUi cp in SelectionHandler.SelectedElements)
                 {
 
                     if (curveUs.ContainsKey(cp.Curve))
@@ -1260,10 +1268,69 @@ namespace T3.Gui.Animation
 
 
 
+
+        #region implement ICanvas =================================================================
+
+        /// <summary>
+        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public Vector2 TransformPosition(Vector2 posOnCanvas)
+        {
+            return posOnCanvas * _scale + _scroll + WindowPos;
+        }
+
+        /// <summary>
+        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public Vector2 InverseTransformPosition(Vector2 screenPos)
+        {
+            return (screenPos - _scroll - WindowPos) / _scale;
+        }
+
+
+        /// <summary>
+        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
+        /// </summary>
+        public Vector2 TransformDirection(Vector2 vectorInCanvas)
+        {
+            return vectorInCanvas * _scale;
+        }
+
+
+        /// <summary>
+        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
+        /// </summary>
+        public Vector2 InverseTransformDirection(Vector2 vectorInScreen)
+        {
+            return vectorInScreen / _scale;
+        }
+
+
+        public ImRect TransformRect(ImRect canvasRect)
+        {
+            return new ImRect(TransformPosition(canvasRect.Min), TransformPosition(canvasRect.Max));
+        }
+
+        public ImRect InverseTransformRect(ImRect screenRect)
+        {
+            return new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
+        }
+
+
+        /// <summary>
+        /// Get relative position within canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
+        {
+            return posOnCanvas * _scale + _scroll;
+        }
+        #endregion
+
+
         private Curve _mockCurve = new Curve();
 
 
-        private ImDrawListPtr _foreground;
+        //private ImDrawListPtr _foreground;
         private Vector2 _size;
         private Vector2 _mouse;
 
@@ -1273,15 +1340,24 @@ namespace T3.Gui.Animation
 
         public Vector2 WindowPos;    // Position of the canvas window-panel within Application window
         public float _scale = 1;            // The damped scale factor {read only}
-        float _scaleTarget = 1;
+        private float _scaleTarget = 1;
 
-        public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
+        //public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
 
-        IEnumerable<ISelectable> ICanvas.SelectableChildren => throw new NotImplementedException();
+        IEnumerable<ISelectable> ICanvas.SelectableChildren
+        {
+            get
+            {
+                List<ISelectable> result = new List<ISelectable>();
+                foreach (var curveUi in _curvesWithUi.Values)
+                {
+                    result.AddRange(curveUi.CurvePoints);
+                }
+                return result;
+            }
+        }
 
         private SelectionFence _selectionFence;
-
         private ImGuiIOPtr _io;
-
     }
 }

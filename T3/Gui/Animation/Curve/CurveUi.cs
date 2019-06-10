@@ -15,7 +15,6 @@ namespace T3.Gui.Animation
     public class CurveUi
     {
         public bool IsHighlighted { get; set; }
-        private CurveEditor _curveEditor;
         public List<CurvePointUi> CurvePoints { get; set; }
 
         public CurveUi(Curve curve, CurveEditor curveEditor)
@@ -27,13 +26,10 @@ namespace T3.Gui.Animation
             foreach (var pair in curve.GetPoints())
             {
                 var key = pair.Value;
-                //var u = pair.Key;
                 CurvePoints.Add(new CurvePointUi(key, curve, curveEditor));
             }
         }
 
-
-        public Curve _curve;
 
         public void Draw()
         {
@@ -45,58 +41,36 @@ namespace T3.Gui.Animation
         }
 
 
-        public void DrawLine()
+        private void DrawLine()
         {
-            //m_Stopwatch.Restart();
-
-            //foreach (var cpc in _curvesWithPointControls[curve])
-            //{
-            //    cpc.UpdateControlTangents();
-            //}
-            ////m_Stopwatch.Stop();
-            //m_Stopwatch.Restart();
-
-            //var path = _curvesWithPaths[curve];
-
-            //PathGeometry myPathGeometry = new PathGeometry();
-            //PathFigure pathFigure2 = new PathFigure();
             var step = 3f;
             var width = (float)ImGui.GetWindowWidth();
 
-            Vector2 lastPoint = Vector2.Zero;
-            Vector2 point;
             double dU = _curveEditor.xToU((double)step) - _curveEditor.xToU(0);
             double u = _curveEditor.xToU(1);
+            float x = 0;
 
-            for (float x = 0; x < width; x += step)
+            var steps = (int)(width / step);
+            if (_points.Length != steps)
             {
-                point = new Vector2(
+                _points = new Vector2[steps];
+            }
+
+            for (int i = 0; i < steps; i++)
+            {
+                _points[i] = new Vector2(
                     x,
                     _curveEditor.vToY((float)_curve.GetSampledValue(u))
                     ) + _curveEditor.WindowPos;
 
-                if (x > 0)
-                    _curveEditor.DrawList.AddLine(lastPoint, point, Color.Gray);
-
                 u += dU;
-                lastPoint = point;
+                x += step;
             }
-
-            //if (steps == 0)
-            //{
-            //    return;
-            //}
-
-
-
-            //pathFigure2.StartPoint = polyLinePointArray[0];
-            //PolyLineSegment myPolyLineSegment = new PolyLineSegment();
-
-            //myPolyLineSegment.Points = new PointCollection(polyLinePointArray);
-            //pathFigure2.Segments.Add(myPolyLineSegment);
-            //myPathGeometry.Figures.Add(pathFigure2);
-            //path.Data = myPathGeometry;
-            //m_Stopwatch.Stop();
+            _curveEditor.DrawList.AddPolyline(ref _points[0], steps, Color.Gray, false, 1);
         }
+
+        private Curve _curve;
+        private static Vector2[] _points = new Vector2[2];
+        private CurveEditor _curveEditor;
     }
 }

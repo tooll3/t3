@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImGuiNET;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -14,7 +15,7 @@ namespace T3.Gui.Animation
     /// </summary>
     public class CurvePointUi : ISelectable
     {
-        public Vector2 Size { get; } = new Vector2(6, 6);
+        public Vector2 Size { get; } = new Vector2(12, 12);
         public bool IsSelected { get; set; }
         public VDefinition Key;
         public Curve Curve { get; set; }
@@ -36,8 +37,44 @@ namespace T3.Gui.Animation
 
         public void Draw()
         {
-            var p = Position + _curveEditor.WindowPos - Size / 2;
-            _curveEditor.DrawList.AddRectFilled(p, p + Size, Color.White);
+            var posInWindow = Position - Size / 2;
+            if (posInWindow.X < -3
+                || posInWindow.Y < -3
+                || posInWindow.X > _curveEditor.ActualWidth + 3
+                || posInWindow.Y > _curveEditor.ActualHeight + 3)
+                return;
+
+            var p = posInWindow + _curveEditor.WindowPos;
+            _curveEditor.DrawList.AddRectFilled(p, p + Size,
+                IsSelected ? Color.White : Color.TBlue);
+
+            // Interaction
+            ImGui.SetCursorPos(posInWindow);
+            ImGui.InvisibleButton("key", Size);
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            }
+
+            if (ImGui.IsItemActive())
+            {
+                if (ImGui.IsItemClicked(0))
+                {
+                    if (!_curveEditor.SelectionHandler.SelectedElements.Contains(this))
+                    {
+                        _curveEditor.SelectionHandler.SetElement(this);
+                    }
+                }
+                if (ImGui.IsMouseDragging(0))
+                {
+                    foreach (var e in _curveEditor.SelectionHandler.SelectedElements)
+                    {
+                        e.Position += new Vector2(
+                            _curveEditor.dxToU(ImGui.GetIO().MouseDelta.X),
+                            _curveEditor.dyToV(-ImGui.GetIO().MouseDelta.Y));
+                    }
+                }
+            }
         }
 
         //static VToYConverter m_VToYConverter = new VToYConverter();

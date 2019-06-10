@@ -13,7 +13,7 @@ namespace T3.Gui.Graph
         {
             //_compositionOp = opInstance;
             _windowTitle = windowTitle;
-            Canvas = new Canvas(opInstance);
+            Canvas = new GraphCanvas(opInstance);
         }
 
 
@@ -64,6 +64,6 @@ namespace T3.Gui.Graph
 
         private string _windowTitle;
 
-        public Canvas Canvas { get; private set; }
+        public GraphCanvas Canvas { get; private set; }
     }
 }

@@ -294,13 +294,14 @@
     <Compile Include="Gui\Animation\Curve\CurvePointUi.cs" />
     <Compile Include="Gui\Animation\Curve\CurveUi.cs" />
     <Compile Include="Gui\Graph\GraphWidgets.cs" />
+    <Compile Include="Gui\Graph\ICanvas.cs" />
     <Compile Include="Gui\InputUi.cs" />
     <Compile Include="Gui\OutputUi.cs" />
     <Compile Include="Gui\SymbolChildUi.cs" />
     <Compile Include="Gui\SymbolChildUiRegistry.cs" />
     <Compile Include="Gui\Graph\ConnectionLine.cs" />
     <Compile Include="Gui\Graph\DraftConnection.cs" />
-    <Compile Include="Gui\Graph\Canvas.cs" />
+    <Compile Include="Gui\Graph\GraphCanvas.cs" />
     <Compile Include="Gui\Graph\InputNodes.cs" />
     <Compile Include="Gui\Graph\OperatorInputZone.cs" />
     <Compile Include="Gui\Graph\OutputNodes.cs" />

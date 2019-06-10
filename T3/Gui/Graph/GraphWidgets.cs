@@ -10,7 +10,7 @@ namespace T3.Gui.Graph
     {
         static public void Draw(SymbolChildUi ui)
         {
-            ImGui.SetCursorPos(Canvas.ChildPosFromCanvas(ui.Position + ui.Size));
+            ImGui.SetCursorPos(GraphCanvas.Current.ChildPosFromCanvas(ui.Position + ui.Size));
 
             ImGui.BeginChildFrame((uint)ui.SymbolChild.Id.GetHashCode(), new Vector2(230, 100));
             {

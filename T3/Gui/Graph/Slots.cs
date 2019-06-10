@@ -13,7 +13,7 @@ namespace T3.Gui.Graph
 
             var virtualRectInCanvas = GetOutputSlotSizeInCanvas(ui, outputIndex);
 
-            var rInScreen = Canvas.TransformRect(virtualRectInCanvas);
+            var rInScreen = GraphCanvas.Current.TransformRect(virtualRectInCanvas);
 
             ImGui.SetCursorScreenPos(rInScreen.Min);
             ImGui.InvisibleButton("output", rInScreen.GetSize());
@@ -22,7 +22,7 @@ namespace T3.Gui.Graph
 
             if (DraftConnection.IsOutputSlotCurrentConnectionSource(ui, outputIndex))
             {
-                Canvas.DrawRectFilled(virtualRectInCanvas, ColorForType(outputDef));
+                GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, ColorForType(outputDef));
 
                 if (ImGui.IsMouseDragging(0))
                 {
@@ -31,7 +31,7 @@ namespace T3.Gui.Graph
             }
             else if (ImGui.IsItemHovered())
             {
-                Canvas.DrawRectFilled(virtualRectInCanvas, Color.White);
+                GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, Color.White);
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                 ImGui.PushStyleColor(ImGuiCol.PopupBg, new Color(0.2f).Rgba);
                 ImGui.BeginTooltip();
@@ -42,12 +42,12 @@ namespace T3.Gui.Graph
 
                 if (ImGui.IsItemClicked(0))
                 {
-                    DraftConnection.StartFromOutputSlot(Canvas.Current.CompositionOp.Symbol, ui, outputIndex);
+                    DraftConnection.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, ui, outputIndex);
                 }
             }
             else
             {
-                Canvas.DrawRectFilled(
+                GraphCanvas.Current.DrawRectFilled(
                     ImRect.RectWithSize(
                         new Vector2(ui.Position.X + virtualRectInCanvas.GetWidth() * outputIndex + 1 + 3, ui.Position.Y - 1),
                         new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3))
@@ -71,7 +71,7 @@ namespace T3.Gui.Graph
         {
             var inputDef = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex];
             var virtualRectInCanvas = GetInputSlotSizeInCanvas(targetUi, inputIndex);
-            var rInScreen = Canvas.TransformRect(virtualRectInCanvas);
+            var rInScreen = GraphCanvas.Current.TransformRect(virtualRectInCanvas);
             ImGui.SetCursorScreenPos(rInScreen.Min);
             ImGui.InvisibleButton("input", rInScreen.GetSize());
             THelpers.DebugItemRect();
@@ -83,7 +83,7 @@ namespace T3.Gui.Graph
 
             if (DraftConnection.IsInputSlotCurrentConnectionTarget(targetUi, inputIndex))
             {
-                Canvas.DrawRectFilled(virtualRectInCanvas, ColorForType(inputDef));
+                GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, ColorForType(inputDef));
 
                 if (ImGui.IsMouseDragging(0))
                 {
@@ -94,28 +94,28 @@ namespace T3.Gui.Graph
             {
                 if (DraftConnection.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
-                    Canvas.DrawRectFilled(virtualRectInCanvas, color);
+                    GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        DraftConnection.CompleteAtInputSlot(Canvas.Current.CompositionOp.Symbol, targetUi, inputIndex);
+                        DraftConnection.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputIndex);
                     }
                 }
                 else
                 {
-                    Canvas.DrawRectFilled(virtualRectInCanvas, color);
+                    GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     ImGui.SetTooltip($"-> .{inputDef.Name}");
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked())
                     {
-                        DraftConnection.StartFromInputSlot(Canvas.Current.CompositionOp.Symbol, targetUi, inputIndex);
+                        DraftConnection.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputIndex);
                     }
                 }
             }
             else
             {
-                Canvas.DrawRectFilled(
+                GraphCanvas.Current.DrawRectFilled(
                     ImRect.RectWithSize(
                         new Vector2(targetUi.Position.X + virtualRectInCanvas.GetWidth() * inputIndex + 1 + 3,
                                     targetUi.Position.Y + targetUi.Size.Y - T3Style.VisibleSlotHeight),
