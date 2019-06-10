@@ -36,23 +36,22 @@ namespace T3.Gui.Animation
         }
 
 
+
+
         public void Draw()
         {
-            var posInWindow = _curveEditor.TransformPosition(PosOnCanvas) - Size / 2;
+            var posInScreen = _curveEditor.TransformPosition(PosOnCanvas) - Size / 2;
 
-            //if (posInWindow.X < -3
-            //    || posInWindow.Y < -3
-            //    || posInWindow.X > _curveEditor.ActualWidth + 3
-            //    || posInWindow.Y > _curveEditor.ActualHeight + 3)
-            //    return;
+            if (!_curveEditor.IsRectVisible(posInScreen, Size))
+                return;
 
-            var p = posInWindow + _curveEditor.WindowPos;
-            _curveEditor.DrawList.AddRectFilled(p, p + Size,
+            _curveEditor.DrawList.AddRectFilled(posInScreen, posInScreen + Size,
                 IsSelected ? Color.White : Color.TBlue);
 
             // Interaction
-            ImGui.SetCursorPos(posInWindow);
+            ImGui.SetCursorPos(posInScreen - _curveEditor.WindowPos);
             ImGui.InvisibleButton("key", Size);
+            imHelpers.THelpers.DebugItemRect();
             if (ImGui.IsItemHovered())
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -175,23 +174,23 @@ namespace T3.Gui.Animation
          */
         public void UpdateControlTangents()
         {
-            if (_curveEditor == null)
-                return;
+            //if (_curveEditor == null)
+            //    return;
 
-            var normVector = new Vector2((float)-Math.Cos(Key.InTangentAngle),
-                                          (float)Math.Sin(Key.InTangentAngle));
+            //var normVector = new Vector2((float)-Math.Cos(Key.InTangentAngle),
+            //                              (float)Math.Sin(Key.InTangentAngle));
 
-            var scaleCorrectedVector = LimitWeightTanget(
-                                            new Vector2(
-                                                normVector.X * _curveEditor.UScale,
-                                                _curveEditor.vToY(0f) - _curveEditor.vToY(normVector.Y))
-                                            );
-            LeftTangentPosition = new Vector2(scaleCorrectedVector.X, scaleCorrectedVector.Y);
+            //var scaleCorrectedVector = LimitWeightTanget(
+            //                                new Vector2(
+            //                                    normVector.X * _curveEditor.UScale,
+            //                                    _curveEditor.vToY(0f) - _curveEditor.vToY(normVector.Y))
+            //                                );
+            //LeftTangentPosition = new Vector2(scaleCorrectedVector.X, scaleCorrectedVector.Y);
 
-            normVector = new Vector2((float)-Math.Cos(Key.OutTangentAngle), (float)Math.Sin(Key.OutTangentAngle));
-            scaleCorrectedVector = LimitWeightTanget(new Vector2(normVector.X * _curveEditor.UScale,
-                (float)(_curveEditor.vToY(0) - _curveEditor.vToY(normVector.Y))));
-            RightTangentPosition = new Vector2(scaleCorrectedVector.X, scaleCorrectedVector.Y);
+            //normVector = new Vector2((float)-Math.Cos(Key.OutTangentAngle), (float)Math.Sin(Key.OutTangentAngle));
+            //scaleCorrectedVector = LimitWeightTanget(new Vector2(normVector.X * _curveEditor.UScale,
+            //    (float)(_curveEditor.vToY(0) - _curveEditor.vToY(normVector.Y))));
+            //RightTangentPosition = new Vector2(scaleCorrectedVector.X, scaleCorrectedVector.Y);
 
             //LeftInterpolationType = Key.InEditMode;
             //RightInterpolationType = Key.OutEditMode;
