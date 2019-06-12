@@ -33,17 +33,11 @@ namespace T3.Gui.Animation
         {
             Key = key;
             _curveEditor = curveEditor;
-            //U = defaultU;
-            //InitFromVDefinition(vdef);
             Curve = curve;
             createCount++;
         }
 
-        // Some constant static vectors to reduce heap impact
-        private static Vector2 _tangentHandleSize = new Vector2(10, 10);
-        private static Vector2 _tangentHandleSizeHalf = _tangentHandleSize * 0.5f;
-        private static Vector2 _tangentSize = new Vector2(2, 2);
-        private static Vector2 _tangentSizeHalf = _tangentSize * 0.5f;
+
 
         public void Draw()
         {
@@ -59,6 +53,7 @@ namespace T3.Gui.Animation
 
             if (IsSelected)
             {
+                UpdateTangentVectors();
                 DrawLeftTangent(pCenter);
                 DrawRightTangent(pCenter);
             }
@@ -72,15 +67,12 @@ namespace T3.Gui.Animation
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
             }
-
             HandleInteraction();
         }
 
 
         private void DrawLeftTangent(Vector2 pCenter)
         {
-            UpdateTangentVectors();
-
             var leftTangentCenter = pCenter + LeftTangentInScreen;
             ImGui.SetCursorPos(leftTangentCenter - _tangentHandleSizeHalf - _curveEditor.WindowPos);
             ImGui.InvisibleButton("keyLT" + Id.GetHashCode(), _tangentHandleSize);
@@ -118,8 +110,6 @@ namespace T3.Gui.Animation
 
         private void DrawRightTangent(Vector2 pCenter)
         {
-            UpdateTangentVectors();
-
             var righTangentCenter = pCenter + RightTangentInScreen;
             ImGui.SetCursorPos(righTangentCenter - _tangentHandleSizeHalf - _curveEditor.WindowPos);
             ImGui.InvisibleButton("keyRT" + Id.GetHashCode(), _tangentHandleSize);
@@ -200,7 +190,7 @@ namespace T3.Gui.Animation
             }
             set
             {
-                Key.U = value.X;
+                Curve.MoveKey(Key.U, value.X);
                 Key.Value = value.Y;
             }
         }
@@ -244,9 +234,9 @@ namespace T3.Gui.Animation
         #endregion
 
 
-        /**
-         * Update tanget orientation after changing the scale of the CurveEditor
-         */
+        /// <summary>
+        /// Update tanget orientation after changing the scale of the CurveEditor
+        /// </summary>
         public void UpdateTangentVectors()
         {
             if (_curveEditor == null)
@@ -269,9 +259,6 @@ namespace T3.Gui.Animation
                                         new Vector2(
                                             normVector.X * _curveEditor.Scale.X,
                                             -_curveEditor.TransformDirection(normVector).Y));
-
-            //LeftInterpolationType = Key.InEditMode;
-            //RightInterpolationType = Key.OutEditMode;
         }
 
         private Vector2 NormalizeTangentLength(Vector2 tangent)
@@ -280,21 +267,14 @@ namespace T3.Gui.Animation
             return tangent * s;
         }
 
-        //#region dirty stuff
-        //private TimeView m_TV;
-        //public TimeView TV
-        //{
-        //    get
-        //    {
-        //        if (m_TV == null)
-        //            m_TV = UIHelper.FindParent<TimeView>(this);
-        //        return m_TV;
-        //    }
-        //}
 
-        //private CurveEditor m_CE;
+        // Some constant static vectors to reduce heap impact
+        private static Vector2 _tangentHandleSize = new Vector2(10, 10);
+        private static Vector2 _tangentHandleSizeHalf = _tangentHandleSize * 0.5f;
+        private static Vector2 _tangentSize = new Vector2(2, 2);
+        private static Vector2 _tangentSizeHalf = _tangentSize * 0.5f;
+
         public CurveEditor _curveEditor;
-        //#endregion
 
 
 

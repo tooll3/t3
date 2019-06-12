@@ -90,21 +90,30 @@ namespace T3.Core.Animation.Curve
         }
 
 
-
-        public void MoveV(double u, double newU)
+        /// <summary>
+        /// Tries to move a keyframe to a new position
+        /// </summary>
+        /// <returns>Returns false if the position is already taken by a keyframe</returns>
+        public bool MoveKey(double u, double newU)
         {
             var state = State;
             if (!state.Table.ContainsKey(u))
             {
                 Log.Warning("Tried to move a non-existing keyframe from {0} to {1}", u, newU);
-                return;
+                return false;
             }
+
+            if (state.Table.ContainsKey(newU))
+            {
+                return false;
+            }
+
             var key = state.Table[u];
             state.Table.Remove(u);
             state.Table[newU] = key;
+            key.U = newU;
             SplineInterpolator.UpdateTangents(state.Table.ToList());
-
-            //TriggerChangedEventIfEnabled();
+            return true;
         }
 
         public List<KeyValuePair<double, VDefinition>> GetPoints()
