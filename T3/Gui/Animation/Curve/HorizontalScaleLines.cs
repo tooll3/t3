@@ -65,7 +65,6 @@ namespace T3.Gui.Animation
 
         public void Draw()
         {
-            ImGui.Text($"scroll:{_canvas.Scroll.X:0.0} zoom:{_canvas.Scale.X:0.00}");
             var drawList = ImGui.GetWindowDrawList();
 
             var bottom = _canvas.WindowPos.Y + _canvas.WindowSize.Y;
