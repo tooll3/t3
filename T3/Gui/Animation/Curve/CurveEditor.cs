@@ -69,9 +69,7 @@ namespace T3.Gui.Animation
                         }
                         DrawList.PopClipRect();
 
-                        if (!_isDraggingBackground)
-                            DrawContextMenu();
-
+                        DrawContextMenu();
 
                     }
                     ImGui.EndChild();
@@ -81,15 +79,21 @@ namespace T3.Gui.Animation
                 ImGui.EndGroup();
             }
             ImGui.End();
-            _isDraggingBackground = false;
             return opened;
         }
 
+        bool contextMenuIsOpen = false;
         private void DrawContextMenu()
         {
+            // This is a horrible hack to distinguish right mouse click from right mouse drag
+            var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
+            if (!contextMenuIsOpen && rightMouseDragDelta > 3)
+                return;
+
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             if (ImGui.BeginPopupContextWindow("context_menu"))
             {
+                contextMenuIsOpen = true;
                 var selectedInterpolations = GetSelectedKeyframeInterpolationTypes();
                 if (ImGui.MenuItem("Smooth", null, selectedInterpolations.Contains(VDefinition.EditMode.Smooth)))
                     OnSmooth();
@@ -111,6 +115,10 @@ namespace T3.Gui.Animation
 
                 ImGui.EndPopup();
             }
+            else
+            {
+                contextMenuIsOpen = false;
+            }
             ImGui.PopStyleVar();
         }
 
@@ -123,7 +131,6 @@ namespace T3.Gui.Animation
             if (ImGui.IsMouseDragging(1))
             {
                 _scrollTarget -= InverseTransformDirection(_io.MouseDelta);
-                _isDraggingBackground = true;
             }
             else
             {
@@ -133,7 +140,6 @@ namespace T3.Gui.Animation
             if (_io.MouseWheel != 0)
                 HandleZoomViewWithMouseWheel();
         }
-        private bool _isDraggingBackground = false;
 
 
         private void HandleZoomViewWithMouseWheel()
