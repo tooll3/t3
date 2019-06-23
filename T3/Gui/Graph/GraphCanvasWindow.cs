@@ -61,9 +61,7 @@ namespace T3.Gui.Graph
             ImGui.PopStyleColor(2);
         }
 
-
         private string _windowTitle;
-
         public GraphCanvas Canvas { get; private set; }
     }
 }

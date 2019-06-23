@@ -250,7 +250,7 @@ namespace T3
                                      context.Draw(3, 0);
 
                                      _t3ui.DrawUI();
-                                     _t3ui.DrawParameterView();
+
                                      _t3ui.DrawSelectedOutput();
 
                                      UiSettingsWindow.DrawUiSettings();

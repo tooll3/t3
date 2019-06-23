@@ -6,7 +6,7 @@ namespace T3.Gui.Graph
     /// <summary>
     /// Renders a small representation of the operator's parameters and other data
     /// </summary>
-    public class GraphWidgets
+    public class NodeDetailsPanel
     {
         static public void Draw(SymbolChildUi ui)
         {
@@ -14,11 +14,11 @@ namespace T3.Gui.Graph
 
             ImGui.BeginChildFrame((uint)ui.SymbolChild.Id.GetHashCode(), new Vector2(230, 100));
             {
-                for (int i = 0; i < 10; i++)
-                {
+                //for (int i = 0; i < 10; i++)
+                //{
 
-                    ImGui.Text("hallo" + i);
-                }
+                //    ImGui.Text("hallo" + i);
+                //}
             }
             ImGui.EndChildFrame();
         }
