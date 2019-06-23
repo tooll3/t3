@@ -72,18 +72,18 @@ namespace T3.Gui.Animation
             return opened;
         }
 
-        bool contextMenuIsOpen = false;
+        bool _contextMenuIsOpen = false;
         private void DrawContextMenu()
         {
             // This is a horrible hack to distinguish right mouse click from right mouse drag
             var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
-            if (!contextMenuIsOpen && rightMouseDragDelta > 3)
+            if (!_contextMenuIsOpen && rightMouseDragDelta > 3)
                 return;
 
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             if (ImGui.BeginPopupContextWindow("context_menu"))
             {
-                contextMenuIsOpen = true;
+                _contextMenuIsOpen = true;
                 var selectedInterpolations = GetSelectedKeyframeInterpolationTypes();
                 if (ImGui.MenuItem("Smooth", null, selectedInterpolations.Contains(VDefinition.EditMode.Smooth)))
                     OnSmooth();
@@ -107,7 +107,7 @@ namespace T3.Gui.Animation
             }
             else
             {
-                contextMenuIsOpen = false;
+                _contextMenuIsOpen = false;
             }
             ImGui.PopStyleVar();
         }

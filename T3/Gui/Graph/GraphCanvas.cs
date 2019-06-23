@@ -130,13 +130,19 @@ namespace T3.Gui.Graph
             _scrollTarget += _mouse - shift - WindowPos;
         }
 
+        private bool _contextMenuIsOpen = false;
         private void DrawContextMenu()
         {
+            // This is a horrible hack to distinguish right mouse click from right mouse drag
+            var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
+            if (!_contextMenuIsOpen && rightMouseDragDelta > 3)
+                return;
+
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             if (ImGui.BeginPopupContextWindow("context_menu"))
             {
                 Vector2 scene_pos = ImGui.GetMousePosOnOpeningCurrentPopup();// - scrollOffset;
-
+                _contextMenuIsOpen = true;
 
                 // Todo: Convert to linc
                 var selectedChildren = new List<SymbolChildUi>();
@@ -171,6 +177,10 @@ namespace T3.Gui.Graph
                 if (ImGui.MenuItem("Add")) { }
                 if (ImGui.MenuItem("Paste", null, false, false)) { }
                 ImGui.EndPopup();
+            }
+            else
+            {
+                _contextMenuIsOpen = false;
             }
             ImGui.PopStyleVar();
         }
