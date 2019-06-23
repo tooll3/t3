@@ -70,8 +70,6 @@ namespace T3.Gui.Graph
                 targetSlotId: NotConnected
             );
             _draftConnectionType = outputDef.ValueType;
-            Log.Debug("Start connection from output of type" + _draftConnectionType.Name);
-
         }
 
 
@@ -100,7 +98,6 @@ namespace T3.Gui.Graph
                 );
             }
             _draftConnectionType = inputDef.DefaultValue.ValueType;
-            Log.Debug("Start connection from input of type" + _draftConnectionType.Name);
         }
 
 
@@ -171,7 +168,6 @@ namespace T3.Gui.Graph
 
         public static void Cancel()
         {
-            Log.Debug("Connection Canceled");
             TempConnection = null;
             _draftConnectionType = null;
         }
