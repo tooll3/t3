@@ -21,48 +21,6 @@ namespace T3.Gui.Animation
         private ICanvas _canvas;
 
 
-
-        //  #region properties
-
-        //  public static readonly DependencyProperty UScaleProperty = DependencyProperty.Register(
-        //    "UScale",
-        //      typeof(double),
-        //      typeof(HorizontalScaleLines),
-        //      new FrameworkPropertyMetadata(-100.0,
-        //      FrameworkPropertyMetadataOptions.AffectsRender)
-        //  );
-        //  public double UScale { get { return (double) GetValue(UScaleProperty); } set { SetValue(UScaleProperty, value); } }
-
-
-        //  public static readonly DependencyProperty UOffsetProperty = DependencyProperty.Register("UOffset", typeof(double), typeof(HorizontalScaleLines), new FrameworkPropertyMetadata(100.0,
-        //FrameworkPropertyMetadataOptions.AffectsRender));
-        //  public double UOffset { get { return (double) GetValue(UOffsetProperty); } set { SetValue(UOffsetProperty, value); } }
-        //  #endregion
-
-        //private float UScale;
-        //private float UOffset;
-
-
-        //private SolidColorBrush GetTransparentBrush(double opacity)
-        //{
-        //    double oClamped = Math.Min(1, Math.Max(0, opacity));
-        //    var br = new SolidColorBrush(Color.FromArgb((byte) ((oClamped * 255)), 0, 0, 0));
-        //    br.Freeze();
-        //    return br;
-        //}
-
-        //private SolidColorBrush GetTransparentLabelBrush(double opacity)
-        //{
-        //    double oClamped = Math.Min(1, Math.Max(0, opacity));
-        //    var br = new SolidColorBrush(Color.FromArgb((byte) ((oClamped * 255)), 255, 255, 255));
-        //    br.Freeze();
-        //    return br;
-        //}
-
-        //private float ActualWidth = 10;
-
-
-
         public void Draw()
         {
             var drawList = ImGui.GetWindowDrawList();

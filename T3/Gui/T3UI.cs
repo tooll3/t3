@@ -42,12 +42,30 @@ namespace T3.Gui
             if (UiSettingsWindow.CurveEditorVisible)
                 _curveEditor.Draw(ref UiSettingsWindow.CurveEditorVisible);
 
+            if (UiSettingsWindow.ParameterWindowVisible)
+            {
+                if (_graphCanvasWindows.Any())
+                {
+                    ParameterWindow.Draw(_graphCanvasWindows[0].Canvas.CompositionOp, GetInstanceSelectedInGraph());
+                }
+            }
             _quickCreateWindow.Draw();
 
             SwapHoveringBuffers();
         }
 
-
+        private SymbolChildUi GetInstanceSelectedInGraph()
+        {
+            foreach (var gcw in _graphCanvasWindows)
+            {
+                if (gcw.Canvas.SelectionHandler.SelectedElements.Any())
+                {
+                    var ui = gcw.Canvas.SelectionHandler.SelectedElements[0] as SymbolChildUi;
+                    return ui;
+                }
+            }
+            return null;
+        }
 
 
         private unsafe void DrawGraphCanvasWindows()
@@ -63,33 +81,7 @@ namespace T3.Gui
         }
 
 
-        public void DrawParameterView()
-        {
-            ImGui.Begin("ParameterView");
 
-            var compositionOp = _instance._graphCanvasWindows[0].Canvas.CompositionOp; // todo: fix
-            Instance selectedInstance = compositionOp;
-            var childUiEntries = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
-            var selectedChildUi = (from childUi in childUiEntries
-                                   where childUi.Value.IsSelected
-                                   select childUi).FirstOrDefault().Value;
-            if (selectedChildUi != null)
-            {
-                var symbolChild = selectedChildUi.SymbolChild;
-                selectedInstance = compositionOp.Children.Single(child => child.Id == symbolChild.Id);
-            }
-
-            foreach (var input in selectedInstance.Inputs)
-            {
-                ImGui.PushID(input.Id.GetHashCode());
-                IInputUi inputUi = InputUiRegistry.Entries[selectedInstance.Symbol.Id][input.Id];
-                inputUi.DrawInputEdit(input.Input.InputDefinition.Name, input);
-
-                ImGui.PopID();
-            }
-
-            ImGui.End();
-        }
 
         public void DrawSelectedOutput()
         {

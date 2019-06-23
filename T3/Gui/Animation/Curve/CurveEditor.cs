@@ -14,16 +14,6 @@ namespace T3.Gui.Animation
 {
     /// <summary>
     /// A stub window to collect curve editing functionality during implementation.
-    /// ToDo:
-    /// [x] Generate a mock curve with some random keyframes
-    /// [x] Render Curve
-    /// [X] Zoom and pan timeline-range
-    /// [x] Mock random-keyframes
-    /// [x] Render value area
-    /// [x] Render time-line ticks
-    /// [x] Selection of keyframes
-    /// [x] Select with Fence
-    /// [x] Edit Keyframes-tangent editing
     /// [ ] Implement Curve-Edit-Box
     /// </summary>
     public class CurveEditor : ICanvas
