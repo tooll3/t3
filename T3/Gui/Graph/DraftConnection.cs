@@ -58,41 +58,17 @@ namespace T3.Gui.Graph
                 && TempConnection.TargetDefinitionId == outputDef.Id;
         }
 
-        //public static bool IsCurrentSourceOutput(IConnectionSource connectionSource, int outputIndex)
-        //{
-        //    return TempConnection != null
-        //        && connectionSource.SymbolChild.Id == TempConnection.SourceChildId
-        //        && connectionSource.SymbolChild.Symbol.OutputDefinitions[outputIndex].Id == TempConnection.OutputDefinitionId;
-        //}
 
         public static void StartFromOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, int outputIndex)
         {
             var outputDef = sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex];
             var existingConnections = FindConnectionsFromOutput(parentSymbol, sourceUi, outputIndex);
-            if (existingConnections.Count > 1)
-            {
-                foreach (var c in existingConnections)
-                {
-                    parentSymbol.RemoveConnection(c);
-                }
-
-                TempConnection = new Symbol.Connection(
-                    sourceChildId: NotConnected,
-                    sourceDefinitionId: NotConnected,
-                    targetChildId: existingConnections[0].TargetChildId,
-                    targetDefinitionId: existingConnections[0].TargetDefinitionId
-                );
-
-            }
-            else
-            {
-                TempConnection = new Symbol.Connection(
-                    sourceChildId: sourceUi.SymbolChild.Id,
-                    sourceDefinitionId: outputDef.Id,
-                    targetChildId: NotConnected,
-                    targetDefinitionId: NotConnected
-                );
-            }
+            TempConnection = new Symbol.Connection(
+                sourceChildId: sourceUi.SymbolChild.Id,
+                sourceDefinitionId: outputDef.Id,
+                targetChildId: NotConnected,
+                targetDefinitionId: NotConnected
+            );
             _draftConnectionType = outputDef.ValueType;
             Log.Debug("Start connection from output of type" + _draftConnectionType.Name);
 
