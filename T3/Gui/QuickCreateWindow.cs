@@ -58,7 +58,11 @@ namespace T3.Gui.Graph
                     Guid newSymbolChildId = _compositionOp.AddChild(symbol);
                     // Create and register ui info for new child
                     var uiEntriesForChildrenOfSymbol = SymbolChildUiRegistry.Entries[_compositionOp.Id];
-                    uiEntriesForChildrenOfSymbol.Add(newSymbolChildId, new SymbolChildUi { SymbolChild = _compositionOp.Children.Find(entry => entry.Id == newSymbolChildId) });
+                    uiEntriesForChildrenOfSymbol.Add(newSymbolChildId, new SymbolChildUi
+                    {
+                        SymbolChild = _compositionOp.Children.Find(entry => entry.Id == newSymbolChildId),
+                        PosOnCanvas = _positionInOp
+                    });
 
                     _opened = false;
                 }
@@ -67,10 +71,10 @@ namespace T3.Gui.Graph
         }
 
 
-        public static void OpenAtPosition(Vector2 position, Symbol compositionOp, Vector2 positionInOp)
+        public static void OpenAtPosition(Vector2 screenPosition, Symbol compositionOp, Vector2 positionInOp)
         {
             _instance._bringWindowToFront = true;
-            _instance._positionInScreen = position;
+            _instance._positionInScreen = screenPosition;
             _instance._compositionOp = compositionOp;
             _instance._positionInOp = positionInOp;
             _opened = true;
