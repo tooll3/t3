@@ -140,8 +140,8 @@ namespace T3.Core.Operator
                 var parent = instance.Parent;
                 var parentSymbol = parent.Symbol;
                 // get all connections that belong to this instance
-                var connectionsToReplace = parentSymbol.Connections.FindAll(c => c.SourceSymbolChildId == instance.Id ||
-                                                                                 c.TargetSymboldChildId == instance.Id);
+                var connectionsToReplace = parentSymbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.Id ||
+                                                                                 c.TargetParentOrChildId == instance.Id);
                 foreach (var connection in connectionsToReplace)
                 {
                     parentSymbol.RemoveConnection(connection);
@@ -283,7 +283,7 @@ namespace T3.Core.Operator
         public void AddConnection(Connection connection)
         {
             // check if another connection is already existing to the target input, ignoring multi inputs for now
-            var existingConnection = Connections.FirstOrDefault(c => c.TargetSymboldChildId == connection.TargetSymboldChildId &&
+            var existingConnection = Connections.FirstOrDefault(c => c.TargetParentOrChildId == connection.TargetParentOrChildId &&
                                                                      c.TargetSlotId == connection.TargetSlotId);
             if (existingConnection != null)
             {
@@ -330,12 +330,12 @@ namespace T3.Core.Operator
 
         public Connection GetConnectionForInput(InputDefinition input)
         {
-            return Connections.FirstOrDefault(c => c.TargetSymboldChildId == input.Id);
+            return Connections.FirstOrDefault(c => c.TargetParentOrChildId == input.Id);
         }
 
         public Connection GetConnectionForOutput(OutputDefinition output)
         {
-            return Connections.FirstOrDefault(c => c.SourceSymbolChildId == output.Id);
+            return Connections.FirstOrDefault(c => c.SourceParentOrChildId == output.Id);
         }
 
         #endregion
@@ -364,24 +364,24 @@ namespace T3.Core.Operator
 
         public class Connection
         {
-            public Guid SourceSymbolChildId { get; }
+            public Guid SourceParentOrChildId { get; }
             public Guid SourceSlotId { get; }
-            public Guid TargetSymboldChildId { get; }
+            public Guid TargetParentOrChildId { get; }
             public Guid TargetSlotId { get; }
 
-            public Connection(Guid sourceSymbolChildId, Guid sourceSlotId, Guid targetSymbolChildId, Guid targetSlotId)
+            public Connection(Guid sourceParentOrChildId, Guid sourceSlotId, Guid targetSymbolChildId, Guid targetSlotId)
             {
-                SourceSymbolChildId = sourceSymbolChildId;
+                SourceParentOrChildId = sourceParentOrChildId;
                 SourceSlotId = sourceSlotId;
-                TargetSymboldChildId = targetSymbolChildId;
+                TargetParentOrChildId = targetSymbolChildId;
                 TargetSlotId = targetSlotId;
             }
 
             public override int GetHashCode()
             {
-                int hash = SourceSymbolChildId.GetHashCode();
+                int hash = SourceParentOrChildId.GetHashCode();
                 hash = hash * 31 + SourceSlotId.GetHashCode();
-                hash = hash * 31 + TargetSymboldChildId.GetHashCode();
+                hash = hash * 31 + TargetParentOrChildId.GetHashCode();
                 hash = hash * 31 + TargetSlotId.GetHashCode();
                 return hash;
             }

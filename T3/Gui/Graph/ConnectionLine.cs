@@ -31,13 +31,13 @@ namespace T3.Gui.Graph
             Vector2 sourcePos;
 
             {
-                if (c.SourceSymbolChildId == DraftConnection.NotConnected)
+                if (c.SourceParentOrChildId == DraftConnection.NotConnected)
                 {
                     sourcePos = ImGui.GetMousePos();
                 }
 
                 // Start at input node
-                else if (c.SourceSymbolChildId == Guid.Empty)
+                else if (c.SourceParentOrChildId == Guid.Empty)
                 {
                     var inputsForSymbol = InputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                     var inputUi = inputsForSymbol[c.SourceSlotId];
@@ -46,7 +46,7 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    var sourceUi = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.SourceSymbolChildId];
+                    var sourceUi = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.SourceParentOrChildId];
                     var outputDefinitions = sourceUi.SymbolChild.Symbol.OutputDefinitions;
                     var outputIndex = outputDefinitions.FindIndex(outputDef => outputDef.Id == c.SourceSlotId);
 
@@ -59,13 +59,13 @@ namespace T3.Gui.Graph
             Vector2 targetPos;
 
             {
-                if (c.TargetSymboldChildId == DraftConnection.NotConnected)
+                if (c.TargetParentOrChildId == DraftConnection.NotConnected)
                 {
                     targetPos = ImGui.GetMousePos();
                 }
 
                 // Ends at symbol output node
-                else if (c.TargetSymboldChildId == Guid.Empty)
+                else if (c.TargetParentOrChildId == Guid.Empty)
                 {
                     var outputsForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                     var outputUi = outputsForSymbol[c.TargetSlotId];
@@ -74,7 +74,7 @@ namespace T3.Gui.Graph
                 else
                 {
                     var uiChildrenFromCurrentOp = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id];
-                    var targetUi = uiChildrenFromCurrentOp[c.TargetSymboldChildId];
+                    var targetUi = uiChildrenFromCurrentOp[c.TargetParentOrChildId];
                     var inputDefinitions = targetUi.SymbolChild.Symbol.InputDefinitions;
                     var inputIndex = inputDefinitions.FindIndex(inputDef => inputDef.Id == c.TargetSlotId);
                     var r = Slots.GetInputSlotSizeInCanvas(targetUi, inputIndex);

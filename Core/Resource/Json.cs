@@ -61,9 +61,9 @@ namespace T3.Core
             connections.ForEach(connection =>
                                 {
                                     Writer.WriteStartObject();
-                                    Writer.WriteValue("SourceInstanceId", connection.SourceSymbolChildId);
+                                    Writer.WriteValue("SourceParentOrChildId", connection.SourceParentOrChildId);
                                     Writer.WriteValue("SourceSlotId", connection.SourceSlotId);
-                                    Writer.WriteValue("TargetInstanceId", connection.TargetSymboldChildId);
+                                    Writer.WriteValue("TargetParentOrChildId", connection.TargetParentOrChildId);
                                     Writer.WriteValue("TargetSlotId", connection.TargetSlotId);
                                     Writer.WriteEndObject();
                                 });
@@ -125,9 +125,9 @@ namespace T3.Core
 
         private Symbol.Connection ReadConnection(JToken jsonConnection)
         {
-            var sourceInstanceId = Guid.Parse(jsonConnection["SourceInstanceId"].Value<string>());
+            var sourceInstanceId = Guid.Parse(jsonConnection["SourceParentOrChildId"].Value<string>());
             var sourceSlotId = Guid.Parse(jsonConnection["SourceSlotId"].Value<string>());
-            var targetInstanceId = Guid.Parse(jsonConnection["TargetInstanceId"].Value<string>());
+            var targetInstanceId = Guid.Parse(jsonConnection["TargetParentOrChildId"].Value<string>());
             var targetSlotId = Guid.Parse(jsonConnection["TargetSlotId"].Value<string>());
 
             return new Symbol.Connection(sourceInstanceId, sourceSlotId, targetInstanceId, targetSlotId);
