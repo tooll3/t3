@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 
@@ -9,7 +10,7 @@ namespace T3.Gui.Graph
     /// <summary>
     /// Handles the creation of new  <see cref="ConnectionLine"/>. It provides accessors for highlighting matching input slots.
     /// </summary>
-    public static class DraftConnection
+    public static class BuildingConnections
     {
         public static Symbol.Connection TempConnection = null;
 
@@ -103,29 +104,12 @@ namespace T3.Gui.Graph
 
         public static void StartFromInputNode(Symbol.InputDefinition inputDef)
         {
-            // Fixme: Relinking existing connections should be possible
-            //var existingConnection = FindConnectionToInput(parentSymbol, targetUi, inputIndex);
-            //var inputDef = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex];
-            //if (existingConnection != null)
-            //{
-            //    parentSymbol.RemoveConnection(existingConnection);
-
-            //    TempConnection = new Symbol.Connection(
-            //        sourceChildId: existingConnection.SourceChildId,
-            //        outputDefinitionId: existingConnection.OutputDefinitionId,
-            //        targetChildId: NotConnected,
-            //        inputDefinitionId: NotConnected
-            //    );
-            //}
-            //else
-            //{
             TempConnection = new Symbol.Connection(
                 sourceParentOrChildId: UseSymbolContainer,
                 sourceSlotId: inputDef.Id,
                 targetSymbolChildId: NotConnected,
                 targetSlotId: NotConnected
             );
-            //}
             _draftConnectionType = inputDef.DefaultValue.ValueType;
         }
 
@@ -200,6 +184,30 @@ namespace T3.Gui.Graph
         }
 
 
+        public static void BuildNodeAtTarget(BuildingNodes nodeBuilding, Vector2 canvasPosition)
+        {
+            nodeBuilding.OpenAt(canvasPosition);
+            //Cancel();
+            TempConnection = new Symbol.Connection(
+                sourceParentOrChildId: TempConnection.SourceParentOrChildId,
+                sourceSlotId: TempConnection.SourceSlotId,
+                targetSymbolChildId: UseDraftOperator,
+                targetSlotId: Guid.Empty
+            );
+        }
+
+        public static void CompleteConnectionToBuiltNode(Symbol parentSymbol, SymbolChild newOp, Symbol.InputDefinition inputDef)
+        {
+            var newConnection = new Symbol.Connection(
+                sourceParentOrChildId: TempConnection.SourceParentOrChildId,
+                sourceSlotId: TempConnection.SourceSlotId,
+                targetSymbolChildId: newOp.Id,
+                targetSlotId: inputDef.Id
+            );
+            parentSymbol.AddConnection(newConnection);
+            TempConnection = null;
+        }
+
         public static void CompleteAtSymbolInputNode(Symbol parentSymbol, Symbol.InputDefinition inputDef)
         {
             var newConnection =
@@ -226,7 +234,6 @@ namespace T3.Gui.Graph
             parentSymbol.AddConnection(newConnection);
             TempConnection = null;
         }
-
 
 
         private static List<Symbol.Connection> FindConnectionsFromOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, int outputIndex)
@@ -257,8 +264,13 @@ namespace T3.Gui.Graph
         public static Guid NotConnected = Guid.NewGuid();
 
         /// <summary>
-        /// 
+        /// A special Id that indicates that the source of target of a connection is not a child but an input or output node
         /// </summary>
-        private static Guid UseSymbolContainer = Guid.Empty;
+        public static Guid UseSymbolContainer = Guid.Empty;
+
+        /// <summary>
+        /// A special id indicating that the connection is ending in the <see cref="BuildingNodes"/>
+        /// </summary>
+        public static Guid UseDraftOperator = Guid.NewGuid();
     }
 }

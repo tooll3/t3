@@ -13,16 +13,19 @@ using T3.Gui.Selection;
 namespace T3.Gui.Graph
 {
     /// <summary>
-    /// Represents the place holder of a new Node on the <see cref="GraphCanvas"/> that can be
-    /// already connected to other nodes and provide search functionality. It's basically the
+    /// Represents the placeholder for a new <see cref="GraphOperator"/> on the <see cref="GraphCanvas"/>. 
+    /// It can be connected to other nodes and provide search functionality. It's basically the
     /// T2's CreateOperatorWindow.
     /// </summary>
-    public class DraftNode
+    public class BuildingNodes
     {
+        #region public API ------------------------------------------------------------------------
         public void Draw()
         {
-            if (!_opened)
+            if (!IsOpen)
                 return;
+
+            Current = this;
 
             ImGui.PushID(_uiId);
             {
@@ -35,7 +38,21 @@ namespace T3.Gui.Graph
             }
             ImGui.PopID();
         }
+        public void OpenAt(Vector2 positionOnCanvas)
+        {
+            IsOpen = true;
+            PosOnCanvas = positionOnCanvas;
+            _focusInputNextTime = true;
 
+        }
+        public void Cancel()
+        {
+            IsOpen = false;
+        }
+        #endregion
+
+
+        #region internal implementation -----------------------------------------------------------
         private void DrawSearchInput()
         {
             _drawList.AddRect(_posInScreen, _posInScreen + Size, Color.Gray);
@@ -66,7 +83,6 @@ namespace T3.Gui.Graph
         }
 
 
-
         private void DrawMatchesList()
         {
             ImGui.SetCursorPos(_posInWindow + new Vector2(91 + 8, 1));
@@ -89,20 +105,30 @@ namespace T3.Gui.Graph
 
                     ImGui.PushID(symbol.Id.GetHashCode());
                     {
-
                         if (ImGui.Selectable("", symbol == _selectedSymbol))
                         {
-                            Guid newSymbolChildId = GraphCanvas.Current.CompositionOp.Symbol.AddChild(symbol);
+                            var parent = GraphCanvas.Current.CompositionOp.Symbol;
+                            Guid newSymbolChildId = parent.AddChild(symbol);
 
                             // Create and register ui info for new child
-                            var uiEntriesForChildrenOfSymbol = SymbolChildUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+                            var uiEntriesForChildrenOfSymbol = SymbolChildUiRegistry.Entries[parent.Id];
+                            var newSymbolChild = GraphCanvas.Current.CompositionOp.Symbol.Children.Find(entry => entry.Id == newSymbolChildId);
                             uiEntriesForChildrenOfSymbol.Add(newSymbolChildId, new SymbolChildUi
                             {
-                                SymbolChild = GraphCanvas.Current.CompositionOp.Symbol.Children.Find(entry => entry.Id == newSymbolChildId),
+                                SymbolChild = newSymbolChild,
                                 PosOnCanvas = _posInWindow,
                             });
 
-                            _opened = false;
+                            if (symbol.InputDefinitions.Any())
+                            {
+                                BuildingConnections.CompleteConnectionToBuiltNode(parent, newSymbolChild, symbol.InputDefinitions[0]);
+                            }
+                            else
+                            {
+                                BuildingConnections.Cancel();
+                            }
+
+                            IsOpen = false;
                         }
                         ImGui.SameLine();
                         ImGui.Text(symbol.Name);
@@ -119,27 +145,26 @@ namespace T3.Gui.Graph
             ImGui.PopStyleVar(2);
         }
 
+        #endregion
 
-        public void OpenAt(Vector2 positionOnCanvas)
-        {
-            _opened = true;
-            PosOnCanvas = positionOnCanvas;
-            _focusInputNextTime = true;
 
-        }
+        public List<Symbol.Connection> ConnectionsIn = new List<Symbol.Connection>();
+        public Symbol.Connection ConnectionOut = null;
 
         public Vector2 PosOnCanvas { get; set; }
         public Vector2 Size { get; set; } = GraphCanvas.DefaultOpSize;
 
         private bool _focusInputNextTime = false;
-
         private Vector2 _posInScreen;
         private ImDrawListPtr _drawList;
         private Vector2 _posInWindow;
 
-        private bool _opened = false;
+        public bool IsOpen { get; private set; } = false;
+
         private Symbol _selectedSymbol = null;
         private readonly static int _uiId = "DraftNode".GetHashCode();
         private string _searchString = "";
+
+        public static BuildingNodes Current;
     }
 }

@@ -8,7 +8,7 @@ using T3.Core.Operator;
 namespace T3.Gui.Graph
 {
     /// <summary>
-    /// Draws published input parameters of a <see cref="Symbol"/> and uses <see cref="DraftConnection"/> 
+    /// Draws published input parameters of a <see cref="Symbol"/> and uses <see cref="BuildingConnections"/> 
     /// create new connections with it.
     /// </summary>
     static class OutputNodes
@@ -83,28 +83,28 @@ namespace T3.Gui.Graph
                     var color = TypeUiRegistry.Entries[outputDef.ValueType].Color;
 
                     //Note: isItemHovered will not work
-                    var hovered = DraftConnection.TempConnection != null ? rInScreen.Contains(ImGui.GetMousePos())
+                    var hovered = BuildingConnections.TempConnection != null ? rInScreen.Contains(ImGui.GetMousePos())
                         : ImGui.IsItemHovered();
 
-                    if (DraftConnection.IsOutputNodeCurrentConnectionTarget(outputDef))
+                    if (BuildingConnections.IsOutputNodeCurrentConnectionTarget(outputDef))
                     {
                         GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                         if (ImGui.IsMouseDragging(0))
                         {
-                            DraftConnection.Update();
+                            BuildingConnections.Update();
                         }
                     }
                     //else if (ImGui.IsItemHovered())   // ToDo: Find out, why IsItemHovered is not working during drag
                     else if (hovered)
                     {
-                        if (DraftConnection.IsMatchingInputType(outputDef.ValueType))
+                        if (BuildingConnections.IsMatchingInputType(outputDef.ValueType))
                         {
                             GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                             if (ImGui.IsMouseReleased(0))
                             {
-                                DraftConnection.CompleteAtSymbolOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
+                                BuildingConnections.CompleteAtSymbolOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
                             }
                         }
                         else
@@ -112,7 +112,7 @@ namespace T3.Gui.Graph
                             GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, Color.White);
                             if (ImGui.IsItemClicked(0))
                             {
-                                DraftConnection.StartFromOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
+                                BuildingConnections.StartFromOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
                             }
                         }
                     }
@@ -122,7 +122,7 @@ namespace T3.Gui.Graph
                             ImRect.RectWithSize(
                                 new Vector2(outputUi.PosOnCanvas.X + 1 + 3, outputUi.PosOnCanvas.Y + outputUi.Size.Y - 1),
                                 new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3))
-                            , DraftConnection.IsMatchingInputType(outputDef.ValueType) ? Color.White : color);
+                            , BuildingConnections.IsMatchingInputType(outputDef.ValueType) ? Color.White : color);
                     }
                 }
 
