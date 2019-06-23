@@ -86,22 +86,24 @@ namespace T3.Gui
         public void DrawSelectedOutput()
         {
             ImGui.Begin("SelectionView");
-
-            var compositionOp = _instance._graphCanvasWindows[0].Canvas.CompositionOp; // todo: fix
-            Instance selectedInstance = compositionOp;
-            var childUiEntries = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
-            var selectedChildUi = childUiEntries.FirstOrDefault(childUi => childUi.Value.IsSelected).Value;
-            if (selectedChildUi != null)
+            if (_instance._graphCanvasWindows.Any())
             {
-                var symbolChild = selectedChildUi.SymbolChild;
-                selectedInstance = compositionOp.Children.Single(child => child.Id == symbolChild.Id);
-            }
+                var compositionOp = _instance._graphCanvasWindows[0].Canvas.CompositionOp; // todo: fix
+                Instance selectedInstance = compositionOp;
+                var childUiEntries = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
+                var selectedChildUi = childUiEntries.FirstOrDefault(childUi => childUi.Value.IsSelected).Value;
+                if (selectedChildUi != null)
+                {
+                    var symbolChild = selectedChildUi.SymbolChild;
+                    selectedInstance = compositionOp.Children.Single(child => child.Id == symbolChild.Id);
+                }
 
-            if (selectedInstance.Outputs.Count > 0)
-            {
-                var firstOutput = selectedInstance.Outputs[0];
-                IOutputUi outputUi = OutputUiRegistry.Entries[selectedInstance.Symbol.Id][firstOutput.Id];
-                outputUi.DrawValue(firstOutput);
+                if (selectedInstance.Outputs.Count > 0)
+                {
+                    var firstOutput = selectedInstance.Outputs[0];
+                    IOutputUi outputUi = OutputUiRegistry.Entries[selectedInstance.Symbol.Id][firstOutput.Id];
+                    outputUi.DrawValue(firstOutput);
+                }
             }
 
             ImGui.End();

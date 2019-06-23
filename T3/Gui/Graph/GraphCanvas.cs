@@ -2,6 +2,7 @@
 using imHelpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -76,6 +77,27 @@ namespace T3.Gui.Graph
             ImGui.EndGroup();
         }
 
+        public List<Instance> GetParents(bool inludeCompositionOp = false)
+        {
+            var parents = new List<Instance>();
+            var op = CompositionOp;
+            if (inludeCompositionOp)
+                parents.Add(op);
+
+            while (op.Parent != null)
+            {
+                op = op.Parent;
+                parents.Insert(0, op);
+            }
+
+            return parents;
+        }
+
+
+        public IEnumerable<Symbol> GetParentSymbols()
+        {
+            return GetParents(inludeCompositionOp: true).Select(p => p.Symbol);
+        }
 
         private void HandleInteraction()
         {
