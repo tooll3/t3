@@ -88,7 +88,6 @@ namespace T3.Gui.Graph
 
                     if (DraftConnection.IsOutputNodeCurrentConnectionTarget(outputDef))
                     {
-                        Log.Debug("current connection target");
                         GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                         if (ImGui.IsMouseDragging(0))
