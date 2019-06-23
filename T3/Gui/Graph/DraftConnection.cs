@@ -7,13 +7,12 @@ using T3.Core.Operator;
 namespace T3.Gui.Graph
 {
     /// <summary>
-    /// Handles the creation of new connections. Provides accessors for highlighting matching input slots.
+    /// Handles the creation of new  <see cref="ConnectionLine"/>. It provides accessors for highlighting matching input slots.
     /// </summary>
     public static class DraftConnection
     {
         public static Symbol.Connection TempConnection = null;
 
-        //public static bool IsMatchingInputType(Symbol.InputDefinition inputDef)
         public static bool IsMatchingInputType(Type valueType)
         {
             return TempConnection != null
@@ -22,7 +21,7 @@ namespace T3.Gui.Graph
                 && _draftConnectionType == valueType;
         }
 
-        //public static bool IsMatchingOutputType(Symbol.OutputDefinition outputDef)
+
         public static bool IsMatchingOutputType(Type valueType)
         {
             return TempConnection != null
@@ -194,6 +193,7 @@ namespace T3.Gui.Graph
 
         public static void Cancel()
         {
+            Log.Debug("Connection Canceled");
             TempConnection = null;
             _draftConnectionType = null;
         }

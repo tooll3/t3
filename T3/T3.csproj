@@ -307,7 +307,6 @@
     <Compile Include="Gui\Graph\DraftConnection.cs" />
     <Compile Include="Gui\Graph\GraphCanvas.cs" />
     <Compile Include="Gui\Graph\InputNodes.cs" />
-    <Compile Include="Gui\Graph\OperatorInputZone.cs" />
     <Compile Include="Gui\Graph\OutputNodes.cs" />
     <Compile Include="Gui\Graph\Slots.cs" />
     <Compile Include="Gui\Metrics.cs" />

@@ -14,6 +14,7 @@ namespace T3.Gui.Graph
 
             ImGui.BeginChildFrame((uint)ui.SymbolChild.Id.GetHashCode(), new Vector2(230, 100));
             {
+                ParameterWindow.DrawParameters(GraphCanvas.Current.CompositionOp, ui);
                 //for (int i = 0; i < 10; i++)
                 //{
 
