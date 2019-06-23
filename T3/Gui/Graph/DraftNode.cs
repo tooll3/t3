@@ -17,7 +17,7 @@ namespace T3.Gui.Graph
     /// already connected to other nodes and provide search functionality. It's basically the
     /// T2's CreateOperatorWindow.
     /// </summary>
-    public class DraftNode : ISelectable
+    public class DraftNode
     {
         public void Draw()
         {
@@ -27,39 +27,46 @@ namespace T3.Gui.Graph
             ImGui.PushID(_uiId);
             {
                 _posInWindow = GraphCanvas.Current.ChildPosFromCanvas(PosOnCanvas);
-                var drawList = ImGui.GetWindowDrawList();
-                var screenPos = GraphCanvas.Current.TransformPosition(PosOnCanvas);
-                drawList.AddRect(screenPos, screenPos + Size, Color.Gray);
+                _posInScreen = GraphCanvas.Current.TransformPosition(PosOnCanvas);
+                _drawList = ImGui.GetWindowDrawList();
 
-                ImGui.SetCursorPos(_posInWindow);
-                ImGui.SetNextItemWidth(90);
-
-                if (_focusInputNextTime)
-                {
-                    ImGui.SetKeyboardFocusHere();
-                    _focusInputNextTime = false;
-                }
-                ImGui.SetCursorPos(_posInWindow + new Vector2(1, 1));
-                ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(7, 6));
-                if (ImGui.InputTextWithHint("", "search", _searchString, 10))
-                {
-                    //Log.Debug("completed search input");
-                }
-                ImGui.PopStyleVar();
-
-                if (ImGui.IsItemActive())
-                {
-                    if (ImGui.IsMouseDragging(0))
-                    {
-                        PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
-                    }
-                }
+                DrawSearchInput();
                 DrawMatchesList();
             }
             ImGui.PopID();
         }
 
-        private Vector2 _posInWindow;
+        private void DrawSearchInput()
+        {
+            _drawList.AddRect(_posInScreen, _posInScreen + Size, Color.Gray);
+
+            ImGui.SetCursorPos(_posInWindow);
+            ImGui.SetNextItemWidth(90);
+
+            if (_focusInputNextTime)
+            {
+                ImGui.SetKeyboardFocusHere();
+                _focusInputNextTime = false;
+            }
+            ImGui.SetCursorPos(_posInWindow + new Vector2(1, 1));
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(7, 6));
+            if (ImGui.InputTextWithHint("", "search", _searchString, 10))
+            {
+                //Log.Debug("completed search input");
+            }
+            ImGui.PopStyleVar();
+
+            if (ImGui.IsItemActive())
+            {
+                if (ImGui.IsMouseDragging(0))
+                {
+                    PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+                }
+            }
+        }
+
+
+
         private void DrawMatchesList()
         {
             ImGui.SetCursorPos(_posInWindow + new Vector2(91 + 8, 1));
@@ -77,29 +84,34 @@ namespace T3.Gui.Graph
 
                 foreach (var symbol in SymbolRegistry.Entries.Values)
                 {
-                    ImGui.PushID(symbol.Id.GetHashCode());
-
                     if (parentSymbols.Contains(symbol))
                         continue;
 
-                    if (ImGui.Selectable("", symbol == _selectedSymbol))
+                    ImGui.PushID(symbol.Id.GetHashCode());
                     {
-                        Guid newSymbolChildId = GraphCanvas.Current.CompositionOp.Symbol.AddChild(symbol);
 
-                        // Create and register ui info for new child
-                        var uiEntriesForChildrenOfSymbol = SymbolChildUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-                        uiEntriesForChildrenOfSymbol.Add(newSymbolChildId, new SymbolChildUi
+                        if (ImGui.Selectable("", symbol == _selectedSymbol))
                         {
-                            SymbolChild = GraphCanvas.Current.CompositionOp.Symbol.Children.Find(entry => entry.Id == newSymbolChildId),
-                            PosOnCanvas = _posInWindow,
-                        });
+                            Guid newSymbolChildId = GraphCanvas.Current.CompositionOp.Symbol.AddChild(symbol);
 
-                        _opened = false;
+                            // Create and register ui info for new child
+                            var uiEntriesForChildrenOfSymbol = SymbolChildUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+                            uiEntriesForChildrenOfSymbol.Add(newSymbolChildId, new SymbolChildUi
+                            {
+                                SymbolChild = GraphCanvas.Current.CompositionOp.Symbol.Children.Find(entry => entry.Id == newSymbolChildId),
+                                PosOnCanvas = _posInWindow,
+                            });
+
+                            _opened = false;
+                        }
+                        ImGui.SameLine();
+                        ImGui.Text(symbol.Name);
+                        if (!String.IsNullOrEmpty(symbol.Namespace))
+                        {
+                            ImGui.TextDisabled(symbol.Namespace);
+                            ImGui.SameLine();
+                        }
                     }
-                    ImGui.SameLine();
-                    ImGui.Text(symbol.Name);
-                    ImGui.SameLine();
-                    ImGui.TextDisabled(symbol.Namespace);
                     ImGui.PopID();
                 }
             }
@@ -115,13 +127,16 @@ namespace T3.Gui.Graph
             _focusInputNextTime = true;
 
         }
-        private bool _focusInputNextTime = false;
 
         public Vector2 PosOnCanvas { get; set; }
-
         public Vector2 Size { get; set; } = GraphCanvas.DefaultOpSize;
 
-        public bool IsSelected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private bool _focusInputNextTime = false;
+
+        private Vector2 _posInScreen;
+        private ImDrawListPtr _drawList;
+        private Vector2 _posInWindow;
+
         private bool _opened = false;
         private Symbol _selectedSymbol = null;
         private readonly static int _uiId = "DraftNode".GetHashCode();
