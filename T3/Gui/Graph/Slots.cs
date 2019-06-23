@@ -24,27 +24,27 @@ namespace T3.Gui.Graph
             var color = ColorForType(outputDef);
 
             //Note: isItemHovered will not work
-            var hovered = DraftConnection.TempConnection != null ? rInScreen.Contains(ImGui.GetMousePos())
+            var hovered = BuildingConnections.TempConnection != null ? rInScreen.Contains(ImGui.GetMousePos())
                 : ImGui.IsItemHovered();
 
-            if (DraftConnection.IsOutputSlotCurrentConnectionSource(ui, outputIndex))
+            if (BuildingConnections.IsOutputSlotCurrentConnectionSource(ui, outputIndex))
             {
                 GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, ColorForType(outputDef));
 
                 if (ImGui.IsMouseDragging(0))
                 {
-                    DraftConnection.Update();
+                    BuildingConnections.Update();
                 }
             }
             else if (hovered)
             {
-                if (DraftConnection.IsMatchingOutputType(outputDef.ValueType))
+                if (BuildingConnections.IsMatchingOutputType(outputDef.ValueType))
                 {
                     GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        DraftConnection.CompleteAtOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, ui, outputIndex);
+                        BuildingConnections.CompleteAtOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, ui, outputIndex);
                     }
                 }
                 else
@@ -55,7 +55,7 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(0))
                     {
-                        DraftConnection.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, ui, outputIndex);
+                        BuildingConnections.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, ui, outputIndex);
                     }
                     //ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     //ImGui.PushStyleColor(ImGuiCol.PopupBg, new Color(0.2f).Rgba);
@@ -72,7 +72,7 @@ namespace T3.Gui.Graph
                     ImRect.RectWithSize(
                         new Vector2(ui.PosOnCanvas.X + virtualRectInCanvas.GetWidth() * outputIndex + 1 + 3, ui.PosOnCanvas.Y - 1),
                         new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3))
-                    , DraftConnection.IsMatchingOutputType(outputDef.ValueType) ? Color.White : color);
+                    , BuildingConnections.IsMatchingOutputType(outputDef.ValueType) ? Color.White : color);
             }
             ImGui.PopID();
         }
@@ -104,27 +104,27 @@ namespace T3.Gui.Graph
             var color = ColorForType(inputDef);
 
             // Note: isItemHovered will not work
-            var hovered = DraftConnection.TempConnection != null ? rInScreen.Contains(ImGui.GetMousePos())
+            var hovered = BuildingConnections.TempConnection != null ? rInScreen.Contains(ImGui.GetMousePos())
                 : ImGui.IsItemHovered();
 
-            if (DraftConnection.IsInputSlotCurrentConnectionTarget(targetUi, inputIndex))
+            if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputIndex))
             {
                 GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, ColorForType(inputDef));
 
                 if (ImGui.IsMouseDragging(0))
                 {
-                    DraftConnection.Update();
+                    BuildingConnections.Update();
                 }
             }
             else if (hovered)
             {
-                if (DraftConnection.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
                     GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        DraftConnection.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputIndex);
+                        BuildingConnections.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputIndex);
                     }
                 }
                 else
@@ -135,7 +135,7 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(0))
                     {
-                        DraftConnection.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputIndex);
+                        BuildingConnections.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputIndex);
                     }
                 }
             }
@@ -147,7 +147,7 @@ namespace T3.Gui.Graph
                                     targetUi.PosOnCanvas.Y + targetUi.Size.Y - T3Style.VisibleSlotHeight),
                         new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6,
                                     T3Style.VisibleSlotHeight))
-                    , color: DraftConnection.IsMatchingInputType(inputDef.DefaultValue.ValueType) ? Color.White : color);
+                    , color: BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType) ? Color.White : color);
             }
 
             ImGui.PopID();

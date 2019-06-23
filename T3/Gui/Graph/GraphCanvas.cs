@@ -59,14 +59,21 @@ namespace T3.Gui.Graph
 
                     DrawGrid();
                     DrawNodes();
-                    _draftNode.Draw();
+                    _buildingNodes.Draw();
 
                     ConnectionLine.DrawAll(this);
 
-                    if (DraftConnection.TempConnection != null && ImGui.IsMouseReleased(0))
+
+                    if (BuildingConnections.TempConnection != null && ImGui.IsMouseReleased(0))
                     {
-                        _draftNode.OpenAt(this.InverseTransformPosition(_mouse));
-                        DraftConnection.Cancel();
+                        if (BuildingConnections.TempConnection.TargetParentOrChildId == BuildingConnections.UseDraftOperator)
+                        {
+                            BuildingNodes.Current.Cancel();
+                        }
+                        else
+                        {
+                            BuildingConnections.BuildNodeAtTarget(_buildingNodes, InverseTransformPosition(_mouse));
+                        }
                     }
 
                     _selectionFence.Draw();
@@ -359,7 +366,7 @@ namespace T3.Gui.Graph
         internal static Vector2 DefaultOpSize = new Vector2(100, 30);
 
         private Dictionary<Guid, SymbolChildUi> UiChildrenById { get; set; }
-        private DraftNode _draftNode = new DraftNode();
+        private BuildingNodes _buildingNodes = new BuildingNodes();
         #endregion
     }
 }

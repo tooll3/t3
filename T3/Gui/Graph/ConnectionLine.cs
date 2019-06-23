@@ -20,8 +20,8 @@ namespace T3.Gui.Graph
                 DrawConnection(c);
             }
 
-            if (DraftConnection.TempConnection != null)
-                DrawConnection(DraftConnection.TempConnection);
+            if (BuildingConnections.TempConnection != null)
+                DrawConnection(BuildingConnections.TempConnection);
         }
 
 
@@ -31,13 +31,15 @@ namespace T3.Gui.Graph
             Vector2 sourcePos;
 
             {
-                if (c.SourceParentOrChildId == DraftConnection.NotConnected)
+                if (c.SourceParentOrChildId == BuildingConnections.NotConnected)
                 {
                     sourcePos = ImGui.GetMousePos();
                 }
-
-                // Start at input node
-                else if (c.SourceParentOrChildId == Guid.Empty)
+                else if (c.SourceParentOrChildId == BuildingConnections.UseDraftOperator)
+                {
+                    sourcePos = GraphCanvas.Current.TransformPosition(BuildingNodes.Current.PosOnCanvas);
+                }
+                else if (c.SourceParentOrChildId == BuildingConnections.UseSymbolContainer)
                 {
                     var inputsForSymbol = InputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                     var inputUi = inputsForSymbol[c.SourceSlotId];
@@ -59,13 +61,15 @@ namespace T3.Gui.Graph
             Vector2 targetPos;
 
             {
-                if (c.TargetParentOrChildId == DraftConnection.NotConnected)
+                if (c.TargetParentOrChildId == BuildingConnections.NotConnected)
                 {
                     targetPos = ImGui.GetMousePos();
                 }
-
-                // Ends at symbol output node
-                else if (c.TargetParentOrChildId == Guid.Empty)
+                else if (c.TargetParentOrChildId == BuildingConnections.UseDraftOperator)
+                {
+                    targetPos = GraphCanvas.Current.TransformPosition(BuildingNodes.Current.PosOnCanvas + BuildingNodes.Current.Size / 2);
+                }
+                else if (c.TargetParentOrChildId == Guid.Empty) // Ends at symbol output node
                 {
                     var outputsForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                     var outputUi = outputsForSymbol[c.TargetSlotId];

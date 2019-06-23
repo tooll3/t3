@@ -8,7 +8,7 @@ using T3.Core.Operator;
 namespace T3.Gui.Graph
 {
     /// <summary>
-    /// Draws published input parameters of a <see cref="Symbol"/> and uses <see cref="DraftConnection"/> 
+    /// Draws published input parameters of a <see cref="Symbol"/> and uses <see cref="BuildingConnections"/> 
     /// create new connections with it.
     /// </summary>
     static class InputNodes
@@ -88,24 +88,24 @@ namespace T3.Gui.Graph
                     THelpers.DebugItemRect();
                     var color = TypeUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
 
-                    if (DraftConnection.IsInputNodeCurrentConnectionSource(inputDef))
+                    if (BuildingConnections.IsInputNodeCurrentConnectionSource(inputDef))
                     {
                         GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                         if (ImGui.IsMouseDragging(0))
                         {
-                            DraftConnection.Update();
+                            BuildingConnections.Update();
                         }
                     }
                     else if (ImGui.IsItemHovered())
                     {
-                        if (DraftConnection.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                        if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                         {
                             GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                             if (ImGui.IsMouseReleased(0))
                             {
-                                DraftConnection.CompleteAtSymbolInputNode(GraphCanvas.Current.CompositionOp.Symbol, inputDef);
+                                BuildingConnections.CompleteAtSymbolInputNode(GraphCanvas.Current.CompositionOp.Symbol, inputDef);
                             }
                         }
                         else
@@ -113,7 +113,7 @@ namespace T3.Gui.Graph
                             GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, Color.White);
                             if (ImGui.IsItemClicked(0))
                             {
-                                DraftConnection.StartFromInputNode(inputDef);
+                                BuildingConnections.StartFromInputNode(inputDef);
                             }
                         }
                     }

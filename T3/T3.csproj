@@ -297,7 +297,7 @@
     <Compile Include="Gui\Animation\Curve\CurveEditor.cs" />
     <Compile Include="Gui\Animation\Curve\CurvePointUi.cs" />
     <Compile Include="Gui\Animation\Curve\CurveUi.cs" />
-    <Compile Include="Gui\Graph\DraftNode.cs" />
+    <Compile Include="Gui\Graph\BuildingNodes.cs" />
     <Compile Include="Gui\Graph\GraphWidgets.cs" />
     <Compile Include="Gui\Animation\Curve\HorizontalScaleLines.cs" />
     <Compile Include="Gui\ICanvas.cs" />
@@ -309,7 +309,7 @@
     <Compile Include="Gui\SymbolChildUi.cs" />
     <Compile Include="Gui\SymbolChildUiRegistry.cs" />
     <Compile Include="Gui\Graph\ConnectionLine.cs" />
-    <Compile Include="Gui\Graph\DraftConnection.cs" />
+    <Compile Include="Gui\Graph\BuildingConnections.cs" />
     <Compile Include="Gui\Graph\GraphCanvas.cs" />
     <Compile Include="Gui\Graph\InputNodes.cs" />
     <Compile Include="Gui\Graph\OutputNodes.cs" />
