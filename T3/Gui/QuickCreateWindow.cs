@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using T3.Core.Operator;
 
@@ -49,11 +50,17 @@ namespace T3.Gui.Graph
         private void DrawOpList()
         {
             ImGui.Separator();
+            var parentSymbols = new List<Symbol>(GraphCanvas.Current.GetParentSymbols());
 
             foreach (var symbol in SymbolRegistry.Entries.Values)
             {
                 ImGui.PushID(symbol.Id.GetHashCode());
-                if (ImGui.Selectable(symbol.SymbolName, symbol == _selectedSymbol))
+
+                var flags = parentSymbols.Contains(symbol)
+                    ? ImGuiSelectableFlags.Disabled
+                    : ImGuiSelectableFlags.None;
+
+                if (ImGui.Selectable(symbol.SymbolName, symbol == _selectedSymbol, flags))
                 {
                     Guid newSymbolChildId = _compositionOp.AddChild(symbol);
                     // Create and register ui info for new child

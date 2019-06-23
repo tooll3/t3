@@ -33,13 +33,7 @@ namespace T3.Gui.Graph
 
         private void DrawBreadcrumbs()
         {
-            var parents = new List<Instance>();
-            var op = Canvas.CompositionOp;
-            while (op.Parent != null)
-            {
-                op = op.Parent;
-                parents.Insert(0, op);
-            }
+            List<Instance> parents = Canvas.GetParents();
 
             foreach (var p in parents)
             {
@@ -60,6 +54,8 @@ namespace T3.Gui.Graph
             ImGui.Button(Canvas.CompositionOp.Symbol.SymbolName);
             ImGui.PopStyleColor(2);
         }
+
+
 
         private string _windowTitle;
         public GraphCanvas Canvas { get; private set; }
