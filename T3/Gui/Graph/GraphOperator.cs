@@ -20,10 +20,7 @@ namespace T3.Gui.Graph
 
                 // Interaction
                 ImGui.SetCursorPos(posInWindow);
-
-
                 ImGui.InvisibleButton("node", (childUi.Size - new Vector2(0, 6)) * GraphCanvas.Current.Scale);
-
 
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
@@ -50,7 +47,6 @@ namespace T3.Gui.Graph
                     }
                     if (ImGui.IsMouseDoubleClicked(0))
                     {
-                        //Logging.Log.Debug("Doubble clickked");
                         var instance = GraphCanvas.Current.CompositionOp.Children.Find(c => c.Symbol == childUi.SymbolChild.Symbol);
                         GraphCanvas.Current.CompositionOp = instance;
                     }

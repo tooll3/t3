@@ -40,14 +40,14 @@ namespace T3.Gui.Graph
 
                 }
 
-                DrawOpList();
+                DrawSymbolList();
                 _bringWindowToFront = false;
             }
             ImGui.End();
         }
 
 
-        private void DrawOpList()
+        private void DrawSymbolList()
         {
             ImGui.Separator();
             var parentSymbols = new List<Symbol>(GraphCanvas.Current.GetParentSymbols());

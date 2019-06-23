@@ -149,6 +149,7 @@ namespace T3.Gui
             style.ScrollbarRounding = 0;
 
             style.Colors[(int)ImGuiCol.Text] = new Vector4(1, 1, 1, 0.85f);
+            style.Colors[(int)ImGuiCol.TextDisabled] = new Vector4(0.328f, 0.328f, 0.328f, 1.000f);
             style.Colors[(int)ImGuiCol.Border] = new Vector4(0, 0.00f, 0.00f, 0.97f);
             style.Colors[(int)ImGuiCol.BorderShadow] = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
             style.Colors[(int)ImGuiCol.FrameBg] = new Vector4(0.13f, 0.13f, 0.13f, 0.80f);

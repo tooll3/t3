@@ -43,6 +43,10 @@ namespace T3
         private int _windowHeight;
         private Vector2 _scaleFactor = Vector2.One;
 
+        public static ImFontPtr FontNormal { get; set; }
+        public static ImFontPtr FontBold { get; set; }
+        public static ImFontPtr FontSmall { get; set; }
+
         public ImGuiDx11Impl(Device device, int width, int height)
         {
             _device = device;
@@ -53,9 +57,9 @@ namespace T3
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
 
-            //ImGui.GetIO().Fonts.AddFontDefault();
-            ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Fonts/Roboto-Regular.ttf", 15f);
-            ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Fonts/Roboto-Black.ttf", 14f);
+            FontNormal = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Fonts/Roboto-Regular.ttf", 15f);
+            FontBold = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Fonts/Roboto-Black.ttf", 15f);
+            FontSmall = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Fonts/Roboto-Black.ttf", 12f);
 
             CreateDeviceObjects();
             SetKeyMappings();
@@ -65,6 +69,7 @@ namespace T3
             ImGui.NewFrame();
             _frameBegun = true;
         }
+
 
         public void WindowResized(int width, int height)
         {
