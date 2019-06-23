@@ -31,24 +31,24 @@ namespace T3.Gui.Graph
             Vector2 sourcePos;
 
             {
-                if (c.SourceChildId == DraftConnection.NotConnected)
+                if (c.SourceSymbolChildId == DraftConnection.NotConnected)
                 {
                     sourcePos = ImGui.GetMousePos();
                 }
 
                 // Start at input node
-                else if (c.SourceChildId == Guid.Empty)
+                else if (c.SourceSymbolChildId == Guid.Empty)
                 {
                     var inputsForSymbol = InputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-                    var inputUi = inputsForSymbol[c.SourceDefinitionId];
+                    var inputUi = inputsForSymbol[c.SourceSlotId];
 
                     sourcePos = GraphCanvas.Current.TransformPosition(inputUi.PosOnCanvas);
                 }
                 else
                 {
-                    var sourceUi = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.SourceChildId];
+                    var sourceUi = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id][c.SourceSymbolChildId];
                     var outputDefinitions = sourceUi.SymbolChild.Symbol.OutputDefinitions;
-                    var outputIndex = outputDefinitions.FindIndex(outputDef => outputDef.Id == c.SourceDefinitionId);
+                    var outputIndex = outputDefinitions.FindIndex(outputDef => outputDef.Id == c.SourceSlotId);
 
                     var r = Slots.GetOutputSlotSizeInCanvas(sourceUi, outputIndex);
                     sourcePos = GraphCanvas.Current.TransformPosition(r.GetCenter());
@@ -59,24 +59,24 @@ namespace T3.Gui.Graph
             Vector2 targetPos;
 
             {
-                if (c.TargetChildId == DraftConnection.NotConnected)
+                if (c.TargetSymboldChildId == DraftConnection.NotConnected)
                 {
                     targetPos = ImGui.GetMousePos();
                 }
 
                 // Ends at symbol output node
-                else if (c.TargetChildId == Guid.Empty)
+                else if (c.TargetSymboldChildId == Guid.Empty)
                 {
                     var outputsForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-                    var outputUi = outputsForSymbol[c.TargetDefinitionId];
+                    var outputUi = outputsForSymbol[c.TargetSlotId];
                     targetPos = GraphCanvas.Current.TransformPosition(outputUi.PosOnCanvas + outputUi.Size / 2);
                 }
                 else
                 {
                     var uiChildrenFromCurrentOp = SymbolChildUiRegistry.Entries[_canvas.CompositionOp.Symbol.Id];
-                    var targetUi = uiChildrenFromCurrentOp[c.TargetChildId];
+                    var targetUi = uiChildrenFromCurrentOp[c.TargetSymboldChildId];
                     var inputDefinitions = targetUi.SymbolChild.Symbol.InputDefinitions;
-                    var inputIndex = inputDefinitions.FindIndex(inputDef => inputDef.Id == c.TargetDefinitionId);
+                    var inputIndex = inputDefinitions.FindIndex(inputDef => inputDef.Id == c.TargetSlotId);
                     var r = Slots.GetInputSlotSizeInCanvas(targetUi, inputIndex);
                     targetPos = GraphCanvas.Current.TransformPosition(r.GetCenter());
                     color = TypeUiRegistry.Entries[inputDefinitions[inputIndex].DefaultValue.ValueType].Color;

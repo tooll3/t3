@@ -132,16 +132,16 @@ namespace T3.Core.Operator
                 var parent = instance.Parent;
                 var parentSymbol = parent.Symbol;
                 // get all connections that belong to this instance
-                var connectionsToReplace = parentSymbol.Connections.FindAll(c => c.SourceChildId == instance.Id ||
-                                                                                 c.TargetChildId == instance.Id);
+                var connectionsToReplace = parentSymbol.Connections.FindAll(c => c.SourceSymbolChildId == instance.Id ||
+                                                                                 c.TargetSymboldChildId == instance.Id);
                 foreach (var connection in connectionsToReplace)
                 {
                     parentSymbol.RemoveConnection(connection);
                 }
 
                 // filter out the connections where no inputs/output exist anymore
-                connectionsToReplace.RemoveAll(c => oldOutputDefinitions.FirstOrDefault(output => output.Id == c.SourceDefinitionId || output.Id == c.TargetDefinitionId) != null ||
-                                                    oldInputDefinitions.FirstOrDefault(input => input.Id == c.SourceDefinitionId || input.Id == c.TargetDefinitionId) != null);
+                connectionsToReplace.RemoveAll(c => oldOutputDefinitions.FirstOrDefault(output => output.Id == c.SourceSlotId || output.Id == c.TargetSlotId) != null ||
+                                                    oldInputDefinitions.FirstOrDefault(input => input.Id == c.SourceSlotId || input.Id == c.TargetSlotId) != null);
 
                 var symbolChild = parentSymbol.Children.Single(child => child.Id == instance.Id);
 
@@ -263,8 +263,8 @@ namespace T3.Core.Operator
         public void AddConnection(Connection connection)
         {
             // check if another connection is already existing to the target input, ignoring multi inputs for now
-            var existingConnection = Connections.FirstOrDefault(c => c.TargetChildId == connection.TargetChildId &&
-                                                                     c.TargetDefinitionId == connection.TargetDefinitionId);
+            var existingConnection = Connections.FirstOrDefault(c => c.TargetSymboldChildId == connection.TargetSymboldChildId &&
+                                                                     c.TargetSlotId == connection.TargetSlotId);
             if (existingConnection != null)
             {
                 RemoveConnection(existingConnection);
@@ -310,14 +310,14 @@ namespace T3.Core.Operator
 
         public Connection GetConnectionForInput(InputDefinition input)
         {
-            return Connections.FirstOrDefault(c => c.TargetChildId == input.Id);
+            return Connections.FirstOrDefault(c => c.TargetSymboldChildId == input.Id);
         }
 
         public Connection GetConnectionForOutput(OutputDefinition output)
         {
-            return Connections.FirstOrDefault(c => c.SourceChildId == output.Id);
+            return Connections.FirstOrDefault(c => c.SourceSymbolChildId == output.Id);
         }
-    
+
         #endregion
 
 
@@ -352,25 +352,25 @@ namespace T3.Core.Operator
 
         public class Connection
         {
-            public Guid SourceChildId { get; }
-            public Guid SourceDefinitionId { get; }
-            public Guid TargetChildId { get; }
-            public Guid TargetDefinitionId { get; }
+            public Guid SourceSymbolChildId { get; }
+            public Guid SourceSlotId { get; }
+            public Guid TargetSymboldChildId { get; }
+            public Guid TargetSlotId { get; }
 
-            public Connection(Guid sourceChildId, Guid sourceDefinitionId, Guid targetChildId, Guid targetDefinitionId)
+            public Connection(Guid sourceSymbolChildId, Guid sourceSlotId, Guid targetSymbolChildId, Guid targetSlotId)
             {
-                SourceChildId = sourceChildId;
-                SourceDefinitionId = sourceDefinitionId;
-                TargetChildId = targetChildId;
-                TargetDefinitionId = targetDefinitionId;
+                SourceSymbolChildId = sourceSymbolChildId;
+                SourceSlotId = sourceSlotId;
+                TargetSymboldChildId = targetSymbolChildId;
+                TargetSlotId = targetSlotId;
             }
 
             public override int GetHashCode()
             {
-                int hash = SourceChildId.GetHashCode();
-                hash = hash*31 + SourceDefinitionId.GetHashCode();
-                hash = hash*31 + TargetChildId.GetHashCode();
-                hash = hash*31 + TargetDefinitionId.GetHashCode();
+                int hash = SourceSymbolChildId.GetHashCode();
+                hash = hash * 31 + SourceSlotId.GetHashCode();
+                hash = hash * 31 + TargetSymboldChildId.GetHashCode();
+                hash = hash * 31 + TargetSlotId.GetHashCode();
                 return hash;
             }
 
