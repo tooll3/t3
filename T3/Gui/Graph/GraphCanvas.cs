@@ -106,7 +106,6 @@ namespace T3.Gui.Graph
             const float zoomSpeed = 1.2f;
             var focusCenter = (_mouse - Scroll - WindowPos) / Scale;
 
-            _foreground.AddCircle(focusCenter + ImGui.GetWindowPos(), 10, Color.TRed);
 
             var zoomDelta = 1f;
 
@@ -125,7 +124,7 @@ namespace T3.Gui.Graph
                     zoomDelta *= zoomSpeed;
                 }
             }
-            Scale *= zoomDelta;
+            _scaleTarget *= zoomDelta;
 
             Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
             _scrollTarget += _mouse - shift - WindowPos;
@@ -306,7 +305,10 @@ namespace T3.Gui.Graph
         /// The damped scale factor {read only}
         /// </summary>
         public Vector2 Scale { get; set; } = Vector2.One;
+        private Vector2 _scaleTarget = Vector2.One;
 
+        public Vector2 Scroll { get; private set; } = new Vector2(0.0f, 0.0f);
+        private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
         #endregion
 
         #region private members ------
@@ -315,11 +317,8 @@ namespace T3.Gui.Graph
         private Vector2 _mouse;
 
 
-        public Vector2 Scroll { get; private set; } = new Vector2(0.0f, 0.0f);
 
-        private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
 
-        private Vector2 _scaleTarget = Vector2.One;
 
         private SelectionFence _selectionFence;
         private ImGuiIOPtr _io;
