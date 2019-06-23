@@ -174,7 +174,10 @@ namespace T3.Gui.Graph
                     ImGui.Separator();
                 }
                 if (ImGui.MenuItem("Rename..", null, false, false)) { }
-                if (ImGui.MenuItem("Add")) { }
+                if (ImGui.MenuItem("Add"))
+                {
+                    QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, InverseTransformPosition(ImGui.GetMousePos()));
+                }
                 if (ImGui.MenuItem("Paste", null, false, false)) { }
                 ImGui.EndPopup();
             }
