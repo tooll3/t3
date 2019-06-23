@@ -39,8 +39,8 @@ namespace T3.Gui.Graph
             ImGui.BeginGroup();
             {
                 _mouse = ImGui.GetMousePos();
-                ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(1, 1));
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
+                //ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(1, 1));
+                //ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
                 ImGui.PushStyleColor(ImGuiCol.WindowBg, new Color(60, 60, 70, 200).Rgba);
 
                 // Damp scaling
@@ -59,10 +59,13 @@ namespace T3.Gui.Graph
 
                     DrawGrid();
                     DrawNodes();
+                    _draftNode.Draw();
+
                     ConnectionLine.DrawAll(this);
 
-                    if (ImGui.IsMouseReleased(0))
+                    if (DraftConnection.TempConnection != null && ImGui.IsMouseReleased(0))
                     {
+                        _draftNode.OpenAt(this.InverseTransformPosition(_mouse));
                         DraftConnection.Cancel();
                     }
 
@@ -72,7 +75,7 @@ namespace T3.Gui.Graph
                 }
                 ImGui.EndChild();
                 ImGui.PopStyleColor();
-                ImGui.PopStyleVar(2);
+                //ImGui.PopStyleVar(2);
             }
             ImGui.EndGroup();
         }
@@ -263,7 +266,7 @@ namespace T3.Gui.Graph
         }
 
         /// <summary>
-        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Convert at screen space position (e.g. from mouse) to canvas coordinates applying canvas zoom and scrolling 
         /// </summary>
         public Vector2 InverseTransformPosition(Vector2 screenPos)
         {
@@ -301,7 +304,7 @@ namespace T3.Gui.Graph
 
 
         /// <summary>
-        /// Get relative position within canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Transform a canvas position to relative position within imgui-window (e.g. to set ImGui context) 
         /// </summary>
         public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
         {
@@ -351,13 +354,12 @@ namespace T3.Gui.Graph
         public Vector2 WindowSize { get; private set; }
         private Vector2 _mouse;
 
-
-
-
-
         private SelectionFence _selectionFence;
         private ImGuiIOPtr _io;
+        internal static Vector2 DefaultOpSize = new Vector2(100, 30);
+
         private Dictionary<Guid, SymbolChildUi> UiChildrenById { get; set; }
+        private DraftNode _draftNode = new DraftNode();
         #endregion
     }
 }

@@ -297,6 +297,7 @@
     <Compile Include="Gui\Animation\Curve\CurveEditor.cs" />
     <Compile Include="Gui\Animation\Curve\CurvePointUi.cs" />
     <Compile Include="Gui\Animation\Curve\CurveUi.cs" />
+    <Compile Include="Gui\Graph\DraftNode.cs" />
     <Compile Include="Gui\Graph\GraphWidgets.cs" />
     <Compile Include="Gui\Animation\Curve\HorizontalScaleLines.cs" />
     <Compile Include="Gui\ICanvas.cs" />

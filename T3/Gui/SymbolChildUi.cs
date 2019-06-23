@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using T3.Core.Operator;
+using T3.Gui.Graph;
 using T3.Gui.Selection;
 
 namespace T3.Gui
@@ -11,7 +12,7 @@ namespace T3.Gui
     {
         public SymbolChild SymbolChild;
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
-        public Vector2 Size { get; set; } = new Vector2(100, 30);
+        public Vector2 Size { get; set; } = GraphCanvas.DefaultOpSize;
         public bool IsVisible { get; set; } = true;
         public bool IsSelected { get; set; } = false;
 

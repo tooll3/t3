@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using static System.Int32;
@@ -24,7 +24,7 @@ namespace T3.Core
 
     public class Model
     {
-        protected string Path { get; }= @"c:\users\cynic\dev\t3-tests\Core\Operator\Types\";
+        protected string Path { get; } = @"..\Core\Operator\Types\";
         protected string SymbolExtension { get; } = ".t3";
 
         public Model()
