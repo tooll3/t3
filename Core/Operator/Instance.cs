@@ -59,30 +59,30 @@ namespace T3.Core.Operator
         {
             Instance compositionInstance = this;
 
-            var sourceInstance = compositionInstance.Children.SingleOrDefault(child => child.Id == connection.SourceChildId);
+            var sourceInstance = compositionInstance.Children.SingleOrDefault(child => child.Id == connection.SourceSymbolChildId);
             IConnectableSource sourceSlot;
             if (sourceInstance != null)
             {
-                sourceSlot = sourceInstance.Outputs.Single(output => output.Id == connection.SourceDefinitionId);
+                sourceSlot = sourceInstance.Outputs.Single(output => output.Id == connection.SourceSlotId);
             }
             else
             {
-                Debug.Assert(connection.SourceChildId == Guid.Empty);
+                Debug.Assert(connection.SourceSymbolChildId == Guid.Empty);
                 sourceInstance = compositionInstance;
-                sourceSlot = sourceInstance.Inputs.Single(input => input.Id == connection.SourceDefinitionId);
+                sourceSlot = sourceInstance.Inputs.Single(input => input.Id == connection.SourceSlotId);
             }
 
-            var targetInstance = compositionInstance.Children.SingleOrDefault(child => child.Id == connection.TargetChildId);
+            var targetInstance = compositionInstance.Children.SingleOrDefault(child => child.Id == connection.TargetSymboldChildId);
             IConnectableTarget targetSlot;
             if (targetInstance != null)
             {
-                targetSlot = targetInstance.Inputs.Single(e => e.Id == connection.TargetDefinitionId);
+                targetSlot = targetInstance.Inputs.Single(e => e.Id == connection.TargetSlotId);
             }
             else
             {
-                Debug.Assert(connection.TargetChildId == Guid.Empty);
+                Debug.Assert(connection.TargetSymboldChildId == Guid.Empty);
                 targetInstance = compositionInstance;
-                targetSlot = targetInstance.Outputs.Single(e => e.Id == connection.TargetDefinitionId);
+                targetSlot = targetInstance.Outputs.Single(e => e.Id == connection.TargetSlotId);
             }
 
             return (sourceInstance, sourceSlot, targetInstance, targetSlot);

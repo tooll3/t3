@@ -50,6 +50,7 @@ namespace T3.Gui.Graph
                             GraphCanvas.Current.SelectionHandler.SetElement(outputUi);
                         }
                     }
+
                     if (ImGui.IsMouseDragging(0))
                     {
                         foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)
@@ -81,6 +82,10 @@ namespace T3.Gui.Graph
                     THelpers.DebugItemRect();
                     var color = TypeUiRegistry.Entries[outputDef.ValueType].Color;
 
+                    //Note: isItemHovered will not work
+                    var hovered = DraftConnection.TempConnection != null ? rInScreen.Contains(ImGui.GetMousePos())
+                        : ImGui.IsItemHovered();
+
                     if (DraftConnection.IsOutputNodeCurrentConnectionTarget(outputDef))
                     {
                         Log.Debug("current connection target");
@@ -92,12 +97,10 @@ namespace T3.Gui.Graph
                         }
                     }
                     //else if (ImGui.IsItemHovered())   // ToDo: Find out, why IsItemHovered is not working during drag
-                    else if (rInScreen.Contains(ImGui.GetMousePos()))
+                    else if (hovered)
                     {
-                        Log.Debug("hovered ");
                         if (DraftConnection.IsMatchingInputType(outputDef.ValueType))
                         {
-                            Log.Debug("is matching inputtype");
                             GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                             if (ImGui.IsMouseReleased(0))
@@ -110,7 +113,7 @@ namespace T3.Gui.Graph
                             GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, Color.White);
                             if (ImGui.IsItemClicked(0))
                             {
-                                DraftConnection.StartFromOutputNode(outputDef);
+                                DraftConnection.StartFromOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
                             }
                         }
                     }
