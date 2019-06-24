@@ -134,7 +134,7 @@ namespace OperatorTests
         {
             var testOp = new TestOperator();
             var testArrayOp = new TestArrayOutputOperator();
-            testOp.IntArray.InputConnection = testArrayOp.ArrayResult;
+            testOp.IntArray.AddConnection(testArrayOp.ArrayResult);
             var result = testOp.Result.GetValue(new EvaluationContext());
             Assert.AreEqual(182.0f, result);
         }
@@ -144,7 +144,7 @@ namespace OperatorTests
         {
             var testOp = new TestOperator();
             var testArrayOp = new TestArrayOutputOperator();
-            testOp.IntArray.InputConnection = testArrayOp.ArrayResult;
+            testOp.IntArray.AddConnection(testArrayOp.ArrayResult);
             testArrayOp.Input1.Value = new[] { 5, 6, 7, 8, 9, 10 };
             var result = testOp.Result.GetValue(new EvaluationContext());
             Assert.AreEqual(350.0f, result);
