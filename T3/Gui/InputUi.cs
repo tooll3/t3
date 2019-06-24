@@ -6,11 +6,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Numerics;
+using SharpDX;
+using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Selection;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui
 {
@@ -144,6 +146,47 @@ namespace T3.Gui
         }
     }
 
+    public class Size2InputUi : InputValueUi<Size2>
+    {
+        public override bool DrawEditControl(string name, ref Size2 value)
+        {
+            return ImGui.DragInt2(name, ref value.Width);
+        }
+
+        public override void DrawValueDisplay(string name, ref Size2 value)
+        {
+            DrawEditControl(name, ref value);
+        }
+    }
+
+    public class EnumInputUi<T> : InputValueUi<T> where T : Enum
+    {
+        public override bool DrawEditControl(string name, ref T value)
+        {
+            // todo: check perf impact of creating the list here again and again! -> cache lists
+            var values = Enum.GetValues(typeof(T));
+            var valueNames = new string[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                valueNames[i] = Enum.GetName(typeof(T), values.GetValue(i));
+            }
+
+            int index = (int)(object)value;
+            bool modified = ImGui.Combo(name, ref index, valueNames, valueNames.Length);
+            if (modified)
+            {
+                value = (T)values.GetValue(index);
+            }
+
+            return modified;
+        }
+
+        public override void DrawValueDisplay(string name, ref T value)
+        {
+            ImGui.Text(value.ToString());
+        }
+    }
+
     public static class InputUiRegistry
     {
         /// <summary>
@@ -262,6 +305,11 @@ namespace T3.Gui
     public class StringUiProperties : ITypeUiProperties
     {
         public Color Color { get; } = Color.TGreen;
+    }
+
+    public class Size2UiProperties : ITypeUiProperties
+    {
+        public Color Color { get; } = Color.TRed;
     }
 
     public class IntUiProperties : ITypeUiProperties

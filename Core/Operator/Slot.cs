@@ -5,6 +5,8 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 using SharpDX;
+using SharpDX.Direct3D11;
+using SharpDX.DXGI;
 using static System.Single;
 
 namespace T3.Core.Operator
@@ -26,21 +28,70 @@ namespace T3.Core.Operator
 
     public class InputAttribute : OperatorAttribute
     {
+        public Type Type { get; set; }
     }
 
     public class FloatInputAttribute : InputAttribute
     {
+        public FloatInputAttribute()
+        {
+            Type = typeof(float);
+        }
+
         public float DefaultValue { get; set; }
     }
 
     public class StringInputAttribute : InputAttribute
     {
+        public StringInputAttribute()
+        {
+            Type = typeof(string);
+        }
+
         public string DefaultValue { get; set; }
     }
 
     public class IntInputAttribute : InputAttribute
     {
+        public IntInputAttribute()
+        {
+            Type = typeof(int);
+        }
+
         public int DefaultValue { get; set; }
+    }
+
+    public class Size2InputAttribute : InputAttribute
+    {
+        public Size2InputAttribute(int width, int height)
+        {
+            Type = typeof(Size2);
+            DefaultValue = new Size2(width, height);
+        }
+
+        public Size2 DefaultValue { get; set; }
+    }
+
+    public class ResourceUsageInputAttribute : InputAttribute
+    {
+        public ResourceUsageInputAttribute()
+        {
+            Type = typeof(ResourceUsage);
+            DefaultValue = ResourceUsage.Default;
+        }
+
+        public ResourceUsage DefaultValue { get; set; }
+    }
+
+    public class FormatInputAttribute : InputAttribute
+    {
+        public FormatInputAttribute()
+        {
+            Type = typeof(Format);
+            DefaultValue = Format.R8G8B8A8_UNorm;
+        }
+
+        public Format DefaultValue { get; set; }
     }
 
     public interface IConnectableSource
@@ -73,13 +124,6 @@ namespace T3.Core.Operator
         public abstract void SetValueFromJson(string json);
     }
 
-    public static class ExtBla
-    {
-        public static T ChangeType<T>(this object obj)
-        {
-            return (T)Convert.ChangeType(obj, typeof(T));
-        }
-    }
     public class InputValue<T> : InputValue
     {
         public InputValue()

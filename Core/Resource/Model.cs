@@ -6,6 +6,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using SharpDX;
+using SharpDX.Direct3D11;
+using SharpDX.DXGI;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using static System.Int32;
@@ -20,6 +23,11 @@ namespace T3.Core
     public static class TypeValueToJsonConverters
     {
         public static Dictionary<Type, Action<JsonTextWriter, object>> Entries { get; } = new Dictionary<Type, Action<JsonTextWriter, object>>();
+    }
+
+    public static class InputValueCreators
+    {
+        public static Dictionary<Type, Func<InputAttribute, InputValue>> Entries { get; } = new Dictionary<Type, Func<InputAttribute, InputValue>>();
     }
 
     public class Model
@@ -52,6 +60,20 @@ namespace T3.Core
                                                                        writer.WriteValue("Y", vec.Y);
                                                                        writer.WriteEndObject();
                                                                    });
+
+            // Register input value creators that take the relevant input attribute, extract the default value and return this with the new input value
+            InputValue IntInputValueCreator(InputAttribute inputAttribute) => new InputValue<int>(((IntInputAttribute)inputAttribute).DefaultValue);
+            InputValue FloatInputValueCreator(InputAttribute inputAttribute) => new InputValue<float>(((FloatInputAttribute)inputAttribute).DefaultValue);
+            InputValue StringInputValueCreator(InputAttribute inputAttribute) => new InputValue<string>(((StringInputAttribute)inputAttribute).DefaultValue);
+            InputValue Size2InputValueCreator(InputAttribute inputAttribute) => new InputValue<Size2>(((Size2InputAttribute)inputAttribute).DefaultValue);
+            InputValue ResourceUsageInputValueCreator(InputAttribute inputAttribute) => new InputValue<ResourceUsage>(((ResourceUsageInputAttribute)inputAttribute).DefaultValue);
+            InputValue FormatInputValueCreator(InputAttribute inputAttribute) => new InputValue<Format>(((FormatInputAttribute)inputAttribute).DefaultValue);
+            InputValueCreators.Entries.Add(typeof(int), IntInputValueCreator);
+            InputValueCreators.Entries.Add(typeof(float), FloatInputValueCreator);
+            InputValueCreators.Entries.Add(typeof(string), StringInputValueCreator);
+            InputValueCreators.Entries.Add(typeof(Size2), Size2InputValueCreator);
+            InputValueCreators.Entries.Add(typeof(ResourceUsage), ResourceUsageInputValueCreator);
+            InputValueCreators.Entries.Add(typeof(Format), FormatInputValueCreator);
         }
 
         public virtual void Load()

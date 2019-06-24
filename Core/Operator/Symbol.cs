@@ -198,24 +198,11 @@ namespace T3.Core.Operator
         private static InputDefinition CreateInputDefinition(InputAttribute attribute, FieldInfo info)
         {
             // create new input definition
-            InputValue defaultValue = null;
-            if (attribute is IntInputAttribute intAttribute)
+            if (!InputValueCreators.Entries.ContainsKey(attribute.Type))
             {
-                defaultValue = new InputValue<int>(intAttribute.DefaultValue);
+                int bla = 12;
             }
-            else if (attribute is FloatInputAttribute floatAttribute)
-            {
-                defaultValue = new InputValue<float>(floatAttribute.DefaultValue);
-            }
-            else if (attribute is StringInputAttribute stringAttribute)
-            {
-                defaultValue = new InputValue<string>(stringAttribute.DefaultValue);
-            }
-            else
-            {
-                Debug.Assert(false);
-            }
-
+            InputValue defaultValue = InputValueCreators.Entries[attribute.Type](attribute);
             var isMultiInput = info.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
             return new InputDefinition { Id = attribute.Id, Name = info.Name, DefaultValue = defaultValue, IsMultiInput = isMultiInput };
         }

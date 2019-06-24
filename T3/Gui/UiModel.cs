@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Numerics;
 using Newtonsoft.Json;
+using SharpDX;
+using SharpDX.Direct3D11;
+using SharpDX.DXGI;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui
 {
@@ -23,16 +26,23 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(float), new FloatUiProperties());
             TypeUiRegistry.Entries.Add(typeof(int), new IntUiProperties());
             TypeUiRegistry.Entries.Add(typeof(string), new StringUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(Size2), new Size2UiProperties());
+            TypeUiRegistry.Entries.Add(typeof(ResourceUsage), new Size2UiProperties());
+            TypeUiRegistry.Entries.Add(typeof(Format), new Size2UiProperties());
 
             // Register input ui creators
             InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
             InputUiFactory.Entries.Add(typeof(int), () => new IntInputUi());
             InputUiFactory.Entries.Add(typeof(string), () => new StringInputUi());
+            InputUiFactory.Entries.Add(typeof(Size2), () => new Size2InputUi());
+            InputUiFactory.Entries.Add(typeof(ResourceUsage), () => new EnumInputUi<ResourceUsage>());
+            InputUiFactory.Entries.Add(typeof(Format), () => new EnumInputUi<Format>());
 
             // Register output ui creators
             OutputUiFactory.Entries.Add(typeof(float), () => new FloatOutputUi());
             OutputUiFactory.Entries.Add(typeof(int), () => new IntOutputUi());
             OutputUiFactory.Entries.Add(typeof(string), () => new StringOutputUi());
+            OutputUiFactory.Entries.Add(typeof(Size2), () => new Size2OutputUi());
 
             var symbols = SymbolRegistry.Entries;
 
