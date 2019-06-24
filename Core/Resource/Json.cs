@@ -46,7 +46,6 @@ namespace T3.Core
             Writer.WriteValue("Id", symbol.Id);
             Writer.WriteValue("Namespace", symbol.Namespace);
             Writer.WriteValue("InstanceType", symbol.InstanceType);
-//            Writer.WriteValue("Description", metaOp.Description);
 
             WriteSymbolChildren(symbol.Children);
             WriteConnections(symbol.Connections);
@@ -106,8 +105,7 @@ namespace T3.Core
         {
             var childId = Guid.Parse(symbolChildJson["Id"].Value<string>());
             var symbolId = Guid.Parse(symbolChildJson["SymbolId"].Value<string>());
-            Symbol symbol;
-            if (!SymbolRegistry.Entries.TryGetValue(symbolId, out symbol))
+            if (!SymbolRegistry.Entries.TryGetValue(symbolId, out var symbol))
             {
                 // if the used symbol hasn't been loaded so far ensure it's loaded now
                 symbol = model.ReadSymbolWithId(symbolId);
@@ -139,7 +137,7 @@ namespace T3.Core
             var valueString = inputJson["Value"].Value<string>();
             symbolChild.InputValues[id].Value.SetValueFromJson(valueString);
             symbolChild.InputValues[id].IsDefault = false;
-            return new Symbol.InputDefinition() { Id = id };
+            return new Symbol.InputDefinition { Id = id };
         }
 
         public Symbol ReadSymbol(Model model)
@@ -152,7 +150,6 @@ namespace T3.Core
             var name = o["Name"].Value<string>();
             var instanceTypeName = o["InstanceType"].Value<string>();
             //var @namespace = o["Namespace"].Value<string>();
-            //var description = o["Description"].Value<string>();
             var symbolChildren = (from childJson in (JArray)o["Children"]
                                   let symbolChild = ReadSymbolChild(model, childJson)
                                   select symbolChild).ToList();
@@ -167,7 +164,6 @@ namespace T3.Core
                          };
             symbol.Connections.AddRange(connections);
 
-            //newMetaOp.CheckForInconsistencyAndFixThem();
             return symbol;
         }
     }
