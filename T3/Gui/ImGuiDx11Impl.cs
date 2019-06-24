@@ -233,24 +233,22 @@ namespace T3
         {
             // Build texture atlas
             ImGuiIOPtr io = ImGui.GetIO();
-            byte* pixels;
-            int width, height, bytesPerPixel;
-            io.Fonts.GetTexDataAsRGBA32(out pixels, out width, out height, out bytesPerPixel);
+            io.Fonts.GetTexDataAsRGBA32(out var pixels, out var width, out var height, out _);
             io.Fonts.SetTexID(_fontAtlasID);
 
             // Upload texture to graphics system
             var textureDesc = new Texture2DDescription()
-            {
-                Width = width,
-                Height = height,
-                MipLevels = 1,
-                ArraySize = 1,
-                Format = Format.R8G8B8A8_UNorm,
-                SampleDescription = new SampleDescription() { Count = 1, Quality = 0 },
-                Usage = ResourceUsage.Default,
-                BindFlags = BindFlags.ShaderResource,
-                CpuAccessFlags = CpuAccessFlags.None
-            };
+                              {
+                                  Width = width,
+                                  Height = height,
+                                  MipLevels = 1,
+                                  ArraySize = 1,
+                                  Format = Format.R8G8B8A8_UNorm,
+                                  SampleDescription = new SampleDescription() { Count = 1, Quality = 0 },
+                                  Usage = ResourceUsage.Default,
+                                  BindFlags = BindFlags.ShaderResource,
+                                  CpuAccessFlags = CpuAccessFlags.None
+                              };
             SharpDX.DataBox box = new SharpDX.DataBox((IntPtr)pixels, width * 4, 0);
             Texture2D texture = new Texture2D(_device, textureDesc, new[] { box });
             texture.DebugName = "FImgui Font Atlas";
@@ -261,16 +259,16 @@ namespace T3
             io.Fonts.TexID = (IntPtr)_fontTextureView;
 
             var samplerDesc = new SamplerStateDescription()
-            {
-                Filter = Filter.MinMagMipLinear,
-                AddressU = TextureAddressMode.Wrap,
-                AddressV = TextureAddressMode.Wrap,
-                AddressW = TextureAddressMode.Wrap,
-                MipLodBias = 0.0f,
-                ComparisonFunction = Comparison.Always,
-                MinimumLod = 0.0f,
-                MaximumLod = 0.0f
-            };
+                              {
+                                  Filter = Filter.MinMagMipLinear,
+                                  AddressU = TextureAddressMode.Wrap,
+                                  AddressV = TextureAddressMode.Wrap,
+                                  AddressW = TextureAddressMode.Wrap,
+                                  MipLodBias = 0.0f,
+                                  ComparisonFunction = Comparison.Always,
+                                  MinimumLod = 0.0f,
+                                  MaximumLod = 0.0f
+                              };
             _fontSampler = new SamplerState(_device, samplerDesc);
         }
 
@@ -373,12 +371,12 @@ namespace T3
 
             // Create the rasterizer state
             var rasterizerDesc = new RasterizerStateDescription()
-            {
-                FillMode = FillMode.Solid,
-                CullMode = CullMode.None,
-                IsScissorEnabled = true,
-                IsDepthClipEnabled = true
-            };
+                                 {
+                                     FillMode = FillMode.Solid,
+                                     CullMode = CullMode.None,
+                                     IsScissorEnabled = true,
+                                     IsDepthClipEnabled = true
+                                 };
             _rasterizerState = new RasterizerState(_device, rasterizerDesc);
 
             // Create depth-stencil State
