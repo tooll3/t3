@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.106
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperatorTests", "OperatorTests\OperatorTests.csproj", "{641EB86B-50CC-4725-BF6C-3A690758694E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreTests", "OperatorTests\CoreTests.csproj", "{641EB86B-50CC-4725-BF6C-3A690758694E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T3", "T3\T3.csproj", "{6E6E8E1A-D5F1-417F-9B4F-0758A935BF89}"
 EndProject

@@ -31,14 +31,13 @@ namespace OperatorTests
             public void UpdateResult(EvaluationContext context)
             {
                 Result.Value = 0;
-                foreach (var input in MyMultiInput)
+                foreach (var input in MyMultiInput.GetCollectedInputs())
                 {
                     Result.Value += input.GetValue(context);
                 }
             }
 
-            // commands/ui would look for IList<T> implementers with generic type (T) of InputSlot<R>
-            public List<InputSlot<int>> MyMultiInput { get; internal set; } = new List<InputSlot<int>>();
+            public MultiInputSlot<int> MyMultiInput { get; internal set; } = new MultiInputSlot<int>();
         }
 
         public class FloatOutputOp
@@ -48,12 +47,23 @@ namespace OperatorTests
 
         public class IntOutputOp
         {
-            public Slot<int> IntOutput { get; } = new Slot<int>(64);
+            public IntOutputOp(int value)
+            {
+                IntOutput.Value = value;
+            }
+
+            public Slot<int> IntOutput { get; } = new Slot<int>();
         }
 
         public class AnotherMultiIntInputOp
         {
-            public List<InputSlot<int>> CompoundMultiInput { get; internal set; } = new List<InputSlot<int>>();
+            public MultiInputSlot<int> CompoundMultiInput { get; internal set; } = new MultiInputSlot<int>();
+        }
+
+        public class CompositionOpWith2MultiInputs
+        {
+            public MultiInputSlot<int> MultiInput1 { get; internal set; } = new MultiInputSlot<int>();
+            public MultiInputSlot<int> MultiInput2 { get; internal set; } = new MultiInputSlot<int>();
         }
 
         public class Size2InputOp
@@ -68,7 +78,7 @@ namespace OperatorTests
         {
             var op = new IntInputOp();
             var op2 = new FloatOutputOp();
-            op.IntInput.InputConnection = new ConverterSlot<float, int>(op2.FloatOutput, f => (int)f);
+            op.IntInput.AddConnection(new ConverterSlot<float, int>(op2.FloatOutput, f => (int)f));
             var result = op.IntInput.GetValue(new EvaluationContext());
             Assert.AreEqual(104, result);
         }
@@ -78,7 +88,7 @@ namespace OperatorTests
         {
             var op = new StringInputOp();
             var op2 = new FloatOutputOp();
-            op.StringInput.InputConnection = new ConverterSlot<float, string>(op2.FloatOutput, f => f.ToString());
+            op.StringInput.AddConnection(new ConverterSlot<float, string>(op2.FloatOutput, f => f.ToString()));
             var result = op.StringInput.GetValue(new EvaluationContext());
             Assert.AreEqual("104", result);
         }
@@ -87,7 +97,7 @@ namespace OperatorTests
         public void TestOperatorSubValueConnection()
         {
             var op = new Size2InputOp();
-            var op2 = new IntOutputOp();
+            var op2 = new IntOutputOp(64);
 //             var result = op.Size.Value;
 //             Assert.AreEqual(new Size2(128, 128), result);
 //             result = op.Size.GetValue(new EvaluationContext());
@@ -103,17 +113,15 @@ namespace OperatorTests
         public void TestOperatorMultiInputConnection()
         {
             var op = new MultiIntInputOp();
-            var op2 = new IntOutputOp();
+            var op2 = new IntOutputOp(64);
             var result = op.Result.Value;
             Assert.AreEqual(0, result);
 
-            op.MyMultiInput.Add(new InputSlot<int>(0));
-            op.MyMultiInput[0].InputConnection = op2.IntOutput;
+            op.MyMultiInput.AddConnection(op2.IntOutput);
             result = op.Result.GetValue(new EvaluationContext());
             Assert.AreEqual(64, result);
 
-            op.MyMultiInput.Add(new InputSlot<int>(0));
-            op.MyMultiInput[1].InputConnection = op2.IntOutput;
+            op.MyMultiInput.AddConnection(op2.IntOutput);
             op.Result.IsDirty = true;
             result = op.Result.GetValue(new EvaluationContext());
             Assert.AreEqual(128, result);
@@ -124,22 +132,60 @@ namespace OperatorTests
         {
             // test scenario: a compound op with multi input connects to a child op with multi input 
             var op = new MultiIntInputOp();
-            var op2 = new AnotherMultiIntInputOp();
+            var compositionOp = new AnotherMultiIntInputOp();
+            var intOutputOp = new IntOutputOp(64);
             var result = op.Result.Value;
             Assert.AreEqual(0, result);
 
-            op.MyMultiInput = op2.CompoundMultiInput;
+            // Add one input to the composition op multi input
+            compositionOp.CompoundMultiInput.AddConnection(intOutputOp.IntOutput);
+
+            op.MyMultiInput.AddConnection(compositionOp.CompoundMultiInput);
             result = op.Result.GetValue(new EvaluationContext());
+            Assert.AreEqual(64, result);
+
+            // Add two more inputs to the composition op multi input
+            compositionOp.CompoundMultiInput.AddConnection(intOutputOp.IntOutput);
+            compositionOp.CompoundMultiInput.AddConnection(intOutputOp.IntOutput);
+            result = op.Result.GetValue(new EvaluationContext());
+            Assert.AreEqual(192, result);
+        }
+
+
+        [TestMethod]
+        public void TestOperatorMixedMultiInputAndNonMutiInputsConnectedToMultiInput()
+        {
+            // test scenario: 
+            // [          AddWithMI         ]  <- op within composition op with multi input
+            // [       MI1       ]  [  MI2  ]  <- composition op multi inputs
+            // [O1] [O2] [O3] [O2]  [O3] [O4]  <- several outputs connected to multi inputs of composition op
+            var add = new MultiIntInputOp();
+            var compositionOp = new CompositionOpWith2MultiInputs();
+            var out1 = new IntOutputOp(64);
+            var out2 = new IntOutputOp(87);
+            var out3 = new IntOutputOp(-15);
+            var out4 = new IntOutputOp(123);
+            var result = add.Result.Value;
             Assert.AreEqual(0, result);
 
-            // add inputs to compound input
-            op2.CompoundMultiInput.Add(new InputSlot<int>(10));
-            op2.CompoundMultiInput.Add(new InputSlot<int>(30));
-            op2.CompoundMultiInput.Add(new InputSlot<int>(60));
-            op.Result.IsDirty = true;
-            result = op.Result.GetValue(new EvaluationContext());
-            Assert.AreEqual(100, result);
+            // Add the outputs to multi input 1 of composition op
+            compositionOp.MultiInput1.AddConnection(out1.IntOutput);
+            compositionOp.MultiInput1.AddConnection(out2.IntOutput);
+            compositionOp.MultiInput1.AddConnection(out3.IntOutput);
+            compositionOp.MultiInput1.AddConnection(out2.IntOutput);
+
+            // Add the output to multi input 2 of composition op
+            compositionOp.MultiInput2.AddConnection(out3.IntOutput);
+            compositionOp.MultiInput2.AddConnection(out4.IntOutput);
+
+            // connect composition op multi inputs to the op within the composition op with one multi input
+            add.MyMultiInput.AddConnection(compositionOp.MultiInput1);
+            add.MyMultiInput.AddConnection(compositionOp.MultiInput2);
+
+            result = add.Result.GetValue(new EvaluationContext());
+            Assert.AreEqual(64 + 87 - 15 + 87 - 15 + 123, result);
         }
+
         #endregion
     }
 

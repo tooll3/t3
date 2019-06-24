@@ -58,7 +58,7 @@ namespace OperatorTests
         {
             InputFunctionOperator opWithInputFunction = new InputFunctionOperator();
             OutputFunctionOperator opWithOutputFunction = new OutputFunctionOperator();
-            opWithInputFunction.InputFunction.InputConnection = opWithOutputFunction.OutputFunction;
+            opWithInputFunction.InputFunction.AddConnection(opWithOutputFunction.OutputFunction);
             EvaluationContext context = new EvaluationContext();
 
             float[] result = opWithInputFunction.Output.GetValue(context);

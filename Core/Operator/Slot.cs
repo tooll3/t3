@@ -141,6 +141,7 @@ namespace T3.Core.Operator
     {
         public T Value;// { get; set; }
         public bool IsDirty { get; set; } = true;
+        public bool IsMultiInput { get; protected set; } = false;
 
         public Slot()
         {
@@ -166,9 +167,9 @@ namespace T3.Core.Operator
 
         public void Update(EvaluationContext context)
         {
-            if (InputConnection != null)
+            if (InputConnection.Count > 0)
             {
-                Value = InputConnection.GetValue(context);
+                Value = InputConnection[0].GetValue(context);
             }
         }
 
@@ -180,18 +181,22 @@ namespace T3.Core.Operator
 
         public override void AddConnection(IConnectableSource sourceSlot)
         {
-            InputConnection = (Slot<T>)sourceSlot;
+            InputConnection.Add((Slot<T>)sourceSlot);
         }
 
         public override void RemoveConnection()
         {
-            InputConnection = null;
+            if (IsConnected)
+            {
+                // todo: fix this with correct connection
+                InputConnection.RemoveAt(InputConnection.Count - 1);
+            }
         }
 
-        public override bool IsConnected => InputConnection != null;
+        public override bool IsConnected => InputConnection.Count > 0;
 
-        private Slot<T> _inputConnection;
-        public Slot<T> InputConnection
+        private List<Slot<T>> _inputConnection = new List<Slot<T>>();
+        public List<Slot<T>> InputConnection
         {
             get => _inputConnection;
             set
@@ -228,6 +233,7 @@ namespace T3.Core.Operator
         public InputSlot()
             : this(default(T))
         {
+            UpdateAction = Update;
         }
 
         public InputSlot(T value)
@@ -237,9 +243,9 @@ namespace T3.Core.Operator
 
         public new void Update(EvaluationContext context)
         {
-            Value = InputConnection != null ? InputConnection.GetValue(context)
-                                            : Input.IsDefault ? TypedDefaultValue.Value
-                                                              : TypedInputValue.Value;
+            Value = InputConnection.Count > 0 ? InputConnection[0].GetValue(context)
+                                              : Input.IsDefault ? TypedDefaultValue.Value
+                                                                : TypedInputValue.Value;
         }
 
         private SymbolChild.Input _input;
@@ -258,6 +264,42 @@ namespace T3.Core.Operator
         public InputValue<T> TypedDefaultValue;
     }
 
+    public class MultiInputSlot<T> : InputSlot<T>
+    {
+        public List<Slot<T>> CollectedInputs { get; } = new List<Slot<T>>(10);
+
+        public MultiInputSlot(InputValue<T> typedInputValue)
+            : base(typedInputValue)
+        {
+            IsMultiInput = true;
+        }
+
+        public MultiInputSlot()
+        {
+            IsMultiInput = true;
+        }
+
+        public List<Slot<T>> GetCollectedInputs()
+        {
+            CollectedInputs.Clear();
+
+            foreach (var slot in InputConnection)
+            {
+                if (slot.IsMultiInput)
+                {
+                    var multiInput = (MultiInputSlot<T>)slot;
+                    CollectedInputs.AddRange(multiInput.GetCollectedInputs());
+                }
+                else
+                {
+                    CollectedInputs.Add(slot);
+                }
+            }
+
+            return CollectedInputs;
+        }
+    }
+
     public class Size2Slot : InputSlot<Size2>
     {
         public Size2Slot(Size2 defaultValue)
@@ -274,8 +316,8 @@ namespace T3.Core.Operator
 
         public new void Update(EvaluationContext context)
         {
-            if (InputConnection != null)
-                Value = InputConnection.GetValue(context);
+            if (InputConnection.Count > 0)
+                Value = InputConnection[0].GetValue(context);
             else
             {
                 if (Width.InputConnection != null)
