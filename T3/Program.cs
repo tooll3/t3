@@ -197,21 +197,19 @@ namespace T3
 
             // SwapChain description
             var desc = new SwapChainDescription()
-            {
-                BufferCount = 1,
-                ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
+                       {
+                           BufferCount = 1,
+                           ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
                                                                  new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                IsWindowed = true,
-                OutputHandle = form.Handle,
-                SampleDescription = new SampleDescription(1, 0),
-                SwapEffect = SwapEffect.Discard,
-                Usage = Usage.RenderTargetOutput
-            };
+                           IsWindowed = true,
+                           OutputHandle = form.Handle,
+                           SampleDescription = new SampleDescription(1, 0),
+                           SwapEffect = SwapEffect.Discard,
+                           Usage = Usage.RenderTargetOutput
+                       };
 
             // Create Device and SwapChain
-            Device device;
-            SwapChain swapChain;
-            Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, desc, out device, out swapChain);
+            Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, desc, out var device, out var swapChain);
             var context = device.ImmediateContext;
 
             // Ignore all windows events

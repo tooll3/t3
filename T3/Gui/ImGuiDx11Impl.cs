@@ -31,8 +31,6 @@ namespace T3
         private DepthStencilState _depthStencilState;
         private int _vertexBufferSize = 5000, _indexBufferSize = 1000;
 
-        private bool _frameBegun;
-
         private IntPtr _fontAtlasID = (IntPtr)1;
 
         private int _windowWidth;
@@ -63,9 +61,7 @@ namespace T3
             SetPerFrameImGuiData(1f / 60f);
 
             ImGui.NewFrame();
-            _frameBegun = true;
         }
-
 
         public void WindowResized(int width, int height)
         {
