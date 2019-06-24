@@ -51,6 +51,12 @@ namespace T3
         private const int WM_SETCURSOR = 0x0020;
         #endregion
 
+        #region VK constants
+        private const int VK_SHIFT = 0x10;
+        private const int VK_CONTROL = 0x11;
+        private const int VK_ALT = 0x12;
+        #endregion
+
         protected override void WndProc(ref System.Windows.Forms.Message m)
         {
             base.WndProc(ref m);
@@ -97,13 +103,45 @@ namespace T3
                     return;
                 case WM_KEYDOWN:
                 case WM_SYSKEYDOWN:
-                    if (((int)m.WParam) < 256)
-                        io.KeysDown[(int)m.WParam] = true;
+                    switch ((int)m.WParam)
+                    {
+                        case VK_SHIFT:
+                            io.KeyShift = true;
+                            break;
+                        case VK_CONTROL:
+                            io.KeyCtrl = true;
+                            break;
+                        case VK_ALT:
+                            io.KeyAlt = true;
+                            break;
+                        default:
+                        {
+                            if ((int)m.WParam < 256)
+                                io.KeysDown[(int)m.WParam] = true;
+                            break;
+                        }
+                    }
                     return;
                 case WM_KEYUP:
                 case WM_SYSKEYUP:
-                    if ((int)m.WParam < 256)
-                        io.KeysDown[(int)m.WParam] = false;
+                    switch ((int)m.WParam)
+                    {
+                        case VK_SHIFT:
+                            io.KeyShift = false;
+                            break;
+                        case VK_CONTROL:
+                            io.KeyCtrl = false;
+                            break;
+                        case VK_ALT:
+                            io.KeyAlt = false;
+                            break;
+                        default:
+                        {
+                            if ((int)m.WParam < 256)
+                                io.KeysDown[(int)m.WParam] = false;
+                            break;
+                        }
+                    }
                     return;
                 case WM_CHAR:
                     // You can also use ToAscii()+GetKeyboardState() to retrieve characters.

@@ -34,10 +34,6 @@ namespace T3
         private bool _frameBegun;
 
         private IntPtr _fontAtlasID = (IntPtr)1;
-        private bool _controlDown; //TODO
-        private bool _shiftDown; //TODO
-        private bool _altDown; //TODO
-        private bool _winKeyDown; //TODO
 
         private int _windowWidth;
         private int _windowHeight;
