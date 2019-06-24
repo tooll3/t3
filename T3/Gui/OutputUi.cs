@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SharpDX;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Selection;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui
 {
@@ -50,6 +51,10 @@ namespace T3.Gui
     }
 
     public class StringOutputUi : ValueOutputUi<string>
+    {
+    }
+
+    public class Size2OutputUi : ValueOutputUi<Size2>
     {
     }
 
