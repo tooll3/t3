@@ -14,6 +14,19 @@
       ]
     },
     {
+      "SymbolId": "2f851b5b-b66d-40b0-9445-e733dc4b907d"/*Add2*/,
+      "OutputUis": [
+        {
+          "OutputId": "5ce9c625-f890-4620-9747-c98eab4b9447"/*Result*/,
+          "Type": "System.Single",
+          "Position": {
+            "X": "0",
+            "Y": "0"
+          }
+        }
+      ]
+    },
+    {
       "SymbolId": "39c96cfd-dedf-4f76-a471-d1c26c9ba9fa"/*FloatFormat*/,
       "OutputUis": [
         {

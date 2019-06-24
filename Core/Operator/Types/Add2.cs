@@ -1,0 +1,27 @@
+﻿using System;
+
+namespace T3.Core.Operator.Types
+{
+    public class Add2 : Instance<Add2>
+    {
+        [Output(Guid = "{5CE9C625-F890-4620-9747-C98EAB4B9447}")]
+        public readonly Slot<float> Result = new Slot<float>();
+
+        public Add2()
+        {
+            Result.UpdateAction = Update;
+        }
+
+        private void Update(EvaluationContext context)
+        {
+            Result.Value = 0;
+            foreach (var input in Input.GetCollectedInputs())
+            {
+                Result.Value += input.GetValue(context);
+            }
+        }
+
+        [FloatInput(DefaultValue = 0.0f, Guid = "{AF4A49E6-1ECD-4E94-AE6D-FB5D2BC8430C}")]
+        public readonly MultiInputSlot<float> Input = new MultiInputSlot<float>();
+    }
+}

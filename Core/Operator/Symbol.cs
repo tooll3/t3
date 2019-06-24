@@ -216,7 +216,8 @@ namespace T3.Core.Operator
                 Debug.Assert(false);
             }
 
-            return new InputDefinition() { Id = attribute.Id, Name = info.Name, DefaultValue = defaultValue };
+            var isMultiInput = info.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
+            return new InputDefinition { Id = attribute.Id, Name = info.Name, DefaultValue = defaultValue, IsMultiInput = isMultiInput };
         }
 
         public Instance CreateInstance(Guid id)
@@ -351,8 +352,7 @@ namespace T3.Core.Operator
             public Guid Id { get; set; }
             public string Name { get; set; }
             public InputValue DefaultValue { get; set; }
-
-            //TODO: how do we handle MultiInputs?
+            public bool IsMultiInput { get; set; }
         }
 
         public class OutputDefinition
