@@ -123,6 +123,7 @@
     <Compile Include="Operator\Symbol.cs" />
     <Compile Include="Operator\SymbolChild.cs" />
     <Compile Include="Operator\SymbolRegistry.cs" />
+    <Compile Include="Operator\Types\LoadTexture2d.cs" />
     <Compile Include="Operator\Types\Texture2d.cs" />
     <Compile Include="Operator\Types\Time.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

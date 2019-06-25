@@ -6,6 +6,7 @@ using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using SharpDX;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using Vector2 = System.Numerics.Vector2;
@@ -105,9 +106,8 @@ namespace T3
             }
 
             // Copy and convert all vertices into a single contiguous buffer
-            SharpDX.DataStream vbStream, ibStream;
-            _deviceContext.MapSubresource(_vb, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out vbStream);
-            _deviceContext.MapSubresource(_ib, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out ibStream);
+            _deviceContext.MapSubresource(_vb, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out var vbStream);
+            _deviceContext.MapSubresource(_ib, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out var ibStream);
             for (int n = 0; n < draw_data.CmdListsCount; n++)
             {
                 ImDrawListPtr cmd_list = draw_data.CmdListsRange[n];

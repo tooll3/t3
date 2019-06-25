@@ -32,6 +32,7 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(BindFlags), new Size2UiProperties());
             TypeUiRegistry.Entries.Add(typeof(CpuAccessFlags), new Size2UiProperties());
             TypeUiRegistry.Entries.Add(typeof(ResourceOptionFlags), new Size2UiProperties());
+            TypeUiRegistry.Entries.Add(typeof(ShaderResourceView), new Size2UiProperties());
 
             // Register input ui creators
             InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
@@ -49,6 +50,8 @@ namespace T3.Gui
             OutputUiFactory.Entries.Add(typeof(int), () => new IntOutputUi());
             OutputUiFactory.Entries.Add(typeof(string), () => new StringOutputUi());
             OutputUiFactory.Entries.Add(typeof(Size2), () => new Size2OutputUi());
+            OutputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new ShaderResourceViewOutputUi());
+            OutputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dOutputUi());
 
             var symbols = SymbolRegistry.Entries;
 
