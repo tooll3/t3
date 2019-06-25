@@ -511,11 +511,12 @@ namespace T3.Core
             return (textureResourceEntry.Id, shaderResourceViewId);
         }
 
-        public void CreateTexture(Texture2DDescription description, string name, ref Guid id, ref Texture2D texture)
+        // returns true if the texture changed
+        public bool CreateTexture(Texture2DDescription description, string name, ref Guid id, ref Texture2D texture)
         {
             if (texture != null && texture.Description.Equals(description))
             {
-                return; // no change
+                return false; // no change
             }
 
             Resources.TryGetValue(id, out var resource);
@@ -523,6 +524,12 @@ namespace T3.Core
 
             if (textureResource == null)
             {
+                // no entry so far, if texture is also null then create a new one
+                if (texture == null)
+                {
+                    texture = new Texture2D(_device, description);
+                }
+
                 // new texture, create resource entry
                 textureResource = new TextureResource(Guid.NewGuid(), name, texture);
                 Resources.Add(textureResource.Id, textureResource);
@@ -534,6 +541,8 @@ namespace T3.Core
             }
 
             id = textureResource.Id;
+
+            return true;
         }
 
         private readonly Stopwatch _operatorUpdateStopwatch = new Stopwatch();
