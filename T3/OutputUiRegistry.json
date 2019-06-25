@@ -1,6 +1,19 @@
 {
   "Entries": [
     {
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d"/*LoadTexture2d*/,
+      "OutputUis": [
+        {
+          "OutputId": "d45d32b6-e588-4723-a071-6e02406b831a"/*ShaderResourceView*/,
+          "Type": "SharpDX.Direct3D11.ShaderResourceView",
+          "Position": {
+            "X": "0",
+            "Y": "0"
+          }
+        }
+      ]
+    },
+    {
       "SymbolId": "10673c38-8c7e-4aa1-8dcd-3f2711c709b5"/*Random*/,
       "OutputUis": [
         {
@@ -14,7 +27,7 @@
       ]
     },
     {
-      "SymbolId": "2f851b5b-b66d-40b0-9445-e733dc4b907d"/*Add2*/,
+      "SymbolId": "2f851b5b-b66d-40b0-9445-e733dc4b907d"/*Sum*/,
       "OutputUis": [
         {
           "OutputId": "5ce9c625-f890-4620-9747-c98eab4b9447"/*Result*/,
@@ -107,6 +120,19 @@
     {
       "SymbolId": "dab61a12-9996-401e-9aa6-328dd6292beb"/*Dashboard*/,
       "OutputUis": []
+    },
+    {
+      "SymbolId": "f52db9a4-fde9-49ca-9ef7-131825c34e65"/*Texture2d*/,
+      "OutputUis": [
+        {
+          "OutputId": "0cc65a71-805e-4de4-94f2-cc710f5f6319"/*ShaderResourceView*/,
+          "Type": "SharpDX.Direct3D11.ShaderResourceView",
+          "Position": {
+            "X": "0",
+            "Y": "0"
+          }
+        }
+      ]
     }
   ]
 }
