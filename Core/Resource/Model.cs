@@ -68,12 +68,18 @@ namespace T3.Core
             InputValue Size2InputValueCreator(InputAttribute inputAttribute) => new InputValue<Size2>(((Size2InputAttribute)inputAttribute).DefaultValue);
             InputValue ResourceUsageInputValueCreator(InputAttribute inputAttribute) => new InputValue<ResourceUsage>(((ResourceUsageInputAttribute)inputAttribute).DefaultValue);
             InputValue FormatInputValueCreator(InputAttribute inputAttribute) => new InputValue<Format>(((FormatInputAttribute)inputAttribute).DefaultValue);
+            InputValue BindFlagsInputValueCreator(InputAttribute inputAttribute) => new InputValue<BindFlags>(((BindFlagsInputAttribute)inputAttribute).DefaultValue);
+            InputValue CpuAccessFlagsInputValueCreator(InputAttribute inputAttribute) => new InputValue<CpuAccessFlags>(((CpuAccessFlagsInputAttribute)inputAttribute).DefaultValue);
+            InputValue ResourceOptionFlagsInputValueCreator(InputAttribute inputAttribute) => new InputValue<ResourceOptionFlags>(((ResourceOptionFlagsInputAttribute)inputAttribute).DefaultValue);
             InputValueCreators.Entries.Add(typeof(int), IntInputValueCreator);
             InputValueCreators.Entries.Add(typeof(float), FloatInputValueCreator);
             InputValueCreators.Entries.Add(typeof(string), StringInputValueCreator);
             InputValueCreators.Entries.Add(typeof(Size2), Size2InputValueCreator);
             InputValueCreators.Entries.Add(typeof(ResourceUsage), ResourceUsageInputValueCreator);
             InputValueCreators.Entries.Add(typeof(Format), FormatInputValueCreator);
+            InputValueCreators.Entries.Add(typeof(BindFlags), BindFlagsInputValueCreator);
+            InputValueCreators.Entries.Add(typeof(CpuAccessFlags), CpuAccessFlagsInputValueCreator);
+            InputValueCreators.Entries.Add(typeof(ResourceOptionFlags), ResourceOptionFlagsInputValueCreator);
         }
 
         public virtual void Load()
