@@ -97,6 +97,12 @@ namespace T3.Gui
                 return;
             }
 
+            List<Type> availableTypes = new List<Type>(100);
+            availableTypes.AddRange(typeof(float).Assembly.GetTypes());
+            availableTypes.AddRange(typeof(Size2).Assembly.GetTypes()); // SharpDX
+            availableTypes.AddRange(typeof(SharpDX.DXGI.Format).Assembly.GetTypes()); // SharpDX.DXGI
+            availableTypes.AddRange(typeof(ResourceUsage).Assembly.GetTypes()); // SharpDX.Direct3D11
+
             var vector2Converter = JsonToTypeValueConverters.Entries[typeof(Vector2)];
 
             using (var streamReader = new StreamReader(FilePath))
@@ -112,8 +118,12 @@ namespace T3.Gui
                     {
                         var outputId = Guid.Parse(uiOutputEntry["OutputId"].Value<string>());
                         var typeName = uiOutputEntry["Type"].Value<string>();
-                        Type type = typeof(float).Assembly.GetTypes().First(t => t.FullName == typeName);
-                        if (OutputUiFactory.Entries.TryGetValue(type, out var outputCreator))
+                        Type type = availableTypes.FirstOrDefault(t => t.FullName == typeName);
+                        if (type == null)
+                        {
+                            Console.WriteLine($"type not available: {typeName}");
+                        }
+                        else if (OutputUiFactory.Entries.TryGetValue(type, out var outputCreator))
                         {
                             var outputUi = outputCreator();
                             JToken positionToken = uiOutputEntry["Position"];

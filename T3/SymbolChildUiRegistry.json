@@ -1,11 +1,15 @@
 {
   "Entries": [
     {
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d"/*LoadTexture2d*/,
+      "SymbolChildUis": []
+    },
+    {
       "SymbolId": "10673c38-8c7e-4aa1-8dcd-3f2711c709b5"/*Random*/,
       "SymbolChildUis": []
     },
     {
-      "SymbolId": "2f851b5b-b66d-40b0-9445-e733dc4b907d"/*Add2*/,
+      "SymbolId": "2f851b5b-b66d-40b0-9445-e733dc4b907d"/*Sum*/,
       "SymbolChildUis": []
     },
     {
@@ -39,7 +43,7 @@
           }
         },
         {
-          "ChildId": "15deb882-1c6c-40db-a509-56ca51e5de12"/*Add2*/,
+          "ChildId": "15deb882-1c6c-40db-a509-56ca51e5de12"/*Sum*/,
           "Position": {
             "X": "327",
             "Y": "195"
@@ -72,6 +76,10 @@
           }
         }
       ]
+    },
+    {
+      "SymbolId": "f52db9a4-fde9-49ca-9ef7-131825c34e65"/*Texture2d*/,
+      "SymbolChildUis": []
     }
   ]
 }
