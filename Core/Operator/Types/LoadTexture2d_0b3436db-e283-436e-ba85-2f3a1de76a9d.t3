@@ -1,0 +1,7 @@
+{
+  "Name": "LoadTexture2d",
+  "Id": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+  "InstanceType": "T3.Core.Operator.Types.LoadTexture2d",
+  "Children": [],
+  "Connections": []
+}
