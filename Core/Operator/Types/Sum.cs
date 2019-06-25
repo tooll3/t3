@@ -2,12 +2,12 @@
 
 namespace T3.Core.Operator.Types
 {
-    public class Add2 : Instance<Add2>
+    public class Sum : Instance<Sum>
     {
         [Output(Guid = "{5CE9C625-F890-4620-9747-C98EAB4B9447}")]
         public readonly Slot<float> Result = new Slot<float>();
 
-        public Add2()
+        public Sum()
         {
             Result.UpdateAction = Update;
         }
