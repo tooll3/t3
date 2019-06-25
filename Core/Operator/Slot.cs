@@ -94,6 +94,50 @@ namespace T3.Core.Operator
         public Format DefaultValue { get; set; }
     }
 
+    public class BindFlagsInputAttribute : InputAttribute
+    {
+        public BindFlagsInputAttribute()
+        {
+            Type = typeof(BindFlags);
+            DefaultValue = BindFlags.None;
+        }
+
+        public BindFlags DefaultValue { get; set; }
+    }
+
+    public class SampleDescriptionInputAttributes : InputAttribute
+    {
+        public SampleDescriptionInputAttributes()
+        {
+            Type = typeof(SampleDescription);
+            DefaultValue = new SampleDescription(1, 0);
+        }
+
+        public SampleDescription DefaultValue { get; set; }
+    }
+
+    public class CpuAccessFlagsInputAttribute : InputAttribute
+    {
+        public CpuAccessFlagsInputAttribute()
+        {
+            Type = typeof(CpuAccessFlags);
+            DefaultValue = CpuAccessFlags.None;
+        }
+
+        public CpuAccessFlags DefaultValue { get; set; }
+    }
+
+    public class ResourceOptionFlagsInputAttribute : InputAttribute
+    {
+        public ResourceOptionFlagsInputAttribute()
+        {
+            Type = typeof(ResourceOptionFlags);
+            DefaultValue = ResourceOptionFlags.None;
+        }
+
+        public ResourceOptionFlags DefaultValue { get; set; }
+    }
+
     public interface IConnectableSource
     {
     }

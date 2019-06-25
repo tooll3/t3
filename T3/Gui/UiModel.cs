@@ -29,6 +29,9 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(Size2), new Size2UiProperties());
             TypeUiRegistry.Entries.Add(typeof(ResourceUsage), new Size2UiProperties());
             TypeUiRegistry.Entries.Add(typeof(Format), new Size2UiProperties());
+            TypeUiRegistry.Entries.Add(typeof(BindFlags), new Size2UiProperties());
+            TypeUiRegistry.Entries.Add(typeof(CpuAccessFlags), new Size2UiProperties());
+            TypeUiRegistry.Entries.Add(typeof(ResourceOptionFlags), new Size2UiProperties());
 
             // Register input ui creators
             InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
@@ -37,6 +40,9 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(Size2), () => new Size2InputUi());
             InputUiFactory.Entries.Add(typeof(ResourceUsage), () => new EnumInputUi<ResourceUsage>());
             InputUiFactory.Entries.Add(typeof(Format), () => new EnumInputUi<Format>());
+            InputUiFactory.Entries.Add(typeof(BindFlags), () => new EnumInputUi<BindFlags>());
+            InputUiFactory.Entries.Add(typeof(CpuAccessFlags), () => new EnumInputUi<CpuAccessFlags>());
+            InputUiFactory.Entries.Add(typeof(ResourceOptionFlags), () => new EnumInputUi<ResourceOptionFlags>());
 
             // Register output ui creators
             OutputUiFactory.Entries.Add(typeof(float), () => new FloatOutputUi());

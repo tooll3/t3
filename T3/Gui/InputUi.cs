@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
@@ -164,21 +165,57 @@ namespace T3.Gui
         public override bool DrawEditControl(string name, ref T value)
         {
             // todo: check perf impact of creating the list here again and again! -> cache lists
-            var values = Enum.GetValues(typeof(T));
+            Type enumType = typeof(T);
+            var values = Enum.GetValues(enumType);
             var valueNames = new string[values.Length];
             for (int i = 0; i < values.Length; i++)
             {
                 valueNames[i] = Enum.GetName(typeof(T), values.GetValue(i));
             }
 
-            int index = (int)(object)value;
-            bool modified = ImGui.Combo(name, ref index, valueNames, valueNames.Length);
-            if (modified)
+            if (enumType.GetCustomAttributes<FlagsAttribute>().Any())
             {
-                value = (T)values.GetValue(index);
-            }
+                // show as checkboxes
+                bool modified = false;
+                if (ImGui.TreeNode(name))
+                {
+                    // todo: refactor crappy code below, works but ugly!
+                    bool[] checks = new bool[values.Length];
+                    int intValue = (int)(object)value;
+                    for (int i = 0; i < valueNames.Length; i++)
+                    {
+                        int enumValueAsInt = (int)values.GetValue(i);
+                        checks[i] = (intValue & enumValueAsInt) > 0;
+                        if (ImGui.Checkbox(valueNames[i], ref checks[i]))
+                        {
+                            // value modified, store new flag
+                            if (checks[i])
+                            {
+                                intValue |= enumValueAsInt;
+                            }
+                            else
+                            {
+                                intValue &= ~enumValueAsInt;
+                            }
 
-            return modified;
+                            value = (T)(object)intValue;
+                            modified = true;
+                        }
+                    }
+                    ImGui.TreePop();
+                }
+                return modified;
+            }
+            else
+            {
+                int index = (int)(object)value;
+                bool modified = ImGui.Combo(name, ref index, valueNames, valueNames.Length);
+                if (modified)
+                {
+                    value = (T)values.GetValue(index);
+                }
+                return modified;
+            }
         }
 
         public override void DrawValueDisplay(string name, ref T value)
