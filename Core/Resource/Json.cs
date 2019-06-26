@@ -66,7 +66,6 @@ namespace T3.Core
                 Writer.WriteStartObject();
                 Writer.WriteValue("Id", input.Id);
                 Writer.WriteComment(input.Name);
-                Writer.WriteValue("Type", input.DefaultValue.ValueType);
                 Writer.WritePropertyName("DefaultValue");
                 input.DefaultValue.ToJson(Writer);
                 Writer.WriteEndObject();
@@ -163,7 +162,6 @@ namespace T3.Core
         public void ReadChildInputValue(SymbolChild symbolChild, JToken inputJson)
         {
             var id = Guid.Parse(inputJson["Id"].Value<string>());
-            //var valueString = inputJson["Value"].Value<string>();
             var jsonValue = inputJson["Value"];
             symbolChild.InputValues[id].Value.SetValueFromJson(jsonValue);
             symbolChild.InputValues[id].IsDefault = false;

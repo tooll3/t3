@@ -5,7 +5,6 @@
   "Inputs": [
     {
       "Id": "af4a49e6-1ecd-4e94-ae6d-fb5d2bc8430c"/*Input*/,
-      "Type": "System.Single",
       "DefaultValue": 0.0
     }
   ],
