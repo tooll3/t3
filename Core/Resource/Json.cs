@@ -24,17 +24,6 @@ namespace T3.Core
         }
     }
 
-    public interface IInputValueJson
-    {
-        void WriteToJson(InputValue inputValue);
-        InputValue ReadFromJson(JToken json);
-    }
-
-    public static class JsonValueRegistry
-    {
-        public static Dictionary<Type, IInputValueJson> Entries { get; } = new Dictionary<Type, IInputValueJson>(20);
-    }
-
     public class Json
     {
         public JsonTextWriter Writer { get; set; }
@@ -202,6 +191,7 @@ namespace T3.Core
                     input.DefaultValue.SetValueFromJson(jsonDefaultValue);
                 }
             }
+
             return symbol;
         }
     }
