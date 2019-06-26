@@ -97,12 +97,6 @@ namespace T3.Gui
                 return;
             }
 
-            List<Type> availableTypes = new List<Type>(100);
-            availableTypes.AddRange(typeof(float).Assembly.GetTypes());
-            availableTypes.AddRange(typeof(Size2).Assembly.GetTypes()); // SharpDX
-            availableTypes.AddRange(typeof(SharpDX.DXGI.Format).Assembly.GetTypes()); // SharpDX.DXGI
-            availableTypes.AddRange(typeof(ResourceUsage).Assembly.GetTypes()); // SharpDX.Direct3D11
-
             var vector2Converter = JsonToTypeValueConverters.Entries[typeof(Vector2)];
 
             using (var streamReader = new StreamReader(FilePath))
@@ -118,7 +112,7 @@ namespace T3.Gui
                     {
                         var outputId = Guid.Parse(uiOutputEntry["OutputId"].Value<string>());
                         var typeName = uiOutputEntry["Type"].Value<string>();
-                        Type type = availableTypes.FirstOrDefault(t => t.FullName == typeName);
+                        Type type = Type.GetType(typeName);
                         if (type == null)
                         {
                             Console.WriteLine($"type not available: {typeName}");
@@ -171,7 +165,7 @@ namespace T3.Gui
                         var outputUi = outputEntry.Value;
                         var outputName = symbol.OutputDefinitions.Single(outputDef => outputDef.Id == outputEntry.Key).Name;
                         jsonTextWriter.WriteComment(outputName);
-                        jsonTextWriter.WriteValue("Type", outputUi.Type);
+                        jsonTextWriter.WriteValue("Type", outputUi.Type + $", {outputUi.Type.Assembly.GetName().Name}");
                         jsonTextWriter.WritePropertyName("Position");
                         vec2Writer(jsonTextWriter, outputUi.PosOnCanvas);
 

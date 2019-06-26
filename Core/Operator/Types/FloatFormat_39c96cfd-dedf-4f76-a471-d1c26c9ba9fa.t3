@@ -1,7 +1,7 @@
 {
   "Name": "FloatFormat",
   "Id": "39c96cfd-dedf-4f76-a471-d1c26c9ba9fa",
-  "InstanceType": "T3.Core.Operator.Types.FloatFormat",
+  "InstanceType": "T3.Core.Operator.Types.FloatFormat, Core",
   "Inputs": [
     {
       "Id": "f36e4078-2608-4308-ab5f-077c05b1181a"/*Input*/,

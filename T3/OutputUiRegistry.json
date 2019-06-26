@@ -5,7 +5,7 @@
       "OutputUis": [
         {
           "OutputId": "d45d32b6-e588-4723-a071-6e02406b831a"/*ShaderResourceView*/,
-          "Type": "SharpDX.Direct3D11.ShaderResourceView",
+          "Type": "SharpDX.Direct3D11.ShaderResourceView, SharpDX.Direct3D11",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -18,7 +18,7 @@
       "OutputUis": [
         {
           "OutputId": "dfb39f6e-7b1c-41f3-9f31-b71caee629f9"/*Result*/,
-          "Type": "System.Single",
+          "Type": "System.Single, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -31,7 +31,7 @@
       "OutputUis": [
         {
           "OutputId": "5ce9c625-f890-4620-9747-c98eab4b9447"/*Result*/,
-          "Type": "System.Single",
+          "Type": "System.Single, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -44,7 +44,7 @@
       "OutputUis": [
         {
           "OutputId": "c63a1977-a594-490d-b5fb-de4d40bad016"/*Output*/,
-          "Type": "System.String",
+          "Type": "System.String, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -57,7 +57,7 @@
       "OutputUis": [
         {
           "OutputId": "e47bf25e-351a-44e6-84c6-ad3abc93531a"/*Result*/,
-          "Type": "System.String",
+          "Type": "System.String, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -70,7 +70,7 @@
       "OutputUis": [
         {
           "OutputId": "c2fa7c57-6a0c-4d33-a70d-5130f3d52798"/*Length*/,
-          "Type": "System.Int32",
+          "Type": "System.Int32, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -83,7 +83,7 @@
       "OutputUis": [
         {
           "OutputId": "1c34d39c-0bef-4c4a-a3e4-dcb8d5664f3b"/*TimeInSeconds*/,
-          "Type": "System.Single",
+          "Type": "System.Single, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -96,7 +96,7 @@
       "OutputUis": [
         {
           "OutputId": "5ce9c625-f890-4620-9747-c98eab4b9447"/*Result*/,
-          "Type": "System.Single",
+          "Type": "System.Single, mscorlib",
           "Position": {
             "X": "133",
             "Y": "38"
@@ -109,7 +109,7 @@
       "OutputUis": [
         {
           "OutputId": "3a9734e8-7346-4535-bd54-3b5a735cc6b8"/*Output*/,
-          "Type": "System.String",
+          "Type": "System.String, mscorlib",
           "Position": {
             "X": "182",
             "Y": "36"
@@ -126,7 +126,7 @@
       "OutputUis": [
         {
           "OutputId": "0cc65a71-805e-4de4-94f2-cc710f5f6319"/*ShaderResourceView*/,
-          "Type": "SharpDX.Direct3D11.ShaderResourceView",
+          "Type": "SharpDX.Direct3D11.ShaderResourceView, SharpDX.Direct3D11",
           "Position": {
             "X": "0",
             "Y": "0"
