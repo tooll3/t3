@@ -43,6 +43,7 @@ namespace T3.Gui
         public bool IsSelected { get; set; }
     }
 
+    // todo: refactor out common code with ValueOutputUi<T> - it's nearly the same
     public class ShaderResourceViewOutputUi : IOutputUi
     {
         public void DrawValue(Slot slot)
@@ -50,7 +51,6 @@ namespace T3.Gui
             if (slot is Slot<ShaderResourceView> typedSlot)
             {
                 var value = typedSlot.GetValue(new EvaluationContext());
-                //ImGui.Text($"{value}");
                 ImGui.Image((IntPtr)value, new Vector2(100.0f, 100.0f));
             }
             else

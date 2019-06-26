@@ -1,9 +1,7 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using Newtonsoft.Json;
 
 //using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -62,7 +60,10 @@ namespace T3.Core.Operator
                 var customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false);
                 Debug.Assert(customAttributes.Length == 1);
                 var attribute = (InputAttribute)customAttributes[0];
-                InputDefinitions.Add(CreateInputDefinition(attribute, inputInfo));
+                var isMultiInput = inputInfo.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
+                var valueType = inputInfo.FieldType.GetGenericArguments()[0];
+                var inputDef = CreateInputDefinition(attribute.Id, inputInfo.Name, isMultiInput, valueType);
+                InputDefinitions.Add(inputDef);
             }
 
             // outputs identified by attribute
@@ -108,7 +109,10 @@ namespace T3.Core.Operator
                 }
                 else
                 {
-                    InputDefinitions.Add(CreateInputDefinition(attribute, info));
+                    var isMultiInput = info.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
+                    var valueType = info.FieldType.GetGenericArguments()[0];
+                    var inputDef = CreateInputDefinition(attribute.Id, info.Name, isMultiInput, valueType);
+                    InputDefinitions.Add(inputDef);
                 }
             }
 
@@ -195,16 +199,11 @@ namespace T3.Core.Operator
             }
         }
 
-        private static InputDefinition CreateInputDefinition(InputAttribute attribute, FieldInfo info)
+        private static InputDefinition CreateInputDefinition(Guid id, string name, bool isMultiInput, Type valueType)
         {
             // create new input definition
-            if (!InputValueCreators.Entries.ContainsKey(attribute.Type))
-            {
-                int bla = 12;
-            }
-            InputValue defaultValue = InputValueCreators.Entries[attribute.Type](attribute);
-            var isMultiInput = info.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
-            return new InputDefinition { Id = attribute.Id, Name = info.Name, DefaultValue = defaultValue, IsMultiInput = isMultiInput };
+            InputValue defaultValue = InputValueCreators.Entries[valueType]();
+            return new InputDefinition { Id = id, Name = name, DefaultValue = defaultValue, IsMultiInput = isMultiInput };
         }
 
         public Instance CreateInstance(Guid id)

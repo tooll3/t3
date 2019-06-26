@@ -15,7 +15,7 @@
             Length.Value = InputString.GetValue(context).Length;
         }
 
-        [StringInput(DefaultValue = "Aber Hallo", Guid = "{5794D63A-3EF7-42C5-B726-E814EA9093E3}")]
+        [Input(Guid = "{5794D63A-3EF7-42C5-B726-E814EA9093E3}")]
         public readonly InputSlot<string> InputString = new InputSlot<string>();
     }
 }

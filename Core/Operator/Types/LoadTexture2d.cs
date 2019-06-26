@@ -48,7 +48,7 @@ namespace T3.Core.Operator.Types
             _textureChanged = false;
         }
 
-        [StringInput(DefaultValue = @"Resources\frog2.jpg", Guid = "{76CC3811-4AE0-48B2-A119-890DB5A4EEB2}")]
+        [Input(Guid = "{76CC3811-4AE0-48B2-A119-890DB5A4EEB2}")]
         public readonly InputSlot<string> Path = new InputSlot<string>();
     }
 }

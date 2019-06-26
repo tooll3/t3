@@ -16,7 +16,7 @@
             Result.Value = (float)random.NextDouble();
         }
 
-        [IntInput(DefaultValue = 3, Guid = "{F2513EAD-7022-4774-8767-7F33D1B92B26}")]
+        [Input(Guid = "{F2513EAD-7022-4774-8767-7F33D1B92B26}")]
         public readonly InputSlot<int> Seed = new InputSlot<int>();
     }
 }

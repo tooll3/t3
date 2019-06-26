@@ -6,6 +6,8 @@ using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SharpDX;
+using SharpDX.Direct3D11;
 using T3.Core.Operator;
 
 namespace T3.Core
@@ -47,10 +49,30 @@ namespace T3.Core
             Writer.WriteValue("Namespace", symbol.Namespace);
             Writer.WriteValue("InstanceType", symbol.InstanceType);
 
+            WriteSymbolInputs(symbol.InputDefinitions);
             WriteSymbolChildren(symbol.Children);
             WriteConnections(symbol.Connections);
 
             Writer.WriteEndObject();
+        }
+
+        private void WriteSymbolInputs(List<Symbol.InputDefinition> inputs)
+        {
+            Writer.WritePropertyName("Inputs");
+            Writer.WriteStartArray();
+
+            foreach (var input in inputs)
+            {
+                Writer.WriteStartObject();
+                Writer.WriteValue("Id", input.Id);
+                Writer.WriteComment(input.Name);
+                Writer.WriteValue("Type", input.DefaultValue.ValueType);
+                Writer.WritePropertyName("DefaultValue");
+                input.DefaultValue.ToJson(Writer);
+                Writer.WriteEndObject();
+            }
+
+            Writer.WriteEndArray();
         }
 
         private void WriteConnections(List<Symbol.Connection> connections)
@@ -115,10 +137,17 @@ namespace T3.Core
 
             foreach (var inputValue in (JArray)symbolChildJson["InputValues"])
             {
-                ReadInput(symbolChild, inputValue);
+                ReadChildInputValue(symbolChild, inputValue);
             }
 
             return symbolChild;
+        }
+
+        private (Guid, JToken) ReadSymbolInputDefaults(JToken jsonInput)
+        {
+            var id = Guid.Parse(jsonInput["Id"].Value<string>());
+            var jsonValue = jsonInput["DefaultValue"];
+            return (id, jsonValue);
         }
 
         private Symbol.Connection ReadConnection(JToken jsonConnection)
@@ -131,13 +160,13 @@ namespace T3.Core
             return new Symbol.Connection(sourceInstanceId, sourceSlotId, targetInstanceId, targetSlotId);
         }
 
-        public Symbol.InputDefinition ReadInput(SymbolChild symbolChild, JToken inputJson)
+        public void ReadChildInputValue(SymbolChild symbolChild, JToken inputJson)
         {
             var id = Guid.Parse(inputJson["Id"].Value<string>());
-            var valueString = inputJson["Value"].Value<string>();
-            symbolChild.InputValues[id].Value.SetValueFromJson(valueString);
+            //var valueString = inputJson["Value"].Value<string>();
+            var jsonValue = inputJson["Value"];
+            symbolChild.InputValues[id].Value.SetValueFromJson(jsonValue);
             symbolChild.InputValues[id].IsDefault = false;
-            return new Symbol.InputDefinition { Id = id };
         }
 
         public Symbol ReadSymbol(Model model)
@@ -156,6 +185,9 @@ namespace T3.Core
             var connections = (from c in ((JArray)o["Connections"])
                                let connection = ReadConnection(c)
                                select connection).ToList();
+            var inputDefaultValues = (from jsonInput in (JArray)o["Inputs"]
+                                      let idAndValue = ReadSymbolInputDefaults(jsonInput)
+                                      select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
             Type instanceType = typeof(Symbol).Assembly.GetTypes().First(t => t.FullName == instanceTypeName);
             var symbol = new Symbol(instanceType, id, symbolChildren)
                          {
@@ -164,6 +196,14 @@ namespace T3.Core
                          };
             symbol.Connections.AddRange(connections);
 
+            foreach (var input in symbol.InputDefinitions)
+            {
+                // if no entry is present just the value default is used, happens for new inputs
+                if (inputDefaultValues.TryGetValue(input.Id, out var jsonDefaultValue))
+                {
+                    input.DefaultValue.SetValueFromJson(jsonDefaultValue);
+                }
+            }
             return symbol;
         }
     }

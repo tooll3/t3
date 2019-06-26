@@ -15,7 +15,7 @@
             Output.Value = Input.GetValue(context).ToString();
         }
 
-        [FloatInput(DefaultValue = 3.0f, Guid = "{F36E4078-2608-4308-AB5F-077C05B1181A}")]
+        [Input(Guid = "{F36E4078-2608-4308-AB5F-077C05B1181A}")]
         public readonly InputSlot<float> Input = new InputSlot<float>();
     }
 }
