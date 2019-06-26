@@ -2,6 +2,13 @@
   "Name": "Project",
   "Id": "c9a7e71c-7311-4d1e-8508-cd580d7a0b8d",
   "InstanceType": "T3.Core.Operator.Types.Project",
+  "Inputs": [
+    {
+      "Id": "9bf87c5f-2dfe-482e-8be7-18fc4d6072e4"/*Input*/,
+      "Type": "System.Single",
+      "DefaultValue": 3.0
+    }
+  ],
   "Children": [
     {
       "Id": "14841d89-c20a-44bc-a0e7-d1f87a4824a3"/*Add*/,

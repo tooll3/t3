@@ -21,7 +21,7 @@ namespace T3.Core.Operator.Types
             }
         }
 
-        [FloatInput(DefaultValue = 0.0f, Guid = "{AF4A49E6-1ECD-4E94-AE6D-FB5D2BC8430C}")]
+        [Input(Guid = "{AF4A49E6-1ECD-4E94-AE6D-FB5D2BC8430C}")]
         public readonly MultiInputSlot<float> Input = new MultiInputSlot<float>();
     }
 }

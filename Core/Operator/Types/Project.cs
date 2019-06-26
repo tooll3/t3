@@ -7,7 +7,7 @@
 
 
 
-        [FloatInput(DefaultValue = 3.0f, Guid = "{9BF87C5F-2DFE-482E-8BE7-18FC4D6072E4}")]
+        [Input(Guid = "{9BF87C5F-2DFE-482E-8BE7-18FC4D6072E4}")]
         public readonly InputSlot<float> Input = new InputSlot<float>();
     }
 }

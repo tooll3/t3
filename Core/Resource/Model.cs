@@ -27,7 +27,7 @@ namespace T3.Core
 
     public static class InputValueCreators
     {
-        public static Dictionary<Type, Func<InputAttribute, InputValue>> Entries { get; } = new Dictionary<Type, Func<InputAttribute, InputValue>>();
+        public static Dictionary<Type, Func<InputValue>> Entries { get; } = new Dictionary<Type, Func<InputValue>>();
     }
 
     public class Model
@@ -37,6 +37,20 @@ namespace T3.Core
 
         public Model()
         {
+            // generic enum value from json function, must be local function
+            object JsonToEnumValue<T>(JToken jsonToken) where T : struct
+            {
+                string value = jsonToken.Value<string>();
+                if (Enum.TryParse(value, out T enumValue))
+                {
+                    return enumValue;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
             // Register the converters from json to a specific type value
             JsonToTypeValueConverters.Entries.Add(typeof(float), jsonToken => jsonToken.Value<float>());
             JsonToTypeValueConverters.Entries.Add(typeof(int), jsonToken => jsonToken.Value<int>());
@@ -47,6 +61,17 @@ namespace T3.Core
                                                                        float y = jsonToken["Y"].Value<float>();
                                                                        return new Vector2(x, y);
                                                                    });
+            JsonToTypeValueConverters.Entries.Add(typeof(Size2), jsonToken =>
+                                                                 {
+                                                                     int width = jsonToken["Width"].Value<int>();
+                                                                     int height = jsonToken["Height"].Value<int>();
+                                                                     return new Size2(width, height);
+                                                                 });
+            JsonToTypeValueConverters.Entries.Add(typeof(Format), JsonToEnumValue<Format>);
+            JsonToTypeValueConverters.Entries.Add(typeof(ResourceUsage), JsonToEnumValue<ResourceUsage>);
+            JsonToTypeValueConverters.Entries.Add(typeof(BindFlags), JsonToEnumValue<BindFlags>);
+            JsonToTypeValueConverters.Entries.Add(typeof(CpuAccessFlags), JsonToEnumValue<CpuAccessFlags>);
+            JsonToTypeValueConverters.Entries.Add(typeof(ResourceOptionFlags), JsonToEnumValue<ResourceOptionFlags>);
 
             // Register the converters from a specific type value to json
             TypeValueToJsonConverters.Entries.Add(typeof(float), (writer, obj) => writer.WriteValue((float)obj));
@@ -60,26 +85,31 @@ namespace T3.Core
                                                                        writer.WriteValue("Y", vec.Y);
                                                                        writer.WriteEndObject();
                                                                    });
+            TypeValueToJsonConverters.Entries.Add(typeof(Size2), (writer, obj) =>
+                                                                 {
+                                                                     Size2 vec = (Size2)obj;
+                                                                     writer.WriteStartObject();
+                                                                     writer.WriteValue("Width", vec.Width);
+                                                                     writer.WriteValue("Height", vec.Height);
+                                                                     writer.WriteEndObject();
+                                                                 });
+            TypeValueToJsonConverters.Entries.Add(typeof(Format), (writer, obj) => writer.WriteValue(obj.ToString()));
+            TypeValueToJsonConverters.Entries.Add(typeof(ResourceUsage), (writer, obj) => writer.WriteValue(obj.ToString()));
+            TypeValueToJsonConverters.Entries.Add(typeof(BindFlags), (writer, obj) => writer.WriteValue(obj.ToString()));
+            TypeValueToJsonConverters.Entries.Add(typeof(CpuAccessFlags), (writer, obj) => writer.WriteValue(obj.ToString()));
+            TypeValueToJsonConverters.Entries.Add(typeof(ResourceOptionFlags), (writer, obj) => writer.WriteValue(obj.ToString()));
 
             // Register input value creators that take the relevant input attribute, extract the default value and return this with the new input value
-            InputValue IntInputValueCreator(InputAttribute inputAttribute) => new InputValue<int>(((IntInputAttribute)inputAttribute).DefaultValue);
-            InputValue FloatInputValueCreator(InputAttribute inputAttribute) => new InputValue<float>(((FloatInputAttribute)inputAttribute).DefaultValue);
-            InputValue StringInputValueCreator(InputAttribute inputAttribute) => new InputValue<string>(((StringInputAttribute)inputAttribute).DefaultValue);
-            InputValue Size2InputValueCreator(InputAttribute inputAttribute) => new InputValue<Size2>(((Size2InputAttribute)inputAttribute).DefaultValue);
-            InputValue ResourceUsageInputValueCreator(InputAttribute inputAttribute) => new InputValue<ResourceUsage>(((ResourceUsageInputAttribute)inputAttribute).DefaultValue);
-            InputValue FormatInputValueCreator(InputAttribute inputAttribute) => new InputValue<Format>(((FormatInputAttribute)inputAttribute).DefaultValue);
-            InputValue BindFlagsInputValueCreator(InputAttribute inputAttribute) => new InputValue<BindFlags>(((BindFlagsInputAttribute)inputAttribute).DefaultValue);
-            InputValue CpuAccessFlagsInputValueCreator(InputAttribute inputAttribute) => new InputValue<CpuAccessFlags>(((CpuAccessFlagsInputAttribute)inputAttribute).DefaultValue);
-            InputValue ResourceOptionFlagsInputValueCreator(InputAttribute inputAttribute) => new InputValue<ResourceOptionFlags>(((ResourceOptionFlagsInputAttribute)inputAttribute).DefaultValue);
-            InputValueCreators.Entries.Add(typeof(int), IntInputValueCreator);
-            InputValueCreators.Entries.Add(typeof(float), FloatInputValueCreator);
-            InputValueCreators.Entries.Add(typeof(string), StringInputValueCreator);
-            InputValueCreators.Entries.Add(typeof(Size2), Size2InputValueCreator);
-            InputValueCreators.Entries.Add(typeof(ResourceUsage), ResourceUsageInputValueCreator);
-            InputValueCreators.Entries.Add(typeof(Format), FormatInputValueCreator);
-            InputValueCreators.Entries.Add(typeof(BindFlags), BindFlagsInputValueCreator);
-            InputValueCreators.Entries.Add(typeof(CpuAccessFlags), CpuAccessFlagsInputValueCreator);
-            InputValueCreators.Entries.Add(typeof(ResourceOptionFlags), ResourceOptionFlagsInputValueCreator);
+            InputValue InputDefaultValueCreator<T>() => new InputValue<T>();
+            InputValueCreators.Entries.Add(typeof(int), InputDefaultValueCreator<int>);
+            InputValueCreators.Entries.Add(typeof(float), InputDefaultValueCreator<float>);
+            InputValueCreators.Entries.Add(typeof(string), InputDefaultValueCreator<string>);
+            InputValueCreators.Entries.Add(typeof(Size2), InputDefaultValueCreator<Size2>);
+            InputValueCreators.Entries.Add(typeof(ResourceUsage), InputDefaultValueCreator<ResourceUsage>);
+            InputValueCreators.Entries.Add(typeof(Format), InputDefaultValueCreator<Format>);
+            InputValueCreators.Entries.Add(typeof(BindFlags), InputDefaultValueCreator<BindFlags>);
+            InputValueCreators.Entries.Add(typeof(CpuAccessFlags), InputDefaultValueCreator<CpuAccessFlags>);
+            InputValueCreators.Entries.Add(typeof(ResourceOptionFlags), InputDefaultValueCreator<ResourceOptionFlags>);
         }
 
         public virtual void Load()

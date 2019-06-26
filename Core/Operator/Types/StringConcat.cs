@@ -15,10 +15,10 @@
             Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
         }
 
-        [StringInput(DefaultValue = "", Guid = "{56098B5B-FE9F-41B8-9BE3-F133A5309689}")]
+        [Input(Guid = "{56098B5B-FE9F-41B8-9BE3-F133A5309689}")]
         public readonly InputSlot<string> Input1 = new InputSlot<string>();
 
-        [StringInput(DefaultValue = "", Guid = "{6E9E070F-8700-4522-BE4E-477FB0D1A71F}")]
+        [Input(Guid = "{6E9E070F-8700-4522-BE4E-477FB0D1A71F}")]
         public readonly InputSlot<string> Input2 = new InputSlot<string>();
     }
 }

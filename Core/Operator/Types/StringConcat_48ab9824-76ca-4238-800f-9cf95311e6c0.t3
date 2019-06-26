@@ -2,6 +2,18 @@
   "Name": "StringConcat",
   "Id": "48ab9824-76ca-4238-800f-9cf95311e6c0",
   "InstanceType": "T3.Core.Operator.Types.StringConcat",
+  "Inputs": [
+    {
+      "Id": "56098b5b-fe9f-41b8-9be3-f133a5309689"/*Input1*/,
+      "Type": "System.String",
+      "DefaultValue": ""
+    },
+    {
+      "Id": "6e9e070f-8700-4522-be4e-477fb0d1a71f"/*Input2*/,
+      "Type": "System.String",
+      "DefaultValue": ""
+    }
+  ],
   "Children": [],
   "Connections": []
 }

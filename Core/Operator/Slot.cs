@@ -31,113 +31,6 @@ namespace T3.Core.Operator
         public Type Type { get; set; }
     }
 
-    public class FloatInputAttribute : InputAttribute
-    {
-        public FloatInputAttribute()
-        {
-            Type = typeof(float);
-        }
-
-        public float DefaultValue { get; set; }
-    }
-
-    public class StringInputAttribute : InputAttribute
-    {
-        public StringInputAttribute()
-        {
-            Type = typeof(string);
-        }
-
-        public string DefaultValue { get; set; }
-    }
-
-    public class IntInputAttribute : InputAttribute
-    {
-        public IntInputAttribute()
-        {
-            Type = typeof(int);
-        }
-
-        public int DefaultValue { get; set; }
-    }
-
-    public class Size2InputAttribute : InputAttribute
-    {
-        public Size2InputAttribute(int width, int height)
-        {
-            Type = typeof(Size2);
-            DefaultValue = new Size2(width, height);
-        }
-
-        public Size2 DefaultValue { get; set; }
-    }
-
-    public class ResourceUsageInputAttribute : InputAttribute
-    {
-        public ResourceUsageInputAttribute()
-        {
-            Type = typeof(ResourceUsage);
-            DefaultValue = ResourceUsage.Default;
-        }
-
-        public ResourceUsage DefaultValue { get; set; }
-    }
-
-    public class FormatInputAttribute : InputAttribute
-    {
-        public FormatInputAttribute()
-        {
-            Type = typeof(Format);
-            DefaultValue = Format.R8G8B8A8_UNorm;
-        }
-
-        public Format DefaultValue { get; set; }
-    }
-
-    public class BindFlagsInputAttribute : InputAttribute
-    {
-        public BindFlagsInputAttribute()
-        {
-            Type = typeof(BindFlags);
-            DefaultValue = BindFlags.None;
-        }
-
-        public BindFlags DefaultValue { get; set; }
-    }
-
-    public class SampleDescriptionInputAttributes : InputAttribute
-    {
-        public SampleDescriptionInputAttributes()
-        {
-            Type = typeof(SampleDescription);
-            DefaultValue = new SampleDescription(1, 0);
-        }
-
-        public SampleDescription DefaultValue { get; set; }
-    }
-
-    public class CpuAccessFlagsInputAttribute : InputAttribute
-    {
-        public CpuAccessFlagsInputAttribute()
-        {
-            Type = typeof(CpuAccessFlags);
-            DefaultValue = CpuAccessFlags.None;
-        }
-
-        public CpuAccessFlags DefaultValue { get; set; }
-    }
-
-    public class ResourceOptionFlagsInputAttribute : InputAttribute
-    {
-        public ResourceOptionFlagsInputAttribute()
-        {
-            Type = typeof(ResourceOptionFlags);
-            DefaultValue = ResourceOptionFlags.None;
-        }
-
-        public ResourceOptionFlags DefaultValue { get; set; }
-    }
-
     public interface IConnectableSource
     {
     }
@@ -165,13 +58,13 @@ namespace T3.Core.Operator
         public abstract InputValue Clone();
         public abstract void Assign(InputValue otherValue);
         public abstract void ToJson(JsonTextWriter writer);
-        public abstract void SetValueFromJson(string json);
+        public abstract void SetValueFromJson(Newtonsoft.Json.Linq.JToken json);
     }
 
     public class InputValue<T> : InputValue
     {
         public InputValue()
-            : this(default(T))
+            : this(default)
         {
         }
 
@@ -206,11 +99,11 @@ namespace T3.Core.Operator
             }
             else
             {
-                Log.Error("Trying to convert an input value of type '{ValueType}' but no converter registered in TypeValueToJsonConverters. Returning empty string.");
+                Log.Error($"Trying to convert an input value of type '{ValueType}' but no converter registered in TypeValueToJsonConverters. Returning empty string.");
             }
         }
 
-        public override void SetValueFromJson(string json)
+        public override void SetValueFromJson(Newtonsoft.Json.Linq.JToken json)
         {
             if (JsonToTypeValueConverters.Entries.TryGetValue(ValueType, out var converterFunc))
             {
@@ -218,7 +111,7 @@ namespace T3.Core.Operator
             }
             else
             {
-                Log.Error("Trying to read a json value for type '{ValueType}' but no converter registered in JsonToTypeValueConverters. Skipping value reading.");
+                Log.Error($"Trying to read a json value for type '{ValueType}' but no converter registered in JsonToTypeValueConverters. Skipping value reading.");
             }
         }
 
