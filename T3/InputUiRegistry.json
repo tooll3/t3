@@ -5,7 +5,7 @@
       "InputUis": [
         {
           "InputId": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
-          "Type": "System.String",
+          "Type": "System.String, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -18,7 +18,7 @@
       "InputUis": [
         {
           "InputId": "f2513ead-7022-4774-8767-7f33d1b92b26"/*Seed*/,
-          "Type": "System.Int32",
+          "Type": "System.Int32, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -31,7 +31,7 @@
       "InputUis": [
         {
           "InputId": "af4a49e6-1ecd-4e94-ae6d-fb5d2bc8430c"/*Input*/,
-          "Type": "System.Single",
+          "Type": "System.Single, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -44,7 +44,7 @@
       "InputUis": [
         {
           "InputId": "f36e4078-2608-4308-ab5f-077c05b1181a"/*Input*/,
-          "Type": "System.Single",
+          "Type": "System.Single, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -57,7 +57,7 @@
       "InputUis": [
         {
           "InputId": "56098b5b-fe9f-41b8-9be3-f133a5309689"/*Input1*/,
-          "Type": "System.String",
+          "Type": "System.String, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -65,7 +65,7 @@
         },
         {
           "InputId": "6e9e070f-8700-4522-be4e-477fb0d1a71f"/*Input2*/,
-          "Type": "System.String",
+          "Type": "System.String, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -78,7 +78,7 @@
       "InputUis": [
         {
           "InputId": "5794d63a-3ef7-42c5-b726-e814ea9093e3"/*InputString*/,
-          "Type": "System.String",
+          "Type": "System.String, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -95,7 +95,7 @@
       "InputUis": [
         {
           "InputId": "993d59bb-1fc0-4857-a36d-629b0e7aa0d2"/*Input2*/,
-          "Type": "System.Single",
+          "Type": "System.Single, mscorlib",
           "Position": {
             "X": "197",
             "Y": "328"
@@ -103,7 +103,7 @@
         },
         {
           "InputId": "e3550929-8905-4cdf-bc85-c31e97da4baa"/*Input1*/,
-          "Type": "System.Single",
+          "Type": "System.Single, mscorlib",
           "Position": {
             "X": "36",
             "Y": "334"
@@ -116,7 +116,7 @@
       "InputUis": [
         {
           "InputId": "9bf87c5f-2dfe-482e-8be7-18fc4d6072e4"/*Input*/,
-          "Type": "System.Single",
+          "Type": "System.Single, mscorlib",
           "Position": {
             "X": "126",
             "Y": "470"
@@ -133,7 +133,7 @@
       "InputUis": [
         {
           "InputId": "2c9e4cb0-0333-439e-abcc-1148a840a260"/*ResourceOptionFlags*/,
-          "Type": "SharpDX.Direct3D11.ResourceOptionFlags",
+          "Type": "SharpDX.Direct3D11.ResourceOptionFlags, SharpDX.Direct3D11",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -141,7 +141,7 @@
         },
         {
           "InputId": "58ff26e7-6beb-44cb-910b-fe467402cee9"/*MipLevels*/,
-          "Type": "System.Int32",
+          "Type": "System.Int32, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -149,7 +149,7 @@
         },
         {
           "InputId": "67cd82c3-504b-4c80-8c49-5b303733ed52"/*Format*/,
-          "Type": "SharpDX.DXGI.Format",
+          "Type": "SharpDX.DXGI.Format, SharpDX.DXGI",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -157,7 +157,7 @@
         },
         {
           "InputId": "940d3d3c-607a-460c-a7fe-22876960d706"/*ArraySize*/,
-          "Type": "System.Int32",
+          "Type": "System.Int32, mscorlib",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -165,7 +165,7 @@
         },
         {
           "InputId": "98353ef2-a18d-43e5-8828-ed8bd182ddd1"/*ResourceUsage*/,
-          "Type": "SharpDX.Direct3D11.ResourceUsage",
+          "Type": "SharpDX.Direct3D11.ResourceUsage, SharpDX.Direct3D11",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -173,7 +173,7 @@
         },
         {
           "InputId": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,
-          "Type": "SharpDX.Size2",
+          "Type": "SharpDX.Size2, SharpDX",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -181,7 +181,7 @@
         },
         {
           "InputId": "cfebc37f-6813-416a-9073-e48d31074115"/*BindFlags*/,
-          "Type": "SharpDX.Direct3D11.BindFlags",
+          "Type": "SharpDX.Direct3D11.BindFlags, SharpDX.Direct3D11",
           "Position": {
             "X": "0",
             "Y": "0"
@@ -189,7 +189,7 @@
         },
         {
           "InputId": "da0d06bd-f5cc-400b-8e79-35756df9b2d5"/*CpuAccessFlags*/,
-          "Type": "SharpDX.Direct3D11.CpuAccessFlags",
+          "Type": "SharpDX.Direct3D11.CpuAccessFlags, SharpDX.Direct3D11",
           "Position": {
             "X": "0",
             "Y": "0"

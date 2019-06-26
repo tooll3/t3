@@ -36,7 +36,7 @@ namespace T3.Core
             Writer.WriteValue("Name", symbol.Name);
             Writer.WriteValue("Id", symbol.Id);
             Writer.WriteValue("Namespace", symbol.Namespace);
-            Writer.WriteValue("InstanceType", symbol.InstanceType);
+            Writer.WriteValue("InstanceType", symbol.InstanceType + $", {symbol.InstanceType.Assembly.GetName().Name}");
 
             WriteSymbolInputs(symbol.InputDefinitions);
             WriteSymbolChildren(symbol.Children);
@@ -175,7 +175,7 @@ namespace T3.Core
             var inputDefaultValues = (from jsonInput in (JArray)o["Inputs"]
                                       let idAndValue = ReadSymbolInputDefaults(jsonInput)
                                       select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
-            Type instanceType = typeof(Symbol).Assembly.GetTypes().First(t => t.FullName == instanceTypeName);
+            Type instanceType = Type.GetType(instanceTypeName);
             var symbol = new Symbol(instanceType, id, symbolChildren)
                          {
                              Name = name,
