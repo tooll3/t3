@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 
 namespace T3.Core.Commands
@@ -44,6 +45,7 @@ namespace T3.Core.Commands
     {
         public static bool CanUndo => _undoStack.Count > 0;
         public static bool CanRedo => _redoStack.Count > 0;
+        public static ICommand CommandInFlight { get; set; }
 
         public static void AddAndExecute(ICommand command)
         {
@@ -63,6 +65,12 @@ namespace T3.Core.Commands
             {
                 Clear();
             }
+        }
+
+        public static void AddCommandInFlightToStack()
+        {
+            Add(CommandInFlight);
+            CommandInFlight = null;
         }
 
         public static void Undo()

@@ -105,6 +105,7 @@
     <Compile Include="Animation\Curve\SplineInterpolator.cs" />
     <Compile Include="Animation\Curve\Utils.cs" />
     <Compile Include="Animation\Curve\VDefinition.cs" />
+    <Compile Include="Commands\ChangeInputValueCommand.cs" />
     <Compile Include="Commands\AddSymbolChildCommand.cs" />
     <Compile Include="Logging\ConsoleWriter.cs" />
     <Compile Include="Logging\ILogWriter.cs" />

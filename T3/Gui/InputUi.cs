@@ -18,19 +18,30 @@ using Vector2 = System.Numerics.Vector2;
 namespace T3.Gui
 {
 
+    public enum InputEditState
+    {
+        Nothing,
+        SingleCommand,
+        Focused,
+        Modified,
+        Finished
+    }
+
     public interface IInputUi : ISelectable
     {
         Type Type { get; }
+        bool HasEditInterval { get; }
 
-        void DrawInputEdit(string name, IInputSlot input);
+        InputEditState DrawInputEdit(string name, IInputSlot input);
     }
 
     public abstract class InputValueUi<T> : IInputUi
     {
+        public virtual bool HasEditInterval => true;
         public abstract bool DrawEditControl(string name, ref T value);
         public abstract void DrawValueDisplay(string name, ref T value);
 
-        public void DrawInputEdit(string name, IInputSlot inputSlot)
+        public InputEditState DrawInputEdit(string name, IInputSlot inputSlot)
         {
             if (inputSlot is InputSlot<T> typedInputSlot)
             {
@@ -61,19 +72,26 @@ namespace T3.Gui
                     }
 
                     bool valueModified = DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
+
+                    InputEditState inputEditState = InputEditState.Nothing;
                     if (ImGui.IsItemClicked())
                     {
+                        inputEditState = InputEditState.Focused;
                         Log.Debug($"focused  {name}");
                     }
+
                     if (valueModified)
                     {
+                        inputEditState = HasEditInterval ? InputEditState.Modified : InputEditState.SingleCommand;
                         Log.Debug($"modified {typedInputSlot.TypedInputValue.Value}");
                     }
 
                     if (ImGui.IsItemDeactivatedAfterEdit())
                     {
+                        inputEditState = InputEditState.Finished;
                         Log.Debug($"Edit {name} completed with {typedInputSlot.TypedInputValue.Value}");
                     }
+
                     input.IsDefault &= !valueModified;
                     ImGui.PopStyleColor();
                     ImGui.PopItemWidth();
@@ -91,6 +109,8 @@ namespace T3.Gui
                     {
                         input.SetCurrentValueAsDefault();
                     }
+
+                    return inputEditState;
                 }
             }
             else
@@ -98,6 +118,7 @@ namespace T3.Gui
                 Debug.Assert(false);
             }
 
+            return InputEditState.Nothing;
         }
 
         public Type Type { get; } = typeof(T);
@@ -162,6 +183,8 @@ namespace T3.Gui
 
     public class EnumInputUi<T> : InputValueUi<T> where T : Enum
     {
+        public override bool HasEditInterval => false;
+
         public override bool DrawEditControl(string name, ref T value)
         {
             // todo: check perf impact of creating the list here again and again! -> cache lists
