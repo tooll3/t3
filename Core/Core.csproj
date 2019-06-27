@@ -130,6 +130,7 @@
     <Compile Include="Resource\Json.cs" />
     <Compile Include="Resource\Model.cs" />
     <Compile Include="Resource\ResourceManager.cs" />
+    <Compile Include="Commands\UndoRedoStack.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
