@@ -40,20 +40,19 @@ namespace T3.Core.Commands
         protected List<ICommand> _commands;
     }
 
-    public class UndoRedoStack : IDisposable
+    public static class UndoRedoStack
     {
-        public void Dispose()
-        {
-        }
+        public static bool CanUndo => _undoStack.Count > 0;
+        public static bool CanRedo => _redoStack.Count > 0;
 
-        public void AddAndExecute(ICommand command)
+        public static void AddAndExecute(ICommand command)
         {
             Add(command);
 
             command.Do();
         }
 
-        public void Add(ICommand command)
+        public static void Add(ICommand command)
         {
             if (command.IsUndoable)
             {
@@ -66,9 +65,9 @@ namespace T3.Core.Commands
             }
         }
 
-        public void Undo()
+        public static void Undo()
         {
-            if (_undoStack.Count > 0)
+            if (CanUndo)
             {
                 var command = _undoStack.Pop();
                 command.Undo();
@@ -76,9 +75,9 @@ namespace T3.Core.Commands
             }
         }
 
-        public void Redo()
+        public static void Redo()
         {
-            if (_redoStack.Count > 0)
+            if (CanRedo)
             {
                 var command = _redoStack.Pop();
                 command.Do();
@@ -86,13 +85,13 @@ namespace T3.Core.Commands
             }
         }
 
-        public void Clear()
+        public static void Clear()
         {
             _undoStack.Clear();
             _redoStack.Clear();
         }
 
-        private readonly Stack<ICommand> _undoStack = new Stack<ICommand>();
-        private readonly Stack<ICommand> _redoStack = new Stack<ICommand>();
+        private static readonly Stack<ICommand> _undoStack = new Stack<ICommand>();
+        private static readonly Stack<ICommand> _redoStack = new Stack<ICommand>();
     }
 }

@@ -267,6 +267,12 @@ namespace T3.Core.Operator
             parentInstance.Children.Add(childInstance);
         }
 
+        private static void RemoveChildInstance(SymbolChild childToRemove, Instance parentInstance)
+        {
+            var childInstanceToRemove = parentInstance.Children.Single(child => child.Id == childToRemove.Id);
+            parentInstance.Children.Remove(childInstanceToRemove);
+        }
+
         public void AddConnection(Connection connection)
         {
             // check if another connection is already existing to the target input, ignoring multi inputs for now
@@ -308,6 +314,16 @@ namespace T3.Core.Operator
             }
 
             return newChild.Id;
+        }
+
+        public void RemoveChild(Guid childId)
+        {
+            var childToRemove = Children.Single(child => child.Id == childId);
+            foreach (var instance in _instancesOfSymbol)
+            {
+                RemoveChildInstance(childToRemove, instance);
+            }
+            Children.Remove(childToRemove);
         }
 
         void DeleteInstance(Instance op)

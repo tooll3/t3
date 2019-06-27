@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Text;
 using Newtonsoft.Json;
 using T3.Core;
+using T3.Core.Commands;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Animation;
@@ -111,6 +112,16 @@ namespace T3.Gui
             if (ImGui.Button("serialize"))
             {
                 _uiModel.Save();
+            }
+
+            if (UndoRedoStack.CanUndo && ImGui.Button("undo"))
+            {
+                UndoRedoStack.Undo();
+            }
+
+            if (UndoRedoStack.CanRedo && ImGui.Button("redo"))
+            {
+                UndoRedoStack.Redo();
             }
 
             ImGui.End();
