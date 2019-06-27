@@ -1,5 +1,7 @@
 ﻿using ImGuiNET;
 using System.Linq;
+using T3.Core.Commands;
+using T3.Core.Logging;
 using T3.Core.Operator;
 
 namespace T3.Gui
@@ -40,7 +42,29 @@ namespace T3.Gui
             {
                 ImGui.PushID(input.Id.GetHashCode());
                 IInputUi inputUi = InputUiRegistry.Entries[selectedInstance.Symbol.Id][input.Id];
-                inputUi.DrawInputEdit(input.Input.InputDefinition.Name, input);
+                var editState = inputUi.DrawInputEdit(input.Input.InputDefinition.Name, input);
+                switch (editState)
+                {
+                    case InputEditState.SingleCommand:
+                        Log.Debug("single command setup currently (e.g. for enums) currently disabled");
+                        break;
+                    case InputEditState.Focused:
+                        // create command for possible editing
+                        Log.Debug("setup 'ChangeInputValue' command");
+                        var command = new ChangeInputValueCommand(compositionOp.Symbol, symbolChild.Id, input.Input);
+                        UndoRedoStack.CommandInFlight = command;
+                        break;
+                    case InputEditState.Modified:
+                        // update command in flight
+                        Log.Debug("updated 'ChangeInputValue' command");
+                        ((ChangeInputValueCommand)UndoRedoStack.CommandInFlight).Value.Assign(input.Input.Value);
+                        break;
+                    case InputEditState.Finished:
+                        // add command to undo queue
+                        Log.Debug("Finalized 'ChangeInputValue' command");
+                        UndoRedoStack.AddCommandInFlightToStack();
+                        break;
+                }
 
                 ImGui.PopID();
             }
