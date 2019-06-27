@@ -1,7 +1,4 @@
-﻿// Copyright (c) 2016 Framefield. All rights reserved.
-// Released under the MIT license. (see LICENSE.txt)
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -38,7 +35,7 @@ namespace T3.Gui.Selection
         public event EventHandler<FirstSelectedChangedEventArgs> FirstSelectedChanged = (o, a) => { };
         public event EventHandler<SelectionChangedEventArgs> SelectionChanged = (o, a) => { };
 
-        public List<ISelectable> SelectedElements { get; private set; }        // Question: Should we refactor this to use ObservableCollection()?
+        public List<ISelectable> SelectedElements { get; private set; } // Question: Should we refactor this to use ObservableCollection()?
 
         public SelectionHandler()
         {
@@ -59,7 +56,6 @@ namespace T3.Gui.Selection
             return GetSelectedElementsOfType<T>().FirstOrDefault();
         }
 
-
         public void AddElement(ISelectable e)
         {
             if (!Enabled || SelectedElements.Contains(e))
@@ -79,7 +75,6 @@ namespace T3.Gui.Selection
             }
         }
 
-
         public void AddElements(List<ISelectable> elements)
         {
             if (!Enabled)
@@ -88,14 +83,14 @@ namespace T3.Gui.Selection
             int originalCount = SelectedElements.Count;
 
             elements.ForEach(e =>
-            {
-                if (!SelectedElements.Contains(e))
-                {
-                    e.IsSelected = true;
-                    SelectedElements.Add(e);
-                    elementChanged = true;
-                }
-            });
+                             {
+                                 if (!SelectedElements.Contains(e))
+                                 {
+                                     e.IsSelected = true;
+                                     SelectedElements.Add(e);
+                                     elementChanged = true;
+                                 }
+                             });
             if (elementChanged)
             {
                 if (originalCount == 0)
@@ -105,10 +100,10 @@ namespace T3.Gui.Selection
                     FirstSelectedChanged(this, new FirstSelectedChangedEventArgs(SelectedElements.FirstOrDefault()));
                     watch.Stop();
                 }
+
                 TriggerSelectionChangedEvent();
             }
         }
-
 
         public void SetElement(ISelectable e)
         {
@@ -117,7 +112,7 @@ namespace T3.Gui.Selection
 
             SelectedElements.ForEach(el => el.IsSelected = false);
             SelectedElements.Clear();
-            AddElement(e);    // eventually triggers SelectionChangedEvent;
+            AddElement(e); // eventually triggers SelectionChangedEvent;
         }
 
         public void SetElements(List<ISelectable> newSelection)
@@ -169,7 +164,6 @@ namespace T3.Gui.Selection
             elementsToUnselect.ForEach(e => e.IsSelected = false);
             SelectedElements = elementsToKeep;
 
-
             if (SelectedElements.Count > 0 && SelectedElements[0] != originalFirst)
             {
                 var watch = new Stopwatch();
@@ -178,6 +172,7 @@ namespace T3.Gui.Selection
                 FirstSelectedChanged(this, new FirstSelectedChangedEventArgs(SelectedElements[0]));
                 watch.Stop();
             }
+
             TriggerSelectionChangedEvent();
         }
 
@@ -210,6 +205,7 @@ namespace T3.Gui.Selection
                     elementChanged = true;
                 }
             }
+
             if (elementChanged)
             {
                 if (firstElement != SelectedElements.FirstOrDefault())
@@ -233,7 +229,7 @@ namespace T3.Gui.Selection
         {
             if (!Enabled)
                 return;
-            elements.ForEach(e => ToggleElement(e));
+            elements.ForEach(ToggleElement);
         }
 
         public void Clear()
@@ -246,9 +242,7 @@ namespace T3.Gui.Selection
             TriggerSelectionChangedEvent();
         }
 
-
         #region helper functions
-
         /**
          * This handler can be used to refresh UI if selection changes
          * E.g. udpate CurveLine highlights 
@@ -261,6 +255,5 @@ namespace T3.Gui.Selection
             }
         }
         #endregion
-
     }
 }

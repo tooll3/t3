@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using T3.Core.Commands;
 using T3.Core.Operator;
+using T3.Gui.Commands;
 
 namespace T3.Gui.Graph
 {
@@ -62,15 +64,7 @@ namespace T3.Gui.Graph
 
                 if (ImGui.Selectable(symbol.Name, symbol == _selectedSymbol, flags))
                 {
-                    Guid newSymbolChildId = _compositionOp.AddChild(symbol);
-                    // Create and register ui info for new child
-                    var uiEntriesForChildrenOfSymbol = SymbolChildUiRegistry.Entries[_compositionOp.Id];
-                    uiEntriesForChildrenOfSymbol.Add(newSymbolChildId, new SymbolChildUi
-                                                                       {
-                                                                           SymbolChild = _compositionOp.Children.Find(entry => entry.Id == newSymbolChildId),
-                                                                           PosOnCanvas = _positionInOp
-                                                                       });
-
+                    UndoRedoStack.AddAndExecute(new AddUiSymbolChildCommand(_compositionOp, symbol.Id) { PosOnCanvas = _positionInOp });
                     _opened = false;
                 }
                 ImGui.PopID();

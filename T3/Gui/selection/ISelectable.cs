@@ -5,7 +5,7 @@ namespace T3.Gui.Selection
     public interface ISelectable
     {
         Vector2 PosOnCanvas { get; set; }
-        Vector2 Size { get; }
+        Vector2 Size { get; set; }
         bool IsSelected { get; set; }
     }
 

@@ -1,9 +1,5 @@
 ﻿using ImGuiNET;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using T3.Core.Operator;
 
 namespace T3.Gui
@@ -36,7 +32,9 @@ namespace T3.Gui
                 return;
 
             var symbolChild = selectedChildUi.SymbolChild;
-            var selectedInstance = compositionOp.Children.Single(child => child.Id == symbolChild.Id);
+            var selectedInstance = compositionOp.Children.SingleOrDefault(child => child.Id == symbolChild.Id);
+            if (selectedInstance == null)
+                return;
 
             foreach (var input in selectedInstance.Inputs)
             {

@@ -17,7 +17,7 @@ namespace T3.Gui.Animation
     /// </summary>
     public class CurvePointUi : ISelectable
     {
-        public Vector2 Size { get; } = new Vector2(0, 0);
+        public Vector2 Size { get; set; } = new Vector2(0, 0);
         private Vector2 ControlSize = new Vector2(6, 6);
 
         public bool IsSelected { get; set; }
