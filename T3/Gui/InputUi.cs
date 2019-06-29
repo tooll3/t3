@@ -18,27 +18,27 @@ using Vector2 = System.Numerics.Vector2;
 namespace T3.Gui
 {
 
+    [Flags]
     public enum InputEditState
     {
-        Nothing,
-        SingleCommand,
-        Focused,
-        Modified,
-        Finished
+        Nothing = 0x0,
+        Focused = 0x1,
+        Modified = 0x2,
+        Finished = 0x4,
+        ModifiedAndFinished = Modified | Finished,
+        SingleCommand = Focused | Modified | Finished
     }
 
     public interface IInputUi : ISelectable
     {
         Type Type { get; }
-        bool HasEditInterval { get; }
 
         InputEditState DrawInputEdit(string name, IInputSlot input);
     }
 
     public abstract class InputValueUi<T> : IInputUi
     {
-        public virtual bool HasEditInterval => true;
-        public abstract bool DrawEditControl(string name, ref T value);
+        public abstract InputEditState DrawEditControl(string name, ref T value);
         public abstract void DrawValueDisplay(string name, ref T value);
 
         public InputEditState DrawInputEdit(string name, IInputSlot inputSlot)
@@ -71,28 +71,25 @@ namespace T3.Gui
                         input.Value.Assign(input.DefaultValue);
                     }
 
-                    bool valueModified = DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
+                    var editState = DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
 
-                    InputEditState inputEditState = InputEditState.Nothing;
-                    if (ImGui.IsItemClicked())
+                    if (editState.HasFlag(InputEditState.Focused))
                     {
-                        inputEditState = InputEditState.Focused;
-                        Log.Debug($"focused  {name}");
+                        Log.Debug($"focused {name}");
                     }
 
-                    if (valueModified)
+                    if (editState.HasFlag(InputEditState.Modified))
                     {
-                        inputEditState = HasEditInterval ? InputEditState.Modified : InputEditState.SingleCommand;
                         Log.Debug($"modified {typedInputSlot.TypedInputValue.Value}");
                     }
 
-                    if (ImGui.IsItemDeactivatedAfterEdit())
+                    if (editState.HasFlag(InputEditState.Finished))
                     {
-                        inputEditState = InputEditState.Finished;
                         Log.Debug($"Edit {name} completed with {typedInputSlot.TypedInputValue.Value}");
                     }
 
-                    input.IsDefault &= !valueModified;
+                    input.IsDefault &= !editState.HasFlag(InputEditState.Modified);
+
                     ImGui.PopStyleColor();
                     ImGui.PopItemWidth();
 
@@ -110,7 +107,7 @@ namespace T3.Gui
                         input.SetCurrentValueAsDefault();
                     }
 
-                    return inputEditState;
+                    return editState;
                 }
             }
             else
@@ -127,9 +124,26 @@ namespace T3.Gui
         public bool IsSelected { get; set; }
     }
 
-    public class FloatInputUi : InputValueUi<float>
+    public abstract class SingleControlInputUi<T> : InputValueUi<T>
     {
-        public override bool DrawEditControl(string name, ref float value)
+        public abstract bool DrawSingleEditControl(string name, ref T value);
+
+        public override InputEditState DrawEditControl(string name, ref T value)
+        {
+            bool valueModified = DrawSingleEditControl(name, ref value);
+
+            InputEditState inputEditState = InputEditState.Nothing;
+            inputEditState |= ImGui.IsItemClicked() ? InputEditState.Focused : InputEditState.Nothing;
+            inputEditState |= valueModified ? InputEditState.Modified : InputEditState.Nothing;
+            inputEditState |= ImGui.IsItemDeactivatedAfterEdit() ? InputEditState.Finished : InputEditState.Nothing;
+
+            return inputEditState;
+        }
+    }
+
+    public class FloatInputUi : SingleControlInputUi<float>
+    {
+        public override bool DrawSingleEditControl(string name, ref float value)
         {
             return ImGui.DragFloat(name, ref value);
         }
@@ -140,9 +154,9 @@ namespace T3.Gui
         }
     }
 
-    public class IntInputUi : InputValueUi<int>
+    public class IntInputUi : SingleControlInputUi<int>
     {
-        public override bool DrawEditControl(string name, ref int value)
+        public override bool DrawSingleEditControl(string name, ref int value)
         {
             return ImGui.DragInt(name, ref value);
         }
@@ -153,11 +167,11 @@ namespace T3.Gui
         }
     }
 
-    public class StringInputUi : InputValueUi<string>
+    public class StringInputUi : SingleControlInputUi<string>
     {
         private const int MAX_STRING_LENGTH = 255;
 
-        public override bool DrawEditControl(string name, ref string value)
+        public override bool DrawSingleEditControl(string name, ref string value)
         {
             return ImGui.InputText(name, ref value, MAX_STRING_LENGTH);
         }
@@ -168,9 +182,9 @@ namespace T3.Gui
         }
     }
 
-    public class Size2InputUi : InputValueUi<Size2>
+    public class Size2InputUi : SingleControlInputUi<Size2>
     {
-        public override bool DrawEditControl(string name, ref Size2 value)
+        public override bool DrawSingleEditControl(string name, ref Size2 value)
         {
             return ImGui.DragInt2(name, ref value.Width);
         }
@@ -183,9 +197,7 @@ namespace T3.Gui
 
     public class EnumInputUi<T> : InputValueUi<T> where T : Enum
     {
-        public override bool HasEditInterval => false;
-
-        public override bool DrawEditControl(string name, ref T value)
+        public override InputEditState DrawEditControl(string name, ref T value)
         {
             // todo: check perf impact of creating the list here again and again! -> cache lists
             Type enumType = typeof(T);
@@ -199,7 +211,7 @@ namespace T3.Gui
             if (enumType.GetCustomAttributes<FlagsAttribute>().Any())
             {
                 // show as checkboxes
-                bool modified = false;
+                InputEditState editState = InputEditState.Nothing;
                 if (ImGui.TreeNode(name))
                 {
                     // todo: refactor crappy code below, works but ugly!
@@ -222,22 +234,37 @@ namespace T3.Gui
                             }
 
                             value = (T)(object)intValue;
-                            modified = true;
+                            editState |= InputEditState.Modified;
                         }
+
+                        if (ImGui.IsItemClicked())
+                        {
+                            editState |= InputEditState.Focused;
+                        }
+
+                        if (ImGui.IsItemDeactivatedAfterEdit())
+                        {
+                            editState |= InputEditState.Finished;
+                        }
+
                     }
                     ImGui.TreePop();
                 }
-                return modified;
+
+                return editState;
             }
             else
             {
                 int index = (int)(object)value;
+                InputEditState editState = InputEditState.Nothing;
                 bool modified = ImGui.Combo(name, ref index, valueNames, valueNames.Length);
                 if (modified)
                 {
                     value = (T)values.GetValue(index);
+                    editState = InputEditState.SingleCommand;
                 }
-                return modified;
+
+                return editState;
             }
         }
 
