@@ -13,24 +13,33 @@ namespace T3.Gui.Graph
         {
             var outputDef = ui.SymbolChild.Symbol.OutputDefinitions[outputIndex];
 
-            var virtualRectInCanvas = GetOutputSlotSizeInCanvas(ui, outputIndex);
+            //var virtualRectInCanvas = GetOutputSlotSizeInCanvas(ui, outputIndex);
 
-            var rInScreen = GraphCanvas.Current.TransformRect(virtualRectInCanvas);
+            //var rInScreen = GraphCanvas.Current.TransformRect(virtualRectInCanvas);
+            var usableArea = GetUsableOutputSlotSize(ui, outputIndex);
 
-            ImGui.SetCursorScreenPos(rInScreen.Min);
+            var dl = ImGui.GetWindowDrawList();
+
+            ImGui.SetCursorScreenPos(usableArea.Min);
             ImGui.PushID(ui.SymbolChild.Id.GetHashCode());
 
-            ImGui.InvisibleButton("output", rInScreen.GetSize());
+            ImGui.InvisibleButton("output", usableArea.GetSize());
             THelpers.DebugItemRect();
-            var color = ColorForType(outputDef);
+            var valueType = outputDef.ValueType;
+            var colorForType = TypeUiRegistry.Entries[valueType].Color;
+            //= ColorForInputType(valueType);
+            //var color = ColorForType(outputDef);
 
             //Note: isItemHovered will not work
-            var hovered = BuildingConnections.TempConnection != null ? rInScreen.Contains(ImGui.GetMousePos())
+            var hovered = BuildingConnections.TempConnection != null ? usableArea.Contains(ImGui.GetMousePos())
                 : ImGui.IsItemHovered();
+
 
             if (BuildingConnections.IsOutputSlotCurrentConnectionSource(ui, outputIndex))
             {
-                GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, ColorForType(outputDef));
+                dl.AddRectFilled(usableArea.Min, usableArea.Max,
+                    ColorVariations.Highlight.GetVariation(colorForType));
+                //GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, ColorForType(outputDef));
 
                 if (ImGui.IsMouseDragging(0))
                 {
@@ -41,7 +50,8 @@ namespace T3.Gui.Graph
             {
                 if (BuildingConnections.IsMatchingOutputType(outputDef.ValueType))
                 {
-                    GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
+                    dl.AddRectFilled(usableArea.Min, usableArea.Max,
+                        ColorVariations.OperatorHover.GetVariation(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
@@ -50,7 +60,9 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, Color.White);
+                    dl.AddRectFilled(usableArea.Min, usableArea.Max,
+                        ColorVariations.OperatorHover.GetVariation(colorForType));
+
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     ImGui.SetTooltip($".{outputDef.Name} ->");
                     ImGui.PopStyleVar();
@@ -69,11 +81,27 @@ namespace T3.Gui.Graph
             }
             else
             {
-                GraphCanvas.Current.DrawRectFilled(
-                    ImRect.RectWithSize(
-                        new Vector2(ui.PosOnCanvas.X + virtualRectInCanvas.GetWidth() * outputIndex + 1 + 3, ui.PosOnCanvas.Y - 1),
-                        new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3))
-                    , BuildingConnections.IsMatchingOutputType(outputDef.ValueType) ? Color.White : color);
+                //GraphCanvas.Current.DrawRectFilled(
+                //    ImRect.RectWithSize(
+                //        new Vector2(ui.PosOnCanvas.X + virtualRectInCanvas.GetWidth() * outputIndex + 1 + 3, ui.PosOnCanvas.Y - 1),
+                //        new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3))
+                //    , BuildingConnections.IsMatchingOutputType(outputDef.ValueType) ? Color.White : color);
+
+                var style = ColorVariations.Operator;
+                if (BuildingConnections.TempConnection != null)
+                {
+                    style = BuildingConnections.IsMatchingOutputType(valueType)
+                        ? ColorVariations.Highlight
+                        : ColorVariations.Muted;
+                }
+
+                var pos = usableArea.Min + Vector2.UnitY * (usableArea.GetHeight() - GraphOperator._outputSlotMargin - GraphOperator._outputSlotHeight);
+                var size = new Vector2(usableArea.GetWidth(), GraphOperator._outputSlotHeight);
+                dl.AddRectFilled(
+                    pos,
+                    pos + size,
+                    style.GetVariation(colorForType)
+                    );
             }
             ImGui.PopID();
         }
@@ -82,14 +110,33 @@ namespace T3.Gui.Graph
         public static ImRect GetOutputSlotSizeInCanvas(SymbolChildUi sourceUi, int outputIndex)
         {
             var outputCount = sourceUi.SymbolChild.Symbol.OutputDefinitions.Count;
-            var inputWidth = sourceUi.Size.X / outputCount;   // size count must be non-zero in this method
+            var outputWidth = sourceUi.Size.X / outputCount;   // size count must be non-zero in this method
 
             return ImRect.RectWithSize(
-                new Vector2(sourceUi.PosOnCanvas.X + inputWidth * outputIndex + 1, sourceUi.PosOnCanvas.Y - 3),
-                new Vector2(inputWidth - 2, 6));
+                new Vector2(sourceUi.PosOnCanvas.X + outputWidth * outputIndex + 1, sourceUi.PosOnCanvas.Y - 3),
+                new Vector2(outputWidth - 2, 6));
         }
 
 
+        public static ImRect GetUsableOutputSlotSize(SymbolChildUi targetUi, int outputIndex)
+        {
+            var opRect = GraphOperator._screenRect;
+            var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
+            var outputWidth = outputCount == 0
+                ? opRect.GetWidth()
+                : (opRect.GetWidth() + GraphOperator._slotGaps) / outputCount - GraphOperator._slotGaps;
+
+            return ImRect.RectWithSize(
+                new Vector2(
+                    opRect.Min.X + (outputWidth + GraphOperator._slotGaps) * outputIndex,
+                    opRect.Min.Y - GraphOperator._usableSlotHeight),
+                new Vector2(
+                    outputWidth,
+                    GraphOperator._usableSlotHeight
+                ));
+        }
+
+        #region inputs
         public static void DrawInputSlot(SymbolChildUi targetUi, int inputIndex)
         {
             var inputDef = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex];
@@ -181,6 +228,8 @@ namespace T3.Gui.Graph
             return TypeUiRegistry.Entries[outputDef.ValueType].Color;
         }
 
+
+
         public static ImRect GetInputSlotSizeInCanvas(SymbolChildUi targetUi, int inputIndex)
         {
             var inputCount = targetUi.SymbolChild.Symbol.InputDefinitions.Count;
@@ -193,23 +242,23 @@ namespace T3.Gui.Graph
         }
 
 
-        /// <summary>Returns rect in screen</summary>
         public static ImRect GetUsableInputSlotSize(SymbolChildUi targetUi, int inputIndex)
         {
             var opRect = GraphOperator._screenRect;
             var inputCount = targetUi.SymbolChild.Symbol.InputDefinitions.Count;
             var inputWidth = inputCount == 0
                 ? opRect.GetWidth()
-                : (opRect.GetWidth() + GraphOperator._inputSlotMarginX) / inputCount - GraphOperator._inputSlotMarginX;
+                : (opRect.GetWidth() + GraphOperator._slotGaps) / inputCount - GraphOperator._slotGaps;
 
             return ImRect.RectWithSize(
                 new Vector2(
-                    opRect.Min.X + (inputWidth + GraphOperator._inputSlotMarginX) * inputIndex,
+                    opRect.Min.X + (inputWidth + GraphOperator._slotGaps) * inputIndex,
                     opRect.Max.Y),
                 new Vector2(
                     inputWidth,
-                    GraphOperator._usableInputSlotHeight
+                    GraphOperator._usableSlotHeight
                 ));
         }
+        #endregion
     }
 }

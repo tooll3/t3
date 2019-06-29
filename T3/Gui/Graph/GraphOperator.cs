@@ -13,10 +13,12 @@ namespace T3.Gui.Graph
     static class GraphOperator
     {
         public static Vector2 _labelPos = new Vector2(4, 4);
-        public static float _usableInputSlotHeight = 6;
+        public static float _usableSlotHeight = 8;
         public static float _inputSlotMargin = 1;
         public static float _inputSlotHeight = 2;
-        public static float _inputSlotMarginX = 2;
+        public static float _slotGaps = 2;
+        public static float _outputSlotMargin = 1;
+        public static float _outputSlotHeight = 2;
 
         public static ImRect _screenRect;
 
@@ -24,10 +26,8 @@ namespace T3.Gui.Graph
         {
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-                //var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(childUi.PosOnCanvas + new Vector2(0, 3));
-                //var posInApp = GraphCanvas.Current.TransformPosition(childUi.PosOnCanvas);
-
                 _screenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas, childUi.PosOnCanvas + childUi.Size));
+                _screenRect.Floor();
 
                 // Interaction
                 ImGui.SetCursorScreenPos(_screenRect.Min);
