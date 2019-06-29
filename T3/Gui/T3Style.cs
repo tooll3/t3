@@ -7,7 +7,7 @@
     {
         public static float GridSize = 25;
         public static float Height = GridSize;
-        public static float VirtuaoSlotHeight = 5;
-        public static float VisibleSlotHeight = 3;
+        //public static float VirtuaoSlotHeight = 5;
+        //public static float VisibleSlotHeight = 3;
     }
 }
