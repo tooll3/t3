@@ -69,6 +69,7 @@
     <Prefer32Bit>true</Prefer32Bit>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -319,6 +320,7 @@
     <Compile Include="Gui\Metrics.cs" />
     <Compile Include="Gui\Color.cs" />
     <Compile Include="Gui\T3Style.cs" />
+    <Compile Include="Gui\ColorVariation.cs" />
     <Compile Include="Logging\ConsoleLogWindow.cs" />
     <Compile Include="Gui\Graph\CreateOperatorWindow.cs" />
     <Compile Include="Gui\Graph\GraphCanvasWindow.cs" />
