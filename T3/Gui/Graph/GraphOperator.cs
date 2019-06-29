@@ -13,7 +13,7 @@ namespace T3.Gui.Graph
     static class GraphOperator
     {
         public static float _connectionZoneHeight = 6;
-        public static Vector2 _labelPos = new Vector2(2, 2);
+        public static Vector2 _labelPos = new Vector2(4, 4);
 
         public static void Draw(SymbolChildUi childUi)
         {
@@ -25,8 +25,6 @@ namespace T3.Gui.Graph
                 var screenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas, childUi.PosOnCanvas + childUi.Size));
 
                 // Interaction
-                //ImGui.SetCursorPos(posInWindow);
-                //ImGui.InvisibleButton("node", (childUi.Size - new Vector2(0, 6)) * GraphCanvas.Current.Scale);
                 ImGui.SetCursorScreenPos(screenRect.Min);
                 ImGui.InvisibleButton("node", screenRect.GetSize());
 
@@ -59,34 +57,44 @@ namespace T3.Gui.Graph
                         GraphCanvas.Current.CompositionOp = instance;
                     }
                 }
-
-                if (ImGui.IsItemHovered())
+                var hovered = ImGui.IsItemHovered();
+                if (hovered)
                 {
                     NodeDetailsPanel.Draw(childUi);
                 }
 
                 // Rendering
+                var typeColor = childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
+                    ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
+                    : Color.Gray;
+
+
                 var dl = GraphCanvas.Current.DrawList;
-                dl.ChannelsSplit(2);
-                dl.ChannelsSetCurrent(1);
+                dl.AddRectFilled(screenRect.Min, screenRect.Max,
+                    hovered
+                    ? ColorVariations.OperatorBackgroundHovered.GetVariation(typeColor)
+                    : ColorVariations.OperatorBackground.GetVariation(typeColor));
 
-                dl.AddText(screenRect.Min + _labelPos, Color.White, string.Format($"{childUi.SymbolChild.ReadableName}"));
-                dl.ChannelsSetCurrent(0);
+                dl.AddText(screenRect.Min + _labelPos,
+                    ColorVariations.OperatorLabel.GetVariation(typeColor),
+                    string.Format($"{childUi.SymbolChild.ReadableName}"));
 
-                var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.Id) ? 1.2f : 0.8f;
+                if (childUi.IsSelected)
+                {
+                    dl.AddRect(screenRect.Min - Vector2.One, screenRect.Max + Vector2.One, Color.White, 1);
+                }
+
+                //var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.Id) ? 1.2f : 0.8f;
 
                 //THelpers.OutlinedRect(ref dl, posInApp, childUi.Size * GraphCanvas.Current.Scale,
                 //    fill: new Color(
                 //            ((childUi.IsSelected || ImGui.IsItemHovered()) ? 0.3f : 0.2f) * hoveredFactor),
                 //    outline: childUi.IsSelected ? Color.White : Color.Black);
                 //dl.AddRectFilled(posInApp, posInApp +)
-                dl.AddRectFilled(screenRect.Min, screenRect.Max, ColorVariations.OperatorBackground.GetVariation(Color.TRed));
-
-
 
                 DrawSlots(childUi);
 
-                dl.ChannelsMerge();
+                //dl.ChannelsMerge();
             }
             ImGui.PopID();
 
