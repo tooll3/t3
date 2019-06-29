@@ -19,6 +19,7 @@ namespace T3.Gui.Graph
         public static float _slotGaps = 2;
         public static float _outputSlotMargin = 1;
         public static float _outputSlotHeight = 2;
+        public static float _multiInputSize = 5;
 
         public static ImRect _screenRect;
 

@@ -9,13 +9,10 @@ namespace T3.Gui.Graph
 {
     public static class Slots
     {
+        #region outputs 
         public static void DrawOutputSlot(SymbolChildUi ui, int outputIndex)
         {
             var outputDef = ui.SymbolChild.Symbol.OutputDefinitions[outputIndex];
-
-            //var virtualRectInCanvas = GetOutputSlotSizeInCanvas(ui, outputIndex);
-
-            //var rInScreen = GraphCanvas.Current.TransformRect(virtualRectInCanvas);
             var usableArea = GetUsableOutputSlotSize(ui, outputIndex);
 
             var dl = ImGui.GetWindowDrawList();
@@ -27,8 +24,6 @@ namespace T3.Gui.Graph
             THelpers.DebugItemRect();
             var valueType = outputDef.ValueType;
             var colorForType = TypeUiRegistry.Entries[valueType].Color;
-            //= ColorForInputType(valueType);
-            //var color = ColorForType(outputDef);
 
             //Note: isItemHovered will not work
             var hovered = BuildingConnections.TempConnection != null ? usableArea.Contains(ImGui.GetMousePos())
@@ -39,7 +34,6 @@ namespace T3.Gui.Graph
             {
                 dl.AddRectFilled(usableArea.Min, usableArea.Max,
                     ColorVariations.Highlight.GetVariation(colorForType));
-                //GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, ColorForType(outputDef));
 
                 if (ImGui.IsMouseDragging(0))
                 {
@@ -70,23 +64,10 @@ namespace T3.Gui.Graph
                     {
                         BuildingConnections.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, ui, outputIndex);
                     }
-                    //ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
-                    //ImGui.PushStyleColor(ImGuiCol.PopupBg, new Color(0.2f).Rgba);
-                    //ImGui.BeginTooltip();
-                    //ImGui.Text($"-> .{outputDef.Name}");
-                    //ImGui.EndTooltip();
-                    //ImGui.PopStyleColor();
-                    //ImGui.PopStyleVar();
                 }
             }
             else
             {
-                //GraphCanvas.Current.DrawRectFilled(
-                //    ImRect.RectWithSize(
-                //        new Vector2(ui.PosOnCanvas.X + virtualRectInCanvas.GetWidth() * outputIndex + 1 + 3, ui.PosOnCanvas.Y - 1),
-                //        new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3))
-                //    , BuildingConnections.IsMatchingOutputType(outputDef.ValueType) ? Color.White : color);
-
                 var style = ColorVariations.Operator;
                 if (BuildingConnections.TempConnection != null)
                 {
@@ -135,6 +116,7 @@ namespace T3.Gui.Graph
                     GraphOperator._usableSlotHeight
                 ));
         }
+        #endregion
 
         #region inputs
         public static void DrawInputSlot(SymbolChildUi targetUi, int inputIndex)
@@ -155,6 +137,32 @@ namespace T3.Gui.Graph
             // Note: isItemHovered does not work when being dragged from another item
             var hovered = BuildingConnections.TempConnection != null ? usableArea.Contains(ImGui.GetMousePos())
                 : ImGui.IsItemHovered();
+
+            // Render Label
+            var inputLabelOpacity = Im.Clamp((GraphCanvas.Current.Scale.X - 1f) / 3f, 0, 1);
+            if (inputLabelOpacity > 0)
+            {
+                ImGui.PushFont(ImGuiDx11Impl.FontSmall);
+                var labelColor = ColorVariations.OperatorLabel.GetVariation(colorForType);
+                labelColor.Rgba.W = inputLabelOpacity;
+                var label = inputDef.Name;
+                if (inputDef.IsMultiInput)
+                {
+                    label += " [...]";
+                }
+                var textSize = ImGui.CalcTextSize(inputDef.Name);
+                if (textSize.X > usableArea.GetWidth())
+                {
+                    ImGui.PushClipRect(usableArea.Min - new Vector2(0, 20), usableArea.Max, true);
+                    dl.AddText(usableArea.Min + new Vector2(0, -15), labelColor, label);
+                    ImGui.PopClipRect();
+                }
+                else
+                {
+                    dl.AddText(usableArea.Min + new Vector2((usableArea.GetWidth() - textSize.X) / 2, -15), labelColor, label);
+                }
+                ImGui.PopFont();
+            }
 
             if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputIndex))
             {
@@ -197,6 +205,7 @@ namespace T3.Gui.Graph
             }
             else
             {
+
                 var style = ColorVariations.Operator;
                 if (BuildingConnections.TempConnection != null)
                 {
@@ -212,6 +221,22 @@ namespace T3.Gui.Graph
                     pos + size,
                     style.GetVariation(colorForType)
                     );
+
+                if (inputDef.IsMultiInput)
+                {
+                    dl.AddRectFilled(
+                        pos + new Vector2(0, GraphOperator._inputSlotHeight),
+                        pos + new Vector2(GraphOperator._inputSlotHeight, GraphOperator._inputSlotHeight + GraphOperator._multiInputSize),
+                        style.GetVariation(colorForType)
+                        );
+
+                    dl.AddRectFilled(
+                        pos + new Vector2(size.X - GraphOperator._inputSlotHeight, GraphOperator._inputSlotHeight),
+                        pos + new Vector2(size.X, GraphOperator._inputSlotHeight + GraphOperator._multiInputSize),
+                        style.GetVariation(colorForType)
+                        );
+
+                }
             }
 
             ImGui.PopID();
