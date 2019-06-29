@@ -14,10 +14,11 @@ namespace T3.Gui.TypeColors
     /// </summary>
     public class ColorVariations
     {
-        public static readonly Variation ConnectionLines = new Variation("Connection Lines");
-        public static readonly Variation OperatorBackground = new Variation("Operators");
-        public static readonly Variation OperatorBorders = new Variation("Operator Borders");
-        public static readonly Variation OperatorLabel = new Variation("Operator Label");
+        public static readonly Variation ConnectionLines = new Variation("Connection Lines", 1, 0.7f, 0.8f);
+        public static readonly Variation OperatorBackground = new Variation("Operator Background", 0.7f, 0.35f, 1);
+        public static readonly Variation OperatorBackgroundHovered = new Variation("Operator Background Hovered", 0.8f, 0.6f, 1);
+        public static readonly Variation OperatorBorders = new Variation("Operator Borders", 0.7f, 0.35f, 0.5f);
+        public static readonly Variation OperatorLabel = new Variation("Operator Label", 0.4f, 1.3f, 1);
 
         public static void DrawSettingsUi()
         {
@@ -61,7 +62,11 @@ namespace T3.Gui.TypeColors
                     originalColor.Rgba.Z,
                     out var h, out var s, out var v);
 
-                return Color.FromHSV(h, s * _saturation, v * _brightness, originalColor.Rgba.Z * _opacity);
+                return Color.FromHSV(
+                    h,
+                    s * _saturation,
+                    v * _brightness,
+                    originalColor.Rgba.W * _opacity);
             }
 
             internal Variation(string label, float saturationFactor = 1, float brightnessFactor = 1, float opacityFactor = 1)
@@ -97,6 +102,7 @@ namespace T3.Gui.TypeColors
         {
             ConnectionLines,
             OperatorBackground,
+            OperatorBackgroundHovered,
             OperatorBorders,
             OperatorLabel,
         };

@@ -390,26 +390,57 @@ namespace T3.Gui
 
     public class FloatUiProperties : ITypeUiProperties
     {
-        public Color Color { get; set; } = Color.Gray;
+        public Color Color { get; set; } = TypeUiRegistry.ColorForValues;
     }
 
     public class StringUiProperties : ITypeUiProperties
     {
-        public Color Color { get; set; } = Color.TGreen;
+        public Color Color { get; set; } = TypeUiRegistry.ColorForString;
     }
 
     public class Size2UiProperties : ITypeUiProperties
     {
-        public Color Color { get; set; } = Color.TRed;
+        public Color Color { get; set; } = TypeUiRegistry.ColorForValues;
     }
 
     public class IntUiProperties : ITypeUiProperties
     {
-        public Color Color { get; set; } = Color.TBlue;
+        public Color Color { get; set; } = TypeUiRegistry.ColorForValues;
+    }
+
+    public class TextureUiProperties : ITypeUiProperties
+    {
+        public Color Color { get; set; } = TypeUiRegistry.ColorForTextures;
+    }
+
+    /// <summary>
+    /// Internal implementation things that are below the tech level of normal artists.
+    /// </summary>
+    public class ShaderUiProperties : ITypeUiProperties
+    {
+        public Color Color { get; set; } = new Color(0.518f, 0.046f, 0.228f, 1.000f);
+    }
+
+    public class FallBackUiProperties : ITypeUiProperties
+    {
+        public Color Color { get; set; } = new Color(0.518f, 0.046f, 0.228f, 1.000f);
     }
 
     public static class TypeUiRegistry
     {
         public static Dictionary<Type, ITypeUiProperties> Entries { get; } = new Dictionary<Type, ITypeUiProperties>();
+
+        public static ITypeUiProperties GetPropertiesForType(Type type)
+        {
+            var t = FallBackTypeUiProperties;
+            if (type != null)
+                Entries.TryGetValue(type, out t);
+            return t;
+        }
+        public static ITypeUiProperties FallBackTypeUiProperties = new FallBackUiProperties();
+
+        internal static Color ColorForValues = new Color(0.525f, 0.550f, 0.554f, 1.000f);
+        internal static Color ColorForString = new Color(0.700f, 0.928f, 0.417f, 1.000f);
+        internal static Color ColorForTextures = new Color(0.803f, 0.313f, 0.785f, 1.000f);
     }
 }

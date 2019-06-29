@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using SharpDX;
+using SharpDX.Direct3D11;
+using SharpDX.DXGI;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using Newtonsoft.Json;
-using SharpDX;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using Vector2 = System.Numerics.Vector2;
@@ -27,12 +27,12 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(int), new IntUiProperties());
             TypeUiRegistry.Entries.Add(typeof(string), new StringUiProperties());
             TypeUiRegistry.Entries.Add(typeof(Size2), new Size2UiProperties());
-            TypeUiRegistry.Entries.Add(typeof(ResourceUsage), new Size2UiProperties());
-            TypeUiRegistry.Entries.Add(typeof(Format), new Size2UiProperties());
-            TypeUiRegistry.Entries.Add(typeof(BindFlags), new Size2UiProperties());
-            TypeUiRegistry.Entries.Add(typeof(CpuAccessFlags), new Size2UiProperties());
-            TypeUiRegistry.Entries.Add(typeof(ResourceOptionFlags), new Size2UiProperties());
-            TypeUiRegistry.Entries.Add(typeof(ShaderResourceView), new Size2UiProperties());
+            TypeUiRegistry.Entries.Add(typeof(ResourceUsage), new ShaderUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(Format), new ShaderUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(BindFlags), new ShaderUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(CpuAccessFlags), new ShaderUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(ResourceOptionFlags), new ShaderUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(ShaderResourceView), new TextureUiProperties());
 
             // Register input ui creators
             InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
@@ -103,10 +103,10 @@ namespace T3.Gui
                 if (!entriesForSymbol.ContainsKey(child.Id))
                 {
                     var childUi = new SymbolChildUi()
-                                  {
-                                      SymbolChild = symbol.Children.Find(c => c.Id == child.Id),
-                                      PosOnCanvas = new Vector2(100, 100)
-                                  };
+                    {
+                        SymbolChild = symbol.Children.Find(c => c.Id == child.Id),
+                        PosOnCanvas = new Vector2(100, 100)
+                    };
                     uiEntries[symbol.Id].Add(child.Id, childUi);
                 }
 
@@ -150,10 +150,10 @@ namespace T3.Gui
                 {
                     Log.Info($"Found no symbol child ui dictionary entry for symbol child '{child.ReadableName}' - creating a new one");
                     var childUi = new SymbolChildUi()
-                                  {
-                                      SymbolChild = child,
-                                      PosOnCanvas = new Vector2(100, 100)
-                                  };
+                    {
+                        SymbolChild = child,
+                        PosOnCanvas = new Vector2(100, 100)
+                    };
                     childUiEntries.Add(child.Id, childUi);
                 }
             }
