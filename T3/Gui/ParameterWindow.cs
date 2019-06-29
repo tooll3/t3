@@ -46,20 +46,21 @@ namespace T3.Gui
                 switch (editState)
                 {
                     case InputEditState.SingleCommand:
-                        Log.Debug("single command setup currently (e.g. for enums) currently disabled");
+                        Log.Debug("single command setup");
+                        UndoRedoStack.Add(new ChangeInputValueCommand(compositionOp.Symbol, symbolChild.Id, input.Input));
                         break;
                     case InputEditState.Focused:
                         // create command for possible editing
                         Log.Debug("setup 'ChangeInputValue' command");
-                        var command = new ChangeInputValueCommand(compositionOp.Symbol, symbolChild.Id, input.Input);
-                        UndoRedoStack.CommandInFlight = command;
+                        UndoRedoStack.CommandInFlight = new ChangeInputValueCommand(compositionOp.Symbol, symbolChild.Id, input.Input);
                         break;
                     case InputEditState.Modified:
                         // update command in flight
                         Log.Debug("updated 'ChangeInputValue' command");
-                        ((ChangeInputValueCommand)UndoRedoStack.CommandInFlight).Value.Assign(input.Input.Value);
+                        ((ChangeInputValueCommand)UndoRedoStack.CommandInFlight).Value.Assign(input.Input.Value); // todo: ugly!
                         break;
                     case InputEditState.Finished:
+                    case InputEditState.ModifiedAndFinished:
                         // add command to undo queue
                         Log.Debug("Finalized 'ChangeInputValue' command");
                         UndoRedoStack.AddCommandInFlightToStack();
