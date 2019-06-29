@@ -2,6 +2,7 @@
 using System;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Gui.TypeColors;
 
 namespace T3.Gui.Graph
 {
@@ -28,6 +29,7 @@ namespace T3.Gui.Graph
         private static void DrawConnection(Symbol.Connection c)
         {
             Color color = Color.White;
+            Type connectionType = null;
             Vector2 sourcePos;
 
             {
@@ -55,6 +57,7 @@ namespace T3.Gui.Graph
                     var r = Slots.GetOutputSlotSizeInCanvas(sourceUi, outputIndex);
                     sourcePos = GraphCanvas.Current.TransformPosition(r.GetCenter());
                     color = TypeUiRegistry.Entries[outputDefinitions[outputIndex].ValueType].Color;
+                    connectionType = outputDefinitions[outputIndex].ValueType;
                 }
             }
 
@@ -84,8 +87,11 @@ namespace T3.Gui.Graph
                     var r = Slots.GetInputSlotSizeInCanvas(targetUi, inputIndex);
                     targetPos = GraphCanvas.Current.TransformPosition(r.GetCenter());
                     color = TypeUiRegistry.Entries[inputDefinitions[inputIndex].DefaultValue.ValueType].Color;
+                    connectionType = inputDefinitions[inputIndex].DefaultValue.ValueType;
                 }
             }
+
+            color = ColorVariations.ConnectionLines.GetVariation(TypeUiRegistry.Entries[connectionType].Color);
 
             _drawlist.AddBezierCurve(
                 sourcePos,

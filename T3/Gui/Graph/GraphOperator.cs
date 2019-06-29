@@ -3,6 +3,7 @@ using imHelpers;
 using System;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Gui.TypeColors;
 
 namespace T3.Gui.Graph
 {
@@ -11,16 +12,23 @@ namespace T3.Gui.Graph
     /// </summary>
     static class GraphOperator
     {
+        public static float _connectionZoneHeight = 6;
+        public static Vector2 _labelPos = new Vector2(2, 2);
+
         public static void Draw(SymbolChildUi childUi)
         {
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-                var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(childUi.PosOnCanvas + new Vector2(0, 3));
-                var posInApp = GraphCanvas.Current.TransformPosition(childUi.PosOnCanvas);
+                //var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(childUi.PosOnCanvas + new Vector2(0, 3));
+                //var posInApp = GraphCanvas.Current.TransformPosition(childUi.PosOnCanvas);
+
+                var screenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas, childUi.PosOnCanvas + childUi.Size));
 
                 // Interaction
-                ImGui.SetCursorPos(posInWindow);
-                ImGui.InvisibleButton("node", (childUi.Size - new Vector2(0, 6)) * GraphCanvas.Current.Scale);
+                //ImGui.SetCursorPos(posInWindow);
+                //ImGui.InvisibleButton("node", (childUi.Size - new Vector2(0, 6)) * GraphCanvas.Current.Scale);
+                ImGui.SetCursorScreenPos(screenRect.Min);
+                ImGui.InvisibleButton("node", screenRect.GetSize());
 
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
@@ -62,15 +70,19 @@ namespace T3.Gui.Graph
                 dl.ChannelsSplit(2);
                 dl.ChannelsSetCurrent(1);
 
-                dl.AddText(posInApp, Color.White, string.Format($"{childUi.SymbolChild.ReadableName}"));
+                dl.AddText(screenRect.Min + _labelPos, Color.White, string.Format($"{childUi.SymbolChild.ReadableName}"));
                 dl.ChannelsSetCurrent(0);
 
                 var hoveredFactor = T3UI.HoveredIdsLastFrame.Contains(childUi.SymbolChild.Id) ? 1.2f : 0.8f;
 
-                THelpers.OutlinedRect(ref dl, posInApp, childUi.Size * GraphCanvas.Current.Scale,
-                    fill: new Color(
-                            ((childUi.IsSelected || ImGui.IsItemHovered()) ? 0.3f : 0.2f) * hoveredFactor),
-                    outline: childUi.IsSelected ? Color.White : Color.Black);
+                //THelpers.OutlinedRect(ref dl, posInApp, childUi.Size * GraphCanvas.Current.Scale,
+                //    fill: new Color(
+                //            ((childUi.IsSelected || ImGui.IsItemHovered()) ? 0.3f : 0.2f) * hoveredFactor),
+                //    outline: childUi.IsSelected ? Color.White : Color.Black);
+                //dl.AddRectFilled(posInApp, posInApp +)
+                dl.AddRectFilled(screenRect.Min, screenRect.Max, ColorVariations.OperatorBackground.GetVariation(Color.TRed));
+
+
 
                 DrawSlots(childUi);
 

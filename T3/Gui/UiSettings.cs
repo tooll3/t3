@@ -1,4 +1,6 @@
 ﻿using ImGuiNET;
+using T3.Gui.Graph;
+using T3.Gui.TypeColors;
 
 namespace T3.Gui
 {
@@ -31,6 +33,13 @@ namespace T3.Gui
                 if (ImGui.Button("Open new Graph Canvas"))
                 {
                     T3UI.OpenNewGraphWindow();
+                }
+                ColorVariations.DrawSettingsUi();
+                if (ImGui.TreeNode("Styles"))
+                {
+                    ImGui.DragFloat("Height Connection Zone", ref GraphOperator._connectionZoneHeight);
+                    ImGui.DragFloat2("Label position", ref GraphOperator._labelPos);
+                    ImGui.TreePop();
                 }
             }
             ImGui.End();

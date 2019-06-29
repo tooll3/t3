@@ -1,14 +1,14 @@
 ﻿using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SharpDX;
+using SharpDX.Direct3D11;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using SharpDX;
-using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -353,32 +353,32 @@ namespace T3.Gui
 
     public static class InputUiFactory
     {
-        public static Dictionary<Type, Func<IInputUi>> Entries { get; } = new Dictionary<Type, Func<IInputUi>>();
+        public static Dictionary<Type, Func<IInputUi>> Entries { get; set; } = new Dictionary<Type, Func<IInputUi>>();
     }
 
     public interface ITypeUiProperties
     {
-        Color Color { get; }
+        Color Color { get; set; }
     }
 
     public class FloatUiProperties : ITypeUiProperties
     {
-        public Color Color { get; } = Color.Gray;
+        public Color Color { get; set; } = Color.Gray;
     }
 
     public class StringUiProperties : ITypeUiProperties
     {
-        public Color Color { get; } = Color.TGreen;
+        public Color Color { get; set; } = Color.TGreen;
     }
 
     public class Size2UiProperties : ITypeUiProperties
     {
-        public Color Color { get; } = Color.TRed;
+        public Color Color { get; set; } = Color.TRed;
     }
 
     public class IntUiProperties : ITypeUiProperties
     {
-        public Color Color { get; } = Color.TBlue;
+        public Color Color { get; set; } = Color.TBlue;
     }
 
     public static class TypeUiRegistry

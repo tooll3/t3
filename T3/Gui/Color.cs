@@ -67,7 +67,7 @@ namespace T3.Gui
             return Rgba.ToString();
         }
 
-        static Color FromHSV(float h, float s, float v, float a = 1.0f)
+        static public Color FromHSV(float h, float s, float v, float a = 1.0f)
         {
             ImGui.ColorConvertHSVtoRGB(h, s, v, out float r, out float g, out float b);
             return new Color(r, g, b, a);
