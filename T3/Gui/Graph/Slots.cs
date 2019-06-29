@@ -3,6 +3,7 @@ using imHelpers;
 using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.TypeColors;
 
 namespace T3.Gui.Graph
 {
@@ -92,24 +93,26 @@ namespace T3.Gui.Graph
         public static void DrawInputSlot(SymbolChildUi targetUi, int inputIndex)
         {
             var inputDef = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex];
-            var virtualRectInCanvas = GetInputSlotSizeInCanvas(targetUi, inputIndex);
-            var rInScreen = GraphCanvas.Current.TransformRect(virtualRectInCanvas);
+            var usableArea = GetUsableInputSlotSize(targetUi, inputIndex);
 
             ImGui.PushID(targetUi.SymbolChild.Id.GetHashCode() + inputIndex);
-            ImGui.SetCursorScreenPos(rInScreen.Min);
-            ImGui.InvisibleButton("input", rInScreen.GetSize());
+            ImGui.SetCursorScreenPos(usableArea.Min);
+            ImGui.InvisibleButton("input", usableArea.GetSize());
             THelpers.DebugItemRect("input-slot");
 
             var valueType = inputDef.DefaultValue.ValueType;
-            var color = ColorForType(inputDef);
+            var colorForType = ColorForInputType(inputDef);
 
-            // Note: isItemHovered will not work
-            var hovered = BuildingConnections.TempConnection != null ? rInScreen.Contains(ImGui.GetMousePos())
+            var dl = ImGui.GetWindowDrawList();
+
+            // Note: isItemHovered does not work when being dragged from another item
+            var hovered = BuildingConnections.TempConnection != null ? usableArea.Contains(ImGui.GetMousePos())
                 : ImGui.IsItemHovered();
 
             if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputIndex))
             {
-                GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, ColorForType(inputDef));
+                dl.AddRectFilled(usableArea.Min, usableArea.Max,
+                    ColorVariations.Highlight.GetVariation(colorForType));
 
                 if (ImGui.IsMouseDragging(0))
                 {
@@ -120,7 +123,8 @@ namespace T3.Gui.Graph
             {
                 if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
-                    GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
+                    dl.AddRectFilled(usableArea.Min, usableArea.Max,
+                        ColorVariations.OperatorHover.GetVariation(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
@@ -129,7 +133,12 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
+                    dl.AddRectFilled(
+                        usableArea.Min,
+                        usableArea.Max,
+                        ColorVariations.OperatorHover.GetVariation(colorForType)
+                        );
+
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     ImGui.SetTooltip($"-> .{inputDef.Name}");
                     ImGui.PopStyleVar();
@@ -141,20 +150,28 @@ namespace T3.Gui.Graph
             }
             else
             {
-                GraphCanvas.Current.DrawRectFilled(
-                    ImRect.RectWithSize(
-                        new Vector2(targetUi.PosOnCanvas.X + virtualRectInCanvas.GetWidth() * inputIndex + 1 + 3,
-                                    targetUi.PosOnCanvas.Y + targetUi.Size.Y - T3Style.VisibleSlotHeight),
-                        new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6,
-                                    T3Style.VisibleSlotHeight))
-                    , color: BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType) ? Color.White : color);
+                var style = ColorVariations.Operator;
+                if (BuildingConnections.TempConnection != null)
+                {
+                    style = BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType)
+                        ? ColorVariations.Highlight
+                        : ColorVariations.Muted;
+                }
+
+                var pos = usableArea.Min + Vector2.UnitY * GraphOperator._inputSlotMargin;
+                var size = new Vector2(usableArea.GetWidth(), GraphOperator._inputSlotHeight);
+                dl.AddRectFilled(
+                    pos,
+                    pos + size,
+                    style.GetVariation(colorForType)
+                    );
             }
 
             ImGui.PopID();
         }
 
 
-        private static Color ColorForType(Symbol.InputDefinition inputDef)
+        private static Color ColorForInputType(Symbol.InputDefinition inputDef)
         {
             return TypeUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
         }
@@ -175,5 +192,24 @@ namespace T3.Gui.Graph
                 new Vector2(inputWidth - 2, 6));
         }
 
+
+        /// <summary>Returns rect in screen</summary>
+        public static ImRect GetUsableInputSlotSize(SymbolChildUi targetUi, int inputIndex)
+        {
+            var opRect = GraphOperator._screenRect;
+            var inputCount = targetUi.SymbolChild.Symbol.InputDefinitions.Count;
+            var inputWidth = inputCount == 0
+                ? opRect.GetWidth()
+                : (opRect.GetWidth() + GraphOperator._inputSlotMarginX) / inputCount - GraphOperator._inputSlotMarginX;
+
+            return ImRect.RectWithSize(
+                new Vector2(
+                    opRect.Min.X + (inputWidth + GraphOperator._inputSlotMarginX) * inputIndex,
+                    opRect.Max.Y),
+                new Vector2(
+                    inputWidth,
+                    GraphOperator._usableInputSlotHeight
+                ));
+        }
     }
 }

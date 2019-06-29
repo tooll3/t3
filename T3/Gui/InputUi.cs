@@ -173,7 +173,15 @@ namespace T3.Gui
 
         public override bool DrawSingleEditControl(string name, ref string value)
         {
-            return ImGui.InputText(name, ref value, MAX_STRING_LENGTH);
+            if (value != null)
+            {
+                return ImGui.InputText(name, ref value, MAX_STRING_LENGTH);
+            }
+            else
+            {
+                ImGui.Text(name + " is null?!");
+                return false;
+            }
         }
 
         public override void DrawValueDisplay(string name, ref string value)
@@ -440,7 +448,7 @@ namespace T3.Gui
         public static ITypeUiProperties FallBackTypeUiProperties = new FallBackUiProperties();
 
         internal static Color ColorForValues = new Color(0.525f, 0.550f, 0.554f, 1.000f);
-        internal static Color ColorForString = new Color(0.700f, 0.928f, 0.417f, 1.000f);
+        internal static Color ColorForString = new Color(0.468f, 0.586f, 0.320f, 1.000f);
         internal static Color ColorForTextures = new Color(0.803f, 0.313f, 0.785f, 1.000f);
     }
 }

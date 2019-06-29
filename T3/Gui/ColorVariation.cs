@@ -14,10 +14,12 @@ namespace T3.Gui.TypeColors
     /// </summary>
     public class ColorVariations
     {
+        public static readonly Variation Highlight = new Variation("Operator Highlight", 1.2f, 1.2f, 1);
+        public static readonly Variation Muted = new Variation("Operator Muted", 0.7f, 0.35f, 0.6f);
         public static readonly Variation ConnectionLines = new Variation("Connection Lines", 1, 0.7f, 0.8f);
-        public static readonly Variation OperatorBackground = new Variation("Operator Background", 0.7f, 0.35f, 1);
-        public static readonly Variation OperatorBackgroundHovered = new Variation("Operator Background Hovered", 0.8f, 0.6f, 1);
-        public static readonly Variation OperatorBorders = new Variation("Operator Borders", 0.7f, 0.35f, 0.5f);
+        public static readonly Variation Operator = new Variation("Operator Background", 0.7f, 0.35f, 1);
+        public static readonly Variation OperatorHover = new Variation("Operator Background", 0.8f, 0.45f, 1);
+        public static readonly Variation OperatorInputZone = new Variation("Operator Input Zone", 0.7f, 0.15f, 0.7f);
         public static readonly Variation OperatorLabel = new Variation("Operator Label", 0.4f, 1.3f, 1);
 
         public static void DrawSettingsUi()
@@ -101,9 +103,11 @@ namespace T3.Gui.TypeColors
         private static List<Variation> _colorVariations = new List<Variation>()
         {
             ConnectionLines,
-            OperatorBackground,
-            OperatorBackgroundHovered,
-            OperatorBorders,
+            Operator,
+            OperatorHover,
+            Highlight,
+            Muted,
+            OperatorInputZone,
             OperatorLabel,
         };
     }
