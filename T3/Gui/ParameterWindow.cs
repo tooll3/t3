@@ -60,9 +60,14 @@ namespace T3.Gui
                         ((ChangeInputValueCommand)UndoRedoStack.CommandInFlight).Value.Assign(input.Input.Value); // todo: ugly!
                         break;
                     case InputEditState.Finished:
-                    case InputEditState.ModifiedAndFinished:
-                        // add command to undo queue
+                        // add command to undo stack
                         Log.Debug("Finalized 'ChangeInputValue' command");
+                        UndoRedoStack.AddCommandInFlightToStack();
+                        break;
+                    case InputEditState.ModifiedAndFinished:
+                        // update and add command to undo queue
+                        Log.Debug("Updated and finalized 'ChangeInputValue' command");
+                        ((ChangeInputValueCommand)UndoRedoStack.CommandInFlight).Value.Assign(input.Input.Value); // todo: ugly!
                         UndoRedoStack.AddCommandInFlightToStack();
                         break;
                 }

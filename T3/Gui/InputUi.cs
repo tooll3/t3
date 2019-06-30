@@ -269,7 +269,12 @@ namespace T3.Gui
                 if (modified)
                 {
                     value = (T)values.GetValue(index);
-                    editState = InputEditState.SingleCommand;
+                    editState |= InputEditState.ModifiedAndFinished;
+                }
+
+                if (ImGui.IsItemClicked())
+                {
+                    editState |= InputEditState.Focused;
                 }
 
                 return editState;
