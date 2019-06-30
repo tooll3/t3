@@ -14,17 +14,17 @@ namespace T3.Gui.Graph
     /// </summary>
     static class OutputNodes
     {
-        public static void DrawAll()
-        {
-            var outputUisForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-            var index = 0;
-            foreach (var outputDef in GraphCanvas.Current.CompositionOp.Symbol.OutputDefinitions)
-            {
-                var outputUi = outputUisForSymbol[outputDef.Id];
-                Draw(outputDef, outputUi);
-                index++;
-            }
-        }
+        //public static void DrawAll()
+        //{
+        //    var outputUisForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+        //    var index = 0;
+        //    foreach (var outputDef in GraphCanvas.Current.CompositionOp.Symbol.OutputDefinitions)
+        //    {
+        //        var outputUi = outputUisForSymbol[outputDef.Id];
+        //        Draw(outputDef, outputUi);
+        //        index++;
+        //    }
+        //}
 
 
         public static void Draw(Symbol.OutputDefinition outputDef, IOutputUi outputUi)
@@ -150,7 +150,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                dl.ChannelsMerge();
+                //dl.ChannelsMerge();
             }
             ImGui.PopID();
         }
