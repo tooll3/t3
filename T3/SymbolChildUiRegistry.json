@@ -57,6 +57,20 @@
           }
         },
         {
+          "ChildId": "a4350952-957f-458c-bdc1-4f9fec0006c6"/*StringConcat*/,
+          "Position": {
+            "X": "8.799232",
+            "Y": "117.6281"
+          }
+        },
+        {
+          "ChildId": "ce7f2ed4-1495-4b96-983b-4fbf2851aa84"/*Texture2d*/,
+          "Position": {
+            "X": "-80.83334",
+            "Y": "261.1667"
+          }
+        },
+        {
           "ChildId": "d032e75c-2f2d-4d4f-98e6-d558f9544838"/*Time*/,
           "Position": {
             "X": "264",

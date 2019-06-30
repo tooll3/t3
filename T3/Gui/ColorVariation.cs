@@ -56,7 +56,7 @@ namespace T3.Gui.TypeColors
         /// </summary>
         public class Variation
         {
-            public Color GetVariation(Color originalColor)
+            public Color Apply(Color originalColor)
             {
                 ImGui.ColorConvertRGBtoHSV(
                     originalColor.Rgba.X,
@@ -81,7 +81,7 @@ namespace T3.Gui.TypeColors
 
             internal void DrawEditUi()
             {
-                ImGui.ColorButton("x", GetVariation(_sampleColor).Rgba);
+                ImGui.ColorButton("x", Apply(_sampleColor).Rgba);
                 ImGui.SameLine();
 
                 var v = new Vector3(_saturation, _brightness, _opacity);

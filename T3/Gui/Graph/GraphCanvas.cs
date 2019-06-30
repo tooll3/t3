@@ -61,7 +61,7 @@ namespace T3.Gui.Graph
                     DrawNodes();
                     _buildingNodes.Draw();
 
-                    ConnectionLine.DrawAll(this);
+                    //ConnectionLine.DrawAll(this);
 
 
                     if (BuildingConnections.TempConnection != null && ImGui.IsMouseReleased(0))
@@ -244,10 +244,11 @@ namespace T3.Gui.Graph
 
         private void DrawNodes()
         {
-            foreach (var symbolChildUi in UiChildrenById.Values)
-            {
-                GraphOperator.Draw(symbolChildUi);
-            }
+            Slots.DoStuff();
+            //foreach (var symbolChildUi in UiChildrenById.Values)
+            //{
+            //    GraphOperator.Draw(symbolChildUi);
+            //}
 
             InputNodes.DrawAll();
             OutputNodes.DrawAll();
@@ -365,7 +366,7 @@ namespace T3.Gui.Graph
         private ImGuiIOPtr _io;
         internal static Vector2 DefaultOpSize = new Vector2(100, 30);
 
-        private Dictionary<Guid, SymbolChildUi> UiChildrenById { get; set; }
+        internal Dictionary<Guid, SymbolChildUi> UiChildrenById { get; set; }
         private BuildingNodes _buildingNodes = new BuildingNodes();
         #endregion
     }

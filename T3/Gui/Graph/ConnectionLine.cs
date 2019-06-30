@@ -90,7 +90,7 @@ namespace T3.Gui.Graph
             }
 
 
-            var color = ColorVariations.ConnectionLines.GetVariation(TypeUiRegistry.GetPropertiesForType(connectionType).Color);
+            var color = ColorVariations.ConnectionLines.Apply(TypeUiRegistry.GetPropertiesForType(connectionType).Color);
 
             _drawlist.AddBezierCurve(
                 sourcePos,
