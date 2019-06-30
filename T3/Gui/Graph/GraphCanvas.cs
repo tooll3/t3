@@ -244,7 +244,7 @@ namespace T3.Gui.Graph
 
         private void DrawNodes()
         {
-            Slots.DoStuff();
+            GraphRendering.DoStuff();
             //foreach (var symbolChildUi in UiChildrenById.Values)
             //{
             //    GraphOperator.Draw(symbolChildUi);

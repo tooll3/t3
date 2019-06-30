@@ -311,12 +311,11 @@
     <Compile Include="Gui\ParameterWindow.cs" />
     <Compile Include="Gui\SymbolChildUi.cs" />
     <Compile Include="Gui\SymbolChildUiRegistry.cs" />
-    <Compile Include="Gui\Graph\ConnectionLine.cs" />
     <Compile Include="Gui\Graph\BuildingConnections.cs" />
     <Compile Include="Gui\Graph\GraphCanvas.cs" />
     <Compile Include="Gui\Graph\InputNodes.cs" />
     <Compile Include="Gui\Graph\OutputNodes.cs" />
-    <Compile Include="Gui\Graph\Slots.cs" />
+    <Compile Include="Gui\Graph\GraphRendering.cs" />
     <Compile Include="Gui\Metrics.cs" />
     <Compile Include="Gui\Color.cs" />
     <Compile Include="Gui\T3Style.cs" />
