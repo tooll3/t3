@@ -13,7 +13,7 @@ namespace T3.Gui.Graph
     static class GraphOperator
     {
         public static Vector2 _labelPos = new Vector2(4, 4);
-        public static float _usableSlotHeight = 8;
+        public static float _usableSlotHeight = 12;
         public static float _inputSlotMargin = 1;
         public static float _inputSlotHeight = 2;
         public static float _slotGaps = 2;
@@ -21,18 +21,18 @@ namespace T3.Gui.Graph
         public static float _outputSlotHeight = 2;
         public static float _multiInputSize = 5;
 
-        public static ImRect _screenRect;
+        public static ImRect _lastScreenRect;
 
         public static void Draw(SymbolChildUi childUi)
         {
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-                _screenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas, childUi.PosOnCanvas + childUi.Size));
-                _screenRect.Floor();
+                _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas, childUi.PosOnCanvas + childUi.Size));
+                _lastScreenRect.Floor();
 
                 // Interaction
-                ImGui.SetCursorScreenPos(_screenRect.Min);
-                ImGui.InvisibleButton("node", _screenRect.GetSize());
+                ImGui.SetCursorScreenPos(_lastScreenRect.Min);
+                ImGui.InvisibleButton("node", _lastScreenRect.GetSize());
 
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
@@ -76,45 +76,35 @@ namespace T3.Gui.Graph
 
 
                 var dl = GraphCanvas.Current.DrawList;
-                dl.AddRectFilled(_screenRect.Min, _screenRect.Max,
+                dl.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
                     hovered
-                    ? ColorVariations.OperatorHover.GetVariation(typeColor)
-                    : ColorVariations.Operator.GetVariation(typeColor));
+                    ? ColorVariations.OperatorHover.Apply(typeColor)
+                    : ColorVariations.Operator.Apply(typeColor));
 
                 dl.AddRectFilled(
-                    new Vector2(_screenRect.Min.X, _screenRect.Max.Y),
-                    new Vector2(_screenRect.Max.X, _screenRect.Max.Y + _inputSlotHeight + _inputSlotMargin),
-                    ColorVariations.OperatorInputZone.GetVariation(typeColor));
+                    new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
+                    new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + _inputSlotHeight + _inputSlotMargin),
+                    ColorVariations.OperatorInputZone.Apply(typeColor));
 
-                dl.AddText(_screenRect.Min + _labelPos,
-                    ColorVariations.OperatorLabel.GetVariation(typeColor),
+                dl.AddText(_lastScreenRect.Min + _labelPos,
+                    ColorVariations.OperatorLabel.Apply(typeColor),
                     string.Format($"{childUi.SymbolChild.ReadableName}"));
 
 
 
                 if (childUi.IsSelected)
                 {
-                    dl.AddRect(_screenRect.Min - Vector2.One, _screenRect.Max + Vector2.One, Color.White, 1);
+                    dl.AddRect(_lastScreenRect.Min - Vector2.One, _lastScreenRect.Max + Vector2.One, Color.White, 1);
                 }
 
-                DrawSlots(childUi);
+                //DrawSlots(childUi);
+                //Slots.DoStuff();
             }
             ImGui.PopID();
 
 
         }
 
-        private static void DrawSlots(SymbolChildUi symbolChildUi)
-        {
-            for (int slot_idx = 0; slot_idx < symbolChildUi.SymbolChild.Symbol.OutputDefinitions.Count; slot_idx++)
-            {
-                Slots.DrawOutputSlot(symbolChildUi, slot_idx);
-            }
 
-            for (int slot_idx = 0; slot_idx < symbolChildUi.SymbolChild.Symbol.InputDefinitions.Count; slot_idx++)
-            {
-                Slots.DrawInputSlot(symbolChildUi, slot_idx);
-            }
-        }
     }
 }
