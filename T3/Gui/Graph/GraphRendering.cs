@@ -91,9 +91,14 @@ namespace T3.Gui.Graph
                 var isConnectionFromSymbolInput = c.SourceParentOrChildId == Guid.Empty;
                 if (isConnectionFromSymbolInput)
                 {
-                    var inputUi = inputUisById[c.SourceSlotId];
-                    newLine.SourcePosition = GraphCanvas.Current.TransformPosition(inputUi.PosOnCanvas);
-                    newLine.ColorForType = Color.White;
+                    //var outputNode = outputUisById[c.TargetSlotId];
+                    var inputNode = inputUisById[c.SourceSlotId];
+
+                    if (!linesFromInputNodes.ContainsKey(inputNode))
+                        linesFromInputNodes.Add(inputNode, new List<ConnectionLineUi>());
+
+                    linesFromInputNodes[inputNode].Add(newLine);
+                    newLine.ColorForType = TypeUiRegistry.Entries[inputNode.Type].Color;
                 }
                 else
                 {
@@ -104,9 +109,6 @@ namespace T3.Gui.Graph
                     linesFromNodes[sourceNode].Add(newLine);
                 }
             }
-
-            // Prepare connections under construction
-            // TODO ...
 
             // Prepare connections to nodes under construction
             // TODO ...
@@ -134,8 +136,6 @@ namespace T3.Gui.Graph
                         ? usableArea.Contains(ImGui.GetMousePos())
                         : ImGui.IsItemHovered();
 
-                    //var colorForType = ColorForTypeOut(output);
-                    //var isHovered = false; // TODO Implement
                     var isPotentialConnectionTarget = false; // ToDo Implement
 
                     var connectedLines = linesFromNodes.ContainsKey(childUi)
@@ -232,7 +232,6 @@ namespace T3.Gui.Graph
                                     line.IsSelected |= childUi.IsSelected;
 
                                     // TODO: Draw input
-
                                 }
                                 targetPos.X += socketWidth;
                             }
@@ -249,10 +248,7 @@ namespace T3.Gui.Graph
                             var index = 0;
                             foreach (var line in connectedLines)
                             {
-                                //line.TargetPosition =
-                                //    new Vector2(
-                                //        usableArea.Min.X + usableArea.GetWidth() / socketCount * index,
-                                //        usableArea.Min.Y);
+
                                 line.TargetPosition = targetPos;
                                 line.IsSelected |= childUi.IsSelected;
 
@@ -268,8 +264,6 @@ namespace T3.Gui.Graph
                             line.TargetPosition = usableArea.GetCenter();
                             line.IsSelected |= childUi.IsSelected;
                         }
-
-                        // Todo: Draw Input...
                     }
                     DrawInputSlot(childUi, inputIndex, input, usableArea, colorForType, hovered);
 
@@ -299,10 +293,29 @@ namespace T3.Gui.Graph
                     line.TargetPosition = targetPos;
                 }
             }
-            // TODO ...
 
             // Draw Inputs Nodes
-            // TODO ....
+            foreach (var pair in inputUisById)
+            {
+                var inputId = pair.Key;
+                var inputNode = pair.Value;
+                var connectedLines = linesFromInputNodes.ContainsKey(inputNode)
+                    ? linesFromInputNodes[inputNode].FindAll(l => l.Connection.SourceSlotId == inputId)
+                    : _noLines;
+
+                var def = symbol.InputDefinitions.Find(idef => idef.Id == inputId);
+                InputNodes.Draw(def, inputNode);
+
+                var outputUisForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+                var sourcePos = new Vector2(
+                    InputNodes._lastScreenRect.GetCenter().X,
+                    InputNodes._lastScreenRect.Min.Y);
+
+                foreach (var line in connectedLines)
+                {
+                    line.SourcePosition = sourcePos;
+                }
+            }
 
             // 6. Draw ConnectionLines
             foreach (var line in lines)
@@ -386,17 +399,6 @@ namespace T3.Gui.Graph
                     );
             }
         }
-
-
-        //public static ImRect GetOutputSlotSizeInCanvas(SymbolChildUi sourceUi, int outputIndex)
-        //{
-        //    var outputCount = sourceUi.SymbolChild.Symbol.OutputDefinitions.Count;
-        //    var outputWidth = sourceUi.Size.X / outputCount;   // size count must be non-zero in this method
-
-        //    return ImRect.RectWithSize(
-        //        new Vector2(sourceUi.PosOnCanvas.X + outputWidth * outputIndex + 1, sourceUi.PosOnCanvas.Y - 3),
-        //        new Vector2(outputWidth - 2, 6));
-        //}
 
 
         public static ImRect GetUsableOutputSlotSize(SymbolChildUi targetUi, int outputIndex)
@@ -533,18 +535,8 @@ namespace T3.Gui.Graph
         private static List<ConnectionLineUi> _connectionLines = new List<ConnectionLineUi>(1000);
     }
 
-    //public class Socket
-    //{
-    //    public ImRect screenRect;
-
-    //}
-
     public class ConnectionLineUi
     {
-        //public Socket TargetSocket;
-        //public Socket SourceSocket;
-        //public bool IsUnderConstruction;    // not used yet
-        //public int UnderConstructionMultiinputIndex = 0;    // not used yet
         public Vector2 TargetPosition;
         public Vector2 SourcePosition;
         public Color ColorForType;

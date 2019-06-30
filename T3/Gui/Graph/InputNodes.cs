@@ -4,6 +4,7 @@ using imHelpers;
 using System;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Gui.TypeColors;
 
 namespace T3.Gui.Graph
 {
@@ -13,35 +14,39 @@ namespace T3.Gui.Graph
     /// </summary>
     static class InputNodes
     {
-        public static void DrawAll()
-        {
-            _drawList = ImGui.GetWindowDrawList();
-            var inputUisForSymbol = InputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-            var index = 0;
-            foreach (var inputDef in GraphCanvas.Current.CompositionOp.Symbol.InputDefinitions)
-            {
-                var inputUi = inputUisForSymbol[inputDef.Id];
-                Draw(inputDef, inputUi);
-                index++;
-            }
-        }
+        //public static void DrawAll()
+        //{
+        //    _drawList = ImGui.GetWindowDrawList();
+        //    var inputUisForSymbol = InputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+        //    var index = 0;
+        //    foreach (var inputDef in GraphCanvas.Current.CompositionOp.Symbol.InputDefinitions)
+        //    {
+        //        var inputUi = inputUisForSymbol[inputDef.Id];
+        //        Draw(inputDef, inputUi);
+        //        index++;
+        //    }
+        //}
 
-        private static ImDrawListPtr _drawList;
+        internal static ImRect _lastScreenRect;
 
-        private static void Draw(Symbol.InputDefinition inputDef, IInputUi inputUi)
+        internal static void Draw(Symbol.InputDefinition inputDef, IInputUi inputUi)
         {
             ImGui.PushID(inputDef.Id.GetHashCode());
             {
-                var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(inputUi.PosOnCanvas + new Vector2(0, 3));
-                var posInApp = GraphCanvas.Current.TransformPosition(inputUi.PosOnCanvas);
+                _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(inputUi.PosOnCanvas, inputUi.PosOnCanvas + inputUi.Size));
+                _lastScreenRect.Floor();
 
                 // Interaction
-                ImGui.SetCursorPos(posInWindow);
-                ImGui.InvisibleButton("node", (inputUi.Size - new Vector2(0, 6)) * GraphCanvas.Current.Scale);
-                if (ImGui.IsItemHovered())
+                ImGui.SetCursorScreenPos(_lastScreenRect.Min);
+                ImGui.InvisibleButton("node", _lastScreenRect.GetSize());
+
+                THelpers.DebugItemRect();
+                var hovered = ImGui.IsItemHovered();
+                if (hovered)
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                 }
+
 
                 if (ImGui.IsItemActive())
                 {
@@ -56,29 +61,46 @@ namespace T3.Gui.Graph
                     {
                         foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)
                         {
-                            e.PosOnCanvas += ImGui.GetIO().MouseDelta;
+                            e.PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+
                         }
                     }
                 }
 
 
                 // Rendering
-                _drawList.ChannelsSplit(2);
-                _drawList.ChannelsSetCurrent(1);
+                var typeColor = TypeUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
 
-                _drawList.AddText(posInApp, Color.White, String.Format($"{inputDef.Name}"));
-                _drawList.ChannelsSetCurrent(0);
+                var dl = GraphCanvas.Current.DrawList;
+                dl.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
+                    hovered
+                        ? ColorVariations.OperatorHover.Apply(typeColor)
+                        : ColorVariations.OutputNodes.Apply(typeColor));
 
-                //THelpers.OutlinedRect(ref Canvas.DrawList, posInApp, inputUi.Size * Canvas.Current._scale,
-                //    fill: new Color(
-                //            ((inputUi.IsSelected || ImGui.IsItemHovered()) ? 0.3f : 0.2f)),
-                //    outline: inputUi.IsSelected ? Color.White : Color.Black);
+                dl.AddRectFilled(
+                    new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
+                    new Vector2(_lastScreenRect.Max.X,
+                                _lastScreenRect.Max.Y + GraphOperator._inputSlotHeight + GraphOperator._inputSlotMargin),
+                    ColorVariations.OperatorInputZone.Apply(typeColor));
 
+                var label = string.Format($"{inputDef.Name}");
+                var size = ImGui.CalcTextSize(label);
+                var pos = _lastScreenRect.GetCenter() - size / 2;
+
+                dl.AddText(
+                    pos,
+                    ColorVariations.OperatorLabel.Apply(typeColor),
+                    label);
+
+                if (inputUi.IsSelected)
+                {
+                    dl.AddRect(_lastScreenRect.Min - Vector2.One, _lastScreenRect.Max + Vector2.One, Color.White, 1);
+                }
 
                 // Draw slot 
                 {
                     var virtualRectInCanvas = ImRect.RectWithSize(
-                        new Vector2(inputUi.PosOnCanvas.X + 1, inputUi.PosOnCanvas.Y - 3),
+                        new Vector2(inputUi.PosOnCanvas.X + 1, inputUi.PosOnCanvas.Y - 6),
                         new Vector2(inputUi.Size.X - 2, 6));
 
                     var rInScreen = GraphCanvas.Current.TransformRect(virtualRectInCanvas);
@@ -127,9 +149,12 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                _drawList.ChannelsMerge();
+                //_drawList.ChannelsMerge();
             }
             ImGui.PopID();
         }
+
+        private static ImDrawListPtr _drawList;
+
     }
 }
