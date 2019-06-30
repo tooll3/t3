@@ -12,17 +12,6 @@ namespace T3.Gui.Graph
     /// </summary>
     static class GraphOperator
     {
-        public static Vector2 _labelPos = new Vector2(4, 4);
-        public static float _usableSlotHeight = 12;
-        public static float _inputSlotMargin = 1;
-        public static float _inputSlotHeight = 2;
-        public static float _slotGaps = 2;
-        public static float _outputSlotMargin = 1;
-        public static float _outputSlotHeight = 2;
-        public static float _multiInputSize = 5;
-
-        public static ImRect _lastScreenRect;
-
         public static void Draw(SymbolChildUi childUi)
         {
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
@@ -90,21 +79,25 @@ namespace T3.Gui.Graph
                     ColorVariations.OperatorLabel.Apply(typeColor),
                     string.Format($"{childUi.SymbolChild.ReadableName}"));
 
-
-
                 if (childUi.IsSelected)
                 {
                     dl.AddRect(_lastScreenRect.Min - Vector2.One, _lastScreenRect.Max + Vector2.One, Color.White, 1);
                 }
-
-                //DrawSlots(childUi);
-                //Slots.DoStuff();
             }
             ImGui.PopID();
-
-
         }
 
+        #region style variables
+        public static Vector2 _labelPos = new Vector2(4, 4);
+        public static float _usableSlotHeight = 12;
+        public static float _inputSlotMargin = 1;
+        public static float _inputSlotHeight = 2;
+        public static float _slotGaps = 2;
+        public static float _outputSlotMargin = 1;
+        public static float _outputSlotHeight = 2;
+        public static float _multiInputSize = 5;
+        #endregion
 
+        public static ImRect _lastScreenRect;
     }
 }
