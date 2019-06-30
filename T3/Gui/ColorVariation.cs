@@ -18,6 +18,7 @@ namespace T3.Gui.TypeColors
         public static readonly Variation Muted = new Variation("Muted", 0.7f, 0.35f, 0.6f);
         public static readonly Variation ConnectionLines = new Variation("Connection Lines", 1, 0.7f, 0.8f);
         public static readonly Variation Operator = new Variation("Operator", 0.7f, 0.35f, 1);
+        public static readonly Variation OutputNodes = new Variation("Output Nodes", 0.7f, 0.35f, 0.3f);
         public static readonly Variation OperatorHover = new Variation("Operator Hover", 0.8f, 0.45f, 1);
         public static readonly Variation OperatorInputZone = new Variation("Operator Input Zone", 0.7f, 0.15f, 0.7f);
         public static readonly Variation OperatorLabel = new Variation("Operator Label", 0.4f, 1.3f, 1);
@@ -105,6 +106,7 @@ namespace T3.Gui.TypeColors
             ConnectionLines,
             Operator,
             OperatorHover,
+            OutputNodes,
             Highlight,
             Muted,
             OperatorInputZone,

@@ -31,7 +31,7 @@ namespace T3.Gui.Graph
                 Log.Debug("Added Op to UI Registry " + CompositionOp.Symbol.Name);
             }
 
-            UiChildrenById = SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id];
+            ChildUisById = SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id];
             DrawList = ImGui.GetWindowDrawList();
             _foreground = ImGui.GetForegroundDrawList();
             _io = ImGui.GetIO();
@@ -58,22 +58,22 @@ namespace T3.Gui.Graph
                     HandleInteraction();
 
                     DrawGrid();
-                    DrawNodes();
-                    _buildingNodes.Draw();
+                    GraphRendering.DrawGraph();
+                    //_buildingNodes.Draw();
 
                     //ConnectionLine.DrawAll(this);
 
 
                     if (BuildingConnections.TempConnection != null && ImGui.IsMouseReleased(0))
                     {
-                        if (BuildingConnections.TempConnection.TargetParentOrChildId == BuildingConnections.UseDraftOperator)
-                        {
-                            BuildingNodes.Current.Cancel();
-                        }
-                        else
-                        {
-                            BuildingConnections.BuildNodeAtTarget(_buildingNodes, InverseTransformPosition(_mouse));
-                        }
+                        //if (BuildingConnections.TempConnection.TargetParentOrChildId == BuildingConnections.UseDraftOperator)
+                        //{
+                        //    BuildingNodes.Current.Cancel();
+                        //}
+                        //else
+                        //{
+                        BuildingConnections.BuildNodeAtTarget(_buildingNodes, InverseTransformPosition(_mouse));
+                        //}
                     }
 
                     _selectionFence.Draw();
@@ -242,17 +242,6 @@ namespace T3.Gui.Graph
         }
 
 
-        private void DrawNodes()
-        {
-            GraphRendering.DoStuff();
-            //foreach (var symbolChildUi in UiChildrenById.Values)
-            //{
-            //    GraphOperator.Draw(symbolChildUi);
-            //}
-
-            InputNodes.DrawAll();
-            OutputNodes.DrawAll();
-        }
         #endregion
 
 
@@ -261,9 +250,14 @@ namespace T3.Gui.Graph
         {
             get
             {
-                return UiChildrenById.Values;
+                _selectableItems.Clear();
+                _selectableItems.AddRange(ChildUisById.Values);
+                _selectableItems.AddRange(OutputUiRegistry.Entries[CompositionOp.Symbol.Id].Values);
+                return _selectableItems;
             }
         }
+
+        private List<ISelectable> _selectableItems = new List<ISelectable>();
 
         /// <summary>
         /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
@@ -366,7 +360,7 @@ namespace T3.Gui.Graph
         private ImGuiIOPtr _io;
         internal static Vector2 DefaultOpSize = new Vector2(100, 30);
 
-        internal Dictionary<Guid, SymbolChildUi> UiChildrenById { get; set; }
+        internal Dictionary<Guid, SymbolChildUi> ChildUisById { get; set; }
         private BuildingNodes _buildingNodes = new BuildingNodes();
         #endregion
     }

@@ -15,6 +15,5 @@ namespace T3.Gui
         public Vector2 Size { get; set; } = GraphCanvas.DefaultOpSize;
         public bool IsVisible { get; set; } = true;
         public bool IsSelected { get; set; } = false;
-
     }
 }
