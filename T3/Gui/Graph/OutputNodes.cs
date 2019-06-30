@@ -4,6 +4,7 @@ using System;
 using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.TypeColors;
 
 namespace T3.Gui.Graph
 {
@@ -26,17 +27,20 @@ namespace T3.Gui.Graph
         }
 
 
-        private static void Draw(Symbol.OutputDefinition outputDef, IOutputUi outputUi)
+        public static void Draw(Symbol.OutputDefinition outputDef, IOutputUi outputUi)
         {
             ImGui.PushID(outputDef.Id.GetHashCode());
             {
-                var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(outputUi.PosOnCanvas + new Vector2(0, 3));
-                var posInApp = GraphCanvas.Current.TransformPosition(outputUi.PosOnCanvas);
+                _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(outputUi.PosOnCanvas, outputUi.PosOnCanvas + outputUi.Size));
+                _lastScreenRect.Floor();
 
                 // Interaction
-                ImGui.SetCursorPos(posInWindow);
-                ImGui.InvisibleButton("node", (outputUi.Size - new Vector2(0, 6)) * GraphCanvas.Current.Scale);
-                if (ImGui.IsItemHovered())
+                ImGui.SetCursorScreenPos(_lastScreenRect.Min);
+                ImGui.InvisibleButton("node", _lastScreenRect.GetSize());
+
+                THelpers.DebugItemRect();
+                var hovered = ImGui.IsItemHovered();
+                if (hovered)
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                 }
@@ -55,19 +59,39 @@ namespace T3.Gui.Graph
                     {
                         foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)
                         {
-                            e.PosOnCanvas += ImGui.GetIO().MouseDelta;
+                            e.PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
                         }
                     }
                 }
 
-
                 // Rendering
-                var dl = ImGui.GetWindowDrawList();
-                dl.ChannelsSplit(2);
-                dl.ChannelsSetCurrent(1);
+                var typeColor = TypeUiRegistry.Entries[outputDef.ValueType].Color;
 
-                dl.AddText(posInApp, Color.White, String.Format($"{outputDef.Name}"));
-                dl.ChannelsSetCurrent(0);
+                var dl = GraphCanvas.Current.DrawList;
+                dl.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
+                    hovered
+                        ? ColorVariations.OperatorHover.Apply(typeColor)
+                        : ColorVariations.OutputNodes.Apply(typeColor));
+
+                dl.AddRectFilled(
+                    new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
+                    new Vector2(_lastScreenRect.Max.X,
+                                _lastScreenRect.Max.Y + GraphOperator._inputSlotHeight + GraphOperator._inputSlotMargin),
+                    ColorVariations.OperatorInputZone.Apply(typeColor));
+
+                var label = string.Format($"{outputDef.Name}");
+                var size = ImGui.CalcTextSize(label);
+                var pos = _lastScreenRect.GetCenter() - size / 2;
+
+                dl.AddText(
+                    pos,
+                    ColorVariations.OperatorLabel.Apply(typeColor),
+                    label);
+
+                if (outputUi.IsSelected)
+                {
+                    dl.AddRect(_lastScreenRect.Min - Vector2.One, _lastScreenRect.Max + Vector2.One, Color.White, 1);
+                }
 
                 // Draw slot 
                 {
@@ -83,7 +107,8 @@ namespace T3.Gui.Graph
                     var color = TypeUiRegistry.Entries[outputDef.ValueType].Color;
 
                     //Note: isItemHovered will not work
-                    var hovered = BuildingConnections.TempConnection != null ? rInScreen.Contains(ImGui.GetMousePos())
+                    var slotHovered = BuildingConnections.TempConnection != null
+                        ? rInScreen.Contains(ImGui.GetMousePos())
                         : ImGui.IsItemHovered();
 
                     if (BuildingConnections.IsOutputNodeCurrentConnectionTarget(outputDef))
@@ -95,8 +120,7 @@ namespace T3.Gui.Graph
                             BuildingConnections.Update();
                         }
                     }
-                    //else if (ImGui.IsItemHovered())   // ToDo: Find out, why IsItemHovered is not working during drag
-                    else if (hovered)
+                    else if (slotHovered)
                     {
                         if (BuildingConnections.IsMatchingInputType(outputDef.ValueType))
                         {
@@ -130,5 +154,7 @@ namespace T3.Gui.Graph
             }
             ImGui.PopID();
         }
+        internal static ImRect _lastScreenRect;
+
     }
 }
