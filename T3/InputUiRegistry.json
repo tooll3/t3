@@ -56,15 +56,7 @@
       "SymbolId": "48ab9824-76ca-4238-800f-9cf95311e6c0"/*StringConcat*/,
       "InputUis": [
         {
-          "InputId": "56098b5b-fe9f-41b8-9be3-f133a5309689"/*Input1*/,
-          "Type": "System.String, mscorlib",
-          "Position": {
-            "X": "0",
-            "Y": "0"
-          }
-        },
-        {
-          "InputId": "6e9e070f-8700-4522-be4e-477fb0d1a71f"/*Input2*/,
+          "InputId": "b5e72715-9339-484f-b197-5a28cd823798"/*Input*/,
           "Type": "System.String, mscorlib",
           "Position": {
             "X": "0",
@@ -120,6 +112,14 @@
           "Position": {
             "X": "126",
             "Y": "470"
+          }
+        },
+        {
+          "InputId": "c99a7718-12b1-484e-ba96-b8d9ea7f448f"/*MultiInput*/,
+          "Type": "System.String, mscorlib",
+          "Position": {
+            "X": "392",
+            "Y": "483"
           }
         }
       ]

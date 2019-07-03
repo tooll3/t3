@@ -12,13 +12,15 @@
 
         private void Update(EvaluationContext context)
         {
-            Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
+            // Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
+            Result.Value = string.Empty;
+            foreach (var input in Input.GetCollectedInputs())
+            {
+                Result.Value += input.GetValue(context);
+            }
         }
 
-        [Input(Guid = "{56098B5B-FE9F-41B8-9BE3-F133A5309689}")]
-        public readonly InputSlot<string> Input1 = new InputSlot<string>();
-
-        [Input(Guid = "{6E9E070F-8700-4522-BE4E-477FB0D1A71F}")]
-        public readonly InputSlot<string> Input2 = new InputSlot<string>();
+        [Input(Guid = "{B5E72715-9339-484F-B197-5A28CD823798}")]
+        public readonly MultiInputSlot<string> Input = new MultiInputSlot<string>();
     }
 }
