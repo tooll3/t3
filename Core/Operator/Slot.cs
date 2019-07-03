@@ -266,7 +266,7 @@ namespace T3.Core.Operator
 
             foreach (var slot in InputConnection)
             {
-                if (slot.IsMultiInput)
+                if (slot.IsMultiInput && slot.IsConnected)
                 {
                     var multiInput = (MultiInputSlot<T>)slot;
                     CollectedInputs.AddRange(multiInput.GetCollectedInputs());

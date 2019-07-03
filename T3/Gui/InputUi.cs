@@ -47,12 +47,29 @@ namespace T3.Gui
             {
                 if (inputSlot.IsConnected)
                 {
-                    // just show actual value
-                    ImGui.PushItemWidth(200.0f);
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.TRed.Rgba);
-                    DrawValueDisplay(name, ref typedInputSlot.Value);
-                    ImGui.PopStyleColor();
-                    ImGui.PopItemWidth();
+                    if (typedInputSlot.IsMultiInput)
+                    {
+                        // just show actual value
+                        ImGui.PushItemWidth(200.0f);
+                        ImGui.PushStyleColor(ImGuiCol.Text, Color.TRed.Rgba);
+                        var multiInput = (MultiInputSlot<T>)typedInputSlot;
+                        var allInputs = multiInput.GetCollectedInputs();
+                        foreach (var input in allInputs)
+                        {
+                            DrawValueDisplay(name, ref input.Value);
+                        }
+                        ImGui.PopStyleColor();
+                        ImGui.PopItemWidth();
+                    }
+                    else
+                    {
+                        // just show actual value
+                        ImGui.PushItemWidth(200.0f);
+                        ImGui.PushStyleColor(ImGuiCol.Text, Color.TRed.Rgba);
+                        DrawValueDisplay(name, ref typedInputSlot.Value);
+                        ImGui.PopStyleColor();
+                        ImGui.PopItemWidth();
+                    }
                 }
                 else
                 {
@@ -186,7 +203,15 @@ namespace T3.Gui
 
         public override void DrawValueDisplay(string name, ref string value)
         {
-            DrawEditControl(name, ref value);
+            if (value != null)
+            {
+                ImGui.InputText(name, ref value, MAX_STRING_LENGTH, ImGuiInputTextFlags.ReadOnly);
+            }
+            else
+            {
+                string nullString = "<null>"; 
+                ImGui.InputText(name, ref nullString, MAX_STRING_LENGTH, ImGuiInputTextFlags.ReadOnly);
+            }
         }
     }
 
@@ -366,11 +391,17 @@ namespace T3.Gui
 
                     foreach (var inputEntry in entry.Value.OrderBy(i => i.Key))
                     {
+                        var symbolInput = symbol.InputDefinitions.SingleOrDefault(inputDef => inputDef.Id == inputEntry.Key);
+                        if (symbolInput == null)
+                        {
+                            Log.Info($"In '{symbol.Name}': Didn't found input definition for InputUi, skipping this one. This can happen if an input got removed.");
+                            continue;
+                        }
+
                         jsonTextWriter.WriteStartObject(); // input entry
                         jsonTextWriter.WriteValue("InputId", inputEntry.Key);
                         var inputUi = inputEntry.Value;
-                        var inputName = symbol.InputDefinitions.Single(inputDef => inputDef.Id == inputEntry.Key).Name;
-                        jsonTextWriter.WriteComment(inputName);
+                        jsonTextWriter.WriteComment(symbolInput.Name);
                         jsonTextWriter.WriteValue("Type", inputUi.Type + $", {inputUi.Type.Assembly.GetName().Name}");
                         jsonTextWriter.WritePropertyName("Position");
                         vec2Writer(jsonTextWriter, inputUi.PosOnCanvas);
