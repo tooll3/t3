@@ -66,13 +66,14 @@ namespace T3.Gui.Graph
 
                     if (BuildingConnections.TempConnection != null && ImGui.IsMouseReleased(0))
                     {
+                        BuildingConnections.Cancel();
                         //if (BuildingConnections.TempConnection.TargetParentOrChildId == BuildingConnections.UseDraftOperator)
                         //{
                         //    BuildingNodes.Current.Cancel();
                         //}
                         //else
                         //{
-                        BuildingConnections.BuildNodeAtTarget(_buildingNodes, InverseTransformPosition(_mouse));
+                        //BuildingConnections.BuildNodeAtTarget(_buildingNodes, InverseTransformPosition(_mouse));
                         //}
                     }
 

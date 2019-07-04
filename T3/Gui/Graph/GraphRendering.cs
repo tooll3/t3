@@ -62,6 +62,27 @@ namespace T3.Gui.Graph
                 var newLine = new ConnectionLineUi() { Connection = c };
                 lines.Add(newLine);
 
+
+                if (c == BuildingConnections.TempConnection)
+                {
+                    if (c.TargetParentOrChildId == BuildingConnections.NotConnected)
+                    {
+                        newLine.TargetPosition = ImGui.GetMousePos();
+                    }
+                    else if (c.SourceParentOrChildId == BuildingConnections.NotConnected)
+                    {
+                        newLine.TargetPosition = Vector2.Zero;
+                        newLine.SourcePosition = ImGui.GetMousePos();
+                        newLine.ColorForType = Color.White;
+
+                    }
+                    else
+                    {
+                        Log.Warning("invalid temporary connection?");
+                    }
+                }
+
+
                 var isConnectionToSymbolOutput = c.TargetParentOrChildId == Guid.Empty;
                 if (isConnectionToSymbolOutput)
                 {
@@ -72,20 +93,16 @@ namespace T3.Gui.Graph
 
                     linesToOutputNodes[outputNode].Add(newLine);
                 }
-                else if (c == BuildingConnections.TempConnection)
-                {
-                    if (c.TargetParentOrChildId == BuildingConnections.NotConnected)
-                    {
-                        newLine.TargetPosition = ImGui.GetMousePos();
-                    }
-                }
                 else
                 {
-                    var targetNode = childUisById[c.TargetParentOrChildId];
-                    if (!linesIntoNodes.ContainsKey(targetNode))
-                        linesIntoNodes.Add(targetNode, new List<ConnectionLineUi>());
+                    if (c.TargetParentOrChildId != BuildingConnections.NotConnected)
+                    {
+                        var targetNode = childUisById[c.TargetParentOrChildId];
+                        if (!linesIntoNodes.ContainsKey(targetNode))
+                            linesIntoNodes.Add(targetNode, new List<ConnectionLineUi>());
 
-                    linesIntoNodes[targetNode].Add(newLine);
+                        linesIntoNodes[targetNode].Add(newLine);
+                    }
                 }
 
                 var isConnectionFromSymbolInput = c.SourceParentOrChildId == Guid.Empty;
@@ -102,11 +119,14 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    var sourceNode = childUisById[c.SourceParentOrChildId];
-                    if (!linesFromNodes.ContainsKey(sourceNode))
-                        linesFromNodes.Add(sourceNode, new List<ConnectionLineUi>());
+                    if (c.SourceParentOrChildId != BuildingConnections.NotConnected)
+                    {
+                        var sourceNode = childUisById[c.SourceParentOrChildId];
+                        if (!linesFromNodes.ContainsKey(sourceNode))
+                            linesFromNodes.Add(sourceNode, new List<ConnectionLineUi>());
 
-                    linesFromNodes[sourceNode].Add(newLine);
+                        linesFromNodes[sourceNode].Add(newLine);
+                    }
                 }
             }
 
@@ -385,9 +405,16 @@ namespace T3.Gui.Graph
                 var style = ColorVariations.Operator;
                 if (BuildingConnections.TempConnection != null)
                 {
-                    style = BuildingConnections.IsMatchingOutputType(outputDef.ValueType)
-                        ? ColorVariations.Highlight
-                        : ColorVariations.Muted;
+                    if (BuildingConnections.IsMatchingOutputType(outputDef.ValueType))
+                    {
+                        var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
+                        colorForType.Rgba.W *= blink;
+                        style = ColorVariations.Highlight;
+                    }
+                    else
+                    {
+                        style = ColorVariations.Muted;
+                    }
                 }
 
                 var pos = usableArea.Min + Vector2.UnitY * (usableArea.GetHeight() - GraphOperator._outputSlotMargin - GraphOperator._outputSlotHeight);
@@ -424,8 +451,9 @@ namespace T3.Gui.Graph
         {
             if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputIndex))
             {
-                drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                    ColorVariations.Highlight.Apply(colorForType));
+
+
+
 
                 if (ImGui.IsMouseDragging(0))
                 {
@@ -436,6 +464,9 @@ namespace T3.Gui.Graph
             {
                 if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
+                    //drawList.AddRectFilled(usableArea.Min, usableArea.Max,
+                    //    ColorVariations.Highlight.Apply(colorForType));
+
                     drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                         ColorVariations.OperatorHover.Apply(colorForType));
 
@@ -466,9 +497,16 @@ namespace T3.Gui.Graph
                 var style = ColorVariations.Operator;
                 if (BuildingConnections.TempConnection != null)
                 {
-                    style = BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType)
-                        ? ColorVariations.Highlight
-                        : ColorVariations.Muted;
+                    if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                    {
+                        var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
+                        colorForType.Rgba.W *= blink;
+                        style = ColorVariations.Highlight;
+                    }
+                    else
+                    {
+                        style = ColorVariations.Muted;
+                    }
                 }
 
                 var pos = usableArea.Min + Vector2.UnitY * GraphOperator._inputSlotMargin;
