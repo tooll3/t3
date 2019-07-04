@@ -169,7 +169,7 @@ namespace T3.Gui.Graph
                         line.IsSelected |= childUi.IsSelected;
                     }
 
-                    DrawOutput(childUi, outputIndex, output, usableArea, colorForType, hovered);
+                    DrawOutput(childUi, output, usableArea, colorForType, hovered);
 
                     outputIndex++;
                 }
@@ -286,7 +286,7 @@ namespace T3.Gui.Graph
                             line.IsSelected |= childUi.IsSelected;
                         }
                     }
-                    DrawInputSlot(childUi, inputIndex, input, usableArea, colorForType, hovered);
+                    DrawInputSlot(childUi, input, usableArea, colorForType, hovered);
 
                     ImGui.PopID();
                 }
@@ -363,9 +363,9 @@ namespace T3.Gui.Graph
         }
 
 
-        private static void DrawOutput(SymbolChildUi childUi, int outputIndex, Symbol.OutputDefinition outputDef, ImRect usableArea, Color colorForType, bool hovered)
+        private static void DrawOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
-            if (BuildingConnections.IsOutputSlotCurrentConnectionSource(childUi, outputIndex))
+            if (BuildingConnections.IsOutputSlotCurrentConnectionSource(childUi, outputDef))
             {
                 drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                     ColorVariations.Highlight.Apply(colorForType));
@@ -449,9 +449,9 @@ namespace T3.Gui.Graph
 
 
 
-        private static void DrawInputSlot(SymbolChildUi targetUi, int inputIndex, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered)
+        private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
-            if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputIndex))
+            if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
             {
                 if (ImGui.IsMouseDragging(0))
                 {
@@ -532,9 +532,9 @@ namespace T3.Gui.Graph
             }
         }
 
-        private static void DrawMultiInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, int inputIndex, ImRect usableArea, Color colorForType, bool hovered)
+        private static void DrawMultiInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered, int multiInputIndex = 0)
         {
-            if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputIndex))
+            if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputDef, multiInputIndex))
             {
                 if (ImGui.IsMouseDragging(0))
                 {
