@@ -193,7 +193,8 @@ namespace T3.Gui.Graph
                         : ImGui.IsItemHovered();
 
 
-                    var isPotentialConnectionTarget = BuildingConnections.IsInputSlotCurrentConnectionTarget(childUi, inputIndex);
+                    //var isPotentialConnectionTarget = BuildingConnections.IsInputSlotCurrentConnectionTarget(childUi, inputIndex);
+                    var isPotentialConnectionTarget = BuildingConnections.IsMatchingInputType(input.DefaultValue.ValueType);
                     var colorForType = ColorForInputType(input);
 
                     var connectedLines = linesIntoNodes.ContainsKey(childUi)
@@ -247,7 +248,7 @@ namespace T3.Gui.Graph
                                 }
                                 else
                                 {
-                                    var line = connectedLines[index << 1];
+                                    var line = connectedLines[index >> 1];
                                     line.TargetPosition = targetPos;
                                     line.IsSelected |= childUi.IsSelected;
 
@@ -383,7 +384,7 @@ namespace T3.Gui.Graph
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        BuildingConnections.CompleteAtOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputIndex);
+                        BuildingConnections.CompleteAtOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
                     }
                 }
                 else
@@ -396,7 +397,7 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(0))
                     {
-                        BuildingConnections.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputIndex);
+                        BuildingConnections.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
                     }
                 }
             }
@@ -447,14 +448,11 @@ namespace T3.Gui.Graph
         }
 
 
+
         private static void DrawInputSlot(SymbolChildUi targetUi, int inputIndex, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
             if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputIndex))
             {
-
-
-
-
                 if (ImGui.IsMouseDragging(0))
                 {
                     BuildingConnections.Update();
@@ -472,7 +470,7 @@ namespace T3.Gui.Graph
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        BuildingConnections.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputIndex);
+                        BuildingConnections.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
                     }
                 }
                 else
@@ -488,7 +486,7 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(0))
                     {
-                        BuildingConnections.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputIndex);
+                        BuildingConnections.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
                     }
                 }
             }
@@ -533,6 +531,90 @@ namespace T3.Gui.Graph
                 }
             }
         }
+
+        private static void DrawMultiInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, int inputIndex, ImRect usableArea, Color colorForType, bool hovered)
+        {
+            if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputIndex))
+            {
+                if (ImGui.IsMouseDragging(0))
+                {
+                    BuildingConnections.Update();
+                }
+            }
+            else if (hovered)
+            {
+                if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                {
+                    //drawList.AddRectFilled(usableArea.Min, usableArea.Max,
+                    //    ColorVariations.Highlight.Apply(colorForType));
+
+                    drawList.AddRectFilled(usableArea.Min, usableArea.Max,
+                        ColorVariations.OperatorHover.Apply(colorForType));
+
+                    if (ImGui.IsMouseReleased(0))
+                    {
+                        BuildingConnections.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                    }
+                }
+                else
+                {
+                    drawList.AddRectFilled(
+                        usableArea.Min,
+                        usableArea.Max,
+                        ColorVariations.OperatorHover.Apply(colorForType)
+                        );
+
+                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
+                    ImGui.SetTooltip($"-> .{inputDef.Name}");
+                    ImGui.PopStyleVar();
+                    if (ImGui.IsItemClicked(0))
+                    {
+                        BuildingConnections.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                    }
+                }
+            }
+            else
+            {
+                var style = ColorVariations.Operator;
+                if (BuildingConnections.TempConnection != null)
+                {
+                    if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                    {
+                        var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
+                        colorForType.Rgba.W *= blink;
+                        style = ColorVariations.Highlight;
+                    }
+                    else
+                    {
+                        style = ColorVariations.Muted;
+                    }
+                }
+
+                var pos = usableArea.Min + Vector2.UnitY * GraphOperator._inputSlotMargin;
+                var size = new Vector2(usableArea.GetWidth(), GraphOperator._inputSlotHeight);
+                drawList.AddRectFilled(
+                    pos,
+                    pos + size,
+                    style.Apply(colorForType)
+                    );
+
+                if (inputDef.IsMultiInput)
+                {
+                    drawList.AddRectFilled(
+                        pos + new Vector2(0, GraphOperator._inputSlotHeight),
+                        pos + new Vector2(GraphOperator._inputSlotHeight, GraphOperator._inputSlotHeight + GraphOperator._multiInputSize),
+                        style.Apply(colorForType)
+                        );
+
+                    drawList.AddRectFilled(
+                        pos + new Vector2(size.X - GraphOperator._inputSlotHeight, GraphOperator._inputSlotHeight),
+                        pos + new Vector2(size.X, GraphOperator._inputSlotHeight + GraphOperator._multiInputSize),
+                        style.Apply(colorForType)
+                        );
+                }
+            }
+        }
+
 
 
         private static Color ColorForInputType(Symbol.InputDefinition inputDef)
