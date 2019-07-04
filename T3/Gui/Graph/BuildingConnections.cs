@@ -30,18 +30,18 @@ namespace T3.Gui.Graph
                 && _draftConnectionType == valueType;
         }
 
-        public static bool IsOutputSlotCurrentConnectionSource(SymbolChildUi sourceUi, int outputIndex)
+        public static bool IsOutputSlotCurrentConnectionSource(SymbolChildUi sourceUi, Symbol.OutputDefinition outputDef)
         {
             return TempConnection != null
                 && TempConnection.SourceParentOrChildId == sourceUi.SymbolChild.Id
-                && TempConnection.SourceSlotId == sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex].Id;
+                && TempConnection.SourceSlotId == outputDef.Id;
         }
 
-        public static bool IsInputSlotCurrentConnectionTarget(SymbolChildUi targetUi, int inputIndex)
+        public static bool IsInputSlotCurrentConnectionTarget(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, int multiInputIndex = 0)
         {
             return TempConnection != null
                 && TempConnection.TargetParentOrChildId == targetUi.SymbolChild.Id
-                && TempConnection.TargetSlotId == targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].Id;
+                && TempConnection.TargetSlotId == inputDef.Id;
         }
 
         public static bool IsInputNodeCurrentConnectionSource(Symbol.InputDefinition inputDef)
