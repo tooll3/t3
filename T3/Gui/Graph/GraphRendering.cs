@@ -39,16 +39,6 @@ namespace T3.Gui.Graph
             var inputUisById = InputUiRegistry.Entries[symbol.Id];
             var outputUisById = OutputUiRegistry.Entries[symbol.Id];
 
-            //var inputUisForSymbol = InputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-            //var index = 0;
-            //foreach (var inputDef in GraphCanvas.Current.CompositionOp.Symbol.InputDefinitions)
-            //{
-            //    var inputUi = inputUisForSymbol[inputDef.Id];
-            //    Draw(inputDef, inputUi);
-            //    index++;
-            //}
-
-
             // 1. Initialize connection lines
             var lines = new List<ConnectionLineUi>(allConnections.Count);
             var linesFromNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
@@ -230,64 +220,71 @@ namespace T3.Gui.Graph
 
                     if (input.IsMultiInput)
                     {
-                        if (isPotentialConnectionTarget)
+                        var showGaps = isPotentialConnectionTarget;
+
+                        var socketCount = showGaps
+                            ? connectedLines.Count * 2 + 1
+                            : connectedLines.Count;
+
+                        var socketWidth = usableArea.GetWidth() / socketCount;
+                        var targetPos = new Vector2(
+                                    usableArea.Min.X + socketWidth * 0.5f,
+                                    usableArea.Min.Y);
+
+                        var topLeft = new Vector2(usableArea.Min.X, usableArea.Min.Y);
+                        var socketSize = new Vector2(socketWidth - 2, usableArea.GetHeight());
+
+                        for (var index = 0; index < socketCount; index++)
                         {
-                            // Reveal gaps for insertion / reordering
-                            var socketCount = connectedLines.Count * 2 + 1;
-                            var socketWidth = usableArea.GetWidth() / socketCount;
-                            var targetPos = new Vector2(
-                                        usableArea.Min.X + socketWidth * 0.5f,
-                                        usableArea.Min.Y);
 
-                            var topLeft = new Vector2(usableArea.Min.X, usableArea.Min.Y);
-                            var socketSize = new Vector2(socketWidth - 2, usableArea.GetHeight());
+                            var usableSocketArea = new ImRect(
+                                topLeft,
+                                topLeft + socketSize);
 
-                            for (var index = 0; index < socketCount; index++)
+                            var isSocketHovered = usableSocketArea.Contains(ImGui.GetMousePos());
+
+                            bool isGap = false;
+                            if (showGaps)
                             {
-
-                                var usableSocketArea = new ImRect(
-                                    topLeft,
-                                    topLeft + socketSize);
-
-                                var isSocketHovered = usableSocketArea.Contains(ImGui.GetMousePos());
-
-
-
-                                var isGap = (index & 1) == 0;
-                                if (!isGap)
-                                {
-                                    var line = connectedLines[index >> 1];
-                                    line.TargetPosition = targetPos;
-                                    line.IsSelected |= childUi.IsSelected;
-                                }
-
-                                DrawMultiInputSocket(childUi, input, usableSocketArea, colorForType, isSocketHovered, index, isGap);
-
-                                targetPos.X += socketWidth;
-                                topLeft.X += socketWidth;
+                                isGap = (index & 1) == 0;
                             }
-                        }
-                        else
-                        {
-                            // Sockets are defined through inputs
-                            var socketCount = Math.Max(connectedLines.Count, 1);
-                            var socketWidth = usableArea.GetWidth() / socketCount;
-                            var targetPos = new Vector2(
-                                        usableArea.Min.X + socketWidth * 0.5f,
-                                        usableArea.Min.Y);
 
-                            var index = 0;
-                            foreach (var line in connectedLines)
+                            if (!isGap)
                             {
+                                var line = showGaps
+                                    ? connectedLines[index >> 1]
+                                    : connectedLines[index];
 
                                 line.TargetPosition = targetPos;
                                 line.IsSelected |= childUi.IsSelected;
-
-                                targetPos.X += socketWidth;
-                                index++;
                             }
-                            DrawInputSlot(childUi, input, usableArea, colorForType, hovered);
+                            DrawMultiInputSocket(childUi, input, usableSocketArea, colorForType, isSocketHovered, index, isGap);
+
+                            targetPos.X += socketWidth;
+                            topLeft.X += socketWidth;
                         }
+                        //}
+                        //else
+                        //{
+                        //    // Sockets are defined through inputs
+                        //    var socketCount = Math.Max(connectedLines.Count, 1);
+                        //    var socketWidth = usableArea.GetWidth() / socketCount;
+                        //    var targetPos = new Vector2(
+                        //                usableArea.Min.X + socketWidth * 0.5f,
+                        //                usableArea.Min.Y);
+
+                        //    var index = 0;
+                        //    foreach (var line in connectedLines)
+                        //    {
+
+                        //        line.TargetPosition = targetPos;
+                        //        line.IsSelected |= childUi.IsSelected;
+
+                        //        targetPos.X += socketWidth;
+                        //        index++;
+                        //    }
+                        //    DrawInputSlot(childUi, input, usableArea, colorForType, hovered);
+                        //}
                     }
                     else
                     {
@@ -543,7 +540,7 @@ namespace T3.Gui.Graph
             }
         }
 
-        private static void DrawMultiInputSocket(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered, int multiInputIndex, bool isGap)
+        private static void DrawMultiInputSocket(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool isInputHovered, int multiInputIndex, bool isGap)
         {
             if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputDef, multiInputIndex))
             {
@@ -552,7 +549,7 @@ namespace T3.Gui.Graph
                     BuildingConnections.Update();
                 }
             }
-            else if (hovered)
+            else if (isInputHovered)
             {
                 if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
