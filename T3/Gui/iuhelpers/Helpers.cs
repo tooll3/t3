@@ -259,6 +259,50 @@ namespace imHelpers
         public static double Lerp(double a, double b, double t) { return (double)(a + (b - a) * t); }
         public static int Lerp(int a, int b, float t) { return (int)(a + (b - a) * t); }
         public static void Swap<T>(ref T a, ref T b) { T tmp = a; a = b; b = tmp; }
+
+
+        public static void DrawSplitter(bool split_vertically, float thickness, ref float size0, ref float size1, float min_size0, float min_size1)
+        {
+            var backup_pos = ImGui.GetCursorPos();
+            if (split_vertically)
+                ImGui.SetCursorPosY(backup_pos.Y + size0);
+            else
+                ImGui.SetCursorPosX(backup_pos.X + size0);
+
+            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
+
+            // We don't draw while active/pressed because as we move the panes the splitter button will be 1 frame late
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 1));
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.6f, 0.6f, 0.6f, 0.10f));
+            ImGui.Button("##Splitter", new Vector2(!split_vertically ? thickness : -1.0f, split_vertically ? thickness : -1.0f));
+            ImGui.PopStyleColor(3);
+
+            ImGui.SetItemAllowOverlap(); // This is to allow having other buttons OVER our splitter. 
+
+            if (ImGui.IsAnyItemHovered())
+            {
+                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS);
+            }
+            if (ImGui.IsItemActive())
+            {
+                float mouse_delta = split_vertically ? ImGui.GetIO().MouseDelta.Y : ImGui.GetIO().MouseDelta.X;
+
+                //// Minimum pane size
+                //if (mouse_delta < min_size0 - size0)
+                //    mouse_delta = min_size0 - size0;
+                //if (mouse_delta > size1 - min_size1)
+                //    mouse_delta = size1 - min_size1;
+
+                // Apply resize
+                size0 += mouse_delta;
+                size1 -= mouse_delta;
+            }
+            ImGui.SetCursorPos(backup_pos);
+        }
+
     }
+
+
+
 
 }

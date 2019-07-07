@@ -553,9 +553,6 @@ namespace T3.Gui.Graph
             {
                 if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
-                    //drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                    //    ColorVariations.Highlight.Apply(colorForType));
-
                     drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                         ColorVariations.OperatorHover.Apply(colorForType));
 

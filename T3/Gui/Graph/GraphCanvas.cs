@@ -33,57 +33,35 @@ namespace T3.Gui.Graph
 
             ChildUisById = SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id];
             DrawList = ImGui.GetWindowDrawList();
-            _foreground = ImGui.GetForegroundDrawList();
             _io = ImGui.GetIO();
+
 
             ImGui.BeginGroup();
             {
                 _mouse = ImGui.GetMousePos();
-                //ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(1, 1));
-                //ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
-                ImGui.PushStyleColor(ImGuiCol.WindowBg, new Color(60, 60, 70, 200).Rgba);
 
+                WindowPos = ImGui.GetWindowPos();
+                WindowSize = ImGui.GetWindowSize();
+
+
+                DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
                 // Damp scaling
                 Scale = Im.Lerp(Scale, _scaleTarget, _io.DeltaTime * 20);
                 Scroll = Im.Lerp(Scroll, _scrollTarget, _io.DeltaTime * 20);
 
-                THelpers.DebugWindowRect("window");
-                ImGui.BeginChild("scrolling_region", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+                HandleInteraction();
+
+                DrawGrid();
+                GraphRendering.DrawGraph();
+
+                if (BuildingConnections.TempConnection != null && ImGui.IsMouseReleased(0))
                 {
-                    THelpers.DebugWindowRect("window.scrollingRegion");
-                    WindowPos = ImGui.GetWindowPos();
-                    WindowSize = ImGui.GetWindowSize();
-                    DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
-
-                    HandleInteraction();
-
-                    DrawGrid();
-                    GraphRendering.DrawGraph();
-                    //_buildingNodes.Draw();
-
-                    //ConnectionLine.DrawAll(this);
-
-
-                    if (BuildingConnections.TempConnection != null && ImGui.IsMouseReleased(0))
-                    {
-                        BuildingConnections.Cancel();
-                        //if (BuildingConnections.TempConnection.TargetParentOrChildId == BuildingConnections.UseDraftOperator)
-                        //{
-                        //    BuildingNodes.Current.Cancel();
-                        //}
-                        //else
-                        //{
-                        //BuildingConnections.BuildNodeAtTarget(_buildingNodes, InverseTransformPosition(_mouse));
-                        //}
-                    }
-
-                    _selectionFence.Draw();
-                    DrawList.PopClipRect();
-                    DrawContextMenu();
+                    BuildingConnections.Cancel();
                 }
-                ImGui.EndChild();
-                ImGui.PopStyleColor();
-                //ImGui.PopStyleVar(2);
+
+                _selectionFence.Draw();
+                DrawList.PopClipRect();
+                DrawContextMenu();
             }
             ImGui.EndGroup();
         }
@@ -353,7 +331,7 @@ namespace T3.Gui.Graph
         #endregion
 
         #region private members ------
-        private ImDrawListPtr _foreground;
+        //private ImDrawListPtr _foreground;
         public Vector2 WindowSize { get; private set; }
         private Vector2 _mouse;
 
