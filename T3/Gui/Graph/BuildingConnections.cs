@@ -155,8 +155,10 @@ namespace T3.Gui.Graph
             _draftConnectionType = null;
         }
 
-        public static void CompleteAtInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input, int multiInputIndex = 0)
+        public static void CompleteAtInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input, int multiInputIndex = 0, bool insertMultiInput = false)
         {
+            // TODO:
+            // use multiInputIndex and inset
             var newConnection =
                 new Symbol.Connection(
                 sourceParentOrChildId: TempConnection.SourceParentOrChildId,
