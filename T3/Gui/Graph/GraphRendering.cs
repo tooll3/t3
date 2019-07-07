@@ -239,22 +239,32 @@ namespace T3.Gui.Graph
                                         usableArea.Min.X + socketWidth * 0.5f,
                                         usableArea.Min.Y);
 
+                            var topLeft = new Vector2(usableArea.Min.X, usableArea.Min.Y);
+                            var socketSize = new Vector2(socketWidth - 2, usableArea.GetHeight());
+
                             for (var index = 0; index < socketCount; index++)
                             {
+
+                                var usableSocketArea = new ImRect(
+                                    topLeft,
+                                    topLeft + socketSize);
+
+                                var isSocketHovered = usableSocketArea.Contains(ImGui.GetMousePos());
+
+
+
                                 var isGap = (index & 1) == 0;
-                                if (isGap)
-                                {
-                                    // intentionally left blank :-)
-                                }
-                                else
+                                if (!isGap)
                                 {
                                     var line = connectedLines[index >> 1];
                                     line.TargetPosition = targetPos;
                                     line.IsSelected |= childUi.IsSelected;
-
-                                    // TODO: Draw input
                                 }
+
+                                DrawMultiInputSocket(childUi, input, usableSocketArea, colorForType, isSocketHovered, index, isGap);
+
                                 targetPos.X += socketWidth;
+                                topLeft.X += socketWidth;
                             }
                         }
                         else
@@ -276,6 +286,7 @@ namespace T3.Gui.Graph
                                 targetPos.X += socketWidth;
                                 index++;
                             }
+                            DrawInputSlot(childUi, input, usableArea, colorForType, hovered);
                         }
                     }
                     else
@@ -285,8 +296,8 @@ namespace T3.Gui.Graph
                             line.TargetPosition = usableArea.GetCenter();
                             line.IsSelected |= childUi.IsSelected;
                         }
+                        DrawInputSlot(childUi, input, usableArea, colorForType, hovered);
                     }
-                    DrawInputSlot(childUi, input, usableArea, colorForType, hovered);
 
                     ImGui.PopID();
                 }
@@ -532,7 +543,7 @@ namespace T3.Gui.Graph
             }
         }
 
-        private static void DrawMultiInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered, int multiInputIndex = 0)
+        private static void DrawMultiInputSocket(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered, int multiInputIndex, bool isGap)
         {
             if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputDef, multiInputIndex))
             {
@@ -553,7 +564,7 @@ namespace T3.Gui.Graph
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        BuildingConnections.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                        BuildingConnections.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex);
                     }
                 }
                 else
@@ -598,20 +609,17 @@ namespace T3.Gui.Graph
                     style.Apply(colorForType)
                     );
 
-                if (inputDef.IsMultiInput)
-                {
-                    drawList.AddRectFilled(
-                        pos + new Vector2(0, GraphOperator._inputSlotHeight),
-                        pos + new Vector2(GraphOperator._inputSlotHeight, GraphOperator._inputSlotHeight + GraphOperator._multiInputSize),
-                        style.Apply(colorForType)
-                        );
+                //drawList.AddRectFilled(
+                //    pos + new Vector2(0, GraphOperator._inputSlotHeight),
+                //    pos + new Vector2(GraphOperator._inputSlotHeight, GraphOperator._inputSlotHeight + GraphOperator._multiInputSize),
+                //    style.Apply(colorForType)
+                //    );
 
-                    drawList.AddRectFilled(
-                        pos + new Vector2(size.X - GraphOperator._inputSlotHeight, GraphOperator._inputSlotHeight),
-                        pos + new Vector2(size.X, GraphOperator._inputSlotHeight + GraphOperator._multiInputSize),
-                        style.Apply(colorForType)
-                        );
-                }
+                //drawList.AddRectFilled(
+                //    pos + new Vector2(size.X - GraphOperator._inputSlotHeight, GraphOperator._inputSlotHeight),
+                //    pos + new Vector2(size.X, GraphOperator._inputSlotHeight + GraphOperator._multiInputSize),
+                //    style.Apply(colorForType)
+                //    );
             }
         }
 
