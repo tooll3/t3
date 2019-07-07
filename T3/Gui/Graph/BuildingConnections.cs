@@ -73,12 +73,13 @@ namespace T3.Gui.Graph
         }
 
 
-        public static void StartFromInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition inputDef)
+        public static void StartFromInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition inputDef, int multiInputIndex = 0)
         {
             var existingConnection = FindConnectionToInputSlot(parentSymbol, targetUi, inputDef);
 
             if (existingConnection != null)
             {
+                // TODO: use multiInputIndex here
                 parentSymbol.RemoveConnection(existingConnection);
 
                 TempConnection = new Symbol.Connection(
