@@ -577,7 +577,7 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(0))
                     {
-                        BuildingConnections.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                        BuildingConnections.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex);
                     }
                 }
             }
