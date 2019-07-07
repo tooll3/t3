@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
+using T3.Core.Logging;
 
 //using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -234,7 +235,8 @@ namespace T3.Core.Operator
             // create connections between instances
             foreach (var connection in Connections)
             {
-                newInstance.AddConnection(connection);
+                //todo: fix the multi input index
+                newInstance.AddConnection(connection, 0);
             }
 
             _instancesOfSymbol.Add(newInstance);
@@ -273,32 +275,68 @@ namespace T3.Core.Operator
             parentInstance.Children.Remove(childInstanceToRemove);
         }
 
-        public void AddConnection(Connection connection)
+        public void AddConnection(Connection connection, int multiInputIndex = 0)
         {
+            var childInputTarget = (from child in Children
+                                    where child.InputValues.ContainsKey(connection.TargetSlotId)
+                                    select child.InputValues[connection.TargetSlotId]).SingleOrDefault();
+            bool isMultiInput = childInputTarget?.InputDefinition.IsMultiInput ?? false;
+
             // check if another connection is already existing to the target input, ignoring multi inputs for now
-            var existingConnection = Connections.FirstOrDefault(c => c.TargetParentOrChildId == connection.TargetParentOrChildId &&
-                                                                     c.TargetSlotId == connection.TargetSlotId);
-            if (existingConnection != null)
+            var existingConnections = Connections.FindAll(c => c.TargetParentOrChildId == connection.TargetParentOrChildId &&
+                                                               c.TargetSlotId == connection.TargetSlotId);
+            if (isMultiInput)
             {
-                RemoveConnection(existingConnection);
+                if (multiInputIndex == existingConnections.Count)
+                {
+                    // simple case, just append
+                    Connections.Add(connection);
+                    Log.Info($"Added MI with index {multiInputIndex} at existing index {Connections.Count - 1}");
+                }
+                else
+                {
+                    // use the target index to find the existing successor among the connections
+                    var existingConnection = existingConnections[multiInputIndex];
+                    int existingAtIndex = Connections.FindIndex(c => c == existingConnection); // == is intended
+                    Connections.Insert(existingAtIndex, connection);
+                    Log.Info($"Added MI with index {multiInputIndex} at existing index {existingAtIndex}");
+                }
+            }
+            else
+            {
+                if (existingConnections.Count > 0)
+                {
+                    RemoveConnection(existingConnections[0]);
+                }
+
+                Connections.Add(connection);
             }
 
-            Connections.Add(connection);
             foreach (var instance in _instancesOfSymbol)
             {
-                instance.AddConnection(connection);
+                instance.AddConnection(connection, multiInputIndex);
             }
         }
 
-        public void RemoveConnection(Connection connection)
+        public void RemoveConnection(Connection connection, int multiInputIndex = 0)
         {
-            var index = Connections.FindIndex(storedConnection => storedConnection.Equals(connection));
-            if (index != -1)
+            var existingConnections = Connections.FindAll(c => c.TargetParentOrChildId == connection.TargetParentOrChildId &&
+                                                               c.TargetSlotId == connection.TargetSlotId);
+            if (existingConnections.Count == 0 || multiInputIndex >= existingConnections.Count)
             {
-                Connections.RemoveAt(index);
+                Log.Error($"Trying to remove a connection that doesn't exist.");
+                return;
+            }
+
+            var existingConnection = existingConnections[multiInputIndex];
+            int connectionsIndex = Connections.FindIndex(c => c == existingConnection); // == is intended
+            if (connectionsIndex != -1)
+            {
+                Log.Info($"Remove  MI with index {multiInputIndex} at existing index {connectionsIndex}");
+                Connections.RemoveAt(connectionsIndex);
                 foreach (var instance in _instancesOfSymbol)
                 {
-                    instance.RemoveConnection(connection);
+                    instance.RemoveConnection(connection, multiInputIndex);
                 }
             }
         }
@@ -371,11 +409,11 @@ namespace T3.Core.Operator
             public Guid TargetParentOrChildId { get; }
             public Guid TargetSlotId { get; }
 
-            public Connection(Guid sourceParentOrChildId, Guid sourceSlotId, Guid targetSymbolChildId, Guid targetSlotId)
+            public Connection(Guid sourceParentOrChildId, Guid sourceSlotId, Guid targetParentOrChildId, Guid targetSlotId)
             {
                 SourceParentOrChildId = sourceParentOrChildId;
                 SourceSlotId = sourceSlotId;
-                TargetParentOrChildId = targetSymbolChildId;
+                TargetParentOrChildId = targetParentOrChildId;
                 TargetSlotId = targetSlotId;
             }
 
