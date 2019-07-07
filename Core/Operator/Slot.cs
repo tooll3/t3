@@ -37,8 +37,8 @@ namespace T3.Core.Operator
 
     public interface IConnectableTarget
     {
-        void AddConnection(IConnectableSource source);
-        void RemoveConnection();
+        void AddConnection(IConnectableSource source, int index = 0);
+        void RemoveConnection(int index = 0);
         bool IsConnected { get; }
     }
 
@@ -47,8 +47,8 @@ namespace T3.Core.Operator
         public Guid Id { get; set; }
         public Type Type { get; protected set; }
 
-        public abstract void AddConnection(IConnectableSource source);
-        public abstract void RemoveConnection();
+        public abstract void AddConnection(IConnectableSource source, int index = 0);
+        public abstract void RemoveConnection(int index = 0);
         public abstract bool IsConnected { get; }
     }
 
@@ -160,17 +160,23 @@ namespace T3.Core.Operator
             return Value;
         }
 
-        public override void AddConnection(IConnectableSource sourceSlot)
+        public override void AddConnection(IConnectableSource sourceSlot, int index = 0)
         {
-            InputConnection.Add((Slot<T>)sourceSlot);
+            InputConnection.Insert(index, (Slot<T>)sourceSlot);
         }
 
-        public override void RemoveConnection()
+        public override void RemoveConnection(int index = 0)
         {
             if (IsConnected)
             {
-                // todo: fix this with correct connection
-                InputConnection.RemoveAt(InputConnection.Count - 1);
+                if (index < InputConnection.Count)
+                {
+                    InputConnection.RemoveAt(index);
+                }
+                else
+                {
+                    Log.Error($"Trying to delete connection at index {index}, but input slot only has {InputConnection.Count} connections");
+                }
             }
         }
 

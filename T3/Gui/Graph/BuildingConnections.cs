@@ -66,7 +66,7 @@ namespace T3.Gui.Graph
             TempConnection = new Symbol.Connection(
                 sourceParentOrChildId: sourceUi.SymbolChild.Id,
                 sourceSlotId: outputDef.Id,
-                targetSymbolChildId: NotConnected,
+                targetParentOrChildId: NotConnected,
                 targetSlotId: NotConnected
             );
             _draftConnectionType = outputDef.ValueType;
@@ -79,13 +79,12 @@ namespace T3.Gui.Graph
 
             if (existingConnection != null)
             {
-                // TODO: use multiInputIndex here
-                parentSymbol.RemoveConnection(existingConnection);
+                parentSymbol.RemoveConnection(existingConnection, multiInputIndex);
 
                 TempConnection = new Symbol.Connection(
                     sourceParentOrChildId: existingConnection.SourceParentOrChildId,
                     sourceSlotId: existingConnection.SourceSlotId,
-                    targetSymbolChildId: NotConnected,
+                    targetParentOrChildId: NotConnected,
                     targetSlotId: NotConnected
                 );
             }
@@ -94,7 +93,7 @@ namespace T3.Gui.Graph
                 TempConnection = new Symbol.Connection(
                     sourceParentOrChildId: NotConnected,
                     sourceSlotId: NotConnected,
-                    targetSymbolChildId: targetUi.SymbolChild.Id,
+                    targetParentOrChildId: targetUi.SymbolChild.Id,
                     targetSlotId: inputDef.Id
                 );
             }
@@ -107,7 +106,7 @@ namespace T3.Gui.Graph
             TempConnection = new Symbol.Connection(
                 sourceParentOrChildId: UseSymbolContainer,
                 sourceSlotId: inputDef.Id,
-                targetSymbolChildId: NotConnected,
+                targetParentOrChildId: NotConnected,
                 targetSlotId: NotConnected
             );
             _draftConnectionType = inputDef.DefaultValue.ValueType;
@@ -128,7 +127,7 @@ namespace T3.Gui.Graph
                 TempConnection = new Symbol.Connection(
                     sourceParentOrChildId: existingConnection.SourceParentOrChildId,
                     sourceSlotId: existingConnection.SourceSlotId,
-                    targetSymbolChildId: NotConnected,
+                    targetParentOrChildId: NotConnected,
                     targetSlotId: NotConnected
                 );
             }
@@ -137,7 +136,7 @@ namespace T3.Gui.Graph
                 TempConnection = new Symbol.Connection(
                     sourceParentOrChildId: NotConnected,
                     sourceSlotId: NotConnected,
-                    targetSymbolChildId: UseSymbolContainer,
+                    targetParentOrChildId: UseSymbolContainer,
                     targetSlotId: outputDef.Id
                 );
             }
@@ -158,19 +157,13 @@ namespace T3.Gui.Graph
 
         public static void CompleteAtInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input, int multiInputIndex = 0, bool insertMultiInput = false)
         {
-            // TODO:
-            // use multiInputIndex and inset
-            var newConnection =
-                new Symbol.Connection(
-                sourceParentOrChildId: TempConnection.SourceParentOrChildId,
-                sourceSlotId: TempConnection.SourceSlotId,
-                targetSymbolChildId: targetUi.SymbolChild.Id,
-                targetSlotId: input.Id
-            );
-            parentSymbol.AddConnection(newConnection);
+            var newConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
+                                                      sourceSlotId: TempConnection.SourceSlotId,
+                                                      targetParentOrChildId: targetUi.SymbolChild.Id,
+                                                      targetSlotId: input.Id);
+            parentSymbol.AddConnection(newConnection, multiInputIndex/2); // divide by 2 to get correct insertion index in existing connections
             TempConnection = null;
         }
-
 
         public static void CompleteAtOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, Symbol.OutputDefinition output)
         {
@@ -178,7 +171,7 @@ namespace T3.Gui.Graph
                 new Symbol.Connection(
                 sourceParentOrChildId: sourceUi.SymbolChild.Id,
                 sourceSlotId: output.Id,
-                targetSymbolChildId: TempConnection.TargetParentOrChildId,
+                targetParentOrChildId: TempConnection.TargetParentOrChildId,
                 targetSlotId: TempConnection.TargetSlotId
             );
             parentSymbol.AddConnection(newConnection);
@@ -193,7 +186,7 @@ namespace T3.Gui.Graph
             TempConnection = new Symbol.Connection(
                 sourceParentOrChildId: TempConnection.SourceParentOrChildId,
                 sourceSlotId: TempConnection.SourceSlotId,
-                targetSymbolChildId: UseDraftOperator,
+                targetParentOrChildId: UseDraftOperator,
                 targetSlotId: Guid.Empty
             );
         }
@@ -203,7 +196,7 @@ namespace T3.Gui.Graph
             var newConnection = new Symbol.Connection(
                 sourceParentOrChildId: TempConnection.SourceParentOrChildId,
                 sourceSlotId: TempConnection.SourceSlotId,
-                targetSymbolChildId: newOp.Id,
+                targetParentOrChildId: newOp.Id,
                 targetSlotId: inputDef.Id
             );
             parentSymbol.AddConnection(newConnection);
@@ -216,7 +209,7 @@ namespace T3.Gui.Graph
                 new Symbol.Connection(
                 sourceParentOrChildId: UseSymbolContainer,
                 sourceSlotId: inputDef.Id,
-                targetSymbolChildId: TempConnection.TargetParentOrChildId,
+                targetParentOrChildId: TempConnection.TargetParentOrChildId,
                 targetSlotId: TempConnection.TargetSlotId
             );
             parentSymbol.AddConnection(newConnection);
@@ -230,7 +223,7 @@ namespace T3.Gui.Graph
                 new Symbol.Connection(
                 sourceParentOrChildId: TempConnection.SourceParentOrChildId,
                 sourceSlotId: TempConnection.SourceSlotId,
-                targetSymbolChildId: UseSymbolContainer,
+                targetParentOrChildId: UseSymbolContainer,
                 targetSlotId: outputDef.Id
             );
             parentSymbol.AddConnection(newConnection);
