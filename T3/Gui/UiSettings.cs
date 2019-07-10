@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using T3.Gui.Graph;
 using T3.Gui.TypeColors;
+using static T3.Gui.T3UI;
 
 namespace T3.Gui
 {
@@ -16,6 +17,7 @@ namespace T3.Gui
         public static bool ConsoleWindowVisible = true;
         public static bool ParameterWindowVisible = true;
         public static bool CurveEditorVisible = true;
+        public static bool ShowMetrics;
 
         public static unsafe void DrawUiSettings()
         {
@@ -24,6 +26,7 @@ namespace T3.Gui
                 Metrics.Draw();
                 ImGui.Checkbox("VSync", ref _vsync);
                 ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
+                ImGui.Checkbox("Show Metrics", ref ShowMetrics);
                 ImGui.Checkbox("Show Item Regions", ref ItemRegionsVisible);
                 ImGui.Checkbox("Demo Window Visible", ref DemoWindowVisible);
                 ImGui.Checkbox("Console Window Visible", ref ConsoleWindowVisible);
@@ -34,6 +37,7 @@ namespace T3.Gui
                 {
                     T3UI.OpenNewGraphWindow();
                 }
+
                 ColorVariations.DrawSettingsUi();
                 if (ImGui.TreeNode("Styles"))
                 {
@@ -45,8 +49,14 @@ namespace T3.Gui
                     ImGui.DragFloat("Output Slot Margin", ref GraphOperator._outputSlotMargin, 0.1f, 0, 10f);
                     ImGui.TreePop();
                 }
+                if (ImGui.TreeNode("ImGui Styles"))
+                {
+                    T3Style.Draw();
+                }
             }
             ImGui.End();
+
         }
     }
+
 }

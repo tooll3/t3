@@ -300,6 +300,50 @@ namespace imHelpers
             ImGui.SetCursorPos(backup_pos);
         }
 
+
+        public static void DrawContentRegion()
+        {
+
+            ImGui.GetForegroundDrawList().AddRect(
+                ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
+                ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos(),
+                Color.White);
+        }
+
+
+
+
+        public static void ToggleButton(string str_id, ref bool v)
+        {
+            var p = ImGui.GetCursorScreenPos();
+            var draw_list = ImGui.GetWindowDrawList();
+
+            float height = ImGui.GetFrameHeight();
+            float width = height * 1.55f;
+            float radius = height * 0.50f;
+
+            ImGui.InvisibleButton(str_id, new Vector2(width, height));
+            if (ImGui.IsItemClicked())
+                v = !v;
+
+            float t = v ? 1.0f : 0.0f;
+
+            //ImGuiContext & g = *GImGui;
+            //var g = ImGui.GetCurrentContext();
+            //float ANIM_SPEED = 0.08f;
+            //if (g.LastActiveId == g.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
+            //{
+            //    float t_anim = ImSaturate(g.LastActiveIdTimer / ANIM_SPEED);
+            //    t = v ? (t_anim) : (1.0f - t_anim);
+            //}
+
+            Color col_bg = ImGui.IsItemHovered()
+                ? Color.White
+                : Color.Red;
+
+            draw_list.AddRectFilled(p, new Vector2(p.X + width, p.Y + height), col_bg, height * 0.5f);
+            draw_list.AddCircleFilled(new Vector2(p.X + radius + t * (width - radius * 2.0f), p.Y + radius), radius - 1.5f, Color.White);
+        }
     }
 
 

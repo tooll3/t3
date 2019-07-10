@@ -197,16 +197,16 @@ namespace T3
 
             // SwapChain description
             var desc = new SwapChainDescription()
-                       {
-                           BufferCount = 1,
-                           ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
+            {
+                BufferCount = 1,
+                ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
                                                                  new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                           IsWindowed = true,
-                           OutputHandle = form.Handle,
-                           SampleDescription = new SampleDescription(1, 0),
-                           SwapEffect = SwapEffect.Discard,
-                           Usage = Usage.RenderTargetOutput
-                       };
+                IsWindowed = true,
+                OutputHandle = form.Handle,
+                SampleDescription = new SampleDescription(1, 0),
+                SwapEffect = SwapEffect.Discard,
+                Usage = Usage.RenderTargetOutput
+            };
 
             // Create Device and SwapChain
             Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, desc, out var device, out var swapChain);
@@ -254,6 +254,7 @@ namespace T3
             stopwatch.Start();
 
             ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+            T3Style.Init();
 
             // Main loop
             RenderLoop.Run(form, () =>
@@ -270,7 +271,7 @@ namespace T3
                                      }
 
                                      Metrics.UiRenderingStarted();
-                                     _t3ui.InitStyle();
+                                     T3Style.Apply();
 
                                      ImGui.NewFrame();
 
