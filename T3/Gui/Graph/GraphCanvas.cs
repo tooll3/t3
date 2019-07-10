@@ -24,6 +24,7 @@ namespace T3.Gui.Graph
         #region drawing UI ====================================================================
         public void Draw()
         {
+
             Current = this;
             if (!SymbolChildUiRegistry.Entries.ContainsKey(CompositionOp.Symbol.Id))
             {
@@ -40,8 +41,8 @@ namespace T3.Gui.Graph
             {
                 _mouse = ImGui.GetMousePos();
 
-                WindowPos = ImGui.GetWindowPos();
-                WindowSize = ImGui.GetWindowSize();
+                WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
+                WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
 
 
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
@@ -329,6 +330,7 @@ namespace T3.Gui.Graph
         public Vector2 Scroll { get; private set; } = new Vector2(0.0f, 0.0f);
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
         #endregion
+
 
         #region private members ------
         //private ImDrawListPtr _foreground;

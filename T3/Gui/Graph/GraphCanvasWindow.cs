@@ -1,5 +1,6 @@
 using ImGuiNET;
 using imHelpers;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using T3.Core.Logging;
@@ -19,6 +20,11 @@ namespace T3.Gui.Graph
             Canvas = new GraphCanvas(opInstance);
         }
 
+        public double Time { get; set; } = 0;
+        public double TimeRangeStart { get; set; } = 5;
+        public double TimeRangeEnd { get; set; } = 30;
+
+
         private float GetGraphHeight()
         {
             return ImGui.GetWindowHeight() - _heightTimeLine - 30;
@@ -29,18 +35,28 @@ namespace T3.Gui.Graph
         {
             bool opened = true;
 
+            Time += ImGui.GetIO().DeltaTime;
+            if (Time > TimeRangeEnd)
+            {
+                Time = Time - TimeRangeEnd > 1
+                    ? TimeRangeStart
+                    : Time - TimeRangeEnd - TimeRangeStart;
+            }
+
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
             if (ImGui.Begin(_windowTitle, ref opened))
             {
+                //Im.DrawContentRegion();
                 SplitFromBottom(ref _heightTimeLine);
                 ImGui.BeginChild("##graph", new Vector2(0, GetGraphHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                 {
+                    //Im.DrawContentRegion();
                     var dl = ImGui.GetWindowDrawList();
                     dl.ChannelsSplit(2);
                     dl.ChannelsSetCurrent(1);
                     {
-                        ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
                         DrawBreadcrumbs();
+                        DrawTimeControls();
                     }
                     dl.ChannelsSetCurrent(0);
                     Canvas.Draw();
@@ -49,11 +65,10 @@ namespace T3.Gui.Graph
                 ImGui.EndChild();
                 ImGui.BeginChild("##timeline", Vector2.Zero, false, ImGuiWindowFlags.NoMove);
                 {
+                    //Im.DrawContentRegion();
                     DrawTimeline();
                 }
                 ImGui.EndChild();
-
-
             }
             ImGui.PopStyleVar();
 
@@ -62,11 +77,34 @@ namespace T3.Gui.Graph
         }
 
 
+        private void DrawTimeControls()
+        {
+            ImGui.SetCursorPos(
+                new Vector2(
+                    ImGui.GetWindowContentRegionMin().X,
+                    ImGui.GetWindowContentRegionMax().Y - 30));
+
+            TimeSpan timespan = TimeSpan.FromSeconds(Time);
+            ImGui.Text(timespan.ToString(@"hh\:mm\:ss\:ff"));
+            ImGui.SameLine();
+            ImGui.Button("[<");
+            ImGui.SameLine();
+            ImGui.Button("<<");
+            ImGui.SameLine();
+            ImGui.Button("<");
+            ImGui.SameLine();
+            ImGui.Button(">");
+            ImGui.SameLine();
+            ImGui.Button(">>");
+            ImGui.SameLine();
+            ImGui.Button(">]");
+            ImGui.SameLine();
+            ImGui.Selectable("Loop");
+        }
 
         private void DrawTimeline()
         {
-            var opened = true;
-            curveEditor.Draw(ref opened);
+            curveEditor.Draw();
         }
 
         /// <summary>Draw a splitter</summary>
@@ -76,7 +114,7 @@ namespace T3.Gui.Graph
 
 
         private static float _heightTimeLine = 100;
-        private CurveEditor curveEditor = new CurveEditor();
+        private CurveEditCanvas curveEditor = new CurveEditCanvas();
 
         /// <summary>Draw a splitter</summary>
         /// <remarks>
@@ -121,6 +159,7 @@ namespace T3.Gui.Graph
 
         private void DrawBreadcrumbs()
         {
+            ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
             List<Instance> parents = Canvas.GetParents();
 
             foreach (var p in parents)
@@ -142,8 +181,6 @@ namespace T3.Gui.Graph
             ImGui.Button(Canvas.CompositionOp.Symbol.Name);
             ImGui.PopStyleColor(2);
         }
-
-
 
         private string _windowTitle;
         public GraphCanvas Canvas { get; private set; }

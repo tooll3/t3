@@ -575,6 +575,7 @@ namespace T3.Gui.Graph
                     if (ImGui.IsItemClicked(0))
                     {
                         BuildingConnections.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex);
+                        Log.Debug("started connection at MultiInputIndex:" + multiInputIndex);
                     }
                 }
             }

@@ -29,10 +29,10 @@ namespace T3.Gui.Animation
         private const float NON_WEIGHT_TANGENT_LENGTH = 50;
         private Color _tangentHandleColor = new Color(0.1f);
 
-        public CurvePointUi(VDefinition key, Curve curve, CurveEditor curveEditor)
+        public CurvePointUi(VDefinition key, Curve curve, CurveEditCanvas curveEditor)
         {
             Key = key;
-            _curveEditor = curveEditor;
+            _curveEditCanvas = curveEditor;
             Curve = curve;
             createCount++;
         }
@@ -41,13 +41,13 @@ namespace T3.Gui.Animation
 
         public void Draw()
         {
-            var pCenter = _curveEditor.TransformPosition(PosOnCanvas);
+            var pCenter = _curveEditCanvas.TransformPosition(PosOnCanvas);
             var pTopLeft = pCenter - ControlSize / 2;
 
-            if (!_curveEditor.IsRectVisible(pTopLeft, ControlSize))
+            if (!_curveEditCanvas.IsRectVisible(pTopLeft, ControlSize))
                 return;
 
-            _curveEditor.DrawList.AddRectFilled(pTopLeft, pTopLeft + ControlSize,
+            _curveEditCanvas.DrawList.AddRectFilled(pTopLeft, pTopLeft + ControlSize,
                 IsSelected ? Color.White : Color.TBlue);
 
 
@@ -59,7 +59,7 @@ namespace T3.Gui.Animation
             }
 
             // Interaction
-            ImGui.SetCursorPos(pTopLeft - _curveEditor.WindowPos);
+            ImGui.SetCursorPos(pTopLeft - _curveEditCanvas.WindowPos);
             ImGui.InvisibleButton("key" + Id.GetHashCode(), ControlSize);
             imHelpers.THelpers.DebugItemRect();
 
@@ -74,15 +74,15 @@ namespace T3.Gui.Animation
         private void DrawLeftTangent(Vector2 pCenter)
         {
             var leftTangentCenter = pCenter + LeftTangentInScreen;
-            ImGui.SetCursorPos(leftTangentCenter - _tangentHandleSizeHalf - _curveEditor.WindowPos);
+            ImGui.SetCursorPos(leftTangentCenter - _tangentHandleSizeHalf - _curveEditCanvas.WindowPos);
             ImGui.InvisibleButton("keyLT" + Id.GetHashCode(), _tangentHandleSize);
             var isHovered = ImGui.IsItemHovered();
             if (isHovered)
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
 
-            _curveEditor.DrawList.AddRectFilled(leftTangentCenter - _tangentSizeHalf, leftTangentCenter + _tangentSize,
-                    isHovered ? Color.TRed : Color.White);
-            _curveEditor.DrawList.AddLine(pCenter, leftTangentCenter, _tangentHandleColor);
+            _curveEditCanvas.DrawList.AddRectFilled(leftTangentCenter - _tangentSizeHalf, leftTangentCenter + _tangentSize,
+                    isHovered ? Color.Red : Color.White);
+            _curveEditCanvas.DrawList.AddLine(pCenter, leftTangentCenter, _tangentHandleColor);
 
             // Dragging
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0, 0f))
@@ -90,7 +90,7 @@ namespace T3.Gui.Animation
                 Key.InType = VDefinition.Interpolation.Spline;
                 Key.InEditMode = VDefinition.EditMode.Tangent;
 
-                var vectorInCanvas = _curveEditor.InverseTransformDirection(ImGui.GetMousePos() - pCenter);
+                var vectorInCanvas = _curveEditCanvas.InverseTransformDirection(ImGui.GetMousePos() - pCenter);
                 Key.InTangentAngle = (float)(Math.PI / 2 - Math.Atan2(-vectorInCanvas.X, -vectorInCanvas.Y));
 
                 if (ImGui.GetIO().KeyCtrl)
@@ -111,15 +111,15 @@ namespace T3.Gui.Animation
         private void DrawRightTangent(Vector2 pCenter)
         {
             var righTangentCenter = pCenter + RightTangentInScreen;
-            ImGui.SetCursorPos(righTangentCenter - _tangentHandleSizeHalf - _curveEditor.WindowPos);
+            ImGui.SetCursorPos(righTangentCenter - _tangentHandleSizeHalf - _curveEditCanvas.WindowPos);
             ImGui.InvisibleButton("keyRT" + Id.GetHashCode(), _tangentHandleSize);
             var isHovered = ImGui.IsItemHovered();
             if (isHovered)
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
 
-            _curveEditor.DrawList.AddRectFilled(righTangentCenter - _tangentSizeHalf, righTangentCenter + _tangentSize,
-                    isHovered ? Color.TRed : Color.White);
-            _curveEditor.DrawList.AddLine(pCenter, righTangentCenter, _tangentHandleColor);
+            _curveEditCanvas.DrawList.AddRectFilled(righTangentCenter - _tangentSizeHalf, righTangentCenter + _tangentSize,
+                    isHovered ? Color.Red : Color.White);
+            _curveEditCanvas.DrawList.AddLine(pCenter, righTangentCenter, _tangentHandleColor);
 
             // Dragging
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0, 0f))
@@ -127,7 +127,7 @@ namespace T3.Gui.Animation
                 Key.OutType = VDefinition.Interpolation.Spline;
                 Key.OutEditMode = VDefinition.EditMode.Tangent;
 
-                var vectorInCanvas = _curveEditor.InverseTransformDirection(ImGui.GetMousePos() - pCenter);
+                var vectorInCanvas = _curveEditCanvas.InverseTransformDirection(ImGui.GetMousePos() - pCenter);
                 Key.InTangentAngle = (float)(Math.PI / 2 - Math.Atan2(vectorInCanvas.X, vectorInCanvas.Y));
 
                 if (ImGui.GetIO().KeyCtrl)
@@ -153,9 +153,9 @@ namespace T3.Gui.Animation
             if (ImGui.IsItemClicked(0))
             {
                 // TODO: add modifier keys...
-                if (!_curveEditor.SelectionHandler.SelectedElements.Contains(this))
+                if (!_curveEditCanvas.SelectionHandler.SelectedElements.Contains(this))
                 {
-                    _curveEditor.SelectionHandler.SetElement(this);
+                    _curveEditCanvas.SelectionHandler.SetElement(this);
                 }
             }
 
@@ -164,9 +164,9 @@ namespace T3.Gui.Animation
                 if (ImGui.GetIO().MouseDelta.Length() > 0)
                 {
                     var dInScreen = ImGui.GetIO().MouseDelta;
-                    var dInCanvas = _curveEditor.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+                    var dInCanvas = _curveEditCanvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
 
-                    foreach (var e in _curveEditor.SelectionHandler.SelectedElements)
+                    foreach (var e in _curveEditCanvas.SelectionHandler.SelectedElements)
                     {
                         e.PosOnCanvas += dInCanvas;
                     }
@@ -239,7 +239,7 @@ namespace T3.Gui.Animation
         /// </summary>
         public void UpdateTangentVectors()
         {
-            if (_curveEditor == null)
+            if (_curveEditCanvas == null)
                 return;
 
             var normVector = new Vector2((float)-Math.Cos(Key.InTangentAngle),
@@ -247,8 +247,8 @@ namespace T3.Gui.Animation
 
             LeftTangentInScreen = NormalizeTangentLength(
                                             new Vector2(
-                                                normVector.X * _curveEditor.Scale.X,
-                                                -_curveEditor.TransformDirection(normVector).Y)
+                                                normVector.X * _curveEditCanvas.Scale.X,
+                                                -_curveEditCanvas.TransformDirection(normVector).Y)
                                             );
 
 
@@ -257,8 +257,8 @@ namespace T3.Gui.Animation
 
             RightTangentInScreen = NormalizeTangentLength(
                                         new Vector2(
-                                            normVector.X * _curveEditor.Scale.X,
-                                            -_curveEditor.TransformDirection(normVector).Y));
+                                            normVector.X * _curveEditCanvas.Scale.X,
+                                            -_curveEditCanvas.TransformDirection(normVector).Y));
         }
 
         private Vector2 NormalizeTangentLength(Vector2 tangent)
@@ -274,7 +274,7 @@ namespace T3.Gui.Animation
         private static Vector2 _tangentSize = new Vector2(2, 2);
         private static Vector2 _tangentSizeHalf = _tangentSize * 0.5f;
 
-        public CurveEditor _curveEditor;
+        public CurveEditCanvas _curveEditCanvas;
 
 
 
