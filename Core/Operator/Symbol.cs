@@ -236,13 +236,13 @@ namespace T3.Core.Operator
             var conHashToCount = new Dictionary<int, int>(Connections.Count);
             foreach (var connection in Connections)
             {
-                int hash = connection.GetHashCode();
+                int hash = connection.TargetSlotId.GetHashCode();
                 if (!conHashToCount.TryGetValue(hash, out int count))
                     conHashToCount.Add(hash, 0);
 
                 newInstance.AddConnection(connection, count);
 
-                conHashToCount[hash] = count;
+                conHashToCount[hash] = count + 1;
             }
 
             _instancesOfSymbol.Add(newInstance);
