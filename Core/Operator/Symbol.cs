@@ -233,10 +233,16 @@ namespace T3.Core.Operator
             }
 
             // create connections between instances
+            var conHashToCount = new Dictionary<int, int>(Connections.Count);
             foreach (var connection in Connections)
             {
-                //todo: fix the multi input index
-                newInstance.AddConnection(connection, 0);
+                int hash = connection.GetHashCode();
+                if (!conHashToCount.TryGetValue(hash, out int count))
+                    conHashToCount.Add(hash, 0);
+
+                newInstance.AddConnection(connection, count);
+
+                conHashToCount[hash] = count;
             }
 
             _instancesOfSymbol.Add(newInstance);
