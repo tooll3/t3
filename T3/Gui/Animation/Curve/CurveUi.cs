@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using T3.Core.Animation.Curve;
+using T3.Gui.Graph;
 
 namespace T3.Gui.Animation
 {
@@ -17,7 +18,7 @@ namespace T3.Gui.Animation
         public bool IsHighlighted { get; set; }
         public List<CurvePointUi> CurvePoints { get; set; }
 
-        public CurveUi(Curve curve, CurveEditor curveEditor)
+        public CurveUi(Curve curve, CurveEditCanvas curveEditor)
         {
             _curveEditor = curveEditor;
             _curve = curve;
@@ -71,6 +72,6 @@ namespace T3.Gui.Animation
 
         private Curve _curve;
         private static Vector2[] _points = new Vector2[2];
-        private CurveEditor _curveEditor;
+        private CurveEditCanvas _curveEditor;
     }
 }

@@ -75,7 +75,7 @@ namespace T3.Gui.Graph
 
         public static void StartFromInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition inputDef, int multiInputIndex = 0)
         {
-            var existingConnection = FindConnectionToInputSlot(parentSymbol, targetUi, inputDef);
+            var existingConnection = FindConnectionToInputSlot(parentSymbol, targetUi, inputDef, multiInputIndex);
 
             if (existingConnection != null)
             {
@@ -161,7 +161,7 @@ namespace T3.Gui.Graph
                                                       sourceSlotId: TempConnection.SourceSlotId,
                                                       targetParentOrChildId: targetUi.SymbolChild.Id,
                                                       targetSlotId: input.Id);
-            parentSymbol.AddConnection(newConnection, multiInputIndex/2); // divide by 2 to get correct insertion index in existing connections
+            parentSymbol.AddConnection(newConnection, multiInputIndex / 2); // divide by 2 to get correct insertion index in existing connections
             TempConnection = null;
         }
 
@@ -256,12 +256,12 @@ namespace T3.Gui.Graph
                 c.TargetParentOrChildId == targetUi.SymbolChild.Id);
         }
 
-        private static Symbol.Connection FindConnectionToInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input)
+        private static Symbol.Connection FindConnectionToInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input, int multiInputIndex = 0)
         {
             var inputId = input.Id;
-            return parentSymbol.Connections.Find(c =>
+            return parentSymbol.Connections.FindAll(c =>
                 c.TargetSlotId == inputId &&
-                c.TargetParentOrChildId == targetUi.SymbolChild.Id);
+                c.TargetParentOrChildId == targetUi.SymbolChild.Id)[multiInputIndex];
         }
 
 
