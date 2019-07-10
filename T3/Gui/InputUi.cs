@@ -51,7 +51,7 @@ namespace T3.Gui
                     {
                         // just show actual value
                         ImGui.PushItemWidth(200.0f);
-                        ImGui.PushStyleColor(ImGuiCol.Text, Color.TRed.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
                         var multiInput = (MultiInputSlot<T>)typedInputSlot;
                         var allInputs = multiInput.GetCollectedInputs();
                         foreach (var input in allInputs)
@@ -65,7 +65,7 @@ namespace T3.Gui
                     {
                         // just show actual value
                         ImGui.PushItemWidth(200.0f);
-                        ImGui.PushStyleColor(ImGuiCol.Text, Color.TRed.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
                         DrawValueDisplay(name, ref typedInputSlot.Value);
                         ImGui.PopStyleColor();
                         ImGui.PopItemWidth();
