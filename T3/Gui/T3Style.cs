@@ -16,14 +16,14 @@ namespace T3.Gui
         public static bool ApplyOverRides = true;
 
         public static Vector2 FramePadding = new Vector2(7, 4);
-        public static Vector2 ItemSpacing = new Vector2(4, 3);
+        public static Vector2 ItemSpacing = new Vector2(1, 3);
         public static Vector2 ItemInnerSpacing = new Vector2(3, 2);
         public static float GrabMinSize = 2;
         public static float FrameBorderSize = 0;
         public static float WindowRounding = 3;
         public static float ChildRounding = 1;
         public static float ScrollbarRounding = 3;
-        public static float FrameRounding = 2f;
+        public static float FrameRounding = 1f;
 
 
         public static void Init()
@@ -45,13 +45,14 @@ namespace T3.Gui
             _colors[(int)ImGuiCol.ScrollbarBg] = new Vector4(0.12f, 0.12f, 0.12f, 0.53f);
             _colors[(int)ImGuiCol.ScrollbarGrab] = new Vector4(0.31f, 0.31f, 0.31f, 0.33f);
             _colors[(int)ImGuiCol.ResizeGrip] = new Vector4(0.00f, 0.00f, 0.00f, 0.25f);
-            _colors[(int)ImGuiCol.Button] = Color.Gray;
-
         }
 
 
         public static void Apply()
         {
+
+
+
             if (!ApplyOverRides)
                 return;
 
@@ -78,6 +79,12 @@ namespace T3.Gui
 
         public static void Draw()
         {
+            ImGui.Button("text");
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS);
+            }
+
             ImGui.Checkbox("Apply Override", ref ApplyOverRides);
             ImGui.DragFloat2("FramePadding", ref FramePadding);
             ImGui.DragFloat2("ItemSpacing", ref ItemSpacing);

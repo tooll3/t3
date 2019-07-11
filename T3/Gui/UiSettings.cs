@@ -1,4 +1,6 @@
 ﻿using ImGuiNET;
+using System.Text;
+using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.TypeColors;
 using static T3.Gui.T3UI;
@@ -23,6 +25,16 @@ namespace T3.Gui
         {
             ImGui.Begin("Stats");
             {
+                if (KeyboardBinding.Triggered(UserAction.PlaybackForward))
+                {
+                    Log.Debug("Forward!");
+                }
+
+                if (KeyboardBinding.Triggered(UserAction.PlaybackStop))
+                {
+                    Log.Debug("Stop!");
+                }
+
                 Metrics.Draw();
                 ImGui.Checkbox("VSync", ref _vsync);
                 ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
@@ -32,6 +44,24 @@ namespace T3.Gui
                 ImGui.Checkbox("Console Window Visible", ref ConsoleWindowVisible);
                 ImGui.Checkbox("Curve Editor Visible", ref CurveEditorVisible);
                 ImGui.Checkbox("Parameters visible", ref ParameterWindowVisible);
+
+                var io = ImGui.GetIO();
+                ImGui.Text(
+                    (io.KeyAlt ? "Alt" : "")
+                    + (io.KeyCtrl ? "Ctrl" : "")
+                    + (io.KeyShift ? "Shift" : ""));
+
+                var sb = new StringBuilder();
+                for (var i = 0; i < ImGui.GetIO().KeysDown.Count; i++)
+                {
+                    if (io.KeysDown[i])
+                    {
+                        Key k = (Key)i;
+
+                        sb.Append($"{k} [{i}]");
+                    }
+                }
+                ImGui.Text("Pressed keys:" + sb);
 
                 if (ImGui.Button("Open new Graph Canvas"))
                 {

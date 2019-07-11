@@ -58,7 +58,7 @@ namespace T3.Gui.Animation
         }
 
 
-
+        public double CurrentTime { get; set; }
 
 
         bool _contextMenuIsOpen = false;
@@ -178,17 +178,12 @@ namespace T3.Gui.Animation
 
         private void DrawCurrentTimeMarker()
         {
-            var p1 = new Vector2(_mouse.X, WindowPos.Y);
-            DrawList.AddText(p1, Color.Red, $"{InverseTransformPosition(_mouse).X:0.00}");
 
-            DrawList.AddRectFilled(p1, new Vector2(_mouse.X + 1, WindowPos.Y + WindowSize.Y), Color.Red);
+            //var p1 = new Vector2(_mouse.X, WindowPos.Y);
+            //DrawList.AddText(p1, Color.Red, $"{InverseTransformPosition(_mouse).X:0.00}");
+            //DrawList.AddRectFilled(p1, new Vector2(_mouse.X + 1, WindowPos.Y + WindowSize.Y), Color.Red);
+            var p1 = InverseTransformPosition(new Vector2((float)CurrentTime, 0));
         }
-
-
-
-
-
-
 
         private void InitiailizeMockCurves()
         {

@@ -20,10 +20,27 @@ namespace T3.Gui.Graph
             Canvas = new GraphCanvas(opInstance);
         }
 
-        public double Time { get; set; } = 0;
-        public double TimeRangeStart { get; set; } = 5;
-        public double TimeRangeEnd { get; set; } = 30;
+        public class ClipTime
+        {
+            public double Time { get; set; } = 0;
+            public double TimeRangeStart { get; set; } = 5;
+            public double TimeRangeEnd { get; set; } = 30;
+            public double PlaybackSpeed { get; set; } = 0;
+            public bool IsLooping = true;
 
+            public void Update()
+            {
+                Time += ImGui.GetIO().DeltaTime * PlaybackSpeed;
+                if (IsLooping && Time > TimeRangeEnd)
+                {
+                    Time = Time - TimeRangeEnd > 1
+                        ? TimeRangeStart
+                        : Time - TimeRangeEnd - TimeRangeStart;
+                }
+            }
+        }
+
+        private ClipTime _clipTime = new ClipTime();
 
         private float GetGraphHeight()
         {
@@ -34,24 +51,20 @@ namespace T3.Gui.Graph
         public bool Draw()
         {
             bool opened = true;
-
-            Time += ImGui.GetIO().DeltaTime;
-            if (Time > TimeRangeEnd)
-            {
-                Time = Time - TimeRangeEnd > 1
-                    ? TimeRangeStart
-                    : Time - TimeRangeEnd - TimeRangeStart;
-            }
+            _clipTime.Update();
 
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
-            if (ImGui.Begin(_windowTitle, ref opened))
+            if (ImGui.Begin(_windowTitle, ref opened, ImGuiWindowFlags.NoScrollbar))
             {
-                //Im.DrawContentRegion();
+                var dl = ImGui.GetWindowDrawList();
+                //dl.ChannelsSplit(2);
+                //dl.ChannelsSetCurrent(0);
+
                 SplitFromBottom(ref _heightTimeLine);
+                //dl.ChannelsSetCurrent(1);
                 ImGui.BeginChild("##graph", new Vector2(0, GetGraphHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                 {
-                    //Im.DrawContentRegion();
-                    var dl = ImGui.GetWindowDrawList();
+                    //Im.DrawContentRegion();                    
                     dl.ChannelsSplit(2);
                     dl.ChannelsSetCurrent(1);
                     {
@@ -63,12 +76,14 @@ namespace T3.Gui.Graph
                     dl.ChannelsMerge();
                 }
                 ImGui.EndChild();
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 4);
                 ImGui.BeginChild("##timeline", Vector2.Zero, false, ImGuiWindowFlags.NoMove);
                 {
-                    //Im.DrawContentRegion();
                     DrawTimeline();
                 }
                 ImGui.EndChild();
+                //dl.ChannelsMerge();
+
             }
             ImGui.PopStyleVar();
 
@@ -77,6 +92,7 @@ namespace T3.Gui.Graph
         }
 
 
+        public static Vector2 _timeControlsSize = new Vector2(40, 0);
         private void DrawTimeControls()
         {
             ImGui.SetCursorPos(
@@ -84,23 +100,90 @@ namespace T3.Gui.Graph
                     ImGui.GetWindowContentRegionMin().X,
                     ImGui.GetWindowContentRegionMax().Y - 30));
 
-            TimeSpan timespan = TimeSpan.FromSeconds(Time);
-            ImGui.Text(timespan.ToString(@"hh\:mm\:ss\:ff"));
+            TimeSpan timespan = TimeSpan.FromSeconds(_clipTime.Time);
+
+            ImGui.Button(timespan.ToString(@"hh\:mm\:ss\:ff"), new Vector2(80, 0));
+
             ImGui.SameLine();
-            ImGui.Button("[<");
+            ImGui.Button("[<", _timeControlsSize);
             ImGui.SameLine();
-            ImGui.Button("<<");
+            ImGui.Button("<<", _timeControlsSize);
             ImGui.SameLine();
-            ImGui.Button("<");
+
+            var isPlayingBackwards = _clipTime.PlaybackSpeed < 0;
+            if (ToggleButton(
+                    label: isPlayingBackwards ? $"[{(int)_clipTime.PlaybackSpeed}x]" : "<",
+                    ref isPlayingBackwards,
+                    _timeControlsSize,
+                    trigger: KeyboardBinding.Triggered(UserAction.PlaybackToggle)))
+            {
+                if (_clipTime.PlaybackSpeed != 0)
+                {
+                    _clipTime.PlaybackSpeed = 0;
+                }
+                else if (_clipTime.PlaybackSpeed == 0)
+                {
+                    _clipTime.PlaybackSpeed = -1;
+                }
+            }
             ImGui.SameLine();
-            ImGui.Button(">");
+
+
+            // Play forward
+            var isPlaying = _clipTime.PlaybackSpeed > 0;
+            if (ToggleButton(
+                    label: isPlaying ? $"[{(int)_clipTime.PlaybackSpeed}x]" : ">",
+                    ref isPlaying,
+                    _timeControlsSize,
+                    trigger: KeyboardBinding.Triggered(UserAction.PlaybackToggle)))
+            {
+                if (_clipTime.PlaybackSpeed != 0)
+                {
+                    _clipTime.PlaybackSpeed = 0;
+                }
+                else if (_clipTime.PlaybackSpeed == 0)
+                {
+                    _clipTime.PlaybackSpeed = 1;
+                }
+            }
+
+            if (KeyboardBinding.Triggered(UserAction.PlaybackForward))
+            {
+                if (_clipTime.PlaybackSpeed == 0)
+                {
+                    _clipTime.PlaybackSpeed = 1;
+                }
+                else if (_clipTime.PlaybackSpeed < 8)
+                {
+                    _clipTime.PlaybackSpeed *= 2;
+                }
+            }
+
+            if (KeyboardBinding.Triggered(UserAction.PlaybackBackwards))
+            {
+                if (_clipTime.PlaybackSpeed >= 0)
+                {
+                    _clipTime.PlaybackSpeed = -1;
+                }
+                else if (_clipTime.PlaybackSpeed > -8)
+                {
+                    _clipTime.PlaybackSpeed *= 2;
+                }
+            }
+
+            if (KeyboardBinding.Triggered(UserAction.PlaybackStop))
+            {
+                _clipTime.PlaybackSpeed = 0;
+            }
+
             ImGui.SameLine();
-            ImGui.Button(">>");
+            ImGui.Button(">>", _timeControlsSize);
             ImGui.SameLine();
-            ImGui.Button(">]");
+            ImGui.Button(">]", _timeControlsSize);
             ImGui.SameLine();
-            ImGui.Selectable("Loop");
+            ToggleButton("Loop", ref _clipTime.IsLooping, _timeControlsSize);
         }
+
 
         private void DrawTimeline()
         {
@@ -116,6 +199,7 @@ namespace T3.Gui.Graph
         private static float _heightTimeLine = 100;
         private CurveEditCanvas curveEditor = new CurveEditCanvas();
 
+
         /// <summary>Draw a splitter</summary>
         /// <remarks>
         /// Take from https://github.com/ocornut/imgui/issues/319#issuecomment-147364392
@@ -125,19 +209,20 @@ namespace T3.Gui.Graph
             const float thickness = 5; ;
 
             var backup_pos = ImGui.GetCursorPos();
-            ImGui.SetCursorPosY(ImGui.GetContentRegionMax().Y - offsetFromBottom - thickness);
 
-            ImGui.GetWindowContentRegionMax();
+            var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
+            var contentMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos();
 
-            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1, 0, 0, 1));
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.6f, 0.6f, 0.6f, 0.10f));
+            var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness);
+            ImGui.SetCursorScreenPos(pos);
+
+            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 0));
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 1));
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0, 0, 0, 1));
+
             ImGui.Button("##Splitter", new Vector2(-1, thickness));
 
             ImGui.PopStyleColor(3);
-
-            THelpers.DebugWindowRect("Child");
-            //ImGui.SetItemAllowOverlap(); // Allow having other buttons OVER our splitter. 
 
             if (ImGui.IsItemHovered())
             {
@@ -149,10 +234,34 @@ namespace T3.Gui.Graph
                 offsetFromBottom = Im.Clamp(
                     offsetFromBottom - ImGui.GetIO().MouseDelta.Y,
                     0,
-                    ImGui.GetWindowContentRegionMax().Y - 30 - thickness);
+                    size.Y - thickness);
             }
 
             ImGui.SetCursorPos(backup_pos);
+        }
+
+
+        private bool ToggleButton(string label, ref bool isSelected, Vector2 size, bool trigger = false)
+        {
+            var wasSelected = isSelected;
+            var clicked = false;
+            if (isSelected)
+            {
+                ImGui.PushStyleColor(ImGuiCol.Button, Color.Red.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red.Rgba);
+            }
+            if (ImGui.Button(label, size) || trigger)
+            {
+                isSelected = !isSelected;
+                clicked = true;
+            }
+
+            if (wasSelected)
+            {
+                ImGui.PopStyleColor(3);
+            }
+            return clicked;
         }
 
 
