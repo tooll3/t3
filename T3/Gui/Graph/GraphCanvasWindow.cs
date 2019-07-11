@@ -18,26 +18,7 @@ namespace T3.Gui.Graph
         {
             _windowTitle = windowTitle;
             Canvas = new GraphCanvas(opInstance);
-        }
-
-        public class ClipTime
-        {
-            public double Time { get; set; } = 0;
-            public double TimeRangeStart { get; set; } = 5;
-            public double TimeRangeEnd { get; set; } = 30;
-            public double PlaybackSpeed { get; set; } = 0;
-            public bool IsLooping = true;
-
-            public void Update()
-            {
-                Time += ImGui.GetIO().DeltaTime * PlaybackSpeed;
-                if (IsLooping && Time > TimeRangeEnd)
-                {
-                    Time = Time - TimeRangeEnd > 1
-                        ? TimeRangeStart
-                        : Time - TimeRangeEnd - TimeRangeStart;
-                }
-            }
+            _curveEditor.ClipTime = _clipTime;
         }
 
         private ClipTime _clipTime = new ClipTime();
@@ -102,7 +83,12 @@ namespace T3.Gui.Graph
 
             TimeSpan timespan = TimeSpan.FromSeconds(_clipTime.Time);
 
-            ImGui.Button(timespan.ToString(@"hh\:mm\:ss\:ff"), new Vector2(80, 0));
+            var delta = 0.0;
+            if (JogDial(timespan.ToString(@"hh\:mm\:ss\:ff"), ref delta, new Vector2(80, 0)))
+            {
+                _clipTime.PlaybackSpeed = 0;
+                _clipTime.Time += delta;
+            }
 
             ImGui.SameLine();
             ImGui.Button("[<", _timeControlsSize);
@@ -114,8 +100,7 @@ namespace T3.Gui.Graph
             if (ToggleButton(
                     label: isPlayingBackwards ? $"[{(int)_clipTime.PlaybackSpeed}x]" : "<",
                     ref isPlayingBackwards,
-                    _timeControlsSize,
-                    trigger: KeyboardBinding.Triggered(UserAction.PlaybackToggle)))
+                    _timeControlsSize))
             {
                 if (_clipTime.PlaybackSpeed != 0)
                 {
@@ -147,18 +132,6 @@ namespace T3.Gui.Graph
                 }
             }
 
-            if (KeyboardBinding.Triggered(UserAction.PlaybackForward))
-            {
-                if (_clipTime.PlaybackSpeed == 0)
-                {
-                    _clipTime.PlaybackSpeed = 1;
-                }
-                else if (_clipTime.PlaybackSpeed < 8)
-                {
-                    _clipTime.PlaybackSpeed *= 2;
-                }
-            }
-
             if (KeyboardBinding.Triggered(UserAction.PlaybackBackwards))
             {
                 if (_clipTime.PlaybackSpeed >= 0)
@@ -170,6 +143,20 @@ namespace T3.Gui.Graph
                     _clipTime.PlaybackSpeed *= 2;
                 }
             }
+
+            if (KeyboardBinding.Triggered(UserAction.PlaybackForward))
+            {
+                if (_clipTime.PlaybackSpeed <= 0)
+                {
+                    _clipTime.PlaybackSpeed = 1;
+                }
+                else if (_clipTime.PlaybackSpeed < 8)
+                {
+                    _clipTime.PlaybackSpeed *= 2;
+                }
+            }
+
+
 
             if (KeyboardBinding.Triggered(UserAction.PlaybackStop))
             {
@@ -187,17 +174,45 @@ namespace T3.Gui.Graph
 
         private void DrawTimeline()
         {
-            curveEditor.Draw();
+            _curveEditor.Draw();
         }
+
+        public static bool JogDial(string label, ref double delta, Vector2 size)
+        {
+            var hot = ImGui.Button(label + "###dummy", size);
+            var io = ImGui.GetIO();
+            if (ImGui.IsItemActive())
+            {
+                var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax()) * 0.5f;
+                ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+                ImGui.GetForegroundDrawList().AddCircle(center, 100, Color.Gray, 50);
+                hot = true;
+
+                var pLast = io.MousePos - io.MouseDelta - center;
+                var pNow = io.MousePos - center;
+                var aLast = Math.Atan2(pLast.X, pLast.Y);
+                var aNow = Math.Atan2(pNow.X, pNow.Y);
+                delta = aNow - aLast;
+                if (delta > 1.5)
+                {
+                    delta -= 2 * Math.PI;
+                }
+                else if (delta < -1.5)
+                {
+                    delta += 2 * Math.PI;
+                }
+            }
+            return hot;
+        }
+
 
         /// <summary>Draw a splitter</summary>
         /// <remarks>
         /// Take from https://github.com/ocornut/imgui/issues/319#issuecomment-147364392
         /// </remarks>
 
-
         private static float _heightTimeLine = 100;
-        private CurveEditCanvas curveEditor = new CurveEditCanvas();
+        private CurveEditCanvas _curveEditor = new CurveEditCanvas();
 
 
         /// <summary>Draw a splitter</summary>
