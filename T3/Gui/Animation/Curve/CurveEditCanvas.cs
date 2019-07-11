@@ -58,7 +58,7 @@ namespace T3.Gui.Animation
         }
 
 
-        public double CurrentTime { get; set; }
+        public ClipTime ClipTime;
 
 
         bool _contextMenuIsOpen = false;
@@ -178,11 +178,13 @@ namespace T3.Gui.Animation
 
         private void DrawCurrentTimeMarker()
         {
-
+            if (ClipTime == null)
+                return;
             //var p1 = new Vector2(_mouse.X, WindowPos.Y);
             //DrawList.AddText(p1, Color.Red, $"{InverseTransformPosition(_mouse).X:0.00}");
-            //DrawList.AddRectFilled(p1, new Vector2(_mouse.X + 1, WindowPos.Y + WindowSize.Y), Color.Red);
-            var p1 = InverseTransformPosition(new Vector2((float)CurrentTime, 0));
+            var p1 = TransformPosition(new Vector2((float)ClipTime.Time, 0));
+            //DrawList.AddRectFilled(p1, new Vector2(p1.X + 1, WindowPos.Y + WindowSize.Y), Color.Red);
+            DrawList.AddRectFilled(p1, p1 + new Vector2(1, 2000), Color.Red);
         }
 
         private void InitiailizeMockCurves()
@@ -834,7 +836,7 @@ namespace T3.Gui.Animation
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
 
 
-        private Vector2 _scaleTarget = new Vector2(1, 20);
+        private Vector2 _scaleTarget = new Vector2(100, 1);
 
         public List<ISelectable> SelectableChildren { get; set; }
         public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
