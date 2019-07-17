@@ -3,7 +3,7 @@ using T3.Gui.Selection;
 
 namespace T3.Gui.Commands
 {
-    public class ChangeSelectableCommand : T3.Core.Commands.ICommand
+    public class ChangeSelectableCommand : ICommand
     {
         public string Name => "Add Symbol Child";
         public bool IsUndoable => true;

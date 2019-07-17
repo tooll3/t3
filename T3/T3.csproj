@@ -298,11 +298,13 @@
     <Compile Include="Gui\ClipTime.cs" />
     <Compile Include="Gui\UserAction.cs" />
     <Compile Include="Gui\Animation\Curve\CurveEditCanvas.cs" />
-    <Compile Include="Gui\Commands\ChangeSelectableCommand.cs" />
-    <Compile Include="Gui\Commands\AddUiSymbolChildCommand.cs" />
     <Compile Include="Gui\Animation\Curve\CurveEditorWindow.cs" />
     <Compile Include="Gui\Animation\Curve\CurvePointUi.cs" />
     <Compile Include="Gui\Animation\Curve\CurveUi.cs" />
+    <Compile Include="Gui\Commands\AddSymbolChildCommand.cs" />
+    <Compile Include="Gui\Commands\ChangeInputValueCommand.cs" />
+    <Compile Include="Gui\Commands\ChangeSelectableCommand.cs" />
+    <Compile Include="Gui\Commands\UndoRedoStack.cs" />
     <Compile Include="Gui\Graph\BuildingNodes.cs" />
     <Compile Include="Gui\Graph\GraphWidgets.cs" />
     <Compile Include="Gui\Animation\Curve\HorizontalScaleLines.cs" />
@@ -322,6 +324,7 @@
     <Compile Include="Gui\Graph\GraphRendering.cs" />
     <Compile Include="Gui\Metrics.cs" />
     <Compile Include="Gui\Color.cs" />
+    <Compile Include="Gui\SymbolUi.cs" />
     <Compile Include="Gui\T3Style.cs" />
     <Compile Include="Gui\ColorVariation.cs" />
     <Compile Include="Logging\ConsoleLogWindow.cs" />
@@ -350,6 +353,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\todo.txt">
+      <Link>todo.txt</Link>
+    </Content>
     <Content Include="cimgui.dll" />
     <Content Include="ImGui\imgui.cpp" />
     <Content Include="ImGui\imgui.h" />

@@ -2,7 +2,7 @@
 using System.Linq;
 using T3.Core.Operator;
 
-namespace T3.Core.Commands
+namespace T3.Gui.Commands
 {
     public class ChangeInputValueCommand : ICommand
     {

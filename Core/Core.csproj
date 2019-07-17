@@ -105,8 +105,6 @@
     <Compile Include="Animation\Curve\SplineInterpolator.cs" />
     <Compile Include="Animation\Curve\Utils.cs" />
     <Compile Include="Animation\Curve\VDefinition.cs" />
-    <Compile Include="Commands\ChangeInputValueCommand.cs" />
-    <Compile Include="Commands\AddSymbolChildCommand.cs" />
     <Compile Include="Logging\ConsoleWriter.cs" />
     <Compile Include="Logging\ILogWriter.cs" />
     <Compile Include="Logging\Log.cs" />
@@ -132,7 +130,6 @@
     <Compile Include="Resource\Json.cs" />
     <Compile Include="Resource\Model.cs" />
     <Compile Include="Resource\ResourceManager.cs" />
-    <Compile Include="Commands\UndoRedoStack.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

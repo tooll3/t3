@@ -1,8 +1,8 @@
 ﻿using ImGuiNET;
 using System.Linq;
-using T3.Core.Commands;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Commands;
 
 namespace T3.Gui
 {
@@ -23,13 +23,6 @@ namespace T3.Gui
 
         public static void DrawParameters(Instance compositionOp, SymbolChildUi selectedChildUi)
         {
-            //var compositionOp = _instance._graphCanvasWindows[0].Canvas.CompositionOp; // todo: fix
-            //Instance selectedInstance = compositionOp;
-            //var childUiEntries = SymbolChildUiRegistry.Entries[compositionOp.Symbol.Id];
-            //var selectedChildUi = (from childUi in childUiEntries
-            //                       where childUi.Value.IsSelected
-            //                       select childUi).FirstOrDefault().Value;
-
             if (selectedChildUi == null || compositionOp == null)
                 return;
 
@@ -37,18 +30,17 @@ namespace T3.Gui
             var selectedInstance = compositionOp.Children.SingleOrDefault(child => child.Id == symbolChild.Id);
             if (selectedInstance == null)
                 return;
+            var selectedSymbolUi = SymbolUiRegistry.Entries[selectedInstance.Symbol.Id]; 
 
             foreach (var input in selectedInstance.Inputs)
             {
                 ImGui.PushID(input.Id.GetHashCode());
-                IInputUi inputUi = InputUiRegistry.Entries[selectedInstance.Symbol.Id][input.Id];
+                IInputUi inputUi = selectedSymbolUi.InputUis[input.Id];
+
                 var editState = inputUi.DrawInputEdit(input.Input.InputDefinition.Name, input);
+
                 switch (editState)
                 {
-                    case InputEditState.SingleCommand:
-                        Log.Debug("single command setup");
-                        UndoRedoStack.Add(new ChangeInputValueCommand(compositionOp.Symbol, symbolChild.Id, input.Input));
-                        break;
                     case InputEditState.Focused:
                         // create command for possible editing
                         Log.Debug("setup 'ChangeInputValue' command");
@@ -74,10 +66,6 @@ namespace T3.Gui
 
                 ImGui.PopID();
             }
-
-
         }
-
-
     }
 }

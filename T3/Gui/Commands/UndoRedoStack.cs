@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace T3.Core.Commands
+namespace T3.Gui.Commands
 {
     public interface ICommand
     {

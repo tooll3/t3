@@ -26,13 +26,7 @@ namespace T3.Gui.Graph
         {
 
             Current = this;
-            if (!SymbolChildUiRegistry.Entries.ContainsKey(CompositionOp.Symbol.Id))
-            {
-                SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id] = new Dictionary<Guid, SymbolChildUi>();
-                Log.Debug("Added Op to UI Registry " + CompositionOp.Symbol.Name);
-            }
-
-            ChildUisById = SymbolChildUiRegistry.Entries[CompositionOp.Symbol.Id];
+            ChildUis = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis;
             DrawList = ImGui.GetWindowDrawList();
             _io = ImGui.GetIO();
 
@@ -67,11 +61,11 @@ namespace T3.Gui.Graph
             ImGui.EndGroup();
         }
 
-        public List<Instance> GetParents(bool inludeCompositionOp = false)
+        public List<Instance> GetParents(bool includeCompositionOp = false)
         {
             var parents = new List<Instance>();
             var op = CompositionOp;
-            if (inludeCompositionOp)
+            if (includeCompositionOp)
                 parents.Add(op);
 
             while (op.Parent != null)
@@ -86,7 +80,7 @@ namespace T3.Gui.Graph
 
         public IEnumerable<Symbol> GetParentSymbols()
         {
-            return GetParents(inludeCompositionOp: true).Select(p => p.Symbol);
+            return GetParents(includeCompositionOp: true).Select(p => p.Symbol);
         }
 
         private void HandleInteraction()
@@ -231,8 +225,8 @@ namespace T3.Gui.Graph
             get
             {
                 _selectableItems.Clear();
-                _selectableItems.AddRange(ChildUisById.Values);
-                _selectableItems.AddRange(OutputUiRegistry.Entries[CompositionOp.Symbol.Id].Values);
+                _selectableItems.AddRange(ChildUis);
+                _selectableItems.AddRange(SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].OutputUis.Values);
                 return _selectableItems;
             }
         }
@@ -341,7 +335,7 @@ namespace T3.Gui.Graph
         private ImGuiIOPtr _io;
         internal static Vector2 DefaultOpSize = new Vector2(100, 30);
 
-        internal Dictionary<Guid, SymbolChildUi> ChildUisById { get; set; }
+        internal List<SymbolChildUi> ChildUis { get; set; }
         private BuildingNodes _buildingNodes = new BuildingNodes();
         #endregion
     }
