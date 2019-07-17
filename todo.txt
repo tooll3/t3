@@ -1,0 +1,8 @@
+/ Restructure UI elements
+/ Move undo redo stack to T3 project
+- Create missing commands - at least basic set
+- Operator with complex output type e.g. list
+- Restructure connections to have an easier handling for multi inputs etc
+- Reactivate dirty flag
+- General op replacement/compilation after change
+ 

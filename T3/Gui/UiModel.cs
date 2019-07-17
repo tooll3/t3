@@ -183,6 +183,9 @@ namespace T3.Gui
                 OutputUiRegistry.Entries.Add(symbol.Id, outputDict);
             }
 
+            var symbolUi = new SymbolUi(symbol);
+            SymbolUiRegistry.Entries.Add(symbol.Id, symbolUi);
+
             var outputUiFactory = OutputUiFactory.Entries;
             foreach (var output in symbol.OutputDefinitions)
             {

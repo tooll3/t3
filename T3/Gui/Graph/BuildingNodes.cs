@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Commands;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Graph
@@ -108,16 +109,9 @@ namespace T3.Gui.Graph
                         if (ImGui.Selectable("", symbol == _selectedSymbol))
                         {
                             var parent = GraphCanvas.Current.CompositionOp.Symbol;
-                            Guid newSymbolChildId = parent.AddChild(symbol);
-
-                            // Create and register ui info for new child
-                            var uiEntriesForChildrenOfSymbol = SymbolChildUiRegistry.Entries[parent.Id];
-                            var newSymbolChild = GraphCanvas.Current.CompositionOp.Symbol.Children.Find(entry => entry.Id == newSymbolChildId);
-                            uiEntriesForChildrenOfSymbol.Add(newSymbolChildId, new SymbolChildUi
-                            {
-                                SymbolChild = newSymbolChild,
-                                PosOnCanvas = _posInWindow,
-                            });
+                            var addCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = _posInWindow };
+                            UndoRedoStack.AddAndExecute(addCommand);
+                            var newSymbolChild = parent.Children.Single(entry => entry.Id == addCommand.AddedChildId);
 
                             if (symbol.InputDefinitions.Any())
                             {

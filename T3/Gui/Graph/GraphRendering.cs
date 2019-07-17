@@ -35,9 +35,10 @@ namespace T3.Gui.Graph
             if (BuildingConnections.TempConnection != null)
                 allConnections.Add(BuildingConnections.TempConnection);
 
-            var childUisById = GraphCanvas.Current.ChildUisById;
-            var inputUisById = InputUiRegistry.Entries[symbol.Id];
-            var outputUisById = OutputUiRegistry.Entries[symbol.Id];
+            var symbolUi = SymbolUiRegistry.Entries[symbol.Id];
+            var childUis = symbolUi.ChildUis;
+            var inputUisById = symbolUi.InputUis;
+            var outputUisById = symbolUi.OutputUis;
 
             // 1. Initialize connection lines
             var lines = new List<ConnectionLineUi>(allConnections.Count);
@@ -76,6 +77,7 @@ namespace T3.Gui.Graph
                 var isConnectionToSymbolOutput = c.TargetParentOrChildId == Guid.Empty;
                 if (isConnectionToSymbolOutput)
                 {
+                    //var outputNode = outputUisById[c.TargetSlotId];
                     var outputNode = outputUisById[c.TargetSlotId];
 
                     if (!linesToOutputNodes.ContainsKey(outputNode))
@@ -87,7 +89,7 @@ namespace T3.Gui.Graph
                 {
                     if (c.TargetParentOrChildId != BuildingConnections.NotConnected)
                     {
-                        var targetNode = childUisById[c.TargetParentOrChildId];
+                        var targetNode = childUis.Single(childUi => childUi.Id == c.TargetParentOrChildId);
                         if (!linesIntoNodes.ContainsKey(targetNode))
                             linesIntoNodes.Add(targetNode, new List<ConnectionLineUi>());
 
@@ -111,7 +113,7 @@ namespace T3.Gui.Graph
                 {
                     if (c.SourceParentOrChildId != BuildingConnections.NotConnected)
                     {
-                        var sourceNode = childUisById[c.SourceParentOrChildId];
+                        var sourceNode = childUis.Single(childUi => childUi.Id == c.SourceParentOrChildId);
                         if (!linesFromNodes.ContainsKey(sourceNode))
                             linesFromNodes.Add(sourceNode, new List<ConnectionLineUi>());
 
@@ -124,7 +126,7 @@ namespace T3.Gui.Graph
             // TODO ...
 
             // 3. Draw Nodes and their sockets and set positions for connection lines
-            foreach (var childUi in childUisById.Values)
+            foreach (var childUi in childUis)
             {
                 GraphOperator.Draw(childUi);
 
@@ -312,7 +314,6 @@ namespace T3.Gui.Graph
                 var def = symbol.OutputDefinitions.Find(od => od.Id == outputId);
                 OutputNodes.Draw(def, outputNode);
 
-                var outputUisForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                 var targetPos = new Vector2(
                     OutputNodes._lastScreenRect.GetCenter().X,
                     OutputNodes._lastScreenRect.Max.Y);
@@ -324,18 +325,15 @@ namespace T3.Gui.Graph
             }
 
             // Draw Inputs Nodes
-            foreach (var pair in inputUisById)
+            foreach (var inputNode in inputUisById)
             {
-                var inputId = pair.Key;
-                var inputNode = pair.Value;
-                var connectedLines = linesFromInputNodes.ContainsKey(inputNode)
-                    ? linesFromInputNodes[inputNode].FindAll(l => l.Connection.SourceSlotId == inputId)
+                var connectedLines = linesFromInputNodes.ContainsKey(inputNode.Value)
+                    ? linesFromInputNodes[inputNode.Value].FindAll(l => l.Connection.SourceSlotId == inputNode.Key)
                     : _noLines;
 
-                var def = symbol.InputDefinitions.Find(idef => idef.Id == inputId);
-                InputNodes.Draw(def, inputNode);
+                var def = symbol.InputDefinitions.Find(idef => idef.Id == inputNode.Key);
+                InputNodes.Draw(def, inputNode.Value);
 
-                var outputUisForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                 var sourcePos = new Vector2(
                     InputNodes._lastScreenRect.GetCenter().X,
                     InputNodes._lastScreenRect.Min.Y);

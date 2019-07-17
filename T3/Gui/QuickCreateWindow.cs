@@ -1,8 +1,8 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
-using T3.Core.Commands;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 
@@ -52,7 +52,7 @@ namespace T3.Gui.Graph
         private void DrawSymbolList()
         {
             ImGui.Separator();
-            var parentSymbols = new List<Symbol>(GraphCanvas.Current.GetParentSymbols());
+            var parentSymbols = GraphCanvas.Current.GetParentSymbols().ToArray();
 
             foreach (var symbol in SymbolRegistry.Entries.Values)
             {
@@ -64,7 +64,7 @@ namespace T3.Gui.Graph
 
                 if (ImGui.Selectable(symbol.Name, symbol == _selectedSymbol, flags))
                 {
-                    UndoRedoStack.AddAndExecute(new AddUiSymbolChildCommand(_compositionOp, symbol.Id) { PosOnCanvas = _positionInOp });
+                    UndoRedoStack.AddAndExecute(new AddSymbolChildCommand(_compositionOp, symbol.Id) { PosOnCanvas = _positionInOp });
                     _opened = false;
                 }
                 ImGui.PopID();

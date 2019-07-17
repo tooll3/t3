@@ -25,8 +25,7 @@ namespace T3.Gui
         Focused = 0x1,
         Modified = 0x2,
         Finished = 0x4,
-        ModifiedAndFinished = Modified | Finished,
-        SingleCommand = Focused | Modified | Finished
+        ModifiedAndFinished = Modified | Finished
     }
 
     public interface IInputUi : ISelectable
