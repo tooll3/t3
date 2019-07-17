@@ -296,6 +296,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gui\ClipTime.cs" />
+    <Compile Include="Gui\UiJson.cs" />
     <Compile Include="Gui\UserAction.cs" />
     <Compile Include="Gui\Animation\Curve\CurveEditCanvas.cs" />
     <Compile Include="Gui\Animation\Curve\CurveEditorWindow.cs" />
