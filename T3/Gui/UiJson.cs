@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -99,6 +102,91 @@ namespace T3.Gui
             }
 
             Writer.WriteEndArray();
+        }
+
+
+        public SymbolUi ReadSymbolUi(string filePath)
+        {
+            var vector2Converter = JsonToTypeValueConverters.Entries[typeof(Vector2)];
+
+            using (var streamReader = new StreamReader(filePath))
+            using (var jsonTextReader = new JsonTextReader(streamReader))
+            {
+                var mainObject = (JObject)JToken.ReadFrom(jsonTextReader);
+                var symbolId = Guid.Parse(mainObject["Id"].Value<string>());
+
+                var inputDict = new Dictionary<Guid, IInputUi>();
+                foreach (var uiInputEntry in (JArray)mainObject["InputUis"])
+                {
+                    var inputId = Guid.Parse(uiInputEntry["InputId"].Value<string>());
+                    var typeName = uiInputEntry["Type"].Value<string>();
+                    Type type = Type.GetType(typeName);
+                    if (type == null)
+                    {
+                        Console.WriteLine($"type not available: {typeName}");
+                    }
+                    else if (InputUiFactory.Entries.TryGetValue(type, out var inputCreator))
+                    {
+                        var inputUi = inputCreator();
+                        JToken positionToken = uiInputEntry["Position"];
+                        inputUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
+                        //JToken sizeToken = uiInputEntry["Size"];
+                        //inputUi.Size = (Vector2)vector2Converter(sizeString);
+
+                        inputDict.Add(inputId, inputUi);
+                    }
+                    else
+                    {
+                        Log.Error($"Error creating input ui for non registered type '{typeName}'.");
+                    }
+                }
+
+                var symbol = SymbolRegistry.Entries[symbolId];
+                var symbolChildUis = new List<SymbolChildUi>();
+                foreach (var childEntry in (JArray)mainObject["SymbolChildUis"])
+                {
+                    var childUi = new SymbolChildUi();
+                    var childId = Guid.Parse(childEntry["ChildId"].Value<string>());
+                    childUi.SymbolChild = symbol.Children.Single(child => child.Id == childId);
+
+                    JToken positionToken = childEntry["Position"];
+                    childUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
+
+                    //JToken sizeToken = uiInputEntry["Size"];
+                    //inputUi.Size = (Vector2)vector2Converter(sizeString);
+
+                    symbolChildUis.Add(childUi);
+                }
+
+                var outputDict = new Dictionary<Guid, IOutputUi>();
+                foreach (var uiOutputEntry in (JArray)mainObject["OutputUis"])
+                {
+                    var outputId = Guid.Parse(uiOutputEntry["OutputId"].Value<string>());
+                    var typeName = uiOutputEntry["Type"].Value<string>();
+                    Type type = Type.GetType(typeName);
+                    if (type == null)
+                    {
+                        Console.WriteLine($"type not available: {typeName}");
+                    }
+                    else if (OutputUiFactory.Entries.TryGetValue(type, out var outputCreator))
+                    {
+                        var outputUi = outputCreator();
+                        JToken positionToken = uiOutputEntry["Position"];
+                        outputUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
+                        //JToken sizeToken = uiOutputEntry["Size"];
+                        //outputUi.Size = (Vector2)vector2Converter(sizeString);
+
+                        outputDict.Add(outputId, outputUi);
+                    }
+                    else
+                    {
+                        Log.Error($"Error creating output ui for non registered type '{typeName}'.");
+                    }
+                }
+
+                return new SymbolUi(symbol, symbolChildUis, inputDict, outputDict);
+            }
+
         }
     }
 }

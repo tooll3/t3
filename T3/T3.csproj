@@ -317,7 +317,6 @@
     <Compile Include="Gui\OutputUi.cs" />
     <Compile Include="Gui\ParameterWindow.cs" />
     <Compile Include="Gui\SymbolChildUi.cs" />
-    <Compile Include="Gui\SymbolChildUiRegistry.cs" />
     <Compile Include="Gui\Graph\BuildingConnections.cs" />
     <Compile Include="Gui\Graph\GraphCanvas.cs" />
     <Compile Include="Gui\Graph\InputNodes.cs" />

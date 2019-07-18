@@ -1,0 +1,24 @@
+{
+  "Id": "39c96cfd-dedf-4f76-a471-d1c26c9ba9fa"/*FloatFormat*/,
+  "InputUis": [
+    {
+      "InputId": "f36e4078-2608-4308-ab5f-077c05b1181a"/*Input*/,
+      "Type": "System.Single, mscorlib",
+      "Position": {
+        "X": "0",
+        "Y": "0"
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c63a1977-a594-490d-b5fb-de4d40bad016"/*Output*/,
+      "Type": "System.String, mscorlib",
+      "Position": {
+        "X": "0",
+        "Y": "0"
+      }
+    }
+  ]
+}

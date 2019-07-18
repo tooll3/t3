@@ -1,0 +1,24 @@
+{
+  "Id": "0b3436db-e283-436e-ba85-2f3a1de76a9d"/*LoadTexture2d*/,
+  "InputUis": [
+    {
+      "InputId": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
+      "Type": "System.String, mscorlib",
+      "Position": {
+        "X": "0",
+        "Y": "0"
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d45d32b6-e588-4723-a071-6e02406b831a"/*ShaderResourceView*/,
+      "Type": "SharpDX.Direct3D11.ShaderResourceView, SharpDX.Direct3D11",
+      "Position": {
+        "X": "0",
+        "Y": "0"
+      }
+    }
+  ]
+}
