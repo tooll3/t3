@@ -1,0 +1,24 @@
+{
+  "Id": "10673c38-8c7e-4aa1-8dcd-3f2711c709b5"/*Random*/,
+  "InputUis": [
+    {
+      "InputId": "f2513ead-7022-4774-8767-7f33d1b92b26"/*Seed*/,
+      "Type": "System.Int32, mscorlib",
+      "Position": {
+        "X": "0",
+        "Y": "0"
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "dfb39f6e-7b1c-41f3-9f31-b71caee629f9"/*Result*/,
+      "Type": "System.Single, mscorlib",
+      "Position": {
+        "X": "0",
+        "Y": "0"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "Id": "862de1a8-f630-4823-8860-7afa918bb1bc"/*Time*/,
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "1c34d39c-0bef-4c4a-a3e4-dcb8d5664f3b"/*TimeInSeconds*/,
+      "Type": "System.Single, mscorlib",
+      "Position": {
+        "X": "0",
+        "Y": "0"
+      }
+    }
+  ]
+}

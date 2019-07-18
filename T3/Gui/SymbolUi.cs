@@ -10,29 +10,73 @@ namespace T3.Gui
     {
         public Symbol Symbol { get; }
 
-        public SymbolUi(Symbol symbol)
+        public SymbolUi(Symbol symbol, List<SymbolChildUi> childUis, Dictionary<Guid, IInputUi> inputs, Dictionary<Guid, IOutputUi> outputs)
         {
             Symbol = symbol;
+            ChildUis = childUis;
+            InputUis = inputs;
+            OutputUis = outputs;
 
-            var childrenUis = SymbolChildUiRegistry.Entries[symbol.Id];
-            foreach (var child in symbol.Children)
-            {
-                ChildUis.Add(childrenUis[child.Id]);
-            }
-
-            var inputUis = InputUiRegistry.Entries[symbol.Id];
-            foreach (var input in symbol.InputDefinitions)
-            {
-                InputUis.Add(input.Id, inputUis[input.Id]);
-            }
-
-            var outputUis = OutputUiRegistry.Entries[symbol.Id];
-            foreach (var output in symbol.OutputDefinitions)
-            {
-                OutputUis.Add(output.Id, outputUis[output.Id]);
-            }
+            CheckConsistency();
         }
 
+        private void CheckConsistency()
+        {
+            // todo: adjust the code below for SymbolUi
+            // var childUiEntries = SymbolChildUiRegistry.Entries[symbol.Id];
+            // foreach (var child in symbol.Children)
+            // {
+            //     if (!childUiEntries.ContainsKey(child.Id))
+            //     {
+            //         Log.Info($"Found no symbol child ui dictionary entry for symbol child '{child.ReadableName}' - creating a new one");
+            //         var childUi = new SymbolChildUi()
+            //         {
+            //             SymbolChild = child,
+            //             PosOnCanvas = new Vector2(100, 100)
+            //         };
+            //         childUiEntries.Add(child.Id, childUi);
+            //     }
+            // }
+            //
+            // if (!InputUiRegistry.Entries.TryGetValue(symbol.Id, out var inputDict))
+            // {
+            //     Log.Info($"Found no input ui dictionary entry for symbol '{symbol.Name}' - creating a new one");
+            //     inputDict = new Dictionary<Guid, IInputUi>();
+            //     InputUiRegistry.Entries.Add(symbol.Id, inputDict);
+            // }
+            //
+            // var inputUiFactory = InputUiFactory.Entries;
+            // foreach (var input in symbol.InputDefinitions)
+            // {
+            //     if (!inputDict.TryGetValue(input.Id, out var value) || (value.Type != input.DefaultValue.ValueType))
+            //     {
+            //         inputDict.Remove(input.Id);
+            //         var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
+            //         inputDict.Add(input.Id, inputCreator());
+            //     }
+            // }
+            //
+            // if (!OutputUiRegistry.Entries.TryGetValue(symbol.Id, out var outputDict))
+            // {
+            //     Log.Info($"Found no output ui dictionary entry for symbol '{symbol.Name}' - creating a new one.");
+            //     outputDict = new Dictionary<Guid, IOutputUi>();
+            //     OutputUiRegistry.Entries.Add(symbol.Id, outputDict);
+            // }
+
+            // var symbolUi = new SymbolUi(symbol);
+            // SymbolUiRegistry.Entries.Add(symbol.Id, symbolUi);
+
+            // var outputUiFactory = OutputUiFactory.Entries;
+            // foreach (var output in symbol.OutputDefinitions)
+            // {
+            //     if (!outputDict.TryGetValue(output.Id, out var value) || (value.Type != output.ValueType))
+            //     {
+            //         outputDict.Remove(output.Id);
+            //         var outputUiCreator = outputUiFactory[output.ValueType];
+            //         outputDict.Add(output.Id, outputUiCreator());
+            //     }
+            // }
+        }
         public Guid AddChild(Symbol symbolToAdd, Vector2 posInCanvas, Vector2 size, bool isVisible)
         {
             Guid addedChildId = Symbol.AddChild(symbolToAdd);

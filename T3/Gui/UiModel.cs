@@ -76,10 +76,16 @@ namespace T3.Gui
             // first load core data
             base.Load();
 
-            // now load ui data
-            SymbolChildUiRegistry.Load();
-            InputUiRegistry.Load();
-            OutputUiRegistry.Load();
+            UiJson json = new UiJson();
+            var symbolUiFiles = Directory.GetFiles(Path, $"*{SymbolUiExtension}");
+            foreach (var symbolUiFile in symbolUiFiles)
+            {
+                SymbolUi symbolUi = json.ReadSymbolUi(symbolUiFile);
+                if (symbolUi != null)
+                {
+                    SymbolUiRegistry.Entries.Add(symbolUi.Symbol.Id, symbolUi);
+                }
+            }
         }
 
         private string SymbolUiExtension = ".t3ui";
@@ -88,11 +94,6 @@ namespace T3.Gui
         {
             // first save core data
             base.Save();
-
-            // save ui data
-            SymbolChildUiRegistry.Save();
-            InputUiRegistry.Save();
-            OutputUiRegistry.Save();
 
             // store all symbols in corresponding files
             UiJson json = new UiJson();
@@ -108,110 +109,9 @@ namespace T3.Gui
             }
         }
 
-        // public void CreateSymbolChildUisForInstance(Instance instance)
-        // {
-        //     var uiEntries = SymbolChildUiRegistry.Entries;
-        //     var symbol = instance.Symbol;
-        //     var entriesForSymbol = uiEntries[symbol.Id];
-        //
-        //     foreach (var child in instance.Children)
-        //     {
-        //         if (!entriesForSymbol.ContainsKey(child.Id))
-        //         {
-        //             var childUi = new SymbolChildUi()
-        //             {
-        //                 SymbolChild = symbol.Children.Find(c => c.Id == child.Id),
-        //                 PosOnCanvas = new Vector2(100, 100)
-        //             };
-        //             uiEntries[symbol.Id].Add(child.Id, childUi);
-        //         }
-        //
-        //         CreateSymbolChildUisForInstance(child);
-        //     }
-        // }
-
-
-        // public void CreateInputAndOutputUiEntriesForSymbol(Symbol symbol)
-        // {
-        //     var inputDict = new Dictionary<Guid, IInputUi>();
-        //     var inputUiFactory = InputUiFactory.Entries;
-        //     foreach (var input in symbol.InputDefinitions)
-        //     {
-        //         var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
-        //         inputDict.Add(input.Id, inputCreator());
-        //     }
-        //     InputUiRegistry.Entries.Add(symbol.Id, inputDict);
-        //
-        //     var outputDict = new Dictionary<Guid, IOutputUi>();
-        //     var outputUiFactory = OutputUiFactory.Entries;
-        //     foreach (var output in symbol.OutputDefinitions)
-        //     {
-        //         var outputUiCreator = outputUiFactory[output.ValueType];
-        //         outputDict.Add(output.Id, outputUiCreator());
-        //     }
-        //     OutputUiRegistry.Entries.Add(symbol.Id, outputDict);
-        // }
-
         public void UpdateUiEntriesForSymbol(Symbol symbol)
         {
-            if (!SymbolChildUiRegistry.Entries.ContainsKey(symbol.Id))
-            {
-                SymbolChildUiRegistry.Entries.Add(symbol.Id, new Dictionary<Guid, SymbolChildUi>());
-            }
-
-            // var childUiEntries = SymbolChildUiRegistry.Entries[symbol.Id];
-            // foreach (var child in symbol.Children)
-            // {
-            //     if (!childUiEntries.ContainsKey(child.Id))
-            //     {
-            //         Log.Info($"Found no symbol child ui dictionary entry for symbol child '{child.ReadableName}' - creating a new one");
-            //         var childUi = new SymbolChildUi()
-            //         {
-            //             SymbolChild = child,
-            //             PosOnCanvas = new Vector2(100, 100)
-            //         };
-            //         childUiEntries.Add(child.Id, childUi);
-            //     }
-            // }
-            //
-            // if (!InputUiRegistry.Entries.TryGetValue(symbol.Id, out var inputDict))
-            // {
-            //     Log.Info($"Found no input ui dictionary entry for symbol '{symbol.Name}' - creating a new one");
-            //     inputDict = new Dictionary<Guid, IInputUi>();
-            //     InputUiRegistry.Entries.Add(symbol.Id, inputDict);
-            // }
-            //
-            // var inputUiFactory = InputUiFactory.Entries;
-            // foreach (var input in symbol.InputDefinitions)
-            // {
-            //     if (!inputDict.TryGetValue(input.Id, out var value) || (value.Type != input.DefaultValue.ValueType))
-            //     {
-            //         inputDict.Remove(input.Id);
-            //         var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
-            //         inputDict.Add(input.Id, inputCreator());
-            //     }
-            // }
-            //
-            // if (!OutputUiRegistry.Entries.TryGetValue(symbol.Id, out var outputDict))
-            // {
-            //     Log.Info($"Found no output ui dictionary entry for symbol '{symbol.Name}' - creating a new one.");
-            //     outputDict = new Dictionary<Guid, IOutputUi>();
-            //     OutputUiRegistry.Entries.Add(symbol.Id, outputDict);
-            // }
-
-            var symbolUi = new SymbolUi(symbol);
-            SymbolUiRegistry.Entries.Add(symbol.Id, symbolUi);
-
-            // var outputUiFactory = OutputUiFactory.Entries;
-            // foreach (var output in symbol.OutputDefinitions)
-            // {
-            //     if (!outputDict.TryGetValue(output.Id, out var value) || (value.Type != output.ValueType))
-            //     {
-            //         outputDict.Remove(output.Id);
-            //         var outputUiCreator = outputUiFactory[output.ValueType];
-            //         outputDict.Add(output.Id, outputUiCreator());
-            //     }
-            // }
+            Log.Error("Code moved to SymbolUi, adjust calling the code.");
         }
 
         public Instance MainOp;
