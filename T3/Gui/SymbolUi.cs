@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using T3.Core.Logging;
 using T3.Core.Operator;
 
 namespace T3.Gui
@@ -10,6 +11,12 @@ namespace T3.Gui
     {
         public Symbol Symbol { get; }
 
+        public SymbolUi(Symbol symbol)
+        {
+            Symbol = symbol;
+            UpdateConsistencyWithSymbol(); // this sets up all missing elements
+        }
+
         public SymbolUi(Symbol symbol, List<SymbolChildUi> childUis, Dictionary<Guid, IInputUi> inputs, Dictionary<Guid, IOutputUi> outputs)
         {
             Symbol = symbol;
@@ -17,65 +24,53 @@ namespace T3.Gui
             InputUis = inputs;
             OutputUis = outputs;
 
-            CheckConsistency();
+            UpdateConsistencyWithSymbol();
         }
 
-        private void CheckConsistency()
+        public void UpdateConsistencyWithSymbol()
         {
-            // todo: adjust the code below for SymbolUi
-            // var childUiEntries = SymbolChildUiRegistry.Entries[symbol.Id];
-            // foreach (var child in symbol.Children)
-            // {
-            //     if (!childUiEntries.ContainsKey(child.Id))
-            //     {
-            //         Log.Info($"Found no symbol child ui dictionary entry for symbol child '{child.ReadableName}' - creating a new one");
-            //         var childUi = new SymbolChildUi()
-            //         {
-            //             SymbolChild = child,
-            //             PosOnCanvas = new Vector2(100, 100)
-            //         };
-            //         childUiEntries.Add(child.Id, childUi);
-            //     }
-            // }
-            //
-            // if (!InputUiRegistry.Entries.TryGetValue(symbol.Id, out var inputDict))
-            // {
-            //     Log.Info($"Found no input ui dictionary entry for symbol '{symbol.Name}' - creating a new one");
-            //     inputDict = new Dictionary<Guid, IInputUi>();
-            //     InputUiRegistry.Entries.Add(symbol.Id, inputDict);
-            // }
-            //
-            // var inputUiFactory = InputUiFactory.Entries;
-            // foreach (var input in symbol.InputDefinitions)
-            // {
-            //     if (!inputDict.TryGetValue(input.Id, out var value) || (value.Type != input.DefaultValue.ValueType))
-            //     {
-            //         inputDict.Remove(input.Id);
-            //         var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
-            //         inputDict.Add(input.Id, inputCreator());
-            //     }
-            // }
-            //
-            // if (!OutputUiRegistry.Entries.TryGetValue(symbol.Id, out var outputDict))
-            // {
-            //     Log.Info($"Found no output ui dictionary entry for symbol '{symbol.Name}' - creating a new one.");
-            //     outputDict = new Dictionary<Guid, IOutputUi>();
-            //     OutputUiRegistry.Entries.Add(symbol.Id, outputDict);
-            // }
+            // check if child entries are missing
+            foreach (var child in Symbol.Children)
+            {
+                if (!ChildUis.Exists(c => c.Id == child.Id))
+                {
+                    Log.Debug($"Found no symbol child ui entry for symbol child '{child.ReadableName}' - creating a new one");
+                    var childUi = new SymbolChildUi()
+                                  {
+                                      SymbolChild = child,
+                                      PosOnCanvas = new Vector2(100, 100)
+                                  };
+                    ChildUis.Add(childUi);
+                }
+            }
 
-            // var symbolUi = new SymbolUi(symbol);
-            // SymbolUiRegistry.Entries.Add(symbol.Id, symbolUi);
+            // check if there are child entries where no symbol child exists anymore
+            ChildUis.RemoveAll(childUi => !Symbol.Children.Exists(child => child.Id == childUi.Id));
 
-            // var outputUiFactory = OutputUiFactory.Entries;
-            // foreach (var output in symbol.OutputDefinitions)
-            // {
-            //     if (!outputDict.TryGetValue(output.Id, out var value) || (value.Type != output.ValueType))
-            //     {
-            //         outputDict.Remove(output.Id);
-            //         var outputUiCreator = outputUiFactory[output.ValueType];
-            //         outputDict.Add(output.Id, outputUiCreator());
-            //     }
-            // }
+            // check if input uis are missing
+            var inputUiFactory = InputUiFactory.Entries;
+            foreach (var input in Symbol.InputDefinitions)
+            {
+                if (!InputUis.TryGetValue(input.Id, out var value) || value.Type != input.DefaultValue.ValueType)
+                {
+                    Log.Debug($"Found no input ui entry for symbol child input '{input.Name}' - creating a new one");
+                    InputUis.Remove(input.Id);
+                    var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
+                    InputUis.Add(input.Id, inputCreator());
+                }
+            }
+
+            var outputUiFactory = OutputUiFactory.Entries;
+            foreach (var output in Symbol.OutputDefinitions)
+            {
+                if (!OutputUis.TryGetValue(output.Id, out var value) || (value.Type != output.ValueType))
+                {
+                    Log.Debug($"Found no output ui entry for symbol child output '{output.Name}' - creating a new one");
+                    OutputUis.Remove(output.Id);
+                    var outputUiCreator = outputUiFactory[output.ValueType];
+                    OutputUis.Add(output.Id, outputUiCreator());
+                }
+            }
         }
         public Guid AddChild(Symbol symbolToAdd, Vector2 posInCanvas, Vector2 size, bool isVisible)
         {

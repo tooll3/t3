@@ -54,10 +54,9 @@ namespace T3.Gui
             OutputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new ShaderResourceViewOutputUi());
             OutputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dOutputUi());
 
-            var symbols = SymbolRegistry.Entries;
-
             Load();
 
+            var symbols = SymbolRegistry.Entries;
             foreach (var symbolEntry in symbols)
             {
                 UpdateUiEntriesForSymbol(symbolEntry.Value);
@@ -111,7 +110,15 @@ namespace T3.Gui
 
         public void UpdateUiEntriesForSymbol(Symbol symbol)
         {
-            Log.Error("Code moved to SymbolUi, adjust calling the code.");
+            if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
+            {
+                symbolUi.UpdateConsistencyWithSymbol();
+            }
+            else
+            {
+                var newSymbolUi = new SymbolUi(symbol);
+                SymbolUiRegistry.Entries.Add(symbol.Id, newSymbolUi);
+            }
         }
 
         public Instance MainOp;
