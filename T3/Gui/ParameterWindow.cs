@@ -11,17 +11,25 @@ namespace T3.Gui
     /// </summary>
     class ParameterWindow
     {
-        public static void Draw(Instance compositionOp, SymbolChildUi childUi)
+        public ParameterWindow(string name)
         {
-            ImGui.Begin("ParameterView");
+            _name = name;
+        }
+
+
+        public bool Draw(Instance compositionOp, SymbolChildUi childUi)
+        {
+            var isOpen = true;
+            ImGui.Begin(_name, ref isOpen);
             {
                 if (childUi != null)
                     DrawParameters(compositionOp, childUi);
             }
             ImGui.End();
+            return isOpen;
         }
 
-        public static void DrawParameters(Instance compositionOp, SymbolChildUi selectedChildUi)
+        private void DrawParameters(Instance compositionOp, SymbolChildUi selectedChildUi)
         {
             if (selectedChildUi == null || compositionOp == null)
                 return;
@@ -30,14 +38,15 @@ namespace T3.Gui
             var selectedInstance = compositionOp.Children.SingleOrDefault(child => child.Id == symbolChild.Id);
             if (selectedInstance == null)
                 return;
-            var selectedSymbolUi = SymbolUiRegistry.Entries[selectedInstance.Symbol.Id]; 
+
+            var selectedSymbolUi = SymbolUiRegistry.Entries[selectedInstance.Symbol.Id];
 
             foreach (var input in selectedInstance.Inputs)
             {
                 ImGui.PushID(input.Id.GetHashCode());
                 IInputUi inputUi = selectedSymbolUi.InputUis[input.Id];
 
-                var editState = inputUi.DrawInputEdit(input.Input.InputDefinition.Name, input);
+                var editState = inputUi.DrawInputEdit(input);
 
                 switch (editState)
                 {
@@ -67,5 +76,7 @@ namespace T3.Gui
                 ImGui.PopID();
             }
         }
+        private string _name;
+
     }
 }

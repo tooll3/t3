@@ -288,7 +288,7 @@ namespace T3
 
                                      _t3ui.DrawUI();
 
-                                     _t3ui.DrawSelectedOutput();
+                                     _t3ui.DrawSelectedWindow();
 
                                      UiSettingsWindow.DrawUiSettings();
 

@@ -32,7 +32,7 @@ namespace T3.Gui
     {
         Type Type { get; }
 
-        InputEditState DrawInputEdit(string name, IInputSlot input);
+        InputEditState DrawInputEdit(IInputSlot input);
     }
 
     public abstract class InputValueUi<T> : IInputUi
@@ -40,8 +40,9 @@ namespace T3.Gui
         public abstract InputEditState DrawEditControl(string name, ref T value);
         public abstract void DrawValueDisplay(string name, ref T value);
 
-        public InputEditState DrawInputEdit(string name, IInputSlot inputSlot)
+        public InputEditState DrawInputEdit(IInputSlot inputSlot)
         {
+            var name = inputSlot.Input.Name;
             if (inputSlot is InputSlot<T> typedInputSlot)
             {
                 if (inputSlot.IsConnected)
@@ -208,7 +209,7 @@ namespace T3.Gui
             }
             else
             {
-                string nullString = "<null>"; 
+                string nullString = "<null>";
                 ImGui.InputText(name, ref nullString, MAX_STRING_LENGTH, ImGuiInputTextFlags.ReadOnly);
             }
         }
