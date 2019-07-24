@@ -1,48 +1,78 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Commands
 {
     public class ChangeSelectableCommand : ICommand
     {
-        public string Name => "Add Symbol Child";
+        public string Name => "Move..."; // todo: put meaningful name here
         public bool IsUndoable => true;
 
-        public ChangeSelectableCommand(ISelectable selectable)
+        private class Entry
         {
-            OriginalPosOnCanvas = selectable.PosOnCanvas;
-            OriginalSize = selectable.Size;
-            OriginalIsSelected = selectable.IsSelected;
+            public ISelectable Selectable { get; set; }
 
-            PosOnCanvas = OriginalPosOnCanvas;
-            Size = OriginalSize;
-            IsSelected = OriginalIsSelected;
+            public Vector2 OriginalPosOnCanvas { get; set; }
+            public Vector2 OriginalSize { get; set; }
+            public bool OriginalIsSelected { get; set; }
 
-            _selectable = selectable;
+            public Vector2 PosOnCanvas { get; set; }
+            public Vector2 Size { get; set; }
+            public bool IsSelected { get; set; }
+        }
+
+        private readonly Entry[] _entries;
+
+        public ChangeSelectableCommand(List<ISelectable> selectables)
+        {
+            _entries = new Entry[selectables.Count()];
+            for (int i = 0; i < _entries.Length; i++)
+            {
+                var selectable = selectables[i];
+                var entry = new Entry
+                            {
+                                Selectable = selectable,
+                                OriginalPosOnCanvas = selectable.PosOnCanvas,
+                                OriginalSize = selectable.Size,
+                                OriginalIsSelected = selectable.IsSelected,
+                                PosOnCanvas = selectable.PosOnCanvas,
+                                Size = selectable.Size,
+                                IsSelected = selectable.IsSelected
+                            };
+                _entries[i] = entry;
+            }
+        }
+
+        public void StoreCurrentValues()
+        {
+            foreach (var entry in _entries)
+            {
+                entry.PosOnCanvas = entry.Selectable.PosOnCanvas;
+                entry.Size = entry.Selectable.Size;
+                entry.IsSelected = entry.Selectable.IsSelected;
+            }
         }
 
         public void Undo()
         {
-            _selectable.PosOnCanvas = OriginalPosOnCanvas;
-            _selectable.Size = OriginalSize;
-            _selectable.IsSelected = IsSelected;
+            foreach (var entry in _entries)
+            {
+                entry.Selectable.PosOnCanvas = entry.OriginalPosOnCanvas;
+                entry.Selectable.Size = entry.OriginalSize;
+                entry.Selectable.IsSelected = entry.OriginalIsSelected;
+            }
         }
 
         public void Do()
         {
-            _selectable.PosOnCanvas = PosOnCanvas;
-            _selectable.Size = Size;
-            _selectable.IsSelected = IsSelected;
+            foreach (var entry in _entries)
+            {
+                entry.Selectable.PosOnCanvas = entry.PosOnCanvas;
+                entry.Selectable.Size = entry.Size;
+                entry.Selectable.IsSelected = entry.IsSelected;
+            }
         }
-
-        public Vector2 OriginalPosOnCanvas { get; set; }
-        public Vector2 OriginalSize { get; set; }
-        public bool OriginalIsSelected { get; set; }
-
-        public Vector2 PosOnCanvas { get; set; }
-        public Vector2 Size { get; set; }
-        public bool IsSelected { get; set; }
-
-        private readonly ISelectable _selectable;
     }
 }
