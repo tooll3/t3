@@ -2,7 +2,9 @@ using ImGuiNET;
 using imHelpers;
 using System;
 using System.Numerics;
+using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Commands;
 using T3.Gui.TypeColors;
 
 namespace T3.Gui.Graph
@@ -12,6 +14,8 @@ namespace T3.Gui.Graph
     /// </summary>
     static class GraphOperator
     {
+        private static ChangeSelectableCommand _moveCommand = null;
+
         public static void Draw(SymbolChildUi childUi)
         {
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
@@ -34,11 +38,15 @@ namespace T3.Gui.Graph
                 {
                     if (ImGui.IsItemClicked(0))
                     {
-                        if (!GraphCanvas.Current.SelectionHandler.SelectedElements.Contains(childUi))
+                        var handler = GraphCanvas.Current.SelectionHandler;
+                        if (!handler.SelectedElements.Contains(childUi))
                         {
-                            GraphCanvas.Current.SelectionHandler.SetElement(childUi);
+                            handler.SetElement(childUi);
                         }
+                        _moveCommand = new ChangeSelectableCommand(handler.SelectedElements);
+                        Log.Debug("start");
                     }
+
                     if (ImGui.IsMouseDragging(0))
                     {
                         foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)
@@ -46,12 +54,27 @@ namespace T3.Gui.Graph
                             e.PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
                         }
                     }
+
                     if (ImGui.IsMouseDoubleClicked(0))
                     {
                         var instance = GraphCanvas.Current.CompositionOp.Children.Find(c => c.Symbol == childUi.SymbolChild.Symbol);
                         GraphCanvas.Current.CompositionOp = instance;
                     }
                 }
+
+                if (ImGui.IsMouseReleased(0) && _moveCommand != null)
+                {
+                    Log.Debug("end");
+                    if (ImGui.GetMouseDragDelta(0).LengthSquared() > 0.0f)
+                    {
+                        // add to stack
+                        Log.Debug("Added to undo stack");
+                        _moveCommand.StoreCurrentValues();
+                        UndoRedoStack.Add(_moveCommand);
+                    }
+                    _moveCommand = null;
+                }
+
                 var hovered = ImGui.IsItemHovered();
                 if (hovered)
                 {
@@ -60,24 +83,23 @@ namespace T3.Gui.Graph
 
                 // Rendering
                 var typeColor = childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
-                    ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
-                    : Color.Gray;
-
+                                    ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
+                                    : Color.Gray;
 
                 var dl = GraphCanvas.Current.DrawList;
                 dl.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
-                    hovered
-                    ? ColorVariations.OperatorHover.Apply(typeColor)
-                    : ColorVariations.Operator.Apply(typeColor));
+                                 hovered
+                                     ? ColorVariations.OperatorHover.Apply(typeColor)
+                                     : ColorVariations.Operator.Apply(typeColor));
 
                 dl.AddRectFilled(
-                    new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
-                    new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + _inputSlotHeight + _inputSlotMargin),
-                    ColorVariations.OperatorInputZone.Apply(typeColor));
+                                 new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
+                                 new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + _inputSlotHeight + _inputSlotMargin),
+                                 ColorVariations.OperatorInputZone.Apply(typeColor));
 
                 dl.AddText(_lastScreenRect.Min + _labelPos,
-                    ColorVariations.OperatorLabel.Apply(typeColor),
-                    string.Format($"{childUi.SymbolChild.ReadableName}"));
+                           ColorVariations.OperatorLabel.Apply(typeColor),
+                           string.Format($"{childUi.SymbolChild.ReadableName}"));
 
                 if (childUi.IsSelected)
                 {
