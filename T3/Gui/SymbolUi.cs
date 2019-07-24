@@ -56,7 +56,7 @@ namespace T3.Gui
                     Log.Debug($"Found no input ui entry for symbol child input '{input.Name}' - creating a new one");
                     InputUis.Remove(input.Id);
                     var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
-                    InputUis.Add(input.Id, inputCreator());
+                    InputUis.Add(input.Id, inputCreator(input.Id));
                 }
             }
 
@@ -68,7 +68,7 @@ namespace T3.Gui
                     Log.Debug($"Found no output ui entry for symbol child output '{output.Name}' - creating a new one");
                     OutputUis.Remove(output.Id);
                     var outputUiCreator = outputUiFactory[output.ValueType];
-                    OutputUis.Add(output.Id, outputUiCreator());
+                    OutputUis.Add(output.Id, outputUiCreator(output.Id));
                 }
             }
         }

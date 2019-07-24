@@ -36,23 +36,23 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(ShaderResourceView), new TextureUiProperties());
 
             // Register input ui creators
-            InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
-            InputUiFactory.Entries.Add(typeof(int), () => new IntInputUi());
-            InputUiFactory.Entries.Add(typeof(string), () => new StringInputUi());
-            InputUiFactory.Entries.Add(typeof(Size2), () => new Size2InputUi());
-            InputUiFactory.Entries.Add(typeof(ResourceUsage), () => new EnumInputUi<ResourceUsage>());
-            InputUiFactory.Entries.Add(typeof(Format), () => new EnumInputUi<Format>());
-            InputUiFactory.Entries.Add(typeof(BindFlags), () => new EnumInputUi<BindFlags>());
-            InputUiFactory.Entries.Add(typeof(CpuAccessFlags), () => new EnumInputUi<CpuAccessFlags>());
-            InputUiFactory.Entries.Add(typeof(ResourceOptionFlags), () => new EnumInputUi<ResourceOptionFlags>());
+            InputUiFactory.Entries.Add(typeof(float), id => new FloatInputUi(id));
+            InputUiFactory.Entries.Add(typeof(int), id => new IntInputUi(id));
+            InputUiFactory.Entries.Add(typeof(string), id => new StringInputUi(id));
+            InputUiFactory.Entries.Add(typeof(Size2), id => new Size2InputUi(id));
+            InputUiFactory.Entries.Add(typeof(ResourceUsage), id => new EnumInputUi<ResourceUsage>(id));
+            InputUiFactory.Entries.Add(typeof(Format), id => new EnumInputUi<Format>(id));
+            InputUiFactory.Entries.Add(typeof(BindFlags), id => new EnumInputUi<BindFlags>(id));
+            InputUiFactory.Entries.Add(typeof(CpuAccessFlags), id => new EnumInputUi<CpuAccessFlags>(id));
+            InputUiFactory.Entries.Add(typeof(ResourceOptionFlags), id => new EnumInputUi<ResourceOptionFlags>(id));
 
             // Register output ui creators
-            OutputUiFactory.Entries.Add(typeof(float), () => new FloatOutputUi());
-            OutputUiFactory.Entries.Add(typeof(int), () => new IntOutputUi());
-            OutputUiFactory.Entries.Add(typeof(string), () => new StringOutputUi());
-            OutputUiFactory.Entries.Add(typeof(Size2), () => new Size2OutputUi());
-            OutputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new ShaderResourceViewOutputUi());
-            OutputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dOutputUi());
+            OutputUiFactory.Entries.Add(typeof(float), id => new FloatOutputUi(id));
+            OutputUiFactory.Entries.Add(typeof(int), id => new IntOutputUi(id));
+            OutputUiFactory.Entries.Add(typeof(string), id => new StringOutputUi(id));
+            OutputUiFactory.Entries.Add(typeof(Size2), id => new Size2OutputUi(id));
+            OutputUiFactory.Entries.Add(typeof(ShaderResourceView), id => new ShaderResourceViewOutputUi(id));
+            OutputUiFactory.Entries.Add(typeof(Texture2D), id => new Texture2dOutputUi(id));
 
             Load();
 

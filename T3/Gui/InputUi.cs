@@ -1,15 +1,10 @@
 ﻿using ImGuiNET;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SharpDX;
-using SharpDX.Direct3D11;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Selection;
@@ -17,7 +12,6 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui
 {
-
     [Flags]
     public enum InputEditState
     {
@@ -37,8 +31,14 @@ namespace T3.Gui
 
     public abstract class InputValueUi<T> : IInputUi
     {
-        public abstract InputEditState DrawEditControl(string name, ref T value);
-        public abstract void DrawValueDisplay(string name, ref T value);
+        protected InputValueUi(Guid id)
+        {
+            Id = id;
+        }
+
+        public Guid Id { get; }
+        protected abstract InputEditState DrawEditControl(string name, ref T value);
+        protected abstract void DrawValueDisplay(string name, ref T value);
 
         public InputEditState DrawInputEdit(IInputSlot inputSlot)
         {
@@ -58,6 +58,7 @@ namespace T3.Gui
                         {
                             DrawValueDisplay(name, ref input.Value);
                         }
+
                         ImGui.PopStyleColor();
                         ImGui.PopItemWidth();
                     }
@@ -143,9 +144,13 @@ namespace T3.Gui
 
     public abstract class SingleControlInputUi<T> : InputValueUi<T>
     {
+        protected SingleControlInputUi(Guid id) : base(id)
+        {
+        }
+
         public abstract bool DrawSingleEditControl(string name, ref T value);
 
-        public override InputEditState DrawEditControl(string name, ref T value)
+        protected override InputEditState DrawEditControl(string name, ref T value)
         {
             bool valueModified = DrawSingleEditControl(name, ref value);
 
@@ -160,12 +165,16 @@ namespace T3.Gui
 
     public class FloatInputUi : SingleControlInputUi<float>
     {
+        public FloatInputUi(Guid id) : base(id)
+        {
+        }
+
         public override bool DrawSingleEditControl(string name, ref float value)
         {
             return ImGui.DragFloat(name, ref value);
         }
 
-        public override void DrawValueDisplay(string name, ref float value)
+        protected override void DrawValueDisplay(string name, ref float value)
         {
             ImGui.InputFloat(name, ref value, 0.0f, 0.0f, "%f", ImGuiInputTextFlags.ReadOnly);
         }
@@ -173,12 +182,16 @@ namespace T3.Gui
 
     public class IntInputUi : SingleControlInputUi<int>
     {
+        public IntInputUi(Guid id) : base(id)
+        {
+        }
+
         public override bool DrawSingleEditControl(string name, ref int value)
         {
             return ImGui.DragInt(name, ref value);
         }
 
-        public override void DrawValueDisplay(string name, ref int value)
+        protected override void DrawValueDisplay(string name, ref int value)
         {
             ImGui.InputInt(name, ref value, 0, 0, ImGuiInputTextFlags.ReadOnly);
         }
@@ -187,6 +200,10 @@ namespace T3.Gui
     public class StringInputUi : SingleControlInputUi<string>
     {
         private const int MAX_STRING_LENGTH = 255;
+
+        public StringInputUi(Guid id) : base(id)
+        {
+        }
 
         public override bool DrawSingleEditControl(string name, ref string value)
         {
@@ -201,7 +218,7 @@ namespace T3.Gui
             }
         }
 
-        public override void DrawValueDisplay(string name, ref string value)
+        protected override void DrawValueDisplay(string name, ref string value)
         {
             if (value != null)
             {
@@ -217,12 +234,16 @@ namespace T3.Gui
 
     public class Size2InputUi : SingleControlInputUi<Size2>
     {
+        public Size2InputUi(Guid id) : base(id)
+        {
+        }
+
         public override bool DrawSingleEditControl(string name, ref Size2 value)
         {
             return ImGui.DragInt2(name, ref value.Width);
         }
 
-        public override void DrawValueDisplay(string name, ref Size2 value)
+        protected override void DrawValueDisplay(string name, ref Size2 value)
         {
             DrawEditControl(name, ref value);
         }
@@ -230,7 +251,11 @@ namespace T3.Gui
 
     public class EnumInputUi<T> : InputValueUi<T> where T : Enum
     {
-        public override InputEditState DrawEditControl(string name, ref T value)
+        public EnumInputUi(Guid id) : base(id)
+        {
+        }
+
+        protected override InputEditState DrawEditControl(string name, ref T value)
         {
             // todo: check perf impact of creating the list here again and again! -> cache lists
             Type enumType = typeof(T);
@@ -279,8 +304,8 @@ namespace T3.Gui
                         {
                             editState |= InputEditState.Finished;
                         }
-
                     }
+
                     ImGui.TreePop();
                 }
 
@@ -306,7 +331,7 @@ namespace T3.Gui
             }
         }
 
-        public override void DrawValueDisplay(string name, ref T value)
+        protected override void DrawValueDisplay(string name, ref T value)
         {
             ImGui.Text(value.ToString());
         }
@@ -314,7 +339,7 @@ namespace T3.Gui
 
     public static class InputUiFactory
     {
-        public static Dictionary<Type, Func<IInputUi>> Entries { get; set; } = new Dictionary<Type, Func<IInputUi>>();
+        public static Dictionary<Type, Func<Guid, IInputUi>> Entries { get; } = new Dictionary<Type, Func<Guid, IInputUi>>();
     }
 
     public interface ITypeUiProperties
@@ -371,6 +396,7 @@ namespace T3.Gui
                 Entries.TryGetValue(type, out t);
             return t;
         }
+
         public static ITypeUiProperties FallBackTypeUiProperties = new FallBackUiProperties();
 
         internal static Color ColorForValues = new Color(0.525f, 0.550f, 0.554f, 1.000f);

@@ -24,6 +24,13 @@ namespace T3.Gui
 
     public class ValueOutputUi<T> : IOutputUi
     {
+        public Guid Id { get; }
+
+        public ValueOutputUi(Guid id)
+        {
+            Id = id;
+        }
+
         public void DrawValue(Slot slot)
         {
             if (slot is Slot<T> typedSlot)
@@ -46,6 +53,13 @@ namespace T3.Gui
     // todo: refactor out common code with ValueOutputUi<T> - it's nearly the same
     public class ShaderResourceViewOutputUi : IOutputUi
     {
+        public Guid Id { get; }
+
+        public ShaderResourceViewOutputUi(Guid id)
+        {
+            Id = id;
+        }
+
         public void DrawValue(Slot slot)
         {
             if (slot is Slot<ShaderResourceView> typedSlot)
@@ -67,26 +81,41 @@ namespace T3.Gui
 
     public class FloatOutputUi : ValueOutputUi<float>
     {
+        public FloatOutputUi(Guid id) : base(id)
+        {
+        }
     }
 
     public class IntOutputUi : ValueOutputUi<int>
     {
+        public IntOutputUi(Guid id) : base(id)
+        {
+        }
     }
 
     public class StringOutputUi : ValueOutputUi<string>
     {
+        public StringOutputUi(Guid id) : base(id)
+        {
+        }
     }
 
     public class Size2OutputUi : ValueOutputUi<Size2>
     {
+        public Size2OutputUi(Guid id) : base(id)
+        {
+        }
     }
 
     public class Texture2dOutputUi : ValueOutputUi<Texture2D>
     {
+        public Texture2dOutputUi(Guid id) : base(id)
+        {
+        }
     }
 
     public static class OutputUiFactory
     {
-        public static Dictionary<Type, Func<IOutputUi>> Entries { get; } = new Dictionary<Type, Func<IOutputUi>>();
+        public static Dictionary<Type, Func<Guid, IOutputUi>> Entries { get; } = new Dictionary<Type, Func<Guid, IOutputUi>>();
     }
 }
