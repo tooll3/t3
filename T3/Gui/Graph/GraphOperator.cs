@@ -43,7 +43,9 @@ namespace T3.Gui.Graph
                         {
                             handler.SetElement(childUi);
                         }
-                        _moveCommand = new ChangeSelectableCommand(handler.SelectedElements);
+
+                        Guid compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
+                        _moveCommand = new ChangeSelectableCommand(compositionSymbolId, handler.SelectedElements);
                         Log.Debug("start");
                     }
 
@@ -72,6 +74,7 @@ namespace T3.Gui.Graph
                         _moveCommand.StoreCurrentValues();
                         UndoRedoStack.Add(_moveCommand);
                     }
+
                     _moveCommand = null;
                 }
 

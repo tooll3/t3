@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Selection;
 
 namespace T3.Gui
 {
@@ -25,6 +26,18 @@ namespace T3.Gui
             OutputUis = outputs;
 
             UpdateConsistencyWithSymbol();
+        }
+
+        public IEnumerable<ISelectable> GetSelectables()
+        {
+            foreach (var childUi in ChildUis)
+                yield return childUi;
+
+            foreach (var inputUi in InputUis)
+                yield return inputUi.Value;
+
+            foreach (var outputUi in OutputUis)
+                yield return outputUi.Value;
         }
 
         public void UpdateConsistencyWithSymbol()
@@ -72,6 +85,7 @@ namespace T3.Gui
                 }
             }
         }
+
         public Guid AddChild(Symbol symbolToAdd, Vector2 posInCanvas, Vector2 size, bool isVisible)
         {
             Guid addedChildId = Symbol.AddChild(symbolToAdd);
