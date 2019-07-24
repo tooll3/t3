@@ -127,7 +127,7 @@ namespace T3.Gui
                     }
                     else if (InputUiFactory.Entries.TryGetValue(type, out var inputCreator))
                     {
-                        var inputUi = inputCreator();
+                        var inputUi = inputCreator(inputId);
                         JToken positionToken = uiInputEntry["Position"];
                         inputUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
                         //JToken sizeToken = uiInputEntry["Size"];
@@ -170,7 +170,7 @@ namespace T3.Gui
                     }
                     else if (OutputUiFactory.Entries.TryGetValue(type, out var outputCreator))
                     {
-                        var outputUi = outputCreator();
+                        var outputUi = outputCreator(outputId);
                         JToken positionToken = uiOutputEntry["Position"];
                         outputUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
                         //JToken sizeToken = uiOutputEntry["Size"];
