@@ -50,32 +50,37 @@ namespace T3.Gui
 
                 switch (editState)
                 {
+                    // create command for possible editing
                     case InputEditState.Focused:
-                        // create command for possible editing
                         Log.Debug("setup 'ChangeInputValue' command");
-                        UndoRedoStack.CommandInFlight = new ChangeInputValueCommand(compositionOp.Symbol, symbolChild.Id, input.Input);
+                        _commandInFlight = new ChangeInputValueCommand(compositionOp.Symbol, symbolChild.Id, input.Input);
                         break;
+
+                    // update command in flight
                     case InputEditState.Modified:
-                        // update command in flight
                         Log.Debug("updated 'ChangeInputValue' command");
-                        ((ChangeInputValueCommand)UndoRedoStack.CommandInFlight).Value.Assign(input.Input.Value); // todo: ugly!
+                        _commandInFlight.Value.Assign(input.Input.Value);
                         break;
+
+                    // add command to undo stack
                     case InputEditState.Finished:
-                        // add command to undo stack
                         Log.Debug("Finalized 'ChangeInputValue' command");
-                        UndoRedoStack.AddCommandInFlightToStack();
+                        //UndoRedoStack.AddCommandInFlightToStack();
+                        UndoRedoStack.Add(_commandInFlight);
                         break;
+
+                    // update and add command to undo queue
                     case InputEditState.ModifiedAndFinished:
-                        // update and add command to undo queue
                         Log.Debug("Updated and finalized 'ChangeInputValue' command");
-                        ((ChangeInputValueCommand)UndoRedoStack.CommandInFlight).Value.Assign(input.Input.Value); // todo: ugly!
-                        UndoRedoStack.AddCommandInFlightToStack();
+                        _commandInFlight.Value.Assign(input.Input.Value);
+                        //UndoRedoStack.AddCommandInFlightToStack();
+                        UndoRedoStack.Add(_commandInFlight);
                         break;
                 }
-
                 ImGui.PopID();
             }
         }
+        private ChangeInputValueCommand _commandInFlight = null;
         private string _name;
 
     }
