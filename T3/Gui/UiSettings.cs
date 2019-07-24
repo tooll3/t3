@@ -9,7 +9,6 @@ namespace T3.Gui
 {
     public class UiSettingsWindow
     {
-        //private static Vector3 _clearColor = new Vector3(0.45f, 0.55f, 0.6f);
         public static bool UseVSync => _vsync;
         private static bool _vsync = true;
 
@@ -25,16 +24,6 @@ namespace T3.Gui
         {
             ImGui.Begin("Stats");
             {
-                if (KeyboardBinding.Triggered(UserAction.PlaybackForward))
-                {
-                    Log.Debug("Forward!");
-                }
-
-                if (KeyboardBinding.Triggered(UserAction.PlaybackStop))
-                {
-                    Log.Debug("Stop!");
-                }
-
                 Metrics.Draw();
                 ImGui.Checkbox("VSync", ref _vsync);
                 ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
@@ -64,9 +53,10 @@ namespace T3.Gui
                 ImGui.Text("Pressed keys:" + sb);
 
                 if (ImGui.Button("Open new Graph Canvas"))
-                {
-                    T3UI.OpenNewGraphWindow();
-                }
+                    OpenNewGraphWindow();
+
+                if (ImGui.Button("New Parameter View"))
+                    OpenNewParameterView();
 
                 ColorVariations.DrawSettingsUi();
                 if (ImGui.TreeNode("Styles"))
@@ -80,9 +70,8 @@ namespace T3.Gui
                     ImGui.TreePop();
                 }
                 if (ImGui.TreeNode("ImGui Styles"))
-                {
                     T3Style.Draw();
-                }
+
             }
             ImGui.End();
 

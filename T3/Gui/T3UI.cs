@@ -35,10 +35,17 @@ namespace T3.Gui
             _instance._graphCanvasWindows.Add(new GraphCanvasWindow(_uiModel.MainOp, "Composition View " + _instance._graphCanvasWindows.Count));
         }
 
+        public static void OpenNewParameterView()
+        {
+            _instance._parameterWindows.Add(new ParameterWindow("Parameter View " + _instance._parameterWindows.Count));
+        }
+
 
         public unsafe void DrawUI()
         {
             DrawGraphCanvasWindows();
+            DrawGraphParameterWindows();
+
             if (UiSettingsWindow.DemoWindowVisible)
                 ImGui.ShowDemoWindow(ref UiSettingsWindow.DemoWindowVisible);
 
@@ -52,15 +59,7 @@ namespace T3.Gui
             if (UiSettingsWindow.CurveEditorVisible)
                 _curveEditor.Draw(ref UiSettingsWindow.CurveEditorVisible);
 
-            if (UiSettingsWindow.ParameterWindowVisible)
-            {
-                if (_graphCanvasWindows.Any())
-                {
-                    ParameterWindow.Draw(_graphCanvasWindows[0].Canvas.CompositionOp, GetInstanceSelectedInGraph());
-                }
-            }
             _quickCreateWindow.Draw();
-
             SwapHoveringBuffers();
         }
 
@@ -90,7 +89,21 @@ namespace T3.Gui
                 _graphCanvasWindows.Remove(obsoleteGraphWindow);
         }
 
-        public void DrawSelectedOutput()
+
+        private unsafe void DrawGraphParameterWindows()
+        {
+            ParameterWindow obsoleteWindow = null;
+            foreach (var g in _parameterWindows)
+            {
+                if (!g.Draw(_graphCanvasWindows[0].Canvas.CompositionOp, GetInstanceSelectedInGraph()))
+                    obsoleteWindow = g;   // we assume that only one window can be close in per frame
+            }
+            if (obsoleteWindow != null)
+                _parameterWindows.Remove(obsoleteWindow);
+        }
+
+
+        public void DrawSelectedWindow()
         {
             ImGui.Begin("SelectionView");
             if (_instance._graphCanvasWindows.Any())
@@ -144,9 +157,9 @@ namespace T3.Gui
         public static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
         public static HashSet<Guid> HoveredIdsLastFrame { get; set; } = new HashSet<Guid>();
 
-
-
         private List<GraphCanvasWindow> _graphCanvasWindows = new List<GraphCanvasWindow>();
+        private List<ParameterWindow> _parameterWindows = new List<ParameterWindow>();
+
         public static UiModel _uiModel = new UiModel();
         private ConsoleLogWindow _consoleWindow = new ConsoleLogWindow();
         private CurveEditorWindow _curveEditor = new CurveEditorWindow();
