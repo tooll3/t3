@@ -283,6 +283,7 @@ namespace T3.Core.Operator
         public void AddConnection(Connection connection, int multiInputIndex = 0)
         {
             var childInputTarget = (from child in Children
+                                    where child.Id == connection.TargetParentOrChildId
                                     where child.InputValues.ContainsKey(connection.TargetSlotId)
                                     select child.InputValues[connection.TargetSlotId]).SingleOrDefault();
             bool isMultiInput = childInputTarget?.InputDefinition.IsMultiInput ?? false;
