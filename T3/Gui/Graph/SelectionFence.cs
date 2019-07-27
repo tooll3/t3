@@ -1,9 +1,8 @@
-﻿using ImGuiNET;
-using imHelpers;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using System.Numerics;
-using System.Windows.Input;
+using ImGuiNET;
+using imHelpers;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Graph
@@ -22,7 +21,7 @@ namespace T3.Gui.Graph
 
         public void Draw()
         {
-            if (!isVisible)
+            if (!_isVisible)
             {
                 if (!ImGui.IsAnyItemHovered()   // Don't start dragging a fence if above an item or output
                     && ImGui.IsWindowHovered()
@@ -43,7 +42,7 @@ namespace T3.Gui.Graph
                 }
 
                 var drawList = ImGui.GetWindowDrawList();
-                drawList.AddRectFilled(_bounds.Min, _bounds.Max, new Color(0.1f), 1);
+                drawList.AddRectFilled(Bounds.Min, Bounds.Max, new Color(0.1f), 1);
             }
 
             if (ImGui.IsKeyPressed((int)Key.Delete))
@@ -60,27 +59,25 @@ namespace T3.Gui.Graph
             _startPositionInScreen = mouseMouse;
             _dragPositionInScreen = mouseMouse;
 
-            isVisible = true;
+            _isVisible = true;
         }
 
 
         public void HandleDragDelta()
         {
             _dragPositionInScreen = ImGui.GetMousePos();
-            var delta = _startPositionInScreen - _dragPositionInScreen;
 
-            var boundsInCanvas = _canvas.InverseTransformRect(_bounds);
+            var boundsInCanvas = _canvas.InverseTransformRect(Bounds);
 
-            var _selectMode = SelectMode.Replace;
+            var selectMode = SelectMode.Replace;
             if (ImGui.IsKeyPressed((int)Key.LeftShift))
             {
-                _selectMode = SelectMode.Add;
+                selectMode = SelectMode.Add;
             }
             else if (ImGui.IsKeyPressed((int)Key.LeftCtrl))
             {
-                _selectMode = SelectMode.Remove;
+                selectMode = SelectMode.Remove;
             }
-
 
             if (!_dragThresholdExceeded)
             {
@@ -88,30 +85,20 @@ namespace T3.Gui.Graph
                     return;
 
                 _dragThresholdExceeded = true;
-                if (_selectMode == SelectMode.Replace)
+                if (selectMode == SelectMode.Replace)
                 {
-                    if (_selectionHandler != null)
-                        _selectionHandler.Clear();
+                    _selectionHandler?.Clear();
                 }
             }
 
             if (_selectionHandler != null)
             {
-                List<ISelectable> elementsToSelect = new List<ISelectable>();
-                foreach (var child in _canvas.SelectableChildren)
-                {
-                    var selectableWidget = child as ISelectable;
-                    if (selectableWidget != null)
-                    {
-                        var rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size);
-                        if (rect.Overlaps(boundsInCanvas))
-                        {
-                            elementsToSelect.Add(selectableWidget);
-                        }
-                    }
-                }
+                var elementsToSelect = (from child in _canvas.SelectableChildren
+                                        let rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size)
+                                        where rect.Overlaps(boundsInCanvas)
+                                        select child).ToList();
 
-                switch (_selectMode)
+                switch (selectMode)
                 {
                     case SelectMode.Add:
                         _selectionHandler.AddElements(elementsToSelect);
@@ -138,7 +125,7 @@ namespace T3.Gui.Graph
             {
                 _selectionHandler.Clear();
             }
-            isVisible = false;
+            _isVisible = false;
         }
 
 
@@ -146,16 +133,15 @@ namespace T3.Gui.Graph
         {
             Add = 0,
             Remove,
-            Replace,
+            Replace
         }
 
-        private SelectionHandler _selectionHandler;
-
-        private bool isVisible = false;
-        ImRect _bounds { get { return ImRect.RectBetweenPoints(_startPositionInScreen, _dragPositionInScreen); } }
+        private readonly SelectionHandler _selectionHandler;
+        private bool _isVisible;
+        private ImRect Bounds => ImRect.RectBetweenPoints(_startPositionInScreen, _dragPositionInScreen);
         private Vector2 _startPositionInScreen;
         private Vector2 _dragPositionInScreen;
-        private ICanvas _canvas;
-        private bool _dragThresholdExceeded = false; // Set to true after DragThreshold reached
+        private readonly ICanvas _canvas;
+        private bool _dragThresholdExceeded; // Set to true after DragThreshold reached
     }
 }
