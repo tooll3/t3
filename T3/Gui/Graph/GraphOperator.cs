@@ -1,8 +1,6 @@
 using ImGuiNET;
 using imHelpers;
-using System;
 using System.Numerics;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.TypeColors;
@@ -34,51 +32,15 @@ namespace T3.Gui.Graph
                     T3UI.AddHoveredId(childUi.SymbolChild.Id);
                 }
 
-                if (ImGui.IsItemActive())
+                SelectableMovement.Handle(childUi);
+
+                if (ImGui.IsItemActive() && ImGui.IsMouseDoubleClicked(0))
                 {
-                    if (ImGui.IsItemClicked(0))
-                    {
-                        var handler = GraphCanvas.Current.SelectionHandler;
-                        if (!handler.SelectedElements.Contains(childUi))
-                        {
-                            handler.SetElement(childUi);
-                        }
-
-                        Guid compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
-                        _moveCommand = new ChangeSelectableCommand(compositionSymbolId, handler.SelectedElements);
-                        Log.Debug("start");
-                    }
-
-                    if (ImGui.IsMouseDragging(0))
-                    {
-                        foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)
-                        {
-                            e.PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
-                        }
-                    }
-
-                    if (ImGui.IsMouseDoubleClicked(0))
-                    {
-                        var instance = GraphCanvas.Current.CompositionOp.Children.Find(c => c.Symbol == childUi.SymbolChild.Symbol);
-                        GraphCanvas.Current.CompositionOp = instance;
-                    }
+                    var instance = GraphCanvas.Current.CompositionOp.Children.Find(c => c.Symbol == childUi.SymbolChild.Symbol);
+                    GraphCanvas.Current.CompositionOp = instance;
                 }
 
-                if (ImGui.IsMouseReleased(0) && _moveCommand != null)
-                {
-                    Log.Debug("end");
-                    if (ImGui.GetMouseDragDelta(0).LengthSquared() > 0.0f)
-                    {
-                        // add to stack
-                        Log.Debug("Added to undo stack");
-                        _moveCommand.StoreCurrentValues();
-                        UndoRedoStack.Add(_moveCommand);
-                    }
-
-                    _moveCommand = null;
-                }
-
-                var hovered = ImGui.IsItemHovered();
+                bool hovered = ImGui.IsItemHovered();
                 if (hovered)
                 {
                     NodeDetailsPanel.Draw(childUi);
@@ -95,8 +57,7 @@ namespace T3.Gui.Graph
                                      ? ColorVariations.OperatorHover.Apply(typeColor)
                                      : ColorVariations.Operator.Apply(typeColor));
 
-                dl.AddRectFilled(
-                                 new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
+                dl.AddRectFilled(new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
                                  new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + _inputSlotHeight + _inputSlotMargin),
                                  ColorVariations.OperatorInputZone.Apply(typeColor));
 

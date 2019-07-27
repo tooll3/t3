@@ -42,24 +42,7 @@ namespace T3.Gui.Graph
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                 }
 
-                if (ImGui.IsItemActive())
-                {
-                    if (ImGui.IsItemClicked(0))
-                    {
-                        if (!GraphCanvas.Current.SelectionHandler.SelectedElements.Contains(outputUi))
-                        {
-                            GraphCanvas.Current.SelectionHandler.SetElement(outputUi);
-                        }
-                    }
-
-                    if (ImGui.IsMouseDragging(0))
-                    {
-                        foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)
-                        {
-                            e.PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
-                        }
-                    }
-                }
+                SelectableMovement.Handle(outputUi);
 
                 // Rendering
                 var typeColor = TypeUiRegistry.Entries[outputDef.ValueType].Color;
