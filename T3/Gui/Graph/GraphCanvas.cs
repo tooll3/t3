@@ -226,12 +226,15 @@ namespace T3.Gui.Graph
             {
                 _selectableItems.Clear();
                 _selectableItems.AddRange(ChildUis);
-                _selectableItems.AddRange(SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].OutputUis.Values);
+                var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                _selectableItems.AddRange(symbolUi.InputUis.Values);
+                _selectableItems.AddRange(symbolUi.OutputUis.Values);
+
                 return _selectableItems;
             }
         }
 
-        private List<ISelectable> _selectableItems = new List<ISelectable>();
+        private readonly List<ISelectable> _selectableItems = new List<ISelectable>();
 
         /// <summary>
         /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
