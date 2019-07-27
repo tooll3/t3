@@ -16,7 +16,6 @@ namespace T3.Gui
             _name = name;
         }
 
-
         public bool Draw(Instance compositionOp, SymbolChildUi childUi)
         {
             var isOpen = true;
@@ -26,6 +25,7 @@ namespace T3.Gui
                     DrawParameters(compositionOp, childUi);
             }
             ImGui.End();
+
             return isOpen;
         }
 
@@ -41,7 +41,7 @@ namespace T3.Gui
 
             var selectedSymbolUi = SymbolUiRegistry.Entries[selectedInstance.Symbol.Id];
 
-            foreach (var input in selectedInstance.Inputs)
+            foreach (IInputSlot input in selectedInstance.Inputs)
             {
                 ImGui.PushID(input.Id.GetHashCode());
                 IInputUi inputUi = selectedSymbolUi.InputUis[input.Id];
@@ -65,7 +65,6 @@ namespace T3.Gui
                     // add command to undo stack
                     case InputEditState.Finished:
                         Log.Debug("Finalized 'ChangeInputValue' command");
-                        //UndoRedoStack.AddCommandInFlightToStack();
                         UndoRedoStack.Add(_commandInFlight);
                         break;
 
@@ -73,15 +72,15 @@ namespace T3.Gui
                     case InputEditState.ModifiedAndFinished:
                         Log.Debug("Updated and finalized 'ChangeInputValue' command");
                         _commandInFlight.Value.Assign(input.Input.Value);
-                        //UndoRedoStack.AddCommandInFlightToStack();
                         UndoRedoStack.Add(_commandInFlight);
                         break;
                 }
+
                 ImGui.PopID();
             }
         }
-        private ChangeInputValueCommand _commandInFlight = null;
-        private string _name;
 
+        private ChangeInputValueCommand _commandInFlight = null;
+        private readonly string _name;
     }
 }
