@@ -3,6 +3,7 @@
 * Make ChangeSelectableCommand working
 * Crash when adding connection to StringConcat
 * Apply ChangeSelectableCommand for Input/Outputs too and extract command UI code for all 3 usages
+* Fix selection of input nodes
 - Operator with complex output type e.g. list
 - Create missing commands - at least basic set
 - Add Id property to InputUi and OutputUi to enabled tracking if an Symbol.(Input|Output) is not existing anymore
