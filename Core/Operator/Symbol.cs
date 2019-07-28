@@ -347,9 +347,9 @@ namespace T3.Core.Operator
             }
         }
 
-        public Guid AddChild(Symbol symbol)
+        public Guid AddChild(Symbol symbol, Guid addedChildId)
         {
-            var newChild = new SymbolChild(symbol, Guid.NewGuid());
+            var newChild = new SymbolChild(symbol, addedChildId);
             Children.Add(newChild);
 
             foreach (var instance in _instancesOfSymbol)
