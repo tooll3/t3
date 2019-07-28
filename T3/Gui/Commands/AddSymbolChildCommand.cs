@@ -28,13 +28,13 @@ namespace T3.Gui.Commands
         {
             var parentSymbolUi = SymbolUiRegistry.Entries[_parentSymbolId];
             var symbolToAdd = SymbolRegistry.Entries[_addedSymbolId];
-            _addedChildId = parentSymbolUi.AddChild(symbolToAdd, PosOnCanvas, Size, IsVisible);
+            parentSymbolUi.AddChild(symbolToAdd, _addedChildId, PosOnCanvas, Size, IsVisible);
         }
 
         // core data
         private readonly Guid _parentSymbolId;
         private readonly Guid _addedSymbolId;
-        private Guid _addedChildId;
+        private readonly Guid _addedChildId;
         
         // ui data
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
