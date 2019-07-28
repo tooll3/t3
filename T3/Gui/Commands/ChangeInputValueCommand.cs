@@ -35,10 +35,11 @@ namespace T3.Gui.Commands
             var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
             var input = symbolChild.InputValues[_inputId];
             input.Value.Assign(value);
+            input.IsDefault = false;
         }
 
         public InputValue OriginalValue { get; }
-        public InputValue Value { get; set; }
+        public InputValue Value { get; }
 
         private readonly Guid _inputParentSymbolId;
         private readonly Guid _childId;
