@@ -73,6 +73,13 @@ namespace T3.Gui
                 }
             }
 
+            // check if there are input entries where no input ui exists anymore
+            foreach (var inputUiToRemove in InputUis.Where(kv => !Symbol.InputDefinitions.Exists(inputDef => inputDef.Id == kv.Key)).ToList())
+            {
+                Log.Debug($"InputUi '{inputUiToRemove.Value.Id}' still existed but no corresponding input definition anymore. Removing the ui.");
+                InputUis.Remove(inputUiToRemove.Key);
+            }
+
             var outputUiFactory = OutputUiFactory.Entries;
             foreach (var output in Symbol.OutputDefinitions)
             {
@@ -83,6 +90,13 @@ namespace T3.Gui
                     var outputUiCreator = outputUiFactory[output.ValueType];
                     OutputUis.Add(output.Id, outputUiCreator(output.Id));
                 }
+            }
+
+            // check if there are input entries where no output ui exists anymore
+            foreach (var outputUiToRemove in OutputUis.Where(kv => !Symbol.OutputDefinitions.Exists(outputDef => outputDef.Id == kv.Key)).ToList())
+            {
+                Log.Debug($"OutputUi '{outputUiToRemove.Value.Id}' still existed but no corresponding input definition anymore. Removing the ui.");
+                InputUis.Remove(outputUiToRemove.Key);
             }
         }
 
