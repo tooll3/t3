@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
-
+using T3.Gui.Commands;
 
 namespace T3.Gui.Graph
 {
@@ -161,20 +161,18 @@ namespace T3.Gui.Graph
                                                       sourceSlotId: TempConnection.SourceSlotId,
                                                       targetParentOrChildId: targetUi.SymbolChild.Id,
                                                       targetSlotId: input.Id);
-            parentSymbol.AddConnection(newConnection, multiInputIndex / 2); // divide by 2 to get correct insertion index in existing connections
+            // divide by 2 to get correct insertion index in existing connections
+            UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex/2));
             TempConnection = null;
         }
 
         public static void CompleteAtOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, Symbol.OutputDefinition output)
         {
-            var newConnection =
-                new Symbol.Connection(
-                sourceParentOrChildId: sourceUi.SymbolChild.Id,
-                sourceSlotId: output.Id,
-                targetParentOrChildId: TempConnection.TargetParentOrChildId,
-                targetSlotId: TempConnection.TargetSlotId
-            );
-            parentSymbol.AddConnection(newConnection);
+            var newConnection = new Symbol.Connection(sourceParentOrChildId: sourceUi.SymbolChild.Id,
+                                                      sourceSlotId: output.Id,
+                                                      targetParentOrChildId: TempConnection.TargetParentOrChildId,
+                                                      targetSlotId: TempConnection.TargetSlotId);
+            UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, 0));
             TempConnection = null;
         }
 
@@ -183,36 +181,29 @@ namespace T3.Gui.Graph
         {
             nodeBuilding.OpenAt(canvasPosition);
             //Cancel();
-            TempConnection = new Symbol.Connection(
-                sourceParentOrChildId: TempConnection.SourceParentOrChildId,
-                sourceSlotId: TempConnection.SourceSlotId,
-                targetParentOrChildId: UseDraftOperator,
-                targetSlotId: Guid.Empty
-            );
+            TempConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
+                                                   sourceSlotId: TempConnection.SourceSlotId,
+                                                   targetParentOrChildId: UseDraftOperator,
+                                                   targetSlotId: Guid.Empty);
         }
 
         public static void CompleteConnectionToBuiltNode(Symbol parentSymbol, SymbolChild newOp, Symbol.InputDefinition inputDef)
         {
-            var newConnection = new Symbol.Connection(
-                sourceParentOrChildId: TempConnection.SourceParentOrChildId,
-                sourceSlotId: TempConnection.SourceSlotId,
-                targetParentOrChildId: newOp.Id,
-                targetSlotId: inputDef.Id
-            );
-            parentSymbol.AddConnection(newConnection);
+            var newConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
+                                                      sourceSlotId: TempConnection.SourceSlotId,
+                                                      targetParentOrChildId: newOp.Id,
+                                                      targetSlotId: inputDef.Id);
+            UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, 0));
             TempConnection = null;
         }
 
         public static void CompleteAtSymbolInputNode(Symbol parentSymbol, Symbol.InputDefinition inputDef)
         {
-            var newConnection =
-                new Symbol.Connection(
-                sourceParentOrChildId: UseSymbolContainer,
-                sourceSlotId: inputDef.Id,
-                targetParentOrChildId: TempConnection.TargetParentOrChildId,
-                targetSlotId: TempConnection.TargetSlotId
-            );
-            parentSymbol.AddConnection(newConnection);
+            var newConnection = new Symbol.Connection(sourceParentOrChildId: UseSymbolContainer,
+                                                      sourceSlotId: inputDef.Id,
+                                                      targetParentOrChildId: TempConnection.TargetParentOrChildId,
+                                                      targetSlotId: TempConnection.TargetSlotId);
+            UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, 0));
             TempConnection = null;
         }
 
