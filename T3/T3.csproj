@@ -297,6 +297,7 @@
   <ItemGroup>
     <Compile Include="Gui\ClipTime.cs" />
     <Compile Include="Gui\Commands\AddConnectionCommand.cs" />
+    <Compile Include="Gui\Commands\RemoveConnectionCommand.cs" />
     <Compile Include="Gui\Graph\SelectableMovement.cs" />
     <Compile Include="Gui\UiJson.cs" />
     <Compile Include="Gui\UserAction.cs" />

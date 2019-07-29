@@ -7,7 +7,7 @@
 * Add Id property to InputUi and OutputUi to enabled tracking if an Symbol.(Input|Output) is not existing anymore
 * Fix adding/removing/changing input value done with undo/redo several times
 * Add 'add connection command'
-- Add 'remove connection command'
+* Add 'remove connection command'
 - Change input value command must take default value into account
 - Operator with complex output type e.g. list
 - Create missing commands - at least basic set
