@@ -32,7 +32,6 @@ namespace T3.Gui
 
 
 
-
         private void DrawContent(Instance op, SymbolChildUi symbolChildUi)
         {
             if (_pinnedOp != null && _pinnedOp.Parent.Children.Contains(_pinnedOp))
@@ -129,7 +128,7 @@ namespace T3.Gui
                 ImGui.PushID(input.Id.GetHashCode());
                 IInputUi inputUi = selectedChildSymbolUi.InputUis[input.Id];
 
-                var editState = inputUi.DrawInputEdit(input);
+                var editState = inputUi.DrawInputEdit(input, op, symbolChildUi);
 
                 switch (editState)
                 {
