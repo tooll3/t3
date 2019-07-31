@@ -233,10 +233,10 @@ namespace T3.Core.Operator
             }
 
             // create connections between instances
-            var conHashToCount = new Dictionary<int, int>(Connections.Count);
+            var conHashToCount = new Dictionary<long, int>(Connections.Count);
             foreach (var connection in Connections)
             {
-                int hash = connection.TargetSlotId.GetHashCode();
+                long hash = ((long)connection.TargetSlotId.GetHashCode() << 32) | connection.TargetParentOrChildId.GetHashCode();
                 if (!conHashToCount.TryGetValue(hash, out int count))
                     conHashToCount.Add(hash, 0);
 
