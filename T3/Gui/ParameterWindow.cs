@@ -47,7 +47,6 @@ namespace T3.Gui
 
             if (op == null)
             {
-                //ImGui.Text("Nothing selected")
                 Im.EmptyWindowMessage("Nothing selected");
                 return;
             }
@@ -56,12 +55,51 @@ namespace T3.Gui
                 ? op.Symbol.Namespace
                 : "undefined";
 
-            if (ImGui.InputText("##234", ref _testString, 128))
+
+            ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
+            ImGui.SetNextItemWidth(150);
+            var namespaceForEdit = op.Symbol.Namespace;
+            if (namespaceForEdit == null)
+                namespaceForEdit = "";
+
+            if (ImGui.InputText("##namespace", ref namespaceForEdit, 128))
             {
-                //_testString = new string()
+                _symbolNamespaceCommandInFlight.NewNamespace = namespaceForEdit;
+                _symbolNamespaceCommandInFlight.Do();
+            }
+            if (ImGui.IsItemActivated())
+            {
+                _symbolNamespaceCommandInFlight = new ChangeSymbolNamespaceCommand(op.Symbol);
+            }
+            if (ImGui.IsItemDeactivatedAfterEdit())
+            {
+                UndoRedoStack.Add(_symbolNamespaceCommandInFlight);
+                _symbolNamespaceCommandInFlight = null;
+            }
+            ImGui.PopStyleColor();
+
+
+
+            ImGui.SameLine();
+            ImGui.SetNextItemWidth(-1);
+            var nameForEdit = op.Symbol.Name;
+            if (ImGui.InputText("##symbolname", ref nameForEdit, 128))
+            {
+                _symbolNameCommandInFlight.NewName = nameForEdit;
+                _symbolNameCommandInFlight.Do();
+            }
+            if (ImGui.IsItemActivated())
+            {
+                _symbolNameCommandInFlight = new ChangeSymbolNameCommand(op.Symbol);
+            }
+            if (ImGui.IsItemDeactivatedAfterEdit())
+            {
+                UndoRedoStack.Add(_symbolNameCommandInFlight);
+                _symbolNameCommandInFlight = null;
             }
 
-            ImGui.InputTextWithHint("", "asdf", op.Symbol.Name, 128);
+
+
 
             var selectedSymbolUi = SymbolUiRegistry.Entries[op.Symbol.Id];
 
@@ -77,26 +115,26 @@ namespace T3.Gui
                     // create command for possible editing
                     case InputEditState.Focused:
                         Log.Debug("setup 'ChangeInputValue' command");
-                        _commandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, input.Input);
+                        _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, input.Input);
                         break;
 
                     // update command in flight
                     case InputEditState.Modified:
                         Log.Debug("updated 'ChangeInputValue' command");
-                        _commandInFlight.Value.Assign(input.Input.Value);
+                        _inputValueCommandInFlight.Value.Assign(input.Input.Value);
                         break;
 
                     // add command to undo stack
                     case InputEditState.Finished:
                         Log.Debug("Finalized 'ChangeInputValue' command");
-                        UndoRedoStack.Add(_commandInFlight);
+                        UndoRedoStack.Add(_inputValueCommandInFlight);
                         break;
 
                     // update and add command to undo queue
                     case InputEditState.ModifiedAndFinished:
                         Log.Debug("Updated and finalized 'ChangeInputValue' command");
-                        _commandInFlight.Value.Assign(input.Input.Value);
-                        UndoRedoStack.Add(_commandInFlight);
+                        _inputValueCommandInFlight.Value.Assign(input.Input.Value);
+                        UndoRedoStack.Add(_inputValueCommandInFlight);
                         break;
                 }
 
@@ -104,7 +142,9 @@ namespace T3.Gui
             }
         }
 
-        private ChangeInputValueCommand _commandInFlight = null;
+        private ChangeSymbolNameCommand _symbolNameCommandInFlight = null;
+        private ChangeSymbolNamespaceCommand _symbolNamespaceCommandInFlight = null;
+        private ChangeInputValueCommand _inputValueCommandInFlight = null;
         private readonly string _name;
     }
 }
