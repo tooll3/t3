@@ -311,8 +311,6 @@ namespace imHelpers
         }
 
 
-
-
         public static void ToggleButton(string str_id, ref bool v)
         {
             var p = ImGui.GetCursorScreenPos();
@@ -344,9 +342,18 @@ namespace imHelpers
             draw_list.AddRectFilled(p, new Vector2(p.X + width, p.Y + height), col_bg, height * 0.5f);
             draw_list.AddCircleFilled(new Vector2(p.X + radius + t * (width - radius * 2.0f), p.Y + radius), radius - 1.5f, Color.White);
         }
+
+        public static void EmptyWindowMessage(string message)
+        {
+
+            var center = (ImGui.GetWindowContentRegionMax() + ImGui.GetWindowContentRegionMin()) / 2;
+            var textSize = ImGui.CalcTextSize(message);
+            center -= textSize * 0.5f;
+            ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + center);
+
+            ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.4f).Rgba);
+            ImGui.Text(message);
+            ImGui.PopStyleColor();
+        }
     }
-
-
-
-
 }

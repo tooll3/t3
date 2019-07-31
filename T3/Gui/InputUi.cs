@@ -40,8 +40,44 @@ namespace T3.Gui
         protected abstract InputEditState DrawEditControl(string name, ref T value);
         protected abstract void DrawValueDisplay(string name, ref T value);
 
+
+        private void DrawConnectionArea(IInputSlot inputSlot)
+        {
+            ImGui.SetNextItemWidth(50);
+
+            ImGui.PushStyleColor(ImGuiCol.Button,
+                IsSelected
+                ? Color.White.Rgba
+                : Color.Gray.Rgba);
+            ImGui.Button("", new Vector2(5, 0));
+            ImGui.PopStyleColor();
+
+            ImGui.SameLine();
+
+            if (inputSlot.IsConnected)
+            {
+                if (ImGui.Button("->", new Vector2(50, 0)))
+                {
+                    // ToDo Do something in canvas
+                    Log.Debug("Would center " + inputSlot.Input.Name);
+                }
+            }
+            else if (ImGui.Button("", new Vector2(50, 0)))
+            {
+                //open context menu
+
+            }
+            ImGui.SameLine(0);
+
+        }
+
+
         public InputEditState DrawInputEdit(IInputSlot inputSlot)
         {
+
+            DrawConnectionArea(inputSlot);
+
+
             var name = inputSlot.Input.Name;
             if (inputSlot is InputSlot<T> typedInputSlot)
             {
@@ -49,7 +85,7 @@ namespace T3.Gui
                 {
                     if (typedInputSlot.IsMultiInput)
                     {
-                        // just show actual value
+                        // Just show actual value
                         ImGui.PushItemWidth(200.0f);
                         ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
                         var multiInput = (MultiInputSlot<T>)typedInputSlot;
@@ -64,7 +100,7 @@ namespace T3.Gui
                     }
                     else
                     {
-                        // just show actual value
+                        // Just show actual value
                         ImGui.PushItemWidth(200.0f);
                         ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
                         DrawValueDisplay(name, ref typedInputSlot.Value);

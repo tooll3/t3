@@ -27,6 +27,7 @@ namespace T3.Gui
 
             // Open a default Window
             OpenNewGraphWindow();
+            OpenNewParameterView();
             _quickCreateWindow = new QuickCreateWindow();
         }
 
@@ -63,7 +64,7 @@ namespace T3.Gui
             SwapHoveringBuffers();
         }
 
-        private SymbolChildUi GetInstanceSelectedInGraph()
+        private SymbolChildUi GetSelectedSymbolChildUi()
         {
             foreach (var gcw in _graphCanvasWindows)
             {
@@ -95,7 +96,15 @@ namespace T3.Gui
             ParameterWindow obsoleteWindow = null;
             foreach (var g in _parameterWindows)
             {
-                if (!g.Draw(_graphCanvasWindows[0].Canvas.CompositionOp, GetInstanceSelectedInGraph()))
+                Instance op = null;
+
+                var symbolChildUi = GetSelectedSymbolChildUi();
+                if (symbolChildUi != null)
+                {
+                    op = _graphCanvasWindows[0].Canvas.CompositionOp.Children.SingleOrDefault(child => child.Id == symbolChildUi.Id);
+                }
+
+                if (!g.Draw(op))
                     obsoleteWindow = g;   // we assume that only one window can be close in per frame
             }
             if (obsoleteWindow != null)
