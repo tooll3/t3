@@ -26,7 +26,7 @@ namespace T3.Gui
     {
         Type Type { get; }
 
-        InputEditState DrawInputEdit(IInputSlot input, Instance op, SymbolChildUi symbolChildUi);
+        InputEditState DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
     }
 
     public abstract class InputValueUi<T> : IInputUi
@@ -41,12 +41,9 @@ namespace T3.Gui
         protected abstract void DrawValueDisplay(string name, ref T value);
 
 
-
-
-
-        public InputEditState DrawInputEdit(IInputSlot inputSlot, Instance op, SymbolChildUi symbolChildUi)
+        public InputEditState DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
-            DrawConnectionArea(inputSlot, op, symbolChildUi);
+            DrawConnectionArea(inputSlot, compositionUi, symbolChildUi);
 
             var name = inputSlot.Input.Name;
             if (inputSlot is InputSlot<T> typedInputSlot)
@@ -143,14 +140,11 @@ namespace T3.Gui
         }
 
 
-        private void DrawConnectionArea(IInputSlot inputSlot, Instance op, SymbolChildUi symbolChildUi)
+        private void DrawConnectionArea(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
             ImGui.SetNextItemWidth(50);
 
-            ImGui.PushStyleColor(ImGuiCol.Button,
-                IsSelected
-                ? Color.White.Rgba
-                : Color.Gray.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Button, IsSelected ? Color.White.Rgba : Color.Gray.Rgba);
             ImGui.Button("", new Vector2(5, 0));
             ImGui.PopStyleColor();
 
@@ -161,15 +155,11 @@ namespace T3.Gui
                 if (ImGui.Button("->", new Vector2(50, 0)))
                 {
                     symbolChildUi.IsSelected = false;
-                    var c = op.Parent.Symbol.Connections.FirstOrDefault(c2 => c2.TargetParentOrChildId == op.Id && c2.TargetSlotId == inputSlot.Id);
-                    var targetOpId = c.SourceParentOrChildId;
-                    var foundChild = op.Parent.Children.FirstOrDefault(child => child.Id == targetOpId);
-                    if (foundChild != null)
-                    {
-                        var parentUi = SymbolUiRegistry.Entries[op.Parent.Symbol.Id];
-                        var sourceChildUi = parentUi.ChildUis.FirstOrDefault(xx => xx.Id == targetOpId);
-                        sourceChildUi.IsSelected = true;
-                    }
+                    var compositionSymbol = compositionUi.Symbol;
+                    var connection = compositionSymbol.Connections.First(c => c.TargetParentOrChildId == symbolChildUi.Id && c.TargetSlotId == inputSlot.Id);
+                    var sourceUi = compositionUi.GetSelectables()
+                                                .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
+                    sourceUi.IsSelected = true;
                     // ToDo Do something in canvas
                 }
             }
@@ -178,7 +168,6 @@ namespace T3.Gui
                 //open context menu
             }
             ImGui.SameLine(0);
-
         }
 
 
