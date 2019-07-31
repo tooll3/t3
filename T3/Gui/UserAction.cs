@@ -37,6 +37,9 @@ namespace T3.Gui
 
         public static bool Triggered(UserAction action)
         {
+            if (ImGui.IsAnyItemActive())
+                return false;
+
             var binding = Bindings.FirstOrDefault(b => b.Action == action);
             if (binding != null)
             {
@@ -48,9 +51,9 @@ namespace T3.Gui
                 {
                     if (io.KeysDown[(int)c.Key]
                         && io.KeysDownDurationPrev[(int)c.Key] == 0
-                        && (!c.Alt || (c.Alt && io.KeyAlt))
-                        && (!c.Ctrl || (c.Ctrl && io.KeyCtrl))
-                        && (!c.Shift || (c.Shift && io.KeyShift))
+                        && (!c.Alt || io.KeyAlt)
+                        && (!c.Ctrl || io.KeyCtrl)
+                        && (!c.Shift || io.KeyShift)
                      )
                         return true;
                 }
