@@ -35,10 +35,10 @@ namespace T3.Gui.Graph
             if (BuildingConnections.TempConnection != null)
                 allConnections.Add(BuildingConnections.TempConnection);
 
-            var symbolUi = SymbolUiRegistry.Entries[symbol.Id];
-            var childUis = symbolUi.ChildUis;
-            var inputUisById = symbolUi.InputUis;
-            var outputUisById = symbolUi.OutputUis;
+            var compositionSymbolUi = SymbolUiRegistry.Entries[symbol.Id];
+            var childUis = compositionSymbolUi.ChildUis;
+            var inputUisById = compositionSymbolUi.InputUis;
+            var outputUisById = compositionSymbolUi.OutputUis;
 
             // 1. Initialize connection lines
             var lines = new List<ConnectionLineUi>(allConnections.Count);
@@ -168,6 +168,10 @@ namespace T3.Gui.Graph
 
                 // Inputs...
                 var visibleInputs = childUi.SymbolChild.Symbol.InputDefinitions; // TODO: Implement relevancy filter
+
+                //var childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
+                //childSymbolUi.InputUis
+
                 for (var inputIndex = 0; inputIndex < visibleInputs.Count; inputIndex++)
                 {
                     var input = visibleInputs[inputIndex];
