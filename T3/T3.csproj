@@ -300,6 +300,7 @@
     <Compile Include="Gui\Commands\ChangeSymbolChildNameCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolNameCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolNamespaceCommand.cs" />
+    <Compile Include="Gui\Commands\DeleteSymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\RemoveConnectionCommand.cs" />
     <Compile Include="Gui\Graph\SelectableMovement.cs" />
     <Compile Include="Gui\UiJson.cs" />
