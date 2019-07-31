@@ -1,4 +1,5 @@
 todo:
+- Fix undo of delete several operators with several multi input connections
 - Make remove connection command applicable for lists of connections
 - Change input value command must take default value into account
 - Operator with complex output type e.g. list
@@ -9,6 +10,8 @@ todo:
 - General op replacement/compilation after change
  
 done:
+* Fixed multi input index calculation when adding connections
+* Added delete operator command that works with collections
 * Add delete operator code (without command)
 * Add 'remove connection command'
 * Add 'add connection command'
