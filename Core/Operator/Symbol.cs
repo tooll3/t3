@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
@@ -362,6 +363,9 @@ namespace T3.Core.Operator
 
         public void RemoveChild(Guid childId)
         {
+            // first remove all connections to or from the child
+            Connections.RemoveAll(c => c.SourceParentOrChildId == childId || c.TargetParentOrChildId == childId);
+
             var childToRemove = Children.Single(child => child.Id == childId);
             foreach (var instance in _instancesOfSymbol)
             {

@@ -1,17 +1,22 @@
-* Restructure UI elements
-* Move undo redo stack to T3 project
-* Make ChangeSelectableCommand working
-* Crash when adding connection to StringConcat
-* Apply ChangeSelectableCommand for Input/Outputs too and extract command UI code for all 3 usages
-* Fix selection of input nodes
-* Add Id property to InputUi and OutputUi to enabled tracking if an Symbol.(Input|Output) is not existing anymore
-* Fix adding/removing/changing input value done with undo/redo several times
-* Add 'add connection command'
-* Add 'remove connection command'
+todo:
+- Make remove connection command applicable for lists of connections
 - Change input value command must take default value into account
 - Operator with complex output type e.g. list
-- Create missing commands - at least basic set
+- Create missing commands - delete operator, set default value, set back to default
 - Restructure connections to have an easier handling for multi inputs etc
 - Reactivate dirty flag
+- How to visualize input connection evaluation
 - General op replacement/compilation after change
  
+done:
+* Add delete operator code (without command)
+* Add 'remove connection command'
+* Add 'add connection command'
+* Fix adding/removing/changing input value done with undo/redo several times
+* Add Id property to InputUi and OutputUi to enabled tracking if an Symbol.(Input|Output) is not existing anymore
+* Fix selection of input nodes
+* Apply ChangeSelectableCommand for Input/Outputs too and extract command UI code for all 3 usages
+* Crash when adding connection to StringConcat
+* Make ChangeSelectableCommand working
+* Move undo redo stack to T3 project
+* Restructure UI elements

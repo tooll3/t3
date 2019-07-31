@@ -154,8 +154,7 @@ namespace T3.Gui.Graph
                 var selectedChildren = new List<SymbolChildUi>();
                 foreach (var x in SelectionHandler.SelectedElements)
                 {
-                    var childUi = x as SymbolChildUi;
-                    if (childUi != null)
+                    if (x is SymbolChildUi childUi)
                     {
                         selectedChildren.Add(childUi);
                     }
@@ -168,14 +167,16 @@ namespace T3.Gui.Graph
 
                     ImGui.Text(label);
                     if (ImGui.MenuItem(" Rename..", null, false, false)) { }
+
                     if (ImGui.MenuItem(" Delete", null))
                     {
-                        Log.Warning("Not implemented yet");
-                        foreach (var x in selectedChildren)
+                        var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                        foreach (var child in selectedChildren)
                         {
-                            // TODO: Add implementation
+                            compositionSymbolUi.RemoveChild(child.Id);
                         }
                     }
+
                     if (ImGui.MenuItem(" Copy", null, false, false)) { }
                     ImGui.Separator();
                 }
