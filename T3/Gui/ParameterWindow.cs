@@ -18,12 +18,12 @@ namespace T3.Gui
         }
 
 
-        public bool Draw(Instance op)
+        public bool Draw(Instance op, SymbolChildUi symbolChildUi)
         {
             var isOpen = true;
             ImGui.Begin(_name, ref isOpen);
             {
-                DrawContent(op);
+                DrawContent(op, symbolChildUi);
             }
             ImGui.End();
 
@@ -31,11 +31,9 @@ namespace T3.Gui
         }
 
 
-        private Instance _pinnedOp = null;
 
-        private string _testString = "hallo";
 
-        private void DrawContent(Instance op)
+        private void DrawContent(Instance op, SymbolChildUi symbolChildUi)
         {
             if (_pinnedOp != null && _pinnedOp.Parent.Children.Contains(_pinnedOp))
             {
@@ -51,62 +49,85 @@ namespace T3.Gui
                 return;
             }
 
+
             var opNamespace = op.Symbol.Namespace != null
                 ? op.Symbol.Namespace
                 : "undefined";
 
+            // Namespace
+            {
+                ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
+                ImGui.SetNextItemWidth(150);
+                var namespaceForEdit = op.Symbol.Namespace;
+                if (namespaceForEdit == null)
+                    namespaceForEdit = "";
 
-            ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
-            ImGui.SetNextItemWidth(150);
-            var namespaceForEdit = op.Symbol.Namespace;
-            if (namespaceForEdit == null)
-                namespaceForEdit = "";
-
-            if (ImGui.InputText("##namespace", ref namespaceForEdit, 128))
-            {
-                _symbolNamespaceCommandInFlight.NewNamespace = namespaceForEdit;
-                _symbolNamespaceCommandInFlight.Do();
-            }
-            if (ImGui.IsItemActivated())
-            {
-                _symbolNamespaceCommandInFlight = new ChangeSymbolNamespaceCommand(op.Symbol);
-            }
-            if (ImGui.IsItemDeactivatedAfterEdit())
-            {
-                UndoRedoStack.Add(_symbolNamespaceCommandInFlight);
-                _symbolNamespaceCommandInFlight = null;
-            }
-            ImGui.PopStyleColor();
-
-
-
-            ImGui.SameLine();
-            ImGui.SetNextItemWidth(-1);
-            var nameForEdit = op.Symbol.Name;
-            if (ImGui.InputText("##symbolname", ref nameForEdit, 128))
-            {
-                _symbolNameCommandInFlight.NewName = nameForEdit;
-                _symbolNameCommandInFlight.Do();
-            }
-            if (ImGui.IsItemActivated())
-            {
-                _symbolNameCommandInFlight = new ChangeSymbolNameCommand(op.Symbol);
-            }
-            if (ImGui.IsItemDeactivatedAfterEdit())
-            {
-                UndoRedoStack.Add(_symbolNameCommandInFlight);
-                _symbolNameCommandInFlight = null;
+                if (ImGui.InputText("##namespace", ref namespaceForEdit, 128))
+                {
+                    _symbolNamespaceCommandInFlight.NewNamespace = namespaceForEdit;
+                    _symbolNamespaceCommandInFlight.Do();
+                }
+                if (ImGui.IsItemActivated())
+                {
+                    _symbolNamespaceCommandInFlight = new ChangeSymbolNamespaceCommand(op.Symbol);
+                }
+                if (ImGui.IsItemDeactivatedAfterEdit())
+                {
+                    UndoRedoStack.Add(_symbolNamespaceCommandInFlight);
+                    _symbolNamespaceCommandInFlight = null;
+                }
+                ImGui.PopStyleColor();
             }
 
 
+            // Symbol Name
+            {
+                ImGui.SameLine();
+                ImGui.SetNextItemWidth(-1);
+                var nameForEdit = op.Symbol.Name;
+                if (ImGui.InputText("##symbolname", ref nameForEdit, 128))
+                {
+                    _symbolNameCommandInFlight.NewName = nameForEdit;
+                    _symbolNameCommandInFlight.Do();
+                }
+                if (ImGui.IsItemActivated())
+                {
+                    _symbolNameCommandInFlight = new ChangeSymbolNameCommand(op.Symbol);
+                }
+                if (ImGui.IsItemDeactivatedAfterEdit())
+                {
+                    UndoRedoStack.Add(_symbolNameCommandInFlight);
+                    _symbolNameCommandInFlight = null;
+                }
+            }
+
+            // SymbolChild Name
+            {
+                ImGui.SetNextItemWidth(-1);
+                var nameForEdit = symbolChildUi.SymbolChild.Name;
+                if (ImGui.InputText("##symbolchildname", ref nameForEdit, 128))
+                {
+                    _symbolChildNameCommand.NewName = nameForEdit;
+                    symbolChildUi.SymbolChild.Name = nameForEdit;
+                }
+                if (ImGui.IsItemActivated())
+                {
+                    _symbolChildNameCommand = new ChangeSymbolChildNameCommand(symbolChildUi, op.Parent.Symbol);
+                }
+                if (ImGui.IsItemDeactivatedAfterEdit())
+                {
+                    UndoRedoStack.Add(_symbolChildNameCommand);
+                    _symbolChildNameCommand = null;
+                }
+            }
 
 
-            var selectedSymbolUi = SymbolUiRegistry.Entries[op.Symbol.Id];
+            var selectedChildSymbolUi = SymbolUiRegistry.Entries[op.Symbol.Id];
 
             foreach (var input in op.Inputs)
             {
                 ImGui.PushID(input.Id.GetHashCode());
-                IInputUi inputUi = selectedSymbolUi.InputUis[input.Id];
+                IInputUi inputUi = selectedChildSymbolUi.InputUis[input.Id];
 
                 var editState = inputUi.DrawInputEdit(input);
 
@@ -144,7 +165,10 @@ namespace T3.Gui
 
         private ChangeSymbolNameCommand _symbolNameCommandInFlight = null;
         private ChangeSymbolNamespaceCommand _symbolNamespaceCommandInFlight = null;
+        private ChangeSymbolChildNameCommand _symbolChildNameCommand = null;
         private ChangeInputValueCommand _inputValueCommandInFlight = null;
         private readonly string _name;
+        private Instance _pinnedOp = null;
+
     }
 }

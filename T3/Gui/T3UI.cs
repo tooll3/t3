@@ -94,18 +94,18 @@ namespace T3.Gui
         private unsafe void DrawGraphParameterWindows()
         {
             ParameterWindow obsoleteWindow = null;
-            foreach (var g in _parameterWindows)
+            foreach (var parameterView in _parameterWindows)
             {
-                Instance op = null;
+                Instance instance = null;
 
                 var symbolChildUi = GetSelectedSymbolChildUi();
                 if (symbolChildUi != null)
                 {
-                    op = _graphCanvasWindows[0].Canvas.CompositionOp.Children.SingleOrDefault(child => child.Id == symbolChildUi.Id);
+                    instance = _graphCanvasWindows[0].Canvas.CompositionOp.Children.SingleOrDefault(child => child.Id == symbolChildUi.Id);
                 }
 
-                if (!g.Draw(op))
-                    obsoleteWindow = g;   // we assume that only one window can be close in per frame
+                if (!parameterView.Draw(instance, symbolChildUi))
+                    obsoleteWindow = parameterView;   // we assume that only one window can be close in per frame
             }
             if (obsoleteWindow != null)
                 _parameterWindows.Remove(obsoleteWindow);
