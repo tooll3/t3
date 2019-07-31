@@ -49,17 +49,13 @@ namespace T3.Gui
             }
 
 
-            var opNamespace = op.Symbol.Namespace != null
-                ? op.Symbol.Namespace
-                : "undefined";
+            var opNamespace = op.Symbol.Namespace ?? "undefined";
 
             // Namespace
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
                 ImGui.SetNextItemWidth(150);
-                var namespaceForEdit = op.Symbol.Namespace;
-                if (namespaceForEdit == null)
-                    namespaceForEdit = "";
+                var namespaceForEdit = op.Symbol.Namespace ?? "";
 
                 if (ImGui.InputText("##namespace", ref namespaceForEdit, 128))
                 {
@@ -121,6 +117,7 @@ namespace T3.Gui
             }
 
 
+            var compositionSymbolUi = SymbolUiRegistry.Entries[op.Parent.Symbol.Id];
             var selectedChildSymbolUi = SymbolUiRegistry.Entries[op.Symbol.Id];
 
             foreach (var input in op.Inputs)
@@ -128,7 +125,7 @@ namespace T3.Gui
                 ImGui.PushID(input.Id.GetHashCode());
                 IInputUi inputUi = selectedChildSymbolUi.InputUis[input.Id];
 
-                var editState = inputUi.DrawInputEdit(input, op, symbolChildUi);
+                var editState = inputUi.DrawInputEdit(input, compositionSymbolUi, symbolChildUi);
 
                 switch (editState)
                 {
