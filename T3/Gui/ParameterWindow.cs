@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using imHelpers;
 using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -16,32 +17,55 @@ namespace T3.Gui
             _name = name;
         }
 
-        public bool Draw(Instance compositionOp, SymbolChildUi childUi)
+
+        public bool Draw(Instance op)
         {
             var isOpen = true;
             ImGui.Begin(_name, ref isOpen);
             {
-                if (childUi != null)
-                    DrawParameters(compositionOp, childUi);
+                DrawContent(op);
             }
             ImGui.End();
 
             return isOpen;
         }
 
-        private void DrawParameters(Instance compositionOp, SymbolChildUi selectedChildUi)
+
+        private Instance _pinnedOp = null;
+
+        private string _testString = "hallo";
+
+        private void DrawContent(Instance op)
         {
-            if (selectedChildUi == null || compositionOp == null)
+            if (_pinnedOp != null && _pinnedOp.Parent.Children.Contains(_pinnedOp))
+            {
+                _pinnedOp = null;
+            }
+
+            if (_pinnedOp != null)
+                op = _pinnedOp;
+
+            if (op == null)
+            {
+                //ImGui.Text("Nothing selected")
+                Im.EmptyWindowMessage("Nothing selected");
                 return;
+            }
 
-            var symbolChild = selectedChildUi.SymbolChild;
-            var selectedInstance = compositionOp.Children.SingleOrDefault(child => child.Id == symbolChild.Id);
-            if (selectedInstance == null)
-                return;
+            var opNamespace = op.Symbol.Namespace != null
+                ? op.Symbol.Namespace
+                : "undefined";
 
-            var selectedSymbolUi = SymbolUiRegistry.Entries[selectedInstance.Symbol.Id];
+            if (ImGui.InputText("##234", ref _testString, 128))
+            {
+                //_testString = new string()
+            }
 
-            foreach (IInputSlot input in selectedInstance.Inputs)
+            ImGui.InputTextWithHint("", "asdf", op.Symbol.Name, 128);
+
+            var selectedSymbolUi = SymbolUiRegistry.Entries[op.Symbol.Id];
+
+            foreach (var input in op.Inputs)
             {
                 ImGui.PushID(input.Id.GetHashCode());
                 IInputUi inputUi = selectedSymbolUi.InputUis[input.Id];
@@ -53,7 +77,7 @@ namespace T3.Gui
                     // create command for possible editing
                     case InputEditState.Focused:
                         Log.Debug("setup 'ChangeInputValue' command");
-                        _commandInFlight = new ChangeInputValueCommand(compositionOp.Symbol, symbolChild.Id, input.Input);
+                        _commandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, input.Input);
                         break;
 
                     // update command in flight
