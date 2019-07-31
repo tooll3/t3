@@ -6,6 +6,7 @@ using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Commands;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Graph
@@ -171,10 +172,8 @@ namespace T3.Gui.Graph
                     if (ImGui.MenuItem(" Delete", null))
                     {
                         var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                        foreach (var child in selectedChildren)
-                        {
-                            compositionSymbolUi.RemoveChild(child.Id);
-                        }
+                        var cmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
+                        UndoRedoStack.AddAndExecute(cmd);
                     }
 
                     if (ImGui.MenuItem(" Copy", null, false, false)) { }
