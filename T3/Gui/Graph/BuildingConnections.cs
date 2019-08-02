@@ -72,7 +72,7 @@ namespace T3.Gui.Graph
 
             if (existingConnection != null)
             {
-                UndoRedoStack.AddAndExecute(new RemoveConnectionCommand(parentSymbol, existingConnection, multiInputIndex));
+                UndoRedoStack.AddAndExecute(new DeleteConnectionCommand(parentSymbol, existingConnection, multiInputIndex));
 
                 TempConnection = new Symbol.Connection(sourceParentOrChildId: existingConnection.SourceParentOrChildId,
                                                        sourceSlotId: existingConnection.SourceSlotId,
@@ -106,7 +106,7 @@ namespace T3.Gui.Graph
 
             if (existingConnection != null)
             {
-                UndoRedoStack.AddAndExecute(new RemoveConnectionCommand(parentSymbol, existingConnection, 0));
+                UndoRedoStack.AddAndExecute(new DeleteConnectionCommand(parentSymbol, existingConnection, 0));
 
                 TempConnection = new Symbol.Connection(sourceParentOrChildId: existingConnection.SourceParentOrChildId,
                                                        sourceSlotId: existingConnection.SourceSlotId,
