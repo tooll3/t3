@@ -3,12 +3,12 @@ using T3.Core.Operator;
 
 namespace T3.Gui.Commands
 {
-    public class RemoveConnectionCommand : ICommand
+    public class DeleteConnectionCommand : ICommand
     {
         public string Name => "Remove Connection";
         public bool IsUndoable => true;
 
-        public RemoveConnectionCommand(Symbol compositionSymbol, Symbol.Connection connectionToRemove, int multiInputIndex)
+        public DeleteConnectionCommand(Symbol compositionSymbol, Symbol.Connection connectionToRemove, int multiInputIndex)
         {
             _removedConnection = connectionToRemove;
             _compositionSymbolId = compositionSymbol.Id;
