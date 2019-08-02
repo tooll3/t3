@@ -44,9 +44,24 @@ namespace T3.Gui.Commands
                                           Size = childUi.Size,
                                           IsVisible = childUi.IsVisible
                                       };
+            }
 
-                var connectionToRemove = compositionSymbol.Connections.FindAll(con => con.SourceParentOrChildId == child.Id
-                                                                                      || con.TargetParentOrChildId == child.Id);
+            _compositionSymbolId = compositionSymbol.Id;
+        }
+
+        public void Do()
+        {
+            var compositionSymbolUi = SymbolUiRegistry.Entries[_compositionSymbolId];
+            var compositionSymbol = compositionSymbolUi.Symbol;
+            _removedConnections.Clear();
+
+            foreach (var childEntry in _removedChildren)
+            {
+                // first get the connections to the child that is removed and store these, this must be done before
+                // each child is removed in order to preserve restore-able multi input indices.
+                var connectionToRemove = compositionSymbol.Connections.FindAll(con => con.SourceParentOrChildId == childEntry.ChildId
+                                                                                      || con.TargetParentOrChildId == childEntry.ChildId);
+                connectionToRemove.Reverse();
                 foreach (var con in connectionToRemove)
                 {
                     var entry = new ConnectionEntry
@@ -59,18 +74,11 @@ namespace T3.Gui.Commands
                                 };
                     _removedConnections.Add(entry);
                 }
+
+                compositionSymbolUi.RemoveChild(childEntry.ChildId);
             }
 
-            _compositionSymbolId = compositionSymbol.Id;
-        }
-
-        public void Do()
-        {
-            var compositionSymbolUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-            foreach (var child in _removedChildren)
-            {
-                compositionSymbolUi.RemoveChild(child.ChildId);
-            }
+            _removedConnections.Reverse(); // reverse in order to restore in reversed order
         }
 
         public void Undo()
