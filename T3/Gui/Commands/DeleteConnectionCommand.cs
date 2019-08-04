@@ -26,7 +26,7 @@ namespace T3.Gui.Commands
             var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
             compositionSymbol.AddConnection(_removedConnection, _multiInputIndex);
         }
-        
+
         private readonly Guid _compositionSymbolId;
         private readonly Symbol.Connection _removedConnection;
         private readonly int _multiInputIndex;
