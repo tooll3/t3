@@ -16,16 +16,15 @@ namespace T3.Gui.Commands
             _originalNamespace = symbol.Namespace;
         }
 
-        public virtual void Do()
+        public void Do()
         {
             AssignValue(NewNamespace);
         }
 
-        public virtual void Undo()
+        public void Undo()
         {
             AssignValue(_originalNamespace);
         }
-
 
         private void AssignValue(string newNamespace)
         {
@@ -35,7 +34,6 @@ namespace T3.Gui.Commands
 
         public string NewNamespace { get; set; }
         private readonly string _originalNamespace;
-
         private readonly Guid _symbolId;
     }
 }

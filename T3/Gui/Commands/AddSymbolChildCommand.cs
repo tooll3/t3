@@ -35,7 +35,7 @@ namespace T3.Gui.Commands
         private readonly Guid _parentSymbolId;
         private readonly Guid _addedSymbolId;
         private readonly Guid _addedChildId;
-        
+
         // ui data
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = GraphCanvas.DefaultOpSize;

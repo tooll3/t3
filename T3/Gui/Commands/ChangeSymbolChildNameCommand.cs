@@ -16,16 +16,15 @@ namespace T3.Gui.Commands
             NewName = _originalName = symbolChildUi.SymbolChild.Name;
         }
 
-        public virtual void Do()
+        public void Do()
         {
             AssignValue(NewName);
         }
 
-        public virtual void Undo()
+        public void Undo()
         {
             AssignValue(_originalName);
         }
-
 
         private void AssignValue(string newName)
         {
@@ -34,10 +33,8 @@ namespace T3.Gui.Commands
             symbol.Name = newName;
         }
 
-
         public string NewName { get; set; }
         private readonly string _originalName;
-
         private readonly Guid _symbolChildId;
         private readonly Guid _parentSymbolId;
     }

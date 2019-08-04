@@ -19,12 +19,12 @@ namespace T3.Gui.Commands
             Value = input.Value.Clone();
         }
 
-        public virtual void Undo()
+        public void Undo()
         {
             AssignValue(OriginalValue);
         }
 
-        public virtual void Do()
+        public void Do()
         {
             AssignValue(Value);
         }
@@ -45,5 +45,4 @@ namespace T3.Gui.Commands
         private readonly Guid _childId;
         private readonly Guid _inputId;
     }
-
 }
