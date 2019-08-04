@@ -1,14 +1,17 @@
 todo:
+- Reactivate dirty flag
+- Make all tests in CoreTests runnable again
 - Make remove connection command applicable for lists of connections
 - Change input value command must take default value into account
 - Operator with complex output type e.g. list
 - Create missing commands - delete operator, set default value, set back to default
 - Restructure connections to have an easier handling for multi inputs etc
-- Reactivate dirty flag
 - How to visualize input connection evaluation
+- Move Roslyn integration to UI project
 - General op replacement/compilation after change
  
 done:
+* Make test for dirty flag runnable again
 * Fix undo of delete several operators with several multi input connections
 * Fixed multi input index calculation when adding connections
 * Added delete operator command that works with collections
