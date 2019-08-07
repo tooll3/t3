@@ -215,6 +215,26 @@ namespace T3.Gui
         }
     }
 
+    public class FloatListInputUi : SingleControlInputUi<List<float>>
+    {
+        public FloatListInputUi(Guid id) : base(id)
+        {
+        }
+
+        public override bool DrawSingleEditControl(string name, ref List<float> list)
+        {
+            var outputString = string.Join(", ", list);
+            ImGui.Text($"{outputString}");
+            return false;
+        }
+
+        protected override void DrawValueDisplay(string name, ref List<float> list)
+        {
+            var outputString = string.Join(", ", list);
+            ImGui.Text($"{outputString}");
+        }
+    }
+
     public class IntInputUi : SingleControlInputUi<int>
     {
         public IntInputUi(Guid id) : base(id)

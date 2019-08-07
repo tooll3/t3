@@ -46,6 +46,7 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(BindFlags), id => new EnumInputUi<BindFlags>(id));
             InputUiFactory.Entries.Add(typeof(CpuAccessFlags), id => new EnumInputUi<CpuAccessFlags>(id));
             InputUiFactory.Entries.Add(typeof(ResourceOptionFlags), id => new EnumInputUi<ResourceOptionFlags>(id));
+            InputUiFactory.Entries.Add(typeof(List<float>), id => new FloatListInputUi(id));
 
             // Register output ui creators
             OutputUiFactory.Entries.Add(typeof(float), id => new FloatOutputUi(id));
