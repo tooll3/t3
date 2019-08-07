@@ -64,8 +64,15 @@
     {
       "ChildId": "ba4c312b-a473-4903-8479-7f2a5f525f31"/*FloatMultiInputToList*/,
       "Position": {
-        "X": "461",
-        "Y": "188"
+        "X": "438",
+        "Y": "280"
+      }
+    },
+    {
+      "ChildId": "4e8bccde-0afb-4070-9a76-9bdece26996e"/*SelectFloatFromList*/,
+      "Position": {
+        "X": "481",
+        "Y": "173"
       }
     }
   ],

@@ -72,6 +72,14 @@ namespace T3.Core
             JsonToTypeValueConverters.Entries.Add(typeof(BindFlags), JsonToEnumValue<BindFlags>);
             JsonToTypeValueConverters.Entries.Add(typeof(CpuAccessFlags), JsonToEnumValue<CpuAccessFlags>);
             JsonToTypeValueConverters.Entries.Add(typeof(ResourceOptionFlags), JsonToEnumValue<ResourceOptionFlags>);
+            JsonToTypeValueConverters.Entries.Add(typeof(List<float>), jsonToken =>
+                                                                       {
+                                                                           var entries = jsonToken["Values"];
+                                                                           var list = new List<float>(entries.Count());
+                                                                           list.AddRange(entries.Select(entry => entry.Value<float>()));
+
+                                                                           return list;
+                                                                       });
 
             // Register the converters from a specific type value to json
             TypeValueToJsonConverters.Entries.Add(typeof(float), (writer, obj) => writer.WriteValue((float)obj));
@@ -98,6 +106,16 @@ namespace T3.Core
             TypeValueToJsonConverters.Entries.Add(typeof(BindFlags), (writer, obj) => writer.WriteValue(obj.ToString()));
             TypeValueToJsonConverters.Entries.Add(typeof(CpuAccessFlags), (writer, obj) => writer.WriteValue(obj.ToString()));
             TypeValueToJsonConverters.Entries.Add(typeof(ResourceOptionFlags), (writer, obj) => writer.WriteValue(obj.ToString()));
+            TypeValueToJsonConverters.Entries.Add(typeof(List<float>), (writer, obj) =>
+                                                                       {
+                                                                           var list = (List<float>)obj;
+                                                                           writer.WriteStartObject();
+                                                                           writer.WritePropertyName("Values");
+                                                                           writer.WriteStartArray();
+                                                                           list.ForEach(writer.WriteValue);
+                                                                           writer.WriteEndArray();
+                                                                           writer.WriteEndObject();
+                                                                       });
 
             // Register input value creators that take the relevant input attribute, extract the default value and return this with the new input value
             InputValue InputDefaultValueCreator<T>() => new InputValue<T>();
@@ -110,6 +128,7 @@ namespace T3.Core
             InputValueCreators.Entries.Add(typeof(BindFlags), InputDefaultValueCreator<BindFlags>);
             InputValueCreators.Entries.Add(typeof(CpuAccessFlags), InputDefaultValueCreator<CpuAccessFlags>);
             InputValueCreators.Entries.Add(typeof(ResourceOptionFlags), InputDefaultValueCreator<ResourceOptionFlags>);
+            InputValueCreators.Entries.Add(typeof(List<float>), () => new InputValue<List<float>>(new List<float>()));
         }
 
         public virtual void Load()

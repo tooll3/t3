@@ -58,6 +58,11 @@
       "Id": "ba4c312b-a473-4903-8479-7f2a5f525f31"/*FloatMultiInputToList*/,
       "SymbolId": "5c5d855c-3167-40a3-b4c3-e7b27b0d61cf",
       "InputValues": []
+    },
+    {
+      "Id": "4e8bccde-0afb-4070-9a76-9bdece26996e"/*SelectFloatFromList*/,
+      "SymbolId": "0841cdd4-0106-4f4e-826b-8de23bb5b5f0",
+      "InputValues": []
     }
   ],
   "Connections": [
