@@ -86,6 +86,27 @@ namespace T3.Gui
         }
     }
 
+    public class FloatListOutputUi : OutputUi<List<float>>
+    {
+        public FloatListOutputUi(Guid id) : base(id)
+        {
+        }
+
+        public override void DrawValue(Slot slot)
+        {
+            if (slot is Slot<List<float>> typedSlot)
+            {
+                var list = typedSlot.GetValue(new EvaluationContext());
+                var outputString = string.Join(", ", list);
+                ImGui.Text($"{outputString}");
+            }
+            else
+            {
+                Debug.Assert(false);
+            }
+        }
+    }
+
     public class IntOutputUi : ValueOutputUi<int>
     {
         public IntOutputUi(Guid id) : base(id)
