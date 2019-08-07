@@ -22,16 +22,30 @@ namespace T3.Gui
         Type Type { get; }
     }
 
-    public class ValueOutputUi<T> : IOutputUi
+    public abstract class OutputUi<T> : IOutputUi
     {
         public Guid Id { get; }
 
-        public ValueOutputUi(Guid id)
+        public OutputUi(Guid id)
         {
             Id = id;
         }
 
-        public void DrawValue(Slot slot)
+        public abstract void DrawValue(Slot slot);
+
+        public Type Type { get; } = typeof(T);
+        public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
+        public Vector2 Size { get; set; } = new Vector2(100, 30);
+        public bool IsSelected { get; set; }
+    }
+
+    public class ValueOutputUi<T> : OutputUi<T>
+    {
+        public ValueOutputUi(Guid id) : base(id)
+        {
+        }
+
+        public override void DrawValue(Slot slot)
         {
             if (slot is Slot<T> typedSlot)
             {
@@ -43,24 +57,15 @@ namespace T3.Gui
                 Debug.Assert(false);
             }
         }
-
-        public Type Type { get; } = typeof(T);
-        public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
-        public Vector2 Size { get; set; } = new Vector2(100, 30);
-        public bool IsSelected { get; set; }
     }
 
-    // todo: refactor out common code with ValueOutputUi<T> - it's nearly the same
-    public class ShaderResourceViewOutputUi : IOutputUi
+    public class ShaderResourceViewOutputUi : OutputUi<ShaderResourceView>
     {
-        public Guid Id { get; }
-
-        public ShaderResourceViewOutputUi(Guid id)
+        public ShaderResourceViewOutputUi(Guid id) : base(id)
         {
-            Id = id;
         }
 
-        public void DrawValue(Slot slot)
+        public override void DrawValue(Slot slot)
         {
             if (slot is Slot<ShaderResourceView> typedSlot)
             {
@@ -72,11 +77,6 @@ namespace T3.Gui
                 Debug.Assert(false);
             }
         }
-
-        public Type Type { get; } = typeof(ShaderResourceView);
-        public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
-        public Vector2 Size { get; set; } = new Vector2(100, 30);
-        public bool IsSelected { get; set; }
     }
 
     public class FloatOutputUi : ValueOutputUi<float>
