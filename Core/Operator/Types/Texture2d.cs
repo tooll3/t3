@@ -44,7 +44,7 @@ namespace T3.Core.Operator.Types
                               CpuAccessFlags = CpuAccessFlags.GetValue(context),
                               OptionFlags = ResourceOptionFlags.GetValue(context)
                           };
-            _textureChanged = ResourceManager.Instance().CreateTexture(texDesc, "Texture2D", ref _textureResId, ref _texture);//Texture.Value);
+            _textureChanged = ResourceManager.Instance().CreateTexture(texDesc, "Texture2D", ref _textureResId, ref _texture); //Texture.Value);
         }
 
         private void UpdateShaderResourceView(EvaluationContext context)
@@ -69,7 +69,7 @@ namespace T3.Core.Operator.Types
         public readonly InputSlot<int> ArraySize = new InputSlot<int>();
 
         [Input(Guid = "{67CD82C3-504B-4C80-8C49-5B303733ED52}")]
-        public readonly InputSlot<SharpDX.DXGI.Format> Format = new InputSlot<SharpDX.DXGI.Format>();
+        public readonly InputSlot<Format> Format = new InputSlot<Format>();
 
         //public readonly InputSlot<SampleDescription> SampleDescription = new InputSlot<SampleDescription>();
 
