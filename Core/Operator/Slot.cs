@@ -156,7 +156,12 @@ namespace T3.Core.Operator
 
         public T GetValue(EvaluationContext context)
         {
-            UpdateAction?.Invoke(context); // no caching atm
+            if (IsDirty)
+            {
+                UpdateAction?.Invoke(context);
+                //IsDirty = false;
+            }
+
             return Value;
         }
 

@@ -15,11 +15,11 @@ namespace OperatorTests
         public class TestOperator : Instance<TestOperator>
         {
             [Output(Guid = "{72BCF9DA-EE8C-41F1-B494-D9D883E305CB}")]
-            public Slot<int> SumResult = new Slot<int>();
+            public Slot<int> SumResult = new Slot<int>(0);
 
             public TestOperator()
             {
-                SumResult = new Slot<int>(UpdateResult) { Value = 0 };
+                SumResult.UpdateAction = UpdateResult;
             }
 
             public void UpdateResult(EvaluationContext context)
