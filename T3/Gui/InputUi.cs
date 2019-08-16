@@ -55,11 +55,12 @@ namespace T3.Gui
                         // Just show actual value
                         ImGui.PushItemWidth(200.0f);
                         ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
+                        ImGui.Text(name);
                         var multiInput = (MultiInputSlot<T>)typedInputSlot;
                         var allInputs = multiInput.GetCollectedInputs();
-                        foreach (var input in allInputs)
+                        for (int i = 0; i < allInputs.Count; i++)
                         {
-                            DrawValueDisplay(name, ref input.Value);
+                            DrawValueDisplay(" #" + i.ToString(), ref allInputs[i].Value);
                         }
 
                         ImGui.PopStyleColor();
@@ -200,13 +201,18 @@ namespace T3.Gui
 
     public class FloatInputUi : SingleControlInputUi<float>
     {
+        public float Min { get; set; } = -100.0f;
+        public float Max { get; set; } = 100.0f;
+
         public FloatInputUi(Guid id) : base(id)
         {
         }
 
         public override bool DrawSingleEditControl(string name, ref float value)
         {
-            return ImGui.DragFloat(name, ref value);
+            bool edited = ImGui.DragFloat(name, ref value, 0.0f, Min, Max);
+
+            return edited;
         }
 
         protected override void DrawValueDisplay(string name, ref float value)
