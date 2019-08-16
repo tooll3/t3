@@ -46,7 +46,7 @@ namespace T3.Gui
                 Writer.WriteValue("InputId", inputEntry.Key);
                 Writer.WriteComment(symbolInput.Name);
                 var inputUi = inputEntry.Value;
-                Writer.WriteValue("Type", inputUi.Type + $", {inputUi.Type.Assembly.GetName().Name}");
+                Writer.WriteValue("Type", $"{inputUi.Type}, {inputUi.Type.Assembly.GetName().Name}");
                 Writer.WritePropertyName("Position");
                 vec2Writer(Writer, inputUi.PosOnCanvas);
 
