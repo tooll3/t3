@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System;
+using ImGuiNET;
 using imHelpers;
 using System.Linq;
 using T3.Core.Logging;
@@ -125,40 +126,61 @@ namespace T3.Gui
                 ImGui.PushID(input.Id.GetHashCode());
                 IInputUi inputUi = selectedChildSymbolUi.InputUis[input.Id];
 
-                var editState = inputUi.DrawInputEdit(input, compositionSymbolUi, symbolChildUi);
-
-                switch (editState)
+                if (_showInputParameterEdits != Guid.Empty)
                 {
-                    // create command for possible editing
-                    case InputEditState.Focused:
-                        Log.Debug("setup 'ChangeInputValue' command");
-                        _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, input.Input);
-                        break;
-
-                    // update command in flight
-                    case InputEditState.Modified:
-                        Log.Debug("updated 'ChangeInputValue' command");
-                        _inputValueCommandInFlight.Value.Assign(input.Input.Value);
-                        break;
-
-                    // add command to undo stack
-                    case InputEditState.Finished:
-                        Log.Debug("Finalized 'ChangeInputValue' command");
-                        UndoRedoStack.Add(_inputValueCommandInFlight);
-                        break;
-
-                    // update and add command to undo queue
-                    case InputEditState.ModifiedAndFinished:
-                        Log.Debug("Updated and finalized 'ChangeInputValue' command");
-                        _inputValueCommandInFlight.Value.Assign(input.Input.Value);
-                        UndoRedoStack.Add(_inputValueCommandInFlight);
-                        break;
+                    if (_showInputParameterEdits == inputUi.Id)
+                    {
+                        inputUi.DrawParameterEdits();
+                        if (ImGui.Button("Back"))
+                        {
+                            _showInputParameterEdits = Guid.Empty;
+                        }
+                    }
                 }
+                else
+                {
+                    var editState = inputUi.DrawInputEdit(input, compositionSymbolUi, symbolChildUi);
 
+                    switch (editState)
+                    {
+                        // create command for possible editing
+                        case InputEditState.Focused:
+                            Log.Debug("setup 'ChangeInputValue' command");
+                            _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, input.Input);
+                            break;
+
+                        // update command in flight
+                        case InputEditState.Modified:
+                            Log.Debug("updated 'ChangeInputValue' command");
+                            _inputValueCommandInFlight.Value.Assign(input.Input.Value);
+                            break;
+
+                        // add command to undo stack
+                        case InputEditState.Finished:
+                            Log.Debug("Finalized 'ChangeInputValue' command");
+                            UndoRedoStack.Add(_inputValueCommandInFlight);
+                            break;
+
+                        // update and add command to undo queue
+                        case InputEditState.ModifiedAndFinished:
+                            Log.Debug("Updated and finalized 'ChangeInputValue' command");
+                            _inputValueCommandInFlight.Value.Assign(input.Input.Value);
+                            UndoRedoStack.Add(_inputValueCommandInFlight);
+                            break;
+                    }
+
+                    ImGui.SameLine();
+
+                    if (inputUi.CanShowParameterEdits && ImGui.Button("Edit Parameter"))
+                    {
+                        _showInputParameterEdits = input.Id;
+                    }
+                }
                 ImGui.PopID();
             }
         }
 
+        private Guid _showInputParameterEdits = Guid.Empty;
         private ChangeSymbolNameCommand _symbolNameCommandInFlight = null;
         private ChangeSymbolNamespaceCommand _symbolNamespaceCommandInFlight = null;
         private ChangeSymbolChildNameCommand _symbolChildNameCommand = null;

@@ -27,6 +27,9 @@ namespace T3.Gui
         Type Type { get; }
 
         InputEditState DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
+
+        bool CanShowParameterEdits { get; }
+        void DrawParameterEdits();
     }
 
     public abstract class InputValueUi<T> : IInputUi
@@ -171,8 +174,12 @@ namespace T3.Gui
             ImGui.SameLine(0);
         }
 
+        public virtual void DrawParameterEdits()
+        {
+        }
 
         public Type Type { get; } = typeof(T);
+        public virtual bool CanShowParameterEdits => false;
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
         public bool IsSelected { get; set; }
@@ -201,8 +208,9 @@ namespace T3.Gui
 
     public class FloatInputUi : SingleControlInputUi<float>
     {
-        public float Min { get; set; } = -100.0f;
-        public float Max { get; set; } = 100.0f;
+        public override bool CanShowParameterEdits => true;
+        public float Min = -100.0f;
+        public float Max = 100.0f;
 
         public FloatInputUi(Guid id) : base(id)
         {
@@ -218,6 +226,12 @@ namespace T3.Gui
         protected override void DrawValueDisplay(string name, ref float value)
         {
             ImGui.InputFloat(name, ref value, 0.0f, 0.0f, "%f", ImGuiInputTextFlags.ReadOnly);
+        }
+
+        public override void DrawParameterEdits()
+        {
+            ImGui.DragFloat("Min", ref Min);
+            ImGui.DragFloat("Max", ref Max);
         }
     }
 
