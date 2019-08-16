@@ -3,7 +3,6 @@ todo:
 - Make all tests in CoreTests runnable again
 - Make remove connection command applicable for lists of connections
 - Change input value command must take default value into account
-- Operator with complex output type e.g. list
 - Create missing commands - delete operator, set default value, set back to default
 - Restructure connections to have an easier handling for multi inputs etc
 - How to visualize input connection evaluation
@@ -11,6 +10,7 @@ todo:
 - General op replacement/compilation after change
  
 done:
+* Operator with complex output type e.g. list (added multi input float -> list and list select op)
 * Make test for dirty flag runnable again
 * Fix undo of delete several operators with several multi input connections
 * Fixed multi input index calculation when adding connections
