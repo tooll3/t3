@@ -94,22 +94,22 @@ namespace T3.Gui
 
                     var editState = DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
 
-                    if (editState.HasFlag(InputEditState.Focused))
+                    if ((editState & InputEditState.Focused) == InputEditState.Focused)
                     {
                         Log.Debug($"focused {name}");
                     }
 
-                    if (editState.HasFlag(InputEditState.Modified))
+                    if ((editState & InputEditState.Modified) == InputEditState.Modified)
                     {
                         Log.Debug($"modified {typedInputSlot.TypedInputValue.Value}");
                     }
 
-                    if (editState.HasFlag(InputEditState.Finished))
+                    if ((editState & InputEditState.Finished) == InputEditState.Finished)
                     {
                         Log.Debug($"Edit {name} completed with {typedInputSlot.TypedInputValue.Value}");
                     }
 
-                    input.IsDefault &= !editState.HasFlag(InputEditState.Modified);
+                    input.IsDefault &= (editState & InputEditState.Modified) != InputEditState.Modified;
 
                     ImGui.PopStyleColor();
                     ImGui.PopItemWidth();

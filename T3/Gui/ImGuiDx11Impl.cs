@@ -140,7 +140,7 @@ namespace T3
             var prevSampleMask = _deviceContext.OutputMerger.BlendSampleMask;
             var prevDepthStencilState = _deviceContext.OutputMerger.DepthStencilState;
             var prevStencilRef = _deviceContext.OutputMerger.DepthStencilReference;
-            var prevPSShaderResource = _deviceContext.PixelShader.GetShaderResources(0, 1);
+            var prevPSShaderResource = _deviceContext.PixelShader.GetShaderResources(0, 1)[0];
             var prevPSSampler = _deviceContext.PixelShader.GetSamplers(0, 1);
             var prevPS = _deviceContext.PixelShader.Get();
             var prevVS = _deviceContext.VertexShader.Get();
