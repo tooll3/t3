@@ -221,8 +221,9 @@ namespace T3.Gui.Graph
                                                                    int multiInputIndex = 0)
         {
             var inputId = input.Id;
-            return parentSymbol.Connections.FindAll(c => c.TargetSlotId == inputId
-                                                         && c.TargetParentOrChildId == targetUi.SymbolChild.Id)[multiInputIndex];
+            var connections = parentSymbol.Connections.FindAll(c => c.TargetSlotId == inputId
+                                                                    && c.TargetParentOrChildId == targetUi.SymbolChild.Id);
+            return (connections.Count > 0) ? connections[multiInputIndex] : null;
         }
 
         /// <summary>
