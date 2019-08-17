@@ -212,6 +212,7 @@ namespace T3.Core.Operator
     {
         Guid Id { get; set; }
         SymbolChild.Input Input { get; set; }
+        bool IsMultiInput { get; }
     }
 
     public class InputSlot<T> : Slot<T>, IInputSlot
