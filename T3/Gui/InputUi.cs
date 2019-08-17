@@ -46,8 +46,6 @@ namespace T3.Gui
 
         public InputEditState DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
-//            DrawConnectionArea(inputSlot, compositionUi, symbolChildUi);
-
             var name = inputSlot.Input.Name;
             if (inputSlot is InputSlot<T> typedInputSlot)
             {
@@ -69,9 +67,9 @@ namespace T3.Gui
                                 symbolChildUi.IsSelected = false;
                                 var compositionSymbol = compositionUi.Symbol;
                                 var allConnections = compositionSymbol.Connections.FindAll(c => c.TargetParentOrChildId == symbolChildUi.Id && c.TargetSlotId == inputSlot.Id);
-                                var con = allConnections[multiInputIndex];
+                                var connection = allConnections[multiInputIndex];
                                 var sourceUi = compositionUi.GetSelectables()
-                                                            .First(ui => ui.Id == con.SourceParentOrChildId || ui.Id == con.SourceSlotId);
+                                                            .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
                                 sourceUi.IsSelected = true;
                             }
                             ImGui.PopID();
@@ -168,37 +166,6 @@ namespace T3.Gui
             }
 
             return InputEditState.Nothing;
-        }
-
-
-        private void DrawConnectionArea(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
-        {
-            ImGui.SetNextItemWidth(50);
-
-            ImGui.PushStyleColor(ImGuiCol.Button, IsSelected ? Color.White.Rgba : Color.Gray.Rgba);
-            ImGui.Button("", new Vector2(5, 0));
-            ImGui.PopStyleColor();
-
-            ImGui.SameLine();
-
-            if (inputSlot.IsConnected)
-            {
-                if (ImGui.Button("->", new Vector2(50, 0)))
-                {
-                    symbolChildUi.IsSelected = false;
-                    var compositionSymbol = compositionUi.Symbol;
-                    var connection = compositionSymbol.Connections.First(c => c.TargetParentOrChildId == symbolChildUi.Id && c.TargetSlotId == inputSlot.Id);
-                    var sourceUi = compositionUi.GetSelectables()
-                                                .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
-                    sourceUi.IsSelected = true;
-                    // ToDo Do something in canvas
-                }
-            }
-            else if (ImGui.Button("", new Vector2(50, 0)))
-            {
-                //open context menu
-            }
-            ImGui.SameLine(0);
         }
 
         public virtual void DrawParameterEdits()
