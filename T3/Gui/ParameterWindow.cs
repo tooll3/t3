@@ -171,7 +171,7 @@ namespace T3.Gui
 
                     ImGui.SameLine();
 
-                    if (inputUi.CanShowParameterEdits && ImGui.Button("Edit Parameter"))
+                    if (inputUi.CanShowParameterEdits && !input.IsMultiInput && ImGui.Button("Edit Parameter"))
                     {
                         _showInputParameterEdits = input.Id;
                     }
