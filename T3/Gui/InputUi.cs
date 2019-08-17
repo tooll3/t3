@@ -35,6 +35,9 @@ namespace T3.Gui
 
     public abstract class InputValueUi<T> : IInputUi
     {
+        public static float ConnectionAreaWidth = 30;
+        public static float ParameterNameWidth = 150;
+
         protected InputValueUi(Guid id)
         {
             Id = id;
@@ -48,6 +51,9 @@ namespace T3.Gui
         public InputEditState DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
             var name = inputSlot.Input.Name;
+            var editState = InputEditState.Nothing;
+            var typeColor = TypeUiRegistry.Entries[Type].Color.Rgba;
+
             if (inputSlot is InputSlot<T> typedInputSlot)
             {
                 if (inputSlot.IsConnected)
@@ -55,15 +61,25 @@ namespace T3.Gui
                     if (typedInputSlot.IsMultiInput)
                     {
                         // Just show actual value
-                        ImGui.PushItemWidth(200.0f);
-                        ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
-                        ImGui.Text(name);
+                        ImGui.Button(name + "##paramName", new Vector2(-1, 0));
+                        if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
+                        {
+                            if (ImGui.MenuItem("Parameters settings", CanShowParameterEdits))
+                                editState = InputEditState.ShowOptions;
+
+                            ImGui.EndPopup();
+                        }
+
+
+                        //ImGui.Text(name);
                         var multiInput = (MultiInputSlot<T>)typedInputSlot;
                         var allInputs = multiInput.GetCollectedInputs();
+
                         for (int multiInputIndex = 0; multiInputIndex < allInputs.Count; multiInputIndex++)
                         {
                             ImGui.PushID(multiInputIndex);
-                            if (ImGui.Button("->", new Vector2(50, 0)))
+                            ImGui.PushStyleColor(ImGuiCol.Button, typeColor);
+                            if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0)))
                             {
                                 symbolChildUi.IsSelected = false;
                                 var compositionSymbol = compositionUi.Symbol;
@@ -73,19 +89,23 @@ namespace T3.Gui
                                                             .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
                                 sourceUi.IsSelected = true;
                             }
-                            ImGui.PopID();
-
+                            ImGui.PopStyleColor();
                             ImGui.SameLine();
 
-                            DrawValueDisplay(" #" + multiInputIndex.ToString(), ref allInputs[multiInputIndex].Value);
-                        }
+                            ImGui.Button("#" + multiInputIndex, new Vector2(ParameterNameWidth, 0));
+                            ImGui.SameLine();
 
-                        ImGui.PopStyleColor();
-                        ImGui.PopItemWidth();
+                            ImGui.SetNextItemWidth(-1);
+                            ImGui.PushStyleColor(ImGuiCol.Text, T3Style.ConnectedParameterColor.Rgba);
+                            DrawValueDisplay("##multiInputParam", ref allInputs[multiInputIndex].Value);
+                            ImGui.PopStyleColor();
+                            ImGui.PopID();
+                        }
                     }
                     else
                     {
-                        if (ImGui.Button("->", new Vector2(50, 0)))
+                        ImGui.PushStyleColor(ImGuiCol.Button, typeColor);
+                        if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0)))
                         {
                             symbolChildUi.IsSelected = false;
                             var compositionSymbol = compositionUi.Symbol;
@@ -94,7 +114,7 @@ namespace T3.Gui
                                                         .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
                             sourceUi.IsSelected = true;
                         }
-
+                        ImGui.PopStyleColor();
                         ImGui.SameLine();
 
                         // Just show actual value
@@ -108,15 +128,15 @@ namespace T3.Gui
                 else
                 {
                     var input = inputSlot.Input;
-                    var editState = InputEditState.Nothing;
 
-                    if (ImGui.Button("", new Vector2(50, 0)))
+                    ImGui.PushStyleColor(ImGuiCol.Button, typeColor);
+                    if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0)))
                     { }
+                    ImGui.PopStyleColor();
                     ImGui.SameLine();
 
-
                     // Draw Name
-                    ImGui.Button(input.Name + "##ParamName", new Vector2(150, 0));
+                    ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0));
                     if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                     {
                         if (ImGui.MenuItem("Set as default", !input.IsDefault))
@@ -169,7 +189,6 @@ namespace T3.Gui
 
                     ImGui.PopStyleColor();
                     ImGui.PopItemWidth();
-                    return editState;
                 }
             }
             else
@@ -177,7 +196,7 @@ namespace T3.Gui
                 Debug.Assert(false);
             }
 
-            return InputEditState.Nothing;
+            return editState;
         }
 
         public virtual void DrawParameterEdits()
