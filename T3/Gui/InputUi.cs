@@ -23,13 +23,20 @@ namespace T3.Gui
         ModifiedAndFinished = Modified | Finished
     }
 
+    public enum Relevancy
+    {
+        Required,
+        Relevant,
+        Optional
+    }
+
     public interface IInputUi : ISelectable
     {
         Type Type { get; }
+        Relevancy Relevancy { get; set; }
 
         InputEditState DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
 
-        bool CanShowParameterEdits { get; }
         void DrawParameterEdits();
     }
 
@@ -44,9 +51,9 @@ namespace T3.Gui
         }
 
         public Guid Id { get; }
+        public Relevancy Relevancy { get; set; } = Relevancy.Required;
         protected abstract InputEditState DrawEditControl(string name, ref T value);
         protected abstract void DrawValueDisplay(string name, ref T value);
-
 
         public InputEditState DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
@@ -64,14 +71,12 @@ namespace T3.Gui
                         ImGui.Button(name + "##paramName", new Vector2(-1, 0));
                         if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                         {
-                            if (ImGui.MenuItem("Parameters settings", CanShowParameterEdits))
+                            if (ImGui.MenuItem("Parameters settings"))
                                 editState = InputEditState.ShowOptions;
 
                             ImGui.EndPopup();
                         }
 
-
-                        //ImGui.Text(name);
                         var multiInput = (MultiInputSlot<T>)typedInputSlot;
                         var allInputs = multiInput.GetCollectedInputs();
 
@@ -145,8 +150,7 @@ namespace T3.Gui
                         if (ImGui.MenuItem("Reset to default", !input.IsDefault))
                             input.ResetToDefault();
 
-
-                        if (ImGui.MenuItem("Parameters settings", CanShowParameterEdits))
+                        if (ImGui.MenuItem("Parameters settings"))
                             editState = InputEditState.ShowOptions;
 
                         ImGui.EndPopup();
@@ -201,10 +205,21 @@ namespace T3.Gui
 
         public virtual void DrawParameterEdits()
         {
+            Type enumType = typeof(Relevancy);
+            var values = Enum.GetValues(enumType);
+            var valueNames = new string[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                valueNames[i] = Enum.GetName(typeof(Relevancy), values.GetValue(i));
+            }
+            int index = (int)Relevancy;
+            ImGui.Combo("##dropDownRelevancy", ref index, valueNames, valueNames.Length);
+            Relevancy = (Relevancy)index;
+            ImGui.SameLine();
+            ImGui.Text("Relevancy");
         }
 
         public Type Type { get; } = typeof(T);
-        public virtual bool CanShowParameterEdits => false;
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
         public bool IsSelected { get; set; }
@@ -233,7 +248,6 @@ namespace T3.Gui
 
     public class FloatInputUi : SingleControlInputUi<float>
     {
-        public override bool CanShowParameterEdits => true;
         public float Min = -100.0f;
         public float Max = 100.0f;
 
@@ -253,6 +267,8 @@ namespace T3.Gui
 
         public override void DrawParameterEdits()
         {
+            base.DrawParameterEdits();
+
             ImGui.DragFloat("Min", ref Min);
             ImGui.DragFloat("Max", ref Max);
         }
