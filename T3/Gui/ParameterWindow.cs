@@ -2,6 +2,7 @@
 using imHelpers;
 using System;
 using System.Linq;
+using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
@@ -37,14 +38,6 @@ namespace T3.Gui
 
         private void DrawContent(Instance op, SymbolChildUi symbolChildUi)
         {
-            //if (_pinnedOp != null && _pinnedOp.Parent.Children.Contains(_pinnedOp))
-            //{
-            //    _pinnedOp = null;
-            //}
-
-            //if (_pinnedOp != null)
-            //    op = _pinnedOp;
-
             if (op == null)
             {
                 Im.EmptyWindowMessage("Nothing selected");
@@ -118,6 +111,9 @@ namespace T3.Gui
                     _symbolChildNameCommand = null;
                 }
             }
+
+            //ImGui.Spacing();
+            ImGui.Dummy(new Vector2(0.0f, 5.0f));
 
 
             var compositionSymbolUi = SymbolUiRegistry.Entries[op.Parent.Symbol.Id];
