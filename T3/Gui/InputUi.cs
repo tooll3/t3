@@ -46,7 +46,7 @@ namespace T3.Gui
 
         public InputEditState DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
-            DrawConnectionArea(inputSlot, compositionUi, symbolChildUi);
+//            DrawConnectionArea(inputSlot, compositionUi, symbolChildUi);
 
             var name = inputSlot.Input.Name;
             if (inputSlot is InputSlot<T> typedInputSlot)
@@ -61,9 +61,24 @@ namespace T3.Gui
                         ImGui.Text(name);
                         var multiInput = (MultiInputSlot<T>)typedInputSlot;
                         var allInputs = multiInput.GetCollectedInputs();
-                        for (int i = 0; i < allInputs.Count; i++)
+                        for (int multiInputIndex = 0; multiInputIndex < allInputs.Count; multiInputIndex++)
                         {
-                            DrawValueDisplay(" #" + i.ToString(), ref allInputs[i].Value);
+                            ImGui.PushID(multiInputIndex);
+                            if (ImGui.Button("->", new Vector2(50, 0)))
+                            {
+                                symbolChildUi.IsSelected = false;
+                                var compositionSymbol = compositionUi.Symbol;
+                                var allConnections = compositionSymbol.Connections.FindAll(c => c.TargetParentOrChildId == symbolChildUi.Id && c.TargetSlotId == inputSlot.Id);
+                                var con = allConnections[multiInputIndex];
+                                var sourceUi = compositionUi.GetSelectables()
+                                                            .First(ui => ui.Id == con.SourceParentOrChildId || ui.Id == con.SourceSlotId);
+                                sourceUi.IsSelected = true;
+                            }
+                            ImGui.PopID();
+
+                            ImGui.SameLine();
+
+                            DrawValueDisplay(" #" + multiInputIndex.ToString(), ref allInputs[multiInputIndex].Value);
                         }
 
                         ImGui.PopStyleColor();
@@ -71,6 +86,18 @@ namespace T3.Gui
                     }
                     else
                     {
+                        if (ImGui.Button("->", new Vector2(50, 0)))
+                        {
+                            symbolChildUi.IsSelected = false;
+                            var compositionSymbol = compositionUi.Symbol;
+                            var connection = compositionSymbol.Connections.First(c => c.TargetParentOrChildId == symbolChildUi.Id && c.TargetSlotId == inputSlot.Id);
+                            var sourceUi = compositionUi.GetSelectables()
+                                                        .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
+                            sourceUi.IsSelected = true;
+                        }
+
+                        ImGui.SameLine();
+
                         // Just show actual value
                         ImGui.PushItemWidth(200.0f);
                         ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
@@ -218,9 +245,7 @@ namespace T3.Gui
 
         public override bool DrawSingleEditControl(string name, ref float value)
         {
-            bool edited = ImGui.DragFloat(name, ref value, 0.0f, Min, Max);
-
-            return edited;
+            return ImGui.DragFloat(name, ref value, 0.0f, Min, Max);
         }
 
         protected override void DrawValueDisplay(string name, ref float value)
