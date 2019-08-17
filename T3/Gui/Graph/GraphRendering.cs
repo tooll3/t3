@@ -166,7 +166,7 @@ namespace T3.Gui.Graph
                     outputIndex++;
                 }
 
-                // Inputs...
+                // Input Sockets...
                 var visibleInputs = childUi.SymbolChild.Symbol.InputDefinitions; // TODO: Implement relevancy filter
 
                 //var childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];

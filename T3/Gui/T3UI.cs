@@ -71,7 +71,23 @@ namespace T3.Gui
                 if (gcw.Canvas.SelectionHandler.SelectedElements.Any())
                 {
                     var ui = gcw.Canvas.SelectionHandler.SelectedElements[0] as SymbolChildUi;
-                    return ui;
+                    if (ui != null)
+                        return ui;
+                }
+            }
+            return null;
+        }
+
+
+        private IOutputUi GetSelectedOutputUi()
+        {
+            foreach (var gcw in _graphCanvasWindows)
+            {
+                if (gcw.Canvas.SelectionHandler.SelectedElements.Any())
+                {
+                    var outputUi = gcw.Canvas.SelectionHandler.SelectedElements[0] as IOutputUi;
+                    if (outputUi != null)
+                        return outputUi;
                 }
             }
             return null;
@@ -94,18 +110,19 @@ namespace T3.Gui
         private unsafe void DrawGraphParameterWindows()
         {
             ParameterWindow obsoleteWindow = null;
+            Instance instance = null;
+
+            var symbolChildUi = GetSelectedSymbolChildUi();
+            if (symbolChildUi != null)
+            {
+                instance = _graphCanvasWindows[0].Canvas.CompositionOp.Children.SingleOrDefault(
+                    child => child.Id == symbolChildUi.Id);
+            }
+
             foreach (var parameterView in _parameterWindows)
             {
-                Instance instance = null;
-
-                var symbolChildUi = GetSelectedSymbolChildUi();
-                if (symbolChildUi != null)
-                {
-                    instance = _graphCanvasWindows[0].Canvas.CompositionOp.Children.SingleOrDefault(child => child.Id == symbolChildUi.Id);
-                }
-
                 if (!parameterView.Draw(instance, symbolChildUi))
-                    obsoleteWindow = parameterView;   // we assume that only one window can be close in per frame
+                    obsoleteWindow = parameterView;   // we assume that only one window can be closed per frame
             }
             if (obsoleteWindow != null)
                 _parameterWindows.Remove(obsoleteWindow);
