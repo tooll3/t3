@@ -19,6 +19,7 @@ namespace T3.Gui
         Focused = 0x1,
         Modified = 0x2,
         Finished = 0x4,
+        ShowOptions = 0x8,
         ModifiedAndFinished = Modified | Finished
     }
 
@@ -107,8 +108,33 @@ namespace T3.Gui
                 else
                 {
                     var input = inputSlot.Input;
+                    var editState = InputEditState.Nothing;
 
-                    // draw control
+                    if (ImGui.Button("", new Vector2(50, 0)))
+                    { }
+                    ImGui.SameLine();
+
+
+                    // Draw Name
+                    ImGui.Button(input.Name + "##ParamName", new Vector2(150, 0));
+                    if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
+                    {
+                        if (ImGui.MenuItem("Set as default", !input.IsDefault))
+                            input.SetCurrentValueAsDefault();
+
+                        if (ImGui.MenuItem("Reset to default", !input.IsDefault))
+                            input.ResetToDefault();
+
+
+                        if (ImGui.MenuItem("Parameters settings", CanShowParameterEdits))
+                            editState = InputEditState.ShowOptions;
+
+                        ImGui.EndPopup();
+                    }
+
+                    ImGui.SameLine();
+
+                    // Draw control
                     ImGui.PushItemWidth(200.0f);
                     ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? Color.Gray.Rgba : Color.White.Rgba);
                     if (input.IsDefault)
@@ -121,7 +147,8 @@ namespace T3.Gui
                         input.Value.Assign(input.DefaultValue);
                     }
 
-                    var editState = DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
+                    ImGui.SetNextItemWidth(-1);
+                    editState |= DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
 
                     if ((editState & InputEditState.Focused) == InputEditState.Focused)
                     {
@@ -142,21 +169,6 @@ namespace T3.Gui
 
                     ImGui.PopStyleColor();
                     ImGui.PopItemWidth();
-
-                    // draw reset button
-                    ImGui.SameLine(200.0f, 130.0f);
-                    if (ImGui.Button("Reset To Default"))
-                    {
-                        input.ResetToDefault();
-                    }
-
-                    // draw set as default button
-                    ImGui.SameLine(330.0f, 130.0f);
-                    if (ImGui.Button("Set As Default"))
-                    {
-                        input.SetCurrentValueAsDefault();
-                    }
-
                     return editState;
                 }
             }
@@ -212,7 +224,7 @@ namespace T3.Gui
 
         public override bool DrawSingleEditControl(string name, ref float value)
         {
-            return ImGui.DragFloat(name, ref value, 0.0f, Min, Max);
+            return ImGui.DragFloat("##floatEdit", ref value, 0.0f, Min, Max);
         }
 
         protected override void DrawValueDisplay(string name, ref float value)
@@ -255,7 +267,7 @@ namespace T3.Gui
 
         public override bool DrawSingleEditControl(string name, ref int value)
         {
-            return ImGui.DragInt(name, ref value);
+            return ImGui.DragInt("##intParam", ref value);
         }
 
         protected override void DrawValueDisplay(string name, ref int value)
@@ -276,7 +288,7 @@ namespace T3.Gui
         {
             if (value != null)
             {
-                return ImGui.InputText(name, ref value, MAX_STRING_LENGTH);
+                return ImGui.InputText("##textEdit", ref value, MAX_STRING_LENGTH);
             }
             else
             {
@@ -307,7 +319,7 @@ namespace T3.Gui
 
         public override bool DrawSingleEditControl(string name, ref Size2 value)
         {
-            return ImGui.DragInt2(name, ref value.Width);
+            return ImGui.DragInt2("##int2Edit", ref value.Width);
         }
 
         protected override void DrawValueDisplay(string name, ref Size2 value)
@@ -337,7 +349,7 @@ namespace T3.Gui
             {
                 // show as checkboxes
                 InputEditState editState = InputEditState.Nothing;
-                if (ImGui.TreeNode(name))
+                if (ImGui.TreeNode("##enumParam"))
                 {
                     // todo: refactor crappy code below, works but ugly!
                     bool[] checks = new bool[values.Length];
@@ -382,7 +394,7 @@ namespace T3.Gui
             {
                 int index = (int)(object)value;
                 InputEditState editState = InputEditState.Nothing;
-                bool modified = ImGui.Combo(name, ref index, valueNames, valueNames.Length);
+                bool modified = ImGui.Combo("##dropDownParam", ref index, valueNames, valueNames.Length);
                 if (modified)
                 {
                     value = (T)values.GetValue(index);

@@ -1,6 +1,6 @@
-﻿using System;
-using ImGuiNET;
+﻿using ImGuiNET;
 using imHelpers;
+using System;
 using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -31,17 +31,19 @@ namespace T3.Gui
             return isOpen;
         }
 
+        //public bool Draw()
+
 
 
         private void DrawContent(Instance op, SymbolChildUi symbolChildUi)
         {
-            if (_pinnedOp != null && _pinnedOp.Parent.Children.Contains(_pinnedOp))
-            {
-                _pinnedOp = null;
-            }
+            //if (_pinnedOp != null && _pinnedOp.Parent.Children.Contains(_pinnedOp))
+            //{
+            //    _pinnedOp = null;
+            //}
 
-            if (_pinnedOp != null)
-                op = _pinnedOp;
+            //if (_pinnedOp != null)
+            //    op = _pinnedOp;
 
             if (op == null)
             {
@@ -167,13 +169,9 @@ namespace T3.Gui
                             _inputValueCommandInFlight.Value.Assign(input.Input.Value);
                             UndoRedoStack.Add(_inputValueCommandInFlight);
                             break;
-                    }
-
-                    ImGui.SameLine();
-
-                    if (inputUi.CanShowParameterEdits && !input.IsMultiInput && ImGui.Button("Edit Parameter"))
-                    {
-                        _showInputParameterEdits = input.Id;
+                        case InputEditState.ShowOptions:
+                            _showInputParameterEdits = input.Id;
+                            break;
                     }
                 }
                 ImGui.PopID();
