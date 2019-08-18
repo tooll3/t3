@@ -79,6 +79,7 @@ namespace T3.Gui
 
                         var multiInput = (MultiInputSlot<T>)typedInputSlot;
                         var allInputs = multiInput.GetCollectedInputs();
+                        var evaluationContext = new EvaluationContext();
 
                         for (int multiInputIndex = 0; multiInputIndex < allInputs.Count; multiInputIndex++)
                         {
@@ -102,7 +103,9 @@ namespace T3.Gui
 
                             ImGui.SetNextItemWidth(-1);
                             ImGui.PushStyleColor(ImGuiCol.Text, T3Style.ConnectedParameterColor.Rgba);
-                            DrawValueDisplay("##multiInputParam", ref allInputs[multiInputIndex].Value);
+                            var input = allInputs[multiInputIndex];
+                            input.Update(evaluationContext);
+                            DrawValueDisplay("##multiInputParam", ref input.Value);
                             ImGui.PopStyleColor();
                             ImGui.PopID();
                         }
@@ -125,6 +128,7 @@ namespace T3.Gui
                         // Just show actual value
                         ImGui.PushItemWidth(200.0f);
                         ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
+                        typedInputSlot.Update(new EvaluationContext());
                         DrawValueDisplay(name, ref typedInputSlot.Value);
                         ImGui.PopStyleColor();
                         ImGui.PopItemWidth();
