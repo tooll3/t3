@@ -148,10 +148,11 @@ namespace T3.Core.Operator
 
         public void Update(EvaluationContext context)
         {
-            if (InputConnection.Count > 0)
-            {
-                Value = InputConnection[0].GetValue(context);
-            }
+        }
+
+        public void ConnectedUpdate(EvaluationContext context)
+        {
+            Value = InputConnection[0].GetValue(context);
         }
 
         public T GetValue(EvaluationContext context)
@@ -167,6 +168,12 @@ namespace T3.Core.Operator
 
         public override void AddConnection(IConnectableSource sourceSlot, int index = 0)
         {
+            if (!IsConnected)
+            {
+                PrevUpdateAction = UpdateAction;
+                UpdateAction = ConnectedUpdate;
+            }
+
             InputConnection.Insert(index, (Slot<T>)sourceSlot);
         }
 
@@ -182,6 +189,12 @@ namespace T3.Core.Operator
                 {
                     Log.Error($"Trying to delete connection at index {index}, but input slot only has {InputConnection.Count} connections");
                 }
+            }
+
+            if (!IsConnected)
+            {
+                // if no connection is set anymore restore the previous update action
+                UpdateAction = PrevUpdateAction;
             }
         }
 
@@ -199,6 +212,7 @@ namespace T3.Core.Operator
         }
 
         public Action<EvaluationContext> UpdateAction;
+        public Action<EvaluationContext> PrevUpdateAction;
     }
 
     public interface IOutputSlot
@@ -219,14 +233,14 @@ namespace T3.Core.Operator
     {
         public InputSlot(InputValue<T> typedInputValue)
         {
-            UpdateAction = Update;
+            UpdateAction = InputUpdate;
             TypedInputValue = typedInputValue;
         }
 
         public InputSlot()
             : this(default(T))
         {
-            UpdateAction = Update;
+            UpdateAction = InputUpdate;
         }
 
         public InputSlot(T value)
@@ -234,11 +248,9 @@ namespace T3.Core.Operator
         {
         }
 
-        public new void Update(EvaluationContext context)
+        public void InputUpdate(EvaluationContext context)
         {
-            Value = InputConnection.Count > 0 ? InputConnection[0].GetValue(context)
-                                              : Input.IsDefault ? TypedDefaultValue.Value
-                                                                : TypedInputValue.Value;
+            Value = Input.IsDefault ? TypedDefaultValue.Value : TypedInputValue.Value;
         }
 
         private SymbolChild.Input _input;
