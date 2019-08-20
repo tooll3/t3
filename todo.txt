@@ -1,4 +1,7 @@
 todo:
+- Test animation specific update action replace in slot
+- Add path parameter options for string type
+- Add load/save for input parameter options like Relevancy and Min/Max
 - Reactivate dirty flag
 - Make all tests in CoreTests runnable again
 - Make remove connection command applicable for lists of connections
