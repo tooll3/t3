@@ -3,8 +3,10 @@ using SharpDX;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Selection;
@@ -319,6 +321,14 @@ namespace T3.Gui
     {
         private const int MAX_STRING_LENGTH = 255;
 
+        public enum UsageType
+        {
+            Default,
+            Path,
+        }
+
+        public UsageType Usage { get; set; } = UsageType.Default;
+
         public StringInputUi(Guid id) : base(id)
         {
         }
@@ -327,13 +337,39 @@ namespace T3.Gui
         {
             if (value != null)
             {
-                return ImGui.InputText("##textEdit", ref value, MAX_STRING_LENGTH);
+                switch (Usage)
+                {
+                    case UsageType.Default:
+                        return ImGui.InputText("##textEdit", ref value, MAX_STRING_LENGTH);
+                    case UsageType.Path:
+                    {
+                        bool changed = ImGui.InputText("##textEditPath", ref value, MAX_STRING_LENGTH);
+                        //ImGui.SameLine();
+                        if (ImGui.Button("Open"))
+                        {
+
+                            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                            {
+                                openFileDialog.InitialDirectory = "c:\\";
+                                openFileDialog.Filter = "jpg files (*.jpg)|*.jpg";
+                                openFileDialog.FilterIndex = 2;
+                                openFileDialog.RestoreDirectory = true;
+
+                                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                                {
+                                    value = openFileDialog.FileName;
+                                    changed = true;
+                                }
+                            }
+                        }
+                        return changed;
+                    }
+                }
             }
-            else
-            {
-                ImGui.Text(name + " is null?!");
-                return false;
-            }
+
+            // value was null!
+            ImGui.Text(name + " is null?!");
+            return false;
         }
 
         protected override void DrawValueDisplay(string name, ref string value)
@@ -347,6 +383,24 @@ namespace T3.Gui
                 string nullString = "<null>";
                 ImGui.InputText(name, ref nullString, MAX_STRING_LENGTH, ImGuiInputTextFlags.ReadOnly);
             }
+        }
+
+        public override void DrawParameterEdits()
+        {
+            base.DrawParameterEdits();
+
+            Type enumType = typeof(UsageType);
+            var values = Enum.GetValues(enumType);
+            var valueNames = new string[values.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                valueNames[i] = Enum.GetName(typeof(UsageType), values.GetValue(i));
+            }
+            int index = (int)Usage;
+            ImGui.Combo("##dropDownStringUsage", ref index, valueNames, valueNames.Length);
+            Usage = (UsageType)index;
+            ImGui.SameLine();
+            ImGui.Text("Usage");
         }
     }
 

@@ -1,6 +1,6 @@
 todo:
+- Showing enums produces always the same code, extract function for this and even better cached object per enum type
 - Test animation specific update action replace in slot
-- Add path parameter options for string type
 - Add load/save for input parameter options like Relevancy and Min/Max
 - Reactivate dirty flag
 - Make all tests in CoreTests runnable again
@@ -13,6 +13,7 @@ todo:
 - General op replacement/compilation after change
  
 done:
+* Add path parameter options for string type
 * Operator with complex output type e.g. list (added multi input float -> list and list select op)
 * Make test for dirty flag runnable again
 * Fix undo of delete several operators with several multi input connections
