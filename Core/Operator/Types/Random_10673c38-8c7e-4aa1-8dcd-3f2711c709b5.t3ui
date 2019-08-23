@@ -4,6 +4,7 @@
     {
       "InputId": "f2513ead-7022-4774-8767-7f33d1b92b26"/*Seed*/,
       "Type": "System.Int32, mscorlib",
+      "Relevancy": "Required",
       "Position": {
         "X": "0",
         "Y": "0"
