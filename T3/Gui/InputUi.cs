@@ -3,10 +3,12 @@ using SharpDX;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Selection;
@@ -41,6 +43,9 @@ namespace T3.Gui
         InputEditState DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
 
         void DrawParameterEdits();
+
+        void WriteInputParameter(JsonTextWriter writer);
+        void ReadInputParameter(JToken inputToken);
     }
 
     public abstract class InputValueUi<T> : IInputUi
@@ -226,6 +231,16 @@ namespace T3.Gui
             ImGui.Text("Relevancy");
         }
 
+        public virtual void WriteInputParameter(JsonTextWriter writer)
+        {
+            // Default does nothing for now
+        }
+
+        public virtual void ReadInputParameter(JToken inputToken)
+        {
+            // Default does nothing for now
+        }
+
         public Type Type { get; } = typeof(T);
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
@@ -278,6 +293,22 @@ namespace T3.Gui
 
             ImGui.DragFloat("Min", ref Min);
             ImGui.DragFloat("Max", ref Max);
+        }
+
+        public override void WriteInputParameter(JsonTextWriter writer)
+        {
+            base.WriteInputParameter(writer);
+
+            writer.WriteValue("Min", Min);
+            writer.WriteValue("Max", Max);
+        }
+
+        public override void ReadInputParameter(JToken inputToken)
+        {
+            base.ReadInputParameter(inputToken);
+
+            Min = inputToken["Min"].Value<float>();
+            Max = inputToken["Max"].Value<float>();
         }
     }
 

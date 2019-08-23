@@ -48,6 +48,7 @@ namespace T3.Gui
                 var inputUi = inputEntry.Value;
                 Writer.WriteValue("Type", $"{inputUi.Type}, {inputUi.Type.Assembly.GetName().Name}");
                 Writer.WriteValue("Relevancy", inputUi.Relevancy);
+                inputUi.WriteInputParameter(Writer);
                 Writer.WritePropertyName("Position");
                 vec2Writer(Writer, inputUi.PosOnCanvas);
 
@@ -117,7 +118,7 @@ namespace T3.Gui
                 var symbolId = Guid.Parse(mainObject["Id"].Value<string>());
 
                 var inputDict = new Dictionary<Guid, IInputUi>();
-                foreach (var uiInputEntry in (JArray)mainObject["InputUis"])
+                foreach (JToken uiInputEntry in (JArray)mainObject["InputUis"])
                 {
                     var inputId = Guid.Parse(uiInputEntry["InputId"].Value<string>());
                     var typeName = uiInputEntry["Type"].Value<string>();
@@ -130,6 +131,7 @@ namespace T3.Gui
                     {
                         var inputUi = inputCreator(inputId);
                         inputUi.Relevancy = (Relevancy)Enum.Parse(typeof(Relevancy), uiInputEntry["Relevancy"].ToString());
+                        inputUi.ReadInputParameter(uiInputEntry);
                         JToken positionToken = uiInputEntry["Position"];
                         inputUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
                         //JToken sizeToken = uiInputEntry["Size"];
