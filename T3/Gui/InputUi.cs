@@ -44,8 +44,8 @@ namespace T3.Gui
 
         void DrawParameterEdits();
 
-        void WriteInputParameter(JsonTextWriter writer);
-        void ReadInputParameter(JToken inputToken);
+        void Write(JsonTextWriter writer);
+        void Read(JToken inputToken);
     }
 
     public abstract class InputValueUi<T> : IInputUi
@@ -148,7 +148,9 @@ namespace T3.Gui
 
                     ImGui.PushStyleColor(ImGuiCol.Button, typeColor);
                     if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0)))
-                    { }
+                    {
+                    }
+
                     ImGui.PopStyleColor();
                     ImGui.SameLine();
 
@@ -224,6 +226,7 @@ namespace T3.Gui
             {
                 valueNames[i] = Enum.GetName(typeof(Relevancy), values.GetValue(i));
             }
+
             int index = (int)Relevancy;
             ImGui.Combo("##dropDownRelevancy", ref index, valueNames, valueNames.Length);
             Relevancy = (Relevancy)index;
@@ -231,14 +234,21 @@ namespace T3.Gui
             ImGui.Text("Relevancy");
         }
 
-        public virtual void WriteInputParameter(JsonTextWriter writer)
+        public virtual void Write(JsonTextWriter writer)
         {
-            // Default does nothing for now
+            writer.WriteValue("Relevancy", Relevancy);
+            writer.WritePropertyName("Position");
+            writer.WriteStartObject();
+            writer.WriteValue("X", PosOnCanvas.X);
+            writer.WriteValue("Y", PosOnCanvas.Y);
+            writer.WriteEndObject();
         }
 
-        public virtual void ReadInputParameter(JToken inputToken)
+        public virtual void Read(JToken inputToken)
         {
-            // Default does nothing for now
+            Relevancy = (Relevancy)Enum.Parse(typeof(Relevancy), inputToken["Relevancy"].ToString());
+            JToken positionToken = inputToken["Position"];
+            PosOnCanvas = new Vector2(positionToken["X"].Value<float>(), positionToken["Y"].Value<float>());
         }
 
         public Type Type { get; } = typeof(T);
@@ -295,17 +305,17 @@ namespace T3.Gui
             ImGui.DragFloat("Max", ref Max);
         }
 
-        public override void WriteInputParameter(JsonTextWriter writer)
+        public override void Write(JsonTextWriter writer)
         {
-            base.WriteInputParameter(writer);
+            base.Write(writer);
 
             writer.WriteValue("Min", Min);
             writer.WriteValue("Max", Max);
         }
 
-        public override void ReadInputParameter(JToken inputToken)
+        public override void Read(JToken inputToken)
         {
-            base.ReadInputParameter(inputToken);
+            base.Read(inputToken);
 
             Min = inputToken["Min"].Value<float>();
             Max = inputToken["Max"].Value<float>();
@@ -379,7 +389,6 @@ namespace T3.Gui
                         //ImGui.SameLine();
                         if (ImGui.Button("Open"))
                         {
-
                             using (OpenFileDialog openFileDialog = new OpenFileDialog())
                             {
                                 openFileDialog.InitialDirectory = "c:\\";
@@ -394,6 +403,7 @@ namespace T3.Gui
                                 }
                             }
                         }
+
                         return changed;
                     }
                 }
@@ -428,6 +438,7 @@ namespace T3.Gui
             {
                 valueNames[i] = Enum.GetName(typeof(UsageType), values.GetValue(i));
             }
+
             int index = (int)Usage;
             ImGui.Combo("##dropDownStringUsage", ref index, valueNames, valueNames.Length);
             Usage = (UsageType)index;
@@ -435,16 +446,16 @@ namespace T3.Gui
             ImGui.Text("Usage");
         }
 
-        public override void WriteInputParameter(JsonTextWriter writer)
+        public override void Write(JsonTextWriter writer)
         {
-            base.WriteInputParameter(writer);
+            base.Write(writer);
 
             writer.WriteValue("Usage", Usage);
         }
 
-        public override void ReadInputParameter(JToken inputToken)
+        public override void Read(JToken inputToken)
         {
-            base.ReadInputParameter(inputToken);
+            base.Read(inputToken);
 
             Usage = (UsageType)Enum.Parse(typeof(UsageType), inputToken["Usage"].Value<string>());
         }

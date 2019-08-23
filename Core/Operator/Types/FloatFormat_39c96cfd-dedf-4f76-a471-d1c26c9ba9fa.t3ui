@@ -5,12 +5,12 @@
       "InputId": "f36e4078-2608-4308-ab5f-077c05b1181a"/*Input*/,
       "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
-      "Min": "-221",
-      "Max": "302",
       "Position": {
         "X": "0",
         "Y": "0"
-      }
+      },
+      "Min": "-221",
+      "Max": "302"
     }
   ],
   "SymbolChildUis": [],
