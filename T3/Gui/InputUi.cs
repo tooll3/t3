@@ -34,6 +34,7 @@ namespace T3.Gui
 
     public interface IInputUi : ISelectable
     {
+        Guid Id { get; }
         Type Type { get; }
         Relevancy Relevancy { get; set; }
 
