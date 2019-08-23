@@ -434,6 +434,20 @@ namespace T3.Gui
             ImGui.SameLine();
             ImGui.Text("Usage");
         }
+
+        public override void WriteInputParameter(JsonTextWriter writer)
+        {
+            base.WriteInputParameter(writer);
+
+            writer.WriteValue("Usage", Usage);
+        }
+
+        public override void ReadInputParameter(JToken inputToken)
+        {
+            base.ReadInputParameter(inputToken);
+
+            Usage = (UsageType)Enum.Parse(typeof(UsageType), inputToken["Usage"].Value<string>());
+        }
     }
 
     public class Size2InputUi : SingleControlInputUi<Size2>
