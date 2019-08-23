@@ -4,6 +4,7 @@
     {
       "InputId": "9bf87c5f-2dfe-482e-8be7-18fc4d6072e4"/*Input*/,
       "Type": "System.Single, mscorlib",
+      "Relevancy": "Required",
       "Position": {
         "X": "126",
         "Y": "470"
@@ -12,6 +13,7 @@
     {
       "InputId": "c99a7718-12b1-484e-ba96-b8d9ea7f448f"/*MultiInput*/,
       "Type": "System.String, mscorlib",
+      "Relevancy": "Required",
       "Position": {
         "X": "392",
         "Y": "483"

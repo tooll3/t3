@@ -4,6 +4,7 @@
     {
       "InputId": "f36e4078-2608-4308-ab5f-077c05b1181a"/*Input*/,
       "Type": "System.Single, mscorlib",
+      "Relevancy": "Required",
       "Position": {
         "X": "0",
         "Y": "0"
