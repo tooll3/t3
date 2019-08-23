@@ -47,12 +47,7 @@ namespace T3.Gui
                 Writer.WriteComment(symbolInput.Name);
                 var inputUi = inputEntry.Value;
                 Writer.WriteValue("Type", $"{inputUi.Type}, {inputUi.Type.Assembly.GetName().Name}");
-                Writer.WriteValue("Relevancy", inputUi.Relevancy);
-                inputUi.WriteInputParameter(Writer);
-                Writer.WritePropertyName("Position");
-                vec2Writer(Writer, inputUi.PosOnCanvas);
-
-                //jsonTextWriter.WriteValue("Size", inputUi.Size); //todo: check if needed
+                inputUi.Write(Writer);
                 Writer.WriteEndObject();
             }
 
@@ -130,13 +125,7 @@ namespace T3.Gui
                     else if (InputUiFactory.Entries.TryGetValue(type, out var inputCreator))
                     {
                         var inputUi = inputCreator(inputId);
-                        inputUi.Relevancy = (Relevancy)Enum.Parse(typeof(Relevancy), uiInputEntry["Relevancy"].ToString());
-                        inputUi.ReadInputParameter(uiInputEntry);
-                        JToken positionToken = uiInputEntry["Position"];
-                        inputUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
-                        //JToken sizeToken = uiInputEntry["Size"];
-                        //inputUi.Size = (Vector2)vector2Converter(sizeString);
-
+                        inputUi.Read(uiInputEntry);
                         inputDict.Add(inputId, inputUi);
                     }
                     else

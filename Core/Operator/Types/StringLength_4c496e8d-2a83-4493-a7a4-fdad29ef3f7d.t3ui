@@ -5,11 +5,11 @@
       "InputId": "5794d63a-3ef7-42c5-b726-e814ea9093e3"/*InputString*/,
       "Type": "System.String, mscorlib",
       "Relevancy": "Required",
-      "Usage": "Default",
       "Position": {
         "X": "0",
         "Y": "0"
-      }
+      },
+      "Usage": "Default"
     }
   ],
   "SymbolChildUis": [],
