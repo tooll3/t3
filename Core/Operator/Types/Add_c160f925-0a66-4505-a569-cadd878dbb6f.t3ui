@@ -6,22 +6,22 @@
       "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
-        "X": "36",
-        "Y": "334"
+        "X": 36.0,
+        "Y": 334.0
       },
-      "Min": "-100",
-      "Max": "100"
+      "Min": -100.0,
+      "Max": 100.0
     },
     {
       "InputId": "993d59bb-1fc0-4857-a36d-629b0e7aa0d2"/*Input2*/,
       "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
-        "X": "197",
-        "Y": "328"
+        "X": 197.0,
+        "Y": 328.0
       },
-      "Min": "-100",
-      "Max": "100"
+      "Min": -100.0,
+      "Max": 100.0
     }
   ],
   "SymbolChildUis": [],

@@ -6,8 +6,8 @@
       "Type": "System.String, mscorlib",
       "Relevancy": "Required",
       "Position": {
-        "X": "0",
-        "Y": "0"
+        "X": 0.0,
+        "Y": 0.0
       },
       "Usage": "Path"
     }

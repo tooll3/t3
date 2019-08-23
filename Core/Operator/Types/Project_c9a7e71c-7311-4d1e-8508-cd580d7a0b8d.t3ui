@@ -6,19 +6,19 @@
       "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
-        "X": "126",
-        "Y": "470"
+        "X": 126.0,
+        "Y": 470.0
       },
-      "Min": "-100",
-      "Max": "100"
+      "Min": -100.0,
+      "Max": 100.0
     },
     {
       "InputId": "c99a7718-12b1-484e-ba96-b8d9ea7f448f"/*MultiInput*/,
       "Type": "System.String, mscorlib",
       "Relevancy": "Required",
       "Position": {
-        "X": "392",
-        "Y": "483"
+        "X": 392.0,
+        "Y": 483.0
       },
       "Usage": "Default"
     }

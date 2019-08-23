@@ -9,7 +9,13 @@ namespace T3.Core
 {
     public static class JsonExtensions
     {
-        public static void WriteValue<T>(this JsonTextWriter writer, string name, T value)
+        public static void WriteValue<T>(this JsonTextWriter writer, string name, T value) where T : struct
+        {
+            writer.WritePropertyName(name);
+            writer.WriteValue(value);
+        }
+
+        public static void WriteObject(this JsonTextWriter writer, string name, object value)
         {
             if (value != null)
             {
@@ -28,10 +34,10 @@ namespace T3.Core
         {
             Writer.WriteStartObject();
 
-            Writer.WriteValue("Name", symbol.Name);
+            Writer.WriteObject("Name", symbol.Name);
             Writer.WriteValue("Id", symbol.Id);
-            Writer.WriteValue("Namespace", symbol.Namespace);
-            Writer.WriteValue("InstanceType", symbol.InstanceType + $", {symbol.InstanceType.Assembly.GetName().Name}");
+            Writer.WriteObject("Namespace", symbol.Namespace);
+            Writer.WriteObject("InstanceType", symbol.InstanceType + $", {symbol.InstanceType.Assembly.GetName().Name}");
 
             WriteSymbolInputs(symbol.InputDefinitions);
             WriteSymbolChildren(symbol.Children);
@@ -48,7 +54,7 @@ namespace T3.Core
             foreach (var input in inputs)
             {
                 Writer.WriteStartObject();
-                Writer.WriteValue("Id", input.Id);
+                Writer.WriteObject("Id", input.Id);
                 Writer.WriteComment(input.Name);
                 Writer.WritePropertyName("DefaultValue");
                 input.DefaultValue.ToJson(Writer);
@@ -94,7 +100,7 @@ namespace T3.Core
                     Writer.WriteStartObject();
                     Writer.WriteValue("Id", inputValueEntry.Key);
                     Writer.WriteComment(inputValueEntry.Value.Name);
-                    Writer.WriteValue("Type", inputValueEntry.Value.Value.ValueType);
+                    Writer.WriteObject("Type", inputValueEntry.Value.Value.ValueType);
                     Writer.WritePropertyName("Value");
                     inputValueEntry.Value.Value.ToJson(Writer);
                     Writer.WriteEndObject();

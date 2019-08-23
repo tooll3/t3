@@ -6,11 +6,11 @@
       "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
-        "X": "0",
-        "Y": "0"
+        "X": 0.0,
+        "Y": 0.0
       },
-      "Min": "-100",
-      "Max": "100"
+      "Min": -100.0,
+      "Max": 100.0
     }
   ],
   "SymbolChildUis": [],
