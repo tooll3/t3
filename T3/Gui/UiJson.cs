@@ -33,7 +33,7 @@ namespace T3.Gui
 
             Writer.WritePropertyName("InputUis");
             Writer.WriteStartArray();
-            foreach (var inputEntry in symbolUi.InputUis.OrderBy(i => i.Key))
+            foreach (var inputEntry in symbolUi.InputUis.OrderBy(i => symbolUi.Symbol.InputDefinitions.FindIndex(def => def.Id == i.Value.Id)))
             {
                 var symbolInput = symbolUi.Symbol.InputDefinitions.SingleOrDefault(inputDef => inputDef.Id == inputEntry.Key);
                 if (symbolInput == null)
