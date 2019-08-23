@@ -5,6 +5,8 @@
       "InputId": "af4a49e6-1ecd-4e94-ae6d-fb5d2bc8430c"/*Input*/,
       "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
+      "Min": "-100",
+      "Max": "100",
       "Position": {
         "X": "0",
         "Y": "0"

@@ -5,6 +5,8 @@
       "InputId": "15874509-fabb-44ca-93a1-858ff95fb5f5"/*Input*/,
       "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
+      "Min": "-100",
+      "Max": "100",
       "Position": {
         "X": "0",
         "Y": "0"
