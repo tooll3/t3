@@ -89,16 +89,16 @@ namespace T3.Core
                                                                    {
                                                                        Vector2 vec = (Vector2)obj;
                                                                        writer.WriteStartObject();
-                                                                       writer.WriteValue("X", vec.X);
-                                                                       writer.WriteValue("Y", vec.Y);
+                                                                       writer.WriteObject("X", vec.X);
+                                                                       writer.WriteObject("Y", vec.Y);
                                                                        writer.WriteEndObject();
                                                                    });
             TypeValueToJsonConverters.Entries.Add(typeof(Size2), (writer, obj) =>
                                                                  {
                                                                      Size2 vec = (Size2)obj;
                                                                      writer.WriteStartObject();
-                                                                     writer.WriteValue("Width", vec.Width);
-                                                                     writer.WriteValue("Height", vec.Height);
+                                                                     writer.WriteObject("Width", vec.Width);
+                                                                     writer.WriteObject("Height", vec.Height);
                                                                      writer.WriteEndObject();
                                                                  });
             TypeValueToJsonConverters.Entries.Add(typeof(Format), (writer, obj) => writer.WriteValue(obj.ToString()));

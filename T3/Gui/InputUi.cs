@@ -236,7 +236,7 @@ namespace T3.Gui
 
         public virtual void Write(JsonTextWriter writer)
         {
-            writer.WriteValue("Relevancy", Relevancy);
+            writer.WriteObject("Relevancy", Relevancy.ToString());
             writer.WritePropertyName("Position");
             writer.WriteStartObject();
             writer.WriteValue("X", PosOnCanvas.X);
@@ -450,7 +450,7 @@ namespace T3.Gui
         {
             base.Write(writer);
 
-            writer.WriteValue("Usage", Usage);
+            writer.WriteObject("Usage", Usage.ToString());
         }
 
         public override void Read(JToken inputToken)

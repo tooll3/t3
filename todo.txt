@@ -1,7 +1,6 @@
 todo:
 - Showing enums produces always the same code, extract function for this and even better cached object per enum type
 - Test animation specific update action replace in slot
-- Add load/save for input parameter options like Relevancy and Min/Max
 - Reactivate dirty flag
 - Make all tests in CoreTests runnable again
 - Make remove connection command applicable for lists of connections
@@ -13,6 +12,8 @@ todo:
 - General op replacement/compilation after change
  
 done:
+* Moved save/load of InputUi properties to the class itself
+* Add load/save for input parameter options like Relevancy and Min/Max
 * Add path parameter options for string type
 * Operator with complex output type e.g. list (added multi input float -> list and list select op)
 * Make test for dirty flag runnable again

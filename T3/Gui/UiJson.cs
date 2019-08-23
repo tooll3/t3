@@ -17,7 +17,7 @@ namespace T3.Gui
         {
             Writer.WriteStartObject();
 
-            Writer.WriteValue("Id", symbolUi.Symbol.Id);
+            Writer.WriteObject("Id", symbolUi.Symbol.Id);
             Writer.WriteComment(symbolUi.Symbol.Name);
 
             WriteInputUis(symbolUi);
@@ -43,10 +43,10 @@ namespace T3.Gui
                 }
 
                 Writer.WriteStartObject(); // input entry
-                Writer.WriteValue("InputId", inputEntry.Key);
+                Writer.WriteObject("InputId", inputEntry.Key);
                 Writer.WriteComment(symbolInput.Name);
                 var inputUi = inputEntry.Value;
-                Writer.WriteValue("Type", $"{inputUi.Type}, {inputUi.Type.Assembly.GetName().Name}");
+                Writer.WriteObject("Type", $"{inputUi.Type}, {inputUi.Type.Assembly.GetName().Name}");
                 inputUi.Write(Writer);
                 Writer.WriteEndObject();
             }
@@ -64,7 +64,7 @@ namespace T3.Gui
             foreach (var childUi in symbolUi.ChildUis)
             {
                 Writer.WriteStartObject(); // child entry
-                Writer.WriteValue("ChildId", childUi.Id);
+                Writer.WriteObject("ChildId", childUi.Id);
                 Writer.WriteComment(childUi.SymbolChild.ReadableName);
                 Writer.WritePropertyName("Position");
                 vec2Writer(Writer, childUi.PosOnCanvas);
@@ -86,11 +86,11 @@ namespace T3.Gui
             foreach (var outputEntry in symbolUi.OutputUis.OrderBy(i => i.Key))
             {
                 Writer.WriteStartObject(); // output entry
-                Writer.WriteValue("OutputId", outputEntry.Key);
+                Writer.WriteObject("OutputId", outputEntry.Key);
                 var outputName = symbolUi.Symbol.OutputDefinitions.Single(outputDef => outputDef.Id == outputEntry.Key).Name;
                 Writer.WriteComment(outputName);
                 var outputUi = outputEntry.Value;
-                Writer.WriteValue("Type", outputUi.Type + $", {outputUi.Type.Assembly.GetName().Name}");
+                Writer.WriteObject("Type", outputUi.Type + $", {outputUi.Type.Assembly.GetName().Name}");
                 Writer.WritePropertyName("Position");
                 vec2Writer(Writer, outputUi.PosOnCanvas);
 
