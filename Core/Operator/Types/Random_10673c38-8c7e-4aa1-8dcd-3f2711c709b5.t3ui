@@ -17,8 +17,8 @@
       "OutputId": "dfb39f6e-7b1c-41f3-9f31-b71caee629f9"/*Result*/,
       "Type": "System.Single, mscorlib",
       "Position": {
-        "X": "0",
-        "Y": "0"
+        "X": 0.0,
+        "Y": 0.0
       }
     }
   ]

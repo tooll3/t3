@@ -18,8 +18,8 @@
       "OutputId": "d45d32b6-e588-4723-a071-6e02406b831a"/*ShaderResourceView*/,
       "Type": "SharpDX.Direct3D11.ShaderResourceView, SharpDX.Direct3D11",
       "Position": {
-        "X": "0",
-        "Y": "0"
+        "X": 0.0,
+        "Y": 0.0
       }
     }
   ]

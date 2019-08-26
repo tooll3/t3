@@ -29,8 +29,6 @@ namespace T3.Gui
 
         public void WriteInputUis(SymbolUi symbolUi)
         {
-            var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
-
             Writer.WritePropertyName("InputUis");
             Writer.WriteStartArray();
             foreach (var inputEntry in symbolUi.InputUis.OrderBy(i => symbolUi.Symbol.InputDefinitions.FindIndex(def => def.Id == i.Value.Id)))

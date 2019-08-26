@@ -19,8 +19,8 @@
       "OutputId": "c63a1977-a594-490d-b5fb-de4d40bad016"/*Output*/,
       "Type": "System.String, mscorlib",
       "Position": {
-        "X": "0",
-        "Y": "0"
+        "X": 0.0,
+        "Y": 0.0
       }
     }
   ]

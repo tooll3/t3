@@ -18,8 +18,8 @@
       "OutputId": "e47bf25e-351a-44e6-84c6-ad3abc93531a"/*Result*/,
       "Type": "System.String, mscorlib",
       "Position": {
-        "X": "0",
-        "Y": "0"
+        "X": 0.0,
+        "Y": 0.0
       }
     }
   ]
