@@ -30,8 +30,8 @@
       "OutputId": "5ce9c625-f890-4620-9747-c98eab4b9447"/*Result*/,
       "Type": "System.Single, mscorlib",
       "Position": {
-        "X": "133",
-        "Y": "38"
+        "X": 133.0,
+        "Y": 38.0
       }
     }
   ]

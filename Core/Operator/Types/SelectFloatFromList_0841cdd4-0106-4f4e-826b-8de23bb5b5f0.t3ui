@@ -26,8 +26,8 @@
       "OutputId": "ec2286af-3ee0-4af0-aa23-272d4b3710e0"/*Selected*/,
       "Type": "System.Single, mscorlib",
       "Position": {
-        "X": "0",
-        "Y": "0"
+        "X": 0.0,
+        "Y": 0.0
       }
     }
   ]
