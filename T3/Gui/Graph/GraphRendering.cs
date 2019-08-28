@@ -167,16 +167,20 @@ namespace T3.Gui.Graph
                 }
 
                 // Input Sockets...
-                var visibleInputs = childUi.SymbolChild.Symbol.InputDefinitions; // TODO: Implement relevancy filter
 
-                //var childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
-                //childSymbolUi.InputUis
+                // prototype
+                var inputDefinitions = childUi.SymbolChild.Symbol.InputDefinitions;
+                var connectionsToNode = linesIntoNodes.ContainsKey(childUi) ? linesIntoNodes[childUi] : new List<ConnectionLineUi>();
+                SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
+                var visibleInputUis = childSymbolUi.InputUis.Where(inputUi => inputUi.Value.Relevancy != Relevancy.Optional ||
+                                                                              connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Key));
+                var visibleInputs = visibleInputUis.Select(visibleInputUi => inputDefinitions.Single(def => def.Id == visibleInputUi.Key)).ToList();
 
                 for (var inputIndex = 0; inputIndex < visibleInputs.Count; inputIndex++)
                 {
                     var input = visibleInputs[inputIndex];
 
-                    var usableArea = GetUsableInputSlotSize(childUi, inputIndex);
+                    var usableArea = GetUsableInputSlotSize(childUi, inputIndex, visibleInputs.Count);
 
                     ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + input.GetHashCode());
                     ImGui.SetCursorScreenPos(usableArea.Min);
@@ -632,13 +636,12 @@ namespace T3.Gui.Graph
             return TypeUiRegistry.Entries[outputDef.ValueType].Color;
         }
 
-        public static ImRect GetUsableInputSlotSize(SymbolChildUi targetUi, int inputIndex)
+        public static ImRect GetUsableInputSlotSize(SymbolChildUi targetUi, int inputIndex, int visibleSlotCount)
         {
             var opRect = GraphOperator._lastScreenRect;
-            var inputCount = targetUi.SymbolChild.Symbol.InputDefinitions.Count;
-            var inputWidth = inputCount == 0
+            var inputWidth = visibleSlotCount == 0
                 ? opRect.GetWidth()
-                : (opRect.GetWidth() + GraphOperator._slotGaps) / inputCount - GraphOperator._slotGaps;
+                : (opRect.GetWidth() + GraphOperator._slotGaps) / visibleSlotCount - GraphOperator._slotGaps;
 
             return ImRect.RectWithSize(
                 new Vector2(
