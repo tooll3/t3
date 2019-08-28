@@ -12,6 +12,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Selection;
+using T3.Gui.TypeColors;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui
@@ -51,7 +52,7 @@ namespace T3.Gui
     public abstract class InputValueUi<T> : IInputUi
     {
         public static float ConnectionAreaWidth = 30;
-        public static float ParameterNameWidth = 150;
+        public static float ParameterNameWidth = 120;
 
         protected InputValueUi(Guid id)
         {
@@ -67,10 +68,12 @@ namespace T3.Gui
         {
             var name = inputSlot.Input.Name;
             var editState = InputEditState.Nothing;
-            var typeColor = TypeUiRegistry.Entries[Type].Color.Rgba;
+            var typeColor = TypeUiRegistry.Entries[Type].Color;
+
 
             if (inputSlot is InputSlot<T> typedInputSlot)
             {
+                var input = inputSlot.Input;
                 if (inputSlot.IsConnected)
                 {
                     if (typedInputSlot.IsMultiInput)
@@ -92,7 +95,8 @@ namespace T3.Gui
                         for (int multiInputIndex = 0; multiInputIndex < allInputs.Count; multiInputIndex++)
                         {
                             ImGui.PushID(multiInputIndex);
-                            ImGui.PushStyleColor(ImGuiCol.Button, typeColor);
+
+                            ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
                             if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0)))
                             {
                                 symbolChildUi.IsSelected = false;
@@ -104,23 +108,27 @@ namespace T3.Gui
                                 sourceUi.IsSelected = true;
                             }
                             ImGui.PopStyleColor();
+
                             ImGui.SameLine();
 
+                            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1f, 0.5f));
                             ImGui.Button("#" + multiInputIndex, new Vector2(ParameterNameWidth, 0));
+                            ImGui.PopStyleVar();
                             ImGui.SameLine();
 
                             ImGui.SetNextItemWidth(-1);
                             ImGui.PushStyleColor(ImGuiCol.Text, T3Style.ConnectedParameterColor.Rgba);
-                            var input = allInputs[multiInputIndex];
-                            input.Update(evaluationContext);
-                            DrawValueDisplay("##multiInputParam", ref input.Value);
+                            var slot = allInputs[multiInputIndex];
+                            slot.Update(evaluationContext);
+                            DrawValueDisplay("##multiInputParam", ref slot.Value);
                             ImGui.PopStyleColor();
                             ImGui.PopID();
                         }
                     }
                     else
                     {
-                        ImGui.PushStyleColor(ImGuiCol.Button, typeColor);
+                        typedInputSlot.Update(new EvaluationContext()); // Force recalculation of input
+                        ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
                         if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0)))
                         {
                             symbolChildUi.IsSelected = false;
@@ -130,13 +138,45 @@ namespace T3.Gui
                                                         .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
                             sourceUi.IsSelected = true;
                         }
+
                         ImGui.PopStyleColor();
                         ImGui.SameLine();
 
-                        // Just show actual value
+                        // Draw Name
+                        ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1f, 0.5f));
+                        ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0));
+                        if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
+                        {
+                            if (ImGui.MenuItem("Set as default", !input.IsDefault))
+                                input.SetCurrentValueAsDefault();
+
+                            if (ImGui.MenuItem("Reset to default", !input.IsDefault))
+                                input.ResetToDefault();
+
+                            if (ImGui.MenuItem("Parameters settings"))
+                                editState = InputEditState.ShowOptions;
+
+                            ImGui.EndPopup();
+                        }
+                        ImGui.PopStyleVar();
+
+                        ImGui.SameLine();
+
+                        // Draw control
                         ImGui.PushItemWidth(200.0f);
-                        ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
-                        typedInputSlot.Update(new EvaluationContext());
+                        ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? Color.Gray.Rgba : Color.White.Rgba);
+                        if (input.IsDefault)
+                        {
+                            // handling default values is a bit tricky with ImGui as we want to show the default
+                            // value when this is set, but we never want the default value to be modified. But as
+                            // editing is already done when the return value of the ImGui edit control tells us
+                            // that editing has happened this here is a simple way to ensure that the default value
+                            // is always correct but editing is only happening on the input value.
+                            input.Value.Assign(input.DefaultValue);
+                        }
+
+                        ImGui.SetNextItemWidth(-1);
+
                         DrawValueDisplay(name, ref typedInputSlot.Value);
                         ImGui.PopStyleColor();
                         ImGui.PopItemWidth();
@@ -144,9 +184,7 @@ namespace T3.Gui
                 }
                 else
                 {
-                    var input = inputSlot.Input;
-
-                    ImGui.PushStyleColor(ImGuiCol.Button, typeColor);
+                    ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
                     if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0)))
                     {
                     }
@@ -155,6 +193,7 @@ namespace T3.Gui
                     ImGui.SameLine();
 
                     // Draw Name
+                    ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1f, 0.5f));
                     ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0));
                     if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                     {
@@ -169,6 +208,7 @@ namespace T3.Gui
 
                         ImGui.EndPopup();
                     }
+                    ImGui.PopStyleVar();
 
                     ImGui.SameLine();
 
