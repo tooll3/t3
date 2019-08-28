@@ -124,14 +124,14 @@ namespace T3.Gui
                 ImGui.PushID(input.Id.GetHashCode());
                 IInputUi inputUi = selectedChildSymbolUi.InputUis[input.Id];
 
-                if (_showInputParameterEdits != Guid.Empty)
+                if (_showInputParameterEdits.SymbolHash == op.Symbol.Id.GetHashCode())
                 {
-                    if (_showInputParameterEdits == inputUi.Id)
+                    if (_showInputParameterEdits.InputHash == input.Id.GetHashCode())
                     {
                         inputUi.DrawParameterEdits();
                         if (ImGui.Button("Back"))
                         {
-                            _showInputParameterEdits = Guid.Empty;
+                            _showInputParameterEdits = ShownInputParameterEdit.None;
                         }
                     }
                 }
@@ -165,8 +165,9 @@ namespace T3.Gui
                             _inputValueCommandInFlight.Value.Assign(input.Input.Value);
                             UndoRedoStack.Add(_inputValueCommandInFlight);
                             break;
+
                         case InputEditState.ShowOptions:
-                            _showInputParameterEdits = input.Id;
+                            _showInputParameterEdits = new ShownInputParameterEdit(op.Symbol.Id.GetHashCode(), input.Id.GetHashCode());
                             break;
                     }
                 }
@@ -174,7 +175,20 @@ namespace T3.Gui
             }
         }
 
-        private Guid _showInputParameterEdits = Guid.Empty;
+        struct ShownInputParameterEdit
+        {
+            public static readonly ShownInputParameterEdit None = new ShownInputParameterEdit(0, 0);
+            public ShownInputParameterEdit(int symbolHash, int inputHash)
+            {
+                SymbolHash = symbolHash;
+                InputHash = inputHash;
+            }
+
+            public int SymbolHash;
+            public int InputHash;
+        }
+
+        private ShownInputParameterEdit _showInputParameterEdits = ShownInputParameterEdit.None;
         private ChangeSymbolNameCommand _symbolNameCommandInFlight = null;
         private ChangeSymbolNamespaceCommand _symbolNamespaceCommandInFlight = null;
         private ChangeSymbolChildNameCommand _symbolChildNameCommand = null;

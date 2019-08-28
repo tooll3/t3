@@ -1,17 +1,19 @@
 todo:
 - Showing enums produces always the same code, extract function for this and even better cached object per enum type
+- Move operators out of Core directory
 - Test animation specific update action replace in slot
 - Reactivate dirty flag
 - Make all tests in CoreTests runnable again
 - Make remove connection command applicable for lists of connections
 - Change input value command must take default value into account
-- Create missing commands - delete operator, set default value, set back to default
+- Create missing commands - set default value, set back to default, set input parameters
 - Restructure connections to have an easier handling for multi inputs etc
 - How to visualize input connection evaluation
 - Move Roslyn integration to UI project
 - General op replacement/compilation after change
  
 done:
+* Fixed showing normal inputs when the input parameters are shown for a specific input
 * Moved save/load of InputUi properties to the class itself
 * Add load/save for input parameter options like Relevancy and Min/Max
 * Add path parameter options for string type
