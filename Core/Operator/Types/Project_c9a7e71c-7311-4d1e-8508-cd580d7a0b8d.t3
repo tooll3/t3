@@ -63,6 +63,16 @@
       "Id": "4e8bccde-0afb-4070-9a76-9bdece26996e"/*SelectFloatFromList*/,
       "SymbolId": "0841cdd4-0106-4f4e-826b-8de23bb5b5f0",
       "InputValues": []
+    },
+    {
+      "Id": "3e4c7664-eef9-4306-8f06-4b3699b51ba5"/*Texture2d*/,
+      "SymbolId": "f52db9a4-fde9-49ca-9ef7-131825c34e65",
+      "InputValues": []
+    },
+    {
+      "Id": "6a5bf36e-a236-461b-bd96-988da892cc7a"/*Add*/,
+      "SymbolId": "c160f925-0a66-4505-a569-cadd878dbb6f",
+      "InputValues": []
     }
   ],
   "Connections": [

@@ -43,7 +43,7 @@ namespace T3.Gui.Graph
                 bool hovered = ImGui.IsItemHovered();
                 if (hovered)
                 {
-                    NodeDetailsPanel.Draw(childUi);
+                    //NodeDetailsPanel.Draw(childUi);
                 }
 
                 // Rendering

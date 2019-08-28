@@ -1,4 +1,6 @@
 ﻿using ImGuiNET;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SharpDX;
 using System;
 using System.Collections.Generic;
@@ -6,8 +8,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -385,9 +385,10 @@ namespace T3.Gui
                         return ImGui.InputText("##textEdit", ref value, MAX_STRING_LENGTH);
                     case UsageType.Path:
                     {
+                        ImGui.SetNextItemWidth(-30);
                         bool changed = ImGui.InputText("##textEditPath", ref value, MAX_STRING_LENGTH);
-                        //ImGui.SameLine();
-                        if (ImGui.Button("Open"))
+                        ImGui.SameLine();
+                        if (ImGui.Button("...", new Vector2(30, 0)))
                         {
                             using (OpenFileDialog openFileDialog = new OpenFileDialog())
                             {
