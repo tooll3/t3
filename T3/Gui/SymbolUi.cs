@@ -90,7 +90,9 @@ namespace T3.Gui
                     Log.Debug($"Found no output ui entry for symbol child output '{output.Name}' - creating a new one");
                     OutputUis.Remove(output.Id);
                     var outputUiCreator = outputUiFactory[output.ValueType];
-                    OutputUis.Add(output.Id, outputUiCreator(output.Id));
+                    var newOutputUi = outputUiCreator();
+                    newOutputUi.OutputDefinition = output;
+                    OutputUis.Add(output.Id, newOutputUi);
                 }
             }
 

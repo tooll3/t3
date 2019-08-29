@@ -49,13 +49,13 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListInputUi());
 
             // Register output ui creators
-            OutputUiFactory.Entries.Add(typeof(float), id => new FloatOutputUi(id));
-            OutputUiFactory.Entries.Add(typeof(int), id => new IntOutputUi(id));
-            OutputUiFactory.Entries.Add(typeof(string), id => new StringOutputUi(id));
-            OutputUiFactory.Entries.Add(typeof(Size2), id => new Size2OutputUi(id));
-            OutputUiFactory.Entries.Add(typeof(ShaderResourceView), id => new ShaderResourceViewOutputUi(id));
-            OutputUiFactory.Entries.Add(typeof(Texture2D), id => new Texture2dOutputUi(id));
-            OutputUiFactory.Entries.Add(typeof(List<float>), id => new FloatListOutputUi(id));
+            OutputUiFactory.Entries.Add(typeof(float), () => new FloatOutputUi());
+            OutputUiFactory.Entries.Add(typeof(int), () => new IntOutputUi());
+            OutputUiFactory.Entries.Add(typeof(string), () => new StringOutputUi());
+            OutputUiFactory.Entries.Add(typeof(Size2), () => new Size2OutputUi());
+            OutputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new ShaderResourceViewOutputUi());
+            OutputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dOutputUi());
+            OutputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListOutputUi());
 
             Load();
 
