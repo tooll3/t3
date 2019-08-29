@@ -12,33 +12,26 @@ namespace T3.Gui
 {
     public interface IOutputUi : ISelectable
     {
-        void DrawValue(Slot slot);
+        Symbol.OutputDefinition OutputDefinition { get; set; }
         Type Type { get; }
+        void DrawValue(Slot slot);
     }
 
     public abstract class OutputUi<T> : IOutputUi
     {
-        public Guid Id { get; }
-
-        public OutputUi(Guid id)
-        {
-            Id = id;
-        }
-
-        public abstract void DrawValue(Slot slot);
-
+        public Symbol.OutputDefinition OutputDefinition { get; set; }
+        public Guid Id => OutputDefinition.Id;
         public Type Type { get; } = typeof(T);
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
         public bool IsSelected { get; set; }
+        
+        public abstract void DrawValue(Slot slot);
+
     }
 
     public class ValueOutputUi<T> : OutputUi<T>
     {
-        public ValueOutputUi(Guid id) : base(id)
-        {
-        }
-
         public override void DrawValue(Slot slot)
         {
             if (slot is Slot<T> typedSlot)
@@ -55,10 +48,6 @@ namespace T3.Gui
 
     public class ShaderResourceViewOutputUi : OutputUi<ShaderResourceView>
     {
-        public ShaderResourceViewOutputUi(Guid id) : base(id)
-        {
-        }
-
         public override void DrawValue(Slot slot)
         {
             if (slot is Slot<ShaderResourceView> typedSlot)
@@ -75,17 +64,10 @@ namespace T3.Gui
 
     public class FloatOutputUi : ValueOutputUi<float>
     {
-        public FloatOutputUi(Guid id) : base(id)
-        {
-        }
     }
 
     public class FloatListOutputUi : OutputUi<List<float>>
     {
-        public FloatListOutputUi(Guid id) : base(id)
-        {
-        }
-
         public override void DrawValue(Slot slot)
         {
             if (slot is Slot<List<float>> typedSlot)
@@ -103,34 +85,22 @@ namespace T3.Gui
 
     public class IntOutputUi : ValueOutputUi<int>
     {
-        public IntOutputUi(Guid id) : base(id)
-        {
-        }
     }
 
     public class StringOutputUi : ValueOutputUi<string>
     {
-        public StringOutputUi(Guid id) : base(id)
-        {
-        }
     }
 
     public class Size2OutputUi : ValueOutputUi<Size2>
     {
-        public Size2OutputUi(Guid id) : base(id)
-        {
-        }
     }
 
     public class Texture2dOutputUi : ValueOutputUi<Texture2D>
     {
-        public Texture2dOutputUi(Guid id) : base(id)
-        {
-        }
     }
 
     public static class OutputUiFactory
     {
-        public static Dictionary<Type, Func<Guid, IOutputUi>> Entries { get; } = new Dictionary<Type, Func<Guid, IOutputUi>>();
+        public static Dictionary<Type, Func<IOutputUi>> Entries { get; } = new Dictionary<Type, Func<IOutputUi>>();
     }
 }

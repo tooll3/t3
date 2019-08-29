@@ -164,7 +164,8 @@ namespace T3.Gui
                     }
                     else if (OutputUiFactory.Entries.TryGetValue(type, out var outputCreator))
                     {
-                        var outputUi = outputCreator(outputId);
+                        var outputUi = outputCreator();
+                        outputUi.OutputDefinition = symbol.OutputDefinitions.Single(def => def.Id == outputId);
                         JToken positionToken = uiOutputEntry["Position"];
                         outputUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
                         //JToken sizeToken = uiOutputEntry["Size"];
