@@ -37,6 +37,7 @@ namespace T3.Gui
 
     public interface IInputUi : ISelectable
     {
+        Symbol.InputDefinition InputDefinition { get; set; }
         Guid Id { get; }
         Type Type { get; }
         Relevancy Relevancy { get; set; }
@@ -54,12 +55,8 @@ namespace T3.Gui
         public static float ConnectionAreaWidth = 30;
         public static float ParameterNameWidth = 120;
 
-        protected InputValueUi(Guid id)
-        {
-            Id = id;
-        }
-
-        public Guid Id { get; }
+        public Symbol.InputDefinition InputDefinition  { get; set; }
+        public Guid Id => InputDefinition.Id; 
         public Relevancy Relevancy { get; set; } = Relevancy.Required;
         protected abstract InputEditState DrawEditControl(string name, ref T value);
         protected abstract void DrawValueDisplay(string name, ref T value);
@@ -299,10 +296,6 @@ namespace T3.Gui
 
     public abstract class SingleControlInputUi<T> : InputValueUi<T>
     {
-        protected SingleControlInputUi(Guid id) : base(id)
-        {
-        }
-
         public abstract bool DrawSingleEditControl(string name, ref T value);
 
         protected override InputEditState DrawEditControl(string name, ref T value)
@@ -322,10 +315,6 @@ namespace T3.Gui
     {
         public float Min = -100.0f;
         public float Max = 100.0f;
-
-        public FloatInputUi(Guid id) : base(id)
-        {
-        }
 
         public override bool DrawSingleEditControl(string name, ref float value)
         {
@@ -364,10 +353,6 @@ namespace T3.Gui
 
     public class FloatListInputUi : SingleControlInputUi<List<float>>
     {
-        public FloatListInputUi(Guid id) : base(id)
-        {
-        }
-
         public override bool DrawSingleEditControl(string name, ref List<float> list)
         {
             var outputString = string.Join(", ", list);
@@ -384,10 +369,6 @@ namespace T3.Gui
 
     public class IntInputUi : SingleControlInputUi<int>
     {
-        public IntInputUi(Guid id) : base(id)
-        {
-        }
-
         public override bool DrawSingleEditControl(string name, ref int value)
         {
             return ImGui.DragInt("##intParam", ref value);
@@ -410,10 +391,6 @@ namespace T3.Gui
         }
 
         public UsageType Usage { get; set; } = UsageType.Default;
-
-        public StringInputUi(Guid id) : base(id)
-        {
-        }
 
         public override bool DrawSingleEditControl(string name, ref string value)
         {
@@ -504,10 +481,6 @@ namespace T3.Gui
 
     public class Size2InputUi : SingleControlInputUi<Size2>
     {
-        public Size2InputUi(Guid id) : base(id)
-        {
-        }
-
         public override bool DrawSingleEditControl(string name, ref Size2 value)
         {
             return ImGui.DragInt2("##int2Edit", ref value.Width);
@@ -521,10 +494,6 @@ namespace T3.Gui
 
     public class EnumInputUi<T> : InputValueUi<T> where T : Enum
     {
-        public EnumInputUi(Guid id) : base(id)
-        {
-        }
-
         protected override InputEditState DrawEditControl(string name, ref T value)
         {
             // todo: check perf impact of creating the list here again and again! -> cache lists
@@ -609,7 +578,7 @@ namespace T3.Gui
 
     public static class InputUiFactory
     {
-        public static Dictionary<Type, Func<Guid, IInputUi>> Entries { get; } = new Dictionary<Type, Func<Guid, IInputUi>>();
+        public static Dictionary<Type, Func<IInputUi>> Entries { get; } = new Dictionary<Type, Func<IInputUi>>();
     }
 
     public interface ITypeUiProperties

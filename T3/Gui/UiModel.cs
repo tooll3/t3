@@ -37,16 +37,16 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(List<float>), new FloatUiProperties());
 
             // Register input ui creators
-            InputUiFactory.Entries.Add(typeof(float), id => new FloatInputUi(id));
-            InputUiFactory.Entries.Add(typeof(int), id => new IntInputUi(id));
-            InputUiFactory.Entries.Add(typeof(string), id => new StringInputUi(id));
-            InputUiFactory.Entries.Add(typeof(Size2), id => new Size2InputUi(id));
-            InputUiFactory.Entries.Add(typeof(ResourceUsage), id => new EnumInputUi<ResourceUsage>(id));
-            InputUiFactory.Entries.Add(typeof(Format), id => new EnumInputUi<Format>(id));
-            InputUiFactory.Entries.Add(typeof(BindFlags), id => new EnumInputUi<BindFlags>(id));
-            InputUiFactory.Entries.Add(typeof(CpuAccessFlags), id => new EnumInputUi<CpuAccessFlags>(id));
-            InputUiFactory.Entries.Add(typeof(ResourceOptionFlags), id => new EnumInputUi<ResourceOptionFlags>(id));
-            InputUiFactory.Entries.Add(typeof(List<float>), id => new FloatListInputUi(id));
+            InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
+            InputUiFactory.Entries.Add(typeof(int), () => new IntInputUi());
+            InputUiFactory.Entries.Add(typeof(string), () => new StringInputUi());
+            InputUiFactory.Entries.Add(typeof(Size2), () => new Size2InputUi());
+            InputUiFactory.Entries.Add(typeof(ResourceUsage), () => new EnumInputUi<ResourceUsage>());
+            InputUiFactory.Entries.Add(typeof(Format), () => new EnumInputUi<Format>());
+            InputUiFactory.Entries.Add(typeof(BindFlags), () => new EnumInputUi<BindFlags>());
+            InputUiFactory.Entries.Add(typeof(CpuAccessFlags), () => new EnumInputUi<CpuAccessFlags>());
+            InputUiFactory.Entries.Add(typeof(ResourceOptionFlags), () => new EnumInputUi<ResourceOptionFlags>());
+            InputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListInputUi());
 
             // Register output ui creators
             OutputUiFactory.Entries.Add(typeof(float), id => new FloatOutputUi(id));

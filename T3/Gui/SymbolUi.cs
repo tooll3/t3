@@ -69,7 +69,9 @@ namespace T3.Gui
                     Log.Debug($"Found no input ui entry for symbol child input '{input.Name}' - creating a new one");
                     InputUis.Remove(input.Id);
                     var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
-                    InputUis.Add(input.Id, inputCreator(input.Id));
+                    IInputUi newInputUi = inputCreator();
+                    newInputUi.InputDefinition = input;
+                    InputUis.Add(input.Id, newInputUi);
                 }
             }
 
