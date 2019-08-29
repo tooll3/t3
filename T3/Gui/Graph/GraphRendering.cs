@@ -169,7 +169,7 @@ namespace T3.Gui.Graph
                 // Input Sockets...
 
                 // prototype
-                var connectionsToNode = linesIntoNodes.ContainsKey(childUi) ? linesIntoNodes[childUi] : new List<ConnectionLineUi>();
+                var connectionsToNode = linesIntoNodes.ContainsKey(childUi) ? linesIntoNodes[childUi] : _noLines;
                 SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
                 var visibleInputUis = (from inputUi in childSymbolUi.InputUis.Values
                                        where inputUi.Relevancy != Relevancy.Optional ||
