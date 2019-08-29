@@ -169,18 +169,18 @@ namespace T3.Gui.Graph
                 // Input Sockets...
 
                 // prototype
-                var inputDefinitions = childUi.SymbolChild.Symbol.InputDefinitions;
                 var connectionsToNode = linesIntoNodes.ContainsKey(childUi) ? linesIntoNodes[childUi] : new List<ConnectionLineUi>();
                 SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
-                var visibleInputUis = childSymbolUi.InputUis.Where(inputUi => inputUi.Value.Relevancy != Relevancy.Optional ||
-                                                                              connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Key));
-                var visibleInputs = visibleInputUis.Select(visibleInputUi => inputDefinitions.Single(def => def.Id == visibleInputUi.Key)).ToList();
+                var visibleInputUis = (from inputUi in childSymbolUi.InputUis.Values
+                                       where inputUi.Relevancy != Relevancy.Optional ||
+                                             connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Id)
+                                       select inputUi).ToArray();
 
-                for (var inputIndex = 0; inputIndex < visibleInputs.Count; inputIndex++)
+                for (var inputIndex = 0; inputIndex < visibleInputUis.Length; inputIndex++)
                 {
-                    var input = visibleInputs[inputIndex];
+                    Symbol.InputDefinition input = visibleInputUis[inputIndex].InputDefinition;
 
-                    var usableArea = GetUsableInputSlotSize(childUi, inputIndex, visibleInputs.Count);
+                    var usableArea = GetUsableInputSlotSize(childUi, inputIndex, visibleInputUis.Length);
 
                     ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + input.GetHashCode());
                     ImGui.SetCursorScreenPos(usableArea.Min);
