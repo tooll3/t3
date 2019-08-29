@@ -144,12 +144,6 @@ namespace T3.Gui
                         ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0));
                         if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                         {
-                            if (ImGui.MenuItem("Set as default", !input.IsDefault))
-                                input.SetCurrentValueAsDefault();
-
-                            if (ImGui.MenuItem("Reset to default", !input.IsDefault))
-                                input.ResetToDefault();
-
                             if (ImGui.MenuItem("Parameters settings"))
                                 editState = InputEditState.ShowOptions;
 
