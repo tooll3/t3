@@ -109,7 +109,8 @@ namespace T3.Gui
             {
                 var mainObject = (JObject)JToken.ReadFrom(jsonTextReader);
                 var symbolId = Guid.Parse(mainObject["Id"].Value<string>());
-
+                var symbol = SymbolRegistry.Entries[symbolId];
+                
                 var inputDict = new Dictionary<Guid, IInputUi>();
                 foreach (JToken uiInputEntry in (JArray)mainObject["InputUis"])
                 {
@@ -122,7 +123,10 @@ namespace T3.Gui
                     }
                     else if (InputUiFactory.Entries.TryGetValue(type, out var inputCreator))
                     {
-                        var inputUi = inputCreator(inputId);
+                        // get the symbol input definition
+                        var inputDefinition = symbol.InputDefinitions.Single(def => def.Id == inputId);
+                        var inputUi = inputCreator();
+                        inputUi.InputDefinition = inputDefinition;
                         inputUi.Read(uiInputEntry);
                         inputDict.Add(inputId, inputUi);
                     }
@@ -132,7 +136,6 @@ namespace T3.Gui
                     }
                 }
 
-                var symbol = SymbolRegistry.Entries[symbolId];
                 var symbolChildUis = new List<SymbolChildUi>();
                 foreach (var childEntry in (JArray)mainObject["SymbolChildUis"])
                 {
