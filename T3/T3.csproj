@@ -341,11 +341,11 @@
     <Compile Include="Gui\Graph\SelectionFence.cs" />
     <Compile Include="Gui\QuickCreateWindow.cs" />
     <Compile Include="Gui\ImGuiDx11Impl.cs" />
-    <Compile Include="Gui\iuhelpers\Helpers.cs" />
+    <Compile Include="Gui\UiHelpers\Helpers.cs" />
     <Compile Include="Gui\Selection\ISelectable.cs" />
     <Compile Include="Gui\Selection\SelectionHandler.cs" />
     <Compile Include="Gui\T3UI.cs" />
-    <Compile Include="Gui\tableview\TableView.cs" />
+    <Compile Include="Gui\TableView\TableView.cs" />
     <Compile Include="Gui\UiSettings.cs" />
     <Compile Include="Gui\UiModel.cs" />
     <Compile Include="Program.cs">
