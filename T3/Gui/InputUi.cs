@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Types;
 using T3.Gui.Selection;
 using T3.Gui.TypeColors;
 using Vector2 = System.Numerics.Vector2;
@@ -176,8 +177,18 @@ namespace T3.Gui
                 else
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
-                    if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0)))
+                    var animated = Animator.IsInputSlotAnimated(inputSlot);
+                    string label = animated ? "A" : "";
+                    if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0)))
                     {
+                        if (animated)
+                        {
+                            Animator.RemoveAnimationFrom(inputSlot);
+                        }
+                        else
+                        {
+                            Animator.CreateInputUpdateAction<float>(inputSlot);
+                        }
                     }
 
                     ImGui.PopStyleColor();

@@ -1,19 +1,25 @@
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 using SharpDX;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using static System.Single;
 
 namespace T3.Core.Operator
 {
 
     public class EvaluationContext
     {
+        public EvaluationContext()
+        {
+            var now = DateTime.Now;
+            GlobalTime = now.Millisecond/1000.0f + now.Second; // todo: create 'real' global time
+            Time = GlobalTime;
+        }
+        
+        public float GlobalTime { get; }
+        public float Time { get; set; }
     }
 
     public class OperatorAttribute : Attribute
@@ -33,6 +39,7 @@ namespace T3.Core.Operator
 
     public interface IConnectableSource
     {
+        Instance Parent { get; set; }
     }
 
     public interface IConnectableTarget
@@ -40,16 +47,20 @@ namespace T3.Core.Operator
         void AddConnection(IConnectableSource source, int index = 0);
         void RemoveConnection(int index = 0);
         bool IsConnected { get; }
+        IConnectableSource GetConnection(int index);
     }
 
     public abstract class Slot : IConnectableSource, IConnectableTarget
     {
         public Guid Id { get; set; }
         public Type Type { get; protected set; }
+        
+        public Instance Parent { get; set; }
 
         public abstract void AddConnection(IConnectableSource source, int index = 0);
         public abstract void RemoveConnection(int index = 0);
         public abstract bool IsConnected { get; }
+        public abstract IConnectableSource GetConnection(int index);
     }
 
     public abstract class InputValue 
@@ -58,7 +69,7 @@ namespace T3.Core.Operator
         public abstract InputValue Clone();
         public abstract void Assign(InputValue otherValue);
         public abstract void ToJson(JsonTextWriter writer);
-        public abstract void SetValueFromJson(Newtonsoft.Json.Linq.JToken json);
+        public abstract void SetValueFromJson(JToken json);
     }
 
     public class InputValue<T> : InputValue
@@ -199,6 +210,10 @@ namespace T3.Core.Operator
         }
 
         public override bool IsConnected => InputConnection.Count > 0;
+        public override IConnectableSource GetConnection(int index)
+        {
+            return InputConnection[index];
+        }
 
         private List<Slot<T>> _inputConnection = new List<Slot<T>>();
         public List<Slot<T>> InputConnection

@@ -38,7 +38,9 @@ namespace T3.Core.Operator
                           select field).ToArray();
             foreach (var output in outputs)
             {
-                Outputs.Add((Slot)output.GetValue(this));
+                var slot = (Slot)output.GetValue(this);
+                slot.Parent = this;
+                Outputs.Add(slot);
             }
         }
 
