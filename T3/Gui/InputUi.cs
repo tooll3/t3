@@ -67,12 +67,13 @@ namespace T3.Gui
             var name = inputSlot.Input.Name;
             var editState = InputEditState.Nothing;
             var typeColor = TypeUiRegistry.Entries[Type].Color;
-
+            var animator = compositionUi.Animator;
+            bool animated = animator.IsInputSlotAnimated(inputSlot);
 
             if (inputSlot is InputSlot<T> typedInputSlot)
             {
                 var input = inputSlot.Input;
-                if (inputSlot.IsConnected)
+                if (inputSlot.IsConnected || animated)
                 {
                     if (typedInputSlot.IsMultiInput)
                     {
@@ -126,15 +127,26 @@ namespace T3.Gui
                     else
                     {
                         typedInputSlot.Update(new EvaluationContext()); // Force recalculation of input
-                        ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
-                        if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0)))
+                        if (animated)
                         {
-                            symbolChildUi.IsSelected = false;
-                            var compositionSymbol = compositionUi.Symbol;
-                            var connection = compositionSymbol.Connections.First(c => c.TargetParentOrChildId == symbolChildUi.Id && c.TargetSlotId == inputSlot.Id);
-                            var sourceUi = compositionUi.GetSelectables()
-                                                        .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
-                            sourceUi.IsSelected = true;
+                            ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
+                            if (ImGui.Button("A", new Vector2(ConnectionAreaWidth, 0)))
+                            {
+                                animator.RemoveAnimationFrom(inputSlot);
+                            }
+                        }
+                        else
+                        {
+                            ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
+                            if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0)))
+                            {
+                                symbolChildUi.IsSelected = false;
+                                var compositionSymbol = compositionUi.Symbol;
+                                var con = compositionSymbol.Connections.First(c => c.TargetParentOrChildId == symbolChildUi.Id && c.TargetSlotId == inputSlot.Id);
+                                var sourceUi = compositionUi.GetSelectables()
+                                                            .First(ui => ui.Id == con.SourceParentOrChildId || ui.Id == con.SourceSlotId);
+                                sourceUi.IsSelected = true;
+                            }
                         }
 
                         ImGui.PopStyleColor();
@@ -177,18 +189,9 @@ namespace T3.Gui
                 else
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
-                    var animated = Animator.IsInputSlotAnimated(inputSlot);
-                    string label = animated ? "A" : "";
-                    if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0)))
+                    if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0)))
                     {
-                        if (animated)
-                        {
-                            Animator.RemoveAnimationFrom(inputSlot);
-                        }
-                        else
-                        {
-                            Animator.CreateInputUpdateAction<float>(inputSlot);
-                        }
+                        animator.CreateInputUpdateAction<float>(inputSlot);
                     }
 
                     ImGui.PopStyleColor();

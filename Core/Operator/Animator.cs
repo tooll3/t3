@@ -2,11 +2,16 @@ using System;
 using System.Collections.Generic;
 using T3.Core.Logging;
 
-namespace T3.Core.Operator.Types
+namespace T3.Core.Operator
 {
-    public static class Animator
+    public class SymbolExtension
     {
-        public static void CreateInputUpdateAction<T>(IInputSlot inputSlot)
+        // todo: how is a symbol extension defined, what exactly does this mean
+    }
+    
+    public class Animator : SymbolExtension
+    {
+        public void CreateInputUpdateAction<T>(IInputSlot inputSlot)
         {
             if (inputSlot is Slot<float> typedInputSlot)
             {
@@ -22,7 +27,7 @@ namespace T3.Core.Operator.Types
             }
         }
 
-        public static void RemoveAnimationFrom(IInputSlot inputSlot)
+        public void RemoveAnimationFrom(IInputSlot inputSlot)
         {
             if (inputSlot is Slot<float> typedInputSlot)
             {
@@ -31,11 +36,11 @@ namespace T3.Core.Operator.Types
             }
         }
 
-        public static bool IsInputSlotAnimated(IInputSlot inputSlot)
+        public bool IsInputSlotAnimated(IInputSlot inputSlot)
         {
             return AnimatedInputs.ContainsKey(inputSlot);
         }
 
-        private static Dictionary<IInputSlot, Action<EvaluationContext>> AnimatedInputs { get; } = new Dictionary<IInputSlot, Action<EvaluationContext>>();
+        private Dictionary<IInputSlot, Action<EvaluationContext>> AnimatedInputs { get; } = new Dictionary<IInputSlot, Action<EvaluationContext>>();
     }
 }
