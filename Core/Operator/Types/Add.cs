@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace T3.Core.Operator.Types
+﻿namespace T3.Core.Operator.Types
 {
     public class Add : Instance<Add>
     {
