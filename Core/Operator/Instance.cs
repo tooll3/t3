@@ -23,9 +23,8 @@ namespace T3.Core.Operator
         protected void SetupInputAndOutputsFromType()
         {
             // input identified by base interface
-            Type inputSlotType = typeof(IInputSlot);
             var inputInfos = from field in Type.GetFields()
-                             where inputSlotType.IsAssignableFrom(field.FieldType)
+                             where typeof(IInputSlot).IsAssignableFrom(field.FieldType)
                              select field;
             foreach (var inputInfo in inputInfos)
             {
