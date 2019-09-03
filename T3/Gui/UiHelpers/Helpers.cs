@@ -2,7 +2,7 @@ using ImGuiNET;
 using System.Numerics;
 using T3.Gui;
 
-namespace imHelpers
+namespace UiHelpers
 {
 
 

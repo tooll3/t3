@@ -1,5 +1,5 @@
 ﻿using ImGuiNET;
-using imHelpers;
+using UiHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,7 +61,7 @@ namespace T3.Gui.Animation
             // Interaction
             ImGui.SetCursorPos(pTopLeft - _curveEditCanvas.WindowPos);
             ImGui.InvisibleButton("key" + Id.GetHashCode(), ControlSize);
-            imHelpers.THelpers.DebugItemRect();
+            UiHelpers.THelpers.DebugItemRect();
 
             if (ImGui.IsItemHovered())
             {
