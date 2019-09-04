@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using T3.Core.Animation.Curve;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Animation;
 using UiHelpers;
@@ -185,19 +183,14 @@ namespace T3.Gui.Graph
             var selection = Canvas.SelectionHandler.SelectedElements;
             var symbolUi = SymbolUiRegistry.Entries[Canvas.CompositionOp.Symbol.Id];
             var animator = symbolUi.Animator;
+            var curvesForSelection = (from child in Canvas.CompositionOp.Children
+                                      from selectedElement in selection
+                                      where child.Id == selectedElement.Id
+                                      from input in child.Inputs
+                                      where animator.AnimatedInputCurves.ContainsKey(input.Id)
+                                      select animator.AnimatedInputCurves[input.Id]).ToList();
 
-            var curvesForSelection = new HashSet<Curve>();
-
-            foreach (var pair in animator.AnimatedInputCurves)
-            {
-                var inputSlot = pair.Key;
-                if (selection.Any(s => s.Id == inputSlot.Parent.Id))
-                {
-                    curvesForSelection.Add(pair.Value);
-                }
-            }
-
-            _curveEditor.SetCurves(curvesForSelection.ToList());
+            _curveEditor.SetCurves(curvesForSelection);
         }
 
         public static bool JogDial(string label, ref double delta, Vector2 size)
