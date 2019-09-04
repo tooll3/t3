@@ -1,5 +1,4 @@
 ﻿using ImGuiNET;
-using UiHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using T3.Core.Animation.Curve;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
+using UiHelpers;
 using static T3.Core.Animation.Curve.Utils;
 
 namespace T3.Gui.Animation
@@ -21,6 +21,31 @@ namespace T3.Gui.Animation
             _selectionFence = new SelectionFence(this);
             _horizontalScaleLines = new HorizontalScaleLines(this);
         }
+
+        /// <summary>
+        /// Update visible curves
+        /// </summary>
+        public void SetCurves(List<Curve> newCurveSelection)
+        {
+            var existingCurves = _curvesWithUi.Keys.ToArray();
+
+            foreach (var c in existingCurves)
+            {
+                if (!newCurveSelection.Contains(c))
+                {
+                    _curvesWithUi.Remove(c);
+                }
+            }
+
+            foreach (var newCurve in newCurveSelection)
+            {
+                if (!_curvesWithUi.ContainsKey(newCurve))
+                {
+                    _curvesWithUi[newCurve] = new CurveUi(newCurve, this);
+                }
+            }
+        }
+
 
         public void Draw()
         {

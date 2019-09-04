@@ -1,10 +1,10 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SharpDX;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
-using SharpDX;
 
 namespace T3.Core.Operator
 {
@@ -13,13 +13,11 @@ namespace T3.Core.Operator
     {
         public EvaluationContext()
         {
-            var now = DateTime.Now;
-            GlobalTime = now.Millisecond/1000.0f + now.Second; // todo: create 'real' global time
             Time = GlobalTime;
         }
-        
-        public float GlobalTime { get; }
-        public float Time { get; set; }
+
+        public static double GlobalTime { get; set; }
+        public double Time { get; set; }
     }
 
     public class OperatorAttribute : Attribute
@@ -54,7 +52,7 @@ namespace T3.Core.Operator
     {
         public Guid Id { get; set; }
         public Type Type { get; protected set; }
-        
+
         public Instance Parent { get; set; }
 
         public abstract void AddConnection(IConnectableSource source, int index = 0);
@@ -63,7 +61,7 @@ namespace T3.Core.Operator
         public abstract IConnectableSource GetConnection(int index);
     }
 
-    public abstract class InputValue 
+    public abstract class InputValue
     {
         public Type ValueType;
         public abstract InputValue Clone();
@@ -347,16 +345,16 @@ namespace T3.Core.Operator
             }
         }
 
-        public InputSlot<int> Width  = new InputSlot<int>(new InputValue<int>(0));
+        public InputSlot<int> Width = new InputSlot<int>(new InputValue<int>(0));
         public InputSlot<int> Height = new InputSlot<int>(new InputValue<int>(0));
     }
 
 
-    public class ConverterSlot<TFrom, TTo> : Slot<TTo> 
+    public class ConverterSlot<TFrom, TTo> : Slot<TTo>
     {
         readonly Func<TFrom, TTo> _converterFunc;
 
-        public ConverterSlot(Slot<TFrom> sourceSlot, Func<TFrom, TTo> converterFunc)                                                                            
+        public ConverterSlot(Slot<TFrom> sourceSlot, Func<TFrom, TTo> converterFunc)
         {
             UpdateAction = Update;
             SourceSlot = sourceSlot;
