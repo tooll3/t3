@@ -16,27 +16,24 @@ namespace T3.Core.Operator
         {
             if (inputSlot is Slot<float> typedInputSlot)
             {
-                AnimatedInputs.Add(inputSlot, typedInputSlot.UpdateAction);
+                AnimatedInputs.Add(inputSlot.Id, typedInputSlot.UpdateAction);
 
                 var newCurve = new Curve();
                 newCurve.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
-                {
-                    Value = typedInputSlot.Value,
-                    InType = VDefinition.Interpolation.Spline,
-                    OutType = VDefinition.Interpolation.Spline,
-                });
+                                                                    {
+                                                                        Value = typedInputSlot.Value,
+                                                                        InType = VDefinition.Interpolation.Spline,
+                                                                        OutType = VDefinition.Interpolation.Spline,
+                                                                    });
                 newCurve.AddOrUpdateV(EvaluationContext.GlobalTime + 1, new VDefinition()
-                {
-                    Value = typedInputSlot.Value + 2,
-                    InType = VDefinition.Interpolation.Spline,
-                    OutType = VDefinition.Interpolation.Spline,
-                });
-                AnimatedInputCurves.Add(inputSlot, newCurve);
+                                                                        {
+                                                                            Value = typedInputSlot.Value + 2,
+                                                                            InType = VDefinition.Interpolation.Spline,
+                                                                            OutType = VDefinition.Interpolation.Spline,
+                                                                        });
+                AnimatedInputCurves.Add(inputSlot.Id, newCurve);
 
-                typedInputSlot.UpdateAction = context =>
-                                              {
-                                                  typedInputSlot.Value = (float)newCurve.GetSampledValue(context.Time);
-                                              };
+                typedInputSlot.UpdateAction = context => { typedInputSlot.Value = (float)newCurve.GetSampledValue(context.Time); };
             }
             else
             {
@@ -48,20 +45,19 @@ namespace T3.Core.Operator
         {
             if (inputSlot is Slot<float> typedInputSlot)
             {
-                typedInputSlot.UpdateAction = AnimatedInputs[inputSlot]; // restore previous update action
+                typedInputSlot.UpdateAction = AnimatedInputs[inputSlot.Id]; // restore previous update action
 
-                AnimatedInputs.Remove(inputSlot);
-                AnimatedInputCurves.Remove(inputSlot);
+                AnimatedInputs.Remove(inputSlot.Id);
+                AnimatedInputCurves.Remove(inputSlot.Id);
             }
         }
 
         public bool IsInputSlotAnimated(IInputSlot inputSlot)
         {
-            return AnimatedInputs.ContainsKey(inputSlot);
+            return AnimatedInputs.ContainsKey(inputSlot.Id);
         }
 
-
-        public Dictionary<IInputSlot, Action<EvaluationContext>> AnimatedInputs { get; } = new Dictionary<IInputSlot, Action<EvaluationContext>>();
-        public Dictionary<IInputSlot, Curve> AnimatedInputCurves { get; } = new Dictionary<IInputSlot, Curve>();
+        public Dictionary<Guid, Action<EvaluationContext>> AnimatedInputs { get; } = new Dictionary<Guid, Action<EvaluationContext>>();
+        public Dictionary<Guid, Curve> AnimatedInputCurves { get; } = new Dictionary<Guid, Curve>();
     }
 }
