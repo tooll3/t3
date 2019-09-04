@@ -1,11 +1,13 @@
 using ImGuiNET;
-using UiHelpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using T3.Core.Animation.Curve;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Animation;
+using UiHelpers;
 
 namespace T3.Gui.Graph
 {
@@ -174,7 +176,28 @@ namespace T3.Gui.Graph
 
         private void DrawTimeline()
         {
+            SetCurvesForSelection();
             _curveEditor.Draw();
+        }
+
+        private void SetCurvesForSelection()
+        {
+            var selection = Canvas.SelectionHandler.SelectedElements;
+            var symbolUi = SymbolUiRegistry.Entries[Canvas.CompositionOp.Symbol.Id];
+            var animator = symbolUi.Animator;
+
+            var curvesForSelection = new HashSet<Curve>();
+
+            foreach (var pair in animator.AnimatedInputCurves)
+            {
+                var inputSlot = pair.Key;
+                if (selection.Any(s => s.Id == inputSlot.Parent.Id))
+                {
+                    curvesForSelection.Add(pair.Value);
+                }
+            }
+
+            _curveEditor.SetCurves(curvesForSelection.ToList());
         }
 
         public static bool JogDial(string label, ref double delta, Vector2 size)

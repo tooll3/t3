@@ -28,14 +28,16 @@ namespace T3.Core.Operator
                              select field;
             foreach (var inputInfo in inputInfos)
             {
-                Inputs.Add((IInputSlot)inputInfo.GetValue(this));
+                var inputSlot = (IInputSlot)inputInfo.GetValue(this);
+                inputSlot.Parent = this;
+                Inputs.Add(inputSlot);
             }
 
             // outputs identified by attribute
             var outputs = (from field in Type.GetFields()
-                          let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
-                          from attr in attributes
-                          select field).ToArray();
+                           let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
+                           from attr in attributes
+                           select field).ToArray();
             foreach (var output in outputs)
             {
                 var slot = (Slot)output.GetValue(this);

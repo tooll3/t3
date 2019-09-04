@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using T3.Core.Operator;
 
 namespace T3.Gui
 {
@@ -20,11 +21,11 @@ namespace T3.Gui
             Time += ImGui.GetIO().DeltaTime * PlaybackSpeed;
             if (IsLooping && Time > TimeRangeEnd)
             {
-                Time = Time - TimeRangeEnd > 1
+                Time = Time - TimeRangeEnd > 1  // JUmp to start if too far out of time region
                     ? TimeRangeStart
-                    : Time - TimeRangeEnd - TimeRangeStart;
+                    : Time - (TimeRangeEnd - TimeRangeStart);
             }
+            EvaluationContext.GlobalTime = Time;
         }
     }
-
 }
