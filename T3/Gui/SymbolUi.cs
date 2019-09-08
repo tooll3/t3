@@ -128,8 +128,6 @@ namespace T3.Gui
             ChildUis.Remove(childToRemove);
         }
 
-        public Animator Animator { get; } = new Animator();
-
         public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();
         public Dictionary<Guid, IInputUi> InputUis = new Dictionary<Guid, IInputUi>();
         public Dictionary<Guid, IOutputUi> OutputUis = new Dictionary<Guid, IOutputUi>();

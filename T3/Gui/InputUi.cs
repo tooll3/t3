@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Operator.Types;
 using T3.Gui.Selection;
 using T3.Gui.TypeColors;
 using Vector2 = System.Numerics.Vector2;
@@ -56,8 +55,8 @@ namespace T3.Gui
         public static float ConnectionAreaWidth = 30;
         public static float ParameterNameWidth = 120;
 
-        public Symbol.InputDefinition InputDefinition  { get; set; }
-        public Guid Id => InputDefinition.Id; 
+        public Symbol.InputDefinition InputDefinition { get; set; }
+        public Guid Id => InputDefinition.Id;
         public Relevancy Relevancy { get; set; } = Relevancy.Required;
         protected abstract InputEditState DrawEditControl(string name, ref T value);
         protected abstract void DrawValueDisplay(string name, ref T value);
@@ -67,7 +66,7 @@ namespace T3.Gui
             var name = inputSlot.Input.Name;
             var editState = InputEditState.Nothing;
             var typeColor = TypeUiRegistry.Entries[Type].Color;
-            var animator = compositionUi.Animator;
+            var animator = compositionUi.Symbol.Animator;
             bool animated = animator.IsInputSlotAnimated(inputSlot);
 
             if (inputSlot is InputSlot<T> typedInputSlot)
@@ -162,6 +161,7 @@ namespace T3.Gui
 
                             ImGui.EndPopup();
                         }
+
                         ImGui.PopStyleVar();
 
                         ImGui.SameLine();
@@ -213,6 +213,7 @@ namespace T3.Gui
 
                         ImGui.EndPopup();
                     }
+
                     ImGui.PopStyleVar();
 
                     ImGui.SameLine();

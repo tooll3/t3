@@ -177,7 +177,7 @@ namespace T3.Gui.Graph
         {
             var selection = Canvas.SelectionHandler.SelectedElements;
             var symbolUi = SymbolUiRegistry.Entries[Canvas.CompositionOp.Symbol.Id];
-            var animator = symbolUi.Animator;
+            var animator = symbolUi.Symbol.Animator;
             var curvesForSelection = (from child in Canvas.CompositionOp.Children
                                       from selectedElement in selection
                                       where child.Id == selectedElement.Id

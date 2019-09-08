@@ -38,6 +38,7 @@ namespace T3.Core.Operator
 
         public Type InstanceType { get; set; }
 
+        public Animator Animator { get; } = new Animator();
 
         #region public API =======================================================================
 
