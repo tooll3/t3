@@ -13,7 +13,7 @@ using UiHelpers;
 using static ImGuiNET.ImGui;
 using static T3.Core.Animation.Curves.Utils;
 
-namespace T3.Gui.Animation
+namespace T3.Gui.Animation.CurveEditing
 {
     public class CurveEditCanvas : ICanvas
     {
@@ -27,6 +27,7 @@ namespace T3.Gui.Animation
         {
             _clipTime = clipTime;
             _selectionFence = new SelectionFence(this);
+            _curveEditBox = new CurveEditBox(this);
             _horizontalScaleLines = new HorizontalScaleLines(this);
         }
 
@@ -37,6 +38,7 @@ namespace T3.Gui.Animation
         {
             var existingCurves = _curvesWithUi.Keys.ToArray();
 
+
             foreach (var c in existingCurves)
             {
                 if (!newCurveSelection.Contains(c))
@@ -45,12 +47,19 @@ namespace T3.Gui.Animation
                 }
             }
 
+            var curveChangedCompletely = _curvesWithUi.Count == 0;
+
             foreach (var newCurve in newCurveSelection)
             {
                 if (!_curvesWithUi.ContainsKey(newCurve))
                 {
                     _curvesWithUi[newCurve] = new CurveUi(newCurve, this);
                 }
+            }
+
+            if (curveChangedCompletely)
+            {
+                ViewAllOrSelectedKeys();
             }
         }
 
@@ -83,6 +92,7 @@ namespace T3.Gui.Animation
                 DrawTimeRange();
                 DrawCurrentTimeMarker();
                 DrawDragTimeArea();
+                _curveEditBox.Draw();
 
             }
             ImGui.EndChild();
@@ -351,7 +361,7 @@ namespace T3.Gui.Animation
         }
 
         #region update children
-        private void ViewAllOrSelectedKeys(bool KeepURange = false)
+        public void ViewAllOrSelectedKeys(bool KeepURange = false)
         {
             const float CURVE_VALUE_PADDING = 0.3f;
 
@@ -748,6 +758,14 @@ namespace T3.Gui.Animation
             return (xOnCanvas - Scroll.X) * Scale.X + WindowPos.X;
         }
 
+        /// <summary>
+        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public float TransformPositionY(float yOnCanvas)
+        {
+            return (yOnCanvas - Scroll.Y) * Scale.Y + WindowPos.Y;
+        }
+
 
         /// <summary>
         /// Convert screen position to canvas position
@@ -763,6 +781,14 @@ namespace T3.Gui.Animation
         public float InverseTransformPositionX(float xOnScreen)
         {
             return (xOnScreen - WindowPos.X) / Scale.X + Scroll.X;
+        }
+
+        /// <summary>
+        /// Convert screen position to canvas position
+        /// </summary>
+        public float InverseTransformPositionY(float yOnScreen)
+        {
+            return (yOnScreen - WindowPos.Y) / Scale.Y + Scroll.Y;
         }
 
 
@@ -784,14 +810,32 @@ namespace T3.Gui.Animation
         }
 
 
+        /// <summary>
+        /// Convert rectangle on canvas to screen space
+        /// </summary>
         public ImRect TransformRect(ImRect canvasRect)
         {
-            return new ImRect(TransformPosition(canvasRect.Min), TransformPosition(canvasRect.Max));
+            var r = new ImRect(TransformPosition(canvasRect.Min), TransformPosition(canvasRect.Max));
+            if (r.Min.Y > r.Max.Y)
+            {
+                var t = r.Min.Y;
+                r.Min.Y = r.Max.Y;
+                r.Max.Y = t;
+            }
+            return r;
         }
 
         public ImRect InverseTransformRect(ImRect screenRect)
         {
-            return new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
+
+            var r = new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
+            if (r.Min.Y > r.Max.Y)
+            {
+                var t = r.Min.Y;
+                r.Min.Y = r.Max.Y;
+                r.Max.Y = t;
+            }
+            return r;
         }
 
 
@@ -883,6 +927,7 @@ namespace T3.Gui.Animation
         private HorizontalScaleLines _horizontalScaleLines;
 
         private SelectionFence _selectionFence;
+        private CurveEditBox _curveEditBox;
         private ImGuiIOPtr _io;
         private Vector2 _mouse;
         private Vector2 _scaleTarget = new Vector2(100, 1);

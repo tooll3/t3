@@ -1,16 +1,17 @@
 ﻿using ImGuiNET;
-using UiHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Animation.Curves;
 using T3.Core.Logging;
+using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
+using UiHelpers;
 using static T3.Core.Animation.Curves.Utils;
 
-namespace T3.Gui.Animation
+namespace T3.Gui.Animation.CurveEditing
 {
     /// <summary>
     /// A stub window to collect curve editing functionality during implementation.

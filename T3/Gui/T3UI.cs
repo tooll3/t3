@@ -9,7 +9,7 @@ using System.Text;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Gui.Animation;
+using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Logging;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using T3.Core.Animation.Curves;
 using T3.Gui.Graph;
 
-namespace T3.Gui.Animation
+namespace T3.Gui.Animation.CurveEditing
 {
     /// <summary>
     /// A graphical representation of a <see cref="CurveEditing"/>. Handles style and selection states.

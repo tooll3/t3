@@ -10,7 +10,7 @@ using T3.Core.Logging;
 using T3.Gui.Selection;
 using UiHelpers;
 
-namespace T3.Gui.Animation
+namespace T3.Gui.Animation.CurveEditing
 {
     /// <summary>
     /// Interaction logic for CurvePointControl.xaml
@@ -166,10 +166,7 @@ namespace T3.Gui.Animation
                     var dInScreen = ImGui.GetIO().MouseDelta;
                     var dInCanvas = _curveEditCanvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
 
-                    foreach (var e in _curveEditCanvas.SelectionHandler.SelectedElements)
-                    {
-                        e.PosOnCanvas += dInCanvas;
-                    }
+                    PosOnCanvas += dInCanvas;
                 }
             }
         }
