@@ -54,7 +54,7 @@ namespace T3.Gui.Animation
             }
         }
 
-
+        #region --- draw ui ---------------------------------------------------
         public void Draw()
         {
             _io = ImGui.GetIO();
@@ -80,6 +80,7 @@ namespace T3.Gui.Animation
                 _selectionFence.Draw();
                 DrawList.PopClipRect();
                 DrawContextMenu();
+                DrawTimeRange();
                 DrawCurrentTimeMarker();
                 DrawDragTimeArea();
 
@@ -128,7 +129,6 @@ namespace T3.Gui.Animation
             ImGui.PopStyleVar();
         }
 
-
         private void HandleInteraction()
         {
             if (!ImGui.IsWindowHovered())
@@ -142,7 +142,6 @@ namespace T3.Gui.Animation
             if (_io.MouseWheel != 0)
                 HandleZoomViewWithMouseWheel();
         }
-
 
         private void HandleZoomViewWithMouseWheel()
         {
@@ -166,7 +165,6 @@ namespace T3.Gui.Animation
                 _scaleTarget.X *= zoomDelta;
             }
         }
-
 
         private float ComputeZoomDeltaFromMouseWheel()
         {
@@ -204,12 +202,9 @@ namespace T3.Gui.Animation
             if (_clipTime == null)
                 return;
 
-            var p1 = TransformPosition(new Vector2((float)_clipTime.Time, 0));
-            p1.Y = 0;
-            DrawList.AddRectFilled(p1, p1 + new Vector2(1, 2000), Color.Red);
+            var p = new Vector2(TransformPositionX((float)_clipTime.Time), 0);
+            DrawList.AddRectFilled(p, p + new Vector2(1, 2000), Color.Red);
         }
-
-
 
         private void DrawDragTimeArea()
         {
@@ -222,6 +217,7 @@ namespace T3.Gui.Animation
 
             var min = Vector2.Zero;
             //Im.DrawContentRegion();
+
             SetCursorPos(new Vector2(0, max.Y - clamp.Y));
             InvisibleButton("##TimeDrag", clamp);
 
@@ -234,11 +230,105 @@ namespace T3.Gui.Animation
                 _clipTime.Time = InverseTransformPosition(_io.MousePos).X;
             }
 
-
             SetCursorPos(Vector2.Zero);
         }
 
+        private static Vector2 TimeRangeShadowSize = new Vector2(5, 9999);
+        private static Color TimeRangeShadowColor = new Color(0, 0, 0, 0.5f);
+        private static Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.3f);
+        private static Color TimeRangeMarkerColor = new Color(1f, 1, 1f, 0.3f);
 
+        private void DrawTimeRange()
+        {
+            if (_clipTime == null)
+                return;
+
+            PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
+
+            // Range start
+            {
+                var xRangeStart = TransformPositionX((float)_clipTime.TimeRangeStart);
+                var rangeStartPos = new Vector2(xRangeStart, 0);
+
+                // Shade outside
+                DrawList.AddRectFilled(
+                    new Vector2(0, 0),
+                    new Vector2(xRangeStart, TimeRangeShadowSize.Y),
+                    TimeRangeOutsideColor);
+
+                // Shadow
+                DrawList.AddRectFilled(
+                    rangeStartPos - new Vector2(TimeRangeShadowSize.X - 1, 0),
+                    rangeStartPos + new Vector2(0, TimeRangeShadowSize.Y),
+                    TimeRangeShadowColor);
+
+                // Line
+                DrawList.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), TimeRangeShadowColor);
+
+                SetCursorToBottom(
+                    xRangeStart - TimeRangeHandleSize.X,
+                    TimeRangeHandleSize.Y);
+
+                Button("##StartPos", TimeRangeHandleSize);
+
+
+                if (IsItemActive() && IsMouseDragging(0))
+                {
+                    _clipTime.TimeRangeStart += InverseTransformDirection(_io.MouseDelta).X;
+                }
+            }
+
+            // Range end
+            {
+                var rangeEndX = TransformPositionX((float)_clipTime.TimeRangeEnd);
+                var rangeEndPos = new Vector2(rangeEndX, 0);
+
+                // Shade outside
+                var windowMaxX = GetContentRegionAvail().X + WindowPos.X;
+                if (rangeEndX < windowMaxX)
+                    DrawList.AddRectFilled(
+                        rangeEndPos,
+                        rangeEndPos + new Vector2(windowMaxX - rangeEndX, TimeRangeShadowSize.Y),
+                        TimeRangeOutsideColor);
+
+                // Shadow
+                DrawList.AddRectFilled(
+                    rangeEndPos,
+                    rangeEndPos + TimeRangeShadowSize,
+                    TimeRangeShadowColor);
+
+                // Line
+                DrawList.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), TimeRangeShadowColor);
+
+                SetCursorToBottom(
+                    rangeEndX,
+                    TimeRangeHandleSize.Y);
+
+                Button("##EndPos", TimeRangeHandleSize);
+
+                if (IsItemActive() && IsMouseDragging(0))
+                {
+                    _clipTime.TimeRangeEnd += InverseTransformDirection(_io.MouseDelta).X;
+                }
+            }
+
+            PopStyleColor();
+        }
+
+
+        private static Vector2 TimeRangeHandleSize = new Vector2(10, 20);
+
+        private void SetCursorToBottom(float xInScreen, float paddingFromBottom)
+        {
+            var max = GetWindowContentRegionMax() + GetWindowPos();
+
+            var p = new Vector2(xInScreen, max.Y - paddingFromBottom);
+            //UiHelpers.THelpers.DebugRect(p, p + new Vector2(3, 3));
+            SetCursorScreenPos(p);
+        }
+
+
+        #endregion
 
         public void RebuildCurrentCurves()
         {
@@ -254,7 +344,6 @@ namespace T3.Gui.Animation
             }
         }
 
-
         private void CurveChangedHandler(object o, EventArgs e)
         {
             Curve curve = o as Curve;
@@ -262,9 +351,6 @@ namespace T3.Gui.Animation
         }
 
         #region update children
-
-
-
         private void ViewAllOrSelectedKeys(bool KeepURange = false)
         {
             const float CURVE_VALUE_PADDING = 0.3f;
@@ -655,11 +741,28 @@ namespace T3.Gui.Animation
         }
 
         /// <summary>
+        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public float TransformPositionX(float xOnCanvas)
+        {
+            return (xOnCanvas - Scroll.X) * Scale.X + WindowPos.X;
+        }
+
+
+        /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
         public Vector2 InverseTransformPosition(Vector2 posOnScreen)
         {
             return (posOnScreen - WindowPos) / Scale + Scroll;
+        }
+
+        /// <summary>
+        /// Convert screen position to canvas position
+        /// </summary>
+        public float InverseTransformPositionX(float xOnScreen)
+        {
+            return (xOnScreen - WindowPos.X) / Scale.X + Scroll.X;
         }
 
 
@@ -737,10 +840,6 @@ namespace T3.Gui.Animation
             //    App.Current.UndoRedoStack.AddAndExecute(new MacroCommand("ForSelectedOrAllPointsDo", commandList));
         }
 
-
-
-
-
         private void RebuildCurve(Curve curve)
         {
             // Keep original selection
@@ -755,8 +854,6 @@ namespace T3.Gui.Animation
 
             SelectionHandler.Clear();
         }
-
-
 
         public bool IsRectVisible(Vector2 pos, Vector2 size)
         {
