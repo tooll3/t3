@@ -5,13 +5,13 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using T3.Core.Animation.Curve;
+using T3.Core.Animation.Curves;
 using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
 using UiHelpers;
 using static ImGuiNET.ImGui;
-using static T3.Core.Animation.Curve.Utils;
+using static T3.Core.Animation.Curves.Utils;
 
 namespace T3.Gui.Animation
 {

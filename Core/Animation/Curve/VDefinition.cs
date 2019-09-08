@@ -1,6 +1,6 @@
 using System;
 
-namespace T3.Core.Animation.Curve
+namespace T3.Core.Animation.Curves
 {
     public class VDefinition
     {

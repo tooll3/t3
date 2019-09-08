@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using T3.Core.Animation.Curve;
+using T3.Core.Animation.Curves;
 using T3.Core.Logging;
 
 namespace T3.Core.Operator

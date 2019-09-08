@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace T3.Core.Animation.Curve
+namespace T3.Core.Animation.Curves
 {
     public static class Utils
     {

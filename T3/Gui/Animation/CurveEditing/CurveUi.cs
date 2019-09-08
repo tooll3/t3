@@ -5,13 +5,13 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using T3.Core.Animation.Curve;
+using T3.Core.Animation.Curves;
 using T3.Gui.Graph;
 
 namespace T3.Gui.Animation
 {
     /// <summary>
-    /// A graphical representation of a <see cref="Curve"/>. Handles style and selection states.
+    /// A graphical representation of a <see cref="CurveEditing"/>. Handles style and selection states.
     /// </summary>
     public class CurveUi
     {

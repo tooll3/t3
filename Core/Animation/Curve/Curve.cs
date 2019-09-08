@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using T3.Core.Logging;
 
-namespace T3.Core.Animation.Curve
+namespace T3.Core.Animation.Curves
 {
     public class Curve
     {
