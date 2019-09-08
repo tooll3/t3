@@ -295,6 +295,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gui\Animation\CurveEditing\CurveEditBox.cs" />
+    <Compile Include="Gui\Animation\CurveEditing\CurveEditCanvas.cs" />
+    <Compile Include="Gui\Animation\CurveEditing\CurveEditorWindow.cs" />
+    <Compile Include="Gui\Animation\CurveEditing\CurvePointUi.cs" />
+    <Compile Include="Gui\Animation\CurveEditing\CurveUi.cs" />
+    <Compile Include="Gui\Animation\CurveEditing\HorizontalScaleLines.cs" />
+    <Compile Include="Gui\Animation\CurveEditing\Snapping\IValueSnapAttractor.cs" />
+    <Compile Include="Gui\Animation\CurveEditing\Snapping\ValueSnapHandler.cs" />
     <Compile Include="Gui\ClipTime.cs" />
     <Compile Include="Gui\Commands\AddConnectionCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolChildNameCommand.cs" />
@@ -306,20 +314,13 @@
     <Compile Include="Gui\Graph\SelectableMovement.cs" />
     <Compile Include="Gui\UiJson.cs" />
     <Compile Include="Gui\UserAction.cs" />
-    <Compile Include="Gui\Animation\Curve\CurveEditCanvas.cs" />
-    <Compile Include="Gui\Animation\Curve\CurveEditorWindow.cs" />
-    <Compile Include="Gui\Animation\Curve\CurvePointUi.cs" />
-    <Compile Include="Gui\Animation\Curve\CurveUi.cs" />
     <Compile Include="Gui\Commands\AddSymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\ChangeInputValueCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSelectableCommand.cs" />
     <Compile Include="Gui\Commands\UndoRedoStack.cs" />
     <Compile Include="Gui\Graph\BuildingNodes.cs" />
     <Compile Include="Gui\Graph\GraphWidgets.cs" />
-    <Compile Include="Gui\Animation\Curve\HorizontalScaleLines.cs" />
     <Compile Include="Gui\ICanvas.cs" />
-    <Compile Include="Gui\Animation\Curve\Snapping\IValueSnapAttractor.cs" />
-    <Compile Include="Gui\Animation\Curve\Snapping\ValueSnapHandler.cs" />
     <Compile Include="Gui\InputUi.cs" />
     <Compile Include="Gui\Key.cs" />
     <Compile Include="Gui\OutputUi.cs" />
