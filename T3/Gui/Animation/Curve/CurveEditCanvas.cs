@@ -26,7 +26,6 @@ namespace T3.Gui.Animation
         public CurveEditCanvas(ClipTime clipTime = null)
         {
             _clipTime = clipTime;
-            //InitiailizeMockCurves();
             _selectionFence = new SelectionFence(this);
             _horizontalScaleLines = new HorizontalScaleLines(this);
         }
@@ -139,10 +138,6 @@ namespace T3.Gui.Animation
             {
                 _scrollTarget -= InverseTransformDirection(_io.MouseDelta);
             }
-            else
-            {
-                //_isDraggingBackground = false;
-            }
 
             if (_io.MouseWheel != 0)
                 HandleZoomViewWithMouseWheel();
@@ -209,11 +204,8 @@ namespace T3.Gui.Animation
             if (_clipTime == null)
                 return;
 
-            //var p1 = new Vector2(_mouse.X, WindowPos.Y);
-            //DrawList.AddText(p1, Color.Red, $"{InverseTransformPosition(_mouse).X:0.00}");
             var p1 = TransformPosition(new Vector2((float)_clipTime.Time, 0));
             p1.Y = 0;
-            //DrawList.AddRectFilled(p1, new Vector2(p1.X + 1, WindowPos.Y + WindowSize.Y), Color.Red);
             DrawList.AddRectFilled(p1, p1 + new Vector2(1, 2000), Color.Red);
         }
 
@@ -246,31 +238,6 @@ namespace T3.Gui.Animation
             SetCursorPos(Vector2.Zero);
         }
 
-
-        private void InitiailizeMockCurves()
-        {
-            _curvesWithUi = new Dictionary<Curve, CurveUi>();
-            var random = new Random();
-
-            for (int u = 0; u < 1; u++)
-            {
-                var newCurve = new Curve();
-                for (int i = 0; i < 100; i++)
-                {
-                    newCurve.AddOrUpdateV(i * 20, new VDefinition()
-                    {
-                        Value = random.NextDouble() * 10,
-                        InType = VDefinition.Interpolation.Spline,
-                        OutType = VDefinition.Interpolation.Spline,
-                        InTangentAngle = 30.0,
-                        OutTangentAngle = 20.0,
-                    });
-                }
-
-                var newCurveUi = new CurveUi(newCurve, this);
-                _curvesWithUi[newCurve] = newCurveUi;
-            }
-        }
 
 
         public void RebuildCurrentCurves()
@@ -405,27 +372,16 @@ namespace T3.Gui.Animation
                         newKey = curve.GetV(prevU.Value).Clone();
 
                     newKey.Value = curve.GetSampledValue(u);
-                    //var command = new AddOrUpdateKeyframeCommand(u, newKey, curve);
-                    //App.Current.UndoRedoStack.AddAndExecute(command);
 
                     curvesToUpdate.Add(curve);
                 }
             }
-            //_updatingCurveEnabled = true;
             return curvesToUpdate;
         }
 
 
 
-
         #region set interpolation types
-        //private void OnFocusSelected(object sender, RoutedEventArgs e)
-        //{
-        //    ViewAllKeys();
-        //}
-
-
-
 
         private void OnSmooth()
         {
@@ -437,7 +393,6 @@ namespace T3.Gui.Animation
                 vDef.OutEditMode = VDefinition.EditMode.Smooth;
                 vDef.OutType = VDefinition.Interpolation.Spline;
             });
-            //CheckmarkSelectedInterpolationTypes();
         }
 
         private void OnCubic()
@@ -450,7 +405,6 @@ namespace T3.Gui.Animation
                 vDef.OutEditMode = VDefinition.EditMode.Cubic;
                 vDef.OutType = VDefinition.Interpolation.Spline;
             });
-            //CheckmarkSelectedInterpolationTypes();
         }
 
 
@@ -468,7 +422,6 @@ namespace T3.Gui.Animation
                 vDef.OutType = VDefinition.Interpolation.Spline;
                 vDef.OutTangentAngle = Math.PI;
             });
-            //CheckmarkSelectedInterpolationTypes();
         }
 
         private void OnConstant()
@@ -479,7 +432,6 @@ namespace T3.Gui.Animation
                 vDef.OutType = VDefinition.Interpolation.Constant;
                 vDef.OutEditMode = VDefinition.EditMode.Constant;
             });
-            //CheckmarkSelectedInterpolationTypes();
         }
 
         private void OnLinear()
@@ -492,7 +444,6 @@ namespace T3.Gui.Animation
                 vDef.OutEditMode = VDefinition.EditMode.Linear;
                 vDef.OutType = VDefinition.Interpolation.Linear;
             });
-            //CheckmarkSelectedInterpolationTypes();
         }
 
 
@@ -653,55 +604,13 @@ namespace T3.Gui.Animation
         #endregion
 
 
-        #region helper functions
-
-        /**
-        * Helper function to extract vdefs from all or selected UI controls across all curves in CurveEditor
-        * Returns a list curves with a list of vDefs...
-        */
-        //protected Dictionary<Curve, List<double>> GetSelectedOrAllVDefinitions()
-        //{
-        //    var curveUs = new Dictionary<Curve, List<double>>();
-
-        //    if (SelectionHandler.SelectedElements.Count > 0)
-        //    {
-        //        foreach (CurvePointUi cp in SelectionHandler.SelectedElements)
-        //        {
-
-        //            if (curveUs.ContainsKey(cp.Curve))
-        //            {
-        //                curveUs[cp.Curve].Add(cp.Key.U);
-        //            }
-        //            else
-        //            {
-        //                var list = new List<double>();
-        //                list.Add(cp.Key.U);
-        //                curveUs[cp.Curve] = list;
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        foreach (var curve in _curvesWithUi.Keys)
-        //        {
-        //            var list = new List<double>();
-
-        //            foreach (var pair in curve.GetPoints())
-        //            {
-        //                var u = pair.Key;
-        //                list.Add(u);
-        //            }
-        //            curveUs[curve] = list;
-        //        }
-        //    }
-        //    return curveUs;
-        //}
+        #region helper functions     
 
 
-        /**
-* Helper function to extract vdefs from all or selected UI controls across all curves in CurveEditor
-* Returns a list curves with a list of vDefs...
-*/
+        /// <summary>
+        /// Helper function to extract vdefs from all or selected UI controls across all curves in CurveEditor
+        /// </summary>
+        /// <returns>a list curves with a list of vDefs</returns>
         protected List<CurvePointUi> GetSelectedOrAllPoints()
         {
             var result = new List<CurvePointUi>();
@@ -723,23 +632,15 @@ namespace T3.Gui.Animation
             return result;
         }
 
-
-
         delegate void DoSomethingWithVdefDelegate(VDefinition v);
-        //delegate void DoSomethingWithPointDelegate(CurvePointUi v);
 
         private void ForSelectedOrAllPointsDo(DoSomethingWithVdefDelegate doFunc)
         {
-            //_updatingCurveEnabled = false;
             UpdateCurveAndMakeUpdateKeyframeCommands(doFunc);
-            //_updatingCurveEnabled = true;
-            //RebuildCurrentCurves();
         }
 
         #endregion
 
-        //public ValueSnapHandler _USnapHandler = new ValueSnapHandler();
-        //public ValueSnapHandler _ValueSnapHandler = new ValueSnapHandler();
 
         private void OnOptimizeKeyframes()
         {
