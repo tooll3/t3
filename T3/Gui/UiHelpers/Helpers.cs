@@ -303,7 +303,6 @@ namespace UiHelpers
 
         public static void DrawContentRegion()
         {
-
             ImGui.GetForegroundDrawList().AddRect(
                 ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
                 ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos(),

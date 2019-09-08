@@ -6,18 +6,27 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using T3.Core.Animation.Curve;
+using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
 using UiHelpers;
+using static ImGuiNET.ImGui;
 using static T3.Core.Animation.Curve.Utils;
 
 namespace T3.Gui.Animation
 {
     public class CurveEditCanvas : ICanvas
     {
-        public CurveEditCanvas()
+        /// <summary>
+        /// Creates at new CurveEditCanvas
+        /// </summary>
+        /// <param name="clipTime">
+        /// An optional ClipTime that allows modifying time marker and regions
+        /// </param>
+        public CurveEditCanvas(ClipTime clipTime = null)
         {
-            InitiailizeMockCurves();
+            _clipTime = clipTime;
+            //InitiailizeMockCurves();
             _selectionFence = new SelectionFence(this);
             _horizontalScaleLines = new HorizontalScaleLines(this);
         }
@@ -66,24 +75,18 @@ namespace T3.Gui.Animation
             {
                 DrawList = ImGui.GetWindowDrawList();
 
-                //DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
-                //{
                 HandleInteraction();
                 _horizontalScaleLines.Draw();
                 DrawCurves();
-                DrawCurrentTimeMarker();
                 _selectionFence.Draw();
-                //}
                 DrawList.PopClipRect();
-
                 DrawContextMenu();
+                DrawCurrentTimeMarker();
+                DrawDragTimeArea();
 
             }
             ImGui.EndChild();
         }
-
-
-        public ClipTime ClipTime;
 
 
         bool _contextMenuIsOpen = false;
@@ -203,14 +206,46 @@ namespace T3.Gui.Animation
 
         private void DrawCurrentTimeMarker()
         {
-            if (ClipTime == null)
+            if (_clipTime == null)
                 return;
+
             //var p1 = new Vector2(_mouse.X, WindowPos.Y);
             //DrawList.AddText(p1, Color.Red, $"{InverseTransformPosition(_mouse).X:0.00}");
-            var p1 = TransformPosition(new Vector2((float)ClipTime.Time, 0));
+            var p1 = TransformPosition(new Vector2((float)_clipTime.Time, 0));
+            p1.Y = 0;
             //DrawList.AddRectFilled(p1, new Vector2(p1.X + 1, WindowPos.Y + WindowSize.Y), Color.Red);
             DrawList.AddRectFilled(p1, p1 + new Vector2(1, 2000), Color.Red);
         }
+
+
+
+        private void DrawDragTimeArea()
+        {
+            if (_clipTime == null)
+                return;
+
+            var max = GetContentRegionMax();
+            var clamp = max;
+            clamp.Y = Im.Min(TimeLineDragHeight, max.Y - 1);
+
+            var min = Vector2.Zero;
+            //Im.DrawContentRegion();
+            SetCursorPos(new Vector2(0, max.Y - clamp.Y));
+            InvisibleButton("##TimeDrag", clamp);
+
+            if (IsItemHovered())
+            {
+                SetMouseCursor(ImGuiMouseCursor.ResizeEW);
+            }
+            if (IsItemActive() && IsMouseDragging(0) || IsItemClicked())
+            {
+                _clipTime.Time = InverseTransformPosition(_io.MousePos).X;
+            }
+
+
+            SetCursorPos(Vector2.Zero);
+        }
+
 
         private void InitiailizeMockCurves()
         {
@@ -838,12 +873,20 @@ namespace T3.Gui.Animation
                 && pos.Y < WindowPos.Y + WindowSize.Y;
         }
 
-        #endregion
         /// <summary>
         /// Damped scale factors for u and v
         /// </summary>
         public Vector2 Scale { get; set; } = Vector2.One;
+        public Vector2 WindowPos { get; set; }
+        public Vector2 WindowSize { get; set; }
+        public Vector2 Scroll { get; set; } = new Vector2(0.0f, 0.0f);
+        private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
+        public List<ISelectable> SelectableChildren { get; set; }
+        public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
 
+        #endregion
+
+        private ClipTime _clipTime;
 
         private Dictionary<Curve, CurveUi> _curvesWithUi = new Dictionary<Curve, CurveUi>();
         private List<CurvePointUi> _pointControlRecyclePool = new List<CurvePointUi>();
@@ -851,20 +894,10 @@ namespace T3.Gui.Animation
 
         private SelectionFence _selectionFence;
         private ImGuiIOPtr _io;
-
-        public Vector2 WindowPos { get; set; }
-        public Vector2 WindowSize { get; set; }
-
         private Vector2 _mouse;
-
-        public Vector2 Scroll { get; set; } = new Vector2(0.0f, 0.0f);
-        private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
-
-
         private Vector2 _scaleTarget = new Vector2(100, 1);
 
-        public List<ISelectable> SelectableChildren { get; set; }
-        public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
-
+        // Styling
+        public static float TimeLineDragHeight = 20;
     }
 }
