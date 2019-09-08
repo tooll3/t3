@@ -2,8 +2,6 @@
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 
 namespace T3.Core.Operator.Types
 {
@@ -31,19 +29,19 @@ namespace T3.Core.Operator.Types
             Size2 size = Size.GetValue(context);
 
             var texDesc = new Texture2DDescription
-            {
-                Width = size.Width,
-                Height = size.Height,
-                MipLevels = MipLevels.GetValue(context),
-                ArraySize = ArraySize.GetValue(context),
-                Format = Format.GetValue(context),
-                //SampleDescription = SampleDescription.GetValue(context),
-                SampleDescription = new SampleDescription(1, 0),
-                Usage = ResourceUsage.GetValue(context),
-                BindFlags = BindFlags.GetValue(context),
-                CpuAccessFlags = CpuAccessFlags.GetValue(context),
-                OptionFlags = ResourceOptionFlags.GetValue(context)
-            };
+                          {
+                              Width = size.Width,
+                              Height = size.Height,
+                              MipLevels = MipLevels.GetValue(context),
+                              ArraySize = ArraySize.GetValue(context),
+                              Format = Format.GetValue(context),
+                              //SampleDescription = SampleDescription.GetValue(context),
+                              SampleDescription = new SampleDescription(1, 0),
+                              Usage = ResourceUsage.GetValue(context),
+                              BindFlags = BindFlags.GetValue(context),
+                              CpuAccessFlags = CpuAccessFlags.GetValue(context),
+                              OptionFlags = ResourceOptionFlags.GetValue(context)
+                          };
             _textureChanged = ResourceManager.Instance().CreateTexture(texDesc, "Texture2D", ref _textureResId, ref _texture); //Texture.Value);
         }
 
