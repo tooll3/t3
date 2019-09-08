@@ -211,6 +211,11 @@ namespace UiHelpers
             Min.X = (float)(int)Min.X; Min.Y = (float)(int)Min.Y; Max.X = (float)(int)Max.X; Max.Y = (float)(int)Max.Y;
         }
         bool IsInverted() { return Min.X > Max.X || Min.Y > Max.Y; }
+
+        public override string ToString()
+        {
+            return $"Rect {Min}  {Max}";
+        }
     }
 
     /// <summary>

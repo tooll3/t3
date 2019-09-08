@@ -117,7 +117,7 @@ namespace T3.Gui.Animation
                     OnLinear();
 
                 if (ImGui.MenuItem(SelectionHandler.SelectedElements.Any() ? "View Selected" : "View All", "F"))
-                    ViewAllKeys();
+                    ViewAllOrSelectedKeys();
 
                 ImGui.EndPopup();
             }
@@ -265,7 +265,7 @@ namespace T3.Gui.Animation
 
 
 
-        private void ViewAllKeys(bool KeepURange = false)
+        private void ViewAllOrSelectedKeys(bool KeepURange = false)
         {
             const float CURVE_VALUE_PADDING = 0.3f;
 
@@ -331,11 +331,11 @@ namespace T3.Gui.Animation
 
             _scaleTarget = new Vector2(
                 (float)(WindowSize.X / ((maxU - minU) * (1 + 2 * CURVE_VALUE_PADDING))),
-                (float)(WindowSize.Y / ((maxV - minV) * (1 + 2 * CURVE_VALUE_PADDING))));
+                (float)(WindowSize.Y / ((minV - maxV) * (1 + 2 * CURVE_VALUE_PADDING))));
 
             _scrollTarget = new Vector2(
                 (float)(minU - CURVE_VALUE_PADDING * (maxU - minU)),
-                (float)(minV - CURVE_VALUE_PADDING * (maxV - minV)));
+                (float)(maxV - CURVE_VALUE_PADDING * (minV - maxV)));
         }
         #endregion
 
@@ -347,13 +347,7 @@ namespace T3.Gui.Animation
 
         private void OnAddKeyframe()
         {
-            //double time = App.Current.Model.GlobalTime;
             var curvesToUpdate = InsertCurvePoint(CurrentU);
-
-            //foreach (var curve in curvesToUpdate)
-            //{
-            //    RebuildCurve(curve);
-            //}
         }
 
 
@@ -361,7 +355,6 @@ namespace T3.Gui.Animation
         {
             var curvesToUpdate = new List<Curve>();
 
-            //_updatingCurveEnabled = false;
             foreach (var curve in _curvesWithUi.Keys)
             {
                 if (!curve.HasVAt(u))
@@ -378,7 +371,6 @@ namespace T3.Gui.Animation
             }
             return curvesToUpdate;
         }
-
 
 
         #region set interpolation types
