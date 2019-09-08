@@ -1,5 +1,4 @@
 ﻿using ImGuiNET;
-using UiHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using T3.Core.Animation.Curve;
 using T3.Core.Logging;
 using T3.Gui.Selection;
+using UiHelpers;
 
 namespace T3.Gui.Animation
 {
@@ -18,7 +18,8 @@ namespace T3.Gui.Animation
     public class CurvePointUi : ISelectable
     {
         public Vector2 Size { get; set; } = new Vector2(0, 0);
-        private Vector2 ControlSize = new Vector2(6, 6);
+        private static Vector2 ControlSize = new Vector2(10, 10);
+        private static Vector2 _controlSizeHalf = ControlSize * 0.5f;
 
         public bool IsSelected { get; set; }
         public VDefinition Key;
@@ -38,11 +39,10 @@ namespace T3.Gui.Animation
         }
 
 
-
         public void Draw()
         {
             var pCenter = _curveEditCanvas.TransformPosition(PosOnCanvas);
-            var pTopLeft = pCenter - ControlSize / 2;
+            var pTopLeft = pCenter - _controlSizeHalf;
 
             if (!_curveEditCanvas.IsRectVisible(pTopLeft, ControlSize))
                 return;

@@ -40,13 +40,6 @@ namespace T3.Gui
         }
 
 
-        /// <summary>Draw a splitter</summary>
-        /// <remarks>
-        /// Take from https://github.com/ocornut/imgui/issues/319#issuecomment-147364392
-        /// </remarks>
-
-
-
 
 
         /// <summary>Draw a splitter</summary>

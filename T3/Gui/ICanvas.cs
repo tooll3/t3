@@ -1,5 +1,4 @@
 ﻿using ImGuiNET;
-using UiHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using T3.Gui.Selection;
+using UiHelpers;
 
 namespace T3.Gui.Graph
 {
@@ -46,6 +46,5 @@ namespace T3.Gui.Graph
         Vector2 Scroll { get; }
         Vector2 WindowSize { get; }
         Vector2 WindowPos { get; }
-        //ImDrawListPtr DrawList { get; }
     }
 }

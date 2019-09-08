@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Animation;
 using UiHelpers;
@@ -23,7 +24,7 @@ namespace T3.Gui.Graph
         {
             _windowTitle = windowTitle;
             Canvas = new GraphCanvas(opInstance);
-            _curveEditor.ClipTime = _clipTime;
+            _curveEditor = new CurveEditCanvas(_clipTime);
         }
 
 
@@ -35,14 +36,13 @@ namespace T3.Gui.Graph
             PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
             if (Begin(_windowTitle, ref opened, ImGuiWindowFlags.NoScrollbar))
             {
-                var dl = ImGui.GetWindowDrawList();
+                var dl = GetWindowDrawList();
 
                 SplitFromBottom(ref _heightTimeLine);
-                var graphHeight = ImGui.GetWindowHeight() - _heightTimeLine - 30;
+                var graphHeight = GetWindowHeight() - _heightTimeLine - 30;
 
-                ImGui.BeginChild("##graph", new Vector2(0, graphHeight), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+                BeginChild("##graph", new Vector2(0, graphHeight), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                 {
-                    //Im.DrawContentRegion();                    
                     dl.ChannelsSplit(2);
                     dl.ChannelsSetCurrent(1);
                     {
@@ -53,29 +53,27 @@ namespace T3.Gui.Graph
                     Canvas.Draw();
                     dl.ChannelsMerge();
                 }
-                ImGui.EndChild();
-                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 4);
-                ImGui.BeginChild("##timeline", Vector2.Zero, false, ImGuiWindowFlags.NoMove);
+                EndChild();
+                SetCursorPosY(GetCursorPosY() + 4);
+                BeginChild("##timeline", Vector2.Zero, false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                 {
-                    DrawTimeline();
+                    DrawTimelineAndCurveEditor();
                 }
-                ImGui.EndChild();
-                //dl.ChannelsMerge();
-
+                EndChild();
             }
-            ImGui.PopStyleVar();
+            PopStyleVar();
 
-            ImGui.End();
+            End();
             return opened;
         }
 
 
         private void DrawTimeControls()
         {
-            ImGui.SetCursorPos(
+            SetCursorPos(
                 new Vector2(
-                    ImGui.GetWindowContentRegionMin().X,
-                    ImGui.GetWindowContentRegionMax().Y - 30));
+                    GetWindowContentRegionMin().X,
+                    GetWindowContentRegionMax().Y - 30));
 
             TimeSpan timespan = TimeSpan.FromSeconds(_clipTime.Time);
 
@@ -86,11 +84,11 @@ namespace T3.Gui.Graph
                 _clipTime.Time += delta;
             }
 
-            ImGui.SameLine();
-            ImGui.Button("[<", _timeControlsSize);
-            ImGui.SameLine();
-            ImGui.Button("<<", _timeControlsSize);
-            ImGui.SameLine();
+            SameLine();
+            Button("[<", _timeControlsSize);
+            SameLine();
+            Button("<<", _timeControlsSize);
+            SameLine();
 
             var isPlayingBackwards = _clipTime.PlaybackSpeed < 0;
             if (CustomComponents.ToggleButton(
@@ -107,7 +105,7 @@ namespace T3.Gui.Graph
                     _clipTime.PlaybackSpeed = -1;
                 }
             }
-            ImGui.SameLine();
+            SameLine();
 
 
             // Play forward
@@ -157,19 +155,23 @@ namespace T3.Gui.Graph
                 _clipTime.PlaybackSpeed = 0;
             }
 
-            ImGui.SameLine();
-            ImGui.Button(">>", _timeControlsSize);
-            ImGui.SameLine();
-            ImGui.Button(">]", _timeControlsSize);
-            ImGui.SameLine();
+            SameLine();
+            Button(">>", _timeControlsSize);
+            SameLine();
+            Button(">]", _timeControlsSize);
+            SameLine();
             CustomComponents.ToggleButton("Loop", ref _clipTime.IsLooping, _timeControlsSize);
         }
 
-        private void DrawTimeline()
+        private void DrawTimelineAndCurveEditor()
         {
             SetCurvesForSelection();
             _curveEditor.Draw();
+            //DrawDragTimeArea();
         }
+
+
+
 
         private void SetCurvesForSelection()
         {
@@ -189,34 +191,34 @@ namespace T3.Gui.Graph
 
         private void DrawBreadcrumbs()
         {
-            ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
+            SetCursorScreenPos(GetWindowPos() + new Vector2(1, 1));
             List<Instance> parents = Canvas.GetParents();
 
             foreach (var p in parents)
             {
-                ImGui.PushID(p.Id.GetHashCode());
-                if (ImGui.Button(p.Symbol.Name))
+                PushID(p.Id.GetHashCode());
+                if (Button(p.Symbol.Name))
                 {
                     Canvas.CompositionOp = p;
                 }
 
-                ImGui.SameLine();
-                ImGui.PopID();
-                ImGui.Text("/");
-                ImGui.SameLine();
+                SameLine();
+                PopID();
+                Text("/");
+                SameLine();
             }
 
-            ImGui.PushStyleColor(ImGuiCol.Button, Color.White.Rgba);
-            ImGui.PushStyleColor(ImGuiCol.Text, Color.Black.Rgba);
-            ImGui.Button(Canvas.CompositionOp.Symbol.Name);
-            ImGui.PopStyleColor(2);
+            PushStyleColor(ImGuiCol.Button, Color.White.Rgba);
+            PushStyleColor(ImGuiCol.Text, Color.Black.Rgba);
+            Button(Canvas.CompositionOp.Symbol.Name);
+            PopStyleColor(2);
         }
 
         private string _windowTitle;
 
         private ClipTime _clipTime = new ClipTime();
         private static float _heightTimeLine = 100;
-        private CurveEditCanvas _curveEditor = new CurveEditCanvas();
+        private CurveEditCanvas _curveEditor;
 
         // Styling properties
         public static Vector2 _timeControlsSize = new Vector2(40, 0);
