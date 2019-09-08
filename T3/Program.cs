@@ -197,44 +197,50 @@ namespace T3
 
             // SwapChain description
             var desc = new SwapChainDescription()
-            {
-                BufferCount = 1,
-                ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
+                       {
+                           BufferCount = 1,
+                           ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
                                                                  new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                IsWindowed = true,
-                OutputHandle = form.Handle,
-                SampleDescription = new SampleDescription(1, 0),
-                SwapEffect = SwapEffect.Discard,
-                Usage = Usage.RenderTargetOutput
-            };
+                           IsWindowed = true,
+                           OutputHandle = form.Handle,
+                           SampleDescription = new SampleDescription(1, 0),
+                           SwapEffect = SwapEffect.Discard,
+                           Usage = Usage.RenderTargetOutput
+                       };
 
             // Create Device and SwapChain
-            Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, desc, out var device, out var swapChain);
+            Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, desc, out var device, out _swapChain);
             var context = device.ImmediateContext;
 
             // Ignore all windows events
-            var factory = swapChain.GetParent<Factory>();
+            var factory = _swapChain.GetParent<Factory>();
             factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAll);
 
             // New RenderTargetView from the backbuffer
-            var backBuffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
-            var renderView = new RenderTargetView(device, backBuffer);
+            _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
+            _renderView = new RenderTargetView(device, _backBuffer);
 
             // Prepare All the stages
             context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
             context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
-            context.OutputMerger.SetTargets(renderView);
+            context.OutputMerger.SetTargets(_renderView);
 
             _controller = new ImGuiDx11Impl(device, form.Width, form.Height);
 
+            form.ResizeBegin += (sender, args) => _inResize = true;
             form.ResizeEnd += (sender, args) =>
                               {
-                                  renderView.Dispose();
-                                  backBuffer.Dispose();
-                                  swapChain.ResizeBuffers(0, form.ClientSize.Width, form.ClientSize.Height, Format.Unknown, 0);
-                                  backBuffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
-                                  renderView = new RenderTargetView(device, backBuffer);
+                                  RebuildBackBuffer(form, device);
+                                  _inResize = false;
                               };
+            form.ClientSizeChanged += (sender, args) =>
+                                      {
+                                          if (_inResize)
+                                              return;
+
+                                          RebuildBackBuffer(form, device);
+                                      };
+            form.WindowState = FormWindowState.Maximized;
 
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
@@ -249,18 +255,17 @@ namespace T3
             //resourceManager.CreateOperatorEntry(@"..\Core\Operator\Types\Add.cs", "Add");
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
 
-
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
             ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
             T3Style.Init();
-
+            
             // Main loop
             RenderLoop.Run(form, () =>
                                  {
                                      Int64 ticks = stopwatch.ElapsedTicks;
-                                     ImGui.GetIO().DeltaTime = (float)(ticks) / Stopwatch.Frequency;
+                                     ImGui.GetIO().DeltaTime = (float)(ticks)/Stopwatch.Frequency;
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
                                      stopwatch.Restart();
 
@@ -275,8 +280,9 @@ namespace T3
 
                                      ImGui.NewFrame();
 
-                                     context.OutputMerger.SetTargets(renderView);
-                                     context.ClearRenderTargetView(renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
+                                     context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
+                                     context.OutputMerger.SetTargets(_renderView);
+                                     context.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
 
                                      if (resourceManager.Resources[vsId] is VertexShaderResource vsr)
                                          context.VertexShader.Set(vsr.VertexShader);
@@ -297,22 +303,35 @@ namespace T3
 
                                      Metrics.UiRenderingCompleted();
 
-                                     swapChain.Present(UiSettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
+                                     _swapChain.Present(UiSettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
                                  });
 
             _controller.Dispose();
 
             // Release all resources
-            renderView.Dispose();
-            backBuffer.Dispose();
+            _renderView.Dispose();
+            _backBuffer.Dispose();
             context.ClearState();
             context.Flush();
             device.Dispose();
             context.Dispose();
-            swapChain.Dispose();
+            _swapChain.Dispose();
             factory.Dispose();
         }
 
+        private static void RebuildBackBuffer(ImGuiDx11RenderForm form, Device device)
+        {
+            _renderView.Dispose();
+            _backBuffer.Dispose();
+            _swapChain.ResizeBuffers(0, form.ClientSize.Width, form.ClientSize.Height, Format.Unknown, 0);
+            _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
+            _renderView = new RenderTargetView(device, _backBuffer);
+        }
+
         private static T3UI _t3ui = new T3UI();
+        private static bool _inResize;
+        private static SwapChain _swapChain;
+        private static RenderTargetView _renderView;
+        private static Texture2D _backBuffer;
     }
 }
