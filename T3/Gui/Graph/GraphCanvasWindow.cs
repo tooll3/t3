@@ -182,8 +182,8 @@ namespace T3.Gui.Graph
                                       from selectedElement in selection
                                       where child.Id == selectedElement.Id
                                       from input in child.Inputs
-                                      where animator.AnimatedInputCurves.ContainsKey(input.Id)
-                                      select animator.AnimatedInputCurves[input.Id]).ToList();
+                                      where animator.IsInputSlotAnimated(input)
+                                      select animator.GetCurveForInput(input)).ToList();
 
             _curveEditor.SetCurves(curvesForSelection);
         }
