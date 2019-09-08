@@ -29,7 +29,7 @@ namespace T3.Core.Operator
                                                                             InType = VDefinition.Interpolation.Spline,
                                                                             OutType = VDefinition.Interpolation.Spline,
                                                                         });
-                AnimatedInputCurves.Add(inputSlot.Id, newCurve);
+                _animatedInputCurves.Add(inputSlot.Id, newCurve);
 
                 typedInputSlot.UpdateAction = context => { typedInputSlot.Value = (float)newCurve.GetSampledValue(context.Time); };
             }
@@ -45,15 +45,20 @@ namespace T3.Core.Operator
             {
                 typedInputSlot.SetUpdateActionBackToDefault();
 
-                AnimatedInputCurves.Remove(inputSlot.Id);
+                _animatedInputCurves.Remove(inputSlot.Id);
             }
         }
 
         public bool IsInputSlotAnimated(IInputSlot inputSlot)
         {
-            return AnimatedInputCurves.ContainsKey(inputSlot.Id);
+            return _animatedInputCurves.ContainsKey(inputSlot.Id);
         }
 
-        public Dictionary<Guid, Curve> AnimatedInputCurves { get; } = new Dictionary<Guid, Curve>();
+        public Curve GetCurveForInput(IInputSlot inputSlot)
+        {
+            return _animatedInputCurves[inputSlot.Id];
+        }
+
+        private readonly Dictionary<Guid, Curve> _animatedInputCurves = new Dictionary<Guid, Curve>();
     }
 }
