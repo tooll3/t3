@@ -1,9 +1,10 @@
-﻿using System;
+﻿using ImGuiNET;
+using System;
 using System.Linq;
 using System.Numerics;
-using ImGuiNET;
-using UiHelpers;
+using T3.Core.Logging;
 using T3.Gui.Selection;
+using UiHelpers;
 
 namespace T3.Gui.Graph
 {
