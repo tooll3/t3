@@ -5,7 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using T3.Core.Animation.Curve;
+using T3.Core.Animation.Curves;
 using T3.Core.Logging;
 using T3.Gui.Selection;
 using UiHelpers;
@@ -208,7 +208,7 @@ namespace T3.Gui.Animation
             Horizontal,
             Both
         }
-        private MoveDirection m_MoveDirection = MoveDirection.Undecided;
+        private MoveDirection _moveDirection = MoveDirection.Undecided;
 
 
         public void ManipulateV(double newV)

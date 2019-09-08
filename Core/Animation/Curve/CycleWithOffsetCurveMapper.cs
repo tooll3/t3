@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace T3.Core.Animation.Curve
+namespace T3.Core.Animation.Curves
 {
     public class CycleWithOffsetCurveMapper : IOutsideCurveMapper
     {
