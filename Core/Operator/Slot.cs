@@ -8,7 +8,6 @@ using T3.Core.Logging;
 
 namespace T3.Core.Operator
 {
-
     public class EvaluationContext
     {
         public EvaluationContext()
@@ -72,8 +71,7 @@ namespace T3.Core.Operator
 
     public class InputValue<T> : InputValue
     {
-        public InputValue()
-            : this(default)
+        public InputValue() : this(default)
         {
         }
 
@@ -129,7 +127,7 @@ namespace T3.Core.Operator
 
     public class Slot<T> : Slot
     {
-        public T Value;// { get; set; }
+        public T Value; // { get; set; }
         public bool IsDirty { get; set; } = true;
         public bool IsMultiInput { get; protected set; } = false;
 
@@ -179,7 +177,7 @@ namespace T3.Core.Operator
         {
             if (!IsConnected)
             {
-                PrevUpdateAction = UpdateAction;
+                _defaultUpdateAction = UpdateAction;
                 UpdateAction = ConnectedUpdate;
             }
 
@@ -202,18 +200,25 @@ namespace T3.Core.Operator
 
             if (!IsConnected)
             {
-                // if no connection is set anymore restore the previous update action
-                UpdateAction = PrevUpdateAction;
+                // if no connection is set anymore restore the default update action
+                SetUpdateActionBackToDefault();
             }
         }
 
+        public void SetUpdateActionBackToDefault()
+        {
+            UpdateAction = _defaultUpdateAction;
+        }
+
         public override bool IsConnected => InputConnection.Count > 0;
+
         public override IConnectableSource GetConnection(int index)
         {
             return InputConnection[index];
         }
 
         private List<Slot<T>> _inputConnection = new List<Slot<T>>();
+
         public List<Slot<T>> InputConnection
         {
             get => _inputConnection;
@@ -225,15 +230,13 @@ namespace T3.Core.Operator
         }
 
         public Action<EvaluationContext> UpdateAction;
-        public Action<EvaluationContext> PrevUpdateAction;
+        private Action<EvaluationContext> _defaultUpdateAction;
     }
 
     public interface IOutputSlot
     {
         Guid Id { get; }
-
     }
-
 
     public interface IInputSlot : IConnectableSource, IConnectableTarget
     {
@@ -250,14 +253,12 @@ namespace T3.Core.Operator
             TypedInputValue = typedInputValue;
         }
 
-        public InputSlot()
-            : this(default(T))
+        public InputSlot() : this(default(T))
         {
             UpdateAction = InputUpdate;
         }
 
-        public InputSlot(T value)
-            : this(new InputValue<T>(value))
+        public InputSlot(T value) : this(new InputValue<T>(value))
         {
         }
 
@@ -267,6 +268,7 @@ namespace T3.Core.Operator
         }
 
         private SymbolChild.Input _input;
+
         public SymbolChild.Input Input
         {
             get => _input;
@@ -286,8 +288,7 @@ namespace T3.Core.Operator
     {
         public List<Slot<T>> CollectedInputs { get; } = new List<Slot<T>>(10);
 
-        public MultiInputSlot(InputValue<T> typedInputValue)
-            : base(typedInputValue)
+        public MultiInputSlot(InputValue<T> typedInputValue) : base(typedInputValue)
         {
             IsMultiInput = true;
         }
@@ -320,14 +321,12 @@ namespace T3.Core.Operator
 
     public class Size2Slot : InputSlot<Size2>
     {
-        public Size2Slot(Size2 defaultValue)
-        : base(defaultValue)
+        public Size2Slot(Size2 defaultValue) : base(defaultValue)
         {
             UpdateAction = Update;
         }
 
-        public Size2Slot(InputValue<Size2> typedInputValue)
-            : base(typedInputValue)
+        public Size2Slot(InputValue<Size2> typedInputValue) : base(typedInputValue)
         {
             UpdateAction = Update;
         }
@@ -349,7 +348,6 @@ namespace T3.Core.Operator
         public InputSlot<int> Height = new InputSlot<int>(new InputValue<int>(0));
     }
 
-
     public class ConverterSlot<TFrom, TTo> : Slot<TTo>
     {
         readonly Func<TFrom, TTo> _converterFunc;
@@ -369,6 +367,4 @@ namespace T3.Core.Operator
             Value = _converterFunc(SourceSlot.GetValue(context));
         }
     }
-
-
 }

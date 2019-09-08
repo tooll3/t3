@@ -16,8 +16,6 @@ namespace T3.Core.Operator
         {
             if (inputSlot is Slot<float> typedInputSlot)
             {
-                AnimatedInputs.Add(inputSlot.Id, typedInputSlot.UpdateAction);
-
                 var newCurve = new Curve();
                 newCurve.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
                                                                     {
@@ -45,19 +43,17 @@ namespace T3.Core.Operator
         {
             if (inputSlot is Slot<float> typedInputSlot)
             {
-                typedInputSlot.UpdateAction = AnimatedInputs[inputSlot.Id]; // restore previous update action
+                typedInputSlot.SetUpdateActionBackToDefault();
 
-                AnimatedInputs.Remove(inputSlot.Id);
                 AnimatedInputCurves.Remove(inputSlot.Id);
             }
         }
 
         public bool IsInputSlotAnimated(IInputSlot inputSlot)
         {
-            return AnimatedInputs.ContainsKey(inputSlot.Id);
+            return AnimatedInputCurves.ContainsKey(inputSlot.Id);
         }
 
-        public Dictionary<Guid, Action<EvaluationContext>> AnimatedInputs { get; } = new Dictionary<Guid, Action<EvaluationContext>>();
         public Dictionary<Guid, Curve> AnimatedInputCurves { get; } = new Dictionary<Guid, Curve>();
     }
 }
