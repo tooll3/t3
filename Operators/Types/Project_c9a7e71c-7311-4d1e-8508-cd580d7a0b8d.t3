@@ -1,7 +1,7 @@
 {
   "Name": "Project",
   "Id": "c9a7e71c-7311-4d1e-8508-cd580d7a0b8d",
-  "InstanceType": "T3.Core.Operator.Types.Project, Core",
+  "InstanceType": "T3.Operators.Types.Project, Operators",
   "Inputs": [
     {
       "Id": "9bf87c5f-2dfe-482e-8be7-18fc4d6072e4"/*Input*/,

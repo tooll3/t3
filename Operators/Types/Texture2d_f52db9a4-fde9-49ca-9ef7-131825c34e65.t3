@@ -1,7 +1,7 @@
 {
   "Name": "Texture2d",
   "Id": "f52db9a4-fde9-49ca-9ef7-131825c34e65",
-  "InstanceType": "T3.Core.Operator.Types.Texture2d, Core",
+  "InstanceType": "T3.Operators.Types.Texture2d, Operators",
   "Inputs": [
     {
       "Id": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,

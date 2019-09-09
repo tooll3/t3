@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E36592ED-4678-4260-B65F-70DC8955F0DE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>T3.Operators</RootNamespace>
+    <AssemblyName>Operators</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct3D11.4.2.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DXGI.4.2.0\lib\net45\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Types\Add.cs" />
+    <Compile Include="Types\Dashboard.cs" />
+    <Compile Include="Types\FloatFormat.cs" />
+    <Compile Include="Types\FloatMultiInputToList.cs" />
+    <Compile Include="Types\LoadTexture2d.cs" />
+    <Compile Include="Types\Project.cs" />
+    <Compile Include="Types\Random.cs" />
+    <Compile Include="Types\SelectFloatFromList.cs" />
+    <Compile Include="Types\StringConcat.cs" />
+    <Compile Include="Types\StringLength.cs" />
+    <Compile Include="Types\Sum.cs" />
+    <Compile Include="Types\Texture2d.cs" />
+    <Compile Include="Types\Time.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Types\Add_c160f925-0a66-4505-a569-cadd878dbb6f.t3" />
+    <Content Include="Types\Add_c160f925-0a66-4505-a569-cadd878dbb6f.t3ui" />
+    <Content Include="Types\Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3" />
+    <Content Include="Types\Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3ui" />
+    <Content Include="Types\FloatFormat_39c96cfd-dedf-4f76-a471-d1c26c9ba9fa.t3" />
+    <Content Include="Types\FloatFormat_39c96cfd-dedf-4f76-a471-d1c26c9ba9fa.t3ui" />
+    <Content Include="Types\FloatMultiInputToList_5c5d855c-3167-40a3-b4c3-e7b27b0d61cf.t3" />
+    <Content Include="Types\FloatMultiInputToList_5c5d855c-3167-40a3-b4c3-e7b27b0d61cf.t3ui" />
+    <Content Include="Types\LoadTexture2d_0b3436db-e283-436e-ba85-2f3a1de76a9d.t3" />
+    <Content Include="Types\LoadTexture2d_0b3436db-e283-436e-ba85-2f3a1de76a9d.t3ui" />
+    <Content Include="Types\Project_c9a7e71c-7311-4d1e-8508-cd580d7a0b8d.t3" />
+    <Content Include="Types\Project_c9a7e71c-7311-4d1e-8508-cd580d7a0b8d.t3ui" />
+    <Content Include="Types\Random_10673c38-8c7e-4aa1-8dcd-3f2711c709b5.t3" />
+    <Content Include="Types\Random_10673c38-8c7e-4aa1-8dcd-3f2711c709b5.t3ui" />
+    <Content Include="Types\SelectFloatFromList_0841cdd4-0106-4f4e-826b-8de23bb5b5f0.t3" />
+    <Content Include="Types\SelectFloatFromList_0841cdd4-0106-4f4e-826b-8de23bb5b5f0.t3ui" />
+    <Content Include="Types\StringConcat_48ab9824-76ca-4238-800f-9cf95311e6c0.t3" />
+    <Content Include="Types\StringConcat_48ab9824-76ca-4238-800f-9cf95311e6c0.t3ui" />
+    <Content Include="Types\StringLength_4c496e8d-2a83-4493-a7a4-fdad29ef3f7d.t3" />
+    <Content Include="Types\StringLength_4c496e8d-2a83-4493-a7a4-fdad29ef3f7d.t3ui" />
+    <Content Include="Types\Sum_2f851b5b-b66d-40b0-9445-e733dc4b907d.t3" />
+    <Content Include="Types\Sum_2f851b5b-b66d-40b0-9445-e733dc4b907d.t3ui" />
+    <Content Include="Types\Texture2d_f52db9a4-fde9-49ca-9ef7-131825c34e65.t3" />
+    <Content Include="Types\Texture2d_f52db9a4-fde9-49ca-9ef7-131825c34e65.t3ui" />
+    <Content Include="Types\Time_862de1a8-f630-4823-8860-7afa918bb1bc.t3" />
+    <Content Include="Types\Time_862de1a8-f630-4823-8860-7afa918bb1bc.t3ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{ce3c1bd6-89b6-4fd9-83f7-cd17d033f783}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

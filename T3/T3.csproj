@@ -389,6 +389,10 @@
       <Project>{ce3c1bd6-89b6-4fd9-83f7-cd17d033f783}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Operators\Operators.csproj">
+      <Project>{e36592ed-4678-4260-b65f-70dc8955f0de}</Project>
+      <Name>Operators</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\ImGui.NET.1.70.0\build\net40\ImGui.NET.targets" Condition="Exists('..\packages\ImGui.NET.1.70.0\build\net40\ImGui.NET.targets')" />
