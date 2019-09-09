@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 
 namespace T3.Core.Animation.Curves
@@ -175,6 +177,16 @@ namespace T3.Core.Animation.Curves
             }
 
             return resultValue;
+        }
+
+        public virtual void Write(JsonTextWriter writer)
+        {
+            _state.Write(writer);
+        }
+
+        public virtual void Read(JToken inputToken)
+        {
+            _state.Read(inputToken);
         }
 
         private readonly CurveState _state = new CurveState();

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace T3.Core.Animation.Curves
 {
@@ -37,14 +39,43 @@ namespace T3.Core.Animation.Curves
 
         public CurveState Clone()
         {
-            var clone = new CurveState();
-            clone.PreCurveMapping = _preCurveMapping;
-            clone.PostCurveMapping = _postCurveMapping;
+            var clone = new CurveState {PreCurveMapping = _preCurveMapping, PostCurveMapping = _postCurveMapping};
 
             foreach (var point in Table)
                 clone.Table[point.Key] = point.Value.Clone();
 
             return clone;
+        }
+
+        public virtual void Write(JsonTextWriter writer)
+        {
+            writer.WritePropertyName("Curve");
+            writer.WriteStartObject();
+
+            writer.WriteObject("PreCurve", PreCurveMapping);
+            writer.WriteObject("PostCurve", PostCurveMapping);
+
+            // write keys
+            writer.WritePropertyName("Keys");
+            writer.WriteStartArray();
+
+            foreach (var point in Table)
+            {
+                writer.WriteStartObject();
+
+                writer.WriteValue("Time", point.Key);
+                point.Value.Write(writer);
+
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteEndObject();
+        }
+
+        public virtual void Read(JToken inputToken)
+        {
         }
 
         private Utils.OutsideCurveBehavior _preCurveMapping;

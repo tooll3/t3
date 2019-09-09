@@ -42,6 +42,7 @@ namespace T3.Core
             WriteSymbolInputs(symbol.InputDefinitions);
             WriteSymbolChildren(symbol.Children);
             WriteConnections(symbol.Connections);
+            symbol.Animator.Write(Writer);
 
             Writer.WriteEndObject();
         }

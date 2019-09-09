@@ -78,10 +78,10 @@ namespace T3.Core.Animation.Curves
         public void Write(JsonTextWriter writer)
         {
             writer.WriteValue("Value", Value);
-            writer.WriteValue("InType", InType);
-            writer.WriteValue("OutType", OutType);
-            writer.WriteValue("InEditMode", InEditMode);
-            writer.WriteValue("OutEditMode", OutEditMode);
+            writer.WriteObject("InType", InType);
+            writer.WriteObject("OutType", OutType);
+            writer.WriteObject("InEditMode", InEditMode);
+            writer.WriteObject("OutEditMode", OutEditMode);
             writer.WriteValue("InTangentAngle", InTangentAngle);
             writer.WriteValue("OutTangentAngle", OutTangentAngle);
         }

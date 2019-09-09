@@ -36,27 +36,5 @@ namespace T3.Core.Animation.Curves
 
         //    curve.AddOrUpdateV(time, newKey);
         //}
-
-        //internal static void AddKeyframeAtTime(OperatorPart opPart, ICurve curve, double time)
-        //{
-        //    AddKeyframeAtTime(curve, time, GetCurrentValueAtTime(opPart, time));
-        //}
-
-        //public static float GetCurrentValueAtTime(OperatorPart opPart, double time)
-        //{
-        //    OperatorPartContext context = new OperatorPartContext() { Time = (float)time };
-        //    return opPart.Eval(context).Value;
-        //}
-
-        //public static OperatorPart GetOperatorPartBelongingToCurve(ICurve curve)
-        //{
-        //    var curveFunc = curve as OperatorPart.Function;
-        //    var compositionOp = curveFunc.OperatorPart.Parent.Parent;
-        //    var animatedOpPart = (from connection in compositionOp.Connections
-        //                          where connection.SourceOp == curveFunc.OperatorPart.Parent
-        //                          select connection.TargetOpPart).SingleOrDefault();
-
-        //    return animatedOpPart;
-        //}
     }
 }
