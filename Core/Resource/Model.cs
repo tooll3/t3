@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -32,11 +33,16 @@ namespace T3.Core
 
     public class Model
     {
-        protected string Path { get; } = @"..\Core\Operator\Types\";
+        protected string Path { get; } = @"..\Operators\Types\";
         protected string SymbolExtension { get; } = ".t3";
 
         public Model()
         {
+#if DEBUG
+            Assembly.LoadFrom(@"bin\debug\Operators.dll");
+#else
+            Assembly.LoadFrom(@"bin\release\Operators.dll");
+#endif
             // generic enum value from json function, must be local function
             object JsonToEnumValue<T>(JToken jsonToken) where T : struct
             {

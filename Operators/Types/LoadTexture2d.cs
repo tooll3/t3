@@ -1,12 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using SharpDX;
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
+using T3.Core;
+using T3.Core.Operator;
 
-namespace T3.Core.Operator.Types
+namespace T3.Operators.Types
 {
     public class LoadTexture2d : Instance<LoadTexture2d>
     {

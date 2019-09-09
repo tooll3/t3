@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using T3.Core.Operator;
 
-namespace T3.Core.Operator.Types
+namespace T3.Operators.Types
 {
     public class FloatMultiInputToList : Instance<FloatMultiInputToList>
     {

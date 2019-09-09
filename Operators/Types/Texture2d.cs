@@ -1,9 +1,11 @@
-﻿using SharpDX;
+﻿using System;
+using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using System;
+using T3.Core;
+using T3.Core.Operator;
 
-namespace T3.Core.Operator.Types
+namespace T3.Operators.Types
 {
     public class Texture2d : Instance<Texture2d>
     {
