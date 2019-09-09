@@ -177,7 +177,6 @@ namespace T3.Core.Operator
         {
             if (!IsConnected)
             {
-                _defaultUpdateAction = UpdateAction;
                 UpdateAction = ConnectedUpdate;
             }
 
@@ -230,7 +229,7 @@ namespace T3.Core.Operator
         }
 
         public Action<EvaluationContext> UpdateAction;
-        private Action<EvaluationContext> _defaultUpdateAction;
+        protected Action<EvaluationContext> _defaultUpdateAction;
     }
 
     public interface IOutputSlot
@@ -250,12 +249,14 @@ namespace T3.Core.Operator
         public InputSlot(InputValue<T> typedInputValue)
         {
             UpdateAction = InputUpdate;
+            _defaultUpdateAction = UpdateAction;
             TypedInputValue = typedInputValue;
         }
 
         public InputSlot() : this(default(T))
         {
             UpdateAction = InputUpdate;
+            _defaultUpdateAction = UpdateAction;
         }
 
         public InputSlot(T value) : this(new InputValue<T>(value))
@@ -324,11 +325,13 @@ namespace T3.Core.Operator
         public Size2Slot(Size2 defaultValue) : base(defaultValue)
         {
             UpdateAction = Update;
+            _defaultUpdateAction = UpdateAction;
         }
 
         public Size2Slot(InputValue<Size2> typedInputValue) : base(typedInputValue)
         {
             UpdateAction = Update;
+            _defaultUpdateAction = UpdateAction;
         }
 
         public new void Update(EvaluationContext context)
@@ -355,6 +358,7 @@ namespace T3.Core.Operator
         public ConverterSlot(Slot<TFrom> sourceSlot, Func<TFrom, TTo> converterFunc)
         {
             UpdateAction = Update;
+            _defaultUpdateAction = UpdateAction;
             SourceSlot = sourceSlot;
             //var floatToInt = new Converter2<float, int>(f => (int)f);
             _converterFunc = converterFunc;
