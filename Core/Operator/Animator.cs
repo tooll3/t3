@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using T3.Core.Animation.Curves;
 using T3.Core.Logging;
 
@@ -57,6 +59,31 @@ namespace T3.Core.Operator
         public Curve GetCurveForInput(IInputSlot inputSlot)
         {
             return _animatedInputCurves[inputSlot.Id];
+        }
+
+        public void Write(JsonTextWriter writer)
+        {
+            if (_animatedInputCurves.Count == 0)
+                return;
+
+            writer.WritePropertyName("Animator");
+            writer.WriteStartArray();
+
+            foreach (var entry in _animatedInputCurves)
+            {
+                writer.WriteStartObject();
+
+                writer.WriteValue("InputId", entry.Key);
+                entry.Value.Write(writer); // write curve itself
+
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+        }
+
+        void Read(JToken inputToken)
+        {
         }
 
         private readonly Dictionary<Guid, Curve> _animatedInputCurves = new Dictionary<Guid, Curve>();
