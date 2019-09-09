@@ -82,8 +82,17 @@ namespace T3.Core.Operator
             writer.WriteEndArray();
         }
 
-        void Read(JToken inputToken)
+        public void Read(JToken inputToken)
         {
+            foreach (JToken entry in inputToken)
+            {
+                Guid inputId = Guid.Parse(entry["InputId"].Value<string>());
+
+                Curve curve = new Curve();
+                curve.Read(entry);
+
+                _animatedInputCurves.Add(inputId, curve);
+            }
         }
 
         private readonly Dictionary<Guid, Curve> _animatedInputCurves = new Dictionary<Guid, Curve>();

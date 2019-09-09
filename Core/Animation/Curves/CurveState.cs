@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -76,6 +78,18 @@ namespace T3.Core.Animation.Curves
 
         public virtual void Read(JToken inputToken)
         {
+            JToken curveToken = inputToken["Curve"];
+
+            PreCurveMapping = (Utils.OutsideCurveBehavior)Enum.Parse(typeof(Utils.OutsideCurveBehavior), curveToken["PreCurve"].Value<string>());
+            PostCurveMapping = (Utils.OutsideCurveBehavior)Enum.Parse(typeof(Utils.OutsideCurveBehavior), curveToken["PostCurve"].Value<string>());
+
+            foreach (var keyEntry in (JArray) curveToken["Keys"])
+            {
+                var time = keyEntry["Time"].Value<double>();
+                var key = new VDefinition();
+                key.Read(keyEntry);
+                Table.Add(time, key);
+            }
         }
 
         private Utils.OutsideCurveBehavior _preCurveMapping;
