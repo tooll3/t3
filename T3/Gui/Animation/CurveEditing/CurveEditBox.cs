@@ -34,229 +34,73 @@ namespace T3.Gui.Animation.CurveEditing
             MaxV = _bounds.Max.Y;
 
             var boundsOnScreen = _curveCanvas.TransformRect(_bounds);
-            //var min = _curveCanvas.TransformPosition(bounds.Min);
-            //var max = _curveCanvas.TransformPosition(bounds.Max);
             _curveCanvas.DrawList.AddRect(boundsOnScreen.Min, boundsOnScreen.Max, SelectBoxBorderColor);
             _curveCanvas.DrawList.AddRectFilled(boundsOnScreen.Min, boundsOnScreen.Max, SelectBoxBorderFill);
 
-            // Top
+            var deltaOnCanvas = _curveCanvas.InverseTransformDirection(GetIO().MouseDelta);
+
+            ScaleAtSide(
+                id: "##top",
+                screenPos: boundsOnScreen.Min - VerticalHandleOffset,
+                size: new Vector2(boundsOnScreen.GetWidth(), DragHandleSize),
+                cursor: ImGuiNET.ImGuiMouseCursor.ResizeNS,
+                scale: (_bounds.Max.Y + deltaOnCanvas.Y - MinV) / (MaxV - MinV),
+                (float scale, CurvePointUi ep) => { ep.ManipulateV(MinV + (ep.PosOnCanvas.Y - MinV) * scale); }
+                );
+
+            ScaleAtSide(
+                id: "##bottom",
+                screenPos: new Vector2(boundsOnScreen.Min.X, boundsOnScreen.Max.Y),
+                size: new Vector2(boundsOnScreen.GetWidth(), DragHandleSize),
+                cursor: ImGuiNET.ImGuiMouseCursor.ResizeNS,
+                scale: (_bounds.Max.Y - deltaOnCanvas.Y - MinV) / (MaxV - MinV),
+                (float scale, CurvePointUi ep) => { ep.ManipulateV(MaxV - (MaxV - ep.PosOnCanvas.Y) * scale); }
+                );
+
+            // Right
             {
-                SetCursorScreenPos(boundsOnScreen.Min - VerticalHandleOffset);
-                Button("##top", new Vector2(boundsOnScreen.GetWidth(), DragHandleSize));
+                SetCursorScreenPos(new Vector2(boundsOnScreen.Max.X, boundsOnScreen.Min.Y));
+                Button("##right", new Vector2(DragHandleSize, boundsOnScreen.GetHeight()));
                 if (IsItemActive() || IsItemHovered())
-                {
-                    SetMouseCursor(ImGuiNET.ImGuiMouseCursor.ResizeNS);
-                }
+                    SetMouseCursor(ImGuiNET.ImGuiMouseCursor.ResizeEW);
 
                 if (IsItemActive() && IsMouseDragging(0))
                 {
-                    var deltaOnCanvas = _curveCanvas.InverseTransformDirection(GetIO().MouseDelta);
-                    ScaleAtTop(deltaOnCanvas.Y);
+                    var scale = (_bounds.Max.X - MinU) / (MaxU - MinU);
+
+                    if (Double.IsNaN(scale) || Math.Abs(scale) > 10000)
+                        return;
+
+                    foreach (var ep in CurvePointsControls)
+                    {
+                        ep.ManipulateV(MaxV - (MaxV - ep.PosOnCanvas.Y) * scale);
+                    }
                 }
             }
+        }
 
-            // Bottom
+        private void ScaleAtSide(string id, Vector2 screenPos, Vector2 size, ImGuiNET.ImGuiMouseCursor cursor, float scale, Action<float, CurvePointUi> scaleFunction)
+        {
+            SetCursorScreenPos(screenPos);
+            Button(id, size);
+            if (IsItemActive() || IsItemHovered())
+                SetMouseCursor(cursor);
+
+            if (!IsItemActive() || !IsMouseDragging(0))
+                return;
+
+            if (Double.IsNaN(scale) || Math.Abs(scale) > 10000)
+                return;
+
+
+            foreach (var ep in CurvePointsControls)
             {
-                SetCursorScreenPos(new Vector2(boundsOnScreen.Min.X, boundsOnScreen.Max.Y));
-                Button("##bottom", new Vector2(boundsOnScreen.GetWidth(), DragHandleSize));
-                if (IsItemActive() || IsItemHovered())
-                {
-                    SetMouseCursor(ImGuiNET.ImGuiMouseCursor.ResizeNS);
-                }
-                if (IsItemActive() && IsMouseDragging(0))
-                {
-                    var deltaOnCanvas = _curveCanvas.InverseTransformDirection(GetIO().MouseDelta);
-                    ScaleAtBottom(deltaOnCanvas.Y);
-                }
-            }
-        }
-
-        private static float DragHandleSize = 10;
-        private static Vector2 VerticalHandleOffset = new Vector2(0, DragHandleSize);
-        private static Vector2 HorizontalHandleOffset = new Vector2(DragHandleSize, 0);
-        private static Vector2 HandleOffset = new Vector2(DragHandleSize, DragHandleSize);
-
-        //private bool DrawDragHandle(ImRect rect, ImGuiNET.ImGuiMouseCursor curor, Action action)
-        //{
-        //    SetCursorScreenPos(rect.Min);
-        //    return Button("##dragLeft", rect.GetSize());
-        //}
-
-
-
-        private static Color SelectBoxBorderColor = new Color(1, 1, 1, 0.2f);
-        private static Color SelectBoxBorderFill = new Color(1, 1, 1, 0.05f);
-
-        //#region dependency properties
-        //public static readonly DependencyProperty MinVProperty = DependencyProperty.Register("MinV", typeof(double), typeof(CurveEditBox), new UIPropertyMetadata(-100.0));
-        //public double MinV { get { return (double)GetValue(MinVProperty); } set { SetValue(MinVProperty, value); } }
-
-        //public static readonly DependencyProperty MaxVProperty = DependencyProperty.Register("MaxV", typeof(double), typeof(CurveEditBox), new UIPropertyMetadata(100.0));
-        //public double MaxV { get { return (double)GetValue(MaxVProperty); } set { SetValue(MaxVProperty, value); } }
-
-        //public static readonly DependencyProperty MinUProperty = DependencyProperty.Register("MinU", typeof(double), typeof(CurveEditBox), new UIPropertyMetadata(-100.0));
-        //public double MinU { get { return (double)GetValue(MinUProperty); } set { SetValue(MinUProperty, value); } }
-
-        //public static readonly DependencyProperty MaxUProperty = DependencyProperty.Register("MaxU", typeof(double), typeof(CurveEditBox), new UIPropertyMetadata(100.0));
-        //public double MaxU { get { return (double)GetValue(MaxUProperty); } set { SetValue(MaxUProperty, value); } }
-        //#endregion
-
-
-        //public SelectionHandler m_SelectionHandler { get; set; }
-        //private CurveEditor CurveEditor { get; set; }
-
-        //#region constructors
-        //public CurveEditBox()
-        //{
-        //    InitializeComponent();
-        //}
-
-
-        //public CurveEditBox(SelectionHandler se, CurveEditor ce)
-        //{
-        //    InitializeComponent();
-        //    m_SelectionHandler = se;
-        //    CurveEditor = ce;
-        //    createBindingsForPositioning();
-        //    UpdateShapeAndLines();
-        //    m_SelectionHandler.SelectionChanged += m_SelectionHandler_SelectionChanged;
-
-        //}
-
-        //void m_SelectionHandler_SelectionChanged(object sender, SelectionHandler.SelectionChangedEventArgs e)
-        //{
-        //    UpdateShapeAndLines();
-        //}
-        //#endregion
-
-        //protected override Geometry GetLayoutClip(Size layoutSlotSize)
-        //{
-        //    return ClipToBounds ? base.GetLayoutClip(layoutSlotSize) : null;
-        //}
-
-
-        ///**
-        // * This method needs to be called everytime the curve editor gets scrolled, or otherwise modified
-        // */
-        //public void UpdateShapeAndLines()
-        //{
-        //    if (m_SelectionHandler.SelectedElements.Count <= 0)
-        //    {
-        //        this.Visibility = System.Windows.Visibility.Collapsed;
-        //    }
-        //    else
-        //    {
-        //        UpdateEditBoxShape();
-
-        //        // Refresh vdef after AddOrUpdateValue cloned the definition
-        //        foreach (var e in CurveEditor._SelectionHandler.SelectedElements)
-        //        {
-        //            var cpc = e as CurvePointControl;
-        //            if (cpc == null) continue;
-
-        //            cpc.m_vdef = cpc.Curve.GetV(cpc.U);
-        //        }
-        //        CurveEditor.UpdateLines();
-        //    }
-        //}
-
-        private static float MinU;
-        private static float MaxU;
-        private static float MinV;
-        private static float MaxV;
-
-        private ImRect _bounds;
-
-        public void UpdateEditBoxShape()
-        {
-            //this.Visibility = System.Windows.Visibility.Visible;
-
-            //this.Height = Math.Abs(CurveEditor.vToY(MaxV) - CurveEditor.vToY(MinV));
-            //this.Width = Math.Abs(CurveEditor.UToX(MaxU) - CurveEditor.UToX(MinU));
-            //App.Current.UpdateRequiredAfterUserInteraction = true;
-            //XMinULabel.Text = String.Format("{0:F3}", MinU);
-            //XMaxULabel.Text = String.Format("{0:F3}", MaxU);
-            //XMinVLabel.Text = String.Format("{0:F3}", MaxV);
-            //XMaxVLabel.Text = String.Format("{0:F3}", MinV);
-
-            //XDragHandle.Visibility = m_SelectionHandler.SelectedElements.Count == 1
-            //    ? System.Windows.Visibility.Collapsed
-            //    : System.Windows.Visibility.Visible;
-
-            //XMinULabel.Visibility = (MinU == MaxU)
-            //    ? System.Windows.Visibility.Collapsed
-            //    : System.Windows.Visibility.Visible;
-
-            //XMaxVLabel.Visibility = (MinV == MaxV)
-            //    ? System.Windows.Visibility.Collapsed
-            //    : System.Windows.Visibility.Visible;
-        }
-
-        private static void ScaleAtBottom(double deltaInPixel)
-        {
-            //var position = Mouse.GetPosition(CurveEditor);
-            //var bottomV = CurveEditor.yToV(position.Y);
-
-            //CurveEditor.DisableRebuildOnCurveChangeEvents();
-            //if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-            //{
-            //    var snapBottomValue = CurveEditor._ValueSnapHandler.CheckForSnapping(bottomV);
-            //    if (!Double.IsNaN(snapBottomValue))
-            //    {
-            //        bottomV = snapBottomValue;
-            //    }
-            //}
-
-            //var scale = (bottomV - MinV) / (MaxV - MinV);
-
-            //if (!Double.IsNaN(scale) && Math.Abs(scale) < 10000)
-            //{
-            //    var idx = 0;
-            //    foreach (var ep in CurvePointsControls)
-            //    {
-            //        ep.ManipulateV(MinV + (ep.V - MinV) * scale);
-            //        _addOrUpdateKeyframeCommands[idx].KeyframeValue = ep.m_vdef;
-            //        ++idx;
-            //    }
-            //    _moveKeyframesCommand.Do();
-            //}
-
-            //CurveEditor.EnableRebuildOnCurveChangeEvents();
-            //UpdateShapeAndLines();
-        }
-
-
-        public void ScaleAtTop(float deltaV)
-        {
-            var scale = (_bounds.Max.Y + deltaV - MinV) / (MaxV - MinV);
-
-            if (!Double.IsNaN(scale) && Math.Abs(scale) < 10000)
-            {
-                var idx = 0;
-                foreach (var ep in CurvePointsControls)
-                {
-                    ep.ManipulateV(MinV + (ep.PosOnCanvas.Y - MinV) * scale);
-                    ++idx;
-                }
+                scaleFunction(scale, ep);
             }
         }
 
 
-        public void ScaleAtBottom(float deltaV)
-        {
-            //var scale = (MinV - (_bounds.Min.Y + deltaV)) / (MaxV - MinV);
-            var scale = (_bounds.Max.Y - deltaV - MinV) / (MaxV - MinV);
 
-            if (!Double.IsNaN(scale) && Math.Abs(scale) < 10000)
-            {
-                var idx = 0;
-                foreach (var ep in CurvePointsControls)
-                {
-                    ep.ManipulateV(MaxV - (MaxV - ep.PosOnCanvas.Y) * scale);
-                    ++idx;
-                }
-            }
-        }
 
 
         /*
@@ -334,11 +178,6 @@ namespace T3.Gui.Animation.CurveEditing
         */
 
         #region XAML event handlers
-
-        //private void DragStarted(object sender, DragStartedEventArgs e)
-        //{
-        //    StartMoveKeyframeCommand();
-        //}
 
 
         private static void XMoveBothThumb_DragDelta()
@@ -454,26 +293,7 @@ namespace T3.Gui.Animation.CurveEditing
         }
         #endregion
 
-        #region private helper methods
-        //private void createBindingsForPositioning()
-        //{
-        //    MultiBinding multiBinding2 = new MultiBinding();
-        //    multiBinding2.Converter = new UToXConverter();
-        //    multiBinding2.Bindings.Add(new Binding("MinU") { Source = this });
-        //    multiBinding2.Bindings.Add(new Binding("UScale") { Source = CurveEditor });
-        //    multiBinding2.Bindings.Add(new Binding("UOffset") { Source = CurveEditor });
-        //    BindingOperations.SetBinding(XTranslateTransform, TranslateTransform.XProperty, multiBinding2);
 
-        //    MultiBinding multiBinding = new MultiBinding();
-        //    multiBinding.Converter = new VToYConverter();
-        //    multiBinding.Bindings.Add(new Binding("MinV") { Source = this });
-        //    multiBinding.Bindings.Add(new Binding("MinV") { Source = CurveEditor });
-        //    multiBinding.Bindings.Add(new Binding("MaxV") { Source = CurveEditor });
-        //    multiBinding.Bindings.Add(new Binding("ActualHeight") { Source = CurveEditor });
-        //    BindingOperations.SetBinding(XTranslateTransform, TranslateTransform.YProperty, multiBinding);
-        //}
-
-        //static SelectionHandler _selectionHandler;
         private ImRect GetBoundingBox()
         {
             float minU = float.PositiveInfinity;
@@ -485,8 +305,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 foreach (var selected in _curveCanvas.SelectionHandler.SelectedElements)
                 {
-                    var pc = selected as CurvePointUi;
-                    if (pc != null)
+                    if (selected is CurvePointUi pc)
                     {
                         minU = Math.Min(minU, pc.PosOnCanvas.X);
                         maxU = Math.Max(maxU, pc.PosOnCanvas.X);
@@ -506,7 +325,23 @@ namespace T3.Gui.Animation.CurveEditing
             return new ImRect(100, 100, 200, 200);
         }
 
-        #endregion
+
+        private static float MinU;
+        private static float MaxU;
+        private static float MinV;
+        private static float MaxV;
+
+        private ImRect _bounds;
+
+
+        // Styling
+        private static float DragHandleSize = 10;
+        private static Vector2 VerticalHandleOffset = new Vector2(0, DragHandleSize);
+        private static Vector2 HorizontalHandleOffset = new Vector2(DragHandleSize, 0);
+        private static Vector2 HandleOffset = new Vector2(DragHandleSize, DragHandleSize);
+
+        private static Color SelectBoxBorderColor = new Color(1, 1, 1, 0.2f);
+        private static Color SelectBoxBorderFill = new Color(1, 1, 1, 0.05f);
     }
 }
 
