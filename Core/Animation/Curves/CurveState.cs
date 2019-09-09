@@ -4,33 +4,24 @@ namespace T3.Core.Animation.Curves
 {
     public class CurveState
     {
-        public bool Changed { get; set; }
         public SortedList<double, VDefinition> Table { get; set; }
 
         public Utils.OutsideCurveBehavior PreCurveMapping
         {
-            get
-            {
-                return _preCurveMapping;
-            }
+            get => _preCurveMapping;
             set
             {
                 _preCurveMapping = value;
                 PreCurveMapper = Utils.CreateOutsideCurveMapper(value);
-                Changed = true;
             }
         }
         public Utils.OutsideCurveBehavior PostCurveMapping
         {
-            get
-            {
-                return _postCurveMapping;
-            }
+            get => _postCurveMapping;
             set
             {
                 _postCurveMapping = value;
                 PostCurveMapper = Utils.CreateOutsideCurveMapper(value);
-                Changed = true;
             }
         }
 
@@ -42,7 +33,6 @@ namespace T3.Core.Animation.Curves
             Table = new SortedList<double, VDefinition>();
             PreCurveMapping = Utils.OutsideCurveBehavior.Constant;
             PostCurveMapping = Utils.OutsideCurveBehavior.Constant;
-            Changed = false;
         }
 
         public CurveState Clone()
@@ -54,13 +44,10 @@ namespace T3.Core.Animation.Curves
             foreach (var point in Table)
                 clone.Table[point.Key] = point.Value.Clone();
 
-            clone.Changed = true;
-
             return clone;
         }
 
         private Utils.OutsideCurveBehavior _preCurveMapping;
         private Utils.OutsideCurveBehavior _postCurveMapping;
     }
-
 }
