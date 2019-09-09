@@ -246,6 +246,9 @@ namespace T3.Core.Operator
                 conHashToCount[hash] = count + 1;
             }
 
+            // connect animations if available
+            Animator.CreateUpdateActionsForExistingCurves(newInstance);
+
             _instancesOfSymbol.Add(newInstance);
 
             return newInstance;

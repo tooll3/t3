@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Animation.Curves;
@@ -38,6 +39,28 @@ namespace T3.Core.Operator
             else
             {
                 Log.Error("Could not create update action.");
+            }
+        }
+
+        internal void CreateUpdateActionsForExistingCurves(Instance compositionInstance)
+        {
+            // gather all inputs that correspond to stored ids
+            var relevantInputs = from curveEntry in _animatedInputCurves
+                                 from childInstance in compositionInstance.Children
+                                 from inputSlot in childInstance.Inputs
+                                 where curveEntry.Key == inputSlot.Id
+                                 select (inputSlot, curveEntry.Value);
+
+            foreach (var entry in relevantInputs)
+            {
+                var (inputSlot, curve) = entry;
+                if (inputSlot is Slot<float> typedInputSlot)
+                {
+                    typedInputSlot.UpdateAction = context =>
+                                                  {
+                                                      typedInputSlot.Value = (float)curve.GetSampledValue(context.Time);
+                                                  };
+                }
             }
         }
 
