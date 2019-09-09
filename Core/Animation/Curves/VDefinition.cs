@@ -1,4 +1,6 @@
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace T3.Core.Animation.Curves
 {
@@ -23,9 +25,6 @@ namespace T3.Core.Animation.Curves
 
         public double U { get; set; }
         public double Value { get; set; }
-        //public double Tension { get; set; }
-        //public double Bias { get; set; }
-        //public double Continuity { get; set; }
         public Interpolation InType { get; set; }
         public Interpolation OutType { get; set; }
 
@@ -40,9 +39,6 @@ namespace T3.Core.Animation.Curves
         public VDefinition()
         {
             Value = 0.0;
-            //Tension = 0.0;
-            //Continuity = 0.0;
-            //Bias = 0.0;
             InType = Interpolation.Spline;
             OutType = Interpolation.Spline;
             InEditMode = EditMode.Smooth;
@@ -57,9 +53,6 @@ namespace T3.Core.Animation.Curves
             {
                 Value = Value,
                 U = U,
-                //Tension = Tension,
-                //Bias = Bias,
-                //Continuity = Continuity,
                 InType = InType,
                 OutType = OutType,
                 InEditMode = InEditMode,
@@ -69,49 +62,28 @@ namespace T3.Core.Animation.Curves
             };
         }
 
-        //public void Read(JToken jsonV)
-        //{
-        //    Value = jsonV["Value"].Value<double>();
-        //    Tension = jsonV["Tension"].Value<double>();
-        //    Bias = jsonV["Bias"].Value<double>();
-        //    Continuity = jsonV["Continuity"].Value<double>();
-        //    InType = (Interpolation)Enum.Parse(typeof(Interpolation), jsonV["InType"].Value<string>());
-        //    OutType = (Interpolation)Enum.Parse(typeof(Interpolation), jsonV["OutType"].Value<string>());
-
-        //    InTangentAngle = jsonV.Value<double>("InTangentAngle");
-        //    OutTangentAngle = jsonV.Value<double>("OutTangentAngle");
-
-        //    InEditMode = (EditMode)Enum.Parse(typeof(EditMode), jsonV["InEditMode"].Value<string>());
-        //    OutEditMode = (EditMode)Enum.Parse(typeof(EditMode), jsonV["OutEditMode"].Value<string>());
-        //}
-
-        //public void Write(JsonTextWriter writer)
-        //{
-        //    writer.WriteValue("Value", Value);
-        //    writer.WriteValue("Tension", Tension);
-        //    writer.WriteValue("Bias", Bias);
-        //    writer.WriteValue("Continuity", Continuity);
-        //    writer.WriteValue("InType", InType);
-        //    writer.WriteValue("OutType", OutType);
-        //    writer.WriteValue("InEditMode", InEditMode);
-        //    writer.WriteValue("OutEditMode", OutEditMode);
-        //    writer.WriteValue("InTangentAngle", InTangentAngle);
-        //    writer.WriteValue("OutTangentAngle", OutTangentAngle);
-        //}
-
-        public static void AngleLengthToTCB(double angle, double length,
-                                            out double tension, out double continuity, out double bias)
+        public void Read(JToken jsonV)
         {
-            tension = 0;
-            continuity = 0;
-            bias = 0;
+            Value = jsonV["Value"].Value<double>();
+            InType = (Interpolation)Enum.Parse(typeof(Interpolation), jsonV["InType"].Value<string>());
+            OutType = (Interpolation)Enum.Parse(typeof(Interpolation), jsonV["OutType"].Value<string>());
+
+            InTangentAngle = jsonV.Value<double>("InTangentAngle");
+            OutTangentAngle = jsonV.Value<double>("OutTangentAngle");
+
+            InEditMode = (EditMode)Enum.Parse(typeof(EditMode), jsonV["InEditMode"].Value<string>());
+            OutEditMode = (EditMode)Enum.Parse(typeof(EditMode), jsonV["OutEditMode"].Value<string>());
         }
 
-        public static void TCBToAngleLength(double tension, double continuity, double bias,
-                                            out double angle, out double length)
+        public void Write(JsonTextWriter writer)
         {
-            angle = 0;
-            length = 0;
+            writer.WriteValue("Value", Value);
+            writer.WriteValue("InType", InType);
+            writer.WriteValue("OutType", OutType);
+            writer.WriteValue("InEditMode", InEditMode);
+            writer.WriteValue("OutEditMode", OutEditMode);
+            writer.WriteValue("InTangentAngle", InTangentAngle);
+            writer.WriteValue("OutTangentAngle", OutTangentAngle);
         }
     };
 }
