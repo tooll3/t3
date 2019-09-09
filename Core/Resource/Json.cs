@@ -177,6 +177,8 @@ namespace T3.Core
             var inputDefaultValues = (from jsonInput in (JArray)o["Inputs"]
                                       let idAndValue = ReadSymbolInputDefaults(jsonInput)
                                       select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
+            var animatorData = (JArray) o["Animator"];
+
             Type instanceType = Type.GetType(instanceTypeName);
             var symbol = new Symbol(instanceType, id, symbolChildren)
                          {
@@ -184,6 +186,11 @@ namespace T3.Core
                              //Namespace = @namespace,
                          };
             symbol.Connections.AddRange(connections);
+
+            if (animatorData != null)
+            {
+                symbol.Animator.Read(animatorData);
+            }
 
             foreach (var input in symbol.InputDefinitions)
             {
