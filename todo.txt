@@ -1,7 +1,6 @@
 todo:
 - Showing enums produces always the same code, extract function for this and even better cached object per enum type
 - Move operators out of Core directory
-- Test animation specific update action replace in slot
 - Reactivate dirty flag
 - Make all tests in CoreTests runnable again
 - Make remove connection command applicable for lists of connections
@@ -13,6 +12,8 @@ todo:
 - General op replacement/compilation after change
  
 done:
+* Integrate animation handling incl. load/store
+* Test animation specific update action replace in slot
 * Fixed showing normal inputs when the input parameters are shown for a specific input
 * Moved save/load of InputUi properties to the class itself
 * Add load/save for input parameter options like Relevancy and Min/Max
