@@ -164,6 +164,7 @@
   ],
   "Animator": [
     {
+      "InstanceId": "6a5bf36e-a236-461b-bd96-988da892cc7a",
       "InputId": "e3550929-8905-4cdf-bc85-c31e97da4baa",
       "Curve": {
         "PreCurve": "Constant",
@@ -193,6 +194,7 @@
       }
     },
     {
+      "InstanceId": "6a5bf36e-a236-461b-bd96-988da892cc7a",
       "InputId": "993d59bb-1fc0-4857-a36d-629b0e7aa0d2",
       "Curve": {
         "PreCurve": "Constant",
