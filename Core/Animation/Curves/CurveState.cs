@@ -88,6 +88,7 @@ namespace T3.Core.Animation.Curves
                 var time = keyEntry["Time"].Value<double>();
                 var key = new VDefinition();
                 key.Read(keyEntry);
+                key.U = time;
                 Table.Add(time, key);
             }
         }
