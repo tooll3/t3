@@ -312,13 +312,12 @@ namespace T3.Core.Operator
 
     public interface IMultiInputSlot : IInputSlot
     {
-        List<ISlot> GetCollectedInputs2();
+        IEnumerable<ISlot> GetCollectedInputs();
     }
 
     public class MultiInputSlot<T> : InputSlot<T>, IMultiInputSlot
     {
         public List<Slot<T>> CollectedInputs { get; } = new List<Slot<T>>(10);
-        public List<ISlot> CollectedInputs2 { get; } = new List<ISlot>(10);
 
         public MultiInputSlot(InputValue<T> typedInputValue) : base(typedInputValue)
         {
@@ -330,7 +329,7 @@ namespace T3.Core.Operator
             IsMultiInput = true;
         }
 
-        public List<Slot<T>> GetCollectedInputs()
+        public List<Slot<T>> GetCollectedTypedInputs()
         {
             CollectedInputs.Clear();
 
@@ -339,7 +338,7 @@ namespace T3.Core.Operator
                 if (slot.IsMultiInput && slot.IsConnected)
                 {
                     var multiInput = (MultiInputSlot<T>)slot;
-                    CollectedInputs.AddRange(multiInput.GetCollectedInputs());
+                    CollectedInputs.AddRange(multiInput.GetCollectedTypedInputs());
                 }
                 else
                 {
@@ -350,24 +349,9 @@ namespace T3.Core.Operator
             return CollectedInputs;
         }
 
-        public List<ISlot> GetCollectedInputs2()
+        public IEnumerable<ISlot> GetCollectedInputs()
         {
-            CollectedInputs2.Clear();
-
-            foreach (var slot in InputConnection)
-            {
-                if (slot.IsMultiInput && slot.IsConnected)
-                {
-                    var multiInput = (IMultiInputSlot)slot;
-                    CollectedInputs2.AddRange(multiInput.GetCollectedInputs2());
-                }
-                else
-                {
-                    CollectedInputs2.Add(slot);
-                }
-            }
-
-            return CollectedInputs2;
+            return GetCollectedTypedInputs();
         }
     }
 

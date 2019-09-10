@@ -16,7 +16,7 @@ namespace T3.Operators.Types
         private void Update(EvaluationContext context)
         {
             Result.Value.Clear();
-            foreach (var input in Input.GetCollectedInputs())
+            foreach (var input in Input.GetCollectedTypedInputs())
             {
                 Result.Value.Add(input.GetValue(context));
             }

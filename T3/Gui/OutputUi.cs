@@ -41,7 +41,7 @@ namespace T3.Gui
                     {
                         var multiInput = (IMultiInputSlot)input;
                         int dirtySum = 0;
-                        foreach (var entry in multiInput.GetCollectedInputs2())
+                        foreach (var entry in multiInput.GetCollectedInputs())
                         {
                             dirtySum += Invalidate(entry);
                         }
