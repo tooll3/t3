@@ -87,7 +87,7 @@ namespace T3.Gui
                         }
 
                         var multiInput = (MultiInputSlot<T>)typedInputSlot;
-                        var allInputs = multiInput.GetCollectedInputs();
+                        var allInputs = multiInput.GetCollectedTypedInputs();
 
                         for (int multiInputIndex = 0; multiInputIndex < allInputs.Count; multiInputIndex++)
                         {

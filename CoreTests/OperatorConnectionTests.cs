@@ -31,7 +31,7 @@ namespace OperatorTests
             public void UpdateResult(EvaluationContext context)
             {
                 Result.Value = 0;
-                foreach (var input in MyMultiInput.GetCollectedInputs())
+                foreach (var input in MyMultiInput.GetCollectedTypedInputs())
                 {
                     Result.Value += input.GetValue(context);
                 }

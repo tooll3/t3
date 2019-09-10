@@ -16,7 +16,7 @@ namespace T3.Operators.Types
         {
             // Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
             Result.Value = string.Empty;
-            foreach (var input in Input.GetCollectedInputs())
+            foreach (var input in Input.GetCollectedTypedInputs())
             {
                 Result.Value += input.GetValue(context);
             }
