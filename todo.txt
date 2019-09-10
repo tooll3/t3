@@ -1,7 +1,8 @@
 todo:
+- Remove abstract Slot class and replace with ISlot
+- Replace Guids with uint ids during runtime
+- How to animate struct type like Vec3 or Color
 - Showing enums produces always the same code, extract function for this and even better cached object per enum type
-- Move operators out of Core directory
-- Reactivate dirty flag
 - Make all tests in CoreTests runnable again
 - Make remove connection command applicable for lists of connections
 - Change input value command must take default value into account
@@ -12,6 +13,9 @@ todo:
 - General op replacement/compilation after change
  
 done:
+* Reactivate dirty flag
+* Integrate graph traversal
+* Move operators out of Core directory
 * Integrate animation handling incl. load/store
 * Test animation specific update action replace in slot
 * Fixed showing normal inputs when the input parameters are shown for a specific input

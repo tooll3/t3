@@ -29,8 +29,8 @@ namespace T3.Core.Operator
                 InputId = inputSlot.Id;
             }
 
-            public Guid InstanceId;
-            public Guid InputId;
+            public readonly Guid InstanceId;
+            public readonly Guid InputId;
         }
 
         public void CreateInputUpdateAction<T>(IInputSlot inputSlot)
@@ -52,7 +52,11 @@ namespace T3.Core.Operator
                                                                             OutType = VDefinition.Interpolation.Spline,
                                                                         });
 
-                typedInputSlot.UpdateAction = context => { typedInputSlot.Value = (float)newCurve.GetSampledValue(context.Time); };
+                typedInputSlot.UpdateAction = context =>
+                                              {
+                                                  typedInputSlot.Value = (float)newCurve.GetSampledValue(context.Time);
+                                              };
+                typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else
             {
@@ -79,6 +83,7 @@ namespace T3.Core.Operator
                                                   {
                                                       typedInputSlot.Value = (float)curve.GetSampledValue(context.Time);
                                                   };
+                    typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                 }
             }
         }
@@ -88,6 +93,7 @@ namespace T3.Core.Operator
             if (inputSlot is Slot<float> typedInputSlot)
             {
                 typedInputSlot.SetUpdateActionBackToDefault();
+                typedInputSlot.DirtyFlag.Trigger &= ~DirtyFlagTrigger.Animated;
 
                 _animatedInputCurves.Remove(new CurveId(inputSlot));
             }

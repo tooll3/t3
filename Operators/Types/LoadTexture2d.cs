@@ -15,7 +15,6 @@ namespace T3.Operators.Types
 
         private Texture2D _texture;
         private Guid _textureResId;
-        private bool _textureChanged = true;
         private Guid _textureSrvResId;
 
         public LoadTexture2d()
@@ -26,7 +25,7 @@ namespace T3.Operators.Types
 
         private void UpdateTexture(EvaluationContext context)
         {
-            if (_textureChanged)
+            if (Path.DirtyFlag.IsDirty)
             {
                 string imagePath = Path.GetValue(context);
                 (Guid textureResId, Guid textureSrvResId) = ResourceManager.Instance().CreateTextureFromFile(imagePath);
@@ -41,8 +40,6 @@ namespace T3.Operators.Types
 
             if (ResourceManager.Instance().Resources[_textureSrvResId] is ShaderResourceViewResource srvr)
                 ShaderResourceView.Value = srvr.ShaderResourceView;
-
-            _textureChanged = false;
         }
 
         [Input(Guid = "{76CC3811-4AE0-48B2-A119-890DB5A4EEB2}")]

@@ -58,12 +58,12 @@ namespace T3.Core.Operator
             targetSlot.RemoveConnection(index);
         }
 
-        private (Instance, IConnectableSource, Instance, IConnectableTarget) GetInstancesForConnection(Symbol.Connection connection)
+        private (Instance, ISlot, Instance, ISlot) GetInstancesForConnection(Symbol.Connection connection)
         {
             Instance compositionInstance = this;
 
             var sourceInstance = compositionInstance.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
-            IConnectableSource sourceSlot;
+            ISlot sourceSlot;
             if (sourceInstance != null)
             {
                 sourceSlot = sourceInstance.Outputs.Single(output => output.Id == connection.SourceSlotId);
@@ -76,7 +76,7 @@ namespace T3.Core.Operator
             }
 
             var targetInstance = compositionInstance.Children.SingleOrDefault(child => child.Id == connection.TargetParentOrChildId);
-            IConnectableTarget targetSlot;
+            ISlot targetSlot;
             if (targetInstance != null)
             {
                 targetSlot = targetInstance.Inputs.Single(e => e.Id == connection.TargetSlotId);

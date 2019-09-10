@@ -4,7 +4,6 @@ using SharpDX;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Resources;
 using T3.Core.Logging;
 
 namespace T3.Core.Operator
@@ -40,30 +39,54 @@ namespace T3.Core.Operator
         public Type Type { get; set; }
     }
 
-    public interface IConnectableSource
+    [Flags]
+    public enum DirtyFlagTrigger
+    {
+        None = 0,
+        Time = 0x1,
+        Animated = 0x2,
+    }
+
+    public class DirtyFlag
+    {
+        public bool IsDirty => Reference != Target;
+
+        public void Invalidate()
+        {
+            Target++;
+        }
+
+        public void Clear()
+        {
+            Reference = Target;
+        }
+
+        public int Reference = 0;
+        public int Target = 1;
+        public DirtyFlagTrigger Trigger;
+    }
+
+    public interface ISlot
     {
         Instance Parent { get; set; }
-    }
-
-    public interface IConnectableTarget
-    {
-        void AddConnection(IConnectableSource source, int index = 0);
+        DirtyFlag DirtyFlag { get; set; }
+        void AddConnection(ISlot source, int index = 0);
         void RemoveConnection(int index = 0);
         bool IsConnected { get; }
-        IConnectableSource GetConnection(int index);
+        ISlot GetConnection(int index);
     }
 
-    public abstract class Slot : IConnectableSource, IConnectableTarget
+    public abstract class Slot : ISlot
     {
         public Guid Id { get; set; }
         public Type Type { get; protected set; }
-
         public Instance Parent { get; set; }
+        public DirtyFlag DirtyFlag { get; set; } = new DirtyFlag();
 
-        public abstract void AddConnection(IConnectableSource source, int index = 0);
+        public abstract void AddConnection(ISlot source, int index = 0);
         public abstract void RemoveConnection(int index = 0);
         public abstract bool IsConnected { get; }
-        public abstract IConnectableSource GetConnection(int index);
+        public abstract ISlot GetConnection(int index);
     }
 
     public abstract class InputValue
@@ -134,7 +157,6 @@ namespace T3.Core.Operator
     public class Slot<T> : Slot
     {
         public T Value; // { get; set; }
-        public bool IsDirty { get; set; } = true;
         public bool IsMultiInput { get; protected set; } = false;
 
         public Slot()
@@ -170,20 +192,22 @@ namespace T3.Core.Operator
 
         public T GetValue(EvaluationContext context)
         {
-            if (IsDirty)
+            if (DirtyFlag.IsDirty)
             {
                 UpdateAction?.Invoke(context);
-                //IsDirty = false;
+                DirtyFlag.Clear();
             }
 
             return Value;
         }
 
-        public override void AddConnection(IConnectableSource sourceSlot, int index = 0)
+        public override void AddConnection(ISlot sourceSlot, int index = 0)
         {
             if (!IsConnected)
             {
                 UpdateAction = ConnectedUpdate;
+                DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
+                DirtyFlag.Reference = DirtyFlag.Target - 1;
             }
 
             InputConnection.Insert(index, (Slot<T>)sourceSlot);
@@ -207,6 +231,7 @@ namespace T3.Core.Operator
             {
                 // if no connection is set anymore restore the default update action
                 SetUpdateActionBackToDefault();
+                DirtyFlag.Invalidate();
             }
         }
 
@@ -217,7 +242,7 @@ namespace T3.Core.Operator
 
         public override bool IsConnected => InputConnection.Count > 0;
 
-        public override IConnectableSource GetConnection(int index)
+        public override ISlot GetConnection(int index)
         {
             return InputConnection[index];
         }
@@ -230,7 +255,7 @@ namespace T3.Core.Operator
             set
             {
                 _inputConnection = value;
-                IsDirty = true;
+                DirtyFlag.Target++;
             }
         }
 
@@ -243,7 +268,7 @@ namespace T3.Core.Operator
         Guid Id { get; }
     }
 
-    public interface IInputSlot : IConnectableSource, IConnectableTarget
+    public interface IInputSlot : ISlot
     {
         Guid Id { get; set; }
         SymbolChild.Input Input { get; set; }
@@ -292,9 +317,15 @@ namespace T3.Core.Operator
         public InputValue<T> TypedDefaultValue;
     }
 
-    public class MultiInputSlot<T> : InputSlot<T>
+    public interface IMultiInputSlot : IInputSlot
+    {
+        List<ISlot> GetCollectedInputs2();
+    }
+
+    public class MultiInputSlot<T> : InputSlot<T>, IMultiInputSlot
     {
         public List<Slot<T>> CollectedInputs { get; } = new List<Slot<T>>(10);
+        public List<ISlot> CollectedInputs2 { get; } = new List<ISlot>(10);
 
         public MultiInputSlot(InputValue<T> typedInputValue) : base(typedInputValue)
         {
@@ -324,6 +355,26 @@ namespace T3.Core.Operator
             }
 
             return CollectedInputs;
+        }
+
+        public List<ISlot> GetCollectedInputs2()
+        {
+            CollectedInputs2.Clear();
+
+            foreach (var slot in InputConnection)
+            {
+                if (slot.IsMultiInput && slot.IsConnected)
+                {
+                    var multiInput = (IMultiInputSlot)slot;
+                    CollectedInputs2.AddRange(multiInput.GetCollectedInputs2());
+                }
+                else
+                {
+                    CollectedInputs2.Add(slot);
+                }
+            }
+
+            return CollectedInputs2;
         }
     }
 
