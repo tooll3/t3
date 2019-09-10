@@ -43,7 +43,7 @@ namespace T3.Core.Operator
     public enum DirtyFlagTrigger
     {
         None = 0,
-        Time = 0x1,
+        Always = 0x1,
         Animated = 0x2,
     }
 

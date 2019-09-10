@@ -11,7 +11,7 @@ namespace T3.Operators.Types
         public Time()
         {
             TimeInSeconds.UpdateAction = Update;
-            TimeInSeconds.DirtyFlag.Trigger |= DirtyFlagTrigger.Time;
+            TimeInSeconds.DirtyFlag.Trigger |= DirtyFlagTrigger.Always;
             _watch.Start();
         }
 
