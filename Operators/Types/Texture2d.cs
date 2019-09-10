@@ -16,9 +16,9 @@ namespace T3.Operators.Types
         public readonly Slot<ShaderResourceView> ShaderResourceView = new Slot<ShaderResourceView>();
 
         private Texture2D _texture;
-        private Guid _textureResId;
+        private uint _textureResId;
         private bool _textureChanged = true;
-        private Guid _textureSrvResId;
+        private uint _textureSrvResId;
 
         public Texture2d()
         {
