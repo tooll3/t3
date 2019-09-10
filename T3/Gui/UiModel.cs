@@ -6,11 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
-using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui
 {
