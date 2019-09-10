@@ -166,6 +166,22 @@ namespace T3.Core
         }
     }
 
+    public class ComputeShaderResource : ShaderResource
+    {
+        public ComputeShaderResource(Guid id, string name, string entryPoint, ShaderBytecode blob, ComputeShader computeShader) :
+            base(id, name, entryPoint, blob)
+        {
+            ComputeShader = computeShader;
+        }
+
+        public ComputeShader ComputeShader;
+
+        public override void Update(string path)
+        {
+            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "ps_5_0", ref ComputeShader, ref Blob);
+        }
+    }
+
     public class TextureResource : Resource, IUpdateable
     {
         public TextureResource(Guid id, string name, Texture2D texture)
@@ -345,6 +361,48 @@ namespace T3.Core
             return resourceEntry.Id;
         }
 
+        public Guid CreateComputeShader(string srcFile, string entryPoint, string name)
+        {
+            bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
+            if (foundFileEntryForPath)
+            {
+                foreach (var id in fileResource.ResourceIds)
+                {
+                    if (Resources[id] is ComputeShaderResource)
+                    {
+                        // if file resource already exists then it must be a different type
+                        Log.Warning($"Trying to create an already existing file resource ('{srcFile}'");
+                        return id;
+                    }
+                }
+            }
+
+            ComputeShader shader = null;
+            ShaderBytecode blob = null;
+            CompileShader(srcFile, entryPoint, name, "ps_5_0", ref shader, ref blob);
+            if (shader == null)
+            {
+                Log.Info("Failed to create pixel shader '{name}'.");
+                return Guid.Empty;
+            }
+
+            var resourceEntry = new ComputeShaderResource(Guid.NewGuid(), name, entryPoint, blob, shader);
+            Resources.Add(resourceEntry.Id, resourceEntry);
+            ComputeShaders.Add(resourceEntry);
+            if (fileResource == null)
+            {
+                fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
+                FileResources.Add(srcFile, fileResource);
+            }
+            else
+            {
+                // file resource already exists, so just add the id of the new type resource
+                fileResource.ResourceIds.Add(resourceEntry.Id);
+            }
+
+            return resourceEntry.Id;
+        }
+
         public Guid CreateOperatorEntry(string srcFile, string name)
         {
             // todo: code below is redundant with all file resources -> refactor
@@ -400,8 +458,10 @@ namespace T3.Core
                             Log.Warning($"Trying to update a non existing file resource '{fileResource.Path}'.");
                         }
                     }
+
                     fileResource.LastWriteReferenceTime = lastWriteTime;
                 }
+
                 // else discard the (duplicated) OnChanged event
             }
         }
@@ -409,25 +469,25 @@ namespace T3.Core
         private static Texture2D CreateTexture2DFromBitmap(Device device, BitmapSource bitmapSource)
         {
             // Allocate DataStream to receive the WIC image pixels
-            int stride = bitmapSource.Size.Width * 4;
-            using (var buffer = new SharpDX.DataStream(bitmapSource.Size.Height * stride, true, true))
+            int stride = bitmapSource.Size.Width*4;
+            using (var buffer = new SharpDX.DataStream(bitmapSource.Size.Height*stride, true, true))
             {
                 // Copy the content of the WIC to the buffer
                 bitmapSource.CopyPixels(stride, buffer);
-                return new Texture2D(device, new Texture2DDescription()
-                {
-                    Width = bitmapSource.Size.Width,
-                    Height = bitmapSource.Size.Height,
-                    ArraySize = 1,
-                    BindFlags = BindFlags.ShaderResource,
-                    Usage = ResourceUsage.Immutable,
-                    CpuAccessFlags = CpuAccessFlags.None,
-                    Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
-                    MipLevels = 1,
-                    OptionFlags = ResourceOptionFlags.None,
-                    SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
-                },
-                                     new SharpDX.DataRectangle(buffer.DataPointer, stride));
+                var texDesc = new Texture2DDescription()
+                              {
+                                  Width = bitmapSource.Size.Width,
+                                  Height = bitmapSource.Size.Height,
+                                  ArraySize = 1,
+                                  BindFlags = BindFlags.ShaderResource,
+                                  Usage = ResourceUsage.Immutable,
+                                  CpuAccessFlags = CpuAccessFlags.None,
+                                  Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
+                                  MipLevels = 1,
+                                  OptionFlags = ResourceOptionFlags.None,
+                                  SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
+                              };
+                return new Texture2D(device, texDesc, new SharpDX.DataRectangle(buffer.DataPointer, stride));
             }
         }
 
@@ -583,6 +643,7 @@ namespace T3.Core
         internal Dictionary<string, FileResource> FileResources = new Dictionary<string, FileResource>();
         internal List<VertexShaderResource> VertexShaders = new List<VertexShaderResource>();
         internal List<PixelShaderResource> PixelShaders = new List<PixelShaderResource>();
+        internal List<ComputeShaderResource> ComputeShaders = new List<ComputeShaderResource>();
         internal List<TextureResource> Textures = new List<TextureResource>();
         internal List<ShaderResourceViewResource> ShaderResourceViews = new List<ShaderResourceViewResource>();
         public List<OperatorResource> Operators = new List<OperatorResource>(100);
