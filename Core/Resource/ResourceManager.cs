@@ -17,19 +17,19 @@ namespace T3.Core
 {
     public class Resource
     {
-        public Resource(Guid id, string name)
+        public Resource(uint id, string name)
         {
             Id = id;
             Name = name;
         }
 
-        public Guid Id { get; }
+        public uint Id { get; }
         public string Name;
     }
 
     class FileResource
     {
-        public FileResource(string path, IEnumerable<Guid> ids)
+        public FileResource(string path, IEnumerable<uint> ids)
         {
             Path = path;
             ResourceIds.AddRange(ids);
@@ -37,7 +37,7 @@ namespace T3.Core
         }
 
         public string Path;
-        public List<Guid> ResourceIds = new List<Guid>();
+        public List<uint> ResourceIds = new List<uint>();
         public DateTime LastWriteReferenceTime;
     }
 
@@ -51,7 +51,7 @@ namespace T3.Core
         public Assembly OperatorAssembly { get; private set; }
         public bool Updated { get; set; } = false;
 
-        public OperatorResource(Guid id, string name, Assembly operatorAssembly)
+        public OperatorResource(uint id, string name, Assembly operatorAssembly)
             : base(id, name)
         {
             OperatorAssembly = operatorAssembly;
@@ -122,7 +122,7 @@ namespace T3.Core
 
     public abstract class ShaderResource : Resource, IUpdateable
     {
-        protected ShaderResource(Guid id, string name, string entryPoint, ShaderBytecode blob)
+        protected ShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob)
             : base(id, name)
         {
             EntryPoint = entryPoint;
@@ -137,7 +137,7 @@ namespace T3.Core
 
     public class VertexShaderResource : ShaderResource
     {
-        public VertexShaderResource(Guid id, string name, string entryPoint, ShaderBytecode blob, VertexShader vertexShader)
+        public VertexShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob, VertexShader vertexShader)
             : base(id, name, entryPoint, blob)
         {
             VertexShader = vertexShader;
@@ -153,7 +153,7 @@ namespace T3.Core
 
     public class PixelShaderResource : ShaderResource
     {
-        public PixelShaderResource(Guid id, string name, string entryPoint, ShaderBytecode blob, PixelShader pixelShader)
+        public PixelShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob, PixelShader pixelShader)
             : base(id, name, entryPoint, blob)
         {
             PixelShader = pixelShader;
@@ -168,7 +168,7 @@ namespace T3.Core
 
     public class ComputeShaderResource : ShaderResource
     {
-        public ComputeShaderResource(Guid id, string name, string entryPoint, ShaderBytecode blob, ComputeShader computeShader) :
+        public ComputeShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob, ComputeShader computeShader) :
             base(id, name, entryPoint, blob)
         {
             ComputeShader = computeShader;
@@ -184,7 +184,7 @@ namespace T3.Core
 
     public class TextureResource : Resource, IUpdateable
     {
-        public TextureResource(Guid id, string name, Texture2D texture)
+        public TextureResource(uint id, string name, Texture2D texture)
             : base(id, name)
         {
             Texture = texture;
@@ -200,7 +200,7 @@ namespace T3.Core
 
     public class ShaderResourceViewResource : Resource, IUpdateable
     {
-        public ShaderResourceViewResource(Guid id, string name, ShaderResourceView srv, Guid textureId)
+        public ShaderResourceViewResource(uint id, string name, ShaderResourceView srv, uint textureId)
             : base(id, name)
         {
             ShaderResourceView = srv;
@@ -213,7 +213,7 @@ namespace T3.Core
         }
 
         public ShaderResourceView ShaderResourceView;
-        public Guid TextureId;
+        public uint TextureId;
     }
 
     public class ResourceManager
@@ -223,6 +223,14 @@ namespace T3.Core
             return _instance;
         }
 
+        public const uint NULL_RESOURCE = 0;
+        private uint _resourceIdCounter = 1;
+
+        private uint GetNextResourceId()
+        {
+            return _resourceIdCounter++;
+        }
+        
         public static void Init(Device device)
         {
             if (_instance == null)
@@ -277,7 +285,7 @@ namespace T3.Core
             Log.Info($"Successfully compiled shader '{name}' from '{srcFile}'");
         }
 
-        public Guid CreateVertexShader(string srcFile, string entryPoint, string name)
+        public uint CreateVertexShader(string srcFile, string entryPoint, string name)
         {
             bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
@@ -299,10 +307,10 @@ namespace T3.Core
             if (vertexShader == null)
             {
                 Log.Info("Failed to create vertex shader '{name}'.");
-                return Guid.Empty;
+                return NULL_RESOURCE;
             }
 
-            var resourceEntry = new VertexShaderResource(Guid.NewGuid(), name, entryPoint, blob, vertexShader);
+            var resourceEntry = new VertexShaderResource(GetNextResourceId(), name, entryPoint, blob, vertexShader);
             Resources.Add(resourceEntry.Id, resourceEntry);
             VertexShaders.Add(resourceEntry);
             if (fileResource == null)
@@ -319,7 +327,7 @@ namespace T3.Core
             return resourceEntry.Id;
         }
 
-        public Guid CreatePixelShader(string srcFile, string entryPoint, string name)
+        public uint CreatePixelShader(string srcFile, string entryPoint, string name)
         {
             bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
@@ -341,10 +349,10 @@ namespace T3.Core
             if (shader == null)
             {
                 Log.Info("Failed to create pixel shader '{name}'.");
-                return Guid.Empty;
+                return NULL_RESOURCE;
             }
 
-            var resourceEntry = new PixelShaderResource(Guid.NewGuid(), name, entryPoint, blob, shader);
+            var resourceEntry = new PixelShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
             Resources.Add(resourceEntry.Id, resourceEntry);
             PixelShaders.Add(resourceEntry);
             if (fileResource == null)
@@ -361,7 +369,7 @@ namespace T3.Core
             return resourceEntry.Id;
         }
 
-        public Guid CreateComputeShader(string srcFile, string entryPoint, string name)
+        public uint CreateComputeShader(string srcFile, string entryPoint, string name)
         {
             bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
@@ -383,10 +391,10 @@ namespace T3.Core
             if (shader == null)
             {
                 Log.Info("Failed to create pixel shader '{name}'.");
-                return Guid.Empty;
+                return NULL_RESOURCE;
             }
 
-            var resourceEntry = new ComputeShaderResource(Guid.NewGuid(), name, entryPoint, blob, shader);
+            var resourceEntry = new ComputeShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
             Resources.Add(resourceEntry.Id, resourceEntry);
             ComputeShaders.Add(resourceEntry);
             if (fileResource == null)
@@ -403,7 +411,7 @@ namespace T3.Core
             return resourceEntry.Id;
         }
 
-        public Guid CreateOperatorEntry(string srcFile, string name)
+        public uint CreateOperatorEntry(string srcFile, string name)
         {
             // todo: code below is redundant with all file resources -> refactor
             bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
@@ -420,7 +428,7 @@ namespace T3.Core
                 }
             }
 
-            var resourceEntry = new OperatorResource(Guid.NewGuid(), name, null);
+            var resourceEntry = new OperatorResource(GetNextResourceId(), name, null);
             Resources.Add(resourceEntry.Id, resourceEntry);
             Operators.Add(resourceEntry);
             if (fileResource == null)
@@ -517,7 +525,7 @@ namespace T3.Core
             }
         }
 
-        public void CreateShaderResourceView(Guid textureId, string name, ref ShaderResourceView shaderResourceView)
+        public void CreateShaderResourceView(uint textureId, string name, ref ShaderResourceView shaderResourceView)
         {
             if (Resources.TryGetValue(textureId, out var resource))
             {
@@ -538,32 +546,32 @@ namespace T3.Core
             }
         }
 
-        public Guid CreateShaderResourceView(Guid textureId, string name)
+        public uint CreateShaderResourceView(uint textureId, string name)
         {
             ShaderResourceView textureView = null;
             CreateShaderResourceView(textureId, name, ref textureView);
-            var textureViewResourceEntry = new ShaderResourceViewResource(Guid.NewGuid(), name, textureView, textureId);
+            var textureViewResourceEntry = new ShaderResourceViewResource(GetNextResourceId(), name, textureView, textureId);
             Resources.Add(textureViewResourceEntry.Id, textureViewResourceEntry);
             ShaderResourceViews.Add(textureViewResourceEntry);
             return textureViewResourceEntry.Id;
         }
 
-        public (Guid, Guid) CreateTextureFromFile(string filename) /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
+        public (uint, uint) CreateTextureFromFile(string filename) /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
         {
             if (FileResources.TryGetValue(filename, out var existingFileResource))
             {
                 Log.Error($"Trying to create an already existing file resource ('{filename}'");
-                return (existingFileResource.ResourceIds.First(), Guid.Empty);
+                return (existingFileResource.ResourceIds.First(), NULL_RESOURCE);
             }
 
             Texture2D texture = null;
             CreateTexture(filename, ref texture);
             string name = Path.GetFileName(filename);
-            var textureResourceEntry = new TextureResource(Guid.NewGuid(), name, texture);
+            var textureResourceEntry = new TextureResource(GetNextResourceId(), name, texture);
             Resources.Add(textureResourceEntry.Id, textureResourceEntry);
             Textures.Add(textureResourceEntry);
 
-            Guid shaderResourceViewId = CreateShaderResourceView(textureResourceEntry.Id, name);
+            uint shaderResourceViewId = CreateShaderResourceView(textureResourceEntry.Id, name);
 
             var fileResource = new FileResource(filename, new[] { textureResourceEntry.Id, shaderResourceViewId });
             FileResources.Add(filename, fileResource);
@@ -572,7 +580,7 @@ namespace T3.Core
         }
 
         // returns true if the texture changed
-        public bool CreateTexture(Texture2DDescription description, string name, ref Guid id, ref Texture2D texture)
+        public bool CreateTexture(Texture2DDescription description, string name, ref uint id, ref Texture2D texture)
         {
             if (texture != null && texture.Description.Equals(description))
             {
@@ -591,7 +599,7 @@ namespace T3.Core
                 }
 
                 // new texture, create resource entry
-                textureResource = new TextureResource(Guid.NewGuid(), name, texture);
+                textureResource = new TextureResource(GetNextResourceId(), name, texture);
                 Resources.Add(textureResource.Id, textureResource);
                 Textures.Add(textureResource);
             }
@@ -639,7 +647,7 @@ namespace T3.Core
             return modifiedSymbols;
         }
 
-        public Dictionary<Guid, Resource> Resources = new Dictionary<Guid, Resource>();
+        public Dictionary<uint, Resource> Resources = new Dictionary<uint, Resource>();
         internal Dictionary<string, FileResource> FileResources = new Dictionary<string, FileResource>();
         internal List<VertexShaderResource> VertexShaders = new List<VertexShaderResource>();
         internal List<PixelShaderResource> PixelShaders = new List<PixelShaderResource>();

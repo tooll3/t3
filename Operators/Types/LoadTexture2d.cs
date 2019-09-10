@@ -14,8 +14,8 @@ namespace T3.Operators.Types
         public readonly Slot<ShaderResourceView> ShaderResourceView = new Slot<ShaderResourceView>();
 
         private Texture2D _texture;
-        private Guid _textureResId;
-        private Guid _textureSrvResId;
+        private uint _textureResId;
+        private uint _textureSrvResId;
 
         public LoadTexture2d()
         {
@@ -28,7 +28,7 @@ namespace T3.Operators.Types
             if (Path.DirtyFlag.IsDirty)
             {
                 string imagePath = Path.GetValue(context);
-                (Guid textureResId, Guid textureSrvResId) = ResourceManager.Instance().CreateTextureFromFile(imagePath);
+                (uint textureResId, uint textureSrvResId) = ResourceManager.Instance().CreateTextureFromFile(imagePath);
                 _textureResId = textureResId;
                 _textureSrvResId = textureSrvResId;
             }
