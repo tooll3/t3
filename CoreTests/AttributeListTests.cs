@@ -300,12 +300,12 @@ namespace OperatorTests
 
             public void Update(EvaluationContext context)
             {
-                bool listHasChanged = AttributeListInput.IsDirty;
+                bool listHasChanged = AttributeListInput.DirtyFlag.IsDirty;
                 AttributeList inputAttributeList = AttributeListInput.GetValue(context);
                 if (inputAttributeList == null)
                     return;
 
-                if (listHasChanged || AttributeName.IsDirty)
+                if (listHasChanged || AttributeName.DirtyFlag.IsDirty)
                 {
                     // update index
                     string name = AttributeName.GetValue(context);

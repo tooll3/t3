@@ -122,7 +122,7 @@ namespace OperatorTests
             Assert.AreEqual(64, result);
 
             op.MyMultiInput.AddConnection(op2.IntOutput);
-            op.Result.IsDirty = true;
+            op.Result.DirtyFlag.Invalidate();
             result = op.Result.GetValue(new EvaluationContext());
             Assert.AreEqual(128, result);
         }

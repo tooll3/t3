@@ -28,6 +28,47 @@ namespace T3.Gui
         
         public abstract void DrawValue(Slot slot);
 
+        public int Invalidate(ISlot slot)
+        {
+            Instance parent = slot.Parent;
+
+            bool outputDirty = false;
+            foreach (var input in parent.Inputs)
+            {
+                if (input.IsConnected)
+                {
+                    if (input.IsMultiInput)
+                    {
+                        var multiInput = (IMultiInputSlot)input;
+                        int dirtySum = 0;
+                        foreach (var entry in multiInput.GetCollectedInputs2())
+                        {
+                            dirtySum += Invalidate(entry);
+                        }
+
+                        input.DirtyFlag.Target = dirtySum;
+                    }
+                    else
+                    {
+                        input.DirtyFlag.Target = Invalidate(input.GetConnection(0));
+                    }
+                }
+                else if (input.DirtyFlag.Trigger != DirtyFlagTrigger.None)
+                {
+                    input.DirtyFlag.Invalidate();
+                }
+
+                outputDirty |= input.DirtyFlag.IsDirty;
+            }
+
+            if (outputDirty || slot.DirtyFlag.Trigger != DirtyFlagTrigger.None)
+            {
+                slot.DirtyFlag.Invalidate();
+            }
+
+            return slot.DirtyFlag.Target;
+        }
+
         protected EvaluationContext _evaluationContext = new EvaluationContext();
     }
 
@@ -37,6 +78,7 @@ namespace T3.Gui
         {
             if (slot is Slot<T> typedSlot)
             {
+                Invalidate(slot);
                 _evaluationContext.Reset();
                 var value = typedSlot.GetValue(_evaluationContext);
                 ImGui.Text($"{value}");
@@ -54,6 +96,7 @@ namespace T3.Gui
         {
             if (slot is Slot<ShaderResourceView> typedSlot)
             {
+                Invalidate(slot);
                 _evaluationContext.Reset();
                 var value = typedSlot.GetValue(_evaluationContext);
                 ImGui.Image((IntPtr)value, new Vector2(100.0f, 100.0f));
@@ -75,6 +118,7 @@ namespace T3.Gui
         {
             if (slot is Slot<List<float>> typedSlot)
             {
+                Invalidate(slot);
                 _evaluationContext.Reset();
                 var list = typedSlot.GetValue(_evaluationContext);
                 var outputString = string.Join(", ", list);

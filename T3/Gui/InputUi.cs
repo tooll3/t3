@@ -238,6 +238,7 @@ namespace T3.Gui
 
                     if ((editState & InputEditState.Modified) == InputEditState.Modified)
                     {
+                        inputSlot.DirtyFlag.Invalidate();
                         Log.Debug($"modified {typedInputSlot.TypedInputValue.Value}");
                     }
 
