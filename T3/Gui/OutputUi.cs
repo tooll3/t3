@@ -14,7 +14,7 @@ namespace T3.Gui
     {
         Symbol.OutputDefinition OutputDefinition { get; set; }
         Type Type { get; }
-        void DrawValue(Slot slot);
+        void DrawValue(ISlot slot);
     }
 
     public abstract class OutputUi<T> : IOutputUi
@@ -26,7 +26,7 @@ namespace T3.Gui
         public Vector2 Size { get; set; } = new Vector2(100, 30);
         public bool IsSelected { get; set; }
         
-        public abstract void DrawValue(Slot slot);
+        public abstract void DrawValue(ISlot slot);
 
         public int Invalidate(ISlot slot)
         {
@@ -74,7 +74,7 @@ namespace T3.Gui
 
     public class ValueOutputUi<T> : OutputUi<T>
     {
-        public override void DrawValue(Slot slot)
+        public override void DrawValue(ISlot slot)
         {
             if (slot is Slot<T> typedSlot)
             {
@@ -92,7 +92,7 @@ namespace T3.Gui
 
     public class ShaderResourceViewOutputUi : OutputUi<ShaderResourceView>
     {
-        public override void DrawValue(Slot slot)
+        public override void DrawValue(ISlot slot)
         {
             if (slot is Slot<ShaderResourceView> typedSlot)
             {
@@ -114,7 +114,7 @@ namespace T3.Gui
 
     public class FloatListOutputUi : OutputUi<List<float>>
     {
-        public override void DrawValue(Slot slot)
+        public override void DrawValue(ISlot slot)
         {
             if (slot is Slot<List<float>> typedSlot)
             {
