@@ -1,5 +1,5 @@
 todo:
-- Remove abstract Slot class and replace with ISlot
+- Clean up multi input handling for graph invalidation
 - Replace Guids with uint ids during runtime
 - How to animate struct type like Vec3 or Color
 - Showing enums produces always the same code, extract function for this and even better cached object per enum type
@@ -13,6 +13,7 @@ todo:
 - General op replacement/compilation after change
  
 done:
+* Remove abstract Slot class and replace with ISlot
 * Reactivate dirty flag
 * Integrate graph traversal
 * Move operators out of Core directory

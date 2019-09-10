@@ -68,25 +68,14 @@ namespace T3.Core.Operator
 
     public interface ISlot
     {
+        Guid Id { get; set; }
+        Type Type { get; }
         Instance Parent { get; set; }
         DirtyFlag DirtyFlag { get; set; }
         void AddConnection(ISlot source, int index = 0);
         void RemoveConnection(int index = 0);
         bool IsConnected { get; }
         ISlot GetConnection(int index);
-    }
-
-    public abstract class Slot : ISlot
-    {
-        public Guid Id { get; set; }
-        public Type Type { get; protected set; }
-        public Instance Parent { get; set; }
-        public DirtyFlag DirtyFlag { get; set; } = new DirtyFlag();
-
-        public abstract void AddConnection(ISlot source, int index = 0);
-        public abstract void RemoveConnection(int index = 0);
-        public abstract bool IsConnected { get; }
-        public abstract ISlot GetConnection(int index);
     }
 
     public abstract class InputValue
@@ -154,8 +143,13 @@ namespace T3.Core.Operator
         public T Value;
     }
 
-    public class Slot<T> : Slot
+    public class Slot<T> : ISlot
     {
+        public Guid Id { get; set; }
+        public Type Type { get; protected set; }
+        public Instance Parent { get; set; }
+        public DirtyFlag DirtyFlag { get; set; } = new DirtyFlag();
+        
         public T Value; // { get; set; }
         public bool IsMultiInput { get; protected set; } = false;
 
@@ -201,7 +195,7 @@ namespace T3.Core.Operator
             return Value;
         }
 
-        public override void AddConnection(ISlot sourceSlot, int index = 0)
+        public void AddConnection(ISlot sourceSlot, int index = 0)
         {
             if (!IsConnected)
             {
@@ -213,7 +207,7 @@ namespace T3.Core.Operator
             InputConnection.Insert(index, (Slot<T>)sourceSlot);
         }
 
-        public override void RemoveConnection(int index = 0)
+        public void RemoveConnection(int index = 0)
         {
             if (IsConnected)
             {
@@ -240,9 +234,9 @@ namespace T3.Core.Operator
             UpdateAction = _defaultUpdateAction;
         }
 
-        public override bool IsConnected => InputConnection.Count > 0;
+        public bool IsConnected => InputConnection.Count > 0;
 
-        public override ISlot GetConnection(int index)
+        public ISlot GetConnection(int index)
         {
             return InputConnection[index];
         }
@@ -270,7 +264,6 @@ namespace T3.Core.Operator
 
     public interface IInputSlot : ISlot
     {
-        Guid Id { get; set; }
         SymbolChild.Input Input { get; set; }
         bool IsMultiInput { get; }
     }

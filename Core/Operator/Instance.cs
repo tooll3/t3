@@ -12,7 +12,7 @@ namespace T3.Core.Operator
         public Instance Parent { get; internal set; }
         public Symbol Symbol { get; internal set; }
 
-        public List<Slot> Outputs { get; set; } = new List<Slot>();
+        public List<ISlot> Outputs { get; set; } = new List<ISlot>();
         public List<Instance> Children { get; set; } = new List<Instance>();
         public List<IInputSlot> Inputs { get; set; } = new List<IInputSlot>();
 
@@ -40,7 +40,7 @@ namespace T3.Core.Operator
                            select field).ToArray();
             foreach (var output in outputs)
             {
-                var slot = (Slot)output.GetValue(this);
+                var slot = (ISlot)output.GetValue(this);
                 slot.Parent = this;
                 Outputs.Add(slot);
             }
