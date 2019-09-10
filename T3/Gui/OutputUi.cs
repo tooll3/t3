@@ -30,40 +30,48 @@ namespace T3.Gui
 
         public int Invalidate(ISlot slot)
         {
-            Instance parent = slot.Parent;
-
-            bool outputDirty = false;
-            foreach (var input in parent.Inputs)
+            if (slot.IsConnected)
             {
-                if (input.IsConnected)
-                {
-                    if (input.IsMultiInput)
-                    {
-                        var multiInput = (IMultiInputSlot)input;
-                        int dirtySum = 0;
-                        foreach (var entry in multiInput.GetCollectedInputs())
-                        {
-                            dirtySum += Invalidate(entry);
-                        }
-
-                        input.DirtyFlag.Target = dirtySum;
-                    }
-                    else
-                    {
-                        input.DirtyFlag.Target = Invalidate(input.GetConnection(0));
-                    }
-                }
-                else if (input.DirtyFlag.Trigger != DirtyFlagTrigger.None)
-                {
-                    input.DirtyFlag.Invalidate();
-                }
-
-                outputDirty |= input.DirtyFlag.IsDirty;
+                // slot is an output of an composition op
+                slot.DirtyFlag.Target = Invalidate(slot.GetConnection(0));
             }
-
-            if (outputDirty || slot.DirtyFlag.Trigger != DirtyFlagTrigger.None)
+            else
             {
-                slot.DirtyFlag.Invalidate();
+                Instance parent = slot.Parent;
+
+                bool outputDirty = false;
+                foreach (var input in parent.Inputs)
+                {
+                    if (input.IsConnected)
+                    {
+                        if (input.IsMultiInput)
+                        {
+                            var multiInput = (IMultiInputSlot)input;
+                            int dirtySum = 0;
+                            foreach (var entry in multiInput.GetCollectedInputs())
+                            {
+                                dirtySum += Invalidate(entry);
+                            }
+
+                            input.DirtyFlag.Target = dirtySum;
+                        }
+                        else
+                        {
+                            input.DirtyFlag.Target = Invalidate(input.GetConnection(0));
+                        }
+                    }
+                    else if (input.DirtyFlag.Trigger != DirtyFlagTrigger.None)
+                    {
+                        input.DirtyFlag.Invalidate();
+                    }
+
+                    outputDirty |= input.DirtyFlag.IsDirty;
+                }
+
+                if (outputDirty || slot.DirtyFlag.Trigger != DirtyFlagTrigger.None)
+                {
+                    slot.DirtyFlag.Invalidate();
+                }
             }
 
             return slot.DirtyFlag.Target;
