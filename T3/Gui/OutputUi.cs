@@ -28,6 +28,7 @@ namespace T3.Gui
         
         public abstract void DrawValue(Slot slot);
 
+        protected EvaluationContext _evaluationContext = new EvaluationContext();
     }
 
     public class ValueOutputUi<T> : OutputUi<T>
@@ -36,7 +37,8 @@ namespace T3.Gui
         {
             if (slot is Slot<T> typedSlot)
             {
-                var value = typedSlot.GetValue(new EvaluationContext());
+                _evaluationContext.Reset();
+                var value = typedSlot.GetValue(_evaluationContext);
                 ImGui.Text($"{value}");
             }
             else
@@ -52,7 +54,8 @@ namespace T3.Gui
         {
             if (slot is Slot<ShaderResourceView> typedSlot)
             {
-                var value = typedSlot.GetValue(new EvaluationContext());
+                _evaluationContext.Reset();
+                var value = typedSlot.GetValue(_evaluationContext);
                 ImGui.Image((IntPtr)value, new Vector2(100.0f, 100.0f));
             }
             else
@@ -72,7 +75,8 @@ namespace T3.Gui
         {
             if (slot is Slot<List<float>> typedSlot)
             {
-                var list = typedSlot.GetValue(new EvaluationContext());
+                _evaluationContext.Reset();
+                var list = typedSlot.GetValue(_evaluationContext);
                 var outputString = string.Join(", ", list);
                 ImGui.Text($"{outputString}");
             }

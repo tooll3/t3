@@ -4,6 +4,7 @@ using SharpDX;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Resources;
 using T3.Core.Logging;
 
 namespace T3.Core.Operator
@@ -11,6 +12,11 @@ namespace T3.Core.Operator
     public class EvaluationContext
     {
         public EvaluationContext()
+        {
+            Time = GlobalTime;
+        }
+
+        public void Reset()
         {
             Time = GlobalTime;
         }
@@ -251,6 +257,7 @@ namespace T3.Core.Operator
             UpdateAction = InputUpdate;
             _defaultUpdateAction = UpdateAction;
             TypedInputValue = typedInputValue;
+            Value = typedInputValue.Value;
         }
 
         public InputSlot() : this(default(T))

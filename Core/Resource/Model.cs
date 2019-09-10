@@ -44,7 +44,7 @@ namespace T3.Core
             Assembly.LoadFrom(@"bin\release\Operators.dll");
 #endif
             // generic enum value from json function, must be local function
-            object JsonToEnumValue<T>(JToken jsonToken) where T : struct
+            object JsonToEnumValue<T>(JToken jsonToken) where T : struct // todo: use 7.3 and replace with enum
             {
                 string value = jsonToken.Value<string>();
                 if (Enum.TryParse(value, out T enumValue))
