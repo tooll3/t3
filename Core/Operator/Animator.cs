@@ -15,6 +15,24 @@ namespace T3.Core.Operator
 
     public class Animator : SymbolExtension
     {
+        struct CurveId
+        {
+            public CurveId(Guid instanceId, Guid inputId)
+            {
+                InstanceId = instanceId;
+                InputId = inputId;
+            }
+
+            public CurveId(IInputSlot inputSlot)
+            {
+                InstanceId = inputSlot.Parent.Id;
+                InputId = inputSlot.Id;
+            }
+
+            public Guid InstanceId;
+            public Guid InputId;
+        }
+
         public void CreateInputUpdateAction<T>(IInputSlot inputSlot)
         {
             if (inputSlot is Slot<float> typedInputSlot)
@@ -26,13 +44,13 @@ namespace T3.Core.Operator
                                                                         InType = VDefinition.Interpolation.Spline,
                                                                         OutType = VDefinition.Interpolation.Spline,
                                                                     });
+                _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
                 newCurve.AddOrUpdateV(EvaluationContext.GlobalTime + 1, new VDefinition()
                                                                         {
                                                                             Value = typedInputSlot.Value + 2,
                                                                             InType = VDefinition.Interpolation.Spline,
                                                                             OutType = VDefinition.Interpolation.Spline,
                                                                         });
-                _animatedInputCurves.Add(inputSlot.Id, newCurve);
 
                 typedInputSlot.UpdateAction = context => { typedInputSlot.Value = (float)newCurve.GetSampledValue(context.Time); };
             }
@@ -47,8 +65,9 @@ namespace T3.Core.Operator
             // gather all inputs that correspond to stored ids
             var relevantInputs = from curveEntry in _animatedInputCurves
                                  from childInstance in compositionInstance.Children
+                                 where curveEntry.Key.InstanceId == childInstance.Id
                                  from inputSlot in childInstance.Inputs
-                                 where curveEntry.Key == inputSlot.Id
+                                 where curveEntry.Key.InputId == inputSlot.Id
                                  select (inputSlot, curveEntry.Value);
 
             foreach (var entry in relevantInputs)
@@ -70,18 +89,18 @@ namespace T3.Core.Operator
             {
                 typedInputSlot.SetUpdateActionBackToDefault();
 
-                _animatedInputCurves.Remove(inputSlot.Id);
+                _animatedInputCurves.Remove(new CurveId(inputSlot));
             }
         }
 
         public bool IsInputSlotAnimated(IInputSlot inputSlot)
         {
-            return _animatedInputCurves.ContainsKey(inputSlot.Id);
+            return _animatedInputCurves.ContainsKey(new CurveId(inputSlot));
         }
 
         public Curve GetCurveForInput(IInputSlot inputSlot)
         {
-            return _animatedInputCurves[inputSlot.Id];
+            return _animatedInputCurves[new CurveId(inputSlot)];
         }
 
         public void Write(JsonTextWriter writer)
@@ -96,7 +115,8 @@ namespace T3.Core.Operator
             {
                 writer.WriteStartObject();
 
-                writer.WriteValue("InputId", entry.Key);
+                writer.WriteValue("InstanceId", entry.Key.InstanceId);
+                writer.WriteValue("InputId", entry.Key.InputId);
                 entry.Value.Write(writer); // write curve itself
 
                 writer.WriteEndObject();
@@ -109,15 +129,16 @@ namespace T3.Core.Operator
         {
             foreach (JToken entry in inputToken)
             {
+                Guid instanceId = Guid.Parse(entry["InstanceId"].Value<string>());
                 Guid inputId = Guid.Parse(entry["InputId"].Value<string>());
 
                 Curve curve = new Curve();
                 curve.Read(entry);
 
-                _animatedInputCurves.Add(inputId, curve);
+                _animatedInputCurves.Add(new CurveId(instanceId, inputId), curve);
             }
         }
 
-        private readonly Dictionary<Guid, Curve> _animatedInputCurves = new Dictionary<Guid, Curve>();
+        private readonly Dictionary<CurveId, Curve> _animatedInputCurves = new Dictionary<CurveId, Curve>();
     }
 }
