@@ -33,15 +33,16 @@ namespace T3.Core
 
     public class Model
     {
+        private Assembly _operatorsAssembly;
         protected string Path { get; } = @"..\Operators\Types\";
         protected string SymbolExtension { get; } = ".t3";
 
         public Model()
         {
 #if DEBUG
-            Assembly.LoadFrom(@"bin\debug\Operators.dll");
+            _operatorsAssembly = Assembly.LoadFrom(@"bin\debug\Operators.dll");
 #else
-            Assembly.LoadFrom(@"bin\release\Operators.dll");
+            _operatorsAssembly = Assembly.LoadFrom(@"bin\release\Operators.dll");
 #endif
             // generic enum value from json function, must be local function
             object JsonToEnumValue<T>(JToken jsonToken) where T : struct // todo: use 7.3 and replace with enum
@@ -127,7 +128,7 @@ namespace T3.Core
             InputValue InputDefaultValueCreator<T>() => new InputValue<T>();
             InputValueCreators.Entries.Add(typeof(int), InputDefaultValueCreator<int>);
             InputValueCreators.Entries.Add(typeof(float), InputDefaultValueCreator<float>);
-            InputValueCreators.Entries.Add(typeof(string), InputDefaultValueCreator<string>);
+            InputValueCreators.Entries.Add(typeof(string), () => new InputValue<string>(string.Empty));
             InputValueCreators.Entries.Add(typeof(Size2), InputDefaultValueCreator<Size2>);
             InputValueCreators.Entries.Add(typeof(ResourceUsage), InputDefaultValueCreator<ResourceUsage>);
             InputValueCreators.Entries.Add(typeof(Format), InputDefaultValueCreator<Format>);
@@ -146,8 +147,7 @@ namespace T3.Core
             }
 
             // check if there are symbols without a file, if yes add these
-            var asm = typeof(Symbol).Assembly;
-            var instanceTypes = (from type in asm.ExportedTypes
+            var instanceTypes = (from type in _operatorsAssembly.ExportedTypes
                                  where type.IsSubclassOf(typeof(Instance))
                                  where !type.IsGenericType
                                  select type).ToList();
@@ -178,8 +178,7 @@ namespace T3.Core
             using (var sr = new StreamReader(symbolFile))
             using (var jsonReader = new JsonTextReader(sr))
             {
-                Json json = new Json();
-                json.Reader = jsonReader;
+                Json json = new Json {Reader = jsonReader};
                 var symbol = json.ReadSymbol(this);
                 if (symbol != null)
                 {
