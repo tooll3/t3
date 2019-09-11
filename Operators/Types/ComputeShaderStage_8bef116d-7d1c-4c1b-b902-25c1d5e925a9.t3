@@ -12,6 +12,10 @@
       "DefaultValue": null
     },
     {
+      "Id": "88938b09-d5a7-437c-b6e1-48a5b375d756"/*ShaderResources*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "cec84992-8525-4242-b3c3-c94fe11c2a15"/*OutputUav*/,
       "DefaultValue": null
     }

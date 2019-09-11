@@ -24,6 +24,19 @@ namespace T3.Operators.Types
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
 
+            _cs = ComputeShader.GetValue(context);
+            _constantBuffer = ConstantBuffer.GetValue(context);
+
+            if (ShaderResources.DirtyFlag.IsDirty)
+            {
+                _srv?.Dispose();
+                Texture2D inputTexture = ShaderResources.GetValue(context);
+                if (inputTexture != null)
+                {
+                    _srv = new ShaderResourceView(device, inputTexture);
+                }
+            }
+
             if (OutputUav.DirtyFlag.IsDirty)
             {
                 _uav?.Dispose();
@@ -34,31 +47,33 @@ namespace T3.Operators.Types
                 }
             }
 
-            _cs = ComputeShader.GetValue(context);
-            _constantBuffer = ConstantBuffer.GetValue(context);
-
             if (_uav == null || _cs == null)
                 return;
 
             csStage.Set(_cs);
-            csStage.SetUnorderedAccessView(0, _uav);
             csStage.SetConstantBuffer(0, _constantBuffer);
+            csStage.SetShaderResource(0, _srv);
+            csStage.SetUnorderedAccessView(0, _uav);
 
             int width = OutputUav.Value.Description.Width;
             int height = OutputUav.Value.Description.Height;
             deviceContext.Dispatch(width / 16, height / 16, 1);
 
             csStage.SetUnorderedAccessView(0, null);
+            csStage.SetShaderResource(0, null);
         }
 
-        private UnorderedAccessView _uav;
         private SharpDX.Direct3D11.ComputeShader _cs;
         private SharpDX.Direct3D11.Buffer _constantBuffer;
+        private ShaderResourceView _srv;
+        private UnorderedAccessView _uav;
         
         [Input(Guid = "{5C0E9C96-9ABA-4757-AE1F-CC50FB6173F1}")]
         public readonly InputSlot<SharpDX.Direct3D11.ComputeShader> ComputeShader = new InputSlot<SharpDX.Direct3D11.ComputeShader>();
         [Input(Guid = "{34CF06FE-8F63-4F14-9C59-35A2C021B817}")]
         public readonly InputSlot<Buffer> ConstantBuffer = new InputSlot<Buffer>();
+        [Input(Guid = "{88938B09-D5A7-437C-B6E1-48A5B375D756}")]
+        public readonly InputSlot<Texture2D> ShaderResources = new InputSlot<Texture2D>();
         [Input(Guid = "{CEC84992-8525-4242-B3C3-C94FE11C2A15}")]
         public readonly InputSlot<Texture2D> OutputUav = new InputSlot<Texture2D>();
     }
