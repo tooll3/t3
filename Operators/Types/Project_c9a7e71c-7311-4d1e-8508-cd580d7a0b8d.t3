@@ -105,6 +105,11 @@
       "Id": "145ec104-05d5-417d-a7d2-b557f5a59819"/*TimeConstBuffer*/,
       "SymbolId": "de8bc97a-8ef0-4d4a-9ffa-88046a2daf40",
       "InputValues": []
+    },
+    {
+      "Id": "2145b502-6124-4b6b-812f-ec4f4cc3d032"/*SamplerStateOp*/,
+      "SymbolId": "9515d59d-0bd5-406b-96da-6a5f60215700",
+      "InputValues": []
     }
   ],
   "Connections": [
@@ -221,6 +226,12 @@
       "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
       "TargetParentOrChildId": "6e316c6f-b602-40b2-81d7-acfa3f4c96a5",
       "TargetSlotId": "88938b09-d5a7-437c-b6e1-48a5b375d756"
+    },
+    {
+      "SourceParentOrChildId": "2145b502-6124-4b6b-812f-ec4f4cc3d032",
+      "SourceSlotId": "0e45c596-c80f-4927-941f-e3199401aa10",
+      "TargetParentOrChildId": "6e316c6f-b602-40b2-81d7-acfa3f4c96a5",
+      "TargetSlotId": "4047c9e7-1edb-4c71-b85c-c1b87058c81c"
     }
   ],
   "Animator": [

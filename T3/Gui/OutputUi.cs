@@ -186,6 +186,10 @@ namespace T3.Gui
     {
     }
 
+    public class SamplerStateOutputUi : ValueOutputUi<SamplerState>
+    {
+    }
+
     public static class OutputUiFactory
     {
         public static Dictionary<Type, Func<IOutputUi>> Entries { get; } = new Dictionary<Type, Func<IOutputUi>>();
