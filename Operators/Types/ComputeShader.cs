@@ -26,11 +26,12 @@ namespace T3.Operators.Types
         {
             var resourceManager = ResourceManager.Instance();
 
-            if (Source.DirtyFlag.IsDirty || EntryPoint.DirtyFlag.IsDirty)
+            if (Source.DirtyFlag.IsDirty || EntryPoint.DirtyFlag.IsDirty || DebugName.DirtyFlag.IsDirty)
             {
                 string sourcePath = Source.GetValue(context);
                 string entryPoint = EntryPoint.GetValue(context);
-                _computeShaderResId = resourceManager.CreateComputeShader(sourcePath, entryPoint, "bla");
+                string debugName = DebugName.GetValue(context);
+                _computeShaderResId = resourceManager.CreateComputeShader(sourcePath, entryPoint, debugName);
             }
 
             if (_computeShaderResId != ResourceManager.NULL_RESOURCE)
@@ -41,7 +42,11 @@ namespace T3.Operators.Types
 
         [Input(Guid = "{AFB69C81-5063-4CB9-9D42-841B994B5EC0}")]
         public readonly InputSlot<string> Source = new InputSlot<string>();
+
         [Input(Guid = "{8AD9E58D-A767-4A5F-BFBF-D082B80901D6}")]
         public readonly InputSlot<string> EntryPoint = new InputSlot<string>();
+
+        [Input(Guid = "{C0701D0B-D37F-4570-9E9A-EC2E88B919D1}")]
+        public readonly InputSlot<string> DebugName = new InputSlot<string>();
     }
 }

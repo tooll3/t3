@@ -62,8 +62,8 @@
     {
       "ChildId": "ce7f2ed4-1495-4b96-983b-4fbf2851aa84"/*Texture2d*/,
       "Position": {
-        "X": -80.83334,
-        "Y": 261.1667
+        "X": 799.1666,
+        "Y": 315.1667
       }
     },
     {
@@ -92,6 +92,13 @@
       "Position": {
         "X": 642.0,
         "Y": 336.0
+      }
+    },
+    {
+      "ChildId": "6e316c6f-b602-40b2-81d7-acfa3f4c96a5"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 664.0,
+        "Y": 177.0
       }
     }
   ],

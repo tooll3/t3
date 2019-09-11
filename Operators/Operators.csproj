@@ -54,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\Add.cs" />
     <Compile Include="Types\ComputeShader.cs" />
+    <Compile Include="Types\ComputeShaderStage.cs" />
     <Compile Include="Types\Dashboard.cs" />
     <Compile Include="Types\FloatFormat.cs" />
     <Compile Include="Types\FloatMultiInputToList.cs" />

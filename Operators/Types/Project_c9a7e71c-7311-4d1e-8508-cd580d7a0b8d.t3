@@ -52,7 +52,13 @@
     {
       "Id": "ce7f2ed4-1495-4b96-983b-4fbf2851aa84"/*Texture2d*/,
       "SymbolId": "f52db9a4-fde9-49ca-9ef7-131825c34e65",
-      "InputValues": []
+      "InputValues": [
+        {
+          "Id": "cfebc37f-6813-416a-9073-e48d31074115"/*BindFlags*/,
+          "Type": "SharpDX.Direct3D11.BindFlags",
+          "Value": "ShaderResource, UnorderedAccess"
+        }
+      ]
     },
     {
       "Id": "ba4c312b-a473-4903-8479-7f2a5f525f31"/*FloatMultiInputToList*/,
@@ -72,6 +78,17 @@
     {
       "Id": "2570c599-138d-4109-9932-33e7bb0dd34a"/*ComputeShader*/,
       "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "c0701d0b-d37f-4570-9e9a-ec2e88b919d1"/*DebugName*/,
+          "Type": "System.String",
+          "Value": "GradientComputeShader"
+        }
+      ]
+    },
+    {
+      "Id": "6e316c6f-b602-40b2-81d7-acfa3f4c96a5"/*ComputeShaderStage*/,
+      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
       "InputValues": []
     }
   ],

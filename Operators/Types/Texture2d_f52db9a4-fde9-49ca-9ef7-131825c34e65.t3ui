@@ -77,8 +77,8 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "0cc65a71-805e-4de4-94f2-cc710f5f6319"/*ShaderResourceView*/,
-      "Type": "SharpDX.Direct3D11.ShaderResourceView, SharpDX.Direct3D11",
+      "OutputId": "007129e4-0eae-4cb9-a142-90c1c171a5fb"/*Texture*/,
+      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
       "Position": {
         "X": 0.0,
         "Y": 0.0
