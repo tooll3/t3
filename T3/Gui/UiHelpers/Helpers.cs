@@ -1,4 +1,5 @@
 using ImGuiNET;
+using System;
 using System.Numerics;
 using T3.Gui;
 
@@ -226,6 +227,11 @@ namespace UiHelpers
         public static Vector2 Min(Vector2 lhs, Vector2 rhs)
         {
             return new Vector2(lhs.X < rhs.X ? lhs.X : rhs.X, lhs.Y < rhs.Y ? lhs.Y : rhs.Y);
+        }
+
+        public static Vector2 Floor(Vector2 v)
+        {
+            return new Vector2((float)Math.Floor(v.X), (float)Math.Floor(v.Y));
         }
 
         public static Vector2 Max(Vector2 lhs, Vector2 rhs)

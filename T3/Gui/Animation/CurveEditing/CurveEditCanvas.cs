@@ -751,6 +751,11 @@ namespace T3.Gui.Animation.CurveEditing
             return (posOnCanvas - Scroll) * Scale + WindowPos;
         }
 
+        public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
+        {
+            return Im.Floor((posOnCanvas - Scroll) * Scale + WindowPos);
+        }
+
         /// <summary>
         /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
@@ -816,7 +821,7 @@ namespace T3.Gui.Animation.CurveEditing
         /// </summary>
         public ImRect TransformRect(ImRect canvasRect)
         {
-            var r = new ImRect(TransformPosition(canvasRect.Min), TransformPosition(canvasRect.Max));
+            var r = new ImRect(TransformPositionFloored(canvasRect.Min), TransformPositionFloored(canvasRect.Max));
             if (r.Min.Y > r.Max.Y)
             {
                 var t = r.Min.Y;
