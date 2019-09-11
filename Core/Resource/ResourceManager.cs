@@ -223,6 +223,16 @@ namespace T3.Core
             return _instance;
         }
 
+        public T GetResource<T>(uint resourceId) where T : Resource
+        {
+            return (T)Resources[resourceId];
+        }
+
+        public ComputeShader GetComputeShader(uint resourceId)
+        {
+            return GetResource<ComputeShaderResource>(resourceId).ComputeShader;
+        }
+        
         public const uint NULL_RESOURCE = 0;
         private uint _resourceIdCounter = 1;
 
