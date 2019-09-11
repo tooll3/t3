@@ -14,6 +14,11 @@ namespace T3.Operators.Types
         public ComputeShader()
         {
             ComputerShader.UpdateAction = UpdateComputeShader;
+
+            // this ensures for now that an asynchronous change of the compute shader resource is picked up
+            // probably a different handling is needed later on, either use a callback or simply output
+            // the resource id instead of the shader object. The user has then to get the shader from the
+            // resource manager which would always be the actual one
             ComputerShader.DirtyFlag.Trigger = DirtyFlagTrigger.Always;
         }
 
@@ -30,7 +35,7 @@ namespace T3.Operators.Types
 
             if (_computeShaderResId != ResourceManager.NULL_RESOURCE)
             {
-                ComputerShader.Value = ((ComputeShaderResource)resourceManager.Resources[_computeShaderResId]).ComputeShader;
+                ComputerShader.Value = resourceManager.GetComputeShader(_computeShaderResId);
             }
         }
 
