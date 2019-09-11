@@ -55,6 +55,7 @@
     <Compile Include="Types\Add.cs" />
     <Compile Include="Types\ComputeShader.cs" />
     <Compile Include="Types\ComputeShaderStage.cs" />
+    <Compile Include="Types\TimeConstBuffer.cs" />
     <Compile Include="Types\Dashboard.cs" />
     <Compile Include="Types\FloatFormat.cs" />
     <Compile Include="Types\FloatMultiInputToList.cs" />
@@ -71,6 +72,8 @@
   <ItemGroup>
     <Content Include="Types\Add_c160f925-0a66-4505-a569-cadd878dbb6f.t3" />
     <Content Include="Types\Add_c160f925-0a66-4505-a569-cadd878dbb6f.t3ui" />
+    <Content Include="Types\ComputeShaderStage_8bef116d-7d1c-4c1b-b902-25c1d5e925a9.t3" />
+    <Content Include="Types\ComputeShaderStage_8bef116d-7d1c-4c1b-b902-25c1d5e925a9.t3ui" />
     <Content Include="Types\ComputeShader_a256d70f-adb3-481d-a926-caf35bd3e64c.t3" />
     <Content Include="Types\ComputeShader_a256d70f-adb3-481d-a926-caf35bd3e64c.t3ui" />
     <Content Include="Types\Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3" />
@@ -95,6 +98,8 @@
     <Content Include="Types\Sum_2f851b5b-b66d-40b0-9445-e733dc4b907d.t3ui" />
     <Content Include="Types\Texture2d_f52db9a4-fde9-49ca-9ef7-131825c34e65.t3" />
     <Content Include="Types\Texture2d_f52db9a4-fde9-49ca-9ef7-131825c34e65.t3ui" />
+    <Content Include="Types\TimeConstBuffer_de8bc97a-8ef0-4d4a-9ffa-88046a2daf40.t3" />
+    <Content Include="Types\TimeConstBuffer_de8bc97a-8ef0-4d4a-9ffa-88046a2daf40.t3ui" />
     <Content Include="Types\Time_862de1a8-f630-4823-8860-7afa918bb1bc.t3" />
     <Content Include="Types\Time_862de1a8-f630-4823-8860-7afa918bb1bc.t3ui" />
   </ItemGroup>

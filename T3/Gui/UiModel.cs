@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using T3.Core.Operator;
+using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Gui
 {
@@ -33,6 +34,7 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(List<float>), new FloatUiProperties());
             TypeUiRegistry.Entries.Add(typeof(ComputeShader), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(Texture2D), new ShaderUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(Buffer), new ShaderUiProperties());
 
             // Register input ui creators
             InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
@@ -47,6 +49,7 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListInputUi());
             InputUiFactory.Entries.Add(typeof(ComputeShader), () => new ComputeShaderInputUi());
             InputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dInputUi());
+            InputUiFactory.Entries.Add(typeof(Buffer), () => new BufferInputUi());
 
             // Register output ui creators
             OutputUiFactory.Entries.Add(typeof(float), () => new FloatOutputUi());
@@ -57,6 +60,7 @@ namespace T3.Gui
             OutputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dOutputUi());
             OutputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListOutputUi());
             OutputUiFactory.Entries.Add(typeof(ComputeShader), () => new ComputeShaderOutputUi());
+            OutputUiFactory.Entries.Add(typeof(Buffer), () => new BufferOutputUi());
 
             Load();
 

@@ -218,6 +218,8 @@ namespace T3.Core
 
     public class ResourceManager
     {
+        public uint TestId = NULL_RESOURCE;
+
         public static ResourceManager Instance()
         {
             return _instance;
