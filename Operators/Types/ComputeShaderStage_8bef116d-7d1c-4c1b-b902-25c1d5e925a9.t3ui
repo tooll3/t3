@@ -20,6 +20,15 @@
       }
     },
     {
+      "InputId": "88938b09-d5a7-437c-b6e1-48a5b375d756"/*ShaderResources*/,
+      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
       "InputId": "cec84992-8525-4242-b3c3-c94fe11c2a15"/*OutputUav*/,
       "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
       "Relevancy": "Required",
