@@ -1,0 +1,36 @@
+{
+  "Id": "a256d70f-adb3-481d-a926-caf35bd3e64c"/*ComputeShader*/,
+  "InputUis": [
+    {
+      "InputId": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+      "Type": "System.String, mscorlib",
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,
+      "Type": "System.String, mscorlib",
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "6c118567-8827-4422-86cc-4d4d00762d87"/*ComputerShader*/,
+      "Type": "SharpDX.Direct3D11.ComputeShader, SharpDX.Direct3D11",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

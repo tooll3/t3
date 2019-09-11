@@ -1,0 +1,17 @@
+{
+  "Name": "ComputeShader",
+  "Id": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+  "InstanceType": "T3.Operators.Types.ComputeShader, Operators",
+  "Inputs": [
+    {
+      "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+      "DefaultValue": "Resources/compute-shader.hlsl"
+    },
+    {
+      "Id": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,
+      "DefaultValue": "main"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

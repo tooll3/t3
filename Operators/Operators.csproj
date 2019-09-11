@@ -70,6 +70,8 @@
   <ItemGroup>
     <Content Include="Types\Add_c160f925-0a66-4505-a569-cadd878dbb6f.t3" />
     <Content Include="Types\Add_c160f925-0a66-4505-a569-cadd878dbb6f.t3ui" />
+    <Content Include="Types\ComputeShader_a256d70f-adb3-481d-a926-caf35bd3e64c.t3" />
+    <Content Include="Types\ComputeShader_a256d70f-adb3-481d-a926-caf35bd3e64c.t3ui" />
     <Content Include="Types\Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3" />
     <Content Include="Types\Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3ui" />
     <Content Include="Types\FloatFormat_39c96cfd-dedf-4f76-a471-d1c26c9ba9fa.t3" />

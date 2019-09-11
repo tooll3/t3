@@ -155,6 +155,10 @@ namespace T3.Gui
     {
     }
 
+    public class ComputeShaderOutputUi : ValueOutputUi<ComputeShader>
+    {
+    }
+
     public static class OutputUiFactory
     {
         public static Dictionary<Type, Func<IOutputUi>> Entries { get; } = new Dictionary<Type, Func<IOutputUi>>();

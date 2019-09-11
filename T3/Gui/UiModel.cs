@@ -31,6 +31,7 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(ResourceOptionFlags), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(ShaderResourceView), new TextureUiProperties());
             TypeUiRegistry.Entries.Add(typeof(List<float>), new FloatUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(ComputeShader), new ShaderUiProperties());
 
             // Register input ui creators
             InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
@@ -52,6 +53,7 @@ namespace T3.Gui
             OutputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new ShaderResourceViewOutputUi());
             OutputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dOutputUi());
             OutputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListOutputUi());
+            OutputUiFactory.Entries.Add(typeof(ComputeShader), () => new ComputeShaderOutputUi());
 
             Load();
 
