@@ -381,6 +381,9 @@ namespace T3.Core
 
         public uint CreateComputeShader(string srcFile, string entryPoint, string name)
         {
+            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
+                return NULL_RESOURCE;
+
             bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
             {
@@ -397,7 +400,7 @@ namespace T3.Core
 
             ComputeShader shader = null;
             ShaderBytecode blob = null;
-            CompileShader(srcFile, entryPoint, name, "ps_5_0", ref shader, ref blob);
+            CompileShader(srcFile, entryPoint, name, "cs_5_0", ref shader, ref blob);
             if (shader == null)
             {
                 Log.Info("Failed to create pixel shader '{name}'.");

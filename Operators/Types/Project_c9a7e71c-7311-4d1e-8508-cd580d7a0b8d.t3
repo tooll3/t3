@@ -68,6 +68,11 @@
       "Id": "6a5bf36e-a236-461b-bd96-988da892cc7a"/*Add*/,
       "SymbolId": "c160f925-0a66-4505-a569-cadd878dbb6f",
       "InputValues": []
+    },
+    {
+      "Id": "2570c599-138d-4109-9932-33e7bb0dd34a"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": []
     }
   ],
   "Connections": [
