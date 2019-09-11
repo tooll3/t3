@@ -4,6 +4,7 @@ using SharpDX.Direct3D11;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using T3.Core;
 using T3.Core.Operator;
 using T3.Gui.Selection;
 using Vector2 = System.Numerics.Vector2;
@@ -116,6 +117,32 @@ namespace T3.Gui
         }
     }
 
+    public class Texture2dOutputUi : ValueOutputUi<Texture2D>
+    {
+        private ShaderResourceView _srv;
+
+        public override void DrawValue(ISlot slot)
+        {
+            if (slot is Slot<Texture2D> typedSlot)
+            {
+                Invalidate(slot);
+                _evaluationContext.Reset();
+                var value = typedSlot.GetValue(_evaluationContext);
+                if (_srv == null || _srv.Resource != value)
+                {
+                    _srv?.Dispose();
+                    _srv = new ShaderResourceView(ResourceManager.Instance()._device, value);
+                }
+
+                ImGui.Image((IntPtr)_srv, new Vector2(100.0f, 100.0f));
+            }
+            else
+            {
+                Debug.Assert(false);
+            }
+        }
+    }
+
     public class FloatOutputUi : ValueOutputUi<float>
     {
     }
@@ -148,10 +175,6 @@ namespace T3.Gui
     }
 
     public class Size2OutputUi : ValueOutputUi<Size2>
-    {
-    }
-
-    public class Texture2dOutputUi : ValueOutputUi<Texture2D>
     {
     }
 

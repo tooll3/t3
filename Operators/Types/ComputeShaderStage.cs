@@ -46,7 +46,9 @@ namespace T3.Operators.Types
 
             int width = OutputUav.Value.Description.Width;
             int height = OutputUav.Value.Description.Height;
-            deviceContext.Dispatch(width/16, height/16, 1);
+            deviceContext.Dispatch(width / 16, height / 16, 1);
+
+            csStage.SetUnorderedAccessView(0, null);
         }
 
         private UnorderedAccessView _uav;
