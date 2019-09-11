@@ -12,18 +12,11 @@ namespace T3.Operators.Types
         [Output(Guid = "{007129E4-0EAE-4CB9-A142-90C1C171A5FB}")]
         public readonly Slot<Texture2D> Texture = new Slot<Texture2D>();
 
-//        [Output(Guid = "{0CC65A71-805E-4DE4-94F2-CC710F5F6319}")]
-//        public readonly Slot<ShaderResourceView> ShaderResourceView = new Slot<ShaderResourceView>();
-
-        private Texture2D _texture;
         private uint _textureResId;
-        private bool _textureChanged = true;
-        private uint _textureSrvResId;
 
         public Texture2d()
         {
             Texture.UpdateAction = UpdateTexture;
-//            ShaderResourceView.UpdateAction = UpdateShaderResourceView;
         }
 
         private void UpdateTexture(EvaluationContext context)
@@ -44,20 +37,8 @@ namespace T3.Operators.Types
                               CpuAccessFlags = CpuAccessFlags.GetValue(context),
                               OptionFlags = ResourceOptionFlags.GetValue(context)
                           };
-            _textureChanged = ResourceManager.Instance().CreateTexture(texDesc, "Texture2D", ref _textureResId, ref Texture.Value);
+            ResourceManager.Instance().CreateTexture(texDesc, "Texture2D", ref _textureResId, ref Texture.Value);
         }
-
-//        private void UpdateShaderResourceView(EvaluationContext context)
-//        {
-//            //if (Texture.Value == null)
-//            UpdateTexture(context);
-//
-//            if (_textureChanged)
-//            {
-//                ResourceManager.Instance().CreateShaderResourceView(_textureResId, "Texture2dSrv", ref ShaderResourceView.Value);
-//                _textureChanged = false;
-//            }
-//        }
 
         [Input(Guid = "{B77088A9-2676-4CAA-809A-5E0F120D25D7}")]
         public readonly InputSlot<Size2> Size = new InputSlot<Size2>();
