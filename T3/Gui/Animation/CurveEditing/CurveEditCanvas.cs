@@ -85,6 +85,7 @@ namespace T3.Gui.Animation.CurveEditing
 
                 HandleInteraction();
                 _horizontalScaleLines.Draw();
+                _curveEditBox.Draw();
                 DrawCurves();
                 _selectionFence.Draw();
                 DrawList.PopClipRect();
@@ -92,7 +93,7 @@ namespace T3.Gui.Animation.CurveEditing
                 DrawTimeRange();
                 DrawCurrentTimeMarker();
                 DrawDragTimeArea();
-                _curveEditBox.Draw();
+
 
             }
             ImGui.EndChild();

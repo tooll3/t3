@@ -28,10 +28,10 @@ namespace T3.Gui.Animation.CurveEditing
                 return;
 
             _bounds = GetBoundingBox();
-            MinU = _bounds.Min.X;
-            MaxU = _bounds.Max.X;
-            MinV = _bounds.Min.Y;
-            MaxV = _bounds.Max.Y;
+            float MinU = _bounds.Min.X;
+            float MaxU = _bounds.Max.X;
+            float MinV = _bounds.Min.Y;
+            float MaxV = _bounds.Max.Y;
 
             var boundsOnScreen = _curveCanvas.TransformRect(_bounds);
             _curveCanvas.DrawList.AddRect(boundsOnScreen.Min, boundsOnScreen.Max, SelectBoxBorderColor);
@@ -43,8 +43,8 @@ namespace T3.Gui.Animation.CurveEditing
                 id: "##top",
                 screenPos: boundsOnScreen.Min - VerticalHandleOffset,
                 size: new Vector2(boundsOnScreen.GetWidth(), DragHandleSize),
-                cursor: ImGuiNET.ImGuiMouseCursor.ResizeNS,
-                scale: (_bounds.Max.Y + deltaOnCanvas.Y - MinV) / (MaxV - MinV),
+                Direction.Vertical,
+                scale: (MaxV + deltaOnCanvas.Y - MinV) / (MaxV - MinV),
                 (float scale, CurvePointUi ep) => { ep.ManipulateV(MinV + (ep.PosOnCanvas.Y - MinV) * scale); }
                 );
 
@@ -52,39 +52,52 @@ namespace T3.Gui.Animation.CurveEditing
                 id: "##bottom",
                 screenPos: new Vector2(boundsOnScreen.Min.X, boundsOnScreen.Max.Y),
                 size: new Vector2(boundsOnScreen.GetWidth(), DragHandleSize),
-                cursor: ImGuiNET.ImGuiMouseCursor.ResizeNS,
-                scale: (_bounds.Max.Y - deltaOnCanvas.Y - MinV) / (MaxV - MinV),
+                Direction.Vertical,
+                scale: (MaxV - deltaOnCanvas.Y - MinV) / (MaxV - MinV),
                 (float scale, CurvePointUi ep) => { ep.ManipulateV(MaxV - (MaxV - ep.PosOnCanvas.Y) * scale); }
                 );
 
-            // Right
-            {
-                SetCursorScreenPos(new Vector2(boundsOnScreen.Max.X, boundsOnScreen.Min.Y));
-                Button("##right", new Vector2(DragHandleSize, boundsOnScreen.GetHeight()));
-                if (IsItemActive() || IsItemHovered())
-                    SetMouseCursor(ImGuiNET.ImGuiMouseCursor.ResizeEW);
+            ScaleAtSide(
+                id: "##right",
+                screenPos: new Vector2(boundsOnScreen.Max.X, boundsOnScreen.Min.Y),
+                size: new Vector2(DragHandleSize, boundsOnScreen.GetHeight()),
+                Direction.Horizontal,
+                scale: (MaxU + deltaOnCanvas.X - MinU) / (MaxU - MinU),
+                (float scale, CurvePointUi ep) => { ep.ManipulateU(MinU + (ep.PosOnCanvas.X - MinU) * scale); }
+                );
 
-                if (IsItemActive() && IsMouseDragging(0))
-                {
-                    var scale = (_bounds.Max.X - MinU) / (MaxU - MinU);
+            ScaleAtSide(
+                id: "##left",
+                screenPos: boundsOnScreen.Min - HorizontalHandleOffset,
+                size: new Vector2(DragHandleSize, boundsOnScreen.GetHeight()),
+                Direction.Horizontal,
+                scale: (MaxU - deltaOnCanvas.X - MinU) / (MaxU - MinU),
+                (float scale, CurvePointUi ep) => { ep.ManipulateU(MaxU - (MaxU - ep.PosOnCanvas.X) * scale); }
+                );
 
-                    if (Double.IsNaN(scale) || Math.Abs(scale) > 10000)
-                        return;
-
-                    foreach (var ep in CurvePointsControls)
-                    {
-                        ep.ManipulateV(MaxV - (MaxV - ep.PosOnCanvas.Y) * scale);
-                    }
-                }
-            }
         }
 
-        private void ScaleAtSide(string id, Vector2 screenPos, Vector2 size, ImGuiNET.ImGuiMouseCursor cursor, float scale, Action<float, CurvePointUi> scaleFunction)
+        private enum Direction
         {
+            Horizontal,
+            Vertical,
+        }
+
+        private void ScaleAtSide(string id, Vector2 screenPos, Vector2 size, Direction direction, float scale, Action<float, CurvePointUi> scaleFunction)
+        {
+            if ((direction == Direction.Vertical && _bounds.GetHeight() <= 0.001f)
+                || (direction == Direction.Horizontal && _bounds.GetWidth() <= 0.001f))
+                return;
+
             SetCursorScreenPos(screenPos);
+
             Button(id, size);
+
             if (IsItemActive() || IsItemHovered())
-                SetMouseCursor(cursor);
+                SetMouseCursor(
+                    direction == Direction.Horizontal
+                        ? ImGuiNET.ImGuiMouseCursor.ResizeEW
+                        : ImGuiNET.ImGuiMouseCursor.ResizeNS);
 
             if (!IsItemActive() || !IsMouseDragging(0))
                 return;
@@ -92,6 +105,10 @@ namespace T3.Gui.Animation.CurveEditing
             if (Double.IsNaN(scale) || Math.Abs(scale) > 10000)
                 return;
 
+            if (scale < 0)
+                scale = 0;
+
+            //Log.Debug("scale: " + scale);
 
             foreach (var ep in CurvePointsControls)
             {
@@ -326,10 +343,10 @@ namespace T3.Gui.Animation.CurveEditing
         }
 
 
-        private static float MinU;
-        private static float MaxU;
-        private static float MinV;
-        private static float MaxV;
+        //private static float MinU;
+        //private static float MaxU;
+        //private static float MinV;
+        //private static float MaxV;
 
         private ImRect _bounds;
 
