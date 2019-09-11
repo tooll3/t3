@@ -178,7 +178,7 @@ namespace T3.Core
 
         public override void Update(string path)
         {
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "ps_5_0", ref ComputeShader, ref Blob);
+            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref Blob);
         }
     }
 
