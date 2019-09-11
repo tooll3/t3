@@ -38,6 +38,7 @@ namespace T3.Operators.Types
                               OptionFlags = ResourceOptionFlags.GetValue(context)
                           };
             ResourceManager.Instance().CreateTexture(texDesc, "Texture2D", ref _textureResId, ref Texture.Value);
+            ResourceManager.Instance().TestId = _textureResId;
         }
 
         [Input(Guid = "{B77088A9-2676-4CAA-809A-5E0F120D25D7}")]

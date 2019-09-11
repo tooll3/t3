@@ -288,9 +288,20 @@ namespace T3
                                          context.VertexShader.Set(vsr.VertexShader);
                                      if (resourceManager.Resources[psId] is PixelShaderResource psr)
                                          context.PixelShader.Set(psr.PixelShader);
-                                     if (resourceManager.Resources[srvId] is ShaderResourceViewResource srvr)
+                                     if (resourceManager.TestId != ResourceManager.NULL_RESOURCE)
+                                     {
+                                         if (resourceManager.Resources[resourceManager.TestId] is TextureResource textureResource)
+                                         {
+                                             var srv1 = new ShaderResourceView(device, textureResource.Texture);
+                                             context.PixelShader.SetShaderResource(0, srv1);
+                                         }
+                                     }
+                                     else if (resourceManager.Resources[srvId] is ShaderResourceViewResource srvr)
                                          context.PixelShader.SetShaderResource(0, srvr.ShaderResourceView);
+
                                      context.Draw(3, 0);
+
+                                     context.PixelShader.SetShaderResource(0, null);
 
                                      _t3ui.DrawUI();
 

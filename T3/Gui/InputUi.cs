@@ -14,6 +14,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Selection;
 using T3.Gui.TypeColors;
+using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui
@@ -521,6 +522,19 @@ namespace T3.Gui
         }
 
         protected override void DrawValueDisplay(string name, ref ComputeShader value)
+        {
+//            DrawEditControl(name, ref value);
+        }
+    }
+
+    public class BufferInputUi : SingleControlInputUi<Buffer>
+    {
+        public override bool DrawSingleEditControl(string name, ref Buffer value)
+        {
+            return false;//ImGui.DragInt2("##int2Edit", ref value.Width);
+        }
+
+        protected override void DrawValueDisplay(string name, ref Buffer value)
         {
 //            DrawEditControl(name, ref value);
         }

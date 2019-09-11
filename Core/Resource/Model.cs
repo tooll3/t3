@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -12,7 +11,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using static System.Int32;
+using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Core
 {
@@ -138,6 +137,7 @@ namespace T3.Core
             InputValueCreators.Entries.Add(typeof(List<float>), () => new InputValue<List<float>>(new List<float>()));
             InputValueCreators.Entries.Add(typeof(Texture2D), () => new InputValue<Texture2D>(null));
             InputValueCreators.Entries.Add(typeof(ComputeShader), () => new InputValue<ComputeShader>(null));
+            InputValueCreators.Entries.Add(typeof(Buffer), () => new InputValue<Buffer>(null));
         }
 
         public virtual void Load()

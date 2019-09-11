@@ -134,7 +134,7 @@ namespace T3.Gui
                     _srv = new ShaderResourceView(ResourceManager.Instance()._device, value);
                 }
 
-                ImGui.Image((IntPtr)_srv, new Vector2(100.0f, 100.0f));
+                ImGui.Image((IntPtr)_srv, new Vector2(256.0f, 256.0f));
             }
             else
             {
@@ -179,6 +179,10 @@ namespace T3.Gui
     }
 
     public class ComputeShaderOutputUi : ValueOutputUi<ComputeShader>
+    {
+    }
+
+    public class BufferOutputUi : ValueOutputUi<SharpDX.Direct3D11.Buffer>
     {
     }
 
