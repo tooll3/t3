@@ -1,0 +1,34 @@
+{
+  "Id": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9"/*ComputeShaderStage*/,
+  "InputUis": [
+    {
+      "InputId": "5c0e9c96-9aba-4757-ae1f-cc50fb6173f1"/*ComputeShader*/,
+      "Type": "SharpDX.Direct3D11.ComputeShader, SharpDX.Direct3D11",
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "cec84992-8525-4242-b3c3-c94fe11c2a15"/*OutputUav*/,
+      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c382284f-7e37-4eb0-b284-bc735247f26b"/*Output*/,
+      "Type": "System.Int32, mscorlib",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -496,6 +497,32 @@ namespace T3.Gui
         protected override void DrawValueDisplay(string name, ref Size2 value)
         {
             DrawEditControl(name, ref value);
+        }
+    }
+
+    public class Texture2dInputUi : SingleControlInputUi<Texture2D>
+    {
+        public override bool DrawSingleEditControl(string name, ref Texture2D value)
+        {
+            return false;//ImGui.DragInt2("##int2Edit", ref value.Width);
+        }
+
+        protected override void DrawValueDisplay(string name, ref Texture2D value)
+        {
+//            DrawEditControl(name, ref value);
+        }
+    }
+
+    public class ComputeShaderInputUi : SingleControlInputUi<ComputeShader>
+    {
+        public override bool DrawSingleEditControl(string name, ref ComputeShader value)
+        {
+            return false;//ImGui.DragInt2("##int2Edit", ref value.Width);
+        }
+
+        protected override void DrawValueDisplay(string name, ref ComputeShader value)
+        {
+//            DrawEditControl(name, ref value);
         }
     }
 

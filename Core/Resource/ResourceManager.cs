@@ -274,7 +274,7 @@ namespace T3.Core
             CompilationResult compilationResult = null;
             try
             {
-                compilationResult = ShaderBytecode.CompileFromFile(srcFile, entryPoint, profile, ShaderFlags.None, EffectFlags.None);
+                compilationResult = ShaderBytecode.CompileFromFile(srcFile, entryPoint, profile, ShaderFlags.Debug, EffectFlags.None);
             }
             catch (Exception ce)
             {
@@ -668,7 +668,7 @@ namespace T3.Core
         internal List<TextureResource> Textures = new List<TextureResource>();
         internal List<ShaderResourceViewResource> ShaderResourceViews = new List<ShaderResourceViewResource>();
         public List<OperatorResource> Operators = new List<OperatorResource>(100);
-        private readonly Device _device;
+        public readonly Device _device;
         private readonly FileSystemWatcher _hlslFileWatcher;
         private readonly FileSystemWatcher _textureFileWatcher;
         private readonly FileSystemWatcher _csFileWatcher;

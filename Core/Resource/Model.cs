@@ -136,6 +136,8 @@ namespace T3.Core
             InputValueCreators.Entries.Add(typeof(CpuAccessFlags), InputDefaultValueCreator<CpuAccessFlags>);
             InputValueCreators.Entries.Add(typeof(ResourceOptionFlags), InputDefaultValueCreator<ResourceOptionFlags>);
             InputValueCreators.Entries.Add(typeof(List<float>), () => new InputValue<List<float>>(new List<float>()));
+            InputValueCreators.Entries.Add(typeof(Texture2D), () => new InputValue<Texture2D>(null));
+            InputValueCreators.Entries.Add(typeof(ComputeShader), () => new InputValue<ComputeShader>(null));
         }
 
         public virtual void Load()

@@ -1,0 +1,17 @@
+{
+  "Name": "ComputeShaderStage",
+  "Id": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
+  "InstanceType": "T3.Operators.Types.ComputeShaderStage, Operators",
+  "Inputs": [
+    {
+      "Id": "5c0e9c96-9aba-4757-ae1f-cc50fb6173f1"/*ComputeShader*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "cec84992-8525-4242-b3c3-c94fe11c2a15"/*OutputUav*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

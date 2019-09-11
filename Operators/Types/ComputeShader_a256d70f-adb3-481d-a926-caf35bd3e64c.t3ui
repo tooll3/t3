@@ -20,6 +20,16 @@
         "Y": 0.0
       },
       "Usage": "Default"
+    },
+    {
+      "InputId": "c0701d0b-d37f-4570-9e9a-ec2e88b919d1"/*DebugName*/,
+      "Type": "System.String, mscorlib",
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
     }
   ],
   "SymbolChildUis": [],
