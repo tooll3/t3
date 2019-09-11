@@ -6,8 +6,8 @@
       "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
-        "X": 126.0,
-        "Y": 470.0
+        "X": 39.0,
+        "Y": 485.0
       },
       "Min": -100.0,
       "Max": 100.0
@@ -17,8 +17,8 @@
       "Type": "System.String, mscorlib",
       "Relevancy": "Required",
       "Position": {
-        "X": 392.0,
-        "Y": 483.0
+        "X": 305.0,
+        "Y": 498.0
       },
       "Usage": "Default"
     }
@@ -27,36 +27,36 @@
     {
       "ChildId": "14841d89-c20a-44bc-a0e7-d1f87a4824a3"/*Add*/,
       "Position": {
-        "X": 154.0,
-        "Y": 240.0
+        "X": 67.0,
+        "Y": 255.0
       }
     },
     {
       "ChildId": "5e9f9137-0463-4216-828b-aa0090099de1"/*FloatFormat*/,
       "Position": {
-        "X": 197.0,
-        "Y": 134.0
+        "X": 110.0,
+        "Y": 149.0
       }
     },
     {
       "ChildId": "d032e75c-2f2d-4d4f-98e6-d558f9544838"/*Time*/,
       "Position": {
-        "X": 264.0,
-        "Y": 422.0
+        "X": 177.0,
+        "Y": 437.0
       }
     },
     {
       "ChildId": "15deb882-1c6c-40db-a509-56ca51e5de12"/*Sum*/,
       "Position": {
-        "X": 311.0,
-        "Y": 179.0
+        "X": 224.0,
+        "Y": 194.0
       }
     },
     {
       "ChildId": "a4350952-957f-458c-bdc1-4f9fec0006c6"/*StringConcat*/,
       "Position": {
-        "X": 495.7992,
-        "Y": 95.6281
+        "X": 408.7992,
+        "Y": 110.6281
       }
     },
     {
@@ -69,29 +69,29 @@
     {
       "ChildId": "ba4c312b-a473-4903-8479-7f2a5f525f31"/*FloatMultiInputToList*/,
       "Position": {
-        "X": 438.0,
-        "Y": 280.0
+        "X": 351.0,
+        "Y": 295.0
       }
     },
     {
       "ChildId": "4e8bccde-0afb-4070-9a76-9bdece26996e"/*SelectFloatFromList*/,
       "Position": {
-        "X": 481.0,
-        "Y": 173.0
+        "X": 394.0,
+        "Y": 188.0
       }
     },
     {
       "ChildId": "6a5bf36e-a236-461b-bd96-988da892cc7a"/*Add*/,
       "Position": {
-        "X": 100.0,
-        "Y": 100.0
+        "X": 13.0,
+        "Y": 115.0
       }
     },
     {
       "ChildId": "2570c599-138d-4109-9932-33e7bb0dd34a"/*ComputeShader*/,
       "Position": {
-        "X": 524.0,
-        "Y": 457.0
+        "X": 413.0,
+        "Y": 453.0
       }
     },
     {
@@ -104,15 +104,22 @@
     {
       "ChildId": "eb2fc5db-976c-4727-b0ba-7dcd008cfc9d"/*LoadTexture2d*/,
       "Position": {
-        "X": 755.0,
-        "Y": 457.0
+        "X": 638.0,
+        "Y": 452.0
       }
     },
     {
       "ChildId": "145ec104-05d5-417d-a7d2-b557f5a59819"/*TimeConstBuffer*/,
       "Position": {
-        "X": 638.0,
-        "Y": 457.0
+        "X": 527.0,
+        "Y": 453.0
+      }
+    },
+    {
+      "ChildId": "2145b502-6124-4b6b-812f-ec4f4cc3d032"/*SamplerStateOp*/,
+      "Position": {
+        "X": 753.0,
+        "Y": 456.0
       }
     }
   ],
@@ -121,8 +128,8 @@
       "OutputId": "3a9734e8-7346-4535-bd54-3b5a735cc6b8"/*Output*/,
       "Type": "System.String, mscorlib",
       "Position": {
-        "X": 182.0,
-        "Y": 36.0
+        "X": 95.0,
+        "Y": 51.0
       }
     }
   ]

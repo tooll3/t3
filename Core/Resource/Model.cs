@@ -86,6 +86,9 @@ namespace T3.Core
 
                                                                            return list;
                                                                        });
+            JsonToTypeValueConverters.Entries.Add(typeof(Filter), JsonToEnumValue<Filter>);
+            JsonToTypeValueConverters.Entries.Add(typeof(TextureAddressMode), JsonToEnumValue<TextureAddressMode>);
+            JsonToTypeValueConverters.Entries.Add(typeof(Comparison), JsonToEnumValue<Comparison>);
 
             // Register the converters from a specific type value to json
             TypeValueToJsonConverters.Entries.Add(typeof(float), (writer, obj) => writer.WriteValue((float)obj));
@@ -122,6 +125,9 @@ namespace T3.Core
                                                                            writer.WriteEndArray();
                                                                            writer.WriteEndObject();
                                                                        });
+            TypeValueToJsonConverters.Entries.Add(typeof(Filter), (writer, obj) => writer.WriteValue(obj.ToString()));
+            TypeValueToJsonConverters.Entries.Add(typeof(TextureAddressMode), (writer, obj) => writer.WriteValue(obj.ToString()));
+            TypeValueToJsonConverters.Entries.Add(typeof(Comparison), (writer, obj) => writer.WriteValue(obj.ToString()));
 
             // Register input value creators that take the relevant input attribute, extract the default value and return this with the new input value
             InputValue InputDefaultValueCreator<T>() => new InputValue<T>();
@@ -138,6 +144,10 @@ namespace T3.Core
             InputValueCreators.Entries.Add(typeof(Texture2D), () => new InputValue<Texture2D>(null));
             InputValueCreators.Entries.Add(typeof(ComputeShader), () => new InputValue<ComputeShader>(null));
             InputValueCreators.Entries.Add(typeof(Buffer), () => new InputValue<Buffer>(null));
+            InputValueCreators.Entries.Add(typeof(Filter), InputDefaultValueCreator<Filter>);
+            InputValueCreators.Entries.Add(typeof(TextureAddressMode), InputDefaultValueCreator<TextureAddressMode>);
+            InputValueCreators.Entries.Add(typeof(Comparison), InputDefaultValueCreator<Comparison>);
+            InputValueCreators.Entries.Add(typeof(SamplerState), () => new InputValue<SamplerState>(null));
         }
 
         public virtual void Load()

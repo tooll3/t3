@@ -540,6 +540,19 @@ namespace T3.Gui
         }
     }
 
+    public class SamplerStateInputUi : SingleControlInputUi<SamplerState>
+    {
+        public override bool DrawSingleEditControl(string name, ref SamplerState value)
+        {
+            return false;//ImGui.DragInt2("##int2Edit", ref value.Width);
+        }
+
+        protected override void DrawValueDisplay(string name, ref SamplerState value)
+        {
+//            DrawEditControl(name, ref value);
+        }
+    }
+
     public class EnumInputUi<T> : InputValueUi<T> where T : Enum
     {
         protected override InputEditState DrawEditControl(string name, ref T value)

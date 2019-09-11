@@ -16,6 +16,10 @@
       "DefaultValue": null
     },
     {
+      "Id": "4047c9e7-1edb-4c71-b85c-c1b87058c81c"/*SamplerState*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "cec84992-8525-4242-b3c3-c94fe11c2a15"/*OutputUav*/,
       "DefaultValue": null
     }
