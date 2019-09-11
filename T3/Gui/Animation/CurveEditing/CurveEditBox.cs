@@ -39,7 +39,7 @@ namespace T3.Gui.Animation.CurveEditing
 
             var deltaOnCanvas = _curveCanvas.InverseTransformDirection(GetIO().MouseDelta);
 
-            ScaleAtSide(
+            ScaleHandle(
                 id: "##top",
                 screenPos: boundsOnScreen.Min - VerticalHandleOffset,
                 size: new Vector2(boundsOnScreen.GetWidth(), DragHandleSize),
@@ -48,7 +48,7 @@ namespace T3.Gui.Animation.CurveEditing
                 (float scale, CurvePointUi ep) => { ep.ManipulateV(MinV + (ep.PosOnCanvas.Y - MinV) * scale); }
                 );
 
-            ScaleAtSide(
+            ScaleHandle(
                 id: "##bottom",
                 screenPos: new Vector2(boundsOnScreen.Min.X, boundsOnScreen.Max.Y),
                 size: new Vector2(boundsOnScreen.GetWidth(), DragHandleSize),
@@ -57,7 +57,7 @@ namespace T3.Gui.Animation.CurveEditing
                 (float scale, CurvePointUi ep) => { ep.ManipulateV(MaxV - (MaxV - ep.PosOnCanvas.Y) * scale); }
                 );
 
-            ScaleAtSide(
+            ScaleHandle(
                 id: "##right",
                 screenPos: new Vector2(boundsOnScreen.Max.X, boundsOnScreen.Min.Y),
                 size: new Vector2(DragHandleSize, boundsOnScreen.GetHeight()),
@@ -66,7 +66,7 @@ namespace T3.Gui.Animation.CurveEditing
                 (float scale, CurvePointUi ep) => { ep.ManipulateU(MinU + (ep.PosOnCanvas.X - MinU) * scale); }
                 );
 
-            ScaleAtSide(
+            ScaleHandle(
                 id: "##left",
                 screenPos: boundsOnScreen.Min - HorizontalHandleOffset,
                 size: new Vector2(DragHandleSize, boundsOnScreen.GetHeight()),
@@ -75,18 +75,53 @@ namespace T3.Gui.Animation.CurveEditing
                 (float scale, CurvePointUi ep) => { ep.ManipulateU(MaxU - (MaxU - ep.PosOnCanvas.X) * scale); }
                 );
 
+            var combined = (MoveRingInnerRadius + MoveRingOuterRadius);
+            var center = _curveCanvas.TransformPositionFloored(_bounds.GetCenter());
+
+            MoveHandle(
+                "<##moveLeft", Direction.Horizontal,
+                screenPos: center + new Vector2(-MoveRingOuterRadius, -0.5f * combined),
+                size: new Vector2(MoveRingOuterRadius - MoveRingInnerRadius, combined));
+
+
+            MoveHandle(
+                "^##moveUp", Direction.Vertical,
+                screenPos: center + new Vector2(-0.5f * combined, -MoveRingOuterRadius),
+                size: new Vector2(combined, MoveRingOuterRadius - MoveRingInnerRadius));
+
+            MoveHandle(
+                ">##moveRight", Direction.Horizontal,
+                screenPos: center + new Vector2(MoveRingInnerRadius, -0.5f * combined),
+                size: new Vector2(MoveRingOuterRadius - MoveRingInnerRadius, combined));
+
+            MoveHandle(
+                "v##moveDown", Direction.Vertical,
+                screenPos: center + new Vector2(-0.5f * combined, MoveRingInnerRadius),
+                size: new Vector2(combined, MoveRingOuterRadius - MoveRingInnerRadius));
+
+            MoveHandle(
+                "+##both", Direction.Both,
+                screenPos: center - new Vector2(1, 1) * MoveRingInnerRadius,
+                size: Vector2.One * MoveRingInnerRadius * 2);
+
+
         }
+
+        private static float MoveRingOuterRadius = 25;
+        private static float MoveRingInnerRadius = 10;
+
 
         private enum Direction
         {
             Horizontal,
             Vertical,
+            Both,
         }
 
-        private void ScaleAtSide(string id, Vector2 screenPos, Vector2 size, Direction direction, float scale, Action<float, CurvePointUi> scaleFunction)
+        private void ScaleHandle(string id, Vector2 screenPos, Vector2 size, Direction direction, float scale, Action<float, CurvePointUi> scaleFunction)
         {
             if ((direction == Direction.Vertical && _bounds.GetHeight() <= 0.001f)
-                || (direction == Direction.Horizontal && _bounds.GetWidth() <= 0.001f))
+             || (direction == Direction.Horizontal && _bounds.GetWidth() <= 0.001f))
                 return;
 
             SetCursorScreenPos(screenPos);
@@ -108,8 +143,6 @@ namespace T3.Gui.Animation.CurveEditing
             if (scale < 0)
                 scale = 0;
 
-            //Log.Debug("scale: " + scale);
-
             foreach (var ep in CurvePointsControls)
             {
                 scaleFunction(scale, ep);
@@ -117,7 +150,41 @@ namespace T3.Gui.Animation.CurveEditing
         }
 
 
+        private void MoveHandle(string labelAndId, Direction direction, Vector2 screenPos, Vector2 size)
+        {
+            SetCursorScreenPos(screenPos);
 
+            Button(labelAndId, size);
+
+            if (IsItemActive() || IsItemHovered())
+            {
+                switch (direction)
+                {
+                    case Direction.Horizontal:
+                        SetMouseCursor(ImGuiNET.ImGuiMouseCursor.ResizeEW); break;
+                    case Direction.Vertical:
+                        SetMouseCursor(ImGuiNET.ImGuiMouseCursor.ResizeNS); break;
+                    case Direction.Both:
+                        SetMouseCursor(ImGuiNET.ImGuiMouseCursor.ResizeAll); break;
+                }
+            }
+
+            if (!IsItemActive() || !IsMouseDragging(0))
+                return;
+
+            var delta = _curveCanvas.InverseTransformDirection(GetIO().MouseDelta);
+            if (direction == Direction.Horizontal)
+                delta.Y = 0;
+            else if (direction == Direction.Vertical)
+                delta.X = 0;
+
+
+            foreach (var ep in CurvePointsControls)
+            {
+
+                ep.PosOnCanvas += delta;
+            }
+        }
 
 
         /*
@@ -197,19 +264,7 @@ namespace T3.Gui.Animation.CurveEditing
         #region XAML event handlers
 
 
-        private static void XMoveBothThumb_DragDelta()
-        {
-            //var idx = 0;
-            //foreach (var cpc in CurvePointsControls)
-            //{
-            //    cpc.ManipulateV(cpc.V + CurveEditor.yToV(e.VerticalChange) - CurveEditor.yToV(0));
-            //    cpc.ManipulateU(cpc.U + CurveEditor.xToU(e.HorizontalChange) - CurveEditor.xToU(0));
-            //    _addOrUpdateKeyframeCommands[idx].KeyframeTime = cpc.U;
-            //    _addOrUpdateKeyframeCommands[idx].KeyframeValue = cpc.m_vdef;
-            //    ++idx;
-            //}
-            //_moveKeyframesCommand.Do();
-        }
+
 
         /*
         private void XMoveVerticalThumb_DragDelta(object sender, DragDeltaEventArgs e)

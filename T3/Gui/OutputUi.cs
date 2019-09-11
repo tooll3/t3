@@ -26,7 +26,7 @@ namespace T3.Gui
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
         public bool IsSelected { get; set; }
-        
+
         public abstract void DrawValue(ISlot slot);
 
         public int Invalidate(ISlot slot)
@@ -127,13 +127,12 @@ namespace T3.Gui
             {
                 Invalidate(slot);
                 _evaluationContext.Reset();
-                var value = typedSlot.GetValue(_evaluationContext);
-                if (_srv == null || _srv.Resource != value)
+                var texture = typedSlot.GetValue(_evaluationContext);
+                if (_srv == null || _srv.Resource != texture)
                 {
                     _srv?.Dispose();
-                    _srv = new ShaderResourceView(ResourceManager.Instance()._device, value);
+                    _srv = new ShaderResourceView(ResourceManager.Instance()._device, texture);
                 }
-
                 ImGui.Image((IntPtr)_srv, new Vector2(256.0f, 256.0f));
             }
             else
