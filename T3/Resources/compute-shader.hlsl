@@ -1,4 +1,4 @@
-RWTexture2D<float4> outputTexture;
+RWTexture2D<float4> outputTexture : register(u0);
 
 [numthreads(16,16,1)]
 void main(uint3 i : SV_DispatchThreadID)

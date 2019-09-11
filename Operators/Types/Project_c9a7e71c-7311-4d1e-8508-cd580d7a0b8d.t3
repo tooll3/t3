@@ -80,6 +80,11 @@
       "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
       "InputValues": [
         {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\compute-shader.hlsl"
+        },
+        {
           "Id": "c0701d0b-d37f-4570-9e9a-ec2e88b919d1"/*DebugName*/,
           "Type": "System.String",
           "Value": "GradientComputeShader"
@@ -187,6 +192,18 @@
       "SourceSlotId": "1c34d39c-0bef-4c4a-a3e4-dcb8d5664f3b",
       "TargetParentOrChildId": "ba4c312b-a473-4903-8479-7f2a5f525f31",
       "TargetSlotId": "15874509-fabb-44ca-93a1-858ff95fb5f5"
+    },
+    {
+      "SourceParentOrChildId": "2570c599-138d-4109-9932-33e7bb0dd34a",
+      "SourceSlotId": "6c118567-8827-4422-86cc-4d4d00762d87",
+      "TargetParentOrChildId": "6e316c6f-b602-40b2-81d7-acfa3f4c96a5",
+      "TargetSlotId": "5c0e9c96-9aba-4757-ae1f-cc50fb6173f1"
+    },
+    {
+      "SourceParentOrChildId": "ce7f2ed4-1495-4b96-983b-4fbf2851aa84",
+      "SourceSlotId": "007129e4-0eae-4cb9-a142-90c1c171a5fb",
+      "TargetParentOrChildId": "6e316c6f-b602-40b2-81d7-acfa3f4c96a5",
+      "TargetSlotId": "cec84992-8525-4242-b3c3-c94fe11c2a15"
     }
   ],
   "Animator": [
