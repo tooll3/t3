@@ -218,8 +218,8 @@ namespace T3.Gui.Animation.CurveEditing
         /// </summary>
         public void ManipulateU(double newU)
         {
-            var newURounded = RoundU(newU);
-            Key.U = newURounded;
+            // FIXME: This casting to float drastically reduces time precisions for keyframes
+            PosOnCanvas = new Vector2((float)newU, PosOnCanvas.Y);
         }
 
         private static double RoundU(double u)
