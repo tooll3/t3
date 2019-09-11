@@ -90,6 +90,11 @@
       "Id": "6e316c6f-b602-40b2-81d7-acfa3f4c96a5"/*ComputeShaderStage*/,
       "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
       "InputValues": []
+    },
+    {
+      "Id": "eb2fc5db-976c-4727-b0ba-7dcd008cfc9d"/*LoadTexture2d*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": []
     }
   ],
   "Connections": [
