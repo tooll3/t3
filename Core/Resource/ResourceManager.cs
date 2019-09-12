@@ -42,6 +42,7 @@ namespace T3.Core
         public string Path;
         public List<uint> ResourceIds = new List<uint>();
         public DateTime LastWriteReferenceTime;
+        public Action FileChangeAction;
     }
 
     public interface IUpdateable
@@ -185,7 +186,7 @@ namespace T3.Core
         }
     }
 
-    public class TextureResource : Resource, IUpdateable
+    public class TextureResource : Resource
     {
         public TextureResource(uint id, string name, Texture2D texture)
             : base(id, name)
@@ -193,26 +194,16 @@ namespace T3.Core
             Texture = texture;
         }
 
-        public void Update(string path)
-        {
-            ResourceManager.Instance().CreateTexture(path, ref Texture);
-        }
-
         public Texture2D Texture;
     }
 
-    public class ShaderResourceViewResource : Resource, IUpdateable
+    public class ShaderResourceViewResource : Resource
     {
         public ShaderResourceViewResource(uint id, string name, ShaderResourceView srv, uint textureId)
             : base(id, name)
         {
             ShaderResourceView = srv;
             TextureId = textureId;
-        }
-
-        public void Update(string path)
-        {
-            ResourceManager.Instance().CreateShaderResourceView(TextureId, Name, ref ShaderResourceView);
         }
 
         public ShaderResourceView ShaderResourceView;
@@ -490,12 +481,14 @@ namespace T3.Core
 
         private void OnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
+            Console.WriteLine("on changed");
             if (FileResources.TryGetValue(fileSystemEventArgs.FullPath, out var fileResource))
             {
+                Console.WriteLine("found resource");
                 DateTime lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
                 if (lastWriteTime != fileResource.LastWriteReferenceTime)
                 {
-                    Log.Info($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
+                    Console.WriteLine($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
                     foreach (var id in fileResource.ResourceIds)
                     {
                         // update all resources that depend from this file
@@ -503,10 +496,11 @@ namespace T3.Core
                         {
                             var updateable = resource as IUpdateable;
                             updateable?.Update(fileResource.Path);
+                            fileResource.FileChangeAction?.Invoke();
                         }
                         else
                         {
-                            Log.Warning($"Trying to update a non existing file resource '{fileResource.Path}'.");
+                            Console.WriteLine($"Trying to update a non existing file resource '{fileResource.Path}'.");
                         }
                     }
 
@@ -576,7 +570,7 @@ namespace T3.Core
                 {
                     shaderResourceView?.Dispose();
                     shaderResourceView = new ShaderResourceView(_device, textureResource.Texture) { DebugName = name };
-                    //Log.Info($"Created shader resource view '{name}' for texture '{textureResource.Name}'.");
+                    Log.Info($"Created shader resource view '{name}' for texture '{textureResource.Name}'.");
                 }
                 else
                 {
@@ -599,7 +593,7 @@ namespace T3.Core
             return textureViewResourceEntry.Id;
         }
 
-        public (uint, uint) CreateTextureFromFile(string filename) /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
+        public (uint, uint) CreateTextureFromFile(string filename, Action fileChangeAction) /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
         {
             if (FileResources.TryGetValue(filename, out var existingFileResource))
             {
@@ -617,6 +611,7 @@ namespace T3.Core
             uint shaderResourceViewId = CreateShaderResourceView(textureResourceEntry.Id, name);
 
             var fileResource = new FileResource(filename, new[] { textureResourceEntry.Id, shaderResourceViewId });
+            fileResource.FileChangeAction = fileChangeAction;
             FileResources.Add(filename, fileResource);
 
             return (textureResourceEntry.Id, shaderResourceViewId);

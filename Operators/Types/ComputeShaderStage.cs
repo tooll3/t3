@@ -38,15 +38,7 @@ namespace T3.Operators.Types
             }
             _samplerState = SamplerState.GetValue(context);
 
-            if (ShaderResources.DirtyFlag.IsDirty)
-            {
-                _srv?.Dispose();
-                Texture2D inputTexture = ShaderResources.GetValue(context);
-                if (inputTexture != null)
-                {
-                    _srv = new ShaderResourceView(device, inputTexture);
-                }
-            }
+            _srv = ShaderResources.GetValue(context);
 
             if (OutputUav.DirtyFlag.IsDirty)
             {
@@ -90,7 +82,7 @@ namespace T3.Operators.Types
         [Input(Guid = "{34CF06FE-8F63-4F14-9C59-35A2C021B817}")]
         public readonly MultiInputSlot<Buffer> ConstantBuffers = new MultiInputSlot<Buffer>();
         [Input(Guid = "{88938B09-D5A7-437C-B6E1-48A5B375D756}")]
-        public readonly InputSlot<Texture2D> ShaderResources = new InputSlot<Texture2D>();
+        public readonly InputSlot<ShaderResourceView> ShaderResources = new InputSlot<ShaderResourceView>();
         [Input(Guid = "{4047C9E7-1EDB-4C71-B85C-C1B87058C81C}")]
         public readonly InputSlot<SamplerState> SamplerState = new InputSlot<SamplerState>();
         [Input(Guid = "{CEC84992-8525-4242-B3C3-C94FE11C2A15}")]

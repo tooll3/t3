@@ -86,10 +86,14 @@
     <Content Include="Types\FloatMultiInputToList_5c5d855c-3167-40a3-b4c3-e7b27b0d61cf.t3ui" />
     <Content Include="Types\LoadTexture2d_0b3436db-e283-436e-ba85-2f3a1de76a9d.t3" />
     <Content Include="Types\LoadTexture2d_0b3436db-e283-436e-ba85-2f3a1de76a9d.t3ui" />
+    <Content Include="Types\ParamConstBuffer_c30542d5-609c-452a-9168-78964a3a0927.t3" />
+    <Content Include="Types\ParamConstBuffer_c30542d5-609c-452a-9168-78964a3a0927.t3ui" />
     <Content Include="Types\Project_c9a7e71c-7311-4d1e-8508-cd580d7a0b8d.t3" />
     <Content Include="Types\Project_c9a7e71c-7311-4d1e-8508-cd580d7a0b8d.t3ui" />
     <Content Include="Types\Random_10673c38-8c7e-4aa1-8dcd-3f2711c709b5.t3" />
     <Content Include="Types\Random_10673c38-8c7e-4aa1-8dcd-3f2711c709b5.t3ui" />
+    <Content Include="Types\SamplerStateOp_9515d59d-0bd5-406b-96da-6a5f60215700.t3" />
+    <Content Include="Types\SamplerStateOp_9515d59d-0bd5-406b-96da-6a5f60215700.t3ui" />
     <Content Include="Types\SelectFloatFromList_0841cdd4-0106-4f4e-826b-8de23bb5b5f0.t3" />
     <Content Include="Types\SelectFloatFromList_0841cdd4-0106-4f4e-826b-8de23bb5b5f0.t3ui" />
     <Content Include="Types\StringConcat_48ab9824-76ca-4238-800f-9cf95311e6c0.t3" />

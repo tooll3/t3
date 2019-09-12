@@ -250,7 +250,7 @@ namespace T3
             System.Console.WriteLine(di.FullName);
             uint vsId = resourceManager.CreateVertexShader(@"Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture");
             uint psId = resourceManager.CreatePixelShader(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture");
-            (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg");
+            (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg", null);
             resourceManager.CreateOperatorEntry(@"..\Core\Operator\Types\Add.cs", "Add");
             //resourceManager.CreateOperatorEntry(@"..\Core\Operator\Types\Add.cs", "Add");
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
