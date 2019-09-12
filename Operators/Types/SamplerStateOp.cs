@@ -22,6 +22,7 @@ namespace T3.Operators.Types
 
         private void Update(EvaluationContext context)
         {
+            SamplerState.Value?.Dispose();
             var samplerDesc = new SamplerStateDescription()
                               {
                                   Filter = Filter.GetValue(context),
@@ -35,7 +36,7 @@ namespace T3.Operators.Types
                                   MinimumLod = MinimumLod.GetValue(context),
                                   MaximumLod = MaximumLod.GetValue(context)
                               };
-//            ResourceManager.Instance().CreateTexture(texDesc, "Texture2D", ref _textureResId, ref Texture.Value);
+            SamplerState.Value = new SamplerState(ResourceManager.Instance()._device, samplerDesc); // todo: put into resource manager
         }
 
         [Input(Guid = "{A870921F-A28C-4501-9F31-38A18B0ACDCC}")]
