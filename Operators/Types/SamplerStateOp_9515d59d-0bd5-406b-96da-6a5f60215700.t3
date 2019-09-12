@@ -9,15 +9,15 @@
     },
     {
       "Id": "e7c95fd5-14d1-434f-a140-f22ef69076ab"/*AddressU*/,
-      "DefaultValue": "0"
+      "DefaultValue": "Wrap"
     },
     {
       "Id": "fdeb503f-09c6-48d1-8853-7426f68cdec3"/*AddressV*/,
-      "DefaultValue": "0"
+      "DefaultValue": "Wrap"
     },
     {
       "Id": "93d8bf26-5067-4ccc-b4cb-e03970686462"/*AddressW*/,
-      "DefaultValue": "0"
+      "DefaultValue": "Wrap"
     },
     {
       "Id": "4b51422e-1da7-4a28-b55f-47881d42f801"/*MipLoadBias*/,
@@ -29,7 +29,7 @@
     },
     {
       "Id": "393a3e40-5c58-48c7-84d2-c4e8d03f7373"/*ComparisonFunction*/,
-      "DefaultValue": "0"
+      "DefaultValue": "Never"
     },
     {
       "Id": "05531ef5-72aa-4868-915f-a40d26da9e80"/*MinimumLod*/,
