@@ -60,6 +60,7 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(TextureAddressMode), () => new EnumInputUi<TextureAddressMode>());
             InputUiFactory.Entries.Add(typeof(Comparison), () => new EnumInputUi<Comparison>());
             InputUiFactory.Entries.Add(typeof(SamplerState), () => new FallbackInputUi<SamplerState>());
+            InputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new FallbackInputUi<ShaderResourceView>());
 
             // Register output ui creators
             OutputUiFactory.Entries.Add(typeof(float), () => new ValueOutputUi<float>());

@@ -148,6 +148,7 @@ namespace T3.Core
             InputValueCreators.Entries.Add(typeof(TextureAddressMode), InputDefaultValueCreator<TextureAddressMode>);
             InputValueCreators.Entries.Add(typeof(Comparison), InputDefaultValueCreator<Comparison>);
             InputValueCreators.Entries.Add(typeof(SamplerState), () => new InputValue<SamplerState>(null));
+            InputValueCreators.Entries.Add(typeof(ShaderResourceView), () => new InputValue<ShaderResourceView>(null));
         }
 
         public virtual void Load()

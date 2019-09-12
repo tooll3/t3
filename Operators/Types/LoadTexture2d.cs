@@ -1,6 +1,7 @@
 ﻿using System;
 using SharpDX.Direct3D11;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 
 namespace T3.Operators.Types
@@ -9,12 +10,25 @@ namespace T3.Operators.Types
     {
         [Output(Guid = "{E0C4FEDD-5C2F-46C8-B67D-5667435FB037}")]
         public readonly Slot<Texture2D> Texture = new Slot<Texture2D>();
+        [Output(Guid = "{A4A46C04-FF03-48CE-83C9-0C0BAA0F72E7}")]
+        public readonly Slot<ShaderResourceView> ShaderResourceView = new Slot<ShaderResourceView>();
 
         private uint _textureResId;
+        private uint _srvResId;
 
         public LoadTexture2d()
         {
             Texture.UpdateAction = UpdateTexture;
+            ShaderResourceView.UpdateAction = UpdateShaderResourceView;
+        }
+
+        private void UpdateShaderResourceView(EvaluationContext context)
+        {
+            if (Texture.DirtyFlag.IsDirty)
+            {
+                UpdateTexture(context);
+                Texture.DirtyFlag.Clear();
+            }
         }
 
         private void UpdateTexture(EvaluationContext context)
@@ -22,11 +36,23 @@ namespace T3.Operators.Types
             if (Path.DirtyFlag.IsDirty)
             {
                 string imagePath = Path.GetValue(context);
-                (uint textureResId, _) = ResourceManager.Instance().CreateTextureFromFile(imagePath);
-                _textureResId = textureResId;
-
+                (_textureResId, _srvResId) = ResourceManager.Instance().CreateTextureFromFile(imagePath, () => Texture.DirtyFlag.Invalidate());
                 if (ResourceManager.Instance().Resources[_textureResId] is TextureResource textureResource)
                     Texture.Value = textureResource.Texture;
+                if (ResourceManager.Instance().Resources[_srvResId] is ShaderResourceViewResource srvResource)
+                    ShaderResourceView.Value = srvResource.ShaderResourceView;
+                Console.WriteLine("update loadtexture2d after path change");
+            }
+            else
+            {
+                Console.WriteLine("update loadtexture2d after resource change");
+                Texture2D texture = Texture.Value;
+                ResourceManager.Instance().CreateTexture(Path.Value, ref texture);
+                Texture.Value = texture;
+                
+                ShaderResourceView srv = ShaderResourceView.Value;
+                ResourceManager.Instance().CreateShaderResourceView(_textureResId, "", ref srv);
+                ShaderResourceView.Value = srv;
             }
         }
 
