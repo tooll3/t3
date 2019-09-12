@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 
 namespace T3.Gui
