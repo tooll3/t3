@@ -62,16 +62,16 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(SamplerState), () => new FallbackInputUi<SamplerState>());
 
             // Register output ui creators
-            OutputUiFactory.Entries.Add(typeof(float), () => new FloatOutputUi());
-            OutputUiFactory.Entries.Add(typeof(int), () => new IntOutputUi());
-            OutputUiFactory.Entries.Add(typeof(string), () => new StringOutputUi());
-            OutputUiFactory.Entries.Add(typeof(Size2), () => new Size2OutputUi());
+            OutputUiFactory.Entries.Add(typeof(float), () => new ValueOutputUi<float>());
+            OutputUiFactory.Entries.Add(typeof(int), () => new ValueOutputUi<int>());
+            OutputUiFactory.Entries.Add(typeof(string), () => new ValueOutputUi<string>());
+            OutputUiFactory.Entries.Add(typeof(Size2), () => new ValueOutputUi<Size2>());
             OutputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new ShaderResourceViewOutputUi());
             OutputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dOutputUi());
             OutputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListOutputUi());
-            OutputUiFactory.Entries.Add(typeof(ComputeShader), () => new ComputeShaderOutputUi());
-            OutputUiFactory.Entries.Add(typeof(Buffer), () => new BufferOutputUi());
-            OutputUiFactory.Entries.Add(typeof(SamplerState), () => new SamplerStateOutputUi());
+            OutputUiFactory.Entries.Add(typeof(ComputeShader), () => new ValueOutputUi<ComputeShader>());
+            OutputUiFactory.Entries.Add(typeof(Buffer), () => new ValueOutputUi<Buffer>());
+            OutputUiFactory.Entries.Add(typeof(SamplerState), () => new ValueOutputUi<SamplerState>());
 
             Load();
 
