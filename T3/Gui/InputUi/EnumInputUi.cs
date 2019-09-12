@@ -65,7 +65,15 @@ namespace T3.Gui.InputUi
             }
             else
             {
-                int index = (int)(object)value;
+                int index = 0;
+                for (int i = 0; i < values.Length; i++)
+                {
+                    if (values.GetValue(i).Equals(value))
+                    {
+                        index = i;
+                        break;
+                    }
+                }
                 InputEditState editState = InputEditState.Nothing;
                 bool modified = ImGui.Combo("##dropDownParam", ref index, valueNames, valueNames.Length);
                 if (modified)
