@@ -110,6 +110,17 @@
       "Id": "2145b502-6124-4b6b-812f-ec4f4cc3d032"/*SamplerStateOp*/,
       "SymbolId": "9515d59d-0bd5-406b-96da-6a5f60215700",
       "InputValues": []
+    },
+    {
+      "Id": "5e52bcbd-4a7a-4bf7-b0e7-3956be1d9f1d"/*ParamConstBuffer*/,
+      "SymbolId": "c30542d5-609c-452a-9168-78964a3a0927",
+      "InputValues": [
+        {
+          "Id": "3bb4bab9-96cd-4e08-bab7-2a15fb4f11c0"/*Param1*/,
+          "Type": "System.Single",
+          "Value": 1.0
+        }
+      ]
     }
   ],
   "Connections": [
@@ -232,6 +243,12 @@
       "SourceSlotId": "0e45c596-c80f-4927-941f-e3199401aa10",
       "TargetParentOrChildId": "6e316c6f-b602-40b2-81d7-acfa3f4c96a5",
       "TargetSlotId": "4047c9e7-1edb-4c71-b85c-c1b87058c81c"
+    },
+    {
+      "SourceParentOrChildId": "5e52bcbd-4a7a-4bf7-b0e7-3956be1d9f1d",
+      "SourceSlotId": "89957a76-09f1-4448-b23e-39dfdd0aa5b0",
+      "TargetParentOrChildId": "6e316c6f-b602-40b2-81d7-acfa3f4c96a5",
+      "TargetSlotId": "34cf06fe-8f63-4f14-9c59-35a2c021b817"
     }
   ],
   "Animator": [
@@ -285,6 +302,36 @@
           {
             "Time": 1.0,
             "Value": 25.0,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Smooth",
+            "OutEditMode": "Smooth",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.1415926535897931
+          }
+        ]
+      }
+    },
+    {
+      "InstanceId": "5e52bcbd-4a7a-4bf7-b0e7-3956be1d9f1d",
+      "InputId": "3bb4bab9-96cd-4e08-bab7-2a15fb4f11c0",
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": -0.016736507415771484,
+            "Value": 1.0,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Smooth",
+            "OutEditMode": "Smooth",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.1415926535897931
+          },
+          {
+            "Time": 0.98326349258422852,
+            "Value": -0.1039993166923523,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Smooth",

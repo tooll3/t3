@@ -7,12 +7,15 @@ cbuffer TimeConstants : register(b0)
 {
     float globalTime;
     float time;
+    float2 dummy;
+}
+
+cbuffer ParamConstants : register(b1)
+{
     float param1;
     float param2;
     float param3;
     float param4;
-    float param5;
-    float param6;
 }
 
 [numthreads(16,16,1)]
