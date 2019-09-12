@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using T3.Core.Operator;
+using T3.Gui.OutputUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Gui
