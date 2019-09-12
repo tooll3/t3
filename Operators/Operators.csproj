@@ -55,6 +55,7 @@
     <Compile Include="Types\Add.cs" />
     <Compile Include="Types\ComputeShader.cs" />
     <Compile Include="Types\ComputeShaderStage.cs" />
+    <Compile Include="Types\ParamConstBuffer.cs" />
     <Compile Include="Types\SamplerStateOp.cs" />
     <Compile Include="Types\TimeConstBuffer.cs" />
     <Compile Include="Types\Dashboard.cs" />

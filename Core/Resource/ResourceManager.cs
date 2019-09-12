@@ -4,14 +4,17 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.WIC;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Core
 {
@@ -268,6 +271,31 @@ namespace T3.Core
             _csFileWatcher.Changed += OnChanged;
             _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite;// | NotifyFilters.CreationTime;
             _csFileWatcher.EnableRaisingEvents = true;
+        }
+
+        public void SetupConstBufferForCS<T>(T bufferData, ref Buffer buffer, int slot) where T : struct
+        {
+            using (var data = new DataStream(Marshal.SizeOf(typeof(T)), true, true))
+            {
+                data.Write(bufferData);
+                data.Position = 0;
+
+                if (buffer == null)
+                {
+                    var bufferDesc = new BufferDescription
+                                         {
+                                             Usage = ResourceUsage.Default,
+                                             SizeInBytes = Marshal.SizeOf(typeof(T)),
+                                             BindFlags = BindFlags.ConstantBuffer
+                                         };
+                    buffer = new Buffer(_device, data, bufferDesc);
+                }
+                else
+                {
+                    _device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer, 0);
+                }
+                _device.ImmediateContext.ComputeShader.SetConstantBuffer(slot, buffer);
+            }
         }
 
         internal void CompileShader<TShader>(string srcFile, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
