@@ -12,6 +12,7 @@ using T3.Core.Operator;
 using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
+using T3.Gui.OutputUi;
 using T3.Logging;
 
 namespace T3.Gui

@@ -305,6 +305,13 @@
     <Compile Include="Gui\Commands\DeleteConnectionCommand.cs" />
     <Compile Include="Gui\CustomComponents.cs" />
     <Compile Include="Gui\Graph\SelectableMovement.cs" />
+    <Compile Include="Gui\OutputUi\FloatListOutputUi.cs" />
+    <Compile Include="Gui\OutputUi\IOutputUi.cs" />
+    <Compile Include="Gui\OutputUi\OutputUi.cs" />
+    <Compile Include="Gui\OutputUi\OutputUiFactory.cs" />
+    <Compile Include="Gui\OutputUi\ShaderResourceViewOutputUi.cs" />
+    <Compile Include="Gui\OutputUi\Texture2dOutputUi.cs" />
+    <Compile Include="Gui\OutputUi\ValueOutputUi.cs" />
     <Compile Include="Gui\UiJson.cs" />
     <Compile Include="Gui\UserAction.cs" />
     <Compile Include="Gui\Animation\CurveEditing\CurveEditCanvas.cs" />
@@ -323,7 +330,6 @@
     <Compile Include="Gui\Animation\CurveEditing\Snapping\ValueSnapHandler.cs" />
     <Compile Include="Gui\InputUi.cs" />
     <Compile Include="Gui\Key.cs" />
-    <Compile Include="Gui\OutputUi.cs" />
     <Compile Include="Gui\ParameterWindow.cs" />
     <Compile Include="Gui\SymbolChildUi.cs" />
     <Compile Include="Gui\Graph\BuildingConnections.cs" />
