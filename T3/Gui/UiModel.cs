@@ -53,13 +53,13 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(CpuAccessFlags), () => new EnumInputUi<CpuAccessFlags>());
             InputUiFactory.Entries.Add(typeof(ResourceOptionFlags), () => new EnumInputUi<ResourceOptionFlags>());
             InputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListInputUi());
-            InputUiFactory.Entries.Add(typeof(ComputeShader), () => new ComputeShaderInputUi());
-            InputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dInputUi());
-            InputUiFactory.Entries.Add(typeof(Buffer), () => new BufferInputUi());
+            InputUiFactory.Entries.Add(typeof(ComputeShader), () => new FallbackInputUi<ComputeShader>());
+            InputUiFactory.Entries.Add(typeof(Texture2D), () => new FallbackInputUi<Texture2D>());
+            InputUiFactory.Entries.Add(typeof(Buffer), () => new FallbackInputUi<Buffer>());
             InputUiFactory.Entries.Add(typeof(Filter), () => new EnumInputUi<Filter>());
             InputUiFactory.Entries.Add(typeof(TextureAddressMode), () => new EnumInputUi<TextureAddressMode>());
             InputUiFactory.Entries.Add(typeof(Comparison), () => new EnumInputUi<Comparison>());
-            InputUiFactory.Entries.Add(typeof(SamplerState), () => new SamplerStateInputUi());
+            InputUiFactory.Entries.Add(typeof(SamplerState), () => new FallbackInputUi<SamplerState>());
 
             // Register output ui creators
             OutputUiFactory.Entries.Add(typeof(float), () => new FloatOutputUi());

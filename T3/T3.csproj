@@ -309,7 +309,7 @@
     <Compile Include="Gui\InputUi\FloatInputUi.cs" />
     <Compile Include="Gui\InputUi\FloatListInputUi.cs" />
     <Compile Include="Gui\InputUi\IInputUi.cs" />
-    <Compile Include="Gui\InputUi\InputUi.cs" />
+    <Compile Include="Gui\InputUi\FallbackInputUi.cs" />
     <Compile Include="Gui\InputUi\InputUiFactory.cs" />
     <Compile Include="Gui\InputUi\InputValueUi.cs" />
     <Compile Include="Gui\InputUi\IntInputUi.cs" />
