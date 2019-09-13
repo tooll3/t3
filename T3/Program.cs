@@ -273,7 +273,7 @@ namespace T3
                                      var modifiedSymbols = resourceManager.UpdateChangedOperatorTypes();
                                      foreach (var symbol in modifiedSymbols)
                                      {
-                                         T3UI._uiModel.UpdateUiEntriesForSymbol(symbol);
+                                         T3UI.UiModel.UpdateUiEntriesForSymbol(symbol);
                                      }
 
                                      T3Metrics.UiRenderingStarted();

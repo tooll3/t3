@@ -31,20 +31,21 @@ namespace T3.Gui
                 new SettingsWindow(),
                 new QuickCreateWindow(),
                 new ConsoleLogWindow(),
-                //new GraphCanvasWindow(),
+                new GraphCanvasWindow(),
+                new ViewWindow(),
             };
 
             // Open a default Window
-            OpenNewGraphWindow();
+            //OpenNewGraphWindow();
             OpenNewParameterView();
         }
 
 
 
-        public static void OpenNewGraphWindow()
-        {
-            _instance._graphCanvasWindows.Add(new GraphCanvasWindow(_uiModel.MainOp, "Composition View " + _instance._graphCanvasWindows.Count));
-        }
+        //public static void OpenNewGraphWindow()
+        //{
+        //    _instance._graphCanvasWindows.Add(new GraphCanvasWindow(UiModel.MainOp, "Composition View " + _instance._graphCanvasWindows.Count));
+        //}
 
         public static void OpenNewParameterView()
         {
@@ -55,14 +56,14 @@ namespace T3.Gui
         public unsafe void DrawUI()
         {
             DrawAppMenu();
-            foreach (var window in _windows)
+
+            foreach (var windowType in _windows)
             {
-                window.Draw();
+                windowType.Draw();
             }
 
-            DrawGraphCanvasWindows();
             DrawGraphParameterWindows();
-            DrawSelectionWindow();
+            //DrawSelectionWindow();
 
             if (SettingsWindow.DemoWindowVisible)
                 ImGui.ShowDemoWindow(ref SettingsWindow.DemoWindowVisible);
@@ -70,11 +71,6 @@ namespace T3.Gui
             if (SettingsWindow.ShowMetrics)
                 ImGui.ShowMetricsWindow(ref SettingsWindow.ShowMetrics);
 
-            //if (SettingsWindow.ConsoleWindowVisible)
-            //    _consoleWindow.Draw(ref SettingsWindow.ConsoleWindowVisible);
-
-
-            //_quickCreateWindow.Draw();
 
             SwapHoveringBuffers();
         }
@@ -86,14 +82,24 @@ namespace T3.Gui
             {
                 if (ImGui.BeginMenu("File"))
                 {
-                    //ShowExampleMenuFile();
+                    if (ImGui.MenuItem("Save"))
+                    {
+                        UiModel.Save();
+                    }
                     ImGui.EndMenu();
                 }
 
                 if (ImGui.BeginMenu("Edit"))
                 {
-                    if (ImGui.MenuItem("Undo", "CTRL+Z")) { }
-                    if (ImGui.MenuItem("Redo", "CTRL+Y", false, false)) { }  // Disabled item
+                    if (ImGui.MenuItem("Undo", "CTRL+Z", false, UndoRedoStack.CanUndo))
+                    {
+                        UndoRedoStack.Undo();
+                    }
+
+                    if (ImGui.MenuItem("Redo", "CTRL+Y", false, UndoRedoStack.CanRedo))
+                    {
+                        UndoRedoStack.Redo();
+                    }
                     ImGui.Separator();
                     if (ImGui.MenuItem("Cut", "CTRL+X")) { }
                     if (ImGui.MenuItem("Copy", "CTRL+C")) { }
@@ -116,7 +122,7 @@ namespace T3.Gui
 
         private SymbolChildUi GetSelectedSymbolChildUi()
         {
-            foreach (var gcw in _graphCanvasWindows)
+            foreach (var gcw in GraphCanvasWindow.WindowInstances)
             {
                 if (gcw.Canvas.SelectionHandler.SelectedElements.Any())
                 {
@@ -131,7 +137,7 @@ namespace T3.Gui
 
         private IOutputUi GetSelectedOutputUi()
         {
-            foreach (var gcw in _graphCanvasWindows)
+            foreach (var gcw in GraphCanvasWindow.WindowInstances)
             {
                 if (gcw.Canvas.SelectionHandler.SelectedElements.Any())
                 {
@@ -144,17 +150,7 @@ namespace T3.Gui
         }
 
 
-        private unsafe void DrawGraphCanvasWindows()
-        {
-            GraphCanvasWindow obsoleteGraphWindow = null;
-            foreach (var g in _graphCanvasWindows)
-            {
-                if (!g.Draw())
-                    obsoleteGraphWindow = g;   // we assume that only one window can be close in per frame
-            }
-            if (obsoleteGraphWindow != null)
-                _graphCanvasWindows.Remove(obsoleteGraphWindow);
-        }
+
 
 
         private unsafe void DrawGraphParameterWindows()
@@ -165,7 +161,7 @@ namespace T3.Gui
             var symbolChildUi = GetSelectedSymbolChildUi();
             if (symbolChildUi != null)
             {
-                instance = _graphCanvasWindows[0].Canvas.CompositionOp.Children.SingleOrDefault(
+                instance = GraphCanvasWindow.WindowInstances[0].Canvas.CompositionOp.Children.SingleOrDefault(
                     child => child.Id == symbolChildUi.Id);
             }
 
@@ -179,45 +175,7 @@ namespace T3.Gui
         }
 
 
-        public void DrawSelectionWindow()
-        {
-            ImGui.Begin("Selection");
-            if (_instance._graphCanvasWindows.Any())
-            {
-                Instance selectedInstance = _instance._graphCanvasWindows[0].Canvas.CompositionOp; // todo: fix
-                SymbolUi selectedUi = SymbolUiRegistry.Entries[selectedInstance.Symbol.Id];
-                var selectedChildUi = selectedUi.ChildUis.FirstOrDefault(childUi => childUi.IsSelected);
-                if (selectedChildUi != null)
-                {
-                    selectedInstance = selectedInstance.Children.Single(child => child.Id == selectedChildUi.Id);
-                    selectedUi = SymbolUiRegistry.Entries[selectedInstance.Symbol.Id];
-                }
 
-                if (selectedInstance.Outputs.Count > 0)
-                {
-                    var firstOutput = selectedInstance.Outputs[0];
-                    IOutputUi outputUi = selectedUi.OutputUis[firstOutput.Id];
-                    outputUi.DrawValue(firstOutput);
-                }
-            }
-
-            if (ImGui.Button("serialize"))
-            {
-                _uiModel.Save();
-            }
-
-            if (UndoRedoStack.CanUndo && ImGui.Button("undo"))
-            {
-                UndoRedoStack.Undo();
-            }
-
-            if (UndoRedoStack.CanRedo && ImGui.Button("redo"))
-            {
-                UndoRedoStack.Redo();
-            }
-
-            ImGui.End();
-        }
 
         public static void AddHoveredId(Guid id)
         {
@@ -233,10 +191,10 @@ namespace T3.Gui
         public static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
         public static HashSet<Guid> HoveredIdsLastFrame { get; set; } = new HashSet<Guid>();
 
-        private List<GraphCanvasWindow> _graphCanvasWindows = new List<GraphCanvasWindow>();
+        //private List<GraphCanvasWindow> _graphCanvasWindows = new List<GraphCanvasWindow>();
         private List<ParameterWindow> _parameterWindows = new List<ParameterWindow>();
 
-        public static UiModel _uiModel = new UiModel();
+        public static UiModel UiModel = new UiModel();
 
         private static T3UI _instance = null;
         //private QuickCreateWindow _quickCreateWindow = null;
