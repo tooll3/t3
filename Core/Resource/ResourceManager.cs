@@ -481,14 +481,12 @@ namespace T3.Core
 
         private void OnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            Console.WriteLine("on changed");
             if (FileResources.TryGetValue(fileSystemEventArgs.FullPath, out var fileResource))
             {
-                Console.WriteLine("found resource");
                 DateTime lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
                 if (lastWriteTime != fileResource.LastWriteReferenceTime)
                 {
-                    Console.WriteLine($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
+                    Log.Info($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
                     foreach (var id in fileResource.ResourceIds)
                     {
                         // update all resources that depend from this file
@@ -500,7 +498,7 @@ namespace T3.Core
                         }
                         else
                         {
-                            Console.WriteLine($"Trying to update a non existing file resource '{fileResource.Path}'.");
+                            Log.Info($"Trying to update a non existing file resource '{fileResource.Path}'.");
                         }
                     }
 
@@ -615,6 +613,16 @@ namespace T3.Core
             FileResources.Add(filename, fileResource);
 
             return (textureResourceEntry.Id, shaderResourceViewId);
+        }
+
+        public void UpdateTextureFromFile(uint textureId, string path, ref Texture2D texture)
+        {
+            Resources.TryGetValue(textureId, out var resource);
+            if (resource is TextureResource textureResource)
+            {
+                CreateTexture(path, ref textureResource.Texture);
+                texture = textureResource.Texture;
+            }
         }
 
         // returns true if the texture changed

@@ -36,23 +36,20 @@ namespace T3.Operators.Types
             if (Path.DirtyFlag.IsDirty)
             {
                 string imagePath = Path.GetValue(context);
-                (_textureResId, _srvResId) = ResourceManager.Instance().CreateTextureFromFile(imagePath, () => Texture.DirtyFlag.Invalidate());
+                (_textureResId, _srvResId) = ResourceManager.Instance().CreateTextureFromFile(imagePath, () =>
+                                                                                                         {
+                                                                                                             Texture.DirtyFlag.Invalidate();
+                                                                                                             ShaderResourceView.DirtyFlag.Invalidate();
+                                                                                                         });
                 if (ResourceManager.Instance().Resources[_textureResId] is TextureResource textureResource)
                     Texture.Value = textureResource.Texture;
                 if (ResourceManager.Instance().Resources[_srvResId] is ShaderResourceViewResource srvResource)
                     ShaderResourceView.Value = srvResource.ShaderResourceView;
-                Console.WriteLine("update loadtexture2d after path change");
             }
             else
             {
-                Console.WriteLine("update loadtexture2d after resource change");
-                Texture2D texture = Texture.Value;
-                ResourceManager.Instance().CreateTexture(Path.Value, ref texture);
-                Texture.Value = texture;
-                
-                ShaderResourceView srv = ShaderResourceView.Value;
-                ResourceManager.Instance().CreateShaderResourceView(_textureResId, "", ref srv);
-                ShaderResourceView.Value = srv;
+                ResourceManager.Instance().UpdateTextureFromFile(_textureResId, Path.Value, ref Texture.Value);
+                ResourceManager.Instance().CreateShaderResourceView(_textureResId, "", ref ShaderResourceView.Value);
             }
         }
 
