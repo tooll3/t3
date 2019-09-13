@@ -500,7 +500,7 @@ namespace T3.Core
                      // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
                      //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
                      //       it cannot read the file. 
-                    Thread.Sleep(5);
+                    Thread.Sleep(15);
                     Log.Info($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
                     foreach (var id in fileResource.ResourceIds)
                     {
@@ -532,20 +532,27 @@ namespace T3.Core
             {
                 // Copy the content of the WIC to the buffer
                 bitmapSource.CopyPixels(stride, buffer);
+                int mipLevels = (int)Math.Log(Math.Max(bitmapSource.Size.Width, bitmapSource.Size.Height), 2.0) + 1;
                 var texDesc = new Texture2DDescription()
                               {
                                   Width = bitmapSource.Size.Width,
                                   Height = bitmapSource.Size.Height,
                                   ArraySize = 1,
-                                  BindFlags = BindFlags.ShaderResource,
-                                  Usage = ResourceUsage.Immutable,
+                                  BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
+                                  Usage = ResourceUsage.Default,
                                   CpuAccessFlags = CpuAccessFlags.None,
                                   Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
-                                  MipLevels = 1,
-                                  OptionFlags = ResourceOptionFlags.None,
+                                  MipLevels = mipLevels,
+                                  OptionFlags = ResourceOptionFlags.GenerateMipMaps,
                                   SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
                               };
-                return new Texture2D(device, texDesc, new SharpDX.DataRectangle(buffer.DataPointer, stride));
+                var dataRectangles = new DataRectangle[mipLevels];
+                for (int i = 0; i < mipLevels; i++)
+                {
+                    dataRectangles[i] = new DataRectangle(buffer.DataPointer, stride);
+                    stride /= 2;
+                }
+                return new Texture2D(device, texDesc, dataRectangles);
             }
         }
 

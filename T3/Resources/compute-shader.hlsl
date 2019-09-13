@@ -25,15 +25,16 @@ void main(uint3 i : SV_DispatchThreadID)
     uint width, height;
     outputTexture.GetDimensions(width, height);
 
-    float2 uv = (float2)i.xy / float2(width, height);
+    float2 uv = (float2)i.xy / float2(width - 1, height - 1);
     float b = sin(time)*0.5 + 0.5;
     float4 calcColor = float4(uv, b, 1);
-//    uv = uv*2.0 - 1.0;
-//    float l = length(uv);
-//    uv *= sin(l*time);
-//    uv *= b;//sin(time);
-//    uv = uv*0.5 + 0.5;
-    float4 inputColor = inputTexture.SampleLevel(texSampler, uv, 0);
+    uv = uv*2.0 - 1.0;
+    float l = length(uv);
+    uv *= sin(l*time);
+    uv *= b;//sin(time);
+    uv = uv*0.5 + 0.5;
+    //float4 inputColor = inputTexture.Load(int3(i.x, i.y, 3)); // using mips here works, below not!
+    float4 inputColor = inputTexture.SampleLevel(texSampler, uv, 0.0);
     inputColor *= 3*inputTexture2.SampleLevel(texSampler, uv, 0);
     float4 outputColor = lerp(calcColor, inputColor, 0.5);
 outputColor.r = param1;
