@@ -1,9 +1,10 @@
 ﻿using ImGuiNET;
 using System.Diagnostics;
+using System.Text;
 
 namespace T3.Gui
 {
-    public static class Metrics
+    public static class T3Metrics
     {
         public static void UiRenderingStarted()
         {
@@ -21,11 +22,35 @@ namespace T3.Gui
         {
             DrawRenderDuration();
             DrawVertexCount();
+            DrawPressedKeys();
 
-            float framerate = ImGui.GetIO().Framerate;
-            ImGui.Text($"average {1000.0f / framerate:0.00}ms ({framerate:0.0}FPS) ");
+            //float framerate = ImGui.GetIO().Framerate;
+            //ImGui.Text($"average {1000.0f / framerate:0.00}ms ({framerate:0.0}FPS) ");
         }
 
+        /// <summary>
+        /// This can be helpful to build keyboard shorts and verify the keys mapping
+        /// </summary>
+        private static void DrawPressedKeys()
+        {
+            var io = ImGui.GetIO();
+            ImGui.Text(
+                (io.KeyAlt ? "Alt" : "")
+                + (io.KeyCtrl ? "Ctrl" : "")
+                + (io.KeyShift ? "Shift" : ""));
+
+            var sb = new StringBuilder();
+            for (var i = 0; i < ImGui.GetIO().KeysDown.Count; i++)
+            {
+                if (io.KeysDown[i])
+                {
+                    Key k = (Key)i;
+
+                    sb.Append($"{k} [{i}]");
+                }
+            }
+            ImGui.Text("Pressed keys:" + sb);
+        }
 
         private static void DrawRenderDuration()
         {
