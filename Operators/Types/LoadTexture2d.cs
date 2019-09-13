@@ -49,9 +49,12 @@ namespace T3.Operators.Types
             }
             else
             {
-                ResourceManager.Instance().UpdateTextureFromFile(_textureResId, Path.Value, ref Texture.Value);
-                ResourceManager.Instance().CreateShaderResourceView(_textureResId, "", ref ShaderResourceView.Value);
+                resourceManager.UpdateTextureFromFile(_textureResId, Path.Value, ref Texture.Value);
+                resourceManager.CreateShaderResourceView(_textureResId, "", ref ShaderResourceView.Value);
             }
+
+            if (ShaderResourceView.Value != null)
+                resourceManager._device.ImmediateContext.GenerateMips(ShaderResourceView.Value);
         }
 
         [Input(Guid = "{76CC3811-4AE0-48B2-A119-890DB5A4EEB2}")]
