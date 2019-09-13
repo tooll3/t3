@@ -13,7 +13,7 @@ using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.OutputUi;
-using T3.Logging;
+using T3.Gui.Windows;
 
 namespace T3.Gui
 {
@@ -26,11 +26,20 @@ namespace T3.Gui
         {
             _instance = this;
 
+            _windows = new List<Window>()
+            {
+                new SettingsWindow(),
+                new QuickCreateWindow(),
+                new ConsoleLogWindow(),
+                //new GraphCanvasWindow(),
+            };
+
             // Open a default Window
             OpenNewGraphWindow();
             OpenNewParameterView();
-            _quickCreateWindow = new QuickCreateWindow();
         }
+
+
 
         public static void OpenNewGraphWindow()
         {
@@ -45,21 +54,64 @@ namespace T3.Gui
 
         public unsafe void DrawUI()
         {
+            DrawAppMenu();
+            foreach (var window in _windows)
+            {
+                window.Draw();
+            }
+
             DrawGraphCanvasWindows();
             DrawGraphParameterWindows();
+            DrawSelectionWindow();
 
-            if (UiSettingsWindow.DemoWindowVisible)
-                ImGui.ShowDemoWindow(ref UiSettingsWindow.DemoWindowVisible);
+            if (SettingsWindow.DemoWindowVisible)
+                ImGui.ShowDemoWindow(ref SettingsWindow.DemoWindowVisible);
 
-            if (UiSettingsWindow.ShowMetrics)
-                ImGui.ShowMetricsWindow(ref UiSettingsWindow.ShowMetrics);
+            if (SettingsWindow.ShowMetrics)
+                ImGui.ShowMetricsWindow(ref SettingsWindow.ShowMetrics);
+
+            //if (SettingsWindow.ConsoleWindowVisible)
+            //    _consoleWindow.Draw(ref SettingsWindow.ConsoleWindowVisible);
 
 
-            if (UiSettingsWindow.ConsoleWindowVisible)
-                _consoleWindow.Draw(ref UiSettingsWindow.ConsoleWindowVisible);
+            //_quickCreateWindow.Draw();
 
-            _quickCreateWindow.Draw();
             SwapHoveringBuffers();
+        }
+
+        private void DrawAppMenu()
+        {
+
+            if (ImGui.BeginMainMenuBar())
+            {
+                if (ImGui.BeginMenu("File"))
+                {
+                    //ShowExampleMenuFile();
+                    ImGui.EndMenu();
+                }
+
+                if (ImGui.BeginMenu("Edit"))
+                {
+                    if (ImGui.MenuItem("Undo", "CTRL+Z")) { }
+                    if (ImGui.MenuItem("Redo", "CTRL+Y", false, false)) { }  // Disabled item
+                    ImGui.Separator();
+                    if (ImGui.MenuItem("Cut", "CTRL+X")) { }
+                    if (ImGui.MenuItem("Copy", "CTRL+C")) { }
+                    if (ImGui.MenuItem("Paste", "CTRL+V")) { }
+                    ImGui.EndMenu();
+                }
+
+                if (ImGui.BeginMenu("Windows"))
+                {
+                    foreach (var window in _windows)
+                    {
+                        window.DrawMenuItemToggle();
+                    }
+                    //SettingsWindow.DrawMenuItemToggle();
+                    ImGui.EndMenu();
+                }
+                ImGui.EndMainMenuBar();
+            }
         }
 
         private SymbolChildUi GetSelectedSymbolChildUi()
@@ -127,9 +179,9 @@ namespace T3.Gui
         }
 
 
-        public void DrawSelectedWindow()
+        public void DrawSelectionWindow()
         {
-            ImGui.Begin("SelectionView");
+            ImGui.Begin("Selection");
             if (_instance._graphCanvasWindows.Any())
             {
                 Instance selectedInstance = _instance._graphCanvasWindows[0].Canvas.CompositionOp; // todo: fix
@@ -185,8 +237,10 @@ namespace T3.Gui
         private List<ParameterWindow> _parameterWindows = new List<ParameterWindow>();
 
         public static UiModel _uiModel = new UiModel();
-        private ConsoleLogWindow _consoleWindow = new ConsoleLogWindow();
+
         private static T3UI _instance = null;
-        private QuickCreateWindow _quickCreateWindow = null;
+        //private QuickCreateWindow _quickCreateWindow = null;
+
+        private List<Window> _windows;
     }
 }

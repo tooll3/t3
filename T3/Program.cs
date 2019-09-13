@@ -14,7 +14,7 @@ using System.Windows.Forms;
 using T3.Core;
 using T3.Core.Operator;
 using T3.Gui;
-using T3.Logging;
+using T3.Gui.Windows;
 using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
 
@@ -279,6 +279,7 @@ namespace T3
                                      T3Metrics.UiRenderingStarted();
                                      T3Style.Apply();
 
+
                                      ImGui.NewFrame();
 
                                      context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
@@ -306,16 +307,13 @@ namespace T3
 
                                      _t3ui.DrawUI();
 
-                                     _t3ui.DrawSelectedWindow();
-
-                                     UiSettingsWindow.DrawUiSettings();
 
                                      ImGui.Render();
                                      _controller.RenderImDrawData(ImGui.GetDrawData());
 
                                      T3Metrics.UiRenderingCompleted();
 
-                                     _swapChain.Present(UiSettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
+                                     _swapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
                                  });
 
             _controller.Dispose();

@@ -13,6 +13,9 @@ namespace T3.Gui.Commands
 
         public AddSymbolChildCommand(Symbol compositionOp, Guid symbolIdToAdd)
         {
+            if (compositionOp == null)
+                return;
+
             _parentSymbolId = compositionOp.Id;
             _addedSymbolId = symbolIdToAdd;
             _addedChildId = Guid.NewGuid();
