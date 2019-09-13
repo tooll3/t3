@@ -28,17 +28,30 @@ namespace T3.Operators.Types
             _cs = ComputeShader.GetValue(context);
             if (ConstantBuffers.DirtyFlag.IsDirty)
             {
-                var bla = ConstantBuffers.GetCollectedTypedInputs();
+                var connectedConstBuffers = ConstantBuffers.GetCollectedTypedInputs();
                 _constantBuffers.Clear();
-                _constantBuffers.Capacity = bla.Count;
-                foreach (var input in bla)
+                _constantBuffers.Capacity = connectedConstBuffers.Count;
+                foreach (var input in connectedConstBuffers)
                 {
                     _constantBuffers.Add(input.GetValue(context));
                 }
             }
             _samplerState = SamplerState.GetValue(context);
 
-            _srv = ShaderResources.GetValue(context);
+            if (ShaderResources.DirtyFlag.IsDirty)
+            {
+                var connectedResources = ShaderResources.GetCollectedTypedInputs();
+                if (connectedResources.Count != _shaderResourceViews.Length)
+                {
+                    _shaderResourceViews = new ShaderResourceView[connectedResources.Count];
+                }
+
+                for (int i = 0; i < connectedResources.Count; i++)
+                {
+                    _shaderResourceViews[i] = connectedResources[i].GetValue(context);
+                }
+                ShaderResources.DirtyFlag.Clear();
+            }
 
             if (OutputUav.DirtyFlag.IsDirty)
             {
@@ -56,7 +69,7 @@ namespace T3.Operators.Types
             csStage.Set(_cs);
             for (int i = 0; i < _constantBuffers.Count; i++)
                 csStage.SetConstantBuffer(i, _constantBuffers[i]);
-            csStage.SetShaderResource(0, _srv);
+            csStage.SetShaderResources(0, _shaderResourceViews.Length, _shaderResourceViews);
             csStage.SetSampler(0, _samplerState);
             csStage.SetUnorderedAccessView(0, _uav);
 
@@ -66,14 +79,15 @@ namespace T3.Operators.Types
 
             csStage.SetUnorderedAccessView(0, null);
             csStage.SetSampler(0, null);
-            csStage.SetShaderResource(0, null);
+            for (int i = 0; i < _shaderResourceViews.Length; i++)
+                csStage.SetShaderResource(i, null);
             for (int i = 0; i < _constantBuffers.Count; i++)
                 csStage.SetConstantBuffer(i, null);
         }
 
         private SharpDX.Direct3D11.ComputeShader _cs;
         private List<Buffer> _constantBuffers = new List<Buffer>();
-        private ShaderResourceView _srv;
+        private ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[0];
         private SamplerState _samplerState;
         private UnorderedAccessView _uav;
         
@@ -82,7 +96,7 @@ namespace T3.Operators.Types
         [Input(Guid = "{34CF06FE-8F63-4F14-9C59-35A2C021B817}")]
         public readonly MultiInputSlot<Buffer> ConstantBuffers = new MultiInputSlot<Buffer>();
         [Input(Guid = "{88938B09-D5A7-437C-B6E1-48A5B375D756}")]
-        public readonly InputSlot<ShaderResourceView> ShaderResources = new InputSlot<ShaderResourceView>();
+        public readonly MultiInputSlot<ShaderResourceView> ShaderResources = new MultiInputSlot<ShaderResourceView>();
         [Input(Guid = "{4047C9E7-1EDB-4C71-B85C-C1B87058C81C}")]
         public readonly InputSlot<SamplerState> SamplerState = new InputSlot<SamplerState>();
         [Input(Guid = "{CEC84992-8525-4242-B3C3-C94FE11C2A15}")]

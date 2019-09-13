@@ -128,6 +128,13 @@
         "X": 556.0,
         "Y": 554.0
       }
+    },
+    {
+      "ChildId": "d8060c5c-1334-4e11-beff-6ca7d7bffd7e"/*LoadTexture2d*/,
+      "Position": {
+        "X": 699.0,
+        "Y": 541.0
+      }
     }
   ],
   "OutputUis": [

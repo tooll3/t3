@@ -121,6 +121,17 @@
           "Value": 1.0
         }
       ]
+    },
+    {
+      "Id": "d8060c5c-1334-4e11-beff-6ca7d7bffd7e"/*LoadTexture2d*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [
+        {
+          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
+          "Type": "System.String",
+          "Value": "Resources\\perlin-noise.jpg"
+        }
+      ]
     }
   ],
   "Connections": [
@@ -246,6 +257,12 @@
     },
     {
       "SourceParentOrChildId": "eb2fc5db-976c-4727-b0ba-7dcd008cfc9d",
+      "SourceSlotId": "a4a46c04-ff03-48ce-83c9-0c0baa0f72e7",
+      "TargetParentOrChildId": "6e316c6f-b602-40b2-81d7-acfa3f4c96a5",
+      "TargetSlotId": "88938b09-d5a7-437c-b6e1-48a5b375d756"
+    },
+    {
+      "SourceParentOrChildId": "d8060c5c-1334-4e11-beff-6ca7d7bffd7e",
       "SourceSlotId": "a4a46c04-ff03-48ce-83c9-0c0baa0f72e7",
       "TargetParentOrChildId": "6e316c6f-b602-40b2-81d7-acfa3f4c96a5",
       "TargetSlotId": "88938b09-d5a7-437c-b6e1-48a5b375d756"

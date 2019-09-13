@@ -1,6 +1,7 @@
 RWTexture2D<float4> outputTexture : register(u0);
 
 Texture2D<float4> inputTexture : register(t0);
+Texture2D<float4> inputTexture2 : register(t1);
 sampler texSampler : register(s0);
 
 cbuffer TimeConstants : register(b0)
@@ -33,6 +34,7 @@ void main(uint3 i : SV_DispatchThreadID)
 //    uv *= b;//sin(time);
 //    uv = uv*0.5 + 0.5;
     float4 inputColor = inputTexture.SampleLevel(texSampler, uv, 0);
+    inputColor *= 3*inputTexture2.SampleLevel(texSampler, uv, 0);
     float4 outputColor = lerp(calcColor, inputColor, 0.5);
 outputColor.r = param1;
 
