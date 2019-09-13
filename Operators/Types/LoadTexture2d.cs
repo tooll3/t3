@@ -33,17 +33,18 @@ namespace T3.Operators.Types
 
         private void UpdateTexture(EvaluationContext context)
         {
+            var resourceManager = ResourceManager.Instance();
             if (Path.DirtyFlag.IsDirty)
             {
                 string imagePath = Path.GetValue(context);
-                (_textureResId, _srvResId) = ResourceManager.Instance().CreateTextureFromFile(imagePath, () =>
-                                                                                                         {
-                                                                                                             Texture.DirtyFlag.Invalidate();
-                                                                                                             ShaderResourceView.DirtyFlag.Invalidate();
-                                                                                                         });
-                if (ResourceManager.Instance().Resources[_textureResId] is TextureResource textureResource)
+                (_textureResId, _srvResId) = resourceManager.CreateTextureFromFile(imagePath, () =>
+                                                                                              {
+                                                                                                  Texture.DirtyFlag.Invalidate();
+                                                                                                  ShaderResourceView.DirtyFlag.Invalidate();
+                                                                                              });
+                if (resourceManager.Resources.TryGetValue(_textureResId, out var resource1) && resource1 is TextureResource textureResource)
                     Texture.Value = textureResource.Texture;
-                if (ResourceManager.Instance().Resources[_srvResId] is ShaderResourceViewResource srvResource)
+                if (resourceManager.Resources.TryGetValue(_srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
                     ShaderResourceView.Value = srvResource.ShaderResourceView;
             }
             else

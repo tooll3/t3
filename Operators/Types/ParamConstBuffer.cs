@@ -22,6 +22,7 @@ namespace T3.Operators.Types
         {
             var bufferContent = new ParamBufferLayout(Param1.GetValue(context), Param2.GetValue(context), Param3.GetValue(context), Param4.GetValue(context));
             ResourceManager.Instance().SetupConstBufferForCS(bufferContent, ref Buffer.Value, 0);
+            Buffer.Value.DebugName = nameof(ParamConstBuffer);
         }
 
         [StructLayout(LayoutKind.Explicit, Size = 16)]
