@@ -1,5 +1,4 @@
 ﻿using ImGuiNET;
-using UiHelpers;
 using System;
 using System.Linq;
 using System.Numerics;
@@ -7,8 +6,9 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.InputUi;
+using UiHelpers;
 
-namespace T3.Gui
+namespace T3.Gui.Windows
 {
     /// <summary>
     /// 

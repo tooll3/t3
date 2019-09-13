@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace T3.Gui
+namespace T3.Gui.Windows
 {
     public static class T3Metrics
     {

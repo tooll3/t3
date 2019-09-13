@@ -1,25 +1,28 @@
 ﻿using ImGuiNET;
-using UiHelpers;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 using T3.Core.Logging;
 using T3.Gui;
+using T3.Gui.Windows;
+using UiHelpers;
 
-namespace T3.Logging
+namespace T3.Gui.Windows
 {
     /// <summary>
     /// Renders the <see cref="ConsoleLogWindow"/>
     /// </summary>
-    public class ConsoleLogWindow : ILogWriter
+    public class ConsoleLogWindow : Window, ILogWriter
     {
-        public ConsoleLogWindow()
+        public ConsoleLogWindow() : base()
         {
             Log.AddWriter(this);
+            _title = "Console";
+            _visible = true;
         }
 
-        public bool Draw(ref bool isOpen)
+        protected override void DrawContent()
         {
             lock (_logEntries)
             {
@@ -29,58 +32,53 @@ namespace T3.Logging
                 }
             }
 
-            if (ImGui.Begin("Console", ref isOpen))
+            ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
+            if (ImGui.Button("Clear"))
             {
-                ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
-                if (ImGui.Button("Clear"))
+                lock (_logEntries)
                 {
-                    lock (_logEntries)
-                    {
-                        _logEntries.Clear();
-                    }
+                    _logEntries.Clear();
                 }
-
-                ImGui.SameLine();
-                ImGui.InputText("##Filter", ref _filterString, 100);
-                ImGui.Separator();
-                ImGui.BeginChild("scrolling");
-                {
-                    lock (_logEntries)
-                    {
-                        foreach (var entry in _logEntries)
-                        {
-                            if (FilterIsActive && !entry.Message.Contains(_filterString))
-                                continue;
-
-                            var colorHoveredElements = T3UI.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f;
-
-                            var color = _colorForLogLevel[entry.Level];
-                            color.W = colorHoveredElements;
-                            ImGui.PushStyleColor(ImGuiCol.Text, color);
-                            ImGui.Text(string.Format("{0:0.000}", (entry.TimeStamp - _startTime).Ticks/10000000f));
-                            ImGui.SameLine(50);
-                            ImGui.Text(entry.Message);
-
-                            if (IsLineHovered())
-                            {
-                                T3UI.AddHoveredId(entry.SourceId);
-                            }
-
-                            ImGui.PopStyleColor();
-                        }
-                    }
-
-                    _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - 5;
-                    if (_shouldScrollToBottom)
-                    {
-                        ImGui.SetScrollHereY(1);
-                        _shouldScrollToBottom = false;
-                    }
-                }
-                ImGui.EndChild();
             }
-            ImGui.End();
-            return isOpen;
+
+            ImGui.SameLine();
+            ImGui.InputText("##Filter", ref _filterString, 100);
+            ImGui.Separator();
+            ImGui.BeginChild("scrolling");
+            {
+                lock (_logEntries)
+                {
+                    foreach (var entry in _logEntries)
+                    {
+                        if (FilterIsActive && !entry.Message.Contains(_filterString))
+                            continue;
+
+                        var colorHoveredElements = T3UI.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f;
+
+                        var color = _colorForLogLevel[entry.Level];
+                        color.W = colorHoveredElements;
+                        ImGui.PushStyleColor(ImGuiCol.Text, color);
+                        ImGui.Text(string.Format("{0:0.000}", (entry.TimeStamp - _startTime).Ticks / 10000000f));
+                        ImGui.SameLine(50);
+                        ImGui.Text(entry.Message);
+
+                        if (IsLineHovered())
+                        {
+                            T3UI.AddHoveredId(entry.SourceId);
+                        }
+
+                        ImGui.PopStyleColor();
+                    }
+                }
+
+                _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - 5;
+                if (_shouldScrollToBottom)
+                {
+                    ImGui.SetScrollHereY(1);
+                    _shouldScrollToBottom = false;
+                }
+            }
+            ImGui.EndChild();
         }
 
         private static bool IsLineHovered()
@@ -119,6 +117,7 @@ namespace T3.Logging
         {
             _logEntries = null;
         }
+
 
 
         public LogEntry.EntryLevel Filter { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
