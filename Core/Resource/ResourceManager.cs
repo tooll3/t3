@@ -124,7 +124,7 @@ namespace T3.Core
         }
     }
 
-    public abstract class ShaderResource : Resource, IUpdateable
+    public abstract class ShaderResource : Resource
     {
         protected ShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob)
             : base(id, name)
@@ -400,7 +400,7 @@ namespace T3.Core
             return resourceEntry.Id;
         }
 
-        public uint CreateComputeShader(string srcFile, string entryPoint, string name)
+        public uint CreateComputeShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
                 return NULL_RESOURCE;
@@ -434,6 +434,7 @@ namespace T3.Core
             if (fileResource == null)
             {
                 fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
+                fileResource.FileChangeAction = fileChangedAction;
                 FileResources.Add(srcFile, fileResource);
             }
             else
@@ -443,6 +444,16 @@ namespace T3.Core
             }
 
             return resourceEntry.Id;
+        }
+
+        public void UpdateComputeShaderFromFile(string path, uint id, ref ComputeShader computeShader)
+        {
+            Resources.TryGetValue(id, out var resource);
+            if (resource is ComputeShaderResource csResource)
+            {
+                csResource.Update(path);
+                computeShader = csResource.ComputeShader;
+            }
         }
 
         public uint CreateOperatorEntry(string srcFile, string name)

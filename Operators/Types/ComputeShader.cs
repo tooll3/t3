@@ -1,6 +1,4 @@
-﻿using System;
-using SharpDX.Direct3D11;
-using T3.Core;
+﻿using T3.Core;
 using T3.Core.Operator;
 
 namespace T3.Operators.Types
@@ -13,16 +11,10 @@ namespace T3.Operators.Types
         private uint _computeShaderResId;
         public ComputeShader()
         {
-            ComputerShader.UpdateAction = UpdateComputeShader;
-
-            // this ensures for now that an asynchronous change of the compute shader resource is picked up
-            // probably a different handling is needed later on, either use a callback or simply output
-            // the resource id instead of the shader object. The user has then to get the shader from the
-            // resource manager which would always be the actual one
-            ComputerShader.DirtyFlag.Trigger = DirtyFlagTrigger.Always;
+            ComputerShader.UpdateAction = Update;
         }
 
-        private void UpdateComputeShader(EvaluationContext context)
+        private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
 
@@ -31,7 +23,12 @@ namespace T3.Operators.Types
                 string sourcePath = Source.GetValue(context);
                 string entryPoint = EntryPoint.GetValue(context);
                 string debugName = DebugName.GetValue(context);
-                _computeShaderResId = resourceManager.CreateComputeShader(sourcePath, entryPoint, debugName);
+                _computeShaderResId = resourceManager.CreateComputeShaderFromFile(sourcePath, entryPoint, debugName,
+                                                                                  () => ComputerShader.DirtyFlag.Invalidate());
+            }
+            else
+            {
+                resourceManager.UpdateComputeShaderFromFile(Source.Value, _computeShaderResId, ref ComputerShader.Value);
             }
 
             if (_computeShaderResId != ResourceManager.NULL_RESOURCE)
