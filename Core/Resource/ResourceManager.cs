@@ -497,6 +497,10 @@ namespace T3.Core
                 DateTime lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
                 if (lastWriteTime != fileResource.LastWriteReferenceTime)
                 {
+                     // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
+                     //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
+                     //       it cannot read the file. 
+                    Thread.Sleep(5);
                     Log.Info($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
                     foreach (var id in fileResource.ResourceIds)
                     {
