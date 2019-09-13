@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "a870921f-a28c-4501-9f31-38a18b0acdcc"/*Filter*/,
-      "DefaultValue": "MinMagMipPoint"
+      "DefaultValue": "MinMagMipLinear"
     },
     {
       "Id": "e7c95fd5-14d1-434f-a140-f22ef69076ab"/*AddressU*/,
