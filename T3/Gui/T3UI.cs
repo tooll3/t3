@@ -58,9 +58,6 @@ namespace T3.Gui
             if (UiSettingsWindow.ConsoleWindowVisible)
                 _consoleWindow.Draw(ref UiSettingsWindow.ConsoleWindowVisible);
 
-            if (UiSettingsWindow.CurveEditorVisible)
-                _curveEditor.Draw(ref UiSettingsWindow.CurveEditorVisible);
-
             _quickCreateWindow.Draw();
             SwapHoveringBuffers();
         }
@@ -189,7 +186,6 @@ namespace T3.Gui
 
         public static UiModel _uiModel = new UiModel();
         private ConsoleLogWindow _consoleWindow = new ConsoleLogWindow();
-        private CurveEditorWindow _curveEditor = new CurveEditorWindow();
         private static T3UI _instance = null;
         private QuickCreateWindow _quickCreateWindow = null;
     }

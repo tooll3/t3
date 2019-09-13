@@ -329,7 +329,6 @@
     <Compile Include="Gui\UiJson.cs" />
     <Compile Include="Gui\UserAction.cs" />
     <Compile Include="Gui\Animation\CurveEditing\CurveEditCanvas.cs" />
-    <Compile Include="Gui\Animation\CurveEditing\CurveEditorWindow.cs" />
     <Compile Include="Gui\Animation\CurveEditing\CurvePointUi.cs" />
     <Compile Include="Gui\Animation\CurveEditing\CurveUi.cs" />
     <Compile Include="Gui\Commands\AddSymbolChildCommand.cs" />
