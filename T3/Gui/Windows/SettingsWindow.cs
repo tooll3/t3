@@ -40,9 +40,6 @@ namespace T3.Gui.Windows
             ImGui.Checkbox("Console Window Visible", ref ConsoleWindowVisible);
             ImGui.Checkbox("Parameters visible", ref ParameterWindowVisible);
 
-            if (ImGui.Button("Open new Graph Canvas"))
-                OpenNewGraphWindow();
-
             if (ImGui.Button("New Parameter View"))
                 OpenNewParameterView();
 

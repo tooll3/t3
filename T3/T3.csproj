@@ -326,6 +326,7 @@
     <Compile Include="Gui\OutputUi\ShaderResourceViewOutputUi.cs" />
     <Compile Include="Gui\OutputUi\Texture2dOutputUi.cs" />
     <Compile Include="Gui\OutputUi\ValueOutputUi.cs" />
+    <Compile Include="Gui\Windows\ViewWindow.cs" />
     <Compile Include="Gui\Windows\Window.cs" />
     <Compile Include="Gui\UiJson.cs" />
     <Compile Include="Gui\Interaction\UserAction.cs" />

@@ -17,6 +17,7 @@ namespace T3.Gui.Windows
         protected bool _canBeOpenedFromAppMenu = true;
         protected string _title = "Window";
         protected abstract void DrawContent();
+        protected ImGuiWindowFlags _windowFlags;
 
         protected Window() { }
 
@@ -43,11 +44,18 @@ namespace T3.Gui.Windows
             if (!_visible)
                 return;
 
-            if (ImGui.Begin(_title, ref _visible))
+            if (ImGui.Begin(_title, ref _visible, _windowFlags))
             {
                 DrawContent();
                 ImGui.End();
             }
+
+            if (!_visible)
+            {
+                Close();
+            }
         }
+
+        protected virtual void Close() { }
     }
 }

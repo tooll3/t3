@@ -6,6 +6,7 @@ using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Animation.CurveEditing;
+using T3.Gui.Windows;
 using UiHelpers;
 using static ImGuiNET.ImGui;
 using static T3.Gui.CustomComponents;
@@ -15,26 +16,34 @@ namespace T3.Gui.Graph
     /// <summary>
     /// A window that renders a node graph 
     /// </summary>
-    public class GraphCanvasWindow
+    public class GraphCanvasWindow : Window
     {
         public GraphCanvas Canvas { get; private set; }
 
+        public static List<GraphCanvasWindow> WindowInstances = new List<GraphCanvasWindow>();
 
-        public GraphCanvasWindow(Instance opInstance, string windowTitle = "Graph windows")
+        public GraphCanvasWindow() : base()
         {
-            _windowTitle = windowTitle;
+            _title = "Graph##" + WindowInstances.Count;
+            _visible = true;
+
+            var opInstance = T3UI.UiModel.MainOp;
             Canvas = new GraphCanvas(opInstance);
             _curveEditor = new CurveEditCanvas(_clipTime);
+
+            _windowFlags = ImGuiWindowFlags.NoScrollbar;
+            WindowInstances.Add(this);
         }
 
 
-        public bool Draw()
+        protected override void UpdateBeforeDraw()
         {
-            bool opened = true;
             _clipTime.Update();
+        }
 
+        protected override void DrawContent()
+        {
             PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
-            if (Begin(_windowTitle, ref opened, ImGuiWindowFlags.NoScrollbar))
             {
                 var dl = GetWindowDrawList();
 
@@ -63,8 +72,12 @@ namespace T3.Gui.Graph
             }
             PopStyleVar();
 
-            End();
-            return opened;
+        }
+
+
+        protected override void Close()
+        {
+            WindowInstances.Remove(this);
         }
 
 
@@ -167,10 +180,7 @@ namespace T3.Gui.Graph
         {
             SetCurvesForSelection();
             _curveEditor.Draw();
-            //DrawDragTimeArea();
         }
-
-
 
 
         private void SetCurvesForSelection()
@@ -214,11 +224,12 @@ namespace T3.Gui.Graph
             PopStyleColor(2);
         }
 
-        private string _windowTitle;
 
         private ClipTime _clipTime = new ClipTime();
         private static float _heightTimeLine = 100;
         private CurveEditCanvas _curveEditor;
+
+
 
         // Styling properties
         public static Vector2 _timeControlsSize = new Vector2(40, 0);
