@@ -197,16 +197,16 @@ namespace T3
 
             // SwapChain description
             var desc = new SwapChainDescription()
-                       {
-                           BufferCount = 1,
-                           ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
+            {
+                BufferCount = 1,
+                ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
                                                                  new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                           IsWindowed = true,
-                           OutputHandle = form.Handle,
-                           SampleDescription = new SampleDescription(1, 0),
-                           SwapEffect = SwapEffect.Discard,
-                           Usage = Usage.RenderTargetOutput
-                       };
+                IsWindowed = true,
+                OutputHandle = form.Handle,
+                SampleDescription = new SampleDescription(1, 0),
+                SwapEffect = SwapEffect.Discard,
+                Usage = Usage.RenderTargetOutput
+            };
 
             // Create Device and SwapChain
             Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, desc, out var device, out _swapChain);
@@ -259,13 +259,14 @@ namespace T3
             stopwatch.Start();
 
             ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
-            T3Style.Init();
-            
+
+            //T3Style.Init();
+
             // Main loop
             RenderLoop.Run(form, () =>
                                  {
                                      Int64 ticks = stopwatch.ElapsedTicks;
-                                     ImGui.GetIO().DeltaTime = (float)(ticks)/Stopwatch.Frequency;
+                                     ImGui.GetIO().DeltaTime = (float)(ticks) / Stopwatch.Frequency;
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
                                      stopwatch.Restart();
 
@@ -275,7 +276,7 @@ namespace T3
                                          T3UI._uiModel.UpdateUiEntriesForSymbol(symbol);
                                      }
 
-                                     Metrics.UiRenderingStarted();
+                                     T3Metrics.UiRenderingStarted();
                                      T3Style.Apply();
 
                                      ImGui.NewFrame();
@@ -312,7 +313,7 @@ namespace T3
                                      ImGui.Render();
                                      _controller.RenderImDrawData(ImGui.GetDrawData());
 
-                                     Metrics.UiRenderingCompleted();
+                                     T3Metrics.UiRenderingCompleted();
 
                                      _swapChain.Present(UiSettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
                                  });
