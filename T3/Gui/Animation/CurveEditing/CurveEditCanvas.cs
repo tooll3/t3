@@ -37,29 +37,35 @@ namespace T3.Gui.Animation.CurveEditing
         public void SetCurves(List<Curve> newCurveSelection)
         {
             var existingCurves = _curvesWithUi.Keys.ToArray();
-
+            var someCurvesUnselected = false;
+            var someNewCurvesSelected = false;
 
             foreach (var c in existingCurves)
             {
                 if (!newCurveSelection.Contains(c))
                 {
                     _curvesWithUi.Remove(c);
+                    someCurvesUnselected = true;
                 }
             }
 
-            var curveChangedCompletely = _curvesWithUi.Count == 0;
+            if (newCurveSelection.Count == 0)
+                return;
+
+            //var curveChangedCompletely = _curvesWithUi.Count == 0;
 
             foreach (var newCurve in newCurveSelection)
             {
                 if (!_curvesWithUi.ContainsKey(newCurve))
                 {
                     _curvesWithUi[newCurve] = new CurveUi(newCurve, this);
+                    someNewCurvesSelected = true;
                 }
             }
 
-            if (curveChangedCompletely)
+            if (someCurvesUnselected && someNewCurvesSelected)
             {
-                ViewAllOrSelectedKeys();
+                ViewAllOrSelectedKeys(keepURange: true);
             }
         }
 
@@ -76,8 +82,13 @@ namespace T3.Gui.Animation.CurveEditing
 
             // Damp scaling
             const float _dampSpeed = 30f;
-            Scale = Im.Lerp(Scale, _scaleTarget, _io.DeltaTime * _dampSpeed);
-            Scroll = Im.Lerp(Scroll, _scrollTarget, _io.DeltaTime * _dampSpeed);
+            var damping = _io.DeltaTime * _dampSpeed;
+            if (!float.IsNaN(damping) && damping > 0.001f && damping <= 1.0f)
+            {
+                Scale = Im.Lerp(Scale, _scaleTarget, damping);
+                Scroll = Im.Lerp(Scroll, _scrollTarget, damping);
+            }
+
 
             ImGui.BeginChild("scrolling_region2", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
@@ -362,7 +373,7 @@ namespace T3.Gui.Animation.CurveEditing
         }
 
         #region update children
-        public void ViewAllOrSelectedKeys(bool KeepURange = false)
+        public void ViewAllOrSelectedKeys(bool keepURange = false)
         {
             const float CURVE_VALUE_PADDING = 0.3f;
 
@@ -919,8 +930,8 @@ namespace T3.Gui.Animation.CurveEditing
         public Vector2 Scale { get; set; } = Vector2.One;
         public Vector2 WindowPos { get; set; }
         public Vector2 WindowSize { get; set; }
-        public Vector2 Scroll { get; set; } = new Vector2(0.0f, 0.0f);
-        private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
+        public Vector2 Scroll { get; set; } = new Vector2(0, 0.0f);
+        private Vector2 _scrollTarget = new Vector2(-1.0f, 0.0f);
         public List<ISelectable> SelectableChildren { get; set; }
         public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
 

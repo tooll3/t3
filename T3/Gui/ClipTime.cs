@@ -11,8 +11,8 @@ namespace T3.Gui
     public class ClipTime
     {
         public double Time { get; set; } = 0;
-        public double TimeRangeStart { get; set; } = 5;
-        public double TimeRangeEnd { get; set; } = 30;
+        public double TimeRangeStart { get; set; } = 0;
+        public double TimeRangeEnd { get; set; } = 8;
         public double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = true;
 
