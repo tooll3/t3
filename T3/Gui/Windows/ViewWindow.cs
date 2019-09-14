@@ -21,26 +21,51 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
-            if (GraphCanvasWindow.WindowInstances.Count == 0)
+            DrawToolbar();
+            UpdateSelectedInstance();
+            if (_selectedInstance == null)
                 return;
 
-            var firstInstace = GraphCanvasWindow.WindowInstances[0] as GraphCanvasWindow;
-
-            Instance selectedInstance = firstInstace.Canvas.CompositionOp; // todo: fix
-            SymbolUi selectedUi = SymbolUiRegistry.Entries[selectedInstance.Symbol.Id];
+            SymbolUi selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
             var selectedChildUi = selectedUi.ChildUis.FirstOrDefault(childUi => childUi.IsSelected);
             if (selectedChildUi != null)
             {
-                selectedInstance = selectedInstance.Children.Single(child => child.Id == selectedChildUi.Id);
-                selectedUi = SymbolUiRegistry.Entries[selectedInstance.Symbol.Id];
+                _selectedInstance = _selectedInstance.Children.Single(child => child.Id == selectedChildUi.Id);
+                selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
             }
 
-            if (selectedInstance.Outputs.Count > 0)
+            if (_selectedInstance.Outputs.Count > 0)
             {
-                var firstOutput = selectedInstance.Outputs[0];
+                var firstOutput = _selectedInstance.Outputs[0];
                 IOutputUi outputUi = selectedUi.OutputUis[firstOutput.Id];
                 outputUi.DrawValue(firstOutput);
             }
         }
+
+
+        private void DrawToolbar()
+        {
+            ImGui.Checkbox("pin", ref _enablePinning);
+            ImGui.SameLine();
+            if (_selectedInstance != null)
+            {
+                ImGui.Text(_selectedInstance.Symbol.Name);
+            }
+        }
+
+
+        private void UpdateSelectedInstance()
+        {
+            if (GraphCanvasWindow.WindowInstances.Count == 0)
+                return;
+
+            if (_selectedInstance != null && _enablePinning)
+                return;
+
+            var firstInstace = GraphCanvasWindow.WindowInstances[0] as GraphCanvasWindow;
+            _selectedInstance = firstInstace.Canvas.CompositionOp; // todo: fix
+        }
+        private bool _enablePinning = false;
+        private Instance _selectedInstance;
     }
 }
