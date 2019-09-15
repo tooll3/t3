@@ -26,9 +26,21 @@ namespace T3.Gui.Windows
             if (!_visible && !_canBeOpenedFromAppMenu)
                 return;
 
-            if (ImGui.MenuItem(_title, "", _visible))
+            if (_allowMultipeInstances)
             {
-                _visible = !_visible;
+                if (ImGui.MenuItem("New " + _title))
+                {
+                    AddAnotherInstance();
+                }
+            }
+            else
+            {
+                if (ImGui.MenuItem(_title, "", _visible))
+                {
+                    _visible = !_visible;
+                }
+                if (!_visible)
+                    Close();
             }
         }
 
@@ -37,7 +49,19 @@ namespace T3.Gui.Windows
 
         }
 
-        public void Draw()
+        public virtual void Draw()
+        {
+            if (_allowMultipeInstances)
+            {
+                DrawAllInstances();
+            }
+            else
+            {
+                DrawOneInstance();
+            }
+        }
+
+        protected void DrawOneInstance()
         {
             UpdateBeforeDraw();
 
@@ -56,6 +80,8 @@ namespace T3.Gui.Windows
             }
         }
 
+        protected virtual void DrawAllInstances() { }
         protected virtual void Close() { }
+        protected virtual void AddAnotherInstance() { }
     }
 }

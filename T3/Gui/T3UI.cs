@@ -178,8 +178,6 @@ namespace T3.Gui
         }
 
 
-
-
         public static void AddHoveredId(Guid id)
         {
             _hoveredIdsForNextFrame.Add(id);
