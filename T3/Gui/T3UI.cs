@@ -32,7 +32,7 @@ namespace T3.Gui
                 new QuickCreateWindow(),
                 new ConsoleLogWindow(),
                 new GraphCanvasWindow(),
-                new ViewWindow(),
+                new OutputWindow(),
             };
 
             // Open a default Window

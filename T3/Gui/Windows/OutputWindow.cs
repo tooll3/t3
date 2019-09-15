@@ -11,9 +11,9 @@ using T3.Gui.OutputUi;
 
 namespace T3.Gui.Windows
 {
-    public class ViewWindow : Window
+    public class OutputWindow : Window
     {
-        public ViewWindow() : base()
+        public OutputWindow() : base()
         {
             _title = "View";
             _visible = true;
