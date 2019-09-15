@@ -21,19 +21,13 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
-            DrawToolbar();
-            UpdateSelectedInstance();
-            if (_selectedInstance == null)
-                return;
+            UpdateSelection();
+            DrawToolbar(_selectedInstance);
+            DrawSelection(_selectedInstance, _selectedUi);
+        }
 
-            SymbolUi selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
-            var selectedChildUi = selectedUi.ChildUis.FirstOrDefault(childUi => childUi.IsSelected);
-            if (selectedChildUi != null)
-            {
-                _selectedInstance = _selectedInstance.Children.Single(child => child.Id == selectedChildUi.Id);
-                selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
-            }
-
+        public static void DrawSelection(Instance _selectedInstance, SymbolUi selectedUi)
+        {
             if (_selectedInstance.Outputs.Count > 0)
             {
                 var firstOutput = _selectedInstance.Outputs[0];
@@ -42,30 +36,54 @@ namespace T3.Gui.Windows
             }
         }
 
+        private void UpdateSelection()
+        {
+            if (!_enablePinning || _pinnedInstance == null || _pinnedUi == null)
+            {
+                if (GraphCanvasWindow.WindowInstances.Count == 0)
+                    return;
 
-        private void DrawToolbar()
+                var defaultGraphWindow = GraphCanvasWindow.WindowInstances[0] as GraphCanvasWindow;
+                _selectedInstance = defaultGraphWindow.Canvas.CompositionOp;
+
+                if (_selectedInstance == null)
+                    return;
+
+                _selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
+                var selectedChildUi = _selectedUi.ChildUis.FirstOrDefault(childUi => childUi.IsSelected);
+                if (selectedChildUi != null)
+                {
+                    _selectedInstance = _selectedInstance.Children.Single(child => child.Id == selectedChildUi.Id);
+                    _selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
+                }
+
+                _pinnedInstance = _selectedInstance;
+                _pinnedUi = _selectedUi;
+            }
+            else
+            {
+                _selectedInstance = _pinnedInstance;
+                _selectedUi = _pinnedUi;
+            }
+
+        }
+
+        private void DrawToolbar(Instance selectedInstance)
         {
             ImGui.Checkbox("pin", ref _enablePinning);
             ImGui.SameLine();
-            if (_selectedInstance != null)
+            if (selectedInstance != null)
             {
-                ImGui.Text(_selectedInstance.Symbol.Name);
+                ImGui.Text(selectedInstance.Symbol.Name);
             }
         }
 
+        private Instance _pinnedInstance = null;
+        private SymbolUi _pinnedUi = null;
 
-        private void UpdateSelectedInstance()
-        {
-            if (GraphCanvasWindow.WindowInstances.Count == 0)
-                return;
-
-            if (_selectedInstance != null && _enablePinning)
-                return;
-
-            var firstInstace = GraphCanvasWindow.WindowInstances[0] as GraphCanvasWindow;
-            _selectedInstance = firstInstace.Canvas.CompositionOp; // todo: fix
-        }
+        private Instance _selectedInstance = null;
+        private SymbolUi _selectedUi = null;
         private bool _enablePinning = false;
-        private Instance _selectedInstance;
+        //private Instance _selectedInstance;
     }
 }

@@ -12,8 +12,7 @@ namespace T3.Gui.Windows
 {
     public class ImageOutputCanvas : ScalableCanvas
     {
-        public override IEnumerable<ISelectable> SelectableChildren => throw new NotImplementedException();
-
-        public override SelectionHandler SelectionHandler => throw new NotImplementedException();
+        public override IEnumerable<ISelectable> SelectableChildren => new List<ISelectable>();
+        public override SelectionHandler SelectionHandler => new SelectionHandler();
     }
 }
