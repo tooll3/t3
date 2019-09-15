@@ -37,6 +37,11 @@ namespace T3.Gui.Graph
             if (ImGui.IsMouseDragging(1))
             {
                 _scrollTarget += _io.MouseDelta;
+                _userScrolledCanvas = true;
+            }
+            else
+            {
+                _userScrolledCanvas = false;
             }
 
             HandleZoomInteraction();
@@ -108,7 +113,6 @@ namespace T3.Gui.Graph
         public Vector2 WindowPos { get; private set; }
         public Vector2 WindowSize { get; private set; }
 
-
         public Vector2 Scale { get; set; } = Vector2.One;
         private Vector2 _scaleTarget = Vector2.One;
 
@@ -116,12 +120,36 @@ namespace T3.Gui.Graph
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
         #endregion
 
+        public void SetScaleToMatchPixels()
+        {
+            _scaleTarget = Vector2.One;
+        }
 
 
+        public void FitArea(ImRect area)
+        {
+            var height = area.GetHeight();
+            var width = area.GetWidth();
+            var targetAspect = width / height;
+
+            float scale;
+            if (targetAspect > WindowSize.X / WindowSize.Y)
+            {
+                scale = WindowSize.X / width;
+                _scrollTarget = new Vector2(0, (WindowSize.Y - height * scale) / 2);
+            }
+            else
+            {
+                scale = WindowSize.Y / height;
+                _scrollTarget = new Vector2((WindowSize.X - width * scale) / 2, 0);
+            }
+            _scaleTarget = new Vector2(scale, scale);
+        }
 
 
         private void HandleZoomInteraction()
         {
+            _userZoomedCanvas = false;
             if (_io.MouseWheel == 0)
                 return;
 
@@ -137,6 +165,7 @@ namespace T3.Gui.Graph
                 {
                     zoomDelta /= zoomSpeed;
                 }
+                _userZoomedCanvas = true;
             }
 
             if (_io.MouseWheel > 0.0f)
@@ -145,6 +174,7 @@ namespace T3.Gui.Graph
                 {
                     zoomDelta *= zoomSpeed;
                 }
+                _userZoomedCanvas = true;
             }
             _scaleTarget *= zoomDelta;
 
@@ -152,6 +182,8 @@ namespace T3.Gui.Graph
             _scrollTarget += _mouse - shift - WindowPos;
         }
 
+        protected bool _userZoomedCanvas = false;
+        protected bool _userScrolledCanvas = false;
         private Vector2 _mouse;
         private ImGuiIOPtr _io;
     }

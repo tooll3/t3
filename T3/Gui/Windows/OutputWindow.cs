@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using T3.Core.Operator;
@@ -22,8 +23,38 @@ namespace T3.Gui.Windows
         protected override void DrawContent()
         {
             UpdateSelection();
-            DrawToolbar(_selectedInstance);
+
+            _imageCanvas.Draw();
+            ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
             DrawSelection(_selectedInstance, _selectedUi);
+            DrawToolbar(_selectedInstance);
+        }
+
+
+        private void DrawToolbar(Instance selectedInstance)
+        {
+            ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin());
+            ImGui.Checkbox("pin to...   ", ref _enablePinning);
+            ImGui.SameLine();
+
+            if (selectedInstance != null)
+            {
+                ImGui.Text(selectedInstance.Symbol.Name + "   ");
+            }
+            ImGui.SameLine();
+
+            if (ImGui.Button("1:1"))
+            {
+                _imageCanvas.SetScaleToMatchPixels();
+                _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Pixel);
+            }
+            ImGui.SameLine();
+
+            if (ImGui.Button("M"))
+            {
+                _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
+            }
+            ImGui.SameLine();
         }
 
         public static void DrawSelection(Instance _selectedInstance, SymbolUi selectedUi)
@@ -65,25 +96,14 @@ namespace T3.Gui.Windows
                 _selectedInstance = _pinnedInstance;
                 _selectedUi = _pinnedUi;
             }
-
-        }
-
-        private void DrawToolbar(Instance selectedInstance)
-        {
-            ImGui.Checkbox("pin", ref _enablePinning);
-            ImGui.SameLine();
-            if (selectedInstance != null)
-            {
-                ImGui.Text(selectedInstance.Symbol.Name);
-            }
         }
 
         private Instance _pinnedInstance = null;
         private SymbolUi _pinnedUi = null;
+        private ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
 
         private Instance _selectedInstance = null;
         private SymbolUi _selectedUi = null;
         private bool _enablePinning = false;
-        //private Instance _selectedInstance;
     }
 }
