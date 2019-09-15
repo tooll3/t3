@@ -20,10 +20,8 @@ namespace T3.Gui.Windows
 
         public static bool WindowRegionsVisible;
         public static bool ItemRegionsVisible;
-        public static bool DemoWindowVisible;
-        public static bool ConsoleWindowVisible = true;
-        public static bool ParameterWindowVisible = true;
-        public static bool ShowMetrics;
+        //public static bool ConsoleWindowVisible = true;
+        //public static bool ParameterWindowVisible = true;
 
         protected override void DrawContent()
         {
@@ -33,12 +31,6 @@ namespace T3.Gui.Windows
             ImGui.Checkbox("VSync", ref _vsync);
             ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
             ImGui.Checkbox("Show Item Regions", ref ItemRegionsVisible);
-            ImGui.Text("ImGUI Features...");
-            ImGui.Checkbox("Show Metrics", ref ShowMetrics);
-            ImGui.Checkbox("Demo Window Visible", ref DemoWindowVisible);
-            ImGui.Text("T3 Windows");
-            ImGui.Checkbox("Console Window Visible", ref ConsoleWindowVisible);
-            ImGui.Checkbox("Parameters visible", ref ParameterWindowVisible);
 
             if (ImGui.Button("New Parameter View"))
                 OpenNewParameterView();

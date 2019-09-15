@@ -63,21 +63,20 @@ namespace T3.Gui
             }
 
             DrawGraphParameterWindows();
-            //DrawSelectionWindow();
 
-            if (SettingsWindow.DemoWindowVisible)
-                ImGui.ShowDemoWindow(ref SettingsWindow.DemoWindowVisible);
+            if (_demoWindowVisible)
+                ImGui.ShowDemoWindow(ref _demoWindowVisible);
 
-            if (SettingsWindow.ShowMetrics)
-                ImGui.ShowMetricsWindow(ref SettingsWindow.ShowMetrics);
-
+            if (_metricsWindowVisible)
+                ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
 
             SwapHoveringBuffers();
         }
 
         private void DrawAppMenu()
         {
-
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6));
             if (ImGui.BeginMainMenuBar())
             {
                 if (ImGui.BeginMenu("File"))
@@ -113,11 +112,18 @@ namespace T3.Gui
                     {
                         window.DrawMenuItemToggle();
                     }
-                    //SettingsWindow.DrawMenuItemToggle();
+                    ImGui.Separator();
+                    if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
+                        _demoWindowVisible = !_demoWindowVisible;
+
+                    if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
+                        _metricsWindowVisible = !_metricsWindowVisible;
+
                     ImGui.EndMenu();
                 }
                 ImGui.EndMainMenuBar();
             }
+            ImGui.PopStyleVar(2);
         }
 
         private SymbolChildUi GetSelectedSymbolChildUi()
@@ -148,9 +154,6 @@ namespace T3.Gui
             }
             return null;
         }
-
-
-
 
 
         private unsafe void DrawGraphParameterWindows()
@@ -200,5 +203,7 @@ namespace T3.Gui
         //private QuickCreateWindow _quickCreateWindow = null;
 
         private List<Window> _windows;
+        private bool _demoWindowVisible = false;
+        private bool _metricsWindowVisible = false;
     }
 }
