@@ -27,13 +27,12 @@ namespace T3.Gui.Windows
             UpdateViewMode();
         }
 
-
-
         /// <summary>
         /// The image canvas that is currently being drawn from the UI.
         /// Note that <see cref="ImageOutputCanvas"/> is NOT a singleton so you can't rely on this to be valid outside of the Draw()ing context.
         /// </summary>
         public static ImageOutputCanvas Current = null;
+
 
         public void DrawTexture(Texture2D texture)
         {
@@ -43,7 +42,7 @@ namespace T3.Gui.Windows
                 _srv = new ShaderResourceView(ResourceManager.Instance()._device, texture);
             }
 
-            var size = new Vector2(texture.Description.Width, texture.Description.Width);
+            var size = new Vector2(texture.Description.Width, texture.Description.Height);
             var area = new ImRect(0, 0, size.X, size.Y);
 
             if (_viewMode == Modes.Fitted)
@@ -55,9 +54,31 @@ namespace T3.Gui.Windows
 
             var sizeOnScreen = ImageOutputCanvas.Current.TransformDirection(size);
             ImGui.Image((IntPtr)_srv, sizeOnScreen);
+
+            var description = $"{size.X}x{size.Y}  {_srv.Description.Format}";
+            var descriptionWidth = ImGui.CalcTextSize(description).X;
+
+            ImGui.SetCursorScreenPos(new Vector2(
+                WindowPos.X + (WindowSize.X - descriptionWidth) / 2,
+                WindowPos.Y + WindowSize.Y - 20
+                ));
+            ImGui.Text(description);
         }
 
 
+        public void SetViewMode(Modes newMode)
+        {
+            _viewMode = newMode;
+            if (newMode == Modes.Pixel)
+            {
+                SetScaleToMatchPixels();
+            }
+        }
+
+
+        /// <summary>
+        /// Updated the view mode if user interacted 
+        /// </summary>
         private void UpdateViewMode()
         {
             switch (_viewMode)
@@ -71,15 +92,6 @@ namespace T3.Gui.Windows
                     if (_userZoomedCanvas)
                         _viewMode = Modes.Custom;
                     break;
-            }
-        }
-
-        public void SetViewMode(Modes newMode)
-        {
-            _viewMode = newMode;
-            if (newMode == Modes.Pixel)
-            {
-                SetScaleToMatchPixels();
             }
         }
 
