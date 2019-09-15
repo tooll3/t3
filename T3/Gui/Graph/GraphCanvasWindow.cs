@@ -24,8 +24,10 @@ namespace T3.Gui.Graph
 
         public GraphCanvasWindow() : base()
         {
-            _title = "Graph##" + WindowInstances.Count;
+            _instanceCounter++;
+            _title = "Graph##" + _instanceCounter;
             _visible = true;
+            _allowMultipeInstances = true;
 
             var opInstance = T3UI.UiModel.MainOp;
             Canvas = new GraphCanvas(opInstance);
@@ -35,11 +37,22 @@ namespace T3.Gui.Graph
             WindowInstances.Add(this);
         }
 
+        static int _instanceCounter = 0;
 
         protected override void UpdateBeforeDraw()
         {
             _clipTime.Update();
         }
+
+
+        protected override void DrawAllInstances()
+        {
+            foreach (var w in new List<GraphCanvasWindow>(WindowInstances))
+            {
+                w.DrawOneInstance();
+            }
+        }
+
 
         protected override void DrawContent()
         {
@@ -71,13 +84,18 @@ namespace T3.Gui.Graph
                 EndChild();
             }
             PopStyleVar();
-
         }
 
 
         protected override void Close()
         {
             WindowInstances.Remove(this);
+        }
+
+
+        protected override void AddAnotherInstance()
+        {
+            new GraphCanvasWindow();
         }
 
 
