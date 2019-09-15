@@ -1,5 +1,5 @@
-using System;
 using ImGuiNET;
+using System;
 using T3.Core.Logging;
 using T3.Gui.Commands;
 using T3.Gui.Selection;
@@ -24,7 +24,6 @@ namespace T3.Gui.Graph
 
                     Guid compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
                     _moveCommand = new ChangeSelectableCommand(compositionSymbolId, handler.SelectedElements);
-                    Log.Debug("start");
                 }
 
                 if (ImGui.IsMouseDragging(0))
@@ -37,7 +36,6 @@ namespace T3.Gui.Graph
             }
             else if (ImGui.IsMouseReleased(0) && _moveCommand != null)
             {
-                Log.Debug("end");
                 if (ImGui.GetMouseDragDelta(0).LengthSquared() > 0.0f)
                 {
                     // add to stack
