@@ -90,6 +90,7 @@ namespace T3.Gui
             public Vector2 ItemSpacing = new Vector2(1, 1);
             public Vector2 FramePadding = new Vector2(7, 4);
             public Vector2 ItemInnerSpacing = new Vector2(3, 2);
+            public Vector2 WindowPadding = Vector2.Zero;
             public float GrabMinSize = 2;
             public float FrameBorderSize = 0;
             public float WindowRounding = 3;
@@ -99,6 +100,7 @@ namespace T3.Gui
 
             public void Apply(ImGuiStylePtr style)
             {
+                style.WindowPadding = WindowPadding;
                 style.FramePadding = FramePadding;
                 style.ItemSpacing = ItemSpacing;
                 style.ItemInnerSpacing = ItemInnerSpacing;

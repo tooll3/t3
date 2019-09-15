@@ -24,61 +24,66 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
-            lock (_logEntries)
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             {
-                while (_logEntries.Count > 1000)
-                {
-                    _logEntries.RemoveAt(0);
-                }
-            }
 
-            ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
-            if (ImGui.Button("Clear"))
-            {
                 lock (_logEntries)
                 {
-                    _logEntries.Clear();
-                }
-            }
-
-            ImGui.SameLine();
-            ImGui.InputText("##Filter", ref _filterString, 100);
-            ImGui.Separator();
-            ImGui.BeginChild("scrolling");
-            {
-                lock (_logEntries)
-                {
-                    foreach (var entry in _logEntries)
+                    while (_logEntries.Count > 1000)
                     {
-                        if (FilterIsActive && !entry.Message.Contains(_filterString))
-                            continue;
-
-                        var colorHoveredElements = T3UI.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f;
-
-                        var color = _colorForLogLevel[entry.Level];
-                        color.W = colorHoveredElements;
-                        ImGui.PushStyleColor(ImGuiCol.Text, color);
-                        ImGui.Text(string.Format("{0:0.000}", (entry.TimeStamp - _startTime).Ticks / 10000000f));
-                        ImGui.SameLine(50);
-                        ImGui.Text(entry.Message);
-
-                        if (IsLineHovered())
-                        {
-                            T3UI.AddHoveredId(entry.SourceId);
-                        }
-
-                        ImGui.PopStyleColor();
+                        _logEntries.RemoveAt(0);
                     }
                 }
 
-                _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - 5;
-                if (_shouldScrollToBottom)
+                ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
+                if (ImGui.Button("Clear"))
                 {
-                    ImGui.SetScrollHereY(1);
-                    _shouldScrollToBottom = false;
+                    lock (_logEntries)
+                    {
+                        _logEntries.Clear();
+                    }
                 }
+
+                ImGui.SameLine();
+                ImGui.InputText("##Filter", ref _filterString, 100);
+                ImGui.Separator();
+                ImGui.BeginChild("scrolling");
+                {
+                    lock (_logEntries)
+                    {
+                        foreach (var entry in _logEntries)
+                        {
+                            if (FilterIsActive && !entry.Message.Contains(_filterString))
+                                continue;
+
+                            var colorHoveredElements = T3UI.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f;
+
+                            var color = _colorForLogLevel[entry.Level];
+                            color.W = colorHoveredElements;
+                            ImGui.PushStyleColor(ImGuiCol.Text, color);
+                            ImGui.Text(string.Format("{0:0.000}", (entry.TimeStamp - _startTime).Ticks / 10000000f));
+                            ImGui.SameLine(50);
+                            ImGui.Text(entry.Message);
+
+                            if (IsLineHovered())
+                            {
+                                T3UI.AddHoveredId(entry.SourceId);
+                            }
+
+                            ImGui.PopStyleColor();
+                        }
+                    }
+
+                    _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - 5;
+                    if (_shouldScrollToBottom)
+                    {
+                        ImGui.SetScrollHereY(1);
+                        _shouldScrollToBottom = false;
+                    }
+                }
+                ImGui.EndChild();
             }
-            ImGui.EndChild();
+            ImGui.PopStyleVar();
         }
 
         private static bool IsLineHovered()
