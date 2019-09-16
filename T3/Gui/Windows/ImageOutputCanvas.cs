@@ -31,6 +31,9 @@ namespace T3.Gui.Windows
 
         public void DrawTexture(Texture2D texture)
         {
+            if (texture == null)
+                return;
+
             if (_srv == null || _srv.Resource != texture)
             {
                 _srv?.Dispose();

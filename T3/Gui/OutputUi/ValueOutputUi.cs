@@ -13,7 +13,14 @@ namespace T3.Gui.OutputUi
                 Invalidate(slot);
                 _evaluationContext.Reset();
                 var value = typedSlot.GetValue(_evaluationContext);
-                ImGui.Text($"{value}");
+                if (value == null)
+                {
+                    ImGui.Text($"{typeof(T)}");
+                }
+                else
+                {
+                    ImGui.Text($"{value}");
+                }
             }
             else
             {

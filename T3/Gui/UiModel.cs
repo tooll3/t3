@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using T3.Core;
 using T3.Core.Operator;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
@@ -41,6 +42,7 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(TextureAddressMode), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(Comparison), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(SamplerState), new ShaderUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(Scene), new FallBackUiProperties());
 
             // Register input ui creators
             InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
@@ -61,6 +63,7 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(Comparison), () => new EnumInputUi<Comparison>());
             InputUiFactory.Entries.Add(typeof(SamplerState), () => new FallbackInputUi<SamplerState>());
             InputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new FallbackInputUi<ShaderResourceView>());
+            InputUiFactory.Entries.Add(typeof(Scene), () => new FallbackInputUi<Scene>());
 
             // Register output ui creators
             OutputUiFactory.Entries.Add(typeof(float), () => new ValueOutputUi<float>());
@@ -73,6 +76,7 @@ namespace T3.Gui
             OutputUiFactory.Entries.Add(typeof(ComputeShader), () => new ValueOutputUi<ComputeShader>());
             OutputUiFactory.Entries.Add(typeof(Buffer), () => new ValueOutputUi<Buffer>());
             OutputUiFactory.Entries.Add(typeof(SamplerState), () => new ValueOutputUi<SamplerState>());
+            OutputUiFactory.Entries.Add(typeof(Scene), () => new ValueOutputUi<Scene>());
 
             Load();
 

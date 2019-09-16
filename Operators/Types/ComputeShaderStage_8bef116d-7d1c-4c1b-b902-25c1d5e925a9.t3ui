@@ -51,7 +51,7 @@
   "OutputUis": [
     {
       "OutputId": "c382284f-7e37-4eb0-b284-bc735247f26b"/*Output*/,
-      "Type": "System.Int32, mscorlib",
+      "Type": "T3.Core.Scene, Core",
       "Position": {
         "X": 0.0,
         "Y": 0.0

@@ -139,8 +139,15 @@
     {
       "ChildId": "d51c6e9a-50f0-4bce-a047-1f435a47e9d7"/*SrvFromTexture2d*/,
       "Position": {
-        "X": 811.0,
-        "Y": 169.0
+        "X": 931.0,
+        "Y": 141.0
+      }
+    },
+    {
+      "ChildId": "360a15c7-4819-4c01-803f-0c7c0f742ae3"/*ShowTexture2d*/,
+      "Position": {
+        "X": 695.0,
+        "Y": 136.0
       }
     }
   ],
