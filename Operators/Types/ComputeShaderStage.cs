@@ -56,6 +56,7 @@ namespace T3.Operators.Types
             if (OutputUav.DirtyFlag.IsDirty)
             {
                 _uav?.Dispose();
+                _uav = null;
                 Texture2D outputTexture = OutputUav.GetValue(context);
                 if (outputTexture != null)
                 {
