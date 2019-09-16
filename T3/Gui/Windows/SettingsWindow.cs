@@ -32,8 +32,8 @@ namespace T3.Gui.Windows
             ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
             ImGui.Checkbox("Show Item Regions", ref ItemRegionsVisible);
 
-            if (ImGui.Button("New Parameter View"))
-                OpenNewParameterView();
+            //if (ImGui.Button("New Parameter View"))
+            //    OpenNewParameterView();
 
             ImGui.Text("Options");
             ColorVariations.DrawSettingsUi();

@@ -44,10 +44,7 @@ namespace T3.Gui.Windows
             }
         }
 
-        protected virtual void UpdateBeforeDraw()
-        {
-
-        }
+        protected virtual void UpdateBeforeDraw() { }
 
         public virtual void Draw()
         {

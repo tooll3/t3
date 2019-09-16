@@ -2,15 +2,10 @@
 using SharpDX.Direct3D11;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using T3.Core;
-using T3.Core.Operator;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
-using T3.Gui.Windows;
 using UiHelpers;
 
 namespace T3.Gui.Windows

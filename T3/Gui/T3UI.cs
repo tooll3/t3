@@ -28,28 +28,13 @@ namespace T3.Gui
 
             _windows = new List<Window>()
             {
+                new GraphCanvasWindow(),
+                new ParameterWindow(),
+                new OutputWindow(),
+                new ConsoleLogWindow(),
                 new SettingsWindow(),
                 new QuickCreateWindow(),
-                new ConsoleLogWindow(),
-                new GraphCanvasWindow(),
-                new OutputWindow(),
             };
-
-            // Open a default Window
-            //OpenNewGraphWindow();
-            OpenNewParameterView();
-        }
-
-
-
-        //public static void OpenNewGraphWindow()
-        //{
-        //    _instance._graphCanvasWindows.Add(new GraphCanvasWindow(UiModel.MainOp, "Composition View " + _instance._graphCanvasWindows.Count));
-        //}
-
-        public static void OpenNewParameterView()
-        {
-            _instance._parameterWindows.Add(new ParameterWindow("Parameter View " + _instance._parameterWindows.Count));
         }
 
 
@@ -61,8 +46,6 @@ namespace T3.Gui
             {
                 windowType.Draw();
             }
-
-            DrawGraphParameterWindows();
 
             if (_demoWindowVisible)
                 ImGui.ShowDemoWindow(ref _demoWindowVisible);
@@ -126,20 +109,6 @@ namespace T3.Gui
             ImGui.PopStyleVar(2);
         }
 
-        private SymbolChildUi GetSelectedSymbolChildUi()
-        {
-            foreach (var gcw in GraphCanvasWindow.WindowInstances)
-            {
-                if (gcw.Canvas.SelectionHandler.SelectedElements.Any())
-                {
-                    var ui = gcw.Canvas.SelectionHandler.SelectedElements[0] as SymbolChildUi;
-                    if (ui != null)
-                        return ui;
-                }
-            }
-            return null;
-        }
-
 
         private IOutputUi GetSelectedOutputUi()
         {
@@ -153,28 +122,6 @@ namespace T3.Gui
                 }
             }
             return null;
-        }
-
-
-        private unsafe void DrawGraphParameterWindows()
-        {
-            ParameterWindow obsoleteWindow = null;
-            Instance instance = null;
-
-            var symbolChildUi = GetSelectedSymbolChildUi();
-            if (symbolChildUi != null)
-            {
-                instance = GraphCanvasWindow.WindowInstances[0].Canvas.CompositionOp.Children.SingleOrDefault(
-                    child => child.Id == symbolChildUi.Id);
-            }
-
-            foreach (var parameterView in _parameterWindows)
-            {
-                if (!parameterView.Draw(instance, symbolChildUi))
-                    obsoleteWindow = parameterView;   // we assume that only one window can be closed per frame
-            }
-            if (obsoleteWindow != null)
-                _parameterWindows.Remove(obsoleteWindow);
         }
 
 
@@ -192,13 +139,11 @@ namespace T3.Gui
         public static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
         public static HashSet<Guid> HoveredIdsLastFrame { get; set; } = new HashSet<Guid>();
 
-        //private List<GraphCanvasWindow> _graphCanvasWindows = new List<GraphCanvasWindow>();
         private List<ParameterWindow> _parameterWindows = new List<ParameterWindow>();
 
         public static UiModel UiModel = new UiModel();
 
         private static T3UI _instance = null;
-        //private QuickCreateWindow _quickCreateWindow = null;
 
         private List<Window> _windows;
         private bool _demoWindowVisible = false;
