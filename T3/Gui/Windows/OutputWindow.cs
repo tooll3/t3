@@ -1,13 +1,7 @@
 ﻿using ImGuiNET;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using T3.Core.Operator;
-using T3.Gui.Commands;
-using T3.Gui.Graph;
 using T3.Gui.OutputUi;
 
 namespace T3.Gui.Windows
@@ -47,6 +41,7 @@ namespace T3.Gui.Windows
         {
             new OutputWindow();
         }
+
 
         protected override void DrawContent()
         {
