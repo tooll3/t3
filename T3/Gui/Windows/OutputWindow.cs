@@ -16,8 +16,36 @@ namespace T3.Gui.Windows
     {
         public OutputWindow() : base()
         {
-            _title = "Output";
+            _title = "Output##" + _instanceCounter;
             _visible = true;
+
+            _allowMultipeInstances = true;
+            _visible = true;
+
+            WindowInstances.Add(this);
+            _instanceCounter++;
+        }
+
+
+        protected override void DrawAllInstances()
+        {
+            // Wrap inside list to enable removable of members during iteration
+            foreach (var w in new List<OutputWindow>(WindowInstances))
+            {
+                w.DrawOneInstance();
+            }
+        }
+
+
+        protected override void Close()
+        {
+            WindowInstances.Remove(this);
+        }
+
+
+        protected override void AddAnotherInstance()
+        {
+            new OutputWindow();
         }
 
         protected override void DrawContent()
@@ -95,5 +123,8 @@ namespace T3.Gui.Windows
 
         private ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
         private SelectionPinning _pinning = new SelectionPinning();
+
+        private static List<OutputWindow> WindowInstances = new List<OutputWindow>();
+        static int _instanceCounter = 0;
     }
 }
