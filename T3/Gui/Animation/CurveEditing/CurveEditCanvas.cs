@@ -63,7 +63,7 @@ namespace T3.Gui.Animation.CurveEditing
                 }
             }
 
-            if (someCurvesUnselected && someNewCurvesSelected)
+            if (someCurvesUnselected || someNewCurvesSelected)
             {
                 ViewAllOrSelectedKeys(keepURange: true);
             }
@@ -376,6 +376,7 @@ namespace T3.Gui.Animation.CurveEditing
         public void ViewAllOrSelectedKeys(bool keepURange = false)
         {
             const float CURVE_VALUE_PADDING = 0.3f;
+            const float CURVE_VALUE_PADDINGY = 2f;
 
             double minU = double.PositiveInfinity;
             double maxU = double.NegativeInfinity;
@@ -439,11 +440,11 @@ namespace T3.Gui.Animation.CurveEditing
 
             _scaleTarget = new Vector2(
                 (float)(WindowSize.X / ((maxU - minU) * (1 + 2 * CURVE_VALUE_PADDING))),
-                (float)(WindowSize.Y / ((minV - maxV) * (1 + 2 * CURVE_VALUE_PADDING))));
+                (float)(WindowSize.Y / ((minV - maxV) * (1 + 2 * CURVE_VALUE_PADDINGY))));
 
             _scrollTarget = new Vector2(
                 (float)(minU - CURVE_VALUE_PADDING * (maxU - minU)),
-                (float)(maxV - CURVE_VALUE_PADDING * (minV - maxV)));
+                (float)(maxV - CURVE_VALUE_PADDINGY * (minV - maxV)));
         }
         #endregion
 
@@ -927,7 +928,7 @@ namespace T3.Gui.Animation.CurveEditing
         /// <summary>
         /// Damped scale factors for u and v
         /// </summary>
-        public Vector2 Scale { get; set; } = Vector2.One;
+        public Vector2 Scale { get; set; } = new Vector2(1, -1);
         public Vector2 WindowPos { get; set; }
         public Vector2 WindowSize { get; set; }
         public Vector2 Scroll { get; set; } = new Vector2(0, 0.0f);
@@ -947,7 +948,7 @@ namespace T3.Gui.Animation.CurveEditing
         private CurveEditBox _curveEditBox;
         private ImGuiIOPtr _io;
         private Vector2 _mouse;
-        private Vector2 _scaleTarget = new Vector2(100, 1);
+        private Vector2 _scaleTarget = new Vector2(100, -1);
 
         // Styling
         public static float TimeLineDragHeight = 20;
