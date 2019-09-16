@@ -673,7 +673,9 @@ namespace T3.Core
             }
             else
             {
-                textureResource.Texture = texture;
+                textureResource.Texture?.Dispose();
+                textureResource.Texture = new Texture2D(_device, description);
+                texture = textureResource.Texture;
             }
 
             id = textureResource.Id;
