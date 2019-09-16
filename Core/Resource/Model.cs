@@ -30,6 +30,11 @@ namespace T3.Core
         public static Dictionary<Type, Func<InputValue>> Entries { get; } = new Dictionary<Type, Func<InputValue>>();
     }
 
+    public class Scene
+    {
+    }
+    
+    
     public class Model
     {
         private Assembly _operatorsAssembly;
@@ -149,6 +154,7 @@ namespace T3.Core
             InputValueCreators.Entries.Add(typeof(Comparison), InputDefaultValueCreator<Comparison>);
             InputValueCreators.Entries.Add(typeof(SamplerState), () => new InputValue<SamplerState>(null));
             InputValueCreators.Entries.Add(typeof(ShaderResourceView), () => new InputValue<ShaderResourceView>(null));
+            InputValueCreators.Entries.Add(typeof(Scene), () => new InputValue<Scene>(null));
         }
 
         public virtual void Load()

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Operator;
@@ -10,7 +9,7 @@ namespace T3.Operators.Types
     public class ComputeShaderStage : Instance<ComputeShaderStage>
     {
         [Output(Guid = "{C382284F-7E37-4EB0-B284-BC735247F26B}")]
-        public readonly Slot<int> Output = new Slot<int>();
+        public readonly Slot<Scene> Output = new Slot<Scene>();
 
         public ComputeShaderStage()
         {
