@@ -329,6 +329,7 @@
     <Compile Include="Gui\OutputUi\ValueOutputUi.cs" />
     <Compile Include="Gui\Windows\ImageOutputCanvas.cs" />
     <Compile Include="Gui\Windows\OutputWindow.cs" />
+    <Compile Include="Gui\Windows\SelectionPinning.cs" />
     <Compile Include="Gui\Windows\Window.cs" />
     <Compile Include="Gui\UiJson.cs" />
     <Compile Include="Gui\Interaction\UserAction.cs" />

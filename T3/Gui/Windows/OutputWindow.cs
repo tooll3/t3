@@ -16,32 +16,25 @@ namespace T3.Gui.Windows
     {
         public OutputWindow() : base()
         {
-            _title = "View";
+            _title = "Output";
             _visible = true;
         }
 
         protected override void DrawContent()
         {
-            UpdateSelection();
+            _pinning.UpdateSelection();
 
             _imageCanvas.Draw();
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
-            DrawSelection(_selectedInstance, _selectedUi);
-            DrawToolbar(_selectedInstance);
+            DrawSelection(_pinning.SelectedInstance, _pinning.SelectedUi);
+            DrawToolbar();
         }
 
 
-        private void DrawToolbar(Instance selectedInstance)
+        private void DrawToolbar()
         {
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin());
-            ImGui.Checkbox("pin to...   ", ref _enablePinning);
-            ImGui.SameLine();
-
-            if (selectedInstance != null)
-            {
-                ImGui.Text(selectedInstance.Symbol.Name + "   ");
-            }
-            ImGui.SameLine();
+            _pinning.DrawPinning();
 
             if (ImGui.Button("1:1"))
             {
@@ -57,6 +50,8 @@ namespace T3.Gui.Windows
             ImGui.SameLine();
         }
 
+
+
         public static void DrawSelection(Instance _selectedInstance, SymbolUi selectedUi)
         {
             if (_selectedInstance.Outputs.Count > 0)
@@ -67,43 +62,38 @@ namespace T3.Gui.Windows
             }
         }
 
-        private void UpdateSelection()
-        {
-            if (!_enablePinning || _pinnedInstance == null || _pinnedUi == null)
-            {
-                if (GraphCanvasWindow.WindowInstances.Count == 0)
-                    return;
+        //private void UpdateSelection()
+        //{
+        //    if (!_enablePinning || _pinnedInstance == null || _pinnedUi == null)
+        //    {
+        //        if (GraphCanvasWindow.WindowInstances.Count == 0)
+        //            return;
 
-                var defaultGraphWindow = GraphCanvasWindow.WindowInstances[0] as GraphCanvasWindow;
-                _selectedInstance = defaultGraphWindow.Canvas.CompositionOp;
+        //        var defaultGraphWindow = GraphCanvasWindow.WindowInstances[0] as GraphCanvasWindow;
+        //        _selectedInstance = defaultGraphWindow.Canvas.CompositionOp;
 
-                if (_selectedInstance == null)
-                    return;
+        //        if (_selectedInstance == null)
+        //            return;
 
-                _selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
-                var selectedChildUi = _selectedUi.ChildUis.FirstOrDefault(childUi => childUi.IsSelected);
-                if (selectedChildUi != null)
-                {
-                    _selectedInstance = _selectedInstance.Children.Single(child => child.Id == selectedChildUi.Id);
-                    _selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
-                }
+        //        _selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
+        //        var selectedChildUi = _selectedUi.ChildUis.FirstOrDefault(childUi => childUi.IsSelected);
+        //        if (selectedChildUi != null)
+        //        {
+        //            _selectedInstance = _selectedInstance.Children.Single(child => child.Id == selectedChildUi.Id);
+        //            _selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
+        //        }
 
-                _pinnedInstance = _selectedInstance;
-                _pinnedUi = _selectedUi;
-            }
-            else
-            {
-                _selectedInstance = _pinnedInstance;
-                _selectedUi = _pinnedUi;
-            }
-        }
+        //        _pinnedInstance = _selectedInstance;
+        //        _pinnedUi = _selectedUi;
+        //    }
+        //    else
+        //    {
+        //        _selectedInstance = _pinnedInstance;
+        //        _selectedUi = _pinnedUi;
+        //    }
+        //}
 
-        private Instance _pinnedInstance = null;
-        private SymbolUi _pinnedUi = null;
         private ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
-
-        private Instance _selectedInstance = null;
-        private SymbolUi _selectedUi = null;
-        private bool _enablePinning = false;
+        private SelectionPinning _pinning = new SelectionPinning();
     }
 }

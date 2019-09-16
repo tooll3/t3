@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
@@ -13,33 +14,49 @@ namespace T3.Gui.Windows
     /// <summary>
     /// 
     /// </summary>
-    class ParameterWindow
+    class ParameterWindow : Window
     {
-        public ParameterWindow(string name)
+        public ParameterWindow() : base()
         {
-            _name = name;
+            _instanceCounter++;
+            _title = "Parameters##" + _instanceCounter;
+            _allowMultipeInstances = true;
+            _visible = true;
+
+            WindowInstances.Add(this);
         }
 
 
-        public bool Draw(Instance op, SymbolChildUi symbolChildUi)
+        protected override void UpdateBeforeDraw()
         {
-            var isOpen = true;
-            ImGui.Begin(_name, ref isOpen);
+            _pinning.UpdateSelection();
+        }
+
+        protected override void DrawAllInstances()
+        {
+            foreach (var w in new List<ParameterWindow>(WindowInstances))
             {
-                DrawContent(op, symbolChildUi);
+                w.DrawOneInstance();
             }
-            ImGui.End();
-
-            return isOpen;
         }
 
-        //public bool Draw()
-
-
-
-        private void DrawContent(Instance op, SymbolChildUi symbolChildUi)
+        protected override void Close()
         {
-            if (op == null)
+            WindowInstances.Remove(this);
+        }
+
+
+        protected override void AddAnotherInstance()
+        {
+            new ParameterWindow();
+        }
+
+
+        protected override void DrawContent()
+        {
+            var op = _pinning.SelectedInstance;
+
+            if (op == null || _pinning.SelectedChildUi == null)
             {
                 Im.EmptyWindowMessage("Nothing selected");
                 return;
@@ -96,15 +113,15 @@ namespace T3.Gui.Windows
             // SymbolChild Name
             {
                 ImGui.SetNextItemWidth(-1);
-                var nameForEdit = symbolChildUi.SymbolChild.Name;
+                var nameForEdit = _pinning.SelectedChildUi.SymbolChild.Name;
                 if (ImGui.InputText("##symbolchildname", ref nameForEdit, 128))
                 {
                     _symbolChildNameCommand.NewName = nameForEdit;
-                    symbolChildUi.SymbolChild.Name = nameForEdit;
+                    _pinning.SelectedChildUi.SymbolChild.Name = nameForEdit;
                 }
                 if (ImGui.IsItemActivated())
                 {
-                    _symbolChildNameCommand = new ChangeSymbolChildNameCommand(symbolChildUi, op.Parent.Symbol);
+                    _symbolChildNameCommand = new ChangeSymbolChildNameCommand(_pinning.SelectedChildUi, op.Parent.Symbol);
                 }
                 if (ImGui.IsItemDeactivatedAfterEdit())
                 {
@@ -138,7 +155,7 @@ namespace T3.Gui.Windows
                 }
                 else
                 {
-                    var editState = inputUi.DrawInputEdit(input, compositionSymbolUi, symbolChildUi);
+                    var editState = inputUi.DrawInputEdit(input, compositionSymbolUi, _pinning.SelectedChildUi);
 
                     switch (editState)
                     {
@@ -194,8 +211,9 @@ namespace T3.Gui.Windows
         private ChangeSymbolNamespaceCommand _symbolNamespaceCommandInFlight = null;
         private ChangeSymbolChildNameCommand _symbolChildNameCommand = null;
         private ChangeInputValueCommand _inputValueCommandInFlight = null;
-        private readonly string _name;
-        private Instance _pinnedOp = null;
+        private readonly SelectionPinning _pinning = new SelectionPinning();
+        private static List<ParameterWindow> WindowInstances = new List<ParameterWindow>();
+        static int _instanceCounter = 0;
 
     }
 }
