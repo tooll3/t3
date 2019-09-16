@@ -69,6 +69,40 @@ namespace T3.Gui.Animation.CurveEditing
             }
         }
 
+        public void ToggleKeyframes()
+        {
+            SelectionHandler.Clear();
+            foreach (var pair in _curvesWithUi)
+            {
+                var curve = pair.Key;
+                var curveUi = pair.Value;
+
+                if (curve.HasVAt(_clipTime.Time))
+                {
+
+                }
+                else
+                {
+                    var value = curve.GetSampledValue(_clipTime.Time);
+                    var previousU = curve.GetPreviousU(_clipTime.Time);
+
+                    var key = (previousU != null)
+                        ? curve.GetV(previousU.Value).Clone()
+                        : new VDefinition();
+
+                    key.Value = value;
+                    key.U = _clipTime.Time;
+
+                    curve.AddOrUpdateV(_clipTime.Time, key);
+                    var newCurvePointUi = new CurvePointUi(key, curve, this);
+                    newCurvePointUi.IsSelected = true;
+                    curveUi.CurvePoints.Add(newCurvePointUi);
+                    SelectionHandler.AddElement(newCurvePointUi);
+                }
+            }
+        }
+
+
         #region --- draw ui ---------------------------------------------------
         public void Draw()
         {
@@ -402,6 +436,10 @@ namespace T3.Gui.Animation.CurveEditing
                     }
                 }
             }
+            else if (SelectionHandler.SelectedElements.Count == 1)
+            {
+                return;
+            }
             else
             {
                 foreach (var element in SelectionHandler.SelectedElements)
@@ -438,13 +476,27 @@ namespace T3.Gui.Animation.CurveEditing
                 minV -= 1;
             }
 
-            _scaleTarget = new Vector2(
+            if (keepURange)
+            {
+                _scaleTarget = new Vector2(
+                    _scaleTarget.X,
+                    (float)(WindowSize.Y / ((minV - maxV) * (1 + 2 * CURVE_VALUE_PADDINGY))));
+
+                _scrollTarget = new Vector2(
+                    _scrollTarget.X,
+                    (float)(maxV - CURVE_VALUE_PADDINGY * (minV - maxV)));
+            }
+            else
+            {
+                _scaleTarget = new Vector2(
                 (float)(WindowSize.X / ((maxU - minU) * (1 + 2 * CURVE_VALUE_PADDING))),
                 (float)(WindowSize.Y / ((minV - maxV) * (1 + 2 * CURVE_VALUE_PADDINGY))));
 
-            _scrollTarget = new Vector2(
-                (float)(minU - CURVE_VALUE_PADDING * (maxU - minU)),
-                (float)(maxV - CURVE_VALUE_PADDINGY * (minV - maxV)));
+                _scrollTarget = new Vector2(
+                    (float)(minU - CURVE_VALUE_PADDING * (maxU - minU)),
+                    (float)(maxV - CURVE_VALUE_PADDINGY * (minV - maxV)));
+            }
+
         }
         #endregion
 

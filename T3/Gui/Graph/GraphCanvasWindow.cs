@@ -192,6 +192,13 @@ namespace T3.Gui.Graph
             Button(">]", _timeControlsSize);
             SameLine();
             CustomComponents.ToggleButton("Loop", ref _clipTime.IsLooping, _timeControlsSize);
+            SameLine();
+
+            if (Button("Key"))
+            {
+                _curveEditor.ToggleKeyframes();
+            }
+            SameLine();
         }
 
         private void DrawTimelineAndCurveEditor()
