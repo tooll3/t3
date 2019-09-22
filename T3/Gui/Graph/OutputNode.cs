@@ -12,7 +12,7 @@ namespace T3.Gui.Graph
     /// Draws published input parameters of a <see cref="Symbol"/> and uses <see cref="ConnectionMaker"/> 
     /// create new connections with it.
     /// </summary>
-    static class OutputNodes
+    static class OutputNode
     {
         //public static void DrawAll()
         //{
@@ -57,7 +57,7 @@ namespace T3.Gui.Graph
 
                 dl.AddRectFilled(new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
                                  new Vector2(_lastScreenRect.Max.X,
-                                             _lastScreenRect.Max.Y + GraphOperator._inputSlotHeight + GraphOperator._inputSlotMargin),
+                                             _lastScreenRect.Max.Y + GraphNode._inputSlotHeight + GraphNode._inputSlotMargin),
                                  ColorVariations.OperatorInputZone.Apply(typeColor));
 
                 var label = string.Format($"{outputDef.Name}");

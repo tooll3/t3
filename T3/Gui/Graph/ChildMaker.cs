@@ -14,7 +14,7 @@ using UiHelpers;
 namespace T3.Gui.Graph
 {
     /// <summary>
-    /// Represents the placeholder for a new <see cref="GraphOperator"/> on the <see cref="GraphCanvas"/>. 
+    /// Represents the placeholder for a new <see cref="GraphNode"/> on the <see cref="GraphCanvas"/>. 
     /// It can be connected to other nodes and provide search functionality. It's basically the
     /// T2's CreateOperatorWindow.
     /// </summary>
