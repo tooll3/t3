@@ -126,12 +126,9 @@ namespace T3.Gui.Graph
                     if (parentSymbols.Contains(symbol))
                         continue;
 
-                    if (_filterType != null)
-                    {
-                        var matchingInputDef = GetInputMatchingType(symbol, _filterType);
-                        if (matchingInputDef == null)
-                            continue;
-                    }
+                    var matchingInputDef = GetInputMatchingType(symbol, _filterType);
+                    if (matchingInputDef == null)
+                        continue;
 
                     if (!_filter.Match(symbol))
                         continue;
@@ -151,7 +148,7 @@ namespace T3.Gui.Graph
                                 ConnectionMaker.CompleteConnectionIntoBuiltNode(
                                     parent,
                                     newSymbolChild,
-                                    symbol.InputDefinitions[0]);
+                                    matchingInputDef);
                             }
                             else
                             {
