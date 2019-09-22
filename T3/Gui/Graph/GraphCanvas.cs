@@ -34,8 +34,6 @@ namespace T3.Gui.Graph
 
             ImGui.BeginGroup();
             {
-
-
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                 DrawGrid();
@@ -43,7 +41,17 @@ namespace T3.Gui.Graph
 
                 if (ConnectionMaker.TempConnection != null && ImGui.IsMouseReleased(0))
                 {
+                    //var droppedOnBackground = ImGui.IsWindowHovered() && !ImGui.IsAnyItemHovered();
+                    //if (droppedOnBackground)
+                    //{
+                    //    ConnectionMaker.InitSymbolBrowserAtPosition(
+                    //        _buildingNodes,
+                    //        InverseTransformPosition(ImGui.GetIO().MousePos));
+                    //}
+                    //else
+                    //{
                     ConnectionMaker.Cancel();
+                    //}
                 }
 
                 _selectionFence.Draw();
