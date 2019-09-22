@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
-using Newtonsoft.Json;
 using T3.Core.Logging;
 
 //using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -443,6 +443,16 @@ namespace T3.Core.Operator
             public override bool Equals(object other)
             {
                 return GetHashCode() == other?.GetHashCode();
+            }
+
+            public bool IsConnectedToSymbolOutput
+            {
+                get { return TargetParentOrChildId == Guid.Empty; }
+            }
+
+            public bool IsConnectedToSymbolInput
+            {
+                get { return SourceParentOrChildId == Guid.Empty; }
             }
 
         }

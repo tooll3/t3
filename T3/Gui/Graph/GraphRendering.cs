@@ -1,5 +1,4 @@
 ﻿using ImGuiNET;
-using UiHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +8,7 @@ using T3.Core.Operator;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.TypeColors;
+using UiHelpers;
 
 namespace T3.Gui.Graph
 {
@@ -22,18 +22,24 @@ namespace T3.Gui.Graph
     ///    - potentially hidden connections
     ///    - layout of connections into multiinput slots
     ///    
+    /// This implementation first collects the information required to drawing the input sockets
+    /// and connection links over serveral passes in which the information about visible connection-lines
+    /// is collected in ConnectionLineUi instances
     /// 
-    ///    
+    /// 1. Initializes lists of ConnectionLineUis
+    /// 2. Fill the lists of which nodes is connected to which lines
+    /// 3. Draw Nodes and their sockets and set positions for connection lines 
+    /// 4. Draw connection lines
     ///</summary>
     public static class GraphRendering
     {
         public static void DrawGraph()
         {
-            drawList = ImGui.GetWindowDrawList();    // just cachine
+            drawList = ImGui.GetWindowDrawList();    // just caching
 
             var symbol = GraphCanvas.Current.CompositionOp.Symbol;
-            //var allConnections = symbol.Connections;
             var allConnections = new List<Symbol.Connection>(symbol.Connections);
+
             if (ConnectionMaker.TempConnection != null)
                 allConnections.Add(ConnectionMaker.TempConnection);
 
@@ -42,31 +48,36 @@ namespace T3.Gui.Graph
             var inputUisById = compositionSymbolUi.InputUis;
             var outputUisById = compositionSymbolUi.OutputUis;
 
-            // 1. Initialize connection lines
+            // 1. Initializes lists of ConnectionLineUis
             var lines = new List<ConnectionLineUi>(allConnections.Count);
             var linesFromNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
             var linesIntoNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
             var linesToOutputNodes = new Dictionary<IOutputUi, List<ConnectionLineUi>>();
             var linesFromInputNodes = new Dictionary<IInputUi, List<ConnectionLineUi>>();
 
-            // 2. Prepare lines internal connections
+            // 2. Which nodes is connected to which lines
             foreach (var c in allConnections)
             {
                 var newLine = new ConnectionLineUi() { Connection = c };
                 lines.Add(newLine);
 
-
                 if (c == ConnectionMaker.TempConnection)
                 {
-                    if (c.TargetParentOrChildId == ConnectionMaker.NotConnected)
+                    if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
                     {
                         newLine.TargetPosition = ImGui.GetMousePos();
                     }
-                    else if (c.SourceParentOrChildId == ConnectionMaker.NotConnected)
+                    else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
                     {
-                        newLine.TargetPosition = Vector2.Zero;
+
+                    }
+                    else if (c.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
+                    {
                         newLine.SourcePosition = ImGui.GetMousePos();
                         newLine.ColorForType = Color.White;
+                    }
+                    else if (c.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
+                    {
 
                     }
                     else
@@ -75,9 +86,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
-
-                var isConnectionToSymbolOutput = c.TargetParentOrChildId == Guid.Empty;
-                if (isConnectionToSymbolOutput)
+                if (c.IsConnectedToSymbolOutput)
                 {
                     //var outputNode = outputUisById[c.TargetSlotId];
                     var outputNode = outputUisById[c.TargetSlotId];
@@ -87,22 +96,22 @@ namespace T3.Gui.Graph
 
                     linesToOutputNodes[outputNode].Add(newLine);
                 }
-                else
+                //else if (c != ConnectionMaker.TempConnection)
+                //{
+                else if (c.TargetParentOrChildId != ConnectionMaker.NotConnectedId
+                   && c.TargetParentOrChildId != ConnectionMaker.UseDraftChildId)
                 {
-                    if (c.TargetParentOrChildId != ConnectionMaker.NotConnected)
-                    {
-                        var targetNode = childUis.Single(childUi => childUi.Id == c.TargetParentOrChildId);
-                        if (!linesIntoNodes.ContainsKey(targetNode))
-                            linesIntoNodes.Add(targetNode, new List<ConnectionLineUi>());
+                    var targetNode = childUis.Single(childUi => childUi.Id == c.TargetParentOrChildId);
+                    if (!linesIntoNodes.ContainsKey(targetNode))
+                        linesIntoNodes.Add(targetNode, new List<ConnectionLineUi>());
 
-                        linesIntoNodes[targetNode].Add(newLine);
-                    }
+                    linesIntoNodes[targetNode].Add(newLine);
                 }
+                //}
 
-                var isConnectionFromSymbolInput = c.SourceParentOrChildId == Guid.Empty;
-                if (isConnectionFromSymbolInput)
+
+                if (c.IsConnectedToSymbolInput)
                 {
-                    //var outputNode = outputUisById[c.TargetSlotId];
                     var inputNode = inputUisById[c.SourceSlotId];
 
                     if (!linesFromInputNodes.ContainsKey(inputNode))
@@ -111,16 +120,14 @@ namespace T3.Gui.Graph
                     linesFromInputNodes[inputNode].Add(newLine);
                     newLine.ColorForType = TypeUiRegistry.Entries[inputNode.Type].Color;
                 }
-                else
+                else if (c.SourceParentOrChildId != ConnectionMaker.NotConnectedId
+                    && c.SourceParentOrChildId != ConnectionMaker.UseDraftChildId)
                 {
-                    if (c.SourceParentOrChildId != ConnectionMaker.NotConnected)
-                    {
-                        var sourceNode = childUis.Single(childUi => childUi.Id == c.SourceParentOrChildId);
-                        if (!linesFromNodes.ContainsKey(sourceNode))
-                            linesFromNodes.Add(sourceNode, new List<ConnectionLineUi>());
+                    var sourceNode = childUis.Single(childUi => childUi.Id == c.SourceParentOrChildId);
+                    if (!linesFromNodes.ContainsKey(sourceNode))
+                        linesFromNodes.Add(sourceNode, new List<ConnectionLineUi>());
 
-                        linesFromNodes[sourceNode].Add(newLine);
-                    }
+                    linesFromNodes[sourceNode].Add(newLine);
                 }
             }
 
@@ -170,7 +177,7 @@ namespace T3.Gui.Graph
 
                 // Input Sockets...
 
-                // prototype
+                // prototype implemention of finding visible relevant inputs
                 var connectionsToNode = linesIntoNodes.ContainsKey(childUi) ? linesIntoNodes[childUi] : _noLines;
                 SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
                 var visibleInputUis = (from inputUi in childSymbolUi.InputUis.Values
@@ -364,10 +371,10 @@ namespace T3.Gui.Graph
                 drawList.AddBezierCurve(
                     line.SourcePosition,
                     line.SourcePosition + new Vector2(0, -50),
-                    line.TargetPosition + new Vector2(0, 50),
-                    line.TargetPosition,
-                    color, 3f,
-                    num_segments: 20);
+                                                    line.TargetPosition + new Vector2(0, 50),
+                                                    line.TargetPosition,
+                                                    color, 3f,
+                                                    num_segments: 20);
 
 
                 drawList.AddTriangleFilled(
@@ -667,11 +674,11 @@ namespace T3.Gui.Graph
 
     public class ConnectionLineUi
     {
+        public Symbol.Connection Connection;
         public Vector2 TargetPosition;
         public Vector2 SourcePosition;
         public Color ColorForType;
         public bool IsSelected;
         public bool IsMultiinput;
-        public Symbol.Connection Connection;
     }
 }
