@@ -1,4 +1,6 @@
 ﻿
+using ImGuiNET;
+
 namespace T3.Gui.InputUi
 {
     public class FallbackInputUi<T> : InputValueUi<T>
@@ -10,6 +12,8 @@ namespace T3.Gui.InputUi
 
         protected override void DrawValueDisplay(string name, ref T value)
         {
+            // ToDo: it would be greate to print the name of the connected op here.
+            ImGui.Text(""); // Print an empty text to force layout to next line
         }
     }
 }
