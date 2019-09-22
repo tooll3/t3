@@ -158,17 +158,32 @@ namespace T3.Gui.Graph
             TempConnection = null;
         }
 
-        public static void InitSymbolBrowserAtPosition(ChildMaker nodeBuilding, Vector2 canvasPosition)
+        public static void InitSymbolBrowserAtPosition(SymbolBrowser symbolBrowser, Vector2 canvasPosition)
         {
-            nodeBuilding.OpenAt(canvasPosition);
-            //Cancel();
-            TempConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
-                                                   sourceSlotId: TempConnection.SourceSlotId,
-                                                   targetParentOrChildId: UseDraftChildId,
-                                                   targetSlotId: Guid.Empty);
+            symbolBrowser.OpenAt(canvasPosition, _draftConnectionType);
+            if (TempConnection != null)
+            {
+                if (TempConnection.TargetParentOrChildId == NotConnectedId)
+                {
+                    TempConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
+                                                           sourceSlotId: TempConnection.SourceSlotId,
+                                                           targetParentOrChildId: UseDraftChildId,
+                                                           targetSlotId: Guid.Empty);
+                }
+                else if (TempConnection.SourceParentOrChildId == NotConnectedId)
+                {
+                    TempConnection = new Symbol.Connection(sourceParentOrChildId: UseDraftChildId,
+                                           sourceSlotId: Guid.Empty,
+                                           targetParentOrChildId: TempConnection.TargetParentOrChildId,
+                                           targetSlotId: TempConnection.TargetSlotId);
+                }
+            }
         }
 
-        public static void CompleteConnectionToBuiltNode(Symbol parentSymbol, SymbolChild newOp, Symbol.InputDefinition inputDef)
+        public static void CompleteConnectionIntoBuiltNode(
+            Symbol parentSymbol,
+            SymbolChild newOp,
+            Symbol.InputDefinition inputDef)
         {
             var newConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
                                                       sourceSlotId: TempConnection.SourceSlotId,
@@ -244,7 +259,7 @@ namespace T3.Gui.Graph
         public static Guid UseSymbolContainerId = Guid.Empty;
 
         /// <summary>
-        /// A special id indicating that the connection is ending in the <see cref="ChildMaker"/>
+        /// A special id indicating that the connection is ending in the <see cref="SymbolBrowser"/>
         /// </summary>
         public static Guid UseDraftChildId = Guid.NewGuid();
     }
