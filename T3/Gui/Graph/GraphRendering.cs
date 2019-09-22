@@ -33,9 +33,14 @@ namespace T3.Gui.Graph
     ///</summary>
     public static class GraphRendering
     {
+        private static List<SymbolChildUi> childUis;
+        private static SymbolUi compositionSymbolUi;
+        private static Dictionary<Guid, IOutputUi> outputUisById;
+        private static Dictionary<Guid, IInputUi> inputUisById;
+
         public static void DrawGraph()
         {
-            drawList = ImGui.GetWindowDrawList();    // just caching
+            _drawList = ImGui.GetWindowDrawList();    // just caching
 
             var symbol = GraphCanvas.Current.CompositionOp.Symbol;
             var allConnections = new List<Symbol.Connection>(symbol.Connections);
@@ -43,92 +48,19 @@ namespace T3.Gui.Graph
             if (ConnectionMaker.TempConnection != null)
                 allConnections.Add(ConnectionMaker.TempConnection);
 
-            var compositionSymbolUi = SymbolUiRegistry.Entries[symbol.Id];
-            var childUis = compositionSymbolUi.ChildUis;
-            var inputUisById = compositionSymbolUi.InputUis;
-            var outputUisById = compositionSymbolUi.OutputUis;
+            compositionSymbolUi = SymbolUiRegistry.Entries[symbol.Id];
+            childUis = compositionSymbolUi.ChildUis;
+            inputUisById = compositionSymbolUi.InputUis;
+            outputUisById = compositionSymbolUi.OutputUis;
 
             // 1. Initializes lists of ConnectionLineUis
-            var lines = new List<ConnectionLineUi>(allConnections.Count);
-            var linesFromNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
-            var linesIntoNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
-            var linesToOutputNodes = new Dictionary<IOutputUi, List<ConnectionLineUi>>();
-            var linesFromInputNodes = new Dictionary<IInputUi, List<ConnectionLineUi>>();
+            _sorter.Init();
 
             // 2. Which nodes is connected to which lines
             foreach (var c in allConnections)
             {
-                var newLine = new ConnectionLineUi() { Connection = c };
-                lines.Add(newLine);
+                var newLine = _sorter.CreateLineUi(c);
 
-                if (c == ConnectionMaker.TempConnection)
-                {
-                    if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
-                    {
-                        newLine.TargetPosition = ImGui.GetMousePos();
-                    }
-                    else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
-                    {
-
-                    }
-                    else if (c.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
-                    {
-                        newLine.SourcePosition = ImGui.GetMousePos();
-                        newLine.ColorForType = Color.White;
-                    }
-                    else if (c.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
-                    {
-
-                    }
-                    else
-                    {
-                        Log.Warning("invalid temporary connection?");
-                    }
-                }
-
-                if (c.IsConnectedToSymbolOutput)
-                {
-                    //var outputNode = outputUisById[c.TargetSlotId];
-                    var outputNode = outputUisById[c.TargetSlotId];
-
-                    if (!linesToOutputNodes.ContainsKey(outputNode))
-                        linesToOutputNodes.Add(outputNode, new List<ConnectionLineUi>());
-
-                    linesToOutputNodes[outputNode].Add(newLine);
-                }
-                //else if (c != ConnectionMaker.TempConnection)
-                //{
-                else if (c.TargetParentOrChildId != ConnectionMaker.NotConnectedId
-                   && c.TargetParentOrChildId != ConnectionMaker.UseDraftChildId)
-                {
-                    var targetNode = childUis.Single(childUi => childUi.Id == c.TargetParentOrChildId);
-                    if (!linesIntoNodes.ContainsKey(targetNode))
-                        linesIntoNodes.Add(targetNode, new List<ConnectionLineUi>());
-
-                    linesIntoNodes[targetNode].Add(newLine);
-                }
-                //}
-
-
-                if (c.IsConnectedToSymbolInput)
-                {
-                    var inputNode = inputUisById[c.SourceSlotId];
-
-                    if (!linesFromInputNodes.ContainsKey(inputNode))
-                        linesFromInputNodes.Add(inputNode, new List<ConnectionLineUi>());
-
-                    linesFromInputNodes[inputNode].Add(newLine);
-                    newLine.ColorForType = TypeUiRegistry.Entries[inputNode.Type].Color;
-                }
-                else if (c.SourceParentOrChildId != ConnectionMaker.NotConnectedId
-                    && c.SourceParentOrChildId != ConnectionMaker.UseDraftChildId)
-                {
-                    var sourceNode = childUis.Single(childUi => childUi.Id == c.SourceParentOrChildId);
-                    if (!linesFromNodes.ContainsKey(sourceNode))
-                        linesFromNodes.Add(sourceNode, new List<ConnectionLineUi>());
-
-                    linesFromNodes[sourceNode].Add(newLine);
-                }
             }
 
             // Prepare connections to nodes under construction
@@ -157,13 +89,7 @@ namespace T3.Gui.Graph
                         ? usableArea.Contains(ImGui.GetMousePos())
                         : ImGui.IsItemHovered();
 
-                    var isPotentialConnectionTarget = false; // ToDo Implement
-
-                    var connectedLines = linesFromNodes.ContainsKey(childUi)
-                        ? linesFromNodes[childUi].FindAll(l => l.Connection.SourceSlotId == output.Id)
-                        : _noLines;
-
-                    foreach (var line in connectedLines)
+                    foreach (var line in _sorter.GetLinesFromNodeOutput(childUi, output.Id))
                     {
                         line.SourcePosition = usableArea.GetCenter();
                         line.ColorForType = colorForType;
@@ -178,7 +104,7 @@ namespace T3.Gui.Graph
                 // Input Sockets...
 
                 // prototype implemention of finding visible relevant inputs
-                var connectionsToNode = linesIntoNodes.ContainsKey(childUi) ? linesIntoNodes[childUi] : _noLines;
+                var connectionsToNode = _sorter.GetLinesIntoNode(childUi);
                 SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
                 var visibleInputUis = (from inputUi in childSymbolUi.InputUis.Values
                                        where inputUi.Relevancy != Relevancy.Optional ||
@@ -201,15 +127,10 @@ namespace T3.Gui.Graph
                         ? usableArea.Contains(ImGui.GetMousePos())
                         : ImGui.IsItemHovered();
 
-
-                    //var isPotentialConnectionTarget = BuildingConnections.IsInputSlotCurrentConnectionTarget(childUi, inputIndex);
                     var isPotentialConnectionTarget = ConnectionMaker.IsMatchingInputType(input.DefaultValue.ValueType);
                     var colorForType = ColorForInputType(input);
 
-                    var connectedLines = linesIntoNodes.ContainsKey(childUi)
-                        ? linesIntoNodes[childUi].FindAll(l => l.Connection.TargetSlotId == input.Id)
-                        : _noLines;
-
+                    var connectedLines = _sorter.GetLinesToNodeInputSlot(childUi, input.Id);
 
                     // Render Label
                     var inputLabelOpacity = Im.Clamp((GraphCanvas.Current.Scale.X - 1f) / 3f, 0, 1);
@@ -227,12 +148,12 @@ namespace T3.Gui.Graph
                         if (textSize.X > usableArea.GetWidth())
                         {
                             ImGui.PushClipRect(usableArea.Min - new Vector2(0, 20), usableArea.Max, true);
-                            drawList.AddText(usableArea.Min + new Vector2(0, -15), labelColor, label);
+                            _drawList.AddText(usableArea.Min + new Vector2(0, -15), labelColor, label);
                             ImGui.PopClipRect();
                         }
                         else
                         {
-                            drawList.AddText(usableArea.Min + new Vector2((usableArea.GetWidth() - textSize.X) / 2, -15), labelColor, label);
+                            _drawList.AddText(usableArea.Min + new Vector2((usableArea.GetWidth() - textSize.X) / 2, -15), labelColor, label);
                         }
                         ImGui.PopFont();
                     }
@@ -282,28 +203,6 @@ namespace T3.Gui.Graph
                             targetPos.X += socketWidth;
                             topLeft.X += socketWidth;
                         }
-                        //}
-                        //else
-                        //{
-                        //    // Sockets are defined through inputs
-                        //    var socketCount = Math.Max(connectedLines.Count, 1);
-                        //    var socketWidth = usableArea.GetWidth() / socketCount;
-                        //    var targetPos = new Vector2(
-                        //                usableArea.Min.X + socketWidth * 0.5f,
-                        //                usableArea.Min.Y);
-
-                        //    var index = 0;
-                        //    foreach (var line in connectedLines)
-                        //    {
-
-                        //        line.TargetPosition = targetPos;
-                        //        line.IsSelected |= childUi.IsSelected;
-
-                        //        targetPos.X += socketWidth;
-                        //        index++;
-                        //    }
-                        //    DrawInputSlot(childUi, input, usableArea, colorForType, hovered);
-                        //}
                     }
                     else
                     {
@@ -324,9 +223,6 @@ namespace T3.Gui.Graph
             {
                 var outputId = pair.Key;
                 var outputNode = pair.Value;
-                var connectedLines = linesToOutputNodes.ContainsKey(outputNode)
-                    ? linesToOutputNodes[outputNode].FindAll(l => l.Connection.TargetSlotId == outputId)
-                    : _noLines;
 
                 var def = symbol.OutputDefinitions.Find(od => od.Id == outputId);
                 OutputNodes.Draw(def, outputNode);
@@ -335,7 +231,7 @@ namespace T3.Gui.Graph
                     OutputNodes._lastScreenRect.GetCenter().X,
                     OutputNodes._lastScreenRect.Max.Y);
 
-                foreach (var line in connectedLines)
+                foreach (var line in _sorter.GetLinesToOutputNodes(outputNode, outputId))
                 {
                     line.TargetPosition = targetPos;
                 }
@@ -344,10 +240,6 @@ namespace T3.Gui.Graph
             // Draw Inputs Nodes
             foreach (var inputNode in inputUisById)
             {
-                var connectedLines = linesFromInputNodes.ContainsKey(inputNode.Value)
-                    ? linesFromInputNodes[inputNode.Value].FindAll(l => l.Connection.SourceSlotId == inputNode.Key)
-                    : _noLines;
-
                 var def = symbol.InputDefinitions.Find(idef => idef.Id == inputNode.Key);
                 InputNodes.Draw(def, inputNode.Value);
 
@@ -355,20 +247,20 @@ namespace T3.Gui.Graph
                     InputNodes._lastScreenRect.GetCenter().X,
                     InputNodes._lastScreenRect.Min.Y);
 
-                foreach (var line in connectedLines)
+                foreach (var line in _sorter.GetLinesFromIntputNodes(inputNode.Value, inputNode.Key))
                 {
                     line.SourcePosition = sourcePos;
                 }
             }
 
             // 6. Draw ConnectionLines
-            foreach (var line in lines)
+            foreach (var line in _sorter.Lines)
             {
                 var color = line.IsSelected
                     ? ColorVariations.Highlight.Apply(line.ColorForType)
                     : ColorVariations.ConnectionLines.Apply(line.ColorForType);
 
-                drawList.AddBezierCurve(
+                _drawList.AddBezierCurve(
                     line.SourcePosition,
                     line.SourcePosition + new Vector2(0, -50),
                                                     line.TargetPosition + new Vector2(0, 50),
@@ -376,8 +268,7 @@ namespace T3.Gui.Graph
                                                     color, 3f,
                                                     num_segments: 20);
 
-
-                drawList.AddTriangleFilled(
+                _drawList.AddTriangleFilled(
                     line.TargetPosition + new Vector2(0, -3),
                     line.TargetPosition + new Vector2(4, 2),
                     line.TargetPosition + new Vector2(-4, 2),
@@ -390,7 +281,7 @@ namespace T3.Gui.Graph
         {
             if (ConnectionMaker.IsOutputSlotCurrentConnectionSource(childUi, outputDef))
             {
-                drawList.AddRectFilled(usableArea.Min, usableArea.Max,
+                _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                     ColorVariations.Highlight.Apply(colorForType));
 
                 if (ImGui.IsMouseDragging(0))
@@ -402,7 +293,7 @@ namespace T3.Gui.Graph
             {
                 if (ConnectionMaker.IsMatchingOutputType(outputDef.ValueType))
                 {
-                    drawList.AddRectFilled(usableArea.Min, usableArea.Max,
+                    _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                         ColorVariations.OperatorHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
@@ -412,7 +303,7 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    drawList.AddRectFilled(usableArea.Min, usableArea.Max,
+                    _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                         ColorVariations.OperatorHover.Apply(colorForType));
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
@@ -443,7 +334,7 @@ namespace T3.Gui.Graph
 
                 var pos = usableArea.Min + Vector2.UnitY * (usableArea.GetHeight() - GraphOperator._outputSlotMargin - GraphOperator._outputSlotHeight);
                 var size = new Vector2(usableArea.GetWidth(), GraphOperator._outputSlotHeight);
-                drawList.AddRectFilled(
+                _drawList.AddRectFilled(
                     pos,
                     pos + size,
                     style.Apply(colorForType)
@@ -471,7 +362,6 @@ namespace T3.Gui.Graph
         }
 
 
-
         private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
             if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
@@ -485,10 +375,7 @@ namespace T3.Gui.Graph
             {
                 if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
-                    //drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                    //    ColorVariations.Highlight.Apply(colorForType));
-
-                    drawList.AddRectFilled(usableArea.Min, usableArea.Max,
+                    _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                         ColorVariations.OperatorHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
@@ -498,7 +385,7 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    drawList.AddRectFilled(
+                    _drawList.AddRectFilled(
                         usableArea.Min,
                         usableArea.Max,
                         ColorVariations.OperatorHover.Apply(colorForType)
@@ -532,7 +419,7 @@ namespace T3.Gui.Graph
 
                 var pos = usableArea.Min + Vector2.UnitY * GraphOperator._inputSlotMargin;
                 var size = new Vector2(usableArea.GetWidth(), GraphOperator._inputSlotHeight);
-                drawList.AddRectFilled(
+                _drawList.AddRectFilled(
                     pos,
                     pos + size,
                     style.Apply(colorForType)
@@ -540,13 +427,13 @@ namespace T3.Gui.Graph
 
                 if (inputDef.IsMultiInput)
                 {
-                    drawList.AddRectFilled(
+                    _drawList.AddRectFilled(
                         pos + new Vector2(0, GraphOperator._inputSlotHeight),
                         pos + new Vector2(GraphOperator._inputSlotHeight, GraphOperator._inputSlotHeight + GraphOperator._multiInputSize),
                         style.Apply(colorForType)
                         );
 
-                    drawList.AddRectFilled(
+                    _drawList.AddRectFilled(
                         pos + new Vector2(size.X - GraphOperator._inputSlotHeight, GraphOperator._inputSlotHeight),
                         pos + new Vector2(size.X, GraphOperator._inputSlotHeight + GraphOperator._multiInputSize),
                         style.Apply(colorForType)
@@ -554,6 +441,7 @@ namespace T3.Gui.Graph
                 }
             }
         }
+
 
         private static void DrawMultiInputSocket(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool isInputHovered, int multiInputIndex, bool isGap)
         {
@@ -568,7 +456,7 @@ namespace T3.Gui.Graph
             {
                 if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
-                    drawList.AddRectFilled(usableArea.Min, usableArea.Max,
+                    _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                         ColorVariations.OperatorHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
@@ -578,7 +466,7 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    drawList.AddRectFilled(
+                    _drawList.AddRectFilled(
                         usableArea.Min,
                         usableArea.Max,
                         ColorVariations.OperatorHover.Apply(colorForType)
@@ -613,7 +501,7 @@ namespace T3.Gui.Graph
 
                 var pos = usableArea.Min + Vector2.UnitY * GraphOperator._inputSlotMargin;
                 var size = new Vector2(usableArea.GetWidth(), GraphOperator._inputSlotHeight);
-                drawList.AddRectFilled(
+                _drawList.AddRectFilled(
                     pos,
                     pos + size,
                     style.Apply(colorForType)
@@ -634,16 +522,17 @@ namespace T3.Gui.Graph
         }
 
 
-
         private static Color ColorForInputType(Symbol.InputDefinition inputDef)
         {
             return TypeUiRegistry.Entries[inputDef.DefaultValue.ValueType].Color;
         }
 
+
         private static Color ColorForTypeOut(Symbol.OutputDefinition outputDef)
         {
             return TypeUiRegistry.Entries[outputDef.ValueType].Color;
         }
+
 
         public static ImRect GetUsableInputSlotSize(SymbolChildUi targetUi, int inputIndex, int visibleSlotCount)
         {
@@ -662,23 +551,146 @@ namespace T3.Gui.Graph
                 ));
         }
 
-        // Reuse empty list instead of null check
-        private static readonly List<ConnectionLineUi> _noLines = new List<ConnectionLineUi>();
-        private static ImDrawListPtr drawList;
+        private static ImDrawListPtr _drawList;
 
-        private static Dictionary<Guid, Symbol.Connection> _connectionsToTargets = new Dictionary<Guid, Symbol.Connection>();
-        private static Dictionary<Guid, Symbol.Connection> _connectionsFromSources = new Dictionary<Guid, Symbol.Connection>();
-        private static Dictionary<Guid, SymbolChildUi> _childUiById = new Dictionary<Guid, SymbolChildUi>();
-        private static List<ConnectionLineUi> _connectionLines = new List<ConnectionLineUi>(1000);
-    }
 
-    public class ConnectionLineUi
-    {
-        public Symbol.Connection Connection;
-        public Vector2 TargetPosition;
-        public Vector2 SourcePosition;
-        public Color ColorForType;
-        public bool IsSelected;
-        public bool IsMultiinput;
+        private class ConnectionSorter
+        {
+            public List<ConnectionLineUi> Lines;
+
+            public void Init()
+            {
+                Lines = new List<ConnectionLineUi>();
+                _linesFromNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
+                _linesIntoNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
+                _linesToOutputNodes = new Dictionary<IOutputUi, List<ConnectionLineUi>>();
+                _linesFromInputNodes = new Dictionary<IInputUi, List<ConnectionLineUi>>();
+            }
+
+            public ConnectionLineUi CreateLineUi(Symbol.Connection c)
+            {
+                var newLine = new ConnectionLineUi() { Connection = c };
+                Lines.Add(newLine);
+
+                if (c.IsConnectedToSymbolOutput)
+                {
+                    var outputNode = outputUisById[c.TargetSlotId];
+
+                    if (!_linesToOutputNodes.ContainsKey(outputNode))
+                        _linesToOutputNodes.Add(outputNode, new List<ConnectionLineUi>());
+
+                    _linesToOutputNodes[outputNode].Add(newLine);
+                }
+                else if (c.TargetParentOrChildId != ConnectionMaker.NotConnectedId
+                        && c.TargetParentOrChildId != ConnectionMaker.UseDraftChildId)
+                {
+                    var targetNode = childUis.Single(childUi => childUi.Id == c.TargetParentOrChildId);
+                    if (!_linesIntoNodes.ContainsKey(targetNode))
+                        _linesIntoNodes.Add(targetNode, new List<ConnectionLineUi>());
+
+                    _linesIntoNodes[targetNode].Add(newLine);
+                }
+
+                if (c.IsConnectedToSymbolInput)
+                {
+                    var inputNode = inputUisById[c.SourceSlotId];
+
+                    if (!_linesFromInputNodes.ContainsKey(inputNode))
+                        _linesFromInputNodes.Add(inputNode, new List<ConnectionLineUi>());
+
+                    _linesFromInputNodes[inputNode].Add(newLine);
+                    newLine.ColorForType = TypeUiRegistry.Entries[inputNode.Type].Color;
+                }
+                else if (c.SourceParentOrChildId != ConnectionMaker.NotConnectedId
+                    && c.SourceParentOrChildId != ConnectionMaker.UseDraftChildId)
+                {
+                    var sourceNode = childUis.Single(childUi => childUi.Id == c.SourceParentOrChildId);
+                    if (!_linesFromNodes.ContainsKey(sourceNode))
+                        _linesFromNodes.Add(sourceNode, new List<ConnectionLineUi>());
+
+                    _linesFromNodes[sourceNode].Add(newLine);
+                }
+
+                if (c == ConnectionMaker.TempConnection)
+                {
+                    if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
+                    {
+                        newLine.TargetPosition = ImGui.GetMousePos();
+                    }
+                    else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
+                    {
+
+                    }
+                    else if (c.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
+                    {
+                        newLine.SourcePosition = ImGui.GetMousePos();
+                        newLine.ColorForType = Color.White;
+                    }
+                    else if (c.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
+                    {
+
+                    }
+                    else
+                    {
+                        Log.Warning("invalid temporary connection?");
+                    }
+                }
+
+                return newLine;
+            }
+
+            public List<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
+            {
+                return _linesFromNodes.ContainsKey(childUi)
+                                        ? _linesFromNodes[childUi].FindAll(l => l.Connection.SourceSlotId == outputId)
+                                        : _noLines;
+            }
+
+            public List<ConnectionLineUi> GetLinesToNodeInputSlot(SymbolChildUi childUi, Guid inputId)
+            {
+                return _linesIntoNodes.ContainsKey(childUi)
+                    ? _linesIntoNodes[childUi].FindAll(l => l.Connection.TargetSlotId == inputId)
+                    : _noLines;
+            }
+
+            public List<ConnectionLineUi> GetLinesIntoNode(SymbolChildUi childUi)
+            {
+                return _linesIntoNodes.ContainsKey(childUi) ? _linesIntoNodes[childUi] : _noLines;
+            }
+
+            public List<ConnectionLineUi> GetLinesToOutputNodes(IOutputUi outputNode, Guid outputId)
+            {
+                return _linesToOutputNodes.ContainsKey(outputNode)
+                    ? _linesToOutputNodes[outputNode].FindAll(l => l.Connection.TargetSlotId == outputId)
+                    : _noLines;
+            }
+
+            public List<ConnectionLineUi> GetLinesFromIntputNodes(IInputUi inputNode, Guid inputNodeId)
+            {
+                return _linesFromInputNodes.ContainsKey(inputNode)
+                    ? _linesFromInputNodes[inputNode].FindAll(l => l.Connection.SourceSlotId == inputNodeId)
+                    : _noLines;
+            }
+
+            private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesFromNodes;
+            private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesIntoNodes;
+            private Dictionary<IOutputUi, List<ConnectionLineUi>> _linesToOutputNodes;
+            private Dictionary<IInputUi, List<ConnectionLineUi>> _linesFromInputNodes;
+
+            // Reuse empty list instead of null check
+            private static readonly List<ConnectionLineUi> _noLines = new List<ConnectionLineUi>();
+        }
+        private static ConnectionSorter _sorter = new ConnectionSorter();
+
+
+        private class ConnectionLineUi
+        {
+            public Symbol.Connection Connection;
+            public Vector2 TargetPosition;
+            public Vector2 SourcePosition;
+            public Color ColorForType;
+            public bool IsSelected;
+            public bool IsMultiinput;
+        }
     }
 }
