@@ -340,7 +340,7 @@
     <Compile Include="Gui\Commands\ChangeInputValueCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSelectableCommand.cs" />
     <Compile Include="Gui\Commands\UndoRedoStack.cs" />
-    <Compile Include="Gui\Graph\Interaction\ChildMaker.cs" />
+    <Compile Include="Gui\Graph\Interaction\SymbolBrowser.cs" />
     <Compile Include="Gui\Animation\CurveEditing\HorizontalScaleLines.cs" />
     <Compile Include="Gui\UiHelpers\ICanvas.cs" />
     <Compile Include="Gui\Animation\CurveEditing\Snapping\IValueSnapAttractor.cs" />

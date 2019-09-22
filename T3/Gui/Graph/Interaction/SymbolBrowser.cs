@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using UiHelpers;
 
@@ -18,9 +19,19 @@ namespace T3.Gui.Graph
     /// It can be connected to other nodes and provide search functionality. It's basically the
     /// T2's CreateOperatorWindow.
     /// </summary>
-    public class ChildMaker
+    public class SymbolBrowser
     {
         #region public API ------------------------------------------------------------------------
+        public void OpenAt(Vector2 positionOnCanvas, Type type)
+        {
+            IsOpen = true;
+            PosOnCanvas = positionOnCanvas;
+            _focusInputNextTime = true;
+            _filterType = type;
+        }
+
+        private Type _filterType;
+
         public void Draw()
         {
             if (!IsOpen)
@@ -39,13 +50,7 @@ namespace T3.Gui.Graph
             }
             ImGui.PopID();
         }
-        public void OpenAt(Vector2 positionOnCanvas)
-        {
-            IsOpen = true;
-            PosOnCanvas = positionOnCanvas;
-            _focusInputNextTime = true;
 
-        }
         public void Cancel()
         {
             IsOpen = false;
@@ -83,16 +88,29 @@ namespace T3.Gui.Graph
             }
         }
 
+        private Symbol.InputDefinition GetInputMatchingType(Symbol symbol, Type type)
+        {
+            foreach (var inputDefinition in symbol.InputDefinitions)
+            {
+                if (inputDefinition.DefaultValue.ValueType == type)
+                    return inputDefinition;
+            }
+            return null;
+        }
 
         private void DrawMatchesList()
         {
             ImGui.SetCursorPos(_posInWindow + new Vector2(91 + 8, 1));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
+
+            var typeUi = TypeUiRegistry.Entries[_filterType];
+
+
             if (ImGui.BeginChildFrame(234, new Vector2(150, 200)))
             {
                 ImGui.PushFont(ImGuiDx11Impl.FontSmall);
-                ImGui.TextDisabled("->float");
+                ImGui.TextDisabled(_filterType.Name);
                 ImGui.PopFont();
 
                 var parentSymbols = new List<Symbol>(GraphCanvas.Current.GetParentSymbols());
@@ -104,18 +122,26 @@ namespace T3.Gui.Graph
                     if (parentSymbols.Contains(symbol))
                         continue;
 
+                    var matchingInputDef = GetInputMatchingType(symbol, _filterType);
+                    if (matchingInputDef == null)
+                        continue;
+
                     ImGui.PushID(symbol.Id.GetHashCode());
                     {
                         if (ImGui.Selectable("", symbol == _selectedSymbol))
                         {
                             var parent = GraphCanvas.Current.CompositionOp.Symbol;
-                            var addCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = _posInWindow };
+                            var addCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = PosOnCanvas };
                             UndoRedoStack.AddAndExecute(addCommand);
                             var newSymbolChild = parent.Children.Single(entry => entry.Id == addCommand.AddedChildId);
 
                             if (symbol.InputDefinitions.Any())
                             {
-                                ConnectionMaker.CompleteConnectionToBuiltNode(parent, newSymbolChild, symbol.InputDefinitions[0]);
+                                var temp = ConnectionMaker.TempConnection;
+                                ConnectionMaker.CompleteConnectionIntoBuiltNode(
+                                    parent,
+                                    newSymbolChild,
+                                    symbol.InputDefinitions[0]);
                             }
                             else
                             {
@@ -159,6 +185,6 @@ namespace T3.Gui.Graph
         private readonly static int _uiId = "DraftNode".GetHashCode();
         private string _searchString = "";
 
-        public static ChildMaker Current;
+        public static SymbolBrowser Current;
     }
 }

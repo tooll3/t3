@@ -37,21 +37,23 @@ namespace T3.Gui.Graph
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                 DrawGrid();
+                _symbolBrowser.Draw();
+
                 Graph.DrawGraph();
 
                 if (ConnectionMaker.TempConnection != null && ImGui.IsMouseReleased(0))
                 {
-                    //var droppedOnBackground = ImGui.IsWindowHovered() && !ImGui.IsAnyItemHovered();
-                    //if (droppedOnBackground)
-                    //{
-                    //    ConnectionMaker.InitSymbolBrowserAtPosition(
-                    //        _buildingNodes,
-                    //        InverseTransformPosition(ImGui.GetIO().MousePos));
-                    //}
-                    //else
-                    //{
-                    ConnectionMaker.Cancel();
-                    //}
+                    var droppedOnBackground = ImGui.IsWindowHovered() && !ImGui.IsAnyItemHovered();
+                    if (droppedOnBackground)
+                    {
+                        ConnectionMaker.InitSymbolBrowserAtPosition(
+                            _symbolBrowser,
+                            InverseTransformPosition(ImGui.GetIO().MousePos));
+                    }
+                    else
+                    {
+                        ConnectionMaker.Cancel();
+                    }
                 }
 
                 _selectionFence.Draw();
@@ -212,6 +214,6 @@ namespace T3.Gui.Graph
         private SelectionFence _selectionFence;
         internal static Vector2 DefaultOpSize = new Vector2(100, 30);
         internal List<SymbolChildUi> ChildUis { get; set; }
-        private ChildMaker _buildingNodes = new ChildMaker();
+        private SymbolBrowser _symbolBrowser = new SymbolBrowser();
     }
 }

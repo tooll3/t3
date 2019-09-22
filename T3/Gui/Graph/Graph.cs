@@ -167,12 +167,15 @@ namespace T3.Gui.Graph
 
                     _linesFromNodes[sourceNode].Add(newLine);
                 }
+
+                InitTempConnection(newLine);
                 return newLine;
             }
 
-            private static void InitializeConnectionUnderConstruction(Symbol.Connection c, ConnectionLineUi newLine)
+            private static void InitTempConnection(ConnectionLineUi newLine)
             {
-                if (c != ConnectionMaker.TempConnection)
+                var c = newLine.Connection;
+                if (newLine.Connection != ConnectionMaker.TempConnection)
                     return;
 
                 if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
@@ -181,7 +184,7 @@ namespace T3.Gui.Graph
                 }
                 else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
-
+                    newLine.TargetPosition = GraphCanvas.Current.TransformPosition(SymbolBrowser.Current.PosOnCanvas);
                 }
                 else if (c.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
                 {
@@ -190,7 +193,7 @@ namespace T3.Gui.Graph
                 }
                 else if (c.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
-
+                    newLine.SourcePosition = GraphCanvas.Current.TransformPosition(SymbolBrowser.Current.PosOnCanvas);
                 }
                 else
                 {
