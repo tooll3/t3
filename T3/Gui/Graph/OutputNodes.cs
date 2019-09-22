@@ -1,15 +1,15 @@
 ﻿using ImGuiNET;
-using UiHelpers;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.TypeColors;
+using UiHelpers;
 
 namespace T3.Gui.Graph
 {
     /// <summary>
-    /// Draws published input parameters of a <see cref="Symbol"/> and uses <see cref="BuildingConnections"/> 
+    /// Draws published input parameters of a <see cref="Symbol"/> and uses <see cref="ConnectionMaker"/> 
     /// create new connections with it.
     /// </summary>
     static class OutputNodes
@@ -62,7 +62,7 @@ namespace T3.Gui.Graph
 
                 var label = string.Format($"{outputDef.Name}");
                 var size = ImGui.CalcTextSize(label);
-                var pos = _lastScreenRect.GetCenter() - size/2;
+                var pos = _lastScreenRect.GetCenter() - size / 2;
 
                 dl.AddText(pos, ColorVariations.OperatorLabel.Apply(typeColor), label);
 
@@ -84,28 +84,28 @@ namespace T3.Gui.Graph
                     var color = TypeUiRegistry.Entries[outputDef.ValueType].Color;
 
                     //Note: isItemHovered will not work
-                    var slotHovered = BuildingConnections.TempConnection != null
+                    var slotHovered = ConnectionMaker.TempConnection != null
                                           ? rInScreen.Contains(ImGui.GetMousePos())
                                           : ImGui.IsItemHovered();
 
-                    if (BuildingConnections.IsOutputNodeCurrentConnectionTarget(outputDef))
+                    if (ConnectionMaker.IsOutputNodeCurrentConnectionTarget(outputDef))
                     {
                         GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                         if (ImGui.IsMouseDragging(0))
                         {
-                            BuildingConnections.Update();
+                            ConnectionMaker.Update();
                         }
                     }
                     else if (slotHovered)
                     {
-                        if (BuildingConnections.IsMatchingInputType(outputDef.ValueType))
+                        if (ConnectionMaker.IsMatchingInputType(outputDef.ValueType))
                         {
                             GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
 
                             if (ImGui.IsMouseReleased(0))
                             {
-                                BuildingConnections.CompleteAtSymbolOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
+                                ConnectionMaker.CompleteAtSymbolOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
                             }
                         }
                         else
@@ -113,7 +113,7 @@ namespace T3.Gui.Graph
                             GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, Color.White);
                             if (ImGui.IsItemClicked(0))
                             {
-                                BuildingConnections.StartFromOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
+                                ConnectionMaker.StartFromOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
                             }
                         }
                     }
@@ -122,7 +122,7 @@ namespace T3.Gui.Graph
                         GraphCanvas.Current.DrawRectFilled(ImRect.RectWithSize(new Vector2(outputUi.PosOnCanvas.X + 1 + 3,
                                                                                            outputUi.PosOnCanvas.Y + outputUi.Size.Y - 1),
                                                                                new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3)),
-                                                           BuildingConnections.IsMatchingInputType(outputDef.ValueType) ? Color.White : color);
+                                                           ConnectionMaker.IsMatchingInputType(outputDef.ValueType) ? Color.White : color);
                     }
                 }
 
