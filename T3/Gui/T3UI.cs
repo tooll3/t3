@@ -28,7 +28,7 @@ namespace T3.Gui
 
             _windows = new List<Window>()
             {
-                new GraphCanvasWindow(),
+                new GraphWindow(),
                 new ParameterWindow(),
                 new OutputWindow(),
                 new ConsoleLogWindow(),
@@ -112,7 +112,7 @@ namespace T3.Gui
 
         private IOutputUi GetSelectedOutputUi()
         {
-            foreach (var gcw in GraphCanvasWindow.WindowInstances)
+            foreach (var gcw in GraphWindow.WindowInstances)
             {
                 if (gcw.Canvas.SelectionHandler.SelectedElements.Any())
                 {

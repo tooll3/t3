@@ -31,23 +31,23 @@ namespace T3.Gui.Graph
     /// 3. Draw Nodes and their sockets and set positions for connection lines 
     /// 4. Draw connection lines
     ///</summary>
-    public static class GraphRendering
+    public static class Graph
     {
 
         public static void DrawGraph()
         {
             _drawList = ImGui.GetWindowDrawList();    // just caching
 
-            var symbol = GraphCanvas.Current.CompositionOp.Symbol;
-            var allConnections = new List<Symbol.Connection>(symbol.Connections);
+            var graphSymbol = GraphCanvas.Current.CompositionOp.Symbol;
+            var allConnections = new List<Symbol.Connection>(graphSymbol.Connections);
 
             if (ConnectionMaker.TempConnection != null)
                 allConnections.Add(ConnectionMaker.TempConnection);
 
-            _compositionSymbolUi = SymbolUiRegistry.Entries[symbol.Id];
-            _childUis = _compositionSymbolUi.ChildUis;
-            _inputUisById = _compositionSymbolUi.InputUis;
-            _outputUisById = _compositionSymbolUi.OutputUis;
+            _graphSymbolUi = SymbolUiRegistry.Entries[graphSymbol.Id];
+            _childUis = _graphSymbolUi.ChildUis;
+            _inputUisById = _graphSymbolUi.InputUis;
+            _outputUisById = _graphSymbolUi.OutputUis;
 
             // 1. Initializes lists of ConnectionLineUis
             Connections.Init();
@@ -70,8 +70,8 @@ namespace T3.Gui.Graph
                 var outputId = pair.Key;
                 var outputNode = pair.Value;
 
-                var def = symbol.OutputDefinitions.Find(od => od.Id == outputId);
-                OutputNode.Draw(def, outputNode);
+                var outputDef = graphSymbol.OutputDefinitions.Find(od => od.Id == outputId);
+                OutputNode.Draw(outputDef, outputNode);
 
                 var targetPos = new Vector2(
                     OutputNode._lastScreenRect.GetCenter().X,
@@ -86,8 +86,8 @@ namespace T3.Gui.Graph
             // Draw Inputs Nodes
             foreach (var inputNode in _inputUisById)
             {
-                var def = symbol.InputDefinitions.Find(idef => idef.Id == inputNode.Key);
-                InputNode.Draw(def, inputNode.Value);
+                var inputDef = graphSymbol.InputDefinitions.Find(idef => idef.Id == inputNode.Key);
+                InputNode.Draw(inputDef, inputNode.Value);
 
                 var sourcePos = new Vector2(
                     InputNode._lastScreenRect.GetCenter().X,
@@ -111,7 +111,7 @@ namespace T3.Gui.Graph
         //    return TypeUiRegistry.Entries[outputDef.ValueType].Color;
         //}
 
-        public class Connetions
+        public class ConnectionSorter
         {
             public List<ConnectionLineUi> Lines;
 
@@ -300,10 +300,10 @@ namespace T3.Gui.Graph
             }
         }
 
-        public static Connetions Connections = new Connetions();
+        public static ConnectionSorter Connections = new ConnectionSorter();
         public static ImDrawListPtr _drawList;
         private static List<SymbolChildUi> _childUis;
-        private static SymbolUi _compositionSymbolUi;
+        private static SymbolUi _graphSymbolUi;
         private static Dictionary<Guid, IOutputUi> _outputUisById;
         private static Dictionary<Guid, IInputUi> _inputUisById;
 

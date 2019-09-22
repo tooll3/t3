@@ -352,7 +352,7 @@
     <Compile Include="Gui\Graph\Interaction\GraphCanvas.cs" />
     <Compile Include="Gui\Graph\InputNode.cs" />
     <Compile Include="Gui\Graph\OutputNode.cs" />
-    <Compile Include="Gui\Graph\GraphRendering.cs" />
+    <Compile Include="Gui\Graph\Graph.cs" />
     <Compile Include="Gui\Windows\Metrics.cs" />
     <Compile Include="Gui\Styling\Color.cs" />
     <Compile Include="Gui\SymbolUi.cs" />
@@ -360,7 +360,7 @@
     <Compile Include="Gui\Styling\ColorVariation.cs" />
     <Compile Include="Gui\Windows\ConsoleLogWindow.cs" />
     <Compile Include="Gui\Graph\CreateOperatorWindow.cs" />
-    <Compile Include="Gui\Graph\GraphCanvasWindow.cs" />
+    <Compile Include="Gui\Graph\GraphWindow.cs" />
     <Compile Include="Gui\Graph\GraphNode.cs" />
     <Compile Include="Gui\Interaction\SelectionFence.cs" />
     <Compile Include="Gui\Windows\QuickCreateWindow.cs" />

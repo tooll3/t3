@@ -12,7 +12,7 @@ using UiHelpers;
 namespace T3.Gui.Graph
 {
     /// <summary>
-    /// Renders a graphic representation of a <see cref="SymbolChild"/> within the current <see cref="GraphCanvasWindow"/>
+    /// Renders a graphic representation of a <see cref="SymbolChild"/> within the current <see cref="GraphWindow"/>
     /// </summary>
     static class GraphNode
     {
@@ -20,7 +20,7 @@ namespace T3.Gui.Graph
 
         public static void Draw(SymbolChildUi childUi)
         {
-            _drawList = GraphRendering._drawList;
+            _drawList = Graph._drawList;
 
 
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
@@ -97,7 +97,7 @@ namespace T3.Gui.Graph
                     ? usableArea.Contains(ImGui.GetMousePos())
                     : ImGui.IsItemHovered();
 
-                foreach (var line in GraphRendering.Connections.GetLinesFromNodeOutput(childUi, output.Id))
+                foreach (var line in Graph.Connections.GetLinesFromNodeOutput(childUi, output.Id))
                 {
                     line.SourcePosition = usableArea.GetCenter();
                     line.ColorForType = colorForType;
@@ -112,7 +112,7 @@ namespace T3.Gui.Graph
             // Input Sockets...
 
             // prototype implemention of finding visible relevant inputs
-            var connectionsToNode = GraphRendering.Connections.GetLinesIntoNode(childUi);
+            var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
             SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
             var visibleInputUis = (from inputUi in childSymbolUi.InputUis.Values
                                    where inputUi.Relevancy != Relevancy.Optional ||
@@ -138,7 +138,7 @@ namespace T3.Gui.Graph
                 var isPotentialConnectionTarget = ConnectionMaker.IsMatchingInputType(input.DefaultValue.ValueType);
                 var colorForType = ColorForInputType(input);
 
-                var connectedLines = GraphRendering.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
+                var connectedLines = Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
 
                 // Render Label
                 var inputLabelOpacity = Im.Clamp((GraphCanvas.Current.Scale.X - 1f) / 3f, 0, 1);
