@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -30,7 +31,6 @@ namespace T3.Gui.Graph
             _filterType = type;
         }
 
-        private Type _filterType;
 
         public void Draw()
         {
@@ -73,7 +73,7 @@ namespace T3.Gui.Graph
             }
             ImGui.SetCursorPos(_posInWindow + new Vector2(1, 1));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(7, 6));
-            if (ImGui.InputTextWithHint("", "search", _searchString, 10))
+            if (ImGui.InputText("##filter", ref _searchString, 10))
             {
                 //Log.Debug("completed search input");
             }
@@ -98,6 +98,9 @@ namespace T3.Gui.Graph
             return null;
         }
 
+
+
+
         private void DrawMatchesList()
         {
             ImGui.SetCursorPos(_posInWindow + new Vector2(91 + 8, 1));
@@ -105,7 +108,7 @@ namespace T3.Gui.Graph
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
 
             var typeUi = TypeUiRegistry.Entries[_filterType];
-
+            _filter.Update(_searchString);
 
             if (ImGui.BeginChildFrame(234, new Vector2(150, 200)))
             {
@@ -117,13 +120,20 @@ namespace T3.Gui.Graph
                 if (_selectedSymbol == null && SymbolRegistry.Entries.Values.Any())
                     _selectedSymbol = SymbolRegistry.Entries.Values.FirstOrDefault();
 
+
                 foreach (var symbol in SymbolRegistry.Entries.Values)
                 {
                     if (parentSymbols.Contains(symbol))
                         continue;
 
-                    var matchingInputDef = GetInputMatchingType(symbol, _filterType);
-                    if (matchingInputDef == null)
+                    if (_filterType != null)
+                    {
+                        var matchingInputDef = GetInputMatchingType(symbol, _filterType);
+                        if (matchingInputDef == null)
+                            continue;
+                    }
+
+                    if (!_filter.Match(symbol))
                         continue;
 
                     ImGui.PushID(symbol.Id.GetHashCode());
@@ -165,8 +175,34 @@ namespace T3.Gui.Graph
             ImGui.PopStyleVar(2);
         }
 
+        /// <summary>
+        /// Provides a regular expression to filter for matching <see cref="Symbol"/>s
+        /// </summary>
+        private class NameFilter
+        {
+            public void Update(string newSearchString)
+            {
+                if (_currentFilter == newSearchString)
+                    return;
+
+                _currentFilter = newSearchString;
+                var pattern = string.Join(".*", newSearchString.ToCharArray());
+                _regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            }
+
+            private Regex _regex;
+            private string _currentFilter = null;
+
+            internal bool Match(Symbol symbol)
+            {
+                return _regex.IsMatch(symbol.Name);
+            }
+        }
+        private NameFilter _filter = new NameFilter();
+
         #endregion
 
+        private Type _filterType;
 
         public List<Symbol.Connection> ConnectionsIn = new List<Symbol.Connection>();
         public Symbol.Connection ConnectionOut = null;
