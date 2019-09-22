@@ -4,8 +4,12 @@
   "InstanceType": "T3.Operators.Types.FloatFormat, Operators",
   "Inputs": [
     {
-      "Id": "f36e4078-2608-4308-ab5f-077c05b1181a"/*Input*/,
+      "Id": "f36e4078-2608-4308-ab5f-077c05b1181a"/*Value*/,
       "DefaultValue": 3.0
+    },
+    {
+      "Id": "f36e4078-2608-4308-ab5f-077c05b1181b"/*Format*/,
+      "DefaultValue": "{0:0.000}"
     }
   ],
   "Children": [],

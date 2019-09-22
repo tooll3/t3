@@ -14,10 +14,25 @@ namespace T3.Operators.Types
 
         private void Update(EvaluationContext context)
         {
-            Output.Value = Input.GetValue(context).ToString();
+            var v = Value.GetValue(context);
+            var s = Format.GetValue(context);
+            try
+            {
+                Output.Value = string.IsNullOrEmpty(s)
+                             ? v.ToString()
+                             : string.Format(s, v);
+
+            }
+            catch (System.FormatException e)
+            {
+                Output.Value = "Invalid Format";
+            }
         }
 
         [Input(Guid = "{F36E4078-2608-4308-AB5F-077C05B1181A}")]
-        public readonly InputSlot<float> Input = new InputSlot<float>();
+        public readonly InputSlot<float> Value = new InputSlot<float>();
+
+        [Input(Guid = "{F36E4078-2608-4308-AB5F-077C05B1181B}")]
+        public readonly InputSlot<string> Format = new InputSlot<string>();
     }
 }
