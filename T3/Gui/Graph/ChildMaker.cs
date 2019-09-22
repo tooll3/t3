@@ -1,5 +1,4 @@
 ﻿using ImGuiNET;
-using UiHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +9,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Selection;
+using UiHelpers;
 
 namespace T3.Gui.Graph
 {
@@ -18,7 +18,7 @@ namespace T3.Gui.Graph
     /// It can be connected to other nodes and provide search functionality. It's basically the
     /// T2's CreateOperatorWindow.
     /// </summary>
-    public class BuildingNodes
+    public class ChildMaker
     {
         #region public API ------------------------------------------------------------------------
         public void Draw()
@@ -115,11 +115,11 @@ namespace T3.Gui.Graph
 
                             if (symbol.InputDefinitions.Any())
                             {
-                                BuildingConnections.CompleteConnectionToBuiltNode(parent, newSymbolChild, symbol.InputDefinitions[0]);
+                                ConnectionMaker.CompleteConnectionToBuiltNode(parent, newSymbolChild, symbol.InputDefinitions[0]);
                             }
                             else
                             {
-                                BuildingConnections.Cancel();
+                                ConnectionMaker.Cancel();
                             }
 
                             IsOpen = false;
@@ -159,6 +159,6 @@ namespace T3.Gui.Graph
         private readonly static int _uiId = "DraftNode".GetHashCode();
         private string _searchString = "";
 
-        public static BuildingNodes Current;
+        public static ChildMaker Current;
     }
 }

@@ -41,9 +41,9 @@ namespace T3.Gui.Graph
                 DrawGrid();
                 GraphRendering.DrawGraph();
 
-                if (BuildingConnections.TempConnection != null && ImGui.IsMouseReleased(0))
+                if (ConnectionMaker.TempConnection != null && ImGui.IsMouseReleased(0))
                 {
-                    BuildingConnections.Cancel();
+                    ConnectionMaker.Cancel();
                 }
 
                 _selectionFence.Draw();
@@ -204,6 +204,6 @@ namespace T3.Gui.Graph
         private SelectionFence _selectionFence;
         internal static Vector2 DefaultOpSize = new Vector2(100, 30);
         internal List<SymbolChildUi> ChildUis { get; set; }
-        private BuildingNodes _buildingNodes = new BuildingNodes();
+        private ChildMaker _buildingNodes = new ChildMaker();
     }
 }

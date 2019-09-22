@@ -34,8 +34,8 @@ namespace T3.Gui.Graph
             var symbol = GraphCanvas.Current.CompositionOp.Symbol;
             //var allConnections = symbol.Connections;
             var allConnections = new List<Symbol.Connection>(symbol.Connections);
-            if (BuildingConnections.TempConnection != null)
-                allConnections.Add(BuildingConnections.TempConnection);
+            if (ConnectionMaker.TempConnection != null)
+                allConnections.Add(ConnectionMaker.TempConnection);
 
             var compositionSymbolUi = SymbolUiRegistry.Entries[symbol.Id];
             var childUis = compositionSymbolUi.ChildUis;
@@ -56,13 +56,13 @@ namespace T3.Gui.Graph
                 lines.Add(newLine);
 
 
-                if (c == BuildingConnections.TempConnection)
+                if (c == ConnectionMaker.TempConnection)
                 {
-                    if (c.TargetParentOrChildId == BuildingConnections.NotConnected)
+                    if (c.TargetParentOrChildId == ConnectionMaker.NotConnected)
                     {
                         newLine.TargetPosition = ImGui.GetMousePos();
                     }
-                    else if (c.SourceParentOrChildId == BuildingConnections.NotConnected)
+                    else if (c.SourceParentOrChildId == ConnectionMaker.NotConnected)
                     {
                         newLine.TargetPosition = Vector2.Zero;
                         newLine.SourcePosition = ImGui.GetMousePos();
@@ -89,7 +89,7 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    if (c.TargetParentOrChildId != BuildingConnections.NotConnected)
+                    if (c.TargetParentOrChildId != ConnectionMaker.NotConnected)
                     {
                         var targetNode = childUis.Single(childUi => childUi.Id == c.TargetParentOrChildId);
                         if (!linesIntoNodes.ContainsKey(targetNode))
@@ -113,7 +113,7 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    if (c.SourceParentOrChildId != BuildingConnections.NotConnected)
+                    if (c.SourceParentOrChildId != ConnectionMaker.NotConnected)
                     {
                         var sourceNode = childUis.Single(childUi => childUi.Id == c.SourceParentOrChildId);
                         if (!linesFromNodes.ContainsKey(sourceNode))
@@ -146,7 +146,7 @@ namespace T3.Gui.Graph
                     var colorForType = TypeUiRegistry.Entries[valueType].Color;
 
                     //Note: isItemHovered does not work when dragging is active
-                    var hovered = BuildingConnections.TempConnection != null
+                    var hovered = ConnectionMaker.TempConnection != null
                         ? usableArea.Contains(ImGui.GetMousePos())
                         : ImGui.IsItemHovered();
 
@@ -190,13 +190,13 @@ namespace T3.Gui.Graph
                     THelpers.DebugItemRect("input-slot");
 
                     // Note: isItemHovered does not work when being dragged from another item
-                    var hovered = BuildingConnections.TempConnection != null
+                    var hovered = ConnectionMaker.TempConnection != null
                         ? usableArea.Contains(ImGui.GetMousePos())
                         : ImGui.IsItemHovered();
 
 
                     //var isPotentialConnectionTarget = BuildingConnections.IsInputSlotCurrentConnectionTarget(childUi, inputIndex);
-                    var isPotentialConnectionTarget = BuildingConnections.IsMatchingInputType(input.DefaultValue.ValueType);
+                    var isPotentialConnectionTarget = ConnectionMaker.IsMatchingInputType(input.DefaultValue.ValueType);
                     var colorForType = ColorForInputType(input);
 
                     var connectedLines = linesIntoNodes.ContainsKey(childUi)
@@ -381,26 +381,26 @@ namespace T3.Gui.Graph
 
         private static void DrawOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
-            if (BuildingConnections.IsOutputSlotCurrentConnectionSource(childUi, outputDef))
+            if (ConnectionMaker.IsOutputSlotCurrentConnectionSource(childUi, outputDef))
             {
                 drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                     ColorVariations.Highlight.Apply(colorForType));
 
                 if (ImGui.IsMouseDragging(0))
                 {
-                    BuildingConnections.Update();
+                    ConnectionMaker.Update();
                 }
             }
             else if (hovered)
             {
-                if (BuildingConnections.IsMatchingOutputType(outputDef.ValueType))
+                if (ConnectionMaker.IsMatchingOutputType(outputDef.ValueType))
                 {
                     drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                         ColorVariations.OperatorHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        BuildingConnections.CompleteAtOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
+                        ConnectionMaker.CompleteAtOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
                     }
                 }
                 else
@@ -413,16 +413,16 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(0))
                     {
-                        BuildingConnections.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
+                        ConnectionMaker.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
                     }
                 }
             }
             else
             {
                 var style = ColorVariations.Operator;
-                if (BuildingConnections.TempConnection != null)
+                if (ConnectionMaker.TempConnection != null)
                 {
-                    if (BuildingConnections.IsMatchingOutputType(outputDef.ValueType))
+                    if (ConnectionMaker.IsMatchingOutputType(outputDef.ValueType))
                     {
                         var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
                         colorForType.Rgba.W *= blink;
@@ -467,16 +467,16 @@ namespace T3.Gui.Graph
 
         private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
-            if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
+            if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
             {
                 if (ImGui.IsMouseDragging(0))
                 {
-                    BuildingConnections.Update();
+                    ConnectionMaker.Update();
                 }
             }
             else if (hovered)
             {
-                if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
                     //drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                     //    ColorVariations.Highlight.Apply(colorForType));
@@ -486,7 +486,7 @@ namespace T3.Gui.Graph
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        BuildingConnections.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                        ConnectionMaker.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
                     }
                 }
                 else
@@ -502,16 +502,16 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(0))
                     {
-                        BuildingConnections.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                        ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
                     }
                 }
             }
             else
             {
                 var style = ColorVariations.Operator;
-                if (BuildingConnections.TempConnection != null)
+                if (ConnectionMaker.TempConnection != null)
                 {
-                    if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                    if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                     {
                         var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
                         colorForType.Rgba.W *= blink;
@@ -550,23 +550,23 @@ namespace T3.Gui.Graph
 
         private static void DrawMultiInputSocket(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool isInputHovered, int multiInputIndex, bool isGap)
         {
-            if (BuildingConnections.IsInputSlotCurrentConnectionTarget(targetUi, inputDef, multiInputIndex))
+            if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef, multiInputIndex))
             {
                 if (ImGui.IsMouseDragging(0))
                 {
-                    BuildingConnections.Update();
+                    ConnectionMaker.Update();
                 }
             }
             else if (isInputHovered)
             {
-                if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
                     drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                         ColorVariations.OperatorHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        BuildingConnections.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex);
+                        ConnectionMaker.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex);
                     }
                 }
                 else
@@ -582,7 +582,7 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(0))
                     {
-                        BuildingConnections.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex);
+                        ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex);
                         Log.Debug("started connection at MultiInputIndex:" + multiInputIndex);
                     }
                 }
@@ -590,9 +590,9 @@ namespace T3.Gui.Graph
             else
             {
                 var style = ColorVariations.Operator;
-                if (BuildingConnections.TempConnection != null)
+                if (ConnectionMaker.TempConnection != null)
                 {
-                    if (BuildingConnections.IsMatchingInputType(inputDef.DefaultValue.ValueType))
+                    if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                     {
                         var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
                         colorForType.Rgba.W *= blink;

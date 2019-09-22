@@ -340,7 +340,7 @@
     <Compile Include="Gui\Commands\ChangeInputValueCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSelectableCommand.cs" />
     <Compile Include="Gui\Commands\UndoRedoStack.cs" />
-    <Compile Include="Gui\Graph\BuildingNodes.cs" />
+    <Compile Include="Gui\Graph\ChildMaker.cs" />
     <Compile Include="Gui\Graph\GraphWidgets.cs" />
     <Compile Include="Gui\Animation\CurveEditing\HorizontalScaleLines.cs" />
     <Compile Include="Gui\UiHelpers\ICanvas.cs" />
@@ -349,7 +349,7 @@
     <Compile Include="Gui\Interaction\Key.cs" />
     <Compile Include="Gui\Windows\ParameterWindow.cs" />
     <Compile Include="Gui\SymbolChildUi.cs" />
-    <Compile Include="Gui\Graph\BuildingConnections.cs" />
+    <Compile Include="Gui\Graph\ConnectionMaker.cs" />
     <Compile Include="Gui\Graph\GraphCanvas.cs" />
     <Compile Include="Gui\Graph\InputNodes.cs" />
     <Compile Include="Gui\Graph\OutputNodes.cs" />

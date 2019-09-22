@@ -7,9 +7,11 @@ using T3.Gui.Commands;
 namespace T3.Gui.Graph
 {
     /// <summary>
-    /// Handles the creation of new  <see cref="ConnectionLine"/>. It provides accessors for highlighting matching input slots.
+    /// Handles the creation of new  <see cref="ConnectionLine"/>s. 
+    /// It provides accessors for highlighting matching input slots and methods that need to be
+    /// called connections are completed or aborted.
     /// </summary>
-    public static class BuildingConnections
+    public static class ConnectionMaker
     {
         public static Symbol.Connection TempConnection = null;
 
@@ -142,7 +144,7 @@ namespace T3.Gui.Graph
                                                       targetParentOrChildId: targetUi.SymbolChild.Id,
                                                       targetSlotId: input.Id);
             // divide by 2 to get correct insertion index in existing connections
-            UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex/2));
+            UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex / 2));
             TempConnection = null;
         }
 
@@ -156,7 +158,7 @@ namespace T3.Gui.Graph
             TempConnection = null;
         }
 
-        public static void BuildNodeAtTarget(BuildingNodes nodeBuilding, Vector2 canvasPosition)
+        public static void BuildNodeAtTarget(ChildMaker nodeBuilding, Vector2 canvasPosition)
         {
             nodeBuilding.OpenAt(canvasPosition);
             //Cancel();
@@ -242,7 +244,7 @@ namespace T3.Gui.Graph
         public static Guid UseSymbolContainer = Guid.Empty;
 
         /// <summary>
-        /// A special id indicating that the connection is ending in the <see cref="BuildingNodes"/>
+        /// A special id indicating that the connection is ending in the <see cref="ChildMaker"/>
         /// </summary>
         public static Guid UseDraftOperator = Guid.NewGuid();
     }
