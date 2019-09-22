@@ -16,13 +16,13 @@ namespace T3.Gui.Graph
     /// <summary>
     /// A window that renders a node graph 
     /// </summary>
-    public class GraphCanvasWindow : Window
+    public class GraphWindow : Window
     {
         public GraphCanvas Canvas { get; private set; }
 
-        public static List<GraphCanvasWindow> WindowInstances = new List<GraphCanvasWindow>();
+        public static List<GraphWindow> WindowInstances = new List<GraphWindow>();
 
-        public GraphCanvasWindow() : base()
+        public GraphWindow() : base()
         {
             _instanceCounter++;
             _title = "Graph##" + _instanceCounter;
@@ -47,7 +47,7 @@ namespace T3.Gui.Graph
 
         protected override void DrawAllInstances()
         {
-            foreach (var w in new List<GraphCanvasWindow>(WindowInstances))
+            foreach (var w in new List<GraphWindow>(WindowInstances))
             {
                 w.DrawOneInstance();
             }
@@ -95,7 +95,7 @@ namespace T3.Gui.Graph
 
         protected override void AddAnotherInstance()
         {
-            new GraphCanvasWindow();
+            new GraphWindow();
         }
 
 

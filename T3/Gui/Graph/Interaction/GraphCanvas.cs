@@ -37,7 +37,7 @@ namespace T3.Gui.Graph
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                 DrawGrid();
-                GraphRendering.DrawGraph();
+                Graph.DrawGraph();
 
                 if (ConnectionMaker.TempConnection != null && ImGui.IsMouseReleased(0))
                 {

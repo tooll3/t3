@@ -23,12 +23,12 @@ namespace T3.Gui.Windows
                 SelectedInstance = null;
                 SelectedUi = null;
 
-                if (GraphCanvasWindow.WindowInstances.Count == 0)
+                if (GraphWindow.WindowInstances.Count == 0)
                 {
                     return;
                 }
 
-                var defaultGraphWindow = GraphCanvasWindow.WindowInstances[0] as GraphCanvasWindow;
+                var defaultGraphWindow = GraphWindow.WindowInstances[0] as GraphWindow;
                 SelectedInstance = defaultGraphWindow.Canvas.CompositionOp;
 
                 if (SelectedInstance == null)
