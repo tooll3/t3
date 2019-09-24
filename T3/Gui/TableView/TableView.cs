@@ -35,7 +35,6 @@ namespace T3.graph
         }
 
         private static int _columnCount = 3;
-        private static Vector3 _values;
         private static Random random = new Random();
     }
 }

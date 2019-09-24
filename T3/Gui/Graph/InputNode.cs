@@ -126,7 +126,5 @@ namespace T3.Gui.Graph
             }
             ImGui.PopID();
         }
-
-        private static ImDrawListPtr _drawList;
     }
 }
