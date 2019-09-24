@@ -8,7 +8,7 @@
       "DefaultValue": 3.0
     },
     {
-      "Id": "f36e4078-2608-4308-ab5f-077c05b1181b"/*Format*/,
+      "Id": "b2b32c44-62d8-4acb-a9a7-4856ec7a33bb"/*Format*/,
       "DefaultValue": "{0:0.000}"
     }
   ],
