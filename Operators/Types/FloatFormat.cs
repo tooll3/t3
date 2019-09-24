@@ -1,4 +1,5 @@
-﻿using T3.Core.Operator;
+﻿using System.Globalization;
+using T3.Core.Operator;
 
 namespace T3.Operators.Types
 {
@@ -18,12 +19,9 @@ namespace T3.Operators.Types
             var s = Format.GetValue(context);
             try
             {
-                Output.Value = string.IsNullOrEmpty(s)
-                             ? v.ToString()
-                             : string.Format(s, v);
-
+                Output.Value = string.IsNullOrEmpty(s) ? v.ToString(CultureInfo.InvariantCulture) : string.Format(CultureInfo.InvariantCulture, s, v);
             }
-            catch (System.FormatException e)
+            catch (System.FormatException)
             {
                 Output.Value = "Invalid Format";
             }
