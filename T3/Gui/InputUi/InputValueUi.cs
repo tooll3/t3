@@ -14,8 +14,8 @@ namespace T3.Gui.InputUi
 {
     public abstract class InputValueUi<T> : IInputUi
     {
-        public static float ConnectionAreaWidth = 30;
-        public static float ParameterNameWidth = 120;
+        public static float ConnectionAreaWidth = 30.0f;
+        public static float ParameterNameWidth = 120.0f;
 
         public Symbol.InputDefinition InputDefinition { get; set; }
         public Guid Id => InputDefinition.Id;
@@ -29,12 +29,12 @@ namespace T3.Gui.InputUi
             var editState = InputEditState.Nothing;
             var typeColor = TypeUiRegistry.Entries[Type].Color;
             var animator = compositionUi.Symbol.Animator;
-            bool animated = animator.IsInputSlotAnimated(inputSlot);
+            bool isAnimated = animator.IsInputSlotAnimated(inputSlot);
 
             if (inputSlot is InputSlot<T> typedInputSlot)
             {
                 var input = inputSlot.Input;
-                if (inputSlot.IsConnected || animated)
+                if (inputSlot.IsConnected || isAnimated)
                 {
                     if (typedInputSlot.IsMultiInput)
                     {
@@ -60,18 +60,19 @@ namespace T3.Gui.InputUi
                             {
                                 symbolChildUi.IsSelected = false;
                                 var compositionSymbol = compositionUi.Symbol;
-                                var allConnections = compositionSymbol.Connections.FindAll(c => c.TargetParentOrChildId == symbolChildUi.Id && c.TargetSlotId == inputSlot.Id);
+                                var allConnections = compositionSymbol.Connections.FindAll(c => c.IsTargetOf(symbolChildUi.Id, inputSlot.Id));
                                 var connection = allConnections[multiInputIndex];
                                 var sourceUi = compositionUi.GetSelectables()
                                                             .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
                                 sourceUi.IsSelected = true;
                             }
+
                             ImGui.PopStyleColor();
 
                             ImGui.SameLine();
 
-                            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1f, 0.5f));
-                            ImGui.Button("#" + multiInputIndex, new Vector2(ParameterNameWidth, 0));
+                            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
+                            ImGui.Button("#" + multiInputIndex, new Vector2(ParameterNameWidth, 0.0f));
                             ImGui.PopStyleVar();
                             ImGui.SameLine();
 
@@ -82,14 +83,15 @@ namespace T3.Gui.InputUi
                             ImGui.PopStyleColor();
                             ImGui.PopID();
                         }
+
                         ImGui.Spacing();
                     }
                     else
                     {
-                        if (animated)
+                        if (isAnimated)
                         {
                             ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
-                            if (ImGui.Button("A", new Vector2(ConnectionAreaWidth, 0)))
+                            if (ImGui.Button("A", new Vector2(ConnectionAreaWidth, 0.0f)))
                             {
                                 animator.RemoveAnimationFrom(inputSlot);
                             }
@@ -97,13 +99,12 @@ namespace T3.Gui.InputUi
                         else
                         {
                             ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
-                            if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0)))
+                            if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0.0f)))
                             {
                                 symbolChildUi.IsSelected = false;
                                 var compositionSymbol = compositionUi.Symbol;
-                                var con = compositionSymbol.Connections.First(c => c.TargetParentOrChildId == symbolChildUi.Id && c.TargetSlotId == inputSlot.Id);
-                                var sourceUi = compositionUi.GetSelectables()
-                                                            .First(ui => ui.Id == con.SourceParentOrChildId || ui.Id == con.SourceSlotId);
+                                var con = compositionSymbol.Connections.First(c => c.IsTargetOf(symbolChildUi.Id, inputSlot.Id));
+                                var sourceUi = compositionUi.GetSelectables().First(ui => ui.Id == con.SourceParentOrChildId || ui.Id == con.SourceSlotId);
                                 sourceUi.IsSelected = true;
                             }
                         }
@@ -112,8 +113,8 @@ namespace T3.Gui.InputUi
                         ImGui.SameLine();
 
                         // Draw Name
-                        ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1f, 0.5f));
-                        ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0));
+                        ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
+                        ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
                         if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                         {
                             if (ImGui.MenuItem("Parameters settings"))
@@ -149,7 +150,7 @@ namespace T3.Gui.InputUi
                 else
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
-                    if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0)))
+                    if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         animator.CreateInputUpdateAction<float>(inputSlot);
                     }
@@ -158,8 +159,8 @@ namespace T3.Gui.InputUi
                     ImGui.SameLine();
 
                     // Draw Name
-                    ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1f, 0.5f));
-                    ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0));
+                    ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
+                    ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
                     if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                     {
                         if (ImGui.MenuItem("Set as default", !input.IsDefault))
@@ -260,7 +261,7 @@ namespace T3.Gui.InputUi
 
         public Type Type { get; } = typeof(T);
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
-        public Vector2 Size { get; set; } = new Vector2(100, 30);
+        public Vector2 Size { get; set; } = new Vector2(100.0f, 30.0f);
         public bool IsSelected { get; set; }
     }
 }

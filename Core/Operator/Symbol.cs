@@ -1,12 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
 using T3.Core.Logging;
-
-//using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace T3.Core.Operator
 {
@@ -445,16 +441,19 @@ namespace T3.Core.Operator
                 return GetHashCode() == other?.GetHashCode();
             }
 
-            public bool IsConnectedToSymbolOutput
+            public bool IsSourceOf(Guid sourceParentOrChildId, Guid sourceSlotId)
             {
-                get { return TargetParentOrChildId == Guid.Empty; }
+                return SourceParentOrChildId == sourceParentOrChildId && SourceSlotId == sourceSlotId;
             }
 
-            public bool IsConnectedToSymbolInput
+            public bool IsTargetOf(Guid targetParentOrChildId, Guid targetSlotId)
             {
-                get { return SourceParentOrChildId == Guid.Empty; }
+                return TargetParentOrChildId == targetParentOrChildId && TargetSlotId == targetSlotId;
             }
 
+            public bool IsConnectedToSymbolOutput => TargetParentOrChildId == Guid.Empty;
+
+            public bool IsConnectedToSymbolInput => SourceParentOrChildId == Guid.Empty;
         }
         #endregion
     }
