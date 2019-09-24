@@ -34,7 +34,7 @@ namespace T3.Gui.Windows
             if (texture == null)
                 return;
 
-            if (_srv == null || _srv.Resource != texture)
+            if (_srv == null || _srv.Resource.NativePointer != texture.NativePointer)
             {
                 _srv?.Dispose();
                 _srv = new ShaderResourceView(ResourceManager.Instance()._device, texture);

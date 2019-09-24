@@ -3,6 +3,7 @@ using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
@@ -31,6 +32,7 @@ namespace T3
         private BlendState _blendState;
         private DepthStencilState _depthStencilState;
         private int _vertexBufferSize = 5000, _indexBufferSize = 1000;
+        private Dictionary<IntPtr, ShaderResourceView> _srvCache = new Dictionary<IntPtr,ShaderResourceView>();
 
         private IntPtr _fontAtlasID = (IntPtr)1;
 
@@ -191,7 +193,12 @@ namespace T3
                     {
                         _deviceContext.Rasterizer.SetScissorRectangle((int)(pcmd.ClipRect.X - pos.X), (int)(pcmd.ClipRect.Y - pos.Y),
                                                                       (int)(pcmd.ClipRect.Z - pos.X), (int)(pcmd.ClipRect.W - pos.Y));
-                        _deviceContext.PixelShader.SetShaderResource(0, (ShaderResourceView)pcmd.TextureId);
+                        if (!_srvCache.TryGetValue(pcmd.TextureId, out var srv))
+                        {
+                            srv = new ShaderResourceView(pcmd.TextureId);
+                            _srvCache.Add(pcmd.TextureId, srv);
+                        }
+                        _deviceContext.PixelShader.SetShaderResource(0, srv);
                         _deviceContext.DrawIndexed((int)pcmd.ElemCount, idx_offset, vtx_offset);
                     }
 
@@ -400,6 +407,10 @@ namespace T3
             if (_device == null)
                 return;
 
+            foreach (var entry in _srvCache)
+            {
+                entry.Value.Dispose();
+            }
             DisposeObj(ref _fontSampler);
             DisposeObj(ref _fontTextureView);
             DisposeObj(ref _ib);

@@ -254,6 +254,7 @@ namespace T3
             resourceManager.CreateOperatorEntry(@"..\Core\Operator\Types\Add.cs", "Add");
             //resourceManager.CreateOperatorEntry(@"..\Core\Operator\Types\Add.cs", "Add");
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
+            ShaderResourceView backgroundSrv = null;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -294,8 +295,12 @@ namespace T3
                                      {
                                          if (resourceManager.Resources[resourceManager.TestId] is TextureResource textureResource)
                                          {
-                                             var srv1 = new ShaderResourceView(device, textureResource.Texture);
-                                             context.PixelShader.SetShaderResource(0, srv1);
+                                             if (backgroundSrv == null || backgroundSrv.Resource.NativePointer != textureResource.Texture.NativePointer)
+                                             {
+                                                 backgroundSrv?.Dispose();
+                                                 backgroundSrv = new ShaderResourceView(device, textureResource.Texture);
+                                             }
+                                             context.PixelShader.SetShaderResource(0, backgroundSrv);
                                          }
                                      }
                                      else if (resourceManager.Resources[srvId] is ShaderResourceViewResource srvr)
