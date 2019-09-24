@@ -205,7 +205,7 @@ namespace T3.Gui.Animation.CurveEditing
             Horizontal,
             Both
         }
-        private MoveDirection _moveDirection = MoveDirection.Undecided;
+        // private MoveDirection _moveDirection = MoveDirection.Undecided;
 
 
         public void ManipulateV(double newV)

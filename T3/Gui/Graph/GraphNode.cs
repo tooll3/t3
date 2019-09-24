@@ -16,8 +16,6 @@ namespace T3.Gui.Graph
     /// </summary>
     static class GraphNode
     {
-        private static ChangeSelectableCommand _moveCommand = null;
-
         public static void Draw(SymbolChildUi childUi)
         {
             _drawList = Graph._drawList;

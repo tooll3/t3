@@ -233,7 +233,7 @@ namespace T3.Core.Operator
             var conHashToCount = new Dictionary<long, int>(Connections.Count);
             foreach (var connection in Connections)
             {
-                long hash = ((long)connection.TargetSlotId.GetHashCode() << 32) | connection.TargetParentOrChildId.GetHashCode();
+                long hash = ((long)connection.TargetSlotId.GetHashCode() << 32) | (long)connection.TargetParentOrChildId.GetHashCode();
                 if (!conHashToCount.TryGetValue(hash, out int count))
                     conHashToCount.Add(hash, 0);
 

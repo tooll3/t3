@@ -13,8 +13,6 @@ namespace T3.Operators.Types
         [Output(Guid = "{0E45C596-C80F-4927-941F-E3199401AA10}")]
         public readonly Slot<SamplerState> SamplerState = new Slot<SamplerState>();
 
-        private uint _samplerResId;
-
         public SamplerStateOp()
         {
             SamplerState.UpdateAction = Update;

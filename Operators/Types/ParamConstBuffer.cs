@@ -10,8 +10,6 @@ namespace T3.Operators.Types
         [Output(Guid = "{89957A76-09F1-4448-B23E-39DFDD0AA5B0}")]
         public readonly Slot<Buffer> Buffer = new Slot<Buffer>();
 
-        private uint _bufferResId;
-
         public ParamConstBuffer()
         {
             Buffer.UpdateAction = Update;

@@ -27,7 +27,6 @@ namespace T3.Gui.InputUi
     public interface IInputUi : ISelectable
     {
         Symbol.InputDefinition InputDefinition { get; set; }
-        Guid Id { get; }
         Type Type { get; }
         Relevancy Relevancy { get; set; }
 

@@ -13,8 +13,6 @@ namespace T3.Operators.Types
         [Output(Guid = "{6C118567-8827-4422-86CC-4D4D00762D87}")]
         public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new Slot<SharpDX.Direct3D11.Buffer>();
 
-        private uint _bufferResId;
-
         public TimeConstBuffer()
         {
             Buffer.UpdateAction = Update;
