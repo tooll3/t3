@@ -32,7 +32,7 @@ namespace T3.Operators.Types
         [Input(Guid = "{F36E4078-2608-4308-AB5F-077C05B1181A}")]
         public readonly InputSlot<float> Value = new InputSlot<float>();
 
-        [Input(Guid = "{F36E4078-2608-4308-AB5F-077C05B1181B}")]
+        [Input(Guid = "{B2B32C44-62D8-4ACB-A9A7-4856EC7A33BB}")]
         public readonly InputSlot<string> Format = new InputSlot<string>();
     }
 }
