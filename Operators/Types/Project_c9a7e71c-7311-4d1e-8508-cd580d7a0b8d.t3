@@ -68,6 +68,11 @@
       "Id": "a7e446cf-a815-4035-bca0-eb9919089ac6"/*ComputeStageExample*/,
       "SymbolId": "25bf7552-68fa-463a-a0f6-8138b8688f9a",
       "InputValues": []
+    },
+    {
+      "Id": "e85a635f-bd24-4dbe-b06d-cb5d04eb49cf"/*ComputeWobble*/,
+      "SymbolId": "7b95571c-8391-4313-a008-7020a14887f4",
+      "InputValues": []
     }
   ],
   "Connections": [

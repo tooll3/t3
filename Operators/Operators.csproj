@@ -56,6 +56,7 @@
     <Compile Include="Types\ComputeShader.cs" />
     <Compile Include="Types\ComputeShaderStage.cs" />
     <Compile Include="Types\ComputeStageExample.cs" />
+    <Compile Include="Types\ComputeWobble.cs" />
     <Compile Include="Types\ParamConstBuffer.cs" />
     <Compile Include="Types\SamplerStateOp.cs" />
     <Compile Include="Types\ShowTexture2d.cs" />
@@ -81,6 +82,10 @@
     <Content Include="Types\ComputeShaderStage_8bef116d-7d1c-4c1b-b902-25c1d5e925a9.t3ui" />
     <Content Include="Types\ComputeShader_a256d70f-adb3-481d-a926-caf35bd3e64c.t3" />
     <Content Include="Types\ComputeShader_a256d70f-adb3-481d-a926-caf35bd3e64c.t3ui" />
+    <Content Include="Types\ComputeStageExample_25bf7552-68fa-463a-a0f6-8138b8688f9a.t3" />
+    <Content Include="Types\ComputeStageExample_25bf7552-68fa-463a-a0f6-8138b8688f9a.t3ui" />
+    <Content Include="Types\ComputeWobble_7b95571c-8391-4313-a008-7020a14887f4.t3" />
+    <Content Include="Types\ComputeWobble_7b95571c-8391-4313-a008-7020a14887f4.t3ui" />
     <Content Include="Types\Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3" />
     <Content Include="Types\Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3ui" />
     <Content Include="Types\FloatFormat_39c96cfd-dedf-4f76-a471-d1c26c9ba9fa.t3" />
@@ -99,6 +104,8 @@
     <Content Include="Types\SamplerStateOp_9515d59d-0bd5-406b-96da-6a5f60215700.t3ui" />
     <Content Include="Types\SelectFloatFromList_0841cdd4-0106-4f4e-826b-8de23bb5b5f0.t3" />
     <Content Include="Types\SelectFloatFromList_0841cdd4-0106-4f4e-826b-8de23bb5b5f0.t3ui" />
+    <Content Include="Types\ShowTexture2d_b0212daa-7fba-4f6a-851c-3dd9e2e8a23e.t3" />
+    <Content Include="Types\ShowTexture2d_b0212daa-7fba-4f6a-851c-3dd9e2e8a23e.t3ui" />
     <Content Include="Types\StringConcat_48ab9824-76ca-4238-800f-9cf95311e6c0.t3" />
     <Content Include="Types\StringConcat_48ab9824-76ca-4238-800f-9cf95311e6c0.t3ui" />
     <Content Include="Types\StringLength_4c496e8d-2a83-4493-a7a4-fdad29ef3f7d.t3" />

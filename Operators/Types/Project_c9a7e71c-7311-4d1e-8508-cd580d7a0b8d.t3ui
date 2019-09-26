@@ -86,6 +86,13 @@
         "X": 618.0,
         "Y": 276.0
       }
+    },
+    {
+      "ChildId": "e85a635f-bd24-4dbe-b06d-cb5d04eb49cf"/*ComputeWobble*/,
+      "Position": {
+        "X": 608.0,
+        "Y": 413.0
+      }
     }
   ],
   "OutputUis": [

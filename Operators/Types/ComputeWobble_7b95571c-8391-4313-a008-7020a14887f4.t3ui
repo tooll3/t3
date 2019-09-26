@@ -1,0 +1,95 @@
+{
+  "Id": "7b95571c-8391-4313-a008-7020a14887f4"/*ComputeWobble*/,
+  "InputUis": [
+    {
+      "InputId": "0214fd61-536b-4a58-9236-00466698269f"/*Speed*/,
+      "Type": "System.Single, mscorlib",
+      "Relevancy": "Required",
+      "Position": {
+        "X": 228.0,
+        "Y": 563.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "83771c7c-f861-4533-b4d2-3d9782a4c973"/*Strength*/,
+      "Type": "System.Single, mscorlib",
+      "Relevancy": "Required",
+      "Position": {
+        "X": 371.0,
+        "Y": 565.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "470ef595-08d2-4445-b7f2-e361b8d66cc7"/*ComputeShader*/,
+      "Position": {
+        "X": 229.0,
+        "Y": 339.0
+      }
+    },
+    {
+      "ChildId": "68e0c364-3637-4f8b-a135-715c50c51799"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 439.999969,
+        "Y": 172.000046
+      }
+    },
+    {
+      "ChildId": "fa04e247-94a0-43c4-b531-a69892feddf2"/*TimeConstBuffer*/,
+      "Position": {
+        "X": 370.0,
+        "Y": 348.0
+      }
+    },
+    {
+      "ChildId": "e5b6ae35-d862-4c17-a611-4c0600588a54"/*ParamConstBuffer*/,
+      "Position": {
+        "X": 504.0,
+        "Y": 347.0
+      }
+    },
+    {
+      "ChildId": "b4484f05-d743-45b4-a657-382ffa4c8583"/*LoadTexture2d*/,
+      "Position": {
+        "X": 640.0,
+        "Y": 350.0
+      }
+    },
+    {
+      "ChildId": "224c8679-f204-47b1-aa17-25bc49eb47c2"/*SamplerStateOp*/,
+      "Position": {
+        "X": 757.4162,
+        "Y": 350.388733
+      }
+    },
+    {
+      "ChildId": "0e0d1b88-98e1-4986-8f77-ff262d53a7f1"/*Texture2d*/,
+      "Position": {
+        "X": 874.4161,
+        "Y": 349.3887
+      }
+    },
+    {
+      "ChildId": "a0a1f453-5391-4c36-80e8-af1a3e574940"/*ShowTexture2d*/,
+      "Position": {
+        "X": 549.4164,
+        "Y": 92.38898
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "f4e9bc98-6ed2-48a2-a2b6-a3372a74ea1b"/*Output*/,
+      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
+      "Position": {
+        "X": 555.999939,
+        "Y": 9.00003052
+      }
+    }
+  ]
+}
