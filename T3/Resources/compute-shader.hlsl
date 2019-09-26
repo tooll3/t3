@@ -31,7 +31,7 @@ void main(uint3 i : SV_DispatchThreadID)
     uv = uv*2.0 - 1.0;
     float l = length(uv);
     uv *= sin(l*time);
-    uv *= b;//sin(time);
+    uv *= b;
     uv = uv*0.5 + 0.5;
     //float4 inputColor = inputTexture.Load(int3(i.x, i.y, 3)); // using mips here works, below not!
     float4 inputColor = inputTexture.SampleLevel(texSampler, uv, 0.0);

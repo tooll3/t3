@@ -1,0 +1,79 @@
+{
+  "Id": "25bf7552-68fa-463a-a0f6-8138b8688f9a"/*ComputeStageExample*/,
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "0cec7082-e6a6-42a5-8f97-7e8b29dacdbf"/*ShowTexture2d*/,
+      "Position": {
+        "X": 548.0,
+        "Y": 274.0
+      }
+    },
+    {
+      "ChildId": "f6b07274-d3c6-4b5d-95f6-626491dea1c1"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 387.0,
+        "Y": 358.0
+      }
+    },
+    {
+      "ChildId": "17c87f9e-edc7-4e97-80d7-e8a71d559de2"/*ComputeShader*/,
+      "Position": {
+        "X": 134.0,
+        "Y": 531.0
+      }
+    },
+    {
+      "ChildId": "5a0ba5a3-889c-43eb-985f-65efafea63c4"/*LoadTexture2d*/,
+      "Position": {
+        "X": 479.0,
+        "Y": 536.0
+      }
+    },
+    {
+      "ChildId": "fd9e7160-9e27-4968-9025-e1f62062da75"/*LoadTexture2d*/,
+      "Position": {
+        "X": 593.0,
+        "Y": 536.0
+      }
+    },
+    {
+      "ChildId": "70eafa03-bccb-4ba5-9b57-abe959b5d715"/*ParamConstBuffer*/,
+      "Position": {
+        "X": 363.0,
+        "Y": 535.0
+      }
+    },
+    {
+      "ChildId": "c570817b-680f-485b-bc53-db6f7f14b9ae"/*TimeConstBuffer*/,
+      "Position": {
+        "X": 248.0,
+        "Y": 535.0
+      }
+    },
+    {
+      "ChildId": "740aa386-f430-49b1-be4c-30b968f21f5f"/*SamplerStateOp*/,
+      "Position": {
+        "X": 708.0,
+        "Y": 536.0
+      }
+    },
+    {
+      "ChildId": "ca7ef950-3ec4-467f-828a-dbba9b71e53f"/*Texture2d*/,
+      "Position": {
+        "X": 822.0,
+        "Y": 539.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "405bb68e-9808-4aea-9e05-c3486b3e045d"/*Output*/,
+      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
+      "Position": {
+        "X": 355.0,
+        "Y": 56.0
+      }
+    }
+  ]
+}
