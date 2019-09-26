@@ -1,4 +1,5 @@
 todo:
+- Fixed loading the same texture file from different instances (currently 2nd one is rejected)
 - Replace Guids with uint ids during runtime
 - How to animate struct type like Vec3 or Color
 - Showing enums produces always the same code, extract function for this and even better cached object per enum type
