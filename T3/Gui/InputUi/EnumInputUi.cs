@@ -22,7 +22,7 @@ namespace T3.Gui.InputUi
             {
                 // show as checkboxes
                 InputEditState editState = InputEditState.Nothing;
-                if (ImGui.TreeNode("##enumParam"))
+                if (ImGui.TreeNode("##enumParam124"))
                 {
                     // todo: refactor crappy code below, works but ugly!
                     bool[] checks = new bool[values.Length];
