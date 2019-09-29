@@ -301,6 +301,7 @@
     <Compile Include="Gui\Commands\ChangeSymbolChildNameCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolNameCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolNamespaceCommand.cs" />
+    <Compile Include="Gui\Commands\CopySymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\DeleteSymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\DeleteConnectionCommand.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />

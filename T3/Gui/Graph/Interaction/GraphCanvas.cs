@@ -118,8 +118,8 @@ namespace T3.Gui.Graph
 
                 if (selectedChildren.Count > 0)
                 {
-                    var label = selectedChildren.Count == 1
-                        ? $"{selectedChildren[0].SymbolChild.ReadableName} Item..." : $"{selectedChildren.Count} Items...";
+                    bool oneElementSelected = selectedChildren.Count == 1;
+                    var label = oneElementSelected ? $"{selectedChildren[0].SymbolChild.ReadableName} Item..." : $"{selectedChildren.Count} Items...";
 
                     ImGui.Text(label);
                     if (ImGui.MenuItem(" Rename..", null, false, false)) { }
@@ -131,7 +131,17 @@ namespace T3.Gui.Graph
                         UndoRedoStack.AddAndExecute(cmd);
                     }
 
-                    if (ImGui.MenuItem(" Copy", null, false, false)) { }
+                    if (ImGui.MenuItem(" Copy", null, false, oneElementSelected))
+                    {
+                        var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                        var cmd = new CopySymbolChildCommand(compositionSymbolUi, selectedChildren[0].Id, compositionSymbolUi)
+                                  {
+                                      PosOnCanvas = InverseTransformPosition(ImGui.GetMousePos())
+                                  };
+
+                        UndoRedoStack.AddAndExecute(cmd);
+                    }
+                    
                     ImGui.Separator();
                 }
                 if (ImGui.MenuItem("Rename..", null, false, false)) { }
