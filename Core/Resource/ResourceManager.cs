@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -617,8 +618,13 @@ namespace T3.Core
         {
             if (FileResources.TryGetValue(filename, out var existingFileResource))
             {
-                Log.Error($"Trying to create an already existing file resource ('{filename}'");
-                return (existingFileResource.ResourceIds.First(), NULL_RESOURCE);
+                Log.Info($"Trying to create an already existing file resource '{filename}' - returning the existing one.");
+                uint textureId = existingFileResource.ResourceIds.First();
+                existingFileResource.FileChangeAction += fileChangeAction;
+                uint srvId = (from srvResourceEntry in ShaderResourceViews
+                              where srvResourceEntry.TextureId == textureId
+                              select srvResourceEntry.Id).Single();
+                return (textureId, srvId);
             }
 
             Texture2D texture = null;
@@ -631,7 +637,7 @@ namespace T3.Core
             uint shaderResourceViewId = CreateShaderResourceView(textureResourceEntry.Id, name);
 
             var fileResource = new FileResource(filename, new[] { textureResourceEntry.Id, shaderResourceViewId });
-            fileResource.FileChangeAction = fileChangeAction;
+            fileResource.FileChangeAction += fileChangeAction;
             FileResources.Add(filename, fileResource);
 
             return (textureResourceEntry.Id, shaderResourceViewId);

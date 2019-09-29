@@ -1,5 +1,6 @@
 todo:
-- Fixed loading the same texture file from different instances (currently 2nd one is rejected)
+- Add copy operator functionality
+- Add color grade op
 - Replace Guids with uint ids during runtime
 - How to animate struct type like Vec3 or Color
 - Showing enums produces always the same code, extract function for this and even better cached object per enum type
@@ -13,6 +14,7 @@ todo:
 - General op replacement/compilation after change
  
 done:
+* Fixed loading the same texture file from different instances (currently 2nd one is rejected)
 * Clean up multi input handling for graph invalidation
 * Remove abstract Slot class and replace with ISlot
 * Reactivate dirty flag
