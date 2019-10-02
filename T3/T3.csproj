@@ -304,6 +304,7 @@
     <Compile Include="Gui\Commands\CopySymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\DeleteSymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\DeleteConnectionCommand.cs" />
+    <Compile Include="Gui\Graph\TimeControls.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
     <Compile Include="Gui\Styling\CustomComponents.cs" />
     <Compile Include="Gui\Graph\Interaction\SelectableMovement.cs" />
