@@ -1,57 +1,86 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using T3.Core.Operator;
-using T3.Gui.Graph;
 
 namespace T3.Gui.Commands
 {
     public class CopySymbolChildCommand : ICommand
     {
         public string Name => "Add Symbol Child";
-        public bool IsUndoable => true;
-        public Guid AddedChildId => _addedChildId;
 
-        public CopySymbolChildCommand(SymbolUi sourceCompositionUi, Guid symbolChildIdToCopy, SymbolUi targetCompositionUi)
+        public bool IsUndoable => true;
+//        public Guid AddedChildrenIds => _addedChildrenIds;
+
+        public CopySymbolChildCommand(SymbolUi sourceCompositionUi, IEnumerable<SymbolChildUi> symbolChildrenToCopy, SymbolUi targetCompositionUi,
+                                      Vector2 targetPosition)
         {
             _sourceSymbolId = sourceCompositionUi.Symbol.Id;
             _targetSymbolId = targetCompositionUi.Symbol.Id;
-            _childIdToCopy = symbolChildIdToCopy;
-            _addedChildId = Guid.NewGuid();
+            _targetPosition = targetPosition;
+
+            Vector2 upperLeftCorner = new Vector2(Single.MaxValue, Single.MaxValue);
+            foreach (var childToCopy in symbolChildrenToCopy)
+            {
+                upperLeftCorner = Vector2.Min(upperLeftCorner, childToCopy.PosOnCanvas);
+            }
+
+            foreach (var childToCopy in symbolChildrenToCopy)
+            {
+                _childrenToCopy.Add(new Entry(childToCopy.Id, Guid.NewGuid(), childToCopy.PosOnCanvas - upperLeftCorner, childToCopy.Size));
+            }
         }
 
         public void Undo()
         {
             var parentSymbolUi = SymbolUiRegistry.Entries[_targetSymbolId];
-            parentSymbolUi.RemoveChild(_addedChildId);
+            foreach (var child in _childrenToCopy)
+            {
+                parentSymbolUi.RemoveChild(child.AddedId);
+            }
         }
 
         public void Do()
         {
             var targetCompositionSymbolUi = SymbolUiRegistry.Entries[_targetSymbolId];
             var sourceCompositionSymbolUi = SymbolUiRegistry.Entries[_sourceSymbolId];
-            SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == _childIdToCopy);
-            var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
-            targetCompositionSymbolUi.AddChild(symbolToAdd, _addedChildId, PosOnCanvas, Size);
-            var targetSymbol = targetCompositionSymbolUi.Symbol;
-            SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == _addedChildId);
-            var newSymbolInputs = newSymbolChild.InputValues;
-            foreach (var input in symbolChildToCopy.InputValues)
+            foreach (var childToCopy in _childrenToCopy)
             {
-                var newInput = newSymbolInputs[input.Key];
-                newInput.Value.Assign(input.Value.Value.Clone());
-                newInput.IsDefault = input.Value.IsDefault;
+                SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == childToCopy.ChildId);
+                var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
+                targetCompositionSymbolUi.AddChild(symbolToAdd, childToCopy.AddedId, _targetPosition + childToCopy.RelativePosition, childToCopy.Size);
+                var targetSymbol = targetCompositionSymbolUi.Symbol;
+                SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
+                var newSymbolInputs = newSymbolChild.InputValues;
+                foreach (var input in symbolChildToCopy.InputValues)
+                {
+                    var newInput = newSymbolInputs[input.Key];
+                    newInput.Value.Assign(input.Value.Value.Clone());
+                    newInput.IsDefault = input.Value.IsDefault;
+                }
             }
         }
 
-        // core data
-        // private readonly Guid _sourceSymbolId;
-        private readonly Guid _childIdToCopy;
-        private readonly Guid _addedChildId;
+        struct Entry
+        {
+            public Entry(Guid childId, Guid addedId, Vector2 relativePosition, Vector2 size)
+            {
+                ChildId = childId;
+                AddedId = addedId;
+                RelativePosition = relativePosition;
+                Size = size;
+            }
+
+            public Guid ChildId;
+            public Guid AddedId;
+            public Vector2 RelativePosition;
+            public Vector2 Size;
+        }
+
+        private Vector2 _targetPosition;
+        private int bla;
         private readonly Guid _sourceSymbolId;
         private readonly Guid _targetSymbolId;
-
-        // ui data
-        public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
-        public Vector2 Size { get; set; } = GraphCanvas.DefaultOpSize;
+        private readonly List<Entry> _childrenToCopy = new List<Entry>();
     }
 }
