@@ -69,7 +69,7 @@ namespace T3.Gui.Graph
                     dl.ChannelsSetCurrent(1);
                     {
                         DrawBreadcrumbs();
-                        DrawTimeControls();
+                        TimeControls.DrawTimeControls(_clipTime, _curveEditor);
                     }
                     dl.ChannelsSetCurrent(0);
                     Canvas.Draw();
@@ -99,107 +99,6 @@ namespace T3.Gui.Graph
         }
 
 
-        private void DrawTimeControls()
-        {
-            SetCursorPos(
-                new Vector2(
-                    GetWindowContentRegionMin().X,
-                    GetWindowContentRegionMax().Y - 30));
-
-            TimeSpan timespan = TimeSpan.FromSeconds(_clipTime.Time);
-
-            var delta = 0.0;
-            if (CustomComponents.JogDial(timespan.ToString(@"hh\:mm\:ss\:ff"), ref delta, new Vector2(80, 0)))
-            {
-                _clipTime.PlaybackSpeed = 0;
-                _clipTime.Time += delta;
-            }
-
-            SameLine();
-            Button("[<", _timeControlsSize);
-            SameLine();
-            Button("<<", _timeControlsSize);
-            SameLine();
-
-            var isPlayingBackwards = _clipTime.PlaybackSpeed < 0;
-            if (CustomComponents.ToggleButton(
-                    label: isPlayingBackwards ? $"[{(int)_clipTime.PlaybackSpeed}x]" : "<",
-                    ref isPlayingBackwards,
-                    _timeControlsSize))
-            {
-                if (_clipTime.PlaybackSpeed != 0)
-                {
-                    _clipTime.PlaybackSpeed = 0;
-                }
-                else if (_clipTime.PlaybackSpeed == 0)
-                {
-                    _clipTime.PlaybackSpeed = -1;
-                }
-            }
-            SameLine();
-
-
-            // Play forward
-            var isPlaying = _clipTime.PlaybackSpeed > 0;
-            if (CustomComponents.ToggleButton(
-                    label: isPlaying ? $"[{(int)_clipTime.PlaybackSpeed}x]" : ">",
-                    ref isPlaying,
-                    _timeControlsSize,
-                    trigger: KeyboardBinding.Triggered(UserActions.PlaybackToggle)))
-            {
-                if (_clipTime.PlaybackSpeed != 0)
-                {
-                    _clipTime.PlaybackSpeed = 0;
-                }
-                else if (_clipTime.PlaybackSpeed == 0)
-                {
-                    _clipTime.PlaybackSpeed = 1;
-                }
-            }
-
-            if (KeyboardBinding.Triggered(UserActions.PlaybackBackwards))
-            {
-                if (_clipTime.PlaybackSpeed >= 0)
-                {
-                    _clipTime.PlaybackSpeed = -1;
-                }
-                else if (_clipTime.PlaybackSpeed > -8)
-                {
-                    _clipTime.PlaybackSpeed *= 2;
-                }
-            }
-
-            if (KeyboardBinding.Triggered(UserActions.PlaybackForward))
-            {
-                if (_clipTime.PlaybackSpeed <= 0)
-                {
-                    _clipTime.PlaybackSpeed = 1;
-                }
-                else if (_clipTime.PlaybackSpeed < 8)
-                {
-                    _clipTime.PlaybackSpeed *= 2;
-                }
-            }
-
-            if (KeyboardBinding.Triggered(UserActions.PlaybackStop))
-            {
-                _clipTime.PlaybackSpeed = 0;
-            }
-
-            SameLine();
-            Button(">>", _timeControlsSize);
-            SameLine();
-            Button(">]", _timeControlsSize);
-            SameLine();
-            CustomComponents.ToggleButton("Loop", ref _clipTime.IsLooping, _timeControlsSize);
-            SameLine();
-
-            if (Button("Key"))
-            {
-                _curveEditor.ToggleKeyframes();
-            }
-            SameLine();
-        }
 
         private void DrawTimelineAndCurveEditor()
         {
@@ -253,10 +152,5 @@ namespace T3.Gui.Graph
         private ClipTime _clipTime = new ClipTime();
         private static float _heightTimeLine = 100;
         private CurveEditCanvas _curveEditor;
-
-
-
-        // Styling properties
-        public static Vector2 _timeControlsSize = new Vector2(40, 0);
     }
 }
