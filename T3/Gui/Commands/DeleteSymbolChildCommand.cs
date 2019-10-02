@@ -17,7 +17,6 @@ namespace T3.Gui.Commands
             public string ChildName { get; set; }
             public Vector2 PosInCanvas { get; set; }
             public Vector2 Size { get; set; }
-            public bool IsVisible { get; set; }
         }
 
         private class ConnectionEntry
@@ -42,7 +41,6 @@ namespace T3.Gui.Commands
                                           ChildName = child.Name,
                                           PosInCanvas = childUi.PosOnCanvas,
                                           Size = childUi.Size,
-                                          IsVisible = childUi.IsVisible
                                       };
             }
 
@@ -87,7 +85,7 @@ namespace T3.Gui.Commands
             foreach (var child in _removedChildren)
             {
                 var symbol = SymbolRegistry.Entries[child.SymbolId];
-                compositionSymbolUi.AddChild(symbol, child.ChildId, child.PosInCanvas, child.Size, child.IsVisible);
+                compositionSymbolUi.AddChild(symbol, child.ChildId, child.PosInCanvas, child.Size);
                 compositionSymbolUi.Symbol.Children.Find(c => c.Id == child.ChildId).Name = child.ChildName; // todo: ugly
             }
 

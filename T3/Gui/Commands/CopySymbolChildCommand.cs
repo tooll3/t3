@@ -31,7 +31,7 @@ namespace T3.Gui.Commands
             var sourceCompositionSymbolUi = SymbolUiRegistry.Entries[_sourceSymbolId];
             SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == _childIdToCopy);
             var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
-            targetCompositionSymbolUi.AddChild(symbolToAdd, _addedChildId, PosOnCanvas, Size, IsVisible);
+            targetCompositionSymbolUi.AddChild(symbolToAdd, _addedChildId, PosOnCanvas, Size);
             var targetSymbol = targetCompositionSymbolUi.Symbol;
             SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == _addedChildId);
             var newSymbolInputs = newSymbolChild.InputValues;
@@ -53,6 +53,5 @@ namespace T3.Gui.Commands
         // ui data
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = GraphCanvas.DefaultOpSize;
-        public bool IsVisible { get; set; } = true;
     }
 }

@@ -15,7 +15,6 @@ namespace T3.Gui
         public Guid Id => SymbolChild.Id;
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = GraphCanvas.DefaultOpSize;
-        public bool IsVisible { get; set; } = true;
         public bool IsSelected { get; set; } = false;
     }
 }

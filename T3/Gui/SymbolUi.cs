@@ -106,7 +106,7 @@ namespace T3.Gui
             }
         }
 
-        public Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size, bool isVisible)
+        public Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size)
         {
             Symbol.AddChild(symbolToAdd, addedChildId);
             var childUi = new SymbolChildUi
@@ -114,7 +114,6 @@ namespace T3.Gui
                               SymbolChild = Symbol.Children.Find(entry => entry.Id == addedChildId),
                               PosOnCanvas = posInCanvas,
                               Size = size,
-                              IsVisible = isVisible
                           };
             ChildUis.Add(childUi);
 
