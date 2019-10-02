@@ -54,11 +54,11 @@ namespace T3.Gui
                 ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
 
             SwapHoveringBuffers();
-            ExecuteActionsFromKeyBindings();
+            TriggerGlobalActionsFromKeyBindings();
         }
 
 
-        private void ExecuteActionsFromKeyBindings()
+        private void TriggerGlobalActionsFromKeyBindings()
         {
             foreach (var keyValue in Actions.Entries)
             {
