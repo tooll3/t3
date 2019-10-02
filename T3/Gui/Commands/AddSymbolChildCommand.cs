@@ -31,7 +31,7 @@ namespace T3.Gui.Commands
         {
             var parentSymbolUi = SymbolUiRegistry.Entries[_parentSymbolId];
             var symbolToAdd = SymbolRegistry.Entries[_addedSymbolId];
-            parentSymbolUi.AddChild(symbolToAdd, _addedChildId, PosOnCanvas, Size, IsVisible);
+            parentSymbolUi.AddChild(symbolToAdd, _addedChildId, PosOnCanvas, Size);
         }
 
         // core data
@@ -42,6 +42,5 @@ namespace T3.Gui.Commands
         // ui data
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = GraphCanvas.DefaultOpSize;
-        public bool IsVisible { get; set; } = true;
     }
 }
