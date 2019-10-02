@@ -145,7 +145,7 @@ namespace T3.Gui.Graph
                     label: isPlaying ? $"[{(int)_clipTime.PlaybackSpeed}x]" : ">",
                     ref isPlaying,
                     _timeControlsSize,
-                    trigger: KeyboardBinding.Triggered(UserAction.PlaybackToggle)))
+                    trigger: KeyboardBinding.Triggered(UserActions.PlaybackToggle)))
             {
                 if (_clipTime.PlaybackSpeed != 0)
                 {
@@ -157,7 +157,7 @@ namespace T3.Gui.Graph
                 }
             }
 
-            if (KeyboardBinding.Triggered(UserAction.PlaybackBackwards))
+            if (KeyboardBinding.Triggered(UserActions.PlaybackBackwards))
             {
                 if (_clipTime.PlaybackSpeed >= 0)
                 {
@@ -169,7 +169,7 @@ namespace T3.Gui.Graph
                 }
             }
 
-            if (KeyboardBinding.Triggered(UserAction.PlaybackForward))
+            if (KeyboardBinding.Triggered(UserActions.PlaybackForward))
             {
                 if (_clipTime.PlaybackSpeed <= 0)
                 {
@@ -181,7 +181,7 @@ namespace T3.Gui.Graph
                 }
             }
 
-            if (KeyboardBinding.Triggered(UserAction.PlaybackStop))
+            if (KeyboardBinding.Triggered(UserActions.PlaybackStop))
             {
                 _clipTime.PlaybackSpeed = 0;
             }

@@ -54,7 +54,24 @@ namespace T3.Gui
                 ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
 
             SwapHoveringBuffers();
+            ExecuteActionsFromKeyBindings();
         }
+
+
+        private void ExecuteActionsFromKeyBindings()
+        {
+            foreach (var keyValue in Actions.Entries)
+            {
+                var actionId = keyValue.Key;
+                var actionFunction = keyValue.Value;
+
+                if (KeyboardBinding.Triggered(actionId))
+                {
+                    actionFunction();
+                }
+            }
+        }
+
 
         private void DrawAppMenu()
         {
@@ -75,12 +92,12 @@ namespace T3.Gui
                 {
                     if (ImGui.MenuItem("Undo", "CTRL+Z", false, UndoRedoStack.CanUndo))
                     {
-                        UndoRedoStack.Undo();
+                        Actions.Entries[UserActions.Undo]();
                     }
 
                     if (ImGui.MenuItem("Redo", "CTRL+Y", false, UndoRedoStack.CanRedo))
                     {
-                        UndoRedoStack.Redo();
+                        Actions.Entries[UserActions.Redo]();
                     }
                     ImGui.Separator();
                     if (ImGui.MenuItem("Cut", "CTRL+X")) { }

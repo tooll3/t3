@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using T3.Gui.Commands;
 
 namespace T3.Gui
 {
@@ -11,7 +12,7 @@ namespace T3.Gui
     /// UserAction represent single atomic commands that can be mapped to a keyboard shortcuts
     /// </summary>
     /// 
-    public enum UserAction
+    public enum UserActions
     {
         PlaybackForward = 0,
         PlaybackBackwards,
@@ -26,16 +27,28 @@ namespace T3.Gui
         PlaybackJumpToStartTime,
         SetStartTime,
         SetEndTime,
+        Undo,
+        Redo,
     }
 
 
+    public static class Actions
+    {
+        public static Dictionary<UserActions, Action> Entries = new Dictionary<UserActions, Action>()
+        {
+            {UserActions.PlaybackBackwards, () => { } },
+            {UserActions.Undo, UndoRedoStack.Undo },
+            {UserActions.Redo,  UndoRedoStack.Redo },
+        };
+    }
+
     public class KeyboardBinding
     {
-        public UserAction Action;
+        public UserActions Action;
         public bool NeedsWindowFocus = false;
         public KeyCombination[] Combinations;
 
-        public static bool Triggered(UserAction action)
+        public static bool Triggered(UserActions action)
         {
             if (ImGui.IsAnyItemActive())
                 return false;
@@ -76,7 +89,7 @@ namespace T3.Gui
             public Key Key;
         }
 
-        public KeyboardBinding(UserAction action, KeyCombination combination, bool needsWindowFocus = false)
+        public KeyboardBinding(UserActions action, KeyCombination combination, bool needsWindowFocus = false)
         {
             Action = action;
             Combinations = new KeyCombination[] { combination };
@@ -85,10 +98,12 @@ namespace T3.Gui
 
         public static List<KeyboardBinding> Bindings = new List<KeyboardBinding>()
         {
-            new KeyboardBinding(UserAction.PlaybackForward, new KeyCombination(Key.L) ),
-            new KeyboardBinding(UserAction.PlaybackBackwards, new KeyCombination(Key.J) ),
-            new KeyboardBinding(UserAction.PlaybackStop, new KeyCombination(Key.K) ),
-            new KeyboardBinding(UserAction.PlaybackToggle, new KeyCombination(Key.Space) ),
+            new KeyboardBinding(UserActions.PlaybackForward, new KeyCombination(Key.L) ),
+            new KeyboardBinding(UserActions.PlaybackBackwards, new KeyCombination(Key.J) ),
+            new KeyboardBinding(UserActions.PlaybackStop, new KeyCombination(Key.K) ),
+            new KeyboardBinding(UserActions.PlaybackToggle, new KeyCombination(Key.Space) ),
+            new KeyboardBinding(UserActions.Undo, new KeyCombination(Key.Z,ctrl:true) ),
+            new KeyboardBinding(UserActions.Redo, new KeyCombination(Key.Z,ctrl:true, shift:true) ),
         };
     }
 }
