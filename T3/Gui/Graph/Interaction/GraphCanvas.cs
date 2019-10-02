@@ -131,14 +131,11 @@ namespace T3.Gui.Graph
                         UndoRedoStack.AddAndExecute(cmd);
                     }
 
-                    if (ImGui.MenuItem(" Copy", null, false, oneElementSelected))
+                    if (ImGui.MenuItem(" Copy", null, false))
                     {
                         var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                        var cmd = new CopySymbolChildCommand(compositionSymbolUi, selectedChildren[0].Id, compositionSymbolUi)
-                                  {
-                                      PosOnCanvas = InverseTransformPosition(ImGui.GetMousePos())
-                                  };
-
+                        var cmd = new CopySymbolChildCommand(compositionSymbolUi, selectedChildren, compositionSymbolUi,
+                                                             InverseTransformPosition(ImGui.GetMousePos()));
                         UndoRedoStack.AddAndExecute(cmd);
                     }
                     
