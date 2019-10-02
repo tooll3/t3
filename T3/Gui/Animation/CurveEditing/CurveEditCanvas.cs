@@ -10,7 +10,6 @@ using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
 using UiHelpers;
-using static ImGuiNET.ImGui;
 using static T3.Core.Animation.Curves.Utils;
 
 namespace T3.Gui.Animation.CurveEditing
@@ -44,6 +43,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 if (!newCurveSelection.Contains(c))
                 {
+                    _curvesWithUi[c].CurvePoints.ForEach(cpc => SelectionHandler.RemoveElement(cpc));
                     _curvesWithUi.Remove(c);
                     someCurvesUnselected = true;
                 }
@@ -51,8 +51,6 @@ namespace T3.Gui.Animation.CurveEditing
 
             if (newCurveSelection.Count == 0)
                 return;
-
-            //var curveChangedCompletely = _curvesWithUi.Count == 0;
 
             foreach (var newCurve in newCurveSelection)
             {
@@ -130,7 +128,6 @@ namespace T3.Gui.Animation.CurveEditing
 
                 HandleInteraction();
                 _horizontalScaleLines.Draw();
-                _curveEditBox.Draw();
                 DrawCurves();
                 _selectionFence.Draw();
                 DrawList.PopClipRect();
@@ -138,8 +135,7 @@ namespace T3.Gui.Animation.CurveEditing
                 DrawTimeRange();
                 DrawCurrentTimeMarker();
                 DrawDragTimeArea();
-
-
+                _curveEditBox.Draw();
             }
             ImGui.EndChild();
         }
@@ -267,26 +263,26 @@ namespace T3.Gui.Animation.CurveEditing
             if (_clipTime == null)
                 return;
 
-            var max = GetContentRegionMax();
+            var max = ImGui.GetContentRegionMax();
             var clamp = max;
             clamp.Y = Im.Min(TimeLineDragHeight, max.Y - 1);
 
             var min = Vector2.Zero;
             //Im.DrawContentRegion();
 
-            SetCursorPos(new Vector2(0, max.Y - clamp.Y));
-            InvisibleButton("##TimeDrag", clamp);
+            ImGui.SetCursorPos(new Vector2(0, max.Y - clamp.Y));
+            ImGui.InvisibleButton("##TimeDrag", clamp);
 
-            if (IsItemHovered())
+            if (ImGui.IsItemHovered())
             {
-                SetMouseCursor(ImGuiMouseCursor.ResizeEW);
+                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
             }
-            if (IsItemActive() && IsMouseDragging(0) || IsItemClicked())
+            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0) || ImGui.IsItemClicked())
             {
                 _clipTime.Time = InverseTransformPosition(_io.MousePos).X;
             }
 
-            SetCursorPos(Vector2.Zero);
+            ImGui.SetCursorPos(Vector2.Zero);
         }
 
         private static Vector2 TimeRangeShadowSize = new Vector2(5, 9999);
@@ -299,7 +295,7 @@ namespace T3.Gui.Animation.CurveEditing
             if (_clipTime == null)
                 return;
 
-            PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
 
             // Range start
             {
@@ -325,10 +321,10 @@ namespace T3.Gui.Animation.CurveEditing
                     xRangeStart - TimeRangeHandleSize.X,
                     TimeRangeHandleSize.Y);
 
-                Button("##StartPos", TimeRangeHandleSize);
+                ImGui.Button("##StartPos", TimeRangeHandleSize);
 
 
-                if (IsItemActive() && IsMouseDragging(0))
+                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
                     _clipTime.TimeRangeStart += InverseTransformDirection(_io.MouseDelta).X;
                 }
@@ -340,7 +336,7 @@ namespace T3.Gui.Animation.CurveEditing
                 var rangeEndPos = new Vector2(rangeEndX, 0);
 
                 // Shade outside
-                var windowMaxX = GetContentRegionAvail().X + WindowPos.X;
+                var windowMaxX = ImGui.GetContentRegionAvail().X + WindowPos.X;
                 if (rangeEndX < windowMaxX)
                     DrawList.AddRectFilled(
                         rangeEndPos,
@@ -360,15 +356,15 @@ namespace T3.Gui.Animation.CurveEditing
                     rangeEndX,
                     TimeRangeHandleSize.Y);
 
-                Button("##EndPos", TimeRangeHandleSize);
+                ImGui.Button("##EndPos", TimeRangeHandleSize);
 
-                if (IsItemActive() && IsMouseDragging(0))
+                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
                     _clipTime.TimeRangeEnd += InverseTransformDirection(_io.MouseDelta).X;
                 }
             }
 
-            PopStyleColor();
+            ImGui.PopStyleColor();
         }
 
 
@@ -376,11 +372,11 @@ namespace T3.Gui.Animation.CurveEditing
 
         private void SetCursorToBottom(float xInScreen, float paddingFromBottom)
         {
-            var max = GetWindowContentRegionMax() + GetWindowPos();
+            var max = ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos();
 
             var p = new Vector2(xInScreen, max.Y - paddingFromBottom);
             //UiHelpers.THelpers.DebugRect(p, p + new Vector2(3, 3));
-            SetCursorScreenPos(p);
+            ImGui.SetCursorScreenPos(p);
         }
 
 
@@ -993,7 +989,7 @@ namespace T3.Gui.Animation.CurveEditing
         private ClipTime _clipTime;
 
         private Dictionary<Curve, CurveUi> _curvesWithUi = new Dictionary<Curve, CurveUi>();
-        private List<CurvePointUi> _pointControlRecyclePool = new List<CurvePointUi>();
+        //private List<CurvePointUi> _pointControlRecyclePool = new List<CurvePointUi>();
         private HorizontalScaleLines _horizontalScaleLines;
 
         private SelectionFence _selectionFence;

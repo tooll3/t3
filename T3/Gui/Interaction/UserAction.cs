@@ -36,7 +36,6 @@ namespace T3.Gui
     {
         public static Dictionary<UserActions, Action> Entries = new Dictionary<UserActions, Action>()
         {
-            {UserActions.PlaybackBackwards, () => { } },
             {UserActions.Undo, UndoRedoStack.Undo },
             {UserActions.Redo,  UndoRedoStack.Redo },
         };
