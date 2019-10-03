@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using T3.Core.Operator;
 
@@ -24,9 +25,23 @@ namespace T3.Gui.Commands
                 upperLeftCorner = Vector2.Min(upperLeftCorner, childToCopy.PosOnCanvas);
             }
 
+            Dictionary<Guid, Guid> oldToNewIdDict = new Dictionary<Guid, Guid>();
             foreach (var childToCopy in symbolChildrenToCopy)
             {
-                _childrenToCopy.Add(new Entry(childToCopy.Id, Guid.NewGuid(), childToCopy.PosOnCanvas - upperLeftCorner, childToCopy.Size));
+                Entry entry = new Entry(childToCopy.Id, Guid.NewGuid(), childToCopy.PosOnCanvas - upperLeftCorner, childToCopy.Size);
+                _childrenToCopy.Add(entry);
+                oldToNewIdDict.Add(entry.ChildId, entry.AddedId);
+            }
+
+            foreach (var entry in _childrenToCopy)
+            {
+                _connectionsToCopy.AddRange(from con in sourceCompositionUi.Symbol.Connections
+                                            where con.TargetParentOrChildId == entry.ChildId
+                                            let newTargetId = oldToNewIdDict[entry.ChildId]
+                                            from connectionSource in symbolChildrenToCopy
+                                            where con.SourceParentOrChildId == connectionSource.Id
+                                            let newSourceId = oldToNewIdDict[connectionSource.Id]
+                                            select new Symbol.Connection(newSourceId, con.SourceSlotId, newTargetId, con.TargetSlotId));
             }
         }
 
@@ -58,6 +73,12 @@ namespace T3.Gui.Commands
                     newInput.IsDefault = input.Value.IsDefault;
                 }
             }
+
+            // add connections between copied children
+            foreach (var connection in _connectionsToCopy)
+            {
+                targetCompositionSymbolUi.Symbol.AddConnection(connection);
+            }
         }
 
         struct Entry
@@ -80,5 +101,6 @@ namespace T3.Gui.Commands
         private readonly Guid _sourceSymbolId;
         private readonly Guid _targetSymbolId;
         private readonly List<Entry> _childrenToCopy = new List<Entry>();
+        private readonly List<Symbol.Connection> _connectionsToCopy = new List<Symbol.Connection>();
     }
 }
