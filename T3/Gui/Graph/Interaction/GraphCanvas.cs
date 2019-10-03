@@ -134,8 +134,8 @@ namespace T3.Gui.Graph
                     if (ImGui.MenuItem(" Copy", null, false))
                     {
                         var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                        var cmd = new CopySymbolChildCommand(compositionSymbolUi, selectedChildren, compositionSymbolUi,
-                                                             InverseTransformPosition(ImGui.GetMousePos()));
+                        var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, compositionSymbolUi,
+                                                                InverseTransformPosition(ImGui.GetMousePos()));
                         UndoRedoStack.AddAndExecute(cmd);
                     }
                     

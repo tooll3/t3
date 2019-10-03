@@ -5,15 +5,14 @@ using T3.Core.Operator;
 
 namespace T3.Gui.Commands
 {
-    public class CopySymbolChildCommand : ICommand
+    public class CopySymbolChildrenCommand : ICommand
     {
-        public string Name => "Add Symbol Child";
+        public string Name => "Copy Symbol Children";
 
         public bool IsUndoable => true;
-//        public Guid AddedChildrenIds => _addedChildrenIds;
 
-        public CopySymbolChildCommand(SymbolUi sourceCompositionUi, IEnumerable<SymbolChildUi> symbolChildrenToCopy, SymbolUi targetCompositionUi,
-                                      Vector2 targetPosition)
+        public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi, IEnumerable<SymbolChildUi> symbolChildrenToCopy, SymbolUi targetCompositionUi,
+                                         Vector2 targetPosition)
         {
             _sourceSymbolId = sourceCompositionUi.Symbol.Id;
             _targetSymbolId = targetCompositionUi.Symbol.Id;
@@ -71,14 +70,13 @@ namespace T3.Gui.Commands
                 Size = size;
             }
 
-            public Guid ChildId;
-            public Guid AddedId;
-            public Vector2 RelativePosition;
-            public Vector2 Size;
+            public readonly Guid ChildId;
+            public readonly Guid AddedId;
+            public readonly Vector2 RelativePosition;
+            public readonly Vector2 Size;
         }
 
-        private Vector2 _targetPosition;
-        private int bla;
+        private readonly Vector2 _targetPosition;
         private readonly Guid _sourceSymbolId;
         private readonly Guid _targetSymbolId;
         private readonly List<Entry> _childrenToCopy = new List<Entry>();
