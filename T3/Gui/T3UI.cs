@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Xml.Schema;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -60,14 +61,11 @@ namespace T3.Gui
 
         private void TriggerGlobalActionsFromKeyBindings()
         {
-            foreach (var keyValue in Actions.Entries)
+            foreach (var (id, action) in Actions.Entries)
             {
-                var actionId = keyValue.Key;
-                var actionFunction = keyValue.Value;
-
-                if (KeyboardBinding.Triggered(actionId))
+                if (KeyboardBinding.Triggered(id))
                 {
-                    actionFunction();
+                    action();
                 }
             }
         }

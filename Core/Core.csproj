@@ -120,6 +120,7 @@
     <Compile Include="Resource\Json.cs" />
     <Compile Include="Resource\Model.cs" />
     <Compile Include="Resource\ResourceManager.cs" />
+    <Compile Include="Resource\Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
