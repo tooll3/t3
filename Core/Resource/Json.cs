@@ -161,6 +161,11 @@ namespace T3.Core
         public Symbol ReadSymbol(Model model)
         {
             var o = JToken.ReadFrom(Reader);
+            return ReadSymbol(model, o);
+        }
+
+        public Symbol ReadSymbol(Model model, JToken o)
+        {
             var id = Guid.Parse(o["Id"].Value<string>());
             if (SymbolRegistry.Entries.ContainsKey(id))
                 return null; // symbol already in registry - nothing to do
@@ -177,7 +182,7 @@ namespace T3.Core
             var inputDefaultValues = (from jsonInput in (JArray)o["Inputs"]
                                       let idAndValue = ReadSymbolInputDefaults(jsonInput)
                                       select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
-            var animatorData = (JArray) o["Animator"];
+            var animatorData = (JArray)o["Animator"];
 
             Type instanceType = Type.GetType(instanceTypeName);
             var symbol = new Symbol(instanceType, id, symbolChildren)

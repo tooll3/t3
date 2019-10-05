@@ -61,7 +61,7 @@ namespace T3.Gui
 
         private void TriggerGlobalActionsFromKeyBindings()
         {
-            foreach (var (id, action) in Actions.Entries)
+            foreach (var (id, action) in UserActionRegistry.Entries)
             {
                 if (KeyboardBinding.Triggered(id))
                 {
@@ -90,12 +90,12 @@ namespace T3.Gui
                 {
                     if (ImGui.MenuItem("Undo", "CTRL+Z", false, UndoRedoStack.CanUndo))
                     {
-                        Actions.Entries[UserActions.Undo]();
+                        UserActionRegistry.Entries[UserActions.Undo]();
                     }
 
                     if (ImGui.MenuItem("Redo", "CTRL+Y", false, UndoRedoStack.CanRedo))
                     {
-                        Actions.Entries[UserActions.Redo]();
+                        UserActionRegistry.Entries[UserActions.Redo]();
                     }
                     ImGui.Separator();
                     if (ImGui.MenuItem("Cut", "CTRL+X")) { }
