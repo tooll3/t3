@@ -1,5 +1,5 @@
 todo:
-- Add copy operator functionality
+- Add remaining things to compute shader stage (missing multi inputs, dispatch count etc)
 - Add color grade op
 - Replace Guids with uint ids during runtime
 - How to animate struct type like Vec3 or Color
@@ -14,6 +14,7 @@ todo:
 - General op replacement/compilation after change
  
 done:
+* Add copy operator functionality
 * Fixed loading the same texture file from different instances (currently 2nd one is rejected)
 * Clean up multi input handling for graph invalidation
 * Remove abstract Slot class and replace with ISlot
