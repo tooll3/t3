@@ -32,13 +32,13 @@ namespace T3.Gui
     }
 
 
-    public static class Actions
+    public static class UserActionRegistry
     {
-        public static Dictionary<UserActions, Action> Entries = new Dictionary<UserActions, Action>()
-        {
-            {UserActions.Undo, UndoRedoStack.Undo },
-            {UserActions.Redo,  UndoRedoStack.Redo },
-        };
+        public static Dictionary<UserActions, Action> Entries { get; } = new Dictionary<UserActions, Action>
+                                                                         {
+                                                                             { UserActions.Undo, UndoRedoStack.Undo },
+                                                                             { UserActions.Redo, UndoRedoStack.Redo },
+                                                                         };
     }
 
     public class KeyboardBinding

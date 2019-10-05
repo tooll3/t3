@@ -1,8 +1,13 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Windows.Forms;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
@@ -103,7 +108,7 @@ namespace T3.Gui.Graph
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             if (ImGui.BeginPopupContextWindow("context_menu"))
             {
-                Vector2 scene_pos = ImGui.GetMousePosOnOpeningCurrentPopup();// - scrollOffset;
+                ImGui.GetMousePosOnOpeningCurrentPopup();
                 _contextMenuIsOpen = true;
 
                 // Todo: Convert to linc
@@ -122,7 +127,9 @@ namespace T3.Gui.Graph
                     var label = oneElementSelected ? $"{selectedChildren[0].SymbolChild.ReadableName} Item..." : $"{selectedChildren.Count} Items...";
 
                     ImGui.Text(label);
-                    if (ImGui.MenuItem(" Rename..", null, false, false)) { }
+                    if (ImGui.MenuItem(" Rename..", null, false, false))
+                    {
+                    }
 
                     if (ImGui.MenuItem(" Delete", null))
                     {
@@ -133,15 +140,20 @@ namespace T3.Gui.Graph
 
                     if (ImGui.MenuItem(" Copy", null, false))
                     {
-                        var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                        var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, compositionSymbolUi,
-                                                                InverseTransformPosition(ImGui.GetMousePos()));
-                        UndoRedoStack.AddAndExecute(cmd);
+                        CopySelectionToClipboard(selectedChildren);
                     }
-                    
-                    ImGui.Separator();
                 }
-                if (ImGui.MenuItem("Rename..", null, false, false)) { }
+
+                if (ImGui.MenuItem("Paste", null, false))
+                {
+                    PasteClipboard();
+                }
+
+                ImGui.Separator();
+
+                if (ImGui.MenuItem("Rename..", null, false, false))
+                {
+                }
                 if (ImGui.MenuItem("Add"))
                 {
                     QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, InverseTransformPosition(ImGui.GetMousePos()));
@@ -156,16 +168,87 @@ namespace T3.Gui.Graph
             ImGui.PopStyleVar();
         }
 
+        private void CopySelectionToClipboard(List<SymbolChildUi> selectedChildren)
+        {
+            var containerOp = new Symbol(typeof(object), Guid.NewGuid());
+            var newContainerUi = new SymbolUi(containerOp);
+            SymbolUiRegistry.Entries.Add(newContainerUi.Symbol.Id, newContainerUi);
+
+            var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+            var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, newContainerUi,
+                                                    InverseTransformPosition(ImGui.GetMousePos()));
+            cmd.Do();
+
+            using (var writer = new StringWriter())
+            {
+                var json = new Json();
+                json.Writer = new JsonTextWriter(writer);
+                json.Writer.Formatting = Formatting.Indented;
+                // MetaManager.WriteOpWithWriter(containerOp, writer);
+                json.Writer.WriteStartArray();
+
+                json.WriteSymbol(containerOp);
+
+                var jsonUi = new UiJson();
+                jsonUi.Writer = json.Writer;
+                jsonUi.WriteSymbolUi(newContainerUi);
+
+                json.Writer.WriteEndArray();
+
+                try
+                {
+                    Clipboard.SetText(writer.ToString(), TextDataFormat.UnicodeText);
+                    Log.Info(Clipboard.GetText(TextDataFormat.UnicodeText));
+                }
+                catch (Exception)
+                {
+                    Log.Error("Could not copy elements to clipboard. Perhaps a tool like Teamviewer locks it.");
+                }
+            }
+
+            SymbolUiRegistry.Entries.Remove(newContainerUi.Symbol.Id);
+        }
+
+        private void PasteClipboard()
+        {
+            try
+            {
+                var text = Clipboard.GetText();
+                using (var reader = new StringReader(text))
+                {
+                    var json = new Json();
+                    json.Reader = new JsonTextReader(reader);
+                    var o = JToken.ReadFrom(json.Reader) as JArray;
+                    var symbolJson = o[0];
+                    var containerSymbol = json.ReadSymbol(null, symbolJson);
+                    SymbolRegistry.Entries.Add(containerSymbol.Id, containerSymbol);
+                    var uiJson = new UiJson();
+                    uiJson.Reader = json.Reader;
+                    var symbolUiJson = o[1];
+                    var containerSymbolUi = UiJson.ReadSymbolUi(symbolUiJson);
+                    var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                    SymbolUiRegistry.Entries.Add(containerSymbolUi.Symbol.Id, containerSymbolUi);
+                    var cmd = new CopySymbolChildrenCommand(containerSymbolUi, null, compositionSymbolUi,
+                                                            InverseTransformPosition(ImGui.GetMousePos()));
+                    cmd.Do();
+                    SymbolUiRegistry.Entries.Remove(containerSymbolUi.Symbol.Id);
+                    SymbolRegistry.Entries.Remove(containerSymbol.Id);
+                }
+            }
+            catch (Exception)
+            {
+                Log.Warning("Could not copy actual selection to clipboard.");
+            }
+        }
 
         private void DrawGrid()
         {
             var gridSize = 64.0f * Scale.X;
             for (float x = Scroll.X % gridSize; x < WindowSize.X; x += gridSize)
             {
-                DrawList.AddLine(
-                    new Vector2(x, 0.0f) + WindowPos,
-                    new Vector2(x, WindowSize.Y) + WindowPos,
-                    new Color(0.5f, 0.5f, 0.5f, 0.1f));
+                DrawList.AddLine(new Vector2(x, 0.0f) + WindowPos,
+                                 new Vector2(x, WindowSize.Y) + WindowPos,
+                                 new Color(0.5f, 0.5f, 0.5f, 0.1f));
             }
 
             for (float y = Scroll.Y % gridSize; y < WindowSize.Y; y += gridSize)

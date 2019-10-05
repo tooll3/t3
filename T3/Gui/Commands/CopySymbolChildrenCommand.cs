@@ -19,6 +19,12 @@ namespace T3.Gui.Commands
             _targetSymbolId = targetCompositionUi.Symbol.Id;
             _targetPosition = targetPosition;
 
+            if (symbolChildrenToCopy == null)
+            {
+                // if now specific child are selected copy all of the source composition op
+                symbolChildrenToCopy = sourceCompositionUi.ChildUis;
+            }
+
             Vector2 upperLeftCorner = new Vector2(Single.MaxValue, Single.MaxValue);
             foreach (var childToCopy in symbolChildrenToCopy)
             {
