@@ -2,12 +2,21 @@
   "Id": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9"/*ComputeShaderStage*/,
   "InputUis": [
     {
+      "InputId": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
+      "Type": "SharpDX.Int3, SharpDX.Mathematics",
+      "Relevancy": "Required",
+      "Position": {
+        "X": 74.0,
+        "Y": 492.0
+      }
+    },
+    {
       "InputId": "5c0e9c96-9aba-4757-ae1f-cc50fb6173f1"/*ComputeShader*/,
       "Type": "SharpDX.Direct3D11.ComputeShader, SharpDX.Direct3D11",
       "Relevancy": "Required",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 186.0,
+        "Y": 493.0
       }
     },
     {
@@ -15,8 +24,8 @@
       "Type": "SharpDX.Direct3D11.Buffer, SharpDX.Direct3D11",
       "Relevancy": "Required",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 303.0,
+        "Y": 492.0
       }
     },
     {
@@ -24,17 +33,17 @@
       "Type": "SharpDX.Direct3D11.ShaderResourceView, SharpDX.Direct3D11",
       "Relevancy": "Required",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 411.0,
+        "Y": 490.0
       }
     },
     {
-      "InputId": "4047c9e7-1edb-4c71-b85c-c1b87058c81c"/*SamplerState*/,
+      "InputId": "4047c9e7-1edb-4c71-b85c-c1b87058c81c"/*SamplerStates*/,
       "Type": "SharpDX.Direct3D11.SamplerState, SharpDX.Direct3D11",
       "Relevancy": "Required",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 523.0,
+        "Y": 490.0
       }
     },
     {
@@ -42,8 +51,8 @@
       "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
       "Relevancy": "Required",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 627.0,
+        "Y": 487.0
       }
     }
   ],
@@ -53,8 +62,8 @@
       "OutputId": "c382284f-7e37-4eb0-b284-bc735247f26b"/*Output*/,
       "Type": "T3.Core.Scene, Core",
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 402.0,
+        "Y": 49.0
       }
     }
   ]
