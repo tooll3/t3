@@ -29,11 +29,14 @@ namespace T3.Operators.Types
             if (ConstantBuffers.DirtyFlag.IsDirty)
             {
                 var connectedConstBuffers = ConstantBuffers.GetCollectedTypedInputs();
-                _constantBuffers.Clear();
-                _constantBuffers.Capacity = connectedConstBuffers.Count;
-                foreach (var input in connectedConstBuffers)
+                if (connectedConstBuffers.Count != _constantBuffers.Length)
                 {
-                    _constantBuffers.Add(input.GetValue(context));
+                    _constantBuffers = new Buffer[connectedConstBuffers.Count];
+                }
+
+                for (int i = 0; i < connectedConstBuffers.Count; i++)
+                {
+                    _constantBuffers[i] = connectedConstBuffers[i].GetValue(context);
                 }
             }
 
@@ -83,8 +86,7 @@ namespace T3.Operators.Types
                 return;
 
             csStage.Set(_cs);
-            for (int i = 0; i < _constantBuffers.Count; i++)
-                csStage.SetConstantBuffer(i, _constantBuffers[i]);
+            csStage.SetConstantBuffers(0, _constantBuffers.Length, _constantBuffers);
             csStage.SetShaderResources(0, _shaderResourceViews.Length, _shaderResourceViews);
             csStage.SetSamplers(0, _samplerStates);
             csStage.SetUnorderedAccessView(0, _uav);
@@ -97,12 +99,12 @@ namespace T3.Operators.Types
             csStage.SetSampler(0, null);
             for (int i = 0; i < _shaderResourceViews.Length; i++)
                 csStage.SetShaderResource(i, null);
-            for (int i = 0; i < _constantBuffers.Count; i++)
+            for (int i = 0; i < _constantBuffers.Length; i++)
                 csStage.SetConstantBuffer(i, null);
         }
 
         private SharpDX.Direct3D11.ComputeShader _cs;
-        private List<Buffer> _constantBuffers = new List<Buffer>();
+        private Buffer[] _constantBuffers = new Buffer[0];
         private ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[0];
         private SamplerState[] _samplerStates = new SamplerState[0];
         private UnorderedAccessView _uav;
