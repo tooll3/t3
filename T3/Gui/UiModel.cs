@@ -28,6 +28,7 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(int), new IntUiProperties());
             TypeUiRegistry.Entries.Add(typeof(string), new StringUiProperties());
             TypeUiRegistry.Entries.Add(typeof(Size2), new Size2UiProperties());
+            TypeUiRegistry.Entries.Add(typeof(Int3), new Size2UiProperties());
             TypeUiRegistry.Entries.Add(typeof(ResourceUsage), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(Format), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(BindFlags), new ShaderUiProperties());
@@ -49,6 +50,7 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(int), () => new IntInputUi());
             InputUiFactory.Entries.Add(typeof(string), () => new StringInputUi());
             InputUiFactory.Entries.Add(typeof(Size2), () => new Size2InputUi());
+            InputUiFactory.Entries.Add(typeof(Int3), () => new Int3InputUi());
             InputUiFactory.Entries.Add(typeof(ResourceUsage), () => new EnumInputUi<ResourceUsage>());
             InputUiFactory.Entries.Add(typeof(Format), () => new EnumInputUi<Format>());
             InputUiFactory.Entries.Add(typeof(BindFlags), () => new EnumInputUi<BindFlags>());
@@ -70,6 +72,7 @@ namespace T3.Gui
             OutputUiFactory.Entries.Add(typeof(int), () => new ValueOutputUi<int>());
             OutputUiFactory.Entries.Add(typeof(string), () => new ValueOutputUi<string>());
             OutputUiFactory.Entries.Add(typeof(Size2), () => new ValueOutputUi<Size2>());
+            OutputUiFactory.Entries.Add(typeof(Int3), () => new ValueOutputUi<Int3>());
             OutputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new ShaderResourceViewOutputUi());
             OutputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dOutputUi());
             OutputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListOutputUi());

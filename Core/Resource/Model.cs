@@ -66,17 +66,24 @@ namespace T3.Core
             JsonToTypeValueConverters.Entries.Add(typeof(float), jsonToken => jsonToken.Value<float>());
             JsonToTypeValueConverters.Entries.Add(typeof(int), jsonToken => jsonToken.Value<int>());
             JsonToTypeValueConverters.Entries.Add(typeof(string), jsonToken => jsonToken.Value<string>());
-            JsonToTypeValueConverters.Entries.Add(typeof(Vector2), jsonToken =>
-                                                                   {
-                                                                       float x = jsonToken["X"].Value<float>();
-                                                                       float y = jsonToken["Y"].Value<float>();
-                                                                       return new Vector2(x, y);
-                                                                   });
+            JsonToTypeValueConverters.Entries.Add(typeof(System.Numerics.Vector2), jsonToken =>
+                                                                                   {
+                                                                                       float x = jsonToken["X"].Value<float>();
+                                                                                       float y = jsonToken["Y"].Value<float>();
+                                                                                       return new System.Numerics.Vector2(x, y);
+                                                                                   });
             JsonToTypeValueConverters.Entries.Add(typeof(Size2), jsonToken =>
                                                                  {
                                                                      int width = jsonToken["Width"].Value<int>();
                                                                      int height = jsonToken["Height"].Value<int>();
                                                                      return new Size2(width, height);
+                                                                 });
+            JsonToTypeValueConverters.Entries.Add(typeof(Int3), jsonToken =>
+                                                                 {
+                                                                       int x = jsonToken["X"].Value<int>();
+                                                                       int y = jsonToken["Y"].Value<int>();
+                                                                       int z = jsonToken["Z"].Value<int>();
+                                                                       return new Int3(x, y, z);
                                                                  });
             JsonToTypeValueConverters.Entries.Add(typeof(Format), JsonToEnumValue<Format>);
             JsonToTypeValueConverters.Entries.Add(typeof(ResourceUsage), JsonToEnumValue<ResourceUsage>);
@@ -99,14 +106,14 @@ namespace T3.Core
             TypeValueToJsonConverters.Entries.Add(typeof(float), (writer, obj) => writer.WriteValue((float)obj));
             TypeValueToJsonConverters.Entries.Add(typeof(int), (writer, obj) => writer.WriteValue((int)obj));
             TypeValueToJsonConverters.Entries.Add(typeof(string), (writer, value) => writer.WriteValue((string)value));
-            TypeValueToJsonConverters.Entries.Add(typeof(Vector2), (writer, obj) =>
-                                                                   {
-                                                                       Vector2 vec = (Vector2)obj;
-                                                                       writer.WriteStartObject();
-                                                                       writer.WriteValue("X", vec.X);
-                                                                       writer.WriteValue("Y", vec.Y);
-                                                                       writer.WriteEndObject();
-                                                                   });
+            TypeValueToJsonConverters.Entries.Add(typeof(System.Numerics.Vector2), (writer, obj) =>
+                                                                                   {
+                                                                                       var vec = (System.Numerics.Vector2)obj;
+                                                                                       writer.WriteStartObject();
+                                                                                       writer.WriteValue("X", vec.X);
+                                                                                       writer.WriteValue("Y", vec.Y);
+                                                                                       writer.WriteEndObject();
+                                                                                   });
             TypeValueToJsonConverters.Entries.Add(typeof(Size2), (writer, obj) =>
                                                                  {
                                                                      Size2 vec = (Size2)obj;
@@ -115,6 +122,15 @@ namespace T3.Core
                                                                      writer.WriteValue("Height", vec.Height);
                                                                      writer.WriteEndObject();
                                                                  });
+            TypeValueToJsonConverters.Entries.Add(typeof(Int3), (writer, obj) =>
+                                                                {
+                                                                    Int3 vec = (Int3)obj;
+                                                                    writer.WriteStartObject();
+                                                                    writer.WriteValue("X", vec.X);
+                                                                    writer.WriteValue("Y", vec.Y);
+                                                                    writer.WriteValue("Z", vec.Z);
+                                                                    writer.WriteEndObject();
+                                                                });
             TypeValueToJsonConverters.Entries.Add(typeof(Format), (writer, obj) => writer.WriteValue(obj.ToString()));
             TypeValueToJsonConverters.Entries.Add(typeof(ResourceUsage), (writer, obj) => writer.WriteValue(obj.ToString()));
             TypeValueToJsonConverters.Entries.Add(typeof(BindFlags), (writer, obj) => writer.WriteValue(obj.ToString()));
@@ -140,6 +156,7 @@ namespace T3.Core
             InputValueCreators.Entries.Add(typeof(float), InputDefaultValueCreator<float>);
             InputValueCreators.Entries.Add(typeof(string), () => new InputValue<string>(string.Empty));
             InputValueCreators.Entries.Add(typeof(Size2), InputDefaultValueCreator<Size2>);
+            InputValueCreators.Entries.Add(typeof(Int3), InputDefaultValueCreator<Int3>);
             InputValueCreators.Entries.Add(typeof(ResourceUsage), InputDefaultValueCreator<ResourceUsage>);
             InputValueCreators.Entries.Add(typeof(Format), InputDefaultValueCreator<Format>);
             InputValueCreators.Entries.Add(typeof(BindFlags), InputDefaultValueCreator<BindFlags>);

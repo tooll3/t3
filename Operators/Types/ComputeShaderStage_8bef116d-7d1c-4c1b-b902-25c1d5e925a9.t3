@@ -4,6 +4,14 @@
   "InstanceType": "T3.Operators.Types.ComputeShaderStage, Operators",
   "Inputs": [
     {
+      "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
+      "DefaultValue": {
+        "X": 16,
+        "Y": 16,
+        "Z": 1
+      }
+    },
+    {
       "Id": "5c0e9c96-9aba-4757-ae1f-cc50fb6173f1"/*ComputeShader*/,
       "DefaultValue": null
     },
@@ -16,7 +24,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "4047c9e7-1edb-4c71-b85c-c1b87058c81c"/*SamplerState*/,
+      "Id": "4047c9e7-1edb-4c71-b85c-c1b87058c81c"/*SamplerStates*/,
       "DefaultValue": null
     },
     {

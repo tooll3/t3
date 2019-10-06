@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Operator;
@@ -93,7 +94,8 @@ namespace T3.Operators.Types
 
             int width = OutputUav.Value.Description.Width;
             int height = OutputUav.Value.Description.Height;
-            deviceContext.Dispatch(width / 16, height / 16, 1);
+            Int3 dispatchCount = Dispatch.GetValue(context);
+            deviceContext.Dispatch(width / dispatchCount.X, height / dispatchCount.Y, dispatchCount.Z);
 
             csStage.SetUnorderedAccessView(0, null);
             csStage.SetSampler(0, null);
@@ -109,6 +111,8 @@ namespace T3.Operators.Types
         private SamplerState[] _samplerStates = new SamplerState[0];
         private UnorderedAccessView _uav;
         
+        [Input(Guid = "{180CAE35-10E3-47F3-8191-F6ECEA7D321C}")]
+        public readonly InputSlot<SharpDX.Int3> Dispatch = new InputSlot<Int3>(new Int3(16, 16, 1));
         [Input(Guid = "{5C0E9C96-9ABA-4757-AE1F-CC50FB6173F1}")]
         public readonly InputSlot<SharpDX.Direct3D11.ComputeShader> ComputeShader = new InputSlot<SharpDX.Direct3D11.ComputeShader>();
         [Input(Guid = "{34CF06FE-8F63-4F14-9C59-35A2C021B817}")]
