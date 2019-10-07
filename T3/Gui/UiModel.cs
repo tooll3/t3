@@ -35,6 +35,7 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(CpuAccessFlags), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(ResourceOptionFlags), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(ShaderResourceView), new TextureUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(UnorderedAccessView), new TextureUiProperties());
             TypeUiRegistry.Entries.Add(typeof(List<float>), new FloatUiProperties());
             TypeUiRegistry.Entries.Add(typeof(ComputeShader), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(Texture2D), new ShaderUiProperties());
@@ -65,6 +66,7 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(Comparison), () => new EnumInputUi<Comparison>());
             InputUiFactory.Entries.Add(typeof(SamplerState), () => new FallbackInputUi<SamplerState>());
             InputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new FallbackInputUi<ShaderResourceView>());
+            InputUiFactory.Entries.Add(typeof(UnorderedAccessView), () => new FallbackInputUi<UnorderedAccessView>());
             InputUiFactory.Entries.Add(typeof(Scene), () => new FallbackInputUi<Scene>());
 
             // Register output ui creators
@@ -74,6 +76,7 @@ namespace T3.Gui
             OutputUiFactory.Entries.Add(typeof(Size2), () => new ValueOutputUi<Size2>());
             OutputUiFactory.Entries.Add(typeof(Int3), () => new ValueOutputUi<Int3>());
             OutputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new ShaderResourceViewOutputUi());
+            OutputUiFactory.Entries.Add(typeof(UnorderedAccessView), () => new ValueOutputUi<UnorderedAccessView>());
             OutputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dOutputUi());
             OutputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListOutputUi());
             OutputUiFactory.Entries.Add(typeof(ComputeShader), () => new ValueOutputUi<ComputeShader>());

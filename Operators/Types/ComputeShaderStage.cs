@@ -49,34 +49,25 @@ namespace T3.Operators.Types
             UpdateMultiInput(ConstantBuffers, ref _constantBuffers, context);
             UpdateMultiInput(ShaderResources, ref _shaderResourceViews, context);
             UpdateMultiInput(SamplerStates, ref _samplerStates, context);
+            UpdateMultiInput(Uavs, ref _uavs, context);
 
-            if (OutputUav.DirtyFlag.IsDirty)
-            {
-                _uav?.Dispose();
-                _uav = null;
-                Texture2D outputTexture = OutputUav.GetValue(context);
-                if (outputTexture != null)
-                {
-                    _uav = new UnorderedAccessView(device, outputTexture);
-                }
-            }
-
-            if (_uav == null || _cs == null)
+            if (_uavs.Length == 0 || _uavs[0] == null || _cs == null)
                 return;
 
             csStage.Set(_cs);
             csStage.SetConstantBuffers(0, _constantBuffers.Length, _constantBuffers);
             csStage.SetShaderResources(0, _shaderResourceViews.Length, _shaderResourceViews);
             csStage.SetSamplers(0, _samplerStates);
-            csStage.SetUnorderedAccessView(0, _uav);
+            csStage.SetUnorderedAccessViews(0, _uavs);
 
-            int width = OutputUav.Value.Description.Width;
-            int height = OutputUav.Value.Description.Height;
             Int3 dispatchCount = Dispatch.GetValue(context);
-            deviceContext.Dispatch(width / dispatchCount.X, height / dispatchCount.Y, dispatchCount.Z);
+            deviceContext.Dispatch(dispatchCount.X, dispatchCount.Y, dispatchCount.Z);
 
-            csStage.SetUnorderedAccessView(0, null);
-            csStage.SetSampler(0, null);
+            // unbind resources
+            for (int i = 0; i < _uavs.Length; i++)
+                csStage.SetUnorderedAccessView(i, null);
+            for (int i = 0; i < _samplerStates.Length; i++)
+                csStage.SetSampler(i, null);
             for (int i = 0; i < _shaderResourceViews.Length; i++)
                 csStage.SetShaderResource(i, null);
             for (int i = 0; i < _constantBuffers.Length; i++)
@@ -87,10 +78,10 @@ namespace T3.Operators.Types
         private Buffer[] _constantBuffers = new Buffer[0];
         private ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[0];
         private SamplerState[] _samplerStates = new SamplerState[0];
-        private UnorderedAccessView _uav;
+        private UnorderedAccessView[] _uavs = new UnorderedAccessView[0];
         
         [Input(Guid = "{180CAE35-10E3-47F3-8191-F6ECEA7D321C}")]
-        public readonly InputSlot<SharpDX.Int3> Dispatch = new InputSlot<Int3>(new Int3(16, 16, 1));
+        public readonly InputSlot<Int3> Dispatch = new InputSlot<Int3>(new Int3(16, 16, 1));
         [Input(Guid = "{5C0E9C96-9ABA-4757-AE1F-CC50FB6173F1}")]
         public readonly InputSlot<SharpDX.Direct3D11.ComputeShader> ComputeShader = new InputSlot<SharpDX.Direct3D11.ComputeShader>();
         [Input(Guid = "{34CF06FE-8F63-4F14-9C59-35A2C021B817}")]
@@ -99,7 +90,7 @@ namespace T3.Operators.Types
         public readonly MultiInputSlot<ShaderResourceView> ShaderResources = new MultiInputSlot<ShaderResourceView>();
         [Input(Guid = "{4047C9E7-1EDB-4C71-B85C-C1B87058C81C}")]
         public readonly MultiInputSlot<SamplerState> SamplerStates = new MultiInputSlot<SamplerState>();
-        [Input(Guid = "{CEC84992-8525-4242-B3C3-C94FE11C2A15}")]
-        public readonly InputSlot<Texture2D> OutputUav = new InputSlot<Texture2D>();
+        [Input(Guid = "{599384C2-BF6C-4953-BE74-D363292AB1C7}")]
+        public readonly MultiInputSlot<UnorderedAccessView> Uavs = new MultiInputSlot<UnorderedAccessView>();
     }
 }
