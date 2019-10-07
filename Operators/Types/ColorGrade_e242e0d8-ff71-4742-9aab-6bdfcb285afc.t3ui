@@ -1,0 +1,16 @@
+{
+  "Id": "e242e0d8-ff71-4742-9aab-6bdfcb285afc"/*ColorGrade*/,
+  "InputUis": [
+    {
+      "InputId": "8ffe42cf-6c2f-4d4e-8892-ada31451d2b9"/*Color*/,
+      "Type": "System.Numerics.Vector4, System.Numerics",
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": []
+}
