@@ -12,5 +12,14 @@
     }
   ],
   "SymbolChildUis": [],
-  "OutputUis": []
+  "OutputUis": [
+    {
+      "OutputId": "9832f278-2d9f-4b14-b92d-60acb1c202cb"/*Output*/,
+      "Type": "System.Numerics.Vector4, System.Numerics",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
 }

@@ -90,6 +90,8 @@
   <ItemGroup>
     <Content Include="Types\Add_c160f925-0a66-4505-a569-cadd878dbb6f.t3" />
     <Content Include="Types\Add_c160f925-0a66-4505-a569-cadd878dbb6f.t3ui" />
+    <Content Include="Types\ColorGrade_e242e0d8-ff71-4742-9aab-6bdfcb285afc.t3" />
+    <Content Include="Types\ColorGrade_e242e0d8-ff71-4742-9aab-6bdfcb285afc.t3ui" />
     <Content Include="Types\ComputeShaderStage_8bef116d-7d1c-4c1b-b902-25c1d5e925a9.t3" />
     <Content Include="Types\ComputeShaderStage_8bef116d-7d1c-4c1b-b902-25c1d5e925a9.t3ui" />
     <Content Include="Types\ComputeShader_a256d70f-adb3-481d-a926-caf35bd3e64c.t3" />

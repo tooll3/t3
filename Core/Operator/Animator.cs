@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Animation;
@@ -17,46 +20,102 @@ namespace T3.Core.Operator
     {
         struct CurveId
         {
-            public CurveId(Guid instanceId, Guid inputId)
+            public CurveId(Guid instanceId, Guid inputId, int index = 0)
             {
                 InstanceId = instanceId;
                 InputId = inputId;
+                Index = index;
             }
 
-            public CurveId(IInputSlot inputSlot)
+            public CurveId(IInputSlot inputSlot, int index = 0)
             {
                 InstanceId = inputSlot.Parent.Id;
                 InputId = inputSlot.Id;
+                Index = index;
             }
 
             public readonly Guid InstanceId;
             public readonly Guid InputId;
+            public readonly int Index;
         }
 
         public void CreateInputUpdateAction<T>(IInputSlot inputSlot)
         {
-            if (inputSlot is Slot<float> typedInputSlot)
+            if (inputSlot is Slot<float> floatInputSlot)
             {
                 var newCurve = new Curve();
                 newCurve.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
                                                                     {
-                                                                        Value = typedInputSlot.Value,
+                                                                        Value = floatInputSlot.Value,
                                                                         InType = VDefinition.Interpolation.Spline,
                                                                         OutType = VDefinition.Interpolation.Spline,
                                                                     });
                 _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
                 newCurve.AddOrUpdateV(EvaluationContext.GlobalTime + 1, new VDefinition()
                                                                         {
-                                                                            Value = typedInputSlot.Value + 2,
+                                                                            Value = floatInputSlot.Value + 2,
                                                                             InType = VDefinition.Interpolation.Spline,
                                                                             OutType = VDefinition.Interpolation.Spline,
                                                                         });
 
-                typedInputSlot.UpdateAction = context =>
+                floatInputSlot.UpdateAction = context =>
                                               {
-                                                  typedInputSlot.Value = (float)newCurve.GetSampledValue(context.Time);
+                                                  floatInputSlot.Value = (float)newCurve.GetSampledValue(context.Time);
                                               };
-                typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                floatInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+            }
+            else if (inputSlot is Slot<System.Numerics.Vector4> vector4InputSlot)
+            {
+                var newCurveX = new Curve();
+                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                                                                     {
+                                                                         Value = vector4InputSlot.Value.X,
+                                                                         InType = VDefinition.Interpolation.Spline,
+                                                                         OutType = VDefinition.Interpolation.Spline,
+                                                                     });
+                _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
+                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTime + 1, new VDefinition()
+                                                                         {
+                                                                             Value = vector4InputSlot.Value.X + 2,
+                                                                             InType = VDefinition.Interpolation.Spline,
+                                                                             OutType = VDefinition.Interpolation.Spline,
+                                                                         });
+
+                var newCurveY = new Curve();
+                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                                                                     {
+                                                                         Value = vector4InputSlot.Value.X,
+                                                                         InType = VDefinition.Interpolation.Spline,
+                                                                         OutType = VDefinition.Interpolation.Spline,
+                                                                     });
+                _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
+
+                var newCurveZ = new Curve();
+                newCurveZ.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                                                                     {
+                                                                         Value = vector4InputSlot.Value.X,
+                                                                         InType = VDefinition.Interpolation.Spline,
+                                                                         OutType = VDefinition.Interpolation.Spline,
+                                                                     });
+                _animatedInputCurves.Add(new CurveId(inputSlot, 2), newCurveZ);
+
+                var newCurveW = new Curve();
+                newCurveW.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                                                                     {
+                                                                         Value = vector4InputSlot.Value.X,
+                                                                         InType = VDefinition.Interpolation.Spline,
+                                                                         OutType = VDefinition.Interpolation.Spline,
+                                                                     });
+                _animatedInputCurves.Add(new CurveId(inputSlot, 3), newCurveW);
+
+                vector4InputSlot.UpdateAction = context =>
+                                                {
+                                                    vector4InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.Time);
+                                                    vector4InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.Time);
+                                                    vector4InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.Time);
+                                                    vector4InputSlot.Value.W = (float)newCurveW.GetSampledValue(context.Time);
+                                                };
+                vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else
             {
@@ -72,30 +131,52 @@ namespace T3.Core.Operator
                                  where curveEntry.Key.InstanceId == childInstance.Id
                                  from inputSlot in childInstance.Inputs
                                  where curveEntry.Key.InputId == inputSlot.Id
-                                 select (inputSlot, curveEntry.Value);
+                                 group (inputSlot, curveEntry.Value) by (childInstance.Id, inputSlot.Id)
+                                 into inputGroup
+                                 select inputGroup;
 
-            foreach (var entry in relevantInputs)
+            foreach (var groupEntry in relevantInputs)
             {
-                var (inputSlot, curve) = entry;
-                if (inputSlot is Slot<float> typedInputSlot)
+                if (groupEntry.Count() == 1)
                 {
-                    typedInputSlot.UpdateAction = context =>
-                                                  {
-                                                      typedInputSlot.Value = (float)curve.GetSampledValue(context.Time);
-                                                  };
-                    typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                    var (inputSlot, curve) = groupEntry.First();
+                    if (inputSlot is Slot<float> typedInputSlot)
+                    {
+                        typedInputSlot.UpdateAction = context => { typedInputSlot.Value = (float)curve.GetSampledValue(context.Time); };
+                        typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                    }
+                }
+                else
+                {
+                    var entries = groupEntry.ToArray();
+                    Debug.Assert(entries.Length == 4);
+                    var inputSlot = entries[0].inputSlot;
+                    if (inputSlot is Slot<Vector4> vector4InputSlot)
+                    {
+                        vector4InputSlot.UpdateAction = context =>
+                                                        {
+                                                            vector4InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.Time);
+                                                            vector4InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.Time);
+                                                            vector4InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.Time);
+                                                            vector4InputSlot.Value.W = (float)entries[3].Value.GetSampledValue(context.Time);
+                                                        };
+                        vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                    }
                 }
             }
         }
 
         public void RemoveAnimationFrom(IInputSlot inputSlot)
         {
-            if (inputSlot is Slot<float> typedInputSlot)
+            inputSlot.SetUpdateActionBackToDefault();
+            inputSlot.DirtyFlag.Trigger &= ~DirtyFlagTrigger.Animated;
+            var curveKeysToRemove = (from curve in _animatedInputCurves
+                                     where curve.Key.InstanceId == inputSlot.Parent.Id
+                                     where curve.Key.InputId == inputSlot.Id
+                                     select curve.Key).ToArray(); // ToArray is needed to remove from collection in batch
+            foreach (var curveKey in curveKeysToRemove)
             {
-                typedInputSlot.SetUpdateActionBackToDefault();
-                typedInputSlot.DirtyFlag.Trigger &= ~DirtyFlagTrigger.Animated;
-
-                _animatedInputCurves.Remove(new CurveId(inputSlot));
+                _animatedInputCurves.Remove(curveKey);
             }
         }
 
@@ -104,11 +185,14 @@ namespace T3.Core.Operator
             return _animatedInputCurves.ContainsKey(new CurveId(inputSlot));
         }
 
-        public Curve GetCurveForInput(IInputSlot inputSlot)
+        public IEnumerable<Curve> GetCurvesForInput(IInputSlot inputSlot)
         {
-            return _animatedInputCurves[new CurveId(inputSlot)];
+            return from curve in _animatedInputCurves
+                   where curve.Key.InstanceId == inputSlot.Parent.Id
+                   where curve.Key.InputId == inputSlot.Id
+                   select curve.Value;
         }
-
+        
         public void Write(JsonTextWriter writer)
         {
             if (_animatedInputCurves.Count == 0)
@@ -123,6 +207,10 @@ namespace T3.Core.Operator
 
                 writer.WriteValue("InstanceId", entry.Key.InstanceId);
                 writer.WriteValue("InputId", entry.Key.InputId);
+                if (entry.Key.Index != 0)
+                {
+                    writer.WriteValue("Index", entry.Key.Index);
+                }
                 entry.Value.Write(writer); // write curve itself
 
                 writer.WriteEndObject();
@@ -137,11 +225,12 @@ namespace T3.Core.Operator
             {
                 Guid instanceId = Guid.Parse(entry["InstanceId"].Value<string>());
                 Guid inputId = Guid.Parse(entry["InputId"].Value<string>());
-
+                var indexToken = entry.SelectToken("Index");
+                int index = indexToken?.Value<int>() ?? 0;
                 Curve curve = new Curve();
                 curve.Read(entry);
 
-                _animatedInputCurves.Add(new CurveId(instanceId, inputId), curve);
+                _animatedInputCurves.Add(new CurveId(instanceId, inputId, index), curve);
             }
         }
 
