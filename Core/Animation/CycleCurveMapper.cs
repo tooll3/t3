@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace T3.Core.Animation.Curves
+namespace T3.Core.Animation
 {
-    public class OscillateCurveMapper : IOutsideCurveMapper
+    public class CycleCurveMapper : IOutsideCurveMapper
     {
         public void Calc(double u, SortedList<double, VDefinition> curveElements, out double newU, out double offset)
         {
@@ -21,28 +21,12 @@ namespace T3.Core.Animation.Curves
                 if (u < firstU)
                 {
                     delta = firstU - u;
-                    int a = (int)(delta / (lastU - firstU));
-                    if ((a & 1) != 0)
-                    {
-                        newU = lastU - (delta % (lastU - firstU));
-                    }
-                    else
-                    {
-                        newU = firstU + (delta % (lastU - firstU));
-                    }
+                    newU = lastU - (delta % (lastU - firstU));
                 }
                 else if (u > lastU)
                 {
                     delta = u - lastU;
-                    byte a = (byte)(delta / (lastU - firstU));
-                    if ((a & 1) != 0)
-                    {
-                        newU = firstU + (delta % (lastU - firstU));
-                    }
-                    else
-                    {
-                        newU = lastU - (delta % (lastU - firstU));
-                    }
+                    newU = firstU + (delta % (lastU - firstU));
                 }
                 else
                 {

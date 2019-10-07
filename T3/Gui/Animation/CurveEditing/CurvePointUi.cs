@@ -5,7 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using T3.Core.Animation.Curves;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Gui.Selection;
 using UiHelpers;

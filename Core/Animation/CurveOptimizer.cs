@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace T3.Core.Animation.Curves
+namespace T3.Core.Animation
 {
     public class CurveOptimizer
     {

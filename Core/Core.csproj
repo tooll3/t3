@@ -96,19 +96,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animation\Curves\ConstantCurveMapper.cs" />
-    <Compile Include="Animation\Curves\ConstInterpolator.cs" />
-    <Compile Include="Animation\Curves\Curve.cs" />
-    <Compile Include="Animation\Curves\CurveOptimizer.cs" />
-    <Compile Include="Animation\Curves\CurveState.cs" />
-    <Compile Include="Animation\Curves\CycleCurveMapper.cs" />
-    <Compile Include="Animation\Curves\CycleWithOffsetCurveMapper.cs" />
-    <Compile Include="Animation\Curves\IOutsideCurveMapper.cs" />
-    <Compile Include="Animation\Curves\LinearInterpolator.cs" />
-    <Compile Include="Animation\Curves\OscillateCurveMapper.cs" />
-    <Compile Include="Animation\Curves\SplineInterpolator.cs" />
-    <Compile Include="Animation\Curves\Utils.cs" />
-    <Compile Include="Animation\Curves\VDefinition.cs" />
+    <Compile Include="Animation\ConstantCurveMapper.cs" />
+    <Compile Include="Animation\ConstInterpolator.cs" />
+    <Compile Include="Animation\Curve.cs" />
+    <Compile Include="Animation\CurveOptimizer.cs" />
+    <Compile Include="Animation\CurveState.cs" />
+    <Compile Include="Animation\CycleCurveMapper.cs" />
+    <Compile Include="Animation\CycleWithOffsetCurveMapper.cs" />
+    <Compile Include="Animation\IOutsideCurveMapper.cs" />
+    <Compile Include="Animation\LinearInterpolator.cs" />
+    <Compile Include="Animation\OscillateCurveMapper.cs" />
+    <Compile Include="Animation\SplineInterpolator.cs" />
+    <Compile Include="Animation\Utils.cs" />
+    <Compile Include="Animation\VDefinition.cs" />
     <Compile Include="Logging\ConsoleWriter.cs" />
     <Compile Include="Logging\ILogWriter.cs" />
     <Compile Include="Logging\Log.cs" />
