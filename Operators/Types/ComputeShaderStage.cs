@@ -18,6 +18,25 @@ namespace T3.Operators.Types
             Output.DirtyFlag.Trigger = DirtyFlagTrigger.Always; // always render atm
         }
 
+        private void UpdateMultiInput<T>(MultiInputSlot<T> input, ref T[] resources, EvaluationContext context)
+        {
+            if (input.DirtyFlag.IsDirty)
+            {
+                var connectedConstBuffers = input.GetCollectedTypedInputs();
+                if (connectedConstBuffers.Count != resources.Length)
+                {
+                    resources = new T[connectedConstBuffers.Count];
+                }
+
+                for (int i = 0; i < connectedConstBuffers.Count; i++)
+                {
+                    resources[i] = connectedConstBuffers[i].GetValue(context);
+                }
+
+                input.DirtyFlag.Clear();
+            }
+        }
+
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
@@ -27,50 +46,9 @@ namespace T3.Operators.Types
 
             _cs = ComputeShader.GetValue(context);
 
-            if (ConstantBuffers.DirtyFlag.IsDirty)
-            {
-                var connectedConstBuffers = ConstantBuffers.GetCollectedTypedInputs();
-                if (connectedConstBuffers.Count != _constantBuffers.Length)
-                {
-                    _constantBuffers = new Buffer[connectedConstBuffers.Count];
-                }
-
-                for (int i = 0; i < connectedConstBuffers.Count; i++)
-                {
-                    _constantBuffers[i] = connectedConstBuffers[i].GetValue(context);
-                }
-            }
-
-            if (ShaderResources.DirtyFlag.IsDirty)
-            {
-                var connectedResources = ShaderResources.GetCollectedTypedInputs();
-                if (connectedResources.Count != _shaderResourceViews.Length)
-                {
-                    _shaderResourceViews = new ShaderResourceView[connectedResources.Count];
-                }
-
-                for (int i = 0; i < connectedResources.Count; i++)
-                {
-                    _shaderResourceViews[i] = connectedResources[i].GetValue(context);
-                }
-                ShaderResources.DirtyFlag.Clear();
-            }
-
-            if (SamplerStates.DirtyFlag.IsDirty)
-            {
-                var connectedSamplers = SamplerStates.GetCollectedTypedInputs();
-                if (connectedSamplers.Count != _samplerStates.Length)
-                {
-                    _samplerStates = new SamplerState[connectedSamplers.Count];
-                }
-
-                for (int i = 0; i < connectedSamplers.Count; i++)
-                {
-                    _samplerStates[i] = connectedSamplers[i].GetValue(context);
-                }
-
-                SamplerStates.DirtyFlag.Clear();
-            }
+            UpdateMultiInput(ConstantBuffers, ref _constantBuffers, context);
+            UpdateMultiInput(ShaderResources, ref _shaderResourceViews, context);
+            UpdateMultiInput(SamplerStates, ref _samplerStates, context);
 
             if (OutputUav.DirtyFlag.IsDirty)
             {
