@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using T3.Core.Animation.Curves;
+using T3.Core.Animation;
 using T3.Core.Logging;
 
 namespace T3.Core.Operator

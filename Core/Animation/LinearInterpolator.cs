@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace T3.Core.Animation.Curves
+namespace T3.Core.Animation
 {
     public class LinearInterpolator
     {
