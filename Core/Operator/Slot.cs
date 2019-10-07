@@ -266,6 +266,8 @@ namespace T3.Core.Operator
     {
         SymbolChild.Input Input { get; set; }
         bool IsMultiInput { get; }
+
+        void SetUpdateActionBackToDefault();
     }
 
     public class InputSlot<T> : Slot<T>, IInputSlot

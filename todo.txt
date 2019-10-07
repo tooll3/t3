@@ -1,9 +1,8 @@
 todo:
-- Add color grade op
+/ Add color grade op
 - Add first player version
 - Add first sound integration
 - Replace Guids with uint ids during runtime
-- How to animate struct type like Vec3 or Color
 - Showing enums produces always the same code, extract function for this and even better cached object per enum type
 - Make all tests in CoreTests runnable again
 - Make remove connection command applicable for lists of connections
@@ -15,6 +14,7 @@ todo:
 - General op replacement/compilation after change
  
 done:
+* How to animate struct type like Vec3 or Color
 * Fix exception when removing and input/output in code and restarting
 * Add remaining things to compute shader stage (missing multi inputs, dispatch count etc)
 * Add copy operator functionality
