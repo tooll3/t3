@@ -86,7 +86,7 @@ namespace T3.Core
             }
 
             var syntaxTree = CSharpSyntaxTree.ParseText(source);
-            var compilation = CSharpCompilation.Create("assemblyName",
+            var compilation = CSharpCompilation.Create("Operators",
                                                        new[] { syntaxTree },
                                                        new[]
                                                        {
@@ -261,7 +261,7 @@ namespace T3.Core
 
             _csFileWatcher = new FileSystemWatcher(@"..\Operators\Types", "*.cs");
             _csFileWatcher.Changed += OnChanged;
-            _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite;// | NotifyFilters.CreationTime;
+            _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
             _csFileWatcher.EnableRaisingEvents = true;
         }
 
