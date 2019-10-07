@@ -171,6 +171,7 @@ namespace T3.Core
             InputValueCreators.Entries.Add(typeof(Comparison), InputDefaultValueCreator<Comparison>);
             InputValueCreators.Entries.Add(typeof(SamplerState), () => new InputValue<SamplerState>(null));
             InputValueCreators.Entries.Add(typeof(ShaderResourceView), () => new InputValue<ShaderResourceView>(null));
+            InputValueCreators.Entries.Add(typeof(UnorderedAccessView), () => new InputValue<UnorderedAccessView>(null));
             InputValueCreators.Entries.Add(typeof(Scene), () => new InputValue<Scene>(null));
         }
 

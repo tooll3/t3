@@ -80,6 +80,13 @@
         "X": 549.4164,
         "Y": 92.38898
       }
+    },
+    {
+      "ChildId": "a08b9858-1edc-42f1-b100-b15f1fbb6a8a"/*UavFromTexture2d*/,
+      "Position": {
+        "X": 640.0,
+        "Y": 223.0
+      }
     }
   ],
   "OutputUis": [

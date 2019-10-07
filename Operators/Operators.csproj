@@ -78,6 +78,7 @@
     <Compile Include="Types\Sum.cs" />
     <Compile Include="Types\Texture2d.cs" />
     <Compile Include="Types\Time.cs" />
+    <Compile Include="Types\UavFromTexture2d.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Types\Add_c160f925-0a66-4505-a569-cadd878dbb6f.t3" />
@@ -110,6 +111,8 @@
     <Content Include="Types\SelectFloatFromList_0841cdd4-0106-4f4e-826b-8de23bb5b5f0.t3ui" />
     <Content Include="Types\ShowTexture2d_b0212daa-7fba-4f6a-851c-3dd9e2e8a23e.t3" />
     <Content Include="Types\ShowTexture2d_b0212daa-7fba-4f6a-851c-3dd9e2e8a23e.t3ui" />
+    <Content Include="Types\SrvFromTexture2d_c2078514-cf1d-439c-a732-0d7b31b5084a.t3" />
+    <Content Include="Types\SrvFromTexture2d_c2078514-cf1d-439c-a732-0d7b31b5084a.t3ui" />
     <Content Include="Types\StringConcat_48ab9824-76ca-4238-800f-9cf95311e6c0.t3" />
     <Content Include="Types\StringConcat_48ab9824-76ca-4238-800f-9cf95311e6c0.t3ui" />
     <Content Include="Types\StringLength_4c496e8d-2a83-4493-a7a4-fdad29ef3f7d.t3" />
@@ -122,6 +125,8 @@
     <Content Include="Types\TimeConstBuffer_de8bc97a-8ef0-4d4a-9ffa-88046a2daf40.t3ui" />
     <Content Include="Types\Time_862de1a8-f630-4823-8860-7afa918bb1bc.t3" />
     <Content Include="Types\Time_862de1a8-f630-4823-8860-7afa918bb1bc.t3ui" />
+    <Content Include="Types\UavFromTexture2d_84e02044-3011-4a5e-b76a-c904d9b4557f.t3" />
+    <Content Include="Types\UavFromTexture2d_84e02044-3011-4a5e-b76a-c904d9b4557f.t3ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
