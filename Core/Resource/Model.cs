@@ -43,6 +43,8 @@ namespace T3.Core
 
         public Model()
         {
+            Log.AddWriter(new ConsoleWriter());
+
 #if DEBUG
             _operatorsAssembly = Assembly.LoadFrom(@"bin\debug\Operators.dll");
 #else

@@ -10,13 +10,6 @@ namespace T3.Core.Logging
     /// </summary>
     public class Log
     {
-        #region API for setup
-        //public static void Initialize(Dispatcher dispatcher)
-        //{
-        //_instance._mainThreadDispatcher = dispatcher;
-        //}
-
-
         public static void Dispose()
         {
             foreach (var w in _instance._logWriters)
@@ -25,13 +18,10 @@ namespace T3.Core.Logging
             }
         }
 
-
         public static void AddWriter(ILogWriter writer)
         {
             _instance._logWriters.Add(writer);
         }
-        #endregion
-
 
         #region API for logging
         public static void Debug(String message)

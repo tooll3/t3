@@ -16,7 +16,7 @@ namespace T3.Core.Logging
 
         public void ProcessEntry(LogEntry newEntry)
         {
-            Console.Write("{0}: {1}", newEntry.Level.ToString(), newEntry.Message + "\n");
+            Console.Write("{0}: {1}\n", newEntry.Level.ToString(), newEntry.Message);
         }
     }
 }
