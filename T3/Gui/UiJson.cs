@@ -136,11 +136,18 @@ namespace T3.Gui
                 else if (InputUiFactory.Entries.TryGetValue(type, out var inputCreator))
                 {
                     // get the symbol input definition
-                    var inputDefinition = symbol.InputDefinitions.Single(def => def.Id == inputId);
-                    var inputUi = inputCreator();
-                    inputUi.InputDefinition = inputDefinition;
-                    inputUi.Read(uiInputEntry);
-                    inputDict.Add(inputId, inputUi);
+                    var inputDefinition = symbol.InputDefinitions.SingleOrDefault(def => def.Id == inputId);
+                    if (inputDefinition != null)
+                    {
+                        var inputUi = inputCreator();
+                        inputUi.InputDefinition = inputDefinition;
+                        inputUi.Read(uiInputEntry);
+                        inputDict.Add(inputId, inputUi);
+                    }
+                    else
+                    {
+                        Log.Warning($"Found input entry in ui file of type '{typeName}' for symbol '{symbol.Name}', but no corresponding input in symbol. Assuming that the input was removed and ignoring the ui information.");
+                    }
                 }
                 else
                 {

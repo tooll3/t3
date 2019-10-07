@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui;
 using T3.Gui.Windows;
@@ -193,20 +194,20 @@ namespace T3
         [STAThread]
         private static void Main()
         {
-            var form = new ImGuiDx11RenderForm("T3 ImGui Test") { ClientSize = new Size(1920, 1080) };
+            var form = new ImGuiDx11RenderForm("T3 ImGui Test") {ClientSize = new Size(1920, 1080)};
 
             // SwapChain description
             var desc = new SwapChainDescription()
-            {
-                BufferCount = 1,
-                ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
+                       {
+                           BufferCount = 1,
+                           ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
                                                                  new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                IsWindowed = true,
-                OutputHandle = form.Handle,
-                SampleDescription = new SampleDescription(1, 0),
-                SwapEffect = SwapEffect.Discard,
-                Usage = Usage.RenderTargetOutput
-            };
+                           IsWindowed = true,
+                           OutputHandle = form.Handle,
+                           SampleDescription = new SampleDescription(1, 0),
+                           SwapEffect = SwapEffect.Discard,
+                           Usage = Usage.RenderTargetOutput
+                       };
 
             // Create Device and SwapChain
             Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, desc, out var device, out _swapChain);
