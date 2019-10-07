@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
 using SharpDX;
 using SharpDX.Direct3D11;
@@ -12,6 +11,7 @@ using SharpDX.DXGI;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core
 {
@@ -81,12 +81,20 @@ namespace T3.Core
                                                                      return new Size2(width, height);
                                                                  });
             JsonToTypeValueConverters.Entries.Add(typeof(Int3), jsonToken =>
-                                                                 {
-                                                                       int x = jsonToken["X"].Value<int>();
-                                                                       int y = jsonToken["Y"].Value<int>();
-                                                                       int z = jsonToken["Z"].Value<int>();
-                                                                       return new Int3(x, y, z);
-                                                                 });
+                                                                {
+                                                                    int x = jsonToken["X"].Value<int>();
+                                                                    int y = jsonToken["Y"].Value<int>();
+                                                                    int z = jsonToken["Z"].Value<int>();
+                                                                    return new Int3(x, y, z);
+                                                                });
+            JsonToTypeValueConverters.Entries.Add(typeof(Vector4), jsonToken =>
+                                                                   {
+                                                                       float x = jsonToken["X"].Value<float>();
+                                                                       float y = jsonToken["Y"].Value<float>();
+                                                                       float z = jsonToken["Z"].Value<float>();
+                                                                       float w = jsonToken["W"].Value<float>();
+                                                                       return new Vector4(x, y, z, w);
+                                                                   });
             JsonToTypeValueConverters.Entries.Add(typeof(Format), JsonToEnumValue<Format>);
             JsonToTypeValueConverters.Entries.Add(typeof(ResourceUsage), JsonToEnumValue<ResourceUsage>);
             JsonToTypeValueConverters.Entries.Add(typeof(BindFlags), JsonToEnumValue<BindFlags>);
@@ -124,7 +132,7 @@ namespace T3.Core
                                                                      writer.WriteValue("Height", vec.Height);
                                                                      writer.WriteEndObject();
                                                                  });
-            TypeValueToJsonConverters.Entries.Add(typeof(Int3), (writer, obj) =>
+           TypeValueToJsonConverters.Entries.Add(typeof(Int3), (writer, obj) =>
                                                                 {
                                                                     Int3 vec = (Int3)obj;
                                                                     writer.WriteStartObject();
@@ -133,6 +141,16 @@ namespace T3.Core
                                                                     writer.WriteValue("Z", vec.Z);
                                                                     writer.WriteEndObject();
                                                                 });
+           TypeValueToJsonConverters.Entries.Add(typeof(Vector4), (writer, obj) =>
+                                                                  {
+                                                                      var vec = (Vector4)obj;
+                                                                      writer.WriteStartObject();
+                                                                      writer.WriteValue("X", vec.X);
+                                                                      writer.WriteValue("Y", vec.Y);
+                                                                      writer.WriteValue("Z", vec.Z);
+                                                                      writer.WriteValue("W", vec.W);
+                                                                      writer.WriteEndObject();
+                                                                  });
             TypeValueToJsonConverters.Entries.Add(typeof(Format), (writer, obj) => writer.WriteValue(obj.ToString()));
             TypeValueToJsonConverters.Entries.Add(typeof(ResourceUsage), (writer, obj) => writer.WriteValue(obj.ToString()));
             TypeValueToJsonConverters.Entries.Add(typeof(BindFlags), (writer, obj) => writer.WriteValue(obj.ToString()));
@@ -159,6 +177,7 @@ namespace T3.Core
             InputValueCreators.Entries.Add(typeof(string), () => new InputValue<string>(string.Empty));
             InputValueCreators.Entries.Add(typeof(Size2), InputDefaultValueCreator<Size2>);
             InputValueCreators.Entries.Add(typeof(Int3), InputDefaultValueCreator<Int3>);
+            InputValueCreators.Entries.Add(typeof(Vector4), () => new InputValue<Vector4>(new Vector4(1.0f, 1.0f, 1.0f, 1.0f)));
             InputValueCreators.Entries.Add(typeof(ResourceUsage), InputDefaultValueCreator<ResourceUsage>);
             InputValueCreators.Entries.Add(typeof(Format), InputDefaultValueCreator<Format>);
             InputValueCreators.Entries.Add(typeof(BindFlags), InputDefaultValueCreator<BindFlags>);

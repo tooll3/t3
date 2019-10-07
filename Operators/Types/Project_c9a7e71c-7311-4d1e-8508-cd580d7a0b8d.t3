@@ -73,6 +73,11 @@
       "Id": "e85a635f-bd24-4dbe-b06d-cb5d04eb49cf"/*ComputeWobble*/,
       "SymbolId": "7b95571c-8391-4313-a008-7020a14887f4",
       "InputValues": []
+    },
+    {
+      "Id": "c31c51f4-f655-497f-b1fd-3ae8eba04e4f"/*ColorGrade*/,
+      "SymbolId": "e242e0d8-ff71-4742-9aab-6bdfcb285afc",
+      "InputValues": []
     }
   ],
   "Connections": [

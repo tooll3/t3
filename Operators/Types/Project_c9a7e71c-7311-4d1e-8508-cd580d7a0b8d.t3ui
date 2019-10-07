@@ -93,6 +93,13 @@
         "X": 608.0,
         "Y": 413.0
       }
+    },
+    {
+      "ChildId": "c31c51f4-f655-497f-b1fd-3ae8eba04e4f"/*ColorGrade*/,
+      "Position": {
+        "X": 577.0,
+        "Y": 529.0
+      }
     }
   ],
   "OutputUis": [
