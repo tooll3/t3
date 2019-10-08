@@ -5,7 +5,6 @@
   "OutputUis": [
     {
       "OutputId": "1c34d39c-0bef-4c4a-a3e4-dcb8d5664f3b"/*TimeInSeconds*/,
-      "Type": "System.Single, mscorlib",
       "Position": {
         "X": 0.0,
         "Y": 0.0

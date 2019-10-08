@@ -3,7 +3,6 @@
   "InputUis": [
     {
       "InputId": "0214fd61-536b-4a58-9236-00466698269f"/*Speed*/,
-      "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
         "X": 228.0,
@@ -14,7 +13,6 @@
     },
     {
       "InputId": "83771c7c-f861-4533-b4d2-3d9782a4c973"/*Strength*/,
-      "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
         "X": 371.0,
@@ -92,7 +90,6 @@
   "OutputUis": [
     {
       "OutputId": "f4e9bc98-6ed2-48a2-a2b6-a3372a74ea1b"/*Output*/,
-      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
       "Position": {
         "X": 555.999939,
         "Y": 9.00003052

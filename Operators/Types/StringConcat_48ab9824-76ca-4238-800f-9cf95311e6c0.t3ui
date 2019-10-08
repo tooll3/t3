@@ -3,7 +3,6 @@
   "InputUis": [
     {
       "InputId": "b5e72715-9339-484f-b197-5a28cd823798"/*Input*/,
-      "Type": "System.String, mscorlib",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -16,7 +15,6 @@
   "OutputUis": [
     {
       "OutputId": "e47bf25e-351a-44e6-84c6-ad3abc93531a"/*Result*/,
-      "Type": "System.String, mscorlib",
       "Position": {
         "X": 0.0,
         "Y": 0.0

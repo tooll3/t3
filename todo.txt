@@ -1,4 +1,6 @@
 todo:
+- order the connections that these are not stored in different order after recompilation
+/ General op replacement/compilation after change
 / Add color grade op
 - Add first player version
 - Add first sound integration
@@ -11,7 +13,6 @@ todo:
 - Restructure connections to have an easier handling for multi inputs etc
 - How to visualize input connection evaluation
 - Move Roslyn integration to UI project
-- General op replacement/compilation after change
  
 done:
 * How to animate struct type like Vec3 or Color

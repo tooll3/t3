@@ -3,7 +3,6 @@
   "InputUis": [
     {
       "InputId": "5a3e1fa0-21fc-4c2e-a4bb-45a311f24c00"/*Scene*/,
-      "Type": "T3.Core.Scene, Core",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -12,7 +11,6 @@
     },
     {
       "InputId": "5095c803-fa2a-408c-ab56-8057e49648d5"/*Texture*/,
-      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -24,7 +22,6 @@
   "OutputUis": [
     {
       "OutputId": "996a44a6-005b-421f-85a4-a3cca425044e"/*TextureOutput*/,
-      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
       "Position": {
         "X": 0.0,
         "Y": 0.0

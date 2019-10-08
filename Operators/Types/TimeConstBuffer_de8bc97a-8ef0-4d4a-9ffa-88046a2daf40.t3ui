@@ -5,7 +5,6 @@
   "OutputUis": [
     {
       "OutputId": "6c118567-8827-4422-86cc-4d4d00762d87"/*Buffer*/,
-      "Type": "SharpDX.Direct3D11.Buffer, SharpDX.Direct3D11",
       "Position": {
         "X": 0.0,
         "Y": 0.0

@@ -3,7 +3,6 @@
   "InputUis": [
     {
       "InputId": "e3550929-8905-4cdf-bc85-c31e97da4baa"/*Input1*/,
-      "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
         "X": 36.0,
@@ -14,7 +13,6 @@
     },
     {
       "InputId": "993d59bb-1fc0-4857-a36d-629b0e7aa0d2"/*Input2*/,
-      "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
         "X": 197.0,
@@ -28,7 +26,6 @@
   "OutputUis": [
     {
       "OutputId": "5ce9c625-f890-4620-9747-c98eab4b9447"/*Result*/,
-      "Type": "System.Single, mscorlib",
       "Position": {
         "X": 133.0,
         "Y": 38.0

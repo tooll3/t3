@@ -3,7 +3,6 @@
   "InputUis": [
     {
       "InputId": "15874509-fabb-44ca-93a1-858ff95fb5f5"/*Input*/,
-      "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -17,7 +16,6 @@
   "OutputUis": [
     {
       "OutputId": "9140bd66-3257-498a-80cd-c516c128f7e5"/*Result*/,
-      "Type": "System.Collections.Generic.List`1[System.Single], mscorlib",
       "Position": {
         "X": 0.0,
         "Y": 0.0

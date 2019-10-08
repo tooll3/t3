@@ -3,7 +3,6 @@
   "InputUis": [
     {
       "InputId": "3bb4bab9-96cd-4e08-bab7-2a15fb4f11c0"/*Param1*/,
-      "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -14,7 +13,6 @@
     },
     {
       "InputId": "a3e13e00-835d-4857-b804-a1e300ebca2a"/*Param2*/,
-      "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -25,7 +23,6 @@
     },
     {
       "InputId": "e3f6e24d-97d7-4679-8a4c-c7ada2e01022"/*Param3*/,
-      "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -36,7 +33,6 @@
     },
     {
       "InputId": "b2208d3a-f321-4f4b-81de-6eb3026fe39c"/*Param4*/,
-      "Type": "System.Single, mscorlib",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -50,7 +46,6 @@
   "OutputUis": [
     {
       "OutputId": "89957a76-09f1-4448-b23e-39dfdd0aa5b0"/*Buffer*/,
-      "Type": "SharpDX.Direct3D11.Buffer, SharpDX.Direct3D11",
       "Position": {
         "X": 0.0,
         "Y": 0.0
