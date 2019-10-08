@@ -64,16 +64,22 @@ namespace T3.Gui
 
             // check if input uis are missing
             var inputUiFactory = InputUiFactory.Entries;
-            foreach (var input in Symbol.InputDefinitions)
+            for (int i = 0; i < Symbol.InputDefinitions.Count; i++)
             {
-                if (!InputUis.TryGetValue(input.Id, out var value) || value.Type != input.DefaultValue.ValueType)
+                Symbol.InputDefinition input = Symbol.InputDefinitions[i];
+                if (!InputUis.TryGetValue(input.Id, out var existingInputUi) || existingInputUi.Type != input.DefaultValue.ValueType)
                 {
                     Log.Debug($"Found no input ui entry for symbol child input '{input.Name}' - creating a new one");
                     InputUis.Remove(input.Id);
                     var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
                     IInputUi newInputUi = inputCreator();
                     newInputUi.InputDefinition = input;
+                    newInputUi.Index = i;
                     InputUis.Add(input.Id, newInputUi);
+                }
+                else
+                {
+                    existingInputUi.Index = i;
                 }
             }
 

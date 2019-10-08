@@ -20,6 +20,7 @@ namespace T3.Gui.InputUi
         public Symbol.InputDefinition InputDefinition { get; set; }
         public Guid Id => InputDefinition.Id;
         public Relevancy Relevancy { get; set; } = Relevancy.Required;
+        public int Index { get; set; } = 0;
         protected abstract InputEditState DrawEditControl(string name, ref T value);
         protected abstract void DrawValueDisplay(string name, ref T value);
 
