@@ -85,14 +85,24 @@ namespace T3.Core
                 return;
             }
 
+            var referencedAssembliesNames = ResourceManager.Instance().OperatorsAssembly.GetReferencedAssemblies();// todo: ugly
+            var appDomainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
+            var coreAssembly = typeof(ResourceManager).Assembly;
+            referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
+            foreach (var asmName in referencedAssembliesNames)
+            {
+                var asm = appDomainAssemblies.SingleOrDefault(assembly => assembly.GetName().Name == asmName.Name);
+                if (asm != null)
+                {
+                    referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
+                }
+            }
+            
             var syntaxTree = CSharpSyntaxTree.ParseText(source);
             var compilation = CSharpCompilation.Create("Operators",
                                                        new[] { syntaxTree },
-                                                       new[]
-                                                       {
-                                                           MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                                                           MetadataReference.CreateFromFile(typeof(Resource).Assembly.Location)
-                                                       },
+                                                       referencedAssemblies.ToArray(),
                                                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
             using (var dllStream = new MemoryStream())
@@ -214,6 +224,7 @@ namespace T3.Core
     public class ResourceManager
     {
         public uint TestId = NULL_RESOURCE;
+        public Assembly OperatorsAssembly { get; set; }
 
         public static ResourceManager Instance()
         {

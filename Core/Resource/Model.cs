@@ -37,7 +37,7 @@ namespace T3.Core
     
     public class Model
     {
-        private Assembly _operatorsAssembly;
+        public Assembly OperatorsAssembly { get; set; }
         protected string Path { get; } = @"..\Operators\Types\";
         protected string SymbolExtension { get; } = ".t3";
 
@@ -46,9 +46,9 @@ namespace T3.Core
             Log.AddWriter(new ConsoleWriter());
 
 #if DEBUG
-            _operatorsAssembly = Assembly.LoadFrom(@"bin\debug\Operators.dll");
+            OperatorsAssembly = Assembly.LoadFrom(@"bin\debug\Operators.dll");
 #else
-            _operatorsAssembly = Assembly.LoadFrom(@"bin\release\Operators.dll");
+            OperatorsAssembly = Assembly.LoadFrom(@"bin\release\Operators.dll");
 #endif
             // generic enum value from json function, must be local function
             object JsonToEnumValue<T>(JToken jsonToken) where T : struct // todo: use 7.3 and replace with enum
@@ -205,7 +205,7 @@ namespace T3.Core
             }
 
             // check if there are symbols without a file, if yes add these
-            var instanceTypes = (from type in _operatorsAssembly.ExportedTypes
+            var instanceTypes = (from type in OperatorsAssembly.ExportedTypes
                                  where type.IsSubclassOf(typeof(Instance))
                                  where !type.IsGenericType
                                  select type).ToList();
