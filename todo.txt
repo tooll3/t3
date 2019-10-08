@@ -1,6 +1,4 @@
 todo:
-- fix reassigning connections to multi input after re-compilation
-/ General op replacement/compilation after change
 / Add color grade op
 - Add first player version
 - Add first sound integration
@@ -15,6 +13,8 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* General op replacement/compilation after change
+* fix reassigning connections to multi input after re-compilation
 * order the connections that these are not stored in different order after recompilation
 * How to animate struct type like Vec3 or Color
 * Fix exception when removing and input/output in code and restarting

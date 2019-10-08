@@ -18,6 +18,7 @@ using T3.Gui;
 using T3.Gui.Windows;
 using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
+using Resource = T3.Core.Resource;
 
 namespace T3
 {
@@ -252,7 +253,13 @@ namespace T3
             uint vsId = resourceManager.CreateVertexShader(@"Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture");
             uint psId = resourceManager.CreatePixelShader(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture");
             (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg", null);
-            resourceManager.CreateOperatorEntry(@"..\Operators\Types\Add.cs", "Add");
+
+            // setup file watching the operator source
+            foreach (var (key, symbol) in SymbolRegistry.Entries)
+            {
+                ResourceManager.Instance().CreateOperatorEntry(@"..\Operators\Types\" + symbol.Name + ".cs", symbol.Id.ToString());
+            }
+
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
             ShaderResourceView backgroundSrv = null;
 
