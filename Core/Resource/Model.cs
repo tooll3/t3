@@ -240,6 +240,7 @@ namespace T3.Core
                 var symbol = json.ReadSymbol(this);
                 if (symbol != null)
                 {
+                    symbol.SourcePath = Path + symbol.Name + ".cs";
                     SymbolRegistry.Entries.Add(symbol.Id, symbol);
                 }
 

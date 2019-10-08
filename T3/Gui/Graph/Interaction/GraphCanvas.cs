@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -127,38 +128,43 @@ namespace T3.Gui.Graph
                     var label = oneElementSelected ? $"{selectedChildren[0].SymbolChild.ReadableName} Item..." : $"{selectedChildren.Count} Items...";
 
                     ImGui.Text(label);
-                    if (ImGui.MenuItem(" Rename..", null, false, false))
+                    if (ImGui.MenuItem(" Rename..", false))
                     {
                     }
 
-                    if (ImGui.MenuItem(" Delete", null))
+                    if (ImGui.MenuItem(" Delete"))
                     {
                         var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
                         var cmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
                         UndoRedoStack.AddAndExecute(cmd);
                     }
 
-                    if (ImGui.MenuItem(" Copy", null, false))
+                    if (ImGui.MenuItem(" Duplicate as new type", oneElementSelected))
+                    {
+                        DuplicateAsNewType(selectedChildren[0].SymbolChild.Symbol);
+                    }
+
+                    if (ImGui.MenuItem(" Copy"))
                     {
                         CopySelectionToClipboard(selectedChildren);
                     }
                 }
 
-                if (ImGui.MenuItem("Paste", null, false))
+                if (ImGui.MenuItem("Paste"))
                 {
                     PasteClipboard();
                 }
 
                 ImGui.Separator();
 
-                if (ImGui.MenuItem("Rename..", null, false, false))
+                if (ImGui.MenuItem("Rename..", false))
                 {
                 }
+
                 if (ImGui.MenuItem("Add"))
                 {
                     QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, InverseTransformPosition(ImGui.GetMousePos()));
                 }
-                if (ImGui.MenuItem("Paste", null, false, false)) { }
                 ImGui.EndPopup();
             }
             else
@@ -166,6 +172,35 @@ namespace T3.Gui.Graph
                 _contextMenuIsOpen = false;
             }
             ImGui.PopStyleVar();
+        }
+
+        private static void DuplicateAsNewType(Symbol symbolToDuplicate)
+        {
+            var sourceSymbol = symbolToDuplicate;
+            string originalSourcePath = sourceSymbol.SourcePath;
+            Log.Info($"original symbol path: {originalSourcePath}");
+            string newName = sourceSymbol.Name + "2";
+            int lastSeparatorIndex = originalSourcePath.LastIndexOf("\\");
+            string newSourcePath = originalSourcePath.Substring(0, lastSeparatorIndex + 1) + newName + ".cs";
+            Log.Info($"new symbol path: {newSourcePath}");
+
+            var sr = new StreamReader(originalSourcePath);
+            string originalSource = sr.ReadToEnd();
+            sr.Dispose();
+            var oldToNewIdMap = new Dictionary<Guid, Guid>(20);
+            string newSource = Regex.Replace(originalSource,
+                                             @"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}",
+                                             match =>
+                                             {
+                                                 Guid newGuid = Guid.NewGuid();
+                                                 oldToNewIdMap.Add(Guid.Parse(match.Value), newGuid);
+                                                 return newGuid.ToString();
+                                             },
+                                             RegexOptions.IgnoreCase);
+            newSource = Regex.Replace(newSource, sourceSymbol.Name, match => newName);
+            var sw = new StreamWriter(newSourcePath);
+            sw.Write(newSource);
+            sw.Dispose();
         }
 
         private void CopySelectionToClipboard(List<SymbolChildUi> selectedChildren)
