@@ -69,15 +69,15 @@ namespace T3.Core
         {
             Writer.WritePropertyName("Connections");
             Writer.WriteStartArray();
-            connections.ForEach(connection =>
-                                {
-                                    Writer.WriteStartObject();
-                                    Writer.WriteValue("SourceParentOrChildId", connection.SourceParentOrChildId);
-                                    Writer.WriteValue("SourceSlotId", connection.SourceSlotId);
-                                    Writer.WriteValue("TargetParentOrChildId", connection.TargetParentOrChildId);
-                                    Writer.WriteValue("TargetSlotId", connection.TargetSlotId);
-                                    Writer.WriteEndObject();
-                                });
+            foreach (var connection in connections.OrderBy(c => c.TargetParentOrChildId.ToString() + c.TargetSlotId))
+            {
+                Writer.WriteStartObject();
+                Writer.WriteValue("SourceParentOrChildId", connection.SourceParentOrChildId);
+                Writer.WriteValue("SourceSlotId", connection.SourceSlotId);
+                Writer.WriteValue("TargetParentOrChildId", connection.TargetParentOrChildId);
+                Writer.WriteValue("TargetSlotId", connection.TargetSlotId);
+                Writer.WriteEndObject();
+            }
             Writer.WriteEndArray();
         }
 

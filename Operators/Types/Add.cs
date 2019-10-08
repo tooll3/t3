@@ -20,6 +20,7 @@ namespace T3.Operators.Types
             Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
         }
 
+
         [Input(Guid = "{E3550929-8905-4CDF-BC85-C31E97DA4BAA}")]
         public readonly InputSlot<float> Input1 = new InputSlot<float>();
 

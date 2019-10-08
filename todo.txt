@@ -1,5 +1,5 @@
 todo:
-- order the connections that these are not stored in different order after recompilation
+- fix reassigning connections to multi input after re-compilation
 / General op replacement/compilation after change
 / Add color grade op
 - Add first player version
@@ -15,6 +15,7 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* order the connections that these are not stored in different order after recompilation
 * How to animate struct type like Vec3 or Color
 * Fix exception when removing and input/output in code and restarting
 * Add remaining things to compute shader stage (missing multi inputs, dispatch count etc)
