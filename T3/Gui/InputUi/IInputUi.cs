@@ -29,6 +29,7 @@ namespace T3.Gui.InputUi
         Symbol.InputDefinition InputDefinition { get; set; }
         Type Type { get; }
         Relevancy Relevancy { get; set; }
+        int Index { get; set; }
 
         InputEditState DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
 

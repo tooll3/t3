@@ -113,8 +113,8 @@ namespace T3.Gui.Graph
             var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
             SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
             var visibleInputUis = (from inputUi in childSymbolUi.InputUis.Values
-                                   where inputUi.Relevancy != Relevancy.Optional ||
-                                         connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Id)
+                                   where inputUi.Relevancy != Relevancy.Optional || connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Id)
+                                   orderby inputUi.Index
                                    select inputUi).ToArray();
 
             for (var inputIndex = 0; inputIndex < visibleInputUis.Length; inputIndex++)

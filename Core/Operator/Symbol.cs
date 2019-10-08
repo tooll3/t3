@@ -102,6 +102,8 @@ namespace T3.Core.Operator
                 var alreadyExistingInput = oldInputDefinitions.FirstOrDefault(i => i.Id == attribute.Id);
                 if (alreadyExistingInput != null)
                 {
+                    alreadyExistingInput.Name = info.Name;
+                    alreadyExistingInput.IsMultiInput = info.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
                     InputDefinitions.Add(alreadyExistingInput);
                     oldInputDefinitions.Remove(alreadyExistingInput);
                 }
