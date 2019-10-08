@@ -82,10 +82,16 @@ namespace T3.Core.Operator
             _instancesOfSymbol.ForEach(instance => instance.Dispose());
         }
 
+        private class ConnectionEntry
+        {
+            public Connection Connection { get; set; }
+            public int MultiInputIndex { get; set; }
+        }
+
         public void SetInstanceType(Type instanceType)
         {
             InstanceType = instanceType;
-            List<(SymbolChild, Instance, List<Connection>)> newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<Connection>)>();
+            var newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<ConnectionEntry>)>();
 
             // check if inputs have changed
             Type inputSlotType = typeof(IInputSlot);
@@ -146,14 +152,41 @@ namespace T3.Core.Operator
                 // get all connections that belong to this instance
                 var connectionsToReplace = parentSymbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.Id ||
                                                                                  c.TargetParentOrChildId == instance.Id);
-                foreach (var connection in connectionsToReplace)
+                // first remove those connections where the inputs/outputs doesn't exist anymore
+                var connectionsToRemove =
+                    connectionsToReplace.FindAll(c =>
+                                                 {
+                                                     return oldOutputDefinitions.FirstOrDefault(output => output.Id == c.SourceSlotId || output.Id == c.TargetSlotId) != null ||
+                                                            oldInputDefinitions.FirstOrDefault(input => input.Id == c.SourceSlotId || input.Id == c.TargetSlotId) != null;
+                                                 });
+
+                foreach (var connection in connectionsToRemove)
                 {
                     parentSymbol.RemoveConnection(connection);
+                    connectionsToReplace.Remove(connection);
                 }
 
-                // filter out the connections where no inputs/output exist anymore
-                connectionsToReplace.RemoveAll(c => oldOutputDefinitions.FirstOrDefault(output => output.Id == c.SourceSlotId || output.Id == c.TargetSlotId) != null ||
-                                                    oldInputDefinitions.FirstOrDefault(input => input.Id == c.SourceSlotId || input.Id == c.TargetSlotId) != null);
+                // now create the entries for those that will be reconnected after the instance has been replaced. Take care of the multi input order
+                connectionsToReplace.Reverse();
+                var connectionEntriesToReplace = new List<ConnectionEntry>(connectionsToReplace.Count);
+                foreach (var con in connectionsToReplace)
+                {
+                    var entry = new ConnectionEntry
+                                {
+                                    Connection = con,
+                                    MultiInputIndex = parentSymbol.Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
+                                                                                            && c.TargetSlotId == con.TargetSlotId)
+                                                                  .FindIndex(cc => cc == con) // todo: fix this mess! connection rework!
+                                };
+                    connectionEntriesToReplace.Add(entry);
+                }
+
+                foreach (var entry in connectionEntriesToReplace)
+                {
+                    parentSymbol.RemoveConnection(entry.Connection, entry.MultiInputIndex);
+                }
+
+                connectionEntriesToReplace.Reverse(); // restore original order
 
                 var symbolChild = parentSymbol.Children.Single(child => child.Id == instance.Id);
 
@@ -172,7 +205,7 @@ namespace T3.Core.Operator
                     }
                 }
 
-                newInstanceSymbolChildren.Add((symbolChild, parent, connectionsToReplace));
+                newInstanceSymbolChildren.Add((symbolChild, parent, connectionEntriesToReplace));
             }
 
             // now remove the old instances itself...
@@ -192,9 +225,9 @@ namespace T3.Core.Operator
             // ... and add the connections again
             foreach (var (_, parent, connectionsToReplace) in newInstanceSymbolChildren)
             {
-                foreach (var connection in connectionsToReplace)
+                foreach (var entry in connectionsToReplace)
                 {
-                    parent.Symbol.AddConnection(connection);
+                    parent.Symbol.AddConnection(entry.Connection, entry.MultiInputIndex);
                 }
             }
         }
@@ -300,9 +333,18 @@ namespace T3.Core.Operator
             {
                 if (multiInputIndex == existingConnections.Count)
                 {
-                    // simple case, just append
-                    Connections.Add(connection);
-                    Log.Info($"Added MI with index {multiInputIndex} at existing index {Connections.Count - 1}");
+                    if (multiInputIndex == 0)
+                    {
+                        Connections.Add(connection);
+                        Log.Info($"Added MI with index {multiInputIndex} at existing index {Connections.Count - 1}");
+                    }
+                    else
+                    {
+                        var existingConnection = existingConnections[multiInputIndex - 1];
+                        int existingAtIndex = Connections.FindIndex(c => c == existingConnection); // == is intended
+                        Connections.Insert(existingAtIndex + 1, connection);
+                        Log.Info($"Added MI with index {multiInputIndex} at existing index {existingAtIndex}");
+                    }
                 }
                 else
                 {
