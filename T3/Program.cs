@@ -255,6 +255,7 @@ namespace T3
             (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg", null);
 
             // setup file watching the operator source
+            resourceManager.OperatorsAssembly = T3UI.UiModel.OperatorsAssembly;
             foreach (var (key, symbol) in SymbolRegistry.Entries)
             {
                 ResourceManager.Instance().CreateOperatorEntry(@"..\Operators\Types\" + symbol.Name + ".cs", symbol.Id.ToString());
