@@ -3,7 +3,6 @@
   "InputUis": [
     {
       "InputId": "d5afa102-2f88-431e-9cd4-af91e41f88f6"/*Texture*/,
-      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -15,7 +14,6 @@
   "OutputUis": [
     {
       "OutputId": "dc71f39f-3fba-4fc6-b8ef-ce57c82bf78e"/*ShaderResourceView*/,
-      "Type": "SharpDX.Direct3D11.ShaderResourceView, SharpDX.Direct3D11",
       "Position": {
         "X": 0.0,
         "Y": 0.0

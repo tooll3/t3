@@ -3,7 +3,6 @@
   "InputUis": [
     {
       "InputId": "4a4f6830-1809-42c9-91eb-d4dbd0290043"/*Texture*/,
-      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -15,7 +14,6 @@
   "OutputUis": [
     {
       "OutputId": "83d2dcfd-3850-45d8-bb1b-93fe9c9f4334"/*UnorderedAccessView*/,
-      "Type": "SharpDX.Direct3D11.UnorderedAccessView, SharpDX.Direct3D11",
       "Position": {
         "X": 0.0,
         "Y": 0.0

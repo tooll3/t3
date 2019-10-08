@@ -3,7 +3,6 @@
   "InputUis": [
     {
       "InputId": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
-      "Type": "System.String, mscorlib",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -16,7 +15,6 @@
   "OutputUis": [
     {
       "OutputId": "a4a46c04-ff03-48ce-83c9-0c0baa0f72e7"/*ShaderResourceView*/,
-      "Type": "SharpDX.Direct3D11.ShaderResourceView, SharpDX.Direct3D11",
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -24,7 +22,6 @@
     },
     {
       "OutputId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037"/*Texture*/,
-      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
       "Position": {
         "X": 0.0,
         "Y": 0.0

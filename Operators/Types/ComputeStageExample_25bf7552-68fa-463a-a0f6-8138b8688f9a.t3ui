@@ -76,7 +76,6 @@
   "OutputUis": [
     {
       "OutputId": "405bb68e-9808-4aea-9e05-c3486b3e045d"/*Output*/,
-      "Type": "SharpDX.Direct3D11.Texture2D, SharpDX.Direct3D11",
       "Position": {
         "X": 355.0,
         "Y": 56.0

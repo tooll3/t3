@@ -46,7 +46,6 @@ namespace T3.Gui
                 Writer.WriteObject("InputId", inputEntry.Key);
                 Writer.WriteComment(symbolInput.Name);
                 var inputUi = inputEntry.Value;
-                Writer.WriteObject("Type", $"{inputUi.Type}, {inputUi.Type.Assembly.GetName().Name}");
                 inputUi.Write(Writer);
                 Writer.WriteEndObject();
             }
@@ -90,7 +89,6 @@ namespace T3.Gui
                 var outputName = symbolUi.Symbol.OutputDefinitions.Single(outputDef => outputDef.Id == outputEntry.Key).Name;
                 Writer.WriteComment(outputName);
                 var outputUi = outputEntry.Value;
-                Writer.WriteObject("Type", outputUi.Type + $", {outputUi.Type.Assembly.GetName().Name}");
                 Writer.WritePropertyName("Position");
                 vec2Writer(Writer, outputUi.PosOnCanvas);
 
@@ -127,31 +125,25 @@ namespace T3.Gui
             foreach (JToken uiInputEntry in (JArray)mainObject["InputUis"])
             {
                 var inputId = Guid.Parse(uiInputEntry["InputId"].Value<string>());
-                var typeName = uiInputEntry["Type"].Value<string>();
-                Type type = Type.GetType(typeName);
-                if (type == null)
+                var inputDefinition = symbol.InputDefinitions.SingleOrDefault(def => def.Id == inputId);
+                if (inputDefinition == null)
                 {
-                    Console.WriteLine($"type not available: {typeName}");
+                    Log.Warning($"Found input entry in ui file for symbol '{symbol.Name}', but no corresponding input in symbol. Assuming that the input was removed and ignoring the ui information.");
+                    continue;
                 }
-                else if (InputUiFactory.Entries.TryGetValue(type, out var inputCreator))
+
+                var type = inputDefinition.DefaultValue.ValueType;
+                if (InputUiFactory.Entries.TryGetValue(type, out var inputCreator))
                 {
                     // get the symbol input definition
-                    var inputDefinition = symbol.InputDefinitions.SingleOrDefault(def => def.Id == inputId);
-                    if (inputDefinition != null)
-                    {
-                        var inputUi = inputCreator();
-                        inputUi.InputDefinition = inputDefinition;
-                        inputUi.Read(uiInputEntry);
-                        inputDict.Add(inputId, inputUi);
-                    }
-                    else
-                    {
-                        Log.Warning($"Found input entry in ui file of type '{typeName}' for symbol '{symbol.Name}', but no corresponding input in symbol. Assuming that the input was removed and ignoring the ui information.");
-                    }
+                    var inputUi = inputCreator();
+                    inputUi.InputDefinition = inputDefinition;
+                    inputUi.Read(uiInputEntry);
+                    inputDict.Add(inputId, inputUi);
                 }
                 else
                 {
-                    Log.Error($"Error creating input ui for non registered type '{typeName}'.");
+                    Log.Error($"Error creating input ui for non registered type '{type.Name}'.");
                 }
             }
 
@@ -175,26 +167,26 @@ namespace T3.Gui
             foreach (var uiOutputEntry in (JArray)mainObject["OutputUis"])
             {
                 var outputId = Guid.Parse(uiOutputEntry["OutputId"].Value<string>());
-                var typeName = uiOutputEntry["Type"].Value<string>();
-                Type type = Type.GetType(typeName);
-                if (type == null)
+                var outputDefinition = symbol.OutputDefinitions.SingleOrDefault(def => def.Id == outputId);
+                if (outputDefinition == null)
                 {
-                    Console.WriteLine($"type not available: {typeName}");
+                    Log.Warning($"Found output entry in ui file for symbol '{symbol.Name}', but no corresponding output in symbol. Assuming that the output was removed and ignoring the ui information.");
+                    continue;
                 }
-                else if (OutputUiFactory.Entries.TryGetValue(type, out var outputCreator))
+
+                var type = outputDefinition.ValueType;
+                if (OutputUiFactory.Entries.TryGetValue(type, out var outputCreator))
                 {
                     var outputUi = outputCreator();
                     outputUi.OutputDefinition = symbol.OutputDefinitions.Single(def => def.Id == outputId);
                     JToken positionToken = uiOutputEntry["Position"];
                     outputUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
-                    //JToken sizeToken = uiOutputEntry["Size"];
-                    //outputUi.Size = (Vector2)vector2Converter(sizeString);
 
                     outputDict.Add(outputId, outputUi);
                 }
                 else
                 {
-                    Log.Error($"Error creating output ui for non registered type '{typeName}'.");
+                    Log.Error($"Error creating output ui for non registered type '{type.Name}'.");
                 }
             }
 

@@ -3,7 +3,6 @@
   "InputUis": [
     {
       "InputId": "8ffe42cf-6c2f-4d4e-8892-ada31451d2b9"/*Color*/,
-      "Type": "System.Numerics.Vector4, System.Numerics",
       "Relevancy": "Required",
       "Position": {
         "X": 0.0,
@@ -15,7 +14,6 @@
   "OutputUis": [
     {
       "OutputId": "9832f278-2d9f-4b14-b92d-60acb1c202cb"/*Output*/,
-      "Type": "System.Numerics.Vector4, System.Numerics",
       "Position": {
         "X": 0.0,
         "Y": 0.0
