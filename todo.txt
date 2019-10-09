@@ -1,7 +1,7 @@
 todo:
-/ Duplicate as new type
-- Combine as new type
-/ Add color grade op
+/ Combine as new type
+- Put operators assembly into own repo as submodule
+- Add color grade op
 - Add first player version
 - Add first sound integration
 - Replace Guids with uint ids during runtime
@@ -15,6 +15,7 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Duplicate as new type
 * General op replacement/compilation after change
 * fix reassigning connections to multi input after re-compilation
 * order the connections that these are not stored in different order after recompilation
