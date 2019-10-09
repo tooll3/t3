@@ -1,6 +1,6 @@
 todo:
+/ Duplicate as new type
 - Combine as new type
-- Duplicate as new type
 / Add color grade op
 - Add first player version
 - Add first sound integration
