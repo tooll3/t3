@@ -69,6 +69,36 @@ namespace T3.Gui.Graph
                 DrawList.PopClipRect();
                 DrawContextMenu();
 
+                if (_showCombine)
+                {
+                    _showCombine = false;
+                    ImGui.OpenPopup("Combine");
+                }
+
+                ImGui.SetNextWindowSize(new Vector2(500, 100), ImGuiCond.FirstUseEver);
+                if (ImGui.BeginPopupModal("Combine"))
+                {
+                    ImGui.AlignTextToFramePadding();
+                    ImGui.Text("Select name for new symbol");
+                    ImGui.SameLine();
+                    ImGui.InputText("##Select name for new symbol", ref _combineName, 255);
+
+                    if (ImGui.Button("Combine"))
+                    {
+                        var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                        CombineAsNewType(compositionSymbolUi, _selectedChildren, _combineName);
+                        ImGui.CloseCurrentPopup();
+                    }
+
+                    ImGui.SameLine();
+                    if (ImGui.Button("Cancel"))
+                    {
+                        ImGui.CloseCurrentPopup();
+                    }
+
+                    ImGui.EndPopup();
+                }
+
                 if (!ImGui.IsAnyItemHovered() && ImGui.IsMouseDoubleClicked(0))
                 {
                     QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, InverseTransformPosition(ImGui.GetMousePos()));
@@ -103,6 +133,7 @@ namespace T3.Gui.Graph
 
         private bool _contextMenuIsOpen = false;
         private int _combinedSymbolCount = 1;
+        private List<SymbolChildUi> _selectedChildren;
         private void DrawContextMenu()
         {
             // This is a horrible hack to distinguish right mouse click from right mouse drag
@@ -118,6 +149,7 @@ namespace T3.Gui.Graph
 
                 // Todo: Convert to linc
                 var selectedChildren = new List<SymbolChildUi>();
+                _selectedChildren = selectedChildren;
                 foreach (var x in SelectionHandler.SelectedElements)
                 {
                     if (x is SymbolChildUi childUi)
@@ -151,9 +183,8 @@ namespace T3.Gui.Graph
 
                     if (ImGui.MenuItem(" Combine as new type"))
                     {
-                        var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                        string newSymbolName = "CombinedName" + _combinedSymbolCount++;
-                        CombineAsNewType(compositionSymbolUi, selectedChildren, newSymbolName);
+//                        ImGui.OpenPopup("Combine");
+                        _showCombine = true;
                     }
 
                     if (ImGui.MenuItem(" Copy"))
@@ -624,5 +655,7 @@ namespace T3.Gui.Graph
         internal static Vector2 DefaultOpSize = new Vector2(100, 30);
         internal List<SymbolChildUi> ChildUis { get; set; }
         private SymbolBrowser _symbolBrowser = new SymbolBrowser();
+        private bool _showCombine;
+        private string _combineName = "";
     }
 }
