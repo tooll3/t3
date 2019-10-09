@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -141,14 +142,8 @@ namespace T3.Gui.Graph
 
                     if (ImGui.MenuItem(" Duplicate as new type", oneElementSelected))
                     {
-                        var newSymbol = DuplicateAsNewType(selectedChildren[0].SymbolChild.Symbol);
-                        if (newSymbol != null)
-                        {
-                            var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                            var mousePos = InverseTransformPosition(ImGui.GetMousePos());
-                            var addCommand = new AddSymbolChildCommand(compositionSymbolUi.Symbol, newSymbol.Id) { PosOnCanvas = mousePos };
-                            UndoRedoStack.AddAndExecute(addCommand);
-                        }
+                        var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                        var newSymbol = DuplicateAsNewType(compositionSymbolUi, selectedChildren[0].SymbolChild);
                     }
 
                     if (ImGui.MenuItem(" Copy"))
@@ -181,9 +176,9 @@ namespace T3.Gui.Graph
             ImGui.PopStyleVar();
         }
 
-        private static Symbol DuplicateAsNewType(Symbol symbolToDuplicate)
+        private Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate)
         {
-            var sourceSymbol = symbolToDuplicate;
+            var sourceSymbol = symbolChildToDuplicate.Symbol;
             string originalSourcePath = sourceSymbol.SourcePath;
             Log.Info($"original symbol path: {originalSourcePath}");
             string newName = sourceSymbol.Name + "2";
@@ -231,6 +226,7 @@ namespace T3.Gui.Graph
             var newSymbol = new Symbol(type, newSymbolId);
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
             var newSymbolUi = UiModel.UpdateUiEntriesForSymbol(newSymbol);
+            newSymbol.SourcePath = newSourcePath;
 
             // apply content to new symbol
             var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];
@@ -255,6 +251,36 @@ namespace T3.Gui.Graph
                 newSymbol.AddConnection(newConnection);
             }
 
+            var mousePos = InverseTransformPosition(ImGui.GetMousePos());
+            var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) {PosOnCanvas = mousePos};
+            UndoRedoStack.AddAndExecute(addCommand);
+
+            // copy the values of the input of the duplicated type: default values of symbol and the ones in composition context
+            var newSymbolInputs = newSymbol.InputDefinitions;
+            for (int i = 0; i < sourceSymbol.InputDefinitions.Count; i++)
+            {
+                newSymbolInputs[i].DefaultValue = sourceSymbol.InputDefinitions[i].DefaultValue.Clone();
+            }
+
+            var newSymbolChild = compositionUi.Symbol.Children.Find(child => child.Id == addCommand.AddedChildId);
+            var newSymbolInputValues = newSymbolChild.InputValues;
+
+            foreach (var input in symbolChildToDuplicate.InputValues)
+            {
+                var newInput = newSymbolInputValues[oldToNewIdMap[input.Key]];
+                newInput.Value.Assign(input.Value.Value.Clone());
+                newInput.IsDefault = input.Value.IsDefault;
+            }
+
+            // update the positions
+            var sourceSelectables = sourceSymbolUi.GetSelectables().ToArray();
+            var newSelectables = newSymbolUi.GetSelectables().ToArray();
+            Debug.Assert(sourceSelectables.Length == newSelectables.Length);
+            for (int i = 0; i < sourceSelectables.Length; i++)
+            {
+                newSelectables[i].PosOnCanvas = sourceSelectables[i].PosOnCanvas; // todo: check if this is enough or if id check needed
+            }
+
             return newSymbol;
         }
 
@@ -274,7 +300,6 @@ namespace T3.Gui.Graph
                 var json = new Json();
                 json.Writer = new JsonTextWriter(writer);
                 json.Writer.Formatting = Formatting.Indented;
-                // MetaManager.WriteOpWithWriter(containerOp, writer);
                 json.Writer.WriteStartArray();
 
                 json.WriteSymbol(containerOp);

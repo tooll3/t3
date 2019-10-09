@@ -50,6 +50,8 @@ namespace T3.Gui.Commands
                                             let newSourceId = OldToNewIdDict[connectionSource.Id]
                                             select new Symbol.Connection(newSourceId, con.SourceSlotId, newTargetId, con.TargetSlotId));
             }
+
+            _connectionsToCopy.Reverse(); // to keep multi input order
         }
 
         public void Undo()
