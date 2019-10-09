@@ -30,6 +30,11 @@ namespace T3.Core
         public static Dictionary<Type, Func<InputValue>> Entries { get; } = new Dictionary<Type, Func<InputValue>>();
     }
 
+    public static class TypeNameRegistry
+    {
+        public static Dictionary<Type, string> Entries { get; }= new Dictionary<Type, string>(20);
+    }
+
     public class Scene
     {
     }
@@ -194,6 +199,12 @@ namespace T3.Core
             InputValueCreators.Entries.Add(typeof(ShaderResourceView), () => new InputValue<ShaderResourceView>(null));
             InputValueCreators.Entries.Add(typeof(UnorderedAccessView), () => new InputValue<UnorderedAccessView>(null));
             InputValueCreators.Entries.Add(typeof(Scene), () => new InputValue<Scene>(null));
+
+            TypeNameRegistry.Entries.Add(typeof(float), "float");
+            TypeNameRegistry.Entries.Add(typeof(string), "string");
+            TypeNameRegistry.Entries.Add(typeof(List<float>), "List<float>");
+            TypeNameRegistry.Entries.Add(typeof(Scene), "Scene");
+            TypeNameRegistry.Entries.Add(typeof(Texture2D), "Texture2D");
         }
 
         public virtual void Load()

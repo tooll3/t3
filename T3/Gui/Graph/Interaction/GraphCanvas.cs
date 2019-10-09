@@ -151,13 +151,6 @@ namespace T3.Gui.Graph
 
                     if (ImGui.MenuItem(" Combine as new type"))
                     {
-                        Dictionary<Type, string> typeToNameRegistry = new Dictionary<Type, string>(20);
-                        typeToNameRegistry.Add(typeof(float), "float");
-                        typeToNameRegistry.Add(typeof(string), "string");
-                        typeToNameRegistry.Add(typeof(List<float>), "List<float>");
-                        typeToNameRegistry.Add(typeof(Scene), "Scene");
-                        typeToNameRegistry.Add(typeof(Texture2D), "Texture2D");
-
                         var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
                         string newSymbolName = "CombinedName" + _combinedSymbolCount++;
                         Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
@@ -184,7 +177,7 @@ namespace T3.Gui.Graph
                         foreach (var (child, input) in inputsToGenerate)
                         {
                             var inputValueType = input.DefaultValue.ValueType;
-                            if (typeToNameRegistry.TryGetValue(inputValueType, out var typeName))
+                            if (TypeNameRegistry.Entries.TryGetValue(inputValueType, out var typeName))
                             {
                                 var @namespace = input.DefaultValue.ValueType.Namespace;
                                 usingStringBuilder.AppendLine("using " + @namespace + ";");
@@ -224,7 +217,7 @@ namespace T3.Gui.Graph
                         foreach (var (child, output) in outputsToGenerate)
                         {
                             var outputValueType = output.ValueType;
-                            if (typeToNameRegistry.TryGetValue(outputValueType, out var typeName))
+                            if (TypeNameRegistry.Entries.TryGetValue(outputValueType, out var typeName))
                             {
                                 var @namespace = outputValueType.Namespace;
                                 usingStringBuilder.AppendLine("using " + @namespace + ";");
