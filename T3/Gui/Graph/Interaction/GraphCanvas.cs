@@ -141,7 +141,14 @@ namespace T3.Gui.Graph
 
                     if (ImGui.MenuItem(" Duplicate as new type", oneElementSelected))
                     {
-                        DuplicateAsNewType(selectedChildren[0].SymbolChild.Symbol);
+                        var newSymbol = DuplicateAsNewType(selectedChildren[0].SymbolChild.Symbol);
+                        if (newSymbol != null)
+                        {
+                            var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                            var mousePos = InverseTransformPosition(ImGui.GetMousePos());
+                            var addCommand = new AddSymbolChildCommand(compositionSymbolUi.Symbol, newSymbol.Id) { PosOnCanvas = mousePos };
+                            UndoRedoStack.AddAndExecute(addCommand);
+                        }
                     }
 
                     if (ImGui.MenuItem(" Copy"))
@@ -174,7 +181,7 @@ namespace T3.Gui.Graph
             ImGui.PopStyleVar();
         }
 
-        private static void DuplicateAsNewType(Symbol symbolToDuplicate)
+        private static Symbol DuplicateAsNewType(Symbol symbolToDuplicate)
         {
             var sourceSymbol = symbolToDuplicate;
             string originalSourcePath = sourceSymbol.SourcePath;
@@ -201,6 +208,54 @@ namespace T3.Gui.Graph
             var sw = new StreamWriter(newSourcePath);
             sw.Write(newSource);
             sw.Dispose();
+
+            var resourceManager = ResourceManager.Instance();
+            Guid newSymbolId = Guid.NewGuid();
+            uint symbolResourceId = resourceManager.CreateOperatorEntry(newSourcePath, newSymbolId.ToString());
+            var symbolResource = resourceManager.GetResource<OperatorResource>(symbolResourceId);
+            symbolResource.Update(newSourcePath);
+            if (!symbolResource.Updated)
+            {
+                Log.Error("Error, new symbol was not updated/compiled");
+                return null;
+            }
+
+            Type type = symbolResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
+            if (type == null)
+            {
+                Log.Error("Error, new symbol has no compiled instance type");
+                return null;
+            }
+
+            // create and register the new symbol
+            var newSymbol = new Symbol(type, newSymbolId);
+            SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
+            var newSymbolUi = UiModel.UpdateUiEntriesForSymbol(newSymbol);
+
+            // apply content to new symbol
+            var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];
+            var cmd = new CopySymbolChildrenCommand(sourceSymbolUi, null, newSymbolUi, Vector2.One);
+            cmd.Do();
+            cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
+            
+            // now copy connection from/to inputs/outputs that are not copied with the command 
+            // todo: check if this can be put into the command
+            var connectionsToCopy = sourceSymbol.Connections.FindAll(c => c.IsConnectedToSymbolInput || c.IsConnectedToSymbolOutput);
+            foreach (var conToCopy in connectionsToCopy)
+            {
+                bool inputConnection = conToCopy.IsConnectedToSymbolInput;
+                var newSourceSlotId = inputConnection ? oldToNewIdMap[conToCopy.SourceSlotId] : conToCopy.SourceSlotId;
+                var newSourceId = inputConnection ? conToCopy.SourceParentOrChildId : oldToNewIdMap[conToCopy.SourceParentOrChildId];
+
+                bool outputConnection = conToCopy.IsConnectedToSymbolOutput;
+                var newTargetSlotId = outputConnection ? oldToNewIdMap[conToCopy.TargetSlotId] : conToCopy.TargetSlotId;
+                var newTargetId = outputConnection ? conToCopy.TargetParentOrChildId : oldToNewIdMap[conToCopy.TargetParentOrChildId];
+
+                var newConnection = new Symbol.Connection(newSourceId, newSourceSlotId, newTargetId, newTargetSlotId);
+                newSymbol.AddConnection(newConnection);
+            }
+
+            return newSymbol;
         }
 
         private void CopySelectionToClipboard(List<SymbolChildUi> selectedChildren)

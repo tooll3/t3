@@ -12,6 +12,8 @@ namespace T3.Gui.Commands
 
         public bool IsUndoable => true;
 
+        public Dictionary<Guid, Guid> OldToNewIdDict { get; } = new Dictionary<Guid, Guid>();
+
         public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi, IEnumerable<SymbolChildUi> symbolChildrenToCopy, SymbolUi targetCompositionUi,
                                          Vector2 targetPosition)
         {
@@ -31,22 +33,21 @@ namespace T3.Gui.Commands
                 upperLeftCorner = Vector2.Min(upperLeftCorner, childToCopy.PosOnCanvas);
             }
 
-            Dictionary<Guid, Guid> oldToNewIdDict = new Dictionary<Guid, Guid>();
             foreach (var childToCopy in symbolChildrenToCopy)
             {
                 Entry entry = new Entry(childToCopy.Id, Guid.NewGuid(), childToCopy.PosOnCanvas - upperLeftCorner, childToCopy.Size);
                 _childrenToCopy.Add(entry);
-                oldToNewIdDict.Add(entry.ChildId, entry.AddedId);
+                OldToNewIdDict.Add(entry.ChildId, entry.AddedId);
             }
 
             foreach (var entry in _childrenToCopy)
             {
                 _connectionsToCopy.AddRange(from con in sourceCompositionUi.Symbol.Connections
                                             where con.TargetParentOrChildId == entry.ChildId
-                                            let newTargetId = oldToNewIdDict[entry.ChildId]
+                                            let newTargetId = OldToNewIdDict[entry.ChildId]
                                             from connectionSource in symbolChildrenToCopy
                                             where con.SourceParentOrChildId == connectionSource.Id
-                                            let newSourceId = oldToNewIdDict[connectionSource.Id]
+                                            let newSourceId = OldToNewIdDict[connectionSource.Id]
                                             select new Symbol.Connection(newSourceId, con.SourceSlotId, newTargetId, con.TargetSlotId));
             }
         }
