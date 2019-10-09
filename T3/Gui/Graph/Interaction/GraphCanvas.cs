@@ -177,6 +177,7 @@ namespace T3.Gui.Graph
                                                 select (child, input)).ToList().Distinct();
                         var usingStringBuilder = new StringBuilder();
                         var inputStringBuilder = new StringBuilder();
+                        var outputStringBuilder = new StringBuilder();
                         var connectionsFromNewInputs = new List<Symbol.Connection>(inputConnections.Length);
                         int inputNameCounter = 2;
                         var inputNameHashSet = new HashSet<string>();
@@ -196,6 +197,7 @@ namespace T3.Gui.Graph
                                 var slotString = (input.IsMultiInput ? "MultiInputSlot<" : "InputSlot<") + typeName + ">";
                                 var inputString = "        public readonly " + slotString + " " + newInputName + " = new " + slotString + "();";
                                 inputStringBuilder.AppendLine(inputString);
+                                inputStringBuilder.AppendLine("");
 
                                 var newConnection = new Symbol.Connection(Guid.Empty, newInputGuid, child.Id, input.Id);
                                 connectionsFromNewInputs.Add(newConnection);
@@ -203,6 +205,46 @@ namespace T3.Gui.Graph
                             else
                             {
                                 Log.Error($"Error, no registered name found for typename: {input.DefaultValue.ValueType.Name}");
+                            }
+                        }
+
+                        var outputConnections = (from con in compositionSymbol.Connections
+                                                from id in potentialTargetIds
+                                                where con.SourceParentOrChildId == id
+                                                select con).ToArray();
+                        var outputsToGenerate = (from con in outputConnections
+                                                 from child in compositionSymbol.Children
+                                                 where child.Id == con.SourceParentOrChildId
+                                                 from output in child.Symbol.OutputDefinitions
+                                                 where output.Id == con.SourceSlotId
+                                                 select (child, output)).ToList().Distinct();
+                        var connectionsToNewOutputs = new List<Symbol.Connection>(outputConnections.Length);
+                        int outputNameCounter = 2;
+                        var outputNameHashSet = new HashSet<string>();
+                        foreach (var (child, output) in outputsToGenerate)
+                        {
+                            var outputValueType = output.ValueType;
+                            if (typeToNameRegistry.TryGetValue(outputValueType, out var typeName))
+                            {
+                                var @namespace = outputValueType.Namespace;
+                                usingStringBuilder.AppendLine("using " + @namespace + ";");
+                                Guid newOutputGuid = Guid.NewGuid();
+                                oldToNewIdMap.Add(output.Id, newOutputGuid);
+                                var attributeString = "        [Output(Guid = \"" + newOutputGuid + "\")]";
+                                outputStringBuilder.AppendLine(attributeString);
+                                var newOutputName = outputNameHashSet.Contains(output.Name) ? (output.Name + outputNameCounter++) : output.Name;
+                                outputNameHashSet.Add(newOutputName);
+                                var slotString = "Slot<" + typeName + ">";
+                                var outputString = "        public readonly " + slotString + " " + newOutputName + " = new " + slotString + "();";
+                                outputStringBuilder.AppendLine(outputString);
+                                outputStringBuilder.AppendLine("");
+
+                                var newConnection = new Symbol.Connection(child.Id, output.Id, Guid.Empty, newOutputGuid);
+                                connectionsToNewOutputs.Add(newConnection);
+                            }
+                            else
+                            {
+                                Log.Error($"Error, no registered name found for typename: {output.ValueType.Name}");
                             }
                         }
 
@@ -214,10 +256,9 @@ namespace T3.Gui.Graph
                         classStringBuilder.AppendLine("{");
                         classStringBuilder.AppendFormat("    public class {0} : Instance<{0}>\n", newSymbolName);
                         classStringBuilder.AppendLine("    {");
-
+                        classStringBuilder.Append(outputStringBuilder.ToString());
                         classStringBuilder.AppendLine("");
                         classStringBuilder.Append(inputStringBuilder.ToString());
-
                         classStringBuilder.AppendLine("    }");
                         classStringBuilder.AppendLine("}");
                         classStringBuilder.AppendLine("");
@@ -269,6 +310,17 @@ namespace T3.Gui.Graph
                             newSymbol.AddConnection(newConnection);
                         }
 
+                        foreach (var con in connectionsToNewOutputs)
+                        {
+                            var sourceId = oldToNewIdMap[con.SourceParentOrChildId];
+                            var sourceSlotId = con.SourceSlotId;
+                            var targetId = con.TargetParentOrChildId;
+                            var targetSlotId = con.TargetSlotId;
+
+                            var newConnection = new Symbol.Connection(sourceId, sourceSlotId, targetId, targetSlotId);
+                            newSymbol.AddConnection(newConnection);
+                        }
+
                         var mousePos = InverseTransformPosition(ImGui.GetMousePos());
                         var addCommand = new AddSymbolChildCommand(compositionSymbolUi.Symbol, newSymbol.Id) {PosOnCanvas = mousePos};
                         UndoRedoStack.AddAndExecute(addCommand);
@@ -285,9 +337,19 @@ namespace T3.Gui.Graph
                             compositionSymbol.AddConnection(newConnection);
                         }
 
+                        foreach (var con in outputConnections.Reverse()) // reverse for multi input order preservation
+                        {
+                            var sourceId = newSymbolChildId;
+                            var sourceSlotId = oldToNewIdMap[con.SourceSlotId];
+                            var targetId = con.TargetParentOrChildId;
+                            var targetSlotId = con.TargetSlotId;
+
+                            var newConnection = new Symbol.Connection(sourceId, sourceSlotId, targetId, targetSlotId);
+                            compositionSymbol.AddConnection(newConnection);
+                        }
+
                         var deleteCmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
                         UndoRedoStack.AddAndExecute(deleteCmd);
-
                     }
 
                     if (ImGui.MenuItem(" Copy"))
