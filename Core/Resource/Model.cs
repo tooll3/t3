@@ -200,11 +200,28 @@ namespace T3.Core
             InputValueCreators.Entries.Add(typeof(UnorderedAccessView), () => new InputValue<UnorderedAccessView>(null));
             InputValueCreators.Entries.Add(typeof(Scene), () => new InputValue<Scene>(null));
 
+            TypeNameRegistry.Entries.Add(typeof(int), "int");
             TypeNameRegistry.Entries.Add(typeof(float), "float");
             TypeNameRegistry.Entries.Add(typeof(string), "string");
+            TypeNameRegistry.Entries.Add(typeof(Size2), "Size2");
+            TypeNameRegistry.Entries.Add(typeof(Int3), "Int3");
+            TypeNameRegistry.Entries.Add(typeof(Vector4), "Vector4");
+            TypeNameRegistry.Entries.Add(typeof(ResourceUsage), "ResourceUsage");
+            TypeNameRegistry.Entries.Add(typeof(Format), "Format");
+            TypeNameRegistry.Entries.Add(typeof(BindFlags), "BindFlags");
+            TypeNameRegistry.Entries.Add(typeof(CpuAccessFlags), "CpuAccessFlags");
+            TypeNameRegistry.Entries.Add(typeof(ResourceOptionFlags), "ResourceOptionFlags");
             TypeNameRegistry.Entries.Add(typeof(List<float>), "List<float>");
-            TypeNameRegistry.Entries.Add(typeof(Scene), "Scene");
             TypeNameRegistry.Entries.Add(typeof(Texture2D), "Texture2D");
+            TypeNameRegistry.Entries.Add(typeof(ComputeShader), "ComputeShader");
+            TypeNameRegistry.Entries.Add(typeof(Buffer), "Buffer");
+            TypeNameRegistry.Entries.Add(typeof(Filter), "Filter");
+            TypeNameRegistry.Entries.Add(typeof(TextureAddressMode), "TextureAddressMode");
+            TypeNameRegistry.Entries.Add(typeof(Comparison), "Comparison");
+            TypeNameRegistry.Entries.Add(typeof(SamplerState), "SamplerState");
+            TypeNameRegistry.Entries.Add(typeof(ShaderResourceView), "ShaderResourceView");
+            TypeNameRegistry.Entries.Add(typeof(UnorderedAccessView), "UnorderedAccessView");
+            TypeNameRegistry.Entries.Add(typeof(Scene), "Scene");
         }
 
         public virtual void Load()
