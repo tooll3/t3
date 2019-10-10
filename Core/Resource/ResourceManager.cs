@@ -270,7 +270,7 @@ namespace T3.Core
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
             _textureFileWatcher.EnableRaisingEvents = true;
 
-            _csFileWatcher = new FileSystemWatcher(@"..\Operators\Types", "*.cs");
+            _csFileWatcher = new FileSystemWatcher(@"Operators\Types", "*.cs");
             _csFileWatcher.Changed += OnChanged;
             _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
             _csFileWatcher.EnableRaisingEvents = true;

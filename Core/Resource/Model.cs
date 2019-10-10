@@ -43,7 +43,7 @@ namespace T3.Core
     public class Model
     {
         public Assembly OperatorsAssembly { get; set; }
-        protected string Path { get; } = @"..\Operators\Types\";
+        protected string Path { get; } = @"Operators\Types\";
         protected string SymbolExtension { get; } = ".t3";
 
         public Model()
@@ -51,9 +51,10 @@ namespace T3.Core
             Log.AddWriter(new ConsoleWriter());
 
 #if DEBUG
-            OperatorsAssembly = Assembly.LoadFrom(@"bin\debug\Operators.dll");
+            var currentPath = Directory.GetCurrentDirectory();
+            OperatorsAssembly = Assembly.LoadFrom(@"T3\bin\debug\Operators.dll");
 #else
-            OperatorsAssembly = Assembly.LoadFrom(@"bin\release\Operators.dll");
+            OperatorsAssembly = Assembly.LoadFrom(@"T3\bin\release\Operators.dll");
 #endif
             // generic enum value from json function, must be local function
             object JsonToEnumValue<T>(JToken jsonToken) where T : struct // todo: use 7.3 and replace with enum
