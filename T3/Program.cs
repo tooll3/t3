@@ -250,7 +250,7 @@ namespace T3
             //resourceManager.CreatePixelShader(@"Resources\\ps-pos-only-fixed-color.hlsl", "main", "ps-pos-only-fixed-color");
             var di = new DirectoryInfo(".");
             System.Console.WriteLine(di.FullName);
-            uint vsId = resourceManager.CreateVertexShader(@"Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture");
+            uint vsId = resourceManager.CreateVertexShaderFromFile(@"Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => {});
             uint psId = resourceManager.CreatePixelShader(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture");
             (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg", null);
 

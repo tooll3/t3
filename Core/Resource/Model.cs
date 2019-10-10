@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using SharpDX;
+using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.Logging;
@@ -149,6 +150,10 @@ namespace T3.Core
                          () => new InputValue<Scene>(null));
             
             // sharpdx types
+            RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",
+                         InputDefaultValueCreator<PrimitiveTopology>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<PrimitiveTopology>);
             RegisterType(typeof(SharpDX.Direct3D11.BindFlags), "BindFlags",
                          InputDefaultValueCreator<BindFlags>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
@@ -159,7 +164,7 @@ namespace T3.Core
                          InputDefaultValueCreator<Comparison>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
                          JsonToEnumValue<Comparison>);
-            RegisterType(typeof(ComputeShader), "ComputeShader", 
+            RegisterType(typeof(SharpDX.Direct3D11.ComputeShader), "ComputeShader", 
                          () => new InputValue<ComputeShader>(null));
             RegisterType(typeof(CpuAccessFlags), "CpuAccessFlags",
                          InputDefaultValueCreator<CpuAccessFlags>,
@@ -169,6 +174,8 @@ namespace T3.Core
                          InputDefaultValueCreator<Filter>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
                          JsonToEnumValue<Filter>);
+            RegisterType(typeof(SharpDX.Direct3D11.InputLayout), "InputLayout",
+                         () => new InputValue<InputLayout>(null));
             RegisterType(typeof(SharpDX.Direct3D11.ResourceOptionFlags), "ResourceOptionFlags",
                          InputDefaultValueCreator<ResourceOptionFlags>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
@@ -179,7 +186,7 @@ namespace T3.Core
                          JsonToEnumValue<ResourceUsage>);
             RegisterType(typeof(SharpDX.Direct3D11.SamplerState), "SamplerState",
                          () => new InputValue<SamplerState>(null));
-            RegisterType(typeof(ShaderResourceView), "ShaderResourceView",
+            RegisterType(typeof(SharpDX.Direct3D11.ShaderResourceView), "ShaderResourceView",
                          () => new InputValue<ShaderResourceView>(null));
             RegisterType(typeof(SharpDX.Direct3D11.Texture2D), "Texture2D",
                          () => new InputValue<Texture2D>(null));
@@ -187,8 +194,10 @@ namespace T3.Core
                          InputDefaultValueCreator<TextureAddressMode>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
                          JsonToEnumValue<TextureAddressMode>);
-            RegisterType(typeof(UnorderedAccessView), "UnorderedAccessView",
+            RegisterType(typeof(SharpDX.Direct3D11.UnorderedAccessView), "UnorderedAccessView",
                          () => new InputValue<UnorderedAccessView>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.VertexShader), "VertexShader",
+                         () => new InputValue<VertexShader>(null));
             RegisterType(typeof(SharpDX.DXGI.Format), "Format",
                          InputDefaultValueCreator<Format>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
