@@ -9,6 +9,7 @@ using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using SharpDX.Mathematics.Interop;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using Buffer = SharpDX.Direct3D11.Buffer;
@@ -176,6 +177,8 @@ namespace T3.Core
                          JsonToEnumValue<Filter>);
             RegisterType(typeof(SharpDX.Direct3D11.InputLayout), "InputLayout",
                          () => new InputValue<InputLayout>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.RasterizerState), "RasterizerState",
+                         () => new InputValue<RasterizerState>(null));
             RegisterType(typeof(SharpDX.Direct3D11.ResourceOptionFlags), "ResourceOptionFlags",
                          InputDefaultValueCreator<ResourceOptionFlags>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
@@ -220,6 +223,11 @@ namespace T3.Core
                              int z = jsonToken["Z"].Value<int>();
                              return new Int3(x, y, z);
                          });
+            RegisterType(typeof(SharpDX.Mathematics.Interop.RawRectangle), "RawRectangle",
+                         () => new InputValue<RawRectangle>(new RawRectangle {Left = -100, Right = 100, Bottom = -100, Top = 100}));
+            RegisterType(typeof(SharpDX.Mathematics.Interop.RawViewportF), "RawViewportF",
+                         () => new InputValue<RawViewportF>(new RawViewportF
+                                                            {X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f}));
             RegisterType(typeof(SharpDX.Size2), "Size2",
                          InputDefaultValueCreator<Size2>,
                          (writer, obj) =>

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SharpDX.Direct3D;
+using SharpDX.Mathematics.Interop;
 using T3.Core;
 using T3.Core.Operator;
 using T3.Gui.InputUi;
@@ -50,6 +51,9 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(PrimitiveTopology), new FallBackUiProperties());
             TypeUiRegistry.Entries.Add(typeof(VertexShader), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(InputLayout), new ShaderUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(RasterizerState), new ShaderUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(RawViewportF), new ShaderUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(RawRectangle), new ShaderUiProperties());
 
             // Register input ui creators
             InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
@@ -77,6 +81,9 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(PrimitiveTopology), () => new FallbackInputUi<PrimitiveTopology>());
             InputUiFactory.Entries.Add(typeof(VertexShader), () => new FallbackInputUi<VertexShader>());
             InputUiFactory.Entries.Add(typeof(InputLayout), () => new FallbackInputUi<InputLayout>());
+            InputUiFactory.Entries.Add(typeof(RasterizerState), () => new FallbackInputUi<RasterizerState>());
+            InputUiFactory.Entries.Add(typeof(RawViewportF), () => new FallbackInputUi<RawViewportF>());
+            InputUiFactory.Entries.Add(typeof(RawRectangle), () => new FallbackInputUi<RawRectangle>());
 
             // Register output ui creators
             OutputUiFactory.Entries.Add(typeof(float), () => new ValueOutputUi<float>());
@@ -96,6 +103,9 @@ namespace T3.Gui
             OutputUiFactory.Entries.Add(typeof(PrimitiveTopology), () => new ValueOutputUi<PrimitiveTopology>());
             OutputUiFactory.Entries.Add(typeof(VertexShader), () => new ValueOutputUi<VertexShader>());
             OutputUiFactory.Entries.Add(typeof(InputLayout), () => new ValueOutputUi<InputLayout>());
+            OutputUiFactory.Entries.Add(typeof(RasterizerState), () => new ValueOutputUi<RasterizerState>());
+            OutputUiFactory.Entries.Add(typeof(RawViewportF), () => new ValueOutputUi<RawViewportF>());
+            OutputUiFactory.Entries.Add(typeof(RawRectangle), () => new ValueOutputUi<RawRectangle>());
 
             Load();
 
