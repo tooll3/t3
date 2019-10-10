@@ -1,6 +1,6 @@
 todo:
-/ Combine as new type
-- Put operators assembly into own repo as submodule
+/ Put operators assembly into own repo as submodule
+- Fix output connections to multi input when doing combine
 - Add color grade op
 - Add first player version
 - Add first sound integration
@@ -15,6 +15,7 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Combine as new type
 * Duplicate as new type
 * General op replacement/compilation after change
 * fix reassigning connections to multi input after re-compilation

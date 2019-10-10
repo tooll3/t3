@@ -132,7 +132,6 @@ namespace T3.Gui.Graph
 
 
         private bool _contextMenuIsOpen = false;
-        private int _combinedSymbolCount = 1;
         private List<SymbolChildUi> _selectedChildren;
         private void DrawContextMenu()
         {
@@ -324,7 +323,7 @@ namespace T3.Gui.Graph
             var newSource = classStringBuilder.ToString();
             Log.Info(newSource);
 
-            var newSourcePath = @"..\Operators\Types\" + newSymbolName + ".cs";
+            var newSourcePath = @"Operators\Types\" + newSymbolName + ".cs";
 
             // todo: below same code as in duplicate new type 
             var sw = new StreamWriter(newSourcePath);
