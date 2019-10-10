@@ -236,6 +236,11 @@ namespace T3.Core
             return (T)Resources[resourceId];
         }
 
+        public VertexShader GetVertexShader(uint resourceId)
+        {
+            return GetResource<VertexShaderResource>(resourceId).VertexShader;
+        }
+
         public ComputeShader GetComputeShader(uint resourceId)
         {
             return GetResource<ComputeShaderResource>(resourceId).ComputeShader;
@@ -328,8 +333,11 @@ namespace T3.Core
             Log.Info($"Successfully compiled shader '{name}' from '{srcFile}'");
         }
 
-        public uint CreateVertexShader(string srcFile, string entryPoint, string name)
+        public uint CreateVertexShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
+            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
+                return NULL_RESOURCE;
+
             bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
             {
@@ -359,6 +367,7 @@ namespace T3.Core
             if (fileResource == null)
             {
                 fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
+                fileResource.FileChangeAction = fileChangedAction;
                 FileResources.Add(srcFile, fileResource);
             }
             else
@@ -456,6 +465,16 @@ namespace T3.Core
             }
 
             return resourceEntry.Id;
+        }
+
+        public void UpdateVertexShaderFromFile(string path, uint id, ref VertexShader vertexShader)
+        {
+            Resources.TryGetValue(id, out var resource);
+            if (resource is VertexShaderResource vsResource)
+            {
+                vsResource.Update(path);
+                vertexShader = vsResource.VertexShader;
+            }
         }
 
         public void UpdateComputeShaderFromFile(string path, uint id, ref ComputeShader computeShader)

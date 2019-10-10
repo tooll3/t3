@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SharpDX.Direct3D;
 using T3.Core;
 using T3.Core.Operator;
 using T3.Gui.InputUi;
@@ -46,6 +47,9 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(typeof(Comparison), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(SamplerState), new ShaderUiProperties());
             TypeUiRegistry.Entries.Add(typeof(Scene), new FallBackUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(PrimitiveTopology), new FallBackUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(VertexShader), new ShaderUiProperties());
+            TypeUiRegistry.Entries.Add(typeof(InputLayout), new ShaderUiProperties());
 
             // Register input ui creators
             InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
@@ -70,6 +74,9 @@ namespace T3.Gui
             InputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new FallbackInputUi<ShaderResourceView>());
             InputUiFactory.Entries.Add(typeof(UnorderedAccessView), () => new FallbackInputUi<UnorderedAccessView>());
             InputUiFactory.Entries.Add(typeof(Scene), () => new FallbackInputUi<Scene>());
+            InputUiFactory.Entries.Add(typeof(PrimitiveTopology), () => new FallbackInputUi<PrimitiveTopology>());
+            InputUiFactory.Entries.Add(typeof(VertexShader), () => new FallbackInputUi<VertexShader>());
+            InputUiFactory.Entries.Add(typeof(InputLayout), () => new FallbackInputUi<InputLayout>());
 
             // Register output ui creators
             OutputUiFactory.Entries.Add(typeof(float), () => new ValueOutputUi<float>());
@@ -86,6 +93,9 @@ namespace T3.Gui
             OutputUiFactory.Entries.Add(typeof(Buffer), () => new ValueOutputUi<Buffer>());
             OutputUiFactory.Entries.Add(typeof(SamplerState), () => new ValueOutputUi<SamplerState>());
             OutputUiFactory.Entries.Add(typeof(Scene), () => new ValueOutputUi<Scene>());
+            OutputUiFactory.Entries.Add(typeof(PrimitiveTopology), () => new ValueOutputUi<PrimitiveTopology>());
+            OutputUiFactory.Entries.Add(typeof(VertexShader), () => new ValueOutputUi<VertexShader>());
+            OutputUiFactory.Entries.Add(typeof(InputLayout), () => new ValueOutputUi<InputLayout>());
 
             Load();
 
