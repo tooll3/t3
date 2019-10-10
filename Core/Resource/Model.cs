@@ -32,14 +32,14 @@ namespace T3.Core
 
     public static class TypeNameRegistry
     {
-        public static Dictionary<Type, string> Entries { get; }= new Dictionary<Type, string>(20);
+        public static Dictionary<Type, string> Entries { get; } = new Dictionary<Type, string>(20);
     }
 
     public class Scene
     {
     }
-    
-    
+
+
     public class Model
     {
         public Assembly OperatorsAssembly { get; set; }
@@ -70,159 +70,179 @@ namespace T3.Core
                 }
             }
 
-            // Register the converters from json to a specific type value
-            JsonToTypeValueConverters.Entries.Add(typeof(float), jsonToken => jsonToken.Value<float>());
-            JsonToTypeValueConverters.Entries.Add(typeof(int), jsonToken => jsonToken.Value<int>());
-            JsonToTypeValueConverters.Entries.Add(typeof(string), jsonToken => jsonToken.Value<string>());
-            JsonToTypeValueConverters.Entries.Add(typeof(System.Numerics.Vector2), jsonToken =>
-                                                                                   {
-                                                                                       float x = jsonToken["X"].Value<float>();
-                                                                                       float y = jsonToken["Y"].Value<float>();
-                                                                                       return new System.Numerics.Vector2(x, y);
-                                                                                   });
-            JsonToTypeValueConverters.Entries.Add(typeof(Size2), jsonToken =>
-                                                                 {
-                                                                     int width = jsonToken["Width"].Value<int>();
-                                                                     int height = jsonToken["Height"].Value<int>();
-                                                                     return new Size2(width, height);
-                                                                 });
-            JsonToTypeValueConverters.Entries.Add(typeof(Int3), jsonToken =>
-                                                                {
-                                                                    int x = jsonToken["X"].Value<int>();
-                                                                    int y = jsonToken["Y"].Value<int>();
-                                                                    int z = jsonToken["Z"].Value<int>();
-                                                                    return new Int3(x, y, z);
-                                                                });
-            JsonToTypeValueConverters.Entries.Add(typeof(Vector4), jsonToken =>
-                                                                   {
-                                                                       float x = jsonToken["X"].Value<float>();
-                                                                       float y = jsonToken["Y"].Value<float>();
-                                                                       float z = jsonToken["Z"].Value<float>();
-                                                                       float w = jsonToken["W"].Value<float>();
-                                                                       return new Vector4(x, y, z, w);
-                                                                   });
-            JsonToTypeValueConverters.Entries.Add(typeof(Format), JsonToEnumValue<Format>);
-            JsonToTypeValueConverters.Entries.Add(typeof(ResourceUsage), JsonToEnumValue<ResourceUsage>);
-            JsonToTypeValueConverters.Entries.Add(typeof(BindFlags), JsonToEnumValue<BindFlags>);
-            JsonToTypeValueConverters.Entries.Add(typeof(CpuAccessFlags), JsonToEnumValue<CpuAccessFlags>);
-            JsonToTypeValueConverters.Entries.Add(typeof(ResourceOptionFlags), JsonToEnumValue<ResourceOptionFlags>);
-            JsonToTypeValueConverters.Entries.Add(typeof(List<float>), jsonToken =>
-                                                                       {
-                                                                           var entries = jsonToken["Values"];
-                                                                           var list = new List<float>(entries.Count());
-                                                                           list.AddRange(entries.Select(entry => entry.Value<float>()));
-
-                                                                           return list;
-                                                                       });
-            JsonToTypeValueConverters.Entries.Add(typeof(Filter), JsonToEnumValue<Filter>);
-            JsonToTypeValueConverters.Entries.Add(typeof(TextureAddressMode), JsonToEnumValue<TextureAddressMode>);
-            JsonToTypeValueConverters.Entries.Add(typeof(Comparison), JsonToEnumValue<Comparison>);
-
-            // Register the converters from a specific type value to json
-            TypeValueToJsonConverters.Entries.Add(typeof(float), (writer, obj) => writer.WriteValue((float)obj));
-            TypeValueToJsonConverters.Entries.Add(typeof(int), (writer, obj) => writer.WriteValue((int)obj));
-            TypeValueToJsonConverters.Entries.Add(typeof(string), (writer, value) => writer.WriteValue((string)value));
-            TypeValueToJsonConverters.Entries.Add(typeof(System.Numerics.Vector2), (writer, obj) =>
-                                                                                   {
-                                                                                       var vec = (System.Numerics.Vector2)obj;
-                                                                                       writer.WriteStartObject();
-                                                                                       writer.WriteValue("X", vec.X);
-                                                                                       writer.WriteValue("Y", vec.Y);
-                                                                                       writer.WriteEndObject();
-                                                                                   });
-            TypeValueToJsonConverters.Entries.Add(typeof(Size2), (writer, obj) =>
-                                                                 {
-                                                                     Size2 vec = (Size2)obj;
-                                                                     writer.WriteStartObject();
-                                                                     writer.WriteValue("Width", vec.Width);
-                                                                     writer.WriteValue("Height", vec.Height);
-                                                                     writer.WriteEndObject();
-                                                                 });
-           TypeValueToJsonConverters.Entries.Add(typeof(Int3), (writer, obj) =>
-                                                                {
-                                                                    Int3 vec = (Int3)obj;
-                                                                    writer.WriteStartObject();
-                                                                    writer.WriteValue("X", vec.X);
-                                                                    writer.WriteValue("Y", vec.Y);
-                                                                    writer.WriteValue("Z", vec.Z);
-                                                                    writer.WriteEndObject();
-                                                                });
-           TypeValueToJsonConverters.Entries.Add(typeof(Vector4), (writer, obj) =>
-                                                                  {
-                                                                      var vec = (Vector4)obj;
-                                                                      writer.WriteStartObject();
-                                                                      writer.WriteValue("X", vec.X);
-                                                                      writer.WriteValue("Y", vec.Y);
-                                                                      writer.WriteValue("Z", vec.Z);
-                                                                      writer.WriteValue("W", vec.W);
-                                                                      writer.WriteEndObject();
-                                                                  });
-            TypeValueToJsonConverters.Entries.Add(typeof(Format), (writer, obj) => writer.WriteValue(obj.ToString()));
-            TypeValueToJsonConverters.Entries.Add(typeof(ResourceUsage), (writer, obj) => writer.WriteValue(obj.ToString()));
-            TypeValueToJsonConverters.Entries.Add(typeof(BindFlags), (writer, obj) => writer.WriteValue(obj.ToString()));
-            TypeValueToJsonConverters.Entries.Add(typeof(CpuAccessFlags), (writer, obj) => writer.WriteValue(obj.ToString()));
-            TypeValueToJsonConverters.Entries.Add(typeof(ResourceOptionFlags), (writer, obj) => writer.WriteValue(obj.ToString()));
-            TypeValueToJsonConverters.Entries.Add(typeof(List<float>), (writer, obj) =>
-                                                                       {
-                                                                           var list = (List<float>)obj;
-                                                                           writer.WriteStartObject();
-                                                                           writer.WritePropertyName("Values");
-                                                                           writer.WriteStartArray();
-                                                                           list.ForEach(writer.WriteValue);
-                                                                           writer.WriteEndArray();
-                                                                           writer.WriteEndObject();
-                                                                       });
-            TypeValueToJsonConverters.Entries.Add(typeof(Filter), (writer, obj) => writer.WriteValue(obj.ToString()));
-            TypeValueToJsonConverters.Entries.Add(typeof(TextureAddressMode), (writer, obj) => writer.WriteValue(obj.ToString()));
-            TypeValueToJsonConverters.Entries.Add(typeof(Comparison), (writer, obj) => writer.WriteValue(obj.ToString()));
-
-            // Register input value creators that take the relevant input attribute, extract the default value and return this with the new input value
             InputValue InputDefaultValueCreator<T>() => new InputValue<T>();
-            InputValueCreators.Entries.Add(typeof(int), InputDefaultValueCreator<int>);
-            InputValueCreators.Entries.Add(typeof(float), InputDefaultValueCreator<float>);
-            InputValueCreators.Entries.Add(typeof(string), () => new InputValue<string>(string.Empty));
-            InputValueCreators.Entries.Add(typeof(Size2), InputDefaultValueCreator<Size2>);
-            InputValueCreators.Entries.Add(typeof(Int3), InputDefaultValueCreator<Int3>);
-            InputValueCreators.Entries.Add(typeof(Vector4), () => new InputValue<Vector4>(new Vector4(1.0f, 1.0f, 1.0f, 1.0f)));
-            InputValueCreators.Entries.Add(typeof(ResourceUsage), InputDefaultValueCreator<ResourceUsage>);
-            InputValueCreators.Entries.Add(typeof(Format), InputDefaultValueCreator<Format>);
-            InputValueCreators.Entries.Add(typeof(BindFlags), InputDefaultValueCreator<BindFlags>);
-            InputValueCreators.Entries.Add(typeof(CpuAccessFlags), InputDefaultValueCreator<CpuAccessFlags>);
-            InputValueCreators.Entries.Add(typeof(ResourceOptionFlags), InputDefaultValueCreator<ResourceOptionFlags>);
-            InputValueCreators.Entries.Add(typeof(List<float>), () => new InputValue<List<float>>(new List<float>()));
-            InputValueCreators.Entries.Add(typeof(Texture2D), () => new InputValue<Texture2D>(null));
-            InputValueCreators.Entries.Add(typeof(ComputeShader), () => new InputValue<ComputeShader>(null));
-            InputValueCreators.Entries.Add(typeof(Buffer), () => new InputValue<Buffer>(null));
-            InputValueCreators.Entries.Add(typeof(Filter), InputDefaultValueCreator<Filter>);
-            InputValueCreators.Entries.Add(typeof(TextureAddressMode), InputDefaultValueCreator<TextureAddressMode>);
-            InputValueCreators.Entries.Add(typeof(Comparison), InputDefaultValueCreator<Comparison>);
-            InputValueCreators.Entries.Add(typeof(SamplerState), () => new InputValue<SamplerState>(null));
-            InputValueCreators.Entries.Add(typeof(ShaderResourceView), () => new InputValue<ShaderResourceView>(null));
-            InputValueCreators.Entries.Add(typeof(UnorderedAccessView), () => new InputValue<UnorderedAccessView>(null));
-            InputValueCreators.Entries.Add(typeof(Scene), () => new InputValue<Scene>(null));
 
-            TypeNameRegistry.Entries.Add(typeof(int), "int");
-            TypeNameRegistry.Entries.Add(typeof(float), "float");
-            TypeNameRegistry.Entries.Add(typeof(string), "string");
-            TypeNameRegistry.Entries.Add(typeof(Size2), "Size2");
-            TypeNameRegistry.Entries.Add(typeof(Int3), "Int3");
-            TypeNameRegistry.Entries.Add(typeof(Vector4), "Vector4");
-            TypeNameRegistry.Entries.Add(typeof(ResourceUsage), "ResourceUsage");
-            TypeNameRegistry.Entries.Add(typeof(Format), "Format");
-            TypeNameRegistry.Entries.Add(typeof(BindFlags), "BindFlags");
-            TypeNameRegistry.Entries.Add(typeof(CpuAccessFlags), "CpuAccessFlags");
-            TypeNameRegistry.Entries.Add(typeof(ResourceOptionFlags), "ResourceOptionFlags");
-            TypeNameRegistry.Entries.Add(typeof(List<float>), "List<float>");
-            TypeNameRegistry.Entries.Add(typeof(Texture2D), "Texture2D");
-            TypeNameRegistry.Entries.Add(typeof(ComputeShader), "ComputeShader");
-            TypeNameRegistry.Entries.Add(typeof(Buffer), "Buffer");
-            TypeNameRegistry.Entries.Add(typeof(Filter), "Filter");
-            TypeNameRegistry.Entries.Add(typeof(TextureAddressMode), "TextureAddressMode");
-            TypeNameRegistry.Entries.Add(typeof(Comparison), "Comparison");
-            TypeNameRegistry.Entries.Add(typeof(SamplerState), "SamplerState");
-            TypeNameRegistry.Entries.Add(typeof(ShaderResourceView), "ShaderResourceView");
-            TypeNameRegistry.Entries.Add(typeof(UnorderedAccessView), "UnorderedAccessView");
-            TypeNameRegistry.Entries.Add(typeof(Scene), "Scene");
+            // build-in default types
+            RegisterType(typeof(int), "int",
+                         InputDefaultValueCreator<int>,
+                         (writer, obj) => writer.WriteValue((int)obj),
+                         jsonToken => jsonToken.Value<int>());
+            RegisterType(typeof(float), "float",
+                         InputDefaultValueCreator<float>,
+                         (writer, obj) => writer.WriteValue((float)obj),
+                         jsonToken => jsonToken.Value<float>());
+            RegisterType(typeof(string), "string",
+                         () => new InputValue<string>(string.Empty),
+                         (writer, value) => writer.WriteValue((string)value),
+                         jsonToken => jsonToken.Value<string>());
+            
+            // system types
+            RegisterType(typeof(System.Collections.Generic.List<float>), "List<float>",
+                         () => new InputValue<List<float>>(new List<float>()),
+                         (writer, obj) =>
+                         {
+                             var list = (List<float>)obj;
+                             writer.WriteStartObject();
+                             writer.WritePropertyName("Values");
+                             writer.WriteStartArray();
+                             list.ForEach(writer.WriteValue);
+                             writer.WriteEndArray();
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             var entries = jsonToken["Values"];
+                             var list = new List<float>(entries.Count());
+                             list.AddRange(entries.Select(entry => entry.Value<float>()));
+
+                             return list;
+                         });
+            RegisterType(typeof(System.Numerics.Vector2), "Vector2",
+                         InputDefaultValueCreator<System.Numerics.Vector2>,
+                         (writer, obj) =>
+                         {
+                             var vec = (System.Numerics.Vector2)obj;
+                             writer.WriteStartObject();
+                             writer.WriteValue("X", vec.X);
+                             writer.WriteValue("Y", vec.Y);
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             float x = jsonToken["X"].Value<float>();
+                             float y = jsonToken["Y"].Value<float>();
+                             return new System.Numerics.Vector2(x, y);
+                         });
+            RegisterType(typeof(System.Numerics.Vector4), "Vector4",
+                         () => new InputValue<Vector4>(new Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
+                         (writer, obj) =>
+                         {
+                             var vec = (Vector4)obj;
+                             writer.WriteStartObject();
+                             writer.WriteValue("X", vec.X);
+                             writer.WriteValue("Y", vec.Y);
+                             writer.WriteValue("Z", vec.Z);
+                             writer.WriteValue("W", vec.W);
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             float x = jsonToken["X"].Value<float>();
+                             float y = jsonToken["Y"].Value<float>();
+                             float z = jsonToken["Z"].Value<float>();
+                             float w = jsonToken["W"].Value<float>();
+                             return new Vector4(x, y, z, w);
+                         });
+            
+            // t3 core types
+            RegisterType(typeof(Scene), "Scene", 
+                         () => new InputValue<Scene>(null));
+            
+            // sharpdx types
+            RegisterType(typeof(SharpDX.Direct3D11.BindFlags), "BindFlags",
+                         InputDefaultValueCreator<BindFlags>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<BindFlags>);
+            RegisterType(typeof(SharpDX.Direct3D11.Buffer), "Buffer",
+                         () => new InputValue<Buffer>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.Comparison), "Comparison",
+                         InputDefaultValueCreator<Comparison>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<Comparison>);
+            RegisterType(typeof(ComputeShader), "ComputeShader", 
+                         () => new InputValue<ComputeShader>(null));
+            RegisterType(typeof(CpuAccessFlags), "CpuAccessFlags",
+                         InputDefaultValueCreator<CpuAccessFlags>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<CpuAccessFlags>);
+            RegisterType(typeof(SharpDX.Direct3D11.Filter), "Filter",
+                         InputDefaultValueCreator<Filter>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<Filter>);
+            RegisterType(typeof(SharpDX.Direct3D11.ResourceOptionFlags), "ResourceOptionFlags",
+                         InputDefaultValueCreator<ResourceOptionFlags>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<ResourceOptionFlags>);
+            RegisterType(typeof(SharpDX.Direct3D11.ResourceUsage), "ResourceUsage",
+                         InputDefaultValueCreator<ResourceUsage>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<ResourceUsage>);
+            RegisterType(typeof(SharpDX.Direct3D11.SamplerState), "SamplerState",
+                         () => new InputValue<SamplerState>(null));
+            RegisterType(typeof(ShaderResourceView), "ShaderResourceView",
+                         () => new InputValue<ShaderResourceView>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.Texture2D), "Texture2D",
+                         () => new InputValue<Texture2D>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.TextureAddressMode), "TextureAddressMode",
+                         InputDefaultValueCreator<TextureAddressMode>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<TextureAddressMode>);
+            RegisterType(typeof(UnorderedAccessView), "UnorderedAccessView",
+                         () => new InputValue<UnorderedAccessView>(null));
+            RegisterType(typeof(SharpDX.DXGI.Format), "Format",
+                         InputDefaultValueCreator<Format>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<Format>);
+            RegisterType(typeof(SharpDX.Int3), "Int3",
+                         InputDefaultValueCreator<Int3>,
+                         (writer, obj) =>
+                         {
+                             Int3 vec = (Int3)obj;
+                             writer.WriteStartObject();
+                             writer.WriteValue("X", vec.X);
+                             writer.WriteValue("Y", vec.Y);
+                             writer.WriteValue("Z", vec.Z);
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             int x = jsonToken["X"].Value<int>();
+                             int y = jsonToken["Y"].Value<int>();
+                             int z = jsonToken["Z"].Value<int>();
+                             return new Int3(x, y, z);
+                         });
+            RegisterType(typeof(SharpDX.Size2), "Size2",
+                         InputDefaultValueCreator<Size2>,
+                         (writer, obj) =>
+                         {
+                             Size2 vec = (Size2)obj;
+                             writer.WriteStartObject();
+                             writer.WriteValue("Width", vec.Width);
+                             writer.WriteValue("Height", vec.Height);
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             int width = jsonToken["Width"].Value<int>();
+                             int height = jsonToken["Height"].Value<int>();
+                             return new Size2(width, height);
+                         });
+        }
+
+        public static void RegisterType(Type type, string typeName,
+                                        Func<InputValue> defaultValueCreator,
+                                        Action<JsonTextWriter, object> valueToJsonConverter,
+                                        Func<JToken, object> jsonToValueConverter)
+        {
+            RegisterType(type, typeName, defaultValueCreator);
+            TypeValueToJsonConverters.Entries.Add(type, valueToJsonConverter);
+            JsonToTypeValueConverters.Entries.Add(type, jsonToValueConverter);
+        }
+
+        public static void RegisterType(Type type, string typeName, Func<InputValue> defaultValueCreator)
+        {
+            TypeNameRegistry.Entries.Add(type, typeName);
+            InputValueCreators.Entries.Add(type, defaultValueCreator);
         }
 
         public virtual void Load()
