@@ -1,0 +1,3 @@
+[submodule "Operators"]
+	path = Operators
+	url = git@github.com:drcynic/Operators.git
