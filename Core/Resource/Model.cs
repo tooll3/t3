@@ -159,6 +159,8 @@ namespace T3.Core
                          InputDefaultValueCreator<BindFlags>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
                          JsonToEnumValue<BindFlags>);
+            RegisterType(typeof(SharpDX.Direct3D11.BlendState), "BlendState",
+                         () => new InputValue<BlendState>(null));
             RegisterType(typeof(SharpDX.Direct3D11.Buffer), "Buffer",
                          () => new InputValue<Buffer>(null));
             RegisterType(typeof(SharpDX.Direct3D11.Comparison), "Comparison",
@@ -167,10 +169,14 @@ namespace T3.Core
                          JsonToEnumValue<Comparison>);
             RegisterType(typeof(SharpDX.Direct3D11.ComputeShader), "ComputeShader", 
                          () => new InputValue<ComputeShader>(null));
-            RegisterType(typeof(CpuAccessFlags), "CpuAccessFlags",
+            RegisterType(typeof(SharpDX.Direct3D11.CpuAccessFlags), "CpuAccessFlags",
                          InputDefaultValueCreator<CpuAccessFlags>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
                          JsonToEnumValue<CpuAccessFlags>);
+            RegisterType(typeof(SharpDX.Direct3D11.DepthStencilState), "DepthStencilState",
+                         () => new InputValue<DepthStencilState>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.DepthStencilView), "DepthStencilView",
+                         () => new InputValue<DepthStencilView>(null));
             RegisterType(typeof(SharpDX.Direct3D11.Filter), "Filter",
                          InputDefaultValueCreator<Filter>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
@@ -179,6 +185,8 @@ namespace T3.Core
                          () => new InputValue<InputLayout>(null));
             RegisterType(typeof(SharpDX.Direct3D11.RasterizerState), "RasterizerState",
                          () => new InputValue<RasterizerState>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.RenderTargetView), "RenderTargetView",
+                         () => new InputValue<RenderTargetView>(null));
             RegisterType(typeof(SharpDX.Direct3D11.ResourceOptionFlags), "ResourceOptionFlags",
                          InputDefaultValueCreator<ResourceOptionFlags>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
