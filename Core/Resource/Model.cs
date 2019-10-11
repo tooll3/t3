@@ -183,6 +183,8 @@ namespace T3.Core
                          JsonToEnumValue<Filter>);
             RegisterType(typeof(SharpDX.Direct3D11.InputLayout), "InputLayout",
                          () => new InputValue<InputLayout>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.PixelShader), "PixelShader",
+                         () => new InputValue<PixelShader>(null));
             RegisterType(typeof(SharpDX.Direct3D11.RasterizerState), "RasterizerState",
                          () => new InputValue<RasterizerState>(null));
             RegisterType(typeof(SharpDX.Direct3D11.RenderTargetView), "RenderTargetView",
