@@ -163,10 +163,22 @@ namespace T3.Core
                          InputDefaultValueCreator<BindFlags>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
                          JsonToEnumValue<BindFlags>);
+            RegisterType(typeof(SharpDX.Direct3D11.BlendOperation), "BlendOperation",
+                         InputDefaultValueCreator<BlendOperation>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<BlendOperation>);
+            RegisterType(typeof(SharpDX.Direct3D11.BlendOption), "BlendOption",
+                         InputDefaultValueCreator<BlendOption>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<BlendOption>);
             RegisterType(typeof(SharpDX.Direct3D11.BlendState), "BlendState",
                          () => new InputValue<BlendState>(null));
             RegisterType(typeof(SharpDX.Direct3D11.Buffer), "Buffer",
                          () => new InputValue<Buffer>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.ColorWriteMaskFlags), "ColorWriteMaskFlags",
+                         InputDefaultValueCreator<ColorWriteMaskFlags>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<ColorWriteMaskFlags>);
             RegisterType(typeof(SharpDX.Direct3D11.Comparison), "Comparison",
                          InputDefaultValueCreator<Comparison>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
@@ -197,6 +209,8 @@ namespace T3.Core
                          () => new InputValue<InputLayout>(null));
             RegisterType(typeof(SharpDX.Direct3D11.PixelShader), "PixelShader",
                          () => new InputValue<PixelShader>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.RenderTargetBlendDescription), "RenderTargetBlendDescription",
+                         () => new InputValue<RenderTargetBlendDescription>());
             RegisterType(typeof(SharpDX.Direct3D11.RasterizerState), "RasterizerState",
                          () => new InputValue<RasterizerState>(null));
             RegisterType(typeof(SharpDX.Direct3D11.RenderTargetView), "RenderTargetView",

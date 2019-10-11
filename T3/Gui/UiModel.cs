@@ -56,9 +56,15 @@ namespace T3.Gui
                            () => new ValueOutputUi<PrimitiveTopology>());
             RegisterUiType(typeof(SharpDX.Direct3D11.BindFlags), new ShaderUiProperties(), () => new EnumInputUi<BindFlags>(),
                            () => new ValueOutputUi<BindFlags>());
+            RegisterUiType(typeof(SharpDX.Direct3D11.BlendOperation), new ShaderUiProperties(), () => new EnumInputUi<BlendOperation>(),
+                           () => new ValueOutputUi<BlendOperation>());
+            RegisterUiType(typeof(SharpDX.Direct3D11.BlendOption), new ShaderUiProperties(), () => new EnumInputUi<BlendOption>(),
+                           () => new ValueOutputUi<BlendOption>());
             RegisterUiType(typeof(SharpDX.Direct3D11.BlendState), new ShaderUiProperties(), () => new FallbackInputUi<BlendState>(),
                            () => new ValueOutputUi<BlendState>());
             RegisterUiType(typeof(SharpDX.Direct3D11.Buffer), new ShaderUiProperties(), () => new FallbackInputUi<Buffer>(), () => new ValueOutputUi<Buffer>());
+            RegisterUiType(typeof(SharpDX.Direct3D11.ColorWriteMaskFlags), new ShaderUiProperties(), () => new EnumInputUi<ColorWriteMaskFlags>(),
+                           () => new ValueOutputUi<ColorWriteMaskFlags>());
             RegisterUiType(typeof(SharpDX.Direct3D11.Comparison), new ShaderUiProperties(), () => new EnumInputUi<Comparison>(),
                            () => new ValueOutputUi<Comparison>());
             RegisterUiType(typeof(ComputeShader), new ShaderUiProperties(), () => new FallbackInputUi<ComputeShader>(),
@@ -80,6 +86,8 @@ namespace T3.Gui
                            () => new ValueOutputUi<PixelShader>());
             RegisterUiType(typeof(SharpDX.Direct3D11.RasterizerState), new ShaderUiProperties(), () => new FallbackInputUi<RasterizerState>(),
                            () => new ValueOutputUi<RasterizerState>());
+            RegisterUiType(typeof(SharpDX.Direct3D11.RenderTargetBlendDescription), new TextureUiProperties(), () => new FallbackInputUi<RenderTargetBlendDescription>(),
+                           () => new ValueOutputUi<RenderTargetBlendDescription>());
             RegisterUiType(typeof(SharpDX.Direct3D11.RenderTargetView), new TextureUiProperties(), () => new FallbackInputUi<RenderTargetView>(),
                            () => new ValueOutputUi<RenderTargetView>());
             RegisterUiType(typeof(SharpDX.Direct3D11.ResourceOptionFlags), new ShaderUiProperties(), () => new EnumInputUi<ResourceOptionFlags>(),
