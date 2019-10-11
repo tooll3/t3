@@ -23,89 +23,52 @@ namespace T3.Gui
             Init();
         }
 
+        private void RegisterUiType(Type type, ITypeUiProperties uiProperties,  Func<IInputUi> inputUi, Func<IOutputUi> outputUi)
+        {
+            TypeUiRegistry.Entries.Add(type, uiProperties);
+            InputUiFactory.Entries.Add(type, inputUi);
+            OutputUiFactory.Entries.Add(type, outputUi);
+        }
+
         private void Init()
         {
-            // Register ui properties for types
-            TypeUiRegistry.Entries.Add(typeof(float), new FloatUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(int), new IntUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(string), new StringUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(Size2), new Size2UiProperties());
-            TypeUiRegistry.Entries.Add(typeof(Int3), new Size2UiProperties());
-            TypeUiRegistry.Entries.Add(typeof(System.Numerics.Vector4), new Size2UiProperties());
-            TypeUiRegistry.Entries.Add(typeof(ResourceUsage), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(Format), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(BindFlags), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(CpuAccessFlags), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(ResourceOptionFlags), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(ShaderResourceView), new TextureUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(UnorderedAccessView), new TextureUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(List<float>), new FloatUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(ComputeShader), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(Texture2D), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(Buffer), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(Filter), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(TextureAddressMode), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(Comparison), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(SamplerState), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(Scene), new FallBackUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(PrimitiveTopology), new FallBackUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(VertexShader), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(InputLayout), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(RasterizerState), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(RawViewportF), new ShaderUiProperties());
-            TypeUiRegistry.Entries.Add(typeof(RawRectangle), new ShaderUiProperties());
-
-            // Register input ui creators
-            InputUiFactory.Entries.Add(typeof(float), () => new FloatInputUi());
-            InputUiFactory.Entries.Add(typeof(int), () => new IntInputUi());
-            InputUiFactory.Entries.Add(typeof(string), () => new StringInputUi());
-            InputUiFactory.Entries.Add(typeof(Size2), () => new Size2InputUi());
-            InputUiFactory.Entries.Add(typeof(Int3), () => new Int3InputUi());
-            InputUiFactory.Entries.Add(typeof(System.Numerics.Vector4), () => new Vector4InputUi());
-            InputUiFactory.Entries.Add(typeof(ResourceUsage), () => new EnumInputUi<ResourceUsage>());
-            InputUiFactory.Entries.Add(typeof(Format), () => new EnumInputUi<Format>());
-            InputUiFactory.Entries.Add(typeof(BindFlags), () => new EnumInputUi<BindFlags>());
-            InputUiFactory.Entries.Add(typeof(CpuAccessFlags), () => new EnumInputUi<CpuAccessFlags>());
-            InputUiFactory.Entries.Add(typeof(ResourceOptionFlags), () => new EnumInputUi<ResourceOptionFlags>());
-            InputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListInputUi());
-            InputUiFactory.Entries.Add(typeof(ComputeShader), () => new FallbackInputUi<ComputeShader>());
-            InputUiFactory.Entries.Add(typeof(Texture2D), () => new FallbackInputUi<Texture2D>());
-            InputUiFactory.Entries.Add(typeof(Buffer), () => new FallbackInputUi<Buffer>());
-            InputUiFactory.Entries.Add(typeof(Filter), () => new EnumInputUi<Filter>());
-            InputUiFactory.Entries.Add(typeof(TextureAddressMode), () => new EnumInputUi<TextureAddressMode>());
-            InputUiFactory.Entries.Add(typeof(Comparison), () => new EnumInputUi<Comparison>());
-            InputUiFactory.Entries.Add(typeof(SamplerState), () => new FallbackInputUi<SamplerState>());
-            InputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new FallbackInputUi<ShaderResourceView>());
-            InputUiFactory.Entries.Add(typeof(UnorderedAccessView), () => new FallbackInputUi<UnorderedAccessView>());
-            InputUiFactory.Entries.Add(typeof(Scene), () => new FallbackInputUi<Scene>());
-            InputUiFactory.Entries.Add(typeof(PrimitiveTopology), () => new FallbackInputUi<PrimitiveTopology>());
-            InputUiFactory.Entries.Add(typeof(VertexShader), () => new FallbackInputUi<VertexShader>());
-            InputUiFactory.Entries.Add(typeof(InputLayout), () => new FallbackInputUi<InputLayout>());
-            InputUiFactory.Entries.Add(typeof(RasterizerState), () => new FallbackInputUi<RasterizerState>());
-            InputUiFactory.Entries.Add(typeof(RawViewportF), () => new FallbackInputUi<RawViewportF>());
-            InputUiFactory.Entries.Add(typeof(RawRectangle), () => new FallbackInputUi<RawRectangle>());
-
-            // Register output ui creators
-            OutputUiFactory.Entries.Add(typeof(float), () => new ValueOutputUi<float>());
-            OutputUiFactory.Entries.Add(typeof(int), () => new ValueOutputUi<int>());
-            OutputUiFactory.Entries.Add(typeof(string), () => new ValueOutputUi<string>());
-            OutputUiFactory.Entries.Add(typeof(Size2), () => new ValueOutputUi<Size2>());
-            OutputUiFactory.Entries.Add(typeof(Int3), () => new ValueOutputUi<Int3>());
-            OutputUiFactory.Entries.Add(typeof(System.Numerics.Vector4), () => new ValueOutputUi<System.Numerics.Vector4>());
-            OutputUiFactory.Entries.Add(typeof(ShaderResourceView), () => new ShaderResourceViewOutputUi());
-            OutputUiFactory.Entries.Add(typeof(UnorderedAccessView), () => new ValueOutputUi<UnorderedAccessView>());
-            OutputUiFactory.Entries.Add(typeof(Texture2D), () => new Texture2dOutputUi());
-            OutputUiFactory.Entries.Add(typeof(List<float>), () => new FloatListOutputUi());
-            OutputUiFactory.Entries.Add(typeof(ComputeShader), () => new ValueOutputUi<ComputeShader>());
-            OutputUiFactory.Entries.Add(typeof(Buffer), () => new ValueOutputUi<Buffer>());
-            OutputUiFactory.Entries.Add(typeof(SamplerState), () => new ValueOutputUi<SamplerState>());
-            OutputUiFactory.Entries.Add(typeof(Scene), () => new ValueOutputUi<Scene>());
-            OutputUiFactory.Entries.Add(typeof(PrimitiveTopology), () => new ValueOutputUi<PrimitiveTopology>());
-            OutputUiFactory.Entries.Add(typeof(VertexShader), () => new ValueOutputUi<VertexShader>());
-            OutputUiFactory.Entries.Add(typeof(InputLayout), () => new ValueOutputUi<InputLayout>());
-            OutputUiFactory.Entries.Add(typeof(RasterizerState), () => new ValueOutputUi<RasterizerState>());
-            OutputUiFactory.Entries.Add(typeof(RawViewportF), () => new ValueOutputUi<RawViewportF>());
-            OutputUiFactory.Entries.Add(typeof(RawRectangle), () => new ValueOutputUi<RawRectangle>());
+            RegisterUiType(typeof(float), new FloatUiProperties(), () => new FloatInputUi(), () => new ValueOutputUi<float>());
+            RegisterUiType(typeof(int), new IntUiProperties(), () => new IntInputUi(), () => new ValueOutputUi<int>());
+            RegisterUiType(typeof(string), new StringUiProperties(), () => new StringInputUi(), () => new ValueOutputUi<string>());
+            RegisterUiType(typeof(Size2), new Size2UiProperties(), () => new Size2InputUi(), () => new ValueOutputUi<Size2>());
+            RegisterUiType(typeof(Int3), new Size2UiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
+            RegisterUiType(typeof(System.Numerics.Vector4), new Size2UiProperties(), () => new Vector4InputUi(),
+                           () => new ValueOutputUi<System.Numerics.Vector4>());
+            RegisterUiType(typeof(ResourceUsage), new ShaderUiProperties(), () => new EnumInputUi<ResourceUsage>(), () => new ValueOutputUi<ResourceUsage>());
+            RegisterUiType(typeof(Format), new ShaderUiProperties(), () => new EnumInputUi<Format>(), () => new ValueOutputUi<Format>());
+            RegisterUiType(typeof(BindFlags), new ShaderUiProperties(), () => new EnumInputUi<BindFlags>(), () => new ValueOutputUi<BindFlags>());
+            RegisterUiType(typeof(CpuAccessFlags), new ShaderUiProperties(), () => new EnumInputUi<CpuAccessFlags>(),
+                           () => new ValueOutputUi<CpuAccessFlags>());
+            RegisterUiType(typeof(ResourceOptionFlags), new ShaderUiProperties(), () => new EnumInputUi<ResourceOptionFlags>(),
+                           () => new ValueOutputUi<ResourceOptionFlags>());
+            RegisterUiType(typeof(ShaderResourceView), new TextureUiProperties(), () => new FallbackInputUi<ShaderResourceView>(),
+                           () => new ShaderResourceViewOutputUi());
+            RegisterUiType(typeof(UnorderedAccessView), new TextureUiProperties(), () => new FallbackInputUi<UnorderedAccessView>(),
+                           () => new ValueOutputUi<UnorderedAccessView>());
+            RegisterUiType(typeof(List<float>), new FloatUiProperties(), () => new FloatListInputUi(), () => new FloatListOutputUi());
+            RegisterUiType(typeof(ComputeShader), new ShaderUiProperties(), () => new FallbackInputUi<ComputeShader>(),
+                           () => new ValueOutputUi<ComputeShader>());
+            RegisterUiType(typeof(Texture2D), new ShaderUiProperties(), () => new FallbackInputUi<Texture2D>(), () => new Texture2dOutputUi());
+            RegisterUiType(typeof(Buffer), new ShaderUiProperties(), () => new FallbackInputUi<Buffer>(), () => new ValueOutputUi<Buffer>());
+            RegisterUiType(typeof(Filter), new ShaderUiProperties(), () => new EnumInputUi<Filter>(), () => new ValueOutputUi<Filter>());
+            RegisterUiType(typeof(TextureAddressMode), new ShaderUiProperties(), () => new EnumInputUi<TextureAddressMode>(),
+                           () => new ValueOutputUi<TextureAddressMode>());
+            RegisterUiType(typeof(Comparison), new ShaderUiProperties(), () => new EnumInputUi<Comparison>(), () => new ValueOutputUi<Comparison>());
+            RegisterUiType(typeof(SamplerState), new ShaderUiProperties(), () => new FallbackInputUi<SamplerState>(), () => new ValueOutputUi<SamplerState>());
+            RegisterUiType(typeof(Scene), new FallBackUiProperties(), () => new FallbackInputUi<Scene>(), () => new ValueOutputUi<Scene>());
+            RegisterUiType(typeof(PrimitiveTopology), new FallBackUiProperties(), () => new FallbackInputUi<PrimitiveTopology>(),
+                           () => new ValueOutputUi<PrimitiveTopology>());
+            RegisterUiType(typeof(VertexShader), new ShaderUiProperties(), () => new FallbackInputUi<VertexShader>(), () => new ValueOutputUi<VertexShader>());
+            RegisterUiType(typeof(InputLayout), new ShaderUiProperties(), () => new FallbackInputUi<InputLayout>(), () => new ValueOutputUi<InputLayout>());
+            RegisterUiType(typeof(RasterizerState), new ShaderUiProperties(), () => new FallbackInputUi<RasterizerState>(),
+                           () => new ValueOutputUi<RasterizerState>());
+            RegisterUiType(typeof(RawViewportF), new ShaderUiProperties(), () => new FallbackInputUi<RawViewportF>(), () => new ValueOutputUi<RawViewportF>());
+            RegisterUiType(typeof(RawRectangle), new ShaderUiProperties(), () => new FallbackInputUi<RawRectangle>(), () => new ValueOutputUi<RawRectangle>());
 
             Load();
 
