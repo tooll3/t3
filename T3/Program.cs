@@ -222,11 +222,6 @@ namespace T3
             _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
             _renderView = new RenderTargetView(device, _backBuffer);
 
-            // Prepare All the stages
-            context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-            context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
-            context.OutputMerger.SetTargets(_renderView);
-
             _controller = new ImGuiDx11Impl(device, form.Width, form.Height);
 
             form.ResizeBegin += (sender, args) => _inResize = true;
@@ -288,9 +283,9 @@ namespace T3
                                      T3Metrics.UiRenderingStarted();
                                      T3Style.Apply();
 
-
                                      ImGui.NewFrame();
 
+                                     context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
                                      context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
                                      context.OutputMerger.SetTargets(_renderView);
                                      context.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
@@ -315,11 +310,12 @@ namespace T3
                                          context.PixelShader.SetShaderResource(0, srvr.ShaderResourceView);
 
                                      context.Draw(3, 0);
-
                                      context.PixelShader.SetShaderResource(0, null);
 
                                      _t3ui.DrawUI();
 
+                                     context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
+                                     context.OutputMerger.SetTargets(_renderView);
 
                                      ImGui.Render();
                                      _controller.RenderImDrawData(ImGui.GetDrawData());

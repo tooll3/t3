@@ -4,6 +4,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using SharpDX.Direct3D;
@@ -52,7 +53,7 @@ namespace T3.Gui
             // sharpdx types
             RegisterUiType(typeof(SharpDX.Int3), new Size2UiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
             RegisterUiType(typeof(SharpDX.Size2), new Size2UiProperties(), () => new Size2InputUi(), () => new ValueOutputUi<Size2>());
-            RegisterUiType(typeof(SharpDX.Direct3D.PrimitiveTopology), new FallBackUiProperties(), () => new FallbackInputUi<PrimitiveTopology>(),
+            RegisterUiType(typeof(SharpDX.Direct3D.PrimitiveTopology), new FallBackUiProperties(), () => new EnumInputUi<PrimitiveTopology>(),
                            () => new ValueOutputUi<PrimitiveTopology>());
             RegisterUiType(typeof(SharpDX.Direct3D11.BindFlags), new ShaderUiProperties(), () => new EnumInputUi<BindFlags>(),
                            () => new ValueOutputUi<BindFlags>());
@@ -140,6 +141,10 @@ namespace T3.Gui
                 SymbolUi symbolUi = json.ReadSymbolUi(symbolUiFile);
                 if (symbolUi != null)
                 {
+                    if (SymbolUiRegistry.Entries.ContainsKey(symbolUi.Symbol.Id))
+                    {
+                        Debug.Assert(false);
+                    }
                     SymbolUiRegistry.Entries.Add(symbolUi.Symbol.Id, symbolUi);
                 }
             }
