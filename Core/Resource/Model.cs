@@ -75,6 +75,10 @@ namespace T3.Core
             InputValue InputDefaultValueCreator<T>() => new InputValue<T>();
 
             // build-in default types
+            RegisterType(typeof(bool), "bool",
+                         InputDefaultValueCreator<bool>,
+                         (writer, obj) => writer.WriteValue((bool)obj),
+                         jsonToken => jsonToken.Value<bool>());
             RegisterType(typeof(int), "int",
                          InputDefaultValueCreator<int>,
                          (writer, obj) => writer.WriteValue((int)obj),
@@ -173,10 +177,18 @@ namespace T3.Core
                          InputDefaultValueCreator<CpuAccessFlags>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
                          JsonToEnumValue<CpuAccessFlags>);
+            RegisterType(typeof(SharpDX.Direct3D11.CullMode), "CullMode",
+                         InputDefaultValueCreator<CullMode>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<CullMode>);
             RegisterType(typeof(SharpDX.Direct3D11.DepthStencilState), "DepthStencilState",
                          () => new InputValue<DepthStencilState>(null));
             RegisterType(typeof(SharpDX.Direct3D11.DepthStencilView), "DepthStencilView",
                          () => new InputValue<DepthStencilView>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.FillMode), "FillMode",
+                         InputDefaultValueCreator<FillMode>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<FillMode>);
             RegisterType(typeof(SharpDX.Direct3D11.Filter), "Filter",
                          InputDefaultValueCreator<Filter>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),

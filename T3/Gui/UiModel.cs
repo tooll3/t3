@@ -33,6 +33,7 @@ namespace T3.Gui
         private void Init()
         {
             // build-in types
+            RegisterUiType(typeof(bool), new IntUiProperties(), () => new BoolInputUi(), () => new ValueOutputUi<bool>());
             RegisterUiType(typeof(float), new FloatUiProperties(), () => new FloatInputUi(), () => new ValueOutputUi<float>());
             RegisterUiType(typeof(int), new IntUiProperties(), () => new IntInputUi(), () => new ValueOutputUi<int>());
             RegisterUiType(typeof(string), new StringUiProperties(), () => new StringInputUi(), () => new ValueOutputUi<string>());
@@ -64,10 +65,14 @@ namespace T3.Gui
                            () => new ValueOutputUi<ComputeShader>());
             RegisterUiType(typeof(SharpDX.Direct3D11.CpuAccessFlags), new ShaderUiProperties(), () => new EnumInputUi<CpuAccessFlags>(),
                            () => new ValueOutputUi<CpuAccessFlags>());
+            RegisterUiType(typeof(SharpDX.Direct3D11.CullMode), new ShaderUiProperties(), () => new EnumInputUi<CullMode>(),
+                           () => new ValueOutputUi<CullMode>());
             RegisterUiType(typeof(SharpDX.Direct3D11.DepthStencilState), new ShaderUiProperties(), () => new FallbackInputUi<DepthStencilState>(),
                            () => new ValueOutputUi<DepthStencilState>());
             RegisterUiType(typeof(SharpDX.Direct3D11.DepthStencilView), new TextureUiProperties(), () => new FallbackInputUi<DepthStencilView>(),
                            () => new ValueOutputUi<DepthStencilView>());
+            RegisterUiType(typeof(SharpDX.Direct3D11.FillMode), new ShaderUiProperties(), () => new EnumInputUi<FillMode>(),
+                           () => new ValueOutputUi<FillMode>());
             RegisterUiType(typeof(SharpDX.Direct3D11.Filter), new ShaderUiProperties(), () => new EnumInputUi<Filter>(), () => new ValueOutputUi<Filter>());
             RegisterUiType(typeof(SharpDX.Direct3D11.InputLayout), new ShaderUiProperties(), () => new FallbackInputUi<InputLayout>(),
                            () => new ValueOutputUi<InputLayout>());

@@ -305,6 +305,7 @@
     <Compile Include="Gui\Commands\DeleteSymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\DeleteConnectionCommand.cs" />
     <Compile Include="Gui\Graph\TimeControls.cs" />
+    <Compile Include="Gui\InputUi\BoolInputUi.cs" />
     <Compile Include="Gui\InputUi\Color4InputUi.cs" />
     <Compile Include="Gui\InputUi\Int3InputUi.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
