@@ -241,6 +241,11 @@ namespace T3.Core
             return GetResource<VertexShaderResource>(resourceId).VertexShader;
         }
 
+        public PixelShader GetPixelShader(uint resourceId)
+        {
+            return GetResource<PixelShaderResource>(resourceId).PixelShader;
+        }
+
         public ComputeShader GetComputeShader(uint resourceId)
         {
             return GetResource<ComputeShaderResource>(resourceId).ComputeShader;
@@ -357,7 +362,7 @@ namespace T3.Core
             CompileShader(srcFile, entryPoint, name, "vs_5_0", ref vertexShader, ref blob);
             if (vertexShader == null)
             {
-                Log.Info("Failed to create vertex shader '{name}'.");
+                Log.Info($"Failed to create vertex shader '{name}'.");
                 return NULL_RESOURCE;
             }
 
@@ -379,8 +384,11 @@ namespace T3.Core
             return resourceEntry.Id;
         }
 
-        public uint CreatePixelShader(string srcFile, string entryPoint, string name)
+        public uint CreatePixelShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
+            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
+                return NULL_RESOURCE;
+
             bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
             {
@@ -400,7 +408,7 @@ namespace T3.Core
             CompileShader(srcFile, entryPoint, name, "ps_5_0", ref shader, ref blob);
             if (shader == null)
             {
-                Log.Info("Failed to create pixel shader '{name}'.");
+                Log.Info($"Failed to create pixel shader '{name}'.");
                 return NULL_RESOURCE;
             }
 
@@ -410,6 +418,7 @@ namespace T3.Core
             if (fileResource == null)
             {
                 fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
+                fileResource.FileChangeAction = fileChangedAction;
                 FileResources.Add(srcFile, fileResource);
             }
             else
@@ -445,7 +454,7 @@ namespace T3.Core
             CompileShader(srcFile, entryPoint, name, "cs_5_0", ref shader, ref blob);
             if (shader == null)
             {
-                Log.Info("Failed to create pixel shader '{name}'.");
+                Log.Info($"Failed to create pixel shader '{name}'.");
                 return NULL_RESOURCE;
             }
 
@@ -474,6 +483,16 @@ namespace T3.Core
             {
                 vsResource.Update(path);
                 vertexShader = vsResource.VertexShader;
+            }
+        }
+
+        public void UpdatePixelShaderFromFile(string path, uint id, ref PixelShader vertexShader)
+        {
+            Resources.TryGetValue(id, out var resource);
+            if (resource is PixelShaderResource vsResource)
+            {
+                vsResource.Update(path);
+                vertexShader = vsResource.PixelShader;
             }
         }
 

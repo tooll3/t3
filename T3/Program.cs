@@ -251,7 +251,7 @@ namespace T3
             var di = new DirectoryInfo(".");
             System.Console.WriteLine(di.FullName);
             uint vsId = resourceManager.CreateVertexShaderFromFile(@"Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => {});
-            uint psId = resourceManager.CreatePixelShader(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture");
+            uint psId = resourceManager.CreatePixelShaderFromFile(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => {});
             (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg", null);
 
             // setup file watching the operator source
