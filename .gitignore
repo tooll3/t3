@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 T3/imgui.ini
+imgui.ini
