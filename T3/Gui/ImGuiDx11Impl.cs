@@ -8,6 +8,8 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using SharpDX;
+using SharpDX.Mathematics.Interop;
+using SharpDX.WIC;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using Vector2 = System.Numerics.Vector2;
@@ -43,6 +45,7 @@ namespace T3
         public static ImFontPtr FontNormal { get; set; }
         public static ImFontPtr FontBold { get; set; }
         public static ImFontPtr FontSmall { get; set; }
+        public static ImFontPtr IconFont { get; set; }
 
         public ImGuiDx11Impl(Device device, int width, int height)
         {
@@ -230,11 +233,60 @@ namespace T3
             _deviceContext.InputAssembler.InputLayout = prevInputLayout;
         }
 
+        public enum IconFontEntries
+        {
+            Icon0 = 64,
+            Icon1,
+            Icon2
+        }
+
         public unsafe void CreateFontsTexture()
         {
             // Build texture atlas
             ImGuiIOPtr io = ImGui.GetIO();
+
+            IconFont = io.Fonts.AddFontDefault();
+            var iconEntryValues = Enum.GetValues(typeof(IconFontEntries));
+            int numIcons = iconEntryValues.Length;
+            var customRectIds = new int[numIcons];
+            for (int i = 0; i < numIcons; i++)
+            {
+                customRectIds[i] = io.Fonts.AddCustomRectFontGlyph(IconFont, (char)(int)iconEntryValues.GetValue(i), 13, 13, 13 + 1);
+            }
+            io.Fonts.Build();
+
+            // get pointer to texture data, must happen after font build
             io.Fonts.GetTexDataAsRGBA32(out var pixels, out var width, out var height, out _);
+
+            // load the source image
+            var filename = @"Resources\testUI.jpg";
+            ImagingFactory factory = new ImagingFactory();
+            var bitmapDecoder = new BitmapDecoder(factory, filename, DecodeOptions.CacheOnDemand);
+            var formatConverter = new FormatConverter(factory);
+            var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
+            formatConverter.Initialize(bitmapFrameDecode, PixelFormat.Format32bppPRGBA, BitmapDitherType.None, null, 0.0, BitmapPaletteType.Custom);
+
+            // copy the data into the font atlas texture
+            for (int rectIdx = 0; rectIdx < numIcons; rectIdx++)
+            {
+                uint[] iconContent = new uint[13 * 13];
+                formatConverter.CopyPixels<uint>(new RawBox(0, 0, 13, 13), iconContent);
+                int rectId = customRectIds[rectIdx];
+                var rect = io.Fonts.GetCustomRectByIndex(rectId);
+                if (rect != null)
+                {
+                    for (int y = 0, s = 0; y < rect->Height; y++)
+                    {
+                        uint* p = (uint*)pixels + (rect->Y + y) * width + rect->X;
+                        for (int x = rect->Width; x > 0; x--)
+                        {
+                            *p++ = iconContent[s];
+                            s++;
+                        }
+                    }
+                }
+            }
+
             io.Fonts.SetTexID(_fontAtlasID);
 
             // Upload texture to graphics system
