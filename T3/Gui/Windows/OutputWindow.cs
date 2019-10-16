@@ -74,9 +74,11 @@ namespace T3.Gui.Windows
         }
 
 
-
         public static void DrawSelection(Instance _selectedInstance, SymbolUi selectedUi)
         {
+            if (_selectedInstance == null)
+                return;
+
             if (_selectedInstance.Outputs.Count > 0)
             {
                 var firstOutput = _selectedInstance.Outputs[0];
@@ -84,6 +86,7 @@ namespace T3.Gui.Windows
                 outputUi.DrawValue(firstOutput);
             }
         }
+
 
         //private void UpdateSelection()
         //{

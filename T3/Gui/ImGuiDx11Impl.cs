@@ -1,15 +1,17 @@
 ﻿using ImGuiNET;
+using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using SharpDX.Mathematics.Interop;
+using SharpDX.WIC;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
-using SharpDX;
-using SharpDX.Mathematics.Interop;
-using SharpDX.WIC;
+using T3.Gui.Styling;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using Vector2 = System.Numerics.Vector2;
@@ -18,6 +20,7 @@ namespace T3
 {
     public class ImGuiDx11Impl : IDisposable
     {
+        //public Device Device => _device;
         private Device _device;
         private DeviceContext _deviceContext;
         private Buffer _vb;
@@ -34,9 +37,9 @@ namespace T3
         private BlendState _blendState;
         private DepthStencilState _depthStencilState;
         private int _vertexBufferSize = 5000, _indexBufferSize = 1000;
-        private Dictionary<IntPtr, ShaderResourceView> _srvCache = new Dictionary<IntPtr,ShaderResourceView>();
+        private Dictionary<IntPtr, ShaderResourceView> _srvCache = new Dictionary<IntPtr, ShaderResourceView>();
 
-        private IntPtr _fontAtlasID = (IntPtr)1;
+        //private IntPtr _fontAtlasID = (IntPtr)1;
 
         private int _windowWidth;
         private int _windowHeight;
@@ -240,90 +243,7 @@ namespace T3
             Icon2
         }
 
-        public unsafe void CreateFontsTexture()
-        {
-            // Build texture atlas
-            ImGuiIOPtr io = ImGui.GetIO();
 
-            IconFont = io.Fonts.AddFontDefault();
-            var iconEntryValues = Enum.GetValues(typeof(IconFontEntries));
-            int numIcons = iconEntryValues.Length;
-            var customRectIds = new int[numIcons];
-            for (int i = 0; i < numIcons; i++)
-            {
-                customRectIds[i] = io.Fonts.AddCustomRectFontGlyph(IconFont, (char)(int)iconEntryValues.GetValue(i), 13, 13, 13 + 1);
-            }
-            io.Fonts.Build();
-
-            // get pointer to texture data, must happen after font build
-            io.Fonts.GetTexDataAsRGBA32(out var pixels, out var width, out var height, out _);
-
-            // load the source image
-            var filename = @"Resources\testUI.jpg";
-            ImagingFactory factory = new ImagingFactory();
-            var bitmapDecoder = new BitmapDecoder(factory, filename, DecodeOptions.CacheOnDemand);
-            var formatConverter = new FormatConverter(factory);
-            var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
-            formatConverter.Initialize(bitmapFrameDecode, PixelFormat.Format32bppPRGBA, BitmapDitherType.None, null, 0.0, BitmapPaletteType.Custom);
-
-            // copy the data into the font atlas texture
-            for (int rectIdx = 0; rectIdx < numIcons; rectIdx++)
-            {
-                uint[] iconContent = new uint[13 * 13];
-                formatConverter.CopyPixels<uint>(new RawBox(0, 0, 13, 13), iconContent);
-                int rectId = customRectIds[rectIdx];
-                var rect = io.Fonts.GetCustomRectByIndex(rectId);
-                if (rect != null)
-                {
-                    for (int y = 0, s = 0; y < rect->Height; y++)
-                    {
-                        uint* p = (uint*)pixels + (rect->Y + y) * width + rect->X;
-                        for (int x = rect->Width; x > 0; x--)
-                        {
-                            *p++ = iconContent[s];
-                            s++;
-                        }
-                    }
-                }
-            }
-
-            io.Fonts.SetTexID(_fontAtlasID);
-
-            // Upload texture to graphics system
-            var textureDesc = new Texture2DDescription()
-                              {
-                                  Width = width,
-                                  Height = height,
-                                  MipLevels = 1,
-                                  ArraySize = 1,
-                                  Format = Format.R8G8B8A8_UNorm,
-                                  SampleDescription = new SampleDescription() { Count = 1, Quality = 0 },
-                                  Usage = ResourceUsage.Default,
-                                  BindFlags = BindFlags.ShaderResource,
-                                  CpuAccessFlags = CpuAccessFlags.None
-                              };
-            SharpDX.DataBox box = new SharpDX.DataBox((IntPtr)pixels, width * 4, 0);
-            Texture2D texture = new Texture2D(_device, textureDesc, new[] { box });
-            texture.DebugName = "FImgui Font Atlas";
-            _fontTextureView = new ShaderResourceView(_device, texture);
-            texture.Dispose();
-
-            // Store our identifier
-            io.Fonts.TexID = (IntPtr)_fontTextureView;
-
-            var samplerDesc = new SamplerStateDescription()
-                              {
-                                  Filter = Filter.MinMagMipLinear,
-                                  AddressU = TextureAddressMode.Wrap,
-                                  AddressV = TextureAddressMode.Wrap,
-                                  AddressW = TextureAddressMode.Wrap,
-                                  MipLodBias = 0.0f,
-                                  ComparisonFunction = Comparison.Always,
-                                  MinimumLod = 0.0f,
-                                  MaximumLod = 0.0f
-                              };
-            _fontSampler = new SamplerState(_device, samplerDesc);
-        }
 
         public bool CreateDeviceObjects()
         {
@@ -424,12 +344,12 @@ namespace T3
 
             // Create the rasterizer state
             var rasterizerDesc = new RasterizerStateDescription()
-                                 {
-                                     FillMode = FillMode.Solid,
-                                     CullMode = CullMode.None,
-                                     IsScissorEnabled = true,
-                                     IsDepthClipEnabled = true
-                                 };
+            {
+                FillMode = FillMode.Solid,
+                CullMode = CullMode.None,
+                IsScissorEnabled = true,
+                IsDepthClipEnabled = true
+            };
             _rasterizerState = new RasterizerState(_device, rasterizerDesc);
 
             // Create depth-stencil State
@@ -510,6 +430,102 @@ namespace T3
             io.KeyMap[(int)ImGuiKey.X] = (int)Keys.X;
             io.KeyMap[(int)ImGuiKey.Y] = (int)Keys.Y;
             io.KeyMap[(int)ImGuiKey.Z] = (int)Keys.Z;
+        }
+
+
+        private unsafe void CreateFontsTexture()
+        {
+            ImGuiIOPtr io = ImGui.GetIO();
+
+            IconFont = io.Fonts.AddFontDefault();
+
+            var glyphIds = Icons.CustomIcons.Select(i => io.Fonts.AddCustomRectFontGlyph(
+                     ImGuiDx11Impl.IconFont,
+                     i.Char,
+                     (int)i.SourceArea.GetWidth(),
+                     (int)i.SourceArea.GetHeight(),
+                     i.SourceArea.GetWidth())).ToArray();
+
+            io.Fonts.Build();
+
+            // Get pointer to texture data, must happen after font build
+            io.Fonts.GetTexDataAsRGBA32(out var atlasPixels, out var atlasWidth, out var atlasHeight, out _);
+
+            // Load the source image
+            ImagingFactory factory = new ImagingFactory();
+            var bitmapDecoder = new BitmapDecoder(factory, Icons.IconAtlasPath, DecodeOptions.CacheOnDemand);
+            var formatConverter = new FormatConverter(factory);
+            var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
+            formatConverter.Initialize(bitmapFrameDecode, PixelFormat.Format32bppPRGBA, BitmapDitherType.None, null, 0.0, BitmapPaletteType.Custom);
+
+            // Copy the data into the font atlas texture
+            for (int i = 0; i < glyphIds.Length; i++)
+            {
+                var glyphId = glyphIds[i];
+                var icon = Icons.CustomIcons[i];
+
+                int sx = (int)icon.SourceArea.GetWidth();
+                int sy = (int)icon.SourceArea.GetHeight();
+                int px = (int)icon.SourceArea.Min.X;
+                int py = (int)icon.SourceArea.Min.Y;
+
+                uint[] iconContent = new uint[sx * sy];
+                formatConverter.CopyPixels<uint>(
+                    new RawBox(px, py, sx, sy),
+                    iconContent);
+
+                var rect = io.Fonts.GetCustomRectByIndex(glyphId);
+                if (rect != null)
+                {
+                    for (int y = 0, s = 0; y < rect->Height; y++)
+                    {
+                        uint* p = (uint*)atlasPixels + (rect->Y + y) * atlasWidth + rect->X;
+                        for (int x = rect->Width; x > 0; x--)
+                        {
+                            *p++ = iconContent[s];
+                            s++;
+                        }
+                    }
+                }
+            }
+            IntPtr _fontAtlasID = (IntPtr)1;
+            io.Fonts.SetTexID(_fontAtlasID);
+            var box = new SharpDX.DataBox((IntPtr)atlasPixels, atlasWidth * 4, 0);
+
+            // Upload texture to graphics system
+            var textureDesc = new Texture2DDescription()
+            {
+                Width = atlasWidth,
+                Height = atlasHeight,
+                MipLevels = 1,
+                ArraySize = 1,
+                Format = Format.R8G8B8A8_UNorm,
+                SampleDescription = new SampleDescription() { Count = 1, Quality = 0 },
+                Usage = ResourceUsage.Default,
+                BindFlags = BindFlags.ShaderResource,
+                CpuAccessFlags = CpuAccessFlags.None
+            };
+            Texture2D texture = new Texture2D(_device, textureDesc, new[] { box });
+            texture.DebugName = "FImgui Font Atlas";
+
+            _fontTextureView = new ShaderResourceView(_device, texture);
+            texture.Dispose();
+
+            // Store our identifier
+            io.Fonts.TexID = (IntPtr)_fontTextureView;
+
+            var samplerDesc = new SamplerStateDescription()
+            {
+                Filter = Filter.MinMagMipLinear,
+                AddressU = TextureAddressMode.Wrap,
+                AddressV = TextureAddressMode.Wrap,
+                AddressW = TextureAddressMode.Wrap,
+                MipLodBias = 0.0f,
+                ComparisonFunction = Comparison.Always,
+                MinimumLod = 0.0f,
+                MaximumLod = 0.0f
+            };
+            _fontSampler = new SamplerState(_device, samplerDesc);
         }
 
         public void Dispose()

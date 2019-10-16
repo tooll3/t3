@@ -332,6 +332,7 @@
     <Compile Include="Gui\OutputUi\ShaderResourceViewOutputUi.cs" />
     <Compile Include="Gui\OutputUi\Texture2dOutputUi.cs" />
     <Compile Include="Gui\OutputUi\ValueOutputUi.cs" />
+    <Compile Include="Gui\Styling\Icons.cs" />
     <Compile Include="Gui\Windows\ImageOutputCanvas.cs" />
     <Compile Include="Gui\Windows\OutputWindow.cs" />
     <Compile Include="Gui\Windows\SelectionPinning.cs" />
