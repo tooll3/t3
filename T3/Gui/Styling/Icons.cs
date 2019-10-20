@@ -57,33 +57,51 @@ namespace T3.Gui.Styling
         {
             public IconSource(Icon icon, int slotIndex, Vector2 size)
             {
-                SourceArea = ImRect.RectWithSize(new Vector2(SLOT_SIZE * slotIndex, SLOT_SIZE), size);
+                SourceArea = ImRect.RectWithSize(new Vector2(SlotSize * slotIndex, 0), size);
                 Char = (char)icon;
             }
 
-            private const int SLOT_SIZE = 32;
+            private const int SlotSize = 16;
             public readonly ImRect SourceArea;
             public readonly char Char;
         }
 
-
-        public static readonly IconSource[] CustomIcons = new IconSource[]
-                                                          {
-                                                              new IconSource(Icon.KeyFrame, 0, new Vector2(32, 32)),
-                                                              new IconSource(Icon.KeyFrameSelected, 4, new Vector2(32, 32)),
-                                                              new IconSource(Icon.NextKeyframeDisabled, 6, new Vector2(32, 32)),
-                                                              new IconSource(Icon.NextKeyframeEnabled, 5, new Vector2(32, 32)),
-                                                          };
-
-        public const string IconAtlasPath = @"Resources\icons.png";
+        public static readonly IconSource[] CustomIcons = {
+            new IconSource(Icon.KeyFrameSelected, 0, new Vector2(16, 25)),
+            new IconSource(Icon.KeyFrame, 1, new Vector2(16, 25)),
+            new IconSource(Icon.LastKeyframe, 2, new Vector2(16,25)),
+            new IconSource(Icon.FirstKeyframe,3 , new Vector2(16,25)),
+            new IconSource(Icon.JumpToFirstKeyframe,4 , new Vector2(16,16)),
+            new IconSource(Icon.JumpToPreviousKeyframe,5 , new Vector2(16,16)),
+            new IconSource(Icon.PlayBackwards,6 , new Vector2(16,16)),
+            new IconSource(Icon.PlayForwards,7 , new Vector2(16,16)),
+            new IconSource(Icon.JumpToNextKeyframe,8 , new Vector2(16,16)),
+            new IconSource(Icon.JumpToLastKeyframe,9 , new Vector2(16,16)),
+            new IconSource(Icon.Loop,10 , new Vector2(16,16)),
+            new IconSource(Icon.BeatGrid,12 , new Vector2(16,16)),
+            new IconSource(Icon.ConnectedParameter,13 , new Vector2(16,16)),
+            new IconSource(Icon.Stripe4PxPattern,14, new Vector2(16,16)),
+        };
+        
+        public const string IconAtlasPath = @"Resources\t3-icons.png";
     }
 
 
     public enum Icon
     {
-        KeyFrame = 64,
-        KeyFrameSelected,
-        NextKeyframeDisabled,
-        NextKeyframeEnabled,
+        KeyFrameSelected=64,
+        KeyFrame,
+        LastKeyframe,
+        FirstKeyframe,
+        JumpToFirstKeyframe,
+        JumpToPreviousKeyframe,
+        PlayBackwards,
+        PlayForwards,
+        JumpToNextKeyframe,
+        JumpToLastKeyframe,
+        Loop,
+        BeatGrid,
+        ConnectedParameter,
+        Stripe4PxPattern,
     }
 }

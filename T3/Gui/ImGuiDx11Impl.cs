@@ -231,13 +231,6 @@ namespace T3
             _deviceContext.InputAssembler.InputLayout = prevInputLayout;
         }
 
-        public enum IconFontEntries
-        {
-            Icon0 = 64,
-            Icon1,
-            Icon2
-        }
-
 
         public bool CreateDeviceObjects()
         {
