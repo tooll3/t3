@@ -19,9 +19,6 @@ namespace T3.Gui.Styling
     /// </summary>
     static class Icons
     {
-        public static ImFontPtr FontNormal { get; set; }
-        public static ImFontPtr FontBold { get; set; }
-        public static ImFontPtr FontSmall { get; set; }
         public static ImFontPtr IconFont { get; set; }
 
         public static void Draw(Icon icon)
