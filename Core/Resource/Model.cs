@@ -37,8 +37,10 @@ namespace T3.Core
         public static Dictionary<Type, string> Entries { get; } = new Dictionary<Type, string>(20);
     }
 
-    public class Scene
+    public class Command
     {
+        public Action<EvaluationContext> PrepareAction;
+        public Action<EvaluationContext> RestoreAction;
     }
 
 
@@ -151,8 +153,8 @@ namespace T3.Core
                          });
             
             // t3 core types
-            RegisterType(typeof(Scene), "Scene", 
-                         () => new InputValue<Scene>(null));
+            RegisterType(typeof(Command), "Command",
+                         () => new InputValue<Command>(null));
             
             // sharpdx types
             RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",
