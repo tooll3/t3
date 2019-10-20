@@ -1,10 +1,7 @@
 ﻿using ImGuiNET;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using T3.Gui.Styling;
 using UiHelpers;
 
 namespace T3.Gui
@@ -40,17 +37,15 @@ namespace T3.Gui
         }
 
 
-
-
         /// <summary>Draw a splitter</summary>
         /// <remarks>
         /// Take from https://github.com/ocornut/imgui/issues/319#issuecomment-147364392
         /// </remarks>
         public static void SplitFromBottom(ref float offsetFromBottom)
         {
-            const float thickness = 5; ;
+            const float thickness = 5;
 
-            var backup_pos = ImGui.GetCursorPos();
+            var backupPos = ImGui.GetCursorPos();
 
             var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
             var contentMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos();
@@ -73,13 +68,12 @@ namespace T3.Gui
 
             if (ImGui.IsItemActive())
             {
-                offsetFromBottom = Im.Clamp(
-                    offsetFromBottom - ImGui.GetIO().MouseDelta.Y,
-                    0,
-                    size.Y - thickness);
+                offsetFromBottom = 
+                    (offsetFromBottom - ImGui.GetIO().MouseDelta.Y)
+                    .Clamp(0, size.Y - thickness);
             }
 
-            ImGui.SetCursorPos(backup_pos);
+            ImGui.SetCursorPos(backupPos);
         }
 
 
@@ -105,7 +99,17 @@ namespace T3.Gui
             }
             return clicked;
         }
-
-
+        
+        
+        
+        public static bool IconButton(Styling.Icon icon, string label, Vector2 size)
+        {
+            var lastPos = ImGui.GetCursorScreenPos();
+            var clicked = ImGui.Button(label, size);
+            Icons.DrawCentered(icon);
+            ImGui.SetCursorScreenPos(lastPos);
+            ImGui.InvisibleButton("##dummy", size);
+            return clicked;
+        }
     }
 }

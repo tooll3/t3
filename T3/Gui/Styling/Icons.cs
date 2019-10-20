@@ -31,8 +31,10 @@ namespace T3.Gui.Styling
 
         public static void Draw(Icon icon, Vector2 screenPosition)
         {
+            var keepPosition = ImGui.GetCursorScreenPos();
             ImGui.SetCursorScreenPos(screenPosition);
             Draw(icon);
+            ImGui.SetCursorScreenPos(keepPosition);
         }
 
 
@@ -50,6 +52,17 @@ namespace T3.Gui.Styling
             var g = IconFont.FindGlyph((char)icon);
             ImGui.SetCursorScreenPos(area.Min);
             ImGui.Image(fonts.TexID, area.GetSize(), new Vector2(g.U0, g.V0), new Vector2(g.U1, g.V1));
+        }
+
+        /// <summary>
+        /// Draws a icon in the center of the current imgui item
+        /// </summary>
+        public static void DrawCentered(Icon icon)
+        {
+            var g = IconFont.FindGlyph((char)icon);
+            var iconSize = new Vector2(g.X1-g.X0, g.Y1- g.Y0)/2;
+            var center = (ImGui.GetItemRectMax() + ImGui.GetItemRectMin()) / 2 - iconSize;
+            Draw(icon, center );
         }
 
 
@@ -82,7 +95,7 @@ namespace T3.Gui.Styling
             new IconSource(Icon.ConnectedParameter,13 , new Vector2(16,16)),
             new IconSource(Icon.Stripe4PxPattern,14, new Vector2(16,16)),
         };
-        
+
         public const string IconAtlasPath = @"Resources\t3-icons.png";
     }
 
