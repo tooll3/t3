@@ -225,7 +225,7 @@ namespace T3.Gui.Graph
             var inputConnections = (from con in compositionSymbol.Connections
                                     from id in potentialTargetIds
                                     where con.TargetParentOrChildId == id
-                                    where !potentialTargetIds.Any(potId => potId == con.SourceParentOrChildId)
+                                    where potentialTargetIds.All(potId => potId != con.SourceParentOrChildId)
                                     select con).ToArray();
             var inputsToGenerate = (from con in inputConnections
                                     from child in compositionSymbol.Children
@@ -269,7 +269,7 @@ namespace T3.Gui.Graph
             var outputConnections = (from con in compositionSymbol.Connections
                                      from id in potentialTargetIds
                                      where con.SourceParentOrChildId == id
-                                     where !potentialTargetIds.Any(potId => potId == con.TargetParentOrChildId)
+                                     where potentialTargetIds.All(potId => potId != con.TargetParentOrChildId)
                                      select con).ToArray();
             var outputsToGenerate = (from con in outputConnections
                                      from child in compositionSymbol.Children
