@@ -253,6 +253,17 @@ namespace T3.Core.Operator
                                                                   }
                                                       },                                                      
                                                   };
+
+        public IEnumerable<Clip> GetAllTimeClips()
+        {
+            foreach (var layer in Layers)
+            {
+                foreach (var clip in layer.Clips)
+                {
+                    yield return clip;
+                }
+            }
+        }
         
         
         private readonly Dictionary<CurveId, Curve> _animatedInputCurves = new Dictionary<CurveId, Curve>();

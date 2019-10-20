@@ -19,8 +19,9 @@ namespace T3.Gui.Windows.TimeLine
             _horizontalScaleLines = new HorizontalScaleLines(this);
         }
         
-        public void Draw(Animator animator)
+        public void Draw(Instance compositionOp)
         {
+
             Current = this;
             _io = ImGui.GetIO();
             _mouse = ImGui.GetMousePos();
@@ -46,8 +47,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 HandleInteraction();
                 _horizontalScaleLines.Draw();
-                _layersArea.Draw(animator);
-                //DrawList.PopClipRect();
+                _layersArea.Draw(compositionOp);
                 DrawTimeRange();
                 DrawCurrentTimeMarker();
                 DrawDragTimeArea();

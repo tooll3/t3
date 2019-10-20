@@ -5,6 +5,7 @@ using ImGuiNET;
 using SharpDX.Direct2D1;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Commands;
 using T3.Gui.Graph;
 using UiHelpers;
 
@@ -15,14 +16,16 @@ namespace T3.Gui.Windows.TimeLine
     /// </summary>
     public class LayersArea
     {
-        public void Draw(Animator animator)
+        public void Draw(Instance compositionOp)
         {
+            var animator = compositionOp.Symbol.Animator;            
+
             ImGui.BeginGroup();
             
             var layerIndex = 0;
             foreach(var layer in animator.Layers)
             {
-                DrawLayer(layer, layerIndex);
+                DrawLayer(layer, compositionOp);
                 layerIndex++;
 
             }
@@ -30,9 +33,8 @@ namespace T3.Gui.Windows.TimeLine
         }
 
 
-        private void DrawLayer(Animator.Layer layer, int layerIndex)
+        private void DrawLayer(Animator.Layer layer, Instance compositionOp)
         {
-            ImGui.PushID(layer.Id.GetHashCode());
             ImGui.InvisibleButton("Layer#layer", new Vector2(0, LayerHeight-1));
 
             var min = ImGui.GetItemRectMin();
@@ -43,9 +45,8 @@ namespace T3.Gui.Windows.TimeLine
             var layerArea= new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax());
             foreach (var clip in layer.Clips)
             {
-                ClipUi.Draw(clip, layerArea);
+                ClipUi.Draw(clip, layerArea, compositionOp);
             }
-            ImGui.PopID();
         }
 
         private const int LayerHeight = 25;
@@ -57,17 +58,39 @@ namespace T3.Gui.Windows.TimeLine
     /// </summary>
     public class ClipUi
     {
-        public static void Draw(Animator.Clip clip, ImRect layerArea)
+        public static void Draw(Animator.Clip clip, ImRect layerArea, Instance compositionOp)
         {
+            var posOnCanvas = new Vector2((float)clip.StartTime,0);
             var xStartTime = TimeLineCanvas.Current.TransformPositionX((float)clip.StartTime);
             var xEndTime = TimeLineCanvas.Current.TransformPositionX((float)clip.EndTime);
             ImGui.SetCursorScreenPos(new Vector2(xStartTime, layerArea.Min.Y));
-            ImGui.PushID(clip.Name.GetHashCode());
+            ImGui.PushID(clip.Id.GetHashCode());
+            
             if (ImGui.Button(clip.Name, new Vector2(xEndTime - xStartTime, layerArea.GetHeight())))
             {
                 Log.Debug("Clicked clip " + clip.Name);
+                _moveClipsCommand.StoreCurrentValues();
+                UndoRedoStack.Add(_moveClipsCommand);
+                _moveClipsCommand = null;
             }
+            
+            // Dragging
+            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0, 0f))
+            {
+                if (_moveClipsCommand == null)
+                {
+                    var listWithOne = new List<Animator.Clip>() { clip };
+                    _moveClipsCommand = new MoveTimeClipCommand( compositionOp.Symbol.Id, listWithOne);
+                }
+                
+                var vectorInCanvas = TimeLineCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+                clip.StartTime += vectorInCanvas.X;
+                clip.EndTime += vectorInCanvas.X;
+            }
+
             ImGui.PopID();
         }
+        
+        private static MoveTimeClipCommand _moveClipsCommand = null;
     }
 }
