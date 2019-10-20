@@ -1,4 +1,6 @@
 todo:
+- Fix combine as new type
+- Fix wrong error output for not serializable types
 - Fix output connections to multi input when doing combine
 - Add color grade op
 - Add first player version
