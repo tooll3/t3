@@ -19,10 +19,14 @@ namespace T3.Gui.Styling
     /// </summary>
     static class Icons
     {
+        public static ImFontPtr FontNormal { get; set; }
+        public static ImFontPtr FontBold { get; set; }
+        public static ImFontPtr FontSmall { get; set; }
+        public static ImFontPtr IconFont { get; set; }
 
         public static void Draw(Icon icon)
         {
-            ImGui.PushFont(ImGuiDx11Impl.IconFont);
+            ImGui.PushFont(IconFont);
             ImGui.Text(((char)(int)icon).ToString());
             ImGui.PopFont();
         }
@@ -46,7 +50,7 @@ namespace T3.Gui.Styling
         public static void Draw(Icon icon, ImRect area)
         {
             var fonts = ImGui.GetIO().Fonts;
-            var g = ImGuiDx11Impl.IconFont.FindGlyph((char)icon);
+            var g = IconFont.FindGlyph((char)icon);
             ImGui.SetCursorScreenPos(area.Min);
             ImGui.Image(fonts.TexID, area.GetSize(), new Vector2(g.U0, g.V0), new Vector2(g.U1, g.V1));
         }
@@ -56,27 +60,24 @@ namespace T3.Gui.Styling
         {
             public IconSource(Icon icon, int slotIndex, Vector2 size)
             {
-                Icon = icon;
                 SourceArea = ImRect.RectWithSize(new Vector2(SLOT_SIZE * slotIndex, SLOT_SIZE), size);
                 Char = (char)icon;
             }
 
             private const int SLOT_SIZE = 32;
-            public Icon Icon;
-            public ImRect SourceArea;
-            public char Char;
+            public readonly ImRect SourceArea;
+            public readonly char Char;
         }
 
 
-        public static IconSource[] CustomIcons = new IconSource[]
-        {
-            new IconSource(Icon.KeyFrame, 0, new Vector2(32,32)),
-            new IconSource(Icon.KeyFrameSelected, 4, new Vector2(32,32)),
-            new IconSource(Icon.NextKeyframeDisabled, 6, new Vector2(32,32)),
-            new IconSource(Icon.NextKeyframeEnabled, 5, new Vector2(32,32)),
-        };
+        public static readonly IconSource[] CustomIcons = new IconSource[]
+                                                          {
+                                                              new IconSource(Icon.KeyFrame, 0, new Vector2(32, 32)),
+                                                              new IconSource(Icon.KeyFrameSelected, 4, new Vector2(32, 32)),
+                                                              new IconSource(Icon.NextKeyframeDisabled, 6, new Vector2(32, 32)),
+                                                              new IconSource(Icon.NextKeyframeEnabled, 5, new Vector2(32, 32)),
+                                                          };
 
-        //@"T3/Fonts/Roboto-Regular.ttf"
         public const string IconAtlasPath = @"Resources\icons.png";
     }
 

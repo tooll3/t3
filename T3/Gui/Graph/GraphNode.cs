@@ -6,6 +6,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.InputUi;
+using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using UiHelpers;
 
@@ -142,7 +143,7 @@ namespace T3.Gui.Graph
                 var inputLabelOpacity = Im.Clamp((GraphCanvas.Current.Scale.X - 1f) / 3f, 0, 1);
                 if (inputLabelOpacity > 0)
                 {
-                    ImGui.PushFont(ImGuiDx11Impl.FontSmall);
+                    ImGui.PushFont(Icons.FontSmall);
                     var labelColor = ColorVariations.OperatorLabel.Apply(colorForType);
                     labelColor.Rgba.W = inputLabelOpacity;
                     var label = input.Name;

@@ -11,6 +11,7 @@ using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
+using T3.Gui.Styling;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -150,7 +151,7 @@ namespace T3.Gui.Graph
 
             if (ImGui.BeginChildFrame(234, new Vector2(150, 200)))
             {
-                ImGui.PushFont(ImGuiDx11Impl.FontSmall);
+                ImGui.PushFont(Icons.FontSmall);
                 ImGui.TextDisabled(_filterType.Name);
                 ImGui.PopFont();
 
