@@ -65,11 +65,11 @@ namespace T3.Gui.Graph
                     _timeControlsSize,
                     trigger: KeyboardBinding.Triggered(UserActions.PlaybackToggle)))
             {
-                if (clipTime.PlaybackSpeed != 0)
+                if (Math.Abs(clipTime.PlaybackSpeed) > 0.001f)
                 {
                     clipTime.PlaybackSpeed = 0;
                 }
-                else if (clipTime.PlaybackSpeed == 0)
+                else if (Math.Abs(clipTime.PlaybackSpeed) < 0.001f)
                 {
                     clipTime.PlaybackSpeed = 1;
                 }
@@ -112,13 +112,16 @@ namespace T3.Gui.Graph
             CustomComponents.ToggleButton("Loop", ref clipTime.IsLooping, _timeControlsSize);
             ImGui.SameLine();
 
-            if (ImGui.Button("Key"))
+            if (curveEditor != null)
             {
-                curveEditor.ToggleKeyframes();
+                if (ImGui.Button("Key"))
+                {
+                        curveEditor.ToggleKeyframes();
+                }
+                ImGui.SameLine();
             }
-            ImGui.SameLine();
         }
 
-        public static Vector2 _timeControlsSize = new Vector2(40, 0);
+        private static readonly Vector2 _timeControlsSize = new Vector2(40, 0);
     }
 }
