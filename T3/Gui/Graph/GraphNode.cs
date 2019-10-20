@@ -67,9 +67,14 @@ namespace T3.Gui.Graph
                                  new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + _inputSlotHeight + _inputSlotMargin),
                                  ColorVariations.OperatorInputZone.Apply(typeColor));
 
+                var childInstance = GraphCanvas.Current.CompositionOp.Children.Single(c => c.Id == childUi.SymbolChild.Id);
+                var output = childInstance.Outputs.First();
+                int frames = output.DirtyFlag.FramesSinceLastUpdate;
+                int numUpdates = output.DirtyFlag.NumUpdatesWithinFrame;
+
                 dl.AddText(_lastScreenRect.Min + _labelPos,
                            ColorVariations.OperatorLabel.Apply(typeColor),
-                           string.Format($"{childUi.SymbolChild.ReadableName}"));
+                           string.Format($"{childUi.SymbolChild.ReadableName} - {frames} - {numUpdates}"));
 
                 if (childUi.IsSelected)
                 {
