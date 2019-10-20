@@ -48,7 +48,7 @@ namespace T3.Gui
                            () => new ValueOutputUi<System.Numerics.Vector4>());
 
             // t3 core types
-            RegisterUiType(typeof(Scene), new FallBackUiProperties(), () => new FallbackInputUi<Scene>(), () => new ValueOutputUi<Scene>());
+            RegisterUiType(typeof(Command), new FallBackUiProperties(), () => new FallbackInputUi<Command>(), () => new ValueOutputUi<Command>());
 
             // sharpdx types
             RegisterUiType(typeof(SharpDX.Int3), new Size2UiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
