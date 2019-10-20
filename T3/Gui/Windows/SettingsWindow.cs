@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Text;
 using T3.Core.Logging;
 using T3.Gui.Graph;
+using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using static T3.Gui.T3UI;
 
@@ -31,10 +32,7 @@ namespace T3.Gui.Windows
             ImGui.Checkbox("VSync", ref _vsync);
             ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
             ImGui.Checkbox("Show Item Regions", ref ItemRegionsVisible);
-
-            //if (ImGui.Button("New Parameter View"))
-            //    OpenNewParameterView();
-
+            
             ImGui.Text("Options");
             ColorVariations.DrawSettingsUi();
             if (ImGui.TreeNode("Styles"))
