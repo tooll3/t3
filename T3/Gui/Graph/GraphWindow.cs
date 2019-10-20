@@ -103,7 +103,7 @@ namespace T3.Gui.Graph
             var symbolUi = SymbolUiRegistry.Entries[Canvas.CompositionOp.Symbol.Id];
             var animator = symbolUi.Symbol.Animator;            
             
-            _timeLineCanvas.Draw(animator);
+            _timeLineCanvas.Draw(Canvas.CompositionOp);
         }
 
 
