@@ -280,6 +280,7 @@ namespace T3
                                          UiModel.UpdateUiEntriesForSymbol(symbol);
                                      }
 
+                                     DirtyFlag.IncrementGlobalTicks();
                                      T3Metrics.UiRenderingStarted();
                                      T3Style.Apply();
 
