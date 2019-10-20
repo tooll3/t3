@@ -39,16 +39,10 @@ namespace T3
         private int _vertexBufferSize = 5000, _indexBufferSize = 1000;
         private Dictionary<IntPtr, ShaderResourceView> _srvCache = new Dictionary<IntPtr, ShaderResourceView>();
 
-        //private IntPtr _fontAtlasID = (IntPtr)1;
-
         private int _windowWidth;
         private int _windowHeight;
         private Vector2 _scaleFactor = Vector2.One;
 
-        public static ImFontPtr FontNormal { get; set; }
-        public static ImFontPtr FontBold { get; set; }
-        public static ImFontPtr FontSmall { get; set; }
-        public static ImFontPtr IconFont { get; set; }
 
         public ImGuiDx11Impl(Device device, int width, int height)
         {
@@ -60,9 +54,9 @@ namespace T3
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
 
-            FontNormal = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Regular.ttf", 15f);
-            FontBold = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Black.ttf", 15f);
-            FontSmall = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Black.ttf", 12f);
+            Icons.FontNormal = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Regular.ttf", 15f);
+            Icons.FontBold = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Black.ttf", 15f);
+            Icons.FontSmall = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Black.ttf", 12f);
 
             CreateDeviceObjects();
             SetKeyMappings();
@@ -438,9 +432,9 @@ namespace T3
         {
             ImGuiIOPtr io = ImGui.GetIO();
 
-            IconFont = io.Fonts.AddFontDefault();
+            Icons.IconFont = io.Fonts.AddFontDefault();
 
-            int CustomGlyphAdder(Icons.IconSource entry) => io.Fonts.AddCustomRectFontGlyph(IconFont, entry.Char, (int)entry.SourceArea.GetWidth(),
+            int CustomGlyphAdder(Icons.IconSource entry) => io.Fonts.AddCustomRectFontGlyph(Icons.IconFont, entry.Char, (int)entry.SourceArea.GetWidth(),
                                                                                             (int)entry.SourceArea.GetHeight(), entry.SourceArea.GetWidth());
 
             var glyphIds = Icons.CustomIcons.Select(CustomGlyphAdder).ToArray();
