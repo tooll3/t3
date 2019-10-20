@@ -1,11 +1,13 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using T3.Gui.Animation.CurveEditing;
+using Icon = T3.Gui.Styling.Icon;
 
 namespace T3.Gui.Graph
 {
@@ -30,7 +32,11 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
             ImGui.Button("[<", _timeControlsSize);
             ImGui.SameLine();
-            ImGui.Button("<<", _timeControlsSize);
+            
+            CustomComponents.IconButton(Icon.JumpToFirstKeyframe,"##firstKeyframe",  _timeControlsSize);
+            ImGui.SameLine();
+            
+            CustomComponents.IconButton(Icon.JumpToPreviousKeyframe,"##prevKeyframe",  _timeControlsSize);
             ImGui.SameLine();
 
             var isPlayingBackwards = clipTime.PlaybackSpeed < 0;
