@@ -151,7 +151,7 @@ namespace T3.Gui.Graph
 
             if (ImGui.BeginChildFrame(234, new Vector2(150, 200)))
             {
-                ImGui.PushFont(Icons.FontSmall);
+                ImGui.PushFont(Fonts.FontSmall);
                 ImGui.TextDisabled(_filterType.Name);
                 ImGui.PopFont();
 

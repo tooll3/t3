@@ -54,9 +54,9 @@ namespace T3
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
 
-            Icons.FontNormal = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Regular.ttf", 15f);
-            Icons.FontBold = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Black.ttf", 15f);
-            Icons.FontSmall = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Black.ttf", 12f);
+            Fonts.FontNormal = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Regular.ttf", 15f);
+            Fonts.FontBold = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Black.ttf", 15f);
+            Fonts.FontSmall = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Black.ttf", 12f);
 
             CreateDeviceObjects();
             SetKeyMappings();

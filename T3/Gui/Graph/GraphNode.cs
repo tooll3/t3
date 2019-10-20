@@ -143,7 +143,7 @@ namespace T3.Gui.Graph
                 var inputLabelOpacity = Im.Clamp((GraphCanvas.Current.Scale.X - 1f) / 3f, 0, 1);
                 if (inputLabelOpacity > 0)
                 {
-                    ImGui.PushFont(Icons.FontSmall);
+                    ImGui.PushFont(Fonts.FontSmall);
                     var labelColor = ColorVariations.OperatorLabel.Apply(colorForType);
                     labelColor.Rgba.W = inputLabelOpacity;
                     var label = input.Name;
