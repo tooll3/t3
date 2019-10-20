@@ -206,6 +206,7 @@ namespace T3
                             srv = new ShaderResourceView(pcmd.TextureId);
                             _srvCache.Add(pcmd.TextureId, srv);
                         }
+
                         _deviceContext.PixelShader.SetShaderResource(0, srv);
                         _deviceContext.DrawIndexed((int)pcmd.ElemCount, idx_offset, vtx_offset);
                     }
@@ -242,7 +243,6 @@ namespace T3
             Icon1,
             Icon2
         }
-
 
 
         public bool CreateDeviceObjects()
@@ -344,22 +344,22 @@ namespace T3
 
             // Create the rasterizer state
             var rasterizerDesc = new RasterizerStateDescription()
-            {
-                FillMode = FillMode.Solid,
-                CullMode = CullMode.None,
-                IsScissorEnabled = true,
-                IsDepthClipEnabled = true
-            };
+                                 {
+                                     FillMode = FillMode.Solid,
+                                     CullMode = CullMode.None,
+                                     IsScissorEnabled = true,
+                                     IsDepthClipEnabled = true
+                                 };
             _rasterizerState = new RasterizerState(_device, rasterizerDesc);
 
             // Create depth-stencil State
             var depthStencilDesc = new DepthStencilStateDescription()
-            {
-                IsDepthEnabled = false,
-                DepthWriteMask = DepthWriteMask.All,
-                DepthComparison = Comparison.Always,
-                IsStencilEnabled = false
-            };
+                                   {
+                                       IsDepthEnabled = false,
+                                       DepthWriteMask = DepthWriteMask.All,
+                                       DepthComparison = Comparison.Always,
+                                       IsStencilEnabled = false
+                                   };
             depthStencilDesc.FrontFace.FailOperation =
                 depthStencilDesc.FrontFace.DepthFailOperation = depthStencilDesc.FrontFace.PassOperation = StencilOperation.Keep;
             depthStencilDesc.BackFace = depthStencilDesc.FrontFace;
@@ -385,6 +385,7 @@ namespace T3
             {
                 entry.Value.Dispose();
             }
+
             DisposeObj(ref _fontSampler);
             DisposeObj(ref _fontTextureView);
             DisposeObj(ref _ib);
@@ -439,13 +440,10 @@ namespace T3
 
             IconFont = io.Fonts.AddFontDefault();
 
-            var glyphIds = Icons.CustomIcons.Select(i => io.Fonts.AddCustomRectFontGlyph(
-                     ImGuiDx11Impl.IconFont,
-                     i.Char,
-                     (int)i.SourceArea.GetWidth(),
-                     (int)i.SourceArea.GetHeight(),
-                     i.SourceArea.GetWidth())).ToArray();
+            int CustomGlyphAdder(Icons.IconSource entry) => io.Fonts.AddCustomRectFontGlyph(IconFont, entry.Char, (int)entry.SourceArea.GetWidth(),
+                                                                                            (int)entry.SourceArea.GetHeight(), entry.SourceArea.GetWidth());
 
+            var glyphIds = Icons.CustomIcons.Select(CustomGlyphAdder).ToArray();
             io.Fonts.Build();
 
             // Get pointer to texture data, must happen after font build
@@ -470,9 +468,7 @@ namespace T3
                 int py = (int)icon.SourceArea.Min.Y;
 
                 uint[] iconContent = new uint[sx * sy];
-                formatConverter.CopyPixels<uint>(
-                    new RawBox(px, py, sx, sy),
-                    iconContent);
+                formatConverter.CopyPixels<uint>(new RawBox(px, py, sx, sy), iconContent);
 
                 var rect = io.Fonts.GetCustomRectByIndex(glyphId);
                 if (rect != null)
@@ -488,23 +484,24 @@ namespace T3
                     }
                 }
             }
+
             IntPtr _fontAtlasID = (IntPtr)1;
             io.Fonts.SetTexID(_fontAtlasID);
             var box = new SharpDX.DataBox((IntPtr)atlasPixels, atlasWidth * 4, 0);
 
             // Upload texture to graphics system
             var textureDesc = new Texture2DDescription()
-            {
-                Width = atlasWidth,
-                Height = atlasHeight,
-                MipLevels = 1,
-                ArraySize = 1,
-                Format = Format.R8G8B8A8_UNorm,
-                SampleDescription = new SampleDescription() { Count = 1, Quality = 0 },
-                Usage = ResourceUsage.Default,
-                BindFlags = BindFlags.ShaderResource,
-                CpuAccessFlags = CpuAccessFlags.None
-            };
+                              {
+                                  Width = atlasWidth,
+                                  Height = atlasHeight,
+                                  MipLevels = 1,
+                                  ArraySize = 1,
+                                  Format = Format.R8G8B8A8_UNorm,
+                                  SampleDescription = new SampleDescription() { Count = 1, Quality = 0 },
+                                  Usage = ResourceUsage.Default,
+                                  BindFlags = BindFlags.ShaderResource,
+                                  CpuAccessFlags = CpuAccessFlags.None
+                              };
             Texture2D texture = new Texture2D(_device, textureDesc, new[] { box });
             texture.DebugName = "FImgui Font Atlas";
 
@@ -515,16 +512,16 @@ namespace T3
             io.Fonts.TexID = (IntPtr)_fontTextureView;
 
             var samplerDesc = new SamplerStateDescription()
-            {
-                Filter = Filter.MinMagMipLinear,
-                AddressU = TextureAddressMode.Wrap,
-                AddressV = TextureAddressMode.Wrap,
-                AddressW = TextureAddressMode.Wrap,
-                MipLodBias = 0.0f,
-                ComparisonFunction = Comparison.Always,
-                MinimumLod = 0.0f,
-                MaximumLod = 0.0f
-            };
+                              {
+                                  Filter = Filter.MinMagMipLinear,
+                                  AddressU = TextureAddressMode.Wrap,
+                                  AddressV = TextureAddressMode.Wrap,
+                                  AddressW = TextureAddressMode.Wrap,
+                                  MipLodBias = 0.0f,
+                                  ComparisonFunction = Comparison.Always,
+                                  MinimumLod = 0.0f,
+                                  MaximumLod = 0.0f
+                              };
             _fontSampler = new SamplerState(_device, samplerDesc);
         }
 
