@@ -104,11 +104,11 @@ namespace T3.Gui
         
         public static bool IconButton(Styling.Icon icon, string label, Vector2 size)
         {
-            var lastPos = ImGui.GetCursorScreenPos();
-            var clicked = ImGui.Button(label, size);
-            Icons.DrawCentered(icon);
-            ImGui.SetCursorScreenPos(lastPos);
-            ImGui.InvisibleButton("##dummy", size);
+            ImGui.PushFont(Icons.IconFont);
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f,0.5f));
+            var clicked = ImGui.Button((char)(int)icon+"##"+label, size);
+            ImGui.PopStyleVar();
+            ImGui.PopFont();
             return clicked;
         }
     }

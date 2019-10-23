@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Animation;
 using T3.Gui.Graph;
@@ -138,6 +140,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
             }
+            
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0) || ImGui.IsItemClicked())
             {
                 _clipTime.Time = InverseTransformPosition(_io.MousePos).X;

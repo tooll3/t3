@@ -122,6 +122,6 @@ namespace T3.Gui.Graph
             }
         }
 
-        private static readonly Vector2 _timeControlsSize = new Vector2(40, 0);
+        private static readonly Vector2 _timeControlsSize = new Vector2(40, 20);
     }
 }
