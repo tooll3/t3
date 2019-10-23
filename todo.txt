@@ -1,5 +1,5 @@
 todo:
-- Fix combine as new type
+- Fix saving instance name for symbol children
 - Fix wrong error output for not serializable types
 - Fix output connections to multi input when doing combine
 - Add color grade op
@@ -16,6 +16,7 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Fix input/output generation of 'combine as new type'
 * Add count to track evaluations of operators
 * Add gfx pipeline parts (first draft)
 * Put operators assembly into own repo as submodule

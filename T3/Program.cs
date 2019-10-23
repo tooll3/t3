@@ -253,7 +253,7 @@ namespace T3
             resourceManager.OperatorsAssembly = T3UI.UiModel.OperatorsAssembly;
             foreach (var (key, symbol) in SymbolRegistry.Entries)
             {
-                ResourceManager.Instance().CreateOperatorEntry(@"..\Operators\Types\" + symbol.Name + ".cs", symbol.Id.ToString());
+                ResourceManager.Instance().CreateOperatorEntry(@"Operators\Types\" + symbol.Name + ".cs", symbol.Id.ToString());
             }
 
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
