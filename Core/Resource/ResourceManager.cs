@@ -286,7 +286,7 @@ namespace T3.Core
             _csFileWatcher.EnableRaisingEvents = true;
         }
 
-        public void SetupConstBufferForCS<T>(T bufferData, ref Buffer buffer, int slot) where T : struct
+        public void SetupConstBuffer<T>(T bufferData, ref Buffer buffer) where T : struct
         {
             using (var data = new DataStream(Marshal.SizeOf(typeof(T)), true, true))
             {
@@ -307,7 +307,33 @@ namespace T3.Core
                 {
                     _device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer, 0);
                 }
-                _device.ImmediateContext.ComputeShader.SetConstantBuffer(slot, buffer);
+            }
+        }
+
+        public void SetupStructuredBuffer<T>(T[] bufferData, ref Buffer buffer) where T : struct
+        {
+            int sizeInBytes = Marshal.SizeOf(typeof(T)) * bufferData.Length;
+            using (var data = new DataStream(sizeInBytes, true, true))
+            {
+                data.WriteRange(bufferData);
+                data.Position = 0;
+
+                if (buffer == null)
+                {
+                    var bufferDesc = new BufferDescription
+                                         {
+                                             Usage = ResourceUsage.Default,
+                                             BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
+                                             SizeInBytes = sizeInBytes,
+                                             OptionFlags = ResourceOptionFlags.BufferStructured,
+                                             StructureByteStride = 32,
+                                         };
+                    buffer = new Buffer(_device, data, bufferDesc);
+                }
+                else
+                {
+                    _device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer, 0);
+                }
             }
         }
 
