@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using T3.Core.Operator;
-using T3.Gui.Selection;
 
 namespace T3.Gui.Commands
 {
@@ -25,14 +23,14 @@ namespace T3.Gui.Commands
             public double SourceEndTime { get; set; }
         }
 
-        public readonly Entry[] Entries;
+        private readonly Entry[] _entries;
         private readonly Guid _compositionSymbolId;
 
         public MoveTimeClipCommand(Guid compositionSymbolId, List<Animator.Clip> clips)
         {
             _compositionSymbolId = compositionSymbolId;
-            Entries = new Entry[clips.Count()];
-            for (var i = 0; i < Entries.Length; i++)
+            _entries = new Entry[clips.Count()];
+            for (var i = 0; i < _entries.Length; i++)
             {
                 var clip = clips[i];
                 var entry = new Entry
@@ -43,7 +41,7 @@ namespace T3.Gui.Commands
                                  OriginalSourceStartTime= clip.SourceStartTime,
                                  OriginalSourceEndTime= clip.SourceEndTime,
                             };
-                Entries[i] = entry;
+                _entries[i] = entry;
             }
         }
         
@@ -55,7 +53,7 @@ namespace T3.Gui.Commands
 
             foreach (var clip in animator.GetAllTimeClips())
             {
-                var selectedEntry = Entries.SingleOrDefault(entry => entry.Id == clip.Id);
+                var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
@@ -74,7 +72,7 @@ namespace T3.Gui.Commands
 
             foreach (var clip in animator.GetAllTimeClips())
             {
-                var selectedEntry = Entries.SingleOrDefault(entry => entry.Id == clip.Id);
+                var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
@@ -92,7 +90,7 @@ namespace T3.Gui.Commands
 
             foreach (var clip in animator.GetAllTimeClips())
             {
-                var selectedEntry = Entries.SingleOrDefault(entry => entry.Id == clip.Id);
+                var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
