@@ -7,6 +7,7 @@ namespace T3.Gui.InputUi
     {
         protected override InputEditState DrawEditControl(string name, ref T value)
         {
+            ImGui.Text(""); // Print an empty text to force layout to next line
             return InputEditState.Nothing;
         }
 
