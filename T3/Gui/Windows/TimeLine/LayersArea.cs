@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
-using SharpDX.Direct2D1;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
-using T3.Gui.Graph;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -21,15 +18,12 @@ namespace T3.Gui.Windows.TimeLine
             var animator = compositionOp.Symbol.Animator;            
 
             ImGui.BeginGroup();
-            
-            var layerIndex = 0;
+
             foreach(var layer in animator.Layers)
             {
                 DrawLayer(layer, compositionOp);
-                layerIndex++;
-
             }
-            ImGui.EndChild();
+            ImGui.EndGroup();
         }
 
 
@@ -60,7 +54,6 @@ namespace T3.Gui.Windows.TimeLine
     {
         public static void Draw(Animator.Clip clip, ImRect layerArea, Instance compositionOp)
         {
-            var posOnCanvas = new Vector2((float)clip.StartTime,0);
             var xStartTime = TimeLineCanvas.Current.TransformPositionX((float)clip.StartTime);
             var xEndTime = TimeLineCanvas.Current.TransformPositionX((float)clip.EndTime);
             ImGui.SetCursorScreenPos(new Vector2(xStartTime, layerArea.Min.Y));
@@ -91,6 +84,6 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.PopID();
         }
         
-        private static MoveTimeClipCommand _moveClipsCommand = null;
+        private static MoveTimeClipCommand _moveClipsCommand;
     }
 }
