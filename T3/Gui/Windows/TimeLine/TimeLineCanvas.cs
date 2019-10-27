@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Animation;
+using T3.Gui.Animation.Snapping;
+using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    class TimeLineCanvas:  ICanvas
+    class TimeLineCanvas:  ICanvas, ITimeElementSelectionHolder
     {
         public TimeLineCanvas(ClipTime clipTime = null)
         {
             _clipTime = clipTime;
             _layersArea = new LayersArea();
+            _selectionHolders.Add(_layersArea);
             _horizontalScaleLines = new HorizontalScaleLines(this);
+            _snapHandler.AddSnapAttractor(_currentTimeMarker);
         }
+
         
         public void Draw(Instance compositionOp)
         {
-
             Current = this;
             _io = ImGui.GetIO();
             _mouse = ImGui.GetMousePos();
@@ -51,7 +53,7 @@ namespace T3.Gui.Windows.TimeLine
                 _horizontalScaleLines.Draw();
                 _layersArea.Draw(compositionOp);
                 DrawTimeRange();
-                DrawCurrentTimeMarker();
+                _currentTimeMarker.Draw(_clipTime);
                 DrawDragTimeArea();
             }
             ImGui.EndChild();
@@ -115,14 +117,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
 
-        private void DrawCurrentTimeMarker()
-        {
-            if (_clipTime == null)
-                return;
 
-            var p = new Vector2(TransformPositionX((float)_clipTime.Time), 0);
-            DrawList.AddRectFilled(p, p + new Vector2(1, 2000), Color.Red);
-        }
 
         private void DrawDragTimeArea()
         {
@@ -243,6 +238,43 @@ namespace T3.Gui.Windows.TimeLine
         }
 
 
+        void ITimeElementSelectionHolder.ClearSelection()
+        {
+            throw new NotImplementedException();
+        }
+
+        void ITimeElementSelectionHolder.UpdateSelectionForArea(ImRect area)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICommand StartDragCommand()
+        {
+            foreach (var s in _selectionHolders)
+            {
+                s.StartDragCommand();
+            }
+            return null;
+        }
+
+        public void UpdateDragCommand(double dt)
+        {
+            foreach (var s in _selectionHolders)
+            {
+                s.UpdateDragCommand(dt);
+            }
+        }
+
+        public void CompleteDragCommand()
+        {
+            foreach (var s in _selectionHolders)
+            {
+                s.CompleteDragCommand();
+            }
+        }
+        
+        private List<ITimeElementSelectionHolder> _selectionHolders = new List<ITimeElementSelectionHolder>();
+        
         #region implement ICanvas =================================================================
 
         /// <summary>
@@ -384,6 +416,8 @@ namespace T3.Gui.Windows.TimeLine
         private readonly ClipTime _clipTime;
         private readonly HorizontalScaleLines _horizontalScaleLines;
         private LayersArea _layersArea;
+        private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
+        private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
 
         public static TimeLineCanvas Current; 
         

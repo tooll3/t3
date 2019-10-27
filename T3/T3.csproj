@@ -310,6 +310,8 @@
     <Compile Include="Gui\InputUi\Color4InputUi.cs" />
     <Compile Include="Gui\InputUi\Int3InputUi.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
+    <Compile Include="Gui\Interaction\Snapping\IValueSnapAttractor.cs" />
+    <Compile Include="Gui\Interaction\Snapping\ValueSnapHandler.cs" />
     <Compile Include="Gui\Styling\CustomComponents.cs" />
     <Compile Include="Gui\Graph\Interaction\SelectableMovement.cs" />
     <Compile Include="Gui\InputUi\EnumInputUi.cs" />
@@ -338,6 +340,7 @@
     <Compile Include="Gui\Windows\ImageOutputCanvas.cs" />
     <Compile Include="Gui\Windows\OutputWindow.cs" />
     <Compile Include="Gui\Windows\SelectionPinning.cs" />
+    <Compile Include="Gui\Windows\TimeLine\CurrentTimeMarker.cs" />
     <Compile Include="Gui\Windows\TimeLine\LayersArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeLineCanvas.cs" />
     <Compile Include="Gui\Windows\Window.cs" />
