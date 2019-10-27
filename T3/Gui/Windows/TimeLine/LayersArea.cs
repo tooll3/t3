@@ -1,34 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.Interaction.Snapping;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
     /// <summary>
-    /// Interface common to Timeline elements that can hold a selection (like <see cref="Animator.Clip"/>, keyframes, etc)
-    /// </summary>
-    interface ITimeElementSelectionHolder
-    {
-        void ClearSelection();
-
-        void UpdateSelectionForArea(ImRect area);
-        //Command DeleteSelectedElements();
-
-        ICommand StartDragCommand();
-        void UpdateDragCommand(double dt);
-        void CompleteDragCommand();
-    }
-
-    /// <summary>
     /// Shows a list of TimeClipLayerUi with Clip
     /// </summary>
-    public class LayersArea : ITimeElementSelectionHolder
+    public class LayersArea : ITimeElementSelectionHolder, IValueSnapAttractor
     {
+        public LayersArea(ValueSnapHandler snapHandler)
+        {
+            _snapHandler = snapHandler;
+        }
+
+
         public void Draw(Instance compositionOp)
         {
             var animator = compositionOp.Symbol.Animator;
@@ -90,12 +82,13 @@ namespace T3.Gui.Windows.TimeLine
                 }
             }
 
-            HandleDragStart(clip, isSelected);
+            HandleDragging(clip, isSelected);
 
             ImGui.PopID();
         }
 
-        private void HandleDragStart(Animator.Clip clip, bool isSelected)
+
+        private void HandleDragging(Animator.Clip clip, bool isSelected)
         {
             if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
                 return;
@@ -104,7 +97,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 if (isSelected)
                     _selectedItems.Remove(clip);
-                
+
                 return;
             }
 
@@ -121,13 +114,14 @@ namespace T3.Gui.Windows.TimeLine
                 TimeLineCanvas.Current.StartDragCommand();
             }
 
-            var dt = TimeLineCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta).X;
+
+            double snapTarget = _snapHandler.CheckForSnapping(clip.StartTime);
+            var dt = double.IsNaN( snapTarget)
+                         ? TimeLineCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta).X
+                         : clip.StartTime - snapTarget;
+
             TimeLineCanvas.Current.UpdateDragCommand(dt);
         }
-
-        private readonly HashSet<Animator.Clip> _selectedItems = new HashSet<Animator.Clip>();
-        private static MoveTimeClipCommand _moveClipsCommand;
-        private const int LayerHeight = 25;
 
 
         void ITimeElementSelectionHolder.ClearSelection()
@@ -185,5 +179,43 @@ namespace T3.Gui.Windows.TimeLine
             UndoRedoStack.Add(_moveClipsCommand);
             _moveClipsCommand = null;
         }
+
+
+        /// <summary>
+        /// Snap to all non-selected Clips
+        /// </summary>
+        SnapResult IValueSnapAttractor.CheckForSnap(double time)
+        {
+            var SnapDistanceOnCanvas = new Vector2(8, 0);
+            var snapThreshold = TimeLineCanvas.Current.InverseTransformDirection(SnapDistanceOnCanvas).X;
+            var minSnapDistance = Double.PositiveInfinity;
+            SnapResult bestSnapResult = null;
+
+            foreach (var clip in _compositionOp.Symbol.Animator.GetAllTimeClips())
+            {
+                if (_selectedItems.Contains(clip))
+                    continue;
+
+                var fStart = Math.Abs(clip.StartTime - time);
+                if (fStart < snapThreshold && fStart < minSnapDistance)
+                {
+                    bestSnapResult = new SnapResult(fStart, clip.StartTime);
+                }
+
+                var fEnd = Math.Abs(clip.StartTime - time);
+                if (fEnd < snapThreshold && fEnd < minSnapDistance)
+                {
+                    bestSnapResult = new SnapResult(fEnd, clip.EndTime);
+                }
+            }
+
+            return bestSnapResult;
+        }
+
+        private readonly HashSet<Animator.Clip> _selectedItems = new HashSet<Animator.Clip>();
+        private static MoveTimeClipCommand _moveClipsCommand;
+        private const int LayerHeight = 25;
+
+        private ValueSnapHandler _snapHandler;
     }
 }
