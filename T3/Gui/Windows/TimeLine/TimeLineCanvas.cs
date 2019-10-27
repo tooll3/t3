@@ -21,7 +21,7 @@ namespace T3.Gui.Windows.TimeLine
             _layersArea = new LayersArea(_snapHandler);
             
             _selectionHolders.Add(_layersArea);
-            _snapHandler.AddSnapAttractor(_currentTimeMarker);
+            //_snapHandler.AddSnapAttractor(_currentTimeMarker);
             _snapHandler.AddSnapAttractor(_layersArea);
         }
 

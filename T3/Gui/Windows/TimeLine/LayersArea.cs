@@ -114,12 +114,15 @@ namespace T3.Gui.Windows.TimeLine
                 TimeLineCanvas.Current.StartDragCommand();
             }
 
+            double dt = TimeLineCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta).X;
+            var snapToStart = _snapHandler.CheckForSnapping(clip.StartTime + dt);
+            if (!double.IsNaN(snapToStart))
+                dt = snapToStart - clip.StartTime;
 
-            double snapTarget = _snapHandler.CheckForSnapping(clip.StartTime);
-            var dt = double.IsNaN( snapTarget)
-                         ? TimeLineCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta).X
-                         : clip.StartTime - snapTarget;
-
+            var snapToEnd = _snapHandler.CheckForSnapping(clip.EndTime + dt);
+            if (!double.IsNaN(snapToEnd))
+                dt = snapToEnd - clip.EndTime;
+            
             TimeLineCanvas.Current.UpdateDragCommand(dt);
         }
 
@@ -181,35 +184,44 @@ namespace T3.Gui.Windows.TimeLine
         }
 
 
+        private const float SnapDistance = 4;
+        private double _snapThresholdOnCanvas;
+
         /// <summary>
         /// Snap to all non-selected Clips
         /// </summary>
-        SnapResult IValueSnapAttractor.CheckForSnap(double time)
+        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime)
         {
-            var SnapDistanceOnCanvas = new Vector2(8, 0);
-            var snapThreshold = TimeLineCanvas.Current.InverseTransformDirection(SnapDistanceOnCanvas).X;
-            var minSnapDistance = Double.PositiveInfinity;
-            SnapResult bestSnapResult = null;
-
+            _snapThresholdOnCanvas = TimeLineCanvas.Current.InverseTransformDirection(new Vector2(SnapDistance,0)).X;
+            var maxForce = 0.0;
+            var bestSnapTime = double.NaN;
+            
             foreach (var clip in _compositionOp.Symbol.Animator.GetAllTimeClips())
             {
                 if (_selectedItems.Contains(clip))
                     continue;
-
-                var fStart = Math.Abs(clip.StartTime - time);
-                if (fStart < snapThreshold && fStart < minSnapDistance)
-                {
-                    bestSnapResult = new SnapResult(fStart, clip.StartTime);
-                }
-
-                var fEnd = Math.Abs(clip.StartTime - time);
-                if (fEnd < snapThreshold && fEnd < minSnapDistance)
-                {
-                    bestSnapResult = new SnapResult(fEnd, clip.EndTime);
-                }
+                
+                CheckForSnapping(targetTime, clip.StartTime, maxForce: ref maxForce, bestSnapTime: ref bestSnapTime);
+                CheckForSnapping(targetTime, clip.EndTime, maxForce: ref maxForce, bestSnapTime: ref bestSnapTime);
             }
 
-            return bestSnapResult;
+            return double.IsNaN(bestSnapTime) 
+                       ? null 
+                       : new SnapResult(bestSnapTime, maxForce);
+        }
+
+        private void CheckForSnapping(double targetTime, double anchorTime, ref double maxForce, ref double bestSnapTime)
+        {
+            var distance = Math.Abs(anchorTime - targetTime);
+            if (distance < 0.001)
+                return;
+            
+            var force = Math.Max(0, _snapThresholdOnCanvas - distance);
+            if (force <= maxForce) 
+                return;
+            
+            bestSnapTime = anchorTime;
+            maxForce = force;
         }
 
         private readonly HashSet<Animator.Clip> _selectedItems = new HashSet<Animator.Clip>();

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using T3.Core.Logging;
 
 namespace T3.Gui.Interaction.Snapping
 {
     public class ValueSnapHandler
     {
-        readonly List<IValueSnapAttractor> _snapAttractors = new List<IValueSnapAttractor>();
-
         public void AddSnapAttractor(IValueSnapAttractor sp)
         {
             if (!_snapAttractors.Contains(sp))
@@ -23,61 +22,52 @@ namespace T3.Gui.Interaction.Snapping
             }
         }
 
-        public class SnapEventArgs : EventArgs
-        {
-            public double Value { get; set; }
-        }
+//        public class SnapEventArgs : EventArgs
+//        {
+//            public double Value { get; set; }
+//        }
         
         /// <summary>
         /// Components can bind to these events to render snap-indicators
         /// </summary>
-        public event EventHandler<SnapEventArgs> SnappedEvent;
-        public event EventHandler<SnapEventArgs> NotSnappedEvent;
-
+        public event Action<double> SnappedEvent;
+        
+        
         /// <summary>
         /// Uses all registered snap providers to test for snapping
         /// </summary>
         /// <returns>snap target of NaN</returns>
-        public double CheckForSnapping(double time, List<IValueSnapAttractor> ignoreSnapAttractors)
+        public double CheckForSnapping(double time, List<IValueSnapAttractor> ignoreSnapAttractors= null)
         {
-            double bestSnapValue = Double.NaN;
+            var bestSnapValue = Double.NaN;
             double maxSnapForce = 0;
             foreach (var sp in _snapAttractors)
             {
-                if (!ignoreSnapAttractors.Contains(sp))
+                if (ignoreSnapAttractors != null && ignoreSnapAttractors.Contains(sp)) 
+                    continue;
+                
+                var snapResult = sp.CheckForSnap(time);
+                if (snapResult != null && snapResult.Force > maxSnapForce)
                 {
-                    var snapResult = sp.CheckForSnap(time);
-                    if (snapResult != null && snapResult.Force > maxSnapForce)
-                    {
-                        bestSnapValue = snapResult.SnapToValue;
-                        maxSnapForce = snapResult.Force;
-                    }
+                    bestSnapValue = snapResult.SnapToValue;
+                    maxSnapForce = snapResult.Force;
                 }
             }
-            if (!Double.IsNaN(bestSnapValue))
+            
+            if (!double.IsNaN(bestSnapValue))
             {
-                if (SnappedEvent != null)
-                    SnappedEvent(this, new SnapEventArgs() { Value = bestSnapValue });
+                SnappedEvent?.Invoke(bestSnapValue);
             }
-            else
-            {
-                if (NotSnappedEvent != null)
-                    SnappedEvent(this, new SnapEventArgs() { Value = bestSnapValue });
-            }
+            
             return bestSnapValue;
         }
 
         public double CheckForSnapping(double time, IValueSnapAttractor ignoreSnapAttractor)
         {
-            var list = new List<IValueSnapAttractor>();
-            list.Add(ignoreSnapAttractor);
+            var list = new List<IValueSnapAttractor> { ignoreSnapAttractor };
             return CheckForSnapping(time, list);
         }
 
-
-        public double CheckForSnapping(double time)
-        {
-            return CheckForSnapping(time, new List<IValueSnapAttractor>());
-        }
+        private readonly List<IValueSnapAttractor> _snapAttractors = new List<IValueSnapAttractor>();
     }
 }
