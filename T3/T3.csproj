@@ -304,6 +304,7 @@
     <Compile Include="Gui\Commands\CopySymbolChildrenCommand.cs" />
     <Compile Include="Gui\Commands\DeleteSymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\DeleteConnectionCommand.cs" />
+    <Compile Include="Gui\Commands\ChangeKeyframesCommand.cs" />
     <Compile Include="Gui\Commands\MoveTimeClipCommand.cs" />
     <Compile Include="Gui\Commands\TimeClipDeleteCommand.cs" />
     <Compile Include="Gui\Graph\TimeControls.cs" />
@@ -342,6 +343,7 @@
     <Compile Include="Gui\Windows\OutputWindow.cs" />
     <Compile Include="Gui\Windows\SelectionPinning.cs" />
     <Compile Include="Gui\Windows\TimeLine\CurrentTimeMarker.cs" />
+    <Compile Include="Gui\Windows\TimeLine\DopeSheetArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\ITimeElementSelectionHolder.cs" />
     <Compile Include="Gui\Windows\TimeLine\LayersArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeLineCanvas.cs" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Animation;
 using T3.Gui.Commands;
@@ -12,21 +13,24 @@ using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class TimeLineCanvas:  ICanvas, ITimeElementSelectionHolder
+    public class TimeLineCanvas : ICanvas, ITimeElementSelectionHolder
     {
         public TimeLineCanvas(ClipTime clipTime = null)
         {
             _clipTime = clipTime;
             _horizontalScaleLines = new HorizontalScaleLines(this);
             _layersArea = new LayersArea(_snapHandler);
+            _dopeSheetArea = new DopeSheetArea(_snapHandler);
             _selectionFence = new TimeSelectionFence(this);
-            
+
             _selectionHolders.Add(_layersArea);
+            _selectionHolders.Add(_dopeSheetArea);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
             _snapHandler.AddSnapAttractor(_layersArea);
+            _snapHandler.AddSnapAttractor(_dopeSheetArea);
         }
-        
-        public void Draw(Instance compositionOp)
+
+        public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             Current = this;
             _io = ImGui.GetIO();
@@ -36,7 +40,7 @@ namespace T3.Gui.Windows.TimeLine
             WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
 
             DrawList = ImGui.GetWindowDrawList();
-            
+
 
             // Damp scaling
             const float dampSpeed = 30f;
@@ -55,6 +59,7 @@ namespace T3.Gui.Windows.TimeLine
                 HandleInteraction();
                 _horizontalScaleLines.Draw();
                 _layersArea.Draw(compositionOp);
+                _dopeSheetArea.Draw(compositionOp, animationParameters);
                 DrawTimeRange();
                 _currentTimeMarker.Draw(_clipTime);
                 DrawDragTimeArea();
@@ -91,7 +96,6 @@ namespace T3.Gui.Windows.TimeLine
             }
             else
             {
-
                 _scrollTarget.X -= deltaU.X;
                 _scaleTarget.X *= zoomDelta;
             }
@@ -116,11 +120,10 @@ namespace T3.Gui.Windows.TimeLine
                     zoomSum *= zoomSpeed;
                 }
             }
+
             zoomSum = zoomSum.Clamp(0.01f, 100f);
             return zoomSum;
         }
-
-
 
 
         private void DrawDragTimeArea()
@@ -139,7 +142,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
             }
-            
+
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0) || ImGui.IsItemClicked())
             {
                 _clipTime.Time = InverseTransformPosition(_io.MousePos).X;
@@ -167,22 +170,22 @@ namespace T3.Gui.Windows.TimeLine
 
                 // Shade outside
                 DrawList.AddRectFilled(
-                    new Vector2(0, 0),
-                    new Vector2(xRangeStart, TimeRangeShadowSize.Y),
-                    TimeRangeOutsideColor);
+                                       new Vector2(0, 0),
+                                       new Vector2(xRangeStart, TimeRangeShadowSize.Y),
+                                       TimeRangeOutsideColor);
 
                 // Shadow
                 DrawList.AddRectFilled(
-                    rangeStartPos - new Vector2(TimeRangeShadowSize.X - 1, 0),
-                    rangeStartPos + new Vector2(0, TimeRangeShadowSize.Y),
-                    TimeRangeShadowColor);
+                                       rangeStartPos - new Vector2(TimeRangeShadowSize.X - 1, 0),
+                                       rangeStartPos + new Vector2(0, TimeRangeShadowSize.Y),
+                                       TimeRangeShadowColor);
 
                 // Line
                 DrawList.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), TimeRangeShadowColor);
 
                 SetCursorToBottom(
-                    xRangeStart - TimeRangeHandleSize.X,
-                    TimeRangeHandleSize.Y);
+                                  xRangeStart - TimeRangeHandleSize.X,
+                                  TimeRangeHandleSize.Y);
 
                 ImGui.Button("##StartPos", TimeRangeHandleSize);
 
@@ -202,22 +205,22 @@ namespace T3.Gui.Windows.TimeLine
                 var windowMaxX = ImGui.GetContentRegionAvail().X + WindowPos.X;
                 if (rangeEndX < windowMaxX)
                     DrawList.AddRectFilled(
-                        rangeEndPos,
-                        rangeEndPos + new Vector2(windowMaxX - rangeEndX, TimeRangeShadowSize.Y),
-                        TimeRangeOutsideColor);
+                                           rangeEndPos,
+                                           rangeEndPos + new Vector2(windowMaxX - rangeEndX, TimeRangeShadowSize.Y),
+                                           TimeRangeOutsideColor);
 
                 // Shadow
                 DrawList.AddRectFilled(
-                    rangeEndPos,
-                    rangeEndPos + TimeRangeShadowSize,
-                    TimeRangeShadowColor);
+                                       rangeEndPos,
+                                       rangeEndPos + TimeRangeShadowSize,
+                                       TimeRangeShadowColor);
 
                 // Line
                 DrawList.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), TimeRangeShadowColor);
 
                 SetCursorToBottom(
-                    rangeEndX,
-                    TimeRangeHandleSize.Y);
+                                  rangeEndX,
+                                  TimeRangeHandleSize.Y);
 
                 ImGui.Button("##EndPos", TimeRangeHandleSize);
 
@@ -261,6 +264,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 s.StartDragCommand();
             }
+
             return null;
         }
 
@@ -279,7 +283,7 @@ namespace T3.Gui.Windows.TimeLine
                 s.UpdateDragStartCommand(dt);
             }
         }
-        
+
         public void UpdateDragEndCommand(double dt)
         {
             foreach (var s in _selectionHolders)
@@ -295,9 +299,9 @@ namespace T3.Gui.Windows.TimeLine
                 s.CompleteDragCommand();
             }
         }
-        
+
         private readonly List<ITimeElementSelectionHolder> _selectionHolders = new List<ITimeElementSelectionHolder>();
-        
+
         #region implement ICanvas =================================================================
 
         /// <summary>
@@ -385,16 +389,16 @@ namespace T3.Gui.Windows.TimeLine
                 r.Min.Y = r.Max.Y;
                 r.Max.Y = t;
             }
+
             return r;
         }
 
         public ImRect InverseTransformRect(ImRect screenRect)
         {
-
             var r = new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
-            if (!(r.Min.Y > r.Max.Y)) 
+            if (!(r.Min.Y > r.Max.Y))
                 return r;
-            
+
             var t = r.Min.Y;
             r.Min.Y = r.Max.Y;
             r.Max.Y = t;
@@ -412,20 +416,21 @@ namespace T3.Gui.Windows.TimeLine
 
 
         IEnumerable<ISelectable> ICanvas.SelectableChildren => new List<ISelectable>();
-        
+
 
         public bool IsRectVisible(Vector2 pos, Vector2 size)
         {
             return pos.X + size.X >= WindowPos.X
-                && pos.Y + size.Y >= WindowPos.Y
-                && pos.X < WindowPos.X + WindowSize.X
-                && pos.Y < WindowPos.Y + WindowSize.Y;
+                   && pos.Y + size.Y >= WindowPos.Y
+                   && pos.X < WindowPos.X + WindowSize.X
+                   && pos.Y < WindowPos.Y + WindowSize.Y;
         }
 
         /// <summary>
         /// Damped scale factors for u and v
         /// </summary>
         public Vector2 Scale { get; private set; } = new Vector2(1, -1);
+
         public Vector2 WindowPos { get; private set; }
         public Vector2 WindowSize { get; private set; }
         public Vector2 Scroll { get; private set; } = new Vector2(0, 0.0f);
@@ -435,23 +440,24 @@ namespace T3.Gui.Windows.TimeLine
 
         #endregion
 
-        
+
         private readonly ClipTime _clipTime;
         private readonly HorizontalScaleLines _horizontalScaleLines;
         private readonly LayersArea _layersArea;
+        private readonly DopeSheetArea _dopeSheetArea;
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
         private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
         private readonly TimeSelectionFence _selectionFence;
 
-        public static TimeLineCanvas Current; 
-        
+        public static TimeLineCanvas Current;
+
         private ImGuiIOPtr _io;
         private Vector2 _mouse;
         private Vector2 _scaleTarget = new Vector2(100, -1);
 
         private ImDrawListPtr DrawList { get; set; }
-        
-        
+
+
         // Styling
         private const float TimeLineDragHeight = 20;
         private static readonly Vector2 TimeRangeHandleSize = new Vector2(10, 20);
