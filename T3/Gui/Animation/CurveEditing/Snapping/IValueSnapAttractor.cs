@@ -14,20 +14,24 @@ using System.Text;
 
 namespace T3.Gui.Animation.Snapping
 {
-    /**
-     * Helper struct to pass return values.
-     */
+        ///<summary>Helper struct to pass return values.</summary>
     public class SnapResult
     {
+        public SnapResult() { }
+        
+        public SnapResult(double target, double force)
+        {
+            SnapToValue = target;
+            Force = force;
+        }
+
         public double SnapToValue { get; set; }
         public double Force { get; set; }
     }
 
-    /**
-     * This is called by the SnapHandler the attractor registered to.
-     * 
-     * should return null if not snapping
-     */
+    /// <summary>
+    /// This is called by the SnapHandler the attractor registered to. should return null if not snapping
+    /// </summary>
     public interface IValueSnapAttractor
     {
         SnapResult CheckForSnap(double value);
