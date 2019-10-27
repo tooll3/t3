@@ -1,7 +1,9 @@
+using System;
 using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Windows;
 using static ImGuiNET.ImGui;
@@ -99,15 +101,20 @@ namespace T3.Gui.Graph
 
         private void DrawTimelineAndCurveEditor()
         {
-            //SetCurvesForSelection();
             var symbolUi = SymbolUiRegistry.Entries[Canvas.CompositionOp.Symbol.Id];
             var animator = symbolUi.Symbol.Animator;            
             
-            _timeLineCanvas.Draw(Canvas.CompositionOp);
+            _timeLineCanvas.Draw(Canvas.CompositionOp, GetCurvesForSelectedNodes());
         }
 
-
-        private void SetCurvesForSelection()
+        public struct AnimationParameter
+        {
+            public IEnumerable<Curve> Curves;
+            public IInputSlot Input;
+            public Instance Instance;
+        }
+        
+        private List<AnimationParameter> GetCurvesForSelectedNodes()
         {
             var selection = Canvas.SelectionHandler.SelectedElements;
             var symbolUi = SymbolUiRegistry.Entries[Canvas.CompositionOp.Symbol.Id];
@@ -117,9 +124,13 @@ namespace T3.Gui.Graph
                                       where child.Id == selectedElement.Id
                                       from input in child.Inputs
                                       where animator.IsInputSlotAnimated(input)
-                                      select animator.GetCurvesForInput(input)).SelectMany(d => d).ToList();
-
-            //_curveEditor.SetCurves(curvesForSelection);
+                                      select new AnimationParameter()
+                                             {
+                                                 Instance = child, 
+                                                 Input = input, 
+                                                 Curves = animator.GetCurvesForInput(input)
+                                             }).ToList();
+            return curvesForSelection;
         }
 
 
@@ -151,7 +162,6 @@ namespace T3.Gui.Graph
 
         private ClipTime _clipTime = new ClipTime();
         private static float _heightTimeLine = 100;
-        //private CurveEditCanvas _curveEditor;
         private TimeLineCanvas _timeLineCanvas;
     }
 }

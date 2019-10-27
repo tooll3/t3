@@ -12,7 +12,7 @@ using UiHelpers;
 namespace T3.Gui.Windows.TimeLine
 {
     /// <summary>
-    /// Shows a list of TimeClipLayerUi with Clip
+    /// Shows a list of <see cref="Animator.Layer"/>s with <see cref="Animator.Clip"/>s
     /// </summary>
     public class LayersArea : ITimeElementSelectionHolder, IValueSnapAttractor
     {
@@ -187,7 +187,9 @@ namespace T3.Gui.Windows.TimeLine
             if (!isSelected)
             {
                 if (!ImGui.GetIO().KeyShift)
-                    _selectedItems.Clear();
+                {
+                    TimeLineCanvas.Current.ClearSelection();
+                } 
 
                 _selectedItems.Add(clip);
             }
