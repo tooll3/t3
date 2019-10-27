@@ -12,19 +12,20 @@ using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    class TimeLineCanvas:  ICanvas, ITimeElementSelectionHolder
+    public class TimeLineCanvas:  ICanvas, ITimeElementSelectionHolder
     {
         public TimeLineCanvas(ClipTime clipTime = null)
         {
             _clipTime = clipTime;
             _horizontalScaleLines = new HorizontalScaleLines(this);
             _layersArea = new LayersArea(_snapHandler);
+            _selectionFence = new TimeSelectionFence(this);
             
             _selectionHolders.Add(_layersArea);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
             _snapHandler.AddSnapAttractor(_layersArea);
         }
-
+        
         public void Draw(Instance compositionOp)
         {
             Current = this;
@@ -35,6 +36,7 @@ namespace T3.Gui.Windows.TimeLine
             WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
 
             DrawList = ImGui.GetWindowDrawList();
+            
 
             // Damp scaling
             const float dampSpeed = 30f;
@@ -56,6 +58,7 @@ namespace T3.Gui.Windows.TimeLine
                 DrawTimeRange();
                 _currentTimeMarker.Draw(_clipTime);
                 DrawDragTimeArea();
+                _selectionFence.Draw();
             }
             ImGui.EndChild();
         }
@@ -228,25 +231,28 @@ namespace T3.Gui.Windows.TimeLine
         }
 
 
-
         private void SetCursorToBottom(float xInScreen, float paddingFromBottom)
         {
             var max = ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos();
-
             var p = new Vector2(xInScreen, max.Y - paddingFromBottom);
-            //UiHelpers.THelpers.DebugRect(p, p + new Vector2(3, 3));
             ImGui.SetCursorScreenPos(p);
         }
 
 
-        void ITimeElementSelectionHolder.ClearSelection()
+        public void ClearSelection()
         {
-            throw new NotImplementedException();
+            foreach (var sh in _selectionHolders)
+            {
+                sh.ClearSelection();
+            }
         }
 
-        void ITimeElementSelectionHolder.UpdateSelectionForArea(ImRect area)
+        public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
         {
-            throw new NotImplementedException();
+            foreach (var sh in _selectionHolders)
+            {
+                sh.UpdateSelectionForArea(screenArea, selectMode);
+            }
         }
 
         public ICommand StartDragCommand()
@@ -274,7 +280,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
         
-        private List<ITimeElementSelectionHolder> _selectionHolders = new List<ITimeElementSelectionHolder>();
+        private readonly List<ITimeElementSelectionHolder> _selectionHolders = new List<ITimeElementSelectionHolder>();
         
         #region implement ICanvas =================================================================
 
@@ -416,9 +422,10 @@ namespace T3.Gui.Windows.TimeLine
         
         private readonly ClipTime _clipTime;
         private readonly HorizontalScaleLines _horizontalScaleLines;
-        private LayersArea _layersArea;
+        private readonly LayersArea _layersArea;
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
         private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
+        private readonly TimeSelectionFence _selectionFence;
 
         public static TimeLineCanvas Current; 
         
