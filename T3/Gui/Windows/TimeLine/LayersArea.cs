@@ -28,7 +28,7 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.BeginGroup();
             {
-                ImGui.SetCursorPos( ImGui.GetCursorPos() + new Vector2(0,3));// keep some padding 
+                ImGui.SetCursorPos( ImGui.GetCursorPos() + new Vector2(0,3)); // keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
 
                 foreach (var layer in compositionOp.Symbol.Animator.Layers)
