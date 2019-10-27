@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Interaction.Snapping;
@@ -56,8 +55,6 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        private const float HandleWidth = 5;
-        private Vector2 _handleOffset = new Vector2(HandleWidth, 0);
 
         private void DrawClip(ImRect layerArea, Animator.Clip clip)
         {
@@ -66,8 +63,8 @@ namespace T3.Gui.Windows.TimeLine
             var position = new Vector2(xStartTime, layerArea.Min.Y);
 
             var clipWidth = xEndTime - xStartTime;
-            var showHandles = clipWidth > 4 * HandleWidth;
-            var bodyWidth = showHandles
+            var showSizeHandles = clipWidth > 4 * HandleWidth;
+            var bodyWidth = showSizeHandles
                                 ? (clipWidth - 2 * HandleWidth)
                                 : clipWidth;
 
@@ -78,10 +75,11 @@ namespace T3.Gui.Windows.TimeLine
 
             var isSelected = _selectedItems.Contains(clip);
             var color = isSelected ? Color.Red : Color.Gray;
-            _drawList.AddRectFilled(position, position + clipSize, color);
+            _drawList.AddRectFilled(position, position + clipSize - new Vector2(1, 0), color);
+            _drawList.AddText(position, Color.Black, clip.Name);
 
             // Body clicked
-            ImGui.SetCursorScreenPos(showHandles ? (position + _handleOffset) : position);
+            ImGui.SetCursorScreenPos(showSizeHandles ? (position + _handleOffset) : position);
             if (ImGui.InvisibleButton("body", bodySize))
             {
                 TimeLineCanvas.Current.CompleteDragCommand();
@@ -93,78 +91,50 @@ namespace T3.Gui.Windows.TimeLine
                     _moveClipsCommand = null;
                 }
             }
-            HandleDragBody(clip, isSelected);
 
-            
-            if (showHandles)
+            HandleDragging(clip, isSelected, HandleDragMode.Body);
+
+            var handleSize = showSizeHandles ? new Vector2(HandleWidth, LayerHeight) : Vector2.One;
+
+            ImGui.SetCursorScreenPos(position);
+            var aHandleClicked = ImGui.InvisibleButton("startHandle", handleSize);
+            HandleDragging(clip, isSelected, HandleDragMode.Start);
+
+            ImGui.SetCursorScreenPos(position + new Vector2(bodyWidth + HandleWidth, 0));
+            aHandleClicked |= ImGui.InvisibleButton("endHandle", handleSize);
+            HandleDragging(clip, isSelected, HandleDragMode.End);
+
+            if (aHandleClicked)
             {
-                var handlePos = position + new Vector2(bodyWidth + HandleWidth,0);
-                ImGui.SetCursorScreenPos(handlePos );
-                
-                // Right Handle clicked
-                if (ImGui.InvisibleButton("rightHandle", bodySize))
-                {
-                    TimeLineCanvas.Current.CompleteDragCommand();
+                TimeLineCanvas.Current.CompleteDragCommand();
 
-                    if (_moveClipsCommand != null)
-                    {
-                        _moveClipsCommand.StoreCurrentValues();
-                        UndoRedoStack.Add(_moveClipsCommand);
-                        _moveClipsCommand = null;
-                    }
+                if (_moveClipsCommand != null)
+                {
+                    _moveClipsCommand.StoreCurrentValues();
+                    UndoRedoStack.Add(_moveClipsCommand);
+                    _moveClipsCommand = null;
                 }
-                HandleDragEnd(clip, isSelected);
             }
-            
+
             ImGui.PopID();
         }
 
 
-        private void HandleDragBody(Animator.Clip clip, bool isSelected)
+        private enum HandleDragMode
         {
-            if (ImGui.IsItemHovered())
-                ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-
-            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
-                return;
-
-            if (ImGui.GetIO().KeyCtrl)
-            {
-                if (isSelected)
-                    _selectedItems.Remove(clip);
-
-                return;
-            }
-
-            if (!isSelected)
-            {
-                if (!ImGui.GetIO().KeyShift)
-                    _selectedItems.Clear();
-
-                _selectedItems.Add(clip);
-            }
-
-            if (_moveClipsCommand == null)
-            {
-                TimeLineCanvas.Current.StartDragCommand();
-            }
-
-            double dt = TimeLineCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta).X;
-            var snapToStart = _snapHandler.CheckForSnapping(clip.StartTime + dt);
-            if (!double.IsNaN(snapToStart))
-                dt = snapToStart - clip.StartTime;
-
-            var snapToEnd = _snapHandler.CheckForSnapping(clip.EndTime + dt);
-            if (!double.IsNaN(snapToEnd))
-                dt = snapToEnd - clip.EndTime;
-
-            TimeLineCanvas.Current.UpdateDragCommand(dt);
+            Body = 0,
+            Start,
+            End,
         }
 
-        private void HandleDragEnd(Animator.Clip clip, bool isSelected)
+        private void HandleDragging(Animator.Clip clip, bool isSelected, HandleDragMode mode)
         {
             if (ImGui.IsItemHovered())
-                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
+            {
+                ImGui.SetMouseCursor(mode == HandleDragMode.Body 
+                                         ? ImGuiMouseCursor.Hand 
+                                         :ImGuiMouseCursor.ResizeEW);
+            }
 
             if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
                 return;
@@ -192,15 +162,42 @@ namespace T3.Gui.Windows.TimeLine
 
             double dt = TimeLineCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta).X;
 
-            var snapToEnd = _snapHandler.CheckForSnapping(clip.EndTime + dt);
-            if (!double.IsNaN(snapToEnd))
-                dt = snapToEnd - clip.EndTime;
+            switch (mode)
+            {
+                case HandleDragMode.Body:
+                    var snapClipToStart = _snapHandler.CheckForSnapping(clip.StartTime + dt);
+                    if (!double.IsNaN(snapClipToStart))
+                        dt = snapClipToStart - clip.StartTime;
 
-            TimeLineCanvas.Current.UpdateDragEndCommand(dt);
+                    var snapClipToEnd = _snapHandler.CheckForSnapping(clip.EndTime + dt);
+                    if (!double.IsNaN(snapClipToEnd))
+                        dt = snapClipToEnd - clip.EndTime;
+
+                    TimeLineCanvas.Current.UpdateDragCommand(dt);
+                    break;
+
+                case HandleDragMode.Start:
+                    var snapToStart = _snapHandler.CheckForSnapping(clip.StartTime + dt);
+                    if (!double.IsNaN(snapToStart))
+                        dt = snapToStart - clip.StartTime;
+
+                    TimeLineCanvas.Current.UpdateDragStartCommand(dt);
+                    break;
+
+                case HandleDragMode.End:
+                    var snapToEnd = _snapHandler.CheckForSnapping(clip.EndTime + dt);
+                    if (!double.IsNaN(snapToEnd))
+                        dt = snapToEnd - clip.EndTime;
+
+                    TimeLineCanvas.Current.UpdateDragEndCommand(dt);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+            }
         }
 
-        
-        
+
         #region implement selection holder interface --------------------------------------------
 
         void ITimeElementSelectionHolder.ClearSelection()
@@ -262,6 +259,16 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
+        void ITimeElementSelectionHolder.UpdateDragStartCommand(double dt)
+        {
+            foreach (var clip in _selectedItems)
+            {
+                // Keep 1 frame min duration
+                clip.StartTime = Math.Min(clip.StartTime + dt, clip.EndTime - 1 / 60f);
+            }
+        }
+
+
         void ITimeElementSelectionHolder.UpdateDragEndCommand(double dt)
         {
             foreach (var clip in _selectedItems)
@@ -270,7 +277,7 @@ namespace T3.Gui.Windows.TimeLine
                 clip.EndTime = Math.Max(clip.EndTime + dt, clip.StartTime + 1 / 60f);
             }
         }
-        
+
         void ITimeElementSelectionHolder.CompleteDragCommand()
         {
             if (_moveClipsCommand == null)
@@ -333,9 +340,11 @@ namespace T3.Gui.Windows.TimeLine
         private readonly HashSet<Animator.Clip> _selectedItems = new HashSet<Animator.Clip>();
         private static MoveTimeClipCommand _moveClipsCommand;
         private const int LayerHeight = 25;
+        private const float HandleWidth = 5;
+        private readonly Vector2 _handleOffset = new Vector2(HandleWidth, 0);
 
         private ImDrawListPtr _drawList;
         private Instance _compositionOp;
-        private ValueSnapHandler _snapHandler;
+        private readonly ValueSnapHandler _snapHandler;
     }
 }

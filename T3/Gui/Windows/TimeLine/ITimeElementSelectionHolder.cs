@@ -16,6 +16,7 @@ namespace T3.Gui.Windows.TimeLine
         ICommand StartDragCommand();
         void UpdateDragCommand(double dt);
         void CompleteDragCommand();
+        void UpdateDragStartCommand(double dt);
         void UpdateDragEndCommand(double dt);
     }
     
