@@ -28,6 +28,7 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.BeginGroup();
             {
+                ImGui.SetCursorPos( ImGui.GetCursorPos() + new Vector2(0,3));// keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
 
                 foreach (var layer in compositionOp.Symbol.Animator.Layers)
@@ -74,19 +75,18 @@ namespace T3.Gui.Windows.TimeLine
 
         private void DrawLayer(Animator.Layer layer)
         {
-            ImGui.InvisibleButton("Layer#layer", new Vector2(0, LayerHeight - 1));
-
             // Draw layer lines
-            var min = ImGui.GetItemRectMin();
-            var max = ImGui.GetItemRectMax();
-            _drawList.AddRectFilled(new Vector2(min.X, max.Y - 1),
-                                    new Vector2(max.X, max.Y), Color.Black);
+            var min = ImGui.GetCursorScreenPos();
+            var max = min + new Vector2(ImGui.GetContentRegionAvail().X,  LayerHeight-1);
+            _drawList.AddRectFilled(new Vector2(min.X, max.Y),
+                                    new Vector2(max.X, max.Y+1), Color.Black);
 
-            var layerArea = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax());
+            var layerArea = new ImRect(min, max);
             foreach (var clip in layer.Clips)
             {
                 DrawClip(layerArea, clip);
             }
+            ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight));
         }
 
 
@@ -108,9 +108,12 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.PushID(clip.Id.GetHashCode());
 
             var isSelected = _selectedItems.Contains(clip);
-            var color = isSelected ? Color.Red : Color.Gray;
+            var color = new Color(0.5f);
             _drawList.AddRectFilled(position, position + clipSize - new Vector2(1, 0), color);
-            _drawList.AddText(position, Color.Black, clip.Name);
+            if(isSelected) 
+                _drawList.AddRect(position, position + clipSize - new Vector2(1,0), Color.White);
+            
+            _drawList.AddText(position + new Vector2(4,4), isSelected ? Color.White: Color.Black, clip.Name);
 
             // Body clicked
             ImGui.SetCursorScreenPos(showSizeHandles ? (position + _handleOffset) : position);
