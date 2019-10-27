@@ -57,6 +57,21 @@ namespace T3.Gui.Graph
                                     ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
                                     : Color.Gray;
 
+                var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.Id == childUi.SymbolChild.Id);
+                var output = childInstance?.Outputs.FirstOrDefault();
+                int framesSinceLastUpdate = output?.DirtyFlag.FramesSinceLastUpdate ?? 0;
+                int updateCountThisFrame = output?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
+                if (updateCountThisFrame == 0)
+                {
+                    typeColor.Rgba.W = typeColor.Rgba.W *0.5f;
+                }
+                else if (updateCountThisFrame > 0)
+                {
+                    var blinkSinNormalized =(float)(Math.Sin(ImGui.GetTime() *6 * updateCountThisFrame) + 1f)/2;
+                    var blinkFactor = blinkSinNormalized * 0.5f + 0.8f;
+                    typeColor.Rgba.W = typeColor.Rgba.W * blinkFactor;
+                }
+                
                 var dl = GraphCanvas.Current.DrawList;
                 dl.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
                                  hovered
@@ -67,14 +82,10 @@ namespace T3.Gui.Graph
                                  new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + _inputSlotHeight + _inputSlotMargin),
                                  ColorVariations.OperatorInputZone.Apply(typeColor));
 
-                var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.Id == childUi.SymbolChild.Id);
-                var output = childInstance?.Outputs.FirstOrDefault();
-                int frames = output?.DirtyFlag.FramesSinceLastUpdate ?? 0;
-                int numUpdates = output?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
 
                 dl.AddText(_lastScreenRect.Min + _labelPos,
                            ColorVariations.OperatorLabel.Apply(typeColor),
-                           string.Format($"{childUi.SymbolChild.ReadableName} - {frames} - {numUpdates}"));
+                           string.Format(childUi.SymbolChild.ReadableName));
 
                 if (childUi.IsSelected)
                 {
