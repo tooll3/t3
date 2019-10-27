@@ -15,9 +15,10 @@ namespace T3.Gui.Windows.TimeLine
     interface ITimeElementSelectionHolder
     {
         void ClearSelection();
+
         void UpdateSelectionForArea(ImRect area);
         //Command DeleteSelectedElements();
-        
+
         ICommand StartDragCommand();
         void UpdateDragCommand(double dt);
         void CompleteDragCommand();
@@ -80,38 +81,48 @@ namespace T3.Gui.Windows.TimeLine
             if (ImGui.InvisibleButton(clip.Name, size))
             {
                 TimeLineCanvas.Current.CompleteDragCommand();
-                
+
                 if (_moveClipsCommand != null)
                 {
                     _moveClipsCommand.StoreCurrentValues();
                     UndoRedoStack.Add(_moveClipsCommand);
                     _moveClipsCommand = null;
                 }
-
-//                if (isSelected)
-//                {
-//                    _selectedItems.Remove(clip);
-//                }
-//                else
-//                {
-//                    _selectedItems.Add(clip);
-//                }
             }
 
-            // Dragging
-            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0, 0f))
-            {
-                _selectedItems.Add(clip);
-                if (_moveClipsCommand == null)
-                {
-                    TimeLineCanvas.Current.StartDragCommand();
-                }
-                var dt = TimeLineCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta).X;
-                
-                TimeLineCanvas.Current.UpdateDragCommand(dt);
-            }
+            HandleDragStart(clip, isSelected);
 
             ImGui.PopID();
+        }
+
+        private void HandleDragStart(Animator.Clip clip, bool isSelected)
+        {
+            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
+                return;
+
+            if (ImGui.GetIO().KeyCtrl)
+            {
+                if (isSelected)
+                    _selectedItems.Remove(clip);
+                
+                return;
+            }
+
+            if (!isSelected)
+            {
+                if (!ImGui.GetIO().KeyShift)
+                    _selectedItems.Clear();
+
+                _selectedItems.Add(clip);
+            }
+
+            if (_moveClipsCommand == null)
+            {
+                TimeLineCanvas.Current.StartDragCommand();
+            }
+
+            var dt = TimeLineCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta).X;
+            TimeLineCanvas.Current.UpdateDragCommand(dt);
         }
 
         private readonly HashSet<Animator.Clip> _selectedItems = new HashSet<Animator.Clip>();
@@ -128,10 +139,10 @@ namespace T3.Gui.Windows.TimeLine
         {
             _selectedItems.Clear();
 
-            var startTime = area.Min.X;        //TODO: implement
-            var endTime = area.Max.X;//TODO: implement
-            var layerMinIndex = area.Min.Y;//TODO: implement
-            var layerMaxIndex = area.Max.Y;//TODO: implement
+            var startTime = area.Min.X; //TODO: implement
+            var endTime = area.Max.X; //TODO: implement
+            var layerMinIndex = area.Min.Y; //TODO: implement
+            var layerMaxIndex = area.Max.Y; //TODO: implement
 
             var index = 0;
             foreach (var layer in _compositionOp.Symbol.Animator.Layers)
@@ -140,6 +151,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     _selectedItems.UnionWith(layer.Clips.FindAll(clip => clip.StartTime >= startTime && clip.EndTime <= endTime));
                 }
+
                 index++;
             }
         }
@@ -166,7 +178,7 @@ namespace T3.Gui.Windows.TimeLine
 
         void ITimeElementSelectionHolder.CompleteDragCommand()
         {
-            if (_moveClipsCommand == null) 
+            if (_moveClipsCommand == null)
                 return;
 
             _moveClipsCommand.StoreCurrentValues();
