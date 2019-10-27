@@ -4,9 +4,9 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Gui.Animation;
-using T3.Gui.Animation.Snapping;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
+using T3.Gui.Interaction.Snapping;
 using T3.Gui.Selection;
 using UiHelpers;
 
@@ -17,13 +17,14 @@ namespace T3.Gui.Windows.TimeLine
         public TimeLineCanvas(ClipTime clipTime = null)
         {
             _clipTime = clipTime;
-            _layersArea = new LayersArea();
-            _selectionHolders.Add(_layersArea);
             _horizontalScaleLines = new HorizontalScaleLines(this);
+            _layersArea = new LayersArea(_snapHandler);
+            
+            _selectionHolders.Add(_layersArea);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
+            _snapHandler.AddSnapAttractor(_layersArea);
         }
 
-        
         public void Draw(Instance compositionOp)
         {
             Current = this;
