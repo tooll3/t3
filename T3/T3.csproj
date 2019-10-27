@@ -341,6 +341,7 @@
     <Compile Include="Gui\Windows\OutputWindow.cs" />
     <Compile Include="Gui\Windows\SelectionPinning.cs" />
     <Compile Include="Gui\Windows\TimeLine\CurrentTimeMarker.cs" />
+    <Compile Include="Gui\Windows\TimeLine\ITimeElementSelectionHolder.cs" />
     <Compile Include="Gui\Windows\TimeLine\LayersArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeLineCanvas.cs" />
     <Compile Include="Gui\Windows\Window.cs" />
@@ -356,8 +357,6 @@
     <Compile Include="Gui\Graph\Interaction\SymbolBrowser.cs" />
     <Compile Include="Gui\Animation\CurveEditing\HorizontalScaleLines.cs" />
     <Compile Include="Gui\UiHelpers\ICanvas.cs" />
-    <Compile Include="Gui\Animation\CurveEditing\Snapping\IValueSnapAttractor.cs" />
-    <Compile Include="Gui\Animation\CurveEditing\Snapping\ValueSnapHandler.cs" />
     <Compile Include="Gui\Interaction\Key.cs" />
     <Compile Include="Gui\Windows\ParameterWindow.cs" />
     <Compile Include="Gui\SymbolChildUi.cs" />
