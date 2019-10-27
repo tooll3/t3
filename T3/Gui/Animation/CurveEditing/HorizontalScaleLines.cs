@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
-using T3.Gui.Animation.Snapping;
 using T3.Gui.Graph;
+using T3.Gui.Interaction.Snapping;
 
 namespace T3.Gui.Animation
 {
@@ -29,7 +29,7 @@ namespace T3.Gui.Animation
 
             var pixelsPerU = _canvas.Scale.X;
             var offset = _canvas.Scroll.X;
-            UsedPositions.Clear();
+            _usedPositions.Clear();
 
             if (pixelsPerU > 0.001f)
             {
@@ -89,9 +89,9 @@ namespace T3.Gui.Animation
                         float posX = u;
                         int x = (int)posX;
 
-                        if (u > 0 && u < width && !UsedPositions.ContainsKey(x))
+                        if (u > 0 && u < width && !_usedPositions.ContainsKey(x))
                         {
-                            UsedPositions[x] = t + offset;
+                            _usedPositions[x] = t + offset;
 
                             var p1 = new Vector2(posX + _canvas.WindowPos.X, bottom - 3);
                             drawList.AddRectFilled(p1, p1 + new Vector2(1, 3), Color.White);
@@ -141,7 +141,7 @@ namespace T3.Gui.Animation
 
         #region implement snap attractor
 
-        const double SNAP_THRESHOLD = 8;
+        private const double SnapThreshold = 8;
 
         public SnapResult CheckForSnap(double time)
         {
@@ -149,12 +149,12 @@ namespace T3.Gui.Animation
             //if (this.Visibility == System.Windows.Visibility.Collapsed)
             //    return null;
 
-            foreach (var beatTime in UsedPositions.Values)
+            foreach (var beatTime in _usedPositions.Values)
             {
                 double distanceToTime = Math.Abs(time - beatTime) * _canvas.WindowSize.X;
-                if (distanceToTime < SNAP_THRESHOLD)
+                if (distanceToTime < SnapThreshold)
                 {
-                    return new SnapResult() { SnapToValue = beatTime, Force = distanceToTime };
+                    return new SnapResult(beatTime,  distanceToTime);
                 }
             }
 
@@ -170,7 +170,7 @@ namespace T3.Gui.Animation
             public float LabelOpacity { get; set; }
         }
 
-        Dictionary<int, double> UsedPositions = new Dictionary<int, double>();
+        readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();
         //private List<DrawingVisual> m_Children = new List<DrawingVisual>();
         //private DrawingVisual m_DrawingVisual;
     }

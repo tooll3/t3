@@ -34,6 +34,10 @@ namespace T3.Gui.Interaction.Snapping
         public event EventHandler<SnapEventArgs> SnappedEvent;
         public event EventHandler<SnapEventArgs> NotSnappedEvent;
 
+        /// <summary>
+        /// Uses all registered snap providers to test for snapping
+        /// </summary>
+        /// <returns>snap target of NaN</returns>
         public double CheckForSnapping(double time, List<IValueSnapAttractor> ignoreSnapAttractors)
         {
             double bestSnapValue = Double.NaN;

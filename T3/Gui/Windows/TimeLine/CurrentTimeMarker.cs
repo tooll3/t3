@@ -1,11 +1,6 @@
-﻿using System;
-using System.Data.SqlTypes;
-using System.Numerics;
+﻿using System.Numerics;
 using ImGuiNET;
-using T3.Core.Operator;
-using T3.Gui.Animation.Snapping;
-using T3.Operators.Types;
-using UiHelpers;
+using T3.Gui.Interaction.Snapping;
 
 namespace T3.Gui.Windows.TimeLine
 {

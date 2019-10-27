@@ -10,8 +10,14 @@
     /// if the current value would snap to a new value coming from any of the registered
     /// SnapProviders.
     /// </remarks>
-    public abstract class SnapResult
+    public class SnapResult
     {
+        public SnapResult(double target, double force)
+        {
+            SnapToValue = target;
+            Force = force;
+        }
+        
         public double SnapToValue { get; set; }
         public double Force {get; set;}
     }
