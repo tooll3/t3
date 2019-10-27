@@ -10,11 +10,18 @@ namespace T3.Gui.Windows.TimeLine
     interface ITimeElementSelectionHolder
     {
         void ClearSelection();
-        void UpdateSelectionForArea(ImRect area);
+        void UpdateSelectionForArea(ImRect area, SelectMode selectMode);
         //Command DeleteSelectedElements();
 
         ICommand StartDragCommand();
         void UpdateDragCommand(double dt);
         void CompleteDragCommand();
+    }
+    
+    public enum SelectMode
+    {
+        Add = 0,
+        Remove,
+        Replace
     }
 }

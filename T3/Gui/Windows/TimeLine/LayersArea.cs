@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Interaction.Snapping;
@@ -20,6 +21,7 @@ namespace T3.Gui.Windows.TimeLine
             _snapHandler = snapHandler;
         }
 
+        private Vector2 _minScreenPos;
 
         public void Draw(Instance compositionOp)
         {
@@ -27,6 +29,9 @@ namespace T3.Gui.Windows.TimeLine
             _compositionOp = compositionOp;
 
             ImGui.BeginGroup();
+            _minScreenPos = ImGui.GetCursorScreenPos();
+            
+            THelpers.DebugWindowRect();
 
             foreach (var layer in animator.Layers)
             {
@@ -132,21 +137,34 @@ namespace T3.Gui.Windows.TimeLine
             _selectedItems.Clear();
         }
 
-        public void UpdateSelectionForArea(ImRect area)
+        public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
         {
-            _selectedItems.Clear();
+            if(selectMode == SelectMode.Replace)
+                _selectedItems.Clear();
+            
+            var startTime = TimeLineCanvas.Current.InverseTransformPositionX(screenArea.Min.X);
+            var endTime = TimeLineCanvas.Current.InverseTransformPositionX(screenArea.Max.X);
 
-            var startTime = area.Min.X; //TODO: implement
-            var endTime = area.Max.X; //TODO: implement
-            var layerMinIndex = area.Min.Y; //TODO: implement
-            var layerMaxIndex = area.Max.Y; //TODO: implement
+            var layerMinIndex = (screenArea.Min.Y - _minScreenPos.Y) / LayerHeight-1;
+            var layerMaxIndex = (screenArea.Max.Y - _minScreenPos.Y) / LayerHeight;
 
             var index = 0;
             foreach (var layer in _compositionOp.Symbol.Animator.Layers)
             {
                 if (index >= layerMinIndex && index <= layerMaxIndex)
                 {
-                    _selectedItems.UnionWith(layer.Clips.FindAll(clip => clip.StartTime >= startTime && clip.EndTime <= endTime));
+                    var matchingItems = layer.Clips.FindAll(clip => clip.StartTime <= endTime
+                                                               && clip.EndTime >= startTime);
+                    switch (selectMode)
+                    {
+                        case SelectMode.Add:
+                        case SelectMode.Replace:
+                            _selectedItems.UnionWith(matchingItems);
+                            break;
+                        case SelectMode.Remove:
+                            _selectedItems.ExceptWith(matchingItems);
+                            break;
+                    }
                 }
 
                 index++;
