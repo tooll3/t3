@@ -272,6 +272,14 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
+        public void UpdateDragEndCommand(double dt)
+        {
+            foreach (var s in _selectionHolders)
+            {
+                s.UpdateDragEndCommand(dt);
+            }
+        }
+
         public void CompleteDragCommand()
         {
             foreach (var s in _selectionHolders)
