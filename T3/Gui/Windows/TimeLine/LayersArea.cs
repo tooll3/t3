@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Interaction.Snapping;
@@ -33,8 +34,41 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     DrawLayer(layer);
                 }
+                
+                DrawContextMenu();
             }
             ImGui.EndGroup();
+        }
+
+        
+        bool _contextMenuIsOpen = false;
+        private void DrawContextMenu()
+        {
+            if (!_contextMenuIsOpen && !ImGui.IsWindowHovered())
+                return;
+            
+            // This is a horrible hack to distinguish right mouse click from right mouse drag
+            var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
+            if (!_contextMenuIsOpen && rightMouseDragDelta > 3)
+                return;
+
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
+            if (ImGui.BeginPopupContextWindow("context_menu"))
+            {
+                _contextMenuIsOpen = true;
+                if (ImGui.MenuItem("Delete", null, false, _selectedItems.Count > 0))
+                {
+                    UndoRedoStack.AddAndExecute(new TimeClipDeleteCommand(_compositionOp.Symbol, _selectedItems));
+                    _selectedItems.Clear();
+                }
+
+                ImGui.EndPopup();
+            }
+            else
+            {
+                _contextMenuIsOpen = false;
+            }
+            ImGui.PopStyleVar();
         }
 
 
