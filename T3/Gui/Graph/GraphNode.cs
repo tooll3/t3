@@ -63,13 +63,14 @@ namespace T3.Gui.Graph
                 int updateCountThisFrame = output?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
                 if (updateCountThisFrame == 0)
                 {
-                    typeColor.Rgba.W = typeColor.Rgba.W *0.5f;
+                    typeColor.Rgba.W *= 0.5f;
                 }
-                else if (updateCountThisFrame > 0)
+                else
                 {
-                    var blinkSinNormalized =(float)(Math.Sin(ImGui.GetTime() *6 * updateCountThisFrame) + 1f)/2;
-                    var blinkFactor = blinkSinNormalized * 0.5f + 0.8f;
-                    typeColor.Rgba.W = typeColor.Rgba.W * blinkFactor;
+                    const double timeScale = 6.0;
+                    float blinkSinNormalized = (float)(Math.Sin(ImGui.GetTime() * timeScale * updateCountThisFrame) + 1f) * 0.5f;
+                    float blinkFactor = blinkSinNormalized * 0.5f + 0.8f;
+                    typeColor.Rgba.W *= blinkFactor;
                 }
                 
                 var dl = GraphCanvas.Current.DrawList;
