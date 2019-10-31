@@ -156,7 +156,7 @@ namespace T3.Gui
 
         private List<ParameterWindow> _parameterWindows = new List<ParameterWindow>();
 
-        public static UiModel UiModel = new UiModel();
+        public static readonly UiModel UiModel = new UiModel();
 
         private static T3UI _instance = null;
 
