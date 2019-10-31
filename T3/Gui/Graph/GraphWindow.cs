@@ -1,7 +1,9 @@
 using System;
 using ImGuiNET;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.Operator;
@@ -27,6 +29,9 @@ namespace T3.Gui.Graph
             _title = "Graph##" + _instanceCounter;
             _visible = true;
             _allowMultipeInstances = true;
+
+            string trackName = @"Resources\lorn-sega-sunset.mp3";
+            _clipTime = File.Exists(trackName) ? new StreamClipTime(trackName) : (ClipTime)new UiClipTime();
 
             var opInstance = T3UI.UiModel.MainOp;
             Canvas = new GraphCanvas(opInstance);
@@ -160,7 +165,7 @@ namespace T3.Gui.Graph
         }
 
 
-        private ClipTime _clipTime = new ClipTime();
+        private readonly ClipTime _clipTime;
         private static float _heightTimeLine = 100;
         private TimeLineCanvas _timeLineCanvas;
     }

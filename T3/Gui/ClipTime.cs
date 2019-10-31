@@ -1,31 +1,95 @@
 ﻿using ImGuiNET;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ManagedBass;
 using T3.Core.Operator;
 
 namespace T3.Gui
 {
-    public class ClipTime
+    public abstract class ClipTime
     {
-        public double Time { get; set; } = 0;
+        public virtual double Time { get; set; }
+
         public double TimeRangeStart { get; set; } = 0;
         public double TimeRangeEnd { get; set; } = 8;
-        public double PlaybackSpeed { get; set; } = 0;
+        public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = true;
 
         public void Update()
         {
-            Time += ImGui.GetIO().DeltaTime * PlaybackSpeed;
+            UpdateTime();
             if (IsLooping && Time > TimeRangeEnd)
             {
-                Time = Time - TimeRangeEnd > 1  // JUmp to start if too far out of time region
-                    ? TimeRangeStart
-                    : Time - (TimeRangeEnd - TimeRangeStart);
+                Time = Time - TimeRangeEnd > 1.0 // Jump to start if too far out of time region
+                           ? TimeRangeStart
+                           : Time - (TimeRangeEnd - TimeRangeStart);
             }
             EvaluationContext.GlobalTime = Time;
+        }
+
+        protected abstract void UpdateTime();
+    }
+
+    public class UiClipTime : ClipTime
+    {
+        protected override void UpdateTime()
+        {
+            Time += ImGui.GetIO().DeltaTime * PlaybackSpeed;
+        }
+    }
+    
+    public class StreamClipTime : ClipTime
+    {
+        private readonly int _soundStreamHandle;
+        
+        public StreamClipTime(string filename)
+        {
+            Bass.Init();
+            _soundStreamHandle = Bass.CreateStream(filename);
+        }
+
+        public override double Time
+        {
+            get => GetCurrentStreamTime();
+            set
+            {
+                long soundStreamPos = Bass.ChannelSeconds2Bytes(_soundStreamHandle, value);
+                Bass.ChannelSetPosition(_soundStreamHandle, soundStreamPos);
+            }
+        }
+
+        public override double PlaybackSpeed
+        {
+            get
+            {
+                var playbackState = Bass.ChannelIsActive(_soundStreamHandle);
+                return playbackState == PlaybackState.Playing ? 1.0 : 0.0;
+            }
+
+            set
+            {
+                if (value == 0.0)
+                {
+                    Bass.ChannelStop(_soundStreamHandle);
+                }
+                else
+                {
+                    var playbackState = Bass.ChannelIsActive(_soundStreamHandle);
+                    if (playbackState != PlaybackState.Playing)
+                    {
+                        Bass.ChannelPlay(_soundStreamHandle);
+                    }
+                }
+            }
+        }
+        
+        protected override void UpdateTime()
+        {
+            // nothing to do here as time is taken directly from stream
+        }
+
+        private double GetCurrentStreamTime()
+        {
+            long soundStreamPos = Bass.ChannelGetPosition(_soundStreamHandle);
+            return Bass.ChannelBytes2Seconds(_soundStreamHandle, soundStreamPos);
         }
     }
 }
