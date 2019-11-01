@@ -110,7 +110,12 @@ namespace T3.Gui
                     {
                         window.DrawMenuItemToggle();
                     }
+
+                    if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
+                        ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
+
                     ImGui.Separator();
+
                     if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
                         _demoWindowVisible = !_demoWindowVisible;
 
@@ -153,6 +158,8 @@ namespace T3.Gui
 
         public static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
         public static HashSet<Guid> HoveredIdsLastFrame { get; set; } = new HashSet<Guid>();
+        
+        public static bool ShowSecondaryRenderWindow { get; private set; }
 
         private List<ParameterWindow> _parameterWindows = new List<ParameterWindow>();
 

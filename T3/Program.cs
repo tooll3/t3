@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using SharpDX.Mathematics.Interop;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -200,7 +201,7 @@ namespace T3
             // SwapChain description
             var desc = new SwapChainDescription()
                        {
-                           BufferCount = 1,
+                           BufferCount = 3,
                            ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
                                                                  new Rational(60, 1), Format.R8G8B8A8_UNorm),
                            IsWindowed = true,
@@ -221,13 +222,14 @@ namespace T3
             // New RenderTargetView from the backbuffer
             _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
             _renderView = new RenderTargetView(device, _backBuffer);
+            
 
             _controller = new ImGuiDx11Impl(device, form.Width, form.Height);
 
             form.ResizeBegin += (sender, args) => _inResize = true;
             form.ResizeEnd += (sender, args) =>
                               {
-                                  RebuildBackBuffer(form, device);
+                                  RebuildBackBuffer(form, device, ref _renderView, ref _backBuffer, ref _swapChain);
                                   _inResize = false;
                               };
             form.ClientSizeChanged += (sender, args) =>
@@ -235,9 +237,36 @@ namespace T3
                                           if (_inResize)
                                               return;
 
-                                          RebuildBackBuffer(form, device);
+                                          RebuildBackBuffer(form, device, ref _renderView, ref _backBuffer, ref _swapChain);
                                       };
             form.WindowState = FormWindowState.Maximized;
+
+            // second render view
+            var form2 = new ImGuiDx11RenderForm("T3 Render Window") { ClientSize = new Size(640, 480) };
+            desc.OutputHandle = form2.Handle;
+            
+            _swapChain2 = new SwapChain(factory, device, desc);
+            
+            _swapChain2.ResizeBuffers(3, form2.ClientSize.Width, form2.ClientSize.Height,
+            _swapChain2.Description.ModeDescription.Format, _swapChain2.Description.Flags);
+            _backBuffer2 = Texture2D.FromSwapChain<Texture2D>(_swapChain2, 0);
+            _renderView2 = new RenderTargetView(device, _backBuffer2);
+
+            form2.ResizeBegin += (sender, args) => _inResize2 = true;
+            form2.ResizeEnd += (sender, args) =>
+                               {
+                                   RebuildBackBuffer(form2, device, ref _renderView2, ref _backBuffer2, ref _swapChain2);
+                                   _inResize2 = false;
+                               };
+            form2.ClientSizeChanged += (sender, args) =>
+                                       {
+                                           if (_inResize2)
+                                               return;
+
+                                           RebuildBackBuffer(form2, device, ref _renderView2, ref _backBuffer2, ref _swapChain2);
+                                       };
+            // form2.WindowState = FormWindowState.Maximized;
+            form2.Show();
 
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
@@ -285,33 +314,41 @@ namespace T3
                                      T3Style.Apply();
 
                                      ImGui.NewFrame();
-
-                                     context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
                                      context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
                                      context.OutputMerger.SetTargets(_renderView);
                                      context.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
 
-                                     if (resourceManager.Resources[vsId] is VertexShaderResource vsr)
-                                         context.VertexShader.Set(vsr.VertexShader);
-                                     if (resourceManager.Resources[psId] is PixelShaderResource psr)
-                                         context.PixelShader.Set(psr.PixelShader);
-                                     if (resourceManager.TestId != ResourceManager.NULL_RESOURCE)
+                                     form2.Visible = T3UI.ShowSecondaryRenderWindow;
+                                     if (T3UI.ShowSecondaryRenderWindow)
                                      {
-                                         if (resourceManager.Resources[resourceManager.TestId] is TextureResource textureResource)
+                                         context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+                                         context.Rasterizer.SetViewport(new Viewport(0, 0, form2.ClientSize.Width, form2.ClientSize.Height, 0.0f, 1.0f));
+                                         context.OutputMerger.SetTargets(_renderView2);
+                                         context.ClearRenderTargetView(_renderView2, new Color(0.45f, 0.55f, 0.6f, 1.0f));
+                                     
+                                         if (resourceManager.Resources[vsId] is VertexShaderResource vsr)
+                                             context.VertexShader.Set(vsr.VertexShader);
+                                         if (resourceManager.Resources[psId] is PixelShaderResource psr)
+                                             context.PixelShader.Set(psr.PixelShader);
+                                         if (resourceManager.TestId != ResourceManager.NULL_RESOURCE)
                                          {
-                                             if (backgroundSrv == null || backgroundSrv.Resource.NativePointer != textureResource.Texture.NativePointer)
+                                             if (resourceManager.Resources[resourceManager.TestId] is TextureResource textureResource)
                                              {
-                                                 backgroundSrv?.Dispose();
-                                                 backgroundSrv = new ShaderResourceView(device, textureResource.Texture);
+                                                 if (backgroundSrv == null || backgroundSrv.Resource.NativePointer != textureResource.Texture.NativePointer)
+                                                 {
+                                                     backgroundSrv?.Dispose();
+                                                     backgroundSrv = new ShaderResourceView(device, textureResource.Texture);
+                                                 }
+                                     
+                                                 context.PixelShader.SetShaderResource(0, backgroundSrv);
                                              }
-                                             context.PixelShader.SetShaderResource(0, backgroundSrv);
                                          }
+                                         else if (resourceManager.Resources[srvId] is ShaderResourceViewResource srvr)
+                                             context.PixelShader.SetShaderResource(0, srvr.ShaderResourceView);
+                                     
+                                         context.Draw(3, 0);
+                                         context.PixelShader.SetShaderResource(0, null);
                                      }
-                                     else if (resourceManager.Resources[srvId] is ShaderResourceViewResource srvr)
-                                         context.PixelShader.SetShaderResource(0, srvr.ShaderResourceView);
-
-                                     context.Draw(3, 0);
-                                     context.PixelShader.SetShaderResource(0, null);
 
                                      _t3ui.DrawUI();
 
@@ -324,6 +361,9 @@ namespace T3
                                      T3Metrics.UiRenderingCompleted();
 
                                      _swapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
+
+                                     if (T3UI.ShowSecondaryRenderWindow)
+                                         _swapChain2.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
                                  });
 
             _controller.Dispose();
@@ -339,19 +379,23 @@ namespace T3
             factory.Dispose();
         }
 
-        private static void RebuildBackBuffer(ImGuiDx11RenderForm form, Device device)
+        private static void RebuildBackBuffer(ImGuiDx11RenderForm form, Device device, ref RenderTargetView rtv, ref Texture2D buffer, ref SwapChain swapChain)
         {
-            _renderView.Dispose();
-            _backBuffer.Dispose();
-            _swapChain.ResizeBuffers(0, form.ClientSize.Width, form.ClientSize.Height, Format.Unknown, 0);
-            _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
-            _renderView = new RenderTargetView(device, _backBuffer);
+            rtv.Dispose();
+            buffer.Dispose();
+            swapChain.ResizeBuffers(3, form.ClientSize.Width, form.ClientSize.Height, Format.Unknown, 0);
+            buffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
+            rtv = new RenderTargetView(device, buffer);
         }
 
         private static T3UI _t3ui = new T3UI();
         private static bool _inResize;
+        private static bool _inResize2;
         private static SwapChain _swapChain;
+        private static SwapChain _swapChain2;
         private static RenderTargetView _renderView;
         private static Texture2D _backBuffer;
+        private static Texture2D _backBuffer2;
+        private static RenderTargetView _renderView2;
     }
 }
