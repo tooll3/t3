@@ -67,6 +67,12 @@ namespace T3.Gui.Windows
 
             if (ImGui.Begin(_title, ref _visible, _windowFlags))
             {
+                // Prevent window header from becoming invisible 
+                var windowPos = ImGui.GetWindowPos();
+                if (windowPos.X <= 0) windowPos.X = 0;
+                if (windowPos.Y <= 0) windowPos.Y = 0;
+                ImGui.SetWindowPos(windowPos);
+                
                 DrawContent();
                 ImGui.End();
             }
