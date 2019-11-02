@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using T3.Gui.Animation.CurveEditing;
+using T3.Gui.Styling;
 using Icon = T3.Gui.Styling.Icon;
 
 namespace T3.Gui.Graph
@@ -16,11 +17,11 @@ namespace T3.Gui.Graph
         internal static void DrawTimeControls(ClipTime clipTime, CurveEditCanvas curveEditor)
         {
             ImGui.SetCursorPos(
-                new Vector2(
-                    ImGui.GetWindowContentRegionMin().X,
-                    ImGui.GetWindowContentRegionMax().Y - 30));
+                               new Vector2(
+                                           ImGui.GetWindowContentRegionMin().X,
+                                           ImGui.GetWindowContentRegionMax().Y - 30));
 
-            TimeSpan timespan = TimeSpan.FromSeconds(clipTime.Time);
+            var timespan = TimeSpan.FromSeconds(clipTime.Time);
 
             var delta = 0.0;
             if (CustomComponents.JogDial(timespan.ToString(@"hh\:mm\:ss\:ff"), ref delta, new Vector2(80, 0)))
@@ -30,20 +31,21 @@ namespace T3.Gui.Graph
             }
 
             ImGui.SameLine();
-            ImGui.Button("[<", _timeControlsSize);
+
+            CustomComponents.IconButton(Icon.JumpToFirstKeyframe, "##jumpToBeginning", _timeControlsSize);
             ImGui.SameLine();
-            
-            CustomComponents.IconButton(Icon.JumpToFirstKeyframe,"##firstKeyframe",  _timeControlsSize);
-            ImGui.SameLine();
-            
-            CustomComponents.IconButton(Icon.JumpToPreviousKeyframe,"##prevKeyframe",  _timeControlsSize);
+
+            //CustomComponents.IconButton(Icon.JumpToFirstKeyframe,"##firstKeyframe",  _timeControlsSize);
+            //ImGui.SameLine();
+
+            CustomComponents.IconButton(Icon.JumpToPreviousKeyframe, "##prevKeyframe", _timeControlsSize);
             ImGui.SameLine();
 
             var isPlayingBackwards = clipTime.PlaybackSpeed < 0;
-            if (CustomComponents.ToggleButton(
-                    label: isPlayingBackwards ? $"[{(int)clipTime.PlaybackSpeed}x]" : "<",
-                    ref isPlayingBackwards,
-                    _timeControlsSize))
+            if (CustomComponents.ToggleButton(Icon.PlayBackwards,
+                                              label: isPlayingBackwards ? $"[{(int)clipTime.PlaybackSpeed}x]" : "<",
+                                              ref isPlayingBackwards,
+                                              _timeControlsSize))
             {
                 if (clipTime.PlaybackSpeed != 0)
                 {
@@ -54,16 +56,17 @@ namespace T3.Gui.Graph
                     clipTime.PlaybackSpeed = -1;
                 }
             }
+
             ImGui.SameLine();
 
 
             // Play forward
             var isPlaying = clipTime.PlaybackSpeed > 0;
-            if (CustomComponents.ToggleButton(
-                    label: isPlaying ? $"[{(int)clipTime.PlaybackSpeed}x]" : ">",
-                    ref isPlaying,
-                    _timeControlsSize,
-                    trigger: KeyboardBinding.Triggered(UserActions.PlaybackToggle)))
+            if (CustomComponents.ToggleButton(Icon.PlayForwards,
+                                              label: isPlaying ? $"[{(int)clipTime.PlaybackSpeed}x]" : ">",
+                                              ref isPlaying,
+                                              _timeControlsSize,
+                                              trigger: KeyboardBinding.Triggered(UserActions.PlaybackToggle)))
             {
                 if (Math.Abs(clipTime.PlaybackSpeed) > 0.001f)
                 {
@@ -74,6 +77,7 @@ namespace T3.Gui.Graph
                     clipTime.PlaybackSpeed = 1;
                 }
             }
+
 
             if (KeyboardBinding.Triggered(UserActions.PlaybackBackwards))
             {
@@ -105,23 +109,27 @@ namespace T3.Gui.Graph
             }
 
             ImGui.SameLine();
-            ImGui.Button(">>", _timeControlsSize);
+
+            CustomComponents.IconButton(Icon.JumpToNextKeyframe, "##nextKeyframe", _timeControlsSize);
             ImGui.SameLine();
-            ImGui.Button(">]", _timeControlsSize);
+
+            CustomComponents.IconButton(Icon.JumpToLastKeyframe, "##nlastKeyframe", _timeControlsSize);
             ImGui.SameLine();
-            CustomComponents.ToggleButton("Loop", ref clipTime.IsLooping, _timeControlsSize);
+
+            CustomComponents.ToggleButton(Icon.Loop, "##loop", ref clipTime.IsLooping, _timeControlsSize);
             ImGui.SameLine();
 
             if (curveEditor != null)
             {
                 if (ImGui.Button("Key"))
                 {
-                        curveEditor.ToggleKeyframes();
+                    curveEditor.ToggleKeyframes();
                 }
+
                 ImGui.SameLine();
             }
         }
 
-        private static readonly Vector2 _timeControlsSize = new Vector2(40, 20);
+        private static readonly Vector2 _timeControlsSize = new Vector2(40, 23);
     }
 }
