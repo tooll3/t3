@@ -41,7 +41,6 @@ namespace T3.Gui
 
         public unsafe void DrawUI()
         {
-            DrawAppMenu();
 
             foreach (var windowType in _windows)
             {
@@ -56,6 +55,7 @@ namespace T3.Gui
 
             SwapHoveringBuffers();
             TriggerGlobalActionsFromKeyBindings();
+            DrawAppMenu();
         }
 
 

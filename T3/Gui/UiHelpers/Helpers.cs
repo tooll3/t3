@@ -6,12 +6,10 @@ using T3.Gui.Windows;
 
 namespace UiHelpers
 {
-
-
     /// <summary>
     /// A collection of helper and debug function for IMGUI development
     /// </summary>
-    class THelpers
+    static class THelpers
     {
         public static ImDrawListPtr OutlinedRect(ref ImDrawListPtr drawList, Vector2 position, Vector2 size, uint fill, uint outline, float cornerRadius = 4)
         {
@@ -33,8 +31,8 @@ namespace UiHelpers
         public static void DebugRect(Vector2 screenMin, Vector2 screenMax, string label = "")
         {
             var overlayDrawlist = ImGui.GetForegroundDrawList();
-            overlayDrawlist.AddRect(screenMin, screenMax, Color.TGreen);
-            overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), Color.TGreen, label);
+            overlayDrawlist.AddRect(screenMin, screenMax, Color.Green);
+            overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), Color.Green, label);
         }
 
         public static void DebugRect(Vector2 screenMin, Vector2 screenMax, Color color, string label = "")
@@ -43,7 +41,6 @@ namespace UiHelpers
             overlayDrawlist.AddRect(screenMin, screenMax, color);
             overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), color, label);
         }
-
 
 
         /// <summary>
@@ -69,22 +66,25 @@ namespace UiHelpers
     /// </summary>
     public struct ImRect
     {
-        public Vector2 Min;    // Upper-left
-        public Vector2 Max;    // Lower-right
+        public Vector2 Min; // Upper-left
+        public Vector2 Max; // Lower-right
 
         public ImRect(Vector2 min, Vector2 max)
         {
-            Min = min; Max = max;
+            Min = min;
+            Max = max;
         }
 
         public ImRect(Vector4 v)
         {
-            Min = new Vector2(v.X, v.Y); Max = new Vector2(v.Z, v.W);
+            Min = new Vector2(v.X, v.Y);
+            Max = new Vector2(v.Z, v.W);
         }
 
         public ImRect(float x1, float y1, float x2, float y2)
         {
-            Min = new Vector2(x1, y1); Max = new Vector2(x2, y2);
+            Min = new Vector2(x1, y1);
+            Max = new Vector2(x2, y2);
         }
 
         public Vector2 GetCenter()
@@ -122,6 +122,7 @@ namespace UiHelpers
         {
             return new Vector2(Max.X, Min.Y);
         }
+
         /// <summary>
         /// Bottom left
         /// </summary>
@@ -155,40 +156,63 @@ namespace UiHelpers
 
         public void Add(Vector2 p)
         {
-            if (Min.X > p.X) Min.X = p.X; if (Min.Y > p.Y) Min.Y = p.Y; if (Max.X < p.X) Max.X = p.X; if (Max.Y < p.Y) Max.Y = p.Y;
+            if (Min.X > p.X) Min.X = p.X;
+            if (Min.Y > p.Y) Min.Y = p.Y;
+            if (Max.X < p.X) Max.X = p.X;
+            if (Max.Y < p.Y) Max.Y = p.Y;
         }
+
         public void Add(ImRect r)
         {
-            if (Min.X > r.Min.X) Min.X = r.Min.X; if (Min.Y > r.Min.Y) Min.Y = r.Min.Y; if (Max.X < r.Max.X) Max.X = r.Max.X; if (Max.Y < r.Max.Y) Max.Y = r.Max.Y;
+            if (Min.X > r.Min.X) Min.X = r.Min.X;
+            if (Min.Y > r.Min.Y) Min.Y = r.Min.Y;
+            if (Max.X < r.Max.X) Max.X = r.Max.X;
+            if (Max.Y < r.Max.Y) Max.Y = r.Max.Y;
         }
+
         public void Expand(float amount)
         {
-            Min.X -= amount; Min.Y -= amount; Max.X += amount; Max.Y += amount;
+            Min.X -= amount;
+            Min.Y -= amount;
+            Max.X += amount;
+            Max.Y += amount;
         }
+
         public void Expand(Vector2 amount)
         {
-            Min.X -= amount.X; Min.Y -= amount.Y; Max.X += amount.X; Max.Y += amount.Y;
+            Min.X -= amount.X;
+            Min.Y -= amount.Y;
+            Max.X += amount.X;
+            Max.Y += amount.Y;
         }
+
         public void Translate(Vector2 d)
         {
-            Min.X += d.X; Min.Y += d.Y; Max.X += d.X; Max.Y += d.Y;
+            Min.X += d.X;
+            Min.Y += d.Y;
+            Max.X += d.X;
+            Max.Y += d.Y;
         }
+
         public void TranslateX(float dx)
         {
-            Min.X += dx; Max.X += dx;
+            Min.X += dx;
+            Max.X += dx;
         }
+
         public void TranslateY(float dy)
         {
-            Min.Y += dy; Max.Y += dy;
+            Min.Y += dy;
+            Max.Y += dy;
         }
 
         public static ImRect RectBetweenPoints(Vector2 a, Vector2 b)
         {
             return new ImRect(
-                x1: Im.Min(a.X, b.X),
-                y1: Im.Min(a.Y, b.Y),
-                x2: Im.Max(a.X, b.X),
-                y2: Im.Max(a.Y, b.Y));
+                              x1: Im.Min(a.X, b.X),
+                              y1: Im.Min(a.Y, b.Y),
+                              x2: Im.Max(a.X, b.X),
+                              y2: Im.Max(a.Y, b.Y));
         }
 
         public static ImRect RectWithSize(Vector2 position, Vector2 size)
@@ -200,19 +224,29 @@ namespace UiHelpers
         // Simple version, may lead to an inverted rectangle, which is fine for Contains/Overlaps test but not for display.
         public void ClipWith(ImRect r)
         {
-            Min = Im.Max(Min, r.Min); Max = Im.Min(Max, r.Max);
+            Min = Im.Max(Min, r.Min);
+            Max = Im.Min(Max, r.Max);
         }
 
         // Full version, ensure both points are fully clipped.
         public void ClipWithFull(ImRect r)
         {
-            Min = Im.Clamp(Min, r.Min, r.Max); Max = Im.Clamp(Max, r.Min, r.Max);
+            Min = Im.Clamp(Min, r.Min, r.Max);
+            Max = Im.Clamp(Max, r.Min, r.Max);
         }
+
         public void Floor()
         {
-            Min.X = (float)(int)Min.X; Min.Y = (float)(int)Min.Y; Max.X = (float)(int)Max.X; Max.Y = (float)(int)Max.Y;
+            Min.X = (float)(int)Min.X;
+            Min.Y = (float)(int)Min.Y;
+            Max.X = (float)(int)Max.X;
+            Max.Y = (float)(int)Max.Y;
         }
-        bool IsInverted() { return Min.X > Max.X || Min.Y > Max.Y; }
+
+        bool IsInverted()
+        {
+            return Min.X > Max.X || Min.Y > Max.Y;
+        }
 
         public override string ToString()
         {
@@ -242,8 +276,11 @@ namespace UiHelpers
 
         public static Vector2 Clamp(Vector2 v, Vector2 mn, Vector2 mx)
         {
-            return new Vector2((v.X < mn.X) ? mn.X : (v.X > mx.X)
-            ? mx.X : v.X, (v.Y < mn.Y) ? mn.Y : (v.Y > mx.Y) ? mx.Y : v.Y);
+            return new Vector2((v.X < mn.X)
+                                   ? mn.X
+                                   : (v.X > mx.X)
+                                       ? mx.X
+                                       : v.X, (v.Y < mn.Y) ? mn.Y : (v.Y > mx.Y) ? mx.Y : v.Y);
         }
 
         public static T Min<T>(T lhs, T rhs) where T : System.IComparable<T>
@@ -263,30 +300,48 @@ namespace UiHelpers
             else return val;
         }
 
-        public static float Lerp(float a, float b, float t) { return (float)(a + (b - a) * t); }
+        public static float Lerp(float a, float b, float t)
+        {
+            return (float)(a + (b - a) * t);
+        }
+
         public static Vector2 Lerp(Vector2 a, Vector2 b, float t)
         {
             return new Vector2(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t);
         }
-        public static double Lerp(double a, double b, double t) { return (double)(a + (b - a) * t); }
-        public static int Lerp(int a, int b, float t) { return (int)(a + (b - a) * t); }
-        public static void Swap<T>(ref T a, ref T b) { T tmp = a; a = b; b = tmp; }
 
-
-        public static void DrawSplitter(bool split_vertically, float thickness, ref float size0, ref float size1, float min_size0, float min_size1)
+        public static double Lerp(double a, double b, double t)
         {
-            var backup_pos = ImGui.GetCursorPos();
-            if (split_vertically)
-                ImGui.SetCursorPosY(backup_pos.Y + size0);
+            return (double)(a + (b - a) * t);
+        }
+
+        public static int Lerp(int a, int b, float t)
+        {
+            return (int)(a + (b - a) * t);
+        }
+
+        public static void Swap<T>(ref T a, ref T b)
+        {
+            T tmp = a;
+            a = b;
+            b = tmp;
+        }
+
+
+        public static void DrawSplitter(bool splitVertically, float thickness, ref float size0, ref float size1, float minSize0, float minSize1)
+        {
+            var backupPos = ImGui.GetCursorPos();
+            if (splitVertically)
+                ImGui.SetCursorPosY(backupPos.Y + size0);
             else
-                ImGui.SetCursorPosX(backup_pos.X + size0);
+                ImGui.SetCursorPosX(backupPos.X + size0);
 
             ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
 
             // We don't draw while active/pressed because as we move the panes the splitter button will be 1 frame late
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 1));
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.6f, 0.6f, 0.6f, 0.10f));
-            ImGui.Button("##Splitter", new Vector2(!split_vertically ? thickness : -1.0f, split_vertically ? thickness : -1.0f));
+            ImGui.Button("##Splitter", new Vector2(!splitVertically ? thickness : -1.0f, splitVertically ? thickness : -1.0f));
             ImGui.PopStyleColor(3);
 
             ImGui.SetItemAllowOverlap(); // This is to allow having other buttons OVER our splitter. 
@@ -295,9 +350,10 @@ namespace UiHelpers
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS);
             }
+
             if (ImGui.IsItemActive())
             {
-                float mouse_delta = split_vertically ? ImGui.GetIO().MouseDelta.Y : ImGui.GetIO().MouseDelta.X;
+                var mouseDelta = splitVertically ? ImGui.GetIO().MouseDelta.Y : ImGui.GetIO().MouseDelta.X;
 
                 //// Minimum pane size
                 //if (mouse_delta < min_size0 - size0)
@@ -306,36 +362,37 @@ namespace UiHelpers
                 //    mouse_delta = size1 - min_size1;
 
                 // Apply resize
-                size0 += mouse_delta;
-                size1 -= mouse_delta;
+                size0 += mouseDelta;
+                size1 -= mouseDelta;
             }
-            ImGui.SetCursorPos(backup_pos);
+
+            ImGui.SetCursorPos(backupPos);
         }
 
 
         public static void DrawContentRegion()
         {
             ImGui.GetForegroundDrawList().AddRect(
-                ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
-                ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos(),
-                Color.White);
+                                                  ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
+                                                  ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos(),
+                                                  Color.White);
         }
 
 
         public static void ToggleButton(string str_id, ref bool v)
         {
             var p = ImGui.GetCursorScreenPos();
-            var draw_list = ImGui.GetWindowDrawList();
+            var drawList = ImGui.GetWindowDrawList();
 
-            float height = ImGui.GetFrameHeight();
-            float width = height * 1.55f;
-            float radius = height * 0.50f;
+            var height = ImGui.GetFrameHeight();
+            var width = height * 1.55f;
+            var radius = height * 0.50f;
 
             ImGui.InvisibleButton(str_id, new Vector2(width, height));
             if (ImGui.IsItemClicked())
                 v = !v;
 
-            float t = v ? 1.0f : 0.0f;
+            var t = v ? 1.0f : 0.0f;
 
             //ImGuiContext & g = *GImGui;
             //var g = ImGui.GetCurrentContext();
@@ -346,17 +403,16 @@ namespace UiHelpers
             //    t = v ? (t_anim) : (1.0f - t_anim);
             //}
 
-            Color col_bg = ImGui.IsItemHovered()
-                ? Color.White
-                : Color.Red;
+            var colBg = ImGui.IsItemHovered()
+                            ? Color.White
+                            : Color.Red;
 
-            draw_list.AddRectFilled(p, new Vector2(p.X + width, p.Y + height), col_bg, height * 0.5f);
-            draw_list.AddCircleFilled(new Vector2(p.X + radius + t * (width - radius * 2.0f), p.Y + radius), radius - 1.5f, Color.White);
+            drawList.AddRectFilled(p, new Vector2(p.X + width, p.Y + height), colBg, height * 0.5f);
+            drawList.AddCircleFilled(new Vector2(p.X + radius + t * (width - radius * 2.0f), p.Y + radius), radius - 1.5f, Color.White);
         }
 
         public static void EmptyWindowMessage(string message)
         {
-
             var center = (ImGui.GetWindowContentRegionMax() + ImGui.GetWindowContentRegionMin()) / 2;
             var textSize = ImGui.CalcTextSize(message);
             center -= textSize * 0.5f;
@@ -365,6 +421,82 @@ namespace UiHelpers
             ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.4f).Rgba);
             ImGui.Text(message);
             ImGui.PopStyleColor();
+        }
+
+        /// <summary>
+        /// Draws an arc connection line.
+        /// </summary>
+        /// <remarks>Assumes that B is the tight node connection direction is bottom to top</remarks>
+        public static void DrawArcConnection(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB)
+        {
+            var drawList = ImGui.GetWindowDrawList();
+            drawList.AddRect(rectA.Min, rectA.Max, Color.Red);
+            drawList.AddRect(rectB.Min, rectB.Max, Color.Green);
+
+            // Flex Horizontal or vertical
+            var dx1 = rectA.Min.X - rectB.Max.X;
+            var dx2 = rectB.Max.X - rectA.Min.X;
+
+            var dy = rectA.Min.Y - rectB.Max.Y;
+
+            var dPx = pointA.X - pointB.X;
+            var dPy = pointA.Y - pointB.Y;
+
+            if (dx1 > 0)
+            {
+                // B is left of A
+                var cB = rectB.Max;
+                var cA = new Vector2(rectA.Min.X, rectA.Min.Y);
+                var rB = rectB.Max.X - pointB.X;
+                var rMinA = pointA.X - rectA.Min.X;
+
+                var rMinB = rectB.Max.X - pointB.X;
+                var rLimit = rB + rMinA;
+
+                ImGui.GetWindowDrawList().AddCircle(cA, rMinA, Color.Red);
+                ImGui.GetWindowDrawList().AddCircle(cB, rMinB, Color.Green);
+
+                if (dy > rLimit && dPx > rLimit)
+                {
+                    // Horizontal flex
+                    if (dPx > dPy)
+                    {
+                        var r2 = dy-rB;
+                        drawList.PathArcTo(cB,rB, 3.1415f,1.5f);
+                        drawList.PathArcTo(cA + new Vector2(-r2+rMinA, 0), r2, 1.5f*3.1415f, 2f*3.1415f);
+                        //drawList.PathLineTo(pointA);
+                        drawList.PathStroke(Color.White, false, 5);
+                    }
+                    // Vertical flex
+                    else
+                    {
+                        //drawList.PathLineTo(Vector2.Zero);
+                        var r2 = dPx-rB;
+                        drawList.PathArcTo(cB,rB, 3.1415f,1.5f);
+                        drawList.PathArcTo(cA + new Vector2(-r2+rMinA, -(dy-r2-rB)), r2, 1.5f*3.1415f, 2f*3.1415f);
+                        drawList.PathLineTo(pointA);
+                        drawList.PathStroke(Color.White, false, 5);
+                    }
+
+                }
+                else
+                {
+                    var cornerDistance = Vector2.Distance(cB, cA);
+                    if (cornerDistance < rMinA + rMinB)
+                    {
+                        // Min circles intersect -> reverse and use outer tangent
+                    }
+                    else
+                    {
+                        // Use inner tangent
+                        // ToDo: Compute angle θ -> https://stackoverflow.com/questions/49968720/find-tangent-points-in-a-circle-from-a-point/49987361#49987361
+                    }
+                }
+            }
+            else if (dx2 > 0)
+            {
+                // A is left of B
+            }
         }
     }
 }
