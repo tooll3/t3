@@ -19,7 +19,7 @@ namespace T3.Gui.Graph
     {
         public static void Draw(SymbolChildUi childUi)
         {
-            _drawList = Graph._drawList;
+            _drawList = Graph.DrawList;
 
 
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
@@ -116,6 +116,7 @@ namespace T3.Gui.Graph
                 foreach (var line in Graph.Connections.GetLinesFromNodeOutput(childUi, output.Id))
                 {
                     line.SourcePosition = usableArea.GetCenter();
+                    line.SourceRect = _lastScreenRect;
                     line.ColorForType = colorForType;
                     line.IsSelected |= childUi.IsSelected;
                 }
@@ -127,7 +128,7 @@ namespace T3.Gui.Graph
 
             // Input Sockets...
 
-            // prototype implemention of finding visible relevant inputs
+            // prototype implementation of finding visible relevant inputs
             var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
             SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
             var visibleInputUis = (from inputUi in childSymbolUi.InputUis.Values
@@ -221,6 +222,7 @@ namespace T3.Gui.Graph
                                            : connectedLines[index];
 
                             line.TargetPosition = targetPos;
+                            line.TargetRect = _lastScreenRect;
                             line.IsSelected |= childUi.IsSelected;
                         }
 
@@ -236,6 +238,7 @@ namespace T3.Gui.Graph
                     {
                         line.TargetPosition = usableArea.GetCenter();
                         line.IsSelected |= childUi.IsSelected;
+                        line.TargetRect = _lastScreenRect;
                     }
 
                     DrawInputSlot(childUi, input, usableArea, colorForType, hovered);

@@ -36,7 +36,7 @@ namespace T3.Gui.Graph
 
         public static void DrawGraph()
         {
-            _drawList = ImGui.GetWindowDrawList();    // just caching
+            DrawList = ImGui.GetWindowDrawList();    // just caching
 
             var graphSymbol = GraphCanvas.Current.CompositionOp.Symbol;
             var allConnections = new List<Symbol.Connection>(graphSymbol.Connections);
@@ -248,6 +248,8 @@ namespace T3.Gui.Graph
             public Symbol.Connection Connection;
             public Vector2 TargetPosition;
             public Vector2 SourcePosition;
+            public ImRect TargetRect { get; set; }
+            public ImRect SourceRect { get; set; }
             public Color ColorForType;
             public bool IsSelected;
             public bool IsMultiinput;
@@ -281,13 +283,14 @@ namespace T3.Gui.Graph
                 }
             }
 
+
             internal void Draw()
             {
                 var color = IsSelected
                     ? ColorVariations.Highlight.Apply(ColorForType)
                     : ColorVariations.ConnectionLines.Apply(ColorForType);
 
-                _drawList.AddBezierCurve(
+                DrawList.AddBezierCurve(
                     SourcePosition,
                     SourcePosition + new Vector2(0, -50),
                                                     TargetPosition + new Vector2(0, 50),
@@ -295,16 +298,18 @@ namespace T3.Gui.Graph
                                                     color, 3f,
                                                     num_segments: 20);
 
-                _drawList.AddTriangleFilled(
+                DrawList.AddTriangleFilled(
                     TargetPosition + new Vector2(0, -3),
                     TargetPosition + new Vector2(4, 2),
                     TargetPosition + new Vector2(-4, 2),
                     color);
+
+                //Im.DrawArcConnection(SourceRect, SourcePosition, TargetRect,TargetPosition);
             }
         }
 
-        public static ConnectionSorter Connections = new ConnectionSorter();
-        public static ImDrawListPtr _drawList;
+        public static readonly ConnectionSorter Connections = new ConnectionSorter();
+        public static ImDrawListPtr DrawList;
         private static List<SymbolChildUi> _childUis;
         private static SymbolUi _graphSymbolUi;
         private static Dictionary<Guid, IOutputUi> _outputUisById;

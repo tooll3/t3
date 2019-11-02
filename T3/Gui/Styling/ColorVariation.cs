@@ -102,7 +102,7 @@ namespace T3.Gui.TypeColors
             private float _opacity = 1;
         }
 
-        private static Color _sampleColor = Color.TGreen;
+        private static Color _sampleColor = Color.Green;
         private static List<Variation> _colorVariations = new List<Variation>()
         {
             ConnectionLines,
