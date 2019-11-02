@@ -100,14 +100,41 @@ namespace T3.Gui
             return clicked;
         }
         
+        public static bool ToggleButton(Icon icon, string label, ref bool isSelected, Vector2 size, bool trigger = false)
+        {
+            var wasSelected = isSelected;
+            var clicked = false;
+            if (isSelected)
+            {
+                ImGui.PushStyleColor(ImGuiCol.Button, Color.Red.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red.Rgba);
+            }
+            
+            if (CustomComponents.IconButton(icon, label, size) || trigger)
+            {
+                isSelected = !isSelected;
+                clicked = true;
+            }
+
+            if (wasSelected)
+            {
+                ImGui.PopStyleColor(3);
+            }
+            return clicked;
+        }
+        
         
         
         public static bool IconButton(Styling.Icon icon, string label, Vector2 size)
         {
             ImGui.PushFont(Icons.IconFont);
-            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f,0.5f));
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f,0.3f));
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+            
             var clicked = ImGui.Button((char)(int)icon+"##"+label, size);
-            ImGui.PopStyleVar();
+            
+            ImGui.PopStyleVar(2);
             ImGui.PopFont();
             return clicked;
         }

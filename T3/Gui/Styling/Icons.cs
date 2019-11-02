@@ -90,7 +90,7 @@ namespace T3.Gui.Styling
             new IconSource(Icon.PlayForwards,7 , new Vector2(16,16)),
             new IconSource(Icon.JumpToNextKeyframe,8 , new Vector2(16,16)),
             new IconSource(Icon.JumpToLastKeyframe,9 , new Vector2(16,16)),
-            new IconSource(Icon.Loop,10 , new Vector2(16,16)),
+            new IconSource(Icon.Loop,10 , new Vector2(32,16)),
             new IconSource(Icon.BeatGrid,12 , new Vector2(16,16)),
             new IconSource(Icon.ConnectedParameter,13 , new Vector2(16,16)),
             new IconSource(Icon.Stripe4PxPattern,14, new Vector2(16,16)),
