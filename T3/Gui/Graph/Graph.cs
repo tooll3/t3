@@ -301,11 +301,11 @@ namespace T3.Gui.Graph
                                                     color, 3f,
                                                     num_segments: 20);
 
-                DrawList.AddTriangleFilled(
-                    TargetPosition + new Vector2(0, -3),
-                    TargetPosition + new Vector2(4, 2),
-                    TargetPosition + new Vector2(-4, 2),
-                    color);
+//                DrawList.AddTriangleFilled(
+//                    TargetPosition + new Vector2(0, -3),
+//                    TargetPosition + new Vector2(4, 2),
+//                    TargetPosition + new Vector2(-4, 2),
+//                    color);
 
                 //Im.DrawArcConnection(SourceRect, SourcePosition, TargetRect,TargetPosition);
             }

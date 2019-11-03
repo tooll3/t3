@@ -33,10 +33,21 @@ namespace T3.Gui.Graph
                                    orderby inputUi.Index
                                    select inputUi).ToArray();
 
+            var additionalMultiInputSlots = 0;
+            foreach (var input in visibleInputUis)
+            {
+                if (!input.InputDefinition.IsMultiInput) 
+                    continue;
+                
+                //TODO: this should be refacatored, because it's very slow and is later repeated  
+                var connectedLines = Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
+                additionalMultiInputSlots += connectedLines.Count;
+            }
+
             _drawList = Graph.DrawList;
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-                var heightWithParams = 23 + visibleInputUis.Length * 13;
+                var heightWithParams = 23 + (visibleInputUis.Length + additionalMultiInputSlots) * 13;
                 _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(
                                                                                childUi.PosOnCanvas,
                                                                                childUi.PosOnCanvas + new Vector2(childUi.Size.X,
@@ -93,16 +104,8 @@ namespace T3.Gui.Graph
                     var output = childInstance?.Outputs.FirstOrDefault();
                     int framesSinceLastUpdate = output?.DirtyFlag.FramesSinceLastUpdate ?? 0;
                     int updateCountThisFrame = output?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
-                    if (updateCountThisFrame == 0)
-                    {
-                        //typeColor.Rgba.W *= 0.5f;
-                    }
-                    else
-                    {
+                    if (updateCountThisFrame > 0) {
                         const double timeScale = 0.125f;
-//                    float blinkSinNormalized = (float)(Math.Sin(ImGui.GetTime() * timeScale * updateCountThisFrame) + 1f) * 0.5f;
-//                    float blinkFactor = blinkSinNormalized * 0.5f + 0.8f;
-//                    typeColor.Rgba.W *= blinkFactor;
                         var blink = (float)(ImGui.GetTime() * timeScale * updateCountThisFrame) % 1f * _lastScreenRect.GetWidth();
                         drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X + blink,
                                                            _lastScreenRect.Min.Y),
@@ -178,7 +181,7 @@ namespace T3.Gui.Graph
 
                     var socketHeight = (usableSlotArea.GetHeight() + 1) / socketCount;
                     var targetPos = new Vector2(
-                                                usableSlotArea.Min.X,
+                                                usableSlotArea.Max.X - 2,
                                                 usableSlotArea.Min.Y + socketHeight * 0.5f);
 
                     var topLeft = new Vector2(usableSlotArea.Min.X, usableSlotArea.Min.Y);
@@ -219,7 +222,8 @@ namespace T3.Gui.Graph
                 {
                     foreach (var line in connectedLines)
                     {
-                        line.TargetPosition = usableSlotArea.GetCenter();
+                        line.TargetPosition = new Vector2(usableSlotArea.Max.X,
+                                                          usableSlotArea.GetCenter().Y);
                         line.IsSelected |= childUi.IsSelected;
                         line.TargetRect = _lastScreenRect;
                     }
@@ -408,7 +412,7 @@ namespace T3.Gui.Graph
 
                 //var pos =  usableArea.Min + Vector2.UnitX * ( GraphNode._inputSlotThickness - GraphNode._inputSlotMargin);
                 var pos = new Vector2(
-                                      usableArea.Max.X - GraphNode._inputSlotThickness + _inputSlotMargin,
+                                      usableArea.Max.X - GraphNode._inputSlotThickness - _inputSlotMargin,
                                       usableArea.Min.Y
                                      );
                 var size = new Vector2(GraphNode._inputSlotThickness, usableArea.GetHeight());
