@@ -14,6 +14,9 @@ using static T3.Core.Animation.Utils;
 
 namespace T3.Gui.Animation.CurveEditing
 {
+    /// <summary>
+    /// This class is currently obsolete 
+    /// </summary>
     public class CurveEditCanvas : ICanvas
     {
         /// <summary>
@@ -77,7 +80,6 @@ namespace T3.Gui.Animation.CurveEditing
 
                 if (curve.HasVAt(_clipTime.Time))
                 {
-
                 }
                 else
                 {
@@ -85,8 +87,8 @@ namespace T3.Gui.Animation.CurveEditing
                     var previousU = curve.GetPreviousU(_clipTime.Time);
 
                     var key = (previousU != null)
-                        ? curve.GetV(previousU.Value).Clone()
-                        : new VDefinition();
+                                  ? curve.GetV(previousU.Value).Clone()
+                                  : new VDefinition();
 
                     key.Value = value;
                     key.U = _clipTime.Time;
@@ -100,8 +102,13 @@ namespace T3.Gui.Animation.CurveEditing
             }
         }
 
+        public void JumpToNextKeyframe()
+        {
+        }
+
 
         #region --- draw ui ---------------------------------------------------
+
         public void Draw()
         {
             _io = ImGui.GetIO();
@@ -142,6 +149,7 @@ namespace T3.Gui.Animation.CurveEditing
 
 
         bool _contextMenuIsOpen = false;
+
         private void DrawContextMenu()
         {
             // This is a horrible hack to distinguish right mouse click from right mouse drag
@@ -178,6 +186,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 _contextMenuIsOpen = false;
             }
+
             ImGui.PopStyleVar();
         }
 
@@ -212,7 +221,6 @@ namespace T3.Gui.Animation.CurveEditing
             }
             else
             {
-
                 _scrollTarget.X -= deltaU.X;
                 _scaleTarget.X *= zoomDelta;
             }
@@ -237,6 +245,7 @@ namespace T3.Gui.Animation.CurveEditing
                     zoomSum *= zoomSpeed;
                 }
             }
+
             zoomSum = Im.Clamp(zoomSum, 0.01f, 100f);
             return zoomSum;
         }
@@ -277,6 +286,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
             }
+
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0) || ImGui.IsItemClicked())
             {
                 _clipTime.Time = InverseTransformPosition(_io.MousePos).X;
@@ -304,22 +314,22 @@ namespace T3.Gui.Animation.CurveEditing
 
                 // Shade outside
                 DrawList.AddRectFilled(
-                    new Vector2(0, 0),
-                    new Vector2(xRangeStart, TimeRangeShadowSize.Y),
-                    TimeRangeOutsideColor);
+                                       new Vector2(0, 0),
+                                       new Vector2(xRangeStart, TimeRangeShadowSize.Y),
+                                       TimeRangeOutsideColor);
 
                 // Shadow
                 DrawList.AddRectFilled(
-                    rangeStartPos - new Vector2(TimeRangeShadowSize.X - 1, 0),
-                    rangeStartPos + new Vector2(0, TimeRangeShadowSize.Y),
-                    TimeRangeShadowColor);
+                                       rangeStartPos - new Vector2(TimeRangeShadowSize.X - 1, 0),
+                                       rangeStartPos + new Vector2(0, TimeRangeShadowSize.Y),
+                                       TimeRangeShadowColor);
 
                 // Line
                 DrawList.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), TimeRangeShadowColor);
 
                 SetCursorToBottom(
-                    xRangeStart - TimeRangeHandleSize.X,
-                    TimeRangeHandleSize.Y);
+                                  xRangeStart - TimeRangeHandleSize.X,
+                                  TimeRangeHandleSize.Y);
 
                 ImGui.Button("##StartPos", TimeRangeHandleSize);
 
@@ -339,22 +349,22 @@ namespace T3.Gui.Animation.CurveEditing
                 var windowMaxX = ImGui.GetContentRegionAvail().X + WindowPos.X;
                 if (rangeEndX < windowMaxX)
                     DrawList.AddRectFilled(
-                        rangeEndPos,
-                        rangeEndPos + new Vector2(windowMaxX - rangeEndX, TimeRangeShadowSize.Y),
-                        TimeRangeOutsideColor);
+                                           rangeEndPos,
+                                           rangeEndPos + new Vector2(windowMaxX - rangeEndX, TimeRangeShadowSize.Y),
+                                           TimeRangeOutsideColor);
 
                 // Shadow
                 DrawList.AddRectFilled(
-                    rangeEndPos,
-                    rangeEndPos + TimeRangeShadowSize,
-                    TimeRangeShadowColor);
+                                       rangeEndPos,
+                                       rangeEndPos + TimeRangeShadowSize,
+                                       TimeRangeShadowColor);
 
                 // Line
                 DrawList.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), TimeRangeShadowColor);
 
                 SetCursorToBottom(
-                    rangeEndX,
-                    TimeRangeHandleSize.Y);
+                                  rangeEndX,
+                                  TimeRangeHandleSize.Y);
 
                 ImGui.Button("##EndPos", TimeRangeHandleSize);
 
@@ -379,7 +389,6 @@ namespace T3.Gui.Animation.CurveEditing
             ImGui.SetCursorScreenPos(p);
         }
 
-
         #endregion
 
         public void RebuildCurrentCurves()
@@ -390,19 +399,21 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 curvesToRebuild.Add(curve);
             }
+
             foreach (var curve in curvesToRebuild)
             {
                 RebuildCurve(curve);
             }
         }
 
-        private void CurveChangedHandler(object o, EventArgs e)
-        {
-            Curve curve = o as Curve;
-            RebuildCurve(curve);
-        }
+//        private void CurveChangedHandler(object o, EventArgs e)
+//        {
+//            Curve curve = o as Curve;
+//            RebuildCurve(curve);
+//        }
 
         #region update children
+
         public void ViewAllOrSelectedKeys(bool keepURange = false)
         {
             const float CURVE_VALUE_PADDING = 0.3f;
@@ -475,25 +486,25 @@ namespace T3.Gui.Animation.CurveEditing
             if (keepURange)
             {
                 _scaleTarget = new Vector2(
-                    _scaleTarget.X,
-                    (float)(WindowSize.Y / ((minV - maxV) * (1 + 2 * CURVE_VALUE_PADDINGY))));
+                                           _scaleTarget.X,
+                                           (float)(WindowSize.Y / ((minV - maxV) * (1 + 2 * CURVE_VALUE_PADDINGY))));
 
                 _scrollTarget = new Vector2(
-                    _scrollTarget.X,
-                    (float)(maxV - CURVE_VALUE_PADDINGY * (minV - maxV)));
+                                            _scrollTarget.X,
+                                            (float)(maxV - CURVE_VALUE_PADDINGY * (minV - maxV)));
             }
             else
             {
                 _scaleTarget = new Vector2(
-                (float)(WindowSize.X / ((maxU - minU) * (1 + 2 * CURVE_VALUE_PADDING))),
-                (float)(WindowSize.Y / ((minV - maxV) * (1 + 2 * CURVE_VALUE_PADDINGY))));
+                                           (float)(WindowSize.X / ((maxU - minU) * (1 + 2 * CURVE_VALUE_PADDING))),
+                                           (float)(WindowSize.Y / ((minV - maxV) * (1 + 2 * CURVE_VALUE_PADDINGY))));
 
                 _scrollTarget = new Vector2(
-                    (float)(minU - CURVE_VALUE_PADDING * (maxU - minU)),
-                    (float)(maxV - CURVE_VALUE_PADDINGY * (minV - maxV)));
+                                            (float)(minU - CURVE_VALUE_PADDING * (maxU - minU)),
+                                            (float)(maxV - CURVE_VALUE_PADDINGY * (minV - maxV)));
             }
-
         }
+
         #endregion
 
 
@@ -502,32 +513,32 @@ namespace T3.Gui.Animation.CurveEditing
         public float CurrentU;
 
 
-        private void OnAddKeyframe()
-        {
-            var curvesToUpdate = InsertCurvePoint(CurrentU);
-        }
+//        private void OnAddKeyframe()
+//        {
+//            var curvesToUpdate = InsertCurvePoint(CurrentU);
+//        }
 
 
-        private List<Curve> InsertCurvePoint(double u)
-        {
-            var curvesToUpdate = new List<Curve>();
-
-            foreach (var curve in _curvesWithUi.Keys)
-            {
-                if (!curve.HasVAt(u))
-                {
-                    var newKey = new VDefinition();
-                    double? prevU = curve.GetPreviousU(u);
-                    if (prevU != null)
-                        newKey = curve.GetV(prevU.Value).Clone();
-
-                    newKey.Value = curve.GetSampledValue(u);
-
-                    curvesToUpdate.Add(curve);
-                }
-            }
-            return curvesToUpdate;
-        }
+//        private List<Curve> InsertCurvePoint(double u)
+//        {
+//            var curvesToUpdate = new List<Curve>();
+//
+//            foreach (var curve in _curvesWithUi.Keys)
+//            {
+//                if (!curve.HasVAt(u))
+//                {
+//                    var newKey = new VDefinition();
+//                    double? prevU = curve.GetPreviousU(u);
+//                    if (prevU != null)
+//                        newKey = curve.GetV(prevU.Value).Clone();
+//
+//                    newKey.Value = curve.GetSampledValue(u);
+//
+//                    curvesToUpdate.Add(curve);
+//                }
+//            }
+//            return curvesToUpdate;
+//        }
 
 
         #region set interpolation types
@@ -535,88 +546,91 @@ namespace T3.Gui.Animation.CurveEditing
         private void OnSmooth()
         {
             ForSelectedOrAllPointsDo((vDef) =>
-            {
-                vDef.BrokenTangents = false;
-                vDef.InEditMode = VDefinition.EditMode.Smooth;
-                vDef.InType = VDefinition.Interpolation.Spline;
-                vDef.OutEditMode = VDefinition.EditMode.Smooth;
-                vDef.OutType = VDefinition.Interpolation.Spline;
-            });
+                                     {
+                                         vDef.BrokenTangents = false;
+                                         vDef.InEditMode = VDefinition.EditMode.Smooth;
+                                         vDef.InType = VDefinition.Interpolation.Spline;
+                                         vDef.OutEditMode = VDefinition.EditMode.Smooth;
+                                         vDef.OutType = VDefinition.Interpolation.Spline;
+                                     });
         }
 
         private void OnCubic()
         {
             ForSelectedOrAllPointsDo((vDef) =>
-            {
-                vDef.BrokenTangents = false;
-                vDef.InEditMode = VDefinition.EditMode.Cubic;
-                vDef.InType = VDefinition.Interpolation.Spline;
-                vDef.OutEditMode = VDefinition.EditMode.Cubic;
-                vDef.OutType = VDefinition.Interpolation.Spline;
-            });
+                                     {
+                                         vDef.BrokenTangents = false;
+                                         vDef.InEditMode = VDefinition.EditMode.Cubic;
+                                         vDef.InType = VDefinition.Interpolation.Spline;
+                                         vDef.OutEditMode = VDefinition.EditMode.Cubic;
+                                         vDef.OutType = VDefinition.Interpolation.Spline;
+                                     });
         }
 
 
         private void OnHorizontal()
         {
             ForSelectedOrAllPointsDo((vDef) =>
-            {
-                vDef.BrokenTangents = false;
+                                     {
+                                         vDef.BrokenTangents = false;
 
-                vDef.InEditMode = VDefinition.EditMode.Horizontal;
-                vDef.InType = VDefinition.Interpolation.Spline;
-                vDef.InTangentAngle = 0;
+                                         vDef.InEditMode = VDefinition.EditMode.Horizontal;
+                                         vDef.InType = VDefinition.Interpolation.Spline;
+                                         vDef.InTangentAngle = 0;
 
-                vDef.OutEditMode = VDefinition.EditMode.Horizontal;
-                vDef.OutType = VDefinition.Interpolation.Spline;
-                vDef.OutTangentAngle = Math.PI;
-            });
+                                         vDef.OutEditMode = VDefinition.EditMode.Horizontal;
+                                         vDef.OutType = VDefinition.Interpolation.Spline;
+                                         vDef.OutTangentAngle = Math.PI;
+                                     });
         }
 
         private void OnConstant()
         {
             ForSelectedOrAllPointsDo((vDef) =>
-            {
-                vDef.BrokenTangents = true;
-                vDef.OutType = VDefinition.Interpolation.Constant;
-                vDef.OutEditMode = VDefinition.EditMode.Constant;
-            });
+                                     {
+                                         vDef.BrokenTangents = true;
+                                         vDef.OutType = VDefinition.Interpolation.Constant;
+                                         vDef.OutEditMode = VDefinition.EditMode.Constant;
+                                     });
         }
 
         private void OnLinear()
         {
             ForSelectedOrAllPointsDo((vDef) =>
-            {
-                vDef.BrokenTangents = false;
-                vDef.InEditMode = VDefinition.EditMode.Linear;
-                vDef.InType = VDefinition.Interpolation.Linear;
-                vDef.OutEditMode = VDefinition.EditMode.Linear;
-                vDef.OutType = VDefinition.Interpolation.Linear;
-            });
+                                     {
+                                         vDef.BrokenTangents = false;
+                                         vDef.InEditMode = VDefinition.EditMode.Linear;
+                                         vDef.InType = VDefinition.Interpolation.Linear;
+                                         vDef.OutEditMode = VDefinition.EditMode.Linear;
+                                         vDef.OutType = VDefinition.Interpolation.Linear;
+                                     });
         }
 
 
         private IEnumerable<VDefinition.EditMode> GetSelectedKeyframeInterpolationTypes()
         {
-
             var checkedInterpolationTypes = new HashSet<VDefinition.EditMode>();
             foreach (var point in GetSelectedOrAllPoints())
             {
                 checkedInterpolationTypes.Add(point.Key.OutEditMode);
                 checkedInterpolationTypes.Add(point.Key.InEditMode);
             }
+
             return checkedInterpolationTypes;
         }
+
         #endregion
 
 
         #region before after
+
         private void OnBeforeConstant()
         {
             foreach (var curve in GetAllOrSelectedCurves())
             {
                 curve.PreCurveMapping = OutsideCurveBehavior.Constant;
             }
+
             RebuildCurrentCurves();
         }
 
@@ -626,6 +640,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 curve.PreCurveMapping = OutsideCurveBehavior.Oscillate;
             }
+
             RebuildCurrentCurves();
         }
 
@@ -635,6 +650,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 curve.PreCurveMapping = OutsideCurveBehavior.Cycle;
             }
+
             RebuildCurrentCurves();
         }
 
@@ -644,6 +660,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 curve.PreCurveMapping = Utils.OutsideCurveBehavior.CycleWithOffset;
             }
+
             RebuildCurrentCurves();
         }
 
@@ -653,6 +670,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 curve.PostCurveMapping = Utils.OutsideCurveBehavior.Constant;
             }
+
             RebuildCurrentCurves();
         }
 
@@ -662,6 +680,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 curve.PostCurveMapping = Utils.OutsideCurveBehavior.Oscillate;
             }
+
             RebuildCurrentCurves();
         }
 
@@ -671,6 +690,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 curve.PostCurveMapping = Utils.OutsideCurveBehavior.Cycle;
             }
+
             RebuildCurrentCurves();
         }
 
@@ -680,6 +700,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 curve.PostCurveMapping = OutsideCurveBehavior.CycleWithOffset;
             }
+
             RebuildCurrentCurves();
         }
 
@@ -746,15 +767,14 @@ namespace T3.Gui.Animation.CurveEditing
                     }
                 }
             }
+
             return curves;
         }
-
 
         #endregion
 
 
         #region helper functions     
-
 
         /// <summary>
         /// Helper function to extract vdefs from all or selected UI controls across all curves in CurveEditor
@@ -778,6 +798,7 @@ namespace T3.Gui.Animation.CurveEditing
                     result.AddRange(curve.CurvePoints);
                 }
             }
+
             return result;
         }
 
@@ -791,12 +812,12 @@ namespace T3.Gui.Animation.CurveEditing
         #endregion
 
 
-        private void OnOptimizeKeyframes()
-        {
-            var curves = _curvesWithUi.Select(pair => pair.Key).OfType<Curve>().ToList();
-            var optimizer = new CurveOptimizer(curves);
-            optimizer.OptimizeCurves(30);
-        }
+//        private void OnOptimizeKeyframes()
+//        {
+//            var curves = _curvesWithUi.Select(pair => pair.Key).OfType<Curve>().ToList();
+//            var optimizer = new CurveOptimizer(curves);
+//            optimizer.OptimizeCurves(30);
+//        }
 
         public ImDrawListPtr DrawList { get; private set; }
 
@@ -888,12 +909,12 @@ namespace T3.Gui.Animation.CurveEditing
                 r.Min.Y = r.Max.Y;
                 r.Max.Y = t;
             }
+
             return r;
         }
 
         public ImRect InverseTransformRect(ImRect screenRect)
         {
-
             var r = new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
             if (r.Min.Y > r.Max.Y)
             {
@@ -901,6 +922,7 @@ namespace T3.Gui.Animation.CurveEditing
                 r.Min.Y = r.Max.Y;
                 r.Max.Y = t;
             }
+
             return r;
         }
 
@@ -923,6 +945,7 @@ namespace T3.Gui.Animation.CurveEditing
                 {
                     result.AddRange(curveUi.CurvePoints);
                 }
+
                 return result;
             }
         }
@@ -936,6 +959,7 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 doFunc(point.Key);
             }
+
             //foreach (var pair in GetSelectedOrAllVDefinitions())
             //{
             //    var curve = pair.Key;
@@ -968,15 +992,16 @@ namespace T3.Gui.Animation.CurveEditing
         public bool IsRectVisible(Vector2 pos, Vector2 size)
         {
             return pos.X + size.X >= WindowPos.X
-                && pos.Y + size.Y >= WindowPos.Y
-                && pos.X < WindowPos.X + WindowSize.X
-                && pos.Y < WindowPos.Y + WindowSize.Y;
+                   && pos.Y + size.Y >= WindowPos.Y
+                   && pos.X < WindowPos.X + WindowSize.X
+                   && pos.Y < WindowPos.Y + WindowSize.Y;
         }
 
         /// <summary>
         /// Damped scale factors for u and v
         /// </summary>
         public Vector2 Scale { get; set; } = new Vector2(1, -1);
+
         public Vector2 WindowPos { get; set; }
         public Vector2 WindowSize { get; set; }
         public Vector2 Scroll { get; set; } = new Vector2(0, 0.0f);
@@ -989,6 +1014,7 @@ namespace T3.Gui.Animation.CurveEditing
         private ClipTime _clipTime;
 
         private Dictionary<Curve, CurveUi> _curvesWithUi = new Dictionary<Curve, CurveUi>();
+
         //private List<CurvePointUi> _pointControlRecyclePool = new List<CurvePointUi>();
         private HorizontalScaleLines _horizontalScaleLines;
 
