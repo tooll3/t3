@@ -149,7 +149,8 @@ namespace T3.Gui.Graph
                 PushID(p.Id.GetHashCode());
                 if (Button(p.Symbol.Name))
                 {
-                    Canvas.CompositionOp = p;
+                    Canvas.OpenComposition(p, zoomIn:false);
+                    break;
                 }
 
                 SameLine();
@@ -163,6 +164,7 @@ namespace T3.Gui.Graph
             Button(Canvas.CompositionOp.Symbol.Name);
             PopStyleColor(2);
         }
+
 
 
         private readonly ClipTime _clipTime;

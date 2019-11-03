@@ -71,7 +71,7 @@ namespace T3.Gui.Graph
                 if (ImGui.IsItemActive() && ImGui.IsMouseDoubleClicked(0))
                 {
                     var instance = GraphCanvas.Current.CompositionOp.Children.Find(c => c.Symbol == childUi.SymbolChild.Symbol);
-                    GraphCanvas.Current.CompositionOp = instance;
+                    GraphCanvas.Current.OpenComposition(instance);
                 }
 
                 if (_lastScreenRect.Contains(ImGui.GetMousePos()))
