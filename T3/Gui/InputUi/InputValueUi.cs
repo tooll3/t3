@@ -245,12 +245,12 @@ namespace T3.Gui.InputUi
 
         public virtual void Write(JsonTextWriter writer)
         {
+            var vec2writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
             writer.WriteObject("Relevancy", Relevancy.ToString());
             writer.WritePropertyName("Position");
-            writer.WriteStartObject();
-            writer.WriteValue("X", PosOnCanvas.X);
-            writer.WriteValue("Y", PosOnCanvas.Y);
-            writer.WriteEndObject();
+            vec2writer(writer, PosOnCanvas);
+            writer.WritePropertyName("Size");
+            vec2writer(writer, Size);
         }
 
         public virtual void Read(JToken inputToken)
@@ -258,6 +258,8 @@ namespace T3.Gui.InputUi
             Relevancy = (Relevancy)Enum.Parse(typeof(Relevancy), inputToken["Relevancy"].ToString());
             JToken positionToken = inputToken["Position"];
             PosOnCanvas = new Vector2(positionToken["X"].Value<float>(), positionToken["Y"].Value<float>());
+            JToken sizeToken = inputToken["Size"];
+            Size = new Vector2(sizeToken["X"].Value<float>(), sizeToken["Y"].Value<float>());
         }
 
         public Type Type { get; } = typeof(T);
