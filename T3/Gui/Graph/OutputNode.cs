@@ -14,18 +14,6 @@ namespace T3.Gui.Graph
     /// </summary>
     static class OutputNode
     {
-        //public static void DrawAll()
-        //{
-        //    var outputUisForSymbol = OutputUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-        //    var index = 0;
-        //    foreach (var outputDef in GraphCanvas.Current.CompositionOp.Symbol.OutputDefinitions)
-        //    {
-        //        var outputUi = outputUisForSymbol[outputDef.Id];
-        //        Draw(outputDef, outputUi);
-        //        index++;
-        //    }
-        //}
-
         public static void Draw(Symbol.OutputDefinition outputDef, IOutputUi outputUi)
         {
             ImGui.PushID(outputDef.Id.GetHashCode());
@@ -49,48 +37,48 @@ namespace T3.Gui.Graph
                 // Rendering
                 var typeColor = TypeUiRegistry.Entries[outputDef.ValueType].Color;
 
-                var dl = GraphCanvas.Current.DrawList;
-                dl.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
+                var drawList = GraphCanvas.Current.DrawList;
+                drawList.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
                                  hovered
                                      ? ColorVariations.OperatorHover.Apply(typeColor)
                                      : ColorVariations.OutputNodes.Apply(typeColor));
 
-                dl.AddRectFilled(new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
+                drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
                                  new Vector2(_lastScreenRect.Max.X,
-                                             _lastScreenRect.Max.Y + GraphNode._inputSlotHeight + GraphNode._inputSlotMargin),
+                                             _lastScreenRect.Max.Y + GraphNode._inputSlotThickness + GraphNode._inputSlotMargin),
                                  ColorVariations.OperatorInputZone.Apply(typeColor));
 
                 var label = string.Format($"{outputDef.Name}");
-                var size = ImGui.CalcTextSize(label);
-                var pos = _lastScreenRect.GetCenter() - size / 2;
 
-                dl.AddText(pos, ColorVariations.OperatorLabel.Apply(typeColor), label);
+                drawList.AddText(_lastScreenRect.Min, ColorVariations.OperatorLabel.Apply(typeColor), label);
 
                 if (outputUi.IsSelected)
                 {
-                    dl.AddRect(_lastScreenRect.Min - Vector2.One, _lastScreenRect.Max + Vector2.One, Color.White, 1);
+                    drawList.AddRect(_lastScreenRect.Min - Vector2.One, _lastScreenRect.Max + Vector2.One, Color.White, 1);
                 }
 
                 // Draw slot 
                 {
-                    var virtualRectInCanvas = ImRect.RectWithSize(new Vector2(outputUi.PosOnCanvas.X + 1, outputUi.PosOnCanvas.Y + outputUi.Size.Y),
-                                                                  new Vector2(outputUi.Size.X - 2, 6));
+                    var usableSlotArea = new ImRect(
+                                                    new Vector2(_lastScreenRect.Min.X - GraphNode._usableSlotThickness,
+                                                                _lastScreenRect.Min.Y),
+                                                    new Vector2(_lastScreenRect.Min.X,
+                                                                _lastScreenRect.Max.Y)); 
+                    
 
-                    var rInScreen = GraphCanvas.Current.TransformRect(virtualRectInCanvas);
-
-                    ImGui.SetCursorScreenPos(rInScreen.Min);
-                    ImGui.InvisibleButton("output", rInScreen.GetSize());
+                    ImGui.SetCursorScreenPos(usableSlotArea.Min);
+                    ImGui.InvisibleButton("output", usableSlotArea.GetSize());
                     THelpers.DebugItemRect();
                     var color = TypeUiRegistry.Entries[outputDef.ValueType].Color;
 
                     //Note: isItemHovered will not work
                     var slotHovered = ConnectionMaker.TempConnection != null
-                                          ? rInScreen.Contains(ImGui.GetMousePos())
+                                          ? usableSlotArea.Contains(ImGui.GetMousePos())
                                           : ImGui.IsItemHovered();
 
                     if (ConnectionMaker.IsOutputNodeCurrentConnectionTarget(outputDef))
                     {
-                        GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
+                        drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
 
                         if (ImGui.IsMouseDragging(0))
                         {
@@ -101,7 +89,7 @@ namespace T3.Gui.Graph
                     {
                         if (ConnectionMaker.IsMatchingInputType(outputDef.ValueType))
                         {
-                            GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, color);
+                            drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
 
                             if (ImGui.IsMouseReleased(0))
                             {
@@ -110,7 +98,7 @@ namespace T3.Gui.Graph
                         }
                         else
                         {
-                            GraphCanvas.Current.DrawRectFilled(virtualRectInCanvas, Color.White);
+                            drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, Color.White);
                             if (ImGui.IsItemClicked(0))
                             {
                                 ConnectionMaker.StartFromOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
@@ -119,14 +107,15 @@ namespace T3.Gui.Graph
                     }
                     else
                     {
-                        GraphCanvas.Current.DrawRectFilled(ImRect.RectWithSize(new Vector2(outputUi.PosOnCanvas.X + 1 + 3,
-                                                                                           outputUi.PosOnCanvas.Y + outputUi.Size.Y - 1),
-                                                                               new Vector2(virtualRectInCanvas.GetWidth() - 2 - 6, 3)),
-                                                           ConnectionMaker.IsMatchingInputType(outputDef.ValueType) ? Color.White : color);
+                        var colorWithMatching = ConnectionMaker.IsMatchingInputType(outputDef.ValueType) ? Color.White : color;
+                        drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - GraphNode._inputSlotMargin- GraphNode._inputSlotThickness,
+                                                           usableSlotArea.Min.Y), 
+                                               new Vector2(
+                                                           usableSlotArea.Max.X - GraphNode._inputSlotMargin , 
+                                                           usableSlotArea.Max.Y), 
+                                               colorWithMatching);
                     }
                 }
-
-                //dl.ChannelsMerge();
             }
             ImGui.PopID();
         }
