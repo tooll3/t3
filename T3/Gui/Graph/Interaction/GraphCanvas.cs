@@ -652,7 +652,7 @@ namespace T3.Gui.Graph
 
         public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private SelectionFence _selectionFence;
-        internal static Vector2 DefaultOpSize = new Vector2(100, 30);
+        internal static Vector2 DefaultOpSize = new Vector2(110, 25);
         internal List<SymbolChildUi> ChildUis { get; set; }
         private SymbolBrowser _symbolBrowser = new SymbolBrowser();
         private bool _showCombine;

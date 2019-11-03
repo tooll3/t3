@@ -95,7 +95,7 @@ namespace T3.Gui.Graph
             }
             ImGui.PopID();
 
-            // Outputs...
+            // Outputs sockes...
             var outputIndex = 0;
             foreach (var output in childUi.SymbolChild.Symbol.OutputDefinitions)
             {
@@ -140,16 +140,16 @@ namespace T3.Gui.Graph
             {
                 Symbol.InputDefinition input = visibleInputUis[inputIndex].InputDefinition;
 
-                var usableArea = GetUsableInputSlotSize(childUi, inputIndex, visibleInputUis.Length);
+                var usableSlotArea = GetUsableInputSlotSize(childUi, inputIndex, visibleInputUis.Length);
 
                 ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + input.GetHashCode());
-                ImGui.SetCursorScreenPos(usableArea.Min);
-                ImGui.InvisibleButton("input", usableArea.GetSize());
+                ImGui.SetCursorScreenPos(usableSlotArea.Min);
+                ImGui.InvisibleButton("input", usableSlotArea.GetSize());
                 THelpers.DebugItemRect("input-slot");
 
                 // Note: isItemHovered does not work when being dragged from another item
                 var hovered = ConnectionMaker.TempConnection != null
-                                  ? usableArea.Contains(ImGui.GetMousePos())
+                                  ? usableSlotArea.Contains(ImGui.GetMousePos())
                                   : ImGui.IsItemHovered();
 
                 var isPotentialConnectionTarget = ConnectionMaker.IsMatchingInputType(input.DefaultValue.ValueType);
@@ -170,17 +170,17 @@ namespace T3.Gui.Graph
                         label += " [...]";
                     }
 
-                    var textSize = ImGui.CalcTextSize(input.Name);
-                    if (textSize.X > usableArea.GetWidth())
-                    {
-                        ImGui.PushClipRect(usableArea.Min - new Vector2(0, 20), usableArea.Max, true);
-                        _drawList.AddText(usableArea.Min + new Vector2(0, -15), labelColor, label);
-                        ImGui.PopClipRect();
-                    }
-                    else
-                    {
-                        _drawList.AddText(usableArea.Min + new Vector2((usableArea.GetWidth() - textSize.X) / 2, -15), labelColor, label);
-                    }
+                    //var textSize = ImGui.CalcTextSize(input.Name);
+                    //if (textSize.X > usableSlotArea.GetWidth())
+                    //{
+                        //ImGui.PushClipRect(usableArea.Min - new Vector2(0, 20), usableArea.Max, true);
+                        _drawList.AddText(usableSlotArea.GetCenter() + new Vector2(10,-5), labelColor, label);
+                        //ImGui.PopClipRect();
+                    //}
+                    //else
+                    //{
+                    //    _drawList.AddText(usableSlotArea.Min + new Vector2((usableSlotArea.GetWidth() - textSize.X) / 2, -15), labelColor, label);
+                    //}
 
                     ImGui.PopFont();
                 }
@@ -193,13 +193,13 @@ namespace T3.Gui.Graph
                                           ? connectedLines.Count * 2 + 1
                                           : connectedLines.Count;
 
-                    var socketHeight = (usableArea.GetHeight() +1) / socketCount;
+                    var socketHeight = (usableSlotArea.GetHeight() +1) / socketCount;
                     var targetPos = new Vector2(
-                                                usableArea.Min.X,
-                                                usableArea.Min.Y + socketHeight * 0.5f);
+                                                usableSlotArea.Min.X,
+                                                usableSlotArea.Min.Y + socketHeight * 0.5f);
 
-                    var topLeft = new Vector2(usableArea.Min.X, usableArea.Min.Y);
-                    var socketSize = new Vector2(usableArea.GetWidth(), socketHeight - 1);
+                    var topLeft = new Vector2(usableSlotArea.Min.X, usableSlotArea.Min.Y);
+                    var socketSize = new Vector2(usableSlotArea.GetWidth(), socketHeight - 1);
 
                     for (var index = 0; index < socketCount; index++)
                     {
@@ -236,12 +236,12 @@ namespace T3.Gui.Graph
                 {
                     foreach (var line in connectedLines)
                     {
-                        line.TargetPosition = usableArea.GetCenter();
+                        line.TargetPosition = usableSlotArea.GetCenter();
                         line.IsSelected |= childUi.IsSelected;
                         line.TargetRect = _lastScreenRect;
                     }
 
-                    DrawInputSlot(childUi, input, usableArea, colorForType, hovered);
+                    DrawInputSlot(childUi, input, usableSlotArea, colorForType, hovered);
                 }
 
                 ImGui.PopID();
