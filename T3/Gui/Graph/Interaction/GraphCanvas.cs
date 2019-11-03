@@ -28,9 +28,38 @@ namespace T3.Gui.Graph
     {
         public GraphCanvas(Instance opInstance)
         {
-            CompositionOp = opInstance;
             _selectionFence = new SelectionFence(this);
+            OpenComposition(opInstance);
         }
+
+        
+        public void OpenComposition(Instance opInstance, bool zoomIn = true)
+        {
+            // save old properties
+            if (CompositionOp != null)
+            {
+                _canvasPropertiesForCompositionOpIds[CompositionOp.Id] = new CanvasProperties()
+                                                                         {
+                                                                             Scale = Scale,
+                                                                             Scroll = Scroll,
+                                                                         };
+            }
+            
+            CompositionOp = opInstance;
+            var id = opInstance.Id;
+            var scale = Vector2.One;
+            var scroll = Vector2.Zero;
+            
+            if (_canvasPropertiesForCompositionOpIds.ContainsKey(id))
+            {
+                var props = _canvasPropertiesForCompositionOpIds[opInstance.Id];
+                scale = props.Scale;
+                scroll = props.Scroll;
+            }
+            SetAreaWithTransition(scale, scroll, zoomIn);
+        }
+
+
 
         #region drawing UI ====================================================================
         public void Draw()
@@ -647,8 +676,17 @@ namespace T3.Gui.Graph
         public static GraphCanvas Current { get; private set; }
 
         public ImDrawListPtr DrawList { get; private set; }
-        public Instance CompositionOp { get; set; }
+        public Instance CompositionOp { get; private set; }
         #endregion
+        
+        
+        private class CanvasProperties
+        {
+            public Vector2 Scale;
+            public Vector2 Scroll;
+        }
+
+        private readonly Dictionary<Guid, CanvasProperties> _canvasPropertiesForCompositionOpIds = new Dictionary<Guid, CanvasProperties>();
 
         public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private SelectionFence _selectionFence;

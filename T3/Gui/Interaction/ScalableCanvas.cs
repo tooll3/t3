@@ -28,8 +28,8 @@ namespace T3.Gui.Graph
             WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
 
             // Damp scaling
-            Scale = Im.Lerp(Scale, _scaleTarget, _io.DeltaTime * 20);
-            Scroll = Im.Lerp(Scroll, _scrollTarget, _io.DeltaTime * 20);
+            Scale = Im.Lerp(Scale, _scaleTarget, _io.DeltaTime * 5);
+            Scroll = Im.Lerp(Scroll, _scrollTarget, _io.DeltaTime * 5);
 
             if (!ImGui.IsWindowHovered())
                 return;
@@ -116,7 +116,7 @@ namespace T3.Gui.Graph
         public Vector2 Scale { get; set; } = Vector2.One;
         private Vector2 _scaleTarget = Vector2.One;
 
-        public Vector2 Scroll { get; private set; } = new Vector2(0.0f, 0.0f);
+        public Vector2 Scroll { get; set; } = new Vector2(0.0f, 0.0f);
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
         #endregion
 
@@ -147,6 +147,20 @@ namespace T3.Gui.Graph
         }
 
 
+        public void SetAreaWithTransition(Vector2 scale, Vector2 scroll, bool zoomIn = true)
+        {
+            _scaleTarget = scale;
+            Scale = scale * (zoomIn ? 0.3f : 3);
+            
+            _scrollTarget = scroll;
+            if(zoomIn)
+                Scroll = _scrollTarget+ WindowSize * 0.5f;
+            else
+            {
+                Scroll = _scrollTarget - WindowSize * 0.5f;
+            }
+        }
+
         private void HandleZoomInteraction()
         {
             _userZoomedCanvas = false;
@@ -155,8 +169,7 @@ namespace T3.Gui.Graph
 
             const float zoomSpeed = 1.2f;
             var focusCenter = (_mouse - Scroll - WindowPos) / Scale;
-
-
+            
             var zoomDelta = 1f;
 
             if (_io.MouseWheel < 0.0f)
