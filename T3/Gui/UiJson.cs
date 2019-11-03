@@ -67,8 +67,6 @@ namespace T3.Gui
                 Writer.WriteComment(childUi.SymbolChild.ReadableName);
                 Writer.WritePropertyName("Position");
                 vec2Writer(Writer, childUi.PosOnCanvas);
-                Writer.WritePropertyName("Size");
-                vec2Writer(Writer, childUi.Size);
 
                 Writer.WriteEndObject();
             }
@@ -92,8 +90,6 @@ namespace T3.Gui
                 var outputUi = outputEntry.Value;
                 Writer.WritePropertyName("Position");
                 vec2Writer(Writer, outputUi.PosOnCanvas);
-                Writer.WritePropertyName("Size");
-                vec2Writer(Writer, outputUi.Size);
 
                 Writer.WriteEndObject();
             }
@@ -159,9 +155,6 @@ namespace T3.Gui
                 JToken positionToken = childEntry["Position"];
                 childUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
 
-                JToken sizeToken = childEntry["Size"];
-                childUi.Size = (Vector2)vector2Converter(sizeToken);
-
                 symbolChildUis.Add(childUi);
             }
 
@@ -184,9 +177,6 @@ namespace T3.Gui
 
                     JToken positionToken = uiOutputEntry["Position"];
                     outputUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
-
-                    JToken sizeToken = uiOutputEntry["Size"];
-                    outputUi.Size = (Vector2)vector2Converter(sizeToken);
 
                     outputDict.Add(outputId, outputUi);
                 }
