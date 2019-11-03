@@ -57,16 +57,20 @@ namespace T3.Gui.Windows.TimeLine
                 DrawList = ImGui.GetWindowDrawList();
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
-                _horizontalScaleLines.Draw();
+                //_horizontalScaleLines.Draw();
+                _beatMarker.Draw(_clipTime);
                 _layersArea.Draw(compositionOp);
                 _dopeSheetArea.Draw(compositionOp, animationParameters);
                 DrawTimeRange();
                 _currentTimeMarker.Draw(_clipTime);
                 DrawDragTimeArea();
                 _selectionFence.Draw();
+                
             }
             ImGui.EndChild();
         }
+        
+        private BeatMarker _beatMarker = new BeatMarker();
 
         private void HandleInteraction()
         {

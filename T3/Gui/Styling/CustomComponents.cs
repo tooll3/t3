@@ -10,7 +10,9 @@ namespace T3.Gui
     {
         public static bool JogDial(string label, ref double delta, Vector2 size)
         {
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1,0.5f));
             var hot = ImGui.Button(label + "###dummy", size);
+            ImGui.PopStyleVar();
             var io = ImGui.GetIO();
             if (ImGui.IsItemActive())
             {
@@ -23,7 +25,7 @@ namespace T3.Gui
                 var pNow = io.MousePos - center;
                 var aLast = Math.Atan2(pLast.X, pLast.Y);
                 var aNow = Math.Atan2(pNow.X, pNow.Y);
-                delta = aNow - aLast;
+                delta = aLast - aNow;
                 if (delta > 1.5)
                 {
                     delta -= 2 * Math.PI;
