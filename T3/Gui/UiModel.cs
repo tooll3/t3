@@ -157,6 +157,14 @@ namespace T3.Gui
             // first save core data
             base.Save();
 
+            // remove all old ui files before storing to get rid off invalid ones
+            DirectoryInfo di = new DirectoryInfo(Path);
+            FileInfo[] files = di.GetFiles("*" + SymbolUiExtension).ToArray();
+            foreach (FileInfo file in files)
+            {
+                File.Delete(file.FullName);
+            }
+
             // store all symbols in corresponding files
             UiJson json = new UiJson();
             foreach (var symbolUiEntry in SymbolUiRegistry.Entries)
