@@ -367,6 +367,14 @@ namespace T3.Core
 
         public virtual void Save()
         {
+            // remove all old t3 files before storing to get rid off invalid ones
+            DirectoryInfo di = new DirectoryInfo(Path);
+            FileInfo[] files = di.GetFiles("*" + SymbolExtension).ToArray();
+            foreach (FileInfo file in files)
+            {
+                File.Delete(file.FullName);
+            }
+
             Json json = new Json();
             // store all symbols in corresponding files
             foreach (var symbolEntry in SymbolRegistry.Entries)

@@ -8,7 +8,7 @@ namespace T3.Core.Operator
     public abstract class Instance : IDisposable
     {
         public abstract Type Type { get; }
-        public Guid Id;
+        public Guid Id { get; set; }
         public Instance Parent { get; internal set; }
         public Symbol Symbol { get; internal set; }
 

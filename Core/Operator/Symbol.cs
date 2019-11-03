@@ -91,6 +91,8 @@ namespace T3.Core.Operator
         public void SetInstanceType(Type instanceType)
         {
             InstanceType = instanceType;
+            Name = instanceType.Name;
+            Log.Info($"new instance type name: {Name}");
             var newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<ConnectionEntry>)>();
 
             // check if inputs have changed
