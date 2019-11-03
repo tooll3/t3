@@ -23,6 +23,7 @@ namespace T3.Gui.Graph
 
             var timespan = TimeSpan.FromSeconds(clipTime.Time);
 
+            // Current Time
             var delta = 0.0;
             if (CustomComponents.JogDial(timespan.ToString(@"hh\:mm\:ss\:ff"), ref delta, new Vector2(80, 0)))
             {
@@ -32,20 +33,29 @@ namespace T3.Gui.Graph
 
             ImGui.SameLine();
 
-            CustomComponents.IconButton(Icon.JumpToFirstKeyframe, "##jumpToBeginning", _timeControlsSize);
+            // Jump to start
+            if (CustomComponents.IconButton(Icon.JumpToRangeStart, "##jumpToBeginning", _timeControlsSize))
+            {
+                clipTime.Time = clipTime.TimeRangeStart;
+            }
+
             ImGui.SameLine();
 
-            //CustomComponents.IconButton(Icon.JumpToFirstKeyframe,"##firstKeyframe",  _timeControlsSize);
-            //ImGui.SameLine();
-
-            CustomComponents.IconButton(Icon.JumpToPreviousKeyframe, "##prevKeyframe", _timeControlsSize);
+            // Prev Keyframe
+            if (CustomComponents.IconButton(Icon.JumpToPreviousKeyframe, "##prevKeyframe", _timeControlsSize)
+                || KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
+            {
+                UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
+            }
             ImGui.SameLine();
 
+            // Play backwards
             var isPlayingBackwards = clipTime.PlaybackSpeed < 0;
             if (CustomComponents.ToggleButton(Icon.PlayBackwards,
                                               label: isPlayingBackwards ? $"[{(int)clipTime.PlaybackSpeed}x]" : "<",
                                               ref isPlayingBackwards,
-                                              _timeControlsSize))
+                                              _timeControlsSize,
+                                              trigger: KeyboardBinding.Triggered(UserActions.PlaybackBackwards)))
             {
                 if (clipTime.PlaybackSpeed != 0)
                 {
@@ -78,7 +88,24 @@ namespace T3.Gui.Graph
                 }
             }
 
+            const float editFrameRate = 30;
+            const float frameDuration = 1 / editFrameRate;
+            
+            // Step to previous frame
+            if (KeyboardBinding.Triggered(UserActions.PlaybackPreviousFrame))
+            {
+                var rounded =  Math.Round(clipTime.Time * editFrameRate)/editFrameRate;    
+                clipTime.Time = rounded - frameDuration;
+            }
 
+            // Step to next frame
+            if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))
+            {
+                var rounded =  Math.Round(clipTime.Time * editFrameRate)/editFrameRate;    
+                clipTime.Time = rounded + frameDuration;
+            }
+
+            // Play backwards with increasing speed
             if (KeyboardBinding.Triggered(UserActions.PlaybackBackwards))
             {
                 if (clipTime.PlaybackSpeed >= 0)
@@ -91,6 +118,7 @@ namespace T3.Gui.Graph
                 }
             }
 
+            // Play forward with increasing speed
             if (KeyboardBinding.Triggered(UserActions.PlaybackForward))
             {
                 if (clipTime.PlaybackSpeed <= 0)
@@ -103,19 +131,29 @@ namespace T3.Gui.Graph
                 }
             }
 
+            // Stop as separate keyboard 
             if (KeyboardBinding.Triggered(UserActions.PlaybackStop))
             {
                 clipTime.PlaybackSpeed = 0;
             }
-
             ImGui.SameLine();
 
-            CustomComponents.IconButton(Icon.JumpToNextKeyframe, "##nextKeyframe", _timeControlsSize);
+            // Next Keyframe
+            if (CustomComponents.IconButton(Icon.JumpToNextKeyframe, "##nextKeyframe", _timeControlsSize)
+                || KeyboardBinding.Triggered(UserActions.PlaybackJumpToNextKeyframe))
+            {
+                UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
+            }
             ImGui.SameLine();
 
-            CustomComponents.IconButton(Icon.JumpToLastKeyframe, "##nlastKeyframe", _timeControlsSize);
+            // End
+            if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##nlastKeyframe", _timeControlsSize))
+            {
+                clipTime.Time = clipTime.TimeRangeEnd;
+            }
             ImGui.SameLine();
 
+            // Loop
             CustomComponents.ToggleButton(Icon.Loop, "##loop", ref clipTime.IsLooping, _timeControlsSize);
             ImGui.SameLine();
 

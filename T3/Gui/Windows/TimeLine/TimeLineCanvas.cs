@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
@@ -50,12 +51,11 @@ namespace T3.Gui.Windows.TimeLine
                 Scale = Im.Lerp(Scale, _scaleTarget, damping);
                 Scroll = Im.Lerp(Scroll, _scrollTarget, damping);
             }
-
-
+            
             ImGui.BeginChild("scrolling_region2", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
                 DrawList = ImGui.GetWindowDrawList();
-
+                HandleDeferredActions(animationParameters);
                 HandleInteraction();
                 _horizontalScaleLines.Draw();
                 _layersArea.Draw(compositionOp);
@@ -80,6 +80,37 @@ namespace T3.Gui.Windows.TimeLine
 
             if (Math.Abs(_io.MouseWheel) > 0.01f)
                 HandleZoomViewWithMouseWheel();
+        }
+
+        private void HandleDeferredActions(List<GraphWindow.AnimationParameter> animationParameters)
+        {
+            if (UserActionRegistry.WasActionQueued(UserActions.PlaybackJumpToNextKeyframe))
+            {
+                var nextKeyframeTime = double.PositiveInfinity;
+                foreach (var next in animationParameters
+                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetNextU(_clipTime.Time + 0.001f))
+                                    .Where(next => next != null && next.Value < nextKeyframeTime))
+                {
+                    nextKeyframeTime = next.Value;
+                }
+
+                if (!double.IsPositiveInfinity(nextKeyframeTime))
+                    _clipTime.Time = nextKeyframeTime;
+            }
+            
+            if (UserActionRegistry.WasActionQueued(UserActions.PlaybackJumpToPreviousKeyframe))
+            {
+                var prevKeyframeTime = double.NegativeInfinity;
+                foreach (var next in animationParameters
+                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetPreviousU(_clipTime.Time - 0.001f))
+                                    .Where(previous => previous != null && previous.Value > prevKeyframeTime))
+                {
+                    prevKeyframeTime = next.Value;
+                }
+
+                if (!double.IsNegativeInfinity(prevKeyframeTime))
+                    _clipTime.Time = prevKeyframeTime;
+            }
         }
 
         private void HandleZoomViewWithMouseWheel()
