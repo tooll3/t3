@@ -195,10 +195,16 @@ namespace T3.Gui.Graph
             if (symbol.InputDefinitions.Any())
             {
                 var temp = ConnectionMaker.TempConnection;
-                ConnectionMaker.CompleteConnectionIntoBuiltNode(
-                    parent,
-                    newSymbolChild,
-                    _filter.GetInputMatchingType(symbol, _filterType));
+                if (temp.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
+                {
+                    // connecting to output
+                    ConnectionMaker.CompleteConnectionFromBuiltNode(parent, newSymbolChild, _filter.GetOutputMatchingType(symbol, _filterType));
+                }
+                else
+                {
+                    // connecting to input
+                    ConnectionMaker.CompleteConnectionIntoBuiltNode(parent, newSymbolChild, _filter.GetInputMatchingType(symbol, _filterType));
+                }
             }
             else
             {
@@ -268,6 +274,18 @@ namespace T3.Gui.Graph
                     if (inputDefinition.DefaultValue.ValueType == type)
                         return inputDefinition;
                 }
+
+                return null;
+            }
+
+            public Symbol.OutputDefinition GetOutputMatchingType(Symbol symbol, Type type)
+            {
+                foreach (var outputDefinition in symbol.OutputDefinitions)
+                {
+                    if (outputDefinition.ValueType == type)
+                        return outputDefinition;
+                }
+
                 return null;
             }
 

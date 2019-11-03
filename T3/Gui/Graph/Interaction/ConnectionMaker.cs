@@ -173,22 +173,29 @@ namespace T3.Gui.Graph
                 else if (TempConnection.SourceParentOrChildId == NotConnectedId)
                 {
                     TempConnection = new Symbol.Connection(sourceParentOrChildId: UseDraftChildId,
-                                           sourceSlotId: Guid.Empty,
-                                           targetParentOrChildId: TempConnection.TargetParentOrChildId,
-                                           targetSlotId: TempConnection.TargetSlotId);
+                                                           sourceSlotId: Guid.Empty,
+                                                           targetParentOrChildId: TempConnection.TargetParentOrChildId,
+                                                           targetSlotId: TempConnection.TargetSlotId);
                 }
             }
         }
 
-        public static void CompleteConnectionIntoBuiltNode(
-            Symbol parentSymbol,
-            SymbolChild newOp,
-            Symbol.InputDefinition inputDef)
+        public static void CompleteConnectionIntoBuiltNode(Symbol parentSymbol, SymbolChild newOp, Symbol.InputDefinition inputDef)
         {
             var newConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
                                                       sourceSlotId: TempConnection.SourceSlotId,
                                                       targetParentOrChildId: newOp.Id,
                                                       targetSlotId: inputDef.Id);
+            UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, 0));
+            TempConnection = null;
+        }
+
+        public static void CompleteConnectionFromBuiltNode(Symbol parentSymbol, SymbolChild newOp, Symbol.OutputDefinition outputDef)
+        {
+            var newConnection = new Symbol.Connection(sourceParentOrChildId: newOp.Id,
+                                                      sourceSlotId: outputDef.Id,
+                                                      targetParentOrChildId: TempConnection.TargetParentOrChildId,
+                                                      targetSlotId: TempConnection.TargetSlotId);
             UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, 0));
             TempConnection = null;
         }
