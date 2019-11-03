@@ -343,6 +343,22 @@ namespace UiHelpers
             return v;
         }
 
+        public static double Remap(double value, double inMin, double inMax, double outMin, double outMax)
+        {
+            var factor = (value - inMin)/(inMax - inMin);
+            var v =factor*(outMax - outMin) + outMin;
+            if (v > outMax)
+            {
+                v = outMax;
+                
+            }
+            else if (v < outMin)
+            {
+                v = outMin;
+            }
+            return v;
+        }
+
 
         public static void DrawSplitter(bool splitVertically, float thickness, ref float size0, ref float size1, float minSize0, float minSize1)
         {

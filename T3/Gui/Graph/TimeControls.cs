@@ -21,17 +21,51 @@ namespace T3.Gui.Graph
                                            ImGui.GetWindowContentRegionMin().X,
                                            ImGui.GetWindowContentRegionMax().Y - 30));
 
-            var timespan = TimeSpan.FromSeconds(clipTime.Time);
+            
+
+            ImGui.Button("##Timeline", _timeControlsSize);
+            ImGui.SameLine();
 
             // Current Time
             var delta = 0.0;
-            if (CustomComponents.JogDial(timespan.ToString(@"hh\:mm\:ss\:ff"), ref delta, new Vector2(80, 0)))
+            string formattedTime = "";
+            switch (clipTime.TimeMode)
+            {
+                case ClipTime.TimeModes.Bars:
+                    formattedTime = $"{clipTime.Bar:0}. {clipTime.Beat:0}. {clipTime.Tick:0}.";
+                    break;
+                
+                case ClipTime.TimeModes.Seconds:
+                    formattedTime = TimeSpan.FromSeconds(clipTime.Time).ToString(@"hh\:mm\:ss\:ff");
+                    break;
+                
+                case ClipTime.TimeModes.F30:
+                    var frames = clipTime.Time * 30;
+                    formattedTime = $"{frames:0}f ";
+                    break;
+                case ClipTime.TimeModes.F60:
+                    var frames60 = clipTime.Time * 60;
+                    formattedTime = $"{frames60:0}f ";
+                    break;
+
+            }
+            if (CustomComponents.JogDial(formattedTime, ref delta, new Vector2(80, 0)))
             {
                 clipTime.PlaybackSpeed = 0;
                 clipTime.Time += delta;
+                if (clipTime.TimeMode == ClipTime.TimeModes.F30)
+                {
+                    clipTime.Time = Math.Floor(clipTime.Time * 30) / 30;
+                }
             }
-
             ImGui.SameLine();
+            
+            if (ImGui.Button(clipTime.TimeMode.ToString(), _timeControlsSize))
+            {
+                clipTime.TimeMode = (ClipTime.TimeModes)(((int)clipTime.TimeMode + 1) % Enum.GetNames(typeof(ClipTime.TimeModes)).Length);
+            }
+            ImGui.SameLine();
+
 
             // Jump to start
             if (CustomComponents.IconButton(Icon.JumpToRangeStart, "##jumpToBeginning", _timeControlsSize))
@@ -156,6 +190,8 @@ namespace T3.Gui.Graph
             // Loop
             CustomComponents.ToggleButton(Icon.Loop, "##loop", ref clipTime.IsLooping, _timeControlsSize);
             ImGui.SameLine();
+
+
 
             if (curveEditor != null)
             {

@@ -10,9 +10,36 @@ namespace T3.Gui
 
         public double TimeRangeStart { get; set; } = 0;
         public double TimeRangeEnd { get; set; } = 8;
+        public double BPM { get; set; } = 120;
         public virtual double PlaybackSpeed { get; set; } = 0;
-        public bool IsLooping = true;
+        public bool IsLooping = false;
+        public TimeModes TimeMode = TimeModes.Seconds;
 
+        public int Bar
+        {
+            get
+            {
+                return  (int)(Time * BPM / 60f / 4f) +1;
+            }
+        }
+        
+        public int Beat
+        {
+            get
+            {
+                return  (int)(Time * BPM / 60f ) %4 +1;
+            }
+        }
+
+        public int Tick
+        {
+            get
+            {
+                return  (int)(Time * BPM / 60f *4 ) %4 +1;
+            }
+        }
+
+        
         public void Update()
         {
             UpdateTime();
@@ -23,6 +50,14 @@ namespace T3.Gui
                            : Time - (TimeRangeEnd - TimeRangeStart);
             }
             EvaluationContext.GlobalTime = Time;
+        }
+
+        public enum TimeModes
+        {
+            Seconds,
+            Bars,
+            F30,
+            F60,
         }
 
         protected abstract void UpdateTime();
