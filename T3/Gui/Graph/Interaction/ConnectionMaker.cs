@@ -9,7 +9,7 @@ namespace T3.Gui.Graph
     /// <summary>
     /// Handles the creation of new  <see cref="ConnectionLine"/>s. 
     /// It provides accessors for highlighting matching input slots and methods that need to be
-    /// called connections are completed or aborted.
+    /// called when connections are completed or aborted.
     /// </summary>
     public static class ConnectionMaker
     {

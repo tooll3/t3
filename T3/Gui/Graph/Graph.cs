@@ -12,7 +12,8 @@ using UiHelpers;
 
 namespace T3.Gui.Graph
 {
-    /// <summary>
+    /// <summary>Rendering a node graph</summary>
+    /// <remarks>
     /// Rendering the graph is complicated because:
     /// - Connection has no real model to store computations
     /// - Connection are defined by Guid references to Symbol-Definitions
@@ -30,7 +31,7 @@ namespace T3.Gui.Graph
     /// 2. Fill the lists of which nodes is connected to which lines
     /// 3. Draw Nodes and their sockets and set positions for connection lines 
     /// 4. Draw connection lines
-    ///</summary>
+    ///</remarks>
     public static class Graph
     {
 
@@ -74,8 +75,8 @@ namespace T3.Gui.Graph
                 OutputNode.Draw(outputDef, outputNode);
 
                 var targetPos = new Vector2(
-                    OutputNode._lastScreenRect.GetCenter().X,
-                    OutputNode._lastScreenRect.Max.Y);
+                                            OutputNode._lastScreenRect.Min.X + GraphNode._inputSlotThickness,
+                                            OutputNode._lastScreenRect.GetCenter().Y);
 
                 foreach (var line in Connections.GetLinesToOutputNodes(outputNode, outputId))
                 {
@@ -90,8 +91,9 @@ namespace T3.Gui.Graph
                 InputNode.Draw(inputDef, inputNode.Value);
 
                 var sourcePos = new Vector2(
-                    InputNode._lastScreenRect.GetCenter().X,
-                    InputNode._lastScreenRect.Min.Y);
+                    InputNode._lastScreenRect.Max.X,
+                    InputNode._lastScreenRect.GetCenter().Y
+                    );
 
                 foreach (var line in Connections.GetLinesFromIntputNodes(inputNode.Value, inputNode.Key))
                 {
@@ -111,7 +113,7 @@ namespace T3.Gui.Graph
         //    return TypeUiRegistry.Entries[outputDef.ValueType].Color;
         //}
 
-        public class ConnectionSorter
+        internal class ConnectionSorter
         {
             public List<ConnectionLineUi> Lines;
 
@@ -243,7 +245,8 @@ namespace T3.Gui.Graph
             private static readonly List<ConnectionLineUi> _noLines = new List<ConnectionLineUi>();
         }
 
-        public class ConnectionLineUi
+        
+        internal class ConnectionLineUi
         {
             public Symbol.Connection Connection;
             public Vector2 TargetPosition;
@@ -252,7 +255,7 @@ namespace T3.Gui.Graph
             public ImRect SourceRect { get; set; }
             public Color ColorForType;
             public bool IsSelected;
-            public bool IsMultiinput;
+            //public bool IsMultiinput;
 
             internal ConnectionLineUi(Symbol.Connection connection)
             {
@@ -292,8 +295,8 @@ namespace T3.Gui.Graph
 
                 DrawList.AddBezierCurve(
                     SourcePosition,
-                    SourcePosition + new Vector2(0, -50),
-                                                    TargetPosition + new Vector2(0, 50),
+                    SourcePosition + new Vector2(50, 0),
+                                                    TargetPosition + new Vector2(-50, 0),
                                                     TargetPosition,
                                                     color, 3f,
                                                     num_segments: 20);
@@ -308,12 +311,11 @@ namespace T3.Gui.Graph
             }
         }
 
-        public static readonly ConnectionSorter Connections = new ConnectionSorter();
+        internal static readonly ConnectionSorter Connections = new ConnectionSorter();
         public static ImDrawListPtr DrawList;
         private static List<SymbolChildUi> _childUis;
         private static SymbolUi _graphSymbolUi;
         private static Dictionary<Guid, IOutputUi> _outputUisById;
         private static Dictionary<Guid, IInputUi> _inputUisById;
-
     }
 }

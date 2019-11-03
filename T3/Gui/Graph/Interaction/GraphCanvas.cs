@@ -215,7 +215,7 @@ namespace T3.Gui.Graph
             ImGui.PopStyleVar();
         }
 
-        private void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName)
+        private static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName)
         {
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
 
@@ -380,7 +380,7 @@ namespace T3.Gui.Graph
                 newSymbol.AddConnection(newConnection);
             }
 
-            var mousePos = InverseTransformPosition(ImGui.GetMousePos());
+            var mousePos = GraphCanvas.Current.InverseTransformPosition(ImGui.GetMousePos());
             var addCommand = new AddSymbolChildCommand(compositionSymbolUi.Symbol, newSymbol.Id) {PosOnCanvas = mousePos};
             UndoRedoStack.AddAndExecute(addCommand);
             var newSymbolChildId = addCommand.AddedChildId;
@@ -411,7 +411,7 @@ namespace T3.Gui.Graph
             UndoRedoStack.AddAndExecute(deleteCmd);
         }
 
-        private Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate)
+        private static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate)
         {
             var sourceSymbol = symbolChildToDuplicate.Symbol;
             string originalSourcePath = sourceSymbol.SourcePath;
@@ -486,7 +486,7 @@ namespace T3.Gui.Graph
                 newSymbol.AddConnection(newConnection);
             }
 
-            var mousePos = InverseTransformPosition(ImGui.GetMousePos());
+            var mousePos = GraphCanvas.Current.InverseTransformPosition(ImGui.GetMousePos());
             var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) {PosOnCanvas = mousePos};
             UndoRedoStack.AddAndExecute(addCommand);
 
