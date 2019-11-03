@@ -4,7 +4,6 @@ todo:
 - Fix output connections to multi input when doing combine
 - Add color grade op
 - Add first player version
-- Add first sound integration
 - Replace Guids with uint ids during runtime
 - Showing enums produces always the same code, extract function for this and even better cached object per enum type
 - Make all tests in CoreTests runnable again
@@ -16,6 +15,8 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Add possibility to rename Ops due to class name refactoring in IDE
+* Add first sound integration
 * Fix input/output generation of 'combine as new type'
 * Add count to track evaluations of operators
 * Add gfx pipeline parts (first draft)
