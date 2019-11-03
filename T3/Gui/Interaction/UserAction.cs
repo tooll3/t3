@@ -39,6 +39,16 @@ namespace T3.Gui
                                                                              { UserActions.Undo, UndoRedoStack.Undo },
                                                                              { UserActions.Redo, UndoRedoStack.Redo },
                                                                          };
+        public static readonly HashSet<UserActions> DeferredActions = new HashSet<UserActions>();
+
+        public static bool WasActionQueued(UserActions action)
+        {
+            if (!DeferredActions.Contains(action)) 
+                return false;
+            
+            DeferredActions.Remove(action);
+            return true;
+        }
     }
 
     public class KeyboardBinding
@@ -101,6 +111,12 @@ namespace T3.Gui
             new KeyboardBinding(UserActions.PlaybackBackwards, new KeyCombination(Key.J) ),
             new KeyboardBinding(UserActions.PlaybackStop, new KeyCombination(Key.K) ),
             new KeyboardBinding(UserActions.PlaybackToggle, new KeyCombination(Key.Space) ),
+            new KeyboardBinding(UserActions.PlaybackPreviousFrame, new KeyCombination(Key.CursorLeft, shift:true)),
+            new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift:true)),
+            new KeyboardBinding(UserActions.PlaybackJumpToNextKeyframe, new KeyCombination(Key.Period)),
+            new KeyboardBinding(UserActions.PlaybackJumpToPreviousKeyframe, new KeyCombination(Key.Comma)),
+            new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift:true)),
+
             new KeyboardBinding(UserActions.Undo, new KeyCombination(Key.Z,ctrl:true) ),
             new KeyboardBinding(UserActions.Redo, new KeyCombination(Key.Z,ctrl:true, shift:true) ),
         };

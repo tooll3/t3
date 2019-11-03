@@ -4,6 +4,7 @@ using System.IO.Packaging;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Commands;
@@ -94,13 +95,13 @@ namespace T3.Gui.Windows.TimeLine
                     }
                 }
 
-                HandleDragging(vDef, isSelected);
+                HandleKeyframeDragging(vDef, isSelected);
 
                 ImGui.PopID();
             }
         }
 
-        private void HandleDragging(VDefinition vDef, bool isSelected)
+        private void HandleKeyframeDragging(VDefinition vDef, bool isSelected)
         {
             if (ImGui.IsItemHovered())
             {
@@ -205,6 +206,27 @@ namespace T3.Gui.Windows.TimeLine
             foreach (var vDefinition in _selectedItems)
             {
                 vDefinition.U += dt;
+            }
+            RebuildCurveTables();
+        }
+
+        /// <summary>
+        /// A horrible hack to keep curve table-structure aligned with position stored in key definitions.
+        /// </summary>
+        private void RebuildCurveTables()
+        {
+            foreach (var param in _animationParameters)
+            {
+                foreach (var curve in param.Curves)
+                {
+                    foreach (var (u, vDef) in curve.GetPoints())
+                    {
+                        if (u != vDef.U)
+                        {
+                            curve.MoveKey(u, vDef.U);
+                        }
+                    }
+                }
             }
         }
 
