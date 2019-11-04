@@ -56,7 +56,7 @@ namespace T3
 
             Fonts.FontNormal = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Regular.ttf", 16f);
             Fonts.FontBold = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Black.ttf", 16f);
-            Fonts.FontSmall = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Black.ttf", 12f);
+            Fonts.FontSmall = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Regular.ttf", 13f);
 
             CreateDeviceObjects();
             SetKeyMappings();
