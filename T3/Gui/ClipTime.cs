@@ -7,39 +7,19 @@ namespace T3.Gui
     public abstract class ClipTime
     {
         public virtual double Time { get; set; }
-
         public double TimeRangeStart { get; set; } = 0;
         public double TimeRangeEnd { get; set; } = 8;
-        public double BPM { get; set; } = 120;
+        public double Bpm { get; set; } = 120;
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
-        public TimeModes TimeMode = TimeModes.Seconds;
+        public TimeModes TimeMode { get; set; } = TimeModes.Seconds;
 
-        public int Bar
-        {
-            get
-            {
-                return  (int)(Time * BPM / 60f / 4f) +1;
-            }
-        }
-        
-        public int Beat
-        {
-            get
-            {
-                return  (int)(Time * BPM / 60f ) %4 +1;
-            }
-        }
+        public int Bar => (int)(Time * Bpm / 60.0 / 4.0) + 1;
 
-        public int Tick
-        {
-            get
-            {
-                return  (int)(Time * BPM / 60f *4 ) %4 +1;
-            }
-        }
+        public int Beat => (int)(Time * Bpm / 60.0) % 4 + 1;
 
-        
+        public int Tick => (int)(Time * Bpm / 60.0 * 4) % 4 + 1;
+
         public void Update()
         {
             UpdateTime();
