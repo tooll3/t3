@@ -182,9 +182,9 @@ namespace T3.Gui.Animation
     {
         public void Draw(ClipTime clipTime)
         {
-            if (Math.Abs(_bpm - clipTime.BPM) > 0.001f || _scaleRanges == null)
+            if (Math.Abs(_bpm - clipTime.Bpm) > 0.001f || _scaleRanges == null)
             {
-                _bpm = clipTime.BPM;
+                _bpm = clipTime.Bpm;
                 InitializeTimeScaleDefinitions();
             }
 
