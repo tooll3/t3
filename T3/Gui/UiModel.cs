@@ -105,6 +105,9 @@ namespace T3.Gui
                            () => new ValueOutputUi<TextureAddressMode>());
             RegisterUiType(typeof(SharpDX.Direct3D11.UnorderedAccessView), new TextureUiProperties(), () => new FallbackInputUi<UnorderedAccessView>(),
                            () => new ValueOutputUi<UnorderedAccessView>());
+            RegisterUiType(typeof(SharpDX.Direct3D11.UnorderedAccessViewBufferFlags), new ShaderUiProperties(),
+                           () => new EnumInputUi<UnorderedAccessViewBufferFlags>(),
+                           () => new ValueOutputUi<UnorderedAccessViewBufferFlags>());
             RegisterUiType(typeof(SharpDX.Direct3D11.VertexShader), new ShaderUiProperties(), () => new FallbackInputUi<VertexShader>(),
                            () => new ValueOutputUi<VertexShader>());
             RegisterUiType(typeof(SharpDX.DXGI.Format), new ShaderUiProperties(), () => new EnumInputUi<Format>(), () => new ValueOutputUi<Format>());

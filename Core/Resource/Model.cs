@@ -237,6 +237,10 @@ namespace T3.Core
                          JsonToEnumValue<TextureAddressMode>);
             RegisterType(typeof(SharpDX.Direct3D11.UnorderedAccessView), "UnorderedAccessView",
                          () => new InputValue<UnorderedAccessView>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.UnorderedAccessViewBufferFlags), "UnorderedAccessViewBufferFlags",
+                         InputDefaultValueCreator<UnorderedAccessViewBufferFlags>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<UnorderedAccessViewBufferFlags>);
             RegisterType(typeof(SharpDX.Direct3D11.VertexShader), "VertexShader",
                          () => new InputValue<VertexShader>(null));
             RegisterType(typeof(SharpDX.DXGI.Format), "Format",
