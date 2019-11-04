@@ -19,13 +19,13 @@ namespace T3.Gui.Windows.TimeLine
         public TimeLineCanvas(ClipTime clipTime = null)
         {
             _clipTime = clipTime;
-            _horizontalScaleLines = new HorizontalScaleLines(this);
             _layersArea = new LayersArea(_snapHandler);
             _dopeSheetArea = new DopeSheetArea(_snapHandler);
             _selectionFence = new TimeSelectionFence(this);
 
             _selectionHolders.Add(_layersArea);
             _selectionHolders.Add(_dopeSheetArea);
+            _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
             _snapHandler.AddSnapAttractor(_layersArea);
             _snapHandler.AddSnapAttractor(_dopeSheetArea);
@@ -57,8 +57,7 @@ namespace T3.Gui.Windows.TimeLine
                 DrawList = ImGui.GetWindowDrawList();
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
-                //_horizontalScaleLines.Draw();
-                _beatMarker.Draw(_clipTime);
+                _timeRasterSwitcher.Draw(_clipTime);
                 _layersArea.Draw(compositionOp);
                 _dopeSheetArea.Draw(compositionOp, animationParameters);
                 DrawTimeRange();
@@ -70,8 +69,6 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.EndChild();
         }
         
-        private BeatMarker _beatMarker = new BeatMarker();
-
         private void HandleInteraction()
         {
             if (!ImGui.IsWindowHovered())
@@ -472,12 +469,10 @@ namespace T3.Gui.Windows.TimeLine
         private Vector2 _scrollTarget = new Vector2(-1.0f, 0.0f);
         public List<ISelectable> SelectableChildren { get; set; }
         public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
-
         #endregion
 
-
         private readonly ClipTime _clipTime;
-        private readonly HorizontalScaleLines _horizontalScaleLines;
+        private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
         private readonly LayersArea _layersArea;
         private readonly DopeSheetArea _dopeSheetArea;
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
@@ -491,8 +486,7 @@ namespace T3.Gui.Windows.TimeLine
         private Vector2 _scaleTarget = new Vector2(100, -1);
 
         private ImDrawListPtr DrawList { get; set; }
-
-
+        
         // Styling
         private const float TimeLineDragHeight = 20;
         private static readonly Vector2 TimeRangeHandleSize = new Vector2(10, 20);
