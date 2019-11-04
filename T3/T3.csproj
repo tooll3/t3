@@ -345,11 +345,15 @@
     <Compile Include="Gui\Windows\ImageOutputCanvas.cs" />
     <Compile Include="Gui\Windows\OutputWindow.cs" />
     <Compile Include="Gui\Windows\SelectionPinning.cs" />
+    <Compile Include="Gui\Windows\TimeLine\BeatTimeRaster.cs" />
     <Compile Include="Gui\Windows\TimeLine\CurrentTimeMarker.cs" />
     <Compile Include="Gui\Windows\TimeLine\DopeSheetArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\ITimeElementSelectionHolder.cs" />
     <Compile Include="Gui\Windows\TimeLine\LayersArea.cs" />
+    <Compile Include="Gui\Windows\TimeLine\StandardTimeRaster.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeLineCanvas.cs" />
+    <Compile Include="Gui\Windows\TimeLine\TimeRaster.cs" />
+    <Compile Include="Gui\Windows\TimeLine\TimeRasterSwitcher.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeSelectionFence.cs" />
     <Compile Include="Gui\Windows\Window.cs" />
     <Compile Include="Gui\UiJson.cs" />
