@@ -115,6 +115,25 @@ namespace T3.Core
 
                              return list;
                          });
+            RegisterType(typeof(System.Collections.Generic.List<string>), "List<string>",
+                         () => new InputValue<List<string>>(new List<string>()),
+                         (writer, obj) =>
+                         {
+                             var list = (List<string>)obj;
+                             writer.WriteStartObject();
+                             writer.WritePropertyName("Values");
+                             writer.WriteStartArray();
+                             list.ForEach(writer.WriteValue);
+                             writer.WriteEndArray();
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             var entries = jsonToken["Values"];
+                             var list = new List<string>(entries.Count());
+                             list.AddRange(entries.Select(entry => entry.Value<string>()));
+                             return list;
+                         });
             RegisterType(typeof(System.Numerics.Vector2), "Vector2",
                          InputDefaultValueCreator<System.Numerics.Vector2>,
                          (writer, obj) =>

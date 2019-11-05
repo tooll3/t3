@@ -314,9 +314,11 @@
     <Compile Include="Gui\InputUi\BoolInputUi.cs" />
     <Compile Include="Gui\InputUi\Color4InputUi.cs" />
     <Compile Include="Gui\InputUi\Int3InputUi.cs" />
+    <Compile Include="Gui\InputUi\StringListInputUi.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
     <Compile Include="Gui\Interaction\Snapping\IValueSnapAttractor.cs" />
     <Compile Include="Gui\Interaction\Snapping\ValueSnapHandler.cs" />
+    <Compile Include="Gui\OutputUi\StringListOutputUi.cs" />
     <Compile Include="Gui\Styling\CustomComponents.cs" />
     <Compile Include="Gui\Graph\Interaction\SelectableMovement.cs" />
     <Compile Include="Gui\InputUi\EnumInputUi.cs" />
