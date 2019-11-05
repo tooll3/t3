@@ -42,6 +42,8 @@ namespace T3.Gui
             // system types
             RegisterUiType(typeof(System.Collections.Generic.List<float>), new FloatUiProperties(), () => new FloatListInputUi(),
                            () => new FloatListOutputUi());
+            RegisterUiType(typeof(System.Collections.Generic.List<string>), new FloatUiProperties(), () => new StringListInputUi(),
+                           () => new StringListOutputUi());
 //            RegisterUiType(typeof(System.Numerics.Vector2), new Size2UiProperties(), () => new Vector2InputUi(),
 //                           () => new ValueOutputUi<System.Numerics.Vector2>());
             RegisterUiType(typeof(System.Numerics.Vector4), new Size2UiProperties(), () => new Vector4InputUi(),
