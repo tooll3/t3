@@ -718,7 +718,6 @@ namespace T3.Core
         {
             if (FileResources.TryGetValue(filename, out var existingFileResource))
             {
-                Log.Info($"Trying to create an already existing file resource '{filename}' - returning the existing one.");
                 uint textureId = existingFileResource.ResourceIds.First();
                 existingFileResource.FileChangeAction += fileChangeAction;
                 uint srvId = (from srvResourceEntry in ShaderResourceViews
