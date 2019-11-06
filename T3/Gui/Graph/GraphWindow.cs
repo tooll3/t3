@@ -31,7 +31,7 @@ namespace T3.Gui.Graph
             _allowMultipeInstances = true;
 
             string trackName = @"Resources\lorn-sega-sunset.mp3";
-            _clipTime = File.Exists(trackName) ? new StreamClipTime(trackName) : (ClipTime)new UiClipTime();
+            _clipTime = File.Exists(trackName) ? new StreamClipTime(trackName) : new ClipTime();
 
             var opInstance = T3UI.UiModel.MainOp;
             Canvas = new GraphCanvas(opInstance);

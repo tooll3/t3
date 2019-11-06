@@ -4,7 +4,7 @@ using T3.Core.Operator;
 
 namespace T3.Gui
 {
-    public abstract class ClipTime
+    public class ClipTime
     {
         public virtual double Time { get; set; }
         public double TimeRangeStart { get; set; } = 0;
@@ -40,12 +40,7 @@ namespace T3.Gui
             F60,
         }
 
-        protected abstract void UpdateTime();
-    }
-
-    public class UiClipTime : ClipTime
-    {
-        protected override void UpdateTime()
+        protected virtual void UpdateTime()
         {
             Time += ImGui.GetIO().DeltaTime * PlaybackSpeed;
         }
@@ -71,6 +66,7 @@ namespace T3.Gui
             }
         }
 
+        private double _playbackSpeed; 
         public override double PlaybackSpeed
         {
             get
@@ -81,7 +77,12 @@ namespace T3.Gui
 
             set
             {
+                _playbackSpeed = value;
                 if (value == 0.0)
+                {
+                    Bass.ChannelStop(_soundStreamHandle);
+                }
+                else if (value < 0.0)
                 {
                     Bass.ChannelStop(_soundStreamHandle);
                 }
@@ -98,7 +99,11 @@ namespace T3.Gui
         
         protected override void UpdateTime()
         {
-            // nothing to do here as time is taken directly from stream
+            if (_playbackSpeed < 0.0)
+            {
+                // bass can't play backwards, so do it manually
+                Time += ImGui.GetIO().DeltaTime * _playbackSpeed;
+            }
         }
 
         private double GetCurrentStreamTime()
