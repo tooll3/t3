@@ -2,10 +2,12 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.TypeColors;
@@ -24,6 +26,10 @@ namespace T3.Gui.InputUi
         protected abstract InputEditState DrawEditControl(string name, ref T value);
         protected abstract void DrawValueDisplay(string name, ref T value);
 
+        protected virtual void DrawAnimatedValue(string name, InputSlot<T> inputSlot, Animator animator)
+        {
+        }
+
         public InputEditState DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
             var name = inputSlot.Input.Name;
@@ -35,7 +41,7 @@ namespace T3.Gui.InputUi
             if (inputSlot is InputSlot<T> typedInputSlot)
             {
                 var input = inputSlot.Input;
-                if (inputSlot.IsConnected || isAnimated)
+                if (inputSlot.IsConnected)
                 {
                     if (typedInputSlot.IsMultiInput)
                     {
@@ -89,25 +95,14 @@ namespace T3.Gui.InputUi
                     }
                     else
                     {
-                        if (isAnimated)
+                        ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
+                        if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0.0f)))
                         {
-                            ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
-                            if (ImGui.Button("A", new Vector2(ConnectionAreaWidth, 0.0f)))
-                            {
-                                animator.RemoveAnimationFrom(inputSlot);
-                            }
-                        }
-                        else
-                        {
-                            ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
-                            if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0.0f)))
-                            {
-                                symbolChildUi.IsSelected = false;
-                                var compositionSymbol = compositionUi.Symbol;
-                                var con = compositionSymbol.Connections.First(c => c.IsTargetOf(symbolChildUi.Id, inputSlot.Id));
-                                var sourceUi = compositionUi.GetSelectables().First(ui => ui.Id == con.SourceParentOrChildId || ui.Id == con.SourceSlotId);
-                                sourceUi.IsSelected = true;
-                            }
+                            symbolChildUi.IsSelected = false;
+                            var compositionSymbol = compositionUi.Symbol;
+                            var con = compositionSymbol.Connections.First(c => c.IsTargetOf(symbolChildUi.Id, inputSlot.Id));
+                            var sourceUi = compositionUi.GetSelectables().First(ui => ui.Id == con.SourceParentOrChildId || ui.Id == con.SourceSlotId);
+                            sourceUi.IsSelected = true;
                         }
 
                         ImGui.PopStyleColor();
@@ -131,22 +126,49 @@ namespace T3.Gui.InputUi
                         // Draw control
                         ImGui.PushItemWidth(200.0f);
                         ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? Color.Gray.Rgba : Color.White.Rgba);
-                        if (input.IsDefault)
-                        {
-                            // handling default values is a bit tricky with ImGui as we want to show the default
-                            // value when this is set, but we never want the default value to be modified. But as
-                            // editing is already done when the return value of the ImGui edit control tells us
-                            // that editing has happened this here is a simple way to ensure that the default value
-                            // is always correct but editing is only happening on the input value.
-                            input.Value.Assign(input.DefaultValue);
-                        }
-
                         ImGui.SetNextItemWidth(-1);
 
                         DrawValueDisplay(name, ref typedInputSlot.Value);
                         ImGui.PopStyleColor();
                         ImGui.PopItemWidth();
                     }
+                }
+                else if (isAnimated)
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
+                    if (ImGui.Button("A", new Vector2(ConnectionAreaWidth, 0.0f)))
+                    {
+                        animator.RemoveAnimationFrom(inputSlot);
+                    }
+
+                    ImGui.PopStyleColor();
+                    ImGui.SameLine();
+
+                    // Draw Name
+                    ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
+                    ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
+                    if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
+                    {
+                        if (ImGui.MenuItem("Parameters settings"))
+                            editState = InputEditState.ShowOptions;
+
+                        ImGui.EndPopup();
+                    }
+
+                    ImGui.PopStyleVar();
+
+                    ImGui.SameLine();
+
+                    // Draw control
+                    ImGui.PushItemWidth(200.0f);
+                    ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? Color.Gray.Rgba : Color.White.Rgba);
+
+                    ImGui.SetNextItemWidth(-1);
+
+                    DrawAnimatedValue(name, typedInputSlot, animator); // todo: command integration
+
+                    ImGui.PopStyleColor();
+                    ImGui.PopItemWidth();
                 }
                 else
                 {

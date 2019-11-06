@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
+using T3.Core.Animation;
+using T3.Core.Operator;
 
 namespace T3.Gui.InputUi
 {
@@ -18,6 +20,25 @@ namespace T3.Gui.InputUi
         protected override void DrawValueDisplay(string name, ref float value)
         {
             ImGui.InputFloat(name, ref value, 0.0f, 0.0f, "%f", ImGuiInputTextFlags.ReadOnly);
+        }
+
+        protected override void DrawAnimatedValue(string name, InputSlot<float> inputSlot, Animator animator)
+        {
+            double time = EvaluationContext.GlobalTime;
+            var curves = animator.GetCurvesForInput(inputSlot);
+            foreach (var curve in curves)
+            {
+                float value = (float)curve.GetSampledValue(time);
+                var editState = DrawEditControl(name, ref value);
+                if ((editState & InputEditState.Modified) == InputEditState.Modified)
+                {
+                    var key = curve.GetV(time);
+                    if (key == null)
+                        key = new VDefinition() { U = time };
+                    key.Value = value;
+                    curve.AddOrUpdateV(time, key);
+                }
+            }
         }
 
         public override void DrawParameterEdits()
