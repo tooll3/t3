@@ -233,25 +233,25 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(instanceId, inputId, index), curve);
             }
         }
-        
+
         public List<Layer> Layers { get; set; } = new List<Layer>()
                                                   {
                                                       new Layer()
                                                       {
                                                           Clips = new List<Clip>()
                                                                   {
-                                                                      new Clip(){Name= "ClipA", Id= Guid.NewGuid(),StartTime =  10,EndTime = 15,},
-                                                                      new Clip(){Name = "ClipB", Id= Guid.NewGuid(),StartTime =  0,EndTime = 7,},
+                                                                      new Clip() { Name = "ClipA", Id = Guid.NewGuid(), StartTime = 10, EndTime = 15, },
+                                                                      new Clip() { Name = "ClipB", Id = Guid.NewGuid(), StartTime = 0, EndTime = 7, },
                                                                   }
                                                       },
                                                       new Layer()
                                                       {
                                                           Clips = new List<Clip>()
                                                                   {
-                                                                      new Clip(){Name= "ClipA", Id= Guid.NewGuid(),StartTime =  12,EndTime = 12.2f,},
-                                                                      new Clip(){Name = "ClipB", Id= Guid.NewGuid(),StartTime =  0,EndTime = 2,},
+                                                                      new Clip() { Name = "ClipA", Id = Guid.NewGuid(), StartTime = 12, EndTime = 12.2f, },
+                                                                      new Clip() { Name = "ClipB", Id = Guid.NewGuid(), StartTime = 0, EndTime = 2, },
                                                                   }
-                                                      },                                                      
+                                                      },
                                                   };
 
         public IEnumerable<Clip> GetAllTimeClips()

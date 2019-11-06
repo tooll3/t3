@@ -429,9 +429,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Logging\Console\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{ce3c1bd6-89b6-4fd9-83f7-cd17d033f783}</Project>
       <Name>Core</Name>
