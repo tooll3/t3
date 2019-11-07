@@ -23,6 +23,8 @@ namespace T3.Gui.InputUi
         public Guid Id => InputDefinition.Id;
         public Relevancy Relevancy { get; set; } = Relevancy.Required;
         public int Index { get; set; } = 0;
+        public virtual bool IsAnimatable => false;
+
         protected abstract InputEditState DrawEditControl(string name, ref T value);
         protected abstract void DrawValueDisplay(string name, ref T value);
 
@@ -36,7 +38,7 @@ namespace T3.Gui.InputUi
             var editState = InputEditState.Nothing;
             var typeColor = TypeUiRegistry.Entries[Type].Color;
             var animator = compositionUi.Symbol.Animator;
-            bool isAnimated = animator.IsInputSlotAnimated(inputSlot);
+            bool isAnimated = IsAnimatable && animator.IsInputSlotAnimated(inputSlot);
 
             if (inputSlot is InputSlot<T> typedInputSlot)
             {
@@ -175,7 +177,8 @@ namespace T3.Gui.InputUi
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
                     if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
-                        animator.CreateInputUpdateAction<float>(inputSlot);
+                        if (IsAnimatable)
+                            animator.CreateInputUpdateAction<float>(inputSlot);
                     }
 
                     ImGui.PopStyleColor();

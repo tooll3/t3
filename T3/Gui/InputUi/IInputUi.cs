@@ -30,6 +30,7 @@ namespace T3.Gui.InputUi
         Type Type { get; }
         Relevancy Relevancy { get; set; }
         int Index { get; set; }
+        bool IsAnimatable { get; }
 
         InputEditState DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
 

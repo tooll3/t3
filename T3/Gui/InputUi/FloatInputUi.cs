@@ -9,6 +9,7 @@ namespace T3.Gui.InputUi
 {
     public class FloatInputUi : SingleControlInputUi<float>
     {
+        public override bool IsAnimatable => true;
         public float Min = -100.0f;
         public float Max = 100.0f;
 
