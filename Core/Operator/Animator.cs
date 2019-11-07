@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -84,7 +83,7 @@ namespace T3.Core.Operator
                 var newCurveY = new Curve();
                 newCurveY.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
                                                                      {
-                                                                         Value = vector4InputSlot.Value.X,
+                                                                         Value = vector4InputSlot.Value.Y,
                                                                          InType = VDefinition.Interpolation.Spline,
                                                                          OutType = VDefinition.Interpolation.Spline,
                                                                      });
@@ -93,7 +92,7 @@ namespace T3.Core.Operator
                 var newCurveZ = new Curve();
                 newCurveZ.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
                                                                      {
-                                                                         Value = vector4InputSlot.Value.X,
+                                                                         Value = vector4InputSlot.Value.Z,
                                                                          InType = VDefinition.Interpolation.Spline,
                                                                          OutType = VDefinition.Interpolation.Spline,
                                                                      });
@@ -102,7 +101,7 @@ namespace T3.Core.Operator
                 var newCurveW = new Curve();
                 newCurveW.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
                                                                      {
-                                                                         Value = vector4InputSlot.Value.X,
+                                                                         Value = vector4InputSlot.Value.W,
                                                                          InType = VDefinition.Interpolation.Spline,
                                                                          OutType = VDefinition.Interpolation.Spline,
                                                                      });
@@ -190,6 +189,7 @@ namespace T3.Core.Operator
             return from curve in _animatedInputCurves
                    where curve.Key.InstanceId == inputSlot.Parent.Id
                    where curve.Key.InputId == inputSlot.Id
+                   orderby curve.Key.Index
                    select curve.Value;
         }
         
