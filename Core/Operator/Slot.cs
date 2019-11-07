@@ -145,10 +145,6 @@ namespace T3.Core.Operator
             {
                 converterFunc(writer, Value);
             }
-            else
-            {
-                Log.Error($"Trying to convert an input value of type '{ValueType}' but no converter registered in TypeValueToJsonConverters. Returning empty string.");
-            }
         }
 
         public override void SetValueFromJson(Newtonsoft.Json.Linq.JToken json)
