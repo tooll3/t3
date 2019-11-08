@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Packaging;
 using System.Linq;
 using System.Numerics;
@@ -7,6 +8,7 @@ using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
@@ -61,6 +63,8 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.Text("." + parameter.Input.Input.Name);
 
             DrawCurves(parameter, layerArea);
+            HandleCreateNewKeyframes(parameter, layerArea);
+
             foreach (var curve in parameter.Curves)
             {
                 foreach (var pair in curve.GetPoints())
@@ -72,6 +76,53 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight)); // Next Line
         }
 
+        private void HandleCreateNewKeyframes(GraphWindow.AnimationParameter parameter, ImRect layerArea)
+        {
+            var hoverNewKeyframe = !ImGui.IsAnyItemActive()
+                                   && ImGui.IsWindowHovered()
+                                   && ImGui.GetIO().KeyAlt
+                                   && layerArea.Contains(ImGui.GetMousePos());
+            if (hoverNewKeyframe)
+            {
+                var hoverTime = TimeLineCanvas.Current.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
+                if (ImGui.IsMouseReleased(0))
+                {
+                    var dragDistance = ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length();
+                    if (dragDistance < 2)
+                    {
+                        TimeLineCanvas.Current.ClearSelection();
+
+                        foreach (var curve in parameter.Curves)
+                        {
+                            var value = curve.GetSampledValue(hoverTime);
+                            var previousU = curve.GetPreviousU(hoverTime);
+
+                            var key = (previousU != null)
+                                          ? curve.GetV(previousU.Value).Clone()
+                                          : new VDefinition();
+
+                            key.Value = value;
+                            key.U = hoverTime;
+
+                            var oldKey = key;
+                            curve.AddOrUpdateV(hoverTime, key);
+                            _selectedItems.Add(oldKey);
+                            Log.Debug("adde new key at " + hoverTime);
+                            TimeLineCanvas.Current._clipTime.Time = hoverTime;
+                        }
+                    }
+                }
+                else
+                {
+                    var posOnScreen = new Vector2(
+                                                  TimeLineCanvas.Current.TransformPositionX((float)hoverTime) - KeyframeIconWidth / 2,
+                                                  layerArea.Min.Y);
+                    Icons.Draw(Icon.KeyFrame, posOnScreen);
+                }
+
+                ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            }
+        }
 
         private readonly Color[] _curveColors = {   Color.Red, Color.Green, Color.Blue, Color.Gray};
         private void DrawCurves(GraphWindow.AnimationParameter parameter, ImRect layerArea)
@@ -102,7 +153,12 @@ namespace T3.Gui.Windows.TimeLine
                                Im.Remap((float)vDef.Value, minValue,maxValue, layerArea.Min.Y+padding, layerArea.Max.Y-padding));
                     index++;
                 }
-                _drawList.AddPolyline(ref positions[0], points.Count, _curveColors[curveIndex %4], false, 1);
+                _drawList.AddPolyline(
+                                      ref positions[0], 
+                                      points.Count, 
+                                      parameter.Curves.Count() > 1 ? _curveColors[curveIndex %4] : Color.Gray, 
+                                      false, 
+                                      1);
                 curveIndex++;
             }
         }
@@ -120,7 +176,7 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.SetCursorScreenPos(posOnScreen);
 
                 // Clicked
-                if (ImGui.InvisibleButton("##key", new Vector2(5, 24)))
+                if (ImGui.InvisibleButton("##key", new Vector2(10, 24)))
                 {
                     TimeLineCanvas.Current.CompleteDragCommand();
 
