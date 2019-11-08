@@ -1,5 +1,7 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics;
+using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -77,13 +79,6 @@ namespace T3.Gui.Windows.TimeLine
 
         private void HandleDragCompleted()
         {
-            var newPosition = ImGui.GetMousePos();
-            var delta = _startPositionInScreen - newPosition;
-            var hasOnlyClicked = delta.LengthSquared() < 4f;
-            if (hasOnlyClicked)
-            {
-                _timeLineCanvas.ClearSelection();
-            }
             _isVisible = false;
         }
 

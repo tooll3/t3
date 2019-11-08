@@ -19,18 +19,19 @@ namespace T3.Gui.Windows.TimeLine
         public TimeLineCanvas(ClipTime clipTime = null)
         {
             _clipTime = clipTime;
-            _layersArea = new LayersArea(_snapHandler);
+            //_layersArea = new LayersArea(_snapHandler);
             _dopeSheetArea = new DopeSheetArea(_snapHandler);
             _selectionFence = new TimeSelectionFence(this);
 
-            _selectionHolders.Add(_layersArea);
+            //_selectionHolders.Add(_layersArea);
             _selectionHolders.Add(_dopeSheetArea);
             _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
-            _snapHandler.AddSnapAttractor(_layersArea);
+            //_snapHandler.AddSnapAttractor(_layersArea);
             _snapHandler.AddSnapAttractor(_dopeSheetArea);
         }
-
+        
+    
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             Current = this;
@@ -58,7 +59,7 @@ namespace T3.Gui.Windows.TimeLine
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
                 _timeRasterSwitcher.Draw(_clipTime);
-                _layersArea.Draw(compositionOp);
+                //_layersArea.Draw(compositionOp);
                 _dopeSheetArea.Draw(compositionOp, animationParameters);
                 DrawTimeRange();
                 _currentTimeMarker.Draw(_clipTime);
@@ -471,7 +472,7 @@ namespace T3.Gui.Windows.TimeLine
         public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
         #endregion
 
-        private readonly ClipTime _clipTime;
+        internal readonly ClipTime _clipTime;
         private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
         private readonly LayersArea _layersArea;
         private readonly DopeSheetArea _dopeSheetArea;
