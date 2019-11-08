@@ -48,7 +48,7 @@ namespace T3.Gui.Animation.CurveEditing
                 return;
 
             _curveEditCanvas.DrawList.AddRectFilled(pTopLeft, pTopLeft + ControlSize,
-                IsSelected ? Color.White : Color.TBlue);
+                IsSelected ? Color.White : Color.Blue);
 
 
             if (IsSelected)
