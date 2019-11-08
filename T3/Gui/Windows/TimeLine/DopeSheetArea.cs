@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Packaging;
 using System.Linq;
 using System.Numerics;
+using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
@@ -59,6 +60,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SameLine();
             ImGui.Text("." + parameter.Input.Input.Name);
 
+            DrawCurves(parameter, layerArea);
             foreach (var curve in parameter.Curves)
             {
                 foreach (var pair in curve.GetPoints())
@@ -70,6 +72,41 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight)); // Next Line
         }
 
+
+        private readonly Color[] _curveColors = {   Color.Red, Color.Green, Color.Blue, Color.Gray};
+        private void DrawCurves(GraphWindow.AnimationParameter parameter, ImRect layerArea)
+        {
+            const float padding=2;
+            var curveIndex = 0;
+            foreach (var curve in parameter.Curves)
+            {
+                var points = curve.GetPoints();
+                var positions = new Vector2[points.Count];
+
+                var minValue = float.PositiveInfinity;
+                var maxValue = float.NegativeInfinity;
+                foreach (var (u, vDef) in points)
+                {
+                    if (minValue > vDef.Value)
+                        minValue = (float)vDef.Value;
+                    if (maxValue < vDef.Value)
+                        maxValue = (float)vDef.Value;
+                }
+                
+                var index = 0;
+                foreach (var (u, vDef) in points)
+                {
+                    positions[index] 
+                        = new Vector2(
+                               TimeLineCanvas.Current.TransformPositionX((float)u), 
+                               Im.Remap((float)vDef.Value, minValue,maxValue, layerArea.Min.Y+padding, layerArea.Max.Y-padding));
+                    index++;
+                }
+                _drawList.AddPolyline(ref positions[0], points.Count, _curveColors[curveIndex %4], false, 1);
+                curveIndex++;
+            }
+        }
+        
         private const float KeyframeIconWidth = 10;
         private void DrawKeyframe(VDefinition vDef, ImRect layerArea, GraphWindow.AnimationParameter parameter)
         {
