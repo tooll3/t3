@@ -109,8 +109,21 @@ namespace T3.Gui
 
         public static SymbolUi ReadSymbolUi(JsonTextReader jsonTextReader)
         {
-            var mainObject = JToken.ReadFrom(jsonTextReader);
-            return ReadSymbolUi(mainObject);
+            try
+            {
+                var mainObject = JToken.ReadFrom(jsonTextReader);
+                return ReadSymbolUi(mainObject);
+            }
+            catch (System.TypeInitializationException e)
+            {
+                Log.Error("Failed to initialize type from json: " + e + "\nLine-Number" + jsonTextReader.LineNumber);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Can't read json " + e);
+            }
+
+            return null;
         }
 
         public static SymbolUi ReadSymbolUi(JToken mainObject)

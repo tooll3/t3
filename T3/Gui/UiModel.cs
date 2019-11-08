@@ -10,6 +10,7 @@ using System.Linq;
 using SharpDX.Direct3D;
 using SharpDX.Mathematics.Interop;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
@@ -151,6 +152,10 @@ namespace T3.Gui
                         Debug.Assert(false);
                     }
                     SymbolUiRegistry.Entries.Add(symbolUi.Symbol.Id, symbolUi);
+                }
+                else
+                {
+                    Log.Error("Failed reading " + symbolUiFile);
                 }
             }
         }
