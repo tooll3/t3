@@ -28,15 +28,17 @@ namespace T3.Gui.Graph
             WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
 
             // Damp scaling
-            Scale = Im.Lerp(Scale, _scaleTarget, _io.DeltaTime * 5);
-            Scroll = Im.Lerp(Scroll, _scrollTarget, _io.DeltaTime * 5);
+            Scale = Im.Lerp(Scale, _scaleTarget, _io.DeltaTime * 10);
+            Scroll = Im.Lerp(Scroll, _scrollTarget, _io.DeltaTime * 10);
 
             if (!ImGui.IsWindowHovered())
                 return;
 
-            if (ImGui.IsMouseDragging(1))
+            if (ImGui.IsMouseDragging(1) 
+                || (ImGui.IsMouseDragging(0) && ImGui.GetIO().KeyAlt))
             {
                 _scrollTarget += _io.MouseDelta;
+                //Scroll += _io.MouseDelta;
                 _userScrolledCanvas = true;
             }
             else
