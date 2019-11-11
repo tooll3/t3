@@ -474,7 +474,7 @@ namespace T3.Gui.Windows.TimeLine
 
         internal readonly ClipTime _clipTime;
         private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
-        private readonly LayersArea _layersArea;
+        // private readonly LayersArea _layersArea;
         private readonly DopeSheetArea _dopeSheetArea;
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
         private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
