@@ -20,7 +20,7 @@ namespace T3.Gui.Graph
             return TempConnection != null
                    && TempConnection.TargetSlotId == NotConnectedId
                    //&& inputDef.DefaultValue.ValueType == _draftConnectionType;
-                   && _draftConnectionType == valueType;
+                   && (_draftConnectionType == valueType || (_draftConnectionType == typeof(float) && valueType == typeof(int)));
         }
 
         public static bool IsMatchingOutputType(Type valueType)

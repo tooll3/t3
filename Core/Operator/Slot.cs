@@ -4,6 +4,7 @@ using SharpDX;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core.Logging;
 
 namespace T3.Core.Operator
@@ -98,6 +99,7 @@ namespace T3.Core.Operator
         void AddConnection(ISlot source, int index = 0);
         void RemoveConnection(int index = 0);
         bool IsConnected { get; }
+        bool IsMultiInput { get; }
         ISlot GetConnection(int index);
     }
 
@@ -198,10 +200,10 @@ namespace T3.Core.Operator
         {
         }
 
-        public void ConnectedUpdate(EvaluationContext context)
-        {
-            Value = InputConnection[0].GetValue(context);
-        }
+        // public void ConnectedUpdate(EvaluationContext context)
+        // {
+        //     Value = InputConnection[0].GetValue(context);
+        // }
 
         public T GetValue(EvaluationContext context)
         {
@@ -215,16 +217,58 @@ namespace T3.Core.Operator
             return Value;
         }
 
-        public void AddConnection(ISlot sourceSlot, int index = 0)
+        public static class TestConv
+        {
+            public static Action<EvaluationContext> SetupUpdateAction(ISlot sourceSlot, ISlot targetSlot)
+            {
+                var floatSlot = (Slot<float>)sourceSlot;
+                var intSlot = (Slot<int>)targetSlot;
+                return context => intSlot.Value = (int)floatSlot.GetValue(context);
+            }
+
+            public static Func<EvaluationContext, TTarget> GetConvEvaluator<TSource, TTarget>(ISlot sourceSlot)
+            {
+                var typedSourceSlot = (Slot<TSource>)sourceSlot;
+                return context => (TTarget)(object)typedSourceSlot.GetValue(context);
+            }
+        }
+
+        class SlotTypeAdapter<TSource, TTarget> where TTarget : struct
+                                                where TSource : struct
+        {
+            public Action<EvaluationContext> SetupUpdateAction(ISlot sourceSlot, ISlot targetSlot)
+            {
+                var floatSlot = (Slot<TSource>)sourceSlot;
+                var intSlot = (Slot<TTarget>)targetSlot;
+                var t = (TTarget)(ValueType)floatSlot.GetValue(null);
+                return context => intSlot.Value = (TTarget)(ValueType)floatSlot.GetValue(context);
+            }
+        }
+
+        public virtual void AddConnection(ISlot sourceSlot, int index = 0)
         {
             if (!IsConnected)
             {
-                UpdateAction = ConnectedUpdate;
+                if (sourceSlot.Type != Type)
+                {
+                    // create casting update 
+                    if (sourceSlot.Type == typeof(float) && Type == typeof(int))
+                    {
+                        UpdateAction = TestConv.SetupUpdateAction(sourceSlot, this);
+                    }
+                }
+                else
+                {
+                    // same type, no cast update
+                    var typedSlot = (Slot<T>)sourceSlot;
+                    UpdateAction = context => Value = typedSlot.GetValue(context);
+                }
+                // UpdateAction = ConnectedUpdate;
                 DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
                 DirtyFlag.Reference = DirtyFlag.Target - 1;
             }
 
-            InputConnection.Insert(index, (Slot<T>)sourceSlot);
+            InputConnection.Insert(index, sourceSlot);
         }
 
         public void RemoveConnection(int index = 0)
@@ -261,9 +305,9 @@ namespace T3.Core.Operator
             return InputConnection[index];
         }
 
-        private List<Slot<T>> _inputConnection = new List<Slot<T>>();
+        private List<ISlot> _inputConnection = new List<ISlot>();
 
-        public List<Slot<T>> InputConnection
+        public List<ISlot> InputConnection
         {
             get => _inputConnection;
             set
@@ -285,7 +329,7 @@ namespace T3.Core.Operator
     public interface IInputSlot : ISlot
     {
         SymbolChild.Input Input { get; set; }
-        bool IsMultiInput { get; }
+        // bool IsMultiInput { get; }
 
         void SetUpdateActionBackToDefault();
     }
@@ -340,6 +384,7 @@ namespace T3.Core.Operator
     public class MultiInputSlot<T> : InputSlot<T>, IMultiInputSlot
     {
         public List<Slot<T>> CollectedInputs { get; } = new List<Slot<T>>(10);
+        public List<Func<EvaluationContext, T>> Evaluators { get; } = new List<Func<EvaluationContext, T>>();
 
         public MultiInputSlot(InputValue<T> typedInputValue) : base(typedInputValue)
         {
@@ -351,6 +396,29 @@ namespace T3.Core.Operator
             IsMultiInput = true;
         }
 
+        public override void AddConnection(ISlot sourceSlot, int index = 0)
+        {
+            if (sourceSlot.Type != Type)
+            {
+                // create casting update 
+                if (sourceSlot.Type == typeof(float))
+                {
+                    Evaluators.Insert(index, TestConv.GetConvEvaluator<float, T>(sourceSlot));
+                }
+            }
+            else
+            {
+                // same type, no cast update
+                var typedSlot = (Slot<T>)sourceSlot;
+                Evaluators.Insert(index, context => typedSlot.GetValue(context));
+            }
+
+            DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
+            DirtyFlag.Reference = DirtyFlag.Target - 1;
+
+            InputConnection.Insert(index, sourceSlot);
+        }
+        
         public List<Slot<T>> GetCollectedTypedInputs()
         {
             CollectedInputs.Clear();
@@ -364,7 +432,7 @@ namespace T3.Core.Operator
                 }
                 else
                 {
-                    CollectedInputs.Add(slot);
+                    CollectedInputs.Add((Slot<T>)slot);
                 }
             }
 
@@ -393,15 +461,15 @@ namespace T3.Core.Operator
 
         public new void Update(EvaluationContext context)
         {
-            if (InputConnection.Count > 0)
-                Value = InputConnection[0].GetValue(context);
-            else
-            {
-                if (Width.InputConnection != null)
-                    Value.Width = Width.GetValue(context);
-                if (Height.InputConnection != null)
-                    Value.Height = Height.GetValue(context);
-            }
+            // if (InputConnection.Count > 0)
+            //     Value = InputConnection[0].GetValue(context);
+            // else
+            // {
+            //     if (Width.InputConnection != null)
+            //         Value.Width = Width.GetValue(context);
+            //     if (Height.InputConnection != null)
+            //         Value.Height = Height.GetValue(context);
+            // }
         }
 
         public InputSlot<int> Width = new InputSlot<int>(new InputValue<int>(0));

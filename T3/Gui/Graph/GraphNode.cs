@@ -20,9 +20,9 @@ namespace T3.Gui.Graph
     {
         public static void Draw(SymbolChildUi childUi)
         {
-            var isPotentialConnectionTargetNode =   _hoveredId == childUi.Id 
-                                                    && ConnectionMaker.TempConnection != null
-                                                    && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
+            var isPotentialConnectionTargetNode = _hoveredId == childUi.Id
+                                                  && ConnectionMaker.TempConnection != null
+                                                  && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
 
             // Find visible input sockets from relevancy or connection
             var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
@@ -48,10 +48,8 @@ namespace T3.Gui.Graph
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
                 var heightWithParams = 23 + (visibleInputUis.Length + additionalMultiInputSlots) * 13;
-                _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(
-                                                                               childUi.PosOnCanvas,
-                                                                               childUi.PosOnCanvas + new Vector2(childUi.Size.X,
-                                                                                                                 heightWithParams)));
+                _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas,
+                                                                               childUi.PosOnCanvas + new Vector2(childUi.Size.X, heightWithParams)));
                 _lastScreenRect.Floor();
 
                 // Interaction
@@ -104,15 +102,13 @@ namespace T3.Gui.Graph
                     var output = childInstance?.Outputs.FirstOrDefault();
                     int framesSinceLastUpdate = output?.DirtyFlag.FramesSinceLastUpdate ?? 0;
                     int updateCountThisFrame = output?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
-                    if (updateCountThisFrame > 0) {
-                        const double timeScale = 0.125f;
+                    if (updateCountThisFrame > 0)
+                    {
+                        const double timeScale = 0.125;
                         var blink = (float)(ImGui.GetTime() * timeScale * updateCountThisFrame) % 1f * _lastScreenRect.GetWidth();
-                        drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X + blink,
-                                                           _lastScreenRect.Min.Y),
-                                               new Vector2(_lastScreenRect.Min.X + blink + 2,
-                                                           _lastScreenRect.Max.Y),
-                                               new Color(0.06f)
-                                              );
+                        drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X + blink, _lastScreenRect.Min.Y),
+                                               new Vector2(_lastScreenRect.Min.X + blink + 2, _lastScreenRect.Max.Y),
+                                               new Color(0.06f));
                     }
                 }
 
