@@ -108,7 +108,7 @@ namespace T3.Gui.Windows.TimeLine
                             curve.AddOrUpdateV(hoverTime, key);
                             _selectedItems.Add(oldKey);
                             Log.Debug("adde new key at " + hoverTime);
-                            TimeLineCanvas.Current._clipTime.Time = hoverTime;
+                            TimeLineCanvas.Current.ClipTime.Time = hoverTime;
                         }
                     }
                 }

@@ -18,7 +18,7 @@ namespace T3.Gui.Windows.TimeLine
     {
         public TimeLineCanvas(ClipTime clipTime = null)
         {
-            _clipTime = clipTime;
+            ClipTime = clipTime;
             //_layersArea = new LayersArea(_snapHandler);
             _dopeSheetArea = new DopeSheetArea(_snapHandler);
             _selectionFence = new TimeSelectionFence(this);
@@ -59,7 +59,7 @@ namespace T3.Gui.Windows.TimeLine
                 DrawList = ImGui.GetWindowDrawList();
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
-                _timeRasterSwitcher.Draw(_clipTime);
+                _timeRasterSwitcher.Draw(ClipTime);
                 //_layersArea.Draw(compositionOp);
                 if (timelineMode == GraphWindow.TimelineModes.LayerView)
                 {
@@ -70,7 +70,7 @@ namespace T3.Gui.Windows.TimeLine
                     _curveEditArea.Draw(compositionOp, animationParameters);
                 }
                 DrawTimeRange();
-                _currentTimeMarker.Draw(_clipTime);
+                _currentTimeMarker.Draw(ClipTime);
                 DrawDragTimeArea();
                 _selectionFence.Draw();
                 
@@ -98,28 +98,28 @@ namespace T3.Gui.Windows.TimeLine
             {
                 var nextKeyframeTime = double.PositiveInfinity;
                 foreach (var next in animationParameters
-                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetNextU(_clipTime.Time + 0.001f))
+                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetNextU(ClipTime.Time + 0.001f))
                                     .Where(next => next != null && next.Value < nextKeyframeTime))
                 {
                     nextKeyframeTime = next.Value;
                 }
 
                 if (!double.IsPositiveInfinity(nextKeyframeTime))
-                    _clipTime.Time = nextKeyframeTime;
+                    ClipTime.Time = nextKeyframeTime;
             }
             
             if (UserActionRegistry.WasActionQueued(UserActions.PlaybackJumpToPreviousKeyframe))
             {
                 var prevKeyframeTime = double.NegativeInfinity;
                 foreach (var next in animationParameters
-                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetPreviousU(_clipTime.Time - 0.001f))
+                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetPreviousU(ClipTime.Time - 0.001f))
                                     .Where(previous => previous != null && previous.Value > prevKeyframeTime))
                 {
                     prevKeyframeTime = next.Value;
                 }
 
                 if (!double.IsNegativeInfinity(prevKeyframeTime))
-                    _clipTime.Time = prevKeyframeTime;
+                    ClipTime.Time = prevKeyframeTime;
             }
         }
 
@@ -169,7 +169,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private void DrawDragTimeArea()
         {
-            if (_clipTime == null)
+            if (ClipTime == null)
                 return;
 
             var max = ImGui.GetContentRegionMax();
@@ -186,7 +186,7 @@ namespace T3.Gui.Windows.TimeLine
 
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0) || ImGui.IsItemClicked())
             {
-                _clipTime.Time = InverseTransformPosition(_io.MousePos).X;
+                ClipTime.Time = InverseTransformPosition(_io.MousePos).X;
             }
 
             ImGui.SetCursorPos(Vector2.Zero);
@@ -199,14 +199,14 @@ namespace T3.Gui.Windows.TimeLine
 
         private void DrawTimeRange()
         {
-            if (_clipTime == null)
+            if (ClipTime == null)
                 return;
 
             ImGui.PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
 
             // Range start
             {
-                var xRangeStart = TransformPositionX((float)_clipTime.TimeRangeStart);
+                var xRangeStart = TransformPositionX((float)ClipTime.TimeRangeStart);
                 var rangeStartPos = new Vector2(xRangeStart, 0);
 
                 // Shade outside
@@ -233,13 +233,13 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
-                    _clipTime.TimeRangeStart += InverseTransformDirection(_io.MouseDelta).X;
+                    ClipTime.TimeRangeStart += InverseTransformDirection(_io.MouseDelta).X;
                 }
             }
 
             // Range end
             {
-                var rangeEndX = TransformPositionX((float)_clipTime.TimeRangeEnd);
+                var rangeEndX = TransformPositionX((float)ClipTime.TimeRangeEnd);
                 var rangeEndPos = new Vector2(rangeEndX, 0);
 
                 // Shade outside
@@ -267,7 +267,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
-                    _clipTime.TimeRangeEnd += InverseTransformDirection(_io.MouseDelta).X;
+                    ClipTime.TimeRangeEnd += InverseTransformDirection(_io.MouseDelta).X;
                 }
             }
 
@@ -346,7 +346,7 @@ namespace T3.Gui.Windows.TimeLine
         #region implement ICanvas =================================================================
 
         /// <summary>
-        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
         public Vector2 TransformPosition(Vector2 posOnCanvas)
         {
@@ -359,7 +359,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         /// <summary>
-        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
         public float TransformPositionX(float xOnCanvas)
         {
@@ -367,7 +367,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         /// <summary>
-        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
         public float TransformPositionY(float yOnCanvas)
         {
@@ -486,9 +486,9 @@ namespace T3.Gui.Windows.TimeLine
             _scrollTarget = new Vector2( _scrollTarget.X,valueScroll);
         }
 
-        internal readonly ClipTime _clipTime;
+        internal readonly ClipTime ClipTime;
         private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
-        private readonly LayersArea _layersArea;
+        //private readonly LayersArea _layersArea;
         
         private readonly DopeSheetArea _dopeSheetArea;
         private CurveEditArea _curveEditArea;
