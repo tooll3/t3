@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core.Animation;
 using T3.Core.Operator;
-using T3.Gui.Animation;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.Snapping;
@@ -43,7 +41,7 @@ namespace T3.Gui.Windows.TimeLine
             WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
             WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
 
-            DrawList = ImGui.GetWindowDrawList();
+            _drawlist = ImGui.GetWindowDrawList();
             
             // Damp scaling
             const float dampSpeed = 30f;
@@ -56,7 +54,7 @@ namespace T3.Gui.Windows.TimeLine
             
             ImGui.BeginChild("scrolling_region2", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
-                DrawList = ImGui.GetWindowDrawList();
+                _drawlist = ImGui.GetWindowDrawList();
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
                 _timeRasterSwitcher.Draw(ClipTime);
@@ -210,19 +208,19 @@ namespace T3.Gui.Windows.TimeLine
                 var rangeStartPos = new Vector2(xRangeStart, 0);
 
                 // Shade outside
-                DrawList.AddRectFilled(
+                _drawlist.AddRectFilled(
                                        new Vector2(0, 0),
                                        new Vector2(xRangeStart, TimeRangeShadowSize.Y),
                                        TimeRangeOutsideColor);
 
                 // Shadow
-                DrawList.AddRectFilled(
+                _drawlist.AddRectFilled(
                                        rangeStartPos - new Vector2(TimeRangeShadowSize.X - 1, 0),
                                        rangeStartPos + new Vector2(0, TimeRangeShadowSize.Y),
                                        TimeRangeShadowColor);
 
                 // Line
-                DrawList.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), TimeRangeShadowColor);
+                _drawlist.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), TimeRangeShadowColor);
 
                 SetCursorToBottom(
                                   xRangeStart - TimeRangeHandleSize.X,
@@ -245,19 +243,19 @@ namespace T3.Gui.Windows.TimeLine
                 // Shade outside
                 var windowMaxX = ImGui.GetContentRegionAvail().X + WindowPos.X;
                 if (rangeEndX < windowMaxX)
-                    DrawList.AddRectFilled(
+                    _drawlist.AddRectFilled(
                                            rangeEndPos,
                                            rangeEndPos + new Vector2(windowMaxX - rangeEndX, TimeRangeShadowSize.Y),
                                            TimeRangeOutsideColor);
 
                 // Shadow
-                DrawList.AddRectFilled(
+                _drawlist.AddRectFilled(
                                        rangeEndPos,
                                        rangeEndPos + TimeRangeShadowSize,
                                        TimeRangeShadowColor);
 
                 // Line
-                DrawList.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), TimeRangeShadowColor);
+                _drawlist.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), TimeRangeShadowColor);
 
                 SetCursorToBottom(
                                   rangeEndX,
@@ -491,7 +489,7 @@ namespace T3.Gui.Windows.TimeLine
         //private readonly LayersArea _layersArea;
         
         private readonly DopeSheetArea _dopeSheetArea;
-        private CurveEditArea _curveEditArea;
+        private readonly CurveEditArea _curveEditArea;
 
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
         private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
@@ -503,7 +501,7 @@ namespace T3.Gui.Windows.TimeLine
         private Vector2 _mouse;
         private Vector2 _scaleTarget = new Vector2(100, -1);
 
-        public ImDrawListPtr DrawList { get; set; }
+        private ImDrawListPtr _drawlist;
         
         // Styling
         private const float TimeLineDragHeight = 20;
