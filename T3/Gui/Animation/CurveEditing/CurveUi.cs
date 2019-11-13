@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using T3.Core.Animation;
 using T3.Gui.Graph;
+using T3.Gui.Windows.TimeLine;
 
 namespace T3.Gui.Animation.CurveEditing
 {
@@ -18,16 +19,17 @@ namespace T3.Gui.Animation.CurveEditing
         public bool IsHighlighted { get; set; }
         public List<CurvePointUi> CurvePoints { get; set; }
 
-        public CurveUi(Curve curve, CurveEditCanvas curveEditor)
+        public CurveUi(Curve curve, ICanvas canvas)
         {
-            _curveEditor = curveEditor;
             _curve = curve;
+            _canvas = canvas;
+            _drawlist = ImGui.GetWindowDrawList();
 
             CurvePoints = new List<CurvePointUi>();
             foreach (var pair in curve.GetPoints())
             {
                 var key = pair.Value;
-                CurvePoints.Add(new CurvePointUi(key, curve, curveEditor));
+                CurvePoints.Add(new CurvePointUi(key, curve, canvas));
             }
         }
 
@@ -47,9 +49,9 @@ namespace T3.Gui.Animation.CurveEditing
             var step = 3f;
             var width = (float)ImGui.GetWindowWidth();
 
-            double dU = _curveEditor.InverseTransformDirection(new Vector2(step, 0)).X;
-            double u = _curveEditor.InverseTransformPosition(_curveEditor.WindowPos).X;
-            float x = _curveEditor.WindowPos.X;
+            double dU = _canvas.InverseTransformDirection(new Vector2(step, 0)).X;
+            double u = _canvas.InverseTransformPosition(_canvas.WindowPos).X;
+            float x = _canvas.WindowPos.X;
 
             var steps = (int)(width / step);
             if (_points.Length != steps)
@@ -61,17 +63,18 @@ namespace T3.Gui.Animation.CurveEditing
             {
                 _points[i] = new Vector2(
                     x,
-                    _curveEditor.TransformPosition(new Vector2(0, (float)_curve.GetSampledValue(u))).Y
+                    _canvas.TransformPosition(new Vector2(0, (float)_curve.GetSampledValue(u))).Y
                     );
 
                 u += dU;
                 x += step;
             }
-            _curveEditor.DrawList.AddPolyline(ref _points[0], steps, Color.Gray, false, 1);
+            _drawlist.AddPolyline(ref _points[0], steps, Color.Gray, false, 1);
         }
 
         private Curve _curve;
         private static Vector2[] _points = new Vector2[2];
-        private CurveEditCanvas _curveEditor;
+        private ICanvas _canvas;
+        private ImDrawListPtr _drawlist;
     }
 }

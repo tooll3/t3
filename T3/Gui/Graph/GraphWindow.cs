@@ -7,6 +7,7 @@ using System.Net;
 using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Windows;
 using static ImGuiNET.ImGui;
 using static T3.Gui.CustomComponents;
@@ -36,6 +37,7 @@ namespace T3.Gui.Graph
             var opInstance = T3UI.UiModel.MainOp;
             Canvas = new GraphCanvas(opInstance);
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
+            _curveEditCanvas = new CurveEditCanvas();
 
             _windowFlags = ImGuiWindowFlags.NoScrollbar;
             WindowInstances.Add(this);
@@ -48,7 +50,6 @@ namespace T3.Gui.Graph
             _clipTime.Update();
         }
 
-
         protected override void DrawAllInstances()
         {
             foreach (var w in new List<GraphWindow>(WindowInstances))
@@ -56,7 +57,6 @@ namespace T3.Gui.Graph
                 w.DrawOneInstance();
             }
         }
-
 
         protected override void DrawContent()
         {
@@ -73,7 +73,7 @@ namespace T3.Gui.Graph
                     dl.ChannelsSetCurrent(1);
                     {
                         DrawBreadcrumbs();
-                        TimeControls.DrawTimeControls(_clipTime, null);
+                        TimeControls.DrawTimeControls(_clipTime, ref TimelineMode);
                     }
                     dl.ChannelsSetCurrent(0);
                     Canvas.Draw();
@@ -90,26 +90,30 @@ namespace T3.Gui.Graph
             PopStyleVar();
         }
 
-
         protected override void Close()
         {
             WindowInstances.Remove(this);
         }
-
 
         protected override void AddAnotherInstance()
         {
             new GraphWindow();
         }
 
-
-
         private void DrawTimelineAndCurveEditor()
         {
             var symbolUi = SymbolUiRegistry.Entries[Canvas.CompositionOp.Symbol.Id];
-            var animator = symbolUi.Symbol.Animator;            
-            
-            _timeLineCanvas.Draw(Canvas.CompositionOp, GetCurvesForSelectedNodes());
+            var animator = symbolUi.Symbol.Animator;
+
+            // switch (TimelineMode)
+            // {
+            //     case TimelineModes.LayerView:
+            _timeLineCanvas.Draw(Canvas.CompositionOp, GetCurvesForSelectedNodes(), ref TimelineMode);
+                //     break;
+                // case TimelineModes.CurveEditor:
+                //     _curveEditCanvas.Draw();
+                //     break;
+            // }
         }
 
         public struct AnimationParameter
@@ -118,7 +122,7 @@ namespace T3.Gui.Graph
             public IInputSlot Input;
             public Instance Instance;
         }
-        
+
         private List<AnimationParameter> GetCurvesForSelectedNodes()
         {
             var selection = Canvas.SelectionHandler.SelectedElements;
@@ -131,13 +135,12 @@ namespace T3.Gui.Graph
                                       where animator.IsInputSlotAnimated(input)
                                       select new AnimationParameter()
                                              {
-                                                 Instance = child, 
-                                                 Input = input, 
+                                                 Instance = child,
+                                                 Input = input,
                                                  Curves = animator.GetCurvesForInput(input)
                                              }).ToList();
             return curvesForSelection;
         }
-
 
         private void DrawBreadcrumbs()
         {
@@ -149,7 +152,7 @@ namespace T3.Gui.Graph
                 PushID(p.Id.GetHashCode());
                 if (Button(p.Symbol.Name))
                 {
-                    Canvas.OpenComposition(p, zoomIn:false);
+                    Canvas.OpenComposition(p, zoomIn: false);
                     break;
                 }
 
@@ -165,10 +168,17 @@ namespace T3.Gui.Graph
             PopStyleColor(2);
         }
 
+        public enum TimelineModes
+        {
+            LayerView,
+            CurveEditor,
+        }
 
+        internal TimelineModes TimelineMode = TimelineModes.LayerView;
 
         private readonly ClipTime _clipTime;
         private static float _heightTimeLine = 100;
         private TimeLineCanvas _timeLineCanvas;
+        private CurveEditCanvas _curveEditCanvas;
     }
 }

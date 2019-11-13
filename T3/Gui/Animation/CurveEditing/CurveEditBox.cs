@@ -4,7 +4,9 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using ImGuiNET;
 using T3.Core.Logging;
+using T3.Gui.Graph;
 using T3.Gui.Selection;
 using UiHelpers;
 
@@ -16,15 +18,17 @@ namespace T3.Gui.Animation.CurveEditing
     public class CurveEditBox
     {
 
-        public CurveEditBox(CurveEditCanvas curveCanvas)
+        public CurveEditBox(ICanvas curveCanvas, SelectionHandler selectionHandler)
         {
             _curveCanvas = curveCanvas;
+            _selectionHandler = selectionHandler;
         }
-        private CurveEditCanvas _curveCanvas;
 
+        
         public void Draw()
         {
-            if (_curveCanvas.SelectionHandler.SelectedElements.Count <= 1)
+            var drawlist = ImGui.GetWindowDrawList();
+            if (_selectionHandler.SelectedElements.Count <= 1)
                 return;
 
             _bounds = GetBoundingBox();
@@ -34,8 +38,8 @@ namespace T3.Gui.Animation.CurveEditing
             float MaxV = _bounds.Max.Y;
 
             var boundsOnScreen = _curveCanvas.TransformRect(_bounds);
-            _curveCanvas.DrawList.AddRect(boundsOnScreen.Min, boundsOnScreen.Max, SelectBoxBorderColor);
-            _curveCanvas.DrawList.AddRectFilled(boundsOnScreen.Min, boundsOnScreen.Max, SelectBoxBorderFill);
+            drawlist.AddRect(boundsOnScreen.Min, boundsOnScreen.Max, SelectBoxBorderColor);
+            drawlist.AddRectFilled(boundsOnScreen.Min, boundsOnScreen.Max, SelectBoxBorderFill);
 
             var deltaOnCanvas = _curveCanvas.InverseTransformDirection(GetIO().MouseDelta);
 
@@ -404,6 +408,8 @@ namespace T3.Gui.Animation.CurveEditing
         //private static float MaxV;
 
         private ImRect _bounds;
+        private readonly SelectionHandler _selectionHandler;
+        private readonly ICanvas _curveCanvas;
 
 
         // Styling

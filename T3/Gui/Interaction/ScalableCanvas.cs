@@ -64,6 +64,12 @@ namespace T3.Gui.Graph
         {
             return posOnCanvas * Scale + Scroll + WindowPos;
         }
+        
+        public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
+        {
+            return Im.Floor((posOnCanvas - Scroll) * Scale + WindowPos);
+        }
+
 
         /// <summary>
         /// Convert at screen space position (e.g. from mouse) to canvas coordinates applying canvas zoom and scrolling 

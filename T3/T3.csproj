@@ -355,6 +355,7 @@
     <Compile Include="Gui\Windows\SelectionPinning.cs" />
     <Compile Include="Gui\Windows\TimeLine\BeatTimeRaster.cs" />
     <Compile Include="Gui\Windows\TimeLine\CurrentTimeMarker.cs" />
+    <Compile Include="Gui\Windows\TimeLine\CurveEditArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\DopeSheetArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\ITimeElementSelectionHolder.cs" />
     <Compile Include="Gui\Windows\TimeLine\LayersArea.cs" />

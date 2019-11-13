@@ -19,12 +19,18 @@ namespace T3.Gui.Graph
         SelectionHandler SelectionHandler { get; }
 
         /// <summary>
-        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
         Vector2 TransformPosition(Vector2 posOnCanvas);
 
         /// <summary>
-        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Get a pixel aligned screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        Vector2 TransformPositionFloored(Vector2 posOnCanvas);
+
+        
+        /// <summary>
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
         Vector2 InverseTransformPosition(Vector2 screenPos);
 

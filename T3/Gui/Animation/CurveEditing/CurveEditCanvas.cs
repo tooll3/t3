@@ -29,7 +29,7 @@ namespace T3.Gui.Animation.CurveEditing
         {
             _clipTime = clipTime;
             _selectionFence = new SelectionFence(this);
-            _curveEditBox = new CurveEditBox(this);
+            _curveEditBox = new CurveEditBox(this, SelectionHandler);
             _horizontalScaleLines = new HorizontalScaleLines(this);
         }
 

@@ -22,6 +22,7 @@ namespace T3.Gui.Windows.TimeLine
             //_layersArea = new LayersArea(_snapHandler);
             _dopeSheetArea = new DopeSheetArea(_snapHandler);
             _selectionFence = new TimeSelectionFence(this);
+            _curveEditArea = new CurveEditArea(this);
 
             //_selectionHolders.Add(_layersArea);
             _selectionHolders.Add(_dopeSheetArea);
@@ -30,9 +31,10 @@ namespace T3.Gui.Windows.TimeLine
             //_snapHandler.AddSnapAttractor(_layersArea);
             _snapHandler.AddSnapAttractor(_dopeSheetArea);
         }
+
         
     
-        public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
+        public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters, ref GraphWindow.TimelineModes timelineMode)
         {
             Current = this;
             _io = ImGui.GetIO();
@@ -42,8 +44,7 @@ namespace T3.Gui.Windows.TimeLine
             WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
 
             DrawList = ImGui.GetWindowDrawList();
-
-
+            
             // Damp scaling
             const float dampSpeed = 30f;
             var damping = _io.DeltaTime * dampSpeed;
@@ -60,7 +61,14 @@ namespace T3.Gui.Windows.TimeLine
                 HandleInteraction();
                 _timeRasterSwitcher.Draw(_clipTime);
                 //_layersArea.Draw(compositionOp);
-                _dopeSheetArea.Draw(compositionOp, animationParameters);
+                if (timelineMode == GraphWindow.TimelineModes.LayerView)
+                {
+                    _dopeSheetArea.Draw(compositionOp, animationParameters);
+                }
+                else if(timelineMode == GraphWindow.TimelineModes.CurveEditor)
+                {
+                    _curveEditArea.Draw(compositionOp, animationParameters);
+                }
                 DrawTimeRange();
                 _currentTimeMarker.Draw(_clipTime);
                 DrawDragTimeArea();
@@ -471,11 +479,20 @@ namespace T3.Gui.Windows.TimeLine
         public List<ISelectable> SelectableChildren { get; set; }
         public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
         #endregion
+        
+        public void SetValueRange(float valueScale, float valueScroll)
+        {
+            _scaleTarget = new Vector2(_scaleTarget.X,valueScale);
+            _scrollTarget = new Vector2( _scrollTarget.X,valueScroll);
+        }
 
         internal readonly ClipTime _clipTime;
         private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
-        // private readonly LayersArea _layersArea;
+        private readonly LayersArea _layersArea;
+        
         private readonly DopeSheetArea _dopeSheetArea;
+        private CurveEditArea _curveEditArea;
+
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
         private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
         private readonly TimeSelectionFence _selectionFence;
@@ -486,10 +503,11 @@ namespace T3.Gui.Windows.TimeLine
         private Vector2 _mouse;
         private Vector2 _scaleTarget = new Vector2(100, -1);
 
-        private ImDrawListPtr DrawList { get; set; }
+        public ImDrawListPtr DrawList { get; set; }
         
         // Styling
         private const float TimeLineDragHeight = 20;
         private static readonly Vector2 TimeRangeHandleSize = new Vector2(10, 20);
+        
     }
 }
