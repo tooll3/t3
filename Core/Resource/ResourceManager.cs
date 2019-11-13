@@ -314,13 +314,14 @@ namespace T3.Core
 
         public void SetupStructuredBuffer<T>(T[] bufferData, ref Buffer buffer) where T : struct
         {
-            int sizeInBytes = Marshal.SizeOf(typeof(T)) * bufferData.Length;
+            int stride = Marshal.SizeOf(typeof(T));
+            int sizeInBytes = stride * bufferData.Length;
             using (var data = new DataStream(sizeInBytes, true, true))
             {
                 data.WriteRange(bufferData);
                 data.Position = 0;
 
-                if (buffer == null)
+                if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
                 {
                     var bufferDesc = new BufferDescription
                                          {
@@ -328,7 +329,7 @@ namespace T3.Core
                                              BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
                                              SizeInBytes = sizeInBytes,
                                              OptionFlags = ResourceOptionFlags.BufferStructured,
-                                             StructureByteStride = 32,
+                                             StructureByteStride = stride
                                          };
                     buffer = new Buffer(_device, data, bufferDesc);
                 }
