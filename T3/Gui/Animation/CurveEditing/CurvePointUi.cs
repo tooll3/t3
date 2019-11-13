@@ -153,11 +153,11 @@ namespace T3.Gui.Animation.CurveEditing
 
             if (ImGui.IsItemClicked(0))
             {
-                // TODO: add modifier keys...
-                if (!_curveEditCanvas.SelectionHandler.SelectedElements.Contains(this))
-                {
-                    _curveEditCanvas.SelectionHandler.SetElement(this);
-                }
+                // // TODO: add modifier keys...
+                // if (!_curveEditCanvas.SelectionHandler.SelectedElements.Contains(this))
+                // {
+                //     _curveEditCanvas.SelectionHandler.SetElement(this);
+                // }
             }
 
             if (ImGui.IsMouseDragging(0))

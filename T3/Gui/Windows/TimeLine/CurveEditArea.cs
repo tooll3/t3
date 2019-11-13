@@ -6,21 +6,29 @@ using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Animation.CurveEditing;
+using T3.Gui.Commands;
 using T3.Gui.Graph;
+using T3.Gui.Interaction.Snapping;
 using T3.Gui.Selection;
+using UiHelpers;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class CurveEditArea
+    public class CurveEditArea : ITimeElementSelectionHolder, IValueSnapAttractor
     {
         public CurveEditArea(TimeLineCanvas timeLineCanvas)
         {
             _timeLineCanvas = timeLineCanvas;
-            _curveEditBox = new CurveEditBox(TimeLineCanvas.Current, SelectionHandler);
+            _curveEditBox = new CurveEditBox(timeLineCanvas, SelectionHandler);
         }
 
+        public void Rebuild()
+        {
+            _curvesWithUi.Clear();
+        }
+        
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             var curves = new List<Curve>();
@@ -201,8 +209,8 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             var height = ImGui.GetWindowContentRegionMax().Y - ImGui.GetWindowContentRegionMin().Y;
-            var scale = (float)(height / ((maxV - minV) * (1 + 2 * curveValuePadding)));
-            _timeLineCanvas.SetValueRange(scale, (float)minV - 20f / scale);
+            var scale = -(float)(height / ((maxV - minV) * (1 + 2 * curveValuePadding)));
+            _timeLineCanvas.SetValueRange(scale, (float)maxV - 20/scale);
         }
 
         private void OnSmooth()
@@ -279,32 +287,7 @@ namespace T3.Gui.Windows.TimeLine
             return checkedInterpolationTypes;
         }
         #endregion
-
-        /*
-                private List<Curve> GetAllOrSelectedCurves()
-                {
-                    List<Curve> curves = new List<Curve>();
-                    if (SelectionHandler.SelectedElements.Count == 0)
-                    {
-                        foreach (var curve in _curvesWithUi.Keys)
-                        {
-                            curves.Add(curve);
-                        }
-                    }
-                    else
-                    {
-                        foreach (var el in SelectionHandler.SelectedElements)
-                        {
-                            var cpc = el as CurvePointUi;
-                            if (cpc != null)
-                            {
-                                curves.Add(cpc.Curve);
-                            }
-                        }
-                    }
-                
-                    return curves;
-                }*/
+        
 
         #region helper functions     
         /// <summary>
@@ -346,11 +329,83 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        public List<ISelectable> SelectableChildren { get; set; }
+        //private readonly HashSet<ISelectable> _selectedItems = new HashSet<ISelectable>();
         private SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
 
         private readonly Dictionary<Curve, CurveUi> _curvesWithUi = new Dictionary<Curve, CurveUi>();
         private readonly TimeLineCanvas _timeLineCanvas;
         private readonly CurveEditBox _curveEditBox;
+        
+        public void ClearSelection()
+        {
+            SelectionHandler.Clear();
+        }
+
+        public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
+        {
+            if (selectMode == SelectMode.Replace)
+                SelectionHandler.Clear();
+
+            var canvasArea = TimeLineCanvas.Current.InverseTransformRect(screenArea);
+            var matchingItems = new List<ISelectable>();
+
+            foreach (var pair in _curvesWithUi.Values)
+            {
+
+                foreach (var p in pair.CurvePoints)
+                {
+                    
+                    if(canvasArea.Contains(p.PosOnCanvas))
+                    {
+                        matchingItems.Add(p);
+                    }
+                }
+            }
+            
+            switch (selectMode)
+            {
+                case SelectMode.Add:
+                case SelectMode.Replace:
+                    SelectionHandler.SetElements(matchingItems);
+                    break;
+                case SelectMode.Remove:
+                    SelectionHandler.RemoveElements(matchingItems);
+                    break;
+            }
+            SelectionHandler.SetElements(matchingItems);
+        }
+        
+
+        public ICommand StartDragCommand()
+        {
+            //throw new NotImplementedException();
+            return null;
+        }
+
+        public void UpdateDragCommand(double dt)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void CompleteDragCommand()
+        {
+           // throw new NotImplementedException();
+        }
+
+        public void UpdateDragStartCommand(double dt)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void UpdateDragEndCommand(double dt)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public SnapResult CheckForSnap(double value)
+        {
+            //throw new NotImplementedException();
+            return null;
+        }
     }
 }

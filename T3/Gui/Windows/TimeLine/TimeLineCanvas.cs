@@ -23,9 +23,11 @@ namespace T3.Gui.Windows.TimeLine
             _curveEditArea = new CurveEditArea(this);
 
             //_selectionHolders.Add(_layersArea);
+            _selectionHolders.Add(_curveEditArea);
             _selectionHolders.Add(_dopeSheetArea);
             _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
+            _snapHandler.AddSnapAttractor(_curveEditArea);
             //_snapHandler.AddSnapAttractor(_layersArea);
             _snapHandler.AddSnapAttractor(_dopeSheetArea);
         }
@@ -59,12 +61,18 @@ namespace T3.Gui.Windows.TimeLine
                 HandleInteraction();
                 _timeRasterSwitcher.Draw(ClipTime);
                 //_layersArea.Draw(compositionOp);
+                var changed = timelineMode != _lastMode;
+                _lastMode = timelineMode;
+                
                 if (timelineMode == GraphWindow.TimelineModes.LayerView)
                 {
                     _dopeSheetArea.Draw(compositionOp, animationParameters);
                 }
                 else if(timelineMode == GraphWindow.TimelineModes.CurveEditor)
                 {
+                    if(changed)
+                        _curveEditArea.Rebuild();
+                    
                     _curveEditArea.Draw(compositionOp, animationParameters);
                 }
                 DrawTimeRange();
@@ -75,6 +83,8 @@ namespace T3.Gui.Windows.TimeLine
             }
             ImGui.EndChild();
         }
+
+        private GraphWindow.TimelineModes _lastMode;
         
         private void HandleInteraction()
         {
@@ -475,7 +485,7 @@ namespace T3.Gui.Windows.TimeLine
         public Vector2 Scroll { get; private set; } = new Vector2(0, 0.0f);
         private Vector2 _scrollTarget = new Vector2(-1.0f, 0.0f);
         public List<ISelectable> SelectableChildren { get; set; }
-        public SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
+        public SelectionHandler SelectionHandler { get; set; } = null;
         #endregion
         
         public void SetValueRange(float valueScale, float valueScroll)

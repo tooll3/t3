@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO.Packaging;
 using System.Linq;
 using System.Numerics;
-using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
@@ -107,7 +104,7 @@ namespace T3.Gui.Windows.TimeLine
                             var oldKey = key;
                             curve.AddOrUpdateV(hoverTime, key);
                             _selectedItems.Add(oldKey);
-                            Log.Debug("adde new key at " + hoverTime);
+                            Log.Debug("added new key at " + hoverTime);
                             TimeLineCanvas.Current.ClipTime.Time = hoverTime;
                         }
                     }
@@ -115,7 +112,7 @@ namespace T3.Gui.Windows.TimeLine
                 else
                 {
                     var posOnScreen = new Vector2(
-                                                  TimeLineCanvas.Current.TransformPositionX((float)hoverTime) - KeyframeIconWidth / 2,
+                                                  TimeLineCanvas.Current.TransformPositionX(hoverTime) - KeyframeIconWidth / 2,
                                                   layerArea.Min.Y);
                     Icons.Draw(Icon.KeyFrame, posOnScreen);
                 }
@@ -150,7 +147,7 @@ namespace T3.Gui.Windows.TimeLine
                     positions[index] 
                         = new Vector2(
                                TimeLineCanvas.Current.TransformPositionX((float)u), 
-                               Im.Remap((float)vDef.Value, minValue,maxValue, layerArea.Min.Y+padding, layerArea.Max.Y-padding));
+                               Im.Remap((float)vDef.Value, maxValue,minValue, layerArea.Min.Y+padding, layerArea.Max.Y-padding));
                     index++;
                 }
                 _drawList.AddPolyline(
@@ -314,7 +311,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     foreach (var (u, vDef) in curve.GetPoints())
                     {
-                        if (u != vDef.U)
+                        if (Math.Abs(u - vDef.U) > 0.001f)
                         {
                             curve.MoveKey(u, vDef.U);
                         }
@@ -404,8 +401,8 @@ namespace T3.Gui.Windows.TimeLine
         private readonly HashSet<VDefinition> _selectedItems = new HashSet<VDefinition>();
         private static ChangeKeyframesCommand _changeKeyframesCommand;
         private const int LayerHeight = 25;
-        private const float HandleWidth = 5;
-        private readonly Vector2 _handleOffset = new Vector2(HandleWidth, 0);
+        //private const float HandleWidth = 5;
+        //private readonly Vector2 _handleOffset = new Vector2(HandleWidth, 0);
 
         private ImDrawListPtr _drawList;
         private readonly ValueSnapHandler _snapHandler;
