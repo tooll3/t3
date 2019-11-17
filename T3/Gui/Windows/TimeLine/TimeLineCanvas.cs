@@ -19,7 +19,7 @@ namespace T3.Gui.Windows.TimeLine
             ClipTime = clipTime;
             _dopeSheetArea = new DopeSheetArea(_snapHandler);
             _selectionFence = new TimeSelectionFence(this);
-            _curveEditArea = new CurveEditArea(this);
+            _curveEditArea = new CurveEditArea(this, _snapHandler);
 
             _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
@@ -307,7 +307,7 @@ namespace T3.Gui.Windows.TimeLine
         {
             foreach (var s in _selectionHolders)
             {
-                s.UpdateDragCommand(dt, 0);
+                s.UpdateDragCommand(dt, dv);
             }
         }
 
@@ -315,7 +315,7 @@ namespace T3.Gui.Windows.TimeLine
         {
             foreach (var s in _selectionHolders)
             {
-                s.UpdateDragStartCommand(dt, 0);
+                s.UpdateDragStartCommand(dt, dv);
             }
         }
 
@@ -323,7 +323,7 @@ namespace T3.Gui.Windows.TimeLine
         {
             foreach (var s in _selectionHolders)
             {
-                s.UpdateDragEndCommand(dt, 0);
+                s.UpdateDragEndCommand(dt, dv);
             }
         }
 

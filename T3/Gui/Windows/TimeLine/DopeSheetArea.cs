@@ -22,9 +22,6 @@ namespace T3.Gui.Windows.TimeLine
             _snapHandler = snapHandler;
         }
 
-        private List<GraphWindow.AnimationParameter> _animationParameters;
-        private Instance _compositionOp;
-        
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             _drawList = ImGui.GetWindowDrawList();
@@ -43,7 +40,6 @@ namespace T3.Gui.Windows.TimeLine
             }
             ImGui.EndGroup();
         }
-
 
         private void DrawProperty(GraphWindow.AnimationParameter parameter)
         {
@@ -103,7 +99,7 @@ namespace T3.Gui.Windows.TimeLine
 
                             var oldKey = key;
                             curve.AddOrUpdateV(hoverTime, key);
-                            _selectedItems.Add(oldKey);
+                            _selectedKeyframes.Add(oldKey);
                             Log.Debug("added new key at " + hoverTime);
                             TimeLineCanvas.Current.ClipTime.Time = hoverTime;
                         }
@@ -121,10 +117,11 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        private readonly Color[] _curveColors = {   Color.Red, Color.Green, Color.Blue, Color.Gray};
+        private readonly Color[] _curveColors = { Color.Red, Color.Green, Color.Blue, Color.Gray };
+
         private void DrawCurves(GraphWindow.AnimationParameter parameter, ImRect layerArea)
         {
-            const float padding=2;
+            const float padding = 2;
             var curveIndex = 0;
             foreach (var curve in parameter.Curves)
             {
@@ -140,35 +137,37 @@ namespace T3.Gui.Windows.TimeLine
                     if (maxValue < vDef.Value)
                         maxValue = (float)vDef.Value;
                 }
-                
+
                 var index = 0;
                 foreach (var (u, vDef) in points)
                 {
-                    positions[index] 
+                    positions[index]
                         = new Vector2(
-                               TimeLineCanvas.Current.TransformPositionX((float)u), 
-                               Im.Remap((float)vDef.Value, maxValue,minValue, layerArea.Min.Y+padding, layerArea.Max.Y-padding));
+                                      TimeLineCanvas.Current.TransformPositionX((float)u),
+                                      Im.Remap((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding));
                     index++;
                 }
+
                 _drawList.AddPolyline(
-                                      ref positions[0], 
-                                      points.Count, 
-                                      parameter.Curves.Count() > 1 ? _curveColors[curveIndex %4] : Color.Gray, 
-                                      false, 
+                                      ref positions[0],
+                                      points.Count,
+                                      parameter.Curves.Count() > 1 ? _curveColors[curveIndex % 4] : Color.Gray,
+                                      false,
                                       1);
                 curveIndex++;
             }
         }
-        
+
         private const float KeyframeIconWidth = 10;
+
         private void DrawKeyframe(VDefinition vDef, ImRect layerArea, GraphWindow.AnimationParameter parameter)
         {
             var posOnScreen = new Vector2(
-                                          TimeLineCanvas.Current.TransformPositionX((float)vDef.U) - KeyframeIconWidth/2, 
+                                          TimeLineCanvas.Current.TransformPositionX((float)vDef.U) - KeyframeIconWidth / 2,
                                           layerArea.Min.Y);
             ImGui.PushID(vDef.GetHashCode());
             {
-                var isSelected = _selectedItems.Contains(vDef);
+                var isSelected = _selectedKeyframes.Contains(vDef);
                 Icons.Draw(isSelected ? Icon.KeyFrameSelected : Icon.KeyFrame, posOnScreen);
                 ImGui.SetCursorScreenPos(posOnScreen);
 
@@ -204,7 +203,7 @@ namespace T3.Gui.Windows.TimeLine
             if (ImGui.GetIO().KeyCtrl)
             {
                 if (isSelected)
-                    _selectedItems.Remove(vDef);
+                    _selectedKeyframes.Remove(vDef);
 
                 return;
             }
@@ -214,9 +213,9 @@ namespace T3.Gui.Windows.TimeLine
                 if (!ImGui.GetIO().KeyShift)
                 {
                     TimeLineCanvas.Current.ClearSelection();
-                } 
-                
-                _selectedItems.Add(vDef);
+                }
+
+                _selectedKeyframes.Add(vDef);
             }
 
             if (_changeKeyframesCommand == null)
@@ -230,21 +229,19 @@ namespace T3.Gui.Windows.TimeLine
             if (!double.IsNaN(snapClipToStart))
                 dt = snapClipToStart - vDef.U;
 
-            TimeLineCanvas.Current.UpdateDragCommand(dt,0);
+            TimeLineCanvas.Current.UpdateDragCommand(dt, 0);
         }
 
-
         #region implement selection holder interface --------------------------------------------
-
         void ITimeElementSelectionHolder.ClearSelection()
         {
-            _selectedItems.Clear();
+            _selectedKeyframes.Clear();
         }
 
         public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
         {
             if (selectMode == SelectMode.Replace)
-                _selectedItems.Clear();
+                _selectedKeyframes.Clear();
 
             var startTime = TimeLineCanvas.Current.InverseTransformPositionX(screenArea.Min.X);
             var endTime = TimeLineCanvas.Current.InverseTransformPositionX(screenArea.Max.X);
@@ -267,10 +264,10 @@ namespace T3.Gui.Windows.TimeLine
                         {
                             case SelectMode.Add:
                             case SelectMode.Replace:
-                                _selectedItems.UnionWith(matchingItems);
+                                _selectedKeyframes.UnionWith(matchingItems);
                                 break;
                             case SelectMode.Remove:
-                                _selectedItems.ExceptWith(matchingItems);
+                                _selectedKeyframes.ExceptWith(matchingItems);
                                 break;
                         }
                     }
@@ -280,49 +277,34 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-//        public Command DeleteSelectedElements()
-//        {
-//            throw new System.NotImplementedException();
-//        }
+        //        public Command DeleteSelectedElements()
+        //        {
+        //            throw new System.NotImplementedException();
+        //        }
 
         ICommand ITimeElementSelectionHolder.StartDragCommand()
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, _selectedItems);
+            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, _selectedKeyframes);
             return _changeKeyframesCommand;
         }
 
         void ITimeElementSelectionHolder.UpdateDragCommand(double dt, double dv)
         {
-            foreach (var vDefinition in _selectedItems)
+            foreach (var vDefinition in _selectedKeyframes)
             {
                 vDefinition.U += dt;
             }
+
             RebuildCurveTables();
         }
 
-        /// <summary>
-        /// A horrible hack to keep curve table-structure aligned with position stored in key definitions.
-        /// </summary>
-        private void RebuildCurveTables()
+        void ITimeElementSelectionHolder.UpdateDragStartCommand(double dt, double dv)
         {
-            foreach (var param in _animationParameters)
-            {
-                foreach (var curve in param.Curves)
-                {
-                    foreach (var (u, vDef) in curve.GetPointTable())
-                    {
-                        if (Math.Abs(u - vDef.U) > 0.001f)
-                        {
-                            curve.MoveKey(u, vDef.U);
-                        }
-                    }
-                }
-            }
         }
 
-        void ITimeElementSelectionHolder.UpdateDragStartCommand(double dt, double dv) { }
-
-        void ITimeElementSelectionHolder.UpdateDragEndCommand(double dt, double dv) { }
+        void ITimeElementSelectionHolder.UpdateDragEndCommand(double dt, double dv)
+        {
+        }
 
         void ITimeElementSelectionHolder.CompleteDragCommand()
         {
@@ -333,30 +315,25 @@ namespace T3.Gui.Windows.TimeLine
             UndoRedoStack.Add(_changeKeyframesCommand);
             _changeKeyframesCommand = null;
         }
-
         #endregion
 
-
         #region implement snapping interface -----------------------------------
-
         private const float SnapDistance = 4;
         private double _snapThresholdOnCanvas;
-        
+
         public IEnumerable<VDefinition> GetAllKeyframes()
         {
-            
             foreach (var param in _animationParameters)
             {
                 foreach (var curve in param.Curves)
                 {
                     foreach (var pair in curve.GetPointTable())
                     {
-                        yield return pair.Value;    
+                        yield return pair.Value;
                     }
                 }
             }
         }
-
 
         /// <summary>
         /// Snap to all non-selected Clips
@@ -369,7 +346,7 @@ namespace T3.Gui.Windows.TimeLine
 
             foreach (var vDefinition in GetAllKeyframes())
             {
-                if (_selectedItems.Contains(vDefinition))
+                if (_selectedKeyframes.Contains(vDefinition))
                     continue;
 
                 CheckForSnapping(targetTime, vDefinition.U, maxForce: ref maxForce, bestSnapTime: ref bestSnapTime);
@@ -393,17 +370,41 @@ namespace T3.Gui.Windows.TimeLine
             bestSnapTime = anchorTime;
             maxForce = force;
         }
+        #endregion
 
+        #region internal helpers
+        /// <summary>
+        /// A horrible hack to keep curve table-structure aligned with position stored in key definitions.
+        /// </summary>
+        private void RebuildCurveTables()
+        {
+            foreach (var param in _animationParameters)
+            {
+                foreach (var curve in param.Curves)
+                {
+                    foreach (var (u, vDef) in curve.GetPointTable())
+                    {
+                        if (Math.Abs(u - vDef.U) > 0.001f)
+                        {
+                            curve.MoveKey(u, vDef.U);
+                        }
+                    }
+                }
+            }
+        }
         #endregion
 
         private Vector2 _minScreenPos;
 
-        private readonly HashSet<VDefinition> _selectedItems = new HashSet<VDefinition>();
+        private readonly HashSet<VDefinition> _selectedKeyframes = new HashSet<VDefinition>();
         private static ChangeKeyframesCommand _changeKeyframesCommand;
+
         private const int LayerHeight = 25;
         //private const float HandleWidth = 5;
         //private readonly Vector2 _handleOffset = new Vector2(HandleWidth, 0);
 
+        private List<GraphWindow.AnimationParameter> _animationParameters;
+        private Instance _compositionOp;
         private ImDrawListPtr _drawList;
         private readonly ValueSnapHandler _snapHandler;
     }
