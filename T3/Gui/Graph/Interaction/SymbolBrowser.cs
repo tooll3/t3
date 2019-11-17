@@ -1,9 +1,11 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Styling;
@@ -18,18 +20,18 @@ namespace T3.Gui.Graph
     public class SymbolBrowser
     {
         private bool _keepNavEnableKeyboard;
-        
+
         #region public API ------------------------------------------------------------------------
-        public void OpenAt(Vector2 positionOnCanvas, Type type)
+        public void OpenAt(Vector2 positionOnCanvas, Type filterInputType)
         {
             _isOpen = true;
             PosOnCanvas = positionOnCanvas;
             _focusInputNextTime = true;
-            _filterType = type;
+            _filterInputType = filterInputType;
             _searchString = "";
             _selectedSymbol = null;
             _filter.Update();
-            
+
             // Keep navigation setting to restore after window gets closed
             _keepNavEnableKeyboard = (ImGui.GetIO().ConfigFlags & ImGuiConfigFlags.NavEnableKeyboard) != ImGuiConfigFlags.None;
 
@@ -42,7 +44,14 @@ namespace T3.Gui.Graph
         public void Draw()
         {
             if (!_isOpen)
+            {
+                if (ImGui.IsKeyReleased((int)Key.Tab))
+                {
+                    Log.Debug("open create with tab");
+                    OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null);
+                }
                 return;
+            }
 
             // Disable keyboard navigation to allow cursor up down
             ImGui.GetIO().ConfigFlags &= ~ImGuiConfigFlags.NavEnableKeyboard;
@@ -119,6 +128,7 @@ namespace T3.Gui.Graph
             if (ImGui.IsItemDeactivated() || ImGui.GetIO().KeysDownDuration[(int)Key.Esc] > 0)
             {
                 ConnectionMaker.Cancel();
+                Log.Debug("Closing...");
                 Close();
             }
 
@@ -135,9 +145,9 @@ namespace T3.Gui.Graph
 
         private void Close()
         {
-            if(_keepNavEnableKeyboard)
+            if (_keepNavEnableKeyboard)
                 ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
-            
+
             _isOpen = false;
         }
 
@@ -151,9 +161,12 @@ namespace T3.Gui.Graph
 
             if (ImGui.BeginChildFrame(234, new Vector2(150, 200)))
             {
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.TextDisabled(_filterType.Name);
-                ImGui.PopFont();
+                if (_filterInputType != null)
+                {
+                    ImGui.PushFont(Fonts.FontSmall);
+                    ImGui.TextDisabled(_filterInputType.Name);
+                    ImGui.PopFont();
+                }
 
                 if (_selectedSymbol == null && SymbolRegistry.Entries.Values.Any())
                     _selectedSymbol = SymbolRegistry.Entries.Values.FirstOrDefault();
@@ -191,24 +204,25 @@ namespace T3.Gui.Graph
             var addCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = PosOnCanvas };
             UndoRedoStack.AddAndExecute(addCommand);
             var newSymbolChild = parent.Children.Single(entry => entry.Id == addCommand.AddedChildId);
-            
+
             // Select new node
             var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
             var childUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
             GraphCanvas.Current.SelectionHandler.SetElement(childUi);
 
-            if (symbol.InputDefinitions.Any())
+            
+            if (ConnectionMaker.TempConnection != null && symbol.InputDefinitions.Any())
             {
                 var temp = ConnectionMaker.TempConnection;
                 if (temp.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
                     // connecting to output
-                    ConnectionMaker.CompleteConnectionFromBuiltNode(parent, newSymbolChild, _filter.GetOutputMatchingType(symbol, _filterType));
+                    ConnectionMaker.CompleteConnectionFromBuiltNode(parent, newSymbolChild, _filter.GetOutputMatchingType(symbol, _filterInputType));
                 }
                 else
                 {
                     // connecting to input
-                    ConnectionMaker.CompleteConnectionIntoBuiltNode(parent, newSymbolChild, _filter.GetInputMatchingType(symbol, _filterType));
+                    ConnectionMaker.CompleteConnectionIntoBuiltNode(parent, newSymbolChild, _filter.GetInputMatchingType(symbol, _filterInputType));
                 }
             }
             else
@@ -236,9 +250,9 @@ namespace T3.Gui.Graph
                     needsUpdate = true;
                 }
 
-                if (_currentType != _filterType)
+                if (_currentType != _filterInputType)
                 {
-                    _currentType = _filterType;
+                    _currentType = _filterInputType;
                     needsUpdate = true;
                 }
 
@@ -262,7 +276,7 @@ namespace T3.Gui.Graph
                     if (parentSymbols.Contains(symbol))
                         continue;
 
-                    var matchingInputDef = GetInputMatchingType(symbol, _filterType);
+                    var matchingInputDef = GetInputMatchingType(symbol, _filterInputType);
                     if (matchingInputDef == null)
                         continue;
 
@@ -277,7 +291,7 @@ namespace T3.Gui.Graph
             {
                 foreach (var inputDefinition in symbol.InputDefinitions)
                 {
-                    if (inputDefinition.DefaultValue.ValueType == type)
+                    if (type == null  || inputDefinition.DefaultValue.ValueType == type)
                         return inputDefinition;
                 }
 
@@ -288,7 +302,7 @@ namespace T3.Gui.Graph
             {
                 foreach (var outputDefinition in symbol.OutputDefinitions)
                 {
-                    if (outputDefinition.ValueType == type)
+                    if (type==null || outputDefinition.ValueType == type)
                         return outputDefinition;
                 }
 
@@ -309,13 +323,13 @@ namespace T3.Gui.Graph
         private readonly Filter _filter = new Filter();
         #endregion
 
-        private static Type _filterType;
+        private static Type _filterInputType;
 
         //public List<Symbol.Connection> ConnectionsIn = new List<Symbol.Connection>();
         // public Symbol.Connection ConnectionOut = null;
 
         public Vector2 PosOnCanvas { get; private set; }
-        private readonly Vector2 _size  = GraphCanvas.DefaultOpSize;
+        private readonly Vector2 _size = GraphCanvas.DefaultOpSize;
 
         private bool _focusInputNextTime;
         private Vector2 _posInScreen;
