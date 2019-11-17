@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
@@ -182,10 +183,12 @@ namespace T3.Gui.Graph
                 if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
                 {
                     newLine.TargetPosition = ImGui.GetMousePos();
+                    newLine.ColorForType = Color.White;
                 }
                 else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
                     newLine.TargetPosition = GraphCanvas.Current.TransformPosition(SymbolBrowser.Current.PosOnCanvas);
+                    newLine.ColorForType = Color.White;
                 }
                 else if (c.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
                 {
@@ -194,7 +197,7 @@ namespace T3.Gui.Graph
                 }
                 else if (c.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
-                    newLine.SourcePosition = GraphCanvas.Current.TransformPosition(SymbolBrowser.Current.PosOnCanvas);
+                    newLine.SourcePosition = SymbolBrowser.Current.OutputPositionOnScreen;
                 }
                 else
                 {
@@ -276,6 +279,8 @@ namespace T3.Gui.Graph
                 }
                 else if (connection.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
+                    ColorForType = Color.White;
+                    //Log.Debug("temp connection from draft child");
                 }
                 else
                 {

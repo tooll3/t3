@@ -160,23 +160,24 @@ namespace T3.Gui.Graph
 
         public static void InitSymbolBrowserAtPosition(SymbolBrowser symbolBrowser, Vector2 canvasPosition)
         {
-            symbolBrowser.OpenAt(canvasPosition, _draftConnectionType);
-            if (TempConnection != null)
+            if (TempConnection == null)
+                return;
+            
+            if (TempConnection.TargetParentOrChildId == NotConnectedId)
             {
-                if (TempConnection.TargetParentOrChildId == NotConnectedId)
-                {
-                    TempConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
-                                                           sourceSlotId: TempConnection.SourceSlotId,
-                                                           targetParentOrChildId: UseDraftChildId,
-                                                           targetSlotId: Guid.Empty);
-                }
-                else if (TempConnection.SourceParentOrChildId == NotConnectedId)
-                {
-                    TempConnection = new Symbol.Connection(sourceParentOrChildId: UseDraftChildId,
-                                                           sourceSlotId: Guid.Empty,
-                                                           targetParentOrChildId: TempConnection.TargetParentOrChildId,
-                                                           targetSlotId: TempConnection.TargetSlotId);
-                }
+                TempConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
+                                                       sourceSlotId: TempConnection.SourceSlotId,
+                                                       targetParentOrChildId: UseDraftChildId,
+                                                       targetSlotId: Guid.Empty);
+                symbolBrowser.OpenAt(canvasPosition, _draftConnectionType, null);
+            }
+            else if (TempConnection.SourceParentOrChildId == NotConnectedId)
+            {
+                TempConnection = new Symbol.Connection(sourceParentOrChildId: UseDraftChildId,
+                                                       sourceSlotId: Guid.Empty,
+                                                       targetParentOrChildId: TempConnection.TargetParentOrChildId,
+                                                       targetSlotId: TempConnection.TargetSlotId);
+                symbolBrowser.OpenAt(canvasPosition, null, _draftConnectionType);
             }
         }
 

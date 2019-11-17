@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
@@ -22,12 +23,13 @@ namespace T3.Gui.Graph
         private bool _keepNavEnableKeyboard;
 
         #region public API ------------------------------------------------------------------------
-        public void OpenAt(Vector2 positionOnCanvas, Type filterInputType)
+        public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType)
         {
             _isOpen = true;
             PosOnCanvas = positionOnCanvas;
             _focusInputNextTime = true;
             _filterInputType = filterInputType;
+            _filterOutputType = filterOutputType;
             _searchString = "";
             _selectedSymbol = null;
             _filter.Update();
@@ -48,7 +50,7 @@ namespace T3.Gui.Graph
                 if (ImGui.IsKeyReleased((int)Key.Tab))
                 {
                     Log.Debug("open create with tab");
-                    OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null);
+                    OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null, null);
                 }
 
                 return;
@@ -147,7 +149,6 @@ namespace T3.Gui.Graph
             _isOpen = false;
         }
 
-
         private void DrawMatchesList()
         {
             ImGui.SetCursorPos(_posInWindow + new Vector2(_size.X + 1, 1));
@@ -159,10 +160,20 @@ namespace T3.Gui.Graph
                 if (_selectedSymbol == null && SymbolRegistry.Entries.Values.Any())
                     _selectedSymbol = SymbolRegistry.Entries.Values.FirstOrDefault();
 
-                if (_filterInputType != null)
+                if (_filterInputType != null || _filterOutputType != null)
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.TextDisabled(_filterInputType.Name);
+
+                    var inputTypeName = _filterInputType != null 
+                                    ? TypeNameRegistry.Entries[_filterInputType] 
+                                    : string.Empty;
+
+                    var outputTypeName = _filterOutputType != null 
+                                            ? TypeNameRegistry.Entries[_filterOutputType] 
+                                            : string.Empty;
+
+                    var headerLabel = $"{inputTypeName} -> {outputTypeName}";
+                    ImGui.TextDisabled(headerLabel);
                     ImGui.PopFont();
                 }
 
@@ -187,9 +198,9 @@ namespace T3.Gui.Graph
                     }
                     ImGui.PopID();
                 }
-                
+
                 var index = _filter.MatchingSymbols.IndexOf(_selectedSymbol);
-                var rectMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(0,(index +1)*ImGui.GetFrameHeight());
+                var rectMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(0, (index + 1) * ImGui.GetFrameHeight());
                 var rectMax = rectMin + new Vector2(10, 10);
                 var isVisible = ImGui.IsRectVisible(rectMin, rectMax);
 
@@ -247,7 +258,7 @@ namespace T3.Gui.Graph
         {
             public void Update()
             {
-                bool needsUpdate = false;
+                var needsUpdate = false;
 
                 if (_currentSearchString != _searchString)
                 {
@@ -257,9 +268,15 @@ namespace T3.Gui.Graph
                     needsUpdate = true;
                 }
 
-                if (_currentType != _filterInputType)
+                if (_inputType != _filterInputType)
                 {
-                    _currentType = _filterInputType;
+                    _inputType = _filterInputType;
+                    needsUpdate = true;
+                }
+
+                if (_outputType != _filterOutputType)
+                {
+                    _outputType = _filterOutputType;
                     needsUpdate = true;
                 }
 
@@ -269,8 +286,8 @@ namespace T3.Gui.Graph
                 }
             }
 
-            private Type _currentType;
-            //public Symbol SelectedSymbol = null;
+            private Type _inputType;
+            private Type _outputType;
 
             private void UpdateMatchingSymbols()
             {
@@ -283,9 +300,19 @@ namespace T3.Gui.Graph
                     if (parentSymbols.Contains(symbol))
                         continue;
 
-                    var matchingInputDef = GetInputMatchingType(symbol, _filterInputType);
-                    if (matchingInputDef == null)
-                        continue;
+                    if (_inputType != null)
+                    {
+                        var matchingInputDef = GetInputMatchingType(symbol, _filterInputType);
+                        if (matchingInputDef == null)
+                            continue;
+                    }
+
+                    if (_outputType != null)
+                    {
+                        var matchingOutputDef = GetOutputMatchingType(symbol, _filterOutputType);
+                        if (matchingOutputDef == null)
+                            continue;
+                    }
 
                     if (!_currentRegex.IsMatch(symbol.Name))
                         continue;
@@ -331,11 +358,15 @@ namespace T3.Gui.Graph
         #endregion
 
         private static Type _filterInputType;
+        private static Type _filterOutputType;
 
         //public List<Symbol.Connection> ConnectionsIn = new List<Symbol.Connection>();
         // public Symbol.Connection ConnectionOut = null;
 
         public Vector2 PosOnCanvas { get; private set; }
+
+        public Vector2 OutputPositionOnScreen => _posInScreen + _size;
+
         private readonly Vector2 _size = GraphCanvas.DefaultOpSize;
 
         private bool _focusInputNextTime;
