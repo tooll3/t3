@@ -34,7 +34,6 @@ namespace T3.Gui.Graph
     ///</remarks>
     public static class Graph
     {
-
         public static void DrawGraph(ImDrawListPtr drawList)
         {
             DrawList = drawList;
@@ -91,9 +90,9 @@ namespace T3.Gui.Graph
                 InputNode.Draw(inputDef, inputNode.Value);
 
                 var sourcePos = new Vector2(
-                    InputNode._lastScreenRect.Max.X,
-                    InputNode._lastScreenRect.GetCenter().Y
-                    );
+                                            InputNode._lastScreenRect.Max.X,
+                                            InputNode._lastScreenRect.GetCenter().Y
+                                           );
 
                 foreach (var line in Connections.GetLinesFromIntputNodes(inputNode.Value, inputNode.Key))
                 {
@@ -141,7 +140,7 @@ namespace T3.Gui.Graph
                     _linesToOutputNodes[outputNode].Add(newLine);
                 }
                 else if (c.TargetParentOrChildId != ConnectionMaker.NotConnectedId
-                        && c.TargetParentOrChildId != ConnectionMaker.UseDraftChildId)
+                         && c.TargetParentOrChildId != ConnectionMaker.UseDraftChildId)
                 {
                     var targetNode = _childUis.Single(childUi => childUi.Id == c.TargetParentOrChildId);
                     if (!_linesIntoNodes.ContainsKey(targetNode))
@@ -161,7 +160,7 @@ namespace T3.Gui.Graph
                     newLine.ColorForType = TypeUiRegistry.Entries[inputNode.Type].Color;
                 }
                 else if (c.SourceParentOrChildId != ConnectionMaker.NotConnectedId
-                    && c.SourceParentOrChildId != ConnectionMaker.UseDraftChildId)
+                         && c.SourceParentOrChildId != ConnectionMaker.UseDraftChildId)
                 {
                     var sourceNode = _childUis.Single(childUi => childUi.Id == c.SourceParentOrChildId);
                     if (!_linesFromNodes.ContainsKey(sourceNode))
@@ -206,15 +205,15 @@ namespace T3.Gui.Graph
             public List<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
             {
                 return _linesFromNodes.ContainsKey(childUi)
-                                        ? _linesFromNodes[childUi].FindAll(l => l.Connection.SourceSlotId == outputId)
-                                        : _noLines;
+                           ? _linesFromNodes[childUi].FindAll(l => l.Connection.SourceSlotId == outputId)
+                           : _noLines;
             }
 
             public List<ConnectionLineUi> GetLinesToNodeInputSlot(SymbolChildUi childUi, Guid inputId)
             {
                 return _linesIntoNodes.ContainsKey(childUi)
-                    ? _linesIntoNodes[childUi].FindAll(l => l.Connection.TargetSlotId == inputId)
-                    : _noLines;
+                           ? _linesIntoNodes[childUi].FindAll(l => l.Connection.TargetSlotId == inputId)
+                           : _noLines;
             }
 
             public List<ConnectionLineUi> GetLinesIntoNode(SymbolChildUi childUi)
@@ -225,15 +224,15 @@ namespace T3.Gui.Graph
             public List<ConnectionLineUi> GetLinesToOutputNodes(IOutputUi outputNode, Guid outputId)
             {
                 return _linesToOutputNodes.ContainsKey(outputNode)
-                    ? _linesToOutputNodes[outputNode].FindAll(l => l.Connection.TargetSlotId == outputId)
-                    : _noLines;
+                           ? _linesToOutputNodes[outputNode].FindAll(l => l.Connection.TargetSlotId == outputId)
+                           : _noLines;
             }
 
             public List<ConnectionLineUi> GetLinesFromIntputNodes(IInputUi inputNode, Guid inputNodeId)
             {
                 return _linesFromInputNodes.ContainsKey(inputNode)
-                    ? _linesFromInputNodes[inputNode].FindAll(l => l.Connection.SourceSlotId == inputNodeId)
-                    : _noLines;
+                           ? _linesFromInputNodes[inputNode].FindAll(l => l.Connection.SourceSlotId == inputNodeId)
+                           : _noLines;
             }
 
             private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesFromNodes;
@@ -245,7 +244,6 @@ namespace T3.Gui.Graph
             private static readonly List<ConnectionLineUi> _noLines = new List<ConnectionLineUi>();
         }
 
-        
         internal class ConnectionLineUi
         {
             public Symbol.Connection Connection;
@@ -254,6 +252,7 @@ namespace T3.Gui.Graph
             public ImRect TargetRect { get; set; }
             public ImRect SourceRect { get; set; }
             public Color ColorForType;
+
             public bool IsSelected;
             //public bool IsMultiinput;
 
@@ -269,7 +268,6 @@ namespace T3.Gui.Graph
                 }
                 else if (connection.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
-
                 }
                 else if (connection.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
                 {
@@ -278,7 +276,6 @@ namespace T3.Gui.Graph
                 }
                 else if (connection.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
-
                 }
                 else
                 {
@@ -286,26 +283,28 @@ namespace T3.Gui.Graph
                 }
             }
 
-
             internal void Draw()
             {
                 var color = IsSelected
-                    ? ColorVariations.Highlight.Apply(ColorForType)
-                    : ColorVariations.ConnectionLines.Apply(ColorForType);
+                                ? ColorVariations.Highlight.Apply(ColorForType)
+                                : ColorVariations.ConnectionLines.Apply(ColorForType);
+
+                var tangentLength = Math.Min(Vector2.Distance(SourcePosition, TargetPosition), 80);
 
                 DrawList.AddBezierCurve(
-                    SourcePosition,
-                    SourcePosition + new Vector2(50, 0),
-                                                    TargetPosition + new Vector2(-50, 0),
-                                                    TargetPosition,
-                                                    color, 3f,
-                                                    num_segments: 20);
+                                        SourcePosition,
+                                        SourcePosition + new Vector2(tangentLength, 0),
+                                        TargetPosition + new Vector2(-tangentLength, 0),
+                                        TargetPosition,
+                                        color,
+                                        thickness: 1f,
+                                        num_segments: 20);
 
-//                DrawList.AddTriangleFilled(
-//                    TargetPosition + new Vector2(0, -3),
-//                    TargetPosition + new Vector2(4, 2),
-//                    TargetPosition + new Vector2(-4, 2),
-//                    color);
+                //                DrawList.AddTriangleFilled(
+                //                    TargetPosition + new Vector2(0, -3),
+                //                    TargetPosition + new Vector2(4, 2),
+                //                    TargetPosition + new Vector2(-4, 2),
+                //                    color);
 
                 //Im.DrawArcConnection(SourceRect, SourcePosition, TargetRect,TargetPosition);
             }
