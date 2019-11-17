@@ -3,16 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
-using T3.Gui.InputUi;
-using T3.Gui.Selection;
 using T3.Gui.Styling;
-using UiHelpers;
 
 namespace T3.Gui.Graph
 {
@@ -23,16 +17,21 @@ namespace T3.Gui.Graph
     /// </summary>
     public class SymbolBrowser
     {
+        private bool _keepNavEnableKeyboard;
+        
         #region public API ------------------------------------------------------------------------
         public void OpenAt(Vector2 positionOnCanvas, Type type)
         {
-            IsOpen = true;
+            _isOpen = true;
             PosOnCanvas = positionOnCanvas;
             _focusInputNextTime = true;
             _filterType = type;
             _searchString = "";
             _selectedSymbol = null;
             _filter.Update();
+            
+            // Keep navigation setting to restore after window gets closed
+            _keepNavEnableKeyboard = (ImGui.GetIO().ConfigFlags & ImGuiConfigFlags.NavEnableKeyboard) != ImGuiConfigFlags.None;
 
             if (_selectedSymbol == null && _filter.MatchingSymbols.Count > 0)
             {
@@ -40,17 +39,18 @@ namespace T3.Gui.Graph
             }
         }
 
-
         public void Draw()
         {
-            if (!IsOpen)
+            if (!_isOpen)
                 return;
 
+            // Disable keyboard navigation to allow cursor up down
+            ImGui.GetIO().ConfigFlags &= ~ImGuiConfigFlags.NavEnableKeyboard;
             Current = this;
 
             _filter.Update();
 
-            ImGui.PushID(_uiId);
+            ImGui.PushID(UiId);
             {
                 _posInWindow = GraphCanvas.Current.ChildPosFromCanvas(PosOnCanvas);
                 _posInScreen = GraphCanvas.Current.TransformPosition(PosOnCanvas);
@@ -62,17 +62,16 @@ namespace T3.Gui.Graph
             ImGui.PopID();
         }
 
-        public void Cancel()
-        {
-            IsOpen = false;
-        }
+        // public void Cancel()
+        // {
+        //     _isOpen = false;
+        // }
         #endregion
-
 
         #region internal implementation -----------------------------------------------------------
         private void DrawSearchInput()
         {
-            _drawList.AddRect(_posInScreen, _posInScreen + Size, Color.Gray);
+            _drawList.AddRect(_posInScreen, _posInScreen + _size, Color.Gray);
 
             ImGui.SetCursorPos(_posInWindow);
             ImGui.SetNextItemWidth(90);
@@ -87,7 +86,7 @@ namespace T3.Gui.Graph
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(7, 6));
             ImGui.InputText("##filter", ref _searchString, 10);
 
-            if (ImGui.IsKeyReleased((int)Key.CursorRight))
+            if (ImGui.IsKeyReleased((int)Key.CursorDown))
             {
                 if (_filter.MatchingSymbols.Count > 0)
                 {
@@ -97,7 +96,7 @@ namespace T3.Gui.Graph
                     _selectedSymbol = _filter.MatchingSymbols[index];
                 }
             }
-            else if (ImGui.IsKeyReleased((int)Key.CursorLeft))
+            else if (ImGui.IsKeyReleased((int)Key.CursorUp))
             {
                 if (_filter.MatchingSymbols.Count > 0)
                 {
@@ -108,7 +107,6 @@ namespace T3.Gui.Graph
 
                     _selectedSymbol = _filter.MatchingSymbols[index];
                 }
-
             }
             else if (ImGui.IsKeyPressed((int)Key.Return))
             {
@@ -120,13 +118,9 @@ namespace T3.Gui.Graph
 
             if (ImGui.IsItemDeactivated() || ImGui.GetIO().KeysDownDuration[(int)Key.Esc] > 0)
             {
-                IsOpen = false;
                 ConnectionMaker.Cancel();
+                Close();
             }
-
-
-
-
 
             ImGui.PopStyleVar();
 
@@ -139,6 +133,13 @@ namespace T3.Gui.Graph
             }
         }
 
+        private void Close()
+        {
+            if(_keepNavEnableKeyboard)
+                ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+            
+            _isOpen = false;
+        }
 
         private void DrawMatchesList()
         {
@@ -146,15 +147,13 @@ namespace T3.Gui.Graph
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
 
-            var typeUi = TypeUiRegistry.Entries[_filterType];
-
+            //var typeUi = TypeUiRegistry.Entries[_filterType];
 
             if (ImGui.BeginChildFrame(234, new Vector2(150, 200)))
             {
                 ImGui.PushFont(Fonts.FontSmall);
                 ImGui.TextDisabled(_filterType.Name);
                 ImGui.PopFont();
-
 
                 if (_selectedSymbol == null && SymbolRegistry.Entries.Values.Any())
                     _selectedSymbol = SymbolRegistry.Entries.Values.FirstOrDefault();
@@ -169,6 +168,7 @@ namespace T3.Gui.Graph
                         {
                             CreateInstance(symbol);
                         }
+
                         ImGui.SameLine();
                         ImGui.Text(symbol.Name);
                         if (!String.IsNullOrEmpty(symbol.Namespace))
@@ -180,10 +180,10 @@ namespace T3.Gui.Graph
                     ImGui.PopID();
                 }
             }
+
             ImGui.EndChildFrame();
             ImGui.PopStyleVar(2);
         }
-
 
         private void CreateInstance(Symbol symbol)
         {
@@ -191,6 +191,11 @@ namespace T3.Gui.Graph
             var addCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = PosOnCanvas };
             UndoRedoStack.AddAndExecute(addCommand);
             var newSymbolChild = parent.Children.Single(entry => entry.Id == addCommand.AddedChildId);
+            
+            // Select new node
+            var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+            var childUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+            GraphCanvas.Current.SelectionHandler.SetElement(childUi);
 
             if (symbol.InputDefinitions.Any())
             {
@@ -211,7 +216,7 @@ namespace T3.Gui.Graph
                 ConnectionMaker.Cancel();
             }
 
-            IsOpen = false;
+            Close();
         }
 
         /// <summary>
@@ -236,6 +241,7 @@ namespace T3.Gui.Graph
                     _currentType = _filterType;
                     needsUpdate = true;
                 }
+
                 if (needsUpdate)
                 {
                     UpdateMatchingSymbols();
@@ -243,7 +249,7 @@ namespace T3.Gui.Graph
             }
 
             private Type _currentType;
-            public Symbol SelectedSymbol = null;
+            //public Symbol SelectedSymbol = null;
 
             private void UpdateMatchingSymbols()
             {
@@ -292,34 +298,34 @@ namespace T3.Gui.Graph
             public List<Symbol> MatchingSymbols { private set; get; } = null;
 
             private Regex _currentRegex;
-            private string _currentSearchString = null;
+            private string _currentSearchString;
 
-            internal bool Match(Symbol symbol)
-            {
-                return _currentRegex.IsMatch(symbol.Name);
-            }
+            // internal bool Match(Symbol symbol)
+            // {
+            //     return _currentRegex.IsMatch(symbol.Name);
+            // }
         }
-        private Filter _filter = new Filter();
 
+        private readonly Filter _filter = new Filter();
         #endregion
 
         private static Type _filterType;
 
-        public List<Symbol.Connection> ConnectionsIn = new List<Symbol.Connection>();
-        public Symbol.Connection ConnectionOut = null;
+        //public List<Symbol.Connection> ConnectionsIn = new List<Symbol.Connection>();
+        // public Symbol.Connection ConnectionOut = null;
 
-        public Vector2 PosOnCanvas { get; set; }
-        public Vector2 Size { get; set; } = GraphCanvas.DefaultOpSize;
+        public Vector2 PosOnCanvas { get; private set; }
+        private readonly Vector2 _size  = GraphCanvas.DefaultOpSize;
 
-        private bool _focusInputNextTime = false;
+        private bool _focusInputNextTime;
         private Vector2 _posInScreen;
         private ImDrawListPtr _drawList;
         private Vector2 _posInWindow;
 
-        public bool IsOpen { get; private set; } = false;
+        private bool _isOpen;
 
-        private Symbol _selectedSymbol = null;
-        private readonly static int _uiId = "DraftNode".GetHashCode();
+        private Symbol _selectedSymbol;
+        private static readonly int UiId = "DraftNode".GetHashCode();
         private static string _searchString = "";
 
         public static SymbolBrowser Current;
