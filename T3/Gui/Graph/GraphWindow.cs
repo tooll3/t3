@@ -31,13 +31,12 @@ namespace T3.Gui.Graph
             _visible = true;
             _allowMultipeInstances = true;
 
-            string trackName = @"Resources\lorn-sega-sunset.mp3";
+            const string trackName = @"Resources\lorn-sega-sunset.mp3";
             _clipTime = File.Exists(trackName) ? new StreamClipTime(trackName) : new ClipTime();
 
             var opInstance = T3UI.UiModel.MainOp;
             Canvas = new GraphCanvas(opInstance);
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
-            _curveEditCanvas = new CurveEditCanvas();
 
             _windowFlags = ImGuiWindowFlags.NoScrollbar;
             WindowInstances.Add(this);
@@ -73,7 +72,7 @@ namespace T3.Gui.Graph
                     dl.ChannelsSetCurrent(1);
                     {
                         DrawBreadcrumbs();
-                        TimeControls.DrawTimeControls(_clipTime, ref TimelineMode);
+                        TimeControls.DrawTimeControls(_clipTime, ref _timelineMode);
                     }
                     dl.ChannelsSetCurrent(0);
                     Canvas.Draw();
@@ -102,18 +101,7 @@ namespace T3.Gui.Graph
 
         private void DrawTimelineAndCurveEditor()
         {
-            var symbolUi = SymbolUiRegistry.Entries[Canvas.CompositionOp.Symbol.Id];
-            var animator = symbolUi.Symbol.Animator;
-
-            // switch (TimelineMode)
-            // {
-            //     case TimelineModes.LayerView:
-            _timeLineCanvas.Draw(Canvas.CompositionOp, GetCurvesForSelectedNodes(), ref TimelineMode);
-                //     break;
-                // case TimelineModes.CurveEditor:
-                //     _curveEditCanvas.Draw();
-                //     break;
-            // }
+            _timeLineCanvas.Draw(Canvas.CompositionOp, GetCurvesForSelectedNodes(), ref _timelineMode);
         }
 
         public struct AnimationParameter
@@ -174,11 +162,10 @@ namespace T3.Gui.Graph
             CurveEditor,
         }
 
-        internal TimelineModes TimelineMode = TimelineModes.LayerView;
+        private TimelineModes _timelineMode = TimelineModes.LayerView;
 
         private readonly ClipTime _clipTime;
         private static float _heightTimeLine = 100;
-        private TimeLineCanvas _timeLineCanvas;
-        private CurveEditCanvas _curveEditCanvas;
+        private readonly TimeLineCanvas _timeLineCanvas;
     }
 }

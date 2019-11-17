@@ -70,10 +70,7 @@ namespace T3.Gui.Windows.TimeLine
                 }
                 else if(timelineMode == GraphWindow.TimelineModes.CurveEditor)
                 {
-                    if(changed)
-                        _curveEditArea.Rebuild();
-                    
-                    _curveEditArea.Draw(compositionOp, animationParameters);
+                    _curveEditArea.Draw(compositionOp, animationParameters, bringCurvesIntoView: changed);
                 }
                 DrawTimeRange();
                 _currentTimeMarker.Draw(ClipTime);

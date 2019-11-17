@@ -20,7 +20,7 @@ namespace T3.Core.Animation
             // Gather all positions from the curves in a dictionary...
             var uniquePositions = new HashSet<double>();
 
-            foreach (var k in _curves.SelectMany(curve => curve.GetPoints()))
+            foreach (var k in _curves.SelectMany(curve => curve.GetPointTable()))
             {
                 uniquePositions.Add(k.Key);
             }

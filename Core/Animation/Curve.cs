@@ -85,18 +85,18 @@ namespace T3.Core.Animation
         /// Tries to move a keyframe to a new position
         /// </summary>
         /// <returns>Returns false if the position is already taken by a keyframe</returns>
-        public bool MoveKey(double u, double newU)
+        public void MoveKey(double u, double newU)
         {
             var state = _state;
             if (!state.Table.ContainsKey(u))
             {
                 Log.Warning("Tried to move a non-existing keyframe from {0} to {1}", u, newU);
-                return false;
+                return;
             }
 
             if (state.Table.ContainsKey(newU))
             {
-                return false;
+                return;
             }
 
             var key = state.Table[u];
@@ -104,10 +104,10 @@ namespace T3.Core.Animation
             state.Table[newU] = key;
             key.U = newU;
             SplineInterpolator.UpdateTangents(state.Table.ToList());
-            return true;
+            return;
         }
 
-        public List<KeyValuePair<double, VDefinition>> GetPoints()
+        public List<KeyValuePair<double, VDefinition>> GetPointTable()
         {
             var points = new List<KeyValuePair<double, VDefinition>>();
             foreach (var item in _state.Table)
@@ -118,13 +118,17 @@ namespace T3.Core.Animation
             return points;
         }
 
-        // Returns null if there is no vDefition at that position
+        public IList<VDefinition> GetVDefinitions()
+        {
+            return _state.Table.Values;
+        }
+
+        // Returns null if there is no vDefinition at that position
         public VDefinition GetV(double u)
         {
-            if (_state.Table.TryGetValue(u, out var foundValue))
-                return foundValue.Clone();
-
-            return null;
+            return _state.Table.TryGetValue(u, out var foundValue) 
+                       ? foundValue.Clone() 
+                       : null;
         }
 
         public double GetSampledValue(double u)

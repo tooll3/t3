@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.Snapping;
-using T3.Gui.Selection;
 using UiHelpers;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -21,66 +21,43 @@ namespace T3.Gui.Windows.TimeLine
         public CurveEditArea(TimeLineCanvas timeLineCanvas)
         {
             _timeLineCanvas = timeLineCanvas;
-            _curveEditBox = new CurveEditBox(timeLineCanvas, SelectionHandler);
-        }
-
-        public void Rebuild()
-        {
-            _curvesWithUi.Clear();
+            _curveEditBox = new CurveEditBox(timeLineCanvas);
         }
         
-        public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
-        {
-            var curves = new List<Curve>();
-            foreach (var p in animationParameters)
-            {
-                curves.AddRange(p.Curves);
-            }
+        
+        private List<GraphWindow.AnimationParameter> _animationParameters;
 
-            SetCurves(curves);
+        public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters, bool bringCurvesIntoView= false)
+        {
+            _drawList = ImGui.GetWindowDrawList();
+            _animationParameters = animationParameters;
+            
+            if (bringCurvesIntoView)
+                ViewAllOrSelectedKeys();
 
             ImGui.BeginGroup();
             {
-                DrawCurves();
+                foreach (var param in animationParameters)
+                {
+                    foreach (var curve in param.Curves)
+                    {
+                        DrawCurveLine(curve);
+                    }
+                }
+
+                foreach (var keyframe in GetAllKeyframes())
+                {
+                    CurvePointUi.Draw(keyframe, _timeLineCanvas, _selectedKeyframes.Contains(keyframe));
+                }
+
                 DrawContextMenu();
-                _curveEditBox.Draw();
+                //_curveEditBox.Draw();
             }
             ImGui.EndGroup();
+
+            RebuildCurveTables();
         }
-
-        private void SetCurves(List<Curve> newCurveSelection)
-        {
-            var existingCurves = _curvesWithUi.Keys.ToArray();
-            var someCurvesUnselected = false;
-            var someNewCurvesSelected = false;
-
-            foreach (var c in existingCurves)
-            {
-                if (newCurveSelection.Contains(c))
-                    continue;
-
-                _curvesWithUi[c].CurvePoints.ForEach(cpc => SelectionHandler.RemoveElement(cpc));
-                _curvesWithUi.Remove(c);
-                someCurvesUnselected = true;
-            }
-
-            if (newCurveSelection.Count == 0)
-                return;
-
-            foreach (var newCurve in newCurveSelection)
-            {
-                if (!_curvesWithUi.ContainsKey(newCurve))
-                {
-                    _curvesWithUi[newCurve] = new CurveUi(newCurve, TimeLineCanvas.Current);
-                    someNewCurvesSelected = true;
-                }
-            }
-
-            if (someCurvesUnselected || someNewCurvesSelected)
-            {
-                ViewAllOrSelectedKeys();
-            }
-        }
+        
 
         private bool _contextMenuIsOpen;
 
@@ -114,7 +91,7 @@ namespace T3.Gui.Windows.TimeLine
                 if (ImGui.MenuItem("Linear", null, editModes.Contains(VDefinition.EditMode.Linear)))
                     OnLinear();
 
-                if (ImGui.MenuItem(SelectionHandler.SelectedElements.Any() ? "View Selected" : "View All", "F"))
+                if (ImGui.MenuItem(_selectedKeyframes.Count > 0 ? "View Selected" : "View All", "F"))
                     ViewAllOrSelectedKeys();
 
                 ImGui.EndPopup();
@@ -126,14 +103,7 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.PopStyleVar();
         }
-
-        private void DrawCurves()
-        {
-            foreach (var c in _curvesWithUi.Values)
-            {
-                c.Draw();
-            }
-        }
+        
 
         #region update children
         private void ViewAllOrSelectedKeys()
@@ -146,24 +116,17 @@ namespace T3.Gui.Windows.TimeLine
             var maxV = double.NegativeInfinity;
             var numPoints = 0;
 
-            switch (SelectionHandler.SelectedElements.Count)
+            switch (_selectedKeyframes.Count)
             {
                 case 0:
                 {
-                    foreach (var pair in _curvesWithUi)
+                    foreach (var vDef in GetAllKeyframes())
                     {
-                        Curve curve = pair.Key;
-
-                        foreach (var pair2 in curve.GetPoints())
-                        {
-                            numPoints++;
-                            double u = pair2.Key;
-                            var vDef = pair2.Value;
-                            minU = Math.Min(minU, u);
-                            maxU = Math.Max(maxU, u);
-                            minV = Math.Min(minV, vDef.Value);
-                            maxV = Math.Max(maxV, vDef.Value);
-                        }
+                        numPoints++;
+                        minU = Math.Min(minU, vDef.U);
+                        maxU = Math.Max(maxU, vDef.U);
+                        minV = Math.Min(minV, vDef.Value);
+                        maxV = Math.Max(maxV, vDef.Value);
                     }
 
                     break;
@@ -173,16 +136,13 @@ namespace T3.Gui.Windows.TimeLine
 
                 default:
                 {
-                    foreach (var element in SelectionHandler.SelectedElements)
+                    foreach (var element in _selectedKeyframes)
                     {
-                        if (!(element is CurvePointUi cpc))
-                            continue;
-
                         numPoints++;
-                        minU = Math.Min(minU, cpc.Key.U);
-                        maxU = Math.Max(maxU, cpc.Key.U);
-                        minV = Math.Min(minV, cpc.Key.Value);
-                        maxV = Math.Max(maxV, cpc.Key.Value);
+                        minU = Math.Min(minU, element.U);
+                        maxU = Math.Max(maxU, element.U);
+                        minV = Math.Min(minV, element.Value);
+                        maxV = Math.Max(maxV, element.Value);
                     }
 
                     break;
@@ -210,7 +170,7 @@ namespace T3.Gui.Windows.TimeLine
 
             var height = ImGui.GetWindowContentRegionMax().Y - ImGui.GetWindowContentRegionMin().Y;
             var scale = -(float)(height / ((maxV - minV) * (1 + 2 * curveValuePadding)));
-            _timeLineCanvas.SetValueRange(scale, (float)maxV - 20/scale);
+            _timeLineCanvas.SetValueRange(scale, (float)maxV - 20 / scale);
         }
 
         private void OnSmooth()
@@ -280,101 +240,97 @@ namespace T3.Gui.Windows.TimeLine
             var checkedInterpolationTypes = new HashSet<VDefinition.EditMode>();
             foreach (var point in GetSelectedOrAllPoints())
             {
-                checkedInterpolationTypes.Add(point.Key.OutEditMode);
-                checkedInterpolationTypes.Add(point.Key.InEditMode);
+                checkedInterpolationTypes.Add(point.OutEditMode);
+                checkedInterpolationTypes.Add(point.InEditMode);
             }
 
             return checkedInterpolationTypes;
         }
         #endregion
-        
 
         #region helper functions     
         /// <summary>
-        /// Helper function to extract vdefs from all or selected UI controls across all curves in CurveEditor
+        /// Helper function to extract vDefs from all or selected UI controls across all curves in CurveEditor
         /// </summary>
         /// <returns>a list curves with a list of vDefs</returns>
-        private IEnumerable<CurvePointUi> GetSelectedOrAllPoints()
+        private IEnumerable<VDefinition> GetSelectedOrAllPoints()
         {
-            var result = new List<CurvePointUi>();
+            var result = new List<VDefinition>();
 
-            if (SelectionHandler.SelectedElements.Count > 0)
+            if (_selectedKeyframes.Count > 0)
             {
-                result.AddRange(SelectionHandler.SelectedElements.Cast<CurvePointUi>());
+                result.AddRange(_selectedKeyframes);
             }
             else
             {
-                foreach (var curve in _curvesWithUi.Values)
+                foreach (var curve in _animationParameters.SelectMany(param => param.Curves))
                 {
-                    result.AddRange(curve.CurvePoints);
+                    result.AddRange(curve.GetVDefinitions());
                 }
             }
 
             return result;
         }
 
-        delegate void DoSomethingWithVdefDelegate(VDefinition v);
+        private delegate void DoSomethingWithKeyframeDelegate(VDefinition v);
 
-        private void ForSelectedOrAllPointsDo(DoSomethingWithVdefDelegate doFunc)
+        private void ForSelectedOrAllPointsDo(DoSomethingWithKeyframeDelegate doFunc)
         {
             UpdateCurveAndMakeUpdateKeyframeCommands(doFunc);
         }
         #endregion
 
-        private void UpdateCurveAndMakeUpdateKeyframeCommands(DoSomethingWithVdefDelegate doFunc)
+        private void UpdateCurveAndMakeUpdateKeyframeCommands(DoSomethingWithKeyframeDelegate doFunc)
         {
-            foreach (var point in GetSelectedOrAllPoints())
+            foreach (var keyframe in GetSelectedOrAllPoints())
             {
-                doFunc(point.Key);
+                doFunc(keyframe);
             }
         }
 
-        //private readonly HashSet<ISelectable> _selectedItems = new HashSet<ISelectable>();
-        private SelectionHandler SelectionHandler { get; set; } = new SelectionHandler();
-
-        private readonly Dictionary<Curve, CurveUi> _curvesWithUi = new Dictionary<Curve, CurveUi>();
-        private readonly TimeLineCanvas _timeLineCanvas;
-        private readonly CurveEditBox _curveEditBox;
-        
         public void ClearSelection()
         {
-            SelectionHandler.Clear();
+            _selectedKeyframes.Clear();
+        }
+
+
+        private IEnumerable<VDefinition> GetAllKeyframes()
+        {
+            return from param in _animationParameters 
+                   from curve in param.Curves 
+                   from keyframe in curve.GetVDefinitions() 
+                   select keyframe;
         }
 
         public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
         {
             if (selectMode == SelectMode.Replace)
-                SelectionHandler.Clear();
+                _selectedKeyframes.Clear();
 
             var canvasArea = TimeLineCanvas.Current.InverseTransformRect(screenArea);
-            var matchingItems = new List<ISelectable>();
+            var matchingItems = new List<VDefinition>();
 
-            foreach (var pair in _curvesWithUi.Values)
+            foreach (var keyframe in GetAllKeyframes())
             {
-
-                foreach (var p in pair.CurvePoints)
+                if (canvasArea.Contains(new Vector2((float)keyframe.U, (float)keyframe.Value)))
                 {
-                    
-                    if(canvasArea.Contains(p.PosOnCanvas))
-                    {
-                        matchingItems.Add(p);
-                    }
+                    matchingItems.Add(keyframe);
                 }
             }
-            
+
             switch (selectMode)
             {
                 case SelectMode.Add:
                 case SelectMode.Replace:
-                    SelectionHandler.SetElements(matchingItems);
+                    _selectedKeyframes.UnionWith(matchingItems);
                     break;
                 case SelectMode.Remove:
-                    SelectionHandler.RemoveElements(matchingItems);
+                    _selectedKeyframes.ExceptWith(matchingItems);
                     break;
             }
-            SelectionHandler.SetElements(matchingItems);
+
+            //SelectionHandler.SetElements(matchingItems);
         }
-        
 
         public ICommand StartDragCommand()
         {
@@ -389,7 +345,7 @@ namespace T3.Gui.Windows.TimeLine
 
         public void CompleteDragCommand()
         {
-           // throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public void UpdateDragStartCommand(double dt)
@@ -407,5 +363,58 @@ namespace T3.Gui.Windows.TimeLine
             //throw new NotImplementedException();
             return null;
         }
+
+        private  void DrawCurveLine(Curve curve)
+        {
+            const float step = 3f;
+            var width = ImGui.GetWindowWidth();
+
+            double dU = _timeLineCanvas.InverseTransformDirection(new Vector2(step, 0)).X;
+            double u = _timeLineCanvas.InverseTransformPosition(_timeLineCanvas.WindowPos).X;
+            var x = _timeLineCanvas.WindowPos.X;
+
+            var steps = (int)(width / step);
+            if (_curveLinePoints.Length != steps)
+            {
+                _curveLinePoints = new Vector2[steps];
+            }
+
+            for (var i = 0; i < steps; i++)
+            {
+                _curveLinePoints[i] = new Vector2(x,_timeLineCanvas.TransformPosition(new Vector2(0, (float)curve.GetSampledValue(u))).Y);
+                u += dU;
+                x += step;
+            }
+
+            _drawList.AddPolyline(ref _curveLinePoints[0], steps, Color.Gray, false, 1);
+        }
+
+        
+        /// <summary>
+        /// A horrible hack to keep curve table-structure aligned with position stored in key definitions.
+        /// </summary>
+        private void RebuildCurveTables()
+        {
+            foreach (var param in _animationParameters)
+            {
+                foreach (var curve in param.Curves)
+                {
+                    foreach (var (u, vDef) in curve.GetPointTable())
+                    {
+                        if (Math.Abs(u - vDef.U) > 0.001f)
+                        {
+                            curve.MoveKey(u, vDef.U);
+                        }
+                    }
+                }
+            }
+        }
+        
+        private static Vector2[] _curveLinePoints = new Vector2[0];
+
+        private readonly HashSet<VDefinition> _selectedKeyframes = new HashSet<VDefinition>();
+        private static ImDrawListPtr _drawList;
+        private readonly TimeLineCanvas _timeLineCanvas;
+        private readonly CurveEditBox _curveEditBox;
     }
 }

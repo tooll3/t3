@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Animation;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
 using UiHelpers;
@@ -12,18 +14,26 @@ namespace T3.Gui.Animation.CurveEditing
     public class CurveEditBox
     {
 
-        public CurveEditBox(ICanvas curveCanvas, SelectionHandler selectionHandler)
+        public CurveEditBox(ICanvas canvas)
         {
-            _curveCanvas = curveCanvas;
-            _selectionHandler = selectionHandler;
+            _canvas = canvas;
+            //_selectionHandler = selectionHandler;
         }
 
-        
-        public void Draw()
+        private void ManipulateKeyframeValue(ref VDefinition vDef, float value)
         {
-            var drawlist = ImGui.GetWindowDrawList();
-            if (_selectionHandler.SelectedElements.Count <= 1)
+            
+        }
+
+        private HashSet<VDefinition> _selectedKeyframes;
+        
+        public void Draw(HashSet<VDefinition> selectedKeyframes )
+        {
+            if (selectedKeyframes.Count <= 1)
                 return;
+            
+            _selectedKeyframes = selectedKeyframes;
+            var drawlist = ImGui.GetWindowDrawList();
 
             _bounds = GetBoundingBox();
             var minU = _bounds.Min.X;
@@ -31,12 +41,13 @@ namespace T3.Gui.Animation.CurveEditing
             var minV = _bounds.Min.Y;
             var maxV = _bounds.Max.Y;
 
-            var boundsOnScreen = _curveCanvas.TransformRect(_bounds);
+            var boundsOnScreen = _canvas.TransformRect(_bounds);
             drawlist.AddRect(boundsOnScreen.Min, boundsOnScreen.Max, SelectBoxBorderColor);
             drawlist.AddRectFilled(boundsOnScreen.Min, boundsOnScreen.Max, SelectBoxBorderFill);
 
-            var deltaOnCanvas = _curveCanvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+            var deltaOnCanvas = _canvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
 
+            /*
             ScaleHandle(
                 id: "##top",
                 screenPos: boundsOnScreen.Min - VerticalHandleOffset,
@@ -44,6 +55,7 @@ namespace T3.Gui.Animation.CurveEditing
                 Direction.Vertical,
                 scale: (maxV + deltaOnCanvas.Y - minV) / (maxV - minV),
                 (scale, ep) => { ep.ManipulateV(minV + (ep.PosOnCanvas.Y - minV) * scale); }
+                //(scale, ep) => { ManipulateKeyframeValue(ep, minV + (ep.PosOnCanvas.Y - minV) * scale); }
                 );
 
             ScaleHandle(
@@ -72,9 +84,10 @@ namespace T3.Gui.Animation.CurveEditing
                 scale: (maxU - deltaOnCanvas.X - minU) / (maxU - minU),
                 (scale, ep) => { ep.ManipulateU(maxU - (maxU - ep.PosOnCanvas.X) * scale); }
                 );
+                */
 
             var combined = (MoveRingInnerRadius + MoveRingOuterRadius);
-            var center = _curveCanvas.TransformPositionFloored(_bounds.GetCenter());
+            var center = _canvas.TransformPositionFloored(_bounds.GetCenter());
 
             MoveHandle(
                 "<##moveLeft", Direction.Horizontal,
@@ -115,7 +128,7 @@ namespace T3.Gui.Animation.CurveEditing
             Both,
         }
 
-        private void ScaleHandle(string id, Vector2 screenPos, Vector2 size, Direction direction, float scale, Action<float, CurvePointUi> scaleFunction)
+        private void ScaleHandle(string id, Vector2 screenPos, Vector2 size, Direction direction, float scale, Action<float, VDefinition> scaleFunction)
         {
             if ((direction == Direction.Vertical && _bounds.GetHeight() <= 0.001f)
              || (direction == Direction.Horizontal && _bounds.GetWidth() <= 0.001f))
@@ -140,9 +153,10 @@ namespace T3.Gui.Animation.CurveEditing
             if (scale < 0)
                 scale = 0;
 
-            foreach (var ep in CurvePointsControls)
+            
+            foreach (var ep in _selectedKeyframes)
             {
-                scaleFunction(scale, ep);
+                //scaleFunction(scale, ep);
             }
         }
 
@@ -171,7 +185,7 @@ namespace T3.Gui.Animation.CurveEditing
             if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0))
                 return;
 
-            var delta = _curveCanvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+            var delta = _canvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
             switch (direction)
             {
                 case Direction.Horizontal:
@@ -183,18 +197,17 @@ namespace T3.Gui.Animation.CurveEditing
             }
 
 
-            foreach (var ep in CurvePointsControls)
+            foreach (var ep in _selectedKeyframes)
             {
-
-                ep.PosOnCanvas += delta;
+                //ep.PosOnCanvas += delta;
             }
         }
 
-        private IEnumerable<CurvePointUi> CurvePointsControls =>
-            from selectedElement in _selectionHandler.SelectedElements
-            let curvePoint = selectedElement as CurvePointUi
-            where curvePoint != null
-            select curvePoint;
+        // private IEnumerable<CurvePointUi> CurvePointsControls =>
+        //     from selectedElement in _selectionHandler.SelectedElements
+        //     let curvePoint = selectedElement as CurvePointUi
+        //     where curvePoint != null
+        //     select curvePoint;
 
         private ImRect GetBoundingBox()
         {
@@ -203,28 +216,23 @@ namespace T3.Gui.Animation.CurveEditing
             var maxU = float.NegativeInfinity;
             var maxV = float.NegativeInfinity;
 
-            if (_selectionHandler.SelectedElements.Count > 1)
+            if (_selectedKeyframes.Count > 1)
             {
-                foreach (var selected in _selectionHandler.SelectedElements)
+                foreach (var selected in _selectedKeyframes)
                 {
-                    if (!(selected is CurvePointUi pc))
-                        continue;
-                    minU = Math.Min(minU, pc.PosOnCanvas.X);
-                    maxU = Math.Max(maxU, pc.PosOnCanvas.X);
-                    minV = Math.Min(minV, pc.PosOnCanvas.Y);
-                    maxV = Math.Max(maxV, pc.PosOnCanvas.Y);
+                    minU = Math.Min(minU, (float)selected.U);
+                    maxU = Math.Max(maxU, (float)selected.U);
+                    minV = Math.Min(minV, (float)selected.Value);
+                    maxV = Math.Max(maxV, (float)selected.Value);
                 }
                 return new ImRect(minU, minV, maxU, maxV);
             }
 
-            if (_selectionHandler.SelectedElements.Count == 1)
+            if (_selectedKeyframes.Count == 1)
             {
-                var pc = _selectionHandler.SelectedElements[0] as CurvePointUi;
-                if (pc == null)
-                    return new ImRect(minU, minV, maxU, maxV);
-                
-                minU = maxU = pc.PosOnCanvas.X;
-                minV = maxV = pc.PosOnCanvas.Y;
+                var vDef = _selectedKeyframes.First();
+                minU = maxU = (float)vDef.U;
+                minV = maxV = (float)vDef.Value;
 
                 return new ImRect(minU, minV, maxU, maxV);
             }
@@ -232,8 +240,8 @@ namespace T3.Gui.Animation.CurveEditing
         }
         
         private ImRect _bounds;
-        private readonly SelectionHandler _selectionHandler;
-        private readonly ICanvas _curveCanvas;
+        //private readonly SelectionHandler _selectionHandler;
+        private readonly ICanvas _canvas;
 
 
         // Styling

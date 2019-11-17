@@ -64,7 +64,7 @@ namespace T3.Gui.Windows.TimeLine
 
             foreach (var curve in parameter.Curves)
             {
-                foreach (var pair in curve.GetPoints())
+                foreach (var pair in curve.GetPointTable())
                 {
                     DrawKeyframe(pair.Value, layerArea, parameter);
                 }
@@ -128,7 +128,7 @@ namespace T3.Gui.Windows.TimeLine
             var curveIndex = 0;
             foreach (var curve in parameter.Curves)
             {
-                var points = curve.GetPoints();
+                var points = curve.GetPointTable();
                 var positions = new Vector2[points.Count];
 
                 var minValue = float.PositiveInfinity;
@@ -259,7 +259,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     foreach (var c in parameter.Curves)
                     {
-                        var matchingItems = c.GetPoints()
+                        var matchingItems = c.GetPointTable()
                                              .Select(pair => pair.Value)
                                              .ToList()
                                              .FindAll(key => key.U <= endTime && key.U >= startTime);
@@ -309,7 +309,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 foreach (var curve in param.Curves)
                 {
-                    foreach (var (u, vDef) in curve.GetPoints())
+                    foreach (var (u, vDef) in curve.GetPointTable())
                     {
                         if (Math.Abs(u - vDef.U) > 0.001f)
                         {
@@ -349,7 +349,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 foreach (var curve in param.Curves)
                 {
-                    foreach (var pair in curve.GetPoints())
+                    foreach (var pair in curve.GetPointTable())
                     {
                         yield return pair.Value;    
                     }

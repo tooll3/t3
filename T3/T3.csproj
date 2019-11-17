@@ -367,9 +367,7 @@
     <Compile Include="Gui\Windows\Window.cs" />
     <Compile Include="Gui\UiJson.cs" />
     <Compile Include="Gui\Interaction\UserAction.cs" />
-    <Compile Include="Gui\Animation\CurveEditing\CurveEditCanvas.cs" />
     <Compile Include="Gui\Animation\CurveEditing\CurvePointUi.cs" />
-    <Compile Include="Gui\Animation\CurveEditing\CurveUi.cs" />
     <Compile Include="Gui\Commands\AddSymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\ChangeInputValueCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSelectableCommand.cs" />
