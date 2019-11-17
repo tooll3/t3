@@ -34,7 +34,6 @@ namespace T3.Gui
                 new OutputWindow(),
                 new ConsoleLogWindow(),
                 new SettingsWindow(),
-                new QuickCreateWindow(),
             };
         }
 

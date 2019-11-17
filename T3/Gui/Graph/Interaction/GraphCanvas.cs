@@ -127,11 +127,6 @@ namespace T3.Gui.Graph
 
                     ImGui.EndPopup();
                 }
-
-                if (!ImGui.IsAnyItemHovered() && ImGui.IsMouseDoubleClicked(0))
-                {
-                    QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, InverseTransformPosition(ImGui.GetMousePos()));
-                }
             }
             ImGui.EndGroup();
         }
@@ -233,7 +228,7 @@ namespace T3.Gui.Graph
 
                 if (ImGui.MenuItem("Add"))
                 {
-                    QuickCreateWindow.OpenAtPosition(ImGui.GetMousePos(), CompositionOp.Symbol, InverseTransformPosition(ImGui.GetMousePos()));
+                    _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null);
                 }
                 ImGui.EndPopup();
             }

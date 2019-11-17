@@ -393,7 +393,6 @@
     <Compile Include="Gui\Graph\GraphWindow.cs" />
     <Compile Include="Gui\Graph\GraphNode.cs" />
     <Compile Include="Gui\Interaction\SelectionFence.cs" />
-    <Compile Include="Gui\Windows\QuickCreateWindow.cs" />
     <Compile Include="Gui\ImGuiDx11Impl.cs" />
     <Compile Include="Gui\UiHelpers\Helpers.cs" />
     <Compile Include="Gui\Selection\ISelectable.cs" />
