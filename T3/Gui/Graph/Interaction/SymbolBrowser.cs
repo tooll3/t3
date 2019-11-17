@@ -50,6 +50,7 @@ namespace T3.Gui.Graph
                     Log.Debug("open create with tab");
                     OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null);
                 }
+
                 return;
             }
 
@@ -70,18 +71,11 @@ namespace T3.Gui.Graph
             }
             ImGui.PopID();
         }
-
-        // public void Cancel()
-        // {
-        //     _isOpen = false;
-        // }
         #endregion
 
         #region internal implementation -----------------------------------------------------------
         private void DrawSearchInput()
         {
-            _drawList.AddRect(_posInScreen, _posInScreen + _size, Color.Gray);
-
             ImGui.SetCursorPos(_posInWindow);
             ImGui.SetNextItemWidth(90);
 
@@ -93,7 +87,9 @@ namespace T3.Gui.Graph
 
             ImGui.SetCursorPos(_posInWindow + new Vector2(1, 1));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(7, 6));
+            ImGui.SetNextItemWidth(_size.X);
             ImGui.InputText("##filter", ref _searchString, 10);
+            _drawList.AddRect(_posInScreen, _posInScreen + _size, Color.Gray);
 
             if (ImGui.IsKeyReleased((int)Key.CursorDown))
             {
@@ -151,25 +147,24 @@ namespace T3.Gui.Graph
             _isOpen = false;
         }
 
+
         private void DrawMatchesList()
         {
-            ImGui.SetCursorPos(_posInWindow + new Vector2(91 + 8, 1));
+            ImGui.SetCursorPos(_posInWindow + new Vector2(_size.X + 1, 1));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
 
-            //var typeUi = TypeUiRegistry.Entries[_filterType];
-
-            if (ImGui.BeginChildFrame(234, new Vector2(150, 200)))
+            if (ImGui.BeginChildFrame(999, new Vector2(200, 200)))
             {
+                if (_selectedSymbol == null && SymbolRegistry.Entries.Values.Any())
+                    _selectedSymbol = SymbolRegistry.Entries.Values.FirstOrDefault();
+
                 if (_filterInputType != null)
                 {
                     ImGui.PushFont(Fonts.FontSmall);
                     ImGui.TextDisabled(_filterInputType.Name);
                     ImGui.PopFont();
                 }
-
-                if (_selectedSymbol == null && SymbolRegistry.Entries.Values.Any())
-                    _selectedSymbol = SymbolRegistry.Entries.Values.FirstOrDefault();
 
                 foreach (var symbol in _filter.MatchingSymbols)
                 {
@@ -192,6 +187,19 @@ namespace T3.Gui.Graph
                     }
                     ImGui.PopID();
                 }
+                
+                var index = _filter.MatchingSymbols.IndexOf(_selectedSymbol);
+                var rectMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(0,(index +1)*ImGui.GetFrameHeight());
+                var rectMax = rectMin + new Vector2(10, 10);
+                var isVisible = ImGui.IsRectVisible(rectMin, rectMax);
+
+                if (!isVisible)
+                {
+                    var keepPos = ImGui.GetCursorScreenPos();
+                    ImGui.SetCursorScreenPos(rectMin);
+                    ImGui.SetScrollHereY(0);
+                    ImGui.SetCursorScreenPos(keepPos);
+                }
             }
 
             ImGui.EndChildFrame();
@@ -210,7 +218,6 @@ namespace T3.Gui.Graph
             var childUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
             GraphCanvas.Current.SelectionHandler.SetElement(childUi);
 
-            
             if (ConnectionMaker.TempConnection != null && symbol.InputDefinitions.Any())
             {
                 var temp = ConnectionMaker.TempConnection;
@@ -291,7 +298,7 @@ namespace T3.Gui.Graph
             {
                 foreach (var inputDefinition in symbol.InputDefinitions)
                 {
-                    if (type == null  || inputDefinition.DefaultValue.ValueType == type)
+                    if (type == null || inputDefinition.DefaultValue.ValueType == type)
                         return inputDefinition;
                 }
 
@@ -302,7 +309,7 @@ namespace T3.Gui.Graph
             {
                 foreach (var outputDefinition in symbol.OutputDefinitions)
                 {
-                    if (type==null || outputDefinition.ValueType == type)
+                    if (type == null || outputDefinition.ValueType == type)
                         return outputDefinition;
                 }
 
