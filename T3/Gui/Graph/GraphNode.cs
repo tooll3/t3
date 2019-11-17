@@ -222,7 +222,7 @@ namespace T3.Gui.Graph
                 {
                     foreach (var line in connectedLines)
                     {
-                        line.TargetPosition = new Vector2(usableSlotArea.Max.X,
+                        line.TargetPosition = new Vector2(usableSlotArea.Max.X-1,
                                                           usableSlotArea.GetCenter().Y);
                         line.IsSelected |= childUi.IsSelected;
                         line.TargetRect = _lastScreenRect;
@@ -255,7 +255,7 @@ namespace T3.Gui.Graph
 
                 foreach (var line in Graph.Connections.GetLinesFromNodeOutput(childUi, output.Id))
                 {
-                    line.SourcePosition = usableArea.GetCenter();
+                    line.SourcePosition = new Vector2(usableArea.Min.X +1, usableArea.GetCenter().Y); 
                     line.SourceRect = _lastScreenRect;
                     line.ColorForType = colorForType;
                     line.IsSelected |= childUi.IsSelected;

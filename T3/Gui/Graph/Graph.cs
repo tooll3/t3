@@ -297,7 +297,7 @@ namespace T3.Gui.Graph
                                         TargetPosition + new Vector2(-tangentLength, 0),
                                         TargetPosition,
                                         color,
-                                        thickness: 1f,
+                                        thickness: 1.5f,
                                         num_segments: 20);
 
                 //                DrawList.AddTriangleFilled(
