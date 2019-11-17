@@ -312,6 +312,14 @@ namespace T3.Core
             }
         }
 
+        public void SetupStructuredBuffer(ref Buffer buffer, BufferDescription bufferDesc)
+        {
+            if (buffer == null)
+            {
+                buffer = new Buffer(_device, bufferDesc);
+            }
+        }
+
         public void SetupStructuredBuffer<T>(T[] bufferData, ref Buffer buffer) where T : struct
         {
             int stride = Marshal.SizeOf(typeof(T));
