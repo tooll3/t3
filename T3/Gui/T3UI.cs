@@ -134,9 +134,9 @@ namespace T3.Gui
         {
             foreach (var gcw in GraphWindow.WindowInstances)
             {
-                if (gcw.Canvas.SelectionHandler.SelectedElements.Any())
+                if (gcw.GraphCanvas.SelectionHandler.SelectedElements.Any())
                 {
-                    var outputUi = gcw.Canvas.SelectionHandler.SelectedElements[0] as IOutputUi;
+                    var outputUi = gcw.GraphCanvas.SelectionHandler.SelectedElements[0] as IOutputUi;
                     if (outputUi != null)
                         return outputUi;
                 }

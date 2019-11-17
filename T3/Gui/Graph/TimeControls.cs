@@ -23,7 +23,7 @@ namespace T3.Gui.Graph
             ImGui.SetCursorPos(
                                new Vector2(
                                            ImGui.GetWindowContentRegionMin().X,
-                                           ImGui.GetWindowContentRegionMax().Y - 30));
+                                           ImGui.GetWindowContentRegionMax().Y - TimeControlsSize.Y));
 
             
 

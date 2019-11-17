@@ -62,22 +62,22 @@ namespace T3.Gui.Graph
 
 
         #region drawing UI ====================================================================
-        public void Draw()
+        public void Draw(ImDrawListPtr dl)
         {
             UpdateCanvas();
 
             Current = this;
             ChildUis = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis;
-            DrawList = ImGui.GetWindowDrawList();
-
+            DrawList = dl;
             ImGui.BeginGroup();
             {
-                DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
+                DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
+                
                 DrawGrid();
                 _symbolBrowser.Draw();
 
-                Graph.DrawGraph();
+                Graph.DrawGraph(DrawList);
 
                 if (ConnectionMaker.TempConnection != null && ImGui.IsMouseReleased(0))
                 {

@@ -29,7 +29,7 @@ namespace T3.Gui.Windows
                 }
 
                 var defaultGraphWindow = GraphWindow.WindowInstances[0] as GraphWindow;
-                SelectedInstance = defaultGraphWindow.Canvas.CompositionOp;
+                SelectedInstance = defaultGraphWindow.GraphCanvas.CompositionOp;
 
                 if (SelectedInstance == null)
                     return;

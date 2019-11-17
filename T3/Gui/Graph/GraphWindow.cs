@@ -9,8 +9,6 @@ using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Windows;
-using static ImGuiNET.ImGui;
-using static T3.Gui.CustomComponents;
 using T3.Gui.Windows.TimeLine;
 
 namespace T3.Gui.Graph
@@ -20,7 +18,7 @@ namespace T3.Gui.Graph
     /// </summary>
     public class GraphWindow : Window
     {
-        public GraphCanvas Canvas { get; private set; }
+        public GraphCanvas GraphCanvas { get; private set; }
 
         public static List<GraphWindow> WindowInstances = new List<GraphWindow>();
 
@@ -35,7 +33,7 @@ namespace T3.Gui.Graph
             _clipTime = File.Exists(trackName) ? new StreamClipTime(trackName) : new ClipTime();
 
             var opInstance = T3UI.UiModel.MainOp;
-            Canvas = new GraphCanvas(opInstance);
+            GraphCanvas = new GraphCanvas(opInstance);
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
 
             _windowFlags = ImGuiWindowFlags.NoScrollbar;
@@ -59,14 +57,14 @@ namespace T3.Gui.Graph
 
         protected override void DrawContent()
         {
-            PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
             {
-                var dl = GetWindowDrawList();
+                var dl = ImGui.GetWindowDrawList();
 
-                SplitFromBottom(ref _heightTimeLine);
-                var graphHeight = GetWindowHeight() - _heightTimeLine - 30;
+                CustomComponents.SplitFromBottom(ref _heightTimeLine);
+                var graphHeight = ImGui.GetWindowHeight() - _heightTimeLine - 30;
 
-                BeginChild("##graph", new Vector2(0, graphHeight), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+                ImGui.BeginChild("##graph", new Vector2(0, graphHeight), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                 {
                     dl.ChannelsSplit(2);
                     dl.ChannelsSetCurrent(1);
@@ -75,18 +73,18 @@ namespace T3.Gui.Graph
                         TimeControls.DrawTimeControls(_clipTime, ref _timeLineCanvas.Mode);
                     }
                     dl.ChannelsSetCurrent(0);
-                    Canvas.Draw();
+                    GraphCanvas.Draw(dl);
                     dl.ChannelsMerge();
                 }
-                EndChild();
-                SetCursorPosY(GetCursorPosY() + 4);
-                BeginChild("##timeline", Vector2.Zero, false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+                ImGui.EndChild();
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 4);
+                ImGui.BeginChild("##timeline", Vector2.Zero, false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                 {
                     DrawTimelineAndCurveEditor();
                 }
-                EndChild();
+                ImGui.EndChild();
             }
-            PopStyleVar();
+            ImGui.PopStyleVar();
         }
 
         protected override void Close()
@@ -101,7 +99,7 @@ namespace T3.Gui.Graph
 
         private void DrawTimelineAndCurveEditor()
         {
-            _timeLineCanvas.Draw(Canvas.CompositionOp, GetCurvesForSelectedNodes());
+            _timeLineCanvas.Draw(GraphCanvas.CompositionOp, GetCurvesForSelectedNodes());
         }
 
         public struct AnimationParameter
@@ -113,10 +111,10 @@ namespace T3.Gui.Graph
 
         private List<AnimationParameter> GetCurvesForSelectedNodes()
         {
-            var selection = Canvas.SelectionHandler.SelectedElements;
-            var symbolUi = SymbolUiRegistry.Entries[Canvas.CompositionOp.Symbol.Id];
+            var selection = GraphCanvas.SelectionHandler.SelectedElements;
+            var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.CompositionOp.Symbol.Id];
             var animator = symbolUi.Symbol.Animator;
-            var curvesForSelection = (from child in Canvas.CompositionOp.Children
+            var curvesForSelection = (from child in GraphCanvas.CompositionOp.Children
                                       from selectedElement in selection
                                       where child.Id == selectedElement.Id
                                       from input in child.Inputs
@@ -132,28 +130,28 @@ namespace T3.Gui.Graph
 
         private void DrawBreadcrumbs()
         {
-            SetCursorScreenPos(GetWindowPos() + new Vector2(1, 1));
-            List<Instance> parents = Canvas.GetParents();
+            ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
+            List<Instance> parents = GraphCanvas.GetParents();
 
             foreach (var p in parents)
             {
-                PushID(p.Id.GetHashCode());
-                if (Button(p.Symbol.Name))
+                ImGui.PushID(p.Id.GetHashCode());
+                if (ImGui.Button(p.Symbol.Name))
                 {
-                    Canvas.OpenComposition(p, zoomIn: false);
+                    GraphCanvas.OpenComposition(p, zoomIn: false);
                     break;
                 }
 
-                SameLine();
-                PopID();
-                Text("/");
-                SameLine();
+                ImGui.SameLine();
+                ImGui.PopID();
+                ImGui.Text("/");
+                ImGui.SameLine();
             }
 
-            PushStyleColor(ImGuiCol.Button, Color.White.Rgba);
-            PushStyleColor(ImGuiCol.Text, Color.Black.Rgba);
-            Button(Canvas.CompositionOp.Symbol.Name);
-            PopStyleColor(2);
+            ImGui.PushStyleColor(ImGuiCol.Button, Color.White.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, Color.Black.Rgba);
+            ImGui.Button(GraphCanvas.CompositionOp.Symbol.Name);
+            ImGui.PopStyleColor(2);
         }
 
 

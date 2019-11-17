@@ -35,9 +35,9 @@ namespace T3.Gui.Graph
     public static class Graph
     {
 
-        public static void DrawGraph()
+        public static void DrawGraph(ImDrawListPtr drawList)
         {
-            DrawList = ImGui.GetWindowDrawList();    // just caching
+            DrawList = drawList;
 
             var graphSymbol = GraphCanvas.Current.CompositionOp.Symbol;
             var allConnections = new List<Symbol.Connection>(graphSymbol.Connections);
