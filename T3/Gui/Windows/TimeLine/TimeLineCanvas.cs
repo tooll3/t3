@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using SharpDX.Direct2D1;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
@@ -23,8 +24,10 @@ namespace T3.Gui.Windows.TimeLine
 
             _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
+            _snapHandler.SnappedEvent += SnappedEventHandler;
         }
 
+        
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             Current = this;
@@ -52,6 +55,7 @@ namespace T3.Gui.Windows.TimeLine
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
                 _timeRasterSwitcher.Draw(ClipTime);
+                DrawSnapIndicator();
                 //_layersArea.Draw(compositionOp);
 
                 switch (Mode)
@@ -64,6 +68,7 @@ namespace T3.Gui.Windows.TimeLine
                         break;
                 }
 
+                
                 DrawTimeRange();
                 _currentTimeMarker.Draw(ClipTime);
                 DrawDragTimeArea();
@@ -275,7 +280,26 @@ namespace T3.Gui.Windows.TimeLine
         }
         #endregion
         
+        
+        private void SnappedEventHandler(double snapPosition)
+        {
+            _lastSnapTime = ImGui.GetTime();
+            _lastSnapU = (float)snapPosition;
+        }
 
+        private void DrawSnapIndicator()
+        {
+            var opacity =1- Im.Clamp( (float)(ImGui.GetTime() - _lastSnapTime) / _snapIndicatorDuration,0,1);
+            var color = Color.Orange;
+            color.Rgba.W = opacity;
+            var p = new Vector2(TransformPositionX(_lastSnapU),0);
+            _drawlist.AddRectFilled(p, p + new Vector2(1, 2000), color);
+        }
+        private double _lastSnapTime;
+        private float _snapIndicatorDuration = 1;
+        private float _lastSnapU=0;
+
+        
         #region ISelection holder
         public void ClearSelection()
         {

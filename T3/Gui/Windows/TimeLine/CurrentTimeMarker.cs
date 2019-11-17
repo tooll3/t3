@@ -20,7 +20,6 @@ namespace T3.Gui.Windows.TimeLine
         
         public SnapResult CheckForSnap(double time)
         {
-            
             var timeX = TimeLineCanvas.Current.TransformPositionX((float)time);
             var currentTime = TimeLineCanvas.Current.TransformPositionX((float)_clipTime.Time);
             var distance = Math.Abs( timeX - currentTime);
