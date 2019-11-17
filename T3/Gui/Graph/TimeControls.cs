@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Styling;
+using T3.Gui.Windows.TimeLine;
 using Icon = T3.Gui.Styling.Icon;
 
 namespace T3.Gui.Graph
@@ -17,7 +18,7 @@ namespace T3.Gui.Graph
 
 
         
-        internal static void DrawTimeControls(ClipTime clipTime, ref GraphWindow.TimelineModes timelineMode)
+        internal static void DrawTimeControls(ClipTime clipTime, ref TimeLineCanvas.Modes mode)
         {
             ImGui.SetCursorPos(
                                new Vector2(
@@ -198,9 +199,9 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
             
             
-            if (ImGui.Button(timelineMode.ToString(), TimeControlsSize))
+            if (ImGui.Button(mode.ToString(), TimeControlsSize))
             {
-                timelineMode = (GraphWindow.TimelineModes)(((int)timelineMode + 1) % Enum.GetNames(typeof(GraphWindow.TimelineModes)).Length);
+                mode = (TimeLineCanvas.Modes)(((int)mode + 1) % Enum.GetNames(typeof(TimeLineCanvas.Modes)).Length);
             }
             ImGui.SameLine();
         }

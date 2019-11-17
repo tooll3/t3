@@ -212,7 +212,7 @@ namespace T3.Gui.Windows.TimeLine
                     if (!double.IsNaN(snapClipToEnd))
                         dt = snapClipToEnd - clip.EndTime;
 
-                    TimeLineCanvas.Current.UpdateDragCommand(dt);
+                    TimeLineCanvas.Current.UpdateDragCommand(dt,0 );
                     break;
 
                 case HandleDragMode.Start:
@@ -220,7 +220,7 @@ namespace T3.Gui.Windows.TimeLine
                     if (!double.IsNaN(snapToStart))
                         dt = snapToStart - clip.StartTime;
 
-                    TimeLineCanvas.Current.UpdateDragStartCommand(dt);
+                    TimeLineCanvas.Current.UpdateDragStartCommand(dt,0 );
                     break;
 
                 case HandleDragMode.End:
@@ -228,7 +228,7 @@ namespace T3.Gui.Windows.TimeLine
                     if (!double.IsNaN(snapToEnd))
                         dt = snapToEnd - clip.EndTime;
 
-                    TimeLineCanvas.Current.UpdateDragEndCommand(dt);
+                    TimeLineCanvas.Current.UpdateDragEndCommand(dt,0);
                     break;
 
                 default:
@@ -289,7 +289,7 @@ namespace T3.Gui.Windows.TimeLine
             return _moveClipsCommand;
         }
 
-        void ITimeElementSelectionHolder.UpdateDragCommand(double dt)
+        void ITimeElementSelectionHolder.UpdateDragCommand(double dt, double dv)
         {
             foreach (var clip in _selectedItems)
             {
@@ -298,7 +298,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        void ITimeElementSelectionHolder.UpdateDragStartCommand(double dt)
+        void ITimeElementSelectionHolder.UpdateDragStartCommand(double dt, double dv)
         {
             foreach (var clip in _selectedItems)
             {
@@ -308,7 +308,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
 
-        void ITimeElementSelectionHolder.UpdateDragEndCommand(double dt)
+        void ITimeElementSelectionHolder.UpdateDragEndCommand(double dt, double dv)
         {
             foreach (var clip in _selectedItems)
             {

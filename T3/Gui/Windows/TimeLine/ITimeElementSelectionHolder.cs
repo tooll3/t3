@@ -14,10 +14,10 @@ namespace T3.Gui.Windows.TimeLine
         //Command DeleteSelectedElements();
 
         ICommand StartDragCommand();
-        void UpdateDragCommand(double dt);
+        void UpdateDragCommand(double dt, double dv);
         void CompleteDragCommand();
-        void UpdateDragStartCommand(double dt);
-        void UpdateDragEndCommand(double dt);
+        void UpdateDragStartCommand(double dt, double dv);
+        void UpdateDragEndCommand(double dt, double dv);
     }
     
     public enum SelectMode

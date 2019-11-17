@@ -230,7 +230,7 @@ namespace T3.Gui.Windows.TimeLine
             if (!double.IsNaN(snapClipToStart))
                 dt = snapClipToStart - vDef.U;
 
-            TimeLineCanvas.Current.UpdateDragCommand(dt);
+            TimeLineCanvas.Current.UpdateDragCommand(dt,0);
         }
 
 
@@ -291,7 +291,7 @@ namespace T3.Gui.Windows.TimeLine
             return _changeKeyframesCommand;
         }
 
-        void ITimeElementSelectionHolder.UpdateDragCommand(double dt)
+        void ITimeElementSelectionHolder.UpdateDragCommand(double dt, double dv)
         {
             foreach (var vDefinition in _selectedItems)
             {
@@ -320,9 +320,9 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        void ITimeElementSelectionHolder.UpdateDragStartCommand(double dt) { }
+        void ITimeElementSelectionHolder.UpdateDragStartCommand(double dt, double dv) { }
 
-        void ITimeElementSelectionHolder.UpdateDragEndCommand(double dt) { }
+        void ITimeElementSelectionHolder.UpdateDragEndCommand(double dt, double dv) { }
 
         void ITimeElementSelectionHolder.CompleteDragCommand()
         {

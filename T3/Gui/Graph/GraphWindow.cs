@@ -72,7 +72,7 @@ namespace T3.Gui.Graph
                     dl.ChannelsSetCurrent(1);
                     {
                         DrawBreadcrumbs();
-                        TimeControls.DrawTimeControls(_clipTime, ref _timelineMode);
+                        TimeControls.DrawTimeControls(_clipTime, ref _timeLineCanvas.Mode);
                     }
                     dl.ChannelsSetCurrent(0);
                     Canvas.Draw();
@@ -101,7 +101,7 @@ namespace T3.Gui.Graph
 
         private void DrawTimelineAndCurveEditor()
         {
-            _timeLineCanvas.Draw(Canvas.CompositionOp, GetCurvesForSelectedNodes(), ref _timelineMode);
+            _timeLineCanvas.Draw(Canvas.CompositionOp, GetCurvesForSelectedNodes());
         }
 
         public struct AnimationParameter
@@ -156,13 +156,9 @@ namespace T3.Gui.Graph
             PopStyleColor(2);
         }
 
-        public enum TimelineModes
-        {
-            LayerView,
-            CurveEditor,
-        }
 
-        private TimelineModes _timelineMode = TimelineModes.LayerView;
+
+        //private TimeLineCanvas.TimelineModes _timelineMode = TimeLineCanvas.TimelineModes.Undefined;
 
         private readonly ClipTime _clipTime;
         private static float _heightTimeLine = 100;

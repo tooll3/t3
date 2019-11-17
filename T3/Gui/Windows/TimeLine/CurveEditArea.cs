@@ -170,7 +170,7 @@ namespace T3.Gui.Windows.TimeLine
 
             var height = ImGui.GetWindowContentRegionMax().Y - ImGui.GetWindowContentRegionMin().Y;
             var scale = -(float)(height / ((maxV - minV) * (1 + 2 * curveValuePadding)));
-            _timeLineCanvas.SetValueRange(scale, (float)maxV - 20 / scale);
+            _timeLineCanvas.SetVisibleValueRange(scale, (float)maxV - 20 / scale);
         }
 
         private void OnSmooth()
@@ -294,13 +294,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
 
-        private IEnumerable<VDefinition> GetAllKeyframes()
-        {
-            return from param in _animationParameters 
-                   from curve in param.Curves 
-                   from keyframe in curve.GetVDefinitions() 
-                   select keyframe;
-        }
+
 
         public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
         {
@@ -338,7 +332,7 @@ namespace T3.Gui.Windows.TimeLine
             return null;
         }
 
-        public void UpdateDragCommand(double dt)
+        public void UpdateDragCommand(double dt,double dv)
         {
             //throw new NotImplementedException();
         }
@@ -348,12 +342,12 @@ namespace T3.Gui.Windows.TimeLine
             // throw new NotImplementedException();
         }
 
-        public void UpdateDragStartCommand(double dt)
+        public void UpdateDragStartCommand(double dt, double dv)
         {
             //throw new NotImplementedException();
         }
 
-        public void UpdateDragEndCommand(double dt)
+        public void UpdateDragEndCommand(double dt, double dv)
         {
             //throw new NotImplementedException();
         }
@@ -362,6 +356,15 @@ namespace T3.Gui.Windows.TimeLine
         {
             //throw new NotImplementedException();
             return null;
+        }
+        
+        
+        private IEnumerable<VDefinition> GetAllKeyframes()
+        {
+            return from param in _animationParameters 
+                   from curve in param.Curves 
+                   from keyframe in curve.GetVDefinitions() 
+                   select keyframe;
         }
 
         private  void DrawCurveLine(Curve curve)

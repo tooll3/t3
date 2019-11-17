@@ -17,33 +17,23 @@ namespace T3.Gui.Windows.TimeLine
         public TimeLineCanvas(ClipTime clipTime = null)
         {
             ClipTime = clipTime;
-            //_layersArea = new LayersArea(_snapHandler);
             _dopeSheetArea = new DopeSheetArea(_snapHandler);
             _selectionFence = new TimeSelectionFence(this);
             _curveEditArea = new CurveEditArea(this);
 
-            //_selectionHolders.Add(_layersArea);
-            _selectionHolders.Add(_curveEditArea);
-            _selectionHolders.Add(_dopeSheetArea);
             _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
-            _snapHandler.AddSnapAttractor(_curveEditArea);
-            //_snapHandler.AddSnapAttractor(_layersArea);
-            _snapHandler.AddSnapAttractor(_dopeSheetArea);
         }
 
-        
-    
-        public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters, ref GraphWindow.TimelineModes timelineMode)
+        public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             Current = this;
             _io = ImGui.GetIO();
             _mouse = ImGui.GetMousePos();
+            _drawlist = ImGui.GetWindowDrawList();
 
             WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
             WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
-
-            _drawlist = ImGui.GetWindowDrawList();
             
             // Damp scaling
             const float dampSpeed = 30f;
@@ -53,36 +43,35 @@ namespace T3.Gui.Windows.TimeLine
                 Scale = Im.Lerp(Scale, _scaleTarget, damping);
                 Scroll = Im.Lerp(Scroll, _scrollTarget, damping);
             }
-            
-            ImGui.BeginChild("scrolling_region2", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+
+            var modeChanged = UpdateMode();
+
+            ImGui.BeginChild("timeline", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
                 _drawlist = ImGui.GetWindowDrawList();
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
                 _timeRasterSwitcher.Draw(ClipTime);
                 //_layersArea.Draw(compositionOp);
-                var changed = timelineMode != _lastMode;
-                _lastMode = timelineMode;
-                
-                if (timelineMode == GraphWindow.TimelineModes.LayerView)
+
+                switch (Mode)
                 {
-                    _dopeSheetArea.Draw(compositionOp, animationParameters);
+                    case Modes.DopeView:
+                        _dopeSheetArea.Draw(compositionOp, animationParameters);
+                        break;
+                    case Modes.CurveEditor:
+                        _curveEditArea.Draw(compositionOp, animationParameters, bringCurvesIntoView: modeChanged);
+                        break;
                 }
-                else if(timelineMode == GraphWindow.TimelineModes.CurveEditor)
-                {
-                    _curveEditArea.Draw(compositionOp, animationParameters, bringCurvesIntoView: changed);
-                }
+
                 DrawTimeRange();
                 _currentTimeMarker.Draw(ClipTime);
                 DrawDragTimeArea();
                 _selectionFence.Draw();
-                
             }
             ImGui.EndChild();
         }
 
-        private GraphWindow.TimelineModes _lastMode;
-        
         private void HandleInteraction()
         {
             if (!ImGui.IsWindowHovered())
@@ -112,7 +101,7 @@ namespace T3.Gui.Windows.TimeLine
                 if (!double.IsPositiveInfinity(nextKeyframeTime))
                     ClipTime.Time = nextKeyframeTime;
             }
-            
+
             if (UserActionRegistry.WasActionQueued(UserActions.PlaybackJumpToPreviousKeyframe))
             {
                 var prevKeyframeTime = double.NegativeInfinity;
@@ -171,7 +160,6 @@ namespace T3.Gui.Windows.TimeLine
             return zoomSum;
         }
 
-
         private void DrawDragTimeArea()
         {
             if (ClipTime == null)
@@ -197,6 +185,14 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorPos(Vector2.Zero);
         }
 
+        
+        public void SetVisibleValueRange(float valueScale, float valueScroll)
+        {
+            _scaleTarget = new Vector2(_scaleTarget.X, valueScale);
+            _scrollTarget = new Vector2(_scrollTarget.X, valueScroll);
+        }
+        
+        #region time range
         private static readonly Vector2 TimeRangeShadowSize = new Vector2(5, 9999);
         private static readonly Color TimeRangeShadowColor = new Color(0, 0, 0, 0.5f);
         private static readonly Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.3f);
@@ -216,15 +212,15 @@ namespace T3.Gui.Windows.TimeLine
 
                 // Shade outside
                 _drawlist.AddRectFilled(
-                                       new Vector2(0, 0),
-                                       new Vector2(xRangeStart, TimeRangeShadowSize.Y),
-                                       TimeRangeOutsideColor);
+                                        new Vector2(0, 0),
+                                        new Vector2(xRangeStart, TimeRangeShadowSize.Y),
+                                        TimeRangeOutsideColor);
 
                 // Shadow
                 _drawlist.AddRectFilled(
-                                       rangeStartPos - new Vector2(TimeRangeShadowSize.X - 1, 0),
-                                       rangeStartPos + new Vector2(0, TimeRangeShadowSize.Y),
-                                       TimeRangeShadowColor);
+                                        rangeStartPos - new Vector2(TimeRangeShadowSize.X - 1, 0),
+                                        rangeStartPos + new Vector2(0, TimeRangeShadowSize.Y),
+                                        TimeRangeShadowColor);
 
                 // Line
                 _drawlist.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), TimeRangeShadowColor);
@@ -234,7 +230,6 @@ namespace T3.Gui.Windows.TimeLine
                                   TimeRangeHandleSize.Y);
 
                 ImGui.Button("##StartPos", TimeRangeHandleSize);
-
 
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
@@ -251,15 +246,15 @@ namespace T3.Gui.Windows.TimeLine
                 var windowMaxX = ImGui.GetContentRegionAvail().X + WindowPos.X;
                 if (rangeEndX < windowMaxX)
                     _drawlist.AddRectFilled(
-                                           rangeEndPos,
-                                           rangeEndPos + new Vector2(windowMaxX - rangeEndX, TimeRangeShadowSize.Y),
-                                           TimeRangeOutsideColor);
+                                            rangeEndPos,
+                                            rangeEndPos + new Vector2(windowMaxX - rangeEndX, TimeRangeShadowSize.Y),
+                                            TimeRangeOutsideColor);
 
                 // Shadow
                 _drawlist.AddRectFilled(
-                                       rangeEndPos,
-                                       rangeEndPos + TimeRangeShadowSize,
-                                       TimeRangeShadowColor);
+                                        rangeEndPos,
+                                        rangeEndPos + TimeRangeShadowSize,
+                                        TimeRangeShadowColor);
 
                 // Line
                 _drawlist.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), TimeRangeShadowColor);
@@ -278,16 +273,10 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.PopStyleColor();
         }
+        #endregion
+        
 
-
-        private void SetCursorToBottom(float xInScreen, float paddingFromBottom)
-        {
-            var max = ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos();
-            var p = new Vector2(xInScreen, max.Y - paddingFromBottom);
-            ImGui.SetCursorScreenPos(p);
-        }
-
-
+        #region ISelection holder
         public void ClearSelection()
         {
             foreach (var sh in _selectionHolders)
@@ -314,27 +303,27 @@ namespace T3.Gui.Windows.TimeLine
             return null;
         }
 
-        public void UpdateDragCommand(double dt)
+        public void UpdateDragCommand(double dt, double dv)
         {
             foreach (var s in _selectionHolders)
             {
-                s.UpdateDragCommand(dt);
+                s.UpdateDragCommand(dt, 0);
             }
         }
 
-        public void UpdateDragStartCommand(double dt)
+        public void UpdateDragStartCommand(double dt, double dv)
         {
             foreach (var s in _selectionHolders)
             {
-                s.UpdateDragStartCommand(dt);
+                s.UpdateDragStartCommand(dt, 0);
             }
         }
 
-        public void UpdateDragEndCommand(double dt)
+        public void UpdateDragEndCommand(double dt, double dv)
         {
             foreach (var s in _selectionHolders)
             {
-                s.UpdateDragEndCommand(dt);
+                s.UpdateDragEndCommand(dt, 0);
             }
         }
 
@@ -347,9 +336,58 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         private readonly List<ITimeElementSelectionHolder> _selectionHolders = new List<ITimeElementSelectionHolder>();
+        #endregion
+
+        #region view modes
+        private bool UpdateMode()
+        {
+            if (Mode == _lastMode)
+                return false;
+
+            switch (_lastMode)
+            {
+                case Modes.DopeView:
+                    _selectionHolders.Remove(_dopeSheetArea);
+                    _snapHandler.RemoveSnapAttractor(_dopeSheetArea);
+                    break;
+
+                case Modes.CurveEditor:
+                    _selectionHolders.Remove(_curveEditArea);
+                    _snapHandler.RemoveSnapAttractor(_curveEditArea);
+                    break;
+            }
+
+            switch (Mode)
+            {
+                case Modes.DopeView:
+                    _selectionHolders.Add(_dopeSheetArea);
+                    _snapHandler.AddSnapAttractor(_dopeSheetArea);
+                    break;
+
+                case Modes.CurveEditor:
+                    _selectionHolders.Add(_curveEditArea);
+                    _snapHandler.AddSnapAttractor(_curveEditArea);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            _lastMode = Mode;
+            return true;
+        }
+
+        public enum Modes
+        {
+            DopeView,
+            CurveEditor,
+        }
+
+        public Modes Mode = Modes.DopeView;
+        private Modes _lastMode = Modes.CurveEditor; // Make different to force initial update
+        #endregion
 
         #region implement ICanvas =================================================================
-
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
@@ -379,7 +417,6 @@ namespace T3.Gui.Windows.TimeLine
             return (yOnCanvas - Scroll.Y) * Scale.Y + WindowPos.Y;
         }
 
-
         /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
@@ -404,7 +441,6 @@ namespace T3.Gui.Windows.TimeLine
             return (yOnScreen - WindowPos.Y) / Scale.Y + Scroll.Y;
         }
 
-
         /// <summary>
         /// Convert direction on canvas to delta in screen space
         /// </summary>
@@ -413,7 +449,6 @@ namespace T3.Gui.Windows.TimeLine
             return vectorInCanvas * Scale;
         }
 
-
         /// <summary>
         /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
         /// </summary>
@@ -421,7 +456,6 @@ namespace T3.Gui.Windows.TimeLine
         {
             return vectorInScreen / Scale;
         }
-
 
         /// <summary>
         /// Convert rectangle on canvas to screen space
@@ -451,7 +485,6 @@ namespace T3.Gui.Windows.TimeLine
             return r;
         }
 
-
         /// <summary>
         /// Get relative position within canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
@@ -460,9 +493,7 @@ namespace T3.Gui.Windows.TimeLine
             return posOnCanvas * Scale - Scroll;
         }
 
-
         IEnumerable<ISelectable> ICanvas.SelectableChildren => new List<ISelectable>();
-
 
         public bool IsRectVisible(Vector2 pos, Vector2 size)
         {
@@ -484,17 +515,21 @@ namespace T3.Gui.Windows.TimeLine
         public List<ISelectable> SelectableChildren { get; set; }
         public SelectionHandler SelectionHandler { get; set; } = null;
         #endregion
+
         
-        public void SetValueRange(float valueScale, float valueScroll)
+        private static void SetCursorToBottom(float xInScreen, float paddingFromBottom)
         {
-            _scaleTarget = new Vector2(_scaleTarget.X,valueScale);
-            _scrollTarget = new Vector2( _scrollTarget.X,valueScroll);
+            var max = ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos();
+            var p = new Vector2(xInScreen, max.Y - paddingFromBottom);
+            ImGui.SetCursorScreenPos(p);
         }
 
+
         internal readonly ClipTime ClipTime;
+
         private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
         //private readonly LayersArea _layersArea;
-        
+
         private readonly DopeSheetArea _dopeSheetArea;
         private readonly CurveEditArea _curveEditArea;
 
@@ -509,10 +544,9 @@ namespace T3.Gui.Windows.TimeLine
         private Vector2 _scaleTarget = new Vector2(100, -1);
 
         private ImDrawListPtr _drawlist;
-        
+
         // Styling
         private const float TimeLineDragHeight = 20;
         private static readonly Vector2 TimeRangeHandleSize = new Vector2(10, 20);
-        
     }
 }
