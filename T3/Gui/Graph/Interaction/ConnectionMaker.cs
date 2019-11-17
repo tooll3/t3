@@ -66,8 +66,10 @@ namespace T3.Gui.Graph
                                                    targetParentOrChildId: NotConnectedId,
                                                    targetSlotId: NotConnectedId);
             _draftConnectionType = outputDef.ValueType;
+            _isDisconnectinFromInput = false;
         }
 
+        private static bool _isDisconnectinFromInput;
         public static void StartFromInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition inputDef, int multiInputIndex = 0)
         {
             var existingConnection = FindConnectionToInputSlot(parentSymbol, targetUi, inputDef, multiInputIndex);
@@ -80,6 +82,7 @@ namespace T3.Gui.Graph
                                                        sourceSlotId: existingConnection.SourceSlotId,
                                                        targetParentOrChildId: NotConnectedId,
                                                        targetSlotId: NotConnectedId);
+                _isDisconnectinFromInput = true;
             }
             else
             {
@@ -87,6 +90,7 @@ namespace T3.Gui.Graph
                                                        sourceSlotId: NotConnectedId,
                                                        targetParentOrChildId: targetUi.SymbolChild.Id,
                                                        targetSlotId: inputDef.Id);
+                _isDisconnectinFromInput = false;
             }
 
             _draftConnectionType = inputDef.DefaultValue.ValueType;
@@ -162,6 +166,13 @@ namespace T3.Gui.Graph
         {
             if (TempConnection == null)
                 return;
+
+            if (_isDisconnectinFromInput)
+            {
+                TempConnection = null;
+                return;
+            }
+                 
             
             if (TempConnection.TargetParentOrChildId == NotConnectedId)
             {
