@@ -91,6 +91,10 @@ namespace T3.Core
                 Writer.WriteValue("Id", child.Id);
                 Writer.WriteComment(child.ReadableName);
                 Writer.WriteValue("SymbolId", child.Symbol.Id);
+                if (!string.IsNullOrEmpty(child.Name))
+                {
+                    Writer.WriteObject("Name", child.Name);
+                }
                 Writer.WritePropertyName("InputValues");
                 Writer.WriteStartArray();
                 foreach (var inputValueEntry in child.InputValues)
@@ -124,6 +128,12 @@ namespace T3.Core
             }
 
             var symbolChild = new SymbolChild(symbol, childId);
+
+            var nameToken = symbolChildJson["Name"];
+            if (nameToken != null)
+            {
+                symbolChild.Name = nameToken.Value<string>();
+            }
 
             foreach (var inputValue in (JArray)symbolChildJson["InputValues"])
             {
