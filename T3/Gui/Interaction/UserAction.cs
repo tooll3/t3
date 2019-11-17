@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using T3.Gui.Commands;
 
 namespace T3.Gui
@@ -29,6 +27,7 @@ namespace T3.Gui
         SetEndTime,
         Undo,
         Redo,
+        Save,
     }
 
 
@@ -38,6 +37,7 @@ namespace T3.Gui
                                                                          {
                                                                              { UserActions.Undo, UndoRedoStack.Undo },
                                                                              { UserActions.Redo, UndoRedoStack.Redo },
+                                                                             { UserActions.Save, T3UI.UiModel.Save }
                                                                          };
         public static readonly HashSet<UserActions> DeferredActions = new HashSet<UserActions>();
 
@@ -92,10 +92,10 @@ namespace T3.Gui
                 Alt = alt;
                 Shift = shift;
             }
-            public bool Ctrl;
-            public bool Alt;
-            public bool Shift;
-            public Key Key;
+            public readonly bool Ctrl;
+            public readonly bool Alt;
+            public readonly bool Shift;
+            public readonly Key Key;
         }
 
         public KeyboardBinding(UserActions action, KeyCombination combination, bool needsWindowFocus = false)
@@ -105,7 +105,7 @@ namespace T3.Gui
             NeedsWindowFocus = needsWindowFocus;
         }
 
-        public static List<KeyboardBinding> Bindings = new List<KeyboardBinding>()
+        public static readonly List<KeyboardBinding> Bindings = new List<KeyboardBinding>()
         {
             new KeyboardBinding(UserActions.PlaybackForward, new KeyCombination(Key.L) ),
             new KeyboardBinding(UserActions.PlaybackBackwards, new KeyCombination(Key.J) ),
@@ -119,6 +119,8 @@ namespace T3.Gui
 
             new KeyboardBinding(UserActions.Undo, new KeyCombination(Key.Z,ctrl:true) ),
             new KeyboardBinding(UserActions.Redo, new KeyCombination(Key.Z,ctrl:true, shift:true) ),
+            
+            new KeyboardBinding(UserActions.Save, new KeyCombination(Key.S,ctrl:true) ),
         };
     }
 }

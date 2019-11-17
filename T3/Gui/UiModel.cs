@@ -164,6 +164,8 @@ namespace T3.Gui
 
         public override void Save()
         {
+            Log.Debug("Saving...");
+            
             // first save core data
             base.Save();
 
