@@ -3,23 +3,24 @@
 - FIX: Implement deleteKeyframesCommand
 - FIX: Deleting last keyframe should disable animation-flag in parameter view
 
-- snap time marker when holding a hotkey (N)
+- snap time marker when holding a hotkey (like N?)
 / scrub through time with sound playback
 / value op
 / fix auto focus in SymbolBrowser after searching
 - Return should rename selected node
 - Renamed children should be styled differently
-- default keyframes should use current value
+
+/ default keyframes should use current value
+
 - drag keyframe values OR time
 - fix curve show selected (or F-hotkey for hovered window)
 - add CurveEditBox
-- fix double keyframe problem
-- add context menu in DopeSheet
-- add horizontal value lines in CurveEditArea
+/ add context menu in DopeSheet
+/ add horizontal value lines in CurveEditArea
 - add HoverBox in DopeSheet
 - DopeSheet should correctly show constant keyframes
-
-
+- DopeSheet should show colors are color gradients
+- Add snapping to TimeLineRange
 
 - opening a new (unknown) op should show all operators
 - fix styling of context menu

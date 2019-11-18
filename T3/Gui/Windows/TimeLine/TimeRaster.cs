@@ -105,7 +105,7 @@ namespace T3.Gui.Windows.TimeLine
         private const float Density = 0.02f;
         private const double Epsilon = 0.001f;
 
-        protected class ScaleRange
+        public class ScaleRange
         {
             public double ScaleMin { get; set; }
             public double ScaleMax { get; set; }

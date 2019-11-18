@@ -64,6 +64,7 @@ namespace T3.Gui.Windows.TimeLine
                         _dopeSheetArea.Draw(compositionOp, animationParameters);
                         break;
                     case Modes.CurveEditor:
+                        _horizontalRaster.Draw(this);
                         _curveEditArea.Draw(compositionOp, animationParameters, bringCurvesIntoView: modeChanged);
                         break;
                 }
@@ -555,7 +556,7 @@ namespace T3.Gui.Windows.TimeLine
         internal readonly ClipTime ClipTime;
 
         private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
-        //private readonly LayersArea _layersArea;
+        private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster(); 
 
         private readonly DopeSheetArea _dopeSheetArea;
         private readonly CurveEditArea _curveEditArea;
