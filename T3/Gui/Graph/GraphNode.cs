@@ -116,9 +116,11 @@ namespace T3.Gui.Graph
                     }
                 }
 
+                ImGui.PushFont(Fonts.FontBold);
                 drawList.AddText(_lastScreenRect.Min + _labelPos,
                            ColorVariations.OperatorLabel.Apply(typeColor),
                            string.Format(childUi.SymbolChild.ReadableName));
+                ImGui.PopFont();
 
                 if (childUi.IsSelected)
                 {
