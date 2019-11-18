@@ -1,11 +1,9 @@
 using ImGuiNET;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Gui.Commands;
 using T3.Gui.InputUi;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
@@ -57,8 +55,7 @@ namespace T3.Gui.Graph
                 // Interaction
                 ImGui.SetCursorScreenPos(_lastScreenRect.Min);
                 ImGui.InvisibleButton("node", _lastScreenRect.GetSize());
-
-
+                
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
                 {
@@ -102,8 +99,7 @@ namespace T3.Gui.Graph
                 {
                     var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.Id == childUi.SymbolChild.Id);
                     var output = childInstance?.Outputs.FirstOrDefault();
-                    int framesSinceLastUpdate = output?.DirtyFlag.FramesSinceLastUpdate ?? 0;
-                    int updateCountThisFrame = output?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
+                    var updateCountThisFrame = output?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
                     if (updateCountThisFrame > 0) {
                         const double timeScale = 0.125f;
                         var blink = (float)(ImGui.GetTime() * timeScale * updateCountThisFrame) % 1f * _lastScreenRect.GetWidth();

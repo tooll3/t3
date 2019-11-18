@@ -1,34 +1,37 @@
-/ delete keyframes
 - FIX: modify animated value creates double keyframes
 - FIX: Implement deleteKeyframesCommand
 - FIX: Deleting last keyframe should disable animation-flag in parameter view
 
-- snap time marker when holding a hotkey (like N?)
-/ scrub through time with sound playback
-/ value op
-/ fix auto focus in SymbolBrowser after searching
-- Return should rename selected node
-/ Renamed children should be styled differently
-
-/ default keyframes should use current value
-
-- implement multi-click selection for GraphCanvas
 - drag keyframe values OR time
 - fix curve show selected (or F-hotkey for hovered window)
 - add CurveEditBox
-/ add context menu in DopeSheet
-/ add horizontal value lines in CurveEditArea
 - add HoverBox in DopeSheet
 - DopeSheet should correctly show constant keyframes
 - DopeSheet should show colors as color gradients
-/ Add snapping to TimeLineRange
+- DopeSheet should normalize values 0 .. 1
 
 - opening a new (unknown) op should show all operators
-- fix styling of context menu
+- improve styling of context menu
 
 - fix keyframe snapping
 
 More ideas
 ------
 - add snapping to canvas nodes
+- Return should rename selected node
+- snap time marker when holding a hotkey (like N?)
+- snap to value lines
+- preview thumbnails
 
+Done
+--------
+/ delete keyframes
+/ scrub through time with sound playback
+/ value op
+/ fix auto focus in SymbolBrowser after searching
+/ Renamed children should be styled differently
+/ default keyframes should use current value
+/ implement multi-click selection for GraphCanvas
+/ add context menu in DopeSheet
+/ add horizontal value lines in CurveEditArea
+/ Add snapping to TimeLineRange

@@ -17,9 +17,24 @@ namespace T3.Gui.Graph
                 if (ImGui.IsItemClicked(0))
                 {
                     var handler = GraphCanvas.Current.SelectionHandler;
+                    
                     if (!handler.SelectedElements.Contains(selectable))
                     {
-                        handler.SetElement(selectable);
+                        if (!ImGui.GetIO().KeyShift)
+                        {
+                            handler.SetElement(selectable);
+                        }
+                        else
+                        {
+                            handler.AddElement(selectable);
+                        }
+                    }
+                    else
+                    {
+                        if (ImGui.GetIO().KeyShift)
+                        {
+                            handler.RemoveElement(selectable);
+                        }
                     }
 
                     Guid compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
