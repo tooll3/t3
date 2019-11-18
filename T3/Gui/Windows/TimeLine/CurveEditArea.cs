@@ -90,13 +90,14 @@ namespace T3.Gui.Windows.TimeLine
                 TimeLineCanvas.Current.StartDragCommand();
             }
 
-            var d = TimeLineCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
 
-            var snapClipToStart = _snapHandler.CheckForSnapping(vDef.U + d.X);
-            if (!double.IsNaN(snapClipToStart))
-                d.X = (float)(snapClipToStart - vDef.U);
-
-            TimeLineCanvas.Current.UpdateDragCommand(d.X, d.Y);
+            var newDragPosition = TimeLineCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos);
+            var snapClipToStart = _snapHandler.CheckForSnapping(newDragPosition.X);
+            var dX = !double.IsNaN(snapClipToStart)
+                         ? snapClipToStart - vDef.U
+                         : newDragPosition.X - vDef.U;
+            var dY = newDragPosition.Y - vDef.Value;
+            TimeLineCanvas.Current.UpdateDragCommand(dX, dY);
         }
         
         void ITimeElementSelectionHolder.DeleteSelectedElements()

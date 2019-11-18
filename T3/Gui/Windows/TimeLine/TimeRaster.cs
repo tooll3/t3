@@ -83,7 +83,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         #region implement snap attractor
-        private const double SnapThreshold = 2;
+        private const double SnapThreshold = 6;
 
         public SnapResult CheckForSnap(double time)
         {

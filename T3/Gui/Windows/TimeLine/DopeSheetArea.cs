@@ -38,6 +38,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     DrawProperty(parameter);
                 }
+
                 DrawContextMenu();
             }
             ImGui.EndGroup();
@@ -225,11 +226,11 @@ namespace T3.Gui.Windows.TimeLine
                 TimeLineCanvas.Current.StartDragCommand();
             }
 
-            double dt = TimeLineCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta).X;
-
-            var snapClipToStart = _snapHandler.CheckForSnapping(vDef.U + dt);
-            if (!double.IsNaN(snapClipToStart))
-                dt = snapClipToStart - vDef.U;
+            var newDragTime = TimeLineCanvas.Current.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
+            var snapClipToStart = _snapHandler.CheckForSnapping(newDragTime);
+            var dt = !double.IsNaN(snapClipToStart)
+                         ? snapClipToStart - vDef.U
+                         : newDragTime - vDef.U;
 
             TimeLineCanvas.Current.UpdateDragCommand(dt, 0);
         }
@@ -278,7 +279,6 @@ namespace T3.Gui.Windows.TimeLine
                 index++;
             }
         }
-        
 
         ICommand ITimeElementSelectionHolder.StartDragCommand()
         {
@@ -322,9 +322,8 @@ namespace T3.Gui.Windows.TimeLine
         #endregion
 
         #region implement snapping interface -----------------------------------
-        private const float SnapDistance = 4;
+        private const float SnapDistance = 6;
         private double _snapThresholdOnCanvas;
-        
 
         /// <summary>
         /// Snap to all non-selected Clips
@@ -362,7 +361,7 @@ namespace T3.Gui.Windows.TimeLine
             maxForce = force;
         }
         #endregion
-        
+
         private Vector2 _minScreenPos;
         private static ChangeKeyframesCommand _changeKeyframesCommand;
         private const int LayerHeight = 25;
