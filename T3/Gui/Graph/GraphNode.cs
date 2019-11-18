@@ -117,9 +117,11 @@ namespace T3.Gui.Graph
                 }
 
                 ImGui.PushFont(Fonts.FontBold);
+                var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
+                
                 drawList.AddText(_lastScreenRect.Min + _labelPos,
                            ColorVariations.OperatorLabel.Apply(typeColor),
-                           string.Format(childUi.SymbolChild.ReadableName));
+                           string.Format(isRenamed ? ("\"" + childUi.SymbolChild.ReadableName + "\"") : childUi.SymbolChild.ReadableName));
                 ImGui.PopFont();
 
                 if (childUi.IsSelected)

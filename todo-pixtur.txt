@@ -8,7 +8,7 @@
 / value op
 / fix auto focus in SymbolBrowser after searching
 - Return should rename selected node
-- Renamed children should be styled differently
+/ Renamed children should be styled differently
 
 / default keyframes should use current value
 
