@@ -80,7 +80,7 @@ namespace T3.Core.Animation
                 foreach (var curve in _curves)
                 {
                     if (curve.HasVAt(minImpactPosition))
-                        curve.RemoveV(minImpactPosition);
+                        curve.RemoveKeyframeAt(minImpactPosition);
                 }
 
                 // Remove position from list and invalidate neighbours
@@ -173,7 +173,7 @@ namespace T3.Core.Animation
                     if (vDef == null)
                         continue;
 
-                    curve.RemoveV(u);
+                    curve.RemoveKeyframeAt(u);
 
                     var startSampleIndex = IndexFromU(previousU);
                     var endSampleIndex = IndexFromU(nextU) + 1;

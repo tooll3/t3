@@ -16,7 +16,7 @@ using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class CurveEditArea : ITimeElementSelectionHolder, IValueSnapAttractor
+    public class CurveEditArea : KeyframeEditArea, ITimeElementSelectionHolder, IValueSnapAttractor
     {
         public CurveEditArea(TimeLineCanvas timeLineCanvas, ValueSnapHandler snapHandler)
         {
@@ -25,8 +25,7 @@ namespace T3.Gui.Windows.TimeLine
             _curveEditBox = new CurveEditBox(timeLineCanvas);
         }
 
-        private List<GraphWindow.AnimationParameter> _animationParameters;
-
+        
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters, bool bringCurvesIntoView = false)
         {
             _compositionOp = compositionOp;
@@ -52,7 +51,6 @@ namespace T3.Gui.Windows.TimeLine
                 }
 
                 DrawContextMenu();
-                //_curveEditBox.Draw();
             }
             ImGui.EndGroup();
 
@@ -100,234 +98,13 @@ namespace T3.Gui.Windows.TimeLine
 
             TimeLineCanvas.Current.UpdateDragCommand(d.X, d.Y);
         }
-
-        private bool _contextMenuIsOpen;
-
-        private void DrawContextMenu()
+        
+        void ITimeElementSelectionHolder.DeleteSelectedElements()
         {
-            // This is a horrible hack to distinguish right mouse click from right mouse drag
-            var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
-            if (!_contextMenuIsOpen && rightMouseDragDelta > 3)
-                return;
-
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
-            if (ImGui.BeginPopupContextWindow("context_menu"))
-            {
-                _contextMenuIsOpen = true;
-                var selectedInterpolations = GetSelectedKeyframeInterpolationTypes();
-
-                var editModes = selectedInterpolations as VDefinition.EditMode[] ?? selectedInterpolations.ToArray();
-
-                if (ImGui.MenuItem("Smooth", null, editModes.Contains(VDefinition.EditMode.Smooth)))
-                    OnSmooth();
-
-                if (ImGui.MenuItem("Cubic", null, editModes.Contains(VDefinition.EditMode.Cubic)))
-                    OnCubic();
-
-                if (ImGui.MenuItem("Horizontal", null, editModes.Contains(VDefinition.EditMode.Horizontal)))
-                    OnHorizontal();
-
-                if (ImGui.MenuItem("Constant", null, editModes.Contains(VDefinition.EditMode.Constant)))
-                    OnConstant();
-
-                if (ImGui.MenuItem("Linear", null, editModes.Contains(VDefinition.EditMode.Linear)))
-                    OnLinear();
-
-                if (ImGui.MenuItem(_selectedKeyframes.Count > 0 ? "View Selected" : "View All", "F"))
-                    ViewAllOrSelectedKeys();
-
-                ImGui.EndPopup();
-            }
-            else
-            {
-                _contextMenuIsOpen = false;
-            }
-
-            ImGui.PopStyleVar();
+            KeyframeOperations.DeleteSelectedKeyframesFromAnimationParameters(_selectedKeyframes, _animationParameters);
+            RebuildCurveTables();
         }
-
-        #region update children
-        private void ViewAllOrSelectedKeys()
-        {
-            const float curveValuePadding = 0.3f;
-
-            var minU = double.PositiveInfinity;
-            var maxU = double.NegativeInfinity;
-            var minV = double.PositiveInfinity;
-            var maxV = double.NegativeInfinity;
-            var numPoints = 0;
-
-            switch (_selectedKeyframes.Count)
-            {
-                case 0:
-                {
-                    foreach (var vDef in GetAllKeyframes())
-                    {
-                        numPoints++;
-                        minU = Math.Min(minU, vDef.U);
-                        maxU = Math.Max(maxU, vDef.U);
-                        minV = Math.Min(minV, vDef.Value);
-                        maxV = Math.Max(maxV, vDef.Value);
-                    }
-
-                    break;
-                }
-                case 1:
-                    return;
-
-                default:
-                {
-                    foreach (var element in _selectedKeyframes)
-                    {
-                        numPoints++;
-                        minU = Math.Min(minU, element.U);
-                        maxU = Math.Max(maxU, element.U);
-                        minV = Math.Min(minV, element.Value);
-                        maxV = Math.Max(maxV, element.Value);
-                    }
-
-                    break;
-                }
-            }
-
-            if (numPoints == 0)
-            {
-                minV = -3;
-                maxV = +3;
-                minU = -2;
-                maxU = 10;
-            }
-
-            if (maxU == minU)
-            {
-                minU -= 1;
-            }
-
-            if (maxV == minU)
-            {
-                maxV += -1;
-                minV -= 1;
-            }
-
-            var height = ImGui.GetWindowContentRegionMax().Y - ImGui.GetWindowContentRegionMin().Y;
-            var scale = -(float)(height / ((maxV - minV) * (1 + 2 * curveValuePadding)));
-            _timeLineCanvas.SetVisibleValueRange(scale, (float)maxV - 20 / scale);
-        }
-
-        private void OnSmooth()
-        {
-            ForSelectedOrAllPointsDo((vDef) =>
-                                     {
-                                         vDef.BrokenTangents = false;
-                                         vDef.InEditMode = VDefinition.EditMode.Smooth;
-                                         vDef.InType = VDefinition.Interpolation.Spline;
-                                         vDef.OutEditMode = VDefinition.EditMode.Smooth;
-                                         vDef.OutType = VDefinition.Interpolation.Spline;
-                                     });
-        }
-
-        private void OnCubic()
-        {
-            ForSelectedOrAllPointsDo((vDef) =>
-                                     {
-                                         vDef.BrokenTangents = false;
-                                         vDef.InEditMode = VDefinition.EditMode.Cubic;
-                                         vDef.InType = VDefinition.Interpolation.Spline;
-                                         vDef.OutEditMode = VDefinition.EditMode.Cubic;
-                                         vDef.OutType = VDefinition.Interpolation.Spline;
-                                     });
-        }
-
-        private void OnHorizontal()
-        {
-            ForSelectedOrAllPointsDo((vDef) =>
-                                     {
-                                         vDef.BrokenTangents = false;
-
-                                         vDef.InEditMode = VDefinition.EditMode.Horizontal;
-                                         vDef.InType = VDefinition.Interpolation.Spline;
-                                         vDef.InTangentAngle = 0;
-
-                                         vDef.OutEditMode = VDefinition.EditMode.Horizontal;
-                                         vDef.OutType = VDefinition.Interpolation.Spline;
-                                         vDef.OutTangentAngle = Math.PI;
-                                     });
-        }
-
-        private void OnConstant()
-        {
-            ForSelectedOrAllPointsDo((vDef) =>
-                                     {
-                                         vDef.BrokenTangents = true;
-                                         vDef.OutType = VDefinition.Interpolation.Constant;
-                                         vDef.OutEditMode = VDefinition.EditMode.Constant;
-                                     });
-        }
-
-        private void OnLinear()
-        {
-            ForSelectedOrAllPointsDo((vDef) =>
-                                     {
-                                         vDef.BrokenTangents = false;
-                                         vDef.InEditMode = VDefinition.EditMode.Linear;
-                                         vDef.InType = VDefinition.Interpolation.Linear;
-                                         vDef.OutEditMode = VDefinition.EditMode.Linear;
-                                         vDef.OutType = VDefinition.Interpolation.Linear;
-                                     });
-        }
-
-        private IEnumerable<VDefinition.EditMode> GetSelectedKeyframeInterpolationTypes()
-        {
-            var checkedInterpolationTypes = new HashSet<VDefinition.EditMode>();
-            foreach (var point in GetSelectedOrAllPoints())
-            {
-                checkedInterpolationTypes.Add(point.OutEditMode);
-                checkedInterpolationTypes.Add(point.InEditMode);
-            }
-
-            return checkedInterpolationTypes;
-        }
-        #endregion
-
-        #region helper functions     
-        /// <summary>
-        /// Helper function to extract vDefs from all or selected UI controls across all curves in CurveEditor
-        /// </summary>
-        /// <returns>a list curves with a list of vDefs</returns>
-        private IEnumerable<VDefinition> GetSelectedOrAllPoints()
-        {
-            var result = new List<VDefinition>();
-
-            if (_selectedKeyframes.Count > 0)
-            {
-                result.AddRange(_selectedKeyframes);
-            }
-            else
-            {
-                foreach (var curve in _animationParameters.SelectMany(param => param.Curves))
-                {
-                    result.AddRange(curve.GetVDefinitions());
-                }
-            }
-
-            return result;
-        }
-
-        private delegate void DoSomethingWithKeyframeDelegate(VDefinition v);
-
-        private void ForSelectedOrAllPointsDo(DoSomethingWithKeyframeDelegate doFunc)
-        {
-            UpdateCurveAndMakeUpdateKeyframeCommands(doFunc);
-        }
-        #endregion
-
-        private void UpdateCurveAndMakeUpdateKeyframeCommands(DoSomethingWithKeyframeDelegate doFunc)
-        {
-            foreach (var keyframe in GetSelectedOrAllPoints())
-            {
-                doFunc(keyframe);
-            }
-        }
+        
 
         public void ClearSelection()
         {
@@ -375,7 +152,6 @@ namespace T3.Gui.Windows.TimeLine
                 vDefinition.U += dt;
                 vDefinition.Value += dv;
             }
-
             RebuildCurveTables();
         }
 
@@ -435,13 +211,6 @@ namespace T3.Gui.Windows.TimeLine
         private const float SnapDistance = 4;
         #endregion
 
-        private IEnumerable<VDefinition> GetAllKeyframes()
-        {
-            return from param in _animationParameters
-                   from curve in param.Curves
-                   from keyframe in curve.GetVDefinitions()
-                   select keyframe;
-        }
 
         private void DrawCurveLine(Curve curve)
         {
@@ -468,34 +237,15 @@ namespace T3.Gui.Windows.TimeLine
             _drawList.AddPolyline(ref _curveLinePoints[0], steps, Color.Gray, false, 1);
         }
 
-        /// <summary>
-        /// A horrible hack to keep curve table-structure aligned with position stored in key definitions.
-        /// </summary>
-        private void RebuildCurveTables()
-        {
-            foreach (var param in _animationParameters)
-            {
-                foreach (var curve in param.Curves)
-                {
-                    foreach (var (u, vDef) in curve.GetPointTable())
-                    {
-                        if (Math.Abs(u - vDef.U) > 0.001f)
-                        {
-                            curve.MoveKey(u, vDef.U);
-                        }
-                    }
-                }
-            }
-        }
+
 
         private static ChangeKeyframesCommand _changeKeyframesCommand;
         private static Vector2[] _curveLinePoints = new Vector2[0];
 
         private Instance _compositionOp;
 
-        private readonly HashSet<VDefinition> _selectedKeyframes = new HashSet<VDefinition>();
         private static ImDrawListPtr _drawList;
-        private readonly TimeLineCanvas _timeLineCanvas;
+        
         private readonly CurveEditBox _curveEditBox;
         private readonly ValueSnapHandler _snapHandler;
     }

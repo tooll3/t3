@@ -11,7 +11,7 @@ namespace T3.Gui.Windows.TimeLine
     {
         void ClearSelection();
         void UpdateSelectionForArea(ImRect area, SelectMode selectMode);
-        //Command DeleteSelectedElements();
+        void DeleteSelectedElements();
 
         ICommand StartDragCommand();
         void UpdateDragCommand(double dt, double dv);

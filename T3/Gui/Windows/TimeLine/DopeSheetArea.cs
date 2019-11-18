@@ -15,11 +15,12 @@ using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class DopeSheetArea : ITimeElementSelectionHolder, IValueSnapAttractor
+    public class DopeSheetArea : KeyframeEditArea, ITimeElementSelectionHolder, IValueSnapAttractor
     {
-        public DopeSheetArea(ValueSnapHandler snapHandler)
+        public DopeSheetArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas)
         {
             _snapHandler = snapHandler;
+            _timeLineCanvas = timeLineCanvas;
         }
 
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
@@ -37,6 +38,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     DrawProperty(parameter);
                 }
+                DrawContextMenu();
             }
             ImGui.EndGroup();
         }
@@ -276,11 +278,7 @@ namespace T3.Gui.Windows.TimeLine
                 index++;
             }
         }
-
-        //        public Command DeleteSelectedElements()
-        //        {
-        //            throw new System.NotImplementedException();
-        //        }
+        
 
         ICommand ITimeElementSelectionHolder.StartDragCommand()
         {
@@ -315,25 +313,18 @@ namespace T3.Gui.Windows.TimeLine
             UndoRedoStack.Add(_changeKeyframesCommand);
             _changeKeyframesCommand = null;
         }
+
+        void ITimeElementSelectionHolder.DeleteSelectedElements()
+        {
+            KeyframeOperations.DeleteSelectedKeyframesFromAnimationParameters(_selectedKeyframes, _animationParameters);
+            RebuildCurveTables();
+        }
         #endregion
 
         #region implement snapping interface -----------------------------------
         private const float SnapDistance = 4;
         private double _snapThresholdOnCanvas;
-
-        public IEnumerable<VDefinition> GetAllKeyframes()
-        {
-            foreach (var param in _animationParameters)
-            {
-                foreach (var curve in param.Curves)
-                {
-                    foreach (var pair in curve.GetPointTable())
-                    {
-                        yield return pair.Value;
-                    }
-                }
-            }
-        }
+        
 
         /// <summary>
         /// Snap to all non-selected Clips
@@ -371,39 +362,10 @@ namespace T3.Gui.Windows.TimeLine
             maxForce = force;
         }
         #endregion
-
-        #region internal helpers
-        /// <summary>
-        /// A horrible hack to keep curve table-structure aligned with position stored in key definitions.
-        /// </summary>
-        private void RebuildCurveTables()
-        {
-            foreach (var param in _animationParameters)
-            {
-                foreach (var curve in param.Curves)
-                {
-                    foreach (var (u, vDef) in curve.GetPointTable())
-                    {
-                        if (Math.Abs(u - vDef.U) > 0.001f)
-                        {
-                            curve.MoveKey(u, vDef.U);
-                        }
-                    }
-                }
-            }
-        }
-        #endregion
-
+        
         private Vector2 _minScreenPos;
-
-        private readonly HashSet<VDefinition> _selectedKeyframes = new HashSet<VDefinition>();
         private static ChangeKeyframesCommand _changeKeyframesCommand;
-
         private const int LayerHeight = 25;
-        //private const float HandleWidth = 5;
-        //private readonly Vector2 _handleOffset = new Vector2(HandleWidth, 0);
-
-        private List<GraphWindow.AnimationParameter> _animationParameters;
         private Instance _compositionOp;
         private ImDrawListPtr _drawList;
         private readonly ValueSnapHandler _snapHandler;

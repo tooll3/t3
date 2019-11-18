@@ -18,7 +18,7 @@ namespace T3.Gui.Windows.TimeLine
         public TimeLineCanvas(ClipTime clipTime = null)
         {
             ClipTime = clipTime;
-            _dopeSheetArea = new DopeSheetArea(_snapHandler);
+            _dopeSheetArea = new DopeSheetArea(_snapHandler, this);
             _selectionFence = new TimeSelectionFence(this);
             _curveEditArea = new CurveEditArea(this, _snapHandler);
 
@@ -353,6 +353,14 @@ namespace T3.Gui.Windows.TimeLine
             foreach (var s in _selectionHolders)
             {
                 s.CompleteDragCommand();
+            }
+        }
+
+        public void DeleteSelectedElements()
+        {
+            foreach (var s in _selectionHolders)
+            {
+                s.DeleteSelectedElements();
             }
         }
 

@@ -73,7 +73,7 @@ namespace T3.Core.Animation
             SplineInterpolator.UpdateTangents(_state.Table.ToList());
         }
 
-        public void RemoveV(double u)
+        public void RemoveKeyframeAt(double u)
         {
             var state = _state;
             state.Table.Remove(u);

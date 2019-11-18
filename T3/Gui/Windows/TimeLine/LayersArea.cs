@@ -327,6 +327,10 @@ namespace T3.Gui.Windows.TimeLine
             _moveClipsCommand = null;
         }
 
+        void ITimeElementSelectionHolder.DeleteSelectedElements()
+        {
+            //TODO: Implement
+        }
         #endregion
 
 
