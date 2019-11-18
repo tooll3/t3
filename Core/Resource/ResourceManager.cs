@@ -312,7 +312,7 @@ namespace T3.Core
             }
         }
 
-        public void SetupStructuredBuffer(ref Buffer buffer, BufferDescription bufferDesc)
+        public void SetupBuffer(ref Buffer buffer, BufferDescription bufferDesc)
         {
             if (buffer == null)
             {
