@@ -12,6 +12,7 @@
 
 / default keyframes should use current value
 
+- implement multi-click selection for GraphCanvas
 - drag keyframe values OR time
 - fix curve show selected (or F-hotkey for hovered window)
 - add CurveEditBox
@@ -19,8 +20,15 @@
 / add horizontal value lines in CurveEditArea
 - add HoverBox in DopeSheet
 - DopeSheet should correctly show constant keyframes
-- DopeSheet should show colors are color gradients
-- Add snapping to TimeLineRange
+- DopeSheet should show colors as color gradients
+/ Add snapping to TimeLineRange
 
 - opening a new (unknown) op should show all operators
 - fix styling of context menu
+
+- fix keyframe snapping
+
+More ideas
+------
+- add snapping to canvas nodes
+

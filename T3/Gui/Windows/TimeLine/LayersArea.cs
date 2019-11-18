@@ -28,26 +28,26 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.BeginGroup();
             {
-                ImGui.SetCursorPos( ImGui.GetCursorPos() + new Vector2(0,3)); // keep some padding 
+                ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(0, 3)); // keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
 
                 foreach (var layer in compositionOp.Symbol.Animator.Layers)
                 {
                     DrawLayer(layer);
                 }
-                
+
                 DrawContextMenu();
             }
             ImGui.EndGroup();
         }
 
-        
         bool _contextMenuIsOpen = false;
+
         private void DrawContextMenu()
         {
             if (!_contextMenuIsOpen && !ImGui.IsWindowHovered())
                 return;
-            
+
             // This is a horrible hack to distinguish right mouse click from right mouse drag
             var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
             if (!_contextMenuIsOpen && rightMouseDragDelta > 3)
@@ -69,26 +69,26 @@ namespace T3.Gui.Windows.TimeLine
             {
                 _contextMenuIsOpen = false;
             }
+
             ImGui.PopStyleVar();
         }
-
 
         private void DrawLayer(Animator.Layer layer)
         {
             // Draw layer lines
             var min = ImGui.GetCursorScreenPos();
-            var max = min + new Vector2(ImGui.GetContentRegionAvail().X,  LayerHeight-1);
+            var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight - 1);
             _drawList.AddRectFilled(new Vector2(min.X, max.Y),
-                                    new Vector2(max.X, max.Y+1), Color.Black);
+                                    new Vector2(max.X, max.Y + 1), Color.Black);
 
             var layerArea = new ImRect(min, max);
             foreach (var clip in layer.Clips)
             {
                 DrawClip(layerArea, clip);
             }
+
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight));
         }
-
 
         private void DrawClip(ImRect layerArea, Animator.Clip clip)
         {
@@ -110,10 +110,10 @@ namespace T3.Gui.Windows.TimeLine
             var isSelected = _selectedItems.Contains(clip);
             var color = new Color(0.5f);
             _drawList.AddRectFilled(position, position + clipSize - new Vector2(1, 0), color);
-            if(isSelected) 
-                _drawList.AddRect(position, position + clipSize - new Vector2(1,0), Color.White);
-            
-            _drawList.AddText(position + new Vector2(4,4), isSelected ? Color.White: Color.Black, clip.Name);
+            if (isSelected)
+                _drawList.AddRect(position, position + clipSize - new Vector2(1, 0), Color.White);
+
+            _drawList.AddText(position + new Vector2(4, 4), isSelected ? Color.White : Color.Black, clip.Name);
 
             // Body clicked
             ImGui.SetCursorScreenPos(showSizeHandles ? (position + _handleOffset) : position);
@@ -156,7 +156,6 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.PopID();
         }
 
-
         private enum HandleDragMode
         {
             Body = 0,
@@ -168,9 +167,9 @@ namespace T3.Gui.Windows.TimeLine
         {
             if (ImGui.IsItemHovered())
             {
-                ImGui.SetMouseCursor(mode == HandleDragMode.Body 
-                                         ? ImGuiMouseCursor.Hand 
-                                         :ImGuiMouseCursor.ResizeEW);
+                ImGui.SetMouseCursor(mode == HandleDragMode.Body
+                                         ? ImGuiMouseCursor.Hand
+                                         : ImGuiMouseCursor.ResizeEW);
             }
 
             if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
@@ -189,7 +188,7 @@ namespace T3.Gui.Windows.TimeLine
                 if (!ImGui.GetIO().KeyShift)
                 {
                     TimeLineCanvas.Current.ClearSelection();
-                } 
+                }
 
                 _selectedItems.Add(clip);
             }
@@ -212,7 +211,7 @@ namespace T3.Gui.Windows.TimeLine
                     if (!double.IsNaN(snapClipToEnd))
                         dt = snapClipToEnd - clip.EndTime;
 
-                    TimeLineCanvas.Current.UpdateDragCommand(dt,0 );
+                    TimeLineCanvas.Current.UpdateDragCommand(dt, 0);
                     break;
 
                 case HandleDragMode.Start:
@@ -220,7 +219,7 @@ namespace T3.Gui.Windows.TimeLine
                     if (!double.IsNaN(snapToStart))
                         dt = snapToStart - clip.StartTime;
 
-                    TimeLineCanvas.Current.UpdateDragStartCommand(dt,0 );
+                    TimeLineCanvas.Current.UpdateDragStartCommand(dt, 0);
                     break;
 
                 case HandleDragMode.End:
@@ -228,7 +227,7 @@ namespace T3.Gui.Windows.TimeLine
                     if (!double.IsNaN(snapToEnd))
                         dt = snapToEnd - clip.EndTime;
 
-                    TimeLineCanvas.Current.UpdateDragEndCommand(dt,0);
+                    TimeLineCanvas.Current.UpdateDragEndCommand(dt, 0);
                     break;
 
                 default:
@@ -236,9 +235,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-
         #region implement selection holder interface --------------------------------------------
-
         void ITimeElementSelectionHolder.ClearSelection()
         {
             _selectedItems.Clear();
@@ -278,11 +275,6 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-//        public Command DeleteSelectedElements()
-//        {
-//            throw new System.NotImplementedException();
-//        }
-
         ICommand ITimeElementSelectionHolder.StartDragCommand()
         {
             _moveClipsCommand = new MoveTimeClipCommand(_compositionOp.Symbol.Id, _selectedItems.ToList());
@@ -306,7 +298,6 @@ namespace T3.Gui.Windows.TimeLine
                 clip.StartTime = Math.Min(clip.StartTime + dt, clip.EndTime - 1 / 60f);
             }
         }
-
 
         void ITimeElementSelectionHolder.UpdateDragEndCommand(double dt, double dv)
         {
@@ -333,49 +324,28 @@ namespace T3.Gui.Windows.TimeLine
         }
         #endregion
 
-
         #region implement snapping interface -----------------------------------
-
         private const float SnapDistance = 4;
-        private double _snapThresholdOnCanvas;
 
         /// <summary>
         /// Snap to all non-selected Clips
         /// </summary>
         SnapResult IValueSnapAttractor.CheckForSnap(double targetTime)
         {
-            _snapThresholdOnCanvas = TimeLineCanvas.Current.InverseTransformDirection(new Vector2(SnapDistance, 0)).X;
-            var maxForce = 0.0;
-            var bestSnapTime = double.NaN;
+            SnapResult bestSnapResult = null;
+            var snapThresholdOnCanvas = TimeLineCanvas.Current.InverseTransformDirection(new Vector2(6, 0)).X;
 
             foreach (var clip in _compositionOp.Symbol.Animator.GetAllTimeClips())
             {
                 if (_selectedItems.Contains(clip))
                     continue;
 
-                CheckForSnapping(targetTime, clip.StartTime, maxForce: ref maxForce, bestSnapTime: ref bestSnapTime);
-                CheckForSnapping(targetTime, clip.EndTime, maxForce: ref maxForce, bestSnapTime: ref bestSnapTime);
+                KeyframeOperations.CheckForBetterSnapping(targetTime, clip.StartTime, snapThresholdOnCanvas, ref bestSnapResult);
+                KeyframeOperations.CheckForBetterSnapping(targetTime, clip.EndTime, snapThresholdOnCanvas, ref bestSnapResult);
             }
 
-            return double.IsNaN(bestSnapTime)
-                       ? null
-                       : new SnapResult(bestSnapTime, maxForce);
+            return bestSnapResult;
         }
-
-        private void CheckForSnapping(double targetTime, double anchorTime, ref double maxForce, ref double bestSnapTime)
-        {
-            var distance = Math.Abs(anchorTime - targetTime);
-            if (distance < 0.001)
-                return;
-
-            var force = Math.Max(0, _snapThresholdOnCanvas - distance);
-            if (force <= maxForce)
-                return;
-
-            bestSnapTime = anchorTime;
-            maxForce = force;
-        }
-
         #endregion
 
         private Vector2 _minScreenPos;

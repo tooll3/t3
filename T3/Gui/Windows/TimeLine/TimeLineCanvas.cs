@@ -22,6 +22,7 @@ namespace T3.Gui.Windows.TimeLine
             _selectionFence = new TimeSelectionFence(this);
             _curveEditArea = new CurveEditArea(this, _snapHandler);
 
+            _snapHandler.AddSnapAttractor(_timeRange);
             _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
             _snapHandler.SnappedEvent += SnappedEventHandler;
@@ -69,7 +70,7 @@ namespace T3.Gui.Windows.TimeLine
                         break;
                 }
 
-                DrawTimeRange();
+                _timeRange.Draw(this, ClipTime, _drawlist, _snapHandler);
                 _currentTimeMarker.Draw(ClipTime);
                 DrawDragTimeArea();
                 _selectionFence.Draw();
@@ -195,89 +196,6 @@ namespace T3.Gui.Windows.TimeLine
             _scaleTarget = new Vector2(_scaleTarget.X, valueScale);
             _scrollTarget = new Vector2(_scrollTarget.X, valueScroll);
         }
-
-        #region time range
-        private static readonly Vector2 TimeRangeShadowSize = new Vector2(5, 9999);
-        private static readonly Color TimeRangeShadowColor = new Color(0, 0, 0, 0.5f);
-        private static readonly Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.3f);
-        private static readonly Color TimeRangeMarkerColor = new Color(1f, 1, 1f, 0.3f);
-
-        private void DrawTimeRange()
-        {
-            if (ClipTime == null)
-                return;
-
-            ImGui.PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
-
-            // Range start
-            {
-                var xRangeStart = TransformPositionX((float)ClipTime.TimeRangeStart);
-                var rangeStartPos = new Vector2(xRangeStart, 0);
-
-                // Shade outside
-                _drawlist.AddRectFilled(
-                                        new Vector2(0, 0),
-                                        new Vector2(xRangeStart, TimeRangeShadowSize.Y),
-                                        TimeRangeOutsideColor);
-
-                // Shadow
-                _drawlist.AddRectFilled(
-                                        rangeStartPos - new Vector2(TimeRangeShadowSize.X - 1, 0),
-                                        rangeStartPos + new Vector2(0, TimeRangeShadowSize.Y),
-                                        TimeRangeShadowColor);
-
-                // Line
-                _drawlist.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), TimeRangeShadowColor);
-
-                SetCursorToBottom(
-                                  xRangeStart - TimeRangeHandleSize.X,
-                                  TimeRangeHandleSize.Y);
-
-                ImGui.Button("##StartPos", TimeRangeHandleSize);
-
-                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
-                {
-                    ClipTime.TimeRangeStart += InverseTransformDirection(_io.MouseDelta).X;
-                }
-            }
-
-            // Range end
-            {
-                var rangeEndX = TransformPositionX((float)ClipTime.TimeRangeEnd);
-                var rangeEndPos = new Vector2(rangeEndX, 0);
-
-                // Shade outside
-                var windowMaxX = ImGui.GetContentRegionAvail().X + WindowPos.X;
-                if (rangeEndX < windowMaxX)
-                    _drawlist.AddRectFilled(
-                                            rangeEndPos,
-                                            rangeEndPos + new Vector2(windowMaxX - rangeEndX, TimeRangeShadowSize.Y),
-                                            TimeRangeOutsideColor);
-
-                // Shadow
-                _drawlist.AddRectFilled(
-                                        rangeEndPos,
-                                        rangeEndPos + TimeRangeShadowSize,
-                                        TimeRangeShadowColor);
-
-                // Line
-                _drawlist.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), TimeRangeShadowColor);
-
-                SetCursorToBottom(
-                                  rangeEndX,
-                                  TimeRangeHandleSize.Y);
-
-                ImGui.Button("##EndPos", TimeRangeHandleSize);
-
-                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
-                {
-                    ClipTime.TimeRangeEnd += InverseTransformDirection(_io.MouseDelta).X;
-                }
-            }
-
-            ImGui.PopStyleColor();
-        }
-        #endregion
 
         private void SnappedEventHandler(double snapPosition)
         {
@@ -546,17 +464,11 @@ namespace T3.Gui.Windows.TimeLine
         public SelectionHandler SelectionHandler { get; set; } = null;
         #endregion
 
-        private static void SetCursorToBottom(float xInScreen, float paddingFromBottom)
-        {
-            var max = ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos();
-            var p = new Vector2(xInScreen, max.Y - paddingFromBottom);
-            ImGui.SetCursorScreenPos(p);
-        }
-
         internal readonly ClipTime ClipTime;
 
         private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
-        private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster(); 
+        private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
+        private readonly TimeRange _timeRange = new TimeRange();
 
         private readonly DopeSheetArea _dopeSheetArea;
         private readonly CurveEditArea _curveEditArea;
@@ -576,6 +488,5 @@ namespace T3.Gui.Windows.TimeLine
 
         // Styling
         private const float TimeLineDragHeight = 20;
-        private static readonly Vector2 TimeRangeHandleSize = new Vector2(10, 20);
     }
 }
