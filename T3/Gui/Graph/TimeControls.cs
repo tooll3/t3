@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System;
 using System.Numerics;
+using T3.Core.Logging;
 using T3.Gui.Windows.TimeLine;
 using Icon = T3.Gui.Styling.Icon;
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -94,8 +95,7 @@ namespace T3.Gui.Graph
             if (CustomComponents.ToggleButton(Icon.PlayBackwards,
                                               label: isPlayingBackwards ? $"[{(int)clipTime.PlaybackSpeed}x]" : "<",
                                               ref isPlayingBackwards,
-                                              TimeControlsSize,
-                                              trigger: KeyboardBinding.Triggered(UserActions.PlaybackBackwards)))
+                                              TimeControlsSize))
             {
                 if (clipTime.PlaybackSpeed != 0)
                 {
@@ -114,8 +114,7 @@ namespace T3.Gui.Graph
             if (CustomComponents.ToggleButton(Icon.PlayForwards,
                                               label: isPlaying ? $"[{(int)clipTime.PlaybackSpeed}x]" : ">",
                                               ref isPlaying,
-                                              TimeControlsSize,
-                                              trigger: KeyboardBinding.Triggered(UserActions.PlaybackToggle)))
+                                              TimeControlsSize))
             {
                 if (Math.Abs(clipTime.PlaybackSpeed) > 0.001f)
                 {
@@ -147,11 +146,12 @@ namespace T3.Gui.Graph
             // Play backwards with increasing speed
             if (KeyboardBinding.Triggered(UserActions.PlaybackBackwards))
             {
+                Log.Debug("Backwards triggered with speed " + clipTime.PlaybackSpeed);
                 if (clipTime.PlaybackSpeed >= 0)
                 {
                     clipTime.PlaybackSpeed = -1;
                 }
-                else if (clipTime.PlaybackSpeed > -8)
+                else if (clipTime.PlaybackSpeed > -16)
                 {
                     clipTime.PlaybackSpeed *= 2;
                 }
@@ -164,10 +164,19 @@ namespace T3.Gui.Graph
                 {
                     clipTime.PlaybackSpeed = 1;
                 }
-                else if (clipTime.PlaybackSpeed < 8)
+                else if (clipTime.PlaybackSpeed < 16)    // Bass can't play much faster anyways
                 {
                     clipTime.PlaybackSpeed *= 2;
                 }
+            }
+            
+            
+            if (KeyboardBinding.Triggered(UserActions.PlaybackForwardHalfSpeed))
+            {
+                if(clipTime.PlaybackSpeed > 0 && clipTime.PlaybackSpeed < 1f)
+                    clipTime.PlaybackSpeed *= 0.5f;
+                else
+                    clipTime.PlaybackSpeed = 0.5f;
             }
 
             // Stop as separate keyboard 

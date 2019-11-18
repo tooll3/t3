@@ -27,6 +27,7 @@ namespace T3.Gui
                            ? TimeRangeStart
                            : Time - (TimeRangeEnd - TimeRangeStart);
             }
+
             EvaluationContext.GlobalTime = Time;
         }
 
@@ -43,15 +44,17 @@ namespace T3.Gui
             Time += ImGui.GetIO().DeltaTime * PlaybackSpeed;
         }
     }
-    
+
     public class StreamClipTime : ClipTime
     {
         private readonly int _soundStreamHandle;
-        
+        private float _originalFrequency;
+
         public StreamClipTime(string filename)
         {
             Bass.Init();
             _soundStreamHandle = Bass.CreateStream(filename);
+            Bass.ChannelGetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, out _originalFrequency);
         }
 
         public override double Time
@@ -64,37 +67,34 @@ namespace T3.Gui
             }
         }
 
-        private double _playbackSpeed; 
+        private double _playbackSpeed;
+
         public override double PlaybackSpeed
         {
-            get
-            {
-                var playbackState = Bass.ChannelIsActive(_soundStreamHandle);
-                return playbackState == PlaybackState.Playing ? 1.0 : 0.0;
-            }
-
+            get => _playbackSpeed;
             set
             {
                 _playbackSpeed = value;
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (value == 0.0)
                 {
                     Bass.ChannelStop(_soundStreamHandle);
                 }
                 else if (value < 0.0)
                 {
-                    Bass.ChannelStop(_soundStreamHandle);
+                    Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.ReverseDirection, -1);
+                    Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, _originalFrequency * -_playbackSpeed);
+                    Bass.ChannelPlay(_soundStreamHandle);
                 }
                 else
                 {
-                    var playbackState = Bass.ChannelIsActive(_soundStreamHandle);
-                    if (playbackState != PlaybackState.Playing)
-                    {
-                        Bass.ChannelPlay(_soundStreamHandle);
-                    }
+                    Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.ReverseDirection, 1);
+                    Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, _originalFrequency * _playbackSpeed);
+                    Bass.ChannelPlay(_soundStreamHandle);
                 }
             }
         }
-        
+
         protected override void UpdateTime()
         {
             if (_playbackSpeed < 0.0)

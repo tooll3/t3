@@ -13,6 +13,7 @@ namespace T3.Gui
     public enum UserActions
     {
         PlaybackForward = 0,
+        PlaybackForwardHalfSpeed,
         PlaybackBackwards,
         PlaybackNextFrame,
         PlaybackPreviousFrame,
@@ -73,9 +74,9 @@ namespace T3.Gui
                 {
                     if (io.KeysDown[(int)c.Key]
                         && io.KeysDownDurationPrev[(int)c.Key] == 0
-                        && (!c.Alt || io.KeyAlt)
-                        && (!c.Ctrl || io.KeyCtrl)
-                        && (!c.Shift || io.KeyShift)
+                        && ((!c.Alt && !io.KeyAlt) || (c.Alt && io.KeyAlt)) // There is probably a smarty way to say this.
+                        && ((!c.Ctrl && !io.KeyCtrl) || (c.Ctrl && io.KeyCtrl))
+                        && ((!c.Shift && !io.KeyShift) || (c.Shift && io.KeyShift))    
                      )
                         return true;
                 }
@@ -108,6 +109,7 @@ namespace T3.Gui
         public static readonly List<KeyboardBinding> Bindings = new List<KeyboardBinding>()
         {
             new KeyboardBinding(UserActions.PlaybackForward, new KeyCombination(Key.L) ),
+            new KeyboardBinding(UserActions.PlaybackForwardHalfSpeed, new KeyCombination(Key.L, shift:true) ),
             new KeyboardBinding(UserActions.PlaybackBackwards, new KeyCombination(Key.J) ),
             new KeyboardBinding(UserActions.PlaybackStop, new KeyCombination(Key.K) ),
             new KeyboardBinding(UserActions.PlaybackToggle, new KeyCombination(Key.Space) ),
