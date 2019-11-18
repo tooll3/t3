@@ -59,9 +59,16 @@ namespace T3.Core.Operator
 
         public bool IsDirty => Reference != Target;
 
+        public static int InvalidationRefFrame { get; set; } = 0;
+        private int _invalidatedWithRefFrame = -1;
         public void Invalidate()
         {
-            Target++;
+            if (InvalidationRefFrame != _invalidatedWithRefFrame)
+            {
+                // the ref frame prevent double invalidation when outputs are connected several times
+                _invalidatedWithRefFrame = InvalidationRefFrame;
+                Target++;
+            }
         }
 
         public void Clear()

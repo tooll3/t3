@@ -11,7 +11,7 @@ namespace T3.Gui.OutputUi
         {
             if (slot is Slot<List<float>> typedSlot)
             {
-                Invalidate(slot);
+                StartInvalidation(slot);
                 _evaluationContext.Reset();
                 var list = typedSlot.GetValue(_evaluationContext);
                 var outputString = string.Join(", ", list);

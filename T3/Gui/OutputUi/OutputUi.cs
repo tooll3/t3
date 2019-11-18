@@ -15,7 +15,13 @@ namespace T3.Gui.OutputUi
 
         public abstract void DrawValue(ISlot slot);
 
-        public int Invalidate(ISlot slot)
+        public void StartInvalidation(ISlot slot)
+        {
+            DirtyFlag.InvalidationRefFrame++;
+            Invalidate(slot);
+        }
+        
+        private int Invalidate(ISlot slot)
         {
             if (slot.IsConnected)
             {

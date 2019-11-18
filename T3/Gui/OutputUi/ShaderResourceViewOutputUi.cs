@@ -14,7 +14,7 @@ namespace T3.Gui.OutputUi
         {
             if (slot is Slot<ShaderResourceView> typedSlot)
             {
-                Invalidate(slot);
+                StartInvalidation(slot);
                 _evaluationContext.Reset();
                 var value = typedSlot.GetValue(_evaluationContext);
                 if (value?.Description.Dimension == ShaderResourceViewDimension.Texture2D)

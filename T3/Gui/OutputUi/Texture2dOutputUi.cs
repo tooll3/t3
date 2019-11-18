@@ -17,7 +17,7 @@ namespace T3.Gui.OutputUi
         {
             if (slot is Slot<Texture2D> typedSlot)
             {
-                Invalidate(slot);
+                StartInvalidation(slot);
                 _evaluationContext.Reset();
                 var texture = typedSlot.GetValue(_evaluationContext);
                 ImageOutputCanvas.Current.DrawTexture(texture);
