@@ -15,7 +15,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 switch (clipTime.TimeMode)
                 {
-                    case ClipTime.TimeModes.Seconds:
+                    case ClipTime.TimeModes.Secs:
                         _standardRaster.UnitsPerSecond = 1;
                         break;
                     case ClipTime.TimeModes.F30:

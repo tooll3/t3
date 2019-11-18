@@ -28,7 +28,7 @@ namespace T3.Gui.Graph
                     formattedTime = $"{clipTime.Bar:0}. {clipTime.Beat:0}. {clipTime.Tick:0}.";
                     break;
 
-                case ClipTime.TimeModes.Seconds:
+                case ClipTime.TimeModes.Secs:
                     formattedTime = TimeSpan.FromSeconds(clipTime.Time).ToString(@"hh\:mm\:ss\:ff");
                     break;
 

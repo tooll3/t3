@@ -9,15 +9,13 @@ namespace T3.Gui
         public virtual double Time { get; set; }
         public double TimeRangeStart { get; set; } = 0;
         public double TimeRangeEnd { get; set; } = 8;
-        public double Bpm { get; set; } = 120;
+        public double Bpm { get; set; } = 95.08f;
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
-        public TimeModes TimeMode { get; set; } = TimeModes.Seconds;
+        public TimeModes TimeMode { get; set; } = TimeModes.Bars;
 
         public int Bar => (int)(Time * Bpm / 60.0 / 4.0) + 1;
-
         public int Beat => (int)(Time * Bpm / 60.0) % 4 + 1;
-
         public int Tick => (int)(Time * Bpm / 60.0 * 4) % 4 + 1;
 
         public void Update()
@@ -34,7 +32,7 @@ namespace T3.Gui
 
         public enum TimeModes
         {
-            Seconds,
+            Secs,
             Bars,
             F30,
             F60,
