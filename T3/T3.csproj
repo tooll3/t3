@@ -361,6 +361,7 @@
     <Compile Include="Gui\Windows\TimeLine\LayersArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\StandardTimeRaster.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeLineCanvas.cs" />
+    <Compile Include="Gui\Windows\TimeLine\TimeLineImage.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeRaster.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeRasterSwitcher.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeSelectionFence.cs" />

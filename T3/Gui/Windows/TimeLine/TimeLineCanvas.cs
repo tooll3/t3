@@ -27,7 +27,6 @@ namespace T3.Gui.Windows.TimeLine
             _snapHandler.SnappedEvent += SnappedEventHandler;
         }
 
-        
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             Current = this;
@@ -37,7 +36,7 @@ namespace T3.Gui.Windows.TimeLine
 
             WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
             WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
-            
+
             // Damp scaling
             const float dampSpeed = 30f;
             var damping = _io.DeltaTime * dampSpeed;
@@ -52,6 +51,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.BeginChild("timeline", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
                 _drawlist = ImGui.GetWindowDrawList();
+                _timeLineImage.Draw(_drawlist);
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
                 _timeRasterSwitcher.Draw(ClipTime);
@@ -68,7 +68,6 @@ namespace T3.Gui.Windows.TimeLine
                         break;
                 }
 
-                
                 DrawTimeRange();
                 _currentTimeMarker.Draw(ClipTime);
                 DrawDragTimeArea();
@@ -190,13 +189,12 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorPos(Vector2.Zero);
         }
 
-        
         public void SetVisibleValueRange(float valueScale, float valueScroll)
         {
             _scaleTarget = new Vector2(_scaleTarget.X, valueScale);
             _scrollTarget = new Vector2(_scrollTarget.X, valueScroll);
         }
-        
+
         #region time range
         private static readonly Vector2 TimeRangeShadowSize = new Vector2(5, 9999);
         private static readonly Color TimeRangeShadowColor = new Color(0, 0, 0, 0.5f);
@@ -279,8 +277,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.PopStyleColor();
         }
         #endregion
-        
-        
+
         private void SnappedEventHandler(double snapPosition)
         {
             _lastSnapTime = ImGui.GetTime();
@@ -289,17 +286,17 @@ namespace T3.Gui.Windows.TimeLine
 
         private void DrawSnapIndicator()
         {
-            var opacity =1- Im.Clamp( (float)(ImGui.GetTime() - _lastSnapTime) / _snapIndicatorDuration,0,1);
+            var opacity = 1 - Im.Clamp((float)(ImGui.GetTime() - _lastSnapTime) / _snapIndicatorDuration, 0, 1);
             var color = Color.Orange;
             color.Rgba.W = opacity;
-            var p = new Vector2(TransformPositionX(_lastSnapU),0);
+            var p = new Vector2(TransformPositionX(_lastSnapU), 0);
             _drawlist.AddRectFilled(p, p + new Vector2(1, 2000), color);
         }
+
         private double _lastSnapTime;
         private float _snapIndicatorDuration = 1;
-        private float _lastSnapU=0;
+        private float _lastSnapU = 0;
 
-        
         #region ISelection holder
         public void ClearSelection()
         {
@@ -540,14 +537,12 @@ namespace T3.Gui.Windows.TimeLine
         public SelectionHandler SelectionHandler { get; set; } = null;
         #endregion
 
-        
         private static void SetCursorToBottom(float xInScreen, float paddingFromBottom)
         {
             var max = ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos();
             var p = new Vector2(xInScreen, max.Y - paddingFromBottom);
             ImGui.SetCursorScreenPos(p);
         }
-
 
         internal readonly ClipTime ClipTime;
 
@@ -556,6 +551,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private readonly DopeSheetArea _dopeSheetArea;
         private readonly CurveEditArea _curveEditArea;
+        private readonly TimeLineImage _timeLineImage = new TimeLineImage();
 
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
         private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
