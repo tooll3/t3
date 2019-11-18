@@ -38,7 +38,7 @@ namespace T3.Gui.InputUi
                             using (OpenFileDialog openFileDialog = new OpenFileDialog())
                             {
                                 openFileDialog.InitialDirectory = "c:\\";
-                                openFileDialog.Filter = "jpg files (*.jpg)|*.jpg";
+                                openFileDialog.Filter = "jpg files (*.jpg)|*.jpg|All files (*.*)|*.*";
                                 openFileDialog.FilterIndex = 2;
                                 openFileDialog.RestoreDirectory = true;
 

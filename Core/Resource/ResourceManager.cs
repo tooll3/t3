@@ -274,7 +274,7 @@ namespace T3.Core
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // creation time needed for visual studio (2017)
             _hlslFileWatcher.EnableRaisingEvents = true;
 
-            _textureFileWatcher = new FileSystemWatcher(@"Resources", "*.jpg");//"*.png|*.jpg|*.dds|*.tiff");
+            _textureFileWatcher = new FileSystemWatcher(@"Resources", "*.png|*.jpg|*.dds|*.tiff");
             _textureFileWatcher.Changed += OnChanged;
             _textureFileWatcher.Created += OnChanged;
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
