@@ -153,5 +153,31 @@ namespace T3.Gui
 
             ImGui.PopStyleVar();
         }
+        
+        public static void DrawContextMenuForScrollCanvas(Action drawMenuContent, ref bool contextMenuIsOpen)
+        {
+            // This is a horrible hack to distinguish right mouse click from right mouse drag
+            var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
+            if (!contextMenuIsOpen && rightMouseDragDelta > 3)
+                return;
+
+            if (!contextMenuIsOpen && !ImGui.IsWindowFocused())
+                return;
+            
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
+            if (ImGui.BeginPopupContextWindow("context_menu"))
+            {
+                ImGui.GetMousePosOnOpeningCurrentPopup();
+                contextMenuIsOpen = true;
+
+                drawMenuContent.Invoke();
+                ImGui.EndPopup();
+            }
+            else
+            {
+                contextMenuIsOpen = false;
+            }
+            ImGui.PopStyleVar();
+        }
     }
 }

@@ -1,21 +1,13 @@
 ﻿using ImGuiNET;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using T3.Core.Logging;
-using T3.Gui.Animation.CurveEditing;
-using T3.Gui.Styling;
 using T3.Gui.Windows.TimeLine;
 using Icon = T3.Gui.Styling.Icon;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace T3.Gui.Graph
 {
-    internal class TimeControls
+    internal static class TimeControls
     {
         internal static void DrawTimeControls(ClipTime clipTime, ref TimeLineCanvas.Modes mode)
         {
@@ -196,7 +188,7 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
 
             // End
-            if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##nlastKeyframe", TimeControlsSize))
+            if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", TimeControlsSize))
             {
                 clipTime.Time = clipTime.TimeRangeEnd;
             }

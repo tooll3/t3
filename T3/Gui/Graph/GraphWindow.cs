@@ -131,7 +131,7 @@ namespace T3.Gui.Graph
         private void DrawBreadcrumbs()
         {
             ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
-            List<Instance> parents = GraphCanvas.GetParents();
+            IEnumerable<Instance> parents = GraphCanvas.GetParents();
 
             foreach (var p in parents)
             {
