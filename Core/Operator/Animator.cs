@@ -50,12 +50,6 @@ namespace T3.Core.Operator
                                                                         OutType = VDefinition.Interpolation.Spline,
                                                                     });
                 _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
-                newCurve.AddOrUpdateV(EvaluationContext.GlobalTime + 1, new VDefinition()
-                                                                        {
-                                                                            Value = floatInputSlot.Value + 2,
-                                                                            InType = VDefinition.Interpolation.Spline,
-                                                                            OutType = VDefinition.Interpolation.Spline,
-                                                                        });
 
                 floatInputSlot.UpdateAction = context =>
                                               {
