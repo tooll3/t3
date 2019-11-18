@@ -10,7 +10,7 @@ namespace T3.Gui
     {
         public static bool JogDial(string label, ref double delta, Vector2 size)
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1,0.5f));
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1, 0.5f));
             var hot = ImGui.Button(label + "###dummy", size);
             ImGui.PopStyleVar();
             var io = ImGui.GetIO();
@@ -35,9 +35,9 @@ namespace T3.Gui
                     delta += 2 * Math.PI;
                 }
             }
+
             return hot;
         }
-
 
         /// <summary>Draw a splitter</summary>
         /// <remarks>
@@ -70,14 +70,13 @@ namespace T3.Gui
 
             if (ImGui.IsItemActive())
             {
-                offsetFromBottom = 
+                offsetFromBottom =
                     (offsetFromBottom - ImGui.GetIO().MouseDelta.Y)
-                    .Clamp(0, size.Y - thickness);
+                   .Clamp(0, size.Y - thickness);
             }
 
             ImGui.SetCursorPos(backupPos);
         }
-
 
         public static bool ToggleButton(string label, ref bool isSelected, Vector2 size, bool trigger = false)
         {
@@ -89,6 +88,7 @@ namespace T3.Gui
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red.Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red.Rgba);
             }
+
             if (ImGui.Button(label, size) || trigger)
             {
                 isSelected = !isSelected;
@@ -99,9 +99,10 @@ namespace T3.Gui
             {
                 ImGui.PopStyleColor(3);
             }
+
             return clicked;
         }
-        
+
         public static bool ToggleButton(Icon icon, string label, ref bool isSelected, Vector2 size, bool trigger = false)
         {
             var wasSelected = isSelected;
@@ -112,7 +113,7 @@ namespace T3.Gui
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red.Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red.Rgba);
             }
-            
+
             if (CustomComponents.IconButton(icon, label, size) || trigger)
             {
                 isSelected = !isSelected;
@@ -123,22 +124,34 @@ namespace T3.Gui
             {
                 ImGui.PopStyleColor(3);
             }
+
             return clicked;
         }
-        
-        
-        
+
         public static bool IconButton(Styling.Icon icon, string label, Vector2 size)
         {
             ImGui.PushFont(Icons.IconFont);
-            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f,0.3f));
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.3f));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-            
-            var clicked = ImGui.Button((char)(int)icon+"##"+label, size);
-            
+
+            var clicked = ImGui.Button((char)(int)icon + "##" + label, size);
+
             ImGui.PopStyleVar(2);
             ImGui.PopFont();
             return clicked;
+        }
+
+
+        public static void ContextMenuForItem(Action drawMenuItems)
+        {
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
+            if (ImGui.BeginPopupContextItem("context_menu"))
+            {
+                drawMenuItems?.Invoke();
+                ImGui.EndPopup();
+            }
+
+            ImGui.PopStyleVar();
         }
     }
 }

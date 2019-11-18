@@ -32,7 +32,6 @@ namespace T3.Gui.Graph
             OpenComposition(opInstance);
         }
 
-        
         public void OpenComposition(Instance opInstance, bool zoomIn = true)
         {
             // save old properties
@@ -44,22 +43,21 @@ namespace T3.Gui.Graph
                                                                              Scroll = Scroll,
                                                                          };
             }
-            
+
             CompositionOp = opInstance;
             var id = opInstance.Id;
             var scale = Vector2.One;
             var scroll = Vector2.Zero;
-            
+
             if (_canvasPropertiesForCompositionOpIds.ContainsKey(id))
             {
                 var props = _canvasPropertiesForCompositionOpIds[opInstance.Id];
                 scale = props.Scale;
                 scroll = props.Scroll;
             }
+
             SetAreaWithTransition(scale, scroll, zoomIn);
         }
-
-
 
         #region drawing UI ====================================================================
         public void Draw(ImDrawListPtr dl)
@@ -71,9 +69,8 @@ namespace T3.Gui.Graph
             DrawList = dl;
             ImGui.BeginGroup();
             {
-
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
-                
+
                 DrawGrid();
                 _symbolBrowser.Draw();
 
@@ -85,8 +82,8 @@ namespace T3.Gui.Graph
                     if (droppedOnBackground)
                     {
                         ConnectionMaker.InitSymbolBrowserAtPosition(
-                            _symbolBrowser,
-                            InverseTransformPosition(ImGui.GetIO().MousePos));
+                                                                    _symbolBrowser,
+                                                                    InverseTransformPosition(ImGui.GetIO().MousePos));
                     }
                     else
                     {
@@ -147,16 +144,14 @@ namespace T3.Gui.Graph
             return parents;
         }
 
-
         public IEnumerable<Symbol> GetParentSymbols()
         {
             return GetParents(includeCompositionOp: true).Select(p => p.Symbol);
         }
 
-
-
         private bool _contextMenuIsOpen = false;
         private List<SymbolChildUi> _selectedChildren;
+
         private void DrawContextMenu()
         {
             // This is a horrible hack to distinguish right mouse click from right mouse drag
@@ -164,13 +159,16 @@ namespace T3.Gui.Graph
             if (!_contextMenuIsOpen && rightMouseDragDelta > 3)
                 return;
 
+            if (!_contextMenuIsOpen && !ImGui.IsWindowFocused())
+                return;
+            
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             if (ImGui.BeginPopupContextWindow("context_menu"))
             {
                 ImGui.GetMousePosOnOpeningCurrentPopup();
                 _contextMenuIsOpen = true;
 
-                // Todo: Convert to linc
+                // Todo: Convert to Lync
                 var selectedChildren = new List<SymbolChildUi>();
                 _selectedChildren = selectedChildren;
                 foreach (var x in SelectionHandler.SelectedElements)
@@ -230,12 +228,14 @@ namespace T3.Gui.Graph
                 {
                     _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null);
                 }
+
                 ImGui.EndPopup();
             }
             else
             {
                 _contextMenuIsOpen = false;
             }
+
             ImGui.PopStyleVar();
         }
 
@@ -405,7 +405,7 @@ namespace T3.Gui.Graph
             }
 
             var mousePos = GraphCanvas.Current.InverseTransformPosition(ImGui.GetMousePos());
-            var addCommand = new AddSymbolChildCommand(compositionSymbolUi.Symbol, newSymbol.Id) {PosOnCanvas = mousePos};
+            var addCommand = new AddSymbolChildCommand(compositionSymbolUi.Symbol, newSymbol.Id) { PosOnCanvas = mousePos };
             UndoRedoStack.AddAndExecute(addCommand);
             var newSymbolChildId = addCommand.AddedChildId;
 
@@ -492,7 +492,7 @@ namespace T3.Gui.Graph
             var cmd = new CopySymbolChildrenCommand(sourceSymbolUi, null, newSymbolUi, Vector2.One);
             cmd.Do();
             cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
-            
+
             // now copy connection from/to inputs/outputs that are not copied with the command 
             // todo: check if this can be put into the command
             var connectionsToCopy = sourceSymbol.Connections.FindAll(c => c.IsConnectedToSymbolInput || c.IsConnectedToSymbolOutput);
@@ -511,7 +511,7 @@ namespace T3.Gui.Graph
             }
 
             var mousePos = GraphCanvas.Current.InverseTransformPosition(ImGui.GetMousePos());
-            var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) {PosOnCanvas = mousePos};
+            var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) { PosOnCanvas = mousePos };
             UndoRedoStack.AddAndExecute(addCommand);
 
             // copy the values of the input of the duplicated type: default values of symbol and the ones in composition context
@@ -628,12 +628,11 @@ namespace T3.Gui.Graph
             for (float y = Scroll.Y % gridSize; y < WindowSize.Y; y += gridSize)
             {
                 DrawList.AddLine(
-                    new Vector2(0.0f, y) + WindowPos,
-                    new Vector2(WindowSize.X, y) + WindowPos,
-                    new Color(0.5f, 0.5f, 0.5f, 0.1f));
+                                 new Vector2(0.0f, y) + WindowPos,
+                                 new Vector2(WindowSize.X, y) + WindowPos,
+                                 new Color(0.5f, 0.5f, 0.5f, 0.1f));
             }
         }
-
 
         public override IEnumerable<ISelectable> SelectableChildren
         {
@@ -648,10 +647,9 @@ namespace T3.Gui.Graph
                 return _selectableItems;
             }
         }
+
         private readonly List<ISelectable> _selectableItems = new List<ISelectable>();
-
         #endregion
-
 
         #region public API
         public void DrawRect(ImRect rectOnCanvas, Color color)
@@ -673,8 +671,7 @@ namespace T3.Gui.Graph
         public ImDrawListPtr DrawList { get; private set; }
         public Instance CompositionOp { get; private set; }
         #endregion
-        
-        
+
         private class CanvasProperties
         {
             public Vector2 Scale;
