@@ -157,20 +157,23 @@ namespace T3.Gui.Graph
 
             if (ImGui.BeginChildFrame(999, new Vector2(200, 200)))
             {
-                if (_selectedSymbol == null && SymbolRegistry.Entries.Values.Any())
+                if (_filter.MatchingSymbols.Count > 0 && !_filter.MatchingSymbols.Contains(_selectedSymbol))
+                    _selectedSymbol = _filter.MatchingSymbols[0];
+                
+                if ((_selectedSymbol == null && SymbolRegistry.Entries.Values.Any()))
                     _selectedSymbol = SymbolRegistry.Entries.Values.FirstOrDefault();
 
                 if (_filterInputType != null || _filterOutputType != null)
                 {
                     ImGui.PushFont(Fonts.FontSmall);
 
-                    var inputTypeName = _filterInputType != null 
-                                    ? TypeNameRegistry.Entries[_filterInputType] 
-                                    : string.Empty;
-
-                    var outputTypeName = _filterOutputType != null 
-                                            ? TypeNameRegistry.Entries[_filterOutputType] 
+                    var inputTypeName = _filterInputType != null
+                                            ? TypeNameRegistry.Entries[_filterInputType]
                                             : string.Empty;
+
+                    var outputTypeName = _filterOutputType != null
+                                             ? TypeNameRegistry.Entries[_filterOutputType]
+                                             : string.Empty;
 
                     var headerLabel = $"{inputTypeName} -> {outputTypeName}";
                     ImGui.TextDisabled(headerLabel);

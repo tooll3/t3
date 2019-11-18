@@ -4,9 +4,9 @@
 - FIX: Deleting last keyframe should disable animation-flag in parameter view
 
 - snap time marker when holding a hotkey (N)
-- scrub through time with sound playback
+/ scrub through time with sound playback
 / value op
-- fix auto focus in SymbolBrowser after searching
+/ fix auto focus in SymbolBrowser after searching
 - Return should rename selected node
 - Renamed children should be styled differently
 - default keyframes should use current value
