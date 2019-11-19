@@ -352,6 +352,7 @@
     <Compile Include="Gui\OutputUi\ValueOutputUi.cs" />
     <Compile Include="Gui\Styling\Fonts.cs" />
     <Compile Include="Gui\Styling\Icons.cs" />
+    <Compile Include="Gui\UiHelpers\FileOperations.cs" />
     <Compile Include="Gui\Windows\ImageOutputCanvas.cs" />
     <Compile Include="Gui\Windows\OutputWindow.cs" />
     <Compile Include="Gui\Windows\SelectionPinning.cs" />

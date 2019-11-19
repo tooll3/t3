@@ -5,6 +5,7 @@ using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.InputUi
 {
@@ -15,7 +16,8 @@ namespace T3.Gui.InputUi
         public enum UsageType
         {
             Default,
-            Path,
+            FilePath,
+            DirectoryPath,
         }
 
         public UsageType Usage { get; set; } = UsageType.Default;
@@ -28,26 +30,23 @@ namespace T3.Gui.InputUi
                 {
                     case UsageType.Default:
                         return ImGui.InputText("##textEdit", ref value, MAX_STRING_LENGTH);
-                    case UsageType.Path:
+
+                    case UsageType.FilePath:
+                    case UsageType.DirectoryPath:
                     {
                         ImGui.SetNextItemWidth(-30);
                         bool changed = ImGui.InputText("##textEditPath", ref value, MAX_STRING_LENGTH);
                         ImGui.SameLine();
                         if (ImGui.Button("...", new Vector2(30, 0)))
                         {
-                            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-                            {
-                                openFileDialog.InitialDirectory = "c:\\";
-                                openFileDialog.Filter = "jpg files (*.jpg)|*.jpg|All files (*.*)|*.*";
-                                openFileDialog.FilterIndex = 2;
-                                openFileDialog.RestoreDirectory = true;
+                            var newPath = Usage == UsageType.FilePath
+                                              ? FileOperations.PickResourceFilePath()
+                                              : FileOperations.PickResourceDirectory();
+                            if (newPath == null)
+                                return changed;
 
-                                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                                {
-                                    value = openFileDialog.FileName;
-                                    changed = true;
-                                }
-                            }
+                            value = newPath;
+                            changed = true;
                         }
 
                         return changed;
