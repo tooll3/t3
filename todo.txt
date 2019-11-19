@@ -1,8 +1,12 @@
 todo:
+- Scene type?
+- Setup simple camera
+- Adjust thread size of particle ops to some useful values
+- Create base type for shader stages and move common code there
+- Think about ParticleSystem type and how to integrate it
+- Investigate how to have several outputs in Op not being dirty flagged by all inputs
 - Replace the 'Execute' Op used in gfx-pipeline-example with the 'Draw' Op
 - Add ops for the different drawing options (draw, drawIndex, drawInstanced, drawIndirect etc)
-- Fix saving instance name for symbol children
-- Fix wrong error output for not serializable types
 - Fix output connections to multi input when doing combine
 - Add color grade op
 - Add first player version
@@ -17,6 +21,9 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Add sampler evaluation to PixelShaderStage
+* Fix wrong error output for not serializable types
+* Fix saving instance name for symbol children
 * Add possibility to rename Ops due to class name refactoring in IDE
 * Add first sound integration
 * Fix input/output generation of 'combine as new type'
