@@ -43,7 +43,7 @@ namespace T3.Gui.UiHelpers
             var currentApplicationPath = System.IO.Path.GetFullPath(".");
             var firstCharUppercase = currentApplicationPath.Substring(0, 1).ToUpper();
             currentApplicationPath = firstCharUppercase + currentApplicationPath.Substring(1, currentApplicationPath.Length - 1) + "\\";
-            var relativeFilePath = absoluteFilePath.Replace(currentApplicationPath, "").Replace("\\", "/");
+            var relativeFilePath = absoluteFilePath.Replace(currentApplicationPath, "");
             return relativeFilePath;
         }
 
