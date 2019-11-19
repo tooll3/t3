@@ -21,7 +21,7 @@ namespace T3.Gui.InputUi
 
         public Symbol.InputDefinition InputDefinition { get; set; }
         public Guid Id => InputDefinition.Id;
-        public Relevancy Relevancy { get; set; } = Relevancy.Required;
+        public Relevancy Relevancy { get; set; } = Relevancy.Optional;
         public int Index { get; set; } = 0;
         public virtual bool IsAnimatable => false;
 
@@ -270,15 +270,20 @@ namespace T3.Gui.InputUi
 
         public virtual void Write(JsonTextWriter writer)
         {
+            if(Relevancy != DefaultRelevancy)
+                writer.WriteObject("Relevancy", Relevancy.ToString());
+            
             var vec2writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
-            writer.WriteObject("Relevancy", Relevancy.ToString());
             writer.WritePropertyName("Position");
             vec2writer(writer, PosOnCanvas);
         }
 
         public virtual void Read(JToken inputToken)
         {
-            Relevancy = (Relevancy)Enum.Parse(typeof(Relevancy), inputToken["Relevancy"].ToString());
+            Relevancy = (inputToken["Relevancy"]==null) 
+                ? DefaultRelevancy
+                : (Relevancy)Enum.Parse(typeof(Relevancy), inputToken["Relevancy"].ToString());
+            
             JToken positionToken = inputToken["Position"];
             PosOnCanvas = new Vector2(positionToken["X"].Value<float>(), positionToken["Y"].Value<float>());
         }
@@ -287,5 +292,7 @@ namespace T3.Gui.InputUi
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100.0f, 30.0f);
         public bool IsSelected { get; set; }
+
+        private const Relevancy DefaultRelevancy = Relevancy.Optional;
     }
 }
