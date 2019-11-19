@@ -24,6 +24,13 @@ namespace T3.Core.Operator
         public static double RunTime => _runTimeWatch.ElapsedMilliseconds / 1000.0;
         public static double GlobalTime { get; set; }
         public double Time { get; set; }
+
+        public Matrix ClipSpaceTcamera { get; set; } = Matrix.Identity;
+        public Matrix CameraTclipSpace { get; set; } = Matrix.Identity;
+        public Matrix CameraTworld { get; set; } = Matrix.Identity;
+        public Matrix WorldTcamera { get; set; } = Matrix.Identity;
+        public Matrix ClipSpaceTworld { get; set; } = Matrix.Identity;
+        public Matrix WorldTclipSpace { get; set; } = Matrix.Identity;
     }
 
     public class OperatorAttribute : Attribute

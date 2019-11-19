@@ -1,6 +1,7 @@
 todo:
+* Setup simple camera
+- Reset option for particle system
 - Scene type?
-- Setup simple camera
 - Adjust thread size of particle ops to some useful values
 - Create base type for shader stages and move common code there
 - Think about ParticleSystem type and how to integrate it
