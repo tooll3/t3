@@ -8,7 +8,7 @@ namespace T3.Gui.Windows
 {
     public class OutputWindow : Window
     {
-        public OutputWindow() : base()
+        public OutputWindow() 
         {
             _title = "Output##" + _instanceCounter;
             _visible = true;
@@ -73,56 +73,24 @@ namespace T3.Gui.Windows
             ImGui.SameLine();
         }
 
-
-        public static void DrawSelection(Instance _selectedInstance, SymbolUi selectedUi)
+        private static void DrawSelection(Instance selectedInstance, SymbolUi selectedUi)
         {
-            if (_selectedInstance == null)
+            if (selectedInstance == null)
                 return;
 
-            if (_selectedInstance.Outputs.Count > 0)
-            {
-                var firstOutput = _selectedInstance.Outputs[0];
-                IOutputUi outputUi = selectedUi.OutputUis[firstOutput.Id];
-                outputUi.DrawValue(firstOutput);
-            }
+            if (selectedInstance.Outputs.Count <= 0)
+                return;
+            
+            var firstOutput = selectedInstance.Outputs[0];
+            IOutputUi outputUi = selectedUi.OutputUis[firstOutput.Id];
+            outputUi.DrawValue(firstOutput);
         }
+        
 
+        private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
+        private readonly SelectionPinning _pinning = new SelectionPinning();
 
-        //private void UpdateSelection()
-        //{
-        //    if (!_enablePinning || _pinnedInstance == null || _pinnedUi == null)
-        //    {
-        //        if (GraphCanvasWindow.WindowInstances.Count == 0)
-        //            return;
-
-        //        var defaultGraphWindow = GraphCanvasWindow.WindowInstances[0] as GraphCanvasWindow;
-        //        _selectedInstance = defaultGraphWindow.Canvas.CompositionOp;
-
-        //        if (_selectedInstance == null)
-        //            return;
-
-        //        _selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
-        //        var selectedChildUi = _selectedUi.ChildUis.FirstOrDefault(childUi => childUi.IsSelected);
-        //        if (selectedChildUi != null)
-        //        {
-        //            _selectedInstance = _selectedInstance.Children.Single(child => child.Id == selectedChildUi.Id);
-        //            _selectedUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
-        //        }
-
-        //        _pinnedInstance = _selectedInstance;
-        //        _pinnedUi = _selectedUi;
-        //    }
-        //    else
-        //    {
-        //        _selectedInstance = _pinnedInstance;
-        //        _selectedUi = _pinnedUi;
-        //    }
-        //}
-
-        private ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
-        private SelectionPinning _pinning = new SelectionPinning();
-
-        private static List<OutputWindow> WindowInstances = new List<OutputWindow>();
-        static int _instanceCounter = 0;
+        private static readonly List<OutputWindow> WindowInstances = new List<OutputWindow>();
+        static int _instanceCounter ;
     }
 }

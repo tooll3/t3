@@ -15,6 +15,7 @@ namespace T3.Gui.UiHelpers
         
         public void Draw(float value)
         {
+            ImGui.SetNextItemWidth(120);
             ImGui.PlotLines($"{value:0.00}", ref _graphValues[0], _framerateSampleCount, _sampleOffset, "");
             _graphValues[_sampleOffset] = value;
             _sampleOffset = (_sampleOffset + 1) % _framerateSampleCount;

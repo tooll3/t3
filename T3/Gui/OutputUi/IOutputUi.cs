@@ -8,6 +8,6 @@ namespace T3.Gui.OutputUi
     {
         Symbol.OutputDefinition OutputDefinition { get; set; }
         Type Type { get; }
-        void DrawValue(ISlot slot);
+        void DrawValue(ISlot slot, bool recompute=true);
     }
 }

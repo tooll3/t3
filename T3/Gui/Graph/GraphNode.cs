@@ -5,8 +5,10 @@ using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.InputUi;
+using T3.Gui.OutputUi;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
+using T3.Gui.Windows;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -55,12 +57,25 @@ namespace T3.Gui.Graph
                 // Interaction
                 ImGui.SetCursorScreenPos(_lastScreenRect.Min);
                 ImGui.InvisibleButton("node", _lastScreenRect.GetSize());
+
                 
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                     T3UI.AddHoveredId(childUi.SymbolChild.Id);
+
+                    ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
+                    ImGui.BeginTooltip();
+                    {
+                        _imageCanvas.Draw();
+                        var children = GraphCanvas.Current.CompositionOp.Children;
+                        Instance instance = children.Single(c => c.Id == childUi.Id);
+                        var firstOutput = instance.Outputs[0];
+                        IOutputUi outputUi = childSymbolUi.OutputUis[firstOutput.Id];
+                        outputUi.DrawValue(firstOutput);
+                    }
+                    ImGui.EndTooltip();
                 }
 
                 SelectableMovement.Handle(childUi);
@@ -267,6 +282,7 @@ namespace T3.Gui.Graph
             }
         }
 
+        private static readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
 
         private static void DrawOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef, ImRect usableArea, Color colorForType, bool hovered)
         {

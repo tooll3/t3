@@ -6,13 +6,19 @@ namespace T3.Gui.OutputUi
 {
     public class ValueOutputUi<T> : OutputUi<T>
     {
-        public override void DrawValue(ISlot slot)
+        public override void DrawValue(ISlot slot, bool recompute = true)
         {
             if (slot is Slot<T> typedSlot)
             {
-                StartInvalidation(slot);
-                _evaluationContext.Reset();
-                var value = typedSlot.GetValue(_evaluationContext);
+                if (recompute)
+                {
+                    StartInvalidation(slot);
+                    _evaluationContext.Reset();
+                }
+                var value = recompute
+                                ? typedSlot.GetValue(_evaluationContext) 
+                                : typedSlot.Value;
+
                 if (value == null)
                 {
                     ImGui.Text($"{typeof(T)}");

@@ -9,13 +9,19 @@ namespace T3.Gui.OutputUi
 {
     public class FloatOutputUi : OutputUi<float>
     {
-        public override void DrawValue(ISlot slot)
+        public override void DrawValue(ISlot slot, bool recompute=true)
         {
             if (slot is Slot<float> typedSlot)
             {
-                StartInvalidation(slot);
-                _evaluationContext.Reset();
-                var value = typedSlot.GetValue(_evaluationContext);
+                if (recompute)
+                {
+                    StartInvalidation(slot);
+                    _evaluationContext.Reset();
+                }
+                var value = recompute
+                                ? typedSlot.GetValue(_evaluationContext) 
+                                : typedSlot.Value;
+
                 
                 if (float.IsNaN(_dampedValue))
                     _dampedValue = 0;
@@ -39,6 +45,6 @@ namespace T3.Gui.OutputUi
 
         private float _dampedValue = 0;
         private ISlot _lastLost;
-        private CurvePlot _curve = new CurvePlot(100);
+        private readonly CurvePlot _curve = new CurvePlot(100);
     }
 }

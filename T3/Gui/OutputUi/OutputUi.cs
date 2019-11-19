@@ -13,7 +13,7 @@ namespace T3.Gui.OutputUi
         public Vector2 Size { get; set; } = new Vector2(100, 30);
         public bool IsSelected { get; set; }
 
-        public abstract void DrawValue(ISlot slot);
+        public abstract void DrawValue(ISlot slot, bool recompute = true);
 
         public void StartInvalidation(ISlot slot)
         {
