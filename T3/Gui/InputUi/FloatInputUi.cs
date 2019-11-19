@@ -4,18 +4,20 @@ using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace T3.Gui.InputUi
 {
     public class FloatInputUi : SingleControlInputUi<float>
     {
         public override bool IsAnimatable => true;
-        public float Min = -100.0f;
-        public float Max = 100.0f;
+        private float Min = DefaultMin;
+        private float Max = DefaultMax;
+        private float Scale = DefaultScale;
 
         public override bool DrawSingleEditControl(string name, ref float value)
         {
-            return ImGui.DragFloat("##floatEdit", ref value, 0.0f, Min, Max);
+            return ImGui.DragFloat("##floatEdit", ref value, Scale, Min, Max);
         }
 
         protected override void DrawValueDisplay(string name, ref float value)
@@ -48,22 +50,34 @@ namespace T3.Gui.InputUi
 
             ImGui.DragFloat("Min", ref Min);
             ImGui.DragFloat("Max", ref Max);
+            ImGui.DragFloat("Scale", ref Scale);
         }
 
         public override void Write(JsonTextWriter writer)
         {
             base.Write(writer);
 
-            writer.WriteValue("Min", Min);
-            writer.WriteValue("Max", Max);
+            if (Min != DefaultMin)
+                writer.WriteValue("Min", Min);
+            
+            if (Max != DefaultMax) 
+                writer.WriteValue("Max", Max);
+            
+            if (Scale != DefaultScale) 
+                writer.WriteValue("Scale",  Scale);
         }
 
         public override void Read(JToken inputToken)
         {
             base.Read(inputToken);
 
-            Min = inputToken["Min"].Value<float>();
-            Max = inputToken["Max"].Value<float>();
+            Min = inputToken["Min"]?.Value<float>() ?? DefaultMin;
+            Max = inputToken["Max"]?.Value<float>() ?? DefaultMin;
+            Scale = inputToken["Scale"]?.Value<float>() ?? DefaultScale;
         }
+        
+        private const float DefaultScale = 0.01f;
+        private const float DefaultMin = -9999999f;
+        private const float DefaultMax = -9999999f;
     }
 }
