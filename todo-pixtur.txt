@@ -1,28 +1,39 @@
-- FIX: modify animated value creates double keyframes
-- FIX: Implement deleteKeyframesCommand
-- FIX: Deleting last keyframe should disable animation-flag in parameter view
+▢ FIX: modify animated value creates double keyframes
+▢ FIX: Implement deleteKeyframesCommand
+▢ FIX: Deleting last keyframe should disable animation-flag in parameter view
 
-- drag keyframe values OR time
-- fix curve show selected (or F-hotkey for hovered window)
-- add CurveEditBox
-- add HoverBox in DopeSheet
-- DopeSheet should correctly show constant keyframes
-- DopeSheet should show colors as color gradients
-- DopeSheet should normalize values 0 .. 1
+▣ dragging a multi-curve-keyframe in dope sheet should move keyframes in all curves
 
+▢ path picker should return relative paths
+▢ in parameter window use orange color for animated parameters
+
+▢ fix curve show selected (or F-hotkey for hovered window)
+▢ add CurveEditBox
+▣ add HoverBox in DopeSheet
+▢ DopeSheet should correctly show constant keyframes
+▢ DopeSheet should show colors as color gradients
+▢ DopeSheet should normalize values 0 .. 1
+
+
+Later minor:
+- add transparency pattern below color parameters
 - opening a new (unknown) op should show all operators
 - improve styling of context menu
-- path picker should return relative paths
+- drag keyframe values OR time
+- unfold multiple curve layers in dope sheet
+- use proper keyframe icons for curve edit area -> need mac boot
 
+Later major:
+- node groups
 
-- fix keyframe snapping
+/ fix keyframe snapping
 
 More ideas
 ------
 - add snapping to canvas nodes
 - Return should rename selected node
 - snap time marker when holding a hotkey (like N?)
-- snap to value lines
+- snap to horizontal value lines
 - preview thumbnails
 
 Done

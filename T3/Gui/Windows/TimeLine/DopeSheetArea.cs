@@ -23,6 +23,7 @@ namespace T3.Gui.Windows.TimeLine
             _timeLineCanvas = timeLineCanvas;
         }
 
+        private GraphWindow.AnimationParameter _currentAnimationParameter;
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             _drawList = ImGui.GetWindowDrawList();
@@ -36,6 +37,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 foreach (var parameter in animationParameters)
                 {
+                    _currentAnimationParameter = parameter;
                     DrawProperty(parameter);
                 }
 
@@ -101,6 +103,8 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight)); // Next Line
         }
 
+        
+        
         private void HandleCreateNewKeyframes(GraphWindow.AnimationParameter parameter, ImRect layerArea)
         {
             var hoverNewKeyframe = !ImGui.IsAnyItemActive()
@@ -253,7 +257,7 @@ namespace T3.Gui.Windows.TimeLine
                 Icons.Draw(isSelected ? Icon.KeyFrameSelected : Icon.KeyFrame, posOnScreen);
                 ImGui.SetCursorScreenPos(posOnScreen);
 
-                // Clicked
+                // Click released
                 if (ImGui.InvisibleButton("##key", new Vector2(10, 24)))
                 {
                     TimeLineCanvas.Current.CompleteDragCommand();
@@ -265,9 +269,7 @@ namespace T3.Gui.Windows.TimeLine
                         _changeKeyframesCommand = null;
                     }
                 }
-
                 HandleKeyframeDragging(vDef, isSelected);
-
                 ImGui.PopID();
             }
         }
@@ -285,7 +287,12 @@ namespace T3.Gui.Windows.TimeLine
             if (ImGui.GetIO().KeyCtrl)
             {
                 if (isSelected)
-                    _selectedKeyframes.Remove(vDef);
+                {
+                    foreach (var k in FindParameterKeysAtPosition(vDef.U))
+                    {
+                        _selectedKeyframes.Remove(k);
+                    }
+                }
 
                 return;
             }
@@ -296,8 +303,11 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     TimeLineCanvas.Current.ClearSelection();
                 }
-
-                _selectedKeyframes.Add(vDef);
+                
+                foreach (var k in FindParameterKeysAtPosition(vDef.U))
+                {
+                    _selectedKeyframes.Add(k);
+                }
             }
 
             if (_changeKeyframesCommand == null)
@@ -312,6 +322,16 @@ namespace T3.Gui.Windows.TimeLine
                          : newDragTime - vDef.U;
 
             TimeLineCanvas.Current.UpdateDragCommand(dt, 0);
+        }
+
+        private IEnumerable<VDefinition> FindParameterKeysAtPosition(double u)
+        {
+            foreach (var curve in _currentAnimationParameter.Curves)
+            {
+                var matchingKey= curve.GetVDefinitions().FirstOrDefault(vDef2 => Math.Abs(vDef2.U - u) < 1/120f);
+                if(matchingKey!= null)
+                    yield return matchingKey;
+            }
         }
 
         #region implement selection holder interface --------------------------------------------
