@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
@@ -38,6 +39,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         private bool _contextMenuIsOpen;
+
         protected void DrawContextMenu()
         {
             CustomComponents.DrawContextMenuForScrollCanvas
@@ -72,10 +74,8 @@ namespace T3.Gui.Windows.TimeLine
                 );
         }
 
-        
-        
-
         private delegate void DoSomethingWithKeyframeDelegate(VDefinition v);
+
         private void ForSelectedOrAllPointsDo(DoSomethingWithKeyframeDelegate doFunc)
         {
             UpdateCurveAndMakeUpdateKeyframeCommands(doFunc);
@@ -88,6 +88,7 @@ namespace T3.Gui.Windows.TimeLine
                 doFunc(keyframe);
             }
         }
+
         private void OnSmooth()
         {
             ForSelectedOrAllPointsDo((vDef) =>
@@ -162,9 +163,10 @@ namespace T3.Gui.Windows.TimeLine
             return checkedInterpolationTypes;
         }
 
-        protected void ViewAllOrSelectedKeys()
+        protected void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false)
         {
             const float curveValuePadding = 0.3f;
+            const float curveTimePadding = 0.1f;
 
             var minU = double.PositiveInfinity;
             var maxU = double.NegativeInfinity;
@@ -224,9 +226,25 @@ namespace T3.Gui.Windows.TimeLine
                 minV -= 1;
             }
 
-            var height = ImGui.GetWindowContentRegionMax().Y - ImGui.GetWindowContentRegionMin().Y;
-            var scale = -(float)(height / ((maxV - minV) * (1 + 2 * curveValuePadding)));
-            TimeLineCanvas.Current.SetVisibleValueRange(scale, (float)maxV - 20 / scale);
+            if (alsoChangeTimeRange)
+            {
+                var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
+                var scaleX = (float)(size.X / ((maxU - minU) * (1 + 2 * curveTimePadding)));
+                var scaleY = -(float)(size.Y / ((maxV - minV) * (1 + 2 * curveValuePadding)));
+                TimeLineCanvas.Current.SetVisibleRange(
+                                                       scale: new Vector2(scaleX, scaleY),
+                                                       scroll: new Vector2(
+                                                                           (float)minU - 150 / scaleX,
+                                                                           (float)maxV - 20 / scaleY
+                                                                          )
+                                                      );
+            }
+            else
+            {
+                var height = ImGui.GetWindowContentRegionMax().Y - ImGui.GetWindowContentRegionMin().Y;
+                var scale = -(float)(height / ((maxV - minV) * (1 + 2 * curveValuePadding)));
+                TimeLineCanvas.Current.SetVisibleValueRange(scale, (float)maxV - 20 / scale);
+            }
         }
 
         protected IEnumerable<VDefinition> GetAllKeyframes()
@@ -236,7 +254,7 @@ namespace T3.Gui.Windows.TimeLine
                    from keyframe in curve.GetVDefinitions()
                    select keyframe;
         }
-        
+
         /// <summary>
         /// A horrible hack to keep curve table-structure aligned with position stored in key definitions.
         /// </summary>
@@ -256,8 +274,5 @@ namespace T3.Gui.Windows.TimeLine
                 }
             }
         }
-        
-
-
     }
 }

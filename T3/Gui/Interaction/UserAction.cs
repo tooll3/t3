@@ -29,6 +29,7 @@ namespace T3.Gui
         Undo,
         Redo,
         Save,
+        FocusSelection,
     }
 
 
@@ -54,9 +55,10 @@ namespace T3.Gui
 
     public class KeyboardBinding
     {
-        public UserActions Action;
-        public bool NeedsWindowFocus = false;
-        public KeyCombination[] Combinations;
+        public readonly UserActions Action;
+        public readonly bool NeedsWindowFocus = false;
+        public bool NeedsWindowHover = false;
+        public readonly KeyCombination[] Combinations;
 
         public static bool Triggered(UserActions action)
         {
@@ -67,6 +69,9 @@ namespace T3.Gui
             if (binding != null)
             {
                 if (binding.NeedsWindowFocus && !ImGui.IsWindowFocused())
+                    return false;
+
+                if (binding.NeedsWindowHover && !ImGui.IsWindowHovered())
                     return false;
 
                 var io = ImGui.GetIO();
@@ -123,6 +128,7 @@ namespace T3.Gui
             new KeyboardBinding(UserActions.Redo, new KeyCombination(Key.Z,ctrl:true, shift:true) ),
             
             new KeyboardBinding(UserActions.Save, new KeyCombination(Key.S,ctrl:true) ),
+            new KeyboardBinding(UserActions.FocusSelection, new KeyCombination(Key.F)) { NeedsWindowHover = true},
         };
     }
 }

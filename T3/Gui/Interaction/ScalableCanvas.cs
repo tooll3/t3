@@ -132,8 +132,8 @@ namespace T3.Gui.Graph
         {
             _scaleTarget = Vector2.One;
         }
-
-
+        
+        
         public void FitArea(ImRect area)
         {
             var height = area.GetHeight();
@@ -144,12 +144,16 @@ namespace T3.Gui.Graph
             if (targetAspect > WindowSize.X / WindowSize.Y)
             {
                 scale = WindowSize.X / width;
-                _scrollTarget = new Vector2(0, (WindowSize.Y - height * scale) / 2);
+                _scrollTarget = new Vector2(
+                                            -area.Min.X * scale, 
+                                            -area.Min.Y* scale+ (WindowSize.Y - height * scale) / 2);
             }
             else
             {
                 scale = WindowSize.Y / height;
-                _scrollTarget = new Vector2((WindowSize.X - width * scale) / 2, 0);
+                _scrollTarget = new Vector2(
+                                            -area.Min.X* scale + (WindowSize.X - width * scale) / 2, 
+                                            -area.Min.Y * scale);
             }
             _scaleTarget = new Vector2(scale, scale);
         }

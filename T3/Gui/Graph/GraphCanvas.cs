@@ -13,6 +13,7 @@ using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
+using UiHelpers;
 
 namespace T3.Gui.Graph
 {
@@ -64,6 +65,11 @@ namespace T3.Gui.Graph
             DrawList = dl;
             ImGui.BeginGroup();
             {
+                if (KeyboardBinding.Triggered(UserActions.FocusSelection))
+                {
+                    FocusViewToSelection();
+                }
+                
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                 DrawGrid();
@@ -147,6 +153,32 @@ namespace T3.Gui.Graph
         private bool _contextMenuIsOpen;
         private List<SymbolChildUi> _selectedChildren;
 
+        private void FocusViewToSelection()
+        {
+            FitArea(GetSelectionBounds());  
+        }
+
+        private ImRect GetSelectionBounds(float padding=50)
+        {
+            var selectedOrAll = !SelectionHandler.SelectedElements.Any()
+                                    ? SelectableChildren.ToArray()
+                                    : SelectionHandler.SelectedElements.ToArray();
+
+            if (selectedOrAll.Length==0)
+                return new ImRect();
+            
+            var firstElement = selectedOrAll[0];
+            var bounds = new ImRect(firstElement.PosOnCanvas, firstElement.PosOnCanvas + Vector2.One);
+            foreach (var element in selectedOrAll)
+            {
+                bounds.Add(element.PosOnCanvas);
+                bounds.Add(element.PosOnCanvas+element.Size);
+            }
+
+            bounds.Expand(padding);
+            return bounds;
+        }
+        
         private void DrawContextMenu()
         {
             CustomComponents.DrawContextMenuForScrollCanvas

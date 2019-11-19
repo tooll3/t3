@@ -32,6 +32,9 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.BeginGroup();
             {
+                if (KeyboardBinding.Triggered(UserActions.FocusSelection))
+                    ViewAllOrSelectedKeys(alsoChangeTimeRange:true);
+                
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(0, 3)); // keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
 

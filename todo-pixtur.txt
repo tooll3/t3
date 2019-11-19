@@ -3,17 +3,15 @@
 ▢ FIX: Deleting last keyframe should disable animation-flag in parameter view
 
 ▣ dragging a multi-curve-keyframe in dope sheet should move keyframes in all curves
-
-▢ path picker should return relative paths
+▣ path picker should return relative paths
 ▢ in parameter window use orange color for animated parameters
 
-▢ fix curve show selected (or F-hotkey for hovered window)
+▢ fix invisible input glitch if 
+▣ fix curve show selected (or F-hotkey for hovered window)
 ▢ add CurveEditBox
 ▣ add HoverBox in DopeSheet
 ▢ DopeSheet should correctly show constant keyframes
-▢ DopeSheet should show colors as color gradients
-▢ DopeSheet should normalize values 0 .. 1
-
+▣ DopeSheet should show colors as color gradients
 
 Later minor:
 - add transparency pattern below color parameters

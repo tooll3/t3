@@ -191,10 +191,23 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorPos(Vector2.Zero);
         }
 
+        public void SetVisibleRange(Vector2 scale, Vector2 scroll)
+        {
+            _scaleTarget = scale;
+            _scrollTarget = scroll;
+        }
+
+        
         public void SetVisibleValueRange(float valueScale, float valueScroll)
         {
             _scaleTarget = new Vector2(_scaleTarget.X, valueScale);
             _scrollTarget = new Vector2(_scrollTarget.X, valueScroll);
+        }
+        
+        public void SetVisibleTimeRange(float timeScale, float timeScroll)
+        {
+            _scaleTarget = new Vector2( timeScale, _scaleTarget.Y);
+            _scrollTarget = new Vector2(timeScroll, _scrollTarget.Y);
         }
 
         private void SnappedEventHandler(double snapPosition)

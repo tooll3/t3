@@ -37,6 +37,9 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.BeginGroup();
             {
+                if (KeyboardBinding.Triggered(UserActions.FocusSelection))
+                    ViewAllOrSelectedKeys(alsoChangeTimeRange:true);
+                
                 foreach (var param in animationParameters)
                 {
                     foreach (var curve in param.Curves)
