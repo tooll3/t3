@@ -180,8 +180,7 @@ namespace T3.Gui.Windows.TimeLine
             foreach (var curve in parameter.Curves)
             {
                 var points = curve.GetPointTable();
-                var positions = new Vector2[points.Count];
-                var colors = new Color[points.Count];
+                var positions = new List<Vector2>();
 
                 var minValue = float.PositiveInfinity;
                 var maxValue = float.NegativeInfinity;
@@ -193,20 +192,29 @@ namespace T3.Gui.Windows.TimeLine
                         maxValue = (float)vDef.Value;
                 }
 
-                var index = 0;
+                VDefinition lastVDef = null;
+                float lastValue=0; 
+                
                 foreach (var (u, vDef) in points)
                 {
-                    positions[index]
-                        = new Vector2(
+                    if (lastVDef != null && lastVDef.OutEditMode == VDefinition.EditMode.Constant)
+                    {
+                        positions.Add(new Vector2(
+                                                  TimeLineCanvas.Current.TransformPositionX((float)u)-1,
+                                                  lastValue));
+                    }
+
+                    lastValue = Im.Remap((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
+                    positions.Add( new Vector2(
                                       TimeLineCanvas.Current.TransformPositionX((float)u),
-                                      Im.Remap((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding));
-                    
-                    index++;
+                                      lastValue));
+
+                    lastVDef = vDef;
                 }
 
                 _drawList.AddPolyline(
-                                      ref positions[0],
-                                      points.Count,
+                                      ref positions.ToArray()[0],
+                                      positions.Count,
                                       parameter.Curves.Count() > 1 ? _curveColors[curveIndex % 4] : GrayCurveColor,
                                       false,
                                       2);
