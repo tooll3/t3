@@ -80,7 +80,14 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.Text("." + parameter.Input.Input.Name);
             ImGui.PopStyleColor();
 
-            DrawCurves(parameter, layerArea);
+            if (parameter.Curves.Count() == 4)
+            {
+                DrawCurveGradient(parameter, layerArea);
+            }
+            else
+            {
+                DrawCurveLines(parameter, layerArea);
+            }
             HandleCreateNewKeyframes(parameter, layerArea);
 
             foreach (var curve in parameter.Curves)
@@ -151,14 +158,16 @@ namespace T3.Gui.Windows.TimeLine
             GrayCurveColor,
         };
 
-        private void DrawCurves(GraphWindow.AnimationParameter parameter, ImRect layerArea)
+        private void DrawCurveLines(GraphWindow.AnimationParameter parameter, ImRect layerArea)
         {
             const float padding = 2;
+            // Lines
             var curveIndex = 0;
             foreach (var curve in parameter.Curves)
             {
                 var points = curve.GetPointTable();
                 var positions = new Vector2[points.Count];
+                var colors = new Color[points.Count];
 
                 var minValue = float.PositiveInfinity;
                 var maxValue = float.NegativeInfinity;
@@ -177,6 +186,7 @@ namespace T3.Gui.Windows.TimeLine
                         = new Vector2(
                                       TimeLineCanvas.Current.TransformPositionX((float)u),
                                       Im.Remap((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding));
+                    
                     index++;
                 }
 
@@ -190,6 +200,46 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
+        private void DrawCurveGradient(GraphWindow.AnimationParameter parameter, ImRect layerArea)
+        {
+            if (parameter.Curves.Count() != 4)
+                return;
+
+            var curve = parameter.Curves.First();
+            const float padding = 2;
+            
+            var points = curve.GetVDefinitions();
+            var times = new float[points.Count];
+            var colors = new Color[points.Count];
+            
+            var curves = parameter.Curves.ToList();
+
+            var index = 0;
+            foreach (var vDef in points)
+            {
+                times[index] = TimeLineCanvas.Current.TransformPositionX((float)vDef.U);
+                colors[index]= new Color(
+                                     (float)vDef.Value,
+                                     (float)curves[1].GetSampledValue(vDef.U),
+                                     (float)curves[2].GetSampledValue(vDef.U),
+                                     (float)curves[3].GetSampledValue(vDef.U)
+                                     );
+                index++;
+            }
+
+            for (var index2 = 0; index2 < times.Length-1; index2++)
+            {
+                _drawList.AddRectFilledMultiColor(new Vector2(times[index2], layerArea.Min.Y + padding),
+                                                  new Vector2(times[index2+1], layerArea.Max.Y - padding),
+                                                 colors[index2],
+                                                 colors[index2+1],
+                                                 colors[index2+1],
+                                                 colors[index2]);
+            }
+        }
+
+        
+        
         private const float KeyframeIconWidth = 10;
 
         private void DrawKeyframe(VDefinition vDef, ImRect layerArea, GraphWindow.AnimationParameter parameter)
