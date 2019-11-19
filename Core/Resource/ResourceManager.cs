@@ -725,6 +725,12 @@ namespace T3.Core
 
         public (uint, uint) CreateTextureFromFile(string filename, Action fileChangeAction) /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
         {
+            if (!File.Exists(filename))
+            {
+                Log.Warning($"Couldn't find texture '{filename}'.");
+                return (NULL_RESOURCE, NULL_RESOURCE);
+            }
+
             if (FileResources.TryGetValue(filename, out var existingFileResource))
             {
                 uint textureId = existingFileResource.ResourceIds.First();
