@@ -75,6 +75,9 @@ namespace T3.Gui.Graph
                    CopySelectionToClipboard(selectedChildren);
                    PasteClipboard();
                 }
+
+                if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
+                    DeleteSelectedElements();
                 
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
@@ -208,9 +211,7 @@ namespace T3.Gui.Graph
                          
                          if (ImGui.MenuItem("Delete"))
                          {
-                             var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                             var cmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
-                             UndoRedoStack.AddAndExecute(cmd);
+                             DeleteSelectedElements();
                          }
 
                          if (ImGui.MenuItem("Duplicate as new type", oneElementSelected))
@@ -241,6 +242,17 @@ namespace T3.Gui.Graph
                          _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null);
                      }
                  }, ref _contextMenuIsOpen);
+        }
+
+        private void DeleteSelectedElements()
+        {
+            var selectedChildren = GetSelectedChildUis();
+            if (!selectedChildren.Any())
+                return;
+            
+            var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+            var cmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
+            UndoRedoStack.AddAndExecute(cmd);
         }
 
         private List<SymbolChildUi> GetSelectedChildUis()

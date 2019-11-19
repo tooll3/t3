@@ -31,6 +31,7 @@ namespace T3.Gui
         Save,
         FocusSelection,
         Duplicate,
+        DeleteSelection,
     }
 
 
@@ -131,6 +132,7 @@ namespace T3.Gui
             new KeyboardBinding(UserActions.Save, new KeyCombination(Key.S,ctrl:true) ),
             new KeyboardBinding(UserActions.FocusSelection, new KeyCombination(Key.F)) { NeedsWindowHover = true},
             new KeyboardBinding(UserActions.Duplicate, new KeyCombination(Key.D, ctrl:true)) { NeedsWindowFocus = true},
+            new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Delete)) { NeedsWindowFocus = true},
         };
     }
 }
