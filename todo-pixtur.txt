@@ -12,6 +12,8 @@
 
 - opening a new (unknown) op should show all operators
 - improve styling of context menu
+- path picker should return relative paths
+
 
 - fix keyframe snapping
 

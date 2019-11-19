@@ -51,12 +51,34 @@ namespace T3.Gui.Windows.TimeLine
             _drawList.AddRectFilled(new Vector2(min.X, max.Y),
                                     new Vector2(max.X, max.Y + 1), Color.Black);
 
+            var mousePos = ImGui.GetMousePos();
+            var mouseTime = _timeLineCanvas.InverseTransformPositionX(mousePos.X);
             var layerArea = new ImRect(min, max);
+            var layerHovered = ImGui.IsWindowHovered() && layerArea.Contains(mousePos); 
+            if (layerHovered)
+            {
+                ImGui.BeginTooltip();
+                
+                ImGui.PushFont(Fonts.FontBold);
+                ImGui.Text(parameter.Input.Input.Name);
+                ImGui.PopFont();
+                
+                foreach (var curve in parameter.Curves)
+                {
+                    var v = curve.GetSampledValue(mouseTime);
+                    ImGui.Text($"{v:0.00}");
+                }
+
+                ImGui.EndTooltip();
+            }
+
+            ImGui.PushStyleColor(ImGuiCol.Text, layerHovered? Color.White.Rgba: Color.Gray);
             ImGui.PushFont(Fonts.FontBold);
-            ImGui.Text(parameter.Instance.Symbol.Name);
+            ImGui.Text("  " +parameter.Instance.Symbol.Name);
             ImGui.PopFont();
             ImGui.SameLine();
             ImGui.Text("." + parameter.Input.Input.Name);
+            ImGui.PopStyleColor();
 
             DrawCurves(parameter, layerArea);
             HandleCreateNewKeyframes(parameter, layerArea);
@@ -120,7 +142,14 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        private readonly Color[] _curveColors = { Color.Red, Color.Green, Color.Blue, Color.Gray };
+        private static readonly Color GrayCurveColor = new Color(1f, 1f, 1.0f, 0.3f);
+        private readonly Color[] _curveColors =
+        {
+            new Color(1f, 0.2f, 0.2f, 0.3f), 
+            new Color(0.1f, 1f, 0.2f, 0.3f), 
+            new Color(0.1f, 0.4f, 1.0f, 0.5f), 
+            GrayCurveColor,
+        };
 
         private void DrawCurves(GraphWindow.AnimationParameter parameter, ImRect layerArea)
         {
@@ -154,9 +183,9 @@ namespace T3.Gui.Windows.TimeLine
                 _drawList.AddPolyline(
                                       ref positions[0],
                                       points.Count,
-                                      parameter.Curves.Count() > 1 ? _curveColors[curveIndex % 4] : Color.Gray,
+                                      parameter.Curves.Count() > 1 ? _curveColors[curveIndex % 4] : GrayCurveColor,
                                       false,
-                                      1);
+                                      2);
                 curveIndex++;
             }
         }
