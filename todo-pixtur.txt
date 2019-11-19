@@ -1,32 +1,49 @@
 ▣ FIX: modify animated value creates double keyframes
 ▢ FIX: Implement deleteKeyframesCommand
 ▢ FIX: Deleting last keyframe should disable animation-flag in parameter view
+▢ FIX: Exception when input type changes
 
-▢ DragScale speed should not be derived from parameter min/max settings
-▣ dragging a multi-curve-keyframe in dope sheet should move keyframes in all curves
-▣ path picker should return relative paths
-▢ in parameter window use orange color for animated parameters
+[] FIX: Replacing multiinput doesn't work
+[] show parameters for current composition op when nothing selected
 
-▢ snap time-marker to beat-lines
+
+▣ add perlin noise op
+▣ add color type ?
+
+[v] add curve to float output
+[v] add node thumbnail
+[] change precision from double to float
+[] resize nodes
+[] highlight nodes with keyframes
+
+[] delete selected elements with hotkey
+▣ snap time-marker to beat-lines
 ▢ in dope sheet insert new key should snap to lines
-▣ duplicate keyframes -> Drag with alt?
-▢ fix invisible input glitch if 
-▣ fix curve show selected (or F-hotkey for hovered window)
+▢ fix invisible input glitch if graph canvas is zoomed out too much
 ▢ add CurveEditBox
-▣ add HoverBox in DopeSheet
-▢ DopeSheet should correctly show constant keyframes
-▣ DopeSheet should show colors as color gradients
+▣ DopeSheet should correctly show constant keyframes
+▢ fix ALT-key problem
+[] fix scroll-bar in quick create window
+
+[ ] Implement camera interaction
+[ ] Copy / Paste with hotkeys
+[ ] Port BlendImages shader
+[ ] Port BlendSmokeNoise shader
+[ ] Port Displace2d shader
 
 Later minor:
-- add transparency pattern below color parameters
-- opening a new (unknown) op should show all operators
-- improve styling of context menu
-- drag keyframe values OR time
-- unfold multiple curve layers in dope sheet
-- use proper keyframe icons for curve edit area -> need mac boot
+[] fix layout in debug log time
+▢ add transparency pattern below color parameters
+▢ opening a new (unknown) op should show all operators
+▣ improve styling of context menu
+▢ drag keyframe values OR time
+▢ unfold multiple curve layers in dope sheet
+▢ pin dope sheet parameters
+▢ use proper keyframe icons for curve edit area -> need mac boot
+- in parameter window use orange color for animated parameters
 
 Later major:
-- node groups
+▢ node groups
 
 / fix keyframe snapping
 
@@ -40,13 +57,20 @@ More ideas
 
 Done
 --------
-/ delete keyframes
-/ scrub through time with sound playback
-/ value op
-/ fix auto focus in SymbolBrowser after searching
-/ Renamed children should be styled differently
-/ default keyframes should use current value
-/ implement multi-click selection for GraphCanvas
-/ add context menu in DopeSheet
-/ add horizontal value lines in CurveEditArea
-/ Add snapping to TimeLineRange
+▣ DragScale speed should not be derived from parameter min/max settings
+▣ dragging a multi-curve-keyframe in dope sheet should move keyframes in all curves
+▣ path picker should return relative paths
+▣ duplicate keyframes -> Drag with alt?
+▣ fix curve show selected (or F-hotkey for hovered window)
+▣ add HoverBox in DopeSheet
+▣ DopeSheet should show colors as color gradients
+▣ delete keyframes
+▣ scrub through time with sound playback
+▣ value op
+▣ fix auto focus in SymbolBrowser after searching
+▣ Renamed children should be styled differently
+▣ default keyframes should use current value
+▣ implement multi-click selection for GraphCanvas
+▣ add context menu in DopeSheet
+▣ add horizontal value lines in CurveEditArea
+▣ Add snapping to TimeLineRange
