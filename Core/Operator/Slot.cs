@@ -20,6 +20,8 @@ namespace T3.Core.Operator
             Time = GlobalTime;
         }
 
+        private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
+        public static double RunTime => _runTimeWatch.ElapsedMilliseconds / 1000.0;
         public static double GlobalTime { get; set; }
         public double Time { get; set; }
     }
