@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -8,6 +9,8 @@ namespace T3.Core.Animation
 {
     public class Curve
     {
+        public static readonly int TIME_PRECISION = 4;
+
         public Utils.OutsideCurveBehavior PreCurveMapping
         {
             get => _state.PreCurveMapping;
@@ -22,6 +25,7 @@ namespace T3.Core.Animation
 
         public bool HasVAt(double u)
         {
+            u = Math.Round(u, TIME_PRECISION);
             return _state.Table.ContainsKey(u);
         }
 
@@ -40,18 +44,21 @@ namespace T3.Core.Animation
 
         public bool ExistVBefore(double u)
         {
+            u = Math.Round(u, TIME_PRECISION);
             var foundEl = _state.Table.FirstOrDefault();
             return foundEl.Value != null && foundEl.Key < u;
         }
 
         public bool ExistVAfter(double u)
         {
+            u = Math.Round(u, TIME_PRECISION);
             var foundEl = _state.Table.LastOrDefault();
             return foundEl.Value != null && foundEl.Key > u;
         }
 
         public double? GetPreviousU(double u)
         {
+            u = Math.Round(u, TIME_PRECISION);
             var foundEl = _state.Table.LastOrDefault(e => e.Key < u);
             if (foundEl.Value != null)
                 return foundEl.Key;
@@ -60,6 +67,7 @@ namespace T3.Core.Animation
 
         public double? GetNextU(double u)
         {
+            u = Math.Round(u, TIME_PRECISION);
             var foundEl = _state.Table.FirstOrDefault(e => e.Key > u);
             if (foundEl.Value != null)
                 return foundEl.Key;
@@ -68,6 +76,7 @@ namespace T3.Core.Animation
 
         public void AddOrUpdateV(double u, VDefinition key)
         {
+            u = Math.Round(u, TIME_PRECISION);
             key.U = u;
             _state.Table[u] = key;
             SplineInterpolator.UpdateTangents(_state.Table.ToList());
@@ -75,6 +84,7 @@ namespace T3.Core.Animation
 
         public void RemoveKeyframeAt(double u)
         {
+            u = Math.Round(u, TIME_PRECISION);
             var state = _state;
             state.Table.Remove(u);
             SplineInterpolator.UpdateTangents(state.Table.ToList());
@@ -87,6 +97,8 @@ namespace T3.Core.Animation
         /// <returns>Returns false if the position is already taken by a keyframe</returns>
         public void MoveKey(double u, double newU)
         {
+            u = Math.Round(u, TIME_PRECISION);
+            newU = Math.Round(newU, TIME_PRECISION);
             var state = _state;
             if (!state.Table.ContainsKey(u))
             {
@@ -126,6 +138,7 @@ namespace T3.Core.Animation
         // Returns null if there is no vDefinition at that position
         public VDefinition GetV(double u)
         {
+            u = Math.Round(u, TIME_PRECISION);
             return _state.Table.TryGetValue(u, out var foundValue) 
                        ? foundValue.Clone() 
                        : null;
@@ -136,6 +149,7 @@ namespace T3.Core.Animation
             if (_state.Table.Count < 1 || double.IsNaN(u) || double.IsInfinity(u))
                 return 0.0;
 
+            u = Math.Round(u, TIME_PRECISION);
             double offset = 0.0;
             double mappedU = u;
             var first = _state.Table.First();
@@ -194,14 +208,4 @@ namespace T3.Core.Animation
 
         private readonly CurveState _state = new CurveState();
     }
-
-    /// <summary>
-    /// The keyframe helper class is used for serializing a list of keyframes to JSON
-    /// </summary>
-    public class Keyframe
-    {
-        public double Time { get; set; }
-        public VDefinition VDefinition { get; set; }
-    }
-
 }

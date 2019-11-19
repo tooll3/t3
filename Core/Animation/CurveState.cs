@@ -85,6 +85,7 @@ namespace T3.Core.Animation
             foreach (var keyEntry in (JArray) curveToken["Keys"])
             {
                 var time = keyEntry["Time"].Value<double>();
+                time = Math.Round(time, Curve.TIME_PRECISION);
                 var key = new VDefinition();
                 key.Read(keyEntry);
                 key.U = time;

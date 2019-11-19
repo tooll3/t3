@@ -23,7 +23,13 @@ namespace T3.Core.Animation
             Cubic,
         }
 
-        public double U { get; set; }
+        private double _u;
+        public double U
+        {
+            get => _u; 
+            set => _u = Math.Round(value, Curve.TIME_PRECISION);
+        }
+            
         public double Value { get; set; }
         public Interpolation InType { get; set; }
         public Interpolation OutType { get; set; }
@@ -50,16 +56,16 @@ namespace T3.Core.Animation
         public VDefinition Clone()
         {
             return new VDefinition()
-            {
-                Value = Value,
-                U = U,
-                InType = InType,
-                OutType = OutType,
-                InEditMode = InEditMode,
-                OutEditMode = OutEditMode,
-                InTangentAngle = InTangentAngle,
-                OutTangentAngle = OutTangentAngle
-            };
+                   {
+                       Value = Value,
+                       U = U,
+                       InType = InType,
+                       OutType = OutType,
+                       InEditMode = InEditMode,
+                       OutEditMode = OutEditMode,
+                       InTangentAngle = InTangentAngle,
+                       OutTangentAngle = OutTangentAngle
+                   };
         }
 
         public void Read(JToken jsonV)
