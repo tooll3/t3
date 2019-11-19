@@ -185,7 +185,18 @@ namespace T3.Gui.Windows.TimeLine
 
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0) || ImGui.IsItemClicked())
             {
-                ClipTime.Time = InverseTransformPosition(_io.MousePos).X;
+                var draggedTime = InverseTransformPosition(_io.MousePos).X;
+                if (ImGui.GetIO().KeyShift)
+                {
+                    var snappedTime = _snapHandler.CheckForSnapping(draggedTime, _currentTimeMarker);
+                    ClipTime.Time = double.IsNaN(snappedTime)
+                                        ? draggedTime
+                                        : snappedTime;
+                }
+                else
+                {
+                    ClipTime.Time = draggedTime;
+                }
             }
 
             ImGui.SetCursorPos(Vector2.Zero);
@@ -197,16 +208,15 @@ namespace T3.Gui.Windows.TimeLine
             _scrollTarget = scroll;
         }
 
-        
         public void SetVisibleValueRange(float valueScale, float valueScroll)
         {
             _scaleTarget = new Vector2(_scaleTarget.X, valueScale);
             _scrollTarget = new Vector2(_scrollTarget.X, valueScroll);
         }
-        
+
         public void SetVisibleTimeRange(float timeScale, float timeScroll)
         {
-            _scaleTarget = new Vector2( timeScale, _scaleTarget.Y);
+            _scaleTarget = new Vector2(timeScale, _scaleTarget.Y);
             _scrollTarget = new Vector2(timeScroll, _scrollTarget.Y);
         }
 
