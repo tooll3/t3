@@ -40,6 +40,9 @@ namespace T3.Gui.Windows.TimeLine
             scale = 1/scale;
 
             var rasters = GetRastersForScale(scale, out var fadeFactor);
+
+            if (rasters == null)
+                return;
             
             // Debug string 
             // drawList.AddText(topLeft + new Vector2(20, 20), Color.Red, $"Scale: {pixelsPerU:0.1}  f={scaleRange:0}");
