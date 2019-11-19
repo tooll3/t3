@@ -323,6 +323,8 @@
     <Compile Include="Gui\InputUi\Color4InputUi.cs" />
     <Compile Include="Gui\InputUi\Int3InputUi.cs" />
     <Compile Include="Gui\InputUi\StringListInputUi.cs" />
+    <Compile Include="Gui\InputUi\Vector2InputUi.cs" />
+    <Compile Include="Gui\InputUi\Vector3InputUi.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
     <Compile Include="Gui\Interaction\Snapping\IValueSnapAttractor.cs" />
     <Compile Include="Gui\Interaction\Snapping\ValueSnapHandler.cs" />

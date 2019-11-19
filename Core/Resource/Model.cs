@@ -150,6 +150,24 @@ namespace T3.Core
                              float y = jsonToken["Y"].Value<float>();
                              return new System.Numerics.Vector2(x, y);
                          });
+            RegisterType(typeof(System.Numerics.Vector3), "Vector3",
+                         InputDefaultValueCreator<System.Numerics.Vector3>,
+                         (writer, obj) =>
+                         {
+                             var vec = (System.Numerics.Vector3)obj;
+                             writer.WriteStartObject();
+                             writer.WriteValue("X", vec.X);
+                             writer.WriteValue("Y", vec.Y);
+                             writer.WriteValue("Z", vec.Z);
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             float x = jsonToken["X"].Value<float>();
+                             float y = jsonToken["Y"].Value<float>();
+                             float z = jsonToken["Z"].Value<float>();
+                             return new System.Numerics.Vector3(x, y, z);
+                         });
             RegisterType(typeof(System.Numerics.Vector4), "Vector4",
                          () => new InputValue<Vector4>(new Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
                          (writer, obj) =>
