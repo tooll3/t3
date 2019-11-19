@@ -1,6 +1,4 @@
 todo:
-* Setup simple camera
-- Reset option for particle system
 - Scene type?
 - Adjust thread size of particle ops to some useful values
 - Create base type for shader stages and move common code there
@@ -9,7 +7,6 @@ todo:
 - Replace the 'Execute' Op used in gfx-pipeline-example with the 'Draw' Op
 - Add ops for the different drawing options (draw, drawIndex, drawInstanced, drawIndirect etc)
 - Fix output connections to multi input when doing combine
-- Add color grade op
 - Add first player version
 - Replace Guids with uint ids during runtime
 - Showing enums produces always the same code, extract function for this and even better cached object per enum type
@@ -22,6 +19,8 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Reset option for particle system
+* Setup simple camera
 * Add sampler evaluation to PixelShaderStage
 * Fix wrong error output for not serializable types
 * Fix saving instance name for symbol children
