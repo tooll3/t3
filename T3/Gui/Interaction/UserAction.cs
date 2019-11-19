@@ -30,6 +30,7 @@ namespace T3.Gui
         Redo,
         Save,
         FocusSelection,
+        Duplicate,
     }
 
 
@@ -56,7 +57,7 @@ namespace T3.Gui
     public class KeyboardBinding
     {
         public readonly UserActions Action;
-        public readonly bool NeedsWindowFocus = false;
+        public bool NeedsWindowFocus = false;
         public bool NeedsWindowHover = false;
         public readonly KeyCombination[] Combinations;
 
@@ -129,6 +130,7 @@ namespace T3.Gui
             
             new KeyboardBinding(UserActions.Save, new KeyCombination(Key.S,ctrl:true) ),
             new KeyboardBinding(UserActions.FocusSelection, new KeyCombination(Key.F)) { NeedsWindowHover = true},
+            new KeyboardBinding(UserActions.Duplicate, new KeyCombination(Key.D, ctrl:true)) { NeedsWindowFocus = true},
         };
     }
 }

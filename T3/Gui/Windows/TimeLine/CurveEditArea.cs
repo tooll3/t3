@@ -40,6 +40,9 @@ namespace T3.Gui.Windows.TimeLine
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                     ViewAllOrSelectedKeys(alsoChangeTimeRange:true);
                 
+                if(KeyboardBinding.Triggered(UserActions.Duplicate))
+                    DuplicateSelectedKeyframes();                
+                
                 foreach (var param in animationParameters)
                 {
                     foreach (var curve in param.Curves)

@@ -13,6 +13,7 @@ using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
+using T3.Gui.Styling;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -66,8 +67,13 @@ namespace T3.Gui.Graph
             ImGui.BeginGroup();
             {
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
-                {
                     FocusViewToSelection();
+
+                if (KeyboardBinding.Triggered(UserActions.Duplicate))
+                {
+                   var selectedChildren = GetSelectedChildUis();
+                   CopySelectionToClipboard(selectedChildren);
+                   PasteClipboard();
                 }
                 
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
@@ -185,69 +191,72 @@ namespace T3.Gui.Graph
                 (
                  () =>
                  {
-                     // Todo: Convert to Lync
-                     var selectedChildren = new List<SymbolChildUi>();
-                     _selectedChildren = selectedChildren;
-                     foreach (var x in SelectionHandler.SelectedElements)
-                     {
-                         if (x is SymbolChildUi childUi)
-                         {
-                             selectedChildren.Add(childUi);
-                         }
-                     }
+                     var selectedChildren = GetSelectedChildUis();
 
                      if (selectedChildren.Count > 0)
                      {
                          bool oneElementSelected = selectedChildren.Count == 1;
                          var label = oneElementSelected
-                                         ? $"{selectedChildren[0].SymbolChild.ReadableName} Item..."
-                                         : $"{selectedChildren.Count} Items...";
+                                         ? $"Selected {selectedChildren[0].SymbolChild.ReadableName}..."
+                                         : $"Selected {selectedChildren.Count} items...";
 
+                         ImGui.PushFont(Fonts.FontSmall);
+                         ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
                          ImGui.Text(label);
-                         if (ImGui.MenuItem(" Rename..", false))
-                         {
-                         }
-
-                         if (ImGui.MenuItem(" Delete"))
+                         ImGui.PopStyleColor();
+                         ImGui.PopFont();
+                         
+                         if (ImGui.MenuItem("Delete"))
                          {
                              var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
                              var cmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
                              UndoRedoStack.AddAndExecute(cmd);
                          }
 
-                         if (ImGui.MenuItem(" Duplicate as new type", oneElementSelected))
+                         if (ImGui.MenuItem("Duplicate as new type", oneElementSelected))
                          {
                              var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
                              NodeOperations.DuplicateAsNewType(compositionSymbolUi, selectedChildren[0].SymbolChild);
                          }
 
-                         if (ImGui.MenuItem(" Combine as new type"))
+                         if (ImGui.MenuItem("Combine as new type"))
                          {
                              _showCombine = true;
                          }
 
-                         if (ImGui.MenuItem(" Copy"))
+                         if (ImGui.MenuItem("Copy"))
                          {
                              CopySelectionToClipboard(selectedChildren);
                          }
+                         ImGui.Separator();
                      }
 
                      if (ImGui.MenuItem("Paste"))
                      {
                          PasteClipboard();
                      }
-
-                     ImGui.Separator();
-
-                     if (ImGui.MenuItem("Rename..", false))
-                     {
-                     }
-
+                     
                      if (ImGui.MenuItem("Add"))
                      {
                          _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null);
                      }
                  }, ref _contextMenuIsOpen);
+        }
+
+        private List<SymbolChildUi> GetSelectedChildUis()
+        {
+            // Todo: Convert to Lync
+            var selectedChildren = new List<SymbolChildUi>();
+            _selectedChildren = selectedChildren;
+            foreach (var x in SelectionHandler.SelectedElements)
+            {
+                if (x is SymbolChildUi childUi)
+                {
+                    selectedChildren.Add(childUi);
+                }
+            }
+
+            return selectedChildren;
         }
 
         private void CopySelectionToClipboard(List<SymbolChildUi> selectedChildren)

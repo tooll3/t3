@@ -145,13 +145,14 @@ namespace T3.Gui
         public static void ContextMenuForItem(Action drawMenuItems)
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
             if (ImGui.BeginPopupContextItem("context_menu"))
             {
                 drawMenuItems?.Invoke();
                 ImGui.EndPopup();
             }
 
-            ImGui.PopStyleVar();
+            ImGui.PopStyleVar(2);
         }
         
         public static void DrawContextMenuForScrollCanvas(Action drawMenuContent, ref bool contextMenuIsOpen)
@@ -165,6 +166,8 @@ namespace T3.Gui
                 return;
             
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
+            
             if (ImGui.BeginPopupContextWindow("context_menu"))
             {
                 ImGui.GetMousePosOnOpeningCurrentPopup();
@@ -177,7 +180,7 @@ namespace T3.Gui
             {
                 contextMenuIsOpen = false;
             }
-            ImGui.PopStyleVar();
+            ImGui.PopStyleVar(2);
         }
     }
 }

@@ -1,11 +1,15 @@
-▢ FIX: modify animated value creates double keyframes
+▣ FIX: modify animated value creates double keyframes
 ▢ FIX: Implement deleteKeyframesCommand
 ▢ FIX: Deleting last keyframe should disable animation-flag in parameter view
 
+▢ DragScale speed should not be derived from parameter min/max settings
 ▣ dragging a multi-curve-keyframe in dope sheet should move keyframes in all curves
 ▣ path picker should return relative paths
 ▢ in parameter window use orange color for animated parameters
 
+▢ snap time-marker to beat-lines
+▢ in dope sheet insert new key should snap to lines
+▣ duplicate keyframes -> Drag with alt?
 ▢ fix invisible input glitch if 
 ▣ fix curve show selected (or F-hotkey for hovered window)
 ▢ add CurveEditBox

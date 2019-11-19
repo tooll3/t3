@@ -5,6 +5,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Gui.Graph;
 
 namespace T3.Gui.Windows.TimeLine
@@ -253,6 +254,43 @@ namespace T3.Gui.Windows.TimeLine
                    from curve in param.Curves
                    from keyframe in curve.GetVDefinitions()
                    select keyframe;
+        }
+        
+        protected void DuplicateSelectedKeyframes()
+        {
+            if (!_selectedKeyframes.Any())
+            {
+                Log.Debug("Select keyframes to duplicate to current time");
+                return;
+            }
+
+            var minTime = float.PositiveInfinity;
+            foreach (var key in _selectedKeyframes)
+            {
+                minTime = Math.Min((float)key.U, minTime);
+            }
+
+            var newSelection = new HashSet<VDefinition>();
+
+            foreach (var param in _animationParameters)
+            {
+                foreach (var curve in param.Curves)
+                {
+                    foreach (var key in curve.GetVDefinitions().ToList())
+                    {
+                        if (!_selectedKeyframes.Contains(key))
+                            continue;
+
+                        var timeOffset = key.U - minTime;
+                        var newKey = key.Clone(); 
+                        curve.AddOrUpdateV(_timeLineCanvas.ClipTime.Time + timeOffset, newKey);
+                        newSelection.Add(newKey);
+                    }
+                }
+            }
+            RebuildCurveTables();
+            _selectedKeyframes.Clear();
+            _selectedKeyframes.UnionWith(newSelection);
         }
 
         /// <summary>

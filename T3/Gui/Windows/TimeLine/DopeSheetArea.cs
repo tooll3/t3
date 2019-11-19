@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
@@ -10,6 +11,7 @@ using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.Snapping;
+using T3.Gui.Selection;
 using T3.Gui.Styling;
 using UiHelpers;
 
@@ -35,6 +37,9 @@ namespace T3.Gui.Windows.TimeLine
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                     ViewAllOrSelectedKeys(alsoChangeTimeRange:true);
                 
+                if(KeyboardBinding.Triggered(UserActions.Duplicate))
+                    DuplicateSelectedKeyframes();
+                
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(0, 3)); // keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
 
@@ -49,6 +54,8 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.EndGroup();
         }
 
+
+        
         private void DrawProperty(GraphWindow.AnimationParameter parameter)
         {
             var min = ImGui.GetCursorScreenPos();
