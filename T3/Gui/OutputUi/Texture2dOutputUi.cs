@@ -11,8 +11,6 @@ namespace T3.Gui.OutputUi
 {
     public class Texture2dOutputUi : OutputUi<Texture2D>
     {
-
-
         public override void DrawValue(ISlot slot)
         {
             if (slot is Slot<Texture2D> typedSlot)

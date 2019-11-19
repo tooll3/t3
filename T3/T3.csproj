@@ -328,6 +328,7 @@
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
     <Compile Include="Gui\Interaction\Snapping\IValueSnapAttractor.cs" />
     <Compile Include="Gui\Interaction\Snapping\ValueSnapHandler.cs" />
+    <Compile Include="Gui\OutputUi\FloatOutputUi.cs" />
     <Compile Include="Gui\OutputUi\StringListOutputUi.cs" />
     <Compile Include="Gui\Styling\CustomComponents.cs" />
     <Compile Include="Gui\Graph\Interaction\SelectableMovement.cs" />
@@ -354,6 +355,7 @@
     <Compile Include="Gui\OutputUi\ValueOutputUi.cs" />
     <Compile Include="Gui\Styling\Fonts.cs" />
     <Compile Include="Gui\Styling\Icons.cs" />
+    <Compile Include="Gui\UiHelpers\CurvePlot.cs" />
     <Compile Include="Gui\UiHelpers\FileOperations.cs" />
     <Compile Include="Gui\Windows\ImageOutputCanvas.cs" />
     <Compile Include="Gui\Windows\OutputWindow.cs" />
