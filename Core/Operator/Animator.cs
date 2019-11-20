@@ -21,7 +21,7 @@ namespace T3.Core.Operator
         {
             public CurveId(Guid instanceId, Guid inputId, int index = 0)
             {
-                InstanceId = instanceId;
+                InstanceId = instanceId;    // TODO: Shouldn't this be symbolChildId?
                 InputId = inputId;
                 Index = index;
             }
@@ -176,6 +176,11 @@ namespace T3.Core.Operator
         public bool IsInputSlotAnimated(IInputSlot inputSlot)
         {
             return _animatedInputCurves.ContainsKey(new CurveId(inputSlot));
+        }
+
+        public bool IsInstanceAnimated(Instance instance)
+        {
+            return _animatedInputCurves.Any(c => c.Key.InstanceId == instance.Id);
         }
 
         public IEnumerable<Curve> GetCurvesForInput(IInputSlot inputSlot)

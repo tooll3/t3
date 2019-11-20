@@ -77,6 +77,8 @@ namespace T3.Gui.Graph
                     }
                     ImGui.EndTooltip();
                 }
+                
+
 
                 SelectableMovement.Handle(childUi);
 
@@ -110,6 +112,22 @@ namespace T3.Gui.Graph
                                  ColorVariations.OperatorInputZone.Apply(typeColor));
 
 
+                // Animation indicator
+                {
+                    var compositionOp = GraphCanvas.Current.CompositionOp;
+                    var instance = compositionOp.Children.FirstOrDefault(child => child.Id == childUi.SymbolChild.Id);
+                    if (instance != null)
+                    {
+                        if(compositionOp.Symbol.Animator.IsInstanceAnimated(instance))
+                        {
+                            _drawList.AddRectFilled(
+                                                    new Vector2(_lastScreenRect.Max.X- 5, _lastScreenRect.Min.Y+2),  
+                                                    new Vector2(_lastScreenRect.Max.X- 2, _lastScreenRect.Min.Y+12),
+                                                    Color.Orange);
+                        }  
+                    }
+                }
+                
                 // Visualize update
                 {
                     var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.Id == childUi.SymbolChild.Id);
