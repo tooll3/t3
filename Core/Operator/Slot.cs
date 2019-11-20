@@ -26,11 +26,8 @@ namespace T3.Core.Operator
         public double Time { get; set; }
 
         public Matrix ClipSpaceTcamera { get; set; } = Matrix.Identity;
-        public Matrix CameraTclipSpace { get; set; } = Matrix.Identity;
         public Matrix CameraTworld { get; set; } = Matrix.Identity;
-        public Matrix WorldTcamera { get; set; } = Matrix.Identity;
-        public Matrix ClipSpaceTworld { get; set; } = Matrix.Identity;
-        public Matrix WorldTclipSpace { get; set; } = Matrix.Identity;
+        public Matrix WorldTobject { get; set; } = Matrix.Identity;
     }
 
     public class OperatorAttribute : Attribute
