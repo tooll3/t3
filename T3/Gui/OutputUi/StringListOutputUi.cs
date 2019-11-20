@@ -7,21 +7,11 @@ namespace T3.Gui.OutputUi
 {
     public class StringListOutputUi : OutputUi<List<string>>
     {
-        public override void DrawValue(ISlot slot, bool recompute=true)
+        protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<List<string>> typedSlot)
             {
-                if (recompute)
-                {
-                    StartInvalidation(slot);
-                    _evaluationContext.Reset();
-                }
-                var list = recompute
-                                ? typedSlot.GetValue(_evaluationContext) 
-                                : typedSlot.Value;
-
-                //var list = typedSlot.GetValue(_evaluationContext);
-                var outputString = string.Join(", ", list);
+                var outputString = string.Join(", ", typedSlot.Value);
                 ImGui.Text($"{outputString}");
             }
             else

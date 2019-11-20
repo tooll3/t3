@@ -9,28 +9,20 @@ namespace T3.Gui.OutputUi
 {
     public class FloatOutputUi : OutputUi<float>
     {
-        public override void DrawValue(ISlot slot, bool recompute=true)
+        protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<float> typedSlot)
             {
-                if (recompute)
-                {
-                    StartInvalidation(slot);
-                    _evaluationContext.Reset();
-                }
-                var value = recompute
-                                ? typedSlot.GetValue(_evaluationContext) 
-                                : typedSlot.Value;
+                var value = typedSlot.Value;
 
-                
                 if (float.IsNaN(_dampedValue))
                     _dampedValue = 0;
-                
-                _dampedValue = Im.Lerp(_dampedValue,value,0.01f);
 
-                if (slot != _lastLost)
+                _dampedValue = Im.Lerp(_dampedValue, value, 0.01f);
+
+                if (slot != _lastSlot)
                 {
-                    _lastLost = slot;
+                    _lastSlot = slot;
                     _curve.Reset(value);
                 }
 
@@ -44,7 +36,7 @@ namespace T3.Gui.OutputUi
         }
 
         private float _dampedValue = 0;
-        private ISlot _lastLost;
+        private ISlot _lastSlot;
         private readonly CurvePlot _curve = new CurvePlot(100);
     }
 }

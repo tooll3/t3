@@ -111,6 +111,7 @@ namespace T3.Core.Operator
         Type Type { get; }
         Instance Parent { get; set; }
         DirtyFlag DirtyFlag { get; set; }
+        void Update(EvaluationContext context);
         void AddConnection(ISlot source, int index = 0);
         void RemoveConnection(int index = 0);
         bool IsConnected { get; }
@@ -190,7 +191,7 @@ namespace T3.Core.Operator
 
         public Slot()
         {
-            UpdateAction = Update;
+            // UpdateAction = Update;
             Type = typeof(T);
         }
 
@@ -212,6 +213,12 @@ namespace T3.Core.Operator
 
         public void Update(EvaluationContext context)
         {
+            if (DirtyFlag.IsDirty)
+            {
+                UpdateAction?.Invoke(context);
+                DirtyFlag.Clear();
+                DirtyFlag.SetUpdated();
+            }
         }
 
         public void ConnectedUpdate(EvaluationContext context)
@@ -221,12 +228,7 @@ namespace T3.Core.Operator
 
         public T GetValue(EvaluationContext context)
         {
-            if (DirtyFlag.IsDirty)
-            {
-                UpdateAction?.Invoke(context);
-                DirtyFlag.Clear();
-                DirtyFlag.SetUpdated();
-            }
+            Update(context);
 
             return Value;
         }

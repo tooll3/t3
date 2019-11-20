@@ -11,20 +11,11 @@ namespace T3.Gui.OutputUi
 {
     public class Texture2dOutputUi : OutputUi<Texture2D>
     {
-        public override void DrawValue(ISlot slot, bool recompute = true)
+        protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<Texture2D> typedSlot)
             {
-                if (recompute)
-                {
-                    StartInvalidation(slot);
-                    _evaluationContext.Reset();
-                }
-                var texture = recompute
-                                ? typedSlot.GetValue(_evaluationContext) 
-                                : typedSlot.Value;
-
-                ImageOutputCanvas.Current.DrawTexture(texture);
+                ImageOutputCanvas.Current.DrawTexture(typedSlot.Value);
             }
             else
             {

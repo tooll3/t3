@@ -1,6 +1,7 @@
 todo:
 - Scene type?
 - Adjust thread size of particle ops to some useful values
+- Add guid to instance classes in order to prevent problems when renaming etc.
 - Create base type for shader stages and move common code there
 - Think about ParticleSystem type and how to integrate it
 - Investigate how to have several outputs in Op not being dirty flagged by all inputs

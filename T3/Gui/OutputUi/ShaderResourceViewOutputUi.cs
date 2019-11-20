@@ -10,19 +10,11 @@ namespace T3.Gui.OutputUi
 {
     public class ShaderResourceViewOutputUi : OutputUi<ShaderResourceView>
     {
-        public override void DrawValue(ISlot slot, bool recompute= true)
+        protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<ShaderResourceView> typedSlot)
             {
-                if (recompute)
-                {
-                    StartInvalidation(slot);
-                     _evaluationContext.Reset();
-                }
-                var value = recompute
-                                ? typedSlot.GetValue(_evaluationContext) 
-                                : typedSlot.Value;
-                
+                var value = typedSlot.Value;
                 if (value?.Description.Dimension == ShaderResourceViewDimension.Texture2D)
                 {
                     //TODO: This causes exception when rendered in output window
