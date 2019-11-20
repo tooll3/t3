@@ -12,43 +12,40 @@ namespace T3.Gui.Windows
     /// </summary>
     public abstract class Window
     {
-        protected bool _visible = false;
-        protected bool _allowMultipeInstances = false;
-        protected bool _canBeOpenedFromAppMenu = true;
-        protected string _title = "Window";
+        protected bool Visible;
+        protected bool AllowMultipleInstances = false;
+        protected string Title = "Window";
         protected abstract void DrawContent();
-        protected ImGuiWindowFlags _windowFlags;
-
-        protected Window() { }
+        protected ImGuiWindowFlags WindowFlags;
 
         public void DrawMenuItemToggle()
         {
-            if (!_visible && !_canBeOpenedFromAppMenu)
-                return;
-
-            if (_allowMultipeInstances)
+            if (AllowMultipleInstances)
             {
-                if (ImGui.MenuItem("New " + _title))
+                if (ImGui.MenuItem("New " + Title))
                 {
                     AddAnotherInstance();
                 }
             }
             else
             {
-                if (ImGui.MenuItem(_title, "", _visible))
+                if (ImGui.MenuItem(Title, "", Visible))
                 {
-                    _visible = !_visible;
+                    Visible = !Visible;
                 }
-                if (!_visible)
+
+                if (!Visible)
                     Close();
             }
         }
 
-        protected virtual void UpdateBeforeDraw() { }
-
-        public virtual void Draw()
+        protected virtual void UpdateBeforeDraw()
         {
-            if (_allowMultipeInstances)
+        }
+
+        public void Draw()
+        {
+            if (AllowMultipleInstances)
             {
                 DrawAllInstances();
             }
@@ -62,29 +59,37 @@ namespace T3.Gui.Windows
         {
             UpdateBeforeDraw();
 
-            if (!_visible)
+            if (!Visible)
                 return;
 
-            if (ImGui.Begin(_title, ref _visible, _windowFlags))
+            if (ImGui.Begin(Title, ref Visible, WindowFlags))
             {
                 // Prevent window header from becoming invisible 
                 var windowPos = ImGui.GetWindowPos();
                 if (windowPos.X <= 0) windowPos.X = 0;
                 if (windowPos.Y <= 0) windowPos.Y = 0;
                 ImGui.SetWindowPos(windowPos);
-                
+
                 DrawContent();
                 ImGui.End();
             }
 
-            if (!_visible)
+            if (!Visible)
             {
                 Close();
             }
         }
 
-        protected virtual void DrawAllInstances() { }
-        protected virtual void Close() { }
-        protected virtual void AddAnotherInstance() { }
+        protected virtual void DrawAllInstances()
+        {
+        }
+
+        protected virtual void Close()
+        {
+        }
+
+        protected virtual void AddAnotherInstance()
+        {
+        }
     }
 }

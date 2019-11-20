@@ -25,9 +25,9 @@ namespace T3.Gui.Graph
         public GraphWindow() : base()
         {
             _instanceCounter++;
-            _title = "Graph##" + _instanceCounter;
-            _visible = true;
-            _allowMultipeInstances = true;
+            Title = "Graph##" + _instanceCounter;
+            Visible = true;
+            AllowMultipleInstances = true;
 
             const string trackName = @"Resources\lorn-sega-sunset.mp3";
             _clipTime = File.Exists(trackName) ? new StreamClipTime(trackName) : new ClipTime();
@@ -36,7 +36,7 @@ namespace T3.Gui.Graph
             GraphCanvas = new GraphCanvas(opInstance);
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
 
-            _windowFlags = ImGuiWindowFlags.NoScrollbar;
+            WindowFlags = ImGuiWindowFlags.NoScrollbar;
             WindowInstances.Add(this);
         }
 

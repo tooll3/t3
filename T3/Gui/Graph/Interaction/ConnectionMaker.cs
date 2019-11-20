@@ -153,7 +153,7 @@ namespace T3.Gui.Graph
             var replaceConnection = multiInputIndex % 2 != 0;
             if (replaceConnection)
             {
-                // TODO: delete previous multiinput connection that need to be replaced
+                // TODO: delete previous multi-input connection that need to be replaced
             }
             // divide by 2 to get correct insertion index in existing connections
             UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex / 2));

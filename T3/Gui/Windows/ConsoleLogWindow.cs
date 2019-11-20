@@ -18,8 +18,8 @@ namespace T3.Gui.Windows
         public ConsoleLogWindow() : base()
         {
             Log.AddWriter(this);
-            _title = "Console";
-            _visible = true;
+            Title = "Console";
+            Visible = true;
         }
 
         protected override void DrawContent()

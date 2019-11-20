@@ -19,9 +19,9 @@ namespace T3.Gui.Windows
         public ParameterWindow() : base()
         {
             _instanceCounter++;
-            _title = "Parameters##" + _instanceCounter;
-            _allowMultipeInstances = true;
-            _visible = true;
+            Title = "Parameters##" + _instanceCounter;
+            AllowMultipleInstances = true;
+            Visible = true;
 
             WindowInstances.Add(this);
         }

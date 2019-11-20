@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
+using T3.Operators.Types;
 
 namespace T3.Gui.Windows
 {
@@ -11,11 +13,12 @@ namespace T3.Gui.Windows
     {
         public OutputWindow() 
         {
-            _title = "Output##" + _instanceCounter;
-            _visible = true;
+            Title = "Output##" + _instanceCounter;
+            Visible = true;
 
-            _allowMultipeInstances = true;
-            _visible = true;
+            AllowMultipleInstances = true;
+            Visible = true;
+            WindowFlags = ImGuiWindowFlags.NoScrollbar;
 
             WindowInstances.Add(this);
             _instanceCounter++;
@@ -46,12 +49,24 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
+            //ImGui.BeginChild("23", new Vector2(100,100), ImGuiWindowFlags.NoMove);
             _pinning.UpdateSelection();
 
             _imageCanvas.Draw();
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
+            _cameraInteraction.UpdateCameraNode(FindCameraNode());
+            _cameraInteraction.Update();
             DrawSelection(_pinning.SelectedInstance, _pinning.SelectedUi);
             DrawToolbar();
+            //ImGui.End();
+        }
+
+        
+        private Camera FindCameraNode()
+        {
+            var obj= _pinning.SelectedInstance.Parent.Children.FirstOrDefault(child => child.Type == typeof(Camera));
+            var cam = obj as Camera;
+            return cam;
         }
 
 
@@ -93,6 +108,7 @@ namespace T3.Gui.Windows
 
         private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
         private readonly SelectionPinning _pinning = new SelectionPinning();
+        private readonly  CameraInteraction _cameraInteraction = new CameraInteraction();
 
         private static readonly List<OutputWindow> WindowInstances = new List<OutputWindow>();
         static int _instanceCounter ;

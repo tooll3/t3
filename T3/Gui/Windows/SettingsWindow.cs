@@ -13,7 +13,7 @@ namespace T3.Gui.Windows
     {
         public SettingsWindow() : base()
         {
-            _title = "Settings";
+            Title = "Settings";
         }
         public static bool UseVSync => _vsync;
 
