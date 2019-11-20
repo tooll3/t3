@@ -1,62 +1,65 @@
-▣ FIX: modify animated value creates double keyframes
-▢ FIX: Implement deleteKeyframesCommand
-▢ FIX: Deleting last keyframe should disable animation-flag in parameter view
-▢ FIX: Exception when input type changes
+▢ Implement camera interaction
+▢ Port BlendImages shader
+▢ Port BlendSmokeNoise shader
 
-[] FIX: Replacing multiinput doesn't work
-[] show parameters for current composition op when nothing selected
+▢ FIX: Replacing multi-input doesn't work
+▢ fix ALT-key problem
 
-
-▣ add perlin noise op
-▣ add color type ?
-
-[v] add curve to float output
-[v] add node thumbnail
-[] change precision from double to float
-[] resize nodes
-[] highlight nodes with keyframes
-
-[] delete selected elements with hotkey
-▣ snap time-marker to beat-lines
+Later minor
+------------
 ▢ in dope sheet insert new key should snap to lines
 ▢ fix invisible input glitch if graph canvas is zoomed out too much
-▢ add CurveEditBox
-▣ DopeSheet should correctly show constant keyframes
-▢ fix ALT-key problem
-[] fix scroll-bar in quick create window
-
-[ ] Implement camera interaction
-[ ] Copy / Paste with hotkeys
-[ ] Port BlendImages shader
-[ ] Port BlendSmokeNoise shader
-[ ] Port Displace2d shader
-
-Later minor:
-[] fix layout in debug log time
+▢ fix scroll-bar in quick create window
+▢ fix layout in debug log time
 ▢ add transparency pattern below color parameters
-▢ opening a new (unknown) op should show all operators
-▣ improve styling of context menu
-▢ drag keyframe values OR time
-▢ unfold multiple curve layers in dope sheet
+▢ opening a new (unknown) op should change view to show all operators
 ▢ pin dope sheet parameters
+▢ unfold multiple curve layers in dope sheet
 ▢ use proper keyframe icons for curve edit area -> need mac boot
-- in parameter window use orange color for animated parameters
+▢ in parameter window use orange color for animated parameters
+▢ Hotkey (return) to rename selected node
+▢ resize nodes?
 
-Later major:
+Later major
+-----------
 ▢ node groups
-
-/ fix keyframe snapping
+▢ add CurveEditBox
+▢ drag keyframe values OR time
+▢ add snapping to canvas nodes
+▢ preview thumbnails
 
 More ideas
 ------
-- add snapping to canvas nodes
-- Return should rename selected node
-- snap time marker when holding a hotkey (like N?)
-- snap to horizontal value lines
-- preview thumbnails
+▢ snap to horizontal value lines
+▢ change precision from double to float
+
+bugs Later
+-------
+▢ FIX: Implement commands for key-frame modifications
+▢ FIX: Deleting last keyframe should disable animation-flag in parameter view
+▢ FIX: Exception when input type changes
 
 Done
 --------
+▣ show parameters for current composition op when nothing selected
+▣ FIX: crash when opening dashboard
+
+▣ FIX: modify animated value creates double keyframes
+
+▣ snap time marker when holding a hotkey (like N?)
+▣ Port Displace2d shader
+▣ add 1D-perlin noise op
+▣ add color type ?
+▣ Copy / Paste with hotkeys
+▣ highlight nodes with keyframes
+▣ fix keyframe snapping
+▣ delete selected elements with hotkey
+▣ snap time-marker to beat-lines
+▣ DopeSheet should correctly show constant keyframes
+▣ add curve to float output
+▣ add node thumbnail
+
+▣ improve styling of context menu
 ▣ DragScale speed should not be derived from parameter min/max settings
 ▣ dragging a multi-curve-keyframe in dope sheet should move keyframes in all curves
 ▣ path picker should return relative paths
@@ -74,3 +77,19 @@ Done
 ▣ add context menu in DopeSheet
 ▣ add horizontal value lines in CurveEditArea
 ▣ Add snapping to TimeLineRange
+
+
+
+-------------------
+Crash after duplicate LoadTexture
+
+Unhandled Exception: System.Runtime.InteropServices.SEHException: External component has thrown an exception.
+   at SharpDX.Direct3D11.PixelShaderStage.SetShaderResources(Int32 startSlot, Int32 numViews, IntPtr shaderResourceView
+sOut)
+   at SharpDX.Direct3D11.CommonShaderStage.SetShaderResource(Int32 slot, ShaderResourceView resourceView)
+   at T3.ImGuiDx11Impl.RenderImDrawData(ImDrawDataPtr draw_data) in C:\Users\pixtur\coding\t3\T3\Gui\ImGuiDx11Impl.cs:l
+ine 204
+   at T3.Program.<>c__DisplayClass1_0.<Main>b__8() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 359
+   at SharpDX.Windows.RenderLoop.Run(Control form, RenderCallback renderCallback, Boolean useApplicationDoEvents)
+   at T3.Program.Main() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 299
+

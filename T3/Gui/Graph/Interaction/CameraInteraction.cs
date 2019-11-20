@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
@@ -32,17 +33,22 @@ namespace T3.Gui.Graph.Interaction
                 _lastCameraNode = _cameraNode;
             }
 
-            //ManipulateCameraByMouse();
+            ManipulateCameraByMouse();
             ManipulateCameraByKeyboard();
             ComputeSmoothMovement();
-            _cameraNode.Position.TypedInputValue.Value = _smoothedSetup.Position;
+            
             _cameraNode.Position.Input.IsDefault = false;
-            _cameraNode.Target.TypedInputValue.Value = _smoothedSetup.Target;
+            _cameraNode.Position.TypedInputValue.Value = _smoothedSetup.Position;
+            _cameraNode.Position.DirtyFlag.Invalidate();
             _cameraNode.Target.Input.IsDefault = false;
+            _cameraNode.Target.TypedInputValue.Value = _smoothedSetup.Target;
+            _cameraNode.Target.DirtyFlag.Invalidate();
 
-            Log.Debug($"pos{_smoothedSetup.Position}  target:{_smoothedSetup.Target}  vel: {_moveVelocity}");
+            // TODO: Camera-Update doesn't work
+            _cameraNode.Position.Value = _intendedSetup.Position;
+            _cameraNode.Target.Value = _intendedSetup.Target;
+            // Log.Debug($"pos{_smoothedSetup.Position}  target:{_smoothedSetup.Target}  vel: {_moveVelocity}");
         }
-
         
 
         private void ComputeSmoothMovement()
@@ -50,21 +56,21 @@ namespace T3.Gui.Graph.Interaction
             var cameraIsStillMoving = (_smoothedSetup.MatchesSetup(_intendedSetup)
                                        || _moveVelocity.Length() > StopDistanceThreshold
                                        || _lookingAroundDelta.Length() > StopDistanceThreshold
-                                       || _orbitDelta.Length() > 0.001f
+                                       || _orbitVelocity.Length() > 0.001f
                                        || _manipulatedByMouseWheel
                                        || _manipulatedByKeyboard);
             if (!cameraIsStillMoving)
             {
                 _smoothedSetup.SetTo(_intendedSetup);
-                _orbitDelta = Vector2.Zero;
+                _orbitVelocity = Vector2.Zero;
                 _moveVelocity= Vector3.Zero;
                 return;
             }
 
-            if (_orbitDelta.Length() > 0.001f)
+            if (_orbitVelocity.Length() > 0.001f)
             {
-                OrbitByAngle(_orbitDelta);
-                _orbitDelta *= new Vector2(OrbitHorizontalFriction, OrbitVerticalFriction) / FrameDurationFactor;
+                OrbitByAngle(_orbitVelocity);
+                _orbitVelocity = Vector2.Lerp(_orbitVelocity, Vector2.Zero, _deltaTime * OrbitHorizontalFriction * 60);;
             }
 
             if (_moveVelocity.Length() > MaxMoveVelocity)
@@ -73,7 +79,7 @@ namespace T3.Gui.Graph.Interaction
             }
             else if(!_manipulatedByKeyboard)
             {
-                _moveVelocity = Vector3.Lerp(Vector3.Zero, _moveVelocity, _deltaTime * CameraMoveFriction * 60);    
+                _moveVelocity = Vector3.Lerp(_moveVelocity, Vector3.Zero, _deltaTime * CameraMoveFriction * 60);    
             }
             
             _intendedSetup.Position += _moveVelocity * _deltaTime;
@@ -111,7 +117,7 @@ namespace T3.Gui.Graph.Interaction
         private void ManipulateCameraByMouse()
         {
             HandleMouseWheel();
-            if (ImGui.IsMouseClicked(0))
+            if (ImGui.IsMouseDragging(0))
             {
                 if (ImGui.GetIO().KeyAlt)
                 {
@@ -155,20 +161,23 @@ namespace T3.Gui.Graph.Interaction
 
         private void DragOrbit()
         {
-            var dragDelta = ImGui.GetMouseDragDelta();
-            _orbitDelta = new Vector2((float)(dragDelta.X / RenderWindowHeight * OrbitSensitivity * Math.PI / 180.0),
-                                      (float)(dragDelta.Y / RenderWindowHeight * OrbitSensitivity * Math.PI / 180.0));
+            //var dragDelta = ImGui.GetMouseDragDelta();
+            var dragDelta = ImGui.GetIO().MouseDelta;
+            _orbitVelocity += dragDelta * _deltaTime * -0.2f;
+            // new Vector2((float)(dragDelta.X / RenderWindowHeight * OrbitSensitivity * Math.PI / 180.0),
+            //                           (float)(dragDelta.Y / RenderWindowHeight * OrbitSensitivity * Math.PI / 180.0));
         }
 
-        private void OrbitByAngle(Vector2 rotationSpeed)
+        private void OrbitByAngle(Vector2 orbitVelocity)
         {
+            Log.Debug("Orbit by angle " + orbitVelocity);
             var currentTarget = _intendedSetup.Target;
             var viewDir = new Vector4(_intendedSetup.Target - _intendedSetup.Position, 1);
             var viewDirLength = viewDir.Length();
             viewDir /= viewDirLength;
 
-            var rotAroundX = Matrix4x4.CreateFromAxisAngle(_viewAxis.Left, rotationSpeed.Y);
-            var rotAroundY = Matrix4x4.CreateFromAxisAngle(_viewAxis.Up, rotationSpeed.X);
+            var rotAroundX = Matrix4x4.CreateFromAxisAngle(_viewAxis.Left, orbitVelocity.Y);
+            var rotAroundY = Matrix4x4.CreateFromAxisAngle(_viewAxis.Up, orbitVelocity.X);
             var rot = Matrix4x4.Multiply(rotAroundX, rotAroundY);
 
             var newViewDir = Vector4.Transform(viewDir, rot);
@@ -196,11 +205,10 @@ namespace T3.Gui.Graph.Interaction
 
         private void ManipulateCameraByKeyboard()
         {
+            if (!ImGui.IsWindowHovered())
+                return;
+            
             var viewDirLength = _viewAxis.ViewDistance.Length();
-            var initialVelocity = _moveVelocity.Length() < StopDistanceThreshold ? InitialMoveVelocity : 0;
-
-            //var increaseAccelerationWithZoom = viewDirLength / 10f;
-            //var acceleration = CameraAcceleration * increaseAccelerationWithZoom;
             var acc = CameraAcceleration * _deltaTime * 60 * viewDirLength;
             
             if (ImGui.IsKeyPressed((int)Key.A) || ImGui.IsKeyPressed((int)Key.CursorLeft))
@@ -256,7 +264,7 @@ namespace T3.Gui.Graph.Interaction
 
             public void ComputeForCamera(Camera camera)
             {
-                ViewDistance = camera.Target.TypedInputValue.Value - camera.Position.TypedInputValue.Value;
+                ViewDistance = camera.Target.Value - camera.Position.Value;
 
                 var worldUp = Vector3.UnitY;
                 var rolledUp = Vector3.Normalize(Vector3.Transform(worldUp, Matrix4x4.CreateFromAxisAngle(ViewDistance, camera.Roll.Value)));
@@ -292,8 +300,8 @@ namespace T3.Gui.Graph.Interaction
 
             public void SetTo(Camera cameraInstance)
             {
-                Position = cameraInstance.Position.TypedInputValue.Value;
-                Target = cameraInstance.Target.TypedInputValue.Value;
+                Position = cameraInstance.Position.Value;
+                Target = cameraInstance.Target.Value;
             }
 
             public void BlendTo(CameraSetup intended, float cameraMoveFriction)
@@ -316,7 +324,7 @@ namespace T3.Gui.Graph.Interaction
         
         private Vector3 _moveVelocity;
         private Vector3 _lookingAroundDelta = Vector3.Zero;
-        private Vector2 _orbitDelta;
+        private Vector2 _orbitVelocity;
         private Camera _cameraNode;
         private Camera _lastCameraNode;
         private static float _deltaTime;
@@ -324,11 +332,8 @@ namespace T3.Gui.Graph.Interaction
         private const float RenderWindowHeight = 450; // TODO: this should be derived from output window size
         private const float StopDistanceThreshold = 0.001f;
         private const float RotateMouseSensitivity = 300;
-        private const float OrbitSensitivity = 200;
-        private const float OrbitHorizontalFriction = 0.92f;
-        private const float OrbitVerticalFriction = 0.86f; // A bit less to avoid sliding into gimbal lock
-        private const float InitialMoveVelocity = 0.0f;
-        private const float CameraMoveFriction = 0.01f;
+        private const float OrbitHorizontalFriction = 0.2f;
+        private const float CameraMoveFriction = 0.03f;
         private const float ZoomSpeed = 0.2f;
 
         private const float MaxMoveVelocity = 200;

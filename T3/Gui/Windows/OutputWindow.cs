@@ -49,16 +49,18 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
-            //ImGui.BeginChild("23", new Vector2(100,100), ImGuiWindowFlags.NoMove);
-            _pinning.UpdateSelection();
+            ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+            {
+                _pinning.UpdateSelection();
 
-            _imageCanvas.Draw();
-            ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
-            _cameraInteraction.UpdateCameraNode(FindCameraNode());
-            _cameraInteraction.Update();
-            DrawSelection(_pinning.SelectedInstance, _pinning.SelectedUi);
-            DrawToolbar();
-            //ImGui.End();
+                _imageCanvas.Draw();
+                ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
+                _cameraInteraction.UpdateCameraNode(FindCameraNode());
+                _cameraInteraction.Update();
+                DrawSelection(_pinning.SelectedInstance, _pinning.SelectedUi);
+                DrawToolbar();
+            }
+            ImGui.EndChild();
         }
 
         
@@ -89,6 +91,7 @@ namespace T3.Gui.Windows
             ImGui.SameLine();
         }
 
+        
         private static void DrawSelection(Instance selectedInstance, SymbolUi selectedUi)
         {
             if (selectedInstance == null)
