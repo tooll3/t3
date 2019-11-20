@@ -63,7 +63,7 @@ namespace T3.Gui.Graph
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                    T3UI.AddHoveredId(childUi.SymbolChild.Id);
+                    T3Ui.AddHoveredId(childUi.SymbolChild.Id);
 
                     ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
                     ImGui.BeginTooltip();

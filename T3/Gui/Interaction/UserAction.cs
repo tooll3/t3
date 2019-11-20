@@ -44,7 +44,7 @@ namespace T3.Gui
                                                                          {
                                                                              { UserActions.Undo, UndoRedoStack.Undo },
                                                                              { UserActions.Redo, UndoRedoStack.Redo },
-                                                                             { UserActions.Save, T3UI.UiModel.Save }
+                                                                             { UserActions.Save, T3Ui.UiModel.Save }
                                                                          };
         public static readonly HashSet<UserActions> DeferredActions = new HashSet<UserActions>();
 

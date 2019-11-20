@@ -279,7 +279,7 @@ namespace T3
             (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg", null);
 
             // setup file watching the operator source
-            resourceManager.OperatorsAssembly = T3UI.UiModel.OperatorsAssembly;
+            resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;
             foreach (var (key, symbol) in SymbolRegistry.Entries)
             {
                 ResourceManager.Instance().CreateOperatorEntry(@"Operators\Types\" + symbol.Name + ".cs", symbol.Id.ToString());
@@ -318,8 +318,8 @@ namespace T3
                                      context.OutputMerger.SetTargets(_renderView);
                                      context.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
 
-                                     form2.Visible = T3UI.ShowSecondaryRenderWindow;
-                                     if (T3UI.ShowSecondaryRenderWindow)
+                                     form2.Visible = T3Ui.ShowSecondaryRenderWindow;
+                                     if (T3Ui.ShowSecondaryRenderWindow)
                                      {
                                          context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
                                          context.Rasterizer.SetViewport(new Viewport(0, 0, form2.ClientSize.Width, form2.ClientSize.Height, 0.0f, 1.0f));
@@ -350,7 +350,7 @@ namespace T3
                                          context.PixelShader.SetShaderResource(0, null);
                                      }
 
-                                     _t3ui.DrawUI();
+                                     _t3ui.Draw();
 
                                      context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
                                      context.OutputMerger.SetTargets(_renderView);
@@ -362,7 +362,7 @@ namespace T3
 
                                      _swapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
 
-                                     if (T3UI.ShowSecondaryRenderWindow)
+                                     if (T3Ui.ShowSecondaryRenderWindow)
                                          _swapChain2.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
                                  });
 
@@ -388,7 +388,7 @@ namespace T3
             rtv = new RenderTargetView(device, buffer);
         }
 
-        private static T3UI _t3ui = new T3UI();
+        private static T3Ui _t3ui = new T3Ui();
         private static bool _inResize;
         private static bool _inResize2;
         private static SwapChain _swapChain;

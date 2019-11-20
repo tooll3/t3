@@ -56,7 +56,7 @@ namespace T3.Gui.Windows
                             if (FilterIsActive && !entry.Message.Contains(_filterString))
                                 continue;
 
-                            var colorHoveredElements = T3UI.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f;
+                            var colorHoveredElements = T3Ui.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f;
 
                             var color = _colorForLogLevel[entry.Level];
                             color.W = colorHoveredElements;
@@ -67,7 +67,7 @@ namespace T3.Gui.Windows
 
                             if (IsLineHovered())
                             {
-                                T3UI.AddHoveredId(entry.SourceId);
+                                T3Ui.AddHoveredId(entry.SourceId);
                             }
 
                             ImGui.PopStyleColor();

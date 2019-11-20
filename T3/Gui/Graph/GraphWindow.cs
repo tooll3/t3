@@ -32,7 +32,7 @@ namespace T3.Gui.Graph
             const string trackName = @"Resources\lorn-sega-sunset.mp3";
             _clipTime = File.Exists(trackName) ? new StreamClipTime(trackName) : new ClipTime();
 
-            var opInstance = T3UI.UiModel.MainOp;
+            var opInstance = T3Ui.UiModel.MainOp;
             GraphCanvas = new GraphCanvas(opInstance);
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
 

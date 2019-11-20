@@ -1,32 +1,21 @@
 ﻿using ImGuiNET;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Xml.Schema;
 using T3.Core;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
-using T3.Gui.OutputUi;
 using T3.Gui.Windows;
 
 namespace T3.Gui
 {
     /// <summary>
-    /// A singleton capsule T3 UI functionality from imgui-clutter in Program.cs
+    /// A singleton capsule T3 UI functionality from ImGui-clutter in Program.cs
     /// </summary>
-    public class T3UI
+    public class T3Ui
     {
-        public T3UI()
+        public T3Ui()
         {
-            _instance = this;
-
             _windows = new List<Window>()
             {
                 new GraphWindow(),
@@ -38,9 +27,8 @@ namespace T3.Gui
         }
 
 
-        public unsafe void DrawUI()
+        public void Draw()
         {
-
             foreach (var windowType in _windows)
             {
                 windowType.Draw();
@@ -129,45 +117,27 @@ namespace T3.Gui
         }
 
 
-        private IOutputUi GetSelectedOutputUi()
-        {
-            foreach (var gcw in GraphWindow.WindowInstances)
-            {
-                if (gcw.GraphCanvas.SelectionHandler.SelectedElements.Any())
-                {
-                    var outputUi = gcw.GraphCanvas.SelectionHandler.SelectedElements[0] as IOutputUi;
-                    if (outputUi != null)
-                        return outputUi;
-                }
-            }
-            return null;
-        }
-
-
         public static void AddHoveredId(Guid id)
         {
             _hoveredIdsForNextFrame.Add(id);
         }
 
-        public void SwapHoveringBuffers()
+        private static void SwapHoveringBuffers()
         {
             HoveredIdsLastFrame = _hoveredIdsForNextFrame;
             _hoveredIdsForNextFrame = new HashSet<Guid>();
         }
 
-        public static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
-        public static HashSet<Guid> HoveredIdsLastFrame { get; set; } = new HashSet<Guid>();
+        private static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
+        public static HashSet<Guid> HoveredIdsLastFrame { get; private set; } = new HashSet<Guid>();
         
         public static bool ShowSecondaryRenderWindow { get; private set; }
 
-        private List<ParameterWindow> _parameterWindows = new List<ParameterWindow>();
-
         public static readonly UiModel UiModel = new UiModel();
 
-        private static T3UI _instance = null;
 
-        private List<Window> _windows;
-        private bool _demoWindowVisible = false;
-        private bool _metricsWindowVisible = false;
+        private readonly List<Window> _windows;
+        private bool _demoWindowVisible;
+        private bool _metricsWindowVisible;
     }
 }

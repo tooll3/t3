@@ -5,7 +5,7 @@ using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
-using static T3.Gui.T3UI;
+using static T3.Gui.T3Ui;
 
 namespace T3.Gui.Windows
 {
