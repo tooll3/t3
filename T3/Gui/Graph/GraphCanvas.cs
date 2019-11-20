@@ -71,14 +71,26 @@ namespace T3.Gui.Graph
 
                 if (KeyboardBinding.Triggered(UserActions.Duplicate))
                 {
-                   var selectedChildren = GetSelectedChildUis();
-                   CopySelectionToClipboard(selectedChildren);
-                   PasteClipboard();
+                    var selectedChildren = GetSelectedChildUis();
+                    CopySelectionToClipboard(selectedChildren);
+                    PasteClipboard();
                 }
 
                 if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
                     DeleteSelectedElements();
-                
+
+                if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
+                {
+                    var selectedChildren = GetSelectedChildUis();
+                    if (selectedChildren.Any())
+                        CopySelectionToClipboard(selectedChildren);
+                }
+
+                if (KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
+                {
+                    PasteClipboard();
+                }
+
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                 DrawGrid();
@@ -164,30 +176,30 @@ namespace T3.Gui.Graph
 
         private void FocusViewToSelection()
         {
-            FitArea(GetSelectionBounds());  
+            FitArea(GetSelectionBounds());
         }
 
-        private ImRect GetSelectionBounds(float padding=50)
+        private ImRect GetSelectionBounds(float padding = 50)
         {
             var selectedOrAll = !SelectionHandler.SelectedElements.Any()
                                     ? SelectableChildren.ToArray()
                                     : SelectionHandler.SelectedElements.ToArray();
 
-            if (selectedOrAll.Length==0)
+            if (selectedOrAll.Length == 0)
                 return new ImRect();
-            
+
             var firstElement = selectedOrAll[0];
             var bounds = new ImRect(firstElement.PosOnCanvas, firstElement.PosOnCanvas + Vector2.One);
             foreach (var element in selectedOrAll)
             {
                 bounds.Add(element.PosOnCanvas);
-                bounds.Add(element.PosOnCanvas+element.Size);
+                bounds.Add(element.PosOnCanvas + element.Size);
             }
 
             bounds.Expand(padding);
             return bounds;
         }
-        
+
         private void DrawContextMenu()
         {
             CustomComponents.DrawContextMenuForScrollCanvas
@@ -208,7 +220,7 @@ namespace T3.Gui.Graph
                          ImGui.Text(label);
                          ImGui.PopStyleColor();
                          ImGui.PopFont();
-                         
+
                          if (ImGui.MenuItem("Delete"))
                          {
                              DeleteSelectedElements();
@@ -229,6 +241,7 @@ namespace T3.Gui.Graph
                          {
                              CopySelectionToClipboard(selectedChildren);
                          }
+
                          ImGui.Separator();
                      }
 
@@ -236,7 +249,7 @@ namespace T3.Gui.Graph
                      {
                          PasteClipboard();
                      }
-                     
+
                      if (ImGui.MenuItem("Add"))
                      {
                          _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null);
@@ -249,7 +262,7 @@ namespace T3.Gui.Graph
             var selectedChildren = GetSelectedChildUis();
             if (!selectedChildren.Any())
                 return;
-            
+
             var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
             var cmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
             UndoRedoStack.AddAndExecute(cmd);
