@@ -317,6 +317,7 @@
     <Compile Include="Gui\Commands\MoveTimeClipCommand.cs" />
     <Compile Include="Gui\Commands\TimeClipDeleteCommand.cs" />
     <Compile Include="Gui\Graph\GraphCanvas.cs" />
+    <Compile Include="Gui\Graph\Interaction\CameraInteraction.cs" />
     <Compile Include="Gui\Graph\Interaction\NodeOperations.cs" />
     <Compile Include="Gui\Graph\TimeControls.cs" />
     <Compile Include="Gui\InputUi\BoolInputUi.cs" />
