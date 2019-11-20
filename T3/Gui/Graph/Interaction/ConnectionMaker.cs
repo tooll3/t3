@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 
@@ -147,6 +149,12 @@ namespace T3.Gui.Graph
                                                       sourceSlotId: TempConnection.SourceSlotId,
                                                       targetParentOrChildId: targetUi.SymbolChild.Id,
                                                       targetSlotId: input.Id);
+
+            var replaceConnection = multiInputIndex % 2 != 0;
+            if (replaceConnection)
+            {
+                // TODO: delete previous multiinput connection that need to be replaced
+            }
             // divide by 2 to get correct insertion index in existing connections
             UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex / 2));
             TempConnection = null;

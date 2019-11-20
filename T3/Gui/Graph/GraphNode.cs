@@ -68,7 +68,7 @@ namespace T3.Gui.Graph
                     ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
                     ImGui.BeginTooltip();
                     {
-                        _imageCanvas.Draw();
+                        ImageCanvasForTooltips.Draw();
                         var children = GraphCanvas.Current.CompositionOp.Children;
                         Instance instance = children.Single(c => c.Id == childUi.Id);
                         var firstOutput = instance.Outputs[0];
@@ -300,7 +300,6 @@ namespace T3.Gui.Graph
             }
         }
 
-        private static readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
 
         private static void DrawOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
@@ -560,9 +559,6 @@ namespace T3.Gui.Graph
 
         private static ImRect GetUsableInputSlotSize(SymbolChildUi targetUi, int inputIndex, int visibleSlotCount)
         {
-            //var opRect = GraphNode._lastScreenRect;
-            var heightForInputs = _lastScreenRect.GetHeight() - _nodeTitleHeight;
-
             var areaForParams = new ImRect(new Vector2(
                                                        _lastScreenRect.Min.X,
                                                        _lastScreenRect.Min.Y + _nodeTitleHeight),
@@ -598,7 +594,8 @@ namespace T3.Gui.Graph
         private static float _outputSlotThickness = 2;
 
         #endregion
-
+        
+        private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
         private static Guid _hoveredId;
 
         private static ImRect _lastScreenRect;
