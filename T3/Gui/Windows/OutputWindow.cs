@@ -52,11 +52,13 @@ namespace T3.Gui.Windows
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
                 _pinning.UpdateSelection();
-
+                var camera = FindCameraInstance();
+                _imageCanvas.NoMouseInteraction = camera != null; 
                 _imageCanvas.Draw();
+                
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
-                _cameraInteraction.UpdateCameraNode(FindCameraNode());
-                _cameraInteraction.Update();
+                //_cameraInteraction.SetCameraInstance(camera);
+                _cameraInteraction.Update(camera);
                 DrawSelection(_pinning.SelectedInstance, _pinning.SelectedUi);
                 DrawToolbar();
             }
@@ -64,7 +66,7 @@ namespace T3.Gui.Windows
         }
 
         
-        private Camera FindCameraNode()
+        private Camera FindCameraInstance()
         {
             var obj= _pinning.SelectedInstance.Parent.Children.FirstOrDefault(child => child.Type == typeof(Camera));
             var cam = obj as Camera;

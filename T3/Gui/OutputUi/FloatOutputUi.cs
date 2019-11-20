@@ -37,6 +37,6 @@ namespace T3.Gui.OutputUi
 
         private float _dampedValue = 0;
         private ISlot _lastSlot;
-        private readonly CurvePlot _curve = new CurvePlot(100);
+        private readonly CurvePlot _curve = new CurvePlot("", resolution: 200, width:150);
     }
 }

@@ -1,35 +1,28 @@
 ﻿using ImGuiNET;
-using System.Numerics;
-using System.Text;
-using T3.Core.Logging;
 using T3.Gui.Graph;
-using T3.Gui.Styling;
 using T3.Gui.TypeColors;
-using static T3.Gui.T3Ui;
 
 namespace T3.Gui.Windows
 {
     public class SettingsWindow : Window
     {
-        public SettingsWindow() : base()
+        public SettingsWindow() 
         {
             Title = "Settings";
         }
-        public static bool UseVSync => _vsync;
+        public static bool UseVSync => _vSync;
 
-        private static bool _vsync = true;
+        private static bool _vSync = true;
 
         public static bool WindowRegionsVisible;
         public static bool ItemRegionsVisible;
-        //public static bool ConsoleWindowVisible = true;
-        //public static bool ParameterWindowVisible = true;
 
         protected override void DrawContent()
         {
             T3Metrics.Draw();
 
             ImGui.Text("Debug options...");
-            ImGui.Checkbox("VSync", ref _vsync);
+            ImGui.Checkbox("VSync", ref _vSync);
             ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
             ImGui.Checkbox("Show Item Regions", ref ItemRegionsVisible);
             

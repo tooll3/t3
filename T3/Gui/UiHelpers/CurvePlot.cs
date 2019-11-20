@@ -1,34 +1,54 @@
 ﻿using ImGuiNET;
+using UiHelpers;
 
 namespace T3.Gui.UiHelpers
 {
     public class CurvePlot
     {
-        private static int _sampleOffset;
-        private readonly int _framerateSampleCount;
-
-        public CurvePlot(int length = 500)
+        public CurvePlot(string label = "", float width = float.NaN, int resolution = 500)
         {
-            _framerateSampleCount = length;
-            _graphValues = new float[_framerateSampleCount];
+            _sampleCount = resolution;
+            _graphValues = new float[_sampleCount];
+            _label = label;
+            _width = width;
         }
-        
+
         public void Draw(float value)
         {
-            ImGui.SetNextItemWidth(120);
-            ImGui.PlotLines($"{value:0.00}", ref _graphValues[0], _framerateSampleCount, _sampleOffset, "");
             _graphValues[_sampleOffset] = value;
-            _sampleOffset = (_sampleOffset + 1) % _framerateSampleCount;
+            _dampedValue = Im.Lerp(_dampedValue, value, 0.1f);
+
+            _sampleOffset = (_sampleOffset + 1) % _sampleCount;
+            if (_width > 0)
+                ImGui.SetNextItemWidth(120);
+
+            if (float.IsNaN(MinValue))
+            {
+                ImGui.PlotLines($"{_dampedValue:0.00} {_label}", ref _graphValues[0], _sampleCount, _sampleOffset);
+            }
+            else
+            {
+                ImGui.PlotLines($"{_dampedValue:0.00} {_label}", ref _graphValues[0], _sampleCount, _sampleOffset, "", 
+                                scale_min: MinValue,
+                                scale_max: MaxValue);
+            }
         }
 
         public void Reset(float clearValue = 0)
         {
-            for (var index = 0; index < _framerateSampleCount; index++)
+            for (var index = 0; index < _sampleCount; index++)
             {
                 _graphValues[index] = clearValue;
             }
         }
 
-        private static float[] _graphValues;
+        public float MinValue = float.NaN;
+        public float MaxValue = 100;
+        private readonly float[] _graphValues;
+        private int _sampleOffset;
+        private readonly int _sampleCount;
+        private float _dampedValue;
+        private readonly string _label;
+        private readonly float _width;
     }
 }

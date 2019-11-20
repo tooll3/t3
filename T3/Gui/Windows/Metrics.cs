@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System.Diagnostics;
 using System.Text;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows
 {
@@ -8,24 +9,23 @@ namespace T3.Gui.Windows
     {
         public static void UiRenderingStarted()
         {
-            _watchImgRenderTime.Restart();
-            _watchImgRenderTime.Start();
+            WatchImgRenderTime.Restart();
+            WatchImgRenderTime.Start();
         }
 
         public static void UiRenderingCompleted()
         {
-            _watchImgRenderTime.Stop();
-            _uiRenderDurationMs = (float)((double)_watchImgRenderTime.ElapsedTicks / Stopwatch.Frequency * 1000.0);
+            WatchImgRenderTime.Stop();
+            _uiRenderDurationMs = (float)((double)WatchImgRenderTime.ElapsedTicks / Stopwatch.Frequency * 1000.0);
         }
 
         public static void Draw()
         {
-            DrawRenderDuration();
-            DrawVertexCount();
+            //RenderDurationPlot.Draw(_uiRenderDurationMs);
+            RenderDurationPlot.Draw(_uiRenderDurationMs);
+            DeltaTime.Draw(ImGui.GetIO().DeltaTime * 1000);
+            ImGui.Text("Vertices:"+ImGui.GetIO().MetricsRenderVertices);
             DrawPressedKeys();
-
-            //float framerate = ImGui.GetIO().Framerate;
-            //ImGui.Text($"average {1000.0f / framerate:0.00}ms ({framerate:0.0}FPS) ");
         }
 
         /// <summary>
@@ -35,46 +35,26 @@ namespace T3.Gui.Windows
         {
             var io = ImGui.GetIO();
             ImGui.Text(
-                (io.KeyAlt ? "Alt" : "")
-                + (io.KeyCtrl ? "Ctrl" : "")
-                + (io.KeyShift ? "Shift" : ""));
+                       (io.KeyAlt ? "Alt" : "")
+                       + (io.KeyCtrl ? "Ctrl" : "")
+                       + (io.KeyShift ? "Shift" : ""));
 
             var sb = new StringBuilder();
             for (var i = 0; i < ImGui.GetIO().KeysDown.Count; i++)
             {
-                if (io.KeysDown[i])
-                {
-                    Key k = (Key)i;
-
-                    sb.Append($"{k} [{i}]");
-                }
+                if (!io.KeysDown[i])
+                    continue;
+                
+                var k = (Key)i;
+                sb.Append($"{k} [{i}]");
             }
+
             ImGui.Text("Pressed keys:" + sb);
         }
 
-        private static void DrawRenderDuration()
-        {
-            _dampedUiRenderDurationMs = _dampedUiRenderDurationMs * (1 - 0.01f) + _uiRenderDurationMs * 0.01f;
-            ImGui.PlotLines($"{_dampedUiRenderDurationMs:0.0}ms", ref _renderDurations[0], FramerateSampleCount, _sampleOffset, "", scale_min: 0, scale_max: 10f);
-            _renderDurations[_sampleOffset] = _uiRenderDurationMs;
-            _sampleOffset = (_sampleOffset + 1) % FramerateSampleCount;
-        }
-
-        private static void DrawVertexCount()
-        {
-            var vertexCount = ImGui.GetIO().MetricsRenderVertices;
-            _vertexCounts[_sampleOffset] = vertexCount;
-            ImGui.PlotLines($"{vertexCount}verts", ref _vertexCounts[0], FramerateSampleCount, _sampleOffset, "", scale_min: 0, scale_max: 50000);
-
-        }
-
-        private const int FramerateSampleCount = 500;
-        private static int _sampleOffset = 0;
-
-        private static Stopwatch _watchImgRenderTime = new Stopwatch();
-        private static float _uiRenderDurationMs = 0;
-        private static float _dampedUiRenderDurationMs;
-        private static float[] _renderDurations = new float[FramerateSampleCount];
-        public static float[] _vertexCounts = new float[FramerateSampleCount];
+        private static float _uiRenderDurationMs;
+        private static readonly CurvePlot RenderDurationPlot = new CurvePlot("ms") {MinValue =0};
+        private static readonly CurvePlot DeltaTime = new CurvePlot("FPS") {MinValue =0, MaxValue = 30f};
+        private static readonly Stopwatch WatchImgRenderTime = new Stopwatch();
     }
 }
