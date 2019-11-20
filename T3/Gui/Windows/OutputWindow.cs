@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.Gui.OutputUi;
@@ -82,6 +83,9 @@ namespace T3.Gui.Windows
                 return;
             
             var firstOutput = selectedInstance.Outputs[0];
+            if (!selectedUi.OutputUis.ContainsKey(firstOutput.Id))
+                return;
+            
             IOutputUi outputUi = selectedUi.OutputUis[firstOutput.Id];
             outputUi.DrawValue(firstOutput);
         }

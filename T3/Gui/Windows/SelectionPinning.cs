@@ -32,7 +32,9 @@ namespace T3.Gui.Windows
                 SelectedInstance = defaultGraphWindow.GraphCanvas.CompositionOp;
 
                 if (SelectedInstance == null)
+                {
                     return;
+                }
 
                 SelectedUi = SymbolUiRegistry.Entries[SelectedInstance.Symbol.Id];
                 SelectedChildUi = SelectedUi.ChildUis.FirstOrDefault(childUi => childUi.IsSelected);
@@ -40,6 +42,16 @@ namespace T3.Gui.Windows
                 {
                     SelectedInstance = SelectedInstance.Children.Single(child => child.Id == SelectedChildUi.Id);
                     SelectedUi = SymbolUiRegistry.Entries[SelectedInstance.Symbol.Id];
+                }
+                else
+                {
+                    var parents = defaultGraphWindow.GraphCanvas.GetParents();
+                    var parent = parents.LastOrDefault();
+                    if (parent != null)
+                    {
+                        SelectedUi = SymbolUiRegistry.Entries[parent.Symbol.Id];
+                        SelectedChildUi = SelectedUi.ChildUis.FirstOrDefault(childUi => childUi.Id == SelectedInstance.Id );
+                    } 
                 }
 
                 _pinnedInstance = SelectedInstance;
@@ -52,30 +64,8 @@ namespace T3.Gui.Windows
                 SelectedUi = _pinnedUi;
                 SelectedChildUi = _pinnedChildUi;
             }
-
-            //var symbolChildUi = GetSelectedSymbolChildUi();
-            //if (symbolChildUi != null)
-            //{
-            //    instance = GraphCanvasWindow.WindowInstances[0].Canvas.CompositionOp.Children.SingleOrDefault(
-            //        child => child.Id == symbolChildUi.Id);
-            //}
         }
-
-        //private SymbolChildUi GetSelectedSymbolChildUi()
-        //{
-        //    foreach (var gcw in GraphCanvasWindow.WindowInstances)
-        //    {
-        //        if (gcw.Canvas.SelectionHandler.SelectedElements.Any())
-        //        {
-        //            var ui = gcw.Canvas.SelectionHandler.SelectedElements[0] as SymbolChildUi;
-        //            if (ui != null)
-        //                return ui;
-        //        }
-        //    }
-        //    return null;
-        //}
-
-
+        
         public void DrawPinning()
         {
             ImGui.Checkbox("pin to...   ", ref _enablePinning);
