@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
@@ -9,45 +8,33 @@ namespace T3.Gui.Graph.Interaction
 {
     public class CameraInteraction
     {
-        public void UpdateCameraNode(Camera cameraNode)
+        public void Update(Camera camera)
         {
-            _cameraNode = cameraNode;
-        }
-        
-        public void Update()
-        {
-            if (_cameraNode == null)
+            if (camera == null)
                 return;
             
-            ImGui.Text("Camera:" + _cameraNode);
-
-            _viewAxis.ComputeForCamera(_cameraNode);
+            _viewAxis.ComputeForCamera(camera);
             _deltaTime = ImGui.GetIO().DeltaTime;
 
-            var cameraSwitched = _cameraNode != _lastCameraNode;
+            var cameraSwitched = camera != _lastCameraNode;
             if (cameraSwitched)
             {
-                _intendedSetup.SetTo(_cameraNode);
-                _smoothedSetup.SetTo(_cameraNode);
+                _intendedSetup.SetTo(camera);
+                _smoothedSetup.SetTo(camera);
                 _moveVelocity = Vector3.Zero;
-                _lastCameraNode = _cameraNode;
+                _lastCameraNode = camera;
             }
 
             ManipulateCameraByMouse();
             ManipulateCameraByKeyboard();
             ComputeSmoothMovement();
             
-            _cameraNode.Position.Input.IsDefault = false;
-            _cameraNode.Position.TypedInputValue.Value = _smoothedSetup.Position;
-            _cameraNode.Position.DirtyFlag.Invalidate();
-            _cameraNode.Target.Input.IsDefault = false;
-            _cameraNode.Target.TypedInputValue.Value = _smoothedSetup.Target;
-            _cameraNode.Target.DirtyFlag.Invalidate();
-
-            // TODO: Camera-Update doesn't work
-            _cameraNode.Position.Value = _intendedSetup.Position;
-            _cameraNode.Target.Value = _intendedSetup.Target;
-            // Log.Debug($"pos{_smoothedSetup.Position}  target:{_smoothedSetup.Target}  vel: {_moveVelocity}");
+            camera.Position.Input.IsDefault = false;
+            camera.Position.TypedInputValue.Value = _smoothedSetup.Position;
+            camera.Position.DirtyFlag.Invalidate();
+            camera.Target.Input.IsDefault = false;
+            camera.Target.TypedInputValue.Value = _smoothedSetup.Target;
+            camera.Target.DirtyFlag.Invalidate();
         }
         
 
@@ -70,7 +57,7 @@ namespace T3.Gui.Graph.Interaction
             if (_orbitVelocity.Length() > 0.001f)
             {
                 OrbitByAngle(_orbitVelocity);
-                _orbitVelocity = Vector2.Lerp(_orbitVelocity, Vector2.Zero, _deltaTime * OrbitHorizontalFriction * 60);;
+                _orbitVelocity = Vector2.Lerp(_orbitVelocity, Vector2.Zero, _deltaTime * OrbitHorizontalFriction * 60);
             }
 
             if (_moveVelocity.Length() > MaxMoveVelocity)
@@ -161,11 +148,7 @@ namespace T3.Gui.Graph.Interaction
 
         private void DragOrbit()
         {
-            //var dragDelta = ImGui.GetMouseDragDelta();
-            var dragDelta = ImGui.GetIO().MouseDelta;
-            _orbitVelocity += dragDelta * _deltaTime * -0.2f;
-            // new Vector2((float)(dragDelta.X / RenderWindowHeight * OrbitSensitivity * Math.PI / 180.0),
-            //                           (float)(dragDelta.Y / RenderWindowHeight * OrbitSensitivity * Math.PI / 180.0));
+            _orbitVelocity += ImGui.GetIO().MouseDelta * _deltaTime * -0.2f;
         }
 
         private void OrbitByAngle(Vector2 orbitVelocity)
@@ -314,6 +297,7 @@ namespace T3.Gui.Graph.Interaction
             private const float DefaultCameraPositionZ = -10;
         }
 
+        
         private static ViewAxis _viewAxis = new ViewAxis();
         private readonly CameraSetup _smoothedSetup = new CameraSetup();
         private readonly CameraSetup _intendedSetup = new CameraSetup();
@@ -325,7 +309,6 @@ namespace T3.Gui.Graph.Interaction
         private Vector3 _moveVelocity;
         private Vector3 _lookingAroundDelta = Vector3.Zero;
         private Vector2 _orbitVelocity;
-        private Camera _cameraNode;
         private Camera _lastCameraNode;
         private static float _deltaTime;
 

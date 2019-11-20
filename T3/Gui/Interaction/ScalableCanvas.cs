@@ -38,12 +38,11 @@ namespace T3.Gui.Graph
                 || (ImGui.IsMouseDragging(0) && ImGui.GetIO().KeyAlt))
             {
                 _scrollTarget += _io.MouseDelta;
-                //Scroll += _io.MouseDelta;
-                _userScrolledCanvas = true;
+                UserScrolledCanvas = true;
             }
             else
             {
-                _userScrolledCanvas = false;
+                UserScrolledCanvas = false;
             }
 
             HandleZoomInteraction();
@@ -58,7 +57,7 @@ namespace T3.Gui.Graph
         public abstract SelectionHandler SelectionHandler { get; }
 
         /// <summary>
-        /// Get screen position applying canas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
         public Vector2 TransformPosition(Vector2 posOnCanvas)
         {
@@ -110,7 +109,7 @@ namespace T3.Gui.Graph
 
 
         /// <summary>
-        /// Transform a canvas position to relative position within imgui-window (e.g. to set ImGui context) 
+        /// Transform a canvas position to relative position within ImGui-window (e.g. to set ImGui context) 
         /// </summary>
         public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
         {
@@ -121,10 +120,10 @@ namespace T3.Gui.Graph
         public Vector2 WindowPos { get; private set; }
         public Vector2 WindowSize { get; private set; }
 
-        public Vector2 Scale { get; set; } = Vector2.One;
+        public Vector2 Scale { get; private set; } = Vector2.One;
         private Vector2 _scaleTarget = Vector2.One;
 
-        public Vector2 Scroll { get; set; } = new Vector2(0.0f, 0.0f);
+        public Vector2 Scroll { get; private set; } = new Vector2(0.0f, 0.0f);
         private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
         #endregion
 
@@ -132,9 +131,8 @@ namespace T3.Gui.Graph
         {
             _scaleTarget = Vector2.One;
         }
-        
-        
-        public void FitArea(ImRect area)
+
+        protected void FitArea(ImRect area)
         {
             var height = area.GetHeight();
             var width = area.GetWidth();
@@ -158,8 +156,7 @@ namespace T3.Gui.Graph
             _scaleTarget = new Vector2(scale, scale);
         }
 
-
-        public void SetAreaWithTransition(Vector2 scale, Vector2 scroll, bool zoomIn = true)
+        protected void SetAreaWithTransition(Vector2 scale, Vector2 scroll, bool zoomIn = true)
         {
             _scaleTarget = scale;
             Scale = scale * (zoomIn ? 0.3f : 3);
@@ -175,7 +172,11 @@ namespace T3.Gui.Graph
 
         private void HandleZoomInteraction()
         {
-            _userZoomedCanvas = false;
+            if (NoMouseInteraction)
+                return;
+            
+            UserZoomedCanvas = false;
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (_io.MouseWheel == 0)
                 return;
 
@@ -190,7 +191,7 @@ namespace T3.Gui.Graph
                 {
                     zoomDelta /= zoomSpeed;
                 }
-                _userZoomedCanvas = true;
+                UserZoomedCanvas = true;
             }
 
             if (_io.MouseWheel > 0.0f)
@@ -199,7 +200,7 @@ namespace T3.Gui.Graph
                 {
                     zoomDelta *= zoomSpeed;
                 }
-                _userZoomedCanvas = true;
+                UserZoomedCanvas = true;
             }
             _scaleTarget *= zoomDelta;
 
@@ -207,8 +208,9 @@ namespace T3.Gui.Graph
             _scrollTarget += _mouse - shift - WindowPos;
         }
 
-        protected bool _userZoomedCanvas = false;
-        protected bool _userScrolledCanvas = false;
+        protected bool UserZoomedCanvas;
+        protected bool UserScrolledCanvas;
+        public bool NoMouseInteraction;
         private Vector2 _mouse;
         private ImGuiIOPtr _io;
     }

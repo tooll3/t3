@@ -93,12 +93,12 @@ namespace T3.Gui.Windows
             switch (_viewMode)
             {
                 case Modes.Fitted:
-                    if (_userScrolledCanvas || _userZoomedCanvas)
+                    if (UserScrolledCanvas || UserZoomedCanvas)
                         _viewMode = Modes.Custom;
                     break;
 
                 case Modes.Pixel:
-                    if (_userZoomedCanvas)
+                    if (UserZoomedCanvas)
                         _viewMode = Modes.Custom;
                     break;
             }
