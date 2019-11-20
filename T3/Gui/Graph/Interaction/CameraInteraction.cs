@@ -36,11 +36,10 @@ namespace T3.Gui.Graph.Interaction
             ManipulateCameraByKeyboard();
             ComputeSmoothMovement();
             _cameraNode.Position.TypedInputValue.Value = _smoothedSetup.Position;
+            _cameraNode.Position.Input.IsDefault = false;
             _cameraNode.Target.TypedInputValue.Value = _smoothedSetup.Target;
+            _cameraNode.Target.Input.IsDefault = false;
 
-            // TODO: Camera-Update doesn't work
-            //_cameraNode.Position.Value = _intendedSetup.Position;
-            //_cameraNode.Target.Value = _intendedSetup.Target;
             Log.Debug($"pos{_smoothedSetup.Position}  target:{_smoothedSetup.Target}  vel: {_moveVelocity}");
         }
 
@@ -257,7 +256,7 @@ namespace T3.Gui.Graph.Interaction
 
             public void ComputeForCamera(Camera camera)
             {
-                ViewDistance = camera.Target.Value - camera.Position.Value;
+                ViewDistance = camera.Target.TypedInputValue.Value - camera.Position.TypedInputValue.Value;
 
                 var worldUp = Vector3.UnitY;
                 var rolledUp = Vector3.Normalize(Vector3.Transform(worldUp, Matrix4x4.CreateFromAxisAngle(ViewDistance, camera.Roll.Value)));
@@ -293,8 +292,8 @@ namespace T3.Gui.Graph.Interaction
 
             public void SetTo(Camera cameraInstance)
             {
-                Position = cameraInstance.Position.Value;
-                Target = cameraInstance.Target.Value;
+                Position = cameraInstance.Position.TypedInputValue.Value;
+                Target = cameraInstance.Target.TypedInputValue.Value;
             }
 
             public void BlendTo(CameraSetup intended, float cameraMoveFriction)
