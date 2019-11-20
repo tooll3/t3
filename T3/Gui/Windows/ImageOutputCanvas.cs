@@ -1,9 +1,10 @@
-﻿using ImGuiNET;
+using ImGuiNET;
 using SharpDX.Direct3D11;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
 using UiHelpers;
@@ -37,7 +38,17 @@ namespace T3.Gui.Windows
             if (_srv == null || _srv.Resource.NativePointer != texture.NativePointer)
             {
                 _srv?.Dispose();
-                _srv = new ShaderResourceView(ResourceManager.Instance()._device, texture);
+                try
+                {
+                    _srv = new ShaderResourceView(ResourceManager.Instance()._device, texture);
+                }
+                catch (Exception e)
+                {
+                    _srv = null;
+                    Log.Warning("ImageOutputCanvas::DrawTexture(...) - Could not create ShaderResourceView for texture.");
+                    Log.Warning(e.Message);
+                    return;
+                }
             }
 
             var size = new Vector2(texture.Description.Width, texture.Description.Height);

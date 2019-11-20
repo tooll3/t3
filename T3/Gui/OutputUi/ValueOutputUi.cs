@@ -11,7 +11,7 @@ namespace T3.Gui.OutputUi
             if (slot is Slot<T> typedSlot)
             {
                 var value = typedSlot.Value;
-                ImGui.Text(value == null ? $"{nameof(T)}" : $"{value}");
+                ImGui.Text(value == null ? $"{typeof(T)}" : $"{value}");
             }
             else
             {
