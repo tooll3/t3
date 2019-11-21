@@ -34,8 +34,9 @@ namespace T3.Gui.Graph
             if (!ImGui.IsWindowHovered())
                 return;
 
-            if (ImGui.IsMouseDragging(1) 
-                || (ImGui.IsMouseDragging(0) && ImGui.GetIO().KeyAlt))
+            if (!NoMouseInteraction 
+                && (ImGui.IsMouseDragging(1) 
+                || (ImGui.IsMouseDragging(0) && ImGui.GetIO().KeyAlt)))
             {
                 _scrollTarget += _io.MouseDelta;
                 UserScrolledCanvas = true;

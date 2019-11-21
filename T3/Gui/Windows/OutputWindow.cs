@@ -5,6 +5,7 @@ using System.Numerics;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
+using T3.Gui.UiHelpers;
 using T3.Operators.Types;
 
 namespace T3.Gui.Windows
@@ -61,10 +62,13 @@ namespace T3.Gui.Windows
                 _cameraInteraction.Update(camera);
                 DrawSelection(_pinning.SelectedInstance, _pinning.SelectedUi);
                 DrawToolbar();
+                
+                ImGui.SetCursorPos( new Vector2(0,0));
+                
             }
             ImGui.EndChild();
         }
-
+        
         
         private Camera FindCameraInstance()
         {
