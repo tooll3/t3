@@ -10,6 +10,7 @@ using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 
 namespace T3.Gui.InputUi
@@ -137,11 +138,12 @@ namespace T3.Gui.InputUi
                 }
                 else if (isAnimated)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Button, Color.Orange.Rgba);
                     if (ImGui.Button("A", new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         animator.RemoveAnimationFrom(inputSlot);
                     }
+
 
                     ImGui.PopStyleColor();
                     ImGui.SameLine();
@@ -149,32 +151,32 @@ namespace T3.Gui.InputUi
                     // Draw Name
                     ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
                     ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
-                    if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
-                    {
-                        if (ImGui.MenuItem("Parameters settings"))
-                            editState = InputEditState.ShowOptions;
-
-                        ImGui.EndPopup();
-                    }
-
+                    CustomComponents.ContextMenuForItem(() =>
+                                                        {
+                                                            if (ImGui.MenuItem("Parameters settings"))
+                                                                editState = InputEditState.ShowOptions;
+                                                        });
                     ImGui.PopStyleVar();
-
                     ImGui.SameLine();
 
                     // Draw control
                     ImGui.PushItemWidth(200.0f);
-                    ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? Color.Gray.Rgba : Color.White.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Orange.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.FrameBgActive, Color.Black.Rgba);
+                    ImGui.PushFont(Fonts.FontBold);
 
                     ImGui.SetNextItemWidth(-1);
 
                     DrawAnimatedValue(name, typedInputSlot, animator); // todo: command integration
 
-                    ImGui.PopStyleColor();
+                    ImGui.PopFont();
+                    ImGui.PopStyleColor(2);
                     ImGui.PopItemWidth();
                 }
                 else
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
+                    ImGui.SetTooltip($"Click to animate\n{input.DefaultValue.ValueType.ToString()}");
                     if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         if (IsAnimatable)
@@ -187,19 +189,18 @@ namespace T3.Gui.InputUi
                     // Draw Name
                     ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
                     ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
-                    if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
-                    {
-                        if (ImGui.MenuItem("Set as default", !input.IsDefault))
-                            input.SetCurrentValueAsDefault();
+                    CustomComponents.ContextMenuForItem(
+                                                        () =>
+                                                        {
+                                                            if (ImGui.MenuItem("Set as default", !input.IsDefault))
+                                                                input.SetCurrentValueAsDefault();
 
-                        if (ImGui.MenuItem("Reset to default", !input.IsDefault))
-                            input.ResetToDefault();
+                                                            if (ImGui.MenuItem("Reset to default", !input.IsDefault))
+                                                                input.ResetToDefault();
 
-                        if (ImGui.MenuItem("Parameters settings"))
-                            editState = InputEditState.ShowOptions;
-
-                        ImGui.EndPopup();
-                    }
+                                                            if (ImGui.MenuItem("Parameters settings"))
+                                                                editState = InputEditState.ShowOptions;
+                                                        });
 
                     ImGui.PopStyleVar();
 
@@ -270,9 +271,9 @@ namespace T3.Gui.InputUi
 
         public virtual void Write(JsonTextWriter writer)
         {
-            if(Relevancy != DefaultRelevancy)
+            if (Relevancy != DefaultRelevancy)
                 writer.WriteObject("Relevancy", Relevancy.ToString());
-            
+
             var vec2writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
             writer.WritePropertyName("Position");
             vec2writer(writer, PosOnCanvas);
@@ -280,10 +281,10 @@ namespace T3.Gui.InputUi
 
         public virtual void Read(JToken inputToken)
         {
-            Relevancy = (inputToken["Relevancy"]==null) 
-                ? DefaultRelevancy
-                : (Relevancy)Enum.Parse(typeof(Relevancy), inputToken["Relevancy"].ToString());
-            
+            Relevancy = (inputToken["Relevancy"] == null)
+                            ? DefaultRelevancy
+                            : (Relevancy)Enum.Parse(typeof(Relevancy), inputToken["Relevancy"].ToString());
+
             JToken positionToken = inputToken["Position"];
             PosOnCanvas = new Vector2(positionToken["X"].Value<float>(), positionToken["Y"].Value<float>());
         }

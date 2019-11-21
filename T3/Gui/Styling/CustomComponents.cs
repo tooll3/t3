@@ -142,11 +142,11 @@ namespace T3.Gui
         }
 
 
-        public static void ContextMenuForItem(Action drawMenuItems)
+        public static void ContextMenuForItem(Action drawMenuItems, string id="context_menu")
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
-            if (ImGui.BeginPopupContextItem("context_menu"))
+            if (ImGui.BeginPopupContextItem(id))
             {
                 drawMenuItems?.Invoke();
                 ImGui.EndPopup();

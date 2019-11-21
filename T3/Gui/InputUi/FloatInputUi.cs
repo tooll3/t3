@@ -38,6 +38,7 @@ namespace T3.Gui.InputUi
                     var key = curve.GetV(time);
                     if (key == null)
                         key = new VDefinition() { U = time };
+                    
                     key.Value = value;
                     curve.AddOrUpdateV(time, key);
                 }
