@@ -1,7 +1,4 @@
 todo:
-/ Think about ParticleSystem type and how to integrate it
-/ Create ParticleSystem type and move buffer management there
-- Move noise functions to own hlsl file in order to reuse them
 - Scene type?
 - Adjust thread size of particle ops to some useful values
 - Add guid to instance classes in order to prevent problems when renaming etc.
@@ -22,6 +19,9 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Move noise functions to own hlsl file in order to reuse them
+* Create ParticleSystem type and move buffer management there
+* Think about ParticleSystem type and how to integrate it
 * Move common code of particle ops and upcoming particle system to resource manager
 * Fix alt-key focus problem
 * Make Vec3 animatable
