@@ -30,12 +30,12 @@ namespace T3.Gui.Windows
             ColorVariations.DrawSettingsUi();
             if (ImGui.TreeNode("Styles"))
             {
-                ImGui.DragFloat("Height Connection Zone", ref GraphNode._usableSlotThickness);
-                ImGui.DragFloat2("Label position", ref GraphNode._labelPos);
-                ImGui.DragFloat("Slot Gaps", ref GraphNode._slotGaps, 0.1f, 0, 10f);
-                ImGui.DragFloat("Input Slot Margin Y", ref GraphNode._inputSlotMargin, 0.1f, 0, 10f);
-                ImGui.DragFloat("Input Slot Height", ref GraphNode._inputSlotThickness, 0.1f, 0, 10f);
-                ImGui.DragFloat("Output Slot Margin", ref GraphNode._outputSlotMargin, 0.1f, 0, 10f);
+                ImGui.DragFloat("Height Connection Zone", ref GraphNode.UsableSlotThickness);
+                ImGui.DragFloat2("Label position", ref GraphNode.LabelPos);
+                ImGui.DragFloat("Slot Gaps", ref GraphNode.SlotGaps, 0.1f, 0, 10f);
+                ImGui.DragFloat("Input Slot Margin Y", ref GraphNode.InputSlotMargin, 0.1f, 0, 10f);
+                ImGui.DragFloat("Input Slot Height", ref GraphNode.InputSlotThickness, 0.1f, 0, 10f);
+                ImGui.DragFloat("Output Slot Margin", ref GraphNode.OutputSlotMargin, 0.1f, 0, 10f);
                 ImGui.TreePop();
             }
             if (ImGui.TreeNode("ImGui Styles"))

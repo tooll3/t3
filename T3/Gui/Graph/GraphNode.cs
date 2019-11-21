@@ -18,6 +18,29 @@ namespace T3.Gui.Graph
     /// </summary>
     static class GraphNode
     {
+        private static float ComputeHeight(SymbolChildUi childUi, IInputUi[] visibleInputUis)
+        {
+            if (childUi.Style == SymbolChildUi.Styles.Resizable)
+            {
+                return childUi.Size.Y;
+            }
+            else
+            {
+                var additionalMultiInputSlots = 0;
+                foreach (var input in visibleInputUis)
+                {
+                    if (!input.InputDefinition.IsMultiInput)
+                        continue;
+
+                    //TODO: this should be refactored, because it's very slow and is later repeated  
+                    var connectedLines = Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
+                    additionalMultiInputSlots += connectedLines.Count;
+                }
+                
+                return 23 + (visibleInputUis.Length + additionalMultiInputSlots) * 13;
+            }
+        }
+        
         public static void Draw(SymbolChildUi childUi)
         {
             var isPotentialConnectionTargetNode = _hoveredId == childUi.Id
@@ -33,30 +56,53 @@ namespace T3.Gui.Graph
                                    orderby inputUi.Index
                                    select inputUi).ToArray();
 
-            var additionalMultiInputSlots = 0;
-            foreach (var input in visibleInputUis)
-            {
-                if (!input.InputDefinition.IsMultiInput)
-                    continue;
 
-                //TODO: this should be refacatored, because it's very slow and is later repeated  
-                var connectedLines = Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
-                additionalMultiInputSlots += connectedLines.Count;
-            }
 
             _drawList = Graph.DrawList;
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-                var heightWithParams = 23 + (visibleInputUis.Length + additionalMultiInputSlots) * 13;
+
+                var heightWithParams = ComputeHeight(childUi, visibleInputUis);
+                
                 _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(
                                                                                childUi.PosOnCanvas,
                                                                                childUi.PosOnCanvas + new Vector2(childUi.Size.X,
                                                                                                                  heightWithParams)));
                 _lastScreenRect.Floor();
 
+                // Resize indicator
+                if (childUi.Style == SymbolChildUi.Styles.Resizable)
+                {
+                    ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
+                    ImGui.SetCursorScreenPos(_lastScreenRect.Max - new Vector2(10, 10));
+                    ImGui.Button("##resize", new Vector2(10, 10));
+                    if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
+                    {
+                        var delta = GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
+                        childUi.Size += delta;
+                        //childUi.PosOnCanvas += delta; // Compensate for dragging of node. ImGui ... don't ask. SIC
+                    }
+                    ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);
+                }
+                
                 // Interaction
                 ImGui.SetCursorScreenPos(_lastScreenRect.Min);
                 ImGui.InvisibleButton("node", _lastScreenRect.GetSize());
+                CustomComponents.ContextMenuForItem(() =>
+                                                    {
+                                                        if (ImGui.BeginMenu("Styles"))
+                                                        {
+                                                            if (ImGui.MenuItem("Default"))
+                                                            {
+                                                                childUi.Style = SymbolChildUi.Styles.Default;
+                                                            }
+                                                            if (ImGui.MenuItem("Resizable"))
+                                                            {
+                                                                childUi.Style = SymbolChildUi.Styles.Resizable;
+                                                            }
+                                                            ImGui.EndMenu();
+                                                        }
+                                                    });
 
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
@@ -107,7 +153,7 @@ namespace T3.Gui.Graph
                                            : ColorVariations.Operator.Apply(typeColor));
 
                 drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
-                                       new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + _inputSlotThickness + _inputSlotMargin),
+                                       new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + InputSlotThickness + InputSlotMargin),
                                        ColorVariations.OperatorInputZone.Apply(typeColor));
 
                 // Animation indicator
@@ -144,10 +190,12 @@ namespace T3.Gui.Graph
                     }
                 }
 
+
+
                 ImGui.PushFont(Fonts.FontBold);
                 var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
 
-                drawList.AddText(_lastScreenRect.Min + _labelPos,
+                drawList.AddText(_lastScreenRect.Min + LabelPos,
                                  ColorVariations.OperatorLabel.Apply(typeColor),
                                  string.Format(isRenamed ? ("\"" + childUi.SymbolChild.ReadableName + "\"") : childUi.SymbolChild.ReadableName));
                 ImGui.PopFont();
@@ -355,7 +403,7 @@ namespace T3.Gui.Graph
 
                 //var pos = usableArea.Min + Vector2.UnitY * (usableArea.GetHeight() - GraphNode._outputSlotMargin - GraphNode._outputSlotThickness);
                 var pos = usableArea.Min;
-                var size = new Vector2(GraphNode._outputSlotThickness, usableArea.GetHeight());
+                var size = new Vector2(GraphNode.OutputSlotThickness, usableArea.GetHeight());
                 _drawList.AddRectFilled(
                                         pos,
                                         pos + size,
@@ -370,15 +418,15 @@ namespace T3.Gui.Graph
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
             var outputHeight = outputCount == 0
                                    ? opRect.GetHeight()
-                                   : (opRect.GetHeight() + GraphNode._slotGaps) / outputCount - GraphNode._slotGaps;
+                                   : (opRect.GetHeight() + GraphNode.SlotGaps) / outputCount - GraphNode.SlotGaps;
 
             return ImRect.RectWithSize(
                                        new Vector2(
                                                    opRect.Max.X - 2, // - GraphNode._usableSlotThickness,
-                                                   opRect.Min.Y + (outputHeight + GraphNode._slotGaps) * outputIndex
+                                                   opRect.Min.Y + (outputHeight + GraphNode.SlotGaps) * outputIndex
                                                   ),
                                        new Vector2(
-                                                   GraphNode._usableSlotThickness,
+                                                   GraphNode.UsableSlotThickness,
                                                    outputHeight
                                                   ));
         }
@@ -440,10 +488,10 @@ namespace T3.Gui.Graph
 
                 //var pos =  usableArea.Min + Vector2.UnitX * ( GraphNode._inputSlotThickness - GraphNode._inputSlotMargin);
                 var pos = new Vector2(
-                                      usableArea.Max.X - GraphNode._inputSlotThickness - _inputSlotMargin,
+                                      usableArea.Max.X - GraphNode.InputSlotThickness - InputSlotMargin,
                                       usableArea.Min.Y
                                      );
-                var size = new Vector2(GraphNode._inputSlotThickness, usableArea.GetHeight());
+                var size = new Vector2(GraphNode.InputSlotThickness, usableArea.GetHeight());
                 _drawList.AddRectFilled(
                                         pos,
                                         pos + size,
@@ -525,9 +573,9 @@ namespace T3.Gui.Graph
                 }
 
                 //var pos = usableArea.Min + Vector2.UnitY * GraphNode._inputSlotMargin;
-                var pos = new Vector2(usableArea.Max.X - GraphNode._inputSlotMargin - GraphNode._inputSlotThickness,
+                var pos = new Vector2(usableArea.Max.X - GraphNode.InputSlotMargin - GraphNode.InputSlotThickness,
                                       usableArea.Min.Y);
-                var size = new Vector2(GraphNode._inputSlotThickness, usableArea.GetHeight());
+                var size = new Vector2(GraphNode.InputSlotThickness, usableArea.GetHeight());
                 _drawList.AddRectFilled(
                                         pos,
                                         pos + size,
@@ -558,15 +606,15 @@ namespace T3.Gui.Graph
                                            _lastScreenRect.Max);
             var inputHeight = visibleSlotCount == 0
                                   ? areaForParams.GetHeight()
-                                  : (areaForParams.GetHeight() + GraphNode._slotGaps) / visibleSlotCount - GraphNode._slotGaps;
+                                  : (areaForParams.GetHeight() + GraphNode.SlotGaps) / visibleSlotCount - GraphNode.SlotGaps;
 
             return ImRect.RectWithSize(
                                        new Vector2(
-                                                   areaForParams.Min.X - _usableSlotThickness,
-                                                   areaForParams.Min.Y + (inputHeight + GraphNode._slotGaps) * inputIndex
+                                                   areaForParams.Min.X - UsableSlotThickness,
+                                                   areaForParams.Min.Y + (inputHeight + GraphNode.SlotGaps) * inputIndex
                                                   ),
                                        new Vector2(
-                                                   GraphNode._usableSlotThickness,
+                                                   GraphNode.UsableSlotThickness,
                                                    inputHeight
                                                   ));
         }
@@ -577,13 +625,13 @@ namespace T3.Gui.Graph
         }
 
         #region style variables
-        public static Vector2 _labelPos = new Vector2(4, 4);
-        public static float _usableSlotThickness = 12;
-        public static float _inputSlotThickness = 2;
-        public static float _inputSlotMargin = 1;
-        public static float _slotGaps = 2;
-        public static float _outputSlotMargin = 1;
-        private static float _outputSlotThickness = 2;
+        public static Vector2 LabelPos = new Vector2(4, 4);
+        public static float UsableSlotThickness = 12;
+        public static float InputSlotThickness = 2;
+        public static  float InputSlotMargin = 1;
+        public static  float SlotGaps = 2;
+        public static  float OutputSlotMargin = 1;
+        private const float OutputSlotThickness = 2;
         #endregion
 
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();

@@ -45,7 +45,7 @@ namespace T3.Gui.Graph
 
                 dl.AddRectFilled(new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
                                  new Vector2(_lastScreenRect.Max.X,
-                                             _lastScreenRect.Max.Y + GraphNode._inputSlotThickness + GraphNode._inputSlotMargin),
+                                             _lastScreenRect.Max.Y + GraphNode.InputSlotThickness + GraphNode.InputSlotMargin),
                                  ColorVariations.OperatorInputZone.Apply(typeColor));
 
                 var label = string.Format($"{inputDef.Name}");
@@ -64,7 +64,7 @@ namespace T3.Gui.Graph
                     var usableSlotArea = new ImRect(
                                                     new Vector2(_lastScreenRect.Max.X,
                                                                 _lastScreenRect.Min.Y),
-                                                    new Vector2(_lastScreenRect.Max.X + GraphNode._usableSlotThickness,
+                                                    new Vector2(_lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
                                                                 _lastScreenRect.Max.Y)); 
 
 
@@ -106,7 +106,7 @@ namespace T3.Gui.Graph
                     {
                         dl.AddRectFilled(new Vector2(usableSlotArea.Min.X,
                                                      usableSlotArea.Min.Y), 
-                                         new Vector2(usableSlotArea.Min.X+ GraphNode._inputSlotThickness,
+                                         new Vector2(usableSlotArea.Min.X+ GraphNode.InputSlotThickness,
                                                      usableSlotArea.Max.Y), 
                                          
                                          color);

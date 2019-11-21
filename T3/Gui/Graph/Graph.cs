@@ -75,7 +75,7 @@ namespace T3.Gui.Graph
                 OutputNode.Draw(outputDef, outputNode);
 
                 var targetPos = new Vector2(
-                                            OutputNode._lastScreenRect.Min.X + GraphNode._inputSlotThickness,
+                                            OutputNode._lastScreenRect.Min.X + GraphNode.InputSlotThickness,
                                             OutputNode._lastScreenRect.GetCenter().Y);
 
                 foreach (var line in Connections.GetLinesToOutputNodes(outputNode, outputId))

@@ -16,5 +16,14 @@ namespace T3.Gui
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = GraphCanvas.DefaultOpSize;
         public bool IsSelected { get; set; } = false;
+        public Styles Style { get; set; }
+
+        public enum Styles
+        {
+            Default,
+            Collapsed,
+            Resizable,
+            WithThumbnail,
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace T3.Gui.Graph
 
                 drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
                                  new Vector2(_lastScreenRect.Max.X,
-                                             _lastScreenRect.Max.Y + GraphNode._inputSlotThickness + GraphNode._inputSlotMargin),
+                                             _lastScreenRect.Max.Y + GraphNode.InputSlotThickness + GraphNode.InputSlotMargin),
                                  ColorVariations.OperatorInputZone.Apply(typeColor));
 
                 var label = string.Format($"{outputDef.Name}");
@@ -60,7 +60,7 @@ namespace T3.Gui.Graph
                 // Draw slot 
                 {
                     var usableSlotArea = new ImRect(
-                                                    new Vector2(_lastScreenRect.Min.X - GraphNode._usableSlotThickness,
+                                                    new Vector2(_lastScreenRect.Min.X - GraphNode.UsableSlotThickness,
                                                                 _lastScreenRect.Min.Y),
                                                     new Vector2(_lastScreenRect.Min.X,
                                                                 _lastScreenRect.Max.Y)); 
@@ -108,10 +108,10 @@ namespace T3.Gui.Graph
                     else
                     {
                         var colorWithMatching = ConnectionMaker.IsMatchingInputType(outputDef.ValueType) ? Color.White : color;
-                        drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - GraphNode._inputSlotMargin- GraphNode._inputSlotThickness,
+                        drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - GraphNode.InputSlotMargin- GraphNode.InputSlotThickness,
                                                            usableSlotArea.Min.Y), 
                                                new Vector2(
-                                                           usableSlotArea.Max.X - GraphNode._inputSlotMargin , 
+                                                           usableSlotArea.Max.X - GraphNode.InputSlotMargin , 
                                                            usableSlotArea.Max.Y), 
                                                colorWithMatching);
                     }

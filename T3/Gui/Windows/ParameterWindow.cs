@@ -94,7 +94,7 @@ namespace T3.Gui.Windows
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(-1);
                 var nameForEdit = op.Symbol.Name;
-                if (ImGui.InputText("##symbolname", ref nameForEdit, 128))
+                if (ImGui.InputText("##symbolname", ref nameForEdit, 128, ImGuiInputTextFlags.ReadOnly))
                 {
                     _symbolNameCommandInFlight.NewName = nameForEdit;
                     _symbolNameCommandInFlight.Do();
