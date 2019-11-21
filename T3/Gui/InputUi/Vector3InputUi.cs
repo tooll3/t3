@@ -2,18 +2,24 @@
 using System.Linq;
 using ImGuiNET;
 using System.Numerics;
+using Newtonsoft.Json;
+using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace T3.Gui.InputUi
 {
     public class Vector3InputUi : SingleControlInputUi<Vector3>
     {
         public override bool IsAnimatable => true;
+        private float Min = DefaultMin;
+        private float Max = DefaultMax;
+        private float Scale = DefaultScale;
 
         public override bool DrawSingleEditControl(string name, ref Vector3 value)
         {
-            return ImGui.DragFloat3("##Vector3Edit", ref value);
+            return ImGui.DragFloat3("##Vector3Edit", ref value, Scale, Min, Max);
         }
 
         protected override void DrawValueDisplay(string name, ref Vector3 value)
@@ -52,5 +58,32 @@ namespace T3.Gui.InputUi
                 }
             }
         }
+        
+        public override void DrawParameterEdits()
+        {
+            base.DrawParameterEdits();
+
+            ImGui.DragFloat("Min", ref Min);
+            ImGui.DragFloat("Max", ref Max);
+            ImGui.DragFloat("Scale", ref Scale);
+        }
+        
+        public override void Write(JsonTextWriter writer)
+        {
+            base.Write(writer);
+
+            if (Min != DefaultMin)
+                writer.WriteValue("Min", Min);
+            
+            if (Max != DefaultMax) 
+                writer.WriteValue("Max", Max);
+            
+            if (Scale != DefaultScale) 
+                writer.WriteValue("Scale",  Scale);
+        }
+        
+        private const float DefaultScale = 0.01f;
+        private const float DefaultMin = -9999999f;
+        private const float DefaultMax = -9999999f;
     }
 }
