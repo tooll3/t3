@@ -52,6 +52,8 @@ namespace T3
         private const int WM_SYSKEYUP = 0x0105;
         private const int WM_CHAR = 0x0102;
         private const int WM_SETCURSOR = 0x0020;
+
+        private const int WM_SETFOCUS = 0x0007;
         #endregion
 
         #region VK constants
@@ -155,6 +157,13 @@ namespace T3
                     if ((((int)m.LParam & 0xFFFF) == 1) && UpdateMouseCursor())
                         m.Result = (IntPtr)1;
                     return;
+                case WM_SETFOCUS:
+                    for (int i = 0; i < io.KeysDown.Count; i++)
+                        io.KeysDown[i] = false;
+                    io.KeyShift = false;
+                    io.KeyCtrl = false;
+                    io.KeyAlt = false;
+                    break;
             }
         }
 

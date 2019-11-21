@@ -20,6 +20,7 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Fix alt-key focus problem
 * Make Vec3 animatable
 * Add first draft for point emitter
 * Fix particle system bug when disconnecting emit dispatch connections
