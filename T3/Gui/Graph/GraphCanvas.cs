@@ -358,12 +358,13 @@ namespace T3.Gui.Graph
 
         private void DrawGrid()
         {
+            var color = new Color(0,0,0,0.5f);
             var gridSize = 64.0f * Scale.X;
             for (var x = Scroll.X % gridSize; x < WindowSize.X; x += gridSize)
             {
                 DrawList.AddLine(new Vector2(x, 0.0f) + WindowPos,
                                  new Vector2(x, WindowSize.Y) + WindowPos,
-                                 new Color(0.5f, 0.5f, 0.5f, 0.1f));
+                                 color);
             }
 
             for (var y = Scroll.Y % gridSize; y < WindowSize.Y; y += gridSize)
@@ -371,7 +372,7 @@ namespace T3.Gui.Graph
                 DrawList.AddLine(
                                  new Vector2(0.0f, y) + WindowPos,
                                  new Vector2(WindowSize.X, y) + WindowPos,
-                                 new Color(0.5f, 0.5f, 0.5f, 0.1f));
+                                 color);
             }
         }
 
