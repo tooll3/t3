@@ -261,3 +261,6 @@ __pycache__/
 *.pyc
 T3/imgui.ini
 imgui.ini
+layout0.json
+layout1.json
+layout2.json
