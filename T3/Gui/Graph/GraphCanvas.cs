@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -14,6 +15,7 @@ using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -117,35 +119,64 @@ namespace T3.Gui.Graph
                 DrawList.PopClipRect();
                 DrawContextMenu();
 
-                if (_showCombine)
-                {
-                    _showCombine = false;
-                    ImGui.OpenPopup("Combine");
-                }
 
-                ImGui.SetNextWindowSize(new Vector2(500, 100), ImGuiCond.FirstUseEver);
-                if (ImGui.BeginPopupModal("Combine"))
-                {
-                    ImGui.AlignTextToFramePadding();
-                    ImGui.Text("Select name for new symbol");
-                    ImGui.SameLine();
-                    ImGui.InputText("##Select name for new symbol", ref _combineName, 255);
 
-                    if (ImGui.Button("Combine"))
-                    {
-                        var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                        NodeOperations.CombineAsNewType(compositionSymbolUi, _selectedChildren, _combineName);
-                        ImGui.CloseCurrentPopup();
-                    }
+                _duplicateSymbolDialog.Draw(() =>
+                                            {
+                                                ImGui.Spacing();
+                                                ImGui.SetNextItemWidth(150);
+                                                ImGui.Text("New symbol name:");
+                                                ImGui.SameLine();
 
-                    ImGui.SameLine();
-                    if (ImGui.Button("Cancel"))
-                    {
-                        ImGui.CloseCurrentPopup();
-                    }
+                                                ImGui.InputText("##name", ref _combineName, 255);
+                                                if (ImGui.IsWindowAppearing())
+                                                    ImGui.SetKeyboardFocusHere();
 
-                    ImGui.EndPopup();
-                }
+                                                CustomComponents
+                                                   .HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
+                                                ImGui.Spacing();
+
+                                                if (CustomComponents.DisablableButton("Duplicate", NodeOperations.IsNewSymbolNameValid(_combineName)))
+                                                {
+                                                    var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                                                    NodeOperations.DuplicateAsNewType(compositionSymbolUi, GetSelectedChildUis()[0].SymbolChild, _combineName);                                                    
+                                                    ImGui.CloseCurrentPopup();
+                                                }
+
+                                                ImGui.SameLine();
+                                                if (ImGui.Button("Cancel"))
+                                                {
+                                                    ImGui.CloseCurrentPopup();
+                                                }
+                                            });
+
+                _combineDialog.Draw(() =>
+                                    {
+                                        ImGui.Spacing();
+                                        ImGui.SetNextItemWidth(150);
+                                        ImGui.Text("Symbol group name:");
+                                        ImGui.SameLine();
+
+                                        ImGui.InputText("##Select name for new symbol", ref _combineName, 255);
+                                        if (ImGui.IsWindowAppearing())
+                                            ImGui.SetKeyboardFocusHere();
+
+                                        CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
+                                        ImGui.Spacing();
+
+                                        if (CustomComponents.DisablableButton("Combine", NodeOperations.IsNewSymbolNameValid(_combineName)))
+                                        {
+                                            var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                                            NodeOperations.CombineAsNewType(compositionSymbolUi, _selectedChildren, _combineName);
+                                            ImGui.CloseCurrentPopup();                                            
+                                        }
+
+                                        ImGui.SameLine();
+                                        if (ImGui.Button("Cancel"))
+                                        {
+                                            ImGui.CloseCurrentPopup();
+                                        }
+                                    });
             }
             ImGui.EndGroup();
         }
@@ -228,13 +259,13 @@ namespace T3.Gui.Graph
 
                          if (ImGui.MenuItem("Duplicate as new type", oneElementSelected))
                          {
-                             var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                             NodeOperations.DuplicateAsNewType(compositionSymbolUi, selectedChildren[0].SymbolChild);
+                             _combineName = selectedChildren[0].SymbolChild.Symbol.Name;
+                             _duplicateSymbolDialog.ShowNextFrame();
                          }
 
                          if (ImGui.MenuItem("Combine as new type"))
                          {
-                             _showCombine = true;
+                             _combineDialog.ShowNextFrame();
                          }
 
                          if (ImGui.MenuItem("Copy"))
@@ -270,7 +301,6 @@ namespace T3.Gui.Graph
 
         private List<SymbolChildUi> GetSelectedChildUis()
         {
-            // Todo: Convert to Lync
             var selectedChildren = new List<SymbolChildUi>();
             _selectedChildren = selectedChildren;
             foreach (var x in SelectionHandler.SelectedElements)
@@ -334,6 +364,9 @@ namespace T3.Gui.Graph
                     var json = new Json();
                     json.Reader = new JsonTextReader(reader);
                     var o = JToken.ReadFrom(json.Reader) as JArray;
+                    if (o == null)
+                        return;
+
                     var symbolJson = o[0];
                     var containerSymbol = json.ReadSymbol(null, symbolJson);
                     SymbolRegistry.Entries.Add(containerSymbol.Id, containerSymbol);
@@ -358,7 +391,7 @@ namespace T3.Gui.Graph
 
         private void DrawGrid()
         {
-            var color = new Color(0,0,0,0.5f);
+            var color = new Color(0, 0, 0, 0.5f);
             var gridSize = 64.0f * Scale.X;
             for (var x = Scroll.X % gridSize; x < WindowSize.X; x += gridSize)
             {
@@ -412,12 +445,13 @@ namespace T3.Gui.Graph
 
         private readonly Dictionary<Guid, CanvasProperties> _canvasPropertiesForCompositionOpIds = new Dictionary<Guid, CanvasProperties>();
 
+        private readonly ModalDialog _combineDialog = new ModalDialog("Combine into symbol");
+        private readonly ModalDialog _duplicateSymbolDialog = new ModalDialog("Duplicate as new symbol");
         public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private readonly SelectionFence _selectionFence;
         internal static Vector2 DefaultOpSize = new Vector2(110, 25);
         private List<SymbolChildUi> ChildUis { get; set; }
         private readonly SymbolBrowser _symbolBrowser = new SymbolBrowser();
-        private bool _showCombine;
         private string _combineName = "";
     }
 }

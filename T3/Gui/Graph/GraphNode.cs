@@ -20,9 +20,9 @@ namespace T3.Gui.Graph
     {
         public static void Draw(SymbolChildUi childUi)
         {
-            var isPotentialConnectionTargetNode =   _hoveredId == childUi.Id 
-                                                    && ConnectionMaker.TempConnection != null
-                                                    && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
+            var isPotentialConnectionTargetNode = _hoveredId == childUi.Id
+                                                  && ConnectionMaker.TempConnection != null
+                                                  && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
 
             // Find visible input sockets from relevancy or connection
             var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
@@ -36,9 +36,9 @@ namespace T3.Gui.Graph
             var additionalMultiInputSlots = 0;
             foreach (var input in visibleInputUis)
             {
-                if (!input.InputDefinition.IsMultiInput) 
+                if (!input.InputDefinition.IsMultiInput)
                     continue;
-                
+
                 //TODO: this should be refacatored, because it's very slow and is later repeated  
                 var connectedLines = Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
                 additionalMultiInputSlots += connectedLines.Count;
@@ -58,7 +58,6 @@ namespace T3.Gui.Graph
                 ImGui.SetCursorScreenPos(_lastScreenRect.Min);
                 ImGui.InvisibleButton("node", _lastScreenRect.GetSize());
 
-                
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
                 {
@@ -71,14 +70,15 @@ namespace T3.Gui.Graph
                         ImageCanvasForTooltips.Draw();
                         var children = GraphCanvas.Current.CompositionOp.Children;
                         Instance instance = children.Single(c => c.Id == childUi.Id);
-                        var firstOutput = instance.Outputs[0];
-                        IOutputUi outputUi = childSymbolUi.OutputUis[firstOutput.Id];
-                        outputUi.DrawValue(firstOutput);
+                        if (instance.Outputs.Count > 0)
+                        {
+                            var firstOutput = instance.Outputs[0];
+                            IOutputUi outputUi = childSymbolUi.OutputUis[firstOutput.Id];
+                            outputUi.DrawValue(firstOutput);
+                        }
                     }
                     ImGui.EndTooltip();
                 }
-                
-
 
                 SelectableMovement.Handle(childUi);
 
@@ -101,16 +101,14 @@ namespace T3.Gui.Graph
                                     ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
                                     : Color.Gray;
 
-
                 drawList.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
-                                 hovered
-                                     ? ColorVariations.OperatorHover.Apply(typeColor)
-                                     : ColorVariations.Operator.Apply(typeColor));
+                                       hovered
+                                           ? ColorVariations.OperatorHover.Apply(typeColor)
+                                           : ColorVariations.Operator.Apply(typeColor));
 
                 drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
-                                 new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + _inputSlotThickness + _inputSlotMargin),
-                                 ColorVariations.OperatorInputZone.Apply(typeColor));
-
+                                       new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + _inputSlotThickness + _inputSlotMargin),
+                                       ColorVariations.OperatorInputZone.Apply(typeColor));
 
                 // Animation indicator
                 {
@@ -118,22 +116,23 @@ namespace T3.Gui.Graph
                     var instance = compositionOp.Children.FirstOrDefault(child => child.Id == childUi.SymbolChild.Id);
                     if (instance != null)
                     {
-                        if(compositionOp.Symbol.Animator.IsInstanceAnimated(instance))
+                        if (compositionOp.Symbol.Animator.IsInstanceAnimated(instance))
                         {
                             _drawList.AddRectFilled(
-                                                    new Vector2(_lastScreenRect.Max.X- 5, _lastScreenRect.Min.Y+2),  
-                                                    new Vector2(_lastScreenRect.Max.X- 2, _lastScreenRect.Min.Y+12),
+                                                    new Vector2(_lastScreenRect.Max.X - 5, _lastScreenRect.Min.Y + 2),
+                                                    new Vector2(_lastScreenRect.Max.X - 2, _lastScreenRect.Min.Y + 12),
                                                     Color.Orange);
-                        }  
+                        }
                     }
                 }
-                
+
                 // Visualize update
                 {
                     var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.Id == childUi.SymbolChild.Id);
                     var output = childInstance?.Outputs.FirstOrDefault();
                     var updateCountThisFrame = output?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
-                    if (updateCountThisFrame > 0) {
+                    if (updateCountThisFrame > 0)
+                    {
                         const double timeScale = 0.125f;
                         var blink = (float)(ImGui.GetTime() * timeScale * updateCountThisFrame) % 1f * _lastScreenRect.GetWidth();
                         drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X + blink,
@@ -147,10 +146,10 @@ namespace T3.Gui.Graph
 
                 ImGui.PushFont(Fonts.FontBold);
                 var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
-                
+
                 drawList.AddText(_lastScreenRect.Min + _labelPos,
-                           ColorVariations.OperatorLabel.Apply(typeColor),
-                           string.Format(isRenamed ? ("\"" + childUi.SymbolChild.ReadableName + "\"") : childUi.SymbolChild.ReadableName));
+                                 ColorVariations.OperatorLabel.Apply(typeColor),
+                                 string.Format(isRenamed ? ("\"" + childUi.SymbolChild.ReadableName + "\"") : childUi.SymbolChild.ReadableName));
                 ImGui.PopFont();
 
                 if (childUi.IsSelected)
@@ -255,7 +254,7 @@ namespace T3.Gui.Graph
                 {
                     foreach (var line in connectedLines)
                     {
-                        line.TargetPosition = new Vector2(usableSlotArea.Max.X-1,
+                        line.TargetPosition = new Vector2(usableSlotArea.Max.X - 1,
                                                           usableSlotArea.GetCenter().Y);
                         line.IsSelected |= childUi.IsSelected;
                         line.TargetRect = _lastScreenRect;
@@ -266,7 +265,6 @@ namespace T3.Gui.Graph
 
                 ImGui.PopID();
             }
-
 
             // Outputs sockets...
             var outputIndex = 0;
@@ -288,7 +286,7 @@ namespace T3.Gui.Graph
 
                 foreach (var line in Graph.Connections.GetLinesFromNodeOutput(childUi, output.Id))
                 {
-                    line.SourcePosition = new Vector2(usableArea.Min.X +1, usableArea.GetCenter().Y); 
+                    line.SourcePosition = new Vector2(usableArea.Min.X + 1, usableArea.GetCenter().Y);
                     line.SourceRect = _lastScreenRect;
                     line.ColorForType = colorForType;
                     line.IsSelected |= childUi.IsSelected;
@@ -299,7 +297,6 @@ namespace T3.Gui.Graph
                 outputIndex++;
             }
         }
-
 
         private static void DrawOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
@@ -367,7 +364,6 @@ namespace T3.Gui.Graph
             }
         }
 
-
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
             var opRect = GraphNode._lastScreenRect;
@@ -386,7 +382,6 @@ namespace T3.Gui.Graph
                                                    outputHeight
                                                   ));
         }
-
 
         private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
@@ -455,24 +450,22 @@ namespace T3.Gui.Graph
                                         style.Apply(colorForType)
                                        );
 
-
-//                if (inputDef.IsMultiInput)
-//                {
-//                    _drawList.AddRectFilled(
-//                                            pos + new Vector2(0, GraphNode._inputSlotThickness),
-//                                            pos + new Vector2(GraphNode._inputSlotThickness, GraphNode._inputSlotThickness + GraphNode._multiInputSize),
-//                                            style.Apply(colorForType)
-//                                           );
-//
-//                    _drawList.AddRectFilled(
-//                                            pos + new Vector2(size.X - GraphNode._inputSlotThickness, GraphNode._inputSlotThickness),
-//                                            pos + new Vector2(size.X, GraphNode._inputSlotThickness + GraphNode._multiInputSize),
-//                                            style.Apply(colorForType)
-//                                           );
-//                }
+                //                if (inputDef.IsMultiInput)
+                //                {
+                //                    _drawList.AddRectFilled(
+                //                                            pos + new Vector2(0, GraphNode._inputSlotThickness),
+                //                                            pos + new Vector2(GraphNode._inputSlotThickness, GraphNode._inputSlotThickness + GraphNode._multiInputSize),
+                //                                            style.Apply(colorForType)
+                //                                           );
+                //
+                //                    _drawList.AddRectFilled(
+                //                                            pos + new Vector2(size.X - GraphNode._inputSlotThickness, GraphNode._inputSlotThickness),
+                //                                            pos + new Vector2(size.X, GraphNode._inputSlotThickness + GraphNode._multiInputSize),
+                //                                            style.Apply(colorForType)
+                //                                           );
+                //                }
             }
         }
-
 
         private static void DrawMultiInputSocket(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType,
                                                  bool isInputHovered, int multiInputIndex, bool isGap)
@@ -584,7 +577,6 @@ namespace T3.Gui.Graph
         }
 
         #region style variables
-
         public static Vector2 _labelPos = new Vector2(4, 4);
         public static float _usableSlotThickness = 12;
         public static float _inputSlotThickness = 2;
@@ -592,9 +584,8 @@ namespace T3.Gui.Graph
         public static float _slotGaps = 2;
         public static float _outputSlotMargin = 1;
         private static float _outputSlotThickness = 2;
-
         #endregion
-        
+
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
         private static Guid _hoveredId;
 

@@ -182,5 +182,37 @@ namespace T3.Gui
             }
             ImGui.PopStyleVar(2);
         }
+
+        public static bool DisablableButton(string label, bool isEnabled)
+        {
+            if (isEnabled)
+            {
+                ImGui.PushFont(Fonts.FontBold);
+                if (ImGui.Button(label))
+                {
+                    ImGui.PopFont();
+                    return true;
+                }
+                ImGui.PopFont();
+            }
+            else
+            {
+                ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.3f, 0.3f, 0.3f, 0.1f));
+                ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1, 1, 1, 0.15f));
+                ImGui.Button(label);
+                ImGui.PopStyleColor(2);
+            }
+            return false;
+        }
+        
+        
+        public static void HelpText(string text)
+        {
+            ImGui.PushFont(Fonts.FontSmall);
+            ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+            ImGui.Text(text);
+            ImGui.PopStyleColor();
+            ImGui.PopFont();
+        }
     }
 }

@@ -16,6 +16,7 @@ namespace T3.Gui.Graph.Interaction
 {
     internal static class NodeOperations
     {
+
         public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName)
         {
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
@@ -212,12 +213,11 @@ namespace T3.Gui.Graph.Interaction
             UndoRedoStack.AddAndExecute(deleteCmd);
         }
 
-        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate)
+        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newName)
         {
             var sourceSymbol = symbolChildToDuplicate.Symbol;
             string originalSourcePath = sourceSymbol.SourcePath;
             Log.Info($"original symbol path: {originalSourcePath}");
-            string newName = sourceSymbol.Name + "2";
             int lastSeparatorIndex = originalSourcePath.LastIndexOf("\\", StringComparison.Ordinal);
             string newSourcePath = originalSourcePath.Substring(0, lastSeparatorIndex + 1) + newName + ".cs";
             Log.Info($"new symbol path: {newSourcePath}");
@@ -319,5 +319,13 @@ namespace T3.Gui.Graph.Interaction
 
             return newSymbol;
         }
+
+        public static bool IsNewSymbolNameValid(string newSymbolName)
+        {
+            return !string.IsNullOrEmpty(newSymbolName)
+                   && ValidTypeNamePattern.IsMatch(newSymbolName)
+                   && !SymbolRegistry.Entries.Values.Any(value => string.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase));
+        }
+        private static readonly Regex ValidTypeNamePattern= new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
     }
 }
