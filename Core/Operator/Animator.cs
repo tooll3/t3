@@ -57,6 +57,43 @@ namespace T3.Core.Operator
                                               };
                 floatInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
+            else if (inputSlot is Slot<System.Numerics.Vector3> vector3InputSlot)
+            {
+                var newCurveX = new Curve();
+                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                                                                     {
+                                                                         Value = vector3InputSlot.Value.X,
+                                                                         InType = VDefinition.Interpolation.Spline,
+                                                                         OutType = VDefinition.Interpolation.Spline,
+                                                                     });
+                _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
+
+                var newCurveY = new Curve();
+                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                                                                     {
+                                                                         Value = vector3InputSlot.Value.Y,
+                                                                         InType = VDefinition.Interpolation.Spline,
+                                                                         OutType = VDefinition.Interpolation.Spline,
+                                                                     });
+                _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
+
+                var newCurveZ = new Curve();
+                newCurveZ.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                                                                     {
+                                                                         Value = vector3InputSlot.Value.Z,
+                                                                         InType = VDefinition.Interpolation.Spline,
+                                                                         OutType = VDefinition.Interpolation.Spline,
+                                                                     });
+                _animatedInputCurves.Add(new CurveId(inputSlot, 2), newCurveZ);
+
+                vector3InputSlot.UpdateAction = context =>
+                                                {
+                                                    vector3InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.Time);
+                                                    vector3InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.Time);
+                                                    vector3InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.Time);
+                                                };
+                vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+            }
             else if (inputSlot is Slot<System.Numerics.Vector4> vector4InputSlot)
             {
                 var newCurveX = new Curve();
@@ -67,12 +104,6 @@ namespace T3.Core.Operator
                                                                          OutType = VDefinition.Interpolation.Spline,
                                                                      });
                 _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
-                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTime + 1, new VDefinition()
-                                                                         {
-                                                                             Value = vector4InputSlot.Value.X + 2,
-                                                                             InType = VDefinition.Interpolation.Spline,
-                                                                             OutType = VDefinition.Interpolation.Spline,
-                                                                         });
 
                 var newCurveY = new Curve();
                 newCurveY.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
@@ -130,7 +161,8 @@ namespace T3.Core.Operator
 
             foreach (var groupEntry in relevantInputs)
             {
-                if (groupEntry.Count() == 1)
+                var count = groupEntry.Count();
+                if (count == 1)
                 {
                     var (inputSlot, curve) = groupEntry.First();
                     if (inputSlot is Slot<float> typedInputSlot)
@@ -139,10 +171,24 @@ namespace T3.Core.Operator
                         typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                 }
-                else
+                else if (count == 3)
                 {
                     var entries = groupEntry.ToArray();
-                    Debug.Assert(entries.Length == 4);
+                    var inputSlot = entries[0].inputSlot;
+                    if (inputSlot is Slot<Vector3> Vector3InputSlot)
+                    {
+                        Vector3InputSlot.UpdateAction = context =>
+                                                        {
+                                                            Vector3InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.Time);
+                                                            Vector3InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.Time);
+                                                            Vector3InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.Time);
+                                                        };
+                        Vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                    }
+                }
+                else if (count == 4)
+                {
+                    var entries = groupEntry.ToArray();
                     var inputSlot = entries[0].inputSlot;
                     if (inputSlot is Slot<Vector4> vector4InputSlot)
                     {
@@ -155,6 +201,10 @@ namespace T3.Core.Operator
                                                         };
                         vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
+                }
+                else
+                {
+                    Debug.Assert(false);
                 }
             }
         }
