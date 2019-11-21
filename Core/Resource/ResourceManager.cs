@@ -348,13 +348,37 @@ namespace T3.Core
             }
         }
 
+        class IncludeHandler : SharpDX.D3DCompiler.Include
+        {
+            private StreamReader _streamReader;
+
+            public void Dispose()
+            {
+                _streamReader?.Dispose();
+            }
+
+            public IDisposable Shadow { get; set; }
+
+            public Stream Open(IncludeType type, string fileName, Stream parentStream)
+            {
+                _streamReader = new StreamReader(@"Resources\" + fileName);
+                return _streamReader.BaseStream;
+            }
+
+            public void Close(Stream stream)
+            {
+                _streamReader.Close();
+            }
+        }
+
         internal void CompileShader<TShader>(string srcFile, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
             where TShader : class, IDisposable
         {
             CompilationResult compilationResult = null;
             try
             {
-                compilationResult = ShaderBytecode.CompileFromFile(srcFile, entryPoint, profile, ShaderFlags.Debug, EffectFlags.None);
+                compilationResult =
+                    ShaderBytecode.CompileFromFile(srcFile, entryPoint, profile, ShaderFlags.Debug, EffectFlags.None, null, new IncludeHandler());
             }
             catch (Exception ce)
             {
@@ -485,7 +509,7 @@ namespace T3.Core
             CompileShader(srcFile, entryPoint, name, "cs_5_0", ref shader, ref blob);
             if (shader == null)
             {
-                Log.Info($"Failed to create pixel shader '{name}'.");
+                Log.Info($"Failed to create compute shader '{name}'.");
                 return NULL_RESOURCE;
             }
 
