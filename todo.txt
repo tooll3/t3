@@ -1,9 +1,11 @@
 todo:
+/ Think about ParticleSystem type and how to integrate it
+/ Create ParticleSystem type and move buffer management there
+- Move noise functions to own hlsl file in order to reuse them
 - Scene type?
 - Adjust thread size of particle ops to some useful values
 - Add guid to instance classes in order to prevent problems when renaming etc.
 - Create base type for shader stages and move common code there
-- Think about ParticleSystem type and how to integrate it
 - Investigate how to have several outputs in Op not being dirty flagged by all inputs
 - Replace the 'Execute' Op used in gfx-pipeline-example with the 'Draw' Op
 - Add ops for the different drawing options (draw, drawIndex, drawInstanced, drawIndirect etc)
@@ -20,6 +22,7 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Move common code of particle ops and upcoming particle system to resource manager
 * Fix alt-key focus problem
 * Make Vec3 animatable
 * Add first draft for point emitter

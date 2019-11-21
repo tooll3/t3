@@ -11,11 +11,14 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using SharpDX;
 using SharpDX.D3DCompiler;
+using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
+using SharpDX.DXGI;
 using SharpDX.WIC;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Device = SharpDX.Direct3D11.Device;
 
 namespace T3.Core
 {
@@ -312,7 +315,7 @@ namespace T3.Core
             }
         }
 
-        public void SetupBuffer(ref Buffer buffer, BufferDescription bufferDesc)
+        public void SetupBuffer(BufferDescription bufferDesc, ref Buffer buffer)
         {
             if (buffer == null)
             {
@@ -320,10 +323,53 @@ namespace T3.Core
             }
         }
 
+        public void SetupIndirectBuffer(int sizeInBytes, ref Buffer buffer)
+        {
+            var bufferDesc = new BufferDescription
+                             {
+                                 Usage = ResourceUsage.Default,
+                                 BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
+                                 SizeInBytes = sizeInBytes,
+                                 OptionFlags = ResourceOptionFlags.DrawIndirectArguments,
+                             };
+            SetupBuffer(bufferDesc, ref buffer);
+        }
+
+        public void CreateBufferUav<T>(Buffer buffer, Format format, ref UnorderedAccessView uav)
+        {
+            if (buffer == null)
+                return;
+
+            if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) != 0)
+            {
+                Log.Warning($"Input buffer is structured, skipping UAV creation.");
+                return;
+            }
+
+            uav?.Dispose();
+            var desc = new UnorderedAccessViewDescription
+                       {
+                           Dimension = UnorderedAccessViewDimension.Buffer,
+                           Format = format,
+                           Buffer = new UnorderedAccessViewDescription.BufferResource()
+                                    {
+                                        FirstElement = 0,
+                                        ElementCount = buffer.Description.SizeInBytes / Marshal.SizeOf<T>(),
+                                        Flags = UnorderedAccessViewBufferFlags.None
+                                    }
+                       };
+            uav = new UnorderedAccessView(_device, buffer, desc);
+        }
+
         public void SetupStructuredBuffer<T>(T[] bufferData, ref Buffer buffer) where T : struct
         {
-            int stride = Marshal.SizeOf(typeof(T));
+            int stride =  Marshal.SizeOf(typeof(T));
             int sizeInBytes = stride * bufferData.Length;
+            SetupStructuredBuffer(bufferData, sizeInBytes, stride, ref buffer);
+        }
+        
+        public void SetupStructuredBuffer<T>(T[] bufferData, int sizeInBytes, int stride, ref Buffer buffer) where T : struct
+        {
             using (var data = new DataStream(sizeInBytes, true, true))
             {
                 data.WriteRange(bufferData);
@@ -347,6 +393,74 @@ namespace T3.Core
                 }
             }
         }
+
+        public void SetupStructuredBuffer(int sizeInBytes, int stride, ref Buffer buffer)
+        {
+            if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
+            {
+                var bufferDesc = new BufferDescription
+                                 {
+                                     Usage = ResourceUsage.Default,
+                                     BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
+                                     SizeInBytes = sizeInBytes,
+                                     OptionFlags = ResourceOptionFlags.BufferStructured,
+                                     StructureByteStride = stride
+                                 };
+                buffer = new Buffer(_device, bufferDesc);
+            }
+        }
+
+        public void CreateStructuredBufferSrv(Buffer buffer, ref ShaderResourceView srv)
+        {
+            if (buffer == null)
+                return;
+
+            if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) == 0)
+            {
+                // Log.Warning($"{nameof(SrvFromStructuredBuffer)} - input buffer is not structured, skipping SRV creation.");
+                return;
+            }
+
+            srv?.Dispose();
+            var srvDesc = new ShaderResourceViewDescription()
+                          {
+                              Dimension = ShaderResourceViewDimension.ExtendedBuffer,
+                              Format = Format.Unknown,
+                              BufferEx = new ShaderResourceViewDescription.ExtendedBufferResource
+                                         {
+                                             FirstElement = 0,
+                                             ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride
+                                         }
+                          };
+            srv = new ShaderResourceView(_device, buffer, srvDesc);
+        }
+
+        public void CreateStructuredBufferUav(Buffer buffer, UnorderedAccessViewBufferFlags bufferFlags, ref UnorderedAccessView uav)
+        {
+            if (buffer == null)
+                return;
+
+            if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) == 0)
+            {
+                // Log.Warning($"{nameof(SrvFromStructuredBuffer)} - input buffer is not structured, skipping SRV creation.");
+                return;
+            }
+
+            uav?.Dispose();
+            var uavDesc = new UnorderedAccessViewDescription()
+                          {
+                              Dimension = UnorderedAccessViewDimension.Buffer,
+                              Format = Format.Unknown,
+                              Buffer = new UnorderedAccessViewDescription.BufferResource
+                                       {
+                                           FirstElement = 0,
+                                           ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
+                                           Flags = bufferFlags
+                                       }
+                          };
+            uav = new UnorderedAccessView(_device, buffer, uavDesc);
+        }
+
 
         class IncludeHandler : SharpDX.D3DCompiler.Include
         {
