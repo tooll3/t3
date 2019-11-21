@@ -13,9 +13,6 @@ namespace T3.Gui
     /// </remarks>
     public static class T3Style
     {
-        public static float GridSize = 25;
-        public static float Height = GridSize;
-
         public static Color ConnectedParameterColor = new Color(0.6f, 0.6f, 1f, 1f);
 
 
@@ -79,9 +76,7 @@ namespace T3.Gui
                     ImGui.ColorEdit4("" + x, ref _colors[index]);
                 }
             }
-
             private static Vector4[] _colors;
-
         }
 
         private static ImGuiStyleOverrides _styleOverrides = new ImGuiStyleOverrides();

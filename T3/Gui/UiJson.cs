@@ -64,10 +64,21 @@ namespace T3.Gui
             {
                 Writer.WriteStartObject(); // child entry
                 Writer.WriteObject("ChildId", childUi.Id);
-                Writer.WriteComment(childUi.SymbolChild.ReadableName);
-                Writer.WritePropertyName("Position");
-                vec2Writer(Writer, childUi.PosOnCanvas);
+                {
+                    Writer.WriteComment(childUi.SymbolChild.ReadableName);
 
+                    if (childUi.Style != SymbolUi.Styles.Default)
+                        Writer.WriteObject("Style", childUi.Style);
+
+                    if (childUi.Size != SymbolChildUi.DefaultOpSize)
+                    {
+                        Writer.WritePropertyName("Size");
+                        vec2Writer(Writer, childUi.Size);
+                    }
+
+                    Writer.WritePropertyName("Position");
+                    vec2Writer(Writer, childUi.PosOnCanvas);
+                }
                 Writer.WriteEndObject();
             }
 
@@ -96,7 +107,6 @@ namespace T3.Gui
 
             Writer.WriteEndArray();
         }
-
 
         public SymbolUi ReadSymbolUi(string filePath)
         {
@@ -167,6 +177,21 @@ namespace T3.Gui
 
                 JToken positionToken = childEntry["Position"];
                 childUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
+
+                if (childEntry["Size"] != null)
+                {
+                    JToken sizeToken = childEntry["Size"];
+                    childUi.Size = (Vector2)vector2Converter(sizeToken);
+                }
+
+                if (childEntry["Style"] != null)
+                {
+                    childUi.Style = (SymbolUi.Styles)Enum.Parse(typeof(SymbolUi.Styles), childEntry["Style"].Value<string>());
+                }
+                else
+                {
+                    childUi.Style = SymbolUi.Styles.Default;
+                }
 
                 symbolChildUis.Add(childUi);
             }

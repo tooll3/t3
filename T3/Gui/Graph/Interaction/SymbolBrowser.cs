@@ -370,7 +370,7 @@ namespace T3.Gui.Graph
 
         public Vector2 OutputPositionOnScreen => _posInScreen + _size;
 
-        private readonly Vector2 _size = GraphCanvas.DefaultOpSize;
+        private readonly Vector2 _size = SymbolChildUi.DefaultOpSize;
 
         private bool _focusInputNextTime;
         private Vector2 _posInScreen;

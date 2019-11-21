@@ -449,7 +449,6 @@ namespace T3.Gui.Graph
         private readonly ModalDialog _duplicateSymbolDialog = new ModalDialog("Duplicate as new symbol");
         public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private readonly SelectionFence _selectionFence;
-        internal static Vector2 DefaultOpSize = new Vector2(110, 25);
         private List<SymbolChildUi> ChildUis { get; set; }
         private readonly SymbolBrowser _symbolBrowser = new SymbolBrowser();
         private string _combineName = "";

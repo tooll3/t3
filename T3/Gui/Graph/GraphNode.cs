@@ -20,7 +20,7 @@ namespace T3.Gui.Graph
     {
         private static float ComputeHeight(SymbolChildUi childUi, IInputUi[] visibleInputUis)
         {
-            if (childUi.Style == SymbolChildUi.Styles.Resizable)
+            if (childUi.Style == SymbolUi.Styles.Resizable)
             {
                 return childUi.Size.Y;
             }
@@ -71,7 +71,7 @@ namespace T3.Gui.Graph
                 _lastScreenRect.Floor();
 
                 // Resize indicator
-                if (childUi.Style == SymbolChildUi.Styles.Resizable)
+                if (childUi.Style == SymbolUi.Styles.Resizable)
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
                     ImGui.SetCursorScreenPos(_lastScreenRect.Max - new Vector2(10, 10));
@@ -94,11 +94,11 @@ namespace T3.Gui.Graph
                                                         {
                                                             if (ImGui.MenuItem("Default"))
                                                             {
-                                                                childUi.Style = SymbolChildUi.Styles.Default;
+                                                                childUi.Style = SymbolUi.Styles.Default;
                                                             }
                                                             if (ImGui.MenuItem("Resizable"))
                                                             {
-                                                                childUi.Style = SymbolChildUi.Styles.Resizable;
+                                                                childUi.Style = SymbolUi.Styles.Resizable;
                                                             }
                                                             ImGui.EndMenu();
                                                         }
