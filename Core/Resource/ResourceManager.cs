@@ -387,8 +387,6 @@ namespace T3.Core
                 {
                     if (Resources[id] is VertexShaderResource)
                     {
-                        // if file resource already exists then it must be a different type
-                        Log.Warning($"Trying to create an already existing file resource ('{srcFile}'");
                         return id;
                     }
                 }
@@ -433,8 +431,6 @@ namespace T3.Core
                 {
                     if (Resources[id] is PixelShaderResource)
                     {
-                        // if file resource already exists then it must be a different type
-                        Log.Warning($"Trying to create an already existing file resource ('{srcFile}'");
                         return id;
                     }
                 }
@@ -479,8 +475,6 @@ namespace T3.Core
                 {
                     if (Resources[id] is ComputeShaderResource)
                     {
-                        // if file resource already exists then it must be a different type
-                        Log.Warning($"Trying to create an already existing file resource ('{srcFile}'");
                         return id;
                     }
                 }
@@ -553,8 +547,6 @@ namespace T3.Core
                 {
                     if (Resources[id] is PixelShaderResource)
                     {
-                        // if file resource already exists then it must be a different type
-                        Log.Warning($"Trying to create an already existing file resource ('{srcFile}'");
                         return id;
                     }
                 }
