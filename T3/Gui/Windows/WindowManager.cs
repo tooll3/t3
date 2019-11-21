@@ -23,6 +23,24 @@ namespace T3.Gui.Windows
 
         public void Draw()
         {
+            if(KeyboardBinding.Triggered(UserActions.LoadLayout0))
+                LoadLayout(0);
+
+            if(KeyboardBinding.Triggered(UserActions.LoadLayout1))
+                LoadLayout(1);
+
+            if(KeyboardBinding.Triggered(UserActions.LoadLayout2))
+                LoadLayout(2);
+
+            if(KeyboardBinding.Triggered(UserActions.SaveLayout0))
+                SaveLayout(0);
+
+            if(KeyboardBinding.Triggered(UserActions.SaveLayout1))
+                SaveLayout(1);
+
+            if(KeyboardBinding.Triggered(UserActions.SaveLayout2))
+                SaveLayout(2);
+
             foreach (var windowType in _windows)
             {
                 windowType.Draw();
@@ -56,16 +74,16 @@ namespace T3.Gui.Windows
                     _metricsWindowVisible = !_metricsWindowVisible;
 
                 if (ImGui.MenuItem("Save layout", ""))
-                    SaveLayout();
+                    SaveLayout(0);
 
                 if (ImGui.MenuItem("Load layout", ""))
-                    LoadLayout();
+                    LoadLayout(0);
 
                 ImGui.EndMenu();
             }
         }
 
-        private void SaveLayout()
+        private void SaveLayout(int index)
         {
             var allWindowConfigs = GetAllWindows().Select(window => window.Config).ToList();
 
@@ -73,15 +91,21 @@ namespace T3.Gui.Windows
             var writer = new StringWriter();
             serializer.Serialize(writer, allWindowConfigs);
 
-            var file = File.CreateText(LayoutFilePath);
+            var file = File.CreateText(string.Format(LayoutFileNameFormat, index));
             file.Write(writer.ToString());
             file.Close();
         }
 
-        
-        private void LoadLayout()
+        private void LoadLayout(int index)
         {
-            var jsonBlob = File.ReadAllText(LayoutFilePath);
+            var filename = string.Format(LayoutFileNameFormat, index);
+            if (!File.Exists(filename))
+            {
+                Log.Warning($"Layout {filename} doesn't exist yet");
+                return;
+            }
+            
+            var jsonBlob = File.ReadAllText(filename);
             var serializer = Newtonsoft.Json.JsonSerializer.Create();
             var fileTextReader = new StringReader(jsonBlob);
             if (!(serializer.Deserialize(fileTextReader, typeof(List<Window.WindowConfig>))
@@ -135,7 +159,8 @@ namespace T3.Gui.Windows
             }
         }
 
-        private const string LayoutFilePath = "layout.json";
+        //private const string LayoutFilePath = "layout.json";
+        private const string LayoutFileNameFormat= "layout{0}.json";
 
         private readonly List<Window> _windows;
         private bool _demoWindowVisible;

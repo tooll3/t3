@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using T3.Gui.Commands;
+using T3.Gui.Windows;
 
 namespace T3.Gui
 {
@@ -35,24 +36,32 @@ namespace T3.Gui
         DeleteSelection,
         CopyToClipboard,
         PasteFromClipboard,
+        LoadLayout0,
+        LoadLayout1,
+        LoadLayout2,
+        SaveLayout0,
+        SaveLayout1,
+        SaveLayout2,
     }
-
 
     public static class UserActionRegistry
     {
-        public static Dictionary<UserActions, Action> Entries { get; } = new Dictionary<UserActions, Action>
-                                                                         {
-                                                                             { UserActions.Undo, UndoRedoStack.Undo },
-                                                                             { UserActions.Redo, UndoRedoStack.Redo },
-                                                                             { UserActions.Save, T3Ui.UiModel.Save }
-                                                                         };
+        public static Dictionary<UserActions, Action> Entries { get; }
+            = new Dictionary<UserActions, Action>
+              {
+                  { UserActions.Undo, UndoRedoStack.Undo },
+                  { UserActions.Redo, UndoRedoStack.Redo },
+                  { UserActions.Save, T3Ui.UiModel.Save },
+
+              };
+
         public static readonly HashSet<UserActions> DeferredActions = new HashSet<UserActions>();
 
         public static bool WasActionQueued(UserActions action)
         {
-            if (!DeferredActions.Contains(action)) 
+            if (!DeferredActions.Contains(action))
                 return false;
-            
+
             DeferredActions.Remove(action);
             return true;
         }
@@ -83,14 +92,15 @@ namespace T3.Gui
                 foreach (var c in binding.Combinations)
                 {
                     if (io.KeysDown[(int)c.Key]
-                        && io.KeysDownDurationPrev[(int)c.Key] == 0
+                        && Math.Abs(io.KeysDownDurationPrev[(int)c.Key]) < 0.001f
                         && ((!c.Alt && !io.KeyAlt) || (c.Alt && io.KeyAlt)) // There is probably a smarty way to say this.
                         && ((!c.Ctrl && !io.KeyCtrl) || (c.Ctrl && io.KeyCtrl))
-                        && ((!c.Shift && !io.KeyShift) || (c.Shift && io.KeyShift))    
-                     )
+                        && ((!c.Shift && !io.KeyShift) || (c.Shift && io.KeyShift))
+                        )
                         return true;
                 }
             }
+
             return false;
         }
 
@@ -103,41 +113,59 @@ namespace T3.Gui
                 Alt = alt;
                 Shift = shift;
             }
+
             public readonly bool Ctrl;
             public readonly bool Alt;
             public readonly bool Shift;
             public readonly Key Key;
         }
 
-        public KeyboardBinding(UserActions action, KeyCombination combination, bool needsWindowFocus = false)
+        private KeyboardBinding(UserActions action, KeyCombination combination, bool needsWindowFocus = false)
         {
             Action = action;
-            Combinations = new KeyCombination[] { combination };
+            Combinations = new[] { combination };
             NeedsWindowFocus = needsWindowFocus;
         }
 
-        public static readonly List<KeyboardBinding> Bindings = new List<KeyboardBinding>()
-        {
-            new KeyboardBinding(UserActions.PlaybackForward, new KeyCombination(Key.L) ),
-            new KeyboardBinding(UserActions.PlaybackForwardHalfSpeed, new KeyCombination(Key.L, shift:true) ),
-            new KeyboardBinding(UserActions.PlaybackBackwards, new KeyCombination(Key.J) ),
-            new KeyboardBinding(UserActions.PlaybackStop, new KeyCombination(Key.K) ),
-            new KeyboardBinding(UserActions.PlaybackToggle, new KeyCombination(Key.Space) ),
-            new KeyboardBinding(UserActions.PlaybackPreviousFrame, new KeyCombination(Key.CursorLeft, shift:true)),
-            new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift:true)),
-            new KeyboardBinding(UserActions.PlaybackJumpToNextKeyframe, new KeyCombination(Key.Period)),
-            new KeyboardBinding(UserActions.PlaybackJumpToPreviousKeyframe, new KeyCombination(Key.Comma)),
-            new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift:true)),
+        private static readonly List<KeyboardBinding> Bindings
+            = new List<KeyboardBinding>
+              {
+                  new KeyboardBinding(UserActions.PlaybackForward, new KeyCombination(Key.L)),
+                  new KeyboardBinding(UserActions.PlaybackForwardHalfSpeed,
+                                      new KeyCombination(Key.L, shift: true)),
+                  new KeyboardBinding(UserActions.PlaybackBackwards, new KeyCombination(Key.J)),
+                  new KeyboardBinding(UserActions.PlaybackStop, new KeyCombination(Key.K)),
+                  new KeyboardBinding(UserActions.PlaybackToggle, new KeyCombination(Key.Space)),
+                  new KeyboardBinding(UserActions.PlaybackPreviousFrame,
+                                      new KeyCombination(Key.CursorLeft, shift: true)),
+                  new KeyboardBinding(UserActions.PlaybackNextFrame,
+                                      new KeyCombination(Key.CursorRight, shift: true)),
+                  new KeyboardBinding(UserActions.PlaybackJumpToNextKeyframe, new KeyCombination(Key.Period)),
+                  new KeyboardBinding(UserActions.PlaybackJumpToPreviousKeyframe,
+                                      new KeyCombination(Key.Comma)),
+                  new KeyboardBinding(UserActions.PlaybackNextFrame,
+                                      new KeyCombination(Key.CursorRight, shift: true)),
 
-            new KeyboardBinding(UserActions.Undo, new KeyCombination(Key.Z,ctrl:true) ),
-            new KeyboardBinding(UserActions.Redo, new KeyCombination(Key.Z,ctrl:true, shift:true) ),
-            
-            new KeyboardBinding(UserActions.Save, new KeyCombination(Key.S,ctrl:true) ),
-            new KeyboardBinding(UserActions.FocusSelection, new KeyCombination(Key.F)) { NeedsWindowHover = true},
-            new KeyboardBinding(UserActions.Duplicate, new KeyCombination(Key.D, ctrl:true)) { NeedsWindowFocus = true},
-            new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Delete)) { NeedsWindowFocus = true},
-            new KeyboardBinding(UserActions.CopyToClipboard, new KeyCombination(Key.C, ctrl:true)) { NeedsWindowFocus = true},
-            new KeyboardBinding(UserActions.PasteFromClipboard, new KeyCombination(Key.V, ctrl:true)) { NeedsWindowFocus = true},
-        };
+                  new KeyboardBinding(UserActions.Undo, new KeyCombination(Key.Z, ctrl: true)),
+                  new KeyboardBinding(UserActions.Redo, new KeyCombination(Key.Z, ctrl: true, shift: true)),
+
+                  new KeyboardBinding(UserActions.Save, new KeyCombination(Key.S, ctrl: true)),
+                  new KeyboardBinding(UserActions.FocusSelection, new KeyCombination(Key.F))
+                  { NeedsWindowHover = true },
+                  new KeyboardBinding(UserActions.Duplicate, new KeyCombination(Key.D, ctrl: true))
+                  { NeedsWindowFocus = true },
+                  new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Delete))
+                  { NeedsWindowFocus = true },
+                  new KeyboardBinding(UserActions.CopyToClipboard, new KeyCombination(Key.C, ctrl: true))
+                  { NeedsWindowFocus = true },
+                  new KeyboardBinding(UserActions.PasteFromClipboard, new KeyCombination(Key.V, ctrl: true))
+                  { NeedsWindowFocus = true },
+                  new KeyboardBinding(UserActions.LoadLayout0, new KeyCombination(Key.F1)),
+                  new KeyboardBinding(UserActions.LoadLayout1, new KeyCombination(Key.F2)),
+                  new KeyboardBinding(UserActions.LoadLayout2, new KeyCombination(Key.F3)),
+                  new KeyboardBinding(UserActions.SaveLayout0, new KeyCombination(Key.F1, ctrl: true)),
+                  new KeyboardBinding(UserActions.SaveLayout1, new KeyCombination(Key.F2, ctrl: true)),
+                  new KeyboardBinding(UserActions.SaveLayout2, new KeyCombination(Key.F3, ctrl: true)),
+              };
     }
 }
