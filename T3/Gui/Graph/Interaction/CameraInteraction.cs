@@ -3,6 +3,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Operators.Types;
+using UiHelpers;
 
 namespace T3.Gui.Graph.Interaction
 {
@@ -12,7 +13,15 @@ namespace T3.Gui.Graph.Interaction
         {
             if (camera == null)
                 return;
-            
+
+            var cameraNodeModified = !_smoothedSetup.Matches(camera) && !_intendedSetup.Matches(camera);
+            if (cameraNodeModified)
+            {
+                _intendedSetup.SetTo(camera);
+                _smoothedSetup.SetTo(camera);
+                return;
+            }
+
             _viewAxis.ComputeForCamera(camera);
             _deltaTime = ImGui.GetIO().DeltaTime;
 
@@ -25,10 +34,16 @@ namespace T3.Gui.Graph.Interaction
                 _lastCameraNode = camera;
             }
 
-            ManipulateCameraByMouse();
-            ManipulateCameraByKeyboard();
-            ComputeSmoothMovement();
-            
+            if (ImGui.IsWindowFocused() && ImGui.IsWindowHovered())
+            {
+                ManipulateCameraByMouse();
+                ManipulateCameraByKeyboard();
+            }
+
+            var updateRequired = ComputeSmoothMovement();
+            if (!updateRequired)
+                return;
+
             camera.Position.Input.IsDefault = false;
             camera.Position.TypedInputValue.Value = _smoothedSetup.Position;
             camera.Position.DirtyFlag.Invalidate();
@@ -36,23 +51,24 @@ namespace T3.Gui.Graph.Interaction
             camera.Target.TypedInputValue.Value = _smoothedSetup.Target;
             camera.Target.DirtyFlag.Invalidate();
         }
-        
 
-        private void ComputeSmoothMovement()
+        private bool ComputeSmoothMovement()
         {
-            var cameraIsStillMoving = (_smoothedSetup.MatchesSetup(_intendedSetup)
-                                       || _moveVelocity.Length() > StopDistanceThreshold
-                                       //|| _lookingAroundDelta.Length() > StopDistanceThreshold
-                                       || _orbitVelocity.Length() > 0.001f
-                                       || _manipulatedByMouseWheel
-                                       || _manipulatedByKeyboard);
+            var stillDamping = !_smoothedSetup.MatchesSetup(_intendedSetup);
+            var stillSliding = _moveVelocity.Length() > StopDistanceThreshold;
+            var stillOrbiting = _orbitVelocity.Length() > 0.001f;
+            
+            var cameraIsStillMoving = stillDamping
+                                      || stillSliding
+                                      || stillOrbiting
+                                      || _manipulatedByMouseWheel
+                                      || _manipulatedByKeyboard;
             if (!cameraIsStillMoving)
             {
-                Log.Debug("Not moving...");
                 _smoothedSetup.SetTo(_intendedSetup);
                 _orbitVelocity = Vector2.Zero;
-                _moveVelocity= Vector3.Zero;
-                return;
+                _moveVelocity = Vector3.Zero;
+                return false;
             }
 
             if (_orbitVelocity.Length() > 0.001f)
@@ -66,22 +82,21 @@ namespace T3.Gui.Graph.Interaction
             {
                 _moveVelocity *= maxVelocityForScale / _moveVelocity.Length();
             }
-            if(!_manipulatedByKeyboard)
+
+            if (!_manipulatedByKeyboard)
             {
-                _moveVelocity = Vector3.Lerp(_moveVelocity, Vector3.Zero, _deltaTime * CameraMoveDamping * 60);    
+                _moveVelocity = Vector3.Lerp(_moveVelocity, Vector3.Zero, _deltaTime * CameraMoveDamping * 60);
             }
-            
+
             _intendedSetup.Position += _moveVelocity * _deltaTime;
-            _intendedSetup.Target += _moveVelocity  * _deltaTime;
-            
+            _intendedSetup.Target += _moveVelocity * _deltaTime;
+
             _smoothedSetup.BlendTo(_intendedSetup, CameraDamping);
-            //_lookingAroundDelta = Vector3.Lerp(_lookingAroundDelta, Vector3.Zero, _deltaTime * CameraMoveFriction * 60);
 
             _manipulatedByMouseWheel = false;
             _manipulatedByKeyboard = false;
+            return true;
         }
-
-
 
         private void ManipulateCameraByMouse()
         {
@@ -98,9 +113,9 @@ namespace T3.Gui.Graph.Interaction
                 }
                 else
                 {
-                    var delta = new Vector2(ImGui.GetIO().MouseDelta.X, 
+                    var delta = new Vector2(ImGui.GetIO().MouseDelta.X,
                                             -ImGui.GetIO().MouseDelta.Y);
-                    _orbitVelocity +=  delta * _deltaTime * -0.1f;
+                    _orbitVelocity += delta * _deltaTime * -0.1f;
                 }
             }
             else if (ImGui.IsMouseDragging(1))
@@ -113,13 +128,12 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
-        
         private void HandleMouseWheel()
         {
             var delta = ImGui.GetIO().MouseWheel;
-            // var viewDirection = _smoothedSetup.MatchesSetup(_intendedSetup)
-            //                         ? _intendedSetup.Position - _intendedSetup.Target
-            //                         : _smoothedSetup.Position - _smoothedSetup.Target;
+            if (Math.Abs(delta) < 0.01f)
+                return;
+
             var viewDistance = _intendedSetup.Position - _intendedSetup.Target;
 
             var zoomFactorForCurrentFramerate = 1 + (ZoomSpeed * FrameDurationFactor);
@@ -128,7 +142,8 @@ namespace T3.Gui.Graph.Interaction
             {
                 viewDistance *= zoomFactorForCurrentFramerate;
             }
-            else if(delta > 0)
+
+            if (delta > 0)
             {
                 viewDistance /= zoomFactorForCurrentFramerate;
             }
@@ -141,7 +156,7 @@ namespace T3.Gui.Graph.Interaction
         {
             if (!ImGui.IsWindowFocused())
                 return;
-            
+
             var dragDelta = ImGui.GetIO().MouseDelta;
             var factorX = -dragDelta.X * RotateMouseSensitivity;
             var factorY = dragDelta.Y * RotateMouseSensitivity;
@@ -152,11 +167,10 @@ namespace T3.Gui.Graph.Interaction
             var viewDir2 = new Vector4(_intendedSetup.Target - _intendedSetup.Position, 1);
             var viewDirRotated = Vector4.Transform(viewDir2, rot);
             viewDirRotated = Vector4.Normalize(viewDirRotated);
-            
+
             var newTarget = _intendedSetup.Position + new Vector3(viewDirRotated.X, viewDirRotated.Y, viewDirRotated.Z);
             _intendedSetup.Target = newTarget;
         }
-        
 
         private void ApplyOrbitVelocity(Vector2 orbitVelocity)
         {
@@ -170,14 +184,14 @@ namespace T3.Gui.Graph.Interaction
 
             var newViewDir = Vector4.Transform(viewDir, rot);
             newViewDir = Vector4.Normalize(newViewDir);
-            _intendedSetup.Position =_intendedSetup.Target - new Vector3(newViewDir.X, newViewDir.Y, newViewDir.Z) * viewDirLength;
+            _intendedSetup.Position = _intendedSetup.Target - new Vector3(newViewDir.X, newViewDir.Y, newViewDir.Z) * viewDirLength;
         }
 
         private void Pan()
         {
             if (!ImGui.IsWindowFocused())
                 return;
-            
+
             var dragDelta = ImGui.GetIO().MouseDelta;
             var factorX = dragDelta.X / RenderWindowHeight;
             var factorY = dragDelta.Y / RenderWindowHeight;
@@ -194,7 +208,7 @@ namespace T3.Gui.Graph.Interaction
         {
             if (!ImGui.IsWindowHovered())
                 return;
-            
+
             var viewDirLength = _viewAxis.ViewDistance.Length();
             var acc = CameraAcceleration * _deltaTime * 60 * viewDirLength;
 
@@ -241,8 +255,7 @@ namespace T3.Gui.Graph.Interaction
                 _manipulatedByKeyboard = true;
             }
         }
-        
-        
+
         private struct ViewAxis
         {
             public Vector3 Up;
@@ -261,7 +274,6 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
-
         private class CameraSetup
         {
             public Vector3 Position = new Vector3(0, 0, DefaultCameraPositionZ);
@@ -272,11 +284,11 @@ namespace T3.Gui.Graph.Interaction
                 Position = new Vector3(0, 0, DefaultCameraPositionZ);
                 Target = Vector3.Zero;
             }
-            
+
             public bool MatchesSetup(CameraSetup other)
             {
                 return Vector3.Distance(other.Position, Position) < StopDistanceThreshold
-                       && Vector3.Distance(other.Target, Target) > StopDistanceThreshold;
+                       && Vector3.Distance(other.Target, Target) < StopDistanceThreshold;
             }
 
             public void SetTo(CameraSetup other)
@@ -291,6 +303,12 @@ namespace T3.Gui.Graph.Interaction
                 Target = cameraInstance.Target.Value;
             }
 
+            public bool Matches(Camera cameraInstance)
+            {
+                return Vector3.Distance(cameraInstance.Position.Value, Position) < StopDistanceThreshold
+                       && Vector3.Distance(cameraInstance.Target.Value, Target) < StopDistanceThreshold;
+            }
+
             public void BlendTo(CameraSetup intended, float cameraMoveFriction)
             {
                 var f = _deltaTime * cameraMoveFriction * 60;
@@ -301,23 +319,21 @@ namespace T3.Gui.Graph.Interaction
             private const float DefaultCameraPositionZ = -10;
         }
 
-        
         private static ViewAxis _viewAxis = new ViewAxis();
         private readonly CameraSetup _smoothedSetup = new CameraSetup();
         private readonly CameraSetup _intendedSetup = new CameraSetup();
-        
+
         private static float FrameDurationFactor => (ImGui.GetIO().DeltaTime);
         private bool _manipulatedByMouseWheel;
         private bool _manipulatedByKeyboard;
-        
+
         private Vector3 _moveVelocity;
-        //private Vector3 _lookingAroundDelta = Vector3.Zero;
         private Vector2 _orbitVelocity;
         private Camera _lastCameraNode;
         private static float _deltaTime;
 
         private const float RenderWindowHeight = 450; // TODO: this should be derived from output window size
-        private const float StopDistanceThreshold = 0.001f;
+        private const float StopDistanceThreshold = 0.01f;
         private const float RotateMouseSensitivity = 0.01f;
         private const float OrbitHorizontalDamping = 0.2f;
         private const float CameraMoveDamping = 0.12f;

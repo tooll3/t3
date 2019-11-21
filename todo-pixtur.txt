@@ -2,7 +2,6 @@
 ▢ Port BlendImages shader
 ▢ Port BlendSmokeNoise shader
 
-▢ FIX: Replacing multi-input doesn't work
 ▢ fix ALT-key problem
 
 Later minor
@@ -22,11 +21,12 @@ Later minor
 
 Later major
 -----------
-▢ node groups
+▢ preview thumbnails
+▢ node groups / annotations
 ▢ add CurveEditBox
 ▢ drag keyframe values OR time
 ▢ add snapping to canvas nodes
-▢ preview thumbnails
+▢ Arc curves
 
 More ideas
 ------
@@ -35,6 +35,7 @@ More ideas
 
 bugs Later
 -------
+▢ FIX: Replacing multi-input doesn't work
 ▢ FIX: Implement commands for key-frame modifications
 ▢ FIX: Deleting last keyframe should disable animation-flag in parameter view
 ▢ FIX: Exception when input type changes
