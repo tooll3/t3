@@ -161,25 +161,25 @@ namespace T3.Gui.Windows
                     {
                         // create command for possible editing
                         case InputEditState.Focused:
-                            Log.Debug("setup 'ChangeInputValue' command");
+                            //Log.Debug("setup 'ChangeInputValue' command");
                             _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, input.Input);
                             break;
 
                         // update command in flight
                         case InputEditState.Modified:
-                            Log.Debug("updated 'ChangeInputValue' command");
+                            //Log.Debug("updated 'ChangeInputValue' command");
                             _inputValueCommandInFlight.Value.Assign(input.Input.Value);
                             break;
 
                         // add command to undo stack
                         case InputEditState.Finished:
-                            Log.Debug("Finalized 'ChangeInputValue' command");
+                            //Log.Debug("Finalized 'ChangeInputValue' command");
                             UndoRedoStack.Add(_inputValueCommandInFlight);
                             break;
 
                         // update and add command to undo queue
                         case InputEditState.ModifiedAndFinished:
-                            Log.Debug("Updated and finalized 'ChangeInputValue' command");
+                            //Log.Debug("Updated and finalized 'ChangeInputValue' command");
                             _inputValueCommandInFlight.Value.Assign(input.Input.Value);
                             UndoRedoStack.Add(_inputValueCommandInFlight);
                             break;
