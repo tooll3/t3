@@ -1,9 +1,6 @@
 ﻿using ImGuiNET;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Numerics;
 
 namespace T3.Gui.Windows
 {
@@ -12,29 +9,28 @@ namespace T3.Gui.Windows
     /// </summary>
     public abstract class Window
     {
-        protected bool Visible;
-        protected bool AllowMultipleInstances = false;
-        protected string Title = "Window";
+        public bool AllowMultipleInstances = false;
         protected abstract void DrawContent();
         protected ImGuiWindowFlags WindowFlags;
+        public List<Window> WindowInstances = new List<Window>();
 
         public void DrawMenuItemToggle()
         {
             if (AllowMultipleInstances)
             {
-                if (ImGui.MenuItem("New " + Title))
+                if (ImGui.MenuItem("New " + Config.Title))
                 {
                     AddAnotherInstance();
                 }
             }
             else
             {
-                if (ImGui.MenuItem(Title, "", Visible))
+                if (ImGui.MenuItem(Config.Title, "", Config.Visible))
                 {
-                    Visible = !Visible;
+                    Config.Visible = !Config.Visible;
                 }
 
-                if (!Visible)
+                if (!Config.Visible)
                     Close();
             }
         }
@@ -55,15 +51,17 @@ namespace T3.Gui.Windows
             }
         }
 
-        protected void DrawOneInstance()
+        public void DrawOneInstance()
         {
             UpdateBeforeDraw();
 
-            if (!Visible)
+            if (!Config.Visible)
                 return;
 
-            if (ImGui.Begin(Title, ref Visible, WindowFlags))
+            if (ImGui.Begin(Config.Title, ref Config.Visible, WindowFlags))
             {
+                StoreWindowLayout();
+
                 // Prevent window header from becoming invisible 
                 var windowPos = ImGui.GetWindowPos();
                 if (windowPos.X <= 0) windowPos.X = 0;
@@ -74,7 +72,7 @@ namespace T3.Gui.Windows
                 ImGui.End();
             }
 
-            if (!Visible)
+            if (!Config.Visible)
             {
                 Close();
             }
@@ -91,5 +89,22 @@ namespace T3.Gui.Windows
         protected virtual void AddAnotherInstance()
         {
         }
+
+
+        private void StoreWindowLayout()
+        {
+            Config.Position = ImGui.GetWindowPos();
+            Config.Size = ImGui.GetWindowSize();
+        }
+
+        public class WindowConfig
+        {
+            public string Title;
+            public bool Visible;
+            public Vector2 Position;
+            public Vector2 Size;
+        }
+
+        public WindowConfig Config = new WindowConfig();
     }
 }

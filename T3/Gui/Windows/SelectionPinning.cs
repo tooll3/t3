@@ -23,13 +23,10 @@ namespace T3.Gui.Windows
                 SelectedInstance = null;
                 SelectedUi = null;
 
-                if (GraphWindow.WindowInstances.Count == 0)
-                {
+                if (GraphCanvas.Current.CompositionOp == null)
                     return;
-                }
 
-                var defaultGraphWindow = GraphWindow.WindowInstances[0] as GraphWindow;
-                SelectedInstance = defaultGraphWindow.GraphCanvas.CompositionOp;
+                SelectedInstance = GraphCanvas.Current.CompositionOp;
 
                 if (SelectedInstance == null)
                 {
@@ -45,7 +42,7 @@ namespace T3.Gui.Windows
                 }
                 else
                 {
-                    var parents = defaultGraphWindow.GraphCanvas.GetParents();
+                    var parents = GraphCanvas.Current.GetParents();
                     var parent = parents.LastOrDefault();
                     if (parent != null)
                     {

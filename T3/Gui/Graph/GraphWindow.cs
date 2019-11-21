@@ -20,13 +20,12 @@ namespace T3.Gui.Graph
     {
         public GraphCanvas GraphCanvas { get; private set; }
 
-        public static List<GraphWindow> WindowInstances = new List<GraphWindow>();
 
         public GraphWindow() : base()
         {
             _instanceCounter++;
-            Title = "Graph##" + _instanceCounter;
-            Visible = true;
+            Config.Title = "Graph##" + _instanceCounter;
+            Config.Visible = true;
             AllowMultipleInstances = true;
 
             const string trackName = @"Resources\lorn-sega-sunset.mp3";
@@ -49,7 +48,7 @@ namespace T3.Gui.Graph
 
         protected override void DrawAllInstances()
         {
-            foreach (var w in new List<GraphWindow>(WindowInstances))
+            foreach (var w in WindowInstances)
             {
                 w.DrawOneInstance();
             }
@@ -153,8 +152,6 @@ namespace T3.Gui.Graph
             ImGui.Button(GraphCanvas.CompositionOp.Symbol.Name);
             ImGui.PopStyleColor(2);
         }
-
-
 
         //private TimeLineCanvas.TimelineModes _timelineMode = TimeLineCanvas.TimelineModes.Undefined;
 

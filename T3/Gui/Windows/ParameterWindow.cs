@@ -19,9 +19,9 @@ namespace T3.Gui.Windows
         public ParameterWindow() : base()
         {
             _instanceCounter++;
-            Title = "Parameters##" + _instanceCounter;
+            Config.Title = "Parameters##" + _instanceCounter;
             AllowMultipleInstances = true;
-            Visible = true;
+            Config.Visible = true;
 
             WindowInstances.Add(this);
         }
@@ -34,7 +34,7 @@ namespace T3.Gui.Windows
 
         protected override void DrawAllInstances()
         {
-            foreach (var w in new List<ParameterWindow>(WindowInstances))
+            foreach (var w in WindowInstances)
             {
                 w.DrawOneInstance();
             }
@@ -212,7 +212,7 @@ namespace T3.Gui.Windows
         private ChangeSymbolChildNameCommand _symbolChildNameCommand = null;
         private ChangeInputValueCommand _inputValueCommandInFlight = null;
         private readonly SelectionPinning _pinning = new SelectionPinning();
-        private static List<ParameterWindow> WindowInstances = new List<ParameterWindow>();
+        //private static List<ParameterWindow> WindowInstances = new List<ParameterWindow>();
         static int _instanceCounter = 0;
 
     }

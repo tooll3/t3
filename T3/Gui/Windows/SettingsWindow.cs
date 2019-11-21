@@ -8,7 +8,7 @@ namespace T3.Gui.Windows
     {
         public SettingsWindow() 
         {
-            Title = "Settings";
+            Config.Title = "Settings";
         }
         public static bool UseVSync => _vSync;
 

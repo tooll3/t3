@@ -14,11 +14,11 @@ namespace T3.Gui.Windows
     {
         public OutputWindow() 
         {
-            Title = "Output##" + _instanceCounter;
-            Visible = true;
+            Config.Title = "Output##" + _instanceCounter;
+            Config.Visible = true;
 
             AllowMultipleInstances = true;
-            Visible = true;
+            Config.Visible = true;
             WindowFlags = ImGuiWindowFlags.NoScrollbar;
 
             WindowInstances.Add(this);
@@ -29,7 +29,7 @@ namespace T3.Gui.Windows
         protected override void DrawAllInstances()
         {
             // Wrap inside list to enable removable of members during iteration
-            foreach (var w in new List<OutputWindow>(WindowInstances))
+            foreach (var w in WindowInstances)
             {
                 w.DrawOneInstance();
             }
@@ -119,7 +119,7 @@ namespace T3.Gui.Windows
         private readonly SelectionPinning _pinning = new SelectionPinning();
         private readonly  CameraInteraction _cameraInteraction = new CameraInteraction();
 
-        private static readonly List<OutputWindow> WindowInstances = new List<OutputWindow>();
+        //private static readonly List<OutputWindow> WindowInstances = new List<OutputWindow>();
         static int _instanceCounter ;
     }
 }
