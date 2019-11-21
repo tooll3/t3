@@ -150,13 +150,25 @@ namespace T3.Gui.Graph
                                                       targetParentOrChildId: targetUi.SymbolChild.Id,
                                                       targetSlotId: input.Id);
 
-            var replaceConnection = multiInputIndex % 2 != 0;
+            bool replaceConnection = multiInputIndex % 2 != 0;
+            multiInputIndex /= 2; // divide by 2 to get correct insertion index in existing connections
+            var addCommand = new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex);
+
             if (replaceConnection)
             {
-                // TODO: delete previous multi-input connection that need to be replaced
+                // get the previous connection
+                var allConnectionsToSlot = parentSymbol.Connections.FindAll(c => c.TargetParentOrChildId == targetUi.SymbolChild.Id &&
+                                                                                 c.TargetSlotId == input.Id);
+                var connectionToRemove = allConnectionsToSlot[multiInputIndex];
+                var deleteCommand = new DeleteConnectionCommand(parentSymbol, connectionToRemove, multiInputIndex);
+                var replaceCommand = new MacroCommand("Replace Connection", new ICommand[] { deleteCommand, addCommand });
+                UndoRedoStack.AddAndExecute(replaceCommand);
             }
-            // divide by 2 to get correct insertion index in existing connections
-            UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex / 2));
+            else
+            {
+                UndoRedoStack.AddAndExecute(addCommand);
+            }
+
             TempConnection = null;
         }
 

@@ -1,5 +1,4 @@
 todo:
-- Make Vec3 animatable
 - Scene type?
 - Adjust thread size of particle ops to some useful values
 - Add guid to instance classes in order to prevent problems when renaming etc.
@@ -21,6 +20,7 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Make Vec3 animatable
 * Add first draft for point emitter
 * Fix particle system bug when disconnecting emit dispatch connections
 * Reset option for particle system
