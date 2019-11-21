@@ -176,12 +176,14 @@ namespace T3.Gui.InputUi
                 else
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
-                    ImGui.SetTooltip($"Click to animate\n{input.DefaultValue.ValueType.ToString()}");
+                    
                     if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         if (IsAnimatable)
                             animator.CreateInputUpdateAction<float>(inputSlot);
                     }
+                    if(ImGui.IsItemHovered()) 
+                        ImGui.SetTooltip($"Click to animate\n{input.DefaultValue.ValueType}");
 
                     ImGui.PopStyleColor();
                     ImGui.SameLine();
@@ -224,18 +226,18 @@ namespace T3.Gui.InputUi
 
                     if ((editState & InputEditState.Focused) == InputEditState.Focused)
                     {
-                        Log.Debug($"focused {name}");
+                        //Log.Debug($"focused {name}");
                     }
 
                     if ((editState & InputEditState.Modified) == InputEditState.Modified)
                     {
                         inputSlot.DirtyFlag.Invalidate();
-                        Log.Debug($"modified {typedInputSlot.TypedInputValue.Value}");
+                        //Log.Debug($"modified {typedInputSlot.TypedInputValue.Value}");
                     }
 
                     if ((editState & InputEditState.Finished) == InputEditState.Finished)
                     {
-                        Log.Debug($"Edit {name} completed with {typedInputSlot.TypedInputValue.Value}");
+                        //Log.Debug($"Edit {name} completed with {typedInputSlot.TypedInputValue.Value}");
                     }
 
                     input.IsDefault &= (editState & InputEditState.Modified) != InputEditState.Modified;
