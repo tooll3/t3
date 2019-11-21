@@ -4,47 +4,20 @@ using System.Collections.Generic;
 using System.Numerics;
 using T3.Core;
 using T3.Gui.Commands;
-using T3.Gui.Graph;
 using T3.Gui.Windows;
 
 namespace T3.Gui
 {
-    /// <summary>
-    /// A singleton capsule T3 UI functionality from ImGui-clutter in Program.cs
-    /// </summary>
     public class T3Ui
     {
-        public T3Ui()
-        {
-            _windows = new List<Window>()
-            {
-                new GraphWindow(),
-                new ParameterWindow(),
-                new OutputWindow(),
-                new ConsoleLogWindow(),
-                new SettingsWindow(),
-            };
-        }
-
-
         public void Draw()
         {
-            foreach (var windowType in _windows)
-            {
-                windowType.Draw();
-            }
-
-            if (_demoWindowVisible)
-                ImGui.ShowDemoWindow(ref _demoWindowVisible);
-
-            if (_metricsWindowVisible)
-                ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
-
+            WindowManager.Draw();
+            
             SwapHoveringBuffers();
             TriggerGlobalActionsFromKeyBindings();
             DrawAppMenu();
         }
-
 
         private void TriggerGlobalActionsFromKeyBindings()
         {
@@ -90,27 +63,8 @@ namespace T3.Gui
                     if (ImGui.MenuItem("Paste", "CTRL+V")) { }
                     ImGui.EndMenu();
                 }
+                WindowManager.DrawWindowsMenu();
 
-                if (ImGui.BeginMenu("Windows"))
-                {
-                    foreach (var window in _windows)
-                    {
-                        window.DrawMenuItemToggle();
-                    }
-
-                    if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
-                        ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
-
-                    ImGui.Separator();
-
-                    if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
-                        _demoWindowVisible = !_demoWindowVisible;
-
-                    if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
-                        _metricsWindowVisible = !_metricsWindowVisible;
-
-                    ImGui.EndMenu();
-                }
                 ImGui.EndMainMenuBar();
             }
             ImGui.PopStyleVar(2);
@@ -131,13 +85,8 @@ namespace T3.Gui
         private static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
         public static HashSet<Guid> HoveredIdsLastFrame { get; private set; } = new HashSet<Guid>();
         
-        public static bool ShowSecondaryRenderWindow { get; private set; }
-
         public static readonly UiModel UiModel = new UiModel();
-
-
-        private readonly List<Window> _windows;
-        private bool _demoWindowVisible;
-        private bool _metricsWindowVisible;
+        private static readonly WindowManager WindowManager = new WindowManager();
+        public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
     }
 }

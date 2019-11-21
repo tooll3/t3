@@ -413,6 +413,7 @@
     <Compile Include="Gui\TableView\TableView.cs" />
     <Compile Include="Gui\Windows\SettingsWindow.cs" />
     <Compile Include="Gui\UiModel.cs" />
+    <Compile Include="Gui\Windows\WindowManager.cs" />
     <Compile Include="Program.cs">
       <SubType>Form</SubType>
     </Compile>
