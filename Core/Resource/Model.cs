@@ -12,6 +12,7 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Helper;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector4 = System.Numerics.Vector4;
 
@@ -192,6 +193,8 @@ namespace T3.Core
             // t3 core types
             RegisterType(typeof(Command), "Command",
                          () => new InputValue<Command>(null));
+            RegisterType(typeof(ParticleSystem), "ParticleSystem",
+                         () => new InputValue<ParticleSystem>(new ParticleSystem()));
             
             // sharpdx types
             RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",

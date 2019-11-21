@@ -12,6 +12,7 @@ using SharpDX.Mathematics.Interop;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Helper;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
@@ -54,6 +55,8 @@ namespace T3.Gui
 
             // t3 core types
             RegisterUiType(typeof(Command), new FallBackUiProperties(), () => new FallbackInputUi<Command>(), () => new ValueOutputUi<Command>());
+            RegisterUiType(typeof(ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<ParticleSystem>(),
+                           () => new ValueOutputUi<ParticleSystem>());
 
             // sharpdx types
             RegisterUiType(typeof(SharpDX.Int3), new Size2UiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
