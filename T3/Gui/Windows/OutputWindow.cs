@@ -72,6 +72,9 @@ namespace T3.Gui.Windows
         
         private Camera FindCameraInstance()
         {
+            if (_pinning.SelectedInstance.Parent == null)
+                return null;
+            
             var obj= _pinning.SelectedInstance.Parent.Children.FirstOrDefault(child => child.Type == typeof(Camera));
             var cam = obj as Camera;
             return cam;
