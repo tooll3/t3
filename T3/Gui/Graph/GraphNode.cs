@@ -18,11 +18,11 @@ namespace T3.Gui.Graph
     /// </summary>
     static class GraphNode
     {
-        private static float ComputeHeight(SymbolChildUi childUi, IInputUi[] visibleInputUis)
+        private static Vector2 ComputeSize(SymbolChildUi childUi, IInputUi[] visibleInputUis)
         {
             if (childUi.Style == SymbolUi.Styles.Resizable)
             {
-                return childUi.Size.Y;
+                return childUi.Size;
             }
             else
             {
@@ -36,10 +36,14 @@ namespace T3.Gui.Graph
                     var connectedLines = Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
                     additionalMultiInputSlots += connectedLines.Count;
                 }
-                
-                return 23 + (visibleInputUis.Length + additionalMultiInputSlots) * 13;
+                return new Vector2(
+                                   SymbolChildUi.DefaultOpSize.X,
+                                   23 + (visibleInputUis.Length + additionalMultiInputSlots) * 13
+                                   );  
+                    
             }
         }
+        
         
         public static void Draw(SymbolChildUi childUi)
         {
@@ -61,13 +65,9 @@ namespace T3.Gui.Graph
             _drawList = Graph.DrawList;
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-
-                var heightWithParams = ComputeHeight(childUi, visibleInputUis);
-                
                 _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(
                                                                                childUi.PosOnCanvas,
-                                                                               childUi.PosOnCanvas + new Vector2(childUi.Size.X,
-                                                                                                                 heightWithParams)));
+                                                                               childUi.PosOnCanvas + ComputeSize(childUi, visibleInputUis)));
                 _lastScreenRect.Floor();
 
                 // Resize indicator
@@ -88,21 +88,7 @@ namespace T3.Gui.Graph
                 // Interaction
                 ImGui.SetCursorScreenPos(_lastScreenRect.Min);
                 ImGui.InvisibleButton("node", _lastScreenRect.GetSize());
-                CustomComponents.ContextMenuForItem(() =>
-                                                    {
-                                                        if (ImGui.BeginMenu("Styles"))
-                                                        {
-                                                            if (ImGui.MenuItem("Default"))
-                                                            {
-                                                                childUi.Style = SymbolUi.Styles.Default;
-                                                            }
-                                                            if (ImGui.MenuItem("Resizable"))
-                                                            {
-                                                                childUi.Style = SymbolUi.Styles.Resizable;
-                                                            }
-                                                            ImGui.EndMenu();
-                                                        }
-                                                    });
+
 
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())

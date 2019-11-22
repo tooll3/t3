@@ -252,6 +252,25 @@ namespace T3.Gui.Graph
                          ImGui.PopStyleColor();
                          ImGui.PopFont();
 
+                         if (ImGui.BeginMenu("Styles"))
+                         {
+                             if (ImGui.MenuItem("Default", "", selectedChildren.Any(child => child.Style== SymbolUi.Styles.Default)))
+                             {
+                                 foreach (var childUi in selectedChildren)
+                                 {
+                                    childUi.Style = SymbolUi.Styles.Default;
+                                 }
+                             }
+                             if (ImGui.MenuItem("Resizable", "", selectedChildren.Any(child => child.Style== SymbolUi.Styles.Resizable)))
+                             {
+                                 foreach (var childUi in selectedChildren)
+                                 {
+                                     childUi.Style = SymbolUi.Styles.Resizable;
+                                 }
+                             }
+                             ImGui.EndMenu();
+                         }
+                         
                          if (ImGui.MenuItem("Delete"))
                          {
                              DeleteSelectedElements();
