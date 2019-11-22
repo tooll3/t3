@@ -80,7 +80,6 @@ namespace T3.Gui.Graph
                     {
                         var delta = GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
                         childUi.Size += delta;
-                        //childUi.PosOnCanvas += delta; // Compensate for dragging of node. ImGui ... don't ask. SIC
                     }
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);
                 }
@@ -88,8 +87,8 @@ namespace T3.Gui.Graph
                 // Interaction
                 ImGui.SetCursorScreenPos(_lastScreenRect.Min);
                 ImGui.InvisibleButton("node", _lastScreenRect.GetSize());
-
-
+                
+                
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
                 {
@@ -177,7 +176,7 @@ namespace T3.Gui.Graph
                 }
 
 
-
+                drawList.PushClipRect(_lastScreenRect.Min, _lastScreenRect.Max, true);
                 ImGui.PushFont(Fonts.FontBold);
                 var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
 
@@ -185,6 +184,7 @@ namespace T3.Gui.Graph
                                  ColorVariations.OperatorLabel.Apply(typeColor),
                                  string.Format(isRenamed ? ("\"" + childUi.SymbolChild.ReadableName + "\"") : childUi.SymbolChild.ReadableName));
                 ImGui.PopFont();
+                drawList.PopClipRect();
 
                 if (childUi.IsSelected)
                 {
