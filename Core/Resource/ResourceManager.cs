@@ -496,7 +496,7 @@ namespace T3.Core
             }
             catch (Exception ce)
             {
-                Log.Info($"Failed to compile shader '{name}': {ce.Message}\nUsing previous resource state.");
+                Log.Error($"Failed to compile shader '{name}': {ce.Message}\nUsing previous resource state.");
                 return;
             }
 

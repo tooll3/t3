@@ -88,5 +88,15 @@ namespace T3.Gui
         {
             return color.Rgba;
         }
+
+        public static Color Mix(Color c1, Color c2, float t)
+        {
+                return new Color(
+                                 c1.Rgba.X + (c2.Rgba.X - c1.Rgba.X) * t,
+                                 c1.Rgba.Y + (c2.Rgba.Y - c1.Rgba.Y) * t,
+                                 c1.Rgba.Z + (c2.Rgba.Z - c1.Rgba.Z) * t,
+                                 c1.Rgba.W + (c2.Rgba.W - c1.Rgba.W) * t
+                                 );
+        }
     };
 }

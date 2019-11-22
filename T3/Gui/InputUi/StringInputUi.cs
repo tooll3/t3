@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
 using System.Numerics;
 using System.Windows.Forms;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Gui.UiHelpers;
 
 namespace T3.Gui.InputUi
@@ -34,7 +38,7 @@ namespace T3.Gui.InputUi
                     case UsageType.FilePath:
                     case UsageType.DirectoryPath:
                     {
-                        ImGui.SetNextItemWidth(-30);
+                        ImGui.SetNextItemWidth(-70);
                         bool changed = ImGui.InputText("##textEditPath", ref value, MAX_STRING_LENGTH);
                         ImGui.SameLine();
                         if (ImGui.Button("...", new Vector2(30, 0)))
@@ -48,7 +52,18 @@ namespace T3.Gui.InputUi
                             value = newPath;
                             changed = true;
                         }
-
+                        ImGui.SameLine();
+                        if (ImGui.Button("Edit", new Vector2(40, 0)))
+                        {
+                            if (!File.Exists(value))
+                            {
+                                Log.Error("Can't open non-existing file " +value);
+                            }
+                            else
+                            {
+                                Process.Start(value);
+                            }
+                        }
                         return changed;
                     }
                 }

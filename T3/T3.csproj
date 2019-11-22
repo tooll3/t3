@@ -359,6 +359,7 @@
     <Compile Include="Gui\UiHelpers\CurvePlot.cs" />
     <Compile Include="Gui\UiHelpers\FileOperations.cs" />
     <Compile Include="Gui\UiHelpers\ModalDialog.cs" />
+    <Compile Include="Gui\UiHelpers\StatusErrorLine.cs" />
     <Compile Include="Gui\Windows\ImageOutputCanvas.cs" />
     <Compile Include="Gui\Windows\OutputWindow.cs" />
     <Compile Include="Gui\Windows\SelectionPinning.cs" />

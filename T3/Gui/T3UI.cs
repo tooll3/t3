@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using T3.Core;
 using T3.Gui.Commands;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 
 namespace T3.Gui
@@ -66,6 +67,7 @@ namespace T3.Gui
                 }
                 WindowManager.DrawWindowsMenu();
 
+                _statusErrorLine.Draw();
                 ImGui.EndMainMenuBar();
             }
             ImGui.PopStyleVar(2);
@@ -86,6 +88,7 @@ namespace T3.Gui
         private static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
         public static HashSet<Guid> HoveredIdsLastFrame { get; private set; } = new HashSet<Guid>();
         
+        private StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel = new UiModel();
         private static readonly WindowManager WindowManager = new WindowManager();
         public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
