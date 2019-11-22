@@ -26,7 +26,6 @@ namespace T3.Gui.Windows
             WindowInstances.Add(this);
         }
 
-
         protected override void UpdateBeforeDraw()
         {
             _pinning.UpdateSelection();
@@ -45,12 +44,10 @@ namespace T3.Gui.Windows
             WindowInstances.Remove(this);
         }
 
-
         protected override void AddAnotherInstance()
         {
             new ParameterWindow();
         }
-
 
         protected override void DrawContent()
         {
@@ -61,7 +58,6 @@ namespace T3.Gui.Windows
                 Im.EmptyWindowMessage("Nothing selected");
                 return;
             }
-
 
             var opNamespace = op.Symbol.Namespace ?? "undefined";
 
@@ -76,18 +72,20 @@ namespace T3.Gui.Windows
                     _symbolNamespaceCommandInFlight.NewNamespace = namespaceForEdit;
                     _symbolNamespaceCommandInFlight.Do();
                 }
+
                 if (ImGui.IsItemActivated())
                 {
                     _symbolNamespaceCommandInFlight = new ChangeSymbolNamespaceCommand(op.Symbol);
                 }
+
                 if (ImGui.IsItemDeactivatedAfterEdit())
                 {
                     UndoRedoStack.Add(_symbolNamespaceCommandInFlight);
                     _symbolNamespaceCommandInFlight = null;
                 }
+
                 ImGui.PopStyleColor();
             }
-
 
             // Symbol Name
             {
@@ -99,10 +97,12 @@ namespace T3.Gui.Windows
                     _symbolNameCommandInFlight.NewName = nameForEdit;
                     _symbolNameCommandInFlight.Do();
                 }
+
                 if (ImGui.IsItemActivated())
                 {
                     _symbolNameCommandInFlight = new ChangeSymbolNameCommand(op.Symbol);
                 }
+
                 if (ImGui.IsItemDeactivatedAfterEdit())
                 {
                     UndoRedoStack.Add(_symbolNameCommandInFlight);
@@ -119,10 +119,12 @@ namespace T3.Gui.Windows
                     _symbolChildNameCommand.NewName = nameForEdit;
                     _pinning.SelectedChildUi.SymbolChild.Name = nameForEdit;
                 }
+
                 if (ImGui.IsItemActivated())
                 {
                     _symbolChildNameCommand = new ChangeSymbolChildNameCommand(_pinning.SelectedChildUi, op.Parent.Symbol);
                 }
+
                 if (ImGui.IsItemDeactivatedAfterEdit())
                 {
                     UndoRedoStack.Add(_symbolChildNameCommand);
@@ -132,7 +134,6 @@ namespace T3.Gui.Windows
 
             //ImGui.Spacing();
             ImGui.Dummy(new Vector2(0.0f, 5.0f));
-
 
             var compositionSymbolUi = SymbolUiRegistry.Entries[op.Parent.Symbol.Id];
             var selectedChildSymbolUi = SymbolUiRegistry.Entries[op.Symbol.Id];
@@ -167,8 +168,16 @@ namespace T3.Gui.Windows
 
                         // update command in flight
                         case InputEditState.Modified:
-                            //Log.Debug("updated 'ChangeInputValue' command");
-                            _inputValueCommandInFlight.Value.Assign(input.Input.Value);
+                            if (_inputValueCommandInFlight == null)
+                            {
+                                Log.Warning("Invalid command in flight?");
+                            }
+                            else
+                            {
+                                //Log.Debug("updated 'ChangeInputValue' command");
+                                _inputValueCommandInFlight.Value.Assign(input.Input.Value);
+                            }
+
                             break;
 
                         // add command to undo stack
@@ -179,9 +188,17 @@ namespace T3.Gui.Windows
 
                         // update and add command to undo queue
                         case InputEditState.ModifiedAndFinished:
-                            //Log.Debug("Updated and finalized 'ChangeInputValue' command");
-                            _inputValueCommandInFlight.Value.Assign(input.Input.Value);
-                            UndoRedoStack.Add(_inputValueCommandInFlight);
+                            if (_inputValueCommandInFlight == null)
+                            {
+                                Log.Warning("Invalid command in flight?");
+                            }
+                            else
+                            {
+                                //Log.Debug("Updated and finalized 'ChangeInputValue' command");
+                                _inputValueCommandInFlight.Value.Assign(input.Input.Value);
+                                UndoRedoStack.Add(_inputValueCommandInFlight);
+                            }
+
                             break;
 
                         case InputEditState.ShowOptions:
@@ -189,6 +206,7 @@ namespace T3.Gui.Windows
                             break;
                     }
                 }
+
                 ImGui.PopID();
             }
         }
@@ -196,6 +214,7 @@ namespace T3.Gui.Windows
         struct ShownInputParameterEdit
         {
             public static readonly ShownInputParameterEdit None = new ShownInputParameterEdit(0, 0);
+
             public ShownInputParameterEdit(int symbolHash, int inputHash)
             {
                 SymbolHash = symbolHash;
@@ -211,9 +230,10 @@ namespace T3.Gui.Windows
         private ChangeSymbolNamespaceCommand _symbolNamespaceCommandInFlight = null;
         private ChangeSymbolChildNameCommand _symbolChildNameCommand = null;
         private ChangeInputValueCommand _inputValueCommandInFlight = null;
+
         private readonly SelectionPinning _pinning = new SelectionPinning();
+
         //private static List<ParameterWindow> WindowInstances = new List<ParameterWindow>();
         static int _instanceCounter = 0;
-
     }
 }
