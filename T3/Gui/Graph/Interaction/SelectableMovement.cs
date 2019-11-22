@@ -51,11 +51,12 @@ namespace T3.Gui.Graph
                     _isDragging = true;
 
                     var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
+                    var newDragPosInCanvas = GraphCanvas.Current.InverseTransformPosition(newDragPos);
                     //var snapDelta = new Vector2(140, 0);
 
-                    var minDist = float.PositiveInfinity;
-                    var targetSnapScreenPos = Vector2.Zero;
-                    foreach (var offset in SnapOffsets)
+                    var bestDistanceInCanvas = float.PositiveInfinity;
+                    var targetSnapPositionInCanvas = Vector2.Zero;
+                    foreach (var offset in SnapOffsetsInCanvas)
                     {
                         var heightAffectFactor = 0;
                         if (Math.Abs(offset.X) < 0.01f)
@@ -68,28 +69,32 @@ namespace T3.Gui.Graph
                             {
                                 heightAffectFactor = 1;
                             }
-                                
                         }
+                         
+                        
                         foreach (var neighbor in GraphCanvas.Current.SelectableChildren)
                         {
                             if (neighbor.IsSelected || neighbor == selectable)
                                 continue;
 
-                            var neighborScreenPos = GraphCanvas.Current.TransformPosition(neighbor.PosOnCanvas) - offset + new Vector2(0, neighbor.Size.Y * heightAffectFactor);
-                            var d = Vector2.Distance(neighborScreenPos, newDragPos);
-                            if (d < minDist)
-                            {
-                                targetSnapScreenPos = neighborScreenPos;
-                                minDist = d;
-                            }
+                            var offset2 = new Vector2(offset.X, -neighbor.Size.Y * heightAffectFactor + offset.Y);
+                            var snapToNeighborPos = neighbor.PosOnCanvas + offset2;
+                            
+                            var d = Vector2.Distance(snapToNeighborPos, newDragPosInCanvas);
+                            if (!(d < bestDistanceInCanvas))
+                                continue;
+                            
+                            targetSnapPositionInCanvas = snapToNeighborPos;
+                            bestDistanceInCanvas = d;
                         }
                     }
 
-                    var isSnapping = minDist < 7;
+                    var snapDistanceInCanvas = GraphCanvas.Current.InverseTransformDirection(new Vector2(20, 0)).X;
+                    var isSnapping = bestDistanceInCanvas < snapDistanceInCanvas;
+                    
                     var moveDeltaOnCanvas = isSnapping
-                                                ? GraphCanvas.Current.InverseTransformPosition(targetSnapScreenPos) - selectable.PosOnCanvas
-                                                : GraphCanvas.Current.InverseTransformPosition((ImGui.GetMousePos() - _dragStartDelta)) -
-                                                  selectable.PosOnCanvas;
+                                                ? targetSnapPositionInCanvas - selectable.PosOnCanvas
+                                                : newDragPosInCanvas - selectable.PosOnCanvas;
 
                     // Drag selection
                     foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)
@@ -116,12 +121,14 @@ namespace T3.Gui.Graph
             }
         }
 
-        private static Vector2[] SnapOffsets = new Vector2[]
+        private static readonly Vector2 SnapPadding = new Vector2(20,20);
+
+        private static Vector2[] SnapOffsetsInCanvas = new Vector2[]
                                                {
-                                                   new Vector2(135, 0),
-                                                   new Vector2(-135, 0),
-                                                   new Vector2(0, 30),
-                                                   new Vector2(0, -30),
+                                                   new Vector2(SymbolChildUi.DefaultOpSize.X + SnapPadding.X, 0),
+                                                   new Vector2(-SymbolChildUi.DefaultOpSize.X-  + SnapPadding.X, 0),
+                                                   new Vector2(0,  SnapPadding.Y),
+                                                   new Vector2(0, -SnapPadding.Y),
                                                };
 
         private static bool _isDragging = false;
