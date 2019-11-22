@@ -1,0 +1,120 @@
+Crash after compiling newly duplicated type in rider
+
+[ANNOYING]
+
+Steps to reproduce:
+
+1. Start t3
+2. Create [Add]
+3. Duplicate as new type
+-> it is automatically added to project in Rider
+4. Added new output of type Vector2
+
+Interpretation from tom:
+- I probably forgot to save in t3 so the .t3 files have not been created yet
+
+System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+  at at System.ThrowHelper.ThrowKeyNotFoundException()
+  at at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+  at T3.Gui.SymbolUi.UpdateConsistencyWithSymbol() in C:\Users\pixtur\coding\t3\T3\Gui\SymbolUi.cs:100
+  at T3.Gui.UiModel.UpdateUiEntriesForSymbol(Symbol symbol) in C:\Users\pixtur\coding\t3\T3\Gui\UiModel.cs:203
+  at T3.Program.<>c__DisplayClass1_0.<Main>b__8() in C:\Users\pixtur\coding\t3\T3\Program.cs:318
+  at at SharpDX.Windows.RenderLoop.Run(Control form, RenderCallback renderCallback, Boolean useApplicationDoEvents)
+  at T3.Program.Main() in C:\Users\pixtur\coding\t3\T3\Program.cs:308
+
+
+This is especially annoying, because after this, t3 does not longer start because of..
+------------------------
+Debug: Found no input ui entry for symbol child input 'Input1' - creating a new one
+Debug: Found no input ui entry for symbol child input 'Input2' - creating a new one
+Debug: Found no output ui entry for symbol child output 'Result' - creating a new one
+Debug: Found no output ui entry for symbol child output 'Size' - creating a new one
+
+
+Unhandled Exception: System.TypeInitializationException: The type initializer for 'T3.Program' threw an exception. ---> System.TypeIn
+itializationException: The type initializer for 'T3.Gui.T3Ui' threw an exception. ---> System.Collections.Generic.KeyNotFoundExceptio
+n: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at T3.Gui.SymbolUi.UpdateConsistencyWithSymbol() in C:\Users\pixtur\coding\t3\T3\Gui\SymbolUi.cs:line 100
+   at T3.Gui.SymbolUi..ctor(Symbol symbol) in C:\Users\pixtur\coding\t3\T3\Gui\SymbolUi.cs:line 20
+   at T3.Gui.UiModel.UpdateUiEntriesForSymbol(Symbol symbol) in C:\Users\pixtur\coding\t3\T3\Gui\UiModel.cs:line 208
+   at T3.Gui.UiModel.Init() in C:\Users\pixtur\coding\t3\T3\Gui\UiModel.cs:line 132
+   at T3.Gui.UiModel..ctor() in C:\Users\pixtur\coding\t3\T3\Gui\UiModel.cs:line 26
+   at T3.Gui.T3Ui..cctor() in C:\Users\pixtur\coding\t3\T3\Gui\T3UI.cs:line 92
+   --- End of inner exception stack trace ---
+   at T3.Gui.T3Ui..ctor()
+   at T3.Program..cctor() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 400
+   --- End of inner exception stack trace ---
+   at T3.Program.Main()
+
+
+This is the c# code I have been using:
+----------------------
+
+```
+using SharpDX;
+using T3.Core.Operator;
+
+namespace T3.Operators.Types
+{
+    public class GetSrvSize : Instance<GetSrvSize>
+    {
+        [Output(Guid = "d6b518ff-9603-4ee3-9b74-d78ba4732b2e")]
+        public readonly Slot<float> Result = new Slot<float>();
+
+        [Output(Guid = "1652BAC6-D496-4726-96F5-DB47927CCA8B")]
+        public readonly Slot<Vector2> Size = new Slot<Vector2>();
+
+        //         [Output(Guid = "849d7d1f-ca6a-4c93-a06f-ea4544722ea6")]
+        //         public readonly Slot<float> Result2 = new Slot<float>();
+
+        public GetSrvSize()
+        {
+            Result.UpdateAction = Update;
+        }
+
+        private void Update(EvaluationContext context)
+        {
+            Result.Value = Input1.GetValue(context) + Input2.GetValue(context);
+            Size.Value = Vector2.One;
+        }
+
+        [Input(Guid = "cc019468-767d-45e2-a1cf-42399174393e")]
+        public readonly InputSlot<float> Input1 = new InputSlot<float>();
+
+        [Input(Guid = "0cdf3ea6-e448-4543-bce8-e41c69f954e9")]
+        public readonly InputSlot<float> Input2 = new InputSlot<float>();
+
+        //         [Input(Guid = "6efd1219-9696-4bde-834f-7197837c6f02")]
+        //         public readonly InputSlot<float> Input3 = new InputSlot<float>();
+        // 
+        //         [Input(Guid = "cd5bdf03-2714-498b-ab75-abd282dddb77")]
+        //         public readonly InputSlot<float> Input4 = new InputSlot<float>();
+    }
+}
+```
+
+
+-----------------
+this is the .t3 file that has been created:
+
+```
+{
+  "Name": "GetSrvSize",
+  "Id": "2fbef4e0-a183-4c6f-b51e-a7178608ac2f",
+  "InstanceType": "T3.Operators.Types.GetSrvSize, Operators",
+  "Inputs": [
+    {
+      "Id": "669a92da-993e-4960-a8b1-a31cbf32e299"/*Input1*/,
+      "DefaultValue": 29.0
+    },
+    {
+      "Id": "3e6df8fb-c407-4d5f-8745-8b1ccab9999c"/*Input2*/,
+      "DefaultValue": 23.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
+```
+

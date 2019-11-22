@@ -1,0 +1,23 @@
+Crash after deleting inputs
+-----------------------
+
+
+Info: type updating took: 0.0005829s
+Debug: Found no input ui entry for symbol child input 'XXX' - creating a new one
+Debug: InputUi 'cc019468-767d-45e2-a1cf-42399174393e' still existed but no corresponding input definition anymore. Removing the ui.
+Debug: InputUi '0cdf3ea6-e448-4543-bce8-e41c69f954e9' still existed but no corresponding input definition anymore. Removing the ui.
+Debug: InputUi '14bf463c-cab6-4d76-9c5e-b8c0fe3e1fb4' still existed but no corresponding input definition anymore. Removing the ui.
+
+Unhandled Exception: System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at T3.Gui.Windows.ParameterWindow.DrawContent() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\ParameterWindow.cs:line 143
+   at T3.Gui.Windows.Window.DrawOneInstance() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\Window.cs:line 71
+   at T3.Gui.Windows.ParameterWindow.DrawAllInstances() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\ParameterWindow.cs:line 39
+   at T3.Gui.Windows.Window.Draw() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\Window.cs:line 46
+   at T3.Gui.Windows.WindowManager.Draw() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\WindowManager.cs:line 46
+   at T3.Gui.T3Ui.Draw() in C:\Users\pixtur\coding\t3\T3\Gui\T3UI.cs:line 17
+   at T3.Program.<>c__DisplayClass1_0.<Main>b__8() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 362
+   at SharpDX.Windows.RenderLoop.Run(Control form, RenderCallback renderCallback, Boolean useApplicationDoEvents)
+   at T3.Program.Main() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 308
+
+Process finished with exit code -532,462,766.

@@ -1,0 +1,73 @@
+Crash after renaming Node type in rider
+---------------------
+
+1. I had a compiling version of a node called "GetSrvSize"
+2. Close T3
+3. Refactor to "GetTextureSize"
+4. Rename .t3 and t3ui files to match new name
+5. Start t3
+---> Crash
+
+
+
+work-around rename both settings in .t3 file:
+
+```
+{
+  "Name": "GetTextureSize",
+  "Id": "064c67af-68bc-4bd3-91f4-6a85388b41ed",
+  "InstanceType": "T3.Operators.Types.GetTextureSize, Operators",
+  "Inputs": [
+    {
+      "Id": "8b15d8e1-10c7-41e1-84db-a85e31e0c909"/*Texture*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
+```
+
+This is super annoying, because renaming types is a frequent action. Ideally this should be possible from t3.
+
+
+
+Info: file: Operators\Types\GetTextureSize_064c67af-68bc-4bd3-91f4-6a85388b41ed.t3
+
+Unhandled Exception: System.TypeInitializationException: The type initializer for 'T3.Program' threw an exception. ---> System.TypeInitializationException: The type initializer for '
+T3.Gui.T3Ui' threw an exception. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at T3.Core.Operator.Symbol..ctor(Type instanceType, Guid id) in C:\Users\pixtur\coding\t3\Core\Operator\Symbol.cs:line 50
+   at T3.Core.Operator.Symbol..ctor(Type instanceType, Guid id, IEnumerable`1 children) inC:\Users\pixtur\coding\t3\Core\Operator\Symbol.cs:line 42
+   at T3.Core.Json.ReadSymbol(Model model, JToken o) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 198
+   at T3.Core.Json.ReadSymbol(Model model) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 174
+   at T3.Core.Model.ReadSymbolFromFile(String symbolFile) in C:\Users\pixtur\coding\t3\Core\Resource\Model.cs:line 388
+   at T3.Core.Model.ReadSymbolWithId(Guid id) in C:\Users\pixtur\coding\t3\Core\Resource\Model.cs:line 408
+   at T3.Core.Json.ReadSymbolChild(Model model, JToken symbolChildJson) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 127
+   at T3.Core.Json.<>c__DisplayClass17_0.<ReadSymbol>b__0(JToken childJson) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 187
+   at System.Linq.Enumerable.<>c__DisplayClass7_0`3.<CombineSelectors>b__0(TSource x)
+   at System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at T3.Core.Json.ReadSymbol(Model model, JToken o) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 186
+   at T3.Core.Json.ReadSymbol(Model model) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 174
+   at T3.Core.Model.ReadSymbolFromFile(String symbolFile) in C:\Users\pixtur\coding\t3\Core\Resource\Model.cs:line 388
+   at T3.Core.Model.ReadSymbolWithId(Guid id) in C:\Users\pixtur\coding\t3\Core\Resource\Model.cs:line 408
+   at T3.Core.Json.ReadSymbolChild(Model model, JToken symbolChildJson) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 127
+   at T3.Core.Json.<>c__DisplayClass17_0.<ReadSymbol>b__0(JToken childJson) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 187
+   at System.Linq.Enumerable.<>c__DisplayClass7_0`3.<CombineSelectors>b__0(TSource x)
+   at System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at T3.Core.Json.ReadSymbol(Model model, JToken o) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 186
+   at T3.Core.Json.ReadSymbol(Model model) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 174
+   at T3.Core.Model.ReadSymbolFromFile(String symbolFile) in C:\Users\pixtur\coding\t3\Core\Resource\Model.cs:line 388
+   at T3.Core.Model.Load() in C:\Users\pixtur\coding\t3\Core\Resource\Model.cs:line 352
+   at T3.Gui.UiModel.Load() in C:\Users\pixtur\coding\t3\T3\Gui\UiModel.cs:line 146
+   at T3.Gui.UiModel.Init() in C:\Users\pixtur\coding\t3\T3\Gui\UiModel.cs:line 127
+   at T3.Gui.UiModel..ctor() in C:\Users\pixtur\coding\t3\T3\Gui\UiModel.cs:line 26
+   at T3.Gui.T3Ui..cctor() in C:\Users\pixtur\coding\t3\T3\Gui\T3UI.cs:line 92
+   --- End of inner exception stack trace ---
+   at T3.Gui.T3Ui..ctor()
+   at T3.Program..cctor() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 400
+   --- End of inner exception stack trace ---
+   at T3.Program.Main()

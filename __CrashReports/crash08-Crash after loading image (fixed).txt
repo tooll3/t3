@@ -1,0 +1,26 @@
+Crash after loading image
+------------------
+Steps to reproduce:
+
+1. Create [LoadTexture2d]
+2. Select
+3. In ParameterWindow select [...]
+4. Select "frog2"
+-> Crash
+
+fixed in 82422cb4bfccbeec830d1777c04910612562c69e
+
+
+Unhandled Exception: System.NullReferenceException: Object reference not set to an instance of an object.
+   at T3.Gui.Windows.ParameterWindow.DrawContent() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\ParameterWindow.cs:line 171
+   at T3.Gui.Windows.Window.DrawOneInstance() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\Window.cs:line 71
+   at T3.Gui.Windows.ParameterWindow.DrawAllInstances() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\ParameterWindow.cs:line 39
+   at T3.Gui.Windows.Window.Draw() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\Window.cs:line 46
+
+   at T3.Gui.Windows.WindowManager.Draw() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\WindowManager.cs:line 46
+   at T3.Gui.T3Ui.Draw() in C:\Users\pixtur\coding\t3\T3\Gui\T3UI.cs:line 17
+   at T3.Program.<>c__DisplayClass1_0.<Main>b__8() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 362
+   at SharpDX.Windows.RenderLoop.Run(Control form, RenderCallback renderCallback, Boolean useApplicationDoEvents)
+   at T3.Program.Main() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 308
+
+Process finished with exit code -1,073,741,819.

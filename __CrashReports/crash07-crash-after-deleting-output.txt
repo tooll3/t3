@@ -1,0 +1,57 @@
+Crash after deleting (replcing) output in rider
+--------------------------------
+
+
+
+
+Info: file: Operators\Types\GetTextureSize_064c67af-68bc-4bd3-91f4-6a85388b41ed.t3
+
+Unhandled Exception: System.TypeInitializationException: The type initializer for 'T3.Program' threw an exception. ---> System.TypeInitializationException: The type
+initializer for 'T3.Gui.T3Ui' threw an exception. ---> System.Reflection.CustomAttributeFormatException: 'Guid' property specified was not found. ---> System.Reflect
+ion.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> System.FormatException: Guid should contain 32 digits with 4 dashes (xx
+xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+   at System.Guid.TryParseGuidWithDashes(String guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(String g, GuidStyles flags, GuidResult& result)
+   at System.Guid.Parse(String input)
+   at T3.Core.Operator.OperatorAttribute.set_Guid(String value) in C:\Users\pixtur\coding\t3\Core\Operator\Slot.cs:line 36
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor)
+   at System.Reflection.RuntimeMethodInfo.UnsafeInvokeInternal(Object obj, Object[] parameters, Object[] arguments)
+   at System.Reflection.RuntimeMethodInfo.UnsafeInvoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.CustomAttribute.GetCustomAttributes(RuntimeModule decoratedModule, Int32 decoratedMetadataToken, Int32 pcaCount, RuntimeType attributeFilterType, Boolean mustBeInheritable, IList derivedAttributes, Boolean isDecoratedTargetSecurityTransparent)
+   --- End of inner exception stack trace ---
+   at System.Reflection.CustomAttribute.GetCustomAttributes(RuntimeModule decoratedModule, Int32 decoratedMetadataToken, Int32 pcaCount, RuntimeType attributeFilterType, Boolean mustBeInheritable, IList derivedAttributes, Boolean isDecoratedTargetSecurityTransparent)
+   at System.Reflection.CustomAttribute.GetCustomAttributes(RuntimeFieldInfo field, RuntimeType caType)
+   at System.Reflection.RuntimeFieldInfo.GetCustomAttributes(Type attributeType, Boolean inherit)
+   at T3.Core.Operator.Symbol.<>c.<.ctor>b__29_1(FieldInfo field) in C:\Users\pixtur\coding\t3\Core\Operator\Symbol.cs:line 69
+   at System.Linq.Enumerable.WhereSelectArrayIterator`2.MoveNext()
+   at System.Linq.Enumerable.<SelectManyIterator>d__23`3.MoveNext()
+   at System.Linq.Buffer`1..ctor(IEnumerable`1 source)
+   at System.Linq.Enumerable.ToArray[TSource](IEnumerable`1 source)
+   at T3.Core.Operator.Symbol..ctor(Type instanceType, Guid id) in C:\Users\pixtur\coding\t3\Core\Operator\Symbol.cs:line 68
+   at T3.Core.Operator.Symbol..ctor(Type instanceType, Guid id, IEnumerable`1 children) in C:\Users\pixtur\coding\t3\Core\Operator\Symbol.cs:line 42
+   at T3.Core.Json.ReadSymbol(Model model, JToken o) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 198
+   at T3.Core.Json.ReadSymbol(Model model) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 174
+   at T3.Core.Model.ReadSymbolFromFile(String symbolFile) in C:\Users\pixtur\coding\t3\Core\Resource\Model.cs:line 388
+   at T3.Core.Model.ReadSymbolWithId(Guid id) in C:\Users\pixtur\coding\t3\Core\Resource\Model.cs:line 408
+   at T3.Core.Json.ReadSymbolChild(Model model, JToken symbolChildJson) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 127
+   at T3.Core.Json.<>c__DisplayClass17_0.<ReadSymbol>b__0(JToken childJson) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 187
+   at System.Linq.Enumerable.<>c__DisplayClass7_0`3.<CombineSelectors>b__0(TSource x)
+   at System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at T3.Core.Json.ReadSymbol(Model model, JToken o) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 186
+   at T3.Core.Json.ReadSymbol(Model model) in C:\Users\pixtur\coding\t3\Core\Resource\Json.cs:line 174
+   at T3.Core.Model.ReadSymbolFromFile(String symbolFile) in C:\Users\pixtur\coding\t3\Core\Resource\Model.cs:line 388
+   at T3.Core.Model.Load() in C:\Users\pixtur\coding\t3\Core\Resource\Model.cs:line 352
+   at T3.Gui.UiModel.Load() in C:\Users\pixtur\coding\t3\T3\Gui\UiModel.cs:line 146
+   at T3.Gui.UiModel.Init() in C:\Users\pixtur\coding\t3\T3\Gui\UiModel.cs:line 127
+   at T3.Gui.UiModel..ctor() in C:\Users\pixtur\coding\t3\T3\Gui\UiModel.cs:line 26
+   at T3.Gui.T3Ui..cctor() in C:\Users\pixtur\coding\t3\T3\Gui\T3UI.cs:line 92
+   --- End of inner exception stack trace ---
+   at T3.Gui.T3Ui..ctor()
+   at T3.Program..cctor() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 400
+   --- End of inner exception stack trace ---
+   at T3.Program.Main()
+
+Process finished with exit code -532,462,766.
