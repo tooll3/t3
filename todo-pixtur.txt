@@ -1,23 +1,53 @@
-▢ Implement camera interaction
-▢ Port BlendImages shader
-▢ Port BlendSmokeNoise shader
+▢ Port [RandomObserverCamera]
+▢ Port [BeatTime]
+▢ Port [BlendImages] shader
+▢ Port [BlendSmokeNoise] shader
 
-▢ fix ALT-key problem
 
-Later minor
-------------
+
+
+▢ increase height of time scrub area
+▢ visibly show time scrub area
+▢ FIX crash when pressing return on empty search symbol browser list
+▢ improve visibility of output slots
+
+▢ use percentage values for storing window layouts
+▢ resize windows when resizing application window ("fake docking")
+
+▢ use Tab switch between curve and dope sheet
+▢ Fix hidden symbol-browser in GraphView
+▢ start symbol browser from input nodes
+▢ start symbol browser from output nodes
+▢ use correct size of nodes for snapping
+▢ push down neighbors when expanding node
+▢ (un)fold nodes with icon?
+▢ visually indicate operator snapping
+▢ use small fonts when zoomed out
+▢ When dragging connections indicate if node has non-relevant matching input slots
+
+
+▢ sort entries in SymbolBrowser by relevancy
+▢ show entries in SymbolBrowser with primary output type color
 ▢ in dope sheet insert new key should snap to lines
 ▢ fix invisible input glitch if graph canvas is zoomed out too much
 ▢ fix scroll-bar in quick create window
 ▢ fix layout in debug log time
 ▢ add transparency pattern below color parameters
+▢ save clip-range with symbol
 ▢ opening a new (unknown) op should change view to show all operators
 ▢ pin dope sheet parameters
+▢ use renamed instance title in dope sheet parameter list
+▢ pin parameter window
+▢ make parameter window non-movable
 ▢ unfold multiple curve layers in dope sheet
+▢ FIX: crash when closing last graph window
 ▢ use proper keyframe icons for curve edit area -> need mac boot
-▢ in parameter window use orange color for animated parameters
 ▢ Hotkey (return) to rename selected node
 ▢ resize nodes?
+▢ save default opened composition / breadcrumb and its position
+▢ fix hovering for output node / inputs etc.
+▢ drag timeline height on left grabber
+▢ add follow time marker mode
 
 Later major
 -----------
@@ -25,28 +55,47 @@ Later major
 ▢ node groups / annotations
 ▢ add CurveEditBox
 ▢ drag keyframe values OR time
-▢ add snapping to canvas nodes
+▢ snap canvas node positions to neighbors
 ▢ Arc curves
+▢ Auto layout graph
+▢ Show graphs inside nodes
 
 More ideas
 ------
 ▢ snap to horizontal value lines
 ▢ change precision from double to float
 
-bugs Later
+bugs for later
 -------
-▢ FIX: Replacing multi-input doesn't work
 ▢ FIX: Implement commands for key-frame modifications
 ▢ FIX: Deleting last keyframe should disable animation-flag in parameter view
 ▢ FIX: Exception when input type changes
 
+Feature-requests with cynic
+-----------
+▢ Rename .t3 and .t3ui files after refactoring type-class name in Rider (probably requires GUID attribute on class)
+
+▢ Create inputs from Ui
+▢ Create outputs from Ui
+▢ Delete inputs/outputs from Ui
+▢ Edit input order in Ui
+
 Done
 --------
+▣ auto-add new node to project file after combine or duplicate symbol
+▣ different view modes / sizes for ChildUis
+▣ save window layout
+▣ FIX: Replacing multi-input doesn't work
 ▣ show parameters for current composition op when nothing selected
+▣ make SymbolClass read only
+▣ in parameter window use orange color for animated parameters
+▣ Implement camera interaction
+▣ fix ALT-key problem
+▣ make Vector3 animatable
+▣ Add scale settings for Vector3 and Vector4
+▣ Add dialog for duplicate as new type
 ▣ FIX: crash when opening dashboard
-
 ▣ FIX: modify animated value creates double keyframes
-
 ▣ snap time marker when holding a hotkey (like N?)
 ▣ Port Displace2d shader
 ▣ add 1D-perlin noise op
@@ -59,7 +108,6 @@ Done
 ▣ DopeSheet should correctly show constant keyframes
 ▣ add curve to float output
 ▣ add node thumbnail
-
 ▣ improve styling of context menu
 ▣ DragScale speed should not be derived from parameter min/max settings
 ▣ dragging a multi-curve-keyframe in dope sheet should move keyframes in all curves
@@ -78,19 +126,4 @@ Done
 ▣ add context menu in DopeSheet
 ▣ add horizontal value lines in CurveEditArea
 ▣ Add snapping to TimeLineRange
-
-
-
--------------------
-Crash after duplicate LoadTexture
-
-Unhandled Exception: System.Runtime.InteropServices.SEHException: External component has thrown an exception.
-   at SharpDX.Direct3D11.PixelShaderStage.SetShaderResources(Int32 startSlot, Int32 numViews, IntPtr shaderResourceView
-sOut)
-   at SharpDX.Direct3D11.CommonShaderStage.SetShaderResource(Int32 slot, ShaderResourceView resourceView)
-   at T3.ImGuiDx11Impl.RenderImDrawData(ImDrawDataPtr draw_data) in C:\Users\pixtur\coding\t3\T3\Gui\ImGuiDx11Impl.cs:l
-ine 204
-   at T3.Program.<>c__DisplayClass1_0.<Main>b__8() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 359
-   at SharpDX.Windows.RenderLoop.Run(Control form, RenderCallback renderCallback, Boolean useApplicationDoEvents)
-   at T3.Program.Main() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 299
 
