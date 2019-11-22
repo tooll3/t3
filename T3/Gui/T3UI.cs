@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 using T3.Core;
 using T3.Gui.Commands;
 using T3.Gui.Windows;
@@ -41,7 +42,7 @@ namespace T3.Gui
                 {
                     if (ImGui.MenuItem("Save"))
                     {
-                        UiModel.Save();
+                        Task.Run(() => UiModel.Save()); // Async save
                     }
                     ImGui.EndMenu();
                 }
