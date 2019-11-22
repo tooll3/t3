@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,7 +17,6 @@ namespace T3.Gui.Graph.Interaction
 {
     internal static class NodeOperations
     {
-
         public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName)
         {
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
@@ -132,6 +132,8 @@ namespace T3.Gui.Graph.Interaction
             var sw = new StreamWriter(newSourcePath);
             sw.Write(newSource);
             sw.Dispose();
+            
+            AddSourceFileToProject(newSourcePath);            
 
             var resourceManager = ResourceManager.Instance();
             Guid newSymbolId = Guid.NewGuid();
@@ -213,6 +215,9 @@ namespace T3.Gui.Graph.Interaction
             UndoRedoStack.AddAndExecute(deleteCmd);
         }
 
+
+        
+
         public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newName)
         {
             var sourceSymbol = symbolChildToDuplicate.Symbol;
@@ -221,6 +226,7 @@ namespace T3.Gui.Graph.Interaction
             int lastSeparatorIndex = originalSourcePath.LastIndexOf("\\", StringComparison.Ordinal);
             string newSourcePath = originalSourcePath.Substring(0, lastSeparatorIndex + 1) + newName + ".cs";
             Log.Info($"new symbol path: {newSourcePath}");
+            AddSourceFileToProject(newSourcePath);
 
             var sr = new StreamReader(originalSourcePath);
             string originalSource = sr.ReadToEnd();
@@ -319,6 +325,40 @@ namespace T3.Gui.Graph.Interaction
 
             return newSymbol;
         }
+        
+        /// <summary>
+        /// Inserts an entry like...
+        ///
+        ///      <Compile Include="Types\GfxPipelineExample.cs" />
+        ///
+        /// ... ot the project file.
+        /// </summary>
+        private static void AddSourceFileToProject(string newSourceFilePath)
+        {
+            var path = Path.GetDirectoryName(newSourceFilePath);
+            var newFileName = Path.GetFileName(newSourceFilePath);
+            var directoryInfo = new DirectoryInfo(path).Parent;
+            if (directoryInfo == null)
+            {
+                Log.Error("Can't find project file folder for " + newSourceFilePath);
+                return;
+            }
+
+            var parentPath = directoryInfo.FullName;
+            var projectFilePath = Path.Combine(parentPath, "Operators.csproj");
+
+            if (!File.Exists(projectFilePath))
+            {
+                Log.Error("Can't find project file in " + projectFilePath);
+                return;
+            }
+
+            var orgLine = "<ItemGroup>\r\n    <Compile Include";
+            var newLine = $"<ItemGroup>\r\n    <Compile Include=\"Types\\{newFileName}\" />\n\r<Compile Include ";
+            var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, newLine);
+            File.WriteAllText(projectFilePath, newContent);
+        }
+        
 
         public static bool IsNewSymbolNameValid(string newSymbolName)
         {
@@ -326,6 +366,7 @@ namespace T3.Gui.Graph.Interaction
                    && ValidTypeNamePattern.IsMatch(newSymbolName)
                    && !SymbolRegistry.Entries.Values.Any(value => string.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase));
         }
-        private static readonly Regex ValidTypeNamePattern= new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
+
+        private static readonly Regex ValidTypeNamePattern = new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
     }
 }
