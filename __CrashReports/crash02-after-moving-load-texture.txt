@@ -1,0 +1,18 @@
+Crash after moving around [LoadTexture] ops?
+----------------
+- Unable to reproduce but happened 1-3 per week
+
+
+Unhandled Exception: System.Runtime.InteropServices.SEHException: External component has thrown an exception.
+
+   at SharpDX.Direct3D11.PixelShaderStage.SetShaderResources(Int32 startSlot, Int32 numViews, IntPtr shaderRe
+sourceViewsOut)
+   at SharpDX.Direct3D11.CommonShaderStage.SetShaderResource(Int32 slot, ShaderResourceView resourceView)
+   at T3.ImGuiDx11Impl.RenderImDrawData(ImDrawDataPtr draw_data) in C:\Users\pixtur\coding\t3\T3\Gui\ImGuiDx1
+1Impl.cs:line 204
+   at T3.Program.<>c__DisplayClass1_0.<Main>b__8() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 368
+   at SharpDX.Windows.RenderLoop.Run(Control form, RenderCallback renderCallback, Boolean useApplicationDoEve
+nts)
+   at T3.Program.Main() in C:\Users\pixtur\coding\t3\T3\Program.cs:line 308
+
+Process finished with exit code 2,173.
