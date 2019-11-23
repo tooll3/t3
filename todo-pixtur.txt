@@ -4,13 +4,25 @@
 ▢ Port [BlendSmokeNoise] shader
 
 
+▣ Add user-settings that saves canvas zooms and current open instance path
+▣ fix new graph window
 
+▢ Namespaces
+  ▢ Add to Combine and Duplicate dialogs
+  ▢ Add to Parameter window
+  ▢ Add to Symbol Browser
+  ▢ Add to nodes when zoomed in
 
 ▢ increase height of time scrub area
-▢ visibly show time scrub area
+▢ make time scrub area visible
 ▢ FIX crash when pressing return on empty search symbol browser list
+▢ FIX crash when pressing backspace after double click on node
 ▢ improve visibility of output slots
-
+▢ MultiCanvas: Time-Line height should be an individual setting of graphCanvas
+▢ MultiCanvas: Output window should be selectable from all canvas windows
+▢ MultiCanvas: Parameter window should work for all canvas windows
+▢ MultiCanvas: Fix dragging connection crash
+▢ MultiCanvas: user-setting should save opened windows
 ▢ use percentage values for storing window layouts
 ▢ resize windows when resizing application window ("fake docking")
 
@@ -25,6 +37,7 @@
 ▢ use small fonts when zoomed out
 ▢ When dragging connections indicate if node has non-relevant matching input slots
 
+▢ Move ClipTime to core and make it accessible in context?
 
 ▢ sort entries in SymbolBrowser by relevancy
 ▢ show entries in SymbolBrowser with primary output type color
@@ -79,6 +92,12 @@ Feature-requests with cynic
 ▢ Create outputs from Ui
 ▢ Delete inputs/outputs from Ui
 ▢ Edit input order in Ui
+
+Architecture questions for discussion
+----------------
+- normal combine groups should have a Guid-Class-Name 
+- why do we actually need correct class names for Node-Types? Why not just stick with the Gui and the additional name. 
+  The ChildClasses only appear in the .t3 files as children
 
 Done
 --------
