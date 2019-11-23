@@ -1,5 +1,19 @@
 Crash after deleting inputs
 -----------------------
+Steps to reproduce:
+
+1. checkout 82cb5c5ee5d88d6fddfb67b71a545bab6902b424
+2. Start T3
+3. Open Types/_ImageFxShaderSetup.cs
+
+4. Delete the lines...
+```
+        [Input(Guid = "c9be988d-56a5-4fcc-a036-406a498affe5")]
+        public readonly InputSlot<Texture2D> Texture2 = new InputSlot<Texture2D>();
+```
+5. Save
+-> Crash
+
 
 
 Info: type updating took: 0.0005829s
