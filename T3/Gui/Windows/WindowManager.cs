@@ -147,7 +147,7 @@ namespace T3.Gui.Windows
             {
                 if (window.AllowMultipleInstances)
                 {
-                    foreach (var windowInstance in window.WindowInstances)
+                    foreach (var windowInstance in window.GetInstances())
                     {
                         yield return windowInstance;
                     }

@@ -20,16 +20,17 @@ namespace T3.Gui.Windows
             AllowMultipleInstances = true;
             Config.Visible = true;
             WindowFlags = ImGuiWindowFlags.NoScrollbar;
-
-            WindowInstances.Add(this);
+            
             _instanceCounter++;
+            _outputWindowInstances.Add(this);
         }
 
+        private static readonly List<Window> _outputWindowInstances = new List<Window>();
 
         protected override void DrawAllInstances()
         {
             // Wrap inside list to enable removable of members during iteration
-            foreach (var w in WindowInstances)
+            foreach (var w in _outputWindowInstances.ToList())
             {
                 w.DrawOneInstance();
             }
@@ -38,7 +39,7 @@ namespace T3.Gui.Windows
 
         protected override void Close()
         {
-            WindowInstances.Remove(this);
+            _outputWindowInstances.Remove(this);
         }
 
 
@@ -68,8 +69,12 @@ namespace T3.Gui.Windows
             }
             ImGui.EndChild();
         }
-        
-        
+
+        public override List<Window> GetInstances()
+        {
+            return _outputWindowInstances;
+        }
+
         private Camera FindCameraInstance()
         {
             if (_pinning.SelectedInstance.Parent == null)

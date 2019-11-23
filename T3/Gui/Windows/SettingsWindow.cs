@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System.Collections.Generic;
+using ImGuiNET;
 using T3.Gui.Graph;
 using T3.Gui.TypeColors;
 
@@ -40,6 +41,11 @@ namespace T3.Gui.Windows
             }
             if (ImGui.TreeNode("ImGui Styles"))
                 T3Style.DrawUi();
+        }
+
+        public override List<Window> GetInstances()
+        {
+            return new List<Window>();
         }
     }
 }

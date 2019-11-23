@@ -86,6 +86,11 @@ namespace T3.Gui.Windows
             ImGui.PopStyleVar();
         }
 
+        public override List<Window> GetInstances()
+        {
+            return new List<Window>();
+        }
+
         private static bool IsLineHovered()
         {
             var min = new Vector2(ImGui.GetWindowPos().X, ImGui.GetItemRectMin().Y);

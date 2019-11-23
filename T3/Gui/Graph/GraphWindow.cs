@@ -36,10 +36,17 @@ namespace T3.Gui.Graph
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
 
             WindowFlags = ImGuiWindowFlags.NoScrollbar;
-            WindowInstances.Add(this);
+            //WindowInstances.Add(this);
+            _graphWindowInstances.Add(this);
         }
 
         private static int _instanceCounter = 0;
+        private static readonly List<Window> _graphWindowInstances = new List<Window>();
+
+        public override List<Window> GetInstances()
+        {
+            return _graphWindowInstances;
+        }
 
         protected override void UpdateBeforeDraw()
         {
@@ -48,7 +55,7 @@ namespace T3.Gui.Graph
 
         protected override void DrawAllInstances()
         {
-            foreach (var w in WindowInstances)
+            foreach (var w in _graphWindowInstances)
             {
                 w.DrawOneInstance();
             }
@@ -88,7 +95,7 @@ namespace T3.Gui.Graph
 
         protected override void Close()
         {
-            WindowInstances.Remove(this);
+            _graphWindowInstances.Remove(this);
         }
 
         protected override void AddAnotherInstance()

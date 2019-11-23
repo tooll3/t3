@@ -12,7 +12,9 @@ namespace T3.Gui.Windows
         public bool AllowMultipleInstances = false;
         protected abstract void DrawContent();
         protected ImGuiWindowFlags WindowFlags;
-        public List<Window> WindowInstances = new List<Window>();
+        //public static List<Window> WindowInstances = new List<Window>();
+
+        public abstract List<Window> GetInstances();
 
         public void DrawMenuItemToggle()
         {

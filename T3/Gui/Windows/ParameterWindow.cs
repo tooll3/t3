@@ -23,7 +23,14 @@ namespace T3.Gui.Windows
             AllowMultipleInstances = true;
             Config.Visible = true;
 
-            WindowInstances.Add(this);
+            _parameterWindowInstances.Add(this);
+        }
+
+        private static List<Window> _parameterWindowInstances = new List<Window>();
+
+        public override List<Window> GetInstances()
+        {
+            return _parameterWindowInstances;
         }
 
         protected override void UpdateBeforeDraw()
@@ -33,7 +40,7 @@ namespace T3.Gui.Windows
 
         protected override void DrawAllInstances()
         {
-            foreach (var w in WindowInstances)
+            foreach (var w in _parameterWindowInstances)
             {
                 w.DrawOneInstance();
             }
@@ -41,7 +48,7 @@ namespace T3.Gui.Windows
 
         protected override void Close()
         {
-            WindowInstances.Remove(this);
+            _parameterWindowInstances.Remove(this);
         }
 
         protected override void AddAnotherInstance()
