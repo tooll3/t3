@@ -38,6 +38,7 @@ namespace T3.Gui.Graph
             WindowFlags = ImGuiWindowFlags.NoScrollbar;
             //WindowInstances.Add(this);
             _graphWindowInstances.Add(this);
+            
         }
 
         private static int _instanceCounter = 0;

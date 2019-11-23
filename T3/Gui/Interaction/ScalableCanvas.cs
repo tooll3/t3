@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using SharpDX.Direct2D1;
 using T3.Gui.Selection;
 using UiHelpers;
 
@@ -24,8 +25,7 @@ namespace T3.Gui.Graph
             _io = ImGui.GetIO();
             _mouse = ImGui.GetMousePos();
 
-            WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
-            WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
+            InitWindowSize();
 
             // Damp scaling
             Scale = Im.Lerp(Scale, _scaleTarget, _io.DeltaTime * 10);
@@ -49,6 +49,26 @@ namespace T3.Gui.Graph
             HandleZoomInteraction();
 
             ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
+        }
+
+        protected void InitWindowSize()
+        {
+            WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
+            WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
+        }
+
+        public CanvasProperties GetTargetProperties()
+        {
+            return new CanvasProperties()
+                   {
+                       Scale = _scaleTarget,
+                       Scroll = _scrollTarget
+                   };
+        }
+
+        public void ApplyProperties(CanvasProperties properties, bool zoomIn)
+        {
+            SetAreaWithTransition(properties.Scale, properties.Scroll, zoomIn);
         }
 
 
@@ -139,6 +159,13 @@ namespace T3.Gui.Graph
             var width = area.GetWidth();
             var targetAspect = width / height;
 
+            // Use a fallback resolution to fix initial call from constructor
+            // where img has not been initialized yet.
+            if (WindowSize == Vector2.Zero)
+            {
+                WindowSize = new Vector2(800,500);
+            }
+
             float scale;
             if (targetAspect > WindowSize.X / WindowSize.Y)
             {
@@ -209,6 +236,13 @@ namespace T3.Gui.Graph
             _scrollTarget += _mouse - shift - WindowPos;
         }
 
+        
+        public struct CanvasProperties
+        {
+            public Vector2 Scale;
+            public Vector2 Scroll;
+        }
+        
         protected bool UserZoomedCanvas;
         protected bool UserScrolledCanvas;
         public bool NoMouseInteraction;

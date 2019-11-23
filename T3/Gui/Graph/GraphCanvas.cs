@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -28,7 +27,7 @@ namespace T3.Gui.Graph
         public GraphCanvas(Instance opInstance)
         {
             _selectionFence = new SelectionFence(this);
-            OpenComposition(opInstance);
+            OpenComposition(opInstance, zoomIn:true);
         }
 
         public void OpenComposition(Instance opInstance, bool zoomIn = true)
@@ -36,26 +35,24 @@ namespace T3.Gui.Graph
             // save old properties
             if (CompositionOp != null)
             {
-                _canvasPropertiesForCompositionOpIds[CompositionOp.Id] = new CanvasProperties()
-                                                                         {
-                                                                             Scale = Scale,
-                                                                             Scroll = Scroll,
-                                                                         };
+                UserSettings.CanvasPropertiesForSymbols[CompositionOp.Id] = GetTargetProperties();
             }
 
+            SelectionHandler.Clear();
             CompositionOp = opInstance;
-            var id = opInstance.Id;
-            var scale = Vector2.One;
-            var scroll = Vector2.Zero;
+            
+            var newProps = UserSettings.CanvasPropertiesForSymbols.ContainsKey(CompositionOp.Id)
+                ? UserSettings.CanvasPropertiesForSymbols[CompositionOp.Id]
+                : GuessViewProperties();
+            
+            ApplyProperties(newProps, zoomIn);
+        }
 
-            if (_canvasPropertiesForCompositionOpIds.ContainsKey(id))
-            {
-                var props = _canvasPropertiesForCompositionOpIds[opInstance.Id];
-                scale = props.Scale;
-                scroll = props.Scroll;
-            }
-
-            SetAreaWithTransition(scale, scroll, zoomIn);
+        private CanvasProperties GuessViewProperties()
+        {
+            ChildUis = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis;
+            FocusViewToSelection();
+            return GetTargetProperties();
         }
 
         #region drawing UI ====================================================================
@@ -456,13 +453,9 @@ namespace T3.Gui.Graph
         public Instance CompositionOp { get; private set; }
         #endregion
 
-        private class CanvasProperties
-        {
-            public Vector2 Scale;
-            public Vector2 Scroll;
-        }
 
-        private readonly Dictionary<Guid, CanvasProperties> _canvasPropertiesForCompositionOpIds = new Dictionary<Guid, CanvasProperties>();
+
+        //private readonly Dictionary<Guid, CanvasProperties> _canvasPropertiesForCompositionOpIds = new Dictionary<Guid, CanvasProperties>();
 
         private readonly ModalDialog _combineDialog = new ModalDialog("Combine into symbol");
         private readonly ModalDialog _duplicateSymbolDialog = new ModalDialog("Duplicate as new symbol");
