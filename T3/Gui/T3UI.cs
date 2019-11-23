@@ -92,5 +92,6 @@ namespace T3.Gui
         public static readonly UiModel UiModel = new UiModel();
         private static readonly WindowManager WindowManager = new WindowManager();
         public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
+        private UserSettings _userSettings = new UserSettings();
     }
 }

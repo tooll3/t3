@@ -1,13 +1,10 @@
-using System;
 using ImGuiNET;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.Operator;
-using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Windows;
 using T3.Gui.Windows.TimeLine;
 
@@ -36,7 +33,6 @@ namespace T3.Gui.Graph
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
 
             WindowFlags = ImGuiWindowFlags.NoScrollbar;
-            //WindowInstances.Add(this);
             _graphWindowInstances.Add(this);
             
         }
