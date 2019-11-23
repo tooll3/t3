@@ -17,8 +17,17 @@ namespace T3.Gui.UiHelpers
             TryLoadingSettings();
         }
 
-        public static Dictionary<Guid, ScalableCanvas.CanvasProperties> CanvasPropertiesForSymbols = new Dictionary<Guid, ScalableCanvas.CanvasProperties>();
+        public class ConfigData
+        {
+            public Dictionary<Guid, ScalableCanvas.CanvasProperties> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.CanvasProperties>();
+            public Dictionary<string, Guid> LastOpsForWindows = new Dictionary<string, Guid>();
 
+
+        }
+
+        public static ConfigData Config= new ConfigData();
+
+        
         void OnProcessExit(object sender, EventArgs e)
         {
             SaveSettings();
@@ -28,7 +37,7 @@ namespace T3.Gui.UiHelpers
         {
             var serializer = Newtonsoft.Json.JsonSerializer.Create();
             var writer = new StringWriter();
-            serializer.Serialize(writer, CanvasPropertiesForSymbols);
+            serializer.Serialize(writer, Config);
 
             var file = File.CreateText(UserSettingFilepath);
             file.Write(writer.ToString());
@@ -46,16 +55,28 @@ namespace T3.Gui.UiHelpers
             var jsonBlob = File.ReadAllText(UserSettingFilepath);
             var serializer = Newtonsoft.Json.JsonSerializer.Create();
             var fileTextReader = new StringReader(jsonBlob);
-            if (!(serializer.Deserialize(fileTextReader, typeof(Dictionary<Guid, ScalableCanvas.CanvasProperties>))
-                      is Dictionary<Guid, ScalableCanvas.CanvasProperties> configurations))
+            if (!(serializer.Deserialize(fileTextReader, typeof(ConfigData))
+                      is ConfigData configurations))
             {
                 Log.Error("Can't load layout");
                 return;
             }
 
-            CanvasPropertiesForSymbols = configurations;
+            Config = configurations;
         }
 
         private const string UserSettingFilepath = "userSettings.json";
+
+        public static Guid GetLastOpenOpForWindow(string windowTitle)
+        {
+            return Config.LastOpsForWindows.ContainsKey(windowTitle)
+                       ? Config.LastOpsForWindows[windowTitle]
+                       : Guid.Empty;
+        }
+        
+        public static void SaveLastViewedOpForWindow(GraphWindow window, Guid opInstanceId)
+        {
+            Config.LastOpsForWindows[window.Config.Title]= opInstanceId;
+        }
     }
 }

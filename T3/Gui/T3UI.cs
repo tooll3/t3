@@ -12,6 +12,13 @@ namespace T3.Gui
 {
     public class T3Ui
     {
+        static T3Ui()
+        {
+            _userSettings = new UserSettings();
+            WindowManager = new WindowManager();
+        }
+
+        
         public void Draw()
         {
             WindowManager.Draw();
@@ -90,8 +97,11 @@ namespace T3.Gui
         
         private StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel = new UiModel();
-        private static readonly WindowManager WindowManager = new WindowManager();
+        private static UserSettings _userSettings;
+        private static readonly WindowManager WindowManager;
+
+
+
         public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
-        private UserSettings _userSettings = new UserSettings();
     }
 }

@@ -24,9 +24,10 @@ namespace T3.Gui.Graph
     /// </summary>
     public class GraphCanvas : ScalableCanvas
     {
-        public GraphCanvas(Instance opInstance)
+        public GraphCanvas(GraphWindow window, Instance opInstance)
         {
             _selectionFence = new SelectionFence(this);
+            _window = window;
             OpenComposition(opInstance, zoomIn:true);
         }
 
@@ -35,16 +36,17 @@ namespace T3.Gui.Graph
             // save old properties
             if (CompositionOp != null)
             {
-                UserSettings.CanvasPropertiesForSymbols[CompositionOp.Id] = GetTargetProperties();
+                UserSettings.Config.OperatorViewSettings[CompositionOp.Id] = GetTargetProperties();
             }
 
             SelectionHandler.Clear();
             CompositionOp = opInstance;
             
-            var newProps = UserSettings.CanvasPropertiesForSymbols.ContainsKey(CompositionOp.Id)
-                ? UserSettings.CanvasPropertiesForSymbols[CompositionOp.Id]
+            var newProps = UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.Id)
+                ? UserSettings.Config.OperatorViewSettings[CompositionOp.Id]
                 : GuessViewProperties();
-            
+
+            UserSettings.SaveLastViewedOpForWindow(_window, opInstance.Id);
             ApplyProperties(newProps, zoomIn);
         }
 
@@ -464,5 +466,6 @@ namespace T3.Gui.Graph
         private List<SymbolChildUi> ChildUis { get; set; }
         private readonly SymbolBrowser _symbolBrowser = new SymbolBrowser();
         private string _combineName = "";
+        private GraphWindow _window;
     }
 }

@@ -1,10 +1,13 @@
+using System;
 using ImGuiNET;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using Microsoft.Win32;
 using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using T3.Gui.Windows.TimeLine;
 
@@ -28,13 +31,35 @@ namespace T3.Gui.Graph
             const string trackName = @"Resources\lorn-sega-sunset.mp3";
             _clipTime = File.Exists(trackName) ? new StreamClipTime(trackName) : new ClipTime();
 
-            var opInstance = T3Ui.UiModel.MainOp;
-            GraphCanvas = new GraphCanvas(opInstance);
+            var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
+
+            var shownOp = (opId != Guid.Empty 
+                               ? FindIdInNestedChildren(T3Ui.UiModel.MainOp, opId) 
+                               : null) ?? T3Ui.UiModel.MainOp;
+
+            GraphCanvas = new GraphCanvas(this, shownOp);
+            
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
 
             WindowFlags = ImGuiWindowFlags.NoScrollbar;
             _graphWindowInstances.Add(this);
             
+        }
+
+        private Instance FindIdInNestedChildren(Instance instance, Guid childId)
+        {
+            foreach (var child in instance.Children)
+            {
+                if (child.Id == childId)
+                {
+                    return child;
+                }
+
+                var result =FindIdInNestedChildren(child, childId);
+                if (result != null)
+                    return result;
+            }
+            return null;
         }
 
         private static int _instanceCounter = 0;
