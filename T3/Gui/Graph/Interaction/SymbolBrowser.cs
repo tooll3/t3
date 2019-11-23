@@ -155,7 +155,7 @@ namespace T3.Gui.Graph
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
 
-            if (ImGui.BeginChildFrame(999, new Vector2(200, 200)))
+            if (ImGui.BeginChildFrame(999, ResultListSize))
             {
                 if (_filter.MatchingSymbols.Count > 0 && !_filter.MatchingSymbols.Contains(_selectedSymbol))
                     _selectedSymbol = _filter.MatchingSymbols[0];
@@ -195,8 +195,8 @@ namespace T3.Gui.Graph
                         ImGui.Text(symbol.Name);
                         if (!String.IsNullOrEmpty(symbol.Namespace))
                         {
-                            ImGui.TextDisabled(symbol.Namespace);
                             ImGui.SameLine();
+                            ImGui.TextDisabled(symbol.Namespace);
                         }
                     }
                     ImGui.PopID();
@@ -378,6 +378,7 @@ namespace T3.Gui.Graph
         private Vector2 _posInWindow;
 
         private bool _isOpen;
+        private static readonly Vector2 ResultListSize = new Vector2(300, 200);
 
         private Symbol _selectedSymbol;
         private static readonly int UiId = "DraftNode".GetHashCode();

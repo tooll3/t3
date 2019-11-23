@@ -364,6 +364,7 @@
     <Compile Include="Gui\Windows\ImageOutputCanvas.cs" />
     <Compile Include="Gui\Windows\OutputWindow.cs" />
     <Compile Include="Gui\Windows\SelectionPinning.cs" />
+    <Compile Include="Gui\Windows\SymbolTree.cs" />
     <Compile Include="Gui\Windows\TimeLine\BeatTimeRaster.cs" />
     <Compile Include="Gui\Windows\TimeLine\CurrentTimeMarker.cs" />
     <Compile Include="Gui\Windows\TimeLine\CurveEditArea.cs" />

@@ -182,7 +182,7 @@ namespace T3.Core
 
             var name = o["Name"].Value<string>();
             var instanceTypeName = o["InstanceType"].Value<string>();
-            //var @namespace = o["Namespace"].Value<string>();
+            var @namespace = o["Namespace"]?.Value<string>() ?? "";
             var symbolChildren = (from childJson in (JArray)o["Children"]
                                   let symbolChild = ReadSymbolChild(model, childJson)
                                   select symbolChild).ToList();
@@ -198,7 +198,7 @@ namespace T3.Core
             var symbol = new Symbol(instanceType, id, symbolChildren)
                          {
                              Name = name,
-                             //Namespace = @namespace,
+                             Namespace = @namespace,
                          };
             symbol.Connections.AddRange(connections);
 

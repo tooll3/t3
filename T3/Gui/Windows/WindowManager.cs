@@ -18,6 +18,7 @@ namespace T3.Gui.Windows
                            new OutputWindow(),
                            new ConsoleLogWindow(),
                            new SettingsWindow(),
+                           new SymbolTree(),
                        };
         }
 
