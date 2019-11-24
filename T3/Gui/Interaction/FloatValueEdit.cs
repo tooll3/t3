@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
+using UiHelpers;
 
 namespace T3.Gui.Interaction
 {
@@ -10,7 +11,7 @@ namespace T3.Gui.Interaction
         /// <summary>
         /// Returns true if editing was completed and value changed
         /// </summary>
-        public static bool Draw(ref float value, Vector2 size, ref bool resetToDefaultTriggered)
+        public static bool Draw(ref float value, Vector2 size,  ref bool resetToDefaultTriggered, float min=float.NegativeInfinity, float max=float.PositiveInfinity, float scale=1)
         {
             var io = ImGui.GetIO();
             var id = ImGui.GetID("jog");
@@ -111,7 +112,8 @@ namespace T3.Gui.Interaction
                             delta += (float)(2 * Math.PI);
                         }
 
-                        _editValue += delta * activeSpeed;
+                        _editValue += delta * activeSpeed * scale* 100;
+                        _editValue = _editValue.Clamp(min, max);
                         break;
 
                     case JogDialStates.StartedTextInput:

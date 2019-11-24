@@ -24,7 +24,7 @@ namespace T3.Gui.InputUi
             ImGui.PushID(Id.GetHashCode());
             //float defaultValue = this.InputDefinition.DefaultValue.Value;
             var resetToDefaultTriggered = false;
-            var result = FloatValueEdit.Draw(ref value, new Vector2(-1, 0), ref  resetToDefaultTriggered);
+            var result = FloatValueEdit.Draw(ref value, new Vector2(-1, 0), ref  resetToDefaultTriggered, Min, Max,Scale);
             if (resetToDefaultTriggered)
             {
                 // TODO: Do something
