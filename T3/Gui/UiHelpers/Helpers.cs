@@ -3,6 +3,7 @@ using System;
 using System.Numerics;
 using T3.Gui;
 using T3.Gui.Windows;
+using T3.Gui.Windows.TimeLine;
 
 namespace UiHelpers
 {
@@ -326,6 +327,12 @@ namespace UiHelpers
             a = b;
             b = tmp;
         }
+
+        public static float Fmod(float v, float mod)
+        {
+            return v - mod * (float)Math.Floor(v / mod);
+        }
+        
 
         public static float Remap(float value, float inMin, float inMax, float outMin, float outMax)
         {

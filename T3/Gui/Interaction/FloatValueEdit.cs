@@ -67,6 +67,7 @@ namespace T3.Gui.Interaction
                         var r = NeutralRadius;
                         float activeSpeed = 0;
                         int index = 0;
+                        var rot = Im.Fmod(((_editValue - _startValue) * RadialIndicatorSpeed), 2*(float)Math.PI);
                         foreach (var segmentSpeed in SegmentSpeeds)
                         {
                             var isLastSegment = index == SegmentSpeeds.Length - 1;
@@ -80,7 +81,7 @@ namespace T3.Gui.Interaction
                             if (isActive)
                             {
                                 const float opening = 3.14f * 1.75f;
-                                var rot = ((_editValue - value) * RadialIndicatorSpeed % (float)(2*Math.PI));
+                                
                                 foreground.PathArcTo(
                                                      _center,
                                                      radius: r + SegmentWidth / 2,
@@ -146,6 +147,7 @@ namespace T3.Gui.Interaction
                 {
                     _activeJogDialId = id;
                     _editValue = value;
+                    _startValue = value;
                     SetState(JogDialStates.Dialing);
                 }
             }
