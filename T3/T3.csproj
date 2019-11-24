@@ -327,6 +327,7 @@
     <Compile Include="Gui\InputUi\StringListInputUi.cs" />
     <Compile Include="Gui\InputUi\Vector2InputUi.cs" />
     <Compile Include="Gui\InputUi\Vector3InputUi.cs" />
+    <Compile Include="Gui\Interaction\FloatValueEdit.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
     <Compile Include="Gui\Interaction\Snapping\IValueSnapAttractor.cs" />
     <Compile Include="Gui\Interaction\Snapping\ValueSnapHandler.cs" />

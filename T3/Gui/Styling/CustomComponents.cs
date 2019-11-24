@@ -11,7 +11,7 @@ namespace T3.Gui
         public static bool JogDial(string label, ref double delta, Vector2 size)
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1, 0.5f));
-            var hot = ImGui.Button(label + "###dummy", size);
+            var isActive = ImGui.Button(label + "###dummy", size);
             ImGui.PopStyleVar();
             var io = ImGui.GetIO();
             if (ImGui.IsItemActive())
@@ -19,7 +19,7 @@ namespace T3.Gui
                 var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax()) * 0.5f;
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                 ImGui.GetForegroundDrawList().AddCircle(center, 100, Color.Gray, 50);
-                hot = true;
+                isActive = true;
 
                 var pLast = io.MousePos - io.MouseDelta - center;
                 var pNow = io.MousePos - center;
@@ -36,7 +36,7 @@ namespace T3.Gui
                 }
             }
 
-            return hot;
+            return isActive;
         }
 
         /// <summary>Draw a splitter</summary>
@@ -141,8 +141,7 @@ namespace T3.Gui
             return clicked;
         }
 
-
-        public static void ContextMenuForItem(Action drawMenuItems, string id="context_menu")
+        public static void ContextMenuForItem(Action drawMenuItems, string id = "context_menu")
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
@@ -154,7 +153,7 @@ namespace T3.Gui
 
             ImGui.PopStyleVar(2);
         }
-        
+
         public static void DrawContextMenuForScrollCanvas(Action drawMenuContent, ref bool contextMenuIsOpen)
         {
             // This is a horrible hack to distinguish right mouse click from right mouse drag
@@ -164,10 +163,10 @@ namespace T3.Gui
 
             if (!contextMenuIsOpen && !ImGui.IsWindowFocused())
                 return;
-            
+
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
-            
+
             if (ImGui.BeginPopupContextWindow("context_menu"))
             {
                 ImGui.GetMousePosOnOpeningCurrentPopup();
@@ -180,6 +179,7 @@ namespace T3.Gui
             {
                 contextMenuIsOpen = false;
             }
+
             ImGui.PopStyleVar(2);
         }
 
@@ -193,6 +193,7 @@ namespace T3.Gui
                     ImGui.PopFont();
                     return true;
                 }
+
                 ImGui.PopFont();
             }
             else
@@ -202,10 +203,10 @@ namespace T3.Gui
                 ImGui.Button(label);
                 ImGui.PopStyleColor(2);
             }
+
             return false;
         }
-        
-        
+
         public static void HelpText(string text)
         {
             ImGui.PushFont(Fonts.FontSmall);

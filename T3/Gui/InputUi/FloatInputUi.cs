@@ -1,9 +1,13 @@
-﻿using ImGuiNET;
+﻿using System.Configuration;
+using System.Numerics;
+using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Gui.Interaction;
+
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace T3.Gui.InputUi
@@ -17,12 +21,15 @@ namespace T3.Gui.InputUi
 
         public override bool DrawSingleEditControl(string name, ref float value)
         {
-            return ImGui.DragFloat("##floatEdit", ref value, Scale, Min, Max);
+            ImGui.PushID(Id.GetHashCode());
+            var result = FloatValueEdit.Draw(ref value, new Vector2(-1, 0));
+            ImGui.PopID();
+            return result;
         }
 
         protected override void DrawValueDisplay(string name, ref float value)
         {
-            ImGui.InputFloat(name, ref value, 0.0f, 0.0f, "%f", ImGuiInputTextFlags.ReadOnly);
+            ImGui.InputFloat(name, ref value, step: 0.0f, step_fast: 0.0f, $"%f", flags: ImGuiInputTextFlags.ReadOnly);
         }
 
         protected override void DrawAnimatedValue(string name, InputSlot<float> inputSlot, Animator animator)
@@ -38,7 +45,7 @@ namespace T3.Gui.InputUi
                     var key = curve.GetV(time);
                     if (key == null)
                         key = new VDefinition() { U = time };
-                    
+
                     key.Value = value;
                     curve.AddOrUpdateV(time, key);
                 }
@@ -60,12 +67,12 @@ namespace T3.Gui.InputUi
 
             if (Min != DefaultMin)
                 writer.WriteValue("Min", Min);
-            
-            if (Max != DefaultMax) 
+
+            if (Max != DefaultMax)
                 writer.WriteValue("Max", Max);
-            
-            if (Scale != DefaultScale) 
-                writer.WriteValue("Scale",  Scale);
+
+            if (Scale != DefaultScale)
+                writer.WriteValue("Scale", Scale);
         }
 
         public override void Read(JToken inputToken)
@@ -76,7 +83,7 @@ namespace T3.Gui.InputUi
             Max = inputToken["Max"]?.Value<float>() ?? DefaultMin;
             Scale = inputToken["Scale"]?.Value<float>() ?? DefaultScale;
         }
-        
+
         private const float DefaultScale = 0.01f;
         private const float DefaultMin = -9999999f;
         private const float DefaultMax = -9999999f;
