@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Data;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Gui.InputUi;
+using T3.Gui.OutputUi;
 using UiHelpers;
 
 namespace T3.Gui.Interaction
@@ -126,12 +128,20 @@ namespace T3.Gui.Interaction
                         goto case JogDialStates.TextInput;
 
                     case JogDialStates.TextInput:
-                        ImGui.InputText("##dialInput", ref _jogDialText, 10);
+                        ImGui.PushStyleColor(ImGuiCol.Text, float.IsNaN(_editValue) 
+                            ? Color.Red.Rgba
+                            : Color.White.Rgba);
+                        ImGui.InputText("##dialInput", ref _jogDialText, 20);
+                        ImGui.PopStyleColor();
+                        
                         if (ImGui.IsItemDeactivated())
                         {
                             SetState(JogDialStates.Inactive);
+                            if (float.IsNaN(_editValue))
+                                _editValue = _startValue;
                         }
 
+                        _editValue = (float)Evaluate(_jogDialText);
                         break;
                 }
 
@@ -151,6 +161,7 @@ namespace T3.Gui.Interaction
                     _activeJogDialId = id;
                     _editValue = value;
                     _startValue = value;
+                    _jogDialText = FormatFloatForButton(ref value);
                     SetState(JogDialStates.Dialing);
                 }
             }
@@ -160,7 +171,6 @@ namespace T3.Gui.Interaction
 
         private static void SetState(JogDialStates newState)
         {
-            Log.Debug($" {_state} -> {newState}");
             switch (newState)
             {
                 case JogDialStates.Inactive:
@@ -181,6 +191,22 @@ namespace T3.Gui.Interaction
             }
 
             _state = newState;
+        }
+        
+        private static double Evaluate(string expression)
+        {
+            try
+            {
+                var table = new DataTable();
+                table.Columns.Add("expression", typeof(string), expression);
+                var row = table.NewRow();
+                table.Rows.Add(row);
+                return double.Parse((string)row["expression"]);
+            }
+            catch
+            {
+                return float.NaN;
+            }
         }
 
         private static string FormatFloatForButton(ref float value, string format = "{0:0.00}")
