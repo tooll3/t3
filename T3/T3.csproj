@@ -319,6 +319,7 @@
     <Compile Include="Gui\Graph\GraphCanvas.cs" />
     <Compile Include="Gui\Graph\Interaction\CameraInteraction.cs" />
     <Compile Include="Gui\Graph\Interaction\NodeOperations.cs" />
+    <Compile Include="Gui\Graph\Interaction\SymbolFilter.cs" />
     <Compile Include="Gui\Graph\TimeControls.cs" />
     <Compile Include="Gui\InputUi\BoolInputUi.cs" />
     <Compile Include="Gui\InputUi\Color4InputUi.cs" />

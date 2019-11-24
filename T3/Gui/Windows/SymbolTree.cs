@@ -35,7 +35,14 @@ namespace T3.Gui.Windows
                 ImGui.Separator();
                 ImGui.BeginChild("scrolling");
                 {
-                    DrawTree();
+                    if (string.IsNullOrEmpty(_filterString))
+                    {
+                        DrawTree();
+                    }
+                    else
+                    {
+                        
+                    }
                 }
                 ImGui.EndChild();
             }
@@ -104,7 +111,7 @@ namespace T3.Gui.Windows
             else
             {
                 ImGui.SameLine();
-                ImGui.Button("  <-");
+                ImGui.Button("  <-", new Vector2(50,15));
                 HandleDropTarget(subtree);
             }
 

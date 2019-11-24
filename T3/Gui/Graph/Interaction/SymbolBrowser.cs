@@ -9,6 +9,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Styling;
 
 namespace T3.Gui.Graph
@@ -28,9 +29,9 @@ namespace T3.Gui.Graph
             _isOpen = true;
             PosOnCanvas = positionOnCanvas;
             _focusInputNextTime = true;
-            _filterInputType = filterInputType;
-            _filterOutputType = filterOutputType;
-            _searchString = "";
+            _filter.FilterInputType = filterInputType;
+            _filter.FilterOutputType = filterOutputType;
+            _filter.SearchString = "";
             _selectedSymbol = null;
             _filter.Update();
 
@@ -90,7 +91,7 @@ namespace T3.Gui.Graph
             ImGui.SetCursorPos(_posInWindow + new Vector2(1, 1));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(7, 6));
             ImGui.SetNextItemWidth(_size.X);
-            ImGui.InputText("##filter", ref _searchString, 10);
+            ImGui.InputText("##filter", ref _filter.SearchString, 10);
             _drawList.AddRect(_posInScreen, _posInScreen + _size, Color.Gray);
 
             if (ImGui.IsKeyReleased((int)Key.CursorDown))
@@ -163,16 +164,16 @@ namespace T3.Gui.Graph
                 if ((_selectedSymbol == null && SymbolRegistry.Entries.Values.Any()))
                     _selectedSymbol = SymbolRegistry.Entries.Values.FirstOrDefault();
 
-                if (_filterInputType != null || _filterOutputType != null)
+                if (_filter.FilterInputType != null || _filter.FilterOutputType != null)
                 {
                     ImGui.PushFont(Fonts.FontSmall);
 
-                    var inputTypeName = _filterInputType != null
-                                            ? TypeNameRegistry.Entries[_filterInputType]
+                    var inputTypeName = _filter.FilterInputType != null
+                                            ? TypeNameRegistry.Entries[_filter.FilterInputType]
                                             : string.Empty;
 
-                    var outputTypeName = _filterOutputType != null
-                                             ? TypeNameRegistry.Entries[_filterOutputType]
+                    var outputTypeName = _filter.FilterOutputType != null
+                                             ? TypeNameRegistry.Entries[_filter.FilterOutputType]
                                              : string.Empty;
 
                     var headerLabel = $"{inputTypeName} -> {outputTypeName}";
@@ -238,12 +239,12 @@ namespace T3.Gui.Graph
                 if (temp.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
                     // connecting to output
-                    ConnectionMaker.CompleteConnectionFromBuiltNode(parent, newSymbolChild, _filter.GetOutputMatchingType(symbol, _filterInputType));
+                    ConnectionMaker.CompleteConnectionFromBuiltNode(parent, newSymbolChild, _filter.GetOutputMatchingType(symbol, _filter.FilterInputType));
                 }
                 else
                 {
                     // connecting to input
-                    ConnectionMaker.CompleteConnectionIntoBuiltNode(parent, newSymbolChild, _filter.GetInputMatchingType(symbol, _filterInputType));
+                    ConnectionMaker.CompleteConnectionIntoBuiltNode(parent, newSymbolChild, _filter.GetInputMatchingType(symbol, _filter.FilterInputType));
                 }
             }
             else
@@ -254,114 +255,11 @@ namespace T3.Gui.Graph
             Close();
         }
 
-        /// <summary>
-        /// Provides a regular expression to filter for matching <see cref="Symbol"/>s
-        /// </summary>
-        private class Filter
-        {
-            public void Update()
-            {
-                var needsUpdate = false;
 
-                if (_currentSearchString != _searchString)
-                {
-                    _currentSearchString = _searchString;
-                    var pattern = string.Join(".*", _currentSearchString.ToCharArray());
-                    _currentRegex = new Regex(pattern, RegexOptions.IgnoreCase);
-                    needsUpdate = true;
-                }
-
-                if (_inputType != _filterInputType)
-                {
-                    _inputType = _filterInputType;
-                    needsUpdate = true;
-                }
-
-                if (_outputType != _filterOutputType)
-                {
-                    _outputType = _filterOutputType;
-                    needsUpdate = true;
-                }
-
-                if (needsUpdate)
-                {
-                    UpdateMatchingSymbols();
-                }
-            }
-
-            private Type _inputType;
-            private Type _outputType;
-
-            private void UpdateMatchingSymbols()
-            {
-                var parentSymbols = new List<Symbol>(GraphCanvas.Current.GetParentSymbols());
-
-                MatchingSymbols = new List<Symbol>();
-
-                foreach (var symbol in SymbolRegistry.Entries.Values)
-                {
-                    if (parentSymbols.Contains(symbol))
-                        continue;
-
-                    if (_inputType != null)
-                    {
-                        var matchingInputDef = GetInputMatchingType(symbol, _filterInputType);
-                        if (matchingInputDef == null)
-                            continue;
-                    }
-
-                    if (_outputType != null)
-                    {
-                        var matchingOutputDef = GetOutputMatchingType(symbol, _filterOutputType);
-                        if (matchingOutputDef == null)
-                            continue;
-                    }
-
-                    if (!_currentRegex.IsMatch(symbol.Name))
-                        continue;
-
-                    MatchingSymbols.Add(symbol);
-                }
-            }
-
-            public Symbol.InputDefinition GetInputMatchingType(Symbol symbol, Type type)
-            {
-                foreach (var inputDefinition in symbol.InputDefinitions)
-                {
-                    if (type == null || inputDefinition.DefaultValue.ValueType == type)
-                        return inputDefinition;
-                }
-
-                return null;
-            }
-
-            public Symbol.OutputDefinition GetOutputMatchingType(Symbol symbol, Type type)
-            {
-                foreach (var outputDefinition in symbol.OutputDefinitions)
-                {
-                    if (type == null || outputDefinition.ValueType == type)
-                        return outputDefinition;
-                }
-
-                return null;
-            }
-
-            public List<Symbol> MatchingSymbols { private set; get; } = null;
-
-            private Regex _currentRegex;
-            private string _currentSearchString;
-
-            // internal bool Match(Symbol symbol)
-            // {
-            //     return _currentRegex.IsMatch(symbol.Name);
-            // }
-        }
-
-        private readonly Filter _filter = new Filter();
+        private readonly SymbolFilter _filter = new SymbolFilter();
         #endregion
 
-        private static Type _filterInputType;
-        private static Type _filterOutputType;
+
 
         //public List<Symbol.Connection> ConnectionsIn = new List<Symbol.Connection>();
         // public Symbol.Connection ConnectionOut = null;
@@ -382,7 +280,6 @@ namespace T3.Gui.Graph
 
         private Symbol _selectedSymbol;
         private static readonly int UiId = "DraftNode".GetHashCode();
-        private static string _searchString = "";
 
         public static SymbolBrowser Current;
     }
