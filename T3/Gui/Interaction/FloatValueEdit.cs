@@ -80,7 +80,7 @@ namespace T3.Gui.Interaction
                             if (isActive)
                             {
                                 const float opening = 3.14f * 1.75f;
-                                var rot = (_editValue - value) * RadialIndicatorSpeed;
+                                var rot = ((_editValue - value) * RadialIndicatorSpeed % (float)(2*Math.PI));
                                 foreground.PathArcTo(
                                                      _center,
                                                      radius: r + SegmentWidth / 2,
@@ -223,7 +223,7 @@ namespace T3.Gui.Interaction
                                                             (float)(20 * 0.5f / Math.PI)
                                                         };
 
-        private static readonly Color SegmentColor = new Color(0.1f, 0.1f, 0.1f, 0.2f);
-        private static readonly Color ActiveSegmentColor = new Color(0.1f, 0.1f, 0.1f, 0.3f);
+        private static readonly Color SegmentColor = new Color(1f, 1f, 1f, 0.05f);
+        private static readonly Color ActiveSegmentColor = new Color(1f, 1f, 1f, 0.05f);
     }
 }
