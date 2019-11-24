@@ -21,6 +21,7 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Fixed assert after editing a string when a float was edited before
 * Fixed crash when deleting an input of the actual composition op (Crash 05)
 * Move noise functions to own hlsl file in order to reuse them
 * Create ParticleSystem type and move buffer management there
