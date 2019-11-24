@@ -191,8 +191,7 @@ namespace T3.Gui.InputUi
                     // Draw Name
                     ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
                     ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
-                    CustomComponents.ContextMenuForItem(
-                                                        () =>
+                    CustomComponents.ContextMenuForItem(() =>
                                                         {
                                                             if (ImGui.MenuItem("Set as default", !input.IsDefault))
                                                                 input.SetCurrentValueAsDefault();
@@ -224,7 +223,7 @@ namespace T3.Gui.InputUi
                     ImGui.SetNextItemWidth(-1);
                     editState |= DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
 
-                    if ((editState & InputEditState.Focused) == InputEditState.Focused)
+                    if ((editState & InputEditState.Started) == InputEditState.Started)
                     {
                         //Log.Debug($"focused {name}");
                     }
@@ -232,12 +231,11 @@ namespace T3.Gui.InputUi
                     if ((editState & InputEditState.Modified) == InputEditState.Modified)
                     {
                         inputSlot.DirtyFlag.Invalidate();
-                        //Log.Debug($"modified {typedInputSlot.TypedInputValue.Value}");
                     }
 
                     if ((editState & InputEditState.Finished) == InputEditState.Finished)
                     {
-                        //Log.Debug($"Edit {name} completed with {typedInputSlot.TypedInputValue.Value}");
+                        inputSlot.DirtyFlag.Invalidate();
                     }
 
                     input.IsDefault &= (editState & InputEditState.Modified) != InputEditState.Modified;

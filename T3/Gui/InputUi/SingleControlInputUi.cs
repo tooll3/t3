@@ -11,7 +11,7 @@ namespace T3.Gui.InputUi
             bool valueModified = DrawSingleEditControl(name, ref value);
 
             InputEditState inputEditState = InputEditState.Nothing;
-            inputEditState |= ImGui.IsItemClicked() ? InputEditState.Focused : InputEditState.Nothing;
+            inputEditState |= ImGui.IsItemClicked() ? InputEditState.Started : InputEditState.Nothing;
             inputEditState |= valueModified ? InputEditState.Modified : InputEditState.Nothing;
             inputEditState |= ImGui.IsItemDeactivatedAfterEdit() ? InputEditState.Finished : InputEditState.Nothing;
 

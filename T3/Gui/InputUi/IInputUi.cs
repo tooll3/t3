@@ -10,7 +10,7 @@ namespace T3.Gui.InputUi
     public enum InputEditState
     {
         Nothing = 0x0,
-        Focused = 0x1,
+        Started = 0x1,
         Modified = 0x2,
         Finished = 0x4,
         ShowOptions = 0x8,

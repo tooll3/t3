@@ -170,52 +170,27 @@ namespace T3.Gui.Windows
                 {
                     var editState = inputUi.DrawInputEdit(input, compositionSymbolUi, _pinning.SelectedChildUi);
 
-                    switch (editState)
+                    if ((editState & InputEditState.Started) != InputEditState.Nothing)
                     {
-                        // create command for possible editing
-                        case InputEditState.Focused:
-                            //Log.Debug("setup 'ChangeInputValue' command");
+                        _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, input.Input);
+                    }
+
+                    if ((editState & InputEditState.Modified) != InputEditState.Nothing)
+                    {
+                        if (_inputValueCommandInFlight == null)
                             _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, input.Input);
-                            break;
+                        _inputValueCommandInFlight.Value.Assign(input.Input.Value);
+                    }
 
-                        // update command in flight
-                        case InputEditState.Modified:
-                            if (_inputValueCommandInFlight == null)
-                            {
-                                Log.Warning("Invalid command in flight?");
-                            }
-                            else
-                            {
-                                //Log.Debug("updated 'ChangeInputValue' command");
-                                _inputValueCommandInFlight.Value.Assign(input.Input.Value);
-                            }
-
-                            break;
-
-                        // add command to undo stack
-                        case InputEditState.Finished:
-                            //Log.Debug("Finalized 'ChangeInputValue' command");
+                    if ((editState & InputEditState.Finished) != InputEditState.Nothing)
+                    {
+                        if (_inputValueCommandInFlight != null)
                             UndoRedoStack.Add(_inputValueCommandInFlight);
-                            break;
+                    }
 
-                        // update and add command to undo queue
-                        case InputEditState.ModifiedAndFinished:
-                            if (_inputValueCommandInFlight == null)
-                            {
-                                Log.Warning("Invalid command in flight?");
-                            }
-                            else
-                            {
-                                //Log.Debug("Updated and finalized 'ChangeInputValue' command");
-                                _inputValueCommandInFlight.Value.Assign(input.Input.Value);
-                                UndoRedoStack.Add(_inputValueCommandInFlight);
-                            }
-
-                            break;
-
-                        case InputEditState.ShowOptions:
-                            _showInputParameterEdits = new ShownInputParameterEdit(op.Symbol.Id.GetHashCode(), input.Id.GetHashCode());
-                            break;
+                    if (editState == InputEditState.ShowOptions)
+                    {
+                        _showInputParameterEdits = new ShownInputParameterEdit(op.Symbol.Id.GetHashCode(), input.Id.GetHashCode());
                     }
                 }
 

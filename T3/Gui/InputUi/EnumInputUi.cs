@@ -49,7 +49,7 @@ namespace T3.Gui.InputUi
 
                         if (ImGui.IsItemClicked())
                         {
-                            editState |= InputEditState.Focused;
+                            editState |= InputEditState.Started;
                         }
 
                         if (ImGui.IsItemDeactivatedAfterEdit())
@@ -84,7 +84,7 @@ namespace T3.Gui.InputUi
 
                 if (ImGui.IsItemClicked())
                 {
-                    editState |= InputEditState.Focused;
+                    editState |= InputEditState.Started;
                 }
 
                 return editState;

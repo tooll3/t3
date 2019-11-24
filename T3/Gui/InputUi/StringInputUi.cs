@@ -13,7 +13,7 @@ using T3.Gui.UiHelpers;
 
 namespace T3.Gui.InputUi
 {
-    public class StringInputUi : SingleControlInputUi<string>
+    public class StringInputUi : InputValueUi<string>
     {
         private const int MAX_STRING_LENGTH = 255;
 
@@ -26,52 +26,68 @@ namespace T3.Gui.InputUi
 
         public UsageType Usage { get; set; } = UsageType.Default;
 
-        public override bool DrawSingleEditControl(string name, ref string value)
+        protected override InputEditState DrawEditControl(string name, ref string value)
         {
-            if (value != null)
+            if (value == null)
             {
-                switch (Usage)
+                // value was null!
+                ImGui.Text(name + " is null?!");
+                return InputEditState.Nothing;
+            }
+
+            InputEditState inputEditState = InputEditState.Nothing;
+            switch (Usage)
+            {
+                case UsageType.Default:
+                    inputEditState = DrawDefaultTextEdit(ref value);
+                    break;
+                case UsageType.FilePath:
+                case UsageType.DirectoryPath:
+                    inputEditState = DrawEditWithSelectors(ref value);
+                    break;
+            }
+
+            inputEditState |= ImGui.IsItemClicked() ? InputEditState.Started : InputEditState.Nothing;
+            inputEditState |= ImGui.IsItemDeactivatedAfterEdit() ? InputEditState.Finished : InputEditState.Nothing;
+
+            return inputEditState;
+        }
+
+        private InputEditState DrawEditWithSelectors(ref string value)
+        {
+            ImGui.SetNextItemWidth(-70);
+            InputEditState inputEditState = DrawDefaultTextEdit(ref value);
+            ImGui.SameLine();
+            if (ImGui.Button("...", new Vector2(30, 0)))
+            {
+                string newPath = Usage == UsageType.FilePath ? FileOperations.PickResourceFilePath() : FileOperations.PickResourceDirectory();
+                if (!string.IsNullOrEmpty(newPath))
                 {
-                    case UsageType.Default:
-                        return ImGui.InputText("##textEdit", ref value, MAX_STRING_LENGTH);
-
-                    case UsageType.FilePath:
-                    case UsageType.DirectoryPath:
-                    {
-                        ImGui.SetNextItemWidth(-70);
-                        bool changed = ImGui.InputText("##textEditPath", ref value, MAX_STRING_LENGTH);
-                        ImGui.SameLine();
-                        if (ImGui.Button("...", new Vector2(30, 0)))
-                        {
-                            var newPath = Usage == UsageType.FilePath
-                                              ? FileOperations.PickResourceFilePath()
-                                              : FileOperations.PickResourceDirectory();
-                            if (newPath == null)
-                                return changed;
-
-                            value = newPath;
-                            changed = true;
-                        }
-                        ImGui.SameLine();
-                        if (ImGui.Button("Edit", new Vector2(40, 0)))
-                        {
-                            if (!File.Exists(value))
-                            {
-                                Log.Error("Can't open non-existing file " +value);
-                            }
-                            else
-                            {
-                                Process.Start(value);
-                            }
-                        }
-                        return changed;
-                    }
+                    value = newPath;
+                    inputEditState = InputEditState.Modified | InputEditState.Finished;
                 }
             }
 
-            // value was null!
-            ImGui.Text(name + " is null?!");
-            return false;
+            ImGui.SameLine();
+            if (ImGui.Button("Edit", new Vector2(40, 0)))
+            {
+                if (!File.Exists(value))
+                {
+                    Log.Error("Can't open non-existing file " + value);
+                }
+                else
+                {
+                    Process.Start(value);
+                }
+            }
+
+            return inputEditState;
+        }
+
+        private static InputEditState DrawDefaultTextEdit(ref string value)
+        {
+            bool changed = ImGui.InputText("##textEdit", ref value, MAX_STRING_LENGTH);
+            return changed ? InputEditState.Modified : InputEditState.Nothing;
         }
 
         protected override void DrawValueDisplay(string name, ref string value)
