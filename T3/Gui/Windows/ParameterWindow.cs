@@ -147,8 +147,13 @@ namespace T3.Gui.Windows
 
             foreach (var input in op.Inputs)
             {
+                if (!selectedChildSymbolUi.InputUis.TryGetValue(input.Id, out IInputUi inputUi))
+                {
+                    Log.Warning("Trying to access an non existing input, probably the op instance is not the actual one.");
+                    continue;
+                }
+
                 ImGui.PushID(input.Id.GetHashCode());
-                IInputUi inputUi = selectedChildSymbolUi.InputUis[input.Id];
 
                 if (_showInputParameterEdits.SymbolHash == op.Symbol.Id.GetHashCode())
                 {
