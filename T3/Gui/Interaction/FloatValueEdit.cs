@@ -10,7 +10,7 @@ namespace T3.Gui.Interaction
         /// <summary>
         /// Returns true if editing was completed and value changed
         /// </summary>
-        public static bool Draw(ref float value, Vector2 size)
+        public static bool Draw(ref float value, Vector2 size, float defaultValue = float.NaN)
         {
             var io = ImGui.GetIO();
             var id = ImGui.GetID("jog");
@@ -164,14 +164,17 @@ namespace T3.Gui.Interaction
             return string.Format(format, value);
         }
         
-        
+        /// <summary>
+        /// A horrible imgui work around to have button that stays active while its label changes.  
+        /// </summary>
         private static bool DrawButtonWithDynamicLabel(string label, ref Vector2 size)
         {
             unsafe
             {
+                var color1 = Color.GetStyleColor(ImGuiCol.Text);
                 var keepPos = ImGui.GetCursorScreenPos();
                 var result = ImGui.Button("##dial", size);
-                ImGui.GetWindowDrawList().AddText(keepPos + new Vector2(4,4), Color.Gray, label);
+                ImGui.GetWindowDrawList().AddText(keepPos + new Vector2(4,4), color1, label);
                 return result;
             }
         }

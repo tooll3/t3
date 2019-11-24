@@ -98,5 +98,15 @@ namespace T3.Gui
                                  c1.Rgba.W + (c2.Rgba.W - c1.Rgba.W) * t
                                  );
         }
+
+        public static Color GetStyleColor(ImGuiCol color)
+        {
+            unsafe
+            {
+                var c = ImGui.GetStyleColorVec4(color);
+                return new Color(c->X, c->Y, c->Z,c->W);
+            }
+        } 
+        
     };
 }
