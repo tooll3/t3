@@ -12,25 +12,32 @@ using T3.Gui.Interaction;
 
 namespace T3.Gui.InputUi
 {
-    public class FloatInputUi : SingleControlInputUi<float>
+    public class FloatInputUi : InputValueUi<float>
     {
         public override bool IsAnimatable => true;
         private float Min = DefaultMin;
         private float Max = DefaultMax;
         private float Scale = DefaultScale;
 
-        public override bool DrawSingleEditControl(string name, ref float value)
+        protected override InputEditState DrawEditControl(string name, ref float value)
         {
             ImGui.PushID(Id.GetHashCode());
-            //float defaultValue = this.InputDefinition.DefaultValue.Value;
-            var resetToDefaultTriggered = false;
-            var result = FloatValueEdit.Draw(ref value, new Vector2(-1, 0), ref  resetToDefaultTriggered, Min, Max,Scale);
+            var valueModified = FloatValueEdit.Draw(ref value, -Vector2.UnitX, out var resetToDefaultTriggered, Min, Max, Scale);
+            ImGui.PopID();
+
+            InputEditState inputEditState = InputEditState.Nothing;
             if (resetToDefaultTriggered)
             {
-                // TODO: Do something
+                inputEditState = InputEditState.ResetToDefault;
             }
-            ImGui.PopID();
-            return result;
+            else
+            {
+                inputEditState |= ImGui.IsItemClicked() ? InputEditState.Started : InputEditState.Nothing;
+                inputEditState |= valueModified ? InputEditState.Modified : InputEditState.Nothing;
+                inputEditState |= ImGui.IsItemDeactivatedAfterEdit() ? InputEditState.Finished : InputEditState.Nothing;
+            }
+        
+            return inputEditState;
         }
 
         protected override void DrawValueDisplay(string name, ref float value)

@@ -238,6 +238,12 @@ namespace T3.Gui.InputUi
                         inputSlot.DirtyFlag.Invalidate();
                     }
 
+                    if ((editState & InputEditState.ResetToDefault) == InputEditState.ResetToDefault)
+                    {
+                        input.ResetToDefault();
+                        inputSlot.DirtyFlag.Invalidate();
+                    }
+
                     input.IsDefault &= (editState & InputEditState.Modified) != InputEditState.Modified;
 
                     ImGui.PopStyleColor();

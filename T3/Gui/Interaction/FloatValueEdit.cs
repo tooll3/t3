@@ -11,8 +11,10 @@ namespace T3.Gui.Interaction
         /// <summary>
         /// Returns true if editing was completed and value changed
         /// </summary>
-        public static bool Draw(ref float value, Vector2 size,  ref bool resetToDefaultTriggered, float min=float.NegativeInfinity, float max=float.PositiveInfinity, float scale=1)
+        public static bool Draw(ref float value, Vector2 size, out bool resetToDefaultTriggered, float min = float.NegativeInfinity,
+                                float max = float.PositiveInfinity, float scale = 1)
         {
+            resetToDefaultTriggered = false;
             var io = ImGui.GetIO();
             var id = ImGui.GetID("jog");
             if (id == _activeJogDialId)

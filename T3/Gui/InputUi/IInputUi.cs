@@ -14,6 +14,7 @@ namespace T3.Gui.InputUi
         Modified = 0x2,
         Finished = 0x4,
         ShowOptions = 0x8,
+        ResetToDefault = 0x10,
         ModifiedAndFinished = Modified | Finished
     }
 
