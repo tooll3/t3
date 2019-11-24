@@ -93,7 +93,7 @@ namespace T3.Gui.InputUi
             base.Read(inputToken);
 
             Min = inputToken["Min"]?.Value<float>() ?? DefaultMin;
-            Max = inputToken["Max"]?.Value<float>() ?? DefaultMin;
+            Max = inputToken["Max"]?.Value<float>() ?? DefaultMax;
             Scale = inputToken["Scale"]?.Value<float>() ?? DefaultScale;
         }
 
