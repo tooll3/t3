@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 
 namespace T3.Gui.Windows
 {
@@ -16,6 +17,8 @@ namespace T3.Gui.Windows
     {
         public SymbolTree()
         {
+
+            _filter.SearchString = "";
             Config.Title = "Symbols";
             PopulateTree();
         }
@@ -24,24 +27,31 @@ namespace T3.Gui.Windows
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             {
+                if (!ImGui.IsMouseDown(0))
+                {
+                    StopDrag();
+                }
+                
                 ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
                 if (ImGui.Button("Clear"))
                 {
-                    _filterString = "";
+                    _filter.SearchString = "";
                 }
 
                 ImGui.SameLine();
-                ImGui.InputText("##Filter", ref _filterString, 100);
+                ImGui.InputText("##Filter", ref _filter.SearchString, 100);
                 ImGui.Separator();
+                
+                
                 ImGui.BeginChild("scrolling");
                 {
-                    if (string.IsNullOrEmpty(_filterString))
+                    if (string.IsNullOrEmpty(_filter.SearchString))
                     {
                         DrawTree();
                     }
                     else
                     {
-                        
+                        DrawList();
                     }
                 }
                 ImGui.EndChild();
@@ -51,20 +61,25 @@ namespace T3.Gui.Windows
 
         private void DrawTree()
         {
-            if (!ImGui.IsMouseDown(0))
-            {
-                StopDrag();
-            }
 
             DrawNode(_tree);
         }
 
-        private static IntPtr _dropData = new IntPtr(0);
-        private static string _guidSting;
+
+        private void DrawList()
+        {
+            _filter.UpdateIfNeccessary();
+            foreach (var symbol in _filter.MatchingSymbols)
+            {
+                DrawSymbolItem(symbol);
+            }
+        }
+
 
         private void StopDrag()
         {
-            _dropData = new IntPtr(0);
+            T3Ui.DraggingIsInProgress = false;
+            _dropData = T3Ui.NotDroppingPointer;
         }
 
         private void DrawNode(NamespaceTree subtree)
@@ -82,28 +97,7 @@ namespace T3.Gui.Windows
 
                 foreach (var symbol in subtree.Symbols)
                 {
-                    ImGui.PushID(symbol.Id.GetHashCode());
-                    {
-                        ImGui.Button(symbol.Name);
-
-                        if (ImGui.IsItemActive())
-                        {
-                            if (ImGui.BeginDragDropSource())
-                            {
-                                if (_dropData == new IntPtr(0))
-                                {
-                                    _guidSting = symbol.Id.ToString() + "|";
-                                    _dropData = Marshal.StringToHGlobalUni(_guidSting);
-                                }
-
-                                ImGui.SetDragDropPayload("Symbol", _dropData, (uint)(_guidSting.Length * sizeof(Char)));
-
-                                ImGui.Button(symbol.Name + "Dropping");
-                                ImGui.EndDragDropSource();
-                            }
-                        }
-                    }
-                    ImGui.PopID();
+                    DrawSymbolItem(symbol);
                 }
 
                 ImGui.TreePop();
@@ -115,6 +109,33 @@ namespace T3.Gui.Windows
                 HandleDropTarget(subtree);
             }
 
+            ImGui.PopID();
+        }
+
+        private static void DrawSymbolItem(Symbol symbol)
+        {
+            ImGui.PushID(symbol.Id.GetHashCode());
+            {
+                ImGui.Button(symbol.Name);
+
+                if (ImGui.IsItemActive())
+                {
+                    if (ImGui.BeginDragDropSource())
+                    {
+                        if (_dropData == new IntPtr(0))
+                        {
+                            _guidSting = symbol.Id.ToString() + "|";
+                            _dropData = Marshal.StringToHGlobalUni(_guidSting);
+                            T3Ui.DraggingIsInProgress = true;
+                        }
+
+                        ImGui.SetDragDropPayload("Symbol", _dropData, (uint)(_guidSting.Length * sizeof(Char)));
+
+                        ImGui.Button(symbol.Name + "Dropping");
+                        ImGui.EndDragDropSource();
+                    }
+                }
+            }
             ImGui.PopID();
         }
 
@@ -248,6 +269,8 @@ namespace T3.Gui.Windows
             public readonly List<Symbol> Symbols = new List<Symbol>();
         }
 
-        private string _filterString = "";
+        private static IntPtr _dropData = new IntPtr(0);
+        private static string _guidSting;
+        private SymbolFilter _filter = new SymbolFilter();
     }
 }

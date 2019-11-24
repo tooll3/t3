@@ -100,8 +100,8 @@ namespace T3.Gui
         private static UserSettings _userSettings;
         private static readonly WindowManager WindowManager;
 
-
-
+        public static IntPtr NotDroppingPointer = new IntPtr(0);
+        public static bool DraggingIsInProgress = false;
         public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
     }
 }

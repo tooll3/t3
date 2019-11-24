@@ -33,7 +33,7 @@ namespace T3.Gui.Graph
             _filter.FilterOutputType = filterOutputType;
             _filter.SearchString = "";
             _selectedSymbol = null;
-            _filter.Update();
+            _filter.UpdateIfNeccessary();
 
             // Keep navigation setting to restore after window gets closed
             _keepNavEnableKeyboard = (ImGui.GetIO().ConfigFlags & ImGuiConfigFlags.NavEnableKeyboard) != ImGuiConfigFlags.None;
@@ -61,7 +61,7 @@ namespace T3.Gui.Graph
             ImGui.GetIO().ConfigFlags &= ~ImGuiConfigFlags.NavEnableKeyboard;
             Current = this;
 
-            _filter.Update();
+            _filter.UpdateIfNeccessary();
 
             ImGui.PushID(UiId);
             {
@@ -224,13 +224,7 @@ namespace T3.Gui.Graph
         private void CreateInstance(Symbol symbol)
         {
             var parent = GraphCanvas.Current.CompositionOp.Symbol;
-            var addCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = PosOnCanvas };
-            UndoRedoStack.AddAndExecute(addCommand);
-            var newSymbolChild = parent.Children.Single(entry => entry.Id == addCommand.AddedChildId);
-
-            // Select new node
-            var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-            var childUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+            var childUi= NodeOperations.CreateInstance(symbol, parent, PosOnCanvas);
             GraphCanvas.Current.SelectionHandler.SetElement(childUi);
 
             if (ConnectionMaker.TempConnection != null && symbol.InputDefinitions.Any())
@@ -239,12 +233,12 @@ namespace T3.Gui.Graph
                 if (temp.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
                     // connecting to output
-                    ConnectionMaker.CompleteConnectionFromBuiltNode(parent, newSymbolChild, _filter.GetOutputMatchingType(symbol, _filter.FilterInputType));
+                    ConnectionMaker.CompleteConnectionFromBuiltNode(parent, childUi.SymbolChild, _filter.GetOutputMatchingType(symbol, _filter.FilterInputType));
                 }
                 else
                 {
                     // connecting to input
-                    ConnectionMaker.CompleteConnectionIntoBuiltNode(parent, newSymbolChild, _filter.GetInputMatchingType(symbol, _filter.FilterInputType));
+                    ConnectionMaker.CompleteConnectionIntoBuiltNode(parent, childUi.SymbolChild, _filter.GetInputMatchingType(symbol, _filter.FilterInputType));
                 }
             }
             else

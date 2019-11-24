@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -67,6 +68,8 @@ namespace T3.Gui.Graph
             DrawList = dl;
             ImGui.BeginGroup();
             {
+                DrawDropHandler();
+                
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                     FocusViewToSelection();
 
@@ -178,6 +181,39 @@ namespace T3.Gui.Graph
                                     });
             }
             ImGui.EndGroup();
+        }
+
+        private void DrawDropHandler()
+        {
+            if (!T3Ui.DraggingIsInProgress)
+                return;
+            
+            ImGui.SetCursorPos(Vector2.Zero);
+            ImGui.InvisibleButton("## drop", ImGui.GetWindowSize());
+            
+            if (ImGui.BeginDragDropTarget())
+            {
+                var payload = ImGui.AcceptDragDropPayload("Symbol");
+                if (ImGui.IsMouseReleased(0))
+                {
+                    var myString = Marshal.PtrToStringAuto(payload.Data);
+                    if (myString != null)
+                    {
+                        var guidString = myString.Split('|')[0];
+                        var guid = Guid.Parse(guidString);
+                        Log.Debug("dropped symbol here" + payload + " " + myString + "  " + guid);
+
+                        var symbol = SymbolRegistry.Entries[guid];
+                        var parent = CompositionOp.Symbol;
+                        var posOnCanvas = InverseTransformPosition(ImGui.GetMousePos());
+                        var childUi= NodeOperations.CreateInstance(symbol, parent, posOnCanvas);
+                        SelectionHandler.SetElement(childUi);
+                        
+                        T3Ui.DraggingIsInProgress = false;
+                    }
+                }
+                ImGui.EndDragDropTarget();
+            }             
         }
 
         public IEnumerable<Instance> GetParents(bool includeCompositionOp = false)

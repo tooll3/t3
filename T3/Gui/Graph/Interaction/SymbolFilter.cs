@@ -14,7 +14,7 @@ namespace T3.Gui.Graph.Interaction
         public Type FilterInputType { get; set; }
         public Type FilterOutputType { get; set; }
 
-        public void Update()
+        public void UpdateIfNeccessary()
         {
             var needsUpdate = false;
 

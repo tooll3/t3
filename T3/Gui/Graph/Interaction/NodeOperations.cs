@@ -132,8 +132,8 @@ namespace T3.Gui.Graph.Interaction
             var sw = new StreamWriter(newSourcePath);
             sw.Write(newSource);
             sw.Dispose();
-            
-            AddSourceFileToProject(newSourcePath);            
+
+            AddSourceFileToProject(newSourcePath);
 
             var resourceManager = ResourceManager.Instance();
             Guid newSymbolId = Guid.NewGuid();
@@ -214,9 +214,6 @@ namespace T3.Gui.Graph.Interaction
             var deleteCmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
             UndoRedoStack.AddAndExecute(deleteCmd);
         }
-
-
-        
 
         public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newName)
         {
@@ -325,7 +322,21 @@ namespace T3.Gui.Graph.Interaction
 
             return newSymbol;
         }
-        
+
+        public static SymbolChildUi CreateInstance(Symbol symbol, Symbol parent, Vector2 positionOnCanvas)
+        {
+            
+            var addCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = positionOnCanvas };
+            UndoRedoStack.AddAndExecute(addCommand);
+            var newSymbolChild = parent.Children.Single(entry => entry.Id == addCommand.AddedChildId);
+
+            // Select new node
+            var symbolUi = SymbolUiRegistry.Entries[parent.Id];
+            var childUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+            return childUi;
+            
+        }
+
         /// <summary>
         /// Inserts an entry like...
         ///
@@ -358,7 +369,6 @@ namespace T3.Gui.Graph.Interaction
             var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, newLine);
             File.WriteAllText(projectFilePath, newContent);
         }
-        
 
         public static bool IsNewSymbolNameValid(string newSymbolName)
         {
