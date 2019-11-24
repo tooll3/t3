@@ -9,8 +9,9 @@
 
 ▢ Namespaces
   ▢ Add to Combine and Duplicate dialogs
-  ▢ Add to Parameter window
-  ▢ Add to Symbol Browser
+  ▣ Add to Parameter window
+  ▣ Add to Symbol Browser
+  ▣ Implement node tree with sorting
   ▢ Add to nodes when zoomed in
 
 ▢ increase height of time scrub area
