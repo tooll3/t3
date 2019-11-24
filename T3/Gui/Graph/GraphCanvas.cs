@@ -29,7 +29,7 @@ namespace T3.Gui.Graph
         {
             _selectionFence = new SelectionFence(this);
             _window = window;
-            OpenComposition(opInstance, zoomIn:true);
+            OpenComposition(opInstance, zoomIn: true);
         }
 
         public void OpenComposition(Instance opInstance, bool zoomIn = true)
@@ -42,10 +42,10 @@ namespace T3.Gui.Graph
 
             SelectionHandler.Clear();
             CompositionOp = opInstance;
-            
+
             var newProps = UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.Id)
-                ? UserSettings.Config.OperatorViewSettings[CompositionOp.Id]
-                : GuessViewProperties();
+                               ? UserSettings.Config.OperatorViewSettings[CompositionOp.Id]
+                               : GuessViewProperties();
 
             UserSettings.SaveLastViewedOpForWindow(_window, opInstance.Id);
             ApplyProperties(newProps, zoomIn);
@@ -69,7 +69,7 @@ namespace T3.Gui.Graph
             ImGui.BeginGroup();
             {
                 DrawDropHandler();
-                
+
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                     FocusViewToSelection();
 
@@ -121,18 +121,26 @@ namespace T3.Gui.Graph
                 DrawList.PopClipRect();
                 DrawContextMenu();
 
-
-
                 _duplicateSymbolDialog.Draw(() =>
                                             {
-                                                ImGui.Spacing();
+                                                ImGui.PushFont(Fonts.FontSmall);
+                                                ImGui.Text("Namespace");
+                                                ImGui.SameLine();
+                                                
+                                                ImGui.SetCursorPosX(250+20); // Not sure how else to layout this
+                                                ImGui.Text("Name");
+                                                ImGui.PopFont();
+
+                                                ImGui.SetNextItemWidth(250);
+                                                ImGui.InputText("##namespace", ref _nameSpace, 255);
+
                                                 ImGui.SetNextItemWidth(150);
-                                                ImGui.Text("New symbol name:");
                                                 ImGui.SameLine();
 
-                                                ImGui.InputText("##name", ref _combineName, 255);
                                                 if (ImGui.IsWindowAppearing())
                                                     ImGui.SetKeyboardFocusHere();
+
+                                                ImGui.InputText("##name", ref _combineName, 255);
 
                                                 CustomComponents
                                                    .HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
@@ -141,7 +149,10 @@ namespace T3.Gui.Graph
                                                 if (CustomComponents.DisablableButton("Duplicate", NodeOperations.IsNewSymbolNameValid(_combineName)))
                                                 {
                                                     var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                                                    NodeOperations.DuplicateAsNewType(compositionSymbolUi, GetSelectedChildUis()[0].SymbolChild, _combineName);                                                    
+                                                    NodeOperations.DuplicateAsNewType(compositionSymbolUi, 
+                                                                                      GetSelectedChildUis()[0].SymbolChild, 
+                                                                                      combineName: _combineName, 
+                                                                                      nameSpace: _nameSpace);
                                                     ImGui.CloseCurrentPopup();
                                                 }
 
@@ -154,14 +165,25 @@ namespace T3.Gui.Graph
 
                 _combineDialog.Draw(() =>
                                     {
-                                        ImGui.Spacing();
+                                        ImGui.PushFont(Fonts.FontSmall);
+                                        ImGui.Text("Namespace");
+                                        ImGui.SameLine();
+                                                
+                                        ImGui.SetCursorPosX(250+20); // Not sure how else to layout this
+                                        ImGui.Text("Name");
+                                        ImGui.PopFont();
+
+                                        ImGui.SetNextItemWidth(250);
+                                        ImGui.InputText("##namespace", ref _nameSpace, 255);
+
                                         ImGui.SetNextItemWidth(150);
-                                        ImGui.Text("Symbol group name:");
                                         ImGui.SameLine();
 
-                                        ImGui.InputText("##Select name for new symbol", ref _combineName, 255);
                                         if (ImGui.IsWindowAppearing())
                                             ImGui.SetKeyboardFocusHere();
+
+                                        ImGui.InputText("##name", ref _combineName, 255);
+
 
                                         CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
                                         ImGui.Spacing();
@@ -169,8 +191,8 @@ namespace T3.Gui.Graph
                                         if (CustomComponents.DisablableButton("Combine", NodeOperations.IsNewSymbolNameValid(_combineName)))
                                         {
                                             var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                                            NodeOperations.CombineAsNewType(compositionSymbolUi, _selectedChildren, _combineName);
-                                            ImGui.CloseCurrentPopup();                                            
+                                            NodeOperations.CombineAsNewType(compositionSymbolUi, _selectedChildren, _combineName, _nameSpace);
+                                            ImGui.CloseCurrentPopup();
                                         }
 
                                         ImGui.SameLine();
@@ -187,10 +209,10 @@ namespace T3.Gui.Graph
         {
             if (!T3Ui.DraggingIsInProgress)
                 return;
-            
+
             ImGui.SetCursorPos(Vector2.Zero);
             ImGui.InvisibleButton("## drop", ImGui.GetWindowSize());
-            
+
             if (ImGui.BeginDragDropTarget())
             {
                 var payload = ImGui.AcceptDragDropPayload("Symbol");
@@ -206,14 +228,15 @@ namespace T3.Gui.Graph
                         var symbol = SymbolRegistry.Entries[guid];
                         var parent = CompositionOp.Symbol;
                         var posOnCanvas = InverseTransformPosition(ImGui.GetMousePos());
-                        var childUi= NodeOperations.CreateInstance(symbol, parent, posOnCanvas);
+                        var childUi = NodeOperations.CreateInstance(symbol, parent, posOnCanvas);
                         SelectionHandler.SetElement(childUi);
-                        
+
                         T3Ui.DraggingIsInProgress = false;
                     }
                 }
+
                 ImGui.EndDragDropTarget();
-            }             
+            }
         }
 
         public IEnumerable<Instance> GetParents(bool includeCompositionOp = false)
@@ -289,23 +312,25 @@ namespace T3.Gui.Graph
 
                          if (ImGui.BeginMenu("Styles"))
                          {
-                             if (ImGui.MenuItem("Default", "", selectedChildren.Any(child => child.Style== SymbolUi.Styles.Default)))
+                             if (ImGui.MenuItem("Default", "", selectedChildren.Any(child => child.Style == SymbolUi.Styles.Default)))
                              {
                                  foreach (var childUi in selectedChildren)
                                  {
-                                    childUi.Style = SymbolUi.Styles.Default;
+                                     childUi.Style = SymbolUi.Styles.Default;
                                  }
                              }
-                             if (ImGui.MenuItem("Resizable", "", selectedChildren.Any(child => child.Style== SymbolUi.Styles.Resizable)))
+
+                             if (ImGui.MenuItem("Resizable", "", selectedChildren.Any(child => child.Style == SymbolUi.Styles.Resizable)))
                              {
                                  foreach (var childUi in selectedChildren)
                                  {
                                      childUi.Style = SymbolUi.Styles.Resizable;
                                  }
                              }
+
                              ImGui.EndMenu();
                          }
-                         
+
                          if (ImGui.MenuItem("Delete"))
                          {
                              DeleteSelectedElements();
@@ -314,6 +339,7 @@ namespace T3.Gui.Graph
                          if (ImGui.MenuItem("Duplicate as new type", oneElementSelected))
                          {
                              _combineName = selectedChildren[0].SymbolChild.Symbol.Name;
+                             _nameSpace = selectedChildren[0].SymbolChild.Symbol.Namespace;
                              _duplicateSymbolDialog.ShowNextFrame();
                          }
 
@@ -491,8 +517,6 @@ namespace T3.Gui.Graph
         public Instance CompositionOp { get; private set; }
         #endregion
 
-
-
         //private readonly Dictionary<Guid, CanvasProperties> _canvasPropertiesForCompositionOpIds = new Dictionary<Guid, CanvasProperties>();
 
         private readonly ModalDialog _combineDialog = new ModalDialog("Combine into symbol");
@@ -502,6 +526,7 @@ namespace T3.Gui.Graph
         private List<SymbolChildUi> ChildUis { get; set; }
         private readonly SymbolBrowser _symbolBrowser = new SymbolBrowser();
         private string _combineName = "";
+        private string _nameSpace = "";
         private GraphWindow _window;
     }
 }

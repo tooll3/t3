@@ -17,7 +17,7 @@ namespace T3.Gui.Graph.Interaction
 {
     internal static class NodeOperations
     {
-        public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName)
+        public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName, string nameSpace)
         {
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
 
@@ -156,6 +156,7 @@ namespace T3.Gui.Graph.Interaction
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
             var newSymbolUi = UiModel.UpdateUiEntriesForSymbol(newSymbol);
             newSymbol.SourcePath = newSourcePath;
+            newSymbol.Namespace = nameSpace;
 
             // apply content to new symbol
             var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, newSymbolUi, Vector2.Zero);
@@ -215,13 +216,13 @@ namespace T3.Gui.Graph.Interaction
             UndoRedoStack.AddAndExecute(deleteCmd);
         }
 
-        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newName)
+        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string combineName, string nameSpace)
         {
             var sourceSymbol = symbolChildToDuplicate.Symbol;
             string originalSourcePath = sourceSymbol.SourcePath;
             Log.Info($"original symbol path: {originalSourcePath}");
             int lastSeparatorIndex = originalSourcePath.LastIndexOf("\\", StringComparison.Ordinal);
-            string newSourcePath = originalSourcePath.Substring(0, lastSeparatorIndex + 1) + newName + ".cs";
+            string newSourcePath = originalSourcePath.Substring(0, lastSeparatorIndex + 1) + combineName + ".cs";
             Log.Info($"new symbol path: {newSourcePath}");
             AddSourceFileToProject(newSourcePath);
 
@@ -238,7 +239,7 @@ namespace T3.Gui.Graph.Interaction
                                                  return newGuid.ToString();
                                              },
                                              RegexOptions.IgnoreCase);
-            newSource = Regex.Replace(newSource, sourceSymbol.Name, match => newName);
+            newSource = Regex.Replace(newSource, sourceSymbol.Name, match => combineName);
             var sw = new StreamWriter(newSourcePath);
             sw.Write(newSource);
             sw.Dispose();
@@ -266,6 +267,7 @@ namespace T3.Gui.Graph.Interaction
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
             var newSymbolUi = UiModel.UpdateUiEntriesForSymbol(newSymbol);
             newSymbol.SourcePath = newSourcePath;
+            newSymbol.Namespace = nameSpace;
 
             // apply content to new symbol
             var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];
