@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Core.Operator;
 using T3.Operators.Types;
 using UiHelpers;
 
@@ -44,12 +47,31 @@ namespace T3.Gui.Graph.Interaction
             if (!updateRequired)
                 return;
 
-            camera.Position.Input.IsDefault = false;
-            camera.Position.TypedInputValue.Value = _smoothedSetup.Position;
-            camera.Position.DirtyFlag.Invalidate();
-            camera.Target.Input.IsDefault = false;
-            camera.Target.TypedInputValue.Value = _smoothedSetup.Target;
-            camera.Target.DirtyFlag.Invalidate();
+            UpdateCameraValue(camera.Position, _smoothedSetup.Position);
+            UpdateCameraValue(camera.Target, _smoothedSetup.Target);
+        }
+
+        private void UpdateCameraValue(InputSlot<Vector3> cameraInput, Vector3 value)
+        {
+            var animator = cameraInput.Parent.Parent.Symbol.Animator;
+            if (animator.IsInputSlotAnimated(cameraInput))
+            {
+                var curves = animator.GetCurvesForInput(cameraInput).ToArray();
+                double time = EvaluationContext.GlobalTime;
+                SharpDX.Vector3 newValue = new SharpDX.Vector3(value.X, value.Y, value.Z);
+                for (int i = 0; i < 3; i++)
+                {
+                    var key = curves[i].GetV(time);
+                    if (key == null)
+                        key = new VDefinition() { U = time };
+                    key.Value = newValue[i];
+                    curves[i].AddOrUpdateV(time, key);
+                }
+            }
+            else
+            {
+                cameraInput.SetTypedInputValue(value);
+            }
         }
 
         private bool ComputeSmoothMovement()

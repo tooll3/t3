@@ -343,6 +343,13 @@ namespace T3.Core.Operator
             }
         }
 
+        public void SetTypedInputValue(T newValue)
+        {
+            Input.IsDefault = false;
+            TypedInputValue.Value = newValue;
+            DirtyFlag.Invalidate();
+        }
+
         public InputValue<T> TypedInputValue;
         public InputValue<T> TypedDefaultValue;
     }
