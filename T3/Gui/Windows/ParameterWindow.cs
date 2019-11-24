@@ -177,14 +177,14 @@ namespace T3.Gui.Windows
 
                     if ((editState & InputEditState.Modified) != InputEditState.Nothing)
                     {
-                        if (_inputValueCommandInFlight == null)
+                        if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.Value.ValueType != input.Input.Value.ValueType)
                             _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, input.Input);
                         _inputValueCommandInFlight.Value.Assign(input.Input.Value);
                     }
 
                     if ((editState & InputEditState.Finished) != InputEditState.Nothing)
                     {
-                        if (_inputValueCommandInFlight != null)
+                        if (_inputValueCommandInFlight != null && _inputValueCommandInFlight.Value.ValueType == input.Input.Value.ValueType)
                             UndoRedoStack.Add(_inputValueCommandInFlight);
                     }
 
