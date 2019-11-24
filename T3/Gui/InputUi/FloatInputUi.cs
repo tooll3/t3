@@ -22,21 +22,8 @@ namespace T3.Gui.InputUi
         protected override InputEditState DrawEditControl(string name, ref float value)
         {
             ImGui.PushID(Id.GetHashCode());
-            var valueModified = FloatValueEdit.Draw(ref value, -Vector2.UnitX, out var resetToDefaultTriggered, Min, Max, Scale);
+            var inputEditState = FloatValueEdit.Draw(ref value, -Vector2.UnitX, out var resetToDefaultTriggered, Min, Max, Scale);
             ImGui.PopID();
-
-            InputEditState inputEditState = InputEditState.Nothing;
-            if (resetToDefaultTriggered)
-            {
-                inputEditState = InputEditState.ResetToDefault;
-            }
-            else
-            {
-                inputEditState |= ImGui.IsItemClicked() ? InputEditState.Started : InputEditState.Nothing;
-                inputEditState |= valueModified ? InputEditState.Modified : InputEditState.Nothing;
-                inputEditState |= ImGui.IsItemDeactivatedAfterEdit() ? InputEditState.Finished : InputEditState.Nothing;
-            }
-        
             return inputEditState;
         }
 

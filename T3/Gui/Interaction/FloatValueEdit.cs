@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
+using T3.Gui.InputUi;
 using UiHelpers;
 
 namespace T3.Gui.Interaction
@@ -11,7 +12,7 @@ namespace T3.Gui.Interaction
         /// <summary>
         /// Returns true if editing was completed and value changed
         /// </summary>
-        public static bool Draw(ref float value, Vector2 size, out bool resetToDefaultTriggered, float min = float.NegativeInfinity,
+        public static InputEditState Draw(ref float value, Vector2 size, out bool resetToDefaultTriggered, float min = float.NegativeInfinity,
                                 float max = float.PositiveInfinity, float scale = 1)
         {
             resetToDefaultTriggered = false;
@@ -36,7 +37,7 @@ namespace T3.Gui.Interaction
                                 if (io.KeyCtrl)
                                 {
                                     SetState(JogDialStates.Inactive);
-                                    resetToDefaultTriggered = true;
+                                    return InputEditState.ResetToDefault;
                                 }
                                 else
                                 {
@@ -137,8 +138,10 @@ namespace T3.Gui.Interaction
                 value = _editValue;
                 if (_state == JogDialStates.Inactive)
                 {
-                    return true;
+                    return InputEditState.Finished;
                 }
+
+                return Math.Abs(_editValue - _startValue) > 0.0001f ? InputEditState.Modified : InputEditState.Started;
             }
             else
             {
@@ -152,7 +155,7 @@ namespace T3.Gui.Interaction
                 }
             }
 
-            return false;
+            return InputEditState.Nothing;
         }
 
         private static void SetState(JogDialStates newState)
