@@ -10,7 +10,7 @@ namespace T3.Gui.Interaction
         /// <summary>
         /// Returns true if editing was completed and value changed
         /// </summary>
-        public static bool Draw(ref float value, Vector2 size, float defaultValue = float.NaN)
+        public static bool Draw(ref float value, Vector2 size, ref bool resetToDefaultTriggered)
         {
             var io = ImGui.GetIO();
             var id = ImGui.GetID("jog");
@@ -27,9 +27,23 @@ namespace T3.Gui.Interaction
 
                         if (ImGui.IsMouseReleased(0))
                         {
-                            SetState(ImGui.GetIO().MouseDragMaxDistanceSqr[0] < 10
-                                         ? JogDialStates.StartedTextInput
-                                         : JogDialStates.Inactive);
+                            var wasClick = ImGui.GetIO().MouseDragMaxDistanceSqr[0] < 4;
+                            if (wasClick)
+                            {
+                                if (io.KeyCtrl)
+                                {
+                                    SetState(JogDialStates.Inactive);
+                                    resetToDefaultTriggered = true;
+                                }
+                                else
+                                {
+                                    SetState(JogDialStates.StartedTextInput);
+                                }
+                            }
+                            else
+                            {
+                                SetState(JogDialStates.Inactive);
+                            }
                             break;
                         }
 
@@ -52,11 +66,11 @@ namespace T3.Gui.Interaction
                         int index = 0;
                         foreach (var segmentSpeed in SegmentSpeeds)
                         {
-                            var isLastSegment = index == SegmentSpeeds.Length -1;
-                            var isActive = 
-                                           (distanceToCenter > r && distanceToCenter < r + SegmentWidth) || 
-                                            (isLastSegment && distanceToCenter > r + SegmentWidth);
-                            
+                            var isLastSegment = index == SegmentSpeeds.Length - 1;
+                            var isActive =
+                                (distanceToCenter > r && distanceToCenter < r + SegmentWidth) ||
+                                (isLastSegment && distanceToCenter > r + SegmentWidth);
+
                             if (isActive)
                                 activeSpeed = segmentSpeed;
 
@@ -131,6 +145,7 @@ namespace T3.Gui.Interaction
                     SetState(JogDialStates.Dialing);
                 }
             }
+
             return false;
         }
 
@@ -158,12 +173,12 @@ namespace T3.Gui.Interaction
 
             _state = newState;
         }
-        
+
         private static string FormatFloatForButton(ref float value, string format = "{0:0.00}")
         {
             return string.Format(format, value);
         }
-        
+
         /// <summary>
         /// A horrible imgui work around to have button that stays active while its label changes.  
         /// </summary>
@@ -174,12 +189,11 @@ namespace T3.Gui.Interaction
                 var color1 = Color.GetStyleColor(ImGuiCol.Text);
                 var keepPos = ImGui.GetCursorScreenPos();
                 var result = ImGui.Button("##dial", size);
-                ImGui.GetWindowDrawList().AddText(keepPos + new Vector2(4,4), color1, label);
+                ImGui.GetWindowDrawList().AddText(keepPos + new Vector2(4, 4), color1, label);
                 return result;
             }
         }
 
-        
         private enum JogDialStates
         {
             Inactive,
@@ -188,7 +202,6 @@ namespace T3.Gui.Interaction
             TextInput,
         }
 
-        
         private static uint _activeJogDialId;
         private static Vector2 _center;
         private static float _editValue;
@@ -197,13 +210,15 @@ namespace T3.Gui.Interaction
         private static JogDialStates _state = JogDialStates.Inactive;
         private const float SegmentWidth = 90;
         private const float NeutralRadius = 10;
-        private const float RadialIndicatorSpeed = (float)(2*Math.PI/20);
+        private const float RadialIndicatorSpeed = (float)(2 * Math.PI / 20);
         private const float Padding = 2;
+
         private static readonly float[] SegmentSpeeds = new[]
-                                                       {
-                                                           (float)(0.5f/Math.PI), 
-                                                           (float)(20*0.5f/Math.PI)
-                                                       };
+                                                        {
+                                                            (float)(0.5f / Math.PI),
+                                                            (float)(20 * 0.5f / Math.PI)
+                                                        };
+
         private static readonly Color SegmentColor = new Color(0.1f, 0.1f, 0.1f, 0.2f);
         private static readonly Color ActiveSegmentColor = new Color(0.1f, 0.1f, 0.1f, 0.3f);
     }

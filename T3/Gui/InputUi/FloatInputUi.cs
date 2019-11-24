@@ -22,7 +22,13 @@ namespace T3.Gui.InputUi
         public override bool DrawSingleEditControl(string name, ref float value)
         {
             ImGui.PushID(Id.GetHashCode());
-            var result = FloatValueEdit.Draw(ref value, new Vector2(-1, 0));
+            //float defaultValue = this.InputDefinition.DefaultValue.Value;
+            var resetToDefaultTriggered = false;
+            var result = FloatValueEdit.Draw(ref value, new Vector2(-1, 0), ref  resetToDefaultTriggered);
+            if (resetToDefaultTriggered)
+            {
+                // TODO: Do something
+            }
             ImGui.PopID();
             return result;
         }
