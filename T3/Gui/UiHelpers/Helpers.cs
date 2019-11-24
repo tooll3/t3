@@ -333,6 +333,10 @@ namespace UiHelpers
             return v - mod * (float)Math.Floor(v / mod);
         }
         
+        public static double Fmod(double v, double mod)
+        {
+            return v - mod * Math.Floor(v / mod);
+        }
 
         public static float Remap(float value, float inMin, float inMax, float outMin, float outMax)
         {

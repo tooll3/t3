@@ -22,7 +22,7 @@ namespace T3.Gui.InputUi
         protected override InputEditState DrawEditControl(string name, ref float value)
         {
             ImGui.PushID(Id.GetHashCode());
-            var inputEditState = FloatValueEdit.Draw(ref value, -Vector2.UnitX, out var resetToDefaultTriggered, Min, Max, Scale);
+            var inputEditState = SingleValueEdit.Draw(ref value, -Vector2.UnitX, Min, Max, Scale);
             ImGui.PopID();
             return inputEditState;
         }

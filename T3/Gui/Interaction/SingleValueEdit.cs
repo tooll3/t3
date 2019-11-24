@@ -2,24 +2,40 @@
 using System.Data;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Gui.InputUi;
-using T3.Gui.OutputUi;
 using UiHelpers;
 
 namespace T3.Gui.Interaction
 {
-    public static class FloatValueEdit
+    public static class SingleValueEdit
     {
+        public static InputEditState Draw(ref int value, Vector2 size, int min = int.MinValue,
+                                          int max = int.MaxValue, float scale = 0.1f, string format = "{0:0}")
+        {
+            double doubleValue = value;
+            var result = Draw(ref doubleValue, size, min, max, scale, format);
+            value = (int)doubleValue;
+            return result;
+        }
+
+        public static InputEditState Draw(ref float value, Vector2 size, float min = float.NegativeInfinity,
+                                          float max = float.PositiveInfinity, float scale = 0.01f, string format = "{0:0.00}")
+        {
+            double floatValue = value;
+            var result = Draw(ref floatValue, size, min, max, scale, format);
+            value = (float)floatValue;
+            return result;
+        }
+
         /// <summary>
         /// Returns true if editing was completed and value changed
         /// </summary>
-        public static InputEditState Draw(ref float value, Vector2 size, out bool resetToDefaultTriggered, float min = float.NegativeInfinity,
-                                float max = float.PositiveInfinity, float scale = 1)
+        public static InputEditState Draw(ref double value, Vector2 size, double min = double.NegativeInfinity,
+                                          double max = double.PositiveInfinity, float scale = 1, string format = "{0:0.00}")
         {
-            resetToDefaultTriggered = false;
             var io = ImGui.GetIO();
             var id = ImGui.GetID("jog");
+            _numberFormat = format;
             if (id == _activeJogDialId)
             {
                 switch (_state)
@@ -28,7 +44,7 @@ namespace T3.Gui.Interaction
                         ImGui.PushStyleColor(ImGuiCol.Button, Color.Black.Rgba);
                         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Black.Rgba);
                         ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Black.Rgba);
-                        DrawButtonWithDynamicLabel(FormatFloatForButton(ref _editValue), ref size);
+                        DrawButtonWithDynamicLabel(FormatValueForButton(ref _editValue), ref size);
                         ImGui.PopStyleColor(3);
 
                         if (ImGui.IsMouseReleased(0))
@@ -50,6 +66,7 @@ namespace T3.Gui.Interaction
                             {
                                 SetState(JogDialStates.Inactive);
                             }
+
                             break;
                         }
 
@@ -70,7 +87,7 @@ namespace T3.Gui.Interaction
                         var r = NeutralRadius;
                         float activeSpeed = 0;
                         int index = 0;
-                        var rot = Im.Fmod(((_editValue - _startValue) * RadialIndicatorSpeed), 2*(float)Math.PI);
+                        var rot = (float)Im.Fmod(((_editValue - _startValue) * RadialIndicatorSpeed), 2 * Math.PI);
                         foreach (var segmentSpeed in SegmentSpeeds)
                         {
                             var isLastSegment = index == SegmentSpeeds.Length - 1;
@@ -84,7 +101,7 @@ namespace T3.Gui.Interaction
                             if (isActive)
                             {
                                 const float opening = 3.14f * 1.75f;
-                                
+
                                 foreground.PathArcTo(
                                                      _center,
                                                      radius: r + SegmentWidth / 2,
@@ -118,7 +135,7 @@ namespace T3.Gui.Interaction
                             delta += (float)(2 * Math.PI);
                         }
 
-                        _editValue += delta * activeSpeed * scale* 100;
+                        _editValue += delta * activeSpeed * scale * 100;
                         _editValue = _editValue.Clamp(min, max);
                         break;
 
@@ -128,20 +145,20 @@ namespace T3.Gui.Interaction
                         goto case JogDialStates.TextInput;
 
                     case JogDialStates.TextInput:
-                        ImGui.PushStyleColor(ImGuiCol.Text, float.IsNaN(_editValue) 
-                            ? Color.Red.Rgba
-                            : Color.White.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, double.IsNaN(_editValue)
+                                                                ? Color.Red.Rgba
+                                                                : Color.White.Rgba);
                         ImGui.InputText("##dialInput", ref _jogDialText, 20);
                         ImGui.PopStyleColor();
-                        
+
                         if (ImGui.IsItemDeactivated())
                         {
                             SetState(JogDialStates.Inactive);
-                            if (float.IsNaN(_editValue))
+                            if (double.IsNaN(_editValue))
                                 _editValue = _startValue;
                         }
 
-                        _editValue = (float)Evaluate(_jogDialText);
+                        _editValue = Evaluate(_jogDialText);
                         break;
                 }
 
@@ -153,17 +170,15 @@ namespace T3.Gui.Interaction
 
                 return Math.Abs(_editValue - _startValue) > 0.0001f ? InputEditState.Modified : InputEditState.Started;
             }
-            else
+
+            DrawButtonWithDynamicLabel(FormatValueForButton(ref value), ref size);
+            if (ImGui.IsItemActivated())
             {
-                DrawButtonWithDynamicLabel(FormatFloatForButton(ref value), ref size);
-                if (ImGui.IsItemActivated())
-                {
-                    _activeJogDialId = id;
-                    _editValue = value;
-                    _startValue = value;
-                    _jogDialText = FormatFloatForButton(ref value);
-                    SetState(JogDialStates.Dialing);
-                }
+                _activeJogDialId = id;
+                _editValue = value;
+                _startValue = value;
+                _jogDialText = FormatValueForButton(ref value);
+                SetState(JogDialStates.Dialing);
             }
 
             return InputEditState.Nothing;
@@ -192,7 +207,7 @@ namespace T3.Gui.Interaction
 
             _state = newState;
         }
-        
+
         private static double Evaluate(string expression)
         {
             try
@@ -209,24 +224,20 @@ namespace T3.Gui.Interaction
             }
         }
 
-        private static string FormatFloatForButton(ref float value, string format = "{0:0.00}")
+        private static string FormatValueForButton(ref double value)
         {
-            return string.Format(format, value);
+            return string.Format(_numberFormat, value);
         }
 
         /// <summary>
-        /// A horrible imgui work around to have button that stays active while its label changes.  
+        /// A horrible ImGui work around to have button that stays active while its label changes.  
         /// </summary>
-        private static bool DrawButtonWithDynamicLabel(string label, ref Vector2 size)
+        private static void DrawButtonWithDynamicLabel(string label, ref Vector2 size)
         {
-            unsafe
-            {
-                var color1 = Color.GetStyleColor(ImGuiCol.Text);
-                var keepPos = ImGui.GetCursorScreenPos();
-                var result = ImGui.Button("##dial", size);
-                ImGui.GetWindowDrawList().AddText(keepPos + new Vector2(4, 4), color1, label);
-                return result;
-            }
+            var color1 = Color.GetStyleColor(ImGuiCol.Text);
+            var keepPos = ImGui.GetCursorScreenPos();
+            ImGui.Button("##dial", size);
+            ImGui.GetWindowDrawList().AddText(keepPos + new Vector2(4, 4), color1, label);
         }
 
         private enum JogDialStates
@@ -239,14 +250,16 @@ namespace T3.Gui.Interaction
 
         private static uint _activeJogDialId;
         private static Vector2 _center;
-        private static float _editValue;
-        private static float _startValue;
+        private static double _editValue;
+        private static double _startValue;
         private static string _jogDialText = "";
         private static JogDialStates _state = JogDialStates.Inactive;
         private const float SegmentWidth = 90;
         private const float NeutralRadius = 10;
         private const float RadialIndicatorSpeed = (float)(2 * Math.PI / 20);
         private const float Padding = 2;
+
+        private static string _numberFormat = "{0:0.00}";
 
         private static readonly float[] SegmentSpeeds = new[]
                                                         {
