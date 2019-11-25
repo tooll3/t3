@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;

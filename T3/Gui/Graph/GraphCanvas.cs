@@ -124,7 +124,8 @@ namespace T3.Gui.Graph
                 DrawContextMenu();
 
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
-                _combineDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
+                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
+                _addInputDialog.Draw(CompositionOp);
             }
             ImGui.EndGroup();
         }
@@ -266,7 +267,7 @@ namespace T3.Gui.Graph
 
                          if (ImGui.MenuItem("Combine as new type"))
                          {
-                             _combineDialog.ShowNextFrame();
+                             _combineToSymbolDialog.ShowNextFrame();
                          }
 
                          if (ImGui.MenuItem("Copy"))
@@ -297,7 +298,7 @@ namespace T3.Gui.Graph
                      }
                      if (ImGui.MenuItem("Add input parameter"))
                      {
-                         // TODO: implement
+                         _addInputDialog.ShowNextFrame();
                      }
                      
                      if (ImGui.MenuItem("Paste"))
@@ -474,7 +475,8 @@ namespace T3.Gui.Graph
         
         
 
-        private readonly CombineToSymbolDialog _combineDialog = new CombineToSymbolDialog();
+        private readonly AddInputDialog _addInputDialog = new AddInputDialog();
+        private readonly CombineToSymbolDialog _combineToSymbolDialog = new CombineToSymbolDialog();
         private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new DuplicateSymbolDialog();
         public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private readonly SelectionFence _selectionFence;
