@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using SharpDX.Direct2D1;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
@@ -172,11 +171,14 @@ namespace T3.Gui.Windows.TimeLine
                 return;
 
             var max = ImGui.GetContentRegionMax();
-            var clamp = max;
-            clamp.Y = Im.Min(TimeLineDragHeight, max.Y - 1);
+            var clampedSize = max;
+            clampedSize.Y = Im.Min(TimeLineDragHeight, max.Y - 1);
 
-            ImGui.SetCursorPos(new Vector2(0, max.Y - clamp.Y));
-            ImGui.InvisibleButton("##TimeDrag", clamp);
+            ImGui.SetCursorPos(new Vector2(0, max.Y - clampedSize.Y));
+            var screenPos = ImGui.GetCursorScreenPos();
+            ImGui.GetWindowDrawList().AddRectFilled(screenPos, screenPos + new Vector2(clampedSize.X, 1), Color.Black);
+            
+            ImGui.InvisibleButton("##TimeDrag", clampedSize);
 
             if (ImGui.IsItemHovered())
             {
@@ -228,7 +230,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private void DrawSnapIndicator()
         {
-            var opacity = 1 - Im.Clamp((float)(ImGui.GetTime() - _lastSnapTime) / _snapIndicatorDuration, 0, 1);
+            var opacity = 1 - ((float)(ImGui.GetTime() - _lastSnapTime) / _snapIndicatorDuration).Clamp(0, 1);
             var color = Color.Orange;
             color.Rgba.W = opacity;
             var p = new Vector2(TransformPositionX(_lastSnapU), 0);
@@ -237,7 +239,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private double _lastSnapTime;
         private float _snapIndicatorDuration = 1;
-        private float _lastSnapU = 0;
+        private float _lastSnapU;
 
         #region ISelection holder
         public void ClearSelection()
@@ -456,23 +458,9 @@ namespace T3.Gui.Windows.TimeLine
             return r;
         }
 
-        /// <summary>
-        /// Get relative position within canvas by applying zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
-        {
-            return posOnCanvas * Scale - Scroll;
-        }
 
         IEnumerable<ISelectable> ICanvas.SelectableChildren => new List<ISelectable>();
-
-        public bool IsRectVisible(Vector2 pos, Vector2 size)
-        {
-            return pos.X + size.X >= WindowPos.X
-                   && pos.Y + size.Y >= WindowPos.Y
-                   && pos.X < WindowPos.X + WindowSize.X
-                   && pos.Y < WindowPos.Y + WindowSize.Y;
-        }
+        
 
         /// <summary>
         /// Damped scale factors for u and v
@@ -483,8 +471,7 @@ namespace T3.Gui.Windows.TimeLine
         public Vector2 WindowSize { get; private set; }
         public Vector2 Scroll { get; private set; } = new Vector2(0, 0.0f);
         private Vector2 _scrollTarget = new Vector2(-1.0f, 0.0f);
-        public List<ISelectable> SelectableChildren { get; set; }
-        public SelectionHandler SelectionHandler { get; set; } = null;
+        public SelectionHandler SelectionHandler { get;  } = null;
         #endregion
 
         internal readonly ClipTime ClipTime;
@@ -506,10 +493,9 @@ namespace T3.Gui.Windows.TimeLine
         private ImGuiIOPtr _io;
         private Vector2 _mouse;
         private Vector2 _scaleTarget = new Vector2(100, -1);
-
         private ImDrawListPtr _drawlist;
 
         // Styling
-        private const float TimeLineDragHeight = 20;
+        private const float TimeLineDragHeight = 30;
     }
 }

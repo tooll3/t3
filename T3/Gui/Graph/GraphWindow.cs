@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using Microsoft.Win32;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Styling;
@@ -22,7 +21,7 @@ namespace T3.Gui.Graph
     {
         public GraphCanvas GraphCanvas { get; private set; }
 
-        public GraphWindow() : base()
+        public GraphWindow()
         {
             _instanceCounter++;
             Config.Title = "Graph##" + _instanceCounter;
@@ -43,7 +42,7 @@ namespace T3.Gui.Graph
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
 
             WindowFlags = ImGuiWindowFlags.NoScrollbar;
-            _graphWindowInstances.Add(this);
+            GraphWindowInstances.Add(this);
         }
 
         private Instance FindIdInNestedChildren(Instance instance, Guid childId)
@@ -63,12 +62,12 @@ namespace T3.Gui.Graph
             return null;
         }
 
-        private static int _instanceCounter = 0;
-        private static readonly List<Window> _graphWindowInstances = new List<Window>();
+        private static int _instanceCounter;
+        private static readonly List<Window> GraphWindowInstances = new List<Window>();
 
         public override List<Window> GetInstances()
         {
-            return _graphWindowInstances;
+            return GraphWindowInstances;
         }
 
         protected override void UpdateBeforeDraw()
@@ -78,7 +77,7 @@ namespace T3.Gui.Graph
 
         protected override void DrawAllInstances()
         {
-            foreach (var w in _graphWindowInstances)
+            foreach (var w in GraphWindowInstances)
             {
                 w.DrawOneInstance();
             }
@@ -177,12 +176,13 @@ namespace T3.Gui.Graph
 
         protected override void Close()
         {
-            _graphWindowInstances.Remove(this);
+            GraphWindowInstances.Remove(this);
         }
 
         protected override void AddAnotherInstance()
         {
-            new GraphWindow();
+            // ReSharper disable once ObjectCreationAsStatement
+            new GraphWindow();    // Must call constructor
         }
 
         private void DrawTimelineAndCurveEditor()
@@ -247,7 +247,7 @@ namespace T3.Gui.Graph
         }
 
         private readonly ClipTime _clipTime;
-        private static float _heightTimeLine = 100;
+        private static float _heightTimeLine = 200;
         private readonly TimeLineCanvas _timeLineCanvas;
     }
 }
