@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Operator;
@@ -12,7 +14,7 @@ namespace T3.Gui.Graph.Dialogs
 {
     public class AddInputDialog : ModalDialog
     {
-        public void Draw(Instance compositionOp)
+        public void Draw(Instance compositionOp, Symbol symbol)
         {
             if (BeginDialog("Add parameter input"))
             {
@@ -44,9 +46,9 @@ namespace T3.Gui.Graph.Dialogs
                     ImGui.InputText("##namespace", ref _searchFilter, 255);
 
                     ImGui.PushFont(Fonts.FontSmall);
-                    foreach (var typeUiPair in TypeUiRegistry.Entries)
+                    foreach (var (type, _) in TypeUiRegistry.Entries)
                     {
-                        var name = TypeNameRegistry.Entries[typeUiPair.Key];
+                        var name = TypeNameRegistry.Entries[type];
                         var matchesSearch = TypeNameMatchesSearch(name);
                         
                         if (!matchesSearch)
@@ -54,7 +56,7 @@ namespace T3.Gui.Graph.Dialogs
 
                         if (ImGui.Button(name))
                         {
-                            _selectedType = typeUiPair.Key;
+                            _selectedType = type;
                         }
 
                         ImGui.SameLine();
@@ -64,11 +66,16 @@ namespace T3.Gui.Graph.Dialogs
 
                 ImGui.Spacing();
 
-                var isValid = NodeOperations.IsNewSymbolNameValid(_parameterName) 
-                              && _selectedType != null;
-                if (CustomComponents.DisablableButton("Combine", isValid))
+                ImGui.SetNextItemWidth(80);
+                ImGui.AlignTextToFramePadding();
+                ImGui.Checkbox("Multi-Input", ref _multiInput);
+
+                bool isValid = NodeOperations.IsNewSymbolNameValid(_parameterName) && _selectedType != null;
+                bool isCompoundType = !symbol.InstanceType.GetTypeInfo().DeclaredMethods.Any();
+                isValid &= isCompoundType;
+                if (CustomComponents.DisablableButton("Add", isValid))
                 {
-                    // TODO: please implement
+                    NodeOperations.AddInputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
                 }
 
                 ImGui.SameLine();
@@ -104,11 +111,13 @@ namespace T3.Gui.Graph.Dialogs
         private string _parameterName = ""; // Initialize for ImGui edit
         private string _searchFilter = ""; // Initialize for ImGui edit
         private Type _selectedType;  
+        private bool _multiInput;
                                                      
         private static readonly Dictionary<string, string[]> Synonyms
             = new Dictionary<string, string[]>
               {
                   {"float", new[]{"Single",}},
               };
+
     }
 }

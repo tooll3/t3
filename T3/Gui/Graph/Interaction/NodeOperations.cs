@@ -327,7 +327,6 @@ namespace T3.Gui.Graph.Interaction
 
         public static SymbolChildUi CreateInstance(Symbol symbol, Symbol parent, Vector2 positionOnCanvas)
         {
-            
             var addCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = positionOnCanvas };
             UndoRedoStack.AddAndExecute(addCommand);
             var newSymbolChild = parent.Children.Single(entry => entry.Id == addCommand.AddedChildId);
@@ -336,7 +335,6 @@ namespace T3.Gui.Graph.Interaction
             var symbolUi = SymbolUiRegistry.Entries[parent.Id];
             var childUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
             return childUi;
-            
         }
 
         /// <summary>
@@ -380,5 +378,100 @@ namespace T3.Gui.Graph.Interaction
         }
 
         private static readonly Regex ValidTypeNamePattern = new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
+
+        public static void AddInputToSymbol(string inputName, bool multiInput, Type inputType, Symbol symbol)
+        {
+            var usingStrings = new HashSet<string>();
+            var outputStringBuilder = new StringBuilder();
+            foreach (var output in symbol.OutputDefinitions)
+            {
+                var @namespace = output.ValueType.Namespace;
+                if (@namespace == "System")
+                {
+                    usingStrings.Add("using " + @namespace + ";");
+                    @namespace = String.Empty;
+                }
+                else
+                {
+                    @namespace += ".";
+                }
+
+                var attributeString = "        [Output(Guid = \"" + output.Id + "\")]";
+                outputStringBuilder.AppendLine(attributeString);
+                var typeName = TypeNameRegistry.Entries[output.ValueType];
+                var slotString = "Slot<" + @namespace + typeName + ">";
+                var outputString = "        public readonly " + slotString + " " + output.Name + " = new " + slotString + "();";
+                outputStringBuilder.AppendLine(outputString);
+                outputStringBuilder.AppendLine("");
+            }
+
+            var inputStringBuilder = new StringBuilder();
+            foreach (var input in symbol.InputDefinitions)
+            {
+                var @namespace = input.DefaultValue.ValueType.Namespace;
+                if (@namespace == "System")
+                {
+                    usingStrings.Add("using " + @namespace + ";");
+                    @namespace = String.Empty;
+                }
+                else
+                {
+                    @namespace += ".";
+                }
+
+                var attributeString = "        [Input(Guid = \"" + input.Id + "\")]";
+                inputStringBuilder.AppendLine(attributeString);
+                var typeName = TypeNameRegistry.Entries[input.DefaultValue.ValueType];
+                var slotString = (input.IsMultiInput ? "MultiInputSlot<" : "InputSlot<") + @namespace + typeName + ">";
+                var inputString = "        public readonly " + slotString + " " + input.Name + " = new " + slotString + "();";
+                inputStringBuilder.AppendLine(inputString);
+                inputStringBuilder.AppendLine("");
+            }
+
+            // add the new input
+            {
+                var @namespace = inputType.Namespace;
+                if (@namespace == "System")
+                {
+                    usingStrings.Add("using " + @namespace + ";");
+                    @namespace = String.Empty;
+                }
+                else
+                {
+                    @namespace += ".";
+                }
+
+                var attributeString = "        [Input(Guid = \"" + Guid.NewGuid() + "\")]";
+                inputStringBuilder.AppendLine(attributeString);
+                var typeName = TypeNameRegistry.Entries[inputType];
+                var slotString = (multiInput ? "MultiInputSlot<" : "InputSlot<") + @namespace + typeName + ">";
+                var inputString = "        public readonly " + slotString + " " + inputName + " = new " + slotString + "();";
+                inputStringBuilder.AppendLine(inputString);
+            }
+            usingStrings.Add("using T3.Core.Operator;");
+
+            var classStringBuilder = new StringBuilder();
+            foreach (var usingString in usingStrings)
+                classStringBuilder.AppendLine(usingString);
+            classStringBuilder.AppendLine("");
+            classStringBuilder.AppendLine("namespace T3.Operators.Types");
+            classStringBuilder.AppendLine("{");
+            classStringBuilder.AppendFormat("    public class {0} : Instance<{0}>\n", symbol.Name);
+            classStringBuilder.AppendLine("    {");
+            classStringBuilder.Append(outputStringBuilder);
+            classStringBuilder.AppendLine("");
+            classStringBuilder.Append(inputStringBuilder);
+            classStringBuilder.AppendLine("    }");
+            classStringBuilder.AppendLine("}");
+            classStringBuilder.AppendLine("");
+            var newSource = classStringBuilder.ToString();
+            Log.Info(newSource);
+
+            string path = @"Operators\Types\";
+            using (var sw = new StreamWriter(path + symbol.Name + ".cs"))
+            {
+                sw.Write(newSource);
+            }
+        }
     }
 }

@@ -125,7 +125,7 @@ namespace T3.Gui.Graph
 
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
                 _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
-                _addInputDialog.Draw(CompositionOp);
+                _addInputDialog.Draw(CompositionOp, GetSelectedChildUis().FirstOrDefault()?.SymbolChild.Symbol);
             }
             ImGui.EndGroup();
         }
