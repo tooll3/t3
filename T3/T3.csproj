@@ -316,9 +316,14 @@
     <Compile Include="Gui\Commands\ChangeKeyframesCommand.cs" />
     <Compile Include="Gui\Commands\MoveTimeClipCommand.cs" />
     <Compile Include="Gui\Commands\TimeClipDeleteCommand.cs" />
+    <Compile Include="Gui\Graph\Dialogs\CombineToSymbolDialog.cs" />
+    <Compile Include="Gui\Graph\Dialogs\CreateInputDialog.cs" />
+    <Compile Include="Gui\Graph\Dialogs\DuplicateSymbolDialog.cs" />
     <Compile Include="Gui\Graph\GraphCanvas.cs" />
-    <Compile Include="Gui\Graph\Interaction\CameraInteraction.cs" />
+    <Compile Include="Gui\Graph\Interaction\ConnectionMaker.cs" />
     <Compile Include="Gui\Graph\Interaction\NodeOperations.cs" />
+    <Compile Include="Gui\Graph\Interaction\SelectableMovement.cs" />
+    <Compile Include="Gui\Graph\Interaction\SymbolBrowser.cs" />
     <Compile Include="Gui\Graph\Interaction\SymbolFilter.cs" />
     <Compile Include="Gui\Graph\TimeControls.cs" />
     <Compile Include="Gui\InputUi\BoolInputUi.cs" />
@@ -327,6 +332,7 @@
     <Compile Include="Gui\InputUi\StringListInputUi.cs" />
     <Compile Include="Gui\InputUi\Vector2InputUi.cs" />
     <Compile Include="Gui\InputUi\Vector3InputUi.cs" />
+    <Compile Include="Gui\Interaction\CameraInteraction.cs" />
     <Compile Include="Gui\Interaction\SingleValueEdit.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
     <Compile Include="Gui\Interaction\Snapping\IValueSnapAttractor.cs" />
@@ -334,7 +340,6 @@
     <Compile Include="Gui\OutputUi\FloatOutputUi.cs" />
     <Compile Include="Gui\OutputUi\StringListOutputUi.cs" />
     <Compile Include="Gui\Styling\CustomComponents.cs" />
-    <Compile Include="Gui\Graph\Interaction\SelectableMovement.cs" />
     <Compile Include="Gui\InputUi\EnumInputUi.cs" />
     <Compile Include="Gui\InputUi\FloatInputUi.cs" />
     <Compile Include="Gui\InputUi\FloatListInputUi.cs" />
@@ -391,13 +396,11 @@
     <Compile Include="Gui\Commands\ChangeInputValueCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSelectableCommand.cs" />
     <Compile Include="Gui\Commands\UndoRedoStack.cs" />
-    <Compile Include="Gui\Graph\Interaction\SymbolBrowser.cs" />
     <Compile Include="Gui\Animation\CurveEditing\HorizontalScaleLines.cs" />
     <Compile Include="Gui\UiHelpers\ICanvas.cs" />
     <Compile Include="Gui\Interaction\Key.cs" />
     <Compile Include="Gui\Windows\ParameterWindow.cs" />
     <Compile Include="Gui\SymbolChildUi.cs" />
-    <Compile Include="Gui\Graph\Interaction\ConnectionMaker.cs" />
     <Compile Include="Gui\Graph\InputNode.cs" />
     <Compile Include="Gui\Graph\OutputNode.cs" />
     <Compile Include="Gui\Graph\Graph.cs" />

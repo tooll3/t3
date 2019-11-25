@@ -12,6 +12,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
@@ -30,7 +31,7 @@ namespace T3.Gui.Graph
         {
             _selectionFence = new SelectionFence(this);
             _window = window;
-            OpenComposition(opInstance, zoomIn: true);
+            OpenComposition(opInstance);
         }
 
         public void OpenComposition(Instance opInstance, bool zoomIn = true)
@@ -122,86 +123,8 @@ namespace T3.Gui.Graph
                 DrawList.PopClipRect();
                 DrawContextMenu();
 
-                _duplicateSymbolDialog.Draw(() =>
-                                            {
-                                                ImGui.PushFont(Fonts.FontSmall);
-                                                ImGui.Text("Namespace");
-                                                ImGui.SameLine();
-                                                
-                                                ImGui.SetCursorPosX(250+20); // Not sure how else to layout this
-                                                ImGui.Text("Name");
-                                                ImGui.PopFont();
-
-                                                ImGui.SetNextItemWidth(250);
-                                                ImGui.InputText("##namespace", ref _nameSpace, 255);
-
-                                                ImGui.SetNextItemWidth(150);
-                                                ImGui.SameLine();
-
-                                                if (ImGui.IsWindowAppearing())
-                                                    ImGui.SetKeyboardFocusHere();
-
-                                                ImGui.InputText("##name", ref _combineName, 255);
-
-                                                CustomComponents
-                                                   .HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
-                                                ImGui.Spacing();
-
-                                                if (CustomComponents.DisablableButton("Duplicate", NodeOperations.IsNewSymbolNameValid(_combineName)))
-                                                {
-                                                    var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                                                    NodeOperations.DuplicateAsNewType(compositionSymbolUi, 
-                                                                                      GetSelectedChildUis()[0].SymbolChild, 
-                                                                                      combineName: _combineName, 
-                                                                                      nameSpace: _nameSpace);
-                                                    ImGui.CloseCurrentPopup();
-                                                }
-
-                                                ImGui.SameLine();
-                                                if (ImGui.Button("Cancel"))
-                                                {
-                                                    ImGui.CloseCurrentPopup();
-                                                }
-                                            });
-
-                _combineDialog.Draw(() =>
-                                    {
-                                        ImGui.PushFont(Fonts.FontSmall);
-                                        ImGui.Text("Namespace");
-                                        ImGui.SameLine();
-                                                
-                                        ImGui.SetCursorPosX(250+20); // Not sure how else to layout this
-                                        ImGui.Text("Name");
-                                        ImGui.PopFont();
-
-                                        ImGui.SetNextItemWidth(250);
-                                        ImGui.InputText("##namespace", ref _nameSpace, 255);
-
-                                        ImGui.SetNextItemWidth(150);
-                                        ImGui.SameLine();
-
-                                        if (ImGui.IsWindowAppearing())
-                                            ImGui.SetKeyboardFocusHere();
-
-                                        ImGui.InputText("##name", ref _combineName, 255);
-
-
-                                        CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
-                                        ImGui.Spacing();
-
-                                        if (CustomComponents.DisablableButton("Combine", NodeOperations.IsNewSymbolNameValid(_combineName)))
-                                        {
-                                            var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                                            NodeOperations.CombineAsNewType(compositionSymbolUi, _selectedChildren, _combineName, _nameSpace);
-                                            ImGui.CloseCurrentPopup();
-                                        }
-
-                                        ImGui.SameLine();
-                                        if (ImGui.Button("Cancel"))
-                                        {
-                                            ImGui.CloseCurrentPopup();
-                                        }
-                                    });
+                _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
+                _combineDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
             }
             ImGui.EndGroup();
         }
@@ -261,8 +184,6 @@ namespace T3.Gui.Graph
             return GetParents(includeCompositionOp: true).Select(p => p.Symbol);
         }
 
-        private bool _contextMenuIsOpen;
-        private List<SymbolChildUi> _selectedChildren;
 
         private void FocusViewToSelection()
         {
@@ -374,6 +295,10 @@ namespace T3.Gui.Graph
                              // TODO: Please implement
                          }
                      }
+                     if (ImGui.MenuItem("Add input parameter"))
+                     {
+                         // TODO: implement
+                     }
                      
                      if (ImGui.MenuItem("Paste"))
                      {
@@ -386,6 +311,7 @@ namespace T3.Gui.Graph
                      }
                  }, ref _contextMenuIsOpen);
         }
+        private bool _contextMenuIsOpen;
 
         private void DeleteSelectedElements()
         {
@@ -401,7 +327,6 @@ namespace T3.Gui.Graph
         private List<SymbolChildUi> GetSelectedChildUis()
         {
             var selectedChildren = new List<SymbolChildUi>();
-            _selectedChildren = selectedChildren;            // TODO: is this line a bug? Why is it here?
             foreach (var x in SelectionHandler.SelectedElements)
             {
                 if (x is SymbolChildUi childUi)
@@ -443,15 +368,12 @@ namespace T3.Gui.Graph
 
             using (var writer = new StringWriter())
             {
-                var json = new Json();
-                json.Writer = new JsonTextWriter(writer);
-                json.Writer.Formatting = Formatting.Indented;
+                var json = new Json { Writer = new JsonTextWriter(writer) { Formatting = Formatting.Indented } };
                 json.Writer.WriteStartArray();
 
                 json.WriteSymbol(containerOp);
 
-                var jsonUi = new UiJson();
-                jsonUi.Writer = json.Writer;
+                var jsonUi = new UiJson { Writer = json.Writer };
                 jsonUi.WriteSymbolUi(newContainerUi);
 
                 json.Writer.WriteEndArray();
@@ -463,7 +385,7 @@ namespace T3.Gui.Graph
                 }
                 catch (Exception)
                 {
-                    Log.Error("Could not copy elements to clipboard. Perhaps a tool like Teamviewer locks it.");
+                    Log.Error("Could not copy elements to clipboard. Perhaps a tool like TeamViewer locks it.");
                 }
             }
 
@@ -477,17 +399,14 @@ namespace T3.Gui.Graph
                 var text = Clipboard.GetText();
                 using (var reader = new StringReader(text))
                 {
-                    var json = new Json();
-                    json.Reader = new JsonTextReader(reader);
-                    var o = JToken.ReadFrom(json.Reader) as JArray;
-                    if (o == null)
+                    var json = new Json { Reader = new JsonTextReader(reader) };
+                    if (!(JToken.ReadFrom(json.Reader) is JArray o))
                         return;
 
                     var symbolJson = o[0];
                     var containerSymbol = json.ReadSymbol(null, symbolJson);
                     SymbolRegistry.Entries.Add(containerSymbol.Id, containerSymbol);
-                    var uiJson = new UiJson();
-                    uiJson.Reader = json.Reader;
+                    
                     var symbolUiJson = o[1];
                     var containerSymbolUi = UiJson.ReadSymbolUi(symbolUiJson);
                     var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
@@ -552,17 +471,17 @@ namespace T3.Gui.Graph
         public ImDrawListPtr DrawList { get; private set; }
         public Instance CompositionOp { get; private set; }
         #endregion
+        
+        
 
-        //private readonly Dictionary<Guid, CanvasProperties> _canvasPropertiesForCompositionOpIds = new Dictionary<Guid, CanvasProperties>();
-
-        private readonly ModalDialog _combineDialog = new ModalDialog("Combine into symbol");
-        private readonly ModalDialog _duplicateSymbolDialog = new ModalDialog("Duplicate as new symbol");
+        private readonly CombineToSymbolDialog _combineDialog = new CombineToSymbolDialog();
+        private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new DuplicateSymbolDialog();
         public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private readonly SelectionFence _selectionFence;
         private List<SymbolChildUi> ChildUis { get; set; }
         private readonly SymbolBrowser _symbolBrowser = new SymbolBrowser();
         private string _combineName = "";
         private string _nameSpace = "";
-        private GraphWindow _window;
+        private readonly GraphWindow _window;
     }
 }

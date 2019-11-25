@@ -1,44 +1,69 @@
 ﻿using System;
 using System.Numerics;
+using System.Windows.Forms;
 using ImGuiNET;
 using T3.Gui.Graph.Interaction;
 
 namespace T3.Gui.UiHelpers
 {
-    public class ModalDialog
+    /// <summary>
+    /// Framework for rendering modal dialogs.
+    ///
+    /// Should be implemented like...
+    /// 
+    /// void Draw()
+    /// {
+    ///     if(BeginDialog("myTitle"))
+    ///     {
+    /// 
+    ///       // draw your content...
+    /// 
+    ///       EndDialogContent();
+    ///     }
+    ///     EndDialog();
+    /// }
+    /// 
+    /// </summary>
+    public abstract class ModalDialog
     {
-        public ModalDialog(string title = "Dialog")
+        public void ShowNextFrame()
         {
-            _title = title;
+            _shouldShowNextFrame = true;
         }
 
-        private string _title;
-        
-        
-        public void Draw(Action drawContent)
+        protected bool BeginDialog(string title)
         {
             if (_shouldShowNextFrame)
             {
                 _shouldShowNextFrame = false;
-                ImGui.OpenPopup(_title);
+                ImGui.OpenPopup(title);
             }
 
             ImGui.SetNextWindowSize(new Vector2(500, 200), ImGuiCond.FirstUseEver);
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(20, 20));
 
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(20,20));
-            if (ImGui.BeginPopupModal(_title))
-            {
-                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(4,10));
-                drawContent();
-                ImGui.PopStyleVar();
-                ImGui.EndPopup();
-            }
-            ImGui.PopStyleVar();
+            if (!ImGui.BeginPopupModal(title))
+                return false;
+            
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(4, 10));
+            return true;
         }
 
-        public void ShowNextFrame()
+        /// <summary>
+        /// Only call if BeginDialog returned true
+        /// </summary>
+        protected static void EndDialogContent()
         {
-            _shouldShowNextFrame = true;
+            ImGui.PopStyleVar();
+            ImGui.EndPopup();
+        }
+
+        /// <summary>
+        /// Call always
+        /// </summary>
+        protected static void EndDialog()
+        {
+            ImGui.PopStyleVar();
         }
 
         private bool _shouldShowNextFrame;
