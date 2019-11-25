@@ -45,10 +45,10 @@ namespace T3.Gui.Graph
             if (ConnectionMaker.TempConnection != null)
                 allConnections.Add(ConnectionMaker.TempConnection);
 
-            _graphSymbolUi = SymbolUiRegistry.Entries[graphSymbol.Id];
-            _childUis = _graphSymbolUi.ChildUis;
-            _inputUisById = _graphSymbolUi.InputUis;
-            _outputUisById = _graphSymbolUi.OutputUis;
+            _symbolUi = SymbolUiRegistry.Entries[graphSymbol.Id];
+            _childUis = _symbolUi.ChildUis;
+            _inputUisById = _symbolUi.InputUis;
+            _outputUisById = _symbolUi.OutputUis;
 
             // 1. Initializes lists of ConnectionLineUis
             Connections.Init();
@@ -318,7 +318,7 @@ namespace T3.Gui.Graph
         internal static readonly ConnectionSorter Connections = new ConnectionSorter();
         public static ImDrawListPtr DrawList;
         private static List<SymbolChildUi> _childUis;
-        private static SymbolUi _graphSymbolUi;
+        private static SymbolUi _symbolUi;
         private static Dictionary<Guid, IOutputUi> _outputUisById;
         private static Dictionary<Guid, IInputUi> _inputUisById;
     }

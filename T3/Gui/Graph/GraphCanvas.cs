@@ -13,6 +13,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
@@ -295,14 +296,13 @@ namespace T3.Gui.Graph
                 (
                  () =>
                  {
-                     var selectedChildren = GetSelectedChildUis();
-
-                     if (selectedChildren.Count > 0)
+                     var selectedChildUis = GetSelectedChildUis();
+                     if (selectedChildUis.Count > 0)
                      {
-                         bool oneElementSelected = selectedChildren.Count == 1;
+                         bool oneElementSelected = selectedChildUis.Count == 1;
                          var label = oneElementSelected
-                                         ? $"Selected {selectedChildren[0].SymbolChild.ReadableName}..."
-                                         : $"Selected {selectedChildren.Count} items...";
+                                         ? $"Selected {selectedChildUis[0].SymbolChild.ReadableName}..."
+                                         : $"Selected {selectedChildUis.Count} items...";
 
                          ImGui.PushFont(Fonts.FontSmall);
                          ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
@@ -312,17 +312,17 @@ namespace T3.Gui.Graph
 
                          if (ImGui.BeginMenu("Styles"))
                          {
-                             if (ImGui.MenuItem("Default", "", selectedChildren.Any(child => child.Style == SymbolUi.Styles.Default)))
+                             if (ImGui.MenuItem("Default", "", selectedChildUis.Any(child => child.Style == SymbolUi.Styles.Default)))
                              {
-                                 foreach (var childUi in selectedChildren)
+                                 foreach (var childUi in selectedChildUis)
                                  {
                                      childUi.Style = SymbolUi.Styles.Default;
                                  }
                              }
 
-                             if (ImGui.MenuItem("Resizable", "", selectedChildren.Any(child => child.Style == SymbolUi.Styles.Resizable)))
+                             if (ImGui.MenuItem("Resizable", "", selectedChildUis.Any(child => child.Style == SymbolUi.Styles.Resizable)))
                              {
-                                 foreach (var childUi in selectedChildren)
+                                 foreach (var childUi in selectedChildUis)
                                  {
                                      childUi.Style = SymbolUi.Styles.Resizable;
                                  }
@@ -338,8 +338,8 @@ namespace T3.Gui.Graph
 
                          if (ImGui.MenuItem("Duplicate as new type", oneElementSelected))
                          {
-                             _combineName = selectedChildren[0].SymbolChild.Symbol.Name;
-                             _nameSpace = selectedChildren[0].SymbolChild.Symbol.Namespace;
+                             _combineName = selectedChildUis[0].SymbolChild.Symbol.Name;
+                             _nameSpace = selectedChildUis[0].SymbolChild.Symbol.Namespace;
                              _duplicateSymbolDialog.ShowNextFrame();
                          }
 
@@ -350,12 +350,31 @@ namespace T3.Gui.Graph
 
                          if (ImGui.MenuItem("Copy"))
                          {
-                             CopySelectionToClipboard(selectedChildren);
+                             CopySelectionToClipboard(selectedChildUis);
                          }
 
                          ImGui.Separator();
                      }
 
+                     var selectedInputUis = GetSelectableInputUis();
+                     if (selectedInputUis.Count > 0)
+                     {
+                         var oneElementSelected = selectedInputUis.Count == 1;
+                         var label = oneElementSelected
+                                         ? $"Input {selectedInputUis[0].InputDefinition.Name}..."
+                                         : $"Selected {selectedInputUis.Count} inputs...";
+
+                         ImGui.PushFont(Fonts.FontSmall);
+                         ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                         ImGui.Text(label);
+                         ImGui.PopStyleColor();
+                         ImGui.PopFont();
+                         if (ImGui.MenuItem("Remove input(s)", enabled: false))
+                         {
+                             // TODO: Please implement
+                         }
+                     }
+                     
                      if (ImGui.MenuItem("Paste"))
                      {
                          PasteClipboard();
@@ -382,7 +401,7 @@ namespace T3.Gui.Graph
         private List<SymbolChildUi> GetSelectedChildUis()
         {
             var selectedChildren = new List<SymbolChildUi>();
-            _selectedChildren = selectedChildren;
+            _selectedChildren = selectedChildren;            // TODO: is this line a bug? Why is it here?
             foreach (var x in SelectionHandler.SelectedElements)
             {
                 if (x is SymbolChildUi childUi)
@@ -393,6 +412,23 @@ namespace T3.Gui.Graph
 
             return selectedChildren;
         }
+        
+        private List<IInputUi> GetSelectableInputUis()
+        {
+            var selectedInputs = new List<IInputUi>();
+            
+            //_selectedChildren = selectedChildren;
+            foreach (var x in SelectionHandler.SelectedElements)
+            {
+                if (x is IInputUi inputUi)
+                {
+                    selectedInputs.Add(inputUi);
+                }
+            }
+            
+            return selectedInputs;
+        }
+
 
         private void CopySelectionToClipboard(List<SymbolChildUi> selectedChildren)
         {
