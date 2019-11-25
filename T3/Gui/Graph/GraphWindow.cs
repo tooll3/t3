@@ -7,9 +7,11 @@ using System.Numerics;
 using Microsoft.Win32;
 using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using T3.Gui.Windows.TimeLine;
+using UiHelpers;
 
 namespace T3.Gui.Graph
 {
@@ -19,7 +21,6 @@ namespace T3.Gui.Graph
     public class GraphWindow : Window
     {
         public GraphCanvas GraphCanvas { get; private set; }
-
 
         public GraphWindow() : base()
         {
@@ -33,17 +34,16 @@ namespace T3.Gui.Graph
 
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
 
-            var shownOp = (opId != Guid.Empty 
-                               ? FindIdInNestedChildren(T3Ui.UiModel.MainOp, opId) 
+            var shownOp = (opId != Guid.Empty
+                               ? FindIdInNestedChildren(T3Ui.UiModel.MainOp, opId)
                                : null) ?? T3Ui.UiModel.MainOp;
 
             GraphCanvas = new GraphCanvas(this, shownOp);
-            
+
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
 
             WindowFlags = ImGuiWindowFlags.NoScrollbar;
             _graphWindowInstances.Add(this);
-            
         }
 
         private Instance FindIdInNestedChildren(Instance instance, Guid childId)
@@ -55,10 +55,11 @@ namespace T3.Gui.Graph
                     return child;
                 }
 
-                var result =FindIdInNestedChildren(child, childId);
+                var result = FindIdInNestedChildren(child, childId);
                 if (result != null)
                     return result;
             }
+
             return null;
         }
 
@@ -83,6 +84,8 @@ namespace T3.Gui.Graph
             }
         }
 
+        private static bool _justAddedDescription;
+
         protected override void DrawContent()
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
@@ -98,6 +101,63 @@ namespace T3.Gui.Graph
                     dl.ChannelsSetCurrent(1);
                     {
                         DrawBreadcrumbs();
+
+                        ImGui.SetCursorPosX(8);
+                        ImGui.PushFont(Fonts.FontBold);
+                        ImGui.Text(GraphCanvas.CompositionOp.Symbol.Name);
+                        ImGui.PopFont();
+                        ImGui.SameLine();
+
+                        ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
+                        ImGui.Text(" in " + GraphCanvas.CompositionOp.Symbol.Namespace);
+                        ImGui.PopStyleColor();
+
+                        var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.CompositionOp.Symbol.Id];
+
+                        if (symbolUi.Description == null)
+                        {
+                            ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
+                            ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+
+                            ImGui.PushFont(Fonts.FontSmall);
+                            if (ImGui.Button("add description..."))
+                            {
+                                symbolUi.Description = " ";
+                                _justAddedDescription = false;
+                            }
+
+                            ImGui.PopFont();
+                            ImGui.PopStyleColor(2);
+                        }
+                        else
+                        {
+                            if (symbolUi.Description == string.Empty)
+                            {
+                                symbolUi.Description = null;
+                            }
+                            else
+                            {
+                                var desc = symbolUi.Description;
+                                ImGui.PushFont(Fonts.FontSmall);
+                                ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
+                                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                                {
+                                    var sizeMatchingDescription = ImGui.CalcTextSize(desc) + new Vector2(20, 40);
+                                    sizeMatchingDescription.X = Im.Max(300, sizeMatchingDescription.X);
+                                    if (_justAddedDescription)
+                                    {
+                                        ImGui.SetKeyboardFocusHere();
+                                        _justAddedDescription = false;
+                                    }
+
+                                    ImGui.InputTextMultiline("##description", ref desc, 3000, sizeMatchingDescription);
+                                }
+                                ImGui.PopStyleColor(2);
+                                ImGui.PopFont();
+                                symbolUi.Description = desc;
+                            }
+                        }
+
                         TimeControls.DrawTimeControls(_clipTime, ref _timeLineCanvas.Mode);
                     }
                     dl.ChannelsSetCurrent(0);
@@ -161,28 +221,30 @@ namespace T3.Gui.Graph
             ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
             IEnumerable<Instance> parents = GraphCanvas.GetParents();
 
-            foreach (var p in parents)
+            ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
+            ImGui.PushFont(Fonts.FontSmall);
             {
-                ImGui.PushID(p.Id.GetHashCode());
-                if (ImGui.Button(p.Symbol.Name))
+                foreach (var p in parents)
                 {
-                    GraphCanvas.OpenComposition(p, zoomIn: false);
-                    break;
+                    ImGui.SameLine();
+                    ImGui.PushID(p.Id.GetHashCode());
+
+                    var clicked = ImGui.Button(p.Symbol.Name);
+
+                    if (clicked)
+                    {
+                        GraphCanvas.OpenComposition(p, zoomIn: false);
+                        break;
+                    }
+
+                    ImGui.SameLine();
+                    ImGui.PopID();
+                    ImGui.Text(">");
                 }
-
-                ImGui.SameLine();
-                ImGui.PopID();
-                ImGui.Text("/");
-                ImGui.SameLine();
             }
-
-            ImGui.PushStyleColor(ImGuiCol.Button, Color.White.Rgba);
-            ImGui.PushStyleColor(ImGuiCol.Text, Color.Black.Rgba);
-            ImGui.Button(GraphCanvas.CompositionOp.Symbol.Name);
-            ImGui.PopStyleColor(2);
+            ImGui.PopFont();
+            ImGui.PopStyleColor();
         }
-
-        //private TimeLineCanvas.TimelineModes _timelineMode = TimeLineCanvas.TimelineModes.Undefined;
 
         private readonly ClipTime _clipTime;
         private static float _heightTimeLine = 100;

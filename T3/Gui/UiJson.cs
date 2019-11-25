@@ -22,6 +22,8 @@ namespace T3.Gui
             Writer.WriteObject("Id", symbolUi.Symbol.Id);
             Writer.WriteComment(symbolUi.Symbol.Name);
 
+            Writer.WriteObject("Description", symbolUi.Description);
+            
             WriteInputUis(symbolUi);
             WriteChildUis(symbolUi);
             WriteOutputUis(symbolUi);
@@ -141,6 +143,7 @@ namespace T3.Gui
             var vector2Converter = JsonToTypeValueConverters.Entries[typeof(Vector2)];
             var symbolId = Guid.Parse(mainObject["Id"].Value<string>());
             var symbol = SymbolRegistry.Entries[symbolId];
+            
 
             var inputDict = new Dictionary<Guid, IInputUi>();
             foreach (JToken uiInputEntry in (JArray)mainObject["InputUis"])
@@ -224,7 +227,9 @@ namespace T3.Gui
                 }
             }
 
-            return new SymbolUi(symbol, symbolChildUis, inputDict, outputDict);
+            var newSymbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict);
+            newSymbolUi.Description = mainObject["Description"]?.Value<string>();
+            return newSymbolUi;
         }
     }
 }

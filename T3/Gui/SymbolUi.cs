@@ -142,8 +142,9 @@ namespace T3.Gui
             Resizable,
             WithThumbnail,
         }
+        
+        public string Description { get; set; }
         // public Styles DefaultStyleForInstances { get; set; }  // TODO: Implement inheritance for display styles? 
-            
         public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();
         public Dictionary<Guid, IInputUi> InputUis = new Dictionary<Guid, IInputUi>();
         public Dictionary<Guid, IOutputUi> OutputUis = new Dictionary<Guid, IOutputUi>();
