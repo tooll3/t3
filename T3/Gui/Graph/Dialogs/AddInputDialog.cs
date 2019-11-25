@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ImGuiNET;
+using T3.Core;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
@@ -30,7 +31,7 @@ namespace T3.Gui.Graph.Dialogs
                 ImGui.SetNextItemWidth(250);
                 if (_selectedType != null)
                 {
-                    ImGui.Button(_selectedType.Name);
+                    ImGui.Button(TypeNameRegistry.Entries[_selectedType] );
                     ImGui.SameLine();
                     if (ImGui.Button("x"))
                     {
@@ -45,8 +46,7 @@ namespace T3.Gui.Graph.Dialogs
                     ImGui.PushFont(Fonts.FontSmall);
                     foreach (var typeUiPair in TypeUiRegistry.Entries)
                     {
-                        var name = typeUiPair.Key.ToString();
-                        
+                        var name = TypeNameRegistry.Entries[typeUiPair.Key];
                         var matchesSearch = TypeNameMatchesSearch(name);
                         
                         if (!matchesSearch)
