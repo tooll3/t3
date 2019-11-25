@@ -1,8 +1,11 @@
 Reproducible crash after opening "Add Input" dialog in PartialScene02
 ---------------------------------------
-1. Checkout
-2. 
-
+1. Checkout t3 35208fdd687aefd821730a6be359a4bc87b03c00
+2. Start t3
+3. Create instance of [CurlNoise]
+4. Open new instance
+5. Right-Click -> Add Input
+-> crash
 
 
 System.NullReferenceException: Object reference not set to an instance of an object.
