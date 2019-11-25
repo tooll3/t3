@@ -342,16 +342,9 @@ namespace UiHelpers
         {
             var factor = (value - inMin)/(inMax - inMin);
             var v =factor*(outMax - outMin) + outMin;
-            if (v > outMax)
-            {
-                v = outMax;
-                
-            }
-            else if (v < outMin)
-            {
-                v = outMin;
-            }
-            return v;
+            if(outMin > outMax)
+                Swap(ref outMin, ref outMax);
+            return v.Clamp(outMin, outMax);
         }
 
         public static double Remap(double value, double inMin, double inMax, double outMin, double outMax)
