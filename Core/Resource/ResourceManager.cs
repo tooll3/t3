@@ -709,14 +709,14 @@ namespace T3.Core
 
         private void OnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
+            //Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
             if (FileResources.TryGetValue(fileSystemEventArgs.FullPath, out var fileResource))
             {
-                Log.Info($"valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
+                //Log.Info($"valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
                 DateTime lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
                 if (lastWriteTime != fileResource.LastWriteReferenceTime)
                 {
-                    Log.Info($"very valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
+                    //Log.Info($"very valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
                      // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
                      //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
                      //       it cannot read the file. 
@@ -746,7 +746,7 @@ namespace T3.Core
 
         private void OnRenamed(object sender, RenamedEventArgs renamedEventArgs)
         {
-            Log.Info($"renamed file from '{renamedEventArgs.OldFullPath}' to '{renamedEventArgs.FullPath}'");
+            //Log.Info($"renamed file from '{renamedEventArgs.OldFullPath}' to '{renamedEventArgs.FullPath}'");
 
             var extension = Path.GetExtension(renamedEventArgs.FullPath);
             if (extension != ".cs")
