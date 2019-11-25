@@ -4,44 +4,56 @@
 ▢ Port [BlendSmokeNoise] shader
 
 
-▣ Add user-settings that saves canvas zooms and current open instance path
-▣ fix new graph window
+▢ Add mock ui to add inputs to group symbols
+▢ Add mock ui to remove inputs from symbols
+▢ Add mock ui to enter text
 
-▢ Namespaces
-  ▢ Add to Combine and Duplicate dialogs
-  ▣ Add to Parameter window
-  ▣ Add to Symbol Browser
-  ▣ Implement node tree with sorting
-  ▢ Add to nodes when zoomed in
+▢ FIX crash when pressing return on empty search symbol browser list  (15')
+▢ increase default height of timeline (2')
+▢ increase height of time scrub area (2')
+▢ make time scrub area visible (10')
+▢ color SymbolBrowser nodes by output (15')
+▢ adjust with of input nodes to graph nodes (5')
 
-▢ increase height of time scrub area
-▢ make time scrub area visible
-▢ FIX crash when pressing return on empty search symbol browser list
-▢ FIX crash when pressing backspace after double click on node
-▢ improve visibility of output slots
+▢ Highlight missing required inputs/parameters (3h)
+▢ add mute audio toggle
+▢ improve visibility of output slots (2h)
+▢ add dark border around graph node to emphasize overlapping (10')
+▢ use percentage values for storing window layouts
+▢ resize windows when resizing application window ("fake docking")
+▢ Make Text in ConsoleLog selectable
+▢ Correctly initialize node style of children when duplicating as new type
+▢ Correctly initialize child name overrides when duplicating as new type
+
+▢ Display input parameter settings when click input
+
+▢ sort entries in SymbolBrowser by relevancy
+▢ show entries in SymbolBrowser with primary output type color
+▢ pin dope sheet parameters
+
+▢ Idea: open Symbol Browser right of to current selection when triggering action AddNeighborToOutput e.g. cursor right?
+▢ Idea: Keyboard navigation through inputs and parameters with left triggering AddNeighborToInput
+
+▢ When dragging connections indicate if node has non-relevant matching input slots (2h)
+▢ use correct size of nodes for snapping (1h)
+▢ use Tab switch between curve and dope sheet (20')
+▢ start symbol browser from input nodes (1h)
+▢ start symbol browser from output nodes (15')
+▢ (un)fold nodes with icon?
+▢ use small fonts when zoomed out (20')
+▢ Add namespace to nodes when zoomed in
+
 ▢ MultiCanvas: Time-Line height should be an individual setting of graphCanvas
 ▢ MultiCanvas: Output window should be selectable from all canvas windows
 ▢ MultiCanvas: Parameter window should work for all canvas windows
 ▢ MultiCanvas: Fix dragging connection crash
 ▢ MultiCanvas: user-setting should save opened windows
-▢ use percentage values for storing window layouts
-▢ resize windows when resizing application window ("fake docking")
 
-▢ use Tab switch between curve and dope sheet
-▢ Fix hidden symbol-browser in GraphView
-▢ start symbol browser from input nodes
-▢ start symbol browser from output nodes
-▢ use correct size of nodes for snapping
-▢ push down neighbors when expanding node
-▢ (un)fold nodes with icon?
 ▢ visually indicate operator snapping
-▢ use small fonts when zoomed out
-▢ When dragging connections indicate if node has non-relevant matching input slots
-
+▢ push down neighbors when expanding node
+▢ Fix hidden symbol-browser in GraphView
 ▢ Move ClipTime to core and make it accessible in context?
 
-▢ sort entries in SymbolBrowser by relevancy
-▢ show entries in SymbolBrowser with primary output type color
 ▢ in dope sheet insert new key should snap to lines
 ▢ fix invisible input glitch if graph canvas is zoomed out too much
 ▢ fix scroll-bar in quick create window
@@ -49,7 +61,6 @@
 ▢ add transparency pattern below color parameters
 ▢ save clip-range with symbol
 ▢ opening a new (unknown) op should change view to show all operators
-▢ pin dope sheet parameters
 ▢ use renamed instance title in dope sheet parameter list
 ▢ pin parameter window
 ▢ make parameter window non-movable
@@ -102,6 +113,20 @@ Architecture questions for discussion
 
 Done
 --------
+Sun
+▣ Add dial widget
+▣ FIX crash when pressing backspace after double click on node 
+
+Sat
+▣ Namespaces
+  ▣ Add to Combine and Duplicate dialogs
+  ▣ Add to Parameter window
+  ▣ Add to Symbol Browser
+  ▣ Implement node tree with sorting
+▣ Add user-settings that saves canvas zooms and current open instance path
+▣ fix new graph window
+
+Fri
 ▣ auto-add new node to project file after combine or duplicate symbol
 ▣ different view modes / sizes for ChildUis
 ▣ save window layout
