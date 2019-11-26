@@ -43,7 +43,7 @@ namespace T3.Gui.Graph
                                                                                childUi.PosOnCanvas,
                                                                                childUi.PosOnCanvas + childUi.Size));
                 _lastScreenRect.Floor();
-
+                
                 // Resize indicator
                 if (childUi.Style == SymbolUi.Styles.Resizable)
                 {
@@ -90,7 +90,7 @@ namespace T3.Gui.Graph
                 if (ImGui.IsItemActive() && ImGui.IsMouseDoubleClicked(0))
                 {
                     var instance = GraphCanvas.Current.CompositionOp.Children.Find(c => c.Symbol == childUi.SymbolChild.Symbol);
-                    GraphCanvas.Current.OpenComposition(instance);
+                    GraphCanvas.Current.OpenComposition(instance, ScalableCanvas.Transition.JumpIn);
                 }
 
                 if (_lastScreenRect.Contains(ImGui.GetMousePos()))

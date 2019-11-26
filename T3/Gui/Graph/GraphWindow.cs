@@ -233,7 +233,7 @@ namespace T3.Gui.Graph
 
                     if (clicked)
                     {
-                        GraphCanvas.OpenComposition(p, zoomIn: false);
+                        GraphCanvas.OpenComposition(p, ScalableCanvas.Transition.JumpOut);
                         break;
                     }
 

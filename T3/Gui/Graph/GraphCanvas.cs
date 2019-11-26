@@ -31,10 +31,10 @@ namespace T3.Gui.Graph
         {
             _selectionFence = new SelectionFence(this);
             _window = window;
-            OpenComposition(opInstance);
+            OpenComposition(opInstance, Transition.JumpIn);
         }
 
-        public void OpenComposition(Instance opInstance, bool zoomIn = true)
+        public void OpenComposition(Instance opInstance, Transition transition)
         {
             // save old properties
             if (CompositionOp != null)
@@ -42,15 +42,32 @@ namespace T3.Gui.Graph
                 UserSettings.Config.OperatorViewSettings[CompositionOp.Id] = GetTargetProperties();
             }
 
+            var previousInstance = CompositionOp;
+            
             SelectionHandler.Clear();
             CompositionOp = opInstance;
 
+
+            UserSettings.SaveLastViewedOpForWindow(_window, opInstance.Id);
+
+            var previousFocusOnScreen = WindowPos + WindowSize / 2;
+
+            if (previousInstance != null)
+            {
+                var newUiContainer = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                var matchingChildUi = newUiContainer.ChildUis.FirstOrDefault(childUi => childUi.SymbolChild.Id == previousInstance.Id);
+                if (matchingChildUi != null)
+                {
+                    var centerOnCanvas = matchingChildUi.PosOnCanvas + matchingChildUi.Size / 2;
+                    previousFocusOnScreen = TransformPosition(centerOnCanvas);
+                }
+            }
+            
             var newProps = UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.Id)
                                ? UserSettings.Config.OperatorViewSettings[CompositionOp.Id]
                                : GuessViewProperties();
-
-            UserSettings.SaveLastViewedOpForWindow(_window, opInstance.Id);
-            ApplyProperties(newProps, zoomIn);
+            
+            SetAreaWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);
         }
 
         private CanvasProperties GuessViewProperties()
@@ -70,6 +87,7 @@ namespace T3.Gui.Graph
             DrawList = dl;
             ImGui.BeginGroup();
             {
+                ImGui.Text($"{Scroll.X:0.0}  {Scroll.Y:0.0}   x{Scale.X:0.0}    Mouse:{ImGui.GetMousePos()}");
                 DrawDropHandler();
 
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
@@ -194,7 +212,7 @@ namespace T3.Gui.Graph
 
         private void FocusViewToSelection()
         {
-            FitArea(GetSelectionBounds());
+            FitAreaOnCanvas(GetSelectionBounds());
         }
 
         private ImRect GetSelectionBounds(float padding = 50)

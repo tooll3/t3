@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using SharpDX.Direct2D1;
+using T3.Core.Logging;
 using T3.Gui.Selection;
 using UiHelpers;
 
@@ -28,8 +29,17 @@ namespace T3.Gui.Graph
             InitWindowSize();
 
             // Damp scaling
-            Scale = Im.Lerp(Scale, _scaleTarget, _io.DeltaTime * 10);
-            Scroll = Im.Lerp(Scroll, _scrollTarget, _io.DeltaTime * 10);
+            var p1 = Scroll;
+            var p2 = Scroll + WindowSize * Scale;
+            var p1Target = _scrollTarget;
+            var p2Target = _scrollTarget + WindowSize * _scaleTarget;
+            var speed = 12;
+            var pp1 = Im.Lerp(p1, p1Target, _io.DeltaTime * speed);
+            var pp2 = Im.Lerp(p2, p2Target, _io.DeltaTime * speed);
+            var scaleT =   (pp2 - pp1) / WindowSize;
+            
+            Scale = scaleT;
+            Scroll = pp1;
 
             if (!ImGui.IsWindowHovered())
                 return;
@@ -66,10 +76,10 @@ namespace T3.Gui.Graph
                    };
         }
 
-        public void ApplyProperties(CanvasProperties properties, bool zoomIn)
-        {
-            SetAreaWithTransition(properties.Scale, properties.Scroll, zoomIn);
-        }
+        // public void ApplyProperties(CanvasProperties properties, bool zoomIn)
+        // {
+        //     
+        // }
 
 
         #region implement ICanvas =================================================================
@@ -153,7 +163,7 @@ namespace T3.Gui.Graph
             _scaleTarget = Vector2.One;
         }
 
-        protected void FitArea(ImRect area)
+        protected void FitAreaOnCanvas(ImRect area)
         {
             var height = area.GetHeight();
             var width = area.GetWidth();
@@ -184,17 +194,26 @@ namespace T3.Gui.Graph
             _scaleTarget = new Vector2(scale, scale);
         }
 
-        protected void SetAreaWithTransition(Vector2 scale, Vector2 scroll, bool zoomIn = true)
+        public enum Transition
+        {
+            JumpIn,
+            JumpOut,
+            Undefined,
+        }
+
+        protected void SetAreaWithTransition(Vector2 scale, Vector2 scroll, Vector2 previousFocusOnScreen, Transition transition)
         {
             _scaleTarget = scale;
-            Scale = scale * (zoomIn ? 0.3f : 3);
+            Scale = scale * (transition == Transition.JumpIn ? 0.3f : 1.5f);
             
             _scrollTarget = scroll;
-            if(zoomIn)
+            if(transition == Transition.JumpIn)
                 Scroll = _scrollTarget+ WindowSize * 0.5f;
             else
             {
-                Scroll = _scrollTarget - WindowSize * 0.5f;
+                var delta = WindowSize / 2;
+                var scrollIs = delta * Scale;
+                Scroll = _scrollTarget -scrollIs;
             }
         }
 
