@@ -510,7 +510,7 @@ namespace T3.Core
             PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
             debugNameInfo?.SetValue(shader, name);
 
-            Log.Info($"Successfully compiled shader '{name}' from '{srcFile}'");
+            Log.Info($"Successfully compiled shader '{name}' with profile '{profile}' from '{srcFile}'");
         }
 
         public uint CreateVertexShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
@@ -545,7 +545,6 @@ namespace T3.Core
             if (fileResource == null)
             {
                 fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
-                fileResource.FileChangeAction = fileChangedAction;
                 FileResources.Add(srcFile, fileResource);
             }
             else
@@ -553,6 +552,8 @@ namespace T3.Core
                 // file resource already exists, so just add the id of the new type resource
                 fileResource.ResourceIds.Add(resourceEntry.Id);
             }
+            fileResource.FileChangeAction -= fileChangedAction;
+            fileResource.FileChangeAction += fileChangedAction;
 
             return resourceEntry.Id;
         }
@@ -589,7 +590,6 @@ namespace T3.Core
             if (fileResource == null)
             {
                 fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
-                fileResource.FileChangeAction = fileChangedAction;
                 FileResources.Add(srcFile, fileResource);
             }
             else
@@ -597,6 +597,8 @@ namespace T3.Core
                 // file resource already exists, so just add the id of the new type resource
                 fileResource.ResourceIds.Add(resourceEntry.Id);
             }
+            fileResource.FileChangeAction -= fileChangedAction;
+            fileResource.FileChangeAction += fileChangedAction;
 
             return resourceEntry.Id;
         }
@@ -633,7 +635,6 @@ namespace T3.Core
             if (fileResource == null)
             {
                 fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
-                fileResource.FileChangeAction = fileChangedAction;
                 FileResources.Add(srcFile, fileResource);
             }
             else
@@ -642,6 +643,9 @@ namespace T3.Core
                 fileResource.ResourceIds.Add(resourceEntry.Id);
             }
 
+            fileResource.FileChangeAction -= fileChangedAction;
+            fileResource.FileChangeAction += fileChangedAction;
+                
             return resourceEntry.Id;
         }
 
@@ -729,13 +733,13 @@ namespace T3.Core
                         {
                             var updateable = resource as IUpdateable;
                             updateable?.Update(fileResource.Path);
-                            fileResource.FileChangeAction?.Invoke();
                         }
                         else
                         {
                             Log.Info($"Trying to update a non existing file resource '{fileResource.Path}'.");
                         }
                     }
+                    fileResource.FileChangeAction?.Invoke();
 
                     fileResource.LastWriteReferenceTime = lastWriteTime;
                 }
