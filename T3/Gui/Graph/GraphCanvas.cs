@@ -125,7 +125,14 @@ namespace T3.Gui.Graph
 
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
                 _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
-                _addInputDialog.Draw(CompositionOp, GetSelectedChildUis().FirstOrDefault()?.SymbolChild.Symbol);
+
+                {
+                    var selectedSymbol = GetSelectedChildUis().FirstOrDefault() != null
+                                     ? GetSelectedChildUis().FirstOrDefault()?.SymbolChild.Symbol
+                                     : CompositionOp.Symbol;
+
+                    _addInputDialog.Draw(selectedSymbol);
+                }
             }
             ImGui.EndGroup();
         }
@@ -184,7 +191,6 @@ namespace T3.Gui.Graph
         {
             return GetParents(includeCompositionOp: true).Select(p => p.Symbol);
         }
-
 
         private void FocusViewToSelection()
         {
@@ -296,11 +302,12 @@ namespace T3.Gui.Graph
                              // TODO: Please implement
                          }
                      }
+
                      if (ImGui.MenuItem("Add input parameter"))
                      {
                          _addInputDialog.ShowNextFrame();
                      }
-                     
+
                      if (ImGui.MenuItem("Paste"))
                      {
                          PasteClipboard();
@@ -312,6 +319,7 @@ namespace T3.Gui.Graph
                      }
                  }, ref _contextMenuIsOpen);
         }
+
         private bool _contextMenuIsOpen;
 
         private void DeleteSelectedElements()
@@ -338,11 +346,11 @@ namespace T3.Gui.Graph
 
             return selectedChildren;
         }
-        
+
         private List<IInputUi> GetSelectableInputUis()
         {
             var selectedInputs = new List<IInputUi>();
-            
+
             //_selectedChildren = selectedChildren;
             foreach (var x in SelectionHandler.SelectedElements)
             {
@@ -351,10 +359,9 @@ namespace T3.Gui.Graph
                     selectedInputs.Add(inputUi);
                 }
             }
-            
+
             return selectedInputs;
         }
-
 
         private void CopySelectionToClipboard(List<SymbolChildUi> selectedChildren)
         {
@@ -407,7 +414,7 @@ namespace T3.Gui.Graph
                     var symbolJson = o[0];
                     var containerSymbol = json.ReadSymbol(null, symbolJson);
                     SymbolRegistry.Entries.Add(containerSymbol.Id, containerSymbol);
-                    
+
                     var symbolUiJson = o[1];
                     var containerSymbolUi = UiJson.ReadSymbolUi(symbolUiJson);
                     var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
@@ -472,8 +479,6 @@ namespace T3.Gui.Graph
         public ImDrawListPtr DrawList { get; private set; }
         public Instance CompositionOp { get; private set; }
         #endregion
-        
-        
 
         private readonly AddInputDialog _addInputDialog = new AddInputDialog();
         private readonly CombineToSymbolDialog _combineToSymbolDialog = new CombineToSymbolDialog();

@@ -14,7 +14,7 @@ namespace T3.Gui.Graph.Dialogs
 {
     public class AddInputDialog : ModalDialog
     {
-        public void Draw(Instance compositionOp, Symbol symbol)
+        public void Draw(Symbol symbol)
         {
             if (BeginDialog("Add parameter input"))
             {
