@@ -18,6 +18,9 @@ namespace T3.Core.Operator
         public void Reset()
         {
             Time = GlobalTime;
+            ClipSpaceTcamera = Matrix.Identity;
+            CameraTworld = Matrix.Identity;
+            WorldTobject = Matrix.Identity;
         }
 
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
