@@ -225,6 +225,7 @@ namespace T3.Core.Operator
             }
 
             // ... and add the connections again
+            newInstanceSymbolChildren.Reverse(); // process reverse that multi input index are correct
             foreach (var (_, parent, connectionsToReplace) in newInstanceSymbolChildren)
             {
                 foreach (var entry in connectionsToReplace)
