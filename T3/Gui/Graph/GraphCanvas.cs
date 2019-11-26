@@ -144,13 +144,8 @@ namespace T3.Gui.Graph
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
                 _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
 
-                {
-                    var selectedSymbol = GetSelectedChildUis().FirstOrDefault() != null
-                                     ? GetSelectedChildUis().FirstOrDefault()?.SymbolChild.Symbol
-                                     : CompositionOp.Symbol;
-
-                    _addInputDialog.Draw(selectedSymbol);
-                }
+                var selectedChildUi = GetSelectedChildUis().FirstOrDefault();
+                _addInputDialog.Draw(selectedChildUi != null ? selectedChildUi.SymbolChild.Symbol : CompositionOp.Symbol);
             }
             ImGui.EndGroup();
         }
