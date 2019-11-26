@@ -11,6 +11,7 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using T3.Core.Logging;
 using T3.Gui.Styling;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
@@ -201,8 +202,15 @@ namespace T3
                             _srvCache.Add(pcmd.TextureId, srv);
                         }
 
-                        _deviceContext.PixelShader.SetShaderResource(0, srv);
-                        _deviceContext.DrawIndexed((int)pcmd.ElemCount, idx_offset, vtx_offset);
+                        try
+                        {
+                            _deviceContext.PixelShader.SetShaderResource(0, srv);
+                            _deviceContext.DrawIndexed((int)pcmd.ElemCount, idx_offset, vtx_offset);
+                        }
+                        catch (SharpDXException e)
+                        {
+                            Log.Error(e.Message);
+                        }
                     }
 
                     idx_offset += (int)pcmd.ElemCount;
