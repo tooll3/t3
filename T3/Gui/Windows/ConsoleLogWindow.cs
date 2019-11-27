@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using System.Windows.Forms;
 using T3.Core.Logging;
 using T3.Gui;
 using T3.Gui.Windows;
@@ -43,6 +44,26 @@ namespace T3.Gui.Windows
                         _logEntries.Clear();
                     }
                 }
+                ImGui.SameLine();
+
+                if (ImGui.Button("Copy"))
+                {
+                    lock (_logEntries)
+                    {
+                        var sb = new StringBuilder();
+                        foreach (var entry in _logEntries)
+                        {
+                            sb.Append(string.Format("{0:  0.000}", (entry.TimeStamp - _startTime).Ticks / 10000000f));
+                            sb.Append("\t");
+                            sb.Append(entry.Level);
+                            sb.Append("\t");
+                            sb.Append(entry.Message);
+                            sb.Append("\n");
+                        }
+                        Clipboard.SetText(sb.ToString());
+                    }
+                }
+                ImGui.SameLine();
 
                 ImGui.SameLine();
                 ImGui.InputText("##Filter", ref _filterString, 100);
@@ -62,7 +83,7 @@ namespace T3.Gui.Windows
                             color.W = colorHoveredElements;
                             ImGui.PushStyleColor(ImGuiCol.Text, color);
                             ImGui.Text(string.Format("{0:0.000}", (entry.TimeStamp - _startTime).Ticks / 10000000f));
-                            ImGui.SameLine(50);
+                            ImGui.SameLine(80);
                             ImGui.Text(entry.Message);
 
                             if (IsLineHovered())
