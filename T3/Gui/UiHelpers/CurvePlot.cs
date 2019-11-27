@@ -16,7 +16,7 @@ namespace T3.Gui.UiHelpers
         public void Draw(float value)
         {
             _graphValues[_sampleOffset] = value;
-            _dampedValue = Im.Lerp(_dampedValue, value, 0.1f);
+            //_dampedValue = Im.Lerp(_dampedValue, value, 0.1f);
 
             _sampleOffset = (_sampleOffset + 1) % _sampleCount;
             if (_width > 0)
@@ -24,11 +24,11 @@ namespace T3.Gui.UiHelpers
 
             if (float.IsNaN(MinValue))
             {
-                ImGui.PlotLines($"{_dampedValue:0.00} {_label}", ref _graphValues[0], _sampleCount, _sampleOffset);
+                ImGui.PlotLines($"{value:##.###} {_label}", ref _graphValues[0], _sampleCount, _sampleOffset);
             }
             else
             {
-                ImGui.PlotLines($"{_dampedValue:0.00} {_label}", ref _graphValues[0], _sampleCount, _sampleOffset, "", 
+                ImGui.PlotLines($"{value:##.###} {_label}", ref _graphValues[0], _sampleCount, _sampleOffset, "", 
                                 scale_min: MinValue,
                                 scale_max: MaxValue);
             }
@@ -47,7 +47,6 @@ namespace T3.Gui.UiHelpers
         private readonly float[] _graphValues;
         private int _sampleOffset;
         private readonly int _sampleCount;
-        private float _dampedValue;
         private readonly string _label;
         private readonly float _width;
     }

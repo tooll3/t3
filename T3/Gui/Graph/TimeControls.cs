@@ -222,7 +222,22 @@ namespace T3.Gui.Graph
                 var streamedClipTime = clipTime as StreamClipTime;
                 streamedClipTime?.SetMuteMode(clipTime.AudioMuted);
             }
-
+            ImGui.SameLine();
+            
+            // ToggleHover
+            var icon = Icon.HoverPreviewSmall;
+            if (GraphCanvas.HoverMode == GraphCanvas.HoverModes.Disabled)
+            {
+                icon = Icon.HoverPreviewDisabled;
+            }
+            else if (GraphCanvas.HoverMode == GraphCanvas.HoverModes.Live)
+            {
+                icon = Icon.HoverPreviewPlay;
+            }
+            if (CustomComponents.IconButton(icon,  "##hoverPreview", TimeControlsSize))
+            {
+                GraphCanvas.HoverMode = (GraphCanvas.HoverModes)(((int)GraphCanvas.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
+            }
             ImGui.SameLine();
         }
 

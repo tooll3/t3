@@ -18,8 +18,6 @@ namespace T3.Gui.Graph
     /// </summary>
     static class GraphNode
     {
-
-
         public static void Draw(SymbolChildUi childUi)
         {
             var isPotentialConnectionTargetNode = _hoveredId == childUi.Id
@@ -43,7 +41,7 @@ namespace T3.Gui.Graph
                                                                                childUi.PosOnCanvas,
                                                                                childUi.PosOnCanvas + childUi.Size));
                 _lastScreenRect.Floor();
-                
+
                 // Resize indicator
                 if (childUi.Style == SymbolUi.Styles.Resizable)
                 {
@@ -70,19 +68,22 @@ namespace T3.Gui.Graph
                     T3Ui.AddHoveredId(childUi.SymbolChild.Id);
 
                     ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
-                    ImGui.BeginTooltip();
+                    if (GraphCanvas.HoverMode != GraphCanvas.HoverModes.Disabled)
                     {
-                        ImageCanvasForTooltips.Draw();
-                        var children = GraphCanvas.Current.CompositionOp.Children;
-                        Instance instance = children.Single(c => c.Id == childUi.Id);
-                        if (instance.Outputs.Count > 0)
+                        ImGui.BeginTooltip();
                         {
-                            var firstOutput = instance.Outputs[0];
-                            IOutputUi outputUi = childSymbolUi.OutputUis[firstOutput.Id];
-                            outputUi.DrawValue(firstOutput);
+                            ImageCanvasForTooltips.Draw();
+                            var children = GraphCanvas.Current.CompositionOp.Children;
+                            Instance instance = children.Single(c => c.Id == childUi.Id);
+                            if (instance.Outputs.Count > 0)
+                            {
+                                var firstOutput = instance.Outputs[0];
+                                IOutputUi outputUi = childSymbolUi.OutputUis[firstOutput.Id];
+                                outputUi.DrawValue(firstOutput, recompute: GraphCanvas.HoverMode == GraphCanvas.HoverModes.Live);
+                            }
                         }
+                        ImGui.EndTooltip();
                     }
-                    ImGui.EndTooltip();
                 }
 
                 SelectableMovement.Handle(childUi);
@@ -121,20 +122,18 @@ namespace T3.Gui.Graph
                                        hovered
                                            ? ColorVariations.OperatorHover.Apply(backgroundColor)
                                            : ColorVariations.Operator.Apply(backgroundColor));
-                
+
                 // drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
                 //                        new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + InputSlotThickness + InputSlotMargin),
                 //                        ColorVariations.OperatorInputZone.Apply(typeColor));
 
                 // outline
                 drawList.AddRect(_lastScreenRect.Min - Vector2.Zero,
-                                       _lastScreenRect.Max + Vector2.One + Vector2.One,
-                                       new Color(0.08f,0.08f,0.08f,0.8f),
-                                       rounding: 0,
-                                       2);
-                                 
+                                 _lastScreenRect.Max + Vector2.One + Vector2.One,
+                                 new Color(0.08f, 0.08f, 0.08f, 0.8f),
+                                 rounding: 0,
+                                 2);
 
-                
                 // Animation indicator
                 {
                     var compositionOp = GraphCanvas.Current.CompositionOp;
@@ -351,7 +350,7 @@ namespace T3.Gui.Graph
                                   );
             }
         }
-        
+
         private static void DrawOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
             if (ConnectionMaker.IsOutputSlotCurrentConnectionSource(childUi, outputDef))

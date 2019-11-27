@@ -14,12 +14,7 @@ namespace T3.Gui.OutputUi
             if (slot is Slot<float> typedSlot)
             {
                 var value = typedSlot.Value;
-
-                if (float.IsNaN(_dampedValue))
-                    _dampedValue = 0;
-
-                _dampedValue = Im.Lerp(_dampedValue, value, 0.01f);
-
+                
                 if (slot != _lastSlot)
                 {
                     _lastSlot = slot;
@@ -27,15 +22,13 @@ namespace T3.Gui.OutputUi
                 }
 
                 _curve.Draw(value);
-                ImGui.Text($"~{_dampedValue:0.00}");
             }
             else
             {
                 Debug.Assert(false);
             }
         }
-
-        private float _dampedValue = 0;
+        
         private ISlot _lastSlot;
         private readonly CurvePlot _curve = new CurvePlot("", resolution: 200, width:150);
     }

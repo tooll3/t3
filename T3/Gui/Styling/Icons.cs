@@ -101,6 +101,9 @@ namespace T3.Gui.Styling
             new IconSource(Icon.ToggleAudioOn,19, new Vector2(16,16)),
             new IconSource(Icon.ToggleAudioOff,20, new Vector2(16,16)),
             new IconSource(Icon.Warning, 21, new Vector2(16,16)),
+            new IconSource(Icon.HoverPreviewSmall, 22, new Vector2(16,16)),
+            new IconSource(Icon.HoverPreviewPlay, 23, new Vector2(16,16)),
+            new IconSource(Icon.HoverPreviewDisabled, 24, new Vector2(16,16)),
         };
 
         public const string IconAtlasPath = @"Resources\t3-icons.png";
@@ -129,6 +132,9 @@ namespace T3.Gui.Styling
         FollowTime,
         ToggleAudioOn,
         ToggleAudioOff,
-        Warning,    //21
+        Warning,    
+        HoverPreviewSmall,
+        HoverPreviewPlay,
+        HoverPreviewDisabled,
     }
 }
