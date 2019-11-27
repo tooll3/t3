@@ -17,6 +17,7 @@ namespace T3.Gui
         public int Bar => (int)(Time * Bpm / 60.0 / 4.0) + 1;
         public int Beat => (int)(Time * Bpm / 60.0) % 4 + 1;
         public int Tick => (int)(Time * Bpm / 60.0 * 4) % 4 + 1;
+        public bool AudioMuted { get; set; }
 
         public void Update()
         {
@@ -67,7 +68,6 @@ namespace T3.Gui
             }
         }
 
-        private double _playbackSpeed;
 
         public override double PlaybackSpeed
         {
@@ -95,6 +95,11 @@ namespace T3.Gui
             }
         }
 
+        public void SetMuteMode(bool isMuted)
+        {
+            Bass.Volume =  isMuted ? 0 :1;
+        }
+
         protected override void UpdateTime()
         {
             if (_playbackSpeed < 0.0)
@@ -109,5 +114,8 @@ namespace T3.Gui
             long soundStreamPos = Bass.ChannelGetPosition(_soundStreamHandle);
             return Bass.ChannelBytes2Seconds(_soundStreamHandle, soundStreamPos);
         }
+
+
+        private double _playbackSpeed;
     }
 }

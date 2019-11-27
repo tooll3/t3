@@ -208,9 +208,19 @@ namespace T3.Gui.Graph
             CustomComponents.ToggleButton(Icon.Loop, "##loop", ref clipTime.IsLooping, TimeControlsSize);
             ImGui.SameLine();
 
+            // Curve MOde
             if (ImGui.Button(mode.ToString(), TimeControlsSize))
             {
                 mode = (TimeLineCanvas.Modes)(((int)mode + 1) % Enum.GetNames(typeof(TimeLineCanvas.Modes)).Length);
+            }
+            ImGui.SameLine();
+            
+            // ToggleAudio
+            if (CustomComponents.IconButton(clipTime.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn,  "##audioToggle", TimeControlsSize))
+            {
+                clipTime.AudioMuted = !clipTime.AudioMuted;
+                var streamedClipTime = clipTime as StreamClipTime;
+                streamedClipTime?.SetMuteMode(clipTime.AudioMuted);
             }
 
             ImGui.SameLine();

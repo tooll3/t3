@@ -94,6 +94,13 @@ namespace T3.Gui.Styling
             new IconSource(Icon.BeatGrid,12 , new Vector2(16,16)),
             new IconSource(Icon.ConnectedParameter,13 , new Vector2(16,16)),
             new IconSource(Icon.Stripe4PxPattern,14, new Vector2(16,16)),
+            new IconSource(Icon.CurveKeyframe,15, new Vector2(16,16)),
+            new IconSource(Icon.CurveKeyframeSelected,16, new Vector2(16,16)),
+            new IconSource(Icon.CurrentTimeMarkerHandle,17, new Vector2(16,16)),
+            new IconSource(Icon.FollowTime,18, new Vector2(16,16)),
+            new IconSource(Icon.ToggleAudioOn,19, new Vector2(16,16)),
+            new IconSource(Icon.ToggleAudioOff,20, new Vector2(16,16)),
+            new IconSource(Icon.Warning, 21, new Vector2(16,16)),
         };
 
         public const string IconAtlasPath = @"Resources\t3-icons.png";
@@ -115,6 +122,13 @@ namespace T3.Gui.Styling
         Loop,
         BeatGrid,
         ConnectedParameter,
-        Stripe4PxPattern,
+        Stripe4PxPattern,    
+        CurveKeyframe,
+        CurveKeyframeSelected,
+        CurrentTimeMarkerHandle,
+        FollowTime,
+        ToggleAudioOn,
+        ToggleAudioOff,
+        Warning,    //21
     }
 }
