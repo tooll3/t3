@@ -73,7 +73,7 @@ namespace T3.Gui.Windows
                 ImGui.SetWindowPos(windowPos);
 
                 if (PreventWindowDragging)
-                    ImGui.BeginChild("inner", ImGui.GetWindowSize(), false, ImGuiWindowFlags.NoMove);
+                    ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax()- ImGui.GetWindowContentRegionMin(), false, ImGuiWindowFlags.NoMove);
 
                 DrawContent();
 
