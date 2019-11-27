@@ -10,6 +10,7 @@ using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Graph;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 
@@ -297,7 +298,7 @@ namespace T3.Gui.InputUi
 
         public Type Type { get; } = typeof(T);
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
-        public Vector2 Size { get; set; } = new Vector2(100.0f, 30.0f);
+        public Vector2 Size { get; set; } = SymbolChildUi.DefaultOpSize;
         public bool IsSelected { get; set; }
 
         private const Relevancy DefaultRelevancy = Relevancy.Optional;
