@@ -12,6 +12,8 @@ namespace T3.Gui.Windows
         public bool AllowMultipleInstances = false;
         protected abstract void DrawContent();
         protected ImGuiWindowFlags WindowFlags;
+
+        protected bool PreventWindowDragging = true;
         //public static List<Window> WindowInstances = new List<Window>();
 
         public abstract List<Window> GetInstances();
@@ -70,7 +72,14 @@ namespace T3.Gui.Windows
                 if (windowPos.Y <= 0) windowPos.Y = 0;
                 ImGui.SetWindowPos(windowPos);
 
+                if (PreventWindowDragging)
+                    ImGui.BeginChild("inner", ImGui.GetWindowSize(), false, ImGuiWindowFlags.NoMove);
+
                 DrawContent();
+
+                if (PreventWindowDragging)
+                    ImGui.EndChild();
+                
                 ImGui.End();
             }
 
@@ -91,7 +100,6 @@ namespace T3.Gui.Windows
         protected virtual void AddAnotherInstance()
         {
         }
-
 
         private void StoreWindowLayout()
         {

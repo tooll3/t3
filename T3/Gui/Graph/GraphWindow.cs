@@ -23,6 +23,7 @@ namespace T3.Gui.Graph
 
         public GraphWindow()
         {
+            PreventWindowDragging = false;    // conflicts with splitter between graph and timeline
             _instanceCounter++;
             Config.Title = "Graph##" + _instanceCounter;
             Config.Visible = true;
