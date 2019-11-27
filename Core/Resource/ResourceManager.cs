@@ -32,6 +32,7 @@ namespace T3.Core
 
         public uint Id { get; }
         public string Name;
+        public bool UpToDate { get; set; }
     }
 
     class FileResource
@@ -163,7 +164,11 @@ namespace T3.Core
 
         public override void Update(string path)
         {
+            if (UpToDate)
+                return;
+            
             ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "vs_5_0", ref VertexShader, ref Blob);
+            UpToDate = true;
         }
 
         public VertexShader VertexShader;
@@ -180,7 +185,11 @@ namespace T3.Core
         public PixelShader PixelShader;
         public override void Update(string path)
         {
+            if (UpToDate)
+                return;
+            
             ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref Blob);
+            UpToDate = true;
         }
     }
 
@@ -525,6 +534,8 @@ namespace T3.Core
                 {
                     if (Resources[id] is VertexShaderResource)
                     {
+                        fileResource.FileChangeAction -= fileChangedAction;
+                        fileResource.FileChangeAction += fileChangedAction;
                         return id;
                     }
                 }
@@ -570,6 +581,8 @@ namespace T3.Core
                 {
                     if (Resources[id] is PixelShaderResource)
                     {
+                        fileResource.FileChangeAction -= fileChangedAction;
+                        fileResource.FileChangeAction += fileChangedAction;
                         return id;
                     }
                 }
@@ -597,6 +610,7 @@ namespace T3.Core
                 // file resource already exists, so just add the id of the new type resource
                 fileResource.ResourceIds.Add(resourceEntry.Id);
             }
+
             fileResource.FileChangeAction -= fileChangedAction;
             fileResource.FileChangeAction += fileChangedAction;
 
@@ -615,6 +629,8 @@ namespace T3.Core
                 {
                     if (Resources[id] is ComputeShaderResource)
                     {
+                        fileResource.FileChangeAction -= fileChangedAction;
+                        fileResource.FileChangeAction += fileChangedAction;
                         return id;
                     }
                 }
@@ -733,6 +749,7 @@ namespace T3.Core
                         {
                             var updateable = resource as IUpdateable;
                             updateable?.Update(fileResource.Path);
+                            resource.UpToDate = false;
                         }
                         else
                         {
