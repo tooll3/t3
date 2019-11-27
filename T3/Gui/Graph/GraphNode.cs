@@ -10,6 +10,7 @@ using T3.Gui.OutputUi;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using T3.Gui.Windows;
+using T3.Operators.Types;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -187,7 +188,7 @@ namespace T3.Gui.Graph
             {
                 Symbol.InputDefinition input = visibleInputUis[inputIndex].InputDefinition;
 
-                var usableSlotArea = GetUsableInputSlotSize(childUi, inputIndex, visibleInputUis.Length);
+                var usableSlotArea = GetUsableInputSlotSize(inputIndex, visibleInputUis.Length);
 
                 ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + input.GetHashCode());
                 ImGui.SetCursorScreenPos(usableSlotArea.Min);
@@ -254,9 +255,9 @@ namespace T3.Gui.Graph
                                                 usableSlotArea.Min.Y + socketHeight * 0.5f);
 
                     var topLeft = new Vector2(usableSlotArea.Min.X, usableSlotArea.Min.Y);
-                    var socketSize = new Vector2(usableSlotArea.GetWidth(), socketHeight - 1);
+                    var socketSize = new Vector2(usableSlotArea.GetWidth(), socketHeight - SlotGaps);
                     
-                    var reactiveSlotColor = GetReactiveSlotColor(input, colorForType);
+                    var reactiveSlotColor = GetReactiveSlotColor(input.DefaultValue.ValueType, colorForType, SocketDirections.Input);
                     
                     for (var index = 0; index < socketCount; index++)
                     {
@@ -338,7 +339,7 @@ namespace T3.Gui.Graph
 
                 foreach (var line in Graph.Connections.GetLinesFromNodeOutput(childUi, output.Id))
                 {
-                    line.SourcePosition = new Vector2(usableArea.Min.X + 1, usableArea.GetCenter().Y);
+                    line.SourcePosition = new Vector2(usableArea.Max.X, usableArea.GetCenter().Y);
                     line.SourceRect = _lastScreenRect;
                     line.ColorForType = colorForType;
                     line.IsSelected |= childUi.IsSelected;
@@ -350,12 +351,19 @@ namespace T3.Gui.Graph
             }
         }
 
-        private static Color GetReactiveSlotColor(Symbol.InputDefinition input, Color colorForType)
+        private enum SocketDirections
         {
-            var style = ColorVariations.ConnectionLines;
+            Input,
+            Ouput,
+        }
+        private static Color GetReactiveSlotColor(Type type, Color colorForType, SocketDirections direction)
+        {
+            var style = direction == SocketDirections.Input ? ColorVariations.ConnectionLines
+                                     : ColorVariations.Operator;
             if (ConnectionMaker.TempConnection != null)
             {
-                if (ConnectionMaker.IsMatchingInputType(input.DefaultValue.ValueType))
+                if (direction == SocketDirections.Input ? ConnectionMaker.IsMatchingInputType(type) 
+                        : ConnectionMaker.IsMatchingOutputType(type))
                 {
                     var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
                     colorForType.Rgba.W *= blink;
@@ -436,46 +444,33 @@ namespace T3.Gui.Graph
             }
             else
             {
-                var style = ColorVariations.Operator;
-                if (ConnectionMaker.TempConnection != null)
-                {
-                    if (ConnectionMaker.IsMatchingOutputType(outputDef.ValueType))
-                    {
-                        var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
-                        colorForType.Rgba.W *= blink;
-                        style = ColorVariations.Highlight;
-                    }
-                    else
-                    {
-                        style = ColorVariations.Muted;
-                    }
-                }
-
+                var color = GetReactiveSlotColor(outputDef.ValueType, colorForType, SocketDirections.Ouput);
                 var pos = usableArea.Min;
-                var size = new Vector2(GraphNode.OutputSlotThickness, usableArea.GetHeight());
                 _drawList.AddRectFilled(
                                         pos,
-                                        pos + size,
-                                        style.Apply(colorForType)
+                                        usableArea.Max,
+                                        color
                                        );
             }
         }
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
-            var opRect = GraphNode._lastScreenRect;
+            var thickness = Im.Remap(GraphCanvas.Current.Scale.X, 0.5f, 1f, 3f, UsableSlotThickness);
+            
+            var opRect = _lastScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
             var outputHeight = outputCount == 0
                                    ? opRect.GetHeight()
-                                   : (opRect.GetHeight() + GraphNode.SlotGaps) / outputCount - GraphNode.SlotGaps;
+                                   : (opRect.GetHeight()  - 1 + SlotGaps) / outputCount - SlotGaps;
 
             return ImRect.RectWithSize(
                                        new Vector2(
-                                                   opRect.Max.X - 2, // - GraphNode._usableSlotThickness,
-                                                   opRect.Min.Y + (outputHeight + GraphNode.SlotGaps) * outputIndex
+                                                   opRect.Max.X + 1, // - GraphNode._usableSlotThickness,
+                                                   opRect.Min.Y + (outputHeight + SlotGaps) * outputIndex +1
                                                   ),
                                        new Vector2(
-                                                   GraphNode.UsableSlotThickness,
+                                                   thickness,
                                                    outputHeight
                                                   ));
         }
@@ -520,7 +515,7 @@ namespace T3.Gui.Graph
             }
             else
             {
-                var connectionColor = GetReactiveSlotColor(inputDef, colorForType);
+                var connectionColor = GetReactiveSlotColor(inputDef.DefaultValue.ValueType, colorForType, SocketDirections.Input);
                 var pos = new Vector2(
                                       usableArea.Max.X - GraphNode.InputSlotThickness - InputSlotMargin,
                                       usableArea.Min.Y
@@ -579,9 +574,9 @@ namespace T3.Gui.Graph
             {
                 //var pos = usableArea.Min + Vector2.UnitY * GraphNode._inputSlotMargin;
                 var gapOffset = isGap ? new Vector2(2, 0) : Vector2.Zero; 
-                var pos = new Vector2(usableArea.Max.X - GraphNode.InputSlotMargin - GraphNode.InputSlotThickness,
+                var pos = new Vector2(usableArea.Max.X - InputSlotMargin - InputSlotThickness,
                                       usableArea.Min.Y) -gapOffset;
-                var size = new Vector2(GraphNode.InputSlotThickness, usableArea.GetHeight()) + gapOffset;
+                var size = new Vector2(InputSlotThickness, usableArea.GetHeight()) + gapOffset;
                 _drawList.AddRectFilled(
                                         pos,
                                         pos + size,
@@ -593,7 +588,7 @@ namespace T3.Gui.Graph
 
         private static float _nodeTitleHeight = 22;
 
-        private static ImRect GetUsableInputSlotSize(SymbolChildUi targetUi, int inputIndex, int visibleSlotCount)
+        private static ImRect GetUsableInputSlotSize(int inputIndex, int visibleSlotCount)
         {
             var areaForParams = new ImRect(new Vector2(
                                                        _lastScreenRect.Min.X,
@@ -601,15 +596,15 @@ namespace T3.Gui.Graph
                                            _lastScreenRect.Max);
             var inputHeight = visibleSlotCount == 0
                                   ? areaForParams.GetHeight()
-                                  : (areaForParams.GetHeight() + GraphNode.SlotGaps) / visibleSlotCount - GraphNode.SlotGaps;
+                                  : (areaForParams.GetHeight() + SlotGaps) / visibleSlotCount - SlotGaps;
 
             return ImRect.RectWithSize(
                                        new Vector2(
                                                    areaForParams.Min.X - UsableSlotThickness,
-                                                   areaForParams.Min.Y + (inputHeight + GraphNode.SlotGaps) * inputIndex
+                                                   areaForParams.Min.Y + (inputHeight + SlotGaps) * inputIndex
                                                   ),
                                        new Vector2(
-                                                   GraphNode.UsableSlotThickness,
+                                                   UsableSlotThickness,
                                                    inputHeight
                                                   ));
         }
@@ -621,12 +616,11 @@ namespace T3.Gui.Graph
 
         #region style variables
         public static Vector2 LabelPos = new Vector2(4, 4);
-        public static float UsableSlotThickness = 12;
+        public static float UsableSlotThickness = 10;
         public static float InputSlotThickness = 3;
         public static float InputSlotMargin = 1;
         public static float SlotGaps = 2;
         public static float OutputSlotMargin = 1;
-        private const float OutputSlotThickness = 3;
         #endregion
 
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
