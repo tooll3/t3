@@ -2,6 +2,7 @@ using ImGuiNET;
 using System;
 using System.Linq;
 using System.Numerics;
+using SharpDX.Direct2D1;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -26,11 +27,14 @@ namespace T3.Gui.Graph
                                                   && ConnectionMaker.TempConnection != null
                                                   && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
 
+            var showAllInputs = isPotentialConnectionTargetNode || childUi.Style == SymbolUi.Styles.Expanded; 
+
             // Find visible input sockets from relevancy or connection
             var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
             SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
+            
             var visibleInputUis = (from inputUi in childSymbolUi.InputUis.Values
-                                   where isPotentialConnectionTargetNode || inputUi.Relevancy != Relevancy.Optional ||
+                                   where showAllInputs || inputUi.Relevancy != Relevancy.Optional ||
                                          connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Id)
                                    orderby inputUi.Index
                                    select inputUi).ToArray();
@@ -57,6 +61,32 @@ namespace T3.Gui.Graph
                     }
 
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);
+                }
+                
+                // Size toggle
+                {
+                    var pos = new Vector2(_lastScreenRect.Max.X - 15, _lastScreenRect.Min.Y + 2);
+                    
+                    ImGui.SetCursorScreenPos(pos);
+                    ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+                    ImGui.PushStyleColor(ImGuiCol.Button,  Color.Transparent.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text,  new Color(0.3f).Rgba);
+                    if (childUi.Style == SymbolUi.Styles.Default)
+                    {
+                        if (ImGui.Button("<##size", new Vector2(16, 16)))
+                        {
+                            childUi.Style = SymbolUi.Styles.Expanded;
+                        }
+                    }
+                    else if (childUi.Style != SymbolUi.Styles.Default)
+                    {
+                        if (ImGui.Button("v##size", new Vector2(16, 16)))
+                        {
+                            childUi.Style = SymbolUi.Styles.Default;
+                        }
+                    }
+                    ImGui.PopStyleVar();
+                    ImGui.PopStyleColor();
                 }
 
                 // Interaction
@@ -141,12 +171,16 @@ namespace T3.Gui.Graph
                         if (compositionOp.Symbol.Animator.IsInstanceAnimated(instance))
                         {
                             _drawList.AddRectFilled(
-                                                    new Vector2(_lastScreenRect.Max.X - 5, _lastScreenRect.Min.Y + 2),
-                                                    new Vector2(_lastScreenRect.Max.X - 2, _lastScreenRect.Min.Y + 12),
+                                                    new Vector2(_lastScreenRect.Max.X - 5, _lastScreenRect.Max.Y - 12),
+                                                    new Vector2(_lastScreenRect.Max.X - 2, _lastScreenRect.Max.Y - 3),
                                                     Color.Orange);
                         }
                     }
                 }
+
+
+
+
 
                 // Visualize update
                 {

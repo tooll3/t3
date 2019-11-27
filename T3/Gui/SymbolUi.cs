@@ -138,7 +138,7 @@ namespace T3.Gui
         public enum Styles
         {
             Default,
-            Collapsed,
+            Expanded,
             Resizable,
             WithThumbnail,
         }

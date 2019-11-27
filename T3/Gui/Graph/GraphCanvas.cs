@@ -267,6 +267,14 @@ namespace T3.Gui.Graph
                                      childUi.Style = SymbolUi.Styles.Resizable;
                                  }
                              }
+                             
+                             if (ImGui.MenuItem("Expanded", "", selectedChildUis.Any(child => child.Style == SymbolUi.Styles.Resizable)))
+                             {
+                                 foreach (var childUi in selectedChildUis)
+                                 {
+                                     childUi.Style = SymbolUi.Styles.Expanded;
+                                 }
+                             }
 
                              ImGui.EndMenu();
                          }
