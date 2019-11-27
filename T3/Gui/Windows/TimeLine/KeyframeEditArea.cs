@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
@@ -41,6 +42,17 @@ namespace T3.Gui.Windows.TimeLine
 
         private bool _contextMenuIsOpen;
 
+        void ApplyPostCurveMapping(Utils.OutsideCurveBehavior mapping)
+        {
+            foreach (var param in _animationParameters)
+            {
+                foreach (var curve in param.Curves)
+                {
+                    curve.PostCurveMapping = mapping;
+                }
+            }
+        }
+
         protected void DrawContextMenu()
         {
             CustomComponents.DrawContextMenuForScrollCanvas
@@ -65,6 +77,17 @@ namespace T3.Gui.Windows.TimeLine
 
                      if (ImGui.MenuItem("Linear", null, editModes.Contains(VDefinition.EditMode.Linear)))
                          OnLinear();
+
+                     if (ImGui.BeginMenu("After last keyframe..."))
+                     {
+                         foreach (Utils.OutsideCurveBehavior mapping in Enum.GetValues(typeof(Utils.OutsideCurveBehavior)))
+                         {
+                             if (ImGui.MenuItem(mapping.ToString(), null))
+                                 ApplyPostCurveMapping(mapping);
+                         }
+
+                         ImGui.EndMenu();
+                     }
 
                      if (ImGui.MenuItem(_selectedKeyframes.Count > 0 ? "View Selected" : "View All", "F"))
                          ViewAllOrSelectedKeys();
@@ -255,7 +278,7 @@ namespace T3.Gui.Windows.TimeLine
                    from keyframe in curve.GetVDefinitions()
                    select keyframe;
         }
-        
+
         protected void DuplicateSelectedKeyframes()
         {
             if (!_selectedKeyframes.Any())
@@ -282,12 +305,13 @@ namespace T3.Gui.Windows.TimeLine
                             continue;
 
                         var timeOffset = key.U - minTime;
-                        var newKey = key.Clone(); 
+                        var newKey = key.Clone();
                         curve.AddOrUpdateV(_timeLineCanvas.ClipTime.Time + timeOffset, newKey);
                         newSelection.Add(newKey);
                     }
                 }
             }
+
             RebuildCurveTables();
             _selectedKeyframes.Clear();
             _selectedKeyframes.UnionWith(newSelection);
