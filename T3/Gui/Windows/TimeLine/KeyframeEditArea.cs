@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Threading;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
@@ -13,9 +12,9 @@ namespace T3.Gui.Windows.TimeLine
 {
     public abstract class KeyframeEditArea
     {
-        protected List<GraphWindow.AnimationParameter> _animationParameters;
-        protected readonly HashSet<VDefinition> _selectedKeyframes = new HashSet<VDefinition>();
-        protected TimeLineCanvas _timeLineCanvas;
+        protected List<GraphWindow.AnimationParameter> AnimationParameters;
+        protected readonly HashSet<VDefinition> SelectedKeyframes = new HashSet<VDefinition>();
+        protected TimeLineCanvas TimeLineCanvas;
 
         /// <summary>
         /// Helper function to extract vDefs from all or selected UI controls across all curves in CurveEditor
@@ -25,13 +24,13 @@ namespace T3.Gui.Windows.TimeLine
         {
             var result = new List<VDefinition>();
 
-            if (_selectedKeyframes.Count > 0)
+            if (SelectedKeyframes.Count > 0)
             {
-                result.AddRange(_selectedKeyframes);
+                result.AddRange(SelectedKeyframes);
             }
             else
             {
-                foreach (var curve in _animationParameters.SelectMany(param => param.Curves))
+                foreach (var curve in AnimationParameters.SelectMany(param => param.Curves))
                 {
                     result.AddRange(curve.GetVDefinitions());
                 }
@@ -42,16 +41,8 @@ namespace T3.Gui.Windows.TimeLine
 
         private bool _contextMenuIsOpen;
 
-        void ApplyPostCurveMapping(Utils.OutsideCurveBehavior mapping)
-        {
-            foreach (var param in _animationParameters)
-            {
-                foreach (var curve in param.Curves)
-                {
-                    curve.PostCurveMapping = mapping;
-                }
-            }
-        }
+
+
 
         protected void DrawContextMenu()
         {
@@ -78,22 +69,32 @@ namespace T3.Gui.Windows.TimeLine
                      if (ImGui.MenuItem("Linear", null, editModes.Contains(VDefinition.EditMode.Linear)))
                          OnLinear();
 
-                     if (ImGui.BeginMenu("After last keyframe..."))
+
+                     if (ImGui.BeginMenu("Before curve..."))
+                     {
+                         foreach (Utils.OutsideCurveBehavior mapping in Enum.GetValues(typeof(Utils.OutsideCurveBehavior)))
+                         {
+                             if (ImGui.MenuItem(mapping.ToString(), null))
+                                 ApplyPreCurveMapping(mapping);
+                         }
+                         ImGui.EndMenu();
+                     }
+                     
+                     if (ImGui.BeginMenu("After curve..."))
                      {
                          foreach (Utils.OutsideCurveBehavior mapping in Enum.GetValues(typeof(Utils.OutsideCurveBehavior)))
                          {
                              if (ImGui.MenuItem(mapping.ToString(), null))
                                  ApplyPostCurveMapping(mapping);
                          }
-
                          ImGui.EndMenu();
                      }
-
-                     if (ImGui.MenuItem(_selectedKeyframes.Count > 0 ? "View Selected" : "View All", "F"))
+                     
+                     if (ImGui.MenuItem(SelectedKeyframes.Count > 0 ? "View Selected" : "View All", "F"))
                          ViewAllOrSelectedKeys();
 
                      if (ImGui.MenuItem("Delete keyframes"))
-                         _timeLineCanvas.DeleteSelectedElements();
+                         TimeLineCanvas.DeleteSelectedElements();
                  }, ref _contextMenuIsOpen
                 );
         }
@@ -175,6 +176,22 @@ namespace T3.Gui.Windows.TimeLine
                                      });
         }
 
+        private void ApplyPostCurveMapping(Utils.OutsideCurveBehavior mapping)
+        {
+            foreach (var curve in ParameterCurves())
+            { 
+                curve.PostCurveMapping = mapping;
+            }
+        }
+        
+        private void ApplyPreCurveMapping(Utils.OutsideCurveBehavior mapping)
+        {
+            foreach (var curve in ParameterCurves())
+            { 
+                curve.PreCurveMapping = mapping;
+            }
+        }
+        
         private IEnumerable<VDefinition.EditMode> GetSelectedKeyframeInterpolationTypes()
         {
             var checkedInterpolationTypes = new HashSet<VDefinition.EditMode>();
@@ -198,7 +215,7 @@ namespace T3.Gui.Windows.TimeLine
             var maxV = double.NegativeInfinity;
             var numPoints = 0;
 
-            switch (_selectedKeyframes.Count)
+            switch (SelectedKeyframes.Count)
             {
                 case 0:
                 {
@@ -218,7 +235,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 default:
                 {
-                    foreach (var element in _selectedKeyframes)
+                    foreach (var element in SelectedKeyframes)
                     {
                         numPoints++;
                         minU = Math.Min(minU, element.U);
@@ -239,12 +256,12 @@ namespace T3.Gui.Windows.TimeLine
                 maxU = 10;
             }
 
-            if (maxU == minU)
+            if (Math.Abs(maxU - minU) < 0.001f)
             {
                 minU -= 1;
             }
 
-            if (maxV == minU)
+            if (Math.Abs(maxV - minU) < 0.001f)
             {
                 maxV += -1;
                 minV -= 1;
@@ -273,48 +290,53 @@ namespace T3.Gui.Windows.TimeLine
 
         protected IEnumerable<VDefinition> GetAllKeyframes()
         {
-            return from param in _animationParameters
+            return from param in AnimationParameters
                    from curve in param.Curves
                    from keyframe in curve.GetVDefinitions()
                    select keyframe;
         }
 
+        private IEnumerable<Curve> ParameterCurves()
+        {
+            return AnimationParameters.SelectMany(param => param.Curves);
+        }
+        
         protected void DuplicateSelectedKeyframes()
         {
-            if (!_selectedKeyframes.Any())
+            if (!SelectedKeyframes.Any())
             {
                 Log.Debug("Select keyframes to duplicate to current time");
                 return;
             }
 
             var minTime = float.PositiveInfinity;
-            foreach (var key in _selectedKeyframes)
+            foreach (var key in SelectedKeyframes)
             {
                 minTime = Math.Min((float)key.U, minTime);
             }
 
             var newSelection = new HashSet<VDefinition>();
 
-            foreach (var param in _animationParameters)
+            foreach (var param in AnimationParameters)
             {
                 foreach (var curve in param.Curves)
                 {
                     foreach (var key in curve.GetVDefinitions().ToList())
                     {
-                        if (!_selectedKeyframes.Contains(key))
+                        if (!SelectedKeyframes.Contains(key))
                             continue;
 
                         var timeOffset = key.U - minTime;
                         var newKey = key.Clone();
-                        curve.AddOrUpdateV(_timeLineCanvas.ClipTime.Time + timeOffset, newKey);
+                        curve.AddOrUpdateV(TimeLineCanvas.ClipTime.Time + timeOffset, newKey);
                         newSelection.Add(newKey);
                     }
                 }
             }
 
             RebuildCurveTables();
-            _selectedKeyframes.Clear();
-            _selectedKeyframes.UnionWith(newSelection);
+            SelectedKeyframes.Clear();
+            SelectedKeyframes.UnionWith(newSelection);
         }
 
         /// <summary>
@@ -322,7 +344,7 @@ namespace T3.Gui.Windows.TimeLine
         /// </summary>
         protected void RebuildCurveTables()
         {
-            foreach (var param in _animationParameters)
+            foreach (var param in AnimationParameters)
             {
                 foreach (var curve in param.Curves)
                 {

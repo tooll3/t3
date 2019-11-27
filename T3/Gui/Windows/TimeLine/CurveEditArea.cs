@@ -21,7 +21,7 @@ namespace T3.Gui.Windows.TimeLine
         public CurveEditArea(TimeLineCanvas timeLineCanvas, ValueSnapHandler snapHandler)
         {
             _snapHandler = snapHandler;
-            _timeLineCanvas = timeLineCanvas;
+            TimeLineCanvas = timeLineCanvas;
             _curveEditBox = new CurveEditBox(timeLineCanvas);
         }
 
@@ -30,7 +30,7 @@ namespace T3.Gui.Windows.TimeLine
         {
             _compositionOp = compositionOp;
             _drawList = ImGui.GetWindowDrawList();
-            _animationParameters = animationParameters;
+            AnimationParameters = animationParameters;
 
             if (bringCurvesIntoView)
                 ViewAllOrSelectedKeys();
@@ -53,7 +53,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 foreach (var keyframe in GetAllKeyframes().ToArray())
                 {
-                    CurvePoint.Draw(keyframe, _timeLineCanvas, _selectedKeyframes.Contains(keyframe), this);
+                    CurvePoint.Draw(keyframe, TimeLineCanvas, SelectedKeyframes.Contains(keyframe), this);
                 }
 
                 DrawContextMenu();
@@ -76,7 +76,7 @@ namespace T3.Gui.Windows.TimeLine
             if (ImGui.GetIO().KeyCtrl)
             {
                 if (isSelected)
-                    _selectedKeyframes.Remove(vDef);
+                    SelectedKeyframes.Remove(vDef);
 
                 return;
             }
@@ -88,7 +88,7 @@ namespace T3.Gui.Windows.TimeLine
                     TimeLineCanvas.Current.ClearSelection();
                 }
 
-                _selectedKeyframes.Add(vDef);
+                SelectedKeyframes.Add(vDef);
             }
 
             if (_changeKeyframesCommand == null)
@@ -108,20 +108,20 @@ namespace T3.Gui.Windows.TimeLine
         
         void ITimeElementSelectionHolder.DeleteSelectedElements()
         {
-            KeyframeOperations.DeleteSelectedKeyframesFromAnimationParameters(_selectedKeyframes, _animationParameters);
+            KeyframeOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters);
             RebuildCurveTables();
         }
         
 
         public void ClearSelection()
         {
-            _selectedKeyframes.Clear();
+            SelectedKeyframes.Clear();
         }
 
         public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
         {
             if (selectMode == SelectMode.Replace)
-                _selectedKeyframes.Clear();
+                SelectedKeyframes.Clear();
 
             var canvasArea = TimeLineCanvas.Current.InverseTransformRect(screenArea);
             var matchingItems = new List<VDefinition>();
@@ -138,23 +138,23 @@ namespace T3.Gui.Windows.TimeLine
             {
                 case SelectMode.Add:
                 case SelectMode.Replace:
-                    _selectedKeyframes.UnionWith(matchingItems);
+                    SelectedKeyframes.UnionWith(matchingItems);
                     break;
                 case SelectMode.Remove:
-                    _selectedKeyframes.ExceptWith(matchingItems);
+                    SelectedKeyframes.ExceptWith(matchingItems);
                     break;
             }
         }
 
         public ICommand StartDragCommand()
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, _selectedKeyframes);
+            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, SelectedKeyframes);
             return _changeKeyframesCommand;
         }
 
         public void UpdateDragCommand(double dt, double dv)
         {
-            foreach (var vDefinition in _selectedKeyframes)
+            foreach (var vDefinition in SelectedKeyframes)
             {
                 vDefinition.U += dt;
                 vDefinition.Value += dv;
@@ -189,7 +189,7 @@ namespace T3.Gui.Windows.TimeLine
 
             foreach (var vDefinition in GetAllKeyframes())
             {
-                if (_selectedKeyframes.Contains(vDefinition))
+                if (SelectedKeyframes.Contains(vDefinition))
                     continue;
 
                 CheckForSnapping(targetTime, vDefinition.U, maxForce: ref maxForce, bestSnapTime: ref bestSnapTime);
@@ -224,9 +224,9 @@ namespace T3.Gui.Windows.TimeLine
             const float step = 3f;
             var width = ImGui.GetWindowWidth();
 
-            double dU = _timeLineCanvas.InverseTransformDirection(new Vector2(step, 0)).X;
-            double u = _timeLineCanvas.InverseTransformPosition(_timeLineCanvas.WindowPos).X;
-            var x = _timeLineCanvas.WindowPos.X;
+            double dU = TimeLineCanvas.InverseTransformDirection(new Vector2(step, 0)).X;
+            double u = TimeLineCanvas.InverseTransformPosition(TimeLineCanvas.WindowPos).X;
+            var x = TimeLineCanvas.WindowPos.X;
 
             var steps = (int)(width / step);
             if (_curveLinePoints.Length != steps)
@@ -236,7 +236,7 @@ namespace T3.Gui.Windows.TimeLine
 
             for (var i = 0; i < steps; i++)
             {
-                _curveLinePoints[i] = new Vector2(x, _timeLineCanvas.TransformPosition(new Vector2(0, (float)curve.GetSampledValue(u))).Y);
+                _curveLinePoints[i] = new Vector2(x, TimeLineCanvas.TransformPosition(new Vector2(0, (float)curve.GetSampledValue(u))).Y);
                 u += dU;
                 x += step;
             }

@@ -22,14 +22,14 @@ namespace T3.Gui.Windows.TimeLine
         public DopeSheetArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas)
         {
             _snapHandler = snapHandler;
-            _timeLineCanvas = timeLineCanvas;
+            TimeLineCanvas = timeLineCanvas;
         }
 
         private GraphWindow.AnimationParameter _currentAnimationParameter;
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             _drawList = ImGui.GetWindowDrawList();
-            _animationParameters = animationParameters;
+            AnimationParameters = animationParameters;
             _compositionOp = compositionOp;
 
             ImGui.BeginGroup();
@@ -64,7 +64,7 @@ namespace T3.Gui.Windows.TimeLine
                                     new Vector2(max.X, max.Y + 1), Color.Black);
 
             var mousePos = ImGui.GetMousePos();
-            var mouseTime = _timeLineCanvas.InverseTransformPositionX(mousePos.X);
+            var mouseTime = TimeLineCanvas.InverseTransformPositionX(mousePos.X);
             var layerArea = new ImRect(min, max);
             var layerHovered = ImGui.IsWindowHovered() && layerArea.Contains(mousePos); 
             if (layerHovered)
@@ -145,7 +145,7 @@ namespace T3.Gui.Windows.TimeLine
 
                             var oldKey = key;
                             curve.AddOrUpdateV(hoverTime, key);
-                            _selectedKeyframes.Add(oldKey);
+                            SelectedKeyframes.Add(oldKey);
                             Log.Debug("added new key at " + hoverTime);
                             TimeLineCanvas.Current.ClipTime.Time = hoverTime;
                         }
@@ -271,7 +271,7 @@ namespace T3.Gui.Windows.TimeLine
                                           layerArea.Min.Y);
             ImGui.PushID(vDef.GetHashCode());
             {
-                var isSelected = _selectedKeyframes.Contains(vDef);
+                var isSelected = SelectedKeyframes.Contains(vDef);
                 Icons.Draw(isSelected ? Icon.KeyFrameSelected : Icon.KeyFrame, posOnScreen);
                 ImGui.SetCursorScreenPos(posOnScreen);
 
@@ -308,7 +308,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     foreach (var k in FindParameterKeysAtPosition(vDef.U))
                     {
-                        _selectedKeyframes.Remove(k);
+                        SelectedKeyframes.Remove(k);
                     }
                 }
 
@@ -324,7 +324,7 @@ namespace T3.Gui.Windows.TimeLine
                 
                 foreach (var k in FindParameterKeysAtPosition(vDef.U))
                 {
-                    _selectedKeyframes.Add(k);
+                    SelectedKeyframes.Add(k);
                 }
             }
 
@@ -355,13 +355,13 @@ namespace T3.Gui.Windows.TimeLine
         #region implement selection holder interface --------------------------------------------
         void ITimeElementSelectionHolder.ClearSelection()
         {
-            _selectedKeyframes.Clear();
+            SelectedKeyframes.Clear();
         }
 
         public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
         {
             if (selectMode == SelectMode.Replace)
-                _selectedKeyframes.Clear();
+                SelectedKeyframes.Clear();
 
             var startTime = TimeLineCanvas.Current.InverseTransformPositionX(screenArea.Min.X);
             var endTime = TimeLineCanvas.Current.InverseTransformPositionX(screenArea.Max.X);
@@ -370,7 +370,7 @@ namespace T3.Gui.Windows.TimeLine
             var layerMaxIndex = (screenArea.Max.Y - _minScreenPos.Y) / LayerHeight;
 
             var index = 0;
-            foreach (var parameter in _animationParameters)
+            foreach (var parameter in AnimationParameters)
             {
                 if (index >= layerMinIndex && index <= layerMaxIndex)
                 {
@@ -384,10 +384,10 @@ namespace T3.Gui.Windows.TimeLine
                         {
                             case SelectMode.Add:
                             case SelectMode.Replace:
-                                _selectedKeyframes.UnionWith(matchingItems);
+                                SelectedKeyframes.UnionWith(matchingItems);
                                 break;
                             case SelectMode.Remove:
-                                _selectedKeyframes.ExceptWith(matchingItems);
+                                SelectedKeyframes.ExceptWith(matchingItems);
                                 break;
                         }
                     }
@@ -399,13 +399,13 @@ namespace T3.Gui.Windows.TimeLine
 
         ICommand ITimeElementSelectionHolder.StartDragCommand()
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, _selectedKeyframes);
+            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, SelectedKeyframes);
             return _changeKeyframesCommand;
         }
 
         void ITimeElementSelectionHolder.UpdateDragCommand(double dt, double dv)
         {
-            foreach (var vDefinition in _selectedKeyframes)
+            foreach (var vDefinition in SelectedKeyframes)
             {
                 vDefinition.U += dt;
             }
@@ -433,7 +433,7 @@ namespace T3.Gui.Windows.TimeLine
 
         void ITimeElementSelectionHolder.DeleteSelectedElements()
         {
-            KeyframeOperations.DeleteSelectedKeyframesFromAnimationParameters(_selectedKeyframes, _animationParameters);
+            KeyframeOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters);
             RebuildCurveTables();
         }
         #endregion
@@ -453,7 +453,7 @@ namespace T3.Gui.Windows.TimeLine
 
             foreach (var vDefinition in GetAllKeyframes())
             {
-                if (_selectedKeyframes.Contains(vDefinition))
+                if (SelectedKeyframes.Contains(vDefinition))
                     continue;
 
                 CheckForSnapping(targetTime, vDefinition.U, maxForce: ref maxForce, bestSnapTime: ref bestSnapTime);
