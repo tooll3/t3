@@ -56,7 +56,10 @@ namespace T3.Gui.Graph
 
                 if (inputUi.IsSelected)
                 {
-                    dl.AddRect(_lastScreenRect.Min - Vector2.One, _lastScreenRect.Max + Vector2.One, Color.White, 1);
+                    const float thickness = 2;
+                    dl.AddRect(_lastScreenRect.Min - Vector2.One*thickness, 
+                               _lastScreenRect.Max + Vector2.One*thickness*2, 
+                               Color.White, 0f, 0, thickness);
                 }
 
                 // Draw slot 

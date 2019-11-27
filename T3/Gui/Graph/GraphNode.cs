@@ -102,7 +102,6 @@ namespace T3.Gui.Graph
                 var drawList = GraphCanvas.Current.DrawList;
 
                 // Rendering
-
                 var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.Id == childUi.SymbolChild.Id);
                 var output = childInstance?.Outputs.FirstOrDefault();
                 int framesSinceLastUpdate = output?.DirtyFlag.FramesSinceLastUpdate ?? 100;
@@ -117,16 +116,25 @@ namespace T3.Gui.Graph
                     backgroundColor.Rgba.W *= fadeFactor;
                 }
 
+                // background
                 drawList.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
                                        hovered
                                            ? ColorVariations.OperatorHover.Apply(backgroundColor)
                                            : ColorVariations.Operator.Apply(backgroundColor));
+                
+                // drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
+                //                        new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + InputSlotThickness + InputSlotMargin),
+                //                        ColorVariations.OperatorInputZone.Apply(typeColor));
 
-                // Selection outline
-                drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y),
-                                       new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Max.Y + InputSlotThickness + InputSlotMargin),
-                                       ColorVariations.OperatorInputZone.Apply(typeColor));
+                // outline
+                drawList.AddRect(_lastScreenRect.Min - Vector2.Zero,
+                                       _lastScreenRect.Max + Vector2.One + Vector2.One,
+                                       new Color(0.08f,0.08f,0.08f,0.8f),
+                                       rounding: 0,
+                                       2);
+                                 
 
+                
                 // Animation indicator
                 {
                     var compositionOp = GraphCanvas.Current.CompositionOp;
