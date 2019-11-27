@@ -10,7 +10,9 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.InputUi;
 using T3.Gui.Styling;
+using T3.Gui.TypeColors;
 
 namespace T3.Gui.Graph
 {
@@ -185,6 +187,14 @@ namespace T3.Gui.Graph
                 {
                     ImGui.PushID(symbol.Id.GetHashCode());
                     {
+
+                        var color = symbol.OutputDefinitions.Count > 0
+                                        ? TypeUiRegistry.GetPropertiesForType(symbol.OutputDefinitions[0]?.ValueType).Color
+                                        : Color.Gray;
+                        ImGui.PushStyleColor(ImGuiCol.Header, ColorVariations.Operator.Apply(color).Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.HeaderHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.HeaderActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
                         ImGui.Selectable("", symbol == _selectedSymbol);
 
                         if (ImGui.IsItemActivated())
@@ -199,6 +209,7 @@ namespace T3.Gui.Graph
                             ImGui.SameLine();
                             ImGui.TextDisabled(symbol.Namespace);
                         }
+                        ImGui.PopStyleColor(4);
                     }
                     ImGui.PopID();
                 }

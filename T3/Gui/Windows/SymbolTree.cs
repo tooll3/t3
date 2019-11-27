@@ -7,6 +7,8 @@ using System.Runtime.InteropServices;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.InputUi;
+using T3.Gui.TypeColors;
 
 namespace T3.Gui.Windows
 {
@@ -17,7 +19,6 @@ namespace T3.Gui.Windows
     {
         public SymbolTree()
         {
-
             _filter.SearchString = "";
             Config.Title = "Symbols";
             PopulateTree();
@@ -31,7 +32,7 @@ namespace T3.Gui.Windows
                 {
                     StopDrag();
                 }
-                
+
                 ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
                 if (ImGui.Button("Clear"))
                 {
@@ -41,8 +42,7 @@ namespace T3.Gui.Windows
                 ImGui.SameLine();
                 ImGui.InputText("##Filter", ref _filter.SearchString, 100);
                 ImGui.Separator();
-                
-                
+
                 ImGui.BeginChild("scrolling");
                 {
                     if (string.IsNullOrEmpty(_filter.SearchString))
@@ -61,10 +61,8 @@ namespace T3.Gui.Windows
 
         private void DrawTree()
         {
-
             DrawNode(_tree);
         }
-
 
         private void DrawList()
         {
@@ -74,7 +72,6 @@ namespace T3.Gui.Windows
                 DrawSymbolItem(symbol);
             }
         }
-
 
         private void StopDrag()
         {
@@ -104,9 +101,12 @@ namespace T3.Gui.Windows
             }
             else
             {
-                ImGui.SameLine();
-                ImGui.Button("  <-", new Vector2(50,15));
-                HandleDropTarget(subtree);
+                if (T3Ui.DraggingIsInProgress)
+                {
+                    ImGui.SameLine();
+                    ImGui.Button("  <-", new Vector2(50, 15));
+                    HandleDropTarget(subtree);
+                }
             }
 
             ImGui.PopID();
@@ -116,6 +116,15 @@ namespace T3.Gui.Windows
         {
             ImGui.PushID(symbol.Id.GetHashCode());
             {
+                var color = symbol.OutputDefinitions.Count > 0
+                                ? TypeUiRegistry.GetPropertiesForType(symbol.OutputDefinitions[0]?.ValueType).Color
+                                : Color.Gray;
+                ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(color).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
+                //ImGui.Selectable("", symbol == _selectedSymbol);
+
                 ImGui.Button(symbol.Name);
 
                 if (ImGui.IsItemActive())
@@ -135,6 +144,8 @@ namespace T3.Gui.Windows
                         ImGui.EndDragDropSource();
                     }
                 }
+
+                ImGui.PopStyleColor(4);
             }
             ImGui.PopID();
         }
