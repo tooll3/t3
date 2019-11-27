@@ -103,13 +103,13 @@ namespace T3.Gui.Graph
                         DrawBreadcrumbs();
 
                         ImGui.SetCursorPosX(8);
-                        ImGui.PushFont(Fonts.FontBold);
+                        ImGui.PushFont(Fonts.FontLarge);
                         ImGui.Text(GraphCanvas.CompositionOp.Symbol.Name);
-                        ImGui.PopFont();
                         ImGui.SameLine();
 
-                        ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
-                        ImGui.Text(" in " + GraphCanvas.CompositionOp.Symbol.Namespace);
+                        ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.3f).Rgba);
+                        ImGui.Text("  - " + GraphCanvas.CompositionOp.Symbol.Namespace);
+                        ImGui.PopFont();
                         ImGui.PopStyleColor();
 
                         var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.CompositionOp.Symbol.Id];
