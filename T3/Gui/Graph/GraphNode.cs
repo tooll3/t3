@@ -2,6 +2,7 @@ using ImGuiNET;
 using System;
 using System.Linq;
 using System.Numerics;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.InputUi;
@@ -224,7 +225,21 @@ namespace T3.Gui.Graph
                             label += " [...]";
                         }
 
+                        var labelSize = ImGui.CalcTextSize(label);
                         _drawList.AddText(usableSlotArea.GetCenter() + new Vector2(14, -7), labelColor, label);
+
+                        if (GraphCanvas.Current.Scale.X > 1.2f)
+                        {
+                            var typeLabelOpacity = Im.Remap(GraphCanvas.Current.Scale.X,
+                                                            1.2f, 3f,
+                                                            0f, 0.6f);
+                            labelColor.Rgba.W *= typeLabelOpacity;
+                            ImGui.PushStyleColor(ImGuiCol.Text, labelColor.Rgba);
+                            _drawList.AddText(usableSlotArea.GetCenter() + new Vector2(14, -7) + new Vector2(labelSize.X, 0),
+                                              labelColor,
+                                              " - " + TypeNameRegistry.Entries[input.DefaultValue.ValueType]);
+                            ImGui.PopStyleColor();
+                        }
 
                         ImGui.PopFont();
                     }
