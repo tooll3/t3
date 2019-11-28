@@ -132,7 +132,7 @@ namespace T3.Gui.Graph
                     _hoveredId = childUi.Id;
                 }
 
-                var hovered = ImGui.IsItemHovered();
+                var hovered = ImGui.IsItemHovered() || T3Ui.HoveredIdsLastFrame.Contains(instance.Id);
                 var drawList = GraphCanvas.Current.DrawList;
 
                 // Rendering

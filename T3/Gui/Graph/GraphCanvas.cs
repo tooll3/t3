@@ -511,7 +511,7 @@ namespace T3.Gui.Graph
         private string _nameSpace = "";
         private readonly GraphWindow _window;
 
-        public static HoverModes HoverMode { get; set; } = HoverModes.LastValue;
+        public static HoverModes HoverMode { get; set; } = HoverModes.Live;
         public enum HoverModes
         {
             Disabled,
