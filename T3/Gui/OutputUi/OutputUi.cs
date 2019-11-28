@@ -35,7 +35,14 @@ namespace T3.Gui.OutputUi
         
         private int Invalidate(ISlot slot)
         {
-            if (slot.IsConnected)
+            if (slot is IInputSlot)
+            {
+                if (slot.IsConnected)
+                {
+                    slot.DirtyFlag.Target = Invalidate(slot.GetConnection(0));
+                }
+            }
+            else if (slot.IsConnected)
             {
                 // slot is an output of an composition op
                 slot.DirtyFlag.Target = Invalidate(slot.GetConnection(0));
