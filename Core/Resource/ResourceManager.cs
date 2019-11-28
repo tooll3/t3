@@ -205,7 +205,11 @@ namespace T3.Core
 
         public override void Update(string path)
         {
+            if (UpToDate)
+                return;
+            
             ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref Blob);
+            UpToDate = true;
         }
     }
 
