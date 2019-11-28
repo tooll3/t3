@@ -1,0 +1,38 @@
+Crash#16 after creating new Symbol in Rider and then starting t3
+------------------------------------
+
+
+
+System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> System.ArgumentException: 
+  at at System.Reflection.RtFieldInfo.CheckConsistency(Object target)
+  at at System.Reflection.RtFieldInfo.InternalGetValue(Object obj, StackCrawlMark& stackMark)
+  at at System.Reflection.RtFieldInfo.GetValue(Object obj)
+  at T3.Core.Operator.Instance.SetupInputAndOutputsFromType() in C:\Users\pixtur\coding\t3\Core\Operator\Instance.cs:31
+  at T3.Core.Operator.Instance`1..ctor() in C:\Users\pixtur\coding\t3\Core\Operator\Instance.cs:101
+  at T3.Operators.Types.String..ctor() in C:\Users\pixtur\coding\t3\Operators\Types\String.cs:11
+  --- End of inner exception stack trace ---
+  at at System.RuntimeTypeHandle.CreateInstance(RuntimeType type, Boolean publicOnly, Boolean noCheck, Boolean& canBeCached, RuntimeMethodHandleInternal& ctor, Boolean& bNeedSecurityCheck)
+  at at System.RuntimeType.CreateInstanceSlow(Boolean publicOnly, Boolean skipCheckThis, Boolean fillCache, StackCrawlMark& stackMark)
+  at at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean skipCheckThis, Boolean fillCache, StackCrawlMark& stackMark)
+  at at System.Activator.CreateInstance(Type type, Boolean nonPublic)
+  at at System.Activator.CreateInstance(Type type)
+  at T3.Core.Operator.Symbol.CreateInstance(Guid id) in C:\Users\pixtur\coding\t3\Core\Operator\Symbol.cs:247
+  at T3.Core.Operator.Symbol.CreateAndAddNewChildInstance(SymbolChild symbolChild, Instance parentInstance) in C:\Users\pixtur\coding\t3\Core\Operator\Symbol.cs:296
+  at T3.Core.Operator.Symbol.AddChild(Symbol symbol, Guid addedChildId) in C:\Users\pixtur\coding\t3\Core\Operator\Symbol.cs:407
+  at T3.Gui.SymbolUi.AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size) in C:\Users\pixtur\coding\t3\T3\Gui\SymbolUi.cs:117
+  at T3.Gui.Commands.AddSymbolChildCommand.Do() in C:\Users\pixtur\coding\t3\T3\Gui\Commands\AddSymbolChildCommand.cs:34
+  at T3.Gui.Commands.UndoRedoStack.AddAndExecute(ICommand command) in C:\Users\pixtur\coding\t3\T3\Gui\Commands\UndoRedoStack.cs:51
+  at T3.Gui.Graph.Interaction.NodeOperations.CreateInstance(Symbol symbol, Symbol parent, Vector2 positionOnCanvas) in C:\Users\pixtur\coding\t3\T3\Gui\Graph\Interaction\NodeOperations.cs:331
+  at T3.Gui.Graph.Interaction.SymbolBrowser.CreateInstance(Symbol symbol) in C:\Users\pixtur\coding\t3\T3\Gui\Graph\Interaction\SymbolBrowser.cs:236
+  at T3.Gui.Graph.Interaction.SymbolBrowser.DrawSearchInput() in C:\Users\pixtur\coding\t3\T3\Gui\Graph\Interaction\SymbolBrowser.cs:120
+  at T3.Gui.Graph.Interaction.SymbolBrowser.Draw() in C:\Users\pixtur\coding\t3\T3\Gui\Graph\Interaction\SymbolBrowser.cs:70
+  at T3.Gui.Graph.GraphCanvas.Draw(ImDrawListPtr dl) in C:\Users\pixtur\coding\t3\T3\Gui\Graph\GraphCanvas.cs:120
+  at T3.Gui.Graph.GraphWindow.DrawContent() in C:\Users\pixtur\coding\t3\T3\Gui\Graph\GraphWindow.cs:164
+  at T3.Gui.Windows.Window.DrawOneInstance() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\Window.cs:78
+  at T3.Gui.Graph.GraphWindow.DrawAllInstances() in C:\Users\pixtur\coding\t3\T3\Gui\Graph\GraphWindow.cs:83
+  at T3.Gui.Windows.Window.Draw() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\Window.cs:50
+  at T3.Gui.Windows.WindowManager.Draw() in C:\Users\pixtur\coding\t3\T3\Gui\Windows\WindowManager.cs:47
+  at T3.Gui.T3Ui.Draw() in C:\Users\pixtur\coding\t3\T3\Gui\T3UI.cs:24
+  at T3.Program.<>c__DisplayClass1_0.<Main>b__8() in C:\Users\pixtur\coding\t3\T3\Program.cs:362
+  at at SharpDX.Windows.RenderLoop.Run(Control form, RenderCallback renderCallback, Boolean useApplicationDoEvents)
+  at T3.Program.Main() in C:\Users\pixtur\coding\t3\T3\Program.cs:308
