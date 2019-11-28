@@ -78,7 +78,7 @@ namespace T3.Gui.Graph.Interaction
 
                 MatchingSymbolUis.Add(symbolUi);
             }
-            MatchingSymbolUis = MatchingSymbolUis.OrderBy(s=> ComputeRelevancy(s, _currentSearchString, "")).Reverse().Take(10).ToList();
+            MatchingSymbolUis = MatchingSymbolUis.OrderBy(s=> ComputeRelevancy(s, _currentSearchString, "")).Reverse().Take(30).ToList();
             // let rating = ComputeRelevancy(metaOpEntry.Value, XSearchTextBox.Text, currentProjectName)
             // orderby rating
         }

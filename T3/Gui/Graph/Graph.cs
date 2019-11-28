@@ -299,7 +299,9 @@ namespace T3.Gui.Graph
                                 ? ColorVariations.Highlight.Apply(ColorForType)
                                 : ColorVariations.ConnectionLines.Apply(ColorForType);
 
-                var tangentLength = Math.Min(Vector2.Distance(SourcePosition, TargetPosition), 80);
+                var tangentLength = Im.Remap(Vector2.Distance(SourcePosition, TargetPosition),
+                                             30, 300,
+                                             5, 200);
 
                 DrawList.AddBezierCurve(
                                         SourcePosition,
@@ -309,14 +311,7 @@ namespace T3.Gui.Graph
                                         color,
                                         thickness: 1.5f,
                                         num_segments: 20);
-
-                //                DrawList.AddTriangleFilled(
-                //                    TargetPosition + new Vector2(0, -3),
-                //                    TargetPosition + new Vector2(4, 2),
-                //                    TargetPosition + new Vector2(-4, 2),
-                //                    color);
-
-                //Im.DrawArcConnection(SourceRect, SourcePosition, TargetRect,TargetPosition);
+                
             }
         }
 
