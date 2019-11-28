@@ -14,7 +14,7 @@ namespace T3.Gui.Windows.TimeLine
             _clipTime = clipTime;
 
             var p = new Vector2(TimeLineCanvas.Current.TransformPositionX((float)clipTime.Time), 0);
-            ImGui.GetWindowDrawList().AddRectFilled(p, p + new Vector2(1, 2000), Color.Red);
+            ImGui.GetWindowDrawList().AddRectFilled(p, p + new Vector2(1, 2000), Color.Orange);
         } 
         
         

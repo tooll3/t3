@@ -135,7 +135,7 @@ namespace T3.Gui
                                       new KeyCombination(Key.L, shift: true)),
                   new KeyboardBinding(UserActions.PlaybackBackwards, new KeyCombination(Key.J)),
                   new KeyboardBinding(UserActions.PlaybackStop, new KeyCombination(Key.K)),
-                  new KeyboardBinding(UserActions.PlaybackToggle, new KeyCombination(Key.Space)),
+                  new KeyboardBinding(UserActions.PlaybackToggle, new KeyCombination(Key.Space)),    // TODO: Fixme!
                   new KeyboardBinding(UserActions.PlaybackPreviousFrame,
                                       new KeyCombination(Key.CursorLeft, shift: true)),
                   new KeyboardBinding(UserActions.PlaybackNextFrame,

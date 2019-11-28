@@ -70,7 +70,7 @@ namespace T3.Gui.Graph
                     ImGui.SetCursorScreenPos(pos);
                     ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
                     ImGui.PushStyleColor(ImGuiCol.Button,  Color.Transparent.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text,  new Color(0.3f).Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text,  new Color(0,0,0,.7f).Rgba);
                     if (childUi.Style == SymbolUi.Styles.Default)
                     {
                         if (ImGui.Button("<##size", new Vector2(16, 16)))
@@ -86,7 +86,7 @@ namespace T3.Gui.Graph
                         }
                     }
                     ImGui.PopStyleVar();
-                    ImGui.PopStyleColor();
+                    ImGui.PopStyleColor(2);
                 }
 
                 // Interaction
