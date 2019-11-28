@@ -135,6 +135,8 @@ namespace T3.Gui.Interaction
                             delta += (float)(2 * Math.PI);
                         }
 
+                        delta = (float)Math.Round(delta*50)/50;
+
                         _editValue += delta * activeSpeed * scale * 100;
                         _editValue = _editValue.Clamp(min, max);
                         break;
@@ -168,6 +170,7 @@ namespace T3.Gui.Interaction
                     return InputEditState.Finished;
                 }
 
+                _editValue = Math.Round(_editValue * 100)/ 100;
                 return Math.Abs(_editValue - _startValue) > 0.0001f ? InputEditState.Modified : InputEditState.Started;
             }
 
