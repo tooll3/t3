@@ -5,6 +5,7 @@ using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.Graph.Interaction;
 
 namespace T3.Gui.Graph
 {

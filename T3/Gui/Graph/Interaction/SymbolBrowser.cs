@@ -1,20 +1,15 @@
-﻿using ImGuiNET;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
 using System.Linq;
 using System.Numerics;
-using System.Text.RegularExpressions;
+using ImGuiNET;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Gui.Commands;
-using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 
-namespace T3.Gui.Graph
+namespace T3.Gui.Graph.Interaction
 {
     /// <summary>
     /// Represents the placeholder for a new <see cref="GraphNode"/> on the <see cref="GraphCanvas"/>. 
@@ -34,15 +29,15 @@ namespace T3.Gui.Graph
             _filter.FilterInputType = filterInputType;
             _filter.FilterOutputType = filterOutputType;
             _filter.SearchString = "";
-            _selectedSymbol = null;
-            _filter.UpdateIfNeccessary();
+            _selectedSymbolUi = null;
+            _filter.UpdateIfNecessary();
 
             // Keep navigation setting to restore after window gets closed
             _keepNavEnableKeyboard = (ImGui.GetIO().ConfigFlags & ImGuiConfigFlags.NavEnableKeyboard) != ImGuiConfigFlags.None;
 
-            if (_selectedSymbol == null && _filter.MatchingSymbols.Count > 0)
+            if (_selectedSymbolUi == null && _filter.MatchingSymbolUis.Count > 0)
             {
-                _selectedSymbol = _filter.MatchingSymbols[0];
+                _selectedSymbolUi = _filter.MatchingSymbolUis[0];
             }
         }
 
@@ -63,7 +58,7 @@ namespace T3.Gui.Graph
             ImGui.GetIO().ConfigFlags &= ~ImGuiConfigFlags.NavEnableKeyboard;
             Current = this;
 
-            _filter.UpdateIfNeccessary();
+            _filter.UpdateIfNecessary();
 
             ImGui.PushID(UiId);
             {
@@ -98,35 +93,38 @@ namespace T3.Gui.Graph
 
             if (ImGui.IsKeyReleased((int)Key.CursorDown))
             {
-                if (_filter.MatchingSymbols.Count > 0)
+                if (_filter.MatchingSymbolUis.Count > 0)
                 {
-                    var index = _filter.MatchingSymbols.IndexOf(_selectedSymbol);
+                    var index = _filter.MatchingSymbolUis.IndexOf(_selectedSymbolUi);
                     index++;
-                    index %= _filter.MatchingSymbols.Count;
-                    _selectedSymbol = _filter.MatchingSymbols[index];
+                    index %= _filter.MatchingSymbolUis.Count;
+                    _selectedSymbolUi = _filter.MatchingSymbolUis[index];
                 }
             }
             else if (ImGui.IsKeyReleased((int)Key.CursorUp))
             {
-                if (_filter.MatchingSymbols.Count > 0)
+                if (_filter.MatchingSymbolUis.Count > 0)
                 {
-                    var index = _filter.MatchingSymbols.IndexOf(_selectedSymbol);
+                    var index = _filter.MatchingSymbolUis.IndexOf(_selectedSymbolUi);
                     index--;
                     if (index < 0)
-                        index = _filter.MatchingSymbols.Count - 1;
+                        index = _filter.MatchingSymbolUis.Count - 1;
 
-                    _selectedSymbol = _filter.MatchingSymbols[index];
+                    _selectedSymbolUi = _filter.MatchingSymbolUis[index];
                 }
             }
             else if (ImGui.IsKeyPressed((int)Key.Return))
             {
-                if (_selectedSymbol != null)
+                if (_selectedSymbolUi != null)
                 {
-                    CreateInstance(_selectedSymbol);
+                    CreateInstance(_selectedSymbolUi.Symbol);
                 }
             }
 
-            if (ImGui.IsItemDeactivated() || ImGui.GetIO().KeysDownDuration[(int)Key.Esc] > 0)
+            var clickedOutside = ImGui.IsMouseClicked(0) && ImGui.IsWindowHovered();
+            if (clickedOutside
+                || ImGui.IsMouseClicked(1)
+                || ImGui.GetIO().KeysDownDuration[(int)Key.Esc] > 0)
             {
                 ConnectionMaker.Cancel();
                 Log.Debug("Closing...");
@@ -160,11 +158,11 @@ namespace T3.Gui.Graph
 
             if (ImGui.BeginChildFrame(999, ResultListSize))
             {
-                if (_filter.MatchingSymbols.Count > 0 && !_filter.MatchingSymbols.Contains(_selectedSymbol))
-                    _selectedSymbol = _filter.MatchingSymbols[0];
+                if (_filter.MatchingSymbolUis.Count > 0 && !_filter.MatchingSymbolUis.Contains(_selectedSymbolUi))
+                    _selectedSymbolUi = _filter.MatchingSymbolUis[0];
                 
-                if ((_selectedSymbol == null && SymbolRegistry.Entries.Values.Any()))
-                    _selectedSymbol = SymbolRegistry.Entries.Values.FirstOrDefault();
+                if ((_selectedSymbolUi == null && SymbolUiRegistry.Entries.Values.Any()))
+                    _selectedSymbolUi = SymbolUiRegistry.Entries.Values.FirstOrDefault();
 
                 if (_filter.FilterInputType != null || _filter.FilterOutputType != null)
                 {
@@ -183,38 +181,38 @@ namespace T3.Gui.Graph
                     ImGui.PopFont();
                 }
 
-                foreach (var symbol in _filter.MatchingSymbols)
+                foreach (var symbolUi in _filter.MatchingSymbolUis)
                 {
-                    ImGui.PushID(symbol.Id.GetHashCode());
+                    ImGui.PushID(symbolUi.Symbol.Id.GetHashCode());
                     {
 
-                        var color = symbol.OutputDefinitions.Count > 0
-                                        ? TypeUiRegistry.GetPropertiesForType(symbol.OutputDefinitions[0]?.ValueType).Color
+                        var color = symbolUi.Symbol.OutputDefinitions.Count > 0
+                                        ? TypeUiRegistry.GetPropertiesForType(symbolUi.Symbol.OutputDefinitions[0]?.ValueType).Color
                                         : Color.Gray;
                         ImGui.PushStyleColor(ImGuiCol.Header, ColorVariations.Operator.Apply(color).Rgba);
                         ImGui.PushStyleColor(ImGuiCol.HeaderHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
                         ImGui.PushStyleColor(ImGuiCol.HeaderActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
                         ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
-                        ImGui.Selectable("", symbol == _selectedSymbol);
+                        ImGui.Selectable("", symbolUi == _selectedSymbolUi);
 
                         if (ImGui.IsItemActivated())
                         {
-                            CreateInstance(symbol);
+                            CreateInstance(symbolUi.Symbol);
                         }
 
                         ImGui.SameLine();
-                        ImGui.Text(symbol.Name);
-                        if (!String.IsNullOrEmpty(symbol.Namespace))
+                        ImGui.Text(symbolUi.Symbol.Name);
+                        if (!String.IsNullOrEmpty(symbolUi.Symbol.Namespace))
                         {
                             ImGui.SameLine();
-                            ImGui.TextDisabled(symbol.Namespace);
+                            ImGui.TextDisabled(symbolUi.Symbol.Namespace);
                         }
                         ImGui.PopStyleColor(4);
                     }
                     ImGui.PopID();
                 }
 
-                var index = _filter.MatchingSymbols.IndexOf(_selectedSymbol);
+                var index = _filter.MatchingSymbolUis.IndexOf(_selectedSymbolUi);
                 var rectMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(0, (index + 1) * ImGui.GetFrameHeight());
                 var rectMax = rectMin + new Vector2(10, 10);
                 var isVisible = ImGui.IsRectVisible(rectMin, rectMax);
@@ -283,7 +281,7 @@ namespace T3.Gui.Graph
         private bool _isOpen;
         private static readonly Vector2 ResultListSize = new Vector2(300, 200);
 
-        private Symbol _selectedSymbol;
+        private SymbolUi _selectedSymbolUi;
         private static readonly int UiId = "DraftNode".GetHashCode();
 
         public static SymbolBrowser Current;

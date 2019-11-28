@@ -66,10 +66,10 @@ namespace T3.Gui.Windows
 
         private void DrawList()
         {
-            _filter.UpdateIfNeccessary();
-            foreach (var symbol in _filter.MatchingSymbols)
+            _filter.UpdateIfNecessary();
+            foreach (var symbolUi in _filter.MatchingSymbolUis)
             {
-                DrawSymbolItem(symbol);
+                DrawSymbolItem(symbolUi.Symbol);
             }
         }
 
