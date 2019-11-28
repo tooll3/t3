@@ -230,7 +230,19 @@ namespace T3.Core.Operator
 
         public bool IsInstanceAnimated(Instance instance)
         {
-            return _animatedInputCurves.Any(c => c.Key.InstanceId == instance.Id);
+            using (var e = _animatedInputCurves.Keys.GetEnumerator())
+            {
+                while (e.MoveNext())
+                {
+                    if (e.Current.InstanceId == instance.Id)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            // code above generates way less allocations than the line below:
+            // return _animatedInputCurves.Any(c => c.Key.InstanceId == instance.Id);
         }
 
         public IEnumerable<Curve> GetCurvesForInput(IInputSlot inputSlot)

@@ -959,13 +959,15 @@ namespace T3.Core
         }
 
         private readonly Stopwatch _operatorUpdateStopwatch = new Stopwatch();
+        private readonly List<Symbol> _modifiedSymbols = new List<Symbol>();
         public List<Symbol> UpdateChangedOperatorTypes()
         {
-            var modifiedSymbols = new List<Symbol>();
-            foreach (var opResource in Operators)
+            _modifiedSymbols.Clear();
+            for (int i = 0; i < Operators.Count; i++)
             {
-                if (opResource.Updated)
+                if (Operators[i].Updated)
                 {
+                    var opResource = Operators[i]; // must be after if to prevent huge amount of allocations
                     Type type = opResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
                     if (type == null)
                     {
@@ -980,7 +982,7 @@ namespace T3.Core
                         opResource.Updated = false;
                         _operatorUpdateStopwatch.Stop();
                         Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
-                        modifiedSymbols.Add(symbolEntry.Value);
+                        _modifiedSymbols.Add(symbolEntry.Value);
                     }
                     else
                     {
@@ -989,7 +991,7 @@ namespace T3.Core
                 }
             }
 
-            return modifiedSymbols;
+            return _modifiedSymbols;
         }
 
         public Dictionary<uint, Resource> Resources = new Dictionary<uint, Resource>();

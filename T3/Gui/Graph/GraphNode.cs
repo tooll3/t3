@@ -33,6 +33,7 @@ namespace T3.Gui.Graph
             var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
             SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
 
+            // !!!perf allocation hotspot
             var visibleInputUis = (from inputUi in childSymbolUi.InputUis.Values
                                    where showAllInputs || inputUi.Relevancy != Relevancy.Optional ||
                                          connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Id)
