@@ -365,7 +365,7 @@ namespace T3.Gui.Graph.Interaction
             }
 
             var orgLine = "<ItemGroup>\r\n    <Compile Include";
-            var newLine = $"<ItemGroup>\r\n    <Compile Include=\"Types\\{newFileName}\" />\n\r<Compile Include ";
+            var newLine = $"<ItemGroup>\r\n    <Compile Include=\"Types\\{newFileName}\" />\r\n    <Compile Include";
             var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, newLine);
             File.WriteAllText(projectFilePath, newContent);
         }
