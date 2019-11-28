@@ -45,6 +45,8 @@ namespace T3.Gui.Graph
             if (ConnectionMaker.TempConnection != null)
                 allConnections.Add(ConnectionMaker.TempConnection);
 
+            var children = GraphCanvas.Current.CompositionOp.Children;
+
             _symbolUi = SymbolUiRegistry.Entries[graphSymbol.Id];
             _childUis = _symbolUi.ChildUis;
             _inputUisById = _symbolUi.InputUis;
@@ -60,9 +62,11 @@ namespace T3.Gui.Graph
             }
 
             // 3. Draw Nodes and their sockets and set positions for connection lines
-            foreach (var childUi in _childUis)
+            foreach(var instance in children)
+            //foreach(SymbolChildUi childUi in _childUis)
             {
-                GraphNode.Draw(childUi);
+                var childUi = _childUis.Single(ui => ui.Id == instance.Id);
+                GraphNode.Draw(childUi, instance);
             }
 
             // Draw Output Nodes

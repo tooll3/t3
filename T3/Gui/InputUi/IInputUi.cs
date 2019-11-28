@@ -34,7 +34,7 @@ namespace T3.Gui.InputUi
         bool IsAnimatable { get; }
 
         InputEditState DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
-
+        string GetSlotValue(IInputSlot inputSlot);
         void DrawParameterEdits();
 
         void Write(JsonTextWriter writer);

@@ -145,7 +145,7 @@ namespace T3.Gui
         
         public string Description { get; set; }
         // public Styles DefaultStyleForInstances { get; set; }  // TODO: Implement inheritance for display styles? 
-        public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();
+        public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();    // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
         public Dictionary<Guid, IInputUi> InputUis = new Dictionary<Guid, IInputUi>();
         public Dictionary<Guid, IOutputUi> OutputUis = new Dictionary<Guid, IOutputUi>();
     }

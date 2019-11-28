@@ -30,10 +30,24 @@ namespace T3.Gui.InputUi
         protected abstract InputEditState DrawEditControl(string name, ref T value);
         protected abstract void DrawValueDisplay(string name, ref T value);
 
+        protected virtual string GetSlotValueAsString(ref T value)
+        {
+            return String.Empty;
+        }
+
         protected virtual void DrawAnimatedValue(string name, InputSlot<T> inputSlot, Animator animator)
         {
         }
-
+        
+        public virtual string GetSlotValue(IInputSlot inputSlot)
+        {
+            if (inputSlot is InputSlot<T> typedInputSlot)
+            {
+                return GetSlotValueAsString(ref typedInputSlot.Value);
+            }
+            return string.Empty;
+        }
+        
         public InputEditState DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
             var name = inputSlot.Input.Name;

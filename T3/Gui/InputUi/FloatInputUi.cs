@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Globalization;
 using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
@@ -31,6 +32,17 @@ namespace T3.Gui.InputUi
         {
             ImGui.InputFloat(name, ref value, step: 0.0f, step_fast: 0.0f, $"%f", flags: ImGuiInputTextFlags.ReadOnly);
         }
+
+        protected override string GetSlotValueAsString(ref float floatValue)
+        {
+            // This is a stub of value editing. Sadly it's very hard to get
+            // under control because of styling issues and because in GraphNodes
+            // The op body captures the mouse event first.
+            //SingleValueEdit.Draw(ref floatValue,  -Vector2.UnitX);
+            
+            return string.Format(T3Ui.FloatNumberFormat, floatValue);
+        }
+
 
         protected override void DrawAnimatedValue(string name, InputSlot<float> inputSlot, Animator animator)
         {

@@ -69,19 +69,19 @@ namespace T3.Gui.Windows
             var compositionSymbolUi = SymbolUiRegistry.Entries[op.Parent.Symbol.Id];
             var selectedChildSymbolUi = SymbolUiRegistry.Entries[op.Symbol.Id];
 
-            foreach (var input in op.Inputs)
+            foreach (var inputSlot in op.Inputs)
             {
-                if (!selectedChildSymbolUi.InputUis.TryGetValue(input.Id, out IInputUi inputUi))
+                if (!selectedChildSymbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
                 {
                     Log.Warning("Trying to access an non existing input, probably the op instance is not the actual one.");
                     continue;
                 }
 
-                ImGui.PushID(input.Id.GetHashCode());
+                ImGui.PushID(inputSlot.Id.GetHashCode());
 
                 if (_inputOptionsEditingReference.SymbolHash == op.Symbol.Id.GetHashCode())
                 {
-                    if (_inputOptionsEditingReference.InputHash == input.Id.GetHashCode())
+                    if (_inputOptionsEditingReference.InputHash == inputSlot.Id.GetHashCode())
                     {
                         inputUi.DrawParameterEdits();
                         if (ImGui.Button("Back"))
@@ -92,29 +92,29 @@ namespace T3.Gui.Windows
                 }
                 else
                 {
-                    var editState = inputUi.DrawInputEdit(input, compositionSymbolUi, _pinning.SelectedChildUi);
+                    var editState = inputUi.DrawInputEdit(inputSlot, compositionSymbolUi, _pinning.SelectedChildUi);
 
                     if ((editState & InputEditState.Started) != InputEditState.Nothing)
                     {
-                        _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, input.Input);
+                        _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, inputSlot.Input);
                     }
 
                     if ((editState & InputEditState.Modified) != InputEditState.Nothing)
                     {
-                        if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.Value.ValueType != input.Input.Value.ValueType)
-                            _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, input.Input);
-                        _inputValueCommandInFlight.Value.Assign(input.Input.Value);
+                        if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.Value.ValueType != inputSlot.Input.Value.ValueType)
+                            _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, inputSlot.Input);
+                        _inputValueCommandInFlight.Value.Assign(inputSlot.Input.Value);
                     }
 
                     if ((editState & InputEditState.Finished) != InputEditState.Nothing)
                     {
-                        if (_inputValueCommandInFlight != null && _inputValueCommandInFlight.Value.ValueType == input.Input.Value.ValueType)
+                        if (_inputValueCommandInFlight != null && _inputValueCommandInFlight.Value.ValueType == inputSlot.Input.Value.ValueType)
                             UndoRedoStack.Add(_inputValueCommandInFlight);
                     }
 
                     if (editState == InputEditState.ShowOptions)
                     {
-                        ShowParameterSettings(op, input);
+                        ShowParameterSettings(op, inputSlot);
                     }
                 }
 

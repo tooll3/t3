@@ -103,5 +103,6 @@ namespace T3.Gui
         public static IntPtr NotDroppingPointer = new IntPtr(0);
         public static bool DraggingIsInProgress = false;
         public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
+        public static string FloatNumberFormat = "{0:F2}";
     }
 }
