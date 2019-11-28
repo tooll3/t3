@@ -157,8 +157,8 @@ namespace T3.Gui.Graph
                                            : ColorVariations.Operator.Apply(backgroundColor));
 
                 // outline
-                drawList.AddRect(_lastScreenRect.Min - Vector2.Zero,
-                                 _lastScreenRect.Max + Vector2.One + Vector2.One,
+                drawList.AddRect(_lastScreenRect.Min,
+                                 _lastScreenRect.Max + Vector2.One,
                                  new Color(0.08f, 0.08f, 0.08f, 0.8f),
                                  rounding: 0,
                                  2);
