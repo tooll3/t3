@@ -212,7 +212,15 @@ namespace T3.Gui.InputUi
                                                                 input.SetCurrentValueAsDefault();
 
                                                             if (ImGui.MenuItem("Reset to default", !input.IsDefault))
+                                                            {
                                                                 input.ResetToDefault();
+                                                                foreach (var compositionInstance in compositionUi.Symbol._instancesOfSymbol)
+                                                                {
+                                                                    var inputParent = compositionInstance.Children.Single(c => c.Id == inputSlot.Parent.Id);
+                                                                    var slot = inputParent.Inputs.Single(i => i.Id == inputSlot.Id);
+                                                                    slot.DirtyFlag.Invalidate(); 
+                                                                }
+                                                            }
 
                                                             if (ImGui.MenuItem("Parameters settings"))
                                                                 editState = InputEditState.ShowOptions;
