@@ -41,6 +41,10 @@ namespace T3.Gui.OutputUi
                 {
                     slot.DirtyFlag.Target = Invalidate(slot.GetConnection(0));
                 }
+                else if (slot.DirtyFlag.Trigger != DirtyFlagTrigger.None)
+                {
+                    slot.DirtyFlag.Invalidate();
+                }
             }
             else if (slot.IsConnected)
             {
