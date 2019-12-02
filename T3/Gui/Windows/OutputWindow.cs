@@ -71,9 +71,9 @@ namespace T3.Gui.Windows
             return _outputWindowInstances;
         }
 
-        private IEnumerable<Camera> FindCameras()
+        private Camera[] FindCameras()
         {
-            return _pinning.SelectedInstance.Parent?.Children.OfType<Camera>();
+            return _pinning.SelectedInstance.Parent?.Children.OfType<Camera>().ToArray();
         }
 
         
@@ -112,10 +112,10 @@ namespace T3.Gui.Windows
 
         private void DrawCameraSelection()
         {
-            var cameras = FindCameras().ToArray();
-            if (cameras.Length <= 0)
+            var cameras = FindCameras();
+            if (cameras == null || cameras.Length==0)
                 return;
-
+            
             _selectedCamera = cameras.FirstOrDefault(cam => cam.Id == _selectedCameraId);
             if (_selectedCamera == null)
             {

@@ -78,7 +78,8 @@ namespace T3.Gui.Graph.Interaction
 
                 MatchingSymbolUis.Add(symbolUi);
             }
-            MatchingSymbolUis = MatchingSymbolUis.OrderBy(s=> ComputeRelevancy(s, _currentSearchString, "")).Reverse().Take(30).ToList();
+
+            MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _currentSearchString, "")).Reverse().Take(30).ToList();
             // let rating = ComputeRelevancy(metaOpEntry.Value, XSearchTextBox.Text, currentProjectName)
             // orderby rating
         }
@@ -105,7 +106,6 @@ namespace T3.Gui.Graph.Interaction
             return null;
         }
 
-        
         private double ComputeRelevancy(SymbolUi symbolUi, string query, string currentProjectName)
         {
             double relevancy = 1;
@@ -141,23 +141,26 @@ namespace T3.Gui.Graph.Interaction
             //
             // if (symbolUi.Symbol.Name == "Curve")      // disfavor shadow ops
             //     relevancy *= 0.05;
-            
-            if (symbolUi.Symbol.Namespace.Contains("dx11"))
-                relevancy *= 0.10f;
 
-            // TODO: Implement
-            // if (symbolUi.InstanceCount > 0)
-            // {
-            //     relevancy *= -0.5 / symbolUi.InstanceCount + 2.0;
-            // }
-
-            //relevancy *= 2 - 1.0 / (0.3 * _numberOfMetaOperatorUsage[symbolUi.ID] + 0.7);
-
-            //relevancy *= (1 + (1.0 / (op.Name.Length + op.Namespace.Length)) * 0.05);
-            
-            if (Regex.Match(symbolUi.Symbol.Namespace, @"^lib\..*", RegexOptions.IgnoreCase) != Match.Empty)
+            if (!string.IsNullOrEmpty(symbolUi.Symbol.Namespace))
             {
-                relevancy *= 1.6;
+                if (symbolUi.Symbol.Namespace.Contains("dx11"))
+                    relevancy *= 0.10f;
+
+                // TODO: Implement
+                // if (symbolUi.InstanceCount > 0)
+                // {
+                //     relevancy *= -0.5 / symbolUi.InstanceCount + 2.0;
+                // }
+
+                //relevancy *= 2 - 1.0 / (0.3 * _numberOfMetaOperatorUsage[symbolUi.ID] + 0.7);
+
+                //relevancy *= (1 + (1.0 / (op.Name.Length + op.Namespace.Length)) * 0.05);
+
+                if (Regex.Match(symbolUi.Symbol.Namespace, @"^lib\..*", RegexOptions.IgnoreCase) != Match.Empty)
+                {
+                    relevancy *= 1.6;
+                }
             }
 
             // TODO: Implement
@@ -206,10 +209,8 @@ namespace T3.Gui.Graph.Interaction
         //         }
         //     }
         // }
-        
-        
-        
-        public  List<SymbolUi> MatchingSymbolUis { get; private set; } = new List<SymbolUi>();
+
+        public List<SymbolUi> MatchingSymbolUis { get; private set; } = new List<SymbolUi>();
 
         private Regex _currentRegex;
         private string _currentSearchString;
