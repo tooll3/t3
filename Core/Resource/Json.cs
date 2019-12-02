@@ -195,6 +195,11 @@ namespace T3.Core
             var animatorData = (JArray)o["Animator"];
 
             Type instanceType = Type.GetType(instanceTypeName);
+            if (instanceType == null)
+            {
+                throw new Exception($"The type for '{instanceTypeName}' could not be found in Operator assembly.");
+            }
+
             var symbol = new Symbol(instanceType, id, symbolChildren)
                          {
                              Name = name,
