@@ -20,6 +20,7 @@ namespace T3.Gui.Graph.Interaction
         public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName, string nameSpace)
         {
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
+            Dictionary<Symbol.Connection, Guid> connectionToNewSlotIdMap = new Dictionary<Symbol.Connection, Guid>();
 
             // get all the connections that go into the selection (selected ops as target)
             var compositionSymbol = compositionSymbolUi.Symbol;
@@ -34,14 +35,14 @@ namespace T3.Gui.Graph.Interaction
                                     where child.Id == con.TargetParentOrChildId
                                     from input in child.Symbol.InputDefinitions
                                     where input.Id == con.TargetSlotId
-                                    select (child, input)).ToList().Distinct();
+                                    select (child, input, con)).ToList().Distinct().ToArray();
             var usingStringBuilder = new StringBuilder();
             var inputStringBuilder = new StringBuilder();
             var outputStringBuilder = new StringBuilder();
             var connectionsFromNewInputs = new List<Symbol.Connection>(inputConnections.Length);
             int inputNameCounter = 2;
             var inputNameHashSet = new HashSet<string>();
-            foreach (var (child, input) in inputsToGenerate)
+            foreach (var (child, input, origConnection) in inputsToGenerate)
             {
                 var inputValueType = input.DefaultValue.ValueType;
                 if (TypeNameRegistry.Entries.TryGetValue(inputValueType, out var typeName))
@@ -49,7 +50,7 @@ namespace T3.Gui.Graph.Interaction
                     var @namespace = input.DefaultValue.ValueType.Namespace;
                     usingStringBuilder.AppendLine("using " + @namespace + ";");
                     Guid newInputGuid = Guid.NewGuid();
-                    oldToNewIdMap.Add(input.Id, newInputGuid);
+                    connectionToNewSlotIdMap.Add(origConnection, newInputGuid);
                     var attributeString = "        [Input(Guid = \"" + newInputGuid + "\")]";
                     inputStringBuilder.AppendLine(attributeString);
                     var newInputName = inputNameHashSet.Contains(input.Name) ? (input.Name + inputNameCounter++) : input.Name;
@@ -78,11 +79,11 @@ namespace T3.Gui.Graph.Interaction
                                      where child.Id == con.SourceParentOrChildId
                                      from output in child.Symbol.OutputDefinitions
                                      where output.Id == con.SourceSlotId
-                                     select (child, output)).ToList().Distinct();
+                                     select (child, output, con)).ToList().Distinct();
             var connectionsToNewOutputs = new List<Symbol.Connection>(outputConnections.Length);
             int outputNameCounter = 2;
             var outputNameHashSet = new HashSet<string>();
-            foreach (var (child, output) in outputsToGenerate)
+            foreach (var (child, output, origConnection) in outputsToGenerate)
             {
                 var outputValueType = output.ValueType;
                 if (TypeNameRegistry.Entries.TryGetValue(outputValueType, out var typeName))
@@ -90,7 +91,6 @@ namespace T3.Gui.Graph.Interaction
                     var @namespace = outputValueType.Namespace;
                     usingStringBuilder.AppendLine("using " + @namespace + ";");
                     Guid newOutputGuid = Guid.NewGuid();
-                    oldToNewIdMap.Add(output.Id, newOutputGuid);
                     var attributeString = "        [Output(Guid = \"" + newOutputGuid + "\")]";
                     outputStringBuilder.AppendLine(attributeString);
                     var newOutputName = outputNameHashSet.Contains(output.Name) ? (output.Name + outputNameCounter++) : output.Name;
@@ -102,6 +102,7 @@ namespace T3.Gui.Graph.Interaction
 
                     var newConnection = new Symbol.Connection(child.Id, output.Id, Guid.Empty, newOutputGuid);
                     connectionsToNewOutputs.Add(newConnection);
+                    connectionToNewSlotIdMap.Add(origConnection, newOutputGuid);
                 }
                 else
                 {
@@ -195,7 +196,7 @@ namespace T3.Gui.Graph.Interaction
                 var sourceId = con.SourceParentOrChildId;
                 var sourceSlotId = con.SourceSlotId;
                 var targetId = newSymbolChildId;
-                var targetSlotId = oldToNewIdMap[con.TargetSlotId];
+                var targetSlotId = connectionToNewSlotIdMap[con];
 
                 var newConnection = new Symbol.Connection(sourceId, sourceSlotId, targetId, targetSlotId);
                 compositionSymbol.AddConnection(newConnection);
@@ -204,7 +205,7 @@ namespace T3.Gui.Graph.Interaction
             foreach (var con in outputConnections.Reverse()) // reverse for multi input order preservation
             {
                 var sourceId = newSymbolChildId;
-                var sourceSlotId = oldToNewIdMap[con.SourceSlotId];
+                var sourceSlotId = connectionToNewSlotIdMap[con];
                 var targetId = con.TargetParentOrChildId;
                 var targetSlotId = con.TargetSlotId;
 
