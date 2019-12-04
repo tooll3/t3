@@ -152,8 +152,8 @@ namespace T3.Core.Operator
                 var parent = instance.Parent;
                 var parentSymbol = parent.Symbol;
                 // get all connections that belong to this instance
-                var connectionsToReplace = parentSymbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.Id ||
-                                                                                 c.TargetParentOrChildId == instance.Id);
+                var connectionsToReplace = parentSymbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId ||
+                                                                                 c.TargetParentOrChildId == instance.SymbolChildId);
                 // first remove those connections where the inputs/outputs doesn't exist anymore
                 var connectionsToRemove =
                     connectionsToReplace.FindAll(c =>
@@ -190,7 +190,7 @@ namespace T3.Core.Operator
 
                 connectionEntriesToReplace.Reverse(); // restore original order
 
-                var symbolChild = parentSymbol.Children.Single(child => child.Id == instance.Id);
+                var symbolChild = parentSymbol.Children.Single(child => child.Id == instance.SymbolChildId);
 
                 // update inputs of symbol child
                 var oldChildInputs = new Dictionary<Guid, SymbolChild.Input>(symbolChild.InputValues);
@@ -246,7 +246,7 @@ namespace T3.Core.Operator
         {
             var newInstance = Activator.CreateInstance(InstanceType) as Instance;
             Debug.Assert(newInstance != null);
-            newInstance.Id = id;
+            newInstance.SymbolChildId = id;
             newInstance.Symbol = this;
 
             int numInputs = newInstance.Inputs.Count;
@@ -317,7 +317,7 @@ namespace T3.Core.Operator
 
         private static void RemoveChildInstance(SymbolChild childToRemove, Instance parentInstance)
         {
-            var childInstanceToRemove = parentInstance.Children.Single(child => child.Id == childToRemove.Id);
+            var childInstanceToRemove = parentInstance.Children.Single(child => child.SymbolChildId == childToRemove.Id);
             parentInstance.Children.Remove(childInstanceToRemove);
         }
 

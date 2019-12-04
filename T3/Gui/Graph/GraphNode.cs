@@ -108,7 +108,7 @@ namespace T3.Gui.Graph
                         {
                             ImageCanvasForTooltips.Draw();
                             var children = GraphCanvas.Current.CompositionOp.Children;
-                            Instance instance__ = children.Single(c => c.Id == childUi.Id);
+                            Instance instance__ = children.Single(c => c.SymbolChildId == childUi.Id);
                             if (instance__.Outputs.Count > 0)
                             {
                                 var firstOutput = instance__.Outputs[0];
@@ -133,11 +133,11 @@ namespace T3.Gui.Graph
                     _hoveredId = childUi.Id;
                 }
 
-                var hovered = ImGui.IsItemHovered() || T3Ui.HoveredIdsLastFrame.Contains(instance.Id);
+                var hovered = ImGui.IsItemHovered() || T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId);
                 var drawList = GraphCanvas.Current.DrawList;
 
                 // Rendering
-                var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.Id == childUi.SymbolChild.Id);
+                var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
                 var output = childInstance?.Outputs.FirstOrDefault();
                 var framesSinceLastUpdate = output?.DirtyFlag.FramesSinceLastUpdate ?? 100;
 

@@ -66,7 +66,7 @@ namespace T3.Gui.Graph
             foreach(var instance in children)
             //foreach(SymbolChildUi childUi in _childUis)
             {
-                var childUi = _childUis.Single(ui => ui.Id == instance.Id);
+                var childUi = _childUis.Single(ui => ui.Id == instance.SymbolChildId);
                 GraphNode.Draw(childUi, instance);
             }
 

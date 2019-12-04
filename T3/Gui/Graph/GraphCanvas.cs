@@ -39,7 +39,7 @@ namespace T3.Gui.Graph
             // save old properties
             if (CompositionOp != null)
             {
-                UserSettings.Config.OperatorViewSettings[CompositionOp.Id] = GetTargetProperties();
+                UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId] = GetTargetProperties();
             }
 
             var previousInstance = CompositionOp;
@@ -48,14 +48,14 @@ namespace T3.Gui.Graph
             CompositionOp = opInstance;
 
 
-            UserSettings.SaveLastViewedOpForWindow(_window, opInstance.Id);
+            UserSettings.SaveLastViewedOpForWindow(_window, opInstance.SymbolChildId);
 
             var previousFocusOnScreen = WindowPos + WindowSize / 2;
 
             if (previousInstance != null)
             {
                 var newUiContainer = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                var matchingChildUi = newUiContainer.ChildUis.FirstOrDefault(childUi => childUi.SymbolChild.Id == previousInstance.Id);
+                var matchingChildUi = newUiContainer.ChildUis.FirstOrDefault(childUi => childUi.SymbolChild.Id == previousInstance.SymbolChildId);
                 if (matchingChildUi != null)
                 {
                     var centerOnCanvas = matchingChildUi.PosOnCanvas + matchingChildUi.Size / 2;
@@ -63,8 +63,8 @@ namespace T3.Gui.Graph
                 }
             }
             
-            var newProps = UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.Id)
-                               ? UserSettings.Config.OperatorViewSettings[CompositionOp.Id]
+            var newProps = UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.SymbolChildId)
+                               ? UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId]
                                : GuessViewProperties();
             
             SetAreaWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);

@@ -50,7 +50,7 @@ namespace T3.Gui.Graph
         {
             foreach (var child in instance.Children)
             {
-                if (child.Id == childId)
+                if (child.SymbolChildId == childId)
                 {
                     return child;
                 }
@@ -221,7 +221,7 @@ namespace T3.Gui.Graph
             var animator = symbolUi.Symbol.Animator;
             var curvesForSelection = (from child in GraphCanvas.CompositionOp.Children
                                       from selectedElement in selection
-                                      where child.Id == selectedElement.Id
+                                      where child.SymbolChildId == selectedElement.Id
                                       from input in child.Inputs
                                       where animator.IsInputSlotAnimated(input)
                                       select new AnimationParameter()
@@ -244,7 +244,7 @@ namespace T3.Gui.Graph
                 foreach (var p in parents)
                 {
                     ImGui.SameLine();
-                    ImGui.PushID(p.Id.GetHashCode());
+                    ImGui.PushID(p.SymbolChildId.GetHashCode());
 
                     var clicked = ImGui.Button(p.Symbol.Name);
 

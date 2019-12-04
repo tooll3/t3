@@ -116,15 +116,15 @@ namespace T3.Gui.Windows
             if (cameras == null || cameras.Length==0)
                 return;
             
-            _selectedCamera = cameras.FirstOrDefault(cam => cam.Id == _selectedCameraId);
+            _selectedCamera = cameras.FirstOrDefault(cam => cam.SymbolChildId == _selectedCameraId);
             if (_selectedCamera == null)
             {
                 _selectedCamera = cameras.First();
-                _selectedCameraId = _selectedCamera.Id;
+                _selectedCameraId = _selectedCamera.SymbolChildId;
             }
             else if (_selectedCameraId == Guid.Empty)
             {
-                _selectedCameraId = cameras.First().Id;
+                _selectedCameraId = cameras.First().SymbolChildId;
             }
 
             ImGui.SetNextItemWidth(100);
@@ -132,18 +132,18 @@ namespace T3.Gui.Windows
             {
                 foreach (var cam in FindCameras())
                 {
-                    ImGui.PushID(cam.Id.GetHashCode());
+                    ImGui.PushID(cam.SymbolChildId.GetHashCode());
                     {
-                        var symbolChild = SymbolRegistry.Entries[_pinning.SelectedInstance.Parent.Symbol.Id].Children.Single(child => child.Id == cam.Id);
+                        var symbolChild = SymbolRegistry.Entries[_pinning.SelectedInstance.Parent.Symbol.Id].Children.Single(child => child.Id == cam.SymbolChildId);
                         ImGui.Selectable(symbolChild.ReadableName, cam == _selectedCamera);
                         if (ImGui.IsItemActivated())
                         {
-                            _selectedCameraId = cam.Id;
+                            _selectedCameraId = cam.SymbolChildId;
                         }
 
                         if (ImGui.IsItemHovered())
                         {
-                            T3Ui.AddHoveredId(cam.Id);
+                            T3Ui.AddHoveredId(cam.SymbolChildId);
                         }
                     }
                     ImGui.PopID();

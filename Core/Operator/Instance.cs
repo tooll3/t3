@@ -8,7 +8,7 @@ namespace T3.Core.Operator
     public abstract class Instance : IDisposable
     {
         public abstract Type Type { get; }
-        public Guid Id { get; set; }
+        public Guid SymbolChildId { get; set; }
         public Instance Parent { get; internal set; }
         public Symbol Symbol { get; internal set; }
 
@@ -62,7 +62,7 @@ namespace T3.Core.Operator
         {
             Instance compositionInstance = this;
 
-            var sourceInstance = compositionInstance.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
+            var sourceInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
             ISlot sourceSlot;
             if (sourceInstance != null)
             {
@@ -75,7 +75,7 @@ namespace T3.Core.Operator
                 sourceSlot = sourceInstance.Inputs.Single(input => input.Id == connection.SourceSlotId);
             }
 
-            var targetInstance = compositionInstance.Children.SingleOrDefault(child => child.Id == connection.TargetParentOrChildId);
+            var targetInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.TargetParentOrChildId);
             ISlot targetSlot;
             if (targetInstance != null)
             {

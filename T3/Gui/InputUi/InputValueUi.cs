@@ -216,7 +216,7 @@ namespace T3.Gui.InputUi
                                                                 input.ResetToDefault();
                                                                 foreach (var compositionInstance in compositionUi.Symbol._instancesOfSymbol)
                                                                 {
-                                                                    var inputParent = compositionInstance.Children.Single(c => c.Id == inputSlot.Parent.Id);
+                                                                    var inputParent = compositionInstance.Children.Single(c => c.SymbolChildId == inputSlot.Parent.SymbolChildId);
                                                                     var slot = inputParent.Inputs.Single(i => i.Id == inputSlot.Id);
                                                                     slot.DirtyFlag.Invalidate(); 
                                                                 }

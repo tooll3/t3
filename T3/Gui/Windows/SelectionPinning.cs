@@ -37,7 +37,7 @@ namespace T3.Gui.Windows
                 SelectedChildUi = SelectedUi.ChildUis.FirstOrDefault(childUi => childUi.IsSelected);
                 if (SelectedChildUi != null)
                 {
-                    SelectedInstance = SelectedInstance.Children.Single(child => child.Id == SelectedChildUi.Id);
+                    SelectedInstance = SelectedInstance.Children.Single(child => child.SymbolChildId == SelectedChildUi.Id);
                     SelectedUi = SymbolUiRegistry.Entries[SelectedInstance.Symbol.Id];
                 }
                 else
@@ -47,7 +47,7 @@ namespace T3.Gui.Windows
                     if (parent != null)
                     {
                         SelectedUi = SymbolUiRegistry.Entries[parent.Symbol.Id];
-                        SelectedChildUi = SelectedUi.ChildUis.FirstOrDefault(childUi => childUi.Id == SelectedInstance.Id );
+                        SelectedChildUi = SelectedUi.ChildUis.FirstOrDefault(childUi => childUi.Id == SelectedInstance.SymbolChildId );
                     } 
                 }
 

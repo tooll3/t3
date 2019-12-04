@@ -96,13 +96,13 @@ namespace T3.Gui.Windows
 
                     if ((editState & InputEditState.Started) != InputEditState.Nothing)
                     {
-                        _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, inputSlot.Input);
+                        _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.SymbolChildId, inputSlot.Input);
                     }
 
                     if ((editState & InputEditState.Modified) != InputEditState.Nothing)
                     {
                         if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.Value.ValueType != inputSlot.Input.Value.ValueType)
-                            _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.Id, inputSlot.Input);
+                            _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.SymbolChildId, inputSlot.Input);
                         _inputValueCommandInFlight.Value.Assign(inputSlot.Input.Value);
                     }
 

@@ -28,7 +28,7 @@ namespace T3.Core.Operator
 
             public CurveId(IInputSlot inputSlot, int index = 0)
             {
-                InstanceId = inputSlot.Parent.Id;
+                InstanceId = inputSlot.Parent.SymbolChildId;
                 InputId = inputSlot.Id;
                 Index = index;
             }
@@ -152,10 +152,10 @@ namespace T3.Core.Operator
             // gather all inputs that correspond to stored ids
             var relevantInputs = from curveEntry in _animatedInputCurves
                                  from childInstance in compositionInstance.Children
-                                 where curveEntry.Key.InstanceId == childInstance.Id
+                                 where curveEntry.Key.InstanceId == childInstance.SymbolChildId
                                  from inputSlot in childInstance.Inputs
                                  where curveEntry.Key.InputId == inputSlot.Id
-                                 group (inputSlot, curveEntry.Value) by (childInstance.Id, inputSlot.Id)
+                                 group (inputSlot, curveEntry.Value) by (Id: childInstance.SymbolChildId, inputSlot.Id)
                                  into inputGroup
                                  select inputGroup;
 
@@ -214,7 +214,7 @@ namespace T3.Core.Operator
             inputSlot.SetUpdateActionBackToDefault();
             inputSlot.DirtyFlag.Trigger &= ~DirtyFlagTrigger.Animated;
             var curveKeysToRemove = (from curve in _animatedInputCurves
-                                     where curve.Key.InstanceId == inputSlot.Parent.Id
+                                     where curve.Key.InstanceId == inputSlot.Parent.SymbolChildId
                                      where curve.Key.InputId == inputSlot.Id
                                      select curve.Key).ToArray(); // ToArray is needed to remove from collection in batch
             foreach (var curveKey in curveKeysToRemove)
@@ -234,7 +234,7 @@ namespace T3.Core.Operator
             {
                 while (e.MoveNext())
                 {
-                    if (e.Current.InstanceId == instance.Id)
+                    if (e.Current.InstanceId == instance.SymbolChildId)
                     {
                         return true;
                     }
@@ -248,7 +248,7 @@ namespace T3.Core.Operator
         public IEnumerable<Curve> GetCurvesForInput(IInputSlot inputSlot)
         {
             return from curve in _animatedInputCurves
-                   where curve.Key.InstanceId == inputSlot.Parent.Id
+                   where curve.Key.InstanceId == inputSlot.Parent.SymbolChildId
                    where curve.Key.InputId == inputSlot.Id
                    orderby curve.Key.Index
                    select curve.Value;
