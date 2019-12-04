@@ -46,7 +46,7 @@ namespace T3.Gui.Graph
             GraphWindowInstances.Add(this);
         }
 
-        private Instance FindIdInNestedChildren(Instance instance, Guid childId)
+        public static Instance FindIdInNestedChildren(Instance instance, Guid childId)
         {
             foreach (var child in instance.Children)
             {
@@ -86,8 +86,19 @@ namespace T3.Gui.Graph
 
         private static bool _justAddedDescription;
 
+        /// <summary>
+        /// References to composition op might be outdated because
+        /// the symbol has been recompiled or otherwise changed.
+        /// This uses the references to 
+        /// </summary>
+        private void UpdateReferences()
+        {
+            
+        }
+        
         protected override void DrawContent()
         {
+            UpdateReferences();
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
             {
                 var dl = ImGui.GetWindowDrawList();
@@ -101,67 +112,13 @@ namespace T3.Gui.Graph
                     dl.ChannelsSetCurrent(1);
                     {
                         DrawBreadcrumbs();
-
-                        ImGui.SetCursorPosX(8);
-                        ImGui.PushFont(Fonts.FontLarge);
-                        ImGui.Text(GraphCanvas.CompositionOp.Symbol.Name);
-                        ImGui.SameLine();
-
-                        ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.3f).Rgba);
-                        ImGui.Text("  - " + GraphCanvas.CompositionOp.Symbol.Namespace);
-                        ImGui.PopFont();
-                        ImGui.PopStyleColor();
-
-                        var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.CompositionOp.Symbol.Id];
-
-                        if (symbolUi.Description == null)
-                        {
-                            ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                            ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-
-                            ImGui.PushFont(Fonts.FontSmall);
-                            if (ImGui.Button("add description..."))
-                            {
-                                symbolUi.Description = " ";
-                                _justAddedDescription = false;
-                            }
-
-                            ImGui.PopFont();
-                            ImGui.PopStyleColor(2);
-                        }
-                        else
-                        {
-                            if (symbolUi.Description == string.Empty)
-                            {
-                                symbolUi.Description = null;
-                            }
-                            else
-                            {
-                                var desc = symbolUi.Description;
-                                ImGui.PushFont(Fonts.FontSmall);
-                                ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
-                                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-                                {
-                                    var sizeMatchingDescription = ImGui.CalcTextSize(desc) + new Vector2(20, 40);
-                                    sizeMatchingDescription.X = Im.Max(300, sizeMatchingDescription.X);
-                                    if (_justAddedDescription)
-                                    {
-                                        ImGui.SetKeyboardFocusHere();
-                                        _justAddedDescription = false;
-                                    }
-
-                                    ImGui.InputTextMultiline("##description", ref desc, 3000, sizeMatchingDescription);
-                                }
-                                ImGui.PopStyleColor(2);
-                                ImGui.PopFont();
-                                symbolUi.Description = desc;
-                            }
-                        }
-
+                        DrawBreadcrumbsNameAndDescription();
                         TimeControls.DrawTimeControls(_clipTime, ref _timeLineCanvas.Mode);
                     }
                     dl.ChannelsSetCurrent(0);
-                    GraphCanvas.Draw(dl);
+                    {
+                        GraphCanvas.Draw(dl);
+                    }
                     dl.ChannelsMerge();
                 }
                 ImGui.EndChild();
@@ -173,6 +130,65 @@ namespace T3.Gui.Graph
                 ImGui.EndChild();
             }
             ImGui.PopStyleVar();
+        }
+
+        private void DrawBreadcrumbsNameAndDescription()
+        {
+            ImGui.SetCursorPosX(8);
+            ImGui.PushFont(Fonts.FontLarge);
+            ImGui.Text(GraphCanvas.CompositionOp.Symbol.Name);
+            ImGui.SameLine();
+
+            ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.3f).Rgba);
+            ImGui.Text("  - " + GraphCanvas.CompositionOp.Symbol.Namespace);
+            ImGui.PopFont();
+            ImGui.PopStyleColor();
+
+            var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.CompositionOp.Symbol.Id];
+
+            if (symbolUi.Description == null)
+            {
+                ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+
+                ImGui.PushFont(Fonts.FontSmall);
+                if (ImGui.Button("add description..."))
+                {
+                    symbolUi.Description = " ";
+                    _justAddedDescription = false;
+                }
+
+                ImGui.PopFont();
+                ImGui.PopStyleColor(2);
+            }
+            else
+            {
+                if (symbolUi.Description == string.Empty)
+                {
+                    symbolUi.Description = null;
+                }
+                else
+                {
+                    var desc = symbolUi.Description;
+                    ImGui.PushFont(Fonts.FontSmall);
+                    ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                    {
+                        var sizeMatchingDescription = ImGui.CalcTextSize(desc) + new Vector2(20, 40);
+                        sizeMatchingDescription.X = Im.Max(300, sizeMatchingDescription.X);
+                        if (_justAddedDescription)
+                        {
+                            ImGui.SetKeyboardFocusHere();
+                            _justAddedDescription = false;
+                        }
+
+                        ImGui.InputTextMultiline("##description", ref desc, 3000, sizeMatchingDescription);
+                    }
+                    ImGui.PopStyleColor(2);
+                    ImGui.PopFont();
+                    symbolUi.Description = desc;
+                }
+            }
         }
 
         protected override void Close()
