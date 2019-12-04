@@ -731,6 +731,16 @@ namespace T3.Core
             return resourceEntry.Id;
         }
 
+        public void RemoveOperatorEntry(uint resourceId)
+        {
+            if (Resources.TryGetValue(resourceId, out var entry))
+            {
+                Operators.Remove(entry as OperatorResource);
+                Resources.Remove(resourceId);
+            }
+        }
+        
+
         private void OnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
             //Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");

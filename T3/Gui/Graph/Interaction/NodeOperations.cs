@@ -134,8 +134,6 @@ namespace T3.Gui.Graph.Interaction
             sw.Write(newSource);
             sw.Dispose();
 
-            AddSourceFileToProject(newSourcePath);
-
             var resourceManager = ResourceManager.Instance();
             Guid newSymbolId = Guid.NewGuid();
             uint symbolResourceId = resourceManager.CreateOperatorEntry(newSourcePath, newSymbolId.ToString());
@@ -144,13 +142,21 @@ namespace T3.Gui.Graph.Interaction
             if (!symbolResource.Updated)
             {
                 Log.Error("Error, new symbol was not updated/compiled");
+                resourceManager.RemoveOperatorEntry(symbolResourceId);
+                File.Delete(newSourcePath);
+                return;
             }
 
             Type type = symbolResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
             if (type == null)
             {
                 Log.Error("Error, new symbol has no compiled instance type");
+                resourceManager.RemoveOperatorEntry(symbolResourceId);
+                File.Delete(newSourcePath);
+                return;
             }
+
+            AddSourceFileToProject(newSourcePath);
 
             // create and register the new symbol
             var newSymbol = new Symbol(type, newSymbolId);
