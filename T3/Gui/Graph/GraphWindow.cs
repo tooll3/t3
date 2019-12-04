@@ -23,7 +23,7 @@ namespace T3.Gui.Graph
 
         public GraphWindow()
         {
-            PreventWindowDragging = false;    // conflicts with splitter between graph and timeline
+            PreventWindowDragging = false; // conflicts with splitter between graph and timeline
             _instanceCounter++;
             Config.Title = "Graph##" + _instanceCounter;
             Config.Visible = true;
@@ -32,13 +32,13 @@ namespace T3.Gui.Graph
             const string trackName = @"Resources\lorn-sega-sunset.mp3";
             _clipTime = File.Exists(trackName) ? new StreamClipTime(trackName) : new ClipTime();
 
+            // Legacy work-around
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
-
-            var shownOp = (opId != Guid.Empty
-                               ? FindIdInNestedChildren(T3Ui.UiModel.MainOp, opId)
-                               : null) ?? T3Ui.UiModel.MainOp;
-
-            GraphCanvas = new GraphCanvas(this, shownOp);
+            var shownOpInstance = (opId != Guid.Empty
+                               ? FindIdInNestedChildren(T3Ui.UiModel.RootInstance, opId)
+                               : null) ?? T3Ui.UiModel.RootInstance;
+            var path = BuildAnIdPathForInstance(shownOpInstance);
+            GraphCanvas = new GraphCanvas(this,path);
 
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
 
@@ -46,6 +46,7 @@ namespace T3.Gui.Graph
             GraphWindowInstances.Add(this);
         }
 
+        
         public static Instance FindIdInNestedChildren(Instance instance, Guid childId)
         {
             foreach (var child in instance.Children)
@@ -61,6 +62,28 @@ namespace T3.Gui.Graph
             }
 
             return null;
+        }
+
+        private static List<Guid> BuildAnIdPathForInstance(Instance instance)
+        {
+            return CollectAnIdPathForInstance(T3Ui.UiModel.RootInstance, new List<Guid>() {T3Ui.UiModel.RootInstance.SymbolChildId });
+
+            List<Guid> CollectAnIdPathForInstance(Instance cursor, List<Guid> path)
+            {
+                if (cursor.SymbolChildId == instance.SymbolChildId)
+                {
+                    path.Add(cursor.SymbolChildId);
+                    return path;
+                }
+                
+                foreach (var subChild in cursor.Children)
+                {
+                    var result = CollectAnIdPathForInstance(subChild, path);
+                    if (result != null)
+                        return result;
+                }
+                return null;
+            }
         }
 
         private static int _instanceCounter;
@@ -93,9 +116,8 @@ namespace T3.Gui.Graph
         /// </summary>
         private void UpdateReferences()
         {
-            
         }
-        
+
         protected override void DrawContent()
         {
             UpdateReferences();
@@ -199,7 +221,7 @@ namespace T3.Gui.Graph
         protected override void AddAnotherInstance()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            new GraphWindow();    // Must call constructor
+            new GraphWindow(); // Must call constructor
         }
 
         private void DrawTimelineAndCurveEditor()
@@ -250,7 +272,7 @@ namespace T3.Gui.Graph
 
                     if (clicked)
                     {
-                        GraphCanvas.OpenComposition(p, ScalableCanvas.Transition.JumpOut);
+                        GraphCanvas.SetCompositionToParentInstance(p);
                         break;
                     }
 

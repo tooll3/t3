@@ -136,8 +136,8 @@ namespace T3.Gui
             // create instance of project op, all children are create automatically
             var dashboard = dashboardSymbol.CreateInstance(Guid.NewGuid());
 
-            Instance projectOp = dashboard.Children[0];
-            MainOp = projectOp;
+            Instance projectOp = dashboard;
+            RootInstance = projectOp;
         }
 
         public override void Load()
@@ -211,6 +211,6 @@ namespace T3.Gui
             }
         }
 
-        public Instance MainOp;
+        public Instance RootInstance;
     }
 }

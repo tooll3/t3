@@ -124,8 +124,7 @@ namespace T3.Gui.Graph
 
                 if (ImGui.IsItemActive() && ImGui.IsMouseDoubleClicked(0))
                 {
-                    //instance = GraphCanvas.Current.CompositionOp.Children.Find(c => c.Symbol == childUi.SymbolChild.Symbol);
-                    GraphCanvas.Current.OpenComposition(instance, ScalableCanvas.Transition.JumpIn);
+                    GraphCanvas.Current.SetCompositionToChildInstance(instance);
                 }
 
                 if (_lastScreenRect.Contains(ImGui.GetMousePos()))

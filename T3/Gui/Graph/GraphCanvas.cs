@@ -27,33 +27,23 @@ namespace T3.Gui.Graph
     /// </summary>
     public class GraphCanvas : ScalableCanvas
     {
-        public GraphCanvas(GraphWindow window, Instance opInstance)
+        public GraphCanvas(GraphWindow window, List<Guid> idPath)
         {
             _selectionFence = new SelectionFence(this);
             _window = window;
-            OpenComposition(opInstance, Transition.JumpIn);
+            SetComposition(idPath, Transition.JumpIn);
         }
 
-        public void OpenComposition(Instance opInstance, Transition transition)
+        public void SetComposition(List<Guid> childIdPath, Transition transition)
         {
-            // save old properties
-            if (CompositionOp != null)
-            {
-                UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId] = GetTargetProperties();
-            }
-
-            var previousInstance = CompositionOp;
-            
-            SelectionHandler.Clear();
-            CompositionOp = opInstance;
-
-
-            UserSettings.SaveLastViewedOpForWindow(_window, opInstance.SymbolChildId);
-
             var previousFocusOnScreen = WindowPos + WindowSize / 2;
-
-            if (previousInstance != null)
+            
+            var previousInstanceWasSet = _compositionPath != null && _compositionPath.Count > 0;
+            if (previousInstanceWasSet)
             {
+                var previousInstance = GetInstanceFromIdPath(_compositionPath);
+                UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId] = GetTargetProperties();
+                
                 var newUiContainer = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
                 var matchingChildUi = newUiContainer.ChildUis.FirstOrDefault(childUi => childUi.SymbolChild.Id == previousInstance.SymbolChildId);
                 if (matchingChildUi != null)
@@ -63,6 +53,13 @@ namespace T3.Gui.Graph
                 }
             }
             
+            _compositionPath = childIdPath;
+            CompositionOp = GetInstanceFromIdPath(childIdPath);
+            
+            SelectionHandler.Clear();
+
+            UserSettings.SaveLastViewedOpForWindow(_window, CompositionOp.SymbolChildId);
+
             var newProps = UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.SymbolChildId)
                                ? UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId]
                                : GuessViewProperties();
@@ -70,6 +67,41 @@ namespace T3.Gui.Graph
             SetAreaWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);
         }
 
+
+        public void SetCompositionToChildInstance(Instance instance)
+        {
+            // Validation that instance is valid
+            // TODO: only do in debug mode
+            var op = GetInstanceFromIdPath(_compositionPath);
+            var matchingChild = op.Children.Single(child => child == instance);
+            if (matchingChild == null)
+            {
+                throw new ArgumentException("Can't OpenChildNode because Instance is not a child of current composition");
+            }
+
+            var newPath = _compositionPath;
+            newPath.Add(instance.SymbolChildId);
+            SetComposition(newPath, Transition.JumpIn);
+        }
+        
+        public void SetCompositionToParentInstance(Instance instance)
+        {
+            var shortenedPath = new List<Guid>();
+            foreach (var pathItemId in _compositionPath)
+            {
+                if (pathItemId == instance.SymbolChildId)
+                    break;
+                
+                shortenedPath.Add(pathItemId);
+            }
+            shortenedPath.Add(instance.SymbolChildId);
+            
+            if(shortenedPath.Count() == _compositionPath.Count())
+                throw new ArgumentException("Can't SetCompositionToParentInstance because Instance is not a parent of current composition");
+
+            SetComposition(shortenedPath, Transition.JumpOut);
+        }        
+        
         private CanvasProperties GuessViewProperties()
         {
             ChildUis = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis;
@@ -80,6 +112,10 @@ namespace T3.Gui.Graph
         #region drawing UI ====================================================================
         public void Draw(ImDrawListPtr dl)
         {
+            // TODO: Refresh reference on every frame. Since this uses lists instead of dictionary
+            // it can be really slow
+            CompositionOp = GetInstanceFromIdPath(_compositionPath);
+
             UpdateCanvas();
 
             Current = this;
@@ -500,6 +536,27 @@ namespace T3.Gui.Graph
         public Instance CompositionOp { get; private set; }
         #endregion
 
+        private static Instance GetInstanceFromIdPath(IEnumerable<Guid> childPath)
+        {
+            if (childPath == null || childPath.Count() == 0)
+                return null;
+            
+            var instance = T3Ui.UiModel.RootInstance;
+            foreach (var childId in childPath)
+            {
+                if (childId == T3Ui.UiModel.RootInstance.SymbolChildId)
+                    continue;
+                
+                instance = instance.Children.FirstOrDefault(child => child.SymbolChildId == childId);
+                if(instance == null)
+                    throw new Exception("Invalid composition path");
+            }
+            return instance;
+        }
+
+        
+        private  List<Guid> _compositionPath = new List<Guid>();
+        
         private readonly AddInputDialog _addInputDialog = new AddInputDialog();
         private readonly CombineToSymbolDialog _combineToSymbolDialog = new CombineToSymbolDialog();
         private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new DuplicateSymbolDialog();
