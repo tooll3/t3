@@ -1,9 +1,9 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
@@ -71,16 +71,12 @@ namespace T3.Gui.Graph
             }
 
             // Draw Output Nodes
-            foreach (var pair in _outputUisById)
+            foreach (var (outputId, outputNode) in _outputUisById)
             {
-                var outputId = pair.Key;
-                var outputNode = pair.Value;
-
                 var outputDef = graphSymbol.OutputDefinitions.Find(od => od.Id == outputId);
                 OutputNode.Draw(outputDef, outputNode);
 
-                var targetPos = new Vector2(
-                                            OutputNode._lastScreenRect.Min.X + GraphNode.InputSlotThickness,
+                var targetPos = new Vector2(OutputNode._lastScreenRect.Min.X + GraphNode.InputSlotThickness,
                                             OutputNode._lastScreenRect.GetCenter().Y);
 
                 foreach (var line in Connections.GetLinesToOutputNodes(outputNode, outputId))

@@ -289,7 +289,7 @@ namespace T3
 
             // setup file watching the operator source
             resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;
-            foreach (var (key, symbol) in SymbolRegistry.Entries)
+            foreach (var (_, symbol) in SymbolRegistry.Entries)
             {
                 ResourceManager.Instance().CreateOperatorEntry(@"Operators\Types\" + symbol.Name + ".cs", symbol.Id.ToString());
             }
