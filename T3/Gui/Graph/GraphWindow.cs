@@ -1,6 +1,7 @@
 using System;
 using ImGuiNET;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -34,11 +35,9 @@ namespace T3.Gui.Graph
 
             // Legacy work-around
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
-            var shownOpInstance = (opId != Guid.Empty
-                               ? FindIdInNestedChildren(T3Ui.UiModel.RootInstance, opId)
-                               : null) ?? T3Ui.UiModel.RootInstance;
-            var path = BuildAnIdPathForInstance(shownOpInstance);
-            GraphCanvas = new GraphCanvas(this,path);
+            var shownOpInstance = FindIdInNestedChildren(T3Ui.UiModel.RootInstance, opId) ?? T3Ui.UiModel.RootInstance;
+            var path = BuildIdPathForInstance(shownOpInstance);
+            GraphCanvas = new GraphCanvas(this, path);
 
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
 
@@ -64,24 +63,29 @@ namespace T3.Gui.Graph
             return null;
         }
 
-        private static List<Guid> BuildAnIdPathForInstance(Instance instance)
+        private static List<Guid> BuildIdPathForInstance(Instance instance)
         {
-            return CollectAnIdPathForInstance(T3Ui.UiModel.RootInstance, new List<Guid>() {T3Ui.UiModel.RootInstance.SymbolChildId });
+            return CollectAnIdPathForInstance(T3Ui.UiModel.RootInstance, new List<Guid>());
 
             List<Guid> CollectAnIdPathForInstance(Instance cursor, List<Guid> path)
             {
                 if (cursor.SymbolChildId == instance.SymbolChildId)
                 {
-                    path.Add(cursor.SymbolChildId);
+                    Debug.Assert(path.Count == 0);
+                    path.Add(cursor.SymbolChildId); // found searched instance
                     return path;
                 }
-                
+
                 foreach (var subChild in cursor.Children)
                 {
                     var result = CollectAnIdPathForInstance(subChild, path);
                     if (result != null)
+                    {
+                        path.Insert(0, cursor.SymbolChildId);
                         return result;
+                    }
                 }
+
                 return null;
             }
         }
