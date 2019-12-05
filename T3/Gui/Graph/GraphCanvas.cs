@@ -536,21 +536,22 @@ namespace T3.Gui.Graph
         public Instance CompositionOp { get; private set; }
         #endregion
 
-        private static Instance GetInstanceFromIdPath(IEnumerable<Guid> childPath)
+        private static Instance GetInstanceFromIdPath(List<Guid> childPath)
         {
-            if (childPath == null || childPath.Count() == 0)
+            if (childPath == null || childPath.Count == 0)
                 return null;
-            
+
             var instance = T3Ui.UiModel.RootInstance;
             foreach (var childId in childPath)
             {
                 if (childId == T3Ui.UiModel.RootInstance.SymbolChildId)
                     continue;
-                
+
                 instance = instance.Children.FirstOrDefault(child => child.SymbolChildId == childId);
-                if(instance == null)
+                if (instance == null)
                     throw new Exception("Invalid composition path");
             }
+
             return instance;
         }
 
