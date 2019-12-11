@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using T3.Core.Logging;
 using T3.Core.Operator;
 
 namespace T3.Gui.Graph.Interaction
@@ -23,7 +24,16 @@ namespace T3.Gui.Graph.Interaction
             {
                 _currentSearchString = SearchString;
                 var pattern = string.Join(".*", _currentSearchString.ToCharArray());
-                _currentRegex = new Regex(pattern, RegexOptions.IgnoreCase);
+                try
+                {
+                    _currentRegex = new Regex(pattern, RegexOptions.IgnoreCase);    
+                }
+                catch(ArgumentException)
+                {
+                    Log.Debug("Invalid Regex format: " + pattern);
+                    return;
+                }
+                
                 needsUpdate = true;
             }
 
