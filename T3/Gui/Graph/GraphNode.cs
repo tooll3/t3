@@ -488,7 +488,7 @@ namespace T3.Gui.Graph
                                             ColorVariations.OperatorHover.Apply(colorForType));
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
-                    ImGui.SetTooltip($".{outputDef.Name} ->");
+                    ImGui.SetTooltip($".{outputDef.Name}<{TypeNameRegistry.Entries[outputDef.ValueType]}>");
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(0))
                     {
@@ -559,7 +559,7 @@ namespace T3.Gui.Graph
                                            );
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
-                    ImGui.SetTooltip($"-> .{inputDef.Name}");
+                    ImGui.SetTooltip($"-> .{inputDef.Name}<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(0))
                     {
@@ -615,7 +615,7 @@ namespace T3.Gui.Graph
                                            );
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
-                    ImGui.SetTooltip($"-> .{inputDef.Name}");
+                    ImGui.SetTooltip($"-> .{inputDef.Name}[{multiInputIndex}] <{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(0))
                     {
