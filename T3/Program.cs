@@ -23,8 +23,6 @@ using Resource = T3.Core.Resource;
 
 namespace T3
 {
-
-
     class ImGuiDx11RenderForm : RenderForm
     {
         public ImGuiDx11RenderForm(string title)
@@ -126,6 +124,7 @@ namespace T3
                             break;
                         }
                     }
+
                     return;
                 case WM_KEYUP:
                 case WM_SYSKEYUP:
@@ -147,6 +146,7 @@ namespace T3
                             break;
                         }
                     }
+
                     return;
                 case WM_CHAR:
                     // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
@@ -184,16 +184,33 @@ namespace T3
                 // Show OS mouse cursor
                 switch (imgui_cursor)
                 {
-                    case ImGuiMouseCursor.Arrow: Cursor.Current = Cursors.Arrow; break;
-                    case ImGuiMouseCursor.TextInput: Cursor.Current = Cursors.IBeam; break;
-                    case ImGuiMouseCursor.ResizeAll: Cursor.Current = Cursors.SizeAll; break;
-                    case ImGuiMouseCursor.ResizeEW: Cursor.Current = Cursors.SizeWE; break;
-                    case ImGuiMouseCursor.ResizeNS: Cursor.Current = Cursors.SizeNS; break;
-                    case ImGuiMouseCursor.ResizeNESW: Cursor.Current = Cursors.SizeNESW; break;
-                    case ImGuiMouseCursor.ResizeNWSE: Cursor.Current = Cursors.SizeNWSE; break;
-                    case ImGuiMouseCursor.Hand: Cursor.Current = Cursors.Hand; break;
+                    case ImGuiMouseCursor.Arrow:
+                        Cursor.Current = Cursors.Arrow;
+                        break;
+                    case ImGuiMouseCursor.TextInput:
+                        Cursor.Current = Cursors.IBeam;
+                        break;
+                    case ImGuiMouseCursor.ResizeAll:
+                        Cursor.Current = Cursors.SizeAll;
+                        break;
+                    case ImGuiMouseCursor.ResizeEW:
+                        Cursor.Current = Cursors.SizeWE;
+                        break;
+                    case ImGuiMouseCursor.ResizeNS:
+                        Cursor.Current = Cursors.SizeNS;
+                        break;
+                    case ImGuiMouseCursor.ResizeNESW:
+                        Cursor.Current = Cursors.SizeNESW;
+                        break;
+                    case ImGuiMouseCursor.ResizeNWSE:
+                        Cursor.Current = Cursors.SizeNWSE;
+                        break;
+                    case ImGuiMouseCursor.Hand:
+                        Cursor.Current = Cursors.Hand;
+                        break;
                 }
             }
+
             return true;
         }
     }
@@ -205,7 +222,7 @@ namespace T3
         [STAThread]
         private static void Main()
         {
-            var form = new ImGuiDx11RenderForm("T3 ImGui Test") {ClientSize = new Size(1920, 1080)};
+            var form = new ImGuiDx11RenderForm("T3 ImGui Test") { ClientSize = new Size(1920, 1080) };
 
             // SwapChain description
             var desc = new SwapChainDescription()
@@ -231,7 +248,6 @@ namespace T3
             // New RenderTargetView from the backbuffer
             _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
             _renderView = new RenderTargetView(device, _backBuffer);
-            
 
             _controller = new ImGuiDx11Impl(device, form.Width, form.Height);
 
@@ -253,11 +269,11 @@ namespace T3
             // second render view
             var form2 = new ImGuiDx11RenderForm("T3 Render Window") { ClientSize = new Size(640, 480) };
             desc.OutputHandle = form2.Handle;
-            
+
             _swapChain2 = new SwapChain(factory, device, desc);
-            
+
             _swapChain2.ResizeBuffers(3, form2.ClientSize.Width, form2.ClientSize.Height,
-            _swapChain2.Description.ModeDescription.Format, _swapChain2.Description.Flags);
+                                      _swapChain2.Description.ModeDescription.Format, _swapChain2.Description.Flags);
             _backBuffer2 = Texture2D.FromSwapChain<Texture2D>(_swapChain2, 0);
             _renderView2 = new RenderTargetView(device, _backBuffer2);
 
@@ -283,8 +299,8 @@ namespace T3
             //resourceManager.CreatePixelShader(@"Resources\\ps-pos-only-fixed-color.hlsl", "main", "ps-pos-only-fixed-color");
             var di = new DirectoryInfo(".");
             System.Console.WriteLine(di.FullName);
-            uint vsId = resourceManager.CreateVertexShaderFromFile(@"Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => {});
-            uint psId = resourceManager.CreatePixelShaderFromFile(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => {});
+            uint vsId = resourceManager.CreateVertexShaderFromFile(@"Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
+            uint psId = resourceManager.CreatePixelShaderFromFile(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
             (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg", null);
 
             // setup file watching the operator source
@@ -334,7 +350,7 @@ namespace T3
                                          context.Rasterizer.SetViewport(new Viewport(0, 0, form2.ClientSize.Width, form2.ClientSize.Height, 0.0f, 1.0f));
                                          context.OutputMerger.SetTargets(_renderView2);
                                          context.ClearRenderTargetView(_renderView2, new Color(0.45f, 0.55f, 0.6f, 1.0f));
-                                     
+
                                          if (resourceManager.Resources[vsId] is VertexShaderResource vsr)
                                              context.VertexShader.Set(vsr.VertexShader);
                                          if (resourceManager.Resources[psId] is PixelShaderResource psr)
@@ -348,13 +364,13 @@ namespace T3
                                                      backgroundSrv?.Dispose();
                                                      backgroundSrv = new ShaderResourceView(device, textureResource.Texture);
                                                  }
-                                     
+
                                                  context.PixelShader.SetShaderResource(0, backgroundSrv);
                                              }
                                          }
                                          else if (resourceManager.Resources[srvId] is ShaderResourceViewResource srvr)
                                              context.PixelShader.SetShaderResource(0, srvr.ShaderResourceView);
-                                     
+
                                          context.Draw(3, 0);
                                          context.PixelShader.SetShaderResource(0, null);
                                      }
