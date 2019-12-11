@@ -286,17 +286,20 @@ namespace T3.Core
         {
             _device = device;
             _hlslFileWatcher = new FileSystemWatcher(@"Resources", "*.hlsl");
+            _hlslFileWatcher.IncludeSubdirectories = true;
             _hlslFileWatcher.Changed += OnChanged;
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // creation time needed for visual studio (2017)
             _hlslFileWatcher.EnableRaisingEvents = true;
 
             _textureFileWatcher = new FileSystemWatcher(@"Resources", "*.png|*.jpg|*.dds|*.tiff");
+            _textureFileWatcher.IncludeSubdirectories = true;
             _textureFileWatcher.Changed += OnChanged;
             _textureFileWatcher.Created += OnChanged;
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
             _textureFileWatcher.EnableRaisingEvents = true;
 
             _csFileWatcher = new FileSystemWatcher(@"Operators\Types", "*.cs");
+            _csFileWatcher.IncludeSubdirectories = true;
             _csFileWatcher.Changed += OnChanged;
             _csFileWatcher.Renamed += OnRenamed;
             _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
