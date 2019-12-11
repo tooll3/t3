@@ -299,9 +299,9 @@ namespace T3
             //resourceManager.CreatePixelShader(@"Resources\\ps-pos-only-fixed-color.hlsl", "main", "ps-pos-only-fixed-color");
             var di = new DirectoryInfo(".");
             System.Console.WriteLine(di.FullName);
-            uint vsId = resourceManager.CreateVertexShaderFromFile(@"Resources\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
-            uint psId = resourceManager.CreatePixelShaderFromFile(@"Resources\\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
-            (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\chipmunk.jpg", null);
+            uint vsId = resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
+            uint psId = resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
+            (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\images\chipmunk.jpg", null);
 
             // setup file watching the operator source
             resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;
