@@ -321,6 +321,7 @@
     <Compile Include="Gui\Graph\Dialogs\DuplicateSymbolDialog.cs" />
     <Compile Include="Gui\Graph\GraphCanvas.cs" />
     <Compile Include="Gui\Graph\Interaction\ConnectionMaker.cs" />
+    <Compile Include="Gui\Graph\Interaction\FileReferenceOperations.cs" />
     <Compile Include="Gui\Graph\Interaction\NodeOperations.cs" />
     <Compile Include="Gui\Graph\Interaction\SelectableMovement.cs" />
     <Compile Include="Gui\Graph\Interaction\SymbolBrowser.cs" />

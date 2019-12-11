@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using T3.Core;
 using T3.Gui.Commands;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 
@@ -70,6 +71,11 @@ namespace T3.Gui
                     if (ImGui.MenuItem("Cut", "CTRL+X")) { }
                     if (ImGui.MenuItem("Copy", "CTRL+C")) { }
                     if (ImGui.MenuItem("Paste", "CTRL+V")) { }
+
+                    if (ImGui.MenuItem("Fix File references", ""))
+                    {
+                        FileReferenceOperations.FixOperatorFilepathsCommand_Executed();
+                    }
                     ImGui.EndMenu();
                 }
                 WindowManager.DrawWindowsMenu();

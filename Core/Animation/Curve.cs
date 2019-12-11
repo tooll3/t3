@@ -102,7 +102,7 @@ namespace T3.Core.Animation
             var state = _state;
             if (!state.Table.ContainsKey(u))
             {
-                Log.Warning("Tried to move a non-existing keyframe from {0} to {1}", u, newU);
+                Log.Warning("Tried to move a non-existing keyframe from {u} to {newU}");
                 return;
             }
 

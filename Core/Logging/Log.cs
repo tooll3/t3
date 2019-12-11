@@ -56,7 +56,18 @@ namespace T3.Core.Logging
             DoLog(new LogEntry(LogEntry.EntryLevel.Info, messageString));
         }
 
-        public static void Warning(String message, params object[] args)
+
+        public static void Warning(String message)
+        {
+            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, message));
+        }
+
+        public static void Warning(String message, Guid sourceId)
+        {
+            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, sourceId, message));
+        }
+
+        public static void WarningFormat(String message, params object[] args)
         {
             var messageString = FormatMessageWithArguments(message, args);
             DoLog(new LogEntry(LogEntry.EntryLevel.Warning, messageString));
