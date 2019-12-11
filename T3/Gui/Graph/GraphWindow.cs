@@ -30,7 +30,7 @@ namespace T3.Gui.Graph
             Config.Visible = true;
             AllowMultipleInstances = true;
 
-            const string trackName = @"Resources\lorn-sega-sunset.mp3";
+            const string trackName = @"Resources\soundtrack\lorn-sega-sunset.mp3";
             _clipTime = File.Exists(trackName) ? new StreamClipTime(trackName) : new ClipTime();
 
             // Legacy work-around

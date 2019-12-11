@@ -106,7 +106,7 @@ namespace T3.Gui.Styling
             new IconSource(Icon.HoverPreviewDisabled, 24, new Vector2(16,16)),
         };
 
-        public const string IconAtlasPath = @"Resources\t3-icons.png";
+        public const string IconAtlasPath = @"Resources\t3\t3-icons.png";
     }
 
 
