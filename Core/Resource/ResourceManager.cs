@@ -291,12 +291,29 @@ namespace T3.Core
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // creation time needed for visual studio (2017)
             _hlslFileWatcher.EnableRaisingEvents = true;
 
-            _textureFileWatcher = new FileSystemWatcher(@"Resources", "*.png|*.jpg|*.dds|*.tiff");
-            _textureFileWatcher.IncludeSubdirectories = true;
-            _textureFileWatcher.Changed += OnChanged;
-            _textureFileWatcher.Created += OnChanged;
-            _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
-            _textureFileWatcher.EnableRaisingEvents = true;
+            _pngFileWatcher = new FileSystemWatcher(@"Resources", "*.png");
+            _pngFileWatcher.IncludeSubdirectories = true;
+            _pngFileWatcher.Changed += OnChanged;
+            _pngFileWatcher.Created += OnChanged;
+            _pngFileWatcher.EnableRaisingEvents = true;
+
+            _jpgFileWatcher = new FileSystemWatcher(@"Resources", "*.jpg");
+            _jpgFileWatcher.IncludeSubdirectories = true;
+            _jpgFileWatcher.Changed += OnChanged;
+            _jpgFileWatcher.Created += OnChanged;
+            _jpgFileWatcher.EnableRaisingEvents = true;
+
+            _ddsFileWatcher = new FileSystemWatcher(@"Resources", "*.dds");
+            _ddsFileWatcher.IncludeSubdirectories = true;
+            _ddsFileWatcher.Changed += OnChanged;
+            _ddsFileWatcher.Created += OnChanged;
+            _ddsFileWatcher.EnableRaisingEvents = true;
+
+            _tiffFileWatcher = new FileSystemWatcher(@"Resources", "*.tiff");
+            _tiffFileWatcher.IncludeSubdirectories = true;
+            _tiffFileWatcher.Changed += OnChanged;
+            _tiffFileWatcher.Created += OnChanged;
+            _tiffFileWatcher.EnableRaisingEvents = true;
 
             _csFileWatcher = new FileSystemWatcher(@"Operators\Types", "*.cs");
             _csFileWatcher.IncludeSubdirectories = true;
@@ -746,14 +763,14 @@ namespace T3.Core
 
         private void OnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            //Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
+            // Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
             if (FileResources.TryGetValue(fileSystemEventArgs.FullPath, out var fileResource))
             {
-                //Log.Info($"valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
+                // Log.Info($"valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
                 DateTime lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
                 if (lastWriteTime != fileResource.LastWriteReferenceTime)
                 {
-                    //Log.Info($"very valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
+                    // Log.Info($"very valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
                      // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
                      //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
                      //       it cannot read the file. 
@@ -1017,7 +1034,10 @@ namespace T3.Core
         public List<OperatorResource> Operators = new List<OperatorResource>(100);
         public readonly Device _device;
         private readonly FileSystemWatcher _hlslFileWatcher;
-        private readonly FileSystemWatcher _textureFileWatcher;
+        private readonly FileSystemWatcher _pngFileWatcher;
+        private readonly FileSystemWatcher _jpgFileWatcher;
+        private readonly FileSystemWatcher _ddsFileWatcher;
+        private readonly FileSystemWatcher _tiffFileWatcher;
         private readonly FileSystemWatcher _csFileWatcher;
     }
 }
