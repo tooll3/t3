@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System;
+using ImGuiNET;
 using ManagedBass;
 using T3.Core.Operator;
 
@@ -7,6 +8,7 @@ namespace T3.Gui
     public class ClipTime
     {
         public virtual double Time { get; set; }
+        public virtual double BeatTime { get; set; }
         public double TimeRangeStart { get; set; } = 0;
         public double TimeRangeEnd { get; set; } = 8;
         public double Bpm { get; set; } = 95.08f;
@@ -29,7 +31,9 @@ namespace T3.Gui
                            : Time - (TimeRangeEnd - TimeRangeStart);
             }
 
+            // TODO: setting the context time here is kind of awkward
             EvaluationContext.GlobalTime = Time;
+            EvaluationContext.BeatTime = BeatTime;
         }
 
         public enum TimeModes
@@ -42,7 +46,17 @@ namespace T3.Gui
 
         protected virtual void UpdateTime()
         {
-            Time += ImGui.GetIO().DeltaTime * PlaybackSpeed;
+            var deltaTime = ImGui.GetIO().DeltaTime;
+            var isPlaying = Math.Abs(PlaybackSpeed) > 0.001;
+            if (isPlaying)
+            {
+                Time += deltaTime * PlaybackSpeed;
+                BeatTime = Time * Bpm / 60.0 / 4.0;    
+            }
+            else
+            {
+                BeatTime += deltaTime * Bpm / 60.0 / 4.0;
+            }
         }
     }
 
@@ -102,10 +116,21 @@ namespace T3.Gui
 
         protected override void UpdateTime()
         {
+            var deltaTime = ImGui.GetIO().DeltaTime;
             if (_playbackSpeed < 0.0)
             {
                 // bass can't play backwards, so do it manually
-                Time += ImGui.GetIO().DeltaTime * _playbackSpeed;
+                Time += deltaTime * _playbackSpeed;
+            }
+
+            var isPlaying = Math.Abs(_playbackSpeed) > 0.001;
+            if (isPlaying)
+            {
+                BeatTime = Time * Bpm / 60.0 / 4.0;
+            }
+            else 
+            {
+                BeatTime += deltaTime * Bpm / 60.0 / 4.0;
             }
         }
 
@@ -117,5 +142,6 @@ namespace T3.Gui
 
 
         private double _playbackSpeed;
+        private double _beatTime;
     }
 }

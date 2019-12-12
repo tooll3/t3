@@ -93,6 +93,6 @@ namespace T3.Gui.OutputUi
             return slot.DirtyFlag.Target;
         }
 
-        protected EvaluationContext _evaluationContext = new EvaluationContext();
+        private readonly EvaluationContext _evaluationContext = new EvaluationContext();
     }
 }
