@@ -113,6 +113,7 @@
     <Compile Include="Logging\LogEntry.cs" />
     <Compile Include="Logging\FileWriter.cs" />
     <Compile Include="Operator\Animator.cs" />
+    <Compile Include="Operator\EvaluationContext.cs" />
     <Compile Include="Operator\Helper\ParticleSystem.cs" />
     <Compile Include="Operator\Instance.cs" />
     <Compile Include="Operator\Slot.cs" />
