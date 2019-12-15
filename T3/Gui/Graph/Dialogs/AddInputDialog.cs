@@ -71,8 +71,7 @@ namespace T3.Gui.Graph.Dialogs
                 ImGui.Checkbox("Multi-Input", ref _multiInput);
 
                 bool isValid = NodeOperations.IsNewSymbolNameValid(_parameterName) && _selectedType != null;
-                bool isCompoundType = !symbol.InstanceType.GetTypeInfo().DeclaredMethods.Any();
-                isValid &= isCompoundType;
+                isValid &= NodeOperations.IsSymbolACompoundType(symbol);
                 if (CustomComponents.DisablableButton("Add", isValid))
                 {
                     NodeOperations.AddInputToSymbol(_parameterName, _multiInput, _selectedType, symbol);

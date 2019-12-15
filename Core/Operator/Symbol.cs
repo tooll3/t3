@@ -147,18 +147,15 @@ namespace T3.Core.Operator
             }
 
             var connectionsToRemoveWithinSymbol = new List<Connection>();
-            foreach (var input in oldInputDefinitions)
+            foreach (var con in Connections)
             {
-                foreach (var con in Connections)
+                foreach (var input in oldInputDefinitions)
                 {
                     if (con.SourceSlotId == input.Id)
                         connectionsToRemoveWithinSymbol.Add(con);
                 }
-            }
 
-            foreach (var output in oldOutputDefinitions)
-            {
-                foreach (var con in Connections)
+                foreach (var output in oldOutputDefinitions)
                 {
                     if (con.TargetSlotId == output.Id)
                         connectionsToRemoveWithinSymbol.Add(con);

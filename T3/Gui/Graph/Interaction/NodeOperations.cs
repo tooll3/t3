@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Numerics;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using ImGuiNET;
@@ -17,6 +17,11 @@ namespace T3.Gui.Graph.Interaction
 {
     internal static class NodeOperations
     {
+        public static bool IsSymbolACompoundType(Symbol symbol)
+        {
+            return !symbol.InstanceType.GetTypeInfo().DeclaredMethods.Any();
+        }
+
         public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName, string nameSpace)
         {
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
@@ -481,7 +486,7 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
-        public static void RemoveInputFromSymbol(Guid inputId, Symbol symbol)
+        public static void RemoveInputFromSymbol(Guid[] inputIdsToRemove, Symbol symbol)
         {
             var usingStrings = new HashSet<string>();
             var outputStringBuilder = new StringBuilder();
@@ -510,7 +515,7 @@ namespace T3.Gui.Graph.Interaction
             var inputStringBuilder = new StringBuilder();
             foreach (var input in symbol.InputDefinitions)
             {
-                if (input.Id == inputId)
+                if (inputIdsToRemove.Any(id => id == input.Id))
                     continue;
 
                 var @namespace = input.DefaultValue.ValueType.Namespace;

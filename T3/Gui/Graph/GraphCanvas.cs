@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -361,10 +360,9 @@ namespace T3.Gui.Graph
                          ImGui.PopFont();
 
                          var symbol = GetSelectedSymbol();
-                         bool isCompoundType = !symbol.InstanceType.GetTypeInfo().DeclaredMethods.Any();
-                         if (ImGui.MenuItem("Remove input(s)", enabled: oneElementSelected && isCompoundType))
+                         if (ImGui.MenuItem("Remove input(s)", NodeOperations.IsSymbolACompoundType(symbol)))
                          {
-                             NodeOperations.RemoveInputFromSymbol(selectedInputUis[0].Id, symbol);
+                             NodeOperations.RemoveInputFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
                          }
                      }
 
