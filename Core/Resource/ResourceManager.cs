@@ -918,9 +918,8 @@ namespace T3.Core
             return textureViewResourceEntry.Id;
         }
 
-        public (uint, uint)
-            CreateTextureFromFile(string filename,
-                                  Action fileChangeAction) /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
+        /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
+        public (uint, uint) CreateTextureFromFile(string filename, Action fileChangeAction)
         {
             if (!File.Exists(filename))
             {
