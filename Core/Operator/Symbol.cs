@@ -146,6 +146,45 @@ namespace T3.Core.Operator
                 }
             }
 
+            var connectionsToRemoveWithinSymbol = new List<Connection>();
+            foreach (var input in oldInputDefinitions)
+            {
+                foreach (var con in Connections)
+                {
+                    if (con.SourceSlotId == input.Id)
+                        connectionsToRemoveWithinSymbol.Add(con);
+                }
+            }
+
+            foreach (var output in oldOutputDefinitions)
+            {
+                foreach (var con in Connections)
+                {
+                    if (con.TargetSlotId == output.Id)
+                        connectionsToRemoveWithinSymbol.Add(con);
+                }
+            }
+
+            connectionsToRemoveWithinSymbol = connectionsToRemoveWithinSymbol.Distinct().ToList(); // remove possible duplicates
+            connectionsToRemoveWithinSymbol.Reverse(); // reverse order to have always valid multi input indices
+            var connectionEntriesToRemove = new List<ConnectionEntry>(connectionsToRemoveWithinSymbol.Count);
+            foreach (var con in connectionsToRemoveWithinSymbol)
+            {
+                    var entry = new ConnectionEntry
+                                {
+                                    Connection = con,
+                                    MultiInputIndex = Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
+                                                                               && c.TargetSlotId == con.TargetSlotId)
+                                                                 .FindIndex(cc => cc == con) // todo: fix this mess! connection rework!
+                                };
+                    connectionEntriesToRemove.Add(entry);
+            }
+
+            foreach (var entry in connectionEntriesToRemove)
+            {
+                RemoveConnection(entry.Connection, entry.MultiInputIndex);
+            }
+
             // first remove relevant connections from instances and update symbol child input values if needed
             foreach (var instance in _instancesOfSymbol)
             {

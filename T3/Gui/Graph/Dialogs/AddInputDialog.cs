@@ -95,16 +95,10 @@ namespace T3.Gui.Graph.Dialogs
             if (name.IndexOf(_searchFilter, StringComparison.OrdinalIgnoreCase) >= 0)
                 return true;
 
-            if (Synonyms.ContainsKey(_searchFilter))
-            {
-                foreach(var alternative in Synonyms[_searchFilter])
-                {
-                    if (name.IndexOf(alternative, StringComparison.OrdinalIgnoreCase) >= 0)
-                        return true;
-                }
-            }
+            if (!Synonyms.ContainsKey(_searchFilter))
+                return false;
 
-            return false;
+            return Synonyms[_searchFilter].Any(alternative => name.IndexOf(alternative, StringComparison.OrdinalIgnoreCase) >= 0);
         }
         
 
@@ -112,12 +106,10 @@ namespace T3.Gui.Graph.Dialogs
         private string _searchFilter = ""; // Initialize for ImGui edit
         private Type _selectedType;  
         private bool _multiInput;
-                                                     
-        private static readonly Dictionary<string, string[]> Synonyms
-            = new Dictionary<string, string[]>
-              {
-                  {"float", new[]{"Single",}},
-              };
 
+        private static readonly Dictionary<string, string[]> Synonyms = new Dictionary<string, string[]>
+                                                                        {
+                                                                            { "float", new[] { "Single", } },
+                                                                        };
     }
 }

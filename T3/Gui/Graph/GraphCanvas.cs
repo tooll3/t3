@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -179,10 +180,15 @@ namespace T3.Gui.Graph
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
                 _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
 
-                var selectedChildUi = GetSelectedChildUis().FirstOrDefault();
-                _addInputDialog.Draw(selectedChildUi != null ? selectedChildUi.SymbolChild.Symbol : CompositionOp.Symbol);
+                _addInputDialog.Draw(GetSelectedSymbol());
             }
             ImGui.EndGroup();
+        }
+
+        private Symbol GetSelectedSymbol()
+        {
+            var selectedChildUi = GetSelectedChildUis().FirstOrDefault();
+            return selectedChildUi != null ? selectedChildUi.SymbolChild.Symbol : CompositionOp.Symbol;
         }
 
         private void DrawDropHandler()
@@ -353,9 +359,12 @@ namespace T3.Gui.Graph
                          ImGui.Text(label);
                          ImGui.PopStyleColor();
                          ImGui.PopFont();
-                         if (ImGui.MenuItem("Remove input(s)", enabled: false))
+
+                         var symbol = GetSelectedSymbol();
+                         bool isCompoundType = !symbol.InstanceType.GetTypeInfo().DeclaredMethods.Any();
+                         if (ImGui.MenuItem("Remove input(s)", enabled: oneElementSelected && isCompoundType))
                          {
-                             // TODO: Please implement
+                             NodeOperations.RemoveInputFromSymbol(selectedInputUis[0].Id, symbol);
                          }
                      }
 
