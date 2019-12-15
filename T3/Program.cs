@@ -355,7 +355,7 @@ namespace T3
                                              context.VertexShader.Set(vsr.VertexShader);
                                          if (resourceManager.Resources[psId] is PixelShaderResource psr)
                                              context.PixelShader.Set(psr.PixelShader);
-                                         if (resourceManager.TestId != ResourceManager.NULL_RESOURCE)
+                                         if (resourceManager.TestId != ResourceManager.NullResource)
                                          {
                                              if (resourceManager.Resources[resourceManager.TestId] is TextureResource textureResource)
                                              {
