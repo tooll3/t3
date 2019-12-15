@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
@@ -40,6 +41,6 @@ namespace T3.Gui.Windows.TimeLine
 
         private bool _initialized = false;
         private static uint _srvResId;
-        private const string ImagePath = @".\Resources\soundtrack\lorn-sega-sunset.mp3.waveform.png";
+        private static readonly string ImagePath =  Path.Combine(ResourceManager.ResourcesFolder, "soundtrack","lorn-sega-sunset.mp3.waveform.png");
     }
 }
