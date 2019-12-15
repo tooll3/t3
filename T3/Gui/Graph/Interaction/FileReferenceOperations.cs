@@ -95,7 +95,7 @@ namespace T3.Gui.Graph.Interaction
         public static void FixOperatorFilepathsCommand_Executed()
         {
             AssetFiles.Clear();
-            ScanAssetDirectory(".\\Resources");
+            ScanAssetDirectory(ResourceManager.ResourcesFolder);
             foreach (var ( key, value) in AssetFiles)
             {
                 Log.Debug($"found {key} in {value}");

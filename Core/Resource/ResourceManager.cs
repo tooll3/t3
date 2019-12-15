@@ -20,9 +20,12 @@ using T3.Core.Operator;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 
+// ReSharper disable SuggestVarOrType_SimpleTypes <- Cynic doesn't like it
+// ReSharper disable PrivateFieldCanBeConvertedToLocalVariable    <- keeping the file handlers as members is clearer
+
 namespace T3.Core
 {
-    public class Resource
+    public abstract class Resource
     {
         public Resource(uint id, string name)
         {
@@ -35,7 +38,10 @@ namespace T3.Core
         public bool UpToDate { get; set; }
     }
 
-    class FileResource
+    /// <summary>
+    /// 
+    /// </summary>
+    internal class FileResource
     {
         public FileResource(string path, IEnumerable<uint> ids)
         {
@@ -71,7 +77,7 @@ namespace T3.Core
             Log.Info($"Operator source '{path}' changed.");
             Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
 
-            string source = string.Empty;
+            var source = string.Empty;
             try
             {
                 source = File.ReadAllText(path);
@@ -89,7 +95,7 @@ namespace T3.Core
                 return;
             }
 
-            var referencedAssembliesNames = ResourceManager.Instance().OperatorsAssembly.GetReferencedAssemblies();// todo: ugly
+            var referencedAssembliesNames = ResourceManager.Instance().OperatorsAssembly.GetReferencedAssemblies(); // todo: ugly
             var appDomainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
             var coreAssembly = typeof(ResourceManager).Assembly;
@@ -102,7 +108,7 @@ namespace T3.Core
                     referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
                 }
             }
-            
+
             var syntaxTree = CSharpSyntaxTree.ParseText(source);
             var compilation = CSharpCompilation.Create("Operators",
                                                        new[] { syntaxTree },
@@ -150,8 +156,8 @@ namespace T3.Core
 
         public abstract void Update(string path);
 
-        public string EntryPoint { get; }
-        public ShaderBytecode Blob;// { get; internal set; }
+        protected string EntryPoint { get; }
+        protected ShaderBytecode Blob; // { get; internal set; }
     }
 
     public class VertexShaderResource : ShaderResource
@@ -166,7 +172,7 @@ namespace T3.Core
         {
             if (UpToDate)
                 return;
-            
+
             ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "vs_5_0", ref VertexShader, ref Blob);
             UpToDate = true;
         }
@@ -183,11 +189,12 @@ namespace T3.Core
         }
 
         public PixelShader PixelShader;
+
         public override void Update(string path)
         {
             if (UpToDate)
                 return;
-            
+
             ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref Blob);
             UpToDate = true;
         }
@@ -207,7 +214,7 @@ namespace T3.Core
         {
             if (UpToDate)
                 return;
-            
+
             ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref Blob);
             UpToDate = true;
         }
@@ -233,8 +240,8 @@ namespace T3.Core
             TextureId = textureId;
         }
 
-        public ShaderResourceView ShaderResourceView;
-        public uint TextureId;
+        public readonly ShaderResourceView ShaderResourceView;
+        public readonly uint TextureId;
     }
 
     public class ResourceManager
@@ -266,7 +273,7 @@ namespace T3.Core
         {
             return GetResource<ComputeShaderResource>(resourceId).ComputeShader;
         }
-        
+
         public const uint NULL_RESOURCE = 0;
         private uint _resourceIdCounter = 1;
 
@@ -274,42 +281,43 @@ namespace T3.Core
         {
             return _resourceIdCounter++;
         }
-        
+
         public static void Init(Device device)
         {
             if (_instance == null)
                 _instance = new ResourceManager(device);
         }
+
         private static ResourceManager _instance;
 
         private ResourceManager(Device device)
         {
-            _device = device;
-            _hlslFileWatcher = new FileSystemWatcher(@"Resources", "*.hlsl");
+            Device = device;
+            _hlslFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.hlsl");
             _hlslFileWatcher.IncludeSubdirectories = true;
             _hlslFileWatcher.Changed += OnChanged;
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // creation time needed for visual studio (2017)
             _hlslFileWatcher.EnableRaisingEvents = true;
 
-            _pngFileWatcher = new FileSystemWatcher(@"Resources", "*.png");
+            _pngFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.png");
             _pngFileWatcher.IncludeSubdirectories = true;
             _pngFileWatcher.Changed += OnChanged;
             _pngFileWatcher.Created += OnChanged;
             _pngFileWatcher.EnableRaisingEvents = true;
 
-            _jpgFileWatcher = new FileSystemWatcher(@"Resources", "*.jpg");
+            _jpgFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.jpg");
             _jpgFileWatcher.IncludeSubdirectories = true;
             _jpgFileWatcher.Changed += OnChanged;
             _jpgFileWatcher.Created += OnChanged;
             _jpgFileWatcher.EnableRaisingEvents = true;
 
-            _ddsFileWatcher = new FileSystemWatcher(@"Resources", "*.dds");
+            _ddsFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.dds");
             _ddsFileWatcher.IncludeSubdirectories = true;
             _ddsFileWatcher.Changed += OnChanged;
             _ddsFileWatcher.Created += OnChanged;
             _ddsFileWatcher.EnableRaisingEvents = true;
 
-            _tiffFileWatcher = new FileSystemWatcher(@"Resources", "*.tiff");
+            _tiffFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.tiff");
             _tiffFileWatcher.IncludeSubdirectories = true;
             _tiffFileWatcher.Changed += OnChanged;
             _tiffFileWatcher.Created += OnChanged;
@@ -323,7 +331,6 @@ namespace T3.Core
             _csFileWatcher.EnableRaisingEvents = true;
         }
 
-
         public void SetupConstBuffer<T>(T bufferData, ref Buffer buffer) where T : struct
         {
             using (var data = new DataStream(Marshal.SizeOf(typeof(T)), true, true))
@@ -334,16 +341,16 @@ namespace T3.Core
                 if (buffer == null)
                 {
                     var bufferDesc = new BufferDescription
-                                         {
-                                             Usage = ResourceUsage.Default,
-                                             SizeInBytes = Marshal.SizeOf(typeof(T)),
-                                             BindFlags = BindFlags.ConstantBuffer
-                                         };
-                    buffer = new Buffer(_device, data, bufferDesc);
+                                     {
+                                         Usage = ResourceUsage.Default,
+                                         SizeInBytes = Marshal.SizeOf(typeof(T)),
+                                         BindFlags = BindFlags.ConstantBuffer
+                                     };
+                    buffer = new Buffer(Device, data, bufferDesc);
                 }
                 else
                 {
-                    _device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer, 0);
+                    Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer, 0);
                 }
             }
         }
@@ -352,7 +359,7 @@ namespace T3.Core
         {
             if (buffer == null)
             {
-                buffer = new Buffer(_device, bufferDesc);
+                buffer = new Buffer(Device, bufferDesc);
             }
         }
 
@@ -391,16 +398,16 @@ namespace T3.Core
                                         Flags = UnorderedAccessViewBufferFlags.None
                                     }
                        };
-            uav = new UnorderedAccessView(_device, buffer, desc);
+            uav = new UnorderedAccessView(Device, buffer, desc);
         }
 
         public void SetupStructuredBuffer<T>(T[] bufferData, ref Buffer buffer) where T : struct
         {
-            int stride =  Marshal.SizeOf(typeof(T));
+            int stride = Marshal.SizeOf(typeof(T));
             int sizeInBytes = stride * bufferData.Length;
             SetupStructuredBuffer(bufferData, sizeInBytes, stride, ref buffer);
         }
-        
+
         public void SetupStructuredBuffer<T>(T[] bufferData, int sizeInBytes, int stride, ref Buffer buffer) where T : struct
         {
             using (var data = new DataStream(sizeInBytes, true, true))
@@ -411,18 +418,18 @@ namespace T3.Core
                 if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
                 {
                     var bufferDesc = new BufferDescription
-                                         {
-                                             Usage = ResourceUsage.Default,
-                                             BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
-                                             SizeInBytes = sizeInBytes,
-                                             OptionFlags = ResourceOptionFlags.BufferStructured,
-                                             StructureByteStride = stride
-                                         };
-                    buffer = new Buffer(_device, data, bufferDesc);
+                                     {
+                                         Usage = ResourceUsage.Default,
+                                         BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
+                                         SizeInBytes = sizeInBytes,
+                                         OptionFlags = ResourceOptionFlags.BufferStructured,
+                                         StructureByteStride = stride
+                                     };
+                    buffer = new Buffer(Device, data, bufferDesc);
                 }
                 else
                 {
-                    _device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer, 0);
+                    Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer, 0);
                 }
             }
         }
@@ -439,7 +446,7 @@ namespace T3.Core
                                      OptionFlags = ResourceOptionFlags.BufferStructured,
                                      StructureByteStride = stride
                                  };
-                buffer = new Buffer(_device, bufferDesc);
+                buffer = new Buffer(Device, bufferDesc);
             }
         }
 
@@ -465,7 +472,7 @@ namespace T3.Core
                                              ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride
                                          }
                           };
-            srv = new ShaderResourceView(_device, buffer, srvDesc);
+            srv = new ShaderResourceView(Device, buffer, srvDesc);
         }
 
         public void CreateStructuredBufferUav(Buffer buffer, UnorderedAccessViewBufferFlags bufferFlags, ref UnorderedAccessView uav)
@@ -491,9 +498,8 @@ namespace T3.Core
                                            Flags = bufferFlags
                                        }
                           };
-            uav = new UnorderedAccessView(_device, buffer, uavDesc);
+            uav = new UnorderedAccessView(Device, buffer, uavDesc);
         }
-
 
         class IncludeHandler : SharpDX.D3DCompiler.Include
         {
@@ -508,7 +514,7 @@ namespace T3.Core
 
             public Stream Open(IncludeType type, string fileName, Stream parentStream)
             {
-                _streamReader = new StreamReader(@"Resources\" + fileName);
+                _streamReader = new StreamReader(Path.Combine(ResourcesFolder, fileName));
                 return _streamReader.BaseStream;
             }
 
@@ -539,7 +545,7 @@ namespace T3.Core
             shader?.Dispose();
             // as shader type is generic we've to use Activator and PropertyInfo to create/set the shader object
             Type shaderType = typeof(TShader);
-            shader = (TShader)Activator.CreateInstance(shaderType, _device, blob.Data, null);
+            shader = (TShader)Activator.CreateInstance(shaderType, Device, blob.Data, null);
             PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
             debugNameInfo?.SetValue(shader, name);
 
@@ -551,7 +557,7 @@ namespace T3.Core
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
                 return NULL_RESOURCE;
 
-            bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
+            bool foundFileEntryForPath = _fileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
             {
                 foreach (var id in fileResource.ResourceIds)
@@ -576,17 +582,18 @@ namespace T3.Core
 
             var resourceEntry = new VertexShaderResource(GetNextResourceId(), name, entryPoint, blob, vertexShader);
             Resources.Add(resourceEntry.Id, resourceEntry);
-            VertexShaders.Add(resourceEntry);
+            _vertexShaders.Add(resourceEntry);
             if (fileResource == null)
             {
                 fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
-                FileResources.Add(srcFile, fileResource);
+                _fileResources.Add(srcFile, fileResource);
             }
             else
             {
                 // file resource already exists, so just add the id of the new type resource
                 fileResource.ResourceIds.Add(resourceEntry.Id);
             }
+
             fileResource.FileChangeAction -= fileChangedAction;
             fileResource.FileChangeAction += fileChangedAction;
 
@@ -598,7 +605,7 @@ namespace T3.Core
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
                 return NULL_RESOURCE;
 
-            bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
+            bool foundFileEntryForPath = _fileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
             {
                 foreach (var id in fileResource.ResourceIds)
@@ -623,11 +630,11 @@ namespace T3.Core
 
             var resourceEntry = new PixelShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
             Resources.Add(resourceEntry.Id, resourceEntry);
-            PixelShaders.Add(resourceEntry);
+            _pixelShaders.Add(resourceEntry);
             if (fileResource == null)
             {
                 fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
-                FileResources.Add(srcFile, fileResource);
+                _fileResources.Add(srcFile, fileResource);
             }
             else
             {
@@ -646,7 +653,7 @@ namespace T3.Core
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
                 return NULL_RESOURCE;
 
-            bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
+            bool foundFileEntryForPath = _fileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
             {
                 foreach (var id in fileResource.ResourceIds)
@@ -671,11 +678,11 @@ namespace T3.Core
 
             var resourceEntry = new ComputeShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
             Resources.Add(resourceEntry.Id, resourceEntry);
-            ComputeShaders.Add(resourceEntry);
+            _computeShaders.Add(resourceEntry);
             if (fileResource == null)
             {
                 fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
-                FileResources.Add(srcFile, fileResource);
+                _fileResources.Add(srcFile, fileResource);
             }
             else
             {
@@ -685,7 +692,7 @@ namespace T3.Core
 
             fileResource.FileChangeAction -= fileChangedAction;
             fileResource.FileChangeAction += fileChangedAction;
-                
+
             return resourceEntry.Id;
         }
 
@@ -722,7 +729,7 @@ namespace T3.Core
         public uint CreateOperatorEntry(string srcFile, string name)
         {
             // todo: code below is redundant with all file resources -> refactor
-            bool foundFileEntryForPath = FileResources.TryGetValue(srcFile, out var fileResource);
+            bool foundFileEntryForPath = _fileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
             {
                 foreach (var id in fileResource.ResourceIds)
@@ -736,11 +743,11 @@ namespace T3.Core
 
             var resourceEntry = new OperatorResource(GetNextResourceId(), name, null);
             Resources.Add(resourceEntry.Id, resourceEntry);
-            Operators.Add(resourceEntry);
+            _operators.Add(resourceEntry);
             if (fileResource == null)
             {
                 fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
-                FileResources.Add(srcFile, fileResource);
+                _fileResources.Add(srcFile, fileResource);
             }
             else
             {
@@ -755,48 +762,51 @@ namespace T3.Core
         {
             if (Resources.TryGetValue(resourceId, out var entry))
             {
-                Operators.Remove(entry as OperatorResource);
+                _operators.Remove(entry as OperatorResource);
                 Resources.Remove(resourceId);
             }
         }
-        
 
         private void OnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
             // Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
-            if (FileResources.TryGetValue(fileSystemEventArgs.FullPath, out var fileResource))
+            if (!_fileResources.TryGetValue(fileSystemEventArgs.FullPath, out var fileResource))
             {
-                // Log.Info($"valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
-                DateTime lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
-                if (lastWriteTime != fileResource.LastWriteReferenceTime)
-                {
-                    // Log.Info($"very valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
-                     // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
-                     //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
-                     //       it cannot read the file. 
-                    Thread.Sleep(15);
-                    Log.Info($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
-                    foreach (var id in fileResource.ResourceIds)
-                    {
-                        // update all resources that depend from this file
-                        if (Resources.TryGetValue(id, out var resource))
-                        {
-                            var updateable = resource as IUpdateable;
-                            updateable?.Update(fileResource.Path);
-                            resource.UpToDate = false;
-                        }
-                        else
-                        {
-                            Log.Info($"Trying to update a non existing file resource '{fileResource.Path}'.");
-                        }
-                    }
-                    fileResource.FileChangeAction?.Invoke();
+                Log.Warning("Invalid FileResource?");
+                return;
+            }
 
-                    fileResource.LastWriteReferenceTime = lastWriteTime;
+            // Log.Info($"valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
+            DateTime lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
+            if (lastWriteTime != fileResource.LastWriteReferenceTime)
+            {
+                // Log.Info($"very valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
+                // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
+                //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
+                //       it cannot read the file. 
+                Thread.Sleep(15);
+                Log.Info($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
+                foreach (var id in fileResource.ResourceIds)
+                {
+                    // update all resources that depend from this file
+                    if (Resources.TryGetValue(id, out var resource))
+                    {
+                        var updateable = resource as IUpdateable;
+                        updateable?.Update(fileResource.Path);
+                        resource.UpToDate = false;
+                    }
+                    else
+                    {
+                        Log.Info($"Trying to update a non existing file resource '{fileResource.Path}'.");
+                    }
                 }
 
-                // else discard the (duplicated) OnChanged event
+                fileResource.FileChangeAction?.Invoke();
+
+                fileResource.LastWriteReferenceTime = lastWriteTime;
             }
+
+            // else discard the (duplicated) OnChanged event
         }
 
         private void OnRenamed(object sender, RenamedEventArgs renamedEventArgs)
@@ -810,20 +820,20 @@ namespace T3.Core
                 return;
             }
 
-            if (FileResources.TryGetValue(renamedEventArgs.OldFullPath, out var fileResource))
+            if (_fileResources.TryGetValue(renamedEventArgs.OldFullPath, out var fileResource))
             {
                 Log.Info($"renamed file resource from '{renamedEventArgs.OldFullPath}' to '{renamedEventArgs.FullPath}'");
                 fileResource.Path = renamedEventArgs.FullPath;
-                FileResources.Remove(renamedEventArgs.OldFullPath);
-                FileResources.Add(renamedEventArgs.FullPath, fileResource);
+                _fileResources.Remove(renamedEventArgs.OldFullPath);
+                _fileResources.Add(renamedEventArgs.FullPath, fileResource);
             }
         }
 
         private static Texture2D CreateTexture2DFromBitmap(Device device, BitmapSource bitmapSource)
         {
             // Allocate DataStream to receive the WIC image pixels
-            int stride = bitmapSource.Size.Width*4;
-            using (var buffer = new SharpDX.DataStream(bitmapSource.Size.Height*stride, true, true))
+            int stride = bitmapSource.Size.Width * 4;
+            using (var buffer = new SharpDX.DataStream(bitmapSource.Size.Height * stride, true, true))
             {
                 // Copy the content of the WIC to the buffer
                 bitmapSource.CopyPixels(stride, buffer);
@@ -847,6 +857,7 @@ namespace T3.Core
                     dataRectangles[i] = new DataRectangle(buffer.DataPointer, stride);
                     stride /= 2;
                 }
+
                 return new Texture2D(device, texDesc, dataRectangles);
             }
         }
@@ -862,7 +873,7 @@ namespace T3.Core
                 formatConverter.Initialize(bitmapFrameDecode, PixelFormat.Format32bppPRGBA, BitmapDitherType.None, null, 0.0, BitmapPaletteType.Custom);
 
                 texture?.Dispose();
-                texture = CreateTexture2DFromBitmap(_device, formatConverter);
+                texture = CreateTexture2DFromBitmap(Device, formatConverter);
                 string name = Path.GetFileName(filename);
                 texture.DebugName = name;
                 bitmapFrameDecode.Dispose();
@@ -884,7 +895,7 @@ namespace T3.Core
                 if (resource is TextureResource textureResource)
                 {
                     shaderResourceView?.Dispose();
-                    shaderResourceView = new ShaderResourceView(_device, textureResource.Texture) { DebugName = name };
+                    shaderResourceView = new ShaderResourceView(Device, textureResource.Texture) { DebugName = name };
                     Log.Info($"Created shader resource view '{name}' for texture '{textureResource.Name}'.");
                 }
                 else
@@ -904,11 +915,13 @@ namespace T3.Core
             CreateShaderResourceView(textureId, name, ref textureView);
             var textureViewResourceEntry = new ShaderResourceViewResource(GetNextResourceId(), name, textureView, textureId);
             Resources.Add(textureViewResourceEntry.Id, textureViewResourceEntry);
-            ShaderResourceViews.Add(textureViewResourceEntry);
+            _shaderResourceViews.Add(textureViewResourceEntry);
             return textureViewResourceEntry.Id;
         }
 
-        public (uint, uint) CreateTextureFromFile(string filename, Action fileChangeAction) /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
+        public (uint, uint)
+            CreateTextureFromFile(string filename,
+                                  Action fileChangeAction) /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
         {
             if (!File.Exists(filename))
             {
@@ -916,11 +929,11 @@ namespace T3.Core
                 return (NULL_RESOURCE, NULL_RESOURCE);
             }
 
-            if (FileResources.TryGetValue(filename, out var existingFileResource))
+            if (_fileResources.TryGetValue(filename, out var existingFileResource))
             {
                 uint textureId = existingFileResource.ResourceIds.First();
                 existingFileResource.FileChangeAction += fileChangeAction;
-                uint srvId = (from srvResourceEntry in ShaderResourceViews
+                uint srvId = (from srvResourceEntry in _shaderResourceViews
                               where srvResourceEntry.TextureId == textureId
                               select srvResourceEntry.Id).Single();
                 return (textureId, srvId);
@@ -931,13 +944,13 @@ namespace T3.Core
             string name = Path.GetFileName(filename);
             var textureResourceEntry = new TextureResource(GetNextResourceId(), name, texture);
             Resources.Add(textureResourceEntry.Id, textureResourceEntry);
-            Textures.Add(textureResourceEntry);
+            _textures.Add(textureResourceEntry);
 
             uint shaderResourceViewId = CreateShaderResourceView(textureResourceEntry.Id, name);
 
             var fileResource = new FileResource(filename, new[] { textureResourceEntry.Id, shaderResourceViewId });
             fileResource.FileChangeAction += fileChangeAction;
-            FileResources.Add(filename, fileResource);
+            _fileResources.Add(filename, fileResource);
 
             return (textureResourceEntry.Id, shaderResourceViewId);
         }
@@ -968,18 +981,18 @@ namespace T3.Core
                 // no entry so far, if texture is also null then create a new one
                 if (texture == null)
                 {
-                    texture = new Texture2D(_device, description);
+                    texture = new Texture2D(Device, description);
                 }
 
                 // new texture, create resource entry
                 textureResource = new TextureResource(GetNextResourceId(), name, texture);
                 Resources.Add(textureResource.Id, textureResource);
-                Textures.Add(textureResource);
+                _textures.Add(textureResource);
             }
             else
             {
                 textureResource.Texture?.Dispose();
-                textureResource.Texture = new Texture2D(_device, description);
+                textureResource.Texture = new Texture2D(Device, description);
                 texture = textureResource.Texture;
             }
 
@@ -990,54 +1003,61 @@ namespace T3.Core
 
         private readonly Stopwatch _operatorUpdateStopwatch = new Stopwatch();
         private readonly List<Symbol> _modifiedSymbols = new List<Symbol>();
+
         public List<Symbol> UpdateChangedOperatorTypes()
         {
             _modifiedSymbols.Clear();
-            for (int i = 0; i < Operators.Count; i++)
+            for (int i = 0; i < _operators.Count; i++)
             {
-                if (Operators[i].Updated)
+                if (!_operators[i].Updated)
+                    continue;
+
+                var opResource = _operators[i]; // must be after if to prevent huge amount of allocations
+                Type type = opResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
+                if (type == null)
                 {
-                    var opResource = Operators[i]; // must be after if to prevent huge amount of allocations
-                    Type type = opResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
-                    if (type == null)
-                    {
-                        Log.Error("Error updateable operator had not exported type");
-                        continue;
-                    }
-                    var symbolEntry = SymbolRegistry.Entries.FirstOrDefault(e => e.Value.Id.ToString() == opResource.Name);
-                    if (symbolEntry.Value != null)
-                    {
-                        _operatorUpdateStopwatch.Restart();
-                        symbolEntry.Value.SetInstanceType(type);
-                        opResource.Updated = false;
-                        _operatorUpdateStopwatch.Stop();
-                        Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
-                        _modifiedSymbols.Add(symbolEntry.Value);
-                    }
-                    else
-                    {
-                        Log.Info($"Error replacing symbol type '{opResource.Name}");
-                    }
+                    Log.Error("Error updateable operator had not exported type");
+                    continue;
+                }
+
+                var symbolEntry = SymbolRegistry.Entries.FirstOrDefault(e => e.Value.Id.ToString() == opResource.Name);
+                if (symbolEntry.Value != null)
+                {
+                    _operatorUpdateStopwatch.Restart();
+                    symbolEntry.Value.SetInstanceType(type);
+                    opResource.Updated = false;
+                    _operatorUpdateStopwatch.Stop();
+                    Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
+                    _modifiedSymbols.Add(symbolEntry.Value);
+                }
+                else
+                {
+                    Log.Info($"Error replacing symbol type '{opResource.Name}");
                 }
             }
 
             return _modifiedSymbols;
         }
 
-        public Dictionary<uint, Resource> Resources = new Dictionary<uint, Resource>();
-        internal Dictionary<string, FileResource> FileResources = new Dictionary<string, FileResource>();
-        internal List<VertexShaderResource> VertexShaders = new List<VertexShaderResource>();
-        internal List<PixelShaderResource> PixelShaders = new List<PixelShaderResource>();
-        internal List<ComputeShaderResource> ComputeShaders = new List<ComputeShaderResource>();
-        internal List<TextureResource> Textures = new List<TextureResource>();
-        internal List<ShaderResourceViewResource> ShaderResourceViews = new List<ShaderResourceViewResource>();
-        public List<OperatorResource> Operators = new List<OperatorResource>(100);
-        public readonly Device _device;
+        public readonly Dictionary<uint, Resource> Resources = new Dictionary<uint, Resource>();
+
+        /// <summary>Maps full filepath to FileResource</summary>
+        private readonly Dictionary<string, FileResource> _fileResources = new Dictionary<string, FileResource>();
+
+        private readonly List<VertexShaderResource> _vertexShaders = new List<VertexShaderResource>();
+        private readonly List<PixelShaderResource> _pixelShaders = new List<PixelShaderResource>();
+        private readonly List<ComputeShaderResource> _computeShaders = new List<ComputeShaderResource>();
+        private readonly List<TextureResource> _textures = new List<TextureResource>();
+        private readonly List<ShaderResourceViewResource> _shaderResourceViews = new List<ShaderResourceViewResource>();
+        private readonly List<OperatorResource> _operators = new List<OperatorResource>(100);
         private readonly FileSystemWatcher _hlslFileWatcher;
         private readonly FileSystemWatcher _pngFileWatcher;
         private readonly FileSystemWatcher _jpgFileWatcher;
         private readonly FileSystemWatcher _ddsFileWatcher;
         private readonly FileSystemWatcher _tiffFileWatcher;
         private readonly FileSystemWatcher _csFileWatcher;
+
+        public readonly Device Device;
+        public const string ResourcesFolder = @"Resources";
     }
 }

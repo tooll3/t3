@@ -142,6 +142,5 @@ namespace T3.Gui
 
 
         private double _playbackSpeed;
-        private double _beatTime;
     }
 }

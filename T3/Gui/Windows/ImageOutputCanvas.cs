@@ -40,7 +40,7 @@ namespace T3.Gui.Windows
                 _srv?.Dispose();
                 try
                 {
-                    _srv = new ShaderResourceView(ResourceManager.Instance()._device, texture);
+                    _srv = new ShaderResourceView(ResourceManager.Instance().Device, texture);
                 }
                 catch (Exception e)
                 {
