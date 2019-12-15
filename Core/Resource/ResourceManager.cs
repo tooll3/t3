@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -64,7 +63,7 @@ namespace T3.Core
     public class OperatorResource : Resource, IUpdateable
     {
         public Assembly OperatorAssembly { get; private set; }
-        public bool Updated { get; set; } = false;
+        public bool Updated { get; set; }
 
         public OperatorResource(uint id, string name, Assembly operatorAssembly)
             : base(id, name)
@@ -246,7 +245,7 @@ namespace T3.Core
 
     public class ResourceManager
     {
-        public uint TestId = NULL_RESOURCE;
+        public uint TestId = NullResource;
         public Assembly OperatorsAssembly { get; set; }
 
         public static ResourceManager Instance()
@@ -274,7 +273,7 @@ namespace T3.Core
             return GetResource<ComputeShaderResource>(resourceId).ComputeShader;
         }
 
-        public const uint NULL_RESOURCE = 0;
+        public const uint NullResource = 0;
         private uint _resourceIdCounter = 1;
 
         private uint GetNextResourceId()
@@ -350,7 +349,7 @@ namespace T3.Core
                 }
                 else
                 {
-                    Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer, 0);
+                    Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer);
                 }
             }
         }
@@ -429,7 +428,7 @@ namespace T3.Core
                 }
                 else
                 {
-                    Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer, 0);
+                    Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer);
                 }
             }
         }
@@ -555,7 +554,7 @@ namespace T3.Core
         public uint CreateVertexShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
-                return NULL_RESOURCE;
+                return NullResource;
 
             bool foundFileEntryForPath = _fileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
@@ -577,7 +576,7 @@ namespace T3.Core
             if (vertexShader == null)
             {
                 Log.Info($"Failed to create vertex shader '{name}'.");
-                return NULL_RESOURCE;
+                return NullResource;
             }
 
             var resourceEntry = new VertexShaderResource(GetNextResourceId(), name, entryPoint, blob, vertexShader);
@@ -603,7 +602,7 @@ namespace T3.Core
         public uint CreatePixelShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
-                return NULL_RESOURCE;
+                return NullResource;
 
             bool foundFileEntryForPath = _fileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
@@ -625,7 +624,7 @@ namespace T3.Core
             if (shader == null)
             {
                 Log.Info($"Failed to create pixel shader '{name}'.");
-                return NULL_RESOURCE;
+                return NullResource;
             }
 
             var resourceEntry = new PixelShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
@@ -651,7 +650,7 @@ namespace T3.Core
         public uint CreateComputeShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
-                return NULL_RESOURCE;
+                return NullResource;
 
             bool foundFileEntryForPath = _fileResources.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
@@ -673,7 +672,7 @@ namespace T3.Core
             if (shader == null)
             {
                 Log.Info($"Failed to create compute shader '{name}'.");
-                return NULL_RESOURCE;
+                return NullResource;
             }
 
             var resourceEntry = new ComputeShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
@@ -926,7 +925,7 @@ namespace T3.Core
             if (!File.Exists(filename))
             {
                 Log.Warning($"Couldn't find texture '{filename}'.");
-                return (NULL_RESOURCE, NULL_RESOURCE);
+                return (NullResource, NullResource);
             }
 
             if (_fileResources.TryGetValue(filename, out var existingFileResource))
