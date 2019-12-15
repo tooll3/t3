@@ -197,9 +197,8 @@ namespace T3.Gui.Graph
                 }
 
                 // Label
-
                 drawList.PushClipRect(_lastScreenRect.Min, _lastScreenRect.Max, true);
-                ImGui.PushFont(GraphCanvas.Current.Scale.X < 0.75f ? Fonts.FontSmall : Fonts.FontBold);
+                ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 ? Fonts.FontSmall : Fonts.FontBold);
                 var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
 
                 drawList.AddText(_lastScreenRect.Min + LabelPos,
@@ -259,35 +258,24 @@ namespace T3.Gui.Graph
                         var labelSize = ImGui.CalcTextSize(label);
                         _drawList.AddText(screenCursor, labelColor, label);
 
-                        //if (GraphCanvas.Current.Scale.X > 1.2f)
-                        //{
-                            screenCursor += new Vector2(labelSize.X + 8, 0);
-                            
-                            var typeLabelOpacity = Im.Remap(GraphCanvas.Current.Scale.X,
-                                                            1.2f, 3f,
-                                                            0f, 0.6f);
-                            //labelColor.Rgba.W *= typeLabelOpacity;
-                            
-                            // Value
-                            ImGui.PushStyleColor(ImGuiCol.Text, labelColor.Rgba);
-                            var inputSlot = instance.Inputs.Single(slot => inputDefinition.Id == slot.Id);
-                            var valueAsString = inputUi.GetSlotValue(inputSlot);
-                            //var valueSize = ImGui.CalcTextSize(valueAsString);
+                        screenCursor += new Vector2(labelSize.X + 8, 0);
 
-                            var valueColor = labelColor;
-                            valueColor.Rgba.W *= 0.6f;
-                            _drawList.AddText(screenCursor,
-                                              valueColor,
-                                              valueAsString);
-                            
-                            // Type Label
-                            // _drawList.AddText(screenCursor,
-                            //                   labelColor,
-                            //                   " - " + TypeNameRegistry.Entries[inputDefinition.DefaultValue.ValueType]);
+                        var typeLabelOpacity = Im.Remap(GraphCanvas.Current.Scale.X,
+                                                        1.2f, 3f,
+                                                        0f, 0.6f);
 
-                            ImGui.PopStyleColor();
-                            
-                        //}
+                        // Value
+                        ImGui.PushStyleColor(ImGuiCol.Text, labelColor.Rgba);
+                        var inputSlot = instance.Inputs.Single(slot => inputDefinition.Id == slot.Id);
+                        var valueAsString = inputUi.GetSlotValue(inputSlot);
+
+                        var valueColor = labelColor;
+                        valueColor.Rgba.W *= 0.6f;
+                        _drawList.AddText(screenCursor,
+                                          valueColor,
+                                          valueAsString);
+
+                        ImGui.PopStyleColor();
 
                         ImGui.PopFont();
                     }
