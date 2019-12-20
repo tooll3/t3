@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using ImGuiNET;
+using T3.Compilation;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -141,7 +142,7 @@ namespace T3.Gui.Graph.Interaction
 
             var resourceManager = ResourceManager.Instance();
             Guid newSymbolId = Guid.NewGuid();
-            uint symbolResourceId = resourceManager.CreateOperatorEntry(newSourcePath, newSymbolId.ToString());
+            uint symbolResourceId = resourceManager.CreateOperatorEntry(newSourcePath, newSymbolId.ToString(), OperatorUpdating.Update);
             var symbolResource = resourceManager.GetResource<OperatorResource>(symbolResourceId);
             symbolResource.Update(newSourcePath);
             if (!symbolResource.Updated)
@@ -258,7 +259,7 @@ namespace T3.Gui.Graph.Interaction
 
             var resourceManager = ResourceManager.Instance();
             Guid newSymbolId = Guid.NewGuid();
-            uint symbolResourceId = resourceManager.CreateOperatorEntry(newSourcePath, newSymbolId.ToString());
+            uint symbolResourceId = resourceManager.CreateOperatorEntry(newSourcePath, newSymbolId.ToString(), OperatorUpdating.Update);
             var symbolResource = resourceManager.GetResource<OperatorResource>(symbolResourceId);
             symbolResource.Update(newSourcePath);
             if (!symbolResource.Updated)

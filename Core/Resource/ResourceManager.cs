@@ -6,8 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
@@ -62,87 +60,24 @@ namespace T3.Core
 
     public class OperatorResource : Resource, IUpdateable
     {
-        public Assembly OperatorAssembly { get; private set; }
+        public Assembly OperatorAssembly { get; set; }
         public bool Updated { get; set; }
 
-        public OperatorResource(uint id, string name, Assembly operatorAssembly)
+        public OperatorResource(uint id, string name, Assembly operatorAssembly, UpdateDelegate updateHandler)
             : base(id, name)
         {
+            UpdateHandler = updateHandler;
             OperatorAssembly = operatorAssembly;
         }
 
+        public delegate bool UpdateDelegate(OperatorResource resource, string path);
+        private readonly UpdateDelegate UpdateHandler;
+
         public void Update(string path)
         {
-            Log.Info($"Operator source '{path}' changed.");
-            Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
-
-            var source = string.Empty;
-            try
-            {
-                source = File.ReadAllText(path);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error opening file '{path}");
-                Log.Error(e.Message);
-                return;
-            }
-
-            if (string.IsNullOrEmpty(source))
-            {
-                Log.Info("Source was empty, skip compilation.");
-                return;
-            }
-
-            var referencedAssembliesNames = ResourceManager.Instance().OperatorsAssembly.GetReferencedAssemblies(); // todo: ugly
-            var appDomainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-            var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
-            var coreAssembly = typeof(ResourceManager).Assembly;
-            referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
-            foreach (var asmName in referencedAssembliesNames)
-            {
-                var asm = appDomainAssemblies.SingleOrDefault(assembly => assembly.GetName().Name == asmName.Name);
-                if (asm != null)
-                {
-                    referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
-                }
-            }
-
-            var syntaxTree = CSharpSyntaxTree.ParseText(source);
-            var compilation = CSharpCompilation.Create("Operators",
-                                                       new[] { syntaxTree },
-                                                       referencedAssemblies.ToArray(),
-                                                       new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-
-            using (var dllStream = new MemoryStream())
-            using (var pdbStream = new MemoryStream())
-            {
-                var emitResult = compilation.Emit(dllStream, pdbStream);
-                Log.Info($"compilation results of '{path}':");
-                if (!emitResult.Success)
-                {
-                    foreach (var entry in emitResult.Diagnostics)
-                    {
-                        Log.Info(entry.GetMessage());
-                    }
-                }
-                else
-                {
-                    Log.Info("successful");
-                    var newAssembly = Assembly.Load(dllStream.GetBuffer());
-                    if (newAssembly.ExportedTypes.Any())
-                    {
-                        OperatorAssembly = newAssembly;
-                        Updated = true;
-                    }
-                    else
-                    {
-                        Log.Error("New compiled Assembly had no exported type.");
-                    }
-                }
-            }
+            UpdateHandler?.Invoke(this, path);
         }
-    }
+   }
 
     public abstract class ShaderResource : Resource
     {
@@ -725,7 +660,7 @@ namespace T3.Core
             }
         }
 
-        public uint CreateOperatorEntry(string srcFile, string name)
+        public uint CreateOperatorEntry(string srcFile, string name, OperatorResource.UpdateDelegate updateHandler)
         {
             // todo: code below is redundant with all file resources -> refactor
             bool foundFileEntryForPath = _fileResources.TryGetValue(srcFile, out var fileResource);
@@ -740,7 +675,7 @@ namespace T3.Core
                 }
             }
 
-            var resourceEntry = new OperatorResource(GetNextResourceId(), name, null);
+            var resourceEntry = new OperatorResource(GetNextResourceId(), name, null, updateHandler);
             Resources.Add(resourceEntry.Id, resourceEntry);
             _operators.Add(resourceEntry);
             if (fileResource == null)
