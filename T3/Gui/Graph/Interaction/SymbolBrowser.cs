@@ -45,16 +45,16 @@ namespace T3.Gui.Graph.Interaction
         {
             if (!_isOpen)
             {
-                if (ImGui.IsKeyReleased((int)Key.Tab))
-                {
-                    Log.Debug("open create with tab");
-                    OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null, null);
-                }
-
+                if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((int)Key.Tab))
+                    return;
+                
+                Log.Debug("open create with tab");
+                OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null, null);
                 return;
             }
 
             // Disable keyboard navigation to allow cursor up down
+            // This is being restored in Close()
             ImGui.GetIO().ConfigFlags &= ~ImGuiConfigFlags.NavEnableKeyboard;
             Current = this;
 
