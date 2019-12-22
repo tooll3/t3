@@ -1,94 +1,76 @@
+
 ▢ Port [RandomObserverCamera]
-▢ Port [BeatTime]
+▣ Port [BeatTime]
 ▢ Port [BlendImages] shader
 ▢ Port [BlendSmokeNoise] shader
+▢ test move time when clicking on a keyframe (20')
 
+▢ Use meaningful position when adding new Inputs
+▢ Add stub for sorting inputs
+▢ Correctly initialize node style of children when duplicating as new type (30')
+▢ Correctly initialize child name overrides when duplicating as new type (30')
+▢ use proper keyframe icons for curve edit area -> need mac boot (15')
 
-▢ Add mock ui to add inputs to group symbols
-▢ Add mock ui to remove inputs from symbols
-▢ Add mock ui to enter text
-
-▢ FIX crash when pressing return on empty search symbol browser list  (15')
-▢ increase default height of timeline (2')
-▢ increase height of time scrub area (2')
-▢ make time scrub area visible (10')
-▢ color SymbolBrowser nodes by output (15')
-▢ adjust with of input nodes to graph nodes (5')
-
-▢ Highlight missing required inputs/parameters (3h)
-▢ add mute audio toggle
-▢ improve visibility of output slots (2h)
-▢ add dark border around graph node to emphasize overlapping (10')
-▢ use percentage values for storing window layouts
-▢ resize windows when resizing application window ("fake docking")
-▢ Make Text in ConsoleLog selectable
-▢ Correctly initialize node style of children when duplicating as new type
-▢ Correctly initialize child name overrides when duplicating as new type
-
-▢ Display input parameter settings when click input
-
-▢ sort entries in SymbolBrowser by relevancy
-▢ show entries in SymbolBrowser with primary output type color
-▢ pin dope sheet parameters
-
-▢ Idea: open Symbol Browser right of to current selection when triggering action AddNeighborToOutput e.g. cursor right?
-▢ Idea: Keyboard navigation through inputs and parameters with left triggering AddNeighborToInput
+▢ pin dope sheet parameters (30')
 
 ▢ When dragging connections indicate if node has non-relevant matching input slots (2h)
-▢ use correct size of nodes for snapping (1h)
 ▢ use Tab switch between curve and dope sheet (20')
+▢ push down neighbors when expanding node (1h)
+
 ▢ start symbol browser from input nodes (1h)
 ▢ start symbol browser from output nodes (15')
-▢ (un)fold nodes with icon?
-▢ use small fonts when zoomed out (20')
-▢ Add namespace to nodes when zoomed in
 
-▢ MultiCanvas: Time-Line height should be an individual setting of graphCanvas
-▢ MultiCanvas: Output window should be selectable from all canvas windows
-▢ MultiCanvas: Parameter window should work for all canvas windows
-▢ MultiCanvas: Fix dragging connection crash
-▢ MultiCanvas: user-setting should save opened windows
+▢ Highlight missing required inputs/parameters (3h)
 
-▢ visually indicate operator snapping
-▢ push down neighbors when expanding node
-▢ Fix hidden symbol-browser in GraphView
-▢ Move ClipTime to core and make it accessible in context?
-
-▢ in dope sheet insert new key should snap to lines
-▢ fix invisible input glitch if graph canvas is zoomed out too much
-▢ fix scroll-bar in quick create window
-▢ fix layout in debug log time
-▢ add transparency pattern below color parameters
-▢ save clip-range with symbol
-▢ opening a new (unknown) op should change view to show all operators
-▢ use renamed instance title in dope sheet parameter list
-▢ pin parameter window
-▢ make parameter window non-movable
-▢ unfold multiple curve layers in dope sheet
+▢ MultiCanvas: Output window should be selectable from all canvas windows (2h)
+▢ MultiCanvas: Parameter window should work for all canvas windows (2h)
+▢ MultiCanvas: Fix dragging connection crash (1h)
+▢ MultiCanvas: user-setting should save opened windows (1h)
 ▢ FIX: crash when closing last graph window
-▢ use proper keyframe icons for curve edit area -> need mac boot
-▢ Hotkey (return) to rename selected node
-▢ resize nodes?
-▢ save default opened composition / breadcrumb and its position
-▢ fix hovering for output node / inputs etc.
-▢ drag timeline height on left grabber
-▢ add follow time marker mode
+▢ MultiCanvas: Time-Line height should be an individual setting of graphCanvas (15')
+
+▢ Move ClipTime to core and make it accessible in context? -> cynic?
+
+▢ in dope sheet insert new key should snap to vertical lines (15min)
+▢ fix invisible input glitch if graph canvas is zoomed out too much (30min)
+▢ fix region clamping in Console log (1h)
+▢ save clip-range with symbol (3h)
+▢ use renamed instance title in dope sheet parameter list
+▢ show parameters of multiple selected nodes (1h)
+▢ pin selection in parameter window (1h)
+▢ improve Color-Type control (3h)
+▢ unfold multiple curve layers in dope sheet? (2h)
+▢ Toggle visibility of parameters in curves? (2h)
+▢ Hotkey (return) to rename selected node (1h)
+▢ drag timeline height on left grabber  (15')
+▢ add follow time marker mode  (30')
+
 
 Later major
 -----------
-▢ preview thumbnails
-▢ node groups / annotations
-▢ add CurveEditBox
-▢ drag keyframe values OR time
-▢ snap canvas node positions to neighbors
-▢ Arc curves
-▢ Auto layout graph
-▢ Show graphs inside nodes
+▢ drag keyframe values OR time (2h)
+▢ preview thumbnails (2h)
+▢ node groups / annotations (4h)
+▢ add CurveEditBox (3h)
+▢ Display input parameter settings when click input (2h)
+▢ Arc curves (8h)
+
+▢ add transparency pattern below color parameters
+▢ visually indicate operator snapping (30')
+▢ Create outputs from Ui
+▢ Delete inputs/outputs from Ui
+▢ Edit input order in Ui
+
 
 More ideas
 ------
+▢ Add namespace to nodes when zoomed in (20min)
 ▢ snap to horizontal value lines
 ▢ change precision from double to float
+▢ use percentage values for storing window layouts (2h')
+▢ resize windows when resizing application window ("fake docking") (30')
+▢ Idea: open Symbol Browser right of current selection when triggering action AddNeighborToOutput e.g. cursor right?
+▢ Idea: Keyboard navigation through inputs and parameters with left triggering AddNeighborToInput
 
 bugs for later
 -------
@@ -96,23 +78,43 @@ bugs for later
 ▢ FIX: Deleting last keyframe should disable animation-flag in parameter view
 ▢ FIX: Exception when input type changes
 
-Feature-requests with cynic
------------
-▢ Rename .t3 and .t3ui files after refactoring type-class name in Rider (probably requires GUID attribute on class)
+▢ Auto layout graph
+▢ Show graphs inside nodes
 
-▢ Create inputs from Ui
-▢ Create outputs from Ui
-▢ Delete inputs/outputs from Ui
-▢ Edit input order in Ui
 
-Architecture questions for discussion
-----------------
-- normal combine groups should have a Guid-Class-Name 
-- why do we actually need correct class names for Node-Types? Why not just stick with the Gui and the additional name. 
-  The ChildClasses only appear in the .t3 files as children
 
 Done
 --------
+Thu
+▣ (un)fold nodes with icon? (2h)
+▣ Show current values in Nodes
+▣ Improve working with multiple cameras (2h)
+▣ fix scroll-bar in quick create window
+▣ sort entries in SymbolBrowser by relevancy, see T2 (2h)
+▣ show entries in SymbolBrowser with primary output type color (15')
+
+Wed
+▣ make parameter window non-movable
+▣ color SymbolBrowser nodes by output (15')
+▣ adjust width of input nodes to graph nodes (5')
+▣ add mute audio toggle (30')
+▣ improve visibility of output slots (2h)
+▣ add dark border around graph node to emphasize overlapping (10')
+▣ Make Text in ConsoleLog selectable (20')
+▣ use correct size of nodes for snapping (1h)
+▣ use small fonts when zoomed out (20')
+▣ opening a new (unknown) op should change view to show all operators
+
+Mon
+▣ Create inputs from Ui
+▣ Add mock ui to add inputs to group symbols
+▣ Add mock ui to remove inputs from symbols
+▣ Add mock ui to enter op description
+▣ FIX crash when pressing return on empty search symbol browser list  (15')
+▣ increase default height of timeline (2')
+▣ increase height of time scrub area (2')
+▣ make time scrub area visible (10')
+
 Sun
 ▣ Add dial widget
 ▣ FIX crash when pressing backspace after double click on node 
@@ -125,6 +127,8 @@ Sat
   ▣ Implement node tree with sorting
 ▣ Add user-settings that saves canvas zooms and current open instance path
 ▣ fix new graph window
+▣ resize nodes?
+▣ save default opened composition / breadcrumb and its position
 
 Fri
 ▣ auto-add new node to project file after combine or duplicate symbol
