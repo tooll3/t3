@@ -18,21 +18,23 @@ namespace T3.Gui.Graph
     /// <remarks>
     /// Rendering the graph is complicated because:
     /// - Connection has no real model to store computations
-    /// - Connection are defined by Guid references to Symbol-Definitions
-    /// - Computation of connection end point position is involves...
-    ///    - many states of the graph nodes
-    ///    - connections under construction
-    ///    - potentially hidden connections
-    ///    - layout of connections into multiinput slots
+    /// - Connections are defined by Guid references to Symbol-Definitions
+    /// - Computing connection end point position involves...
+    ///    - ...many states of the graph nodes
+    ///    - ...connections under construction
+    ///    - ...potentially hidden connections
+    ///    - ...layout of connections into multi input slots
     ///    
     /// This implementation first collects the information required to drawing the input sockets
-    /// and connection links over serveral passes in which the information about visible connection-lines
-    /// is collected in ConnectionLineUi instances
+    /// and connection links over several passes in which the information about visible connection-lines
+    /// is collected into a list of ConnectionLineUi instances. These passes are...
     /// 
     /// 1. Initializes lists of ConnectionLineUis
-    /// 2. Fill the lists of which nodes is connected to which lines
-    /// 3. Draw Nodes and their sockets and set positions for connection lines 
-    /// 4. Draw connection lines
+    /// 2. Fill the lists of which nodes are connected to which lines
+    /// 3. Draw nodes and their sockets and set positions for connection lines
+    /// 4. Draw inputs
+    /// 5. Draw outputs 
+    /// 6. Draw connection lines
     ///</remarks>
     public static class Graph
     {
@@ -59,18 +61,34 @@ namespace T3.Gui.Graph
             // 2. Collect which nodes are connected to which lines
             foreach (var c in allConnections)
             {
-                var newLine = Connections.CreateAndSortLineUi(c);
+                Connections.CreateAndSortLineUi(c);
             }
 
             // 3. Draw Nodes and their sockets and set positions for connection lines
             foreach(var instance in children)
-            //foreach(SymbolChildUi childUi in _childUis)
             {
                 var childUi = _childUis.Single(ui => ui.Id == instance.SymbolChildId);
                 GraphNode.Draw(childUi, instance);
             }
+            
+            // 4. Draw Inputs Nodes
+            foreach (var inputNode in _inputUisById)
+            {
+                var inputDef = graphSymbol.InputDefinitions.Find(def => def.Id == inputNode.Key);
+                InputNode.Draw(inputDef, inputNode.Value);
 
-            // Draw Output Nodes
+                var sourcePos = new Vector2(
+                                            InputNode._lastScreenRect.Max.X,
+                                            InputNode._lastScreenRect.GetCenter().Y
+                                           );
+
+                foreach (var line in Connections.GetLinesFromInputNodes(inputNode.Value, inputNode.Key))
+                {
+                    line.SourcePosition = sourcePos;
+                }
+            }
+
+            // 5. Draw Output Nodes
             foreach (var (outputId, outputNode) in _outputUisById)
             {
                 var outputDef = graphSymbol.OutputDefinitions.Find(od => od.Id == outputId);
@@ -84,24 +102,7 @@ namespace T3.Gui.Graph
                     line.TargetPosition = targetPos;
                 }
             }
-
-            // Draw Inputs Nodes
-            foreach (var inputNode in _inputUisById)
-            {
-                var inputDef = graphSymbol.InputDefinitions.Find(idef => idef.Id == inputNode.Key);
-                InputNode.Draw(inputDef, inputNode.Value);
-
-                var sourcePos = new Vector2(
-                                            InputNode._lastScreenRect.Max.X,
-                                            InputNode._lastScreenRect.GetCenter().Y
-                                           );
-
-                foreach (var line in Connections.GetLinesFromIntputNodes(inputNode.Value, inputNode.Key))
-                {
-                    line.SourcePosition = sourcePos;
-                }
-            }
-
+            
             // 6. Draw ConnectionLines
             foreach (var line in Connections.Lines)
             {
@@ -127,7 +128,7 @@ namespace T3.Gui.Graph
                 _linesFromInputNodes = new Dictionary<IInputUi, List<ConnectionLineUi>>();
             }
 
-            public ConnectionLineUi CreateAndSortLineUi(Symbol.Connection c)
+            public void CreateAndSortLineUi(Symbol.Connection c)
             {
                 var newLine = new ConnectionLineUi(c);
                 Lines.Add(newLine);
@@ -172,13 +173,12 @@ namespace T3.Gui.Graph
                 }
 
                 InitTempConnection(newLine);
-                return newLine;
             }
 
             private static void InitTempConnection(ConnectionLineUi newLine)
             {
                 var c = newLine.Connection;
-                if (newLine.Connection != ConnectionMaker.TempConnection)
+                if (!Equals(newLine.Connection, ConnectionMaker.TempConnection))
                     return;
 
                 if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
@@ -206,37 +206,37 @@ namespace T3.Gui.Graph
                 }
             }
 
-            public List<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
+            public IEnumerable<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
             {
                 return _linesFromNodes.ContainsKey(childUi)
                            ? _linesFromNodes[childUi].FindAll(l => l.Connection.SourceSlotId == outputId)
-                           : _noLines;
+                           : NoLines;
             }
 
             public List<ConnectionLineUi> GetLinesToNodeInputSlot(SymbolChildUi childUi, Guid inputId)
             {
                 return _linesIntoNodes.ContainsKey(childUi)
                            ? _linesIntoNodes[childUi].FindAll(l => l.Connection.TargetSlotId == inputId)
-                           : _noLines;
+                           : NoLines;
             }
 
             public List<ConnectionLineUi> GetLinesIntoNode(SymbolChildUi childUi)
             {
-                return _linesIntoNodes.ContainsKey(childUi) ? _linesIntoNodes[childUi] : _noLines;
+                return _linesIntoNodes.ContainsKey(childUi) ? _linesIntoNodes[childUi] : NoLines;
             }
 
             public List<ConnectionLineUi> GetLinesToOutputNodes(IOutputUi outputNode, Guid outputId)
             {
                 return _linesToOutputNodes.ContainsKey(outputNode)
                            ? _linesToOutputNodes[outputNode].FindAll(l => l.Connection.TargetSlotId == outputId)
-                           : _noLines;
+                           : NoLines;
             }
 
-            public List<ConnectionLineUi> GetLinesFromIntputNodes(IInputUi inputNode, Guid inputNodeId)
+            public List<ConnectionLineUi> GetLinesFromInputNodes(IInputUi inputNode, Guid inputNodeId)
             {
                 return _linesFromInputNodes.ContainsKey(inputNode)
                            ? _linesFromInputNodes[inputNode].FindAll(l => l.Connection.SourceSlotId == inputNodeId)
-                           : _noLines;
+                           : NoLines;
             }
 
             private Dictionary<SymbolChildUi, List<ConnectionLineUi>> _linesFromNodes;
@@ -245,25 +245,22 @@ namespace T3.Gui.Graph
             private Dictionary<IInputUi, List<ConnectionLineUi>> _linesFromInputNodes;
 
             // Reuse empty list instead of null check
-            private static readonly List<ConnectionLineUi> _noLines = new List<ConnectionLineUi>();
+            private static readonly List<ConnectionLineUi> NoLines = new List<ConnectionLineUi>();
         }
 
         internal class ConnectionLineUi
         {
-            public Symbol.Connection Connection;
+            public readonly Symbol.Connection Connection;
             public Vector2 TargetPosition;
             public Vector2 SourcePosition;
-            public ImRect TargetRect { get; set; }
-            public ImRect SourceRect { get; set; }
             public Color ColorForType;
 
             public bool IsSelected;
-            //public bool IsMultiinput;
 
             internal ConnectionLineUi(Symbol.Connection connection)
             {
                 Connection = connection;
-                if (connection != ConnectionMaker.TempConnection)
+                if (!Equals(connection, ConnectionMaker.TempConnection))
                     return;
 
                 if (connection.TargetParentOrChildId == ConnectionMaker.NotConnectedId)

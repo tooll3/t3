@@ -43,7 +43,6 @@ namespace T3.Gui.Graph.Dialogs
 
             {
                 for(var index =0; index < _compositionOp.Inputs.Count; index++)
-                //foreach (var input in _compositionOp.Inputs)
                 {
                     var input = _compositionOp.Inputs[index];
                     if (ImGui.Selectable(input.Input.Name, input.Id == _selectedInputId))

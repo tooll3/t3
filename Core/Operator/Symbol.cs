@@ -537,7 +537,6 @@ namespace T3.Core.Operator
             }
 
             public bool IsConnectedToSymbolOutput => TargetParentOrChildId == Guid.Empty;
-
             public bool IsConnectedToSymbolInput => SourceParentOrChildId == Guid.Empty;
         }
         #endregion

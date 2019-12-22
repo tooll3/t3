@@ -166,9 +166,6 @@ namespace T3.Gui.Graph
                 // Animation indicator
                 {
                     var compositionOp = GraphCanvas.Current.CompositionOp;
-                    //var instance = compositionOp.Children.FirstOrDefault(child => child.Id == childUi.SymbolChild.Id);
-                    //if (instance != null)
-                    //{
                     if (compositionOp.Symbol.Animator.IsInstanceAnimated(instance))
                     {
                         _drawList.AddRectFilled(
@@ -176,8 +173,6 @@ namespace T3.Gui.Graph
                                                 new Vector2(_lastScreenRect.Max.X - 2, _lastScreenRect.Max.Y - 3),
                                                 Color.Orange);
                     }
-
-                    //}
                 }
 
                 // Visualize update
@@ -320,7 +315,6 @@ namespace T3.Gui.Graph
                                            : connectedLines[index];
 
                             line.TargetPosition = targetPos;
-                            line.TargetRect = _lastScreenRect;
                             line.IsSelected |= childUi.IsSelected;
                         }
 
@@ -349,7 +343,6 @@ namespace T3.Gui.Graph
                         line.TargetPosition = new Vector2(usableSlotArea.Max.X - 1,
                                                           usableSlotArea.GetCenter().Y);
                         line.IsSelected |= childUi.IsSelected;
-                        line.TargetRect = _lastScreenRect;
                     }
 
                     DrawInputSlot(childUi, inputDefinition, usableSlotArea, colorForType, hovered);
@@ -379,7 +372,6 @@ namespace T3.Gui.Graph
                 foreach (var line in Graph.Connections.GetLinesFromNodeOutput(childUi, output.Id))
                 {
                     line.SourcePosition = new Vector2(usableArea.Max.X, usableArea.GetCenter().Y);
-                    line.SourceRect = _lastScreenRect;
                     line.ColorForType = colorForType;
                     line.IsSelected |= childUi.IsSelected;
                 }
