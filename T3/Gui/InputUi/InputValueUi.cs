@@ -214,7 +214,7 @@ namespace T3.Gui.InputUi
                                                             if (ImGui.MenuItem("Reset to default", !input.IsDefault))
                                                             {
                                                                 input.ResetToDefault();
-                                                                foreach (var compositionInstance in compositionUi.Symbol._instancesOfSymbol)
+                                                                foreach (var compositionInstance in compositionUi.Symbol.InstancesOfSymbol)
                                                                 {
                                                                     var inputParent = compositionInstance.Children.Single(c => c.SymbolChildId == inputSlot.Parent.SymbolChildId);
                                                                     var slot = inputParent.Inputs.Single(i => i.Id == inputSlot.Id);

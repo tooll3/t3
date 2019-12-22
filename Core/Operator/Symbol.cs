@@ -21,7 +21,7 @@ namespace T3.Core.Operator
         public string Name { get; set; }
         public string Namespace { get; set; }
 
-        public readonly List<Instance> _instancesOfSymbol = new List<Instance>();
+        public readonly List<Instance> InstancesOfSymbol = new List<Instance>();
         public readonly List<SymbolChild> Children = new List<SymbolChild>();
         public readonly List<Connection> Connections = new List<Connection>();
 
@@ -79,7 +79,7 @@ namespace T3.Core.Operator
 
         public void Dispose()
         {
-            _instancesOfSymbol.ForEach(instance => instance.Dispose());
+            InstancesOfSymbol.ForEach(instance => instance.Dispose());
         }
 
         private class ConnectionEntry
@@ -183,7 +183,7 @@ namespace T3.Core.Operator
             }
 
             // first remove relevant connections from instances and update symbol child input values if needed
-            foreach (var instance in _instancesOfSymbol)
+            foreach (var instance in InstancesOfSymbol)
             {
                 var parent = instance.Parent;
                 var parentSymbol = parent.Symbol;
@@ -247,12 +247,12 @@ namespace T3.Core.Operator
             }
 
             // now remove the old instances itself...
-            foreach (var instance in _instancesOfSymbol)
+            foreach (var instance in InstancesOfSymbol)
             {
                 instance.Parent.Children.Remove(instance);
                 instance.Dispose();
             }
-            _instancesOfSymbol.Clear();
+            InstancesOfSymbol.Clear();
 
             // ... and create the new ones...
             foreach (var (symbolChild, parent, _) in newInstanceSymbolChildren)
@@ -321,7 +321,7 @@ namespace T3.Core.Operator
             // connect animations if available
             Animator.CreateUpdateActionsForExistingCurves(newInstance);
 
-            _instancesOfSymbol.Add(newInstance);
+            InstancesOfSymbol.Add(newInstance);
 
             return newInstance;
         }
@@ -404,7 +404,7 @@ namespace T3.Core.Operator
                 Connections.Add(connection);
             }
 
-            foreach (var instance in _instancesOfSymbol)
+            foreach (var instance in InstancesOfSymbol)
             {
                 instance.AddConnection(connection, multiInputIndex);
             }
@@ -426,7 +426,7 @@ namespace T3.Core.Operator
             {
                 Log.Info($"Remove  MI with index {multiInputIndex} at existing index {connectionsIndex}");
                 Connections.RemoveAt(connectionsIndex);
-                foreach (var instance in _instancesOfSymbol)
+                foreach (var instance in InstancesOfSymbol)
                 {
                     instance.RemoveConnection(connection, multiInputIndex);
                 }
@@ -438,7 +438,7 @@ namespace T3.Core.Operator
             var newChild = new SymbolChild(symbol, addedChildId);
             Children.Add(newChild);
 
-            foreach (var instance in _instancesOfSymbol)
+            foreach (var instance in InstancesOfSymbol)
             {
                 CreateAndAddNewChildInstance(newChild, instance);
             }
@@ -452,7 +452,7 @@ namespace T3.Core.Operator
             Connections.RemoveAll(c => c.SourceParentOrChildId == childId || c.TargetParentOrChildId == childId);
 
             var childToRemove = Children.Single(child => child.Id == childId);
-            foreach (var instance in _instancesOfSymbol)
+            foreach (var instance in InstancesOfSymbol)
             {
                 RemoveChildInstance(childToRemove, instance);
             }
@@ -461,7 +461,7 @@ namespace T3.Core.Operator
 
         void DeleteInstance(Instance op)
         {
-            _instancesOfSymbol.Remove(op);
+            InstancesOfSymbol.Remove(op);
         }
 
         public Connection GetConnectionForInput(InputDefinition input)

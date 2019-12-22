@@ -84,7 +84,7 @@ namespace T3.Gui.Graph.Dialogs
             inputDefs[indexA] = inputDefs[indexB];
             inputDefs[indexB] = tmpDef;
 
-            foreach (var instance in _compositionOp.Symbol._instancesOfSymbol)
+            foreach (var instance in _compositionOp.Symbol.InstancesOfSymbol)
             {
                 var inputs = instance.Inputs;
                 var tmp = inputs[indexA];
