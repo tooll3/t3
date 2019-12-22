@@ -1,8 +1,6 @@
-using ImGuiNET;
 using System;
-using System.Diagnostics;
 using System.Numerics;
-using T3.Core.Logging;
+using ImGuiNET;
 using T3.Gui.Commands;
 using T3.Gui.Selection;
 
@@ -10,8 +8,6 @@ namespace T3.Gui.Graph
 {
     public static class SelectableMovement
     {
-        private static ChangeSelectableCommand _moveCommand = null;
-
         public static void Handle(ISelectable selectable)
         {
             if (ImGui.IsItemActive())
@@ -52,7 +48,6 @@ namespace T3.Gui.Graph
 
                     var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
                     var newDragPosInCanvas = GraphCanvas.Current.InverseTransformPosition(newDragPos);
-                    //var snapDelta = new Vector2(140, 0);
 
                     var bestDistanceInCanvas = float.PositiveInfinity;
                     var targetSnapPositionInCanvas = Vector2.Zero;
@@ -111,27 +106,24 @@ namespace T3.Gui.Graph
             {
                 if (ImGui.GetMouseDragDelta(0).LengthSquared() > 0.0f)
                 {
-                    // add to stack
-                    Log.Debug("Added to undo stack");
                     _moveCommand.StoreCurrentValues();
                     UndoRedoStack.Add(_moveCommand);
                 }
-
                 _moveCommand = null;
             }
         }
 
         private static readonly Vector2 SnapPadding = new Vector2(20,20);
 
-        private static Vector2[] SnapOffsetsInCanvas = new Vector2[]
-                                               {
+        private static readonly Vector2[] SnapOffsetsInCanvas = {
                                                    new Vector2(SymbolChildUi.DefaultOpSize.X + SnapPadding.X, 0),
                                                    new Vector2(-SymbolChildUi.DefaultOpSize.X-  + SnapPadding.X, 0),
                                                    new Vector2(0,  SnapPadding.Y),
-                                                   new Vector2(0, -SnapPadding.Y),
+                                                   new Vector2(0, -SnapPadding.Y)
                                                };
 
-        private static bool _isDragging = false;
+        private static bool _isDragging;
         private static Vector2 _dragStartDelta;
+        private static ChangeSelectableCommand _moveCommand;
     }
 }

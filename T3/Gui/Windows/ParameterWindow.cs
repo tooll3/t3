@@ -124,8 +124,6 @@ namespace T3.Gui.Windows
 
         private void DrawSelectedSymbolHeader(Instance op)
         {
-            //var opNamespace = op.Symbol.Namespace ?? "undefined";
-
             // Namespace
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
