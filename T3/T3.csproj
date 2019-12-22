@@ -343,6 +343,7 @@
     <Compile Include="Gui\Graph\Dialogs\CombineToSymbolDialog.cs" />
     <Compile Include="Gui\Graph\Dialogs\AddInputDialog.cs" />
     <Compile Include="Gui\Graph\Dialogs\DuplicateSymbolDialog.cs" />
+    <Compile Include="Gui\Graph\Dialogs\EditInputsDialog.cs" />
     <Compile Include="Gui\Graph\GraphCanvas.cs" />
     <Compile Include="Gui\Graph\Interaction\ConnectionMaker.cs" />
     <Compile Include="Gui\Graph\Interaction\FileReferenceOperations.cs" />
@@ -492,6 +493,9 @@
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ImGui\imgui_demo.cpp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\ImGui.NET.1.70.0\build\net40\ImGui.NET.targets" Condition="Exists('..\packages\ImGui.NET.1.70.0\build\net40\ImGui.NET.targets')" />
