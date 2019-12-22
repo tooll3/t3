@@ -30,7 +30,7 @@ namespace T3.Gui
             UpdateConsistencyWithSymbol();
         }
 
-        public IEnumerable<ISelectable> GetSelectables()
+        public IEnumerable<ISelectableNode> GetSelectables()
         {
             foreach (var childUi in ChildUis)
                 yield return childUi;

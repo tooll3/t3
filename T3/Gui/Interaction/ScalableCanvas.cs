@@ -84,7 +84,7 @@ namespace T3.Gui.Graph
 
         #region implement ICanvas =================================================================
 
-        public abstract IEnumerable<ISelectable> SelectableChildren { get; }
+        public abstract IEnumerable<ISelectableNode> SelectableChildren { get; }
         public abstract SelectionHandler SelectionHandler { get; }
 
         /// <summary>

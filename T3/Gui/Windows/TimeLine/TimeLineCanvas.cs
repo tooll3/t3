@@ -458,10 +458,7 @@ namespace T3.Gui.Windows.TimeLine
             return r;
         }
 
-
-        IEnumerable<ISelectable> ICanvas.SelectableChildren => new List<ISelectable>();
         
-
         /// <summary>
         /// Damped scale factors for u and v
         /// </summary>

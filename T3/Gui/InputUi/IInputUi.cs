@@ -25,7 +25,7 @@ namespace T3.Gui.InputUi
         Optional
     }
 
-    public interface IInputUi : ISelectable
+    public interface IInputUi : ISelectableNode
     {
         Symbol.InputDefinition InputDefinition { get; set; }
         Type Type { get; }

@@ -27,7 +27,7 @@ namespace T3.Gui.Commands
         private readonly Entry[] _entries;
         private readonly Guid _compositionSymbolId;
 
-        public ChangeSelectableCommand(Guid compositionSymbolId, List<ISelectable> selectables)
+        public ChangeSelectableCommand(Guid compositionSymbolId, List<ISelectableNode> selectables)
         {
             _compositionSymbolId = compositionSymbolId;
             _entries = new Entry[selectables.Count()];

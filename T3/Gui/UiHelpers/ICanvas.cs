@@ -10,14 +10,17 @@ using UiHelpers;
 
 namespace T3.Gui.Graph
 {
+    public interface INodeCanvas:ICanvas
+    {
+        IEnumerable<ISelectableNode> SelectableChildren { get; }
+        SelectionHandler SelectionHandler { get; }
+    }
+    
     /// <summary>
-    /// A zoomable canvas that can hold <see cref="ISelectable"/> elements.
+    /// A zoomable canvas that can hold <see cref="ISelectableNode"/> elements.
     /// </summary>
     public interface ICanvas
     {
-        IEnumerable<ISelectable> SelectableChildren { get; }
-        SelectionHandler SelectionHandler { get; }
-
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>

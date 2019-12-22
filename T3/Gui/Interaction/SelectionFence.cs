@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using T3.Core.Logging;
 using T3.Gui.Selection;
 using UiHelpers;
 
@@ -13,7 +12,7 @@ namespace T3.Gui.Graph
     /// </summary>
     public class SelectionFence
     {
-        public SelectionFence(ICanvas canvas)
+        public SelectionFence(INodeCanvas canvas)
         {
             _canvas = canvas;
             _selectionHandler = canvas.SelectionHandler;
@@ -143,7 +142,7 @@ namespace T3.Gui.Graph
         private ImRect Bounds => ImRect.RectBetweenPoints(_startPositionInScreen, _dragPositionInScreen);
         private Vector2 _startPositionInScreen;
         private Vector2 _dragPositionInScreen;
-        private readonly ICanvas _canvas;
+        private readonly INodeCanvas _canvas;
         private bool _dragThresholdExceeded; // Set to true after DragThreshold reached
     }
 }

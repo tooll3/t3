@@ -9,7 +9,7 @@ namespace T3.Gui
     /// <summary>
     /// Properties needed for visual representation of an instance. Should later be moved to gui component.
     /// </summary>
-    public class SymbolChildUi : ISelectable
+    public class SymbolChildUi : ISelectableNode
     {
         public SymbolChild SymbolChild;
         public Guid Id => SymbolChild.Id;

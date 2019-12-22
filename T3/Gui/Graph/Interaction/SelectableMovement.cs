@@ -8,7 +8,7 @@ namespace T3.Gui.Graph
 {
     public static class SelectableMovement
     {
-        public static void Handle(ISelectable selectable)
+        public static void Handle(ISelectableNode selectableNode)
         {
             if (ImGui.IsItemActive())
             {
@@ -16,22 +16,22 @@ namespace T3.Gui.Graph
                 {
                     var handler = GraphCanvas.Current.SelectionHandler;
 
-                    if (!handler.SelectedElements.Contains(selectable))
+                    if (!handler.SelectedElements.Contains(selectableNode))
                     {
                         if (!ImGui.GetIO().KeyShift)
                         {
-                            handler.SetElement(selectable);
+                            handler.SetElement(selectableNode);
                         }
                         else
                         {
-                            handler.AddElement(selectable);
+                            handler.AddElement(selectableNode);
                         }
                     }
                     else
                     {
                         if (ImGui.GetIO().KeyShift)
                         {
-                            handler.RemoveElement(selectable);
+                            handler.RemoveElement(selectableNode);
                         }
                     }
 
@@ -42,7 +42,7 @@ namespace T3.Gui.Graph
                 if (ImGui.IsMouseDragging(0))
                 {
                     if (!_isDragging)
-                        _dragStartDelta = ImGui.GetMousePos() - GraphCanvas.Current.TransformPosition(selectable.PosOnCanvas);
+                        _dragStartDelta = ImGui.GetMousePos() - GraphCanvas.Current.TransformPosition(selectableNode.PosOnCanvas);
 
                     _isDragging = true;
 
@@ -69,7 +69,7 @@ namespace T3.Gui.Graph
                         
                         foreach (var neighbor in GraphCanvas.Current.SelectableChildren)
                         {
-                            if (neighbor.IsSelected || neighbor == selectable)
+                            if (neighbor.IsSelected || neighbor == selectableNode)
                                 continue;
 
                             var offset2 = new Vector2(offset.X, -neighbor.Size.Y * heightAffectFactor + offset.Y);
@@ -88,8 +88,8 @@ namespace T3.Gui.Graph
                     var isSnapping = bestDistanceInCanvas < snapDistanceInCanvas;
                     
                     var moveDeltaOnCanvas = isSnapping
-                                                ? targetSnapPositionInCanvas - selectable.PosOnCanvas
-                                                : newDragPosInCanvas - selectable.PosOnCanvas;
+                                                ? targetSnapPositionInCanvas - selectableNode.PosOnCanvas
+                                                : newDragPosInCanvas - selectableNode.PosOnCanvas;
 
                     // Drag selection
                     foreach (var e in GraphCanvas.Current.SelectionHandler.SelectedElements)

@@ -13,33 +13,33 @@ namespace T3.Gui.Selection
     {
         public class FirstSelectedChangedEventArgs : EventArgs
         {
-            public FirstSelectedChangedEventArgs(ISelectable element)
+            public FirstSelectedChangedEventArgs(ISelectableNode element)
             {
                 Element = element;
             }
 
-            public ISelectable Element { get; private set; }
+            public ISelectableNode Element { get; private set; }
         }
 
         public class SelectionChangedEventArgs : EventArgs
         {
-            public SelectionChangedEventArgs(List<ISelectable> elements)
+            public SelectionChangedEventArgs(List<ISelectableNode> elements)
             {
                 SelectedElements = elements;
             }
 
-            public List<ISelectable> SelectedElements { get; private set; }
+            public List<ISelectableNode> SelectedElements { get; private set; }
         }
 
         public bool Enabled { get; set; }
         public event EventHandler<FirstSelectedChangedEventArgs> FirstSelectedChanged = (o, a) => { };
         public event EventHandler<SelectionChangedEventArgs> SelectionChanged = (o, a) => { };
 
-        public List<ISelectable> SelectedElements { get; private set; } // Question: Should we refactor this to use ObservableCollection()?
+        public List<ISelectableNode> SelectedElements { get; private set; } // Question: Should we refactor this to use ObservableCollection()?
 
         public SelectionHandler()
         {
-            SelectedElements = new List<ISelectable>();
+            SelectedElements = new List<ISelectableNode>();
             Enabled = true;
         }
 
@@ -56,7 +56,7 @@ namespace T3.Gui.Selection
             return GetSelectedElementsOfType<T>().FirstOrDefault();
         }
 
-        public void AddElement(ISelectable e)
+        public void AddElement(ISelectableNode e)
         {
             if (!Enabled || SelectedElements.Contains(e))
                 return;
@@ -75,7 +75,7 @@ namespace T3.Gui.Selection
             }
         }
 
-        public void AddElements(List<ISelectable> elements)
+        public void AddElements(List<ISelectableNode> elements)
         {
             if (!Enabled)
                 return;
@@ -105,7 +105,7 @@ namespace T3.Gui.Selection
             }
         }
 
-        public void SetElement(ISelectable e)
+        public void SetElement(ISelectableNode e)
         {
             if (!Enabled || SelectedElements.Contains(e) && SelectedElements.Count == 1)
                 return;
@@ -115,12 +115,12 @@ namespace T3.Gui.Selection
             AddElement(e); // eventually triggers SelectionChangedEvent;
         }
 
-        public void SetElements(List<ISelectable> newSelection)
+        public void SetElements(List<ISelectableNode> newSelection)
         {
             if (!Enabled)
                 return;
 
-            ISelectable originalFirst = null;
+            ISelectableNode originalFirst = null;
             if (SelectedElements.Count > 0)
             {
                 originalFirst = SelectedElements[0];
@@ -132,8 +132,8 @@ namespace T3.Gui.Selection
                 return;
             }
 
-            List<ISelectable> elementsToUnselect = new List<ISelectable>();
-            List<ISelectable> elementsToKeep = new List<ISelectable>();
+            List<ISelectableNode> elementsToUnselect = new List<ISelectableNode>();
+            List<ISelectableNode> elementsToKeep = new List<ISelectableNode>();
 
             foreach (var alreadySelected in SelectedElements)
             {
@@ -176,7 +176,7 @@ namespace T3.Gui.Selection
             TriggerSelectionChangedEvent();
         }
 
-        public void RemoveElement(ISelectable e)
+        public void RemoveElement(ISelectableNode e)
         {
             if (!Enabled)
                 return;
@@ -189,13 +189,13 @@ namespace T3.Gui.Selection
             }
         }
 
-        public void RemoveElements(List<ISelectable> elements)
+        public void RemoveElements(List<ISelectableNode> elements)
         {
             if (!Enabled)
                 return;
 
             bool elementChanged = false;
-            ISelectable firstElement = SelectedElements.FirstOrDefault();
+            ISelectableNode firstElement = SelectedElements.FirstOrDefault();
 
             foreach (var e in elements)
             {
@@ -214,7 +214,7 @@ namespace T3.Gui.Selection
             }
         }
 
-        public void ToggleElement(ISelectable e)
+        public void ToggleElement(ISelectableNode e)
         {
             if (!Enabled)
                 return;
@@ -225,7 +225,7 @@ namespace T3.Gui.Selection
                 AddElement(e);
         }
 
-        public void ToggleElements(List<ISelectable> elements)
+        public void ToggleElements(List<ISelectableNode> elements)
         {
             if (!Enabled)
                 return;

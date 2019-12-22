@@ -25,7 +25,7 @@ namespace T3.Gui.Graph
     /// <summary>
     /// A <see cref="ICanvas"/> that displays the graph of an Operator.
     /// </summary>
-    public class GraphCanvas : ScalableCanvas
+    public class GraphCanvas : ScalableCanvas, INodeCanvas
     {
         public GraphCanvas(GraphWindow window, List<Guid> idPath)
         {
@@ -522,7 +522,7 @@ namespace T3.Gui.Graph
             }
         }
 
-        public override IEnumerable<ISelectable> SelectableChildren
+        public override IEnumerable<ISelectableNode> SelectableChildren
         {
             get
             {
@@ -536,7 +536,7 @@ namespace T3.Gui.Graph
             }
         }
 
-        private readonly List<ISelectable> _selectableItems = new List<ISelectable>();
+        private readonly List<ISelectableNode> _selectableItems = new List<ISelectableNode>();
         #endregion
 
         #region public API
