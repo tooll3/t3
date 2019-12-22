@@ -74,8 +74,9 @@ namespace T3.Gui.Graph
             // 4. Draw Inputs Nodes
             foreach (var inputNode in _inputUisById)
             {
-                var inputDef = graphSymbol.InputDefinitions.Find(def => def.Id == inputNode.Key);
-                InputNode.Draw(inputDef, inputNode.Value);
+                var index = graphSymbol.InputDefinitions.FindIndex(def => def.Id == inputNode.Key);
+                var inputDef = graphSymbol.InputDefinitions[index];
+                InputNode.Draw(inputDef, inputNode.Value, index);
 
                 var sourcePos = new Vector2(
                                             InputNode._lastScreenRect.Max.X,
@@ -110,10 +111,6 @@ namespace T3.Gui.Graph
             }
         }
 
-        //private static Color ColorForTypeOut(Symbol.OutputDefinition outputDef)
-        //{
-        //    return TypeUiRegistry.Entries[outputDef.ValueType].Color;
-        //}
 
         internal class ConnectionSorter
         {

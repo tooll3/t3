@@ -14,7 +14,7 @@ namespace T3.Gui.Graph
     /// </summary>
     static class InputNode
     {
-        internal static void Draw(Symbol.InputDefinition inputDef, IInputUi inputUi)
+        internal static void Draw(Symbol.InputDefinition inputDef, IInputUi inputUi, int index)
         {
             ImGui.PushID(inputDef.Id.GetHashCode());
             {
@@ -53,23 +53,30 @@ namespace T3.Gui.Graph
                 
                 // Label
                 {
+                    
                     var isScaledDown = GraphCanvas.Current.Scale.X < 1;
                     ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontBold);
-                    var label = string.Format($"{inputDef.Name}");
-                    var size = ImGui.CalcTextSize(label);
-                    var pos = new Vector2(
-                                          _lastScreenRect.Max.X - size.X -4,
-                                          _lastScreenRect.GetCenter().Y - size.Y / 2);
-
+                    
+                    // Index
+                    var nameLabel = string.Format($"{inputDef.Name}");
+                    var size = ImGui.CalcTextSize(nameLabel);
+                    var yPos = _lastScreenRect.GetCenter().Y - size.Y / 2;
+                    drawList.AddText(new Vector2(_lastScreenRect.Min.X - 20, yPos),
+                                     ColorVariations.ConnectionLines.Apply(typeColor),
+                                     (index+1) + ".");
+                    
                     drawList.PushClipRect(_lastScreenRect.Min, _lastScreenRect.Max, true);
-                    drawList.AddText(pos,
+                    var labelPos = new Vector2(
+                                          _lastScreenRect.Max.X - size.X -4,
+                                          yPos);
+
+                    drawList.AddText(labelPos,
                                      ColorVariations.OperatorLabel.Apply(typeColor),
-                                     label);
+                                     nameLabel);
                     ImGui.PopFont();
                     drawList.PopClipRect();
                 }
-
-
+                
 
                 // Draw slot 
                 {
