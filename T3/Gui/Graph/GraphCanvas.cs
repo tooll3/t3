@@ -109,6 +109,7 @@ namespace T3.Gui.Graph
             return GetTargetProperties();
         }
 
+
         #region drawing UI ====================================================================
         public void Draw(ImDrawListPtr dl)
         {
@@ -124,7 +125,7 @@ namespace T3.Gui.Graph
             ImGui.BeginGroup();
             {
                 DrawDropHandler();
-
+                
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                     FocusViewToSelection();
 

@@ -64,9 +64,9 @@ namespace T3.Gui.InputUi
             }
         }
 
-        public override void DrawParameterEdits()
+        public override void DrawSettings()
         {
-            base.DrawParameterEdits();
+            base.DrawSettings();
 
             ImGui.DragFloat("Min", ref Min);
             ImGui.DragFloat("Max", ref Max);

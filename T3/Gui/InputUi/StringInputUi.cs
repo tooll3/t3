@@ -103,9 +103,9 @@ namespace T3.Gui.InputUi
             }
         }
 
-        public override void DrawParameterEdits()
+        public override void DrawSettings()
         {
-            base.DrawParameterEdits();
+            base.DrawSettings();
 
             Type enumType = typeof(UsageType);
             var values = Enum.GetValues(enumType);

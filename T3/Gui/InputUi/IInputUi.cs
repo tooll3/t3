@@ -35,7 +35,7 @@ namespace T3.Gui.InputUi
 
         InputEditState DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
         string GetSlotValue(IInputSlot inputSlot);
-        void DrawParameterEdits();
+        void DrawSettings();
 
         void Write(JsonTextWriter writer);
         void Read(JToken inputToken);

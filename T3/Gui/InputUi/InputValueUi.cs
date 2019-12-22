@@ -281,7 +281,7 @@ namespace T3.Gui.InputUi
             return editState;
         }
 
-        public virtual void DrawParameterEdits()
+        public virtual void DrawSettings()
         {
             Type enumType = typeof(Relevancy);
             var values = Enum.GetValues(enumType);

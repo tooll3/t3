@@ -14,7 +14,6 @@ namespace T3.Gui.Windows
     /// </summary>
     public class SelectionPinning
     {
-
         public void UpdateSelection()
         {
             if (!_enablePinning || _pinnedInstance == null || _pinnedUi == null)
