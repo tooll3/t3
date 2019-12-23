@@ -38,21 +38,22 @@ namespace T3.Core.Operator
 
         #region public API =======================================================================
 
-        internal Symbol(Type instanceType, Guid id, IEnumerable<SymbolChild> children)
-            : this(instanceType, id)
+        internal Symbol(Type instanceType, Guid id, Guid[] orderedInputIds, IEnumerable<SymbolChild> children)
+            : this(instanceType, id, orderedInputIds)
         {
             Children.AddRange(children);
         }
 
-        public Symbol(Type instanceType, Guid id)
+        public Symbol(Type instanceType, Guid symbolId, Guid[] orderedInputIds = null)
         {
             InstanceType = instanceType;
             Name = instanceType.Name;
-            Id = id;
+            Id = symbolId;
 
             // input identified by base interface
             Type inputSlotType = typeof(IInputSlot);
             var inputInfos = instanceType.GetFields().Where(f => inputSlotType.IsAssignableFrom(f.FieldType));
+            var inputDefs = new List<InputDefinition>();
             foreach (var inputInfo in inputInfos)
             {
                 var customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false);
@@ -61,8 +62,25 @@ namespace T3.Core.Operator
                 var isMultiInput = inputInfo.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
                 var valueType = inputInfo.FieldType.GetGenericArguments()[0];
                 var inputDef = CreateInputDefinition(attribute.Id, inputInfo.Name, isMultiInput, valueType);
-                InputDefinitions.Add(inputDef);
+                inputDefs.Add(inputDef);
             }
+
+            // add in order for input ids that are given
+            if (orderedInputIds != null)
+            {
+                foreach (Guid id in orderedInputIds)
+                {
+                    var inputDefinition = inputDefs.Find(inputDef => inputDef.Id == id);
+                    if (inputDefinition != null)
+                    {
+                        InputDefinitions.Add(inputDefinition);
+                        inputDefs.Remove(inputDefinition);
+                    }
+                }
+            }
+
+            // add the ones where no id was available to the end
+            InputDefinitions.AddRange(inputDefs);
 
             // outputs identified by attribute
             var outputs = (from field in instanceType.GetFields()
@@ -278,6 +296,38 @@ namespace T3.Core.Operator
             return new InputDefinition { Id = id, Name = name, DefaultValue = defaultValue, IsMultiInput = isMultiInput };
         }
 
+        public void SwapInputs(int indexA, int indexB)
+        {
+            InputDefinitions.Swap(indexA, indexB);
+
+            foreach (var instance in InstancesOfSymbol)
+            {
+                instance.Inputs.Swap(indexA, indexB);
+            }
+        }
+
+        public void SortInputSlotsByDefinitionOrder(List<IInputSlot> inputs)
+        {
+            // order the inputs by the given input definitions. original order is coming from code, but input def order is the relevant one
+            int numInputs = inputs.Count;
+            for (int i = 0; i < numInputs - 1; i++)
+            {
+                Guid inputId = InputDefinitions[i].Id;
+                if (inputs[i].Id != inputId)
+                {
+                    int index = inputs.FindIndex(i + 1, input => input.Id == inputId);
+                    Debug.Assert(index >= 0);
+                    inputs.Swap(i, index);
+                }
+            }
+
+            // verify the order
+            for (int i = 0; i < numInputs; i++)
+            {
+                Debug.Assert(InputDefinitions[i].Id == inputs[i].Id);
+            }
+        }
+
         public Instance CreateInstance(Guid id)
         {
             var newInstance = Activator.CreateInstance(InstanceType) as Instance;
@@ -285,17 +335,7 @@ namespace T3.Core.Operator
             newInstance.SymbolChildId = id;
             newInstance.Symbol = this;
 
-            int numInputs = newInstance.Inputs.Count;
-            for (int i = 0; i < numInputs; i++)
-            {
-                newInstance.Inputs[i].Id = InputDefinitions[i].Id;
-            }
-
-            int numOutputs = newInstance.Outputs.Count;
-            for (int i = 0; i < numOutputs; i++)
-            {
-                newInstance.Outputs[i].Id = OutputDefinitions[i].Id;
-            }
+            SortInputSlotsByDefinitionOrder(newInstance.Inputs);
 
             // create child instances
             foreach (var symbolChild in Children)
@@ -325,6 +365,7 @@ namespace T3.Core.Operator
 
             return newInstance;
         }
+
 
         private static void CreateAndAddNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
         {

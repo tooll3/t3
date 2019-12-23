@@ -61,12 +61,12 @@ namespace T3.Gui.Graph.Dialogs
                         var dragDy = ImGui.GetMouseDragDelta(0).Y;
                         if (dragDy < 0.0f && index > 0)
                         {
-                            SwapInputs(index, index-1);
+                            _compositionOp.Symbol.SwapInputs(index, index - 1);
                             ImGui.ResetMouseDragDelta();
                         }
-                        else if (dragDy > 0.0f && index < _compositionOp.Inputs.Count-1)
+                        else if (dragDy > 0.0f && index < _compositionOp.Inputs.Count - 1)
                         {
-                            SwapInputs(index, index+1);
+                            _compositionOp.Symbol.SwapInputs(index, index + 1);
                             ImGui.ResetMouseDragDelta();
                         }
                     }
@@ -75,24 +75,6 @@ namespace T3.Gui.Graph.Dialogs
             ImGui.EndChild();
             ImGui.SameLine();
         }
-
-        // TODO: This needs to be properly implemented
-        private void SwapInputs(int indexA, int indexB)
-        {
-            var inputDefs = _compositionOp.Symbol.InputDefinitions;
-            var tmpDef = inputDefs[indexA];
-            inputDefs[indexA] = inputDefs[indexB];
-            inputDefs[indexB] = tmpDef;
-
-            foreach (var instance in _compositionOp.Symbol.InstancesOfSymbol)
-            {
-                var inputs = instance.Inputs;
-                var tmp = inputs[indexA];
-                inputs[indexA] = inputs[indexB];
-                inputs[indexB] = tmp;
-            }
-        }
-        
         
         private void EnsureSelection()
         {

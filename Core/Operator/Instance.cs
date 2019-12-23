@@ -28,8 +28,12 @@ namespace T3.Core.Operator
                              select field;
             foreach (var inputInfo in inputInfos)
             {
+                var customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false);
+                Debug.Assert(customAttributes.Length == 1);
+                var attribute = (InputAttribute)customAttributes[0];
                 var inputSlot = (IInputSlot)inputInfo.GetValue(this);
                 inputSlot.Parent = this;
+                inputSlot.Id = attribute.Id;
                 Inputs.Add(inputSlot);
             }
 
@@ -37,11 +41,12 @@ namespace T3.Core.Operator
             var outputs = (from field in Type.GetFields()
                            let attributes = field.GetCustomAttributes(typeof(OutputAttribute), false)
                            from attr in attributes
-                           select field).ToArray();
-            foreach (var output in outputs)
+                           select (field, (OutputAttribute)attributes[0])).ToArray();
+            foreach (var (output, outputAttribute) in outputs)
             {
                 var slot = (ISlot)output.GetValue(this);
                 slot.Parent = this;
+                slot.Id = outputAttribute.Id;
                 Outputs.Add(slot);
             }
         }

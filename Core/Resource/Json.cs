@@ -189,6 +189,9 @@ namespace T3.Core
             var connections = (from c in ((JArray)o["Connections"])
                                let connection = ReadConnection(c)
                                select connection).ToList();
+            var orderedInputIds = (from jsonInput in (JArray)o["Inputs"]
+                                      let idAndValue = ReadSymbolInputDefaults(jsonInput)
+                                      select idAndValue.Item1).ToArray();
             var inputDefaultValues = (from jsonInput in (JArray)o["Inputs"]
                                       let idAndValue = ReadSymbolInputDefaults(jsonInput)
                                       select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
@@ -200,7 +203,7 @@ namespace T3.Core
                 throw new Exception($"The type for '{instanceTypeName}' could not be found in Operator assembly.");
             }
 
-            var symbol = new Symbol(instanceType, id, symbolChildren)
+            var symbol = new Symbol(instanceType, id, orderedInputIds, symbolChildren)
                          {
                              Name = name,
                              Namespace = @namespace,
