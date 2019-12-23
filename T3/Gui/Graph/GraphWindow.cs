@@ -82,7 +82,7 @@ namespace T3.Gui.Graph
 
         protected override void DrawAllInstances()
         {
-            foreach (var w in GraphWindowInstances)
+            foreach (var w in GraphWindowInstances.ToArray())
             {
                 w.DrawOneInstance();
             }
