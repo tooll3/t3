@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.InputUi;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Graph.Interaction
@@ -55,6 +57,20 @@ namespace T3.Gui.Graph.Interaction
                 {
                     _moveCommand.StoreCurrentValues();
                     UndoRedoStack.Add(_moveCommand);
+
+                    var selectedInputs = SelectionManager.GetSelectedNodes<IInputUi>().ToList();
+                    if (selectedInputs.Count() > 0)
+                    {
+                        var composition = GraphCanvas.Current.CompositionOp;
+                        var compositionUi = SymbolUiRegistry.Entries[composition.Symbol.Id];
+                        composition.Symbol.InputDefinitions.Sort((a,b) =>
+                                                                    {
+                                                                        var childA = compositionUi.InputUis[a.Id];
+                                                                        var childB = compositionUi.InputUis[b.Id];
+                                                                        return (int)(childA.PosOnCanvas.Y * 10000 + childA.PosOnCanvas.X) - (int)(childB.PosOnCanvas.Y * 10000 + childB.PosOnCanvas.X);
+                                                                    });
+                        composition.Symbol.SortInputSlotsByDefinitionOrder();
+                    }
                 }
 
                 _moveCommand = null;
