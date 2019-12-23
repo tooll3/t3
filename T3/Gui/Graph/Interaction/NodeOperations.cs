@@ -39,7 +39,7 @@ namespace T3.Gui.Graph.Interaction
                 {
                     instance = instance.Children.Single(child => child.SymbolChildId == childId);
                 }
-                catch (InvalidOperationException e)
+                catch (InvalidOperationException)
                 {
                     return null;
                 }
