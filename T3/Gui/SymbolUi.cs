@@ -4,6 +4,8 @@ using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Graph;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
@@ -62,7 +64,7 @@ namespace T3.Gui
             // check if there are child entries where no symbol child exists anymore
             ChildUis.RemoveAll(childUi => !Symbol.Children.Exists(child => child.Id == childUi.Id));
 
-            // check if input uis are missing
+            // check if input UIs are missing
             var inputUiFactory = InputUiFactory.Entries;
             for (int i = 0; i < Symbol.InputDefinitions.Count; i++)
             {
@@ -75,6 +77,7 @@ namespace T3.Gui
                     IInputUi newInputUi = inputCreator();
                     newInputUi.InputDefinition = input;
                     newInputUi.Index = i;
+                    newInputUi.PosOnCanvas = GetCanvasPositionForNextInputUi(this);
                     InputUis.Add(input.Id, newInputUi);
                 }
                 else
@@ -110,6 +113,27 @@ namespace T3.Gui
                 Log.Debug($"OutputUi '{outputUiToRemove.Value.Id}' still existed but no corresponding input definition anymore. Removing the ui.");
                 InputUis.Remove(outputUiToRemove.Key);
             }
+        }
+
+        private Vector2 GetCanvasPositionForNextInputUi(SymbolUi symbolUi)
+        {
+            if (symbolUi.Symbol.InputDefinitions.Count == 0)
+            {
+                return new Vector2(-200,0);
+            }
+
+            
+            IInputUi lastInputUi = null;
+
+            foreach (var inputDef in symbolUi.Symbol.InputDefinitions)
+            {
+                if (symbolUi.InputUis.ContainsKey(inputDef.Id))
+                    lastInputUi = symbolUi.InputUis[inputDef.Id];
+            }
+            if(lastInputUi == null)
+                return new Vector2(-200,0);
+            
+            return lastInputUi.PosOnCanvas + new Vector2(0, lastInputUi.Size.Y + SelectableNodeMovement.SnapPadding.Y);
         }
 
         public Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size)

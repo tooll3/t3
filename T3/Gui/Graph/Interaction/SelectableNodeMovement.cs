@@ -143,7 +143,7 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
-        private static readonly Vector2 SnapPadding = new Vector2(20, 20);
+        public static readonly Vector2 SnapPadding = new Vector2(20, 20);
 
         private static readonly Vector2[] SnapOffsetsInCanvas =
         {

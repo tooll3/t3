@@ -7,6 +7,7 @@ using T3.Core;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
+using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 
@@ -20,7 +21,7 @@ namespace T3.Gui.Graph.Dialogs
             {
                 ImGui.SetNextItemWidth(120);
                 ImGui.AlignTextToFramePadding();
-                ImGui.Text("Name");
+                ImGui.Text("Name:");
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(250);
                 ImGui.InputText("##parameterName", ref _parameterName, 255);
