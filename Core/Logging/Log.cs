@@ -40,7 +40,7 @@ namespace T3.Core.Logging
             DoLog(new LogEntry(LogEntry.EntryLevel.Debug, messageString));
         }
 
-        public static void Info(String message)
+        public static void Info(string message)
         {
             DoLog(new LogEntry(LogEntry.EntryLevel.Info, message));
         }

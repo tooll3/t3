@@ -8,6 +8,9 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using ImGuiNET;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Compilation;
 using T3.Core;
 using T3.Core.Logging;
@@ -525,6 +528,60 @@ namespace T3.Gui.Graph.Interaction
             {
                 sw.Write(newSource);
             }
+        }
+
+        class InputNodeFinder : CSharpSyntaxRewriter
+        {
+            public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
+            {
+                var attrList = node.AttributeLists[0];
+                var searchedNodes = (from attribute in attrList.Attributes
+                                     from id in IdsToRemove
+                                     where attribute.ToString().ToLower().Contains(id.ToString().ToLower())
+                                     select attribute).ToArray();
+
+                if (searchedNodes.Length > 0)
+                {
+                    NodeToRemove.Add(node);
+                }
+
+                return node;
+            }
+
+            public Guid[] IdsToRemove;
+            public List<SyntaxNode> NodeToRemove { get; } = new List<SyntaxNode>();
+        }
+
+        public static void RemoveInputFromSymbolRoslyn(Guid[] inputIdsToRemove, Symbol symbol)
+        {
+            string path = @"Operators\Types\" + symbol.Name + ".cs";
+            string source;
+            try
+            {
+                source = File.ReadAllText(path);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Error opening file '{path}");
+                Log.Error(e.Message);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(source))
+            {
+                Log.Info("Source was empty, skip compilation.");
+                return;
+            }
+
+            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+            var root = syntaxTree.GetRoot();
+
+            var inputNodeFinder = new InputNodeFinder();
+            inputNodeFinder.IdsToRemove = inputIdsToRemove;
+            var newRoot = inputNodeFinder.Visit(root);
+            newRoot = newRoot.RemoveNodes(inputNodeFinder.NodeToRemove, SyntaxRemoveOptions.KeepNoTrivia);
+            var newSource = newRoot.GetText().ToString();
+            Log.Info(newSource);
         }
 
         public static void RemoveInputFromSymbol(Guid[] inputIdsToRemove, Symbol symbol)
