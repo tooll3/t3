@@ -306,7 +306,15 @@ namespace T3.Core.Operator
             }
         }
 
-        public void SortInputSlotsByDefinitionOrder(List<IInputSlot> inputs)
+        public void SortInputSlotsByDefinitionOrder()
+        {
+            foreach (var instance in InstancesOfSymbol)
+            {
+                SortInputSlotsByDefinitionOrder(instance.Inputs);
+            }
+        }
+
+        private void SortInputSlotsByDefinitionOrder(List<IInputSlot> inputs)
         {
             // order the inputs by the given input definitions. original order is coming from code, but input def order is the relevant one
             int numInputs = inputs.Count;
