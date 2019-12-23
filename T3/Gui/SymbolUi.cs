@@ -75,14 +75,14 @@ namespace T3.Gui
                     InputUis.Remove(input.Id);
                     var inputCreator = inputUiFactory[input.DefaultValue.ValueType];
                     IInputUi newInputUi = inputCreator();
+                    newInputUi.Parent = this;
                     newInputUi.InputDefinition = input;
-                    newInputUi.Index = i;
                     newInputUi.PosOnCanvas = GetCanvasPositionForNextInputUi(this);
                     InputUis.Add(input.Id, newInputUi);
                 }
                 else
                 {
-                    existingInputUi.Index = i;
+                    existingInputUi.Parent = this;
                 }
             }
 

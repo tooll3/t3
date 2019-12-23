@@ -27,10 +27,11 @@ namespace T3.Gui.InputUi
 
     public interface IInputUi : ISelectableNode
     {
+        SymbolUi Parent { get; set; }
         Symbol.InputDefinition InputDefinition { get; set; }
         Type Type { get; }
         Relevancy Relevancy { get; set; }
-        int Index { get; set; }
+        int Index { get; }
         bool IsAnimatable { get; }
 
         InputEditState DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);

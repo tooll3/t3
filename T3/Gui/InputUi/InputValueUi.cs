@@ -22,10 +22,11 @@ namespace T3.Gui.InputUi
         public static float ConnectionAreaWidth = 30.0f;
         public static float ParameterNameWidth = 120.0f;
 
+        public SymbolUi Parent { get; set; }
         public Symbol.InputDefinition InputDefinition { get; set; }
         public Guid Id => InputDefinition.Id;
         public Relevancy Relevancy { get; set; } = Relevancy.Optional;
-        public int Index { get; set; } = 0;
+        public int Index => Parent.Symbol.InputDefinitions.FindIndex(inputDef => inputDef == InputDefinition);
         public virtual bool IsAnimatable => false;
 
         protected abstract InputEditState DrawEditControl(string name, ref T value);
