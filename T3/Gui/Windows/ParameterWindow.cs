@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -29,7 +30,7 @@ namespace T3.Gui.Windows
 
         protected override void UpdateBeforeDraw()
         {
-            _pinning.UpdateSelection();
+            
         }
 
         protected override void DrawAllInstances()
@@ -56,9 +57,13 @@ namespace T3.Gui.Windows
             var instance = SelectionManager.GetSelectedInstance();
             if (instance != null)
             {
-                //var selectedChildUi = uiregi
+                if (instance.Parent == null)
+                    return;
                 
-                DrawSelectedSymbolHeader(instance);
+                var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
+                var symbolChildUi = parentUi.ChildUis.Single(childUi => childUi.Id == instance.SymbolChildId);
+                
+                DrawSelectedSymbolHeader(instance, symbolChildUi);
 
                 var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
                 var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
@@ -73,7 +78,7 @@ namespace T3.Gui.Windows
                     }
 
                     ImGui.PushID(inputSlot.Id.GetHashCode());
-                    var editState = inputUi.DrawInputEdit(inputSlot, compositionSymbolUi, _pinning.SelectedChildUi);
+                    var editState = inputUi.DrawInputEdit(inputSlot, compositionSymbolUi, symbolChildUi);
 
                     if ((editState & InputEditState.Started) != InputEditState.Nothing)
                     {
@@ -109,15 +114,17 @@ namespace T3.Gui.Windows
 
             foreach (var input in SelectionManager.GetSelectedNodes<IInputUi>())
             {
+                ImGui.PushID(input.Id.GetHashCode());
                 ImGui.PushFont(Fonts.FontLarge);
                 ImGui.Text(input.InputDefinition.Name);
                 ImGui.PopFont();
                 input.DrawSettings();
                 ImGui.Spacing();
+                ImGui.PopID();
             }
         }
 
-        private void DrawSelectedSymbolHeader(Instance op)
+        private void DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi)
         {
             // Namespace
             {
@@ -171,16 +178,17 @@ namespace T3.Gui.Windows
             // SymbolChild Name
             {
                 ImGui.SetNextItemWidth(-1);
-                var nameForEdit = _pinning.SelectedChildUi.SymbolChild.Name;
+                
+                var nameForEdit = symbolChildUi.SymbolChild.Name;
                 if (ImGui.InputText("##symbolChildName", ref nameForEdit, 128))
                 {
                     _symbolChildNameCommand.NewName = nameForEdit;
-                    _pinning.SelectedChildUi.SymbolChild.Name = nameForEdit;
+                    symbolChildUi.SymbolChild.Name = nameForEdit;
                 }
 
                 if (ImGui.IsItemActivated())
                 {
-                    _symbolChildNameCommand = new ChangeSymbolChildNameCommand(_pinning.SelectedChildUi, op.Parent.Symbol);
+                    _symbolChildNameCommand = new ChangeSymbolChildNameCommand(symbolChildUi, op.Parent.Symbol);
                 }
 
                 if (ImGui.IsItemDeactivatedAfterEdit())
@@ -198,8 +206,6 @@ namespace T3.Gui.Windows
         private ChangeSymbolNamespaceCommand _symbolNamespaceCommandInFlight;
         private ChangeSymbolChildNameCommand _symbolChildNameCommand;
         private ChangeInputValueCommand _inputValueCommandInFlight;
-
-        private readonly SelectionPinning _pinning = new SelectionPinning();
         private static int _instanceCounter;
     }
 }
