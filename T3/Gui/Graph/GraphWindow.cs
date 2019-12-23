@@ -7,6 +7,7 @@ using System.Linq;
 using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
@@ -37,7 +38,7 @@ namespace T3.Gui.Graph
             // Legacy work-around
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
             var shownOpInstance = FindIdInNestedChildren(T3Ui.UiModel.RootInstance, opId) ?? T3Ui.UiModel.RootInstance;
-            var path = BuildIdPathForInstance(shownOpInstance);
+            var path = NodeOperations.BuildIdPathForInstance(shownOpInstance);
             GraphCanvas = new GraphCanvas(this, path);
 
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
@@ -64,32 +65,7 @@ namespace T3.Gui.Graph
             return null;
         }
 
-        private static List<Guid> BuildIdPathForInstance(Instance instance)
-        {
-            return CollectAnIdPathForInstance(T3Ui.UiModel.RootInstance, new List<Guid>());
 
-            List<Guid> CollectAnIdPathForInstance(Instance cursor, List<Guid> path)
-            {
-                if (cursor.SymbolChildId == instance.SymbolChildId)
-                {
-                    Debug.Assert(path.Count == 0);
-                    path.Add(cursor.SymbolChildId); // found searched instance
-                    return path;
-                }
-
-                foreach (var subChild in cursor.Children)
-                {
-                    var result = CollectAnIdPathForInstance(subChild, path);
-                    if (result != null)
-                    {
-                        path.Insert(0, cursor.SymbolChildId);
-                        return result;
-                    }
-                }
-
-                return null;
-            }
-        }
 
         private static int _instanceCounter;
         private static readonly List<Window> GraphWindowInstances = new List<Window>();

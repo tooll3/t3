@@ -22,7 +22,38 @@ namespace T3.Gui.Graph.Interaction
         {
             return !symbol.InstanceType.GetTypeInfo().DeclaredMethods.Any();
         }
+        
+        public static Instance GetInstanceFromIdPath(IReadOnlyCollection<Guid> childPath)
+        {
+            if (childPath == null || childPath.Count == 0)
+                return null;
 
+            var instance = T3Ui.UiModel.RootInstance;
+            foreach (var childId in childPath)
+            {
+                // Ignore root
+                if (childId == T3Ui.UiModel.RootInstance.SymbolChildId)
+                    continue;
+
+                instance = instance.Children.Single(child => child.SymbolChildId == childId);
+            }
+            return instance;
+        }
+        
+        
+        public static List<Guid> BuildIdPathForInstance(Instance instance)
+        {
+            var path = new List<Guid>();
+            do
+            {
+                path.Insert(0, instance.SymbolChildId);
+                instance = instance.Parent;
+            }
+            while (instance != null);
+            return path;
+        }
+        
+        
         public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName, string nameSpace)
         {
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();

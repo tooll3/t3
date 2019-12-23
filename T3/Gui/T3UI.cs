@@ -101,7 +101,7 @@ namespace T3.Gui
         private static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
         public static HashSet<Guid> HoveredIdsLastFrame { get; private set; } = new HashSet<Guid>();
         
-        private StatusErrorLine _statusErrorLine = new StatusErrorLine();
+        private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel = new UiModel();
         private static UserSettings _userSettings;
         private static readonly WindowManager WindowManager;
@@ -109,6 +109,6 @@ namespace T3.Gui
         public static IntPtr NotDroppingPointer = new IntPtr(0);
         public static bool DraggingIsInProgress = false;
         public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
-        public static string FloatNumberFormat = "{0:F2}";
+        public const string FloatNumberFormat = "{0:F2}";
     }
 }

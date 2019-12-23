@@ -41,7 +41,7 @@ namespace T3.Gui.Graph
             var previousInstanceWasSet = _compositionPath != null && _compositionPath.Count > 0;
             if (previousInstanceWasSet)
             {
-                var previousInstance = GetInstanceFromIdPath(_compositionPath);
+                var previousInstance = NodeOperations.GetInstanceFromIdPath(_compositionPath);
                 UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId] = GetTargetProperties();
 
                 var newUiContainer = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
@@ -54,7 +54,7 @@ namespace T3.Gui.Graph
             }
 
             _compositionPath = childIdPath;
-            CompositionOp = GetInstanceFromIdPath(childIdPath);
+            CompositionOp = NodeOperations.GetInstanceFromIdPath(childIdPath);
 
             SelectionManager.Clear();
 
@@ -71,7 +71,7 @@ namespace T3.Gui.Graph
         {
             // Validation that instance is valid
             // TODO: only do in debug mode
-            var op = GetInstanceFromIdPath(_compositionPath);
+            var op = NodeOperations.GetInstanceFromIdPath(_compositionPath);
             var matchingChild = op.Children.Single(child => child == instance);
             if (matchingChild == null)
             {
@@ -114,7 +114,7 @@ namespace T3.Gui.Graph
         {
             // TODO: Refresh reference on every frame. Since this uses lists instead of dictionary
             // it can be really slow
-            CompositionOp = GetInstanceFromIdPath(_compositionPath);
+            CompositionOp = NodeOperations.GetInstanceFromIdPath(_compositionPath);
 
             UpdateCanvas();
 
@@ -545,24 +545,7 @@ namespace T3.Gui.Graph
         public Instance CompositionOp { get; private set; }
         #endregion
 
-        private static Instance GetInstanceFromIdPath(List<Guid> childPath)
-        {
-            if (childPath == null || childPath.Count == 0)
-                return null;
 
-            var instance = T3Ui.UiModel.RootInstance;
-            foreach (var childId in childPath)
-            {
-                if (childId == T3Ui.UiModel.RootInstance.SymbolChildId)
-                    continue;
-
-                instance = instance.Children.FirstOrDefault(child => child.SymbolChildId == childId);
-                if (instance == null)
-                    throw new Exception("Invalid composition path");
-            }
-
-            return instance;
-        }
 
         private List<Guid> _compositionPath = new List<Guid>();
 
