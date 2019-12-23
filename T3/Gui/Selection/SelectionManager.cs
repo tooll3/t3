@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 
 namespace T3.Gui.Selection
@@ -42,7 +44,7 @@ namespace T3.Gui.Selection
             _parent = null;
             Selection.Add(node);
             if(instance != null)
-                InstancesForChildUis[node] = instance;
+                InstancesForChildUis[node] = NodeOperations.BuildIdPathForInstance(instance);
         }
 
         public static void RemoveSelection(ISelectableNode node)
@@ -91,7 +93,8 @@ namespace T3.Gui.Selection
 
             if (Selection[0] is SymbolChildUi firstNode)
             {
-                return InstancesForChildUis[firstNode];
+                var idPath = InstancesForChildUis[firstNode];
+                return NodeOperations.GetInstanceFromIdPath(idPath);
             }
 
             return null;
@@ -103,6 +106,6 @@ namespace T3.Gui.Selection
         private static readonly List<ISelectableNode> NodesSelectedLastFrame = new List<ISelectableNode>();
         public static List<ISelectableNode> LastFrameSelection = new List<ISelectableNode>();
         
-        public static Dictionary<SymbolChildUi, Instance> InstancesForChildUis = new Dictionary<SymbolChildUi, Instance>();
+        public static Dictionary<SymbolChildUi, List<Guid>> InstancesForChildUis = new Dictionary<SymbolChildUi, List<Guid>>();
     }
 }

@@ -35,7 +35,14 @@ namespace T3.Gui.Graph.Interaction
                 if (childId == T3Ui.UiModel.RootInstance.SymbolChildId)
                     continue;
 
-                instance = instance.Children.Single(child => child.SymbolChildId == childId);
+                try
+                {
+                    instance = instance.Children.Single(child => child.SymbolChildId == childId);
+                }
+                catch (InvalidOperationException e)
+                {
+                    return null;
+                }
             }
             return instance;
         }

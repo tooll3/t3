@@ -396,23 +396,26 @@ namespace T3.Gui.Graph
         private void DeleteSelectedElements()
         {
             var selectedChildren = GetSelectedChildUis();
-            if (!selectedChildren.Any())
-                return;
-
-            var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-            var cmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
-            UndoRedoStack.AddAndExecute(cmd);
-        }
-
-        private List<SymbolChildUi> GetSelectedChildUis()
-        {
-            var selectedChildren = new List<SymbolChildUi>();
-            foreach (var childUi in SelectionManager.GetSelectedNodes<SymbolChildUi>())
+            if (selectedChildren.Any())
             {
-                selectedChildren.Add(childUi);
+                var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                var cmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
+                UndoRedoStack.AddAndExecute(cmd);
             }
 
-            return selectedChildren;
+            var selectedInputUis = SelectionManager.GetSelectedNodes<IInputUi>().ToList();
+            if (NodeOperations.IsSymbolACompoundType(CompositionOp.Symbol) &&  selectedInputUis.Count>0)
+            {
+                NodeOperations.RemoveInputFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
+            }
+            
+            SelectionManager.Clear();
+        }
+
+        
+        private static List<SymbolChildUi> GetSelectedChildUis()
+        {
+            return SelectionManager.GetSelectedNodes<SymbolChildUi>().ToList();
         }
 
         private List<IInputUi> GetSelectableInputUis()
