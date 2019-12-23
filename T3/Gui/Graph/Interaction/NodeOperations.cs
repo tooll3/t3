@@ -348,10 +348,11 @@ namespace T3.Gui.Graph.Interaction
             UndoRedoStack.AddAndExecute(addCommand);
 
             // copy the values of the input of the duplicated type: default values of symbol and the ones in composition context
-            var newSymbolInputs = newSymbol.InputDefinitions;
-            for (int i = 0; i < sourceSymbol.InputDefinitions.Count; i++)
+            foreach (var sourceInputDef in sourceSymbol.InputDefinitions)
             {
-                newSymbolInputs[i].DefaultValue = sourceSymbol.InputDefinitions[i].DefaultValue.Clone();
+                Guid newInputId = oldToNewIdMap[sourceInputDef.Id];
+                var correspondingInputDef = newSymbol.InputDefinitions.Find(newInputDef => newInputDef.Id == newInputId);
+                correspondingInputDef.DefaultValue = sourceInputDef.DefaultValue.Clone();
             }
 
             var newSymbolChild = compositionUi.Symbol.Children.Find(child => child.Id == addCommand.AddedChildId);
