@@ -37,13 +37,13 @@ namespace T3.Gui.Graph
         public void SetComposition(List<Guid> childIdPath, Transition transition)
         {
             var previousFocusOnScreen = WindowPos + WindowSize / 2;
-            
+
             var previousInstanceWasSet = _compositionPath != null && _compositionPath.Count > 0;
             if (previousInstanceWasSet)
             {
                 var previousInstance = GetInstanceFromIdPath(_compositionPath);
                 UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId] = GetTargetProperties();
-                
+
                 var newUiContainer = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
                 var matchingChildUi = newUiContainer.ChildUis.FirstOrDefault(childUi => childUi.SymbolChild.Id == previousInstance.SymbolChildId);
                 if (matchingChildUi != null)
@@ -52,21 +52,20 @@ namespace T3.Gui.Graph
                     previousFocusOnScreen = TransformPosition(centerOnCanvas);
                 }
             }
-            
+
             _compositionPath = childIdPath;
             CompositionOp = GetInstanceFromIdPath(childIdPath);
-            
-            SelectionManager.Selection.Clear();
+
+            SelectionManager.Clear();
 
             UserSettings.SaveLastViewedOpForWindow(_window, CompositionOp.SymbolChildId);
 
             var newProps = UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.SymbolChildId)
                                ? UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId]
                                : GuessViewProperties();
-            
+
             SetAreaWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);
         }
-
 
         public void SetCompositionToChildInstance(Instance instance)
         {
@@ -83,7 +82,7 @@ namespace T3.Gui.Graph
             newPath.Add(instance.SymbolChildId);
             SetComposition(newPath, Transition.JumpIn);
         }
-        
+
         public void SetCompositionToParentInstance(Instance instance)
         {
             var shortenedPath = new List<Guid>();
@@ -91,24 +90,24 @@ namespace T3.Gui.Graph
             {
                 if (pathItemId == instance.SymbolChildId)
                     break;
-                
+
                 shortenedPath.Add(pathItemId);
             }
+
             shortenedPath.Add(instance.SymbolChildId);
-            
-            if(shortenedPath.Count() == _compositionPath.Count())
+
+            if (shortenedPath.Count() == _compositionPath.Count())
                 throw new ArgumentException("Can't SetCompositionToParentInstance because Instance is not a parent of current composition");
 
             SetComposition(shortenedPath, Transition.JumpOut);
-        }        
-        
+        }
+
         private CanvasProperties GuessViewProperties()
         {
             ChildUis = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis;
             FocusViewToSelection();
             return GetTargetProperties();
         }
-
 
         #region drawing UI ====================================================================
         public void Draw(ImDrawListPtr dl)
@@ -125,9 +124,7 @@ namespace T3.Gui.Graph
             ImGui.BeginGroup();
             {
                 DrawDropHandler();
-                
-                ImGui.Text("SelectionCount " + SelectionManager.Selection.Count);
-                
+
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                     FocusViewToSelection();
 
@@ -258,9 +255,9 @@ namespace T3.Gui.Graph
 
         private ImRect GetSelectionBounds(float padding = 50)
         {
-            var selectedOrAll = SelectionManager.Selection.Any()
-                                ? SelectionManager.Selection.ToArray()
-                                : SelectableChildren.ToArray();
+            var selectedOrAll = SelectionManager.IsAnythingSelected()
+                                    ? SelectionManager.GetSelectedNodes<ISelectableNode>().ToArray()
+                                    : SelectableChildren.ToArray();
 
             if (selectedOrAll.Length == 0)
                 return new ImRect();
@@ -314,7 +311,7 @@ namespace T3.Gui.Graph
                                      childUi.Style = SymbolUi.Styles.Resizable;
                                  }
                              }
-                             
+
                              if (ImGui.MenuItem("Expanded", "", selectedChildUis.Any(child => child.Style == SymbolUi.Styles.Resizable)))
                              {
                                  foreach (var childUi in selectedChildUis)
@@ -337,7 +334,6 @@ namespace T3.Gui.Graph
                              _nameSpace = selectedChildUis[0].SymbolChild.Symbol.Namespace;
                              _duplicateSymbolDialog.ShowNextFrame();
                          }
-
 
                          if (ImGui.MenuItem("Combine as new type"))
                          {
@@ -372,7 +368,7 @@ namespace T3.Gui.Graph
                              NodeOperations.RemoveInputFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
                          }
                      }
-                     
+
                      if (ImGui.MenuItem("Edit inputs"))
                      {
                          _editInputsDialog.ShowNextFrame();
@@ -411,12 +407,9 @@ namespace T3.Gui.Graph
         private List<SymbolChildUi> GetSelectedChildUis()
         {
             var selectedChildren = new List<SymbolChildUi>();
-            foreach (var x in SelectionManager.Selection)
+            foreach (var childUi in SelectionManager.GetSelectedNodes<SymbolChildUi>())
             {
-                if (x is SymbolChildUi childUi)
-                {
-                    selectedChildren.Add(childUi);
-                }
+                selectedChildren.Add(childUi);
             }
 
             return selectedChildren;
@@ -427,12 +420,9 @@ namespace T3.Gui.Graph
             var selectedInputs = new List<IInputUi>();
 
             //_selectedChildren = selectedChildren;
-            foreach (var x in SelectionManager.Selection)
+            foreach (var inputUi in SelectionManager.GetSelectedNodes<IInputUi>())
             {
-                if (x is IInputUi inputUi)
-                {
-                    selectedInputs.Add(inputUi);
-                }
+                selectedInputs.Add(inputUi);
             }
 
             return selectedInputs;
@@ -574,13 +564,14 @@ namespace T3.Gui.Graph
             return instance;
         }
 
-        
-        private  List<Guid> _compositionPath = new List<Guid>();
-        
+        private List<Guid> _compositionPath = new List<Guid>();
+
         private readonly AddInputDialog _addInputDialog = new AddInputDialog();
         private readonly CombineToSymbolDialog _combineToSymbolDialog = new CombineToSymbolDialog();
         private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new DuplicateSymbolDialog();
+
         private readonly EditInputsDialog _editInputsDialog = new EditInputsDialog();
+
         //public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private readonly SelectionFence _selectionFence;
         private List<SymbolChildUi> ChildUis { get; set; }
@@ -590,6 +581,7 @@ namespace T3.Gui.Graph
         private readonly GraphWindow _window;
 
         public static HoverModes HoverMode { get; set; } = HoverModes.Live;
+
         public enum HoverModes
         {
             Disabled,

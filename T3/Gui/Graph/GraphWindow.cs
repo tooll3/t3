@@ -243,7 +243,7 @@ namespace T3.Gui.Graph
 
         private List<AnimationParameter> GetCurvesForSelectedNodes()
         {
-            var selection = SelectionManager.Selection;
+            var selection = SelectionManager.GetSelectedNodes<ISelectableNode>();
             var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.CompositionOp.Symbol.Id];
             var animator = symbolUi.Symbol.Animator;
             var curvesForSelection = (from child in GraphCanvas.CompositionOp.Children

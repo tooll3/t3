@@ -56,6 +56,8 @@ namespace T3.Gui.Windows
             var instance = SelectionManager.GetSelectedInstance();
             if (instance != null)
             {
+                //var selectedChildUi = uiregi
+                
                 DrawSelectedSymbolHeader(instance);
 
                 var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
@@ -102,19 +104,15 @@ namespace T3.Gui.Windows
                 return;
             }
 
-            if (SelectionManager.Selection.Count == 0)
+            if (!SelectionManager.IsAnythingSelected())
                 return;
 
-            foreach (var input in SelectionManager.Selection)
+            foreach (var input in SelectionManager.GetSelectedNodes<IInputUi>())
             {
-                if (!(input is IInputUi inputUiForSettings))
-                    continue;
-                
                 ImGui.PushFont(Fonts.FontLarge);
-                ImGui.Text(inputUiForSettings.InputDefinition.Name);
+                ImGui.Text(input.InputDefinition.Name);
                 ImGui.PopFont();
-                inputUiForSettings.DrawSettings();
-                
+                input.DrawSettings();
                 ImGui.Spacing();
             }
         }

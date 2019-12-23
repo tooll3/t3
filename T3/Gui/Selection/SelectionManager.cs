@@ -7,6 +7,11 @@ namespace T3.Gui.Selection
 {
     public static class SelectionManager
     {
+        public static void Clear()
+        {
+            Selection.Clear();
+        }
+        
         public static void SetSelectionToParent(Instance instance)
         {
             Selection.Clear();
@@ -46,9 +51,23 @@ namespace T3.Gui.Selection
         }
 
         
+        public static IEnumerable<T> GetSelectedNodes<T>() where T:ISelectableNode
+        {
+            foreach (var item in Selection)
+            {
+                if (item is T typedItem)
+                    yield return typedItem;
+            }
+        } 
+        
         public static bool IsNodeSelected(ISelectableNode node)
         {
             return Selection.Contains(node);
+        }
+
+        public static bool IsAnythingSelected()
+        {
+            return Selection.Count > 0;
         }
 
         
@@ -80,7 +99,7 @@ namespace T3.Gui.Selection
 
         private static Instance _parent;
         
-        public static readonly List<ISelectableNode> Selection = new List<ISelectableNode>();
+        private static readonly List<ISelectableNode> Selection = new List<ISelectableNode>();
         private static readonly List<ISelectableNode> NodesSelectedLastFrame = new List<ISelectableNode>();
         public static List<ISelectableNode> LastFrameSelection = new List<ISelectableNode>();
         

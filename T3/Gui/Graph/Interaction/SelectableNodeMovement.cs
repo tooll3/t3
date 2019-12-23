@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
@@ -22,7 +23,7 @@ namespace T3.Gui.Graph.Interaction
                     {
                         if (!ImGui.GetIO().KeyShift)
                         {
-                            SelectionManager.Selection.Clear();
+                            SelectionManager.Clear();
                         }
 
                         if (node is SymbolChildUi childUi)
@@ -43,7 +44,7 @@ namespace T3.Gui.Graph.Interaction
                     }
 
                     Guid compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
-                    _moveCommand = new ChangeSelectableCommand(compositionSymbolId, SelectionManager.Selection);
+                    _moveCommand = new ChangeSelectableCommand(compositionSymbolId, SelectionManager.GetSelectedNodes<ISelectableNode>().ToList());
                 }
 
                 HandleNodeDragging(node);
@@ -120,7 +121,7 @@ namespace T3.Gui.Graph.Interaction
                                         : newDragPosInCanvas - selectableNode.PosOnCanvas;
 
             // Drag selection
-            foreach (var e in SelectionManager.Selection)
+            foreach (var e in SelectionManager.GetSelectedNodes<ISelectableNode>())
             {
                 e.PosOnCanvas += moveDeltaOnCanvas;
             }

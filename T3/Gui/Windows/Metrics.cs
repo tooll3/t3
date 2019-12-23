@@ -53,7 +53,7 @@ namespace T3.Gui.Windows
         }
 
         private static float _uiRenderDurationMs;
-        private static readonly CurvePlot RenderDurationPlot = new CurvePlot("ms") {MinValue =0};
+        private static readonly CurvePlot RenderDurationPlot = new CurvePlot("ms") {MinValue =0, MaxValue = 30f};
         private static readonly CurvePlot DeltaTime = new CurvePlot("FPS") {MinValue =0, MaxValue = 30f};
         private static readonly Stopwatch WatchImgRenderTime = new Stopwatch();
     }

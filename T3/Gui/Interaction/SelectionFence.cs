@@ -80,7 +80,7 @@ namespace T3.Gui.Graph
                 _dragThresholdExceeded = true;
                 if (selectMode == SelectMode.Replace)
                 {
-                    SelectionManager.Selection.Clear();
+                    SelectionManager.Clear();
                 }
             }
 
@@ -89,7 +89,7 @@ namespace T3.Gui.Graph
                                  where rect.Overlaps(boundsInCanvas)
                                  select child).ToList();
 
-            SelectionManager.Selection.Clear();
+            SelectionManager.Clear();
 
             foreach (var node in nodesToSelect)
             {
@@ -138,7 +138,7 @@ namespace T3.Gui.Graph
             var hasOnlyClicked = delta.LengthSquared() < 4f;
             if (hasOnlyClicked)
             {
-                SelectionManager.Selection.Clear();
+                SelectionManager.Clear();
                 SelectionManager.SetSelectionToParent(GraphCanvas.Current.CompositionOp);
             }
 
