@@ -184,7 +184,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 var minValue = float.PositiveInfinity;
                 var maxValue = float.NegativeInfinity;
-                foreach (var (u, vDef) in points)
+                foreach (var (_, vDef) in points)
                 {
                     if (minValue > vDef.Value)
                         minValue = (float)vDef.Value;
@@ -262,7 +262,7 @@ namespace T3.Gui.Windows.TimeLine
 
         
         
-        private const float KeyframeIconWidth = 10;
+        
 
         private void DrawKeyframe(VDefinition vDef, ImRect layerArea, GraphWindow.AnimationParameter parameter)
         {
@@ -278,6 +278,10 @@ namespace T3.Gui.Windows.TimeLine
                 // Click released
                 if (ImGui.InvisibleButton("##key", new Vector2(10, 24)))
                 {
+                    var justClicked = ImGui.GetMouseDragDelta().LengthSquared() < 1;
+                    if(justClicked && Math.Abs(TimeLineCanvas.ClipTime.PlaybackSpeed) < 0.001f)
+                        TimeLineCanvas.Current.ClipTime.Time = vDef.U;
+                    
                     TimeLineCanvas.Current.CompleteDragCommand();
 
                     if (_changeKeyframesCommand != null)
@@ -302,14 +306,15 @@ namespace T3.Gui.Windows.TimeLine
             if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
                 return;
 
+            // Deselect
             if (ImGui.GetIO().KeyCtrl)
             {
-                if (isSelected)
+                if (!isSelected)
+                    return;
+                
+                foreach (var k in FindParameterKeysAtPosition(vDef.U))
                 {
-                    foreach (var k in FindParameterKeysAtPosition(vDef.U))
-                    {
-                        SelectedKeyframes.Remove(k);
-                    }
+                    SelectedKeyframes.Remove(k);
                 }
 
                 return;
@@ -479,6 +484,7 @@ namespace T3.Gui.Windows.TimeLine
         }
         #endregion
 
+        private const float KeyframeIconWidth = 10;
         private Vector2 _minScreenPos;
         private static ChangeKeyframesCommand _changeKeyframesCommand;
         private const int LayerHeight = 25;
