@@ -98,12 +98,11 @@ namespace T3.Gui.Windows.TimeLine
 
 
             var newDragPosition = TimeLineCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos);
-            var snapClipToStart = _snapHandler.CheckForSnapping(newDragPosition.X);
-            var dX = !double.IsNaN(snapClipToStart)
-                         ? snapClipToStart - vDef.U
-                         : newDragPosition.X - vDef.U;
+            double u = newDragPosition.X;
+            _snapHandler.CheckForSnapping(ref u);
+            
             var dY = newDragPosition.Y - vDef.Value;
-            TimeLineCanvas.Current.UpdateDragCommand(dX, dY);
+            TimeLineCanvas.Current.UpdateDragCommand(u - vDef.U, dY);
         }
         
         void ITimeElementSelectionHolder.DeleteSelectedElements()

@@ -191,15 +191,9 @@ namespace T3.Gui.Windows.TimeLine
                 var draggedTime = InverseTransformPosition(_io.MousePos).X;
                 if (ImGui.GetIO().KeyShift)
                 {
-                    var snappedTime = _snapHandler.CheckForSnapping(draggedTime, _currentTimeMarker);
-                    ClipTime.Time = double.IsNaN(snappedTime)
-                                        ? draggedTime
-                                        : snappedTime;
+                    _snapHandler.CheckForSnapping(ref draggedTime, _currentTimeMarker);
                 }
-                else
-                {
-                    ClipTime.Time = draggedTime;
-                }
+                ClipTime.Time = draggedTime;
             }
 
             ImGui.SetCursorPos(Vector2.Zero);

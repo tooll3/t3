@@ -66,9 +66,9 @@ namespace T3.Gui.Windows.TimeLine
                     {
                         _usedPositions[xIndex] = t + scroll;
 
-                        drawList.AddRect(
+                        drawList.AddRectFilled(
                                          new Vector2(topLeft.X + xIndex, topLeft.Y),
-                                         new Vector2(topLeft.X + xIndex, topLeft.Y + viewHeight), lineColor);
+                                         new Vector2(topLeft.X + xIndex+1, topLeft.Y + viewHeight), lineColor);
 
                         if (raster.Label != "")
                         {

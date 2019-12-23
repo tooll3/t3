@@ -22,30 +22,38 @@ namespace T3.Gui.Interaction.Snapping
             }
         }
 
-//        public class SnapEventArgs : EventArgs
-//        {
-//            public double Value { get; set; }
-//        }
-        
+        //        public class SnapEventArgs : EventArgs
+        //        {
+        //            public double Value { get; set; }
+        //        }
+
         /// <summary>
         /// Components can bind to these events to render snap-indicators
         /// </summary>
         public event Action<double> SnappedEvent;
-        
-        
+
+        public bool CheckForSnapping(ref float time, List<IValueSnapAttractor> ignoreSnapAttractors = null)
+        {
+            double d = time;
+            var result = CheckForSnapping(ref d, ignoreSnapAttractors);
+            if (result)
+                time = (float)d;
+
+            return result;
+        }
+
         /// <summary>
         /// Uses all registered snap providers to test for snapping
         /// </summary>
-        /// <returns>snap target of NaN</returns>
-        public double CheckForSnapping(double time, List<IValueSnapAttractor> ignoreSnapAttractors= null)
+        public bool CheckForSnapping(ref double time, List<IValueSnapAttractor> ignoreSnapAttractors = null)
         {
             var bestSnapValue = Double.NaN;
             double maxSnapForce = 0;
             foreach (var sp in _snapAttractors)
             {
-                if (ignoreSnapAttractors != null && ignoreSnapAttractors.Contains(sp)) 
+                if (ignoreSnapAttractors != null && ignoreSnapAttractors.Contains(sp))
                     continue;
-                
+
                 var snapResult = sp.CheckForSnap(time);
                 if (snapResult != null && snapResult.Force > maxSnapForce)
                 {
@@ -53,19 +61,27 @@ namespace T3.Gui.Interaction.Snapping
                     maxSnapForce = snapResult.Force;
                 }
             }
-            
+
             if (!double.IsNaN(bestSnapValue))
             {
                 SnappedEvent?.Invoke(bestSnapValue);
             }
-            
-            return bestSnapValue;
+
+            if (double.IsNaN(bestSnapValue))
+                return false;
+
+            time = bestSnapValue;
+            return true;
         }
 
-        public double CheckForSnapping(double time, IValueSnapAttractor ignoreSnapAttractor)
+        public bool CheckForSnapping(ref float time, IValueSnapAttractor ignoreSnapAttractor)
         {
+            double d = time;
             var list = new List<IValueSnapAttractor> { ignoreSnapAttractor };
-            return CheckForSnapping(time, list);
+            var result = CheckForSnapping(ref d, list);
+            if (result)
+                time = (float)d;
+            return result;
         }
 
         private readonly List<IValueSnapAttractor> _snapAttractors = new List<IValueSnapAttractor>();

@@ -26,6 +26,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         private GraphWindow.AnimationParameter _currentAnimationParameter;
+
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             _drawList = ImGui.GetWindowDrawList();
@@ -35,11 +36,11 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.BeginGroup();
             {
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
-                    ViewAllOrSelectedKeys(alsoChangeTimeRange:true);
-                
-                if(KeyboardBinding.Triggered(UserActions.Duplicate))
+                    ViewAllOrSelectedKeys(alsoChangeTimeRange: true);
+
+                if (KeyboardBinding.Triggered(UserActions.Duplicate))
                     DuplicateSelectedKeyframes();
-                
+
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(0, 3)); // keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
 
@@ -54,8 +55,6 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.EndGroup();
         }
 
-
-        
         private void DrawProperty(GraphWindow.AnimationParameter parameter)
         {
             var min = ImGui.GetCursorScreenPos();
@@ -66,15 +65,15 @@ namespace T3.Gui.Windows.TimeLine
             var mousePos = ImGui.GetMousePos();
             var mouseTime = TimeLineCanvas.InverseTransformPositionX(mousePos.X);
             var layerArea = new ImRect(min, max);
-            var layerHovered = ImGui.IsWindowHovered() && layerArea.Contains(mousePos); 
+            var layerHovered = ImGui.IsWindowHovered() && layerArea.Contains(mousePos);
             if (layerHovered)
             {
                 ImGui.BeginTooltip();
-                
+
                 ImGui.PushFont(Fonts.FontBold);
                 ImGui.Text(parameter.Input.Input.Name);
                 ImGui.PopFont();
-                
+
                 foreach (var curve in parameter.Curves)
                 {
                     var v = curve.GetSampledValue(mouseTime);
@@ -84,9 +83,9 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.EndTooltip();
             }
 
-            ImGui.PushStyleColor(ImGuiCol.Text, layerHovered? Color.White.Rgba: Color.Gray);
+            ImGui.PushStyleColor(ImGuiCol.Text, layerHovered ? Color.White.Rgba : Color.Gray);
             ImGui.PushFont(Fonts.FontBold);
-            ImGui.Text("  " +parameter.Instance.Symbol.Name);
+            ImGui.Text("  " + parameter.Instance.Symbol.Name);
             ImGui.PopFont();
             ImGui.SameLine();
             ImGui.Text("." + parameter.Input.Input.Name);
@@ -100,6 +99,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 DrawCurveLines(parameter, layerArea);
             }
+
             HandleCreateNewKeyframes(parameter, layerArea);
 
             foreach (var curve in parameter.Curves)
@@ -113,62 +113,63 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight)); // Next Line
         }
 
-        
-        
         private void HandleCreateNewKeyframes(GraphWindow.AnimationParameter parameter, ImRect layerArea)
         {
             var hoverNewKeyframe = !ImGui.IsAnyItemActive()
                                    && ImGui.IsWindowHovered()
                                    && ImGui.GetIO().KeyAlt
                                    && layerArea.Contains(ImGui.GetMousePos());
-            if (hoverNewKeyframe)
+            if (!hoverNewKeyframe)
+                return;
+
+            var hoverTime = TimeLineCanvas.Current.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
+            _snapHandler.CheckForSnapping(ref hoverTime);
+
+            if (ImGui.IsMouseReleased(0))
             {
-                var hoverTime = TimeLineCanvas.Current.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
-                if (ImGui.IsMouseReleased(0))
+                var dragDistance = ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length();
+                if (dragDistance < 2)
                 {
-                    var dragDistance = ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length();
-                    if (dragDistance < 2)
+                    TimeLineCanvas.Current.ClearSelection();
+
+                    foreach (var curve in parameter.Curves)
                     {
-                        TimeLineCanvas.Current.ClearSelection();
+                        var value = curve.GetSampledValue(hoverTime);
+                        var previousU = curve.GetPreviousU(hoverTime);
 
-                        foreach (var curve in parameter.Curves)
-                        {
-                            var value = curve.GetSampledValue(hoverTime);
-                            var previousU = curve.GetPreviousU(hoverTime);
+                        var key = (previousU != null)
+                                      ? curve.GetV(previousU.Value).Clone()
+                                      : new VDefinition();
 
-                            var key = (previousU != null)
-                                          ? curve.GetV(previousU.Value).Clone()
-                                          : new VDefinition();
+                        key.Value = value;
+                        key.U = hoverTime;
 
-                            key.Value = value;
-                            key.U = hoverTime;
-
-                            var oldKey = key;
-                            curve.AddOrUpdateV(hoverTime, key);
-                            SelectedKeyframes.Add(oldKey);
-                            Log.Debug("added new key at " + hoverTime);
-                            TimeLineCanvas.Current.ClipTime.Time = hoverTime;
-                        }
+                        var oldKey = key;
+                        curve.AddOrUpdateV(hoverTime, key);
+                        SelectedKeyframes.Add(oldKey);
+                        Log.Debug("added new key at " + hoverTime);
+                        TimeLineCanvas.Current.ClipTime.Time = hoverTime;
                     }
                 }
-                else
-                {
-                    var posOnScreen = new Vector2(
-                                                  TimeLineCanvas.Current.TransformPositionX(hoverTime) - KeyframeIconWidth / 2,
-                                                  layerArea.Min.Y);
-                    Icons.Draw(Icon.KeyFrame, posOnScreen);
-                }
-
-                ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
             }
+            else
+            {
+                var posOnScreen = new Vector2(
+                                              TimeLineCanvas.Current.TransformPositionX(hoverTime) - KeyframeIconWidth / 2 + 1,
+                                              layerArea.Min.Y);
+                Icons.Draw(Icon.KeyFrame, posOnScreen);
+            }
+
+            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
         }
 
         private static readonly Color GrayCurveColor = new Color(1f, 1f, 1.0f, 0.3f);
+
         private readonly Color[] _curveColors =
         {
-            new Color(1f, 0.2f, 0.2f, 0.3f), 
-            new Color(0.1f, 1f, 0.2f, 0.3f), 
-            new Color(0.1f, 0.4f, 1.0f, 0.5f), 
+            new Color(1f, 0.2f, 0.2f, 0.3f),
+            new Color(0.1f, 1f, 0.2f, 0.3f),
+            new Color(0.1f, 0.4f, 1.0f, 0.5f),
             GrayCurveColor,
         };
 
@@ -193,21 +194,21 @@ namespace T3.Gui.Windows.TimeLine
                 }
 
                 VDefinition lastVDef = null;
-                float lastValue=0; 
-                
+                float lastValue = 0;
+
                 foreach (var (u, vDef) in points)
                 {
                     if (lastVDef != null && lastVDef.OutEditMode == VDefinition.EditMode.Constant)
                     {
                         positions.Add(new Vector2(
-                                                  TimeLineCanvas.Current.TransformPositionX((float)u)-1,
+                                                  TimeLineCanvas.Current.TransformPositionX((float)u) - 1,
                                                   lastValue));
                     }
 
                     lastValue = Im.Remap((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
-                    positions.Add( new Vector2(
-                                      TimeLineCanvas.Current.TransformPositionX((float)u),
-                                      lastValue));
+                    positions.Add(new Vector2(
+                                              TimeLineCanvas.Current.TransformPositionX((float)u),
+                                              lastValue));
 
                     lastVDef = vDef;
                 }
@@ -229,45 +230,41 @@ namespace T3.Gui.Windows.TimeLine
 
             var curve = parameter.Curves.First();
             const float padding = 2;
-            
+
             var points = curve.GetVDefinitions();
             var times = new float[points.Count];
             var colors = new Color[points.Count];
-            
+
             var curves = parameter.Curves.ToList();
 
             var index = 0;
             foreach (var vDef in points)
             {
                 times[index] = TimeLineCanvas.Current.TransformPositionX((float)vDef.U);
-                colors[index]= new Color(
-                                     (float)vDef.Value,
-                                     (float)curves[1].GetSampledValue(vDef.U),
-                                     (float)curves[2].GetSampledValue(vDef.U),
-                                     (float)curves[3].GetSampledValue(vDef.U)
-                                     );
+                colors[index] = new Color(
+                                          (float)vDef.Value,
+                                          (float)curves[1].GetSampledValue(vDef.U),
+                                          (float)curves[2].GetSampledValue(vDef.U),
+                                          (float)curves[3].GetSampledValue(vDef.U)
+                                         );
                 index++;
             }
 
-            for (var index2 = 0; index2 < times.Length-1; index2++)
+            for (var index2 = 0; index2 < times.Length - 1; index2++)
             {
                 _drawList.AddRectFilledMultiColor(new Vector2(times[index2], layerArea.Min.Y + padding),
-                                                  new Vector2(times[index2+1], layerArea.Max.Y - padding),
-                                                 colors[index2],
-                                                 colors[index2+1],
-                                                 colors[index2+1],
-                                                 colors[index2]);
+                                                  new Vector2(times[index2 + 1], layerArea.Max.Y - padding),
+                                                  colors[index2],
+                                                  colors[index2 + 1],
+                                                  colors[index2 + 1],
+                                                  colors[index2]);
             }
         }
-
-        
-        
-        
 
         private void DrawKeyframe(VDefinition vDef, ImRect layerArea, GraphWindow.AnimationParameter parameter)
         {
             var posOnScreen = new Vector2(
-                                          TimeLineCanvas.Current.TransformPositionX((float)vDef.U) - KeyframeIconWidth / 2,
+                                          TimeLineCanvas.Current.TransformPositionX((float)vDef.U) - KeyframeIconWidth / 2 + 1,
                                           layerArea.Min.Y);
             ImGui.PushID(vDef.GetHashCode());
             {
@@ -279,9 +276,9 @@ namespace T3.Gui.Windows.TimeLine
                 if (ImGui.InvisibleButton("##key", new Vector2(10, 24)))
                 {
                     var justClicked = ImGui.GetMouseDragDelta().LengthSquared() < 1;
-                    if(justClicked && Math.Abs(TimeLineCanvas.ClipTime.PlaybackSpeed) < 0.001f)
+                    if (justClicked && Math.Abs(TimeLineCanvas.ClipTime.PlaybackSpeed) < 0.001f)
                         TimeLineCanvas.Current.ClipTime.Time = vDef.U;
-                    
+
                     TimeLineCanvas.Current.CompleteDragCommand();
 
                     if (_changeKeyframesCommand != null)
@@ -291,6 +288,7 @@ namespace T3.Gui.Windows.TimeLine
                         _changeKeyframesCommand = null;
                     }
                 }
+
                 HandleKeyframeDragging(vDef, isSelected);
                 ImGui.PopID();
             }
@@ -311,7 +309,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 if (!isSelected)
                     return;
-                
+
                 foreach (var k in FindParameterKeysAtPosition(vDef.U))
                 {
                     SelectedKeyframes.Remove(k);
@@ -326,7 +324,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     TimeLineCanvas.Current.ClearSelection();
                 }
-                
+
                 foreach (var k in FindParameterKeysAtPosition(vDef.U))
                 {
                     SelectedKeyframes.Add(k);
@@ -339,20 +337,17 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             var newDragTime = TimeLineCanvas.Current.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
-            var snapClipToStart = _snapHandler.CheckForSnapping(newDragTime);
-            var dt = !double.IsNaN(snapClipToStart)
-                         ? snapClipToStart - vDef.U
-                         : newDragTime - vDef.U;
+            _snapHandler.CheckForSnapping(ref newDragTime);
 
-            TimeLineCanvas.Current.UpdateDragCommand(dt, 0);
+            TimeLineCanvas.Current.UpdateDragCommand(newDragTime - vDef.U, 0);
         }
 
         private IEnumerable<VDefinition> FindParameterKeysAtPosition(double u)
         {
             foreach (var curve in _currentAnimationParameter.Curves)
             {
-                var matchingKey= curve.GetVDefinitions().FirstOrDefault(vDef2 => Math.Abs(vDef2.U - u) < 1/120f);
-                if(matchingKey!= null)
+                var matchingKey = curve.GetVDefinitions().FirstOrDefault(vDef2 => Math.Abs(vDef2.U - u) < 1 / 120f);
+                if (matchingKey != null)
                     yield return matchingKey;
             }
         }

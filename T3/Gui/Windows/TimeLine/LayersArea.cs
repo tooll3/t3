@@ -203,29 +203,30 @@ namespace T3.Gui.Windows.TimeLine
             switch (mode)
             {
                 case HandleDragMode.Body:
-                    var snapClipToStart = _snapHandler.CheckForSnapping(clip.StartTime + dt);
-                    if (!double.IsNaN(snapClipToStart))
-                        dt = snapClipToStart - clip.StartTime;
+                    var startTime = clip.StartTime + dt;
+                    if (_snapHandler.CheckForSnapping(ref startTime))
+                        dt = startTime - clip.StartTime;
 
-                    var snapClipToEnd = _snapHandler.CheckForSnapping(clip.EndTime + dt);
-                    if (!double.IsNaN(snapClipToEnd))
-                        dt = snapClipToEnd - clip.EndTime;
-
+                    var endTime = clip.EndTime + dt;
+                    if (_snapHandler.CheckForSnapping(ref endTime))
+                        dt = endTime - clip.EndTime;
+                    
                     TimeLineCanvas.Current.UpdateDragCommand(dt, 0);
                     break;
 
                 case HandleDragMode.Start:
-                    var snapToStart = _snapHandler.CheckForSnapping(clip.StartTime + dt);
-                    if (!double.IsNaN(snapToStart))
-                        dt = snapToStart - clip.StartTime;
-
+                    var startTime2 = clip.StartTime + dt;
+                    if (_snapHandler.CheckForSnapping(ref startTime2))
+                        dt = startTime2 - clip.StartTime;
+                    
                     TimeLineCanvas.Current.UpdateDragStartCommand(dt, 0);
                     break;
 
                 case HandleDragMode.End:
-                    var snapToEnd = _snapHandler.CheckForSnapping(clip.EndTime + dt);
-                    if (!double.IsNaN(snapToEnd))
-                        dt = snapToEnd - clip.EndTime;
+                    var endTime2 = clip.StartTime + dt;
+                    if (_snapHandler.CheckForSnapping(ref endTime2))
+                        dt = endTime2 - clip.EndTime;
+                    
 
                     TimeLineCanvas.Current.UpdateDragEndCommand(dt, 0);
                     break;
