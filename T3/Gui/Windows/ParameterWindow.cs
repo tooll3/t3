@@ -1,14 +1,12 @@
 ﻿using ImGuiNET;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
-using UiHelpers;
+using T3.Gui.Styling;
 
 namespace T3.Gui.Windows
 {
@@ -57,12 +55,12 @@ namespace T3.Gui.Windows
         {
             var instance = SelectionManager.GetSelectedInstance();
             if (instance != null)
-            { 
+            {
                 DrawSelectedSymbolHeader(instance);
 
                 var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
                 var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
-                
+
                 // Draw parameters
                 foreach (var inputSlot in instance.Inputs)
                 {
@@ -100,15 +98,24 @@ namespace T3.Gui.Windows
 
                     ImGui.PopID();
                 }
+
                 return;
             }
 
             if (SelectionManager.Selection.Count == 0)
                 return;
 
-            if (SelectionManager.Selection[0] is IInputUi inputUiForSettings)
+            foreach (var input in SelectionManager.Selection)
             {
+                if (!(input is IInputUi inputUiForSettings))
+                    continue;
+                
+                ImGui.PushFont(Fonts.FontLarge);
+                ImGui.Text(inputUiForSettings.InputDefinition.Name);
+                ImGui.PopFont();
                 inputUiForSettings.DrawSettings();
+                
+                ImGui.Spacing();
             }
         }
 
@@ -187,7 +194,6 @@ namespace T3.Gui.Windows
 
             ImGui.Dummy(new Vector2(0.0f, 5.0f));
         }
-        
 
         private static readonly List<Window> ParameterWindowInstances = new List<Window>();
         private ChangeSymbolNameCommand _symbolNameCommandInFlight;
