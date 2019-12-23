@@ -94,9 +94,9 @@ namespace T3.Core.Operator
 
     public class Instance<T> : Instance
     {
-        public override Type Type => typeof(T);
+        public override Type Type { get; } = typeof(T);
 
-        public Instance()
+        protected Instance()
         {
             SetupInputAndOutputsFromType();
         }
