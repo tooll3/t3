@@ -111,7 +111,7 @@ namespace T3.Gui
             foreach (var outputUiToRemove in OutputUis.Where(kv => !Symbol.OutputDefinitions.Exists(outputDef => outputDef.Id == kv.Key)).ToList())
             {
                 Log.Debug($"OutputUi '{outputUiToRemove.Value.Id}' still existed but no corresponding input definition anymore. Removing the ui.");
-                InputUis.Remove(outputUiToRemove.Key);
+                OutputUis.Remove(outputUiToRemove.Key);
             }
         }
 
