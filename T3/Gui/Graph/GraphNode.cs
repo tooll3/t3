@@ -6,6 +6,7 @@ using SharpDX.Direct2D1;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.Styling;
@@ -107,11 +108,9 @@ namespace T3.Gui.Graph
                         ImGui.BeginTooltip();
                         {
                             ImageCanvasForTooltips.Draw();
-                            var children = GraphCanvas.Current.CompositionOp.Children;
-                            Instance instance__ = children.Single(c => c.SymbolChildId == childUi.Id);
-                            if (instance__.Outputs.Count > 0)
+                            if (instance.Outputs.Count > 0)
                             {
-                                var firstOutput = instance__.Outputs[0];
+                                var firstOutput = instance.Outputs[0];
                                 IOutputUi outputUi = childSymbolUi.OutputUis[firstOutput.Id];
                                 outputUi.DrawValue(firstOutput, recompute: GraphCanvas.HoverMode == GraphCanvas.HoverModes.Live);
                             }
@@ -120,7 +119,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                SelectableMovement.Handle(childUi);
+                SelectableNodeMovement.Handle(childUi, instance);
 
                 if (ImGui.IsItemActive() && ImGui.IsMouseDoubleClicked(0))
                 {

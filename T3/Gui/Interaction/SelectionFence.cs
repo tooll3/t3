@@ -2,7 +2,9 @@
 using System;
 using System.Linq;
 using System.Numerics;
+using T3.Core.Logging;
 using T3.Gui.Selection;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -15,15 +17,27 @@ namespace T3.Gui.Graph
         public SelectionFence(INodeCanvas canvas)
         {
             _canvas = canvas;
-            _selectionHandler = canvas.SelectionHandler;
         }
-
 
         public void Draw()
         {
-            if (!_isVisible)
+            if (_isDragging)
             {
-                if (!ImGui.IsAnyItemHovered()   // Don't start dragging a fence if above an item or output
+                if (ImGui.IsMouseReleased(0))
+                {
+                    HandleDragCompleted();
+                }
+                else
+                {
+                    HandleDragDelta();
+                }
+
+                var drawList = ImGui.GetWindowDrawList();
+                drawList.AddRectFilled(Bounds.Min, Bounds.Max, new Color(0.1f), 1);
+            }
+            else
+            {
+                if (!ImGui.IsAnyItemHovered() // Don't start dragging a fence if above an item or output
                     && ImGui.IsWindowHovered()
                     && ImGui.IsMouseClicked(0)
                     && !ImGui.GetIO().KeyAlt)
@@ -31,40 +45,18 @@ namespace T3.Gui.Graph
                     HandleDragStarted();
                 }
             }
-            else
-            {
-                if (!ImGui.IsMouseReleased(0))
-                {
-                    HandleDragDelta();
-                }
-                else
-                {
-                    HandleDragCompleted();
-                }
-
-                var drawList = ImGui.GetWindowDrawList();
-                drawList.AddRectFilled(Bounds.Min, Bounds.Max, new Color(0.1f), 1);
-            }
-
-            if (ImGui.IsKeyPressed((int)Key.Delete))
-            {
-                // TODO: Implement Key Detection and delete command
-                Console.WriteLine("Would delete stuff:" + _selectionHandler.SelectedElements);
-            }
         }
 
-
-        public void HandleDragStarted()
+        private void HandleDragStarted()
         {
             var mouseMouse = ImGui.GetMousePos();
             _startPositionInScreen = mouseMouse;
             _dragPositionInScreen = mouseMouse;
 
-            _isVisible = true;
+            _isDragging = true;
         }
 
-
-        public void HandleDragDelta()
+        private void HandleDragDelta()
         {
             _dragPositionInScreen = ImGui.GetMousePos();
 
@@ -88,35 +80,57 @@ namespace T3.Gui.Graph
                 _dragThresholdExceeded = true;
                 if (selectMode == SelectMode.Replace)
                 {
-                    _selectionHandler?.Clear();
+                    SelectionManager.Selection.Clear();
                 }
             }
 
-            if (_selectionHandler != null)
+            var nodesToSelect = (from child in _canvas.SelectableChildren
+                                 let rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size)
+                                 where rect.Overlaps(boundsInCanvas)
+                                 select child).ToList();
+
+            SelectionManager.Selection.Clear();
+
+            foreach (var node in nodesToSelect)
             {
-                var elementsToSelect = (from child in _canvas.SelectableChildren
-                                        let rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size)
-                                        where rect.Overlaps(boundsInCanvas)
-                                        select child).ToList();
-
-                switch (selectMode)
+                if (node is SymbolChildUi symbolChildUi)
                 {
-                    case SelectMode.Add:
-                        _selectionHandler.AddElements(elementsToSelect);
-                        break;
+                    var instance = GraphCanvas.Current.CompositionOp.Children.FirstOrDefault(child => child.SymbolChildId == symbolChildUi.Id);
+                    if (instance == null)
+                    {
+                        Log.Warning("Can't find instance");
+                    }
 
-                    case SelectMode.Remove:
-                        _selectionHandler.RemoveElements(elementsToSelect);
-                        break;
+                    switch (selectMode)
+                    {
+                        case SelectMode.Replace:
+                        case SelectMode.Add:
+                            SelectionManager.AddSelection(symbolChildUi, instance);
+                            break;
 
-                    case SelectMode.Replace:
-                        _selectionHandler.SetElements(elementsToSelect);
-                        break;
+                        case SelectMode.Remove:
+                            SelectionManager.RemoveSelection(node);
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (selectMode)
+                    {
+                        case SelectMode.Replace:
+                        case SelectMode.Add:
+                            SelectionManager.AddSelection(node);
+                            break;
+
+                        case SelectMode.Remove:
+                            SelectionManager.RemoveSelection(node);
+                            break;
+                    }
                 }
             }
         }
 
-        public void HandleDragCompleted()
+        private void HandleDragCompleted()
         {
             _dragThresholdExceeded = false;
             var newPosition = ImGui.GetMousePos();
@@ -124,11 +138,12 @@ namespace T3.Gui.Graph
             var hasOnlyClicked = delta.LengthSquared() < 4f;
             if (hasOnlyClicked)
             {
-                _selectionHandler.Clear();
+                SelectionManager.Selection.Clear();
+                SelectionManager.SetSelectionToParent(GraphCanvas.Current.CompositionOp);
             }
-            _isVisible = false;
-        }
 
+            _isDragging = false;
+        }
 
         private enum SelectMode
         {
@@ -137,8 +152,7 @@ namespace T3.Gui.Graph
             Replace
         }
 
-        private readonly SelectionHandler _selectionHandler;
-        private bool _isVisible;
+        private bool _isDragging;
         private ImRect Bounds => ImRect.RectBetweenPoints(_startPositionInScreen, _dragPositionInScreen);
         private Vector2 _startPositionInScreen;
         private Vector2 _dragPositionInScreen;

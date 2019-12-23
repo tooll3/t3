@@ -1,19 +1,13 @@
-﻿using ImGuiNET;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using T3.Gui.Selection;
 using UiHelpers;
 
-namespace T3.Gui.Graph
+namespace T3.Gui.UiHelpers
 {
     public interface INodeCanvas:ICanvas
     {
         IEnumerable<ISelectableNode> SelectableChildren { get; }
-        SelectionHandler SelectionHandler { get; }
     }
     
     /// <summary>

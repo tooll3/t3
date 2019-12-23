@@ -347,6 +347,7 @@ namespace T3.Gui.Graph.Interaction
             // Select new node
             var symbolUi = SymbolUiRegistry.Entries[parent.Id];
             var childUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+            
             return childUi;
         }
 

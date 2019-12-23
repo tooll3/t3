@@ -7,13 +7,11 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.InputUi;
+using T3.Gui.Selection;
 using UiHelpers;
 
 namespace T3.Gui.Windows
 {
-    /// <summary>
-    /// 
-    /// </summary>
     class ParameterWindow : Window
     {
         public ParameterWindow()
@@ -57,37 +55,16 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
-            var op = _pinning.SelectedInstance;
+            var instance = SelectionManager.GetSelectedInstance();
+            if (instance != null)
+            { 
+                DrawSelectedSymbolHeader(instance);
 
-            if (op == null || _pinning.SelectedChildUi == null)
-            {
-                Im.EmptyWindowMessage("Nothing selected");
-                return;
-            }
-
-            DrawSelectedSymbolHeader(op);
-
-            var compositionSymbolUi = SymbolUiRegistry.Entries[op.Parent.Symbol.Id];
-            var selectedChildSymbolUi = SymbolUiRegistry.Entries[op.Symbol.Id];
-
-            // Draw input settings
-            if (_referenceForReferenceForInputSettings.IsActive)
-            {
-                var inputSlot = op.Inputs.FirstOrDefault(input => input.Id.GetHashCode() == _referenceForReferenceForInputSettings.InputHash);
-                if (inputSlot == null)
-                    return;
-
-                var inputUi = selectedChildSymbolUi.InputUis[inputSlot.Id];
-
-                inputUi.DrawSettings();
-
-                if (ImGui.Button("Back"))
-                    _referenceForReferenceForInputSettings = ReferenceForInputSettings.Inactive;
-            }
-            else
-            {
+                var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
+                var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+                
                 // Draw parameters
-                foreach (var inputSlot in op.Inputs)
+                foreach (var inputSlot in instance.Inputs)
                 {
                     if (!selectedChildSymbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
                     {
@@ -100,13 +77,13 @@ namespace T3.Gui.Windows
 
                     if ((editState & InputEditState.Started) != InputEditState.Nothing)
                     {
-                        _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.SymbolChildId, inputSlot.Input);
+                        _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
                     }
 
                     if ((editState & InputEditState.Modified) != InputEditState.Nothing)
                     {
                         if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.Value.ValueType != inputSlot.Input.Value.ValueType)
-                            _inputValueCommandInFlight = new ChangeInputValueCommand(op.Parent.Symbol, op.SymbolChildId, inputSlot.Input);
+                            _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
                         _inputValueCommandInFlight.Value.Assign(inputSlot.Input.Value);
                     }
 
@@ -118,11 +95,20 @@ namespace T3.Gui.Windows
 
                     if (editState == InputEditState.ShowOptions)
                     {
-                        _referenceForReferenceForInputSettings = ReferenceForInputSettings.GetForInstanceParameter(op, inputSlot);
+                        SelectionManager.SetSelection(inputUi);
                     }
 
                     ImGui.PopID();
                 }
+                return;
+            }
+
+            if (SelectionManager.Selection.Count == 0)
+                return;
+
+            if (SelectionManager.Selection[0] is IInputUi inputUiForSettings)
+            {
+                inputUiForSettings.DrawSettings();
             }
         }
 
@@ -201,30 +187,9 @@ namespace T3.Gui.Windows
 
             ImGui.Dummy(new Vector2(0.0f, 5.0f));
         }
-
-        private struct ReferenceForInputSettings
-        {
-            public static readonly ReferenceForInputSettings Inactive = new ReferenceForInputSettings(0, 0);
-
-            public static ReferenceForInputSettings GetForInstanceParameter(Instance op, IInputSlot input)
-            {
-                return new ReferenceForInputSettings(op.Symbol.Id.GetHashCode(), input.Id.GetHashCode());
-            }
-
-            public ReferenceForInputSettings(int symbolHash, int inputHash)
-            {
-                SymbolHash = symbolHash;
-                InputHash = inputHash;
-            }
-
-            public bool IsActive => (SymbolHash != Inactive.SymbolHash || InputHash != Inactive.SymbolHash);
-            public readonly int SymbolHash;
-            public readonly int InputHash;
-        }
+        
 
         private static readonly List<Window> ParameterWindowInstances = new List<Window>();
-
-        private ReferenceForInputSettings _referenceForReferenceForInputSettings = ReferenceForInputSettings.Inactive;
         private ChangeSymbolNameCommand _symbolNameCommandInFlight;
         private ChangeSymbolNamespaceCommand _symbolNamespaceCommandInFlight;
         private ChangeSymbolChildNameCommand _symbolChildNameCommand;

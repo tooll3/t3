@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Numerics;
 using ImGuiNET;
 using T3.Gui.Graph;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {

@@ -348,7 +348,7 @@
     <Compile Include="Gui\Graph\Interaction\ConnectionMaker.cs" />
     <Compile Include="Gui\Graph\Interaction\FileReferenceOperations.cs" />
     <Compile Include="Gui\Graph\Interaction\NodeOperations.cs" />
-    <Compile Include="Gui\Graph\Interaction\SelectableMovement.cs" />
+    <Compile Include="Gui\Graph\Interaction\SelectableNodeMovement.cs" />
     <Compile Include="Gui\Graph\Interaction\SymbolBrowser.cs" />
     <Compile Include="Gui\Graph\Interaction\SymbolFilter.cs" />
     <Compile Include="Gui\Graph\TimeControls.cs" />
@@ -365,6 +365,7 @@
     <Compile Include="Gui\Interaction\Snapping\ValueSnapHandler.cs" />
     <Compile Include="Gui\OutputUi\FloatOutputUi.cs" />
     <Compile Include="Gui\OutputUi\StringListOutputUi.cs" />
+    <Compile Include="Gui\Selection\SelectionManager.cs" />
     <Compile Include="Gui\Styling\CustomComponents.cs" />
     <Compile Include="Gui\InputUi\EnumInputUi.cs" />
     <Compile Include="Gui\InputUi\FloatInputUi.cs" />
@@ -443,7 +444,6 @@
     <Compile Include="Gui\ImGuiDx11Impl.cs" />
     <Compile Include="Gui\UiHelpers\Helpers.cs" />
     <Compile Include="Gui\Selection\ISelectableNode.cs" />
-    <Compile Include="Gui\Selection\SelectionHandler.cs" />
     <Compile Include="Gui\T3UI.cs" />
     <Compile Include="Gui\TableView\TableView.cs" />
     <Compile Include="Gui\Windows\SettingsWindow.cs" />

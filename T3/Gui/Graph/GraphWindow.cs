@@ -7,6 +7,7 @@ using System.Linq;
 using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
@@ -242,7 +243,7 @@ namespace T3.Gui.Graph
 
         private List<AnimationParameter> GetCurvesForSelectedNodes()
         {
-            var selection = GraphCanvas.SelectionHandler.SelectedElements;
+            var selection = SelectionManager.Selection;
             var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.CompositionOp.Symbol.Id];
             var animator = symbolUi.Symbol.Animator;
             var curvesForSelection = (from child in GraphCanvas.CompositionOp.Children

@@ -11,6 +11,7 @@ using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph;
+using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 
@@ -83,13 +84,12 @@ namespace T3.Gui.InputUi
                             ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
                             if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0)))
                             {
-                                symbolChildUi.IsSelected = false;
+                                // TODO: implement with proper SelectionManager
                                 var compositionSymbol = compositionUi.Symbol;
                                 var allConnections = compositionSymbol.Connections.FindAll(c => c.IsTargetOf(symbolChildUi.Id, inputSlot.Id));
                                 var connection = allConnections[multiInputIndex];
                                 var sourceUi = compositionUi.GetSelectables()
                                                             .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
-                                sourceUi.IsSelected = true;
                             }
 
                             ImGui.PopStyleColor();
@@ -116,11 +116,10 @@ namespace T3.Gui.InputUi
                         ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
                         if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0.0f)))
                         {
-                            symbolChildUi.IsSelected = false;
+                            // TODO: implement with proper selectionManager
                             var compositionSymbol = compositionUi.Symbol;
                             var con = compositionSymbol.Connections.First(c => c.IsTargetOf(symbolChildUi.Id, inputSlot.Id));
                             var sourceUi = compositionUi.GetSelectables().First(ui => ui.Id == con.SourceParentOrChildId || ui.Id == con.SourceSlotId);
-                            sourceUi.IsSelected = true;
                         }
 
                         ImGui.PopStyleColor();
@@ -321,7 +320,7 @@ namespace T3.Gui.InputUi
         public Type Type { get; } = typeof(T);
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = SymbolChildUi.DefaultOpSize;
-        public bool IsSelected { get; set; }
+        public bool IsSelected => SelectionManager.IsNodeSelected(this);
 
         private const Relevancy DefaultRelevancy = Relevancy.Optional;
     }

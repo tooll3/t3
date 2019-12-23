@@ -6,6 +6,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.InputUi;
+using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 
@@ -234,7 +235,8 @@ namespace T3.Gui.Graph.Interaction
         {
             var parent = GraphCanvas.Current.CompositionOp.Symbol;
             var childUi= NodeOperations.CreateInstance(symbol, parent, PosOnCanvas);
-            GraphCanvas.Current.SelectionHandler.SetElement(childUi);
+            var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+            SelectionManager.SetSelection(childUi, instance);
 
             if (ConnectionMaker.TempConnection != null && symbol.InputDefinitions.Any())
             {

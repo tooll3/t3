@@ -8,6 +8,6 @@ namespace T3.Gui.Selection
         Guid Id { get; }
         Vector2 PosOnCanvas { get; set; }
         Vector2 Size { get; set; }
-        bool IsSelected { get; set; }
+        bool IsSelected { get; }
     }
 }

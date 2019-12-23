@@ -3,6 +3,7 @@ using System;
 using System.Numerics;
 using T3.Core.Animation;
 using T3.Gui.Graph;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
 using UiHelpers;
 

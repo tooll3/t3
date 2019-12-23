@@ -7,6 +7,7 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Gui.Graph;
 using T3.Gui.Selection;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Animation.CurveEditing

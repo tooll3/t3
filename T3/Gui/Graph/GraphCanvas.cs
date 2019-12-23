@@ -56,7 +56,7 @@ namespace T3.Gui.Graph
             _compositionPath = childIdPath;
             CompositionOp = GetInstanceFromIdPath(childIdPath);
             
-            SelectionHandler.Clear();
+            SelectionManager.Selection.Clear();
 
             UserSettings.SaveLastViewedOpForWindow(_window, CompositionOp.SymbolChildId);
 
@@ -125,6 +125,8 @@ namespace T3.Gui.Graph
             ImGui.BeginGroup();
             {
                 DrawDropHandler();
+                
+                ImGui.Text("SelectionCount " + SelectionManager.Selection.Count);
                 
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                     FocusViewToSelection();
@@ -216,7 +218,9 @@ namespace T3.Gui.Graph
                         var parent = CompositionOp.Symbol;
                         var posOnCanvas = InverseTransformPosition(ImGui.GetMousePos());
                         var childUi = NodeOperations.CreateInstance(symbol, parent, posOnCanvas);
-                        SelectionHandler.SetElement(childUi);
+
+                        var instance = CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+                        SelectionManager.SetSelection(childUi, instance);
 
                         T3Ui.DraggingIsInProgress = false;
                     }
@@ -254,9 +258,9 @@ namespace T3.Gui.Graph
 
         private ImRect GetSelectionBounds(float padding = 50)
         {
-            var selectedOrAll = !SelectionHandler.SelectedElements.Any()
-                                    ? SelectableChildren.ToArray()
-                                    : SelectionHandler.SelectedElements.ToArray();
+            var selectedOrAll = SelectionManager.Selection.Any()
+                                ? SelectionManager.Selection.ToArray()
+                                : SelectableChildren.ToArray();
 
             if (selectedOrAll.Length == 0)
                 return new ImRect();
@@ -407,7 +411,7 @@ namespace T3.Gui.Graph
         private List<SymbolChildUi> GetSelectedChildUis()
         {
             var selectedChildren = new List<SymbolChildUi>();
-            foreach (var x in SelectionHandler.SelectedElements)
+            foreach (var x in SelectionManager.Selection)
             {
                 if (x is SymbolChildUi childUi)
                 {
@@ -423,7 +427,7 @@ namespace T3.Gui.Graph
             var selectedInputs = new List<IInputUi>();
 
             //_selectedChildren = selectedChildren;
-            foreach (var x in SelectionHandler.SelectedElements)
+            foreach (var x in SelectionManager.Selection)
             {
                 if (x is IInputUi inputUi)
                 {
@@ -577,7 +581,7 @@ namespace T3.Gui.Graph
         private readonly CombineToSymbolDialog _combineToSymbolDialog = new CombineToSymbolDialog();
         private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new DuplicateSymbolDialog();
         private readonly EditInputsDialog _editInputsDialog = new EditInputsDialog();
-        public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
+        //public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private readonly SelectionFence _selectionFence;
         private List<SymbolChildUi> ChildUis { get; set; }
         private readonly SymbolBrowser _symbolBrowser = new SymbolBrowser();

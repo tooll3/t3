@@ -9,6 +9,7 @@ using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.Snapping;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
 using UiHelpers;
 using Brush = SharpDX.Direct2D1.Brush;

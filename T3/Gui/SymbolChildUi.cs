@@ -15,7 +15,7 @@ namespace T3.Gui
         public Guid Id => SymbolChild.Id;
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = DefaultOpSize;
-        public bool IsSelected { get; set; } = false;
+        public bool IsSelected { get { return SelectionManager.IsNodeSelected(this); } }
         public SymbolUi.Styles Style { get; set; }
         internal static Vector2 DefaultOpSize = new Vector2(110, 25);
     }

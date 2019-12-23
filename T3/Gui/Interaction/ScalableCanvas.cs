@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using SharpDX.Direct2D1;
 using T3.Core.Logging;
 using T3.Gui.Selection;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -76,16 +77,10 @@ namespace T3.Gui.Graph
                    };
         }
 
-        // public void ApplyProperties(CanvasProperties properties, bool zoomIn)
-        // {
-        //     
-        // }
-
 
         #region implement ICanvas =================================================================
 
         public abstract IEnumerable<ISelectableNode> SelectableChildren { get; }
-        public abstract SelectionHandler SelectionHandler { get; }
 
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 

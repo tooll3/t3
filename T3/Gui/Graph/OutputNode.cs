@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.TypeColors;
@@ -32,7 +33,7 @@ namespace T3.Gui.Graph
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                 }
 
-                SelectableMovement.Handle(outputUi);
+                SelectableNodeMovement.Handle(outputUi);
 
                 // Rendering
                 var typeColor = TypeUiRegistry.Entries[outputDef.ValueType].Color;

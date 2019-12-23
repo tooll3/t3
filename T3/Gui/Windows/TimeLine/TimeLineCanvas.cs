@@ -8,6 +8,7 @@ using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Selection;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -468,7 +469,6 @@ namespace T3.Gui.Windows.TimeLine
         public Vector2 WindowSize { get; private set; }
         public Vector2 Scroll { get; private set; } = new Vector2(0, 0.0f);
         private Vector2 _scrollTarget = new Vector2(-1.0f, 0.0f);
-        public SelectionHandler SelectionHandler { get;  } = null;
         #endregion
 
         internal readonly ClipTime ClipTime;

@@ -17,7 +17,6 @@ namespace T3.Gui.Commands
 
             public Vector2 OriginalPosOnCanvas { get; set; }
             public Vector2 OriginalSize { get; set; }
-            public bool OriginalIsSelected { get; set; }
 
             public Vector2 PosOnCanvas { get; set; }
             public Vector2 Size { get; set; }
@@ -39,7 +38,6 @@ namespace T3.Gui.Commands
                                 SelectableId = selectable.Id,
                                 OriginalPosOnCanvas = selectable.PosOnCanvas,
                                 OriginalSize = selectable.Size,
-                                OriginalIsSelected = selectable.IsSelected,
                                 PosOnCanvas = selectable.PosOnCanvas,
                                 Size = selectable.Size,
                                 IsSelected = selectable.IsSelected
@@ -72,7 +70,6 @@ namespace T3.Gui.Commands
                     continue;
                 selectable.PosOnCanvas = entry.OriginalPosOnCanvas;
                 selectable.Size = entry.OriginalSize;
-                selectable.IsSelected = entry.OriginalIsSelected;
             }
         }
 
@@ -86,7 +83,6 @@ namespace T3.Gui.Commands
                     continue;
                 selectable.PosOnCanvas = entry.PosOnCanvas;
                 selectable.Size = entry.Size;
-                selectable.IsSelected = entry.IsSelected;
             }
         }
     }
