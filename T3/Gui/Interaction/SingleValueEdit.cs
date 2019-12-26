@@ -7,10 +7,20 @@ using UiHelpers;
 
 namespace T3.Gui.Interaction
 {
+    /// <summary>
+    /// An alternative component for editing float values 
+    /// </summary>
     public static class SingleValueEdit
     {
-        public static InputEditStateFlags Draw(ref int value, Vector2 size, int min = int.MinValue,
-                                          int max = int.MaxValue, float scale = 0.1f, string format = "{0:0}")
+        /// <summary>
+        /// Wrapper coll for int type 
+        /// </summary>
+        public static InputEditStateFlags Draw(ref int value, 
+                                               Vector2 size, 
+                                               int min = int.MinValue,
+                                               int max = int.MaxValue, 
+                                               float scale = 0.1f, 
+                                               string format = "{0:0}")
         {
             double doubleValue = value;
             var result = Draw(ref doubleValue, size, min, max, scale, format);
@@ -18,8 +28,15 @@ namespace T3.Gui.Interaction
             return result;
         }
 
-        public static InputEditStateFlags Draw(ref float value, Vector2 size, float min = float.NegativeInfinity,
-                                          float max = float.PositiveInfinity, float scale = 0.01f, string format = "{0:0.00}")
+        /// <summary>
+        /// Wrapper call for float type
+        /// </summary>
+        public static InputEditStateFlags Draw(ref float value, 
+                                               Vector2 size, 
+                                               float min = float.NegativeInfinity,
+                                               float max = float.PositiveInfinity, 
+                                               float scale = 0.01f, 
+                                               string format = "{0:0.00}")
         {
             double floatValue = value;
             var result = Draw(ref floatValue, size, min, max, scale, format);
@@ -27,11 +44,12 @@ namespace T3.Gui.Interaction
             return result;
         }
 
-        /// <summary>
-        /// Returns true if editing was completed and value changed
-        /// </summary>
-        public static InputEditStateFlags Draw(ref double value, Vector2 size, double min = double.NegativeInfinity,
-                                          double max = double.PositiveInfinity, float scale = 1, string format = "{0:0.00}")
+        public static InputEditStateFlags Draw(ref double value,
+                                               Vector2 size,
+                                               double min = double.NegativeInfinity,
+                                               double max = double.PositiveInfinity,
+                                               float scale = 1,
+                                               string format = "{0:0.00}")
         {
             var io = ImGui.GetIO();
             var id = ImGui.GetID("jog");
@@ -135,7 +153,7 @@ namespace T3.Gui.Interaction
                             delta += (float)(2 * Math.PI);
                         }
 
-                        delta = (float)Math.Round(delta*50)/50;
+                        delta = (float)Math.Round(delta * 50) / 50;
 
                         _editValue += delta * activeSpeed * scale * 100;
                         _editValue = _editValue.Clamp(min, max);
@@ -170,7 +188,7 @@ namespace T3.Gui.Interaction
                     return InputEditStateFlags.Finished;
                 }
 
-                _editValue = Math.Round(_editValue * 100)/ 100;
+                _editValue = Math.Round(_editValue * 100) / 100;
                 return Math.Abs(_editValue - _startValue) > 0.0001f ? InputEditStateFlags.Modified : InputEditStateFlags.Started;
             }
 

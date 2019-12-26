@@ -352,6 +352,8 @@
     <Compile Include="Gui\Graph\Interaction\SymbolBrowser.cs" />
     <Compile Include="Gui\Graph\Interaction\SymbolFilter.cs" />
     <Compile Include="Gui\Graph\TimeControls.cs" />
+    <Compile Include="Gui\InputUi\Float2InputUi.cs" />
+    <Compile Include="Gui\InputUi\Float3InputUi.cs" />
     <Compile Include="Gui\InputUi\FloatInputUi.cs" />
     <Compile Include="Gui\InputUi\SingleControlInputs\BoolInputUi.cs" />
     <Compile Include="Gui\InputUi\SingleControlInputs\Color4InputUi.cs" />
@@ -362,13 +364,12 @@
     <Compile Include="Gui\InputUi\SingleControlInputs\SingleControlInputUi.cs" />
     <Compile Include="Gui\InputUi\SingleControlInputs\Size2InputUi.cs" />
     <Compile Include="Gui\InputUi\SingleControlInputs\StringListInputUi.cs" />
-    <Compile Include="Gui\InputUi\SingleControlInputs\Vector2InputUi.cs" />
-    <Compile Include="Gui\InputUi\SingleControlInputs\Vector3InputUi.cs" />
     <Compile Include="Gui\Interaction\CameraInteraction.cs" />
     <Compile Include="Gui\Interaction\SingleValueEdit.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
     <Compile Include="Gui\Interaction\Snapping\IValueSnapAttractor.cs" />
     <Compile Include="Gui\Interaction\Snapping\ValueSnapHandler.cs" />
+    <Compile Include="Gui\Interaction\VectorValueEdit.cs" />
     <Compile Include="Gui\OutputUi\FloatOutputUi.cs" />
     <Compile Include="Gui\OutputUi\StringListOutputUi.cs" />
     <Compile Include="Gui\Selection\SelectionManager.cs" />
