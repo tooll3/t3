@@ -4,7 +4,7 @@ namespace T3.Gui.InputUi
 {
     public class BoolInputUi : SingleControlInputUi<bool>
     {
-        public override bool DrawSingleEditControl(string name, ref bool value)
+        protected override bool DrawSingleEditControl(string name, ref bool value)
         {
             return ImGui.Checkbox("##boolParam", ref value);
         }

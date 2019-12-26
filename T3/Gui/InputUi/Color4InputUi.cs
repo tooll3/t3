@@ -12,7 +12,7 @@ namespace T3.Gui.InputUi
     {
         public override bool IsAnimatable => true;
 
-        public override bool DrawSingleEditControl(string name, ref Vector4 value)
+        protected override bool DrawSingleEditControl(string name, ref Vector4 value)
         {
             return ImGui.ColorEdit4("##Vector4Edit", ref value, ImGuiColorEditFlags.Float);
         }

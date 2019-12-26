@@ -7,7 +7,7 @@ namespace T3.Gui.InputUi
     {
         public override bool IsAnimatable => false;
 
-        public override bool DrawSingleEditControl(string name, ref Vector2 value)
+        protected override bool DrawSingleEditControl(string name, ref Vector2 value)
         {
             return ImGui.DragFloat2("##Vector2Edit", ref value);
         }

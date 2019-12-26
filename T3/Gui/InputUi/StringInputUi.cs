@@ -27,37 +27,37 @@ namespace T3.Gui.InputUi
 
         public UsageType Usage { get; set; } = UsageType.Default;
 
-        protected override InputEditState DrawEditControl(string name, ref string value)
+        protected override InputEditStateFlags DrawEditControl(string name, ref string value)
         {
             if (value == null)
             {
                 // value was null!
                 ImGui.Text(name + " is null?!");
-                return InputEditState.Nothing;
+                return InputEditStateFlags.Nothing;
             }
 
-            InputEditState inputEditState = InputEditState.Nothing;
+            InputEditStateFlags inputEditStateFlags = InputEditStateFlags.Nothing;
             switch (Usage)
             {
                 case UsageType.Default:
-                    inputEditState = DrawDefaultTextEdit(ref value);
+                    inputEditStateFlags = DrawDefaultTextEdit(ref value);
                     break;
                 case UsageType.FilePath:
                 case UsageType.DirectoryPath:
-                    inputEditState = DrawEditWithSelectors(ref value);
+                    inputEditStateFlags = DrawEditWithSelectors(ref value);
                     break;
             }
 
-            inputEditState |= ImGui.IsItemClicked() ? InputEditState.Started : InputEditState.Nothing;
-            inputEditState |= ImGui.IsItemDeactivatedAfterEdit() ? InputEditState.Finished : InputEditState.Nothing;
+            inputEditStateFlags |= ImGui.IsItemClicked() ? InputEditStateFlags.Started : InputEditStateFlags.Nothing;
+            inputEditStateFlags |= ImGui.IsItemDeactivatedAfterEdit() ? InputEditStateFlags.Finished : InputEditStateFlags.Nothing;
 
-            return inputEditState;
+            return inputEditStateFlags;
         }
 
-        private InputEditState DrawEditWithSelectors(ref string value)
+        private InputEditStateFlags DrawEditWithSelectors(ref string value)
         {
             ImGui.SetNextItemWidth(-70);
-            InputEditState inputEditState = DrawDefaultTextEdit(ref value);
+            InputEditStateFlags inputEditStateFlags = DrawDefaultTextEdit(ref value);
             ImGui.SameLine();
             if (ImGui.Button("...", new Vector2(30, 0)))
             {
@@ -65,7 +65,7 @@ namespace T3.Gui.InputUi
                 if (!string.IsNullOrEmpty(newPath))
                 {
                     value = newPath;
-                    inputEditState = InputEditState.Modified | InputEditState.Finished;
+                    inputEditStateFlags = InputEditStateFlags.Modified | InputEditStateFlags.Finished;
                 }
             }
 
@@ -89,13 +89,13 @@ namespace T3.Gui.InputUi
                 }
             }
 
-            return inputEditState;
+            return inputEditStateFlags;
         }
 
-        private static InputEditState DrawDefaultTextEdit(ref string value)
+        private static InputEditStateFlags DrawDefaultTextEdit(ref string value)
         {
             bool changed = ImGui.InputText("##textEdit", ref value, MAX_STRING_LENGTH);
-            return changed ? InputEditState.Modified : InputEditState.Nothing;
+            return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
 
         protected override void DrawValueDisplay(string name, ref string value)

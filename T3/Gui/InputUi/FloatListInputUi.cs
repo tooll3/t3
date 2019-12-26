@@ -5,7 +5,7 @@ namespace T3.Gui.InputUi
 {
     public class FloatListInputUi : SingleControlInputUi<List<float>>
     {
-        public override bool DrawSingleEditControl(string name, ref List<float> list)
+        protected override bool DrawSingleEditControl(string name, ref List<float> list)
         {
             var outputString = string.Join(", ", list);
             ImGui.Text($"{outputString}");

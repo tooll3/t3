@@ -13,11 +13,8 @@ namespace T3.Gui.InputUi
     public class Vector3InputUi : SingleControlInputUi<Vector3>
     {
         public override bool IsAnimatable => true;
-        private float Min = DefaultMin;
-        private float Max = DefaultMax;
-        private float Scale = DefaultScale;
-
-        public override bool DrawSingleEditControl(string name, ref Vector3 value)
+        
+        protected override bool DrawSingleEditControl(string name, ref Vector3 value)
         {
             return ImGui.DragFloat3("##Vector3Edit", ref value, Scale, Min, Max);
         }
@@ -81,6 +78,10 @@ namespace T3.Gui.InputUi
             if (Scale != DefaultScale) 
                 writer.WriteValue("Scale",  Scale);
         }
+        
+        private float Min = DefaultMin;
+        private float Max = DefaultMax;
+        private float Scale = DefaultScale;
         
         private const float DefaultScale = 0.01f;
         private const float DefaultMin = -9999999f;

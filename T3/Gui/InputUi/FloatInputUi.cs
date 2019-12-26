@@ -20,7 +20,7 @@ namespace T3.Gui.InputUi
         private float Max = DefaultMax;
         private float Scale = DefaultScale;
 
-        protected override InputEditState DrawEditControl(string name, ref float value)
+        protected override InputEditStateFlags DrawEditControl(string name, ref float value)
         {
             ImGui.PushID(Id.GetHashCode());
             var inputEditState = SingleValueEdit.Draw(ref value, -Vector2.UnitX, Min, Max, Scale);
@@ -52,7 +52,7 @@ namespace T3.Gui.InputUi
             {
                 float value = (float)curve.GetSampledValue(time);
                 var editState = DrawEditControl(name, ref value);
-                if ((editState & InputEditState.Modified) == InputEditState.Modified)
+                if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
                 {
                     var key = curve.GetV(time);
                     if (key == null)

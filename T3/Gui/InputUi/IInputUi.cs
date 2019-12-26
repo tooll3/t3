@@ -7,7 +7,7 @@ using T3.Gui.Selection;
 namespace T3.Gui.InputUi
 {
     [Flags]
-    public enum InputEditState
+    public enum InputEditStateFlags
     {
         Nothing = 0x0,
         Started = 0x1,
@@ -34,7 +34,7 @@ namespace T3.Gui.InputUi
         int Index { get; }
         bool IsAnimatable { get; }
 
-        InputEditState DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
+        InputEditStateFlags DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
         string GetSlotValue(IInputSlot inputSlot);
         void DrawSettings();
 

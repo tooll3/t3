@@ -29,7 +29,10 @@ namespace T3.Gui.InputUi
         public int Index => Parent.Symbol.InputDefinitions.FindIndex(inputDef => inputDef == InputDefinition);
         public virtual bool IsAnimatable => false;
 
-        protected abstract InputEditState DrawEditControl(string name, ref T value);
+        /// <summary>
+        /// Wraps the implementation of an parameter control to handle <see cref="InputEditStateFlags"/>
+        /// </summary>
+        protected abstract InputEditStateFlags DrawEditControl(string name, ref T value);
         protected abstract void DrawValueDisplay(string name, ref T value);
 
         protected virtual string GetSlotValueAsString(ref T value)
@@ -50,10 +53,10 @@ namespace T3.Gui.InputUi
             return string.Empty;
         }
         
-        public InputEditState DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
+        public InputEditStateFlags DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
             var name = inputSlot.Input.Name;
-            var editState = InputEditState.Nothing;
+            var editState = InputEditStateFlags.Nothing;
             var typeColor = TypeUiRegistry.Entries[Type].Color;
             var animator = compositionUi.Symbol.Animator;
             bool isAnimated = IsAnimatable && animator.IsInputSlotAnimated(inputSlot);
@@ -70,7 +73,7 @@ namespace T3.Gui.InputUi
                         if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                         {
                             if (ImGui.MenuItem("Parameters settings"))
-                                editState = InputEditState.ShowOptions;
+                                editState = InputEditStateFlags.ShowOptions;
 
                             ImGui.EndPopup();
                         }
@@ -132,7 +135,7 @@ namespace T3.Gui.InputUi
                         if (ImGui.BeginPopupContextItem("##parameterOptions", 0))
                         {
                             if (ImGui.MenuItem("Parameters settings"))
-                                editState = InputEditState.ShowOptions;
+                                editState = InputEditStateFlags.ShowOptions;
 
                             ImGui.EndPopup();
                         }
@@ -169,7 +172,7 @@ namespace T3.Gui.InputUi
                     CustomComponents.ContextMenuForItem(() =>
                                                         {
                                                             if (ImGui.MenuItem("Parameters settings"))
-                                                                editState = InputEditState.ShowOptions;
+                                                                editState = InputEditStateFlags.ShowOptions;
                                                         });
                     ImGui.PopStyleVar();
                     ImGui.SameLine();
@@ -223,7 +226,7 @@ namespace T3.Gui.InputUi
                                                             }
 
                                                             if (ImGui.MenuItem("Parameters settings"))
-                                                                editState = InputEditState.ShowOptions;
+                                                                editState = InputEditStateFlags.ShowOptions;
                                                         });
 
                     ImGui.PopStyleVar();
@@ -246,28 +249,28 @@ namespace T3.Gui.InputUi
                     ImGui.SetNextItemWidth(-1);
                     editState |= DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
 
-                    if ((editState & InputEditState.Started) == InputEditState.Started)
+                    if ((editState & InputEditStateFlags.Started) == InputEditStateFlags.Started)
                     {
                         //Log.Debug($"focused {name}");
                     }
 
-                    if ((editState & InputEditState.Modified) == InputEditState.Modified)
+                    if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
                     {
                         inputSlot.DirtyFlag.Invalidate();
                     }
 
-                    if ((editState & InputEditState.Finished) == InputEditState.Finished)
+                    if ((editState & InputEditStateFlags.Finished) == InputEditStateFlags.Finished)
                     {
                         inputSlot.DirtyFlag.Invalidate();
                     }
 
-                    if ((editState & InputEditState.ResetToDefault) == InputEditState.ResetToDefault)
+                    if ((editState & InputEditStateFlags.ResetToDefault) == InputEditStateFlags.ResetToDefault)
                     {
                         input.ResetToDefault();
                         inputSlot.DirtyFlag.Invalidate();
                     }
 
-                    input.IsDefault &= (editState & InputEditState.Modified) != InputEditState.Modified;
+                    input.IsDefault &= (editState & InputEditStateFlags.Modified) != InputEditStateFlags.Modified;
 
                     ImGui.PopStyleColor();
                     ImGui.PopItemWidth();

@@ -5,15 +5,15 @@ namespace T3.Gui.InputUi
 {
     public class FallbackInputUi<T> : InputValueUi<T>
     {
-        protected override InputEditState DrawEditControl(string name, ref T value)
+        protected override InputEditStateFlags DrawEditControl(string name, ref T value)
         {
             ImGui.Text(""); // Print an empty text to force layout to next line
-            return InputEditState.Nothing;
+            return InputEditStateFlags.Nothing;
         }
 
         protected override void DrawValueDisplay(string name, ref T value)
         {
-            // ToDo: it would be greate to print the name of the connected op here.
+            // ToDo: it would be great to print the name of the connected op here.
             ImGui.Text(""); // Print an empty text to force layout to next line
         }
     }

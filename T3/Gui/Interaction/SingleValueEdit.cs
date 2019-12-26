@@ -9,7 +9,7 @@ namespace T3.Gui.Interaction
 {
     public static class SingleValueEdit
     {
-        public static InputEditState Draw(ref int value, Vector2 size, int min = int.MinValue,
+        public static InputEditStateFlags Draw(ref int value, Vector2 size, int min = int.MinValue,
                                           int max = int.MaxValue, float scale = 0.1f, string format = "{0:0}")
         {
             double doubleValue = value;
@@ -18,7 +18,7 @@ namespace T3.Gui.Interaction
             return result;
         }
 
-        public static InputEditState Draw(ref float value, Vector2 size, float min = float.NegativeInfinity,
+        public static InputEditStateFlags Draw(ref float value, Vector2 size, float min = float.NegativeInfinity,
                                           float max = float.PositiveInfinity, float scale = 0.01f, string format = "{0:0.00}")
         {
             double floatValue = value;
@@ -30,7 +30,7 @@ namespace T3.Gui.Interaction
         /// <summary>
         /// Returns true if editing was completed and value changed
         /// </summary>
-        public static InputEditState Draw(ref double value, Vector2 size, double min = double.NegativeInfinity,
+        public static InputEditStateFlags Draw(ref double value, Vector2 size, double min = double.NegativeInfinity,
                                           double max = double.PositiveInfinity, float scale = 1, string format = "{0:0.00}")
         {
             var io = ImGui.GetIO();
@@ -55,7 +55,7 @@ namespace T3.Gui.Interaction
                                 if (io.KeyCtrl)
                                 {
                                     SetState(JogDialStates.Inactive);
-                                    return InputEditState.ResetToDefault;
+                                    return InputEditStateFlags.ResetToDefault;
                                 }
                                 else
                                 {
@@ -167,11 +167,11 @@ namespace T3.Gui.Interaction
                 value = _editValue;
                 if (_state == JogDialStates.Inactive)
                 {
-                    return InputEditState.Finished;
+                    return InputEditStateFlags.Finished;
                 }
 
                 _editValue = Math.Round(_editValue * 100)/ 100;
-                return Math.Abs(_editValue - _startValue) > 0.0001f ? InputEditState.Modified : InputEditState.Started;
+                return Math.Abs(_editValue - _startValue) > 0.0001f ? InputEditStateFlags.Modified : InputEditStateFlags.Started;
             }
 
             DrawButtonWithDynamicLabel(FormatValueForButton(ref value), ref size);
@@ -184,7 +184,7 @@ namespace T3.Gui.Interaction
                 SetState(JogDialStates.Dialing);
             }
 
-            return InputEditState.Nothing;
+            return InputEditStateFlags.Nothing;
         }
 
         private static void SetState(JogDialStates newState)

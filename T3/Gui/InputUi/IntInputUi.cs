@@ -6,10 +6,10 @@ namespace T3.Gui.InputUi
 {
     public class IntInputUi : SingleControlInputUi<int>
     {
-        public override bool DrawSingleEditControl(string name, ref int value)
+        protected override bool DrawSingleEditControl(string name, ref int value)
         {
             var result= SingleValueEdit.Draw(ref value, new Vector2(-1, 0));
-            return result == InputEditState.Modified;
+            return result == InputEditStateFlags.Modified;
         }
 
         protected override string GetSlotValueAsString(ref int intValue)

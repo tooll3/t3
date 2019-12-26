@@ -7,7 +7,7 @@ namespace T3.Gui.InputUi
 {
     public class EnumInputUi<T> : InputValueUi<T> where T : Enum
     {
-        protected override InputEditState DrawEditControl(string name, ref T value)
+        protected override InputEditStateFlags DrawEditControl(string name, ref T value)
         {
             // todo: check perf impact of creating the list here again and again! -> cache lists
             Type enumType = typeof(T);
@@ -21,7 +21,7 @@ namespace T3.Gui.InputUi
             if (enumType.GetCustomAttributes<FlagsAttribute>().Any())
             {
                 // show as checkboxes
-                InputEditState editState = InputEditState.Nothing;
+                InputEditStateFlags editStateFlags = InputEditStateFlags.Nothing;
                 if (ImGui.TreeNode("##enumParam124"))
                 {
                     // todo: refactor crappy code below, works but ugly!
@@ -44,24 +44,24 @@ namespace T3.Gui.InputUi
                             }
 
                             value = (T)(object)intValue;
-                            editState |= InputEditState.Modified;
+                            editStateFlags |= InputEditStateFlags.Modified;
                         }
 
                         if (ImGui.IsItemClicked())
                         {
-                            editState |= InputEditState.Started;
+                            editStateFlags |= InputEditStateFlags.Started;
                         }
 
                         if (ImGui.IsItemDeactivatedAfterEdit())
                         {
-                            editState |= InputEditState.Finished;
+                            editStateFlags |= InputEditStateFlags.Finished;
                         }
                     }
 
                     ImGui.TreePop();
                 }
 
-                return editState;
+                return editStateFlags;
             }
             else
             {
@@ -74,20 +74,20 @@ namespace T3.Gui.InputUi
                         break;
                     }
                 }
-                InputEditState editState = InputEditState.Nothing;
+                InputEditStateFlags editStateFlags = InputEditStateFlags.Nothing;
                 bool modified = ImGui.Combo("##dropDownParam", ref index, valueNames, valueNames.Length);
                 if (modified)
                 {
                     value = (T)values.GetValue(index);
-                    editState |= InputEditState.ModifiedAndFinished;
+                    editStateFlags |= InputEditStateFlags.ModifiedAndFinished;
                 }
 
                 if (ImGui.IsItemClicked())
                 {
-                    editState |= InputEditState.Started;
+                    editStateFlags |= InputEditStateFlags.Started;
                 }
 
-                return editState;
+                return editStateFlags;
             }
         }
 

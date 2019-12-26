@@ -80,25 +80,25 @@ namespace T3.Gui.Windows
                     ImGui.PushID(inputSlot.Id.GetHashCode());
                     var editState = inputUi.DrawInputEdit(inputSlot, compositionSymbolUi, symbolChildUi);
 
-                    if ((editState & InputEditState.Started) != InputEditState.Nothing)
+                    if ((editState & InputEditStateFlags.Started) != InputEditStateFlags.Nothing)
                     {
                         _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
                     }
 
-                    if ((editState & InputEditState.Modified) != InputEditState.Nothing)
+                    if ((editState & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
                     {
                         if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.Value.ValueType != inputSlot.Input.Value.ValueType)
                             _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
                         _inputValueCommandInFlight.Value.Assign(inputSlot.Input.Value);
                     }
 
-                    if ((editState & InputEditState.Finished) != InputEditState.Nothing)
+                    if ((editState & InputEditStateFlags.Finished) != InputEditStateFlags.Nothing)
                     {
                         if (_inputValueCommandInFlight != null && _inputValueCommandInFlight.Value.ValueType == inputSlot.Input.Value.ValueType)
                             UndoRedoStack.Add(_inputValueCommandInFlight);
                     }
 
-                    if (editState == InputEditState.ShowOptions)
+                    if (editState == InputEditStateFlags.ShowOptions)
                     {
                         SelectionManager.SetSelection(inputUi);
                     }

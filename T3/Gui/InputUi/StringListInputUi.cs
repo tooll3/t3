@@ -5,7 +5,7 @@ namespace T3.Gui.InputUi
 {
     public class StringListInputUi : SingleControlInputUi<List<string>>
     {
-        public override bool DrawSingleEditControl(string name, ref List<string> list)
+        protected override bool DrawSingleEditControl(string name, ref List<string> list)
         {
             var outputString = string.Join(", ", list);
             ImGui.Text($"{outputString}");
