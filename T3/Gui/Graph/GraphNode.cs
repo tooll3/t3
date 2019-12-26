@@ -2,7 +2,6 @@ using ImGuiNET;
 using System;
 using System.Linq;
 using System.Numerics;
-using SharpDX.Direct2D1;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -12,7 +11,6 @@ using T3.Gui.OutputUi;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using T3.Gui.Windows;
-using T3.Operators.Types;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -24,22 +22,14 @@ namespace T3.Gui.Graph
     {
         public static void Draw(SymbolChildUi childUi, Instance instance)
         {
-            var isPotentialConnectionTargetNode = _hoveredId == childUi.Id
-                                                  && ConnectionMaker.TempConnection != null
-                                                  && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
 
-            var showAllInputs = isPotentialConnectionTargetNode || childUi.Style == SymbolUi.Styles.Expanded;
 
             // Find visible input sockets from relevancy or connection
             var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
             SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
 
-            // !!!perf allocation hotspot
-            var visibleInputUis = (from inputUi in childSymbolUi.InputUis.Values
-                                   where showAllInputs || inputUi.Relevancy != Relevancy.Optional ||
-                                         connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Id)
-                                   orderby inputUi.Index
-                                   select inputUi).ToArray();
+            // !!!perf allocation hot spot
+            var visibleInputUis = FindVisibleInputUis();
 
             _drawList = Graph.DrawList;
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
@@ -254,10 +244,6 @@ namespace T3.Gui.Graph
 
                         screenCursor += new Vector2(labelSize.X + 8, 0);
 
-                        var typeLabelOpacity = Im.Remap(GraphCanvas.Current.Scale.X,
-                                                        1.2f, 3f,
-                                                        0f, 0.6f);
-
                         // Value
                         ImGui.PushStyleColor(ImGuiCol.Text, labelColor.Rgba);
                         var inputSlot = instance.Inputs.Single(slot => inputDefinition.Id == slot.Id);
@@ -379,12 +365,30 @@ namespace T3.Gui.Graph
 
                 outputIndex++;
             }
+
+            // Helper method
+            IInputUi[] FindVisibleInputUis()
+            {
+                var isPotentialConnectionTargetNode = _hoveredId == childUi.Id
+                                                      && ConnectionMaker.TempConnection != null
+                                                      && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
+
+                var showAllInputs = isPotentialConnectionTargetNode 
+                                    || childUi.Style == SymbolUi.Styles.Expanded;
+                
+                return (from inputUi in childSymbolUi.InputUis.Values
+                                       where showAllInputs 
+                                             || inputUi.Relevancy != Relevancy.Optional 
+                                             || connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Id)
+                                       orderby inputUi.Index
+                                       select inputUi).ToArray();
+            }
         }
 
         private enum SocketDirections
         {
             Input,
-            Ouput,
+            Output,
         }
 
         private static Color GetReactiveSlotColor(Type type, Color colorForType, SocketDirections direction)
@@ -477,7 +481,7 @@ namespace T3.Gui.Graph
             }
             else
             {
-                var color = GetReactiveSlotColor(outputDef.ValueType, colorForType, SocketDirections.Ouput);
+                var color = GetReactiveSlotColor(outputDef.ValueType, colorForType, SocketDirections.Output);
                 var pos = usableArea.Min;
                 _drawList.AddRectFilled(
                                         pos,
