@@ -10,7 +10,7 @@ namespace T3.Gui.InputUi.SingleControlInputs
             return ImGui.DragInt3("##int3Edit", ref value.X);
         }
 
-        protected override void DrawValueDisplay(string name, ref Int3 value)
+        protected override void DrawReadOnlyControl(string name, ref Int3 value)
         {
             DrawEditControl(name, ref value);
         }

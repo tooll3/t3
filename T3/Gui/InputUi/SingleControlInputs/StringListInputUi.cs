@@ -12,7 +12,7 @@ namespace T3.Gui.InputUi.SingleControlInputs
             return false;
         }
 
-        protected override void DrawValueDisplay(string name, ref List<string> list)
+        protected override void DrawReadOnlyControl(string name, ref List<string> list)
         {
             var outputString = string.Join(", ", list);
             ImGui.Text($"{outputString}");

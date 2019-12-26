@@ -33,9 +33,9 @@ namespace T3.Gui.InputUi
         /// Wraps the implementation of an parameter control to handle <see cref="InputEditStateFlags"/>
         /// </summary>
         protected abstract InputEditStateFlags DrawEditControl(string name, ref T value);
-        protected abstract void DrawValueDisplay(string name, ref T value);
+        protected abstract void DrawReadOnlyControl(string name, ref T value);
 
-        protected virtual string GetSlotValueAsString(ref T value)
+        protected virtual string GetSlotValueAsString(ref T float3Value)
         {
             return String.Empty;
         }
@@ -108,7 +108,7 @@ namespace T3.Gui.InputUi
                             ImGui.SetNextItemWidth(-1);
                             ImGui.PushStyleColor(ImGuiCol.Text, T3Style.ConnectedParameterColor.Rgba);
                             var slot = allInputs[multiInputIndex];
-                            DrawValueDisplay("##multiInputParam", ref slot.Value);
+                            DrawReadOnlyControl("##multiInputParam", ref slot.Value);
                             ImGui.PopStyleColor();
                             ImGui.PopID();
                         }
@@ -149,7 +149,7 @@ namespace T3.Gui.InputUi
                         ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? Color.Gray.Rgba : Color.White.Rgba);
                         ImGui.SetNextItemWidth(-1);
 
-                        DrawValueDisplay(name, ref typedInputSlot.Value);
+                        DrawReadOnlyControl(name, ref typedInputSlot.Value);
                         ImGui.PopStyleColor();
                         ImGui.PopItemWidth();
                     }

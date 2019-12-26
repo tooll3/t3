@@ -16,7 +16,7 @@ namespace T3.Gui.InputUi.SingleControlInputs
             return ImGui.ColorEdit4("##Vector4Edit", ref value, ImGuiColorEditFlags.Float);
         }
 
-        protected override void DrawValueDisplay(string name, ref Vector4 value)
+        protected override void DrawReadOnlyControl(string name, ref Vector4 value)
         {
             DrawEditControl(name, ref value);
         }
@@ -27,7 +27,7 @@ namespace T3.Gui.InputUi.SingleControlInputs
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
             if (curves.Length < 4)
             {
-                DrawValueDisplay(name, ref inputSlot.Value);
+                DrawReadOnlyControl(name, ref inputSlot.Value);
                 return;
             }
 

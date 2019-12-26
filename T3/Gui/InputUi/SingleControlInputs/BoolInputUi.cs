@@ -9,7 +9,7 @@ namespace T3.Gui.InputUi.SingleControlInputs
             return ImGui.Checkbox("##boolParam", ref value);
         }
 
-        protected override void DrawValueDisplay(string name, ref bool value)
+        protected override void DrawReadOnlyControl(string name, ref bool value)
         {
             ImGui.Text(value.ToString());
         }

@@ -28,7 +28,7 @@ namespace T3.Gui.InputUi
             return inputEditState;
         }
 
-        protected override void DrawValueDisplay(string name, ref float value)
+        protected override void DrawReadOnlyControl(string name, ref float value)
         {
             ImGui.InputFloat(name, ref value, step: 0.0f, step_fast: 0.0f, $"%f", flags: ImGuiInputTextFlags.ReadOnly);
         }

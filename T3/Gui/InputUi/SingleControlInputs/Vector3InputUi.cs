@@ -20,7 +20,7 @@ namespace T3.Gui.InputUi.SingleControlInputs
             return ImGui.DragFloat3("##Vector3Edit", ref value, Scale, Min, Max);
         }
 
-        protected override void DrawValueDisplay(string name, ref Vector3 value)
+        protected override void DrawReadOnlyControl(string name, ref Vector3 value)
         {
             DrawEditControl(name, ref value);
         }
@@ -31,7 +31,7 @@ namespace T3.Gui.InputUi.SingleControlInputs
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
             if (curves.Length < 3)
             {
-                DrawValueDisplay(name, ref inputSlot.Value);
+                DrawReadOnlyControl(name, ref inputSlot.Value);
                 return;
             }
 

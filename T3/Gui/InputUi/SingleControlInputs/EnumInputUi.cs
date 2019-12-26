@@ -91,7 +91,7 @@ namespace T3.Gui.InputUi
             }
         }
 
-        protected override void DrawValueDisplay(string name, ref T value)
+        protected override void DrawReadOnlyControl(string name, ref T value)
         {
             ImGui.Text(value.ToString());
         }

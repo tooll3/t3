@@ -10,7 +10,7 @@ namespace T3.Gui.InputUi.SingleControlInputs
             return ImGui.DragInt2("##int2Edit", ref value.Width);
         }
 
-        protected override void DrawValueDisplay(string name, ref Size2 value)
+        protected override void DrawReadOnlyControl(string name, ref Size2 value)
         {
             DrawEditControl(name, ref value);
         }

@@ -12,7 +12,7 @@ namespace T3.Gui.InputUi.SingleControlInputs
             return ImGui.DragFloat2("##Vector2Edit", ref value);
         }
 
-        protected override void DrawValueDisplay(string name, ref Vector2 value)
+        protected override void DrawReadOnlyControl(string name, ref Vector2 value)
         {
             DrawEditControl(name, ref value);
         }

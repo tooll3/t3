@@ -98,7 +98,7 @@ namespace T3.Gui.InputUi
             return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
 
-        protected override void DrawValueDisplay(string name, ref string value)
+        protected override void DrawReadOnlyControl(string name, ref string value)
         {
             if (value != null)
             {
