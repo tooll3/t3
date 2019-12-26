@@ -178,7 +178,6 @@ namespace T3.Gui.Graph
 
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
                 _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
-                _editInputsDialog.Draw(CompositionOp, GetSelectedChildUis());
 
                 _addInputDialog.Draw(GetSelectedSymbol());
             }
@@ -369,11 +368,6 @@ namespace T3.Gui.Graph
                          }
                      }
 
-                     if (ImGui.MenuItem("Edit inputs"))
-                     {
-                         _editInputsDialog.ShowNextFrame();
-                     }
-
                      if (ImGui.MenuItem("Add input parameter"))
                      {
                          _addInputDialog.ShowNextFrame();
@@ -555,9 +549,7 @@ namespace T3.Gui.Graph
         private readonly AddInputDialog _addInputDialog = new AddInputDialog();
         private readonly CombineToSymbolDialog _combineToSymbolDialog = new CombineToSymbolDialog();
         private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new DuplicateSymbolDialog();
-
-        private readonly EditInputsDialog _editInputsDialog = new EditInputsDialog();
-
+        
         //public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private readonly SelectionFence _selectionFence;
         private List<SymbolChildUi> ChildUis { get; set; }
