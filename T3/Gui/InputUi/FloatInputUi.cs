@@ -38,12 +38,12 @@ namespace T3.Gui.InputUi
             // This is a stub of value editing. Sadly it's very hard to get
             // under control because of styling issues and because in GraphNodes
             // The op body captures the mouse event first.
+            //
             //SingleValueEdit.Draw(ref floatValue,  -Vector2.UnitX);
             
             return string.Format(T3Ui.FloatNumberFormat, floatValue);
         }
-
-
+        
         protected override void DrawAnimatedValue(string name, InputSlot<float> inputSlot, Animator animator)
         {
             double time = EvaluationContext.GlobalTime;

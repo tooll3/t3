@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using ImGuiNET;
 using System.Numerics;
-using System.Runtime.Remoting.Messaging;
+using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 
-namespace T3.Gui.InputUi
+namespace T3.Gui.InputUi.SingleControlInputs
 {
     public class Vector4InputUi : SingleControlInputUi<Vector4>
     {

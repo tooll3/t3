@@ -2,7 +2,7 @@
 using ImGuiNET;
 using T3.Gui.Interaction;
 
-namespace T3.Gui.InputUi
+namespace T3.Gui.InputUi.SingleControlInputs
 {
     public class IntInputUi : SingleControlInputUi<int>
     {

@@ -14,6 +14,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Helper;
 using T3.Gui.InputUi;
+using T3.Gui.InputUi.SingleControlInputs;
 using T3.Gui.OutputUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
 

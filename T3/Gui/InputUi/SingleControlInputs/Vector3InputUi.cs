@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Linq;
-using ImGuiNET;
 using System.Numerics;
+using ImGuiNET;
 using Newtonsoft.Json;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
+
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
-namespace T3.Gui.InputUi
+namespace T3.Gui.InputUi.SingleControlInputs
 {
     public class Vector3InputUi : SingleControlInputUi<Vector3>
     {

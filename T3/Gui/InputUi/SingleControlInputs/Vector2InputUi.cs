@@ -1,7 +1,7 @@
-﻿using ImGuiNET;
-using System.Numerics;
+﻿using System.Numerics;
+using ImGuiNET;
 
-namespace T3.Gui.InputUi
+namespace T3.Gui.InputUi.SingleControlInputs
 {
     public class Vector2InputUi : SingleControlInputUi<Vector2>
     {
