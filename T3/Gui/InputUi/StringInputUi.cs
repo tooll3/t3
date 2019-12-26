@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -77,7 +78,14 @@ namespace T3.Gui.InputUi
                 }
                 else
                 {
-                    Process.Start(value);
+                    try
+                    {
+                        Process.Start(value);
+                    }
+                    catch (Win32Exception e)
+                    {
+                        Log.Warning("Can't open editor: " + e.Message);
+                    }
                 }
             }
 
