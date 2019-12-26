@@ -23,14 +23,14 @@ namespace T3.Gui.Graph
             return TempConnection != null
                    && TempConnection.TargetSlotId == NotConnectedId
                    //&& inputDef.DefaultValue.ValueType == _draftConnectionType;
-                   && _draftConnectionType == valueType;
+                   && DraftConnectionType == valueType;
         }
 
         public static bool IsMatchingOutputType(Type valueType)
         {
             return TempConnection != null
                    && TempConnection.SourceSlotId == NotConnectedId
-                   && _draftConnectionType == valueType;
+                   && DraftConnectionType == valueType;
         }
 
         public static bool IsOutputSlotCurrentConnectionSource(SymbolChildUi sourceUi, Symbol.OutputDefinition outputDef)
@@ -68,7 +68,7 @@ namespace T3.Gui.Graph
                                                    sourceSlotId: outputDef.Id,
                                                    targetParentOrChildId: NotConnectedId,
                                                    targetSlotId: NotConnectedId);
-            _draftConnectionType = outputDef.ValueType;
+            DraftConnectionType = outputDef.ValueType;
             _isDisconnectinFromInput = false;
         }
 
@@ -96,7 +96,7 @@ namespace T3.Gui.Graph
                 _isDisconnectinFromInput = false;
             }
 
-            _draftConnectionType = inputDef.DefaultValue.ValueType;
+            DraftConnectionType = inputDef.DefaultValue.ValueType;
         }
 
         public static void StartFromInputNode(Symbol.InputDefinition inputDef)
@@ -105,7 +105,7 @@ namespace T3.Gui.Graph
                                                    sourceSlotId: inputDef.Id,
                                                    targetParentOrChildId: NotConnectedId,
                                                    targetSlotId: NotConnectedId);
-            _draftConnectionType = inputDef.DefaultValue.ValueType;
+            DraftConnectionType = inputDef.DefaultValue.ValueType;
         }
 
         public static void StartFromOutputNode(Symbol parentSymbol, Symbol.OutputDefinition outputDef)
@@ -130,7 +130,7 @@ namespace T3.Gui.Graph
                                                        targetSlotId: outputDef.Id);
             }
 
-            _draftConnectionType = outputDef.ValueType;
+            DraftConnectionType = outputDef.ValueType;
         }
 
         public static void Update()
@@ -140,7 +140,7 @@ namespace T3.Gui.Graph
         public static void Cancel()
         {
             TempConnection = null;
-            _draftConnectionType = null;
+            DraftConnectionType = null;
         }
 
         public static void CompleteAtInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input, int multiInputIndex = 0,
@@ -201,7 +201,7 @@ namespace T3.Gui.Graph
                                                        sourceSlotId: TempConnection.SourceSlotId,
                                                        targetParentOrChildId: UseDraftChildId,
                                                        targetSlotId: Guid.Empty);
-                symbolBrowser.OpenAt(canvasPosition, _draftConnectionType, null);
+                symbolBrowser.OpenAt(canvasPosition, DraftConnectionType, null);
             }
             else if (TempConnection.SourceParentOrChildId == NotConnectedId)
             {
@@ -209,7 +209,7 @@ namespace T3.Gui.Graph
                                                        sourceSlotId: Guid.Empty,
                                                        targetParentOrChildId: TempConnection.TargetParentOrChildId,
                                                        targetSlotId: TempConnection.TargetSlotId);
-                symbolBrowser.OpenAt(canvasPosition, null, _draftConnectionType);
+                symbolBrowser.OpenAt(canvasPosition, null, DraftConnectionType);
             }
         }
 
@@ -286,7 +286,7 @@ namespace T3.Gui.Graph
         /// <summary>
         /// This is a cached value to highlight matching inputs or outputs
         /// </summary>
-        private static Type _draftConnectionType = null;
+        public static Type DraftConnectionType = null;
 
         /// <summary>
         /// A spectial Id the flags a connection as incomplete because either the source or the target is not yet connected.

@@ -1,7 +1,9 @@
 using ImGuiNET;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -22,13 +24,8 @@ namespace T3.Gui.Graph
     {
         public static void Draw(SymbolChildUi childUi, Instance instance)
         {
-
-
-            // Find visible input sockets from relevancy or connection
-            var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
-            SymbolUi childSymbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
-
-            // !!!perf allocation hot spot
+            var symbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
+            var nodeHasHiddenMatchingInputs= false;
             var visibleInputUis = FindVisibleInputUis();
 
             _drawList = Graph.DrawList;
@@ -101,7 +98,7 @@ namespace T3.Gui.Graph
                             if (instance.Outputs.Count > 0)
                             {
                                 var firstOutput = instance.Outputs[0];
-                                IOutputUi outputUi = childSymbolUi.OutputUis[firstOutput.Id];
+                                IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
                                 outputUi.DrawValue(firstOutput, recompute: GraphCanvas.HoverMode == GraphCanvas.HoverModes.Live);
                             }
                         }
@@ -118,7 +115,7 @@ namespace T3.Gui.Graph
 
                 if (_lastScreenRect.Contains(ImGui.GetMousePos()))
                 {
-                    _hoveredId = childUi.Id;
+                    _hoveredNodeId = childUi.Id;
                 }
 
                 var hovered = ImGui.IsItemHovered() || T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId);
@@ -163,7 +160,19 @@ namespace T3.Gui.Graph
                                                 Color.Orange);
                     }
                 }
-
+                
+                // Hidden inputs indicator
+                if (nodeHasHiddenMatchingInputs)
+                {
+                    var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
+                    var colorForType = TypeUiRegistry.Entries[ConnectionMaker.DraftConnectionType].Color;
+                    colorForType.Rgba.W *= blink;
+                    _drawList.AddRectFilled(
+                                            new Vector2(_lastScreenRect.Min.X , _lastScreenRect.Max.Y + 3),
+                                            new Vector2(_lastScreenRect.Min.X + 10, _lastScreenRect.Max.Y + 5),
+                                            colorForType);
+                }
+                
                 // Visualize update
                 {
                     var updateCountThisFrame = output?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
@@ -366,22 +375,46 @@ namespace T3.Gui.Graph
                 outputIndex++;
             }
 
-            // Helper method
+            // Find visible input slots.
+            // TODO: this is a major performance hot spot and needs optimization 
             IInputUi[] FindVisibleInputUis()
             {
-                var isPotentialConnectionTargetNode = _hoveredId == childUi.Id
+                var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
+
+                if (childUi.Style == SymbolUi.Styles.Expanded)
+                {
+                    return (from inputUi in symbolUi.InputUis.Values
+                            orderby inputUi.Index
+                            select inputUi).ToArray();
+                }
+
+                var isNodeHoveredConnectionTarget = _hoveredNodeId == childUi.Id
                                                       && ConnectionMaker.TempConnection != null
                                                       && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
 
-                var showAllInputs = isPotentialConnectionTargetNode 
-                                    || childUi.Style == SymbolUi.Styles.Expanded;
-                
-                return (from inputUi in childSymbolUi.InputUis.Values
-                                       where showAllInputs 
-                                             || inputUi.Relevancy != Relevancy.Optional 
-                                             || connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Id)
-                                       orderby inputUi.Index
-                                       select inputUi).ToArray();
+                var visibleInputs = new List<IInputUi>();
+                foreach (var inputUi in symbolUi.InputUis.Values)
+                {
+                    if (inputUi.Relevancy != Relevancy.Optional
+                        || connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Id))
+                    {
+                        visibleInputs.Add(inputUi);
+                        
+                    }
+                    else if (ConnectionMaker.IsMatchingInputType(inputUi.Type))
+                    {
+                        if (isNodeHoveredConnectionTarget)
+                        {
+                            visibleInputs.Add(inputUi);
+                        }
+                        else
+                        {
+                            nodeHasHiddenMatchingInputs = true;
+                        }
+                    }
+                }
+
+                return visibleInputs.OrderBy(ui => ui.Index).ToArray();
             }
         }
 
@@ -660,7 +693,7 @@ namespace T3.Gui.Graph
         #endregion
 
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
-        private static Guid _hoveredId;
+        private static Guid _hoveredNodeId;
 
         private static ImRect _lastScreenRect;
         private static ImDrawListPtr _drawList;
