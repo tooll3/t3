@@ -168,6 +168,7 @@ namespace T3.Gui.Interaction
                         ImGui.PushStyleColor(ImGuiCol.Text, double.IsNaN(_editValue)
                                                                 ? Color.Red.Rgba
                                                                 : Color.White.Rgba);
+                        ImGui.SetNextItemWidth(size.X);
                         ImGui.InputText("##dialInput", ref _jogDialText, 20);
                         ImGui.PopStyleColor();
 
