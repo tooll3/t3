@@ -21,11 +21,6 @@ namespace T3.Gui.Graph.Interaction
 {
     internal static class NodeOperations
     {
-        public static bool IsSymbolACompoundType(Symbol symbol)
-        {
-            return !symbol.InstanceType.GetTypeInfo().DeclaredMethods.Any();
-        }
-        
         public static Instance GetInstanceFromIdPath(IReadOnlyCollection<Guid> childPath)
         {
             if (childPath == null || childPath.Count == 0)
@@ -47,23 +42,25 @@ namespace T3.Gui.Graph.Interaction
                     return null;
                 }
             }
+
             return instance;
         }
-        
-        
+
+        private static readonly List<Guid> IdPath = new List<Guid>(10);
+
         public static List<Guid> BuildIdPathForInstance(Instance instance)
         {
-            var path = new List<Guid>();
+            IdPath.Clear();
             do
             {
-                path.Insert(0, instance.SymbolChildId);
+                IdPath.Insert(0, instance.SymbolChildId);
                 instance = instance.Parent;
             }
             while (instance != null);
-            return path;
+
+            return IdPath;
         }
-        
-        
+
         public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName, string nameSpace)
         {
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
@@ -389,7 +386,7 @@ namespace T3.Gui.Graph.Interaction
             // Select new node
             var symbolUi = SymbolUiRegistry.Entries[parent.Id];
             var childUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
-            
+
             return childUi;
         }
 
@@ -398,7 +395,7 @@ namespace T3.Gui.Graph.Interaction
         ///
         ///      <Compile Include="Types\GfxPipelineExample.cs" />
         ///
-        /// ... ot the project file.
+        /// ... to the project file.
         /// </summary>
         private static void AddSourceFileToProject(string newSourceFilePath)
         {
@@ -435,108 +432,18 @@ namespace T3.Gui.Graph.Interaction
 
         private static readonly Regex ValidTypeNamePattern = new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
 
-        public static void AddInputToSymbol(string inputName, bool multiInput, Type inputType, Symbol symbol)
+        class InputNodeByIdFinder : CSharpSyntaxRewriter
         {
-            var usingStrings = new HashSet<string>();
-            var outputStringBuilder = new StringBuilder();
-            foreach (var output in symbol.OutputDefinitions)
+            public InputNodeByIdFinder(Guid[] inputIds)
             {
-                var @namespace = output.ValueType.Namespace;
-                if (@namespace == "System")
-                {
-                    usingStrings.Add("using " + @namespace + ";");
-                    @namespace = String.Empty;
-                }
-                else
-                {
-                    @namespace += ".";
-                }
-
-                var attributeString = "        [Output(Guid = \"" + output.Id + "\")]";
-                outputStringBuilder.AppendLine(attributeString);
-                var typeName = TypeNameRegistry.Entries[output.ValueType];
-                var slotString = "Slot<" + @namespace + typeName + ">";
-                var outputString = "        public readonly " + slotString + " " + output.Name + " = new " + slotString + "();";
-                outputStringBuilder.AppendLine(outputString);
-                outputStringBuilder.AppendLine("");
+                _inputIds = inputIds ?? new Guid[0];
             }
 
-            var inputStringBuilder = new StringBuilder();
-            foreach (var input in symbol.InputDefinitions)
-            {
-                var @namespace = input.DefaultValue.ValueType.Namespace;
-                if (@namespace == "System")
-                {
-                    usingStrings.Add("using " + @namespace + ";");
-                    @namespace = String.Empty;
-                }
-                else
-                {
-                    @namespace += ".";
-                }
-
-                var attributeString = "        [Input(Guid = \"" + input.Id + "\")]";
-                inputStringBuilder.AppendLine(attributeString);
-                var typeName = TypeNameRegistry.Entries[input.DefaultValue.ValueType];
-                var slotString = (input.IsMultiInput ? "MultiInputSlot<" : "InputSlot<") + @namespace + typeName + ">";
-                var inputString = "        public readonly " + slotString + " " + input.Name + " = new " + slotString + "();";
-                inputStringBuilder.AppendLine(inputString);
-                inputStringBuilder.AppendLine("");
-            }
-
-            // add the new input
-            {
-                var @namespace = inputType.Namespace;
-                if (@namespace == "System")
-                {
-                    usingStrings.Add("using " + @namespace + ";");
-                    @namespace = String.Empty;
-                }
-                else
-                {
-                    @namespace += ".";
-                }
-
-                var attributeString = "        [Input(Guid = \"" + Guid.NewGuid() + "\")]";
-                inputStringBuilder.AppendLine(attributeString);
-                var typeName = TypeNameRegistry.Entries[inputType];
-                var slotString = (multiInput ? "MultiInputSlot<" : "InputSlot<") + @namespace + typeName + ">";
-                var inputString = "        public readonly " + slotString + " " + inputName + " = new " + slotString + "();";
-                inputStringBuilder.AppendLine(inputString);
-            }
-            usingStrings.Add("using T3.Core.Operator;");
-
-            var classStringBuilder = new StringBuilder();
-            foreach (var usingString in usingStrings)
-                classStringBuilder.AppendLine(usingString);
-            classStringBuilder.AppendLine("");
-            classStringBuilder.AppendLine("namespace T3.Operators.Types");
-            classStringBuilder.AppendLine("{");
-            classStringBuilder.AppendFormat("    public class {0} : Instance<{0}>\n", symbol.Name);
-            classStringBuilder.AppendLine("    {");
-            classStringBuilder.Append(outputStringBuilder);
-            classStringBuilder.AppendLine("");
-            classStringBuilder.Append(inputStringBuilder);
-            classStringBuilder.AppendLine("    }");
-            classStringBuilder.AppendLine("}");
-            classStringBuilder.AppendLine("");
-            var newSource = classStringBuilder.ToString();
-            Log.Info(newSource);
-
-            string path = @"Operators\Types\";
-            using (var sw = new StreamWriter(path + symbol.Name + ".cs"))
-            {
-                sw.Write(newSource);
-            }
-        }
-
-        class InputNodeFinder : CSharpSyntaxRewriter
-        {
             public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
             {
                 var attrList = node.AttributeLists[0];
                 var searchedNodes = (from attribute in attrList.Attributes
-                                     from id in IdsToRemove
+                                     from id in _inputIds
                                      where attribute.ToString().ToLower().Contains(id.ToString().ToLower())
                                      select attribute).ToArray();
 
@@ -548,11 +455,93 @@ namespace T3.Gui.Graph.Interaction
                 return node;
             }
 
-            public Guid[] IdsToRemove;
+            private readonly Guid[] _inputIds;
             public List<SyntaxNode> NodeToRemove { get; } = new List<SyntaxNode>();
         }
 
-        public static void RemoveInputFromSymbolRoslyn(Guid[] inputIdsToRemove, Symbol symbol)
+        public static void RemoveInputsFromSymbol(Guid[] inputIdsToRemove, Symbol symbol)
+        {
+            var syntaxTree = GetSyntaxTree(symbol);
+            if (syntaxTree == null)
+            {
+                Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
+                return;
+            }
+
+            var root = syntaxTree.GetRoot();
+
+            var inputNodeFinder = new InputNodeByIdFinder(inputIdsToRemove);
+            var newRoot = inputNodeFinder.Visit(root);
+            newRoot = newRoot.RemoveNodes(inputNodeFinder.NodeToRemove, SyntaxRemoveOptions.KeepNoTrivia);
+            var newSource = newRoot.GetText().ToString();
+            Log.Info(newSource);
+            WriteSymbolSourceToFile(newSource, symbol);
+        }
+
+        class InputNodeByTypeFinder : CSharpSyntaxRewriter
+        {
+            public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
+            {
+                if (!(node.Declaration.Type is GenericNameSyntax nameSyntax))
+                    return node;
+                
+                string idValue = nameSyntax.Identifier.ValueText;
+                if (idValue == "InputSlot" || idValue == "MultiInputSlot")
+                    LastInputNodeFound = node;
+
+                return node;
+            }
+
+            public SyntaxNode LastInputNodeFound { get; private set; }
+        }
+
+        public static void AddInputToSymbol(string inputName, bool multiInput, Type inputType, Symbol symbol)
+        {
+            var syntaxTree = GetSyntaxTree(symbol);
+            if (syntaxTree == null)
+            {
+                Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
+                return;
+            }
+
+            var root = syntaxTree.GetRoot();
+
+            var inputNodeFinder = new InputNodeByTypeFinder();
+            root = inputNodeFinder.Visit(root);
+            if (inputNodeFinder.LastInputNodeFound == null)
+            {
+                Log.Error("Could not add an input as no previous one was found, this case is missing and must be added.");
+                return;
+            }
+
+            var @namespace = inputType.Namespace;
+            if (@namespace == "System")
+                @namespace = String.Empty;
+            else
+                @namespace += ".";
+            var attributeString = "\n        [Input(Guid = \"" + Guid.NewGuid() + "\")]\n";
+            var typeName = TypeNameRegistry.Entries[inputType];
+            var slotString = (multiInput ? "MultiInputSlot<" : "InputSlot<") + @namespace + typeName + ">";
+            var inputString = "        public readonly " + slotString + " " + inputName + " = new " + slotString + "();\n";
+            
+            var inputDeclaration = SyntaxFactory.ParseMemberDeclaration(attributeString + inputString);
+            root = root.InsertNodesAfter(inputNodeFinder.LastInputNodeFound, new[] { inputDeclaration });
+
+            var newSource = root.GetText().ToString();
+            Log.Info(newSource);
+            WriteSymbolSourceToFile(newSource, symbol);
+        }
+
+        private static void WriteSymbolSourceToFile(string source, Symbol symbol)
+        {
+            string path = @"Operators\Types\";
+            using (var sw = new StreamWriter(path + symbol.Name + ".cs"))
+            {
+                sw.Write(source);
+            }
+        }
+
+        private static SyntaxTree GetSyntaxTree(Symbol symbol)
         {
             string path = @"Operators\Types\" + symbol.Name + ".cs";
             string source;
@@ -564,102 +553,16 @@ namespace T3.Gui.Graph.Interaction
             {
                 Log.Error($"Error opening file '{path}");
                 Log.Error(e.Message);
-                return;
+                return null;
             }
 
             if (string.IsNullOrEmpty(source))
             {
                 Log.Info("Source was empty, skip compilation.");
-                return;
+                return null;
             }
 
-            var syntaxTree = CSharpSyntaxTree.ParseText(source);
-            var root = syntaxTree.GetRoot();
-
-            var inputNodeFinder = new InputNodeFinder();
-            inputNodeFinder.IdsToRemove = inputIdsToRemove;
-            var newRoot = inputNodeFinder.Visit(root);
-            newRoot = newRoot.RemoveNodes(inputNodeFinder.NodeToRemove, SyntaxRemoveOptions.KeepNoTrivia);
-            var newSource = newRoot.GetText().ToString();
-            Log.Info(newSource);
-        }
-
-        public static void RemoveInputFromSymbol(Guid[] inputIdsToRemove, Symbol symbol)
-        {
-            var usingStrings = new HashSet<string>();
-            var outputStringBuilder = new StringBuilder();
-            foreach (var output in symbol.OutputDefinitions)
-            {
-                var @namespace = output.ValueType.Namespace;
-                if (@namespace == "System")
-                {
-                    usingStrings.Add("using " + @namespace + ";");
-                    @namespace = String.Empty;
-                }
-                else
-                {
-                    @namespace += ".";
-                }
-
-                var attributeString = "        [Output(Guid = \"" + output.Id + "\")]";
-                outputStringBuilder.AppendLine(attributeString);
-                var typeName = TypeNameRegistry.Entries[output.ValueType];
-                var slotString = "Slot<" + @namespace + typeName + ">";
-                var outputString = "        public readonly " + slotString + " " + output.Name + " = new " + slotString + "();";
-                outputStringBuilder.AppendLine(outputString);
-                outputStringBuilder.AppendLine("");
-            }
-
-            var inputStringBuilder = new StringBuilder();
-            foreach (var input in symbol.InputDefinitions)
-            {
-                if (inputIdsToRemove.Any(id => id == input.Id))
-                    continue;
-
-                var @namespace = input.DefaultValue.ValueType.Namespace;
-                if (@namespace == "System")
-                {
-                    usingStrings.Add("using " + @namespace + ";");
-                    @namespace = String.Empty;
-                }
-                else
-                {
-                    @namespace += ".";
-                }
-
-                var attributeString = "        [Input(Guid = \"" + input.Id + "\")]";
-                inputStringBuilder.AppendLine(attributeString);
-                var typeName = TypeNameRegistry.Entries[input.DefaultValue.ValueType];
-                var slotString = (input.IsMultiInput ? "MultiInputSlot<" : "InputSlot<") + @namespace + typeName + ">";
-                var inputString = "        public readonly " + slotString + " " + input.Name + " = new " + slotString + "();";
-                inputStringBuilder.AppendLine(inputString);
-                inputStringBuilder.AppendLine("");
-            }
-
-            usingStrings.Add("using T3.Core.Operator;");
-
-            var classStringBuilder = new StringBuilder();
-            foreach (var usingString in usingStrings)
-                classStringBuilder.AppendLine(usingString);
-            classStringBuilder.AppendLine("");
-            classStringBuilder.AppendLine("namespace T3.Operators.Types");
-            classStringBuilder.AppendLine("{");
-            classStringBuilder.AppendFormat("    public class {0} : Instance<{0}>\n", symbol.Name);
-            classStringBuilder.AppendLine("    {");
-            classStringBuilder.Append(outputStringBuilder);
-            classStringBuilder.AppendLine("");
-            classStringBuilder.Append(inputStringBuilder);
-            classStringBuilder.AppendLine("    }");
-            classStringBuilder.AppendLine("}");
-            classStringBuilder.AppendLine("");
-            var newSource = classStringBuilder.ToString();
-            Log.Info(newSource);
-
-            string path = @"Operators\Types\";
-            using (var sw = new StreamWriter(path + symbol.Name + ".cs"))
-            {
-                sw.Write(newSource);
-            }
+            return CSharpSyntaxTree.ParseText(source);
         }
     }
 }

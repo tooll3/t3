@@ -362,9 +362,9 @@ namespace T3.Gui.Graph
                          ImGui.PopFont();
 
                          var symbol = GetSelectedSymbol();
-                         if (ImGui.MenuItem("Remove input(s)", NodeOperations.IsSymbolACompoundType(symbol)))
+                         if (ImGui.MenuItem("Remove input(s)"))
                          {
-                             NodeOperations.RemoveInputFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
+                             NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
                          }
                      }
 
@@ -398,9 +398,9 @@ namespace T3.Gui.Graph
             }
 
             var selectedInputUis = SelectionManager.GetSelectedNodes<IInputUi>().ToList();
-            if (NodeOperations.IsSymbolACompoundType(CompositionOp.Symbol) &&  selectedInputUis.Count>0)
+            if (selectedInputUis.Count > 0)
             {
-                NodeOperations.RemoveInputFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
+                NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
             }
             
             SelectionManager.Clear();
