@@ -469,23 +469,41 @@ namespace T3.Gui.Graph.Interaction
             }
 
             var root = syntaxTree.GetRoot();
-
             var inputNodeFinder = new InputNodeByIdFinder(inputIdsToRemove);
             var newRoot = inputNodeFinder.Visit(root);
+
             newRoot = newRoot.RemoveNodes(inputNodeFinder.NodeToRemove, SyntaxRemoveOptions.KeepNoTrivia);
+            
             var newSource = newRoot.GetText().ToString();
             Log.Debug(newSource);
-            var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, symbol.Name);
-            if (newAssembly != null)
-            {
-                WriteSymbolSourceToFile(newSource, symbol);
-            }
-            else
+
+            bool success = UpdateSymbolWithNewSource(symbol, newSource);
+            if (!success)
             {
                 Log.Error("Compilation after removing inputs failed, aborting the remove.");
             }
         }
 
+        private static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource)
+        {
+            var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, symbol.Name);
+            if (newAssembly != null)
+            {
+                string path = @"Operators\Types\" + symbol.Name + ".cs";
+                var operatorResource = ResourceManager.Instance().GetOperatorFileResource(path);
+                if (operatorResource != null)
+                {
+                    operatorResource.OperatorAssembly = newAssembly;
+                    operatorResource.Updated = true;
+                    symbol.PendingSource = newSource;
+                    return true;
+                }
+                
+                Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
+            }
+
+            return false;
+        }
         class InputNodeByTypeFinder : CSharpSyntaxRewriter
         {
             public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
@@ -536,13 +554,10 @@ namespace T3.Gui.Graph.Interaction
             root = root.InsertNodesAfter(inputNodeFinder.LastInputNodeFound, new[] { inputDeclaration });
 
             var newSource = root.GetText().ToString();
-            Log.Info(newSource);
-            var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, symbol.Name);
-            if (newAssembly != null)
-            {
-                WriteSymbolSourceToFile(newSource, symbol);
-            }
-            else
+            Log.Debug(newSource);
+
+            bool success = UpdateSymbolWithNewSource(symbol, newSource);
+            if (!success)
             {
                 Log.Error("Compilation after adding input failed, aborting the add.");
             }
@@ -559,17 +574,20 @@ namespace T3.Gui.Graph.Interaction
 
         private static SyntaxTree GetSyntaxTree(Symbol symbol)
         {
-            string path = @"Operators\Types\" + symbol.Name + ".cs";
-            string source;
-            try
+            string source = symbol.PendingSource; // there's intermediate source, so use this
+            if (string.IsNullOrEmpty(source))
             {
-                source = File.ReadAllText(path);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error opening file '{path}");
-                Log.Error(e.Message);
-                return null;
+                string path = @"Operators\Types\" + symbol.Name + ".cs";
+                try
+                {
+                    source = File.ReadAllText(path);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Error opening file '{path}");
+                    Log.Error(e.Message);
+                    return null;
+                }
             }
 
             if (string.IsNullOrEmpty(source))

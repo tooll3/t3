@@ -207,6 +207,21 @@ namespace T3.Core
         {
             return GetResource<ComputeShaderResource>(resourceId).ComputeShader;
         }
+        
+        public OperatorResource GetOperatorFileResource(string path)
+        {
+            bool foundFileEntryForPath = _fileResources.TryGetValue(path, out var fileResource);
+            if (foundFileEntryForPath)
+            {
+                foreach (var id in fileResource.ResourceIds)
+                {
+                    if (Resources[id] is OperatorResource opResource)
+                        return opResource;
+                }
+            }
+
+            return null;
+        }
 
         public const uint NullResource = 0;
         private uint _resourceIdCounter = 1;
@@ -262,6 +277,16 @@ namespace T3.Core
             _csFileWatcher.Changed += OnChanged;
             _csFileWatcher.Renamed += OnRenamed;
             _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
+            _csFileWatcher.EnableRaisingEvents = true;
+        }
+
+        public void DisableOperatorFileWatcher()
+        {
+            _csFileWatcher.EnableRaisingEvents = false;
+        }
+        
+        public void EnableOperatorFileWatcher()
+        {
             _csFileWatcher.EnableRaisingEvents = true;
         }
 
@@ -668,7 +693,7 @@ namespace T3.Core
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
-                    if (Resources[id] is PixelShaderResource)
+                    if (Resources[id] is OperatorResource)
                     {
                         return id;
                     }

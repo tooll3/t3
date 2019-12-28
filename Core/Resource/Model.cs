@@ -411,6 +411,8 @@ namespace T3.Core
 
         public virtual void Save()
         {
+            ResourceManager.Instance().DisableOperatorFileWatcher(); // don't update ops if file is written during save
+            
             // remove all old t3 files before storing to get rid off invalid ones
             DirectoryInfo di = new DirectoryInfo(Path);
             FileInfo[] files = di.GetFiles("*" + SymbolExtension).ToArray();
@@ -421,16 +423,33 @@ namespace T3.Core
 
             Json json = new Json();
             // store all symbols in corresponding files
-            foreach (var symbolEntry in SymbolRegistry.Entries)
+            foreach (var (_, symbol) in SymbolRegistry.Entries)
             {
-                using (var sw = new StreamWriter(Path + symbolEntry.Value.Name + "_" + symbolEntry.Value.Id + SymbolExtension))
+                using (var sw = new StreamWriter(Path + symbol.Name + "_" + symbol.Id + SymbolExtension))
                 using (var writer = new JsonTextWriter(sw))
                 {
                     json.Writer = writer;
                     json.Writer.Formatting = Formatting.Indented;
-                    json.WriteSymbol(symbolEntry.Value);
+                    json.WriteSymbol(symbol);
+                }
+
+                if (!string.IsNullOrEmpty(symbol.PendingSource))
+                {
+                    WriteSymbolSourceToFile(symbol);
                 }
             }
+
+            ResourceManager.Instance().EnableOperatorFileWatcher();
+        }
+        
+        private void WriteSymbolSourceToFile(Symbol symbol)
+        {
+            using (var sw = new StreamWriter(Path + symbol.Name + ".cs"))
+            {
+                sw.Write(symbol.PendingSource);
+            }
+
+            symbol.PendingSource = null;
         }
     }
 }
