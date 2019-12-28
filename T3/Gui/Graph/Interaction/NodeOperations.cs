@@ -474,8 +474,16 @@ namespace T3.Gui.Graph.Interaction
             var newRoot = inputNodeFinder.Visit(root);
             newRoot = newRoot.RemoveNodes(inputNodeFinder.NodeToRemove, SyntaxRemoveOptions.KeepNoTrivia);
             var newSource = newRoot.GetText().ToString();
-            Log.Info(newSource);
-            WriteSymbolSourceToFile(newSource, symbol);
+            Log.Debug(newSource);
+            var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, symbol.Name);
+            if (newAssembly != null)
+            {
+                WriteSymbolSourceToFile(newSource, symbol);
+            }
+            else
+            {
+                Log.Error("Compilation after removing inputs failed, aborting the remove.");
+            }
         }
 
         class InputNodeByTypeFinder : CSharpSyntaxRewriter
@@ -529,7 +537,15 @@ namespace T3.Gui.Graph.Interaction
 
             var newSource = root.GetText().ToString();
             Log.Info(newSource);
-            WriteSymbolSourceToFile(newSource, symbol);
+            var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, symbol.Name);
+            if (newAssembly != null)
+            {
+                WriteSymbolSourceToFile(newSource, symbol);
+            }
+            else
+            {
+                Log.Error("Compilation after adding input failed, aborting the add.");
+            }
         }
 
         private static void WriteSymbolSourceToFile(string source, Symbol symbol)

@@ -35,7 +35,18 @@ namespace T3.Compilation
                 Log.Info("Source was empty, skip compilation.");
                 return false;
             }
-        
+
+            var newAssembly = CompileSymbolFromSource(source, path);
+            if (newAssembly == null)
+                return false;
+            
+            resource.OperatorAssembly = newAssembly;
+            resource.Updated = true;
+            return true;
+        }
+
+        public static Assembly CompileSymbolFromSource(string source, string symbolName)
+        {
             var referencedAssembliesNames = ResourceManager.Instance().OperatorsAssembly.GetReferencedAssemblies(); // todo: ugly
             var appDomainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
@@ -60,7 +71,7 @@ namespace T3.Compilation
             using (var pdbStream = new MemoryStream())
             {
                 var emitResult = compilation.Emit(dllStream, pdbStream);
-                Log.Info($"compilation results of '{path}':");
+                Log.Info($"compilation results of '{symbolName}':");
                 if (!emitResult.Success)
                 {
                     foreach (var entry in emitResult.Diagnostics)
@@ -73,22 +84,21 @@ namespace T3.Compilation
                 }
                 else
                 {
-                    Log.Info("successful");
+                    Log.Info($"Compilation of '{symbolName}' successful.");
                     var newAssembly = Assembly.Load(dllStream.GetBuffer());
                     if (newAssembly.ExportedTypes.Any())
                     {
-                        resource.OperatorAssembly = newAssembly;
-                        resource.Updated = true;
+                        return newAssembly;
                     }
                     else
                     {
-                        Log.Error("New compiled Assembly had no exported type.");
-                        return false;
+                        Log.Error("New compiled assembly had no exported type.");
+                        return null;
                     }
                 }
             }
 
-            return true;
+            return null;
         }
     }
 }
