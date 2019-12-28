@@ -521,7 +521,9 @@ namespace T3.Gui.Graph
             var outputHeight = outputCount == 0
                                    ? opRect.GetHeight()
                                    : (opRect.GetHeight() - 1 + SlotGaps) / outputCount - SlotGaps;
-
+            if (outputHeight <= 0)
+                outputHeight = 1;
+            
             return ImRect.RectWithSize(
                                        new Vector2(
                                                    opRect.Max.X + 1, // - GraphNode._usableSlotThickness,
@@ -654,6 +656,8 @@ namespace T3.Gui.Graph
             var inputHeight = visibleSlotCount == 0
                                   ? areaForParams.GetHeight()
                                   : (areaForParams.GetHeight() + SlotGaps) / visibleSlotCount - SlotGaps;
+            if (inputHeight <= 0)
+                inputHeight = 1;
 
             return ImRect.RectWithSize(
                                        new Vector2(
