@@ -1,5 +1,4 @@
 todo:
-- Add/Remove Inputs to/from compound ops without code editing
 - Integrate reset-to-default for new float edit
 - Scene type?
 - Adjust thread size of particle ops to some useful values
@@ -21,6 +20,7 @@ todo:
 - Move Roslyn integration to UI project
  
 done:
+* Add/Remove Inputs to/from compound ops without code editing
 * Make animated camera moveable (add/update keyframes)
 * Fixed assert after editing a string when a float was edited before
 * Fixed crash when deleting an input of the actual composition op (Crash 05)

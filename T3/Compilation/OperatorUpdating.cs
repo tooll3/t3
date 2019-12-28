@@ -65,7 +65,10 @@ namespace T3.Compilation
                 {
                     foreach (var entry in emitResult.Diagnostics)
                     {
-                        Log.Info(entry.GetMessage());
+                        if (entry.WarningLevel == 0)
+                            Log.Error(entry.GetMessage());
+                        else
+                            Log.Warning(entry.GetMessage());
                     }
                 }
                 else
