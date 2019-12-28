@@ -90,6 +90,12 @@ namespace T3.Gui
             return color.Rgba;
         }
 
+        public static Color operator *(Color c, float f)
+        {
+            c.Rgba.W *= f;
+            return c;
+        }
+        
         public static Color Mix(Color c1, Color c2, float t)
         {
                 return new Color(
