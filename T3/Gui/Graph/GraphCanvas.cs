@@ -295,27 +295,27 @@ namespace T3.Gui.Graph
 
                          if (ImGui.BeginMenu("Styles"))
                          {
-                             if (ImGui.MenuItem("Default", "", selectedChildUis.Any(child => child.Style == SymbolUi.Styles.Default)))
+                             if (ImGui.MenuItem("Default", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Default)))
                              {
                                  foreach (var childUi in selectedChildUis)
                                  {
-                                     childUi.Style = SymbolUi.Styles.Default;
+                                     childUi.Style = SymbolChildUi.Styles.Default;
                                  }
                              }
 
-                             if (ImGui.MenuItem("Resizable", "", selectedChildUis.Any(child => child.Style == SymbolUi.Styles.Resizable)))
+                             if (ImGui.MenuItem("Resizable", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable)))
                              {
                                  foreach (var childUi in selectedChildUis)
                                  {
-                                     childUi.Style = SymbolUi.Styles.Resizable;
+                                     childUi.Style = SymbolChildUi.Styles.Resizable;
                                  }
                              }
 
-                             if (ImGui.MenuItem("Expanded", "", selectedChildUis.Any(child => child.Style == SymbolUi.Styles.Resizable)))
+                             if (ImGui.MenuItem("Expanded", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable)))
                              {
                                  foreach (var childUi in selectedChildUis)
                                  {
-                                     childUi.Style = SymbolUi.Styles.Expanded;
+                                     childUi.Style = SymbolChildUi.Styles.Expanded;
                                  }
                              }
 

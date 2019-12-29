@@ -69,7 +69,7 @@ namespace T3.Gui
                 {
                     Writer.WriteComment(childUi.SymbolChild.ReadableName);
 
-                    if (childUi.Style != SymbolUi.Styles.Default)
+                    if (childUi.Style != SymbolChildUi.Styles.Default)
                         Writer.WriteObject("Style", childUi.Style);
 
                     if (childUi.Size != SymbolChildUi.DefaultOpSize)
@@ -189,11 +189,11 @@ namespace T3.Gui
 
                 if (childEntry["Style"] != null)
                 {
-                    childUi.Style = (SymbolUi.Styles)Enum.Parse(typeof(SymbolUi.Styles), childEntry["Style"].Value<string>());
+                    childUi.Style = (SymbolChildUi.Styles)Enum.Parse(typeof(SymbolChildUi.Styles), childEntry["Style"].Value<string>());
                 }
                 else
                 {
-                    childUi.Style = SymbolUi.Styles.Default;
+                    childUi.Style = SymbolChildUi.Styles.Default;
                 }
 
                 symbolChildUis.Add(childUi);

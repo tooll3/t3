@@ -38,7 +38,7 @@ namespace T3.Gui.Graph
                 _lastScreenRect.Floor();
 
                 // Resize indicator
-                if (childUi.Style == SymbolUi.Styles.Resizable)
+                if (childUi.Style == SymbolChildUi.Styles.Resizable)
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
                     ImGui.SetCursorScreenPos(_lastScreenRect.Max - new Vector2(10, 10));
@@ -60,18 +60,18 @@ namespace T3.Gui.Graph
                     ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
                     ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.Text, new Color(0, 0, 0, .7f).Rgba);
-                    if (childUi.Style == SymbolUi.Styles.Default)
+                    if (childUi.Style == SymbolChildUi.Styles.Default)
                     {
                         if (ImGui.Button("<##size", new Vector2(16, 16)))
                         {
-                            childUi.Style = SymbolUi.Styles.Expanded;
+                            childUi.Style = SymbolChildUi.Styles.Expanded;
                         }
                     }
-                    else if (childUi.Style != SymbolUi.Styles.Default)
+                    else if (childUi.Style != SymbolChildUi.Styles.Default)
                     {
                         if (ImGui.Button("v##size", new Vector2(16, 16)))
                         {
-                            childUi.Style = SymbolUi.Styles.Default;
+                            childUi.Style = SymbolChildUi.Styles.Default;
                         }
                     }
 
@@ -381,7 +381,7 @@ namespace T3.Gui.Graph
             {
                 var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
 
-                if (childUi.Style == SymbolUi.Styles.Expanded)
+                if (childUi.Style == SymbolChildUi.Styles.Expanded)
                 {
                     return (from inputUi in symbolUi.InputUis.Values
                             orderby inputUi.Index
@@ -450,7 +450,7 @@ namespace T3.Gui.Graph
 
         private static Vector2 ComputeNodeSize(SymbolChildUi childUi, IInputUi[] visibleInputUis)
         {
-            if (childUi.Style == SymbolUi.Styles.Resizable)
+            if (childUi.Style == SymbolChildUi.Styles.Resizable)
             {
                 return childUi.Size;
             }

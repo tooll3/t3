@@ -11,12 +11,21 @@ namespace T3.Gui
     /// </summary>
     public class SymbolChildUi : ISelectableNode
     {
+        public enum Styles
+        {
+            Default,
+            Expanded,
+            Resizable,
+            WithThumbnail,
+        }
+        
+        internal static Vector2 DefaultOpSize { get; } = new Vector2(110, 25);
+        
         public SymbolChild SymbolChild;
         public Guid Id => SymbolChild.Id;
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = DefaultOpSize;
-        public bool IsSelected { get { return SelectionManager.IsNodeSelected(this); } }
-        public SymbolUi.Styles Style { get; set; }
-        internal static Vector2 DefaultOpSize = new Vector2(110, 25);
+        public bool IsSelected => SelectionManager.IsNodeSelected(this);
+        public Styles Style { get; set; }
     }
 }

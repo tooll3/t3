@@ -159,14 +159,6 @@ namespace T3.Gui
             ChildUis.Remove(childToRemove);
         }
 
-        public enum Styles
-        {
-            Default,
-            Expanded,
-            Resizable,
-            WithThumbnail,
-        }
-        
         public string Description { get; set; }
         // public Styles DefaultStyleForInstances { get; set; }  // TODO: Implement inheritance for display styles? 
         public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();    // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
