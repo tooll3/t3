@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using SharpDX.Direct3D;
 using SharpDX.Mathematics.Interop;
+using T3.Compilation;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -185,14 +186,23 @@ namespace T3.Gui
 
             // store all symbols in corresponding files
             UiJson json = new UiJson();
-            foreach (var symbolUiEntry in SymbolUiRegistry.Entries)
+            var resourceManager = ResourceManager.Instance();
+            foreach (var (_, symbolUi) in SymbolUiRegistry.Entries)
             {
-                using (var sw = new StreamWriter(Path + symbolUiEntry.Value.Symbol.Name + "_" + symbolUiEntry.Value.Symbol.Id + SymbolUiExtension))
+                var symbol = symbolUi.Symbol;
+                using (var sw = new StreamWriter(Path + symbol.Name + "_" + symbol.Id + SymbolUiExtension))
                 using (var writer = new JsonTextWriter(sw))
                 {
                     json.Writer = writer;
                     json.Writer.Formatting = Formatting.Indented;
-                    json.WriteSymbolUi(symbolUiEntry.Value);
+                    json.WriteSymbolUi(symbolUi);
+                }
+                
+                var opResource = resourceManager.GetOperatorFileResource(Path + symbol.Name + ".cs");
+                if (opResource == null)
+                {
+                    // if the source wasn't registered before do this now
+                    resourceManager.CreateOperatorEntry(symbol.SourcePath, symbol.Id.ToString(), OperatorUpdating.Update);
                 }
             }
         }

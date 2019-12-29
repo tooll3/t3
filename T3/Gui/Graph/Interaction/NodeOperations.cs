@@ -17,6 +17,8 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+
 namespace T3.Gui.Graph.Interaction
 {
     internal static class NodeOperations
@@ -200,7 +202,7 @@ namespace T3.Gui.Graph.Interaction
                 return;
             }
 
-            AddSourceFileToProject(newSourcePath);
+            Model.AddSourceFileToProject(newSourcePath);
 
             // create and register the new symbol
             var newSymbol = new Symbol(type, newSymbolId);
@@ -267,46 +269,106 @@ namespace T3.Gui.Graph.Interaction
             UndoRedoStack.AddAndExecute(deleteCmd);
         }
 
-        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string combineName, string nameSpace)
+        class ClassRenameRewriter : CSharpSyntaxRewriter
+        {
+            private readonly string _newSymbolName;
+            public ClassRenameRewriter(string newSymbolName)
+            {
+                _newSymbolName = newSymbolName;
+            }
+
+            public override SyntaxNode VisitClassDeclaration(ClassDeclarationSyntax node)
+            {
+                var identifier = ParseToken(_newSymbolName).WithTrailingTrivia(SyntaxTrivia(SyntaxKind.WhitespaceTrivia, " "));
+                var classDeclaration = ClassDeclaration(node.AttributeLists, node.Modifiers, node.Keyword, identifier, node.TypeParameterList,
+                                                        null, node.ConstraintClauses, node.OpenBraceToken, node.Members, node.CloseBraceToken,
+                                                        node.SemicolonToken);
+                var genericName = GenericName(Identifier("Instance"))
+                   .WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList<TypeSyntax>(IdentifierName(_newSymbolName)))
+                                            .WithGreaterThanToken(Token(TriviaList(), SyntaxKind.GreaterThanToken, TriviaList(LineFeed))));
+                var baseList = BaseList(SingletonSeparatedList<BaseTypeSyntax>(SimpleBaseType(genericName)));
+                baseList = baseList.WithColonToken(Token(TriviaList(), SyntaxKind.ColonToken, TriviaList(Space)));
+                classDeclaration = classDeclaration.WithBaseList(baseList);
+                return classDeclaration;
+            }
+        }
+        
+        class MemberDuplicateRewriter : CSharpSyntaxRewriter
+        {
+            private readonly string _newSymbolName;
+            public MemberDuplicateRewriter(string newSymbolName)
+            {
+                _newSymbolName = newSymbolName;
+            }
+
+            public override SyntaxNode VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
+            {
+                return ConstructorDeclaration(_newSymbolName)
+                      .AddModifiers(Token(SyntaxKind.PublicKeyword))
+                      .NormalizeWhitespace()
+                      .WithTrailingTrivia(SyntaxTrivia(SyntaxKind.EndOfLineTrivia, "\r\n"))
+                      .WithBody(node.Body)
+                      .WithLeadingTrivia(node.GetLeadingTrivia())
+                      .WithTrailingTrivia(node.GetTrailingTrivia());
+            }
+
+            public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
+            {
+                if (!(node.Declaration.Type is GenericNameSyntax nameSyntax))
+                    return node;
+                
+                string idValue = nameSyntax.Identifier.ValueText;
+                if (idValue != "InputSlot" && idValue != "MultiInputSlot" && idValue != "Slot")
+                    return node; // no input/multi-input/slot (output)
+
+                var attrList = node.AttributeLists[0];
+                var attribute = attrList.Attributes[0];
+                var match = _guidRegex.Match(attribute.ToString());
+                Guid oldGuid = Guid.Parse(match.Value);
+                Guid newGuid = Guid.NewGuid();
+                OldToNewGuidDict[oldGuid] = newGuid;
+                var attributeArg = "(Guid = \"" + newGuid + "\")";
+                var argList = ParseAttributeArgumentList(attributeArg);
+
+                node = node.ReplaceNode(attribute.ArgumentList, argList);
+                
+                return node;
+            }
+
+            private readonly Regex _guidRegex = new Regex(@"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}",
+                                                          RegexOptions.IgnoreCase);
+            public Dictionary<Guid, Guid> OldToNewGuidDict { get; } = new Dictionary<Guid, Guid>(10);
+        }
+        
+        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newTypeName, string nameSpace)
         {
             var sourceSymbol = symbolChildToDuplicate.Symbol;
-            string originalSourcePath = sourceSymbol.SourcePath;
-            Log.Info($"original symbol path: {originalSourcePath}");
-            int lastSeparatorIndex = originalSourcePath.LastIndexOf("\\", StringComparison.Ordinal);
-            string newSourcePath = originalSourcePath.Substring(0, lastSeparatorIndex + 1) + combineName + ".cs";
-            Log.Info($"new symbol path: {newSourcePath}");
-            AddSourceFileToProject(newSourcePath);
-
-            var sr = new StreamReader(originalSourcePath);
-            string originalSource = sr.ReadToEnd();
-            sr.Dispose();
-            var oldToNewIdMap = new Dictionary<Guid, Guid>(20);
-            string newSource = Regex.Replace(originalSource,
-                                             @"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}",
-                                             match =>
-                                             {
-                                                 Guid newGuid = Guid.NewGuid();
-                                                 oldToNewIdMap.Add(Guid.Parse(match.Value), newGuid);
-                                                 return newGuid.ToString();
-                                             },
-                                             RegexOptions.IgnoreCase);
-            newSource = Regex.Replace(newSource, sourceSymbol.Name, match => combineName);
-            var sw = new StreamWriter(newSourcePath);
-            sw.Write(newSource);
-            sw.Dispose();
-
-            var resourceManager = ResourceManager.Instance();
-            Guid newSymbolId = Guid.NewGuid();
-            uint symbolResourceId = resourceManager.CreateOperatorEntry(newSourcePath, newSymbolId.ToString(), OperatorUpdating.Update);
-            var symbolResource = resourceManager.GetResource<OperatorResource>(symbolResourceId);
-            symbolResource.Update(newSourcePath);
-            if (!symbolResource.Updated)
+            
+            var syntaxTree = GetSyntaxTree(sourceSymbol);
+            if (syntaxTree == null)
             {
-                Log.Error("Error, new symbol was not updated/compiled");
+                Log.Error($"Error getting syntax tree from symbol '{sourceSymbol.Name}' source.");
                 return null;
             }
 
-            Type type = symbolResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
+            // create new source on basis of original type
+            var root = syntaxTree.GetRoot();
+            var classRenamer = new ClassRenameRewriter(newTypeName);
+            root = classRenamer.Visit(root);
+            var memberRewriter = new MemberDuplicateRewriter(newTypeName);
+            root = memberRewriter.Visit(root);
+            var oldToNewIdMap = memberRewriter.OldToNewGuidDict;
+            var newSource = root.GetText().ToString();
+            Log.Debug(newSource);
+
+            var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newTypeName);
+            if (newAssembly == null)
+            {
+                Log.Error("Error compiling duplicated type, aborting duplication.");
+                return null;
+            }
+            
+            Type type = newAssembly.ExportedTypes.FirstOrDefault();
             if (type == null)
             {
                 Log.Error("Error, new symbol has no compiled instance type");
@@ -314,10 +376,11 @@ namespace T3.Gui.Graph.Interaction
             }
 
             // create and register the new symbol
+            Guid newSymbolId = Guid.NewGuid();
             var newSymbol = new Symbol(type, newSymbolId);
+            newSymbol.PendingSource = newSource;
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
             var newSymbolUi = UiModel.UpdateUiEntriesForSymbol(newSymbol);
-            newSymbol.SourcePath = newSourcePath;
             newSymbol.Namespace = nameSpace;
 
             // apply content to new symbol
@@ -388,39 +451,6 @@ namespace T3.Gui.Graph.Interaction
             var childUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
 
             return childUi;
-        }
-
-        /// <summary>
-        /// Inserts an entry like...
-        ///
-        ///      <Compile Include="Types\GfxPipelineExample.cs" />
-        ///
-        /// ... to the project file.
-        /// </summary>
-        private static void AddSourceFileToProject(string newSourceFilePath)
-        {
-            var path = Path.GetDirectoryName(newSourceFilePath);
-            var newFileName = Path.GetFileName(newSourceFilePath);
-            var directoryInfo = new DirectoryInfo(path).Parent;
-            if (directoryInfo == null)
-            {
-                Log.Error("Can't find project file folder for " + newSourceFilePath);
-                return;
-            }
-
-            var parentPath = directoryInfo.FullName;
-            var projectFilePath = Path.Combine(parentPath, "Operators.csproj");
-
-            if (!File.Exists(projectFilePath))
-            {
-                Log.Error("Can't find project file in " + projectFilePath);
-                return;
-            }
-
-            var orgLine = "<ItemGroup>\r\n    <Compile Include";
-            var newLine = $"<ItemGroup>\r\n    <Compile Include=\"Types\\{newFileName}\" />\r\n    <Compile Include";
-            var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, newLine);
-            File.WriteAllText(projectFilePath, newContent);
         }
 
         public static bool IsNewSymbolNameValid(string newSymbolName)

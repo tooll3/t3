@@ -42,7 +42,7 @@ namespace T3.Gui.Graph.Dialogs
                     var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
                     NodeOperations.DuplicateAsNewType(compositionSymbolUi,
                                                       selectedChildUis.First().SymbolChild,
-                                                      combineName: combineName,
+                                                      newTypeName: combineName,
                                                       nameSpace: nameSpace);
                     ImGui.CloseCurrentPopup();
                 }

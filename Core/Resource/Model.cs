@@ -444,12 +444,52 @@ namespace T3.Core
         
         private void WriteSymbolSourceToFile(Symbol symbol)
         {
-            using (var sw = new StreamWriter(Path + symbol.Name + ".cs"))
+            string sourcePath = Path + symbol.Name + ".cs";
+            using (var sw = new StreamWriter(sourcePath))
             {
                 sw.Write(symbol.PendingSource);
             }
 
+            if (string.IsNullOrEmpty(symbol.SourcePath))
+            {
+                symbol.SourcePath = sourcePath;
+                AddSourceFileToProject(sourcePath);
+            }
+
             symbol.PendingSource = null;
+        }
+        
+        /// <summary>
+        /// Inserts an entry like...
+        /// 
+        ///      <Compile Include="Types\GfxPipelineExample.cs" />
+        /// 
+        /// ... to the project file.
+        /// </summary>
+        public static void AddSourceFileToProject(string newSourceFilePath)
+        {
+            var path = System.IO.Path.GetDirectoryName(newSourceFilePath);
+            var newFileName = System.IO.Path.GetFileName(newSourceFilePath);
+            var directoryInfo = new DirectoryInfo(path).Parent;
+            if (directoryInfo == null)
+            {
+                Log.Error("Can't find project file folder for " + newSourceFilePath);
+                return;
+            }
+
+            var parentPath = directoryInfo.FullName;
+            var projectFilePath = System.IO.Path.Combine(parentPath, "Operators.csproj");
+
+            if (!File.Exists(projectFilePath))
+            {
+                Log.Error("Can't find project file in " + projectFilePath);
+                return;
+            }
+
+            var orgLine = "<ItemGroup>\r\n    <Compile Include";
+            var newLine = $"<ItemGroup>\r\n    <Compile Include=\"Types\\{newFileName}\" />\r\n    <Compile Include";
+            var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, newLine);
+            File.WriteAllText(projectFilePath, newContent);
         }
     }
 }
