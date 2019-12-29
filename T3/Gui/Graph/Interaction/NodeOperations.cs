@@ -380,11 +380,12 @@ namespace T3.Gui.Graph.Interaction
             var newSymbol = new Symbol(type, newSymbolId);
             newSymbol.PendingSource = newSource;
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
-            var newSymbolUi = UiModel.UpdateUiEntriesForSymbol(newSymbol);
+            var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];
+            var newSymbolUi = sourceSymbolUi.CloneForNewSymbol(newSymbol, oldToNewIdMap);
+            SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
             newSymbol.Namespace = nameSpace;
 
             // apply content to new symbol
-            var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];
             var cmd = new CopySymbolChildrenCommand(sourceSymbolUi, null, newSymbolUi, Vector2.One);
             cmd.Do();
             cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));

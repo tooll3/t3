@@ -184,6 +184,18 @@ namespace T3.Gui
 
             return addedChildId;
         }
+        
+        public Guid AddChildAsCopyFromSource(Symbol symbolToAdd, Guid addedChildId, SymbolUi sourceCompositionSymbolUi, Guid sourceChildId, Vector2 posInCanvas)
+        {
+            Symbol.AddChild(symbolToAdd, addedChildId);
+            var sourceChildUi = sourceCompositionSymbolUi.ChildUis.Single(child => child.Id == sourceChildId);
+            var childUi = sourceChildUi.Clone();
+            childUi.SymbolChild = Symbol.Children.Find(entry => entry.Id == addedChildId);
+            childUi.PosOnCanvas = posInCanvas;
+            ChildUis.Add(childUi);
+
+            return addedChildId;
+        }
 
         public void RemoveChild(Guid id)
         {

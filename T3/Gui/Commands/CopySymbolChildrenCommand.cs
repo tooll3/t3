@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using T3.Core;
 using T3.Core.Operator;
 
 namespace T3.Gui.Commands
@@ -71,15 +72,16 @@ namespace T3.Gui.Commands
             {
                 SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == childToCopy.ChildId);
                 var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
-                targetCompositionSymbolUi.AddChild(symbolToAdd, childToCopy.AddedId, _targetPosition + childToCopy.RelativePosition, childToCopy.Size);
+                targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, childToCopy.AddedId, sourceCompositionSymbolUi, childToCopy.ChildId,
+                                                                   _targetPosition + childToCopy.RelativePosition);
                 var targetSymbol = targetCompositionSymbolUi.Symbol;
                 SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
                 var newSymbolInputs = newSymbolChild.InputValues;
-                foreach (var input in symbolChildToCopy.InputValues)
+                foreach (var (id, input) in symbolChildToCopy.InputValues)
                 {
-                    var newInput = newSymbolInputs[input.Key];
-                    newInput.Value.Assign(input.Value.Value.Clone());
-                    newInput.IsDefault = input.Value.IsDefault;
+                    var newInput = newSymbolInputs[id];
+                    newInput.Value.Assign(input.Value.Clone());
+                    newInput.IsDefault = input.IsDefault;
                 }
             }
 
