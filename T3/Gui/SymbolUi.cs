@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph;
@@ -31,6 +32,40 @@ namespace T3.Gui
 
             UpdateConsistencyWithSymbol();
         }
+
+        public SymbolUi CloneForNewSymbol(Symbol newSymbol, Dictionary<Guid, Guid> oldToNewIds)
+        {
+            var childUis = new List<SymbolChildUi>(ChildUis.Count);
+            // foreach (var sourceChildUi in ChildUis)
+            // {
+            //     var clonedChildUi = sourceChildUi.Clone();
+            //     Guid newChildId = oldToNewIds[clonedChildUi.Id];
+            //     clonedChildUi.SymbolChild = newSymbol.Children.Single(child => child.Id == newChildId);
+            //     childUis.Add(clonedChildUi);
+            // }
+
+            var inputUis = new Dictionary<Guid, IInputUi>(InputUis.Count);
+            foreach (var (_, inputUi) in InputUis)
+            {
+                var clonedInputUi = inputUi.Clone();
+                clonedInputUi.Parent = this;
+                Guid newInputId = oldToNewIds[clonedInputUi.Id];
+                clonedInputUi.InputDefinition = newSymbol.InputDefinitions.Single(inputDef => inputDef.Id == newInputId);
+                inputUis.Add(clonedInputUi.Id, clonedInputUi);
+            }
+
+            var outputUis = new Dictionary<Guid, IOutputUi>(OutputUis.Count);
+            foreach (var (_, outputUi) in OutputUis)
+            {
+                var clonedOutputUi = outputUi.Clone();
+                Guid newOutputId = oldToNewIds[clonedOutputUi.Id];
+                clonedOutputUi.OutputDefinition = newSymbol.OutputDefinitions.Single(outputDef => outputDef.Id == newOutputId);
+                outputUis.Add(clonedOutputUi.Id, clonedOutputUi);
+            }
+            
+            return new SymbolUi(newSymbol, childUis, inputUis, outputUis);
+        }
+        
 
         public IEnumerable<ISelectableNode> GetSelectables()
         {

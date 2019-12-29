@@ -27,6 +27,19 @@ namespace T3.Gui.InputUi
 
         public UsageType Usage { get; set; } = UsageType.Default;
 
+        public override IInputUi Clone()
+        {
+            return new StringInputUi
+                   {
+                       InputDefinition = InputDefinition,
+                       Parent = Parent,
+                       PosOnCanvas = PosOnCanvas,
+                       Relevancy = Relevancy,
+                       Size = Size,
+                       Usage = Usage
+                   };
+        }
+
         protected override InputEditStateFlags DrawEditControl(string name, ref string value)
         {
             if (value == null)

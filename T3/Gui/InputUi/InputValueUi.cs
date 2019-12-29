@@ -29,6 +29,7 @@ namespace T3.Gui.InputUi
         public int Index => Parent.Symbol.InputDefinitions.FindIndex(inputDef => inputDef == InputDefinition);
         public virtual bool IsAnimatable => false;
 
+        public abstract IInputUi Clone();
         /// <summary>
         /// Wraps the implementation of an parameter control to handle <see cref="InputEditStateFlags"/>
         /// </summary>

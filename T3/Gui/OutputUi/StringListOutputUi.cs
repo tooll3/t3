@@ -7,6 +7,17 @@ namespace T3.Gui.OutputUi
 {
     public class StringListOutputUi : OutputUi<List<string>>
     {
+        public override IOutputUi Clone()
+        {
+            return new StringListOutputUi()
+                   {
+                       OutputDefinition = OutputDefinition,
+                       IsSelected = IsSelected,
+                       PosOnCanvas = PosOnCanvas,
+                       Size = Size
+                   };
+        }
+        
         protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<List<string>> typedSlot)

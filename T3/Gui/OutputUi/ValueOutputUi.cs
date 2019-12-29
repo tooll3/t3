@@ -6,6 +6,17 @@ namespace T3.Gui.OutputUi
 {
     public class ValueOutputUi<T> : OutputUi<T>
     {
+        public override IOutputUi Clone()
+        {
+            return new ValueOutputUi<T>
+                   {
+                       OutputDefinition = OutputDefinition,
+                       IsSelected = IsSelected,
+                       PosOnCanvas = PosOnCanvas,
+                       Size = Size
+                   };
+        }
+
         protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<T> typedSlot)

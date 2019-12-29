@@ -9,6 +9,18 @@ namespace T3.Gui.OutputUi
 {
     public class FloatOutputUi : OutputUi<float>
     {
+        public override IOutputUi Clone()
+        {
+            return new FloatOutputUi()
+                   {
+                       OutputDefinition = OutputDefinition,
+                       IsSelected = IsSelected,
+                       PosOnCanvas = PosOnCanvas,
+                       Size = Size
+                   };
+            // TODO: check if curve should be cloned too
+        }
+        
         protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<float> typedSlot)

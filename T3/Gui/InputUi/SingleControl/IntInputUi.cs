@@ -6,6 +6,17 @@ namespace T3.Gui.InputUi.SingleControl
 {
     public class IntInputUi : SingleControlInputUi<int>
     {
+        public override IInputUi Clone()
+        {
+            return new IntInputUi()
+                   {
+                       InputDefinition = InputDefinition,
+                       Parent = Parent,
+                       PosOnCanvas = PosOnCanvas,
+                       Relevancy = Relevancy
+                   };
+        }
+
         protected override bool DrawSingleEditControl(string name, ref int value)
         {
             var result= SingleValueEdit.Draw(ref value, new Vector2(-1, 0));

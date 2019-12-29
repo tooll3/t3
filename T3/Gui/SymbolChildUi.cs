@@ -27,5 +27,16 @@ namespace T3.Gui
         public Vector2 Size { get; set; } = DefaultOpSize;
         public bool IsSelected => SelectionManager.IsNodeSelected(this);
         public Styles Style { get; set; }
+
+        public SymbolChildUi Clone()
+        {
+            return new SymbolChildUi()
+                   {
+                       PosOnCanvas = PosOnCanvas,
+                       Size = Size,
+                       Style = Style,
+                       SymbolChild = SymbolChild,
+                   };
+        }
     }
 }

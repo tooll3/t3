@@ -10,6 +10,17 @@ namespace T3.Gui.OutputUi
 {
     public class ShaderResourceViewOutputUi : OutputUi<ShaderResourceView>
     {
+        public override IOutputUi Clone()
+        {
+            return new ShaderResourceViewOutputUi()
+                   {
+                       OutputDefinition = OutputDefinition,
+                       IsSelected = IsSelected,
+                       PosOnCanvas = PosOnCanvas,
+                       Size = Size
+                   };
+        }
+        
         protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<ShaderResourceView> typedSlot)

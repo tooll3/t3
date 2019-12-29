@@ -38,6 +38,7 @@ namespace T3.Gui.InputUi
         string GetSlotValue(IInputSlot inputSlot);
         void DrawSettings();
 
+        IInputUi Clone();
         void Write(JsonTextWriter writer);
         void Read(JToken inputToken);
     }

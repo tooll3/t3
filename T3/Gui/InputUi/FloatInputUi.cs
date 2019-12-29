@@ -14,6 +14,21 @@ namespace T3.Gui.InputUi
     {
         public override bool IsAnimatable => true;
 
+        public override IInputUi Clone()
+        {
+            return new FloatInputUi()
+                   {
+                       _max = _max,
+                       _min = _min,
+                       _scale = _scale,
+                       InputDefinition = InputDefinition,
+                       Parent = Parent,
+                       PosOnCanvas = PosOnCanvas,
+                       Relevancy = Relevancy,
+                       Size = Size
+                   };
+        }
+
         protected override InputEditStateFlags DrawEditControl(string name, ref float value)
         {
             ImGui.PushID(Id.GetHashCode());

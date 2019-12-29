@@ -11,6 +11,17 @@ namespace T3.Gui.InputUi.SingleControl
     {
         public override bool IsAnimatable => true;
 
+        public override IInputUi Clone()
+        {
+            return new Vector4InputUi()
+                   {
+                       InputDefinition = InputDefinition,
+                       Parent = Parent,
+                       PosOnCanvas = PosOnCanvas,
+                       Relevancy = Relevancy
+                   };
+        }
+
         protected override bool DrawSingleEditControl(string name, ref Vector4 value)
         {
             return ImGui.ColorEdit4("##Vector4Edit", ref value, ImGuiColorEditFlags.Float);

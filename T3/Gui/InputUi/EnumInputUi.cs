@@ -7,6 +7,17 @@ namespace T3.Gui.InputUi
 {
     public class EnumInputUi<T> : InputValueUi<T> where T : Enum
     {
+        public override IInputUi Clone()
+        {
+            return new EnumInputUi<T>
+                   {
+                       InputDefinition = InputDefinition,
+                       Parent = Parent,
+                       PosOnCanvas = PosOnCanvas,
+                       Relevancy = Relevancy
+                   };
+        }
+
         protected override InputEditStateFlags DrawEditControl(string name, ref T value)
         {
             // todo: check perf impact of creating the list here again and again! -> cache lists

@@ -11,6 +11,17 @@ namespace T3.Gui.OutputUi
 {
     public class Texture2dOutputUi : OutputUi<Texture2D>
     {
+        public override IOutputUi Clone()
+        {
+            return new Texture2dOutputUi()
+                   {
+                       OutputDefinition = OutputDefinition,
+                       IsSelected = IsSelected,
+                       PosOnCanvas = PosOnCanvas,
+                       Size = Size
+                   };
+        }
+        
         protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<Texture2D> typedSlot)

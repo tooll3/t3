@@ -5,6 +5,18 @@ namespace T3.Gui.InputUi
 {
     public class FallbackInputUi<T> : InputValueUi<T>
     {
+        public override IInputUi Clone()
+        {
+            return new FallbackInputUi<T>
+                   {
+                       InputDefinition = InputDefinition,
+                       Parent = Parent,
+                       PosOnCanvas = PosOnCanvas,
+                       Relevancy = Relevancy,
+                       Size = Size
+                   };
+        }
+
         protected override InputEditStateFlags DrawEditControl(string name, ref T value)
         {
             ImGui.Text(""); // Print an empty text to force layout to next line

@@ -7,6 +7,17 @@ namespace T3.Gui.OutputUi
 {
     public class FloatListOutputUi : OutputUi<List<float>>
     {
+        public override IOutputUi Clone()
+        {
+            return new FloatListOutputUi()
+                   {
+                       OutputDefinition = OutputDefinition,
+                       IsSelected = IsSelected,
+                       PosOnCanvas = PosOnCanvas,
+                       Size = Size
+                   };
+        }
+        
         protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<List<float>> typedSlot)
