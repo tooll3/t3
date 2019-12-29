@@ -19,8 +19,8 @@ namespace T3.Gui.InputUi
 {
     public abstract class InputValueUi<T> : IInputUi
     {
-        public static float ConnectionAreaWidth = 30.0f;
-        public static float ParameterNameWidth = 120.0f;
+        private const float ConnectionAreaWidth = 30.0f;
+        private const float ParameterNameWidth = 120.0f;
 
         public SymbolUi Parent { get; set; }
         public Symbol.InputDefinition InputDefinition { get; set; }
@@ -35,7 +35,7 @@ namespace T3.Gui.InputUi
         protected abstract InputEditStateFlags DrawEditControl(string name, ref T value);
         protected abstract void DrawReadOnlyControl(string name, ref T value);
 
-        protected virtual string GetSlotValueAsString(ref T float3Value)
+        protected virtual string GetSlotValueAsString(ref T value)
         {
             return String.Empty;
         }

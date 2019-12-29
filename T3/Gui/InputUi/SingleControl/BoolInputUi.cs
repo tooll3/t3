@@ -1,6 +1,6 @@
 ﻿using ImGuiNET;
 
-namespace T3.Gui.InputUi.SingleControlInputs
+namespace T3.Gui.InputUi.SingleControl
 {
     public class BoolInputUi : SingleControlInputUi<bool>
     {

@@ -2,7 +2,7 @@
 using ImGuiNET;
 using T3.Gui.Interaction;
 
-namespace T3.Gui.InputUi.SingleControlInputs
+namespace T3.Gui.InputUi.SingleControl
 {
     public class IntInputUi : SingleControlInputUi<int>
     {
@@ -12,14 +12,14 @@ namespace T3.Gui.InputUi.SingleControlInputs
             return result == InputEditStateFlags.Modified;
         }
 
-        protected override string GetSlotValueAsString(ref int float3Value)
+        protected override string GetSlotValueAsString(ref int value)
         {
             // This is a stub of value editing. Sadly it's very hard to get
             // under control because of styling issues and because in GraphNodes
             // The op body captures the mouse event first.
             //SingleValueEdit.Draw(ref floatValue,  -Vector2.UnitX);
             
-            return float3Value.ToString();
+            return value.ToString();
         }
         
         protected override void DrawReadOnlyControl(string name, ref int value)

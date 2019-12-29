@@ -5,7 +5,7 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 
-namespace T3.Gui.InputUi.SingleControlInputs
+namespace T3.Gui.InputUi.SingleControl
 {
     public class Vector4InputUi : SingleControlInputUi<Vector4>
     {
@@ -43,11 +43,9 @@ namespace T3.Gui.InputUi.SingleControlInputs
             SharpDX.Vector4 newValue = new SharpDX.Vector4(editValue.X, editValue.Y, editValue.Z, editValue.W);
             for (int i = 0; i < 4; i++)
             {
-                if (Math.Abs(newValue[i] - value[i]) > Single.Epsilon)
+                if (Math.Abs(newValue[i] - value[i]) > float.Epsilon)
                 {
-                    var key = curves[i].GetV(time);
-                    if (key == null)
-                        key = new VDefinition() { U = time };
+                    var key = curves[i].GetV(time) ?? new VDefinition() { U = time };
                     key.Value = newValue[i];
                     curves[i].AddOrUpdateV(time, key);
                 }

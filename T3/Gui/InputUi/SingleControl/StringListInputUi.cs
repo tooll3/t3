@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using ImGuiNET;
 
-namespace T3.Gui.InputUi.SingleControlInputs
+namespace T3.Gui.InputUi.SingleControl
 {
-    public class FloatListInputUi : SingleControlInputUi<List<float>>
+    public class StringListInputUi : SingleControlInputUi<List<string>>
     {
-        protected override bool DrawSingleEditControl(string name, ref List<float> list)
+        protected override bool DrawSingleEditControl(string name, ref List<string> list)
         {
             var outputString = string.Join(", ", list);
             ImGui.Text($"{outputString}");
             return false;
         }
 
-        protected override void DrawReadOnlyControl(string name, ref List<float> list)
+        protected override void DrawReadOnlyControl(string name, ref List<string> list)
         {
             var outputString = string.Join(", ", list);
             ImGui.Text($"{outputString}");

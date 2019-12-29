@@ -8,7 +8,6 @@ using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Interaction;
 
-// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace T3.Gui.InputUi
 {
@@ -18,17 +17,16 @@ namespace T3.Gui.InputUi
 
         protected override InputEditStateFlags DrawEditControl(string name, ref Vector2 float2Value)
         {
-            _components[0] = float2Value.X;
-            _components[1] = float2Value.Y;
-            var inputEditState = VectorValueEdit.Draw(ref _components, _min, _max, _scale);
-            float2Value.X = _components[0];
-            float2Value.Y = _components[1];
+            float2Value.CopyTo(_components);
+            var inputEditState = VectorValueEdit.Draw(_components, _min, _max, _scale);
+            float2Value = new Vector2(_components[0], _components[1]);
+
             return inputEditState;
         }
         
         protected override void DrawReadOnlyControl(string name, ref Vector2 float2Value)
         {
-            ImGui.InputFloat2(name, ref float2Value, $"%f", flags: ImGuiInputTextFlags.ReadOnly);
+            ImGui.InputFloat2(name, ref float2Value, "%f", flags: ImGuiInputTextFlags.ReadOnly);
         }
 
         protected override string GetSlotValueAsString(ref Vector2 float2Value)
@@ -57,15 +55,13 @@ namespace T3.Gui.InputUi
                 _components[index] = (float)curves[index].GetSampledValue(time);
             }
 
-            var inputEditState = VectorValueEdit.Draw(ref _components, _min, _max, _scale);
+            var inputEditState = VectorValueEdit.Draw(_components, _min, _max, _scale);
             if (inputEditState == InputEditStateFlags.Nothing)
                 return;
 
             for (var index = 0; index < _components.Length; index++)
             {
-                var key = curves[index].GetV(time) 
-                          ?? new VDefinition { U = time };
-
+                var key = curves[index].GetV(time) ?? new VDefinition { U = time };
                 key.Value = _components[index];
                 curves[index].AddOrUpdateV(time, key);
             }
@@ -84,6 +80,7 @@ namespace T3.Gui.InputUi
         {
             base.Write(writer);
 
+            // ReSharper disable CompareOfFloatsByEqualityOperator
             if (_min != DefaultMin)
                 writer.WriteValue("Min", _min);
 
@@ -92,6 +89,7 @@ namespace T3.Gui.InputUi
 
             if (_scale != DefaultScale)
                 writer.WriteValue("Scale", _scale);
+            // ReSharper enable CompareOfFloatsByEqualityOperator
         }
 
         public override void Read(JToken inputToken)

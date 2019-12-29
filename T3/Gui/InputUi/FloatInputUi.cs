@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-using System.Globalization;
-using System.Numerics;
+﻿using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,21 +7,17 @@ using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Interaction;
 
-// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace T3.Gui.InputUi
 {
     public class FloatInputUi : InputValueUi<float>
     {
         public override bool IsAnimatable => true;
-        private float Min = DefaultMin;
-        private float Max = DefaultMax;
-        private float Scale = DefaultScale;
 
         protected override InputEditStateFlags DrawEditControl(string name, ref float value)
         {
             ImGui.PushID(Id.GetHashCode());
-            var inputEditState = SingleValueEdit.Draw(ref value, -Vector2.UnitX, Min, Max, Scale);
+            var inputEditState = SingleValueEdit.Draw(ref value, -Vector2.UnitX, _min, _max, _scale);
             ImGui.PopID();
             return inputEditState;
         }
@@ -54,10 +48,7 @@ namespace T3.Gui.InputUi
                 var editState = DrawEditControl(name, ref value);
                 if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
                 {
-                    var key = curve.GetV(time);
-                    if (key == null)
-                        key = new VDefinition() { U = time };
-
+                    var key = curve.GetV(time) ?? new VDefinition() { U = time };
                     key.Value = value;
                     curve.AddOrUpdateV(time, key);
                 }
@@ -68,33 +59,39 @@ namespace T3.Gui.InputUi
         {
             base.DrawSettings();
 
-            ImGui.DragFloat("Min", ref Min);
-            ImGui.DragFloat("Max", ref Max);
-            ImGui.DragFloat("Scale", ref Scale);
+            ImGui.DragFloat("Min", ref _min);
+            ImGui.DragFloat("Max", ref _max);
+            ImGui.DragFloat("Scale", ref _scale);
         }
 
         public override void Write(JsonTextWriter writer)
         {
             base.Write(writer);
 
-            if (Min != DefaultMin)
-                writer.WriteValue("Min", Min);
+            // ReSharper disable CompareOfFloatsByEqualityOperator
+            if (_min != DefaultMin)
+                writer.WriteValue("Min", _min);
 
-            if (Max != DefaultMax)
-                writer.WriteValue("Max", Max);
+            if (_max != DefaultMax)
+                writer.WriteValue("Max", _max);
 
-            if (Scale != DefaultScale)
-                writer.WriteValue("Scale", Scale);
+            if (_scale != DefaultScale)
+                writer.WriteValue("Scale", _scale);
+            // ReSharper enable CompareOfFloatsByEqualityOperator
         }
 
         public override void Read(JToken inputToken)
         {
             base.Read(inputToken);
 
-            Min = inputToken["Min"]?.Value<float>() ?? DefaultMin;
-            Max = inputToken["Max"]?.Value<float>() ?? DefaultMax;
-            Scale = inputToken["Scale"]?.Value<float>() ?? DefaultScale;
+            _min = inputToken["Min"]?.Value<float>() ?? DefaultMin;
+            _max = inputToken["Max"]?.Value<float>() ?? DefaultMax;
+            _scale = inputToken["Scale"]?.Value<float>() ?? DefaultScale;
         }
+
+        private float _min = DefaultMin;
+        private float _max = DefaultMax;
+        private float _scale = DefaultScale;
 
         private const float DefaultScale = 0.01f;
         private const float DefaultMin = -9999999f;

@@ -1,7 +1,7 @@
 ﻿using ImGuiNET;
 using SharpDX;
 
-namespace T3.Gui.InputUi.SingleControlInputs
+namespace T3.Gui.InputUi.SingleControl
 {
     public class Int3InputUi : SingleControlInputUi<Int3>
     {
