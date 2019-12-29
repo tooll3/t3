@@ -967,10 +967,10 @@ namespace T3.Core
             _modifiedSymbols.Clear();
             for (int i = 0; i < _operators.Count; i++)
             {
-                if (!_operators[i].Updated)
+                var opResource = _operators[i];
+                if (!opResource.Updated)
                     continue;
 
-                var opResource = _operators[i]; // must be after if to prevent huge amount of allocations
                 Type type = opResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
                 if (type == null)
                 {
@@ -978,7 +978,16 @@ namespace T3.Core
                     continue;
                 }
 
-                var symbolEntry = SymbolRegistry.Entries.FirstOrDefault(e => e.Value.Id.ToString() == opResource.Name);
+                var symbolEntry = new KeyValuePair<Guid, Symbol>(Guid.Empty, null);
+                foreach (var entry in SymbolRegistry.Entries)
+                {
+                    if (entry.Value.Id.ToString() == opResource.Name)
+                    {
+                        symbolEntry = entry;
+                        break;
+                    }
+                }
+
                 if (symbolEntry.Value != null)
                 {
                     _operatorUpdateStopwatch.Restart();

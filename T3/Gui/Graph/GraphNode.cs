@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -26,14 +25,13 @@ namespace T3.Gui.Graph
         {
             var symbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
             var nodeHasHiddenMatchingInputs= false;
-            var visibleInputUis = FindVisibleInputUis();
+            var visibleInputUis = FindVisibleInputUis(symbolUi, childUi, ref nodeHasHiddenMatchingInputs);
 
             _drawList = Graph.DrawList;
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
                 childUi.Size = ComputeNodeSize(childUi, visibleInputUis);
-                _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(
-                                                                               childUi.PosOnCanvas,
+                _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas,
                                                                                childUi.PosOnCanvas + childUi.Size));
                 _lastScreenRect.Floor();
 
@@ -154,8 +152,7 @@ namespace T3.Gui.Graph
                     var compositionOp = GraphCanvas.Current.CompositionOp;
                     if (compositionOp.Symbol.Animator.IsInstanceAnimated(instance))
                     {
-                        _drawList.AddRectFilled(
-                                                new Vector2(_lastScreenRect.Max.X - 5, _lastScreenRect.Max.Y - 12),
+                        _drawList.AddRectFilled(new Vector2(_lastScreenRect.Max.X - 5, _lastScreenRect.Max.Y - 12),
                                                 new Vector2(_lastScreenRect.Max.X - 2, _lastScreenRect.Max.Y - 3),
                                                 Color.Orange);
                     }
@@ -180,12 +177,9 @@ namespace T3.Gui.Graph
                     {
                         const double timeScale = 0.125f;
                         var blink = (float)(ImGui.GetTime() * timeScale * updateCountThisFrame) % 1f * _lastScreenRect.GetWidth();
-                        drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X + blink,
-                                                           _lastScreenRect.Min.Y),
-                                               new Vector2(_lastScreenRect.Min.X + blink + 2,
-                                                           _lastScreenRect.Max.Y),
-                                               new Color(0.06f)
-                                              );
+                        drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X + blink, _lastScreenRect.Min.Y),
+                                               new Vector2(_lastScreenRect.Min.X + blink + 2, _lastScreenRect.Max.Y),
+                                               new Color(0.06f));
                     }
                 }
 
@@ -208,12 +202,12 @@ namespace T3.Gui.Graph
             ImGui.PopID();
 
             // Input Sockets...
-            for (var inputIndex = 0; inputIndex < visibleInputUis.Length; inputIndex++)
+            for (var inputIndex = 0; inputIndex < visibleInputUis.Count; inputIndex++)
             {
                 var inputUi = visibleInputUis[inputIndex];
                 var inputDefinition = inputUi.InputDefinition;
 
-                var usableSlotArea = GetUsableInputSlotSize(inputIndex, visibleInputUis.Length);
+                var usableSlotArea = GetUsableInputSlotSize(inputIndex, visibleInputUis.Count);
 
                 ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + inputDefinition.GetHashCode());
                 ImGui.SetCursorScreenPos(usableSlotArea.Min);
@@ -260,10 +254,7 @@ namespace T3.Gui.Graph
 
                         var valueColor = labelColor;
                         valueColor.Rgba.W *= 0.6f;
-                        _drawList.AddText(screenCursor,
-                                          valueColor,
-                                          valueAsString);
-
+                        _drawList.AddText(screenCursor, valueColor, valueAsString);
                         ImGui.PopStyleColor();
 
                         ImGui.PopFont();
@@ -279,8 +270,7 @@ namespace T3.Gui.Graph
                                           : connectedLines.Count;
 
                     var socketHeight = (usableSlotArea.GetHeight() + 1) / socketCount;
-                    var targetPos = new Vector2(
-                                                usableSlotArea.Max.X - 2,
+                    var targetPos = new Vector2(usableSlotArea.Max.X - 2,
                                                 usableSlotArea.Min.Y + socketHeight * 0.5f);
 
                     var topLeft = new Vector2(usableSlotArea.Min.X, usableSlotArea.Min.Y);
@@ -290,10 +280,7 @@ namespace T3.Gui.Graph
 
                     for (var index = 0; index < socketCount; index++)
                     {
-                        var usableSocketArea = new ImRect(
-                                                          topLeft,
-                                                          topLeft + socketSize);
-
+                        var usableSocketArea = new ImRect(topLeft, topLeft + socketSize);
                         var isSocketHovered = usableSocketArea.Contains(ImGui.GetMousePos());
 
                         bool isGap = false;
@@ -318,17 +305,13 @@ namespace T3.Gui.Graph
                         topLeft.Y += socketHeight;
                     }
 
-                    _drawList.AddRectFilled(
-                                            new Vector2(usableSlotArea.Max.X - 8, usableSlotArea.Min.Y),
+                    _drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - 8, usableSlotArea.Min.Y),
                                             new Vector2(usableSlotArea.Max.X - 1, usableSlotArea.Min.Y + 2),
-                                            reactiveSlotColor
-                                           );
+                                            reactiveSlotColor);
 
-                    _drawList.AddRectFilled(
-                                            new Vector2(usableSlotArea.Max.X - 8, usableSlotArea.Max.Y - 2),
+                    _drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - 8, usableSlotArea.Max.Y - 2),
                                             new Vector2(usableSlotArea.Max.X - 1, usableSlotArea.Max.Y),
-                                            reactiveSlotColor
-                                           );
+                                            reactiveSlotColor);
                 }
                 else
                 {
@@ -374,48 +357,57 @@ namespace T3.Gui.Graph
 
                 outputIndex++;
             }
+        }
 
-            // Find visible input slots.
-            // TODO: this is a major performance hot spot and needs optimization 
-            IInputUi[] FindVisibleInputUis()
+        static readonly List<IInputUi> VisibleInputs = new List<IInputUi>(15);
+
+        // Find visible input slots.
+        // TODO: this is a major performance hot spot and needs optimization
+        static List<IInputUi> FindVisibleInputUis(SymbolUi symbolUi, SymbolChildUi childUi, ref bool nodeHasHiddenMatchingInputs)
+        {
+            var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
+
+            if (childUi.Style == SymbolChildUi.Styles.Expanded)
             {
-                var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
-
-                if (childUi.Style == SymbolChildUi.Styles.Expanded)
-                {
-                    return (from inputUi in symbolUi.InputUis.Values
-                            orderby inputUi.Index
-                            select inputUi).ToArray();
-                }
-
-                var isNodeHoveredConnectionTarget = _hoveredNodeId == childUi.Id
-                                                      && ConnectionMaker.TempConnection != null
-                                                      && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
-
-                var visibleInputs = new List<IInputUi>();
-                foreach (var inputUi in symbolUi.InputUis.Values)
-                {
-                    if (inputUi.Relevancy != Relevancy.Optional
-                        || connectionsToNode.Any(c => c.Connection.TargetSlotId == inputUi.Id))
-                    {
-                        visibleInputs.Add(inputUi);
-                        
-                    }
-                    else if (ConnectionMaker.IsMatchingInputType(inputUi.Type))
-                    {
-                        if (isNodeHoveredConnectionTarget)
-                        {
-                            visibleInputs.Add(inputUi);
-                        }
-                        else
-                        {
-                            nodeHasHiddenMatchingInputs = true;
-                        }
-                    }
-                }
-
-                return visibleInputs.OrderBy(ui => ui.Index).ToArray();
+                return (from inputUi in symbolUi.InputUis.Values
+                        orderby inputUi.Index
+                        select inputUi).ToList();
             }
+
+            var isNodeHoveredConnectionTarget = _hoveredNodeId == childUi.Id
+                                                && ConnectionMaker.TempConnection != null
+                                                && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
+
+            VisibleInputs.Clear();
+            foreach (var inputUi in symbolUi.InputUis.Values)
+            {
+                bool inputIsConnectionTarget = false;
+                for (int i = 0; i < connectionsToNode.Count; i++)
+                {
+                    if (connectionsToNode[i].Connection.TargetSlotId == inputUi.Id)
+                    {
+                        inputIsConnectionTarget = true;
+                        break;
+                    }
+                }
+                if (inputUi.Relevancy != Relevancy.Optional || inputIsConnectionTarget)
+                {
+                    VisibleInputs.Add(inputUi);
+                }
+                else if (ConnectionMaker.IsMatchingInputType(inputUi.Type))
+                {
+                    if (isNodeHoveredConnectionTarget)
+                    {
+                        VisibleInputs.Add(inputUi);
+                    }
+                    else
+                    {
+                        nodeHasHiddenMatchingInputs = true;
+                    }
+                }
+            }
+
+            return VisibleInputs.OrderBy(ui => ui.Index).ToList();
         }
 
         private enum SocketDirections
@@ -448,30 +440,26 @@ namespace T3.Gui.Graph
             return style.Apply(colorForType);
         }
 
-        private static Vector2 ComputeNodeSize(SymbolChildUi childUi, IInputUi[] visibleInputUis)
+        private static Vector2 ComputeNodeSize(SymbolChildUi childUi, List<IInputUi> visibleInputUis)
         {
             if (childUi.Style == SymbolChildUi.Styles.Resizable)
             {
                 return childUi.Size;
             }
-            else
+
+            var additionalMultiInputSlots = 0;
+            foreach (var input in visibleInputUis)
             {
-                var additionalMultiInputSlots = 0;
-                foreach (var input in visibleInputUis)
-                {
-                    if (!input.InputDefinition.IsMultiInput)
-                        continue;
+                if (!input.InputDefinition.IsMultiInput)
+                    continue;
 
-                    //TODO: this should be refactored, because it's very slow and is later repeated  
-                    var connectedLines = Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
-                    additionalMultiInputSlots += connectedLines.Count;
-                }
-
-                return new Vector2(
-                                   SymbolChildUi.DefaultOpSize.X,
-                                   23 + (visibleInputUis.Length + additionalMultiInputSlots) * 13
-                                  );
+                //TODO: this should be refactored, because it's very slow and is later repeated
+                var connectedLines = Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
+                additionalMultiInputSlots += connectedLines.Count;
             }
+
+            return new Vector2(SymbolChildUi.DefaultOpSize.X,
+                               23 + (visibleInputUis.Count + additionalMultiInputSlots) * 13);
         }
 
         private static void DrawOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef, ImRect usableArea, Color colorForType, bool hovered)
