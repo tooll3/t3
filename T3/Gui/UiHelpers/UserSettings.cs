@@ -36,12 +36,10 @@ namespace T3.Gui.UiHelpers
         {
             var serializer = JsonSerializer.Create();
             serializer.Formatting = Formatting.Indented;
-            var writer = new StringWriter();
-            serializer.Serialize(writer, Config);
-
-            var file = File.CreateText(UserSettingFilepath);
-            file.Write(writer.ToString());
-            file.Close();
+            using (var file = File.CreateText(UserSettingFilepath))
+            {
+                serializer.Serialize(file, Config);
+            }
         }
 
         private static void TryLoadingSettings()
