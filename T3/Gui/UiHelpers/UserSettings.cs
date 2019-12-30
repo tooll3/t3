@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Gui.Graph;
 
@@ -21,11 +22,9 @@ namespace T3.Gui.UiHelpers
         {
             public Dictionary<Guid, ScalableCanvas.CanvasProperties> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.CanvasProperties>();
             public Dictionary<string, Guid> LastOpsForWindows = new Dictionary<string, Guid>();
-
-
         }
 
-        public static ConfigData Config= new ConfigData();
+        public static ConfigData Config = new ConfigData();
 
         
         void OnProcessExit(object sender, EventArgs e)
@@ -35,7 +34,8 @@ namespace T3.Gui.UiHelpers
 
         private static void SaveSettings()
         {
-            var serializer = Newtonsoft.Json.JsonSerializer.Create();
+            var serializer = JsonSerializer.Create();
+            serializer.Formatting = Formatting.Indented;
             var writer = new StringWriter();
             serializer.Serialize(writer, Config);
 
