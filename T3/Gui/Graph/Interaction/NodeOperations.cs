@@ -545,6 +545,8 @@ namespace T3.Gui.Graph.Interaction
                 string idValue = nameSyntax.Identifier.ValueText;
                 if (idValue == "InputSlot" || idValue == "MultiInputSlot")
                     LastInputNodeFound = node;
+                else if (LastInputNodeFound == null && idValue == "Slot")
+                    LastInputNodeFound = node;
 
                 return node;
             }
