@@ -47,20 +47,17 @@ namespace T3.Gui.Graph.Interaction
 
             return instance;
         }
-
-        private static readonly List<Guid> IdPath = new List<Guid>(10);
-
+        
         public static List<Guid> BuildIdPathForInstance(Instance instance)
         {
-            IdPath.Clear();
+            var result = new List<Guid>(6);
             do
             {
-                IdPath.Insert(0, instance.SymbolChildId);
+                result.Insert(0, instance.SymbolChildId);
                 instance = instance.Parent;
             }
             while (instance != null);
-
-            return IdPath;
+            return result;
         }
 
         public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName, string nameSpace)
