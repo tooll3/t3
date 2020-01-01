@@ -57,6 +57,33 @@ namespace T3.Core.Operator
                                               };
                 floatInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
+            else if (inputSlot is Slot<System.Numerics.Vector2> vector2InputSlot)
+            {
+                var newCurveX = new Curve();
+                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                                                                     {
+                                                                         Value = vector2InputSlot.Value.X,
+                                                                         InType = VDefinition.Interpolation.Spline,
+                                                                         OutType = VDefinition.Interpolation.Spline,
+                                                                     });
+                _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
+
+                var newCurveY = new Curve();
+                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                                                                     {
+                                                                         Value = vector2InputSlot.Value.Y,
+                                                                         InType = VDefinition.Interpolation.Spline,
+                                                                         OutType = VDefinition.Interpolation.Spline,
+                                                                     });
+                _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
+
+                vector2InputSlot.UpdateAction = context =>
+                                                {
+                                                    vector2InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.Time);
+                                                    vector2InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.Time);
+                                                };
+                vector2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+            }
             else if (inputSlot is Slot<System.Numerics.Vector3> vector3InputSlot)
             {
                 var newCurveX = new Curve();
