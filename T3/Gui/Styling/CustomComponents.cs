@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System;
 using System.Numerics;
+using System.Windows.Forms;
 using T3.Gui.Styling;
 using UiHelpers;
 
@@ -183,12 +184,13 @@ namespace T3.Gui
             ImGui.PopStyleVar(2);
         }
 
-        public static bool DisablableButton(string label, bool isEnabled)
+        public static bool DisablableButton(string label, bool isEnabled, bool enableTriggerWithReturn = true)
         {
             if (isEnabled)
             {
                 ImGui.PushFont(Fonts.FontBold);
-                if (ImGui.Button(label))
+                if (ImGui.Button(label) 
+                    || (enableTriggerWithReturn && ImGui.IsKeyPressed((int)Key.Return)))
                 {
                     ImGui.PopFont();
                     return true;
