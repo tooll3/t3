@@ -316,6 +316,15 @@ namespace T3.Gui.Interaction
                     return;
 
                 var delta = deltaSinceLastStep / StepSize;
+                if (io.KeyCtrl)
+                {
+                    delta *= 10f;
+                }
+                else if (io.KeyShift)
+                {
+                    delta *= 0.1f;
+                }
+                
                 _editValue += delta * activeScaleFactor * scale;
                 if (activeScaleFactor > 1)
                 {
