@@ -336,7 +336,13 @@ namespace T3.Gui.Graph.Interaction
                                                           RegexOptions.IgnoreCase);
             public Dictionary<Guid, Guid> OldToNewGuidDict { get; } = new Dictionary<Guid, Guid>(10);
         }
-        
+
+        private class ConnectionEntry
+        {
+            public Symbol.Connection Connection { get; set; }
+            public int MultiInputIndex { get; set; }
+        }
+
         public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newTypeName, string nameSpace)
         {
             var sourceSymbol = symbolChildToDuplicate.Symbol;
@@ -388,10 +394,24 @@ namespace T3.Gui.Graph.Interaction
             cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
 
             // now copy connection from/to inputs/outputs that are not copied with the command 
-            // todo: check if this can be put into the command
+            // todo: same code as in Symbol.SetInstanceType, factor out common code
             var connectionsToCopy = sourceSymbol.Connections.FindAll(c => c.IsConnectedToSymbolInput || c.IsConnectedToSymbolOutput);
-            foreach (var conToCopy in connectionsToCopy)
+            var connectionEntriesToReplace = new List<ConnectionEntry>(connectionsToCopy.Count);
+            foreach (var con in connectionsToCopy)
             {
+                var entry = new ConnectionEntry
+                            {
+                                Connection = con,
+                                MultiInputIndex = sourceSymbol.Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
+                                                                                        && c.TargetSlotId == con.TargetSlotId)
+                                                              .FindIndex(cc => cc == con)
+                            };
+                connectionEntriesToReplace.Add(entry);
+            }
+
+            foreach (var conEntry in connectionEntriesToReplace)
+            {
+                var conToCopy = conEntry.Connection;
                 bool inputConnection = conToCopy.IsConnectedToSymbolInput;
                 var newSourceSlotId = inputConnection ? oldToNewIdMap[conToCopy.SourceSlotId] : conToCopy.SourceSlotId;
                 var newSourceId = inputConnection ? conToCopy.SourceParentOrChildId : oldToNewIdMap[conToCopy.SourceParentOrChildId];
@@ -401,7 +421,7 @@ namespace T3.Gui.Graph.Interaction
                 var newTargetId = outputConnection ? conToCopy.TargetParentOrChildId : oldToNewIdMap[conToCopy.TargetParentOrChildId];
 
                 var newConnection = new Symbol.Connection(newSourceId, newSourceSlotId, newTargetId, newTargetSlotId);
-                newSymbol.AddConnection(newConnection);
+                newSymbol.AddConnection(newConnection, conEntry.MultiInputIndex);
             }
 
             var mousePos = GraphCanvas.Current.InverseTransformPosition(ImGui.GetMousePos());

@@ -33,8 +33,7 @@ namespace T3.Gui.Graph.Dialogs
 
                 ImGui.InputText("##name", ref combineName, 255);
 
-                CustomComponents
-                   .HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
+                CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
                 ImGui.Spacing();
 
                 if (CustomComponents.DisablableButton("Duplicate", NodeOperations.IsNewSymbolNameValid(combineName)))

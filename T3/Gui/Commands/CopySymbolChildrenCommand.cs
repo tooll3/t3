@@ -24,7 +24,7 @@ namespace T3.Gui.Commands
 
             if (symbolChildrenToCopy == null)
             {
-                // if now specific child are selected copy all of the source composition op
+                // if no specific children are selected copy all of the source composition op
                 symbolChildrenToCopy = sourceCompositionUi.ChildUis;
             }
 
