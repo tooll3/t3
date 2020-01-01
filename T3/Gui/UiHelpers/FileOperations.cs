@@ -1,14 +1,18 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace T3.Gui.UiHelpers
 {
     public static class FileOperations
     {
-        public static string PickResourceFilePath()
+        public static string PickResourceFilePath(string initialPath= "")
         {
+            var path = String.IsNullOrEmpty(initialPath)
+                           ? GetAbsoluteResourcePath()
+                           : initialPath;
             using (var openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = GetAbsoluteResourcePath();
+                openFileDialog.InitialDirectory = path;
                 openFileDialog.Filter = "jpg files (*.jpg)|*.jpg|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;

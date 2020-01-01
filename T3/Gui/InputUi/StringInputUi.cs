@@ -74,7 +74,7 @@ namespace T3.Gui.InputUi
             ImGui.SameLine();
             if (ImGui.Button("...", new Vector2(30, 0)))
             {
-                string newPath = Usage == UsageType.FilePath ? FileOperations.PickResourceFilePath() : FileOperations.PickResourceDirectory();
+                string newPath = Usage == UsageType.FilePath ? FileOperations.PickResourceFilePath(value) : FileOperations.PickResourceDirectory();
                 if (!string.IsNullOrEmpty(newPath))
                 {
                     value = newPath;
