@@ -153,7 +153,8 @@ namespace T3.Gui.Graph.Interaction
 
         private void DrawMatchesList()
         {
-            ImGui.SetCursorPos(_posInWindow + new Vector2(_size.X + 1, 1));
+            //ImGui.SetCursorPos(_posInWindow + new Vector2(_size.X + 1, 1));
+            ImGui.SetCursorPos(_posInWindow + new Vector2(1, _size.Y + 1));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
 
