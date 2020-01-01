@@ -207,7 +207,7 @@ namespace T3.Gui.Graph
 
         private void DrawTimelineAndCurveEditor()
         {
-            _timeLineCanvas.Draw(GraphCanvas.CompositionOp, GetCurvesForSelectedNodes());
+            _timeLineCanvas.Draw(GraphCanvas.CompositionOp, GetAnimationParametersForSelectedNodes());
         }
 
         public struct AnimationParameter
@@ -215,9 +215,10 @@ namespace T3.Gui.Graph
             public IEnumerable<Curve> Curves;
             public IInputSlot Input;
             public Instance Instance;
+            public SymbolChildUi ChildUi;
         }
 
-        private List<AnimationParameter> GetCurvesForSelectedNodes()
+        private List<AnimationParameter> GetAnimationParametersForSelectedNodes()
         {
             var selection = SelectionManager.GetSelectedNodes<ISelectableNode>();
             var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.CompositionOp.Symbol.Id];
@@ -231,7 +232,8 @@ namespace T3.Gui.Graph
                                              {
                                                  Instance = child,
                                                  Input = input,
-                                                 Curves = animator.GetCurvesForInput(input)
+                                                 Curves = animator.GetCurvesForInput(input),
+                                                 ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == selectedElement.Id),
                                              }).ToList();
             return curvesForSelection;
         }

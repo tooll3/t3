@@ -104,12 +104,19 @@ namespace T3.Gui.Styling
             new IconSource(Icon.HoverPreviewSmall, 22, new Vector2(16,16)),
             new IconSource(Icon.HoverPreviewPlay, 23, new Vector2(16,16)),
             new IconSource(Icon.HoverPreviewDisabled, 24, new Vector2(16,16)),
+            new IconSource(Icon.ConstantKeyframeSelected, 25, new Vector2(16,25)),
+            new IconSource(Icon.ConstantKeyframe, 26, new Vector2(16,25)),
+            new IconSource(Icon.ChevronLeft, 27, new Vector2(16,16)),
+            new IconSource(Icon.ChevronRight, 28, new Vector2(16,16)),
+            new IconSource(Icon.ChevronUp, 29, new Vector2(16,16)),
+            new IconSource(Icon.ChevronDown, 30, new Vector2(16,16)),
+            new IconSource(Icon.Pin, 31, new Vector2(16,16)),
         };
 
         public const string IconAtlasPath = @"Resources\t3\t3-icons.png";
     }
-
-
+    
+    
     public enum Icon
     {
         KeyFrameSelected=64,
@@ -136,5 +143,12 @@ namespace T3.Gui.Styling
         HoverPreviewSmall,
         HoverPreviewPlay,
         HoverPreviewDisabled,
+        ConstantKeyframeSelected,
+        ConstantKeyframe,
+        ChevronLeft,
+        ChevronRight,
+        ChevronUp,
+        ChevronDown,
+        Pin,
     }
 }

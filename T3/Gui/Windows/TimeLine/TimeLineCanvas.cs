@@ -53,6 +53,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 _drawlist = ImGui.GetWindowDrawList();
                 _timeLineImage.Draw(_drawlist);
+                ImGui.SetScrollY(0);
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
                 _timeRasterSwitcher.Draw(ClipTime);

@@ -85,7 +85,8 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.PushStyleColor(ImGuiCol.Text, layerHovered ? Color.White.Rgba : Color.Gray);
             ImGui.PushFont(Fonts.FontBold);
-            ImGui.Text("  " + parameter.Instance.Symbol.Name);
+            
+            ImGui.Text("  " + parameter.ChildUi.SymbolChild.ReadableName);
             ImGui.PopFont();
             ImGui.SameLine();
             ImGui.Text("." + parameter.Input.Input.Name);
@@ -269,7 +270,14 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.PushID(vDef.GetHashCode());
             {
                 var isSelected = SelectedKeyframes.Contains(vDef);
-                Icons.Draw(isSelected ? Icon.KeyFrameSelected : Icon.KeyFrame, posOnScreen);
+                if (vDef.OutEditMode == VDefinition.EditMode.Constant)
+                {
+                    Icons.Draw(isSelected ? Icon.ConstantKeyframeSelected : Icon.ConstantKeyframe, posOnScreen);
+                }
+                else
+                {
+                    Icons.Draw(isSelected ? Icon.KeyFrameSelected : Icon.KeyFrame, posOnScreen);
+                }
                 ImGui.SetCursorScreenPos(posOnScreen);
 
                 // Click released
