@@ -424,10 +424,6 @@ namespace T3.Gui.Graph.Interaction
                 newSymbol.AddConnection(newConnection, conEntry.MultiInputIndex);
             }
 
-            var mousePos = GraphCanvas.Current.InverseTransformPosition(ImGui.GetMousePos());
-            var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) { PosOnCanvas = mousePos };
-            UndoRedoStack.AddAndExecute(addCommand);
-
             // copy the values of the input of the duplicated type: default values of symbol and the ones in composition context
             foreach (var sourceInputDef in sourceSymbol.InputDefinitions)
             {
@@ -435,6 +431,10 @@ namespace T3.Gui.Graph.Interaction
                 var correspondingInputDef = newSymbol.InputDefinitions.Find(newInputDef => newInputDef.Id == newInputId);
                 correspondingInputDef.DefaultValue = sourceInputDef.DefaultValue.Clone();
             }
+
+            var mousePos = GraphCanvas.Current.InverseTransformPosition(ImGui.GetMousePos());
+            var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) { PosOnCanvas = mousePos };
+            UndoRedoStack.AddAndExecute(addCommand);
 
             var newSymbolChild = compositionUi.Symbol.Children.Find(child => child.Id == addCommand.AddedChildId);
             var newSymbolInputValues = newSymbolChild.InputValues;
