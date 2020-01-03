@@ -305,8 +305,15 @@ namespace T3.Gui.Windows.TimeLine
                 if (ImGui.InvisibleButton("##key", new Vector2(10, 24)))
                 {
                     var justClicked = ImGui.GetMouseDragDelta().LengthSquared() < 1;
-                    if (justClicked && Math.Abs(TimeLineCanvas.ClipTime.PlaybackSpeed) < 0.001f)
-                        TimeLineCanvas.Current.ClipTime.Time = vDef.U;
+                    if (justClicked)
+                    {
+                        UpdateSelectionOnClickOrDrag(vDef, isSelected);
+
+                        if (Math.Abs(TimeLineCanvas.ClipTime.PlaybackSpeed) < 0.001f)
+                        {
+                            TimeLineCanvas.Current.ClipTime.Time = vDef.U;
+                        }
+                    }
 
                     TimeLineCanvas.Current.CompleteDragCommand();
 
@@ -330,21 +337,37 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
             }
 
-            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
+            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 1f))
                 return;
 
+            if (UpdateSelectionOnClickOrDrag(vDef, isSelected))
+                return;
+
+            if (_changeKeyframesCommand == null)
+            {
+                TimeLineCanvas.Current.StartDragCommand();
+            }
+
+            var newDragTime = TimeLineCanvas.Current.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
+            _snapHandler.CheckForSnapping(ref newDragTime);
+
+            TimeLineCanvas.Current.UpdateDragCommand(newDragTime - vDef.U, 0);
+        }
+
+        private bool UpdateSelectionOnClickOrDrag(VDefinition vDef, bool isSelected)
+        {
             // Deselect
             if (ImGui.GetIO().KeyCtrl)
             {
                 if (!isSelected)
-                    return;
+                    return true;
 
                 foreach (var k in FindParameterKeysAtPosition(vDef.U))
                 {
                     SelectedKeyframes.Remove(k);
                 }
 
-                return;
+                return true;
             }
 
             if (!isSelected)
@@ -360,15 +383,7 @@ namespace T3.Gui.Windows.TimeLine
                 }
             }
 
-            if (_changeKeyframesCommand == null)
-            {
-                TimeLineCanvas.Current.StartDragCommand();
-            }
-
-            var newDragTime = TimeLineCanvas.Current.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
-            _snapHandler.CheckForSnapping(ref newDragTime);
-
-            TimeLineCanvas.Current.UpdateDragCommand(newDragTime - vDef.U, 0);
+            return false;
         }
 
         private IEnumerable<VDefinition> FindParameterKeysAtPosition(double u)
