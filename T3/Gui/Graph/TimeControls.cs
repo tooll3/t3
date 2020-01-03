@@ -36,7 +36,7 @@ namespace T3.Gui.Graph
                     break;
             }
 
-            if (CustomComponents.JogDial(formattedTime, ref delta, new Vector2(80, 0)))
+            if (CustomComponents.JogDial(formattedTime, ref delta, new Vector2(100, 0)))
             {
                 clipTime.PlaybackSpeed = 0;
                 clipTime.Time += delta;
@@ -234,6 +234,6 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
         }
 
-        public static readonly Vector2 ControlSize = new Vector2(40, 23);
+        public static readonly Vector2 ControlSize = new Vector2(45, 26);
     }
 }

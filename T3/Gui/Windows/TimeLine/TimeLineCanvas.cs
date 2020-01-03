@@ -71,7 +71,10 @@ namespace T3.Gui.Windows.TimeLine
                         break;
                 }
 
-                _timeRange.Draw(this, ClipTime, _drawlist, _snapHandler);
+                if (ClipTime.IsLooping)
+                {
+                    _timeRange.Draw(this, ClipTime, _drawlist, _snapHandler);
+                }
                 _currentTimeMarker.Draw(ClipTime);
                 DrawDragTimeArea();
                 _selectionFence.Draw();
@@ -463,7 +466,6 @@ namespace T3.Gui.Windows.TimeLine
         public Vector2 WindowPos { get; private set; }
         public Vector2 WindowSize { get; private set; }
         public Vector2 Scroll { get; private set; } = new Vector2(0, 0.0f);
-        private Vector2 _scrollTarget = new Vector2(-1.0f, 0.0f);
         #endregion
 
         internal readonly ClipTime ClipTime;
@@ -484,7 +486,8 @@ namespace T3.Gui.Windows.TimeLine
 
         private ImGuiIOPtr _io;
         private Vector2 _mouse;
-        private Vector2 _scaleTarget = new Vector2(100, -1);
+        private Vector2 _scrollTarget = new Vector2(-25f, 0.0f);
+        private Vector2 _scaleTarget = new Vector2(10, -1);
         private ImDrawListPtr _drawlist;
 
         // Styling

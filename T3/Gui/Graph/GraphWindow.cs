@@ -146,7 +146,7 @@ namespace T3.Gui.Graph
                     dl.ChannelsMerge();
                 }
                 ImGui.EndChild();
-                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 4);
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 2);
                 ImGui.BeginChild("##timeline", Vector2.Zero, false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                 {
                     _timeLineCanvas.Draw(GraphCanvas.CompositionOp, animationParameters);

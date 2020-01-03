@@ -367,7 +367,12 @@ namespace T3.Gui.Graph
                              NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
                          }
                      }
-
+                     
+                     if (ImGui.MenuItem("Add Node"))
+                     {
+                         _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null);
+                     }
+                     
                      if (ImGui.MenuItem("Add input parameter"))
                      {
                          _addInputDialog.ShowNextFrame();
@@ -378,10 +383,6 @@ namespace T3.Gui.Graph
                          PasteClipboard();
                      }
 
-                     if (ImGui.MenuItem("Add"))
-                     {
-                         _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null);
-                     }
                  }, ref _contextMenuIsOpen);
         }
 
