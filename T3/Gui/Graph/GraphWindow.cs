@@ -233,7 +233,7 @@ namespace T3.Gui.Graph
                                                  Instance = child,
                                                  Input = input,
                                                  Curves = animator.GetCurvesForInput(input),
-                                                 ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == selectedElement.Id),
+                                                 ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == selectedElement.Id)
                                              }).ToList();
             return curvesForSelection;
         }

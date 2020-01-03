@@ -44,10 +44,13 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(0, 3)); // keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
 
-                foreach (var parameter in animationParameters)
+                for (var index = 0; index < animationParameters.Count; index++)
                 {
+                    var parameter = animationParameters[index];
                     _currentAnimationParameter = parameter;
+                    ImGui.PushID(index);
                     DrawProperty(parameter);
+                    ImGui.PopID();
                 }
 
                 DrawContextMenu();
@@ -79,13 +82,29 @@ namespace T3.Gui.Windows.TimeLine
                     var v = curve.GetSampledValue(mouseTime);
                     ImGui.Text($"{v:0.00}");
                 }
-
                 ImGui.EndTooltip();
             }
 
+            
+            
             ImGui.PushStyleColor(ImGuiCol.Text, layerHovered ? Color.White.Rgba : Color.Gray);
             ImGui.PushFont(Fonts.FontBold);
+            //if (CustomComponents.ToggleButton( Icon.Pin, "Pin", new Vector2(16, 16)))
             
+            var hash = parameter.Input.GetHashCode();
+            var pinned = _pinnedParameters.Contains(hash);
+            if(CustomComponents.ToggleButton(Icon.Pin,"pin", ref pinned, new Vector2(16,16)))
+            {
+                if (pinned)
+                {
+                    _pinnedParameters.Add(hash);
+                }
+                else
+                {
+                    _pinnedParameters.Remove(hash);
+                }
+            }
+            ImGui.SameLine();
             ImGui.Text("  " + parameter.ChildUi.SymbolChild.ReadableName);
             ImGui.PopFont();
             ImGui.SameLine();
@@ -114,6 +133,8 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight)); // Next Line
         }
 
+        private readonly  HashSet<int> _pinnedParameters = new HashSet<int>();
+        
         private void HandleCreateNewKeyframes(GraphWindow.AnimationParameter parameter, ImRect layerArea)
         {
             var hoverNewKeyframe = !ImGui.IsAnyItemActive()

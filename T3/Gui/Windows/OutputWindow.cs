@@ -54,7 +54,7 @@ namespace T3.Gui.Windows
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
                 _imageCanvas.NoMouseInteraction = _selectedCamera != null;
-                _imageCanvas.Draw();
+                _imageCanvas.Update();
 
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
                 _cameraInteraction.Update(_selectedCamera);

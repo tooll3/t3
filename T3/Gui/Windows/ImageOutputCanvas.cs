@@ -6,6 +6,7 @@ using System.Numerics;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Graph;
+using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using UiHelpers;
 
@@ -15,7 +16,7 @@ namespace T3.Gui.Windows
     {
         public override IEnumerable<ISelectableNode> SelectableChildren => new List<ISelectableNode>();
 
-        public void Draw()
+        public void Update()
         {
             Current = this;
             UpdateCanvas();
@@ -25,6 +26,7 @@ namespace T3.Gui.Windows
         /// <summary>
         /// The image canvas that is currently being drawn from the UI.
         /// Note that <see cref="ImageOutputCanvas"/> is NOT a singleton so you can't rely on this to be valid outside of the Draw()ing context.
+        /// It is used by <see cref="Texture2dOutputUi"/> to draw its content.
         /// </summary>
         public static ImageOutputCanvas Current = null;
 

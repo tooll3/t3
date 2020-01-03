@@ -253,6 +253,11 @@ namespace UiHelpers
         {
             return $"Rect {Min}  {Max}";
         }
+
+        public float GetAspect()
+        {
+            return GetWidth() / GetHeight();
+        }
     }
 
     /// <summary>

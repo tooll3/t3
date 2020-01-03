@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -12,6 +13,7 @@ using T3.Gui.OutputUi;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using T3.Gui.Windows;
+using T3.Operators.Types;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -24,7 +26,7 @@ namespace T3.Gui.Graph
         public static void Draw(SymbolChildUi childUi, Instance instance)
         {
             var symbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
-            var nodeHasHiddenMatchingInputs= false;
+            var nodeHasHiddenMatchingInputs = false;
             var visibleInputUis = FindVisibleInputUis(symbolUi, childUi, ref nodeHasHiddenMatchingInputs);
 
             _drawList = Graph.DrawList;
@@ -92,7 +94,7 @@ namespace T3.Gui.Graph
                     {
                         ImGui.BeginTooltip();
                         {
-                            ImageCanvasForTooltips.Draw();
+                            ImageCanvasForTooltips.Update();
                             if (instance.Outputs.Count > 0)
                             {
                                 var firstOutput = instance.Outputs[0];
@@ -103,6 +105,8 @@ namespace T3.Gui.Graph
                         ImGui.EndTooltip();
                     }
                 }
+
+                DrawPreview(instance);
 
                 SelectableNodeMovement.Handle(childUi, instance);
 
@@ -157,7 +161,7 @@ namespace T3.Gui.Graph
                                                 Color.Orange);
                     }
                 }
-                
+
                 // Hidden inputs indicator
                 if (nodeHasHiddenMatchingInputs)
                 {
@@ -165,11 +169,11 @@ namespace T3.Gui.Graph
                     var colorForType = TypeUiRegistry.Entries[ConnectionMaker.DraftConnectionType].Color;
                     colorForType.Rgba.W *= blink;
                     _drawList.AddRectFilled(
-                                            new Vector2(_lastScreenRect.Min.X , _lastScreenRect.Max.Y + 3),
+                                            new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y + 3),
                                             new Vector2(_lastScreenRect.Min.X + 10, _lastScreenRect.Max.Y + 5),
                                             colorForType);
                 }
-                
+
                 // Visualize update
                 {
                     var updateCountThisFrame = output?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
@@ -390,6 +394,7 @@ namespace T3.Gui.Graph
                         break;
                     }
                 }
+
                 if (inputUi.Relevancy != Relevancy.Optional || inputIsConnectionTarget)
                 {
                     VisibleInputs.Add(inputUi);
@@ -440,6 +445,43 @@ namespace T3.Gui.Graph
             return style.Apply(colorForType);
         }
 
+        private static void DrawPreview(Instance instance)
+        {
+            
+            if (instance.Outputs.Count == 0)
+                return;
+
+            var firstOutput = instance.Outputs[0];
+            if (!(firstOutput is Slot<Texture2D> textureSlot))
+                return;
+
+            var texture = textureSlot.Value;
+            if (texture == null)
+                return;
+
+            ShaderResourceView srv;
+            try
+            {
+                srv = new ShaderResourceView(ResourceManager.Instance().Device, texture);
+            }
+            catch (Exception e)
+            {
+                Log.Warning("ImageOutputCanvas::DrawTexture(...) - Could not create ShaderResourceView for texture.");
+                Log.Warning(e.Message);
+                return;
+            }
+
+            var dl = ImGui.GetWindowDrawList();
+            var aspect = (float)texture.Description.Width / texture.Description.Height; 
+            //var size = new Vector2(_lastScreenRect.GetWidth() / aspect);
+            var previewHeight = _lastScreenRect.GetWidth() / aspect;
+
+            dl.AddImage((IntPtr)srv,
+                        new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Min.Y - previewHeight-1),
+                        new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Min.Y-1));
+        }
+
+        
         private static Vector2 ComputeNodeSize(SymbolChildUi childUi, List<IInputUi> visibleInputUis)
         {
             if (childUi.Style == SymbolChildUi.Styles.Resizable)
@@ -523,7 +565,7 @@ namespace T3.Gui.Graph
                                    : (opRect.GetHeight() - 1 + SlotGaps) / outputCount - SlotGaps;
             if (outputHeight <= 0)
                 outputHeight = 1;
-            
+
             return ImRect.RectWithSize(
                                        new Vector2(
                                                    opRect.Max.X + 1, // - GraphNode._usableSlotThickness,
