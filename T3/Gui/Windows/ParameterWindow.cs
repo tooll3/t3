@@ -35,7 +35,8 @@ namespace T3.Gui.Windows
 
         protected override void DrawAllInstances()
         {
-            foreach (var w in ParameterWindowInstances)
+            // Convert to array to allow closing of windowns
+            foreach (var w in ParameterWindowInstances.ToArray())
             {
                 w.DrawOneInstance();
             }
