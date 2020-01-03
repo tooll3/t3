@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using ImGuiNET;
+using SharpDX.WIC;
 using T3.Core.Logging;
 using T3.Gui.Graph;
 
@@ -93,12 +94,33 @@ namespace T3.Gui.Windows
 
                 if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
                     _metricsWindowVisible = !_metricsWindowVisible;
-
+                
                 if (ImGui.MenuItem("Save layout", ""))
                     SaveLayout(0);
 
-                if (ImGui.MenuItem("Load layout", ""))
-                    LoadLayout(0);
+                if (ImGui.BeginMenu("Load layout"))
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (ImGui.MenuItem("Layout " + (i+1),"F"+ (i+1), false, enabled:DoesLayoutExists(i)))
+                        {
+                            LoadLayout(i);
+                        }
+                    }
+                    ImGui.EndMenu();
+                }
+
+                if (ImGui.BeginMenu("Save layouts"))
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (ImGui.MenuItem("Layout " + (i+1), "Ctrl+F" + (i+1)))
+                        {
+                            SaveLayout(i);
+                        }
+                    }
+                    ImGui.EndMenu();
+                }
 
                 ImGui.EndMenu();
             }
@@ -112,14 +134,15 @@ namespace T3.Gui.Windows
             var writer = new StringWriter();
             serializer.Serialize(writer, allWindowConfigs);
 
-            var file = File.CreateText(string.Format(LayoutFileNameFormat, index));
+            var file = File.CreateText(GetLayoutFilename(index));
             file.Write(writer.ToString());
             file.Close();
         }
 
+
         private void LoadLayout(int index)
         {
-            var filename = string.Format(LayoutFileNameFormat, index);
+            var filename = GetLayoutFilename(index);
             if (!File.Exists(filename))
             {
                 Log.Warning($"Layout {filename} doesn't exist yet");
@@ -141,14 +164,53 @@ namespace T3.Gui.Windows
                 var matchingWindow = GetAllWindows().FirstOrDefault(window => window.Config.Title == config.Title);
                 if (matchingWindow== null)
                 {
-                    Log.Error($"Can't find window '{config.Title}'");
+                    if (config.Title.StartsWith("Graph#"))
+                    {
+                        matchingWindow = new GraphWindow();
+                        matchingWindow.Config = config;
+                    }
+                    else if (config.Title.StartsWith("Output#"))
+                    {
+                        matchingWindow = new OutputWindow();
+                        matchingWindow.Config = config;
+                    }
+                    else if (config.Title.StartsWith("Parameters#"))
+                    {
+                        matchingWindow = new ParameterWindow();
+                        matchingWindow.Config = config;
+                    }
+                    else
+                    {
+                        Log.Error($"Can't find type of window '{config.Title}'");    
+                    }
                 }
                 else
                 {
                     matchingWindow.Config = config;
                 }
             }
+            
+            // Close Windows without configurations
+            foreach (var w in GetAllWindows())
+            {
+                var hasConfig = configurations.Any(config => config.Title == w.Config.Title);
+                if (!hasConfig)
+                {
+                    w.Config.Visible = false;
+                }
+            }
+            
             ApplyLayout();
+        }
+
+        private static string GetLayoutFilename(int index)
+        {
+            return Path.Combine(ConfigFolderName,string.Format(  LayoutFileNameFormat, index));
+        }
+
+        private static bool DoesLayoutExists(int index)
+        {
+            return File.Exists(GetLayoutFilename(index));
         }
 
         
@@ -182,6 +244,7 @@ namespace T3.Gui.Windows
 
         //private const string LayoutFilePath = "layout.json";
         private const string LayoutFileNameFormat= "layout{0}.json";
+        private const string ConfigFolderName = ".t3"; 
 
         private readonly List<Window> _windows;
         private bool _demoWindowVisible;
