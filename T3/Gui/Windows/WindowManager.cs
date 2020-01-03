@@ -22,25 +22,45 @@ namespace T3.Gui.Windows
                        };
         }
 
+        private readonly UserActions[] _loadLayoutActions =
+        {
+            UserActions.LoadLayout0,
+            UserActions.LoadLayout1,
+            UserActions.LoadLayout2,
+            UserActions.LoadLayout3,
+            UserActions.LoadLayout4,
+            UserActions.LoadLayout5,
+            UserActions.LoadLayout6,
+            UserActions.LoadLayout7,
+            UserActions.LoadLayout8,
+            UserActions.LoadLayout9,
+        };
+
+        private readonly UserActions[] _saveLayoutActions =
+        {
+            UserActions.SaveLayout0,
+            UserActions.SaveLayout1,
+            UserActions.SaveLayout2,
+            UserActions.SaveLayout3,
+            UserActions.SaveLayout4,
+            UserActions.SaveLayout5,
+            UserActions.SaveLayout6,
+            UserActions.SaveLayout7,
+            UserActions.SaveLayout8,
+            UserActions.SaveLayout9,
+        };
+        
         public void Draw()
         {
-            if(KeyboardBinding.Triggered(UserActions.LoadLayout0))
-                LoadLayout(0);
-
-            if(KeyboardBinding.Triggered(UserActions.LoadLayout1))
-                LoadLayout(1);
-
-            if(KeyboardBinding.Triggered(UserActions.LoadLayout2))
-                LoadLayout(2);
-
-            if(KeyboardBinding.Triggered(UserActions.SaveLayout0))
-                SaveLayout(0);
-
-            if(KeyboardBinding.Triggered(UserActions.SaveLayout1))
-                SaveLayout(1);
-
-            if(KeyboardBinding.Triggered(UserActions.SaveLayout2))
-                SaveLayout(2);
+            
+            for (var i = 0; i < _saveLayoutActions.Length; i++)
+            {
+                if (KeyboardBinding.Triggered(_saveLayoutActions[i]))
+                    SaveLayout(i);
+                
+                if (KeyboardBinding.Triggered(_loadLayoutActions[i]))
+                    LoadLayout(i);
+            }
 
             foreach (var windowType in _windows)
             {

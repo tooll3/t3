@@ -39,9 +39,24 @@ namespace T3.Gui
         LoadLayout0,
         LoadLayout1,
         LoadLayout2,
+        LoadLayout3,
+        LoadLayout4,
+        LoadLayout5,
+        LoadLayout6,
+        LoadLayout7,
+        LoadLayout8,
+        LoadLayout9,
         SaveLayout0,
         SaveLayout1,
         SaveLayout2,
+        SaveLayout3,
+        SaveLayout4,
+        SaveLayout5,
+        SaveLayout6,
+        SaveLayout7,
+        SaveLayout8,
+        SaveLayout9,
+
     }
 
     public static class UserActionRegistry
@@ -163,9 +178,24 @@ namespace T3.Gui
                   new KeyboardBinding(UserActions.LoadLayout0, new KeyCombination(Key.F1)),
                   new KeyboardBinding(UserActions.LoadLayout1, new KeyCombination(Key.F2)),
                   new KeyboardBinding(UserActions.LoadLayout2, new KeyCombination(Key.F3)),
+                  new KeyboardBinding(UserActions.LoadLayout3, new KeyCombination(Key.F4)),
+                  new KeyboardBinding(UserActions.LoadLayout4, new KeyCombination(Key.F5)),
+                  new KeyboardBinding(UserActions.LoadLayout5, new KeyCombination(Key.F6)),
+                  new KeyboardBinding(UserActions.LoadLayout6, new KeyCombination(Key.F7)),
+                  new KeyboardBinding(UserActions.LoadLayout7, new KeyCombination(Key.F8)),
+                  new KeyboardBinding(UserActions.LoadLayout8, new KeyCombination(Key.F9)),
+                  new KeyboardBinding(UserActions.LoadLayout9, new KeyCombination(Key.F10)),
+                  
                   new KeyboardBinding(UserActions.SaveLayout0, new KeyCombination(Key.F1, ctrl: true)),
                   new KeyboardBinding(UserActions.SaveLayout1, new KeyCombination(Key.F2, ctrl: true)),
                   new KeyboardBinding(UserActions.SaveLayout2, new KeyCombination(Key.F3, ctrl: true)),
+                  new KeyboardBinding(UserActions.SaveLayout3, new KeyCombination(Key.F4, ctrl: true)),
+                  new KeyboardBinding(UserActions.SaveLayout4, new KeyCombination(Key.F5, ctrl: true)),
+                  new KeyboardBinding(UserActions.SaveLayout5, new KeyCombination(Key.F6, ctrl: true)),
+                  new KeyboardBinding(UserActions.SaveLayout6, new KeyCombination(Key.F7, ctrl: true)),
+                  new KeyboardBinding(UserActions.SaveLayout7, new KeyCombination(Key.F8, ctrl: true)),
+                  new KeyboardBinding(UserActions.SaveLayout8, new KeyCombination(Key.F9, ctrl: true)),
+                  new KeyboardBinding(UserActions.SaveLayout9, new KeyCombination(Key.F10, ctrl: true)),
               };
     }
 }
