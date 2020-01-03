@@ -42,6 +42,7 @@ namespace T3
 
         private int _windowWidth;
         private int _windowHeight;
+        
         private Vector2 _scaleFactor = Vector2.One;
 
 

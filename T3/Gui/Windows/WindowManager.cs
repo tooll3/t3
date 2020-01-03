@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using ImGuiNET;
 using SharpDX.WIC;
 using T3.Core.Logging;
@@ -50,15 +52,14 @@ namespace T3.Gui.Windows
             UserActions.SaveLayout8,
             UserActions.SaveLayout9,
         };
-        
+
         public void Draw()
         {
-            
             for (var i = 0; i < _saveLayoutActions.Length; i++)
             {
                 if (KeyboardBinding.Triggered(_saveLayoutActions[i]))
                     SaveLayout(i);
-                
+
                 if (KeyboardBinding.Triggered(_loadLayoutActions[i]))
                     LoadLayout(i);
             }
@@ -94,7 +95,7 @@ namespace T3.Gui.Windows
 
                 if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
                     _metricsWindowVisible = !_metricsWindowVisible;
-                
+
                 if (ImGui.MenuItem("Save layout", ""))
                     SaveLayout(0);
 
@@ -102,11 +103,12 @@ namespace T3.Gui.Windows
                 {
                     for (int i = 0; i < 10; i++)
                     {
-                        if (ImGui.MenuItem("Layout " + (i+1),"F"+ (i+1), false, enabled:DoesLayoutExists(i)))
+                        if (ImGui.MenuItem("Layout " + (i + 1), "F" + (i + 1), false, enabled: DoesLayoutExists(i)))
                         {
                             LoadLayout(i);
                         }
                     }
+
                     ImGui.EndMenu();
                 }
 
@@ -114,11 +116,12 @@ namespace T3.Gui.Windows
                 {
                     for (int i = 0; i < 10; i++)
                     {
-                        if (ImGui.MenuItem("Layout " + (i+1), "Ctrl+F" + (i+1)))
+                        if (ImGui.MenuItem("Layout " + (i + 1), "Ctrl+F" + (i + 1)))
                         {
                             SaveLayout(i);
                         }
                     }
+
                     ImGui.EndMenu();
                 }
 
@@ -139,7 +142,6 @@ namespace T3.Gui.Windows
             file.Close();
         }
 
-
         private void LoadLayout(int index)
         {
             var filename = GetLayoutFilename(index);
@@ -148,7 +150,7 @@ namespace T3.Gui.Windows
                 Log.Warning($"Layout {filename} doesn't exist yet");
                 return;
             }
-            
+
             var jsonBlob = File.ReadAllText(filename);
             var serializer = Newtonsoft.Json.JsonSerializer.Create();
             var fileTextReader = new StringReader(jsonBlob);
@@ -162,7 +164,7 @@ namespace T3.Gui.Windows
             foreach (var config in configurations)
             {
                 var matchingWindow = GetAllWindows().FirstOrDefault(window => window.Config.Title == config.Title);
-                if (matchingWindow== null)
+                if (matchingWindow == null)
                 {
                     if (config.Title.StartsWith("Graph#"))
                     {
@@ -181,7 +183,7 @@ namespace T3.Gui.Windows
                     }
                     else
                     {
-                        Log.Error($"Can't find type of window '{config.Title}'");    
+                        Log.Error($"Can't find type of window '{config.Title}'");
                     }
                 }
                 else
@@ -189,7 +191,7 @@ namespace T3.Gui.Windows
                     matchingWindow.Config = config;
                 }
             }
-            
+
             // Close Windows without configurations
             foreach (var w in GetAllWindows())
             {
@@ -199,13 +201,13 @@ namespace T3.Gui.Windows
                     w.Config.Visible = false;
                 }
             }
-            
+
             ApplyLayout();
         }
 
         private static string GetLayoutFilename(int index)
         {
-            return Path.Combine(ConfigFolderName,string.Format(  LayoutFileNameFormat, index));
+            return Path.Combine(ConfigFolderName, string.Format(LayoutFileNameFormat, index));
         }
 
         private static bool DoesLayoutExists(int index)
@@ -213,14 +215,31 @@ namespace T3.Gui.Windows
             return File.Exists(GetLayoutFilename(index));
         }
 
-        
         private void ApplyLayout()
         {
             foreach (var window in GetAllWindows())
             {
-                ImGui.SetWindowPos(window.Config.Title, window.Config.Position);
-                ImGui.SetWindowSize(window.Config.Title, window.Config.Size);
+                ImGui.SetWindowPos(window.Config.Title,  GetPixelPositionFromRelative(window.Config.Position));
+                ImGui.SetWindowSize(window.Config.Title, GetPixelPositionFromRelative(window.Config.Size));
             }
+        }
+
+        public static Vector2 GetRelativePositionFromPixel(Vector2 pixel)
+        {
+            var io = ImGui.GetIO();
+            return new Vector2(
+                               pixel.X / io.DisplaySize.X,
+                               pixel.Y / io.DisplaySize.Y
+                              );
+        }
+
+        public static Vector2 GetPixelPositionFromRelative(Vector2 fraction)
+        {
+            var io = ImGui.GetIO();
+            return new Vector2(
+                               fraction.X * io.DisplaySize.X,
+                               fraction.Y * io.DisplaySize.Y
+                              );
         }
 
         
@@ -243,8 +262,8 @@ namespace T3.Gui.Windows
         }
 
         //private const string LayoutFilePath = "layout.json";
-        private const string LayoutFileNameFormat= "layout{0}.json";
-        private const string ConfigFolderName = ".t3"; 
+        private const string LayoutFileNameFormat = "layout{0}.json";
+        private const string ConfigFolderName = ".t3";
 
         private readonly List<Window> _windows;
         private bool _demoWindowVisible;

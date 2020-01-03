@@ -103,8 +103,8 @@ namespace T3.Gui.Windows
 
         private void StoreWindowLayout()
         {
-            Config.Position = ImGui.GetWindowPos();
-            Config.Size = ImGui.GetWindowSize();
+            Config.Position = WindowManager.GetRelativePositionFromPixel(ImGui.GetWindowPos());
+            Config.Size = WindowManager.GetRelativePositionFromPixel(ImGui.GetWindowSize());
         }
 
         public class WindowConfig
