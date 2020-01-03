@@ -44,9 +44,10 @@ namespace T3.Gui
         /// <remarks>
         /// Take from https://github.com/ocornut/imgui/issues/319#issuecomment-147364392
         /// </remarks>
-        public static void SplitFromBottom(ref float offsetFromBottom)
+        public static bool SplitFromBottom(ref float offsetFromBottom)
         {
             const float thickness = 5;
+            bool hasBeenDragged = false;
 
             var backupPos = ImGui.GetCursorPos();
 
@@ -71,12 +72,17 @@ namespace T3.Gui
 
             if (ImGui.IsItemActive())
             {
-                offsetFromBottom =
-                    (offsetFromBottom - ImGui.GetIO().MouseDelta.Y)
-                   .Clamp(0, size.Y - thickness);
+                if (Math.Abs(ImGui.GetIO().MouseDelta.Y) > 0)
+                {
+                    hasBeenDragged = true;
+                    offsetFromBottom =
+                        (offsetFromBottom - ImGui.GetIO().MouseDelta.Y)
+                       .Clamp(0, size.Y - thickness);
+                }
             }
 
             ImGui.SetCursorPos(backupPos);
+            return hasBeenDragged;
         }
 
         public static bool ToggleButton(string label, ref bool isSelected, Vector2 size, bool trigger = false)
@@ -189,7 +195,7 @@ namespace T3.Gui
             if (isEnabled)
             {
                 ImGui.PushFont(Fonts.FontBold);
-                if (ImGui.Button(label) 
+                if (ImGui.Button(label)
                     || (enableTriggerWithReturn && ImGui.IsKeyPressed((int)Key.Return)))
                 {
                     ImGui.PopFont();

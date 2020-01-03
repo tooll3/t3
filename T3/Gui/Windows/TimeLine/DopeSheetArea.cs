@@ -511,7 +511,7 @@ namespace T3.Gui.Windows.TimeLine
         private const float KeyframeIconWidth = 10;
         private Vector2 _minScreenPos;
         private static ChangeKeyframesCommand _changeKeyframesCommand;
-        private const int LayerHeight = 25;
+        public const int LayerHeight = 25;
         private Instance _compositionOp;
         private ImDrawListPtr _drawList;
         private readonly ValueSnapHandler _snapHandler;

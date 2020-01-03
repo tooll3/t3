@@ -12,13 +12,6 @@ namespace T3.Gui.Graph
     {
         internal static void DrawTimeControls(ClipTime clipTime, ref TimeLineCanvas.Modes mode)
         {
-            ImGui.SetCursorPos(
-                               new Vector2(
-                                           ImGui.GetWindowContentRegionMin().X,
-                                           ImGui.GetWindowContentRegionMax().Y - TimeControlsSize.Y));
-
-            ImGui.Button("##Timeline", TimeControlsSize);
-            ImGui.SameLine();
 
             // Current Time
             var delta = 0.0;
@@ -55,7 +48,7 @@ namespace T3.Gui.Graph
 
             ImGui.SameLine();
 
-            if (ImGui.Button(clipTime.TimeMode.ToString(), TimeControlsSize))
+            if (ImGui.Button(clipTime.TimeMode.ToString(), ControlSize))
             {
                 clipTime.TimeMode = (ClipTime.TimeModes)(((int)clipTime.TimeMode + 1) % Enum.GetNames(typeof(ClipTime.TimeModes)).Length);
             }
@@ -74,7 +67,7 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
 
             // Jump to start
-            if (CustomComponents.IconButton(Icon.JumpToRangeStart, "##jumpToBeginning", TimeControlsSize))
+            if (CustomComponents.IconButton(Icon.JumpToRangeStart, "##jumpToBeginning", ControlSize))
             {
                 clipTime.Time = clipTime.TimeRangeStart;
             }
@@ -82,7 +75,7 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
 
             // Prev Keyframe
-            if (CustomComponents.IconButton(Icon.JumpToPreviousKeyframe, "##prevKeyframe", TimeControlsSize)
+            if (CustomComponents.IconButton(Icon.JumpToPreviousKeyframe, "##prevKeyframe", ControlSize)
                 || KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
             {
                 UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
@@ -95,7 +88,7 @@ namespace T3.Gui.Graph
             if (CustomComponents.ToggleButton(Icon.PlayBackwards,
                                               label: isPlayingBackwards ? $"[{(int)clipTime.PlaybackSpeed}x]" : "<",
                                               ref isPlayingBackwards,
-                                              TimeControlsSize))
+                                              ControlSize))
             {
                 if (clipTime.PlaybackSpeed != 0)
                 {
@@ -114,7 +107,7 @@ namespace T3.Gui.Graph
             if (CustomComponents.ToggleButton(Icon.PlayForwards,
                                               label: isPlaying ? $"[{(int)clipTime.PlaybackSpeed}x]" : ">",
                                               ref isPlaying,
-                                              TimeControlsSize))
+                                              ControlSize))
             {
                 if (Math.Abs(clipTime.PlaybackSpeed) > 0.001f)
                 {
@@ -188,7 +181,7 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
 
             // Next Keyframe
-            if (CustomComponents.IconButton(Icon.JumpToNextKeyframe, "##nextKeyframe", TimeControlsSize)
+            if (CustomComponents.IconButton(Icon.JumpToNextKeyframe, "##nextKeyframe", ControlSize)
                 || KeyboardBinding.Triggered(UserActions.PlaybackJumpToNextKeyframe))
             {
                 UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
@@ -197,7 +190,7 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
 
             // End
-            if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", TimeControlsSize))
+            if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", ControlSize))
             {
                 clipTime.Time = clipTime.TimeRangeEnd;
             }
@@ -205,18 +198,18 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
 
             // Loop
-            CustomComponents.ToggleButton(Icon.Loop, "##loop", ref clipTime.IsLooping, TimeControlsSize);
+            CustomComponents.ToggleButton(Icon.Loop, "##loop", ref clipTime.IsLooping, ControlSize);
             ImGui.SameLine();
 
             // Curve MOde
-            if (ImGui.Button(mode.ToString(), TimeControlsSize))
+            if (ImGui.Button(mode.ToString(), ControlSize))
             {
                 mode = (TimeLineCanvas.Modes)(((int)mode + 1) % Enum.GetNames(typeof(TimeLineCanvas.Modes)).Length);
             }
             ImGui.SameLine();
             
             // ToggleAudio
-            if (CustomComponents.IconButton(clipTime.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn,  "##audioToggle", TimeControlsSize))
+            if (CustomComponents.IconButton(clipTime.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn,  "##audioToggle", ControlSize))
             {
                 clipTime.AudioMuted = !clipTime.AudioMuted;
                 var streamedClipTime = clipTime as StreamClipTime;
@@ -234,13 +227,13 @@ namespace T3.Gui.Graph
             {
                 icon = Icon.HoverPreviewPlay;
             }
-            if (CustomComponents.IconButton(icon,  "##hoverPreview", TimeControlsSize))
+            if (CustomComponents.IconButton(icon,  "##hoverPreview", ControlSize))
             {
                 GraphCanvas.HoverMode = (GraphCanvas.HoverModes)(((int)GraphCanvas.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
             }
             ImGui.SameLine();
         }
 
-        private static readonly Vector2 TimeControlsSize = new Vector2(40, 23);
+        public static readonly Vector2 ControlSize = new Vector2(40, 23);
     }
 }

@@ -47,7 +47,6 @@ namespace T3.Gui.Graph
             GraphWindowInstances.Add(this);
         }
 
-        
         public static Instance FindIdInNestedChildren(Instance instance, Guid childId)
         {
             foreach (var child in instance.Children)
@@ -64,8 +63,6 @@ namespace T3.Gui.Graph
 
             return null;
         }
-
-
 
         private static int _instanceCounter;
         private static readonly List<Window> GraphWindowInstances = new List<Window>();
@@ -106,9 +103,19 @@ namespace T3.Gui.Graph
             {
                 var dl = ImGui.GetWindowDrawList();
 
-                CustomComponents.SplitFromBottom(ref _heightTimeLine);
-                var graphHeight = ImGui.GetWindowHeight() - _heightTimeLine - 30;
+                var animationParameters = GetAnimationParametersForSelectedNodes();
+                
+                var isTimelineCollapsed = _heightTimeLine <= TimeLineCanvas.TimeLineDragHeight;
+                var timelineHeight = isTimelineCollapsed
+                                         ? (animationParameters.Count * DopeSheetArea.LayerHeight)+ TimeLineCanvas.TimeLineDragHeight
+                                         : _heightTimeLine;
 
+                if (CustomComponents.SplitFromBottom(ref timelineHeight))
+                {
+                    _heightTimeLine = timelineHeight;
+                }
+
+                var graphHeight = ImGui.GetWindowHeight() - timelineHeight - 30;
                 ImGui.BeginChild("##graph", new Vector2(0, graphHeight), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                 {
                     dl.ChannelsSplit(2);
@@ -116,6 +123,20 @@ namespace T3.Gui.Graph
                     {
                         DrawBreadcrumbs();
                         DrawBreadcrumbsNameAndDescription();
+
+                        ImGui.SetCursorPos(
+                                           new Vector2(
+                                                       ImGui.GetWindowContentRegionMin().X,
+                                                       ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
+
+                        if (CustomComponents.IconButton(isTimelineCollapsed ? Icon.ChevronUp : Icon.ChevronDown, 
+                                                        "##TimelineToggle", TimeControls.ControlSize))
+                        {
+                            _heightTimeLine = isTimelineCollapsed ? 200 : TimeLineCanvas.TimeLineDragHeight;
+                        }
+
+                        ImGui.SameLine();
+
                         TimeControls.DrawTimeControls(_clipTime, ref _timeLineCanvas.Mode);
                     }
                     dl.ChannelsSetCurrent(0);
@@ -128,7 +149,7 @@ namespace T3.Gui.Graph
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 4);
                 ImGui.BeginChild("##timeline", Vector2.Zero, false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
                 {
-                    DrawTimelineAndCurveEditor();
+                    _timeLineCanvas.Draw(GraphCanvas.CompositionOp, animationParameters);
                 }
                 ImGui.EndChild();
             }
@@ -205,11 +226,6 @@ namespace T3.Gui.Graph
             new GraphWindow(); // Must call constructor
         }
 
-        private void DrawTimelineAndCurveEditor()
-        {
-            _timeLineCanvas.Draw(GraphCanvas.CompositionOp, GetAnimationParametersForSelectedNodes());
-        }
-
         public struct AnimationParameter
         {
             public IEnumerable<Curve> Curves;
@@ -269,7 +285,7 @@ namespace T3.Gui.Graph
         }
 
         private readonly ClipTime _clipTime;
-        private static float _heightTimeLine = 200;
+        private float _heightTimeLine = TimeLineCanvas.TimeLineDragHeight;
         private readonly TimeLineCanvas _timeLineCanvas;
     }
 }
