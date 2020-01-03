@@ -445,9 +445,9 @@ namespace T3.Gui.Graph
             return style.Apply(colorForType);
         }
 
+        
         private static void DrawPreview(Instance instance)
         {
-            
             if (instance.Outputs.Count == 0)
                 return;
 
@@ -471,12 +471,10 @@ namespace T3.Gui.Graph
                 return;
             }
 
-            var dl = ImGui.GetWindowDrawList();
             var aspect = (float)texture.Description.Width / texture.Description.Height; 
-            //var size = new Vector2(_lastScreenRect.GetWidth() / aspect);
             var previewHeight = _lastScreenRect.GetWidth() / aspect;
 
-            dl.AddImage((IntPtr)srv,
+            Graph.DrawList.AddImage((IntPtr)srv,
                         new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Min.Y - previewHeight-1),
                         new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Min.Y-1));
         }
