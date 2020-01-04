@@ -149,7 +149,7 @@ namespace T3.Core.Operator
             }
             else
             {
-                Log.Error($"Trying to read a json value for type '{ValueType}' but no converter registered in JsonToTypeValueConverters. Skipping value reading.");
+                //Log.Error($"Trying to read a json value for type '{ValueType}' but no converter registered in JsonToTypeValueConverters. Skipping value reading.");
             }
         }
 
