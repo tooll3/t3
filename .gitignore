@@ -259,7 +259,10 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# t3 
+.t3/
+T3/ImGui
 T3/imgui.ini
 imgui.ini
 userSettings.json
-T3/ImGui
