@@ -1,41 +1,29 @@
+▣ Implement proper compound type control for Vec2, Vec3,Vec4 (2h) 16:02 - 19:00
+▣ When unfolding target nodes on hover only show matching inputs
+▣ When dragging connections indicate if node has hidden matching input slots (2h) 19:00 - 21:00
+▢ When computing height of visible inputs normalize height of non-multiInputs
 
-▢ Port [RandomObserverCamera]
-▣ Port [BeatTime]
-▢ Port [BlendImages] shader
-▢ Port [BlendSmokeNoise] shader
-▢ test move time when clicking on a keyframe (20')
-
-▢ Use meaningful position when adding new Inputs
-▢ Add stub for sorting inputs
-▢ Correctly initialize node style of children when duplicating as new type (30')
-▢ Correctly initialize child name overrides when duplicating as new type (30')
-▢ use proper keyframe icons for curve edit area -> need mac boot (15')
+▣ Port [BlendImages] shader
+▣ Port [BlendSmokeNoise] shader
 
 ▢ pin dope sheet parameters (30')
 
-▢ When dragging connections indicate if node has non-relevant matching input slots (2h)
 ▢ use Tab switch between curve and dope sheet (20')
 ▢ push down neighbors when expanding node (1h)
 
 ▢ start symbol browser from input nodes (1h)
 ▢ start symbol browser from output nodes (15')
+▢ publish parameter as input
 
 ▢ Highlight missing required inputs/parameters (3h)
 
-▢ MultiCanvas: Output window should be selectable from all canvas windows (2h)
-▢ MultiCanvas: Parameter window should work for all canvas windows (2h)
-▢ MultiCanvas: Fix dragging connection crash (1h)
-▢ MultiCanvas: user-setting should save opened windows (1h)
-▢ FIX: crash when closing last graph window
+▣ MultiCanvas: user-setting should save opened windows (1h)
 ▢ MultiCanvas: Time-Line height should be an individual setting of graphCanvas (15')
 
-▢ Move ClipTime to core and make it accessible in context? -> cynic?
-
-▢ in dope sheet insert new key should snap to vertical lines (15min)
-▢ fix invisible input glitch if graph canvas is zoomed out too much (30min)
-▢ fix region clamping in Console log (1h)
+▢ use proper keyframe icons for curve edit area -> need mac boot (15')
+▣ fix invisible input glitch if graph canvas is zoomed out too much (30min)
 ▢ save clip-range with symbol (3h)
-▢ use renamed instance title in dope sheet parameter list
+▣ use renamed instance title in dope sheet parameter list
 ▢ show parameters of multiple selected nodes (1h)
 ▢ pin selection in parameter window (1h)
 ▢ improve Color-Type control (3h)
@@ -45,6 +33,7 @@
 ▢ drag timeline height on left grabber  (15')
 ▢ add follow time marker mode  (30')
 
+▢ Adjust height of timeline to number of selected animated parameters
 
 Later major
 -----------
@@ -52,7 +41,6 @@ Later major
 ▢ preview thumbnails (2h)
 ▢ node groups / annotations (4h)
 ▢ add CurveEditBox (3h)
-▢ Display input parameter settings when click input (2h)
 ▢ Arc curves (8h)
 
 ▢ add transparency pattern below color parameters
@@ -78,13 +66,35 @@ bugs for later
 ▢ FIX: Deleting last keyframe should disable animation-flag in parameter view
 ▢ FIX: Exception when input type changes
 
+
 ▢ Auto layout graph
 ▢ Show graphs inside nodes
 
+For cynic
+----------
+▢ Correctly initialize node style of children when duplicating as new type (30')
+▢ Correctly initialize child name overrides when duplicating as new type (30')
+▢ Move ClipTime to core and make it accessible in context? -> cynic?
 
+Blocked
+===========
+▢ fix region clamping in Console log (1h)
 
 Done
 --------
+▣ Port [BeatTime]
+▣ test move time when clicking on a keyframe (20')
+▣ Remove inputs when pressing delete
+▣ Resort input order on canvas
+▣ Use meaningful position when adding new Inputs
+▣ Add stub for sorting inputs
+▣ MultiCanvas: Output window should be selectable from all canvas windows (2h)
+▣ MultiCanvas: Parameter window should work for all canvas windows (2h)
+▣ MultiCanvas: Fix dragging connection crash (1h)
+▣ FIX: crash when closing last graph window
+▣ in dope sheet insert new key should snap to vertical lines (15min)
+▣ Display input parameter settings when click input (2h)
+
 Thu
 ▣ (un)fold nodes with icon? (2h)
 ▣ Show current values in Nodes
