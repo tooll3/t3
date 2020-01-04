@@ -491,6 +491,6 @@ namespace T3.Gui.Windows.TimeLine
         private ImDrawListPtr _drawlist;
 
         // Styling
-        public const float TimeLineDragHeight = 30;
+        public const float TimeLineDragHeight = 40;
     }
 }

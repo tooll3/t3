@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Gui.Interaction.Snapping;
+using T3.Gui.Styling;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -46,14 +47,15 @@ namespace T3.Gui.Windows.TimeLine
             
             // Debug string 
             // drawList.AddText(topLeft + new Vector2(20, 20), Color.Red, $"Scale: {pixelsPerU:0.1}  f={scaleRange:0}");
-
+            ImGui.PushFont(Fonts.FontSmall);
+            
             foreach (var raster in rasters)
             {
                 double t = -scroll%raster.Spacing;
 
 
                 var lineAlpha = raster.FadeLines ? fadeFactor : 1;
-                var lineColor = new Color(0, 0, 0, lineAlpha*0.3f);
+                var lineColor = new Color(0, 0, 0, lineAlpha*0.9f);
 
                 var textAlpha = raster.FadeLabels ? fadeFactor : 1;
                 var textColor = new Color(textAlpha);
@@ -75,7 +77,7 @@ namespace T3.Gui.Windows.TimeLine
                             var time = t + scroll;
                             var output = BuildLabel(raster, time);
 
-                            var p = topLeft + new Vector2(xIndex, viewHeight - 15);
+                            var p = topLeft + new Vector2(xIndex-7, viewHeight - 17);
                             drawList.AddText(p, textColor, output);
                         }
                     }
@@ -83,6 +85,7 @@ namespace T3.Gui.Windows.TimeLine
                     t += raster.Spacing;
                 }
             }
+            ImGui.PopFont();
         }
 
         #region implement snap attractor
