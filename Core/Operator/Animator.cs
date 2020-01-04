@@ -38,6 +38,18 @@ namespace T3.Core.Operator
             public readonly int Index;
         }
 
+        public void CopyAllAnimationsTo(Animator targetAnimator, Dictionary<Guid, Guid> oldToNewIdDict)
+        {
+            Debug.Assert(targetAnimator._animatedInputCurves.Count == 0);
+            foreach (var (id, curve) in _animatedInputCurves)
+            {
+                Guid newInstanceId = oldToNewIdDict[id.InstanceId];
+                var newCurveId = new CurveId(newInstanceId, id.InputId, id.Index);
+                var newCurve = curve.Clone();
+                targetAnimator._animatedInputCurves.Add(newCurveId, newCurve); 
+            }
+        }
+
         public void CreateInputUpdateAction<T>(IInputSlot inputSlot)
         {
             if (inputSlot is Slot<float> floatInputSlot)

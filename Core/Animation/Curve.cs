@@ -11,6 +11,11 @@ namespace T3.Core.Animation
     {
         public static readonly int TIME_PRECISION = 4;
 
+        public Curve Clone()
+        {
+            return new Curve { _state = _state.Clone() };
+        }
+
         public Utils.OutsideCurveBehavior PreCurveMapping
         {
             get => _state.PreCurveMapping;
@@ -206,6 +211,6 @@ namespace T3.Core.Animation
             _state.Read(inputToken);
         }
 
-        private readonly CurveState _state = new CurveState();
+        private CurveState _state = new CurveState();
     }
 }

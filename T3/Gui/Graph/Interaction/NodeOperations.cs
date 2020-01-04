@@ -432,6 +432,10 @@ namespace T3.Gui.Graph.Interaction
                 correspondingInputDef.DefaultValue = sourceInputDef.DefaultValue.Clone();
             }
 
+            // copy the animations
+            sourceSymbol.Animator.CopyAllAnimationsTo(newSymbol.Animator, oldToNewIdMap);
+
+            // create instance
             var mousePos = GraphCanvas.Current.InverseTransformPosition(ImGui.GetMousePos());
             var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) { PosOnCanvas = mousePos };
             UndoRedoStack.AddAndExecute(addCommand);
