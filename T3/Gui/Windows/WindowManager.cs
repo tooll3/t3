@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using Newtonsoft.Json;
 using SharpDX.WIC;
 using T3.Core.Logging;
 using T3.Gui.Graph;
@@ -133,13 +134,12 @@ namespace T3.Gui.Windows
         {
             var allWindowConfigs = GetAllWindows().Select(window => window.Config).ToList();
 
-            var serializer = Newtonsoft.Json.JsonSerializer.Create();
-            var writer = new StringWriter();
-            serializer.Serialize(writer, allWindowConfigs);
-
-            var file = File.CreateText(GetLayoutFilename(index));
-            file.Write(writer.ToString());
-            file.Close();
+            var serializer = JsonSerializer.Create();
+            serializer.Formatting = Formatting.Indented;
+            using (var file = File.CreateText(GetLayoutFilename(index)))
+            {
+                serializer.Serialize(file, allWindowConfigs);
+            }
         }
 
         private void LoadLayout(int index)
