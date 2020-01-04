@@ -254,10 +254,10 @@ namespace T3.Core.Operator
         {
             inputSlot.SetUpdateActionBackToDefault();
             inputSlot.DirtyFlag.Trigger &= ~DirtyFlagTrigger.Animated;
-            var curveKeysToRemove = (from curve in _animatedInputCurves
-                                     where curve.Key.InstanceId == inputSlot.Parent.SymbolChildId
-                                     where curve.Key.InputId == inputSlot.Id
-                                     select curve.Key).ToArray(); // ToArray is needed to remove from collection in batch
+            var curveKeysToRemove = (from curveId in _animatedInputCurves.Keys
+                                     where curveId.InstanceId == inputSlot.Parent.SymbolChildId
+                                     where curveId.InputId == inputSlot.Id
+                                     select curveId).ToArray(); // ToArray is needed to remove from collection in batch
             foreach (var curveKey in curveKeysToRemove)
             {
                 _animatedInputCurves.Remove(curveKey);
@@ -336,6 +336,7 @@ namespace T3.Core.Operator
             }
         }
 
+        // todo: layers should be put into an own class as these are not directly related/dependent on keyframe animations
         public List<Layer> Layers { get; set; } = new List<Layer>()
                                                   {
                                                       new Layer()
