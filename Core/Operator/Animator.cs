@@ -198,19 +198,33 @@ namespace T3.Core.Operator
                         typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                 }
+                else if (count == 2)
+                {
+                    var entries = groupEntry.ToArray();
+                    var inputSlot = entries[0].inputSlot;
+                    if (inputSlot is Slot<Vector3> vector2InputSlot)
+                    {
+                        vector2InputSlot.UpdateAction = context =>
+                                                        {
+                                                            vector2InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.Time);
+                                                            vector2InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.Time);
+                                                        };
+                        vector2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                    }
+                }
                 else if (count == 3)
                 {
                     var entries = groupEntry.ToArray();
                     var inputSlot = entries[0].inputSlot;
-                    if (inputSlot is Slot<Vector3> Vector3InputSlot)
+                    if (inputSlot is Slot<Vector3> vector3InputSlot)
                     {
-                        Vector3InputSlot.UpdateAction = context =>
+                        vector3InputSlot.UpdateAction = context =>
                                                         {
-                                                            Vector3InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.Time);
-                                                            Vector3InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.Time);
-                                                            Vector3InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.Time);
+                                                            vector3InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.Time);
+                                                            vector3InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.Time);
+                                                            vector3InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.Time);
                                                         };
-                        Vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                        vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                 }
                 else if (count == 4)
