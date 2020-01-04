@@ -106,7 +106,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                DrawPreview(instance);
+                //DrawPreview(instance);
 
                 SelectableNodeMovement.Handle(childUi, instance);
 
