@@ -317,6 +317,11 @@ namespace T3
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
+            unsafe
+            {
+                // disable imgui ini file settings
+                ImGui.GetIO().NativePtr->IniFilename = null;
+            }
             ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
 
             //T3Style.Init();
