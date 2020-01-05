@@ -67,6 +67,7 @@ namespace T3.Gui.Commands
         public void Do()
         {
             var targetCompositionSymbolUi = SymbolUiRegistry.Entries[_targetSymbolId];
+            var targetSymbol = targetCompositionSymbolUi.Symbol;
             var sourceCompositionSymbolUi = SymbolUiRegistry.Entries[_sourceSymbolId];
             foreach (var childToCopy in _childrenToCopy)
             {
@@ -74,7 +75,6 @@ namespace T3.Gui.Commands
                 var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
                 targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, childToCopy.AddedId, sourceCompositionSymbolUi, childToCopy.ChildId,
                                                                    _targetPosition + childToCopy.RelativePosition);
-                var targetSymbol = targetCompositionSymbolUi.Symbol;
                 SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
                 var newSymbolInputs = newSymbolChild.InputValues;
                 foreach (var (id, input) in symbolChildToCopy.InputValues)
@@ -90,6 +90,11 @@ namespace T3.Gui.Commands
             {
                 targetCompositionSymbolUi.Symbol.AddConnection(connection);
             }
+            
+            // copy animations
+            var childIdsToCopyAnimations = _childrenToCopy.Select(entry => entry.ChildId).ToList();
+            var oldToNewIdDict = _childrenToCopy.ToDictionary(entry => entry.ChildId, entry => entry.AddedId);
+            sourceCompositionSymbolUi.Symbol.Animator.CopyAnimationsTo(targetSymbol.Animator, childIdsToCopyAnimations, oldToNewIdDict);
         }
 
         struct Entry

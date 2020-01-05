@@ -47,12 +47,23 @@ namespace T3.Core.Operator
             }
         }
 
-        public void MoveAnimationsTo(Animator targetAnimator, List<Guid> childrenToCopyAnimationsFrom, Dictionary<Guid, Guid> oldToNewIdDict)
+        public void CopyAnimationsTo(Animator targetAnimator, List<Guid> childrenToCopyAnimationsFrom, Dictionary<Guid, Guid> oldToNewIdDict)
+        {
+            foreach (var (id, curve) in _animatedInputCurves)
+            {
+                if (!childrenToCopyAnimationsFrom.Contains(id.InstanceId))
+                    continue;
+
+                CloneAndAddCurve(targetAnimator, oldToNewIdDict, id, curve);
+            }
+        }
+        
+        public void MoveAnimationsTo(Animator targetAnimator, List<Guid> childrenToMoveAnimationsFrom, Dictionary<Guid, Guid> oldToNewIdDict)
         {
             List<CurveId> elementsToDelete = new List<CurveId>();
             foreach (var (id, curve) in _animatedInputCurves)
             {
-                if (!childrenToCopyAnimationsFrom.Contains(id.InstanceId))
+                if (!childrenToMoveAnimationsFrom.Contains(id.InstanceId))
                     continue;
 
                 CloneAndAddCurve(targetAnimator, oldToNewIdDict, id, curve);
