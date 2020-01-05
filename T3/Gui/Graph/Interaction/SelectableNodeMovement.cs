@@ -59,7 +59,7 @@ namespace T3.Gui.Graph.Interaction
                     UndoRedoStack.Add(_moveCommand);
 
                     var selectedInputs = SelectionManager.GetSelectedNodes<IInputUi>().ToList();
-                    if (selectedInputs.Count() > 0)
+                    if (selectedInputs.Count > 0)
                     {
                         var composition = GraphCanvas.Current.CompositionOp;
                         var compositionUi = SymbolUiRegistry.Entries[composition.Symbol.Id];
@@ -70,6 +70,7 @@ namespace T3.Gui.Graph.Interaction
                                                                         return (int)(childA.PosOnCanvas.Y * 10000 + childA.PosOnCanvas.X) - (int)(childB.PosOnCanvas.Y * 10000 + childB.PosOnCanvas.X);
                                                                     });
                         composition.Symbol.SortInputSlotsByDefinitionOrder();
+                        NodeOperations.AdjustInputOrderOfSymbol(composition.Symbol);
                     }
                 }
 

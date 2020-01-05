@@ -489,14 +489,14 @@ namespace T3.Gui.Graph.Interaction
 
                 if (searchedNodes.Length > 0)
                 {
-                    NodeToRemove.Add(node);
+                    NodesToRemove.Add(node);
                 }
 
                 return node;
             }
 
             private readonly Guid[] _inputIds;
-            public List<SyntaxNode> NodeToRemove { get; } = new List<SyntaxNode>();
+            public List<SyntaxNode> NodesToRemove { get; } = new List<SyntaxNode>();
         }
 
         public static void RemoveInputsFromSymbol(Guid[] inputIdsToRemove, Symbol symbol)
@@ -508,12 +508,7 @@ namespace T3.Gui.Graph.Interaction
                 return;
             }
 
-            var root = syntaxTree.GetRoot();
-            var inputNodeFinder = new InputNodeByIdFinder(inputIdsToRemove);
-            var newRoot = inputNodeFinder.Visit(root);
-
-            newRoot = newRoot.RemoveNodes(inputNodeFinder.NodeToRemove, SyntaxRemoveOptions.KeepNoTrivia);
-            
+            var newRoot = RemoveInputsFromTree(inputIdsToRemove, syntaxTree.GetRoot());
             var newSource = newRoot.GetText().ToString();
             Log.Debug(newSource);
 
@@ -522,6 +517,14 @@ namespace T3.Gui.Graph.Interaction
             {
                 Log.Error("Compilation after removing inputs failed, aborting the remove.");
             }
+        }
+
+        private static SyntaxNode RemoveInputsFromTree(Guid[] inputIdsToRemove, SyntaxNode root)
+        {
+            var inputNodeFinder = new InputNodeByIdFinder(inputIdsToRemove);
+            var newRoot = inputNodeFinder.Visit(root);
+
+            return newRoot.RemoveNodes(inputNodeFinder.NodesToRemove, SyntaxRemoveOptions.KeepNoTrivia);
         }
 
         private static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource)
@@ -561,6 +564,47 @@ namespace T3.Gui.Graph.Interaction
             }
 
             public SyntaxNode LastInputNodeFound { get; private set; }
+        }
+
+        class AllInputNodesFinder : CSharpSyntaxRewriter
+        {
+            public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
+            {
+                if (!(node.Declaration.Type is GenericNameSyntax nameSyntax))
+                    return node;
+                
+                string idValue = nameSyntax.Identifier.ValueText;
+                if (idValue == "InputSlot" || idValue == "MultiInputSlot")
+                {
+                    var first = node.Declaration.Variables[0];
+                    var id = first.Identifier.ValueText;
+                    InputNodesFound.Add((id, node));
+                }
+
+                return node;
+            }
+
+            public List<(string, SyntaxNode)> InputNodesFound { get; } = new List<(string, SyntaxNode)>();
+        }
+
+        class AllInputNodesReplacer : CSharpSyntaxRewriter
+        {
+            public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
+            {
+                if (!(node.Declaration.Type is GenericNameSyntax nameSyntax))
+                    return node;
+                
+                string idValue = nameSyntax.Identifier.ValueText;
+                if (idValue == "InputSlot" || idValue == "MultiInputSlot")
+                {
+                    return _replacementNodes[_index++];
+                }
+
+                return node;
+            }
+
+            private int _index;
+            public SyntaxNode[] _replacementNodes;
         }
 
         public static void AddInputToSymbol(string inputName, bool multiInput, Type inputType, Symbol symbol)
@@ -605,12 +649,63 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
-        private static void WriteSymbolSourceToFile(string source, Symbol symbol)
+        public static void AdjustInputOrderOfSymbol(Symbol symbol)
         {
-            string path = @"Operators\Types\";
-            using (var sw = new StreamWriter(path + symbol.Name + ".cs"))
+            var syntaxTree = GetSyntaxTree(symbol);
+            if (syntaxTree == null)
             {
-                sw.Write(source);
+                Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
+                return;
+            }
+
+            var root = syntaxTree.GetRoot();
+
+            var inputNodeFinder = new AllInputNodesFinder();
+            root = inputNodeFinder.Visit(root);
+            // check if the order in code is the same as in symbol
+            Debug.Assert(inputNodeFinder.InputNodesFound.Count == symbol.InputDefinitions.Count);
+            bool orderIsOk = true;
+            for (int i = 0; i < inputNodeFinder.InputNodesFound.Count; i++)
+            {
+                if (inputNodeFinder.InputNodesFound[i].Item1 != symbol.InputDefinitions[i].Name)
+                {
+                    orderIsOk = false;
+                    break;
+                }
+            }
+
+            if (orderIsOk)
+                return; // nothing to do
+            
+            var inputDeclarations = new List<SyntaxNode>(symbol.InputDefinitions.Count);
+            foreach (var inputDef in symbol.InputDefinitions)
+            {
+                Type inputType = inputDef.DefaultValue.ValueType;
+                var @namespace = inputType.Namespace;
+                if (@namespace == "System")
+                    @namespace = String.Empty;
+                else
+                    @namespace += ".";
+                var attributeString = "\n        [Input(Guid = \"" + inputDef.Id + "\")]\n";
+                var typeName = TypeNameRegistry.Entries[inputType];
+                var slotString = (inputDef.IsMultiInput ? "MultiInputSlot<" : "InputSlot<") + @namespace + typeName + ">";
+                var inputString = "        public readonly " + slotString + " " + inputDef.Name + " = new " + slotString + "();\n";
+
+                var inputDeclaration = SyntaxFactory.ParseMemberDeclaration(attributeString + inputString);
+                inputDeclarations.Add(inputDeclaration);
+            }
+            
+            var replacer = new AllInputNodesReplacer();
+            replacer._replacementNodes = inputDeclarations.ToArray();
+            root = replacer.Visit(root);
+            
+            var newSource = root.GetText().ToString();
+            Log.Debug(newSource);
+
+            bool success = UpdateSymbolWithNewSource(symbol, newSource);
+            if (!success)
+            {
+                Log.Error("Compilation after reordering inputs failed, aborting the add.");
             }
         }
 
