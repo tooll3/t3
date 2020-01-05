@@ -15,7 +15,6 @@ using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
-using T3.Operators.Types;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -101,7 +100,8 @@ namespace T3.Gui.Graph
                             {
                                 var firstOutput = instance.Outputs[0];
                                 IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
-                                outputUi.DrawValue(firstOutput, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
+                                _evaluationContext.Reset();
+                                outputUi.DrawValue(firstOutput, _evaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
                             }
                         }
                         ImGui.EndTooltip();
@@ -715,6 +715,8 @@ namespace T3.Gui.Graph
         public static float SlotGaps = 2;
         public static float OutputSlotMargin = 1;
         #endregion
+        
+        private static EvaluationContext _evaluationContext = new EvaluationContext();
 
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
         private static Guid _hoveredNodeId;

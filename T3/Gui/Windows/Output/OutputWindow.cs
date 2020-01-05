@@ -1,18 +1,16 @@
 ﻿using System;
-using ImGuiNET;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
+using ImGuiNET;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
-using T3.Gui.Windows.Output;
-using T3.Operators.Types;
 
-namespace T3.Gui.Windows
+namespace T3.Gui.Windows.Output
 {
     public class OutputWindow : Window
     {
+        #region Window implementation
         public OutputWindow()
         {
             Config.Title = "Output##" + _instanceCounter;
@@ -46,6 +44,12 @@ namespace T3.Gui.Windows
             new OutputWindow();
         }
 
+        public override List<Window> GetInstances()
+        {
+            return OutputWindowInstances;
+        }
+        #endregion
+
         protected override void DrawContent()
         {
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
@@ -53,19 +57,15 @@ namespace T3.Gui.Windows
                 _imageCanvas.NoMouseInteraction = CameraSelectionHandling.SelectedCamera != null;
                 _imageCanvas.Update();
 
-                ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
                 _cameraInteraction.Update(CameraSelectionHandling.SelectedCamera);
-                DrawSelection(_pinning.GetSelectedInstance());
-                DrawToolbar();
 
-                ImGui.SetCursorPos(new Vector2(0, 0));
+                // move down to avoid overlapping with toolbar
+                ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
+                DrawOutput(_pinning.GetSelectedInstance());
+
+                DrawToolbar();
             }
             ImGui.EndChild();
-        }
-
-        public override List<Window> GetInstances()
-        {
-            return OutputWindowInstances;
         }
 
         private void DrawToolbar()
@@ -91,9 +91,8 @@ namespace T3.Gui.Windows
             CameraSelectionHandling.DrawCameraSelection(_pinning, ref _selectedCameraId);
             ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
         }
-        
 
-        private static void DrawSelection(Instance instance)
+        private void DrawOutput(Instance instance)
         {
             if (instance == null)
                 return;
@@ -108,9 +107,22 @@ namespace T3.Gui.Windows
                 return;
 
             IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
-            outputUi.DrawValue(firstOutput);
+
+            if (_selectedResolution.IsAdaptive)
+            {
+                var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
+                _evaluationContext.RequestedResolution.Width = (int)size.X;
+                _evaluationContext.RequestedResolution.Height = (int)size.Y;
+            }
+            else
+            {
+                _evaluationContext.RequestedResolution.Width = _selectedResolution.Width;
+                _evaluationContext.RequestedResolution.Height = _selectedResolution.Height;
+            }
+            outputUi.DrawValue(firstOutput, _evaluationContext);
         }
 
+        private readonly EvaluationContext _evaluationContext = new EvaluationContext();
         private static readonly List<Window> OutputWindowInstances = new List<Window>();
         private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
         private readonly SelectionPinning _pinning = new SelectionPinning();
@@ -119,7 +131,7 @@ namespace T3.Gui.Windows
         private Guid _selectedCameraId = Guid.Empty;
         private static int _instanceCounter;
         private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.Resolutions[0];
-        
+
         private readonly EditResolutionDialog _resolutionDialog = new EditResolutionDialog();
     }
 }

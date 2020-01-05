@@ -15,12 +15,12 @@ namespace T3.Gui.OutputUi
 
         public abstract IOutputUi Clone();
 
-        public void DrawValue(ISlot slot, bool recompute)
+        public void DrawValue(ISlot slot, EvaluationContext context, bool recompute)
         {
+            _evaluationContext = context;
             if (recompute)
             {
                 StartInvalidation(slot);
-                _evaluationContext.Reset();
                 slot.Update(_evaluationContext);
             }
 
@@ -95,6 +95,6 @@ namespace T3.Gui.OutputUi
             return slot.DirtyFlag.Target;
         }
 
-        private readonly EvaluationContext _evaluationContext = new EvaluationContext();
+        private EvaluationContext _evaluationContext;
     }
 }

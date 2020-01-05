@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using SharpDX.WIC;
 using T3.Core.Logging;
 using T3.Gui.Graph;
+using T3.Gui.Windows.Output;
 
 namespace T3.Gui.Windows
 {

@@ -23,6 +23,7 @@ namespace T3.Core.Operator
         public static double GlobalTime { get; set; }
         public static double BeatTime { get; set; }
         public double Time { get; set; }
+        public Size2 RequestedResolution;
 
         public Matrix ClipSpaceTcamera { get; set; } = Matrix.Identity;
         public Matrix CameraTworld { get; set; } = Matrix.Identity;

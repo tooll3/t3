@@ -74,6 +74,11 @@ namespace T3.Gui.Windows.Output
                                    && Height > 0 && Height < 16384;
                 }
             }
+
+            public bool IsAdaptive
+            {
+                get { return Height == 0 || Width == 0; }
+            }
         }
     }
 }
