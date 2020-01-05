@@ -19,7 +19,6 @@ namespace T3.Gui
         public int Bar => (int)(Time * Bpm / 60.0 / 4.0) + 1;
         public int Beat => (int)(Time * Bpm / 60.0) % 4 + 1;
         public int Tick => (int)(Time * Bpm / 60.0 * 4) % 4 + 1;
-        public bool AudioMuted { get; set; }
 
         public void Update()
         {

@@ -2,6 +2,7 @@
 using System;
 using System.Numerics;
 using T3.Core.Logging;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
 using Icon = T3.Gui.Styling.Icon;
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -209,27 +210,27 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
             
             // ToggleAudio
-            if (CustomComponents.IconButton(clipTime.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn,  "##audioToggle", ControlSize))
+            if (CustomComponents.IconButton(UserSettings.Config.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn,  "##audioToggle", ControlSize))
             {
-                clipTime.AudioMuted = !clipTime.AudioMuted;
+                UserSettings.Config.AudioMuted = !UserSettings.Config.AudioMuted;
                 var streamedClipTime = clipTime as StreamClipTime;
-                streamedClipTime?.SetMuteMode(clipTime.AudioMuted);
+                streamedClipTime?.SetMuteMode(UserSettings.Config.AudioMuted);
             }
             ImGui.SameLine();
             
             // ToggleHover
             var icon = Icon.HoverPreviewSmall;
-            if (GraphCanvas.HoverMode == GraphCanvas.HoverModes.Disabled)
+            if (UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Disabled)
             {
                 icon = Icon.HoverPreviewDisabled;
             }
-            else if (GraphCanvas.HoverMode == GraphCanvas.HoverModes.Live)
+            else if (UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live)
             {
                 icon = Icon.HoverPreviewPlay;
             }
             if (CustomComponents.IconButton(icon,  "##hoverPreview", ControlSize))
             {
-                GraphCanvas.HoverMode = (GraphCanvas.HoverModes)(((int)GraphCanvas.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
+                UserSettings.Config.HoverMode = (GraphCanvas.HoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
             }
             ImGui.SameLine();
         }

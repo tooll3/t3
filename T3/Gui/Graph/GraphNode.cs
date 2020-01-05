@@ -13,6 +13,7 @@ using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using T3.Operators.Types;
 using UiHelpers;
@@ -91,7 +92,7 @@ namespace T3.Gui.Graph
                     T3Ui.AddHoveredId(childUi.SymbolChild.Id);
 
                     ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
-                    if (GraphCanvas.HoverMode != GraphCanvas.HoverModes.Disabled)
+                    if (UserSettings.Config.HoverMode != GraphCanvas.HoverModes.Disabled)
                     {
                         ImGui.BeginTooltip();
                         {
@@ -100,7 +101,7 @@ namespace T3.Gui.Graph
                             {
                                 var firstOutput = instance.Outputs[0];
                                 IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
-                                outputUi.DrawValue(firstOutput, recompute: GraphCanvas.HoverMode == GraphCanvas.HoverModes.Live);
+                                outputUi.DrawValue(firstOutput, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
                             }
                         }
                         ImGui.EndTooltip();
