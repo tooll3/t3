@@ -397,8 +397,9 @@
     <Compile Include="Gui\UiHelpers\StatusErrorLine.cs" />
     <Compile Include="Gui\UiHelpers\UserSettings.cs" />
     <Compile Include="Gui\Windows\ImageOutputCanvas.cs" />
-    <Compile Include="Gui\Windows\OutputWindow.cs" />
+    <Compile Include="Gui\Windows\Output\CameraSelectionHandling.cs" />
     <Compile Include="Gui\Windows\Output\EditResolutionDialog.cs" />
+    <Compile Include="Gui\Windows\Output\OutputWindow.cs" />
     <Compile Include="Gui\Windows\Output\ResolutionHandling.cs" />
     <Compile Include="Gui\Windows\SelectionPinning.cs" />
     <Compile Include="Gui\Windows\SymbolTree.cs" />

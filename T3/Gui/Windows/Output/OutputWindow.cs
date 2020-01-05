@@ -50,11 +50,11 @@ namespace T3.Gui.Windows
         {
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
-                _imageCanvas.NoMouseInteraction = _selectedCamera != null;
+                _imageCanvas.NoMouseInteraction = CameraSelectionHandling.SelectedCamera != null;
                 _imageCanvas.Update();
 
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
-                _cameraInteraction.Update(_selectedCamera);
+                _cameraInteraction.Update(CameraSelectionHandling.SelectedCamera);
                 DrawSelection(_pinning.GetSelectedInstance());
                 DrawToolbar();
 
@@ -88,61 +88,9 @@ namespace T3.Gui.Windows
 
             ImGui.SameLine();
 
-            DrawCameraSelection();
+            CameraSelectionHandling.DrawCameraSelection(_pinning, ref _selectedCameraId);
             ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
         }
-
-        private void DrawCameraSelection()
-        {
-            var cameras = FindCameras();
-            if (cameras == null || cameras.Length == 0)
-                return;
-
-            _selectedCamera = cameras.FirstOrDefault(cam => cam.SymbolChildId == _selectedCameraId);
-            if (_selectedCamera == null)
-            {
-                _selectedCamera = cameras.First();
-                _selectedCameraId = _selectedCamera.SymbolChildId;
-            }
-            else if (_selectedCameraId == Guid.Empty)
-            {
-                _selectedCameraId = cameras.First().SymbolChildId;
-            }
-
-            ImGui.SetNextItemWidth(100);
-            if (ImGui.BeginCombo("##CameraSelection", _selectedCamera.Symbol.Name))
-            {
-                foreach (var cam in FindCameras())
-                {
-                    ImGui.PushID(cam.SymbolChildId.GetHashCode());
-                    {
-                        var instance = _pinning.GetSelectedInstance();
-                        var symbolChild = SymbolRegistry.Entries[instance.Parent.Symbol.Id].Children.Single(child => child.Id == cam.SymbolChildId);
-                        ImGui.Selectable(symbolChild.ReadableName, cam == _selectedCamera);
-                        if (ImGui.IsItemActivated())
-                        {
-                            _selectedCameraId = cam.SymbolChildId;
-                        }
-
-                        if (ImGui.IsItemHovered())
-                        {
-                            T3Ui.AddHoveredId(cam.SymbolChildId);
-                        }
-                    }
-                    ImGui.PopID();
-                }
-            }
-        }
-
-        private Camera[] FindCameras()
-        {
-            var instance = _pinning.GetSelectedInstance();
-            if (instance == null)
-                return new Camera[] { };
-
-            return instance.Parent?.Children.OfType<Camera>().ToArray();
-        }
-
         
 
         private static void DrawSelection(Instance instance)
@@ -170,9 +118,8 @@ namespace T3.Gui.Windows
 
         private Guid _selectedCameraId = Guid.Empty;
         private static int _instanceCounter;
-        private Camera _selectedCamera;
         private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.Resolutions[0];
         
-        private EditResolutionDialog _resolutionDialog = new EditResolutionDialog();
+        private readonly EditResolutionDialog _resolutionDialog = new EditResolutionDialog();
     }
 }
