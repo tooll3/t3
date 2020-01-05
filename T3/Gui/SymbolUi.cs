@@ -154,10 +154,9 @@ namespace T3.Gui
         {
             if (symbolUi.Symbol.InputDefinitions.Count == 0)
             {
-                return new Vector2(-200,0);
+                return new Vector2(-200, 0);
             }
 
-            
             IInputUi lastInputUi = null;
 
             foreach (var inputDef in symbolUi.Symbol.InputDefinitions)
@@ -165,9 +164,10 @@ namespace T3.Gui
                 if (symbolUi.InputUis.ContainsKey(inputDef.Id))
                     lastInputUi = symbolUi.InputUis[inputDef.Id];
             }
-            if(lastInputUi == null)
-                return new Vector2(-200,0);
-            
+
+            if (lastInputUi == null)
+                return new Vector2(-200, 0);
+
             return lastInputUi.PosOnCanvas + new Vector2(0, lastInputUi.Size.Y + SelectableNodeMovement.SnapPadding.Y);
         }
 
@@ -209,8 +209,8 @@ namespace T3.Gui
         public string Description { get; set; }
         // public Styles DefaultStyleForInstances { get; set; }  // TODO: Implement inheritance for display styles? 
         public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();    // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
-        public Dictionary<Guid, IInputUi> InputUis = new Dictionary<Guid, IInputUi>();
-        public Dictionary<Guid, IOutputUi> OutputUis = new Dictionary<Guid, IOutputUi>();
+        public Dictionary<Guid, IInputUi> InputUis { get; } = new Dictionary<Guid, IInputUi>();
+        public Dictionary<Guid, IOutputUi> OutputUis { get; }= new Dictionary<Guid, IOutputUi>();
     }
 
     public static class SymbolUiRegistry
