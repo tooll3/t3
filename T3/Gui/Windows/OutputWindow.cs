@@ -3,12 +3,9 @@ using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Microsoft.CodeAnalysis.CSharp;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
-using T3.Gui.UiHelpers;
 using T3.Operators.Types;
 
 namespace T3.Gui.Windows
@@ -25,30 +22,33 @@ namespace T3.Gui.Windows
             WindowFlags = ImGuiWindowFlags.NoScrollbar;
 
             _instanceCounter++;
-            _outputWindowInstances.Add(this);
+            OutputWindowInstances.Add(this);
         }
 
-        private static readonly List<Window> _outputWindowInstances = new List<Window>();
-
+        
         protected override void DrawAllInstances()
         {
-            // Wrap inside list to enable removable of members during iteration
-            foreach (var w in _outputWindowInstances.ToList())
+            // Convert to array to enable removable of members during iteration
+            foreach (var w in OutputWindowInstances.ToArray())
             {
                 w.DrawOneInstance();
             }
         }
 
+        
         protected override void Close()
         {
-            _outputWindowInstances.Remove(this);
+            OutputWindowInstances.Remove(this);
         }
 
+        
         protected override void AddAnotherInstance()
         {
+            // ReSharper disable once ObjectCreationAsStatement
             new OutputWindow();
         }
 
+        
         protected override void DrawContent()
         {
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
@@ -66,30 +66,16 @@ namespace T3.Gui.Windows
             ImGui.EndChild();
         }
 
+        
         public override List<Window> GetInstances()
         {
-            return _outputWindowInstances;
-        }
-
-        private Camera[] FindCameras()
-        {
-            var instance = _pinning.GetSelectedInstance();
-            if (instance == null)
-                return new Camera[] { };
-            
-            return instance.Parent?.Children.OfType<Camera>().ToArray();
+            return OutputWindowInstances;
         }
 
         
-        // private Camera FindCameraInstance()
-        // {
-        //     if (_pinning.SelectedInstance.Parent == null)
-        //         return null;
-        //
-        //     var obj = _pinning.SelectedInstance.Parent.Children.FirstOrDefault(child => child.Type == typeof(Camera));
-        //     var cam = obj as Camera;
-        //     return cam;
-        // }
+
+
+        
 
         private void DrawToolbar()
         {
@@ -156,7 +142,17 @@ namespace T3.Gui.Windows
             }
         }
 
-
+        
+        private Camera[] FindCameras()
+        {
+            var instance = _pinning.GetSelectedInstance();
+            if (instance == null)
+                return new Camera[] { };
+            
+            return instance.Parent?.Children.OfType<Camera>().ToArray();
+        }
+        
+        
         private static void DrawSelection(Instance instance)
         {
             if (instance == null)
@@ -174,13 +170,14 @@ namespace T3.Gui.Windows
             IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
             outputUi.DrawValue(firstOutput);
         }
-
+        
+        private static readonly List<Window> OutputWindowInstances = new List<Window>();
         private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
         private readonly SelectionPinning _pinning = new SelectionPinning();
         private readonly CameraInteraction _cameraInteraction = new CameraInteraction();
         
         private Guid _selectedCameraId = Guid.Empty;
-        static int _instanceCounter;
+        private static int _instanceCounter;
         private Camera _selectedCamera;
     }
 }
