@@ -213,7 +213,7 @@ namespace T3.Gui.Graph.Interaction
             cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
 
             var selectedChildrenIds = (from child in selectedChildren select child.Id).ToList();
-            compositionSymbol.Animator.MoveAnimationsTo(newSymbol.Animator, selectedChildrenIds, oldToNewIdMap);
+            compositionSymbol.Animator.RemoveAnimationsFromInstances(selectedChildrenIds);
 
             foreach (var con in connectionsFromNewInputs)
             {
