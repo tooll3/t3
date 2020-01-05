@@ -10,17 +10,30 @@ namespace T3.Gui.UiHelpers
     /// Framework for rendering modal dialogs.
     ///
     /// Should be implemented like...
+    ///
+    /// void SomeClass {
+    ///     void Draw() {
+    ///         _someDialog.Draw();
     /// 
-    /// void Draw()
-    /// {
-    ///     if(BeginDialog("myTitle"))
-    ///     {
-    /// 
-    ///       // draw your content...
-    /// 
-    ///       EndDialogContent();
+    ///        if(ImGui.Button()) {
+    ///            _someDialog.ShowNextFrame();
+    ///        }
     ///     }
-    ///     EndDialog();
+    /// }
+    /// 
+    /// void SomeDialog()
+    /// {
+    ///     void Draw()
+    ///     {
+    ///         if(BeginDialog("myTitle"))
+    ///         {    
+    /// 
+    ///           // draw your content...
+    /// 
+    ///           EndDialogContent();
+    ///         }   
+    ///         EndDialog();
+    ///     }
     /// }
     /// 
     /// </summary>

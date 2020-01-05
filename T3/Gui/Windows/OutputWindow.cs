@@ -6,6 +6,7 @@ using System.Numerics;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
+using T3.Gui.Windows.Output;
 using T3.Operators.Types;
 
 namespace T3.Gui.Windows
@@ -25,7 +26,6 @@ namespace T3.Gui.Windows
             OutputWindowInstances.Add(this);
         }
 
-        
         protected override void DrawAllInstances()
         {
             // Convert to array to enable removable of members during iteration
@@ -35,20 +35,17 @@ namespace T3.Gui.Windows
             }
         }
 
-        
         protected override void Close()
         {
             OutputWindowInstances.Remove(this);
         }
 
-        
         protected override void AddAnotherInstance()
         {
             // ReSharper disable once ObjectCreationAsStatement
             new OutputWindow();
         }
 
-        
         protected override void DrawContent()
         {
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
@@ -66,16 +63,10 @@ namespace T3.Gui.Windows
             ImGui.EndChild();
         }
 
-        
         public override List<Window> GetInstances()
         {
             return OutputWindowInstances;
         }
-
-        
-
-
-        
 
         private void DrawToolbar()
         {
@@ -98,14 +89,15 @@ namespace T3.Gui.Windows
             ImGui.SameLine();
 
             DrawCameraSelection();
+            ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
         }
 
         private void DrawCameraSelection()
         {
             var cameras = FindCameras();
-            if (cameras == null || cameras.Length==0)
+            if (cameras == null || cameras.Length == 0)
                 return;
-            
+
             _selectedCamera = cameras.FirstOrDefault(cam => cam.SymbolChildId == _selectedCameraId);
             if (_selectedCamera == null)
             {
@@ -142,17 +134,17 @@ namespace T3.Gui.Windows
             }
         }
 
-        
         private Camera[] FindCameras()
         {
             var instance = _pinning.GetSelectedInstance();
             if (instance == null)
                 return new Camera[] { };
-            
+
             return instance.Parent?.Children.OfType<Camera>().ToArray();
         }
+
         
-        
+
         private static void DrawSelection(Instance instance)
         {
             if (instance == null)
@@ -162,7 +154,7 @@ namespace T3.Gui.Windows
                 return;
 
             var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
-            
+
             var firstOutput = instance.Outputs[0];
             if (!symbolUi.OutputUis.ContainsKey(firstOutput.Id))
                 return;
@@ -170,14 +162,17 @@ namespace T3.Gui.Windows
             IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
             outputUi.DrawValue(firstOutput);
         }
-        
+
         private static readonly List<Window> OutputWindowInstances = new List<Window>();
         private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
         private readonly SelectionPinning _pinning = new SelectionPinning();
         private readonly CameraInteraction _cameraInteraction = new CameraInteraction();
-        
+
         private Guid _selectedCameraId = Guid.Empty;
         private static int _instanceCounter;
         private Camera _selectedCamera;
+        private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.Resolutions[0];
+        
+        private EditResolutionDialog _resolutionDialog = new EditResolutionDialog();
     }
 }
