@@ -8,6 +8,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.Graph.Rendering;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.Styling;
@@ -106,7 +107,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                //DrawPreview(instance);
+                DrawPreview(instance);
 
                 SelectableNodeMovement.Handle(childUi, instance);
 
@@ -459,17 +460,7 @@ namespace T3.Gui.Graph
             if (texture == null)
                 return;
 
-            ShaderResourceView srv;
-            try
-            {
-                srv = new ShaderResourceView(ResourceManager.Instance().Device, texture);
-            }
-            catch (Exception e)
-            {
-                Log.Warning("ImageOutputCanvas::DrawTexture(...) - Could not create ShaderResourceView for texture.");
-                Log.Warning(e.Message);
-                return;
-            }
+            var srv = SrvManager.GetSrvForTexture(texture);
 
             var aspect = (float)texture.Description.Width / texture.Description.Height; 
             var previewHeight = _lastScreenRect.GetWidth() / aspect;
