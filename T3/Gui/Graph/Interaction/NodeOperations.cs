@@ -167,44 +167,30 @@ namespace T3.Gui.Graph.Interaction
             classStringBuilder.AppendLine("}");
             classStringBuilder.AppendLine("");
             var newSource = classStringBuilder.ToString();
-            Log.Info(newSource);
+            Log.Debug(newSource);
 
-            var newSourcePath = @"Operators\Types\" + newSymbolName + ".cs";
-
-            // todo: below same code as in duplicate new type 
-            var sw = new StreamWriter(newSourcePath);
-            sw.Write(newSource);
-            sw.Dispose();
-
-            var resourceManager = ResourceManager.Instance();
-            Guid newSymbolId = Guid.NewGuid();
-            uint symbolResourceId = resourceManager.CreateOperatorEntry(newSourcePath, newSymbolId.ToString(), OperatorUpdating.Update);
-            var symbolResource = resourceManager.GetResource<OperatorResource>(symbolResourceId);
-            symbolResource.Update(newSourcePath);
-            if (!symbolResource.Updated)
+            // compile new instance type
+            var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newSymbolName);
+            if (newAssembly == null)
             {
-                Log.Error("Error, new symbol was not updated/compiled");
-                resourceManager.RemoveOperatorEntry(symbolResourceId);
-                File.Delete(newSourcePath);
+                Log.Error("Error compiling combining type, aborting combine.");
                 return;
             }
-
-            Type type = symbolResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
+            
+            Type type = newAssembly.ExportedTypes.FirstOrDefault();
             if (type == null)
             {
                 Log.Error("Error, new symbol has no compiled instance type");
-                resourceManager.RemoveOperatorEntry(symbolResourceId);
-                File.Delete(newSourcePath);
                 return;
             }
 
-            Model.AddSourceFileToProject(newSourcePath);
-
-            // create and register the new symbol
+            // Create new symbol and its UI
+            Guid newSymbolId = Guid.NewGuid();
             var newSymbol = new Symbol(type, newSymbolId);
+            newSymbol.PendingSource = newSource;
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
-            var newSymbolUi = UiModel.UpdateUiEntriesForSymbol(newSymbol);
-            newSymbol.SourcePath = newSourcePath;
+            var newSymbolUi = new SymbolUi(newSymbol);
+            SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
             newSymbol.Namespace = nameSpace;
 
             // apply content to new symbol
