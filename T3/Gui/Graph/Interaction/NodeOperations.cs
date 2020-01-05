@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using ImGuiNET;
@@ -212,6 +211,9 @@ namespace T3.Gui.Graph.Interaction
             var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, newSymbolUi, Vector2.Zero);
             cmd.Do();
             cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
+
+            var selectedChildrenIds = (from child in selectedChildren select child.Id).ToList();
+            compositionSymbol.Animator.MoveAnimationsTo(newSymbol.Animator, selectedChildrenIds, oldToNewIdMap);
 
             foreach (var con in connectionsFromNewInputs)
             {

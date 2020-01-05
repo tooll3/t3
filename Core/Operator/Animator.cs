@@ -43,11 +43,34 @@ namespace T3.Core.Operator
             Debug.Assert(targetAnimator._animatedInputCurves.Count == 0);
             foreach (var (id, curve) in _animatedInputCurves)
             {
-                Guid newInstanceId = oldToNewIdDict[id.InstanceId];
-                var newCurveId = new CurveId(newInstanceId, id.InputId, id.Index);
-                var newCurve = curve.Clone();
-                targetAnimator._animatedInputCurves.Add(newCurveId, newCurve); 
+                CloneAndAddCurve(targetAnimator, oldToNewIdDict, id, curve);
             }
+        }
+
+        public void MoveAnimationsTo(Animator targetAnimator, List<Guid> childrenToCopyAnimationsFrom, Dictionary<Guid, Guid> oldToNewIdDict)
+        {
+            List<CurveId> elementsToDelete = new List<CurveId>();
+            foreach (var (id, curve) in _animatedInputCurves)
+            {
+                if (!childrenToCopyAnimationsFrom.Contains(id.InstanceId))
+                    continue;
+
+                CloneAndAddCurve(targetAnimator, oldToNewIdDict, id, curve);
+                elementsToDelete.Add(id);
+            }
+
+            foreach (var idToDelete in elementsToDelete)
+            {
+                _animatedInputCurves.Remove(idToDelete);
+            }
+        }
+
+        private static void CloneAndAddCurve(Animator targetAnimator, Dictionary<Guid, Guid> oldToNewIdDict, CurveId id, Curve curve)
+        {
+            Guid newInstanceId = oldToNewIdDict[id.InstanceId];
+            var newCurveId = new CurveId(newInstanceId, id.InputId, id.Index);
+            var newCurve = curve.Clone();
+            targetAnimator._animatedInputCurves.Add(newCurveId, newCurve);
         }
 
         public void CreateInputUpdateAction<T>(IInputSlot inputSlot)
