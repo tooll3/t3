@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using SharpDX;
 
 namespace T3.Gui.Windows.Output
 {
@@ -44,25 +45,30 @@ namespace T3.Gui.Windows.Output
 
         public static readonly List<Resolution> Resolutions = new List<Resolution>()
                                                                {
-                                                                   new Resolution("Adaptive", 0, 0),
-                                                                   new Resolution("1080p", 1920, 1080),
-                                                                   new Resolution("4k", 3940, 2160),
+                                                                   new Resolution("1:1", 1, 1, useAsAspectRatio: true),
+                                                                   new Resolution("16:9", 16, 9, useAsAspectRatio: true),
+                                                                   new Resolution("4:3", 4, 3, useAsAspectRatio: true),
+                                                                   new Resolution("720p",  1280, 720),
+                                                                   new Resolution("1080p",  1920, 1080),
+                                                                   new Resolution("4k", 1920*2, 1080*2),
+                                                                   new Resolution("8k", 1920*4, 1080*4),
                                                                };
 
         private static Resolution _resolutionForEdit;
         
         public class Resolution
         {
-            public Resolution(string title, int width, int height)
+            public Resolution(string title,  int width, int height,bool useAsAspectRatio=false)
             {
                 Title = title;
-                Width = width;
-                Height = height;
+                Size.Width = width;
+                Size.Height = height;
+                UseAsAspectRatio = useAsAspectRatio;
             }
 
             public string Title;
-            public int Width;
-            public int Height;
+            public Size2 Size;
+            public bool UseAsAspectRatio;
 
             public bool IsValid
             {
@@ -70,14 +76,9 @@ namespace T3.Gui.Windows.Output
                 {
                     return !string.IsNullOrEmpty(Title)
                                    && !Resolutions.Any(res => res != this && res.Title == Title)
-                                   && Width > 0 && Width < 16384
-                                   && Height > 0 && Height < 16384;
+                                   && Size.Width > 0 && Size.Width < 16384
+                                   && Size.Height > 0 && Size.Height < 16384;
                 }
-            }
-
-            public bool IsAdaptive
-            {
-                get { return Height == 0 || Width == 0; }
             }
         }
     }

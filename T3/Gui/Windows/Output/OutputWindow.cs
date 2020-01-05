@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using ImGuiNET;
+using SharpDX;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.Windows.Output
 {
@@ -107,17 +108,25 @@ namespace T3.Gui.Windows.Output
                 return;
 
             IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
+            _evaluationContext.Reset();
 
-            if (_selectedResolution.IsAdaptive)
+            if (_selectedResolution.UseAsAspectRatio)
             {
-                var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
-                _evaluationContext.RequestedResolution.Width = (int)size.X;
-                _evaluationContext.RequestedResolution.Height = (int)size.Y;
+                var windowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
+                var windowAspectRatio =  (float)windowSize.X / windowSize.Y;
+                var requestedAspectRatio = (float)_selectedResolution.Size.Width / _selectedResolution.Size.Height;
+
+                var size = (requestedAspectRatio > windowAspectRatio)
+                               ? new Size2((int)windowSize.X, (int)(windowSize.X / requestedAspectRatio))
+                               : new Size2((int)(windowSize.Y * requestedAspectRatio),(int)windowSize.Y);
+                
+                _evaluationContext.RequestedResolution.Width = (int)size.Width;
+                _evaluationContext.RequestedResolution.Height = (int)size.Height;
             }
             else
             {
-                _evaluationContext.RequestedResolution.Width = _selectedResolution.Width;
-                _evaluationContext.RequestedResolution.Height = _selectedResolution.Height;
+                _evaluationContext.RequestedResolution.Width = _selectedResolution.Size.Width;
+                _evaluationContext.RequestedResolution.Height = _selectedResolution.Size.Height;
             }
             outputUi.DrawValue(firstOutput, _evaluationContext);
         }

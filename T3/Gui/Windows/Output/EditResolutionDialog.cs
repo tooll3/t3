@@ -24,10 +24,12 @@ namespace T3.Gui.Windows.Output
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(250);
 
-                var res = new int[2] { resolution.Width, resolution.Height };
+                var res = new int[2] { resolution.Size.Width, resolution.Size.Height };
                 ImGui.DragInt2("##resolution", ref res[0], 255);
-                resolution.Width = res[0];
-                resolution.Height = res[1];
+                resolution.Size.Width = res[0];
+                resolution.Size.Height = res[1];
+                
+                ImGui.Checkbox("Use as aspect ratio", ref resolution.UseAsAspectRatio);
 
                 if (CustomComponents.DisablableButton("Add", resolution.IsValid))
                 {
