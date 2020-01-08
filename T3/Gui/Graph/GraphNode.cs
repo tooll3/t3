@@ -375,9 +375,7 @@ namespace T3.Gui.Graph
 
             if (childUi.Style == SymbolChildUi.Styles.Expanded)
             {
-                return (from inputUi in symbolUi.InputUis.Values
-                        orderby inputUi.Index
-                        select inputUi).ToList();
+                return symbolUi.InputUis.Values.ToList();
             }
 
             var isNodeHoveredConnectionTarget = _hoveredNodeId == childUi.Id
@@ -414,7 +412,7 @@ namespace T3.Gui.Graph
                 }
             }
 
-            return VisibleInputs.OrderBy(ui => ui.Index).ToList();
+            return VisibleInputs;
         }
 
         private enum SocketDirections

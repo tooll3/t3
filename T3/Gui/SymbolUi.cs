@@ -10,6 +10,7 @@ using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
+using Truncon.Collections;
 
 namespace T3.Gui
 {
@@ -23,7 +24,7 @@ namespace T3.Gui
             UpdateConsistencyWithSymbol(); // this sets up all missing elements
         }
 
-        public SymbolUi(Symbol symbol, List<SymbolChildUi> childUis, Dictionary<Guid, IInputUi> inputs, Dictionary<Guid, IOutputUi> outputs)
+        public SymbolUi(Symbol symbol, List<SymbolChildUi> childUis, OrderedDictionary<Guid, IInputUi> inputs, Dictionary<Guid, IOutputUi> outputs)
         {
             Symbol = symbol;
             ChildUis = childUis;
@@ -44,7 +45,7 @@ namespace T3.Gui
             //     childUis.Add(clonedChildUi);
             // }
 
-            var inputUis = new Dictionary<Guid, IInputUi>(InputUis.Count);
+            var inputUis = new OrderedDictionary<Guid, IInputUi>(InputUis.Count);
             foreach (var (_, inputUi) in InputUis)
             {
                 var clonedInputUi = inputUi.Clone();
@@ -101,10 +102,13 @@ namespace T3.Gui
 
             // check if input UIs are missing
             var inputUiFactory = InputUiFactory.Entries;
+            var existingInputs = InputUis.Values.ToList();
+            InputUis.Clear();
             for (int i = 0; i < Symbol.InputDefinitions.Count; i++)
             {
                 Symbol.InputDefinition input = Symbol.InputDefinitions[i];
-                if (!InputUis.TryGetValue(input.Id, out var existingInputUi) || existingInputUi.Type != input.DefaultValue.ValueType)
+                var existingInputUi = existingInputs.SingleOrDefault(inputUi => inputUi.Id == input.Id);
+                if (existingInputUi == null || existingInputUi.Type != input.DefaultValue.ValueType)
                 {
                     Log.Debug($"Found no input ui entry for symbol child input '{input.Name}' - creating a new one");
                     InputUis.Remove(input.Id);
@@ -118,6 +122,7 @@ namespace T3.Gui
                 else
                 {
                     existingInputUi.Parent = this;
+                    InputUis.Add(existingInputUi.Id, existingInputUi); // add at correct position
                 }
             }
 
@@ -209,7 +214,7 @@ namespace T3.Gui
         public string Description { get; set; }
         // public Styles DefaultStyleForInstances { get; set; }  // TODO: Implement inheritance for display styles? 
         public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();    // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
-        public Dictionary<Guid, IInputUi> InputUis { get; } = new Dictionary<Guid, IInputUi>();
+        public OrderedDictionary<Guid, IInputUi> InputUis { get; } = new OrderedDictionary<Guid, IInputUi>();
         public Dictionary<Guid, IOutputUi> OutputUis { get; }= new Dictionary<Guid, IOutputUi>();
     }
 

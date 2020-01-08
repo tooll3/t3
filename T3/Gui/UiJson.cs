@@ -10,6 +10,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
+using Truncon.Collections;
 
 namespace T3.Gui
 {
@@ -35,7 +36,8 @@ namespace T3.Gui
         {
             Writer.WritePropertyName("InputUis");
             Writer.WriteStartArray();
-            foreach (var inputEntry in symbolUi.InputUis.OrderBy(i => symbolUi.Symbol.InputDefinitions.FindIndex(def => def.Id == i.Value.Id)))
+
+            foreach (var inputEntry in symbolUi.InputUis)
             {
                 var symbolInput = symbolUi.Symbol.InputDefinitions.SingleOrDefault(inputDef => inputDef.Id == inputEntry.Key);
                 if (symbolInput == null)
@@ -145,7 +147,7 @@ namespace T3.Gui
             var symbol = SymbolRegistry.Entries[symbolId];
             
 
-            var inputDict = new Dictionary<Guid, IInputUi>();
+            var inputDict = new OrderedDictionary<Guid, IInputUi>();
             foreach (JToken uiInputEntry in (JArray)mainObject["InputUis"])
             {
                 var inputId = Guid.Parse(uiInputEntry["InputId"].Value<string>());

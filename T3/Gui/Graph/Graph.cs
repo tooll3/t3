@@ -10,6 +10,7 @@ using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.TypeColors;
+using Truncon.Collections;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -310,6 +311,6 @@ namespace T3.Gui.Graph
         private static List<SymbolChildUi> _childUis;
         private static SymbolUi _symbolUi;
         private static Dictionary<Guid, IOutputUi> _outputUisById;
-        private static Dictionary<Guid, IInputUi> _inputUisById;
+        private static OrderedDictionary<Guid, IInputUi> _inputUisById;
     }
 }

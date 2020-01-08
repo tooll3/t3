@@ -26,7 +26,6 @@ namespace T3.Gui.InputUi
         public Symbol.InputDefinition InputDefinition { get; set; }
         public Guid Id => InputDefinition.Id;
         public Relevancy Relevancy { get; set; } = Relevancy.Optional;
-        public int Index => Parent.Symbol.InputDefinitions.FindIndex(inputDef => inputDef == InputDefinition);
         public virtual bool IsAnimatable => false;
 
         public abstract IInputUi Clone();
