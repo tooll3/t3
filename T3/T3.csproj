@@ -328,6 +328,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compilation\OperatorUpdating.cs" />
+    <Compile Include="External\Truncon.Collections\CollectionExtensions.cs" />
+    <Compile Include="External\Truncon.Collections\OrderedDictionary.cs" />
+    <Compile Include="External\Truncon.Collections\OrderedDictionaryDebugView.cs" />
+    <Compile Include="External\Truncon.Collections\Properties\Resources.Designer.cs" />
     <Compile Include="Gui\Animation\CurveEditing\CurveEditBox.cs" />
     <Compile Include="Gui\ClipTime.cs" />
     <Compile Include="Gui\Commands\AddConnectionCommand.cs" />
@@ -497,6 +501,9 @@
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="External\Truncon.Collections\Properties\Resources.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\ImGui.NET.1.70.0\build\net40\ImGui.NET.targets" Condition="Exists('..\packages\ImGui.NET.1.70.0\build\net40\ImGui.NET.targets')" />
