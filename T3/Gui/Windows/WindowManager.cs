@@ -135,6 +135,9 @@ namespace T3.Gui.Windows
         {
             var allWindowConfigs = GetAllWindows().Select(window => window.Config).ToList();
 
+            if (!Directory.Exists(".t3"))
+                Directory.CreateDirectory(".t3");
+
             var serializer = JsonSerializer.Create();
             serializer.Formatting = Formatting.Indented;
             using (var file = File.CreateText(GetLayoutFilename(index)))
