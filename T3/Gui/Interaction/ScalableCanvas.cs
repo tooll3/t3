@@ -59,7 +59,7 @@ namespace T3.Gui.Graph
 
             HandleZoomInteraction();
 
-            ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
+            //ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
         }
 
         protected void InitWindowSize()

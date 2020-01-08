@@ -43,7 +43,7 @@ namespace T3.Gui.Graph
 
             _timeLineCanvas = new TimeLineCanvas(_clipTime);
 
-            WindowFlags = ImGuiWindowFlags.NoScrollbar;
+            WindowFlags = ImGuiWindowFlags.NoScrollbar|ImGuiWindowFlags.NoScrollWithMouse;
             GraphWindowInstances.Add(this);
         }
 
@@ -116,7 +116,7 @@ namespace T3.Gui.Graph
                 }
 
                 var graphHeight = ImGui.GetWindowHeight() - timelineHeight - 30;
-                ImGui.BeginChild("##graph", new Vector2(0, graphHeight), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+                ImGui.BeginChild("##graph", new Vector2(0, graphHeight), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
                 {
                     dl.ChannelsSplit(2);
                     dl.ChannelsSetCurrent(1);
@@ -147,7 +147,7 @@ namespace T3.Gui.Graph
                 }
                 ImGui.EndChild();
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 2);
-                ImGui.BeginChild("##timeline", Vector2.Zero, false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+                ImGui.BeginChild("##timeline", Vector2.Zero, false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
                 {
                     _timeLineCanvas.Draw(GraphCanvas.CompositionOp, animationParameters);
                 }
