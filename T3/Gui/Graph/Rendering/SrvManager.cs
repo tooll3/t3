@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using SharpDX.Direct3D11;
 using T3.Core;
-//using System.Resources;
-//using SharpDX.Direct3D11;
 using T3.Core.Logging;
-using T3.Operators.Types;
 
 namespace T3.Gui.Graph.Rendering
 {
@@ -27,6 +24,7 @@ namespace T3.Gui.Graph.Rendering
                 return null;
             
             _srvForTextures.Add(texture, srv);
+            Log.Debug("Count is now " + _srvForTextures.Count);
             return srv;
         }
 
@@ -44,6 +42,25 @@ namespace T3.Gui.Graph.Rendering
                 return null;
             }
             return srv;
+        }
+
+        
+        public static void FreeUnusedTextures()
+        {
+            var keysForRemoval = new List<KeyValuePair<Texture2D, ShaderResourceView>>();
+            foreach (var pair in _srvForTextures)
+            {
+                if (pair.Key.IsDisposed)
+                {
+                    keysForRemoval.Add(pair);
+                }
+            }
+
+            foreach (var (texture,srv) in keysForRemoval)
+            {
+                _srvForTextures.Remove(texture);
+                srv.Dispose();
+            }
         }
 
         /// <summary>
