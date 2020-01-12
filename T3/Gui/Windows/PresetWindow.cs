@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Gui.Graph;
@@ -85,7 +86,7 @@ namespace T3.Gui.Windows
                 FitAreaOnCanvas(new ImRect(left, right));
             }
 
-            private Texture2D _previewTexture;
+
             
             
             public void Draw()
@@ -118,7 +119,7 @@ namespace T3.Gui.Windows
                 if (_previewTexture == null)
                     return;
 
-                var srv = SrvManager.GetSrvForTexture(_previewTexture);
+                _previewTextureSrv = SrvManager.GetSrvForTexture(_previewTexture);
                 
                 FillInNextVariation();
                 UpdateCanvas();
@@ -126,30 +127,28 @@ namespace T3.Gui.Windows
 
                 ImGui.Text(""+Scroll+" " + Scale + " test offset" + _currentOffsetIndexForFocus);
                 var drawlist = ImGui.GetWindowDrawList();
-
+                
+                // Draw Canvas Texture
+                var rectOnScreen = ImRect.RectWithSize(WindowPos, new Vector2(_canvasTexture.Description.Width, _canvasTexture.Description.Height));
+                drawlist.AddImage((IntPtr)_canvasTextureSrv,
+                                  rectOnScreen.Min,
+                                  rectOnScreen.Max);
 
                 foreach (var variation in _variationByGridIndex.Values)
                 {
                     var screenRect = GetGridPosScreenRect(variation.GridPos);
                     drawlist.AddRect(screenRect.Min, screenRect.Max, variation.ThumbnailNeedsUpdate ? Color.Orange : Color.Green);
-                    //drawlist.AddImage(srv.);
-                    //drawlist.AddImage((IntPtr)srv, screenRect.Min, screenRect.Max);
                 }
-                
-                drawlist.AddImage((IntPtr)_canvasTextureSrv,
-                                  new Vector2(0,0),
-                                  new Vector2(1000, 1000));
-
             }
-
+            
             private void InitializeCanvasTexture()
             {
                 if (_canvasTexture == null)
                 {
                     var description = new Texture2DDescription()
                                       {
-                                          Height = 1000,
-                                          Width = 1000,
+                                          Height = 2048,
+                                          Width = 2048,
                                           ArraySize = 1,
                                           BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
                                           Usage = ResourceUsage.Default,
@@ -276,12 +275,22 @@ namespace T3.Gui.Windows
             
             private void RenderThumbnail(Variation variation)
             {
+                variation.ThumbnailNeedsUpdate = false;
+
+                var screenRect = GetGridPosScreenRect(variation.GridPos);
+                var posInCanvasTexture = screenRect.Min - WindowPos;
+                //if (posInCanvasTexture.X < 0 || posInCanvasTexture.X > 500 || posInCanvasTexture.Y < 0 || posInCanvasTexture.Y > 500)
+                if (posInCanvasTexture.X < 0  || posInCanvasTexture.Y < 0)
+                    return;
+
+                
                 var region = new ResourceRegion()
                              {
                                  Left = 0,
-                                 Right = (int)_thumbnailSize.X,
+                                 Right = (int)screenRect.GetWidth(),
                                  Top = 0,
-                                 Bottom = (int)_thumbnailSize.Y
+                                 Bottom = (int)screenRect.GetHeight(),
+                                 Back = 1,
                              };
                 
 
@@ -291,10 +300,9 @@ namespace T3.Gui.Windows
                                                                       sourceRegion: region,
                                                                       destination: _canvasTexture,
                                                                       destinationSubResource:0,
-                                                                      dstX: 0,
-                                                                      dstY: 0,
+                                                                      dstX: (int)posInCanvasTexture.X,
+                                                                      dstY: (int)posInCanvasTexture.Y,
                                                                       dstZ: 0);
-                variation.ThumbnailNeedsUpdate = false;
             }
 
             private static readonly GridPos[] SortedOffset = BuildSortedOffsets();
@@ -308,6 +316,9 @@ namespace T3.Gui.Windows
             private readonly GridPos _currentFocusIndex = GridCenter;
             private int _currentOffsetIndexForFocus;
             private bool _updateCompleted;
+            
+            private Texture2D _previewTexture;
+            private ShaderResourceView _previewTextureSrv;
             
             private Texture2D _canvasTexture;
             private ShaderResourceView _canvasTextureSrv;
