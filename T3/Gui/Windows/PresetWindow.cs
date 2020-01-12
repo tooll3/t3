@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ImGuiNET;
+using SharpDX.Direct3D11;
+using T3.Core.Operator;
 using T3.Gui.Graph;
+using T3.Gui.Graph.Rendering;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
+using T3.Gui.Windows.Output;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
@@ -64,6 +69,10 @@ namespace T3.Gui.Windows
             return new List<Window>();
         }
 
+        
+        
+        
+        //=====================================================================
         private class PreviewCanvas : ScalableCanvas
         {
             public PreviewCanvas()
@@ -76,18 +85,83 @@ namespace T3.Gui.Windows
                 FitAreaOnCanvas(new ImRect(left, right));
             }
 
+            private Texture2D _previewTexture;
+            
+            
             public void Draw()
             {
+                InitializeCanvasTexture();
+                
+                
+                var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) as OutputWindow;
+                if (outputWindow == null)
+                {
+                    ImGui.Text("No output window found");
+                    return;
+                }
+
+                var instance = outputWindow.ShownInstance;
+                if (instance == null)
+                {
+                    ImGui.Text("Nothing selected");
+                    return;
+                }
+                
+                var firstOutput = instance.Outputs[0];
+                if (!(firstOutput is Slot<Texture2D> textureSlot))
+                {
+                    ImGui.Text("Output should be texture");
+                    return;
+                }
+                
+                _previewTexture = textureSlot.Value;
+                if (_previewTexture == null)
+                    return;
+
+                var srv = SrvManager.GetSrvForTexture(_previewTexture);
+                
                 FillInNextVariation();
                 UpdateCanvas();
                 Invalidate();
 
                 ImGui.Text(""+Scroll+" " + Scale + " test offset" + _currentOffsetIndexForFocus);
                 var drawlist = ImGui.GetWindowDrawList();
+
+
                 foreach (var variation in _variationByGridIndex.Values)
                 {
                     var screenRect = GetGridPosScreenRect(variation.GridPos);
                     drawlist.AddRect(screenRect.Min, screenRect.Max, variation.ThumbnailNeedsUpdate ? Color.Orange : Color.Green);
+                    //drawlist.AddImage(srv.);
+                    //drawlist.AddImage((IntPtr)srv, screenRect.Min, screenRect.Max);
+                }
+                
+                drawlist.AddImage((IntPtr)_canvasTextureSrv,
+                                  new Vector2(0,0),
+                                  new Vector2(1000, 1000));
+
+            }
+
+            private void InitializeCanvasTexture()
+            {
+                if (_canvasTexture == null)
+                {
+                    var description = new Texture2DDescription()
+                                      {
+                                          Height = 1000,
+                                          Width = 1000,
+                                          ArraySize = 1,
+                                          BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
+                                          Usage = ResourceUsage.Default,
+                                          CpuAccessFlags = CpuAccessFlags.None,
+                                          Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
+                                          //MipLevels = mipLevels,
+                                          OptionFlags = ResourceOptionFlags.GenerateMipMaps,
+                                          SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
+                                      };
+
+                    _canvasTexture = new Texture2D(Program.Device, description);
+                    _canvasTextureSrv = SrvManager.GetSrvForTexture(_canvasTexture);
                 }
             }
 
@@ -96,7 +170,8 @@ namespace T3.Gui.Windows
                 var thumbnailInCanvas = ImRect.RectWithSize(new Vector2(gridPos.X, gridPos.Y) * _thumbnailSize, _thumbnailSize);
                 //var screenPos = TransformPosition(thumbnailInCanvas.Min);
                 //return new ImRect(screenPos, screenPos + new Vector2(20,20));
-                return TransformRect(thumbnailInCanvas);
+                var r= TransformRect(thumbnailInCanvas);
+                return new ImRect((int)r.Min.X, (int)r.Min.Y, (int)r.Max.X, (int)r.Max.Y);
             }
 
             
@@ -107,8 +182,6 @@ namespace T3.Gui.Windows
                 
                 var rectOnScreen= GetGridPosScreenRect(gridPos);
                 var visible= contentRegion.Contains(rectOnScreen);
-                // var foregroundDrawList = ImGui.GetForegroundDrawList();
-                // foregroundDrawList.AddRect(rectOnScreen.Min, rectOnScreen.Max, visible?Color.Green : Color.Red);
                 return visible;
             }
 
@@ -159,13 +232,15 @@ namespace T3.Gui.Windows
                         if (!variation.ThumbnailNeedsUpdate)
                             continue;
 
-                        variation.UpdateThumbnail();
+                        RenderThumbnail(variation);
+                        //variation.UpdateThumbnail();
                         return;
                     }
                     else
                     {
                         variation = CreateVariationAtGridPos(gridPos);
-                        variation.UpdateThumbnail();
+                        RenderThumbnail(variation);
+                        //variation.UpdateThumbnail();
                         _variationByGridIndex[gridPos.GridIndex] = variation;
                         return;
                     }
@@ -198,6 +273,30 @@ namespace T3.Gui.Windows
                 return offsets.ToArray();
             }
 
+            
+            private void RenderThumbnail(Variation variation)
+            {
+                var region = new ResourceRegion()
+                             {
+                                 Left = 0,
+                                 Right = (int)_thumbnailSize.X,
+                                 Top = 0,
+                                 Bottom = (int)_thumbnailSize.Y
+                             };
+                
+
+                Program.Device.ImmediateContext.CopySubresourceRegion(
+                                                                      source: _previewTexture,
+                                                                      sourceSubresource: 0,
+                                                                      sourceRegion: region,
+                                                                      destination: _canvasTexture,
+                                                                      destinationSubResource:0,
+                                                                      dstX: 0,
+                                                                      dstY: 0,
+                                                                      dstZ: 0);
+                variation.ThumbnailNeedsUpdate = false;
+            }
+
             private static readonly GridPos[] SortedOffset = BuildSortedOffsets();
             private static readonly GridPos GridCenter = new GridPos(VariationGridSize / 2, VariationGridSize / 2);
             private float _lastScale;
@@ -209,6 +308,9 @@ namespace T3.Gui.Windows
             private readonly GridPos _currentFocusIndex = GridCenter;
             private int _currentOffsetIndexForFocus;
             private bool _updateCompleted;
+            
+            private Texture2D _canvasTexture;
+            private ShaderResourceView _canvasTextureSrv;
         }
 
         private class Variation
@@ -222,10 +324,11 @@ namespace T3.Gui.Windows
                 ThumbnailNeedsUpdate = true;
             }
 
-            public void UpdateThumbnail()
-            {
-                ThumbnailNeedsUpdate = false;
-            }
+            // public void UpdateThumbnail()
+            // {
+            //     _canv RenderThumbnail(this);
+            //     ThumbnailNeedsUpdate = false;
+            // }
         }
 
         public struct GridPos

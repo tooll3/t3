@@ -219,6 +219,7 @@ namespace T3
     public class Program
     {
         private static ImGuiDx11Impl _controller;
+        public static Device Device { get; private set; }
 
         [STAThread]
         private static void Main()
@@ -241,6 +242,7 @@ namespace T3
             // Create Device and SwapChain
             Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, desc, out var device, out _swapChain);
             var context = device.ImmediateContext;
+            Device = device;
 
             // Ignore all windows events
             var factory = _swapChain.GetParent<Factory>();

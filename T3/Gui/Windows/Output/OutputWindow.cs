@@ -69,6 +69,8 @@ namespace T3.Gui.Windows.Output
             ImGui.EndChild();
         }
 
+        public Instance ShownInstance => _pinning.GetSelectedInstance();
+
         private void DrawToolbar()
         {
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin());
@@ -113,13 +115,13 @@ namespace T3.Gui.Windows.Output
             if (_selectedResolution.UseAsAspectRatio)
             {
                 var windowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
-                var windowAspectRatio =  (float)windowSize.X / windowSize.Y;
+                var windowAspectRatio = (float)windowSize.X / windowSize.Y;
                 var requestedAspectRatio = (float)_selectedResolution.Size.Width / _selectedResolution.Size.Height;
 
                 var size = (requestedAspectRatio > windowAspectRatio)
                                ? new Size2((int)windowSize.X, (int)(windowSize.X / requestedAspectRatio))
-                               : new Size2((int)(windowSize.Y * requestedAspectRatio),(int)windowSize.Y);
-                
+                               : new Size2((int)(windowSize.Y * requestedAspectRatio), (int)windowSize.Y);
+
                 _evaluationContext.RequestedResolution.Width = (int)size.Width;
                 _evaluationContext.RequestedResolution.Height = (int)size.Height;
             }
@@ -128,11 +130,12 @@ namespace T3.Gui.Windows.Output
                 _evaluationContext.RequestedResolution.Width = _selectedResolution.Size.Width;
                 _evaluationContext.RequestedResolution.Height = _selectedResolution.Size.Height;
             }
+
             outputUi.DrawValue(firstOutput, _evaluationContext);
         }
 
         private readonly EvaluationContext _evaluationContext = new EvaluationContext();
-        private static readonly List<Window> OutputWindowInstances = new List<Window>();
+        public static readonly List<Window> OutputWindowInstances = new List<Window>();
         private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
         private readonly SelectionPinning _pinning = new SelectionPinning();
         private readonly CameraInteraction _cameraInteraction = new CameraInteraction();
