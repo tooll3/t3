@@ -88,10 +88,10 @@ namespace T3.Gui
             public Vector2 WindowPadding = Vector2.Zero;
             public float GrabMinSize = 2;
             public float FrameBorderSize = 0;
-            public float WindowRounding = 3;
-            public float ChildRounding = 1;
-            public float ScrollbarRounding = 3;
-            public float FrameRounding = 1f;
+            public float WindowRounding = 0;
+            public float ChildRounding = 0;
+            public float ScrollbarRounding = 2;
+            public float FrameRounding = 0f;
 
             public void Apply(ImGuiStylePtr style)
             {
