@@ -82,18 +82,16 @@ namespace T3.Gui.Windows
                 var center = new Vector2(VariationGridSize / 2f, VariationGridSize / 2f);
                 var left = (center - extend) * _thumbnailSize;
                 var right = (center + extend) * _thumbnailSize;
-
+                ZoomSpeed = 20000;
+                
                 FitAreaOnCanvas(new ImRect(left, right));
             }
-
-
             
             
             public void Draw()
             {
                 InitializeCanvasTexture();
-                
-                
+
                 var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) as OutputWindow;
                 if (outputWindow == null)
                 {
@@ -137,31 +135,39 @@ namespace T3.Gui.Windows
                 foreach (var variation in _variationByGridIndex.Values)
                 {
                     var screenRect = GetGridPosScreenRect(variation.GridPos);
-                    drawlist.AddRect(screenRect.Min, screenRect.Max, variation.ThumbnailNeedsUpdate ? Color.Orange : Color.Green);
+                    if (variation.ThumbnailNeedsUpdate)
+                    {
+                        drawlist.AddRectFilled(screenRect.Min, screenRect.Max, Color.Orange);    
+                    }
+                    else
+                    {
+                        drawlist.AddRect(screenRect.Min, screenRect.Max, Color.Black);
+                    }
                 }
             }
             
+            
             private void InitializeCanvasTexture()
             {
-                if (_canvasTexture == null)
-                {
-                    var description = new Texture2DDescription()
-                                      {
-                                          Height = 2048,
-                                          Width = 2048,
-                                          ArraySize = 1,
-                                          BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
-                                          Usage = ResourceUsage.Default,
-                                          CpuAccessFlags = CpuAccessFlags.None,
-                                          Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
-                                          //MipLevels = mipLevels,
-                                          OptionFlags = ResourceOptionFlags.GenerateMipMaps,
-                                          SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
-                                      };
+                if (_canvasTexture != null)
+                    return;
+                
+                var description = new Texture2DDescription()
+                                  {
+                                      Height = 2048,
+                                      Width = 2048,
+                                      ArraySize = 1,
+                                      BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
+                                      Usage = ResourceUsage.Default,
+                                      CpuAccessFlags = CpuAccessFlags.None,
+                                      Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
+                                      //MipLevels = mipLevels,
+                                      OptionFlags = ResourceOptionFlags.GenerateMipMaps,
+                                      SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
+                                  };
 
-                    _canvasTexture = new Texture2D(Program.Device, description);
-                    _canvasTextureSrv = SrvManager.GetSrvForTexture(_canvasTexture);
-                }
+                _canvasTexture = new Texture2D(Program.Device, description);
+                _canvasTextureSrv = SrvManager.GetSrvForTexture(_canvasTexture);
             }
 
             private ImRect GetGridPosScreenRect(GridPos gridPos)
@@ -179,7 +185,10 @@ namespace T3.Gui.Windows
                 var contentRegion = new ImRect(ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
                                                ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
                 
+                contentRegion.Expand(_thumbnailSize / Scale);
+                
                 var rectOnScreen= GetGridPosScreenRect(gridPos);
+                
                 var visible= contentRegion.Contains(rectOnScreen);
                 return visible;
             }

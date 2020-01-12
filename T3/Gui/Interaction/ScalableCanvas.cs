@@ -19,6 +19,9 @@ namespace T3.Gui.Graph
     /// </summary>
     public abstract class ScalableCanvas : ICanvas
     {
+
+        protected float ZoomSpeed = 12;
+        
         /// <summary>
         /// This needs to be called by the inherited class before drawing its interface. 
         /// </summary>
@@ -34,9 +37,10 @@ namespace T3.Gui.Graph
             var p2 = Scroll + WindowSize * Scale;
             var p1Target = _scrollTarget;
             var p2Target = _scrollTarget + WindowSize * _scaleTarget;
-            var speed = 12;
-            var pp1 = Im.Lerp(p1, p1Target, _io.DeltaTime * speed);
-            var pp2 = Im.Lerp(p2, p2Target, _io.DeltaTime * speed);
+            //var speed = 12;
+            var f = Math.Min(_io.DeltaTime * ZoomSpeed, 1);
+            var pp1 = Im.Lerp(p1, p1Target, f);
+            var pp2 = Im.Lerp(p2, p2Target, f);
             var scaleT =   (pp2 - pp1) / WindowSize;
             
             Scale = scaleT;
