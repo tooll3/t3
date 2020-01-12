@@ -13,7 +13,7 @@ namespace T3.Gui.Selection
         {
             Selection.Clear();
         }
-        
+
         public static void SetSelectionToParent(Instance instance)
         {
             Selection.Clear();
@@ -26,7 +26,6 @@ namespace T3.Gui.Selection
             AddSelection(node);
         }
 
-        
         public static void SetSelection(SymbolChildUi node, Instance instance)
         {
             Selection.Clear();
@@ -43,8 +42,8 @@ namespace T3.Gui.Selection
         {
             _parent = null;
             Selection.Add(node);
-            if(instance != null)
-                InstancesForChildUis[node] = NodeOperations.BuildIdPathForInstance(instance);
+            if (instance != null)
+                ChildUiInstanceIdPaths[node] = NodeOperations.BuildIdPathForInstance(instance);
         }
 
         public static void RemoveSelection(ISelectableNode node)
@@ -52,16 +51,15 @@ namespace T3.Gui.Selection
             Selection.Remove(node);
         }
 
-        
-        public static IEnumerable<T> GetSelectedNodes<T>() where T:ISelectableNode
+        public static IEnumerable<T> GetSelectedNodes<T>() where T : ISelectableNode
         {
             foreach (var item in Selection)
             {
                 if (item is T typedItem)
                     yield return typedItem;
             }
-        } 
-        
+        }
+
         public static bool IsNodeSelected(ISelectableNode node)
         {
             return Selection.Contains(node);
@@ -72,7 +70,6 @@ namespace T3.Gui.Selection
             return Selection.Count > 0;
         }
 
-        
         public static void ProcessNewFrame()
         {
             NodesSelectedLastFrame.Clear();
@@ -85,7 +82,6 @@ namespace T3.Gui.Selection
             LastFrameSelection = Selection;
         }
 
-        
         public static Instance GetSelectedInstance()
         {
             if (Selection.Count == 0)
@@ -93,19 +89,56 @@ namespace T3.Gui.Selection
 
             if (Selection[0] is SymbolChildUi firstNode)
             {
-                var idPath = InstancesForChildUis[firstNode];
+                var idPath = ChildUiInstanceIdPaths[firstNode];
                 return NodeOperations.GetInstanceFromIdPath(idPath);
             }
 
             return null;
         }
 
+        // public static IEnumerable<Instance> GetSelectedInstances()
+        // {
+        //     if (Selection.Count == 0)
+        //         return new List<Instance> { _parent, };
+        //
+        //     var result = new List<Instance>();
+        //     foreach (var s in Selection)
+        //     {
+        //         if (!(s is SymbolChildUi symbolChildUi))
+        //             continue;
+        //
+        //         var idPath = ChildUiInstanceIdPaths[symbolChildUi];
+        //         result.Add(NodeOperations.GetInstanceFromIdPath(idPath));
+        //     }
+        //
+        //     return result;
+        // }
+
+        public static IEnumerable<SymbolChildUi> GetSelectedSymbolChildUis()
+        {
+            var result = new List<SymbolChildUi>();
+            foreach (var s in Selection)
+            {
+                if (!(s is SymbolChildUi symbolChildUi))
+                    continue;
+                
+                result.Add(symbolChildUi);
+            }
+            return result;
+        }
+
+        public static Instance GetInstanceForSymbolChildUi(SymbolChildUi symbolChildUi)
+        {
+            var idPath = ChildUiInstanceIdPaths[symbolChildUi];
+            return(NodeOperations.GetInstanceFromIdPath(idPath));
+        }
+
         private static Instance _parent;
-        
+
         private static readonly List<ISelectableNode> Selection = new List<ISelectableNode>();
         private static readonly List<ISelectableNode> NodesSelectedLastFrame = new List<ISelectableNode>();
         public static List<ISelectableNode> LastFrameSelection = new List<ISelectableNode>();
-        
-        public static Dictionary<SymbolChildUi, List<Guid>> InstancesForChildUis = new Dictionary<SymbolChildUi, List<Guid>>();
+
+        public static readonly Dictionary<SymbolChildUi, List<Guid>> ChildUiInstanceIdPaths = new Dictionary<SymbolChildUi, List<Guid>>();
     }
 }

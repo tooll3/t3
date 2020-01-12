@@ -24,6 +24,7 @@ namespace T3.Gui.Windows
                            new ConsoleLogWindow(),
                            new SettingsWindow(),
                            new SymbolTree(),
+                           new PresetWindow(),
                        };
         }
 
