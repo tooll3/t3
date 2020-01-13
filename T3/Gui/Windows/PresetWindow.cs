@@ -4,6 +4,7 @@ using System.Linq;
 using ImGuiNET;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SharpDX.Direct3D11;
+using SharpDX.Mathematics.Interop;
 using T3.Core.Operator;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Rendering;
@@ -168,6 +169,7 @@ namespace T3.Gui.Windows
 
                 _canvasTexture = new Texture2D(Program.Device, description);
                 _canvasTextureSrv = SrvManager.GetSrvForTexture(_canvasTexture);
+                _canvasTextureRtv = new RenderTargetView(Program.Device, _canvasTexture);
             }
 
             private ImRect GetGridPosScreenRect(GridPos gridPos)
@@ -207,6 +209,8 @@ namespace T3.Gui.Windows
                     {
                         variation.ThumbnailNeedsUpdate = true;
                     }
+
+                    Program.Device.ImmediateContext.ClearRenderTargetView(_canvasTextureRtv, new RawColor4(0, 0, 0, 0));
                 }
 
                 var scrollChanged = Scroll != _lastScroll;
@@ -331,6 +335,7 @@ namespace T3.Gui.Windows
             
             private Texture2D _canvasTexture;
             private ShaderResourceView _canvasTextureSrv;
+            private RenderTargetView _canvasTextureRtv;
         }
 
         private class Variation
