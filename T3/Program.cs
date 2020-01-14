@@ -301,9 +301,9 @@ namespace T3
             //resourceManager.CreateVertexShader(@"Resources\\vs-fullscreen-tri-pos-only.hlsl", "main", "vs-fullscreen-tri-pos-only");
             //resourceManager.CreatePixelShader(@"Resources\\ps-pos-only-fixed-color.hlsl", "main", "ps-pos-only-fixed-color");
             var di = new DirectoryInfo(".");
-            System.Console.WriteLine(di.FullName);
-            uint vsId = resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
-            uint psId = resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
+            Console.WriteLine(di.FullName);
+            FullScreenVertexShaderId = resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
+            FullScreenPixelShaderId = resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
             (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\images\chipmunk.jpg", null);
 
             // setup file watching the operator source
@@ -359,9 +359,9 @@ namespace T3
                                          context.OutputMerger.SetTargets(_renderView2);
                                          context.ClearRenderTargetView(_renderView2, new Color(0.45f, 0.55f, 0.6f, 1.0f));
 
-                                         if (resourceManager.Resources[vsId] is VertexShaderResource vsr)
+                                         if (resourceManager.Resources[FullScreenVertexShaderId] is VertexShaderResource vsr)
                                              context.VertexShader.Set(vsr.VertexShader);
-                                         if (resourceManager.Resources[psId] is PixelShaderResource psr)
+                                         if (resourceManager.Resources[FullScreenPixelShaderId] is PixelShaderResource psr)
                                              context.PixelShader.Set(psr.PixelShader);
                                          if (resourceManager.TestId != ResourceManager.NullResource)
                                          {
@@ -430,5 +430,7 @@ namespace T3
         private static Texture2D _backBuffer;
         private static Texture2D _backBuffer2;
         private static RenderTargetView _renderView2;
+        public static uint FullScreenVertexShaderId { get; private set; }
+        public static uint FullScreenPixelShaderId { get; private set; }
     }
 }

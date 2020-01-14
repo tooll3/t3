@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SharpDX;
+using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
+using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Rendering;
@@ -87,7 +91,6 @@ namespace T3.Gui.Windows
                 
                 FitAreaOnCanvas(new ImRect(left, right));
             }
-            
             
             public void Draw()
             {
@@ -293,29 +296,27 @@ namespace T3.Gui.Windows
                 var screenRect = GetGridPosScreenRect(variation.GridPos);
                 var posInCanvasTexture = screenRect.Min - WindowPos;
                 //if (posInCanvasTexture.X < 0 || posInCanvasTexture.X > 500 || posInCanvasTexture.Y < 0 || posInCanvasTexture.Y > 500)
-                if (posInCanvasTexture.X < 0  || posInCanvasTexture.Y < 0)
+                if (posInCanvasTexture.X < 0 || posInCanvasTexture.Y < 0)
                     return;
 
-                
-                var region = new ResourceRegion()
-                             {
-                                 Left = 0,
-                                 Right = (int)screenRect.GetWidth(),
-                                 Top = 0,
-                                 Bottom = (int)screenRect.GetHeight(),
-                                 Back = 1,
-                             };
-                
+                // setup graphics pipeline for rendering into the canvas texture
+                var context = Program.Device.ImmediateContext;
+                context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+                context.Rasterizer.SetViewport(new ViewportF(posInCanvasTexture.X, posInCanvasTexture.Y,
+                                                             screenRect.GetWidth(), screenRect.GetHeight(),
+                                                             0.0f, 1.0f));
+                context.OutputMerger.SetTargets(_canvasTextureRtv);
 
-                Program.Device.ImmediateContext.CopySubresourceRegion(
-                                                                      source: _previewTexture,
-                                                                      sourceSubresource: 0,
-                                                                      sourceRegion: region,
-                                                                      destination: _canvasTexture,
-                                                                      destinationSubResource:0,
-                                                                      dstX: (int)posInCanvasTexture.X,
-                                                                      dstY: (int)posInCanvasTexture.Y,
-                                                                      dstZ: 0);
+                var resourceManager = ResourceManager.Instance();
+                if (resourceManager.Resources[Program.FullScreenVertexShaderId] is VertexShaderResource vsr)
+                    context.VertexShader.Set(vsr.VertexShader);
+                if (resourceManager.Resources[Program.FullScreenPixelShaderId] is PixelShaderResource psr)
+                    context.PixelShader.Set(psr.PixelShader);
+                context.PixelShader.SetShaderResource(0, _previewTextureSrv);
+
+                // render the preview in the canvas texture
+                context.Draw(3, 0);
+                context.PixelShader.SetShaderResource(0, null);
             }
 
             private static readonly GridPos[] SortedOffset = BuildSortedOffsets();
