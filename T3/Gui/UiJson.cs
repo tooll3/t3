@@ -96,7 +96,7 @@ namespace T3.Gui
             Writer.WritePropertyName("OutputUis");
             Writer.WriteStartArray();
 
-            foreach (var outputEntry in symbolUi.OutputUis.OrderBy(i => i.Key))
+            foreach (var outputEntry in symbolUi.OutputUis)
             {
                 Writer.WriteStartObject(); // output entry
                 Writer.WriteObject("OutputId", outputEntry.Key);
@@ -201,7 +201,7 @@ namespace T3.Gui
                 symbolChildUis.Add(childUi);
             }
 
-            var outputDict = new Dictionary<Guid, IOutputUi>();
+            var outputDict = new OrderedDictionary<Guid, IOutputUi>();
             foreach (var uiOutputEntry in (JArray)mainObject["OutputUis"])
             {
                 var outputId = Guid.Parse(uiOutputEntry["OutputId"].Value<string>());

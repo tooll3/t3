@@ -310,7 +310,7 @@ namespace T3.Gui.Graph
         public static ImDrawListPtr DrawList;
         private static List<SymbolChildUi> _childUis;
         private static SymbolUi _symbolUi;
-        private static Dictionary<Guid, IOutputUi> _outputUisById;
+        private static OrderedDictionary<Guid, IOutputUi> _outputUisById;
         private static OrderedDictionary<Guid, IInputUi> _inputUisById;
     }
 }

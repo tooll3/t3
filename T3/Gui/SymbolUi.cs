@@ -24,7 +24,7 @@ namespace T3.Gui
             UpdateConsistencyWithSymbol(); // this sets up all missing elements
         }
 
-        public SymbolUi(Symbol symbol, List<SymbolChildUi> childUis, OrderedDictionary<Guid, IInputUi> inputs, Dictionary<Guid, IOutputUi> outputs)
+        public SymbolUi(Symbol symbol, List<SymbolChildUi> childUis, OrderedDictionary<Guid, IInputUi> inputs, OrderedDictionary<Guid, IOutputUi> outputs)
         {
             Symbol = symbol;
             ChildUis = childUis;
@@ -55,7 +55,7 @@ namespace T3.Gui
                 inputUis.Add(clonedInputUi.Id, clonedInputUi);
             }
 
-            var outputUis = new Dictionary<Guid, IOutputUi>(OutputUis.Count);
+            var outputUis = new OrderedDictionary<Guid, IOutputUi>(OutputUis.Count);
             foreach (var (_, outputUi) in OutputUis)
             {
                 var clonedOutputUi = outputUi.Clone();
@@ -215,7 +215,7 @@ namespace T3.Gui
         // public Styles DefaultStyleForInstances { get; set; }  // TODO: Implement inheritance for display styles? 
         public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();    // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
         public OrderedDictionary<Guid, IInputUi> InputUis { get; } = new OrderedDictionary<Guid, IInputUi>();
-        public Dictionary<Guid, IOutputUi> OutputUis { get; }= new Dictionary<Guid, IOutputUi>();
+        public OrderedDictionary<Guid, IOutputUi> OutputUis { get; }= new OrderedDictionary<Guid, IOutputUi>();
     }
 
     public static class SymbolUiRegistry
