@@ -109,7 +109,10 @@ namespace T3.Gui.Windows
                     ImGui.Text("Nothing selected");
                     return;
                 }
-                
+
+                if (instance.Outputs.Count == 0)
+                    return;
+
                 var firstOutput = instance.Outputs[0];
                 if (!(firstOutput is Slot<Texture2D> textureSlot))
                 {
