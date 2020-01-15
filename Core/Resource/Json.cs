@@ -37,7 +37,6 @@ namespace T3.Core
             Writer.WriteObject("Name", symbol.Name);
             Writer.WriteValue("Id", symbol.Id);
             Writer.WriteObject("Namespace", symbol.Namespace);
-            Writer.WriteObject("InstanceType", symbol.InstanceType + $", {symbol.InstanceType.Assembly.GetName().Name}");
 
             WriteSymbolInputs(symbol.InputDefinitions);
             WriteSymbolChildren(symbol.Children);
@@ -181,7 +180,6 @@ namespace T3.Core
                 return null; // symbol already in registry - nothing to do
 
             var name = o["Name"].Value<string>();
-            var instanceTypeName = o["InstanceType"].Value<string>();
             var @namespace = o["Namespace"]?.Value<string>() ?? "";
             var symbolChildren = (from childJson in (JArray)o["Children"]
                                   let symbolChild = ReadSymbolChild(model, childJson)
@@ -197,6 +195,9 @@ namespace T3.Core
                                       select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
             var animatorData = (JArray)o["Animator"];
 
+            //     string namespaceId = id.ToString().ToLower().Replace("-", "_");
+            //     instanceTypeName = "T3.Operators.Types.ID_" + namespaceId + "." + name + ", Operators";
+            string instanceTypeName = "T3.Operators.Types." + name + ", Operators";
             Type instanceType = Type.GetType(instanceTypeName);
             if (instanceType == null)
             {
