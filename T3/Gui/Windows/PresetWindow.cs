@@ -300,18 +300,18 @@ namespace T3.Gui.Windows
                     return;
 
                 // setup graphics pipeline for rendering into the canvas texture
-                var context = Program.Device.ImmediateContext;
+                var resourceManager = ResourceManager.Instance();
+                var context = resourceManager.Device.ImmediateContext;
                 context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
                 context.Rasterizer.SetViewport(new ViewportF(posInCanvasTexture.X, posInCanvasTexture.Y,
                                                              screenRect.GetWidth(), screenRect.GetHeight(),
                                                              0.0f, 1.0f));
                 context.OutputMerger.SetTargets(_canvasTextureRtv);
 
-                var resourceManager = ResourceManager.Instance();
-                if (resourceManager.Resources[Program.FullScreenVertexShaderId] is VertexShaderResource vsr)
-                    context.VertexShader.Set(vsr.VertexShader);
-                if (resourceManager.Resources[Program.FullScreenPixelShaderId] is PixelShaderResource psr)
-                    context.PixelShader.Set(psr.PixelShader);
+                var vertexShader = resourceManager.GetVertexShader(Program.FullScreenVertexShaderId);
+                context.VertexShader.Set(vertexShader);
+                var pixelShader = resourceManager.GetPixelShader(Program.FullScreenPixelShaderId);
+                context.PixelShader.Set(pixelShader);
                 context.PixelShader.SetShaderResource(0, _previewTextureSrv);
 
                 // render the preview in the canvas texture
