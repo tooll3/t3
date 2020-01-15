@@ -154,9 +154,11 @@ namespace T3.Gui.Graph.Interaction
 
             usingStringBuilder.AppendLine("using T3.Core.Operator;");
 
+            Guid newSymbolId = Guid.NewGuid();
+
             var classStringBuilder = new StringBuilder(usingStringBuilder.ToString());
             classStringBuilder.AppendLine("");
-            classStringBuilder.AppendLine("namespace T3.Operators.Types");
+            classStringBuilder.AppendLine("namespace T3.Operators.Types.Id_" + newSymbolId.ToString().ToLower().Replace('-', '_'));
             classStringBuilder.AppendLine("{");
             classStringBuilder.AppendFormat("    public class {0} : Instance<{0}>\n", newSymbolName);
             classStringBuilder.AppendLine("    {");
@@ -185,7 +187,6 @@ namespace T3.Gui.Graph.Interaction
             }
 
             // Create new symbol and its UI
-            Guid newSymbolId = Guid.NewGuid();
             var newSymbol = new Symbol(type, newSymbolId);
             newSymbol.PendingSource = newSource;
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
@@ -350,6 +351,12 @@ namespace T3.Gui.Graph.Interaction
             root = memberRewriter.Visit(root);
             var oldToNewIdMap = memberRewriter.OldToNewGuidDict;
             var newSource = root.GetText().ToString();
+
+            Guid newSymbolId = Guid.NewGuid();
+            // patch the symbol id in namespace
+            string oldSymbolNamespace = sourceSymbol.Id.ToString().ToLower().Replace('-', '_');
+            string newSymbolNamespace = newSymbolId.ToString().ToLower().Replace('-', '_');
+            newSource = newSource.Replace(oldSymbolNamespace, newSymbolNamespace);
             Log.Debug(newSource);
 
             var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newTypeName);
@@ -367,7 +374,6 @@ namespace T3.Gui.Graph.Interaction
             }
 
             // create and register the new symbol
-            Guid newSymbolId = Guid.NewGuid();
             var newSymbol = new Symbol(type, newSymbolId);
             newSymbol.PendingSource = newSource;
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);

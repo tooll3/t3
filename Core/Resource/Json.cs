@@ -195,9 +195,8 @@ namespace T3.Core
                                       select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
             var animatorData = (JArray)o["Animator"];
 
-            //     string namespaceId = id.ToString().ToLower().Replace("-", "_");
-            //     instanceTypeName = "T3.Operators.Types.ID_" + namespaceId + "." + name + ", Operators";
-            string instanceTypeName = "T3.Operators.Types." + name + ", Operators";
+            string namespaceId = id.ToString().ToLower().Replace('-', '_');
+            string instanceTypeName = "T3.Operators.Types.Id_" + namespaceId + "." + name + ", Operators";
             Type instanceType = Type.GetType(instanceTypeName);
             if (instanceType == null)
             {
