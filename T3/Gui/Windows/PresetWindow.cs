@@ -38,7 +38,7 @@ namespace T3.Gui.Windows
 
         private class VariationParameter
         {
-            //public SymbolChildUi SymbolChildUi;
+            public SymbolChildUi SymbolChildUi;
             public IInputSlot InputSlot { get; set; }
             public InputValue OriginalValue { get; set; }
             public SymbolChild.Input Input;
@@ -57,6 +57,8 @@ namespace T3.Gui.Windows
                     ImGui.Selectable(symbolChildUi.SymbolChild.ReadableName);
                     ImGui.PopFont();
                     ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                    ImGui.PushID(symbolChildUi.Id.GetHashCode());
+                        
                     foreach (var input in symbolChildUi.SymbolChild.InputValues.Values)
                     {
                         var p = input.DefaultValue;
@@ -68,8 +70,9 @@ namespace T3.Gui.Windows
                             || p.ValueType == typeof(Vector4)
                             )
                         {
-                            var matchingParam = _variationParameters.FirstOrDefault(variationParam => input == variationParam.Input);
+                            var matchingParam = _variationParameters.FirstOrDefault(variationParam => input == variationParam.Input && symbolChildUi.Id == variationParam.SymbolChildUi.Id);
                             var selected = matchingParam != null;
+                            
                             if (ImGui.Selectable(input.Name, selected))
                             {
                                 if (selected)
@@ -80,20 +83,23 @@ namespace T3.Gui.Windows
                                 {
                                     var instance = SelectionManager.GetInstanceForSymbolChildUi(symbolChildUi);
                                     var inputSlot = instance.Inputs.Single(input2 => input2.Id == input.InputDefinition.Id);
+                                    
                                     _variationParameters.Add(new VariationParameter()
-                                                            {
-                                                                Input = input,
-                                                                Instance = SelectionManager.GetInstanceForSymbolChildUi(symbolChildUi),
-                                                                Type = p.ValueType,
-                                                                InputSlot = inputSlot,
-                                                                OriginalValue = inputSlot.Input.Value.Clone(),
-                                                            });
+                                                             {
+                                                                 SymbolChildUi =  symbolChildUi,
+                                                                 Input = input,
+                                                                 Instance = SelectionManager.GetInstanceForSymbolChildUi(symbolChildUi),
+                                                                 Type = p.ValueType,
+                                                                 InputSlot = inputSlot,
+                                                                 OriginalValue = inputSlot.Input.Value.Clone(),
+                                                             });
                                 }
 
                                 _previewCanvas.ClearVariations();
                             }
                         }
                     }
+                    ImGui.PopID();
 
                     ImGui.Dummy(Spacing);
                     ImGui.PopStyleColor();
@@ -178,21 +184,23 @@ namespace T3.Gui.Windows
                 UpdateCanvas();
                 Invalidate();
 
-                ImGui.Text("" + Scroll + " " + Scale + " test offset" + _currentOffsetIndexForFocus);
-                var drawlist = ImGui.GetWindowDrawList();
-
                 // Draw Canvas Texture
                 var rectOnScreen = ImRect.RectWithSize(WindowPos, new Vector2(_canvasTexture.Description.Width, _canvasTexture.Description.Height));
+                
+                var drawlist = ImGui.GetWindowDrawList();
                 drawlist.AddImage((IntPtr)_canvasTextureSrv,
                                   rectOnScreen.Min,
                                   rectOnScreen.Max);
 
                 foreach (var variation in _variationByGridIndex.Values)
                 {
+                    if(!IsGridPosVisible(variation.GridPos))
+                        continue;
+                    
                     var screenRect = GetGridPosScreenRect(variation.GridPos);
                     if (variation.ThumbnailNeedsUpdate)
                     {
-                        drawlist.AddRectFilled(screenRect.Min, screenRect.Max, Color.Orange);
+                        drawlist.AddRectFilled(screenRect.Min, screenRect.Max, _needsUpdateColor);
                     }
                     else
                     {
@@ -202,6 +210,8 @@ namespace T3.Gui.Windows
                 }
             }
 
+            private Color _needsUpdateColor = new Color(1f,1f,1f,0.1f);
+            
             private void InitializeCanvasTexture()
             {
                 if (_canvasTexture != null)
@@ -226,13 +236,12 @@ namespace T3.Gui.Windows
                 _canvasTextureRtv = new RenderTargetView(Program.Device, _canvasTexture);
             }
 
+            
             private ImRect GetGridPosScreenRect(GridPos gridPos)
             {
                 var thumbnailInCanvas = ImRect.RectWithSize(new Vector2(gridPos.X, gridPos.Y) * ThumbnailSize, ThumbnailSize);
-                //var screenPos = TransformPosition(thumbnailInCanvas.Min);
-                //return new ImRect(screenPos, screenPos + new Vector2(20,20));
                 var r = TransformRect(thumbnailInCanvas);
-                return new ImRect((int)r.Min.X, (int)r.Min.Y, (int)r.Max.X, (int)r.Max.Y);
+                return new ImRect((int)r.Min.X, (int)r.Min.Y, (int)r.Max.X-1, (int)r.Max.Y-1);
             }
 
             private bool IsGridPosVisible(GridPos gridPos)
@@ -240,7 +249,7 @@ namespace T3.Gui.Windows
                 var contentRegion = new ImRect(ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
                                                ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
 
-                contentRegion.Expand(ThumbnailSize / Scale);
+                contentRegion.Expand(ThumbnailSize * Scale);
 
                 var rectOnScreen = GetGridPosScreenRect(gridPos);
 
@@ -248,11 +257,12 @@ namespace T3.Gui.Windows
                 return visible;
             }
 
+            
             private void Invalidate()
             {
                 var scaleChanged = Math.Abs(Scale.X - _lastScale) > 0.01f;
                 var scrollChanged = Scroll != _lastScroll;
-                
+
                 // TODO: optimize performance by only invalidating thumbnails and moving part of the canvas  
                 if (scaleChanged || scrollChanged)
                 {
@@ -265,11 +275,23 @@ namespace T3.Gui.Windows
                     {
                         variation.ThumbnailNeedsUpdate = true;
                     }
+                    
+                    SetGridIndexAtWindowCenter();
 
                     Program.Device.ImmediateContext.ClearRenderTargetView(_canvasTextureRtv, new RawColor4(0, 0, 0, 0));
                 }
             }
 
+            private void SetGridIndexAtWindowCenter()
+            {
+                var contentRegion = new ImRect(ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
+                                               ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
+                var centerInCanvas = InverseTransformPosition(contentRegion.GetCenter());
+                _currentFocusIndex.X = (int)(centerInCanvas.X / ThumbnailSize.X);
+                _currentFocusIndex.Y = (int)(centerInCanvas.Y / ThumbnailSize.Y);
+            }
+            
+            
             private void FillInNextVariation()
             {
                 if (_updateCompleted)
@@ -317,43 +339,131 @@ namespace T3.Gui.Windows
                 _variationByGridIndex.Clear();
             }
 
+            private readonly GridPos[] _neighbourOffsets =
+            {
+                new GridPos(-1, -1),
+                new GridPos(0, -1),
+                new GridPos(1, -1),
+                new GridPos(1, 0),
+                new GridPos(1, 1),
+                new GridPos(0, 1),
+                new GridPos(-1, 1),
+                new GridPos(-1, 0),
+            };
+
+            private readonly Random _random = new Random();
+
+
             private Variation CreateVariationAtGridPos(GridPos pos)
             {
-                //TODO: Blend neighbours
+                // Collect Neighbours
                 var newVariation = new Variation(pos);
-                foreach (var param in _presetWindow._variationParameters)
+                Variation neighbour2;
+
+                // Collect neighbours
+                var neighbours = new List<Variation>();
+                foreach (var nOffset in _neighbourOffsets)
                 {
-                    if (param.Type == typeof(float))
-                    {
-                        var randomValue = (pos.X * pos.Y) / 10f % 1;
-                        newVariation.ValuesForParameters.Add(param, randomValue);
-                    }
-                    else if (param.Type == typeof(Vector4))
-                    {
-                        var randomVec4 = new Vector4((pos.X * pos.Y) / 10f % 1,
-                                                     (pos.X * pos.Y * 0.1231f) / 10f % 1,
-                                                     (pos.X * pos.Y * 0.3131f) / 10f % 1,
-                                                     (pos.X * pos.Y * 2.1231f) / 10f % 1
-                                                    );
-                        newVariation.ValuesForParameters.Add(param, randomVec4);
-                    }
-                    else if (param.Type == typeof(Vector3))
-                    {
-                        var randomVec3 = new Vector3((pos.X * pos.Y) / 10f % 1,
-                                                     (pos.X * pos.Y * 0.1231f) / 10f % 1,
-                                                     (pos.X * pos.Y * 2.1231f) / 10f % 1
-                                                    );
-                        newVariation.ValuesForParameters.Add(param, randomVec3);
-                    }
-                    else if (param.Type == typeof(Vector2))
-                    {
-                        var randomVec2 = new Vector2((pos.X * pos.Y) / 10f % 1,
-                                                     (pos.X * pos.Y * 2.1231f) / 10f % 1
-                                                    );
-                        newVariation.ValuesForParameters.Add(param, randomVec2);
-                    }
+                    var neighbourPos = pos + nOffset;
+
+                    if (_variationByGridIndex.TryGetValue(neighbourPos.GridIndex, out neighbour2))
+                        neighbours.Add(neighbour2);
                 }
 
+                // Initialize parameters with defaults of neighbour averages 
+                var scattering = 0.5f;
+                var useDefault = (neighbours.Count == 0);
+
+                foreach (var param in _presetWindow._variationParameters)
+                {
+                    if (useDefault)
+                    {
+                        if (param.OriginalValue is InputValue<float> value)
+                        {
+                            newVariation.ValuesForParameters.Add(param, value.Value);
+                        }
+                        else if (param.OriginalValue is InputValue<Vector2> vec2Value)
+                        {
+                            newVariation.ValuesForParameters.Add(param, vec2Value.Value);
+                        }
+                        else if (param.OriginalValue is InputValue<Vector3> vec3Value)
+                        {
+                            newVariation.ValuesForParameters.Add(param, vec3Value.Value);
+                        }
+                        else if (param.OriginalValue is InputValue<Vector4> vec4Value)
+                        {
+                            newVariation.ValuesForParameters.Add(param, vec4Value.Value);
+                        }
+                        continue;
+                    }
+
+                    if (param.Type == typeof(float))
+                    {
+                        var value = 0f;
+                        foreach (var neighbour in neighbours)
+                        {
+                            value += (float)neighbour.ValuesForParameters[param];
+                        }
+
+                        value *= 1f / neighbours.Count + ((float)_random.NextDouble() - 0.5f) * scattering;
+                        value += _random.NextFloat(-scattering, scattering);
+                        newVariation.ValuesForParameters.Add(param, value);
+                    }
+
+                    if (param.Type == typeof(Vector2))
+                    {
+                        var value = Vector2.Zero;
+                        foreach (var neighbour in neighbours)
+                        {
+                            value += (Vector2)neighbour.ValuesForParameters[param];
+                        }
+                    
+                        value *= 1f / neighbours.Count;
+                        value += new Vector2(
+                                             _random.NextFloat(-scattering, scattering),
+                                             _random.NextFloat(-scattering, scattering)
+                                            );
+                        
+                        newVariation.ValuesForParameters.Add(param, value);
+                    }
+                    
+                    if (param.Type == typeof(Vector3))
+                    {
+                        var value = Vector3.Zero;
+                        foreach (var neighbour in neighbours)
+                        {
+                            value += (Vector3)neighbour.ValuesForParameters[param];
+                        }
+                    
+                        value *= 1f / neighbours.Count;
+                        value += new Vector3(
+                                             _random.NextFloat(-scattering, scattering),
+                                             _random.NextFloat(-scattering, scattering),
+                                             _random.NextFloat(-scattering, scattering)
+                                            );
+                        
+                        newVariation.ValuesForParameters.Add(param, value);
+                    }
+                    
+                    if (param.Type == typeof(Vector4))
+                    {
+                        var value = Vector4.Zero;
+                        foreach (var neighbour in neighbours)
+                        {
+                            value += (Vector4)neighbour.ValuesForParameters[param];
+                        }
+                    
+                        value *= 1f / neighbours.Count;
+                        value += new Vector4(
+                                             _random.NextFloat(-scattering, scattering),
+                                             _random.NextFloat(-scattering, scattering),
+                                             _random.NextFloat(-scattering, scattering),
+                                             _random.NextFloat(-scattering, scattering)
+                                            );
+                        
+                        newVariation.ValuesForParameters.Add(param, value);
+                    }
+                }
                 return newVariation;
             }
 
@@ -380,11 +490,6 @@ namespace T3.Gui.Windows
 
                 var screenRect = GetGridPosScreenRect(variation.GridPos);
                 var posInCanvasTexture = screenRect.Min - WindowPos;
-                //if (posInCanvasTexture.X < 0 || posInCanvasTexture.X > 500 || posInCanvasTexture.Y < 0 || posInCanvasTexture.Y > 500)
-                if (posInCanvasTexture.X < 0 || posInCanvasTexture.Y < 0)
-                    return;
-
-                Log.Debug("Draw thumbnail with....");
 
                 // Set variation values
                 foreach (var (param, value) in variation.ValuesForParameters)
@@ -445,7 +550,7 @@ namespace T3.Gui.Windows
             public override IEnumerable<ISelectableNode> SelectableChildren { get; } = new List<ISelectableNode>();
             private static readonly Vector2 ThumbnailSize = new Vector2(160, 160 / 16f * 9);
             private readonly Dictionary<int, Variation> _variationByGridIndex = new Dictionary<int, Variation>();
-            private readonly GridPos _currentFocusIndex = GridCenter;
+            private  GridPos _currentFocusIndex = GridCenter;
             private int _currentOffsetIndexForFocus;
             private bool _updateCompleted;
 
@@ -474,7 +579,7 @@ namespace T3.Gui.Windows
                 ThumbnailNeedsUpdate = true;
             }
 
-            public Dictionary<VariationParameter, object> ValuesForParameters = new Dictionary<VariationParameter, object>();
+            public readonly Dictionary<VariationParameter, object> ValuesForParameters = new Dictionary<VariationParameter, object>();
 
             // public void UpdateThumbnail()
             // {
@@ -485,8 +590,8 @@ namespace T3.Gui.Windows
 
         public struct GridPos
         {
-            public readonly int X;
-            public readonly int Y;
+            public  int X;
+            public  int Y;
 
             public GridPos(int x, int y)
             {
@@ -497,6 +602,11 @@ namespace T3.Gui.Windows
             public static GridPos operator +(GridPos a, GridPos b)
             {
                 return new GridPos(a.X + b.X, a.Y + b.Y);
+            }
+
+            public static GridPos operator +(GridPos a, Size2 b)
+            {
+                return new GridPos(a.X + b.Width, a.Y + b.Height);
             }
 
             public bool IsWithinGrid(int gridSize)
