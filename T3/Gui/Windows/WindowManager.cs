@@ -9,6 +9,7 @@ using SharpDX.WIC;
 using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.Windows.Output;
+using T3.Gui.Windows.Variations;
 
 namespace T3.Gui.Windows
 {
@@ -20,7 +21,7 @@ namespace T3.Gui.Windows
                        {
                            new GraphWindow(),
                            new ParameterWindow(),
-                           new PresetWindow(),
+                           new VariationWindow(),
                            new OutputWindow(),
                            new ConsoleLogWindow(),
                            new SettingsWindow(),
