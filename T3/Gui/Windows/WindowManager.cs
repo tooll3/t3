@@ -20,11 +20,11 @@ namespace T3.Gui.Windows
                        {
                            new GraphWindow(),
                            new ParameterWindow(),
+                           new PresetWindow(),
                            new OutputWindow(),
                            new ConsoleLogWindow(),
                            new SettingsWindow(),
                            new SymbolTree(),
-                           new PresetWindow(),
                        };
         }
 
