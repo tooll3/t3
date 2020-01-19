@@ -2,19 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
-using SharpDX;
-using SharpDX.Direct3D;
-using SharpDX.Direct3D11;
-using SharpDX.Mathematics.Interop;
-using T3.Core;
 using T3.Core.Operator;
-using T3.Gui.Graph;
-using T3.Gui.Graph.Rendering;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
-using T3.Gui.Windows.Output;
-using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
@@ -43,7 +34,6 @@ namespace T3.Gui.Windows.Variations
             public InputValue OriginalValue { get; set; }
             public SymbolChild.Input Input;
             public Type Type;
-            public Instance Instance;
             public float Strength = 1;
         }
 
@@ -58,6 +48,8 @@ namespace T3.Gui.Windows.Variations
                 ImGui.SameLine();
                 
                 ImGui.Button("1:1");
+
+                ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.01f, 0, 3);
                 
                 foreach (var symbolChildUi in SelectionManager.GetSelectedSymbolChildUis())
                 {
@@ -96,10 +88,11 @@ namespace T3.Gui.Windows.Variations
                                                              {
                                                                  SymbolChildUi =  symbolChildUi,
                                                                  Input = input,
-                                                                 Instance = SelectionManager.GetInstanceForSymbolChildUi(symbolChildUi),
+                                                                 //Instance = SelectionManager.GetInstanceForSymbolChildUi(symbolChildUi),
                                                                  Type = p.ValueType,
                                                                  InputSlot = inputSlot,
                                                                  OriginalValue = inputSlot.Input.Value.Clone(),
+                                                                 Strength = 1,
                                                              });
                                 }
 
