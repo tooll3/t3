@@ -31,6 +31,7 @@ namespace T3.Gui
             DrawAppMenu();
         }
 
+        
         private void TriggerGlobalActionsFromKeyBindings()
         {
             foreach (var (id, action) in UserActionRegistry.Entries)

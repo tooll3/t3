@@ -285,25 +285,37 @@ namespace T3.Gui.Windows.Variations
             _variationByGridIndex.Clear();
         }
 
+        private Variation CreateVariationAtMouseMouse()
+        {
+            // TODO: implement and add to hover
+            return new Variation(new GridPos(0,0));
+        }
         
         private Variation CreateVariationAtGridPos(GridPos pos)
         {
-            // Collect Neighbours
-            var newVariation = new Variation(pos);
 
             // Collect neighbours
-            var neighbours = new List<Variation>();
+            var neighboursAndWeights = new List<Tuple<Variation, float>>();
             foreach (var nOffset in _neighbourOffsets)
             {
                 var neighbourPos = pos + nOffset;
                 
                 if (_variationByGridIndex.TryGetValue(neighbourPos.GridIndex, out var neighbour))
-                    neighbours.Add(neighbour);
+                    neighboursAndWeights.Add( new Tuple<Variation, float>(neighbour, 1));
             }
 
-            // Initialize parameters with defaults of neighbour averages 
-            //var scattering = 0.5f;
-            var useDefault = (neighbours.Count == 0);
+            // Initialize parameters with defaults or neighbour averages and apply variation scatter
+
+            return CreateVariation(pos, neighboursAndWeights);
+        }
+
+        
+        private Variation CreateVariation(GridPos pos, List<Tuple<Variation, float>> neighboursAndWeights)
+        {
+            // Collect Neighbours
+            var newVariation = new Variation(pos);
+            var useDefault = (neighboursAndWeights.Count == 0);
+
 
             foreach (var param in _variationWindow.VariationParameters)
             {
@@ -332,12 +344,12 @@ namespace T3.Gui.Windows.Variations
                 if (param.Type == typeof(float))
                 {
                     var value = 0f;
-                    foreach (var neighbour in neighbours)
+                    foreach (var neighbour in neighboursAndWeights)
                     {
-                        value += (float)neighbour.ValuesForParameters[param];
+                        value += (float)neighbour.Item1.ValuesForParameters[param];
                     }
 
-                    value *= 1f / neighbours.Count + ((float)_random.NextDouble() - 0.5f) * Scatter;
+                    value *= 1f / neighboursAndWeights.Count + ((float)_random.NextDouble() - 0.5f) * Scatter;
                     value += _random.NextFloat(-Scatter, Scatter);
                     newVariation.ValuesForParameters.Add(param, value);
                 }
@@ -345,12 +357,12 @@ namespace T3.Gui.Windows.Variations
                 if (param.Type == typeof(Vector2))
                 {
                     var value = Vector2.Zero;
-                    foreach (var neighbour in neighbours)
+                    foreach (var neighbour in neighboursAndWeights)
                     {
-                        value += (Vector2)neighbour.ValuesForParameters[param];
+                        value += (Vector2)neighbour.Item1.ValuesForParameters[param];
                     }
 
-                    value *= 1f / neighbours.Count;
+                    value *= 1f / neighboursAndWeights.Count;
                     value += new Vector2(
                                          _random.NextFloat(-Scatter, Scatter),
                                          _random.NextFloat(-Scatter, Scatter)
@@ -362,12 +374,12 @@ namespace T3.Gui.Windows.Variations
                 if (param.Type == typeof(Vector3))
                 {
                     var value = Vector3.Zero;
-                    foreach (var neighbour in neighbours)
+                    foreach (var neighbour in neighboursAndWeights)
                     {
-                        value += (Vector3)neighbour.ValuesForParameters[param];
+                        value += (Vector3)neighbour.Item1.ValuesForParameters[param];
                     }
 
-                    value *= 1f / neighbours.Count;
+                    value *= 1f / neighboursAndWeights.Count;
                     value += new Vector3(
                                          _random.NextFloat(-Scatter, Scatter),
                                          _random.NextFloat(-Scatter, Scatter),
@@ -380,12 +392,12 @@ namespace T3.Gui.Windows.Variations
                 if (param.Type == typeof(Vector4))
                 {
                     var value = Vector4.Zero;
-                    foreach (var neighbour in neighbours)
+                    foreach (var neighbour in neighboursAndWeights)
                     {
-                        value += (Vector4)neighbour.ValuesForParameters[param];
+                        value += (Vector4)neighbour.Item1.ValuesForParameters[param];
                     }
 
-                    value *= 1f / neighbours.Count;
+                    value *= 1f / neighboursAndWeights.Count;
                     value += new Vector4(
                                          _random.NextFloat(-Scatter, Scatter),
                                          _random.NextFloat(-Scatter, Scatter),
@@ -400,7 +412,6 @@ namespace T3.Gui.Windows.Variations
             return newVariation;
         }
 
-        
         private static GridPos[] BuildSortedOffsets()
         {
             var offsets = new List<GridPos>();
