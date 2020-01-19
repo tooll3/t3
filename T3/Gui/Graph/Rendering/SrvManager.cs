@@ -24,7 +24,6 @@ namespace T3.Gui.Graph.Rendering
                 return null;
             
             _srvForTextures.Add(texture, srv);
-            Log.Debug("Count is now " + _srvForTextures.Count);
             return srv;
         }
 

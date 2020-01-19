@@ -108,7 +108,8 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                DrawPreview(instance);
+                if(UserSettings.Config.ShowThumbnails)
+                    DrawPreview(instance);
 
                 SelectableNodeMovement.Handle(childUi, instance);
 

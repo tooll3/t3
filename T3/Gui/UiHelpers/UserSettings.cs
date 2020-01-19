@@ -26,6 +26,7 @@ namespace T3.Gui.UiHelpers
             [JsonConverter(typeof(StringEnumConverter))]
             public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.Live;
             public bool AudioMuted;
+            public bool ShowThumbnails = true;
         }
 
         public static ConfigData Config = new ConfigData();

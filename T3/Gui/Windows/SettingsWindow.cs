@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Gui.Graph;
 using T3.Gui.TypeColors;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows
 {
@@ -22,6 +23,10 @@ namespace T3.Gui.Windows
         {
             T3Metrics.Draw();
 
+            ImGui.Separator();
+            ImGui.Checkbox("Show Graph thumbnails", ref UserSettings.Config.ShowThumbnails);
+            
+            ImGui.Separator();
             ImGui.Text("Debug options...");
             ImGui.Checkbox("VSync", ref _vSync);
             ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
