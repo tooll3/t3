@@ -13,8 +13,7 @@ namespace T3.Gui.Graph.Rendering
     {
         public static ShaderResourceView GetSrvForTexture(Texture2D texture)
         {
-            ShaderResourceView srv;
-            if (_srvForTextures.TryGetValue(texture, out srv))
+            if (_srvForTextures.TryGetValue(texture, out ShaderResourceView srv))
             {
                 return srv;
             }
@@ -24,6 +23,7 @@ namespace T3.Gui.Graph.Rendering
                 return null;
             
             _srvForTextures.Add(texture, srv);
+
             return srv;
         }
 

@@ -84,9 +84,7 @@ namespace T3.Gui.Windows.Variations
             var rectOnScreen = ImRect.RectWithSize(WindowPos, new Vector2(_canvasTexture.Description.Width, _canvasTexture.Description.Height));
 
             var drawlist = ImGui.GetWindowDrawList();
-            drawlist.AddImage((IntPtr)_canvasTextureSrv,
-                              rectOnScreen.Min,
-                              rectOnScreen.Max);
+            drawlist.AddImage((IntPtr)_canvasTextureSrv, rectOnScreen.Min, rectOnScreen.Max);
 
             foreach (var variation in _variationByGridIndex.Values)
             {

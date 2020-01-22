@@ -6,6 +6,7 @@ using System.Numerics;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Graph;
+using T3.Gui.Graph.Rendering;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using UiHelpers;
@@ -36,22 +37,6 @@ namespace T3.Gui.Windows
             if (texture == null)
                 return;
 
-            if (_srv == null || _srv.Resource.NativePointer != texture.NativePointer)
-            {
-                _srv?.Dispose();
-                try
-                {
-                    _srv = new ShaderResourceView(ResourceManager.Instance().Device, texture);
-                }
-                catch (Exception e)
-                {
-                    _srv = null;
-                    Log.Warning("ImageOutputCanvas::DrawTexture(...) - Could not create ShaderResourceView for texture.");
-                    Log.Warning(e.Message);
-                    return;
-                }
-            }
-
             var size = new Vector2(texture.Description.Width, texture.Description.Height);
             var area = new ImRect(0, 0, size.X, size.Y);
 
@@ -63,15 +48,14 @@ namespace T3.Gui.Windows
             ImGui.SetCursorScreenPos(topLeftOnScreen);
 
             var sizeOnScreen = ImageOutputCanvas.Current.TransformDirection(size);
-            ImGui.Image((IntPtr)_srv, sizeOnScreen);
+            var srv = SrvManager.GetSrvForTexture(texture);
+            ImGui.Image((IntPtr)srv, sizeOnScreen);
 
-            var description = $"{size.X}x{size.Y}  {_srv.Description.Format}";
+            var description = $"{size.X}x{size.Y}  {srv.Description.Format}";
             var descriptionWidth = ImGui.CalcTextSize(description).X;
 
-            ImGui.SetCursorScreenPos(new Vector2(
-                WindowPos.X + (WindowSize.X - descriptionWidth) / 2,
-                WindowPos.Y + WindowSize.Y - 20
-                ));
+            ImGui.SetCursorScreenPos(new Vector2(WindowPos.X + (WindowSize.X - descriptionWidth) / 2,
+                                                 WindowPos.Y + WindowSize.Y - 20));
             ImGui.Text(description);
         }
 
@@ -112,9 +96,7 @@ namespace T3.Gui.Windows
             Pixel,
             Custom,
         }
+
         private Modes _viewMode = Modes.Fitted;
-
-
-        private ShaderResourceView _srv;
     }
 }
