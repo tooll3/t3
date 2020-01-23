@@ -11,12 +11,12 @@ namespace T3.Gui.Windows.Variations
 {
     public class Variation
     {
-        public readonly GridPos GridPos;
+        public readonly GridCell GridCell;
         public bool ThumbnailNeedsUpdate;
 
-        private Variation(GridPos pos)
+        private Variation(GridCell cell)
         {
-            GridPos = pos;
+            GridCell = cell;
             ThumbnailNeedsUpdate = true;
         }
 
@@ -56,10 +56,10 @@ namespace T3.Gui.Windows.Variations
 
         public static Variation Mix(IEnumerable<VariationParameter> variationParameters,
                                     IReadOnlyCollection<Tuple<Variation, float>> neighboursAndWeights, float scatter,
-                                    GridPos pos = new GridPos())
+                                    GridCell cell = new GridCell())
         {
             // Collect neighbours
-            var newVariation = new Variation(pos);
+            var newVariation = new Variation(cell);
             var useDefault = (neighboursAndWeights.Count == 0);
 
             foreach (var param in variationParameters)

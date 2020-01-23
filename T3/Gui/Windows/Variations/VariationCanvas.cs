@@ -22,7 +22,7 @@ namespace T3.Gui.Windows.Variations
         public VariationCanvas(VariationWindow variationWindow)
         {
             var extend = new Vector2(3, 3);
-            var center = new Vector2(GridPos.VariationGridSize / 2f, GridPos.VariationGridSize / 2f);
+            var center = new Vector2(GridCell.VariationGridSize / 2f, GridCell.VariationGridSize / 2f);
             var left = (center - extend) * ThumbnailSize;
             var right = (center + extend) * ThumbnailSize;
             ZoomSpeed = 20000;
@@ -86,10 +86,10 @@ namespace T3.Gui.Windows.Variations
 
             foreach (var variation in _variationByGridIndex.Values)
             {
-                if (!IsGridPosVisible(variation.GridPos))
+                if (!IsCellVisible(variation.GridCell))
                     continue;
 
-                var screenRect = GetGridPosScreenRect(variation.GridPos);
+                var screenRect = GetScreenRectForCell(variation.GridCell);
                 if (variation.ThumbnailNeedsUpdate)
                 {
                     drawlist.AddRectFilled(screenRect.Min, screenRect.Max, NeedsUpdateColor);
@@ -103,8 +103,8 @@ namespace T3.Gui.Windows.Variations
 
             if (ImGui.IsWindowHovered())
             {
-                var gridPosUnderMouse = GetScreenRectForGridCell(ImGui.GetMousePos());
-                if (_variationByGridIndex.TryGetValue(gridPosUnderMouse.GridIndex, out var variation))
+                var cellUnderMouse = GetScreenRectForGridCell(ImGui.GetMousePos());
+                if (_variationByGridIndex.TryGetValue(cellUnderMouse.GridIndex, out var variation))
                 {
                     var hoverVariation = CreateVariationAtMouseMouse();
                     //variation.ApplyValues();
@@ -147,29 +147,29 @@ namespace T3.Gui.Windows.Variations
             _canvasTextureRtv = new RenderTargetView(Program.Device, _canvasTexture);
         }
 
-        private ImRect GetGridPosScreenRect(GridPos gridPos)
+        private ImRect GetScreenRectForCell(GridCell gridCell)
         {
-            var thumbnailInCanvas = ImRect.RectWithSize(new Vector2(gridPos.X, gridPos.Y) * ThumbnailSize, ThumbnailSize);
+            var thumbnailInCanvas = ImRect.RectWithSize(new Vector2(gridCell.X, gridCell.Y) * ThumbnailSize, ThumbnailSize);
             var r = TransformRect(thumbnailInCanvas);
             return new ImRect((int)r.Min.X, (int)r.Min.Y, (int)r.Max.X - 1, (int)r.Max.Y - 1);
         }
 
-        private GridPos GetScreenRectForGridCell(Vector2 screenPos)
+        private GridCell GetScreenRectForGridCell(Vector2 screenPos)
         {
             var centerInCanvas = InverseTransformPosition(screenPos);
-            return new GridPos(
+            return new GridCell(
                                (int)(centerInCanvas.X / ThumbnailSize.X),
                                (int)(centerInCanvas.Y / ThumbnailSize.Y));
         }
 
-        private bool IsGridPosVisible(GridPos gridPos)
+        private bool IsCellVisible(GridCell gridCell)
         {
             var contentRegion = new ImRect(ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
                                            ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
 
             contentRegion.Expand(ThumbnailSize * Scale);
 
-            var rectOnScreen = GetGridPosScreenRect(gridPos);
+            var rectOnScreen = GetScreenRectForCell(gridCell);
 
             var visible = contentRegion.Contains(rectOnScreen);
             return visible;
@@ -237,14 +237,14 @@ namespace T3.Gui.Windows.Variations
             while (_currentOffsetIndexForFocus < SortedOffset.Length)
             {
                 var offset = SortedOffset[_currentOffsetIndexForFocus++];
-                var gridPos = _gridFocusIndex + offset;
-                if (!gridPos.IsWithinGrid())
+                var cell = _gridFocusIndex + offset;
+                if (!cell.IsWithinGrid())
                     continue;
 
-                if (!IsGridPosVisible(gridPos))
+                if (!IsCellVisible(cell))
                     continue;
 
-                var hasVariation = _variationByGridIndex.TryGetValue(gridPos.GridIndex, out var variation);
+                var hasVariation = _variationByGridIndex.TryGetValue(cell.GridIndex, out var variation);
                 if (hasVariation)
                 {
                     if (!variation.ThumbnailNeedsUpdate)
@@ -255,11 +255,11 @@ namespace T3.Gui.Windows.Variations
                 }
                 else
                 {
-                    variation = CreateVariationAtGridPos(gridPos);
+                    variation = CreateVariationForCell(cell);
                     if (variation.ValuesForParameters.Count > 0)
                     {
                         RenderThumbnail(variation);
-                        _variationByGridIndex[gridPos.GridIndex] = variation;
+                        _variationByGridIndex[cell.GridIndex] = variation;
                     }
 
                     return;
@@ -280,8 +280,8 @@ namespace T3.Gui.Windows.Variations
         private Variation CreateVariationAtMouseMouse()
         {
             var mousePos = ImGui.GetMousePos();
-            var gridPosBelowMouse = GetScreenRectForGridCell(mousePos);
-            var region = GetGridPosScreenRect(gridPosBelowMouse);
+            var cellBelowMouse = GetScreenRectForGridCell(mousePos);
+            var region = GetScreenRectForCell(cellBelowMouse);
             var posInCell = mousePos - region.Min;
 
             var cellSize = region.GetSize();
@@ -290,7 +290,7 @@ namespace T3.Gui.Windows.Variations
             posInCell -= halfSize;
             if (posInCell.X < 0)
             {
-                gridPosBelowMouse.X--;
+                cellBelowMouse.X--;
                 posInCell.X += halfSize.X;
             }
             else
@@ -300,7 +300,7 @@ namespace T3.Gui.Windows.Variations
 
             if (posInCell.Y < 0)
             {
-                gridPosBelowMouse.Y--;
+                cellBelowMouse.Y--;
                 posInCell.Y += halfSize.Y;
             }
             else
@@ -316,25 +316,25 @@ namespace T3.Gui.Windows.Variations
 
             var neighbours = new List<Tuple<Variation, float>>();
 
-            if (_variationByGridIndex.TryGetValue(gridPosBelowMouse.GridIndex, out var variationTopLeft))
+            if (_variationByGridIndex.TryGetValue(cellBelowMouse.GridIndex, out var variationTopLeft))
             {
                 var weight = (1 - xWeight) * (1 - yWeight);
                 neighbours.Add(new Tuple<Variation, float>(variationTopLeft, weight));
             }
 
-            if (_variationByGridIndex.TryGetValue((gridPosBelowMouse + new GridPos(1, 0)).GridIndex, out var variationTopRight))
+            if (_variationByGridIndex.TryGetValue((cellBelowMouse + new GridCell(1, 0)).GridIndex, out var variationTopRight))
             {
                 var weight = xWeight * (1 - yWeight);
                 neighbours.Add(new Tuple<Variation, float>(variationTopRight, weight));
             }
 
-            if (_variationByGridIndex.TryGetValue((gridPosBelowMouse + new GridPos(0, 1)).GridIndex, out var variationBottomLeft))
+            if (_variationByGridIndex.TryGetValue((cellBelowMouse + new GridCell(0, 1)).GridIndex, out var variationBottomLeft))
             {
                 var weight = (1 - xWeight) * yWeight;
                 neighbours.Add(new Tuple<Variation, float>(variationBottomLeft, weight));
             }
 
-            if (_variationByGridIndex.TryGetValue((gridPosBelowMouse + new GridPos(1, 1)).GridIndex, out var variationBottomRight))
+            if (_variationByGridIndex.TryGetValue((cellBelowMouse + new GridCell(1, 1)).GridIndex, out var variationBottomRight))
             {
                 var weight = xWeight * yWeight;
                 neighbours.Add(new Tuple<Variation, float>(variationBottomRight, weight));
@@ -343,19 +343,19 @@ namespace T3.Gui.Windows.Variations
             return Variation.Mix(_variationWindow.VariationParameters, neighbours, 0);
         }
 
-        private Variation CreateVariationAtGridPos(GridPos pos)
+        private Variation CreateVariationForCell(GridCell cell)
         {
             // Collect neighbours
             var neighboursAndWeights = new List<Tuple<Variation, float>>();
             foreach (var nOffset in NeighbourOffsets)
             {
-                var neighbourPos = pos + nOffset;
+                var neighbourCell = cell + nOffset;
 
-                if (_variationByGridIndex.TryGetValue(neighbourPos.GridIndex, out var neighbour))
+                if (_variationByGridIndex.TryGetValue(neighbourCell.GridIndex, out var neighbour))
                     neighboursAndWeights.Add(new Tuple<Variation, float>(neighbour, 1));
             }
 
-            return Variation.Mix(_variationWindow.VariationParameters, neighboursAndWeights, Scatter, pos);
+            return Variation.Mix(_variationWindow.VariationParameters, neighboursAndWeights, Scatter, cell);
         }
 
 
@@ -363,7 +363,7 @@ namespace T3.Gui.Windows.Variations
         {
             variation.ThumbnailNeedsUpdate = false;
 
-            var screenRect = GetGridPosScreenRect(variation.GridPos);
+            var screenRect = GetScreenRectForCell(variation.GridCell);
             var posInCanvasTexture = screenRect.Min - WindowPos;
 
             // Set variation values
@@ -398,8 +398,8 @@ namespace T3.Gui.Windows.Variations
         }
         
         private const float HoverEdgeBlendFactor = 0.5f;
-        private static readonly GridPos[] SortedOffset = GridPos.BuildSortedOffsets();
-        private static readonly GridPos GridCenter = GridPos.Center;
+        private static readonly GridCell[] SortedOffset = GridCell.BuildSortedOffsets();
+        private static readonly GridCell GridCenter = GridCell.Center;
         private float _lastScale;
         private Vector2 _lastScroll = Vector2.One;
 
@@ -407,7 +407,7 @@ namespace T3.Gui.Windows.Variations
         private static readonly Vector2 ThumbnailSize = new Vector2(160, 160 / 16f * 9);
         private static readonly Color NeedsUpdateColor = new Color(1f, 1f, 1f, 0.05f);
         private readonly Dictionary<int, Variation> _variationByGridIndex = new Dictionary<int, Variation>();
-        private GridPos _gridFocusIndex = GridCenter;
+        private GridCell _gridFocusIndex = GridCenter;
         private int _currentOffsetIndexForFocus;
         private bool _updateCompleted;
 
@@ -420,16 +420,16 @@ namespace T3.Gui.Windows.Variations
         private readonly VariationWindow _variationWindow;
         private Variation _hoveringVariation;
 
-        private static readonly GridPos[] NeighbourOffsets =
+        private static readonly GridCell[] NeighbourOffsets =
         {
-            new GridPos(-1, -1),
-            new GridPos(0, -1),
-            new GridPos(1, -1),
-            new GridPos(1, 0),
-            new GridPos(1, 1),
-            new GridPos(0, 1),
-            new GridPos(-1, 1),
-            new GridPos(-1, 0),
+            new GridCell(-1, -1),
+            new GridCell(0, -1),
+            new GridCell(1, -1),
+            new GridCell(1, 0),
+            new GridCell(1, 1),
+            new GridCell(0, 1),
+            new GridCell(-1, 1),
+            new GridCell(-1, 0),
         };
 
 

@@ -423,7 +423,7 @@
     <Compile Include="Gui\Windows\TimeLine\TimeRaster.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeRasterSwitcher.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeSelectionFence.cs" />
-    <Compile Include="Gui\Windows\Variations\GridPos.cs" />
+    <Compile Include="Gui\Windows\Variations\GridCell.cs" />
     <Compile Include="Gui\Windows\Variations\Variation.cs" />
     <Compile Include="Gui\Windows\Variations\VariationCanvas.cs" />
     <Compile Include="Gui\Windows\Variations\VariationWindow.cs" />

@@ -3,25 +3,25 @@ using SharpDX;
 
 namespace T3.Gui.Windows.Variations
 {
-    public struct GridPos
+    public struct GridCell
     {
         public int X;
         public int Y;
 
-        public GridPos(int x, int y)
+        public GridCell(int x, int y)
         {
             X = x;
             Y = y;
         }
 
-        public static GridPos operator +(GridPos a, GridPos b)
+        public static GridCell operator +(GridCell a, GridCell b)
         {
-            return new GridPos(a.X + b.X, a.Y + b.Y);
+            return new GridCell(a.X + b.X, a.Y + b.Y);
         }
 
-        public static GridPos operator +(GridPos a, Size2 b)
+        public static GridCell operator +(GridCell a, Size2 b)
         {
-            return new GridPos(a.X + b.Width, a.Y + b.Height);
+            return new GridCell(a.X + b.Width, a.Y + b.Height);
         }
 
         public bool IsWithinGrid()
@@ -29,14 +29,14 @@ namespace T3.Gui.Windows.Variations
             return X > 0 && X < VariationGridSize && Y > 0 && Y < VariationGridSize;
         }
             
-        public static GridPos[] BuildSortedOffsets()
+        public static GridCell[] BuildSortedOffsets()
         {
-            var offsets = new List<GridPos>();
+            var offsets = new List<GridCell>();
             for (var x = -VariationGridSize; x < VariationGridSize; x++)
             {
                 for (var y = -VariationGridSize; y < VariationGridSize; y++)
                 {
-                    offsets.Add(new GridPos(x, y));
+                    offsets.Add(new GridCell(x, y));
                 }
             }
 
@@ -48,7 +48,7 @@ namespace T3.Gui.Windows.Variations
 
 
         public int GridIndex => Y * VariationGridSize + X;
-        public static GridPos Center = new GridPos(VariationGridSize / 2, VariationGridSize / 2);
+        public static GridCell Center = new GridCell(VariationGridSize / 2, VariationGridSize / 2);
         public const int VariationGridSize = 100;
     }
 }
