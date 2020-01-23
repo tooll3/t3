@@ -14,8 +14,6 @@ using T3.Gui.Selection;
 using T3.Gui.Windows.Output;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
-using Vector3 = System.Numerics.Vector3;
-using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Gui.Windows.Variations
 {
@@ -24,7 +22,7 @@ namespace T3.Gui.Windows.Variations
         public VariationCanvas(VariationWindow variationWindow)
         {
             var extend = new Vector2(3, 3);
-            var center = new Vector2(VariationGridSize / 2f, VariationGridSize / 2f);
+            var center = new Vector2(GridPos.VariationGridSize / 2f, GridPos.VariationGridSize / 2f);
             var left = (center - extend) * ThumbnailSize;
             var right = (center + extend) * ThumbnailSize;
             ZoomSpeed = 20000;
@@ -94,7 +92,7 @@ namespace T3.Gui.Windows.Variations
                 var screenRect = GetGridPosScreenRect(variation.GridPos);
                 if (variation.ThumbnailNeedsUpdate)
                 {
-                    drawlist.AddRectFilled(screenRect.Min, screenRect.Max, _needsUpdateColor);
+                    drawlist.AddRectFilled(screenRect.Min, screenRect.Max, NeedsUpdateColor);
                 }
                 else
                 {
@@ -112,6 +110,7 @@ namespace T3.Gui.Windows.Variations
                     //variation.ApplyValues();
                     hoverVariation.ApplyValues();
                 }
+
                 _hoveringVariation = variation;
             }
             else
@@ -122,10 +121,7 @@ namespace T3.Gui.Windows.Variations
                     _hoveringVariation = null;
                 }
             }
-
-            
         }
-
 
         private void InitializeCanvasTexture()
         {
@@ -242,7 +238,7 @@ namespace T3.Gui.Windows.Variations
             {
                 var offset = SortedOffset[_currentOffsetIndexForFocus++];
                 var gridPos = _gridFocusIndex + offset;
-                if (!gridPos.IsWithinGrid(VariationGridSize))
+                if (!gridPos.IsWithinGrid())
                     continue;
 
                 if (!IsGridPosVisible(gridPos))
@@ -280,7 +276,6 @@ namespace T3.Gui.Windows.Variations
             _variationByGridIndex.Clear();
         }
 
-        private const float HoverEdgeBlendFactor = 0.5f;
 
         private Variation CreateVariationAtMouseMouse()
         {
@@ -290,7 +285,7 @@ namespace T3.Gui.Windows.Variations
             var posInCell = mousePos - region.Min;
 
             var cellSize = region.GetSize();
-            var halfSize = region.GetSize()/2;
+            var halfSize = region.GetSize() / 2;
 
             posInCell -= halfSize;
             if (posInCell.X < 0)
@@ -312,184 +307,57 @@ namespace T3.Gui.Windows.Variations
             {
                 posInCell.Y -= halfSize.Y;
             }
-            
-            ImGui.GetForegroundDrawList().AddRect(region.Min , region.Max, Color.Orange);
+
+            ImGui.GetForegroundDrawList().AddRect(region.Min, region.Max, Color.Orange);
 
             var clamp = cellSize / 2f * HoverEdgeBlendFactor;
-            var xWeight = posInCell.X.Clamp(-clamp.X, clamp.X)/clamp.X/2+0.5f;
-            var yWeight = posInCell.Y.Clamp(-clamp.Y, clamp.Y)/clamp.Y/2+0.5f;
-            
-            
+            var xWeight = posInCell.X.Clamp(-clamp.X, clamp.X) / clamp.X / 2 + 0.5f;
+            var yWeight = posInCell.Y.Clamp(-clamp.Y, clamp.Y) / clamp.Y / 2 + 0.5f;
+
             var neighbours = new List<Tuple<Variation, float>>();
 
             if (_variationByGridIndex.TryGetValue(gridPosBelowMouse.GridIndex, out var variationTopLeft))
             {
                 var weight = (1 - xWeight) * (1 - yWeight);
                 neighbours.Add(new Tuple<Variation, float>(variationTopLeft, weight));
-            } 
+            }
 
-            if (_variationByGridIndex.TryGetValue((gridPosBelowMouse + new GridPos(1,0)).GridIndex, out var variationTopRight))
+            if (_variationByGridIndex.TryGetValue((gridPosBelowMouse + new GridPos(1, 0)).GridIndex, out var variationTopRight))
             {
                 var weight = xWeight * (1 - yWeight);
                 neighbours.Add(new Tuple<Variation, float>(variationTopRight, weight));
-            } 
+            }
 
-            if (_variationByGridIndex.TryGetValue((gridPosBelowMouse + new GridPos(0,1)).GridIndex, out var variationBottomLeft))
+            if (_variationByGridIndex.TryGetValue((gridPosBelowMouse + new GridPos(0, 1)).GridIndex, out var variationBottomLeft))
             {
-                var weight = (1-xWeight) * yWeight;
+                var weight = (1 - xWeight) * yWeight;
                 neighbours.Add(new Tuple<Variation, float>(variationBottomLeft, weight));
-            } 
-            
-            if (_variationByGridIndex.TryGetValue((gridPosBelowMouse + new GridPos(1,1)).GridIndex, out var variationBottomRight))
+            }
+
+            if (_variationByGridIndex.TryGetValue((gridPosBelowMouse + new GridPos(1, 1)).GridIndex, out var variationBottomRight))
             {
                 var weight = xWeight * yWeight;
                 neighbours.Add(new Tuple<Variation, float>(variationBottomRight, weight));
             }
-            
-            return MixVariations(neighbours, 0);
+
+            return Variation.Mix(_variationWindow.VariationParameters, neighbours, 0);
         }
 
         private Variation CreateVariationAtGridPos(GridPos pos)
         {
             // Collect neighbours
             var neighboursAndWeights = new List<Tuple<Variation, float>>();
-            foreach (var nOffset in _neighbourOffsets)
+            foreach (var nOffset in NeighbourOffsets)
             {
                 var neighbourPos = pos + nOffset;
 
                 if (_variationByGridIndex.TryGetValue(neighbourPos.GridIndex, out var neighbour))
                     neighboursAndWeights.Add(new Tuple<Variation, float>(neighbour, 1));
             }
-            return MixVariations(neighboursAndWeights, Scatter,pos);
+
+            return Variation.Mix(_variationWindow.VariationParameters, neighboursAndWeights, Scatter, pos);
         }
 
-        
-        private Variation MixVariations(List<Tuple<Variation, float>> neighboursAndWeights, float scatter, GridPos pos= new GridPos())
-        {
-            // Collect neighbours
-            var newVariation = new Variation(pos);
-            var useDefault = (neighboursAndWeights.Count == 0);
-
-            foreach (var param in _variationWindow.VariationParameters)
-            {
-                if (useDefault)
-                {
-                    if (param.OriginalValue is InputValue<float> value)
-                    {
-                        newVariation.ValuesForParameters.Add(param, value.Value);
-                    }
-                    else if (param.OriginalValue is InputValue<Vector2> vec2Value)
-                    {
-                        newVariation.ValuesForParameters.Add(param, vec2Value.Value);
-                    }
-                    else if (param.OriginalValue is InputValue<Vector3> vec3Value)
-                    {
-                        newVariation.ValuesForParameters.Add(param, vec3Value.Value);
-                    }
-                    else if (param.OriginalValue is InputValue<Vector4> vec4Value)
-                    {
-                        newVariation.ValuesForParameters.Add(param, vec4Value.Value);
-                    }
-
-                    continue;
-                }
-
-                if (param.Type == typeof(float))
-                {
-                    var value = 0f;
-                    var sumWeight = 0f;
-                    foreach (var neighbour in neighboursAndWeights)
-                    {
-                        value += (float)neighbour.Item1.ValuesForParameters[param] * neighbour.Item2;
-                        sumWeight += neighbour.Item2;
-                    }
-
-                    value *= 1f / sumWeight + ((float)_random.NextDouble() - 0.5f) * scatter;
-                    value += _random.NextFloat(-scatter, scatter);
-                    newVariation.ValuesForParameters.Add(param, value);
-                }
-
-                if (param.Type == typeof(Vector2))
-                {
-                    var value = Vector2.Zero;
-                    var sumWeight = 0f;
-                    foreach (var neighbour in neighboursAndWeights)
-                    {
-                        value += (Vector2)neighbour.Item1.ValuesForParameters[param] * neighbour.Item2;
-                        sumWeight += neighbour.Item2;
-                    }
-
-                    value *= 1f / sumWeight;
-                    value += new Vector2(
-                                         _random.NextFloat(-scatter, scatter),
-                                         _random.NextFloat(-scatter, scatter)
-                                        );
-
-                    newVariation.ValuesForParameters.Add(param, value);
-                }
-
-                if (param.Type == typeof(Vector3))
-                {
-                    var value = Vector3.Zero;
-                    var sumWeight = 0f;
-                    
-                    foreach (var neighbour in neighboursAndWeights)
-                    {
-                        value += (Vector3)neighbour.Item1.ValuesForParameters[param] * neighbour.Item2;
-                        sumWeight += neighbour.Item2;
-                    }
-
-                    value *= 1f / sumWeight;
-                    value += new Vector3(
-                                         _random.NextFloat(-scatter, scatter),
-                                         _random.NextFloat(-scatter, scatter),
-                                         _random.NextFloat(-scatter, scatter)
-                                        );
-
-                    newVariation.ValuesForParameters.Add(param, value);
-                }
-
-                if (param.Type == typeof(Vector4))
-                {
-                    var value = Vector4.Zero;
-                    var sumWeight = 0f;
-                    foreach (var neighbour in neighboursAndWeights)
-                    {
-                        value += (Vector4)neighbour.Item1.ValuesForParameters[param] * neighbour.Item2;
-                        sumWeight += neighbour.Item2;
-                    }
-
-                    value *= 1f / sumWeight;
-                    value += new Vector4(
-                                         _random.NextFloat(-scatter, scatter),
-                                         _random.NextFloat(-scatter, scatter),
-                                         _random.NextFloat(-scatter, scatter),
-                                         _random.NextFloat(-scatter, scatter)
-                                        );
-
-                    newVariation.ValuesForParameters.Add(param, value);
-                }
-            }
-
-            return newVariation;
-        }
-
-        private static GridPos[] BuildSortedOffsets()
-        {
-            var offsets = new List<GridPos>();
-            for (var x = -VariationGridSize; x < VariationGridSize; x++)
-            {
-                for (var y = -VariationGridSize; y < VariationGridSize; y++)
-                {
-                    offsets.Add(new GridPos(x, y));
-                }
-            }
-
-            offsets.Sort((a, b) => (a.X * a.X + a.Y * a.Y)
-                                   - (b.X * b.X + b.Y * b.Y));
-
-            return offsets.ToArray();
-        }
 
         private void RenderThumbnail(Variation variation)
         {
@@ -503,7 +371,7 @@ namespace T3.Gui.Windows.Variations
 
             // Render variation
             EvaluationContext.Reset();
-            EvaluationContext.BeatTime = 0;
+            EvaluationContext.BeatTime = 13.4f;
             _variationWindow.OutputUi.DrawValue(_firstOutputSlot, EvaluationContext);
 
             // Setup graphics pipeline for rendering into the canvas texture
@@ -528,15 +396,16 @@ namespace T3.Gui.Windows.Variations
             // Restore values
             variation.RestoreValues();
         }
-
-        private static readonly GridPos[] SortedOffset = BuildSortedOffsets();
-        private static readonly GridPos GridCenter = new GridPos(VariationGridSize / 2, VariationGridSize / 2);
+        
+        private const float HoverEdgeBlendFactor = 0.5f;
+        private static readonly GridPos[] SortedOffset = GridPos.BuildSortedOffsets();
+        private static readonly GridPos GridCenter = GridPos.Center;
         private float _lastScale;
         private Vector2 _lastScroll = Vector2.One;
 
         public override IEnumerable<ISelectableNode> SelectableChildren { get; } = new List<ISelectableNode>();
         private static readonly Vector2 ThumbnailSize = new Vector2(160, 160 / 16f * 9);
-        private readonly Color _needsUpdateColor = new Color(1f, 1f, 1f, 0.05f);
+        private static readonly Color NeedsUpdateColor = new Color(1f, 1f, 1f, 0.05f);
         private readonly Dictionary<int, Variation> _variationByGridIndex = new Dictionary<int, Variation>();
         private GridPos _gridFocusIndex = GridCenter;
         private int _currentOffsetIndexForFocus;
@@ -550,8 +419,8 @@ namespace T3.Gui.Windows.Variations
         private RenderTargetView _canvasTextureRtv;
         private readonly VariationWindow _variationWindow;
         private Variation _hoveringVariation;
-        
-        private readonly GridPos[] _neighbourOffsets =
+
+        private static readonly GridPos[] NeighbourOffsets =
         {
             new GridPos(-1, -1),
             new GridPos(0, -1),
@@ -563,7 +432,7 @@ namespace T3.Gui.Windows.Variations
             new GridPos(-1, 0),
         };
 
-        private readonly Random _random = new Random();
+
         public float Scatter = 0.5f;
         private float _lastScatter;
 
@@ -572,81 +441,6 @@ namespace T3.Gui.Windows.Variations
                                                                           RequestedResolution = new Size2((int)ThumbnailSize.X, (int)ThumbnailSize.Y)
                                                                       };
 
-        private const int VariationGridSize = 100;
-
-        public struct GridPos
-        {
-            public int X;
-            public int Y;
-
-            public GridPos(int x, int y)
-            {
-                X = x;
-                Y = y;
-            }
-
-            public static GridPos operator +(GridPos a, GridPos b)
-            {
-                return new GridPos(a.X + b.X, a.Y + b.Y);
-            }
-
-            public static GridPos operator +(GridPos a, Size2 b)
-            {
-                return new GridPos(a.X + b.Width, a.Y + b.Height);
-            }
-
-            public bool IsWithinGrid(int gridSize)
-            {
-                return X > 0 && X < gridSize && Y > 0 && Y < gridSize;
-            }
-
-            public int GridIndex => Y * VariationGridSize + X;
-        }
-
-        private class Variation
-        {
-            public readonly GridPos GridPos;
-            public bool ThumbnailNeedsUpdate;
-
-            public Variation(GridPos pos)
-            {
-                GridPos = pos;
-                ThumbnailNeedsUpdate = true;
-            }
-
-            public readonly Dictionary<VariationWindow.VariationParameter, object> ValuesForParameters =
-                new Dictionary<VariationWindow.VariationParameter, object>();
-
-            public void ApplyValues()
-            {
-                foreach (var (param, value) in ValuesForParameters)
-                {
-                    switch (param.InputSlot)
-                    {
-                        case InputSlot<float> floatInput:
-                            floatInput.SetTypedInputValue((float)value);
-                            break;
-                        case InputSlot<Vector2> vec2Input:
-                            vec2Input.SetTypedInputValue((Vector2)value);
-                            break;
-                        case InputSlot<Vector3> vec3Input:
-                            vec3Input.SetTypedInputValue((Vector3)value);
-                            break;
-                        case InputSlot<Vector4> vec4Input:
-                            vec4Input.SetTypedInputValue((Vector4)value);
-                            break;
-                    }
-                }
-            }
-
-            public void RestoreValues()
-            {
-                foreach (var param in ValuesForParameters.Keys)
-                {
-                    param.Input.Value.Assign(param.OriginalValue);
-                    param.InputSlot.DirtyFlag.Invalidate();
-                }
-            }
-        }
+        
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
-using T3.Core.Operator;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -25,17 +23,9 @@ namespace T3.Gui.Windows.Variations
             Config.Visible = true;
         }
 
-        internal readonly List<VariationParameter> VariationParameters = new List<VariationParameter>();
+        internal readonly List<Variation.VariationParameter> VariationParameters = new List<Variation.VariationParameter>();
 
-        internal class VariationParameter
-        {
-            public SymbolChildUi SymbolChildUi;
-            public IInputSlot InputSlot { get; set; }
-            public InputValue OriginalValue { get; set; }
-            public SymbolChild.Input Input;
-            public Type Type;
-            public float Strength = 1;
-        }
+
 
         protected override void DrawContent()
         {
@@ -84,7 +74,7 @@ namespace T3.Gui.Windows.Variations
                                     var instance = SelectionManager.GetInstanceForSymbolChildUi(symbolChildUi);
                                     var inputSlot = instance.Inputs.Single(input2 => input2.Id == input.InputDefinition.Id);
                                     
-                                    VariationParameters.Add(new VariationParameter()
+                                    VariationParameters.Add(new Variation.VariationParameter()
                                                              {
                                                                  SymbolChildUi =  symbolChildUi,
                                                                  Input = input,
