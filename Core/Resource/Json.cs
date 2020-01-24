@@ -173,7 +173,7 @@ namespace T3.Core
             return ReadSymbol(model, o);
         }
 
-        public Symbol ReadSymbol(Model model, JToken o)
+        public Symbol ReadSymbol(Model model, JToken o, bool allowNonOperatorInstanceType = false)
         {
             var id = Guid.Parse(o["Id"].Value<string>());
             if (SymbolRegistry.Entries.ContainsKey(id))
@@ -200,7 +200,10 @@ namespace T3.Core
             Type instanceType = Type.GetType(instanceTypeName);
             if (instanceType == null)
             {
-                throw new Exception($"The type for '{instanceTypeName}' could not be found in Operator assembly.");
+                if (allowNonOperatorInstanceType)
+                    instanceType = typeof(object);
+                else
+                    throw new Exception($"The type for '{instanceTypeName}' could not be found in Operator assembly.");
             }
 
             var symbol = new Symbol(instanceType, id, orderedInputIds, symbolChildren)

@@ -475,7 +475,7 @@ namespace T3.Gui.Graph
                         return;
 
                     var symbolJson = o[0];
-                    var containerSymbol = json.ReadSymbol(null, symbolJson);
+                    var containerSymbol = json.ReadSymbol(null, symbolJson, true);
                     SymbolRegistry.Entries.Add(containerSymbol.Id, containerSymbol);
 
                     var symbolUiJson = o[1];
