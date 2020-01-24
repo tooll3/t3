@@ -456,6 +456,39 @@ namespace T3.Gui.Graph.Interaction
             return newSymbol;
         }
 
+        public static void RenameSymbol(Symbol symbol, string newName)
+        {
+            var syntaxTree = GetSyntaxTree(symbol);
+            if (syntaxTree == null)
+            {
+                Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
+                return;
+            }
+
+            // create new source on basis of original type
+            var root = syntaxTree.GetRoot();
+            var classRenamer = new ClassRenameRewriter(newName);
+            root = classRenamer.Visit(root);
+            var memberRewriter = new MemberDuplicateRewriter(newName);
+            root = memberRewriter.Visit(root);
+            var newSource = root.GetText().ToString();
+            Log.Debug(newSource);
+
+            var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName);
+            if (newAssembly == null)
+            {
+                Log.Error("Error compiling duplicated type, aborting duplication.");
+                return;
+            }
+            
+            Type type = newAssembly.ExportedTypes.FirstOrDefault();
+            if (type == null)
+            {
+                Log.Error("Error, new symbol has no compiled instance type");
+                return;
+            }
+        }
+
         public static SymbolChildUi CreateInstance(Symbol symbol, Symbol parent, Vector2 positionOnCanvas)
         {
             var addCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = positionOnCanvas };

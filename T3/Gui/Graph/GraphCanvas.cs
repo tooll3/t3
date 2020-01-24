@@ -327,6 +327,11 @@ namespace T3.Gui.Graph
                              DeleteSelectedElements();
                          }
 
+                         if (ImGui.MenuItem("Rename", oneElementSelected))
+                         {
+                             NodeOperations.RenameSymbol(selectedChildUis[0].SymbolChild.Symbol, "NewName");
+                         }
+
                          if (ImGui.MenuItem("Duplicate as new type", oneElementSelected))
                          {
                              _combineName = selectedChildUis[0].SymbolChild.Symbol.Name;
