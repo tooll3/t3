@@ -98,19 +98,22 @@ namespace T3.Gui.Windows.Variations
 
             if (ImGui.IsWindowHovered())
             {
-                var cellUnderMouse = GetScreenRectForGridCell(ImGui.GetMousePos());
-                if (_variationByGridIndex.TryGetValue(cellUnderMouse.GridIndex, out var variation))
+                _hoveringVariation?.RestoreValues();
+
+                _hoveringVariation = CreateVariationAtMouseMouse();
+
+                if (_hoveringVariation != null)
                 {
-                    var hoverVariation = CreateVariationAtMouseMouse();
-                    hoverVariation.ApplyValues();
                     if (ImGui.IsMouseReleased(0))
                     {
-                        Log.Debug("Clicked!");
-                        _variationWindow.SaveVariation(hoverVariation);
+                        _hoveringVariation.RestoreValues();
+                        var savedVariation = _hoveringVariation.Clone();
+                        _variationWindow.SaveVariation(savedVariation);
+                        savedVariation.ApplyPermanently();
+                        _hoveringVariation.UpdateUndoCommand();
                     }
+                    _hoveringVariation.ApplyValues();
                 }
-
-                _hoveringVariation = variation;
             }
             else
             {
@@ -265,12 +268,8 @@ namespace T3.Gui.Windows.Variations
                 else
                 {
                     variation = CreateVariationForCell(cell);
-                    // if (variation.ValuesForParameters.Count > 0)
-                    // {
                     RenderThumbnail(variation);
                     _variationByGridIndex[cell.GridIndex] = variation;
-                    // }
-
                     return;
                 }
             }
@@ -396,6 +395,8 @@ namespace T3.Gui.Windows.Variations
             // Restore values
             variation.RestoreValues();
         }
+
+        public IEnumerable<Variation> AllVariations => _variationByGridIndex.Values;
 
         private const float HoverEdgeBlendFactor = 0.5f;
         private static readonly GridCell[] SortedOffset = GridCell.BuildSortedOffsets();

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
@@ -85,7 +84,7 @@ namespace T3.Gui.Windows.Variations
                                                                 InstanceIdPath = NodeOperations.BuildIdPathForInstance(instance),
                                                                 Type = p.ValueType,
                                                                 InputSlot = inputSlot,
-                                                                OriginalValue = inputSlot.Input.Value.Clone(),
+                                                                //OriginalValue = inputSlot.Input.Value.Clone(),
                                                                 Strength = 1,
                                                             });
                                 }
@@ -106,12 +105,17 @@ namespace T3.Gui.Windows.Variations
                 ImGui.Text("Favs");
                 ImGui.PopFont();
 
-                if (_compositionSymbolId != Guid.Empty && VariationsForSymbols.TryGetValue(_compositionSymbolId, out var favorites))
+                if (_compositionSymbolId != Guid.Empty && _variationsForSymbols.TryGetValue(_compositionSymbolId, out var favorites))
                 {
                     foreach (var fav in favorites)
                     {
                         ImGui.PushID(fav.GridCell.GridIndex);
-                        ImGui.Selectable("fav");
+                        if (ImGui.Selectable("fav"))
+                        {
+                            fav.ApplyPermanently();
+                            _hoveredVariation = null;
+                        }
+                        
                         if (ImGui.IsItemHovered())
                         {
                             if (_hoveredVariation == null)
@@ -133,7 +137,8 @@ namespace T3.Gui.Windows.Variations
                         }
                         else
                         {
-                            if (_hoveredVariation == fav)
+                            var noLongerHovered = _hoveredVariation == fav;
+                            if (noLongerHovered)
                             {
                                 _hoveredVariation.RestoreValues();
                                 _hoveredVariation = null;
@@ -155,7 +160,6 @@ namespace T3.Gui.Windows.Variations
             ImGui.EndChild();
         }
 
-        private Variation _hoveredVariation;
 
         public override List<Window> GetInstances()
         {
@@ -164,21 +168,23 @@ namespace T3.Gui.Windows.Variations
 
         public void SaveVariation(Variation variation)
         {
-            if (VariationsForSymbols.TryGetValue(_compositionSymbolId, out var list))
+            if (_variationsForSymbols.TryGetValue(_compositionSymbolId, out var list))
             {
-                list.Add(variation.Clone());
+                list.Add(variation);
             }
             else
             {
-                VariationsForSymbols[_compositionSymbolId] = new List<Variation> { variation };
+                _variationsForSymbols[_compositionSymbolId] = new List<Variation> { variation };
             }
         }
 
-        public IOutputUi OutputUi;
 
+        public IOutputUi OutputUi;
+        private readonly Dictionary<Guid, List<Variation>> _variationsForSymbols = new Dictionary<Guid, List<Variation>>();
+        
+        private Variation _hoveredVariation;
         private readonly VariationCanvas _variationCanvas;
         private static readonly Vector2 Spacing = new Vector2(1, 5);
         internal readonly List<Variation.VariationParameter> VariationParameters = new List<Variation.VariationParameter>();
-        internal readonly Dictionary<Guid, List<Variation>> VariationsForSymbols = new Dictionary<Guid, List<Variation>>();
     }
 }
