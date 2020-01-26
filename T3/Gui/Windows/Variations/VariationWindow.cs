@@ -46,7 +46,7 @@ namespace T3.Gui.Windows.Variations
             {
                 ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.01f, 0, 3);
                 _compositionSymbolId = SelectionManager.GetCompositionForSelection()?.SymbolChildId ?? Guid.Empty;
-                
+
                 var selectedSymbolChildUis = SelectionManager.GetSelectedSymbolChildUis();
 
                 // Remove no longer selected parameters
@@ -127,35 +127,29 @@ namespace T3.Gui.Windows.Variations
                     foreach (var variation in savedForComposition)
                     {
                         var isMatching = CheckFavoriteMatchesNodeSelection(variation);
-                        ImGui.PushStyleColor(ImGuiCol.Text, isMatching ? Color.Gray.Rgba : _nonMatchingVarationsColor);
+                        ImGui.PushStyleColor(ImGuiCol.Text, isMatching ? Color.Gray.Rgba : NonMatchingVarationsColor);
                         ImGui.PushID(variation.GetHashCode());
                         {
-                            if (CustomComponents.IconButton(Icon.Pin, "selection", new Vector2(16, 16)))
+                            var isSelected = _blendedVariations.Contains(variation);
+                            if (CustomComponents.IconButton(isSelected ? Icon.ChevronRight : Icon.Pin, "selection", new Vector2(16, 16)))
                             {
-                                
-                            }
-                            ImGui.SameLine();
-                            
-                            if (ImGui.Selectable(variation.Title, false,0, new Vector2(ImGui.GetWindowWidth() -32,0)))
-                            {
-                                variation.ApplyPermanently();
-                                variation.UpdateUndoCommand();
-
-                                // Select relevant operators
-                                SelectionManager.Clear();
-                                VariationParameters.Clear();
-                                
-                                var alreadyAdded = new HashSet<SymbolChildUi>();
-                                foreach (var param in variation.ValuesForParameters.Keys.Distinct())
+                                if (isSelected)
                                 {
-                                    VariationParameters.Add(param);
-                                    if (!alreadyAdded.Contains(param.SymbolChildUi))
-                                    {
-                                        SelectionManager.AddSelection(param.SymbolChildUi, NodeOperations.GetInstanceFromIdPath(param.InstanceIdPath));
-                                        alreadyAdded.Add(param.SymbolChildUi);
-                                    }
+                                    _blendedVariations.Remove(variation);
                                 }
-                                _variationCanvas.ClearVariations();
+                                else
+                                {
+                                    _blendedVariations.Add(variation);
+                                }
+
+                                LayoutBlendedVariations();
+                            }
+
+                            ImGui.SameLine();
+
+                            if (ImGui.Selectable(variation.Title, false, 0, new Vector2(ImGui.GetWindowWidth() - 32, 0)))
+                            {
+                                SelectVariation(variation);
                             }
 
                             if (ImGui.IsItemHovered())
@@ -187,6 +181,7 @@ namespace T3.Gui.Windows.Variations
                                     _lastHoveredVariation = null;
                                 }
                             }
+
                             ImGui.SameLine();
 
                             // Delete button
@@ -217,6 +212,85 @@ namespace T3.Gui.Windows.Variations
             ImGui.EndChild();
         }
 
+        private void LayoutBlendedVariations()
+        {
+            _variationCanvas.ClearVariations();
+            _variationCanvas.ResetView();
+
+            // Merge parameter list
+            var parameters = new List<Variation.VariationParameter>();
+            foreach (var variation in _blendedVariations)
+            {
+                foreach (var param in variation.ValuesForParameters.Keys)
+                {
+                    if (!parameters.Contains(param))
+                        parameters.Add(param);
+                }
+            }
+
+            const int steps = 7;
+            if (_blendedVariations.Count == 2)
+            {
+                for (int stepY = 0; stepY <= steps; stepY++)
+                {
+                    var ty = (float)stepY / steps;
+                    var inputVariationsAndWeights = new List<Tuple<Variation, float>>()
+                                                    {
+                                                        new Tuple<Variation, float>(_blendedVariations[0], 1 - ty),
+                                                        new Tuple<Variation, float>(_blendedVariations[1], ty),
+                                                    };
+                    var newVariation = Variation.Mix(parameters, inputVariationsAndWeights, 0, GridCell.Center + new GridCell(0, stepY - steps / 2));
+                    _variationCanvas.AddVariationToGrid(newVariation);
+                }
+            }
+            else if (_blendedVariations.Count == 3)
+            {
+                for (int stepY = 0; stepY <= steps; stepY++)
+                {
+                    for (int stepX = 0; stepX <= steps; stepX++)
+                    {
+                        var tx = (float)stepX / steps;
+                        var ty = (float)stepY / steps;
+                        var inputVariationsAndWeights = new List<Tuple<Variation, float>>()
+                                                        {
+                                                            new Tuple<Variation, float>(_blendedVariations[0], (1 - tx) * (1 - ty)),
+                                                            new Tuple<Variation, float>(_blendedVariations[1], (1 - tx) * (ty)),
+                                                            new Tuple<Variation, float>(_blendedVariations[2], (tx) * (ty)),
+                                                        };
+
+                        var gridCell = GridCell.Center + new GridCell(stepX - steps/2, stepY - steps / 2);
+                        var newVariation = Variation.Mix(parameters, inputVariationsAndWeights, 0, gridCell);
+                        _variationCanvas.AddVariationToGrid(newVariation);
+                    }
+                }
+            }
+        }
+
+        private void SelectVariation(Variation variation)
+        {
+            variation.ApplyPermanently();
+            variation.UpdateUndoCommand();
+
+            // Select variation
+            SelectionManager.Clear();
+            VariationParameters.Clear();
+
+            var alreadyAdded = new HashSet<SymbolChildUi>();
+            foreach (var param in variation.ValuesForParameters.Keys.Distinct())
+            {
+                VariationParameters.Add(param);
+                if (!alreadyAdded.Contains(param.SymbolChildUi))
+                {
+                    SelectionManager.AddSelection(param.SymbolChildUi, NodeOperations.GetInstanceFromIdPath(param.InstanceIdPath));
+                    alreadyAdded.Add(param.SymbolChildUi);
+                }
+            }
+
+            _variationCanvas.ClearVariations();
+        }
+
+        private List<Variation> _blendedVariations = new List<Variation>();
+
         public override List<Window> GetInstances()
         {
             return new List<Window>();
@@ -224,8 +298,8 @@ namespace T3.Gui.Windows.Variations
 
         public void SaveVariation(Variation variation)
         {
-            SavedVariationIndex++;
-            variation.Title = "Untitled " + SavedVariationIndex;
+            _savedVariationIndex++;
+            variation.Title = "Untitled " + _savedVariationIndex;
             if (_variationsForSymbols.TryGetValue(_compositionSymbolId, out var list))
             {
                 list.Add(variation);
@@ -242,8 +316,8 @@ namespace T3.Gui.Windows.Variations
         private Variation _lastHoveredVariation;
         private readonly VariationCanvas _variationCanvas;
         private static readonly Vector2 Spacing = new Vector2(1, 5);
-        private static readonly Color _nonMatchingVarationsColor = new Color(0.3f);
-        private static int SavedVariationIndex = 1;
+        private static readonly Color NonMatchingVarationsColor = new Color(0.3f);
+        private static int _savedVariationIndex = 1;
         internal readonly List<Variation.VariationParameter> VariationParameters = new List<Variation.VariationParameter>();
     }
 }

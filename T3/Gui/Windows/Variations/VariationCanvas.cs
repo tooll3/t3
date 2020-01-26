@@ -22,13 +22,7 @@ namespace T3.Gui.Windows.Variations
     {
         public VariationCanvas(VariationWindow variationWindow)
         {
-            var extend = new Vector2(3, 3);
-            var center = new Vector2(GridCell.VariationGridSize / 2f, GridCell.VariationGridSize / 2f);
-            var left = (center - extend) * ThumbnailSize;
-            var right = (center + extend) * ThumbnailSize;
-            ZoomSpeed = 20000;
-
-            FitAreaOnCanvas(new ImRect(left, right));
+            ResetView();
             _variationWindow = variationWindow;
         }
 
@@ -110,6 +104,7 @@ namespace T3.Gui.Windows.Variations
                         _variationWindow.SaveVariation(savedVariation);
                         savedVariation.ApplyPermanently();
                     }
+
                     _hoveringVariation.KeepCurrentAndApplyNewValues();
                 }
             }
@@ -128,6 +123,17 @@ namespace T3.Gui.Windows.Variations
             _currentOffsetIndexForFocus = 0;
             _updateCompleted = false;
             _variationByGridIndex.Clear();
+        }
+
+        public void ResetView()
+        {
+            var extend = new Vector2(3, 3);
+            var center = new Vector2(GridCell.VariationGridSize / 2f, GridCell.VariationGridSize / 2f);
+            var left = (center - extend) * ThumbnailSize;
+            var right = (center + extend) * ThumbnailSize;
+            ZoomSpeed = 20000;
+
+            FitAreaOnCanvas(new ImRect(left, right));
         }
 
         private void InitializeCanvasTexture()
@@ -439,5 +445,10 @@ namespace T3.Gui.Windows.Variations
                                                                       {
                                                                           RequestedResolution = new Size2((int)ThumbnailSize.X, (int)ThumbnailSize.Y)
                                                                       };
+
+        public void AddVariationToGrid(Variation newVariation)
+        {
+            _variationByGridIndex[newVariation.GridCell.GridIndex] = newVariation;
+        }
     }
 }
