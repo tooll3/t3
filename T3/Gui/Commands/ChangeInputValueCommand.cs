@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 
 namespace T3.Gui.Commands
 {
@@ -36,6 +37,13 @@ namespace T3.Gui.Commands
             var input = symbolChild.InputValues[_inputId];
             input.Value.Assign(value);
             input.IsDefault = false;
+            
+            foreach (var parentInstance in inputParentSymbol.InstancesOfSymbol)
+            {
+                var instance = parentInstance.Children.Single(child => child.SymbolChildId == symbolChild.Id);
+                var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
+                inputSlot.DirtyFlag.Invalidate();
+            }
         }
 
         public InputValue OriginalValue { get; set; }
