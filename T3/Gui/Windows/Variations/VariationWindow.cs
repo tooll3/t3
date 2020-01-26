@@ -46,8 +46,20 @@ namespace T3.Gui.Windows.Variations
             {
                 ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.01f, 0, 3);
                 _compositionSymbolId = SelectionManager.GetCompositionForSelection()?.SymbolChildId ?? Guid.Empty;
+                
+                var selectedSymbolChildUis = SelectionManager.GetSelectedSymbolChildUis();
 
-                foreach (var symbolChildUi in SelectionManager.GetSelectedSymbolChildUis())
+                // Remove no longer selected parameters
+                var symbolChildUis = selectedSymbolChildUis as SymbolChildUi[] ?? selectedSymbolChildUis.ToArray();
+                for (var index = VariationParameters.Count - 1; index >= 0; index--)
+                {
+                    if (!symbolChildUis.Contains(VariationParameters[index].SymbolChildUi))
+                    {
+                        VariationParameters.RemoveAt(index);
+                    }
+                }
+
+                foreach (var symbolChildUi in symbolChildUis)
                 {
                     ImGui.PushFont(Fonts.FontBold);
                     ImGui.Selectable(symbolChildUi.SymbolChild.ReadableName);
@@ -124,20 +136,26 @@ namespace T3.Gui.Windows.Variations
                             }
                             ImGui.SameLine();
                             
-                            //ImGui.SetNextItemWidth(ImGui.GetWindowWidth() -32);
-                            
                             if (ImGui.Selectable(variation.Title, false,0, new Vector2(ImGui.GetWindowWidth() -32,0)))
                             {
                                 variation.ApplyPermanently();
                                 variation.UpdateUndoCommand();
 
-                                // Hover relevant operators
+                                // Select relevant operators
                                 SelectionManager.Clear();
-                                foreach (var param in variation.ValuesForParameters.Keys)
+                                VariationParameters.Clear();
+                                
+                                var alreadyAdded = new HashSet<SymbolChildUi>();
+                                foreach (var param in variation.ValuesForParameters.Keys.Distinct())
                                 {
-                                    SelectionManager.AddSelection(param.SymbolChildUi, NodeOperations.GetInstanceFromIdPath(param.InstanceIdPath));
-                                    T3Ui.AddHoveredId(param.SymbolChildUi.Id);
+                                    VariationParameters.Add(param);
+                                    if (!alreadyAdded.Contains(param.SymbolChildUi))
+                                    {
+                                        SelectionManager.AddSelection(param.SymbolChildUi, NodeOperations.GetInstanceFromIdPath(param.InstanceIdPath));
+                                        alreadyAdded.Add(param.SymbolChildUi);
+                                    }
                                 }
+                                _variationCanvas.ClearVariations();
                             }
 
                             if (ImGui.IsItemHovered())
