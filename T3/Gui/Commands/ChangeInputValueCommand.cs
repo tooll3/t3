@@ -38,8 +38,8 @@ namespace T3.Gui.Commands
             input.IsDefault = false;
         }
 
-        public InputValue OriginalValue { get; }
-        public InputValue Value { get; }
+        public InputValue OriginalValue { get; set; }
+        public InputValue Value { get; set; }
 
         private readonly Guid _inputParentSymbolId;
         private readonly Guid _childId;

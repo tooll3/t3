@@ -7,6 +7,7 @@ using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Rendering;
@@ -30,8 +31,6 @@ namespace T3.Gui.Windows.Variations
             FitAreaOnCanvas(new ImRect(left, right));
             _variationWindow = variationWindow;
         }
-
-        private ISlot _firstOutputSlot;
 
         public void Draw()
         {
@@ -78,10 +77,11 @@ namespace T3.Gui.Windows.Variations
             UpdateCanvas();
             Invalidate();
 
+            var drawlist = ImGui.GetWindowDrawList();
+
             // Draw Canvas Texture
             var rectOnScreen = ImRect.RectWithSize(WindowPos, new Vector2(_canvasTexture.Description.Width, _canvasTexture.Description.Height));
 
-            var drawlist = ImGui.GetWindowDrawList();
             drawlist.AddImage((IntPtr)_canvasTextureSrv, rectOnScreen.Min, rectOnScreen.Max);
 
             foreach (var variation in _variationByGridIndex.Values)
@@ -94,11 +94,6 @@ namespace T3.Gui.Windows.Variations
                 {
                     drawlist.AddRectFilled(screenRect.Min, screenRect.Max, NeedsUpdateColor);
                 }
-                else
-                {
-                    //drawlist.AddRect(screenRect.Min, screenRect.Max, Color.Black);
-                    //drawlist.AddRectFilled(screenRect.Min, screenRect.Max, Color.Green);
-                }
             }
 
             if (ImGui.IsWindowHovered())
@@ -107,8 +102,12 @@ namespace T3.Gui.Windows.Variations
                 if (_variationByGridIndex.TryGetValue(cellUnderMouse.GridIndex, out var variation))
                 {
                     var hoverVariation = CreateVariationAtMouseMouse();
-                    //variation.ApplyValues();
                     hoverVariation.ApplyValues();
+                    if (ImGui.IsMouseReleased(0))
+                    {
+                        Log.Debug("Clicked!");
+                        _variationWindow.SaveVariation(hoverVariation);
+                    }
                 }
 
                 _hoveringVariation = variation;
@@ -121,6 +120,13 @@ namespace T3.Gui.Windows.Variations
                     _hoveringVariation = null;
                 }
             }
+        }
+
+        public void ClearVariations()
+        {
+            _currentOffsetIndexForFocus = 0;
+            _updateCompleted = false;
+            _variationByGridIndex.Clear();
         }
 
         private void InitializeCanvasTexture()
@@ -158,8 +164,8 @@ namespace T3.Gui.Windows.Variations
         {
             var centerInCanvas = InverseTransformPosition(screenPos);
             return new GridCell(
-                               (int)(centerInCanvas.X / ThumbnailSize.X),
-                               (int)(centerInCanvas.Y / ThumbnailSize.Y));
+                                (int)(centerInCanvas.X / ThumbnailSize.X),
+                                (int)(centerInCanvas.Y / ThumbnailSize.Y));
         }
 
         private bool IsCellVisible(GridCell gridCell)
@@ -234,6 +240,9 @@ namespace T3.Gui.Windows.Variations
             if (_updateCompleted)
                 return;
 
+            if (_variationWindow.VariationParameters.Count == 0)
+                return;
+
             while (_currentOffsetIndexForFocus < SortedOffset.Length)
             {
                 var offset = SortedOffset[_currentOffsetIndexForFocus++];
@@ -256,11 +265,11 @@ namespace T3.Gui.Windows.Variations
                 else
                 {
                     variation = CreateVariationForCell(cell);
-                    if (variation.ValuesForParameters.Count > 0)
-                    {
-                        RenderThumbnail(variation);
-                        _variationByGridIndex[cell.GridIndex] = variation;
-                    }
+                    // if (variation.ValuesForParameters.Count > 0)
+                    // {
+                    RenderThumbnail(variation);
+                    _variationByGridIndex[cell.GridIndex] = variation;
+                    // }
 
                     return;
                 }
@@ -268,14 +277,6 @@ namespace T3.Gui.Windows.Variations
 
             _updateCompleted = true;
         }
-
-        public void ClearVariations()
-        {
-            _currentOffsetIndexForFocus = 0;
-            _updateCompleted = false;
-            _variationByGridIndex.Clear();
-        }
-
 
         private Variation CreateVariationAtMouseMouse()
         {
@@ -358,7 +359,6 @@ namespace T3.Gui.Windows.Variations
             return Variation.Mix(_variationWindow.VariationParameters, neighboursAndWeights, Scatter, cell);
         }
 
-
         private void RenderThumbnail(Variation variation)
         {
             variation.ThumbnailNeedsUpdate = false;
@@ -396,7 +396,7 @@ namespace T3.Gui.Windows.Variations
             // Restore values
             variation.RestoreValues();
         }
-        
+
         private const float HoverEdgeBlendFactor = 0.5f;
         private static readonly GridCell[] SortedOffset = GridCell.BuildSortedOffsets();
         private static readonly GridCell GridCenter = GridCell.Center;
@@ -432,15 +432,13 @@ namespace T3.Gui.Windows.Variations
             new GridCell(-1, 0),
         };
 
-
         public float Scatter = 0.5f;
         private float _lastScatter;
+        private ISlot _firstOutputSlot;
 
         private static readonly EvaluationContext EvaluationContext = new EvaluationContext()
                                                                       {
                                                                           RequestedResolution = new Size2((int)ThumbnailSize.X, (int)ThumbnailSize.Y)
                                                                       };
-
-        
     }
 }

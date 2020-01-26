@@ -342,6 +342,7 @@
     <Compile Include="Gui\Commands\DeleteSymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\DeleteConnectionCommand.cs" />
     <Compile Include="Gui\Commands\ChangeKeyframesCommand.cs" />
+    <Compile Include="Gui\Commands\MacroCommand.cs" />
     <Compile Include="Gui\Commands\MoveTimeClipCommand.cs" />
     <Compile Include="Gui\Commands\TimeClipDeleteCommand.cs" />
     <Compile Include="Gui\Graph\Dialogs\CombineToSymbolDialog.cs" />

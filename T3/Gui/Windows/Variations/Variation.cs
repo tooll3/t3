@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using T3.Core;
 using T3.Core.Operator;
 using SharpDX;
+using T3.Core.Logging;
+using T3.Gui.Commands;
+using T3.Gui.Graph.Interaction;
+using T3.Gui.Selection;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
@@ -11,45 +15,37 @@ namespace T3.Gui.Windows.Variations
 {
     public class Variation
     {
-        public readonly GridCell GridCell;
+        public GridCell GridCell;
         public bool ThumbnailNeedsUpdate;
 
-        private Variation(GridCell cell)
+        private Variation(Dictionary<VariationParameter, InputValue> valuesForParameters)
         {
-            GridCell = cell;
+            ValuesForParameters = valuesForParameters;
+            _changeCommand = CreateChangeCommand();
             ThumbnailNeedsUpdate = true;
         }
 
-        public readonly Dictionary<VariationParameter, object> ValuesForParameters =
-            new Dictionary<VariationParameter, object>();
+        public Variation Clone()
+        {
+            return new Variation(new Dictionary<VariationParameter, InputValue>(ValuesForParameters));
+        }
 
         public void ApplyValues()
         {
-            foreach (var (param, value) in ValuesForParameters)
-            {
-                switch (param.InputSlot)
-                {
-                    case InputSlot<float> floatInput:
-                        floatInput.SetTypedInputValue((float)value);
-                        break;
-                    case InputSlot<Vector2> vec2Input:
-                        vec2Input.SetTypedInputValue((Vector2)value);
-                        break;
-                    case InputSlot<Vector3> vec3Input:
-                        vec3Input.SetTypedInputValue((Vector3)value);
-                        break;
-                    case InputSlot<Vector4> vec4Input:
-                        vec4Input.SetTypedInputValue((Vector4)value);
-                        break;
-                }
-            }
+            _changeCommand.Do();
+            InvalidateParameters();
         }
 
         public void RestoreValues()
         {
+            _changeCommand.Undo();
+            InvalidateParameters();
+        }
+
+        private void InvalidateParameters()
+        {
             foreach (var param in ValuesForParameters.Keys)
             {
-                param.Input.Value.Assign(param.OriginalValue);
                 param.InputSlot.DirtyFlag.Invalidate();
             }
         }
@@ -59,7 +55,7 @@ namespace T3.Gui.Windows.Variations
                                     GridCell cell = new GridCell())
         {
             // Collect neighbours
-            var newVariation = new Variation(cell);
+            var valuesForParameters = new Dictionary<VariationParameter, InputValue>();
             var useDefault = (neighboursAndWeights.Count == 0);
 
             foreach (var param in variationParameters)
@@ -68,19 +64,19 @@ namespace T3.Gui.Windows.Variations
                 {
                     if (param.OriginalValue is InputValue<float> value)
                     {
-                        newVariation.ValuesForParameters.Add(param, value.Value);
+                        valuesForParameters.Add(param, value);
                     }
                     else if (param.OriginalValue is InputValue<Vector2> vec2Value)
                     {
-                        newVariation.ValuesForParameters.Add(param, vec2Value.Value);
+                        valuesForParameters.Add(param, vec2Value);
                     }
                     else if (param.OriginalValue is InputValue<Vector3> vec3Value)
                     {
-                        newVariation.ValuesForParameters.Add(param, vec3Value.Value);
+                        valuesForParameters.Add(param, vec3Value);
                     }
                     else if (param.OriginalValue is InputValue<Vector4> vec4Value)
                     {
-                        newVariation.ValuesForParameters.Add(param, vec4Value.Value);
+                        valuesForParameters.Add(param, vec4Value);
                     }
 
                     continue;
@@ -92,13 +88,18 @@ namespace T3.Gui.Windows.Variations
                     var sumWeight = 0f;
                     foreach (var neighbour in neighboursAndWeights)
                     {
-                        value += (float)neighbour.Item1.ValuesForParameters[param] * neighbour.Item2;
-                        sumWeight += neighbour.Item2;
+                        var neighbourVariation = neighbour.Item1;
+                        var matchingParam = neighbourVariation.ValuesForParameters[param];
+                        if (matchingParam is InputValue<float> floatInput)
+                        {
+                            value += floatInput.Value * neighbour.Item2;
+                            sumWeight += neighbour.Item2;
+                        }
                     }
 
                     value *= 1f / sumWeight + ((float)Random.NextDouble() - 0.5f) * scatter;
                     value += Random.NextFloat(-scatter, scatter);
-                    newVariation.ValuesForParameters.Add(param, value);
+                    valuesForParameters.Add(param, new InputValue<float>(value));
                 }
 
                 if (param.Type == typeof(Vector2))
@@ -107,8 +108,13 @@ namespace T3.Gui.Windows.Variations
                     var sumWeight = 0f;
                     foreach (var neighbour in neighboursAndWeights)
                     {
-                        value += (Vector2)neighbour.Item1.ValuesForParameters[param] * neighbour.Item2;
-                        sumWeight += neighbour.Item2;
+                        var neighbourVariation = neighbour.Item1;
+                        var matchingParam = neighbourVariation.ValuesForParameters[param];
+                        if (matchingParam is InputValue<Vector2> typedInput)
+                        {
+                            value += typedInput.Value * neighbour.Item2;
+                            sumWeight += neighbour.Item2;
+                        }
                     }
 
                     value *= 1f / sumWeight;
@@ -117,18 +123,46 @@ namespace T3.Gui.Windows.Variations
                                          Random.NextFloat(-scatter, scatter)
                                         );
 
-                    newVariation.ValuesForParameters.Add(param, value);
+                    valuesForParameters.Add(param, new InputValue<Vector2>(value));
+                }
+
+                if (param.Type == typeof(Vector2))
+                {
+                    var value = Vector2.Zero;
+                    var sumWeight = 0f;
+                    foreach (var neighbour in neighboursAndWeights)
+                    {
+                        var neighbourVariation = neighbour.Item1;
+                        var matchingParam = neighbourVariation.ValuesForParameters[param];
+                        if (matchingParam is InputValue<Vector2> typedInput)
+                        {
+                            value += typedInput.Value * neighbour.Item2;
+                            sumWeight += neighbour.Item2;
+                        }
+                    }
+
+                    value *= 1f / sumWeight;
+                    value += new Vector2(
+                                         Random.NextFloat(-scatter, scatter),
+                                         Random.NextFloat(-scatter, scatter)
+                                        );
+
+                    valuesForParameters.Add(param, new InputValue<Vector2>(value));
                 }
 
                 if (param.Type == typeof(Vector3))
                 {
                     var value = Vector3.Zero;
                     var sumWeight = 0f;
-
                     foreach (var neighbour in neighboursAndWeights)
                     {
-                        value += (Vector3)neighbour.Item1.ValuesForParameters[param] * neighbour.Item2;
-                        sumWeight += neighbour.Item2;
+                        var neighbourVariation = neighbour.Item1;
+                        var matchingParam = neighbourVariation.ValuesForParameters[param];
+                        if (matchingParam is InputValue<Vector3> typedInput)
+                        {
+                            value += typedInput.Value * neighbour.Item2;
+                            sumWeight += neighbour.Item2;
+                        }
                     }
 
                     value *= 1f / sumWeight;
@@ -138,7 +172,7 @@ namespace T3.Gui.Windows.Variations
                                          Random.NextFloat(-scatter, scatter)
                                         );
 
-                    newVariation.ValuesForParameters.Add(param, value);
+                    valuesForParameters.Add(param, new InputValue<Vector3>(value));
                 }
 
                 if (param.Type == typeof(Vector4))
@@ -147,8 +181,13 @@ namespace T3.Gui.Windows.Variations
                     var sumWeight = 0f;
                     foreach (var neighbour in neighboursAndWeights)
                     {
-                        value += (Vector4)neighbour.Item1.ValuesForParameters[param] * neighbour.Item2;
-                        sumWeight += neighbour.Item2;
+                        var neighbourVariation = neighbour.Item1;
+                        var matchingParam = neighbourVariation.ValuesForParameters[param];
+                        if (matchingParam is InputValue<Vector4> typedInput)
+                        {
+                            value += typedInput.Value * neighbour.Item2;
+                            sumWeight += neighbour.Item2;
+                        }
                     }
 
                     value *= 1f / sumWeight;
@@ -159,16 +198,39 @@ namespace T3.Gui.Windows.Variations
                                          Random.NextFloat(-scatter, scatter)
                                         );
 
-                    newVariation.ValuesForParameters.Add(param, value);
+                    valuesForParameters.Add(param, new InputValue<Vector4>(value));
                 }
             }
 
-            return newVariation;
+            return new Variation(valuesForParameters)
+                   {
+                       GridCell = cell,
+                   };
         }
-        
-        
+
+        private MacroCommand CreateChangeCommand()
+        {
+            var commands = new List<ICommand>();
+
+            foreach (var (param, value) in ValuesForParameters)
+            {
+                InputValue v = null;
+                var newCommand = new ChangeInputValueCommand(param.Instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input)
+                                 {
+                                     Value = value,
+                                     OriginalValue = param.OriginalValue,
+                                 };
+                commands.Add(newCommand);
+            }
+
+            return new MacroCommand("Set Preset Values", commands);
+            ;
+        }
+
         public class VariationParameter
         {
+            public List<Guid> InstanceIdPath = new List<Guid>();
+            public Instance Instance => NodeOperations.GetInstanceFromIdPath(InstanceIdPath);
             public SymbolChildUi SymbolChildUi;
             public IInputSlot InputSlot { get; set; }
             public InputValue OriginalValue { get; set; }
@@ -176,7 +238,10 @@ namespace T3.Gui.Windows.Variations
             public Type Type;
             public float Strength = 1;
         }
-        
+
+        public readonly Dictionary<VariationParameter, InputValue> ValuesForParameters;
+
         private static readonly Random Random = new Random();
+        private ICommand _changeCommand;
     }
 }

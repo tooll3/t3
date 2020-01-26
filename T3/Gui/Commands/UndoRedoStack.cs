@@ -11,33 +11,7 @@ namespace T3.Gui.Commands
         void Do();
     }
 
-    public class MacroCommand : ICommand
-    {
-        public MacroCommand(string name, IEnumerable<ICommand> commands)
-        {
-            _name = name;
-            _commands = commands.ToList();
-        }
 
-        public string Name => _name;
-
-        public bool IsUndoable => _commands.Aggregate(true, (result, current) => result && current.IsUndoable);
-
-        public void Do()
-        {
-            _commands.ForEach(c => c.Do());
-        }
-
-        public void Undo()
-        {
-            var tmpCmds = new List<ICommand>(_commands);
-            tmpCmds.Reverse();
-            tmpCmds.ForEach(c => c.Undo());
-        }
-
-        protected string _name = string.Empty;
-        protected List<ICommand> _commands;
-    }
 
     public static class UndoRedoStack
     {
