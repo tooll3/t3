@@ -106,13 +106,11 @@ namespace T3.Gui.Windows.Variations
                 {
                     if (ImGui.IsMouseReleased(0))
                     {
-                        _hoveringVariation.RestoreValues();
                         var savedVariation = _hoveringVariation.Clone();
                         _variationWindow.SaveVariation(savedVariation);
                         savedVariation.ApplyPermanently();
-                        _hoveringVariation.UpdateUndoCommand();
                     }
-                    _hoveringVariation.ApplyValues();
+                    _hoveringVariation.KeepCurrentAndApplyNewValues();
                 }
             }
             else
@@ -366,7 +364,7 @@ namespace T3.Gui.Windows.Variations
             var posInCanvasTexture = screenRect.Min - WindowPos;
 
             // Set variation values
-            variation.ApplyValues();
+            variation.KeepCurrentAndApplyNewValues();
 
             // Render variation
             EvaluationContext.Reset();

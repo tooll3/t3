@@ -30,14 +30,6 @@ namespace T3.Gui.Windows.Variations
         {
             ImGui.BeginChild("#params", new Vector2(200, -1));
             {
-                ImGui.Button("Smoother");
-                ImGui.SameLine();
-
-                ImGui.Button("Rougher");
-                ImGui.SameLine();
-
-                ImGui.Button("1:1");
-
                 ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.01f, 0, 3);
 
                 _compositionSymbolId = SelectionManager.GetSelectedInstance()?.Parent.SymbolChildId ?? Guid.Empty;
@@ -84,7 +76,6 @@ namespace T3.Gui.Windows.Variations
                                                                 InstanceIdPath = NodeOperations.BuildIdPathForInstance(instance),
                                                                 Type = p.ValueType,
                                                                 InputSlot = inputSlot,
-                                                                //OriginalValue = inputSlot.Input.Value.Clone(),
                                                                 Strength = 1,
                                                             });
                                 }
@@ -107,41 +98,42 @@ namespace T3.Gui.Windows.Variations
 
                 if (_compositionSymbolId != Guid.Empty && _variationsForSymbols.TryGetValue(_compositionSymbolId, out var favorites))
                 {
-                    foreach (var fav in favorites)
+                    foreach (var variation in favorites)
                     {
-                        ImGui.PushID(fav.GridCell.GridIndex);
+                        ImGui.PushID(variation.GetHashCode());
                         if (ImGui.Selectable("fav"))
                         {
-                            fav.ApplyPermanently();
-                            _hoveredVariation = null;
+                            variation.ApplyPermanently();
+                            variation.UpdateUndoCommand();
                         }
                         
                         if (ImGui.IsItemHovered())
                         {
-                            if (_hoveredVariation == null)
+                            if (_lastHoveredVariation == null)
                             {
-                                fav.ApplyValues();
-                                _hoveredVariation = fav;
+                                variation.KeepCurrentAndApplyNewValues();
+                                _lastHoveredVariation = variation;
                             }
-                            else if (_hoveredVariation != fav)
+                            else if (_lastHoveredVariation != variation)
                             {
-                                _hoveredVariation.RestoreValues();
-                                fav.ApplyValues();
-                                _hoveredVariation = fav;
+                                _lastHoveredVariation.RestoreValues();
+                                variation.KeepCurrentAndApplyNewValues();
+                                _lastHoveredVariation = variation;
                             }
                             
-                            foreach (var param in _hoveredVariation.ValuesForParameters.Keys)
+                            // Hover relevant operators
+                            foreach (var param in _lastHoveredVariation.ValuesForParameters.Keys)
                             {
                                 T3Ui.AddHoveredId(param.SymbolChildUi.Id);                                
                             }
                         }
                         else
                         {
-                            var noLongerHovered = _hoveredVariation == fav;
-                            if (noLongerHovered)
+                            var wasHoveredBefore = _lastHoveredVariation == variation;
+                            if (wasHoveredBefore)
                             {
-                                _hoveredVariation.RestoreValues();
-                                _hoveredVariation = null;
+                                _lastHoveredVariation.RestoreValues();
+                                _lastHoveredVariation = null;
                             }
                         }
 
@@ -182,7 +174,7 @@ namespace T3.Gui.Windows.Variations
         public IOutputUi OutputUi;
         private readonly Dictionary<Guid, List<Variation>> _variationsForSymbols = new Dictionary<Guid, List<Variation>>();
         
-        private Variation _hoveredVariation;
+        private Variation _lastHoveredVariation;
         private readonly VariationCanvas _variationCanvas;
         private static readonly Vector2 Spacing = new Vector2(1, 5);
         internal readonly List<Variation.VariationParameter> VariationParameters = new List<Variation.VariationParameter>();

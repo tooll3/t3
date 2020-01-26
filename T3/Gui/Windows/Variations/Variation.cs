@@ -19,18 +19,21 @@ namespace T3.Gui.Windows.Variations
         private Variation(Dictionary<VariationParameter, InputValue> valuesForParameters)
         {
             ValuesForParameters = valuesForParameters;
-            _changeCommand = CreateChangeCommand();
+            //_changeCommand = CreateChangeCommand();
             ThumbnailNeedsUpdate = true;
         }
 
         public Variation Clone()
         {
-            return new Variation(new Dictionary<VariationParameter, InputValue>(ValuesForParameters));
+            var newVariation = new Variation(new Dictionary<VariationParameter, InputValue>(ValuesForParameters));
+            newVariation.UpdateUndoCommand();
+            return newVariation;
         }
 
         
-        public void ApplyValues()
+        public void KeepCurrentAndApplyNewValues()
         {
+            _changeCommand = CreateChangeCommand();
             _changeCommand.Do();
             InvalidateParameters();
         }
@@ -38,12 +41,18 @@ namespace T3.Gui.Windows.Variations
         
         public void ApplyPermanently()
         {
+            if (_changeCommand == null)
+                return;
+            
             UndoRedoStack.AddAndExecute(_changeCommand);
             InvalidateParameters();
         }
         
         public void RestoreValues()
         {
+            if (_changeCommand == null)
+                return;
+            
             _changeCommand.Undo();
             InvalidateParameters();
         }
