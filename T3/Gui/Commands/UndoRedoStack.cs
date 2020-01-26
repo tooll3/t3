@@ -66,5 +66,8 @@ namespace T3.Gui.Commands
 
         private static readonly Stack<ICommand> _undoStack = new Stack<ICommand>();
         private static readonly Stack<ICommand> _redoStack = new Stack<ICommand>();
+
+        public static Stack<ICommand> UndoStack => _undoStack;
+        public static Stack<ICommand> RedoStack => _redoStack;
     }
 }

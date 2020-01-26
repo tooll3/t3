@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ImGuiNET;
+using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.TypeColors;
 using T3.Gui.UiHelpers;
@@ -25,6 +26,24 @@ namespace T3.Gui.Windows
 
             ImGui.Separator();
             ImGui.Checkbox("Show Graph thumbnails", ref UserSettings.Config.ShowThumbnails);
+
+            
+            if (ImGui.TreeNode("Undo Queue"))
+            {
+                ImGui.Text("Undo");
+                foreach (var c in UndoRedoStack.UndoStack)
+                {
+                    ImGui.Selectable(c.Name);
+                }
+                ImGui.Text("Redo");
+                foreach (var c in UndoRedoStack.RedoStack)
+                {
+                    ImGui.Selectable(c.Name);
+                }
+
+                ImGui.TreePop();
+            }
+
             
             ImGui.Separator();
             ImGui.Text("Debug options...");
