@@ -15,6 +15,7 @@ namespace T3.Gui.Windows.Variations
     {
         public GridCell GridCell;
         public bool ThumbnailNeedsUpdate;
+        public string Title; 
 
         private Variation(Dictionary<VariationParameter, InputValue> valuesForParameters)
         {

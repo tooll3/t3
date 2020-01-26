@@ -96,23 +96,20 @@ namespace T3.Gui.Selection
             return null;
         }
 
-        // public static IEnumerable<Instance> GetSelectedInstances()
-        // {
-        //     if (Selection.Count == 0)
-        //         return new List<Instance> { _parent, };
-        //
-        //     var result = new List<Instance>();
-        //     foreach (var s in Selection)
-        //     {
-        //         if (!(s is SymbolChildUi symbolChildUi))
-        //             continue;
-        //
-        //         var idPath = ChildUiInstanceIdPaths[symbolChildUi];
-        //         result.Add(NodeOperations.GetInstanceFromIdPath(idPath));
-        //     }
-        //
-        //     return result;
-        // }
+        public static Instance GetCompositionForSelection()
+        {
+            if (Selection.Count == 0)
+                return _parent;
+
+            if (Selection[0] is SymbolChildUi firstNode)
+            {
+                var idPath = ChildUiInstanceIdPaths[firstNode];
+                return NodeOperations.GetInstanceFromIdPath(idPath).Parent;
+            }
+
+            return null;
+        }
+        
 
         public static IEnumerable<SymbolChildUi> GetSelectedSymbolChildUis()
         {
@@ -121,16 +118,17 @@ namespace T3.Gui.Selection
             {
                 if (!(s is SymbolChildUi symbolChildUi))
                     continue;
-                
+
                 result.Add(symbolChildUi);
             }
+
             return result;
         }
 
         public static Instance GetInstanceForSymbolChildUi(SymbolChildUi symbolChildUi)
         {
             var idPath = ChildUiInstanceIdPaths[symbolChildUi];
-            return(NodeOperations.GetInstanceFromIdPath(idPath));
+            return (NodeOperations.GetInstanceFromIdPath(idPath));
         }
 
         private static Instance _parent;

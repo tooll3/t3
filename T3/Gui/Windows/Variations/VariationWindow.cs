@@ -26,13 +26,26 @@ namespace T3.Gui.Windows.Variations
 
         private Guid _compositionSymbolId;
 
+        private bool CheckFavoriteMatchesNodeSelection(Variation variation)
+        {
+            var match = true;
+            foreach (var param in variation.ValuesForParameters.Keys)
+            {
+                if (!SelectionManager.GetSelectedSymbolChildUis().Contains(param.SymbolChildUi))
+                {
+                    match = false;
+                }
+            }
+
+            return match;
+        }
+
         protected override void DrawContent()
         {
             ImGui.BeginChild("#params", new Vector2(200, -1));
             {
                 ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.01f, 0, 3);
-
-                _compositionSymbolId = SelectionManager.GetSelectedInstance()?.Parent.SymbolChildId ?? Guid.Empty;
+                _compositionSymbolId = SelectionManager.GetCompositionForSelection()?.SymbolChildId ?? Guid.Empty;
 
                 foreach (var symbolChildUi in SelectionManager.GetSelectedSymbolChildUis())
                 {
@@ -93,51 +106,85 @@ namespace T3.Gui.Windows.Variations
 
                 ImGui.Separator();
                 ImGui.PushFont(Fonts.FontBold);
-                ImGui.Text("Favs");
+                ImGui.Text("Saved");
                 ImGui.PopFont();
 
-                if (_compositionSymbolId != Guid.Empty && _variationsForSymbols.TryGetValue(_compositionSymbolId, out var favorites))
+                if (_compositionSymbolId != Guid.Empty && _variationsForSymbols.TryGetValue(_compositionSymbolId, out var savedForComposition))
                 {
-                    foreach (var variation in favorites)
+                    Variation deleteThis = null;
+                    foreach (var variation in savedForComposition)
                     {
+                        var isMatching = CheckFavoriteMatchesNodeSelection(variation);
+                        ImGui.PushStyleColor(ImGuiCol.Text, isMatching ? Color.Gray.Rgba : _nonMatchingVarationsColor);
                         ImGui.PushID(variation.GetHashCode());
-                        if (ImGui.Selectable("fav"))
                         {
-                            variation.ApplyPermanently();
-                            variation.UpdateUndoCommand();
-                        }
-                        
-                        if (ImGui.IsItemHovered())
-                        {
-                            if (_lastHoveredVariation == null)
+                            if (CustomComponents.IconButton(Icon.Pin, "selection", new Vector2(16, 16)))
                             {
-                                variation.KeepCurrentAndApplyNewValues();
-                                _lastHoveredVariation = variation;
+                                
                             }
-                            else if (_lastHoveredVariation != variation)
-                            {
-                                _lastHoveredVariation.RestoreValues();
-                                variation.KeepCurrentAndApplyNewValues();
-                                _lastHoveredVariation = variation;
-                            }
+                            ImGui.SameLine();
                             
-                            // Hover relevant operators
-                            foreach (var param in _lastHoveredVariation.ValuesForParameters.Keys)
+                            //ImGui.SetNextItemWidth(ImGui.GetWindowWidth() -32);
+                            
+                            if (ImGui.Selectable(variation.Title, false,0, new Vector2(ImGui.GetWindowWidth() -32,0)))
                             {
-                                T3Ui.AddHoveredId(param.SymbolChildUi.Id);                                
+                                variation.ApplyPermanently();
+                                variation.UpdateUndoCommand();
+
+                                // Hover relevant operators
+                                SelectionManager.Clear();
+                                foreach (var param in variation.ValuesForParameters.Keys)
+                                {
+                                    SelectionManager.AddSelection(param.SymbolChildUi, NodeOperations.GetInstanceFromIdPath(param.InstanceIdPath));
+                                    T3Ui.AddHoveredId(param.SymbolChildUi.Id);
+                                }
                             }
-                        }
-                        else
-                        {
-                            var wasHoveredBefore = _lastHoveredVariation == variation;
-                            if (wasHoveredBefore)
+
+                            if (ImGui.IsItemHovered())
                             {
-                                _lastHoveredVariation.RestoreValues();
-                                _lastHoveredVariation = null;
+                                if (_lastHoveredVariation == null)
+                                {
+                                    variation.KeepCurrentAndApplyNewValues();
+                                    _lastHoveredVariation = variation;
+                                }
+                                else if (_lastHoveredVariation != variation)
+                                {
+                                    _lastHoveredVariation.RestoreValues();
+                                    variation.KeepCurrentAndApplyNewValues();
+                                    _lastHoveredVariation = variation;
+                                }
+
+                                // Hover relevant operators
+                                foreach (var param in _lastHoveredVariation.ValuesForParameters.Keys)
+                                {
+                                    T3Ui.AddHoveredId(param.SymbolChildUi.Id);
+                                }
+                            }
+                            else
+                            {
+                                var wasHoveredBefore = _lastHoveredVariation == variation;
+                                if (wasHoveredBefore)
+                                {
+                                    _lastHoveredVariation.RestoreValues();
+                                    _lastHoveredVariation = null;
+                                }
+                            }
+                            ImGui.SameLine();
+
+                            // Delete button
+                            if (CustomComponents.IconButton(Icon.Loop, "selection", new Vector2(16, 16)))
+                            {
+                                deleteThis = variation;
                             }
                         }
 
+                        ImGui.PopStyleColor();
                         ImGui.PopID();
+                    }
+
+                    if (deleteThis != null)
+                    {
+                        savedForComposition.Remove(deleteThis);
                     }
                 }
             }
@@ -152,7 +199,6 @@ namespace T3.Gui.Windows.Variations
             ImGui.EndChild();
         }
 
-
         public override List<Window> GetInstances()
         {
             return new List<Window>();
@@ -160,6 +206,8 @@ namespace T3.Gui.Windows.Variations
 
         public void SaveVariation(Variation variation)
         {
+            SavedVariationIndex++;
+            variation.Title = "Untitled " + SavedVariationIndex;
             if (_variationsForSymbols.TryGetValue(_compositionSymbolId, out var list))
             {
                 list.Add(variation);
@@ -170,13 +218,14 @@ namespace T3.Gui.Windows.Variations
             }
         }
 
-
         public IOutputUi OutputUi;
         private readonly Dictionary<Guid, List<Variation>> _variationsForSymbols = new Dictionary<Guid, List<Variation>>();
-        
+
         private Variation _lastHoveredVariation;
         private readonly VariationCanvas _variationCanvas;
         private static readonly Vector2 Spacing = new Vector2(1, 5);
+        private static readonly Color _nonMatchingVarationsColor = new Color(0.3f);
+        private static int SavedVariationIndex = 1;
         internal readonly List<Variation.VariationParameter> VariationParameters = new List<Variation.VariationParameter>();
     }
 }
