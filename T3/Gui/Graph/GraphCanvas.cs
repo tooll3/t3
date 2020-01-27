@@ -176,9 +176,9 @@ namespace T3.Gui.Graph
                 DrawList.PopClipRect();
                 DrawContextMenu();
 
-                _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
-                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpace, ref _combineName);
-
+                _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits);
+                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits);
+                _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
                 _addInputDialog.Draw(GetSelectedSymbol());
             }
             ImGui.EndGroup();
@@ -329,13 +329,15 @@ namespace T3.Gui.Graph
 
                          if (ImGui.MenuItem("Rename", oneElementSelected))
                          {
-                             NodeOperations.RenameSymbol(selectedChildUis[0].SymbolChild.Symbol, "NewName");
+                             _renameSymbolDialog.ShowNextFrame();
+                             _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name;
+                             //NodeOperations.RenameSymbol(selectedChildUis[0].SymbolChild.Symbol, "NewName");
                          }
 
                          if (ImGui.MenuItem("Duplicate as new type", oneElementSelected))
                          {
-                             _combineName = selectedChildUis[0].SymbolChild.Symbol.Name;
-                             _nameSpace = selectedChildUis[0].SymbolChild.Symbol.Namespace;
+                             _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name;
+                             _nameSpaceForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Namespace;
                              _duplicateSymbolDialog.ShowNextFrame();
                          }
 
@@ -555,13 +557,14 @@ namespace T3.Gui.Graph
         private readonly AddInputDialog _addInputDialog = new AddInputDialog();
         private readonly CombineToSymbolDialog _combineToSymbolDialog = new CombineToSymbolDialog();
         private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new DuplicateSymbolDialog();
+        private readonly RenameSymbolDialog _renameSymbolDialog = new RenameSymbolDialog();
         
         //public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private readonly SelectionFence _selectionFence;
         private List<SymbolChildUi> ChildUis { get; set; }
         private readonly SymbolBrowser _symbolBrowser = new SymbolBrowser();
-        private string _combineName = "";
-        private string _nameSpace = "";
+        private string _symbolNameForDialogEdits = "";
+        private string _nameSpaceForDialogEdits = "";
         private readonly GraphWindow _window;
 
         
