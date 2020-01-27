@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
-using SharpDX.WIC;
 using T3.Core.Logging;
 using T3.Gui.Graph;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows.Output;
 using T3.Gui.Windows.Variations;
 
@@ -59,6 +58,7 @@ namespace T3.Gui.Windows
 
         public void Draw()
         {
+            Initialize();
             for (var i = 0; i < _saveLayoutActions.Length; i++)
             {
                 if (KeyboardBinding.Triggered(_saveLayoutActions[i]))
@@ -78,6 +78,20 @@ namespace T3.Gui.Windows
 
             if (_metricsWindowVisible)
                 ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
+        }
+
+        private void Initialize()
+        {
+            // Wait first frame for ImGUI to initialize
+            if (ImGui.GetTime() > 1 && _hasBeenInitialized)
+                return;
+
+            if (File.Exists(GetLayoutFilename(UserSettings.Config.WindowLayoutIndex)))
+            {
+                LoadLayout(UserSettings.Config.WindowLayoutIndex);
+            }
+
+            _hasBeenInitialized = true;
         }
 
         public void DrawWindowsMenu()
@@ -146,6 +160,8 @@ namespace T3.Gui.Windows
             {
                 serializer.Serialize(file, allWindowConfigs);
             }
+
+            UserSettings.Config.WindowLayoutIndex = index;
         }
 
         private void LoadLayout(int index)
@@ -158,7 +174,7 @@ namespace T3.Gui.Windows
             }
 
             var jsonBlob = File.ReadAllText(filename);
-            var serializer = Newtonsoft.Json.JsonSerializer.Create();
+            var serializer = JsonSerializer.Create();
             var fileTextReader = new StringReader(jsonBlob);
             if (!(serializer.Deserialize(fileTextReader, typeof(List<Window.WindowConfig>))
                       is List<Window.WindowConfig> configurations))
@@ -208,6 +224,7 @@ namespace T3.Gui.Windows
                 }
             }
 
+            UserSettings.Config.WindowLayoutIndex = index;
             ApplyLayout();
         }
 
@@ -225,7 +242,7 @@ namespace T3.Gui.Windows
         {
             foreach (var window in GetAllWindows())
             {
-                ImGui.SetWindowPos(window.Config.Title,  GetPixelPositionFromRelative(window.Config.Position));
+                ImGui.SetWindowPos(window.Config.Title, GetPixelPositionFromRelative(window.Config.Position));
                 ImGui.SetWindowSize(window.Config.Title, GetPixelPositionFromRelative(window.Config.Size));
             }
         }
@@ -248,7 +265,6 @@ namespace T3.Gui.Windows
                               );
         }
 
-        
         private IEnumerable<Window> GetAllWindows()
         {
             foreach (var window in _windows)
@@ -275,5 +291,7 @@ namespace T3.Gui.Windows
         private bool _demoWindowVisible;
         private bool _metricsWindowVisible;
         public static bool ShowSecondaryRenderWindow { get; private set; }
+
+        private bool _hasBeenInitialized;
     }
 }

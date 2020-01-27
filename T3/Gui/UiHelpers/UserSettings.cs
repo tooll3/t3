@@ -27,6 +27,7 @@ namespace T3.Gui.UiHelpers
             public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.Live;
             public bool AudioMuted;
             public bool ShowThumbnails = true;
+            public int WindowLayoutIndex = 0;
         }
 
         public static ConfigData Config = new ConfigData();
