@@ -38,7 +38,7 @@ namespace T3.Gui.Windows.Variations
             }
 
             var instance = outputWindow.ShownInstance;
-            if (instance == null)
+            if (instance == null || instance.Outputs == null || instance.Outputs.Count == 0)
             {
                 ImGui.Text("Nothing selected");
                 return;
