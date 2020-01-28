@@ -450,6 +450,12 @@ namespace T3.Core
                 sw.Write(symbol.PendingSource);
             }
 
+            if (!string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
+            {
+                RemoveSourceFileFromProject(symbol.DeprecatedSourcePath);
+                symbol.DeprecatedSourcePath = string.Empty;
+            }
+
             if (string.IsNullOrEmpty(symbol.SourcePath))
             {
                 symbol.SourcePath = sourcePath;
@@ -489,6 +495,31 @@ namespace T3.Core
             var orgLine = "<ItemGroup>\r\n    <Compile Include";
             var newLine = $"<ItemGroup>\r\n    <Compile Include=\"Types\\{newFileName}\" />\r\n    <Compile Include";
             var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, newLine);
+            File.WriteAllText(projectFilePath, newContent);
+        }
+
+        public static void RemoveSourceFileFromProject(string sourceFilePath)
+        {
+            var path = System.IO.Path.GetDirectoryName(sourceFilePath);
+            var fileName = System.IO.Path.GetFileName(sourceFilePath);
+            var directoryInfo = new DirectoryInfo(path).Parent;
+            if (directoryInfo == null)
+            {
+                Log.Error("Can't find project file folder for " + sourceFilePath);
+                return;
+            }
+
+            var parentPath = directoryInfo.FullName;
+            var projectFilePath = System.IO.Path.Combine(parentPath, "Operators.csproj");
+
+            if (!File.Exists(projectFilePath))
+            {
+                Log.Error("Can't find project file in " + projectFilePath);
+                return;
+            }
+
+            var orgLine = $"    <Compile Include=\"Types\\{fileName}\" />\r\n";
+            var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, string.Empty);
             File.WriteAllText(projectFilePath, newContent);
         }
     }

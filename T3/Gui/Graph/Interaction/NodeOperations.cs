@@ -473,20 +473,26 @@ namespace T3.Gui.Graph.Interaction
             root = memberRewriter.Visit(root);
             var newSource = root.GetText().ToString();
             Log.Debug(newSource);
+            return;
 
-            var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName);
-            if (newAssembly == null)
-            {
-                Log.Error("Error compiling duplicated type, aborting duplication.");
-                return;
-            }
-            
-            Type type = newAssembly.ExportedTypes.FirstOrDefault();
-            if (type == null)
-            {
-                Log.Error("Error, new symbol has no compiled instance type");
-                return;
-            }
+            // var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName);
+            // if (newAssembly != null)
+            // {
+            //     string newPath = @"Operators\Types\" + newName + ".cs";
+            //     string originalPath = @"Operators\Types\" + symbol.Name + ".cs";
+            //     var operatorResource = ResourceManager.Instance().GetOperatorFileResource(originalPath);
+            //     if (operatorResource != null)
+            //     {
+            //         operatorResource.OperatorAssembly = newAssembly;
+            //         operatorResource.Updated = true;
+            //         symbol.SourcePath = string.Empty;
+            //         symbol.PendingSource = newSource;
+            //         symbol.DeprecatedSourcePath = originalPath;
+            //         return;
+            //     }
+            // }
+
+            // Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
         }
 
         public static SymbolChildUi CreateInstance(Symbol symbol, Symbol parent, Vector2 positionOnCanvas)

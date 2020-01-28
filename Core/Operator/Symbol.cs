@@ -21,6 +21,7 @@ namespace T3.Core.Operator
         public string Namespace { get; set; }
         public string PendingSource { get; set; }
         public string SourcePath { get; set; }
+        public string DeprecatedSourcePath { get; set; }
 
         public readonly List<Instance> InstancesOfSymbol = new List<Instance>();
         public readonly List<SymbolChild> Children = new List<SymbolChild>();
