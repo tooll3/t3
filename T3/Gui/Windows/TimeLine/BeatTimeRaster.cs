@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using T3.Core.Animation;
 using T3.Gui.Interaction.Snapping;
 
 namespace T3.Gui.Windows.TimeLine
@@ -9,11 +10,11 @@ namespace T3.Gui.Windows.TimeLine
     /// </summary>
     public class BeatTimeRaster : TimeRaster
     {
-        public override void Draw(ClipTime clipTime)
+        public override void Draw(Playback playback)
         {
-            if (Math.Abs(_bpm - clipTime.Bpm) > 0.001f || ScaleRanges == null)
+            if (Math.Abs(_bpm - playback.Bpm) > 0.001f || ScaleRanges == null)
             {
-                _bpm = clipTime.Bpm;
+                _bpm = playback.Bpm;
                 ScaleRanges= InitializeTimeScaleDefinitions();
             }
             DrawTimeTicks(TimeLineCanvas.Current.Scale.X, TimeLineCanvas.Current.Scroll.X );

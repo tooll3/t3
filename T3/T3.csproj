@@ -333,7 +333,6 @@
     <Compile Include="External\Truncon.Collections\OrderedDictionaryDebugView.cs" />
     <Compile Include="External\Truncon.Collections\Properties\Resources.Designer.cs" />
     <Compile Include="Gui\Animation\CurveEditing\CurveEditBox.cs" />
-    <Compile Include="Gui\ClipTime.cs" />
     <Compile Include="Gui\Commands\AddConnectionCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolChildNameCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolNameCommand.cs" />

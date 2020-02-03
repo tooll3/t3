@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Animation;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Styling;
 using UiHelpers;
@@ -11,7 +12,7 @@ namespace T3.Gui.Windows.TimeLine
 {
     public abstract class TimeRaster : IValueSnapAttractor
     {
-        public abstract void Draw(ClipTime clipTime);
+        public abstract void Draw(Playback playback);
         protected abstract string BuildLabel(Raster raster, double time);
 
         

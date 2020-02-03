@@ -328,7 +328,7 @@ namespace T3.Gui.Windows.TimeLine
 
                         var timeOffset = key.U - minTime;
                         var newKey = key.Clone();
-                        curve.AddOrUpdateV(TimeLineCanvas.ClipTime.Time + timeOffset, newKey);
+                        curve.AddOrUpdateV(TimeLineCanvas.Playback.Time + timeOffset, newKey);
                         newSelection.Add(newKey);
                     }
                 }

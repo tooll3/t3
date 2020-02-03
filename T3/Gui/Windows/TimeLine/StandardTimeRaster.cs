@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using T3.Core.Animation;
 
 namespace T3.Gui.Windows.TimeLine
 {
@@ -9,7 +10,7 @@ namespace T3.Gui.Windows.TimeLine
     /// </summary>
     public class StandardTimeRaster : TimeRaster
     {
-        public override void Draw(ClipTime clipTime)
+        public override void Draw(Playback playback)
         {
             DrawTimeTicks(TimeLineCanvas.Current.Scale.X / UnitsPerSecond, TimeLineCanvas.Current.Scroll.X * UnitsPerSecond);
         }

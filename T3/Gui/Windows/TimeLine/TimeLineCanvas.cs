@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
@@ -15,9 +16,9 @@ namespace T3.Gui.Windows.TimeLine
 {
     public class TimeLineCanvas : ICanvas, ITimeElementSelectionHolder
     {
-        public TimeLineCanvas(ClipTime clipTime = null)
+        public TimeLineCanvas(Playback playback = null)
         {
-            ClipTime = clipTime;
+            Playback = playback;
             _dopeSheetArea = new DopeSheetArea(_snapHandler, this);
             _selectionFence = new TimeSelectionFence(this);
             _curveEditArea = new CurveEditArea(this, _snapHandler);
@@ -56,7 +57,7 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.SetScrollY(0);
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
-                _timeRasterSwitcher.Draw(ClipTime);
+                _timeRasterSwitcher.Draw(Playback);
                 DrawSnapIndicator();
                 //_layersArea.Draw(compositionOp);
 
@@ -71,11 +72,11 @@ namespace T3.Gui.Windows.TimeLine
                         break;
                 }
 
-                if (ClipTime.IsLooping)
+                if (Playback.IsLooping)
                 {
-                    _timeRange.Draw(this, ClipTime, _drawlist, _snapHandler);
+                    _timeRange.Draw(this, Playback, _drawlist, _snapHandler);
                 }
-                _currentTimeMarker.Draw(ClipTime);
+                _currentTimeMarker.Draw(Playback);
                 DrawDragTimeArea();
                 _selectionFence.Draw();
             }
@@ -102,28 +103,28 @@ namespace T3.Gui.Windows.TimeLine
             {
                 var nextKeyframeTime = double.PositiveInfinity;
                 foreach (var next in animationParameters
-                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetNextU(ClipTime.Time + 0.001f))
+                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetNextU(Playback.Time + 0.001f))
                                     .Where(next => next != null && next.Value < nextKeyframeTime))
                 {
                     nextKeyframeTime = next.Value;
                 }
 
                 if (!double.IsPositiveInfinity(nextKeyframeTime))
-                    ClipTime.Time = nextKeyframeTime;
+                    Playback.Time = nextKeyframeTime;
             }
 
             if (UserActionRegistry.WasActionQueued(UserActions.PlaybackJumpToPreviousKeyframe))
             {
                 var prevKeyframeTime = double.NegativeInfinity;
                 foreach (var next in animationParameters
-                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetPreviousU(ClipTime.Time - 0.001f))
+                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetPreviousU(Playback.Time - 0.001f))
                                     .Where(previous => previous != null && previous.Value > prevKeyframeTime))
                 {
                     prevKeyframeTime = next.Value;
                 }
 
                 if (!double.IsNegativeInfinity(prevKeyframeTime))
-                    ClipTime.Time = prevKeyframeTime;
+                    Playback.Time = prevKeyframeTime;
             }
         }
 
@@ -172,7 +173,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private void DrawDragTimeArea()
         {
-            if (ClipTime == null)
+            if (Playback == null)
                 return;
 
             var max = ImGui.GetContentRegionMax();
@@ -197,7 +198,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     _snapHandler.CheckForSnapping(ref draggedTime, _currentTimeMarker);
                 }
-                ClipTime.Time = draggedTime;
+                Playback.Time = draggedTime;
             }
 
             ImGui.SetCursorPos(Vector2.Zero);
@@ -468,7 +469,7 @@ namespace T3.Gui.Windows.TimeLine
         public Vector2 Scroll { get; private set; } = new Vector2(0, 0.0f);
         #endregion
 
-        internal readonly ClipTime ClipTime;
+        internal readonly Playback Playback;
 
         private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
         private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();

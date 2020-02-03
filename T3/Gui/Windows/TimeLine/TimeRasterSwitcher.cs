@@ -1,32 +1,33 @@
-﻿using T3.Gui.Interaction.Snapping;
+﻿using T3.Core.Animation;
+using T3.Gui.Interaction.Snapping;
 
 namespace T3.Gui.Windows.TimeLine
 {
     /// <summary>
     /// A small helper class that switches the drawing of time rasters depending on the
-    /// setting in <see cref="ClipTime"/> 
+    /// setting in <see cref="Playback"/> 
     /// </summary>
     public class TimeRasterSwitcher:IValueSnapAttractor
     {
-        public void Draw(ClipTime clipTime)
+        public void Draw(Playback playback)
         {
-            _lastClipTime = clipTime;
-            if(clipTime.TimeMode != ClipTime.TimeModes.Bars)
+            _lastPlayback = playback;
+            if(playback.TimeMode != Playback.TimeModes.Bars)
             {
-                switch (clipTime.TimeMode)
+                switch (playback.TimeMode)
                 {
-                    case ClipTime.TimeModes.Secs:
+                    case Playback.TimeModes.Secs:
                         _standardRaster.UnitsPerSecond = 1;
                         break;
-                    case ClipTime.TimeModes.F30:
+                    case Playback.TimeModes.F30:
                         _standardRaster.UnitsPerSecond = 30;
                         break;
-                    case ClipTime.TimeModes.F60:
+                    case Playback.TimeModes.F60:
                         _standardRaster.UnitsPerSecond = 60;
                         break;
                 }
             }
-            ActiveRaster?.Draw(clipTime);
+            ActiveRaster?.Draw(playback);
         }
         
         public SnapResult CheckForSnap(double value)
@@ -38,9 +39,9 @@ namespace T3.Gui.Windows.TimeLine
         {
             get
             {
-                switch (_lastClipTime.TimeMode)
+                switch (_lastPlayback.TimeMode)
                 {
-                    case ClipTime.TimeModes.Bars:
+                    case Playback.TimeModes.Bars:
                         return _beatRaster;
                     default:
                         return _standardRaster;
@@ -48,7 +49,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
         
-        private ClipTime _lastClipTime;
+        private Playback _lastPlayback;
         private readonly StandardTimeRaster _standardRaster = new StandardTimeRaster();
         private readonly BeatTimeRaster _beatRaster = new BeatTimeRaster();
     }

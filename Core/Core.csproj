@@ -33,6 +33,9 @@
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ManagedBass, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\ManagedBass.2.0.4\lib\net45\ManagedBass.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -84,6 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animation\Playback.cs" />
     <Compile Include="Animation\ConstantCurveMapper.cs" />
     <Compile Include="Animation\ConstInterpolator.cs" />
     <Compile Include="Animation\Curve.cs" />

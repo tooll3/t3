@@ -33,7 +33,7 @@ namespace T3.Gui.Graph
             AllowMultipleInstances = true;
 
             const string trackName = @"Resources\soundtrack\lorn-sega-sunset.mp3";
-            _clipTime = File.Exists(trackName) ? new StreamClipTime(trackName) : new ClipTime();
+            _playback = File.Exists(trackName) ? new StreamPlayback(trackName) : new Playback();
 
             // Legacy work-around
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
@@ -41,7 +41,7 @@ namespace T3.Gui.Graph
             var path = NodeOperations.BuildIdPathForInstance(shownOpInstance);
             GraphCanvas = new GraphCanvas(this, path);
 
-            _timeLineCanvas = new TimeLineCanvas(_clipTime);
+            _timeLineCanvas = new TimeLineCanvas(_playback);
 
             WindowFlags = ImGuiWindowFlags.NoScrollbar|ImGuiWindowFlags.NoScrollWithMouse;
             GraphWindowInstances.Add(this);
@@ -74,7 +74,7 @@ namespace T3.Gui.Graph
 
         protected override void UpdateBeforeDraw()
         {
-            _clipTime.Update();
+            _playback.Update(ImGui.GetIO().DeltaTime);
         }
 
         protected override void DrawAllInstances()
@@ -137,7 +137,7 @@ namespace T3.Gui.Graph
 
                         ImGui.SameLine();
 
-                        TimeControls.DrawTimeControls(_clipTime, ref _timeLineCanvas.Mode);
+                        TimeControls.DrawTimeControls(_playback, ref _timeLineCanvas.Mode);
                     }
                     dl.ChannelsSetCurrent(0);
                     {
@@ -284,7 +284,7 @@ namespace T3.Gui.Graph
             ImGui.PopStyleColor();
         }
 
-        private readonly ClipTime _clipTime;
+        private readonly Playback _playback;
         private float _heightTimeLine = TimeLineCanvas.TimeLineDragHeight;
         private readonly TimeLineCanvas _timeLineCanvas;
     }

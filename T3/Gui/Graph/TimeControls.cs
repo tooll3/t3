@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System;
 using System.Numerics;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
@@ -11,54 +12,54 @@ namespace T3.Gui.Graph
 {
     internal static class TimeControls
     {
-        internal static void DrawTimeControls(ClipTime clipTime, ref TimeLineCanvas.Modes mode)
+        internal static void DrawTimeControls(Playback playback, ref TimeLineCanvas.Modes mode)
         {
 
             // Current Time
             var delta = 0.0;
             string formattedTime = "";
-            switch (clipTime.TimeMode)
+            switch (playback.TimeMode)
             {
-                case ClipTime.TimeModes.Bars:
-                    formattedTime = $"{clipTime.Bar:0}. {clipTime.Beat:0}. {clipTime.Tick:0}.";
+                case Playback.TimeModes.Bars:
+                    formattedTime = $"{playback.Bar:0}. {playback.Beat:0}. {playback.Tick:0}.";
                     break;
 
-                case ClipTime.TimeModes.Secs:
-                    formattedTime = TimeSpan.FromSeconds(clipTime.Time).ToString(@"hh\:mm\:ss\:ff");
+                case Playback.TimeModes.Secs:
+                    formattedTime = TimeSpan.FromSeconds(playback.Time).ToString(@"hh\:mm\:ss\:ff");
                     break;
 
-                case ClipTime.TimeModes.F30:
-                    var frames = clipTime.Time * 30;
+                case Playback.TimeModes.F30:
+                    var frames = playback.Time * 30;
                     formattedTime = $"{frames:0}f ";
                     break;
-                case ClipTime.TimeModes.F60:
-                    var frames60 = clipTime.Time * 60;
+                case Playback.TimeModes.F60:
+                    var frames60 = playback.Time * 60;
                     formattedTime = $"{frames60:0}f ";
                     break;
             }
 
             if (CustomComponents.JogDial(formattedTime, ref delta, new Vector2(100, 0)))
             {
-                clipTime.PlaybackSpeed = 0;
-                clipTime.Time += delta;
-                if (clipTime.TimeMode == ClipTime.TimeModes.F30)
+                playback.PlaybackSpeed = 0;
+                playback.Time += delta;
+                if (playback.TimeMode == Playback.TimeModes.F30)
                 {
-                    clipTime.Time = Math.Floor(clipTime.Time * 30) / 30;
+                    playback.Time = Math.Floor(playback.Time * 30) / 30;
                 }
             }
 
             ImGui.SameLine();
 
-            if (ImGui.Button(clipTime.TimeMode.ToString(), ControlSize))
+            if (ImGui.Button(playback.TimeMode.ToString(), ControlSize))
             {
-                clipTime.TimeMode = (ClipTime.TimeModes)(((int)clipTime.TimeMode + 1) % Enum.GetNames(typeof(ClipTime.TimeModes)).Length);
+                playback.TimeMode = (Playback.TimeModes)(((int)playback.TimeMode + 1) % Enum.GetNames(typeof(Playback.TimeModes)).Length);
             }
 
             CustomComponents.ContextMenuForItem(() =>
                                                 {
-                                                    var t = (float)clipTime.Bpm;
+                                                    var t = (float)playback.Bpm;
                                                     ImGui.DragFloat("BPM", ref t);
-                                                    clipTime.Bpm = t;
+                                                    playback.Bpm = t;
                                                     if (ImGui.Button("Close"))
                                                     {
                                                         ImGui.CloseCurrentPopup();
@@ -70,7 +71,7 @@ namespace T3.Gui.Graph
             // Jump to start
             if (CustomComponents.IconButton(Icon.JumpToRangeStart, "##jumpToBeginning", ControlSize))
             {
-                clipTime.Time = clipTime.TimeRangeStart;
+                playback.Time = playback.TimeRangeStart;
             }
 
             ImGui.SameLine();
@@ -85,38 +86,38 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
 
             // Play backwards
-            var isPlayingBackwards = clipTime.PlaybackSpeed < 0;
+            var isPlayingBackwards = playback.PlaybackSpeed < 0;
             if (CustomComponents.ToggleButton(Icon.PlayBackwards,
-                                              label: isPlayingBackwards ? $"[{(int)clipTime.PlaybackSpeed}x]" : "<",
+                                              label: isPlayingBackwards ? $"[{(int)playback.PlaybackSpeed}x]" : "<",
                                               ref isPlayingBackwards,
                                               ControlSize))
             {
-                if (clipTime.PlaybackSpeed != 0)
+                if (playback.PlaybackSpeed != 0)
                 {
-                    clipTime.PlaybackSpeed = 0;
+                    playback.PlaybackSpeed = 0;
                 }
-                else if (clipTime.PlaybackSpeed == 0)
+                else if (playback.PlaybackSpeed == 0)
                 {
-                    clipTime.PlaybackSpeed = -1;
+                    playback.PlaybackSpeed = -1;
                 }
             }
 
             ImGui.SameLine();
 
             // Play forward
-            var isPlaying = clipTime.PlaybackSpeed > 0;
+            var isPlaying = playback.PlaybackSpeed > 0;
             if (CustomComponents.ToggleButton(Icon.PlayForwards,
-                                              label: isPlaying ? $"[{(int)clipTime.PlaybackSpeed}x]" : ">",
+                                              label: isPlaying ? $"[{(int)playback.PlaybackSpeed}x]" : ">",
                                               ref isPlaying,
                                               ControlSize))
             {
-                if (Math.Abs(clipTime.PlaybackSpeed) > 0.001f)
+                if (Math.Abs(playback.PlaybackSpeed) > 0.001f)
                 {
-                    clipTime.PlaybackSpeed = 0;
+                    playback.PlaybackSpeed = 0;
                 }
-                else if (Math.Abs(clipTime.PlaybackSpeed) < 0.001f)
+                else if (Math.Abs(playback.PlaybackSpeed) < 0.001f)
                 {
-                    clipTime.PlaybackSpeed = 1;
+                    playback.PlaybackSpeed = 1;
                 }
             }
 
@@ -126,57 +127,57 @@ namespace T3.Gui.Graph
             // Step to previous frame
             if (KeyboardBinding.Triggered(UserActions.PlaybackPreviousFrame))
             {
-                var rounded = Math.Round(clipTime.Time * editFrameRate) / editFrameRate;
-                clipTime.Time = rounded - frameDuration;
+                var rounded = Math.Round(playback.Time * editFrameRate) / editFrameRate;
+                playback.Time = rounded - frameDuration;
             }
 
             // Step to next frame
             if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))
             {
-                var rounded = Math.Round(clipTime.Time * editFrameRate) / editFrameRate;
-                clipTime.Time = rounded + frameDuration;
+                var rounded = Math.Round(playback.Time * editFrameRate) / editFrameRate;
+                playback.Time = rounded + frameDuration;
             }
 
             // Play backwards with increasing speed
             if (KeyboardBinding.Triggered(UserActions.PlaybackBackwards))
             {
-                Log.Debug("Backwards triggered with speed " + clipTime.PlaybackSpeed);
-                if (clipTime.PlaybackSpeed >= 0)
+                Log.Debug("Backwards triggered with speed " + playback.PlaybackSpeed);
+                if (playback.PlaybackSpeed >= 0)
                 {
-                    clipTime.PlaybackSpeed = -1;
+                    playback.PlaybackSpeed = -1;
                 }
-                else if (clipTime.PlaybackSpeed > -16)
+                else if (playback.PlaybackSpeed > -16)
                 {
-                    clipTime.PlaybackSpeed *= 2;
+                    playback.PlaybackSpeed *= 2;
                 }
             }
 
             // Play forward with increasing speed
             if (KeyboardBinding.Triggered(UserActions.PlaybackForward))
             {
-                if (clipTime.PlaybackSpeed <= 0)
+                if (playback.PlaybackSpeed <= 0)
                 {
-                    clipTime.PlaybackSpeed = 1;
+                    playback.PlaybackSpeed = 1;
                 }
-                else if (clipTime.PlaybackSpeed < 16)    // Bass can't play much faster anyways
+                else if (playback.PlaybackSpeed < 16)    // Bass can't play much faster anyways
                 {
-                    clipTime.PlaybackSpeed *= 2;
+                    playback.PlaybackSpeed *= 2;
                 }
             }
             
             
             if (KeyboardBinding.Triggered(UserActions.PlaybackForwardHalfSpeed))
             {
-                if(clipTime.PlaybackSpeed > 0 && clipTime.PlaybackSpeed < 1f)
-                    clipTime.PlaybackSpeed *= 0.5f;
+                if(playback.PlaybackSpeed > 0 && playback.PlaybackSpeed < 1f)
+                    playback.PlaybackSpeed *= 0.5f;
                 else
-                    clipTime.PlaybackSpeed = 0.5f;
+                    playback.PlaybackSpeed = 0.5f;
             }
 
             // Stop as separate keyboard 
             if (KeyboardBinding.Triggered(UserActions.PlaybackStop))
             {
-                clipTime.PlaybackSpeed = 0;
+                playback.PlaybackSpeed = 0;
             }
 
             ImGui.SameLine();
@@ -193,13 +194,13 @@ namespace T3.Gui.Graph
             // End
             if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", ControlSize))
             {
-                clipTime.Time = clipTime.TimeRangeEnd;
+                playback.Time = playback.TimeRangeEnd;
             }
 
             ImGui.SameLine();
 
             // Loop
-            CustomComponents.ToggleButton(Icon.Loop, "##loop", ref clipTime.IsLooping, ControlSize);
+            CustomComponents.ToggleButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize);
             ImGui.SameLine();
 
             // Curve MOde
@@ -213,7 +214,7 @@ namespace T3.Gui.Graph
             if (CustomComponents.IconButton(UserSettings.Config.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn,  "##audioToggle", ControlSize))
             {
                 UserSettings.Config.AudioMuted = !UserSettings.Config.AudioMuted;
-                var streamedClipTime = clipTime as StreamClipTime;
+                var streamedClipTime = playback as StreamPlayback;
                 streamedClipTime?.SetMuteMode(UserSettings.Config.AudioMuted);
             }
             ImGui.SameLine();

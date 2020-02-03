@@ -1,11 +1,11 @@
 ﻿using System;
-using ImGuiNET;
 using ManagedBass;
 using T3.Core.Operator;
+//using ImGuiNET;
 
-namespace T3.Gui
+namespace T3.Core.Animation
 {
-    public class ClipTime
+    public class Playback
     {
         public virtual double Time { get; set; }
         public virtual double BeatTime { get; set; }
@@ -20,9 +20,9 @@ namespace T3.Gui
         public int Beat => (int)(Time * Bpm / 60.0) % 4 + 1;
         public int Tick => (int)(Time * Bpm / 60.0 * 4) % 4 + 1;
 
-        public void Update()
+        public void Update(float timeSinceLastFrameInSecs)
         {
-            UpdateTime();
+            UpdateTime(timeSinceLastFrameInSecs);
             if (IsLooping && Time > TimeRangeEnd)
             {
                 Time = Time - TimeRangeEnd > 1.0 // Jump to start if too far out of time region
@@ -43,28 +43,28 @@ namespace T3.Gui
             F60,
         }
 
-        protected virtual void UpdateTime()
+        protected virtual void UpdateTime(float timeSinceLastFrameInSecs)
         {
-            var deltaTime = ImGui.GetIO().DeltaTime;
+            //var deltaTime = ImGui.GetIO().DeltaTime;
             var isPlaying = Math.Abs(PlaybackSpeed) > 0.001;
             if (isPlaying)
             {
-                Time += deltaTime * PlaybackSpeed;
+                Time += timeSinceLastFrameInSecs * PlaybackSpeed;
                 BeatTime = Time * Bpm / 60.0 / 4.0;    
             }
             else
             {
-                BeatTime += deltaTime * Bpm / 60.0 / 4.0;
+                BeatTime += timeSinceLastFrameInSecs * Bpm / 60.0 / 4.0;
             }
         }
     }
 
-    public class StreamClipTime : ClipTime
+    public class StreamPlayback : Playback
     {
         private readonly int _soundStreamHandle;
         private float _originalFrequency;
 
-        public StreamClipTime(string filename)
+        public StreamPlayback(string filename)
         {
             Bass.Init();
             _soundStreamHandle = Bass.CreateStream(filename);
@@ -113,13 +113,13 @@ namespace T3.Gui
             Bass.Volume =  isMuted ? 0 :1;
         }
 
-        protected override void UpdateTime()
+        protected override void UpdateTime(float timeSinceLastFrameInSecs)
         {
-            var deltaTime = ImGui.GetIO().DeltaTime;
+            //var deltaTime = ImGui.GetIO().DeltaTime;
             if (_playbackSpeed < 0.0)
             {
                 // bass can't play backwards, so do it manually
-                Time += deltaTime * _playbackSpeed;
+                Time += timeSinceLastFrameInSecs * _playbackSpeed;
             }
 
             var isPlaying = Math.Abs(_playbackSpeed) > 0.001;
@@ -129,7 +129,7 @@ namespace T3.Gui
             }
             else 
             {
-                BeatTime += deltaTime * Bpm / 60.0 / 4.0;
+                BeatTime += timeSinceLastFrameInSecs * Bpm / 60.0 / 4.0;
             }
         }
 
