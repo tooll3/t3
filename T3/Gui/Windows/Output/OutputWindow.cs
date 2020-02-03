@@ -19,7 +19,7 @@ namespace T3.Gui.Windows.Output
 
             AllowMultipleInstances = true;
             Config.Visible = true;
-            WindowFlags = ImGuiWindowFlags.NoScrollbar;
+            WindowFlags = ImGuiWindowFlags.NoScrollbar|ImGuiWindowFlags.NoScrollWithMouse;
 
             _instanceCounter++;
             OutputWindowInstances.Add(this);
