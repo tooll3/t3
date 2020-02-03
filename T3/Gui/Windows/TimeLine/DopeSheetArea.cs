@@ -170,7 +170,7 @@ namespace T3.Gui.Windows.TimeLine
                         curve.AddOrUpdateV(hoverTime, key);
                         SelectedKeyframes.Add(oldKey);
                         Log.Debug("added new key at " + hoverTime);
-                        TimeLineCanvas.Current.Playback.Time = hoverTime;
+                        TimeLineCanvas.Current.Playback.TimeInBars = hoverTime;
                     }
                 }
             }
@@ -311,7 +311,7 @@ namespace T3.Gui.Windows.TimeLine
 
                         if (Math.Abs(TimeLineCanvas.Playback.PlaybackSpeed) < 0.001f)
                         {
-                            TimeLineCanvas.Current.Playback.Time = vDef.U;
+                            TimeLineCanvas.Current.Playback.TimeInBars = vDef.U;
                         }
                     }
 

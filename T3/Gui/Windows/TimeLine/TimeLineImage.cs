@@ -3,6 +3,7 @@ using System.IO;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
+using T3.Core.Animation;
 
 namespace T3.Gui.Windows.TimeLine
 {
@@ -13,9 +14,11 @@ namespace T3.Gui.Windows.TimeLine
             if (!_initialized)
                 Initialize();
 
-            const float songDuration = 177.78f;
+            const float songDurationInSecs = 177.78f;
+            
+            var songDurationInBars = (float)(songDurationInSecs * Playback.Bpm / 240);
             var xMin= TimeLineCanvas.Current.TransformPositionX(0);
-            var xMax = TimeLineCanvas.Current.TransformPositionX(songDuration);
+            var xMax = TimeLineCanvas.Current.TransformPositionX(songDurationInBars);
 
             var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
             var yMin = (ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos()).Y;

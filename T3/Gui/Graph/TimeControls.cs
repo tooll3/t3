@@ -25,15 +25,15 @@ namespace T3.Gui.Graph
                     break;
 
                 case Playback.TimeModes.Secs:
-                    formattedTime = TimeSpan.FromSeconds(playback.Time).ToString(@"hh\:mm\:ss\:ff");
+                    formattedTime = TimeSpan.FromSeconds(playback.TimeInSecs).ToString(@"hh\:mm\:ss\:ff");
                     break;
 
                 case Playback.TimeModes.F30:
-                    var frames = playback.Time * 30;
+                    var frames = playback.TimeInSecs * 30;
                     formattedTime = $"{frames:0}f ";
                     break;
                 case Playback.TimeModes.F60:
-                    var frames60 = playback.Time * 60;
+                    var frames60 = playback.TimeInSecs * 60;
                     formattedTime = $"{frames60:0}f ";
                     break;
             }
@@ -41,10 +41,10 @@ namespace T3.Gui.Graph
             if (CustomComponents.JogDial(formattedTime, ref delta, new Vector2(100, 0)))
             {
                 playback.PlaybackSpeed = 0;
-                playback.Time += delta;
+                playback.TimeInBars += delta;
                 if (playback.TimeMode == Playback.TimeModes.F30)
                 {
-                    playback.Time = Math.Floor(playback.Time * 30) / 30;
+                    playback.TimeInSecs = Math.Floor(playback.TimeInSecs * 30) / 30;
                 }
             }
 
@@ -57,9 +57,9 @@ namespace T3.Gui.Graph
 
             CustomComponents.ContextMenuForItem(() =>
                                                 {
-                                                    var t = (float)playback.Bpm;
+                                                    var t = (float)Playback.Bpm;
                                                     ImGui.DragFloat("BPM", ref t);
-                                                    playback.Bpm = t;
+                                                    Playback.Bpm = t;
                                                     if (ImGui.Button("Close"))
                                                     {
                                                         ImGui.CloseCurrentPopup();
@@ -71,7 +71,7 @@ namespace T3.Gui.Graph
             // Jump to start
             if (CustomComponents.IconButton(Icon.JumpToRangeStart, "##jumpToBeginning", ControlSize))
             {
-                playback.Time = playback.TimeRangeStart;
+                playback.TimeInBars = playback.TimeRangeStart;
             }
 
             ImGui.SameLine();
@@ -127,15 +127,15 @@ namespace T3.Gui.Graph
             // Step to previous frame
             if (KeyboardBinding.Triggered(UserActions.PlaybackPreviousFrame))
             {
-                var rounded = Math.Round(playback.Time * editFrameRate) / editFrameRate;
-                playback.Time = rounded - frameDuration;
+                var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
+                playback.TimeInBars = rounded - frameDuration;
             }
 
             // Step to next frame
             if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))
             {
-                var rounded = Math.Round(playback.Time * editFrameRate) / editFrameRate;
-                playback.Time = rounded + frameDuration;
+                var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
+                playback.TimeInBars = rounded + frameDuration;
             }
 
             // Play backwards with increasing speed
@@ -194,7 +194,7 @@ namespace T3.Gui.Graph
             // End
             if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", ControlSize))
             {
-                playback.Time = playback.TimeRangeEnd;
+                playback.TimeInBars = playback.TimeRangeEnd;
             }
 
             ImGui.SameLine();

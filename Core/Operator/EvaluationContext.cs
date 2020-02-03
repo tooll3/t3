@@ -7,22 +7,22 @@ namespace T3.Core.Operator
     {
         public EvaluationContext()
         {
-            Time = GlobalTime;
+            TimeInBars = GlobalTimeInBars;
         }
 
         public void Reset()
         {
-            Time = GlobalTime;
+            TimeInBars = GlobalTimeInBars;
             ClipSpaceTcamera = Matrix.Identity;
             CameraTworld = Matrix.Identity;
             WorldTobject = Matrix.Identity;
         }
 
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
-        public static double RunTime => _runTimeWatch.ElapsedMilliseconds / 1000.0;
-        public static double GlobalTime { get; set; }
+        public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000.0;
+        public static double GlobalTimeInBars { get; set; }
         public static double BeatTime { get; set; }
-        public double Time { get; set; }
+        public double TimeInBars { get; set; }
         public Size2 RequestedResolution;
 
         public Matrix ClipSpaceTcamera { get; set; } = Matrix.Identity;

@@ -1,37 +1,45 @@
 ﻿using System;
 using ManagedBass;
 using T3.Core.Operator;
+
 //using ImGuiNET;
 
 namespace T3.Core.Animation
 {
     public class Playback
     {
-        public virtual double Time { get; set; }
+        
+        public virtual double TimeInBars { get; set; }
+        public virtual double TimeInSecs
+        {
+            get => TimeInBars * 240 / Bpm;
+            set => TimeInBars = value / Bpm * 240f;
+        }
+
         public virtual double BeatTime { get; set; }
         public double TimeRangeStart { get; set; } = 0;
         public double TimeRangeEnd { get; set; } = 8;
-        public double Bpm { get; set; } = 95.08f;
+        public static double Bpm  = 95.08f;   // a hack until with have proper bpm handling
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
         public TimeModes TimeMode { get; set; } = TimeModes.Bars;
-
-        public int Bar => (int)(Time * Bpm / 60.0 / 4.0) + 1;
-        public int Beat => (int)(Time * Bpm / 60.0) % 4 + 1;
-        public int Tick => (int)(Time * Bpm / 60.0 * 4) % 4 + 1;
+        
+        public int Bar => (int)(TimeInBars) + 1;
+        public int Beat => (int)(TimeInBars * 4) % 4 + 1;
+        public int Tick => (int)(TimeInBars * 16) % 4 + 1;
 
         public void Update(float timeSinceLastFrameInSecs)
         {
             UpdateTime(timeSinceLastFrameInSecs);
-            if (IsLooping && Time > TimeRangeEnd)
+            if (IsLooping && TimeInBars > TimeRangeEnd)
             {
-                Time = Time - TimeRangeEnd > 1.0 // Jump to start if too far out of time region
-                           ? TimeRangeStart
-                           : Time - (TimeRangeEnd - TimeRangeStart);
+                TimeInBars = TimeInBars - TimeRangeEnd > 1.0 // Jump to start if too far out of time region
+                                 ? TimeRangeStart
+                                 : TimeInBars - (TimeRangeEnd - TimeRangeStart);
             }
 
             // TODO: setting the context time here is kind of awkward
-            EvaluationContext.GlobalTime = Time;
+            EvaluationContext.GlobalTimeInBars = TimeInBars;
             EvaluationContext.BeatTime = BeatTime;
         }
 
@@ -47,14 +55,17 @@ namespace T3.Core.Animation
         {
             //var deltaTime = ImGui.GetIO().DeltaTime;
             var isPlaying = Math.Abs(PlaybackSpeed) > 0.001;
+
             if (isPlaying)
             {
-                Time += timeSinceLastFrameInSecs * PlaybackSpeed;
-                BeatTime = Time * Bpm / 60.0 / 4.0;    
+                TimeInBars += timeSinceLastFrameInSecs * PlaybackSpeed * Bpm / 240f;
+                //BeatTime = TimeInBars * Bpm / 60.0 / 4.0;
+                BeatTime = TimeInBars;
             }
             else
             {
-                BeatTime += timeSinceLastFrameInSecs * Bpm / 60.0 / 4.0;
+                //BeatTime += timeSinceLastFrameInSecs * Bpm / 60.0 / 4.0;
+                BeatTime += timeSinceLastFrameInSecs * Bpm / 240f;
             }
         }
     }
@@ -71,16 +82,16 @@ namespace T3.Core.Animation
             Bass.ChannelGetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, out _originalFrequency);
         }
 
-        public override double Time
+        public override double TimeInBars
         {
-            get => GetCurrentStreamTime();
+            get => GetCurrentStreamTime() * Bpm / 240f;
             set
             {
-                long soundStreamPos = Bass.ChannelSeconds2Bytes(_soundStreamHandle, value);
+                var timeInSecs = value * 240f / Bpm;
+                long soundStreamPos = Bass.ChannelSeconds2Bytes(_soundStreamHandle, timeInSecs);
                 Bass.ChannelSetPosition(_soundStreamHandle, soundStreamPos);
             }
         }
-
 
         public override double PlaybackSpeed
         {
@@ -108,9 +119,14 @@ namespace T3.Core.Animation
             }
         }
 
-        public void SetMuteMode(bool isMuted)
+        public void SetMuteMode(bool shouldBeMuted)
         {
-            Bass.Volume =  isMuted ? 0 :1;
+            if (Bass.Volume > 0)
+            {
+                _previousVolume = Bass.Volume;
+            }
+
+            Bass.Volume = shouldBeMuted ? 0 : _previousVolume;
         }
 
         protected override void UpdateTime(float timeSinceLastFrameInSecs)
@@ -119,17 +135,17 @@ namespace T3.Core.Animation
             if (_playbackSpeed < 0.0)
             {
                 // bass can't play backwards, so do it manually
-                Time += timeSinceLastFrameInSecs * _playbackSpeed;
+                TimeInBars += timeSinceLastFrameInSecs * _playbackSpeed * Bpm / 240f;
             }
 
             var isPlaying = Math.Abs(_playbackSpeed) > 0.001;
             if (isPlaying)
             {
-                BeatTime = Time * Bpm / 60.0 / 4.0;
+                BeatTime = TimeInBars; // * Bpm / 60.0 / 4.0;
             }
-            else 
+            else
             {
-                BeatTime += timeSinceLastFrameInSecs * Bpm / 60.0 / 4.0;
+                BeatTime += timeSinceLastFrameInSecs * Bpm / 240f;
             }
         }
 
@@ -139,7 +155,7 @@ namespace T3.Core.Animation
             return Bass.ChannelBytes2Seconds(_soundStreamHandle, soundStreamPos);
         }
 
-
         private double _playbackSpeed;
+        private double _previousVolume;
     }
 }

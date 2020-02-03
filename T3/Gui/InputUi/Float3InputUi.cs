@@ -59,7 +59,7 @@ namespace T3.Gui.InputUi
 
         protected override void DrawAnimatedValue(string name, InputSlot<Vector3> inputSlot, Animator animator)
         {
-            double time = EvaluationContext.GlobalTime;
+            double time = EvaluationContext.GlobalTimeInBars;
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
             if (curves.Length < _components.Length)
             {

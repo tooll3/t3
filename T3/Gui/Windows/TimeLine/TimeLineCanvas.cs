@@ -103,28 +103,28 @@ namespace T3.Gui.Windows.TimeLine
             {
                 var nextKeyframeTime = double.PositiveInfinity;
                 foreach (var next in animationParameters
-                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetNextU(Playback.Time + 0.001f))
+                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetNextU(Playback.TimeInBars + 0.001f))
                                     .Where(next => next != null && next.Value < nextKeyframeTime))
                 {
                     nextKeyframeTime = next.Value;
                 }
 
                 if (!double.IsPositiveInfinity(nextKeyframeTime))
-                    Playback.Time = nextKeyframeTime;
+                    Playback.TimeInBars = nextKeyframeTime;
             }
 
             if (UserActionRegistry.WasActionQueued(UserActions.PlaybackJumpToPreviousKeyframe))
             {
                 var prevKeyframeTime = double.NegativeInfinity;
                 foreach (var next in animationParameters
-                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetPreviousU(Playback.Time - 0.001f))
+                                    .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetPreviousU(Playback.TimeInBars - 0.001f))
                                     .Where(previous => previous != null && previous.Value > prevKeyframeTime))
                 {
                     prevKeyframeTime = next.Value;
                 }
 
                 if (!double.IsNegativeInfinity(prevKeyframeTime))
-                    Playback.Time = prevKeyframeTime;
+                    Playback.TimeInBars = prevKeyframeTime;
             }
         }
 
@@ -198,7 +198,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     _snapHandler.CheckForSnapping(ref draggedTime, _currentTimeMarker);
                 }
-                Playback.Time = draggedTime;
+                Playback.TimeInBars = draggedTime;
             }
 
             ImGui.SetCursorPos(Vector2.Zero);

@@ -88,7 +88,7 @@ namespace T3.Core.Operator
             if (inputSlot is Slot<float> floatInputSlot)
             {
                 var newCurve = new Curve();
-                newCurve.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                newCurve.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
                                                                     {
                                                                         Value = floatInputSlot.Value,
                                                                         InType = VDefinition.Interpolation.Spline,
@@ -98,14 +98,14 @@ namespace T3.Core.Operator
 
                 floatInputSlot.UpdateAction = context =>
                                               {
-                                                  floatInputSlot.Value = (float)newCurve.GetSampledValue(context.Time);
+                                                  floatInputSlot.Value = (float)newCurve.GetSampledValue(context.TimeInBars);
                                               };
                 floatInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<System.Numerics.Vector2> vector2InputSlot)
             {
                 var newCurveX = new Curve();
-                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
                                                                      {
                                                                          Value = vector2InputSlot.Value.X,
                                                                          InType = VDefinition.Interpolation.Spline,
@@ -114,7 +114,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
 
                 var newCurveY = new Curve();
-                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
                                                                      {
                                                                          Value = vector2InputSlot.Value.Y,
                                                                          InType = VDefinition.Interpolation.Spline,
@@ -124,15 +124,15 @@ namespace T3.Core.Operator
 
                 vector2InputSlot.UpdateAction = context =>
                                                 {
-                                                    vector2InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.Time);
-                                                    vector2InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.Time);
+                                                    vector2InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.TimeInBars);
+                                                    vector2InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.TimeInBars);
                                                 };
                 vector2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<System.Numerics.Vector3> vector3InputSlot)
             {
                 var newCurveX = new Curve();
-                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
                                                                      {
                                                                          Value = vector3InputSlot.Value.X,
                                                                          InType = VDefinition.Interpolation.Spline,
@@ -141,7 +141,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
 
                 var newCurveY = new Curve();
-                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
                                                                      {
                                                                          Value = vector3InputSlot.Value.Y,
                                                                          InType = VDefinition.Interpolation.Spline,
@@ -150,7 +150,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
 
                 var newCurveZ = new Curve();
-                newCurveZ.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                newCurveZ.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
                                                                      {
                                                                          Value = vector3InputSlot.Value.Z,
                                                                          InType = VDefinition.Interpolation.Spline,
@@ -160,16 +160,16 @@ namespace T3.Core.Operator
 
                 vector3InputSlot.UpdateAction = context =>
                                                 {
-                                                    vector3InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.Time);
-                                                    vector3InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.Time);
-                                                    vector3InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.Time);
+                                                    vector3InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.TimeInBars);
+                                                    vector3InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.TimeInBars);
+                                                    vector3InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.TimeInBars);
                                                 };
                 vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<System.Numerics.Vector4> vector4InputSlot)
             {
                 var newCurveX = new Curve();
-                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
                                                                      {
                                                                          Value = vector4InputSlot.Value.X,
                                                                          InType = VDefinition.Interpolation.Spline,
@@ -178,7 +178,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
 
                 var newCurveY = new Curve();
-                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
                                                                      {
                                                                          Value = vector4InputSlot.Value.Y,
                                                                          InType = VDefinition.Interpolation.Spline,
@@ -187,7 +187,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
 
                 var newCurveZ = new Curve();
-                newCurveZ.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                newCurveZ.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
                                                                      {
                                                                          Value = vector4InputSlot.Value.Z,
                                                                          InType = VDefinition.Interpolation.Spline,
@@ -196,7 +196,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 2), newCurveZ);
 
                 var newCurveW = new Curve();
-                newCurveW.AddOrUpdateV(EvaluationContext.GlobalTime, new VDefinition()
+                newCurveW.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
                                                                      {
                                                                          Value = vector4InputSlot.Value.W,
                                                                          InType = VDefinition.Interpolation.Spline,
@@ -206,10 +206,10 @@ namespace T3.Core.Operator
 
                 vector4InputSlot.UpdateAction = context =>
                                                 {
-                                                    vector4InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.Time);
-                                                    vector4InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.Time);
-                                                    vector4InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.Time);
-                                                    vector4InputSlot.Value.W = (float)newCurveW.GetSampledValue(context.Time);
+                                                    vector4InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.TimeInBars);
+                                                    vector4InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.TimeInBars);
+                                                    vector4InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.TimeInBars);
+                                                    vector4InputSlot.Value.W = (float)newCurveW.GetSampledValue(context.TimeInBars);
                                                 };
                 vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
@@ -239,7 +239,7 @@ namespace T3.Core.Operator
                     var (inputSlot, curve) = groupEntry.First();
                     if (inputSlot is Slot<float> typedInputSlot)
                     {
-                        typedInputSlot.UpdateAction = context => { typedInputSlot.Value = (float)curve.GetSampledValue(context.Time); };
+                        typedInputSlot.UpdateAction = context => { typedInputSlot.Value = (float)curve.GetSampledValue(context.TimeInBars); };
                         typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                 }
@@ -251,8 +251,8 @@ namespace T3.Core.Operator
                     {
                         vector2InputSlot.UpdateAction = context =>
                                                         {
-                                                            vector2InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.Time);
-                                                            vector2InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.Time);
+                                                            vector2InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.TimeInBars);
+                                                            vector2InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.TimeInBars);
                                                         };
                         vector2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
@@ -265,9 +265,9 @@ namespace T3.Core.Operator
                     {
                         vector3InputSlot.UpdateAction = context =>
                                                         {
-                                                            vector3InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.Time);
-                                                            vector3InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.Time);
-                                                            vector3InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.Time);
+                                                            vector3InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.TimeInBars);
+                                                            vector3InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.TimeInBars);
+                                                            vector3InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.TimeInBars);
                                                         };
                         vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
@@ -280,10 +280,10 @@ namespace T3.Core.Operator
                     {
                         vector4InputSlot.UpdateAction = context =>
                                                         {
-                                                            vector4InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.Time);
-                                                            vector4InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.Time);
-                                                            vector4InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.Time);
-                                                            vector4InputSlot.Value.W = (float)entries[3].Value.GetSampledValue(context.Time);
+                                                            vector4InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.TimeInBars);
+                                                            vector4InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.TimeInBars);
+                                                            vector4InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.TimeInBars);
+                                                            vector4InputSlot.Value.W = (float)entries[3].Value.GetSampledValue(context.TimeInBars);
                                                         };
                         vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }

@@ -14,7 +14,7 @@ namespace T3.Gui.Windows.TimeLine
                 return;
             _playback = playback;
 
-            var p = new Vector2(TimeLineCanvas.Current.TransformPositionX((float)playback.Time), 0);
+            var p = new Vector2(TimeLineCanvas.Current.TransformPositionX((float)playback.TimeInBars), 0);
             ImGui.GetWindowDrawList().AddRectFilled(p, p + new Vector2(1, 2000), Color.Orange);
         } 
         
@@ -22,14 +22,14 @@ namespace T3.Gui.Windows.TimeLine
         public SnapResult CheckForSnap(double time)
         {
             var timeX = TimeLineCanvas.Current.TransformPositionX((float)time);
-            var currentTime = TimeLineCanvas.Current.TransformPositionX((float)_playback.Time);
+            var currentTime = TimeLineCanvas.Current.TransformPositionX((float)_playback.TimeInBars);
             var distance = Math.Abs( timeX - currentTime);
             if (distance <= 0)
                 return null;
 
             var force = Math.Max(0,SnapThreshold - distance); 
             return force >0 
-                       ? new SnapResult(_playback.Time, force) 
+                       ? new SnapResult(_playback.TimeInBars, force) 
                        : null;
         }
         

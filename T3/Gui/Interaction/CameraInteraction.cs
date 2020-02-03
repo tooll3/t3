@@ -55,7 +55,7 @@ namespace T3.Gui.Graph.Interaction
             if (animator.IsInputSlotAnimated(cameraInput))
             {
                 var curves = animator.GetCurvesForInput(cameraInput).ToArray();
-                double time = EvaluationContext.GlobalTime;
+                double time = EvaluationContext.GlobalTimeInBars;
                 SharpDX.Vector3 newValue = new SharpDX.Vector3(value.X, value.Y, value.Z);
                 for (int i = 0; i < 3; i++)
                 {

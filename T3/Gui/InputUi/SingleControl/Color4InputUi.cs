@@ -34,7 +34,7 @@ namespace T3.Gui.InputUi.SingleControl
         
         protected override void DrawAnimatedValue(string name, InputSlot<Vector4> inputSlot, Animator animator)
         {
-            double time = EvaluationContext.GlobalTime;
+            double time = EvaluationContext.GlobalTimeInBars;
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
             if (curves.Length < 4)
             {

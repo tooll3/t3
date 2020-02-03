@@ -12,17 +12,18 @@ namespace T3.Gui.Windows.TimeLine
     {
         public override void Draw(Playback playback)
         {
-            if (Math.Abs(_bpm - playback.Bpm) > 0.001f || ScaleRanges == null)
+            var hasChanged = Math.Abs(_bpm - Playback.Bpm) > 0.001f;
+            if (ScaleRanges == null || hasChanged)
             {
-                _bpm = playback.Bpm;
+                //_bpm = playback.Bpm;
                 ScaleRanges= InitializeTimeScaleDefinitions();
             }
             DrawTimeTicks(TimeLineCanvas.Current.Scale.X, TimeLineCanvas.Current.Scroll.X );
         }
 
-        private double _bpm = 98;
+        private double _bpm = 240;
 
-        protected override string BuildLabel(Raster raster, double time)
+        protected override string BuildLabel(Raster raster, double timeInBars)
         {
             var output = "";
             foreach (char c in raster.Label)
@@ -30,19 +31,20 @@ namespace T3.Gui.Windows.TimeLine
                 // bars
                 if (c == 'b')
                 {
-                    var bars = (int)(time*_bpm/60f/4f) + 1;
+                    //var bars = (int)(time*_bpm/60f/4f) + 1;
+                    var bars = (int)(timeInBars) + 1;
                     output += $"{bars}.";
                 }
                 // beats
                 else if (c == '.')
                 {
-                    var beats = (int)(time*_bpm/60f)%4 + 1;
+                    var beats = (int)(timeInBars*4)%4 + 1;
                     output += $".{beats}";
                 }
                 // ticks
                 else if (c == ':')
                 {
-                    var ticks = (int)(time*_bpm/60f*4f)%4 + 1;
+                    var ticks = (int)(timeInBars*16)%4 + 1;
                     output += $":{ticks}";
                 }
                 else
