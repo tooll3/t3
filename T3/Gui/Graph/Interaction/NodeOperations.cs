@@ -278,6 +278,26 @@ namespace T3.Gui.Graph.Interaction
                 return classDeclaration;
             }
         }
+
+        class ConstructorRewriter : CSharpSyntaxRewriter
+        {
+            private readonly string _newSymbolName;
+            public ConstructorRewriter(string newSymbolName)
+            {
+                _newSymbolName = newSymbolName;
+            }
+            
+            public override SyntaxNode VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
+            {
+                return ConstructorDeclaration(_newSymbolName)
+                      .AddModifiers(Token(SyntaxKind.PublicKeyword))
+                      .NormalizeWhitespace()
+                      .WithTrailingTrivia(SyntaxTrivia(SyntaxKind.EndOfLineTrivia, "\r\n"))
+                      .WithBody(node.Body)
+                      .WithLeadingTrivia(node.GetLeadingTrivia())
+                      .WithTrailingTrivia(node.GetTrailingTrivia());
+            }
+        }
         
         class MemberDuplicateRewriter : CSharpSyntaxRewriter
         {
@@ -469,30 +489,28 @@ namespace T3.Gui.Graph.Interaction
             var root = syntaxTree.GetRoot();
             var classRenamer = new ClassRenameRewriter(newName);
             root = classRenamer.Visit(root);
-            var memberRewriter = new MemberDuplicateRewriter(newName);
+            var memberRewriter = new ConstructorRewriter(newName);
             root = memberRewriter.Visit(root);
             var newSource = root.GetText().ToString();
             Log.Debug(newSource);
-            return;
 
-            // var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName);
-            // if (newAssembly != null)
-            // {
-            //     string newPath = @"Operators\Types\" + newName + ".cs";
-            //     string originalPath = @"Operators\Types\" + symbol.Name + ".cs";
-            //     var operatorResource = ResourceManager.Instance().GetOperatorFileResource(originalPath);
-            //     if (operatorResource != null)
-            //     {
-            //         operatorResource.OperatorAssembly = newAssembly;
-            //         operatorResource.Updated = true;
-            //         symbol.SourcePath = string.Empty;
-            //         symbol.PendingSource = newSource;
-            //         symbol.DeprecatedSourcePath = originalPath;
-            //         return;
-            //     }
-            // }
-
-            // Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
+            var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName);
+            if (newAssembly != null)
+            {
+                string originalPath = @"Operators\Types\" + symbol.Name + ".cs";
+                var operatorResource = ResourceManager.Instance().GetOperatorFileResource(originalPath);
+                if (operatorResource != null)
+                {
+                    operatorResource.OperatorAssembly = newAssembly;
+                    operatorResource.Updated = true;
+                    symbol.SourcePath = string.Empty;
+                    symbol.PendingSource = newSource;
+                    symbol.DeprecatedSourcePath = originalPath;
+                    return;
+                }
+            }
+            
+            Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
         }
 
         public static SymbolChildUi CreateInstance(Symbol symbol, Symbol parent, Vector2 positionOnCanvas)

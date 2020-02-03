@@ -452,7 +452,9 @@ namespace T3.Core
 
             if (!string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
             {
+                // remove old source file and its entry in project 
                 RemoveSourceFileFromProject(symbol.DeprecatedSourcePath);
+                File.Delete(symbol.DeprecatedSourcePath);
                 symbol.DeprecatedSourcePath = string.Empty;
             }
 
