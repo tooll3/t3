@@ -12,7 +12,8 @@ namespace T3.Gui.Windows.TimeLine
     {
         public override void Draw(Playback playback)
         {
-            DrawTimeTicks(TimeLineCanvas.Current.Scale.X / UnitsPerSecond, TimeLineCanvas.Current.Scroll.X * UnitsPerSecond);
+            var unitInSecs = UnitsPerSecond * Playback.Bpm / 240f;
+            DrawTimeTicks(TimeLineCanvas.Current.Scale.X / unitInSecs, TimeLineCanvas.Current.Scroll.X * unitInSecs);
         }
         
         public float UnitsPerSecond { get; set; } = 1;
