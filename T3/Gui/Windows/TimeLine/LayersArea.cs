@@ -296,7 +296,7 @@ namespace T3.Gui.Windows.TimeLine
             foreach (var clip in _selectedItems)
             {
                 // Keep 1 frame min duration
-                clip.StartTime = Math.Min(clip.StartTime + dt, clip.EndTime - 1 / 60f);
+                clip.StartTime = Math.Min(clip.StartTime + dt, clip.EndTime - MinDuration);
             }
         }
 
@@ -305,8 +305,31 @@ namespace T3.Gui.Windows.TimeLine
             foreach (var clip in _selectedItems)
             {
                 // Keep 1 frame min duration
-                clip.EndTime = Math.Max(clip.EndTime + dt, clip.StartTime + 1 / 60f);
+                clip.EndTime = Math.Max(clip.EndTime + dt, clip.StartTime + MinDuration);
             }
+        }
+
+        void ITimeElementSelectionHolder.UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV)
+        {
+            foreach (var clip in _selectedItems)
+            {
+                clip.StartTime = originU + (clip.StartTime - originU) * scaleU;
+                clip.EndTime = Math.Max(originU + (clip.EndTime - originU) * scaleU, clip.StartTime + MinDuration);
+            }
+        }
+
+        private const float MinDuration = 1 / 60f;    // In bars
+        
+        public TimeRange GetSelectionTimeRange()
+        {
+            var timeRange = TimeRange.Undefined;
+            foreach (var s in _selectedItems)
+            {
+                timeRange.Unite((float)s.StartTime);
+                timeRange.Unite((float)s.EndTime);
+            }
+
+            return timeRange;
         }
 
         void ITimeElementSelectionHolder.CompleteDragCommand()

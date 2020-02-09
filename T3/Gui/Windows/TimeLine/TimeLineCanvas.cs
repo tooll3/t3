@@ -8,7 +8,6 @@ using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.Snapping;
-using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using UiHelpers;
 
@@ -22,10 +21,13 @@ namespace T3.Gui.Windows.TimeLine
             _dopeSheetArea = new DopeSheetArea(_snapHandler, this);
             _selectionFence = new TimeSelectionFence(this);
             _curveEditArea = new CurveEditArea(this, _snapHandler);
+            _selectionRange = new TimeSelectionRange(this, _snapHandler);
 
-            _snapHandler.AddSnapAttractor(_timeRange);
+            _snapHandler.AddSnapAttractor(_playbackRange);
             _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
+            _snapHandler.AddSnapAttractor(_selectionRange);
+            
             _snapHandler.SnappedEvent += SnappedEventHandler;
         }
 
@@ -71,10 +73,12 @@ namespace T3.Gui.Windows.TimeLine
                         _curveEditArea.Draw(compositionOp, animationParameters, bringCurvesIntoView: modeChanged);
                         break;
                 }
+                
+                _selectionRange.Draw(_drawlist);
 
                 if (Playback.IsLooping)
                 {
-                    _timeRange.Draw(this, Playback, _drawlist, _snapHandler);
+                    _playbackRange.Draw(this, Playback, _drawlist, _snapHandler);
                 }
                 _currentTimeMarker.Draw(Playback);
                 DrawDragTimeArea();
@@ -82,6 +86,9 @@ namespace T3.Gui.Windows.TimeLine
             }
             ImGui.EndChild();
         }
+        
+        
+        
 
         private void HandleInteraction()
         {
@@ -291,7 +298,27 @@ namespace T3.Gui.Windows.TimeLine
                 s.UpdateDragEndCommand(dt, dv);
             }
         }
+        
+        public void UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV)
+        {
+            foreach (var s in _selectionHolders)
+            {
+                s.UpdateDragStretchCommand(scaleU, scaleV, originU, originV);
+            }
+        }
+        
+        public TimeRange GetSelectionTimeRange()
+        {
+            var timeRange = new TimeRange(float.PositiveInfinity, float.NegativeInfinity);
 
+            foreach (var sh in _selectionHolders)
+            {
+                timeRange.Unite(sh.GetSelectionTimeRange());    
+            }
+            return timeRange;
+        }
+
+        
         public void CompleteDragCommand()
         {
             foreach (var s in _selectionHolders)
@@ -473,7 +500,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
         private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
-        private readonly TimeRange _timeRange = new TimeRange();
+        private readonly PlaybackRange _playbackRange = new PlaybackRange();
 
         private readonly DopeSheetArea _dopeSheetArea;
         private readonly CurveEditArea _curveEditArea;
@@ -482,6 +509,7 @@ namespace T3.Gui.Windows.TimeLine
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
         private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
         private readonly TimeSelectionFence _selectionFence;
+        private readonly TimeSelectionRange _selectionRange;
 
         public static TimeLineCanvas Current;
 

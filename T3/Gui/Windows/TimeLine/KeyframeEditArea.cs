@@ -42,7 +42,27 @@ namespace T3.Gui.Windows.TimeLine
         private bool _contextMenuIsOpen;
 
 
+        public TimeRange GetSelectionTimeRange()
+        {
+            var timeRange = TimeRange.Undefined;
+            foreach (var s in SelectedKeyframes)
+            {
+                timeRange.Unite((float)s.U);
+            }
 
+            return timeRange;
+        }
+        
+        public void UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV)
+        {
+            foreach (var vDefinition in SelectedKeyframes)
+            {
+                vDefinition.U = originU + (vDefinition.U - originU) * scaleU;
+            }
+
+            RebuildCurveTables();
+        }
+        
 
         protected void DrawContextMenu()
         {
