@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
@@ -31,11 +32,26 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(0, 3)); // keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
 
-                foreach (var layer in compositionOp.Symbol.Animator.Layers)
+                // Obsolete stub implementation if Clips would be stored in Animator
+                // foreach (var layer in compositionOp.Symbol.Animator.Layers)
+                // {
+                //     DrawLayer(layer.Clips);
+                // }
+
+                // This is horrible because we have to cast the list of ITimeClips into
+                // legacy Animator.Clips(). Eventually this needs to be refactored. 
+                var clips = new List<Animator.Clip>();
+                foreach (var clip in compositionOp.Children.OfType<ITimeClip>())
                 {
-                    DrawLayer(layer);
+                    clips.Add(new Animator.Clip()
+                             {
+                                 StartTime = clip.TimeRange.Start,
+                                 EndTime = clip.TimeRange.End,
+                                 Name = "Clip",
+                             });
                 }
 
+                DrawLayer(clips);
                 DrawContextMenu();
             }
             ImGui.EndGroup();
@@ -73,7 +89,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.PopStyleVar();
         }
 
-        private void DrawLayer(Animator.Layer layer)
+        private void DrawLayer(List<Animator.Clip> layerClips)
         {
             // Draw layer lines
             var min = ImGui.GetCursorScreenPos();
@@ -82,13 +98,14 @@ namespace T3.Gui.Windows.TimeLine
                                     new Vector2(max.X, max.Y + 1), Color.Black);
 
             var layerArea = new ImRect(min, max);
-            foreach (var clip in layer.Clips)
+            foreach (var clip in layerClips)
             {
                 DrawClip(layerArea, clip);
             }
 
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight));
         }
+        
 
         private void DrawClip(ImRect layerArea, Animator.Clip clip)
         {
@@ -210,7 +227,7 @@ namespace T3.Gui.Windows.TimeLine
                     var endTime = clip.EndTime + dt;
                     if (_snapHandler.CheckForSnapping(ref endTime))
                         dt = endTime - clip.EndTime;
-                    
+
                     TimeLineCanvas.Current.UpdateDragCommand(dt, 0);
                     break;
 
@@ -218,7 +235,7 @@ namespace T3.Gui.Windows.TimeLine
                     var startTime2 = clip.StartTime + dt;
                     if (_snapHandler.CheckForSnapping(ref startTime2))
                         dt = startTime2 - clip.StartTime;
-                    
+
                     TimeLineCanvas.Current.UpdateDragStartCommand(dt, 0);
                     break;
 
@@ -226,7 +243,6 @@ namespace T3.Gui.Windows.TimeLine
                     var endTime2 = clip.StartTime + dt;
                     if (_snapHandler.CheckForSnapping(ref endTime2))
                         dt = endTime2 - clip.EndTime;
-                    
 
                     TimeLineCanvas.Current.UpdateDragEndCommand(dt, 0);
                     break;
@@ -318,8 +334,8 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        private const float MinDuration = 1 / 60f;    // In bars
-        
+        private const float MinDuration = 1 / 60f; // In bars
+
         public TimeRange GetSelectionTimeRange()
         {
             var timeRange = TimeRange.Undefined;

@@ -87,6 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animation\ITimeClip.cs" />
     <Compile Include="Animation\Playback.cs" />
     <Compile Include="Animation\ConstantCurveMapper.cs" />
     <Compile Include="Animation\ConstInterpolator.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Animation\LinearInterpolator.cs" />
     <Compile Include="Animation\OscillateCurveMapper.cs" />
     <Compile Include="Animation\SplineInterpolator.cs" />
+    <Compile Include="Animation\TimeRange.cs" />
     <Compile Include="Animation\Utils.cs" />
     <Compile Include="Animation\VDefinition.cs" />
     <Compile Include="Logging\ConsoleWriter.cs" />
