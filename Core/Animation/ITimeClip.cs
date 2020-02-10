@@ -1,6 +1,4 @@
-﻿using T3.Gui.Windows.TimeLine;
-
-namespace T3.Core.Animation
+﻿namespace T3.Core.Animation
 {
     public interface ITimeClip
     {

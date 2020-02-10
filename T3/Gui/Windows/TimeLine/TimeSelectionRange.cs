@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Gui.Interaction.Snapping;
 
