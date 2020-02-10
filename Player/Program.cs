@@ -64,15 +64,11 @@ namespace T3
 
                                           RebuildBackBuffer(form, device, ref _renderView, ref _backBuffer, ref _swapChain);
                                       };
-            form.WindowState = FormWindowState.Maximized;
 
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
             var di = new DirectoryInfo(".");
             Console.WriteLine(di.FullName);
-            FullScreenVertexShaderId = resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
-            FullScreenPixelShaderId = resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
-            (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\images\chipmunk.jpg", null);
 
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
 
@@ -83,16 +79,17 @@ namespace T3
             RenderLoop.Run(form, () =>
                                  {
                                      Int64 ticks = stopwatch.ElapsedTicks;
+                                     // Console.WriteLine("{0}", (double)ticks/Stopwatch.Frequency);
                                      stopwatch.Restart();
                                      DirtyFlag.IncrementGlobalTicks();
-                                     
+
                                      context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
                                      context.OutputMerger.SetTargets(_renderView);
+                                     
+                                     // todo: remove this and add operator evaluation here:
                                      context.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
 
-                                     context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
-                                     context.OutputMerger.SetTargets(_renderView);
-
+                                     
                                      // _swapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
                                      _swapChain.Present(1, PresentFlags.None);
                                  });
