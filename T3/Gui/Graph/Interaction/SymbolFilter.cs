@@ -53,10 +53,13 @@ namespace T3.Gui.Graph.Interaction
             {
                 UpdateMatchingSymbols();
             }
+
+            WasUpdated = needsUpdate;
         }
 
         private Type _inputType;
         private Type _outputType;
+        public bool WasUpdated;
 
         private void UpdateMatchingSymbols()
         {

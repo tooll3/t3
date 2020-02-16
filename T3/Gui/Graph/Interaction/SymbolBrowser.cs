@@ -19,8 +19,6 @@ namespace T3.Gui.Graph.Interaction
     /// </summary>
     public class SymbolBrowser
     {
-        private bool _keepNavEnableKeyboard;
-
         #region public API ------------------------------------------------------------------------
         public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType)
         {
@@ -32,9 +30,7 @@ namespace T3.Gui.Graph.Interaction
             _filter.SearchString = "";
             _selectedSymbolUi = null;
             _filter.UpdateIfNecessary();
-
-            // Keep navigation setting to restore after window gets closed
-            _keepNavEnableKeyboard = (ImGui.GetIO().ConfigFlags & ImGuiConfigFlags.NavEnableKeyboard) != ImGuiConfigFlags.None;
+            DisableImGuiKeyboardNavigation();
 
             if (_selectedSymbolUi == null && _filter.MatchingSymbolUis.Count > 0)
             {
@@ -48,15 +44,12 @@ namespace T3.Gui.Graph.Interaction
             {
                 if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((int)Key.Tab))
                     return;
-                
+
                 Log.Debug("open create with tab");
                 OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null, null);
                 return;
             }
 
-            // Disable keyboard navigation to allow cursor up down
-            // This is being restored in Close()
-            ImGui.GetIO().ConfigFlags &= ~ImGuiConfigFlags.NavEnableKeyboard;
             Current = this;
 
             _filter.UpdateIfNecessary();
@@ -73,6 +66,8 @@ namespace T3.Gui.Graph.Interaction
             ImGui.PopID();
         }
         #endregion
+
+        private bool _selectedItemWasChanged;
 
         #region internal implementation -----------------------------------------------------------
         private void DrawSearchInput()
@@ -100,6 +95,8 @@ namespace T3.Gui.Graph.Interaction
                     index++;
                     index %= _filter.MatchingSymbolUis.Count;
                     _selectedSymbolUi = _filter.MatchingSymbolUis[index];
+
+                    _selectedItemWasChanged = true;
                 }
             }
             else if (ImGui.IsKeyReleased((int)Key.CursorUp))
@@ -112,6 +109,7 @@ namespace T3.Gui.Graph.Interaction
                         index = _filter.MatchingSymbolUis.Count - 1;
 
                     _selectedSymbolUi = _filter.MatchingSymbolUis[index];
+                    _selectedItemWasChanged = true;
                 }
             }
             else if (ImGui.IsKeyPressed((int)Key.Return))
@@ -120,6 +118,15 @@ namespace T3.Gui.Graph.Interaction
                 {
                     CreateInstance(_selectedSymbolUi.Symbol);
                 }
+            }
+            
+            
+            if(_filter.WasUpdated)
+            {
+                _selectedSymbolUi = _filter.MatchingSymbolUis.Count > 0
+                                        ? _filter.MatchingSymbolUis[0]
+                                        : null;
+                _selectedItemWasChanged = true;
             }
 
             var clickedOutside = ImGui.IsMouseClicked(0) && ImGui.IsWindowHovered();
@@ -145,15 +152,12 @@ namespace T3.Gui.Graph.Interaction
 
         private void Close()
         {
-            if (_keepNavEnableKeyboard)
-                ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
-
+            RestoreImGuiKeyboardNavigation();
             _isOpen = false;
         }
 
         private void DrawMatchesList()
         {
-            //ImGui.SetCursorPos(_posInWindow + new Vector2(_size.X + 1, 1));
             ImGui.SetCursorPos(_posInWindow + new Vector2(1, _size.Y + 1));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
@@ -162,10 +166,11 @@ namespace T3.Gui.Graph.Interaction
             {
                 if (_filter.MatchingSymbolUis.Count > 0 && !_filter.MatchingSymbolUis.Contains(_selectedSymbolUi))
                     _selectedSymbolUi = _filter.MatchingSymbolUis[0];
-                
+
                 if ((_selectedSymbolUi == null && SymbolUiRegistry.Entries.Values.Any()))
                     _selectedSymbolUi = SymbolUiRegistry.Entries.Values.FirstOrDefault();
 
+                //  Print type filter
                 if (_filter.FilterInputType != null || _filter.FilterOutputType != null)
                 {
                     ImGui.PushFont(Fonts.FontSmall);
@@ -187,7 +192,6 @@ namespace T3.Gui.Graph.Interaction
                 {
                     ImGui.PushID(symbolUi.Symbol.Id.GetHashCode());
                     {
-
                         var color = symbolUi.Symbol.OutputDefinitions.Count > 0
                                         ? TypeUiRegistry.GetPropertiesForType(symbolUi.Symbol.OutputDefinitions[0]?.ValueType).Color
                                         : Color.Gray;
@@ -195,7 +199,15 @@ namespace T3.Gui.Graph.Interaction
                         ImGui.PushStyleColor(ImGuiCol.HeaderHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
                         ImGui.PushStyleColor(ImGuiCol.HeaderActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
                         ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
-                        ImGui.Selectable("", symbolUi == _selectedSymbolUi);
+
+                        var isSelected = symbolUi == _selectedSymbolUi;
+                        if (isSelected && _selectedItemWasChanged)
+                        {
+                            ScrollToMakeItemVisible();
+                            _selectedItemWasChanged = false;
+                        }
+
+                        ImGui.Selectable("", isSelected);
 
                         if (ImGui.IsItemActivated())
                         {
@@ -209,22 +221,10 @@ namespace T3.Gui.Graph.Interaction
                             ImGui.SameLine();
                             ImGui.TextDisabled(symbolUi.Symbol.Namespace);
                         }
+
                         ImGui.PopStyleColor(4);
                     }
                     ImGui.PopID();
-                }
-
-                var index = _filter.MatchingSymbolUis.IndexOf(_selectedSymbolUi);
-                var rectMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(0, (index + 1) * ImGui.GetFrameHeight());
-                var rectMax = rectMin + new Vector2(10, 10);
-                var isVisible = ImGui.IsRectVisible(rectMin, rectMax);
-
-                if (!isVisible)
-                {
-                    var keepPos = ImGui.GetCursorScreenPos();
-                    ImGui.SetCursorScreenPos(rectMin);
-                    ImGui.SetScrollHereY(0);
-                    ImGui.SetCursorScreenPos(keepPos);
                 }
             }
 
@@ -232,10 +232,25 @@ namespace T3.Gui.Graph.Interaction
             ImGui.PopStyleVar(2);
         }
 
+        private void ScrollToMakeItemVisible()
+        {
+            var scrollTarget = ImGui.GetCursorPos();
+            var windowSize = ImGui.GetWindowSize();
+            var scrollPos = ImGui.GetScrollY();
+            if (scrollTarget.Y < scrollPos)
+            {
+                ImGui.SetScrollY(scrollTarget.Y);
+            }
+            else if (scrollTarget.Y + 20 > scrollPos + windowSize.Y)
+            {
+                ImGui.SetScrollY(scrollPos + windowSize.Y - 20);
+            }
+        }
+
         private void CreateInstance(Symbol symbol)
         {
             var parent = GraphCanvas.Current.CompositionOp.Symbol;
-            var childUi= NodeOperations.CreateInstance(symbol, parent, PosOnCanvas);
+            var childUi = NodeOperations.CreateInstance(symbol, parent, PosOnCanvas);
             var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
             SelectionManager.SetSelection(childUi, instance);
 
@@ -245,7 +260,8 @@ namespace T3.Gui.Graph.Interaction
                 if (temp.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
                     // connecting to output
-                    ConnectionMaker.CompleteConnectionFromBuiltNode(parent, childUi.SymbolChild, _filter.GetOutputMatchingType(symbol, _filter.FilterInputType));
+                    ConnectionMaker.CompleteConnectionFromBuiltNode(parent, childUi.SymbolChild,
+                                                                    _filter.GetOutputMatchingType(symbol, _filter.FilterInputType));
                 }
                 else
                 {
@@ -261,14 +277,22 @@ namespace T3.Gui.Graph.Interaction
             Close();
         }
 
-
         private readonly SymbolFilter _filter = new SymbolFilter();
         #endregion
 
+        // This has to be called on open
+        private void DisableImGuiKeyboardNavigation()
+        {
+            // Keep navigation setting to restore after window gets closed
+            _keepNavEnableKeyboard = (ImGui.GetIO().ConfigFlags & ImGuiConfigFlags.NavEnableKeyboard) != ImGuiConfigFlags.None;
+            ImGui.GetIO().ConfigFlags &= ~ImGuiConfigFlags.NavEnableKeyboard;
+        }
 
-
-        //public List<Symbol.Connection> ConnectionsIn = new List<Symbol.Connection>();
-        // public Symbol.Connection ConnectionOut = null;
+        private void RestoreImGuiKeyboardNavigation()
+        {
+            if (_keepNavEnableKeyboard)
+                ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+        }
 
         public Vector2 PosOnCanvas { get; private set; }
 
@@ -286,7 +310,7 @@ namespace T3.Gui.Graph.Interaction
 
         private SymbolUi _selectedSymbolUi;
         private static readonly int UiId = "DraftNode".GetHashCode();
-
+        private bool _keepNavEnableKeyboard;
         public static SymbolBrowser Current;
     }
 }
