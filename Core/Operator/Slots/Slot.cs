@@ -40,7 +40,7 @@ namespace T3.Core.Operator.Slots
         {
             if (DirtyFlag.IsDirty)
             {
-                UpdateAction?.Invoke(context);
+                _updateAction?.Invoke(context);
                 DirtyFlag.Clear();
                 DirtyFlag.SetUpdated();
             }
@@ -116,7 +116,9 @@ namespace T3.Core.Operator.Slots
             }
         }
 
-        public Action<EvaluationContext> UpdateAction;
+        private Action<EvaluationContext> _updateAction;
+        public virtual Action<EvaluationContext> UpdateAction { get => _updateAction; set => _updateAction = value; }
+
         protected Action<EvaluationContext> _defaultUpdateAction;
     }
 }
