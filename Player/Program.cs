@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows.Forms;
 using T3.Core;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
 

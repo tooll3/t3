@@ -1,5 +1,6 @@
 ﻿using System;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Gui.Selection;
 
 namespace T3.Gui.OutputUi

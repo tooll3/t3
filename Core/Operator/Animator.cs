@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator
 {

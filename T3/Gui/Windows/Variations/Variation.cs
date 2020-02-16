@@ -4,6 +4,7 @@ using System.Linq;
 using T3.Core;
 using T3.Core.Operator;
 using SharpDX;
+using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using Vector2 = System.Numerics.Vector2;

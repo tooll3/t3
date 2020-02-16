@@ -1,5 +1,6 @@
 ﻿using System;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.OutputUi

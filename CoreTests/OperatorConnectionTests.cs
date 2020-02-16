@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharpDX;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 
 namespace OperatorTests
 {

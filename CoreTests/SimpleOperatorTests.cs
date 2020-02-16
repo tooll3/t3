@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 
 namespace OperatorTests
 {

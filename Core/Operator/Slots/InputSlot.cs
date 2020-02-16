@@ -1,0 +1,51 @@
+namespace T3.Core.Operator.Slots
+{
+    public class InputSlot<T> : Slot<T>, IInputSlot
+    {
+        public InputSlot(InputValue<T> typedInputValue)
+        {
+            UpdateAction = InputUpdate;
+            _defaultUpdateAction = UpdateAction;
+            TypedInputValue = typedInputValue;
+            Value = typedInputValue.Value;
+        }
+
+        public InputSlot() : this(default(T))
+        {
+            UpdateAction = InputUpdate;
+            _defaultUpdateAction = UpdateAction;
+        }
+
+        public InputSlot(T value) : this(new InputValue<T>(value))
+        {
+        }
+
+        public void InputUpdate(EvaluationContext context)
+        {
+            Value = Input.IsDefault ? TypedDefaultValue.Value : TypedInputValue.Value;
+        }
+
+        private SymbolChild.Input _input;
+
+        public SymbolChild.Input Input
+        {
+            get => _input;
+            set
+            {
+                _input = value;
+                TypedInputValue = (InputValue<T>)value.Value;
+                TypedDefaultValue = (InputValue<T>)value.DefaultValue;
+            }
+        }
+
+        public void SetTypedInputValue(T newValue)
+        {
+            Input.IsDefault = false;
+            TypedInputValue.Value = newValue;
+            DirtyFlag.Invalidate();
+        }
+
+        public InputValue<T> TypedInputValue;
+        public InputValue<T> TypedDefaultValue;
+    }
+}

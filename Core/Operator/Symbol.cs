@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator
 {
