@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using T3.Core.Logging;
+using T3.Core.Operator.Attributes;
 
 namespace T3.Core.Operator
 {

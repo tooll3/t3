@@ -8,23 +8,6 @@ using T3.Core.Logging;
 
 namespace T3.Core.Operator
 {
-
-
-    public class OperatorAttribute : Attribute
-    {
-        public Guid Id { get; set; }
-        public string Guid { get => Id.ToString(); set => Id = System.Guid.Parse(value); }
-    }
-
-    public class OutputAttribute : OperatorAttribute
-    {
-    }
-
-    public class InputAttribute : OperatorAttribute
-    {
-        public Type Type { get; set; }
-    }
-
     [Flags]
     public enum DirtyFlagTrigger
     {
