@@ -119,25 +119,51 @@ namespace T3.Gui.Graph.Interaction
             return null;
         }
 
-        private double ComputeRelevancy(SymbolUi symbolUi, string query, string currentProjectName)
+        private static double ComputeRelevancy(SymbolUi symbolUi, string query, string currentProjectName)
         {
-            double relevancy = 1;
+            float relevancy = 1;
 
-            if (symbolUi.Symbol.Name.Equals(query, StringComparison.InvariantCultureIgnoreCase))
+            var symbolName = symbolUi.Symbol.Name;
+
+            if (symbolName.Equals(query, StringComparison.InvariantCultureIgnoreCase))
             {
                 relevancy *= 5;
             }
 
-            if (symbolUi.Symbol.Name.StartsWith(query, StringComparison.InvariantCultureIgnoreCase))
+            if (symbolName.StartsWith(query, StringComparison.InvariantCultureIgnoreCase))
             {
-                relevancy *= 4.5;
+                // bump if starts
+                relevancy *= 4.5f;
             }
             else
             {
-                if (symbolUi.Symbol.Name.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)
+                // bump if direct match
+                if (symbolName.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     relevancy *= 3;
                 }
+            }
+            
+            // Bump if characters match upper characters
+            // e.g. "ds" matches "DrawState"
+            var pascalCaseMatch = true;
+            var maxIndex = 0;
+            var uppercaseQuery = query.ToUpper();
+            for (var charIndex = 0; charIndex < uppercaseQuery.Length; charIndex++)
+            {
+                var c = uppercaseQuery[charIndex];
+                var indexInName = symbolName.IndexOf(c); 
+                if (indexInName < maxIndex)
+                {
+                    pascalCaseMatch = false;
+                    break;
+                }
+                maxIndex = indexInName;
+            }
+
+            if (pascalCaseMatch)
+            {
+                relevancy *= 2.5f;
             }
 
             // Bump up if query occurs in description
@@ -145,16 +171,10 @@ namespace T3.Gui.Graph.Interaction
             {
                 if (symbolUi.Description != null && symbolUi.Description.IndexOf(query, StringComparison.InvariantCultureIgnoreCase) != -1)
                 {
-                    relevancy *= 1.2;
+                    relevancy *= 1.2f;
                 }
             }
-
-            // if (symbolUi.Symbol.Name == "Time")      // disfavor shadow ops
-            //     relevancy *= 0.3;
-            //
-            // if (symbolUi.Symbol.Name == "Curve")      // disfavor shadow ops
-            //     relevancy *= 0.05;
-
+            
             if (!string.IsNullOrEmpty(symbolUi.Symbol.Namespace))
             {
                 if (symbolUi.Symbol.Namespace.Contains("dx11"))
@@ -172,7 +192,7 @@ namespace T3.Gui.Graph.Interaction
 
                 if (Regex.Match(symbolUi.Symbol.Namespace, @"^lib\..*", RegexOptions.IgnoreCase) != Match.Empty)
                 {
-                    relevancy *= 1.6;
+                    relevancy *= 1.6f;
                 }
             }
 
@@ -194,34 +214,7 @@ namespace T3.Gui.Graph.Interaction
 
             return relevancy;
         }
-
-        // private bool IsCompositionOperatorInNamespaceOf(MetaOperator op)
-        // {
-        //     return op.Namespace.StartsWith(_compositionOperator.Definition.Namespace);
-        // }
-        //
-        // private void InitDictionaryWithMetaOperatorUsageCount()
-        // {
-        //     foreach (var metaOp in App.Current.Model.MetaOpManager.MetaOperators)
-        //     {
-        //         _numberOfMetaOperatorUsage.Add(metaOp.Key, 1);
-        //     }
-        //     CountUsageOfMetaOps();
-        // }
-
-        // private void CountUsageOfMetaOps()
-        // {
-        //     foreach (var metaOp in App.Current.Model.MetaOpManager.MetaOperators)
-        //     {
-        //         foreach (var internalIds in metaOp.Value.InternalOperatorsMetaOpId)
-        //         {
-        //             if (_numberOfMetaOperatorUsage.ContainsKey(internalIds))
-        //             {
-        //                 _numberOfMetaOperatorUsage[internalIds]++;
-        //             }
-        //         }
-        //     }
-        // }
+        
 
         public List<SymbolUi> MatchingSymbolUis { get; private set; } = new List<SymbolUi>();
 
