@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 
 namespace T3.Gui.Commands
 {
@@ -10,7 +12,7 @@ namespace T3.Gui.Commands
         public string Name => "Delete time clip";
         public bool IsUndoable => true;
 
-        public TimeClipDeleteCommand(Symbol compositionSymbol, IEnumerable<Animator.Clip> clipsToRemove)
+        public TimeClipDeleteCommand(Symbol compositionSymbol, IEnumerable<TimeClip> clipsToRemove)
         {
             _clipsToRemove = clipsToRemove;
             _compositionSymbolId = compositionSymbol.Id;
@@ -19,34 +21,21 @@ namespace T3.Gui.Commands
         public void Do()
         {
             var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
-            foreach (var layer in compositionSymbol.Animator.Layers)
+            var allClips = NodeOperations.GetAllTimeClips(compositionSymbol);
+            foreach (var clipToRemove in _clipsToRemove)
             {
-                var removedClips = new List<Animator.Clip>();
-
-                foreach (var clip in _clipsToRemove)
-                {
-                    if (!layer.Clips.Contains(clip))
-                        continue;
-                    
-                    removedClips.Add(clip);
-                    layer.Clips.Remove(clip);
-                }
-
-                if (removedClips.Count > 0)
-                    _layersWithRemovedClips[layer] = removedClips;
+                allClips.Remove(clipToRemove);
             }
         }
 
         public void Undo()
         {
-            foreach (var (layer, removedClips) in _layersWithRemovedClips)
-            {
-                layer.Clips.AddRange(removedClips);
-            }            
+            var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
+            var allClips = NodeOperations.GetAllTimeClips(compositionSymbol);
+            allClips.AddRange(_clipsToRemove);
         }
 
         private readonly Guid _compositionSymbolId;
-        private readonly IEnumerable<Animator.Clip> _clipsToRemove;
-        private readonly Dictionary<Animator.Layer, List<Animator.Clip>> _layersWithRemovedClips = new Dictionary<Animator.Layer, List<Animator.Clip>>();
+        private readonly IEnumerable<TimeClip> _clipsToRemove;
     }
 }

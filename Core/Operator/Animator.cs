@@ -381,56 +381,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(instanceId, inputId, index), curve);
             }
         }
-
-        // todo: layers should be put into an own class as these are not directly related/dependent on keyframe animations
-        public List<Layer> Layers { get; set; } = new List<Layer>()
-                                                  {
-                                                      new Layer()
-                                                      {
-                                                          Clips = new List<Clip>()
-                                                                  {
-                                                                      new Clip() { Name = "ClipA", Id = Guid.NewGuid(), StartTime = 10, EndTime = 15, },
-                                                                      new Clip() { Name = "ClipB", Id = Guid.NewGuid(), StartTime = 0, EndTime = 7, },
-                                                                  }
-                                                      },
-                                                      new Layer()
-                                                      {
-                                                          Clips = new List<Clip>()
-                                                                  {
-                                                                      new Clip() { Name = "ClipA", Id = Guid.NewGuid(), StartTime = 12, EndTime = 12.2f, },
-                                                                      new Clip() { Name = "ClipB", Id = Guid.NewGuid(), StartTime = 0, EndTime = 2, },
-                                                                  }
-                                                      },
-                                                  };
-
-        public IEnumerable<Clip> GetAllTimeClips()
-        {
-            foreach (var layer in Layers)
-            {
-                foreach (var clip in layer.Clips)
-                {
-                    yield return clip;
-                }
-            }
-        }
-        
         
         private readonly Dictionary<CurveId, Curve> _animatedInputCurves = new Dictionary<CurveId, Curve>();
-        
-        public class Layer
-        {
-            public Guid Id { get; set; }
-            public List<Clip> Clips = new List<Clip>();
-        }
-
-        public class Clip
-        {
-            public Guid Id { get; set; }
-            public string Name { get; set; }
-            public double StartTime { get; set; }
-            public double EndTime { get; set; } = 10;
-            public double SourceStartTime { get; set; }
-            public double SourceEndTime { get; set; } = 10;
-        }        
     }
 }

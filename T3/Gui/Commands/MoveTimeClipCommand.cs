@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 
 namespace T3.Gui.Commands
 {
@@ -13,20 +15,20 @@ namespace T3.Gui.Commands
         public class Entry
         {
             public Guid Id;
-            public double OriginalStartTime { get; set; }
-            public double OriginalEndTime { get; set; }
-            public double OriginalSourceStartTime { get; set; }
-            public double OriginalSourceEndTime { get; set; }
-            public double StartTime { get; set; }
-            public double EndTime { get; set; }
-            public double SourceStartTime { get; set; }
-            public double SourceEndTime { get; set; }
+            public float OriginalStartTime { get; set; }
+            public float OriginalEndTime { get; set; }
+            public float OriginalSourceStartTime { get; set; }
+            public float OriginalSourceEndTime { get; set; }
+            public float StartTime { get; set; }
+            public float EndTime { get; set; }
+            public float SourceStartTime { get; set; }
+            public float SourceEndTime { get; set; }
         }
 
         private readonly Entry[] _entries;
         private readonly Guid _compositionSymbolId;
 
-        public MoveTimeClipCommand(Guid compositionSymbolId, List<Animator.Clip> clips)
+        public MoveTimeClipCommand(Guid compositionSymbolId, IReadOnlyList<TimeClip> clips)
         {
             _compositionSymbolId = compositionSymbolId;
             _entries = new Entry[clips.Count()];
@@ -36,10 +38,10 @@ namespace T3.Gui.Commands
                 var entry = new Entry
                             {
                                 Id = clip.Id,
-                                 OriginalStartTime= clip.StartTime,
-                                 OriginalEndTime= clip.EndTime,
-                                 OriginalSourceStartTime= clip.SourceStartTime,
-                                 OriginalSourceEndTime= clip.SourceEndTime,
+                                 OriginalStartTime= clip.VisibleRange.Start,
+                                 OriginalEndTime= clip.VisibleRange.End,
+                                 OriginalSourceStartTime= clip.SourceRange.Start,
+                                 OriginalSourceEndTime= clip.SourceRange.End,
                             };
                 _entries[i] = entry;
             }
@@ -51,16 +53,16 @@ namespace T3.Gui.Commands
             var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
             var animator = compositionUi.Symbol.Animator;
 
-            foreach (var clip in animator.GetAllTimeClips())
+            foreach (var clip in NodeOperations.GetAllTimeClips(compositionUi.Symbol))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
-                selectedEntry.StartTime = clip.StartTime;
-                selectedEntry.EndTime = clip.EndTime;
-                selectedEntry.SourceStartTime = clip.SourceStartTime;
-                selectedEntry.SourceEndTime = clip.SourceEndTime;
+                selectedEntry.StartTime = clip.VisibleRange.Start;
+                selectedEntry.EndTime = clip.VisibleRange.End;
+                selectedEntry.SourceStartTime = clip.SourceRange.Start;
+                selectedEntry.SourceEndTime = clip.SourceRange.End;
             }            
         }
 
@@ -70,16 +72,16 @@ namespace T3.Gui.Commands
             var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
             var animator = compositionUi.Symbol.Animator;
 
-            foreach (var clip in animator.GetAllTimeClips())
+            foreach (var clip in NodeOperations.GetAllTimeClips(compositionUi.Symbol))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
-                clip.StartTime = selectedEntry.OriginalStartTime;
-                clip.EndTime = selectedEntry.OriginalEndTime;
-                clip.SourceStartTime = selectedEntry.OriginalSourceStartTime;
-                clip.SourceEndTime = selectedEntry.OriginalSourceEndTime;
+                clip.VisibleRange.Start = selectedEntry.OriginalStartTime;
+                clip.VisibleRange.End = selectedEntry.OriginalEndTime;
+                clip.SourceRange.Start = selectedEntry.OriginalSourceStartTime;
+                clip.SourceRange.End = selectedEntry.OriginalSourceEndTime;
             }
         }
 
@@ -88,16 +90,16 @@ namespace T3.Gui.Commands
             var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
             var animator = compositionUi.Symbol.Animator;
 
-            foreach (var clip in animator.GetAllTimeClips())
+            foreach (var clip in NodeOperations.GetAllTimeClips(compositionUi.Symbol))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
-                clip.StartTime = selectedEntry.StartTime;
-                clip.EndTime = selectedEntry.EndTime;
-                clip.SourceStartTime = selectedEntry.SourceStartTime;
-                clip.SourceEndTime = selectedEntry.SourceEndTime;
+                clip.VisibleRange.Start = selectedEntry.StartTime;
+                clip.VisibleRange.End = selectedEntry.EndTime;
+                clip.SourceRange.Start = selectedEntry.SourceStartTime;
+                clip.SourceRange.End = selectedEntry.SourceEndTime;
             }        
         }
     }

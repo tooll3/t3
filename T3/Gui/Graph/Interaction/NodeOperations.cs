@@ -12,16 +12,30 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Compilation;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
-
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace T3.Gui.Graph.Interaction
 {
     internal static class NodeOperations
     {
+        public static List<TimeClip> GetAllTimeClips(Symbol symbol)
+        {
+            var clips = new List<TimeClip>();
+            foreach (var clip in symbol.Children.OfType<ITimeClip>())
+            {
+                clips.Add(new TimeClip()
+                          {
+                              VisibleRange = new TimeRange(clip.TimeRange.Start, clip.TimeRange.End),
+                              Name = "Clip",
+                          });
+            }
+            return clips;
+        }
+
         public static Instance GetInstanceFromIdPath(IReadOnlyCollection<Guid> childPath)
         {
             if (childPath == null || childPath.Count == 0)
@@ -46,7 +60,7 @@ namespace T3.Gui.Graph.Interaction
 
             return instance;
         }
-        
+
         public static List<Guid> BuildIdPathForInstance(Instance instance)
         {
             var result = new List<Guid>(6);
@@ -56,6 +70,7 @@ namespace T3.Gui.Graph.Interaction
                 instance = instance.Parent;
             }
             while (instance != null);
+
             return result;
         }
 
@@ -178,7 +193,7 @@ namespace T3.Gui.Graph.Interaction
                 Log.Error("Error compiling combining type, aborting combine.");
                 return;
             }
-            
+
             Type type = newAssembly.ExportedTypes.FirstOrDefault();
             if (type == null)
             {
@@ -258,6 +273,7 @@ namespace T3.Gui.Graph.Interaction
         class ClassRenameRewriter : CSharpSyntaxRewriter
         {
             private readonly string _newSymbolName;
+
             public ClassRenameRewriter(string newSymbolName)
             {
                 _newSymbolName = newSymbolName;
@@ -282,11 +298,12 @@ namespace T3.Gui.Graph.Interaction
         class ConstructorRewriter : CSharpSyntaxRewriter
         {
             private readonly string _newSymbolName;
+
             public ConstructorRewriter(string newSymbolName)
             {
                 _newSymbolName = newSymbolName;
             }
-            
+
             public override SyntaxNode VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
             {
                 return ConstructorDeclaration(_newSymbolName)
@@ -298,10 +315,11 @@ namespace T3.Gui.Graph.Interaction
                       .WithTrailingTrivia(node.GetTrailingTrivia());
             }
         }
-        
+
         class MemberDuplicateRewriter : CSharpSyntaxRewriter
         {
             private readonly string _newSymbolName;
+
             public MemberDuplicateRewriter(string newSymbolName)
             {
                 _newSymbolName = newSymbolName;
@@ -322,7 +340,7 @@ namespace T3.Gui.Graph.Interaction
             {
                 if (!(node.Declaration.Type is GenericNameSyntax nameSyntax))
                     return node;
-                
+
                 string idValue = nameSyntax.Identifier.ValueText;
                 if (idValue != "InputSlot" && idValue != "MultiInputSlot" && idValue != "Slot")
                     return node; // no input/multi-input/slot (output)
@@ -337,12 +355,13 @@ namespace T3.Gui.Graph.Interaction
                 var argList = ParseAttributeArgumentList(attributeArg);
 
                 node = node.ReplaceNode(attribute.ArgumentList, argList);
-                
+
                 return node;
             }
 
             private readonly Regex _guidRegex = new Regex(@"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}",
                                                           RegexOptions.IgnoreCase);
+
             public Dictionary<Guid, Guid> OldToNewGuidDict { get; } = new Dictionary<Guid, Guid>(10);
         }
 
@@ -355,7 +374,7 @@ namespace T3.Gui.Graph.Interaction
         public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newTypeName, string nameSpace)
         {
             var sourceSymbol = symbolChildToDuplicate.Symbol;
-            
+
             var syntaxTree = GetSyntaxTree(sourceSymbol);
             if (syntaxTree == null)
             {
@@ -385,7 +404,7 @@ namespace T3.Gui.Graph.Interaction
                 Log.Error("Error compiling duplicated type, aborting duplication.");
                 return null;
             }
-            
+
             Type type = newAssembly.ExportedTypes.FirstOrDefault();
             if (type == null)
             {
@@ -509,7 +528,7 @@ namespace T3.Gui.Graph.Interaction
                     return;
                 }
             }
-            
+
             Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
         }
 
@@ -604,19 +623,20 @@ namespace T3.Gui.Graph.Interaction
                     symbol.PendingSource = newSource;
                     return true;
                 }
-                
+
                 Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
             }
 
             return false;
         }
+
         class InputNodeByTypeFinder : CSharpSyntaxRewriter
         {
             public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
             {
                 if (!(node.Declaration.Type is GenericNameSyntax nameSyntax))
                     return node;
-                
+
                 string idValue = nameSyntax.Identifier.ValueText;
                 if (idValue == "InputSlot" || idValue == "MultiInputSlot")
                     LastInputNodeFound = node;
@@ -635,7 +655,7 @@ namespace T3.Gui.Graph.Interaction
             {
                 if (!(node.Declaration.Type is GenericNameSyntax nameSyntax))
                     return node;
-                
+
                 string idValue = nameSyntax.Identifier.ValueText;
                 if (idValue == "InputSlot" || idValue == "MultiInputSlot")
                 {
@@ -656,7 +676,7 @@ namespace T3.Gui.Graph.Interaction
             {
                 if (!(node.Declaration.Type is GenericNameSyntax nameSyntax))
                     return node;
-                
+
                 string idValue = nameSyntax.Identifier.ValueText;
                 if (idValue == "InputSlot" || idValue == "MultiInputSlot")
                 {
@@ -698,7 +718,7 @@ namespace T3.Gui.Graph.Interaction
             var typeName = TypeNameRegistry.Entries[inputType];
             var slotString = (multiInput ? "MultiInputSlot<" : "InputSlot<") + @namespace + typeName + ">";
             var inputString = "        public readonly " + slotString + " " + inputName + " = new " + slotString + "();\n";
-            
+
             var inputDeclaration = SyntaxFactory.ParseMemberDeclaration(attributeString + inputString);
             root = root.InsertNodesAfter(inputNodeFinder.LastInputNodeFound, new[] { inputDeclaration });
 
@@ -739,7 +759,7 @@ namespace T3.Gui.Graph.Interaction
 
             if (orderIsOk)
                 return; // nothing to do
-            
+
             var inputDeclarations = new List<SyntaxNode>(symbol.InputDefinitions.Count);
             foreach (var inputDef in symbol.InputDefinitions)
             {
@@ -757,11 +777,11 @@ namespace T3.Gui.Graph.Interaction
                 var inputDeclaration = SyntaxFactory.ParseMemberDeclaration(attributeString + inputString);
                 inputDeclarations.Add(inputDeclaration);
             }
-            
+
             var replacer = new AllInputNodesReplacer();
             replacer._replacementNodes = inputDeclarations.ToArray();
             root = replacer.Visit(root);
-            
+
             var newSource = root.GetText().ToString();
             Log.Debug(newSource);
 

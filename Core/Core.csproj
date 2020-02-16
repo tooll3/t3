@@ -100,6 +100,7 @@
     <Compile Include="Animation\LinearInterpolator.cs" />
     <Compile Include="Animation\OscillateCurveMapper.cs" />
     <Compile Include="Animation\SplineInterpolator.cs" />
+    <Compile Include="Animation\TimeClip.cs" />
     <Compile Include="Animation\TimeRange.cs" />
     <Compile Include="Animation\Utils.cs" />
     <Compile Include="Animation\VDefinition.cs" />
