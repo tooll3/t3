@@ -28,26 +28,31 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         
-        public static void CheckForBetterSnapping(double targetTime, double anchorTime, float snapThresholdOnCanvas, ref SnapResult bestSnapResult)
+        public static bool CheckForBetterSnapping(double targetTime, double anchorTime, float snapThresholdOnCanvas, ref SnapResult bestSnapResult)
         {
             var distance = Math.Abs(anchorTime - targetTime);
             if (distance < 0.001)
-                return;
+                return false;
 
             var force = Math.Max(0, snapThresholdOnCanvas - distance);
+            if (force < 000.1)
+                return false;
+            
             if (bestSnapResult != null && bestSnapResult.Force > force)
-                return;
+                return false;
 
             // Avoid allocation
             if (bestSnapResult == null)
             {
-                bestSnapResult = new SnapResult(distance, force);
+                bestSnapResult = new SnapResult(anchorTime, force);
             }
             else
             {
                 bestSnapResult.Force = force;
                 bestSnapResult.SnapToValue = anchorTime;
             }
+
+            return true;
         }
     }
 }
