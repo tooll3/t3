@@ -12,16 +12,16 @@ namespace T3.Gui.Commands
         public string Name => "Delete time clip";
         public bool IsUndoable => true;
 
-        public TimeClipDeleteCommand(Symbol compositionSymbol, IEnumerable<TimeClip> clipsToRemove)
+        public TimeClipDeleteCommand(Instance compositionOp, IEnumerable<ITimeClip> clipsToRemove)
         {
             _clipsToRemove = clipsToRemove;
-            _compositionSymbolId = compositionSymbol.Id;
+            _compositionOp = compositionOp;
         }
 
         public void Do()
         {
-            var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
-            var allClips = NodeOperations.GetAllTimeClips(compositionSymbol);
+            // var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
+            var allClips = NodeOperations.GetAllTimeClips(_compositionOp);
             foreach (var clipToRemove in _clipsToRemove)
             {
                 allClips.Remove(clipToRemove);
@@ -30,12 +30,12 @@ namespace T3.Gui.Commands
 
         public void Undo()
         {
-            var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
-            var allClips = NodeOperations.GetAllTimeClips(compositionSymbol);
+            // var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
+            var allClips = NodeOperations.GetAllTimeClips(_compositionOp);
             allClips.AddRange(_clipsToRemove);
         }
 
-        private readonly Guid _compositionSymbolId;
-        private readonly IEnumerable<TimeClip> _clipsToRemove;
+        private readonly Instance _compositionOp;
+        private readonly IEnumerable<ITimeClip> _clipsToRemove;
     }
 }

@@ -6,8 +6,14 @@ namespace T3.Core.Operator.Slots
 {
     public class TimeClipSlot<T> : Slot<T>, ITimeClip
     {
-        public TimeRange TimeRange { get; set; } = new TimeRange(0.0f, 1.0f);
-        public TimeRange SourceRange { get; set; } = new TimeRange(0.0f, 1.0f);
+        TimeRange _timeRange = new TimeRange(0.0f, 4.0f);
+        TimeRange _sourceRange = new TimeRange(0.0f, 4.0f);
+        
+        // ITimeClip implementation
+        public ref TimeRange TimeRange => ref _timeRange;
+        public ref TimeRange SourceRange => ref _sourceRange;
+        public int LayerIndex { get; set; } = 0;
+        public string Name => "kjfljdl";
 
         private void UpdateWithTimeRangeCheck(EvaluationContext context)
         {

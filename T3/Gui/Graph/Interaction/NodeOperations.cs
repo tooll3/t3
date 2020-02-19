@@ -22,7 +22,7 @@ namespace T3.Gui.Graph.Interaction
 {
     internal static class NodeOperations
     {
-        public static List<TimeClip> GetAllTimeClips(Symbol symbol)
+        public static List<TimeClip> GetAllTimeClips2(Symbol symbol)
         {
             var clips = new List<TimeClip>();
             foreach (var clip in symbol.Children.OfType<ITimeClip>())
@@ -33,6 +33,20 @@ namespace T3.Gui.Graph.Interaction
                               Name = "Clip",
                           });
             }
+            return clips;
+        }
+
+        public static List<ITimeClip> GetAllTimeClips(Instance compositionOp)
+        {
+            var clips = new List<ITimeClip>();
+            foreach (var child in compositionOp.Children)
+            {
+                foreach (var clip in child.Outputs.OfType<ITimeClip>())
+                {
+                    clips.Add(clip);
+                }
+            }
+
             return clips;
         }
 

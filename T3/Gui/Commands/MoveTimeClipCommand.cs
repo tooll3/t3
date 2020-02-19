@@ -26,11 +26,11 @@ namespace T3.Gui.Commands
         }
 
         private readonly Entry[] _entries;
-        private readonly Guid _compositionSymbolId;
+        private readonly Instance _compositionOp;
 
-        public MoveTimeClipCommand(Guid compositionSymbolId, IReadOnlyList<TimeClip> clips)
+        public MoveTimeClipCommand(Instance compositionOp, IReadOnlyList<ITimeClip> clips)
         {
-            _compositionSymbolId = compositionSymbolId;
+            _compositionOp = compositionOp;
             _entries = new Entry[clips.Count()];
             for (var i = 0; i < _entries.Length; i++)
             {
@@ -38,8 +38,8 @@ namespace T3.Gui.Commands
                 var entry = new Entry
                             {
                                 Id = clip.Id,
-                                 OriginalStartTime= clip.VisibleRange.Start,
-                                 OriginalEndTime= clip.VisibleRange.End,
+                                 OriginalStartTime= clip.TimeRange.Start,
+                                 OriginalEndTime= clip.TimeRange.End,
                                  OriginalSourceStartTime= clip.SourceRange.Start,
                                  OriginalSourceEndTime= clip.SourceRange.End,
                             };
@@ -50,17 +50,16 @@ namespace T3.Gui.Commands
 
         public void StoreCurrentValues()
         {
-            var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-            var animator = compositionUi.Symbol.Animator;
+            // var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
 
-            foreach (var clip in NodeOperations.GetAllTimeClips(compositionUi.Symbol))
+            foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
-                selectedEntry.StartTime = clip.VisibleRange.Start;
-                selectedEntry.EndTime = clip.VisibleRange.End;
+                selectedEntry.StartTime = clip.TimeRange.Start;
+                selectedEntry.EndTime = clip.TimeRange.End;
                 selectedEntry.SourceStartTime = clip.SourceRange.Start;
                 selectedEntry.SourceEndTime = clip.SourceRange.End;
             }            
@@ -69,17 +68,16 @@ namespace T3.Gui.Commands
 
         public void Undo()
         {
-            var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-            var animator = compositionUi.Symbol.Animator;
+            // var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
 
-            foreach (var clip in NodeOperations.GetAllTimeClips(compositionUi.Symbol))
+            foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
-                clip.VisibleRange.Start = selectedEntry.OriginalStartTime;
-                clip.VisibleRange.End = selectedEntry.OriginalEndTime;
+                clip.TimeRange.Start = selectedEntry.OriginalStartTime;
+                clip.TimeRange.End = selectedEntry.OriginalEndTime;
                 clip.SourceRange.Start = selectedEntry.OriginalSourceStartTime;
                 clip.SourceRange.End = selectedEntry.OriginalSourceEndTime;
             }
@@ -87,17 +85,16 @@ namespace T3.Gui.Commands
 
         public void Do()
         {
-            var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-            var animator = compositionUi.Symbol.Animator;
+            // var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
 
-            foreach (var clip in NodeOperations.GetAllTimeClips(compositionUi.Symbol))
+            foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
-                clip.VisibleRange.Start = selectedEntry.StartTime;
-                clip.VisibleRange.End = selectedEntry.EndTime;
+                clip.TimeRange.Start = selectedEntry.StartTime;
+                clip.TimeRange.End = selectedEntry.EndTime;
                 clip.SourceRange.Start = selectedEntry.SourceStartTime;
                 clip.SourceRange.End = selectedEntry.SourceEndTime;
             }        

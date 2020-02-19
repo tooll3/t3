@@ -77,7 +77,7 @@ namespace T3.Gui.Windows.TimeLine
                         break;
                 }
                 
-                _selectionRange.Draw(_drawlist);
+                // _selectionRange.Draw(_drawlist);
 
                 if (Playback.IsLooping)
                 {
