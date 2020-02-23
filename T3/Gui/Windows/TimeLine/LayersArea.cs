@@ -8,6 +8,7 @@ using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.Snapping;
+using T3.Gui.Selection;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -102,22 +103,41 @@ namespace T3.Gui.Windows.TimeLine
             var bodySize = new Vector2(bodyWidth, layerArea.GetHeight());
             var clipSize = new Vector2(clipWidth, layerArea.GetHeight());
 
-            ImGui.PushID(index);
+            var symbolUi = SymbolUiRegistry.Entries[_compositionOp.Symbol.Id];
+            var symbolChildUi = symbolUi.ChildUis.Single(child => child.Id == timeClip.Id);
+
+            ImGui.PushID(symbolChildUi.Id.GetHashCode());
 
             var isSelected = _selectedItems.Contains(timeClip);
+            //symbolChildUi.IsSelected = isSelected;
+
             var color = new Color(0.5f);
             _drawList.AddRectFilled(position, position + clipSize - new Vector2(1, 0), color);
             if (isSelected)
                 _drawList.AddRect(position, position + clipSize - new Vector2(1, 0), Color.White);
 
-            _drawList.AddText(position + new Vector2(4, 4), isSelected ? Color.White : Color.Black, timeClip.Name);
+            _drawList.AddText(position + new Vector2(4, 4), isSelected ? Color.White : Color.Black, symbolChildUi.SymbolChild.ReadableName);
 
-            
             ImGui.SetCursorScreenPos(showSizeHandles ? (position + _handleOffset) : position);
-            ImGui.InvisibleButton("body", bodySize);
+
+            var wasClicked = ImGui.InvisibleButton("body", bodySize);
+            
+            if(ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(0))
+            {
+                var instance = _compositionOp.Children.Single(child => child.SymbolChildId == symbolChildUi.Id);
+                SelectionManager.AddSelection(symbolChildUi, instance);
+                _selectedItems.Clear();
+                _selectedItems.Add(timeClip);
+            }
+            
+
+            if (ImGui.IsItemHovered())
+            {
+                T3Ui.AddHoveredId(symbolChildUi.Id);
+            }
 
             var notClickingOrDragging = !ImGui.IsItemActive() && !ImGui.IsMouseDragging(0);
-            if (notClickingOrDragging && _moveClipsCommand != null) 
+            if (notClickingOrDragging && _moveClipsCommand != null)
             {
                 TimeLineCanvas.Current.CompleteDragCommand();
 
@@ -129,17 +149,17 @@ namespace T3.Gui.Windows.TimeLine
                 }
             }
 
-            HandleDragging(timeClip, isSelected, HandleDragMode.Body);
-            
+            HandleDragging(timeClip, isSelected, wasClicked, HandleDragMode.Body);
+
             var handleSize = showSizeHandles ? new Vector2(HandleWidth, LayerHeight) : Vector2.One;
 
             ImGui.SetCursorScreenPos(position);
             var aHandleClicked = ImGui.InvisibleButton("startHandle", handleSize);
-            HandleDragging(timeClip, isSelected, HandleDragMode.Start);
+            HandleDragging(timeClip, isSelected, false, HandleDragMode.Start);
 
             ImGui.SetCursorScreenPos(position + new Vector2(bodyWidth + HandleWidth, 0));
             aHandleClicked |= ImGui.InvisibleButton("endHandle", handleSize);
-            HandleDragging(timeClip, isSelected, HandleDragMode.End);
+            HandleDragging(timeClip, isSelected, false, HandleDragMode.End);
 
             if (aHandleClicked)
             {
@@ -165,9 +185,8 @@ namespace T3.Gui.Windows.TimeLine
 
         private float _dragStartedAtTime;
         private float _timeWithinDraggedClip;
-        
-        
-        private void HandleDragging(ITimeClip timeClip, bool isSelected, HandleDragMode mode)
+
+        private void HandleDragging(ITimeClip timeClip, bool isSelected, bool wasClicked, HandleDragMode mode)
         {
             if (ImGui.IsItemHovered())
             {
@@ -176,7 +195,7 @@ namespace T3.Gui.Windows.TimeLine
                                          : ImGuiMouseCursor.ResizeEW);
             }
 
-            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 1f))
+            if (!wasClicked && (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 1f)))
                 return;
 
             if (ImGui.GetIO().KeyCtrl)
@@ -210,7 +229,7 @@ namespace T3.Gui.Windows.TimeLine
                     var currentDragTime = TimeLineCanvas.Current.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
                     var newStartTime = currentDragTime - _timeWithinDraggedClip;
 
-                    if(_snapHandler.CheckForSnapping(ref newStartTime))
+                    if (_snapHandler.CheckForSnapping(ref newStartTime))
                     {
                         TimeLineCanvas.Current.UpdateDragCommand(newStartTime - timeClip.TimeRange.Start, 0);
                         return;
@@ -218,7 +237,7 @@ namespace T3.Gui.Windows.TimeLine
 
                     var newEndTime = newStartTime + timeClip.TimeRange.Duration;
                     _snapHandler.CheckForSnapping(ref newEndTime);
-                    
+
                     TimeLineCanvas.Current.UpdateDragCommand(newEndTime - timeClip.TimeRange.End, 0);
                     break;
 
@@ -357,7 +376,7 @@ namespace T3.Gui.Windows.TimeLine
             var snapThresholdOnCanvas = TimeLineCanvas.Current.InverseTransformDirection(new Vector2(6, 0)).X;
 
             var allClips = NodeOperations.GetAllTimeClips(_compositionOp);
-            
+
             foreach (var clip in allClips)
             {
                 if (_selectedItems.Contains(clip))
@@ -366,6 +385,7 @@ namespace T3.Gui.Windows.TimeLine
                 KeyframeOperations.CheckForBetterSnapping(targetTime, clip.TimeRange.Start, snapThresholdOnCanvas, ref bestSnapResult);
                 KeyframeOperations.CheckForBetterSnapping(targetTime, clip.TimeRange.End, snapThresholdOnCanvas, ref bestSnapResult);
             }
+
             return bestSnapResult;
         }
         #endregion
