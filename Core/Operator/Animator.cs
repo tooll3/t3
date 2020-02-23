@@ -248,7 +248,7 @@ namespace T3.Core.Operator
                 {
                     var entries = groupEntry.ToArray();
                     var inputSlot = entries[0].inputSlot;
-                    if (inputSlot is Slot<Vector3> vector2InputSlot)
+                    if (inputSlot is Slot<Vector2> vector2InputSlot)
                     {
                         vector2InputSlot.UpdateAction = context =>
                                                         {
