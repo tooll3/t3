@@ -8,6 +8,7 @@ namespace T3.Core.Operator.Slots
         Type ValueType { get; }
         Instance Parent { get; set; }
         DirtyFlag DirtyFlag { get; set; }
+        int Invalidate();
         void Update(EvaluationContext context);
         void AddConnection(ISlot source, int index = 0);
         void RemoveConnection(int index = 0);

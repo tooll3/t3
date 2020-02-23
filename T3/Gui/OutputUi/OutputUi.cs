@@ -33,67 +33,7 @@ namespace T3.Gui.OutputUi
         public void StartInvalidation(ISlot slot)
         {
             DirtyFlag.InvalidationRefFrame++;
-            Invalidate(slot);
-        }
-        
-        private int Invalidate(ISlot slot)
-        {
-            if (slot is IInputSlot)
-            {
-                if (slot.IsConnected)
-                {
-                    slot.DirtyFlag.Target = Invalidate(slot.GetConnection(0));
-                }
-                else if (slot.DirtyFlag.Trigger != DirtyFlagTrigger.None)
-                {
-                    slot.DirtyFlag.Invalidate();
-                }
-            }
-            else if (slot.IsConnected)
-            {
-                // slot is an output of an composition op
-                slot.DirtyFlag.Target = Invalidate(slot.GetConnection(0));
-            }
-            else
-            {
-                Instance parent = slot.Parent;
-
-                bool outputDirty = false;
-                foreach (var input in parent.Inputs)
-                {
-                    if (input.IsConnected)
-                    {
-                        if (input.IsMultiInput)
-                        {
-                            var multiInput = (IMultiInputSlot)input;
-                            int dirtySum = 0;
-                            foreach (var entry in multiInput.GetCollectedInputs())
-                            {
-                                dirtySum += Invalidate(entry);
-                            }
-
-                            input.DirtyFlag.Target = dirtySum;
-                        }
-                        else
-                        {
-                            input.DirtyFlag.Target = Invalidate(input.GetConnection(0));
-                        }
-                    }
-                    else if (input.DirtyFlag.Trigger != DirtyFlagTrigger.None)
-                    {
-                        input.DirtyFlag.Invalidate();
-                    }
-
-                    outputDirty |= input.DirtyFlag.IsDirty;
-                }
-
-                if (outputDirty || slot.DirtyFlag.Trigger != DirtyFlagTrigger.None)
-                {
-                    slot.DirtyFlag.Invalidate();
-                }
-            }
-
-            return slot.DirtyFlag.Target;
+            slot.Invalidate();
         }
 
         private EvaluationContext _evaluationContext;

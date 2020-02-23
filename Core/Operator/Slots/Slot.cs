@@ -116,6 +116,66 @@ namespace T3.Core.Operator.Slots
             }
         }
 
+        public int Invalidate()
+        {
+            if (this is IInputSlot)
+            {
+                if (IsConnected)
+                {
+                    DirtyFlag.Target = GetConnection(0).Invalidate();
+                }
+                else if (DirtyFlag.Trigger != DirtyFlagTrigger.None)
+                {
+                    DirtyFlag.Invalidate();
+                }
+            }
+            else if (IsConnected)
+            {
+                // slot is an output of an composition op
+                DirtyFlag.Target = GetConnection(0).Invalidate();
+            }
+            else
+            {
+                Instance parent = Parent;
+
+                bool outputDirty = false;
+                foreach (var input in parent.Inputs)
+                {
+                    if (input.IsConnected)
+                    {
+                        if (input.IsMultiInput)
+                        {
+                            var multiInput = (IMultiInputSlot)input;
+                            int dirtySum = 0;
+                            foreach (var entry in multiInput.GetCollectedInputs())
+                            {
+                                dirtySum += entry.Invalidate();
+                            }
+
+                            input.DirtyFlag.Target = dirtySum;
+                        }
+                        else
+                        {
+                            input.DirtyFlag.Target = input.GetConnection(0).Invalidate();
+                        }
+                    }
+                    else if (input.DirtyFlag.Trigger != DirtyFlagTrigger.None)
+                    {
+                        input.DirtyFlag.Invalidate();
+                    }
+
+                    outputDirty |= input.DirtyFlag.IsDirty;
+                }
+
+                if (outputDirty || DirtyFlag.Trigger != DirtyFlagTrigger.None)
+                {
+                    DirtyFlag.Invalidate();
+                }
+            }
+
+            return DirtyFlag.Target;
+        }
+
         private Action<EvaluationContext> _updateAction;
         public virtual Action<EvaluationContext> UpdateAction { get => _updateAction; set => _updateAction = value; }
 
