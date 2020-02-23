@@ -10,9 +10,9 @@ namespace T3.Gui.UiHelpers
     /// </summary>
     public abstract class Settings
     {
-        private static string _filepath;
+        private  string _filepath;
 
-        protected static T TryLoading<T>(string filepath) where T:class
+        protected  T TryLoading<T>(string filepath) where T:class
         {
             _filepath = filepath;
             if (!File.Exists(_filepath))
@@ -33,7 +33,7 @@ namespace T3.Gui.UiHelpers
         }
 
         
-        protected static void SaveSettings<T>(T configuration)
+        protected  void SaveSettings<T>(T configuration)
         {
             Log.Debug("Saving user settings...");
             var serializer = JsonSerializer.Create();

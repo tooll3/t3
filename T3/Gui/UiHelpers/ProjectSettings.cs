@@ -7,13 +7,13 @@ namespace T3.Gui.UiHelpers
     /// </summary>
     public  class ProjectSettings :Settings
     {
-        static ProjectSettings()
+        public ProjectSettings()
         {
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
             Config = TryLoading<ConfigData>("projectSettings.json")?? new ConfigData();
         }
         
-        public static readonly ConfigData Config;
+        public static  ConfigData Config;
         
         public class ConfigData
         {
@@ -22,7 +22,7 @@ namespace T3.Gui.UiHelpers
         }
         
         
-        private static void OnProcessExit(object sender, EventArgs e)
+        private  void OnProcessExit(object sender, EventArgs e)
         {
             SaveSettings(Config);
         }

@@ -11,7 +11,7 @@ namespace T3.Gui.UiHelpers
     /// </summary>
     public class UserSettings :Settings
     {
-        static UserSettings()
+        public UserSettings()
         {
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
             Config = TryLoading<ConfigData>("userSettings.json") ?? new ConfigData();
@@ -43,7 +43,7 @@ namespace T3.Gui.UiHelpers
             Config.LastOpsForWindows[window.Config.Title]= opInstanceId;
         }
 
-        private static void OnProcessExit(object sender, EventArgs e)
+        private  void OnProcessExit(object sender, EventArgs e)
         {
             SaveSettings(Config);
         }
