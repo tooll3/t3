@@ -105,7 +105,7 @@ namespace T3.Core.Operator
         private static Type GetOutputDataType(FieldInfo output)
         {
             Type outputDataInterfaceType = (from interfaceType in output.FieldType.GetInterfaces()
-                                            where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IOutputDataConsumer<>)
+                                            where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IOutputDataUser<>)
                                             select interfaceType).SingleOrDefault();
             return outputDataInterfaceType?.GetGenericArguments().Single();
         }
@@ -420,7 +420,7 @@ namespace T3.Core.Operator
                 if (childSymbol.OutputDefinitions[i].OutputDataType != null)
                 {
                     // output is using data, so link it
-                    if (childInstance.Outputs[i] is IOutputDataConsumer outputDataConsumer)
+                    if (childInstance.Outputs[i] is IOutputDataUser outputDataConsumer)
                     {
                         outputDataConsumer.SetOutputData(symbolChild.OutputData[childInstance.Outputs[i].Id]);
                     }

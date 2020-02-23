@@ -9,17 +9,17 @@ namespace T3.Core.Operator.Slots
         TimeClip TimeClip { get; }
     }
 
-    public interface IOutputDataConsumer
+    public interface IOutputDataUser
     {
         void SetOutputData(IOutputData data);
     }
 
     // This interface is mainly to extract the output data type while no instance of an implementer exists.
-    internal interface IOutputDataConsumer<T> : IOutputDataConsumer
+    internal interface IOutputDataUser<T> : IOutputDataUser
     {
     }
 
-    public class TimeClipSlot<T> : Slot<T>, ITimeClipProvider, IOutputDataConsumer<TimeClip>
+    public class TimeClipSlot<T> : Slot<T>, ITimeClipProvider, IOutputDataUser<TimeClip>
     {
         public TimeClip TimeClip { get; private set; }
 

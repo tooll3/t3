@@ -34,11 +34,6 @@ namespace T3.Core
         public static Dictionary<Type, Func<InputValue>> Entries { get; } = new Dictionary<Type, Func<InputValue>>();
     }
 
-    public static class OutputDataCreators
-    {
-        public static Dictionary<Type, Action<IOutputData>> Entries { get; } = new Dictionary<Type, Action<IOutputData>>();
-    }
-
     public static class TypeNameRegistry
     {
         public static Dictionary<Type, string> Entries { get; } = new Dictionary<Type, string>(20);

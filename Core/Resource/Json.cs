@@ -136,9 +136,7 @@ namespace T3.Core
                 {
                     Writer.WriteStartObject();
                     Writer.WriteValue("Id", id);
-                    // Writer.WriteComment();
                     Writer.WriteObject("Type", outputData.DataType);
-                    // Writer.WritePropertyName("Data");
                     outputData.ToJson(Writer);
                     Writer.WriteEndObject();
                 }
