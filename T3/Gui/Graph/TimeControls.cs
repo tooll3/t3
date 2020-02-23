@@ -1,8 +1,11 @@
 ﻿using ImGuiNET;
 using System;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Gui;
+using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
 using Icon = T3.Gui.Styling.Icon;
@@ -64,10 +67,20 @@ namespace T3.Gui.Graph
                                                     ProjectSettings.Config.SoundtrackBpm = bpm;
 
                                                     ImGui.Text("Soundtrack");
-                                                    ImGui.SetNextItemWidth(-70);
-                                                    ImGui.InputText("##filepath", ref ProjectSettings.Config.SoundtrackFilepath, 255);
-                                                    FileOperations.DrawEditWithSelectors(FileOperations.FilePickerTypes.File,
+                                                    var modified = FileOperations.DrawFilePicker(FileOperations.FilePickerTypes.File,
                                                                                          ref ProjectSettings.Config.SoundtrackFilepath);
+
+                                                    if (modified)
+                                                    { 
+                                                        var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
+                                                        var result = matchBpmPattern.Match(ProjectSettings.Config.SoundtrackFilepath);
+                                                        if (result.Success)
+                                                        {
+                                                            float.TryParse(result.Groups[1].Value,  out bpm);
+                                                            ProjectSettings.Config.SoundtrackBpm = bpm;
+                                                            playback.Bpm = bpm;
+                                                        }
+                                                    }
                                                     
                                                     if (ImGui.Button("Close"))
                                                     {

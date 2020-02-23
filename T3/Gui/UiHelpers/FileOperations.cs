@@ -55,7 +55,17 @@ namespace T3.Gui.UiHelpers
             Folder,
         }
         
-        public static bool DrawEditWithSelectors(FilePickerTypes type, ref string value)
+        public static bool DrawFilePicker(FilePickerTypes type, ref string value)
+        {
+            ImGui.SetNextItemWidth(-70);
+            var modified = ImGui.InputText("##filepath", ref ProjectSettings.Config.SoundtrackFilepath, 255);
+            
+            modified |= DrawSelector(type, ref value);
+            return modified;
+        }
+        
+        
+        public static bool DrawSelector(FilePickerTypes type, ref string value)
         {
             var modified = false;
             ImGui.SameLine();
