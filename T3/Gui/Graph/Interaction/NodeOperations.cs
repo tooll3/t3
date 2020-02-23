@@ -171,6 +171,8 @@ namespace T3.Gui.Graph.Interaction
             }
 
             usingStringBuilder.AppendLine("using T3.Core.Operator;");
+            usingStringBuilder.AppendLine("using T3.Core.Operator.Attributes;");
+            usingStringBuilder.AppendLine("using T3.Core.Operator.Slots;");
 
             Guid newSymbolId = Guid.NewGuid();
 
