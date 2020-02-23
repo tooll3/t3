@@ -6,10 +6,10 @@ using SharpDX.Windows;
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Threading;
+using System.Linq;
 using System.Windows.Forms;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using Color = SharpDX.Color;
@@ -25,6 +25,7 @@ namespace T3
         private static void Main()
         {
             var form = new RenderForm("T3-Player") { ClientSize = new Size(1920, 1080) };
+            form.AllowUserResizing = false;
 
             // SwapChain description
             var desc = new SwapChainDescription()
@@ -73,42 +74,54 @@ namespace T3
             _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
             _renderView = new RenderTargetView(device, _backBuffer);
 
-            form.ResizeBegin += (sender, args) => _inResize = true;
-            form.ResizeEnd += (sender, args) =>
-                              {
-                                  RebuildBackBuffer(form, device, ref _renderView, ref _backBuffer, ref _swapChain);
-                                  _inResize = false;
-                              };
-            form.ClientSizeChanged += (sender, args) =>
-                                      {
-                                          if (_inResize)
-                                              return;
-
-                                          RebuildBackBuffer(form, device, ref _renderView, ref _backBuffer, ref _swapChain);
-                                      };
-
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
-            var di = new DirectoryInfo(".");
-            Console.WriteLine(di.FullName);
+            FullScreenVertexShaderId = resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
+            FullScreenPixelShaderId = resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
+            _model = new Model();
+            _model.Load();
+            
+            var symbols = SymbolRegistry.Entries;
+            var demoSymbol = symbols.First(entry => entry.Value.Name == "Demo").Value;
+            // create instance of project op, all children are create automatically
+            _project = demoSymbol.CreateInstance(Guid.NewGuid());
+            _evalContext = new EvaluationContext();
+            _playback = new StreamPlayback("Resources\\proj-partial\\soundtrack\\technotoad-02.mp3");
+            _playback.PlaybackSpeed = 1.0;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
+
             // Main loop
             RenderLoop.Run(form, () =>
                                  {
-                                     Int64 ticks = stopwatch.ElapsedTicks;
-                                     // Console.WriteLine("{0}", (double)ticks/Stopwatch.Frequency);
-                                     stopwatch.Restart();
                                      DirtyFlag.IncrementGlobalTicks();
+                                     DirtyFlag.InvalidationRefFrame++;
 
                                      context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
                                      context.OutputMerger.SetTargets(_renderView);
                                      
-                                     // todo: remove this and add operator evaluation here:
-                                     context.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
+                                     _evalContext.Reset();
+                                     _playback.Update(1.0f);
+                                     
+                                     if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
+                                     {
+                                         textureOutput.Invalidate();
+                                         Texture2D tex = textureOutput.GetValue(_evalContext);
 
+                                         if (resourceManager.Resources[FullScreenVertexShaderId] is VertexShaderResource vsr)
+                                             context.VertexShader.Set(vsr.VertexShader);
+                                         if (resourceManager.Resources[FullScreenPixelShaderId] is PixelShaderResource psr)
+                                             context.PixelShader.Set(psr.PixelShader);
+                                         var srv = new ShaderResourceView(device, tex);
+                                         context.PixelShader.SetShaderResource(0, srv);
+
+                                         context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+                                         context.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
+                                         context.Draw(3, 0);
+                                         context.PixelShader.SetShaderResource(0, null);
+                                     }
                                      
                                      // _swapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
                                      _swapChain.Present(1, PresentFlags.None);
@@ -125,18 +138,15 @@ namespace T3
             factory.Dispose();
         }
 
-        private static void RebuildBackBuffer(RenderForm form, Device device, ref RenderTargetView rtv, ref Texture2D buffer, ref SwapChain swapChain)
-        {
-            rtv.Dispose();
-            buffer.Dispose();
-            swapChain.ResizeBuffers(3, form.ClientSize.Width, form.ClientSize.Height, Format.Unknown, 0);
-            buffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
-            rtv = new RenderTargetView(device, buffer);
-        }
-
-        private static bool _inResize;
+        // private static bool _inResize;
         private static SwapChain _swapChain;
         private static RenderTargetView _renderView;
         private static Texture2D _backBuffer;
+        private static Model _model;
+        private static Instance _project;
+        private static EvaluationContext _evalContext;
+        private static Playback _playback;
+        public static uint FullScreenVertexShaderId { get; private set; }
+        public static uint FullScreenPixelShaderId { get; private set; }
     }
 }
