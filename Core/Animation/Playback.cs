@@ -73,13 +73,13 @@ namespace T3.Core.Animation
     public class StreamPlayback : Playback
     {
         private readonly int _soundStreamHandle;
-        private float _originalFrequency;
+        private readonly float _defaultPlaybackFrequency;
 
         public StreamPlayback(string filename)
         {
             Bass.Init();
             _soundStreamHandle = Bass.CreateStream(filename);
-            Bass.ChannelGetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, out _originalFrequency);
+            Bass.ChannelGetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, out _defaultPlaybackFrequency);
         }
 
         public override double TimeInBars
@@ -107,13 +107,13 @@ namespace T3.Core.Animation
                 else if (value < 0.0)
                 {
                     Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.ReverseDirection, -1);
-                    Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, _originalFrequency * -_playbackSpeed);
+                    Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, _defaultPlaybackFrequency * -_playbackSpeed);
                     Bass.ChannelPlay(_soundStreamHandle);
                 }
                 else
                 {
                     Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.ReverseDirection, 1);
-                    Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, _originalFrequency * _playbackSpeed);
+                    Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, _defaultPlaybackFrequency * _playbackSpeed);
                     Bass.ChannelPlay(_soundStreamHandle);
                 }
             }

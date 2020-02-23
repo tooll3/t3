@@ -1,5 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Numerics;
 using System.Windows.Forms;
+using ImGuiNET;
+using T3.Core.Logging;
+using T3.Gui.InputUi;
 
 namespace T3.Gui.UiHelpers
 {
@@ -41,6 +48,50 @@ namespace T3.Gui.UiHelpers
                 return ConvertToRelativeFilepath(absoluteFolderPath);
             }
         }
+
+        public enum FilePickerTypes
+        {
+            File,
+            Folder,
+        }
+        
+        public static bool DrawEditWithSelectors(FilePickerTypes type, ref string value)
+        {
+            bool modified = false;
+            ImGui.SameLine();
+            if (ImGui.Button("...", new Vector2(30, 0)))
+            {
+                string newPath = type == FilePickerTypes.File 
+                                     ? FileOperations.PickResourceFilePath(value) 
+                                     : FileOperations.PickResourceDirectory();
+                if (!string.IsNullOrEmpty(newPath))
+                {
+                    value = newPath;
+                    modified = true;
+                }
+            }
+
+            ImGui.SameLine();
+            if (ImGui.Button("Edit", new Vector2(40, 0)))
+            {
+                if (!File.Exists(value))
+                {
+                    Log.Error("Can't open non-existing file " + value);
+                }
+                else
+                {
+                    try
+                    {
+                        Process.Start(value);
+                    }
+                    catch (Win32Exception e)
+                    {
+                        Log.Warning("Can't open editor: " + e.Message);
+                    }
+                }
+            }
+            return modified;
+        }
         
         private static string ConvertToRelativeFilepath(string absoluteFilePath)
         {
@@ -55,5 +106,9 @@ namespace T3.Gui.UiHelpers
         {
             return System.IO.Path.Combine(System.IO.Path.GetFullPath("."), "Resources");
         }
+        
+        
+        
+        
     }
 }

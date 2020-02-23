@@ -56,8 +56,10 @@ namespace T3.Gui.InputUi
                     inputEditStateFlags = DrawDefaultTextEdit(ref value);
                     break;
                 case UsageType.FilePath:
+                    inputEditStateFlags = DrawEditWithSelectors(FileOperations.FilePickerTypes.File, ref value);
+                    break;
                 case UsageType.DirectoryPath:
-                    inputEditStateFlags = DrawEditWithSelectors(ref value);
+                    inputEditStateFlags = DrawEditWithSelectors(FileOperations.FilePickerTypes.Folder, ref value);
                     break;
             }
 
@@ -67,39 +69,16 @@ namespace T3.Gui.InputUi
             return inputEditStateFlags;
         }
 
-        private InputEditStateFlags DrawEditWithSelectors(ref string value)
+
+        private static InputEditStateFlags DrawEditWithSelectors(FileOperations.FilePickerTypes type, ref string value)
         {
             ImGui.SetNextItemWidth(-70);
-            InputEditStateFlags inputEditStateFlags = DrawDefaultTextEdit(ref value);
+            var inputEditStateFlags = DrawDefaultTextEdit(ref value);
             ImGui.SameLine();
-            if (ImGui.Button("...", new Vector2(30, 0)))
+            var modifiedByPicker = FileOperations.DrawEditWithSelectors(type, ref value);
+            if (modifiedByPicker)
             {
-                string newPath = Usage == UsageType.FilePath ? FileOperations.PickResourceFilePath(value) : FileOperations.PickResourceDirectory();
-                if (!string.IsNullOrEmpty(newPath))
-                {
-                    value = newPath;
-                    inputEditStateFlags = InputEditStateFlags.Modified | InputEditStateFlags.Finished;
-                }
-            }
-
-            ImGui.SameLine();
-            if (ImGui.Button("Edit", new Vector2(40, 0)))
-            {
-                if (!File.Exists(value))
-                {
-                    Log.Error("Can't open non-existing file " + value);
-                }
-                else
-                {
-                    try
-                    {
-                        Process.Start(value);
-                    }
-                    catch (Win32Exception e)
-                    {
-                        Log.Warning("Can't open editor: " + e.Message);
-                    }
-                }
+                inputEditStateFlags = InputEditStateFlags.Modified | InputEditStateFlags.Finished;
             }
 
             return inputEditStateFlags;
