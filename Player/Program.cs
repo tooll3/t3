@@ -47,6 +47,27 @@ namespace T3
             // Ignore all windows events
             var factory = _swapChain.GetParent<Factory>();
             factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAll);
+            
+            form.KeyUp += (sender, args) =>
+                          {
+                              if (args.Alt && args.KeyCode == Keys.Enter)
+                              {
+                                  _swapChain.IsFullScreen = !_swapChain.IsFullScreen;
+                                  if (_swapChain.IsFullScreen)
+                                  {
+                                      Cursor.Hide();
+                                  }
+                                  else
+                                  {
+                                      Cursor.Show();
+                                  }
+                              }
+
+                              if (args.KeyCode == Keys.Escape)
+                              {
+                                  Application.Exit();
+                              }
+                          };
 
             // New RenderTargetView from the backbuffer
             _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
@@ -70,8 +91,6 @@ namespace T3
             ResourceManager resourceManager = ResourceManager.Instance();
             var di = new DirectoryInfo(".");
             Console.WriteLine(di.FullName);
-
-            Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -119,7 +138,5 @@ namespace T3
         private static SwapChain _swapChain;
         private static RenderTargetView _renderView;
         private static Texture2D _backBuffer;
-        public static uint FullScreenVertexShaderId { get; private set; }
-        public static uint FullScreenPixelShaderId { get; private set; }
     }
 }
