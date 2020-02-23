@@ -53,7 +53,7 @@ namespace T3.Gui.Windows.Output
 
         protected override void DrawContent()
         {
-            ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+            ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
                 _imageCanvas.NoMouseInteraction = CameraSelectionHandling.SelectedCamera != null;
                 _imageCanvas.Update();
