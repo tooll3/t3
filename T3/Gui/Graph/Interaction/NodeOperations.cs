@@ -15,6 +15,7 @@ using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
@@ -22,28 +23,14 @@ namespace T3.Gui.Graph.Interaction
 {
     internal static class NodeOperations
     {
-        public static List<TimeClip> GetAllTimeClips2(Symbol symbol)
-        {
-            var clips = new List<TimeClip>();
-            foreach (var clip in symbol.Children.OfType<ITimeClip>())
-            {
-                clips.Add(new TimeClip()
-                          {
-                              VisibleRange = new TimeRange(clip.TimeRange.Start, clip.TimeRange.End),
-                              Name = "Clip",
-                          });
-            }
-            return clips;
-        }
-
         public static List<ITimeClip> GetAllTimeClips(Instance compositionOp)
         {
             var clips = new List<ITimeClip>();
             foreach (var child in compositionOp.Children)
             {
-                foreach (var clip in child.Outputs.OfType<ITimeClip>())
+                foreach (var clipProvider in child.Outputs.OfType<ITimeClipProvider>())
                 {
-                    clips.Add(clip);
+                    clips.Add(clipProvider.TimeClip);
                 }
             }
 

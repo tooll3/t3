@@ -7,7 +7,7 @@ namespace T3.Core.Operator.Slots
     public class Slot<T> : ISlot
     {
         public Guid Id { get; set; }
-        public Type Type { get; protected set; }
+        public Type ValueType { get; }
         public Instance Parent { get; set; }
         public DirtyFlag DirtyFlag { get; set; } = new DirtyFlag();
         
@@ -17,7 +17,7 @@ namespace T3.Core.Operator.Slots
         public Slot()
         {
             // UpdateAction = Update;
-            Type = typeof(T);
+            ValueType = typeof(T);
         }
 
         public Slot(Action<EvaluationContext> updateAction) : this()

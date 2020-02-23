@@ -64,6 +64,24 @@ namespace T3.Core
             Writer.WriteEndArray();
         }
 
+        private void WriteSymbolOutputs(List<Symbol.OutputDefinition> outputs)
+        {
+            Writer.WritePropertyName("Outputs");
+            Writer.WriteStartArray();
+
+            foreach (var output in outputs)
+            {
+                Writer.WriteStartObject();
+                Writer.WriteObject("Id", output.Id);
+                Writer.WriteComment(output.Name);
+                Writer.WritePropertyName("DefaultValue");
+                // output.DefaultValue.ToJson(Writer);
+                Writer.WriteEndObject();
+            }
+
+            Writer.WriteEndArray();
+        }
+
         private void WriteConnections(List<Symbol.Connection> connections)
         {
             Writer.WritePropertyName("Connections");
@@ -94,6 +112,7 @@ namespace T3.Core
                 {
                     Writer.WriteObject("Name", child.Name);
                 }
+
                 Writer.WritePropertyName("InputValues");
                 Writer.WriteStartArray();
                 foreach (var inputValueEntry in child.InputValues)
@@ -110,9 +129,25 @@ namespace T3.Core
                     Writer.WriteEndObject();
                 }
                 Writer.WriteEndArray();
-                Writer.WriteEndObject();
+
+                Writer.WritePropertyName("OutputData");
+                Writer.WriteStartArray();
+                foreach (var (id, outputData) in child.OutputData)
+                {
+                    Writer.WriteStartObject();
+                    Writer.WriteValue("Id", id);
+                    // Writer.WriteComment();
+                    Writer.WriteObject("Type", outputData.DataType);
+                    // Writer.WritePropertyName("Data");
+                    outputData.ToJson(Writer);
+                    Writer.WriteEndObject();
+                }
+
+                Writer.WriteEndArray();
+
+                Writer.WriteEndObject(); // child
             }
-            ;
+
             Writer.WriteEndArray();
         }
 
@@ -137,6 +172,11 @@ namespace T3.Core
             foreach (var inputValue in (JArray)symbolChildJson["InputValues"])
             {
                 ReadChildInputValue(symbolChild, inputValue);
+            }
+
+            foreach (var outputDataToken in (JArray)symbolChildJson["OutputData"])
+            {
+                ReadChildOutputData(symbolChild, outputDataToken);
             }
 
             return symbolChild;
@@ -165,6 +205,13 @@ namespace T3.Core
             var jsonValue = inputJson["Value"];
             symbolChild.InputValues[id].Value.SetValueFromJson(jsonValue);
             symbolChild.InputValues[id].IsDefault = false;
+        }
+
+        private void ReadChildOutputData(SymbolChild symbolChild, JToken json)
+        {
+            var id = Guid.Parse(json["Id"].Value<string>());
+            // var jsonValue = jsonInput["Data"];
+            symbolChild.OutputData[id].ReadFromJson(json);
         }
 
         public Symbol ReadSymbol(Model model)

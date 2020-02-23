@@ -5,7 +5,7 @@ namespace T3.Core.Operator.Slots
     public interface ISlot
     {
         Guid Id { get; set; }
-        Type Type { get; }
+        Type ValueType { get; }
         Instance Parent { get; set; }
         DirtyFlag DirtyFlag { get; set; }
         void Update(EvaluationContext context);

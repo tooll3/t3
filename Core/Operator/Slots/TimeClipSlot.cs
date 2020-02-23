@@ -4,26 +4,41 @@ using T3.Core.Logging;
 
 namespace T3.Core.Operator.Slots
 {
-    public class TimeClipSlot<T> : Slot<T>, ITimeClip
+    public interface ITimeClipProvider
     {
-        TimeRange _timeRange = new TimeRange(0.0f, 4.0f);
-        TimeRange _sourceRange = new TimeRange(0.0f, 4.0f);
-        
-        // ITimeClip implementation
-        public ref TimeRange TimeRange => ref _timeRange;
-        public ref TimeRange SourceRange => ref _sourceRange;
-        public int LayerIndex { get; set; } = 0;
-        public string Name => "kjfljdl";
+        TimeClip TimeClip { get; }
+    }
+
+    public interface IOutputDataConsumer
+    {
+        void SetOutputData(IOutputData data);
+    }
+
+    // This interface is mainly to extract the output data type while no instance of an implementer exists.
+    internal interface IOutputDataConsumer<T> : IOutputDataConsumer
+    {
+    }
+
+    public class TimeClipSlot<T> : Slot<T>, ITimeClipProvider, IOutputDataConsumer<TimeClip>
+    {
+        public TimeClip TimeClip { get; private set; }
+
+        public void SetOutputData(IOutputData data)
+        {
+            TimeClip = data as TimeClip;
+            TimeClip.Id = Parent.SymbolChildId;
+        }
 
         private void UpdateWithTimeRangeCheck(EvaluationContext context)
         {
-            if (context.TimeInBars >= TimeRange.Start && context.TimeInBars < TimeRange.End)
+            if (context.TimeInBars >= TimeClip.TimeRange.Start && context.TimeInBars < TimeClip.TimeRange.End)
             {
                 _baseUpdateAction(context);
-            } 
+            }
         }
-        
+
         private Action<EvaluationContext> _baseUpdateAction;
+
         public override Action<EvaluationContext> UpdateAction
         {
             set

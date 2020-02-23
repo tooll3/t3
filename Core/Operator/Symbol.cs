@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using T3.Core.Logging;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -95,8 +96,18 @@ namespace T3.Core.Operator
             {
                 var valueType = output.FieldType.GenericTypeArguments[0];
                 var attribute = (OutputAttribute)attributes.First();
-                OutputDefinitions.Add(new OutputDefinition() { Id = attribute.Id, Name = output.Name, ValueType = valueType });
+                var outputDataType = GetOutputDataType(output);
+
+                OutputDefinitions.Add(new OutputDefinition { Id = attribute.Id, Name = output.Name, ValueType = valueType, OutputDataType = outputDataType });
             }
+        }
+
+        private static Type GetOutputDataType(FieldInfo output)
+        {
+            Type outputDataInterfaceType = (from interfaceType in output.FieldType.GetInterfaces()
+                                            where interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IOutputDataConsumer<>)
+                                            select interfaceType).SingleOrDefault();
+            return outputDataInterfaceType?.GetGenericArguments().Single();
         }
 
         public void Dispose()
@@ -164,7 +175,14 @@ namespace T3.Core.Operator
                 else
                 {
                     var valueType = output.FieldType.GenericTypeArguments[0];
-                    OutputDefinitions.Add(new OutputDefinition() { Id = attribute.Id, Name = output.Name, ValueType = valueType });
+                    var outputDataType = GetOutputDataType(output);
+                    OutputDefinitions.Add(new OutputDefinition()
+                                          {
+                                              Id = attribute.Id,
+                                              Name = output.Name,
+                                              ValueType = valueType,
+                                              OutputDataType = outputDataType
+                                          });
                 }
             }
 
@@ -399,6 +417,14 @@ namespace T3.Core.Operator
             {
                 Debug.Assert(i < childInstance.Outputs.Count);
                 childInstance.Outputs[i].Id = childSymbol.OutputDefinitions[i].Id;
+                if (childSymbol.OutputDefinitions[i].OutputDataType != null)
+                {
+                    // output is using data, so link it
+                    if (childInstance.Outputs[i] is IOutputDataConsumer outputDataConsumer)
+                    {
+                        outputDataConsumer.SetOutputData(symbolChild.OutputData[childInstance.Outputs[i].Id]);
+                    }
+                }
             }
 
             parentInstance.Children.Add(childInstance);
@@ -548,6 +574,7 @@ namespace T3.Core.Operator
             public Guid Id { get; set; }
             public string Name { get; set; }
             public Type ValueType { get; set; }
+            public Type OutputDataType { get; set; }
         }
 
         public class Connection

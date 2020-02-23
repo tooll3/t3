@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator
 {
@@ -21,6 +22,7 @@ namespace T3.Core.Operator
         public string ReadableName => string.IsNullOrEmpty(Name) ? Symbol.Name : Name;
 
         public Dictionary<InputDefinitionId, Input> InputValues { get; } = new Dictionary<InputDefinitionId, Input>();
+        public Dictionary<Guid, IOutputData> OutputData { get; } = new Dictionary<Guid, IOutputData>();
 
         public SymbolChild(Symbol symbol, Guid childId)
         {
@@ -30,6 +32,14 @@ namespace T3.Core.Operator
             foreach (var inputDefinition in symbol.InputDefinitions)
             {
                 InputValues.Add(inputDefinition.Id, new Input(inputDefinition));
+            }
+
+            foreach (var outputDefinition in symbol.OutputDefinitions)
+            {
+                if (outputDefinition.OutputDataType != null)
+                {
+                    OutputData.Add(outputDefinition.Id, Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData);
+                }
             }
         }
 
