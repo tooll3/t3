@@ -12,7 +12,7 @@ namespace T3.Gui.Windows.TimeLine
     {
         public override void Draw(Playback playback)
         {
-            var hasChanged = Math.Abs(_bpm - Playback.Bpm) > 0.001f;
+            var hasChanged = Math.Abs(_bpm - playback.Bpm) > 0.001f;
             if (ScaleRanges == null || hasChanged)
             {
                 //_bpm = playback.Bpm;

@@ -57,7 +57,7 @@ namespace T3.Gui.UiHelpers
         
         public static bool DrawEditWithSelectors(FilePickerTypes type, ref string value)
         {
-            bool modified = false;
+            var modified = false;
             ImGui.SameLine();
             if (ImGui.Button("...", new Vector2(30, 0)))
             {

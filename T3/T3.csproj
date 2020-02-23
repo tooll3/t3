@@ -399,6 +399,8 @@
     <Compile Include="Gui\UiHelpers\CurvePlot.cs" />
     <Compile Include="Gui\UiHelpers\FileOperations.cs" />
     <Compile Include="Gui\UiHelpers\ModalDialog.cs" />
+    <Compile Include="Gui\UiHelpers\ProjectSettings.cs" />
+    <Compile Include="Gui\UiHelpers\Settings.cs" />
     <Compile Include="Gui\UiHelpers\StatusErrorLine.cs" />
     <Compile Include="Gui\UiHelpers\UserSettings.cs" />
     <Compile Include="Gui\Windows\ImageOutputCanvas.cs" />

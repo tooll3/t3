@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using T3.Core.Logging;
 using T3.Gui.Graph;
 
 namespace T3.Gui.UiHelpers
 {
     /// <summary>
-    /// Saves view layout and currently open node 
+    /// Saves view layout, currently open node and other usersettings 
     /// </summary>
-    public class UserSettings
+    public class UserSettings :Settings
     {
-        public UserSettings()
+        static UserSettings()
         {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-            TryLoadingSettings();
+            AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
+            Config = TryLoading<ConfigData>("userSettings.json") ?? new ConfigData();
         }
-
+        
+        public static ConfigData Config;
+        
         public class ConfigData
         {
             public readonly Dictionary<Guid, ScalableCanvas.CanvasProperties> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.CanvasProperties>();
@@ -29,48 +29,8 @@ namespace T3.Gui.UiHelpers
             public bool ShowThumbnails = true;
             public int WindowLayoutIndex = 0;
         }
-
-        public static ConfigData Config = new ConfigData();
-
         
-        void OnProcessExit(object sender, EventArgs e)
-        {
-            SaveSettings();
-        }
-
-        private static void SaveSettings()
-        {
-            Log.Debug("Saving user settings...");
-            var serializer = JsonSerializer.Create();
-            serializer.Formatting = Formatting.Indented;
-            using (var file = File.CreateText(UserSettingFilepath))
-            {
-                serializer.Serialize(file, Config);
-            }
-        }
-
-        private static void TryLoadingSettings()
-        {
-            if (!File.Exists(UserSettingFilepath))
-            {
-                Log.Warning($"Layout {UserSettingFilepath} doesn't exist yet");
-                return;
-            }
-
-            var jsonBlob = File.ReadAllText(UserSettingFilepath);
-            var serializer = Newtonsoft.Json.JsonSerializer.Create();
-            var fileTextReader = new StringReader(jsonBlob);
-            if (!(serializer.Deserialize(fileTextReader, typeof(ConfigData))
-                      is ConfigData configurations))
-            {
-                Log.Error("Can't load layout");
-                return;
-            }
-
-            Config = configurations;
-        }
-
-
+        
         public static Guid GetLastOpenOpForWindow(string windowTitle)
         {
             return Config.LastOpsForWindows.ContainsKey(windowTitle)
@@ -82,6 +42,10 @@ namespace T3.Gui.UiHelpers
         {
             Config.LastOpsForWindows[window.Config.Title]= opInstanceId;
         }
-        private const string UserSettingFilepath = "userSettings.json";
+
+        private static void OnProcessExit(object sender, EventArgs e)
+        {
+            SaveSettings(Config);
+        }
     }
 }

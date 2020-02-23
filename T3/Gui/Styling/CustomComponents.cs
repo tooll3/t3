@@ -148,12 +148,20 @@ namespace T3.Gui
             return clicked;
         }
 
-        public static void ContextMenuForItem(Action drawMenuItems, string id = "context_menu")
+        public static void ContextMenuForItem(Action drawMenuItems, string title=null, string id = "context_menu")
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
+            
             if (ImGui.BeginPopupContextItem(id))
             {
+                if (title != null)
+                {
+                    ImGui.PushFont(Fonts.FontLarge);
+                    ImGui.Text(title);
+                    ImGui.PopFont();
+                }
+                
                 drawMenuItems?.Invoke();
                 ImGui.EndPopup();
             }

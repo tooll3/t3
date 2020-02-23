@@ -57,7 +57,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.BeginChild("timeline", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
                 _drawlist = ImGui.GetWindowDrawList();
-                _timeLineImage.Draw(_drawlist);
+                _timeLineImage.Draw(_drawlist, Playback);
                 ImGui.SetScrollY(0);
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();

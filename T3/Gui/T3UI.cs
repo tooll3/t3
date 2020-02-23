@@ -17,6 +17,7 @@ namespace T3.Gui
         static T3Ui()
         {
             _userSettings = new UserSettings();
+            _projectSettings = new ProjectSettings();
             WindowManager = new WindowManager();
         }
 
@@ -107,6 +108,7 @@ namespace T3.Gui
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel = new UiModel();
         private static UserSettings _userSettings;
+        private static ProjectSettings _projectSettings;
         private static readonly WindowManager WindowManager;
 
         public static IntPtr NotDroppingPointer = new IntPtr(0);

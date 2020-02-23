@@ -1,22 +1,20 @@
 ﻿using System;
-using System.IO;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
     public class TimeLineImage
     {
-        public void Draw(ImDrawListPtr drawlist)
+        public void Draw(ImDrawListPtr drawlist, Playback playback)
         {
             if (!_initialized)
                 Initialize();
-
-            const float songDurationInSecs = 177.78f;
             
-            var songDurationInBars = (float)(songDurationInSecs * Playback.Bpm / 240);
+            var songDurationInBars = (float)(playback.GetSongDurationInSecs() * playback.Bpm / 240);
             var xMin= TimeLineCanvas.Current.TransformPositionX(0);
             var xMax = TimeLineCanvas.Current.TransformPositionX(songDurationInBars);
 
@@ -37,13 +35,15 @@ namespace T3.Gui.Windows.TimeLine
             var resourceManager = ResourceManager.Instance();
             if (resourceManager == null)
                 return;
+
+            var imagePath = ProjectSettings.Config.SoundtrackFilepath + ".waveform.png";
             
-            (_, _srvResId) = resourceManager.CreateTextureFromFile(ImagePath, () => { });
+            
+            (_, _srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
             _initialized = true;
         }
 
-        private bool _initialized = false;
+        private bool _initialized;
         private static uint _srvResId;
-        private static readonly string ImagePath =  Path.Combine(ResourceManager.ResourcesFolder, "soundtrack","lorn-sega-sunset.mp3.waveform.png");
     }
 }

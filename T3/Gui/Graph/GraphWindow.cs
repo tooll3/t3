@@ -32,9 +32,12 @@ namespace T3.Gui.Graph
             Config.Title = "Graph##" + _instanceCounter;
             Config.Visible = true;
             AllowMultipleInstances = true;
-
-            const string trackName = @"Resources\soundtrack\lorn-sega-sunset.mp3";
-            _playback = File.Exists(trackName) ? new StreamPlayback(trackName) : new Playback();
+            
+            _playback = File.Exists(ProjectSettings.Config.SoundtrackFilepath) 
+                            ? new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath) 
+                            : new Playback();
+            
+            _playback.Bpm = ProjectSettings.Config.SoundtrackBpm; 
 
             // Legacy work-around
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);

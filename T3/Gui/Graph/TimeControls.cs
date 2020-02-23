@@ -55,16 +55,25 @@ namespace T3.Gui.Graph
                 playback.TimeMode = (Playback.TimeModes)(((int)playback.TimeMode + 1) % Enum.GetNames(typeof(Playback.TimeModes)).Length);
             }
 
+            ImGui.SetNextWindowSize(new Vector2(400,200));
             CustomComponents.ContextMenuForItem(() =>
                                                 {
-                                                    var t = (float)Playback.Bpm;
-                                                    ImGui.DragFloat("BPM", ref t);
-                                                    Playback.Bpm = t;
+                                                    var bpm = (float)playback.Bpm;
+                                                    ImGui.DragFloat("BPM", ref bpm);
+                                                    playback.Bpm = bpm;
+                                                    ProjectSettings.Config.SoundtrackBpm = bpm;
+
+                                                    ImGui.Text("Soundtrack");
+                                                    ImGui.SetNextItemWidth(-70);
+                                                    ImGui.InputText("##filepath", ref ProjectSettings.Config.SoundtrackFilepath, 255);
+                                                    FileOperations.DrawEditWithSelectors(FileOperations.FilePickerTypes.File,
+                                                                                         ref ProjectSettings.Config.SoundtrackFilepath);
+                                                    
                                                     if (ImGui.Button("Close"))
                                                     {
                                                         ImGui.CloseCurrentPopup();
                                                     }
-                                                });
+                                                }, "Timeline options");
 
             ImGui.SameLine();
 

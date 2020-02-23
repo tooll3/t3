@@ -19,7 +19,7 @@ namespace T3.Core.Animation
         public virtual double BeatTime { get; set; }
         public double TimeRangeStart { get; set; } = 0;
         public double TimeRangeEnd { get; set; } = 8;
-        public static double Bpm  = 95.08f;   // a hack until with have proper bpm handling
+        public double Bpm = 120;  
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
         public TimeModes TimeMode { get; set; } = TimeModes.Bars;
@@ -68,6 +68,11 @@ namespace T3.Core.Animation
                 BeatTime += timeSinceLastFrameInSecs * Bpm / 240f;
             }
         }
+
+        public virtual float GetSongDurationInSecs()
+        {
+            return 120;
+        }
     }
 
     public class StreamPlayback : Playback
@@ -80,6 +85,7 @@ namespace T3.Core.Animation
             Bass.Init();
             _soundStreamHandle = Bass.CreateStream(filename);
             Bass.ChannelGetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, out _defaultPlaybackFrequency);
+            
         }
 
         public override double TimeInBars
@@ -91,6 +97,12 @@ namespace T3.Core.Animation
                 long soundStreamPos = Bass.ChannelSeconds2Bytes(_soundStreamHandle, timeInSecs);
                 Bass.ChannelSetPosition(_soundStreamHandle, soundStreamPos);
             }
+        }
+
+        public override float GetSongDurationInSecs()
+        {
+            var length = Bass.ChannelGetLength(_soundStreamHandle);
+            return (float)Bass.ChannelBytes2Seconds(_soundStreamHandle, length);
         }
 
         public override double PlaybackSpeed
