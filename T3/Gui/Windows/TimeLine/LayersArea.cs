@@ -257,7 +257,6 @@ namespace T3.Gui.Windows.TimeLine
                     
                     var newDragPosY =  mousePos.Y - position.Y;
                     var dy =   _posYInsideDraggedClip-newDragPosY;
-                    Log.Debug("dy"+dy);
 
                     if (_snapHandler.CheckForSnapping(ref newStartTime))
                     {
@@ -304,15 +303,15 @@ namespace T3.Gui.Windows.TimeLine
             var startTime = TimeLineCanvas.Current.InverseTransformPositionX(screenArea.Min.X);
             var endTime = TimeLineCanvas.Current.InverseTransformPositionX(screenArea.Max.X);
 
-            var layerMinIndex = (screenArea.Min.Y - _minScreenPos.Y) / LayerHeight - 1;
-            var layerMaxIndex = (screenArea.Max.Y - _minScreenPos.Y) / LayerHeight;
-
+            var layerMinIndex = (screenArea.Min.Y - _minScreenPos.Y) / LayerHeight + _minLayerIndex;
+            var layerMaxIndex = (screenArea.Max.Y - _minScreenPos.Y) / LayerHeight + _minLayerIndex;
+            
             var allClips = NodeOperations.GetAllTimeClips(_compositionOp);
 
             var matchingClips = allClips.FindAll(clip => clip.TimeRange.Start <= endTime
                                                          && clip.TimeRange.End >= startTime
                                                          && clip.LayerIndex <= layerMaxIndex
-                                                         && clip.LayerIndex >= layerMinIndex);
+                                                         && clip.LayerIndex >= layerMinIndex-1);
             switch (selectMode)
             {
                 case SelectMode.Add:
