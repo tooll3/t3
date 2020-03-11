@@ -41,6 +41,7 @@ namespace T3
         private static void Main(string[] args)
         {
             bool isWindowed = false;
+            bool exit = false;
             Size size = new Size(1920, 1080);
 
             var parser = new Parser(config => config.HelpWriter = Console.Out);
@@ -51,7 +52,11 @@ namespace T3
                                   isWindowed = !o.Fullscreen;
                                   size = new Size(o.Width, o.Height);
                                   Console.WriteLine($"using vsync: {_vsync}, windowed: {isWindowed}, size: {size}");
-                              });
+                              })
+                  .WithNotParsed(o => exit = true);
+
+            if (exit)
+                return;
 
             var form = new RenderForm("T3-Player") { ClientSize = size };
             form.AllowUserResizing = false;
