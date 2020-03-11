@@ -141,7 +141,7 @@ namespace T3.Gui.Graph
 
                         ImGui.SameLine();
 
-                        TimeControls.DrawTimeControls(_playback, ref _timeLineCanvas.Mode);
+                        TimeControls.DrawTimeControls(_playback, _timeLineCanvas);
                     }
                     dl.ChannelsSetCurrent(0);
                     {

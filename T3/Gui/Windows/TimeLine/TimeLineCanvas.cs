@@ -22,17 +22,20 @@ namespace T3.Gui.Windows.TimeLine
             _selectionFence = new TimeSelectionFence(this);
             _curveEditArea = new CurveEditArea(this, _snapHandler);
             _selectionRange = new TimeSelectionRange(this, _snapHandler);
-            _layersArea = new LayersArea(_snapHandler);
+            LayersArea = new LayersArea(_snapHandler);
 
             _snapHandler.AddSnapAttractor(_playbackRange);
             _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
             _snapHandler.AddSnapAttractor(_selectionRange);
-            _snapHandler.AddSnapAttractor(_layersArea);
+            _snapHandler.AddSnapAttractor(LayersArea);
             
             _snapHandler.SnappedEvent += SnappedEventHandler;
         }
 
+        public  bool FoundTimeClipForCurrentTime => LayersArea.FoundClipWithinCurrentTime;
+        
+        
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             Current = this;
@@ -68,7 +71,7 @@ namespace T3.Gui.Windows.TimeLine
                 switch (Mode)
                 {
                     case Modes.DopeView:
-                        _layersArea.Draw(compositionOp);
+                        LayersArea.Draw(compositionOp, Playback);
                         _dopeSheetArea.Draw(compositionOp, animationParameters);
                         break;
                     case Modes.CurveEditor:
@@ -351,7 +354,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 case Modes.DopeView:
                     _selectionHolders.Remove(_dopeSheetArea);
-                    _selectionHolders.Remove(_layersArea);
+                    _selectionHolders.Remove(LayersArea);
                     _snapHandler.RemoveSnapAttractor(_dopeSheetArea);
                     break;
 
@@ -365,7 +368,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 case Modes.DopeView:
                     _selectionHolders.Add(_dopeSheetArea);
-                    _selectionHolders.Add(_layersArea);
+                    _selectionHolders.Add(LayersArea);
                     _snapHandler.AddSnapAttractor(_dopeSheetArea);
                     break;
 
@@ -515,7 +518,7 @@ namespace T3.Gui.Windows.TimeLine
         private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
         private readonly TimeSelectionFence _selectionFence;
         private readonly TimeSelectionRange _selectionRange;
-        private readonly LayersArea _layersArea;
+        public readonly LayersArea LayersArea;
 
         public static TimeLineCanvas Current;
 

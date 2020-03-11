@@ -31,5 +31,10 @@ namespace T3.Core.Animation
             Start = Math.Min(Start, time);
             End = Math.Max(End, time);
         }
+
+        public bool Contains(double time)
+        {
+            return Start <= time && End >= time;
+        }
     }
 }

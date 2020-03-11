@@ -1,5 +1,8 @@
 ﻿using ImGuiNET;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using T3.Core.Animation;
@@ -9,15 +12,15 @@ using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
 using Icon = T3.Gui.Styling.Icon;
+
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace T3.Gui.Graph
 {
     internal static class TimeControls
     {
-        internal static void DrawTimeControls(Playback playback, ref TimeLineCanvas.Modes mode)
+        internal static void DrawTimeControls(Playback playback, TimeLineCanvas timeLineCanvas)
         {
-
             // Current Time
             var delta = 0.0;
             string formattedTime = "";
@@ -58,7 +61,7 @@ namespace T3.Gui.Graph
                 playback.TimeMode = (Playback.TimeModes)(((int)playback.TimeMode + 1) % Enum.GetNames(typeof(Playback.TimeModes)).Length);
             }
 
-            ImGui.SetNextWindowSize(new Vector2(400,200));
+            ImGui.SetNextWindowSize(new Vector2(400, 200));
             CustomComponents.ContextMenuForItem(() =>
                                                 {
                                                     var bpm = (float)playback.Bpm;
@@ -68,20 +71,20 @@ namespace T3.Gui.Graph
 
                                                     ImGui.Text("Soundtrack");
                                                     var modified = FileOperations.DrawFilePicker(FileOperations.FilePickerTypes.File,
-                                                                                         ref ProjectSettings.Config.SoundtrackFilepath);
+                                                                                                 ref ProjectSettings.Config.SoundtrackFilepath);
 
                                                     if (modified)
-                                                    { 
+                                                    {
                                                         var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
                                                         var result = matchBpmPattern.Match(ProjectSettings.Config.SoundtrackFilepath);
                                                         if (result.Success)
                                                         {
-                                                            float.TryParse(result.Groups[1].Value,  out bpm);
+                                                            float.TryParse(result.Groups[1].Value, out bpm);
                                                             ProjectSettings.Config.SoundtrackBpm = bpm;
                                                             playback.Bpm = bpm;
                                                         }
                                                     }
-                                                    
+
                                                     if (ImGui.Button("Close"))
                                                     {
                                                         ImGui.CloseCurrentPopup();
@@ -181,16 +184,15 @@ namespace T3.Gui.Graph
                 {
                     playback.PlaybackSpeed = 1;
                 }
-                else if (playback.PlaybackSpeed < 16)    // Bass can't play much faster anyways
+                else if (playback.PlaybackSpeed < 16) // Bass can't play much faster anyways
                 {
                     playback.PlaybackSpeed *= 2;
                 }
             }
-            
-            
+
             if (KeyboardBinding.Triggered(UserActions.PlaybackForwardHalfSpeed))
             {
-                if(playback.PlaybackSpeed > 0 && playback.PlaybackSpeed < 1f)
+                if (playback.PlaybackSpeed > 0 && playback.PlaybackSpeed < 1f)
                     playback.PlaybackSpeed *= 0.5f;
                 else
                     playback.PlaybackSpeed = 0.5f;
@@ -225,22 +227,24 @@ namespace T3.Gui.Graph
             CustomComponents.ToggleButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize);
             ImGui.SameLine();
 
-            // Curve MOde
-            if (ImGui.Button(mode.ToString(), ControlSize))
+            // Curve Mode
+            if (ImGui.Button(timeLineCanvas.Mode.ToString(), ControlSize))
             {
-                mode = (TimeLineCanvas.Modes)(((int)mode + 1) % Enum.GetNames(typeof(TimeLineCanvas.Modes)).Length);
+                timeLineCanvas.Mode = (TimeLineCanvas.Modes)(((int)timeLineCanvas.Mode + 1) % Enum.GetNames(typeof(TimeLineCanvas.Modes)).Length);
             }
+
             ImGui.SameLine();
-            
+
             // ToggleAudio
-            if (CustomComponents.IconButton(UserSettings.Config.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn,  "##audioToggle", ControlSize))
+            if (CustomComponents.IconButton(UserSettings.Config.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn, "##audioToggle", ControlSize))
             {
                 UserSettings.Config.AudioMuted = !UserSettings.Config.AudioMuted;
                 var streamedClipTime = playback as StreamPlayback;
                 streamedClipTime?.SetMuteMode(UserSettings.Config.AudioMuted);
             }
+
             ImGui.SameLine();
-            
+
             // ToggleHover
             var icon = Icon.HoverPreviewSmall;
             if (UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Disabled)
@@ -251,11 +255,32 @@ namespace T3.Gui.Graph
             {
                 icon = Icon.HoverPreviewPlay;
             }
-            if (CustomComponents.IconButton(icon,  "##hoverPreview", ControlSize))
+
+            if (CustomComponents.IconButton(icon, "##hoverPreview", ControlSize))
             {
-                UserSettings.Config.HoverMode = (GraphCanvas.HoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
+                UserSettings.Config.HoverMode =
+                    (GraphCanvas.HoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
             }
+
             ImGui.SameLine();
+
+            // Cut
+            if (timeLineCanvas.FoundTimeClipForCurrentTime)
+            {
+                if (CustomComponents.IconButton(Icon.ConnectedParameter, "##CutClip", ControlSize))
+                {
+                    var matchingClips = timeLineCanvas.LayersArea.SelectedItems
+                                                      .Where(clip => clip.TimeRange.Contains(playback.TimeInBars));
+
+                    foreach (var clip in matchingClips)
+                    {
+                        var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == clip.Id);
+                        Log.Debug("This would cut this selected clips:" + instance.SymbolChildId);    
+                        
+                        //TODO: Implement cut
+                    }
+                }
+            }
         }
 
         public static readonly Vector2 ControlSize = new Vector2(45, 26);
