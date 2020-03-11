@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using CommandLine;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
@@ -21,10 +22,38 @@ namespace T3
     {
         public static Device Device { get; private set; }
 
-        [STAThread]
-        private static void Main()
+        public class Options
         {
-            var form = new RenderForm("T3-Player") { ClientSize = new Size(1920, 1080) };
+            [Option('v', "no-vsync", Required = false, HelpText = "Disables vsync")]
+            public bool Vsync { get; set; }
+
+            [Option('w', "width", Default = 1920, Required = false, HelpText = "Defines the width")]
+            public int Width { get; set; }
+
+            [Option('h', "height", Default = 1080, Required = false, HelpText = "Defines the height")]
+            public int Height { get; set; }
+
+            [Option('f', "fullscreen", Required = false, HelpText = "Run in fullscreen mode")]
+            public bool Fullscreen { get; set; }
+        }
+
+        [STAThread]
+        private static void Main(string[] args)
+        {
+            bool isWindowed = false;
+            Size size = new Size(1920, 1080);
+
+            var parser = new Parser(config => config.HelpWriter = Console.Out);
+            parser.ParseArguments<Options>(args)
+                  .WithParsed(o =>
+                              {
+                                  _vsync = !o.Vsync;
+                                  isWindowed = !o.Fullscreen;
+                                  size = new Size(o.Width, o.Height);
+                                  Console.WriteLine($"using vsync: {_vsync}, windowed: {isWindowed}, size: {size}");
+                              });
+
+            var form = new RenderForm("T3-Player") { ClientSize = size };
             form.AllowUserResizing = false;
 
             // SwapChain description
@@ -33,7 +62,7 @@ namespace T3
                            BufferCount = 3,
                            ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
                                                                  new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                           IsWindowed = true,
+                           IsWindowed = isWindowed,
                            OutputHandle = form.Handle,
                            SampleDescription = new SampleDescription(1, 0),
                            SwapEffect = SwapEffect.Discard,
@@ -49,9 +78,9 @@ namespace T3
             var factory = _swapChain.GetParent<Factory>();
             factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAll);
             
-            form.KeyUp += (sender, args) =>
+            form.KeyUp += (sender, keyArgs) =>
                           {
-                              if (args.Alt && args.KeyCode == Keys.Enter)
+                              if (keyArgs.Alt && keyArgs.KeyCode == Keys.Enter)
                               {
                                   _swapChain.IsFullScreen = !_swapChain.IsFullScreen;
                                   if (_swapChain.IsFullScreen)
@@ -64,7 +93,7 @@ namespace T3
                                   }
                               }
 
-                              if (args.KeyCode == Keys.Escape)
+                              if (keyArgs.KeyCode == Keys.Escape)
                               {
                                   Application.Exit();
                               }
@@ -123,8 +152,7 @@ namespace T3
                                          context.PixelShader.SetShaderResource(0, null);
                                      }
                                      
-                                     // _swapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
-                                     _swapChain.Present(1, PresentFlags.None);
+                                     _swapChain.Present(_vsync ? 1 : 0, PresentFlags.None);
                                  });
 
             // Release all resources
@@ -139,6 +167,7 @@ namespace T3
         }
 
         // private static bool _inResize;
+        private static bool _vsync;
         private static SwapChain _swapChain;
         private static RenderTargetView _renderView;
         private static Texture2D _backBuffer;
