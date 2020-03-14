@@ -160,7 +160,9 @@ namespace T3.Gui.Windows.TimeLine
             if (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(0))
             {
                 var instance = _compositionOp.Children.Single(child => child.SymbolChildId == symbolChildUi.Id);
-                SelectionManager.AddSelection(symbolChildUi, instance);
+                //SelectionManager.AddSelection(symbolChildUi, instance);
+                SelectionManager.SetSelection(symbolChildUi,instance);
+                SelectionManager.FitViewToSelection();
                 SelectedItems.Clear();
                 SelectedItems.Add(timeClip);
             }

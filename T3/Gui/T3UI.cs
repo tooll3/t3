@@ -7,6 +7,7 @@ using T3.Core;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
+using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 
@@ -24,6 +25,7 @@ namespace T3.Gui
         
         public void Draw()
         {
+            SelectionManager.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             WindowManager.Draw();
             

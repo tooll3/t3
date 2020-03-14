@@ -32,12 +32,12 @@ namespace T3.Gui.Graph
             Config.Title = "Graph##" + _instanceCounter;
             Config.Visible = true;
             AllowMultipleInstances = true;
-            
-            _playback = File.Exists(ProjectSettings.Config.SoundtrackFilepath) 
-                            ? new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath) 
+
+            _playback = File.Exists(ProjectSettings.Config.SoundtrackFilepath)
+                            ? new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath)
                             : new Playback();
-            
-            _playback.Bpm = ProjectSettings.Config.SoundtrackBpm; 
+
+            _playback.Bpm = ProjectSettings.Config.SoundtrackBpm;
 
             // Legacy work-around
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
@@ -47,7 +47,7 @@ namespace T3.Gui.Graph
 
             _timeLineCanvas = new TimeLineCanvas(_playback);
 
-            WindowFlags = ImGuiWindowFlags.NoScrollbar|ImGuiWindowFlags.NoScrollWithMouse;
+            WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
             GraphWindowInstances.Add(this);
         }
 
@@ -91,27 +91,43 @@ namespace T3.Gui.Graph
 
         private static bool _justAddedDescription;
 
-        /// <summary>
-        /// References to composition op might be outdated because
-        /// the symbol has been recompiled or otherwise changed.
-        /// This uses the references to 
-        /// </summary>
-        private void UpdateReferences()
+        private void FitViewToSelection()
         {
+            var selection = SelectionManager.GetSelectedSymbolChildUis().ToArray();
+
+            if (selection.Length == 0)
+                return;
+
+            var area = new ImRect(selection[0].PosOnCanvas,
+                                     selection[0].PosOnCanvas + selection[0].Size);
+
+            for (var index = 1; index < selection.Length; index++)
+            {
+                var selectedItem = selection[index];
+                area.Add(new ImRect(selectedItem.PosOnCanvas, 
+                                         selectedItem.PosOnCanvas + selectedItem.Size));
+            }
+            
+            area.Expand(400);
+
+            GraphCanvas.FitAreaOnCanvas(area);
         }
 
+        
         protected override void DrawContent()
         {
-            UpdateReferences();
+            if(SelectionManager.FitViewToSelectionRequested)
+                FitViewToSelection();
+            
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
             {
                 var dl = ImGui.GetWindowDrawList();
 
                 var animationParameters = GetAnimationParametersForSelectedNodes();
-                
+
                 var isTimelineCollapsed = _heightTimeLine <= TimeLineCanvas.TimeLineDragHeight;
                 var timelineHeight = isTimelineCollapsed
-                                         ? (animationParameters.Count * DopeSheetArea.LayerHeight)+ TimeLineCanvas.TimeLineDragHeight
+                                         ? (animationParameters.Count * DopeSheetArea.LayerHeight) + TimeLineCanvas.TimeLineDragHeight
                                          : _heightTimeLine;
 
                 if (CustomComponents.SplitFromBottom(ref timelineHeight))
@@ -120,7 +136,8 @@ namespace T3.Gui.Graph
                 }
 
                 var graphHeight = ImGui.GetWindowHeight() - timelineHeight - 30;
-                ImGui.BeginChild("##graph", new Vector2(0, graphHeight), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
+                ImGui.BeginChild("##graph", new Vector2(0, graphHeight), false,
+                                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
                 {
                     dl.ChannelsSplit(2);
                     dl.ChannelsSetCurrent(1);
@@ -133,7 +150,7 @@ namespace T3.Gui.Graph
                                                        ImGui.GetWindowContentRegionMin().X,
                                                        ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
 
-                        if (CustomComponents.IconButton(isTimelineCollapsed ? Icon.ChevronUp : Icon.ChevronDown, 
+                        if (CustomComponents.IconButton(isTimelineCollapsed ? Icon.ChevronUp : Icon.ChevronDown,
                                                         "##TimelineToggle", TimeControls.ControlSize))
                         {
                             _heightTimeLine = isTimelineCollapsed ? 200 : TimeLineCanvas.TimeLineDragHeight;
@@ -151,7 +168,8 @@ namespace T3.Gui.Graph
                 }
                 ImGui.EndChild();
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 2);
-                ImGui.BeginChild("##timeline", Vector2.Zero, false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
+                ImGui.BeginChild("##timeline", Vector2.Zero, false,
+                                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
                 {
                     _timeLineCanvas.Draw(GraphCanvas.CompositionOp, animationParameters);
                 }

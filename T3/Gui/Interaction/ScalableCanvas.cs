@@ -162,7 +162,7 @@ namespace T3.Gui.Graph
             _scaleTarget = Vector2.One;
         }
 
-        protected void FitAreaOnCanvas(ImRect area)
+        public void FitAreaOnCanvas(ImRect area)
         {
             var height = area.GetHeight();
             var width = area.GetWidth();
