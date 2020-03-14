@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
@@ -36,7 +37,8 @@ namespace T3.Gui.Windows.TimeLine
             {
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(0, 3)); // keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
-                DrawAllLayers(NodeOperations.GetAllTimeClips(_compositionOp));
+                var allTimeClips = NodeOperations.GetAllTimeClips(_compositionOp);
+                DrawAllLayers(allTimeClips);
                 DrawContextMenu();
             }
             ImGui.EndGroup();
@@ -53,7 +55,7 @@ namespace T3.Gui.Windows.TimeLine
             var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
             if (!_contextMenuIsOpen && rightMouseDragDelta > 3)
                 return;
-
+            
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             if (ImGui.BeginPopupContextWindow("context_menu"))
             {
@@ -63,7 +65,18 @@ namespace T3.Gui.Windows.TimeLine
                     UndoRedoStack.AddAndExecute(new TimeClipDeleteCommand(_compositionOp, SelectedItems));
                     SelectedItems.Clear();
                 }
-
+                
+                if (ImGui.MenuItem("Clear Time Stretch", null, false, SelectedItems.Count > 0))
+                {
+                    var moveTimeClipCommand = new MoveTimeClipCommand( _compositionOp, SelectedItems.ToList());
+                    foreach (var clip in SelectedItems)
+                    {
+                        clip.SourceRange = clip.TimeRange.Clone();
+                    }
+                    moveTimeClipCommand.StoreCurrentValues();
+                    UndoRedoStack.AddAndExecute(moveTimeClipCommand);
+                    SelectedItems.Clear();
+                }
                 ImGui.EndPopup();
             }
             else
@@ -148,6 +161,18 @@ namespace T3.Gui.Windows.TimeLine
 
             var color = new Color(0.5f);
             _drawList.AddRectFilled(position, position + clipSize - new Vector2(1, 0), color);
+
+            var timeRemapped = timeClip.TimeRange != timeClip.SourceRange;
+            var timeStretched = Math.Abs(timeClip.TimeRange.Duration - timeClip.SourceRange.Duration) > 0.001;
+            if (timeStretched)
+            {
+                _drawList.AddRectFilled(position, position + new Vector2(clipSize.X -1, 2), Color.Red);
+            }
+            else if (timeRemapped)
+            {
+                _drawList.AddRectFilled(position, position + new Vector2(clipSize.X -1, 2), Color.Orange);    
+            }
+            
             if (isSelected)
                 _drawList.AddRect(position, position + clipSize - new Vector2(1, 0), Color.White);
 
@@ -157,10 +182,33 @@ namespace T3.Gui.Windows.TimeLine
 
             var wasClicked = ImGui.InvisibleButton("body", bodySize);
 
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.BeginTooltip();
+                {
+                    ImGui.Text($"In: {timeClip.TimeRange.Start}");
+                    ImGui.Text($"Out: {timeClip.TimeRange.End}");
+                    if (timeRemapped)
+                    {
+                        ImGui.Text($"Source In: {timeClip.SourceRange.Start}");
+                        ImGui.Text($"Source Out: {timeClip.SourceRange.End}");
+                    }
+
+                    if (timeStretched)
+                    {
+                        var speed = Math.Abs(timeClip.TimeRange.Duration) > 0.001 
+                                        ? (timeClip.SourceRange.Duration / timeClip.TimeRange.Duration) * 100 
+                                        :9999;
+                        ImGui.Text($"Speed: {speed:0.0}%");
+                    }
+                }
+                ImGui.EndTooltip();
+            }
+
+
             if (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(0))
             {
                 var instance = _compositionOp.Children.Single(child => child.SymbolChildId == symbolChildUi.Id);
-                //SelectionManager.AddSelection(symbolChildUi, instance);
                 SelectionManager.SetSelection(symbolChildUi,instance);
                 SelectionManager.FitViewToSelection();
                 SelectedItems.Clear();
@@ -171,6 +219,8 @@ namespace T3.Gui.Windows.TimeLine
             {
                 T3Ui.AddHoveredId(symbolChildUi.Id);
             }
+            
+
 
             var notClickingOrDragging = !ImGui.IsItemActive() && !ImGui.IsMouseDragging(0);
             if (notClickingOrDragging && _moveClipsCommand != null)
@@ -370,19 +420,29 @@ namespace T3.Gui.Windows.TimeLine
 
         void ITimeElementSelectionHolder.UpdateDragStartCommand(double dt, double dv)
         {
+            var trim = !ImGui.GetIO().KeyAlt;
             foreach (var clip in SelectedItems)
             {
                 // Keep 1 frame min duration
+                var org = clip.TimeRange.Start;
                 clip.TimeRange.Start = (float)Math.Min(clip.TimeRange.Start + dt, clip.TimeRange.End - MinDuration);
+                var d = clip.TimeRange.Start - org;
+                if(trim)
+                    clip.SourceRange.Start += d;
             }
         }
 
         void ITimeElementSelectionHolder.UpdateDragEndCommand(double dt, double dv)
         {
+            var trim = !ImGui.GetIO().KeyAlt;
             foreach (var clip in SelectedItems)
             {
                 // Keep 1 frame min duration
+                var org = clip.TimeRange.End;
                 clip.TimeRange.End = (float)Math.Max(clip.TimeRange.End + dt, clip.TimeRange.Start + MinDuration);
+                var d =  clip.TimeRange.End - org;
+                if(trim)
+                    clip.SourceRange.End += d;
             }
         }
 
