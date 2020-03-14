@@ -1,7 +1,6 @@
 using System;
 using ImGuiNET;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -23,7 +22,6 @@ namespace T3.Gui.Graph
     /// </summary>
     public class GraphWindow : Window
     {
-        public GraphCanvas GraphCanvas { get; private set; }
 
         public GraphWindow()
         {
@@ -43,7 +41,7 @@ namespace T3.Gui.Graph
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
             var shownOpInstance = FindIdInNestedChildren(T3Ui.UiModel.RootInstance, opId) ?? T3Ui.UiModel.RootInstance;
             var path = NodeOperations.BuildIdPathForInstance(shownOpInstance);
-            GraphCanvas = new GraphCanvas(this, path);
+            _graphCanvas = new GraphCanvas(this, path);
 
             _timeLineCanvas = new TimeLineCanvas(_playback);
 
@@ -110,7 +108,7 @@ namespace T3.Gui.Graph
             
             area.Expand(400);
 
-            GraphCanvas.FitAreaOnCanvas(area);
+            _graphCanvas.FitAreaOnCanvas(area);
         }
 
         
@@ -162,7 +160,7 @@ namespace T3.Gui.Graph
                     }
                     dl.ChannelsSetCurrent(0);
                     {
-                        GraphCanvas.Draw(dl);
+                        _graphCanvas.Draw(dl);
                     }
                     dl.ChannelsMerge();
                 }
@@ -171,7 +169,7 @@ namespace T3.Gui.Graph
                 ImGui.BeginChild("##timeline", Vector2.Zero, false,
                                  ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
                 {
-                    _timeLineCanvas.Draw(GraphCanvas.CompositionOp, animationParameters);
+                    _timeLineCanvas.Draw(_graphCanvas.CompositionOp, animationParameters);
                 }
                 ImGui.EndChild();
             }
@@ -182,15 +180,15 @@ namespace T3.Gui.Graph
         {
             ImGui.SetCursorPosX(8);
             ImGui.PushFont(Fonts.FontLarge);
-            ImGui.Text(GraphCanvas.CompositionOp.Symbol.Name);
+            ImGui.Text(_graphCanvas.CompositionOp.Symbol.Name);
             ImGui.SameLine();
 
             ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.3f).Rgba);
-            ImGui.Text("  - " + GraphCanvas.CompositionOp.Symbol.Namespace);
+            ImGui.Text("  - " + _graphCanvas.CompositionOp.Symbol.Namespace);
             ImGui.PopFont();
             ImGui.PopStyleColor();
 
-            var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.CompositionOp.Symbol.Id];
+            var symbolUi = SymbolUiRegistry.Entries[_graphCanvas.CompositionOp.Symbol.Id];
 
             if (symbolUi.Description == null)
             {
@@ -259,9 +257,9 @@ namespace T3.Gui.Graph
         private List<AnimationParameter> GetAnimationParametersForSelectedNodes()
         {
             var selection = SelectionManager.GetSelectedNodes<ISelectableNode>();
-            var symbolUi = SymbolUiRegistry.Entries[GraphCanvas.CompositionOp.Symbol.Id];
+            var symbolUi = SymbolUiRegistry.Entries[_graphCanvas.CompositionOp.Symbol.Id];
             var animator = symbolUi.Symbol.Animator;
-            var curvesForSelection = (from child in GraphCanvas.CompositionOp.Children
+            var curvesForSelection = (from child in _graphCanvas.CompositionOp.Children
                                       from selectedElement in selection
                                       where child.SymbolChildId == selectedElement.Id
                                       from input in child.Inputs
@@ -279,7 +277,7 @@ namespace T3.Gui.Graph
         private void DrawBreadcrumbs()
         {
             ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
-            IEnumerable<Instance> parents = GraphCanvas.GetParents();
+            IEnumerable<Instance> parents = _graphCanvas.GetParents();
 
             ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
             ImGui.PushFont(Fonts.FontSmall);
@@ -293,7 +291,7 @@ namespace T3.Gui.Graph
 
                     if (clicked)
                     {
-                        GraphCanvas.SetCompositionToParentInstance(p);
+                        _graphCanvas.SetCompositionToParentInstance(p);
                         break;
                     }
 
@@ -306,6 +304,7 @@ namespace T3.Gui.Graph
             ImGui.PopStyleColor();
         }
 
+        private readonly GraphCanvas _graphCanvas;
         private readonly Playback _playback;
         private float _heightTimeLine = TimeLineCanvas.TimeLineDragHeight;
         private readonly TimeLineCanvas _timeLineCanvas;
