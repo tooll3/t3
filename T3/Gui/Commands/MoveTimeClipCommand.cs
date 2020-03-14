@@ -11,18 +11,13 @@ namespace T3.Gui.Commands
     {
         public string Name => "Move Time Clip";
         public bool IsUndoable => true;
-
-        public class Entry
+        
+        private class  Entry
         {
-            public Guid Id;
-            public float OriginalStartTime { get; set; }
-            public float OriginalEndTime { get; set; }
-            public float OriginalSourceStartTime { get; set; }
-            public float OriginalSourceEndTime { get; set; }
-            public float StartTime { get; set; }
-            public float EndTime { get; set; }
-            public float SourceStartTime { get; set; }
-            public float SourceEndTime { get; set; }
+            public Guid Id { get; set; }
+            public TimeRange TimeRange { get; set; }
+            public TimeRange SourceRange { get; set; }
+            public int LayerIndex { get; set; }
         }
 
         private readonly Entry[] _entries;
@@ -38,10 +33,9 @@ namespace T3.Gui.Commands
                 var entry = new Entry
                             {
                                 Id = clip.Id,
-                                 OriginalStartTime= clip.TimeRange.Start,
-                                 OriginalEndTime= clip.TimeRange.End,
-                                 OriginalSourceStartTime= clip.SourceRange.Start,
-                                 OriginalSourceEndTime= clip.SourceRange.End,
+                                TimeRange =clip.TimeRange.Clone(),
+                                SourceRange =clip.SourceRange.Clone(),
+                                LayerIndex = clip.LayerIndex,
                             };
                 _entries[i] = entry;
             }
@@ -50,53 +44,44 @@ namespace T3.Gui.Commands
 
         public void StoreCurrentValues()
         {
-            // var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-
             foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
-                selectedEntry.StartTime = clip.TimeRange.Start;
-                selectedEntry.EndTime = clip.TimeRange.End;
-                selectedEntry.SourceStartTime = clip.SourceRange.Start;
-                selectedEntry.SourceEndTime = clip.SourceRange.End;
+                selectedEntry.TimeRange = clip.TimeRange.Clone();
+                selectedEntry.SourceRange = clip.SourceRange.Clone();
+                selectedEntry.LayerIndex = clip.LayerIndex;
             }            
         }
 
 
         public void Undo()
         {
-            // var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-
             foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
-                clip.TimeRange.Start = selectedEntry.OriginalStartTime;
-                clip.TimeRange.End = selectedEntry.OriginalEndTime;
-                clip.SourceRange.Start = selectedEntry.OriginalSourceStartTime;
-                clip.SourceRange.End = selectedEntry.OriginalSourceEndTime;
+                clip.TimeRange = selectedEntry.TimeRange.Clone();
+                clip.SourceRange = selectedEntry.SourceRange.Clone();
+                clip.LayerIndex = selectedEntry.LayerIndex;
             }
         }
 
         public void Do()
         {
-            // var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-
             foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
 
-                clip.TimeRange.Start = selectedEntry.StartTime;
-                clip.TimeRange.End = selectedEntry.EndTime;
-                clip.SourceRange.Start = selectedEntry.SourceStartTime;
-                clip.SourceRange.End = selectedEntry.SourceEndTime;
+                clip.TimeRange = selectedEntry.TimeRange.Clone();
+                clip.SourceRange = selectedEntry.SourceRange.Clone();
+                clip.LayerIndex = selectedEntry.LayerIndex;
             }        
         }
     }
