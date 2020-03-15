@@ -28,9 +28,9 @@ namespace T3.Core.Animation
         public int Beat => (int)(TimeInBars * 4) % 4 + 1;
         public int Tick => (int)(TimeInBars * 16) % 4 + 1;
 
-        public void Update(float timeSinceLastFrameInSecs)
+        public void Update(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning = false)
         {
-            UpdateTime(timeSinceLastFrameInSecs);
+            UpdateTime(timeSinceLastFrameInSecs, keepBeatTimeRunning);
             if (IsLooping && TimeInBars > TimeRangeEnd)
             {
                 TimeInBars = TimeInBars - TimeRangeEnd > 1.0 // Jump to start if too far out of time region
@@ -51,7 +51,7 @@ namespace T3.Core.Animation
             F60,
         }
 
-        protected virtual void UpdateTime(float timeSinceLastFrameInSecs)
+        protected virtual void UpdateTime(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning)
         {
             //var deltaTime = ImGui.GetIO().DeltaTime;
             var isPlaying = Math.Abs(PlaybackSpeed) > 0.001;
@@ -62,7 +62,7 @@ namespace T3.Core.Animation
                 //BeatTime = TimeInBars * Bpm / 60.0 / 4.0;
                 BeatTime = TimeInBars;
             }
-            else
+            else if(keepBeatTimeRunning)
             {
                 //BeatTime += timeSinceLastFrameInSecs * Bpm / 60.0 / 4.0;
                 BeatTime += timeSinceLastFrameInSecs * Bpm / 240f;
@@ -96,6 +96,7 @@ namespace T3.Core.Animation
                 var timeInSecs = value * 240f / Bpm;
                 long soundStreamPos = Bass.ChannelSeconds2Bytes(_soundStreamHandle, timeInSecs);
                 Bass.ChannelSetPosition(_soundStreamHandle, soundStreamPos);
+                BeatTime = value;
             }
         }
 
@@ -141,7 +142,7 @@ namespace T3.Core.Animation
             Bass.Volume = shouldBeMuted ? 0 : _previousVolume;
         }
 
-        protected override void UpdateTime(float timeSinceLastFrameInSecs)
+        protected override void UpdateTime(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning)
         {
             //var deltaTime = ImGui.GetIO().DeltaTime;
             if (_playbackSpeed < 0.0)
@@ -155,7 +156,7 @@ namespace T3.Core.Animation
             {
                 BeatTime = TimeInBars; // * Bpm / 60.0 / 4.0;
             }
-            else
+            else if(keepBeatTimeRunning)
             {
                 BeatTime += timeSinceLastFrameInSecs * Bpm / 240f;
             }

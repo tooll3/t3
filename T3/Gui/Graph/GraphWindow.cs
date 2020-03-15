@@ -76,7 +76,7 @@ namespace T3.Gui.Graph
 
         protected override void UpdateBeforeDraw()
         {
-            _playback.Update(ImGui.GetIO().DeltaTime);
+            _playback.Update(ImGui.GetIO().DeltaTime, UserSettings.Config.KeepBeatTimeRunningInPause);
         }
 
         protected override void DrawAllInstances()

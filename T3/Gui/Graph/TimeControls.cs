@@ -64,6 +64,8 @@ namespace T3.Gui.Graph
             ImGui.SetNextWindowSize(new Vector2(400, 200));
             CustomComponents.ContextMenuForItem(() =>
                                                 {
+                                                    ImGui.Checkbox("Keep BeatTime running when paused", ref UserSettings.Config.KeepBeatTimeRunningInPause);
+                                                    
                                                     var bpm = (float)playback.Bpm;
                                                     ImGui.DragFloat("BPM", ref bpm);
                                                     playback.Bpm = bpm;
