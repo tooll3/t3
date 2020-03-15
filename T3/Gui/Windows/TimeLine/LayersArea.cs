@@ -105,19 +105,14 @@ namespace T3.Gui.Windows.TimeLine
                 _minLayerIndex = Math.Min(clip.LayerIndex, _minLayerIndex);
                 _maxLayerIndex = Math.Max(clip.LayerIndex, _maxLayerIndex);
             }
-
-
-
-            
             
             // Draw layer lines
             var min = ImGui.GetCursorScreenPos();
             var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight * (_maxLayerIndex - _minLayerIndex) - 1);
             var layerArea = new ImRect(min, max);
 
-            for (var index = 0; index < clips.Count; index++)
+            foreach (var clip in clips)
             {
-                var clip = clips[index];
                 DrawClip(clip, layerArea, _minLayerIndex);
             }
 
@@ -131,7 +126,7 @@ namespace T3.Gui.Windows.TimeLine
         /// <summary>
         ///  This will updated during redraw and thus has one frame delay
         /// </summary>
-        public bool FoundClipWithinCurrentTime = false;
+        public bool FoundClipWithinCurrentTime;
         
         private void DrawClip(ITimeClip timeClip, ImRect layerArea, int minLayerIndex)
         {
@@ -176,7 +171,9 @@ namespace T3.Gui.Windows.TimeLine
             if (isSelected)
                 _drawList.AddRect(position, position + clipSize - new Vector2(1, 0), Color.White);
 
-            _drawList.AddText(position + new Vector2(4, 4), isSelected ? Color.White : Color.Black, symbolChildUi.SymbolChild.ReadableName);
+            var label = timeStretched ? symbolChildUi.SymbolChild.ReadableName + $" ({GetSpeed(timeClip)}%)"
+                            : symbolChildUi.SymbolChild.ReadableName;
+            _drawList.AddText(position + new Vector2(4, 4), isSelected ? Color.White : Color.Black, label);
 
             ImGui.SetCursorScreenPos(showSizeHandles ? (position + _handleOffset) : position);
 
@@ -196,10 +193,8 @@ namespace T3.Gui.Windows.TimeLine
 
                     if (timeStretched)
                     {
-                        var speed = Math.Abs(timeClip.TimeRange.Duration) > 0.001 
-                                        ? (timeClip.SourceRange.Duration / timeClip.TimeRange.Duration) * 100 
-                                        :9999;
-                        ImGui.Text($"Speed: {speed:0.0}%");
+                        var speed = GetSpeed(timeClip);
+                        ImGui.Text($"Speed: {speed:0.}%");
                     }
                 }
                 ImGui.EndTooltip();
@@ -220,8 +215,6 @@ namespace T3.Gui.Windows.TimeLine
                 T3Ui.AddHoveredId(symbolChildUi.Id);
             }
             
-
-
             var notClickingOrDragging = !ImGui.IsItemActive() && !ImGui.IsMouseDragging(0);
             if (notClickingOrDragging && _moveClipsCommand != null)
             {
@@ -260,6 +253,13 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             ImGui.PopID();
+        }
+
+        private static double GetSpeed(ITimeClip timeClip)
+        {
+            return Math.Abs(timeClip.TimeRange.Duration) > 0.001 
+                       ? Math.Round( (timeClip.TimeRange.Duration / timeClip.SourceRange.Duration) * 100) 
+                       :9999;
         }
 
         private enum HandleDragMode
@@ -396,11 +396,21 @@ namespace T3.Gui.Windows.TimeLine
 
         void ITimeElementSelectionHolder.UpdateDragCommand(double dt, double dy)
         {
+            var dragContent = ImGui.GetIO().KeyAlt;
+            
             foreach (var clip in SelectedItems)
             {
-                clip.TimeRange.Start += (float)dt;
-                clip.TimeRange.End += (float)dt;
-
+                if (dragContent)
+                {
+                    //TODO: fix continuous dragging
+                    clip.SourceRange.Start += (float)dt;
+                    clip.SourceRange.End += (float)dt;
+                }
+                else
+                {
+                    clip.TimeRange.Start += (float)dt;
+                    clip.TimeRange.End += (float)dt;
+                }
                 
                 if (clip.LayerIndex > _minLayerIndex && dy > LayerHeight)
                 {
