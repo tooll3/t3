@@ -118,6 +118,7 @@ namespace T3.Gui.Interaction
                         if (ImGui.IsItemDeactivated())
                         {
                             SetState(JogDialStates.Inactive);
+                            ImGui.SetKeyboardFocusHere();    // Clear focus so next time value will be completely selected
                             if (double.IsNaN(_editValue))
                                 _editValue = _startValue;
                         }
