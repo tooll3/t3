@@ -46,12 +46,9 @@ namespace T3.Gui.Windows.TimeLine
 
                 // Line
                 drawlist.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), TimeRangeShadowColor);
-
-                SetCursorToBottom(
-                                  xRangeStart - TimeRangeHandleSize.X,
-                                  TimeRangeHandleSize.Y);
-
-                ImGui.Button("##StartPos", TimeRangeHandleSize);
+                
+                ImGui.SetCursorScreenPos(rangeStartPos + ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(-TimeRangeHandleSize.X-5,0));
+                ImGui.Button("##SelectionStartPos", TimeRangeHandleSize);
 
                 HandleDrag(_selectionTimeRange.Start, _selectionTimeRange.End);
             }
@@ -78,11 +75,9 @@ namespace T3.Gui.Windows.TimeLine
                 // Line
                 drawlist.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), TimeRangeShadowColor);
 
-                SetCursorToBottom(
-                                  rangeEndX,
-                                  TimeRangeHandleSize.Y);
 
-                ImGui.Button("##EndPos", TimeRangeHandleSize);
+                ImGui.SetCursorScreenPos(rangeEndPos + ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(5,0));
+                ImGui.Button("##SelectionEndPos", TimeRangeHandleSize);
                 HandleDrag(_selectionTimeRange.End, _selectionTimeRange.Start);
             }
 
@@ -137,7 +132,7 @@ namespace T3.Gui.Windows.TimeLine
         }
         #endregion
 
-        private static readonly Vector2 TimeRangeHandleSize = new Vector2(10, 20);
+        private static readonly Vector2 TimeRangeHandleSize = new Vector2(5, 1000);
         private static readonly Vector2 TimeRangeShadowSize = new Vector2(5, 9999);
         private static readonly Color TimeRangeShadowColor = new Color(0, 0, 0, 0.5f);
         private static readonly Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.3f);
