@@ -14,7 +14,9 @@ namespace T3.Gui.Windows.TimeLine
                 return;
             _playback = playback;
 
-            var p = new Vector2(TimeLineCanvas.Current.TransformPositionX((float)playback.TimeInBars), 0);
+            //var localTime = (playback.TimeInBars - TimeLineCanvas.Current._localOffset) / TimeLineCanvas.Current._localScale;
+            //var p = new Vector2(TimeLineCanvas.Current.TransformPositionX((float)localTime), 0);
+            var p = new Vector2(TimeLineCanvas.Current.TransformGlobalTime((float)playback.TimeInBars), 0);
             ImGui.GetWindowDrawList().AddRectFilled(p, p + new Vector2(1, 2000), Color.Orange);
         } 
         

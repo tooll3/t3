@@ -15,8 +15,8 @@ namespace T3.Gui.Windows.TimeLine
                 Initialize();
             
             var songDurationInBars = (float)(playback.GetSongDurationInSecs() * playback.Bpm / 240);
-            var xMin= TimeLineCanvas.Current.TransformPositionX(0);
-            var xMax = TimeLineCanvas.Current.TransformPositionX(songDurationInBars);
+            var xMin= TimeLineCanvas.Current.TransformGlobalTime(0);
+            var xMax = TimeLineCanvas.Current.TransformGlobalTime(songDurationInBars);
 
             var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
             var yMin = (ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos()).Y;

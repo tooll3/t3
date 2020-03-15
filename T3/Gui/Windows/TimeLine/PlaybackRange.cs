@@ -8,18 +8,20 @@ namespace T3.Gui.Windows.TimeLine
 {
     public class PlaybackRange : IValueSnapAttractor
     {
-        public void Draw(TimeLineCanvas canvas, Playback playback, ImDrawListPtr drawlist, ValueSnapHandler snapHandler)
+        public void Draw(TimeLineCanvas canvas, ITimeClip timeClip, ImDrawListPtr drawlist, ValueSnapHandler snapHandler)
         {
-            if (playback == null)
+            if (timeClip == null)
                 return;
 
-            _playback = playback;
+            _timeClip = timeClip;
+            
+            //_playback = playback;
 
             ImGui.PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
 
             // Range start
             {
-                var xRangeStart = canvas.TransformPositionX((float)playback.TimeRangeStart);
+                var xRangeStart = canvas.TransformPositionX((float)timeClip.SourceRange.Start);
                 var rangeStartPos = new Vector2(xRangeStart, 0);
 
                 // Shade outside
@@ -47,13 +49,14 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     var newTime = canvas.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
                     snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
-                    playback.TimeRangeStart = newTime;
+                    //playback.TimeRangeStart = newTime;
+                    timeClip.SourceRange.Start = newTime;
                 }
             }
 
             // Range end
             {
-                var rangeEndX = canvas.TransformPositionX((float)playback.TimeRangeEnd);
+                var rangeEndX = canvas.TransformPositionX((float)timeClip.SourceRange.End);
                 var rangeEndPos = new Vector2(rangeEndX, 0);
 
                 // Shade outside
@@ -84,7 +87,8 @@ namespace T3.Gui.Windows.TimeLine
                     //clipTime.TimeRangeEnd += canvas.InverseTransformDirection(ImGui.GetIO().MouseDelta).X;
                     var newTime = canvas.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
                     snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
-                    playback.TimeRangeEnd = newTime;
+                    //playback.TimeRangeEnd = newTime;
+                    timeClip.SourceRange.End = newTime;
                 }
             }
 
@@ -104,20 +108,21 @@ namespace T3.Gui.Windows.TimeLine
         private static readonly Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.3f);
         private static readonly Color TimeRangeMarkerColor = new Color(1f, 1, 1f, 0.3f);
 
+        //private static Playback _playback;
+        private static ITimeClip _timeClip;
         #region implement snapping interface -----------------------------------
-        private static Playback _playback;
 
         SnapResult IValueSnapAttractor.CheckForSnap(double targetTime)
         {
-            if (_playback == null)
+            if (_timeClip == null)
                 return null;
             
             const float snapDistance = 4;
             var snapThresholdOnCanvas = TimeLineCanvas.Current.InverseTransformDirection(new Vector2(snapDistance, 0)).X;
             SnapResult bestSnapResult = null;
 
-            KeyframeOperations.CheckForBetterSnapping(targetTime, _playback.TimeRangeStart, snapThresholdOnCanvas, ref bestSnapResult);
-            KeyframeOperations.CheckForBetterSnapping(targetTime, _playback.TimeRangeEnd, snapThresholdOnCanvas, ref bestSnapResult);
+            KeyframeOperations.CheckForBetterSnapping(targetTime, _timeClip.SourceRange.Start, snapThresholdOnCanvas, ref bestSnapResult);
+            KeyframeOperations.CheckForBetterSnapping(targetTime, _timeClip.SourceRange.End, snapThresholdOnCanvas, ref bestSnapResult);
             return bestSnapResult;
         }
         #endregion

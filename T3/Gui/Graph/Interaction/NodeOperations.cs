@@ -23,20 +23,28 @@ namespace T3.Gui.Graph.Interaction
 {
     internal static class NodeOperations
     {
-        private static readonly List<ITimeClip> TimeClips = new List<ITimeClip>();
-
         public static List<ITimeClip> GetAllTimeClips(Instance compositionOp)
         {
-            TimeClips.Clear();
+            var timeClips = new List<ITimeClip>();
             foreach (var child in compositionOp.Children)
             {
                 foreach (var clipProvider in child.Outputs.OfType<ITimeClipProvider>())
                 {
-                    TimeClips.Add(clipProvider.TimeClip);
+                    timeClips.Add(clipProvider.TimeClip);
                 }
             }
 
-            return TimeClips;
+            return timeClips;
+        }
+        
+        public static ITimeClip GetCompositionTimeClip(Instance compositionOp)
+        {    
+            var timeClips = new List<ITimeClip>();
+            foreach (var clipProvider in compositionOp.Outputs.OfType<ITimeClipProvider>())
+            {
+                timeClips.Add(clipProvider.TimeClip);
+            }
+            return timeClips.FirstOrDefault();
         }
 
         public static Instance GetInstanceFromIdPath(IReadOnlyCollection<Guid> childPath)

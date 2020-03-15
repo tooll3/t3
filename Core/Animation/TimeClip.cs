@@ -11,10 +11,10 @@ namespace T3.Core.Animation
     {
         public Guid Id { get; set; }
 
-        public TimeRange _timeRange = new TimeRange(0.0f, 4.0f);
+        private TimeRange _timeRange = new TimeRange(0.0f, 4.0f);
         public ref TimeRange TimeRange => ref _timeRange;
 
-        public TimeRange _sourceRange = new TimeRange(0.0f, 4.0f);
+        private TimeRange _sourceRange = new TimeRange(0.0f, 4.0f);
         public ref TimeRange SourceRange => ref _sourceRange;
 
         public string Name { get; set; } = string.Empty;
