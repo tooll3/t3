@@ -80,11 +80,13 @@ namespace T3.Gui.Graph
 
             var newPath = _compositionPath;
             newPath.Add(instance.SymbolChildId);
+            SelectionManager.Clear();
             SetComposition(newPath, Transition.JumpIn);
         }
 
         public void SetCompositionToParentInstance(Instance instance)
         {
+            var previousCompositionOp = CompositionOp;
             var shortenedPath = new List<Guid>();
             foreach (var pathItemId in _compositionPath)
             {
@@ -100,6 +102,10 @@ namespace T3.Gui.Graph
                 throw new ArgumentException("Can't SetCompositionToParentInstance because Instance is not a parent of current composition");
 
             SetComposition(shortenedPath, Transition.JumpOut);
+            SelectionManager.Clear();
+            var previousCompChildUi= SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis.SingleOrDefault(childUi => childUi.Id == previousCompositionOp.SymbolChildId);
+            if(previousCompChildUi != null)
+                SelectionManager.AddSelection(previousCompChildUi, previousCompositionOp);
         }
 
         private CanvasProperties GuessViewProperties()
