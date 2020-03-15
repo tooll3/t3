@@ -2,6 +2,7 @@
 using System;
 using System.Numerics;
 using System.Windows.Forms;
+using T3.Core.Logging;
 using T3.Gui.Styling;
 using UiHelpers;
 
@@ -46,8 +47,8 @@ namespace T3.Gui
         /// </remarks>
         public static bool SplitFromBottom(ref float offsetFromBottom)
         {
-            const float thickness = 3;
-            bool hasBeenDragged = false;
+            const float thickness = 4;
+            var hasBeenDragged = false;
 
             var backupPos = ImGui.GetCursorPos();
 
@@ -58,17 +59,18 @@ namespace T3.Gui
             ImGui.SetCursorScreenPos(pos);
 
             ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 1));
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0, 0, 0, 1));
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0,0,0, 1));
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.5f, 0.5f, 0.5f, 1));
 
             ImGui.Button("##Splitter", new Vector2(-1, thickness));
 
             ImGui.PopStyleColor(3);
 
-            if (ImGui.IsItemHovered())
-            {
-                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS);
-            }
+            // Disabled for now, since Setting MouseCursor wasn't working reliably
+            // if (ImGui.IsItemHovered() )
+            // {
+            //     //ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS);
+            // }
 
             if (ImGui.IsItemActive())
             {

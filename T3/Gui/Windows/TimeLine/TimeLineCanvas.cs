@@ -23,13 +23,13 @@ namespace T3.Gui.Windows.TimeLine
             _dopeSheetArea = new DopeSheetArea(_snapHandler, this);
             _selectionFence = new TimeSelectionFence(this);
             _curveEditArea = new CurveEditArea(this, _snapHandler);
-            var selectionRange = new TimeSelectionRange(this, _snapHandler);
+            _timeSelectionRange = new TimeSelectionRange(this, _snapHandler);
             LayersArea = new LayersArea(_snapHandler);
 
             _snapHandler.AddSnapAttractor(_playbackRange);
             _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
-            _snapHandler.AddSnapAttractor(selectionRange);
+            _snapHandler.AddSnapAttractor(_timeSelectionRange);
             _snapHandler.AddSnapAttractor(LayersArea);
 
             _snapHandler.SnappedEvent += SnappedEventHandler;
@@ -61,6 +61,8 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.BeginChild("timeline", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
+                
+                
                 _drawlist = ImGui.GetWindowDrawList();
                 _timeLineImage.Draw(_drawlist, Playback);
                 ImGui.SetScrollY(0);
@@ -88,6 +90,8 @@ namespace T3.Gui.Windows.TimeLine
                     _playbackRange.Draw(this, compositionTimeClip, _drawlist, _snapHandler);
                 }
                 
+                _timeSelectionRange.Draw(_drawlist);
+                
                 _currentTimeMarker.Draw(Playback);
                 DrawDragTimeArea();
                 _selectionFence.Draw();
@@ -107,6 +111,9 @@ namespace T3.Gui.Windows.TimeLine
 
             if (Math.Abs(_io.MouseWheel) > 0.01f)
                 HandleZoomViewWithMouseWheel();
+            
+            if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
+                DeleteSelectedElements();            
         }
 
         private void HandleDeferredActions(List<GraphWindow.AnimationParameter> animationParameters)
@@ -554,6 +561,7 @@ namespace T3.Gui.Windows.TimeLine
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
         private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
         private readonly TimeSelectionFence _selectionFence;
+        private readonly  TimeSelectionRange _timeSelectionRange;
         public readonly LayersArea LayersArea;
 
         public static TimeLineCanvas Current;

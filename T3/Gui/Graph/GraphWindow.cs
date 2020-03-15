@@ -45,7 +45,7 @@ namespace T3.Gui.Graph
 
             _timeLineCanvas = new TimeLineCanvas(_playback);
 
-            WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
+            WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoMove;
             GraphWindowInstances.Add(this);
         }
 

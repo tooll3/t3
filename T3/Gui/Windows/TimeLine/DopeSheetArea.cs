@@ -203,6 +203,9 @@ namespace T3.Gui.Windows.TimeLine
             foreach (var curve in parameter.Curves)
             {
                 var points = curve.GetPointTable();
+                if (points.Count == 0)
+                    continue;
+                
                 var positions = new List<Vector2>();
 
                 var minValue = float.PositiveInfinity;
