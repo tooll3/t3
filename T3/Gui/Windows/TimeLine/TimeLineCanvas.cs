@@ -447,7 +447,9 @@ namespace T3.Gui.Windows.TimeLine
         /// </summary>
         public float InverseTransformPositionX(float xOnScreen)
         {
-            return (xOnScreen - WindowPos.X) / (Scale.X * _localScale) + Scroll.X - _localOffset;
+            var scale =   Scale.X  * _localScale;
+            var offset =  (Scroll.X - _localOffset) / _localScale;
+            return (xOnScreen - WindowPos.X) / scale  + offset;
         }
 
         /// <summary>
