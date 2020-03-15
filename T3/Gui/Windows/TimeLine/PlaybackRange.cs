@@ -49,8 +49,10 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     var newTime = canvas.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
                     snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
-                    //playback.TimeRangeStart = newTime;
+                    var delta = newTime - timeClip.SourceRange.Start;
+                    var speed =  timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
                     timeClip.SourceRange.Start = newTime;
+                    timeClip.TimeRange.Start += delta * speed;
                 }
             }
 
@@ -84,11 +86,12 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
-                    //clipTime.TimeRangeEnd += canvas.InverseTransformDirection(ImGui.GetIO().MouseDelta).X;
                     var newTime = canvas.InverseTransformPositionX(ImGui.GetIO().MousePos.X);
                     snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
-                    //playback.TimeRangeEnd = newTime;
+                    var delta = newTime - timeClip.SourceRange.End;
+                    var speed =  timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
                     timeClip.SourceRange.End = newTime;
+                    timeClip.TimeRange.End += delta * speed;
                 }
             }
 
