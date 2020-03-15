@@ -89,8 +89,9 @@ namespace T3.Gui.Windows.TimeLine
         
         int _minLayerIndex = int.MaxValue;
         int _maxLayerIndex = int.MinValue;
-        
 
+        public float LastHeight;
+        
         private void DrawAllLayers(List<ITimeClip> clips)
         {
             FoundClipWithinCurrentTime = false;
@@ -108,8 +109,9 @@ namespace T3.Gui.Windows.TimeLine
             
             // Draw layer lines
             var min = ImGui.GetCursorScreenPos();
-            var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight * (_maxLayerIndex - _minLayerIndex) - 1);
+            var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight * (_maxLayerIndex - _minLayerIndex+1) +1 );
             var layerArea = new ImRect(min, max);
+            LastHeight = max.Y - min.Y;
 
             foreach (var clip in clips)
             {

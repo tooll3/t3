@@ -21,7 +21,7 @@ namespace T3.Gui.Windows.TimeLine
 
             // Range start
             {
-                var xRangeStart = canvas.TransformPositionX((float)timeClip.SourceRange.Start);
+                var xRangeStart = canvas.TransformPositionX(timeClip.SourceRange.Start);
                 var rangeStartPos = new Vector2(xRangeStart, 0);
 
                 // Shade outside
@@ -58,7 +58,7 @@ namespace T3.Gui.Windows.TimeLine
 
             // Range end
             {
-                var rangeEndX = canvas.TransformPositionX((float)timeClip.SourceRange.End);
+                var rangeEndX = canvas.TransformPositionX(timeClip.SourceRange.End);
                 var rangeEndPos = new Vector2(rangeEndX, 0);
 
                 // Shade outside

@@ -64,12 +64,11 @@ namespace T3.Gui.Windows.TimeLine
                 _drawlist = ImGui.GetWindowDrawList();
                 _timeLineImage.Draw(_drawlist, Playback);
                 ImGui.SetScrollY(0);
-                ImGui.Text($"Scale: {Scale.X} Offset: {Scroll.X}   LocScale: {_localScale} LocCffset: {_localOffset}");
+                
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
                 _timeRasterSwitcher.Draw(Playback);
                 DrawSnapIndicator();
-                //_layersArea.Draw(compositionOp);
 
                 switch (Mode)
                 {

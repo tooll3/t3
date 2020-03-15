@@ -125,7 +125,9 @@ namespace T3.Gui.Graph
 
                 var isTimelineCollapsed = _heightTimeLine <= TimeLineCanvas.TimeLineDragHeight;
                 var timelineHeight = isTimelineCollapsed
-                                         ? (animationParameters.Count * DopeSheetArea.LayerHeight) + TimeLineCanvas.TimeLineDragHeight
+                                         ? (animationParameters.Count * DopeSheetArea.LayerHeight) 
+                                           + _timeLineCanvas.LayersArea.LastHeight
+                                           + TimeLineCanvas.TimeLineDragHeight
                                          : _heightTimeLine;
 
                 if (CustomComponents.SplitFromBottom(ref timelineHeight))
