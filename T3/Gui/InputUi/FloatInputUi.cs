@@ -64,7 +64,12 @@ namespace T3.Gui.InputUi
                 var editState = DrawEditControl(name, ref value);
                 if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
                 {
-                    var key = curve.GetV(time) ?? new VDefinition() { U = time };
+                    var previousU = curve.GetPreviousU(time);
+
+                    var key = (previousU != null)
+                                  ? curve.GetV(previousU.Value).Clone()
+                                  : new VDefinition();
+                    
                     key.Value = value;
                     curve.AddOrUpdateV(time, key);
                 }
