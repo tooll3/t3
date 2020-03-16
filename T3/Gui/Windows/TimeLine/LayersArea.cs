@@ -51,6 +51,9 @@ namespace T3.Gui.Windows.TimeLine
             if (!_contextMenuIsOpen && !ImGui.IsWindowHovered())
                 return;
 
+            if (SelectedItems.Count == 0)
+                return;
+
             // This is a horrible hack to distinguish right mouse click from right mouse drag
             var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
             if (!_contextMenuIsOpen && rightMouseDragDelta > 3)
