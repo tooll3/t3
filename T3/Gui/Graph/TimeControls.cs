@@ -7,7 +7,9 @@ using System.Numerics;
 using System.Text.RegularExpressions;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Core.Operator.Slots;
 using T3.Gui;
+using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
@@ -274,12 +276,27 @@ namespace T3.Gui.Graph
                     var matchingClips = timeLineCanvas.LayersArea.SelectedItems
                                                       .Where(clip => clip.TimeRange.Contains(playback.TimeInBars));
 
+                    var compOp = GraphCanvas.Current.CompositionOp;
                     foreach (var clip in matchingClips)
                     {
-                        var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == clip.Id);
-                        Log.Debug("This would cut this selected clips:" + instance.SymbolChildId);    
+                        var instance = compOp.Children.Single(child => child.SymbolChildId == clip.Id);
+                        var compositionSymbolUi = SymbolUiRegistry.Entries[compOp.Symbol.Id];
+                        var symbolChildUi = compositionSymbolUi.ChildUis.Single(child => child.Id == clip.Id);
+
+                        Vector2 newPos = symbolChildUi.PosOnCanvas;
+                        newPos.Y += symbolChildUi.Size.Y + 5.0f;
+                        var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, new[] { symbolChildUi }, compositionSymbolUi, newPos);
+                        cmd.Do();
                         
-                        //TODO: Implement cut
+                        // set new end to the original time clip
+                        float originalEndTime = clip.TimeRange.End;
+                        clip.TimeRange = new TimeRange(clip.TimeRange.Start, (float)playback.TimeInBars);
+                        
+                        // apply new time range to newly added instance
+                        Guid newChildId = cmd.OldToNewIdDict[clip.Id];
+                        var newInstance = compOp.Children.Single(child => child.SymbolChildId == newChildId);
+                        var newTimeClip = newInstance.Outputs.OfType<ITimeClipProvider>().Single().TimeClip;
+                        newTimeClip.TimeRange = new TimeRange((float)playback.TimeInBars, originalEndTime);
                     }
                 }
             }
