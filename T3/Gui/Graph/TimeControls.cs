@@ -279,7 +279,6 @@ namespace T3.Gui.Graph
                     var compOp = GraphCanvas.Current.CompositionOp;
                     foreach (var clip in matchingClips)
                     {
-                        var instance = compOp.Children.Single(child => child.SymbolChildId == clip.Id);
                         var compositionSymbolUi = SymbolUiRegistry.Entries[compOp.Symbol.Id];
                         var symbolChildUi = compositionSymbolUi.ChildUis.Single(child => child.Id == clip.Id);
 
