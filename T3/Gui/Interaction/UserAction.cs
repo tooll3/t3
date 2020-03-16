@@ -146,35 +146,25 @@ namespace T3.Gui
             = new List<KeyboardBinding>
               {
                   new KeyboardBinding(UserActions.PlaybackForward, new KeyCombination(Key.L)),
-                  new KeyboardBinding(UserActions.PlaybackForwardHalfSpeed,
-                                      new KeyCombination(Key.L, shift: true)),
+                  new KeyboardBinding(UserActions.PlaybackForwardHalfSpeed, new KeyCombination(Key.L, shift: true)),
                   new KeyboardBinding(UserActions.PlaybackBackwards, new KeyCombination(Key.J)),
                   new KeyboardBinding(UserActions.PlaybackStop, new KeyCombination(Key.K)),
                   new KeyboardBinding(UserActions.PlaybackToggle, new KeyCombination(Key.Space)),    // TODO: Fixme!
-                  new KeyboardBinding(UserActions.PlaybackPreviousFrame,
-                                      new KeyCombination(Key.CursorLeft, shift: true)),
-                  new KeyboardBinding(UserActions.PlaybackNextFrame,
-                                      new KeyCombination(Key.CursorRight, shift: true)),
+                  new KeyboardBinding(UserActions.PlaybackPreviousFrame, new KeyCombination(Key.CursorLeft, shift: true)),
+                  new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift: true)),
                   new KeyboardBinding(UserActions.PlaybackJumpToNextKeyframe, new KeyCombination(Key.Period)),
-                  new KeyboardBinding(UserActions.PlaybackJumpToPreviousKeyframe,
-                                      new KeyCombination(Key.Comma)),
-                  new KeyboardBinding(UserActions.PlaybackNextFrame,
-                                      new KeyCombination(Key.CursorRight, shift: true)),
+                  new KeyboardBinding(UserActions.PlaybackJumpToPreviousKeyframe, new KeyCombination(Key.Comma)),
+                  new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift: true)),
 
                   new KeyboardBinding(UserActions.Undo, new KeyCombination(Key.Z, ctrl: true)),
                   new KeyboardBinding(UserActions.Redo, new KeyCombination(Key.Z, ctrl: true, shift: true)),
 
                   new KeyboardBinding(UserActions.Save, new KeyCombination(Key.S, ctrl: true)),
-                  new KeyboardBinding(UserActions.FocusSelection, new KeyCombination(Key.F))
-                  { NeedsWindowHover = true },
-                  new KeyboardBinding(UserActions.Duplicate, new KeyCombination(Key.D, ctrl: true))
-                  { NeedsWindowFocus = true },
-                  new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Delete))
-                  { NeedsWindowFocus = true },
-                  new KeyboardBinding(UserActions.CopyToClipboard, new KeyCombination(Key.C, ctrl: true))
-                  { NeedsWindowFocus = true },
-                  new KeyboardBinding(UserActions.PasteFromClipboard, new KeyCombination(Key.V, ctrl: true))
-                  { NeedsWindowFocus = true },
+                  new KeyboardBinding(UserActions.FocusSelection, new KeyCombination(Key.F)) { NeedsWindowHover = true },
+                  new KeyboardBinding(UserActions.Duplicate, new KeyCombination(Key.D, ctrl: true)) { NeedsWindowFocus = true },
+                  new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Delete)) { NeedsWindowFocus = true },
+                  new KeyboardBinding(UserActions.CopyToClipboard, new KeyCombination(Key.C, ctrl: true)) { NeedsWindowFocus = true },
+                  new KeyboardBinding(UserActions.PasteFromClipboard, new KeyCombination(Key.V, ctrl: true)) { NeedsWindowFocus = true },
                   new KeyboardBinding(UserActions.LoadLayout0, new KeyCombination(Key.F1)),
                   new KeyboardBinding(UserActions.LoadLayout1, new KeyCombination(Key.F2)),
                   new KeyboardBinding(UserActions.LoadLayout2, new KeyCombination(Key.F3)),

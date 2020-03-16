@@ -16,5 +16,6 @@ namespace T3.Core.Operator.Slots
         // serialization
         void ToJson(JsonTextWriter writer);
         void ReadFromJson(JToken json);
+        bool Assign(IOutputData outputData);
     }
 }

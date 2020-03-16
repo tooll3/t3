@@ -83,6 +83,13 @@ namespace T3.Gui.Commands
                     newInput.Value.Assign(input.Value.Clone());
                     newInput.IsDefault = input.IsDefault;
                 }
+
+                var newSymbolOutputs = newSymbolChild.OutputData;
+                foreach (var (id, outputData) in symbolChildToCopy.OutputData)
+                {
+                    var newOutput = newSymbolOutputs[id];
+                    newOutput.Assign(outputData);
+                }
             }
 
             // add connections between copied children

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using T3.Core.Operator.Attributes;
+using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 
 namespace T3.Core.Animation
@@ -59,6 +58,22 @@ namespace T3.Core.Animation
 
                 LayerIndex = timeClip["LayerIndex"]?.Value<int>() ?? 0;
             }
+        }
+
+        public bool Assign(IOutputData outputData)
+        {
+            if (outputData is TimeClip otherTimeClip)
+            {
+                _timeRange = otherTimeClip.TimeRange;
+                _sourceRange = otherTimeClip.SourceRange;
+                LayerIndex = otherTimeClip.LayerIndex;
+
+                return true;
+            }
+
+            Log.Error($"Trying to assign output data of type '{outputData.GetType()}' to 'TimeClip'.");
+
+            return false;
         }
     }
 }
