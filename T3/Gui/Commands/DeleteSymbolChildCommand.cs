@@ -71,6 +71,7 @@ namespace T3.Gui.Commands
                                                       .FindIndex(cc => cc == con) // todo: fix this mess! connection rework!
                                 };
                     _removedConnections.Add(entry);
+                    compositionSymbol.RemoveConnection(con);
                 }
 
                 compositionSymbolUi.RemoveChild(childEntry.ChildId);
