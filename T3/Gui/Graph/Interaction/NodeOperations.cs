@@ -659,6 +659,23 @@ namespace T3.Gui.Graph.Interaction
             public SyntaxNode LastInputNodeFound { get; private set; }
         }
 
+        class OutputNodeByTypeFinder : CSharpSyntaxRewriter
+        {
+            public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
+            {
+                if (!(node.Declaration.Type is GenericNameSyntax nameSyntax))
+                    return node;
+
+                string idValue = nameSyntax.Identifier.ValueText;
+                if (idValue == "Slot" || idValue == "TimeClipSlot") // find general way to support all output types here
+                    LastOutputNodeFound = node;
+
+                return node;
+            }
+
+            public SyntaxNode LastOutputNodeFound { get; private set; }
+        }
+
         class AllInputNodesFinder : CSharpSyntaxRewriter
         {
             public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
@@ -739,6 +756,48 @@ namespace T3.Gui.Graph.Interaction
             if (!success)
             {
                 Log.Error("Compilation after adding input failed, aborting the add.");
+            }
+        }
+
+        public static void AddOutputToSymbol(string outputName, bool isTimeClipOutput, Type outputType, Symbol symbol)
+        {
+            var syntaxTree = GetSyntaxTree(symbol);
+            if (syntaxTree == null)
+            {
+                Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
+                return;
+            }
+
+            var root = syntaxTree.GetRoot();
+
+            var outputNodeFinder = new OutputNodeByTypeFinder();
+            root = outputNodeFinder.Visit(root);
+            if (outputNodeFinder.LastOutputNodeFound == null)
+            {
+                Log.Error("Could not add an output as no previous one was found, this case is missing and must be added.");
+                return;
+            }
+
+            var @namespace = outputType.Namespace;
+            if (@namespace == "System")
+                @namespace = String.Empty;
+            else
+                @namespace += ".";
+            var attributeString = "\n        [Output(Guid = \"" + Guid.NewGuid() + "\")]\n";
+            var typeName = TypeNameRegistry.Entries[outputType];
+            var slotString = (isTimeClipOutput ? "TimeClipSlot<" : "Slot<") + @namespace + typeName + ">";
+            var inputString = "        public readonly " + slotString + " " + outputName + " = new " + slotString + "();\n";
+
+            var outputDeclaration = SyntaxFactory.ParseMemberDeclaration(attributeString + inputString);
+            root = root.InsertNodesAfter(outputNodeFinder.LastOutputNodeFound, new[] { outputDeclaration });
+
+            var newSource = root.GetText().ToString();
+            Log.Debug(newSource);
+
+            bool success = UpdateSymbolWithNewSource(symbol, newSource);
+            if (!success)
+            {
+                Log.Error("Compilation after adding output failed, aborting the add.");
             }
         }
 

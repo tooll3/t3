@@ -75,6 +75,7 @@ namespace T3.Gui.Graph.Dialogs
                 if (CustomComponents.DisablableButton("Add", isValid))
                 {
                     NodeOperations.AddInputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
+                    // NodeOperations.AddOutputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
                 }
 
                 ImGui.SameLine();
