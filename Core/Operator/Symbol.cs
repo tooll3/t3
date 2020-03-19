@@ -283,6 +283,21 @@ namespace T3.Core.Operator
                     }
                 }
 
+                // update output of symbol child
+                var oldChildOutputs = new Dictionary<Guid, IOutputData>(symbolChild.OutputData);
+                symbolChild.OutputData.Clear();
+                foreach (var outputDefinition in OutputDefinitions)
+                {
+                    if (oldChildOutputs.TryGetValue(outputDefinition.Id, out var outputData))
+                    {
+                        symbolChild.OutputData.Add(outputDefinition.Id, outputData);
+                    }
+                    else if (outputDefinition.OutputDataType != null)
+                    {
+                        symbolChild.OutputData.Add(outputDefinition.Id, Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData);
+                    }
+                }
+
                 newInstanceSymbolChildren.Add((symbolChild, parent, connectionEntriesToReplace));
             }
 
