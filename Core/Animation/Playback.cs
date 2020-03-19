@@ -8,22 +8,17 @@ namespace T3.Core.Animation
 {
     public class Playback
     {
-        
         public virtual double TimeInBars { get; set; }
-        public virtual double TimeInSecs
-        {
-            get => TimeInBars * 240 / Bpm;
-            set => TimeInBars = value / Bpm * 240f;
-        }
+        public virtual double TimeInSecs { get => TimeInBars * 240 / Bpm; set => TimeInBars = value / Bpm * 240f; }
 
         public virtual double BeatTime { get; set; }
         public double TimeRangeStart { get; set; } = 0;
         public double TimeRangeEnd { get; set; } = 8;
-        public double Bpm = 120;  
+        public double Bpm = 120;
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
         public TimeModes TimeMode { get; set; } = TimeModes.Bars;
-        
+
         public int Bar => (int)(TimeInBars) + 1;
         public int Beat => (int)(TimeInBars * 4) % 4 + 1;
         public int Tick => (int)(TimeInBars * 16) % 4 + 1;
@@ -59,19 +54,17 @@ namespace T3.Core.Animation
             if (isPlaying)
             {
                 TimeInBars += timeSinceLastFrameInSecs * PlaybackSpeed * Bpm / 240f;
-                //BeatTime = TimeInBars * Bpm / 60.0 / 4.0;
                 BeatTime = TimeInBars;
             }
-            else if(keepBeatTimeRunning)
+            else if (keepBeatTimeRunning)
             {
-                //BeatTime += timeSinceLastFrameInSecs * Bpm / 60.0 / 4.0;
                 BeatTime += timeSinceLastFrameInSecs * Bpm / 240f;
             }
         }
 
         public virtual float GetSongDurationInSecs()
         {
-            return 120;
+            return 120; // fallback
         }
     }
 
@@ -85,7 +78,6 @@ namespace T3.Core.Animation
             Bass.Init();
             _soundStreamHandle = Bass.CreateStream(filename);
             Bass.ChannelGetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, out _defaultPlaybackFrequency);
-            
         }
 
         public override double TimeInBars
@@ -93,11 +85,19 @@ namespace T3.Core.Animation
             get => GetCurrentStreamTime() * Bpm / 240f;
             set
             {
-                var timeInSecs = value * 240f / Bpm;
-                long soundStreamPos = Bass.ChannelSeconds2Bytes(_soundStreamHandle, timeInSecs);
-                Bass.ChannelSetPosition(_soundStreamHandle, soundStreamPos);
+                _timeInSeconds = value * 240f / Bpm;
+                if (IsTimeWithinAudioTrack)
+                {
+                    SetStreamPositionFromTime();
+                }
                 BeatTime = value;
             }
+        }
+
+        private void SetStreamPositionFromTime()
+        {
+            long soundStreamPos = Bass.ChannelSeconds2Bytes(_soundStreamHandle, _timeInSeconds);
+            Bass.ChannelSetPosition(_soundStreamHandle, soundStreamPos);
         }
 
         public override float GetSongDurationInSecs()
@@ -142,21 +142,28 @@ namespace T3.Core.Animation
             Bass.Volume = shouldBeMuted ? 0 : _previousVolume;
         }
 
+        
+        
         protected override void UpdateTime(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning)
         {
-            //var deltaTime = ImGui.GetIO().DeltaTime;
-            if (_playbackSpeed < 0.0)
+            if (_playbackSpeed < 0.0 || !IsTimeWithinAudioTrack)
             {
                 // bass can't play backwards, so do it manually
                 TimeInBars += timeSinceLastFrameInSecs * _playbackSpeed * Bpm / 240f;
+                Bass.ChannelPause(_soundStreamHandle);
+            }
+            else if(Bass.ChannelIsActive(_soundStreamHandle) == PlaybackState.Paused)
+            {
+                Bass.ChannelPlay(_soundStreamHandle);
+                SetStreamPositionFromTime();
             }
 
             var isPlaying = Math.Abs(_playbackSpeed) > 0.001;
             if (isPlaying)
             {
-                BeatTime = TimeInBars; // * Bpm / 60.0 / 4.0;
+                BeatTime = TimeInBars;
             }
-            else if(keepBeatTimeRunning)
+            else if (keepBeatTimeRunning)
             {
                 BeatTime += timeSinceLastFrameInSecs * Bpm / 240f;
             }
@@ -164,9 +171,17 @@ namespace T3.Core.Animation
 
         private double GetCurrentStreamTime()
         {
+            if (_timeInSeconds < 0 || _timeInSeconds > GetSongDurationInSecs())
+            {
+                return _timeInSeconds;
+            }
+
             long soundStreamPos = Bass.ChannelGetPosition(_soundStreamHandle);
             return Bass.ChannelBytes2Seconds(_soundStreamHandle, soundStreamPos);
         }
+
+        private bool IsTimeWithinAudioTrack => _timeInSeconds >= 0 && _timeInSeconds < GetSongDurationInSecs();
+        private double _timeInSeconds; // We use this outside of stream range
 
         private double _playbackSpeed;
         private double _previousVolume;
