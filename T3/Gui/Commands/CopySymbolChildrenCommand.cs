@@ -69,6 +69,12 @@ namespace T3.Gui.Commands
             var targetCompositionSymbolUi = SymbolUiRegistry.Entries[_targetSymbolId];
             var targetSymbol = targetCompositionSymbolUi.Symbol;
             var sourceCompositionSymbolUi = SymbolUiRegistry.Entries[_sourceSymbolId];
+            
+            // copy animations first, so when creating the new child instances can automatically create animations actions for the existing curves
+            var childIdsToCopyAnimations = _childrenToCopy.Select(entry => entry.ChildId).ToList();
+            var oldToNewIdDict = _childrenToCopy.ToDictionary(entry => entry.ChildId, entry => entry.AddedId);
+            sourceCompositionSymbolUi.Symbol.Animator.CopyAnimationsTo(targetSymbol.Animator, childIdsToCopyAnimations, oldToNewIdDict);
+            
             foreach (var childToCopy in _childrenToCopy)
             {
                 SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == childToCopy.ChildId);
@@ -97,11 +103,6 @@ namespace T3.Gui.Commands
             {
                 targetCompositionSymbolUi.Symbol.AddConnection(connection);
             }
-            
-            // copy animations
-            var childIdsToCopyAnimations = _childrenToCopy.Select(entry => entry.ChildId).ToList();
-            var oldToNewIdDict = _childrenToCopy.ToDictionary(entry => entry.ChildId, entry => entry.AddedId);
-            sourceCompositionSymbolUi.Symbol.Animator.CopyAnimationsTo(targetSymbol.Animator, childIdsToCopyAnimations, oldToNewIdDict);
         }
 
         struct Entry

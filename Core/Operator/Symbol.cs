@@ -404,7 +404,7 @@ namespace T3.Core.Operator
             }
 
             // connect animations if available
-            Animator.CreateUpdateActionsForExistingCurves(newInstance);
+            Animator.CreateUpdateActionsForExistingCurves(newInstance.Children);
 
             InstancesOfSymbol.Add(newInstance);
 
@@ -412,7 +412,7 @@ namespace T3.Core.Operator
         }
 
 
-        private static void CreateAndAddNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
+        private Instance CreateAndAddNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
         {
             var childSymbol = symbolChild.Symbol;
             var childInstance = childSymbol.CreateInstance(symbolChild.Id);
@@ -443,6 +443,8 @@ namespace T3.Core.Operator
             }
 
             parentInstance.Children.Add(childInstance);
+
+            return childInstance;
         }
 
         private static void RemoveChildInstance(SymbolChild childToRemove, Instance parentInstance)
@@ -532,10 +534,13 @@ namespace T3.Core.Operator
             var newChild = new SymbolChild(symbol, addedChildId);
             Children.Add(newChild);
 
+            var childInstances = new List<Instance>(InstancesOfSymbol.Count);
             foreach (var instance in InstancesOfSymbol)
             {
-                CreateAndAddNewChildInstance(newChild, instance);
+                var newChildInstance = CreateAndAddNewChildInstance(newChild, instance);
+                childInstances.Add(newChildInstance);
             }
+            Animator.CreateUpdateActionsForExistingCurves(childInstances);
 
             return newChild.Id;
         }

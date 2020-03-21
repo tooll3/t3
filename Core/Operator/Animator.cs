@@ -217,11 +217,11 @@ namespace T3.Core.Operator
             }
         }
 
-        internal void CreateUpdateActionsForExistingCurves(Instance compositionInstance)
+        internal void CreateUpdateActionsForExistingCurves(IEnumerable<Instance> childInstances)
         {
             // gather all inputs that correspond to stored ids
             var relevantInputs = from curveEntry in _animatedInputCurves
-                                 from childInstance in compositionInstance.Children
+                                 from childInstance in childInstances
                                  where curveEntry.Key.InstanceId == childInstance.SymbolChildId
                                  from inputSlot in childInstance.Inputs
                                  where curveEntry.Key.InputId == inputSlot.Id
