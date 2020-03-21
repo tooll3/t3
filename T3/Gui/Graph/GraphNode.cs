@@ -458,7 +458,7 @@ namespace T3.Gui.Graph
                 return;
 
             var texture = textureSlot.Value;
-            if (texture == null)
+            if (texture == null || texture.IsDisposed)
                 return;
 
             var srv = SrvManager.GetSrvForTexture(texture);
