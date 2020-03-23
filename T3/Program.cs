@@ -236,7 +236,7 @@ namespace T3
                            IsWindowed = true,
                            OutputHandle = form.Handle,
                            SampleDescription = new SampleDescription(1, 0),
-                           SwapEffect = SwapEffect.Discard,
+                           SwapEffect = SwapEffect.FlipDiscard,
                            Usage = Usage.RenderTargetOutput
                        };
 
