@@ -137,24 +137,27 @@ namespace T3
                                      context.OutputMerger.SetTargets(_renderView);
                                      
                                      _evalContext.Reset();
+                                     _evalContext.RequestedResolution = new Size2(size.Width, size.Height);
                                      _playback.Update(1.0f);
                                      
                                      if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
                                      {
                                          textureOutput.Invalidate();
                                          Texture2D tex = textureOutput.GetValue(_evalContext);
+                                         if (tex != null)
+                                         {
+                                             if (resourceManager.Resources[FullScreenVertexShaderId] is VertexShaderResource vsr)
+                                                 context.VertexShader.Set(vsr.VertexShader);
+                                             if (resourceManager.Resources[FullScreenPixelShaderId] is PixelShaderResource psr)
+                                                 context.PixelShader.Set(psr.PixelShader);
+                                             var srv = new ShaderResourceView(device, tex);
+                                             context.PixelShader.SetShaderResource(0, srv);
 
-                                         if (resourceManager.Resources[FullScreenVertexShaderId] is VertexShaderResource vsr)
-                                             context.VertexShader.Set(vsr.VertexShader);
-                                         if (resourceManager.Resources[FullScreenPixelShaderId] is PixelShaderResource psr)
-                                             context.PixelShader.Set(psr.PixelShader);
-                                         var srv = new ShaderResourceView(device, tex);
-                                         context.PixelShader.SetShaderResource(0, srv);
-
-                                         context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-                                         context.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
-                                         context.Draw(3, 0);
-                                         context.PixelShader.SetShaderResource(0, null);
+                                             context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+                                             context.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
+                                             context.Draw(3, 0);
+                                             context.PixelShader.SetShaderResource(0, null);
+                                         }
                                      }
                                      
                                      _swapChain.Present(_vsync ? 1 : 0, PresentFlags.None);
