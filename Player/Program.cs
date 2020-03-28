@@ -71,6 +71,7 @@ namespace T3
                            OutputHandle = form.Handle,
                            SampleDescription = new SampleDescription(1, 0),
                            SwapEffect = SwapEffect.FlipDiscard,
+                           Flags = SwapChainFlags.AllowModeSwitch,
                            Usage = Usage.RenderTargetOutput
                        };
 
@@ -88,6 +89,7 @@ namespace T3
                               if (keyArgs.Alt && keyArgs.KeyCode == Keys.Enter)
                               {
                                   _swapChain.IsFullScreen = !_swapChain.IsFullScreen;
+                                  RebuildBackBuffer(form, device, ref _renderView, ref _backBuffer, ref _swapChain);
                                   if (_swapChain.IsFullScreen)
                                   {
                                       Cursor.Hide();
@@ -174,6 +176,15 @@ namespace T3
             factory.Dispose();
         }
 
+        private static void RebuildBackBuffer(RenderForm form, Device device, ref RenderTargetView rtv, ref Texture2D buffer, ref SwapChain swapChain)
+        {
+            rtv.Dispose();
+            buffer.Dispose();
+            swapChain.ResizeBuffers(3, form.ClientSize.Width, form.ClientSize.Height, Format.Unknown, 0);
+            buffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
+            rtv = new RenderTargetView(device, buffer);
+        }
+        
         // private static bool _inResize;
         private static bool _vsync;
         private static SwapChain _swapChain;
