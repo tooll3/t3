@@ -47,7 +47,7 @@ namespace T3.Gui
         /// </remarks>
         public static bool SplitFromBottom(ref float offsetFromBottom)
         {
-            const float thickness = 4;
+            const float thickness = 3;
             var hasBeenDragged = false;
 
             var backupPos = ImGui.GetCursorPos();
@@ -58,7 +58,7 @@ namespace T3.Gui
             var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness);
             ImGui.SetCursorScreenPos(pos);
 
-            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
+            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(1, 0, 0, 1));
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0,0,0, 1));
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.5f, 0.5f, 0.5f, 1));
 

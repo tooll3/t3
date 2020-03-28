@@ -25,7 +25,6 @@ namespace T3.Gui.Graph
 
         public GraphWindow()
         {
-            PreventWindowDragging = false; // conflicts with splitter between graph and timeline
             _instanceCounter++;
             Config.Title = "Graph##" + _instanceCounter;
             Config.Visible = true;
@@ -45,7 +44,7 @@ namespace T3.Gui.Graph
 
             _timeLineCanvas = new TimeLineCanvas(_playback);
 
-            WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoMove;
+            WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
             GraphWindowInstances.Add(this);
         }
 
@@ -135,7 +134,9 @@ namespace T3.Gui.Graph
                     _heightTimeLine = timelineHeight;
                 }
 
-                var graphHeight = ImGui.GetWindowHeight() - timelineHeight - 30;
+                const float ImgGuiTitleHeight = 3; // Hack that also depends on when a window-title is being rendered 
+
+                var graphHeight = ImGui.GetWindowHeight() - timelineHeight - ImgGuiTitleHeight;
                 ImGui.BeginChild("##graph", new Vector2(0, graphHeight), false,
                                  ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
                 {
@@ -167,7 +168,7 @@ namespace T3.Gui.Graph
                     dl.ChannelsMerge();
                 }
                 ImGui.EndChild();
-                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 2);
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
                 ImGui.BeginChild("##timeline", Vector2.Zero, false,
                                  ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
                 {
