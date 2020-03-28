@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.Logging;
 using T3.Core.Operator;
 
 namespace T3.Core
@@ -201,8 +202,16 @@ namespace T3.Core
         {
             var id = Guid.Parse(inputJson["Id"].Value<string>());
             var jsonValue = inputJson["Value"];
-            symbolChild.InputValues[id].Value.SetValueFromJson(jsonValue);
-            symbolChild.InputValues[id].IsDefault = false;
+            try
+            {
+                symbolChild.InputValues[id].Value.SetValueFromJson(jsonValue);
+                symbolChild.InputValues[id].IsDefault = false;
+            }
+            catch
+            {
+                Log.Error("Failed to read input value");
+            }
+            
         }
 
         private void ReadChildOutputData(SymbolChild symbolChild, JToken json)
