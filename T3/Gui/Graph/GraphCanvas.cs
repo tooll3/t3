@@ -186,6 +186,7 @@ namespace T3.Gui.Graph
                 _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits);
                 _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
                 _addInputDialog.Draw(GetSelectedSymbol());
+                _addOutputDialog.Draw(GetSelectedSymbol());
             }
             ImGui.EndGroup();
         }
@@ -391,6 +392,11 @@ namespace T3.Gui.Graph
                          _addInputDialog.ShowNextFrame();
                      }
 
+                     if (ImGui.MenuItem("Add output"))
+                     {
+                         _addOutputDialog.ShowNextFrame();
+                     }
+
                      if (ImGui.MenuItem("Paste"))
                      {
                          PasteClipboard();
@@ -561,6 +567,7 @@ namespace T3.Gui.Graph
         private List<Guid> _compositionPath = new List<Guid>();
 
         private readonly AddInputDialog _addInputDialog = new AddInputDialog();
+        private readonly AddOutputDialog _addOutputDialog = new AddOutputDialog();
         private readonly CombineToSymbolDialog _combineToSymbolDialog = new CombineToSymbolDialog();
         private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new DuplicateSymbolDialog();
         private readonly RenameSymbolDialog _renameSymbolDialog = new RenameSymbolDialog();

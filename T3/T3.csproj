@@ -344,6 +344,7 @@
     <Compile Include="Gui\Commands\MacroCommand.cs" />
     <Compile Include="Gui\Commands\MoveTimeClipCommand.cs" />
     <Compile Include="Gui\Commands\TimeClipDeleteCommand.cs" />
+    <Compile Include="Gui\Graph\Dialogs\AddOutputDialog.cs" />
     <Compile Include="Gui\Graph\Dialogs\CombineToSymbolDialog.cs" />
     <Compile Include="Gui\Graph\Dialogs\AddInputDialog.cs" />
     <Compile Include="Gui\Graph\Dialogs\DuplicateSymbolDialog.cs" />
