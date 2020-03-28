@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -97,6 +98,9 @@ namespace T3.Core
                          jsonToken => jsonToken.Value<string>());
             
             // system types
+            RegisterType(typeof(StringBuilder), "StringBuilder",
+                         () => new InputValue<StringBuilder>(new StringBuilder()));            
+            
             RegisterType(typeof(System.Collections.Generic.List<float>), "List<float>",
                          () => new InputValue<List<float>>(new List<float>()),
                          (writer, obj) =>

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using SharpDX.Direct3D;
 using SharpDX.Mathematics.Interop;
 using T3.Compilation;
@@ -44,6 +45,9 @@ namespace T3.Gui
             RegisterUiType(typeof(string), new StringUiProperties(), () => new StringInputUi(), () => new ValueOutputUi<string>());
 
             // system types
+            RegisterUiType(typeof(StringBuilder), new StringUiProperties(), () => new FallbackInputUi<StringBuilder>(),
+                           () => new ValueOutputUi<StringBuilder>());
+            
             RegisterUiType(typeof(System.Collections.Generic.List<float>), new FloatUiProperties(), () => new FloatListInputUi(),
                            () => new FloatListOutputUi());
             RegisterUiType(typeof(System.Collections.Generic.List<string>), new FloatUiProperties(), () => new StringListInputUi(),
