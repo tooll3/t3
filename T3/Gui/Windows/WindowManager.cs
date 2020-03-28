@@ -26,6 +26,7 @@ namespace T3.Gui.Windows
                            new SettingsWindow(),
                            new SymbolTree(),
                        };
+            
         }
 
         private readonly UserActions[] _loadLayoutActions =
@@ -59,6 +60,11 @@ namespace T3.Gui.Windows
         public void Draw()
         {
             Initialize();
+            if (!_hasBeenInitialized)
+                return;
+            
+            UpdateAppWindowSize();
+            
             for (var i = 0; i < _saveLayoutActions.Length; i++)
             {
                 if (KeyboardBinding.Triggered(_saveLayoutActions[i]))
@@ -78,6 +84,7 @@ namespace T3.Gui.Windows
 
             if (_metricsWindowVisible)
                 ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
+            
         }
 
         private void Initialize()
@@ -90,7 +97,7 @@ namespace T3.Gui.Windows
             {
                 LoadLayout(UserSettings.Config.WindowLayoutIndex);
             }
-
+            _appWindowSize = ImGui.GetIO().DisplaySize;
             _hasBeenInitialized = true;
         }
 
@@ -183,6 +190,15 @@ namespace T3.Gui.Windows
                 return;
             }
 
+            ApplyConfigurations(configurations);
+
+
+
+            UserSettings.Config.WindowLayoutIndex = index;
+        }
+
+        private void ApplyConfigurations(List<Window.WindowConfig> configurations)
+        {
             foreach (var config in configurations)
             {
                 var matchingWindow = GetAllWindows().FirstOrDefault(window => window.Config.Title == config.Title);
@@ -213,7 +229,7 @@ namespace T3.Gui.Windows
                     matchingWindow.Config = config;
                 }
             }
-
+            
             // Close Windows without configurations
             foreach (var w in GetAllWindows())
             {
@@ -223,9 +239,7 @@ namespace T3.Gui.Windows
                     w.Config.Visible = false;
                 }
             }
-
-            UserSettings.Config.WindowLayoutIndex = index;
-            ApplyLayout();
+            ApplyLayout();            
         }
 
         private static string GetLayoutFilename(int index)
@@ -249,23 +263,17 @@ namespace T3.Gui.Windows
 
         public static Vector2 GetRelativePositionFromPixel(Vector2 pixel)
         {
-            var io = ImGui.GetIO();
-            return new Vector2(
-                               pixel.X / io.DisplaySize.X,
-                               pixel.Y / io.DisplaySize.Y
-                              );
+            return pixel / _appWindowSize;
         }
 
         public static Vector2 GetPixelPositionFromRelative(Vector2 fraction)
         {
-            var io = ImGui.GetIO();
-            return new Vector2(
-                               fraction.X * io.DisplaySize.X,
-                               fraction.Y * io.DisplaySize.Y
-                              );
+            return fraction * _appWindowSize;
         }
 
-        private IEnumerable<Window> GetAllWindows()
+        private static Vector2 _appWindowSize;
+
+        private  IEnumerable<Window> GetAllWindows()
         {
             foreach (var window in _windows)
             {
@@ -283,7 +291,17 @@ namespace T3.Gui.Windows
             }
         }
 
-        //private const string LayoutFilePath = "layout.json";
+        private void UpdateAppWindowSize()
+        {
+            var newSize = ImGui.GetIO().DisplaySize;
+            if (newSize == _appWindowSize)
+                return;
+
+            var allWindowConfigs = GetAllWindows().Select(window => window.Config).ToList();
+            _appWindowSize = newSize;
+            ApplyConfigurations(allWindowConfigs);
+        }
+
         private const string LayoutFileNameFormat = "layout{0}.json";
         private const string ConfigFolderName = ".t3";
 
