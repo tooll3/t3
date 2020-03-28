@@ -16,13 +16,14 @@ namespace T3.Gui.InputUi
 {
     public class StringInputUi : InputValueUi<string>
     {
-        private const int MAX_STRING_LENGTH = 255;
+        private const int MAX_STRING_LENGTH = 4000;
 
         public enum UsageType
         {
             Default,
             FilePath,
             DirectoryPath,
+            Multiline,
         }
 
         public UsageType Usage { get; set; } = UsageType.Default;
@@ -54,6 +55,9 @@ namespace T3.Gui.InputUi
             {
                 case UsageType.Default:
                     inputEditStateFlags = DrawDefaultTextEdit(ref value);
+                    break;
+                case UsageType.Multiline:
+                    inputEditStateFlags = DrawMultilineTextEdit(ref value);
                     break;
                 case UsageType.FilePath:
                     inputEditStateFlags = DrawEditWithSelectors(FileOperations.FilePickerTypes.File, ref value);
@@ -90,6 +94,14 @@ namespace T3.Gui.InputUi
             return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
 
+        private static InputEditStateFlags DrawMultilineTextEdit(ref string value)
+        {
+            ImGui.Dummy(new Vector2(1,1));
+            var changed = ImGui.InputTextMultiline("##textEdit", ref value, MAX_STRING_LENGTH, new Vector2(-1, 300));
+            return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
+        }
+
+        
         protected override void DrawReadOnlyControl(string name, ref string value)
         {
             if (value != null)

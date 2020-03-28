@@ -50,7 +50,7 @@ namespace T3.Gui
             
             RegisterUiType(typeof(System.Collections.Generic.List<float>), new FloatUiProperties(), () => new FloatListInputUi(),
                            () => new FloatListOutputUi());
-            RegisterUiType(typeof(System.Collections.Generic.List<string>), new FloatUiProperties(), () => new StringListInputUi(),
+            RegisterUiType(typeof(System.Collections.Generic.List<string>), new StringUiProperties(), () => new StringListInputUi(),
                            () => new StringListOutputUi());
             RegisterUiType(typeof(System.Numerics.Vector2), new Size2UiProperties(), () => new Float2InputUi(),
                            () => new ValueOutputUi<System.Numerics.Vector2>());
