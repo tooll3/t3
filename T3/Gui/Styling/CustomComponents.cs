@@ -58,7 +58,7 @@ namespace T3.Gui
             var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness);
             ImGui.SetCursorScreenPos(pos);
 
-            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(1, 0, 0, 1));
+            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0,0,0, 1));
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.5f, 0.5f, 0.5f, 1));
 
