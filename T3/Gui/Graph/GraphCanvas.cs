@@ -400,7 +400,7 @@ namespace T3.Gui.Graph
                          if (ImGui.MenuItem("Remove output(s)"))
                          {
                              var symbol = GetSelectedSymbol();
-                             //NodeOperations.RemoveOutputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
+                             NodeOperations.RemoveOutputsFromSymbol(selectedOutputUis.Select(entry => entry.Id).ToArray(), symbol);
                          }                         
                      }
                      

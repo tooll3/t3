@@ -618,7 +618,27 @@ namespace T3.Gui.Graph.Interaction
 
             return newRoot.RemoveNodes(nodeFinder.NodesToRemove, SyntaxRemoveOptions.KeepNoTrivia);
         }
+        
+        public static void RemoveOutputsFromSymbol(Guid[] outputIdsToRemove, Symbol symbol)
+        {
+            var syntaxTree = GetSyntaxTree(symbol);
+            if (syntaxTree == null)
+            {
+                Log.Error($"Error getting syntax tree from symbol '{symbol.Name}' source.");
+                return;
+            }
 
+            var newRoot = RemoveNodesByIdFromTree(outputIdsToRemove, syntaxTree.GetRoot());
+            var newSource = newRoot.GetText().ToString();
+            Log.Debug(newSource);
+
+            bool success = UpdateSymbolWithNewSource(symbol, newSource);
+            if (!success)
+            {
+                Log.Error("Compilation after removing outputs failed, aborting the remove.");
+            }
+        }
+        
         private static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource)
         {
             var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, symbol.Name);
