@@ -375,7 +375,7 @@ namespace T3.Gui.Windows.Variations
 
             // Render variation
             EvaluationContext.Reset();
-            EvaluationContext.BeatTime = 13.4f;
+            EvaluationContext.TimeInBars = 13.4f;
             _variationWindow.OutputUi.DrawValue(_firstOutputSlot, EvaluationContext);
 
             // Setup graphics pipeline for rendering into the canvas texture
