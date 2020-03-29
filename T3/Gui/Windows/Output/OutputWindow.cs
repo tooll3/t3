@@ -112,7 +112,7 @@ namespace T3.Gui.Windows.Output
             if (_selectedResolution.UseAsAspectRatio)
             {
                 var windowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
-                var windowAspectRatio = (float)windowSize.X / windowSize.Y;
+                var windowAspectRatio = windowSize.X / windowSize.Y;
                 var requestedAspectRatio = (float)_selectedResolution.Size.Width / _selectedResolution.Size.Height;
 
                 var size = (requestedAspectRatio > windowAspectRatio)
@@ -137,7 +137,7 @@ namespace T3.Gui.Windows.Output
 
         private Guid _selectedCameraId = Guid.Empty;
         private static int _instanceCounter;
-        private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.Resolutions[0];
+        private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
 
         private readonly EditResolutionDialog _resolutionDialog = new EditResolutionDialog();
     }

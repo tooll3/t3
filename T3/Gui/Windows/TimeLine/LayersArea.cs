@@ -149,7 +149,7 @@ namespace T3.Gui.Windows.TimeLine
                                 : clipWidth;
 
             var bodySize = new Vector2(bodyWidth, LayerHeight);
-            var clipSize = new Vector2(clipWidth, LayerHeight);
+            var clipSize = new Vector2(clipWidth, LayerHeight-1);
 
             var symbolUi = SymbolUiRegistry.Entries[_compositionOp.Symbol.Id];
             var symbolChildUi = symbolUi.ChildUis.Single(child => child.Id == timeClip.Id);
