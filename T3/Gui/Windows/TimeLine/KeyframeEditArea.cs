@@ -115,6 +115,10 @@ namespace T3.Gui.Windows.TimeLine
 
                      if (ImGui.MenuItem("Delete keyframes"))
                          TimeLineCanvas.DeleteSelectedElements();
+                     
+                     if (ImGui.MenuItem("Duplicate keyframes"))
+                         DuplicateSelectedKeyframes();
+                     
                  }, ref _contextMenuIsOpen
                 );
         }

@@ -134,8 +134,8 @@ namespace T3.Gui.Windows.TimeLine
 
         private static readonly Vector2 TimeRangeHandleSize = new Vector2(5, 1000);
         private static readonly Vector2 TimeRangeShadowSize = new Vector2(5, 9999);
-        private static readonly Color TimeRangeShadowColor = new Color(0, 0, 0, 0.5f);
-        private static readonly Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.3f);
+        private static readonly Color TimeRangeShadowColor = new Color(0, 0, 0, 0.4f);
+        private static readonly Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.1f);
         private static readonly Color TimeRangeMarkerColor = new Color(1f, 1, 1f, 0.3f);
         private readonly TimeLineCanvas _timeLineCanvas;
         private readonly ValueSnapHandler _snapHandler;
