@@ -192,6 +192,7 @@ namespace T3.Gui.Graph
             ImGui.EndGroup();
         }
 
+
         private Symbol GetSelectedSymbol()
         {
             var selectedChildUi = GetSelectedChildUis().FirstOrDefault();
@@ -283,148 +284,147 @@ namespace T3.Gui.Graph
 
         private void DrawContextMenu()
         {
-            CustomComponents.DrawContextMenuForScrollCanvas
-                (
-                 () =>
-                 {
-                     var selectedChildUis = GetSelectedChildUis();
-                     if (selectedChildUis.Count > 0)
-                     {
-                         bool oneElementSelected = selectedChildUis.Count == 1;
-                         var label = oneElementSelected
-                                         ? $"Selected {selectedChildUis[0].SymbolChild.ReadableName}..."
-                                         : $"Selected {selectedChildUis.Count} items...";
+            CustomComponents.DrawContextMenuForScrollCanvas(DrawContextMenuContent, ref _contextMenuIsOpen);
+        }
 
-                         ImGui.PushFont(Fonts.FontSmall);
-                         ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-                         ImGui.Text(label);
-                         ImGui.PopStyleColor();
-                         ImGui.PopFont();
+        private void DrawContextMenuContent()
+        {
+            var selectedChildUis = GetSelectedChildUis();
+            if (selectedChildUis.Count > 0)
+            {
+                bool oneElementSelected = selectedChildUis.Count == 1;
+                var label = oneElementSelected
+                                ? $"Selected {selectedChildUis[0].SymbolChild.ReadableName}..."
+                                : $"Selected {selectedChildUis.Count} items...";
 
-                         if (ImGui.BeginMenu("Styles"))
-                         {
-                             if (ImGui.MenuItem("Default", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Default)))
-                             {
-                                 foreach (var childUi in selectedChildUis)
-                                 {
-                                     childUi.Style = SymbolChildUi.Styles.Default;
-                                 }
-                             }
+                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                ImGui.Text(label);
+                ImGui.PopStyleColor();
+                ImGui.PopFont();
 
-                             if (ImGui.MenuItem("Resizable", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable)))
-                             {
-                                 foreach (var childUi in selectedChildUis)
-                                 {
-                                     childUi.Style = SymbolChildUi.Styles.Resizable;
-                                 }
-                             }
+                if (ImGui.BeginMenu("Styles"))
+                {
+                    if (ImGui.MenuItem("Default", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Default)))
+                    {
+                        foreach (var childUi in selectedChildUis)
+                        {
+                            childUi.Style = SymbolChildUi.Styles.Default;
+                        }
+                    }
 
-                             if (ImGui.MenuItem("Expanded", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable)))
-                             {
-                                 foreach (var childUi in selectedChildUis)
-                                 {
-                                     childUi.Style = SymbolChildUi.Styles.Expanded;
-                                 }
-                             }
+                    if (ImGui.MenuItem("Resizable", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable)))
+                    {
+                        foreach (var childUi in selectedChildUis)
+                        {
+                            childUi.Style = SymbolChildUi.Styles.Resizable;
+                        }
+                    }
 
-                             ImGui.EndMenu();
-                         }
+                    if (ImGui.MenuItem("Expanded", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable)))
+                    {
+                        foreach (var childUi in selectedChildUis)
+                        {
+                            childUi.Style = SymbolChildUi.Styles.Expanded;
+                        }
+                    }
 
-                         if (ImGui.MenuItem("Delete"))
-                         {
-                             DeleteSelectedElements();
-                         }
+                    ImGui.EndMenu();
+                }
 
-                         if (ImGui.MenuItem("Rename", oneElementSelected))
-                         {
-                             _renameSymbolDialog.ShowNextFrame();
-                             _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name;
-                             //NodeOperations.RenameSymbol(selectedChildUis[0].SymbolChild.Symbol, "NewName");
-                         }
+                if (ImGui.MenuItem("Delete"))
+                {
+                    DeleteSelectedElements();
+                }
 
-                         if (ImGui.MenuItem("Duplicate as new type", oneElementSelected))
-                         {
-                             _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name;
-                             _nameSpaceForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Namespace;
-                             _duplicateSymbolDialog.ShowNextFrame();
-                         }
+                if (ImGui.MenuItem("Rename", oneElementSelected))
+                {
+                    _renameSymbolDialog.ShowNextFrame();
+                    _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name;
+                    //NodeOperations.RenameSymbol(selectedChildUis[0].SymbolChild.Symbol, "NewName");
+                }
 
-                         if (ImGui.MenuItem("Combine as new type"))
-                         {
-                             _combineToSymbolDialog.ShowNextFrame();
-                         }
+                if (ImGui.MenuItem("Duplicate as new type", oneElementSelected))
+                {
+                    _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name;
+                    _nameSpaceForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Namespace;
+                    _duplicateSymbolDialog.ShowNextFrame();
+                }
 
-                         if (ImGui.MenuItem("Copy"))
-                         {
-                             CopySelectionToClipboard(selectedChildUis);
-                         }
+                if (ImGui.MenuItem("Combine as new type"))
+                {
+                    _combineToSymbolDialog.ShowNextFrame();
+                }
 
-                         ImGui.Separator();
-                     }
+                if (ImGui.MenuItem("Copy"))
+                {
+                    CopySelectionToClipboard(selectedChildUis);
+                }
 
-                     var selectedInputUis = GetSelectedInputUis().ToArray();
-                     if (selectedInputUis.Length > 0)
-                     {
-                         var oneElementSelected = selectedInputUis.Length == 1;
-                         var label = oneElementSelected
-                                         ? $"Input {selectedInputUis[0].InputDefinition.Name}..."
-                                         : $"Selected {selectedInputUis.Length} inputs...";
+                ImGui.Separator();
+            }
 
-                         ImGui.PushFont(Fonts.FontSmall);
-                         ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-                         ImGui.Text(label);
-                         ImGui.PopStyleColor();
-                         ImGui.PopFont();
+            var selectedInputUis = GetSelectedInputUis().ToArray();
+            if (selectedInputUis.Length > 0)
+            {
+                var oneElementSelected = selectedInputUis.Length == 1;
+                var label = oneElementSelected
+                                ? $"Input {selectedInputUis[0].InputDefinition.Name}..."
+                                : $"Selected {selectedInputUis.Length} inputs...";
 
-                         if (ImGui.MenuItem("Remove input(s)"))
-                         {
-                             var symbol = GetSelectedSymbol();
-                             NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
-                         }
-                     }
+                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                ImGui.Text(label);
+                ImGui.PopStyleColor();
+                ImGui.PopFont();
 
-                     var selectedOutputUis = GetSelectedOutputUis().ToArray();
-                     if (selectedOutputUis.Length > 0)
-                     {
-                         var oneElementSelected = selectedOutputUis.Length == 1;
-                         var label = oneElementSelected
-                                         ? $"Output {selectedOutputUis[0].OutputDefinition.Name}..."
-                                         : $"Selected {selectedOutputUis.Length} outputs...";
+                if (ImGui.MenuItem("Remove input(s)"))
+                {
+                    var symbol = GetSelectedSymbol();
+                    NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
+                }
+            }
 
-                         ImGui.PushFont(Fonts.FontSmall);
-                         ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-                         ImGui.Text(label);
-                         ImGui.PopStyleColor();
-                         ImGui.PopFont();
+            var selectedOutputUis = GetSelectedOutputUis().ToArray();
+            if (selectedOutputUis.Length > 0)
+            {
+                var oneElementSelected = selectedOutputUis.Length == 1;
+                var label = oneElementSelected
+                                ? $"Output {selectedOutputUis[0].OutputDefinition.Name}..."
+                                : $"Selected {selectedOutputUis.Length} outputs...";
 
-                         if (ImGui.MenuItem("Remove output(s)"))
-                         {
-                             var symbol = GetSelectedSymbol();
-                             NodeOperations.RemoveOutputsFromSymbol(selectedOutputUis.Select(entry => entry.Id).ToArray(), symbol);
-                         }                         
-                     }
-                     
-                     if (ImGui.MenuItem("Add Node"))
-                     {
-                         _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null);
-                     }
-                     
-                     if (ImGui.MenuItem("Add input parameter"))
-                     {
-                         _addInputDialog.ShowNextFrame();
-                     }
+                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                ImGui.Text(label);
+                ImGui.PopStyleColor();
+                ImGui.PopFont();
 
-                     if (ImGui.MenuItem("Add output"))
-                     {
-                         _addOutputDialog.ShowNextFrame();
-                     }
+                if (ImGui.MenuItem("Remove output(s)"))
+                {
+                    var symbol = GetSelectedSymbol();
+                    NodeOperations.RemoveOutputsFromSymbol(selectedOutputUis.Select(entry => entry.Id).ToArray(), symbol);
+                }
+            }
 
-                     if (ImGui.MenuItem("Paste"))
-                     {
-                         PasteClipboard();
-                     }
+            if (ImGui.MenuItem("Add Node"))
+            {
+                _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null);
+            }
 
-                 }, ref _contextMenuIsOpen);
+            if (ImGui.MenuItem("Add input parameter"))
+            {
+                _addInputDialog.ShowNextFrame();
+            }
+
+            if (ImGui.MenuItem("Add output"))
+            {
+                _addOutputDialog.ShowNextFrame();
+            }
+
+            if (ImGui.MenuItem("Paste"))
+            {
+                PasteClipboard();
+            }
         }
 
         private bool _contextMenuIsOpen;
