@@ -19,7 +19,7 @@ namespace T3.Gui.Windows.Output
 
             AllowMultipleInstances = true;
             Config.Visible = true;
-            WindowFlags = ImGuiWindowFlags.NoScrollbar|ImGuiWindowFlags.NoScrollWithMouse;
+            WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
 
             _instanceCounter++;
             OutputWindowInstances.Add(this);
@@ -53,7 +53,8 @@ namespace T3.Gui.Windows.Output
 
         protected override void DrawContent()
         {
-            ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
+            ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
+                             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
                 _imageCanvas.NoMouseInteraction = CameraSelectionHandling.SelectedCamera != null;
                 _imageCanvas.Update();
@@ -97,19 +98,15 @@ namespace T3.Gui.Windows.Output
 
         private void DrawOutput(Instance instance)
         {
-            if (instance == null)
-                return;
-
-            if (instance.Outputs.Count <= 0)
+            if (instance == null || instance.Outputs.Count <= 0)
                 return;
 
             var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
 
             var firstOutput = instance.Outputs[0];
-            if (!symbolUi.OutputUis.ContainsKey(firstOutput.Id))
+            if (!symbolUi.OutputUis.TryGetValue(firstOutput.Id, out IOutputUi outputUi))
                 return;
 
-            IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
             _evaluationContext.Reset();
 
             if (_selectedResolution.UseAsAspectRatio)
@@ -122,13 +119,11 @@ namespace T3.Gui.Windows.Output
                                ? new Size2((int)windowSize.X, (int)(windowSize.X / requestedAspectRatio))
                                : new Size2((int)(windowSize.Y * requestedAspectRatio), (int)windowSize.Y);
 
-                _evaluationContext.RequestedResolution.Width = (int)size.Width;
-                _evaluationContext.RequestedResolution.Height = (int)size.Height;
+                _evaluationContext.RequestedResolution = size;
             }
             else
             {
-                _evaluationContext.RequestedResolution.Width = _selectedResolution.Size.Width;
-                _evaluationContext.RequestedResolution.Height = _selectedResolution.Size.Height;
+                _evaluationContext.RequestedResolution = _selectedResolution.Size;
             }
 
             outputUi.DrawValue(firstOutput, _evaluationContext);

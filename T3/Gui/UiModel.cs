@@ -45,9 +45,6 @@ namespace T3.Gui
             RegisterUiType(typeof(string), new StringUiProperties(), () => new StringInputUi(), () => new ValueOutputUi<string>());
 
             // system types
-            RegisterUiType(typeof(StringBuilder), new StringUiProperties(), () => new FallbackInputUi<StringBuilder>(),
-                           () => new ValueOutputUi<StringBuilder>());
-            
             RegisterUiType(typeof(System.Collections.Generic.List<float>), new FloatUiProperties(), () => new FloatListInputUi(),
                            () => new FloatListOutputUi());
             RegisterUiType(typeof(System.Collections.Generic.List<string>), new StringUiProperties(), () => new StringListInputUi(),
@@ -58,6 +55,8 @@ namespace T3.Gui
                            () => new ValueOutputUi<System.Numerics.Vector3>());
             RegisterUiType(typeof(System.Numerics.Vector4), new Size2UiProperties(), () => new Vector4InputUi(),
                            () => new ValueOutputUi<System.Numerics.Vector4>());
+            RegisterUiType(typeof(System.Text.StringBuilder), new StringUiProperties(), () => new FallbackInputUi<StringBuilder>(),
+                           () => new ValueOutputUi<System.Text.StringBuilder>());
 
             // t3 core types
             RegisterUiType(typeof(Command), new CommandUiProperties(), () => new FallbackInputUi<Command>(), () => new ValueOutputUi<Command>());

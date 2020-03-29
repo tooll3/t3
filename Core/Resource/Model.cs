@@ -98,9 +98,6 @@ namespace T3.Core
                          jsonToken => jsonToken.Value<string>());
             
             // system types
-            RegisterType(typeof(StringBuilder), "StringBuilder",
-                         () => new InputValue<StringBuilder>(new StringBuilder()));            
-            
             RegisterType(typeof(System.Collections.Generic.List<float>), "List<float>",
                          () => new InputValue<List<float>>(new List<float>()),
                          (writer, obj) =>
@@ -194,6 +191,9 @@ namespace T3.Core
                              float w = jsonToken["W"].Value<float>();
                              return new Vector4(x, y, z, w);
                          });
+            RegisterType(typeof(System.Text.StringBuilder), "StringBuilder",
+                         () => new InputValue<StringBuilder>(new StringBuilder()));
+
             
             // t3 core types
             RegisterType(typeof(Command), "Command",
