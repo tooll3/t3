@@ -17,7 +17,6 @@ namespace T3.Gui.OutputUi
             return new Texture2dOutputUi()
                    {
                        OutputDefinition = OutputDefinition,
-                       IsSelected = IsSelected,
                        PosOnCanvas = PosOnCanvas,
                        Size = Size
                    };

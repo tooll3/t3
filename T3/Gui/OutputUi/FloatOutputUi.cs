@@ -15,7 +15,6 @@ namespace T3.Gui.OutputUi
             return new FloatOutputUi()
                    {
                        OutputDefinition = OutputDefinition,
-                       IsSelected = IsSelected,
                        PosOnCanvas = PosOnCanvas,
                        Size = Size
                    };

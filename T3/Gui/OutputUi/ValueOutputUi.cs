@@ -12,7 +12,6 @@ namespace T3.Gui.OutputUi
             return new ValueOutputUi<T>
                    {
                        OutputDefinition = OutputDefinition,
-                       IsSelected = IsSelected,
                        PosOnCanvas = PosOnCanvas,
                        Size = Size
                    };
