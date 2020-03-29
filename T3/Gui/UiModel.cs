@@ -59,7 +59,7 @@ namespace T3.Gui
                            () => new ValueOutputUi<System.Text.StringBuilder>());
 
             // t3 core types
-            RegisterUiType(typeof(Command), new CommandUiProperties(), () => new FallbackInputUi<Command>(), () => new ValueOutputUi<Command>());
+            RegisterUiType(typeof(Command), new CommandUiProperties(), () => new FallbackInputUi<Command>(), () => new CommandOutputUi());
             RegisterUiType(typeof(ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<ParticleSystem>(),
                            () => new ValueOutputUi<ParticleSystem>());
 

@@ -376,6 +376,7 @@
     <Compile Include="Gui\Interaction\Snapping\IValueSnapAttractor.cs" />
     <Compile Include="Gui\Interaction\Snapping\ValueSnapHandler.cs" />
     <Compile Include="Gui\Interaction\VectorValueEdit.cs" />
+    <Compile Include="Gui\OutputUi\CommandOutputUi.cs" />
     <Compile Include="Gui\OutputUi\FloatOutputUi.cs" />
     <Compile Include="Gui\OutputUi\StringListOutputUi.cs" />
     <Compile Include="Gui\Selection\SelectionManager.cs" />

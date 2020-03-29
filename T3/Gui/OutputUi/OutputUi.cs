@@ -13,23 +13,23 @@ namespace T3.Gui.OutputUi
         public Type Type { get; } = typeof(T);
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
-        // public bool IsSelected
-        // {
-        //     get { return SelectionManager.IsNodeSelected(this);} 
-        //     set  }
         public bool IsSelected => SelectionManager.IsNodeSelected(this);
         public abstract IOutputUi Clone();
 
         public void DrawValue(ISlot slot, EvaluationContext context, bool recompute)
         {
-            _evaluationContext = context;
             if (recompute)
             {
-                StartInvalidation(slot);
-                slot.Update(_evaluationContext);
+                Recompute(slot, context);
             }
 
             DrawTypedValue(slot);
+        }
+
+        protected virtual void Recompute(ISlot slot, EvaluationContext context)
+        {
+            StartInvalidation(slot);
+            slot.Update(context);
         }
 
         protected abstract void DrawTypedValue(ISlot slot);
@@ -39,7 +39,5 @@ namespace T3.Gui.OutputUi
             DirtyFlag.InvalidationRefFrame++;
             slot.Invalidate();
         }
-
-        private EvaluationContext _evaluationContext;
     }
 }
