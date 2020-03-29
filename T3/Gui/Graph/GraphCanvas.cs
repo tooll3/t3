@@ -15,6 +15,7 @@ using T3.Gui.Commands;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
+using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
@@ -361,13 +362,13 @@ namespace T3.Gui.Graph
                          ImGui.Separator();
                      }
 
-                     var selectedInputUis = GetSelectableInputUis();
-                     if (selectedInputUis.Count > 0)
+                     var selectedInputUis = GetSelectedInputUis().ToArray();
+                     if (selectedInputUis.Length > 0)
                      {
-                         var oneElementSelected = selectedInputUis.Count == 1;
+                         var oneElementSelected = selectedInputUis.Length == 1;
                          var label = oneElementSelected
                                          ? $"Input {selectedInputUis[0].InputDefinition.Name}..."
-                                         : $"Selected {selectedInputUis.Count} inputs...";
+                                         : $"Selected {selectedInputUis.Length} inputs...";
 
                          ImGui.PushFont(Fonts.FontSmall);
                          ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
@@ -375,15 +376,30 @@ namespace T3.Gui.Graph
                          ImGui.PopStyleColor();
                          ImGui.PopFont();
 
-                         var symbol = GetSelectedSymbol();
                          if (ImGui.MenuItem("Remove input(s)"))
                          {
+                             var symbol = GetSelectedSymbol();
                              NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
                          }
-                         
-                         if (ImGui.MenuItem("Remove output(s)", false))
+                     }
+
+                     var selectedOutputUis = GetSelectedOutputUis().ToArray();
+                     if (selectedOutputUis.Length > 0)
+                     {
+                         var oneElementSelected = selectedOutputUis.Length == 1;
+                         var label = oneElementSelected
+                                         ? $"Output {selectedOutputUis[0].OutputDefinition.Name}..."
+                                         : $"Selected {selectedOutputUis.Length} outputs...";
+
+                         ImGui.PushFont(Fonts.FontSmall);
+                         ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                         ImGui.Text(label);
+                         ImGui.PopStyleColor();
+                         ImGui.PopFont();
+
+                         if (ImGui.MenuItem("Remove output(s)"))
                          {
-                             //TODO: Needs to be implemented
+                             var symbol = GetSelectedSymbol();
                              //NodeOperations.RemoveOutputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
                          }                         
                      }
@@ -438,17 +454,14 @@ namespace T3.Gui.Graph
             return SelectionManager.GetSelectedNodes<SymbolChildUi>().ToList();
         }
 
-        private List<IInputUi> GetSelectableInputUis()
+        private IEnumerable<IInputUi> GetSelectedInputUis()
         {
-            var selectedInputs = new List<IInputUi>();
+            return SelectionManager.GetSelectedNodes<IInputUi>();
+        }
 
-            //_selectedChildren = selectedChildren;
-            foreach (var inputUi in SelectionManager.GetSelectedNodes<IInputUi>())
-            {
-                selectedInputs.Add(inputUi);
-            }
-
-            return selectedInputs;
+        private IEnumerable<IOutputUi> GetSelectedOutputUis()
+        {
+            return SelectionManager.GetSelectedNodes<IOutputUi>();
         }
 
         private void CopySelectionToClipboard(List<SymbolChildUi> selectedChildren)
