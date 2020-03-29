@@ -2,7 +2,7 @@ using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
+using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Logging;
@@ -17,6 +17,7 @@ using T3.Gui.TypeColors;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using UiHelpers;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.Graph
 {
@@ -102,6 +103,7 @@ namespace T3.Gui.Graph
                                 var firstOutput = instance.Outputs[0];
                                 IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
                                 _evaluationContext.Reset();
+                                _evaluationContext.RequestedResolution = new Size2(1280, 720);
                                 outputUi.DrawValue(firstOutput, _evaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
                             }
                         }
