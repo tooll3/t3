@@ -463,12 +463,19 @@ namespace T3.Gui.Graph
 
             var srv = SrvManager.GetSrvForTexture(texture);
 
-            var aspect = (float)texture.Description.Width / texture.Description.Height; 
-            var previewHeight = _lastScreenRect.GetWidth() / aspect;
+            var aspect = (float)texture.Description.Width / texture.Description.Height;
+            var opWidth = _lastScreenRect.GetWidth();
+            var previewSize = new Vector2(opWidth, opWidth / aspect);
+            
+            //var previewHeight = opWidth / aspect;
+            if (previewSize.Y > opWidth)
+            {
+                previewSize  *= opWidth / previewSize.Y;
+            }
 
             Graph.DrawList.AddImage((IntPtr)srv,
-                        new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Min.Y - previewHeight-1),
-                        new Vector2(_lastScreenRect.Max.X, _lastScreenRect.Min.Y-1));
+                        new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Min.Y - previewSize.Y-1),
+                        new Vector2(_lastScreenRect.Min.X + previewSize.X, _lastScreenRect.Min.Y-1));
         }
 
         
