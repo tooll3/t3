@@ -34,7 +34,7 @@ namespace T3.Core.Animation
             }
 
             // TODO: setting the context time here is kind of awkward
-            EvaluationContext.GlobalTimeInBars = TimeInBars;
+            EvaluationContext.GlobalTimeInBars = BeatTime;
             EvaluationContext.GlobalTimeInSecs = TimeInSecs;
         }
 
