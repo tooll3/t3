@@ -380,6 +380,12 @@ namespace T3.Gui.Graph
                          {
                              NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
                          }
+                         
+                         if (ImGui.MenuItem("Remove output(s)", false))
+                         {
+                             //TODO: Needs to be implemented
+                             //NodeOperations.RemoveOutputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
+                         }                         
                      }
                      
                      if (ImGui.MenuItem("Add Node"))
