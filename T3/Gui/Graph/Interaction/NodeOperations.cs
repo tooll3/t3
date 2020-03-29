@@ -564,18 +564,18 @@ namespace T3.Gui.Graph.Interaction
 
         private static readonly Regex ValidTypeNamePattern = new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
 
-        class InputNodeByIdFinder : CSharpSyntaxRewriter
+        class NodeByAttributeIdFinder : CSharpSyntaxRewriter
         {
-            public InputNodeByIdFinder(Guid[] inputIds)
+            public NodeByAttributeIdFinder(Guid[] inputIds)
             {
-                _inputIds = inputIds ?? new Guid[0];
+                _ids = inputIds ?? new Guid[0];
             }
 
             public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
             {
                 var attrList = node.AttributeLists[0];
                 var searchedNodes = (from attribute in attrList.Attributes
-                                     from id in _inputIds
+                                     from id in _ids
                                      where attribute.ToString().ToLower().Contains(id.ToString().ToLower())
                                      select attribute).ToArray();
 
@@ -587,7 +587,7 @@ namespace T3.Gui.Graph.Interaction
                 return node;
             }
 
-            private readonly Guid[] _inputIds;
+            private readonly Guid[] _ids;
             public List<SyntaxNode> NodesToRemove { get; } = new List<SyntaxNode>();
         }
 
@@ -600,7 +600,7 @@ namespace T3.Gui.Graph.Interaction
                 return;
             }
 
-            var newRoot = RemoveInputsFromTree(inputIdsToRemove, syntaxTree.GetRoot());
+            var newRoot = RemoveNodesByIdFromTree(inputIdsToRemove, syntaxTree.GetRoot());
             var newSource = newRoot.GetText().ToString();
             Log.Debug(newSource);
 
@@ -611,12 +611,12 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
-        private static SyntaxNode RemoveInputsFromTree(Guid[] inputIdsToRemove, SyntaxNode root)
+        private static SyntaxNode RemoveNodesByIdFromTree(Guid[] inputIdsToRemove, SyntaxNode root)
         {
-            var inputNodeFinder = new InputNodeByIdFinder(inputIdsToRemove);
-            var newRoot = inputNodeFinder.Visit(root);
+            var nodeFinder = new NodeByAttributeIdFinder(inputIdsToRemove);
+            var newRoot = nodeFinder.Visit(root);
 
-            return newRoot.RemoveNodes(inputNodeFinder.NodesToRemove, SyntaxRemoveOptions.KeepNoTrivia);
+            return newRoot.RemoveNodes(nodeFinder.NodesToRemove, SyntaxRemoveOptions.KeepNoTrivia);
         }
 
         private static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource)
