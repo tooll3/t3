@@ -93,8 +93,6 @@ namespace T3.Gui.Graph.Interaction
             }
 
             MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _currentSearchString, "")).Reverse().Take(30).ToList();
-            // let rating = ComputeRelevancy(metaOpEntry.Value, XSearchTextBox.Text, currentProjectName)
-            // orderby rating
         }
 
         public Symbol.InputDefinition GetInputMatchingType(Symbol symbol, Type type)
@@ -143,6 +141,10 @@ namespace T3.Gui.Graph.Interaction
                     relevancy *= 3;
                 }
             }
+            
+            // Add usage count (the following statement is slow and should be cached)
+            var count = symbolUi.Symbol.InstancesOfSymbol.Select(instance =>instance.SymbolChildId).Distinct().Count();
+            relevancy *= 1 + count/100f;
             
             // Bump if characters match upper characters
             // e.g. "ds" matches "DrawState"
