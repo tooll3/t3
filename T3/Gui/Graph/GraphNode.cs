@@ -363,6 +363,11 @@ namespace T3.Gui.Graph
                 foreach (var line in Graph.Connections.GetLinesFromNodeOutput(childUi, output.Id))
                 {
                     line.SourcePosition = new Vector2(usableArea.Max.X, usableArea.GetCenter().Y);
+
+                    var dirtyFlagNumUpdatesWithinFrame = instance.Outputs[outputIndex].DirtyFlag.NumUpdatesWithinFrame;
+
+                    line.Thickness = (1 - 1 / (dirtyFlagNumUpdatesWithinFrame + 1f))*3 +1;
+
                     line.ColorForType = colorForType;
                     line.IsSelected |= childUi.IsSelected;
                 }

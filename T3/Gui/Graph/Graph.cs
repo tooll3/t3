@@ -254,6 +254,7 @@ namespace T3.Gui.Graph
             public Color ColorForType;
 
             public bool IsSelected;
+            public float Thickness = 1f;
 
             internal ConnectionLineUi(Symbol.Connection connection)
             {
@@ -300,7 +301,7 @@ namespace T3.Gui.Graph
                                         TargetPosition + new Vector2(-tangentLength, 0),
                                         TargetPosition,
                                         color,
-                                        thickness: 1.5f,
+                                        thickness: 1.5f * Thickness,
                                         num_segments: 20);
                 
             }
