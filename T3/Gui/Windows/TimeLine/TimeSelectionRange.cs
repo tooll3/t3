@@ -22,11 +22,11 @@ namespace T3.Gui.Windows.TimeLine
 
         public void Draw(ImDrawListPtr drawlist)
         {
-            ImGui.PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
             _selectionTimeRange = _timeLineCanvas.GetSelectionTimeRange();
             if (!_selectionTimeRange.IsValid || _selectionTimeRange.Duration <= 0)
                 return;
 
+            ImGui.PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
             // Range start
             {
                 var xRangeStart = _timeLineCanvas.TransformPositionX(_selectionTimeRange.Start);
