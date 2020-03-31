@@ -36,15 +36,19 @@ namespace T3.Gui.Graph
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
                 childUi.Size = ComputeNodeSize(childUi, visibleInputUis);
-                _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas,
+                _usableScreenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas,
                                                                                childUi.PosOnCanvas + childUi.Size));
-                _lastScreenRect.Floor();
-
+                _usableScreenRect.Floor();
+                _selectableScreenRect = _usableScreenRect;
+                
+                if(UserSettings.Config.ShowThumbnails)
+                    PreparePreviewAndExpandSelectableArea(instance);
+                
                 // Resize indicator
                 if (childUi.Style == SymbolChildUi.Styles.Resizable)
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
-                    ImGui.SetCursorScreenPos(_lastScreenRect.Max - new Vector2(10, 10));
+                    ImGui.SetCursorScreenPos(_usableScreenRect.Max - new Vector2(10, 10));
                     ImGui.Button("##resize", new Vector2(10, 10));
                     if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                     {
@@ -57,7 +61,7 @@ namespace T3.Gui.Graph
 
                 // Size toggle
                 {
-                    var pos = new Vector2(_lastScreenRect.Max.X - 15, _lastScreenRect.Min.Y + 2);
+                    var pos = new Vector2(_usableScreenRect.Max.X - 15, _usableScreenRect.Min.Y + 2);
 
                     ImGui.SetCursorScreenPos(pos);
                     ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
@@ -83,8 +87,8 @@ namespace T3.Gui.Graph
                 }
 
                 // Interaction
-                ImGui.SetCursorScreenPos(_lastScreenRect.Min);
-                ImGui.InvisibleButton("node", _lastScreenRect.GetSize());
+                ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
+                ImGui.InvisibleButton("node", _selectableScreenRect.GetSize());
 
                 THelpers.DebugItemRect();
                 if (ImGui.IsItemHovered())
@@ -111,8 +115,6 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                if(UserSettings.Config.ShowThumbnails)
-                    DrawPreview(instance);
 
                 SelectableNodeMovement.Handle(childUi, instance);
 
@@ -121,7 +123,7 @@ namespace T3.Gui.Graph
                     GraphCanvas.Current.SetCompositionToChildInstance(instance);
                 }
 
-                if (_lastScreenRect.Contains(ImGui.GetMousePos()))
+                if (_selectableScreenRect.Contains(ImGui.GetMousePos()))
                 {
                     _hoveredNodeId = childUi.Id;
                 }
@@ -145,14 +147,16 @@ namespace T3.Gui.Graph
                 }
 
                 // background
-                drawList.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
+                drawList.AddRectFilled(_usableScreenRect.Min, _usableScreenRect.Max,
                                        hovered
                                            ? ColorVariations.OperatorHover.Apply(backgroundColor)
                                            : ColorVariations.Operator.Apply(backgroundColor));
 
+                DrawPreview();
+                
                 // outline
-                drawList.AddRect(_lastScreenRect.Min,
-                                 _lastScreenRect.Max + Vector2.One,
+                drawList.AddRect(_selectableScreenRect.Min,
+                                 _selectableScreenRect.Max + Vector2.One,
                                  new Color(0.08f, 0.08f, 0.08f, 0.8f),
                                  rounding: 0,
                                  2);
@@ -162,8 +166,8 @@ namespace T3.Gui.Graph
                     var compositionOp = GraphCanvas.Current.CompositionOp;
                     if (compositionOp.Symbol.Animator.IsInstanceAnimated(instance))
                     {
-                        _drawList.AddRectFilled(new Vector2(_lastScreenRect.Max.X - 5, _lastScreenRect.Max.Y - 12),
-                                                new Vector2(_lastScreenRect.Max.X - 2, _lastScreenRect.Max.Y - 3),
+                        _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, _usableScreenRect.Max.Y - 12),
+                                                new Vector2(_usableScreenRect.Max.X - 2, _usableScreenRect.Max.Y - 3),
                                                 Color.Orange);
                     }
                 }
@@ -175,8 +179,8 @@ namespace T3.Gui.Graph
                     var colorForType = TypeUiRegistry.Entries[ConnectionMaker.DraftConnectionType].Color;
                     colorForType.Rgba.W *= blink;
                     _drawList.AddRectFilled(
-                                            new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Max.Y + 3),
-                                            new Vector2(_lastScreenRect.Min.X + 10, _lastScreenRect.Max.Y + 5),
+                                            new Vector2(_usableScreenRect.Min.X, _usableScreenRect.Max.Y + 3),
+                                            new Vector2(_usableScreenRect.Min.X + 10, _usableScreenRect.Max.Y + 5),
                                             colorForType);
                 }
 
@@ -186,19 +190,19 @@ namespace T3.Gui.Graph
                     if (updateCountThisFrame > 0)
                     {
                         const double timeScale = 0.125f;
-                        var blink = (float)(ImGui.GetTime() * timeScale * updateCountThisFrame) % 1f * _lastScreenRect.GetWidth();
-                        drawList.AddRectFilled(new Vector2(_lastScreenRect.Min.X + blink, _lastScreenRect.Min.Y),
-                                               new Vector2(_lastScreenRect.Min.X + blink + 2, _lastScreenRect.Max.Y),
+                        var blink = (float)(ImGui.GetTime() * timeScale * updateCountThisFrame) % 1f * _usableScreenRect.GetWidth();
+                        drawList.AddRectFilled(new Vector2(_usableScreenRect.Min.X + blink, _usableScreenRect.Min.Y),
+                                               new Vector2(_usableScreenRect.Min.X + blink + 2, _usableScreenRect.Max.Y),
                                                new Color(0.06f));
                     }
                 }
 
                 // Label
-                drawList.PushClipRect(_lastScreenRect.Min, _lastScreenRect.Max, true);
+                drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
                 ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 ? Fonts.FontSmall : Fonts.FontBold);
                 var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
 
-                drawList.AddText(_lastScreenRect.Min + LabelPos,
+                drawList.AddText(_usableScreenRect.Min + LabelPos,
                                  ColorVariations.OperatorLabel.Apply(typeColor),
                                  string.Format(isRenamed ? ("\"" + childUi.SymbolChild.ReadableName + "\"") : childUi.SymbolChild.ReadableName));
                 ImGui.PopFont();
@@ -206,7 +210,7 @@ namespace T3.Gui.Graph
 
                 if (childUi.IsSelected)
                 {
-                    drawList.AddRect(_lastScreenRect.Min - Vector2.One, _lastScreenRect.Max + Vector2.One, Color.White, 1);
+                    drawList.AddRect(_selectableScreenRect.Min - Vector2.One, _selectableScreenRect.Max + Vector2.One, Color.White, 1);
                 }
             }
             ImGui.PopID();
@@ -449,9 +453,15 @@ namespace T3.Gui.Graph
             return style.Apply(colorForType);
         }
 
-        
-        private static void DrawPreview(Instance instance)
+
+
+        /// <summary>
+        /// Set
+        /// </summary>
+        /// <param name="instance"></param>
+        private static void PreparePreviewAndExpandSelectableArea(Instance instance)
         {
+            _previewTextureView=null;
             if (instance.Outputs.Count == 0)
                 return;
 
@@ -463,21 +473,32 @@ namespace T3.Gui.Graph
             if (texture == null || texture.IsDisposed)
                 return;
 
-            var srv = SrvManager.GetSrvForTexture(texture);
+            _previewTextureView = SrvManager.GetSrvForTexture(texture);
 
             var aspect = (float)texture.Description.Width / texture.Description.Height;
-            var opWidth = _lastScreenRect.GetWidth();
+            var opWidth = _usableScreenRect.GetWidth();
             var previewSize = new Vector2(opWidth, opWidth / aspect);
             
-            //var previewHeight = opWidth / aspect;
             if (previewSize.Y > opWidth)
             {
                 previewSize  *= opWidth / previewSize.Y;
             }
 
-            Graph.DrawList.AddImage((IntPtr)srv,
-                        new Vector2(_lastScreenRect.Min.X, _lastScreenRect.Min.Y - previewSize.Y-1),
-                        new Vector2(_lastScreenRect.Min.X + previewSize.X, _lastScreenRect.Min.Y-1));
+            var min = new Vector2(_usableScreenRect.Min.X, _usableScreenRect.Min.Y - previewSize.Y - 1);
+            var max = new Vector2(_usableScreenRect.Min.X + previewSize.X, _usableScreenRect.Min.Y-1);
+            _selectableScreenRect.Add(min);
+            _previewArea = new ImRect(min,max);
+        }
+        
+        private static ImRect  _previewArea;
+        private static ShaderResourceView _previewTextureView;
+        
+        private static void DrawPreview()
+        {
+            if (_previewTextureView == null)
+                return;
+            
+            Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min, _previewArea.Max);
         }
 
         
@@ -557,7 +578,7 @@ namespace T3.Gui.Graph
         {
             var thickness = Im.Remap(GraphCanvas.Current.Scale.X, 0.5f, 1f, 3f, UsableSlotThickness);
 
-            var opRect = _lastScreenRect;
+            var opRect = _usableScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
             var outputHeight = outputCount == 0
                                    ? opRect.GetHeight()
@@ -691,9 +712,9 @@ namespace T3.Gui.Graph
         private static ImRect GetUsableInputSlotSize(int inputIndex, int visibleSlotCount)
         {
             var areaForParams = new ImRect(new Vector2(
-                                                       _lastScreenRect.Min.X,
-                                                       _lastScreenRect.Min.Y + _nodeTitleHeight),
-                                           _lastScreenRect.Max);
+                                                       _usableScreenRect.Min.X,
+                                                       _usableScreenRect.Min.Y + _nodeTitleHeight),
+                                           _usableScreenRect.Max);
             var inputHeight = visibleSlotCount == 0
                                   ? areaForParams.GetHeight()
                                   : (areaForParams.GetHeight() + SlotGaps) / visibleSlotCount - SlotGaps;
@@ -730,7 +751,8 @@ namespace T3.Gui.Graph
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
         private static Guid _hoveredNodeId;
 
-        private static ImRect _lastScreenRect;
+        private static ImRect _usableScreenRect;
+        private static ImRect _selectableScreenRect;
         private static ImDrawListPtr _drawList;
     }
 }
