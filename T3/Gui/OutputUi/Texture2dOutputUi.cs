@@ -1,5 +1,6 @@
 ﻿using SharpDX.Direct3D11;
 using System.Diagnostics;
+using T3.Core;
 using T3.Core.Operator.Slots;
 using T3.Gui.Windows;
 
@@ -21,7 +22,9 @@ namespace T3.Gui.OutputUi
         {
             if (slot is Slot<Texture2D> typedSlot)
             {
-                ImageOutputCanvas.Current.DrawTexture(typedSlot.Value);
+                Texture2D texture = typedSlot.Value;
+                ImageOutputCanvas.Current.DrawTexture(texture);
+                ResourceManager.Instance().SecondRenderWindowTexture = texture;
             }
             else
             {

@@ -180,7 +180,8 @@ namespace T3.Core
 
     public class ResourceManager
     {
-        public uint TestId = NullResource;
+        public Texture2D SecondRenderWindowTexture { get; set; }
+
         public Assembly OperatorsAssembly { get; set; }
 
         public static ResourceManager Instance()
@@ -845,6 +846,23 @@ namespace T3.Core
             {
                 Log.Info($"Info: couldn't access file '{filename}' as it was locked.");
             }
+        }
+
+        public uint GetIdForTexture(Texture2D texture)
+        {
+            if (texture == null)
+                return NullResource;
+
+            foreach (var (id, resourceEntry) in Resources)
+            {
+                if (resourceEntry is TextureResource textureResource)
+                {
+                    if (textureResource.Texture == texture)
+                        return id;
+                }
+            }
+
+            return NullResource;
         }
 
         public void CreateShaderResourceView(uint textureId, string name, ref ShaderResourceView shaderResourceView)

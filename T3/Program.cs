@@ -364,18 +364,16 @@ namespace T3
                                              context.VertexShader.Set(vsr.VertexShader);
                                          if (resourceManager.Resources[FullScreenPixelShaderId] is PixelShaderResource psr)
                                              context.PixelShader.Set(psr.PixelShader);
-                                         if (resourceManager.TestId != ResourceManager.NullResource)
+                                         
+                                         if (resourceManager.SecondRenderWindowTexture != null)
                                          {
-                                             if (resourceManager.Resources[resourceManager.TestId] is TextureResource textureResource)
+                                             if (backgroundSrv == null || backgroundSrv.Resource.NativePointer != resourceManager.SecondRenderWindowTexture.NativePointer)
                                              {
-                                                 if (backgroundSrv == null || backgroundSrv.Resource.NativePointer != textureResource.Texture.NativePointer)
-                                                 {
-                                                     backgroundSrv?.Dispose();
-                                                     backgroundSrv = new ShaderResourceView(device, textureResource.Texture);
-                                                 }
-
-                                                 context.PixelShader.SetShaderResource(0, backgroundSrv);
+                                                 backgroundSrv?.Dispose();
+                                                 backgroundSrv = new ShaderResourceView(device, resourceManager.SecondRenderWindowTexture);
                                              }
+
+                                             context.PixelShader.SetShaderResource(0, backgroundSrv);
                                          }
                                          else if (resourceManager.Resources[srvId] is ShaderResourceViewResource srvr)
                                              context.PixelShader.SetShaderResource(0, srvr.ShaderResourceView);
