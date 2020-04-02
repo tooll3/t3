@@ -1,5 +1,5 @@
 using System;
-using System.Diagnostics;
+using T3.Core.Logging;
 
 namespace T3.Core.Operator.Slots
 {
@@ -20,11 +20,17 @@ namespace T3.Core.Operator.Slots
         public bool IsAlreadyInvalidated => InvalidationRefFrame == _invalidatedWithRefFrame;
         public void Invalidate()
         {
-            Debug.Assert(!IsAlreadyInvalidated); // this should never happen and prevented on the calling side
-
-            // the ref frame prevent double invalidation when outputs are connected several times
-            _invalidatedWithRefFrame = InvalidationRefFrame;
-            Target++;
+            // Debug.Assert(!IsAlreadyInvalidated); // this should never happen and prevented on the calling side
+            if (!IsAlreadyInvalidated)
+            {
+                // the ref frame prevent double invalidation when outputs are connected several times
+                _invalidatedWithRefFrame = InvalidationRefFrame;
+                Target++;
+            }
+            else
+            {
+                Log.Error("Double invalidation of a slot. Please notify cynic about current setup.");
+            }
         }
 
         public void Clear()
