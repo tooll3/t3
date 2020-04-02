@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace T3.Core.Operator.Slots
 {
@@ -16,14 +17,14 @@ namespace T3.Core.Operator.Slots
 
         public static int InvalidationRefFrame { get; set; } = 0;
         private int _invalidatedWithRefFrame = -1;
+        public bool IsAlreadyInvalidated => InvalidationRefFrame == _invalidatedWithRefFrame;
         public void Invalidate()
         {
-            if (InvalidationRefFrame != _invalidatedWithRefFrame)
-            {
-                // the ref frame prevent double invalidation when outputs are connected several times
-                _invalidatedWithRefFrame = InvalidationRefFrame;
-                Target++;
-            }
+            Debug.Assert(!IsAlreadyInvalidated); // this should never happen and prevented on the calling side
+
+            // the ref frame prevent double invalidation when outputs are connected several times
+            _invalidatedWithRefFrame = InvalidationRefFrame;
+            Target++;
         }
 
         public void Clear()
