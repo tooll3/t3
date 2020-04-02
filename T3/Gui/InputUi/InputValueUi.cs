@@ -250,17 +250,8 @@ namespace T3.Gui.InputUi
                     ImGui.SetNextItemWidth(-1);
                     editState |= DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
 
-                    if ((editState & InputEditStateFlags.Started) == InputEditStateFlags.Started)
-                    {
-                        //Log.Debug($"focused {name}");
-                    }
-
-                    if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
-                    {
-                        inputSlot.DirtyFlag.Invalidate();
-                    }
-
-                    if ((editState & InputEditStateFlags.Finished) == InputEditStateFlags.Finished)
+                    if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified ||
+                        (editState & InputEditStateFlags.Finished) == InputEditStateFlags.Finished)
                     {
                         inputSlot.DirtyFlag.Invalidate();
                     }
