@@ -118,7 +118,7 @@ namespace T3
             _model.Load();
             
             var symbols = SymbolRegistry.Entries;
-            var demoSymbol = symbols.First(entry => entry.Value.Name == "Demo").Value;
+            var demoSymbol = symbols.First(entry => entry.Value.Name == "Numbers").Value;
             // create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
