@@ -365,7 +365,7 @@ namespace T3
                                          if (resourceManager.Resources[FullScreenPixelShaderId] is PixelShaderResource psr)
                                              context.PixelShader.Set(psr.PixelShader);
                                          
-                                         if (resourceManager.SecondRenderWindowTexture != null)
+                                         if (resourceManager.SecondRenderWindowTexture != null && !resourceManager.SecondRenderWindowTexture.IsDisposed)
                                          {
                                              if (backgroundSrv == null || backgroundSrv.Resource.NativePointer != resourceManager.SecondRenderWindowTexture.NativePointer)
                                              {
