@@ -21,7 +21,7 @@ namespace T3.Core.Operator
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
         public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000.0;
         public static double GlobalTimeInBars { get; set; }
-        //public static double BeatTime { get; set; }
+        public static double BeatTime { get; set; }
         public  double TimeInBars { get; set; }
         public static double GlobalTimeInSecs { get; set; }
         public Size2 RequestedResolution;

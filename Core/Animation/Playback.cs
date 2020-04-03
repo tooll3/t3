@@ -34,7 +34,8 @@ namespace T3.Core.Animation
             }
 
             // TODO: setting the context time here is kind of awkward
-            EvaluationContext.GlobalTimeInBars = BeatTime;
+            EvaluationContext.GlobalTimeInBars = TimeInBars;
+            EvaluationContext.BeatTime = BeatTime;
             EvaluationContext.GlobalTimeInSecs = TimeInSecs;
         }
 
@@ -171,7 +172,7 @@ namespace T3.Core.Animation
 
         private double GetCurrentStreamTime()
         {
-            if (_timeInSeconds < 0 || _timeInSeconds > GetSongDurationInSecs())
+            if (!IsTimeWithinAudioTrack)
             {
                 return _timeInSeconds;
             }
