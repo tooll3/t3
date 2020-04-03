@@ -97,7 +97,7 @@ namespace T3.Gui.InputUi
         private static InputEditStateFlags DrawMultilineTextEdit(ref string value)
         {
             ImGui.Dummy(new Vector2(1,1));
-            var changed = ImGui.InputTextMultiline("##textEdit", ref value, MAX_STRING_LENGTH, new Vector2(-1, 300));
+            var changed = ImGui.InputTextMultiline("##textEdit", ref value, MAX_STRING_LENGTH, new Vector2(-1, 150));
             return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
 
