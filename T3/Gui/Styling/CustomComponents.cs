@@ -143,7 +143,7 @@ namespace T3.Gui
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.3f));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
 
-            var clicked = ImGui.Button((char)(int)icon + "##" + label, size);
+            var clicked = ImGui.Button((char)(int)icon +  label, size);
 
             ImGui.PopStyleVar(2);
             ImGui.PopFont();

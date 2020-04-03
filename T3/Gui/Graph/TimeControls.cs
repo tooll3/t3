@@ -58,6 +58,7 @@ namespace T3.Gui.Graph
 
             ImGui.SameLine();
 
+            // Time Mode with context menu
             if (ImGui.Button(playback.TimeMode.ToString(), ControlSize))
             {
                 playback.TimeMode = (Playback.TimeModes)(((int)playback.TimeMode + 1) % Enum.GetNames(typeof(Playback.TimeModes)).Length);
@@ -66,8 +67,6 @@ namespace T3.Gui.Graph
             ImGui.SetNextWindowSize(new Vector2(400, 200));
             CustomComponents.ContextMenuForItem(() =>
                                                 {
-                                                    ImGui.Checkbox("Keep BeatTime running when paused", ref UserSettings.Config.KeepBeatTimeRunningInPause);
-                                                    
                                                     var bpm = (float)playback.Bpm;
                                                     ImGui.DragFloat("BPM", ref bpm);
                                                     playback.Bpm = bpm;
@@ -94,8 +93,33 @@ namespace T3.Gui.Graph
                                                         ImGui.CloseCurrentPopup();
                                                     }
                                                 }, "Timeline options");
-
             ImGui.SameLine();
+
+            // Continue Beat indicator
+            {
+                ImGui.PushStyleColor(ImGuiCol.Text, UserSettings.Config.KeepBeatTimeRunningInPause 
+                                                        ? new Vector4(1, 1, 1, 0.5f)
+                                                        : new Vector4(0, 0, 0, 0.5f));
+                
+                if (CustomComponents.IconButton(Icon.BeatGrid, "##continueBeat", ControlSize))
+                {
+                    UserSettings.Config.KeepBeatTimeRunningInPause = !UserSettings.Config.KeepBeatTimeRunningInPause;
+                }
+                
+                if (UserSettings.Config.KeepBeatTimeRunningInPause)
+                {
+                    var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax())/2;
+                    var beat = (int)(playback.BeatTime * 4) % 4;
+                    var bar = (int)(playback.BeatTime) % 4;
+                    const int gridSize = 4; 
+                    var drawList = ImGui.GetWindowDrawList();
+                    var min = center -new Vector2(8,9)  + new Vector2(beat * gridSize, bar*gridSize);
+                    drawList.AddRectFilled(min, min + new Vector2(gridSize-1, gridSize-1), Color.Orange);
+                }
+
+                ImGui.PopStyleColor();
+                ImGui.SameLine();
+            }
 
             // Jump to start
             if (CustomComponents.IconButton(Icon.JumpToRangeStart, "##jumpToBeginning", ControlSize))
@@ -117,7 +141,7 @@ namespace T3.Gui.Graph
             // Play backwards
             var isPlayingBackwards = playback.PlaybackSpeed < 0;
             if (CustomComponents.ToggleButton(Icon.PlayBackwards,
-                                              label: isPlayingBackwards ? $"[{(int)playback.PlaybackSpeed}x]" : "<",
+                                              label: isPlayingBackwards ? $"{(int)playback.PlaybackSpeed}x##backwards" : "##backwards",
                                               ref isPlayingBackwards,
                                               ControlSize))
             {
@@ -136,7 +160,7 @@ namespace T3.Gui.Graph
             // Play forward
             var isPlaying = playback.PlaybackSpeed > 0;
             if (CustomComponents.ToggleButton(Icon.PlayForwards,
-                                              label: isPlaying ? $"[{(int)playback.PlaybackSpeed}x]" : ">",
+                                              label: isPlaying ? $"{(int)playback.PlaybackSpeed}x##forward" : "##forward",
                                               ref isPlaying,
                                               ControlSize))
             {
@@ -286,11 +310,11 @@ namespace T3.Gui.Graph
                         newPos.Y += symbolChildUi.Size.Y + 5.0f;
                         var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, new[] { symbolChildUi }, compositionSymbolUi, newPos);
                         cmd.Do();
-                        
+
                         // set new end to the original time clip
                         float originalEndTime = clip.TimeRange.End;
                         clip.TimeRange = new TimeRange(clip.TimeRange.Start, (float)playback.TimeInBars);
-                        
+
                         // apply new time range to newly added instance
                         Guid newChildId = cmd.OldToNewIdDict[clip.Id];
                         var newInstance = compOp.Children.Single(child => child.SymbolChildId == newChildId);
