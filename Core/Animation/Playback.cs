@@ -11,9 +11,9 @@ namespace T3.Core.Animation
         public virtual double TimeInBars { get; set; }
         public virtual double TimeInSecs { get => TimeInBars * 240 / Bpm; set => TimeInBars = value / Bpm * 240f; }
 
-        public virtual double BeatTime { get; set; }
-        public double TimeRangeStart { get; set; } = 0;
-        public double TimeRangeEnd { get; set; } = 8;
+        public virtual double BeatTime { get; set; } 
+        //public double TimeRangeStart { get; set; } = 0;
+        public TimeRange LoopRange;
         public double Bpm = 120;
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
@@ -26,11 +26,11 @@ namespace T3.Core.Animation
         public void Update(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning = false)
         {
             UpdateTime(timeSinceLastFrameInSecs, keepBeatTimeRunning);
-            if (IsLooping && TimeInBars > TimeRangeEnd)
+            if (IsLooping && TimeInBars > LoopRange.End)
             {
-                TimeInBars = TimeInBars - TimeRangeEnd > 1.0 // Jump to start if too far out of time region
-                                 ? TimeRangeStart
-                                 : TimeInBars - (TimeRangeEnd - TimeRangeStart);
+                TimeInBars = TimeInBars - LoopRange.End > 1.0 // Jump to start if too far out of time region
+                                 ? LoopRange.Start
+                                 : TimeInBars - (LoopRange.End - LoopRange.Start);
             }
 
             // TODO: setting the context time here is kind of awkward

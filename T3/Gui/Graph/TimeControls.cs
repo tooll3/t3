@@ -124,7 +124,7 @@ namespace T3.Gui.Graph
             // Jump to start
             if (CustomComponents.IconButton(Icon.JumpToRangeStart, "##jumpToBeginning", ControlSize))
             {
-                playback.TimeInBars = playback.TimeRangeStart;
+                playback.TimeInBars = playback.LoopRange.Start;
             }
 
             ImGui.SameLine();
@@ -246,7 +246,7 @@ namespace T3.Gui.Graph
             // End
             if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", ControlSize))
             {
-                playback.TimeInBars = playback.TimeRangeEnd;
+                playback.TimeInBars = playback.LoopRange.End;
             }
 
             ImGui.SameLine();

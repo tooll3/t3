@@ -26,7 +26,8 @@ namespace T3.Gui.Windows.TimeLine
             _timeSelectionRange = new TimeSelectionRange(this, _snapHandler);
             LayersArea = new LayersArea(_snapHandler);
 
-            _snapHandler.AddSnapAttractor(_playbackRange);
+            _snapHandler.AddSnapAttractor(_clipRange);
+            _snapHandler.AddSnapAttractor(_loopRange);
             _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
             _snapHandler.AddSnapAttractor(_timeSelectionRange);
@@ -61,12 +62,10 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.BeginChild("timeline", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
-                
-                
                 _drawlist = ImGui.GetWindowDrawList();
                 _timeLineImage.Draw(_drawlist, Playback);
                 ImGui.SetScrollY(0);
-                
+
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
                 _timeRasterSwitcher.Draw(Playback);
@@ -85,13 +84,18 @@ namespace T3.Gui.Windows.TimeLine
                 }
 
                 var compositionTimeClip = NodeOperations.GetCompositionTimeClip(compositionOp);
-                if (compositionTimeClip != null || Playback.IsLooping)
+
+                if (Playback.IsLooping)
                 {
-                    _playbackRange.Draw(this, compositionTimeClip, _drawlist, _snapHandler);
+                    _loopRange.Draw(this, Playback, _drawlist, _snapHandler);
                 }
-                
+                else if (compositionTimeClip != null)
+                {
+                    _clipRange.Draw(this, compositionTimeClip, _drawlist, _snapHandler);
+                }
+
                 _timeSelectionRange.Draw(_drawlist);
-                
+
                 _currentTimeMarker.Draw(Playback);
                 DrawDragTimeArea();
                 _selectionFence.Draw();
@@ -111,9 +115,9 @@ namespace T3.Gui.Windows.TimeLine
 
             if (Math.Abs(_io.MouseWheel) > 0.01f)
                 HandleZoomViewWithMouseWheel();
-            
+
             if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
-                DeleteSelectedElements();            
+                DeleteSelectedElements();
         }
 
         private void HandleDeferredActions(List<GraphWindow.AnimationParameter> animationParameters)
@@ -421,8 +425,8 @@ namespace T3.Gui.Windows.TimeLine
         /// </summary>
         public float TransformPositionX(float xOnCanvas)
         {
-            var scale =   Scale.X  * _localScale;
-            var offset =  (Scroll.X - _localOffset) / _localScale;
+            var scale = Scale.X * _localScale;
+            var offset = (Scroll.X - _localOffset) / _localScale;
             return (xOnCanvas - offset) * scale + WindowPos.X;
         }
 
@@ -453,9 +457,9 @@ namespace T3.Gui.Windows.TimeLine
         /// </summary>
         public float InverseTransformPositionX(float xOnScreen)
         {
-            var scale =   Scale.X  * _localScale;
-            var offset =  (Scroll.X - _localOffset) / _localScale;
-            return (xOnScreen - WindowPos.X) / scale  + offset;
+            var scale = Scale.X * _localScale;
+            var offset = (Scroll.X - _localOffset) / _localScale;
+            return (xOnScreen - WindowPos.X) / scale + offset;
         }
 
         /// <summary>
@@ -519,27 +523,24 @@ namespace T3.Gui.Windows.TimeLine
         public Vector2 WindowSize { get; private set; }
         public Vector2 Scroll { get; private set; } = new Vector2(0, 0.0f);
 
-
-        
         private void UpdateLocalTimeTranslation(Instance compositionOp)
         {
             _localScale = 1f;
             _localOffset = 0f;
             ;
-            var parents= GraphCanvas.Current.GetParents().Reverse().ToList();
+            var parents = GraphCanvas.Current.GetParents().Reverse().ToList();
             parents.Add(compositionOp);
             foreach (var p in parents)
             {
                 if (p.Outputs.Count <= 0 || !(p.Outputs[0] is ITimeClipProvider timeClipProvider))
                     continue;
-                
+
                 var clip = timeClipProvider.TimeClip;
                 var scale = clip.TimeRange.Duration / clip.SourceRange.Duration;
-                _localScale *= scale ;
+                _localScale *= scale;
                 _localOffset += clip.TimeRange.Start - clip.SourceRange.Start * scale;
             }
-        } 
-        
+        }
         #endregion
 
         public float NestedTimeScale => Scale.X * _localScale;
@@ -552,7 +553,8 @@ namespace T3.Gui.Windows.TimeLine
 
         private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
         private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
-        private readonly PlaybackRange _playbackRange = new PlaybackRange();
+        private readonly ClipRange _clipRange = new ClipRange();
+        private readonly LoopRange _loopRange = new LoopRange();
 
         private readonly DopeSheetArea _dopeSheetArea;
         private readonly CurveEditArea _curveEditArea;
@@ -561,7 +563,7 @@ namespace T3.Gui.Windows.TimeLine
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
         private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
         private readonly TimeSelectionFence _selectionFence;
-        private readonly  TimeSelectionRange _timeSelectionRange;
+        private readonly TimeSelectionRange _timeSelectionRange;
         public readonly LayersArea LayersArea;
 
         public static TimeLineCanvas Current;

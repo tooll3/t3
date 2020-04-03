@@ -6,7 +6,7 @@ using T3.Gui.Interaction.Snapping;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class PlaybackRange : IValueSnapAttractor
+    public class ClipRange : IValueSnapAttractor
     {
         public void Draw(TimeLineCanvas canvas, ITimeClip timeClip, ImDrawListPtr drawlist, ValueSnapHandler snapHandler)
         {
