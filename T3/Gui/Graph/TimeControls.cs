@@ -252,7 +252,15 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
 
             // Loop
-            CustomComponents.ToggleButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize);
+            if (CustomComponents.ToggleButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize))
+            {
+                var loopRangeMatchesTime = playback.LoopRange.IsValid && playback.LoopRange.Contains(playback.TimeInBars); 
+                if (playback.IsLooping && !loopRangeMatchesTime )
+                {
+                    playback.LoopRange.Start = (float)(playback.TimeInBars- playback.TimeInBars % 4);
+                    playback.LoopRange.Duration = 4;
+                }
+            }
             ImGui.SameLine();
 
             // Curve Mode

@@ -35,8 +35,13 @@ namespace T3.Core.Animation
 
         public float Start;
         public float End;
-        public float Duration => End - Start;
-        public bool IsValid => !float.IsInfinity(Start) && !float.IsInfinity(End);
+
+        public float Duration
+        {
+            get => End - Start;
+            set => End = Start + value;
+        }
+        public bool IsValid => !float.IsInfinity(Start) && !float.IsInfinity(End) && Duration > 0;
 
         public TimeRange Clone()
         {
