@@ -110,9 +110,12 @@ namespace T3.Gui.Windows.TimeLine
 
         SnapResult IValueSnapAttractor.CheckForSnap(double targetTime)
         {
+            if (_playback == null)
+                return null;
+            
+            SnapResult bestSnapResult = null;
             const float snapDistance = 4;
             var snapThresholdOnCanvas = TimeLineCanvas.Current.InverseTransformDirection(new Vector2(snapDistance, 0)).X;
-            SnapResult bestSnapResult = null;
 
             KeyframeOperations.CheckForBetterSnapping(targetTime, _playback.LoopRange.Start, snapThresholdOnCanvas, ref bestSnapResult);
             KeyframeOperations.CheckForBetterSnapping(targetTime, _playback.LoopRange.End, snapThresholdOnCanvas, ref bestSnapResult);
