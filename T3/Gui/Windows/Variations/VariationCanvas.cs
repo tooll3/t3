@@ -62,11 +62,8 @@ namespace T3.Gui.Windows.Variations
                 _variationWindow.OutputUi = symbolUi.OutputUis[_firstOutputSlot.Id];
             }
 
-            _previewTexture = textureSlot.Value;
-            if (_previewTexture == null)
+            if (textureSlot.Value == null)
                 return;
-
-            _previewTextureSrv = SrvManager.GetSrvForTexture(_previewTexture);
 
             FillInNextVariation();
             UpdateCanvas();
@@ -373,26 +370,30 @@ namespace T3.Gui.Windows.Variations
             EvaluationContext.TimeInBars = 13.4f;
             _variationWindow.OutputUi.DrawValue(_firstOutputSlot, EvaluationContext);
 
-            // Setup graphics pipeline for rendering into the canvas texture
-            var resourceManager = ResourceManager.Instance();
-            var deviceContext = resourceManager.Device.ImmediateContext;
-            deviceContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-            deviceContext.Rasterizer.SetViewport(new ViewportF(posInCanvasTexture.X, posInCanvasTexture.Y,
-                                                               screenRect.GetWidth(), screenRect.GetHeight(),
-                                                               0.0f, 1.0f));
-            deviceContext.OutputMerger.SetTargets(_canvasTextureRtv);
+            if (_firstOutputSlot is Slot<Texture2D> textureSlot)
+            {
+                var previewTextureSrv = SrvManager.GetSrvForTexture(textureSlot.Value);
 
-            var vertexShader = resourceManager.GetVertexShader(Program.FullScreenVertexShaderId);
-            deviceContext.VertexShader.Set(vertexShader);
-            var pixelShader = resourceManager.GetPixelShader(Program.FullScreenPixelShaderId);
-            deviceContext.PixelShader.Set(pixelShader);
-            deviceContext.PixelShader.SetShaderResource(0, _previewTextureSrv);
+                // Setup graphics pipeline for rendering into the canvas texture
+                var resourceManager = ResourceManager.Instance();
+                var deviceContext = resourceManager.Device.ImmediateContext;
+                deviceContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+                deviceContext.Rasterizer.SetViewport(new ViewportF(posInCanvasTexture.X, posInCanvasTexture.Y,
+                                                                   screenRect.GetWidth(), screenRect.GetHeight(),
+                                                                   0.0f, 1.0f));
+                deviceContext.OutputMerger.SetTargets(_canvasTextureRtv);
 
-            // Render the preview in the canvas texture
-            deviceContext.Draw(3, 0);
-            deviceContext.PixelShader.SetShaderResource(0, null);
+                var vertexShader = resourceManager.GetVertexShader(Program.FullScreenVertexShaderId);
+                deviceContext.VertexShader.Set(vertexShader);
+                var pixelShader = resourceManager.GetPixelShader(Program.FullScreenPixelShaderId);
+                deviceContext.PixelShader.Set(pixelShader);
+                deviceContext.PixelShader.SetShaderResource(0, previewTextureSrv);
 
-            // Restore values
+                // Render the preview in the canvas texture
+                deviceContext.Draw(3, 0);
+                deviceContext.PixelShader.SetShaderResource(0, null);
+            }
+
             variation.RestoreValues();
         }
 
@@ -411,9 +412,6 @@ namespace T3.Gui.Windows.Variations
         private GridCell _gridFocusIndex = GridCenter;
         private int _currentOffsetIndexForFocus;
         private bool _updateCompleted;
-
-        private Texture2D _previewTexture;
-        private ShaderResourceView _previewTextureSrv;
 
         private Texture2D _canvasTexture;
         private ShaderResourceView _canvasTextureSrv;
