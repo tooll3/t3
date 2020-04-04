@@ -11,6 +11,7 @@ using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -243,6 +244,22 @@ namespace T3.Core
         private ResourceManager(Device device)
         {
             Device = device;
+
+            var samplerDesc = new SamplerStateDescription()
+                                  {
+                                      Filter = Filter.MinMagMipLinear,
+                                      AddressU = TextureAddressMode.Clamp,
+                                      AddressV = TextureAddressMode.Clamp,
+                                      AddressW = TextureAddressMode.Clamp,
+                                      MipLodBias = 0.0f,
+                                      MaximumAnisotropy = 1,
+                                      ComparisonFunction = Comparison.Never,
+                                      BorderColor = new RawColor4(1.0f, 1.0f, 1.0f, 1.0f),
+                                      MinimumLod = -Single.MaxValue,
+                                      MaximumLod = Single.MaxValue,
+                                  };
+            DefaultSamplerState = new SamplerState(device, samplerDesc);
+                
             _hlslFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.hlsl");
             _hlslFileWatcher.IncludeSubdirectories = true;
             _hlslFileWatcher.Changed += OnChanged;
@@ -280,6 +297,8 @@ namespace T3.Core
             _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
             _csFileWatcher.EnableRaisingEvents = true;
         }
+
+        public SamplerState DefaultSamplerState { get; }
 
         public void DisableOperatorFileWatcher()
         {
