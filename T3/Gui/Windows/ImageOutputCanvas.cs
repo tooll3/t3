@@ -3,12 +3,14 @@ using SharpDX.Direct3D11;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using SharpDX.DXGI;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
+using T3.Gui.Styling;
 using UiHelpers;
 
 namespace T3.Gui.Windows
@@ -51,12 +53,30 @@ namespace T3.Gui.Windows
             var srv = SrvManager.GetSrvForTexture(texture);
             ImGui.Image((IntPtr)srv, sizeOnScreen);
 
-            var description = $"{size.X}x{size.Y}  {srv.Description.Format}";
+            string format = "";
+            switch (srv.Description.Format)
+            {
+                case Format.R16G16B16A16_Float:
+                    format = "RGBA:16";
+                    break;
+                case Format.R8G8B8A8_SNorm:
+                    format = "RGBA:8";
+                    break;
+                default:
+                    format = srv.Description.Format.ToString();
+                    break;
+            }
+            
+            ImGui.PushFont(Fonts.FontSmall);
+            var description = $"{size.X}x{size.Y}  {format}";
             var descriptionWidth = ImGui.CalcTextSize(description).X;
 
             ImGui.SetCursorScreenPos(new Vector2(WindowPos.X + (WindowSize.X - descriptionWidth) / 2,
-                                                 WindowPos.Y + WindowSize.Y - 20));
+                                                 WindowPos.Y + WindowSize.Y - 16));
+            ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.8f,0.8f,0.8f, 0.8f));
             ImGui.Text(description);
+            ImGui.PopFont();
+            ImGui.PopStyleColor();
         }
 
 
