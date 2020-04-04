@@ -22,8 +22,9 @@ namespace T3.Gui.OutputUi
         {
             if (slot is Slot<List<string>> typedSlot)
             {
-                var outputString = string.Join(", ", typedSlot.Value);
-                ImGui.Text($"{outputString}");
+                var stringValue = typedSlot.Value;
+                var outputString = stringValue == null ? "null" : string.Join(", ", stringValue);
+                ImGui.Text(outputString);
             }
             else
             {
