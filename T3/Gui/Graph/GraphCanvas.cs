@@ -163,6 +163,12 @@ namespace T3.Gui.Graph
                 _symbolBrowser.Draw();
 
                 Graph.DrawGraph(DrawList);
+                
+                var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
+                if (isOnBackground && ImGui.IsMouseDoubleClicked(0))
+                {
+                    SetCompositionToParentInstance(CompositionOp.Parent);
+                }
 
                 if (ConnectionMaker.TempConnection != null && ImGui.IsMouseReleased(0))
                 {
