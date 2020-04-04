@@ -18,10 +18,10 @@ namespace T3.Core.Operator.Slots
         public static int InvalidationRefFrame { get; set; } = 0;
         private int _invalidatedWithRefFrame = -1;
         public bool IsAlreadyInvalidated => InvalidationRefFrame == _invalidatedWithRefFrame;
-        public void Invalidate()
+        public void Invalidate(bool forceInvalidation = false)
         {
             // Debug.Assert(!IsAlreadyInvalidated); // this should never happen and prevented on the calling side
-            if (!IsAlreadyInvalidated)
+            if (!IsAlreadyInvalidated || forceInvalidation)
             {
                 // the ref frame prevent double invalidation when outputs are connected several times
                 _invalidatedWithRefFrame = InvalidationRefFrame;

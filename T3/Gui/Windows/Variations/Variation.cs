@@ -57,7 +57,7 @@ namespace T3.Gui.Windows.Variations
         {
             foreach (var param in ValuesForParameters.Keys)
             {
-                param.InputSlot.DirtyFlag.Invalidate();
+                param.InputSlot.DirtyFlag.Invalidate(true);
             }
         }
 
