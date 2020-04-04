@@ -22,7 +22,6 @@ namespace T3.Gui.Windows.Variations
         private Variation(Dictionary<VariationParameter, InputValue> valuesForParameters)
         {
             ValuesForParameters = valuesForParameters;
-            //_changeCommand = CreateChangeCommand();
             ThumbnailNeedsUpdate = true;
         }
 
@@ -38,7 +37,6 @@ namespace T3.Gui.Windows.Variations
         {
             _changeCommand = CreateChangeCommand();
             _changeCommand.Do();
-            InvalidateParameters();
         }
 
         
@@ -48,16 +46,11 @@ namespace T3.Gui.Windows.Variations
                 return;
             
             UndoRedoStack.AddAndExecute(_changeCommand);
-            InvalidateParameters();
         }
         
         public void RestoreValues()
         {
-            if (_changeCommand == null)
-                return;
-            
-            _changeCommand.Undo();
-            InvalidateParameters();
+            _changeCommand?.Undo();
         }
 
         private void InvalidateParameters()

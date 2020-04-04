@@ -91,10 +91,9 @@ namespace T3.Gui.Windows.Variations
                 }
             }
 
+            _hoveringVariation?.RestoreValues();
             if (ImGui.IsWindowHovered())
             {
-                _hoveringVariation?.RestoreValues();
-
                 _hoveringVariation = CreateVariationAtMouseMouse();
 
                 if (_hoveringVariation != null)
@@ -111,11 +110,7 @@ namespace T3.Gui.Windows.Variations
             }
             else
             {
-                if (_hoveringVariation != null)
-                {
-                    _hoveringVariation.RestoreValues();
-                    _hoveringVariation = null;
-                }
+                _hoveringVariation = null;
             }
         }
 

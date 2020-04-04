@@ -310,9 +310,9 @@ namespace T3.Gui.Windows.Variations
             }
         }
 
-        public IOutputUi OutputUi;
-        private readonly Dictionary<Guid, List<Variation>> _variationsForSymbols = new Dictionary<Guid, List<Variation>>();
+        public IOutputUi OutputUi { get; set; }
 
+        private readonly Dictionary<Guid, List<Variation>> _variationsForSymbols = new Dictionary<Guid, List<Variation>>();
         private Variation _lastHoveredVariation;
         private readonly VariationCanvas _variationCanvas;
         private static readonly Vector2 Spacing = new Vector2(1, 5);
