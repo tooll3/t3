@@ -25,7 +25,7 @@ namespace T3.Gui.InputUi.SingleControl
 
         protected override bool DrawSingleEditControl(string name, ref Vector4 value)
         {
-            return ImGui.ColorEdit4("##Vector4Edit", ref value, ImGuiColorEditFlags.Float);
+            return ImGui.ColorEdit4("##Vector4Edit", ref value, ImGuiColorEditFlags.Float| ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreviewHalf);
         }
 
         protected override void DrawReadOnlyControl(string name, ref Vector4 value)
