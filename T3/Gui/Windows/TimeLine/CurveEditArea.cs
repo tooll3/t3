@@ -235,7 +235,7 @@ namespace T3.Gui.Windows.TimeLine
 
             for (var i = 0; i < steps; i++)
             {
-                _curveLinePoints[i] = new Vector2(x, TimeLineCanvas.TransformPosition(new Vector2(0, (float)curve.GetSampledValue(u))).Y);
+                _curveLinePoints[i] = new Vector2(x, (int)TimeLineCanvas.TransformPosition(new Vector2(0, (float)curve.GetSampledValue(u))).Y - 0.5f);
                 u += dU;
                 x += step;
             }

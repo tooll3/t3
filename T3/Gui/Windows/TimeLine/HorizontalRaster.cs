@@ -121,7 +121,7 @@ namespace T3.Gui.Windows.TimeLine
                         var y = topLeft.Y + yIndex;
                         drawList.AddRect(
                                          new Vector2(topLeft.X,y ),
-                                         new Vector2(topLeft.X + viewWidth, y), lineColor);
+                                         new Vector2(topLeft.X + viewWidth, y+1), lineColor);
 
                         if (raster.Label != "")
                         {

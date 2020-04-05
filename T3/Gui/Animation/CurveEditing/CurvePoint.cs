@@ -2,7 +2,7 @@
 using System;
 using System.Numerics;
 using T3.Core.Animation;
-using T3.Gui.Graph;
+using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
 using UiHelpers;
@@ -14,7 +14,6 @@ namespace T3.Gui.Animation.CurveEditing
     /// </summary>
     public static class CurvePoint
     {
-
         public static void Draw(VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, CurveEditArea curveEditArea)
         {
             _drawlist = ImGui.GetWindowDrawList();
@@ -24,9 +23,9 @@ namespace T3.Gui.Animation.CurveEditing
             var pCenter = _curveEditCanvas.TransformPosition(new Vector2((float)vDef.U, (float)vDef.Value));
             var pTopLeft = pCenter - ControlSizeHalf;
 
-            _drawlist.AddRectFilled(pTopLeft, pTopLeft + ControlSize,
-                isSelected ? Color.White : Color.Blue);
-
+            ImGui.PushFont(Icons.IconFont);
+            _drawlist.AddText(pTopLeft - new Vector2(2,4), Color.White, isSelected ? KeyframeIconSelected : KeyframeIcon);
+            ImGui.PopFont();
 
             if (isSelected)
             {
@@ -173,6 +172,9 @@ namespace T3.Gui.Animation.CurveEditing
         private static readonly Vector2 TangentSize = new Vector2(2, 2);
         private static readonly Vector2 TangentSizeHalf = TangentSize * 0.5f;
         
+        private static readonly string KeyframeIcon = "" + (char)(int)Icon.CurveKeyframe;
+        private static readonly string KeyframeIconSelected = "" + (char)(int)Icon.CurveKeyframeSelected;
+
         /* TODO: MoveDirection needs to be implemented eventually
         private enum MoveDirection
         {
