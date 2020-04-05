@@ -6,6 +6,7 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Gui.Interaction.Snapping;
+using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
@@ -26,16 +27,18 @@ namespace T3.Gui.Windows.TimeLine
             if (!_selectionTimeRange.IsValid || _selectionTimeRange.Duration <= 0)
                 return;
 
+
+            var contentRegionMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos();
+            var contentRegionMax = ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos();
             ImGui.PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
             // Range start
             {
-                var xRangeStart = _timeLineCanvas.TransformPositionX(_selectionTimeRange.Start);
-                var rangeStartPos = new Vector2(xRangeStart, 0);
-
+                var xRangeStartOnScreen = _timeLineCanvas.TransformPositionX(_selectionTimeRange.Start);
+                var rangeStartPos = new Vector2(xRangeStartOnScreen, contentRegionMin.Y);
                 // Shade outside
                 drawlist.AddRectFilled(
                                        new Vector2(0, 0),
-                                       new Vector2(xRangeStart, TimeRangeShadowSize.Y),
+                                       new Vector2(xRangeStartOnScreen, TimeRangeShadowSize.Y),
                                        TimeRangeOutsideColor);
 
                 // Shadow
@@ -47,7 +50,7 @@ namespace T3.Gui.Windows.TimeLine
                 // Line
                 drawlist.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), TimeRangeShadowColor);
                 
-                ImGui.SetCursorScreenPos(rangeStartPos + ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(-TimeRangeHandleSize.X-5,0));
+                ImGui.SetCursorScreenPos(rangeStartPos +  new Vector2(-TimeRangeHandleSize.X-5,0));
                 ImGui.Button("##SelectionStartPos", TimeRangeHandleSize);
 
                 HandleDrag(_selectionTimeRange.Start, _selectionTimeRange.End);
@@ -55,15 +58,15 @@ namespace T3.Gui.Windows.TimeLine
 
             // Range end
             {
-                var rangeEndX = _timeLineCanvas.TransformPositionX(_selectionTimeRange.End);
-                var rangeEndPos = new Vector2(rangeEndX, 0);
+                var xRangeEndOnScreen = _timeLineCanvas.TransformPositionX(_selectionTimeRange.End);
+                var rangeEndPos = new Vector2(xRangeEndOnScreen, contentRegionMin.Y);
 
                 // Shade outside
-                var windowMaxX = ImGui.GetContentRegionAvail().X + _timeLineCanvas.WindowPos.X;
-                if (rangeEndX < windowMaxX)
+                //var windowMaxX =  ImGui.GetContentRegionAvail().X + _timeLineCanvas.WindowPos.X;
+                if (xRangeEndOnScreen < contentRegionMax.X)
                     drawlist.AddRectFilled(
                                            rangeEndPos,
-                                           rangeEndPos + new Vector2(windowMaxX - rangeEndX, TimeRangeShadowSize.Y),
+                                           new Vector2(contentRegionMax.X, TimeRangeShadowSize.Y),
                                            TimeRangeOutsideColor);
 
                 // Shadow
@@ -76,7 +79,7 @@ namespace T3.Gui.Windows.TimeLine
                 drawlist.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), TimeRangeShadowColor);
 
 
-                ImGui.SetCursorScreenPos(rangeEndPos + ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(5,0));
+                ImGui.SetCursorScreenPos(rangeEndPos + new Vector2(5,0));
                 ImGui.Button("##SelectionEndPos", TimeRangeHandleSize);
                 HandleDrag(_selectionTimeRange.End, _selectionTimeRange.Start);
             }
