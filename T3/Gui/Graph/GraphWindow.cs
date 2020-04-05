@@ -127,6 +127,7 @@ namespace T3.Gui.Graph
                                          ? (animationParameters.Count * DopeSheetArea.LayerHeight) 
                                            + _timeLineCanvas.LayersArea.LastHeight
                                            + TimeLineCanvas.TimeLineDragHeight
+                                           + 2
                                          : _heightTimeLine;
 
                 if (CustomComponents.SplitFromBottom(ref timelineHeight))
@@ -134,7 +135,7 @@ namespace T3.Gui.Graph
                     _heightTimeLine = timelineHeight;
                 }
 
-                const float ImgGuiTitleHeight = 3; // Hack that also depends on when a window-title is being rendered 
+                const float ImgGuiTitleHeight = 4; // Hack that also depends on when a window-title is being rendered 
 
                 var graphHeight = ImGui.GetWindowHeight() - timelineHeight - ImgGuiTitleHeight;
                 ImGui.BeginChild("##graph", new Vector2(0, graphHeight), false,

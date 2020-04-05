@@ -205,7 +205,7 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.SetCursorPos(new Vector2(0, max.Y - clampedSize.Y));
             var screenPos = ImGui.GetCursorScreenPos();
-            ImGui.GetWindowDrawList().AddRectFilled(screenPos, screenPos + new Vector2(clampedSize.X, 1), Color.Black);
+            ImGui.GetWindowDrawList().AddRectFilled(screenPos, screenPos + new Vector2(clampedSize.X, clampedSize.Y), new Color(0,0,0,0.1f));
 
             ImGui.InvisibleButton("##TimeDrag", clampedSize);
 
@@ -427,7 +427,7 @@ namespace T3.Gui.Windows.TimeLine
         {
             var scale = Scale.X * _localScale;
             var offset = (Scroll.X - _localOffset) / _localScale;
-            return (xOnCanvas - offset) * scale + WindowPos.X;
+            return (int)((xOnCanvas - offset) * scale + WindowPos.X);
         }
 
         public float TransformGlobalTime(float time)
