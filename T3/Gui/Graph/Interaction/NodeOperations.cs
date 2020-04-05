@@ -355,8 +355,8 @@ namespace T3.Gui.Graph.Interaction
                     return node;
 
                 string idValue = nameSyntax.Identifier.ValueText;
-                if (idValue != "InputSlot" && idValue != "MultiInputSlot" && idValue != "Slot")
-                    return node; // no input/multi-input/slot (output)
+                if (!(idValue == "InputSlot" || idValue == "MultiInputSlot" || idValue == "Slot" || idValue == "TimeClipSlot"))
+                    return node; // no input/multi-input/slot/timeclip-slot (output)
 
                 var attrList = node.AttributeLists[0];
                 var attribute = attrList.Attributes[0];
