@@ -275,8 +275,8 @@ namespace T3.Gui.Graph
             if (CustomComponents.IconButton(UserSettings.Config.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn, "##audioToggle", ControlSize))
             {
                 UserSettings.Config.AudioMuted = !UserSettings.Config.AudioMuted;
-                var streamedClipTime = playback as StreamPlayback;
-                streamedClipTime?.SetMuteMode(UserSettings.Config.AudioMuted);
+                if (playback is StreamPlayback streamPlayback)
+                    streamPlayback.SetMuteMode(UserSettings.Config.AudioMuted);
             }
 
             ImGui.SameLine();

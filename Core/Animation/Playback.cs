@@ -135,16 +135,15 @@ namespace T3.Core.Animation
 
         public void SetMuteMode(bool shouldBeMuted)
         {
-            if (Bass.Volume > 0)
+            Bass.ChannelGetAttribute(_soundStreamHandle, ChannelAttribute.Volume, out float actualVolume);
+            if (actualVolume > 0.0f)
             {
-                _previousVolume = Bass.Volume;
+                _previousVolume = actualVolume;
             }
 
-            Bass.Volume = shouldBeMuted ? 0 : _previousVolume;
+            Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.Volume, shouldBeMuted ? 0 : _previousVolume);
         }
 
-        
-        
         protected override void UpdateTime(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning)
         {
             if (_playbackSpeed < 0.0 || !IsTimeWithinAudioTrack)
@@ -185,6 +184,6 @@ namespace T3.Core.Animation
         private double _timeInSeconds; // We use this outside of stream range
 
         private double _playbackSpeed;
-        private double _previousVolume;
+        private float _previousVolume;
     }
 }
