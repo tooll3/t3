@@ -11,6 +11,7 @@ using T3.Gui.Graph.Rendering;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Windows
@@ -54,17 +55,24 @@ namespace T3.Gui.Windows
             ImGui.Image((IntPtr)srv, sizeOnScreen);
 
             string format = "";
-            switch (srv.Description.Format)
+            if (UserSettings.Config.ShowExplicitTextureFormatInOutputWindow)
             {
-                case Format.R16G16B16A16_Float:
-                    format = "RGBA:16";
-                    break;
-                case Format.R8G8B8A8_SNorm:
-                    format = "RGBA:8";
-                    break;
-                default:
-                    format = srv.Description.Format.ToString();
-                    break;
+                format = srv.Description.Format.ToString();
+            }
+            else
+            {
+                switch (srv.Description.Format)
+                {
+                    case Format.R16G16B16A16_Float:
+                        format = "RGBA:16";
+                        break;
+                    case Format.R8G8B8A8_SNorm:
+                        format = "RGBA:8";
+                        break;
+                    default:
+                        format = srv.Description.Format.ToString();
+                        break;
+                }
             }
             
             ImGui.PushFont(Fonts.FontSmall);
