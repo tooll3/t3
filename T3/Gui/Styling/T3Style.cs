@@ -49,6 +49,7 @@ namespace T3.Gui
 
                 _colors[(int)ImGuiCol.Text] = new Vector4(1, 1, 1, 0.85f);
                 _colors[(int)ImGuiCol.TextDisabled] = new Vector4(0.328f, 0.328f, 0.328f, 1.000f);
+                _colors[(int)ImGuiCol.Button] = new Vector4(0.15f, 0.15f, 0.15f, 1f);
                 _colors[(int)ImGuiCol.Border] = new Vector4(0, 0.00f, 0.00f, 0.97f);
                 _colors[(int)ImGuiCol.BorderShadow] = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
                 _colors[(int)ImGuiCol.FrameBg] = new Vector4(0.13f, 0.13f, 0.13f, 0.80f);
@@ -57,7 +58,7 @@ namespace T3.Gui
                 _colors[(int)ImGuiCol.ScrollbarBg] = new Vector4(0.12f, 0.12f, 0.12f, 0.53f);
                 _colors[(int)ImGuiCol.ScrollbarGrab] = new Vector4(0.31f, 0.31f, 0.31f, 0.33f);
                 _colors[(int)ImGuiCol.ResizeGrip] = new Vector4(0.00f, 0.00f, 0.00f, 0.25f);
-                _colors[(int)ImGuiCol.Button] = new Vector4(0.15f, 0.15f, 0.15f, 1f);
+                _colors[(int)ImGuiCol.WindowBg] = new Vector4(0.14f,0.14f,0.14f, 0.98f);
             }
 
             public void Apply(ImGuiStylePtr style)
