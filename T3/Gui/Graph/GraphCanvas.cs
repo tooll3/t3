@@ -363,6 +363,7 @@ namespace T3.Gui.Graph
 
                 if (ImGui.MenuItem("Combine as new type"))
                 {
+                    _nameSpaceForDialogEdits = CompositionOp.Symbol.Namespace;
                     _combineToSymbolDialog.ShowNextFrame();
                 }
 
