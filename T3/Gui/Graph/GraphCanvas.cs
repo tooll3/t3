@@ -19,6 +19,7 @@ using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
+using T3.Gui.Windows.TimeLine;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -58,6 +59,7 @@ namespace T3.Gui.Graph
             CompositionOp = NodeOperations.GetInstanceFromIdPath(childIdPath);
 
             SelectionManager.Clear();
+            TimeLineCanvas.Current?.ClearSelection();
 
             UserSettings.SaveLastViewedOpForWindow(_window, CompositionOp.SymbolChildId);
 
@@ -82,6 +84,7 @@ namespace T3.Gui.Graph
             var newPath = _compositionPath;
             newPath.Add(instance.SymbolChildId);
             SelectionManager.Clear();
+            TimeLineCanvas.Current?.ClearSelection();
             SetComposition(newPath, Transition.JumpIn);
         }
 
@@ -104,6 +107,7 @@ namespace T3.Gui.Graph
 
             SetComposition(shortenedPath, Transition.JumpOut);
             SelectionManager.Clear();
+            TimeLineCanvas.Current?.ClearSelection();
             var previousCompChildUi= SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis.SingleOrDefault(childUi => childUi.Id == previousCompositionOp.SymbolChildId);
             if(previousCompChildUi != null)
                 SelectionManager.AddSelection(previousCompChildUi, previousCompositionOp);
