@@ -110,13 +110,12 @@ namespace T3.Gui.Selection
             if (Selection.Count == 0)
                 return _parent;
 
-            if (Selection[0] is SymbolChildUi firstNode)
-            {
-                var idPath = ChildUiInstanceIdPaths[firstNode];
-                return NodeOperations.GetInstanceFromIdPath(idPath).Parent;
-            }
-
-            return null;
+            if (!(Selection[0] is SymbolChildUi firstNode))
+                return null;
+            
+            var idPath = ChildUiInstanceIdPaths[firstNode];
+            var instanceFromIdPath = NodeOperations.GetInstanceFromIdPath(idPath);
+            return instanceFromIdPath?.Parent;
         }
         
 
