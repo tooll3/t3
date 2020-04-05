@@ -41,6 +41,22 @@ namespace T3.Gui.Windows.TimeLine
                 if (KeyboardBinding.Triggered(UserActions.Duplicate))
                     DuplicateSelectedKeyframes();
 
+                if (KeyboardBinding.Triggered(UserActions.InsertKeyframe))
+                {
+                    foreach (var p in AnimationParameters)
+                    {
+                        InsertNewKeyframe(p, (float)TimeLineCanvas.Playback.TimeInBars);
+                    }
+                }
+
+                if (KeyboardBinding.Triggered(UserActions.InsertKeyframeWithIncrement))
+                {
+                    foreach (var p in AnimationParameters)
+                    {
+                        InsertNewKeyframe(p, (float)TimeLineCanvas.Playback.TimeInBars, false, 1);
+                    }
+                }
+
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(0, 3)); // keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
 
@@ -82,18 +98,17 @@ namespace T3.Gui.Windows.TimeLine
                     var v = curve.GetSampledValue(mouseTime);
                     ImGui.Text($"{v:0.00}");
                 }
+
                 ImGui.EndTooltip();
             }
 
-            
-            
             ImGui.PushStyleColor(ImGuiCol.Text, layerHovered ? Color.White.Rgba : Color.Gray);
             ImGui.PushFont(Fonts.FontBold);
             //if (CustomComponents.ToggleButton( Icon.Pin, "Pin", new Vector2(16, 16)))
-            
+
             var hash = parameter.Input.GetHashCode();
             var pinned = _pinnedParameters.Contains(hash);
-            if(CustomComponents.ToggleButton(Icon.Pin,"pin", ref pinned, new Vector2(16,16)))
+            if (CustomComponents.ToggleButton(Icon.Pin, "pin", ref pinned, new Vector2(16, 16)))
             {
                 if (pinned)
                 {
@@ -104,6 +119,7 @@ namespace T3.Gui.Windows.TimeLine
                     _pinnedParameters.Remove(hash);
                 }
             }
+
             ImGui.SameLine();
             ImGui.Text("  " + parameter.ChildUi.SymbolChild.ReadableName);
             ImGui.PopFont();
@@ -133,8 +149,8 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight)); // Next Line
         }
 
-        private readonly  HashSet<int> _pinnedParameters = new HashSet<int>();
-        
+        private readonly HashSet<int> _pinnedParameters = new HashSet<int>();
+
         private void HandleCreateNewKeyframes(GraphWindow.AnimationParameter parameter, ImRect layerArea)
         {
             var hoverNewKeyframe = !ImGui.IsAnyItemActive()
@@ -154,24 +170,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     TimeLineCanvas.Current.ClearSelection();
 
-                    foreach (var curve in parameter.Curves)
-                    {
-                        var value = curve.GetSampledValue(hoverTime);
-                        var previousU = curve.GetPreviousU(hoverTime);
-
-                        var key = (previousU != null)
-                                      ? curve.GetV(previousU.Value).Clone()
-                                      : new VDefinition();
-
-                        key.Value = value;
-                        key.U = hoverTime;
-
-                        var oldKey = key;
-                        curve.AddOrUpdateV(hoverTime, key);
-                        SelectedKeyframes.Add(oldKey);
-                        Log.Debug("added new key at " + hoverTime);
-                        TimeLineCanvas.Current.Playback.TimeInBars = hoverTime;
-                    }
+                    InsertNewKeyframe(parameter, hoverTime, setPlaybackTime: true);
                 }
             }
             else
@@ -185,15 +184,39 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
         }
 
+        private void InsertNewKeyframe(GraphWindow.AnimationParameter parameter, float time, bool setPlaybackTime = false, float increment=0)
+        {
+            foreach (var curve in parameter.Curves)
+            {
+                var value = curve.GetSampledValue(time);
+                var previousU = curve.GetPreviousU(time);
+
+                var key = (previousU != null)
+                              ? curve.GetV(previousU.Value).Clone()
+                              : new VDefinition();
+
+                key.Value = value+increment;
+                key.U = time;
+
+                var oldKey = key;
+                curve.AddOrUpdateV(time, key);
+                SelectedKeyframes.Add(oldKey);
+                //Log.Debug("added new key at " + time);
+            }
+
+            if (setPlaybackTime)
+                TimeLineCanvas.Current.Playback.TimeInBars = time;
+        }
+
         private static readonly Color GrayCurveColor = new Color(1f, 1f, 1.0f, 0.3f);
 
         private readonly Color[] _curveColors =
-        {
-            new Color(1f, 0.2f, 0.2f, 0.3f),
-            new Color(0.1f, 1f, 0.2f, 0.3f),
-            new Color(0.1f, 0.4f, 1.0f, 0.5f),
-            GrayCurveColor,
-        };
+            {
+                new Color(1f, 0.2f, 0.2f, 0.3f),
+                new Color(0.1f, 1f, 0.2f, 0.3f),
+                new Color(0.1f, 0.4f, 1.0f, 0.5f),
+                GrayCurveColor,
+            };
 
         private void DrawCurveLines(GraphWindow.AnimationParameter parameter, ImRect layerArea)
         {
@@ -205,7 +228,7 @@ namespace T3.Gui.Windows.TimeLine
                 var points = curve.GetPointTable();
                 if (points.Count == 0)
                     continue;
-                
+
                 var positions = new List<Vector2>();
 
                 var minValue = float.PositiveInfinity;
@@ -302,6 +325,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     Icons.Draw(isSelected ? Icon.KeyFrameSelected : Icon.KeyFrame, posOnScreen);
                 }
+
                 ImGui.SetCursorScreenPos(posOnScreen);
 
                 // Click released
