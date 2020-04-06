@@ -10,6 +10,7 @@ using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.TypeColors;
+using T3.Gui.Windows;
 using Truncon.Collections;
 using UiHelpers;
 
@@ -66,12 +67,12 @@ namespace T3.Gui.Graph
             }
 
             // 3. Draw Nodes and their sockets and set positions for connection lines
-            foreach(var instance in children)
+            foreach (var instance in children)
             {
                 var childUi = _childUis.Single(ui => ui.Id == instance.SymbolChildId);
                 GraphNode.Draw(childUi, instance);
             }
-            
+
             // 4. Draw Inputs Nodes
             foreach (var inputNode in _inputUisById)
             {
@@ -104,14 +105,13 @@ namespace T3.Gui.Graph
                     line.TargetPosition = targetPos;
                 }
             }
-            
+
             // 6. Draw ConnectionLines
             foreach (var line in Connections.Lines)
             {
                 line.Draw();
             }
         }
-
 
         internal class ConnectionSorter
         {
@@ -295,15 +295,24 @@ namespace T3.Gui.Graph
                                              30, 300,
                                              5, 200);
 
-                DrawList.AddBezierCurve(
-                                        SourcePosition,
-                                        SourcePosition + new Vector2(tangentLength, 0),
-                                        TargetPosition + new Vector2(-tangentLength, 0),
-                                        TargetPosition,
-                                        color,
-                                        thickness: 1.5f * Thickness,
-                                        num_segments: 20);
-                
+                if (SettingsWindow.UseArcConnections)
+                {
+                    Im.DrawArcConnection(new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
+                                         SourcePosition,
+                                         new ImRect(TargetPosition, TargetPosition + new Vector2(10, 10)),
+                                         TargetPosition, color, 1.5f * Thickness);
+                }
+                else
+                {
+                    DrawList.AddBezierCurve(
+                                            SourcePosition,
+                                            SourcePosition + new Vector2(tangentLength, 0),
+                                            TargetPosition + new Vector2(-tangentLength, 0),
+                                            TargetPosition,
+                                            color,
+                                            thickness: 1.5f * Thickness,
+                                            num_segments: 30);
+                }
             }
         }
 

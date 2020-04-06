@@ -3,6 +3,7 @@ using System;
 using System.Numerics;
 using T3.Gui;
 using T3.Gui.Graph;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using T3.Gui.Windows.TimeLine;
 
@@ -479,7 +480,7 @@ namespace UiHelpers
 
         private const float TAU = Pi / 180;
 
-        public static void DrawArcConnection(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color)
+        public static void DrawArcConnection(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color, float thickness)
         {
             var drawList = ImGui.GetWindowDrawList();
 
@@ -491,15 +492,18 @@ namespace UiHelpers
             rectB = new ImRect(rectBMin, rectBMin + fallbackRectSize);
 
             var d = pointB - pointA;
-            // var rA = d.Y < 0
-            //              ? pointA.Y - rectA.Max.Y
-            //              : rectA.Min.Y - pointA.Y;
-            //
-            // var rB = d.Y < 0
-            //              ? pointB.Y - rectB.Max.Y
-            //              : rectB.Min.Y - pointB.Y;
 
+            var maxRadius = SettingsWindow.LimitArcConnectionRadius * GraphCanvas.Current.Scale.X;
             var shrinkArkAngle = 0.8f;
+            
+            var pointAOrg = pointA;
+            var exceededMaxRadius = d.X > maxRadius;
+            if (exceededMaxRadius)
+            {
+                pointA.X += d.X - maxRadius;
+                d.X = maxRadius;
+            }
+            
             var aAboveB = d.Y > 0;
             if (aAboveB)
             {
@@ -511,6 +515,8 @@ namespace UiHelpers
 
                 if (d.X > rA + rB)
                 {
+
+                    
                     var horizontalStretch = d.X / d.Y > 1;
                     if (horizontalStretch)
                     {
@@ -524,8 +530,11 @@ namespace UiHelpers
                         drawList.PathClear();
                         drawList.PathArcTo(cB, rB, Pi / 2, Pi / 2 + alpha * shrinkArkAngle);
                         drawList.PathArcTo(cA, rA, 1.5f * Pi + alpha * shrinkArkAngle, 1.5f * Pi);
-                        drawList.PathStroke(color, false, 2);
-
+                        if(exceededMaxRadius)
+                            drawList.PathLineTo(pointAOrg);
+                        
+                        drawList.PathStroke(color, false, thickness);
+                        
                         // drawList.AddLine(pointA, pointB, Color.Red);
                         // drawList.AddCircle(cB, rB, Color.Red);
                         // drawList.AddCircle(cA, rA, new Color(1f,0,0,0.2f));
@@ -540,7 +549,10 @@ namespace UiHelpers
                         drawList.PathClear();
                         drawList.PathArcTo(cB, rB, 0.5f * Pi, Pi);
                         drawList.PathArcTo(cA, rA, 2 * Pi, 1.5f * Pi);
-                        drawList.PathStroke(color, false, 2);
+                        if(exceededMaxRadius)
+                            drawList.PathLineTo(pointAOrg);
+
+                        drawList.PathStroke(color, false, thickness);
                     }
                 }
             }
@@ -568,7 +580,10 @@ namespace UiHelpers
                         drawList.PathClear();
                         drawList.PathArcTo(cB, rB, 1.5f * Pi, 1.5f * Pi - alpha* shrinkArkAngle);
                         drawList.PathArcTo(cA, rA, 0.5f * Pi - alpha* shrinkArkAngle, 0.5f * Pi);
-                        drawList.PathStroke(color, false, 2);
+                        if(exceededMaxRadius)
+                            drawList.PathLineTo(pointAOrg);
+
+                        drawList.PathStroke(color, false, thickness);
 
                         // drawList.AddLine(pointA, pointB, Color.Red);
                         // drawList.AddCircle(cB, rB, Color.Red,128);
@@ -583,7 +598,10 @@ namespace UiHelpers
                         drawList.PathClear();
                         drawList.PathArcTo(cB, rB, 1.5f * Pi, Pi);
                         drawList.PathArcTo(cA, rA, 2 * Pi, 2.5f * Pi);
-                        drawList.PathStroke(color, false, 2);
+                        if(exceededMaxRadius)
+                            drawList.PathLineTo(pointAOrg);
+
+                        drawList.PathStroke(color, false, thickness);
                     }
                 }
             }
