@@ -122,8 +122,9 @@ namespace T3
             // create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
-            _playback = new StreamPlayback("Resources\\proj-partial\\soundtrack\\technotoad-02.mp3");
+            _playback = new StreamPlayback(@"Resources\proj-partial\soundtrack\synthtoad-02.mp3");
             _playback.PlaybackSpeed = 1.0;
+            _playback.Bpm = 80.02;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
