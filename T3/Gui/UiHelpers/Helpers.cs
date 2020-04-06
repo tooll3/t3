@@ -2,6 +2,7 @@ using ImGuiNET;
 using System;
 using System.Numerics;
 using T3.Gui;
+using T3.Gui.Graph;
 using T3.Gui.Windows;
 using T3.Gui.Windows.TimeLine;
 
@@ -43,7 +44,6 @@ namespace UiHelpers
             overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), color, label);
         }
 
-
         /// <summary>
         /// Draws an outline of the current (last) Imgui item
         /// </summary>
@@ -52,7 +52,6 @@ namespace UiHelpers
             if (SettingsWindow.ItemRegionsVisible)
                 DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color, label);
         }
-
 
         public static void DebugWindowRect(string label = "", uint color = 0xffff2080)
         {
@@ -221,7 +220,6 @@ namespace UiHelpers
             return new ImRect(position, position + size);
         }
 
-
         // Simple version, may lead to an inverted rectangle, which is fine for Contains/Overlaps test but not for display.
         public void ClipWith(ImRect r)
         {
@@ -337,7 +335,7 @@ namespace UiHelpers
         {
             return v - mod * (float)Math.Floor(v / mod);
         }
-        
+
         public static double Fmod(double v, double mod)
         {
             return v - mod * Math.Floor(v / mod);
@@ -345,29 +343,28 @@ namespace UiHelpers
 
         public static float Remap(float value, float inMin, float inMax, float outMin, float outMax)
         {
-            var factor = (value - inMin)/(inMax - inMin);
-            var v =factor*(outMax - outMin) + outMin;
-            if(outMin > outMax)
+            var factor = (value - inMin) / (inMax - inMin);
+            var v = factor * (outMax - outMin) + outMin;
+            if (outMin > outMax)
                 Swap(ref outMin, ref outMax);
             return v.Clamp(outMin, outMax);
         }
 
         public static double Remap(double value, double inMin, double inMax, double outMin, double outMax)
         {
-            var factor = (value - inMin)/(inMax - inMin);
-            var v =factor*(outMax - outMin) + outMin;
+            var factor = (value - inMin) / (inMax - inMin);
+            var v = factor * (outMax - outMin) + outMin;
             if (v > outMax)
             {
                 v = outMax;
-                
             }
             else if (v < outMin)
             {
                 v = outMin;
             }
+
             return v;
         }
-
 
         public static void DrawSplitter(bool splitVertically, float thickness, ref float size0, ref float size1, float minSize0, float minSize1)
         {
@@ -410,7 +407,6 @@ namespace UiHelpers
             ImGui.SetCursorPos(backupPos);
         }
 
-
         public static void DrawContentRegion()
         {
             ImGui.GetForegroundDrawList().AddRect(
@@ -418,7 +414,6 @@ namespace UiHelpers
                                                   ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos(),
                                                   Color.White);
         }
-
 
         public static void ToggleButton(string str_id, ref bool v)
         {
@@ -467,77 +462,268 @@ namespace UiHelpers
         /// <summary>
         /// Draws an arc connection line.
         /// </summary>
-        /// <remarks>Assumes that B is the tight node connection direction is bottom to top</remarks>
-        public static void DrawArcConnection(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB)
+        /// <remarks>
+        /// Assumes that B is the tight node connection direction is bottom to top
+        /// </remarks>
+        ///
+        ///
+        ///
+        /*                                 dx
+         *
+         *        +-------------------+
+         *        |      A            +----\  rB+---------------+
+         *        +-------------------+rA   \---+      B        |
+          *                                     +---------------+
+         */
+        private const float Pi = 3.141578f;
+
+        private const float TAU = Pi / 180;
+
+        public static void DrawArcConnection(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color)
         {
             var drawList = ImGui.GetWindowDrawList();
-            drawList.AddRect(rectA.Min, rectA.Max, Color.Red);
-            drawList.AddRect(rectB.Min, rectB.Max, Color.Green);
 
-            // Flex Horizontal or vertical
-            var dx1 = rectA.Min.X - rectB.Max.X;
-            var dx2 = rectB.Max.X - rectA.Min.X;
+            var fallbackRectSize = new Vector2(120, 50) * GraphCanvas.Current.Scale;
+            var rectAMin = new Vector2(pointA.X - fallbackRectSize.X, pointA.Y - fallbackRectSize.Y / 2);
+            rectA = new ImRect(rectAMin, rectAMin + fallbackRectSize);
 
-            var dy = rectA.Min.Y - rectB.Max.Y;
+            var rectBMin = new Vector2(pointB.X, pointB.Y - fallbackRectSize.Y / 2);
+            rectB = new ImRect(rectBMin, rectBMin + fallbackRectSize);
 
-            var dPx = pointA.X - pointB.X;
-            var dPy = pointA.Y - pointB.Y;
+            var d = pointB - pointA;
+            // var rA = d.Y < 0
+            //              ? pointA.Y - rectA.Max.Y
+            //              : rectA.Min.Y - pointA.Y;
+            //
+            // var rB = d.Y < 0
+            //              ? pointB.Y - rectB.Max.Y
+            //              : rectB.Min.Y - pointB.Y;
 
-            if (dx1 > 0)
+            var shrinkArkAngle = 0.8f;
+            var aAboveB = d.Y > 0;
+            if (aAboveB)
             {
-                // B is left of A
-                var cB = rectB.Max;
-                var cA = new Vector2(rectA.Min.X, rectA.Min.Y);
-                var rB = rectB.Max.X - pointB.X;
-                var rMinA = pointA.X - rectA.Min.X;
+                var cA = rectA.Max;
+                var cB = rectB.Min;
 
-                var rMinB = rectB.Max.X - pointB.X;
-                var rLimit = rB + rMinA;
+                var rA = cA.Y - pointA.Y;
+                var rB = pointB.Y - cB.Y;
 
-                ImGui.GetWindowDrawList().AddCircle(cA, rMinA, Color.Red);
-                ImGui.GetWindowDrawList().AddCircle(cB, rMinB, Color.Green);
-
-                if (dy > rLimit && dPx > rLimit)
+                if (d.X > rA + rB)
                 {
-                    // Horizontal flex
-                    if (dPx > dPy)
+                    var horizontalStretch = d.X / d.Y > 1;
+                    if (horizontalStretch)
                     {
-                        var r2 = dy-rB;
-                        drawList.PathArcTo(cB,rB, 3.1415f,1.5f);
-                        drawList.PathArcTo(cA + new Vector2(-r2+rMinA, 0), r2, 1.5f*3.1415f, 2f*3.1415f);
-                        //drawList.PathLineTo(pointA);
-                        drawList.PathStroke(Color.White, false, 5);
-                    }
-                    // Vertical flex
-                    else
-                    {
-                        //drawList.PathLineTo(Vector2.Zero);
-                        var r2 = dPx-rB;
-                        drawList.PathArcTo(cB,rB, 3.1415f,1.5f);
-                        drawList.PathArcTo(cA + new Vector2(-r2+rMinA, -(dy-r2-rB)), r2, 1.5f*3.1415f, 2f*3.1415f);
-                        drawList.PathLineTo(pointA);
-                        drawList.PathStroke(Color.White, false, 5);
-                    }
+                        var f = d.Y / d.X;
+                        var alpha = (float)(f * 90 + Math.Sin(f * 3.1415f) * 8) * TAU;
 
-                }
-                else
-                {
-                    var cornerDistance = Vector2.Distance(cB, cA);
-                    if (cornerDistance < rMinA + rMinB)
-                    {
-                        // Min circles intersect -> reverse and use outer tangent
+                        var dt = Math.Sin(alpha) * rB;
+                        rA = (float)(1f / Math.Tan(alpha) * (d.X - dt) + d.Y - rB * Math.Sin(alpha));
+                        cA = pointA + new Vector2(0, rA);
+
+                        drawList.PathClear();
+                        drawList.PathArcTo(cB, rB, Pi / 2, Pi / 2 + alpha * shrinkArkAngle);
+                        drawList.PathArcTo(cA, rA, 1.5f * Pi + alpha * shrinkArkAngle, 1.5f * Pi);
+                        drawList.PathStroke(color, false, 2);
+
+                        // drawList.AddLine(pointA, pointB, Color.Red);
+                        // drawList.AddCircle(cB, rB, Color.Red);
+                        // drawList.AddCircle(cA, rA, new Color(1f,0,0,0.2f));
+                        // drawList.AddRect(rectA.Min, rectA.Max, Color.Red);
+                        // drawList.AddRect(rectB.Min, rectB.Max, Color.Green);
                     }
                     else
                     {
-                        // Use inner tangent
-                        // ToDo: Compute angle θ -> https://stackoverflow.com/questions/49968720/find-tangent-points-in-a-circle-from-a-point/49987361#49987361
+                        rA = d.X - rB;
+                        cA = pointA + new Vector2(0, rA);
+
+                        drawList.PathClear();
+                        drawList.PathArcTo(cB, rB, 0.5f * Pi, Pi);
+                        drawList.PathArcTo(cA, rA, 2 * Pi, 1.5f * Pi);
+                        drawList.PathStroke(color, false, 2);
                     }
                 }
             }
-            else if (dx2 > 0)
+            else
             {
-                // A is left of B
+                var cA = new Vector2(rectA.Max.X, rectA.Min.Y);
+                var cB = new Vector2(rectB.Min.X, rectB.Max.Y);
+
+                var rA = pointA.Y - cA.Y;
+                var rB = cB.Y - pointB.Y;
+
+                if (d.X > rA + rB)
+                {
+                    var horizontalStretch = -d.X / d.Y > 1;
+                    if (horizontalStretch)
+                    {
+                        // hack to find angle where circles touch
+                        var f = -d.Y / d.X;
+                        var alpha = (float)(f * 90 + Math.Sin(f * 3.1415f) * 8f) * TAU;
+
+                        var dt = Math.Sin(alpha) * rB;
+                        rA = (float)(1f / Math.Tan(alpha) * (d.X - dt) - d.Y - rB * Math.Sin(alpha));
+                        cA = pointA - new Vector2(0, rA);
+
+                        drawList.PathClear();
+                        drawList.PathArcTo(cB, rB, 1.5f * Pi, 1.5f * Pi - alpha* shrinkArkAngle);
+                        drawList.PathArcTo(cA, rA, 0.5f * Pi - alpha* shrinkArkAngle, 0.5f * Pi);
+                        drawList.PathStroke(color, false, 2);
+
+                        // drawList.AddLine(pointA, pointB, Color.Red);
+                        // drawList.AddCircle(cB, rB, Color.Red,128);
+                        // drawList.AddCircle(cA, rA, new Color(1f, 0, 0, 0.2f), 128);
+                        // drawList.AddText(pointA, Color.Gray, $"rA {rA}  rB {rB}  a {alpha}");
+                    }
+                    else
+                    {
+                        rA = d.X - rB;
+                        cA = pointA - new Vector2(0, rA);
+
+                        drawList.PathClear();
+                        drawList.PathArcTo(cB, rB, 1.5f * Pi, Pi);
+                        drawList.PathArcTo(cA, rA, 2 * Pi, 2.5f * Pi);
+                        drawList.PathStroke(color, false, 2);
+                    }
+                }
             }
         }
+
+        // // Flex Horizontal or vertical
+        // var dx1 = rectA.Min.X - rectB.Max.X;
+        // var dx2 = rectB.Max.X - rectA.Min.X;
+        //
+        // var dy = rectA.Min.Y - rectB.Max.Y;
+        //
+        // var dPx = pointA.X - pointB.X;
+        //
+        // var dPy = pointA.Y - pointB.Y;
+        //     if (dx1 > 0)
+        // {
+        //     // B is left of A
+        //     var cB = rectB.Max;
+        //     var cA = new Vector2(rectA.Min.X, rectA.Min.Y);
+        //     var rB = rectB.Max.X - pointB.X;
+        //     var rMinA = pointA.X - rectA.Min.X;
+        //
+        //     var rMinB = rectB.Max.X - pointB.X;
+        //     var rLimit = rB + rMinA;
+        //
+        //     ImGui.GetWindowDrawList().AddCircle(cA, rMinA, Color.Red);
+        //     ImGui.GetWindowDrawList().AddCircle(cB, rMinB, Color.Green);
+        //
+        //     if (dy > rLimit && dPx > rLimit)
+        //     {
+        //         // Horizontal flex
+        //         if (dPx > dPy)
+        //         {
+        //             var r2 = dy - rB;
+        //             drawList.PathArcTo(cB, rB, 3.1415f, 1.5f);
+        //             drawList.PathArcTo(cA + new Vector2(-r2 + rMinA, 0), r2, 1.5f * 3.1415f, 2f * 3.1415f);
+        //             //drawList.PathLineTo(pointA);
+        //             drawList.PathStroke(Color.White, false, 2);
+        //         }
+        //         // Vertical flex
+        //         else
+        //         {
+        //             //drawList.PathLineTo(Vector2.Zero);
+        //             var r2 = dPx - rB;
+        //             drawList.PathArcTo(cB, rB, 3.1415f, 1.5f);
+        //             drawList.PathArcTo(cA + new Vector2(-r2 + rMinA, -(dy - r2 - rB)), r2, 1.5f * 3.1415f, 2f * 3.1415f);
+        //             drawList.PathLineTo(pointA);
+        //             drawList.PathStroke(Color.White, false, 2);
+        //         }
+        //     }
+        //     else
+        //     {
+        //         var cornerDistance = Vector2.Distance(cB, cA);
+        //         if (cornerDistance < rMinA + rMinB)
+        //         {
+        //             // Min circles intersect -> reverse and use outer tangent
+        //         }
+        //         else
+        //         {
+        //             // Use inner tangent
+        //             // ToDo: Compute angle θ -> https://stackoverflow.com/questions/49968720/find-tangent-points-in-a-circle-from-a-point/49987361#49987361
+        //         }
+        //     }
+        // }
+        //
+        // else if (dx2 > 0)
+        // {
+        //     // A is left of B
+        // }
+
+        // public static void DrawArcConnection(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB)
+        // {
+        //     var drawList = ImGui.GetWindowDrawList();
+        //     drawList.AddRect(rectA.Min, rectA.Max, Color.Red);
+        //     drawList.AddRect(rectB.Min, rectB.Max, Color.Green);
+        //
+        //     // Flex Horizontal or vertical
+        //     var dx1 = rectA.Min.X - rectB.Max.X;
+        //     var dx2 = rectB.Max.X - rectA.Min.X;
+        //
+        //     var dy = rectA.Min.Y - rectB.Max.Y;
+        //
+        //     var dPx = pointA.X - pointB.X;
+        //     var dPy = pointA.Y - pointB.Y;
+        //
+        //     if (dx1 > 0)
+        //     {
+        //         // B is left of A
+        //         var cB = rectB.Max;
+        //         var cA = new Vector2(rectA.Min.X, rectA.Min.Y);
+        //         var rB = rectB.Max.X - pointB.X;
+        //         var rMinA = pointA.X - rectA.Min.X;
+        //
+        //         var rMinB = rectB.Max.X - pointB.X;
+        //         var rLimit = rB + rMinA;
+        //
+        //         ImGui.GetWindowDrawList().AddCircle(cA, rMinA, Color.Red);
+        //         ImGui.GetWindowDrawList().AddCircle(cB, rMinB, Color.Green);
+        //
+        //         if (dy > rLimit && dPx > rLimit)
+        //         {
+        //             // Horizontal flex
+        //             if (dPx > dPy)
+        //             {
+        //                 var r2 = dy-rB;
+        //                 drawList.PathArcTo(cB,rB, 3.1415f,1.5f);
+        //                 drawList.PathArcTo(cA + new Vector2(-r2+rMinA, 0), r2, 1.5f*3.1415f, 2f*3.1415f);
+        //                 //drawList.PathLineTo(pointA);
+        //                 drawList.PathStroke(Color.White, false, 2);
+        //             }
+        //             // Vertical flex
+        //             else
+        //             {
+        //                 //drawList.PathLineTo(Vector2.Zero);
+        //                 var r2 = dPx-rB;
+        //                 drawList.PathArcTo(cB,rB, 3.1415f,1.5f);
+        //                 drawList.PathArcTo(cA + new Vector2(-r2+rMinA, -(dy-r2-rB)), r2, 1.5f*3.1415f, 2f*3.1415f);
+        //                 drawList.PathLineTo(pointA);
+        //                 drawList.PathStroke(Color.White, false, 2);
+        //             }
+        //
+        //         }
+        //         else
+        //         {
+        //             var cornerDistance = Vector2.Distance(cB, cA);
+        //             if (cornerDistance < rMinA + rMinB)
+        //             {
+        //                 // Min circles intersect -> reverse and use outer tangent
+        //             }
+        //             else
+        //             {
+        //                 // Use inner tangent
+        //                 // ToDo: Compute angle θ -> https://stackoverflow.com/questions/49968720/find-tangent-points-in-a-circle-from-a-point/49987361#49987361
+        //             }
+        //         }
+        //     }
+        //     else if (dx2 > 0)
+        //     {
+        //         // A is left of B
+        //     }
+        // }
     }
 }
