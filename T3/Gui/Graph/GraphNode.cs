@@ -37,13 +37,13 @@ namespace T3.Gui.Graph
             {
                 childUi.Size = ComputeNodeSize(childUi, visibleInputUis);
                 _usableScreenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas,
-                                                                               childUi.PosOnCanvas + childUi.Size));
+                                                                                 childUi.PosOnCanvas + childUi.Size));
                 _usableScreenRect.Floor();
                 _selectableScreenRect = _usableScreenRect;
-                
-                if(UserSettings.Config.ShowThumbnails)
+
+                if (UserSettings.Config.ShowThumbnails)
                     PreparePreviewAndExpandSelectableArea(instance);
-                
+
                 // Resize indicator
                 if (childUi.Style == SymbolChildUi.Styles.Resizable)
                 {
@@ -60,30 +60,37 @@ namespace T3.Gui.Graph
                 }
 
                 // Size toggle
+                if(GraphCanvas.Current.Scale.X > 0.7f)
                 {
                     var pos = new Vector2(_usableScreenRect.Max.X - 15, _usableScreenRect.Min.Y + 2);
 
                     ImGui.SetCursorScreenPos(pos);
                     ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
                     ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, new Color(0, 0, 0, .7f).Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Color(1, 1, 1, .3f).Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, .3f).Rgba);
+                    ImGui.PushFont(Icons.IconFont);
+                    
                     if (childUi.Style == SymbolChildUi.Styles.Default)
                     {
-                        if (ImGui.Button("<##size", new Vector2(16, 16)))
+
+                        if (ImGui.Button(UnfoldLabel, new Vector2(16, 16)))
                         {
                             childUi.Style = SymbolChildUi.Styles.Expanded;
                         }
                     }
                     else if (childUi.Style != SymbolChildUi.Styles.Default)
                     {
-                        if (ImGui.Button("v##size", new Vector2(16, 16)))
+                        
+                        if (ImGui.Button(FoldLabel, new Vector2(16, 16)))
                         {
                             childUi.Style = SymbolChildUi.Styles.Default;
                         }
                     }
 
+                    ImGui.PopFont();
                     ImGui.PopStyleVar();
-                    ImGui.PopStyleColor(2);
+                    ImGui.PopStyleColor(3);
                 }
 
                 // Interaction
@@ -114,7 +121,6 @@ namespace T3.Gui.Graph
                         ImGui.EndTooltip();
                     }
                 }
-
 
                 SelectableNodeMovement.Handle(childUi, instance);
 
@@ -153,7 +159,7 @@ namespace T3.Gui.Graph
                                            : ColorVariations.Operator.Apply(backgroundColor));
 
                 DrawPreview();
-                
+
                 // outline
                 drawList.AddRect(_selectableScreenRect.Min,
                                  _selectableScreenRect.Max + Vector2.One,
@@ -366,7 +372,7 @@ namespace T3.Gui.Graph
 
                     var dirtyFlagNumUpdatesWithinFrame = instance.Outputs[outputIndex].DirtyFlag.NumUpdatesWithinFrame;
 
-                    line.Thickness = (1 - 1 / (dirtyFlagNumUpdatesWithinFrame + 1f))*3 +1;
+                    line.Thickness = (1 - 1 / (dirtyFlagNumUpdatesWithinFrame + 1f)) * 3 + 1;
 
                     line.ColorForType = colorForType;
                     line.IsSelected |= childUi.IsSelected;
@@ -377,8 +383,7 @@ namespace T3.Gui.Graph
                 outputIndex++;
             }
         }
-
-        static readonly List<IInputUi> VisibleInputs = new List<IInputUi>(15);
+        
 
         // Find visible input slots.
         // TODO: this is a major performance hot spot and needs optimization
@@ -458,15 +463,13 @@ namespace T3.Gui.Graph
             return style.Apply(colorForType);
         }
 
-
-
         /// <summary>
         /// Set
         /// </summary>
         /// <param name="instance"></param>
         private static void PreparePreviewAndExpandSelectableArea(Instance instance)
         {
-            _previewTextureView=null;
+            _previewTextureView = null;
             if (instance.Outputs.Count == 0)
                 return;
 
@@ -483,30 +486,29 @@ namespace T3.Gui.Graph
             var aspect = (float)texture.Description.Width / texture.Description.Height;
             var opWidth = _usableScreenRect.GetWidth();
             var previewSize = new Vector2(opWidth, opWidth / aspect);
-            
+
             if (previewSize.Y > opWidth)
             {
-                previewSize  *= opWidth / previewSize.Y;
+                previewSize *= opWidth / previewSize.Y;
             }
 
             var min = new Vector2(_usableScreenRect.Min.X, _usableScreenRect.Min.Y - previewSize.Y - 1);
-            var max = new Vector2(_usableScreenRect.Min.X + previewSize.X, _usableScreenRect.Min.Y-1);
+            var max = new Vector2(_usableScreenRect.Min.X + previewSize.X, _usableScreenRect.Min.Y - 1);
             _selectableScreenRect.Add(min);
-            _previewArea = new ImRect(min,max);
+            _previewArea = new ImRect(min, max);
         }
-        
-        private static ImRect  _previewArea;
+
+        private static ImRect _previewArea;
         private static ShaderResourceView _previewTextureView;
-        
+
         private static void DrawPreview()
         {
             if (_previewTextureView == null)
                 return;
-            
+
             Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min, _previewArea.Max);
         }
 
-        
         private static Vector2 ComputeNodeSize(SymbolChildUi childUi, List<IInputUi> visibleInputUis)
         {
             if (childUi.Style == SymbolChildUi.Styles.Resizable)
@@ -743,14 +745,18 @@ namespace T3.Gui.Graph
         }
 
         #region style variables
-        public static Vector2 LabelPos = new Vector2(4, 4);
+        public static Vector2 LabelPos = new Vector2(4, 2);
         public static float UsableSlotThickness = 10;
         public static float InputSlotThickness = 3;
         public static float InputSlotMargin = 1;
         public static float SlotGaps = 2;
         public static float OutputSlotMargin = 1;
         #endregion
-        
+
+        private static readonly string UnfoldLabel = (char)Icon.ChevronLeft + "##size";
+        private static readonly string  FoldLabel = (char)Icon.ChevronDown + "##size";
+        private static readonly List<IInputUi> VisibleInputs = new List<IInputUi>(15);
+
         private static EvaluationContext _evaluationContext = new EvaluationContext();
 
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
