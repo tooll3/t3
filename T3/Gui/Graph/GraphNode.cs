@@ -316,6 +316,7 @@ namespace T3.Gui.Graph
                                            : connectedLines[index];
 
                             line.TargetPosition = targetPos;
+                            line.TargetNodeArea = _selectableScreenRect;
                             line.IsSelected |= childUi.IsSelected;
                         }
 
@@ -339,6 +340,7 @@ namespace T3.Gui.Graph
                     {
                         line.TargetPosition = new Vector2(usableSlotArea.Max.X - 1,
                                                           usableSlotArea.GetCenter().Y);
+                        line.TargetNodeArea = _selectableScreenRect;
                         line.IsSelected |= childUi.IsSelected;
                     }
 
@@ -369,6 +371,7 @@ namespace T3.Gui.Graph
                 foreach (var line in Graph.Connections.GetLinesFromNodeOutput(childUi, output.Id))
                 {
                     line.SourcePosition = new Vector2(usableArea.Max.X, usableArea.GetCenter().Y);
+                    line.SourceNodeArea = _selectableScreenRect;
 
                     var dirtyFlagNumUpdatesWithinFrame = instance.Outputs[outputIndex].DirtyFlag.NumUpdatesWithinFrame;
 

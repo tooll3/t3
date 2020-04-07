@@ -255,6 +255,8 @@ namespace T3.Gui.Graph
 
             public bool IsSelected;
             public float Thickness = 1f;
+            public ImRect SourceNodeArea;
+            public ImRect TargetNodeArea;
 
             internal ConnectionLineUi(Symbol.Connection connection)
             {
@@ -299,8 +301,10 @@ namespace T3.Gui.Graph
                 {
                     Im.DrawArcConnection(new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
                                          SourcePosition,
-                                         new ImRect(TargetPosition, TargetPosition + new Vector2(10, 10)),
-                                         TargetPosition, color, 1.5f * Thickness);
+                                         TargetNodeArea,
+                                         TargetPosition, 
+                                         color, 
+                                         1.5f * Thickness);
                 }
                 else
                 {

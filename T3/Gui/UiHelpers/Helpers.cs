@@ -485,37 +485,48 @@ namespace UiHelpers
             var drawList = ImGui.GetWindowDrawList();
 
             var fallbackRectSize = new Vector2(120, 50) * GraphCanvas.Current.Scale;
-            var rectAMin = new Vector2(pointA.X - fallbackRectSize.X, pointA.Y - fallbackRectSize.Y / 2);
-            rectA = new ImRect(rectAMin, rectAMin + fallbackRectSize);
+            if (rectA.GetHeight() < 1)
+            {
+                var rectAMin = new Vector2(pointA.X - fallbackRectSize.X, pointA.Y - fallbackRectSize.Y / 2);
+                rectA = new ImRect(rectAMin, rectAMin + fallbackRectSize);
+            }
 
-            var rectBMin = new Vector2(pointB.X, pointB.Y - fallbackRectSize.Y / 2);
-            rectB = new ImRect(rectBMin, rectBMin + fallbackRectSize);
+            if (rectB.GetHeight() < 1)
+            {
+                var rectBMin = new Vector2(pointB.X, pointB.Y - fallbackRectSize.Y / 2);
+                rectB = new ImRect(rectBMin, rectBMin + fallbackRectSize);
+            }
+            // THelpers.DebugRect(rectB.Min, rectB.Max, Color.Orange);
 
             var d = pointB - pointA;
 
             var maxRadius = SettingsWindow.LimitArcConnectionRadius * GraphCanvas.Current.Scale.X;
             var shrinkArkAngle = 0.8f;
+            var edgeFactor = 0.3f;    // 0 -> overlap  ... 1 concentric around node edge
+            var edgeOffset = 10 * GraphCanvas.Current.Scale.X;
             
             var pointAOrg = pointA;
-            var exceededMaxRadius = d.X > maxRadius;
-            if (exceededMaxRadius)
-            {
-                pointA.X += d.X - maxRadius;
-                d.X = maxRadius;
-            }
             
             var aAboveB = d.Y > 0;
             if (aAboveB)
             {
-                var cA = rectA.Max;
                 var cB = rectB.Min;
-
+                var rB = (pointB.Y - cB.Y) * edgeFactor + edgeOffset;
+                
+                var exceededMaxRadius = d.X - rB > maxRadius;
+                if (exceededMaxRadius)
+                {
+                    pointA.X += d.X - maxRadius - rB;
+                    d.X = maxRadius +rB;
+                }
+                
+                var cA = rectA.Max;
                 var rA = cA.Y - pointA.Y;
-                var rB = pointB.Y - cB.Y;
+                cB.Y = pointB.Y - rB;
 
+                
                 if (d.X > rA + rB)
                 {
-
                     
                     var horizontalStretch = d.X / d.Y > 1;
                     if (horizontalStretch)
@@ -558,11 +569,19 @@ namespace UiHelpers
             }
             else
             {
-                var cA = new Vector2(rectA.Max.X, rectA.Min.Y);
                 var cB = new Vector2(rectB.Min.X, rectB.Max.Y);
-
+                var rB = (cB.Y - pointB.Y) * edgeFactor + edgeOffset;
+                
+                var exceededMaxRadius = d.X - rB > maxRadius;
+                if (exceededMaxRadius)
+                {
+                    pointA.X += d.X - maxRadius - rB;
+                    d.X = maxRadius +rB;
+                }
+                
+                var cA = new Vector2(rectA.Max.X, rectA.Min.Y);
                 var rA = pointA.Y - cA.Y;
-                var rB = cB.Y - pointB.Y;
+                cB.Y = pointB.Y + rB;
 
                 if (d.X > rA + rB)
                 {
