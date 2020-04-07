@@ -91,8 +91,9 @@ namespace T3.Core
 
         public abstract void Update(string path);
 
-        protected string EntryPoint { get; }
-        protected ShaderBytecode Blob; // { get; internal set; }
+        public string EntryPoint { get; }
+        protected ShaderBytecode _blob;
+        public ShaderBytecode Blob { get => _blob; internal set { _blob = value; } }
     }
 
     public class VertexShaderResource : ShaderResource
@@ -108,7 +109,7 @@ namespace T3.Core
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "vs_5_0", ref VertexShader, ref Blob);
+            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "vs_5_0", ref VertexShader, ref _blob);
             UpToDate = true;
         }
 
@@ -130,7 +131,7 @@ namespace T3.Core
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref Blob);
+            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref _blob);
             UpToDate = true;
         }
     }
@@ -150,7 +151,7 @@ namespace T3.Core
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref Blob);
+            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
             UpToDate = true;
         }
     }
@@ -208,6 +209,11 @@ namespace T3.Core
         public ComputeShader GetComputeShader(uint resourceId)
         {
             return GetResource<ComputeShaderResource>(resourceId).ComputeShader;
+        }
+
+        public ShaderBytecode GetComputeShaderBytecode(uint resourceId)
+        {
+            return GetResource<ComputeShaderResource>(resourceId).Blob;
         }
         
         public OperatorResource GetOperatorFileResource(string path)
