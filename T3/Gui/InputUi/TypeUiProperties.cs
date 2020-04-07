@@ -35,11 +35,11 @@
     /// </summary>
     public class ShaderUiProperties : ITypeUiProperties
     {
-        public Color Color { get; set; } = new Color(0.518f, 0.046f, 0.228f, 1.000f);
+        public Color Color { get; set; } = new Color(0.681f, 0.034f, 0.283f, 1.000f);
     }
 
     public class FallBackUiProperties : ITypeUiProperties
     {
-        public Color Color { get; set; } = new Color(0.518f, 0.046f, 0.228f, 1.000f);
+        public Color Color { get; set; } = new Color(0.681f, 0.234f, 0.283f, 1.000f);
     }
 }

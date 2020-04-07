@@ -19,7 +19,7 @@ namespace T3.Gui.InputUi
 
         internal static Color ColorForValues = new Color(0.525f, 0.550f, 0.554f, 1.000f);
         internal static Color ColorForString = new Color(0.468f, 0.586f, 0.320f, 1.000f);
-        internal static Color ColorForTextures = new Color(0.803f, 0.313f, 0.785f, 1.000f);
+        internal static Color ColorForTextures = new Color(0.853f, 0.313f, 0.855f, 1.000f);
         internal static Color ColorForCommands = new Color(0.132f, 0.722f, 0.762f, 1.000f);
     }
 }
