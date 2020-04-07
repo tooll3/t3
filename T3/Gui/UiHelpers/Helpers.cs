@@ -1,6 +1,7 @@
 using ImGuiNET;
 using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using T3.Gui;
 using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
@@ -506,6 +507,13 @@ namespace UiHelpers
             var edgeOffset = 10 * GraphCanvas.Current.Scale.X;
             
             var pointAOrg = pointA;
+
+            
+            if (d.Y > -1 && d.Y < 1 && d.X > 2)
+            {
+                drawList.AddLine(pointA, pointB, color,thickness);
+                return;
+            }
             
             var aAboveB = d.Y > 0;
             if (aAboveB)
@@ -566,6 +574,10 @@ namespace UiHelpers
                         drawList.PathStroke(color, false, thickness);
                     }
                 }
+                else
+                {
+                    // draw squiggly
+                }
             }
             else
             {
@@ -583,9 +595,11 @@ namespace UiHelpers
                 var rA = pointA.Y - cA.Y;
                 cB.Y = pointB.Y + rB;
 
+                
+                
                 if (d.X > rA + rB)
                 {
-                    var horizontalStretch = -d.X / d.Y > 1;
+                    var horizontalStretch = Math.Abs(d.Y) <2 || -d.X / d.Y > 1;
                     if (horizontalStretch)
                     {
                         // hack to find angle where circles touch
@@ -604,10 +618,7 @@ namespace UiHelpers
 
                         drawList.PathStroke(color, false, thickness);
 
-                        // drawList.AddLine(pointA, pointB, Color.Red);
-                        // drawList.AddCircle(cB, rB, Color.Red,128);
-                        // drawList.AddCircle(cA, rA, new Color(1f, 0, 0, 0.2f), 128);
-                        // drawList.AddText(pointA, Color.Gray, $"rA {rA}  rB {rB}  a {alpha}");
+                        
                     }
                     else
                     {
@@ -621,7 +632,16 @@ namespace UiHelpers
                             drawList.PathLineTo(pointAOrg);
 
                         drawList.PathStroke(color, false, thickness);
+                        
+                        // drawList.AddLine(pointA, pointB, Color.Red);
+                        // drawList.AddCircle(cB, rB, Color.Red,128);
+                        // drawList.AddCircle(cA, rA, new Color(1f, 0, 0, 0.2f), 128);
+                        // drawList.AddText(pointA, Color.Gray, $"rA {rA}  rB {rB}  a {alpha}");
                     }
+                }
+                else
+                {
+                    // squiggly
                 }
             }
         }
