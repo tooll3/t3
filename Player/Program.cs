@@ -78,7 +78,14 @@ namespace T3
                        };
 
             // Create Device and SwapChain
-            Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, desc, out var device, out _swapChain);
+            #if DEBUG || FORCE_D3D_DEBUG
+            var deviceCreationFlags = DeviceCreationFlags.Debug;
+            #else
+            var deviceCreationFlags = DeviceCreationFlags.None;
+            #endif
+            Console.WriteLine($"swap effect: {desc.SwapEffect}");
+            Console.WriteLine($"Using creating flags: {deviceCreationFlags}");
+            Device.CreateWithSwapChain(DriverType.Hardware, deviceCreationFlags, desc, out var device, out _swapChain);
             var context = device.ImmediateContext;
             Device = device;
 
