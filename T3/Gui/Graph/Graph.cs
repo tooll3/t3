@@ -10,6 +10,7 @@ using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.TypeColors;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using Truncon.Collections;
 using UiHelpers;
@@ -295,14 +296,14 @@ namespace T3.Gui.Graph
 
 
 
-                if (SettingsWindow.UseArcConnections)
+                if (UserSettings.Config.UseArcConnections)
                 {
                     Im.DrawArcConnection(new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
                                          SourcePosition,
                                          TargetNodeArea,
                                          TargetPosition, 
                                          color, 
-                                         1f * Thickness);
+                                         1.5f * Thickness);
                 }
                 else
                 {

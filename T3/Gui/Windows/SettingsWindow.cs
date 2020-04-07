@@ -19,7 +19,6 @@ namespace T3.Gui.Windows
 
         public static bool WindowRegionsVisible;
         public static bool ItemRegionsVisible;
-        public static bool UseArcConnections;
         public static float LimitArcConnectionRadius = 100;
 
         protected override void DrawContent()
@@ -29,7 +28,7 @@ namespace T3.Gui.Windows
             ImGui.Separator();
             ImGui.Checkbox("Show Graph thumbnails", ref UserSettings.Config.ShowThumbnails);
 
-            ImGui.Checkbox("Use arc connections", ref UseArcConnections);
+            ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
             ImGui.DragFloat("Limit arc connection radius", ref LimitArcConnectionRadius);
             
             if (ImGui.TreeNode("Undo Queue"))

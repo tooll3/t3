@@ -30,6 +30,7 @@ namespace T3.Gui.UiHelpers
             public int WindowLayoutIndex = 0;
             public bool KeepBeatTimeRunningInPause = false;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
+            public bool UseArcConnections = false;
         }
         
         public static Guid GetLastOpenOpForWindow(string windowTitle)
