@@ -157,6 +157,10 @@ namespace T3
             // Main loop
             RenderLoop.Run(form, () =>
                                  {
+                                     _playback.Update(1.0f);
+                                     if (_playback.StreamPos >= _playback.StreamLength)
+                                         Application.Exit();
+
                                      DirtyFlag.IncrementGlobalTicks();
                                      DirtyFlag.InvalidationRefFrame++;
 
@@ -165,7 +169,6 @@ namespace T3
                                      
                                      _evalContext.Reset();
                                      _evalContext.RequestedResolution = new Size2(size.Width, size.Height);
-                                     _playback.Update(1.0f);
                                      
                                      if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
                                      {
@@ -218,7 +221,7 @@ namespace T3
         private static Model _model;
         private static Instance _project;
         private static EvaluationContext _evalContext;
-        private static Playback _playback;
+        private static StreamPlayback _playback;
         public static uint FullScreenVertexShaderId { get; private set; }
         public static uint FullScreenPixelShaderId { get; private set; }
     }

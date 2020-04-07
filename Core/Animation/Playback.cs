@@ -107,6 +107,9 @@ namespace T3.Core.Animation
             return (float)Bass.ChannelBytes2Seconds(_soundStreamHandle, length);
         }
 
+        public long StreamLength => Bass.ChannelGetLength(_soundStreamHandle);
+        public long StreamPos => Bass.ChannelGetPosition(_soundStreamHandle);
+
         public override double PlaybackSpeed
         {
             get => _playbackSpeed;
