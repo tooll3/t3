@@ -502,13 +502,12 @@ namespace UiHelpers
             var d = pointB - pointA;
 
             var maxRadius = SettingsWindow.LimitArcConnectionRadius * GraphCanvas.Current.Scale.X;
-            var shrinkArkAngle = 0.8f;
-            var edgeFactor = 0.3f;    // 0 -> overlap  ... 1 concentric around node edge
+            const float shrinkArkAngle = 0.8f;
+            const float edgeFactor = 0.2f; // 0 -> overlap  ... 1 concentric around node edge
             var edgeOffset = 10 * GraphCanvas.Current.Scale.X;
             
             var pointAOrg = pointA;
 
-            
             if (d.Y > -1 && d.Y < 1 && d.X > 2)
             {
                 drawList.AddLine(pointA, pointB, color,thickness);
@@ -576,7 +575,7 @@ namespace UiHelpers
                 }
                 else
                 {
-                    // draw squiggly
+                    DrawBezierFallback();
                 }
             }
             else
@@ -641,8 +640,23 @@ namespace UiHelpers
                 }
                 else
                 {
-                    // squiggly
+                    DrawBezierFallback();
                 }
+            }
+
+            void DrawBezierFallback()
+            {
+                var tangentLength = Im.Remap(Vector2.Distance(pointA, pointB),
+                                             30, 300,
+                                             5, 200);
+                drawList.AddBezierCurve(
+                                        pointA,
+                                        pointA + new Vector2(tangentLength, 0),
+                                        pointB + new Vector2(-tangentLength, 0),
+                                        pointB,
+                                        color,
+                                        thickness:  thickness,
+                                        num_segments: 30);
             }
         }
 
