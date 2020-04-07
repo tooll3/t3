@@ -515,8 +515,11 @@ namespace T3.Core
             CompilationResult compilationResult = null;
             try
             {
-                compilationResult =
-                    ShaderBytecode.CompileFromFile(srcFile, entryPoint, profile, ShaderFlags.Debug, EffectFlags.None, null, new IncludeHandler());
+                ShaderFlags flags = ShaderFlags.None;
+                #if DEBUG || FORCE_SHADER_DEBUG
+                flags |= ShaderFlags.Debug;
+                #endif
+                compilationResult = ShaderBytecode.CompileFromFile(srcFile, entryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler());
             }
             catch (Exception ce)
             {
