@@ -6,7 +6,9 @@ using SharpDX.Windows;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using CommandLine;
 using T3.Core;
@@ -114,7 +116,22 @@ namespace T3
             ResourceManager resourceManager = ResourceManager.Instance();
             FullScreenVertexShaderId = resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
             FullScreenPixelShaderId = resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
-            _model = new Model();
+
+            Assembly operatorsAssembly;
+            try
+            {
+                operatorsAssembly = Assembly.LoadFrom("Operators.dll");
+            }
+            catch (Exception)
+            {
+                #if DEBUG
+                operatorsAssembly = Assembly.LoadFrom(@"Player\bin\debug\Operators.dll");
+                #else
+                operatorsAssembly = Assembly.LoadFrom(@"Player\bin\release\Operators.dll");
+                #endif
+            }
+
+            _model = new Model(operatorsAssembly);
             _model.Load();
             
             var symbols = SymbolRegistry.Entries;

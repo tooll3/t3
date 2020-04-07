@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using SharpDX.Direct3D;
 using SharpDX.Mathematics.Interop;
@@ -24,7 +25,7 @@ namespace T3.Gui
 {
     public class UiModel : Core.Model
     {
-        public UiModel()
+        public UiModel(Assembly operatorAssembly) : base(operatorAssembly)
         {
             Init();
         }

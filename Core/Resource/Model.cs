@@ -49,20 +49,16 @@ namespace T3.Core
 
     public class Model
     {
-        public Assembly OperatorsAssembly { get; set; }
+        public Assembly OperatorsAssembly { get; }
         protected string Path { get; } = @"Operators\Types\";
         protected string SymbolExtension { get; } = ".t3";
 
-        public Model()
+        public Model(Assembly operatorAssembly)
         {
             Log.AddWriter(new ConsoleWriter());
 
-#if DEBUG
-            var currentPath = Directory.GetCurrentDirectory();
-            OperatorsAssembly = Assembly.LoadFrom(@"T3\bin\debug\Operators.dll");
-#else
-            OperatorsAssembly = Assembly.LoadFrom(@"T3\bin\release\Operators.dll");
-#endif
+            OperatorsAssembly = operatorAssembly;
+
             // generic enum value from json function, must be local function
             object JsonToEnumValue<T>(JToken jsonToken) where T : struct // todo: use 7.3 and replace with enum
             {

@@ -1,7 +1,9 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Numerics;
+using System.Reflection;
 using System.Threading.Tasks;
 using T3.Core;
 using T3.Gui.Commands;
@@ -17,12 +19,18 @@ namespace T3.Gui
     {
         static T3Ui()
         {
+            #if DEBUG
+            var operatorsAssembly = Assembly.LoadFrom(@"T3\bin\debug\Operators.dll");
+            #else
+            var operatorsAssembly = Assembly.LoadFrom(@"T3\bin\release\Operators.dll");
+            #endif
+
+            UiModel = new UiModel(operatorsAssembly);
             _userSettings = new UserSettings();
             _projectSettings = new ProjectSettings();
             WindowManager = new WindowManager();
         }
 
-        
         public void Draw()
         {
             SelectionManager.ProcessNewFrame();
@@ -108,7 +116,7 @@ namespace T3.Gui
         public static HashSet<Guid> HoveredIdsLastFrame { get; private set; } = new HashSet<Guid>();
         
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
-        public static readonly UiModel UiModel = new UiModel();
+        public static readonly UiModel UiModel;
         private static UserSettings _userSettings;
         private static ProjectSettings _projectSettings;
         private static readonly WindowManager WindowManager;
