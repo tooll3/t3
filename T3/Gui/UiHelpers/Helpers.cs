@@ -480,6 +480,7 @@ namespace UiHelpers
         private const float Pi = 3.141578f;
 
         private const float TAU = Pi / 180;
+        private static readonly Color OutlineColor = new Color(0.1f, 0.1f, 0.1f, 0.6f);
 
         public static void DrawArcConnection(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color, float thickness)
         {
@@ -504,6 +505,7 @@ namespace UiHelpers
             var maxRadius = SettingsWindow.LimitArcConnectionRadius * GraphCanvas.Current.Scale.X;
             const float shrinkArkAngle = 0.8f;
             const float edgeFactor = 0.2f; // 0 -> overlap  ... 1 concentric around node edge
+            const float outlineWidth = 3;
             var edgeOffset = 10 * GraphCanvas.Current.Scale.X;
             
             var pointAOrg = pointA;
@@ -551,6 +553,7 @@ namespace UiHelpers
                         if(exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
                         
+                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness+outlineWidth);
                         drawList.PathStroke(color, false, thickness);
                         
                         // drawList.AddLine(pointA, pointB, Color.Red);
@@ -569,7 +572,7 @@ namespace UiHelpers
                         drawList.PathArcTo(cA, rA, 2 * Pi, 1.5f * Pi);
                         if(exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
-
+                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness+outlineWidth);
                         drawList.PathStroke(color, false, thickness);
                     }
                 }
@@ -614,7 +617,7 @@ namespace UiHelpers
                         drawList.PathArcTo(cA, rA, 0.5f * Pi - alpha* shrinkArkAngle, 0.5f * Pi);
                         if(exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
-
+                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness+outlineWidth);
                         drawList.PathStroke(color, false, thickness);
 
                         
@@ -629,7 +632,8 @@ namespace UiHelpers
                         drawList.PathArcTo(cA, rA, 2 * Pi, 2.5f * Pi);
                         if(exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
-
+                        
+                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness+outlineWidth);
                         drawList.PathStroke(color, false, thickness);
                         
                         // drawList.AddLine(pointA, pointB, Color.Red);
