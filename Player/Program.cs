@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using CommandLine;
+using CommandLine.Text;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
@@ -50,21 +51,33 @@ namespace T3
             bool loopDemo = false;
 
             var parser = new Parser(config => config.HelpWriter = Console.Out);
-            parser.ParseArguments<Options>(args)
-                  .WithParsed(o =>
-                              {
-                                  _vsync = !o.NoVsync;
-                                  isWindowed = o.Windowed;
-                                  size = new Size(o.Width, o.Height);
-                                  loopDemo = o.Loop;
-                                  Console.WriteLine($"using vsync: {_vsync}, windowed: {isWindowed}, size: {size}, loop: {loopDemo}");
-                              })
-                  .WithNotParsed(o => exit = true);
+            var parserResult = parser.ParseArguments<Options>(args);
+            var helpText = HelpText.AutoBuild(parserResult, h =>
+                                                            {
+                                                                h.AdditionalNewLineAfterOption = false;
+                                                                h.Heading = "Still : Home - v0.3"; 
+                                                                h.Copyright = "Copyright (c) 2020 lucid, pixtur and cynic"; 
+                                                                return h;
+                                                            }, e => e);
+
+            parserResult.WithParsed(o =>
+                                    {
+                                        _vsync = !o.NoVsync;
+                                        isWindowed = o.Windowed;
+                                        size = new Size(o.Width, o.Height);
+                                        loopDemo = o.Loop;
+                                        Console.WriteLine($"using vsync: {_vsync}, windowed: {isWindowed}, size: {size}, loop: {loopDemo}");
+                                    })
+                        .WithNotParsed(o =>
+                                       {
+                                           Console.WriteLine(helpText);
+                                           exit = true;
+                                       });
 
             if (exit)
                 return;
 
-            var form = new RenderForm("T3-Player") { ClientSize = size };
+            var form = new RenderForm("Still : Home") { ClientSize = size };
             form.AllowUserResizing = false;
 
             // SwapChain description
