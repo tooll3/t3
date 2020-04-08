@@ -34,6 +34,8 @@ namespace T3
 
             [Option(Default = 1080, Required = false, HelpText = "Defines the height")]
             public int Height { get; set; }
+            
+            public Size Size => new Size(Width, Height);
 
             [Option(Default = false, Required = false, HelpText = "Run in windowed mode")]
             public bool Windowed { get; set; }
@@ -42,43 +44,52 @@ namespace T3
             public bool Loop { get; set; }
         }
 
-        [STAThread]
-        private static void Main(string[] args)
+        private static Options ParseCommandLine(string[] args)
         {
-            bool isWindowed = false;
-            bool exit = false;
-            Size size = new Size(1920, 1080);
-            bool loopDemo = false;
-
-            var parser = new Parser(config => config.HelpWriter = Console.Out);
+            Options parsedOptions = null;
+            var parser = new Parser(config =>
+                                    {
+                                        config.HelpWriter = null;
+                                        config.AutoVersion = false;
+                                    });
             var parserResult = parser.ParseArguments<Options>(args);
-            var helpText = HelpText.AutoBuild(parserResult, h =>
-                                                            {
-                                                                h.AdditionalNewLineAfterOption = false;
-                                                                h.Heading = "Still : Home - v0.3"; 
-                                                                h.Copyright = "Copyright (c) 2020 lucid, pixtur and cynic"; 
-                                                                return h;
-                                                            }, e => e);
+            var helpText = HelpText.AutoBuild(parserResult,
+                                              h =>
+                                              {
+                                                  h.AdditionalNewLineAfterOption = false;
+                                                  h.Heading = "still::home - v0.3";
+                                                  h.Copyright = "Copyright (c) 2020 lucid, pixtur and cynic";
+                                                  h.AutoVersion = false;
+                                                  return h;
+                                              },
+                                              e => e);
 
             parserResult.WithParsed(o =>
                                     {
-                                        _vsync = !o.NoVsync;
-                                        isWindowed = o.Windowed;
-                                        size = new Size(o.Width, o.Height);
-                                        loopDemo = o.Loop;
-                                        Console.WriteLine($"using vsync: {_vsync}, windowed: {isWindowed}, size: {size}, loop: {loopDemo}");
+                                        parsedOptions = o;
                                     })
                         .WithNotParsed(o =>
                                        {
                                            Console.WriteLine(helpText);
-                                           exit = true;
                                        });
+            return parsedOptions;
+        }
 
-            if (exit)
+        [STAThread]
+        private static void Main(string[] args)
+        {
+            Options options = ParseCommandLine(args);
+            if (options == null)
                 return;
 
-            var form = new RenderForm("Still : Home") { ClientSize = size };
-            form.AllowUserResizing = false;
+            _vsync = !options.NoVsync;
+            Console.WriteLine($"using vsync: {_vsync}, windowed: {options.Windowed}, size: {options.Size}, loop: {options.Loop}");
+            var form = new RenderForm("still::home")
+                           {
+                               ClientSize = options.Size,
+                               AllowUserResizing = false, 
+                               // Icon = new Icon(@"Resources\proj-partial\home.ico")
+                           };
 
             // SwapChain description
             var desc = new SwapChainDescription()
@@ -86,7 +97,7 @@ namespace T3
                            BufferCount = 3,
                            ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
                                                                  new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                           IsWindowed = isWindowed,
+                           IsWindowed = options.Windowed,
                            OutputHandle = form.Handle,
                            SampleDescription = new SampleDescription(1, 0),
                            SwapEffect = SwapEffect.FlipDiscard,
@@ -113,7 +124,7 @@ namespace T3
             var factory = _swapChain.GetParent<Factory>();
             factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAll);
 
-            bool startedWindowed = isWindowed;
+            bool startedWindowed = options.Windowed;
             form.KeyUp += (sender, keyArgs) =>
                           {
                               if (startedWindowed && keyArgs.Alt && keyArgs.KeyCode == Keys.Enter)
@@ -181,7 +192,7 @@ namespace T3
                                      _playback.Update(1.0f);
                                      if (_playback.StreamPos >= _playback.StreamLength)
                                      {
-                                         if (loopDemo)
+                                         if (options.Loop)
                                          {
                                              _playback.TimeInBars = 0.0;
                                              _playback.PlaybackSpeed = 1.0; // restart the stream
@@ -199,7 +210,7 @@ namespace T3
                                      context.OutputMerger.SetTargets(_renderView);
                                      
                                      _evalContext.Reset();
-                                     _evalContext.RequestedResolution = new Size2(size.Width, size.Height);
+                                     _evalContext.RequestedResolution = new Size2(options.Width, options.Height);
                                      
                                      if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
                                      {
