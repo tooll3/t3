@@ -88,7 +88,7 @@ namespace T3
                            {
                                ClientSize = options.Size,
                                AllowUserResizing = false, 
-                               // Icon = new Icon(@"Resources\proj-partial\home.ico")
+                               Icon = new Icon(@"Resources\proj-numbers\home.ico")
                            };
 
             // SwapChain description
