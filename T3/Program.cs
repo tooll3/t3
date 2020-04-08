@@ -228,7 +228,7 @@ namespace T3
             var form = new ImGuiDx11RenderForm("T3 ImGui Test")
                            {
                                ClientSize = new Size(1920, 1080),
-                               Icon = new Icon(@"Resources\t3\t3.ico")
+                               Icon = new Icon(@"Resources\t3\t3.ico", 48, 48)//, 256, 256)
                            };
 
             // SwapChain description
