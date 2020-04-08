@@ -6,7 +6,6 @@ using SharpDX.Windows;
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -26,19 +25,19 @@ namespace T3
 
         public class Options
         {
-            [Option('v', "no-vsync", Required = false, HelpText = "Disables vsync")]
-            public bool Vsync { get; set; }
+            [Option(Default = false, Required = false, HelpText = "Disable vsync")]
+            public bool NoVsync { get; set; }
 
-            [Option('w', "width", Default = 1920, Required = false, HelpText = "Defines the width")]
+            [Option(Default = 1920, Required = false, HelpText = "Defines the width")]
             public int Width { get; set; }
 
-            [Option('h', "height", Default = 1080, Required = false, HelpText = "Defines the height")]
+            [Option(Default = 1080, Required = false, HelpText = "Defines the height")]
             public int Height { get; set; }
 
-            [Option('f', "fullscreen", Required = false, HelpText = "Run in fullscreen mode")]
-            public bool Fullscreen { get; set; }
+            [Option(Default = false, Required = false, HelpText = "Run in windowed mode")]
+            public bool Windowed { get; set; }
             
-            [Option('l', "loop", Required = false, HelpText = "Loops the demo")]
+            [Option(Default = false, Required = false, HelpText = "Loops the demo")]
             public bool Loop { get; set; }
         }
 
@@ -54,8 +53,8 @@ namespace T3
             parser.ParseArguments<Options>(args)
                   .WithParsed(o =>
                               {
-                                  _vsync = !o.Vsync;
-                                  isWindowed = !o.Fullscreen;
+                                  _vsync = !o.NoVsync;
+                                  isWindowed = o.Windowed;
                                   size = new Size(o.Width, o.Height);
                                   loopDemo = o.Loop;
                                   Console.WriteLine($"using vsync: {_vsync}, windowed: {isWindowed}, size: {size}, loop: {loopDemo}");
@@ -88,21 +87,25 @@ namespace T3
             #else
             var deviceCreationFlags = DeviceCreationFlags.None;
             #endif
-            Console.WriteLine($"swap effect: {desc.SwapEffect}");
-            Console.WriteLine($"Using creating flags: {deviceCreationFlags}");
             Device.CreateWithSwapChain(DriverType.Hardware, deviceCreationFlags, desc, out var device, out _swapChain);
             var context = device.ImmediateContext;
             Device = device;
 
+            if (_swapChain.IsFullScreen)
+            {
+                Cursor.Hide();
+            }
+
             // Ignore all windows events
             var factory = _swapChain.GetParent<Factory>();
             factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAll);
-            
+
+            bool startedWindowed = isWindowed;
             form.KeyUp += (sender, keyArgs) =>
                           {
-                              if (keyArgs.Alt && keyArgs.KeyCode == Keys.Enter)
+                              if (startedWindowed && keyArgs.Alt && keyArgs.KeyCode == Keys.Enter)
                               {
-                                  _swapChain.IsFullScreen = !_swapChain.IsFullScreen;
+                                   _swapChain.IsFullScreen = !_swapChain.IsFullScreen;
                                   RebuildBackBuffer(form, device, ref _renderView, ref _backBuffer, ref _swapChain);
                                   if (_swapChain.IsFullScreen)
                                   {
@@ -143,6 +146,7 @@ namespace T3
                 #endif
             }
 
+
             _model = new Model(operatorsAssembly);
             _model.Load();
             
@@ -157,7 +161,6 @@ namespace T3
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-
 
             // Main loop
             RenderLoop.Run(form, () =>
@@ -223,7 +226,7 @@ namespace T3
         {
             rtv.Dispose();
             buffer.Dispose();
-            swapChain.ResizeBuffers(3, form.ClientSize.Width, form.ClientSize.Height, Format.Unknown, 0);
+            swapChain.ResizeBuffers(3, form.ClientSize.Width, form.ClientSize.Height, Format.Unknown, SwapChainFlags.AllowModeSwitch);
             buffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
             rtv = new RenderTargetView(device, buffer);
         }
