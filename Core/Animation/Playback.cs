@@ -12,7 +12,6 @@ namespace T3.Core.Animation
         public virtual double TimeInSecs { get => TimeInBars * 240 / Bpm; set => TimeInBars = value / Bpm * 240f; }
 
         public virtual double BeatTime { get; set; } 
-        //public double TimeRangeStart { get; set; } = 0;
         public TimeRange LoopRange;
         public double Bpm = 120;
         public virtual double PlaybackSpeed { get; set; } = 0;

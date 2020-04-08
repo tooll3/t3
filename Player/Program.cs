@@ -37,6 +37,9 @@ namespace T3
 
             [Option('f', "fullscreen", Required = false, HelpText = "Run in fullscreen mode")]
             public bool Fullscreen { get; set; }
+            
+            [Option('l', "loop", Required = false, HelpText = "Loops the demo")]
+            public bool Loop { get; set; }
         }
 
         [STAThread]
@@ -45,6 +48,7 @@ namespace T3
             bool isWindowed = false;
             bool exit = false;
             Size size = new Size(1920, 1080);
+            bool loopDemo = false;
 
             var parser = new Parser(config => config.HelpWriter = Console.Out);
             parser.ParseArguments<Options>(args)
@@ -53,7 +57,8 @@ namespace T3
                                   _vsync = !o.Vsync;
                                   isWindowed = !o.Fullscreen;
                                   size = new Size(o.Width, o.Height);
-                                  Console.WriteLine($"using vsync: {_vsync}, windowed: {isWindowed}, size: {size}");
+                                  loopDemo = o.Loop;
+                                  Console.WriteLine($"using vsync: {_vsync}, windowed: {isWindowed}, size: {size}, loop: {loopDemo}");
                               })
                   .WithNotParsed(o => exit = true);
 
@@ -159,7 +164,17 @@ namespace T3
                                  {
                                      _playback.Update(1.0f);
                                      if (_playback.StreamPos >= _playback.StreamLength)
-                                         Application.Exit();
+                                     {
+                                         if (loopDemo)
+                                         {
+                                             _playback.TimeInBars = 0.0;
+                                             _playback.PlaybackSpeed = 1.0; // restart the stream
+                                         }
+                                         else
+                                         {
+                                             Application.Exit();
+                                         }
+                                     }
 
                                      DirtyFlag.IncrementGlobalTicks();
                                      DirtyFlag.InvalidationRefFrame++;
