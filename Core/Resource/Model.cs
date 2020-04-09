@@ -11,6 +11,7 @@ using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Helper;
@@ -326,6 +327,30 @@ namespace T3.Core
                              int width = jsonToken["Width"].Value<int>();
                              int height = jsonToken["Height"].Value<int>();
                              return new Size2(width, height);
+                         });
+            
+            RegisterType(typeof(Animation.Curve), "Curve",
+                         InputDefaultValueCreator<Animation.Curve>,
+                         (writer, obj) =>
+                         {
+                             Animation.Curve curve = (Animation.Curve)obj;
+                             writer.WriteStartObject();
+                             curve?.Write(writer);
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             Animation.Curve curve = new Animation.Curve();
+                             if (jsonToken == null || !jsonToken.HasValues)
+                             {
+                                 curve.AddOrUpdateV(0, new VDefinition(){ Value = 0});
+                                 curve.AddOrUpdateV(1, new VDefinition(){ Value = 1});
+                             }
+                             else
+                             {
+                                 curve.Read(jsonToken);
+                             }
+                             return curve;
                          });
         }
 

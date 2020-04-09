@@ -30,6 +30,7 @@
     {
         public Color Color { get; set; } = TypeUiRegistry.ColorForCommands;
     }
+    
     /// <summary>
     /// Internal implementation things that are below the tech level of normal artists.
     /// </summary>

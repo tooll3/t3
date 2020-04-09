@@ -78,6 +78,8 @@ namespace T3.Core.Animation
         public virtual void Read(JToken inputToken)
         {
             JToken curveToken = inputToken["Curve"];
+            if (curveToken == null)
+                return;
 
             PreCurveMapping = (Utils.OutsideCurveBehavior)Enum.Parse(typeof(Utils.OutsideCurveBehavior), curveToken["PreCurve"].Value<string>());
             PostCurveMapping = (Utils.OutsideCurveBehavior)Enum.Parse(typeof(Utils.OutsideCurveBehavior), curveToken["PostCurve"].Value<string>());

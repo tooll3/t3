@@ -19,7 +19,8 @@ namespace T3.Gui.Windows.TimeLine
                 ScaleRanges= InitializeTimeScaleDefinitions();
             }
             DrawTimeTicks(TimeLineCanvas.Current.NestedTimeScale,
-                          TimeLineCanvas.Current.NestedTimeOffset);
+                          TimeLineCanvas.Current.NestedTimeOffset, 
+                          TimeLineCanvas.Current);
         }
 
         private double _bpm = 240;

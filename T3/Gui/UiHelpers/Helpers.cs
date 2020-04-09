@@ -60,6 +60,16 @@ namespace UiHelpers
             if (SettingsWindow.WindowRegionsVisible)
                 DebugRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), color, label);
         }
+        
+        public static void DebugContentRect(string label = "", uint color = 0xff804080)
+        {
+            if (!SettingsWindow.WindowRegionsVisible)
+                return;
+
+            var min = ImGui.GetWindowContentRegionMin();
+            var max = ImGui.GetWindowContentRegionMax();
+            DebugRect(ImGui.GetWindowPos() + min, ImGui.GetWindowPos() + max, color, label);
+        }
     }
 
     /// <summary>
@@ -536,7 +546,6 @@ namespace UiHelpers
                 
                 if (d.X > rA + rB)
                 {
-                    
                     var horizontalStretch = d.X / d.Y > 1;
                     if (horizontalStretch)
                     {

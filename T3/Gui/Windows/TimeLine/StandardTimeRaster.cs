@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using T3.Core.Animation;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
@@ -13,7 +14,13 @@ namespace T3.Gui.Windows.TimeLine
         public override void Draw(Playback playback)
         {
             var unitInSecs = UnitsPerSecond * playback.Bpm / 240f;
-            DrawTimeTicks(TimeLineCanvas.Current.Scale.X / unitInSecs, TimeLineCanvas.Current.Scroll.X * unitInSecs);
+            DrawTimeTicks(TimeLineCanvas.Current.Scale.X / unitInSecs, TimeLineCanvas.Current.Scroll.X * unitInSecs, TimeLineCanvas.Current);
+        }
+
+        public void Draw(ICanvas canvas)
+        {
+            var unitInSecs = UnitsPerSecond;
+            DrawTimeTicks(canvas.Scale.X / unitInSecs, canvas.Scroll.X * unitInSecs, canvas);
         }
         
         public float UnitsPerSecond { get; set; } = 1;

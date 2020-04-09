@@ -6,6 +6,7 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Styling;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -27,15 +28,15 @@ namespace T3.Gui.Windows.TimeLine
         }
         
         
-        protected void DrawTimeTicks(double scale, double scroll)
+        protected void DrawTimeTicks(double scale, double scroll, ICanvas canvas)
         {
             if (!(scale > Epsilon))
                 return;
 
             var drawList = ImGui.GetWindowDrawList();
-            var topLeft = TimeLineCanvas.Current.WindowPos;
-            var viewHeight = TimeLineCanvas.Current.WindowSize.Y;
-            var width = TimeLineCanvas.Current.WindowSize.X;
+            var topLeft = canvas.WindowPos;
+            var viewHeight = canvas.WindowSize.Y;
+            var width = canvas.WindowSize.X;
 
             _usedPositions.Clear();
 

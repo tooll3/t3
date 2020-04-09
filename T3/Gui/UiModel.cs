@@ -130,6 +130,9 @@ namespace T3.Gui
             RegisterUiType(typeof(SharpDX.Mathematics.Interop.RawRectangle), new ShaderUiProperties(), () => new FallbackInputUi<RawRectangle>(),
                            () => new ValueOutputUi<RawRectangle>());
 
+            RegisterUiType(typeof(T3.Core.Animation.Curve), new FloatUiProperties(), () => new CurveInputUi(),
+                           () => new ValueOutputUi<T3.Core.Animation.Curve>());
+            
             Load();
 
             var symbols = SymbolRegistry.Entries;

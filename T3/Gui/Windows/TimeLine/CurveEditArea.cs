@@ -10,6 +10,7 @@ using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.Snapping;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -47,7 +48,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     foreach (var curve in param.Curves)
                     {
-                        DrawCurveLine(curve);
+                        DrawCurveLine(curve, TimeLineCanvas);
                     }
                 }
 
@@ -218,14 +219,14 @@ namespace T3.Gui.Windows.TimeLine
         #endregion
 
 
-        private void DrawCurveLine(Curve curve)
+        public static void DrawCurveLine(Curve curve, ICanvas canvas)
         {
             const float step = 3f;
             var width = ImGui.GetWindowWidth();
 
-            double dU = TimeLineCanvas.InverseTransformDirection(new Vector2(step, 0)).X;
-            double u = TimeLineCanvas.InverseTransformPosition(TimeLineCanvas.WindowPos).X;
-            var x = TimeLineCanvas.WindowPos.X;
+            double dU = canvas.InverseTransformDirection(new Vector2(step, 0)).X;
+            double u = canvas.InverseTransformPosition(canvas.WindowPos).X;
+            var x = canvas.WindowPos.X;
 
             var steps = (int)(width / step);
             if (_curveLinePoints.Length != steps)
@@ -235,16 +236,15 @@ namespace T3.Gui.Windows.TimeLine
 
             for (var i = 0; i < steps; i++)
             {
-                _curveLinePoints[i] = new Vector2(x, (int)TimeLineCanvas.TransformPosition(new Vector2(0, (float)curve.GetSampledValue(u))).Y - 0.5f);
+                _curveLinePoints[i] = new Vector2(x, (int)canvas.TransformPosition(new Vector2(0, (float)curve.GetSampledValue(u))).Y - 0.5f);
                 u += dU;
                 x += step;
             }
 
-            _drawList.AddPolyline(ref _curveLinePoints[0], steps, Color.Gray, false, 1);
+            ImGui.GetWindowDrawList().AddPolyline(ref _curveLinePoints[0], steps, Color.Gray, false, 1);
         }
 
-
-
+        
         private static ChangeKeyframesCommand _changeKeyframesCommand;
         private static Vector2[] _curveLinePoints = new Vector2[0];
 
