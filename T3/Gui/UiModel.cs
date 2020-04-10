@@ -25,7 +25,8 @@ namespace T3.Gui
 {
     public class UiModel : Core.Model
     {
-        public UiModel(Assembly operatorAssembly) : base(operatorAssembly)
+        public UiModel(Assembly operatorAssembly) 
+            : base(operatorAssembly, enabledLogging: true)
         {
             Init();
         }

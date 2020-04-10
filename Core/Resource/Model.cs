@@ -54,9 +54,10 @@ namespace T3.Core
         protected string Path { get; } = @"Operators\Types\";
         protected string SymbolExtension { get; } = ".t3";
 
-        public Model(Assembly operatorAssembly)
+        public Model(Assembly operatorAssembly, bool enabledLogging)
         {
-            Log.AddWriter(new ConsoleWriter());
+            if (enabledLogging)
+                Log.AddWriter(new ConsoleWriter());
 
             OperatorsAssembly = operatorAssembly;
 

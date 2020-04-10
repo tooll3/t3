@@ -42,6 +42,9 @@ namespace T3
             
             [Option(Default = false, Required = false, HelpText = "Loops the demo")]
             public bool Loop { get; set; }
+            
+            [Option(Default = false, Required = false, HelpText = "Show log messages.")]
+            public bool Logging { get; set; }
         }
 
         private static Options ParseCommandLine(string[] args)
@@ -83,7 +86,7 @@ namespace T3
                 return;
 
             _vsync = !options.NoVsync;
-            Console.WriteLine($"using vsync: {_vsync}, windowed: {options.Windowed}, size: {options.Size}, loop: {options.Loop}");
+            Console.WriteLine($"using vsync: {_vsync}, windowed: {options.Windowed}, size: {options.Size}, loop: {options.Loop}, logging: {options.Logging}");
             var form = new RenderForm("still::home")
                            {
                                ClientSize = options.Size,
@@ -171,7 +174,7 @@ namespace T3
             }
 
 
-            _model = new Model(operatorsAssembly);
+            _model = new Model(operatorsAssembly, options.Logging);
             _model.Load();
             
             var symbols = SymbolRegistry.Entries;
