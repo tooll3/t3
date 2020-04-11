@@ -178,13 +178,13 @@ namespace T3
             _model.Load();
             
             var symbols = SymbolRegistry.Entries;
-            var demoSymbol = symbols.First(entry => entry.Value.Name == "Numbers").Value;
+            var demoSymbol = symbols.First(entry => entry.Value.Name == "Synchotron").Value;
             // create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
-            _playback = new StreamPlayback(@"Resources\proj-numbers\soundtrack\synthtoad-02.mp3");
+            _playback = new StreamPlayback(@"Resources\proj-synchotron\soundtrack\synthjam.mp3");
             _playback.PlaybackSpeed = 1.0;
-            _playback.Bpm = 80.02;
+            _playback.Bpm = 120;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
