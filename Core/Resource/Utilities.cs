@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace T3.Core
@@ -8,6 +9,12 @@ namespace T3.Core
         {
             key = tuple.Key;
             value = tuple.Value;
+        }
+
+        public static void Dispose<T>(ref T obj) where T : class, IDisposable
+        {
+            obj?.Dispose();
+            obj = null;
         }
 
         public static void Swap<T>(this IList<T> list, int indexA, int indexB)
