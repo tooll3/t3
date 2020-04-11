@@ -80,7 +80,7 @@ namespace T3.Core.Operator.Helper
             csStage.Set(deadListInitShader);
             csStage.SetUnorderedAccessView(0, DeadParticleIndicesUav, 0);
             int dispatchCount = MaxCount / (x > 0 ? x : 1);
-            Log.Info($"particle system: maxcount {{MaxCount}}  dispatchCount: {dispatchCount} *64: {dispatchCount*64}");
+            Log.Info($"particle system: maxcount {MaxCount}  dispatchCount: {dispatchCount} *64: {dispatchCount*64}");
             deviceContext.Dispatch(dispatchCount, 1, 1);
             
             // restore prev setup
