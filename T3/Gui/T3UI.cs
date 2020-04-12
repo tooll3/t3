@@ -19,12 +19,7 @@ namespace T3.Gui
     {
         static T3Ui()
         {
-            #if DEBUG
-            var operatorsAssembly = Assembly.LoadFrom(@"T3\bin\debug\Operators.dll");
-            #else
-            var operatorsAssembly = Assembly.LoadFrom(@"T3\bin\release\Operators.dll");
-            #endif
-
+            var operatorsAssembly = Assembly.GetAssembly(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value));
             UiModel = new UiModel(operatorsAssembly);
             _userSettings = new UserSettings();
             _projectSettings = new ProjectSettings();

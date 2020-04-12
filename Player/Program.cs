@@ -159,21 +159,7 @@ namespace T3
             FullScreenVertexShaderId = resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
             FullScreenPixelShaderId = resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
 
-            Assembly operatorsAssembly;
-            try
-            {
-                operatorsAssembly = Assembly.LoadFrom("Operators.dll");
-            }
-            catch (Exception)
-            {
-                #if DEBUG
-                operatorsAssembly = Assembly.LoadFrom(@"Player\bin\debug\Operators.dll");
-                #else
-                operatorsAssembly = Assembly.LoadFrom(@"Player\bin\release\Operators.dll");
-                #endif
-            }
-
-
+            var operatorsAssembly = Assembly.GetAssembly(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value));
             _model = new Model(operatorsAssembly, options.Logging);
             _model.Load();
             
