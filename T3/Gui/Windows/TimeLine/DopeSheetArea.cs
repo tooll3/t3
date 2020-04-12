@@ -484,11 +484,11 @@ namespace T3.Gui.Windows.TimeLine
             RebuildCurveTables();
         }
 
-        void ITimeElementSelectionHolder.UpdateDragStartCommand(double dt, double dv)
+        void ITimeElementSelectionHolder.UpdateDragAtStartPointCommand(double dt, double dv)
         {
         }
 
-        void ITimeElementSelectionHolder.UpdateDragEndCommand(double dt, double dv)
+        void ITimeElementSelectionHolder.UpdateDragAtEndPointCommand(double dt, double dv)
         {
         }
 

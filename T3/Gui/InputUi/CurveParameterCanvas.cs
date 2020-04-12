@@ -3,6 +3,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Gui.Animation.CurveEditing;
+using T3.Gui.Commands;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
@@ -10,12 +11,20 @@ using UiHelpers;
 
 namespace T3.Gui.InputUi
 {
-    public class CurveEditCanvas : ICanvas
+    public class CurveParameterCanvas : KeyframeEditArea, ICanvas, ITimeElementSelectionHolder
     {
-        public CurveEditCanvas()
+        public CurveParameterCanvas()
         {
             _snapHandler.SnappedEvent += SnappedEventHandler;
             //_selectionFence = new TimeSelectionFence(this);
+        }
+
+        struct CanvasViewSettings
+        {
+            public Vector2 Scroll;
+            public Vector2 Scale;
+            public Vector2 ScrollTarget;
+            public Vector2 ScaleTarget;
         }
         
         public void Draw(Curve curve)
@@ -282,5 +291,56 @@ namespace T3.Gui.InputUi
         private Vector2 _scaleTarget = new Vector2(40, -80);
         private ImDrawListPtr _drawlist;
 
+        #region implement selection holder
+        public void ClearSelection()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateSelectionForArea(ImRect area, SelectMode selectMode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteSelectedElements()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICommand StartDragCommand()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateDragCommand(double dt, double dv)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CompleteDragCommand()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateDragAtStartPointCommand(double dt, double dv)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateDragAtEndPointCommand(double dt, double dv)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TimeRange GetSelectionTimeRange()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

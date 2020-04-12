@@ -265,7 +265,7 @@ namespace T3.Gui.Windows.TimeLine
         private float _snapIndicatorDuration = 1;
         private float _lastSnapU;
 
-        #region ISelection holder
+        #region implement ISelectionHolder
         public void ClearSelection()
         {
             foreach (var sh in _selectionHolders)
@@ -288,7 +288,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 s.StartDragCommand();
             }
-
+        
             return null;
         }
 
@@ -300,19 +300,19 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        public void UpdateDragStartCommand(double dt, double dv)
+        public void UpdateDragAtStartPointCommand(double dt, double dv)
         {
             foreach (var s in _selectionHolders)
             {
-                s.UpdateDragStartCommand(dt, dv);
+                s.UpdateDragAtStartPointCommand(dt, dv);
             }
         }
 
-        public void UpdateDragEndCommand(double dt, double dv)
+        public void UpdateDragAtEndPointCommand(double dt, double dv)
         {
             foreach (var s in _selectionHolders)
             {
-                s.UpdateDragEndCommand(dt, dv);
+                s.UpdateDragAtEndPointCommand(dt, dv);
             }
         }
 

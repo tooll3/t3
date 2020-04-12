@@ -24,7 +24,7 @@ namespace T3.Gui.InputUi
                    };
         }
         
-        static CurveEditCanvas _curveEditCanvas = new CurveEditCanvas();
+        static CurveParameterCanvas _curveParameterCanvas = new CurveParameterCanvas();
 
         protected override InputEditStateFlags DrawEditControl(string name, ref T3.Core.Animation.Curve curve)
         {
@@ -37,7 +37,7 @@ namespace T3.Gui.InputUi
             
             ImGui.Dummy(Vector2.One);    // Add Line Break
             
-            _curveEditCanvas.Draw(curve);
+            _curveParameterCanvas.Draw(curve);
 
             //
             // {

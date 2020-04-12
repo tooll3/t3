@@ -21,11 +21,7 @@ namespace T3.Gui.Interaction.Snapping
                 _snapAttractors.Remove(sp);
             }
         }
-
-        //        public class SnapEventArgs : EventArgs
-        //        {
-        //            public double Value { get; set; }
-        //        }
+        
 
         /// <summary>
         /// Components can bind to these events to render snap-indicators

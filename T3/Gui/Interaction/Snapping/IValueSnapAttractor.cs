@@ -24,7 +24,7 @@
 
     
     /// <summary>
-    /// This is called by the SnapHandler the attractor registered to.
+    /// Called by the SnapHandler to look for potential snap targets
     /// </summary>
     /// <remarks>should return null if not snapping</remarks>
     public interface IValueSnapAttractor

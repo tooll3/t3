@@ -20,8 +20,8 @@ namespace T3.Gui.Windows.TimeLine
         void UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV);
         void CompleteDragCommand();
         
-        void UpdateDragStartCommand(double dt, double dv);
-        void UpdateDragEndCommand(double dt, double dv);
+        void UpdateDragAtStartPointCommand(double dt, double dv);
+        void UpdateDragAtEndPointCommand(double dt, double dv);
 
         TimeRange GetSelectionTimeRange();
     }

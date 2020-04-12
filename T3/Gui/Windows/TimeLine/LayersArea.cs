@@ -347,14 +347,14 @@ namespace T3.Gui.Windows.TimeLine
                 case HandleDragMode.Start:
                     var newDragStartTime = TimeLineCanvas.Current.InverseTransformPositionX(mousePos.X);
                     _snapHandler.CheckForSnapping(ref newDragStartTime);
-                    TimeLineCanvas.Current.UpdateDragStartCommand(newDragStartTime - timeClip.TimeRange.Start, 0);
+                    TimeLineCanvas.Current.UpdateDragAtStartPointCommand(newDragStartTime - timeClip.TimeRange.Start, 0);
                     break;
 
                 case HandleDragMode.End:
                     var newDragTime = TimeLineCanvas.Current.InverseTransformPositionX(mousePos.X);
                     _snapHandler.CheckForSnapping(ref newDragTime);
 
-                    TimeLineCanvas.Current.UpdateDragEndCommand(newDragTime - timeClip.TimeRange.End, 0);
+                    TimeLineCanvas.Current.UpdateDragAtEndPointCommand(newDragTime - timeClip.TimeRange.End, 0);
                     break;
 
                 default:
@@ -437,7 +437,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        void ITimeElementSelectionHolder.UpdateDragStartCommand(double dt, double dv)
+        void ITimeElementSelectionHolder.UpdateDragAtStartPointCommand(double dt, double dv)
         {
             var trim = !ImGui.GetIO().KeyAlt;
             foreach (var clip in SelectedItems)
@@ -451,7 +451,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        void ITimeElementSelectionHolder.UpdateDragEndCommand(double dt, double dv)
+        void ITimeElementSelectionHolder.UpdateDragAtEndPointCommand(double dt, double dv)
         {
             var trim = !ImGui.GetIO().KeyAlt;
             foreach (var clip in SelectedItems)

@@ -172,11 +172,11 @@ namespace T3.Gui.Windows.TimeLine
             _changeKeyframesCommand = null;
         }
 
-        public void UpdateDragStartCommand(double dt, double dv)
+        public void UpdateDragAtStartPointCommand(double dt, double dv)
         {
         }
 
-        public void UpdateDragEndCommand(double dt, double dv)
+        public void UpdateDragAtEndPointCommand(double dt, double dv)
         {
         }
 
