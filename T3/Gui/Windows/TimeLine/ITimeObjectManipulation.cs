@@ -9,7 +9,7 @@ namespace T3.Gui.Windows.TimeLine
     /// Interface common to Timeline components that can hold a selection and manipulate
     /// a selection (like <see cref="Animator.Clip"/>, keyframes, etc).
     /// </summary>
-    public interface ITimeElementSelectionHolder
+    public interface ITimeObjectManipulation
     {
         void ClearSelection();
         void UpdateSelectionForArea(ImRect area, SelectMode selectMode);

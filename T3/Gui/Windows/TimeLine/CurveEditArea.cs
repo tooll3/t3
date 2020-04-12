@@ -17,7 +17,7 @@ using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class CurveEditArea : KeyframeEditArea, ITimeElementSelectionHolder, IValueSnapAttractor
+    public class CurveEditArea : KeyframeEditArea, ITimeObjectManipulation, IValueSnapAttractor
     {
         public CurveEditArea(TimeLineCanvas timeLineCanvas, ValueSnapHandler snapHandler)
         {
@@ -106,7 +106,7 @@ namespace T3.Gui.Windows.TimeLine
             TimeLineCanvas.Current.UpdateDragCommand(u - vDef.U, dY);
         }
         
-        void ITimeElementSelectionHolder.DeleteSelectedElements()
+        void ITimeObjectManipulation.DeleteSelectedElements()
         {
             KeyframeOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters);
             RebuildCurveTables();

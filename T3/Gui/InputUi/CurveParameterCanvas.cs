@@ -11,7 +11,7 @@ using UiHelpers;
 
 namespace T3.Gui.InputUi
 {
-    public class CurveParameterCanvas : KeyframeEditArea, ICanvas, ITimeElementSelectionHolder
+    public class CurveParameterCanvas : KeyframeEditArea, ICanvas, ITimeObjectManipulation
     {
         public CurveParameterCanvas()
         {

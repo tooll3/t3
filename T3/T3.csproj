@@ -419,7 +419,7 @@
     <Compile Include="Gui\Windows\TimeLine\CurveEditArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\DopeSheetArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\HorizontalRaster.cs" />
-    <Compile Include="Gui\Windows\TimeLine\ITimeElementSelectionHolder.cs" />
+    <Compile Include="Gui\Windows\TimeLine\ITimeObjectManipulation.cs" />
     <Compile Include="Gui\Windows\TimeLine\KeyframeEditArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\KeyframeOperations.cs" />
     <Compile Include="Gui\Windows\TimeLine\LayerClip.cs" />

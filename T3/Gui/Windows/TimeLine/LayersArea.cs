@@ -20,7 +20,7 @@ namespace T3.Gui.Windows.TimeLine
     /// <summary>
     /// Shows a list of Layers with <see cref="TimeClip"/>s
     /// </summary>
-    public class LayersArea : ITimeElementSelectionHolder, IValueSnapAttractor
+    public class LayersArea : ITimeObjectManipulation, IValueSnapAttractor
     {
         public LayersArea(ValueSnapHandler snapHandler)
         {
@@ -363,7 +363,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         #region implement selection holder interface --------------------------------------------
-        void ITimeElementSelectionHolder.ClearSelection()
+        void ITimeObjectManipulation.ClearSelection()
         {
             SelectedItems.Clear();
         }
@@ -397,13 +397,13 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        ICommand ITimeElementSelectionHolder.StartDragCommand()
+        ICommand ITimeObjectManipulation.StartDragCommand()
         {
             _moveClipsCommand = new MoveTimeClipCommand(_compositionOp, SelectedItems.ToList());
             return _moveClipsCommand;
         }
 
-        void ITimeElementSelectionHolder.UpdateDragCommand(double dt, double dy)
+        void ITimeObjectManipulation.UpdateDragCommand(double dt, double dy)
         {
             var dragContent = ImGui.GetIO().KeyAlt;
 
@@ -437,7 +437,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        void ITimeElementSelectionHolder.UpdateDragAtStartPointCommand(double dt, double dv)
+        void ITimeObjectManipulation.UpdateDragAtStartPointCommand(double dt, double dv)
         {
             var trim = !ImGui.GetIO().KeyAlt;
             foreach (var clip in SelectedItems)
@@ -451,7 +451,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        void ITimeElementSelectionHolder.UpdateDragAtEndPointCommand(double dt, double dv)
+        void ITimeObjectManipulation.UpdateDragAtEndPointCommand(double dt, double dv)
         {
             var trim = !ImGui.GetIO().KeyAlt;
             foreach (var clip in SelectedItems)
@@ -465,7 +465,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        void ITimeElementSelectionHolder.UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV)
+        void ITimeObjectManipulation.UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV)
         {
             foreach (var clip in SelectedItems)
             {
@@ -488,7 +488,7 @@ namespace T3.Gui.Windows.TimeLine
             return timeRange;
         }
 
-        void ITimeElementSelectionHolder.CompleteDragCommand()
+        void ITimeObjectManipulation.CompleteDragCommand()
         {
             if (_moveClipsCommand == null)
                 return;
@@ -498,7 +498,7 @@ namespace T3.Gui.Windows.TimeLine
             _moveClipsCommand = null;
         }
 
-        void ITimeElementSelectionHolder.DeleteSelectedElements()
+        void ITimeObjectManipulation.DeleteSelectedElements()
         {
             //TODO: Implement
         }

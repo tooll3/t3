@@ -11,7 +11,7 @@ namespace T3.Gui.Windows.TimeLine
     /// </summary>
     public class TimeSelectionFence
     {
-        public TimeSelectionFence(ITimeElementSelectionHolder selectionHolder)
+        public TimeSelectionFence(ITimeObjectManipulation selectionHolder)
         {
             _selectionHolder = selectionHolder;
         }
@@ -86,6 +86,6 @@ namespace T3.Gui.Windows.TimeLine
         private ImRect Bounds => ImRect.RectBetweenPoints(_startPositionInScreen, _dragPositionInScreen);
         private Vector2 _startPositionInScreen;
         private Vector2 _dragPositionInScreen;
-        private readonly ITimeElementSelectionHolder _selectionHolder;
+        private readonly ITimeObjectManipulation _selectionHolder;
     }
 }

@@ -15,7 +15,7 @@ using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class TimeLineCanvas : ICanvas, ITimeElementSelectionHolder
+    public class TimeLineCanvas : ICanvas, ITimeObjectManipulation
     {
         public TimeLineCanvas(Playback playback = null)
         {
@@ -352,7 +352,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        private readonly List<ITimeElementSelectionHolder> _selectionHolders = new List<ITimeElementSelectionHolder>();
+        private readonly List<ITimeObjectManipulation> _selectionHolders = new List<ITimeObjectManipulation>();
         #endregion
 
         #region view modes

@@ -17,7 +17,7 @@ using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class DopeSheetArea : KeyframeEditArea, ITimeElementSelectionHolder, IValueSnapAttractor
+    public class DopeSheetArea : KeyframeEditArea, ITimeObjectManipulation, IValueSnapAttractor
     {
         public DopeSheetArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas)
         {
@@ -424,7 +424,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         #region implement selection holder interface --------------------------------------------
-        void ITimeElementSelectionHolder.ClearSelection()
+        void ITimeObjectManipulation.ClearSelection()
         {
             SelectedKeyframes.Clear();
         }
@@ -468,13 +468,13 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        ICommand ITimeElementSelectionHolder.StartDragCommand()
+        ICommand ITimeObjectManipulation.StartDragCommand()
         {
             _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, SelectedKeyframes);
             return _changeKeyframesCommand;
         }
 
-        void ITimeElementSelectionHolder.UpdateDragCommand(double dt, double dv)
+        void ITimeObjectManipulation.UpdateDragCommand(double dt, double dv)
         {
             foreach (var vDefinition in SelectedKeyframes)
             {
@@ -484,15 +484,15 @@ namespace T3.Gui.Windows.TimeLine
             RebuildCurveTables();
         }
 
-        void ITimeElementSelectionHolder.UpdateDragAtStartPointCommand(double dt, double dv)
+        void ITimeObjectManipulation.UpdateDragAtStartPointCommand(double dt, double dv)
         {
         }
 
-        void ITimeElementSelectionHolder.UpdateDragAtEndPointCommand(double dt, double dv)
+        void ITimeObjectManipulation.UpdateDragAtEndPointCommand(double dt, double dv)
         {
         }
 
-        void ITimeElementSelectionHolder.CompleteDragCommand()
+        void ITimeObjectManipulation.CompleteDragCommand()
         {
             if (_changeKeyframesCommand == null)
                 return;
@@ -502,7 +502,7 @@ namespace T3.Gui.Windows.TimeLine
             _changeKeyframesCommand = null;
         }
 
-        void ITimeElementSelectionHolder.DeleteSelectedElements()
+        void ITimeObjectManipulation.DeleteSelectedElements()
         {
             KeyframeOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters);
             RebuildCurveTables();
