@@ -10,12 +10,11 @@ using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.Snapping;
-using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class TimeLineCanvas : ICanvas, ITimeObjectManipulation
+    public class TimeLineCanvas : CurveCanvas, ITimeObjectManipulation
     {
         public TimeLineCanvas(Playback playback = null)
         {
@@ -42,21 +41,10 @@ namespace T3.Gui.Windows.TimeLine
         {
             Current = this;
             UpdateLocalTimeTranslation(compositionOp);
-            _io = ImGui.GetIO();
-            _mouse = ImGui.GetMousePos();
+
             _drawlist = ImGui.GetWindowDrawList();
 
-            WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
-            WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
-
-            // Damp scaling
-            const float dampSpeed = 30f;
-            var damping = _io.DeltaTime * dampSpeed;
-            if (!float.IsNaN(damping) && damping > 0.001f && damping <= 1.0f)
-            {
-                Scale = Im.Lerp(Scale, _scaleTarget, damping);
-                Scroll = Im.Lerp(Scroll, _scrollTarget, damping);
-            }
+            Update();
 
             var modeChanged = UpdateMode();
 
@@ -68,6 +56,10 @@ namespace T3.Gui.Windows.TimeLine
 
                 HandleDeferredActions(animationParameters);
                 HandleInteraction();
+
+                if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
+                    DeleteSelectedElements();
+
                 _timeRasterSwitcher.Draw(Playback);
                 DrawSnapIndicator();
 
@@ -103,22 +95,52 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.EndChild();
         }
 
-        private void HandleInteraction()
+        #region handle nested timelines ----------------------------------
+        private void UpdateLocalTimeTranslation(Instance compositionOp)
         {
-            if (!ImGui.IsWindowHovered())
-                return;
-
-            if (ImGui.IsMouseDragging(1))
+            _localTimeScale = 1f;
+            _localTimeOffset = 0f;
+            ;
+            var parents = GraphCanvas.Current.GetParents().Reverse().ToList();
+            parents.Add(compositionOp);
+            foreach (var p in parents)
             {
-                _scrollTarget -= InverseTransformDirection(_io.MouseDelta);
+                if (p.Outputs.Count <= 0 || !(p.Outputs[0] is ITimeClipProvider timeClipProvider))
+                    continue;
+
+                var clip = timeClipProvider.TimeClip;
+                var scale = clip.TimeRange.Duration / clip.SourceRange.Duration;
+                _localTimeScale *= scale;
+                _localTimeOffset += clip.TimeRange.Start - clip.SourceRange.Start * scale;
             }
-
-            if (Math.Abs(_io.MouseWheel) > 0.01f)
-                HandleZoomViewWithMouseWheel();
-
-            if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
-                DeleteSelectedElements();
         }
+
+        /// <summary>
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public override float TransformPositionX(float xOnCanvas)
+        {
+            var scale = Scale.X * _localTimeScale;
+            var offset = (Scroll.X - _localTimeOffset) / _localTimeScale;
+            return (int)((xOnCanvas - offset) * scale + WindowPos.X);
+        }
+
+        /// <summary>
+        /// Convert screen position to canvas position
+        /// </summary>
+        public override float InverseTransformPositionX(float xOnScreen)
+        {
+            var scale = Scale.X * _localTimeScale;
+            var offset = (Scroll.X - _localTimeOffset) / _localTimeScale;
+            return (xOnScreen - WindowPos.X) / scale + offset;
+        }
+
+        public float TransformGlobalTime(float time)
+        {
+            var localTime = (time - _localTimeOffset) / _localTimeScale;
+            return TransformPositionX(localTime);
+        }
+        #endregion
 
         private void HandleDeferredActions(List<GraphWindow.AnimationParameter> animationParameters)
         {
@@ -151,49 +173,6 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        private void HandleZoomViewWithMouseWheel()
-        {
-            var zoomDelta = ComputeZoomDeltaFromMouseWheel();
-            var uAtMouse = InverseTransformDirection(_mouse - WindowPos);
-            var uScaled = uAtMouse / zoomDelta;
-            var deltaU = uScaled - uAtMouse;
-
-            if (_io.KeyShift)
-            {
-                _scrollTarget.Y -= deltaU.Y;
-                _scaleTarget.Y *= zoomDelta;
-            }
-            else
-            {
-                _scrollTarget.X -= deltaU.X;
-                _scaleTarget.X *= zoomDelta;
-            }
-        }
-
-        private float ComputeZoomDeltaFromMouseWheel()
-        {
-            const float zoomSpeed = 1.2f;
-            var zoomSum = 1f;
-            if (_io.MouseWheel < 0.0f)
-            {
-                for (var zoom = _io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
-                {
-                    zoomSum /= zoomSpeed;
-                }
-            }
-
-            if (_io.MouseWheel > 0.0f)
-            {
-                for (var zoom = _io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
-                {
-                    zoomSum *= zoomSpeed;
-                }
-            }
-
-            zoomSum = zoomSum.Clamp(0.01f, 100f);
-            return zoomSum;
-        }
-
         private void DrawDragTimeArea()
         {
             if (Playback == null)
@@ -205,7 +184,7 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.SetCursorPos(new Vector2(0, max.Y - clampedSize.Y));
             var screenPos = ImGui.GetCursorScreenPos();
-            ImGui.GetWindowDrawList().AddRectFilled(screenPos, screenPos + new Vector2(clampedSize.X, clampedSize.Y), new Color(0,0,0,0.1f));
+            ImGui.GetWindowDrawList().AddRectFilled(screenPos, screenPos + new Vector2(clampedSize.X, clampedSize.Y), new Color(0, 0, 0, 0.1f));
 
             ImGui.InvisibleButton("##TimeDrag", clampedSize);
 
@@ -226,24 +205,6 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             ImGui.SetCursorPos(Vector2.Zero);
-        }
-
-        public void SetVisibleURange(Vector2 scale, Vector2 scroll)
-        {
-            _scaleTarget = scale;
-            _scrollTarget = scroll;
-        }
-
-        public void SetVisibleVRange(float valueScale, float valueScroll)
-        {
-            _scaleTarget = new Vector2(_scaleTarget.X, valueScale);
-            _scrollTarget = new Vector2(_scrollTarget.X, valueScroll);
-        }
-
-        public void SetVisibleTimeRange(float timeScale, float timeScroll)
-        {
-            _scaleTarget = new Vector2(timeScale, _scaleTarget.Y);
-            _scrollTarget = new Vector2(timeScroll, _scrollTarget.Y);
         }
 
         private void SnappedEventHandler(double snapPosition)
@@ -288,7 +249,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 s.StartDragCommand();
             }
-        
+
             return null;
         }
 
@@ -406,148 +367,8 @@ namespace T3.Gui.Windows.TimeLine
         private Modes _lastMode = Modes.CurveEditor; // Make different to force initial update
         #endregion
 
-        #region implement ICanvas =================================================================
-        /// <summary>
-        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        public Vector2 TransformPosition(Vector2 posOnCanvas)
-        {
-            return (posOnCanvas - Scroll) * Scale + WindowPos;
-        }
-
-        public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
-        {
-            return Im.Floor((posOnCanvas - Scroll) * Scale + WindowPos);
-        }
-
-        /// <summary>
-        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        public float TransformPositionX(float xOnCanvas)
-        {
-            var scale = Scale.X * _localScale;
-            var offset = (Scroll.X - _localOffset) / _localScale;
-            return (int)((xOnCanvas - offset) * scale + WindowPos.X);
-        }
-
-        public float TransformGlobalTime(float time)
-        {
-            var localTime = (time - _localOffset) / _localScale;
-            return TransformPositionX(localTime);
-        }
-
-        /// <summary>
-        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        public float TransformPositionY(float yOnCanvas)
-        {
-            return (yOnCanvas - Scroll.Y) * Scale.Y + WindowPos.Y;
-        }
-
-        /// <summary>
-        /// Convert screen position to canvas position
-        /// </summary>
-        public Vector2 InverseTransformPosition(Vector2 posOnScreen)
-        {
-            return (posOnScreen - WindowPos) / Scale + Scroll;
-        }
-
-        /// <summary>
-        /// Convert screen position to canvas position
-        /// </summary>
-        public float InverseTransformPositionX(float xOnScreen)
-        {
-            var scale = Scale.X * _localScale;
-            var offset = (Scroll.X - _localOffset) / _localScale;
-            return (xOnScreen - WindowPos.X) / scale + offset;
-        }
-
-        /// <summary>
-        /// Convert screen position to canvas position
-        /// </summary>
-        public float InverseTransformPositionY(float yOnScreen)
-        {
-            return (yOnScreen - WindowPos.Y) / Scale.Y + Scroll.Y;
-        }
-
-        /// <summary>
-        /// Convert direction on canvas to delta in screen space
-        /// </summary>
-        public Vector2 TransformDirection(Vector2 vectorInCanvas)
-        {
-            return vectorInCanvas * Scale;
-        }
-
-        /// <summary>
-        /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
-        /// </summary>
-        public Vector2 InverseTransformDirection(Vector2 vectorInScreen)
-        {
-            return vectorInScreen / Scale;
-        }
-
-        /// <summary>
-        /// Convert rectangle on canvas to screen space
-        /// </summary>
-        public ImRect TransformRect(ImRect canvasRect)
-        {
-            var r = new ImRect(TransformPositionFloored(canvasRect.Min), TransformPositionFloored(canvasRect.Max));
-            if (r.Min.Y > r.Max.Y)
-            {
-                var t = r.Min.Y;
-                r.Min.Y = r.Max.Y;
-                r.Max.Y = t;
-            }
-
-            return r;
-        }
-
-        public ImRect InverseTransformRect(ImRect screenRect)
-        {
-            var r = new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
-            if (!(r.Min.Y > r.Max.Y))
-                return r;
-
-            var t = r.Min.Y;
-            r.Min.Y = r.Max.Y;
-            r.Max.Y = t;
-            return r;
-        }
-
-        /// <summary>
-        /// Damped scale factors for u and v
-        /// </summary>
-        public Vector2 Scale { get; private set; } = new Vector2(1, -1);
-
-        public Vector2 WindowPos { get; private set; }
-        public Vector2 WindowSize { get; private set; }
-        public Vector2 Scroll { get; private set; } = new Vector2(0, 0.0f);
-
-        private void UpdateLocalTimeTranslation(Instance compositionOp)
-        {
-            _localScale = 1f;
-            _localOffset = 0f;
-            ;
-            var parents = GraphCanvas.Current.GetParents().Reverse().ToList();
-            parents.Add(compositionOp);
-            foreach (var p in parents)
-            {
-                if (p.Outputs.Count <= 0 || !(p.Outputs[0] is ITimeClipProvider timeClipProvider))
-                    continue;
-
-                var clip = timeClipProvider.TimeClip;
-                var scale = clip.TimeRange.Duration / clip.SourceRange.Duration;
-                _localScale *= scale;
-                _localOffset += clip.TimeRange.Start - clip.SourceRange.Start * scale;
-            }
-        }
-        #endregion
-
-        public float NestedTimeScale => Scale.X * _localScale;
-        public float NestedTimeOffset => (Scroll.X - _localOffset) / _localScale;
-
-        private float _localScale = 1;
-        private float _localOffset = 0;
+        public float NestedTimeScale => Scale.X * _localTimeScale;
+        public float NestedTimeOffset => (Scroll.X - _localTimeOffset) / _localTimeScale;
 
         internal readonly Playback Playback;
 
@@ -568,10 +389,9 @@ namespace T3.Gui.Windows.TimeLine
 
         public static TimeLineCanvas Current;
 
-        private ImGuiIOPtr _io;
-        private Vector2 _mouse;
-        private Vector2 _scrollTarget = new Vector2(-25f, 0.0f);
-        private Vector2 _scaleTarget = new Vector2(10, -1);
+        private float _localTimeScale = 1;
+        private float _localTimeOffset = 0;
+
         private ImDrawListPtr _drawlist;
 
         // Styling

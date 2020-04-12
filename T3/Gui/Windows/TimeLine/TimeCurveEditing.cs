@@ -113,7 +113,7 @@ namespace T3.Gui.Windows.TimeLine
                 var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
                 var scaleX = (float)(size.X / ((maxU - minU) * (1 + 2 * curveTimePadding)));
                 var scaleY = -(float)(size.Y / ((maxV - minV) * (1 + 2 * curveValuePadding)));
-                TimeLineCanvas.Current.SetVisibleURange(
+                TimeLineCanvas.Current.SetVisibleRange(
                                                        scale: new Vector2(scaleX, scaleY),
                                                        scroll: new Vector2(
                                                                            (float)minU - 150 / scaleX,
