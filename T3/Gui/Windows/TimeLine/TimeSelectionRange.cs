@@ -33,7 +33,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
             // Range start
             {
-                var xRangeStartOnScreen = _timeLineCanvas.TransformU(_selectionTimeRange.Start);
+                var xRangeStartOnScreen = _timeLineCanvas.TransformX(_selectionTimeRange.Start);
                 var rangeStartPos = new Vector2(xRangeStartOnScreen, contentRegionMin.Y);
                 // Shade outside
                 drawlist.AddRectFilled(
@@ -58,7 +58,7 @@ namespace T3.Gui.Windows.TimeLine
 
             // Range end
             {
-                var xRangeEndOnScreen = _timeLineCanvas.TransformU(_selectionTimeRange.End);
+                var xRangeEndOnScreen = _timeLineCanvas.TransformX(_selectionTimeRange.End);
                 var rangeEndPos = new Vector2(xRangeEndOnScreen, contentRegionMin.Y);
 
                 // Shade outside
@@ -91,7 +91,7 @@ namespace T3.Gui.Windows.TimeLine
         {
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
             {
-                var u = _timeLineCanvas.InverseTransformU(ImGui.GetIO().MousePos.X);
+                var u = _timeLineCanvas.InverseTransformX(ImGui.GetIO().MousePos.X);
 
                 if (!_isDragging)
                 {

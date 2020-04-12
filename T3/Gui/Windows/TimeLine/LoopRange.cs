@@ -17,7 +17,7 @@ namespace T3.Gui.Windows.TimeLine
 
             // Range start
             {
-                var xRangeStart = canvas.TransformU(playback.LoopRange.Start);
+                var xRangeStart = canvas.TransformX(playback.LoopRange.Start);
                 var rangeStartPos = new Vector2(xRangeStart, 0);
 
                 // Shade outside
@@ -43,7 +43,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
-                    var newTime = canvas.InverseTransformU(ImGui.GetIO().MousePos.X);
+                    var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
                     snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
                     playback.LoopRange.Start = newTime;
                 }
@@ -51,7 +51,7 @@ namespace T3.Gui.Windows.TimeLine
 
             // Range end
             {
-                var rangeEndX = canvas.TransformU(playback.LoopRange.End);
+                var rangeEndX = canvas.TransformX(playback.LoopRange.End);
                 var rangeEndPos = new Vector2(rangeEndX, 0);
 
                 // Shade outside
@@ -79,7 +79,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
-                    var newTime = canvas.InverseTransformU(ImGui.GetIO().MousePos.X);
+                    var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
                     snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
                     playback.LoopRange.End = newTime;
                 }

@@ -21,7 +21,7 @@ namespace T3.Gui.Windows.TimeLine
 
             // Range start
             {
-                var xRangeStart = canvas.TransformU(timeClip.SourceRange.Start);
+                var xRangeStart = canvas.TransformX(timeClip.SourceRange.Start);
                 var rangeStartPos = new Vector2(xRangeStart, 0);
 
                 // Shade outside
@@ -47,7 +47,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
-                    var newTime = canvas.InverseTransformU(ImGui.GetIO().MousePos.X);
+                    var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
                     snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
                     var delta = newTime - timeClip.SourceRange.Start;
                     var speed =  timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
@@ -58,7 +58,7 @@ namespace T3.Gui.Windows.TimeLine
 
             // Range end
             {
-                var rangeEndX = canvas.TransformU(timeClip.SourceRange.End);
+                var rangeEndX = canvas.TransformX(timeClip.SourceRange.End);
                 var rangeEndPos = new Vector2(rangeEndX, 0);
 
                 // Shade outside
@@ -86,7 +86,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
-                    var newTime = canvas.InverseTransformU(ImGui.GetIO().MousePos.X);
+                    var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
                     snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
                     var delta = newTime - timeClip.SourceRange.End;
                     var speed =  timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;

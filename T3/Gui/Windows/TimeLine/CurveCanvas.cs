@@ -46,21 +46,7 @@ namespace T3.Gui.Windows.TimeLine
             return Im.Floor((posOnCanvas - Scroll) * Scale + WindowPos);
         }
 
-        /// <summary>
-        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        public virtual float TransformU(float xOnCanvas)
-        {
-            return (int)((xOnCanvas - Scroll.X) * Scale.X + WindowPos.X);
-        }
 
-        /// <summary>
-        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        public float TransformPositionY(float yOnCanvas)
-        {
-            return (yOnCanvas - Scroll.Y) * Scale.Y + WindowPos.Y;
-        }
 
         /// <summary>
         /// Convert screen position to canvas position
@@ -73,15 +59,31 @@ namespace T3.Gui.Windows.TimeLine
         /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
-        public virtual float InverseTransformU(float xOnScreen)
+        public virtual float InverseTransformX(float xOnScreen)
         {
             return (xOnScreen - WindowPos.X) / Scale.X + Scroll.X;
         }
 
+        
+        /// <summary>
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public virtual float TransformX(float xOnCanvas)
+        {
+            return (int)((xOnCanvas - Scroll.X) * Scale.X + WindowPos.X);
+        }
+
+        /// <summary>
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public float TransformY(float yOnCanvas)
+        {
+            return (yOnCanvas - Scroll.Y) * Scale.Y + WindowPos.Y;
+        }
         /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
-        public float InverseTransformPositionY(float yOnScreen)
+        public float InverseTransformY(float yOnScreen)
         {
             return (yOnScreen - WindowPos.Y) / Scale.Y + Scroll.Y;
         }

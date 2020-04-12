@@ -71,6 +71,38 @@ namespace T3.Gui.Interaction
         {
             return posOnCanvas * Scale + Scroll + WindowPos;
         }
+
+        /// <summary>
+        /// Convert screen position to canvas position
+        /// </summary>
+        public virtual float InverseTransformX(float xOnScreen)
+        {
+            return (xOnScreen - WindowPos.X) / Scale.X + Scroll.X;
+        }
+
+        
+        /// <summary>
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public virtual float TransformX(float xOnCanvas)
+        {
+            return (int)((xOnCanvas - Scroll.X) * Scale.X + WindowPos.X);
+        }
+
+        /// <summary>
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public float TransformY(float yOnCanvas)
+        {
+            return (yOnCanvas - Scroll.Y) * Scale.Y + WindowPos.Y;
+        }
+        /// <summary>
+        /// Convert screen position to canvas position
+        /// </summary>
+        public float InverseTransformY(float yOnScreen)
+        {
+            return (yOnScreen - WindowPos.Y) / Scale.Y + Scroll.Y;
+        }
         
         public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
         {

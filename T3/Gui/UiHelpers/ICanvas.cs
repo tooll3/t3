@@ -31,6 +31,12 @@ namespace T3.Gui.UiHelpers
         /// </summary>
         Vector2 InverseTransformPosition(Vector2 screenPos);
 
+        float InverseTransformX(float x);
+        float TransformX(float x);
+        
+        float InverseTransformY(float y);
+        float TransformY(float y);
+        
         /// <summary>
         /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
         /// </summary>

@@ -119,7 +119,7 @@ namespace T3.Gui.Windows.TimeLine
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public override float TransformU(float xOnCanvas)
+        public override float TransformX(float xOnCanvas)
         {
             var scale = Scale.X * _localTimeScale;
             var offset = (Scroll.X - _localTimeOffset) / _localTimeScale;
@@ -129,7 +129,7 @@ namespace T3.Gui.Windows.TimeLine
         /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
-        public override float InverseTransformU(float xOnScreen)
+        public override float InverseTransformX(float xOnScreen)
         {
             var scale = Scale.X * _localTimeScale;
             var offset = (Scroll.X - _localTimeOffset) / _localTimeScale;
@@ -139,7 +139,7 @@ namespace T3.Gui.Windows.TimeLine
         public float TransformGlobalTime(float time)
         {
             var localTime = (time - _localTimeOffset) / _localTimeScale;
-            return TransformU(localTime);
+            return TransformX(localTime);
         }
         #endregion
 
@@ -219,7 +219,7 @@ namespace T3.Gui.Windows.TimeLine
             var opacity = 1 - ((float)(ImGui.GetTime() - _lastSnapTime) / _snapIndicatorDuration).Clamp(0, 1);
             var color = Color.Orange;
             color.Rgba.W = opacity;
-            var p = new Vector2(TransformU(_lastSnapU), 0);
+            var p = new Vector2(TransformX(_lastSnapU), 0);
             _drawlist.AddRectFilled(p, p + new Vector2(1, 2000), color);
         }
 

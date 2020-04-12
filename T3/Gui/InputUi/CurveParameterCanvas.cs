@@ -231,6 +231,38 @@ namespace T3.Gui.InputUi
         }
 
         /// <summary>
+        /// Convert screen position to canvas position
+        /// </summary>
+        public virtual float InverseTransformX(float xOnScreen)
+        {
+            return (xOnScreen - WindowPos.X) / Scale.X + Scroll.X;
+        }
+
+        
+        /// <summary>
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public virtual float TransformX(float xOnCanvas)
+        {
+            return (int)((xOnCanvas - Scroll.X) * Scale.X + WindowPos.X);
+        }
+
+        /// <summary>
+        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
+        public float TransformY(float yOnCanvas)
+        {
+            return (yOnCanvas - Scroll.Y) * Scale.Y + WindowPos.Y;
+        }
+        /// <summary>
+        /// Convert screen position to canvas position
+        /// </summary>
+        public float InverseTransformY(float yOnScreen)
+        {
+            return (yOnScreen - WindowPos.Y) / Scale.Y + Scroll.Y;
+        }
+        
+        /// <summary>
         /// Convert direction on canvas to delta in screen space
         /// </summary>
         public Vector2 TransformDirection(Vector2 vectorInCanvas)

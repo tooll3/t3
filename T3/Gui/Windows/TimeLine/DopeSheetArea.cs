@@ -82,7 +82,7 @@ namespace T3.Gui.Windows.TimeLine
                                     new Vector2(max.X, max.Y + 1), Color.Black);
 
             var mousePos = ImGui.GetMousePos();
-            var mouseTime = TimeLineCanvas.InverseTransformU(mousePos.X);
+            var mouseTime = TimeLineCanvas.InverseTransformX(mousePos.X);
             var layerArea = new ImRect(min, max);
             var layerHovered = ImGui.IsWindowHovered() && layerArea.Contains(mousePos);
             if (layerHovered)
@@ -160,7 +160,7 @@ namespace T3.Gui.Windows.TimeLine
             if (!hoverNewKeyframe)
                 return;
 
-            var hoverTime = TimeLineCanvas.Current.InverseTransformU(ImGui.GetIO().MousePos.X);
+            var hoverTime = TimeLineCanvas.Current.InverseTransformX(ImGui.GetIO().MousePos.X);
             _snapHandler.CheckForSnapping(ref hoverTime);
 
             if (ImGui.IsMouseReleased(0))
@@ -176,7 +176,7 @@ namespace T3.Gui.Windows.TimeLine
             else
             {
                 var posOnScreen = new Vector2(
-                                              TimeLineCanvas.Current.TransformU(hoverTime) - KeyframeIconWidth / 2 + 1,
+                                              TimeLineCanvas.Current.TransformX(hoverTime) - KeyframeIconWidth / 2 + 1,
                                               layerArea.Min.Y);
                 Icons.Draw(Icon.KeyFrame, posOnScreen);
             }
@@ -249,13 +249,13 @@ namespace T3.Gui.Windows.TimeLine
                     if (lastVDef != null && lastVDef.OutEditMode == VDefinition.EditMode.Constant)
                     {
                         positions.Add(new Vector2(
-                                                  TimeLineCanvas.Current.TransformU((float)u) - 1,
+                                                  TimeLineCanvas.Current.TransformX((float)u) - 1,
                                                   lastValue));
                     }
 
                     lastValue = Im.Remap((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
                     positions.Add(new Vector2(
-                                              TimeLineCanvas.Current.TransformU((float)u),
+                                              TimeLineCanvas.Current.TransformX((float)u),
                                               lastValue));
 
                     lastVDef = vDef;
@@ -288,7 +288,7 @@ namespace T3.Gui.Windows.TimeLine
             var index = 0;
             foreach (var vDef in points)
             {
-                times[index] = TimeLineCanvas.Current.TransformU((float)vDef.U);
+                times[index] = TimeLineCanvas.Current.TransformX((float)vDef.U);
                 colors[index] = new Color(
                                           (float)vDef.Value,
                                           (float)curves[1].GetSampledValue(vDef.U),
@@ -312,7 +312,7 @@ namespace T3.Gui.Windows.TimeLine
         private void DrawKeyframe(VDefinition vDef, ImRect layerArea, GraphWindow.AnimationParameter parameter)
         {
             var posOnScreen = new Vector2(
-                                          TimeLineCanvas.Current.TransformU((float)vDef.U) - KeyframeIconWidth / 2 + 1,
+                                          TimeLineCanvas.Current.TransformX((float)vDef.U) - KeyframeIconWidth / 2 + 1,
                                           layerArea.Min.Y);
             ImGui.PushID(vDef.GetHashCode());
             {
@@ -375,7 +375,7 @@ namespace T3.Gui.Windows.TimeLine
                 TimeLineCanvas.Current.StartDragCommand();
             }
 
-            var newDragTime = TimeLineCanvas.Current.InverseTransformU(ImGui.GetIO().MousePos.X);
+            var newDragTime = TimeLineCanvas.Current.InverseTransformX(ImGui.GetIO().MousePos.X);
             _snapHandler.CheckForSnapping(ref newDragTime);
 
             TimeLineCanvas.Current.UpdateDragCommand(newDragTime - vDef.U, 0);
@@ -434,8 +434,8 @@ namespace T3.Gui.Windows.TimeLine
             if (selectMode == SelectMode.Replace)
                 SelectedKeyframes.Clear();
 
-            var startTime = TimeLineCanvas.Current.InverseTransformU(screenArea.Min.X);
-            var endTime = TimeLineCanvas.Current.InverseTransformU(screenArea.Max.X);
+            var startTime = TimeLineCanvas.Current.InverseTransformX(screenArea.Min.X);
+            var endTime = TimeLineCanvas.Current.InverseTransformX(screenArea.Max.X);
 
             var layerMinIndex = (screenArea.Min.Y - _minScreenPos.Y) / LayerHeight - 1;
             var layerMaxIndex = (screenArea.Max.Y - _minScreenPos.Y) / LayerHeight;
