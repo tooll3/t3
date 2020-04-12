@@ -37,7 +37,7 @@ namespace T3.Gui.Windows
 
         public void DrawTexture(Texture2D texture)
         {
-            if (texture == null)
+            if (texture == null || texture.IsDisposed)
                 return;
 
             var size = new Vector2(texture.Description.Width, texture.Description.Height);
