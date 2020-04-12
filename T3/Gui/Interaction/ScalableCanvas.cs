@@ -1,17 +1,12 @@
-﻿using ImGuiNET;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using SharpDX.Direct2D1;
-using T3.Core.Logging;
+using ImGuiNET;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using UiHelpers;
 
-namespace T3.Gui.Graph
+namespace T3.Gui.Interaction
 {
     /// <summary>
     /// Implements transformations and interactions for a canvas that can
@@ -19,7 +14,6 @@ namespace T3.Gui.Graph
     /// </summary>
     public abstract class ScalableCanvas : ICanvas
     {
-
         protected float ZoomSpeed = 12;
         
         /// <summary>

@@ -15,6 +15,7 @@ using T3.Gui.Commands;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
+using T3.Gui.Interaction;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
