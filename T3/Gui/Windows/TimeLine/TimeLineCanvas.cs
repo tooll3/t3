@@ -9,6 +9,7 @@ using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using UiHelpers;
 
@@ -43,19 +44,19 @@ namespace T3.Gui.Windows.TimeLine
             UpdateLocalTimeTranslation(compositionOp);
 
             _drawlist = ImGui.GetWindowDrawList();
-
-            Update();
-
+            
             var modeChanged = UpdateMode();
 
             ImGui.BeginChild("timeline", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
+                UpdateCanvas();
+                
                 _drawlist = ImGui.GetWindowDrawList();
                 _timeLineImage.Draw(_drawlist, Playback);
                 ImGui.SetScrollY(0);
 
                 HandleDeferredActions(animationParameters);
-                HandleInteraction();
+                //HandleInteraction();
 
                 if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
                     DeleteSelectedElements();
@@ -118,7 +119,7 @@ namespace T3.Gui.Windows.TimeLine
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public override float TransformPositionX(float xOnCanvas)
+        public override float TransformU(float xOnCanvas)
         {
             var scale = Scale.X * _localTimeScale;
             var offset = (Scroll.X - _localTimeOffset) / _localTimeScale;
@@ -128,7 +129,7 @@ namespace T3.Gui.Windows.TimeLine
         /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
-        public override float InverseTransformPositionX(float xOnScreen)
+        public override float InverseTransformU(float xOnScreen)
         {
             var scale = Scale.X * _localTimeScale;
             var offset = (Scroll.X - _localTimeOffset) / _localTimeScale;
@@ -138,7 +139,7 @@ namespace T3.Gui.Windows.TimeLine
         public float TransformGlobalTime(float time)
         {
             var localTime = (time - _localTimeOffset) / _localTimeScale;
-            return TransformPositionX(localTime);
+            return TransformU(localTime);
         }
         #endregion
 
@@ -218,7 +219,7 @@ namespace T3.Gui.Windows.TimeLine
             var opacity = 1 - ((float)(ImGui.GetTime() - _lastSnapTime) / _snapIndicatorDuration).Clamp(0, 1);
             var color = Color.Orange;
             color.Rgba.W = opacity;
-            var p = new Vector2(TransformPositionX(_lastSnapU), 0);
+            var p = new Vector2(TransformU(_lastSnapU), 0);
             _drawlist.AddRectFilled(p, p + new Vector2(1, 2000), color);
         }
 

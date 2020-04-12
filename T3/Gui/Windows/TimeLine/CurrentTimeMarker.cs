@@ -23,8 +23,8 @@ namespace T3.Gui.Windows.TimeLine
         
         public SnapResult CheckForSnap(double time)
         {
-            var timeX = TimeLineCanvas.Current.TransformPositionX((float)time);
-            var currentTime = TimeLineCanvas.Current.TransformPositionX((float)_playback.TimeInBars);
+            var timeX = TimeLineCanvas.Current.TransformU((float)time);
+            var currentTime = TimeLineCanvas.Current.TransformU((float)_playback.TimeInBars);
             var distance = Math.Abs( timeX - currentTime);
             if (distance <= 0)
                 return null;

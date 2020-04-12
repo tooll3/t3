@@ -24,8 +24,17 @@ namespace T3.Gui.Interaction
             _io = ImGui.GetIO();
             _mouse = ImGui.GetMousePos();
 
-            InitWindowSize();
+            WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
+            WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
 
+            DampScaling();
+            HandleInteraction();
+
+            //ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
+        }
+
+        private void DampScaling()
+        {
             // Damp scaling
             var p1 = Scroll;
             var p2 = Scroll + WindowSize * Scale;
@@ -35,40 +44,15 @@ namespace T3.Gui.Interaction
             var f = Math.Min(_io.DeltaTime * ZoomSpeed, 1);
             var pp1 = Im.Lerp(p1, p1Target, f);
             var pp2 = Im.Lerp(p2, p2Target, f);
-            var scaleT =   (pp2 - pp1) / WindowSize;
-            
+            var scaleT = (pp2 - pp1) / WindowSize;
+
             Scale = scaleT;
             Scroll = pp1;
-
-            if (!ImGui.IsWindowHovered())
-                return;
-
-            if (!NoMouseInteraction 
-                && (ImGui.IsMouseDragging(1) 
-                || (ImGui.IsMouseDragging(0) && ImGui.GetIO().KeyAlt)))
-            {
-                _scrollTarget += _io.MouseDelta;
-                UserScrolledCanvas = true;
-            }
-            else
-            {
-                UserScrolledCanvas = false;
-            }
-
-            HandleZoomInteraction();
-
-            //ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
         }
 
-        protected void InitWindowSize()
+        public Scope GetTargetProperties()
         {
-            WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
-            WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
-        }
-
-        public CanvasProperties GetTargetProperties()
-        {
-            return new CanvasProperties()
+            return new Scope()
                    {
                        Scale = _scaleTarget,
                        Scroll = _scrollTarget
@@ -194,7 +178,7 @@ namespace T3.Gui.Interaction
             Undefined,
         }
 
-        protected void SetAreaWithTransition(Vector2 scale, Vector2 scroll, Vector2 previousFocusOnScreen, Transition transition)
+        protected void SetScopeWithTransition(Vector2 scale, Vector2 scroll, Vector2 previousFocusOnScreen, Transition transition)
         {
             _scaleTarget = scale;
             Scale = scale * (transition == Transition.JumpIn ? 0.3f : 1.5f);
@@ -210,19 +194,39 @@ namespace T3.Gui.Interaction
             }
         }
 
-        private void HandleZoomInteraction()
+        private void HandleInteraction()
         {
+            if (!ImGui.IsWindowHovered())
+                return;
+
+            if (!NoMouseInteraction 
+                && (ImGui.IsMouseDragging(1) 
+                    || (ImGui.IsMouseDragging(0) && ImGui.GetIO().KeyAlt)))
+            {
+                _scrollTarget += _io.MouseDelta;
+                UserScrolledCanvas = true;
+            }
+            else
+            {
+                UserScrolledCanvas = false;
+            }            
+            
             if (NoMouseInteraction)
                 return;
             
-            UserZoomedCanvas = false;
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (_io.MouseWheel == 0)
-                return;
+            HandleZoomWithMouseWheel();
+        }
 
+        private void HandleZoomWithMouseWheel()
+        {
+            UserZoomedCanvas = false;
+            
+            if (Math.Abs(_io.MouseWheel) < 0.01f)
+                return;
+            
             const float zoomSpeed = 1.2f;
             var focusCenter = (_mouse - Scroll - WindowPos) / Scale;
-            
+
             var zoomDelta = 1f;
 
             if (_io.MouseWheel < 0.0f)
@@ -231,6 +235,7 @@ namespace T3.Gui.Interaction
                 {
                     zoomDelta /= zoomSpeed;
                 }
+
                 UserZoomedCanvas = true;
             }
 
@@ -240,16 +245,17 @@ namespace T3.Gui.Interaction
                 {
                     zoomDelta *= zoomSpeed;
                 }
+
                 UserZoomedCanvas = true;
             }
+
             _scaleTarget *= zoomDelta;
 
             Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
             _scrollTarget += _mouse - shift - WindowPos;
         }
 
-        
-        public struct CanvasProperties
+        public struct Scope
         {
             public Vector2 Scale;
             public Vector2 Scroll;

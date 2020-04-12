@@ -68,7 +68,7 @@ namespace T3.Gui.Graph
                                ? UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId]
                                : GuessViewProperties();
 
-            SetAreaWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);
+            SetScopeWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);
         }
 
         public void SetCompositionToChildInstance(Instance instance)
@@ -114,7 +114,7 @@ namespace T3.Gui.Graph
                 SelectionManager.AddSelection(previousCompChildUi, previousCompositionOp);
         }
 
-        private CanvasProperties GuessViewProperties()
+        private Scope GuessViewProperties()
         {
             ChildUis = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis;
             FocusViewToSelection();

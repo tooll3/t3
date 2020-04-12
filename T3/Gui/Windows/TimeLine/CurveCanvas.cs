@@ -8,6 +8,30 @@ namespace T3.Gui.Windows.TimeLine
 {
     public abstract class CurveCanvas : ICanvas
     {
+        protected void UpdateCanvas()
+        {
+            _io = ImGui.GetIO();
+            _mouse = ImGui.GetMousePos();
+
+            WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
+            WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
+
+            DampScaling();
+            HandleInteraction();
+        }
+
+        private void DampScaling()
+        {
+            // Damp scaling
+            const float dampSpeed = 30f;
+            var damping = ImGui.GetIO().DeltaTime * dampSpeed;
+            if (!float.IsNaN(damping) && damping > 0.001f && damping <= 1.0f)
+            {
+                Scale = Im.Lerp(Scale, _scaleTarget, damping);
+                Scroll = Im.Lerp(Scroll, _scrollTarget, damping);
+            }
+        }
+
         #region implement ICanvas =================================================================
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
@@ -25,7 +49,7 @@ namespace T3.Gui.Windows.TimeLine
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public virtual float TransformPositionX(float xOnCanvas)
+        public virtual float TransformU(float xOnCanvas)
         {
             return (int)((xOnCanvas - Scroll.X) * Scale.X + WindowPos.X);
         }
@@ -49,7 +73,7 @@ namespace T3.Gui.Windows.TimeLine
         /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
-        public virtual float InverseTransformPositionX(float xOnScreen)
+        public virtual float InverseTransformU(float xOnScreen)
         {
             return (xOnScreen - WindowPos.X) / Scale.X + Scroll.X;
         }
@@ -116,23 +140,7 @@ namespace T3.Gui.Windows.TimeLine
         public Vector2 Scroll { get; private set; } = new Vector2(0, 0.0f);
         #endregion
 
-        protected void Update()
-        {
-            _io = ImGui.GetIO();
-            _mouse = ImGui.GetMousePos();
 
-            WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
-            WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
-
-            // Damp scaling
-            const float dampSpeed = 30f;
-            var damping = ImGui.GetIO().DeltaTime * dampSpeed;
-            if (!float.IsNaN(damping) && damping > 0.001f && damping <= 1.0f)
-            {
-                Scale = Im.Lerp(Scale, _scaleTarget, damping);
-                Scroll = Im.Lerp(Scroll, _scrollTarget, damping);
-            }
-        }
 
         protected void HandleInteraction()
         {
@@ -143,13 +151,15 @@ namespace T3.Gui.Windows.TimeLine
             {
                 _scrollTarget -= InverseTransformDirection(_io.MouseDelta);
             }
-
-            if (Math.Abs(_io.MouseWheel) > 0.01f)
-                HandleZoomViewWithMouseWheel();
+            
+            HandleZoomWithMouseWheel();
         }
 
-        private void HandleZoomViewWithMouseWheel()
+        private void HandleZoomWithMouseWheel()
         {
+            if (Math.Abs(_io.MouseWheel) < 0.01f)
+                return;
+            
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
             var uAtMouse = InverseTransformDirection(_mouse - WindowPos);
             var uScaled = uAtMouse / zoomDelta;

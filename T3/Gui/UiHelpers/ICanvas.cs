@@ -45,6 +45,8 @@ namespace T3.Gui.UiHelpers
 
         ImRect InverseTransformRect(ImRect screenRect);
 
+        
+        
         Vector2 Scale { get; }
         Vector2 Scroll { get; }
         Vector2 WindowSize { get; }

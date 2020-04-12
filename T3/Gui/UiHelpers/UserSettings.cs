@@ -22,7 +22,7 @@ namespace T3.Gui.UiHelpers
         
         public class ConfigData
         {
-            public readonly Dictionary<Guid, ScalableCanvas.CanvasProperties> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.CanvasProperties>();
+            public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.Scope>();
             public readonly Dictionary<string, Guid> LastOpsForWindows = new Dictionary<string, Guid>();
             [JsonConverter(typeof(StringEnumConverter))]
             public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.Live;
