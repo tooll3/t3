@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
-using T3.Gui.Graph;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public abstract class KeyframeEditArea
+    /// <summary>
+    /// Editing of a set of curves and keyframes independent of the actual visualization.
+    /// </summary>
+    /// <remarks>This provides basic curve editing functionality outside a timeline context, e.g. for CurveParameters</remarks>
+    public abstract class CurveEditing
     {
-        protected List<GraphWindow.AnimationParameter> AnimationParameters;
         protected readonly HashSet<VDefinition> SelectedKeyframes = new HashSet<VDefinition>();
-        protected TimeLineCanvas TimeLineCanvas;
-
+        protected abstract IEnumerable<Curve> GetAllCurves();
+        protected abstract void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false);
+        protected abstract void DeleteSelectedKeyframes();
+        
         /// <summary>
         /// Helper function to extract vDefs from all or selected UI controls across all curves in CurveEditor
         /// </summary>
@@ -30,7 +33,7 @@ namespace T3.Gui.Windows.TimeLine
             }
             else
             {
-                foreach (var curve in AnimationParameters.SelectMany(param => param.Curves))
+                foreach (var curve in GetAllCurves())
                 {
                     result.AddRange(curve.GetVDefinitions());
                 }
@@ -38,31 +41,6 @@ namespace T3.Gui.Windows.TimeLine
 
             return result;
         }
-
-        private bool _contextMenuIsOpen;
-
-
-        public TimeRange GetSelectionTimeRange()
-        {
-            var timeRange = TimeRange.Undefined;
-            foreach (var s in SelectedKeyframes)
-            {
-                timeRange.Unite((float)s.U);
-            }
-
-            return timeRange;
-        }
-        
-        public void UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV)
-        {
-            foreach (var vDefinition in SelectedKeyframes)
-            {
-                vDefinition.U = originU + (vDefinition.U - originU) * scaleU;
-            }
-
-            RebuildCurveTables();
-        }
-        
 
         protected void DrawContextMenu()
         {
@@ -114,15 +92,17 @@ namespace T3.Gui.Windows.TimeLine
                          ViewAllOrSelectedKeys();
 
                      if (ImGui.MenuItem("Delete keyframes"))
-                         TimeLineCanvas.DeleteSelectedElements();
+                         DeleteSelectedKeyframes();
                      
                      if (ImGui.MenuItem("Duplicate keyframes"))
-                         DuplicateSelectedKeyframes();
+                         DuplicateSelectedKeyframes(TimeLineCanvas.Current.Playback.TimeInBars);
                      
                  }, ref _contextMenuIsOpen
                 );
         }
-
+                
+        private bool _contextMenuIsOpen;
+        
         private delegate void DoSomethingWithKeyframeDelegate(VDefinition v);
 
         private void ForSelectedOrAllPointsDo(DoSomethingWithKeyframeDelegate doFunc)
@@ -202,7 +182,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private void ApplyPostCurveMapping(Utils.OutsideCurveBehavior mapping)
         {
-            foreach (var curve in ParameterCurves())
+            foreach (var curve in GetAllCurves())
             { 
                 curve.PostCurveMapping = mapping;
             }
@@ -210,7 +190,7 @@ namespace T3.Gui.Windows.TimeLine
         
         private void ApplyPreCurveMapping(Utils.OutsideCurveBehavior mapping)
         {
-            foreach (var curve in ParameterCurves())
+            foreach (var curve in GetAllCurves())
             { 
                 curve.PreCurveMapping = mapping;
             }
@@ -227,105 +207,17 @@ namespace T3.Gui.Windows.TimeLine
 
             return checkedInterpolationTypes;
         }
-
-        protected void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false)
-        {
-            const float curveValuePadding = 0.3f;
-            const float curveTimePadding = 0.1f;
-
-            var minU = double.PositiveInfinity;
-            var maxU = double.NegativeInfinity;
-            var minV = double.PositiveInfinity;
-            var maxV = double.NegativeInfinity;
-            var numPoints = 0;
-
-            switch (SelectedKeyframes.Count)
-            {
-                case 0:
-                {
-                    foreach (var vDef in GetAllKeyframes())
-                    {
-                        numPoints++;
-                        minU = Math.Min(minU, vDef.U);
-                        maxU = Math.Max(maxU, vDef.U);
-                        minV = Math.Min(minV, vDef.Value);
-                        maxV = Math.Max(maxV, vDef.Value);
-                    }
-
-                    break;
-                }
-                case 1:
-                    return;
-
-                default:
-                {
-                    foreach (var element in SelectedKeyframes)
-                    {
-                        numPoints++;
-                        minU = Math.Min(minU, element.U);
-                        maxU = Math.Max(maxU, element.U);
-                        minV = Math.Min(minV, element.Value);
-                        maxV = Math.Max(maxV, element.Value);
-                    }
-
-                    break;
-                }
-            }
-
-            if (numPoints == 0)
-            {
-                minV = -3;
-                maxV = +3;
-                minU = -2;
-                maxU = 10;
-            }
-
-            if (Math.Abs(maxU - minU) < 0.001f)
-            {
-                minU -= 1;
-            }
-
-            if (Math.Abs(maxV - minU) < 0.001f)
-            {
-                maxV += -1;
-                minV -= 1;
-            }
-
-            if (alsoChangeTimeRange)
-            {
-                var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
-                var scaleX = (float)(size.X / ((maxU - minU) * (1 + 2 * curveTimePadding)));
-                var scaleY = -(float)(size.Y / ((maxV - minV) * (1 + 2 * curveValuePadding)));
-                TimeLineCanvas.Current.SetVisibleRange(
-                                                       scale: new Vector2(scaleX, scaleY),
-                                                       scroll: new Vector2(
-                                                                           (float)minU - 150 / scaleX,
-                                                                           (float)maxV - 20 / scaleY
-                                                                          )
-                                                      );
-            }
-            else
-            {
-                var height = ImGui.GetWindowContentRegionMax().Y - ImGui.GetWindowContentRegionMin().Y;
-                var scale = -(float)(height / ((maxV - minV) * (1 + 2 * curveValuePadding)));
-                TimeLineCanvas.Current.SetVisibleValueRange(scale, (float)maxV - 20 / scale);
-            }
-        }
-
+        
+        
         protected IEnumerable<VDefinition> GetAllKeyframes()
         {
-            return from param in AnimationParameters
-                   from curve in param.Curves
+            return from curve in GetAllCurves()
                    from keyframe in curve.GetVDefinitions()
                    select keyframe;
         }
-
-        private IEnumerable<Curve> ParameterCurves()
-        {
-            return AnimationParameters.SelectMany(param => param.Curves);
-        }
         
-        protected void DuplicateSelectedKeyframes()
+        
+        protected void DuplicateSelectedKeyframes(double targetTime)
         {
             if (!SelectedKeyframes.Any())
             {
@@ -341,20 +233,17 @@ namespace T3.Gui.Windows.TimeLine
 
             var newSelection = new HashSet<VDefinition>();
 
-            foreach (var param in AnimationParameters)
+            foreach (var curve in GetAllCurves())
             {
-                foreach (var curve in param.Curves)
+                foreach (var key in curve.GetVDefinitions().ToList())
                 {
-                    foreach (var key in curve.GetVDefinitions().ToList())
-                    {
-                        if (!SelectedKeyframes.Contains(key))
-                            continue;
+                    if (!SelectedKeyframes.Contains(key))
+                        continue;
 
-                        var timeOffset = key.U - minTime;
-                        var newKey = key.Clone();
-                        curve.AddOrUpdateV(TimeLineCanvas.Playback.TimeInBars + timeOffset, newKey);
-                        newSelection.Add(newKey);
-                    }
+                    var timeOffset = key.U - minTime;
+                    var newKey = key.Clone();
+                    curve.AddOrUpdateV(targetTime + timeOffset, newKey);
+                    newSelection.Add(newKey);
                 }
             }
 
@@ -368,19 +257,16 @@ namespace T3.Gui.Windows.TimeLine
         /// </summary>
         protected void RebuildCurveTables()
         {
-            foreach (var param in AnimationParameters)
+            foreach (var curve in GetAllCurves())
             {
-                foreach (var curve in param.Curves)
+                foreach (var (u, vDef) in curve.GetPointTable())
                 {
-                    foreach (var (u, vDef) in curve.GetPointTable())
+                    if (Math.Abs(u - vDef.U) > 0.001f)
                     {
-                        if (Math.Abs(u - vDef.U) > 0.001f)
-                        {
-                            curve.MoveKey(u, vDef.U);
-                        }
+                        curve.MoveKey(u, vDef.U);
                     }
                 }
             }
-        }
+        }        
     }
 }

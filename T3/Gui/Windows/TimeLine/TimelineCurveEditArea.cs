@@ -17,9 +17,9 @@ using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class CurveEditArea : KeyframeEditArea, ITimeObjectManipulation, IValueSnapAttractor
+    public class TimelineCurveEditArea : TimeCurveEditing, ITimeObjectManipulation, IValueSnapAttractor
     {
-        public CurveEditArea(TimeLineCanvas timeLineCanvas, ValueSnapHandler snapHandler)
+        public TimelineCurveEditArea(TimeLineCanvas timeLineCanvas, ValueSnapHandler snapHandler)
         {
             _snapHandler = snapHandler;
             TimeLineCanvas = timeLineCanvas;
@@ -42,7 +42,7 @@ namespace T3.Gui.Windows.TimeLine
                     ViewAllOrSelectedKeys(alsoChangeTimeRange:true);
                 
                 if(KeyboardBinding.Triggered(UserActions.Duplicate))
-                    DuplicateSelectedKeyframes();                
+                    DuplicateSelectedKeyframes(TimeLineCanvas.Playback.TimeInBars);                
                 
                 foreach (var param in animationParameters)
                 {

@@ -11,7 +11,7 @@ using UiHelpers;
 
 namespace T3.Gui.InputUi
 {
-    public class CurveParameterCanvas : KeyframeEditArea, ICanvas, ITimeObjectManipulation
+    public class CurveParameterCanvas : TimeCurveEditing, ICanvas, ITimeObjectManipulation
     {
         public CurveParameterCanvas()
         {
@@ -55,7 +55,7 @@ namespace T3.Gui.InputUi
                 HandleInteraction();
                 _standardRaster.Draw(this);
                 _horizontalRaster.Draw(this);
-                CurveEditArea.DrawCurveLine(curve, this);
+                TimelineCurveEditArea.DrawCurveLine(curve, this);
                 
                 foreach (var keyframe in curve.GetVDefinitions())
                 {

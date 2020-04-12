@@ -14,7 +14,7 @@ namespace T3.Gui.Animation.CurveEditing
     /// </summary>
     public static class CurvePoint
     {
-        public static void Draw(VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, CurveEditArea curveEditArea)
+        public static void Draw(VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, TimelineCurveEditArea timelineCurveEditArea)
         {
             _drawlist = ImGui.GetWindowDrawList();
             _curveEditCanvas = curveEditCanvas;
@@ -44,7 +44,7 @@ namespace T3.Gui.Animation.CurveEditing
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
             }
 
-            curveEditArea?.HandleCurvePointDragging(_vDef, isSelected);
+            timelineCurveEditArea?.HandleCurvePointDragging(_vDef, isSelected);
         }
 
         private static void DrawLeftTangent(Vector2 pCenter)

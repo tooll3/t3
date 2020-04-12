@@ -17,7 +17,7 @@ using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class DopeSheetArea : KeyframeEditArea, ITimeObjectManipulation, IValueSnapAttractor
+    public class DopeSheetArea : TimeCurveEditing, ITimeObjectManipulation, IValueSnapAttractor
     {
         public DopeSheetArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas)
         {
@@ -39,7 +39,7 @@ namespace T3.Gui.Windows.TimeLine
                     ViewAllOrSelectedKeys(alsoChangeTimeRange: true);
 
                 if (KeyboardBinding.Triggered(UserActions.Duplicate))
-                    DuplicateSelectedKeyframes();
+                    DuplicateSelectedKeyframes(TimeLineCanvas.Playback.TimeInBars);
 
                 if (KeyboardBinding.Triggered(UserActions.InsertKeyframe))
                 {

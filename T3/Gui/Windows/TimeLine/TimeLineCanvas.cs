@@ -22,7 +22,7 @@ namespace T3.Gui.Windows.TimeLine
             Playback = playback;
             _dopeSheetArea = new DopeSheetArea(_snapHandler, this);
             _selectionFence = new TimeSelectionFence(this);
-            _curveEditArea = new CurveEditArea(this, _snapHandler);
+            _timelineCurveEditArea = new TimelineCurveEditArea(this, _snapHandler);
             _timeSelectionRange = new TimeSelectionRange(this, _snapHandler);
             LayersArea = new LayersArea(_snapHandler);
 
@@ -79,7 +79,7 @@ namespace T3.Gui.Windows.TimeLine
                         break;
                     case Modes.CurveEditor:
                         _horizontalRaster.Draw(this);
-                        _curveEditArea.Draw(compositionOp, animationParameters, bringCurvesIntoView: modeChanged);
+                        _timelineCurveEditArea.Draw(compositionOp, animationParameters, bringCurvesIntoView: modeChanged);
                         break;
                 }
 
@@ -228,13 +228,13 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorPos(Vector2.Zero);
         }
 
-        public void SetVisibleRange(Vector2 scale, Vector2 scroll)
+        public void SetVisibleURange(Vector2 scale, Vector2 scroll)
         {
             _scaleTarget = scale;
             _scrollTarget = scroll;
         }
 
-        public void SetVisibleValueRange(float valueScale, float valueScroll)
+        public void SetVisibleVRange(float valueScale, float valueScroll)
         {
             _scaleTarget = new Vector2(_scaleTarget.X, valueScale);
             _scrollTarget = new Vector2(_scrollTarget.X, valueScroll);
@@ -370,8 +370,8 @@ namespace T3.Gui.Windows.TimeLine
                     break;
 
                 case Modes.CurveEditor:
-                    _selectionHolders.Remove(_curveEditArea);
-                    _snapHandler.RemoveSnapAttractor(_curveEditArea);
+                    _selectionHolders.Remove(_timelineCurveEditArea);
+                    _snapHandler.RemoveSnapAttractor(_timelineCurveEditArea);
                     break;
             }
 
@@ -384,8 +384,8 @@ namespace T3.Gui.Windows.TimeLine
                     break;
 
                 case Modes.CurveEditor:
-                    _selectionHolders.Add(_curveEditArea);
-                    _snapHandler.AddSnapAttractor(_curveEditArea);
+                    _selectionHolders.Add(_timelineCurveEditArea);
+                    _snapHandler.AddSnapAttractor(_timelineCurveEditArea);
                     break;
 
                 default:
@@ -557,7 +557,7 @@ namespace T3.Gui.Windows.TimeLine
         private readonly LoopRange _loopRange = new LoopRange();
 
         private readonly DopeSheetArea _dopeSheetArea;
-        private readonly CurveEditArea _curveEditArea;
+        private readonly TimelineCurveEditArea _timelineCurveEditArea;
         private readonly TimeLineImage _timeLineImage = new TimeLineImage();
 
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
