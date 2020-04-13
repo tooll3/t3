@@ -16,7 +16,7 @@ using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class TimelineCurveEditArea : TimeCurveEditing, ITimeObjectManipulation, IValueSnapAttractor
+    public class TimelineCurveEditArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
     {
         public TimelineCurveEditArea(TimeLineCanvas timeLineCanvas, ValueSnapHandler snapHandler)
         {

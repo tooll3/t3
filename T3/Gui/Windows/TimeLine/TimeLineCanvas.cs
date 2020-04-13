@@ -205,7 +205,7 @@ namespace T3.Gui.Windows.TimeLine
 
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0) || ImGui.IsItemClicked())
             {
-                var draggedTime = InverseTransformX(_io.MousePos.X);
+                var draggedTime = InverseTransformX(Io.MousePos.X);
                 if (ImGui.GetIO().KeyShift)
                 {
                     _snapHandler.CheckForSnapping(ref draggedTime, _currentTimeMarker);

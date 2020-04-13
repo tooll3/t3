@@ -11,20 +11,12 @@ using UiHelpers;
 
 namespace T3.Gui.InputUi
 {
-    public class CurveParameterCanvas : TimeCurveEditing, ICanvas
+    public class CurveParameterCanvas : AnimationParameterEditing, ICanvas
     {
         public CurveParameterCanvas()
         {
             _snapHandler.SnappedEvent += SnappedEventHandler;
         }
-
-        // struct CanvasViewSettings
-        // {
-        //     public Vector2 Scroll;
-        //     public Vector2 Scale;
-        //     public Vector2 ScrollTarget;
-        //     public Vector2 ScaleTarget;
-        // }
         
         public void Draw(Curve curve)
         {

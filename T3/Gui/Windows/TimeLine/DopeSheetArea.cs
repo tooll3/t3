@@ -17,7 +17,7 @@ using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public class DopeSheetArea : TimeCurveEditing, ITimeObjectManipulation, IValueSnapAttractor
+    public class DopeSheetArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
     {
         public DopeSheetArea(ValueSnapHandler snapHandler, TimeLineCanvas timeLineCanvas)
         {

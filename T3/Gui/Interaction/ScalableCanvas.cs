@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
-using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using UiHelpers;
 
@@ -21,7 +19,7 @@ namespace T3.Gui.Interaction
         /// </summary>
         protected void UpdateCanvas()
         {
-            _io = ImGui.GetIO();
+            Io = ImGui.GetIO();
             _mouse = ImGui.GetMousePos();
 
             WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
@@ -36,9 +34,9 @@ namespace T3.Gui.Interaction
             // Damp scaling
             var p1 = Scroll;
             var p2 = Scroll + WindowSize * Scale;
-            var p1Target = _scrollTarget;
-            var p2Target = _scrollTarget + WindowSize * _scaleTarget;
-            var f = Math.Min(_io.DeltaTime * ZoomSpeed, 1);
+            var p1Target = ScrollTarget;
+            var p2Target = ScrollTarget + WindowSize * ScaleTarget;
+            var f = Math.Min(Io.DeltaTime * ZoomSpeed, 1);
             var pp1 = Im.Lerp(p1, p1Target, f);
             var pp2 = Im.Lerp(p2, p2Target, f);
             var scaleT = (pp2 - pp1) / WindowSize;
@@ -51,21 +49,21 @@ namespace T3.Gui.Interaction
         {
             return new Scope()
                    {
-                       Scale = _scaleTarget,
-                       Scroll = _scrollTarget
+                       Scale = ScaleTarget,
+                       Scroll = ScrollTarget
                    };
         }
 
         public void SetVisibleRange(Vector2 scale, Vector2 scroll)
         {
-            _scaleTarget = scale;
-            _scrollTarget = scroll;
+            ScaleTarget = scale;
+            ScrollTarget = scroll;
         }
 
         public void SetVisibleVRange(float valueScale, float valueScroll)
         {
-            _scaleTarget = new Vector2(_scaleTarget.X, valueScale);
-            _scrollTarget = new Vector2(_scrollTarget.X, valueScroll);
+            ScaleTarget = new Vector2(ScaleTarget.X, valueScale);
+            ScrollTarget = new Vector2(ScrollTarget.X, valueScroll);
         }
 
         #region implement ICanvas =================================================================
@@ -169,15 +167,15 @@ namespace T3.Gui.Interaction
         public Vector2 WindowSize { get; private set; }
 
         public Vector2 Scale { get; private set; } = Vector2.One;
-        protected Vector2 _scaleTarget = Vector2.One;
+        protected Vector2 ScaleTarget = Vector2.One;
 
         public Vector2 Scroll { get; private set; } = new Vector2(0.0f, 0.0f);
-        protected Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
+        protected Vector2 ScrollTarget = new Vector2(0.0f, 0.0f);
         #endregion
 
         public void SetScaleToMatchPixels()
         {
-            _scaleTarget = Vector2.One;
+            ScaleTarget = Vector2.One;
         }
 
         public void FitAreaOnCanvas(ImRect area)
@@ -197,18 +195,18 @@ namespace T3.Gui.Interaction
             if (targetAspect > WindowSize.X / WindowSize.Y)
             {
                 scale = WindowSize.X / width;
-                _scrollTarget = new Vector2(
+                ScrollTarget = new Vector2(
                                             -area.Min.X * scale, 
                                             -area.Min.Y* scale+ (WindowSize.Y - height * scale) / 2);
             }
             else
             {
                 scale = WindowSize.Y / height;
-                _scrollTarget = new Vector2(
+                ScrollTarget = new Vector2(
                                             -area.Min.X* scale + (WindowSize.X - width * scale) / 2, 
                                             -area.Min.Y * scale);
             }
-            _scaleTarget = new Vector2(scale, scale);
+            ScaleTarget = new Vector2(scale, scale);
         }
 
         public enum Transition
@@ -220,17 +218,17 @@ namespace T3.Gui.Interaction
 
         protected void SetScopeWithTransition(Vector2 scale, Vector2 scroll, Vector2 previousFocusOnScreen, Transition transition)
         {
-            _scaleTarget = scale;
+            ScaleTarget = scale;
             Scale = scale * (transition == Transition.JumpIn ? 0.3f : 1.5f);
             
-            _scrollTarget = scroll;
+            ScrollTarget = scroll;
             if(transition == Transition.JumpIn)
-                Scroll = _scrollTarget+ WindowSize * 0.5f;
+                Scroll = ScrollTarget+ WindowSize * 0.5f;
             else
             {
                 var delta = WindowSize / 2;
                 var scrollIs = delta * Scale;
-                Scroll = _scrollTarget -scrollIs;
+                Scroll = ScrollTarget -scrollIs;
             }
         }
 
@@ -243,7 +241,7 @@ namespace T3.Gui.Interaction
                 && (ImGui.IsMouseDragging(1) 
                     || (ImGui.IsMouseDragging(0) && ImGui.GetIO().KeyAlt)))
             {
-                _scrollTarget += _io.MouseDelta;
+                ScrollTarget += Io.MouseDelta;
                 UserScrolledCanvas = true;
             }
             else
@@ -258,36 +256,36 @@ namespace T3.Gui.Interaction
         {
             UserZoomedCanvas = false;
             
-            if (Math.Abs(_io.MouseWheel) < 0.01f)
+            if (Math.Abs(Io.MouseWheel) < 0.01f)
                 return;
             
             var focusCenter = (_mouse - Scroll - WindowPos) / Scale;
 
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
 
-            _scaleTarget *= zoomDelta;
+            ScaleTarget *= zoomDelta;
             if (Math.Abs(zoomDelta) > 0.1f)
                 UserZoomedCanvas = true;
 
-            var shift = _scrollTarget + (focusCenter * _scaleTarget);
-            _scrollTarget += _mouse - shift - WindowPos;
+            var shift = ScrollTarget + (focusCenter * ScaleTarget);
+            ScrollTarget += _mouse - shift - WindowPos;
         }
 
-        protected float ComputeZoomDeltaFromMouseWheel()
+        private float ComputeZoomDeltaFromMouseWheel()
         {
             const float zoomSpeed = 1.2f;
             var zoomSum = 1f;
-            if (_io.MouseWheel < 0.0f)
+            if (Io.MouseWheel < 0.0f)
             {
-                for (var zoom = _io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
+                for (var zoom = Io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
                 {
                     zoomSum /= zoomSpeed;
                 }
             }
 
-            if (_io.MouseWheel > 0.0f)
+            if (Io.MouseWheel > 0.0f)
             {
-                for (var zoom = _io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
+                for (var zoom = Io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
                 {
                     zoomSum *= zoomSpeed;
                 }
@@ -299,6 +297,11 @@ namespace T3.Gui.Interaction
         
         public struct Scope
         {
+            public Scope(Vector2 scale, Vector2 scroll)
+            {
+                Scale = scale;
+                Scroll = scroll;
+            }
             public Vector2 Scale;
             public Vector2 Scroll;
         }
@@ -306,7 +309,7 @@ namespace T3.Gui.Interaction
         protected bool UserZoomedCanvas;
         protected bool UserScrolledCanvas;
         public bool NoMouseInteraction;
-        protected Vector2 _mouse;
-        protected ImGuiIOPtr _io;
+        private Vector2 _mouse;
+        protected ImGuiIOPtr Io;
     }
 }

@@ -7,8 +7,8 @@ namespace T3.Gui.Windows.TimeLine
     {
         public CurveCanvas()
         {
-            _scrollTarget = new Vector2(500f, 0.0f);
-            _scaleTarget = new Vector2(80, -1);
+            ScrollTarget = new Vector2(500f, 0.0f);
+            ScaleTarget = new Vector2(80, -1);
         }
     }
 }
