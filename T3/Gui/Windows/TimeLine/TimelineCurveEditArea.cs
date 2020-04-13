@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Animation.CurveEditing;
@@ -23,14 +22,12 @@ namespace T3.Gui.Windows.TimeLine
         {
             _snapHandler = snapHandler;
             TimeLineCanvas = timeLineCanvas;
-            _curveEditBox = new CurveEditBox(timeLineCanvas);
         }
 
         
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters, bool bringCurvesIntoView = false)
         {
             _compositionOp = compositionOp;
-            _drawList = ImGui.GetWindowDrawList();
             AnimationParameters = animationParameters;
 
             if (bringCurvesIntoView)
@@ -123,7 +120,8 @@ namespace T3.Gui.Windows.TimeLine
             if (selectMode == SelectMode.Replace)
                 SelectedKeyframes.Clear();
 
-            var canvasArea = TimeLineCanvas.Current.InverseTransformRect(screenArea);
+            THelpers.DebugRect(screenArea.Min, screenArea.Max);
+            var canvasArea = TimeLineCanvas.Current.InverseTransformRect(screenArea).MakePositive();
             var matchingItems = new List<VDefinition>();
 
             foreach (var keyframe in GetAllKeyframes())
@@ -247,12 +245,7 @@ namespace T3.Gui.Windows.TimeLine
         
         private static ChangeKeyframesCommand _changeKeyframesCommand;
         private static Vector2[] _curveLinePoints = new Vector2[0];
-
         private Instance _compositionOp;
-
-        private static ImDrawListPtr _drawList;
-        
-        private readonly CurveEditBox _curveEditBox;
         private readonly ValueSnapHandler _snapHandler;
     }
 }

@@ -120,6 +120,28 @@ namespace UiHelpers
         }
 
         /// <summary>
+        /// This is required before using <see cref="Contains(Vector2)"/>
+        /// </summary>
+        public ImRect MakePositive()
+        {
+            if (Min.X > Max.X)
+            {
+                var t = Min.X;
+                Min.X = Max.X;
+                Max.X = t;
+            }            
+
+            if (Min.Y > Max.Y)
+            {
+                var t = Min.Y;
+                Min.Y = Max.Y;
+                Max.Y = t;
+            }
+                
+            return this;
+        }
+
+        /// <summary>
         /// Top-left
         /// </summary>
         public Vector2 GetTL()
@@ -151,6 +173,10 @@ namespace UiHelpers
             return Max;
         }
 
+        /// <summary>
+        /// This is required before using <see cref="Contains(Vector2)"/>
+        /// </summary>
+        /// <remarks>Please make sure to make the rectangle positive before testing</remarks>
         public bool Contains(Vector2 p)
         {
             return p.X >= Min.X && p.Y >= Min.Y && p.X < Max.X && p.Y < Max.Y;

@@ -15,12 +15,11 @@ namespace T3.Gui.Windows.TimeLine
             var hasChanged = Math.Abs(_bpm - playback.Bpm) > 0.001f;
             if (ScaleRanges == null || hasChanged)
             {
-                //_bpm = playback.Bpm;
                 ScaleRanges= InitializeTimeScaleDefinitions();
             }
-            DrawTimeTicks(TimeLineCanvas.Current.NestedTimeScale,
-                          TimeLineCanvas.Current.NestedTimeOffset, 
-                          TimeLineCanvas.Current);
+            var scale = TimeLineCanvas.Current.NestedTimeScale;
+            var scroll = TimeLineCanvas.Current.NestedTimeOffset;
+            DrawTimeTicks(scale,-scroll / scale,TimeLineCanvas.Current);            
         }
 
         private double _bpm = 240;
@@ -33,7 +32,6 @@ namespace T3.Gui.Windows.TimeLine
                 // bars
                 if (c == 'b')
                 {
-                    //var bars = (int)(time*_bpm/60f/4f) + 1;
                     var bars = (int)(timeInBars) + 1;
                     output += $"{bars}.";
                 }

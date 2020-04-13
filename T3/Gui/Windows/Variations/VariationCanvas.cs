@@ -405,8 +405,7 @@ namespace T3.Gui.Windows.Variations
         private static readonly GridCell GridCenter = GridCell.Center;
         private float _lastScale;
         private Vector2 _lastScroll = Vector2.One;
-
-        public override IEnumerable<ISelectableNode> SelectableChildren { get; } = new List<ISelectableNode>();
+        
         private static readonly Vector2 ThumbnailSize = new Vector2(160, 160 / 16f * 9);
         private static readonly Color NeedsUpdateColor = new Color(1f, 1f, 1f, 0.05f);
         private readonly Dictionary<int, Variation> _variationByGridIndex = new Dictionary<int, Variation>();

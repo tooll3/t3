@@ -128,10 +128,5 @@ namespace T3.Gui.Windows.TimeLine
                 TimeLineCanvas.Current.SetVisibleVRange(scale, (float)maxV - 20 / scale);
             }
         }
-        
-        // private IEnumerable<Curve> ParameterCurves()
-        // {
-        //     return AnimationParameters.SelectMany(param => param.Curves);
-        // }
     }
 }

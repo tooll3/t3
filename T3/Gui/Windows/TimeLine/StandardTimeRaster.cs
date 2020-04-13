@@ -14,13 +14,19 @@ namespace T3.Gui.Windows.TimeLine
         public override void Draw(Playback playback)
         {
             var unitInSecs = UnitsPerSecond * playback.Bpm / 240f;
-            DrawTimeTicks(TimeLineCanvas.Current.Scale.X / unitInSecs, TimeLineCanvas.Current.Scroll.X * unitInSecs, TimeLineCanvas.Current);
+            
+            var scale = TimeLineCanvas.Current.NestedTimeScale / unitInSecs;
+            var scroll = TimeLineCanvas.Current.NestedTimeOffset;
+            DrawTimeTicks(scale,-scroll / scale,TimeLineCanvas.Current);     
         }
 
         public void Draw(ICanvas canvas)
         {
             var unitInSecs = UnitsPerSecond;
-            DrawTimeTicks(canvas.Scale.X / unitInSecs, canvas.Scroll.X * unitInSecs, canvas);
+            
+            var scale = canvas.Scale.X / unitInSecs;
+            var scroll = canvas.Scroll.X;
+            DrawTimeTicks(scale,-scroll / scale,TimeLineCanvas.Current);     
         }
         
         public float UnitsPerSecond { get; set; } = 1;

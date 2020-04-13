@@ -29,18 +29,15 @@ namespace T3.Gui.Interaction
 
             DampScaling();
             HandleInteraction();
-
-            //ImGui.SetScrollY(0);    // HACK: prevent jump of scroll position by accidental scrolling
         }
 
-        private void DampScaling()
+        protected void DampScaling()
         {
             // Damp scaling
             var p1 = Scroll;
             var p2 = Scroll + WindowSize * Scale;
             var p1Target = _scrollTarget;
             var p2Target = _scrollTarget + WindowSize * _scaleTarget;
-            //var speed = 12;
             var f = Math.Min(_io.DeltaTime * ZoomSpeed, 1);
             var pp1 = Im.Lerp(p1, p1Target, f);
             var pp2 = Im.Lerp(p2, p2Target, f);
@@ -50,7 +47,7 @@ namespace T3.Gui.Interaction
             Scroll = pp1;
         }
 
-        public Scope GetTargetProperties()
+        public Scope GetTargetScope()
         {
             return new Scope()
                    {
@@ -59,66 +56,77 @@ namespace T3.Gui.Interaction
                    };
         }
 
+        public void SetVisibleRange(Vector2 scale, Vector2 scroll)
+        {
+            _scaleTarget = scale;
+            _scrollTarget = scroll;
+        }
+
+        public void SetVisibleVRange(float valueScale, float valueScroll)
+        {
+            _scaleTarget = new Vector2(_scaleTarget.X, valueScale);
+            _scrollTarget = new Vector2(_scrollTarget.X, valueScroll);
+        }
 
         #region implement ICanvas =================================================================
 
-        public abstract IEnumerable<ISelectableNode> SelectableChildren { get; }
 
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public Vector2 TransformPosition(Vector2 posOnCanvas)
+        public virtual Vector2 TransformPosition(Vector2 posOnCanvas)
         {
             return posOnCanvas * Scale + Scroll + WindowPos;
         }
-
-        /// <summary>
-        /// Convert screen position to canvas position
-        /// </summary>
-        public virtual float InverseTransformX(float xOnScreen)
+        
+        public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
         {
-            return (xOnScreen - WindowPos.X) / Scale.X + Scroll.X;
+            return Im.Floor(posOnCanvas * Scale + Scroll + WindowPos);
         }
-
         
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        public virtual float TransformX(float xOnCanvas)
+        public  float TransformX(float xOnCanvas)
         {
-            return (int)((xOnCanvas - Scroll.X) * Scale.X + WindowPos.X);
+            return TransformPosition(new Vector2(xOnCanvas, 0)).X;
         }
-
+        
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
         public float TransformY(float yOnCanvas)
         {
-            return (yOnCanvas - Scroll.Y) * Scale.Y + WindowPos.Y;
+            return TransformPosition(new Vector2(yOnCanvas, 0)).Y;
         }
+        
+        /// <summary>
+        /// Convert at screen space position (e.g. from mouse) to canvas coordinates applying canvas zoom and scrolling 
+        /// </summary>
+        public virtual Vector2 InverseTransformPosition(Vector2 screenPos)
+        {
+            return (screenPos - Scroll - WindowPos) / Scale;
+        }
+        
+        /// <summary>
+        /// Convert screen position to canvas position
+        /// </summary>
+        public virtual float InverseTransformX(float xOnScreen)
+        {
+            return InverseTransformPosition(new Vector2(xOnScreen,0)).X;
+        }
+        
         /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
         public float InverseTransformY(float yOnScreen)
         {
-            return (yOnScreen - WindowPos.Y) / Scale.Y + Scroll.Y;
+            //return (yOnScreen - WindowPos.Y) / Scale.Y + Scroll.Y;
+            //return (yOnScreen - WindowPos.Y - WindowPos.Y) / Scale.Y;
+            return InverseTransformPosition(new Vector2(yOnScreen,0)).Y;
         }
         
-        public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
-        {
-            return Im.Floor((posOnCanvas - Scroll) * Scale + WindowPos);
-        }
-
-
-        /// <summary>
-        /// Convert at screen space position (e.g. from mouse) to canvas coordinates applying canvas zoom and scrolling 
-        /// </summary>
-        public Vector2 InverseTransformPosition(Vector2 screenPos)
-        {
-            return (screenPos - Scroll - WindowPos) / Scale;
-        }
-
-
+        
         /// <summary>
         /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
         /// </summary>
@@ -161,10 +169,10 @@ namespace T3.Gui.Interaction
         public Vector2 WindowSize { get; private set; }
 
         public Vector2 Scale { get; private set; } = Vector2.One;
-        private Vector2 _scaleTarget = Vector2.One;
+        protected Vector2 _scaleTarget = Vector2.One;
 
         public Vector2 Scroll { get; private set; } = new Vector2(0.0f, 0.0f);
-        private Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
+        protected Vector2 _scrollTarget = new Vector2(0.0f, 0.0f);
         #endregion
 
         public void SetScaleToMatchPixels()
@@ -226,7 +234,7 @@ namespace T3.Gui.Interaction
             }
         }
 
-        private void HandleInteraction()
+        protected virtual void HandleInteraction()
         {
             if (!ImGui.IsWindowHovered())
                 return;
@@ -243,9 +251,6 @@ namespace T3.Gui.Interaction
                 UserScrolledCanvas = false;
             }            
             
-            if (NoMouseInteraction)
-                return;
-            
             HandleZoomWithMouseWheel();
         }
 
@@ -256,37 +261,42 @@ namespace T3.Gui.Interaction
             if (Math.Abs(_io.MouseWheel) < 0.01f)
                 return;
             
-            const float zoomSpeed = 1.2f;
             var focusCenter = (_mouse - Scroll - WindowPos) / Scale;
 
-            var zoomDelta = 1f;
+            var zoomDelta = ComputeZoomDeltaFromMouseWheel();
 
+            _scaleTarget *= zoomDelta;
+            if (Math.Abs(zoomDelta) > 0.1f)
+                UserZoomedCanvas = true;
+
+            var shift = _scrollTarget + (focusCenter * _scaleTarget);
+            _scrollTarget += _mouse - shift - WindowPos;
+        }
+
+        protected float ComputeZoomDeltaFromMouseWheel()
+        {
+            const float zoomSpeed = 1.2f;
+            var zoomSum = 1f;
             if (_io.MouseWheel < 0.0f)
             {
-                for (float zoom = _io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
+                for (var zoom = _io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
                 {
-                    zoomDelta /= zoomSpeed;
+                    zoomSum /= zoomSpeed;
                 }
-
-                UserZoomedCanvas = true;
             }
 
             if (_io.MouseWheel > 0.0f)
             {
-                for (float zoom = _io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
+                for (var zoom = _io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
                 {
-                    zoomDelta *= zoomSpeed;
+                    zoomSum *= zoomSpeed;
                 }
-
-                UserZoomedCanvas = true;
             }
 
-            _scaleTarget *= zoomDelta;
-
-            Vector2 shift = _scrollTarget + (focusCenter * _scaleTarget);
-            _scrollTarget += _mouse - shift - WindowPos;
+            zoomSum = zoomSum.Clamp(0.01f, 100f);
+            return zoomSum;
         }
-
+        
         public struct Scope
         {
             public Vector2 Scale;
@@ -296,7 +306,7 @@ namespace T3.Gui.Interaction
         protected bool UserZoomedCanvas;
         protected bool UserScrolledCanvas;
         public bool NoMouseInteraction;
-        private Vector2 _mouse;
-        private ImGuiIOPtr _io;
+        protected Vector2 _mouse;
+        protected ImGuiIOPtr _io;
     }
 }

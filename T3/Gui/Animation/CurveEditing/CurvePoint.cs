@@ -17,11 +17,14 @@ namespace T3.Gui.Animation.CurveEditing
         public static void Draw(VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, TimelineCurveEditArea timelineCurveEditArea)
         {
             _drawlist = ImGui.GetWindowDrawList();
-            _curveEditCanvas = curveEditCanvas;
+            _curveEditCanvas = TimeLineCanvas.Current;
             _vDef = vDef;
 
             var pCenter = _curveEditCanvas.TransformPosition(new Vector2((float)vDef.U, (float)vDef.Value));
             var pTopLeft = pCenter - ControlSizeHalf;
+            
+            var debugPosition =  new Vector2(TimeLineCanvas.Current.TransformX((float)vDef.U)  + 1,100);
+            THelpers.DebugRect(debugPosition, debugPosition+ Vector2.One*10);
 
             ImGui.PushFont(Icons.IconFont);
             _drawlist.AddText(pTopLeft - new Vector2(2, 4), Color.White, isSelected ? KeyframeIconSelected : KeyframeIcon);

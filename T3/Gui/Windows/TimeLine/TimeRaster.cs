@@ -41,6 +41,7 @@ namespace T3.Gui.Windows.TimeLine
             _usedPositions.Clear();
 
             scale = 1/scale;
+            
 
             var rasters = GetRastersForScale(scale, out var fadeFactor);
 

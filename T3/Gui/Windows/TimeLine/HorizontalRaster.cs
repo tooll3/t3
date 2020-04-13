@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
 using ImGuiNET;
-using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -13,7 +12,7 @@ namespace T3.Gui.Windows.TimeLine
         public void Draw(ICanvas canvas)
         {
             _canvas = canvas;
-            DrawLines(canvas.Scale.Y , canvas.Scroll.Y);
+            DrawLines(canvas.Scale.Y , -canvas.Scroll.Y / canvas.Scale.Y);
         }
 
         private ICanvas _canvas;
@@ -126,8 +125,8 @@ namespace T3.Gui.Windows.TimeLine
                         if (raster.Label != "")
                         {
                             var value = t - scroll;
-                            var output = BuildLabel(raster, value);
-                            var p = new Vector2(topLeft.X+ 5,y - 8f); //topLeft + new Vector2(yIndex, viewWidth - 15);
+                            var output = BuildLabel(raster, -value);
+                            var p = new Vector2(topLeft.X+ 5,y - 8f);
                             drawList.AddText(p, textColor, output);
                         }
                     }

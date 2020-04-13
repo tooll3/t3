@@ -9,12 +9,15 @@ using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
-using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
+    /// <summary>
+    /// Combines multiple <see cref="ITimeObjectManipulation"/>s into a single consistent
+    /// timeline that allows dragging selected time elements of various types.
+    /// </summary>
     public class TimeLineCanvas : CurveCanvas, ITimeObjectManipulation
     {
         public TimeLineCanvas(Playback playback = null)
@@ -56,7 +59,6 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.SetScrollY(0);
 
                 HandleDeferredActions(animationParameters);
-                //HandleInteraction();
 
                 if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
                     DeleteSelectedElements();
@@ -99,9 +101,9 @@ namespace T3.Gui.Windows.TimeLine
         #region handle nested timelines ----------------------------------
         private void UpdateLocalTimeTranslation(Instance compositionOp)
         {
-            _localTimeScale = 1f;
-            _localTimeOffset = 0f;
-            ;
+            _nestedTimeScale = 1f;
+            _nestedTimeOffset = 0f;
+            
             var parents = GraphCanvas.Current.GetParents().Reverse().ToList();
             parents.Add(compositionOp);
             foreach (var p in parents)
@@ -111,36 +113,43 @@ namespace T3.Gui.Windows.TimeLine
 
                 var clip = timeClipProvider.TimeClip;
                 var scale = clip.TimeRange.Duration / clip.SourceRange.Duration;
-                _localTimeScale *= scale;
-                _localTimeOffset += clip.TimeRange.Start - clip.SourceRange.Start * scale;
+                _nestedTimeScale *= scale;
+                _nestedTimeOffset += clip.TimeRange.Start - clip.SourceRange.Start * scale;
             }
+            
+            // ImGui.Text($"localScale: {_nestedTimeScale}   localScroll: {_nestedTimeOffset}");
         }
 
+        
         /// <summary>
-        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Override the default implement to support time clip nesting 
         /// </summary>
-        public override float TransformX(float xOnCanvas)
+        public override Vector2 TransformPosition(Vector2 posOnCanvas)
         {
-            var scale = Scale.X * _localTimeScale;
-            var offset = (Scroll.X - _localTimeOffset) / _localTimeScale;
-            return (int)((xOnCanvas - offset) * scale + WindowPos.X);
+            var localScale = new Vector2(_nestedTimeScale,1);
+            var localScroll = new Vector2(_nestedTimeOffset,0);
+            
+            return (posOnCanvas * localScale + localScroll) * Scale + Scroll + WindowPos;
         }
-
-        /// <summary>
-        /// Convert screen position to canvas position
-        /// </summary>
-        public override float InverseTransformX(float xOnScreen)
+        
+        
+        public override Vector2 InverseTransformPosition(Vector2 posOnScreen)
         {
-            var scale = Scale.X * _localTimeScale;
-            var offset = (Scroll.X - _localTimeOffset) / _localTimeScale;
-            return (xOnScreen - WindowPos.X) / scale + offset;
+            var localScale = new Vector2(_nestedTimeScale,1);
+            var localScroll = new Vector2(_nestedTimeOffset,0);
+            
+            return (posOnScreen- localScroll * Scale - Scroll - WindowPos) / (localScale * Scale);
         }
+        
 
         public float TransformGlobalTime(float time)
         {
-            var localTime = (time - _localTimeOffset) / _localTimeScale;
-            return TransformX(localTime);
+            return base.TransformPosition(new Vector2(time, 0)).X;
         }
+        
+        public float NestedTimeScale => Scale.X * _nestedTimeScale;
+        public float NestedTimeOffset => (Scroll.X - _nestedTimeOffset) + _nestedTimeOffset;        
+        
         #endregion
 
         private void HandleDeferredActions(List<GraphWindow.AnimationParameter> animationParameters)
@@ -196,7 +205,7 @@ namespace T3.Gui.Windows.TimeLine
 
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0) || ImGui.IsItemClicked())
             {
-                var draggedTime = InverseTransformPosition(_io.MousePos).X;
+                var draggedTime = InverseTransformX(_io.MousePos.X);
                 if (ImGui.GetIO().KeyShift)
                 {
                     _snapHandler.CheckForSnapping(ref draggedTime, _currentTimeMarker);
@@ -227,7 +236,7 @@ namespace T3.Gui.Windows.TimeLine
         private float _snapIndicatorDuration = 1;
         private float _lastSnapU;
 
-        #region implement ISelectionHolder
+        #region implement ITimeObjectManipulation
         public void ClearSelection()
         {
             foreach (var sh in _selectionHolders)
@@ -368,8 +377,7 @@ namespace T3.Gui.Windows.TimeLine
         private Modes _lastMode = Modes.CurveEditor; // Make different to force initial update
         #endregion
 
-        public float NestedTimeScale => Scale.X * _localTimeScale;
-        public float NestedTimeOffset => (Scroll.X - _localTimeOffset) / _localTimeScale;
+
 
         internal readonly Playback Playback;
 
@@ -390,8 +398,8 @@ namespace T3.Gui.Windows.TimeLine
 
         public static TimeLineCanvas Current;
 
-        private float _localTimeScale = 1;
-        private float _localTimeOffset = 0;
+        private float _nestedTimeScale = 1;
+        private float _nestedTimeOffset = 0;
 
         private ImDrawListPtr _drawlist;
 

@@ -45,7 +45,7 @@ namespace T3.Gui.Graph
             if (previousInstanceWasSet)
             {
                 var previousInstance = NodeOperations.GetInstanceFromIdPath(_compositionPath);
-                UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId] = GetTargetProperties();
+                UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId] = GetTargetScope();
 
                 var newUiContainer = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
                 var matchingChildUi = newUiContainer.ChildUis.FirstOrDefault(childUi => childUi.SymbolChild.Id == previousInstance.SymbolChildId);
@@ -91,6 +91,11 @@ namespace T3.Gui.Graph
 
         public void SetCompositionToParentInstance(Instance instance)
         {
+            if (instance == null)
+            {
+                Log.Warning("can't jump to parent with invalid instance");
+                return;
+            }
             var previousCompositionOp = CompositionOp;
             var shortenedPath = new List<Guid>();
             foreach (var pathItemId in _compositionPath)
@@ -118,7 +123,7 @@ namespace T3.Gui.Graph
         {
             ChildUis = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis;
             FocusViewToSelection();
-            return GetTargetProperties();
+            return GetTargetScope();
         }
 
         #region drawing UI ====================================================================
@@ -565,7 +570,7 @@ namespace T3.Gui.Graph
             }
         }
 
-        public override IEnumerable<ISelectableNode> SelectableChildren
+        public  IEnumerable<ISelectableNode> SelectableChildren
         {
             get
             {
