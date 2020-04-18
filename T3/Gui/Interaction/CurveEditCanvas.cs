@@ -156,8 +156,8 @@ namespace T3.Gui.Interaction
 
         protected readonly List<ITimeObjectManipulation> TimeObjectManipulators = new List<ITimeObjectManipulation>();
         #endregion
-        
-        protected readonly ValueSnapHandler SnapHandler = new ValueSnapHandler();
+
+        public readonly ValueSnapHandler SnapHandler = new ValueSnapHandler();
         protected ImDrawListPtr Drawlist;
         private double _lastSnapTime;
         private float _snapIndicatorDuration = 1;

@@ -20,6 +20,7 @@ namespace T3.Gui.Windows.TimeLine
         protected abstract IEnumerable<Curve> GetAllCurves();
         protected abstract void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false);
         protected abstract void DeleteSelectedKeyframes();
+        protected internal abstract void HandleCurvePointDragging(VDefinition vDef, bool isSelected);
         
         /// <summary>
         /// Helper function to extract vDefs from all or selected UI controls across all curves in CurveEditor

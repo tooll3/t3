@@ -62,7 +62,7 @@ namespace T3.Gui.Windows.TimeLine
             RebuildCurveTables();
         }
 
-        internal void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
+        protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
         {
             if (ImGui.IsItemHovered())
             {

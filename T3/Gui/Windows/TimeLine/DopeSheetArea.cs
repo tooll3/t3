@@ -353,12 +353,12 @@ namespace T3.Gui.Windows.TimeLine
                     }
                 }
 
-                HandleKeyframeDragging(vDef, isSelected);
+                HandleCurvePointDragging(vDef, isSelected);
                 ImGui.PopID();
             }
         }
 
-        private void HandleKeyframeDragging(VDefinition vDef, bool isSelected)
+        protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
         {
             if (ImGui.IsItemHovered())
             {

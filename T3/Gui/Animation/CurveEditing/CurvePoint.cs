@@ -14,7 +14,7 @@ namespace T3.Gui.Animation.CurveEditing
     /// </summary>
     public static class CurvePoint
     {
-        public static void Draw(VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, TimelineCurveEditArea timelineCurveEditArea)
+        public static void Draw(VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, Windows.TimeLine.CurveEditing timelineCurveEditArea)
         {
             _drawlist = ImGui.GetWindowDrawList();
             _curveEditCanvas = curveEditCanvas;

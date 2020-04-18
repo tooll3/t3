@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using ImGuiNET;
 using T3.Core.Animation;
 using T3.Gui.Animation.CurveEditing;
+using T3.Gui.Commands;
 using T3.Gui.Interaction;
 using T3.Gui.Windows.TimeLine;
 
@@ -54,7 +58,79 @@ namespace T3.Gui.InputUi
             protected override void DeleteSelectedKeyframes()
             {
             }
+            
+            
+            protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
+            {
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
+                }
 
+                if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
+                    return;
+
+                if (ImGui.GetIO().KeyCtrl)
+                {
+                    if (isSelected)
+                        SelectedKeyframes.Remove(vDef);
+
+                    return;
+                }
+
+                if (!isSelected)
+                {
+                    if (!ImGui.GetIO().KeyShift)
+                    {
+                        _canvas.ClearSelection();
+                    }
+
+                    SelectedKeyframes.Add(vDef);
+                }
+
+                if (_changeKeyframesCommand == null)
+                {
+                    _canvas.StartDragCommand();
+                }
+
+
+                var newDragPosition = _canvas.InverseTransformPosition(ImGui.GetIO().MousePos);
+                double u = newDragPosition.X;
+                _canvas.SnapHandler.CheckForSnapping(ref u);
+            
+                var dY = newDragPosition.Y - vDef.Value;
+                UpdateDragCommand(u - vDef.U, dY);
+            }
+
+
+            public ICommand StartDragCommand()
+            {
+                _changeKeyframesCommand = new ChangeKeyframesCommand(Guid.Empty, SelectedKeyframes);
+                return _changeKeyframesCommand;
+            }
+
+            public void UpdateDragCommand(double dt, double dv)
+            {
+                foreach (var vDefinition in SelectedKeyframes)
+                {
+                    vDefinition.U += dt;
+                    vDefinition.Value += dv;
+                }
+                RebuildCurveTables();
+            }
+
+            public void CompleteDragCommand()
+            {
+                if (_changeKeyframesCommand == null)
+                    return;
+
+                _changeKeyframesCommand.StoreCurrentValues();
+                UndoRedoStack.Add(_changeKeyframesCommand);
+                _changeKeyframesCommand = null;
+            }
+            
+            private static ChangeKeyframesCommand _changeKeyframesCommand;
+            
             
             private void HandleFenceSelection()
             {
@@ -91,9 +167,9 @@ namespace T3.Gui.InputUi
                         HorizontalRaster.Draw(this);
                         TimelineCurveEditArea.DrawCurveLine(curve, this);
 
-                        foreach (var keyframe in interaction.GetAllKeyframes())
+                        foreach (var keyframe in interaction.GetAllKeyframes().ToArray())
                         {
-                            CurvePoint.Draw(keyframe, this,  interaction.SelectedKeyframes.Contains(keyframe), null);
+                            CurvePoint.Draw(keyframe, this,  interaction.SelectedKeyframes.Contains(keyframe), interaction);
                         }
                         
                         interaction.HandleFenceSelection();
