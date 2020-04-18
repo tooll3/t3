@@ -18,7 +18,7 @@ namespace T3.Gui.InputUi
                    };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, ref T value)
+        protected override InputEditStateFlags DrawEditControl(string name, ref T value, bool isDefaultValue)
         {
             // todo: check perf impact of creating the list here again and again! -> cache lists
             Type enumType = typeof(T);

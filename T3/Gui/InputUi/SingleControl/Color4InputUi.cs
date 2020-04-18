@@ -30,7 +30,7 @@ namespace T3.Gui.InputUi.SingleControl
 
         protected override void DrawReadOnlyControl(string name, ref Vector4 value)
         {
-            DrawEditControl(name, ref value);
+            DrawEditControl(name, ref value, false);
         }
         
         protected override void DrawAnimatedValue(string name, InputSlot<Vector4> inputSlot, Animator animator)

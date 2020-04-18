@@ -17,7 +17,7 @@ namespace T3.Gui.InputUi
                    };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, ref T value)
+        protected override InputEditStateFlags DrawEditControl(string name, ref T value, bool isDefaultValue)
         {
             ImGui.Text(""); // Print an empty text to force layout to next line
             return InputEditStateFlags.Nothing;

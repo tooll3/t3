@@ -23,7 +23,7 @@ namespace T3.Gui.InputUi.SingleControl
 
         protected override void DrawReadOnlyControl(string name, ref Size2 value)
         {
-            DrawEditControl(name, ref value);
+            DrawEditControl(name, ref value, false);
         }
     }
 }
