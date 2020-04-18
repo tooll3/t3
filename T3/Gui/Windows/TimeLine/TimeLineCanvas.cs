@@ -19,12 +19,10 @@ namespace T3.Gui.Windows.TimeLine
     /// Combines multiple <see cref="ITimeObjectManipulation"/>s into a single consistent
     /// timeline that allows dragging selected time elements of various types.
     /// </summary>
-    public class TimeLineCanvas : ScalableCanvas, ITimeObjectManipulation
+    public class TimeLineCanvas : CurveEditCanvas
     {
         public TimeLineCanvas(Playback playback = null)
         {
-            ScrollTarget = new Vector2(500f, 0.0f);
-            ScaleTarget = new Vector2(80, -1);
             
             Playback = playback;
             _dopeSheetArea = new DopeSheetArea(_snapHandler, this);
@@ -39,26 +37,21 @@ namespace T3.Gui.Windows.TimeLine
             _snapHandler.AddSnapAttractor(_currentTimeMarker);
             _snapHandler.AddSnapAttractor(_timeSelectionRange);
             _snapHandler.AddSnapAttractor(LayersArea);
-
-            _snapHandler.SnappedEvent += SnappedEventHandler;
         }
 
         public bool FoundTimeClipForCurrentTime => LayersArea.FoundClipWithinCurrentTime;
-
+        
+        
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             Current = this;
             UpdateLocalTimeTranslation(compositionOp);
-
-            _drawlist = ImGui.GetWindowDrawList();
             
             var modeChanged = UpdateMode();
+            DrawCurveCanvas(drawAdditionalCanvasContent:DrawCanvasContent);
 
-            ImGui.BeginChild("timeline", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+            void DrawCanvasContent()
             {
-                UpdateCanvas();
-                
-                _drawlist = ImGui.GetWindowDrawList();
                 _timeLineImage.Draw(_drawlist, Playback);
                 ImGui.SetScrollY(0);
 
@@ -68,7 +61,6 @@ namespace T3.Gui.Windows.TimeLine
                     DeleteSelectedElements();
 
                 _timeRasterSwitcher.Draw(Playback);
-                DrawSnapIndicator();
 
                 switch (Mode)
                 {
@@ -97,11 +89,13 @@ namespace T3.Gui.Windows.TimeLine
 
                 _currentTimeMarker.Draw(Playback);
                 DrawDragTimeArea();
-                _selectionFence.Draw();
-            }
-            ImGui.EndChild();
+            }            
+
         }
 
+
+        
+        
         #region handle nested timelines ----------------------------------
         private void UpdateLocalTimeTranslation(Instance compositionOp)
         {
@@ -221,115 +215,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorPos(Vector2.Zero);
         }
 
-        private void SnappedEventHandler(double snapPosition)
-        {
-            _lastSnapTime = ImGui.GetTime();
-            _lastSnapU = (float)snapPosition;
-        }
-
-        private void DrawSnapIndicator()
-        {
-            var opacity = 1 - ((float)(ImGui.GetTime() - _lastSnapTime) / _snapIndicatorDuration).Clamp(0, 1);
-            var color = Color.Orange;
-            color.Rgba.W = opacity;
-            var p = new Vector2(TransformX(_lastSnapU), 0);
-            _drawlist.AddRectFilled(p, p + new Vector2(1, 2000), color);
-        }
-
-        private double _lastSnapTime;
-        private float _snapIndicatorDuration = 1;
-        private float _lastSnapU;
-
-        #region implement ITimeObjectManipulation to forward interaction to children
-        public void ClearSelection()
-        {
-            foreach (var sh in _selectionHolders)
-            {
-                sh.ClearSelection();
-            }
-        }
-
-        public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
-        {
-            foreach (var sh in _selectionHolders)
-            {
-                sh.UpdateSelectionForArea(screenArea, selectMode);
-            }
-        }
-
-        public ICommand StartDragCommand()
-        {
-            foreach (var s in _selectionHolders)
-            {
-                s.StartDragCommand();
-            }
-
-            return null;
-        }
-
-        public void UpdateDragCommand(double dt, double dv)
-        {
-            foreach (var s in _selectionHolders)
-            {
-                s.UpdateDragCommand(dt, dv);
-            }
-        }
-
-        public void UpdateDragAtStartPointCommand(double dt, double dv)
-        {
-            foreach (var s in _selectionHolders)
-            {
-                s.UpdateDragAtStartPointCommand(dt, dv);
-            }
-        }
-
-        public void UpdateDragAtEndPointCommand(double dt, double dv)
-        {
-            foreach (var s in _selectionHolders)
-            {
-                s.UpdateDragAtEndPointCommand(dt, dv);
-            }
-        }
-
-        public void UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV)
-        {
-            foreach (var s in _selectionHolders)
-            {
-                s.UpdateDragStretchCommand(scaleU, scaleV, originU, originV);
-            }
-        }
-
-        public TimeRange GetSelectionTimeRange()
-        {
-            var timeRange = new TimeRange(float.PositiveInfinity, float.NegativeInfinity);
-
-            foreach (var sh in _selectionHolders)
-            {
-                timeRange.Unite(sh.GetSelectionTimeRange());
-            }
-
-            return timeRange;
-        }
-
-        public void CompleteDragCommand()
-        {
-            foreach (var s in _selectionHolders)
-            {
-                s.CompleteDragCommand();
-            }
-        }
-
-        public void DeleteSelectedElements()
-        {
-            foreach (var s in _selectionHolders)
-            {
-                s.DeleteSelectedElements();
-            }
-        }
-
-        private readonly List<ITimeObjectManipulation> _selectionHolders = new List<ITimeObjectManipulation>();
-        #endregion
-
+        
         #region view modes
         private bool UpdateMode()
         {
@@ -395,7 +281,6 @@ namespace T3.Gui.Windows.TimeLine
         private readonly TimeLineImage _timeLineImage = new TimeLineImage();
 
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
-        private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
         private readonly TimeSelectionFence _selectionFence;
         private readonly TimeSelectionRange _timeSelectionRange;
         public readonly LayersArea LayersArea;
@@ -405,7 +290,7 @@ namespace T3.Gui.Windows.TimeLine
         private float _nestedTimeScale = 1;
         private float _nestedTimeOffset = 0;
 
-        private ImDrawListPtr _drawlist;
+        
 
         // Styling
         public const float TimeLineDragHeight = 40;

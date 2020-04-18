@@ -373,6 +373,7 @@
     <Compile Include="Gui\InputUi\SingleControl\Size2InputUi.cs" />
     <Compile Include="Gui\InputUi\SingleControl\StringListInputUi.cs" />
     <Compile Include="Gui\Interaction\CameraInteraction.cs" />
+    <Compile Include="Gui\Interaction\CurveEditCanvas.cs" />
     <Compile Include="Gui\Interaction\SelectionFence.cs" />
     <Compile Include="Gui\Interaction\SingleValueEdit.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
