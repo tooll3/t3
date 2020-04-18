@@ -180,9 +180,10 @@ namespace T3.Gui.InputUi
                         {
                             CurvePoint.Draw(keyframe, this, interaction.SelectedKeyframes.Contains(keyframe), interaction);
                         }
-
+                        
                         interaction.HandleFenceSelection();
                         interaction.DrawContextMenu();
+                        HandleCreateNewKeyframes(curve);
                         if (_needToAdjustScopeAfterFirstRendering)
                         {
                             var bounds = GetBoundsOnCanvas(interaction.GetAllKeyframes());
