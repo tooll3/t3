@@ -33,11 +33,12 @@ namespace T3.Gui.InputUi
         private class CurveInteraction : CurveEditing
         {
             public List<Curve> Curves = new List<Curve>();
-            private readonly SingleCurveEditCanvas _canvas = new SingleCurveEditCanvas();
+            private readonly SingleCurveEditCanvas _canvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + InteractionForCurve.Count};
             
             public void Draw()
             {
                 _canvas.Draw(Curves[0], this);
+                
             }
             
             
@@ -82,7 +83,7 @@ namespace T3.Gui.InputUi
             {
                 public void Draw(Curve curve, CurveInteraction interaction)
                 {
-                    DrawCurveCanvas(DrawCanvasContent);
+                    DrawCurveCanvas(DrawCanvasContent, height: 150);
 
                     void DrawCanvasContent()
                     {
@@ -96,6 +97,7 @@ namespace T3.Gui.InputUi
                         }
                         
                         interaction.HandleFenceSelection();
+                        interaction.DrawContextMenu();
                     }
                 }
                 

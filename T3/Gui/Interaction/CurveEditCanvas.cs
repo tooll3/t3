@@ -20,11 +20,13 @@ namespace T3.Gui.Interaction
             SnapHandler.SnappedEvent += SnappedEventHandler;
         }
 
-        protected void DrawCurveCanvas(Action drawAdditionalCanvasContent)
+        public string ImGuiTitle = "timeline";
+
+        protected void DrawCurveCanvas(Action drawAdditionalCanvasContent, float height=0)
         {
             Drawlist = ImGui.GetWindowDrawList();
             
-            ImGui.BeginChild("timeline", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+            ImGui.BeginChild(ImGuiTitle, new Vector2(0, height), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
                 UpdateCanvas();
                 Drawlist = ImGui.GetWindowDrawList();
