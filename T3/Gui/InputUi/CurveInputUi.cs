@@ -35,7 +35,7 @@ namespace T3.Gui.InputUi
             
             ImGui.Dummy(Vector2.One);    // Add Line Break
             
-            CurveParameterEditing.DrawCanvasForCurve(curve);
+            CurveInputEditing.DrawCanvasForCurve(curve);
 
             InputEditStateFlags inputEditStateFlags = InputEditStateFlags.Nothing;
 

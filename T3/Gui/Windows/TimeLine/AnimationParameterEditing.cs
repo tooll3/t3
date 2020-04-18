@@ -5,6 +5,9 @@ using T3.Gui.Graph;
 
 namespace T3.Gui.Windows.TimeLine
 {
+    /// <summary>
+    /// Links to AnimationParameters to editors like DopeSheets or <see cref="TimelineCurveEditArea"/>>
+    /// </summary>
     public abstract class AnimationParameterEditing : CurveEditing
     {
         protected override IEnumerable<Curve> GetAllCurves()

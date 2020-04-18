@@ -358,7 +358,7 @@
     <Compile Include="Gui\Graph\Interaction\SymbolFilter.cs" />
     <Compile Include="Gui\Graph\Rendering\SrvManager.cs" />
     <Compile Include="Gui\Graph\TimeControls.cs" />
-    <Compile Include="Gui\InputUi\CurveParameterEditing.cs" />
+    <Compile Include="Gui\InputUi\CurveInputEditing.cs" />
     <Compile Include="Gui\InputUi\CurveInputUi.cs" />
     <Compile Include="Gui\InputUi\EnumInputUi.cs" />
     <Compile Include="Gui\InputUi\Float2InputUi.cs" />
