@@ -9,6 +9,7 @@ using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using UiHelpers;
 
@@ -18,10 +19,13 @@ namespace T3.Gui.Windows.TimeLine
     /// Combines multiple <see cref="ITimeObjectManipulation"/>s into a single consistent
     /// timeline that allows dragging selected time elements of various types.
     /// </summary>
-    public class TimeLineCanvas : CurveCanvas, ITimeObjectManipulation
+    public class TimeLineCanvas : ScalableCanvas, ITimeObjectManipulation
     {
         public TimeLineCanvas(Playback playback = null)
         {
+            ScrollTarget = new Vector2(500f, 0.0f);
+            ScaleTarget = new Vector2(80, -1);
+            
             Playback = playback;
             _dopeSheetArea = new DopeSheetArea(_snapHandler, this);
             _selectionFence = new TimeSelectionFence(this);
@@ -236,7 +240,7 @@ namespace T3.Gui.Windows.TimeLine
         private float _snapIndicatorDuration = 1;
         private float _lastSnapU;
 
-        #region implement ITimeObjectManipulation
+        #region implement ITimeObjectManipulation to forward interaction to children
         public void ClearSelection()
         {
             foreach (var sh in _selectionHolders)
