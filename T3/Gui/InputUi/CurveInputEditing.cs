@@ -27,6 +27,7 @@ namespace T3.Gui.InputUi
                                        {
                                            Curves = new List<Curve>() { curve }
                                        };
+                
                 InteractionForCurve.Add(curve, curveInteraction);
             }
 
@@ -38,11 +39,10 @@ namespace T3.Gui.InputUi
         {
             public List<Curve> Curves = new List<Curve>();
             private readonly SingleCurveEditCanvas _canvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + InteractionForCurve.Count};
-            
+
             public void Draw()
             {
                 _canvas.Draw(Curves[0], this);
-                
             }
             
             
@@ -174,11 +174,19 @@ namespace T3.Gui.InputUi
                         
                         interaction.HandleFenceSelection();
                         interaction.DrawContextMenu();
+                        if (_needToAdjustScopeAfterFirstRendering)
+                        {
+                            var bounds = GetBoundsOnCanvas(interaction.GetAllKeyframes());
+                            SetScopeToCanvasArea(bounds, flipY:true);
+                            _needToAdjustScopeAfterFirstRendering = false;
+                        }
+                        
                     }
                 }
                 
                 private static readonly StandardTimeRaster StandardRaster = new StandardTimeRaster();
                 private static readonly HorizontalRaster HorizontalRaster = new HorizontalRaster();
+                private bool _needToAdjustScopeAfterFirstRendering = true;
             }
         }
     }

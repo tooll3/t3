@@ -2,7 +2,9 @@
 using System.Linq;
 using T3.Core.Animation;
 using T3.Gui.Graph;
+using T3.Gui.Interaction;
 using T3.Gui.Interaction.WithCurves;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
@@ -44,16 +46,8 @@ namespace T3.Gui.Windows.TimeLine
 
         protected override void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false)
         {
-            var scope = GetScopeForRelevantKeyframes();
-
-            if (alsoChangeTimeRange)
-            {
-                TimeLineCanvas.Current.SetVisibleRange(scope.Scale, scope.Scroll);
-            }
-            else
-            {
-                TimeLineCanvas.Current.SetVisibleVRange(scope.Scale.Y, scope.Scroll.Y);
-            }
+            var bounds = GetBoundsOnCanvas(GetSelectedOrAllPoints());
+            TimeLineCanvas.Current.SetScopeToCanvasArea(bounds, flipY:true);
         }
 
         protected List<GraphWindow.AnimationParameter> AnimationParameters;

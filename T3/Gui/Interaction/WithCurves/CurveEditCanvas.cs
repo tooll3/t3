@@ -26,7 +26,7 @@ namespace T3.Gui.Interaction.WithCurves
         {
             Drawlist = ImGui.GetWindowDrawList();
             
-            ImGui.BeginChild(ImGuiTitle, new Vector2(0, height), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+            ImGui.BeginChild(ImGuiTitle, new Vector2(0, height), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
                 UpdateCanvas();
                 Drawlist = ImGui.GetWindowDrawList();

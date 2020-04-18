@@ -176,7 +176,20 @@ namespace T3.Gui.Interaction
             ScaleTarget = Vector2.One;
         }
 
-        public void FitAreaOnCanvas(ImRect area)
+        public void SetScopeToCanvasArea(ImRect area, bool flipY = false)
+        {
+            WindowSize = ImGui.GetContentRegionMax()- ImGui.GetWindowContentRegionMin();
+            ScaleTarget = WindowSize / area.GetSize();
+            if (flipY)
+            {
+                ScaleTarget.Y *= -1;
+            }
+            
+            ScrollTarget = new Vector2(-area.Min.X * ScaleTarget.X,
+                                       -area.Max.Y * ScaleTarget.Y);
+        }
+        
+        public void FitAreaOnCanvas(ImRect area, bool flipY=false)
         {
             var height = area.GetHeight();
             var width = area.GetWidth();
@@ -206,6 +219,10 @@ namespace T3.Gui.Interaction
             }
 
             ScaleTarget = new Vector2(scale, scale);
+            if (flipY)
+            {
+                ScaleTarget.Y *= -1;
+            }
         }
 
         public enum Transition
@@ -257,8 +274,6 @@ namespace T3.Gui.Interaction
 
             if (Math.Abs(Io.MouseWheel) < 0.01f)
                 return;
-
-            Log.Debug("Mouse wheel:" + Scale);
             
             var focusCenter = (_mouse - Scroll - WindowPos) / Scale;
 

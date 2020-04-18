@@ -7,6 +7,7 @@ using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Gui.Windows.TimeLine;
+using UiHelpers;
 
 namespace T3.Gui.Interaction.WithCurves
 {
@@ -21,12 +22,12 @@ namespace T3.Gui.Interaction.WithCurves
         protected abstract void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false);
         protected abstract void DeleteSelectedKeyframes();
         protected internal abstract void HandleCurvePointDragging(VDefinition vDef, bool isSelected);
-        
+
         /// <summary>
         /// Helper function to extract vDefs from all or selected UI controls across all curves in CurveEditor
         /// </summary>
         /// <returns>a list curves with a list of vDefs</returns>
-        private IEnumerable<VDefinition> GetSelectedOrAllPoints()
+        protected IEnumerable<VDefinition> GetSelectedOrAllPoints()
         {
             var result = new List<VDefinition>();
 
@@ -70,7 +71,6 @@ namespace T3.Gui.Interaction.WithCurves
                      if (ImGui.MenuItem("Linear", null, editModes.Contains(VDefinition.EditMode.Linear)))
                          OnLinear();
 
-
                      if (ImGui.BeginMenu("Before curve..."))
                      {
                          foreach (Utils.OutsideCurveBehavior mapping in Enum.GetValues(typeof(Utils.OutsideCurveBehavior)))
@@ -78,9 +78,10 @@ namespace T3.Gui.Interaction.WithCurves
                              if (ImGui.MenuItem(mapping.ToString(), null))
                                  ApplyPreCurveMapping(mapping);
                          }
+
                          ImGui.EndMenu();
                      }
-                     
+
                      if (ImGui.BeginMenu("After curve..."))
                      {
                          foreach (Utils.OutsideCurveBehavior mapping in Enum.GetValues(typeof(Utils.OutsideCurveBehavior)))
@@ -88,24 +89,24 @@ namespace T3.Gui.Interaction.WithCurves
                              if (ImGui.MenuItem(mapping.ToString(), null))
                                  ApplyPostCurveMapping(mapping);
                          }
+
                          ImGui.EndMenu();
                      }
-                     
+
                      if (ImGui.MenuItem(SelectedKeyframes.Count > 0 ? "View Selected" : "View All", "F"))
                          ViewAllOrSelectedKeys();
 
                      if (ImGui.MenuItem("Delete keyframes"))
                          DeleteSelectedKeyframes();
-                     
+
                      if (ImGui.MenuItem("Duplicate keyframes"))
                          DuplicateSelectedKeyframes(TimeLineCanvas.Current.Playback.TimeInBars);
-                     
                  }, ref _contextMenuIsOpen
                 );
         }
-                
+
         private bool _contextMenuIsOpen;
-        
+
         private delegate void DoSomethingWithKeyframeDelegate(VDefinition v);
 
         private void ForSelectedOrAllPointsDo(DoSomethingWithKeyframeDelegate doFunc)
@@ -186,19 +187,19 @@ namespace T3.Gui.Interaction.WithCurves
         private void ApplyPostCurveMapping(Utils.OutsideCurveBehavior mapping)
         {
             foreach (var curve in GetAllCurves())
-            { 
+            {
                 curve.PostCurveMapping = mapping;
             }
         }
-        
+
         private void ApplyPreCurveMapping(Utils.OutsideCurveBehavior mapping)
         {
             foreach (var curve in GetAllCurves())
-            { 
+            {
                 curve.PreCurveMapping = mapping;
             }
         }
-        
+
         private IEnumerable<VDefinition.EditMode> GetSelectedKeyframeInterpolationTypes()
         {
             var checkedInterpolationTypes = new HashSet<VDefinition.EditMode>();
@@ -210,16 +211,14 @@ namespace T3.Gui.Interaction.WithCurves
 
             return checkedInterpolationTypes;
         }
-        
-        
+
         protected IEnumerable<VDefinition> GetAllKeyframes()
         {
             return from curve in GetAllCurves()
                    from keyframe in curve.GetVDefinitions()
                    select keyframe;
         }
-        
-        
+
         protected void DuplicateSelectedKeyframes(double targetTime)
         {
             if (!SelectedKeyframes.Any())
@@ -272,80 +271,28 @@ namespace T3.Gui.Interaction.WithCurves
             }
         }
 
-        protected ScalableCanvas.Scope GetScopeForRelevantKeyframes()
+
+        public static ImRect GetBoundsOnCanvas(IEnumerable<VDefinition> keyframes)
         {
-            const float curveValuePadding = 0.3f;
-            const float curveTimePadding = 0.1f;
-
-            var minU = double.PositiveInfinity;
-            var maxU = double.NegativeInfinity;
-            var minV = double.PositiveInfinity;
-            var maxV = double.NegativeInfinity;
-            var numPoints = 0;
-
-            switch (SelectedKeyframes.Count)
+            var bounds = new ImRect(-Vector2.One, Vector2.One);
+            var isFirst = true;
+            foreach(var k in keyframes)
             {
-                case 0:
-                case 1:
-                {
-                    foreach (var vDef in GetAllKeyframes())
-                    {
-                        numPoints++;
-                        minU = Math.Min(minU, vDef.U);
-                        maxU = Math.Max(maxU, vDef.U);
-                        minV = Math.Min(minV, vDef.Value);
-                        maxV = Math.Max(maxV, vDef.Value);
-                    }
+                var p = new Vector2((float)k.U, (float)k.Value);
 
-                    break;
+                if (isFirst)
+                {
+                    bounds = new ImRect(p, p);
+                    isFirst = false;
                 }
-                // case 1:
-                //     return;
-
-                default:
+                else
                 {
-                    foreach (var element in SelectedKeyframes)
-                    {
-                        numPoints++;
-                        minU = Math.Min(minU, element.U);
-                        maxU = Math.Max(maxU, element.U);
-                        minV = Math.Min(minV, element.Value);
-                        maxV = Math.Max(maxV, element.Value);
-                    }
-
-                    break;
+                    bounds.Add(p);
                 }
             }
 
-            if (numPoints == 0)
-            {
-                minV = -3;
-                maxV = +3;
-                minU = -2;
-                maxU = 10;
-            }
-
-            if (Math.Abs(maxU - minU) < 0.001f)
-            {
-                minU -= 1;
-            }
-
-            if (Math.Abs(maxV - minU) < 0.001f)
-            {
-                maxV += -1;
-                minV -= 1;
-            }
-
-            var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
-            var scaleX = (float)(size.X / ((maxU - minU) * (1 + 2 * curveTimePadding)));
-            var scaleY = -(float)(size.Y / ((maxV - minV) * (1 + 2 * curveValuePadding)));
-            return new ScalableCanvas.Scope(new Vector2(scaleX, scaleY),
-                                            new Vector2(
-                                                                (float)minU - 150 / scaleX,
-                                                                (float)maxV - 20 / scaleY
-                                                               )
-                                           );
+            bounds.Expand(0.2f);
+            return bounds;
         }
-        
     }
 }
