@@ -2,6 +2,7 @@
 using System.Linq;
 using T3.Core.Animation;
 using T3.Gui.Graph;
+using T3.Gui.Interaction.WithCurves;
 
 namespace T3.Gui.Windows.TimeLine
 {

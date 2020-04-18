@@ -5,11 +5,11 @@ using System.Linq;
 using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.Operator;
-using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
+using T3.Gui.Interaction.WithCurves;
 using T3.Gui.UiHelpers;
 using UiHelpers;
 

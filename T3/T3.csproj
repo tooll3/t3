@@ -332,7 +332,6 @@
     <Compile Include="External\Truncon.Collections\OrderedDictionary.cs" />
     <Compile Include="External\Truncon.Collections\OrderedDictionaryDebugView.cs" />
     <Compile Include="External\Truncon.Collections\Properties\Resources.Designer.cs" />
-    <Compile Include="Gui\Animation\CurveEditing\CurveEditBox.cs" />
     <Compile Include="Gui\Commands\AddConnectionCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolChildNameCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolNameCommand.cs" />
@@ -373,7 +372,10 @@
     <Compile Include="Gui\InputUi\SingleControl\Size2InputUi.cs" />
     <Compile Include="Gui\InputUi\SingleControl\StringListInputUi.cs" />
     <Compile Include="Gui\Interaction\CameraInteraction.cs" />
-    <Compile Include="Gui\Interaction\CurveEditCanvas.cs" />
+    <Compile Include="Gui\Interaction\WithCurves\CurveEditBox.cs" />
+    <Compile Include="Gui\Interaction\WithCurves\CurveEditCanvas.cs" />
+    <Compile Include="Gui\Interaction\WithCurves\CurveEditing.cs" />
+    <Compile Include="Gui\Interaction\WithCurves\CurvePoint.cs" />
     <Compile Include="Gui\Interaction\SelectionFence.cs" />
     <Compile Include="Gui\Interaction\SingleValueEdit.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
@@ -418,7 +420,6 @@
     <Compile Include="Gui\Windows\SymbolTree.cs" />
     <Compile Include="Gui\Windows\TimeLine\BeatTimeRaster.cs" />
     <Compile Include="Gui\Windows\TimeLine\CurrentTimeMarker.cs" />
-    <Compile Include="Gui\Windows\TimeLine\CurveEditing.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimelineCurveEditArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\DopeSheetArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\HorizontalRaster.cs" />
@@ -442,7 +443,6 @@
     <Compile Include="Gui\Windows\Window.cs" />
     <Compile Include="Gui\UiJson.cs" />
     <Compile Include="Gui\Interaction\UserAction.cs" />
-    <Compile Include="Gui\Animation\CurveEditing\CurvePoint.cs" />
     <Compile Include="Gui\Commands\AddSymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\ChangeInputValueCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSelectableCommand.cs" />
@@ -518,6 +518,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="External\Truncon.Collections\Properties\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Gui\Animation" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\ImGui.NET.1.70.0\build\net40\ImGui.NET.targets" Condition="Exists('..\packages\ImGui.NET.1.70.0\build\net40\ImGui.NET.targets')" />

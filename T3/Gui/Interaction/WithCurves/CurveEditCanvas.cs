@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Gui.Commands;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Windows.TimeLine;
 using UiHelpers;
-using System;
-using T3.Gui.Commands;
 
-namespace T3.Gui.Interaction
+namespace T3.Gui.Interaction.WithCurves
 {
     public abstract class CurveEditCanvas: ScalableCanvas, ITimeObjectManipulation
     {

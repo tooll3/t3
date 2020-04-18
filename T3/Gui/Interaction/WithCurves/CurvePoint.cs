@@ -1,20 +1,19 @@
-﻿using ImGuiNET;
-using System;
+﻿using System;
 using System.Numerics;
+using ImGuiNET;
 using T3.Core.Animation;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
-using T3.Gui.Windows.TimeLine;
 using UiHelpers;
 
-namespace T3.Gui.Animation.CurveEditing
+namespace T3.Gui.Interaction.WithCurves
 {
     /// <summary>
     /// Interaction logic for CurvePointControl.xaml
     /// </summary>
     public static class CurvePoint
     {
-        public static void Draw(VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, Windows.TimeLine.CurveEditing timelineCurveEditArea)
+        public static void Draw(VDefinition vDef, ICanvas curveEditCanvas, bool isSelected, CurveEditing curveEditing)
         {
             _drawlist = ImGui.GetWindowDrawList();
             _curveEditCanvas = curveEditCanvas;
@@ -44,7 +43,7 @@ namespace T3.Gui.Animation.CurveEditing
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
             }
 
-            timelineCurveEditArea?.HandleCurvePointDragging(_vDef, isSelected);
+            curveEditing?.HandleCurvePointDragging(_vDef, isSelected);
         }
 
         private static void DrawLeftTangent(Vector2 pCenter)

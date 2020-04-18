@@ -11,6 +11,7 @@ using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
+using T3.Gui.Interaction.WithCurves;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine

@@ -6,9 +6,9 @@ using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
-using T3.Gui.Interaction;
+using T3.Gui.Windows.TimeLine;
 
-namespace T3.Gui.Windows.TimeLine
+namespace T3.Gui.Interaction.WithCurves
 {
     /// <summary>
     /// Editing of a set of curves and keyframes independent of the actual visualization.

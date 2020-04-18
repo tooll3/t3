@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
-using T3.Gui.Graph;
-using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using UiHelpers;
 
-namespace T3.Gui.Animation.CurveEditing
+namespace T3.Gui.Interaction.WithCurves
 {
     public class CurveEditBox
     {
