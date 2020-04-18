@@ -44,7 +44,7 @@ namespace T3.Gui.Windows.TimeLine
             return result;
         }
 
-        protected void DrawContextMenu()
+        public void DrawContextMenu()
         {
             CustomComponents.DrawContextMenuForScrollCanvas
                 (

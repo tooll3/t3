@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
 using ImGuiNET;
+using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -96,8 +97,8 @@ namespace T3.Gui.Windows.TimeLine
             scale = 1/scale;
             scale = -scale;
 
+            ImGui.PushFont(Fonts.FontSmall);
             var rasters = GetRastersForScale(scale, out var fadeFactor);
-            
 
             foreach (var raster in rasters)
             {
@@ -134,6 +135,7 @@ namespace T3.Gui.Windows.TimeLine
                     t += raster.Spacing;
                 }
             }
+            ImGui.PopFont();
         }
 
         private readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();

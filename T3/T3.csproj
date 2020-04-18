@@ -358,7 +358,7 @@
     <Compile Include="Gui\Graph\Interaction\SymbolFilter.cs" />
     <Compile Include="Gui\Graph\Rendering\SrvManager.cs" />
     <Compile Include="Gui\Graph\TimeControls.cs" />
-    <Compile Include="Gui\InputUi\CurveParameterCanvas.cs" />
+    <Compile Include="Gui\InputUi\CurveParameterEditing.cs" />
     <Compile Include="Gui\InputUi\CurveInputUi.cs" />
     <Compile Include="Gui\InputUi\EnumInputUi.cs" />
     <Compile Include="Gui\InputUi\Float2InputUi.cs" />
@@ -373,6 +373,7 @@
     <Compile Include="Gui\InputUi\SingleControl\Size2InputUi.cs" />
     <Compile Include="Gui\InputUi\SingleControl\StringListInputUi.cs" />
     <Compile Include="Gui\Interaction\CameraInteraction.cs" />
+    <Compile Include="Gui\Interaction\SelectionFence.cs" />
     <Compile Include="Gui\Interaction\SingleValueEdit.cs" />
     <Compile Include="Gui\Interaction\ScalableCanvas.cs" />
     <Compile Include="Gui\Interaction\Snapping\IValueSnapAttractor.cs" />
@@ -447,7 +448,6 @@
     <Compile Include="Gui\Commands\ChangeInputValueCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSelectableCommand.cs" />
     <Compile Include="Gui\Commands\UndoRedoStack.cs" />
-    <Compile Include="Gui\Animation\CurveEditing\HorizontalScaleLines.cs" />
     <Compile Include="Gui\UiHelpers\ICanvas.cs" />
     <Compile Include="Gui\Interaction\Key.cs" />
     <Compile Include="Gui\Windows\ParameterWindow.cs" />
@@ -464,7 +464,6 @@
     <Compile Include="Gui\Graph\CreateOperatorWindow.cs" />
     <Compile Include="Gui\Graph\GraphWindow.cs" />
     <Compile Include="Gui\Graph\GraphNode.cs" />
-    <Compile Include="Gui\Interaction\SelectionFence.cs" />
     <Compile Include="Gui\ImGuiDx11Impl.cs" />
     <Compile Include="Gui\UiHelpers\Helpers.cs" />
     <Compile Include="Gui\Selection\ISelectableNode.cs" />

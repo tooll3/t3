@@ -1,9 +1,11 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Gui.Animation.CurveEditing;
-using T3.Gui.Commands;
+using T3.Gui.Graph;
+using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
@@ -11,20 +13,114 @@ using UiHelpers;
 
 namespace T3.Gui.InputUi
 {
-    public class CurveParameterCanvas : AnimationParameterEditing, ICanvas
+    /// <summary>
+    /// A static class that helps to draw and edit parameters for type curve
+    /// in parameter Window.
+    /// </summary>
+    public static class CurveParameterEditing
+    {
+        //private static readonly ScalableCanvas _canvas = new ScalableCanvas();
+        private static readonly Dictionary<Curve, CurveInteraction> _interactionForCurve = new Dictionary<Curve, CurveInteraction>();
+
+        public static void DrawCanvasForCurve(Curve curve)
+        {
+            // if (FenceSelection == null)
+            // {
+            //     FenceSelection = new SelectionFence(_canvas);
+            // }
+
+            if (!_interactionForCurve.TryGetValue(curve, out var curveInteraction))
+            {
+                curveInteraction = new CurveInteraction()
+                                       {
+                                           Curves = new List<Curve>() { curve }
+                                       };
+                _interactionForCurve.Add(curve, curveInteraction);
+            }
+
+
+            ImGui.BeginChild("curveCanvas", new Vector2(0, 200), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
+            {
+                curveInteraction.Draw(curve);
+            }
+            ImGui.EndChild();
+        }
+
+        private class CurveInteraction : CurveEditing
+        {
+            public List<Curve> Curves = new List<Curve>();
+            private readonly ScalableCanvas _canvas = new ScalableCanvas();
+            
+            private readonly List<VDefinition> _selectedKeyframes = new List<VDefinition>();
+            private SelectionFence.States _fenceState = SelectionFence.States.Inactive;
+
+            public void Draw(Curve curve)
+            {
+                _canvas.UpdateCanvas();
+
+                StandardRaster.Draw(_canvas);
+                HorizontalRaster.Draw(_canvas);
+                DrawContextMenu();
+
+                TimelineCurveEditArea.DrawCurveLine(curve, _canvas);
+
+                foreach (var keyframe in GetAllKeyframes())
+                {
+                    CurvePoint.Draw(keyframe, _canvas, _selectedKeyframes.Contains(keyframe), null);
+                }
+
+                _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
+                switch (_fenceState)
+                {
+                    case SelectionFence.States.Updated:
+                        var boundsInCanvas = _canvas.InverseTransformRect(SelectionFence.BoundsInScreen).MakePositive();
+                        _selectedKeyframes.Clear();
+                        foreach (var point in GetAllKeyframes())
+                        {
+                            if (boundsInCanvas.Contains(new Vector2((float)point.U, (float)point.Value)))
+                                _selectedKeyframes.Add(point);
+                        }
+                        break;
+
+                    case SelectionFence.States.CompletedAsClick:
+                        _selectedKeyframes.Clear();
+                        break;
+                }
+            }
+
+            protected override IEnumerable<Curve> GetAllCurves()
+            {
+                return Curves;
+            }
+
+            protected override void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false)
+            {
+            }
+
+            protected override void DeleteSelectedKeyframes()
+            {
+            }
+        }
+
+        private static readonly StandardTimeRaster StandardRaster = new StandardTimeRaster();
+        private static readonly HorizontalRaster HorizontalRaster = new HorizontalRaster();
+        private static readonly ValueSnapHandler SnapHandler = new ValueSnapHandler();
+    }
+
+    /*
+    public class CurveParameterCanvas : CurveEditing, ICanvas
     {
         public CurveParameterCanvas()
         {
             _snapHandler.SnappedEvent += SnappedEventHandler;
         }
-        
+
         public void Draw(Curve curve)
         {
             _io = ImGui.GetIO();
             _mouse = ImGui.GetMousePos();
             _drawlist = ImGui.GetWindowDrawList();
 
-            
             // Damp scaling
             const float dampSpeed = 30f;
             var damping = _io.DeltaTime * dampSpeed;
@@ -33,7 +129,7 @@ namespace T3.Gui.InputUi
                 Scale = Im.Lerp(Scale, _scaleTarget, damping);
                 Scroll = Im.Lerp(Scroll, _scrollTarget, damping);
             }
-            
+
             ImGui.BeginChild("curve", new Vector2(0, 100), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
                 WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
@@ -47,17 +143,18 @@ namespace T3.Gui.InputUi
                 _standardRaster.Draw(this);
                 _horizontalRaster.Draw(this);
                 TimelineCurveEditArea.DrawCurveLine(curve, this);
-                
+
                 foreach (var keyframe in curve.GetVDefinitions())
                 {
                     //CurvePoint.Draw(keyframe, this,  SelectedKeyframes.Contains(keyframe), this);
-                    CurvePoint.Draw(keyframe, this,  false, null);
+                    CurvePoint.Draw(keyframe, this, false, null);
                 }
+
                 DrawSnapIndicator();
             }
             ImGui.EndChild();
         }
-
+        
         private void HandleInteraction()
         {
             if (!ImGui.IsWindowHovered())
@@ -74,7 +171,7 @@ namespace T3.Gui.InputUi
             // if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
             //     DeleteSelectedElements();
         }
-        
+
         private void HandleZoomViewWithMouseWheel()
         {
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
@@ -117,25 +214,6 @@ namespace T3.Gui.InputUi
             zoomSum = zoomSum.Clamp(0.01f, 100f);
             return zoomSum;
         }
-        
-
-        public void SetVisibleRange(Vector2 scale, Vector2 scroll)
-        {
-            _scaleTarget = scale;
-            _scrollTarget = scroll;
-        }
-
-        public void SetVisibleValueRange(float valueScale, float valueScroll)
-        {
-            _scaleTarget = new Vector2(_scaleTarget.X, valueScale);
-            _scrollTarget = new Vector2(_scrollTarget.X, valueScroll);
-        }
-
-        public void SetVisibleTimeRange(float timeScale, float timeScroll)
-        {
-            _scaleTarget = new Vector2(timeScale, _scaleTarget.Y);
-            _scrollTarget = new Vector2(timeScroll, _scrollTarget.Y);
-        }
 
         private void SnappedEventHandler(double snapPosition)
         {
@@ -155,7 +233,6 @@ namespace T3.Gui.InputUi
         private double _lastSnapTime;
         private const float SnapIndicatorDuration = 1;
         private float _lastSnapU;
-        
 
         #region implement ICanvas =================================================================
         /// <summary>
@@ -176,23 +253,9 @@ namespace T3.Gui.InputUi
         /// </summary>
         public float TransformPositionX(float xOnCanvas)
         {
-            var scale = Scale.X ;
-            var offset = Scroll.X ;
+            var scale = Scale.X;
+            var offset = Scroll.X;
             return (int)((xOnCanvas - offset) * scale + WindowPos.X);
-        }
-
-        public float TransformGlobalTime(float time)
-        {
-            var localTime = (time) ;
-            return TransformPositionX(localTime);
-        }
-
-        /// <summary>
-        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        public float TransformPositionY(float yOnCanvas)
-        {
-            return (yOnCanvas - Scroll.Y) * Scale.Y + WindowPos.Y;
         }
 
         /// <summary>
@@ -206,30 +269,11 @@ namespace T3.Gui.InputUi
         /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
-        public float InverseTransformPositionX(float xOnScreen)
-        {
-            var scale = Scale.X ;
-            var offset = Scroll.X;
-            return (xOnScreen - WindowPos.X) / scale + offset;
-        }
-
-        /// <summary>
-        /// Convert screen position to canvas position
-        /// </summary>
-        public float InverseTransformPositionY(float yOnScreen)
-        {
-            return (yOnScreen - WindowPos.Y) / Scale.Y + Scroll.Y;
-        }
-
-        /// <summary>
-        /// Convert screen position to canvas position
-        /// </summary>
         public virtual float InverseTransformX(float xOnScreen)
         {
             return (xOnScreen - WindowPos.X) / Scale.X + Scroll.X;
         }
 
-        
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
@@ -245,6 +289,7 @@ namespace T3.Gui.InputUi
         {
             return (yOnCanvas - Scroll.Y) * Scale.Y + WindowPos.Y;
         }
+
         /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
@@ -252,7 +297,7 @@ namespace T3.Gui.InputUi
         {
             return (yOnScreen - WindowPos.Y) / Scale.Y + Scroll.Y;
         }
-        
+
         /// <summary>
         /// Convert direction on canvas to delta in screen space
         /// </summary>
@@ -296,22 +341,38 @@ namespace T3.Gui.InputUi
             r.Max.Y = t;
             return r;
         }
-        
+
         public Vector2 WindowPos { get; private set; }
         public Vector2 WindowSize { get; private set; }
         #endregion
-        
+
         private readonly StandardTimeRaster _standardRaster = new StandardTimeRaster();
         private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
         private readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
-        
+
         private ImGuiIOPtr _io;
         private Vector2 _mouse;
         public Vector2 Scroll { get; private set; } = new Vector2(-1, 2.5f);
         private Vector2 _scrollTarget = new Vector2(-1, 2.5f);
-        
+
         public Vector2 Scale { get; private set; } = new Vector2(40, -80);
         private Vector2 _scaleTarget = new Vector2(40, -80);
         private ImDrawListPtr _drawlist;
+
+        protected override IEnumerable<Curve> GetAllCurves()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void DeleteSelectedKeyframes()
+        {
+            throw new NotImplementedException();
+        }
     }
+    */
 }

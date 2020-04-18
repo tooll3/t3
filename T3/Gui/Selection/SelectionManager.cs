@@ -35,12 +35,18 @@ namespace T3.Gui.Selection
         public static void AddSelection(ISelectableNode node)
         {
             _parent = null;
+            if (Selection.Contains(node))
+                return;
+            
             Selection.Add(node);
         }
 
         public static void AddSelection(SymbolChildUi node, Instance instance)
         {
             _parent = null;
+            if (Selection.Contains(node))
+                return;
+            
             Selection.Add(node);
             if (instance != null)
                 ChildUiInstanceIdPaths[node] = NodeOperations.BuildIdPathForInstance(instance);
