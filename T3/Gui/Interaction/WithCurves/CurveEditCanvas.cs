@@ -17,7 +17,7 @@ namespace T3.Gui.Interaction.WithCurves
             ScrollTarget = new Vector2(500f, 0.0f);
             ScaleTarget = new Vector2(80, -1);
 
-            SnapHandler.SnappedEvent += SnappedEventHandler;
+            //SnapHandlerForU.SnappedEvent += SnappedEventHandler;
         }
 
         public string ImGuiTitle = "timeline";
@@ -33,7 +33,8 @@ namespace T3.Gui.Interaction.WithCurves
 
                 drawAdditionalCanvasContent();
                 HandleFenceUpdate();
-                DrawSnapIndicator();
+                SnapHandlerForU.DrawSnapIndicator(this, ValueSnapHandler.Mode.VerticalLinesForU);
+                SnapHandlerForV.DrawSnapIndicator(this, ValueSnapHandler.Mode.HorizontalLinesForV);
             }
             ImGui.EndChild();
         }
@@ -51,20 +52,6 @@ namespace T3.Gui.Interaction.WithCurves
 
         private SelectionFence.States _fenceState;
         
-        private void SnappedEventHandler(double snapPosition)
-        {
-            _lastSnapTime = ImGui.GetTime();
-            _lastSnapU = (float)snapPosition;
-        }
-
-        private void DrawSnapIndicator()
-        {
-            var opacity = 1 - ((float)(ImGui.GetTime() - _lastSnapTime) / _snapIndicatorDuration).Clamp(0, 1);
-            var color = Color.Orange;
-            color.Rgba.W = opacity;
-            var p = new Vector2(TransformX(_lastSnapU), 0);
-            Drawlist.AddRectFilled(p, p + new Vector2(1, 2000), color);
-        }
         
         
         #region implement ITimeObjectManipulation to forward interaction to children
@@ -157,10 +144,8 @@ namespace T3.Gui.Interaction.WithCurves
         protected readonly List<ITimeObjectManipulation> TimeObjectManipulators = new List<ITimeObjectManipulation>();
         #endregion
 
-        public readonly ValueSnapHandler SnapHandler = new ValueSnapHandler();
+        public readonly ValueSnapHandler SnapHandlerForU = new ValueSnapHandler();
+        public readonly ValueSnapHandler SnapHandlerForV = new ValueSnapHandler();
         protected ImDrawListPtr Drawlist;
-        private double _lastSnapTime;
-        private float _snapIndicatorDuration = 1;
-        private float _lastSnapU;
     }
 }

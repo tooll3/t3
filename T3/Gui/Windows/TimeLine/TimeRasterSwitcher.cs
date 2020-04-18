@@ -30,9 +30,9 @@ namespace T3.Gui.Windows.TimeLine
             ActiveRaster?.Draw(playback);
         }
         
-        public SnapResult CheckForSnap(double value)
+        public SnapResult CheckForSnap(double value, float canvasScale)
         {
-            return ActiveRaster?.CheckForSnap(value);
+            return ActiveRaster?.CheckForSnap(value, canvasScale);
         }
 
         private TimeRaster ActiveRaster

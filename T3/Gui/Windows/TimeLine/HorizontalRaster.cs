@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
 using ImGuiNET;
+using T3.Gui.Interaction.Snapping;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
-    public  class HorizontalRaster
+    public  class HorizontalRaster: IValueSnapAttractor
     {
         public void Draw(ICanvas canvas)
         {
@@ -114,9 +115,10 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     var yIndex = (int)(t/scale);
 
-                    if (yIndex >= 0 && yIndex < height && !_usedPositions.ContainsKey(yIndex))
+                    if (yIndex > 0 && yIndex < height && !_usedPositions.ContainsKey(yIndex))
                     {
-                        _usedPositions[yIndex] = t + scroll;
+                        var value = scroll-t;
+                        _usedPositions[yIndex] = value;
 
                         var y = topLeft.Y + yIndex;
                         drawList.AddRect(
@@ -125,8 +127,7 @@ namespace T3.Gui.Windows.TimeLine
 
                         if (raster.Label != "")
                         {
-                            var value = t - scroll;
-                            var output = BuildLabel(raster, -value);
+                            var output = BuildLabel(raster, value);
                             var p = new Vector2(topLeft.X+ 5,y - 8f);
                             drawList.AddText(p, textColor, output);
                         }
@@ -138,6 +139,14 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.PopFont();
         }
 
+        #region implement snap attractor
+        
+        public SnapResult CheckForSnap(double targetPos, float canvasScale)
+        {
+            return ValueSnapHandler.FindSnapResult(targetPos, _usedPositions.Values, canvasScale);
+        }
+        #endregion
+        
         private readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();
         private const double Epsilon = 0.001f;
     }

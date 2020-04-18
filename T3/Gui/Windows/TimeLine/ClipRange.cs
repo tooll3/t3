@@ -48,7 +48,7 @@ namespace T3.Gui.Windows.TimeLine
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
                     var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
-                    snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
+                    snapHandler.CheckForSnapping(ref newTime, canvas.Scale.X, new List<IValueSnapAttractor> {this});
                     var delta = newTime - timeClip.SourceRange.Start;
                     var speed =  timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
                     timeClip.SourceRange.Start = newTime;
@@ -87,7 +87,7 @@ namespace T3.Gui.Windows.TimeLine
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
                     var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
-                    snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
+                    snapHandler.CheckForSnapping(ref newTime, canvas.Scale.X, new List<IValueSnapAttractor> {this});
                     var delta = newTime - timeClip.SourceRange.End;
                     var speed =  timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
                     timeClip.SourceRange.End = newTime;
@@ -115,17 +115,15 @@ namespace T3.Gui.Windows.TimeLine
         private static ITimeClip _timeClip;
         #region implement snapping interface -----------------------------------
 
-        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime)
+        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
         {
             if (_timeClip == null)
                 return null;
             
-            const float snapDistance = 4;
-            var snapThresholdOnCanvas = TimeLineCanvas.Current.InverseTransformDirection(new Vector2(snapDistance, 0)).X;
             SnapResult bestSnapResult = null;
 
-            KeyframeOperations.CheckForBetterSnapping(targetTime, _timeClip.SourceRange.Start, snapThresholdOnCanvas, ref bestSnapResult);
-            KeyframeOperations.CheckForBetterSnapping(targetTime, _timeClip.SourceRange.End, snapThresholdOnCanvas, ref bestSnapResult);
+            ValueSnapHandler.CheckForBetterSnapping(targetTime, _timeClip.SourceRange.Start, canvasScale, ref bestSnapResult);
+            ValueSnapHandler.CheckForBetterSnapping(targetTime, _timeClip.SourceRange.End, canvasScale, ref bestSnapResult);
             return bestSnapResult;
         }
         #endregion

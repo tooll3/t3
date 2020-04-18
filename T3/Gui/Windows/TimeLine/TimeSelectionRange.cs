@@ -100,7 +100,7 @@ namespace T3.Gui.Windows.TimeLine
                     _isDragging = true;
                 }
 
-                _snapHandler.CheckForSnapping(ref u, new List<IValueSnapAttractor> { this });
+                _snapHandler.CheckForSnapping(ref u, _timeLineCanvas.Scale.X, new List<IValueSnapAttractor> { this });
                 var dScale = (u - origin) / (_lastDragU - origin);
                 _timeLineCanvas.UpdateDragStretchCommand(scaleU: dScale, scaleV: 1, originU: origin, originV: 0);
                 _lastDragU = u;
@@ -123,14 +123,12 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         #region implement snapping interface -----------------------------------
-        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime)
+        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
         {
-            const float snapDistance = 4;
-            var snapThresholdOnCanvas = _timeLineCanvas.InverseTransformDirection(new Vector2(snapDistance, 0)).X;
             SnapResult bestSnapResult = null;
 
-            KeyframeOperations.CheckForBetterSnapping(targetTime, _selectionTimeRange.Start, snapThresholdOnCanvas, ref bestSnapResult);
-            KeyframeOperations.CheckForBetterSnapping(targetTime, _selectionTimeRange.End, snapThresholdOnCanvas, ref bestSnapResult);
+            ValueSnapHandler.CheckForBetterSnapping(targetTime, _selectionTimeRange.Start, canvasScale, ref bestSnapResult);
+            ValueSnapHandler.CheckForBetterSnapping(targetTime, _selectionTimeRange.End, canvasScale, ref bestSnapResult);
             return bestSnapResult;
         }
         #endregion

@@ -44,7 +44,7 @@ namespace T3.Gui.Windows.TimeLine
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
                     var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
-                    snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
+                    snapHandler.CheckForSnapping(ref newTime, TimeLineCanvas.Current.Scale.X, new List<IValueSnapAttractor> {this});
                     playback.LoopRange.Start = newTime;
                 }
             }
@@ -80,7 +80,7 @@ namespace T3.Gui.Windows.TimeLine
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                 {
                     var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
-                    snapHandler.CheckForSnapping(ref newTime, new List<IValueSnapAttractor> {this});
+                    snapHandler.CheckForSnapping(ref newTime, TimeLineCanvas.Current.Scale.X, new List<IValueSnapAttractor> {this});
                     playback.LoopRange.End = newTime;
                 }
             }
@@ -100,25 +100,19 @@ namespace T3.Gui.Windows.TimeLine
         private static readonly Color TimeRangeShadowColor = new Color(0, 0, 0, 0.5f);
         private static readonly Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.3f);
         private static readonly Color TimeRangeMarkerColor = new Color(1f, 1, 1f, 0.3f);
-
-        //private static Playback _playback;
-        //private static ITimeClip _timeClip;
-        //private TimeRange _range;
         private Playback _playback;
         
         #region implement snapping interface -----------------------------------
 
-        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime)
+        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
         {
             if (_playback == null)
                 return null;
             
             SnapResult bestSnapResult = null;
-            const float snapDistance = 4;
-            var snapThresholdOnCanvas = TimeLineCanvas.Current.InverseTransformDirection(new Vector2(snapDistance, 0)).X;
 
-            KeyframeOperations.CheckForBetterSnapping(targetTime, _playback.LoopRange.Start, snapThresholdOnCanvas, ref bestSnapResult);
-            KeyframeOperations.CheckForBetterSnapping(targetTime, _playback.LoopRange.End, snapThresholdOnCanvas, ref bestSnapResult);
+            ValueSnapHandler.CheckForBetterSnapping(targetTime, _playback.LoopRange.Start, canvasScale, ref bestSnapResult);
+            ValueSnapHandler.CheckForBetterSnapping(targetTime, _playback.LoopRange.End, canvasScale, ref bestSnapResult);
             return bestSnapResult;
         }
         #endregion

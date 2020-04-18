@@ -12,8 +12,7 @@ using T3.Gui.Windows.TimeLine;
 namespace T3.Gui.InputUi
 {
     /// <summary>
-    /// A static class that helps to draw and edit parameters for curve inputs
-    /// in parameter Window.
+    /// Handles editing of Curve-Inputs in parameter window.
     /// </summary>
     public static class CurveInputEditing
     {
@@ -27,25 +26,26 @@ namespace T3.Gui.InputUi
                                        {
                                            Curves = new List<Curve>() { curve }
                                        };
-                
+
                 InteractionForCurve.Add(curve, curveInteraction);
             }
 
             curveInteraction.Draw();
         }
 
-        
+        /// <summary>
+        /// Implement interaction of manipulating the individual keyframes
+        /// </summary>
         private class CurveInteraction : CurveEditing
         {
             public List<Curve> Curves = new List<Curve>();
-            private readonly SingleCurveEditCanvas _canvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + InteractionForCurve.Count};
+            private readonly SingleCurveEditCanvas _canvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + InteractionForCurve.Count };
 
             public void Draw()
             {
                 _canvas.Draw(Curves[0], this);
             }
-            
-            
+
             protected override IEnumerable<Curve> GetAllCurves()
             {
                 return Curves;
@@ -58,8 +58,7 @@ namespace T3.Gui.InputUi
             protected override void DeleteSelectedKeyframes()
             {
             }
-            
-            
+
             protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
             {
                 if (ImGui.IsItemHovered())
@@ -93,15 +92,15 @@ namespace T3.Gui.InputUi
                     _canvas.StartDragCommand();
                 }
 
-
                 var newDragPosition = _canvas.InverseTransformPosition(ImGui.GetIO().MousePos);
                 double u = newDragPosition.X;
-                _canvas.SnapHandler.CheckForSnapping(ref u);
-            
-                var dY = newDragPosition.Y - vDef.Value;
-                UpdateDragCommand(u - vDef.U, dY);
-            }
+                _canvas.SnapHandlerForU.CheckForSnapping(ref u, _canvas.Scale.X);
 
+                double v = newDragPosition.Y;
+                _canvas.SnapHandlerForV.CheckForSnapping(ref v, _canvas.Scale.Y);
+
+                UpdateDragCommand(u - vDef.U, v - vDef.Value);
+            }
 
             public ICommand StartDragCommand()
             {
@@ -116,6 +115,7 @@ namespace T3.Gui.InputUi
                     vDefinition.U += dt;
                     vDefinition.Value += dv;
                 }
+
                 RebuildCurveTables();
             }
 
@@ -128,10 +128,9 @@ namespace T3.Gui.InputUi
                 UndoRedoStack.Add(_changeKeyframesCommand);
                 _changeKeyframesCommand = null;
             }
-            
+
             private static ChangeKeyframesCommand _changeKeyframesCommand;
-            
-            
+
             private void HandleFenceSelection()
             {
                 _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
@@ -145,47 +144,56 @@ namespace T3.Gui.InputUi
                             if (boundsInCanvas.Contains(new Vector2((float)point.U, (float)point.Value)))
                                 SelectedKeyframes.Add(point);
                         }
+
                         break;
 
                     case SelectionFence.States.CompletedAsClick:
                         SelectedKeyframes.Clear();
                         break;
-                }                
+                }
             }
+
             private SelectionFence.States _fenceState = SelectionFence.States.Inactive;
-            
-            
-            private class SingleCurveEditCanvas: CurveEditCanvas
+
+            /// <summary>
+            /// Implement canvas for showing and manipulating curve
+            /// </summary>
+            private class SingleCurveEditCanvas : CurveEditCanvas
             {
+                public SingleCurveEditCanvas()
+                {
+                    SnapHandlerForU.AddSnapAttractor(_standardRaster);
+                    SnapHandlerForV.AddSnapAttractor(_horizontalRaster);
+                }
+
                 public void Draw(Curve curve, CurveInteraction interaction)
                 {
                     DrawCurveCanvas(DrawCanvasContent, height: 150);
 
                     void DrawCanvasContent()
                     {
-                        StandardRaster.Draw(this);
-                        HorizontalRaster.Draw(this);
+                        _standardRaster.Draw(this);
+                        _horizontalRaster.Draw(this);
                         TimelineCurveEditArea.DrawCurveLine(curve, this);
 
                         foreach (var keyframe in interaction.GetAllKeyframes().ToArray())
                         {
-                            CurvePoint.Draw(keyframe, this,  interaction.SelectedKeyframes.Contains(keyframe), interaction);
+                            CurvePoint.Draw(keyframe, this, interaction.SelectedKeyframes.Contains(keyframe), interaction);
                         }
-                        
+
                         interaction.HandleFenceSelection();
                         interaction.DrawContextMenu();
                         if (_needToAdjustScopeAfterFirstRendering)
                         {
                             var bounds = GetBoundsOnCanvas(interaction.GetAllKeyframes());
-                            SetScopeToCanvasArea(bounds, flipY:true);
+                            SetScopeToCanvasArea(bounds, flipY: true);
                             _needToAdjustScopeAfterFirstRendering = false;
                         }
-                        
                     }
                 }
-                
-                private static readonly StandardTimeRaster StandardRaster = new StandardTimeRaster();
-                private static readonly HorizontalRaster HorizontalRaster = new HorizontalRaster();
+
+                private readonly StandardTimeRaster _standardRaster = new StandardTimeRaster();
+                private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
                 private bool _needToAdjustScopeAfterFirstRendering = true;
             }
         }

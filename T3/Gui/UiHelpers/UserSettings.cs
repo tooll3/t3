@@ -8,7 +8,7 @@ using T3.Gui.Interaction;
 namespace T3.Gui.UiHelpers
 {
     /// <summary>
-    /// Saves view layout, currently open node and other usersettings 
+    /// Saves view layout, currently open node and other user settings 
     /// </summary>
     public class UserSettings :Settings
     {
@@ -32,6 +32,7 @@ namespace T3.Gui.UiHelpers
             public bool KeepBeatTimeRunningInPause = false;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = false;
+            public float SnapStrength = 4;
         }
         
         public static Guid GetLastOpenOpForWindow(string windowTitle)

@@ -162,7 +162,7 @@ namespace T3.Gui.Windows.TimeLine
                 return;
 
             var hoverTime = TimeLineCanvas.Current.InverseTransformX(ImGui.GetIO().MousePos.X);
-            _snapHandler.CheckForSnapping(ref hoverTime);
+            _snapHandler.CheckForSnapping(ref hoverTime, TimeLineCanvas.Current.Scale.X);
 
             if (ImGui.IsMouseReleased(0))
             {
@@ -377,7 +377,7 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             var newDragTime = TimeLineCanvas.Current.InverseTransformX(ImGui.GetIO().MousePos.X);
-            _snapHandler.CheckForSnapping(ref newDragTime);
+            _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X);
 
             TimeLineCanvas.Current.UpdateDragCommand(newDragTime - vDef.U, 0);
         }
@@ -517,38 +517,50 @@ namespace T3.Gui.Windows.TimeLine
         /// <summary>
         /// Snap to all non-selected Clips
         /// </summary>
-        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime)
+        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
         {
             _snapThresholdOnCanvas = TimeLineCanvas.Current.InverseTransformDirection(new Vector2(SnapDistance, 0)).X;
-            var maxForce = 0.0;
-            var bestSnapTime = double.NaN;
+            // var maxForce = 0.0;
+            // var bestSnapTime = double.NaN;
 
+            SnapResult best = null;
             foreach (var vDefinition in GetAllKeyframes())
             {
                 if (SelectedKeyframes.Contains(vDefinition))
+                {
+                    ImGui.Text("  skipped " + vDefinition.U);
+                    ImGui.SameLine();
                     continue;
+                }
 
-                CheckForSnapping(targetTime, vDefinition.U, maxForce: ref maxForce, bestSnapTime: ref bestSnapTime);
+                if (ValueSnapHandler.CheckForBetterSnapping(targetTime, vDefinition.U, canvasScale, ref best))
+                {
+                    ImGui.Text("   added:" + vDefinition.U);
+                    ImGui.SameLine();
+                }
+                //CheckForSnapping(targetTime, vDefinition.U, maxForce: ref maxForce, bestSnapTime: ref bestSnapTime);
             }
 
-            return double.IsNaN(bestSnapTime)
-                       ? null
-                       : new SnapResult(bestSnapTime, maxForce);
+            return best;
+
+            // return double.IsNaN(bestSnapTime)
+            //            ? null
+            //            : new SnapResult(bestSnapTime, maxForce);
         }
 
-        private void CheckForSnapping(double targetTime, double anchorTime, ref double maxForce, ref double bestSnapTime)
-        {
-            var distance = Math.Abs(anchorTime - targetTime);
-            if (distance < 0.001)
-                return;
-
-            var force = Math.Max(0, _snapThresholdOnCanvas - distance);
-            if (force <= maxForce)
-                return;
-
-            bestSnapTime = anchorTime;
-            maxForce = force;
-        }
+        // private void CheckForSnapping(double targetTime, double anchorTime, ref double maxForce, ref double bestSnapTime)
+        // {
+        //     var distance = Math.Abs(anchorTime - targetTime);
+        //     if (distance < 0.001)
+        //         return;
+        //
+        //     var force = Math.Max(0, _snapThresholdOnCanvas - distance);
+        //     if (force <= maxForce)
+        //         return;
+        //
+        //     bestSnapTime = anchorTime;
+        //     maxForce = force;
+        // }
         #endregion
 
         private const float KeyframeIconWidth = 10;

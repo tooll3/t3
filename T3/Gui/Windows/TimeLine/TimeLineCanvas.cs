@@ -6,10 +6,8 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
-using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Interaction.WithCurves;
 using UiHelpers;
@@ -26,17 +24,18 @@ namespace T3.Gui.Windows.TimeLine
         {
             
             Playback = playback;
-            _dopeSheetArea = new DopeSheetArea(SnapHandler, this);
-            _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandler);
-            _timeSelectionRange = new TimeSelectionRange(this, SnapHandler);
-            LayersArea = new LayersArea(SnapHandler);
+            _dopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
+            _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandlerForU, SnapHandlerForV);
+            _timeSelectionRange = new TimeSelectionRange(this, SnapHandlerForU);
+            LayersArea = new LayersArea(SnapHandlerForU);
 
-            SnapHandler.AddSnapAttractor(_clipRange);
-            SnapHandler.AddSnapAttractor(_loopRange);
-            SnapHandler.AddSnapAttractor(_timeRasterSwitcher);
-            SnapHandler.AddSnapAttractor(_currentTimeMarker);
-            SnapHandler.AddSnapAttractor(_timeSelectionRange);
-            SnapHandler.AddSnapAttractor(LayersArea);
+            SnapHandlerForV.AddSnapAttractor(_horizontalRaster);
+            SnapHandlerForU.AddSnapAttractor(_clipRange);
+            SnapHandlerForU.AddSnapAttractor(_loopRange);
+            SnapHandlerForU.AddSnapAttractor(_timeRasterSwitcher);
+            SnapHandlerForU.AddSnapAttractor(_currentTimeMarker);
+            //SnapHandlerForU.AddSnapAttractor(_timeSelectionRange);
+            SnapHandlerForU.AddSnapAttractor(LayersArea);
         }
 
         public bool FoundTimeClipForCurrentTime => LayersArea.FoundClipWithinCurrentTime;
@@ -78,11 +77,11 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (Playback.IsLooping)
                 {
-                    _loopRange.Draw(this, Playback, Drawlist, SnapHandler);
+                    _loopRange.Draw(this, Playback, Drawlist, SnapHandlerForU);
                 }
                 else if (compositionTimeClip != null)
                 {
-                    _clipRange.Draw(this, compositionTimeClip, Drawlist, SnapHandler);
+                    _clipRange.Draw(this, compositionTimeClip, Drawlist, SnapHandlerForU);
                 }
 
                 _timeSelectionRange.Draw(Drawlist);
@@ -206,7 +205,7 @@ namespace T3.Gui.Windows.TimeLine
                 var draggedTime = InverseTransformX(Io.MousePos.X);
                 if (ImGui.GetIO().KeyShift)
                 {
-                    SnapHandler.CheckForSnapping(ref draggedTime, _currentTimeMarker);
+                    SnapHandlerForU.CheckForSnapping(ref draggedTime, Scale.X, new List<IValueSnapAttractor> { _currentTimeMarker});
                 }
 
                 Playback.TimeInBars = draggedTime;
@@ -227,12 +226,12 @@ namespace T3.Gui.Windows.TimeLine
                 case Modes.DopeView:
                     TimeObjectManipulators.Remove(_dopeSheetArea);
                     TimeObjectManipulators.Remove(LayersArea);
-                    SnapHandler.RemoveSnapAttractor(_dopeSheetArea);
+                    SnapHandlerForU.RemoveSnapAttractor(_dopeSheetArea);
                     break;
 
                 case Modes.CurveEditor:
                     TimeObjectManipulators.Remove(_timelineCurveEditArea);
-                    SnapHandler.RemoveSnapAttractor(_timelineCurveEditArea);
+                    SnapHandlerForU.RemoveSnapAttractor(_timelineCurveEditArea);
                     break;
             }
 
@@ -241,12 +240,12 @@ namespace T3.Gui.Windows.TimeLine
                 case Modes.DopeView:
                     TimeObjectManipulators.Add(_dopeSheetArea);
                     TimeObjectManipulators.Add(LayersArea);
-                    SnapHandler.AddSnapAttractor(_dopeSheetArea);
+                    SnapHandlerForU.AddSnapAttractor(_dopeSheetArea);
                     break;
 
                 case Modes.CurveEditor:
                     TimeObjectManipulators.Add(_timelineCurveEditArea);
-                    SnapHandler.AddSnapAttractor(_timelineCurveEditArea);
+                    SnapHandlerForU.AddSnapAttractor(_timelineCurveEditArea);
                     break;
 
                 default:

@@ -19,9 +19,10 @@ namespace T3.Gui.Windows.TimeLine
 {
     public class TimelineCurveEditArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
     {
-        public TimelineCurveEditArea(TimeLineCanvas timeLineCanvas, ValueSnapHandler snapHandler)
+        public TimelineCurveEditArea(TimeLineCanvas timeLineCanvas, ValueSnapHandler snapHandlerForU, ValueSnapHandler snapHandlerV)
         {
-            _snapHandler = snapHandler;
+            SnapHandlerU = snapHandlerForU;
+            SnapHandlerV = snapHandlerV;
             TimeLineCanvas = timeLineCanvas;
         }
 
@@ -94,14 +95,14 @@ namespace T3.Gui.Windows.TimeLine
             {
                 TimeLineCanvas.Current.StartDragCommand();
             }
-
-
+            
             var newDragPosition = TimeLineCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos);
             double u = newDragPosition.X;
-            _snapHandler.CheckForSnapping(ref u);
+            SnapHandlerU.CheckForSnapping(ref u, TimeLineCanvas.Scale.X);
             
-            var dY = newDragPosition.Y - vDef.Value;
-            TimeLineCanvas.Current.UpdateDragCommand(u - vDef.U, dY);
+            double v = newDragPosition.Y;
+            SnapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
+            UpdateDragCommand(u - vDef.U, v - vDef.Value);
         }
         
         void ITimeObjectManipulation.DeleteSelectedElements()
@@ -180,9 +181,9 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         #region  implement snapping -------------------------
-        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime)
+        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
         {
-            _snapThresholdOnCanvas = TimeLineCanvas.Current.InverseTransformDirection(new Vector2(SnapDistance, 0)).X;
+            _snapThresholdOnCanvas = SnapDistance / canvasScale;;
             var maxForce = 0.0;
             var bestSnapTime = double.NaN;
 
@@ -247,6 +248,7 @@ namespace T3.Gui.Windows.TimeLine
         private static ChangeKeyframesCommand _changeKeyframesCommand;
         private static Vector2[] _curveLinePoints = new Vector2[0];
         private Instance _compositionOp;
-        private readonly ValueSnapHandler _snapHandler;
+        public readonly ValueSnapHandler SnapHandlerU;
+        public readonly ValueSnapHandler SnapHandlerV;
     }
 }

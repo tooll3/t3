@@ -98,7 +98,7 @@ namespace T3.Gui.Interaction
         /// </summary>
         public float TransformY(float yOnCanvas)
         {
-            return TransformPosition(new Vector2(yOnCanvas, 0)).Y;
+            return TransformPosition(new Vector2(0,yOnCanvas)).Y;
         }
 
         /// <summary>

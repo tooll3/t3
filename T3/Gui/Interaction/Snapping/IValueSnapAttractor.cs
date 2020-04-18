@@ -29,6 +29,6 @@
     /// <remarks>should return null if not snapping</remarks>
     public interface IValueSnapAttractor
     {
-        SnapResult CheckForSnap(double value);
+        SnapResult CheckForSnap(double value, float canvasScale);
     }
 }

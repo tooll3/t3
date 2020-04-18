@@ -333,27 +333,27 @@ namespace T3.Gui.Windows.TimeLine
                     var newDragPosY = mousePos.Y - position.Y;
                     var dy = _posYInsideDraggedClip - newDragPosY;
 
-                    if (_snapHandler.CheckForSnapping(ref newStartTime))
+                    if (_snapHandler.CheckForSnapping(ref newStartTime, TimeLineCanvas.Current.Scale.X))
                     {
                         TimeLineCanvas.Current.UpdateDragCommand(newStartTime - timeClip.TimeRange.Start, dy);
                         return;
                     }
 
                     var newEndTime = newStartTime + timeClip.TimeRange.Duration;
-                    _snapHandler.CheckForSnapping(ref newEndTime);
+                    _snapHandler.CheckForSnapping(ref newEndTime, TimeLineCanvas.Current.Scale.X);
 
                     TimeLineCanvas.Current.UpdateDragCommand(newEndTime - timeClip.TimeRange.End, dy);
                     break;
 
                 case HandleDragMode.Start:
                     var newDragStartTime = TimeLineCanvas.Current.InverseTransformX(mousePos.X);
-                    _snapHandler.CheckForSnapping(ref newDragStartTime);
+                    _snapHandler.CheckForSnapping(ref newDragStartTime, TimeLineCanvas.Current.Scale.X);
                     TimeLineCanvas.Current.UpdateDragAtStartPointCommand(newDragStartTime - timeClip.TimeRange.Start, 0);
                     break;
 
                 case HandleDragMode.End:
                     var newDragTime = TimeLineCanvas.Current.InverseTransformX(mousePos.X);
-                    _snapHandler.CheckForSnapping(ref newDragTime);
+                    _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X);
 
                     TimeLineCanvas.Current.UpdateDragAtEndPointCommand(newDragTime - timeClip.TimeRange.End, 0);
                     break;
@@ -509,11 +509,10 @@ namespace T3.Gui.Windows.TimeLine
         /// <summary>
         /// Snap to all non-selected Clips
         /// </summary>
-        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime)
+        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
         {
             SnapResult bestSnapResult = null;
-            var snapThresholdOnCanvas = TimeLineCanvas.Current.InverseTransformDirection(new Vector2(6, 0)).X;
-
+                
             var allClips = NodeOperations.GetAllTimeClips(_compositionOp);
 
             foreach (var clip in allClips)
@@ -521,8 +520,8 @@ namespace T3.Gui.Windows.TimeLine
                 if (SelectedItems.Contains(clip))
                     continue;
 
-                KeyframeOperations.CheckForBetterSnapping(targetTime, clip.TimeRange.Start, snapThresholdOnCanvas, ref bestSnapResult);
-                KeyframeOperations.CheckForBetterSnapping(targetTime, clip.TimeRange.End, snapThresholdOnCanvas, ref bestSnapResult);
+                ValueSnapHandler.CheckForBetterSnapping(targetTime, clip.TimeRange.Start, canvasScale, ref bestSnapResult);
+                ValueSnapHandler.CheckForBetterSnapping(targetTime, clip.TimeRange.End, canvasScale, ref bestSnapResult);
             }
 
             return bestSnapResult;

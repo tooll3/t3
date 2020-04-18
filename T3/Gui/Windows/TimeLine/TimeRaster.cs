@@ -16,18 +16,16 @@ namespace T3.Gui.Windows.TimeLine
         public abstract void Draw(Playback playback);
         protected abstract string BuildLabel(Raster raster, double time);
 
-        
         protected virtual IEnumerable<Raster> GetRastersForScale(double scale, out float fadeFactor)
         {
-            var scaleRange = ScaleRanges.FirstOrDefault(range => range.ScaleMax*Density > scale);
-            fadeFactor = scaleRange == null 
+            var scaleRange = ScaleRanges.FirstOrDefault(range => range.ScaleMax * Density > scale);
+            fadeFactor = scaleRange == null
                              ? 1
-                             : 1-(float)Im.Remap(scale, scaleRange.ScaleMin*Density, scaleRange.ScaleMax*Density, 0, 1);
-            
+                             : 1 - (float)Im.Remap(scale, scaleRange.ScaleMin * Density, scaleRange.ScaleMax * Density, 0, 1);
+
             return scaleRange?.Rasters;
         }
-        
-        
+
         protected void DrawTimeTicks(double scale, double scroll, ICanvas canvas)
         {
             if (!(scale > Epsilon))
@@ -40,47 +38,45 @@ namespace T3.Gui.Windows.TimeLine
 
             _usedPositions.Clear();
 
-            scale = 1/scale;
-            
+            scale = 1 / scale;
 
             var rasters = GetRastersForScale(scale, out var fadeFactor);
 
             if (rasters == null)
                 return;
-            
+
             // Debug string 
             // drawList.AddText(topLeft + new Vector2(20, 20), Color.Red, $"Scale: {pixelsPerU:0.1}  f={scaleRange:0}");
             ImGui.PushFont(Fonts.FontSmall);
-            
+
             foreach (var raster in rasters)
             {
-                double t = -scroll%raster.Spacing;
-
+                double t = -scroll % raster.Spacing;
 
                 var lineAlpha = raster.FadeLines ? fadeFactor : 1;
-                var lineColor = new Color(0, 0, 0, lineAlpha*0.9f);
+                var lineColor = new Color(0, 0, 0, lineAlpha * 0.9f);
 
                 var textAlpha = raster.FadeLabels ? fadeFactor : 1;
                 var textColor = new Color(textAlpha);
 
-                while (t/scale < width)
+                while (t / scale < width)
                 {
-                    var xIndex = (int)(t/scale);
+                    var xIndex = (int)(t / scale);
 
                     if (xIndex > 0 && xIndex < width && !_usedPositions.ContainsKey(xIndex))
                     {
-                        _usedPositions[xIndex] = t + scroll;
+                        var time = t + scroll;
+                        _usedPositions[xIndex] = time;
 
                         drawList.AddRectFilled(
-                                         new Vector2(topLeft.X + xIndex, topLeft.Y),
-                                         new Vector2(topLeft.X + xIndex+1, topLeft.Y + viewHeight), lineColor);
+                                               new Vector2(topLeft.X + xIndex, topLeft.Y),
+                                               new Vector2(topLeft.X + xIndex + 1, topLeft.Y + viewHeight), lineColor);
 
                         if (raster.Label != "")
                         {
-                            var time = t + scroll;
                             var output = BuildLabel(raster, time);
 
-                            var p = topLeft + new Vector2(xIndex-7, viewHeight - 17);
+                            var p = topLeft + new Vector2(xIndex - 7, viewHeight - 17);
                             drawList.AddText(p, textColor, output);
                         }
                     }
@@ -88,24 +84,15 @@ namespace T3.Gui.Windows.TimeLine
                     t += raster.Spacing;
                 }
             }
+
             ImGui.PopFont();
         }
 
         #region implement snap attractor
-        private const double SnapThreshold = 6;
 
-        public SnapResult CheckForSnap(double time)
+        public SnapResult CheckForSnap(double time, float canvasScale)
         {
-            foreach (var beatTime in _usedPositions.Values)
-            {
-                var distanceToTime = Math.Abs(time - beatTime)*TimeLineCanvas.Current.Scale.X;
-                if (distanceToTime < SnapThreshold)
-                {
-                    return new SnapResult(beatTime, SnapThreshold - distanceToTime);
-                }
-            }
-
-            return null;
+            return ValueSnapHandler.FindSnapResult(time, _usedPositions.Values, canvasScale);
         }
         #endregion
 
@@ -120,7 +107,7 @@ namespace T3.Gui.Windows.TimeLine
             public double ScaleMax { get; set; }
             public List<Raster> Rasters { get; set; }
         }
-        
+
         public struct Raster
         {
             public string Label { get; set; }

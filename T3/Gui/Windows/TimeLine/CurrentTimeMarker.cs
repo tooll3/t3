@@ -14,25 +14,14 @@ namespace T3.Gui.Windows.TimeLine
                 return;
             _playback = playback;
 
-            //var localTime = (playback.TimeInBars - TimeLineCanvas.Current._localOffset) / TimeLineCanvas.Current._localScale;
-            //var p = new Vector2(TimeLineCanvas.Current.TransformPositionX((float)localTime), 0);
             var p = new Vector2(TimeLineCanvas.Current.TransformGlobalTime((float)playback.TimeInBars), 0);
             ImGui.GetWindowDrawList().AddRectFilled(p, p + new Vector2(1, 2000), Color.Orange);
         } 
         
         
-        public SnapResult CheckForSnap(double time)
+        public SnapResult CheckForSnap(double time, float canvasScale)
         {
-            var timeX = TimeLineCanvas.Current.TransformX((float)time);
-            var currentTime = TimeLineCanvas.Current.TransformX((float)_playback.TimeInBars);
-            var distance = Math.Abs( timeX - currentTime);
-            if (distance <= 0)
-                return null;
-
-            var force = Math.Max(0,SnapThreshold - distance); 
-            return force >0 
-                       ? new SnapResult(_playback.TimeInBars, force) 
-                       : null;
+            return ValueSnapHandler.FindSnapResult(time, _playback.TimeInBars, canvasScale);
         }
         
         private Playback _playback;
