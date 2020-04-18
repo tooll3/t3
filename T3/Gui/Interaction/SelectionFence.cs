@@ -27,7 +27,6 @@ namespace T3.Gui.Interaction
             if (ImGui.IsMouseReleased(0))
             {
                 state = state == States.PressedButNotMoved ? States.CompletedAsClick : States.CompletedAsArea;
-                Log.Debug("new state:" + state);
                 return state;
             }
 
