@@ -2,7 +2,6 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
-using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Windows.TimeLine;
 using UiHelpers;
@@ -13,30 +12,42 @@ namespace T3.Gui.Interaction
 {
     public abstract class CurveEditCanvas: ScalableCanvas, ITimeObjectManipulation
     {
-        public CurveEditCanvas()
+        protected CurveEditCanvas()
         {
             ScrollTarget = new Vector2(500f, 0.0f);
             ScaleTarget = new Vector2(80, -1);
 
-            _snapHandler.SnappedEvent += SnappedEventHandler;
+            SnapHandler.SnappedEvent += SnappedEventHandler;
         }
-        
 
-        public void DrawCurveCanvas(Action drawAdditionalCanvasContent)
+        protected void DrawCurveCanvas(Action drawAdditionalCanvasContent)
         {
-            _drawlist = ImGui.GetWindowDrawList();
+            Drawlist = ImGui.GetWindowDrawList();
             
             ImGui.BeginChild("timeline", new Vector2(0, 0), true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove);
             {
                 UpdateCanvas();
-                _drawlist = ImGui.GetWindowDrawList();
+                Drawlist = ImGui.GetWindowDrawList();
 
                 drawAdditionalCanvasContent();
+                HandleFenceUpdate();
                 DrawSnapIndicator();
             }
             ImGui.EndChild();
         }
 
+        private void HandleFenceUpdate()
+        {
+            _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
+            switch (_fenceState)
+            {
+                case SelectionFence.States.Updated:
+                    this.UpdateSelectionForArea(SelectionFence.BoundsInScreen, SelectionFence.SelectMode);
+                    break;
+            }
+        }
+
+        private SelectionFence.States _fenceState;
         
         private void SnappedEventHandler(double snapPosition)
         {
@@ -50,22 +61,22 @@ namespace T3.Gui.Interaction
             var color = Color.Orange;
             color.Rgba.W = opacity;
             var p = new Vector2(TransformX(_lastSnapU), 0);
-            _drawlist.AddRectFilled(p, p + new Vector2(1, 2000), color);
+            Drawlist.AddRectFilled(p, p + new Vector2(1, 2000), color);
         }
         
         
         #region implement ITimeObjectManipulation to forward interaction to children
         public void ClearSelection()
         {
-            foreach (var sh in _selectionHolders)
+            foreach (var sh in TimeObjectManipulators)
             {
                 sh.ClearSelection();
             }
         }
 
-        public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
+        public void UpdateSelectionForArea(ImRect screenArea, SelectionFence.SelectModes selectMode)
         {
-            foreach (var sh in _selectionHolders)
+            foreach (var sh in TimeObjectManipulators)
             {
                 sh.UpdateSelectionForArea(screenArea, selectMode);
             }
@@ -73,7 +84,7 @@ namespace T3.Gui.Interaction
 
         public ICommand StartDragCommand()
         {
-            foreach (var s in _selectionHolders)
+            foreach (var s in TimeObjectManipulators)
             {
                 s.StartDragCommand();
             }
@@ -83,7 +94,7 @@ namespace T3.Gui.Interaction
 
         public void UpdateDragCommand(double dt, double dv)
         {
-            foreach (var s in _selectionHolders)
+            foreach (var s in TimeObjectManipulators)
             {
                 s.UpdateDragCommand(dt, dv);
             }
@@ -91,7 +102,7 @@ namespace T3.Gui.Interaction
 
         public void UpdateDragAtStartPointCommand(double dt, double dv)
         {
-            foreach (var s in _selectionHolders)
+            foreach (var s in TimeObjectManipulators)
             {
                 s.UpdateDragAtStartPointCommand(dt, dv);
             }
@@ -99,7 +110,7 @@ namespace T3.Gui.Interaction
 
         public void UpdateDragAtEndPointCommand(double dt, double dv)
         {
-            foreach (var s in _selectionHolders)
+            foreach (var s in TimeObjectManipulators)
             {
                 s.UpdateDragAtEndPointCommand(dt, dv);
             }
@@ -107,7 +118,7 @@ namespace T3.Gui.Interaction
 
         public void UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV)
         {
-            foreach (var s in _selectionHolders)
+            foreach (var s in TimeObjectManipulators)
             {
                 s.UpdateDragStretchCommand(scaleU, scaleV, originU, originV);
             }
@@ -117,7 +128,7 @@ namespace T3.Gui.Interaction
         {
             var timeRange = new TimeRange(float.PositiveInfinity, float.NegativeInfinity);
 
-            foreach (var sh in _selectionHolders)
+            foreach (var sh in TimeObjectManipulators)
             {
                 timeRange.Unite(sh.GetSelectionTimeRange());
             }
@@ -127,7 +138,7 @@ namespace T3.Gui.Interaction
 
         public void CompleteDragCommand()
         {
-            foreach (var s in _selectionHolders)
+            foreach (var s in TimeObjectManipulators)
             {
                 s.CompleteDragCommand();
             }
@@ -135,18 +146,17 @@ namespace T3.Gui.Interaction
 
         public void DeleteSelectedElements()
         {
-            foreach (var s in _selectionHolders)
+            foreach (var s in TimeObjectManipulators)
             {
                 s.DeleteSelectedElements();
             }
         }
 
-        protected readonly List<ITimeObjectManipulation> _selectionHolders = new List<ITimeObjectManipulation>();
+        protected readonly List<ITimeObjectManipulation> TimeObjectManipulators = new List<ITimeObjectManipulation>();
         #endregion
         
-        protected readonly ValueSnapHandler _snapHandler = new ValueSnapHandler();
-
-        protected ImDrawListPtr _drawlist;
+        protected readonly ValueSnapHandler SnapHandler = new ValueSnapHandler();
+        protected ImDrawListPtr Drawlist;
         private double _lastSnapTime;
         private float _snapIndicatorDuration = 1;
         private float _lastSnapU;

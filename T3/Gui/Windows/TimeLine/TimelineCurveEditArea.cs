@@ -8,6 +8,7 @@ using T3.Core.Operator;
 using T3.Gui.Animation.CurveEditing;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
+using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.UiHelpers;
 using UiHelpers;
@@ -115,9 +116,9 @@ namespace T3.Gui.Windows.TimeLine
             SelectedKeyframes.Clear();
         }
 
-        public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
+        public void UpdateSelectionForArea(ImRect screenArea, SelectionFence.SelectModes selectMode)
         {
-            if (selectMode == SelectMode.Replace)
+            if (selectMode == SelectionFence.SelectModes.Replace)
                 SelectedKeyframes.Clear();
 
             THelpers.DebugRect(screenArea.Min, screenArea.Max);
@@ -134,11 +135,11 @@ namespace T3.Gui.Windows.TimeLine
 
             switch (selectMode)
             {
-                case SelectMode.Add:
-                case SelectMode.Replace:
+                case SelectionFence.SelectModes.Add:
+                case SelectionFence.SelectModes.Replace:
                     SelectedKeyframes.UnionWith(matchingItems);
                     break;
-                case SelectMode.Remove:
+                case SelectionFence.SelectModes.Remove:
                     SelectedKeyframes.ExceptWith(matchingItems);
                     break;
             }

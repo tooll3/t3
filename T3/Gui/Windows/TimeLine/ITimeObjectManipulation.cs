@@ -1,6 +1,7 @@
 ﻿using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.Interaction;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -12,7 +13,7 @@ namespace T3.Gui.Windows.TimeLine
     public interface ITimeObjectManipulation
     {
         void ClearSelection();
-        void UpdateSelectionForArea(ImRect area, SelectMode selectMode);
+        void UpdateSelectionForArea(ImRect area, SelectionFence.SelectModes selectMode);
         void DeleteSelectedElements();
 
         ICommand StartDragCommand();
@@ -24,13 +25,5 @@ namespace T3.Gui.Windows.TimeLine
         void UpdateDragAtEndPointCommand(double dt, double dv);
 
         TimeRange GetSelectionTimeRange();
-    }
-
-    
-    public enum SelectMode
-    {
-        Add = 0,
-        Remove,
-        Replace
     }
 }

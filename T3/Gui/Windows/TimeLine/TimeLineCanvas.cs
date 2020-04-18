@@ -25,18 +25,17 @@ namespace T3.Gui.Windows.TimeLine
         {
             
             Playback = playback;
-            _dopeSheetArea = new DopeSheetArea(_snapHandler, this);
-            _selectionFence = new TimeSelectionFence(this);
-            _timelineCurveEditArea = new TimelineCurveEditArea(this, _snapHandler);
-            _timeSelectionRange = new TimeSelectionRange(this, _snapHandler);
-            LayersArea = new LayersArea(_snapHandler);
+            _dopeSheetArea = new DopeSheetArea(SnapHandler, this);
+            _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandler);
+            _timeSelectionRange = new TimeSelectionRange(this, SnapHandler);
+            LayersArea = new LayersArea(SnapHandler);
 
-            _snapHandler.AddSnapAttractor(_clipRange);
-            _snapHandler.AddSnapAttractor(_loopRange);
-            _snapHandler.AddSnapAttractor(_timeRasterSwitcher);
-            _snapHandler.AddSnapAttractor(_currentTimeMarker);
-            _snapHandler.AddSnapAttractor(_timeSelectionRange);
-            _snapHandler.AddSnapAttractor(LayersArea);
+            SnapHandler.AddSnapAttractor(_clipRange);
+            SnapHandler.AddSnapAttractor(_loopRange);
+            SnapHandler.AddSnapAttractor(_timeRasterSwitcher);
+            SnapHandler.AddSnapAttractor(_currentTimeMarker);
+            SnapHandler.AddSnapAttractor(_timeSelectionRange);
+            SnapHandler.AddSnapAttractor(LayersArea);
         }
 
         public bool FoundTimeClipForCurrentTime => LayersArea.FoundClipWithinCurrentTime;
@@ -52,7 +51,7 @@ namespace T3.Gui.Windows.TimeLine
 
             void DrawCanvasContent()
             {
-                _timeLineImage.Draw(_drawlist, Playback);
+                _timeLineImage.Draw(Drawlist, Playback);
                 ImGui.SetScrollY(0);
 
                 HandleDeferredActions(animationParameters);
@@ -78,14 +77,14 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (Playback.IsLooping)
                 {
-                    _loopRange.Draw(this, Playback, _drawlist, _snapHandler);
+                    _loopRange.Draw(this, Playback, Drawlist, SnapHandler);
                 }
                 else if (compositionTimeClip != null)
                 {
-                    _clipRange.Draw(this, compositionTimeClip, _drawlist, _snapHandler);
+                    _clipRange.Draw(this, compositionTimeClip, Drawlist, SnapHandler);
                 }
 
-                _timeSelectionRange.Draw(_drawlist);
+                _timeSelectionRange.Draw(Drawlist);
 
                 _currentTimeMarker.Draw(Playback);
                 DrawDragTimeArea();
@@ -206,7 +205,7 @@ namespace T3.Gui.Windows.TimeLine
                 var draggedTime = InverseTransformX(Io.MousePos.X);
                 if (ImGui.GetIO().KeyShift)
                 {
-                    _snapHandler.CheckForSnapping(ref draggedTime, _currentTimeMarker);
+                    SnapHandler.CheckForSnapping(ref draggedTime, _currentTimeMarker);
                 }
 
                 Playback.TimeInBars = draggedTime;
@@ -225,28 +224,28 @@ namespace T3.Gui.Windows.TimeLine
             switch (_lastMode)
             {
                 case Modes.DopeView:
-                    _selectionHolders.Remove(_dopeSheetArea);
-                    _selectionHolders.Remove(LayersArea);
-                    _snapHandler.RemoveSnapAttractor(_dopeSheetArea);
+                    TimeObjectManipulators.Remove(_dopeSheetArea);
+                    TimeObjectManipulators.Remove(LayersArea);
+                    SnapHandler.RemoveSnapAttractor(_dopeSheetArea);
                     break;
 
                 case Modes.CurveEditor:
-                    _selectionHolders.Remove(_timelineCurveEditArea);
-                    _snapHandler.RemoveSnapAttractor(_timelineCurveEditArea);
+                    TimeObjectManipulators.Remove(_timelineCurveEditArea);
+                    SnapHandler.RemoveSnapAttractor(_timelineCurveEditArea);
                     break;
             }
 
             switch (Mode)
             {
                 case Modes.DopeView:
-                    _selectionHolders.Add(_dopeSheetArea);
-                    _selectionHolders.Add(LayersArea);
-                    _snapHandler.AddSnapAttractor(_dopeSheetArea);
+                    TimeObjectManipulators.Add(_dopeSheetArea);
+                    TimeObjectManipulators.Add(LayersArea);
+                    SnapHandler.AddSnapAttractor(_dopeSheetArea);
                     break;
 
                 case Modes.CurveEditor:
-                    _selectionHolders.Add(_timelineCurveEditArea);
-                    _snapHandler.AddSnapAttractor(_timelineCurveEditArea);
+                    TimeObjectManipulators.Add(_timelineCurveEditArea);
+                    SnapHandler.AddSnapAttractor(_timelineCurveEditArea);
                     break;
 
                 default:
@@ -281,7 +280,6 @@ namespace T3.Gui.Windows.TimeLine
         private readonly TimeLineImage _timeLineImage = new TimeLineImage();
 
         private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
-        private readonly TimeSelectionFence _selectionFence;
         private readonly TimeSelectionRange _timeSelectionRange;
         public readonly LayersArea LayersArea;
 

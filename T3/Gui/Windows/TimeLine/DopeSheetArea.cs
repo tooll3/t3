@@ -10,6 +10,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
+using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -429,9 +430,9 @@ namespace T3.Gui.Windows.TimeLine
             SelectedKeyframes.Clear();
         }
 
-        public void UpdateSelectionForArea(ImRect screenArea, SelectMode selectMode)
+        public void UpdateSelectionForArea(ImRect screenArea, SelectionFence.SelectModes selectMode)
         {
-            if (selectMode == SelectMode.Replace)
+            if (selectMode == SelectionFence.SelectModes.Replace)
                 SelectedKeyframes.Clear();
 
             var startTime = TimeLineCanvas.Current.InverseTransformX(screenArea.Min.X);
@@ -453,11 +454,11 @@ namespace T3.Gui.Windows.TimeLine
                                              .FindAll(key => key.U <= endTime && key.U >= startTime);
                         switch (selectMode)
                         {
-                            case SelectMode.Add:
-                            case SelectMode.Replace:
+                            case SelectionFence.SelectModes.Add:
+                            case SelectionFence.SelectModes.Replace:
                                 SelectedKeyframes.UnionWith(matchingItems);
                                 break;
-                            case SelectMode.Remove:
+                            case SelectionFence.SelectModes.Remove:
                                 SelectedKeyframes.ExceptWith(matchingItems);
                                 break;
                         }
