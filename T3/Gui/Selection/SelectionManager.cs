@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
@@ -22,6 +23,10 @@ namespace T3.Gui.Selection
 
         public static void SetSelection(ISelectableNode node)
         {
+            if (node is SymbolChildUi)
+            {
+                Log.Warning("Setting selection to a SymbolChildUi without providing instance will lead to problems.");
+            }
             Selection.Clear();
             AddSelection(node);
         }
@@ -104,6 +109,12 @@ namespace T3.Gui.Selection
 
             if (Selection[0] is SymbolChildUi firstNode)
             {
+                if (!ChildUiInstanceIdPaths.ContainsKey(firstNode))
+                {
+                    Log.Error("Failed to access id-path of selected childUi " + firstNode.SymbolChild.Name);
+                    Clear();
+                    return null;
+                }
                 var idPath = ChildUiInstanceIdPaths[firstNode];
                 return NodeOperations.GetInstanceFromIdPath(idPath);
             }
@@ -151,7 +162,7 @@ namespace T3.Gui.Selection
         }
 
 
-        public static bool FitViewToSelectionRequested = false;
+        public static bool FitViewToSelectionRequested { get; private set; }
         private static bool _fitViewToSelectionTriggered = false;
         private static Instance _parent;
         private static readonly List<ISelectableNode> Selection = new List<ISelectableNode>();

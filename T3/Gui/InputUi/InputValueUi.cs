@@ -12,6 +12,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Graph;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
@@ -118,13 +119,23 @@ namespace T3.Gui.InputUi
                     }
                     else
                     {
+                        // Connected single inputs
                         ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
                         if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0.0f)))
                         {
                             // TODO: implement with proper selectionManager
                             var compositionSymbol = compositionUi.Symbol;
-                            var con = compositionSymbol.Connections.First(c => c.IsTargetOf(symbolChildUi.Id, inputSlot.Id));
-                            var sourceUi = compositionUi.GetSelectables().First(ui => ui.Id == con.SourceParentOrChildId || ui.Id == con.SourceSlotId);
+                            var connection = compositionSymbol.Connections.First(c => c.IsTargetOf(symbolChildUi.Id, inputSlot.Id));
+                            var sourceUi = compositionUi.GetSelectables().First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
+                            // Try to find instance
+                            if (sourceUi is SymbolChildUi sourceSymbolChildUi)
+                            {
+                                var selectedInstance = SelectionManager.GetSelectedInstance();
+                                var parent = selectedInstance.Parent;
+                                var selectionTargetInstance = parent.Children.Single(instance => instance.SymbolChildId ==  sourceUi.Id); 
+                                SelectionManager.SetSelection(sourceSymbolChildUi, selectionTargetInstance);
+                                SelectionManager.FitViewToSelection();
+                            }
                         }
 
                         ImGui.PopStyleColor();
