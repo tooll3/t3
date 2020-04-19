@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
+using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
 using UiHelpers;
 
@@ -250,7 +251,9 @@ namespace T3.Gui.Interaction
 
         protected virtual void HandleInteraction()
         {
-            if (!ImGui.IsWindowHovered())
+            var isDraggingConnection = (ConnectionMaker.TempConnection != null) && ImGui.IsWindowFocused();
+            
+            if (!ImGui.IsWindowHovered() && !isDraggingConnection)
                 return;
 
             if (!NoMouseInteraction
