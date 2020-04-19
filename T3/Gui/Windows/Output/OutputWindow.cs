@@ -63,14 +63,14 @@ namespace T3.Gui.Windows.Output
 
                 // move down to avoid overlapping with toolbar
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
-                DrawOutput(_pinning.GetSelectedInstance());
+                DrawOutput(_pinning.GetPinnedOrSelectedInstance(), _pinning.GetPinnedEvaluationInstance());
 
                 DrawToolbar();
             }
             ImGui.EndChild();
         }
 
-        public Instance ShownInstance => _pinning.GetSelectedInstance();
+        public Instance ShownInstance => _pinning.GetPinnedOrSelectedInstance();
 
         private void DrawToolbar()
         {
@@ -99,15 +99,19 @@ namespace T3.Gui.Windows.Output
             ImGui.PopStyleColor();
         }
 
-        private void DrawOutput(Instance instance)
+        private void DrawOutput(Instance instanceForOutput, Instance instanceForEvaluation= null)
         {
-            if (instance == null || instance.Outputs.Count <= 0)
+            if (instanceForEvaluation == null)
+                instanceForEvaluation = instanceForOutput;
+                    
+            if (instanceForEvaluation == null || instanceForEvaluation.Outputs.Count <= 0)
                 return;
 
-            var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+            var evaluatedSymbolUi = SymbolUiRegistry.Entries[instanceForEvaluation.Symbol.Id];
 
-            var firstOutput = instance.Outputs[0];
-            if (!symbolUi.OutputUis.TryGetValue(firstOutput.Id, out IOutputUi outputUi))
+            // Todo: use output from pinning...
+            var evalOutput = instanceForEvaluation.Outputs[0];
+            if (!evaluatedSymbolUi.OutputUis.TryGetValue(evalOutput.Id, out IOutputUi evaluatedOutputUi))
                 return;
 
             _evaluationContext.Reset();
@@ -128,8 +132,26 @@ namespace T3.Gui.Windows.Output
             {
                 _evaluationContext.RequestedResolution = _selectedResolution.Size;
             }
+            
+            // Ugly hack to hide final target
+            if (instanceForOutput != instanceForEvaluation)
+            {
+                ImGui.BeginChild("hidden", Vector2.One * 20);
+                {
+                    evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext);
+                }
+                ImGui.EndChild();
 
-            outputUi.DrawValue(firstOutput, _evaluationContext);
+                var viewOutput = instanceForOutput.Outputs[0];
+                if (!evaluatedSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
+                    return;
+
+                viewOutputUi.DrawValue(evalOutput, _evaluationContext, recompute:false);    
+            }
+            else
+            {
+                evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext);
+            }
         }
 
         private readonly EvaluationContext _evaluationContext = new EvaluationContext();

@@ -14,7 +14,7 @@ namespace T3.Gui.Windows.Output
         /// </summary>
         public static void DrawCameraSelection(ViewSelectionPinning pinning, ref Guid selectedCameraId)
         {
-            var instanceSelectedInOutput = pinning.GetSelectedInstance();
+            var instanceSelectedInOutput = pinning.GetPinnedOrSelectedInstance();
 
             // ReSharper disable once UseNullPropagation
             if (instanceSelectedInOutput == null)

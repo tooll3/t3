@@ -20,8 +20,8 @@ namespace T3.Gui.Windows
     {
         public void DrawPinning()
         {
-            var selectedInstance = GetSelectedInstance();
-            if (selectedInstance == null)
+            var pinnedOrSelectedInstance = GetPinnedOrSelectedInstance();
+            if (pinnedOrSelectedInstance == null)
                 return;
 
             if (CustomComponents.ToggleButton(Icon.Pin, "##pin", ref _isPinned, new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight)))
@@ -34,7 +34,13 @@ namespace T3.Gui.Windows
             ImGui.SetNextItemWidth(250);
             var suffix = _isPinned ? " (pinned)" : " (selected)";
 
-            if (ImGui.BeginCombo("##pinning", selectedInstance.Symbol.Name + suffix))
+            var pinnedEvaluationInstance = GetPinnedEvaluationInstance();
+            if (pinnedEvaluationInstance != null)
+            {
+                suffix += " -> " + pinnedEvaluationInstance.Symbol.Name + " (Final)";
+            }
+
+            if (ImGui.BeginCombo("##pinning", pinnedOrSelectedInstance.Symbol.Name + suffix))
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6));
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
@@ -44,10 +50,41 @@ namespace T3.Gui.Windows
                     {
                         _isPinned = false;
                     }
+
+                    var instanceSelectedInGraph = SelectionManager.GetSelectedInstance();
+                    if (instanceSelectedInGraph != pinnedOrSelectedInstance)
+                    {
+                        var selectionIsPartOfTree = instanceSelectedInGraph.Outputs[0].DirtyFlag.FramesSinceLastUpdate < 2;
+                        if (selectionIsPartOfTree)
+                        {
+                            if (instanceSelectedInGraph == GetPinnedEvaluationInstance())
+                            {
+                                if (ImGui.MenuItem("Unpin Selected Rendering Step"))
+                                {
+                                    PinEvaluationToSelection();
+                                }
+                            }
+                            else
+                            {
+                                if (ImGui.MenuItem("Pin Selected Rendering Step"))
+                                {
+                                    PinEvaluationToSelection();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (ImGui.MenuItem("Pin Selection to View"))
+                            {
+                                _isPinned = true;
+                                SetPinningToSelection();
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    if (ImGui.MenuItem("Pin View To Selection"))
+                    if (ImGui.MenuItem("Pin Selection to View"))
                     {
                         _isPinned = true;
                         SetPinningToSelection();
@@ -58,19 +95,19 @@ namespace T3.Gui.Windows
                 {
                     if (ImGui.MenuItem("Show in Graph"))
                     {
-                        var parentInstance = selectedInstance.Parent;
+                        var parentInstance = pinnedOrSelectedInstance.Parent;
                         var parentSymbolUi = SymbolUiRegistry.Entries[parentInstance.Symbol.Id];
-                        var instanceChildUi = parentSymbolUi.ChildUis.Single(childUi => childUi.Id == selectedInstance.SymbolChildId);
-                        SelectionManager.SetSelection(instanceChildUi, selectedInstance);
+                        var instanceChildUi = parentSymbolUi.ChildUis.Single(childUi => childUi.Id == pinnedOrSelectedInstance.SymbolChildId);
+                        SelectionManager.SetSelection(instanceChildUi, pinnedOrSelectedInstance);
                         SelectionManager.FitViewToSelection();
                     }
                 }
 
-                if (selectedInstance.Outputs.Count > 1)
+                if (pinnedOrSelectedInstance.Outputs.Count > 1)
                 {
                     if (ImGui.BeginMenu("Show Output..."))
                     {
-                        foreach (var output in selectedInstance.Outputs)
+                        foreach (var output in pinnedOrSelectedInstance.Outputs)
                         {
                             ImGui.MenuItem(output.ToString());
                         }
@@ -88,12 +125,18 @@ namespace T3.Gui.Windows
             ImGui.SameLine();
         }
 
-        public void SetPinningToSelection()
+        private void SetPinningToSelection()
         {
             _pinnedInstancePath = NodeOperations.BuildIdPathForInstance(SelectionManager.GetSelectedInstance());
+            _pinnedEvaluationInstancePath = null;
         }
 
-        public Instance GetSelectedInstance()
+        private void PinEvaluationToSelection()
+        {
+            _pinnedEvaluationInstancePath = NodeOperations.BuildIdPathForInstance(SelectionManager.GetSelectedInstance());
+        }
+
+        public Instance GetPinnedOrSelectedInstance()
         {
             if (!_isPinned)
                 return SelectionManager.GetSelectedInstance();
@@ -104,5 +147,11 @@ namespace T3.Gui.Windows
 
         private bool _isPinned;
         private List<Guid> _pinnedInstancePath = new List<Guid>();
+        private List<Guid> _pinnedEvaluationInstancePath = new List<Guid>();
+
+        public Instance GetPinnedEvaluationInstance()
+        { 
+            return NodeOperations.GetInstanceFromIdPath(_pinnedEvaluationInstancePath);
+        }
     }
 }
