@@ -12,7 +12,7 @@ namespace T3.Gui.Windows.Output
         /// <summary>
         /// 
         /// </summary>
-        public static void DrawCameraSelection(SelectionPinning pinning, ref Guid selectedCameraId)
+        public static void DrawCameraSelection(ViewSelectionPinning pinning, ref Guid selectedCameraId)
         {
             var instanceSelectedInOutput = pinning.GetSelectedInstance();
 

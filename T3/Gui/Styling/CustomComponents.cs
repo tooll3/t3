@@ -59,7 +59,7 @@ namespace T3.Gui
             ImGui.SetCursorScreenPos(pos);
 
             ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0,0,0, 1));
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 1));
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.5f, 0.5f, 0.5f, 1));
 
             ImGui.Button("##Splitter", new Vector2(-1, thickness));
@@ -116,12 +116,11 @@ namespace T3.Gui
         {
             var wasSelected = isSelected;
             var clicked = false;
-            if (isSelected)
-            {
-                ImGui.PushStyleColor(ImGuiCol.Button, Color.Red.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red.Rgba);
-            }
+
+            //ImGui.PushStyleColor(ImGuiCol.Text, isSelected ? new Color(1f).Rgba : new Color(0.3f));
+            ImGui.PushStyleColor(ImGuiCol.Text, isSelected ? new Color(1f,1,1f,1f).Rgba : new Color(0,0,0,1f));
+            // ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red.Rgba);
+            // ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red.Rgba);
 
             if (CustomComponents.IconButton(icon, label, size) || trigger)
             {
@@ -129,10 +128,7 @@ namespace T3.Gui
                 clicked = true;
             }
 
-            if (wasSelected)
-            {
-                ImGui.PopStyleColor(3);
-            }
+            ImGui.PopStyleColor(1);
 
             return clicked;
         }
@@ -143,18 +139,18 @@ namespace T3.Gui
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.3f));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
 
-            var clicked = ImGui.Button((char)(int)icon +  label, size);
+            var clicked = ImGui.Button((char)(int)icon + label, size);
 
             ImGui.PopStyleVar(2);
             ImGui.PopFont();
             return clicked;
         }
 
-        public static void ContextMenuForItem(Action drawMenuItems, string title=null, string id = "context_menu")
+        public static void ContextMenuForItem(Action drawMenuItems, string title = null, string id = "context_menu")
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
-            
+
             if (ImGui.BeginPopupContextItem(id))
             {
                 if (title != null)
@@ -163,8 +159,22 @@ namespace T3.Gui
                     ImGui.Text(title);
                     ImGui.PopFont();
                 }
-                
+
                 drawMenuItems?.Invoke();
+                ImGui.EndPopup();
+            }
+
+            ImGui.PopStyleVar(2);
+        }
+
+        public static void PopUp(Action drawContent, string id = "context_menu")
+        {
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
+
+            if (ImGui.BeginPopupContextItem(id))
+            {
+                drawContent?.Invoke();
                 ImGui.EndPopup();
             }
 

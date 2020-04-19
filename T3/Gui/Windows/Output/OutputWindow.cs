@@ -74,9 +74,11 @@ namespace T3.Gui.Windows.Output
 
         private void DrawToolbar()
         {
+            ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.6f).Rgba);
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin());
             _pinning.DrawPinning();
-
+            
+            
             if (ImGui.Button("1:1"))
             {
                 _imageCanvas.SetScaleToMatchPixels();
@@ -94,6 +96,7 @@ namespace T3.Gui.Windows.Output
 
             CameraSelectionHandling.DrawCameraSelection(_pinning, ref _selectedCameraId);
             ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
+            ImGui.PopStyleColor();
         }
 
         private void DrawOutput(Instance instance)
@@ -132,7 +135,7 @@ namespace T3.Gui.Windows.Output
         private readonly EvaluationContext _evaluationContext = new EvaluationContext();
         public static readonly List<Window> OutputWindowInstances = new List<Window>();
         private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
-        private readonly SelectionPinning _pinning = new SelectionPinning();
+        private readonly ViewSelectionPinning _pinning = new ViewSelectionPinning();
         private readonly CameraInteraction _cameraInteraction = new CameraInteraction();
 
         private Guid _selectedCameraId = Guid.Empty;

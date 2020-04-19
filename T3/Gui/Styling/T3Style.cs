@@ -14,7 +14,7 @@ namespace T3.Gui
     public static class T3Style
     {
         public static Color ConnectedParameterColor = new Color(0.6f, 0.6f, 1f, 1f);
-
+        public static float ToolBarHeight = 25; 
 
         public static void Apply()
         {
