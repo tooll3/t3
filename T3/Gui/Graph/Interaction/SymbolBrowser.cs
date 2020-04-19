@@ -129,9 +129,9 @@ namespace T3.Gui.Graph.Interaction
                 _selectedItemWasChanged = true;
             }
 
-            var clickedOutside = ImGui.IsMouseClicked(0) && ImGui.IsWindowHovered();
+            var clickedOutside = ImGui.IsMouseClicked(ImGuiMouseButton.Left) && ImGui.IsWindowHovered();
             if (clickedOutside
-                || ImGui.IsMouseClicked(1)
+                || ImGui.IsMouseClicked(ImGuiMouseButton.Right)
                 || ImGui.GetIO().KeysDownDuration[(int)Key.Esc] > 0)
             {
                 ConnectionMaker.Cancel();

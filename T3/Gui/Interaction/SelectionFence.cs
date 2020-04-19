@@ -17,7 +17,7 @@ namespace T3.Gui.Interaction
 
             if (state == States.Inactive)
             {
-                if (ImGui.IsAnyItemHovered() || !ImGui.IsWindowHovered() || !ImGui.IsMouseClicked(0) || ImGui.GetIO().KeyAlt)
+                if (ImGui.IsAnyItemHovered() || !ImGui.IsWindowHovered() || !ImGui.IsMouseClicked(ImGuiMouseButton.Left) || ImGui.GetIO().KeyAlt)
                     return state;
                 
                 _startPositionInScreen = ImGui.GetMousePos();

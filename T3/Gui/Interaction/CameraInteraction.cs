@@ -139,11 +139,11 @@ namespace T3.Gui.Graph.Interaction
                     _orbitVelocity += delta * _deltaTime * -0.1f;
                 }
             }
-            else if (ImGui.IsMouseDragging(1))
+            else if (ImGui.IsMouseDragging(ImGuiMouseButton.Right))
             {
                 Pan();
             }
-            else if (ImGui.IsMouseDragging(2))
+            else if (ImGui.IsMouseDragging(ImGuiMouseButton.Middle))
             {
                 LookAround();
             }

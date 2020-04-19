@@ -254,8 +254,8 @@ namespace T3.Gui.Interaction
                 return;
 
             if (!NoMouseInteraction
-                && (ImGui.IsMouseDragging(1)
-                    || (ImGui.IsMouseDragging(0) && ImGui.GetIO().KeyAlt)))
+                && (ImGui.IsMouseDragging(ImGuiMouseButton.Right)
+                    || (ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)))
             {
                 ScrollTarget += Io.MouseDelta;
                 UserScrolledCanvas = true;

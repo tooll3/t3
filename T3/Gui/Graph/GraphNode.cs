@@ -165,7 +165,7 @@ namespace T3.Gui.Graph
                                  _selectableScreenRect.Max + Vector2.One,
                                  new Color(0.08f, 0.08f, 0.08f, 0.8f),
                                  rounding: 0,
-                                 2);
+                                 ImDrawCornerFlags.None);
 
                 // Animation indicator
                 {

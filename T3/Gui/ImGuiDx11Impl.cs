@@ -444,7 +444,7 @@ namespace T3
             io.Fonts.Build();
 
             // Get pointer to texture data, must happen after font build
-            io.Fonts.GetTexDataAsRGBA32(out var atlasPixels, out var atlasWidth, out var atlasHeight, out _);
+            io.Fonts.GetTexDataAsRGBA32(out System.IntPtr atlasPixels, out var atlasWidth, out var atlasHeight, out _);
 
             // Load the source image
             ImagingFactory factory = new ImagingFactory();
@@ -466,20 +466,17 @@ namespace T3
 
                 uint[] iconContent = new uint[sx * sy];
                 formatConverter.CopyPixels<uint>(new RawBox(px, py, sx, sy), iconContent);
-
+                
                 var rect = io.Fonts.GetCustomRectByIndex(glyphId);
-                if (rect != null)
-                {
-                    for (int y = 0, s = 0; y < rect->Height; y++)
+                    for (int y = 0, s = 0; y < rect.Height; y++)
                     {
-                        uint* p = (uint*)atlasPixels + (rect->Y + y) * atlasWidth + rect->X;
-                        for (int x = rect->Width; x > 0; x--)
+                        uint* p = (uint*)atlasPixels + (rect.Y + y) * atlasWidth + rect.X;
+                        for (int x = rect.Width; x > 0; x--)
                         {
                             *p++ = iconContent[s];
                             s++;
                         }
                     }
-                }
             }
 
             IntPtr _fontAtlasID = (IntPtr)1;
