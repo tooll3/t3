@@ -27,11 +27,11 @@ namespace T3.Gui.Windows
             if (CustomComponents.ToggleButton(Icon.Pin, "##pin", ref _isPinned, new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight)))
             {
                 if (_isPinned)
-                    SetPinningToSelection();
+                    PinSelectionToView();
             }
 
             ImGui.SameLine();
-            ImGui.SetNextItemWidth(250);
+            ImGui.SetNextItemWidth(300);
             var suffix = _isPinned ? " (pinned)" : " (selected)";
 
             var pinnedEvaluationInstance = GetPinnedEvaluationInstance();
@@ -61,14 +61,15 @@ namespace T3.Gui.Windows
                             {
                                 if (ImGui.MenuItem("Unpin Selected Rendering Step"))
                                 {
-                                    PinEvaluationToSelection();
+                                    //PinEvaluationToSelection();
                                 }
                             }
                             else
                             {
                                 if (ImGui.MenuItem("Pin Selected Rendering Step"))
                                 {
-                                    PinEvaluationToSelection();
+                                    PinSelectionToView();
+                                    PinSelectionAsEvaluationStart(pinnedOrSelectedInstance);
                                 }
                             }
                         }
@@ -77,7 +78,7 @@ namespace T3.Gui.Windows
                             if (ImGui.MenuItem("Pin Selection to View"))
                             {
                                 _isPinned = true;
-                                SetPinningToSelection();
+                                PinSelectionToView();
                             }
                         }
                     }
@@ -87,7 +88,7 @@ namespace T3.Gui.Windows
                     if (ImGui.MenuItem("Pin Selection to View"))
                     {
                         _isPinned = true;
-                        SetPinningToSelection();
+                        PinSelectionToView();
                     }
                 }
 
@@ -125,15 +126,15 @@ namespace T3.Gui.Windows
             ImGui.SameLine();
         }
 
-        private void SetPinningToSelection()
+        private void PinSelectionToView()
         {
             _pinnedInstancePath = NodeOperations.BuildIdPathForInstance(SelectionManager.GetSelectedInstance());
             _pinnedEvaluationInstancePath = null;
         }
 
-        private void PinEvaluationToSelection()
+        private void PinSelectionAsEvaluationStart(Instance instance)
         {
-            _pinnedEvaluationInstancePath = NodeOperations.BuildIdPathForInstance(SelectionManager.GetSelectedInstance());
+            _pinnedEvaluationInstancePath = NodeOperations.BuildIdPathForInstance(instance);
         }
 
         public Instance GetPinnedOrSelectedInstance()
@@ -144,14 +145,16 @@ namespace T3.Gui.Windows
             var instance = NodeOperations.GetInstanceFromIdPath(_pinnedInstancePath);
             return instance ?? SelectionManager.GetSelectedInstance();
         }
+        
+        public Instance GetPinnedEvaluationInstance()
+        { 
+            return NodeOperations.GetInstanceFromIdPath(_pinnedEvaluationInstancePath);
+        }
 
         private bool _isPinned;
         private List<Guid> _pinnedInstancePath = new List<Guid>();
         private List<Guid> _pinnedEvaluationInstancePath = new List<Guid>();
 
-        public Instance GetPinnedEvaluationInstance()
-        { 
-            return NodeOperations.GetInstanceFromIdPath(_pinnedEvaluationInstancePath);
-        }
+
     }
 }

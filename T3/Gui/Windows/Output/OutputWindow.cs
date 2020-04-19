@@ -136,17 +136,18 @@ namespace T3.Gui.Windows.Output
             // Ugly hack to hide final target
             if (instanceForOutput != instanceForEvaluation)
             {
-                ImGui.BeginChild("hidden", Vector2.One * 20);
+                ImGui.BeginChild("hidden", Vector2.One * 1);
                 {
                     evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext);
                 }
                 ImGui.EndChild();
 
                 var viewOutput = instanceForOutput.Outputs[0];
-                if (!evaluatedSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
+                var viewSymbolUi = SymbolUiRegistry.Entries[instanceForOutput.Symbol.Id];
+                if (!viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
                     return;
 
-                viewOutputUi.DrawValue(evalOutput, _evaluationContext, recompute:false);    
+                viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute:false);    
             }
             else
             {
