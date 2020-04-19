@@ -53,10 +53,22 @@ namespace T3.Gui.InputUi
 
             protected override void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false)
             {
+                _canvas.NeedToAdjustScopeAfterFirstRendering = true;
             }
 
             protected override void DeleteSelectedKeyframes()
             {
+                foreach (var curve in GetAllCurves())
+                {
+                    foreach (var keyframe in curve.GetVDefinitions().ToList())
+                    {
+                        if (!SelectedKeyframes.Contains(keyframe))
+                            continue;
+
+                        curve.RemoveKeyframeAt(keyframe.U);
+                        SelectedKeyframes.Remove(keyframe);
+                    }
+                }
             }
 
             protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
@@ -66,7 +78,7 @@ namespace T3.Gui.InputUi
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
                 }
 
-                if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
+                if (!ImGui.IsItemActive())
                     return;
 
                 if (ImGui.GetIO().KeyCtrl)
@@ -81,11 +93,14 @@ namespace T3.Gui.InputUi
                 {
                     if (!ImGui.GetIO().KeyShift)
                     {
-                        _canvas.ClearSelection();
+                        SelectedKeyframes.Clear();
                     }
 
                     SelectedKeyframes.Add(vDef);
                 }
+
+                if (!ImGui.IsMouseDragging(0, 2f))
+                    return;
 
                 if (_changeKeyframesCommand == null)
                 {
@@ -174,28 +189,29 @@ namespace T3.Gui.InputUi
                     {
                         _standardRaster.Draw(this);
                         _horizontalRaster.Draw(this);
+                        curve.UpdateTangents();
                         TimelineCurveEditArea.DrawCurveLine(curve, this);
 
                         foreach (var keyframe in interaction.GetAllKeyframes().ToArray())
                         {
                             CurvePoint.Draw(keyframe, this, interaction.SelectedKeyframes.Contains(keyframe), interaction);
                         }
-                        
+
                         interaction.HandleFenceSelection();
                         interaction.DrawContextMenu();
                         HandleCreateNewKeyframes(curve);
-                        if (_needToAdjustScopeAfterFirstRendering)
+                        if (NeedToAdjustScopeAfterFirstRendering)
                         {
                             var bounds = GetBoundsOnCanvas(interaction.GetAllKeyframes());
                             SetScopeToCanvasArea(bounds, flipY: true);
-                            _needToAdjustScopeAfterFirstRendering = false;
+                            NeedToAdjustScopeAfterFirstRendering = false;
                         }
                     }
                 }
 
                 private readonly StandardTimeRaster _standardRaster = new StandardTimeRaster();
                 private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
-                private bool _needToAdjustScopeAfterFirstRendering = true;
+                public bool NeedToAdjustScopeAfterFirstRendering = true;
             }
         }
     }

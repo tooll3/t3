@@ -160,6 +160,7 @@ namespace T3.Gui.Interaction.WithCurves
                                          vDef.OutType = VDefinition.Interpolation.Spline;
                                          vDef.OutTangentAngle = Math.PI;
                                      });
+            
         }
 
         private void OnConstant()
@@ -291,7 +292,7 @@ namespace T3.Gui.Interaction.WithCurves
                 }
             }
 
-            bounds.Expand(0.2f);
+            bounds.Expand(0.5f);
             return bounds;
         }
     }

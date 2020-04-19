@@ -95,6 +95,11 @@ namespace T3.Core.Animation
             SplineInterpolator.UpdateTangents(state.Table.ToList());
         }
 
+        public void UpdateTangents()
+        {
+            SplineInterpolator.UpdateTangents(_state.Table.ToList());
+        }
+
 
         /// <summary>
         /// Tries to move a keyframe to a new position

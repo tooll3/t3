@@ -276,16 +276,36 @@ namespace T3.Gui.Interaction
                 return;
             
             var focusCenter = (_mouse - Scroll - WindowPos) / Scale;
-
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
+            
 
-            ScaleTarget *= zoomDelta;
+            if (IsCurveCanvas)
+            {
+                if (ImGui.GetIO().KeyCtrl)
+                {
+                    ScaleTarget.X *= zoomDelta;
+                }
+                else if(ImGui.GetIO().KeyShift)
+                {
+                    ScaleTarget.Y *= zoomDelta;
+                }
+                else
+                {
+                    ScaleTarget *= zoomDelta;
+                }
+            }
+            else
+            {
+                ScaleTarget *= zoomDelta;
+            }
             if (Math.Abs(zoomDelta) > 0.1f)
                 UserZoomedCanvas = true;
 
             var shift = ScrollTarget + (focusCenter * ScaleTarget);
             ScrollTarget += _mouse - shift - WindowPos;
         }
+
+        private bool IsCurveCanvas => Scale.Y < 0;
 
         private float ComputeZoomDeltaFromMouseWheel()
         {
