@@ -33,6 +33,7 @@ namespace T3.Gui.UiHelpers
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = false;
             public float SnapStrength = 4;
+            public bool UseJogDialControl = false;
         }
         
         public static Guid GetLastOpenOpForWindow(string windowTitle)

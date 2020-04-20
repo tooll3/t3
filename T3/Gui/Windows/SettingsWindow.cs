@@ -31,6 +31,8 @@ namespace T3.Gui.Windows
             ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
             ImGui.DragFloat("Limit arc connection radius", ref LimitArcConnectionRadius);
             
+            ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
+            
             if (ImGui.TreeNode("Undo Queue"))
             {
                 ImGui.Text("Undo");

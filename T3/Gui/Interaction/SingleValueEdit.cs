@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 using T3.Gui.InputUi;
 using T3.Gui.Styling;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Interaction
@@ -98,8 +99,15 @@ namespace T3.Gui.Interaction
                             break;
                         }
 
-                        //JogDialOverlay.Draw(io, min, max, scale);
-                        SliderLadder.Draw(io, min, max, scale, (float)(ImGui.GetTime() - _timeOpened));
+                        if (UserSettings.Config.UseJogDialControl)
+                        {
+                            JogDialOverlay.Draw(io, min, max, scale);
+                        }
+                        else
+                        {
+                            SliderLadder.Draw(io, min, max, scale, (float)(ImGui.GetTime() - _timeOpened));                            
+                        }
+
                         break;
 
                     case JogDialStates.StartedTextInput:
