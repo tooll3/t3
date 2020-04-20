@@ -13,7 +13,7 @@ using Icon = T3.Gui.Styling.Icon;
 namespace T3.Gui.Windows
 {
     /// <summary>
-    /// A helper that decides with graph element to show.
+    /// A helper that decides which graph element to show.
     /// This is used by <see cref="OutputWindow"/> and eventually in <see cref="ParameterWindow"/>.
     /// </summary>
     public class ViewSelectionPinning
@@ -54,33 +54,34 @@ namespace T3.Gui.Windows
                     var instanceSelectedInGraph = SelectionManager.GetSelectedInstance();
                     if (instanceSelectedInGraph != pinnedOrSelectedInstance)
                     {
-                        var selectionIsPartOfTree = instanceSelectedInGraph.Outputs[0].DirtyFlag.FramesSinceLastUpdate < 2;
-                        if (selectionIsPartOfTree)
+                        // var selectionIsPartOfTree = instanceSelectedInGraph.Outputs[0].DirtyFlag.FramesSinceLastUpdate < 2;
+                        // if (selectionIsPartOfTree)
+                        // {
+                        //     if (instanceSelectedInGraph == GetPinnedEvaluationInstance())
+                        //     {
+                        //         if (ImGui.MenuItem("Unpin Selected Rendering Step"))
+                        //         {
+                        //             //PinEvaluationToSelection();
+                        //         }
+                        //     }
+                        //     else
+                        //     {
+                        //         if (ImGui.MenuItem("Pin Selected Rendering Step"))
+                        //         {
+                        //             PinSelectionToView();
+                        //             PinSelectionAsEvaluationStart(pinnedOrSelectedInstance);
+                        //         }
+                        //     }
+                        // }
+                        // else
+                        // {
+                        if (ImGui.MenuItem("Pin Selection to View"))
                         {
-                            if (instanceSelectedInGraph == GetPinnedEvaluationInstance())
-                            {
-                                if (ImGui.MenuItem("Unpin Selected Rendering Step"))
-                                {
-                                    //PinEvaluationToSelection();
-                                }
-                            }
-                            else
-                            {
-                                if (ImGui.MenuItem("Pin Selected Rendering Step"))
-                                {
-                                    PinSelectionToView();
-                                    PinSelectionAsEvaluationStart(pinnedOrSelectedInstance);
-                                }
-                            }
+                            _isPinned = true;
+                            PinSelectionToView();
                         }
-                        else
-                        {
-                            if (ImGui.MenuItem("Pin Selection to View"))
-                            {
-                                _isPinned = true;
-                                PinSelectionToView();
-                            }
-                        }
+
+                        // }
                     }
                 }
                 else
@@ -89,6 +90,21 @@ namespace T3.Gui.Windows
                     {
                         _isPinned = true;
                         PinSelectionToView();
+                    }
+                }
+
+                if (pinnedEvaluationInstance != null)
+                {
+                    if (ImGui.MenuItem("Unpin start operator"))
+                    {
+                        _pinnedEvaluationInstancePath = null;
+                    }
+                }
+                else
+                {
+                    if (ImGui.MenuItem("Pin as start operator"))
+                    {
+                        PinSelectionAsEvaluationStart(SelectionManager.GetSelectedInstance());
                     }
                 }
 
@@ -129,7 +145,7 @@ namespace T3.Gui.Windows
         private void PinSelectionToView()
         {
             _pinnedInstancePath = NodeOperations.BuildIdPathForInstance(SelectionManager.GetSelectedInstance());
-            _pinnedEvaluationInstancePath = null;
+            //_pinnedEvaluationInstancePath = null;
         }
 
         private void PinSelectionAsEvaluationStart(Instance instance)
@@ -145,16 +161,14 @@ namespace T3.Gui.Windows
             var instance = NodeOperations.GetInstanceFromIdPath(_pinnedInstancePath);
             return instance ?? SelectionManager.GetSelectedInstance();
         }
-        
+
         public Instance GetPinnedEvaluationInstance()
-        { 
+        {
             return NodeOperations.GetInstanceFromIdPath(_pinnedEvaluationInstancePath);
         }
 
         private bool _isPinned;
         private List<Guid> _pinnedInstancePath = new List<Guid>();
         private List<Guid> _pinnedEvaluationInstancePath = new List<Guid>();
-
-
     }
 }

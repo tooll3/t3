@@ -143,6 +143,9 @@ namespace T3.Gui.Windows.Output
                 }
                 ImGui.EndChild();
 
+                if (instanceForOutput == null || instanceForOutput.Outputs.Count == 0)
+                    return;
+                    
                 var viewOutput = instanceForOutput.Outputs[0];
                 var viewSymbolUi = SymbolUiRegistry.Entries[instanceForOutput.Symbol.Id];
                 if (!viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
