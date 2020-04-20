@@ -15,53 +15,64 @@ namespace T3.Gui.Windows.Output
         public static void DrawCameraSelection(ViewSelectionPinning pinning, ref Guid selectedCameraId)
         {
             var instanceSelectedInOutput = pinning.GetPinnedOrSelectedInstance();
+            var isCameraControlDisabled = selectedCameraId == DisableCameraId;
 
             // ReSharper disable once UseNullPropagation
             if (instanceSelectedInOutput == null)
                 return;
-            
+
             var activeCamerasInComposition = instanceSelectedInOutput.Parent?.Children
-                                                               .OfType<Camera>()
-                                                               .Where(cam => cam.Outputs[0].DirtyFlag.FramesSinceLastUpdate < 1)
-                                                               .ToList();
+                                                                     .OfType<Camera>()
+                                                                     .Where(cam => cam.Outputs[0].DirtyFlag.FramesSinceLastUpdate < 1)
+                                                                     .ToList();
 
-            if (activeCamerasInComposition == null || activeCamerasInComposition.Count == 0)
+            if (!isCameraControlDisabled)
             {
-                SelectedCamera = null;
-                return;
-            }
+                if (activeCamerasInComposition == null || activeCamerasInComposition.Count == 0)
+                {
+                    SelectedCamera = null;
+                    return;
+                }
 
-            var idForLambda = selectedCameraId;
-            SelectedCamera = activeCamerasInComposition.FirstOrDefault(cam => cam.SymbolChildId == idForLambda);
+                var idForLambda = selectedCameraId;
+                SelectedCamera = activeCamerasInComposition.FirstOrDefault(cam => cam.SymbolChildId == idForLambda);
 
-            if (SelectedCamera == null)
-            {
-                SelectedCamera = activeCamerasInComposition.First();
-                selectedCameraId = SelectedCamera.SymbolChildId;
-            }
-            else if (selectedCameraId == Guid.Empty)
-            {
-                selectedCameraId = activeCamerasInComposition.First().SymbolChildId;
+                if (SelectedCamera == null)
+                {
+                    SelectedCamera = activeCamerasInComposition.First();
+                    selectedCameraId = SelectedCamera.SymbolChildId;
+                }
+                else if (selectedCameraId == Guid.Empty)
+                {
+                    selectedCameraId = activeCamerasInComposition.First().SymbolChildId;
+                }
             }
 
             ImGui.SetNextItemWidth(100);
-            
-            var selectedSymbolChild = SymbolRegistry.Entries[instanceSelectedInOutput.Parent.Symbol.Id].Children.Single(child => child.Id == SelectedCamera.SymbolChildId);
 
-            if (ImGui.BeginCombo("##CameraSelection", selectedSymbolChild.ReadableName))
+            var selectedSymbolChild = isCameraControlDisabled
+                                          ? null
+                                          : SymbolRegistry.Entries[instanceSelectedInOutput.Parent.Symbol.Id]
+                                                          .Children
+                                                          .Single(child => child.Id == SelectedCamera.SymbolChildId);
+
+            var label = isCameraControlDisabled ? "No Camera" : selectedSymbolChild.ReadableName;
+
+            if (ImGui.BeginCombo("##CameraSelection", label))
             {
-                ImGui.Selectable("No Camera", SelectedCamera == null);
-                if (ImGui.IsItemActivated())
+                if (ImGui.Selectable("No Camera", selectedCameraId == DisableCameraId))
                 {
                     SelectedCamera = null;
-                    selectedCameraId = Guid.Empty;
+                    selectedCameraId = DisableCameraId;
+                    
                 }
-                
+
                 foreach (var cam in activeCamerasInComposition)
                 {
                     ImGui.PushID(cam.SymbolChildId.GetHashCode());
                     {
-                        var symbolChild = SymbolRegistry.Entries[instanceSelectedInOutput.Parent.Symbol.Id].Children.Single(child => child.Id == cam.SymbolChildId);
+                        var symbolChild = SymbolRegistry.Entries[instanceSelectedInOutput.Parent.Symbol.Id].Children
+                                                        .Single(child => child.Id == cam.SymbolChildId);
                         ImGui.Selectable(symbolChild.ReadableName, cam == SelectedCamera);
                         if (ImGui.IsItemActivated())
                         {
@@ -75,10 +86,13 @@ namespace T3.Gui.Windows.Output
                     }
                     ImGui.PopID();
                 }
+                ImGui.EndCombo();
             }
+
             ImGui.SameLine();
         }
 
         public static Camera SelectedCamera { get; private set; }
+        public static readonly Guid DisableCameraId = Guid.NewGuid();
     }
 }

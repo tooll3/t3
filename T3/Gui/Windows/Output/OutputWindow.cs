@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ImGuiNET;
 using SharpDX;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
@@ -56,7 +57,7 @@ namespace T3.Gui.Windows.Output
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
-                _imageCanvas.NoMouseInteraction = CameraSelectionHandling.SelectedCamera != null;
+                _imageCanvas.PreventMouseInteraction = CameraSelectionHandling.SelectedCamera != null;
                 _imageCanvas.Update();
 
                 _cameraInteraction.Update(CameraSelectionHandling.SelectedCamera);

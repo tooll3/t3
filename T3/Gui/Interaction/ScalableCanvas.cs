@@ -256,8 +256,10 @@ namespace T3.Gui.Interaction
             if (!ImGui.IsWindowHovered() && !isDraggingConnection)
                 return;
 
-            if (!NoMouseInteraction
-                && (ImGui.IsMouseDragging(ImGuiMouseButton.Right)
+            if (PreventMouseInteraction)
+                return;
+
+            if ((ImGui.IsMouseDragging(ImGuiMouseButton.Right)
                     || (ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)))
             {
                 ScrollTarget += Io.MouseDelta;
@@ -348,7 +350,7 @@ namespace T3.Gui.Interaction
 
         protected bool UserZoomedCanvas;
         protected bool UserScrolledCanvas;
-        public bool NoMouseInteraction;
+        public bool PreventMouseInteraction;
         private Vector2 _mouse;
         protected ImGuiIOPtr Io;
     }

@@ -39,6 +39,7 @@ namespace T3.Gui.Windows.Output
                     Resolutions.Add(_resolutionForEdit);
                     resolutionDialog.ShowNextFrame();
                 }
+                ImGui.EndCombo();
             }
         }
         
