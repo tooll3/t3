@@ -3,17 +3,20 @@ using ImGuiNET;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
+using SharpDX;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
+using T3.Gui.Windows.Output;
 using T3.Gui.Windows.TimeLine;
 using UiHelpers;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.Graph
 {
@@ -22,7 +25,6 @@ namespace T3.Gui.Graph
     /// </summary>
     public class GraphWindow : Window
     {
-
         public GraphWindow()
         {
             _instanceCounter++;
@@ -78,12 +80,16 @@ namespace T3.Gui.Graph
             _playback.Update(ImGui.GetIO().DeltaTime, UserSettings.Config.KeepBeatTimeRunningInPause);
         }
 
+
+        private static GraphWindow _currentWindow;
         protected override void DrawAllInstances()
         {
             foreach (var w in GraphWindowInstances.ToArray())
             {
+                _currentWindow = w as GraphWindow;
                 w.DrawOneInstance();
             }
+            _currentWindow = null;
         }
 
         private static bool _justAddedDescription;
@@ -96,26 +102,81 @@ namespace T3.Gui.Graph
                 return;
 
             var area = new ImRect(selection[0].PosOnCanvas,
-                                     selection[0].PosOnCanvas + selection[0].Size);
+                                  selection[0].PosOnCanvas + selection[0].Size);
 
             for (var index = 1; index < selection.Length; index++)
             {
                 var selectedItem = selection[index];
-                area.Add(new ImRect(selectedItem.PosOnCanvas, 
-                                         selectedItem.PosOnCanvas + selectedItem.Size));
+                area.Add(new ImRect(selectedItem.PosOnCanvas,
+                                    selectedItem.PosOnCanvas + selectedItem.Size));
             }
-            
+
             area.Expand(400);
 
             _graphCanvas.FitAreaOnCanvas(area);
         }
 
-        
+        public static void SetBackgroundOutput(Instance instance)
+        {
+            if(_currentWindow == null)
+                return;
+            
+            _currentWindow._imageBackground.BackgroundNodePath = instance != null
+                                                                 ? NodeOperations.BuildIdPathForInstance(instance)
+                                                                 : null;
+        }
+
+        private readonly ImageBackground _imageBackground = new ImageBackground();
+
+        private class ImageBackground
+        {
+            internal List<Guid> BackgroundNodePath = new List<Guid>();
+
+            public void Draw()
+            {
+                if (BackgroundNodePath == null)
+                    return;
+
+                _evaluationContext.Reset();
+                _imageCanvas.PreventMouseInteraction = true;
+                _imageCanvas.Update();
+
+                ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 0));
+                var instanceForOutput = NodeOperations.GetInstanceFromIdPath(BackgroundNodePath);
+
+                if (instanceForOutput == null || instanceForOutput.Outputs.Count == 0)
+                    return;
+
+                var viewOutput = instanceForOutput.Outputs[0];
+                var viewSymbolUi = SymbolUiRegistry.Entries[instanceForOutput.Symbol.Id];
+                if (!viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
+                    return;
+
+                var size2 = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
+                _evaluationContext.RequestedResolution = new Size2((int)size2.X, (int)size2.Y);
+                var shouldEvaluate = viewOutput.DirtyFlag.FramesSinceLastUpdate > 0;
+                viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: shouldEvaluate);
+            }
+
+            private void DrawOutput(Instance instanceForOutput, Instance instanceForEvaluation = null)
+            {
+            }
+
+            private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
+
+            //private readonly ViewSelectionPinning _pinning = new ViewSelectionPinning();
+            private readonly EvaluationContext _evaluationContext = new EvaluationContext();
+            private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
+        }
+
         protected override void DrawContent()
         {
-            if(SelectionManager.FitViewToSelectionRequested)
+            if (SelectionManager.FitViewToSelectionRequested)
                 FitViewToSelection();
-            
+
+            _imageBackground.Draw();
+            ImGui.SetCursorPos(Vector2.Zero);
+
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
             {
                 var dl = ImGui.GetWindowDrawList();
@@ -124,7 +185,7 @@ namespace T3.Gui.Graph
 
                 var isTimelineCollapsed = _heightTimeLine <= TimeLineCanvas.TimeLineDragHeight;
                 var timelineHeight = isTimelineCollapsed
-                                         ? (animationParameters.Count * DopeSheetArea.LayerHeight) 
+                                         ? (animationParameters.Count * DopeSheetArea.LayerHeight)
                                            + _timeLineCanvas.LayersArea.LastHeight
                                            + TimeLineCanvas.TimeLineDragHeight
                                            + 2
@@ -269,12 +330,12 @@ namespace T3.Gui.Graph
                                       from input in child.Inputs
                                       where animator.IsInputSlotAnimated(input)
                                       select new AnimationParameter()
-                                             {
-                                                 Instance = child,
-                                                 Input = input,
-                                                 Curves = animator.GetCurvesForInput(input),
-                                                 ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == selectedElement.Id)
-                                             }).ToList();
+                                                 {
+                                                     Instance = child,
+                                                     Input = input,
+                                                     Curves = animator.GetCurvesForInput(input),
+                                                     ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == selectedElement.Id)
+                                                 }).ToList();
             return curvesForSelection;
         }
 

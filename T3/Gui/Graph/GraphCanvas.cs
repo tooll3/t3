@@ -430,7 +430,12 @@ namespace T3.Gui.Graph
                 {
                     CopySelectionToClipboard(selectedChildUis);
                 }
-
+                
+                if (oneElementSelected && ImGui.MenuItem("Set at background image"))
+                {
+                    var instance =CompositionOp.Children.Single(child => child.SymbolChildId == selectedChildUis[0].Id);
+                    GraphWindow.SetBackgroundOutput(instance);
+                }
                 ImGui.Separator();
             }
 
