@@ -116,23 +116,8 @@ namespace T3.Gui.Windows.Output
                 return;
 
             _evaluationContext.Reset();
-
-            if (_selectedResolution.UseAsAspectRatio)
-            {
-                var windowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
-                var windowAspectRatio = windowSize.X / windowSize.Y;
-                var requestedAspectRatio = (float)_selectedResolution.Size.Width / _selectedResolution.Size.Height;
-
-                var size = (requestedAspectRatio > windowAspectRatio)
-                               ? new Size2((int)windowSize.X, (int)(windowSize.X / requestedAspectRatio))
-                               : new Size2((int)(windowSize.Y * requestedAspectRatio), (int)windowSize.Y);
-
-                _evaluationContext.RequestedResolution = size;
-            }
-            else
-            {
-                _evaluationContext.RequestedResolution = _selectedResolution.Size;
-            }
+            _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
+            
             
             // Ugly hack to hide final target
             if (instanceForOutput != instanceForEvaluation)

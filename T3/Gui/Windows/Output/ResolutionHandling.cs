@@ -9,7 +9,7 @@ namespace T3.Gui.Windows.Output
     {
         public static void DrawSelector(ref Resolution selectedResolution, EditResolutionDialog resolutionDialog)
         {
-            resolutionDialog.Draw(_resolutionForEdit);
+            resolutionDialog?.Draw(_resolutionForEdit);
 
             ImGui.SetNextItemWidth(100);
             if (ImGui.BeginCombo("##ResolutionSelection", selectedResolution.Title))
@@ -71,6 +71,20 @@ namespace T3.Gui.Windows.Output
             public string Title;
             public Size2 Size;
             public bool UseAsAspectRatio;
+
+            public Size2 ComputeResolution()
+            {
+                if (!UseAsAspectRatio)
+                    return Size; 
+
+                var windowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
+                var windowAspectRatio = windowSize.X / windowSize.Y;
+                var requestedAspectRatio = (float)Size.Width / Size.Height;
+
+                return (requestedAspectRatio > windowAspectRatio)
+                           ? new Size2((int)windowSize.X, (int)(windowSize.X / requestedAspectRatio))
+                           : new Size2((int)(windowSize.Y * requestedAspectRatio), (int)windowSize.Y);
+            }
 
             public bool IsValid
             {

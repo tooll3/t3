@@ -129,7 +129,7 @@ namespace T3.Gui.Graph
         }
 
         #region drawing UI ====================================================================
-        public void Draw(ImDrawListPtr dl)
+        public void Draw(ImDrawListPtr dl, bool showGrid)
         {
             // TODO: Refresh reference on every frame. Since this uses lists instead of dictionary
             // it can be really slow
@@ -171,7 +171,8 @@ namespace T3.Gui.Graph
 
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
-                DrawGrid();
+                if(showGrid)
+                    DrawGrid();
                 _symbolBrowser.Draw();
 
                 Graph.DrawGraph(DrawList);

@@ -3,17 +3,14 @@ using ImGuiNET;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SharpDX;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Graph.Interaction;
-using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
-using T3.Gui.Windows.Output;
 using T3.Gui.Windows.TimeLine;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
@@ -23,7 +20,7 @@ namespace T3.Gui.Graph
     /// <summary>
     /// A window that renders a node graph 
     /// </summary>
-    public class GraphWindow : Window
+    public partial class GraphWindow : Window
     {
         public GraphWindow()
         {
@@ -128,47 +125,6 @@ namespace T3.Gui.Graph
 
         private readonly ImageBackground _imageBackground = new ImageBackground();
 
-        private class ImageBackground
-        {
-            internal List<Guid> BackgroundNodePath = new List<Guid>();
-
-            public void Draw()
-            {
-                if (BackgroundNodePath == null)
-                    return;
-
-                _evaluationContext.Reset();
-                _imageCanvas.PreventMouseInteraction = true;
-                _imageCanvas.Update();
-
-                ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 0));
-                var instanceForOutput = NodeOperations.GetInstanceFromIdPath(BackgroundNodePath);
-
-                if (instanceForOutput == null || instanceForOutput.Outputs.Count == 0)
-                    return;
-
-                var viewOutput = instanceForOutput.Outputs[0];
-                var viewSymbolUi = SymbolUiRegistry.Entries[instanceForOutput.Symbol.Id];
-                if (!viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
-                    return;
-
-                var size2 = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
-                _evaluationContext.RequestedResolution = new Size2((int)size2.X, (int)size2.Y);
-                var shouldEvaluate = viewOutput.DirtyFlag.FramesSinceLastUpdate > 0;
-                viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: shouldEvaluate);
-            }
-
-            private void DrawOutput(Instance instanceForOutput, Instance instanceForEvaluation = null)
-            {
-            }
-
-            private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
-
-            //private readonly ViewSelectionPinning _pinning = new ViewSelectionPinning();
-            private readonly EvaluationContext _evaluationContext = new EvaluationContext();
-            private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
-        }
-
         protected override void DrawContent()
         {
             if (SelectionManager.FitViewToSelectionRequested)
@@ -222,10 +178,12 @@ namespace T3.Gui.Graph
                         ImGui.SameLine();
 
                         TimeControls.DrawTimeControls(_playback, _timeLineCanvas);
+                        if(_imageBackground.IsActive)
+                            _imageBackground.DrawResolutionSelector();
                     }
                     dl.ChannelsSetCurrent(0);
                     {
-                        _graphCanvas.Draw(dl);
+                        _graphCanvas.Draw(dl, showGrid:!_imageBackground.IsActive);
                     }
                     dl.ChannelsMerge();
                 }
