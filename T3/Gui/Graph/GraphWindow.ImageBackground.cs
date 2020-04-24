@@ -49,8 +49,8 @@ namespace T3.Gui.Graph
                     return;
                 
                 _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
-                var shouldEvaluate = viewOutput.DirtyFlag.FramesSinceLastUpdate > 0;
-                viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: shouldEvaluate);
+                //var shouldEvaluate = viewOutput.DirtyFlag.FramesSinceLastUpdate > 0;
+                viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: true);
             }
             
             private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
