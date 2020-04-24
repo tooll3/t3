@@ -114,7 +114,7 @@ namespace T3.Gui
         public static readonly UiModel UiModel;
         private static UserSettings _userSettings;
         private static ProjectSettings _projectSettings;
-        private static readonly WindowManager WindowManager;
+        public static readonly WindowManager WindowManager;
 
         public static IntPtr NotDroppingPointer = new IntPtr(0);
         public static bool DraggingIsInProgress = false;

@@ -174,8 +174,8 @@ namespace T3.Gui.Graph
                 if(showGrid)
                     DrawGrid();
                 _symbolBrowser.Draw();
-
                 Graph.DrawGraph(DrawList);
+                HandleFenceSelection();
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
                 if (isOnBackground && ImGui.IsMouseDoubleClicked(0))
@@ -198,7 +198,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                HandleFenceSelection();
+                
                 DrawList.PopClipRect();
                 DrawContextMenu();
 

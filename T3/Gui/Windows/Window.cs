@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System.Collections.Generic;
 using System.Numerics;
+using T3.Core.Operator;
 
 namespace T3.Gui.Windows
 {
@@ -116,5 +117,8 @@ namespace T3.Gui.Windows
         }
 
         public WindowConfig Config = new WindowConfig();
+        
+
+
     }
 }

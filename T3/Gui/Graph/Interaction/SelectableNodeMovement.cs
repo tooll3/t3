@@ -19,7 +19,7 @@ namespace T3.Gui.Graph.Interaction
         {
             if (ImGui.IsItemActive())
             {
-                if (ImGui.IsItemClicked(0))
+                if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                 {
                     if (!SelectionManager.IsNodeSelected(node))
                     {

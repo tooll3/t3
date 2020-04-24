@@ -12,6 +12,7 @@ using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
+using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using T3.Gui.UiHelpers;
@@ -60,7 +61,7 @@ namespace T3.Gui.Graph
                 }
 
                 // Size toggle
-                if(GraphCanvas.Current.Scale.X > 0.7f)
+                if (GraphCanvas.Current.Scale.X > 0.7f)
                 {
                     var pos = new Vector2(_usableScreenRect.Max.X - 15, _usableScreenRect.Min.Y + 2);
 
@@ -70,10 +71,9 @@ namespace T3.Gui.Graph
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Color(1, 1, 1, .3f).Rgba);
                     ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, .3f).Rgba);
                     ImGui.PushFont(Icons.IconFont);
-                    
+
                     if (childUi.Style == SymbolChildUi.Styles.Default)
                     {
-
                         if (ImGui.Button(UnfoldLabel, new Vector2(16, 16)))
                         {
                             childUi.Style = SymbolChildUi.Styles.Expanded;
@@ -81,7 +81,6 @@ namespace T3.Gui.Graph
                     }
                     else if (childUi.Style != SymbolChildUi.Styles.Default)
                     {
-                        
                         if (ImGui.Button(FoldLabel, new Vector2(16, 16)))
                         {
                             childUi.Style = SymbolChildUi.Styles.Default;
@@ -97,7 +96,9 @@ namespace T3.Gui.Graph
                 ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
                 ImGui.InvisibleButton("node", _selectableScreenRect.GetSize());
 
-                THelpers.DebugItemRect();
+                var hoveredBeforeContextMenu = ImGui.IsItemHovered();
+
+                // Tooltip
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -123,6 +124,28 @@ namespace T3.Gui.Graph
                 }
 
                 SelectableNodeMovement.Handle(childUi, instance);
+
+                // Parameter as context
+                {
+                    var isClicked = ImGui.IsItemHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left) &&
+                                    ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() < 4;
+                    if (isClicked && !ParameterWindow.IsAnyInstanceVisible())
+                    {
+                        SelectionManager.SetSelection(childUi);
+                        ImGui.OpenPopup("test");
+                    }
+
+                    ImGui.SetNextWindowSizeConstraints(new Vector2(280, 40), new Vector2(280, 320));
+                    if (ImGui.BeginPopup("test"))
+                    {
+                        ImGui.PushFont(Fonts.FontSmall);
+                        var compositionSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+                        var symbolChildUi = compositionSymbolUi.ChildUis.Single(symbolChildUi2 => symbolChildUi2.Id == instance.SymbolChildId);
+                        ParameterWindow.DrawParameters(instance, symbolUi, symbolChildUi, compositionSymbolUi);
+                        ImGui.PopFont();
+                        ImGui.EndPopup();
+                    }
+                }
 
                 if (ImGui.IsItemActive() && ImGui.IsMouseDoubleClicked(0))
                 {
@@ -386,7 +409,6 @@ namespace T3.Gui.Graph
                 outputIndex++;
             }
         }
-        
 
         // Find visible input slots.
         // TODO: this is a major performance hot spot and needs optimization
@@ -757,7 +779,7 @@ namespace T3.Gui.Graph
         #endregion
 
         private static readonly string UnfoldLabel = (char)Icon.ChevronLeft + "##size";
-        private static readonly string  FoldLabel = (char)Icon.ChevronDown + "##size";
+        private static readonly string FoldLabel = (char)Icon.ChevronDown + "##size";
         private static readonly List<IInputUi> VisibleInputs = new List<IInputUi>(15);
 
         private static EvaluationContext _evaluationContext = new EvaluationContext();

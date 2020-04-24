@@ -302,6 +302,11 @@ namespace T3.Gui.Windows
             ApplyConfigurations(allWindowConfigs);
         }
 
+        public bool IsAnyInstanceVisible<T>() where T: Window
+        {
+            return GetAllWindows().OfType<T>().Any(w => w.Config.Visible);
+        }
+        
         private const string LayoutFileNameFormat = "layout{0}.json";
         private const string ConfigFolderName = ".t3";
 

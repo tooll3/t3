@@ -152,9 +152,9 @@ namespace T3.Gui.Graph
                     _heightTimeLine = timelineHeight;
                 }
 
-                const float ImgGuiTitleHeight = 4; // Hack that also depends on when a window-title is being rendered 
+                const float imGuiTitleHeight = 4; // Hack that also depends on when a window-title is being rendered 
 
-                var graphHeight = ImGui.GetWindowHeight() - timelineHeight - ImgGuiTitleHeight;
+                var graphHeight = ImGui.GetWindowHeight() - timelineHeight - imGuiTitleHeight;
                 ImGui.BeginChild("##graph", new Vector2(0, graphHeight), false,
                                  ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
                 {

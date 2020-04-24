@@ -170,6 +170,7 @@ namespace T3.Gui.InputUi
 
             private SelectionFence.States _fenceState = SelectionFence.States.Inactive;
 
+            
             /// <summary>
             /// Implement canvas for showing and manipulating curve
             /// </summary>
@@ -183,7 +184,8 @@ namespace T3.Gui.InputUi
 
                 public void Draw(Curve curve, CurveInteraction interaction)
                 {
-                    DrawCurveCanvas(DrawCanvasContent, height: 150);
+                    
+                    DrawCurveCanvas(DrawCanvasContent, DefaultCurveParameterHeight);
 
                     void DrawCanvasContent()
                     {
@@ -208,7 +210,7 @@ namespace T3.Gui.InputUi
                         }
                     }
                 }
-
+                private const float DefaultCurveParameterHeight = 100;
                 private readonly StandardTimeRaster _standardRaster = new StandardTimeRaster();
                 private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
                 public bool NeedToAdjustScopeAfterFirstRendering = true;

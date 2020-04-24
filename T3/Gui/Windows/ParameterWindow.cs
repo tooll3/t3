@@ -70,42 +70,7 @@ namespace T3.Gui.Windows
                 var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
 
                 // Draw parameters
-                foreach (var inputSlot in instance.Inputs)
-                {
-                    if (!selectedChildSymbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
-                    {
-                        Log.Warning("Trying to access an non existing input, probably the op instance is not the actual one.");
-                        continue;
-                    }
-
-                    ImGui.PushID(inputSlot.Id.GetHashCode());
-                    var editState = inputUi.DrawInputEdit(inputSlot, compositionSymbolUi, symbolChildUi);
-
-                    if ((editState & InputEditStateFlags.Started) != InputEditStateFlags.Nothing)
-                    {
-                        _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
-                    }
-
-                    if ((editState & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
-                    {
-                        if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.Value.ValueType != inputSlot.Input.Value.ValueType)
-                            _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
-                        _inputValueCommandInFlight.Value.Assign(inputSlot.Input.Value);
-                    }
-
-                    if ((editState & InputEditStateFlags.Finished) != InputEditStateFlags.Nothing)
-                    {
-                        if (_inputValueCommandInFlight != null && _inputValueCommandInFlight.Value.ValueType == inputSlot.Input.Value.ValueType)
-                            UndoRedoStack.Add(_inputValueCommandInFlight);
-                    }
-
-                    if (editState == InputEditStateFlags.ShowOptions)
-                    {
-                        SelectionManager.SetSelection(inputUi);
-                    }
-
-                    ImGui.PopID();
-                }
+                DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi);
 
                 return;
             }
@@ -121,6 +86,47 @@ namespace T3.Gui.Windows
                 ImGui.PopFont();
                 input.DrawSettings();
                 ImGui.Spacing();
+                ImGui.PopID();
+            }
+        }
+
+        public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi, 
+                                           SymbolUi compositionSymbolUi)
+        {
+            foreach (var inputSlot in instance.Inputs)
+            {
+                if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
+                {
+                    Log.Warning("Trying to access an non existing input, probably the op instance is not the actual one.");
+                    continue;
+                }
+
+                ImGui.PushID(inputSlot.Id.GetHashCode());
+                var editState = inputUi.DrawInputEdit(inputSlot, compositionSymbolUi, symbolChildUi);
+
+                if ((editState & InputEditStateFlags.Started) != InputEditStateFlags.Nothing)
+                {
+                    _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
+                }
+
+                if ((editState & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
+                {
+                    if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.Value.ValueType != inputSlot.Input.Value.ValueType)
+                        _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
+                    _inputValueCommandInFlight.Value.Assign(inputSlot.Input.Value);
+                }
+
+                if ((editState & InputEditStateFlags.Finished) != InputEditStateFlags.Nothing)
+                {
+                    if (_inputValueCommandInFlight != null && _inputValueCommandInFlight.Value.ValueType == inputSlot.Input.Value.ValueType)
+                        UndoRedoStack.Add(_inputValueCommandInFlight);
+                }
+
+                if (editState == InputEditStateFlags.ShowOptions)
+                {
+                    SelectionManager.SetSelection(inputUi);
+                }
+
                 ImGui.PopID();
             }
         }
@@ -182,9 +188,14 @@ namespace T3.Gui.Windows
             ImGui.Dummy(new Vector2(0.0f, 5.0f));
         }
 
+        public static bool IsAnyInstanceVisible()
+        {
+            return T3Ui.WindowManager.IsAnyInstanceVisible<ParameterWindow>();
+        }
+        
         private static readonly List<Window> ParameterWindowInstances = new List<Window>();
         private ChangeSymbolChildNameCommand _symbolChildNameCommand;
-        private ChangeInputValueCommand _inputValueCommandInFlight;
+        private static ChangeInputValueCommand _inputValueCommandInFlight;
         private static int _instanceCounter;
     }
 }

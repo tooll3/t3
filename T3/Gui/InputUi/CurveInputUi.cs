@@ -45,7 +45,7 @@ namespace T3.Gui.InputUi
             }
 
             // TODO: with the return value of this function the inputEditStateFlags should somehow be set, or selfmade editing controls for reference types
-            // handle cloning by themself when previously in default state. Needs to be discussed
+            // handle cloning by themselves when previously in default state. Needs to be discussed
             CurveInputEditing.DrawCanvasForCurve(curve);
 
             return inputEditStateFlags;

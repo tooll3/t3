@@ -22,7 +22,7 @@ namespace T3.Gui.InputUi
     public abstract class InputValueUi<T> : IInputUi
     {
         private const float ConnectionAreaWidth = 30.0f;
-        private const float ParameterNameWidth = 120.0f;
+        private float ParameterNameWidth => ImGui.GetTextLineHeight() * 120.0f/16;
 
         public SymbolUi Parent { get; set; }
         public Symbol.InputDefinition InputDefinition { get; set; }
