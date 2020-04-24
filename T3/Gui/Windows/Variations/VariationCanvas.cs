@@ -14,6 +14,7 @@ using T3.Gui.Graph;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
 using T3.Gui.Selection;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows.Output;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
@@ -125,7 +126,7 @@ namespace T3.Gui.Windows.Variations
             var center = new Vector2(GridCell.VariationGridSize / 2f, GridCell.VariationGridSize / 2f);
             var left = (center - extend) * ThumbnailSize;
             var right = (center + extend) * ThumbnailSize;
-            ZoomSpeed = 20000;
+            //UserSettings.Config.ZoomSpeed = 20000;
 
             FitAreaOnCanvas(new ImRect(left, right));
         }

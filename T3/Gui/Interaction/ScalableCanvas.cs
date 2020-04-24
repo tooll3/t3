@@ -270,19 +270,19 @@ namespace T3.Gui.Interaction
                 UserScrolledCanvas = false;
             }
 
-            HandleZoomWithMouseWheel();
+            ZoomWithMouseWheel();
+            ZoomWithMiddleMouseDrag();
         }
 
-        private void HandleZoomWithMouseWheel()
+        private void ZoomWithMouseWheel()
         {
             UserZoomedCanvas = false;
-
-            if (Math.Abs(Io.MouseWheel) < 0.01f)
-                return;
             
             var focusCenter = (_mouse - Scroll - WindowPos) / Scale;
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
             
+            if (Math.Abs(zoomDelta - 1) < 0.001f)
+                return;
 
             if (IsCurveCanvas)
             {
@@ -316,25 +316,57 @@ namespace T3.Gui.Interaction
         {
             const float zoomSpeed = 1.2f;
             var zoomSum = 1f;
-            if (Io.MouseWheel < 0.0f)
+            var ioMouseWheel = Io.MouseWheel;
+
+            if (ioMouseWheel < 0.0f)
             {
-                for (var zoom = Io.MouseWheel; zoom < 0.0f; zoom += 1.0f)
+                for (var zoom = ioMouseWheel; zoom < 0.0f; zoom += 1.0f)
                 {
                     zoomSum /= zoomSpeed;
                 }
             }
 
-            if (Io.MouseWheel > 0.0f)
+            if (ioMouseWheel > 0.0f)
             {
-                for (var zoom = Io.MouseWheel; zoom > 0.0f; zoom -= 1.0f)
+                for (var zoom = ioMouseWheel; zoom > 0.0f; zoom -= 1.0f)
                 {
                     zoomSum *= zoomSpeed;
                 }
             }
 
-            zoomSum = zoomSum.Clamp(0.01f, 100f);
+            
+            zoomSum = zoomSum.Clamp(0.02f, 100f);
             return zoomSum;
         }
+
+        private void ZoomWithMiddleMouseDrag()
+        {
+            if (ImGui.IsMouseClicked(ImGuiMouseButton.Middle))
+            {
+                _mousePosWhenMiddlePressed = ImGui.GetMousePos();
+                _scaleWhenMiddlePressed = ScaleTarget;
+            }
+            
+            if (ImGui.IsMouseDragging(ImGuiMouseButton.Middle,0))
+            {
+                var delta = ImGui.GetMousePos() - _mousePosWhenMiddlePressed;
+                if (IsCurveCanvas)
+                {
+                    
+                }
+                else
+                {
+                    var f = (float)Math.Pow(1.1f, delta.Y/40f);
+                    ScaleTarget = _scaleWhenMiddlePressed * f;
+                }
+                var focusCenter = (_mousePosWhenMiddlePressed - Scroll - WindowPos) / Scale;
+                var shift = ScrollTarget + (focusCenter * ScaleTarget);
+                ScrollTarget += _mousePosWhenMiddlePressed - shift - WindowPos;
+            }
+        }
+        
+        private Vector2 _mousePosWhenMiddlePressed;
+        private Vector2 _scaleWhenMiddlePressed;
 
         public struct Scope
         {
