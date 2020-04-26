@@ -22,7 +22,7 @@ namespace T3.Core.Operator
         public string ReadableName => string.IsNullOrEmpty(Name) ? Symbol.Name : Name;
 
         public Dictionary<InputDefinitionId, Input> InputValues { get; } = new Dictionary<InputDefinitionId, Input>();
-        public Dictionary<Guid, IOutputData> OutputData { get; } = new Dictionary<Guid, IOutputData>();
+        public Dictionary<Guid, Output> Outputs { get; } = new Dictionary<Guid, Output>();
 
         public SymbolChild(Symbol symbol, Guid childId)
         {
@@ -36,14 +36,26 @@ namespace T3.Core.Operator
 
             foreach (var outputDefinition in symbol.OutputDefinitions)
             {
-                if (outputDefinition.OutputDataType != null)
-                {
-                    OutputData.Add(outputDefinition.Id, Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData);
-                }
+                var outputData = (outputDefinition.OutputDataType != null) ? (Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData) : null;
+                var output = new Output(outputDefinition, outputData);
+                Outputs.Add(outputDefinition.Id, output);
             }
         }
 
         #region sub classes =============================================================
+
+        public class Output
+        {
+            public Symbol.OutputDefinition OutputDefinition { get; }
+            public IOutputData OutputData { get; }
+            public DirtyFlagTrigger DirtyFlagTrigger { get; set; } = DirtyFlagTrigger.None;
+
+            public Output(Symbol.OutputDefinition outputDefinition, IOutputData outputData)
+            {
+                OutputDefinition = outputDefinition;
+                OutputData = outputData;
+            }
+        }
 
         public class Input
         {

@@ -284,17 +284,21 @@ namespace T3.Core.Operator
                 }
 
                 // update output of symbol child
-                var oldChildOutputs = new Dictionary<Guid, IOutputData>(symbolChild.OutputData);
-                symbolChild.OutputData.Clear();
+                var oldChildOutputs = new Dictionary<Guid, SymbolChild.Output>(symbolChild.Outputs);
+                symbolChild.Outputs.Clear();
                 foreach (var outputDefinition in OutputDefinitions)
                 {
-                    if (oldChildOutputs.TryGetValue(outputDefinition.Id, out var outputData))
+                    if (oldChildOutputs.TryGetValue(outputDefinition.Id, out var output))
                     {
-                        symbolChild.OutputData.Add(outputDefinition.Id, outputData);
+                        symbolChild.Outputs.Add(outputDefinition.Id, output);
                     }
-                    else if (outputDefinition.OutputDataType != null)
+                    else
                     {
-                        symbolChild.OutputData.Add(outputDefinition.Id, Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData);
+                        var outputData = (outputDefinition.OutputDataType != null)
+                                             ? (Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData)
+                                             : null;
+                        var newOutput = new SymbolChild.Output(outputDefinition, outputData);
+                        symbolChild.Outputs.Add(outputDefinition.Id, newOutput);
                     }
                 }
 
@@ -437,7 +441,7 @@ namespace T3.Core.Operator
                     // output is using data, so link it
                     if (childInstance.Outputs[i] is IOutputDataUser outputDataConsumer)
                     {
-                        outputDataConsumer.SetOutputData(symbolChild.OutputData[childInstance.Outputs[i].Id]);
+                        outputDataConsumer.SetOutputData(symbolChild.Outputs[childInstance.Outputs[i].Id].OutputData);
                     }
                 }
             }

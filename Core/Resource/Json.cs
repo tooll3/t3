@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 
 namespace T3.Core
 {
@@ -133,15 +134,42 @@ namespace T3.Core
 
                 Writer.WritePropertyName("OutputData");
                 Writer.WriteStartArray();
-                foreach (var (id, outputData) in child.OutputData)
+                var bla = (from instance in child.Symbol.InstancesOfSymbol
+                           where instance.SymbolChildId == child.Id
+                           select instance).FirstOrDefault();
+                if (bla == null)
                 {
-                    Writer.WriteStartObject();
-                    Writer.WriteValue("Id", id);
-                    Writer.WriteObject("Type", outputData.DataType);
-                    outputData.ToJson(Writer);
-                    Writer.WriteEndObject();
+                    int i = 0;
                 }
+                foreach (var (id, output) in child.Outputs)
+                {
+                    ISlot outputInstance = null;
+                    if (bla != null)
+                    {
+                        outputInstance = (from o in bla.Outputs where o.Id == id select o).Single();
+                    }
+                    if (output.DirtyFlagTrigger != DirtyFlagTrigger.None || output.OutputData != null)
+                    // if ((outputInstance != null && outputInstance.DirtyFlag.Trigger != DirtyFlagTrigger.None) || output.OutputData != null)
+                    {
+                        Writer.WriteStartObject();
+                        Writer.WriteValue("Id", id);
 
+                        if (output.OutputData != null)
+                        {
+                            Writer.WriteObject("Type", output.OutputData.DataType);
+                            output.OutputData.ToJson(Writer);
+                        }
+
+                        if (output.DirtyFlagTrigger != DirtyFlagTrigger.None)
+                        // if (outputInstance.DirtyFlag.Trigger != DirtyFlagTrigger.None)
+                        {
+                            Writer.WriteObject("DirtyFlagTrigger", output.DirtyFlagTrigger);
+                            // Writer.WriteObject("DirtyFlagTrigger", outputInstance.DirtyFlag.Trigger);
+                        }
+
+                        Writer.WriteEndObject();
+                    }
+                }
                 Writer.WriteEndArray();
 
                 Writer.WriteEndObject(); // child
@@ -173,9 +201,9 @@ namespace T3.Core
                 ReadChildInputValue(symbolChild, inputValue);
             }
 
-            foreach (var outputDataToken in (JArray)symbolChildJson["OutputData"])
+            foreach (var outputToken in (JArray)symbolChildJson["OutputData"])
             {
-                ReadChildOutputData(symbolChild, outputDataToken);
+                ReadChildOutputData(symbolChild, outputToken);
             }
 
             return symbolChild;
@@ -217,8 +245,14 @@ namespace T3.Core
         private void ReadChildOutputData(SymbolChild symbolChild, JToken json)
         {
             var id = Guid.Parse(json["Id"].Value<string>());
-            // var jsonValue = jsonInput["Data"];
-            symbolChild.OutputData[id].ReadFromJson(json);
+            if (json["Type"] != null)
+            {
+                symbolChild.Outputs[id].OutputData.ReadFromJson(json);
+            }
+            if (json["DirtyFlagTrigger"] != null)
+            {
+                symbolChild.Outputs[id].DirtyFlagTrigger = (DirtyFlagTrigger)Enum.Parse(typeof(DirtyFlagTrigger), json["DirtyFlagTrigger"].Value<string>());
+            }
         }
 
         public Symbol ReadSymbol(Model model)

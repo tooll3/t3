@@ -90,11 +90,15 @@ namespace T3.Gui.Commands
                     newInput.IsDefault = input.IsDefault;
                 }
 
-                var newSymbolOutputs = newSymbolChild.OutputData;
-                foreach (var (id, outputData) in symbolChildToCopy.OutputData)
+                var newSymbolOutputs = newSymbolChild.Outputs;
+                foreach (var (id, output) in symbolChildToCopy.Outputs)
                 {
-                    var newOutput = newSymbolOutputs[id];
-                    newOutput.Assign(outputData);
+                    if (output.OutputData != null)
+                    {
+                        var newOutput = newSymbolOutputs[id];
+                        newOutput.OutputData.Assign(output.OutputData);
+                        //todo: !!!dirty-flag
+                    }
                 }
             }
 
