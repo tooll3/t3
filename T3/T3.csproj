@@ -348,6 +348,7 @@
     <Compile Include="Gui\Graph\Dialogs\CombineToSymbolDialog.cs" />
     <Compile Include="Gui\Graph\Dialogs\AddInputDialog.cs" />
     <Compile Include="Gui\Graph\Dialogs\DuplicateSymbolDialog.cs" />
+    <Compile Include="Gui\Graph\Dialogs\EditNodeOutputDialog.cs" />
     <Compile Include="Gui\Graph\Dialogs\RenameSymbolDialog.cs" />
     <Compile Include="Gui\Graph\GraphCanvas.cs" />
     <Compile Include="Gui\Graph\GraphWindow.ImageBackground.cs" />

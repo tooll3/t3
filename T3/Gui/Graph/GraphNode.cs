@@ -8,6 +8,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.InputUi;
@@ -588,9 +589,14 @@ namespace T3.Gui.Graph
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     ImGui.SetTooltip($".{outputDef.Name}<{TypeNameRegistry.Entries[outputDef.ValueType]}>");
                     ImGui.PopStyleVar();
-                    if (ImGui.IsItemClicked(0))
+                    if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                     {
                         ConnectionMaker.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
+                    }
+
+                    if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
+                    {
+                        GraphCanvas.Current.EditNodeOutputDialog.OpenForOutput(childUi, outputDef);
                     }
                 }
             }

@@ -207,6 +207,7 @@ namespace T3.Gui.Graph
                 _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
                 _addInputDialog.Draw(GetSelectedSymbol());
                 _addOutputDialog.Draw(GetSelectedSymbol());
+                EditNodeOutputDialog.Draw();
             }
             ImGui.EndGroup();
         }
@@ -663,6 +664,7 @@ namespace T3.Gui.Graph
         private readonly CombineToSymbolDialog _combineToSymbolDialog = new CombineToSymbolDialog();
         private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new DuplicateSymbolDialog();
         private readonly RenameSymbolDialog _renameSymbolDialog = new RenameSymbolDialog();
+        public readonly EditNodeOutputDialog EditNodeOutputDialog = new EditNodeOutputDialog();
 
         //public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private List<SymbolChildUi> ChildUis { get; set; }
