@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -22,8 +24,15 @@ namespace T3.Gui.OutputUi
         {
             if (slot is Slot<List<float>> typedSlot)
             {
-                var outputString = string.Join(", ", typedSlot.Value);
+                var v = typedSlot.Value;
+                var outputString =  v == null? "NULL" : string.Join(", ", v);
                 ImGui.Text($"{outputString}");
+                if (v != null && v.Count > 3)
+                {
+                    var length = Math.Min(100, v.Count);
+                    var floatList = v.GetRange(0, length).ToArray();
+                    ImGui.PlotLines("##values", ref floatList[0], length);
+                }
             }
             else
             {

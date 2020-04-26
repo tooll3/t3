@@ -25,7 +25,7 @@ namespace T3.Gui.InputUi.SingleControl
 
         protected override void DrawReadOnlyControl(string name, ref List<float> list)
         {
-            var outputString = string.Join(", ", list);
+            var outputString = (list == null) ? "NULL" :  string.Join(", ", list);
             ImGui.Text($"{outputString}");
         }
     }
