@@ -98,7 +98,14 @@ namespace T3.Core.Operator
                 var attribute = (OutputAttribute)attributes.First();
                 var outputDataType = GetOutputDataType(output);
 
-                OutputDefinitions.Add(new OutputDefinition { Id = attribute.Id, Name = output.Name, ValueType = valueType, OutputDataType = outputDataType });
+                OutputDefinitions.Add(new OutputDefinition
+                                          {
+                                              Id = attribute.Id,
+                                              Name = output.Name,
+                                              ValueType = valueType,
+                                              OutputDataType = outputDataType,
+                                              DirtyFlagTrigger = attribute.DirtyFlagTrigger
+                                          });
             }
         }
 
@@ -176,13 +183,14 @@ namespace T3.Core.Operator
                 {
                     var valueType = output.FieldType.GenericTypeArguments[0];
                     var outputDataType = GetOutputDataType(output);
-                    OutputDefinitions.Add(new OutputDefinition()
-                                          {
-                                              Id = attribute.Id,
-                                              Name = output.Name,
-                                              ValueType = valueType,
-                                              OutputDataType = outputDataType
-                                          });
+                    OutputDefinitions.Add(new OutputDefinition
+                                              {
+                                                  Id = attribute.Id,
+                                                  Name = output.Name,
+                                                  ValueType = valueType,
+                                                  OutputDataType = outputDataType,
+                                                  DirtyFlagTrigger = attribute.DirtyFlagTrigger
+                                              });
                 }
             }
 
@@ -444,6 +452,8 @@ namespace T3.Core.Operator
                         outputDataConsumer.SetOutputData(symbolChild.Outputs[childInstance.Outputs[i].Id].OutputData);
                     }
                 }
+
+                childInstance.Outputs[i].DirtyFlag.Trigger = symbolChild.Outputs[childInstance.Outputs[i].Id].DirtyFlagTrigger;
             }
 
             parentInstance.Children.Add(childInstance);
@@ -599,6 +609,7 @@ namespace T3.Core.Operator
             public string Name { get; set; }
             public Type ValueType { get; set; }
             public Type OutputDataType { get; set; }
+            public DirtyFlagTrigger DirtyFlagTrigger { get; set; }
         }
 
         public class Connection

@@ -596,7 +596,7 @@ namespace T3.Gui.Graph
 
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                     {
-                        GraphCanvas.Current.EditNodeOutputDialog.OpenForOutput(childUi, outputDef);
+                        GraphCanvas.Current.EditNodeOutputDialog.OpenForOutput(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
                     }
                 }
             }

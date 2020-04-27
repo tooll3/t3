@@ -136,24 +136,10 @@ namespace T3.Core
 
                 Writer.WritePropertyName("Outputs");
                 Writer.WriteStartArray();
-                var bla = (from instance in child.Symbol.InstancesOfSymbol
-                           where instance.SymbolChildId == child.Id
-                           select instance).FirstOrDefault();
-                if (bla == null)
-                {
-                    int i = 0;
-                }
 
                 foreach (var (id, output) in child.Outputs)
                 {
-                    ISlot outputInstance = null;
-                    if (bla != null)
-                    {
-                        outputInstance = (from o in bla.Outputs where o.Id == id select o).Single();
-                    }
-
-                    if (output.DirtyFlagTrigger != DirtyFlagTrigger.None || output.OutputData != null)
-                    // if ((outputInstance != null && outputInstance.DirtyFlag.Trigger != DirtyFlagTrigger.None) || output.OutputData != null)
+                    if (output.DirtyFlagTrigger != output.OutputDefinition.DirtyFlagTrigger || output.OutputData != null)
                     {
                         Writer.WriteStartObject();
                         Writer.WriteValue("Id", id);
@@ -168,11 +154,9 @@ namespace T3.Core
                             Writer.WriteEndObject();
                         }
 
-                        if (output.DirtyFlagTrigger != DirtyFlagTrigger.None)
-                        // if (outputInstance.DirtyFlag.Trigger != DirtyFlagTrigger.None)
+                        if (output.DirtyFlagTrigger != output.OutputDefinition.DirtyFlagTrigger)
                         {
                             Writer.WriteObject("DirtyFlagTrigger", output.DirtyFlagTrigger);
-                            // Writer.WriteObject("DirtyFlagTrigger", outputInstance.DirtyFlag.Trigger);
                         }
 
                         Writer.WriteEndObject();

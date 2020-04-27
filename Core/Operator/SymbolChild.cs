@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ManagedBass.DirectX8;
 using Newtonsoft.Json;
 using T3.Core.Operator.Slots;
 
@@ -37,7 +38,7 @@ namespace T3.Core.Operator
             foreach (var outputDefinition in symbol.OutputDefinitions)
             {
                 var outputData = (outputDefinition.OutputDataType != null) ? (Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData) : null;
-                var output = new Output(outputDefinition, outputData);
+                var output = new Output(outputDefinition, outputData) { DirtyFlagTrigger = outputDefinition.DirtyFlagTrigger };
                 Outputs.Add(outputDefinition.Id, output);
             }
         }
@@ -48,7 +49,14 @@ namespace T3.Core.Operator
         {
             public Symbol.OutputDefinition OutputDefinition { get; }
             public IOutputData OutputData { get; }
-            public DirtyFlagTrigger DirtyFlagTrigger { get; set; } = DirtyFlagTrigger.None;
+
+            public DirtyFlagTrigger DirtyFlagTrigger
+            {
+                get => _dirtyFlagTrigger ?? OutputDefinition.DirtyFlagTrigger;
+                set => _dirtyFlagTrigger = (value != OutputDefinition.DirtyFlagTrigger) ? (DirtyFlagTrigger?)value : null;
+            }
+
+            private DirtyFlagTrigger? _dirtyFlagTrigger = null;
 
             public Output(Symbol.OutputDefinition outputDefinition, IOutputData outputData)
             {

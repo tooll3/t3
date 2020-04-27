@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -12,14 +13,14 @@ namespace T3.Gui.Graph.Dialogs
         {
             if (BeginDialog("Edit node output"))
             {
-                ImGui.Text("Current output is called " + _outputDefinition.Name);
+                ImGui.Text("Define the dirty flag behavior for " + _outputDefinition.Name);
 
                 var symbolChild = _symbolChildUi.SymbolChild;
                 var outputEntry = symbolChild.Outputs[_outputDefinition.Id];
-                Type enumType = typeof(DirtyFlagTrigger);
+                var enumType = typeof(DirtyFlagTrigger);
                 var values = Enum.GetValues(enumType);
                 var valueNames = Enum.GetNames(enumType);
-                string currentValueName = Enum.GetName(enumType, outputEntry.DirtyFlagTrigger);
+                var currentValueName = Enum.GetName(enumType, outputEntry.DirtyFlagTrigger);
 
                 int index = 0;
                 for (int i = 0; i < values.Length; i++)
@@ -33,7 +34,17 @@ namespace T3.Gui.Graph.Dialogs
 
                 if (ImGui.Combo("##dirtyFlagTriggerDropDownParam", ref index, valueNames, valueNames.Length))
                 {
-                    outputEntry.DirtyFlagTrigger = (DirtyFlagTrigger)Enum.Parse(enumType, valueNames[index]);
+                    var trigger = (DirtyFlagTrigger)Enum.Parse(enumType, valueNames[index]);
+                    outputEntry.DirtyFlagTrigger = trigger;
+                    foreach (var compositionInstance in _compositionSymbol.InstancesOfSymbol)
+                    {
+                        ISlot outputSlot = (from instance in compositionInstance.Children
+                                            where instance.SymbolChildId == symbolChild.Id
+                                            from output in instance.Outputs
+                                            where output.Id == _outputDefinition.Id
+                                            select output).Single();
+                        outputSlot.DirtyFlag.Trigger = trigger;
+                    }
                 }
 
                 if (ImGui.Button("Close"))
@@ -47,8 +58,9 @@ namespace T3.Gui.Graph.Dialogs
             EndDialog();
         }
 
-        public void OpenForOutput(SymbolChildUi symbolChildUi, Symbol.OutputDefinition outputDefinition)
+        public void OpenForOutput(Symbol compositionSymbol, SymbolChildUi symbolChildUi, Symbol.OutputDefinition outputDefinition)
         {
+            _compositionSymbol = compositionSymbol;
             _symbolChildUi = symbolChildUi;
             _outputDefinition = outputDefinition;
             ShowNextFrame();
@@ -56,5 +68,6 @@ namespace T3.Gui.Graph.Dialogs
 
         private SymbolChildUi _symbolChildUi;
         private Symbol.OutputDefinition _outputDefinition;
+        private Symbol _compositionSymbol;
     }
 }
