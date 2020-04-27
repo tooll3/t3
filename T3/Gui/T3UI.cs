@@ -9,6 +9,7 @@ using T3.Core;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
+using T3.Gui.Interaction.Timing;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
@@ -23,6 +24,7 @@ namespace T3.Gui
             UiModel = new UiModel(operatorsAssembly);
             _userSettings = new UserSettings();
             _projectSettings = new ProjectSettings();
+            BeatTiming = new BeatTiming();
             WindowManager = new WindowManager();
         }
 
@@ -31,12 +33,12 @@ namespace T3.Gui
             SelectionManager.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             WindowManager.Draw();
+            BeatTiming.Update();
             
             SwapHoveringBuffers();
             TriggerGlobalActionsFromKeyBindings();
             DrawAppMenu();
         }
-
         
         private void TriggerGlobalActionsFromKeyBindings()
         {
@@ -114,6 +116,7 @@ namespace T3.Gui
         public static readonly UiModel UiModel;
         private static UserSettings _userSettings;
         private static ProjectSettings _projectSettings;
+        public static readonly BeatTiming BeatTiming;
         public static readonly WindowManager WindowManager;
 
         public static IntPtr NotDroppingPointer = new IntPtr(0);

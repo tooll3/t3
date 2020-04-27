@@ -1,19 +1,19 @@
 ﻿using ImGuiNET;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Numerics;
 using System.Text.RegularExpressions;
+using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
-using T3.Gui;
 using T3.Gui.Commands;
-using T3.Gui.Graph;
+using T3.Gui.Interaction.Timing;
+using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
 using Icon = T3.Gui.Styling.Icon;
+using Vector2 = System.Numerics.Vector2;
+using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
@@ -21,26 +21,26 @@ namespace T3.Gui.Graph
 {
     internal static class TimeControls
     {
-        internal static void DrawTimeControls(Playback playback, TimeLineCanvas timeLineCanvas)
+        internal static void DrawTimeControls(ref Playback playback, TimeLineCanvas timeLineCanvas)
         {
             // Current Time
             var delta = 0.0;
             string formattedTime = "";
-            switch (playback.TimeMode)
+            switch (playback.TimeDisplayMode)
             {
-                case Playback.TimeModes.Bars:
+                case Playback.TimeDisplayModes.Bars:
                     formattedTime = $"{playback.Bar:0}. {playback.Beat:0}. {playback.Tick:0}.";
                     break;
 
-                case Playback.TimeModes.Secs:
+                case Playback.TimeDisplayModes.Secs:
                     formattedTime = TimeSpan.FromSeconds(playback.TimeInSecs).ToString(@"hh\:mm\:ss\:ff");
                     break;
 
-                case Playback.TimeModes.F30:
+                case Playback.TimeDisplayModes.F30:
                     var frames = playback.TimeInSecs * 30;
                     formattedTime = $"{frames:0}f ";
                     break;
-                case Playback.TimeModes.F60:
+                case Playback.TimeDisplayModes.F60:
                     var frames60 = playback.TimeInSecs * 60;
                     formattedTime = $"{frames60:0}f ";
                     break;
@@ -50,7 +50,7 @@ namespace T3.Gui.Graph
             {
                 playback.PlaybackSpeed = 0;
                 playback.TimeInBars += delta;
-                if (playback.TimeMode == Playback.TimeModes.F30)
+                if (playback.TimeDisplayMode == Playback.TimeDisplayModes.F30)
                 {
                     playback.TimeInSecs = Math.Floor(playback.TimeInSecs * 30) / 30;
                 }
@@ -59,209 +59,205 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
 
             // Time Mode with context menu
-            if (ImGui.Button(playback.TimeMode.ToString(), ControlSize))
+            if (ImGui.Button(playback.TimeDisplayMode.ToString(), ControlSize))
             {
-                playback.TimeMode = (Playback.TimeModes)(((int)playback.TimeMode + 1) % Enum.GetNames(typeof(Playback.TimeModes)).Length);
+                playback.TimeDisplayMode =
+                    (Playback.TimeDisplayModes)(((int)playback.TimeDisplayMode + 1) % Enum.GetNames(typeof(Playback.TimeDisplayModes)).Length);
             }
 
-            ImGui.SetNextWindowSize(new Vector2(400, 200));
-            CustomComponents.ContextMenuForItem(() =>
-                                                {
-                                                    var bpm = (float)playback.Bpm;
-                                                    ImGui.DragFloat("BPM", ref bpm);
-                                                    playback.Bpm = bpm;
-                                                    ProjectSettings.Config.SoundtrackBpm = bpm;
+            DrawTimeSettingsContextMenu(ref playback);
 
-                                                    ImGui.Text("Soundtrack");
-                                                    var modified = FileOperations.DrawFilePicker(FileOperations.FilePickerTypes.File,
-                                                                                                 ref ProjectSettings.Config.SoundtrackFilepath);
-
-                                                    if (modified)
-                                                    {
-                                                        var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
-                                                        var result = matchBpmPattern.Match(ProjectSettings.Config.SoundtrackFilepath);
-                                                        if (result.Success)
-                                                        {
-                                                            float.TryParse(result.Groups[1].Value, out bpm);
-                                                            ProjectSettings.Config.SoundtrackBpm = bpm;
-                                                            playback.Bpm = bpm;
-                                                        }
-                                                    }
-
-                                                    if (ImGui.Button("Close"))
-                                                    {
-                                                        ImGui.CloseCurrentPopup();
-                                                    }
-                                                }, "Timeline options");
             ImGui.SameLine();
 
             // Continue Beat indicator
             {
-                ImGui.PushStyleColor(ImGuiCol.Text, UserSettings.Config.KeepBeatTimeRunningInPause 
+                ImGui.PushStyleColor(ImGuiCol.Text, UserSettings.Config.KeepBeatTimeRunningInPause
                                                         ? new Vector4(1, 1, 1, 0.5f)
                                                         : new Vector4(0, 0, 0, 0.5f));
-                
+
                 if (CustomComponents.IconButton(Icon.BeatGrid, "##continueBeat", ControlSize))
                 {
                     UserSettings.Config.KeepBeatTimeRunningInPause = !UserSettings.Config.KeepBeatTimeRunningInPause;
                 }
-                
+
                 if (UserSettings.Config.KeepBeatTimeRunningInPause)
                 {
-                    var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax())/2;
+                    var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax()) / 2;
                     var beat = (int)(playback.BeatTime * 4) % 4;
                     var bar = (int)(playback.BeatTime) % 4;
-                    const int gridSize = 4; 
+                    const int gridSize = 4;
                     var drawList = ImGui.GetWindowDrawList();
-                    var min = center -new Vector2(8,9)  + new Vector2(beat * gridSize, bar*gridSize);
-                    drawList.AddRectFilled(min, min + new Vector2(gridSize-1, gridSize-1), Color.Orange);
+                    var min = center - new Vector2(8, 9) + new Vector2(beat * gridSize, bar * gridSize);
+                    drawList.AddRectFilled(min, min + new Vector2(gridSize - 1, gridSize - 1), Color.Orange);
                 }
 
                 ImGui.PopStyleColor();
                 ImGui.SameLine();
             }
 
-            // Jump to start
-            if (CustomComponents.IconButton(Icon.JumpToRangeStart, "##jumpToBeginning", ControlSize))
+            var hideTimeControls = playback is BeatTimingPlayback;
+
+            if (hideTimeControls)
             {
-                playback.TimeInBars = playback.LoopRange.Start;
+                if (ImGui.Button($"{playback.Bpm:0.0} BPM?"))
+                {
+                    var newBpm = T3Ui.BeatTiming.ComputeBpmFromSystemAudio();
+                    if (newBpm > 0)
+                        playback.Bpm = newBpm;
+                }
+                ImGui.SameLine();
+                
+                if(ImGui.Button("Sync"))
+                {
+                    T3Ui.BeatTiming.TriggerSyncTap();
+                }
+                ImGui.SameLine();
             }
-
-            ImGui.SameLine();
-
-            // Prev Keyframe
-            if (CustomComponents.IconButton(Icon.JumpToPreviousKeyframe, "##prevKeyframe", ControlSize)
-                || KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
+            else
             {
-                UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
-            }
+                // Jump to start
+                if (CustomComponents.IconButton(Icon.JumpToRangeStart, "##jumpToBeginning", ControlSize))
+                {
+                    playback.TimeInBars = playback.LoopRange.Start;
+                }
 
-            ImGui.SameLine();
+                ImGui.SameLine();
 
-            // Play backwards
-            var isPlayingBackwards = playback.PlaybackSpeed < 0;
-            if (CustomComponents.ToggleButton(Icon.PlayBackwards,
-                                              label: isPlayingBackwards ? $"{(int)playback.PlaybackSpeed}x##backwards" : "##backwards",
-                                              ref isPlayingBackwards,
-                                              ControlSize))
-            {
-                if (playback.PlaybackSpeed != 0)
+                // Prev Keyframe
+                if (CustomComponents.IconButton(Icon.JumpToPreviousKeyframe, "##prevKeyframe", ControlSize)
+                    || KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
+                {
+                    UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
+                }
+
+                ImGui.SameLine();
+
+                // Play backwards
+                var isPlayingBackwards = playback.PlaybackSpeed < 0;
+                if (CustomComponents.ToggleButton(Icon.PlayBackwards,
+                                                  label: isPlayingBackwards ? $"{(int)playback.PlaybackSpeed}x##backwards" : "##backwards",
+                                                  ref isPlayingBackwards,
+                                                  ControlSize))
+                {
+                    if (playback.PlaybackSpeed != 0)
+                    {
+                        playback.PlaybackSpeed = 0;
+                    }
+                    else if (playback.PlaybackSpeed == 0)
+                    {
+                        playback.PlaybackSpeed = -1;
+                    }
+                }
+
+                ImGui.SameLine();
+
+                // Play forward
+                var isPlaying = playback.PlaybackSpeed > 0;
+                if (CustomComponents.ToggleButton(Icon.PlayForwards,
+                                                  label: isPlaying ? $"{(int)playback.PlaybackSpeed}x##forward" : "##forward",
+                                                  ref isPlaying,
+                                                  ControlSize))
+                {
+                    if (Math.Abs(playback.PlaybackSpeed) > 0.001f)
+                    {
+                        playback.PlaybackSpeed = 0;
+                    }
+                    else if (Math.Abs(playback.PlaybackSpeed) < 0.001f)
+                    {
+                        playback.PlaybackSpeed = 1;
+                    }
+                }
+
+                const float editFrameRate = 30;
+                const float frameDuration = 1 / editFrameRate;
+
+                // Step to previous frame
+                if (KeyboardBinding.Triggered(UserActions.PlaybackPreviousFrame))
+                {
+                    var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
+                    playback.TimeInBars = rounded - frameDuration;
+                }
+
+                // Step to next frame
+                if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))
+                {
+                    var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
+                    playback.TimeInBars = rounded + frameDuration;
+                }
+
+                // Play backwards with increasing speed
+                if (KeyboardBinding.Triggered(UserActions.PlaybackBackwards))
+                {
+                    Log.Debug("Backwards triggered with speed " + playback.PlaybackSpeed);
+                    if (playback.PlaybackSpeed >= 0)
+                    {
+                        playback.PlaybackSpeed = -1;
+                    }
+                    else if (playback.PlaybackSpeed > -16)
+                    {
+                        playback.PlaybackSpeed *= 2;
+                    }
+                }
+
+                // Play forward with increasing speed
+                if (KeyboardBinding.Triggered(UserActions.PlaybackForward))
+                {
+                    if (playback.PlaybackSpeed <= 0)
+                    {
+                        playback.PlaybackSpeed = 1;
+                    }
+                    else if (playback.PlaybackSpeed < 16) // Bass can't play much faster anyways
+                    {
+                        playback.PlaybackSpeed *= 2;
+                    }
+                }
+
+                if (KeyboardBinding.Triggered(UserActions.PlaybackForwardHalfSpeed))
+                {
+                    if (playback.PlaybackSpeed > 0 && playback.PlaybackSpeed < 1f)
+                        playback.PlaybackSpeed *= 0.5f;
+                    else
+                        playback.PlaybackSpeed = 0.5f;
+                }
+
+                // Stop as separate keyboard 
+                if (KeyboardBinding.Triggered(UserActions.PlaybackStop))
                 {
                     playback.PlaybackSpeed = 0;
                 }
-                else if (playback.PlaybackSpeed == 0)
+
+                ImGui.SameLine();
+
+                // Next Keyframe
+                if (CustomComponents.IconButton(Icon.JumpToNextKeyframe, "##nextKeyframe", ControlSize)
+                    || KeyboardBinding.Triggered(UserActions.PlaybackJumpToNextKeyframe))
                 {
-                    playback.PlaybackSpeed = -1;
+                    UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
                 }
-            }
 
-            ImGui.SameLine();
+                ImGui.SameLine();
 
-            // Play forward
-            var isPlaying = playback.PlaybackSpeed > 0;
-            if (CustomComponents.ToggleButton(Icon.PlayForwards,
-                                              label: isPlaying ? $"{(int)playback.PlaybackSpeed}x##forward" : "##forward",
-                                              ref isPlaying,
-                                              ControlSize))
-            {
-                if (Math.Abs(playback.PlaybackSpeed) > 0.001f)
+                // End
+                if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", ControlSize))
                 {
-                    playback.PlaybackSpeed = 0;
+                    playback.TimeInBars = playback.LoopRange.End;
                 }
-                else if (Math.Abs(playback.PlaybackSpeed) < 0.001f)
+
+                ImGui.SameLine();
+
+                // Loop
+                if (CustomComponents.ToggleButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize))
                 {
-                    playback.PlaybackSpeed = 1;
+                    var loopRangeMatchesTime = playback.LoopRange.IsValid && playback.LoopRange.Contains(playback.TimeInBars);
+                    if (playback.IsLooping && !loopRangeMatchesTime)
+                    {
+                        playback.LoopRange.Start = (float)(playback.TimeInBars - playback.TimeInBars % 4);
+                        playback.LoopRange.Duration = 4;
+                    }
                 }
+
+                ImGui.SameLine();
             }
-
-            const float editFrameRate = 30;
-            const float frameDuration = 1 / editFrameRate;
-
-            // Step to previous frame
-            if (KeyboardBinding.Triggered(UserActions.PlaybackPreviousFrame))
-            {
-                var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
-                playback.TimeInBars = rounded - frameDuration;
-            }
-
-            // Step to next frame
-            if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))
-            {
-                var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
-                playback.TimeInBars = rounded + frameDuration;
-            }
-
-            // Play backwards with increasing speed
-            if (KeyboardBinding.Triggered(UserActions.PlaybackBackwards))
-            {
-                Log.Debug("Backwards triggered with speed " + playback.PlaybackSpeed);
-                if (playback.PlaybackSpeed >= 0)
-                {
-                    playback.PlaybackSpeed = -1;
-                }
-                else if (playback.PlaybackSpeed > -16)
-                {
-                    playback.PlaybackSpeed *= 2;
-                }
-            }
-
-            // Play forward with increasing speed
-            if (KeyboardBinding.Triggered(UserActions.PlaybackForward))
-            {
-                if (playback.PlaybackSpeed <= 0)
-                {
-                    playback.PlaybackSpeed = 1;
-                }
-                else if (playback.PlaybackSpeed < 16) // Bass can't play much faster anyways
-                {
-                    playback.PlaybackSpeed *= 2;
-                }
-            }
-
-            if (KeyboardBinding.Triggered(UserActions.PlaybackForwardHalfSpeed))
-            {
-                if (playback.PlaybackSpeed > 0 && playback.PlaybackSpeed < 1f)
-                    playback.PlaybackSpeed *= 0.5f;
-                else
-                    playback.PlaybackSpeed = 0.5f;
-            }
-
-            // Stop as separate keyboard 
-            if (KeyboardBinding.Triggered(UserActions.PlaybackStop))
-            {
-                playback.PlaybackSpeed = 0;
-            }
-
-            ImGui.SameLine();
-
-            // Next Keyframe
-            if (CustomComponents.IconButton(Icon.JumpToNextKeyframe, "##nextKeyframe", ControlSize)
-                || KeyboardBinding.Triggered(UserActions.PlaybackJumpToNextKeyframe))
-            {
-                UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
-            }
-
-            ImGui.SameLine();
-
-            // End
-            if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", ControlSize))
-            {
-                playback.TimeInBars = playback.LoopRange.End;
-            }
-
-            ImGui.SameLine();
-
-            // Loop
-            if (CustomComponents.ToggleButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize))
-            {
-                var loopRangeMatchesTime = playback.LoopRange.IsValid && playback.LoopRange.Contains(playback.TimeInBars); 
-                if (playback.IsLooping && !loopRangeMatchesTime )
-                {
-                    playback.LoopRange.Start = (float)(playback.TimeInBars- playback.TimeInBars % 4);
-                    playback.LoopRange.Duration = 4;
-                }
-            }
-            ImGui.SameLine();
 
             // Curve Mode
             if (ImGui.Button(timeLineCanvas.Mode.ToString(), ControlSize))
@@ -305,8 +301,9 @@ namespace T3.Gui.Graph
             {
                 if (CustomComponents.IconButton(Icon.ConnectedParameter, "##CutClip", ControlSize))
                 {
+                    var timeInBars = playback.TimeInBars;
                     var matchingClips = timeLineCanvas.LayersArea.SelectedItems
-                                                      .Where(clip => clip.TimeRange.Contains(playback.TimeInBars));
+                                                      .Where(clip => clip.TimeRange.Contains(timeInBars));
 
                     var compOp = GraphCanvas.Current.CompositionOp;
                     foreach (var clip in matchingClips)
@@ -331,6 +328,90 @@ namespace T3.Gui.Graph
                     }
                 }
             }
+        }
+
+        private static void DrawTimeSettingsContextMenu(ref Playback playback)
+        {
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
+            ImGui.SetNextWindowSize(new Vector2(400, 200));
+            if (!ImGui.BeginPopupContextItem("##TimeSettings"))
+            {
+                ImGui.PopStyleVar(2);
+                return;
+            }
+
+            ImGui.PushFont(Fonts.FontLarge);
+            ImGui.Text("Playback settings");
+            ImGui.PopFont();
+
+            if (ImGui.BeginTabBar("##timeMode"))
+            {
+                if (ImGui.BeginTabItem("AudioFile"))
+                {
+                    ImGui.Text("Soundtrack");
+                    var modified = FileOperations.DrawFilePicker(FileOperations.FilePickerTypes.File, ref ProjectSettings.Config.SoundtrackFilepath);
+
+                    var isInitialized = playback is StreamPlayback;
+                    if (isInitialized)
+                    {
+                        var bpm = (float)playback.Bpm;
+
+                        ImGui.DragFloat("BPM", ref bpm);
+                        playback.Bpm = bpm;
+                        ProjectSettings.Config.SoundtrackBpm = bpm;
+
+                        if (modified)
+                        {
+                            var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
+                            var result = matchBpmPattern.Match(ProjectSettings.Config.SoundtrackFilepath);
+                            if (result.Success)
+                            {
+                                float.TryParse(result.Groups[1].Value, out bpm);
+                                ProjectSettings.Config.SoundtrackBpm = bpm;
+                                playback.Bpm = bpm;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (ImGui.Button("Load"))
+                        {
+                            Utilities.Dispose(ref playback);
+                            playback = new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath);
+                        }
+                    }
+
+                    ImGui.EndTabItem();
+                }
+
+                if (ImGui.BeginTabItem("System Audio"))
+                {
+                    CustomComponents.HelpText("Uses Windows core audio input for BPM detection");
+                    CustomComponents.HelpText("Tab the Sync button to set begin of measure and to improve BPM detection.");
+                    var isInitialized = playback is BeatTimingPlayback;
+                    if (isInitialized)
+                    {
+                        // Settings got here
+                    }
+                    else
+                    {
+                        if (ImGui.Button("Initialize"))
+                        {
+                            playback = new BeatTimingPlayback();
+                        }
+
+                        CustomComponents.HelpText("This can take several seconds...");
+                    }
+
+                    ImGui.EndTabItem();
+                }
+
+                ImGui.EndTabBar();
+            }
+
+            ImGui.EndPopup();
+            ImGui.PopStyleVar(2);
         }
 
         public static readonly Vector2 ControlSize = new Vector2(45, 26);

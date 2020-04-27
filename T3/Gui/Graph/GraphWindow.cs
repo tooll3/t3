@@ -41,7 +41,7 @@ namespace T3.Gui.Graph
             var path = NodeOperations.BuildIdPathForInstance(shownOpInstance);
             _graphCanvas = new GraphCanvas(this, path);
 
-            _timeLineCanvas = new TimeLineCanvas(_playback);
+            _timeLineCanvas = new TimeLineCanvas(ref _playback);
 
             WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
             GraphWindowInstances.Add(this);
@@ -177,7 +177,7 @@ namespace T3.Gui.Graph
 
                         ImGui.SameLine();
 
-                        TimeControls.DrawTimeControls(_playback, _timeLineCanvas);
+                        TimeControls.DrawTimeControls(ref _playback, _timeLineCanvas);
                         if(_imageBackground.IsActive)
                             _imageBackground.DrawResolutionSelector();
                     }
@@ -328,7 +328,7 @@ namespace T3.Gui.Graph
         }
 
         private readonly GraphCanvas _graphCanvas;
-        private readonly Playback _playback;
+        private Playback _playback;
         private float _heightTimeLine = TimeLineCanvas.TimeLineDragHeight;
         private readonly TimeLineCanvas _timeLineCanvas;
     }

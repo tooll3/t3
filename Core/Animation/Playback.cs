@@ -6,23 +6,23 @@ using T3.Core.Operator;
 
 namespace T3.Core.Animation
 {
-    public class Playback
+    public class Playback : IDisposable
     {
         public virtual double TimeInBars { get; set; }
-        public virtual double TimeInSecs { get => TimeInBars * 240 / Bpm; set => TimeInBars = value / Bpm * 240f; }
+        public double TimeInSecs { get => TimeInBars * 240 / Bpm; set => TimeInBars = value / Bpm * 240f; }
 
-        public virtual double BeatTime { get; set; } 
+        public double BeatTime { get; set; }
         public TimeRange LoopRange;
         public double Bpm = 120;
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
-        public TimeModes TimeMode { get; set; } = TimeModes.Bars;
+        public TimeDisplayModes TimeDisplayMode { get; set; } = TimeDisplayModes.Bars;
 
         public int Bar => (int)(TimeInBars) + 1;
         public int Beat => (int)(TimeInBars * 4) % 4 + 1;
         public int Tick => (int)(TimeInBars * 16) % 4 + 1;
 
-        public void Update(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning = false)
+        public virtual void Update(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning = false)
         {
             UpdateTime(timeSinceLastFrameInSecs, keepBeatTimeRunning);
             if (IsLooping && TimeInBars > LoopRange.End)
@@ -38,7 +38,7 @@ namespace T3.Core.Animation
             EvaluationContext.GlobalTimeInSecs = TimeInSecs;
         }
 
-        public enum TimeModes
+        public enum TimeDisplayModes
         {
             Secs,
             Bars,
@@ -48,7 +48,6 @@ namespace T3.Core.Animation
 
         protected virtual void UpdateTime(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning)
         {
-            //var deltaTime = ImGui.GetIO().DeltaTime;
             var isPlaying = Math.Abs(PlaybackSpeed) > 0.001;
 
             if (isPlaying)
@@ -65,6 +64,10 @@ namespace T3.Core.Animation
         public virtual float GetSongDurationInSecs()
         {
             return 120; // fallback
+        }
+
+        public virtual void Dispose()
+        {
         }
     }
 
@@ -90,6 +93,7 @@ namespace T3.Core.Animation
                 {
                     SetStreamPositionFromTime();
                 }
+
                 BeatTime = value;
             }
         }
@@ -154,7 +158,7 @@ namespace T3.Core.Animation
                 TimeInBars += timeSinceLastFrameInSecs * _playbackSpeed * Bpm / 240f;
                 Bass.ChannelPause(_soundStreamHandle);
             }
-            else if(Bass.ChannelIsActive(_soundStreamHandle) == PlaybackState.Paused)
+            else if (Bass.ChannelIsActive(_soundStreamHandle) == PlaybackState.Paused)
             {
                 Bass.ChannelPlay(_soundStreamHandle);
                 SetStreamPositionFromTime();
@@ -180,6 +184,11 @@ namespace T3.Core.Animation
 
             long soundStreamPos = Bass.ChannelGetPosition(_soundStreamHandle);
             return Bass.ChannelBytes2Seconds(_soundStreamHandle, soundStreamPos);
+        }
+
+        public override void Dispose()
+        {
+            Bass.Free();
         }
 
         private bool IsTimeWithinAudioTrack => _timeInSeconds >= 0 && _timeInSeconds < GetSongDurationInSecs();
