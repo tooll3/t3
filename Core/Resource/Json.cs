@@ -97,6 +97,7 @@ namespace T3.Core
                 Writer.WriteValue("TargetSlotId", connection.TargetSlotId);
                 Writer.WriteEndObject();
             }
+
             Writer.WriteEndArray();
         }
 
@@ -130,9 +131,10 @@ namespace T3.Core
                     inputValueEntry.Value.Value.ToJson(Writer);
                     Writer.WriteEndObject();
                 }
+
                 Writer.WriteEndArray();
 
-                Writer.WritePropertyName("OutputData");
+                Writer.WritePropertyName("Outputs");
                 Writer.WriteStartArray();
                 var bla = (from instance in child.Symbol.InstancesOfSymbol
                            where instance.SymbolChildId == child.Id
@@ -141,6 +143,7 @@ namespace T3.Core
                 {
                     int i = 0;
                 }
+
                 foreach (var (id, output) in child.Outputs)
                 {
                     ISlot outputInstance = null;
@@ -148,16 +151,21 @@ namespace T3.Core
                     {
                         outputInstance = (from o in bla.Outputs where o.Id == id select o).Single();
                     }
+
                     if (output.DirtyFlagTrigger != DirtyFlagTrigger.None || output.OutputData != null)
                     // if ((outputInstance != null && outputInstance.DirtyFlag.Trigger != DirtyFlagTrigger.None) || output.OutputData != null)
                     {
                         Writer.WriteStartObject();
                         Writer.WriteValue("Id", id);
+                        Writer.WriteComment(child.ReadableName);
 
                         if (output.OutputData != null)
                         {
+                            Writer.WritePropertyName("OutputData");
+                            Writer.WriteStartObject();
                             Writer.WriteObject("Type", output.OutputData.DataType);
                             output.OutputData.ToJson(Writer);
+                            Writer.WriteEndObject();
                         }
 
                         if (output.DirtyFlagTrigger != DirtyFlagTrigger.None)
@@ -170,6 +178,7 @@ namespace T3.Core
                         Writer.WriteEndObject();
                     }
                 }
+
                 Writer.WriteEndArray();
 
                 Writer.WriteEndObject(); // child
@@ -201,9 +210,20 @@ namespace T3.Core
                 ReadChildInputValue(symbolChild, inputValue);
             }
 
-            foreach (var outputToken in (JArray)symbolChildJson["OutputData"])
+            foreach (var outputJson in (JArray)symbolChildJson["Outputs"])
             {
-                ReadChildOutputData(symbolChild, outputToken);
+                var outputId = Guid.Parse(outputJson["Id"].Value<string>());
+                var outputDataJson = outputJson["OutputData"];
+                if (outputDataJson != null)
+                {
+                    ReadChildOutputData(symbolChild, outputId, outputDataJson);
+                }
+
+                var dirtyFlagJson = outputJson["DirtyFlagTrigger"];
+                if (dirtyFlagJson != null)
+                {
+                    symbolChild.Outputs[outputId].DirtyFlagTrigger = (DirtyFlagTrigger)Enum.Parse(typeof(DirtyFlagTrigger), dirtyFlagJson.Value<string>());
+                }
             }
 
             return symbolChild;
@@ -239,19 +259,13 @@ namespace T3.Core
             {
                 Log.Error("Failed to read input value");
             }
-            
         }
 
-        private void ReadChildOutputData(SymbolChild symbolChild, JToken json)
+        private void ReadChildOutputData(SymbolChild symbolChild, Guid outputId, JToken json)
         {
-            var id = Guid.Parse(json["Id"].Value<string>());
             if (json["Type"] != null)
             {
-                symbolChild.Outputs[id].OutputData.ReadFromJson(json);
-            }
-            if (json["DirtyFlagTrigger"] != null)
-            {
-                symbolChild.Outputs[id].DirtyFlagTrigger = (DirtyFlagTrigger)Enum.Parse(typeof(DirtyFlagTrigger), json["DirtyFlagTrigger"].Value<string>());
+                symbolChild.Outputs[outputId].OutputData.ReadFromJson(json);
             }
         }
 
@@ -276,8 +290,8 @@ namespace T3.Core
                                let connection = ReadConnection(c)
                                select connection).ToList();
             var orderedInputIds = (from jsonInput in (JArray)o["Inputs"]
-                                      let idAndValue = ReadSymbolInputDefaults(jsonInput)
-                                      select idAndValue.Item1).ToArray();
+                                   let idAndValue = ReadSymbolInputDefaults(jsonInput)
+                                   select idAndValue.Item1).ToArray();
             var inputDefaultValues = (from jsonInput in (JArray)o["Inputs"]
                                       let idAndValue = ReadSymbolInputDefaults(jsonInput)
                                       select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
@@ -295,10 +309,10 @@ namespace T3.Core
             }
 
             var symbol = new Symbol(instanceType, id, orderedInputIds, symbolChildren)
-                         {
-                             Name = name,
-                             Namespace = @namespace,
-                         };
+                             {
+                                 Name = name,
+                                 Namespace = @namespace,
+                             };
             symbol.Connections.AddRange(connections);
 
             if (animatorData != null)
