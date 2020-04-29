@@ -93,12 +93,14 @@ namespace T3.Gui.Commands
                 var newSymbolOutputs = newSymbolChild.Outputs;
                 foreach (var (id, output) in symbolChildToCopy.Outputs)
                 {
+                    var newOutput = newSymbolOutputs[id];
+
                     if (output.OutputData != null)
                     {
-                        var newOutput = newSymbolOutputs[id];
                         newOutput.OutputData.Assign(output.OutputData);
-                        //todo: !!!dirty-flag
                     }
+
+                    newOutput.DirtyFlagTrigger = output.DirtyFlagTrigger;
                 }
             }
 
