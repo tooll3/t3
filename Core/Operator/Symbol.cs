@@ -49,6 +49,19 @@ namespace T3.Core.Operator
             Children.AddRange(children);
         }
 
+        public void ForEachSymbolChildInstanceWithId(Guid id, Action<Instance> handler)
+        {
+            var matchingInstances = from symbolInstance in InstancesOfSymbol
+                                    from childInstance in symbolInstance.Children
+                                    where childInstance.SymbolChildId == id
+                                    select childInstance;
+
+            foreach (var childInstance in matchingInstances)
+            {
+                handler(childInstance);
+            }
+        }
+
         public Symbol(Type instanceType, Guid symbolId, Guid[] orderedInputIds = null)
         {
             InstanceType = instanceType;

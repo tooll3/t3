@@ -36,13 +36,14 @@ namespace T3.Gui.Graph.Dialogs
                 {
                     var trigger = (DirtyFlagTrigger)Enum.Parse(enumType, valueNames[index]);
                     outputEntry.DirtyFlagTrigger = trigger;
-                    foreach (var compositionInstance in _compositionSymbol.InstancesOfSymbol)
+
+                    _compositionSymbol.ForEachSymbolChildInstanceWithId(symbolChild.Id, ApplyTriggerToInstanceOutputs);
+
+                    void ApplyTriggerToInstanceOutputs(Instance instance)
                     {
-                        ISlot outputSlot = (from instance in compositionInstance.Children
-                                            where instance.SymbolChildId == symbolChild.Id
-                                            from output in instance.Outputs
-                                            where output.Id == _outputDefinition.Id
-                                            select output).Single();
+                        var outputSlot = (from output in instance.Outputs
+                                          where output.Id == _outputDefinition.Id
+                                          select output).Single();
                         outputSlot.DirtyFlag.Trigger = trigger;
                     }
                 }
