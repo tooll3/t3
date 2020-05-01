@@ -26,7 +26,7 @@ namespace T3.Core.Operator.Helper
         public Buffer ParticleCountConstBuffer;
 
         public int MaxCount { get; set; } = 20480;
-        public readonly int ParticleSizeInBytes = 48;
+        public readonly int ParticleSizeInBytes = 64;
         private uint _initDeadListShaderResId = ResourceManager.NullResource;
         public int ParticleSystemSizeInBytes => MaxCount * ParticleSizeInBytes;
 
@@ -51,7 +51,7 @@ namespace T3.Core.Operator.Helper
         private void InitParticleBufferAndViews()
         {
             var resourceManager = ResourceManager.Instance();
-            int stride = 48;
+            int stride = ParticleSizeInBytes;
             var bufferData = Enumerable.Repeat(-10.0f, MaxCount * (stride / 4)).ToArray(); // init with negative lifetime other values doesn't matter
             resourceManager.SetupStructuredBuffer(bufferData, stride * MaxCount, stride, ref ParticleBuffer);
             resourceManager.CreateStructuredBufferUav(ParticleBuffer, UnorderedAccessViewBufferFlags.None, ref ParticleBufferUav);
