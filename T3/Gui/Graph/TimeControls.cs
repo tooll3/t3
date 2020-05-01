@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text.RegularExpressions;
 using T3.Core;
@@ -105,13 +106,34 @@ namespace T3.Gui.Graph
                     if (newBpm > 0)
                         playback.Bpm = newBpm;
                 }
+
                 ImGui.SameLine();
-                
-                if(ImGui.Button("Sync"))
+
+                ImGui.Button("Sync");
+                if (ImGui.IsItemActivated())
                 {
                     T3Ui.BeatTiming.TriggerSyncTap();
                 }
+                
                 ImGui.SameLine();
+
+                ImGui.PushButtonRepeat(true);
+                {
+                    if (ImGui.ArrowButton("##left", ImGuiDir.Left))
+                    {
+                        T3Ui.BeatTiming.TriggerDelaySync();
+                    }
+
+                    ImGui.SameLine();
+
+                    if (ImGui.ArrowButton("##right", ImGuiDir.Right))
+                    {
+                        T3Ui.BeatTiming.TriggerAdvanceSync();
+                    }
+
+                    ImGui.SameLine();
+                }
+                ImGui.PopButtonRepeat();
             }
             else
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using ImGuiNET;
 using T3.Core.Logging;
@@ -16,13 +17,17 @@ namespace T3.Gui.Interaction.Timing
     {
         public void TriggerSyncTap() => _syncTriggered = true;
         public void TriggerReset() =>   _resetTriggered = true;
+        public void TriggerDelaySync() => _delayTriggered = true;
+        public void TriggerAdvanceSync() =>_advanceTriggered = true;
+        
 
         public float ComputeBpmFromSystemAudio()
         {
             if (_bpmDetection.HasSufficientSampleData)
             {
                 var bpm = _bpmDetection.ComputeBpmRate();
-                Log.Debug("New Bpm would be " + bpm);
+                Log.Debug("Set bpm to " + bpm);
+                _beatDuration =  bpm * 60f; 
                 return bpm;
             }
             Log.Warning("Insufficient sample data");
@@ -71,7 +76,8 @@ namespace T3.Gui.Interaction.Timing
             if (Math.Abs(time - _lastTime) < 0.0001f)
                 return;
 
-            //var timeDelta = time - _lastTime;
+            var timeDelta = time - _lastTime;
+            
             _lastTime = time;
 
             var barDuration = _dampedBeatDuration * BeatsPerBar;
@@ -83,6 +89,20 @@ namespace T3.Gui.Interaction.Timing
                 _dampedBeatDuration = 120;
             }
 
+            if (_advanceTriggered)
+            {
+                _tappedBarStartTime += 0.01f;
+                _advanceTriggered = false;
+            }
+            
+            if (_delayTriggered)
+            {
+                _tappedBarStartTime -= 0.01f;
+                _delayTriggered = false;
+            }
+
+            
+            
             if (_syncTriggered)
             {
                 _syncTriggered = false;
@@ -149,7 +169,9 @@ namespace T3.Gui.Interaction.Timing
             var tappedBeatTime = (tappedTimeInBar / _dampedBeatDuration) % 1f;
             var beatTime = (timeInBar / _dampedBeatDuration) % 1f;
 
-            _barStartTime += (beatTime < tappedBeatTime) ? -0.01f : 0.01f;
+            var isTimingOff = Math.Abs(beatTime - tappedBeatTime) > 0.03f; 
+            if(isTimingOff)
+                _barStartTime += (beatTime < tappedBeatTime) ? -0.01f : 0.01f;   
 
             // Check for next bar               
             if (timeInBar > barDuration)
@@ -225,5 +247,11 @@ namespace T3.Gui.Interaction.Timing
         readonly List<double> _tapTimes = new List<double>();
         private double _tappedBarStartTime;
         private BpmDetection _bpmDetection = new BpmDetection();
+
+
+        private bool _delayTriggered;
+        private bool _advanceTriggered;
+        
+
     }
 }

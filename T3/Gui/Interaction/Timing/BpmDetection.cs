@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using T3.Core.Logging;
 using UiHelpers;
 
 namespace T3.Gui.Interaction.Timing
@@ -11,7 +12,7 @@ namespace T3.Gui.Interaction.Timing
         public int BpmRangeMax { get; set; } = 160;
         public float NormalizedFrequencyRangeMin { get; set; } = 0;
         public float NormalizedFrequencyRangeMax { get; set; } = 0.2f;
-        public float LockInFactor { get; set; } = 0.1f;
+        public float LockInFactor { get; set; } = 0.001f;
         public bool HasSufficientSampleData => _addedSampleCount >= SampleBufferSize;
         
         /// <summary>
@@ -71,9 +72,7 @@ namespace T3.Gui.Interaction.Timing
             return bestBpm;
         }
         
-
-
-
+        
         /// <summary>
         /// Create a fall-off curve   
         /// </summary>
@@ -99,11 +98,14 @@ namespace T3.Gui.Interaction.Timing
 
             _addedSampleCount++;
             
+            
             var sum = 0f;
             for (var index = lowerBorder; index < upperBorder; index++)
             {
                 sum += fftBuffer[index];
             }
+
+            Log.Debug("Added fft sum " + sum);
 
             _sampleBuffer.Add(sum);
             if (_sampleBuffer.Count > SampleBufferSize)
@@ -170,7 +172,7 @@ namespace T3.Gui.Interaction.Timing
         
         private const int FramesPerSecond = 60;
         private const int FftResolution = 512;
-        private float _currentBpm = 122;
+        private float _currentBpm = 66;
         private readonly float[] _searchOffsets = { -0.5f, -0.1f, 0, 0.1f, 0.5f, };
 
         private int SampleBufferSize => (int)SampleDurationInSec.Clamp(1, 60) * FramesPerSecond;
