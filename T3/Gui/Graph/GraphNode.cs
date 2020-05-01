@@ -126,18 +126,39 @@ namespace T3.Gui.Graph
 
                 SelectableNodeMovement.Handle(childUi, instance);
 
-                // Parameter as context
+
+                //if(ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
+                // A work around to detect if node is below mouse while dragging end of new connection
+                if (_selectableScreenRect.Contains(ImGui.GetMousePos()))
+                {
+                    _hoveredNodeIdForConnectionTarget = childUi.Id;
+                }
+
+                var hovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId);
+
+                
+                // A horrible work around to prevent exception because CompositionOp changed during drawing.
+                // A better solution would defer setting the compositionOp to the beginning of next frame.
+                var justOpenedChild = false;     
+                if (hovered && ImGui.IsMouseDoubleClicked(0))
+                {
+                    GraphCanvas.Current.SetCompositionToChildInstance(instance);
+                    ImGui.CloseCurrentPopup();
+                    justOpenedChild= true;
+                }
+                
+                // Show Parameter window as context menu
                 {
                     var isClicked = ImGui.IsItemHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left) &&
                                     ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() < 4;
-                    if (isClicked && !ParameterWindow.IsAnyInstanceVisible())
+                    if (isClicked && !ParameterWindow.IsAnyInstanceVisible() && !justOpenedChild)
                     {
-                        SelectionManager.SetSelection(childUi);
+                        SelectionManager.SetSelection(childUi, instance);
                         ImGui.OpenPopup("test");
                     }
 
                     ImGui.SetNextWindowSizeConstraints(new Vector2(280, 40), new Vector2(280, 320));
-                    if (ImGui.BeginPopup("test"))
+                    if (!justOpenedChild && ImGui.BeginPopup("test"))
                     {
                         ImGui.PushFont(Fonts.FontSmall);
                         var compositionSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
@@ -148,17 +169,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                if (ImGui.IsItemActive() && ImGui.IsMouseDoubleClicked(0))
-                {
-                    GraphCanvas.Current.SetCompositionToChildInstance(instance);
-                }
 
-                if (_selectableScreenRect.Contains(ImGui.GetMousePos()))
-                {
-                    _hoveredNodeId = childUi.Id;
-                }
-
-                var hovered = ImGui.IsItemHovered() || T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId);
                 var drawList = GraphCanvas.Current.DrawList;
 
                 // Rendering
@@ -422,7 +433,7 @@ namespace T3.Gui.Graph
                 return symbolUi.InputUis.Values.ToList();
             }
 
-            var isNodeHoveredConnectionTarget = _hoveredNodeId == childUi.Id
+            var isNodeHoveredConnectionTarget = _hoveredNodeIdForConnectionTarget == childUi.Id
                                                 && ConnectionMaker.TempConnection != null
                                                 && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
 
@@ -791,7 +802,7 @@ namespace T3.Gui.Graph
         private static EvaluationContext _evaluationContext = new EvaluationContext();
 
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
-        private static Guid _hoveredNodeId;
+        private static Guid _hoveredNodeIdForConnectionTarget;
 
         private static ImRect _usableScreenRect;
         private static ImRect _selectableScreenRect;
