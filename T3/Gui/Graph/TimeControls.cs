@@ -1,6 +1,5 @@
 ﻿using ImGuiNET;
 using System;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text.RegularExpressions;
 using T3.Core;
@@ -12,6 +11,7 @@ using T3.Gui.Interaction.Timing;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
+using UiHelpers;
 using Icon = T3.Gui.Styling.Icon;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
@@ -100,12 +100,18 @@ namespace T3.Gui.Graph
 
             if (hideTimeControls)
             {
-                if (ImGui.Button($"{playback.Bpm:0.0} BPM?"))
+                if (ImGui.Button($"{T3Ui.BeatTiming.DampedBpm:0.0} BPM?"))
                 {
-                    var newBpm = T3Ui.BeatTiming.ComputeBpmFromSystemAudio();
-                    if (newBpm > 0)
-                        playback.Bpm = newBpm;
+                    T3Ui.BeatTiming.SetBpmFromSystemAudio();
+                    // if (newBpm > 0)
+                    //     playback.Bpm = newBpm;
                 }
+
+                var min = ImGui.GetItemRectMin();
+                var max = ImGui.GetItemRectMax();
+                //var volume = Im.Clamp(BpmDetection.LastVolume,0,1);
+                var volume = BeatTiming.SyncPrecision;
+                ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - volume * (max.Y - min.Y)), Color.Orange);
 
                 ImGui.SameLine();
 
@@ -414,7 +420,20 @@ namespace T3.Gui.Graph
                     var isInitialized = playback is BeatTimingPlayback;
                     if (isInitialized)
                     {
-                        // Settings got here
+                        var currentDevice = BeatTiming.SystemAudioInput.LoopBackDevices[BeatTiming.SystemAudioInput.SelectedDeviceIndex];
+                        if (ImGui.BeginCombo("Device selection",currentDevice.ToString()))
+                        {
+                            for (var index = 0; index < BeatTiming.SystemAudioInput.LoopBackDevices.Count; index++)
+                            {
+                                var d = BeatTiming.SystemAudioInput.LoopBackDevices[index];
+                                if (ImGui.Selectable(d.ToString()))
+                                {
+                                    BeatTiming.SystemAudioInput.SetDeviceIndex(index);
+                                }
+                            }
+
+                            ImGui.EndCombo();
+                        }
                     }
                     else
                     {

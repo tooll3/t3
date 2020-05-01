@@ -13,6 +13,7 @@ namespace T3.Gui.Interaction.Timing
         public override void Update(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning = false)
         {
             BeatTime = T3Ui.BeatTiming.GetSyncedBeatTiming();
+            Bpm = T3Ui.BeatTiming.Bpm;
             TimeInBars = BeatTime;            
             
             // TODO: setting the context time here is kind of awkward

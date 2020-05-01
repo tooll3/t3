@@ -20,29 +20,47 @@ namespace T3.Gui.Interaction.Timing
         public void TriggerDelaySync() => _delayTriggered = true;
         public void TriggerAdvanceSync() =>_advanceTriggered = true;
         
+        public static SystemAudioInput SystemAudioInput;
 
-        public float ComputeBpmFromSystemAudio()
+        public float Bpm => (float)(60f / _beatDuration);
+        public float DampedBpm => (float)(60f / _dampedBeatDuration);
+
+        public void SetBpmFromSystemAudio()
         {
-            if (_bpmDetection.HasSufficientSampleData)
+            if (SystemAudioInput.LastIntLevel == 0)
             {
-                var bpm = _bpmDetection.ComputeBpmRate();
-                Log.Debug("Set bpm to " + bpm);
-                _beatDuration =  bpm * 60f; 
-                return bpm;
+                Log.Warning("Sound seems to be stuck. Trying restart.");
+                SystemAudioInput.Restart();
             }
-            Log.Warning("Insufficient sample data");
-            return -1;
+            
+            if (!_bpmDetection.HasSufficientSampleData)
+            {
+                Log.Warning("Insufficient sample data");
+                return;
+            }
+
+            var bpm = _bpmDetection.ComputeBpmRate();
+            if (!(bpm > 0))
+            {
+                Log.Warning("Computing bpm-rate failed");
+                return;
+            }
+
+            Log.Debug("Setting bpm to " + bpm);
+            _beatDuration = 60f / bpm;
+            _dampedBeatDuration = _beatDuration;
+            _lastResyncTime = 0;    // Prevent bpm stretching on resync
         } 
         
         public double GetSyncedBeatTiming()
         {
-            if(_systemAudioInput == null)
-                _systemAudioInput = new SystemAudioInput();
+            if(SystemAudioInput == null)
+                SystemAudioInput = new SystemAudioInput();
             
             return SyncedTime;
         }
 
-        private static SystemAudioInput _systemAudioInput;
+        
         
         public void Update()
         {
@@ -56,10 +74,10 @@ namespace T3.Gui.Interaction.Timing
 
         private void UpdatedBpmDetection()
         {
-            if (_systemAudioInput == null || _bpmDetection == null)
+            if (SystemAudioInput == null || _bpmDetection == null)
                 return;
 
-            _bpmDetection.AddFffSample(_systemAudioInput.LastFftBuffer);
+            _bpmDetection.AddFffSample(SystemAudioInput.LastFftBuffer);
         }
 
         /// <remarks>
@@ -80,28 +98,40 @@ namespace T3.Gui.Interaction.Timing
             
             _lastTime = time;
 
-            var barDuration = _dampedBeatDuration * BeatsPerBar;
+            //var barDuration = _dampedBeatDuration * BeatsPerBar;
 
             if (_resetTriggered)
             {
                 _resetTriggered = false;
-                _barCounter = 0;
+                _measureCounter = 0;
                 _dampedBeatDuration = 120;
             }
 
             if (_advanceTriggered)
             {
-                _tappedBarStartTime += 0.01f;
+                _tappedMeasureStartTime += 0.01f;
                 _advanceTriggered = false;
             }
             
             if (_delayTriggered)
             {
-                _tappedBarStartTime -= 0.01f;
+                _tappedMeasureStartTime -= 0.01f;
                 _delayTriggered = false;
             }
-
             
+            
+            var measureDuration = _beatDuration * BeatsPerMeasure;
+            var barDuration = _beatDuration * BeatsPerBar;
+            var timeInMeasure = time - _measureStartTime;
+            var timeInBar = timeInMeasure % barDuration;
+
+            if (timeInBar > barDuration / 2)
+            {
+                timeInBar -= barDuration;
+            }
+
+            const float precision = 0.5f;
+            SyncPrecision = (float)(Math.Max(0, 1-Math.Abs(timeInBar) / barDuration * 2) - precision) * 1/(1-precision);
             
             if (_syncTriggered)
             {
@@ -109,80 +139,71 @@ namespace T3.Gui.Interaction.Timing
                 AddTapAndShiftTimings(time);
 
                 // Fix BPM if completely out of control
-                var bpm = 60f / _beatDuration;
-                if (double.IsNaN(bpm) || bpm < 20 || bpm > 200)
+                if (double.IsNaN(Bpm) || Bpm < 20 || Bpm > 200)
                 {
                     _beatDuration = 1;
-                    _tappedBarStartTime = 0;
+                    _tappedMeasureStartTime = 0;
                     _dampedBeatDuration = 0.5;
-                    _tappedBarStartTime = 0;
                     _tapTimes.Clear();
                 }
-
-                var measureDuration = _beatDuration * BeatsPerBar / 4;
-                var timeInMeasure = time - _barStartTime;
-
-                if (timeInMeasure > measureDuration / 2)
+                
+                Log.Debug("Sync Hit precision: " + SyncPrecision);
+                var needToJumpSync = SyncPrecision < 0f;
+                if (needToJumpSync)
                 {
-                    timeInMeasure -= measureDuration;
+                    _measureStartTime = time;
                 }
 
-                if (Math.Abs(timeInMeasure) > measureDuration / BeatsPerBar)
-                {
-                    // Reset measure-timing
-                    _tappedBarStartTime = _barStartTime = time;
-                }
-                else
-                {
-                    // Sliding is sufficient
-                    _tappedBarStartTime = time;
-                }
+                _tappedMeasureStartTime = time;
 
                 // Stretch _beatTime
                 if (Math.Abs(_lastResyncTime) > 0.001f)
                 {
                     var timeSinceResync = time - _lastResyncTime;
 
-                    var measureCount = timeSinceResync / measureDuration;
-                    var measureCountInt = Math.Round(measureCount);
-                    Log.Debug("MeasureCount:" + measureCount);
-                    var mod = measureCount - measureCountInt;
-                    Log.Debug(" Mod:" + mod);
-                    if (Math.Abs(mod) < 0.5 && measureCountInt > 0)
+                    var barCount = timeSinceResync / barDuration;
+                    var barCountInt = Math.Round(barCount);
+                    var isNotTappingAndNotAbandoned = barCount > 4 && barCount < 200;
+                    if (isNotTappingAndNotAbandoned)
                     {
-                        var measureFragment = mod * measureDuration / measureCountInt;
-                        var beatShift = measureFragment / BeatsPerBar;
-                        _beatDuration += beatShift;
-                        Log.Debug("Resync-Offset:" + mod + " shift:" + beatShift + " new BPM" + (60 / _beatDuration));
+                        var mod = barCount - barCountInt;
+                        if (Math.Abs(mod) < 0.5 && barCountInt > 0)
+                        {
+                            var barFragment = mod * barDuration / barCountInt;
+                            var beatShift = barFragment / BeatsPerBar;
+                            _beatDuration += beatShift;
+                            Log.Debug("Resync-Offset:" + mod + " shift:" + beatShift + " new BPM" + (60 / _beatDuration));
+                        }
                     }
                 }
 
                 _lastResyncTime = time;
             }
 
-            // Smooth offset and beatduration to avoid jumps
+            // Smooth offset and beat duration to avoid jumps
             _dampedBeatDuration = Lerp(_dampedBeatDuration, _beatDuration, 0.05f);
 
             // Slide start-time to match last beat-trigger
-            var timeInBar = time - _barStartTime;
-            var tappedTimeInBar = time - _tappedBarStartTime;
-            var tappedBeatTime = (tappedTimeInBar / _dampedBeatDuration) % 1f;
-            var beatTime = (timeInBar / _dampedBeatDuration) % 1f;
+            //var timeInBar = time - _measureStartTime;
+            var tappedTimeInMeasure = time - _tappedMeasureStartTime;
+            var differenceToTapping = tappedTimeInMeasure - timeInMeasure; 
+            //var tappedBeatTime = (tappedTimeInMeasure / _dampedBeatDuration) % 1f;
+            //var beatTime = (timeInBar / _dampedBeatDuration) % 1f;
 
-            var isTimingOff = Math.Abs(beatTime - tappedBeatTime) > 0.03f; 
+            var isTimingOff = Math.Abs(differenceToTapping) > 0.03f; 
             if(isTimingOff)
-                _barStartTime += (beatTime < tappedBeatTime) ? -0.01f : 0.01f;   
+                _measureStartTime += (differenceToTapping > 0) ? -0.01f : 0.01f;   
 
-            // Check for next bar               
-            if (timeInBar > barDuration)
+            // Check for next measure               
+            if (timeInMeasure > measureDuration)
             {
-                _barCounter++;
-                _barStartTime += barDuration;
-                timeInBar -= barDuration;
+                _measureCounter++;
+                _measureStartTime += measureDuration;
+                timeInMeasure -= measureDuration;
             }
 
-            _tappedBarStartTime = time + (_tappedBarStartTime - time) % barDuration;
-            _barProgress = (float)(timeInBar / barDuration);
+            _tappedMeasureStartTime = time + (_tappedMeasureStartTime - time) % measureDuration;
+            _measureProgress = (float)(timeInMeasure / measureDuration);
         }
 
         private void AddTapAndShiftTimings(double time)
@@ -216,7 +237,7 @@ namespace T3.Gui.Interaction.Timing
             }
         
             _beatDuration = sum / (_tapTimes.Count - 1);
-            _tappedBarStartTime = time - _beatDuration;
+            //_tappedMeasureStartTime = time - _beatDuration;
         }
         
         
@@ -225,28 +246,28 @@ namespace T3.Gui.Interaction.Timing
             return a * (1 - t) + b * t;
         }
         
-        // private float _beatTime = 0;
-        // private float _tapTime = 0;
-        private double SyncedTime => (float)(_barCounter + _barProgress) * 4;
+        private double SyncedTime => (float)(_measureCounter + _measureProgress) * 4 ;
         private double _lastResyncTime;
-        private int _barCounter;
-        private float _barProgress;
+        private int _measureCounter;
+        private float _measureProgress;
 
-        private double _barStartTime;
+        private double _measureStartTime;
 
         private double _beatDuration = 0.5;
         private double _dampedBeatDuration = 0.5;
 
         
-        private const float BeatsPerBar = 16;
+        private const int BeatsPerBar = 4;
+        private const int BeatsPerMeasure = 16;
         private double _lastTime;
         
         private bool _syncTriggered;
         private bool _resetTriggered;
 
         readonly List<double> _tapTimes = new List<double>();
-        private double _tappedBarStartTime;
+        private double _tappedMeasureStartTime;
         private BpmDetection _bpmDetection = new BpmDetection();
+        public static float SyncPrecision;
 
 
         private bool _delayTriggered;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using T3.Core.Logging;
 using UiHelpers;
 
 namespace T3.Gui.Interaction.Timing
@@ -84,6 +83,7 @@ namespace T3.Gui.Interaction.Timing
             return Math.Max(bump, 1);
         }
 
+        public static float LastVolume;
 
         private void UpdateSampleBuffer(IReadOnlyList<float> fftBuffer)
         {
@@ -98,15 +98,16 @@ namespace T3.Gui.Interaction.Timing
 
             _addedSampleCount++;
             
-            
             var sum = 0f;
             for (var index = lowerBorder; index < upperBorder; index++)
             {
                 sum += fftBuffer[index];
             }
 
-            Log.Debug("Added fft sum " + sum);
+            //Log.Debug("Added fft sum " + sum);
 
+            LastVolume = sum;
+            
             _sampleBuffer.Add(sum);
             if (_sampleBuffer.Count > SampleBufferSize)
                 _sampleBuffer.RemoveAt(0);

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Threading;
 using ManagedBass;
 using ManagedBass.Wasapi;
@@ -11,14 +13,38 @@ namespace T3.Gui.Interaction.Timing
     /// This is based on https://www.codeproject.com/Articles/797537/
     /// Audio Spectrum by @webmaster442
     /// </summary>
-
     public class SystemAudioInput
     {
         public readonly float[] LastFftBuffer = new float[512];
         public float LastLevel => (RightLevel + LeftLevel) / 2;
-        
+
+        public void Restart()
+        {
+            Log.Warning("Looks like sound got lost. Trying to restart.");
+            _hangCounter = 0;
+            Free();
+
+            InitBass();
+            _initialized = false;
+            SetEnableWasapi(true);
+        }
+
         public float RightLevel;
         public float LeftLevel;
+        public int SelectedDeviceIndex { get; private set; }
+        public readonly List<WasapiDeviceDescription> LoopBackDevices = new List<WasapiDeviceDescription>();
+
+        public struct WasapiDeviceDescription
+        {
+            public string Title;
+            public string Type;
+            public int WasapiDeviceIndex;
+
+            public override string ToString()
+            {
+                return $"#{WasapiDeviceIndex} {Title} {Type}";
+            }
+        }
 
         /// <summary>
         /// Note that the initialization of the the WASAPI device list can
@@ -35,10 +61,11 @@ namespace T3.Gui.Interaction.Timing
 
         public void SetDeviceIndex(int index)
         {
-            if (index == _deviceIndex)
+            if (index == SelectedDeviceIndex)
                 return;
 
-            _deviceIndex = index;
+            SetEnableWasapi(false);
+            SelectedDeviceIndex = index;
             _initialized = false;
             SetEnableWasapi(true);
         }
@@ -48,6 +75,7 @@ namespace T3.Gui.Interaction.Timing
             if (!enable)
             {
                 BassWasapi.Stop();
+                BassWasapi.Free();
                 _timer.Stop();
                 _timer.IsEnabled = false;
                 return;
@@ -55,11 +83,11 @@ namespace T3.Gui.Interaction.Timing
 
             if (!_initialized)
             {
-                var str = _deviceList[_deviceIndex % _deviceList.Count];
-                var array = str.Split(' ');
-                _wasapiDeviceIndex = Convert.ToInt32(array[0]);
-                Log.Debug($"Initializing WASAPI for {str}... #{_wasapiDeviceIndex}");
-                if (!BassWasapi.Init(_wasapiDeviceIndex,
+                var selectedDeviceDescription = LoopBackDevices[SelectedDeviceIndex % LoopBackDevices.Count];
+
+                //var device = BassWasapi.GetDeviceInfo(selectedDeviceId);
+                Log.Debug($"Initializing WASAPI for selection #{SelectedDeviceIndex}  -> {selectedDeviceDescription}");
+                if (!BassWasapi.Init(selectedDeviceDescription.WasapiDeviceIndex,
                                      Frequency: 0,
                                      Channels: 0,
                                      Flags: WasapiInitFlags.Buffer,
@@ -89,13 +117,19 @@ namespace T3.Gui.Interaction.Timing
 
         private void InitBass()
         {
-            for (var i = 0; i < BassWasapi.DeviceCount; i++)
+            for (var index = 0; index < BassWasapi.DeviceCount; index++)
             {
-                var device = BassWasapi.GetDeviceInfo(i);
-                if (device.IsEnabled && device.IsLoopback)
-                {
-                    _deviceList.Add(string.Format($"{i} - {device.Name}"));
-                }
+                var deviceInfo = BassWasapi.GetDeviceInfo(index);
+                if (!deviceInfo.IsEnabled || !deviceInfo.IsLoopback)
+                    continue;
+
+                LoopBackDevices.Add(new WasapiDeviceDescription()
+                                        {
+                                            WasapiDeviceIndex = index,
+                                            Title = deviceInfo.Name,
+                                            Type = deviceInfo.Type.ToString(),
+                                        });
+                Log.Debug($"Found #{index} - {deviceInfo.Name}");
             }
 
             Bass.Configure(Configuration.UpdateThreads, false);
@@ -128,23 +162,17 @@ namespace T3.Gui.Interaction.Timing
             LeftLevel = 65384f / left;
             RightLevel = 65384f / right;
 
-            if (level == _lastLevel && level != 0) _hangCounter++;
-            _lastLevel = level;
+            if (level == LastIntLevel && level != 0) _hangCounter++;
+            LastIntLevel = level;
 
             // Required, because some programs hang the output. If the output hangs for a 75ms
             // this piece of code re initializes the output so it doesn't make a glitched sound for long.
             //
             // This is a pain in the butt, and I already sunk some time into this problem.
             // It's definitely worse in when streaming audio/video in web browsers like Firefox. 
-            if (_hangCounter > 10)
+            if (_hangCounter > 120)
             {
-                Log.Warning("Looks like sound got lost. Trying to restart.");
-                _hangCounter = 0;
-                Free();
-
-                InitBass();
-                _initialized = false;
-                SetEnableWasapi(true);
+                Restart();
             }
         }
 
@@ -163,17 +191,14 @@ namespace T3.Gui.Interaction.Timing
             Bass.Free();
         }
 
-        private const int FftBufferResolution = 512;
+        //private const int FftBufferResolution = 512;
 
-        private int _deviceIndex;
         private readonly DispatcherTimer _timer = new DispatcherTimer(); //timer that refreshes the display
 
         private readonly WasapiProcedure _wasapiProcedure;
-        private int _lastLevel;
+        public int LastIntLevel;
         private int _hangCounter;
 
-        private readonly List<string> _deviceList = new List<string>();
         private bool _initialized;
-        private int _wasapiDeviceIndex;
     }
 }
