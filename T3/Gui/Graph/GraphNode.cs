@@ -126,7 +126,6 @@ namespace T3.Gui.Graph
 
                 SelectableNodeMovement.Handle(childUi, instance);
 
-
                 //if(ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                 // A work around to detect if node is below mouse while dragging end of new connection
                 if (_selectableScreenRect.Contains(ImGui.GetMousePos()))
@@ -136,17 +135,16 @@ namespace T3.Gui.Graph
 
                 var hovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId);
 
-                
                 // A horrible work around to prevent exception because CompositionOp changed during drawing.
                 // A better solution would defer setting the compositionOp to the beginning of next frame.
-                var justOpenedChild = false;     
+                var justOpenedChild = false;
                 if (hovered && ImGui.IsMouseDoubleClicked(0))
                 {
                     GraphCanvas.Current.SetCompositionToChildInstance(instance);
                     ImGui.CloseCurrentPopup();
-                    justOpenedChild= true;
+                    justOpenedChild = true;
                 }
-                
+
                 // Show Parameter window as context menu
                 {
                     var isClicked = ImGui.IsItemHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left) &&
@@ -168,7 +166,6 @@ namespace T3.Gui.Graph
                         ImGui.EndPopup();
                     }
                 }
-
 
                 var drawList = GraphCanvas.Current.DrawList;
 
@@ -598,7 +595,11 @@ namespace T3.Gui.Graph
                                             ColorVariations.OperatorHover.Apply(colorForType));
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
-                    ImGui.SetTooltip($".{outputDef.Name}<{TypeNameRegistry.Entries[outputDef.ValueType]}>");
+
+                    var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+                    var output = instance.Outputs.Single(output2 => output2.Id == outputDef.Id);
+                    
+                    ImGui.SetTooltip($".{outputDef.Name}<{TypeNameRegistry.Entries[outputDef.ValueType]}>\nevaluated: {output.DirtyFlag.NumUpdatesWithinFrame}");
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                     {
