@@ -123,7 +123,6 @@ namespace T3.Gui.Graph
                                                                  : null;
         }
 
-        private readonly ImageBackground _imageBackground = new ImageBackground();
 
         protected override void DrawContent()
         {
@@ -178,8 +177,15 @@ namespace T3.Gui.Graph
                         ImGui.SameLine();
 
                         TimeControls.DrawTimeControls(ref _playback, _timeLineCanvas);
-                        if(_imageBackground.IsActive)
+                        if (_imageBackground.IsActive)
+                        {
                             _imageBackground.DrawResolutionSelector();
+                            ImGui.SameLine();
+                            if (ImGui.Button("Clear"))
+                            {
+                                _currentWindow._imageBackground.BackgroundNodePath = null;
+                            }
+                        }
                     }
                     dl.ChannelsSetCurrent(0);
                     {
@@ -326,6 +332,8 @@ namespace T3.Gui.Graph
             ImGui.PopFont();
             ImGui.PopStyleColor();
         }
+
+        private readonly ImageBackground _imageBackground = new ImageBackground();
 
         private readonly GraphCanvas _graphCanvas;
         private Playback _playback;
