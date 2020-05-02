@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ImGuiNET;
 using SharpDX;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
@@ -49,7 +50,6 @@ namespace T3.Gui.Graph
                     return;
                 
                 _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
-                //var shouldEvaluate = viewOutput.DirtyFlag.FramesSinceLastUpdate > 0;
                 viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: true);
             }
             
