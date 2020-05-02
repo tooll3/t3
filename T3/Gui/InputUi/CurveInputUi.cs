@@ -44,9 +44,7 @@ namespace T3.Gui.InputUi
                 inputEditStateFlags |= InputEditStateFlags.Modified; // the will clear the IsDefault flag after editing
             }
 
-            // TODO: with the return value of this function the inputEditStateFlags should somehow be set, or selfmade editing controls for reference types
-            // handle cloning by themselves when previously in default state. Needs to be discussed
-            CurveInputEditing.DrawCanvasForCurve(curve);
+            inputEditStateFlags |= CurveInputEditing.DrawCanvasForCurve(curve);
 
             return inputEditStateFlags;
         }

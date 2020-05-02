@@ -17,8 +17,8 @@ namespace T3.Gui.InputUi
     public static class CurveInputEditing
     {
         private static readonly Dictionary<Curve, CurveInteraction> InteractionForCurve = new Dictionary<Curve, CurveInteraction>();
-
-        public static void DrawCanvasForCurve(Curve curve)
+        
+        public static InputEditStateFlags DrawCanvasForCurve(Curve curve)
         {
             if (!InteractionForCurve.TryGetValue(curve, out var curveInteraction))
             {
@@ -31,6 +31,8 @@ namespace T3.Gui.InputUi
             }
 
             curveInteraction.Draw();
+
+            return curveInteraction.EditState;
         }
 
         /// <summary>
@@ -40,6 +42,8 @@ namespace T3.Gui.InputUi
         {
             public List<Curve> Curves = new List<Curve>();
             private readonly SingleCurveEditCanvas _canvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + InteractionForCurve.Count };
+
+            public InputEditStateFlags EditState { get; private set; } = InputEditStateFlags.Nothing;
 
             public void Draw()
             {
@@ -69,6 +73,8 @@ namespace T3.Gui.InputUi
                         SelectedKeyframes.Remove(keyframe);
                     }
                 }
+
+                EditState = InputEditStateFlags.Modified;
             }
 
             protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
@@ -115,6 +121,8 @@ namespace T3.Gui.InputUi
                 _canvas.SnapHandlerForV.CheckForSnapping(ref v, _canvas.Scale.Y);
 
                 UpdateDragCommand(u - vDef.U, v - vDef.Value);
+                
+                EditState = InputEditStateFlags.Modified;
             }
 
             public ICommand StartDragCommand()
@@ -132,6 +140,7 @@ namespace T3.Gui.InputUi
                 }
 
                 RebuildCurveTables();
+                EditState = InputEditStateFlags.Modified;
             }
 
             public void CompleteDragCommand()
@@ -142,6 +151,7 @@ namespace T3.Gui.InputUi
                 _changeKeyframesCommand.StoreCurrentValues();
                 UndoRedoStack.Add(_changeKeyframesCommand);
                 _changeKeyframesCommand = null;
+                EditState = InputEditStateFlags.Finished;
             }
 
             private static ChangeKeyframesCommand _changeKeyframesCommand;
