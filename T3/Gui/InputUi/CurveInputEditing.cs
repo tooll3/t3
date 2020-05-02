@@ -30,6 +30,7 @@ namespace T3.Gui.InputUi
                 InteractionForCurve.Add(curve, curveInteraction);
             }
 
+            curveInteraction.EditState = InputEditStateFlags.Nothing;
             curveInteraction.Draw();
 
             return curveInteraction.EditState;
@@ -43,7 +44,7 @@ namespace T3.Gui.InputUi
             public List<Curve> Curves = new List<Curve>();
             private readonly SingleCurveEditCanvas _canvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + InteractionForCurve.Count };
 
-            public InputEditStateFlags EditState { get; private set; } = InputEditStateFlags.Nothing;
+            public InputEditStateFlags EditState { get; set; } = InputEditStateFlags.Nothing;
 
             public void Draw()
             {
