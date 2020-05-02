@@ -117,6 +117,7 @@
     <Compile Include="Operator\Attributes\OperatorAttribute.cs" />
     <Compile Include="Operator\Attributes\OutputAttribute.cs" />
     <Compile Include="Operator\EvaluationContext.cs" />
+    <Compile Include="Operator\Helper\EmitterCounter.cs" />
     <Compile Include="Operator\Helper\ParticleSystem.cs" />
     <Compile Include="Operator\Instance.cs" />
     <Compile Include="Operator\Slots\DirtyFlag.cs" />
