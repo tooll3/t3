@@ -99,9 +99,13 @@ namespace T3.Gui.Graph
 
                 var hoveredBeforeContextMenu = ImGui.IsItemHovered();
 
+                SelectableNodeMovement.Handle(childUi, instance);
+                
                 // Tooltip
                 if (ImGui.IsItemHovered())
                 {
+                    SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
+                    
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                     T3Ui.AddHoveredId(childUi.SymbolChild.Id);
 
@@ -134,7 +138,6 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                SelectableNodeMovement.Handle(childUi, instance);
 
                 //if(ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                 // A work around to detect if node is below mouse while dragging end of new connection
@@ -258,7 +261,7 @@ namespace T3.Gui.Graph
 
                 if (childUi.IsSelected)
                 {
-                    drawList.AddRect(_selectableScreenRect.Min - Vector2.One, _selectableScreenRect.Max + Vector2.One, Color.White, 1);
+                    drawList.AddRect(_selectableScreenRect.Min - Vector2.One, _selectableScreenRect.Max + Vector2.One, Color.White, 2);
                 }
             }
             ImGui.PopID();
