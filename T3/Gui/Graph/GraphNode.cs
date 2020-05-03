@@ -119,6 +119,16 @@ namespace T3.Gui.Graph
                                 _evaluationContext.RequestedResolution = new Size2(1280, 720);
                                 outputUi.DrawValue(firstOutput, _evaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
                             }
+
+                            if (!string.IsNullOrEmpty(symbolUi.Description))
+                            {
+                                ImGui.Spacing();
+                                ImGui.PushFont(Fonts.FontSmall);
+                                ImGui.PushStyleColor(ImGuiCol.Text, new Color(1,1,1,0.5f).Rgba);
+                                ImGui.TextWrapped(symbolUi.Description);
+                                ImGui.PopStyleColor();
+                                ImGui.PopFont();
+                            }
                         }
                         ImGui.EndTooltip();
                     }
