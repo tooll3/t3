@@ -13,7 +13,7 @@ namespace T3.Core.Operator.Slots
             _globalTickCount += GLOBAL_TICK_DIFF_PER_FRAME;
         }
 
-        public bool IsDirty => Reference != Target;
+        public bool IsDirty => Reference != Target || Trigger == DirtyFlagTrigger.Always;
 
         public static int InvalidationRefFrame { get; set; } = 0;
         private int _invalidatedWithRefFrame = -1;
@@ -35,7 +35,7 @@ namespace T3.Core.Operator.Slots
 
         public void Clear()
         {
-            Reference = Trigger == DirtyFlagTrigger.Always ? Target - 1 : Target;
+            Reference = Target;//Trigger == DirtyFlagTrigger.Always ? Target - 1 : Target;
         }
 
         public void SetUpdated()

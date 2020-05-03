@@ -162,7 +162,7 @@ namespace T3.Core.Operator.Slots
                             input.DirtyFlag.Target = input.GetConnection(0).Invalidate();
                         }
                     }
-                    else if (input.DirtyFlag.Trigger != DirtyFlagTrigger.None)
+                    else if ((input.DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
                     {
                         input.DirtyFlag.Invalidate();
                     }
@@ -170,7 +170,7 @@ namespace T3.Core.Operator.Slots
                     outputDirty |= input.DirtyFlag.IsDirty;
                 }
 
-                if (outputDirty || DirtyFlag.Trigger != DirtyFlagTrigger.None)
+                if (outputDirty || (DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
                 {
                     DirtyFlag.Invalidate();
                 }
