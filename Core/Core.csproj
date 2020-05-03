@@ -138,6 +138,7 @@
     <Compile Include="Operator\SymbolRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\Json.cs" />
+    <Compile Include="Resource\MathUtils.cs" />
     <Compile Include="Resource\Model.cs" />
     <Compile Include="Resource\ResourceManager.cs" />
     <Compile Include="Resource\Utilities.cs" />
