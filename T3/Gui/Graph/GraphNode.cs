@@ -114,7 +114,8 @@ namespace T3.Gui.Graph
                     T3Ui.AddHoveredId(childUi.SymbolChild.Id);
 
                     ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
-                    if (UserSettings.Config.HoverMode != GraphCanvas.HoverModes.Disabled)
+                    if (UserSettings.Config.HoverMode != GraphCanvas.HoverModes.Disabled 
+                        && !ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                     {
                         ImGui.BeginTooltip();
                         {
