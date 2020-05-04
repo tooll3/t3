@@ -3,7 +3,6 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -16,6 +15,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Helper;
+using T3.Gui.ChildUi;
 using T3.Gui.InputUi;
 using T3.Gui.InputUi.SingleControl;
 using T3.Gui.OutputUi;
@@ -62,6 +62,8 @@ namespace T3.Gui
 
             // t3 core types
             RegisterUiType(typeof(Command), new CommandUiProperties(), () => new FallbackInputUi<Command>(), () => new CommandOutputUi());
+            RegisterUiType(typeof(Core.Animation.Curve), new FloatUiProperties(), () => new CurveInputUi(),
+                           () => new ValueOutputUi<Core.Animation.Curve>());
             RegisterUiType(typeof(ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<ParticleSystem>(),
                            () => new ValueOutputUi<ParticleSystem>());
 
@@ -131,8 +133,8 @@ namespace T3.Gui
             RegisterUiType(typeof(SharpDX.Mathematics.Interop.RawRectangle), new ShaderUiProperties(), () => new FallbackInputUi<RawRectangle>(),
                            () => new ValueOutputUi<RawRectangle>());
 
-            RegisterUiType(typeof(T3.Core.Animation.Curve), new FloatUiProperties(), () => new CurveInputUi(),
-                           () => new ValueOutputUi<T3.Core.Animation.Curve>());
+            // register custom UIs for symbol children
+            CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value), ValueUi.DrawChildUi);
             
             Load();
 

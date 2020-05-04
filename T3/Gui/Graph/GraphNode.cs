@@ -97,7 +97,8 @@ namespace T3.Gui.Graph
 
                 // FIXME: proof-of-concept stub for custom UI 
 
-                var usesCustomUi = DrawCustomUi(instance, _selectableScreenRect);
+                // var usesCustomUi = DrawCustomUi(instance, _selectableScreenRect);
+                var usesCustomUi = childUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
 
                 // Interaction
                 ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
