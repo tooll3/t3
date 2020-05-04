@@ -18,6 +18,7 @@ using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
+using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
@@ -93,6 +94,10 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleColor(3);
                 }
 
+                // FIXME: proof-of-concept stub for custom UI 
+
+                var usesCustomUi = DrawCustomUi(instance, _selectableScreenRect);
+
                 // Interaction
                 ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
                 ImGui.InvisibleButton("node", _selectableScreenRect.GetSize());
@@ -100,12 +105,12 @@ namespace T3.Gui.Graph
                 var hoveredBeforeContextMenu = ImGui.IsItemHovered();
 
                 SelectableNodeMovement.Handle(childUi, instance);
-                
+
                 // Tooltip
                 if (ImGui.IsItemHovered())
                 {
                     SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
-                    
+
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                     T3Ui.AddHoveredId(childUi.SymbolChild.Id);
 
@@ -128,7 +133,7 @@ namespace T3.Gui.Graph
                             {
                                 ImGui.Spacing();
                                 ImGui.PushFont(Fonts.FontSmall);
-                                ImGui.PushStyleColor(ImGuiCol.Text, new Color(1,1,1,0.5f).Rgba);
+                                ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, 0.5f).Rgba);
                                 ImGui.TextWrapped(symbolUi.Description);
                                 ImGui.PopStyleColor();
                                 ImGui.PopFont();
@@ -137,7 +142,6 @@ namespace T3.Gui.Graph
                         ImGui.EndTooltip();
                     }
                 }
-
 
                 //if(ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                 // A work around to detect if node is below mouse while dragging end of new connection
@@ -249,15 +253,18 @@ namespace T3.Gui.Graph
                 }
 
                 // Label
-                drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
-                ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 ? Fonts.FontSmall : Fonts.FontBold);
-                var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
+                if (!usesCustomUi)
+                {
+                    drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
+                    ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 ? Fonts.FontSmall : Fonts.FontBold);
+                    var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
 
-                drawList.AddText(_usableScreenRect.Min + LabelPos,
-                                 ColorVariations.OperatorLabel.Apply(typeColor),
-                                 string.Format(isRenamed ? ("\"" + childUi.SymbolChild.ReadableName + "\"") : childUi.SymbolChild.ReadableName));
-                ImGui.PopFont();
-                drawList.PopClipRect();
+                    drawList.AddText(_usableScreenRect.Min + LabelPos,
+                                     ColorVariations.OperatorLabel.Apply(typeColor),
+                                     string.Format(isRenamed ? ("\"" + childUi.SymbolChild.ReadableName + "\"") : childUi.SymbolChild.ReadableName));
+                    ImGui.PopFont();
+                    drawList.PopClipRect();
+                }
 
                 if (childUi.IsSelected)
                 {
@@ -430,6 +437,21 @@ namespace T3.Gui.Graph
 
                 outputIndex++;
             }
+        }
+
+        /// <summary>
+        /// @cynic: FIXME: this is a stub for custom UI rendering 
+        /// </summary>
+        private static bool DrawCustomUi(Instance instance, ImRect selectableScreenRect)
+        {
+            if (!(instance is Value v))
+                return false;
+            
+            var opacity = (float)Math.Sin(ImGui.GetTime());
+            _drawList.AddRectFilled(_selectableScreenRect.Min, _selectableScreenRect.Max, new Color(1, 1, 0, 0.2f * opacity));
+            ImGui.SetCursorScreenPos(_selectableScreenRect.Min + Vector2.One * 10);
+            ImGui.Text($"{v.Result.Value:0.00}");
+            return true;
         }
 
         // Find visible input slots.
@@ -611,7 +633,7 @@ namespace T3.Gui.Graph
 
                     var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
                     var output = instance.Outputs.Single(output2 => output2.Id == outputDef.Id);
-                    
+
                     ImGui.SetTooltip($".{outputDef.Name}<{TypeNameRegistry.Entries[outputDef.ValueType]}>\nevaluated: {output.DirtyFlag.NumUpdatesWithinFrame}");
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
