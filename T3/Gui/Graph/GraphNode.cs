@@ -38,7 +38,8 @@ namespace T3.Gui.Graph
             _drawList = Graph.DrawList;
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-                childUi.Size = ComputeNodeSize(childUi, visibleInputUis);
+                var newNodeSize = ComputeNodeSize(childUi, visibleInputUis);
+                AdjustGroupLayoutAfterResize(childUi, newNodeSize);
                 _usableScreenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas,
                                                                                  childUi.PosOnCanvas + childUi.Size));
                 _usableScreenRect.Floor();
@@ -101,8 +102,6 @@ namespace T3.Gui.Graph
                 // Interaction
                 ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
                 ImGui.InvisibleButton("node", _selectableScreenRect.GetSize());
-
-                var hoveredBeforeContextMenu = ImGui.IsItemHovered();
 
                 SelectableNodeMovement.Handle(childUi, instance);
 
@@ -439,6 +438,51 @@ namespace T3.Gui.Graph
             }
         }
 
+        private static void AdjustGroupLayoutAfterResize(ISelectableNode childUi, Vector2 newNodeSize)
+        {
+            if (childUi.Size == newNodeSize)
+                return;
+
+            var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+            var groupMembers = SelectableNodeMovement.FindSnappedNeighbours(parentUi, childUi);
+            if (groupMembers.Count > 0)
+            {
+                var heightDelta = newNodeSize.Y - childUi.Size.Y;
+                var offset = new Vector2(0, heightDelta);
+                if (heightDelta > 0)
+                {
+                    foreach (var neighbour in groupMembers)
+                    {
+                        if (neighbour == childUi)
+                            return;
+
+                        if (neighbour.PosOnCanvas.Y > childUi.PosOnCanvas.Y 
+                            && Math.Abs(neighbour.PosOnCanvas.X - childUi.PosOnCanvas.X) < SelectableNodeMovement.Tolerance)
+                        {
+                            neighbour.PosOnCanvas += offset;
+                        }
+                    }
+                }
+
+                else if (heightDelta < 0)
+                {
+                    foreach (var neighbour in groupMembers)
+                    {
+                        if (neighbour == childUi)
+                            return;
+
+                        if (neighbour.PosOnCanvas.Y > childUi.PosOnCanvas.Y 
+                            && Math.Abs(neighbour.PosOnCanvas.X - childUi.PosOnCanvas.X) < SelectableNodeMovement.Tolerance)
+                        {
+                            neighbour.PosOnCanvas += offset;
+                        }
+                    }
+                }
+            }
+
+            childUi.Size = newNodeSize;
+        }
+
         /// <summary>
         /// @cynic: FIXME: this is a stub for custom UI rendering 
         /// </summary>
@@ -446,7 +490,7 @@ namespace T3.Gui.Graph
         {
             if (!(instance is Value v))
                 return false;
-            
+
             var opacity = (float)Math.Sin(ImGui.GetTime());
             _drawList.AddRectFilled(_selectableScreenRect.Min, _selectableScreenRect.Max, new Color(1, 1, 0, 0.2f * opacity));
             ImGui.SetCursorScreenPos(_selectableScreenRect.Min + Vector2.One * 10);
