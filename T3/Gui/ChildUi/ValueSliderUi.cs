@@ -1,0 +1,50 @@
+﻿using System;
+using System.Numerics;
+using ImGuiNET;
+using T3.Core;
+using T3.Core.Logging;
+using T3.Core.Operator;
+using T3.Gui.InputUi;
+using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
+using T3.Operators.Types.Id_d6384148_c654_48ce_9cf4_9adccf91283a;
+using UiHelpers;
+
+namespace T3.Gui.ChildUi
+{
+    public static class ValueSliderUi
+    {
+        public static bool DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        {
+            if (!(instance is ValueSlider valueSlider))
+                return false;
+
+            var innerRect = selectableScreenRect;
+            innerRect.Expand(-4);
+            drawList.AddRect(innerRect.Min,innerRect.Max, Color.Black);
+            
+
+            var t = valueSlider.Input.Value.Clamp(0, 1);
+            var x = innerRect.Min.X - _handleWSize.X/2f + innerRect.GetWidth() * t;
+            drawList.AddRectFilled(innerRect.Min, new Vector2(x, innerRect.Max.Y), 
+                                   new Color(0.3f,0.4f,1f,0.4f));
+            
+            ImGui.SetCursorScreenPos( new Vector2(x , innerRect.Min.Y) );
+            ImGui.Button(" ", new Vector2(_handleWSize.X, innerRect.GetHeight()));
+
+            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
+            {
+                var newT = ((ImGui.GetMousePos().X - innerRect.Min.X)/ innerRect.GetWidth()).Clamp(0,1);
+                
+                valueSlider.Input.TypedInputValue.Value = newT;
+                valueSlider.Input.Value = newT;
+                valueSlider.Input.DirtyFlag.Invalidate();
+            }
+            
+            ImGui.SameLine();
+            ImGui.Text($"  {valueSlider.Result.Value:0.00}");
+            
+            return true;
+        }
+        private static Vector2 _handleWSize = new Vector2(10,20);
+    }
+}

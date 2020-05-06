@@ -222,7 +222,7 @@ namespace T3.Gui.Graph.Interaction
             return snappedChildren;
         }
 
-        private const float Tolerance = 0.1f;
+        public const float Tolerance = 0.1f;
 
         private static Alignment AreChildUisSnapped(ISelectableNode childA, ISelectableNode childB)
         {
@@ -260,6 +260,51 @@ namespace T3.Gui.Graph.Interaction
             }
 
             return Alignment.NoSnapped;
+        }
+
+        
+
+        private static double RecursivelyAlignChildrenOfSelectedOps(SymbolChildUi childUi, List<ISelectableNode> freshlySnappedOpWidgets)
+        {
+            var connectedInstances = GetConnectedInstances(childUi);
+            var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.SymbolChildId];
+            var connectedChildUis = connectedInstances
+                                   .Select(ci => parentUi.ChildUis.Single(childUi2 => childUi2.Id == ci.SymbolChildId))
+                                   .ToList();
+            
+            var compositionSymbol = GraphCanvas.Current.CompositionOp.Symbol;
+            
+            // var childUis = (from con in compositionSymbol.Connections
+            //                 where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
+            //                 from childUi in compositionSymbolUi.ChildUis
+            //                 where con.SourceParentOrChildId == childUi.Id
+            //                 select childUi).Distinct();            
+
+            foreach (var connectedChild in connectedChildUis)
+            {
+                if (childUi.IsSelected)
+                    continue;
+                
+                
+            }
+            return 0;
+        }
+
+        private static List<Instance> GetConnectedInstances(SymbolChildUi childUi)
+        {
+            var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+
+            var connectedInstances = new List<Instance>();
+            foreach (var i in instance.Inputs)
+            {
+                if (!i.IsConnected)
+                    continue;
+
+                var connection = instance.Parent.Symbol.Connections.Single(c => c.TargetParentOrChildId == instance.SymbolChildId);
+                connectedInstances.Add(instance.Parent.Children.Single(child => child.SymbolChildId == connection.SourceParentOrChildId));
+            }
+
+            return connectedInstances;
         }
 
         private enum Alignment
