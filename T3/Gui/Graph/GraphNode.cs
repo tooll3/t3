@@ -115,7 +115,7 @@ namespace T3.Gui.Graph
                     T3Ui.AddHoveredId(childUi.SymbolChild.Id);
 
                     ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
-                    if (UserSettings.Config.HoverMode != GraphCanvas.HoverModes.Disabled 
+                    if (UserSettings.Config.HoverMode != GraphCanvas.HoverModes.Disabled
                         && !ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                     {
                         ImGui.BeginTooltip();
@@ -195,18 +195,22 @@ namespace T3.Gui.Graph
                 var typeColor = childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
                                     ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
                                     : Color.Gray;
-                var backgroundColor = typeColor;
-                if (framesSinceLastUpdate > 2)
-                {
-                    var fadeFactor = Im.Remap(framesSinceLastUpdate, 0f, 60f, 1f, 0.4f);
-                    backgroundColor.Rgba.W *= fadeFactor;
-                }
 
-                // background
-                drawList.AddRectFilled(_usableScreenRect.Min, _usableScreenRect.Max,
-                                       hovered
-                                           ? ColorVariations.OperatorHover.Apply(backgroundColor)
-                                           : ColorVariations.Operator.Apply(backgroundColor));
+                if (!usesCustomUi)
+                {
+                    var backgroundColor = typeColor;
+                    if (framesSinceLastUpdate > 2)
+                    {
+                        var fadeFactor = Im.Remap(framesSinceLastUpdate, 0f, 60f, 1f, 0.4f);
+                        backgroundColor.Rgba.W *= fadeFactor;
+                    }
+
+                    // background
+                    drawList.AddRectFilled(_usableScreenRect.Min, _usableScreenRect.Max,
+                                           hovered
+                                               ? ColorVariations.OperatorHover.Apply(backgroundColor)
+                                               : ColorVariations.Operator.Apply(backgroundColor));
+                }
 
                 DrawPreview();
 
@@ -458,7 +462,7 @@ namespace T3.Gui.Graph
                         if (neighbour == childUi)
                             return;
 
-                        if (neighbour.PosOnCanvas.Y > childUi.PosOnCanvas.Y 
+                        if (neighbour.PosOnCanvas.Y > childUi.PosOnCanvas.Y
                             && Math.Abs(neighbour.PosOnCanvas.X - childUi.PosOnCanvas.X) < SelectableNodeMovement.Tolerance)
                         {
                             neighbour.PosOnCanvas += offset;
@@ -473,7 +477,7 @@ namespace T3.Gui.Graph
                         if (neighbour == childUi)
                             return;
 
-                        if (neighbour.PosOnCanvas.Y > childUi.PosOnCanvas.Y 
+                        if (neighbour.PosOnCanvas.Y > childUi.PosOnCanvas.Y
                             && Math.Abs(neighbour.PosOnCanvas.X - childUi.PosOnCanvas.X) < SelectableNodeMovement.Tolerance)
                         {
                             neighbour.PosOnCanvas += offset;
