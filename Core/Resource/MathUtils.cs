@@ -39,22 +39,22 @@ namespace T3.Core
 
         public static float SmootherStep(float min, float max, float value)
         {
-            var t = Math.Max(0, Math.Min(1, (value-min)/(max-min)));
+            var t = Math.Max(0, Math.Min(1, (value - min) / (max - min)));
             return Fade(t);
         }
-        
+
         private static float SmoothStep(float min, float max, float value)
         {
-            var x = Math.Max(0, Math.Min(1, (value-min)/(max-min)));
+            var x = Math.Max(0, Math.Min(1, (value - min) / (max - min)));
             return x * x * (3 - 2 * x);
         }
-        
+
         private static double SmoothStep(double min, double max, double value)
         {
-            var x = Math.Max(0, Math.Min(1, (value-min)/(max-min)));
+            var x = Math.Max(0, Math.Min(1, (value - min) / (max - min)));
             return x * x * (3 - 2 * x);
         }
-        
+
         public static Vector2 Clamp(Vector2 v, Vector2 mn, Vector2 mx)
         {
             return new Vector2((v.X < mn.X)
@@ -73,8 +73,7 @@ namespace T3.Core
         {
             return lhs.CompareTo(rhs) >= 0 ? lhs : rhs;
         }
-        
-        
+
         public static T Clamp<T>(this T val, T min, T max) where T : System.IComparable<T>
         {
             if (val.CompareTo(min) < 0) return min;
@@ -86,8 +85,7 @@ namespace T3.Core
         {
             return (float)(a + (b - a) * t);
         }
-        
-        
+
         public static float Fmod(float v, float mod)
         {
             return v - mod * (float)Math.Floor(v / mod);
@@ -103,7 +101,7 @@ namespace T3.Core
             var factor = (value - inMin) / (inMax - inMin);
             var v = factor * (outMax - outMin) + outMin;
             if (outMin > outMax)
-                Swap(ref outMin, ref outMax);
+                Utilities.Swap(ref outMin, ref outMax);
             return v.Clamp(outMin, outMax);
         }
 
@@ -122,7 +120,7 @@ namespace T3.Core
 
             return v;
         }
-        
+
         public static Vector2 Min(Vector2 lhs, Vector2 rhs)
         {
             return new Vector2(lhs.X < rhs.X ? lhs.X : rhs.X, lhs.Y < rhs.Y ? lhs.Y : rhs.Y);
@@ -138,7 +136,6 @@ namespace T3.Core
             return new Vector2(lhs.X >= rhs.X ? lhs.X : rhs.X, lhs.Y >= rhs.Y ? lhs.Y : rhs.Y);
         }
 
-
         public static Vector2 Lerp(Vector2 a, Vector2 b, float t)
         {
             return new Vector2(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t);
@@ -152,13 +149,6 @@ namespace T3.Core
         public static int Lerp(int a, int b, float t)
         {
             return (int)(a + (b - a) * t);
-        }
-
-        public static void Swap<T>(ref T a, ref T b)
-        {
-            T tmp = a;
-            a = b;
-            b = tmp;
         }
     }
 }

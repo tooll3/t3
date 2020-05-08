@@ -59,12 +59,11 @@ namespace T3.Core.DataTypes
 
                 foreach (var keyEntry in (JArray)gradientToken["Steps"])
                 {
-                    Steps.Add(new Step()
+                    Steps.Add(new Step
                                   {
                                       NormalizedPosition = keyEntry["NormalizedPosition"].Value<float>(),
                                       Id = Guid.Parse(keyEntry["Id"].Value<string>()),
-                                      Color = new Vector4(
-                                                          keyEntry["Color"]["R"].Value<float>(),
+                                      Color = new Vector4(keyEntry["Color"]["R"].Value<float>(),
                                                           keyEntry["Color"]["G"].Value<float>(),
                                                           keyEntry["Color"]["B"].Value<float>(),
                                                           keyEntry["Color"]["A"].Value<float>()),
@@ -81,13 +80,14 @@ namespace T3.Core.DataTypes
 
         public Gradient Clone()
         {
-            return new Gradient()
+            return new Gradient
                        {
-                           Steps = Steps.Select(step => new Step()
+                           Steps = Steps.Select(step => new Step
                                                             {
-                                                                NormalizedPosition = step.NormalizedPosition, 
+                                                                NormalizedPosition = step.NormalizedPosition,
                                                                 Color = step.Color,
-                                                            }).ToList(),
+                                                            })
+                                        .ToList(),
                            Interpolation = Interpolation,
                        };
         }
@@ -109,14 +109,9 @@ namespace T3.Core.DataTypes
                         return step.Color;
                     }
 
-                    return Vector4.Lerp(
-                                        previousStep.Color,
-                                        step.Color,
-                                        MathUtils.Remap(t,
-                                                        previousStep.NormalizedPosition,
-                                                        step.NormalizedPosition,
-                                                        0,
-                                                        1));
+                    float amount = MathUtils.Remap(t, previousStep.NormalizedPosition, step.NormalizedPosition, 0, 1);
+
+                    return Vector4.Lerp(previousStep.Color, step.Color, amount);
                 }
 
                 previousStep = step;
@@ -127,15 +122,15 @@ namespace T3.Core.DataTypes
 
         private static List<Step> CreateDefaultSteps()
         {
-            return new List<Step>()
+            return new List<Step>
                        {
-                           new Step()
+                           new Step
                                {
                                    NormalizedPosition = 0,
                                    Color = new Vector4(1, 0, 1, 1),
                                    Id = Guid.NewGuid(),
                                },
-                           new Step()
+                           new Step
                                {
                                    NormalizedPosition = 1,
                                    Color = new Vector4(0, 0, 1, 1),

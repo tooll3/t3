@@ -107,6 +107,9 @@
     <Compile Include="Animation\TimeRange.cs" />
     <Compile Include="Animation\Utils.cs" />
     <Compile Include="Animation\VDefinition.cs" />
+    <Compile Include="DataTypes\EmitterCounter.cs" />
+    <Compile Include="DataTypes\Gradient.cs" />
+    <Compile Include="DataTypes\ParticleSystem.cs" />
     <Compile Include="Logging\ConsoleWriter.cs" />
     <Compile Include="Logging\ILogWriter.cs" />
     <Compile Include="Logging\Log.cs" />
@@ -117,8 +120,6 @@
     <Compile Include="Operator\Attributes\OperatorAttribute.cs" />
     <Compile Include="Operator\Attributes\OutputAttribute.cs" />
     <Compile Include="Operator\EvaluationContext.cs" />
-    <Compile Include="Operator\Helper\EmitterCounter.cs" />
-    <Compile Include="Operator\Helper\ParticleSystem.cs" />
     <Compile Include="Operator\Instance.cs" />
     <Compile Include="Operator\Slots\DirtyFlag.cs" />
     <Compile Include="Operator\Slots\DirtyFlagTrigger.cs" />
@@ -137,7 +138,6 @@
     <Compile Include="Operator\SymbolChild.cs" />
     <Compile Include="Operator\SymbolRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resource\DataTypes\Gradient.cs" />
     <Compile Include="Resource\Json.cs" />
     <Compile Include="Resource\MathUtils.cs" />
     <Compile Include="Resource\Model.cs" />

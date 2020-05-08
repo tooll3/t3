@@ -23,5 +23,12 @@ namespace T3.Core
             list[indexA] = list[indexB];
             list[indexB] = tmp;
         }
+
+        public static void Swap<T>(ref T a, ref T b)
+        {
+            T tmp = a;
+            a = b;
+            b = tmp;
+        }
     }
 }
