@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -59,12 +58,10 @@ namespace T3.Core.DataTypes
                                       Interpolation = (Interpolations)Enum.Parse(typeof(Interpolations), keyEntry["Interpolation"].Value<string>()),
                                       NormalizedPosition = keyEntry["NormalizedPosition"].Value<float>(),
                                       Id = keyEntry["Id"].Value<Guid>(),
-                                      Color = new Vector4(
-                                                          keyEntry["Color"]["R"].Value<float>(),
+                                      Color = new Vector4(keyEntry["Color"]["R"].Value<float>(),
                                                           keyEntry["Color"]["G"].Value<float>(),
                                                           keyEntry["Color"]["B"].Value<float>(),
-                                                          keyEntry["Color"]["A"].Value<float>()
-                                                         ),
+                                                          keyEntry["Color"]["A"].Value<float>()),
                                   });
                 }
             }

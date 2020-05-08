@@ -197,6 +197,51 @@ namespace T3.Core
             // t3 core types
             RegisterType(typeof(Command), "Command",
                          () => new InputValue<Command>(null));
+            RegisterType(typeof(Animation.Curve), "Curve",
+                         InputDefaultValueCreator<Animation.Curve>,
+                         (writer, obj) =>
+                         {
+                             Animation.Curve curve = (Animation.Curve)obj;
+                             writer.WriteStartObject();
+                             curve?.Write(writer);
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             Animation.Curve curve = new Animation.Curve();
+                             if (jsonToken == null || !jsonToken.HasValues)
+                             {
+                                 curve.AddOrUpdateV(0, new VDefinition(){ Value = 0});
+                                 curve.AddOrUpdateV(1, new VDefinition(){ Value = 1});
+                             }
+                             else
+                             {
+                                 curve.Read(jsonToken);
+                             }
+                             return curve;
+                         });
+            RegisterType(typeof(Gradient), "Gradient",
+                         InputDefaultValueCreator<Gradient>,
+                         (writer, obj) =>
+                         {
+                             Gradient gradient = (Gradient)obj;
+                             writer.WriteStartObject();
+                             gradient?.Write(writer);
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             Gradient gradient = new Gradient();
+                             if (jsonToken == null || !jsonToken.HasValues)
+                             {
+                                 gradient = new Gradient();
+                             }
+                             else
+                             {
+                                 gradient.Read(jsonToken);
+                             }
+                             return gradient;
+                         });
             RegisterType(typeof(ParticleSystem), "ParticleSystem",
                          () => new InputValue<ParticleSystem>(new ParticleSystem()));
             
@@ -331,51 +376,6 @@ namespace T3.Core
                              return new Size2(width, height);
                          });
             
-            RegisterType(typeof(Animation.Curve), "Curve",
-                         InputDefaultValueCreator<Animation.Curve>,
-                         (writer, obj) =>
-                         {
-                             Animation.Curve curve = (Animation.Curve)obj;
-                             writer.WriteStartObject();
-                             curve?.Write(writer);
-                             writer.WriteEndObject();
-                         },
-                         jsonToken =>
-                         {
-                             Animation.Curve curve = new Animation.Curve();
-                             if (jsonToken == null || !jsonToken.HasValues)
-                             {
-                                 curve.AddOrUpdateV(0, new VDefinition(){ Value = 0});
-                                 curve.AddOrUpdateV(1, new VDefinition(){ Value = 1});
-                             }
-                             else
-                             {
-                                 curve.Read(jsonToken);
-                             }
-                             return curve;
-                         });
-            RegisterType(typeof(Gradient), "Gradient",
-                         InputDefaultValueCreator<Gradient>,
-                         (writer, obj) =>
-                         {
-                             Gradient gradient = (Gradient)obj;
-                             writer.WriteStartObject();
-                             gradient?.Write(writer);
-                             writer.WriteEndObject();
-                         },
-                         jsonToken =>
-                         {
-                             Gradient gradient = new Gradient();
-                             if (jsonToken == null || !jsonToken.HasValues)
-                             {
-                                 gradient = new Gradient();
-                             }
-                             else
-                             {
-                                 gradient.Read(jsonToken);
-                             }
-                             return gradient;
-                         });            
         }
 
         public static void RegisterType(Type type, string typeName,

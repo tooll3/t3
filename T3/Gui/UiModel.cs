@@ -66,7 +66,6 @@ namespace T3.Gui
                            () => new ValueOutputUi<Core.Animation.Curve>());
             RegisterUiType(typeof(Core.DataTypes.Gradient), new FloatUiProperties(), () => new GradientInputUi(),
                            () => new ValueOutputUi<Core.DataTypes.Gradient>());
-            
             RegisterUiType(typeof(ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<ParticleSystem>(),
                            () => new ValueOutputUi<ParticleSystem>());
 
