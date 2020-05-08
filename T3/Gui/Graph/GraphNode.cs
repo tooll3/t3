@@ -280,6 +280,8 @@ namespace T3.Gui.Graph
             }
             ImGui.PopID();
 
+            var connectionBorderArea = _selectableScreenRect;
+            connectionBorderArea.Min.X -= 4;
             // Input Sockets...
             for (var inputIndex = 0; inputIndex < visibleInputUis.Count; inputIndex++)
             {
@@ -349,7 +351,7 @@ namespace T3.Gui.Graph
                                           : connectedLines.Count;
 
                     var socketHeight = (usableSlotArea.GetHeight() + 1) / socketCount;
-                    var targetPos = new Vector2(usableSlotArea.Max.X - 2,
+                    var targetPos = new Vector2(usableSlotArea.Max.X - 4,
                                                 usableSlotArea.Min.Y + socketHeight * 0.5f);
 
                     var topLeft = new Vector2(usableSlotArea.Min.X, usableSlotArea.Min.Y);
@@ -375,7 +377,7 @@ namespace T3.Gui.Graph
                                            : connectedLines[index];
 
                             line.TargetPosition = targetPos;
-                            line.TargetNodeArea = _selectableScreenRect;
+                            line.TargetNodeArea = connectionBorderArea;
                             line.IsSelected |= childUi.IsSelected;
                         }
 
@@ -397,9 +399,9 @@ namespace T3.Gui.Graph
                 {
                     foreach (var line in connectedLines)
                     {
-                        line.TargetPosition = new Vector2(usableSlotArea.Max.X - 1,
+                        line.TargetPosition = new Vector2(usableSlotArea.Max.X - 4,
                                                           usableSlotArea.GetCenter().Y);
-                        line.TargetNodeArea = _selectableScreenRect;
+                        line.TargetNodeArea = connectionBorderArea;
                         line.IsSelected |= childUi.IsSelected;
                     }
 

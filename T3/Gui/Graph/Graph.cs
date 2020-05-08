@@ -82,7 +82,7 @@ namespace T3.Gui.Graph
                 InputNode.Draw(inputDef, inputNode.Value, index);
 
                 var sourcePos = new Vector2(
-                                            InputNode._lastScreenRect.Max.X,
+                                            InputNode._lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
                                             InputNode._lastScreenRect.GetCenter().Y
                                            );
 
