@@ -36,25 +36,26 @@ namespace T3.Gui.InputUi
                 return InputEditStateFlags.Nothing;
             }
             
-            ImGui.Dummy(Vector2.One);    // Add Line Break
-
-            InputEditStateFlags inputEditStateFlags = InputEditStateFlags.Nothing;
+            var inputEditStateFlags = InputEditStateFlags.Nothing;
 
             if (isDefaultValue)
             {
                 gradient = gradient.Clone(); // cloning here every frame when the curve is default would be awkward, so can this be cached somehow?
                 inputEditStateFlags |= InputEditStateFlags.Modified; // the will clear the IsDefault flag after editing
             }
-
-            // TODO: DrawGradient Editor
-            //inputEditStateFlags |= CurveInputEditing.DrawCanvasForCurve(curve);
+            
+            inputEditStateFlags |= DrawEditor(gradient);
 
             return inputEditStateFlags;
         }
 
+        // TODO: Implement proper edit flags and Undo
         private static InputEditStateFlags DrawEditor(Gradient gradient)
         {
-            var area = new ImRect(ImGui.GetCursorScreenPos(), ImGui.GetCursorScreenPos() + new Vector2(200, 20));
+            var size = new Vector2(ImGui.GetContentRegionAvail().X, 
+                                   ImGui.GetFrameHeight());
+            var area = new ImRect(ImGui.GetCursorScreenPos(), 
+                                  ImGui.GetCursorScreenPos() + size);
             var modified= GradientEditor.Draw(gradient, ImGui.GetWindowDrawList(), area);
             return modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
