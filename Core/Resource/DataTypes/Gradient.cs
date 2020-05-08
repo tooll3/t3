@@ -9,20 +9,19 @@ namespace T3.Core.DataTypes
 {
     public class Gradient
     {
-        public List<Step> Steps = CreateDefaultSteps();
-
         public virtual void Write(JsonTextWriter writer)
         {
             writer.WritePropertyName(typeof(Gradient).Name);
             writer.WriteStartObject();
 
+            writer.WriteObject("Interpolation", Interpolation);
             writer.WritePropertyName("Steps");
             writer.WriteStartArray();
 
             foreach (var step in Steps)
             {
                 writer.WriteStartObject();
-
+                writer.WriteObject("Id", step.Id);
                 writer.WriteValue("NormalizedPosition", step.NormalizedPosition);
 
                 writer.WritePropertyName("Color");
@@ -33,15 +32,15 @@ namespace T3.Core.DataTypes
                 writer.WriteValue("A", step.Color.W);
                 writer.WriteEndObject();
 
-                writer.WriteObject("Interpolation", step.Interpolation);
-                writer.WriteObject("Id", step.Id);
-
                 writer.WriteEndObject();
             }
 
             writer.WriteEndArray();
             writer.WriteEndObject();
         }
+
+        public List<Step> Steps = CreateDefaultSteps();
+        public Interpolations Interpolation;
 
         public virtual void Read(JToken inputToken)
         {
@@ -52,15 +51,21 @@ namespace T3.Core.DataTypes
 
             try
             {
+                if (inputToken["Interpolation"] != null)
+                {
+                    Interpolation = (Interpolations)Enum.Parse(typeof(Interpolations), inputToken["Interpolation"].Value<string>());
+                }
+                else
+                {
+                    
+                }
+
                 foreach (var keyEntry in (JArray)gradientToken["Steps"])
                 {
-
-                    var id = Guid.Parse(keyEntry["Id"].Value<string>());
                     Steps.Add(new Step()
                                   {
-                                      Interpolation = (Interpolations)Enum.Parse(typeof(Interpolations), keyEntry["Interpolation"].Value<string>()),
                                       NormalizedPosition = keyEntry["NormalizedPosition"].Value<float>(),
-                                      Id = id,
+                                      Id = Guid.Parse(keyEntry["Id"].Value<string>()),
                                       Color = new Vector4(
                                                           keyEntry["Color"]["R"].Value<float>(),
                                                           keyEntry["Color"]["G"].Value<float>(),
@@ -83,6 +88,39 @@ namespace T3.Core.DataTypes
                        {
                            Steps = new List<Step>(Steps) //FIXME: this should also create new ids for steps
                        };
+        }
+
+        /// <remarks>
+        /// this assumes that steps have been sorted by GradientEditor
+        /// </remarks>
+        public Vector4 Sample(float t)
+        {
+            t = t.Clamp(0, 1);
+            Step previousStep = null;
+
+            foreach (var step in Steps)
+            {
+                if (step.NormalizedPosition >= t)
+                {
+                    if (previousStep == null || previousStep.NormalizedPosition >= step.NormalizedPosition)
+                    {
+                        return step.Color;
+                    }
+
+                    return Vector4.Lerp(
+                                        previousStep.Color,
+                                        step.Color,
+                                        MathUtils.Remap(t,
+                                                        previousStep.NormalizedPosition,
+                                                        step.NormalizedPosition,
+                                                        0,
+                                                        1));
+                }
+
+                previousStep = step;
+            }
+
+            return previousStep?.Color ?? Vector4.One;
         }
 
         private static List<Step> CreateDefaultSteps()
@@ -108,7 +146,6 @@ namespace T3.Core.DataTypes
         {
             public float NormalizedPosition;
             public Vector4 Color;
-            public Interpolations Interpolation;
             public Guid Id;
         }
 
