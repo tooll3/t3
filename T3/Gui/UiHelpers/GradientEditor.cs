@@ -9,7 +9,6 @@ namespace T3.Gui.UiHelpers
 {
     public static class GradientEditor
     {
-
         /// <summary>
         /// Draw a gradient control that returns true, if gradient has been modified
         /// </summary>
@@ -30,11 +29,11 @@ namespace T3.Gui.UiHelpers
                 var color = ImGui.ColorConvertFloat4ToU32(step.Color);
                 maxPos.X = areaOnScreen.Min.X + areaOnScreen.GetWidth() * step.NormalizedPosition;
                 drawList.AddRectFilledMultiColor(lastPos,
-                                                  maxPos,
-                                                  lastColor,
-                                                  color,
-                                                  color,
-                                                  lastColor);
+                                                 maxPos,
+                                                 lastColor,
+                                                 color,
+                                                 color,
+                                                 lastColor);
                 lastPos.X = maxPos.X;
                 lastColor = color;
             }
@@ -42,68 +41,87 @@ namespace T3.Gui.UiHelpers
             if (lastPos.X < areaOnScreen.Max.X)
             {
                 drawList.AddRectFilled(lastPos, areaOnScreen.Max, lastColor);
-            } 
-            
-            
-            // Draw handles
-            foreach (var step in gradient.Steps)
-            {
-                ImGui.PushID(step.Id.GetHashCode());
-                var x = areaOnScreen.Min.X - StepHandleSize.X / 2f + areaOnScreen.GetWidth() * step.NormalizedPosition;
-
-                var stepAreaMin = new Vector2(x, areaOnScreen.Min.Y);
-                var stepAreaMax = new Vector2(x + StepHandleSize.X, areaOnScreen.Max.Y);
-
-                drawList.AddRectFilled(stepAreaMin, stepAreaMax, ImGui.ColorConvertFloat4ToU32(step.Color));
-                drawList.AddRect(stepAreaMin, stepAreaMax, Color.Black);
-
-                drawList.AddRect(stepAreaMin+ Vector2.One, stepAreaMax- Vector2.One, Color.White);
-
-                ImGui.SetCursorScreenPos(stepAreaMin);
-                ImGui.InvisibleButton("gradientStep", new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
-
-                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
-                {
-                    step.NormalizedPosition = ((ImGui.GetMousePos().X - areaOnScreen.Min.X) / areaOnScreen.GetWidth()).Clamp(0, 1);
-                    modified = true;
-                }
-
-                if(ImGui.IsItemHovered() 
-                   && ImGui.IsMouseReleased(0) 
-                   && ImGui.GetIO().MouseDragMaxDistanceAbs[0].LengthSquared() < 2
-                   && !ImGui.IsPopupOpen("##colorEdit")) 
-                    ImGui.OpenPopup("##colorEdit");
-                
-                if (ImGui.BeginPopupContextItem("##colorEdit"))
-                {
-                    modified= ImGui.ColorPicker4("edit", ref step.Color, ImGuiColorEditFlags.Float| ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreview);
-                    ImGui.EndPopup();
-                }
-
-                ImGui.PopID();
             }
-            
-            // Insert new range
-            if (areaOnScreen.GetHeight() > MinInsertHeight)
+
+            // Draw handles
+            var anyHandleHovered = false;
+            if (areaOnScreen.GetHeight() >= RequiredHeightForHandles)
             {
-                var insertRangeMin = new Vector2(areaOnScreen.Min.X, areaOnScreen.Max.Y - MinInsertHeight *0.5f);
-                
-                drawList.AddRectFilled(insertRangeMin, areaOnScreen.Max, new Color(0,0,0,0.1f));
-                ImGui.SetCursorScreenPos(insertRangeMin);
-                if (ImGui.InvisibleButton("insertRange",  areaOnScreen.Max - insertRangeMin))
+                foreach (var step in gradient.Steps)
                 {
-                    gradient.Steps.Add(new Gradient.Step()
-                                           {
-                                               NormalizedPosition =   (ImGui.GetMousePos().X - insertRangeMin.X) / areaOnScreen.GetWidth(),
-                                               Id =  Guid.NewGuid(),
-                                           });
-                    modified = true;
+                    ImGui.PushID(step.Id.GetHashCode());
+                    var handleArea = GetHandleAreaForPosition(step.NormalizedPosition);
+                    drawList.AddRectFilled(handleArea.Min, handleArea.Max, ImGui.ColorConvertFloat4ToU32(step.Color));
+                    drawList.AddRect(handleArea.Min, handleArea.Max, Color.Black);
+                    drawList.AddRect(handleArea.Min + Vector2.One, handleArea.Max - Vector2.One, Color.White);
+
+                    ImGui.SetCursorScreenPos(handleArea.Min);
+                    ImGui.InvisibleButton("gradientStep", new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
+
+                    if(ImGui.IsItemHovered()) 
+                        anyHandleHovered = true;
+                    
+                    if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
+                    {
+                        step.NormalizedPosition = ((ImGui.GetMousePos().X - areaOnScreen.Min.X) / areaOnScreen.GetWidth()).Clamp(0, 1);
+                        modified = true;
+                    }
+
+                    if (ImGui.IsItemHovered()
+                        && ImGui.IsMouseReleased(0)
+                        && ImGui.GetIO().MouseDragMaxDistanceAbs[0].LengthSquared() < 2
+                        && !ImGui.IsPopupOpen("##colorEdit"))
+                        ImGui.OpenPopup("##colorEdit");
+
+                    if (ImGui.BeginPopupContextItem("##colorEdit"))
+                    {
+                        anyHandleHovered = true;
+                        modified = ImGui.ColorPicker4("edit", ref step.Color,
+                                                      ImGuiColorEditFlags.Float | ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreview);
+                        ImGui.EndPopup();
+                    }
+
+                    ImGui.PopID();
+                }
+
+                // Insert new range
+                if (areaOnScreen.GetHeight() > MinInsertHeight)
+                {
+                    var insertRangeMin = new Vector2(areaOnScreen.Min.X, areaOnScreen.Max.Y - StepHandleSize.Y);
+                    ImGui.SetCursorScreenPos(insertRangeMin);
+                    
+                    var normalizedPosition = (ImGui.GetMousePos().X - insertRangeMin.X) / areaOnScreen.GetWidth();
+                    
+                    if (ImGui.InvisibleButton("insertRange", areaOnScreen.Max - insertRangeMin))
+                    {
+                        gradient.Steps.Add(new Gradient.Step()
+                                               {
+                                                   NormalizedPosition = normalizedPosition,
+                                                   Id = Guid.NewGuid(),
+                                                   Color = gradient.Sample(normalizedPosition)
+                                               });
+                        modified = true;
+                    }
+
+                    if (ImGui.IsItemHovered() && !ImGui.IsItemActive() && !anyHandleHovered)
+                    {
+                        var handleArea = GetHandleAreaForPosition(normalizedPosition);
+                        drawList.AddRect(handleArea.Min + Vector2.One, handleArea.Max - Vector2.One, new Color(1f,1f,1f,0.4f));
+                    }
                 }
             }
 
             return modified;
+            
+            ImRect GetHandleAreaForPosition(float normalizedPosition)
+            {
+                var x = areaOnScreen.Min.X - StepHandleSize.X / 2f + areaOnScreen.GetWidth() * normalizedPosition;
+                return new ImRect(new Vector2(x, areaOnScreen.Max.Y - StepHandleSize.Y), new Vector2(x + StepHandleSize.X, areaOnScreen.Max.Y + 2));
+            }
         }
 
+
+        private const float RequiredHeightForHandles = 20;
         private const int MinInsertHeight = 20;
         public static readonly Vector2 StepHandleSize = new Vector2(10, 20);
     }

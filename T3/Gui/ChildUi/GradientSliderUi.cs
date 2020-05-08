@@ -16,7 +16,7 @@ namespace T3.Gui.ChildUi
                 return false;
 
             var innerRect = selectableScreenRect;
-            innerRect.Expand(-4);
+            innerRect.Expand(-7);
 
             var gradient = gradientSlider.Gradient.Value;
             if (gradient == null)
