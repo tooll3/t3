@@ -256,17 +256,8 @@ namespace T3.Gui.InputUi
                         // editing is already done when the return value of the ImGui edit control tells us
                         // that editing has happened this here is a simple way to ensure that the default value
                         // is always correct but editing is only happening on the input value.
-                        bool isEditableInputType = !input.Value.ValueType.IsValueType && typedInputSlot.TypedDefaultValue.Value is IEditableInputType;
-                        if (isEditableInputType)
-                        {
-                            input.Value.AssignClone(input.DefaultValue);
-                            editState |= InputEditStateFlags.Modified;
-                            input.IsDefault = false;
-                        }
-                        else
-                        {
-                            input.Value.Assign(input.DefaultValue);
-                        }
+                        // bool isEditableInputType = !input.Value.ValueType.IsValueType && typedInputSlot.TypedDefaultValue.Value is IEditableInputType;
+                        input.Value.Assign(input.DefaultValue);
                     }
 
                     ImGui.SetNextItemWidth(-1);

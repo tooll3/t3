@@ -1,3 +1,5 @@
+using T3.Core.DataTypes;
+
 namespace T3.Core.Operator.Slots
 {
     public class InputSlot<T> : Slot<T>, IInputSlot
@@ -35,6 +37,12 @@ namespace T3.Core.Operator.Slots
                 _input = value;
                 TypedInputValue = (InputValue<T>)value.Value;
                 TypedDefaultValue = (InputValue<T>)value.DefaultValue;
+
+                if (_input.IsDefault && TypedDefaultValue.IsEditableInputReferenceType)
+                {
+                    TypedInputValue.AssignClone(TypedDefaultValue);
+                    _input.IsDefault = false;
+                }
             }
         }
 

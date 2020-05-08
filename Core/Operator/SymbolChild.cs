@@ -86,14 +86,30 @@ namespace T3.Core.Operator
 
             public void SetCurrentValueAsDefault()
             {
-                DefaultValue.Assign(Value);
-                IsDefault = true;
+                if (DefaultValue.IsEditableInputReferenceType)
+                {
+                    DefaultValue.AssignClone(Value);
+                    IsDefault = false;
+                }
+                else
+                {
+                    DefaultValue.Assign(Value);
+                    IsDefault = true;
+                }
             }
 
             public void ResetToDefault()
             {
-                Value.Assign(DefaultValue);
-                IsDefault = true;
+                if (DefaultValue.IsEditableInputReferenceType)
+                {
+                    Value.AssignClone(DefaultValue);
+                    IsDefault = false;
+                }
+                else
+                {
+                    Value.Assign(DefaultValue);
+                    IsDefault = true;
+                }
             }
         }
 

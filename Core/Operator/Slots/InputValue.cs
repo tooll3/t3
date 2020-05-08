@@ -13,6 +13,7 @@ namespace T3.Core.Operator
         public abstract InputValue Clone();
         public abstract void Assign(InputValue otherValue);
         public abstract void AssignClone(InputValue otherValue);
+        public abstract bool IsEditableInputReferenceType { get; }
         public abstract void ToJson(JsonTextWriter writer);
         public abstract void SetValueFromJson(JToken json);
     }
@@ -64,6 +65,8 @@ namespace T3.Core.Operator
                 Debug.Assert(false); // trying to assign different types of input values
             }
         }
+
+        public override bool IsEditableInputReferenceType => Value is IEditableInputType;
 
         public override void ToJson(JsonTextWriter writer)
         {

@@ -26,12 +26,6 @@ namespace T3.Gui.ChildUi
                 return false;
             }
             
-            // TODO: this is a work around for default initialization of reference data types
-            if (gradientSlider.Gradient.Input.IsDefault)
-            {
-                gradientSlider.Gradient.TypedInputValue.Value = new Gradient(); 
-            }            
-
             if (GradientEditor.Draw(gradient, drawList, innerRect))
             {
                 gradientSlider.Gradient.DirtyFlag.Invalidate();
