@@ -47,25 +47,45 @@ namespace T3.Gui.UiHelpers
             var anyHandleHovered = false;
             if (areaOnScreen.GetHeight() >= RequiredHeightForHandles)
             {
+                Gradient.Step removedStep = null;
                 foreach (var step in gradient.Steps)
                 {
                     ImGui.PushID(step.Id.GetHashCode());
                     var handleArea = GetHandleAreaForPosition(step.NormalizedPosition);
-                    drawList.AddRectFilled(handleArea.Min, handleArea.Max, ImGui.ColorConvertFloat4ToU32(step.Color));
-                    drawList.AddRect(handleArea.Min, handleArea.Max, Color.Black);
-                    drawList.AddRect(handleArea.Min + Vector2.One, handleArea.Max - Vector2.One, Color.White);
 
+                    // Interaction
                     ImGui.SetCursorScreenPos(handleArea.Min);
                     ImGui.InvisibleButton("gradientStep", new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
 
                     if(ImGui.IsItemHovered()) 
                         anyHandleHovered = true;
-                    
+
+                    var draggedOutside = false;
                     if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                     {
+                        draggedOutside= ImGui.GetMousePos().Y > areaOnScreen.Max.Y + 50;
+
                         step.NormalizedPosition = ((ImGui.GetMousePos().X - areaOnScreen.Min.X) / areaOnScreen.GetWidth()).Clamp(0, 1);
                         modified = true;
                     }
+                    
+                    // Draw handle
+                    if (draggedOutside)
+                    {
+                        handleArea.Min.Y += 10;
+                        handleArea.Max.Y += 10;
+                    }
+                    
+                    if (ImGui.IsItemDeactivated())
+                    {
+                        var mouseOutsideThresholdAfterDrag = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + 50;
+                        if(mouseOutsideThresholdAfterDrag && gradient.Steps.Count > 1)
+                            removedStep = step;
+                    }
+                    
+                    drawList.AddRectFilled(handleArea.Min, handleArea.Max, ImGui.ColorConvertFloat4ToU32(step.Color));
+                    drawList.AddRect(handleArea.Min, handleArea.Max, Color.Black);
+                    drawList.AddRect(handleArea.Min + Vector2.One, handleArea.Max - Vector2.One, Color.White);
 
                     if (ImGui.IsItemHovered()
                         && ImGui.IsMouseReleased(0)
@@ -83,6 +103,9 @@ namespace T3.Gui.UiHelpers
 
                     ImGui.PopID();
                 }
+
+                if (removedStep != null)
+                    gradient.Steps.Remove(removedStep);
 
                 // Insert new range
                 if (areaOnScreen.GetHeight() > MinInsertHeight)

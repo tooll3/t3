@@ -1,4 +1,6 @@
-﻿using ImGuiNET;
+﻿using System.Numerics;
+using ImGuiNET;
+using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -35,6 +37,11 @@ namespace T3.Gui.ChildUi
             {
                 gradientSlider.Gradient.DirtyFlag.Invalidate();
             }
+
+            var x = gradientSlider.SamplePos.Value.Clamp(0,1)* innerRect.GetWidth() ;
+            var pMin = new Vector2(innerRect.Min.X + x, innerRect.Min.Y);
+            var pMax = new Vector2(innerRect.Min.X + x+2, innerRect.Max.Y);
+            drawList.AddRectFilled(pMin, pMax, Color.Orange );
             
             return true;
         }
