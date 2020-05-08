@@ -105,6 +105,6 @@ namespace T3.Gui.UiHelpers
         }
 
         private const int MinInsertHeight = 20;
-        private static readonly Vector2 StepHandleSize = new Vector2(10, 20);
+        public static readonly Vector2 StepHandleSize = new Vector2(10, 20);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -55,10 +56,6 @@ namespace T3.Core.DataTypes
                 {
                     Interpolation = (Interpolations)Enum.Parse(typeof(Interpolations), inputToken["Interpolation"].Value<string>());
                 }
-                else
-                {
-                    
-                }
 
                 foreach (var keyEntry in (JArray)gradientToken["Steps"])
                 {
@@ -86,7 +83,12 @@ namespace T3.Core.DataTypes
         {
             return new Gradient()
                        {
-                           Steps = new List<Step>(Steps) //FIXME: this should also create new ids for steps
+                           Steps = Steps.Select(step => new Step()
+                                                            {
+                                                                NormalizedPosition = step.NormalizedPosition, 
+                                                                Color = step.Color,
+                                                            }).ToList(),
+                           Interpolation = Interpolation,
                        };
         }
 
