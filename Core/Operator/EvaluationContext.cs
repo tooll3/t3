@@ -13,9 +13,9 @@ namespace T3.Core.Operator
         public void Reset()
         {
             TimeInBars = GlobalTimeInBars;
-            ClipSpaceTcamera = Matrix.Identity;
-            CameraTworld = Matrix.Identity;
-            WorldTobject = Matrix.Identity;
+            CameraToClipSpace = Matrix.Identity;
+            WorldToCamera = Matrix.Identity;
+            ObjectToWorld = Matrix.Identity;
         }
 
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
@@ -26,8 +26,8 @@ namespace T3.Core.Operator
         public static double GlobalTimeInSecs { get; set; }
         public Size2 RequestedResolution;
 
-        public Matrix ClipSpaceTcamera { get; set; } = Matrix.Identity;
-        public Matrix CameraTworld { get; set; } = Matrix.Identity;
-        public Matrix WorldTobject { get; set; } = Matrix.Identity;
+        public Matrix CameraToClipSpace { get; set; } = Matrix.Identity;
+        public Matrix WorldToCamera { get; set; } = Matrix.Identity;
+        public Matrix ObjectToWorld { get; set; } = Matrix.Identity;
     }
 }
