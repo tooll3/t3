@@ -36,7 +36,7 @@ namespace T3.Core.Operator.Slots
 
         public void Clear()
         {
-            Reference = Target;//Trigger == DirtyFlagTrigger.Always ? Target - 1 : Target;
+            Reference = Target;
         }
 
         public void SetUpdated()
@@ -52,7 +52,7 @@ namespace T3.Core.Operator.Slots
         }
 
         public int Reference = 0;
-        public int Target = 1;
+        public int Target = 1; // intial dirty
         public int LastUpdate = 0;
         public int FramesSinceLastUpdate => (_globalTickCount - 1 - LastUpdate) / GLOBAL_TICK_DIFF_PER_FRAME;
 
