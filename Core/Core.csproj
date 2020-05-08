@@ -137,6 +137,7 @@
     <Compile Include="Operator\SymbolChild.cs" />
     <Compile Include="Operator\SymbolRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource\DataTypes\Gradient.cs" />
     <Compile Include="Resource\Json.cs" />
     <Compile Include="Resource\MathUtils.cs" />
     <Compile Include="Resource\Model.cs" />

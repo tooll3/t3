@@ -12,6 +12,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using T3.Core.Animation;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Helper;
@@ -353,6 +354,28 @@ namespace T3.Core
                              }
                              return curve;
                          });
+            RegisterType(typeof(Gradient), "Gradient",
+                         InputDefaultValueCreator<Gradient>,
+                         (writer, obj) =>
+                         {
+                             Gradient gradient = (Gradient)obj;
+                             writer.WriteStartObject();
+                             gradient?.Write(writer);
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             Gradient gradient = new Gradient();
+                             if (jsonToken == null || !jsonToken.HasValues)
+                             {
+                                 gradient = new Gradient();
+                             }
+                             else
+                             {
+                                 gradient.Read(jsonToken);
+                             }
+                             return gradient;
+                         });            
         }
 
         public static void RegisterType(Type type, string typeName,

@@ -64,6 +64,9 @@ namespace T3.Gui
             RegisterUiType(typeof(Command), new CommandUiProperties(), () => new FallbackInputUi<Command>(), () => new CommandOutputUi());
             RegisterUiType(typeof(Core.Animation.Curve), new FloatUiProperties(), () => new CurveInputUi(),
                            () => new ValueOutputUi<Core.Animation.Curve>());
+            RegisterUiType(typeof(Core.DataTypes.Gradient), new FloatUiProperties(), () => new GradientInputUi(),
+                           () => new ValueOutputUi<Core.DataTypes.Gradient>());
+            
             RegisterUiType(typeof(ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<ParticleSystem>(),
                            () => new ValueOutputUi<ParticleSystem>());
 

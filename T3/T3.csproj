@@ -374,6 +374,7 @@
     <Compile Include="Gui\InputUi\Float2InputUi.cs" />
     <Compile Include="Gui\InputUi\Float3InputUi.cs" />
     <Compile Include="Gui\InputUi\FloatInputUi.cs" />
+    <Compile Include="Gui\InputUi\GradientUi.cs" />
     <Compile Include="Gui\InputUi\SingleControl\BoolInputUi.cs" />
     <Compile Include="Gui\InputUi\SingleControl\Color4InputUi.cs" />
     <Compile Include="Gui\InputUi\SingleControl\FloatListInputUi.cs" />
@@ -421,6 +422,7 @@
     <Compile Include="Gui\Styling\Icons.cs" />
     <Compile Include="Gui\UiHelpers\CurvePlot.cs" />
     <Compile Include="Gui\UiHelpers\FileOperations.cs" />
+    <Compile Include="Gui\UiHelpers\GradientEditor.cs" />
     <Compile Include="Gui\UiHelpers\ModalDialog.cs" />
     <Compile Include="Gui\UiHelpers\ProjectSettings.cs" />
     <Compile Include="Gui\UiHelpers\Settings.cs" />
