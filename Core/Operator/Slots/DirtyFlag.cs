@@ -18,6 +18,7 @@ namespace T3.Core.Operator.Slots
         public static int InvalidationRefFrame { get; set; } = 0;
         private int _invalidatedWithRefFrame = -1;
         public bool IsAlreadyInvalidated => InvalidationRefFrame == _invalidatedWithRefFrame;
+
         public void Invalidate(bool forceInvalidation = false)
         {
             // Debug.Assert(!IsAlreadyInvalidated); // this should never happen and prevented on the calling side
@@ -54,7 +55,17 @@ namespace T3.Core.Operator.Slots
         public int Target = 1;
         public int LastUpdate = 0;
         public int FramesSinceLastUpdate => (_globalTickCount - 1 - LastUpdate) / GLOBAL_TICK_DIFF_PER_FRAME;
-        public int NumUpdatesWithinFrame => Math.Max(LastUpdate - _globalTickCount + GLOBAL_TICK_DIFF_PER_FRAME + 1, 0);
+
+        public int NumUpdatesWithinFrame
+        {
+            get
+            {
+                int diff = LastUpdate - _globalTickCount;
+                int shift = (-diff >= GLOBAL_TICK_DIFF_PER_FRAME) ? GLOBAL_TICK_DIFF_PER_FRAME : 0;
+                return Math.Max(diff + shift + 1, 0); // shift corrects if update was one frame ago
+            }
+        }
+
         public DirtyFlagTrigger Trigger;
     }
 }
