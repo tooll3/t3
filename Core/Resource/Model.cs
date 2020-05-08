@@ -15,8 +15,6 @@ using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Operator.Helper;
-using T3.Core.Operator.Slots;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector4 = System.Numerics.Vector4;
 
@@ -220,7 +218,7 @@ namespace T3.Core
                              }
                              return curve;
                          });
-            RegisterType(typeof(Gradient), "Gradient",
+            RegisterType(typeof(DataTypes.Gradient), "Gradient",
                          InputDefaultValueCreator<Gradient>,
                          (writer, obj) =>
                          {

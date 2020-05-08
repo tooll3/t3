@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 
 namespace T3.Core.Animation
 {
-    public class Curve
+    public class Curve : IEditableInputType
     {
         public static readonly int TIME_PRECISION = 4;
 
-        public Curve Clone()
+        public object Clone()
+        {
+            return TypedClone();
+        }
+
+        public Curve TypedClone()
         {
             return new Curve { _state = _state.Clone() };
         }

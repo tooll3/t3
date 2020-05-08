@@ -80,7 +80,7 @@ namespace T3.Core.Operator
         {
             Guid newInstanceId = oldToNewIdDict[id.InstanceId];
             var newCurveId = new CurveId(newInstanceId, id.InputId, id.Index);
-            var newCurve = curve.Clone();
+            var newCurve = curve.TypedClone();
             targetAnimator._animatedInputCurves.Add(newCurveId, newCurve);
         }
 

@@ -31,7 +31,7 @@ namespace T3.Gui.InputUi
                    };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, ref Vector3 float3Value, bool isDefaultValue)
+        protected override InputEditStateFlags DrawEditControl(string name, ref Vector3 float3Value)
         {
             float3Value.CopyTo(_components);
             var inputEditState = VectorValueEdit.Draw(_components, _min, _max, _scale);

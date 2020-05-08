@@ -8,6 +8,7 @@ using System.Linq;
 using System.Numerics;
 using T3.Core;
 using T3.Core.Animation;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -34,7 +35,7 @@ namespace T3.Gui.InputUi
         /// <summary>
         /// Wraps the implementation of an parameter control to handle <see cref="InputEditStateFlags"/>
         /// </summary>
-        protected abstract InputEditStateFlags DrawEditControl(string name, ref T value, bool isDefaultValue);
+        protected abstract InputEditStateFlags DrawEditControl(string name, ref T value);
         protected abstract void DrawReadOnlyControl(string name, ref T value);
 
         protected virtual string GetSlotValueAsString(ref T value)
@@ -255,11 +256,21 @@ namespace T3.Gui.InputUi
                         // editing is already done when the return value of the ImGui edit control tells us
                         // that editing has happened this here is a simple way to ensure that the default value
                         // is always correct but editing is only happening on the input value.
-                        input.Value.Assign(input.DefaultValue);
+                        bool isEditableInputType = !input.Value.ValueType.IsValueType && typedInputSlot.TypedDefaultValue.Value is IEditableInputType;
+                        if (isEditableInputType)
+                        {
+                            input.Value.AssignClone(input.DefaultValue);
+                            editState |= InputEditStateFlags.Modified;
+                            input.IsDefault = false;
+                        }
+                        else
+                        {
+                            input.Value.Assign(input.DefaultValue);
+                        }
                     }
 
                     ImGui.SetNextItemWidth(-1);
-                    editState |= DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value, input.IsDefault);
+                    editState |= DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
 
                     if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified ||
                         (editState & InputEditStateFlags.Finished) == InputEditStateFlags.Finished)

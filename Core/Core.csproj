@@ -109,6 +109,7 @@
     <Compile Include="Animation\VDefinition.cs" />
     <Compile Include="DataTypes\EmitterCounter.cs" />
     <Compile Include="DataTypes\Gradient.cs" />
+    <Compile Include="DataTypes\IEditableInputType.cs" />
     <Compile Include="DataTypes\ParticleSystem.cs" />
     <Compile Include="Logging\ConsoleWriter.cs" />
     <Compile Include="Logging\ILogWriter.cs" />

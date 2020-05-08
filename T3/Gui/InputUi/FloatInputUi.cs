@@ -30,7 +30,7 @@ namespace T3.Gui.InputUi
                    };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, ref float value, bool isDefaultValue)
+        protected override InputEditStateFlags DrawEditControl(string name, ref float value)
         {
             ImGui.PushID(Id.GetHashCode());
             var inputEditState = SingleValueEdit.Draw(ref value, -Vector2.UnitX, _min, _max, _scale);
@@ -61,7 +61,7 @@ namespace T3.Gui.InputUi
             foreach (var curve in curves)
             {
                 float value = (float)curve.GetSampledValue(time);
-                var editState = DrawEditControl(name, ref value, false);
+                var editState = DrawEditControl(name, ref value);
                 if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
                 {
                     var previousU = curve.GetPreviousU(time);

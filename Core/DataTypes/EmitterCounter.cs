@@ -1,4 +1,4 @@
-﻿namespace T3.Operators
+﻿namespace T3.Core.DataTypes
 {
     public static class EmitterCounter
     {

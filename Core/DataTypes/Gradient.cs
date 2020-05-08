@@ -4,11 +4,12 @@ using System.Linq;
 using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.Animation;
 using T3.Core.Logging;
 
 namespace T3.Core.DataTypes
 {
-    public class Gradient
+    public class Gradient : IEditableInputType
     {
         public virtual void Write(JsonTextWriter writer)
         {
@@ -78,7 +79,9 @@ namespace T3.Core.DataTypes
             }
         }
 
-        public Gradient Clone()
+        public object Clone() => TypedClone();
+
+        public Gradient TypedClone()
         {
             return new Gradient
                        {
@@ -86,6 +89,7 @@ namespace T3.Core.DataTypes
                                                             {
                                                                 NormalizedPosition = step.NormalizedPosition,
                                                                 Color = step.Color,
+                                                                Id = Guid.NewGuid(),
                                                             })
                                         .ToList(),
                            Interpolation = Interpolation,

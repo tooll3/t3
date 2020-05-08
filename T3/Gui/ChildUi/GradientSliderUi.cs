@@ -2,7 +2,6 @@
 using ImGuiNET;
 using T3.Core;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.UiHelpers;
 using T3.Operators.Types.Id_8211249d_7a26_4ad0_8d84_56da72a5c536;

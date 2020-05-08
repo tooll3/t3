@@ -2,6 +2,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
+using T3.Core.Animation;
+using T3.Core.DataTypes;
 
 namespace T3.Core.Operator
 {
@@ -10,6 +12,7 @@ namespace T3.Core.Operator
         public Type ValueType;
         public abstract InputValue Clone();
         public abstract void Assign(InputValue otherValue);
+        public abstract void AssignClone(InputValue otherValue);
         public abstract void ToJson(JsonTextWriter writer);
         public abstract void SetValueFromJson(JToken json);
     }
@@ -36,6 +39,25 @@ namespace T3.Core.Operator
             if (otherValue is InputValue<T> otherTypedValue)
             {
                 Value = otherTypedValue.Value;
+            }
+            else
+            {
+                Debug.Assert(false); // trying to assign different types of input values
+            }
+        }
+
+        public override void AssignClone(InputValue otherValue)
+        {
+            if (otherValue is InputValue<T> otherTypedValue)
+            {
+                if (otherTypedValue.Value is IEditableInputType editableInput)
+                {
+                    Value = (T)editableInput.Clone();
+                }
+                else
+                {
+                    Debug.Assert(false); // trying to clone non cloneable type
+                }
             }
             else
             {

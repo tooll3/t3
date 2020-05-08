@@ -14,7 +14,6 @@ using T3.Compilation;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Operator.Helper;
 using T3.Gui.ChildUi;
 using T3.Gui.InputUi;
 using T3.Gui.InputUi.SingleControl;
@@ -66,8 +65,8 @@ namespace T3.Gui
                            () => new ValueOutputUi<Core.Animation.Curve>());
             RegisterUiType(typeof(Core.DataTypes.Gradient), new FloatUiProperties(), () => new GradientInputUi(),
                            () => new ValueOutputUi<Core.DataTypes.Gradient>());
-            RegisterUiType(typeof(ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<ParticleSystem>(),
-                           () => new ValueOutputUi<ParticleSystem>());
+            RegisterUiType(typeof(Core.DataTypes.ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<Core.DataTypes.ParticleSystem>(),
+                           () => new ValueOutputUi<Core.DataTypes.ParticleSystem>());
 
             // sharpdx types
             RegisterUiType(typeof(SharpDX.Int3), new Size2UiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());

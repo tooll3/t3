@@ -41,7 +41,7 @@ namespace T3.Gui.InputUi
                    };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, ref string value, bool isDefaultValue)
+        protected override InputEditStateFlags DrawEditControl(string name, ref string value)
         {
             if (value == null)
             {

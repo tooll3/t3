@@ -6,7 +6,7 @@ namespace T3.Gui.InputUi.SingleControl
      {
          protected abstract bool DrawSingleEditControl(string name, ref T value);
  
-         protected override InputEditStateFlags DrawEditControl(string name, ref T value, bool isDefaultValue)
+         protected override InputEditStateFlags DrawEditControl(string name, ref T value)
          {
              bool valueModified = DrawSingleEditControl(name, ref value);
  

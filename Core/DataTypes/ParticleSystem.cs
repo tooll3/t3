@@ -5,7 +5,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.Logging;
 
-namespace T3.Core.Operator.Helper
+namespace T3.Core.DataTypes
 {
     public class ParticleSystem
     {

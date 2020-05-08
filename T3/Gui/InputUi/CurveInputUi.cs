@@ -25,7 +25,7 @@ namespace T3.Gui.InputUi
                    };
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, ref Curve curve, bool isDefaultValue)
+        protected override InputEditStateFlags DrawEditControl(string name, ref Curve curve)
         {
             if (curve == null)
             {
@@ -36,17 +36,7 @@ namespace T3.Gui.InputUi
             
             ImGui.Dummy(Vector2.One);    // Add Line Break
 
-            InputEditStateFlags inputEditStateFlags = InputEditStateFlags.Nothing;
-
-            if (isDefaultValue)
-            {
-                curve = curve.Clone(); // cloning here every frame when the curve is default would be awkward, so can this be cached somehow?
-                inputEditStateFlags |= InputEditStateFlags.Modified; // the will clear the IsDefault flag after editing
-            }
-
-            inputEditStateFlags |= CurveInputEditing.DrawCanvasForCurve(curve);
-
-            return inputEditStateFlags;
+            return CurveInputEditing.DrawCanvasForCurve(curve);
         }
         
         protected override void DrawReadOnlyControl(string name, ref Curve value)

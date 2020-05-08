@@ -20,7 +20,7 @@ namespace T3.Gui.InputUi
                    };
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, ref Gradient gradient, bool isDefaultValue)
+        protected override InputEditStateFlags DrawEditControl(string name, ref Gradient gradient)
         {
             if (gradient == null)
             {
@@ -29,17 +29,7 @@ namespace T3.Gui.InputUi
                 return InputEditStateFlags.Nothing;
             }
             
-            var inputEditStateFlags = InputEditStateFlags.Nothing;
-
-            if (isDefaultValue)
-            {
-                gradient = new Gradient(); // cloning here every frame when the curve is default would be awkward, so can this be cached somehow?
-                inputEditStateFlags |= InputEditStateFlags.Modified; // the will clear the IsDefault flag after editing
-            }
-            
-            inputEditStateFlags |= DrawEditor(gradient);
-
-            return inputEditStateFlags;
+            return DrawEditor(gradient);
         }
 
         // TODO: Implement proper edit flags and Undo
