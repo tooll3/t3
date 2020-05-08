@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core;
 using T3.Core.Animation;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Styling;
@@ -21,7 +22,7 @@ namespace T3.Gui.Windows.TimeLine
             var scaleRange = ScaleRanges.FirstOrDefault(range => range.ScaleMax * Density > scale);
             fadeFactor = scaleRange == null
                              ? 1
-                             : 1 - (float)Im.Remap(scale, scaleRange.ScaleMin * Density, scaleRange.ScaleMax * Density, 0, 1);
+                             : 1 - (float)MathUtils.Remap(scale, scaleRange.ScaleMin * Density, scaleRange.ScaleMax * Density, 0, 1);
 
             return scaleRange?.Rasters;
         }

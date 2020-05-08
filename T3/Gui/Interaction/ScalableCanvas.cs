@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
@@ -40,8 +41,8 @@ namespace T3.Gui.Interaction
             var p1Target = ScrollTarget;
             var p2Target = ScrollTarget + WindowSize * ScaleTarget;
             var f = Math.Min(Io.DeltaTime * ZoomSpeed, 1);
-            var pp1 = Im.Lerp(p1, p1Target, f);
-            var pp2 = Im.Lerp(p2, p2Target, f);
+            var pp1 = Vector2.Lerp(p1, p1Target, f);
+            var pp2 = Vector2.Lerp(p2, p2Target, f);
             var scaleT = (pp2 - pp1) / WindowSize;
 
             Scale = scaleT;
@@ -83,7 +84,7 @@ namespace T3.Gui.Interaction
 
         public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
         {
-            return Im.Floor(posOnCanvas * Scale + Scroll + WindowPos);
+            return MathUtils.Floor(posOnCanvas * Scale + Scroll + WindowPos);
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using ImGuiNET;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Styling;
 using UiHelpers;
@@ -24,7 +25,8 @@ namespace T3.Gui.UiHelpers
             if (_lastEntryTime <=0)
                 return;
 
-            var shadeFactor = Color.Mix(Color.Red, new Color(0.3f), Im.Clamp((float) (ImGui.GetTime() - _lastEntryTime)/3,0,1));
+            var shadeFactor = Color.Mix(Color.Red, new Color(0.3f), 
+                                        ((float) (ImGui.GetTime() - _lastEntryTime)/3).Clamp(0,1));
             ImGui.PushStyleColor(ImGuiCol.Text, shadeFactor.Rgba);
             
             ImGui.PushFont(Fonts.FontBold);

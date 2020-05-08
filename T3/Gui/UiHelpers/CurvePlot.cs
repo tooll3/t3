@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Core;
 using UiHelpers;
 
 namespace T3.Gui.UiHelpers
@@ -18,7 +19,7 @@ namespace T3.Gui.UiHelpers
             _graphValues[_sampleOffset] = value;
             if (Damping)
             {
-                _dampedValue = Im.Lerp(_dampedValue, value, 0.01f);
+                _dampedValue = MathUtils.Lerp(_dampedValue, value, 0.01f);
                 value = _dampedValue;
             }
             

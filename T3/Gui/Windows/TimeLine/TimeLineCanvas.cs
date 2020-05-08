@@ -186,7 +186,7 @@ namespace T3.Gui.Windows.TimeLine
 
             var max = ImGui.GetContentRegionMax();
             var clampedSize = max;
-            clampedSize.Y = Im.Min(TimeLineDragHeight, max.Y - 1);
+            clampedSize.Y = Math.Min(TimeLineDragHeight, max.Y - 1);
 
             ImGui.SetCursorPos(new Vector2(0, max.Y - clampedSize.Y));
             var screenPos = ImGui.GetCursorScreenPos();

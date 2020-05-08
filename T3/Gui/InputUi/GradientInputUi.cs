@@ -9,6 +9,7 @@ using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
+using UiHelpers;
 
 namespace T3.Gui.InputUi
 {
@@ -50,6 +51,14 @@ namespace T3.Gui.InputUi
 
             return inputEditStateFlags;
         }
+
+        private static InputEditStateFlags DrawEditor(Gradient gradient)
+        {
+            var area = new ImRect(ImGui.GetCursorScreenPos(), ImGui.GetCursorScreenPos() + new Vector2(200, 20));
+            var modified= GradientEditor.Draw(gradient, ImGui.GetWindowDrawList(), area);
+            return modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
+        }
+        
         
         protected override void DrawReadOnlyControl(string name, ref Gradient value)
         {

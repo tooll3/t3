@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Windows.Forms.VisualStyles;
 using ImGuiNET;
 using Newtonsoft.Json.Linq;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.InputUi;
 using T3.Gui.Styling;
@@ -372,7 +373,7 @@ namespace T3.Gui.Interaction
                 var r = NeutralRadius;
                 float activeSpeed = 0;
                 int index = 0;
-                var rot = (float)Im.Fmod(((_editValue - _startValue) * RadialIndicatorSpeed), 2 * Math.PI);
+                var rot = (float)MathUtils.Fmod(((_editValue - _startValue) * RadialIndicatorSpeed), 2 * Math.PI);
                 foreach (var segmentSpeed in SegmentSpeeds)
                 {
                     var isLastSegment = index == SegmentSpeeds.Length - 1;

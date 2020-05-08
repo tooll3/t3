@@ -2,6 +2,7 @@ using ImGuiNET;
 using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using T3.Core;
 using T3.Gui;
 using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
@@ -247,10 +248,10 @@ namespace UiHelpers
         public static ImRect RectBetweenPoints(Vector2 a, Vector2 b)
         {
             return new ImRect(
-                              x1: Im.Min(a.X, b.X),
-                              y1: Im.Min(a.Y, b.Y),
-                              x2: Im.Max(a.X, b.X),
-                              y2: Im.Max(a.Y, b.Y));
+                              x1: MathUtils.Min(a.X, b.X),
+                              y1: MathUtils.Min(a.Y, b.Y),
+                              x2: MathUtils.Max(a.X, b.X),
+                              y2: MathUtils.Max(a.Y, b.Y));
         }
 
         public static ImRect RectWithSize(Vector2 position, Vector2 size)
@@ -261,15 +262,15 @@ namespace UiHelpers
         // Simple version, may lead to an inverted rectangle, which is fine for Contains/Overlaps test but not for display.
         public void ClipWith(ImRect r)
         {
-            Min = Im.Max(Min, r.Min);
-            Max = Im.Min(Max, r.Max);
+            Min = MathUtils.Max(Min, r.Min);
+            Max = MathUtils.Min(Max, r.Max);
         }
 
         // Full version, ensure both points are fully clipped.
         public void ClipWithFull(ImRect r)
         {
-            Min = Im.Clamp(Min, r.Min, r.Max);
-            Max = Im.Clamp(Max, r.Min, r.Max);
+            Min = MathUtils.Clamp(Min, r.Min, r.Max);
+            Max = MathUtils.Clamp(Max, r.Min, r.Max);
         }
 
         public void Floor()
@@ -301,109 +302,6 @@ namespace UiHelpers
     /// </summary>
     static class Im
     {
-        public static Vector2 Min(Vector2 lhs, Vector2 rhs)
-        {
-            return new Vector2(lhs.X < rhs.X ? lhs.X : rhs.X, lhs.Y < rhs.Y ? lhs.Y : rhs.Y);
-        }
-
-        public static Vector2 Floor(Vector2 v)
-        {
-            return new Vector2((float)Math.Floor(v.X), (float)Math.Floor(v.Y));
-        }
-
-        public static Vector2 Max(Vector2 lhs, Vector2 rhs)
-        {
-            return new Vector2(lhs.X >= rhs.X ? lhs.X : rhs.X, lhs.Y >= rhs.Y ? lhs.Y : rhs.Y);
-        }
-
-        public static Vector2 Clamp(Vector2 v, Vector2 mn, Vector2 mx)
-        {
-            return new Vector2((v.X < mn.X)
-                                   ? mn.X
-                                   : (v.X > mx.X)
-                                       ? mx.X
-                                       : v.X, (v.Y < mn.Y) ? mn.Y : (v.Y > mx.Y) ? mx.Y : v.Y);
-        }
-
-        public static T Min<T>(T lhs, T rhs) where T : System.IComparable<T>
-        {
-            return lhs.CompareTo(rhs) < 0 ? lhs : rhs;
-        }
-
-        public static T Max<T>(T lhs, T rhs) where T : System.IComparable<T>
-        {
-            return lhs.CompareTo(rhs) >= 0 ? lhs : rhs;
-        }
-
-        public static T Clamp<T>(this T val, T min, T max) where T : System.IComparable<T>
-        {
-            if (val.CompareTo(min) < 0) return min;
-            else if (val.CompareTo(max) > 0) return max;
-            else return val;
-        }
-
-        public static float Lerp(float a, float b, float t)
-        {
-            return (float)(a + (b - a) * t);
-        }
-
-        public static Vector2 Lerp(Vector2 a, Vector2 b, float t)
-        {
-            return new Vector2(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t);
-        }
-
-        public static double Lerp(double a, double b, double t)
-        {
-            return (double)(a + (b - a) * t);
-        }
-
-        public static int Lerp(int a, int b, float t)
-        {
-            return (int)(a + (b - a) * t);
-        }
-
-        public static void Swap<T>(ref T a, ref T b)
-        {
-            T tmp = a;
-            a = b;
-            b = tmp;
-        }
-
-        public static float Fmod(float v, float mod)
-        {
-            return v - mod * (float)Math.Floor(v / mod);
-        }
-
-        public static double Fmod(double v, double mod)
-        {
-            return v - mod * Math.Floor(v / mod);
-        }
-
-        public static float Remap(float value, float inMin, float inMax, float outMin, float outMax)
-        {
-            var factor = (value - inMin) / (inMax - inMin);
-            var v = factor * (outMax - outMin) + outMin;
-            if (outMin > outMax)
-                Swap(ref outMin, ref outMax);
-            return v.Clamp(outMin, outMax);
-        }
-
-        public static double Remap(double value, double inMin, double inMax, double outMin, double outMax)
-        {
-            var factor = (value - inMin) / (inMax - inMin);
-            var v = factor * (outMax - outMin) + outMin;
-            if (v > outMax)
-            {
-                v = outMax;
-            }
-            else if (v < outMin)
-            {
-                v = outMin;
-            }
-
-            return v;
-        }
-
         public static void DrawSplitter(bool splitVertically, float thickness, ref float size0, ref float size1, float minSize0, float minSize1)
         {
             var backupPos = ImGui.GetCursorPos();
@@ -685,7 +583,7 @@ namespace UiHelpers
 
             void DrawBezierFallback()
             {
-                var tangentLength = Im.Remap(Vector2.Distance(pointA, pointB),
+                var tangentLength = MathUtils.Remap(Vector2.Distance(pointA, pointB),
                                              30, 300,
                                              5, 200);
                 drawList.AddBezierCurve(

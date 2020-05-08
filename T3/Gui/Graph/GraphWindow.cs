@@ -248,7 +248,7 @@ namespace T3.Gui.Graph
                     ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
                     {
                         var sizeMatchingDescription = ImGui.CalcTextSize(desc) + new Vector2(20, 40);
-                        sizeMatchingDescription.X = Im.Max(300, sizeMatchingDescription.X);
+                        sizeMatchingDescription.X =  Math.Max(300, sizeMatchingDescription.X);
                         if (_justAddedDescription)
                         {
                             ImGui.SetKeyboardFocusHere();

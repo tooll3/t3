@@ -254,7 +254,7 @@ namespace T3.Gui.Windows.TimeLine
                                                   lastValue));
                     }
 
-                    lastValue = Im.Remap((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
+                    lastValue = MathUtils.Remap((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
                     positions.Add(new Vector2(
                                               TimeLineCanvas.Current.TransformX((float)u),
                                               lastValue));

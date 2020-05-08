@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.UiHelpers;
 using UiHelpers;

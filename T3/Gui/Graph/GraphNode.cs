@@ -201,7 +201,7 @@ namespace T3.Gui.Graph
                     var backgroundColor = typeColor;
                     if (framesSinceLastUpdate > 2)
                     {
-                        var fadeFactor = Im.Remap(framesSinceLastUpdate, 0f, 60f, 1f, 0.4f);
+                        var fadeFactor = MathUtils.Remap(framesSinceLastUpdate, 0f, 60f, 1f, 0.4f);
                         backgroundColor.Rgba.W *= fadeFactor;
                     }
 
@@ -303,7 +303,7 @@ namespace T3.Gui.Graph
 
                 // Render input Label
                 {
-                    var inputLabelOpacity = Im.Remap(GraphCanvas.Current.Scale.X,
+                    var inputLabelOpacity = MathUtils.Remap(GraphCanvas.Current.Scale.X,
                                                      0.75f, 1.5f,
                                                      0f, 1f);
 
@@ -711,7 +711,7 @@ namespace T3.Gui.Graph
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
-            var thickness = Im.Remap(GraphCanvas.Current.Scale.X, 0.5f, 1f, 3f, UsableSlotThickness);
+            var thickness = MathUtils.Remap(GraphCanvas.Current.Scale.X, 0.5f, 1f, 3f, UsableSlotThickness);
 
             var opRect = _usableScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;

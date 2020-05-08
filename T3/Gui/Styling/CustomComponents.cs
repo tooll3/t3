@@ -2,6 +2,7 @@
 using System;
 using System.Numerics;
 using System.Windows.Forms;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Styling;
 using UiHelpers;
