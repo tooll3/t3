@@ -17,7 +17,7 @@ namespace T3.Gui.ChildUi
             var innerRect = selectableScreenRect;
             innerRect.Expand(-4);
 
-            var gradient = gradientSlider.Gradient.TypedDefaultValue.Value;
+            var gradient = gradientSlider.Gradient.Value;
             if (gradient == null)
             {
                 Log.Warning("Can't draw undefined gradient");

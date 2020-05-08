@@ -45,6 +45,7 @@ namespace T3.Core.DataTypes
 
         public virtual void Read(JToken inputToken)
         {
+            Steps.Clear();
             JToken gradientToken = inputToken[typeof(Gradient).Name];
             if (gradientToken == null)
                 return;
@@ -53,12 +54,15 @@ namespace T3.Core.DataTypes
             {
                 foreach (var keyEntry in (JArray)gradientToken["Steps"])
                 {
+
+                    var id = Guid.Parse(keyEntry["Id"].Value<string>());
                     Steps.Add(new Step()
                                   {
                                       Interpolation = (Interpolations)Enum.Parse(typeof(Interpolations), keyEntry["Interpolation"].Value<string>()),
                                       NormalizedPosition = keyEntry["NormalizedPosition"].Value<float>(),
-                                      Id = keyEntry["Id"].Value<Guid>(),
-                                      Color = new Vector4(keyEntry["Color"]["R"].Value<float>(),
+                                      Id = id,
+                                      Color = new Vector4(
+                                                          keyEntry["Color"]["R"].Value<float>(),
                                                           keyEntry["Color"]["G"].Value<float>(),
                                                           keyEntry["Color"]["B"].Value<float>(),
                                                           keyEntry["Color"]["A"].Value<float>()),
