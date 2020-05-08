@@ -98,11 +98,40 @@ namespace T3.Gui.Graph
                 // FIXME: proof-of-concept stub for custom UI 
 
                 // var usesCustomUi = DrawCustomUi(instance, _selectableScreenRect);
+
+                var drawList = GraphCanvas.Current.DrawList;
+
+                // Rendering
+                var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
+                var firstInstanceOutput = childInstance?.Outputs.FirstOrDefault();
+                var framesSinceLastUpdate = firstInstanceOutput?.DirtyFlag.FramesSinceLastUpdate ?? 100;
+
+                var typeColor = childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
+                                    ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
+                                    : Color.Gray;
+
+                var backgroundColor = typeColor;
+                if (framesSinceLastUpdate > 2)
+                {
+                    var fadeFactor = MathUtils.Remap(framesSinceLastUpdate, 0f, 60f, 1f, 0.4f);
+                    backgroundColor.Rgba.W *= fadeFactor;
+                }
+
+                // background
+                var hoveredBackground = T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId);
+                drawList.AddRectFilled(_usableScreenRect.Min, _usableScreenRect.Max,
+                                       hoveredBackground
+                                           ? ColorVariations.OperatorHover.Apply(backgroundColor)
+                                           : ColorVariations.Operator.Apply(backgroundColor));
+
                 var usesCustomUi = childUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
 
                 // Interaction
                 ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
+
+                //--------------------------------------------------------------------------
                 ImGui.InvisibleButton("node", _selectableScreenRect.GetSize());
+                //--------------------------------------------------------------------------
 
                 SelectableNodeMovement.Handle(childUi, instance);
 
@@ -185,33 +214,6 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                var drawList = GraphCanvas.Current.DrawList;
-
-                // Rendering
-                var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
-                var output = childInstance?.Outputs.FirstOrDefault();
-                var framesSinceLastUpdate = output?.DirtyFlag.FramesSinceLastUpdate ?? 100;
-
-                var typeColor = childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
-                                    ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
-                                    : Color.Gray;
-
-                if (!usesCustomUi)
-                {
-                    var backgroundColor = typeColor;
-                    if (framesSinceLastUpdate > 2)
-                    {
-                        var fadeFactor = MathUtils.Remap(framesSinceLastUpdate, 0f, 60f, 1f, 0.4f);
-                        backgroundColor.Rgba.W *= fadeFactor;
-                    }
-
-                    // background
-                    drawList.AddRectFilled(_usableScreenRect.Min, _usableScreenRect.Max,
-                                           hovered
-                                               ? ColorVariations.OperatorHover.Apply(backgroundColor)
-                                               : ColorVariations.Operator.Apply(backgroundColor));
-                }
-
                 DrawPreview();
 
                 // outline
@@ -246,7 +248,7 @@ namespace T3.Gui.Graph
 
                 // Visualize update
                 {
-                    var updateCountThisFrame = output?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
+                    var updateCountThisFrame = firstInstanceOutput?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
                     if (updateCountThisFrame > 0)
                     {
                         const double timeScale = 0.125f;
@@ -304,8 +306,8 @@ namespace T3.Gui.Graph
                 // Render input Label
                 {
                     var inputLabelOpacity = MathUtils.Remap(GraphCanvas.Current.Scale.X,
-                                                     0.75f, 1.5f,
-                                                     0f, 1f);
+                                                            0.75f, 1.5f,
+                                                            0f, 1f);
 
                     var screenCursor = usableSlotArea.GetCenter() + new Vector2(14, -7);
                     if (inputLabelOpacity > 0)
