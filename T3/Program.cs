@@ -225,6 +225,11 @@ namespace T3
         [STAThread]
         private static void Main()
         {
+            var startupStopWatch = new Stopwatch();
+            startupStopWatch.Start();
+            
+            _t3ui = new T3Ui();
+
             var form = new ImGuiDx11RenderForm("T3 ImGui Test")
                            {
                                ClientSize = new Size(1920, 1080),
@@ -331,6 +336,9 @@ namespace T3
             }
             ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
 
+            startupStopWatch.Stop();
+            Log.Debug($"startup took {startupStopWatch.ElapsedMilliseconds}ms.");
+            
             //T3Style.Init();
 
             // Main loop
@@ -424,7 +432,7 @@ namespace T3
             rtv = new RenderTargetView(device, buffer);
         }
 
-        private static T3Ui _t3ui = new T3Ui();
+        private static T3Ui _t3ui = null;
         private static bool _inResize;
         private static bool _inResize2;
         private static SwapChain _swapChain;
