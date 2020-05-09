@@ -106,15 +106,7 @@ namespace T3.Core.Operator.Slots
 
         private List<Slot<T>> _inputConnection = new List<Slot<T>>();
 
-        public List<Slot<T>> InputConnection
-        {
-            get => _inputConnection;
-            set
-            {
-                _inputConnection = value;
-                DirtyFlag.Target++;
-            }
-        }
+        public List<Slot<T>> InputConnection => _inputConnection;
 
         public int Invalidate()
         {
