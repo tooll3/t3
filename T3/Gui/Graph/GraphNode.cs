@@ -193,7 +193,7 @@ namespace T3.Gui.Graph
                 }
 
                 // Show Parameter window as context menu
-                {
+                if(!usesCustomUi){
                     var isClicked = ImGui.IsItemHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left) &&
                                     ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() < 4;
                     if (isClicked && !ParameterWindow.IsAnyInstanceVisible() && !justOpenedChild)
