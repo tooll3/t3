@@ -48,6 +48,8 @@ namespace T3.Gui.Graph
                 if (UserSettings.Config.ShowThumbnails)
                     PreparePreviewAndExpandSelectableArea(instance);
 
+                var drawList = GraphCanvas.Current.DrawList;
+                
                 // Resize indicator
                 if (childUi.Style == SymbolChildUi.Styles.Resizable)
                 {
@@ -63,8 +65,37 @@ namespace T3.Gui.Graph
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);
                 }
 
+
+                
+                // Rendering
+                var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
+                var firstInstanceOutput = childInstance?.Outputs.FirstOrDefault();
+                var framesSinceLastUpdate = firstInstanceOutput?.DirtyFlag.FramesSinceLastUpdate ?? 100;
+
+                var typeColor = childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
+                                    ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
+                                    : Color.Gray;
+
+                var backgroundColor = typeColor;
+                if (framesSinceLastUpdate > 2)
+                {
+                    var fadeFactor = MathUtils.Remap(framesSinceLastUpdate, 0f, 60f, 1f, 0.4f);
+                    backgroundColor.Rgba.W *= fadeFactor;
+                }
+
+                // background
+                var hoveredBackground = T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId);
+                drawList.AddRectFilled(_usableScreenRect.Min, _usableScreenRect.Max,
+                                       hoveredBackground
+                                           ? ColorVariations.OperatorHover.Apply(backgroundColor)
+                                           : ColorVariations.Operator.Apply(backgroundColor));
+
+                // Custom ui
+                var usesCustomUi = childUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
+
+                
                 // Size toggle
-                if (GraphCanvas.Current.Scale.X > 0.7f)
+                if (!usesCustomUi && GraphCanvas.Current.Scale.X > 0.7f)
                 {
                     var pos = new Vector2(_usableScreenRect.Max.X - 15, _usableScreenRect.Min.Y + 2);
 
@@ -94,38 +125,7 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     ImGui.PopStyleColor(3);
                 }
-
-                // FIXME: proof-of-concept stub for custom UI 
-
-                // var usesCustomUi = DrawCustomUi(instance, _selectableScreenRect);
-
-                var drawList = GraphCanvas.Current.DrawList;
-
-                // Rendering
-                var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
-                var firstInstanceOutput = childInstance?.Outputs.FirstOrDefault();
-                var framesSinceLastUpdate = firstInstanceOutput?.DirtyFlag.FramesSinceLastUpdate ?? 100;
-
-                var typeColor = childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
-                                    ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
-                                    : Color.Gray;
-
-                var backgroundColor = typeColor;
-                if (framesSinceLastUpdate > 2)
-                {
-                    var fadeFactor = MathUtils.Remap(framesSinceLastUpdate, 0f, 60f, 1f, 0.4f);
-                    backgroundColor.Rgba.W *= fadeFactor;
-                }
-
-                // background
-                var hoveredBackground = T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId);
-                drawList.AddRectFilled(_usableScreenRect.Min, _usableScreenRect.Max,
-                                       hoveredBackground
-                                           ? ColorVariations.OperatorHover.Apply(backgroundColor)
-                                           : ColorVariations.Operator.Apply(backgroundColor));
-
-                var usesCustomUi = childUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
-
+                
                 // Interaction
                 ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
 
@@ -140,7 +140,7 @@ namespace T3.Gui.Graph
                 {
                     SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
 
-                    ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+                    //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                     T3Ui.AddHoveredId(childUi.SymbolChild.Id);
 
                     ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
