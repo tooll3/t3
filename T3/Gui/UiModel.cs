@@ -220,18 +220,16 @@ namespace T3.Gui
             }
         }
 
-        public static SymbolUi UpdateUiEntriesForSymbol(Symbol symbol)
+        public static void UpdateUiEntriesForSymbol(Symbol symbol)
         {
             if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
             {
                 symbolUi.UpdateConsistencyWithSymbol();
-                return symbolUi;
             }
             else
             {
                 var newSymbolUi = new SymbolUi(symbol);
                 SymbolUiRegistry.Entries.Add(symbol.Id, newSymbolUi);
-                return newSymbolUi;
             }
         }
 
