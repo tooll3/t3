@@ -339,6 +339,7 @@
     <Compile Include="External\Truncon.Collections\Properties\Resources.Designer.cs" />
     <Compile Include="Gui\ChildUi\CustomChildUiRegistry.cs" />
     <Compile Include="Gui\ChildUi\GradientSliderUi.cs" />
+    <Compile Include="Gui\ChildUi\Jitter2dUi.cs" />
     <Compile Include="Gui\ChildUi\ValueSliderUi.cs" />
     <Compile Include="Gui\ChildUi\ValueUi.cs" />
     <Compile Include="Gui\Commands\AddConnectionCommand.cs" />

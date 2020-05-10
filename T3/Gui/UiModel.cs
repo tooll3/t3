@@ -138,6 +138,7 @@ namespace T3.Gui
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_8211249d_7a26_4ad0_8d84_56da72a5c536.GradientSlider), GradientSliderUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value), ValueUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_d6384148_c654_48ce_9cf4_9adccf91283a.ValueSlider), ValueSliderUi.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_23794a1f_372d_484b_ac31_9470d0e77819.Jitter2d), Jitter2dUi.DrawChildUi);
             
             Load();
 
