@@ -17,8 +17,20 @@ namespace T3.Gui.ChildUi
             innerRect.Expand(-4);
             var h = innerRect.GetWidth() * 0.2f;
 
-            var modified = RateLabel.Draw(ref jitter2d.Rate.Value, innerRect, drawList);
-            MicroGraph.Draw(ref jitter2d.JumpDistance.Value, ref jitter2d.Smoothing.Value, jitter2d.Fragment, innerRect, drawList);
+            if (RateLabel.Draw(ref jitter2d.Rate.TypedInputValue.Value, 
+                               innerRect, drawList, nameof(jitter2d)))
+            {
+                jitter2d.Rate.DirtyFlag.Invalidate();
+            }
+
+            if (MicroGraph.Draw(ref jitter2d.JumpDistance.TypedInputValue.Value, 
+                                ref jitter2d.Blending.TypedInputValue.Value, 
+                                jitter2d.Fragment, 
+                                innerRect, drawList))
+            {
+                jitter2d.Blending.DirtyFlag.Invalidate();
+                jitter2d.JumpDistance.DirtyFlag.Invalidate();
+            }
             return true;
         }
     }

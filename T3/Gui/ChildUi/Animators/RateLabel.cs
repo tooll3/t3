@@ -8,7 +8,7 @@ namespace T3.Gui.ChildUi.Animators
 {
     public static class RateLabel
     {
-        public static bool Draw(ref float rate, ImRect selectableScreenRect, ImDrawListPtr drawList)
+        public static bool Draw(ref float rate, ImRect selectableScreenRect, ImDrawListPtr drawList,  string nodeLabel)
         {
             var modified = false;
             var h = selectableScreenRect.GetHeight();
@@ -16,7 +16,7 @@ namespace T3.Gui.ChildUi.Animators
             if (h > 30)
             {
                 ImGui.PushFont(Fonts.FontSmall);
-                drawList.AddText(selectableScreenRect.Min + new Vector2(4, 2), Color.White, "Jitter2D");
+                drawList.AddText(selectableScreenRect.Min + new Vector2(4, 2), Color.White, nodeLabel);
                 ImGui.PopFont();
             }
 

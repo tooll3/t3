@@ -9,8 +9,9 @@ namespace T3.Gui.ChildUi.Animators
 {
     public static class MicroGraph
     {
-        public static void Draw(ref float offset, ref float smoothing, float fragment, ImRect innerRect, ImDrawListPtr drawList)
+        public static bool Draw(ref float offset, ref float smoothing, float fragment, ImRect innerRect, ImDrawListPtr drawList)
         {
+            var modified = false;
             var h = innerRect.GetHeight();
             var graphRect = innerRect;
             graphRect.Min.X = graphRect.Max.X - GraphWidthRatio * h;
@@ -76,6 +77,7 @@ namespace T3.Gui.ChildUi.Animators
 
             if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
             {
+                modified = true;
                 var dragDelta = ImGui.GetMouseDragDelta(0, 1);
                 smoothing = (smoothing + dragDelta.X / 100f).Clamp(0, 1);
                 if (Math.Abs(dragDelta.Y) > 0.1f)
@@ -87,6 +89,8 @@ namespace T3.Gui.ChildUi.Animators
 
                 ImGui.ResetMouseDragDelta();
             }
+
+            return modified;
         }
 
         private static readonly Color GraphLineColor = new Color(0, 0, 0, 0.3f);
