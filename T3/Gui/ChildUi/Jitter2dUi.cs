@@ -16,15 +16,19 @@ namespace T3.Gui.ChildUi
             if (AnimatorLabel.Draw(ref jitter2d.Rate.TypedInputValue.Value, 
                                screenRect, drawList, nameof(jitter2d)))
             {
+                jitter2d.Rate.Input.IsDefault = false;
                 jitter2d.Rate.DirtyFlag.Invalidate();
             }
-
+            var label = $"±{jitter2d.JumpDistance.TypedInputValue.Value:0.0}";
+            
             if (MicroGraph.Draw(ref jitter2d.JumpDistance.TypedInputValue.Value, 
                                 ref jitter2d.Blending.TypedInputValue.Value, 
                                 jitter2d.Fragment, 
-                                screenRect, drawList))
+                                screenRect, drawList, label))
             {
+                jitter2d.Blending.Input.IsDefault = false;
                 jitter2d.Blending.DirtyFlag.Invalidate();
+                jitter2d.JumpDistance.Input.IsDefault = false;
                 jitter2d.JumpDistance.DirtyFlag.Invalidate();
             }
             return true;

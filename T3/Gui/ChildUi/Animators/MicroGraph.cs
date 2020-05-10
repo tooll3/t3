@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Gui.Styling;
 using UiHelpers;
 
@@ -9,13 +10,72 @@ namespace T3.Gui.ChildUi.Animators
 {
     public static class MicroGraph
     {
-        public static bool Draw(ref float offset, ref float smoothing, float fragment, ImRect innerRect, ImDrawListPtr drawList)
+        public static bool Draw(ref float offset, ref float smoothing, float fragment, ImRect innerRect, ImDrawListPtr drawList, string valueText)
         {
             var modified = false;
             var h = innerRect.GetHeight();
             var graphRect = innerRect;
             graphRect.Min.X = graphRect.Max.X - GraphWidthRatio * h;
 
+            // Draw interaction
+            ImGui.SetCursorScreenPos(graphRect.Min);
+            ImGui.InvisibleButton("dragMicroGraph", graphRect.GetSize());
+            
+            
+            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            if (ImGui.IsItemHovered() || _dragState != DragMode.Off)
+            { 
+                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
+            }
+
+            var isActive = ImGui.IsItemActive();
+            if (isActive)
+            {
+                 var dragDelta = ImGui.GetMouseDragDelta(0, 1);
+                 switch (_dragState)
+                 {
+                     case DragMode.Off:
+                     case DragMode.Undecided:
+                     {
+                         if (dragDelta.LengthSquared() > 10)
+                         {
+                             _dragState = Math.Abs(dragDelta.X) > Math.Abs(dragDelta.Y) 
+                                              ? DragMode.DraggingHorizontally : 
+                                              DragMode.DraggingVertically;
+                         }
+
+                         break;
+                     }
+                     
+                     case DragMode.DraggingHorizontally:
+                         if (Math.Abs(dragDelta.X) > 0.5f)
+                         {
+                             smoothing = (smoothing + dragDelta.X / 100f).Clamp(0, 1);
+                             ImGui.ResetMouseDragDelta();
+                             Log.Debug("horizontally");
+                             modified = true;
+                         }
+                         break;
+                
+                     case DragMode.DraggingVertically:
+                         if (Math.Abs(dragDelta.Y) > 0.5f)
+                         {
+                             offset = (offset * (dragDelta.Y < 0
+                                                     ? JumpDistanceDragScale
+                                                     : 1 / JumpDistanceDragScale)).Clamp(0.01f, 100);
+                             ImGui.ResetMouseDragDelta();
+                             Log.Debug("vertically");
+                             modified = true;
+                         }
+                         break;
+                 }
+            }
+            else if (ImGui.IsItemDeactivated())
+            {
+                _dragState = DragMode.Off;
+            }
+            
+            
             // horizontal line
             var lh1 = graphRect.Min + Vector2.UnitY * h / 2;
             var lh2 = new Vector2(graphRect.Max.X, lh1.Y + 1);
@@ -51,55 +111,41 @@ namespace T3.Gui.ChildUi.Animators
 
             GraphLinePoints[3].X = graphRect.Max.X + 1;
             GraphLinePoints[3].Y = y;
-            drawList.AddPolyline(ref GraphLinePoints[0], 4, CurveLineColor, false, 1);
+
+            var curveLineColor = isActive && _dragState == DragMode.DraggingHorizontally ? Color.Red : CurveLineColor;
+            drawList.AddPolyline(ref GraphLinePoints[0], 4, curveLineColor, false, 1);
 
             // Draw offset label
             if (h > 14)
             {
                 ImGui.PushFont(Fonts.FontSmall);
+                
+                var labelSize = ImGui.CalcTextSize(valueText);
 
-                var label = $"±{offset:0.0}"; // + jitter2d.JumpDistance.Value.ToString(Formatter, CultureInfo.InvariantCulture);
-                var labelSize = ImGui.CalcTextSize(label);
-
+                var color = isActive && _dragState == DragMode.DraggingVertically ? Color.Red : Color.White;
                 drawList.AddText(MathUtils.Floor(new Vector2(graphRect.Max.X - 3 - labelSize.X,
                                                              lh1.Y - labelSize.Y / 2 - 2
-                                                            )), Color.White, label);
+                                                            )), color, valueText);
                 ImGui.PopFont();
             }
-
-            // Draw interaction
-            ImGui.SetCursorScreenPos(graphRect.Min);
-            ImGui.InvisibleButton("drag", graphRect.GetSize());
-            if (ImGui.IsItemHovered() || ImGui.IsItemActive())
-            {
-                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
-            }
-
-            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
-            {
-                modified = true;
-                var dragDelta = ImGui.GetMouseDragDelta(0, 1);
-                smoothing = (smoothing + dragDelta.X / 100f).Clamp(0, 1);
-                if (Math.Abs(dragDelta.Y) > 0.1f)
-                {
-                    offset = (offset * (dragDelta.Y < 0 
-                                            ? JumpDistanceDragScale 
-                                            : 1 / JumpDistanceDragScale)).Clamp(0.01f, 100);
-                }
-
-                ImGui.ResetMouseDragDelta();
-            }
-
             return modified;
+        }
+
+        private static DragMode _dragState;
+
+        private enum DragMode
+        {
+            Off,
+            Undecided,
+            DraggingVertically,
+            DraggingHorizontally,
         }
 
         private static readonly Color GraphLineColor = new Color(0, 0, 0, 0.3f);
         private static readonly Color FragmentLineColor = Color.Orange;
         private static readonly Color CurveLineColor = new Color(1, 1, 1, 0.5f);
         private const float JumpDistanceDragScale = 1.05f;
-
-        // ReSharper disable once UseStringInterpolation
-        private static readonly string Formatter = string.Format("G{0:D}", 4);
+        
         private const float GraphWidthRatio = 2;
         private static readonly Vector2[] GraphLinePoints = new Vector2[4];
     }

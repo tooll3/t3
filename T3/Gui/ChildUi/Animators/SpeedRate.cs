@@ -15,6 +15,8 @@ namespace T3.Gui.ChildUi.Animators
 
         public static readonly SpeedRate[] RelevantRates =
             {
+                new SpeedRate(-1, "Ignore"),
+                new SpeedRate(0.0f, "OFF"),
                 new SpeedRate(0.125f, "1/8"),
                 new SpeedRate(0.25f, "1/4"),
                 new SpeedRate(0.5f, "1/2"),
