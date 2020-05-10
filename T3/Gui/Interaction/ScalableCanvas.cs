@@ -236,6 +236,15 @@ namespace T3.Gui.Interaction
 
         protected void SetScopeWithTransition(Vector2 scale, Vector2 scroll, Vector2 previousFocusOnScreen, Transition transition)
         {
+            if (float.IsInfinity(scale.X) || float.IsNaN(scale.X)
+                                          || float.IsInfinity(scale.Y) || float.IsNaN(scale.Y)
+                                          || float.IsInfinity(scroll.X) || float.IsNaN(scroll.X)
+                                          || float.IsInfinity(scroll.Y) || float.IsNaN(scroll.Y)
+                )
+            {
+                scale = Vector2.One;
+                scroll= Vector2.Zero;
+            }
             ScaleTarget = scale;
             Scale = scale * (transition == Transition.JumpIn ? 0.3f : 1.5f);
 
