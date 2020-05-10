@@ -8,17 +8,13 @@ namespace T3.Gui.ChildUi
 {
     public static class Jitter2dUi
     {
-        public static bool DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        public static bool DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
             if (!(instance is Jitter2d jitter2d))
                 return false;
-
-            var innerRect = selectableScreenRect;
-            innerRect.Expand(-4);
-            var h = innerRect.GetWidth() * 0.2f;
-
-            if (RateLabel.Draw(ref jitter2d.Rate.TypedInputValue.Value, 
-                               innerRect, drawList, nameof(jitter2d)))
+            
+            if (AnimatorLabel.Draw(ref jitter2d.Rate.TypedInputValue.Value, 
+                               screenRect, drawList, nameof(jitter2d)))
             {
                 jitter2d.Rate.DirtyFlag.Invalidate();
             }
@@ -26,7 +22,7 @@ namespace T3.Gui.ChildUi
             if (MicroGraph.Draw(ref jitter2d.JumpDistance.TypedInputValue.Value, 
                                 ref jitter2d.Blending.TypedInputValue.Value, 
                                 jitter2d.Fragment, 
-                                innerRect, drawList))
+                                screenRect, drawList))
             {
                 jitter2d.Blending.DirtyFlag.Invalidate();
                 jitter2d.JumpDistance.DirtyFlag.Invalidate();

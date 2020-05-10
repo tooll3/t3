@@ -338,7 +338,7 @@
     <Compile Include="External\Truncon.Collections\OrderedDictionaryDebugView.cs" />
     <Compile Include="External\Truncon.Collections\Properties\Resources.Designer.cs" />
     <Compile Include="Gui\ChildUi\Animators\MicroGraph.cs" />
-    <Compile Include="Gui\ChildUi\Animators\RateLabel.cs" />
+    <Compile Include="Gui\ChildUi\Animators\AnimatorLabel.cs" />
     <Compile Include="Gui\ChildUi\Animators\SpeedRate.cs" />
     <Compile Include="Gui\ChildUi\CounterUi.cs" />
     <Compile Include="Gui\ChildUi\CustomChildUiRegistry.cs" />

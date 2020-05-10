@@ -6,7 +6,7 @@ using UiHelpers;
 
 namespace T3.Gui.ChildUi.Animators
 {
-    public static class RateLabel
+    public static class AnimatorLabel
     {
         public static bool Draw(ref float rate, ImRect selectableScreenRect, ImDrawListPtr drawList,  string nodeLabel)
         {

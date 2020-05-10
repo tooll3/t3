@@ -12,24 +12,21 @@ namespace T3.Gui.ChildUi
 {
     public static class CounterUi
     {
-        public static bool DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        public static bool DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
             if (!(instance is Counter counter))
                 return false;
-
-            var innerRect = selectableScreenRect;
-            innerRect.Expand(-4);
-            var h = innerRect.GetWidth() * 0.2f;
-
-            if (RateLabel.Draw(ref counter.Rate.TypedInputValue.Value, 
-                               innerRect, drawList, nameof(counter)))
+            
+            if (AnimatorLabel.Draw(ref counter.Rate.TypedInputValue.Value, 
+                                   screenRect, drawList, nameof(counter)))
             {
                 counter.Rate.DirtyFlag.Invalidate();
             }
 
             if (MicroGraph.Draw(ref counter.Increment.TypedInputValue.Value, 
                                 ref counter.Blending.TypedInputValue.Value, 
-                                counter.Fragment, innerRect, drawList))
+                                counter.Fragment, 
+                                screenRect, drawList))
             {
                 counter.Blending.DirtyFlag.Invalidate();
                 counter.Increment.DirtyFlag.Invalidate();
