@@ -2,10 +2,12 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -420,11 +422,16 @@ namespace T3.Core
 
             foreach (var newType in instanceTypes)
             {
-                var symbol = new Symbol(newType, Guid.NewGuid());
+                string idFromNamespace = _idFromNamespace.Match(newType.Namespace ?? string.Empty).Value.Replace('_', '-');
+                Debug.Assert(!string.IsNullOrEmpty(idFromNamespace));
+                var symbol = new Symbol(newType, Guid.Parse(idFromNamespace));
                 SymbolRegistry.Entries.Add(symbol.Id, symbol);
                 Console.WriteLine($"new added symbol: {newType}");
             }
         }
+
+        private readonly Regex _idFromNamespace = new Regex(@"(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
+                                                            RegexOptions.IgnoreCase);
 
         public Symbol ReadSymbolFromFile(string symbolFile)
         {
