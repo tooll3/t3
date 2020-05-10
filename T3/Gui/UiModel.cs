@@ -148,8 +148,9 @@ namespace T3.Gui
                 UpdateUiEntriesForSymbol(symbolEntry.Value);
             }
 
-            var dashboardSymbol = symbols.First(entry => entry.Value.Name == "Dashboard").Value;
             // create instance of project op, all children are create automatically
+            Guid dashboardId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
+            var dashboardSymbol = symbols[dashboardId];
             var dashboard = dashboardSymbol.CreateInstance(Guid.NewGuid());
 
             Instance projectOp = dashboard;
