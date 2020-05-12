@@ -32,7 +32,7 @@ namespace T3
         {
             MouseMove += (o, e) => ImGui.GetIO().MousePos = new System.Numerics.Vector2(e.X, e.Y);
         }
-
+        
         #region WM Message Ids
         private const int WM_LBUTTONDOWN = 0x0201;
         private const int WM_LBUTTONUP = 0x0202;
@@ -221,7 +221,14 @@ namespace T3
     {
         private static ImGuiDx11Impl _controller;
         public static Device Device { get; private set; }
-
+        private static bool _fullScreenRequested;
+        
+        public static void MakeFullScreen()
+        {
+            _fullScreenRequested = true;
+        }
+        
+        
         [STAThread]
         private static void Main()
         {
@@ -349,6 +356,16 @@ namespace T3
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
                                      stopwatch.Restart();
 
+                                     if (_fullScreenRequested)
+                                     {
+                                         Log.Debug("Not implemented");
+                                         // TODO: need to manage swap chain resetting
+                                         // form.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+                                         // form.ControlBox = false;
+                                         // form.Text = String.Empty;
+                                         // _fullScreenRequested = false;
+                                     }
+                                     
                                      var modifiedSymbols = resourceManager.UpdateChangedOperatorTypes();
                                      foreach (var symbol in modifiedSymbols)
                                      {
