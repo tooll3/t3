@@ -49,6 +49,7 @@ namespace T3.Gui.Windows.Output
                                                                    new Resolution("1:1", 1, 1, useAsAspectRatio: true),
                                                                    new Resolution("16:9", 16, 9, useAsAspectRatio: true),
                                                                    new Resolution("4:3", 4, 3, useAsAspectRatio: true),
+                                                                   new Resolution("480p",  850, 480),
                                                                    new Resolution("720p",  1280, 720),
                                                                    new Resolution("1080p",  1920, 1080),
                                                                    new Resolution("4k", 1920*2, 1080*2),

@@ -5,7 +5,7 @@ namespace T3.Core
 {
     public static class MathUtils
     {
-        private static float ComputePerlinNoise(float value, float period, int octaves, int seed)
+        public static float PerlinNoise(float value, float period, int octaves, int seed)
         {
             var noiseSum = 0.0f;
 
