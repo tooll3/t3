@@ -215,6 +215,9 @@ namespace T3.Gui.Graph
 
         public static void CompleteConnectionIntoBuiltNode(Symbol parentSymbol, SymbolChild newOp, Symbol.InputDefinition inputDef)
         {
+            if (inputDef == null)
+                return;
+            
             var newConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
                                                       sourceSlotId: TempConnection.SourceSlotId,
                                                       targetParentOrChildId: newOp.Id,
