@@ -413,11 +413,30 @@ namespace T3.Gui.Graph
                     ImGui.EndTabItem();
                 }
 
+                if (ImGui.BeginTabItem("Tapping"))
+                {
+                    CustomComponents.HelpText("Tab the Sync button to set begin of measure and to improve BPM detection.");
+                    var isInitialized = playback is BeatTimingPlayback;
+                    if (isInitialized)
+                    {
+                    }
+                    else
+                    {
+                        if (ImGui.Button("Initialize"))
+                        {
+                            playback = new BeatTimingPlayback();
+                        }
+                    }
+
+                    ImGui.EndTabItem();
+                    
+                }
+                
                 if (ImGui.BeginTabItem("System Audio"))
                 {
                     CustomComponents.HelpText("Uses Windows core audio input for BPM detection");
                     CustomComponents.HelpText("Tab the Sync button to set begin of measure and to improve BPM detection.");
-                    var isInitialized = playback is BeatTimingPlayback;
+                    var isInitialized = playback is BeatTimingPlayback && T3Ui.BeatTiming.UseSystemAudio;
                     if (isInitialized)
                     {
                         var currentDevice = BeatTiming.SystemAudioInput.LoopBackDevices[BeatTiming.SystemAudioInput.SelectedDeviceIndex];
@@ -440,6 +459,7 @@ namespace T3.Gui.Graph
                         if (ImGui.Button("Initialize"))
                         {
                             playback = new BeatTimingPlayback();
+                            T3Ui.BeatTiming.UseSystemAudio = true;
                         }
 
                         CustomComponents.HelpText("This can take several seconds...");

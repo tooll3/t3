@@ -25,8 +25,26 @@ namespace T3.Gui.Interaction.Timing
         public float Bpm => (float)(60f / _beatDuration);
         public float DampedBpm => (float)(60f / _dampedBeatDuration);
 
+        public bool UseSystemAudio
+        {
+            get => _useSystemAudio;
+            set
+            {
+                if (value)
+                    InitializeSystemAudio();
+                _useSystemAudio = value;
+            }
+        }
+
+        private bool _useSystemAudio;
+
         public void SetBpmFromSystemAudio()
         {
+            if (SystemAudioInput == null)
+            {
+                return;
+            }
+            
             if (SystemAudioInput.LastIntLevel == 0)
             {
                 Log.Warning("Sound seems to be stuck. Trying restart.");
@@ -54,12 +72,15 @@ namespace T3.Gui.Interaction.Timing
         
         public double GetSyncedBeatTiming()
         {
-            if(SystemAudioInput == null)
-                SystemAudioInput = new SystemAudioInput();
-            
             return SyncedTime;
         }
 
+        public void InitializeSystemAudio()
+        {
+            if(SystemAudioInput == null)
+                SystemAudioInput = new SystemAudioInput();
+        }
+        
         
         
         public void Update()
@@ -163,7 +184,7 @@ namespace T3.Gui.Interaction.Timing
 
                     var barCount = timeSinceResync / barDuration;
                     var barCountInt = Math.Round(barCount);
-                    var isNotTappingAndNotAbandoned = barCount > 4 && barCount < 200;
+                    var isNotTappingAndNotAbandoned = barCount > 2 && barCount < 200;
                     if (isNotTappingAndNotAbandoned)
                     {
                         var mod = barCount - barCountInt;
@@ -171,8 +192,17 @@ namespace T3.Gui.Interaction.Timing
                         {
                             var barFragment = mod * barDuration / barCountInt;
                             var beatShift = barFragment / BeatsPerBar;
-                            _beatDuration += beatShift;
-                            Log.Debug("Resync-Offset:" + mod + " shift:" + beatShift + " new BPM" + (60 / _beatDuration));
+                            var newBeatDuration = _beatDuration + beatShift;
+                            var bpmChange = Math.Abs(60 / newBeatDuration - 60 / _beatDuration);
+                            if (bpmChange > 4)
+                            {
+                                Log.Debug($"Speed change of {bpmChange:0.0}bpm exceeds threshold. Resync only.");
+                            }
+                            else
+                            {
+                                Log.Debug("Resync-Offset:" + mod + " shift:" + beatShift + " new BPM" + (60 / _beatDuration));
+                                _beatDuration = newBeatDuration;
+                            }
                         }
                     }
                 }
@@ -184,11 +214,8 @@ namespace T3.Gui.Interaction.Timing
             _dampedBeatDuration = Lerp(_dampedBeatDuration, _beatDuration, 0.05f);
 
             // Slide start-time to match last beat-trigger
-            //var timeInBar = time - _measureStartTime;
             var tappedTimeInMeasure = time - _tappedMeasureStartTime;
             var differenceToTapping = tappedTimeInMeasure - timeInMeasure; 
-            //var tappedBeatTime = (tappedTimeInMeasure / _dampedBeatDuration) % 1f;
-            //var beatTime = (timeInBar / _dampedBeatDuration) % 1f;
 
             var isTimingOff = Math.Abs(differenceToTapping) > 0.03f; 
             if(isTimingOff)
@@ -208,7 +235,7 @@ namespace T3.Gui.Interaction.Timing
 
         private void AddTapAndShiftTimings(double time)
         {
-            var newSeriesStarted = _tapTimes.Count == 0 || Math.Abs(time - _tapTimes.Last()) > 16 * _beatDuration;
+            var newSeriesStarted = _tapTimes.Count == 0 || Math.Abs(time - _tapTimes.Last()) > 4 * _beatDuration;
             if (newSeriesStarted)
                 _tapTimes.Clear();
         
