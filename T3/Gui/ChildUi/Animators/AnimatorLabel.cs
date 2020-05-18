@@ -40,7 +40,7 @@ namespace T3.Gui.ChildUi.Animators
 
             // Speed Interaction
             var speedRect = selectableScreenRect;
-            speedRect.Max.X = speedRect.Min.X + speedRect.GetHeight();
+            speedRect.Max.X = speedRect.Min.X +  speedRect.GetWidth() * 0.2f;
             ImGui.SetCursorScreenPos(speedRect.Min);
             ImGui.InvisibleButton("rateButton", speedRect.GetSize());
             if (ImGui.IsItemHovered())

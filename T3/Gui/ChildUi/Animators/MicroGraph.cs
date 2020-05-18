@@ -15,14 +15,14 @@ namespace T3.Gui.ChildUi.Animators
             var modified = false;
             var h = innerRect.GetHeight();
             var graphRect = innerRect;
-            graphRect.Min.X = graphRect.Max.X - GraphWidthRatio * h;
+            graphRect.Min.X = graphRect.Max.X - graphRect.GetWidth() * 0.5f;// GraphWidthRatio * h;
 
             // Draw interaction
             ImGui.SetCursorScreenPos(graphRect.Min);
             ImGui.InvisibleButton("dragMicroGraph", graphRect.GetSize());
             
             
-            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
             if (ImGui.IsItemHovered() || _dragState != DragMode.Off)
             { 
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
@@ -83,12 +83,13 @@ namespace T3.Gui.ChildUi.Animators
 
             // Vertical start line
             const float leftPaddingH = 0.25f;
-            var lv1 = graphRect.Min + Vector2.UnitX * (int)(leftPaddingH * h + 0.5f);
+            var lv1 = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * 0.1f + 0.5f);
+            
             var lv2 = new Vector2(lv1.X + 1, graphRect.Max.Y);
             drawList.AddRectFilled(lv1, lv2, GraphLineColor);
 
             // Fragment line 
-            var width = h * (GraphWidthRatio - leftPaddingH);
+            var width = graphRect.GetWidth() - (lv1.X - graphRect.Min.X  );  //h * (GraphWidthRatio - leftPaddingH);
             var dx = new Vector2(fragment * width - 1, 0);
             drawList.AddRectFilled(lv1 + dx, lv2 + dx, FragmentLineColor);
 
