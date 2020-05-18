@@ -82,6 +82,20 @@ namespace T3.Gui
 
                     Writer.WritePropertyName("Position");
                     vec2Writer(Writer, childUi.PosOnCanvas);
+
+                    if (childUi.ConnectionStyleOverrides.Count > 0)
+                    {
+                        Writer.WritePropertyName("ConnectionStyleOverrides");
+                        Writer.WriteStartArray();
+                        foreach (var (key, value) in childUi.ConnectionStyleOverrides)
+                        {
+                            Writer.WriteStartObject();
+                            Writer.WriteObject("Id", key);
+                            Writer.WriteObject("Style", value);
+                            Writer.WriteEndObject();
+                        }
+                        Writer.WriteEndArray();
+                    }
                 }
                 Writer.WriteEndObject();
             }
@@ -196,6 +210,18 @@ namespace T3.Gui
                 else
                 {
                     childUi.Style = SymbolChildUi.Styles.Default;
+                }
+
+                var conStyleEntry = childEntry["ConnectionStyleOverrides"];
+                if (conStyleEntry != null)
+                {
+                    var dict = childUi.ConnectionStyleOverrides;
+                    foreach (var styleEntry in (JArray)conStyleEntry)
+                    {
+                        Guid id = Guid.Parse(styleEntry["Id"].Value<string>());
+                        var style = (SymbolChildUi.ConnectionStyles)Enum.Parse(typeof(SymbolChildUi.ConnectionStyles), styleEntry["Style"].Value<string>());
+                        dict.Add(id, style);
+                    }
                 }
 
                 symbolChildUis.Add(childUi);

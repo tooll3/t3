@@ -17,6 +17,7 @@ namespace T3.Gui.Graph.Dialogs
 
                 var symbolChild = _symbolChildUi.SymbolChild;
                 var outputEntry = symbolChild.Outputs[_outputDefinition.Id];
+                
                 var enumType = typeof(DirtyFlagTrigger);
                 var values = Enum.GetValues(enumType);
                 var valueNames = Enum.GetNames(enumType);
@@ -48,6 +49,21 @@ namespace T3.Gui.Graph.Dialogs
                     }
                 }
 
+                
+                var connectionStyles = new[] { "Default", "Faded Out" };
+                var connectionStyleIndex = _symbolChildUi.ConnectionStyleOverrides.ContainsKey(_outputDefinition.Id) ? 1 : 0;
+                if (ImGui.Combo("Connection Style##connectionStyle", ref connectionStyleIndex, connectionStyles, connectionStyles.Length))
+                {
+                    if (connectionStyleIndex == 0)
+                    {
+                        _symbolChildUi.ConnectionStyleOverrides.Remove(_outputDefinition.Id);
+                    }
+                    else
+                    {
+                        _symbolChildUi.ConnectionStyleOverrides.Add(_outputDefinition.Id, SymbolChildUi.ConnectionStyles.FadedOut);
+                    }
+                }
+                
                 if (ImGui.Button("Close"))
                 {
                     ImGui.CloseCurrentPopup();

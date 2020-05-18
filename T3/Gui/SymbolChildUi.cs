@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
@@ -21,8 +22,16 @@ namespace T3.Gui
             Resizable,
             WithThumbnail,
         }
+
+        public enum ConnectionStyles
+        {
+            Default,
+            FadedOut,
+        }
         
         internal static Vector2 DefaultOpSize { get; } = new Vector2(110, 25);
+        
+        public Dictionary<Guid, ConnectionStyles> ConnectionStyleOverrides { get; } = new Dictionary<Guid, ConnectionStyles>();
         
         public SymbolChild SymbolChild;
         public Guid Id => SymbolChild.Id;

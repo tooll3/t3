@@ -435,10 +435,15 @@ namespace T3.Gui.Graph
                     line.SourceNodeArea = _selectableScreenRect;
 
                     var dirtyFlagNumUpdatesWithinFrame = instance.Outputs[outputIndex].DirtyFlag.NumUpdatesWithinFrame;
+                    line.ColorForType = colorForType;
 
                     line.Thickness = (1 - 1 / (dirtyFlagNumUpdatesWithinFrame + 1f)) * 3 + 1;
-
-                    line.ColorForType = colorForType;
+                    
+                    if (childUi.ConnectionStyleOverrides.ContainsKey(output.Id))
+                    {
+                        line.ColorForType.Rgba.W = 0.3f;
+                    }
+                    
                     line.IsSelected |= childUi.IsSelected;
                 }
 
