@@ -82,7 +82,6 @@ namespace T3.Gui.ChildUi.Animators
             drawList.AddRectFilled(lh1, lh2, GraphLineColor);
 
             // Vertical start line
-            const float leftPaddingH = 0.25f;
             var lv1 = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * 0.1f + 0.5f);
             
             var lv2 = new Vector2(lv1.X + 1, graphRect.Max.Y);
@@ -147,7 +146,6 @@ namespace T3.Gui.ChildUi.Animators
         private static readonly Color CurveLineColor = new Color(1, 1, 1, 0.5f);
         private const float JumpDistanceDragScale = 1.05f;
         
-        private const float GraphWidthRatio = 2;
         private static readonly Vector2[] GraphLinePoints = new Vector2[4];
     }
 }
