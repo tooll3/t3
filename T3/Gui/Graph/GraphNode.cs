@@ -49,7 +49,7 @@ namespace T3.Gui.Graph
                     PreparePreviewAndExpandSelectableArea(instance);
 
                 var drawList = GraphCanvas.Current.DrawList;
-                
+
                 // Resize indicator
                 if (childUi.Style == SymbolChildUi.Styles.Resizable)
                 {
@@ -125,7 +125,7 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     ImGui.PopStyleColor(3);
                 }
-                
+
                 // Interaction
                 ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
 
@@ -193,27 +193,26 @@ namespace T3.Gui.Graph
                 }
 
                 // Show Parameter window as context menu
-                if(!usesCustomUi){
-                    var isClicked = ImGui.IsItemHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left) &&
-                                    ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() < 4;
-                    if (isClicked && !ParameterWindow.IsAnyInstanceVisible() && !justOpenedChild)
-                    {
-                        SelectionManager.SetSelection(childUi, instance);
-                        ImGui.OpenPopup("test");
-                    }
+                var isClicked = ImGui.IsItemHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left);
+                var clickWasDrag = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).LengthSquared() > 1;
 
-                    ImGui.SetNextWindowSizeConstraints(new Vector2(280, 40), new Vector2(280, 320));
-                    if (!justOpenedChild && ImGui.BeginPopup("test"))
-                    {
-                        ImGui.PushFont(Fonts.FontSmall);
-                        var compositionSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-                        var symbolChildUi = compositionSymbolUi.ChildUis.Single(symbolChildUi2 => symbolChildUi2.Id == instance.SymbolChildId);
-                        ParameterWindow.DrawParameters(instance, symbolUi, symbolChildUi, compositionSymbolUi);
-                        ImGui.PopFont();
-                        ImGui.EndPopup();
-                    }
+                if (isClicked && !clickWasDrag && !ParameterWindow.IsAnyInstanceVisible() && !justOpenedChild)
+                {
+                    SelectionManager.SetSelection(childUi, instance);
+                    ImGui.OpenPopup("parameterContextPopup");
                 }
 
+                ImGui.SetNextWindowSizeConstraints(new Vector2(280, 40), new Vector2(280, 320));
+                if (!justOpenedChild && ImGui.BeginPopup("parameterContextPopup"))
+                {
+                    ImGui.PushFont(Fonts.FontSmall);
+                    var compositionSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+                    var symbolChildUi = compositionSymbolUi.ChildUis.Single(symbolChildUi2 => symbolChildUi2.Id == instance.SymbolChildId);
+                    ParameterWindow.DrawParameters(instance, symbolUi, symbolChildUi, compositionSymbolUi);
+                    ImGui.PopFont();
+                    ImGui.EndPopup();
+                }
+                
                 DrawPreview();
 
                 // outline
@@ -438,12 +437,12 @@ namespace T3.Gui.Graph
                     line.ColorForType = colorForType;
 
                     line.Thickness = (1 - 1 / (dirtyFlagNumUpdatesWithinFrame + 1f)) * 3 + 1;
-                    
+
                     if (childUi.ConnectionStyleOverrides.ContainsKey(output.Id))
                     {
                         line.ColorForType.Rgba.W = 0.3f;
                     }
-                    
+
                     line.IsSelected |= childUi.IsSelected;
                 }
 
@@ -497,21 +496,7 @@ namespace T3.Gui.Graph
 
             childUi.Size = newNodeSize;
         }
-
-        /// <summary>
-        /// @cynic: FIXME: this is a stub for custom UI rendering 
-        /// </summary>
-        private static bool DrawCustomUi(Instance instance, ImRect selectableScreenRect)
-        {
-            if (!(instance is Value v))
-                return false;
-
-            var opacity = (float)Math.Sin(ImGui.GetTime());
-            _drawList.AddRectFilled(_selectableScreenRect.Min, _selectableScreenRect.Max, new Color(1, 1, 0, 0.2f * opacity));
-            ImGui.SetCursorScreenPos(_selectableScreenRect.Min + Vector2.One * 10);
-            ImGui.Text($"{v.Result.Value:0.00}");
-            return true;
-        }
+        
 
         // Find visible input slots.
         // TODO: this is a major performance hot spot and needs optimization
