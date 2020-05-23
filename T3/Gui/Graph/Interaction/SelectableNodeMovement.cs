@@ -104,6 +104,22 @@ namespace T3.Gui.Graph.Interaction
 
                 _moveCommand = null;
             }
+            
+            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).LengthSquared() > 0.0f;
+            if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) 
+                && !wasDraggingRight 
+                && ImGui.IsItemHovered() 
+                && !SelectionManager.IsNodeSelected(node))
+            {
+                if (node is SymbolChildUi childUi2)
+                {
+                    SelectionManager.SetSelection(childUi2, instance);
+                }
+                else
+                {
+                    SelectionManager.SetSelection(node);
+                }
+            }
         }
 
         private static Guid _draggedNodeId = Guid.Empty;
