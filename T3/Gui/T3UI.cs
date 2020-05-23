@@ -30,6 +30,7 @@ namespace T3.Gui
 
         public void Draw()
         {
+            OpenedPopUpName = String.Empty;
             SelectionManager.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             WindowManager.Draw();
@@ -118,6 +119,8 @@ namespace T3.Gui
         private static ProjectSettings _projectSettings;
         public static readonly BeatTiming BeatTiming;
         public static readonly WindowManager WindowManager;
+        public static string OpenedPopUpName;    // This is reset on Frame start and can be useful for allow context menu to stay open even if a
+                                                 // later context menu would also be opened. There is probably some ImGui magic to do this probably. 
 
         public static IntPtr NotDroppingPointer = new IntPtr(0);
         public static bool DraggingIsInProgress = false;

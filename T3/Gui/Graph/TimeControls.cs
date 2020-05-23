@@ -367,8 +367,11 @@ namespace T3.Gui.Graph
             {
                 ImGui.PopStyleVar(2);
                 return;
+
             }
 
+            T3Ui.OpenedPopUpName = "##TimeSettings";
+            
             ImGui.PushFont(Fonts.FontLarge);
             ImGui.Text("Playback settings");
             ImGui.PopFont();

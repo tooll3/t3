@@ -119,7 +119,7 @@ namespace T3.Gui
             var clicked = false;
 
             //ImGui.PushStyleColor(ImGuiCol.Text, isSelected ? new Color(1f).Rgba : new Color(0.3f));
-            ImGui.PushStyleColor(ImGuiCol.Text, isSelected ? new Color(1f,1,1f,1f).Rgba : new Color(0,0,0,1f));
+            ImGui.PushStyleColor(ImGuiCol.Text, isSelected ? new Color(1f, 1, 1f, 1f).Rgba : new Color(0, 0, 0, 1f));
             // ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red.Rgba);
             // ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red.Rgba);
 
@@ -185,12 +185,17 @@ namespace T3.Gui
         public static void DrawContextMenuForScrollCanvas(Action drawMenuContent, ref bool contextMenuIsOpen)
         {
             // This is a horrible hack to distinguish right mouse click from right mouse drag
-            var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
-            if (!contextMenuIsOpen && rightMouseDragDelta > 3)
-                return;
+            //var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
+            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).LengthSquared() > 0.0f;
 
-            if (!contextMenuIsOpen && !ImGui.IsWindowFocused())
-                return;
+            if (!contextMenuIsOpen)
+            {
+                if (wasDraggingRight)
+                    return;
+
+                if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
+                    return;
+            }
 
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));

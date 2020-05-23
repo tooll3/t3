@@ -355,7 +355,10 @@ namespace T3.Gui.Graph
 
         private void DrawContextMenu()
         {
-            CustomComponents.DrawContextMenuForScrollCanvas(DrawContextMenuContent, ref _contextMenuIsOpen);
+            if (T3Ui.OpenedPopUpName == string.Empty)
+            {
+                CustomComponents.DrawContextMenuForScrollCanvas(DrawContextMenuContent, ref _contextMenuIsOpen);
+            }
         }
 
         private void DrawContextMenuContent()
