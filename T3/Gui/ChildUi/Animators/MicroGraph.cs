@@ -21,8 +21,6 @@ namespace T3.Gui.ChildUi.Animators
             ImGui.SetCursorScreenPos(graphRect.Min);
             ImGui.InvisibleButton("dragMicroGraph", graphRect.GetSize());
             
-            
-            //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
             if (ImGui.IsItemHovered() || _dragState != DragMode.Off)
             { 
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
@@ -42,6 +40,9 @@ namespace T3.Gui.ChildUi.Animators
                              _dragState = Math.Abs(dragDelta.X) > Math.Abs(dragDelta.Y) 
                                               ? DragMode.DraggingHorizontally : 
                                               DragMode.DraggingVertically;
+                             _dragStartPosition = ImGui.GetMousePos();
+                             _dragStartSmoothing = smoothing;
+                             _dragStartOffset = offset;
                          }
 
                          break;
@@ -50,9 +51,7 @@ namespace T3.Gui.ChildUi.Animators
                      case DragMode.DraggingHorizontally:
                          if (Math.Abs(dragDelta.X) > 0.5f)
                          {
-                             smoothing = (smoothing + dragDelta.X / 100f).Clamp(0, 1);
-                             ImGui.ResetMouseDragDelta();
-                             Log.Debug("horizontally");
+                             smoothing = (_dragStartSmoothing - (_dragStartPosition.X - ImGui.GetMousePos().X)/100).Clamp(0, 1);
                              modified = true;
                          }
                          break;
@@ -60,11 +59,8 @@ namespace T3.Gui.ChildUi.Animators
                      case DragMode.DraggingVertically:
                          if (Math.Abs(dragDelta.Y) > 0.5f)
                          {
-                             offset = (offset * (dragDelta.Y < 0
-                                                     ? JumpDistanceDragScale
-                                                     : 1 / JumpDistanceDragScale)).Clamp(0.01f, 100);
-                             ImGui.ResetMouseDragDelta();
-                             Log.Debug("vertically");
+                             var logScale = ((float)Math.Pow(1.02f,Math.Abs(dragDelta.Y)) -1)/100;
+                             offset = _dragStartOffset + (dragDelta.Y < 0 ? logScale : -logScale);
                              modified = true;
                          }
                          break;
@@ -131,7 +127,10 @@ namespace T3.Gui.ChildUi.Animators
             return modified;
         }
 
+        private static Vector2 _dragStartPosition;
         private static DragMode _dragState;
+        private static float _dragStartSmoothing;
+        private static float _dragStartOffset;
 
         private enum DragMode
         {
