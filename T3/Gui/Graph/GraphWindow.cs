@@ -306,7 +306,7 @@ namespace T3.Gui.Graph
         private void DrawBreadcrumbs()
         {
             ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
-            IEnumerable<Instance> parents = _graphCanvas.GetParents();
+            IEnumerable<Instance> parents = GraphCanvas.GetParents(_graphCanvas.CompositionOp);
 
             ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
             ImGui.PushFont(Fonts.FontSmall);

@@ -210,6 +210,7 @@ namespace T3.Gui.Graph
                 EditNodeOutputDialog.Draw();
             }
             ImGui.EndGroup();
+            Current = null;
         }
 
         private void HandleFenceSelection()
@@ -306,10 +307,10 @@ namespace T3.Gui.Graph
             }
         }
 
-        public IEnumerable<Instance> GetParents(bool includeCompositionOp = false)
+        public static IEnumerable<Instance> GetParents(Instance compositionOp, bool includeCompositionOp = false)
         {
             var parents = new List<Instance>();
-            var op = CompositionOp;
+            var op = compositionOp;
             if (includeCompositionOp)
                 parents.Add(op);
 
@@ -324,7 +325,7 @@ namespace T3.Gui.Graph
 
         public IEnumerable<Symbol> GetParentSymbols()
         {
-            return GetParents(includeCompositionOp: true).Select(p => p.Symbol);
+            return GetParents(CompositionOp, includeCompositionOp: true).Select(p => p.Symbol);
         }
 
         private void FocusViewToSelection()

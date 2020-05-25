@@ -92,15 +92,13 @@ namespace T3.Gui.Windows.TimeLine
         }
 
 
-        
-        
         #region handle nested timelines ----------------------------------
         private void UpdateLocalTimeTranslation(Instance compositionOp)
         {
             _nestedTimeScale = 1f;
             _nestedTimeOffset = 0f;
             
-            var parents = GraphCanvas.Current.GetParents().Reverse().ToList();
+            var parents = GraphCanvas.GetParents(compositionOp).Reverse().ToList();
             parents.Add(compositionOp);
             foreach (var p in parents)
             {
