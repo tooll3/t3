@@ -3,6 +3,8 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Gui.Graph;
+using T3.Gui.Interaction;
 using UiHelpers;
 
 namespace T3.Gui.UiHelpers
@@ -16,6 +18,29 @@ namespace T3.Gui.UiHelpers
         {
             var modified = false;
             drawList.AddRect(areaOnScreen.Min, areaOnScreen.Max, Color.Black);
+            drawList.AddRectFilled(areaOnScreen.Min, areaOnScreen.Max, new Color(0.15f, 0.15f, 0.15f, 1));
+
+            // Draw Gradient background
+            {
+                drawList.PushClipRect(areaOnScreen.Min, areaOnScreen.Max);
+                var lineColor = new Color(0f, 0f, 0f, 0.2f);
+                var stripeOffset = GraphCanvas.Current == null ? 16f : (8f * GraphCanvas.Current.Scale.X);
+                var lineWidth = stripeOffset / 2.7f;
+
+                var h = areaOnScreen.GetHeight();
+                var stripeCount = (int)((areaOnScreen.GetWidth() + h + 3 * lineWidth) / stripeOffset);
+                var p = areaOnScreen.Min - new Vector2(h + lineWidth, +lineWidth);
+                var offset = new Vector2(h + 2 * lineWidth,
+                                         h + 2 * lineWidth);
+
+                for (var i = 0; i < stripeCount; i++)
+                {
+                    drawList.AddLine(p, p + offset, lineColor, lineWidth);
+                    p.X += stripeOffset;
+                }
+
+                drawList.PopClipRect();
+            }
 
             //gradient.Steps.OrderBy(o => o.NormalizedPosition);
             gradient.Steps.Sort((x, y) => x.NormalizedPosition.CompareTo(y.NormalizedPosition));
@@ -57,32 +82,32 @@ namespace T3.Gui.UiHelpers
                     ImGui.SetCursorScreenPos(handleArea.Min);
                     ImGui.InvisibleButton("gradientStep", new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
 
-                    if(ImGui.IsItemHovered()) 
+                    if (ImGui.IsItemHovered())
                         anyHandleHovered = true;
 
                     var draggedOutside = false;
                     if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                     {
-                        draggedOutside= ImGui.GetMousePos().Y > areaOnScreen.Max.Y + 50;
+                        draggedOutside = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + 50;
 
                         step.NormalizedPosition = ((ImGui.GetMousePos().X - areaOnScreen.Min.X) / areaOnScreen.GetWidth()).Clamp(0, 1);
                         modified = true;
                     }
-                    
+
                     // Draw handle
                     if (draggedOutside)
                     {
                         handleArea.Min.Y += 10;
                         handleArea.Max.Y += 10;
                     }
-                    
+
                     if (ImGui.IsItemDeactivated())
                     {
                         var mouseOutsideThresholdAfterDrag = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + 50;
-                        if(mouseOutsideThresholdAfterDrag && gradient.Steps.Count > 1)
+                        if (mouseOutsideThresholdAfterDrag && gradient.Steps.Count > 1)
                             removedStep = step;
                     }
-                    
+
                     drawList.AddRectFilled(handleArea.Min, handleArea.Max, ImGui.ColorConvertFloat4ToU32(step.Color));
                     drawList.AddRect(handleArea.Min, handleArea.Max, Color.Black);
                     drawList.AddRect(handleArea.Min + Vector2.One, handleArea.Max - Vector2.One, Color.White);
@@ -112,9 +137,9 @@ namespace T3.Gui.UiHelpers
                 {
                     var insertRangeMin = new Vector2(areaOnScreen.Min.X, areaOnScreen.Max.Y - StepHandleSize.Y);
                     ImGui.SetCursorScreenPos(insertRangeMin);
-                    
+
                     var normalizedPosition = (ImGui.GetMousePos().X - insertRangeMin.X) / areaOnScreen.GetWidth();
-                    
+
                     if (ImGui.InvisibleButton("insertRange", areaOnScreen.Max - insertRangeMin))
                     {
                         gradient.Steps.Add(new Gradient.Step()
@@ -129,20 +154,19 @@ namespace T3.Gui.UiHelpers
                     if (ImGui.IsItemHovered() && !ImGui.IsItemActive() && !anyHandleHovered)
                     {
                         var handleArea = GetHandleAreaForPosition(normalizedPosition);
-                        drawList.AddRect(handleArea.Min + Vector2.One, handleArea.Max - Vector2.One, new Color(1f,1f,1f,0.4f));
+                        drawList.AddRect(handleArea.Min + Vector2.One, handleArea.Max - Vector2.One, new Color(1f, 1f, 1f, 0.4f));
                     }
                 }
             }
 
             return modified;
-            
+
             ImRect GetHandleAreaForPosition(float normalizedPosition)
             {
                 var x = areaOnScreen.Min.X - StepHandleSize.X / 2f + areaOnScreen.GetWidth() * normalizedPosition;
                 return new ImRect(new Vector2(x, areaOnScreen.Max.Y - StepHandleSize.Y), new Vector2(x + StepHandleSize.X, areaOnScreen.Max.Y + 2));
             }
         }
-
 
         private const float RequiredHeightForHandles = 20;
         private const int MinInsertHeight = 20;
