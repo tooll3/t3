@@ -22,24 +22,7 @@ namespace T3.Gui.UiHelpers
 
             // Draw Gradient background
             {
-                drawList.PushClipRect(areaOnScreen.Min, areaOnScreen.Max);
-                var lineColor = new Color(0f, 0f, 0f, 0.2f);
-                var stripeOffset = GraphCanvas.Current == null ? 16f : (8f * GraphCanvas.Current.Scale.X);
-                var lineWidth = stripeOffset / 2.7f;
-
-                var h = areaOnScreen.GetHeight();
-                var stripeCount = (int)((areaOnScreen.GetWidth() + h + 3 * lineWidth) / stripeOffset);
-                var p = areaOnScreen.Min - new Vector2(h + lineWidth, +lineWidth);
-                var offset = new Vector2(h + 2 * lineWidth,
-                                         h + 2 * lineWidth);
-
-                for (var i = 0; i < stripeCount; i++)
-                {
-                    drawList.AddLine(p, p + offset, lineColor, lineWidth);
-                    p.X += stripeOffset;
-                }
-
-                drawList.PopClipRect();
+                CustomComponents.FillWithStripes(drawList, areaOnScreen);
             }
 
             //gradient.Steps.OrderBy(o => o.NormalizedPosition);

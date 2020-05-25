@@ -71,6 +71,12 @@ namespace UiHelpers
             var max = ImGui.GetWindowContentRegionMax();
             DebugRect(ImGui.GetWindowPos() + min, ImGui.GetWindowPos() + max, color, label);
         }
+
+        public static ImRect GetContentRegionArea()
+        {
+            return new ImRect(ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
+                              ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
+        }
     }
 
     /// <summary>

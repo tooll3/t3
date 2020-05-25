@@ -36,6 +36,8 @@ namespace T3.Gui.Windows
 
         public void DrawTexture(Texture2D texture)
         {
+            CustomComponents.FillWithStripes(ImGui.GetWindowDrawList(), THelpers.GetContentRegionArea());
+            
             if (texture == null || texture.IsDisposed)
                 return;
 

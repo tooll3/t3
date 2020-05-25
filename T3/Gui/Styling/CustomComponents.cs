@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Windows.Forms;
 using T3.Core;
 using T3.Core.Logging;
+using T3.Gui.Graph;
 using T3.Gui.Styling;
 using UiHelpers;
 
@@ -134,7 +135,7 @@ namespace T3.Gui
             return clicked;
         }
 
-        public static bool IconButton(Styling.Icon icon, string label, Vector2 size)
+        public static bool IconButton(Icon icon, string label, Vector2 size)
         {
             ImGui.PushFont(Icons.IconFont);
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.3f));
@@ -248,6 +249,28 @@ namespace T3.Gui
             ImGui.Text(text);
             ImGui.PopStyleColor();
             ImGui.PopFont();
+        }
+
+        public static void FillWithStripes(ImDrawListPtr drawList, ImRect areaOnScreen, float patternWidth=16)
+        {
+            drawList.PushClipRect(areaOnScreen.Min, areaOnScreen.Max);
+            var lineColor = new Color(0f, 0f, 0f, 0.2f);
+            var stripeOffset = GraphCanvas.Current == null ? patternWidth : (patternWidth/2 * GraphCanvas.Current.Scale.X);
+            var lineWidth = stripeOffset / 2.7f;
+
+            var h = areaOnScreen.GetHeight();
+            var stripeCount = (int)((areaOnScreen.GetWidth() + h + 3 * lineWidth) / stripeOffset);
+            var p = areaOnScreen.Min - new Vector2(h + lineWidth, +lineWidth);
+            var offset = new Vector2(h + 2 * lineWidth,
+                                     h + 2 * lineWidth);
+
+            for (var i = 0; i < stripeCount; i++)
+            {
+                drawList.AddLine(p, p + offset, lineColor, lineWidth);
+                p.X += stripeOffset;
+            }
+
+            drawList.PopClipRect();
         }
     }
 }
