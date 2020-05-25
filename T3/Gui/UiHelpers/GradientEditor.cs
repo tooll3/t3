@@ -108,6 +108,12 @@ namespace T3.Gui.UiHelpers
                             removedStep = step;
                     }
 
+                    var points = new[] {
+                                               new Vector2(handleArea.Min.X, handleArea.Max.Y),
+                                               handleArea.Max,
+                                               new Vector2(handleArea.Max.X, handleArea.Min.Y),
+                                           };
+                    drawList.AddConvexPolyFilled(ref points[0], 3 , new Color(0.15f,0.15f,0.15f,1));
                     drawList.AddRectFilled(handleArea.Min, handleArea.Max, ImGui.ColorConvertFloat4ToU32(step.Color));
                     drawList.AddRect(handleArea.Min, handleArea.Max, Color.Black);
                     drawList.AddRect(handleArea.Min + Vector2.One, handleArea.Max - Vector2.One, Color.White);
@@ -116,7 +122,12 @@ namespace T3.Gui.UiHelpers
                         && ImGui.IsMouseReleased(0)
                         && ImGui.GetIO().MouseDragMaxDistanceAbs[0].LengthSquared() < 2
                         && !ImGui.IsPopupOpen("##colorEdit"))
+                    {
+                        T3Ui.OpenedPopUpName = "##colorEdit";
                         ImGui.OpenPopup("##colorEdit");
+                        ImGui.SetNextWindowPos( new Vector2(handleArea.Min.X, handleArea.Max.Y));
+                        
+                    }
 
                     if (ImGui.BeginPopupContextItem("##colorEdit"))
                     {
@@ -170,6 +181,6 @@ namespace T3.Gui.UiHelpers
 
         private const float RequiredHeightForHandles = 20;
         private const int MinInsertHeight = 20;
-        public static readonly Vector2 StepHandleSize = new Vector2(10, 20);
+        public static readonly Vector2 StepHandleSize = new Vector2(14, 24);
     }
 }

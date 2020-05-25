@@ -196,7 +196,11 @@ namespace T3.Gui.Graph
                 var isClicked = ImGui.IsItemHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left);
                 var clickWasDrag = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).LengthSquared() > 1;
 
-                if (isClicked && !clickWasDrag && !ParameterWindow.IsAnyInstanceVisible() && !justOpenedChild)
+                if (isClicked 
+                    && !clickWasDrag 
+                    && !ParameterWindow.IsAnyInstanceVisible() 
+                    && !justOpenedChild 
+                    && string.IsNullOrEmpty(T3Ui.OpenedPopUpName))
                 {
                     SelectionManager.SetSelection(childUi, instance);
                     ImGui.OpenPopup("parameterContextPopup");
