@@ -48,16 +48,26 @@ namespace T3.Compilation
         public static Assembly CompileSymbolFromSource(string source, string symbolName)
         {
             var referencedAssembliesNames = ResourceManager.Instance().OperatorsAssembly.GetReferencedAssemblies(); // todo: ugly
-            var appDomainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
             var coreAssembly = typeof(ResourceManager).Assembly;
             referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
             foreach (var asmName in referencedAssembliesNames)
             {
-                var asm = appDomainAssemblies.SingleOrDefault(assembly => assembly.GetName().Name == asmName.Name);
+                var asm = Assembly.Load(asmName);
                 if (asm != null)
                 {
                     referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
+                }
+
+                // in order to get dependencies of the used assemblies that are not part of T3 references itself
+                var subAsmNames = asm.GetReferencedAssemblies();
+                foreach (var subAsmName in subAsmNames)
+                {
+                    var subAsm = Assembly.Load(subAsmName);
+                    if (subAsm != null)
+                    {
+                        referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
+                    }
                 }
             }
         
