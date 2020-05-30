@@ -511,6 +511,7 @@
     <Content Include="cimgui.dll" />
     <Content Include="ImGui\imgui.cpp" />
     <Content Include="ImGui\imgui.h" />
+    <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">

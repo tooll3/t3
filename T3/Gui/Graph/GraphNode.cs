@@ -79,8 +79,9 @@ namespace T3.Gui.Graph
                 var backgroundColor = typeColor;
                 if (framesSinceLastUpdate > 2)
                 {
-                    var fadeFactor = MathUtils.Remap(framesSinceLastUpdate, 0f, 60f, 1f, 0.4f);
-                    backgroundColor.Rgba.W *= fadeFactor;
+                    var fadeFactor = MathUtils.Remap(framesSinceLastUpdate, 0f, 60f,0f, 0.5f);
+                    //backgroundColor.Rgba.W *= fadeFactor;
+                    backgroundColor = Color.Mix(backgroundColor, Color.Black, fadeFactor);
                 }
 
                 // background
@@ -155,7 +156,7 @@ namespace T3.Gui.Graph
                                 var firstOutput = instance.Outputs[0];
                                 IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
                                 _evaluationContext.Reset();
-                                _evaluationContext.RequestedResolution = new Size2(1280, 720);
+                                _evaluationContext.RequestedResolution = new Size2(1280/2, 720/2);
                                 outputUi.DrawValue(firstOutput, _evaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
                             }
 
