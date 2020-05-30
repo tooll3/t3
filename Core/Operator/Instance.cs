@@ -99,7 +99,7 @@ namespace T3.Core.Operator
         }
     }
 
-    public class Instance<T> : Instance
+    public class Instance<T> : Instance where T : Instance
     {
         public override Type Type { get; } = typeof(T);
 
