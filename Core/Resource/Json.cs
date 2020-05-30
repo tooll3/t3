@@ -181,6 +181,11 @@ namespace T3.Core
                 symbol = model.ReadSymbolWithId(symbolId);
             }
 
+            if (symbol == null)
+            {
+                throw new ArgumentException($"Failed to load symbol {symbolId}.\nThis is frequently caused by instances of a missing Symbol.\nDon't forget to look to references in Dashboard operator.");
+            }
+            
             var symbolChild = new SymbolChild(symbol, childId);
 
             var nameToken = symbolChildJson["Name"];
