@@ -18,7 +18,9 @@ namespace T3.Core.Operator
         public List<Instance> Children { get; set; } = new List<Instance>();
         public List<IInputSlot> Inputs { get; set; } = new List<IInputSlot>();
 
-        public void Dispose()
+        public void Dispose() => Dispose(true);
+
+        protected virtual void Dispose(bool disposing)
         {
         }
 
