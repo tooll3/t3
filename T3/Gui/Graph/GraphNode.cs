@@ -65,8 +65,6 @@ namespace T3.Gui.Graph
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);
                 }
 
-
-                
                 // Rendering
                 var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
                 var firstInstanceOutput = childInstance?.Outputs.FirstOrDefault();
@@ -79,7 +77,7 @@ namespace T3.Gui.Graph
                 var backgroundColor = typeColor;
                 if (framesSinceLastUpdate > 2)
                 {
-                    var fadeFactor = MathUtils.Remap(framesSinceLastUpdate, 0f, 60f,0f, 0.5f);
+                    var fadeFactor = MathUtils.Remap(framesSinceLastUpdate, 0f, 60f, 0f, 0.5f);
                     //backgroundColor.Rgba.W *= fadeFactor;
                     backgroundColor = Color.Mix(backgroundColor, Color.Black, fadeFactor);
                 }
@@ -94,7 +92,6 @@ namespace T3.Gui.Graph
                 // Custom ui
                 var usesCustomUi = childUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
 
-                
                 // Size toggle
                 if (!usesCustomUi && GraphCanvas.Current.Scale.X > 0.7f)
                 {
@@ -156,7 +153,7 @@ namespace T3.Gui.Graph
                                 var firstOutput = instance.Outputs[0];
                                 IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
                                 _evaluationContext.Reset();
-                                _evaluationContext.RequestedResolution = new Size2(1280/2, 720/2);
+                                _evaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
                                 outputUi.DrawValue(firstOutput, _evaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
                             }
 
@@ -197,10 +194,10 @@ namespace T3.Gui.Graph
                 var isClicked = ImGui.IsItemHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left);
                 var clickWasDrag = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).LengthSquared() > 1;
 
-                if (isClicked 
-                    && !clickWasDrag 
-                    && !ParameterWindow.IsAnyInstanceVisible() 
-                    && !justOpenedChild 
+                if (isClicked
+                    && !clickWasDrag
+                    && !ParameterWindow.IsAnyInstanceVisible()
+                    && !justOpenedChild
                     && string.IsNullOrEmpty(T3Ui.OpenedPopUpName))
                 {
                     SelectionManager.SetSelection(childUi, instance);
@@ -217,7 +214,7 @@ namespace T3.Gui.Graph
                     ImGui.PopFont();
                     ImGui.EndPopup();
                 }
-                
+
                 DrawPreview();
 
                 // outline
@@ -501,7 +498,6 @@ namespace T3.Gui.Graph
 
             childUi.Size = newNodeSize;
         }
-        
 
         // Find visible input slots.
         // TODO: this is a major performance hot spot and needs optimization
@@ -516,7 +512,8 @@ namespace T3.Gui.Graph
 
             var isNodeHoveredConnectionTarget = _hoveredNodeIdForConnectionTarget == childUi.Id
                                                 && ConnectionMaker.TempConnection != null
-                                                && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId;
+                                                && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId
+                                                && ConnectionMaker.TempConnection.SourceParentOrChildId != childUi.Id;
 
             VisibleInputs.Clear();
             foreach (var inputUi in symbolUi.InputUis.Values)
