@@ -1,35 +1,35 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
 using T3.Gui.ChildUi.Animators;
-using T3.Operators.Types.Id_23794a1f_372d_484b_ac31_9470d0e77819;
+using T3.Operators.Types.Id_3b0eb327_6ad8_424f_bca7_ccbfa2c9a986;
 using UiHelpers;
 
 namespace T3.Gui.ChildUi
 {
-    public static class Jitter2dUi
+    public static class JitterUi
     {
         public static bool DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
-            if (!(instance is Jitter2d jitter2d))
+            if (!(instance is Jitter jitter))
                 return false;
             
-            if (AnimatorLabel.Draw(ref jitter2d.Rate.TypedInputValue.Value, 
-                               screenRect, drawList, nameof(jitter2d)))
+            if (AnimatorLabel.Draw(ref jitter.Rate.TypedInputValue.Value, 
+                               screenRect, drawList, nameof(jitter)))
             {
-                jitter2d.Rate.Input.IsDefault = false;
-                jitter2d.Rate.DirtyFlag.Invalidate();
+                jitter.Rate.Input.IsDefault = false;
+                jitter.Rate.DirtyFlag.Invalidate();
             }
-            var label = $"±{jitter2d.JumpDistance.TypedInputValue.Value:0.0}";
+            var label = $"±{jitter.JumpDistance.TypedInputValue.Value:0.0}";
             
-            if (MicroGraph.Draw(ref jitter2d.JumpDistance.TypedInputValue.Value, 
-                                ref jitter2d.Blending.TypedInputValue.Value, 
-                                jitter2d.Fragment, 
+            if (MicroGraph.Draw(ref jitter.JumpDistance.TypedInputValue.Value, 
+                                ref jitter.Blending.TypedInputValue.Value, 
+                                jitter.Fragment, 
                                 screenRect, drawList, label))
             {
-                jitter2d.Blending.Input.IsDefault = false;
-                jitter2d.Blending.DirtyFlag.Invalidate();
-                jitter2d.JumpDistance.Input.IsDefault = false;
-                jitter2d.JumpDistance.DirtyFlag.Invalidate();
+                jitter.Blending.Input.IsDefault = false;
+                jitter.Blending.DirtyFlag.Invalidate();
+                jitter.JumpDistance.Input.IsDefault = false;
+                jitter.JumpDistance.DirtyFlag.Invalidate();
             }
             return true;
         }
