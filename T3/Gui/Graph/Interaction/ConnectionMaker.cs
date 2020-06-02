@@ -73,10 +73,10 @@ namespace T3.Gui.Graph
                                                    targetParentOrChildId: NotConnectedId,
                                                    targetSlotId: NotConnectedId);
             DraftConnectionType = outputDef.ValueType;
-            _isDisconnectinFromInput = false;
+            _isDisconnectingFromInput = false;
         }
 
-        private static bool _isDisconnectinFromInput;
+        private static bool _isDisconnectingFromInput;
 
         public static void StartFromInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition inputDef, int multiInputIndex = 0)
         {
@@ -90,7 +90,7 @@ namespace T3.Gui.Graph
                                                        sourceSlotId: existingConnection.SourceSlotId,
                                                        targetParentOrChildId: NotConnectedId,
                                                        targetSlotId: NotConnectedId);
-                _isDisconnectinFromInput = true;
+                _isDisconnectingFromInput = true;
             }
             else
             {
@@ -98,7 +98,7 @@ namespace T3.Gui.Graph
                                                        sourceSlotId: NotConnectedId,
                                                        targetParentOrChildId: targetUi.SymbolChild.Id,
                                                        targetSlotId: inputDef.Id);
-                _isDisconnectinFromInput = false;
+                _isDisconnectingFromInput = false;
             }
 
             DraftConnectionType = inputDef.DefaultValue.ValueType;
@@ -194,7 +194,7 @@ namespace T3.Gui.Graph
             if (TempConnection == null)
                 return;
 
-            if (_isDisconnectinFromInput)
+            if (_isDisconnectingFromInput)
             {
                 TempConnection = null;
                 return;
@@ -320,15 +320,17 @@ namespace T3.Gui.Graph
             {
                 var drawList = ImGui.GetWindowDrawList();
                 _mousePosition = ImGui.GetMousePos();
-                _bestMatchLastFrame = _bestMatchYetForCurrentFrame;
-                if (_bestMatchLastFrame != null)
+                BestMatchLastFrame = _bestMatchYetForCurrentFrame;
+                if (BestMatchLastFrame != null)
                 {
-                    drawList.AddRect(_bestMatchLastFrame.Area.Min, _bestMatchLastFrame.Area.Max, Color.Orange);
-                    var textSize = ImGui.CalcTextSize(_bestMatchLastFrame.Name);
+                    // drawList.AddRect(_bestMatchLastFrame.Area.Min, _bestMatchLastFrame.Area.Max, Color.Orange);
+                    var textSize = ImGui.CalcTextSize(BestMatchLastFrame.Name);
                     ImGui.SetNextWindowPos(_mousePosition - new Vector2(textSize.X + 10, textSize.Y / 2));
+                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
                     ImGui.BeginTooltip();
-                    ImGui.Text(_bestMatchLastFrame.Name);
+                    ImGui.Text(BestMatchLastFrame.Name);
                     ImGui.EndTooltip();
+                    ImGui.PopStyleVar();
                 }
                 
                 _bestMatchYetForCurrentFrame = null;
@@ -344,7 +346,7 @@ namespace T3.Gui.Graph
                     return;
 
                 var distance = Vector2.Distance(areaOnScreen.Min, _mousePosition);
-                if (distance > 100 || distance > _bestMatchDistance)
+                if (distance > SnapDistance || distance > _bestMatchDistance)
                 {
                     return;
                 }
@@ -360,13 +362,20 @@ namespace T3.Gui.Graph
                 _bestMatchDistance = distance;
             }
 
-            private static PotentialConnectionTarget _bestMatchLastFrame;
+            public static bool IsNextBestTarget(SymbolChildUi childUi, Guid inputDefinitionId, int socketIndex)
+            {
+                return BestMatchLastFrame != null && BestMatchLastFrame.TargetParentOrChildId == childUi.SymbolChild.Id
+                                                  && BestMatchLastFrame.TargetInputId == inputDefinitionId
+                                                  && BestMatchLastFrame.SlotIndex == socketIndex;
+            }
+            
+            public static PotentialConnectionTarget BestMatchLastFrame;
             private static PotentialConnectionTarget _bestMatchYetForCurrentFrame;
             private static float _bestMatchDistance = float.PositiveInfinity;
-
+            private const int SnapDistance = 50;
             private static Vector2 _mousePosition;
 
-            private class PotentialConnectionTarget
+            public class PotentialConnectionTarget
             {
                 public Guid TargetParentOrChildId;
                 public Guid TargetInputId;
@@ -375,12 +384,7 @@ namespace T3.Gui.Graph
                 public int SlotIndex;
             }
 
-            public static bool IsNextBestTarget(SymbolChildUi childUi, Guid inputDefinitionId, int socketIndex)
-            {
-                return _bestMatchLastFrame != null && _bestMatchLastFrame.TargetParentOrChildId == childUi.SymbolChild.Id
-                                          && _bestMatchLastFrame.TargetInputId == inputDefinitionId
-                                          && _bestMatchLastFrame.SlotIndex == socketIndex;
-            }
+
         }
     }
 }

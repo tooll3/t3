@@ -182,7 +182,16 @@ namespace T3.Gui.Graph
 
                 if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
                 {
-                    newLine.TargetPosition = ImGui.GetMousePos();
+                    if (ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame != null)
+                    {
+                        newLine.TargetPosition = new Vector2(  ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame.Area.Min.X,
+                                                               ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame.Area.GetCenter().Y);
+                    }
+                    else
+                    {
+                        newLine.TargetPosition = ImGui.GetMousePos();
+                    }
+
                     newLine.ColorForType = Color.White;
                 }
                 else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
@@ -303,15 +312,15 @@ namespace T3.Gui.Graph
                     Im.DrawArcConnection(new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
                                          SourcePosition,
                                          TargetNodeArea,
-                                         TargetPosition, 
-                                         color, 
+                                         TargetPosition,
+                                         color,
                                          1.5f * Thickness);
                 }
                 else
                 {
                     var tangentLength = MathUtils.Remap(Vector2.Distance(SourcePosition, TargetPosition),
-                                                 30, 300,
-                                                 5, 200);
+                                                        30, 300,
+                                                        5, 200);
                     DrawList.AddBezierCurve(
                                             SourcePosition,
                                             SourcePosition + new Vector2(tangentLength, 0),
