@@ -283,6 +283,7 @@ namespace T3.Gui.Graph
 
             var connectionBorderArea = _selectableScreenRect;
             connectionBorderArea.Min.X -= 4;
+
             // Input Sockets...
             for (var inputIndex = 0; inputIndex < visibleInputUis.Count; inputIndex++)
             {
@@ -291,6 +292,7 @@ namespace T3.Gui.Graph
 
                 var usableSlotArea = GetUsableInputSlotSize(inputIndex, visibleInputUis.Count);
 
+                ConnectionMaker.ConnectionSnapEndHelper.RegisterAsConnectionTarget(childUi, inputUi, 0, usableSlotArea);
                 ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + inputDefinition.GetHashCode());
                 ImGui.SetCursorScreenPos(usableSlotArea.Min);
                 ImGui.InvisibleButton("input", usableSlotArea.GetSize());
@@ -305,6 +307,7 @@ namespace T3.Gui.Graph
                 var colorForType = ColorForInputType(inputDefinition);
 
                 var connectedLines = Graph.Connections.GetLinesToNodeInputSlot(childUi, inputDefinition.Id);
+
 
                 // Render input Label
                 {
@@ -343,6 +346,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
+                // Draw input slots
                 if (inputDefinition.IsMultiInput)
                 {
                     var showGaps = isPotentialConnectionTarget;
@@ -360,29 +364,30 @@ namespace T3.Gui.Graph
 
                     var reactiveSlotColor = GetReactiveSlotColor(inputDefinition.DefaultValue.ValueType, colorForType, SocketDirections.Input);
 
-                    for (var index = 0; index < socketCount; index++)
+                    for (var socketIndex = 0; socketIndex < socketCount; socketIndex++)
                     {
+                        var isAboutToBeReconnected = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, socketIndex);
                         var usableSocketArea = new ImRect(topLeft, topLeft + socketSize);
                         var isSocketHovered = usableSocketArea.Contains(ImGui.GetMousePos());
 
                         bool isGap = false;
                         if (showGaps)
                         {
-                            isGap = (index & 1) == 0;
+                            isGap = (socketIndex & 1) == 0;
                         }
 
                         if (!isGap)
                         {
                             var line = showGaps
-                                           ? connectedLines[index >> 1]
-                                           : connectedLines[index];
+                                           ? connectedLines[socketIndex >> 1]
+                                           : connectedLines[socketIndex];
 
                             line.TargetPosition = targetPos;
                             line.TargetNodeArea = connectionBorderArea;
                             line.IsSelected |= childUi.IsSelected;
                         }
 
-                        DrawMultiInputSocket(childUi, inputDefinition, usableSocketArea, isSocketHovered, index, isGap, colorForType, reactiveSlotColor);
+                        DrawMultiInputSocket(childUi, inputDefinition, usableSocketArea, isSocketHovered, socketIndex, isGap, colorForType, reactiveSlotColor);
 
                         targetPos.Y += socketHeight;
                         topLeft.Y += socketHeight;
@@ -398,12 +403,15 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
+                    //ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id,0)
+                    var isAboutToBeReconnected = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, 0);
                     foreach (var line in connectedLines)
                     {
                         line.TargetPosition = new Vector2(usableSlotArea.Max.X - 4,
                                                           usableSlotArea.GetCenter().Y);
                         line.TargetNodeArea = connectionBorderArea;
                         line.IsSelected |= childUi.IsSelected;
+                        line.IsAboutToBeReplaced = isAboutToBeReconnected;
                     }
 
                     DrawInputSlot(childUi, inputDefinition, usableSlotArea, colorForType, hovered);
@@ -737,7 +745,7 @@ namespace T3.Gui.Graph
                     ConnectionMaker.Update();
                 }
             }
-            else if (hovered)
+            else if (ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id,0))
             {
                 if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
@@ -879,7 +887,7 @@ namespace T3.Gui.Graph
 
         private static readonly string UnfoldLabel = (char)Icon.ChevronLeft + "##size";
         private static readonly string FoldLabel = (char)Icon.ChevronDown + "##size";
-        private static readonly List<IInputUi> VisibleInputs = new List<IInputUi>(15);
+        private static readonly List<IInputUi> VisibleInputs = new List<IInputUi>(15); // A static variable to avoid GC allocations
 
         private static EvaluationContext _evaluationContext = new EvaluationContext();
 

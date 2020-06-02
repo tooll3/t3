@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
+using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.InputUi;
+using UiHelpers;
 
 namespace T3.Gui.Graph
 {
@@ -42,6 +45,7 @@ namespace T3.Gui.Graph
 
         public static bool IsInputSlotCurrentConnectionTarget(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, int multiInputIndex = 0)
         {
+            // return ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, 0);
             return TempConnection != null
                    && TempConnection.TargetParentOrChildId == targetUi.SymbolChild.Id
                    && TempConnection.TargetSlotId == inputDef.Id;
@@ -73,6 +77,7 @@ namespace T3.Gui.Graph
         }
 
         private static bool _isDisconnectinFromInput;
+
         public static void StartFromInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition inputDef, int multiInputIndex = 0)
         {
             var existingConnection = FindConnectionToInputSlot(parentSymbol, targetUi, inputDef, multiInputIndex);
@@ -135,6 +140,7 @@ namespace T3.Gui.Graph
 
         public static void Update()
         {
+            ConnectionSnapEndHelper.PrepareNewFrame();
         }
 
         public static void Cancel()
@@ -193,8 +199,7 @@ namespace T3.Gui.Graph
                 TempConnection = null;
                 return;
             }
-                 
-            
+
             if (TempConnection.TargetParentOrChildId == NotConnectedId)
             {
                 TempConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
@@ -217,7 +222,7 @@ namespace T3.Gui.Graph
         {
             if (inputDef == null)
                 return;
-            
+
             var newConnection = new Symbol.Connection(sourceParentOrChildId: TempConnection.SourceParentOrChildId,
                                                       sourceSlotId: TempConnection.SourceSlotId,
                                                       targetParentOrChildId: newOp.Id,
@@ -305,5 +310,77 @@ namespace T3.Gui.Graph
         /// A special id indicating that the connection is ending in the <see cref="SymbolBrowser"/>
         /// </summary>
         public static Guid UseDraftChildId = Guid.NewGuid();
+
+        /// <summary>
+        /// A helper that collects potential collection targets during connection drag operations.
+        /// </summary>
+        public static class ConnectionSnapEndHelper
+        {
+            public static void PrepareNewFrame()
+            {
+                var drawList = ImGui.GetWindowDrawList();
+                _mousePosition = ImGui.GetMousePos();
+                _bestMatchLastFrame = _bestMatchYetForCurrentFrame;
+                if (_bestMatchLastFrame != null)
+                {
+                    drawList.AddRect(_bestMatchLastFrame.Area.Min, _bestMatchLastFrame.Area.Max, Color.Orange);
+                    var textSize = ImGui.CalcTextSize(_bestMatchLastFrame.Name);
+                    ImGui.SetNextWindowPos(_mousePosition - new Vector2(textSize.X + 10, textSize.Y / 2));
+                    ImGui.BeginTooltip();
+                    ImGui.Text(_bestMatchLastFrame.Name);
+                    ImGui.EndTooltip();
+                }
+                
+                _bestMatchYetForCurrentFrame = null;
+                _bestMatchDistance = float.PositiveInfinity;
+            }
+
+            public static void RegisterAsConnectionTarget(SymbolChildUi childUi, IInputUi inputUi, int slotIndex, ImRect areaOnScreen)
+            {
+                if (ConnectionMaker.TempConnection == null)
+                    return;
+
+                if (inputUi.Type != ConnectionMaker.DraftConnectionType)
+                    return;
+
+                var distance = Vector2.Distance(areaOnScreen.Min, _mousePosition);
+                if (distance > 100 || distance > _bestMatchDistance)
+                {
+                    return;
+                }
+
+                _bestMatchYetForCurrentFrame = new PotentialConnectionTarget()
+                                 {
+                                     TargetParentOrChildId = childUi.SymbolChild.Id,
+                                     TargetInputId = inputUi.InputDefinition.Id,
+                                     Area = areaOnScreen,
+                                     Name = inputUi.InputDefinition.Name,
+                                     SlotIndex = slotIndex
+                                 };
+                _bestMatchDistance = distance;
+            }
+
+            private static PotentialConnectionTarget _bestMatchLastFrame;
+            private static PotentialConnectionTarget _bestMatchYetForCurrentFrame;
+            private static float _bestMatchDistance = float.PositiveInfinity;
+
+            private static Vector2 _mousePosition;
+
+            private class PotentialConnectionTarget
+            {
+                public Guid TargetParentOrChildId;
+                public Guid TargetInputId;
+                public ImRect Area;
+                public string Name;
+                public int SlotIndex;
+            }
+
+            public static bool IsNextBestTarget(SymbolChildUi childUi, Guid inputDefinitionId, int socketIndex)
+            {
+                return _bestMatchLastFrame != null && _bestMatchLastFrame.TargetParentOrChildId == childUi.SymbolChild.Id
+                                          && _bestMatchLastFrame.TargetInputId == inputDefinitionId
+                                          && _bestMatchLastFrame.SlotIndex == socketIndex;
+            }
+        }
     }
 }

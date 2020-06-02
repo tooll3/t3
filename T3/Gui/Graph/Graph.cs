@@ -258,6 +258,7 @@ namespace T3.Gui.Graph
             public float Thickness = 1f;
             public ImRect SourceNodeArea;
             public ImRect TargetNodeArea;
+            public bool IsAboutToBeReplaced;
 
             internal ConnectionLineUi(Symbol.Connection connection)
             {
@@ -294,7 +295,8 @@ namespace T3.Gui.Graph
                                 ? ColorVariations.Highlight.Apply(ColorForType)
                                 : ColorVariations.ConnectionLines.Apply(ColorForType);
 
-
+                if (IsAboutToBeReplaced)
+                    color = Color.Mix(color, Color.Red, (float)Math.Sin(ImGui.GetTime() * 10) / 2 + 0.5f);
 
                 if (UserSettings.Config.UseArcConnections)
                 {
