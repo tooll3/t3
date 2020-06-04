@@ -147,6 +147,8 @@ namespace T3.Gui.Graph
         {
             TempConnection = null;
             DraftConnectionType = null;
+            ConnectionSnapEndHelper.Reset();
+            
         }
 
         public static void CompleteAtInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input, int multiInputIndex = 0,
@@ -177,6 +179,7 @@ namespace T3.Gui.Graph
             }
 
             TempConnection = null;
+            ConnectionSnapEndHelper.Reset();
         }
 
         public static void CompleteAtOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, Symbol.OutputDefinition output)
@@ -187,6 +190,7 @@ namespace T3.Gui.Graph
                                                       targetSlotId: TempConnection.TargetSlotId);
             UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, 0));
             TempConnection = null;
+            ConnectionSnapEndHelper.Reset();
         }
 
         public static void InitSymbolBrowserAtPosition(SymbolBrowser symbolBrowser, Vector2 canvasPosition)
@@ -229,6 +233,7 @@ namespace T3.Gui.Graph
                                                       targetSlotId: inputDef.Id);
             UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, 0));
             TempConnection = null;
+            ConnectionSnapEndHelper.Reset();
         }
 
         public static void CompleteConnectionFromBuiltNode(Symbol parentSymbol, SymbolChild newOp, Symbol.OutputDefinition outputDef)
@@ -239,6 +244,7 @@ namespace T3.Gui.Graph
                                                       targetSlotId: TempConnection.TargetSlotId);
             UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, 0));
             TempConnection = null;
+            ConnectionSnapEndHelper.Reset();
         }
 
         public static void CompleteAtSymbolInputNode(Symbol parentSymbol, Symbol.InputDefinition inputDef)
@@ -249,6 +255,7 @@ namespace T3.Gui.Graph
                                                       targetSlotId: TempConnection.TargetSlotId);
             UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, 0));
             TempConnection = null;
+            ConnectionSnapEndHelper.Reset();
         }
 
         public static void CompleteAtSymbolOutputNode(Symbol parentSymbol, Symbol.OutputDefinition outputDef)
@@ -259,6 +266,7 @@ namespace T3.Gui.Graph
                                                       targetSlotId: outputDef.Id);
             parentSymbol.AddConnection(newConnection);
             TempConnection = null;
+            ConnectionSnapEndHelper.Reset();
         }
 
         private static List<Symbol.Connection> FindConnectionsFromOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, int outputIndex)
@@ -337,6 +345,11 @@ namespace T3.Gui.Graph
                 _bestMatchDistance = float.PositiveInfinity;
             }
 
+            public static void Reset()
+            {
+                BestMatchLastFrame = null;
+            }
+            
             public static void RegisterAsConnectionTarget(SymbolChildUi childUi, IInputUi inputUi, int slotIndex, ImRect areaOnScreen)
             {
                 if (ConnectionMaker.TempConnection == null)

@@ -415,7 +415,7 @@ namespace T3.Gui.Graph
                         line.IsAboutToBeReplaced = isAboutToBeReconnected;
                     }
 
-                    DrawInputSlot(childUi, inputDefinition, usableSlotArea, colorForType);
+                    DrawInputSlot(childUi, inputDefinition, usableSlotArea, colorForType, hovered);
                 }
 
                 ImGui.PopID();
@@ -737,7 +737,7 @@ namespace T3.Gui.Graph
                                                   ));
         }
 
-        private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType)
+        private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
             if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
             {
@@ -746,7 +746,7 @@ namespace T3.Gui.Graph
                     ConnectionMaker.Update();
                 }
             }
-            else if (ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id,0))
+            else if (ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id,0) || hovered)
             {
                 if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
