@@ -5,8 +5,6 @@ using System.Numerics;
 using System.Text;
 using System.Windows.Forms;
 using T3.Core.Logging;
-using T3.Gui;
-using T3.Gui.Windows;
 using UiHelpers;
 
 namespace T3.Gui.Windows
@@ -30,7 +28,7 @@ namespace T3.Gui.Windows
 
                 lock (_logEntries)
                 {
-                    while (_logEntries.Count > 1000)
+                    while (_logEntries.Count > MaxLineCount)
                     {
                         _logEntries.RemoveAt(0);
                     }
@@ -53,7 +51,7 @@ namespace T3.Gui.Windows
                         var sb = new StringBuilder();
                         foreach (var entry in _logEntries)
                         {
-                            sb.Append(string.Format("{0:  0.000}", (entry.TimeStamp - _startTime).Ticks / 10000000f));
+                            sb.Append($"{(entry.TimeStamp - _startTime).Ticks / 10000000f:  0.000}");
                             sb.Append("\t");
                             sb.Append(entry.Level);
                             sb.Append("\t");
@@ -82,7 +80,13 @@ namespace T3.Gui.Windows
                             var color = _colorForLogLevel[entry.Level];
                             color.W = colorHoveredElements;
                             ImGui.PushStyleColor(ImGuiCol.Text, color);
-                            ImGui.Text(string.Format("{0:0.000}", (entry.TimeStamp - _startTime).Ticks / 10000000f));
+                            var timeInSeconds= (entry.TimeStamp - _startTime).Ticks / 10000000f;
+                            // Hack to hide ":" render prefix problem
+                            ImGui.SetCursorPosX(-2);
+                            
+                            // FIXME: It should be possible to pass NULL to avoid prefixing. 
+                            // This seems to be broken in imgui.net
+                            ImGui.Value("", timeInSeconds);    // Print with ImGui to avoid allocation
                             ImGui.SameLine(80);
                             ImGui.Text(entry.Message);
 
@@ -115,20 +119,18 @@ namespace T3.Gui.Windows
         private static bool IsLineHovered()
         {
             var min = new Vector2(ImGui.GetWindowPos().X, ImGui.GetItemRectMin().Y);
-            var size = new Vector2(ImGui.GetWindowWidth(), ImGui.GetItemRectSize().Y + LINE_PADDING);
+            var size = new Vector2(ImGui.GetWindowWidth(), ImGui.GetItemRectSize().Y + LinePadding);
             var lineRect = new ImRect(min, min + size);
             return lineRect.Contains(ImGui.GetMousePos());
         }
-
-
-
-        private Dictionary<LogEntry.EntryLevel, Vector4> _colorForLogLevel = new Dictionary<LogEntry.EntryLevel, Vector4>()
-        {
-            {LogEntry.EntryLevel.Debug, new Vector4(1,1,1,0.6f) },
-            {LogEntry.EntryLevel.Info, new Vector4(1,1,1,0.6f) },
-            {LogEntry.EntryLevel.Warning, new Vector4(1,0.5f,0.5f,0.9f) },
-            {LogEntry.EntryLevel.Error, new Vector4(1,0.2f,0.2f,1f) },
-        };
+        
+        private readonly Dictionary<LogEntry.EntryLevel, Vector4> _colorForLogLevel = new Dictionary<LogEntry.EntryLevel, Vector4>()
+                                                                                          {
+                                                                                              {LogEntry.EntryLevel.Debug, new Vector4(1,1,1,0.6f) },
+                                                                                              {LogEntry.EntryLevel.Info, new Vector4(1,1,1,0.6f) },
+                                                                                              {LogEntry.EntryLevel.Warning, new Vector4(1,0.5f,0.5f,0.9f) },
+                                                                                              {LogEntry.EntryLevel.Error, new Vector4(1,0.2f,0.2f,1f) },
+                                                                                          };
 
 
         public void ProcessEntry(LogEntry entry)
@@ -149,12 +151,12 @@ namespace T3.Gui.Windows
             _logEntries = null;
         }
 
-
-
+        private const int MaxLineCount = 250;
+        
         public LogEntry.EntryLevel Filter { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         private bool FilterIsActive => !string.IsNullOrEmpty(_filterString);
-        private const float LINE_PADDING = 3;
+        private const float LinePadding = 3;
         private List<LogEntry> _logEntries = new List<LogEntry>();
         private bool _shouldScrollToBottom = true;
         private string _filterString = "";
