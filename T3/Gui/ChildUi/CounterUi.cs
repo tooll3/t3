@@ -13,10 +13,10 @@ namespace T3.Gui.ChildUi
 {
     public static class CounterUi
     {
-        public static bool DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
             if (!(instance is Counter counter))
-                return false;
+                return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
             if (AnimatorLabel.Draw(ref counter.Rate.TypedInputValue.Value,
@@ -45,7 +45,7 @@ namespace T3.Gui.ChildUi
             }
 
             ImGui.PopID();
-            return true;
+            return SymbolChildUi.CustomUiResult.Rendered;
         }
     }
 }

@@ -90,10 +90,10 @@ namespace T3.Gui.Graph
                                            : ColorVariations.Operator.Apply(backgroundColor));
 
                 // Custom ui
-                var usesCustomUi = childUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
+                var customUiResult = childUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
 
                 // Size toggle
-                if (!usesCustomUi && GraphCanvas.Current.Scale.X > 0.7f)
+                if (customUiResult == SymbolChildUi.CustomUiResult.None && GraphCanvas.Current.Scale.X > 0.7f)
                 {
                     var pos = new Vector2(_usableScreenRect.Max.X - 15, _usableScreenRect.Min.Y + 2);
 
@@ -134,7 +134,8 @@ namespace T3.Gui.Graph
                 SelectableNodeMovement.Handle(childUi, instance);
 
                 // Tooltip
-                if (ImGui.IsItemHovered())
+                if (ImGui.IsItemHovered() 
+                && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip)
                 {
                     SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
 
@@ -261,7 +262,7 @@ namespace T3.Gui.Graph
                 }
 
                 // Label
-                if (!usesCustomUi)
+                if (customUiResult == SymbolChildUi.CustomUiResult.None)
                 {
                     drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
                     ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 ? Fonts.FontSmall : Fonts.FontBold);
@@ -366,7 +367,6 @@ namespace T3.Gui.Graph
 
                     for (var socketIndex = 0; socketIndex < socketCount; socketIndex++)
                     {
-                        var isAboutToBeReconnected = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, socketIndex);
                         var usableSocketArea = new ImRect(topLeft, topLeft + socketSize);
                         var isSocketHovered = usableSocketArea.Contains(ImGui.GetMousePos());
 
@@ -385,6 +385,7 @@ namespace T3.Gui.Graph
                             line.TargetPosition = targetPos;
                             line.TargetNodeArea = connectionBorderArea;
                             line.IsSelected |= childUi.IsSelected;
+                            line.IsAboutToBeReplaced = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, socketIndex);
                         }
 
                         DrawMultiInputSocket(childUi, inputDefinition, usableSocketArea, isSocketHovered, socketIndex, isGap, colorForType, reactiveSlotColor);
@@ -414,7 +415,7 @@ namespace T3.Gui.Graph
                         line.IsAboutToBeReplaced = isAboutToBeReconnected;
                     }
 
-                    DrawInputSlot(childUi, inputDefinition, usableSlotArea, colorForType, hovered);
+                    DrawInputSlot(childUi, inputDefinition, usableSlotArea, colorForType);
                 }
 
                 ImGui.PopID();
@@ -509,7 +510,7 @@ namespace T3.Gui.Graph
 
         // Find visible input slots.
         // TODO: this is a major performance hot spot and needs optimization
-        static List<IInputUi> FindVisibleInputUis(SymbolUi symbolUi, SymbolChildUi childUi, ref bool nodeHasHiddenMatchingInputs)
+        private static List<IInputUi> FindVisibleInputUis(SymbolUi symbolUi, SymbolChildUi childUi, ref bool nodeHasHiddenMatchingInputs)
         {
             var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
 
@@ -736,7 +737,7 @@ namespace T3.Gui.Graph
                                                   ));
         }
 
-        private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered)
+        private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType)
         {
             if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
             {

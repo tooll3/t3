@@ -11,10 +11,10 @@ namespace T3.Gui.ChildUi
 {
     public static class GradientSliderUi
     {
-        public static bool DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
         {
             if (!(instance is GradientSlider gradientSlider))
-                return false;
+                return SymbolChildUi.CustomUiResult.None;
 
             var innerRect = selectableScreenRect;
             innerRect.Expand(-7);
@@ -23,7 +23,7 @@ namespace T3.Gui.ChildUi
             if (gradient == null)
             {
                 //Log.Warning("Can't draw undefined gradient");
-                return false;
+                return SymbolChildUi.CustomUiResult.None;
             }
             
             if (GradientEditor.Draw(gradient, drawList, innerRect))
@@ -36,7 +36,7 @@ namespace T3.Gui.ChildUi
             var pMax = new Vector2(innerRect.Min.X + x+2, innerRect.Max.Y);
             drawList.AddRectFilled(pMin, pMax, Color.Orange );
             
-            return true;
+            return SymbolChildUi.CustomUiResult.Rendered;
         }
     }
 }

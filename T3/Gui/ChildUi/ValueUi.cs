@@ -11,10 +11,10 @@ namespace T3.Gui.ChildUi
 {
     public static class ValueUi
     {
-        public static bool DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
         {
             if (!(instance is Value valueInstance))
-                return false;
+                return SymbolChildUi.CustomUiResult.None;
 
             // var valueSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
             // var inputUi = (FloatInputUi)valueSymbolUi.InputUis[valueInstance.Float.Id];
@@ -48,7 +48,7 @@ namespace T3.Gui.ChildUi
             ImGui.Text($"{valueInstance.Result.Value:0.00}");
             
             ImGui.PopClipRect();
-            return true;
+            return SymbolChildUi.CustomUiResult.Rendered;
         }
     }
 }

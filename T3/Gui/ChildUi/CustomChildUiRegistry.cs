@@ -8,6 +8,7 @@ namespace T3.Gui.ChildUi
 {
     public static class CustomChildUiRegistry
     {
-        public static Dictionary<Type, Func<Instance, ImDrawListPtr, ImRect, bool>> Entries { get; } = new Dictionary<Type, Func<Instance, ImDrawListPtr, ImRect, bool>>();
+        public static Dictionary<Type, Func<Instance, ImDrawListPtr, ImRect, SymbolChildUi.CustomUiResult>> Entries { get; } = new Dictionary<Type, Func<Instance, ImDrawListPtr, ImRect, SymbolChildUi.CustomUiResult>>();
     }
+
 }

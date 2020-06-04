@@ -40,14 +40,26 @@ namespace T3.Gui
         public bool IsSelected => SelectionManager.IsNodeSelected(this);
         public Styles Style { get; set; }
 
-        public bool DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        public CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
         {
             if (!CustomChildUiRegistry.Entries.TryGetValue(instance.Type, out var drawFunction))
-                return false;
+                return CustomUiResult.None;
 
             return drawFunction(instance, drawList, selectableScreenRect);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Flags]
+        public enum CustomUiResult
+        {
+            None =0,
+            Rendered = 1<<2,
+            PreventTooltip = 1<<3,
+            PreventOpenSubGraph = 1<<4,
+        }
+        
         public virtual SymbolChildUi Clone()
         {
             return new SymbolChildUi()

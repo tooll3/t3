@@ -8,10 +8,10 @@ namespace T3.Gui.ChildUi
 {
     public static class JitterUi
     {
-        public static bool DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
             if (!(instance is Jitter jitter))
-                return false;
+                return SymbolChildUi.CustomUiResult.None;
             
             if (AnimatorLabel.Draw(ref jitter.Rate.TypedInputValue.Value, 
                                screenRect, drawList, nameof(jitter)))
@@ -31,7 +31,7 @@ namespace T3.Gui.ChildUi
                 jitter.JumpDistance.Input.IsDefault = false;
                 jitter.JumpDistance.DirtyFlag.Invalidate();
             }
-            return true;
+            return SymbolChildUi.CustomUiResult.Rendered;
         }
     }
 }

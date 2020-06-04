@@ -340,6 +340,7 @@
     <Compile Include="Gui\ChildUi\Animators\MicroGraph.cs" />
     <Compile Include="Gui\ChildUi\Animators\AnimatorLabel.cs" />
     <Compile Include="Gui\ChildUi\Animators\SpeedRate.cs" />
+    <Compile Include="Gui\ChildUi\StringUi.cs" />
     <Compile Include="Gui\ChildUi\CounterUi.cs" />
     <Compile Include="Gui\ChildUi\CustomChildUiRegistry.cs" />
     <Compile Include="Gui\ChildUi\GradientSliderUi.cs" />

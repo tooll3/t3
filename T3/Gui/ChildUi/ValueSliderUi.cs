@@ -13,10 +13,10 @@ namespace T3.Gui.ChildUi
 {
     public static class ValueSliderUi
     {
-        public static bool DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
         {
             if (!(instance is ValueSlider valueSlider))
-                return false;
+                return SymbolChildUi.CustomUiResult.None;
 
             var innerRect = selectableScreenRect;
             innerRect.Expand(-4);
@@ -43,7 +43,7 @@ namespace T3.Gui.ChildUi
             ImGui.SameLine();
             ImGui.Text($"  {valueSlider.Result.Value:0.00}");
             
-            return true;
+            return SymbolChildUi.CustomUiResult.Rendered;
         }
         private static Vector2 _handleWSize = new Vector2(10,20);
     }
