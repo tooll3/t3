@@ -20,7 +20,7 @@ namespace T3.Gui.Graph.Interaction
     public class SymbolBrowser
     {
         #region public API ------------------------------------------------------------------------
-        public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType)
+        public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType, bool onlyMultiInputs)
         {
             _isOpen = true;
             PosOnCanvas = positionOnCanvas;
@@ -29,7 +29,8 @@ namespace T3.Gui.Graph.Interaction
             _filter.FilterOutputType = filterOutputType;
             _filter.SearchString = "";
             _selectedSymbolUi = null;
-            _filter.UpdateIfNecessary();
+            _filter.OnlyMultiInputs = onlyMultiInputs;
+            _filter.UpdateIfNecessary(); 
             DisableImGuiKeyboardNavigation();
 
             if (_selectedSymbolUi == null && _filter.MatchingSymbolUis.Count > 0)
@@ -46,7 +47,7 @@ namespace T3.Gui.Graph.Interaction
                     return;
 
                 Log.Debug("open create with tab");
-                OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null, null);
+                OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null, null, false);
                 return;
             }
 
@@ -135,7 +136,7 @@ namespace T3.Gui.Graph.Interaction
                 || ImGui.GetIO().KeysDownDuration[(int)Key.Esc] > 0)
             {
                 ConnectionMaker.Cancel();
-                Log.Debug("Closing...");
+                //Log.Debug("Closing...");
                 Close();
             }
 
@@ -183,7 +184,9 @@ namespace T3.Gui.Graph.Interaction
                                              ? TypeNameRegistry.Entries[_filter.FilterOutputType]
                                              : string.Empty;
 
-                    var headerLabel = $"{inputTypeName} -> {outputTypeName}";
+                    var isMultiInput = _filter.OnlyMultiInputs ? "[..]" : "";
+
+                    var headerLabel = $"{inputTypeName}{isMultiInput}  -> {outputTypeName}";
                     ImGui.TextDisabled(headerLabel);
                     ImGui.PopFont();
                 }
@@ -283,6 +286,8 @@ namespace T3.Gui.Graph.Interaction
         }
 
         private readonly SymbolFilter _filter = new SymbolFilter();
+        
+        
         #endregion
 
         // This has to be called on open

@@ -183,13 +183,12 @@ namespace T3.Gui.Graph
                     SetCompositionToParentInstance(CompositionOp.Parent);
                 }
 
-                if (ConnectionMaker.TempConnections.Count == 1 && ImGui.IsMouseReleased(0))
+                if (ConnectionMaker.TempConnections.Count > 0 && ImGui.IsMouseReleased(0))
                 {
                     var droppedOnBackground = ImGui.IsWindowHovered() && !ImGui.IsAnyItemHovered();
                     if (droppedOnBackground)
                     {
-                        ConnectionMaker.InitSymbolBrowserAtPosition(
-                                                                    _symbolBrowser,
+                        ConnectionMaker.InitSymbolBrowserAtPosition(_symbolBrowser,
                                                                     InverseTransformPosition(ImGui.GetIO().MousePos));
                     }
                     else
@@ -489,7 +488,7 @@ namespace T3.Gui.Graph
 
             if (ImGui.MenuItem("Add Node"))
             {
-                _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null);
+                _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null, false);
             }
 
             if (ImGui.MenuItem("Add input parameter"))

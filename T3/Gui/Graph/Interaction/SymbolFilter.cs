@@ -15,6 +15,7 @@ namespace T3.Gui.Graph.Interaction
         public string SearchString; // not a property to allow ref passing
         public Type FilterInputType { get; set; }
         public Type FilterOutputType { get; set; }
+        public bool OnlyMultiInputs { get; set; }
 
         public void UpdateIfNecessary()
         {
@@ -76,6 +77,9 @@ namespace T3.Gui.Graph.Interaction
                 {
                     var matchingInputDef = symbolUi.Symbol.GetInputMatchingType(FilterInputType);
                     if (matchingInputDef == null)
+                        continue;
+
+                    if (OnlyMultiInputs && !matchingInputDef.IsMultiInput )
                         continue;
                 }
 

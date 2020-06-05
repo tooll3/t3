@@ -8,6 +8,7 @@ using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
+using T3.Gui.Selection;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -67,13 +68,34 @@ namespace T3.Gui.Graph
 
         public static void StartFromOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, Symbol.OutputDefinition outputDef)
         {
-            //var existingConnections = FindConnectionsFromOutputSlot(parentSymbol, sourceUi, outputDef);
-            SetTempConnection(new TempConnection(sourceParentOrChildId: sourceUi.SymbolChild.Id,
-                                                 sourceSlotId: outputDef.Id,
-                                                 targetParentOrChildId: NotConnectedId,
-                                                 targetSlotId: NotConnectedId,
-                                                 outputDef.ValueType));
+            TempConnections.Clear();
             _isDisconnectingFromInput = false;
+
+            var selectedSymbolChildUis = SelectionManager.GetSelectedSymbolChildUis().ToList();
+            if (selectedSymbolChildUis.Count > 1 && selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id))
+            {
+                Log.Debug("Magic would happen here?");
+                foreach (var selectedChild in selectedSymbolChildUis)
+                {
+                    if (selectedChild.SymbolChild.Symbol.Id != sourceUi.SymbolChild.Symbol.Id)
+                        return;
+
+                    TempConnections.Add(new TempConnection(sourceParentOrChildId: selectedChild.SymbolChild.Id,
+                                                           sourceSlotId: outputDef.Id,
+                                                           targetParentOrChildId: NotConnectedId,
+                                                           targetSlotId: NotConnectedId,
+                                                           outputDef.ValueType));
+                }
+            }
+
+            else
+            {
+                SetTempConnection(new TempConnection(sourceParentOrChildId: sourceUi.SymbolChild.Id,
+                                                     sourceSlotId: outputDef.Id,
+                                                     targetParentOrChildId: NotConnectedId,
+                                                     targetSlotId: NotConnectedId,
+                                                     outputDef.ValueType));
+            }
         }
 
         private static bool _isDisconnectingFromInput;
@@ -196,12 +218,8 @@ namespace T3.Gui.Graph
         /// </remarks>
         public static void InitSymbolBrowserAtPosition(SymbolBrowser symbolBrowser, Vector2 canvasPosition)
         {
-            // TODO: Support multiple connections?
-            if (TempConnections == null || TempConnections.Count != 1)
-            {
-                Log.Warning("Init Symbol browser with incorrectly assigned connection");
+            if (TempConnections.Count == 0)
                 return;
-            }
 
             if (_isDisconnectingFromInput)
             {
@@ -209,25 +227,53 @@ namespace T3.Gui.Graph
                 return;
             }
 
-            var connectionType = TempConnections[0].ConnectionType;
-            if (TempConnections[0].TargetParentOrChildId == NotConnectedId)
+            var firstConnectionType = TempConnections[0].ConnectionType;
+            if (TempConnections.Count == 1)
             {
-                SetTempConnection(new TempConnection(sourceParentOrChildId: TempConnections[0].SourceParentOrChildId,
-                                                     sourceSlotId: TempConnections[0].SourceSlotId,
-                                                     targetParentOrChildId: UseDraftChildId,
-                                                     targetSlotId: NotConnectedId,
-                                                     connectionType));
-                symbolBrowser.OpenAt(canvasPosition, connectionType, null);
+                if (TempConnections[0].TargetParentOrChildId == NotConnectedId)
+                {
+                    SetTempConnection(new TempConnection(sourceParentOrChildId: TempConnections[0].SourceParentOrChildId,
+                                                         sourceSlotId: TempConnections[0].SourceSlotId,
+                                                         targetParentOrChildId: UseDraftChildId,
+                                                         targetSlotId: NotConnectedId,
+                                                         firstConnectionType));
+                    symbolBrowser.OpenAt(canvasPosition, firstConnectionType, null, false);
+                }
+                else if (TempConnections[0].SourceParentOrChildId == NotConnectedId)
+                {
+                    SetTempConnection(new TempConnection(sourceParentOrChildId: UseDraftChildId,
+                                                         sourceSlotId: NotConnectedId,
+                                                         targetParentOrChildId: TempConnections[0].TargetParentOrChildId,
+                                                         targetSlotId: TempConnections[0].TargetSlotId,
+                                                         firstConnectionType));
+                    symbolBrowser.OpenAt(canvasPosition, null, firstConnectionType, false);
+                }
             }
-            else if (TempConnections[0].SourceParentOrChildId == NotConnectedId)
+            else if (TempConnections.Count > 1)
             {
-                SetTempConnection(new TempConnection(sourceParentOrChildId: UseDraftChildId,
-                                                     sourceSlotId: NotConnectedId,
-                                                     targetParentOrChildId: TempConnections[0].TargetParentOrChildId,
-                                                     targetSlotId: TempConnections[0].TargetSlotId,
-                                                     connectionType));
-                symbolBrowser.OpenAt(canvasPosition, null, connectionType);
+                var validForMultiInput = TempConnections.All(c =>
+                                            c.GetStatus() == TempConnection.Status.TargetIsUndefined
+                                            && c.ConnectionType == firstConnectionType);
+                if (validForMultiInput)
+                {
+                    var oldConnections = TempConnections.ToArray();
+                    TempConnections.Clear();
+                    foreach (var c in oldConnections) 
+                    {
+                        TempConnections.Add(new TempConnection(sourceParentOrChildId: c.SourceParentOrChildId ,
+                                                             sourceSlotId: c.SourceSlotId,
+                                                             targetParentOrChildId: UseDraftChildId,
+                                                             targetSlotId: NotConnectedId,
+                                                             firstConnectionType));
+                    }
+                    symbolBrowser.OpenAt(canvasPosition, firstConnectionType, null , onlyMultiInputs: true);                    
+                }
             }
+            else
+            {
+                Cancel();
+            }
+            
         }
 
         public static void CompleteConnectsToBuiltNode(Symbol parent, SymbolChild newSymbolChild)
