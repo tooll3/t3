@@ -73,7 +73,7 @@ namespace T3.Gui.Graph
                     var color = TypeUiRegistry.Entries[outputDef.ValueType].Color;
 
                     //Note: isItemHovered will not work
-                    var slotHovered = ConnectionMaker.TempConnection != null
+                    var slotHovered = ConnectionMaker.TempConnections != null
                                           ? usableSlotArea.Contains(ImGui.GetMousePos())
                                           : ImGui.IsItemHovered();
 

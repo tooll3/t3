@@ -183,7 +183,7 @@ namespace T3.Gui.Graph
                     SetCompositionToParentInstance(CompositionOp.Parent);
                 }
 
-                if (ConnectionMaker.TempConnection != null && ImGui.IsMouseReleased(0))
+                if (ConnectionMaker.TempConnections.Count == 1 && ImGui.IsMouseReleased(0))
                 {
                     var droppedOnBackground = ImGui.IsWindowHovered() && !ImGui.IsAnyItemHovered();
                     if (droppedOnBackground)

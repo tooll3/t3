@@ -261,7 +261,7 @@ namespace T3.Gui.Interaction
 
         protected virtual void HandleInteraction()
         {
-            var isDraggingConnection = (ConnectionMaker.TempConnection != null) && ImGui.IsWindowFocused();
+            var isDraggingConnection = (ConnectionMaker.TempConnections != null) && ImGui.IsWindowFocused();
             
             if (!ImGui.IsWindowHovered() && !isDraggingConnection)
                 return;

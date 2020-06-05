@@ -250,29 +250,34 @@ namespace T3.Gui.Graph.Interaction
         private void CreateInstance(Symbol symbol)
         {
             var parent = GraphCanvas.Current.CompositionOp.Symbol;
-            var childUi = NodeOperations.CreateInstance(symbol, parent, PosOnCanvas);
-            var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
-            SelectionManager.SetSelection(childUi, instance);
+            var newChildUi = NodeOperations.CreateInstance(symbol, parent, PosOnCanvas);
+            var newInstance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == newChildUi.Id);
+            SelectionManager.SetSelection(newChildUi, newInstance);
 
-            if (ConnectionMaker.TempConnection != null && symbol.InputDefinitions.Any())
-            {
-                var temp = ConnectionMaker.TempConnection;
-                if (temp.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
-                {
-                    // connecting to output
-                    ConnectionMaker.CompleteConnectionFromBuiltNode(parent, childUi.SymbolChild,
-                                                                    _filter.GetOutputMatchingType(symbol, _filter.FilterInputType));
-                }
-                else
-                {
-                    // connecting to input
-                    ConnectionMaker.CompleteConnectionIntoBuiltNode(parent, childUi.SymbolChild, _filter.GetInputMatchingType(symbol, _filter.FilterInputType));
-                }
-            }
-            else
-            {
-                ConnectionMaker.Cancel();
-            }
+            // TODO: Refactor this by moving it to connectionMaker
+            // if (ConnectionMaker.TempConnections != null && symbol.InputDefinitions.Any())
+            // {
+            //     var temp = ConnectionMaker.TempConnections;
+            //     if (temp.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
+            //     {
+            //         // connecting to output
+            //         ConnectionMaker.CompleteConnectionFromBuiltNode(parent, newChildUi.SymbolChild,
+            //                                                         symbol.GetOutputMatchingType(_filter.FilterInputType));
+            //     }
+            //     else
+            //     {
+            //         // connecting to input
+            //         ConnectionMaker.CompleteConnectionsIntoBuiltNode(parent, newChildUi.SymbolChild, symbol.GetInputMatchingType(_filter.FilterInputType));
+            //     }
+            // }
+            // else
+            // {
+            //     ConnectionMaker.Cancel();
+            // }
+            ConnectionMaker.CompleteConnectsToBuiltNode(parent, newChildUi.SymbolChild);
+            
+            
+            ConnectionMaker.Cancel();
 
             Close();
         }

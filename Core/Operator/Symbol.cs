@@ -589,6 +589,28 @@ namespace T3.Core.Operator
         {
             InstancesOfSymbol.Remove(op);
         }
+        
+        public InputDefinition GetInputMatchingType(Type type)
+        {
+            foreach (var inputDefinition in InputDefinitions)
+            {
+                if (type == null || inputDefinition.DefaultValue.ValueType == type)
+                    return inputDefinition;
+            }
+
+            return null;
+        }
+
+        public OutputDefinition GetOutputMatchingType(Type type)
+        {
+            foreach (var outputDefinition in OutputDefinitions)
+            {
+                if (type == null || outputDefinition.ValueType == type)
+                    return outputDefinition;
+            }
+
+            return null;
+        }        
 
         public Connection GetConnectionForInput(InputDefinition input)
         {

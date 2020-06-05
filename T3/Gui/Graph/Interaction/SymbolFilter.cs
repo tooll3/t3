@@ -74,14 +74,14 @@ namespace T3.Gui.Graph.Interaction
 
                 if (_inputType != null)
                 {
-                    var matchingInputDef = GetInputMatchingType(symbolUi.Symbol, FilterInputType);
+                    var matchingInputDef = symbolUi.Symbol.GetInputMatchingType(FilterInputType);
                     if (matchingInputDef == null)
                         continue;
                 }
 
                 if (_outputType != null)
                 {
-                    var matchingOutputDef = GetOutputMatchingType(symbolUi.Symbol, FilterOutputType);
+                    var matchingOutputDef = symbolUi.Symbol.GetOutputMatchingType(FilterOutputType);
                     if (matchingOutputDef == null)
                         continue;
                 }
@@ -95,27 +95,7 @@ namespace T3.Gui.Graph.Interaction
             MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _currentSearchString, "")).Reverse().Take(30).ToList();
         }
 
-        public Symbol.InputDefinition GetInputMatchingType(Symbol symbol, Type type)
-        {
-            foreach (var inputDefinition in symbol.InputDefinitions)
-            {
-                if (type == null || inputDefinition.DefaultValue.ValueType == type)
-                    return inputDefinition;
-            }
 
-            return null;
-        }
-
-        public Symbol.OutputDefinition GetOutputMatchingType(Symbol symbol, Type type)
-        {
-            foreach (var outputDefinition in symbol.OutputDefinitions)
-            {
-                if (type == null || outputDefinition.ValueType == type)
-                    return outputDefinition;
-            }
-
-            return null;
-        }
 
         private static double ComputeRelevancy(SymbolUi symbolUi, string query, string currentProjectName)
         {

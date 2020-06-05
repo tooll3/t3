@@ -8,7 +8,6 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.InputUi;
@@ -18,7 +17,6 @@ using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
-using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
@@ -153,9 +151,9 @@ namespace T3.Gui.Graph
                             {
                                 var firstOutput = instance.Outputs[0];
                                 IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
-                                _evaluationContext.Reset();
-                                _evaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
-                                outputUi.DrawValue(firstOutput, _evaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
+                                EvaluationContext.Reset();
+                                EvaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
+                                outputUi.DrawValue(firstOutput, EvaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
                             }
 
                             if (!string.IsNullOrEmpty(symbolUi.Description))
@@ -240,7 +238,7 @@ namespace T3.Gui.Graph
                 if (nodeHasHiddenMatchingInputs)
                 {
                     var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
-                    var colorForType = TypeUiRegistry.Entries[ConnectionMaker.DraftConnectionType].Color;
+                    var colorForType = TypeUiRegistry.Entries[ConnectionMaker.TempConnections[0].ConnectionType].Color;
                     colorForType.Rgba.W *= blink;
                     _drawList.AddRectFilled(
                                             new Vector2(_usableScreenRect.Min.X, _usableScreenRect.Max.Y + 3),
@@ -293,14 +291,14 @@ namespace T3.Gui.Graph
 
                 var usableSlotArea = GetUsableInputSlotSize(inputIndex, visibleInputUis.Count);
 
-                ConnectionMaker.ConnectionSnapEndHelper.RegisterAsConnectionTarget(childUi, inputUi, 0, usableSlotArea);
+                ConnectionMaker.ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, 0, usableSlotArea);
                 ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + inputDefinition.GetHashCode());
                 ImGui.SetCursorScreenPos(usableSlotArea.Min);
                 ImGui.InvisibleButton("input", usableSlotArea.GetSize());
                 THelpers.DebugItemRect("input-slot");
 
                 // Note: isItemHovered does not work when being dragged from another item
-                var hovered = ConnectionMaker.TempConnection != null
+                var hovered = ConnectionMaker.TempConnections != null
                                   ? usableSlotArea.Contains(ImGui.GetMousePos())
                                   : ImGui.IsItemHovered();
 
@@ -435,7 +433,7 @@ namespace T3.Gui.Graph
                 var colorForType = TypeUiRegistry.Entries[valueType].Color;
 
                 //Note: isItemHovered does not work when dragging is active
-                var hovered = ConnectionMaker.TempConnection != null
+                var hovered = ConnectionMaker.TempConnections != null
                                   ? usableArea.Contains(ImGui.GetMousePos())
                                   : ImGui.IsItemHovered();
 
@@ -519,10 +517,11 @@ namespace T3.Gui.Graph
                 return symbolUi.InputUis.Values.ToList();
             }
 
-            var isNodeHoveredConnectionTarget = _hoveredNodeIdForConnectionTarget == childUi.Id
-                                                && ConnectionMaker.TempConnection != null
-                                                && ConnectionMaker.TempConnection.TargetParentOrChildId == ConnectionMaker.NotConnectedId
-                                                && ConnectionMaker.TempConnection.SourceParentOrChildId != childUi.Id;
+            var isNodeHoveredAsConnectionTarget = _hoveredNodeIdForConnectionTarget == childUi.Id
+                                                && ConnectionMaker.TempConnections != null
+                                                && ConnectionMaker.TempConnections.Count == 1
+                                                && ConnectionMaker.TempConnections[0].TargetParentOrChildId == ConnectionMaker.NotConnectedId
+                                                && ConnectionMaker.TempConnections[0].SourceParentOrChildId != childUi.Id;
 
             VisibleInputs.Clear();
             foreach (var inputUi in symbolUi.InputUis.Values)
@@ -543,7 +542,7 @@ namespace T3.Gui.Graph
                 }
                 else if (ConnectionMaker.IsMatchingInputType(inputUi.Type))
                 {
-                    if (isNodeHoveredConnectionTarget)
+                    if (isNodeHoveredAsConnectionTarget)
                     {
                         VisibleInputs.Add(inputUi);
                     }
@@ -568,7 +567,7 @@ namespace T3.Gui.Graph
             var style = direction == SocketDirections.Input
                             ? ColorVariations.ConnectionLines
                             : ColorVariations.Operator;
-            if (ConnectionMaker.TempConnection != null)
+            if (ConnectionMaker.TempConnections != null)
             {
                 if (direction == SocketDirections.Input
                         ? ConnectionMaker.IsMatchingInputType(type)
@@ -890,7 +889,7 @@ namespace T3.Gui.Graph
         private static readonly string FoldLabel = (char)Icon.ChevronDown + "##size";
         private static readonly List<IInputUi> VisibleInputs = new List<IInputUi>(15); // A static variable to avoid GC allocations
 
-        private static EvaluationContext _evaluationContext = new EvaluationContext();
+        private static readonly EvaluationContext EvaluationContext = new EvaluationContext();
 
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
         private static Guid _hoveredNodeIdForConnectionTarget;

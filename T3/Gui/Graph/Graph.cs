@@ -47,9 +47,7 @@ namespace T3.Gui.Graph
 
             var graphSymbol = GraphCanvas.Current.CompositionOp.Symbol;
             var allConnections = new List<Symbol.Connection>(graphSymbol.Connections);
-
-            if (ConnectionMaker.TempConnection != null)
-                allConnections.Add(ConnectionMaker.TempConnection);
+            allConnections.AddRange(ConnectionMaker.TempConnections);
 
             var children = GraphCanvas.Current.CompositionOp.Children;
 
@@ -177,8 +175,11 @@ namespace T3.Gui.Graph
             private static void InitTempConnection(ConnectionLineUi newLine)
             {
                 var c = newLine.Connection;
-                if (!Equals(newLine.Connection, ConnectionMaker.TempConnection))
+                if (!ConnectionMaker.TempConnections.Contains(c))
                     return;
+                    
+                // if (!Equals(newLine.Connection, ConnectionMaker.TempConnections))
+                //     return;
 
                 if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
                 {
@@ -272,7 +273,7 @@ namespace T3.Gui.Graph
             internal ConnectionLineUi(Symbol.Connection connection)
             {
                 Connection = connection;
-                if (!Equals(connection, ConnectionMaker.TempConnection))
+                if (!Equals(connection, ConnectionMaker.TempConnections))
                     return;
 
                 if (connection.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
