@@ -7,6 +7,7 @@ using SharpDX.Windows;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -232,6 +233,8 @@ namespace T3
         [STAThread]
         private static void Main()
         {
+            CultureInfo.CurrentCulture = new CultureInfo("en-US");;
+            
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
             
