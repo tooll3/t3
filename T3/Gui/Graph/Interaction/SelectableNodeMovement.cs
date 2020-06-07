@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using UiHelpers;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.Graph.Interaction
 {
@@ -40,6 +39,17 @@ namespace T3.Gui.Graph.Interaction
                     }
 
                     _moveCommand = new ChangeSelectableCommand(compositionSymbolId, _draggedNodes);
+                    ShakeDetector.Reset();
+                }
+                else if (_moveCommand != null)
+                {
+                    if (ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
+                    {
+                        _moveCommand.StoreCurrentValues();
+                        UndoRedoStack.Add(_moveCommand);
+                        _moveCommand = null;
+                        DisconnectDraggedNodes();
+                    }
                 }
 
                 HandleNodeDragging(node);
@@ -55,7 +65,6 @@ namespace T3.Gui.Graph.Interaction
                 var varDragging = ImGui.GetMouseDragDelta(0).LengthSquared() > 0.0f;
                 if (varDragging)
                 {
-                    Log.Debug("was dragging node " + node);
                     _moveCommand.StoreCurrentValues();
                     UndoRedoStack.Add(_moveCommand);
 
@@ -104,11 +113,11 @@ namespace T3.Gui.Graph.Interaction
 
                 _moveCommand = null;
             }
-            
+
             var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).LengthSquared() > 0.0f;
-            if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) 
-                && !wasDraggingRight 
-                && ImGui.IsItemHovered() 
+            if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
+                && !wasDraggingRight
+                && ImGui.IsItemHovered()
                 && !SelectionManager.IsNodeSelected(node))
             {
                 if (node is SymbolChildUi childUi2)
@@ -122,8 +131,81 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
-        private static Guid _draggedNodeId = Guid.Empty;
-        private static List<ISelectableNode> _draggedNodes = new List<ISelectableNode>();
+        private static void DisconnectDraggedNodes()
+        {
+            var removeCommands = new List<ICommand>();
+            var inputConnections = new List<Symbol.Connection>();
+            var outputConnections = new List<Symbol.Connection>();
+            Type inputConnectionType = null;
+            Type outputConnectionType = null;
+
+            foreach (var nod in _draggedNodes)
+            {
+                if (!(nod is SymbolChildUi childUi))
+                    continue;
+
+                var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+
+                foreach (var input in instance.Inputs)
+                {
+                    if (!input.IsConnected)
+                        continue;
+
+                    var connectionsToInput = instance.Parent.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == instance.SymbolChildId
+                                                                                             && _draggedNodes.All(c2 => c2.Id != c.SourceParentOrChildId));
+                    var lastTargetId = Guid.Empty;
+                    var lastInputId = Guid.Empty;
+                    var multiInputSlotIndex = 0;
+                    foreach (var connectionToInput in connectionsToInput)
+                    {
+                        removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, connectionToInput, multiInputSlotIndex));
+                        inputConnections.Add(connectionToInput);
+                        inputConnectionType = input.ValueType;
+                        if (connectionToInput.TargetParentOrChildId == lastTargetId
+                            && connectionToInput.TargetSlotId == lastInputId)
+                        {
+                            multiInputSlotIndex++;
+                        }
+                        else
+                        {
+                            multiInputSlotIndex = 0;
+                        }
+                    }
+                }
+
+                foreach (var output in instance.Outputs)
+                {
+                    var connectionsToOutput =
+                        instance.Parent.Symbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId
+                                                                        && _draggedNodes.All(c2 => c2.Id != c.TargetParentOrChildId));
+                    foreach (var outputConnection in connectionsToOutput)
+                    {
+                        removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, outputConnection, 0));
+                        outputConnections.Add(outputConnection);
+                        outputConnectionType = output.ValueType;
+                    }
+                }
+            }
+
+            if (inputConnections.Count == 1
+                && outputConnections.Count == 1
+                && inputConnectionType == outputConnectionType
+                )
+            {
+                var newConnection = new Symbol.Connection(sourceParentOrChildId: inputConnections[0].SourceParentOrChildId,
+                                                          sourceSlotId: inputConnections[0].SourceSlotId,
+                                                          targetParentOrChildId: outputConnections[0].TargetParentOrChildId,
+                                                          targetSlotId: outputConnections[0].TargetSlotId);
+                removeCommands.Add(new AddConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, newConnection, 0));
+            }
+
+            if (removeCommands.Count > 0)
+            {
+                var macro = new MacroCommand("Shake off connections", removeCommands);
+                UndoRedoStack.AddAndExecute(macro);
+            }
+        }
+
 
         private static void HandleNodeDragging(ISelectableNode draggedNode)
         {
@@ -278,50 +360,48 @@ namespace T3.Gui.Graph.Interaction
             return Alignment.NoSnapped;
         }
 
-        
+        // private static double RecursivelyAlignChildrenOfSelectedOps(SymbolChildUi childUi, List<ISelectableNode> freshlySnappedOpWidgets)
+        // {
+        //     var connectedInstances = GetConnectedInstances(childUi);
+        //     var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.SymbolChildId];
+        //     var connectedChildUis = connectedInstances
+        //                            .Select(ci => parentUi.ChildUis.Single(childUi2 => childUi2.Id == ci.SymbolChildId))
+        //                            .ToList();
+        //     
+        //     var compositionSymbol = GraphCanvas.Current.CompositionOp.Symbol;
+        //     
+        //     // var childUis = (from con in compositionSymbol.Connections
+        //     //                 where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
+        //     //                 from childUi in compositionSymbolUi.ChildUis
+        //     //                 where con.SourceParentOrChildId == childUi.Id
+        //     //                 select childUi).Distinct();            
+        //
+        //     foreach (var connectedChild in connectedChildUis)
+        //     {
+        //         if (childUi.IsSelected)
+        //             continue;
+        //         
+        //         
+        //     }
+        //     return 0;
+        // }
 
-        private static double RecursivelyAlignChildrenOfSelectedOps(SymbolChildUi childUi, List<ISelectableNode> freshlySnappedOpWidgets)
-        {
-            var connectedInstances = GetConnectedInstances(childUi);
-            var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.SymbolChildId];
-            var connectedChildUis = connectedInstances
-                                   .Select(ci => parentUi.ChildUis.Single(childUi2 => childUi2.Id == ci.SymbolChildId))
-                                   .ToList();
-            
-            var compositionSymbol = GraphCanvas.Current.CompositionOp.Symbol;
-            
-            // var childUis = (from con in compositionSymbol.Connections
-            //                 where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
-            //                 from childUi in compositionSymbolUi.ChildUis
-            //                 where con.SourceParentOrChildId == childUi.Id
-            //                 select childUi).Distinct();            
-
-            foreach (var connectedChild in connectedChildUis)
-            {
-                if (childUi.IsSelected)
-                    continue;
-                
-                
-            }
-            return 0;
-        }
-
-        private static List<Instance> GetConnectedInstances(SymbolChildUi childUi)
-        {
-            var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
-
-            var connectedInstances = new List<Instance>();
-            foreach (var i in instance.Inputs)
-            {
-                if (!i.IsConnected)
-                    continue;
-
-                var connection = instance.Parent.Symbol.Connections.Single(c => c.TargetParentOrChildId == instance.SymbolChildId);
-                connectedInstances.Add(instance.Parent.Children.Single(child => child.SymbolChildId == connection.SourceParentOrChildId));
-            }
-
-            return connectedInstances;
-        }
+        // private static List<Instance> GetConnectedInstances(SymbolChildUi childUi)
+        // {
+        //     var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+        //
+        //     var connectedInstances = new List<Instance>();
+        //     foreach (var i in instance.Inputs)
+        //     {
+        //         if (!i.IsConnected)
+        //             continue;
+        //
+        //         var connection = instance.Parent.Symbol.Connections.Single(c => c.TargetParentOrChildId == instance.SymbolChildId);
+        //         connectedInstances.Add(instance.Parent.Children.Single(child => child.SymbolChildId == connection.SourceParentOrChildId));
+        //     }
+        //
+        //     return connectedInstances;
+        // }
 
         private enum Alignment
         {
@@ -334,7 +414,7 @@ namespace T3.Gui.Graph.Interaction
 
         public static readonly Vector2 SnapPadding = new Vector2(20, 20);
 
-        public static readonly Vector2[] SnapOffsetsInCanvas =
+        private static readonly Vector2[] SnapOffsetsInCanvas =
             {
                 new Vector2(SymbolChildUi.DefaultOpSize.X + SnapPadding.X, 0),
                 new Vector2(-SymbolChildUi.DefaultOpSize.X - +SnapPadding.X, 0),
@@ -345,5 +425,67 @@ namespace T3.Gui.Graph.Interaction
         private static bool _isDragging;
         private static Vector2 _dragStartDelta;
         private static ChangeSelectableCommand _moveCommand;
+
+        private static Guid _draggedNodeId = Guid.Empty;
+        private static List<ISelectableNode> _draggedNodes = new List<ISelectableNode>();
+        
+        private static class ShakeDetector
+        {
+            public static bool TestDragForShake(Vector2 mousePosition)
+            {
+                var delta = mousePosition - _lastPosition;
+                _lastPosition = mousePosition;
+
+                int dx = 0;
+                if (Math.Abs(delta.X) > 2)
+                {
+                    dx = delta.X > 0 ? 1 : -1;
+                }
+
+                Directions.Add(dx);
+
+                if (Directions.Count < 2)
+                    return false;
+
+                if (Directions.Count > QueueLength)
+                    Directions.RemoveAt(0);
+
+                // count direction changes
+                var changeDirectionCount = 0;
+
+                var lastD = 0;
+                var lastRealD = 0;
+                foreach (var d in Directions)
+                {
+                    if (lastD != 0 && d != 0)
+                    {
+                        if (d != lastRealD)
+                        {
+                            changeDirectionCount++;
+                        }
+
+                        lastRealD = d;
+                    }
+
+                    lastD = d;
+                }
+
+                var wasShaking = changeDirectionCount >= ChangeDirectionThreshold;
+                if (wasShaking)
+                    Reset();
+
+                return wasShaking;
+            }
+
+            public static void Reset()
+            {
+                Directions.Clear();
+            }
+
+            private static Vector2 _lastPosition = Vector2.Zero;
+            private const int QueueLength = 25;
+            private const int ChangeDirectionThreshold = 5;
+            private static readonly List<int> Directions = new List<int>(QueueLength);
+        }
     }
 }
