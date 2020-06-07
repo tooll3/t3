@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
@@ -22,7 +24,21 @@ namespace T3.Gui.OutputUi
             if (slot is Slot<T> typedSlot)
             {
                 var value = typedSlot.Value;
-                ImGui.Text(value == null ? $"{typeof(T)}" : $"{value}");
+                switch (value)
+                {
+                    case float f:
+                        ImGui.Value("", f);
+                        break;
+                    case string s:
+                        ImGui.Text(s);
+                        break;
+                    default:
+                    {
+                        var t = value?.ToString();
+                        ImGui.Text(t ?? typeof(T).ToString());
+                        break;
+                    }
+                }
             }
             else
             {
