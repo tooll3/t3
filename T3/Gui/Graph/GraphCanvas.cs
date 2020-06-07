@@ -193,7 +193,10 @@ namespace T3.Gui.Graph
                     }
                     else
                     {
-                        ConnectionMaker.Cancel();
+                        if (ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode)
+                        {
+                            ConnectionMaker.Cancel();
+                        }
                     }
                 }
 
@@ -263,6 +266,23 @@ namespace T3.Gui.Graph
                 }
             }
         }
+        
+        /// <remarks>
+        /// This method is completed, because it has to handle several edge cases and has potential to remove previous user data:
+        /// - We have to preserve the previous state.
+        /// - We have to make space -> Shift all connected operators towards the right.
+        /// - We have to convert all existing connections from the output into temporary connections.
+        /// - We have to insert a new temp connection line between output and symbol browser
+        ///
+        /// - If the user completes the symbol browser, it must complete the previous connections from the temp connections.
+        /// - If the user cancels the operation, the previous state has to be restored. This might be tricky
+        /// </remarks>
+        public void OpenSymbolBrowserForOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef)
+        {
+            ConnectionMaker.InitSymbolBrowserAtPosition(_symbolBrowser,
+                                        childUi.PosOnCanvas + new Vector2(childUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0));
+        }
+        
 
         private Symbol GetSelectedSymbol()
         {
@@ -671,7 +691,7 @@ namespace T3.Gui.Graph
 
         //public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private List<SymbolChildUi> ChildUis { get; set; }
-        private readonly SymbolBrowser _symbolBrowser = new SymbolBrowser();
+        public readonly SymbolBrowser _symbolBrowser = new SymbolBrowser();
         private string _symbolNameForDialogEdits = "";
         private string _nameSpaceForDialogEdits = "";
         private readonly GraphWindow _window;

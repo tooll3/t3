@@ -213,6 +213,9 @@ namespace T3.Gui.Graph
         }
 
         #region related to SymbolBrowser
+
+
+        
         /// <remarks>
         /// Assumes that a temp connection has be created earlier and is now dropped on the background
         /// </remarks>
@@ -252,28 +255,28 @@ namespace T3.Gui.Graph
             else if (TempConnections.Count > 1)
             {
                 var validForMultiInput = TempConnections.All(c =>
-                                            c.GetStatus() == TempConnection.Status.TargetIsUndefined
-                                            && c.ConnectionType == firstConnectionType);
+                                                                 c.GetStatus() == TempConnection.Status.TargetIsUndefined
+                                                                 && c.ConnectionType == firstConnectionType);
                 if (validForMultiInput)
                 {
                     var oldConnections = TempConnections.ToArray();
                     TempConnections.Clear();
-                    foreach (var c in oldConnections) 
+                    foreach (var c in oldConnections)
                     {
-                        TempConnections.Add(new TempConnection(sourceParentOrChildId: c.SourceParentOrChildId ,
-                                                             sourceSlotId: c.SourceSlotId,
-                                                             targetParentOrChildId: UseDraftChildId,
-                                                             targetSlotId: NotConnectedId,
-                                                             firstConnectionType));
+                        TempConnections.Add(new TempConnection(sourceParentOrChildId: c.SourceParentOrChildId,
+                                                               sourceSlotId: c.SourceSlotId,
+                                                               targetParentOrChildId: UseDraftChildId,
+                                                               targetSlotId: NotConnectedId,
+                                                               firstConnectionType));
                     }
-                    symbolBrowser.OpenAt(canvasPosition, firstConnectionType, null , onlyMultiInputs: true);                    
+
+                    symbolBrowser.OpenAt(canvasPosition, firstConnectionType, null, onlyMultiInputs: true);
                 }
             }
             else
             {
                 Cancel();
             }
-            
         }
 
         public static void CompleteConnectsToBuiltNode(Symbol parent, SymbolChild newSymbolChild)
@@ -528,5 +531,6 @@ namespace T3.Gui.Graph
                 public int SlotIndex;
             }
         }
+
     }
 }
