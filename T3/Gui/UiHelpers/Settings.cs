@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 
@@ -24,9 +25,17 @@ namespace T3.Gui.UiHelpers
             var jsonBlob = File.ReadAllText(_filepath);
             var serializer = Newtonsoft.Json.JsonSerializer.Create();
             var fileTextReader = new StringReader(jsonBlob);
-            if (serializer.Deserialize(fileTextReader, typeof(T))
-                    is T configurations)
-                return configurations;
+            try
+            {
+                if (serializer.Deserialize(fileTextReader, typeof(T))
+                        is T configurations)
+                    return configurations;
+            }
+            catch(Exception e)
+            {
+                Log.Error($"Can't load layout {_filepath}:" + e.Message);
+                return null;
+            }
             
             Log.Error("Can't load layout");
             return null;
