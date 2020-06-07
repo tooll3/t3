@@ -665,6 +665,13 @@ namespace T3.Gui.Graph
                 {
                     ConnectionMaker.Update();
                 }
+
+                var isMouseReleasedWithoutDrag = ImGui.IsMouseReleased(ImGuiMouseButton.Left) && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() < 4;
+                if (isMouseReleasedWithoutDrag)
+                {
+                    //Graph.Connections.GetLinesFromNodeOutput(childUi, outputDef.Id);
+                    GraphCanvas.Current.OpenSymbolBrowserForOutput(childUi, outputDef);
+                }
             }
             else if (hovered)
             {
