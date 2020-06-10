@@ -298,7 +298,7 @@ namespace T3.Gui.Graph
                 THelpers.DebugItemRect("input-slot");
 
                 // Note: isItemHovered does not work when being dragged from another item
-                var hovered = ConnectionMaker.TempConnections != null
+                var hovered = ConnectionMaker.TempConnections.Count > 0
                                   ? usableSlotArea.Contains(ImGui.GetMousePos())
                                   : ImGui.IsItemHovered();
 
@@ -433,7 +433,7 @@ namespace T3.Gui.Graph
                 var colorForType = TypeUiRegistry.Entries[valueType].Color;
 
                 //Note: isItemHovered does not work when dragging is active
-                var hovered = ConnectionMaker.TempConnections != null
+                var hovered = ConnectionMaker.TempConnections.Count > 0
                                   ? usableArea.Contains(ImGui.GetMousePos())
                                   : ImGui.IsItemHovered();
 
@@ -567,7 +567,7 @@ namespace T3.Gui.Graph
             var style = direction == SocketDirections.Input
                             ? ColorVariations.ConnectionLines
                             : ColorVariations.Operator;
-            if (ConnectionMaker.TempConnections != null)
+            if (ConnectionMaker.TempConnections.Count > 0)
             {
                 if (direction == SocketDirections.Input
                         ? ConnectionMaker.IsMatchingInputType(type)

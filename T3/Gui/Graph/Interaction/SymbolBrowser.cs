@@ -258,7 +258,7 @@ namespace T3.Gui.Graph.Interaction
             SelectionManager.SetSelection(newChildUi, newInstance);
 
             // TODO: Refactor this by moving it to connectionMaker
-            // if (ConnectionMaker.TempConnections != null && symbol.InputDefinitions.Any())
+            // if (ConnectionMaker.TempConnections.Count > 0 && symbol.InputDefinitions.Any())
             // {
             //     var temp = ConnectionMaker.TempConnections;
             //     if (temp.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
