@@ -99,6 +99,19 @@ namespace T3.Gui.Interaction.WithCurves
                      if (ImGui.MenuItem("Delete keyframes"))
                          DeleteSelectedKeyframes();
 
+                     if (ImGui.MenuItem("Recount values"))
+                     {
+                         var value = 0;
+                         ForSelectedOrAllPointsDo((vDef) =>
+                                                  {
+                                                      vDef.Value = value;
+                                                      value++;
+                                                  });
+                         
+                     }
+                         
+
+
                      if (ImGui.MenuItem("Duplicate keyframes"))
                          DuplicateSelectedKeyframes(TimeLineCanvas.Current.Playback.TimeInBars);
                  }, ref _contextMenuIsOpen
