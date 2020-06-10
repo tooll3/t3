@@ -91,7 +91,7 @@ namespace T3.Gui.Windows.TimeLine
 
         #region implement snap attractor
 
-        public SnapResult CheckForSnap(double time, float canvasScale)
+        public virtual SnapResult CheckForSnap(double time, float canvasScale)
         {
             return ValueSnapHandler.FindSnapResult(time, _usedPositions.Values, canvasScale);
         }

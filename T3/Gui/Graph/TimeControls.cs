@@ -388,10 +388,19 @@ namespace T3.Gui.Graph
                     {
                         var bpm = (float)playback.Bpm;
 
-                        ImGui.DragFloat("BPM", ref bpm);
-                        playback.Bpm = bpm;
-                        ProjectSettings.Config.SoundtrackBpm = bpm;
+                        if (ImGui.Checkbox("Use BPM Rate", ref ProjectSettings.Config.UseBpmRate))
+                        {
+                            if (!ProjectSettings.Config.UseBpmRate)
+                                playback.TimeDisplayMode = Playback.TimeDisplayModes.Secs;
+                        }
 
+                        if (ProjectSettings.Config.UseBpmRate)
+                        {
+                            ImGui.DragFloat("BPM", ref bpm);
+                            playback.Bpm = bpm;
+                            ProjectSettings.Config.SoundtrackBpm = bpm;
+                        }
+                        
                         if (modified)
                         {
                             var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using T3.Core.Animation;
+using T3.Gui.Interaction.Snapping;
 using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -91,6 +92,12 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             return _blendRasters;
+        }
+        
+        public override  SnapResult CheckForSnap(double time, float canvasScale)
+        {
+            // Disable snapping for normal mode
+            return null;
         }
 
         private readonly Raster[] _blendRasters = new Raster[2];

@@ -18,10 +18,10 @@ namespace T3.Gui.UiHelpers
         public class ConfigData
         {
             public string SoundtrackFilepath = "";
+            public bool UseBpmRate = true;
             public float SoundtrackBpm=120;
         }
-        
-        
+
         private  void OnProcessExit(object sender, EventArgs e)
         {
             SaveSettings(Config);
