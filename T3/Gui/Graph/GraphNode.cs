@@ -291,7 +291,7 @@ namespace T3.Gui.Graph
 
                 var usableSlotArea = GetUsableInputSlotSize(inputIndex, visibleInputUis.Count);
 
-                ConnectionMaker.ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, 0, usableSlotArea);
+
                 ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + inputDefinition.GetHashCode());
                 ImGui.SetCursorScreenPos(usableSlotArea.Min);
                 ImGui.InvisibleButton("input", usableSlotArea.GetSize());
@@ -367,6 +367,7 @@ namespace T3.Gui.Graph
                     {
                         var usableSocketArea = new ImRect(topLeft, topLeft + socketSize);
                         var isSocketHovered = usableSocketArea.Contains(ImGui.GetMousePos());
+                        ConnectionMaker.ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, socketIndex, usableSocketArea);
 
                         bool isGap = false;
                         if (showGaps)
@@ -402,6 +403,7 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
+                    ConnectionMaker.ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, 0, usableSlotArea);
                     //ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id,0)
                     var isAboutToBeReconnected = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, 0);
                     foreach (var line in connectedLines)
@@ -743,6 +745,9 @@ namespace T3.Gui.Graph
                                                   ));
         }
 
+        /// <summary>
+        /// Draws slot for non multi-input
+        /// </summary>
         private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered)
         {
             if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
@@ -808,7 +813,7 @@ namespace T3.Gui.Graph
                     ConnectionMaker.Update();
                 }
             }
-            else if (isInputHovered)
+            else if (ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id,multiInputIndex) || isInputHovered)
             {
                 if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
