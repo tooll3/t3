@@ -72,6 +72,10 @@ namespace T3.Gui.Windows
                 // Draw parameters
                 DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi);
 
+                ImGui.PushFont(Fonts.FontSmall);
+                var symbolUi= SymbolUiRegistry.Entries[instance.Symbol.Id];
+                ImGui.Text(symbolUi.Description);
+                ImGui.PopFont();
                 return;
             }
 
