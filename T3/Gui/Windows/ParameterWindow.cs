@@ -74,7 +74,10 @@ namespace T3.Gui.Windows
 
                 ImGui.PushFont(Fonts.FontSmall);
                 var symbolUi= SymbolUiRegistry.Entries[instance.Symbol.Id];
-                ImGui.Text(symbolUi.Description);
+                if (!string.IsNullOrEmpty(symbolUi.Description))
+                {
+                    ImGui.Text(symbolUi.Description);
+                }
                 ImGui.PopFont();
                 return;
             }
