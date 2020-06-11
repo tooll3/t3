@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Data;
-using System.Numerics;
 using System.Windows.Forms.VisualStyles;
 using ImGuiNET;
 using Newtonsoft.Json.Linq;
+using SharpDX;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.InputUi;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using UiHelpers;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.Interaction
 {
@@ -69,6 +70,7 @@ namespace T3.Gui.Interaction
                         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Black.Rgba);
                         ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Black.Rgba);
                         DrawButtonWithDynamicLabel(FormatValueForButton(ref _editValue), ref size);
+                        DrawValueRangeIndicator(value, min, max);
                         ImGui.PopStyleColor(3);
 
                         if (ImGui.IsMouseReleased(0))
@@ -147,6 +149,9 @@ namespace T3.Gui.Interaction
             }
 
             DrawButtonWithDynamicLabel(FormatValueForButton(ref value), ref size);
+            
+            DrawValueRangeIndicator(value, min, max);
+            
             if (ImGui.IsItemActivated())
             {
                 _activeJogDialId = id;
@@ -158,6 +163,42 @@ namespace T3.Gui.Interaction
 
             return InputEditStateFlags.Nothing;
         }
+
+        private static void DrawValueRangeIndicator(double value, double min, double max)
+        {
+            if (!double.IsInfinity(min) || !double.IsInfinity(max))
+            {
+                var itemSize = ImGui.GetItemRectSize();
+
+                var center = 0.0;
+                if (min < 0)
+                {
+                    center = MathUtils.Remap((min + max) * 0.5, min, max, 0, itemSize.X);
+                }
+
+                var end = MathUtils.Remap(value, min, max, 0, itemSize.X);
+                var orgCenter = center;
+                
+                if (center > end)
+                {
+                    var t = center;
+                    center = end;
+                    end = t;
+                }
+
+                var p1 = ImGui.GetItemRectMin() + new Vector2((float)center, 0);
+                var p2 = ImGui.GetItemRectMin() + new Vector2((float)end, itemSize.Y);
+                ImGui.GetWindowDrawList().AddRectFilled(p1, p2, ValueIndicatorColor);
+                
+                // Indicate center
+                var alignment = center < orgCenter ? -1 : 0;
+                ImGui.GetWindowDrawList().AddRectFilled(
+                                                        ImGui.GetItemRectMin() + new Vector2((float)orgCenter + alignment, 0), 
+                                                        ImGui.GetItemRectMin() + new Vector2((float)orgCenter+ alignment+1, itemSize.Y), 
+                                                        ValueIndicatorColor);
+            }
+        }
+        private static readonly Color ValueIndicatorColor = new Color(1,1,1,0.06f); 
 
         private static void SetState(JogDialStates newState)
         {
