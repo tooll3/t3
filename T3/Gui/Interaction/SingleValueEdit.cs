@@ -26,11 +26,13 @@ namespace T3.Gui.Interaction
                                                Vector2 size,
                                                int min = int.MinValue,
                                                int max = int.MaxValue,
+                                               bool clamp= false,
                                                float scale = 0.1f,
-                                               string format = "{0:0}")
+                                               string format = "{0:0}"
+                                               )
         {
             double doubleValue = value;
-            var result = Draw(ref doubleValue, size, min, max, scale, format);
+            var result = Draw(ref doubleValue, size, min, max,clamp, scale, format);
             value = (int)doubleValue;
             return result;
         }
@@ -42,11 +44,13 @@ namespace T3.Gui.Interaction
                                                Vector2 size,
                                                float min = float.NegativeInfinity,
                                                float max = float.PositiveInfinity,
+                                               bool clamp= false,
                                                float scale = 0.01f,
-                                               string format = "{0:0.00}")
+                                               string format = "{0:0.00}"
+                                                )
         {
             double floatValue = value;
-            var result = Draw(ref floatValue, size, min, max, scale, format);
+            var result = Draw(ref floatValue, size, min, max, clamp, scale, format);
             value = (float)floatValue;
             return result;
         }
@@ -55,8 +59,10 @@ namespace T3.Gui.Interaction
                                                Vector2 size,
                                                double min = double.NegativeInfinity,
                                                double max = double.PositiveInfinity,
+                                               bool clamp = false,
                                                float scale = 1,
-                                               string format = "{0:0.00}")
+                                               string format = "{0:0.00}"
+                                               )
         {
             var io = ImGui.GetIO();
             var id = ImGui.GetID("jog");
@@ -104,11 +110,11 @@ namespace T3.Gui.Interaction
 
                         if (UserSettings.Config.UseJogDialControl)
                         {
-                            JogDialOverlay.Draw(io, min, max, scale);
+                            JogDialOverlay.Draw(io, min, max, scale, clamp);
                         }
                         else
                         {
-                            SliderLadder.Draw(io, min, max, scale, (float)(ImGui.GetTime() - _timeOpened));                            
+                            SliderLadder.Draw(io, min, max, scale, (float)(ImGui.GetTime() - _timeOpened), clamp);                            
                         }
 
                         break;
@@ -164,41 +170,6 @@ namespace T3.Gui.Interaction
             return InputEditStateFlags.Nothing;
         }
 
-        private static void DrawValueRangeIndicator(double value, double min, double max)
-        {
-            if (!double.IsInfinity(min) || !double.IsInfinity(max))
-            {
-                var itemSize = ImGui.GetItemRectSize();
-
-                var center = 0.0;
-                if (min < 0)
-                {
-                    center = MathUtils.Remap((min + max) * 0.5, min, max, 0, itemSize.X);
-                }
-
-                var end = MathUtils.Remap(value, min, max, 0, itemSize.X);
-                var orgCenter = center;
-                
-                if (center > end)
-                {
-                    var t = center;
-                    center = end;
-                    end = t;
-                }
-
-                var p1 = ImGui.GetItemRectMin() + new Vector2((float)center, 0);
-                var p2 = ImGui.GetItemRectMin() + new Vector2((float)end, itemSize.Y);
-                ImGui.GetWindowDrawList().AddRectFilled(p1, p2, ValueIndicatorColor);
-                
-                // Indicate center
-                var alignment = center < orgCenter ? -1 : 0;
-                ImGui.GetWindowDrawList().AddRectFilled(
-                                                        ImGui.GetItemRectMin() + new Vector2((float)orgCenter + alignment, 0), 
-                                                        ImGui.GetItemRectMin() + new Vector2((float)orgCenter+ alignment+1, itemSize.Y), 
-                                                        ValueIndicatorColor);
-            }
-        }
-        private static readonly Color ValueIndicatorColor = new Color(1,1,1,0.06f); 
 
         private static void SetState(JogDialStates newState)
         {
@@ -257,6 +228,44 @@ namespace T3.Gui.Interaction
             ImGui.GetWindowDrawList().AddText(keepPos + new Vector2(4, 4), color1, label);
         }
 
+        
+        private static void DrawValueRangeIndicator(double value, double min, double max)
+        {
+            if (!double.IsInfinity(min) || !double.IsInfinity(max))
+            {
+                var itemSize = ImGui.GetItemRectSize();
+
+                var center = 0.0;
+                if (min < 0)
+                {
+                    center = MathUtils.Remap((min + max) * 0.5, min, max, 0, itemSize.X);
+                }
+
+                var end = MathUtils.Remap(value, min, max, 0, itemSize.X);
+                var orgCenter = center;
+                
+                if (center > end)
+                {
+                    var t = center;
+                    center = end;
+                    end = t;
+                }
+
+                var p1 = ImGui.GetItemRectMin() + new Vector2((float)center, 0);
+                var p2 = ImGui.GetItemRectMin() + new Vector2((float)end, itemSize.Y);
+                ImGui.GetWindowDrawList().AddRectFilled(p1, p2, ValueIndicatorColor);
+                
+                // Indicate center
+                var alignment = center < orgCenter ? -1 : 0;
+                ImGui.GetWindowDrawList().AddRectFilled(
+                                                        ImGui.GetItemRectMin() + new Vector2((float)orgCenter + alignment, 0), 
+                                                        ImGui.GetItemRectMin() + new Vector2((float)orgCenter+ alignment+1, itemSize.Y), 
+                                                        ValueIndicatorColor);
+            }
+        }
+        private static readonly Color ValueIndicatorColor = new Color(1,1,1,0.06f); 
+
+        
         private enum JogDialStates
         {
             Inactive,
@@ -308,7 +317,7 @@ namespace T3.Gui.Interaction
                 new RangeDef(2f * OuterRangeHeight, 3f * OuterRangeHeight, 0.01f, "x0.01", 1),
             };
 
-            public static void Draw(ImGuiIOPtr io, double min, double max, float scale, float timeSinceVisible)
+            public static void Draw(ImGuiIOPtr io, double min, double max, float scale, float timeSinceVisible, bool clamp)
             {
                 var foreground = ImGui.GetForegroundDrawList();
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -382,7 +391,9 @@ namespace T3.Gui.Interaction
                     _editValue = Math.Round(_editValue / (activeScaleFactor * scale)) * (activeScaleFactor * scale);
                 }
 
-                _editValue = _editValue.Clamp(min, max);
+                if(clamp)
+                    _editValue = _editValue.Clamp(min, max);
+                
                 _lastStepPosX = pNow.X;
             }
 
@@ -401,7 +412,7 @@ namespace T3.Gui.Interaction
         /// </summary>
         private static class JogDialOverlay
         {
-            public static void Draw(ImGuiIOPtr io, double min, double max, float scale)
+            public static void Draw(ImGuiIOPtr io, double min, double max, float scale, bool clamp)
             {
                 var foreground = ImGui.GetForegroundDrawList();
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -463,9 +474,19 @@ namespace T3.Gui.Interaction
                 }
 
                 delta = (float)Math.Round(delta * 50) / 50;
+                if (ImGui.GetIO().KeyAlt)
+                {
+                    activeSpeed *= 0.01f;
+                }
+                else if (ImGui.GetIO().KeyShift)
+                {
+                    activeSpeed *= 10;
+                }
 
                 _editValue += delta * activeSpeed * scale * 100;
-                _editValue = _editValue.Clamp(min, max);
+                
+                if(clamp)
+                    _editValue = _editValue.Clamp(min, max);
             }
 
             private const float SegmentWidth = 90;
