@@ -23,6 +23,7 @@ namespace T3.Gui.InputUi
                        _max = _max,
                        _min = _min,
                        _scale = _scale,
+                       _clamp = _clamp,
                        InputDefinition = InputDefinition,
                        Parent = Parent,
                        PosOnCanvas = PosOnCanvas,
@@ -34,7 +35,7 @@ namespace T3.Gui.InputUi
         protected override InputEditStateFlags DrawEditControl(string name, ref Vector2 float2Value)
         {
             float2Value.CopyTo(_components);
-            var inputEditState = VectorValueEdit.Draw(_components, _min, _max, _scale);
+            var inputEditState = VectorValueEdit.Draw(_components, _min, _max, _scale, _clamp);
             float2Value = new Vector2(_components[0], _components[1]);
 
             return inputEditState;
@@ -71,7 +72,7 @@ namespace T3.Gui.InputUi
                 _components[index] = (float)curves[index].GetSampledValue(time);
             }
 
-            var inputEditState = VectorValueEdit.Draw(_components, _min, _max, _scale);
+            var inputEditState = VectorValueEdit.Draw(_components, _min, _max, _scale, _clamp);
             if (inputEditState == InputEditStateFlags.Nothing)
                 return;
 
@@ -90,6 +91,7 @@ namespace T3.Gui.InputUi
             ImGui.DragFloat("Min", ref _min);
             ImGui.DragFloat("Max", ref _max);
             ImGui.DragFloat("Scale", ref _scale);
+            ImGui.Checkbox("Clamp Range", ref _clamp);
         }
 
         public override void Write(JsonTextWriter writer)
@@ -105,6 +107,9 @@ namespace T3.Gui.InputUi
 
             if (_scale != DefaultScale)
                 writer.WriteValue("Scale", _scale);
+            
+            if(_clamp != false)
+                writer.WriteValue("Clamp", _clamp);
             // ReSharper enable CompareOfFloatsByEqualityOperator
         }
 
@@ -115,11 +120,13 @@ namespace T3.Gui.InputUi
             _min = inputToken["Min"]?.Value<float>() ?? DefaultMin;
             _max = inputToken["Max"]?.Value<float>() ?? DefaultMax;
             _scale = inputToken["Scale"]?.Value<float>() ?? DefaultScale;
+            _clamp = inputToken["Clamp"]?.Value<bool>() ?? false;
         }
 
         private float _min = DefaultMin;
         private float _max = DefaultMax;
         private float _scale = DefaultScale;
+        private bool _clamp = false;
 
         private const float DefaultScale = 0.01f;
         private const float DefaultMin = -9999999f;

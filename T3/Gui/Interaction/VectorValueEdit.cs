@@ -6,7 +6,7 @@ namespace T3.Gui.Interaction
 {
     public static class VectorValueEdit
     {
-        public static InputEditStateFlags Draw(float[] components, float min, float max, float scale)
+        public static InputEditStateFlags Draw(float[] components, float min, float max, float scale, bool clamp)
         {
             var width = ImGui.GetContentRegionAvail().X / components.Length;
             var size = new Vector2(width, 0);
@@ -18,7 +18,7 @@ namespace T3.Gui.Interaction
                     ImGui.SameLine();
 
                 ImGui.PushID(index);
-                resultingEditState |= SingleValueEdit.Draw(ref components[index], size: size, min, max, scale);
+                resultingEditState |= SingleValueEdit.Draw(ref components[index], size: size, min, max, clamp, scale);
                 ImGui.PopID();
             }
 
