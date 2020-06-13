@@ -1,21 +1,16 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using ImGuiNET;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Gui.Graph.Interaction;
-using T3.Gui.InputUi;
-using T3.Gui.Selection;
+using T3.Core;
+using UiHelpers;
 
 namespace T3.Gui.Interaction
 {
-    public class ColorEditButton
+    public static class ColorEditButton
     {
         public static bool Draw(ref Vector4 color, Vector2 size)
         {
+            var buttonPosition = ImGui.GetCursorScreenPos();
             if (ImGui.ColorButton("##thumbnail", color, ImGuiColorEditFlags.AlphaPreviewHalf, size))
             {
                 ImGui.OpenPopup("##colorEdit");
@@ -23,42 +18,25 @@ namespace T3.Gui.Interaction
 
             if (ImGui.IsItemActivated())
             {
-                previousColor = color;
+                _previousColor = color;
                 CollectNewColorsInPalette(color);
             }
 
-            if (ImGui.IsItemActivated() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-            {
-                Log.Debug("Dragging" + ImGui.GetMouseDragDelta());
-            }
-
-            var edited = DrawPopup(ref color, previousColor, ImGuiColorEditFlags.AlphaBar);
-            // if (edited && !ImGui.IsPopupOpen("##colorEdit"))
-            // {
-            //     colorPalette[colorPaletteIndex++ % colorPalette.Length] = color;
-            // }
-            // if (ImGui.BeginPopup("##colorEdit"))
-            // {
-            //     if (ImGui.ColorPicker4("edit", ref float4Value,
-            //                            ImGuiColorEditFlags.Float | ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreview | ImGuiColorEditFlags.HDR))
-            //     {
-            //         edited = true;
-            //     }
-            //
-            //     ImGui.EndPopup();
-            // }
-
+            var edited = false;
+            edited |= HandleQuickSliders(ref color, buttonPosition);
+            edited |= DrawPopup(ref color, _previousColor, ImGuiColorEditFlags.AlphaBar);
             return edited;
         }
+        
 
-        private static bool DrawPopup(ref Vector4 color, Vector4 previousColor, ImGuiColorEditFlags misc_flags)
+        private static bool DrawPopup(ref Vector4 color, Vector4 previousColor, ImGuiColorEditFlags flags)
         {
             var edited = false;
             if (ImGui.BeginPopup("##colorEdit"))
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
                 ImGui.Separator();
-                edited |= ImGui.ColorPicker4("##picker", ref color, misc_flags | ImGuiColorEditFlags.NoSidePreview | ImGuiColorEditFlags.NoSmallPreview);
+                edited |= ImGui.ColorPicker4("##picker", ref color, flags | ImGuiColorEditFlags.NoSidePreview | ImGuiColorEditFlags.NoSmallPreview);
                 ImGui.SameLine();
 
                 ImGui.BeginGroup(); // Lock X position
@@ -72,26 +50,25 @@ namespace T3.Gui.Interaction
 
                 ImGui.Separator();
 
-                for (int n = 0; n < colorPalette.Length; n++)
+                for (int n = 0; n < ColorPalette.Length; n++)
                 {
                     ImGui.PushID(n);
                     if ((n % 8) != 0)
                         ImGui.SameLine(0.0f, 1); //ImGui.GetStyle().ItemSpacing.Y);
 
-                    if (ImGui.ColorButton("##palette", colorPalette[n],
-                                           ImGuiColorEditFlags.NoPicker | ImGuiColorEditFlags.NoTooltip | ImGuiColorEditFlags.AlphaPreviewHalf, new Vector2(20, 20)))
+                    if (ImGui.ColorButton("##palette", ColorPalette[n],
+                                          ImGuiColorEditFlags.NoPicker | ImGuiColorEditFlags.NoTooltip | ImGuiColorEditFlags.AlphaPreviewHalf,
+                                          new Vector2(20, 20)))
 
-                        color = new Vector4(colorPalette[n].X, colorPalette[n].Y, colorPalette[n].Z, color.W); // Preserve alpha!
+                        color = new Vector4(ColorPalette[n].X, ColorPalette[n].Y, ColorPalette[n].Z, color.W); // Preserve alpha!
 
                     // Allow user to drop colors into each palette entry
                     // (Note that ColorButton is already a drag source by default, unless using ImGuiColorEditFlags.NoDragDrop)
                     if (ImGui.BeginDragDropTarget())
                     {
-                        var payload = ImGui.AcceptDragDropPayload("_COL4F");
-                        
                         // TODO: accepting the payload doesn't work because for colorButtons the payload is always undefined.
                         // I'm not sure if this is a problem of ImGui.net. A workaround would be to reimplement ImGui color button. 
-                        
+                        // var payload = ImGui.AcceptDragDropPayload("_COL4F");
                         // if (ImGui.IsMouseReleased(0))
                         // {
                         //     var color2 = Marshal.PtrToStructure<Vector4>(payload.Data);
@@ -113,25 +90,103 @@ namespace T3.Gui.Interaction
 
         private static void CollectNewColorsInPalette(Vector4 potentialColor)
         {
-            var alreadyExists = colorPalette.Any(c => c == potentialColor);
+            var alreadyExists = ColorPalette.Any(c => c == potentialColor);
             if (alreadyExists)
                 return;
+
+            ColorPalette[_colorPaletteIndex++ % ColorPalette.Length] = potentialColor;
+        }
+
+
+        private static bool HandleQuickSliders(ref Vector4 color, Vector2 buttonPosition)
+        {
+            var edited = false;
+            if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
+            {
+                _rightClickedItemId = ImGui.GetID(string.Empty);
+                _previousColor = color;
+            }
+
+            if (ImGui.IsMouseReleased(ImGuiMouseButton.Right))
+            {
+                _rightClickedItemId = 0;
+            }
             
-            colorPalette[colorPaletteIndex++ % colorPalette.Length] = potentialColor;
+            var drawList = ImGui.GetForegroundDrawList();
+            const int barHeight = 100;
+            const int barWidth = 10;
+
+            var pCenter = buttonPosition + Vector2.One * ImGui.GetFrameHeight() / 2;
+            
+            if (ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.IsItemActive())
+            {
+                var pMin = pCenter + new Vector2(15, -barHeight * color.W);
+                var pMax = pMin + new Vector2(barWidth, barHeight);
+                var area = new ImRect(pMin, pMax);
+                drawList.AddRectFilled(pMin - Vector2.One, pMax + Vector2.One, new Color(0.1f, 0.1f, 0.1f));
+                CustomComponents.FillWithStripes(drawList, area);
+                var opaqueColor = color;
+                opaqueColor.W = 1;
+                var transparentColor = color;
+                transparentColor.W = 0;
+                drawList.AddRectFilledMultiColor(pMin, pMax,
+                                                 ImGui.ColorConvertFloat4ToU32(transparentColor),
+                                                 ImGui.ColorConvertFloat4ToU32(transparentColor),
+                                                 ImGui.ColorConvertFloat4ToU32(opaqueColor),
+                                                 ImGui.ColorConvertFloat4ToU32(opaqueColor));
+                drawList.AddRectFilled(pCenter, pCenter + new Vector2(barWidth + 15, 1), Color.Black);
+            
+                color.W = (_previousColor.W - ImGui.GetMouseDragDelta().Y / 100).Clamp(0, 1);
+                edited = true;
+            }
+            
+            if (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && ImGui.GetID(string.Empty) == _rightClickedItemId)
+            {
+                var hsb = new Color(color).AsHsl;
+                var previousHsb =new Color(_previousColor).AsHsl; 
+                var pMin = pCenter + new Vector2(15, -barHeight * hsb.Z);
+                var pMax = pMin + new Vector2(barWidth, barHeight);
+                var area = new ImRect(pMin, pMax);
+                drawList.AddRectFilled(pMin - Vector2.One, pMax + Vector2.One, new Color(0.1f, 0.1f, 0.1f));
+                CustomComponents.FillWithStripes(drawList, area);
+                
+                // Draw Slider
+                var opaqueColor = color;
+                opaqueColor.W = 1;
+                var transparentColor = color;
+                transparentColor.W = 0;
+                drawList.AddRectFilledMultiColor(pMin, pMax,
+                                                 ImGui.ColorConvertFloat4ToU32(transparentColor),
+                                                 ImGui.ColorConvertFloat4ToU32(transparentColor),
+                                                 ImGui.ColorConvertFloat4ToU32(opaqueColor),
+                                                 ImGui.ColorConvertFloat4ToU32(opaqueColor));
+                
+                
+                drawList.AddRectFilled(pCenter, pCenter + new Vector2(barWidth + 15, 1), Color.Black);
+
+                var newBrightness = (previousHsb.Z - ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Y / 100).Clamp(0, 1);
+                color = Color.ColorFromHsl(previousHsb.X, previousHsb.Y, newBrightness, _previousColor.W);
+                edited = true;
+            }
+            return edited;
         }
         
+        
+        
+        
         private static Vector4[] IntializePalette(int length)
-        { 
+        {
             var r = new Vector4[length];
             for (int i = 0; i < length; i++)
             {
-                r[i] = new Vector4(0,0,0,1);
+                r[i] = new Vector4(0, 0, 0, 1);
             }
+
             return r;
         }
-
-        private static Vector4[] colorPalette = IntializePalette(32);
-        private static int colorPaletteIndex = 0;
-        private static Vector4 previousColor;
+        private static uint _rightClickedItemId;
+        private static readonly Vector4[] ColorPalette = IntializePalette(32);
+        private static int _colorPaletteIndex;
+        private static Vector4 _previousColor;
     }
 }

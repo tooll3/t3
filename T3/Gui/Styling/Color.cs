@@ -1,5 +1,7 @@
-﻿using ImGuiNET;
+﻿using System;
+using ImGuiNET;
 using System.Numerics;
+using T3.Operators.Types.Id_1677fd74_6e54_479a_b478_c2ac77288f9c;
 
 namespace T3.Gui
 {
@@ -113,7 +115,103 @@ namespace T3.Gui
                 var c = ImGui.GetStyleColorVec4(color);
                 return new Color(c->X, c->Y, c->Z,c->W);
             }
-        } 
-        
-    };
+        }
+
+        /// <summary>
+        /// This is a variation of the normal HSV function in that it returns a desaturated "white" colors brightness above 0.5   
+        /// </summary>
+        public static Color ColorFromHsl(float h, float s, float l, float a=1)
+        {
+            float r, g, b, m, c, x;
+
+            h /= 60;
+            if (h < 0) h = 6 - (-h%6);
+            h %= 6;
+
+            s = Math.Max(0, Math.Min(1, s));
+            l = Math.Max(0, Math.Min(1, l));
+
+            c = (1 - Math.Abs((2*l) - 1))*s;
+            x = c*(1 - Math.Abs((h%2) - 1));
+
+            if (h < 1)
+            {
+                r = c;
+                g = x;
+                b = 0;
+            }
+            else if (h < 2)
+            {
+                r = x;
+                g = c;
+                b = 0;
+            }
+            else if (h < 3)
+            {
+                r = 0;
+                g = c;
+                b = x;
+            }
+            else if (h < 4)
+            {
+                r = 0;
+                g = x;
+                b = c;
+            }
+            else if (h < 5)
+            {
+                r = x;
+                g = 0;
+                b = c;
+            }
+            else
+            {
+                r = c;
+                g = 0;
+                b = x;
+            }
+
+            m = l - c/2;
+
+            return new Color(r+m, g+m, b+m,a);
+        }
+
+        public Vector3 AsHsl
+        {
+            get
+            {
+                float r = Rgba.X;
+                float g = Rgba.Y;
+                float b = Rgba.Z;
+                
+                float tmp = (r < g) ? r : g;
+                float min = (tmp < b) ? tmp : b;
+
+                tmp = (r > g) ? r : g;
+                float max = (tmp > b) ? tmp : b;
+
+                float delta = max - min;
+                float lum = (min + max) / 2.0f;
+                float sat = 0;
+                if (lum > 0.0f && lum < 1.0f)
+                {
+                    sat = delta / ((lum < 0.5f) ? (2.0f * lum) : (2.0f - 2.0f * lum));
+                }
+
+                float hue = 0.0f;
+                if (delta > 0.0f)
+                {
+                    if (max == r && max != g)
+                        hue += (g - b) / delta;
+                    if (max == g && max != b)
+                        hue += (2.0f + (b - r) / delta);
+                    if (max == b && max != r)
+                        hue += (4.0f + (r - g) / delta);
+                    hue *= 60.0f;
+                }
+
+                return new Vector3(hue, sat, lum);
+            }
+        }
+    }
 }
