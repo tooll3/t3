@@ -17,32 +17,31 @@ namespace T3.Gui.UiHelpers
             _filepath = filepath;
             if (!File.Exists(_filepath))
             {
-                Log.Warning($"Layout {_filepath} doesn't exist yet");
+                Log.Warning($"{_filepath} doesn't exist yet");
                 return null;
             }
 
             var jsonBlob = File.ReadAllText(_filepath);
-            var serializer = Newtonsoft.Json.JsonSerializer.Create();
+            var serializer = JsonSerializer.Create();
             var fileTextReader = new StringReader(jsonBlob);
             try
             {
-                if (serializer.Deserialize(fileTextReader, typeof(T))
-                        is T configurations)
+                if (serializer.Deserialize(fileTextReader, typeof(T)) is T configurations)
                     return configurations;
             }
             catch (Exception e)
             {
-                Log.Error($"Can't load layout {_filepath}:" + e.Message);
+                Log.Error($"Can't load {_filepath}:" + e.Message);
                 return null;
             }
 
-            Log.Error("Can't load layout");
+            Log.Error($"Can't load {_filepath}");
             return null;
         }
 
         protected void SaveSettings<T>(T configuration)
         {
-            Log.Debug("Saving user settings...");
+            Log.Debug($"Saving {_filepath}...");
             var serializer = JsonSerializer.Create();
             serializer.Formatting = Formatting.Indented;
             using (var file = File.CreateText(_filepath))
