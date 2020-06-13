@@ -12,7 +12,7 @@ namespace T3.Gui.Windows
     {
         public bool AllowMultipleInstances = false;
         protected abstract void DrawContent();
-        protected ImGuiWindowFlags WindowFlags;
+        public ImGuiWindowFlags WindowFlags;
 
         protected bool PreventWindowDragging = true;
         //public static List<Window> WindowInstances = new List<Window>();

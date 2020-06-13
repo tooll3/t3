@@ -101,6 +101,8 @@ namespace T3.Gui.Windows
             _hasBeenInitialized = true;
         }
 
+        private bool _graphWindowAsBackground = false;
+        
         public void DrawWindowsMenu()
         {
             if (ImGui.BeginMenu("Windows"))
@@ -108,6 +110,30 @@ namespace T3.Gui.Windows
                 if (ImGui.MenuItem("FullScreen", "", Program.IsFullScreen))
                     Program.IsFullScreen = !Program.IsFullScreen;
 
+                if (ImGui.MenuItem("Graph Window as background", "", ref _graphWindowAsBackground))
+                {
+                    {
+                        foreach (var w in _windows)
+                        {
+                            if (w is GraphWindow graphWindow)
+                            {
+                                if (_graphWindowAsBackground)
+                                {
+                                    graphWindow.Config.Position = Vector2.Zero;
+                                    graphWindow.Config.Size = ImGui.GetIO().DisplaySize;
+                                    graphWindow.WindowFlags |= ImGuiWindowFlags.NoDecoration;
+                                }
+                                else
+                                {
+                                    graphWindow.WindowFlags &= ~ImGuiWindowFlags.NoDecoration;
+                                }
+                            }
+                        }
+                    }
+                    //if(_graphWindowAsBackground)
+                }
+                    
+                
                 ImGui.Separator();
                 
                 foreach (var window in _windows)

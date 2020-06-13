@@ -46,6 +46,7 @@ namespace T3.Gui.Windows.Output
 
         public static readonly List<Resolution> Resolutions = new List<Resolution>()
                                                                {
+                                                                   new Resolution("Fill", 0, 0, useAsAspectRatio: true),
                                                                    new Resolution("1:1", 1, 1, useAsAspectRatio: true),
                                                                    new Resolution("16:9", 16, 9, useAsAspectRatio: true),
                                                                    new Resolution("4:3", 4, 3, useAsAspectRatio: true),
@@ -79,6 +80,11 @@ namespace T3.Gui.Windows.Output
                     return Size; 
 
                 var windowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
+                if (Size.Width <= 0 || Size.Height <= 0)
+                {
+                    return new Size2((int)windowSize.X, (int)windowSize.Y); 
+                }
+                
                 var windowAspectRatio = windowSize.X / windowSize.Y;
                 var requestedAspectRatio = (float)Size.Width / Size.Height;
 
