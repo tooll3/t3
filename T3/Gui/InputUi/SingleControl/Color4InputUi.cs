@@ -5,10 +5,11 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Gui.Interaction;
 
 namespace T3.Gui.InputUi.SingleControl
 {
-    public class Vector4InputUi : SingleControlInputUi<Vector4>
+    public class Vector4InputUi : InputValueUi<Vector4>
     {
         public override bool IsAnimatable => true;
 
@@ -23,14 +24,48 @@ namespace T3.Gui.InputUi.SingleControl
                    };
         }
 
-        protected override bool DrawSingleEditControl(string name, ref Vector4 value)
+        protected override InputEditStateFlags DrawEditControl(string name, ref Vector4 float4Value)
         {
-            return ImGui.ColorEdit4("##Vector4Edit", ref value, ImGuiColorEditFlags.Float| ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreviewHalf);
+            float4Value.CopyTo(_components);
+            var thumbWidth = ImGui.GetFrameHeight();
+            var width = (ImGui.GetContentRegionAvail().X - thumbWidth) / 4f -1;
+            var size = new Vector2(width, 0);
+
+            var resultingEditState = InputEditStateFlags.Nothing;
+            for (var index = 0; index < 4; index++)
+            {
+                if (index > 0)
+                    ImGui.SameLine();
+
+                ImGui.PushID(index);
+                resultingEditState |= SingleValueEdit.Draw(ref _components[index], size: size, 0, 1, true, 0.01f);
+                ImGui.PopID();
+            }
+            
+            float4Value = new Vector4(_components[0], _components[1], _components[2], _components[3]);
+            
+            ImGui.SameLine();
+            ImGui.ColorButton("thumbnail", float4Value, ImGuiColorEditFlags.AlphaPreviewHalf);
+            if (ImGui.BeginPopupContextItem("##colorEdit", ImGuiMouseButton.Left))
+            {
+                if (ImGui.ColorPicker4("edit", ref float4Value,
+                                       ImGuiColorEditFlags.Float | ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreview))
+                {
+                    resultingEditState |= InputEditStateFlags.Modified;                    
+                }
+                ImGui.EndPopup();
+            }
+            return resultingEditState;
         }
+        
+        private static float[] _components = new float[4];    // static to avoid GC allocations
+        
 
         protected override void DrawReadOnlyControl(string name, ref Vector4 value)
         {
+            ImGui.PushStyleColor(ImGuiCol.Text, Color.Blue.Rgba);
             DrawEditControl(name, ref value);
+            ImGui.PopStyleColor();
         }
         
         protected override void DrawAnimatedValue(string name, InputSlot<Vector4> inputSlot, Animator animator)
@@ -48,10 +83,11 @@ namespace T3.Gui.InputUi.SingleControl
                                                         (float)curves[2].GetSampledValue(time),
                                                         (float)curves[3].GetSampledValue(time));
             Vector4 editValue = new Vector4(value.X, value.Y, value.Z, value.W);
-            var edited = DrawSingleEditControl(name, ref editValue);
-            if (!edited)
-                return; // nothing changed
-
+            
+            var inputEditState = DrawEditControl(name, ref editValue);
+            if (inputEditState == InputEditStateFlags.Nothing)
+                return;
+            
             SharpDX.Vector4 newValue = new SharpDX.Vector4(editValue.X, editValue.Y, editValue.Z, editValue.W);
             for (int i = 0; i < 4; i++)
             {
