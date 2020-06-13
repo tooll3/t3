@@ -3,7 +3,6 @@ using System.IO;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 
-
 namespace T3.Gui.UiHelpers
 {
     /// <summary>
@@ -11,9 +10,9 @@ namespace T3.Gui.UiHelpers
     /// </summary>
     public abstract class Settings
     {
-        private  string _filepath;
+        private string _filepath;
 
-        protected  T TryLoading<T>(string filepath) where T:class
+        protected T TryLoading<T>(string filepath) where T : class
         {
             _filepath = filepath;
             if (!File.Exists(_filepath))
@@ -31,18 +30,17 @@ namespace T3.Gui.UiHelpers
                         is T configurations)
                     return configurations;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Error($"Can't load layout {_filepath}:" + e.Message);
                 return null;
             }
-            
+
             Log.Error("Can't load layout");
             return null;
         }
 
-        
-        protected  void SaveSettings<T>(T configuration)
+        protected void SaveSettings<T>(T configuration)
         {
             Log.Debug("Saving user settings...");
             var serializer = JsonSerializer.Create();

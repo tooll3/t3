@@ -33,11 +33,9 @@ namespace T3.Gui.OutputUi
                         ImGui.Text(s);
                         break;
                     default:
-                    {
                         var t = value?.ToString();
                         ImGui.Text(t ?? typeof(T).ToString());
                         break;
-                    }
                 }
             }
             else
