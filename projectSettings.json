@@ -1,4 +1,5 @@
 {
   "SoundtrackFilepath": "Resources\\proj-synchotron\\soundtrack\\synthjam.mp3",
+  "UseBpmRate": true,
   "SoundtrackBpm": 120.0
 }

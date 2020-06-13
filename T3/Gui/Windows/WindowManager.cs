@@ -105,10 +105,9 @@ namespace T3.Gui.Windows
         {
             if (ImGui.BeginMenu("Windows"))
             {
-                if (ImGui.MenuItem("FullScreen"))
-                {
-                    Program.MakeFullScreen();
-                }
+                if (ImGui.MenuItem("FullScreen", "", Program.IsFullScreen))
+                    Program.IsFullScreen = !Program.IsFullScreen;
+
                 ImGui.Separator();
                 
                 foreach (var window in _windows)

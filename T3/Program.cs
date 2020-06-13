@@ -222,12 +222,7 @@ namespace T3
     {
         private static ImGuiDx11Impl _controller;
         public static Device Device { get; private set; }
-        private static bool _fullScreenRequested;
-        
-        public static void MakeFullScreen()
-        {
-            _fullScreenRequested = true;
-        }
+        public static bool IsFullScreen { get; set; } = false;
         
         
         [STAThread]
@@ -294,6 +289,7 @@ namespace T3
             desc.OutputHandle = form2.Handle;
 
             _swapChain2 = new SwapChain(factory, device, desc);
+            
 
             _swapChain2.ResizeBuffers(3, form2.ClientSize.Width, form2.ClientSize.Height,
                                       _swapChain2.Description.ModeDescription.Format, _swapChain2.Description.Flags);
@@ -359,14 +355,10 @@ namespace T3
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
                                      stopwatch.Restart();
 
-                                     if (_fullScreenRequested)
+                                     bool fullScreenBorderStyle = form.FormBorderStyle == FormBorderStyle.None;
+                                     if (IsFullScreen != fullScreenBorderStyle) 
                                      {
-                                         Log.Debug("Not implemented");
-                                         // TODO: need to manage swap chain resetting
-                                         // form.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
-                                         // form.ControlBox = false;
-                                         // form.Text = String.Empty;
-                                         // _fullScreenRequested = false;
+                                         form.FormBorderStyle = fullScreenBorderStyle ? FormBorderStyle.Sizable : FormBorderStyle.None;
                                      }
                                      
                                      var modifiedSymbols = resourceManager.UpdateChangedOperatorTypes();
