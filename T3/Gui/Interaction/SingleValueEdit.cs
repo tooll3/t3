@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Data;
-using System.Windows.Forms.VisualStyles;
 using ImGuiNET;
-using Newtonsoft.Json.Linq;
-using SharpDX;
 using T3.Core;
-using T3.Core.Logging;
 using T3.Gui.InputUi;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
-using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.Interaction
@@ -376,13 +371,13 @@ namespace T3.Gui.Interaction
                     return;
 
                 var delta = deltaSinceLastStep / StepSize;
-                if (io.KeyCtrl)
+                if (io.KeyAlt)
                 {
-                    delta *= 10f;
+                    delta *= 0.01f;
                 }
                 else if (io.KeyShift)
                 {
-                    delta *= 0.1f;
+                    delta *= 10f;
                 }
                 
                 _editValue += delta * activeScaleFactor * scale;
