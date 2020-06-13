@@ -8,11 +8,17 @@ namespace T3.Gui.UiHelpers
     /// <summary>
     /// Implements writing and reading configuration files 
     /// </summary>
-    public abstract class Settings
+    public class Settings<T> where T : class, new()
     {
-        private string _filepath;
+        public static T Config;
 
-        protected T TryLoading<T>(string filepath) where T : class
+        public Settings(string filepath)
+        {
+            AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
+            Config = TryLoading(filepath) ?? new T();
+        }
+
+        private T TryLoading(string filepath)
         {
             _filepath = filepath;
             if (!File.Exists(_filepath))
@@ -39,7 +45,7 @@ namespace T3.Gui.UiHelpers
             return null;
         }
 
-        protected void SaveSettings<T>(T configuration)
+        private void SaveSettings(T configuration)
         {
             Log.Debug($"Saving {_filepath}...");
             var serializer = JsonSerializer.Create();
@@ -49,5 +55,12 @@ namespace T3.Gui.UiHelpers
                 serializer.Serialize(file, configuration);
             }
         }
+
+        private void OnProcessExit(object sender, EventArgs e)
+        {
+            SaveSettings(Config);
+        }
+
+        private string _filepath;
     }
 }

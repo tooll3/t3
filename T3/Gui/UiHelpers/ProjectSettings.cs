@@ -5,26 +5,17 @@ namespace T3.Gui.UiHelpers
     /// <summary>
     /// Saves view layout and currently open node 
     /// </summary>
-    public class ProjectSettings : Settings
+    public class ProjectSettings : Settings<ProjectSettings.ConfigData>
     {
-        public ProjectSettings()
+        public ProjectSettings() : base("projectSettings.json")
         {
-            AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
-            Config = TryLoading<ConfigData>("projectSettings.json") ?? new ConfigData();
         }
-
-        public static ConfigData Config;
 
         public class ConfigData
         {
             public string SoundtrackFilepath = "";
             public bool UseBpmRate = true;
             public float SoundtrackBpm = 120;
-        }
-
-        private void OnProcessExit(object sender, EventArgs e)
-        {
-            SaveSettings(Config);
         }
     }
 }

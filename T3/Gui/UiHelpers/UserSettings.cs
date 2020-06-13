@@ -10,22 +10,20 @@ namespace T3.Gui.UiHelpers
     /// <summary>
     /// Saves view layout, currently open node and other user settings 
     /// </summary>
-    public class UserSettings :Settings
+    public class UserSettings : Settings<UserSettings.ConfigData>
     {
-        public UserSettings()
+        public UserSettings() : base("userSettings.json")
         {
-            AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
-            Config = TryLoading<ConfigData>("userSettings.json") ?? new ConfigData();
         }
-        
-        public static ConfigData Config;
-        
+
         public class ConfigData
         {
             public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.Scope>();
             public readonly Dictionary<string, Guid> LastOpsForWindows = new Dictionary<string, Guid>();
+
             [JsonConverter(typeof(StringEnumConverter))]
             public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.Live;
+
             public bool AudioMuted;
             public bool ShowThumbnails = true;
             public int WindowLayoutIndex = 0;
@@ -36,20 +34,15 @@ namespace T3.Gui.UiHelpers
             public bool UseJogDialControl = false;
             public float ZoomSpeed = 12;
         }
-        
+
         public static Guid GetLastOpenOpForWindow(string windowTitle)
         {
             return Config.LastOpsForWindows.TryGetValue(windowTitle, out var id) ? id : Guid.Empty;
         }
-        
+
         public static void SaveLastViewedOpForWindow(GraphWindow window, Guid opInstanceId)
         {
-            Config.LastOpsForWindows[window.Config.Title]= opInstanceId;
-        }
-
-        private  void OnProcessExit(object sender, EventArgs e)
-        {
-            SaveSettings(Config);
+            Config.LastOpsForWindows[window.Config.Title] = opInstanceId;
         }
     }
 }
