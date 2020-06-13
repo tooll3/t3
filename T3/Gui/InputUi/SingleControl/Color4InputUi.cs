@@ -45,19 +45,18 @@ namespace T3.Gui.InputUi.SingleControl
             float4Value = new Vector4(_components[0], _components[1], _components[2], _components[3]);
             
             ImGui.SameLine();
-            ImGui.ColorButton("thumbnail", float4Value, ImGuiColorEditFlags.AlphaPreviewHalf);
-            if (ImGui.BeginPopupContextItem("##colorEdit", ImGuiMouseButton.Left))
+            
+            
+            if (ColorEditButton.Draw(ref float4Value, Vector2.Zero))
             {
-                if (ImGui.ColorPicker4("edit", ref float4Value,
-                                       ImGuiColorEditFlags.Float | ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreview))
-                {
-                    resultingEditState |= InputEditStateFlags.Modified;                    
-                }
-                ImGui.EndPopup();
+                resultingEditState |= InputEditStateFlags.Modified;
             }
             return resultingEditState;
         }
         
+        
+        
+
         private static float[] _components = new float[4];    // static to avoid GC allocations
         
 
