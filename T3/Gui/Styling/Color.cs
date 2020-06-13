@@ -26,7 +26,7 @@ namespace T3.Gui
         public static Color Black = new Color(0, 0, 0, 1f);
         public static Color Red = new Color(1f, 0.2f, 0.2f, 1f);
         public static Color Green = new Color(0.2f, 0.9f, 0.2f, 1f);
-        public static Color Blue = new Color(0.2f, 0.2f, 0.9f, 1);
+        public static Color Blue = new Color(0.4f, 0.5f, 1f, 1);
         public static Color Orange = new Color(1f, 0.46f, 0f, 1f);
 
         /// <summary>
