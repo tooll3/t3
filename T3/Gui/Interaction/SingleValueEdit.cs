@@ -41,7 +41,7 @@ namespace T3.Gui.Interaction
                                                float max = float.PositiveInfinity,
                                                bool clamp= false,
                                                float scale = 0.01f,
-                                               string format = "{0:0.00}"
+                                               string format = "{0:0.000}"
                                                 )
         {
             double floatValue = value;
@@ -56,9 +56,22 @@ namespace T3.Gui.Interaction
                                                double max = double.PositiveInfinity,
                                                bool clamp = false,
                                                float scale = 1,
-                                               string format = "{0:0.00}"
+                                               string format = "{0:0.000}"
                                                )
         {
+            // Automatically set scale from range
+            if (scale <= 0)
+            {
+                if (double.IsInfinity(min) || double.IsInfinity(max))
+                {
+                    scale = 0.01f;
+                }
+                else
+                {
+                    scale = (float)Math.Abs(min - max) / 100;
+                }
+            }
+            
             var io = ImGui.GetIO();
             var id = ImGui.GetID("jog");
             _numberFormat = format;
@@ -367,18 +380,26 @@ namespace T3.Gui.Interaction
                 }
 
                 var deltaSinceLastStep = pLast.X - _lastStepPosX;
-                if (!(Math.Abs(deltaSinceLastStep) >= StepSize))
-                    return;
-
                 var delta = deltaSinceLastStep / StepSize;
                 if (io.KeyAlt)
                 {
+                    ImGui.PushFont(Fonts.FontSmall);
+                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x0.01");
+                    ImGui.PopFont();
+                    
                     delta *= 0.01f;
                 }
                 else if (io.KeyShift)
                 {
+                    ImGui.PushFont(Fonts.FontSmall);
+                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x10");
+                    ImGui.PopFont();
+
                     delta *= 10f;
                 }
+                
+                if (!(Math.Abs(deltaSinceLastStep) >= StepSize))
+                    return;
                 
                 _editValue += delta * activeScaleFactor * scale;
                 if (activeScaleFactor > 1)

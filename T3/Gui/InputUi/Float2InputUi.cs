@@ -130,7 +130,7 @@ namespace T3.Gui.InputUi
         private float _scale = DefaultScale;
         private bool _clamp = false;
 
-        private const float DefaultScale = 0.01f;
+        private const float DefaultScale = 0.0f;
         private const float DefaultMin = -9999999f;
         private const float DefaultMax = 9999999f;
         

@@ -38,7 +38,13 @@ namespace T3.Gui.InputUi.SingleControl
                     ImGui.SameLine();
 
                 ImGui.PushID(index);
-                resultingEditState |= SingleValueEdit.Draw(ref _components[index], size: size, 0, 1, true, 0.01f);
+                resultingEditState |= SingleValueEdit.Draw(ref _components[index], 
+                                                           size: size, 
+                                                           min: 0, 
+                                                           max:1, 
+                                                           true,     // clamping at 1 means that HDRs values have to done with the color picker
+                                                           0.01f,    // we can't use auto, because range differs 
+                                                           "{0:0.00}"); // limit precision display, because we don't have much space
                 ImGui.PopID();
             }
             

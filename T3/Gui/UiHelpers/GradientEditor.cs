@@ -64,6 +64,9 @@ namespace T3.Gui.UiHelpers
                     // Interaction
                     ImGui.SetCursorScreenPos(handleArea.Min);
                     ImGui.InvisibleButton("gradientStep", new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
+                    
+                    // Stub for ColorEditButton that allows quick sliders. Sadly this doesn't work with right mouse button drag.
+                    //modified |= ColorEditButton.Draw(ref step.Color, new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
 
                     if (ImGui.IsItemHovered())
                         anyHandleHovered = true;
@@ -71,7 +74,7 @@ namespace T3.Gui.UiHelpers
                     var draggedOutside = false;
                     if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
                     {
-                        draggedOutside = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + 50;
+                        draggedOutside = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + RemoveThreshold;
 
                         step.NormalizedPosition = ((ImGui.GetMousePos().X - areaOnScreen.Min.X) / areaOnScreen.GetWidth()).Clamp(0, 1);
                         modified = true;
@@ -86,7 +89,7 @@ namespace T3.Gui.UiHelpers
 
                     if (ImGui.IsItemDeactivated())
                     {
-                        var mouseOutsideThresholdAfterDrag = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + 50;
+                        var mouseOutsideThresholdAfterDrag = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + RemoveThreshold;
                         if (mouseOutsideThresholdAfterDrag && gradient.Steps.Count > 1)
                             removedStep = step;
                     }
@@ -161,6 +164,7 @@ namespace T3.Gui.UiHelpers
                 return new ImRect(new Vector2(x, areaOnScreen.Max.Y - StepHandleSize.Y), new Vector2(x + StepHandleSize.X, areaOnScreen.Max.Y + 2));
             }
         }
+        private const float RemoveThreshold = 150;
 
         private const float RequiredHeightForHandles = 20;
         private const int MinInsertHeight = 20;
