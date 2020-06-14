@@ -96,8 +96,8 @@ namespace T3.Gui
             if (ImGui.IsAnyItemActive())
                 return false;
 
-            var binding = Bindings.FirstOrDefault(b => b.Action == action);
-            if (binding != null)
+            var bindings = Bindings.FindAll(b => b.Action == action);
+            foreach(var binding in bindings)
             {
                 if (binding.NeedsWindowFocus && !ImGui.IsWindowFocused())
                     return false;
@@ -164,6 +164,7 @@ namespace T3.Gui
                   new KeyboardBinding(UserActions.Save, new KeyCombination(Key.S, ctrl: true)),
                   new KeyboardBinding(UserActions.FocusSelection, new KeyCombination(Key.F)) { NeedsWindowHover = true },
                   new KeyboardBinding(UserActions.Duplicate, new KeyCombination(Key.D, ctrl: true)) { NeedsWindowFocus = true },
+                  new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Backspace)) { NeedsWindowFocus = true },
                   new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Delete)) { NeedsWindowFocus = true },
                   new KeyboardBinding(UserActions.CopyToClipboard, new KeyCombination(Key.C, ctrl: true)) { NeedsWindowFocus = true },
                   new KeyboardBinding(UserActions.PasteFromClipboard, new KeyCombination(Key.V, ctrl: true)) { NeedsWindowFocus = true },

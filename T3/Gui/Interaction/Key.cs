@@ -45,10 +45,11 @@ namespace T3.Gui
         X = 88,
         Y = 89,
         Z = 90,
-        Delete = 8,
-        LeftShift,
-        RightShift,
-        LeftCtrl,
+        Backspace = 8,
+        Delete = 46,
+        // LeftShift,    
+        // RightShift,
+        // LeftCtrl,
         F1 = 112,
         F2 = 113,
         F3 = 114,
@@ -78,5 +79,4 @@ namespace T3.Gui
         Period = 190,
         Slash = 191
     }
-
 }
