@@ -62,7 +62,8 @@ namespace T3.Gui.Interaction
             // Automatically set scale from range
             if (scale <= 0)
             {
-                if (double.IsInfinity(min) || double.IsInfinity(max))
+                // A lame hack because we can't set infinity values in parameter properties
+                if (min < -9999 || max > 9999)
                 {
                     scale = 0.01f;
                 }
@@ -242,6 +243,7 @@ namespace T3.Gui.Interaction
             if (!double.IsInfinity(min) || !double.IsInfinity(max))
             {
                 var itemSize = ImGui.GetItemRectSize();
+                var itemPos = ImGui.GetItemRectMin();
 
                 var center = 0.0;
                 if (min < 0)
@@ -259,8 +261,8 @@ namespace T3.Gui.Interaction
                     end = t;
                 }
 
-                var p1 = ImGui.GetItemRectMin() + new Vector2((float)center, 0);
-                var p2 = ImGui.GetItemRectMin() + new Vector2((float)end, itemSize.Y);
+                var p1 = itemPos + new Vector2((float)center, 0);
+                var p2 = itemPos + new Vector2((float)end, itemSize.Y);
                 ImGui.GetWindowDrawList().AddRectFilled(p1, p2, ValueIndicatorColor);
                 
                 // Indicate center
@@ -269,6 +271,28 @@ namespace T3.Gui.Interaction
                                                         ImGui.GetItemRectMin() + new Vector2((float)orgCenter + alignment, 0), 
                                                         ImGui.GetItemRectMin() + new Vector2((float)orgCenter+ alignment+1, itemSize.Y), 
                                                         ValueIndicatorColor);
+                
+                // Indicate overflow
+                if (value < min)
+                {
+                    var triangleCenter = new Vector2(itemPos.X + 5, itemPos.Y + itemSize.Y - 5);
+                    ImGui.GetWindowDrawList().AddTriangleFilled( 
+                                                                triangleCenter + new Vector2(-3, 0),
+                                                                triangleCenter + new Vector2(2, -4),
+                                                                triangleCenter + new Vector2(2, 4),
+                                                                new Color(1,1,1,0.2f)
+                                                                );
+                }
+                else if (value > max)
+                {
+                    var triangleCenter = new Vector2(itemPos.X + itemSize.X - 3, itemPos.Y + itemSize.Y - 5);
+                    ImGui.GetWindowDrawList().AddTriangleFilled( 
+                                                                triangleCenter + new Vector2(-2, -4),
+                                                                triangleCenter + new Vector2(3, 0),
+                                                                triangleCenter + new Vector2(-2, 4),
+                                                                new Color(1,1,1,0.2f)
+                                                               );                    
+                }
             }
         }
         private static readonly Color ValueIndicatorColor = new Color(1,1,1,0.06f); 
