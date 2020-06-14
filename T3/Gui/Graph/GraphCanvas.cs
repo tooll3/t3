@@ -175,6 +175,7 @@ namespace T3.Gui.Graph
                     DrawGrid();
                 _symbolBrowser.Draw();
                 Graph.DrawGraph(DrawList);
+                RenameInstanceOverlay.Draw();
                 HandleFenceSelection();
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
@@ -432,6 +433,11 @@ namespace T3.Gui.Graph
                 }
 
                 if (ImGui.MenuItem("Rename", oneElementSelected))
+                {
+                    RenameInstanceOverlay.OpenForSymbolChildUi(selectedChildUis[0]);
+                }
+                
+                if (ImGui.MenuItem("Rename Symbol", oneElementSelected))
                 {
                     _renameSymbolDialog.ShowNextFrame();
                     _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name;

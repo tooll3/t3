@@ -373,6 +373,7 @@
     <Compile Include="Gui\Graph\Interaction\SelectableNodeMovement.cs" />
     <Compile Include="Gui\Graph\Interaction\SymbolBrowser.cs" />
     <Compile Include="Gui\Graph\Interaction\SymbolFilter.cs" />
+    <Compile Include="Gui\Graph\RenameInstanceOverlay.cs" />
     <Compile Include="Gui\Graph\Rendering\SrvManager.cs" />
     <Compile Include="Gui\Graph\TimeControls.cs" />
     <Compile Include="Gui\InputUi\CurveInputEditing.cs" />

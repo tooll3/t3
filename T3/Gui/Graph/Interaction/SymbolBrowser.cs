@@ -50,9 +50,10 @@ namespace T3.Gui.Graph.Interaction
                 OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null, null, false);
                 return;
             }
-
+            
+            T3Ui.OpenedPopUpName = "SymbolBrowser";
             Current = this;
-
+            
             _filter.UpdateIfNecessary();
 
             ImGui.PushID(UiId);
@@ -154,6 +155,7 @@ namespace T3.Gui.Graph.Interaction
         private void Close()
         {
             RestoreImGuiKeyboardNavigation();
+            //T3Ui.OpenedPopUpName = null;
             _isOpen = false;
         }
 
