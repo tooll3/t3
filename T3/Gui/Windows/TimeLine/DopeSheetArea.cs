@@ -424,7 +424,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        #region implement selection holder interface --------------------------------------------
+        #region implement interface --------------------------------------------
         void ITimeObjectManipulation.ClearSelection()
         {
             SelectedKeyframes.Clear();

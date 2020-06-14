@@ -27,6 +27,7 @@ namespace T3.Gui.Interaction
             if (ImGui.IsMouseReleased(0))
             {
                 state = state == States.PressedButNotMoved ? States.CompletedAsClick : States.CompletedAsArea;
+                BoundsInScreen = ImRect.RectBetweenPoints(_startPositionInScreen, ImGui.GetMousePos());
                 return state;
             }
 
@@ -64,11 +65,11 @@ namespace T3.Gui.Interaction
             get
             {
                 var selectMode = SelectModes.Replace;
-                if (ImGui.IsKeyPressed((int)Key.LeftShift))
+                if (ImGui.GetIO().KeyShift)
                 {
                     selectMode = SelectModes.Add;
                 }
-                else if (ImGui.IsKeyPressed((int)Key.LeftCtrl))
+                else if (ImGui.GetIO().KeyCtrl)
                 {
                     selectMode = SelectModes.Remove;
                 }

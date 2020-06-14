@@ -45,6 +45,7 @@ namespace T3.Gui.Interaction.WithCurves
             switch (_fenceState)
             {
                 case SelectionFence.States.Updated:
+                case SelectionFence.States.CompletedAsClick:
                     UpdateSelectionForArea(SelectionFence.BoundsInScreen, SelectionFence.SelectMode);
                     break;
             }
