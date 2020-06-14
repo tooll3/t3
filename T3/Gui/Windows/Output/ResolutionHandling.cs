@@ -57,7 +57,7 @@ namespace T3.Gui.Windows.Output
                                                                    new Resolution("8k", 1920*4, 1080*4),
                                                                };
 
-        public static Resolution DefaultResolution = Resolutions[1];
+        public static Resolution DefaultResolution = Resolutions[0];
         private static Resolution _resolutionForEdit;
         
         public class Resolution
