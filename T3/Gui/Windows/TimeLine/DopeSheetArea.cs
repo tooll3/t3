@@ -108,16 +108,16 @@ namespace T3.Gui.Windows.TimeLine
             //if (CustomComponents.ToggleButton( Icon.Pin, "Pin", new Vector2(16, 16)))
 
             var hash = parameter.Input.GetHashCode();
-            var pinned = _pinnedParameters.Contains(hash);
+            var pinned = PinnedParameters.Contains(hash);
             if (CustomComponents.ToggleButton(Icon.Pin, "pin", ref pinned, new Vector2(16, 16)))
             {
                 if (pinned)
                 {
-                    _pinnedParameters.Add(hash);
+                    PinnedParameters.Add(hash);
                 }
                 else
                 {
-                    _pinnedParameters.Remove(hash);
+                    PinnedParameters.Remove(hash);
                 }
             }
 
@@ -150,7 +150,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight)); // Next Line
         }
 
-        private readonly HashSet<int> _pinnedParameters = new HashSet<int>();
+        public readonly HashSet<int> PinnedParameters = new HashSet<int>();
 
         private void HandleCreateNewKeyframes(GraphWindow.AnimationParameter parameter, ImRect layerArea)
         {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Graph.Interaction;
@@ -136,6 +137,7 @@ namespace T3.Gui.Graph
             {
                 var dl = ImGui.GetWindowDrawList();
 
+                
                 var animationParameters = GetAnimationParametersForSelectedNodes();
 
                 var isTimelineCollapsed = _heightTimeLine <= TimeLineCanvas.TimeLineDragHeight;
@@ -283,11 +285,26 @@ namespace T3.Gui.Graph
             public SymbolChildUi ChildUi;
         }
 
+        // TODO: this is horrible and should be refactored
         private List<AnimationParameter> GetAnimationParametersForSelectedNodes()
         {
             var selection = SelectionManager.GetSelectedNodes<ISelectableNode>();
             var symbolUi = SymbolUiRegistry.Entries[_graphCanvas.CompositionOp.Symbol.Id];
             var animator = symbolUi.Symbol.Animator;
+            var pinnedParams = (from child in _graphCanvas.CompositionOp.Children
+                                      from input in child.Inputs
+                                      where animator.IsInputSlotAnimated(input)
+                                      from pinnedInputSlot in _timeLineCanvas.DopeSheetArea.PinnedParameters
+                                      where pinnedInputSlot == input.GetHashCode()
+                                      select new AnimationParameter()
+                                                 {
+                                                     Instance = child,
+                                                     Input = input,
+                                                     Curves = animator.GetCurvesForInput(input),
+                                                     ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == child.SymbolChildId)
+                                                 }).ToList();
+           
+            
             var curvesForSelection = (from child in _graphCanvas.CompositionOp.Children
                                       from selectedElement in selection
                                       where child.SymbolChildId == selectedElement.Id
@@ -300,7 +317,9 @@ namespace T3.Gui.Graph
                                                      Curves = animator.GetCurvesForInput(input),
                                                      ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == selectedElement.Id)
                                                  }).ToList();
-            return curvesForSelection;
+            
+            pinnedParams.AddRange(curvesForSelection.FindAll(sp => pinnedParams.All(pp => pp.Input != sp.Input)));
+            return pinnedParams;
         }
 
         private void DrawBreadcrumbs()

@@ -23,7 +23,7 @@ namespace T3.Gui.Windows.TimeLine
         public TimeLineCanvas(ref Playback playback)
         {
             Playback = playback;
-            _dopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
+            DopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
             _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandlerForU, SnapHandlerForV);
             _timeSelectionRange = new TimeSelectionRange(this, SnapHandlerForU);
             LayersArea = new LayersArea(SnapHandlerForU);
@@ -64,7 +64,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     case Modes.DopeView:
                         LayersArea.Draw(compositionOp, Playback);
-                        _dopeSheetArea.Draw(compositionOp, animationParameters);
+                        DopeSheetArea.Draw(compositionOp, animationParameters);
                         break;
                     case Modes.CurveEditor:
                         _horizontalRaster.Draw(this);
@@ -221,9 +221,9 @@ namespace T3.Gui.Windows.TimeLine
             switch (_lastMode)
             {
                 case Modes.DopeView:
-                    TimeObjectManipulators.Remove(_dopeSheetArea);
+                    TimeObjectManipulators.Remove(DopeSheetArea);
                     TimeObjectManipulators.Remove(LayersArea);
-                    SnapHandlerForU.RemoveSnapAttractor(_dopeSheetArea);
+                    SnapHandlerForU.RemoveSnapAttractor(DopeSheetArea);
                     break;
 
                 case Modes.CurveEditor:
@@ -235,9 +235,9 @@ namespace T3.Gui.Windows.TimeLine
             switch (Mode)
             {
                 case Modes.DopeView:
-                    TimeObjectManipulators.Add(_dopeSheetArea);
+                    TimeObjectManipulators.Add(DopeSheetArea);
                     TimeObjectManipulators.Add(LayersArea);
-                    SnapHandlerForU.AddSnapAttractor(_dopeSheetArea);
+                    SnapHandlerForU.AddSnapAttractor(DopeSheetArea);
                     break;
 
                 case Modes.CurveEditor:
@@ -272,7 +272,7 @@ namespace T3.Gui.Windows.TimeLine
         private readonly ClipRange _clipRange = new ClipRange();
         private readonly LoopRange _loopRange = new LoopRange();
 
-        private readonly DopeSheetArea _dopeSheetArea;
+        public readonly DopeSheetArea DopeSheetArea;
         private readonly TimelineCurveEditArea _timelineCurveEditArea;
         private readonly TimeLineImage _timeLineImage = new TimeLineImage();
 
