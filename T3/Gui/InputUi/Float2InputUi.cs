@@ -43,7 +43,9 @@ namespace T3.Gui.InputUi
         
         protected override void DrawReadOnlyControl(string name, ref Vector2 float2Value)
         {
-            ImGui.InputFloat2(name, ref float2Value, "%f", flags: ImGuiInputTextFlags.ReadOnly);
+            ImGui.PushStyleColor(ImGuiCol.Text, Color.Blue.Rgba);
+            DrawEditControl(name, ref float2Value);
+            ImGui.PopStyleColor();
         }
 
         protected override string GetSlotValueAsString(ref Vector2 float2Value)

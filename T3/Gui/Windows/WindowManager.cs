@@ -130,7 +130,6 @@ namespace T3.Gui.Windows
                             }
                         }
                     }
-                    //if(_graphWindowAsBackground)
                 }
                     
                 
