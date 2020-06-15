@@ -108,7 +108,7 @@ namespace T3.Gui.Windows
                     }
                 }
 
-                if (GraphCanvas.Current.CompositionOp != null)
+                if (GraphCanvas.Current?.CompositionOp != null)
                 {
                     if (ImGui.MenuItem("Show in Graph"))
                     {
