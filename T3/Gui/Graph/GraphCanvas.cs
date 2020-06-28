@@ -134,7 +134,11 @@ namespace T3.Gui.Graph
             // TODO: Refresh reference on every frame. Since this uses lists instead of dictionary
             // it can be really slow
             CompositionOp = NodeOperations.GetInstanceFromIdPath(_compositionPath);
-
+            if (CompositionOp == null)
+            {
+                Log.Error("unable to get composition op");
+                return;
+            }
             UpdateCanvas();
 
             Current = this;

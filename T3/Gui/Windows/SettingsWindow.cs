@@ -38,16 +38,20 @@ namespace T3.Gui.Windows
             if (ImGui.TreeNode("Undo Queue"))
             {
                 ImGui.Text("Undo");
+                ImGui.Indent();
                 foreach (var c in UndoRedoStack.UndoStack)
                 {
                     ImGui.Selectable(c.Name);
                 }
+                ImGui.Unindent();
+                ImGui.Spacing();
                 ImGui.Text("Redo");
+                ImGui.Indent();
                 foreach (var c in UndoRedoStack.RedoStack)
                 {
                     ImGui.Selectable(c.Name);
                 }
-
+                ImGui.Unindent();
                 ImGui.TreePop();
             }
 
