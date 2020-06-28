@@ -70,6 +70,12 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
             }
 
+            if (ImGui.IsItemDeactivated())
+            {
+                if(_changeKeyframesCommand != null)
+                    TimeLineCanvas.Current.CompleteDragCommand();
+            }
+            
             if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
                 return;
 
@@ -167,8 +173,9 @@ namespace T3.Gui.Windows.TimeLine
             if (_changeKeyframesCommand == null)
                 return;
 
+            // Update reference in macro command
             _changeKeyframesCommand.StoreCurrentValues();
-            UndoRedoStack.Add(_changeKeyframesCommand);
+            //UndoRedoStack.Add(_changeKeyframesCommand);
             _changeKeyframesCommand = null;
         }
 

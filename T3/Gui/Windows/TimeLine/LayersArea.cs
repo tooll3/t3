@@ -72,7 +72,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (ImGui.MenuItem("Clear Time Stretch", null, false, SelectedItems.Count > 0))
                 {
-                    var moveTimeClipCommand = new MoveTimeClipCommand(_compositionOp, SelectedItems.ToList());
+                    var moveTimeClipCommand = new MoveTimeClipsCommand(_compositionOp, SelectedItems.ToList());
                     foreach (var clip in SelectedItems)
                     {
                         clip.SourceRange = clip.TimeRange.Clone();
@@ -226,7 +226,7 @@ namespace T3.Gui.Windows.TimeLine
                 T3Ui.AddHoveredId(symbolChildUi.Id);
             }
 
-            var notClickingOrDragging = !ImGui.IsItemActive() && !ImGui.IsMouseDragging(0);
+            var notClickingOrDragging = !ImGui.IsItemActive() && !ImGui.IsMouseDragging(ImGuiMouseButton.Left);
             if (notClickingOrDragging && _moveClipsCommand != null)
             {
                 TimeLineCanvas.Current.CompleteDragCommand();
@@ -400,7 +400,7 @@ namespace T3.Gui.Windows.TimeLine
 
         ICommand ITimeObjectManipulation.StartDragCommand()
         {
-            _moveClipsCommand = new MoveTimeClipCommand(_compositionOp, SelectedItems.ToList());
+            _moveClipsCommand = new MoveTimeClipsCommand(_compositionOp, SelectedItems.ToList());
             return _moveClipsCommand;
         }
 
@@ -494,8 +494,9 @@ namespace T3.Gui.Windows.TimeLine
             if (_moveClipsCommand == null)
                 return;
 
+            // Update reference in macro-command 
             _moveClipsCommand.StoreCurrentValues();
-            UndoRedoStack.Add(_moveClipsCommand);
+            // UndoRedoStack.Add(_moveClipsCommand);
             _moveClipsCommand = null;
         }
 
@@ -531,7 +532,7 @@ namespace T3.Gui.Windows.TimeLine
         private Vector2 _minScreenPos;
 
         public readonly HashSet<ITimeClip> SelectedItems = new HashSet<ITimeClip>();
-        private static MoveTimeClipCommand _moveClipsCommand;
+        private static MoveTimeClipsCommand _moveClipsCommand;
         private const int LayerHeight = 18;
         private const float HandleWidth = 5;
         private readonly Vector2 _handleOffset = new Vector2(HandleWidth, 0);

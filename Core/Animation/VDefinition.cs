@@ -68,6 +68,18 @@ namespace T3.Core.Animation
                    };
         }
 
+        public void CopyValuesFrom(VDefinition def)
+        {
+            Value = def.Value;
+            U = def.U;
+            InType = def.InType;
+            OutType = def.OutType;
+            InEditMode = def.InEditMode;
+            OutEditMode = def.OutEditMode;
+            InTangentAngle = def.InTangentAngle;
+            OutTangentAngle = def.OutTangentAngle;            
+        }
+
         public void Read(JToken jsonV)
         {
             Value = jsonV["Value"].Value<double>();

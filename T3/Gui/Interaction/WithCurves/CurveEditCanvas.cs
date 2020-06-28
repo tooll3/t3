@@ -121,45 +121,49 @@ namespace T3.Gui.Interaction.WithCurves
             }
         }
 
+        private MacroCommand _macro;
+        private readonly List<ICommand> _commands = new List<ICommand>();
+        
         public ICommand StartDragCommand()
         {
-            foreach (var s in TimeObjectManipulators)
+            _commands.Clear();
+            foreach (var manipulators in TimeObjectManipulators)
             {
-                s.StartDragCommand();
+                _commands.Add(manipulators.StartDragCommand());
             }
-
+            _macro = new MacroCommand("Manipulate Keyframes", _commands);
             return null;
         }
 
         public void UpdateDragCommand(double dt, double dv)
         {
-            foreach (var s in TimeObjectManipulators)
+            foreach (var manipulators in TimeObjectManipulators)
             {
-                s.UpdateDragCommand(dt, dv);
+                manipulators.UpdateDragCommand(dt, dv);
             }
         }
 
         public void UpdateDragAtStartPointCommand(double dt, double dv)
         {
-            foreach (var s in TimeObjectManipulators)
+            foreach (var manipulators in TimeObjectManipulators)
             {
-                s.UpdateDragAtStartPointCommand(dt, dv);
+                manipulators.UpdateDragAtStartPointCommand(dt, dv);
             }
         }
 
         public void UpdateDragAtEndPointCommand(double dt, double dv)
         {
-            foreach (var s in TimeObjectManipulators)
+            foreach (var manipulators in TimeObjectManipulators)
             {
-                s.UpdateDragAtEndPointCommand(dt, dv);
+                manipulators.UpdateDragAtEndPointCommand(dt, dv);
             }
         }
 
         public void UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV)
         {
-            foreach (var s in TimeObjectManipulators)
+            foreach (var manipulators in TimeObjectManipulators)
             {
-                s.UpdateDragStretchCommand(scaleU, scaleV, originU, originV);
+                manipulators.UpdateDragStretchCommand(scaleU, scaleV, originU, originV);
             }
         }
 
@@ -177,10 +181,11 @@ namespace T3.Gui.Interaction.WithCurves
 
         public void CompleteDragCommand()
         {
-            foreach (var s in TimeObjectManipulators)
+            foreach (var manipulators in TimeObjectManipulators)
             {
-                s.CompleteDragCommand();
+                manipulators.CompleteDragCommand();
             }
+            UndoRedoStack.AddAndExecute(_macro);
         }
 
         public void DeleteSelectedElements()

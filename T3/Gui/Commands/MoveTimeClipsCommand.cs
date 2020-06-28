@@ -7,7 +7,7 @@ using T3.Gui.Graph.Interaction;
 
 namespace T3.Gui.Commands
 {
-    public class MoveTimeClipCommand : ICommand
+    public class MoveTimeClipsCommand : ICommand
     {
         public string Name => "Move Time Clip";
         public bool IsUndoable => true;
@@ -23,7 +23,7 @@ namespace T3.Gui.Commands
         private readonly Entry[] _entries;
         private readonly Instance _compositionOp;
 
-        public MoveTimeClipCommand(Instance compositionOp, IReadOnlyList<ITimeClip> clips)
+        public MoveTimeClipsCommand(Instance compositionOp, IReadOnlyList<ITimeClip> clips)
         {
             _compositionOp = compositionOp;
             _entries = new Entry[clips.Count()];

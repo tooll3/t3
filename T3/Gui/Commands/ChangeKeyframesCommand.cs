@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 
 namespace T3.Gui.Commands
 {
@@ -13,27 +15,40 @@ namespace T3.Gui.Commands
 
         private readonly Guid _compositionSymbolId;
 
+        private readonly Dictionary<VDefinition, VDefinition> _originalDefForReferences = new Dictionary<VDefinition, VDefinition>();
+        private readonly Dictionary<VDefinition, VDefinition> _newDefForReferences = new Dictionary<VDefinition, VDefinition>();
+
         public ChangeKeyframesCommand(Guid compositionSymbolId, IEnumerable<VDefinition> vDefinitions)
         {
             _compositionSymbolId = compositionSymbolId;
-            // TODO: Implement
+            foreach (var def in vDefinitions)
+            {
+                _originalDefForReferences[def] = def.Clone();
+            }
         }
-
 
         public void StoreCurrentValues()
         {
-            // TODO: Implement
+            foreach (var referencedDefinition in _originalDefForReferences.Keys)
+            {
+                _newDefForReferences[referencedDefinition] = referencedDefinition.Clone();
+            }
         }
-
 
         public void Undo()
         {
-            // TODO: Implement
+            foreach (var (referencedDefinition, orgDef) in _originalDefForReferences)
+            {
+                referencedDefinition.CopyValuesFrom(orgDef);
+            }
         }
 
         public void Do()
         {
-            // TODO: Implement
+            foreach (var (referencedDefinition, newDef) in _newDefForReferences)
+            {
+                referencedDefinition.CopyValuesFrom(newDef);
+            }
         }
     }
 }

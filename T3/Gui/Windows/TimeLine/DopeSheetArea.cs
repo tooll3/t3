@@ -342,15 +342,9 @@ namespace T3.Gui.Windows.TimeLine
                             TimeLineCanvas.Current.Playback.TimeInBars = vDef.U;
                         }
                     }
-
-                    TimeLineCanvas.Current.CompleteDragCommand();
-
-                    if (_changeKeyframesCommand != null)
-                    {
-                        _changeKeyframesCommand.StoreCurrentValues();
-                        UndoRedoStack.Add(_changeKeyframesCommand);
-                        _changeKeyframesCommand = null;
-                    }
+                    
+                    if(_changeKeyframesCommand != null)
+                        TimeLineCanvas.Current.CompleteDragCommand();
                 }
 
                 HandleCurvePointDragging(vDef, isSelected);
@@ -498,8 +492,9 @@ namespace T3.Gui.Windows.TimeLine
             if (_changeKeyframesCommand == null)
                 return;
 
+            // Update reference in Macro-command
             _changeKeyframesCommand.StoreCurrentValues();
-            UndoRedoStack.Add(_changeKeyframesCommand);
+            // UndoRedoStack.Add(_changeKeyframesCommand);
             _changeKeyframesCommand = null;
         }
 
