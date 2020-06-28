@@ -197,7 +197,7 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
             }
 
-            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0) || ImGui.IsItemClicked())
+            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left) || ImGui.IsItemClicked())
             {
                 var draggedTime = InverseTransformX(Io.MousePos.X);
                 if (ImGui.GetIO().KeyShift)

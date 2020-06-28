@@ -97,7 +97,7 @@ namespace T3.Gui.Graph
                     {
                         drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
 
-                        if (ImGui.IsMouseDragging(0))
+                        if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                         {
                             ConnectionMaker.Update();
                         }

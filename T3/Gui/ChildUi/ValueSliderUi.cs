@@ -31,7 +31,7 @@ namespace T3.Gui.ChildUi
             ImGui.SetCursorScreenPos( new Vector2(x , innerRect.Min.Y) );
             ImGui.Button(" ", new Vector2(_handleWSize.X, innerRect.GetHeight()));
 
-            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
+            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
                 var newT = ((ImGui.GetMousePos().X - innerRect.Min.X)/ innerRect.GetWidth()).Clamp(0,1);
                 

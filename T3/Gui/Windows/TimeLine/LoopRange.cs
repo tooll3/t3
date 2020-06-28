@@ -41,7 +41,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 ImGui.Button("##StartPos", TimeRangeHandleSize);
 
-                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
+                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
                     var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
                     snapHandler.CheckForSnapping(ref newTime, TimeLineCanvas.Current.Scale.X, new List<IValueSnapAttractor> {this});
@@ -77,7 +77,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 ImGui.Button("##EndPos", TimeRangeHandleSize);
 
-                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
+                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
                     var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
                     snapHandler.CheckForSnapping(ref newTime, TimeLineCanvas.Current.Scale.X, new List<IValueSnapAttractor> {this});

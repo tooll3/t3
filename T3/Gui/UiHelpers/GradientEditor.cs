@@ -72,7 +72,7 @@ namespace T3.Gui.UiHelpers
                         anyHandleHovered = true;
 
                     var draggedOutside = false;
-                    if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
+                    if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                     {
                         draggedOutside = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + RemoveThreshold;
 

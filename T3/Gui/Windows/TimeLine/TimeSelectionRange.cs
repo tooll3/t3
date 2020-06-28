@@ -89,7 +89,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private void HandleDrag(double originalU, double origin)
         {
-            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
+            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
                 var u = _timeLineCanvas.InverseTransformX(ImGui.GetIO().MousePos.X);
 
@@ -105,7 +105,7 @@ namespace T3.Gui.Windows.TimeLine
                 _timeLineCanvas.UpdateDragStretchCommand(scaleU: dScale, scaleV: 1, originU: origin, originV: 0);
                 _lastDragU = u;
             }
-            else if (_isDragging)
+            else if (ImGui.IsItemDeactivated() && _isDragging)
             {
                 _isDragging = false;
                 _timeLineCanvas.CompleteDragCommand();

@@ -145,7 +145,7 @@ namespace T3.Gui.Graph.Interaction
 
             if (ImGui.IsItemActive())
             {
-                if (ImGui.IsMouseDragging(0))
+                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
                     PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
                 }

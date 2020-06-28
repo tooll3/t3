@@ -48,7 +48,7 @@ namespace T3.Gui.ChildUi.Animators
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS);
             }
 
-            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
+            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
                 var dragDelta = ImGui.GetMouseDragDelta(0, 1);
                 if (Math.Abs(dragDelta.Y) > 40)

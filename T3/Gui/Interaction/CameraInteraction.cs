@@ -122,7 +122,7 @@ namespace T3.Gui.Graph.Interaction
         private void ManipulateCameraByMouse()
         {
             HandleMouseWheel();
-            if (ImGui.IsMouseDragging(0))
+            if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
                 if (ImGui.GetIO().KeyAlt)
                 {

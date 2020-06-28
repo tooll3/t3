@@ -142,7 +142,7 @@ namespace T3.Gui.Interaction.WithCurves
                         ? ImGuiMouseCursor.ResizeEW
                         : ImGuiMouseCursor.ResizeNS);
 
-            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0))
+            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 return;
 
             if (Double.IsNaN(scale) || Math.Abs(scale) > 10000)
@@ -180,7 +180,7 @@ namespace T3.Gui.Interaction.WithCurves
                 }
             }
 
-            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0))
+            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 return;
 
             var delta = _canvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);

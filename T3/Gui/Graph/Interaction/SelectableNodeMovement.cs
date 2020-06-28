@@ -209,7 +209,7 @@ namespace T3.Gui.Graph.Interaction
 
         private static void HandleNodeDragging(ISelectableNode draggedNode)
         {
-            if (!ImGui.IsMouseDragging(0))
+            if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
                 _isDragging = false;
                 return;

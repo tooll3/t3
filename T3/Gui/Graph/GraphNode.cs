@@ -54,7 +54,7 @@ namespace T3.Gui.Graph
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
                     ImGui.SetCursorScreenPos(_usableScreenRect.Max - new Vector2(10, 10));
                     ImGui.Button("##resize", new Vector2(10, 10));
-                    if (ImGui.IsItemActive() && ImGui.IsMouseDragging(0))
+                    if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                     {
                         var delta = GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
                         childUi.Size += delta;
@@ -663,7 +663,7 @@ namespace T3.Gui.Graph
                 _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                                         ColorVariations.Highlight.Apply(colorForType));
 
-                if (ImGui.IsMouseDragging(0))
+                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
                     ConnectionMaker.Update();
                 }
@@ -752,7 +752,7 @@ namespace T3.Gui.Graph
         {
             if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
             {
-                if (ImGui.IsMouseDragging(0))
+                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
                     ConnectionMaker.Update();
                 }
@@ -808,7 +808,7 @@ namespace T3.Gui.Graph
         {
             if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef, multiInputIndex))
             {
-                if (ImGui.IsMouseDragging(0))
+                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
                     ConnectionMaker.Update();
                 }
