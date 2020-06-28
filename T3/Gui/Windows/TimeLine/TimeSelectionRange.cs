@@ -50,7 +50,9 @@ namespace T3.Gui.Windows.TimeLine
                 // Line
                 drawlist.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), TimeRangeShadowColor);
                 
-                ImGui.SetCursorScreenPos(rangeStartPos +  new Vector2(-TimeRangeHandleSize.X-5,0));
+                ImGui.SetCursorScreenPos(rangeStartPos 
+                                         + new Vector2(-TimeRangeHandleSize.X, 
+                                                       (contentRegionMax-contentRegionMin).Y - TimeRangeHandleSize.Y));
                 ImGui.Button("##SelectionStartPos", TimeRangeHandleSize);
 
                 HandleDrag(_selectionTimeRange.Start, _selectionTimeRange.End);
@@ -78,8 +80,9 @@ namespace T3.Gui.Windows.TimeLine
                 // Line
                 drawlist.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), TimeRangeShadowColor);
 
-
-                ImGui.SetCursorScreenPos(rangeEndPos + new Vector2(5,0));
+                ImGui.SetCursorScreenPos(rangeEndPos 
+                                         + new Vector2(0, (contentRegionMax-contentRegionMin).Y - TimeRangeHandleSize.Y));
+                
                 ImGui.Button("##SelectionEndPos", TimeRangeHandleSize);
                 HandleDrag(_selectionTimeRange.End, _selectionTimeRange.Start);
             }
@@ -133,10 +136,10 @@ namespace T3.Gui.Windows.TimeLine
         }
         #endregion
 
-        private static readonly Vector2 TimeRangeHandleSize = new Vector2(5, 1000);
+        private static readonly Vector2 TimeRangeHandleSize = new Vector2(10, 20);
         private static readonly Vector2 TimeRangeShadowSize = new Vector2(5, 9999);
         private static readonly Color TimeRangeShadowColor = new Color(0, 0, 0, 0.4f);
-        private static readonly Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.1f);
+        private static readonly Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.2f);
         private static readonly Color TimeRangeMarkerColor = new Color(1f, 1, 1f, 0.3f);
         private readonly TimeLineCanvas _timeLineCanvas;
         private readonly ValueSnapHandler _snapHandler;
