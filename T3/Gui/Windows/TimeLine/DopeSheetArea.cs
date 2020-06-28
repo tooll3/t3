@@ -10,6 +10,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
+using T3.Gui.InputUi;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Selection;
@@ -90,9 +91,8 @@ namespace T3.Gui.Windows.TimeLine
             {
                 ImGui.BeginTooltip();
 
-                ImGui.PushFont(Fonts.FontBold);
+                ImGui.PushFont(Fonts.FontSmall);
                 ImGui.Text(parameter.Input.Input.Name);
-                ImGui.PopFont();
 
                 foreach (var curve in parameter.Curves)
                 {
@@ -100,12 +100,13 @@ namespace T3.Gui.Windows.TimeLine
                     ImGui.Text($"{v:0.00}");
                 }
 
+                ImGui.PopFont();
+
                 ImGui.EndTooltip();
             }
 
             ImGui.PushStyleColor(ImGuiCol.Text, layerHovered ? Color.White.Rgba : Color.Gray);
             ImGui.PushFont(Fonts.FontBold);
-            //if (CustomComponents.ToggleButton( Icon.Pin, "Pin", new Vector2(16, 16)))
 
             var hash = parameter.Input.GetHashCode();
             var pinned = PinnedParameters.Contains(hash);
@@ -185,7 +186,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
         }
 
-        private void InsertNewKeyframe(GraphWindow.AnimationParameter parameter, float time, bool setPlaybackTime = false, float increment=0)
+        private void InsertNewKeyframe(GraphWindow.AnimationParameter parameter, float time, bool setPlaybackTime = false, float increment = 0)
         {
             foreach (var curve in parameter.Curves)
             {
@@ -196,13 +197,12 @@ namespace T3.Gui.Windows.TimeLine
                               ? curve.GetV(previousU.Value).Clone()
                               : new VDefinition();
 
-                key.Value = value+increment;
+                key.Value = value + increment;
                 key.U = time;
 
                 var oldKey = key;
                 curve.AddOrUpdateV(time, key);
                 SelectedKeyframes.Add(oldKey);
-                //Log.Debug("added new key at " + time);
             }
 
             if (setPlaybackTime)
@@ -315,7 +315,8 @@ namespace T3.Gui.Windows.TimeLine
             var posOnScreen = new Vector2(
                                           TimeLineCanvas.Current.TransformX((float)vDef.U) - KeyframeIconWidth / 2 + 1,
                                           layerArea.Min.Y);
-            ImGui.PushID(vDef.GetHashCode());
+            var keyHash = (int)vDef.GetHashCode();
+            ImGui.PushID(keyHash);
             {
                 var isSelected = SelectedKeyframes.Contains(vDef);
                 if (vDef.OutEditMode == VDefinition.EditMode.Constant)
@@ -330,27 +331,71 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.SetCursorScreenPos(posOnScreen);
 
                 // Click released
-                if (ImGui.InvisibleButton("##key", new Vector2(10, 24)))
+                var keyframeSize = new Vector2(10, 24);
+                if (ImGui.InvisibleButton("##key", keyframeSize))
                 {
                     var justClicked = ImGui.GetMouseDragDelta().LengthSquared() < 1;
                     if (justClicked)
                     {
                         UpdateSelectionOnClickOrDrag(vDef, isSelected);
+                        _clickedKeyframeHash = keyHash;
 
                         if (Math.Abs(TimeLineCanvas.Playback.PlaybackSpeed) < 0.001f)
                         {
                             TimeLineCanvas.Current.Playback.TimeInBars = vDef.U;
                         }
                     }
-                    
-                    if(_changeKeyframesCommand != null)
+
+                    if (_changeKeyframesCommand != null)
                         TimeLineCanvas.Current.CompleteDragCommand();
                 }
 
                 HandleCurvePointDragging(vDef, isSelected);
+
+                var valueInputVisible = isSelected && keyHash == _clickedKeyframeHash;
+                if (valueInputVisible)
+                {
+                    var symbolUi = SymbolUiRegistry.Entries[parameter.ChildUi.SymbolChild.Symbol.Id];
+                    var inputUi = symbolUi.InputUis[parameter.Input.Id];
+                    if (inputUi is FloatInputUi floatInputUi)
+                    {
+                        var size = new Vector2(60, 25);
+                        ImGui.SetCursorScreenPos(posOnScreen + new Vector2(-size.X / 2, keyframeSize.Y - 5));
+                        ImGui.BeginChildFrame((uint)keyHash, size, ImGuiWindowFlags.NoScrollbar);
+                        ImGui.PushFont(Fonts.FontSmall);
+                        var tmp = (float)vDef.Value;
+                        var result = floatInputUi.DrawEditControl(ref tmp);
+                        if (result == InputEditStateFlags.Started)
+                        {
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.SymbolChildId, SelectedKeyframes);
+                        }
+
+                        if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
+                        {
+                            foreach (var k in SelectedKeyframes)
+                            {
+                                k.Value = tmp;
+                            }
+                        }
+
+                        if ((result & InputEditStateFlags.Finished) == InputEditStateFlags.Finished && _changeKeyframesCommand != null)
+                        {
+                            _changeKeyframesCommand.StoreCurrentValues();
+                            UndoRedoStack.AddAndExecute(_changeKeyframesCommand);
+                            _changeKeyframesCommand = null;
+                        }
+
+                        //vDef.Value = tmp;
+                        ImGui.PopFont();
+                        ImGui.EndChildFrame();
+                    }
+                }
+
                 ImGui.PopID();
             }
         }
+
+        private int _clickedKeyframeHash;
 
         protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
         {
@@ -505,7 +550,6 @@ namespace T3.Gui.Windows.TimeLine
         }
         #endregion
 
-
         /// <summary>
         /// Snap to all non-selected Clips
         /// </summary>
@@ -519,9 +563,10 @@ namespace T3.Gui.Windows.TimeLine
 
                 ValueSnapHandler.CheckForBetterSnapping(targetTime, vDefinition.U, canvasScale, ref best);
             }
+
             return best;
         }
-        
+
         private const float KeyframeIconWidth = 10;
         private Vector2 _minScreenPos;
         private static ChangeKeyframesCommand _changeKeyframesCommand;

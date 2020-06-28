@@ -39,6 +39,11 @@ namespace T3.Gui.InputUi
             return inputEditState;
         }
 
+        public  InputEditStateFlags DrawEditControl(ref float value)
+        {
+            return SingleValueEdit.Draw(ref value, -Vector2.UnitX, _min, _max, _clamp, _scale);
+        }
+        
         protected override void DrawReadOnlyControl(string name, ref float value)
         {
             ImGui.PushStyleColor(ImGuiCol.Text, Color.Blue.Rgba);
