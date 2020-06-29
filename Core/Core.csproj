@@ -132,6 +132,7 @@
     <Compile Include="Operator\Slots\ISlot.cs" />
     <Compile Include="Operator\Slots\MultiInputSlot.cs" />
     <Compile Include="Operator\Slots\Research\ConverterSlot.cs" />
+    <Compile Include="Operator\Slots\Research\IterationOutputSlot.cs" />
     <Compile Include="Operator\Slots\Research\Size2Slot.cs" />
     <Compile Include="Operator\Slots\Slot.cs" />
     <Compile Include="Operator\Slots\TimeClipSlot.cs" />
