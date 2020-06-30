@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
 using ImGuiNET;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.InputUi
 {
@@ -20,29 +19,21 @@ namespace T3.Gui.InputUi
 
         protected override InputEditStateFlags DrawEditControl(string name, ref T value)
         {
-            // todo: check perf impact of creating the list here again and again! -> cache lists
-            Type enumType = typeof(T);
-            var values = Enum.GetValues(enumType);
-            var valueNames = new string[values.Length];
-            for (int i = 0; i < values.Length; i++)
-            {
-                valueNames[i] = Enum.GetName(typeof(T), values.GetValue(i));
-            }
+            var enumInfo = EnumCache.Instance.GetEnumEntry<T>();
 
-            if (enumType.GetCustomAttributes<FlagsAttribute>().Any())
+            if (enumInfo.IsFlagEnum)
             {
                 // show as checkboxes
                 InputEditStateFlags editStateFlags = InputEditStateFlags.Nothing;
                 if (ImGui.TreeNode("##enumParam124"))
                 {
-                    // todo: refactor crappy code below, works but ugly!
-                    bool[] checks = new bool[values.Length];
+                    bool[] checks = enumInfo.SetFlags;
                     int intValue = (int)(object)value;
-                    for (int i = 0; i < valueNames.Length; i++)
+                    for (int i = 0; i < enumInfo.ValueNames.Length; i++)
                     {
-                        int enumValueAsInt = (int)values.GetValue(i);
+                        int enumValueAsInt = enumInfo.ValuesAsInt[i];
                         checks[i] = (intValue & enumValueAsInt) > 0;
-                        if (ImGui.Checkbox(valueNames[i], ref checks[i]))
+                        if (ImGui.Checkbox(enumInfo.ValueNames[i], ref checks[i]))
                         {
                             // value modified, store new flag
                             if (checks[i])
@@ -76,20 +67,12 @@ namespace T3.Gui.InputUi
             }
             else
             {
-                int index = 0;
-                for (int i = 0; i < values.Length; i++)
-                {
-                    if (values.GetValue(i).Equals(value))
-                    {
-                        index = i;
-                        break;
-                    }
-                }
+                int index = Array.IndexOf(enumInfo.Values, value);
                 InputEditStateFlags editStateFlags = InputEditStateFlags.Nothing;
-                bool modified = ImGui.Combo("##dropDownParam", ref index, valueNames, valueNames.Length);
+                bool modified = ImGui.Combo("##dropDownParam", ref index, enumInfo.ValueNames, enumInfo.ValueNames.Length);
                 if (modified)
                 {
-                    value = (T)values.GetValue(index);
+                    value = enumInfo[index];
                     editStateFlags |= InputEditStateFlags.ModifiedAndFinished;
                 }
 
