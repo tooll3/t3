@@ -51,6 +51,7 @@ namespace T3.Compilation
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
             var coreAssembly = typeof(ResourceManager).Assembly;
             referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
+            referencedAssemblies.Add(MetadataReference.CreateFromFile(ResourceManager.Instance().OperatorsAssembly.Location));
             foreach (var asmName in referencedAssembliesNames)
             {
                 var asm = Assembly.Load(asmName);
