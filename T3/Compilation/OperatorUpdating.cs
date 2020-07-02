@@ -47,11 +47,12 @@ namespace T3.Compilation
 
         public static Assembly CompileSymbolFromSource(string source, string symbolName)
         {
-            var referencedAssembliesNames = ResourceManager.Instance().OperatorsAssembly.GetReferencedAssemblies(); // todo: ugly
+            var operatorsAssembly = ResourceManager.Instance().OperatorsAssembly;
+            var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
             var coreAssembly = typeof(ResourceManager).Assembly;
             referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
-            referencedAssemblies.Add(MetadataReference.CreateFromFile(ResourceManager.Instance().OperatorsAssembly.Location));
+            referencedAssemblies.Add(MetadataReference.CreateFromFile(operatorsAssembly.Location));
             foreach (var asmName in referencedAssembliesNames)
             {
                 var asm = Assembly.Load(asmName);
