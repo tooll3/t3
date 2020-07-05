@@ -18,7 +18,7 @@ namespace T3.Core.Operator
             TimeInBars = GlobalTimeInBars;
             
             var fov = MathUtil.DegreesToRadians(45);
-            const float aspectRatio = 16f/9;
+            float aspectRatio = (float)RequestedResolution.Width/RequestedResolution.Height;
             CameraToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, 0.01f, 1000);
             
             Vector3 eye = new Vector3(0,0, 2.416f);
