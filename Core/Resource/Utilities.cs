@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 
 namespace T3.Core
 {
@@ -29,6 +32,31 @@ namespace T3.Core
             T tmp = a;
             a = b;
             b = tmp;
+        }
+
+        public static T GetEnumValue<T>(this InputSlot<int> intInputSlot, EvaluationContext context) where T : Enum
+        {
+            return CastTo<T>.From(intInputSlot.GetValue(context));
+        }
+    }
+
+    public static class CastTo<TTarget>
+    {
+        public static TTarget From<TSource>(TSource source)
+        {
+            return Cache<TSource>.Caster(source);
+        }
+
+        private static class Cache<TSource>
+        {
+            public static readonly Func<TSource, TTarget> Caster = Get();
+
+            private static Func<TSource, TTarget> Get()
+            {
+                var p = Expression.Parameter(typeof(TSource));
+                var c = Expression.ConvertChecked(p, typeof(TTarget));
+                return Expression.Lambda<Func<TSource, TTarget>>(c, p).Compile();
+            }
         }
     }
 }
