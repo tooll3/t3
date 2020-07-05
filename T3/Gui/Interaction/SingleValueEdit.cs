@@ -2,6 +2,7 @@
 using System.Data;
 using ImGuiNET;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Gui.InputUi;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
@@ -223,7 +224,11 @@ namespace T3.Gui.Interaction
 
         private static string FormatValueForButton(ref double value)
         {
-            return string.Format(_numberFormat, value);
+            // Don't use rounding for integers
+            return (_numberFormat == "{0:0}")
+                       ? "" + (int)value
+                       : string.Format(_numberFormat, value);    
+            
         }
 
         /// <summary>
