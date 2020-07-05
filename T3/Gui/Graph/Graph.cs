@@ -265,7 +265,8 @@ namespace T3.Gui.Graph
             public Color ColorForType;
 
             public bool IsSelected;
-            public float Thickness = 1f;
+            public int UpdateCount;
+            public int FramesSinceLastUsage;
             public ImRect SourceNodeArea;
             public ImRect TargetNodeArea;
             public bool IsAboutToBeReplaced;
@@ -308,6 +309,9 @@ namespace T3.Gui.Graph
                 if (IsAboutToBeReplaced)
                     color = Color.Mix(color, Color.Red, (float)Math.Sin(ImGui.GetTime() * 10) / 2 + 0.5f);
 
+                var usageFactor =  Math.Max(0,1- FramesSinceLastUsage/ 50f);
+                var thickness = ((1 - 1 / (UpdateCount + 1f)) * 3 + 1) * 0.5f *  (usageFactor * 2 + 1);
+
                 if (UserSettings.Config.UseArcConnections)
                 {
                     Im.DrawArcConnection(new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
@@ -315,7 +319,7 @@ namespace T3.Gui.Graph
                                          TargetNodeArea,
                                          TargetPosition,
                                          color,
-                                         1.5f * Thickness);
+                                         thickness);
                 }
                 else
                 {
@@ -328,7 +332,7 @@ namespace T3.Gui.Graph
                                             TargetPosition + new Vector2(-tangentLength, 0),
                                             TargetPosition,
                                             color,
-                                            thickness: 1.5f * Thickness,
+                                            thickness,
                                             num_segments: 30);
                 }
             }

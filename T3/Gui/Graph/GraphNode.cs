@@ -29,9 +29,18 @@ namespace T3.Gui.Graph
     {
         public static void Draw(SymbolChildUi childUi, Instance instance)
         {
+            if (instance == null)
+                return;
+            
             var symbolUi = SymbolUiRegistry.Entries[childUi.SymbolChild.Symbol.Id];
             var nodeHasHiddenMatchingInputs = false;
             var visibleInputUis = FindVisibleInputUis(symbolUi, childUi, ref nodeHasHiddenMatchingInputs);
+
+            var framesSinceLastUpdate = 100;
+            foreach (var output in instance.Outputs)
+            {
+                framesSinceLastUpdate = Math.Min(framesSinceLastUpdate, output.DirtyFlag.FramesSinceLastUpdate);                
+            }
 
             _drawList = Graph.DrawList;
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
@@ -65,8 +74,8 @@ namespace T3.Gui.Graph
 
                 // Rendering
                 //var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
-                var firstInstanceOutput = instance?.Outputs.FirstOrDefault();
-                var framesSinceLastUpdate = firstInstanceOutput?.DirtyFlag.FramesSinceLastUpdate ?? 100;
+                
+                
 
                 var typeColor = childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
                                     ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
@@ -372,6 +381,7 @@ namespace T3.Gui.Graph
                             line.TargetPosition = targetPos;
                             line.TargetNodeArea = connectionBorderArea;
                             line.IsSelected |= childUi.IsSelected;
+                            line.FramesSinceLastUsage = framesSinceLastUpdate; 
                             line.IsAboutToBeReplaced = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, socketIndex);
                         }
 
@@ -401,6 +411,7 @@ namespace T3.Gui.Graph
                         line.TargetNodeArea = connectionBorderArea;
                         line.IsSelected |= childUi.IsSelected;
                         line.IsAboutToBeReplaced = isAboutToBeReconnected;
+                        line.FramesSinceLastUsage = framesSinceLastUpdate;
                     }
 
                     DrawInputSlot(childUi, inputDefinition, usableSlotArea, colorForType, hovered);
@@ -438,9 +449,8 @@ namespace T3.Gui.Graph
                     line.SourceNodeArea = _selectableScreenRect;
 
                     line.ColorForType = colorForType;
-
-                    line.Thickness = (1 - 1 / (dirtyFlagNumUpdatesWithinFrame + 1f)) * 3 + 1;
-
+                    line.UpdateCount = output.DirtyFlag.NumUpdatesWithinFrame;
+                    
                     if (childUi.ConnectionStyleOverrides.ContainsKey(outputDef.Id))
                     {
                         line.ColorForType.Rgba.W = 0.3f;
