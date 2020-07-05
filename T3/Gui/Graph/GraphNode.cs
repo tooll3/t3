@@ -290,7 +290,7 @@ namespace T3.Gui.Graph
                 var inputDefinition = inputUi.InputDefinition;
 
                 var usableSlotArea = GetUsableInputSlotSize(inputIndex, visibleInputUis.Count);
-
+                
 
                 ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + inputDefinition.GetHashCode());
                 ImGui.SetCursorScreenPos(usableSlotArea.Min);
@@ -366,6 +366,7 @@ namespace T3.Gui.Graph
                     for (var socketIndex = 0; socketIndex < socketCount; socketIndex++)
                     {
                         var usableSocketArea = new ImRect(topLeft, topLeft + socketSize);
+
                         var isSocketHovered = usableSocketArea.Contains(ImGui.GetMousePos());
                         ConnectionMaker.ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, socketIndex, usableSocketArea);
 
@@ -875,7 +876,7 @@ namespace T3.Gui.Graph
             return ImRect.RectWithSize(
                                        new Vector2(
                                                    areaForParams.Min.X - UsableSlotThickness,
-                                                   areaForParams.Min.Y + (inputHeight + SlotGaps) * inputIndex
+                                                   Math.Min(_selectableScreenRect.Max.Y, areaForParams.Min.Y + (inputHeight + SlotGaps) * inputIndex)
                                                   ),
                                        new Vector2(
                                                    UsableSlotThickness,
