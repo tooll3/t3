@@ -211,6 +211,22 @@ namespace T3.Core.Operator
                                                 };
                 vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
+            else if (inputSlot is Slot<int> intInputSlot)
+            {
+                var newCurve = new Curve();
+                newCurve.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
+                                                                              {
+                                                                                  Value = intInputSlot.Value,
+                                                                                  InType = VDefinition.Interpolation.Constant,
+                                                                                  OutType = VDefinition.Interpolation.Constant,
+                                                                                  InEditMode = VDefinition.EditMode.Constant,
+                                                                                  OutEditMode = VDefinition.EditMode.Constant,
+                                                                              });
+                _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
+
+                intInputSlot.UpdateAction = context => { intInputSlot.Value = (int)newCurve.GetSampledValue(context.TimeInBars); };
+                intInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+            }            
             else
             {
                 Log.Error("Could not create update action.");

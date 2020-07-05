@@ -11,6 +11,7 @@ using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.InputUi;
+using T3.Gui.InputUi.SingleControl;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Selection;
@@ -365,6 +366,38 @@ namespace T3.Gui.Windows.TimeLine
                         ImGui.PushFont(Fonts.FontSmall);
                         var tmp = (float)vDef.Value;
                         var result = floatInputUi.DrawEditControl(ref tmp);
+                        if (result == InputEditStateFlags.Started)
+                        {
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.SymbolChildId, SelectedKeyframes);
+                        }
+
+                        if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
+                        {
+                            foreach (var k in SelectedKeyframes)
+                            {
+                                k.Value = tmp;
+                            }
+                        }
+
+                        if ((result & InputEditStateFlags.Finished) == InputEditStateFlags.Finished && _changeKeyframesCommand != null)
+                        {
+                            _changeKeyframesCommand.StoreCurrentValues();
+                            UndoRedoStack.AddAndExecute(_changeKeyframesCommand);
+                            _changeKeyframesCommand = null;
+                        }
+
+                        //vDef.Value = tmp;
+                        ImGui.PopFont();
+                        ImGui.EndChildFrame();
+                    }
+                    else if (inputUi is IntInputUi intInputUi)
+                    {
+                        var size = new Vector2(60, 25);
+                        ImGui.SetCursorScreenPos(posOnScreen + new Vector2(-size.X / 2, keyframeSize.Y - 5));
+                        ImGui.BeginChildFrame((uint)keyHash, size, ImGuiWindowFlags.NoScrollbar);
+                        ImGui.PushFont(Fonts.FontSmall);
+                        var tmp = (int)vDef.Value;
+                        var result = intInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
                             _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.SymbolChildId, SelectedKeyframes);
