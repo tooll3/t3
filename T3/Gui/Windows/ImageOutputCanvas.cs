@@ -80,13 +80,19 @@ namespace T3.Gui.Windows
             var description = $"{size.X}x{size.Y}  {format}";
             var descriptionWidth = ImGui.CalcTextSize(description).X;
 
-            ImGui.SetCursorScreenPos(new Vector2(WindowPos.X + (WindowSize.X - descriptionWidth) / 2,
-                                                 WindowPos.Y + WindowSize.Y - 16));
-            ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.8f,0.8f,0.8f, 0.8f));
-            ImGui.Text(description);
+            var textPos = new Vector2(WindowPos.X + (WindowSize.X - descriptionWidth) / 2,
+                                      WindowPos.Y + WindowSize.Y - 16);
+
+            var drawList = ImGui.GetWindowDrawList();
+            drawList.AddText(textPos + new Vector2(1,0), ShadowColor, description );
+            drawList.AddText(textPos + new Vector2(-1,0), ShadowColor, description );
+            drawList.AddText(textPos + new Vector2(0,1), ShadowColor, description );
+            drawList.AddText(textPos + new Vector2(0,-1), ShadowColor, description );
+            drawList.AddText(textPos, Color.White, description );
             ImGui.PopFont();
-            ImGui.PopStyleColor();
         }
+        
+        private static readonly Color ShadowColor = new Color(0.0f, 0.0f, 0.0f, 0.6f);
 
 
         public void SetViewMode(Modes newMode)
