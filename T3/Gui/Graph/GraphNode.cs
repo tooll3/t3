@@ -64,8 +64,8 @@ namespace T3.Gui.Graph
                 }
 
                 // Rendering
-                var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
-                var firstInstanceOutput = childInstance?.Outputs.FirstOrDefault();
+                //var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
+                var firstInstanceOutput = instance?.Outputs.FirstOrDefault();
                 var framesSinceLastUpdate = firstInstanceOutput?.DirtyFlag.FramesSinceLastUpdate ?? 100;
 
                 var typeColor = childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
@@ -246,19 +246,6 @@ namespace T3.Gui.Graph
                                             colorForType);
                 }
 
-                // Visualize update
-                {
-                    var updateCountThisFrame = firstInstanceOutput?.DirtyFlag.NumUpdatesWithinFrame ?? 0;
-                    if (updateCountThisFrame > 0)
-                    {
-                        const double timeScale = 0.125f;
-                        var blink = (float)(ImGui.GetTime() * timeScale * updateCountThisFrame) % 1f * _usableScreenRect.GetWidth();
-                        drawList.AddRectFilled(new Vector2(_usableScreenRect.Min.X + blink, _usableScreenRect.Min.Y),
-                                               new Vector2(_usableScreenRect.Min.X + blink + 2, _usableScreenRect.Max.Y),
-                                               new Color(0.06f));
-                    }
-                }
-
                 // Label
                 if (customUiResult == SymbolChildUi.CustomUiResult.None)
                 {
@@ -424,15 +411,17 @@ namespace T3.Gui.Graph
 
             // Outputs sockets...
             var outputIndex = 0;
-            foreach (var output in childUi.SymbolChild.Symbol.OutputDefinitions)
+            //foreach(var output in instance.Outputs)
+            foreach (var outputDef in childUi.SymbolChild.Symbol.OutputDefinitions)
             {
+                var output = instance.Outputs[outputIndex];
                 var usableArea = GetUsableOutputSlotArea(childUi, outputIndex);
                 ImGui.SetCursorScreenPos(usableArea.Min);
-                ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + output.Id.GetHashCode());
+                ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + outputDef.Id.GetHashCode());
 
                 ImGui.InvisibleButton("output", usableArea.GetSize());
                 THelpers.DebugItemRect();
-                var valueType = output.ValueType;
+                var valueType = outputDef.ValueType;
                 var colorForType = TypeUiRegistry.Entries[valueType].Color;
 
                 //Note: isItemHovered does not work when dragging is active
@@ -440,17 +429,19 @@ namespace T3.Gui.Graph
                                   ? usableArea.Contains(ImGui.GetMousePos())
                                   : ImGui.IsItemHovered();
 
-                foreach (var line in Graph.Connections.GetLinesFromNodeOutput(childUi, output.Id))
+                // Update connection lines
+                var dirtyFlagNumUpdatesWithinFrame = output.DirtyFlag.NumUpdatesWithinFrame;
+                
+                foreach (var line in Graph.Connections.GetLinesFromNodeOutput(childUi, outputDef.Id))
                 {
                     line.SourcePosition = new Vector2(usableArea.Max.X, usableArea.GetCenter().Y);
                     line.SourceNodeArea = _selectableScreenRect;
 
-                    var dirtyFlagNumUpdatesWithinFrame = instance.Outputs[outputIndex].DirtyFlag.NumUpdatesWithinFrame;
                     line.ColorForType = colorForType;
 
                     line.Thickness = (1 - 1 / (dirtyFlagNumUpdatesWithinFrame + 1f)) * 3 + 1;
 
-                    if (childUi.ConnectionStyleOverrides.ContainsKey(output.Id))
+                    if (childUi.ConnectionStyleOverrides.ContainsKey(outputDef.Id))
                     {
                         line.ColorForType.Rgba.W = 0.3f;
                     }
@@ -458,8 +449,19 @@ namespace T3.Gui.Graph
                     line.IsSelected |= childUi.IsSelected;
                 }
 
-                DrawOutput(childUi, output, usableArea, colorForType, hovered);
+                DrawOutput(childUi, outputDef, usableArea, colorForType, hovered);
 
+                // Visualize update
+                {
+                    if (dirtyFlagNumUpdatesWithinFrame > 0)
+                    {
+                        var movement = (float)(ImGui.GetTime() *  dirtyFlagNumUpdatesWithinFrame) % 1f * (usableArea.GetWidth()-1);
+                        _drawList.AddRectFilled(new Vector2(usableArea.Min.X + movement-1, usableArea.Min.Y),
+                                               new Vector2(usableArea.Min.X + movement + 1, usableArea.Max.Y),
+                                               new Color(0.2f));
+                    }
+                }
+                
                 outputIndex++;
             }
         }
@@ -698,7 +700,7 @@ namespace T3.Gui.Graph
                     var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
                     var output = instance.Outputs.Single(output2 => output2.Id == outputDef.Id);
 
-                    ImGui.SetTooltip($".{outputDef.Name}<{TypeNameRegistry.Entries[outputDef.ValueType]}>\nevaluated: {output.DirtyFlag.NumUpdatesWithinFrame}");
+                    ImGui.SetTooltip($".{outputDef.Name}<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates");
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                     {
@@ -721,6 +723,9 @@ namespace T3.Gui.Graph
                                         color
                                        );
             }
+            
+
+            
         }
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
