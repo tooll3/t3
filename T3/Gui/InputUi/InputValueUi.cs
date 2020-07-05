@@ -30,6 +30,7 @@ namespace T3.Gui.InputUi
         public Guid Id => InputDefinition.Id;
         public Relevancy Relevancy { get; set; } = Relevancy.Optional;
         public virtual bool IsAnimatable => false;
+        protected Type MappedType { get; set; }
 
         public abstract IInputUi Clone();
         /// <summary>
@@ -63,6 +64,7 @@ namespace T3.Gui.InputUi
             var typeColor = TypeUiRegistry.Entries[Type].Color;
             var animator = compositionUi.Symbol.Animator;
             bool isAnimated = IsAnimatable && animator.IsInputSlotAnimated(inputSlot);
+            MappedType = inputSlot.MappedType;
 
             if (inputSlot is InputSlot<T> typedInputSlot)
             {

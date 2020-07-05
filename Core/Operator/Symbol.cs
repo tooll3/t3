@@ -37,7 +37,7 @@ namespace T3.Core.Operator
 
         public readonly List<OutputDefinition> OutputDefinitions = new List<OutputDefinition>();
 
-        public Type InstanceType { get; set; }
+        public Type InstanceType { get; private set; }
 
         public Animator Animator { get; } = new Animator();
 

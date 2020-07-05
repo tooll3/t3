@@ -1,9 +1,12 @@
+using System;
 using T3.Core.DataTypes;
 
 namespace T3.Core.Operator.Slots
 {
     public class InputSlot<T> : Slot<T>, IInputSlot
     {
+        public Type MappedType { get; set; }
+
         public InputSlot(InputValue<T> typedInputValue)
         {
             UpdateAction = InputUpdate;

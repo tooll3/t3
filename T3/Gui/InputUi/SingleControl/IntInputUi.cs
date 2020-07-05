@@ -1,9 +1,11 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Interaction;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.InputUi.SingleControl
 {
@@ -14,18 +16,27 @@ namespace T3.Gui.InputUi.SingleControl
         public override IInputUi Clone()
         {
             return new IntInputUi()
-                   {
-                       InputDefinition = InputDefinition,
-                       Parent = Parent,
-                       PosOnCanvas = PosOnCanvas,
-                       Relevancy = Relevancy
-                   };
+                       {
+                           InputDefinition = InputDefinition,
+                           Parent = Parent,
+                           PosOnCanvas = PosOnCanvas,
+                           Relevancy = Relevancy
+                       };
         }
 
         protected override bool DrawSingleEditControl(string name, ref int value)
         {
-            var result= SingleValueEdit.Draw(ref value, new Vector2(-1, 0));
-            return result == InputEditStateFlags.Modified;
+            InputEditStateFlags result = InputEditStateFlags.Nothing;
+            if (MappedType != null)
+            {
+                result = DrawEnumInputEdit(ref value, MappedType);
+            }
+            else
+            {
+                result = SingleValueEdit.Draw(ref value, new Vector2(-1, 0));
+            }
+
+            return (result & InputEditStateFlags.Modified) != 0;
         }
 
         public  InputEditStateFlags DrawEditControl(ref int value)
@@ -66,13 +77,88 @@ namespace T3.Gui.InputUi.SingleControl
             // under control because of styling issues and because in GraphNodes
             // The op body captures the mouse event first.
             //SingleValueEdit.Draw(ref floatValue,  -Vector2.UnitX);
-            
+
             return value.ToString();
         }
-        
+
         protected override void DrawReadOnlyControl(string name, ref int value)
         {
-            ImGui.InputInt(name, ref value, 0, 0, ImGuiInputTextFlags.ReadOnly);
+            if (MappedType != null)
+            {
+                var enumInfo = EnumCache.Instance.GetEnumEntry(MappedType);
+                int nameIndex = Array.IndexOf(enumInfo.ValuesAsInt, value);
+                ImGui.Text(nameIndex != -1 ? enumInfo.ValueNames[nameIndex] : "Invalid enum value.");
+            }
+            else
+            {
+                ImGui.InputInt(name, ref value, 0, 0, ImGuiInputTextFlags.ReadOnly);
+            }
+        }
+
+        public static InputEditStateFlags DrawEnumInputEdit(ref int value, Type enumType)
+        {
+            var enumInfo = EnumCache.Instance.GetEnumEntry(enumType);
+
+            if (enumInfo.IsFlagEnum)
+            {
+                // show as checkboxes
+                InputEditStateFlags editStateFlags = InputEditStateFlags.Nothing;
+                if (ImGui.TreeNode("##enumParamInt124"))
+                {
+                    bool[] checks = enumInfo.SetFlags;
+                    for (int i = 0; i < enumInfo.ValueNames.Length; i++)
+                    {
+                        int enumValueAsInt = enumInfo.ValuesAsInt[i];
+                        checks[i] = (value & enumValueAsInt) > 0;
+                        if (ImGui.Checkbox(enumInfo.ValueNames[i], ref checks[i]))
+                        {
+                            // value modified, store new flag
+                            if (checks[i])
+                            {
+                                value |= enumValueAsInt;
+                            }
+                            else
+                            {
+                                value &= ~enumValueAsInt;
+                            }
+
+                            editStateFlags |= InputEditStateFlags.Modified;
+                        }
+
+                        if (ImGui.IsItemClicked())
+                        {
+                            editStateFlags |= InputEditStateFlags.Started;
+                        }
+
+                        if (ImGui.IsItemDeactivatedAfterEdit())
+                        {
+                            editStateFlags |= InputEditStateFlags.Finished;
+                        }
+                    }
+
+                    ImGui.TreePop();
+                }
+
+                return editStateFlags;
+            }
+            else
+            {
+                int index = Array.IndexOf(enumInfo.ValuesAsInt, value);
+                InputEditStateFlags editStateFlags = InputEditStateFlags.Nothing;
+                bool modified = ImGui.Combo("##dropDownParam", ref index, enumInfo.ValueNames, enumInfo.ValueNames.Length);
+                if (modified)
+                {
+                    value = enumInfo.ValuesAsInt[index];
+                    editStateFlags |= InputEditStateFlags.ModifiedAndFinished;
+                }
+
+                if (ImGui.IsItemClicked())
+                {
+                    editStateFlags |= InputEditStateFlags.Started;
+                }
+
+                return editStateFlags;
+            }
         }
     }
 }

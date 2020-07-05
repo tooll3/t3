@@ -38,6 +38,7 @@ namespace T3.Core.Operator
                 var inputSlot = (IInputSlot)inputInfo.GetValue(this);
                 inputSlot.Parent = this;
                 inputSlot.Id = attribute.Id;
+                inputSlot.MappedType = attribute.MappedType;
                 Inputs.Add(inputSlot);
             }
 

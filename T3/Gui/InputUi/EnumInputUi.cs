@@ -19,7 +19,12 @@ namespace T3.Gui.InputUi
 
         protected override InputEditStateFlags DrawEditControl(string name, ref T value)
         {
-            var enumInfo = EnumCache.Instance.GetEnumEntry<T>();
+            return DrawEnumInputEdit(ref value);
+        }
+
+        public static InputEditStateFlags DrawEnumInputEdit(ref T value)
+        {
+            var enumInfo = EnumCache.Instance.GetTypedEnumEntry<T>();
 
             if (enumInfo.IsFlagEnum)
             {

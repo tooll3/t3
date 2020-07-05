@@ -9,30 +9,55 @@ namespace T3.Gui.UiHelpers
     {
         public static EnumCache Instance { get; } = new EnumCache();
 
-        public Entry<T> GetEnumEntry<T>() where T : Enum
+        public TypedEntry<T> GetTypedEnumEntry<T>() where T : Enum
         {
             Type enumType = typeof(T);
             if (!_entries.TryGetValue(enumType, out var entry))
             {
-                entry = new Entry<T>();
+                entry = new TypedEntry<T>();
                 _entries.Add(enumType, entry);
             }
 
-            return (Entry<T>)entry;
+            return entry as TypedEntry<T>;
         }
 
-        public class Entry<T> where T : Enum
+        public Entry GetEnumEntry(Type enumType)
         {
-            public Entry()
+            if (!_entries.TryGetValue(enumType, out var entry))
             {
-                var enumType = typeof(T);
+                entry = new Entry(enumType);
+                _entries.Add(enumType, entry);
+            }
+
+            return entry;
+        }
+
+        public class TypedEntry<T> : Entry where T : Enum
+        {
+            public TypedEntry() : base(typeof(T))
+            {
+                var values = Enum.GetValues(EnumType);
+                Values = new T[ValueNames.Length];
+                for (int i = 0; i < values.Length; i++)
+                {
+                    ValuesAsInt[i] = (int)values.GetValue(i);
+                }
+            }
+
+            public T this[int i] => Values[i];
+            public T[] Values { get; }
+        }
+
+        public class Entry
+        {
+            public Entry(Type enumType)
+            {
+                EnumType = enumType;
                 ValueNames = Enum.GetNames(enumType);
                 var values = Enum.GetValues(enumType);
-                Values = new T[ValueNames.Length];
                 ValuesAsInt = new int[values.Length];
                 for (int i = 0; i < values.Length; i++)
                 {
-                    Values[i] = (T)values.GetValue(i);
                     ValuesAsInt[i] = (int)values.GetValue(i);
                 }
 
@@ -43,14 +68,13 @@ namespace T3.Gui.UiHelpers
                 }
             }
 
-            public T this[int i] => Values[i];
-            public T[] Values { get; }
+            protected Type EnumType { get; }
             public string[] ValueNames { get; }
             public int[] ValuesAsInt { get; }
             public bool IsFlagEnum { get; }
             public bool[] SetFlags { get; }
         }
 
-        private readonly Dictionary<Type, object> _entries = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, Entry> _entries = new Dictionary<Type, Entry>();
     }
 }
