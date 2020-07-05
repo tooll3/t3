@@ -256,6 +256,11 @@ namespace T3.Core.Operator
                         typedInputSlot.UpdateAction = context => { typedInputSlot.Value = (float)curve.GetSampledValue(context.TimeInBars); };
                         typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
+                    else if (inputSlot is Slot<int> intSlot)
+                    {
+                        intSlot.UpdateAction = context => { intSlot.Value = (int)curve.GetSampledValue(context.TimeInBars); };
+                        intSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                    }
                 }
                 else if (count == 2)
                 {
