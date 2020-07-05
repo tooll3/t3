@@ -8,6 +8,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Interaction.WithCurves;
 using UiHelpers;
@@ -47,6 +48,7 @@ namespace T3.Gui.Windows.TimeLine
             Current = this;
             UpdateLocalTimeTranslation(compositionOp);
             ScrollToTimeAfterStopped();
+
             
             var modeChanged = UpdateMode();
             DrawCurveCanvas(drawAdditionalCanvasContent:DrawCanvasContent);
@@ -90,8 +92,12 @@ namespace T3.Gui.Windows.TimeLine
                 
                 _currentTimeMarker.Draw(Playback);
                 DrawDragTimeArea();
-            }            
-
+                
+                if (FenceState == SelectionFence.States.CompletedAsClick)
+                {
+                    Playback.TimeInBars = InverseTransformPosition(ImGui.GetMousePos()).X;
+                }
+            }
         }
 
 
@@ -311,7 +317,7 @@ namespace T3.Gui.Windows.TimeLine
         public static TimeLineCanvas Current;
 
         private float _nestedTimeScale = 1;
-        private float _nestedTimeOffset = 0;
+        private float _nestedTimeOffset;
         private double _lastPlaybackSpeed;
         
 

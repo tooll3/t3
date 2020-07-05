@@ -41,8 +41,8 @@ namespace T3.Gui.Interaction.WithCurves
 
         private void HandleFenceUpdate()
         {
-            _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
-            switch (_fenceState)
+            FenceState = SelectionFence.UpdateAndDraw(FenceState);
+            switch (FenceState)
             {
                 case SelectionFence.States.Updated:
                 case SelectionFence.States.CompletedAsClick:
@@ -51,7 +51,6 @@ namespace T3.Gui.Interaction.WithCurves
             }
         }
 
-        private SelectionFence.States _fenceState;
 
         protected void HandleCreateNewKeyframes(Curve curve)
         {
@@ -198,7 +197,9 @@ namespace T3.Gui.Interaction.WithCurves
 
         protected readonly List<ITimeObjectManipulation> TimeObjectManipulators = new List<ITimeObjectManipulation>();
         #endregion
-
+        
+        protected SelectionFence.States FenceState;
+        
         public readonly ValueSnapHandler SnapHandlerForU = new ValueSnapHandler();
         public readonly ValueSnapHandler SnapHandlerForV = new ValueSnapHandler();
         protected ImDrawListPtr Drawlist;

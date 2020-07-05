@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using ImGuiNET;
-using T3.Core.Logging;
 using UiHelpers;
 
 namespace T3.Gui.Interaction
