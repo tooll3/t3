@@ -38,12 +38,15 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         public bool FoundTimeClipForCurrentTime => LayersArea.FoundClipWithinCurrentTime;
+
+
         
         
         public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
         {
             Current = this;
             UpdateLocalTimeTranslation(compositionOp);
+            ScrollToTimeAfterStopped();
             
             var modeChanged = UpdateMode();
             DrawCurveCanvas(drawAdditionalCanvasContent:DrawCanvasContent);
@@ -211,6 +214,31 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorPos(Vector2.Zero);
         }
 
+
+        private void ScrollToTimeAfterStopped()
+        {
+            var isPlaying = Math.Abs(Playback.PlaybackSpeed) > 0.01f;
+            var wasPlaying = Math.Abs(_lastPlaybackSpeed) > 0.01f;
+            
+            if(!isPlaying && wasPlaying) 
+            {
+                if (!IsCurrentTimeVisible())
+                {
+                    var time = Playback.TimeInBars - InverseTransformDirection(new Vector2(WindowSize.X, 0)).X / 2;
+                    ScrollTarget.X = (float)(- time * ScaleTarget.X);
+                }
+            }
+
+            _lastPlaybackSpeed = Playback.PlaybackSpeed;
+        }
+        
+        
+        private bool IsCurrentTimeVisible()
+        {
+            var timePosInScreen = TransformPosition(new Vector2((float)this.Playback.TimeInBars,0));
+            return ImRect.RectWithSize(WindowPos, WindowSize).Contains(timePosInScreen);
+        }
+        
         
         #region view modes
         private bool UpdateMode()
@@ -284,7 +312,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private float _nestedTimeScale = 1;
         private float _nestedTimeOffset = 0;
-
+        private double _lastPlaybackSpeed;
         
 
         // Styling
