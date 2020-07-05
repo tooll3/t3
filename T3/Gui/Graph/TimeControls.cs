@@ -248,12 +248,18 @@ namespace T3.Gui.Graph
                         playback.PlaybackSpeed = 0.5f;
                 }
 
-                // Stop as separate keyboard 
+                // Stop as separate keyboard action 
                 if (KeyboardBinding.Triggered(UserActions.PlaybackStop))
                 {
                     playback.PlaybackSpeed = 0;
                 }
 
+                if (KeyboardBinding.Triggered(UserActions.PlaybackToggle))
+                {
+                    playback.PlaybackSpeed = playback.PlaybackSpeed == 0 ? 1 : 0;
+                }
+
+                
                 ImGui.SameLine();
 
                 // Next Keyframe
