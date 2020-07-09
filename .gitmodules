@@ -1,6 +1,6 @@
 [submodule "Operators"]
 	path = Operators
-	url = git@github.com:drcynic/Operators.git
+	url = git@github.com:still-scene/Operators.git
 [submodule "Resources"]
 	path = Resources
-	url = git@github.com:drcynic/Resources.git
+	url = git@github.com:still-scene/Resources.git
