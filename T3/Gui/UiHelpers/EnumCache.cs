@@ -40,7 +40,7 @@ namespace T3.Gui.UiHelpers
                 Values = new T[ValueNames.Length];
                 for (int i = 0; i < values.Length; i++)
                 {
-                    ValuesAsInt[i] = (int)values.GetValue(i);
+                    Values[i] = (T)values.GetValue(i);
                 }
             }
 
