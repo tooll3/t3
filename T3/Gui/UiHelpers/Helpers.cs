@@ -61,7 +61,7 @@ namespace UiHelpers
             if (SettingsWindow.WindowRegionsVisible)
                 DebugRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), color, label);
         }
-        
+
         public static void DebugContentRect(string label = "", uint color = 0xff804080)
         {
             if (!SettingsWindow.WindowRegionsVisible)
@@ -136,7 +136,7 @@ namespace UiHelpers
                 var t = Min.X;
                 Min.X = Max.X;
                 Max.X = t;
-            }            
+            }
 
             if (Min.Y > Max.Y)
             {
@@ -144,7 +144,7 @@ namespace UiHelpers
                 Min.Y = Max.Y;
                 Max.Y = t;
             }
-                
+
             return this;
         }
 
@@ -447,33 +447,32 @@ namespace UiHelpers
             const float edgeFactor = 0.4f; // 0 -> overlap  ... 1 concentric around node edge
             const float outlineWidth = 3;
             var edgeOffset = 10 * GraphCanvas.Current.Scale.X;
-            
+
             var pointAOrg = pointA;
 
             if (d.Y > -1 && d.Y < 1 && d.X > 2)
             {
-                drawList.AddLine(pointA, pointB, color,thickness);
+                drawList.AddLine(pointA, pointB, color, thickness);
                 return;
             }
-            
+
             var aAboveB = d.Y > 0;
             if (aAboveB)
             {
                 var cB = rectB.Min;
                 var rB = (pointB.Y - cB.Y) * edgeFactor + edgeOffset;
-                
+
                 var exceededMaxRadius = d.X - rB > maxRadius;
                 if (exceededMaxRadius)
                 {
                     pointA.X += d.X - maxRadius - rB;
-                    d.X = maxRadius +rB;
+                    d.X = maxRadius + rB;
                 }
-                
+
                 var cA = rectA.Max;
                 var rA = cA.Y - pointA.Y;
                 cB.Y = pointB.Y - rB;
 
-                
                 if (d.X > rA + rB)
                 {
                     var horizontalStretch = d.X / d.Y > 1;
@@ -489,12 +488,12 @@ namespace UiHelpers
                         drawList.PathClear();
                         drawList.PathArcTo(cB, rB, Pi / 2, Pi / 2 + alpha * shrinkArkAngle);
                         drawList.PathArcTo(cA, rA, 1.5f * Pi + alpha * shrinkArkAngle, 1.5f * Pi);
-                        if(exceededMaxRadius)
+                        if (exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
-                        
-                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness+outlineWidth);
+
+                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness + outlineWidth);
                         drawList.PathStroke(color, false, thickness);
-                        
+
                         // drawList.AddLine(pointA, pointB, Color.Red);
                         // drawList.AddCircle(cB, rB, Color.Red);
                         // drawList.AddCircle(cA, rA, new Color(1f,0,0,0.2f));
@@ -509,9 +508,9 @@ namespace UiHelpers
                         drawList.PathClear();
                         drawList.PathArcTo(cB, rB, 0.5f * Pi, Pi);
                         drawList.PathArcTo(cA, rA, 2 * Pi, 1.5f * Pi);
-                        if(exceededMaxRadius)
+                        if (exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
-                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness+outlineWidth);
+                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness + outlineWidth);
                         drawList.PathStroke(color, false, thickness);
                     }
                 }
@@ -524,23 +523,21 @@ namespace UiHelpers
             {
                 var cB = new Vector2(rectB.Min.X, rectB.Max.Y);
                 var rB = (cB.Y - pointB.Y) * edgeFactor + edgeOffset;
-                
+
                 var exceededMaxRadius = d.X - rB > maxRadius;
                 if (exceededMaxRadius)
                 {
                     pointA.X += d.X - maxRadius - rB;
-                    d.X = maxRadius +rB;
+                    d.X = maxRadius + rB;
                 }
-                
+
                 var cA = new Vector2(rectA.Max.X, rectA.Min.Y);
                 var rA = pointA.Y - cA.Y;
                 cB.Y = pointB.Y + rB;
 
-                
-                
                 if (d.X > rA + rB)
                 {
-                    var horizontalStretch = Math.Abs(d.Y) <2 || -d.X / d.Y > 1;
+                    var horizontalStretch = Math.Abs(d.Y) < 2 || -d.X / d.Y > 1;
                     if (horizontalStretch)
                     {
                         // hack to find angle where circles touch
@@ -552,14 +549,12 @@ namespace UiHelpers
                         cA = pointA - new Vector2(0, rA);
 
                         drawList.PathClear();
-                        drawList.PathArcTo(cB, rB, 1.5f * Pi, 1.5f * Pi - alpha* shrinkArkAngle);
-                        drawList.PathArcTo(cA, rA, 0.5f * Pi - alpha* shrinkArkAngle, 0.5f * Pi);
-                        if(exceededMaxRadius)
+                        drawList.PathArcTo(cB, rB, 1.5f * Pi, 1.5f * Pi - alpha * shrinkArkAngle);
+                        drawList.PathArcTo(cA, rA, 0.5f * Pi - alpha * shrinkArkAngle, 0.5f * Pi);
+                        if (exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
-                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness+outlineWidth);
+                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness + outlineWidth);
                         drawList.PathStroke(color, false, thickness);
-
-                        
                     }
                     else
                     {
@@ -569,12 +564,12 @@ namespace UiHelpers
                         drawList.PathClear();
                         drawList.PathArcTo(cB, rB, 1.5f * Pi, Pi);
                         drawList.PathArcTo(cA, rA, 2 * Pi, 2.5f * Pi);
-                        if(exceededMaxRadius)
+                        if (exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
-                        
-                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness+outlineWidth);
+
+                        drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness + outlineWidth);
                         drawList.PathStroke(color, false, thickness);
-                        
+
                         // drawList.AddLine(pointA, pointB, Color.Red);
                         // drawList.AddCircle(cB, rB, Color.Red,128);
                         // drawList.AddCircle(cA, rA, new Color(1f, 0, 0, 0.2f), 128);
@@ -590,15 +585,15 @@ namespace UiHelpers
             void DrawBezierFallback()
             {
                 var tangentLength = MathUtils.Remap(Vector2.Distance(pointA, pointB),
-                                             30, 300,
-                                             5, 200);
+                                                    30, 300,
+                                                    5, 200);
                 drawList.AddBezierCurve(
                                         pointA,
                                         pointA + new Vector2(tangentLength, 0),
                                         pointB + new Vector2(-tangentLength, 0),
                                         pointB,
                                         color,
-                                        thickness:  thickness,
+                                        thickness: thickness,
                                         num_segments: 30);
             }
         }
