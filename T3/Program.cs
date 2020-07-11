@@ -233,8 +233,6 @@ namespace T3
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
             
-            _t3ui = new T3Ui();
-
             var form = new ImGuiDx11RenderForm("T3 ImGui Test")
                            {
                                ClientSize = new Size(1920, 1080),
@@ -314,6 +312,9 @@ namespace T3
 
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
+
+            _t3ui = new T3Ui();
+
             //resourceManager.CreateVertexShader(@"Resources\\vs-fullscreen-tri-pos-only.hlsl", "main", "vs-fullscreen-tri-pos-only");
             //resourceManager.CreatePixelShader(@"Resources\\ps-pos-only-fixed-color.hlsl", "main", "ps-pos-only-fixed-color");
             var di = new DirectoryInfo(".");
