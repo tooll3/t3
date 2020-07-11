@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
+using T3.Gui.InputUi;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Interaction.WithCurves;
@@ -99,15 +101,39 @@ namespace T3.Gui.Windows.TimeLine
 
             if (_changeKeyframesCommand == null)
             {
-                TimeLineCanvas.Current.StartDragCommand();
+                var mouseDragDelta = ImGui.GetMouseDragDelta();
+                if (CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Undecided)
+                {
+
+                    if (Math.Abs(mouseDragDelta.X) > CurveInputEditing.MoveDirectionThreshold)
+                    {
+                        CurveInputEditing.MoveDirection = CurveInputEditing.MoveDirections.Horizontal;
+                        TimeLineCanvas.Current.StartDragCommand();
+                    }
+                    else if (Math.Abs(mouseDragDelta.Y) > CurveInputEditing.MoveDirectionThreshold)
+                    {
+                        CurveInputEditing.MoveDirection = CurveInputEditing.MoveDirections.Vertical;
+                        TimeLineCanvas.Current.StartDragCommand();
+                    }
+                }
             }
             
             var newDragPosition = TimeLineCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos);
-            double u = newDragPosition.X;
+
+            var allowHorizontal = CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Both
+                                   || CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Horizontal
+                                   || (ImGui.GetIO().KeyCtrl && ImGui.GetIO().KeyShift);
+            
+            var allowVertical = CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Both
+                                  || CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Vertical
+                                  || (ImGui.GetIO().KeyCtrl && ImGui.GetIO().KeyShift);
+            
+            double u = allowHorizontal ? newDragPosition.X : vDef.U;
             SnapHandlerU.CheckForSnapping(ref u, TimeLineCanvas.Scale.X);
             
-            double v = newDragPosition.Y;
+            double v = allowVertical ?  newDragPosition.Y : vDef.Value;
             SnapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
+            
             UpdateDragCommand(u - vDef.U, v - vDef.Value);
         }
         
@@ -173,6 +199,7 @@ namespace T3.Gui.Windows.TimeLine
             if (_changeKeyframesCommand == null)
                 return;
 
+            CurveInputEditing.MoveDirection = CurveInputEditing.MoveDirections.Undecided;
             // Update reference in macro command
             _changeKeyframesCommand.StoreCurrentValues();
             //UndoRedoStack.Add(_changeKeyframesCommand);

@@ -227,5 +227,16 @@ namespace T3.Gui.InputUi
                 public bool NeedToAdjustScopeAfterFirstRendering = true;
             }
         }
+
+        public enum MoveDirections
+        {
+            Undecided = 0,
+            Vertical,
+            Horizontal,
+            Both
+        }
+
+        public static MoveDirections MoveDirection = MoveDirections.Undecided;
+        public const float MoveDirectionThreshold = 2;
     }
 }

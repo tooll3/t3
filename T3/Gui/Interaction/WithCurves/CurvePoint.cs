@@ -172,15 +172,6 @@ namespace T3.Gui.Interaction.WithCurves
         private static readonly string KeyframeIcon = "" + (char)(int)Icon.CurveKeyframe;
         private static readonly string KeyframeIconSelected = "" + (char)(int)Icon.CurveKeyframeSelected;
 
-        /* TODO: MoveDirection needs to be implemented eventually
-        private enum MoveDirection
-        {
-            Undecided = 0,
-            Vertical,
-            Horizontal,
-            Both
-        }
-        private MoveDirection _moveDirection = MoveDirection.Undecided;
-        */
+
     }
 }
