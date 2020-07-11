@@ -49,8 +49,10 @@ namespace T3.Gui.Graph
                 if (!viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
                     return;
                 
+                _imageCanvas.SetAsCurrent();
                 _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
                 viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: true);
+                _imageCanvas.Deactivate();
             }
             
             private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
