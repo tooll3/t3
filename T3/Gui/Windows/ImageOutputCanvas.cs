@@ -21,9 +21,20 @@ namespace T3.Gui.Windows
     {
         public void Update()
         {
-            Current = this;
+            
             UpdateCanvas();
             UpdateViewMode();
+            
+        }
+
+        public void SetAsCurrent()
+        {
+            Current = this;
+        }
+
+        public void Deactivate()
+        {
+            Current = null;
         }
 
         /// <summary>

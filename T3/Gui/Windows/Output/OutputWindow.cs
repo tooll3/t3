@@ -58,6 +58,7 @@ namespace T3.Gui.Windows.Output
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
+                _imageCanvas.SetAsCurrent();
                 _imageCanvas.PreventMouseInteraction = CameraSelectionHandling.SelectedCamera != null;
                 _imageCanvas.Update();
 
@@ -66,6 +67,7 @@ namespace T3.Gui.Windows.Output
                 // move down to avoid overlapping with toolbar
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
                 DrawOutput(_pinning.GetPinnedOrSelectedInstance(), _pinning.GetPinnedEvaluationInstance());
+                _imageCanvas.Deactivate();
 
                 DrawToolbar();
             }

@@ -156,6 +156,7 @@ namespace T3.Gui.Graph
                         ImGui.BeginTooltip();
                         {
                             ImageCanvasForTooltips.Update();
+                            ImageCanvasForTooltips.SetAsCurrent();
                             if (instance.Outputs.Count > 0)
                             {
                                 var firstOutput = instance.Outputs[0];
@@ -174,6 +175,7 @@ namespace T3.Gui.Graph
                                 ImGui.PopStyleColor();
                                 ImGui.PopFont();
                             }
+                            ImageCanvasForTooltips.Deactivate();
                         }
                         ImGui.EndTooltip();
                     }

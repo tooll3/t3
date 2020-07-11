@@ -370,7 +370,14 @@ namespace T3.Gui.Windows.Variations
             // Render variation
             EvaluationContext.Reset();
             EvaluationContext.TimeInBars = 13.4f;
+            
+            // NOTE: This is horrible hack to prevent _imageCanvas from being rendered by imgui
+            // DrawValue will use the current ImageOutputCanvas for rendering
+            _imageCanvas.SetAsCurrent();
+            ImGui.PushClipRect(new Vector2(0,0), new Vector2(1,1), true);
             _variationWindow.OutputUi.DrawValue(_firstOutputSlot, EvaluationContext);
+            ImGui.PopClipRect();
+            _imageCanvas.Deactivate();
 
             if (_firstOutputSlot is Slot<Texture2D> textureSlot)
             {
@@ -413,6 +420,7 @@ namespace T3.Gui.Windows.Variations
         private GridCell _gridFocusIndex = GridCenter;
         private int _currentOffsetIndexForFocus;
         private bool _updateCompleted;
+        private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
 
         private Texture2D _canvasTexture;
         private ShaderResourceView _canvasTextureSrv;
