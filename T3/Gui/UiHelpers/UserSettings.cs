@@ -30,7 +30,7 @@ namespace T3.Gui.UiHelpers
             public bool KeepBeatTimeRunningInPause = false;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = false;
-            public float SnapStrength = 4;
+            public float SnapStrength = 5;
             public bool UseJogDialControl = false;
             public float ZoomSpeed = 12;
         }

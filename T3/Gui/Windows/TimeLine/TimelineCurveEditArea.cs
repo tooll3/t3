@@ -81,14 +81,15 @@ namespace T3.Gui.Windows.TimeLine
             if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
                 return;
 
-            if (ImGui.GetIO().KeyCtrl)
+
+            if (ImGui.GetIO().KeyCtrl && _changeKeyframesCommand == null)
             {
                 if (isSelected)
                     SelectedKeyframes.Remove(vDef);
 
                 return;
             }
-
+            
             if (!isSelected)
             {
                 if (!ImGui.GetIO().KeyShift)
@@ -122,17 +123,19 @@ namespace T3.Gui.Windows.TimeLine
 
             var allowHorizontal = CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Both
                                    || CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Horizontal
-                                   || (ImGui.GetIO().KeyCtrl && ImGui.GetIO().KeyShift);
+                                   || (ImGui.GetIO().KeyCtrl);
             
             var allowVertical = CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Both
                                   || CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Vertical
-                                  || (ImGui.GetIO().KeyCtrl && ImGui.GetIO().KeyShift);
+                                  || (ImGui.GetIO().KeyCtrl);
             
             double u = allowHorizontal ? newDragPosition.X : vDef.U;
-            SnapHandlerU.CheckForSnapping(ref u, TimeLineCanvas.Scale.X);
+            if(!ImGui.GetIO().KeyShift)
+                SnapHandlerU.CheckForSnapping(ref u, TimeLineCanvas.Scale.X);
             
             double v = allowVertical ?  newDragPosition.Y : vDef.Value;
-            SnapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
+            if(!ImGui.GetIO().KeyShift)
+                SnapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
             
             UpdateDragCommand(u - vDef.U, v - vDef.Value);
         }

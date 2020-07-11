@@ -103,7 +103,9 @@ namespace T3.Gui.Windows.TimeLine
                     _isDragging = true;
                 }
 
-                _snapHandler.CheckForSnapping(ref u, _timeLineCanvas.Scale.X, new List<IValueSnapAttractor> { this });
+                if(!ImGui.GetIO().KeyShift)
+                    _snapHandler.CheckForSnapping(ref u, _timeLineCanvas.Scale.X, new List<IValueSnapAttractor> { this });
+                
                 var dScale = (u - origin) / (_lastDragU - origin);
                 _timeLineCanvas.UpdateDragStretchCommand(scaleU: dScale, scaleV: 1, originU: origin, originV: 0);
                 _lastDragU = u;

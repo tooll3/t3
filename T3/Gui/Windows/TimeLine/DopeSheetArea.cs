@@ -449,7 +449,9 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             var newDragTime = TimeLineCanvas.Current.InverseTransformX(ImGui.GetIO().MousePos.X);
-            _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X);
+            
+            if(!ImGui.GetIO().KeyShift)
+                _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X);
 
             TimeLineCanvas.Current.UpdateDragCommand(newDragTime - vDef.U, 0);
         }

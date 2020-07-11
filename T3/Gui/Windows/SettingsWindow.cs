@@ -35,6 +35,8 @@ namespace T3.Gui.Windows
 
             ImGui.DragFloat("Scroll damping", ref UserSettings.Config.ZoomSpeed);
             
+            ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
+            
             if (ImGui.TreeNode("Undo Queue"))
             {
                 ImGui.Text("Undo");
