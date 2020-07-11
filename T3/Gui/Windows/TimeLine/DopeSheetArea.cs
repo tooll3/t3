@@ -143,9 +143,13 @@ namespace T3.Gui.Windows.TimeLine
 
             foreach (var curve in parameter.Curves)
             {
-                foreach (var pair in curve.GetPointTable())
+                var list = curve.GetPointTable();
+                VDefinition lastVDef = null;
+                for (var index = 0; index < list.Count; index++)
                 {
-                    DrawKeyframe(pair.Value, layerArea, parameter);
+                    var vDef = list[index].Value;
+                    DrawKeyframe(vDef, layerArea, parameter, lastVDef);
+                    lastVDef = vDef;
                 }
             }
 
@@ -311,11 +315,30 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        private void DrawKeyframe(VDefinition vDef, ImRect layerArea, GraphWindow.AnimationParameter parameter)
+        private void DrawKeyframe(VDefinition vDef, ImRect layerArea, GraphWindow.AnimationParameter parameter, VDefinition lastVDef)
         {
             var posOnScreen = new Vector2(
                                           TimeLineCanvas.Current.TransformX((float)vDef.U) - KeyframeIconWidth / 2 + 1,
                                           layerArea.Min.Y);
+
+            var showValue = vDef.OutEditMode == VDefinition.EditMode.Constant && lastVDef != null;
+            if (showValue)
+            {
+                var min = new Vector2(
+                                              TimeLineCanvas.Current.TransformX((float)lastVDef.U) + KeyframeIconWidth / 2 + 1,
+                                              layerArea.Min.Y + 5);
+
+                var availableSpace = posOnScreen.X - min.X;
+                if (availableSpace > 40)
+                {
+                    var color = Color.Orange;
+                    color.Rgba.W =MathUtils.Remap(availableSpace, 40, 60, 0, 1).Clamp(0, 1); 
+                    ImGui.PushFont(Fonts.FontSmall);
+                    _drawList.AddText(min, color, $"{vDef.Value:G3}");
+                    ImGui.PopFont();
+                }
+            }            
+            
             var keyHash = (int)vDef.GetHashCode();
             ImGui.PushID(keyHash);
             {
@@ -350,6 +373,8 @@ namespace T3.Gui.Windows.TimeLine
                     if (_changeKeyframesCommand != null)
                         TimeLineCanvas.Current.CompleteDragCommand();
                 }
+
+
 
                 HandleCurvePointDragging(vDef, isSelected);
 
