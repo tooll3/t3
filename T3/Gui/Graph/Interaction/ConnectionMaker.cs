@@ -467,7 +467,7 @@ namespace T3.Gui.Graph
                 {
                     // drawList.AddRect(_bestMatchLastFrame.Area.Min, _bestMatchLastFrame.Area.Max, Color.Orange);
                     var textSize = ImGui.CalcTextSize(BestMatchLastFrame.Name);
-                    ImGui.SetNextWindowPos(_mousePosition - new Vector2(textSize.X + 10, textSize.Y / 2));
+                    ImGui.SetNextWindowPos(_mousePosition + new Vector2(-textSize.X - 20, -textSize.Y / 2));
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
                     ImGui.BeginTooltip();
                     ImGui.Text(BestMatchLastFrame.Name);
