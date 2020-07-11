@@ -387,7 +387,7 @@ namespace T3.Gui.Graph
                 if (ImGui.BeginTabItem("AudioFile"))
                 {
                     ImGui.Text("Soundtrack");
-                    var modified = FileOperations.DrawFilePicker(FileOperations.FilePickerTypes.File, ref ProjectSettings.Config.SoundtrackFilepath);
+                    var modified = FileOperations.DrawSoundFilePicker(FileOperations.FilePickerTypes.File, ref ProjectSettings.Config.SoundtrackFilepath);
 
                     var isInitialized = playback is StreamPlayback;
                     if (isInitialized)

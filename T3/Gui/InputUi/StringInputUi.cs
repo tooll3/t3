@@ -79,7 +79,7 @@ namespace T3.Gui.InputUi
             ImGui.SetNextItemWidth(-70);
             var inputEditStateFlags = DrawDefaultTextEdit(ref value);
             ImGui.SameLine();
-            var modifiedByPicker = FileOperations.DrawSelector(type, ref value);
+            var modifiedByPicker = FileOperations.DrawFileSelector(type, ref value);
             if (modifiedByPicker)
             {
                 inputEditStateFlags = InputEditStateFlags.Modified | InputEditStateFlags.Finished;

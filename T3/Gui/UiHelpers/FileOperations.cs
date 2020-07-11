@@ -12,17 +12,17 @@ namespace T3.Gui.UiHelpers
 {
     public static class FileOperations
     {
+        private const string ResourcesFolder = "Resources";
+
         public static string PickResourceFilePath(string initialPath= "")
         {
-            var path = String.IsNullOrEmpty(initialPath)
-                           ? GetAbsoluteResourcePath()
-                           : initialPath;
             using (var openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = path;
+                openFileDialog.InitialDirectory = String.IsNullOrEmpty(initialPath)
+                                                      ? GetAbsoluteResourcePath()
+                                                      : GetAbsoluteDirectory(initialPath);
                 openFileDialog.Filter = "jpg files (*.jpg)|*.jpg|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 2;
-                openFileDialog.RestoreDirectory = true;
 
                 if (openFileDialog.ShowDialog() != DialogResult.OK)
                     return null;
@@ -55,17 +55,17 @@ namespace T3.Gui.UiHelpers
             Folder,
         }
         
-        public static bool DrawFilePicker(FilePickerTypes type, ref string value)
+        public static bool DrawSoundFilePicker(FilePickerTypes type, ref string value)
         {
             ImGui.SetNextItemWidth(-70);
             var modified = ImGui.InputText("##filepath", ref ProjectSettings.Config.SoundtrackFilepath, 255);
             
-            modified |= DrawSelector(type, ref value);
+            modified |= DrawFileSelector(type, ref value);
             return modified;
         }
         
         
-        public static bool DrawSelector(FilePickerTypes type, ref string value)
+        public static bool DrawFileSelector(FilePickerTypes type, ref string value)
         {
             var modified = false;
             ImGui.SameLine();
@@ -105,20 +105,25 @@ namespace T3.Gui.UiHelpers
         
         private static string ConvertToRelativeFilepath(string absoluteFilePath)
         {
-            var currentApplicationPath = System.IO.Path.GetFullPath(".");
+            var currentApplicationPath = Path.GetFullPath(".");
             var firstCharUppercase = currentApplicationPath.Substring(0, 1).ToUpper();
             currentApplicationPath = firstCharUppercase + currentApplicationPath.Substring(1, currentApplicationPath.Length - 1) + "\\";
             var relativeFilePath = absoluteFilePath.Replace(currentApplicationPath, "");
             return relativeFilePath;
         }
 
+
+        
         private static string GetAbsoluteResourcePath()
         {
-            return System.IO.Path.Combine(System.IO.Path.GetFullPath("."), "Resources");
+            return Path.Combine(Path.GetFullPath("."), ResourcesFolder);
         }
         
         
-        
-        
+        private static string GetAbsoluteDirectory(string relativeFilepath)
+        {
+            var absolutePath = GetAbsoluteResourcePath();
+            return Path.GetDirectoryName(Path.Combine(absolutePath, relativeFilepath.Replace(ResourcesFolder + "\\", "")));
+        }
     }
 }
