@@ -78,6 +78,17 @@ namespace T3.Gui.InputUi
         {
             ImGui.SetNextItemWidth(-70);
             var inputEditStateFlags = DrawDefaultTextEdit(ref value);
+
+
+            if (ImGui.IsItemHovered() && ImGui.CalcTextSize(value).X > ImGui.GetItemRectSize().X)
+            {
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One*5);
+                ImGui.BeginTooltip();
+                ImGui.Text(value);
+                ImGui.EndTooltip();
+                ImGui.PopStyleVar();
+            }
+            
             ImGui.SameLine();
             var modifiedByPicker = FileOperations.DrawFileSelector(type, ref value);
             if (modifiedByPicker)

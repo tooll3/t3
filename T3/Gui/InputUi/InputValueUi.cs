@@ -215,7 +215,7 @@ namespace T3.Gui.InputUi
                         if (IsAnimatable)
                             animator.CreateInputUpdateAction<float>(inputSlot);
                     }
-                    if(ImGui.IsItemHovered()) 
+                    if(ImGui.IsItemHovered() && IsAnimatable) 
                         ImGui.SetTooltip($"Click to animate\n{input.DefaultValue.ValueType}");
 
                     ImGui.PopStyleColor();
