@@ -326,7 +326,7 @@ namespace T3.Gui.Interaction
         /// </summary>
         private static class SliderLadder
         {
-            private struct RangeDef
+            private class RangeDef
             {
                 public readonly float YMin;
                 public readonly float YMax;
@@ -354,10 +354,14 @@ namespace T3.Gui.Interaction
                 new RangeDef(2f * OuterRangeHeight, 3f * OuterRangeHeight, 0.01f, "x0.01", 1),
             };
 
+            private static RangeDef _lockedRange;
+            
             public static void Draw(ImGuiIOPtr io, double min, double max, float scale, float timeSinceVisible, bool clamp)
             {
                 var foreground = ImGui.GetForegroundDrawList();
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+                if (timeSinceVisible < 0.2)
+                    _lockedRange = null;
 
                 var pLast = io.MousePos - io.MouseDelta - _center;
                 var pNow = io.MousePos - _center;
@@ -370,13 +374,18 @@ namespace T3.Gui.Interaction
 
                 foreach (var range in Ranges)
                 {
-                    var isActiveRange = pNow.Y > range.YMin && pNow.Y < range.YMax;
+                    var isActiveRange = range == _lockedRange 
+                                        || (_lockedRange == null &&  pNow.Y > range.YMin && pNow.Y < range.YMax);
                     var opacity = (timeSinceVisible * 4 - range.FadeInDelay / 4).Clamp(0, 1);
 
                     var isCenterRange = Math.Abs(range.ScaleFactor - 1) < 0.001f;
                     if (isActiveRange)
                     {
                         activeScaleFactor = range.ScaleFactor;
+                        if(_lockedRange == null && Math.Abs(ImGui.GetMouseDragDelta().X) > 30)
+                        {
+                            _lockedRange = range;
+                        }
                     }
                     
                     if (!isCenterRange)
@@ -407,6 +416,7 @@ namespace T3.Gui.Interaction
                                            range.Label);
                     }
                 }
+                
 
                 var deltaSinceLastStep = pLast.X - _lastStepPosX;
                 var delta = deltaSinceLastStep / StepSize;
