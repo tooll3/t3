@@ -15,12 +15,12 @@ namespace T3.Gui.Windows
     /// <summary>
     /// Shows a tree of all defined symbols sorted by namespace 
     /// </summary>
-    public class SymbolTree : Window
+    public class SymbolLibrary : Window
     {
-        public SymbolTree()
+        public SymbolLibrary()
         {
             _filter.SearchString = "";
-            Config.Title = "Symbols";
+            Config.Title = "Symbol Library";
             PopulateTree();
         }
 

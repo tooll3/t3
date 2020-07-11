@@ -24,7 +24,7 @@ namespace T3.Gui.Windows
                            new OutputWindow(),
                            new ConsoleLogWindow(),
                            new SettingsWindow(),
-                           new SymbolTree(),
+                           new SymbolLibrary(),
                        };
             
         }
@@ -249,10 +249,10 @@ namespace T3.Gui.Windows
                         matchingWindow = new ParameterWindow();
                         matchingWindow.Config = config;
                     }
-                    else
-                    {
-                        Log.Error($"Can't find type of window '{config.Title}'");
-                    }
+                    // else
+                    // {
+                    //     Log.Error($"Can't find type of window '{config.Title}'");
+                    // }
                 }
                 else
                 {

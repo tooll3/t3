@@ -444,7 +444,7 @@
     <Compile Include="Gui\Windows\Output\OutputWindow.cs" />
     <Compile Include="Gui\Windows\Output\ResolutionHandling.cs" />
     <Compile Include="Gui\Windows\ViewSelectionPinning.cs" />
-    <Compile Include="Gui\Windows\SymbolTree.cs" />
+    <Compile Include="Gui\Windows\SymbolLibrary.cs" />
     <Compile Include="Gui\Windows\TimeLine\BeatTimeRaster.cs" />
     <Compile Include="Gui\Windows\TimeLine\CurrentTimeMarker.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimelineCurveEditArea.cs" />
