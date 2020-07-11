@@ -82,7 +82,7 @@ namespace T3.Gui.Windows.Output
                 var windowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
                 if (Size.Width <= 0 || Size.Height <= 0)
                 {
-                    return new Size2((int)windowSize.X, (int)windowSize.Y); 
+                    return new Size2((int)windowSize.X-2, (int)windowSize.Y-2); 
                 }
                 
                 var windowAspectRatio = windowSize.X / windowSize.Y;

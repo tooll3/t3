@@ -6,6 +6,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
+using T3.Gui.Styling;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.Windows.Output
@@ -79,19 +80,22 @@ namespace T3.Gui.Windows.Output
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin());
             _pinning.DrawPinning();
             
-            
+            ImGui.PushStyleColor(ImGuiCol.Text, Math.Abs(_imageCanvas.Scale.X - 1f) < 0.001f ? Color.Black.Rgba: Color.White);
             if (ImGui.Button("1:1"))
             {
                 _imageCanvas.SetScaleToMatchPixels();
                 _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Pixel);
             }
+            ImGui.PopStyleColor();
 
             ImGui.SameLine();
-
-            if (ImGui.Button("M"))
+            
+            ImGui.PushStyleColor(ImGuiCol.Text, _imageCanvas.ViewMode == ImageOutputCanvas.Modes.Fitted ? Color.Black.Rgba: Color.White);
+            if (ImGui.Button("Fit") || KeyboardBinding.Triggered(UserActions.FocusSelection))
             {
                 _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
             }
+            ImGui.PopStyleColor();
 
             ImGui.SameLine();
 

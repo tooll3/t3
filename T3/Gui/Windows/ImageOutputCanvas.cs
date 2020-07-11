@@ -76,8 +76,11 @@ namespace T3.Gui.Windows
                 }
             }
             
+            
+            
             ImGui.PushFont(Fonts.FontSmall);
-            var description = $"{size.X}x{size.Y}  {format}";
+            var zoom = Math.Abs(Scale.X) < 0.001f ? "" : $" ×{Scale.X:G2}";
+            var description = $"{size.X}x{size.Y}  {format} {zoom}";
             var descriptionWidth = ImGui.CalcTextSize(description).X;
 
             var textPos = new Vector2(WindowPos.X + (WindowSize.X - descriptionWidth) / 2,
@@ -132,6 +135,7 @@ namespace T3.Gui.Windows
             Custom,
         }
 
+        public Modes ViewMode => _viewMode;
         private Modes _viewMode = Modes.Fitted;
     }
 }
