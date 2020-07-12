@@ -28,7 +28,7 @@ namespace UiHelpers
 
         private const float TAU = Pi / 180;
 
-        public static void Draw(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color, float thickness)
+        public static bool Draw(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color, float thickness, ref Vector2 hoverPosition)
         {
             var drawList = ImGui.GetWindowDrawList();
 
@@ -58,10 +58,10 @@ namespace UiHelpers
             if (d.Y > -1 && d.Y < 1 && d.X > 2)
             {
                 drawList.AddLine(pointA, pointB, color, thickness);
-                return;
+                return false;
             }
 
-            drawList.PathClear();
+            //drawList.PathClear();
             var aAboveB = d.Y > 0;
             if (aAboveB)
             {
@@ -91,7 +91,6 @@ namespace UiHelpers
                         rA = (float)(1f / Math.Tan(alpha) * (d.X - dt) + d.Y - rB * Math.Sin(alpha));
                         cA = pointA + new Vector2(0, rA);
 
-                        drawList.PathClear();
                         drawList.PathArcTo(cB, rB, Pi / 2, Pi / 2 + alpha * shrinkArkAngle);
                         drawList.PathArcTo(cA, rA, 1.5f * Pi + alpha * shrinkArkAngle, 1.5f * Pi);
                         if (exceededMaxRadius)
@@ -163,11 +162,14 @@ namespace UiHelpers
                 {
                     FnDrawBezierFallback();
                 }
+                
             }
 
-            //TestHover(ref drawList);
+            
+            var isHovering = TestHover(ref drawList, ref hoverPosition );
             drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness + outlineWidth);
             drawList.PathStroke(color, false, thickness);
+            return isHovering;
             
             void FnDrawBezierFallback()
             {
@@ -183,7 +185,7 @@ namespace UiHelpers
             }
         }
 
-        private static bool TestHover(ref ImDrawListPtr drawList)
+        public static bool TestHover(ref ImDrawListPtr drawList, ref Vector2 positionOnLine)
         {
             var foreground = ImGui.GetForegroundDrawList();
             if (drawList._Path.Size < 2)
@@ -191,10 +193,10 @@ namespace UiHelpers
 
             var p1 = drawList._Path[0];
             var p2 = drawList._Path[drawList._Path.Size - 1];
-            //foreground.AddRect(p1, p2, Color.Orange);
+            // foreground.AddRect(p1, p2, Color.Orange);
             var r = new ImRect(p2, p1).MakePositive();
 
-            r.Expand(10);
+            r.Expand(4);
             var mousePos = ImGui.GetMousePos();
             if (!r.Contains(mousePos))
                 return false;
@@ -205,17 +207,17 @@ namespace UiHelpers
                 var p = drawList._Path[i];
 
                 r = new ImRect(pLast, p).MakePositive();
-                r.Expand(10);
-                foreground.AddRect(r.Min, r.Max, Color.Gray);
+                r.Expand(4);
+                // foreground.AddRect(r.Min, r.Max, Color.Gray);
                 if (r.Contains(mousePos))
                 {
-                    foreground.AddRect(r.Min, r.Max, Color.Orange);
+                    // foreground.AddRect(r.Min, r.Max, Color.Orange);
                     var v = (pLast - p);
                     var vLen = v.Length();
                     
                     var d = Vector2.Dot(v, mousePos-p) / vLen;
-                    foreground.AddCircleFilled(p + v * d/vLen, 4f, Color.Red);
-                    // Log.Debug("inside: " +d );
+                    positionOnLine = p + v * d/vLen;
+                    // foreground.AddCircleFilled(positionOnLine, 4f, Color.Red);
                     return true;
                 }
 

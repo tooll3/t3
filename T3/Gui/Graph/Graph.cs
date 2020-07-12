@@ -11,7 +11,6 @@ using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using T3.Gui.TypeColors;
 using T3.Gui.UiHelpers;
-using T3.Gui.Windows;
 using Truncon.Collections;
 using UiHelpers;
 
@@ -274,30 +273,6 @@ namespace T3.Gui.Graph
             internal ConnectionLineUi(Symbol.Connection connection)
             {
                 Connection = connection;
-                if (!Equals(connection, ConnectionMaker.TempConnections))
-                    return;
-
-                if (connection.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
-                {
-                    TargetPosition = ImGui.GetMousePos();
-                }
-                else if (connection.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
-                {
-                }
-                else if (connection.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
-                {
-                    SourcePosition = ImGui.GetMousePos();
-                    ColorForType = Color.White;
-                }
-                else if (connection.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
-                {
-                    ColorForType = Color.White;
-                    //Log.Debug("temp connection from draft child");
-                }
-                else
-                {
-                    Log.Warning("invalid temporary connection?");
-                }
             }
 
             internal void Draw()
@@ -314,12 +289,19 @@ namespace T3.Gui.Graph
 
                 if (UserSettings.Config.UseArcConnections)
                 {
-                    ArcConnection.Draw(new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
-                                                    SourcePosition,
-                                                    TargetNodeArea,
-                                                    TargetPosition,
-                                                    color,
-                                                    thickness);
+                    var hoverPositionOnLine = Vector2.Zero;
+                    var isHovering = ArcConnection.Draw(new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
+                                                                SourcePosition,
+                                                                TargetNodeArea,
+                                                                TargetPosition,
+                                                                color,
+                                                                thickness,
+                                                                ref hoverPositionOnLine);
+
+                    if (isHovering)
+                    {
+                        ConnectionMaker.ConnectionSplitHelper.RegisterAsPotentialSplit(Connection, ColorForType, hoverPositionOnLine);
+                    }
                 }
                 else
                 {

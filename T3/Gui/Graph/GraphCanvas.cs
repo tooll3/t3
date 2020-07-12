@@ -177,7 +177,13 @@ namespace T3.Gui.Graph
 
                 if(showGrid)
                     DrawGrid();
+                
+                if (ImGui.IsWindowHovered())
+                {
+                    ConnectionMaker.ConnectionSplitHelper.PrepareNewFrame(this);
+                }
                 _symbolBrowser.Draw();
+                
                 Graph.DrawGraph(DrawList);
                 RenameInstanceOverlay.Draw();
                 HandleFenceSelection();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
@@ -213,8 +214,6 @@ namespace T3.Gui.Graph
         }
 
         #region related to SymbolBrowser
-
-
         
         /// <remarks>
         /// Assumes that a temp connection has be created earlier and is now dropped on the background
@@ -252,6 +251,7 @@ namespace T3.Gui.Graph
                     symbolBrowser.OpenAt(canvasPosition, null, firstConnectionType, false);
                 }
             }
+            // Multiple TempConnections only work when they are connected to outputs 
             else if (TempConnections.Count > 1)
             {
                 var validForMultiInput = TempConnections.All(c =>
@@ -306,6 +306,34 @@ namespace T3.Gui.Graph
 
             Reset();
         }
+
+
+
+        public static void SplitConnectionWithSymbolBrowser(Symbol parent, SymbolBrowser symbolBrowser, Symbol.Connection connection, Vector2 positionInCanvas)
+        {
+            // Todo: Fix me for output nodes
+            var child = parent.Children.Single(child2 => child2.Id == connection.TargetParentOrChildId);
+            var inputDef = child.Symbol.InputDefinitions.Single(i => i.Id == connection.TargetSlotId);
+            
+
+            TempConnections.Clear();
+            var connectionType = inputDef.DefaultValue.ValueType;
+            TempConnections.Add(new TempConnection(sourceParentOrChildId: connection.SourceParentOrChildId,
+                                                   sourceSlotId: connection.SourceSlotId,
+                                                   targetParentOrChildId: UseDraftChildId,
+                                                   targetSlotId: NotConnectedId,
+                                                   connectionType));
+
+            TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
+                                                   sourceSlotId: NotConnectedId,
+                                                   targetParentOrChildId: connection.TargetParentOrChildId,
+                                                   targetSlotId: connection.TargetSlotId,
+                                                   connectionType));
+
+            symbolBrowser.OpenAt(positionInCanvas, connectionType, connectionType, false);
+            parent.RemoveConnection(connection);
+        }        
+        
         #endregion
 
         public static void CompleteAtSymbolInputNode(Symbol parentSymbol, Symbol.InputDefinition inputDef)
@@ -531,6 +559,88 @@ namespace T3.Gui.Graph
                 public int SlotIndex;
             }
         }
+        
 
+
+        public class ConnectionSplitHelper
+        {
+
+            public static void PrepareNewFrame(GraphCanvas graphCanvas)
+            {
+                _mousePosition = ImGui.GetMousePos();
+                BestMatchLastFrame = _bestMatchYetForCurrentFrame;
+                if (BestMatchLastFrame != null)
+                {
+                    var time = ImGui.GetTime();
+                    if (_hoverStartTime < 0)
+                        _hoverStartTime = time;
+
+                    var hoverDuration = time - _hoverStartTime;
+                    var radius = EaseFunctions.EaseOutElastic((float)hoverDuration) * 4;
+                    var drawList = ImGui.GetForegroundDrawList();
+                    
+                    //BestMatchLastFrame.Connection.
+                    drawList.AddCircleFilled(_bestMatchYetForCurrentFrame.PositionOnScreen, radius , _bestMatchYetForCurrentFrame.Color, 30);
+                    ImGui.SetCursorScreenPos(_bestMatchYetForCurrentFrame.PositionOnScreen - Vector2.One * radius/2);
+                    if(ImGui.InvisibleButton("splitMe", Vector2.One * radius))
+                    {
+                    }
+
+                    if (ImGui.IsItemClicked())
+                    {
+                        SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol, 
+                                                         graphCanvas._symbolBrowser, 
+                                                         _bestMatchYetForCurrentFrame.Connection, 
+                                                         graphCanvas.InverseTransformPosition(_bestMatchYetForCurrentFrame.PositionOnScreen));
+                    }
+                    CustomComponents.TooltipForLastItem("Split and insert new node");
+                }
+                else
+                {
+                    _hoverStartTime = -1;
+                }
+
+                _bestMatchYetForCurrentFrame = null;
+                _bestMatchDistance = float.PositiveInfinity;
+            }
+
+            public static void ResetSnapping()
+            {
+                BestMatchLastFrame = null;
+            }
+
+            public static void RegisterAsPotentialSplit(Symbol.Connection connection, Color color, Vector2 position)
+            {
+                var distance = Vector2.Distance(position, _mousePosition);
+                if (distance > SnapDistance || distance > _bestMatchDistance)
+                {
+                    return;
+                }
+
+                _bestMatchYetForCurrentFrame = new PotentialConnectionSplit()
+                                                   {
+                                                       Connection =  connection,
+                                                       PositionOnScreen =  position,
+                                                       Color = color,
+                                                   };
+                _bestMatchDistance = distance;
+            }
+            
+            
+            public static PotentialConnectionSplit BestMatchLastFrame;
+            private static PotentialConnectionSplit _bestMatchYetForCurrentFrame;
+            private static float _bestMatchDistance = float.PositiveInfinity;
+            private const int SnapDistance = 50;
+            private static Vector2 _mousePosition;
+            private static double _hoverStartTime =-1;
+
+            public class PotentialConnectionSplit
+            {
+                public Vector2 PositionOnScreen;
+                public Symbol.Connection Connection;
+                public Color Color;
+            }
+
+        }
     }
 }

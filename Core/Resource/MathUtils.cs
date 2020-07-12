@@ -151,4 +151,18 @@ namespace T3.Core
             return (int)(a + (b - a) * t);
         }
     }
+
+    public class EaseFunctions
+    {
+        public static float EaseOutElastic(float x) {
+            const float c4 = (float)(2 * Math.PI) / 3;
+
+            return x <= 0f
+                       ? 0f
+                       : x >= 1f
+                           ? 1f
+                           : (float)(Math.Pow(2, -10 * x) * Math.Sin((x * 10 - 0.75) * c4) + 1);
+
+        }
+    }
 }
