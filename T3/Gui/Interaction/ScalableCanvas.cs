@@ -45,8 +45,20 @@ namespace T3.Gui.Interaction
             var pp2 = Vector2.Lerp(p2, p2Target, f);
             var scaleT = (pp2 - pp1) / WindowSize;
 
+
             Scale = scaleT;
             Scroll = pp1;
+
+            var completed = Math.Abs(Scroll.X - ScrollTarget.X) < 0.5f
+                            && Math.Abs(Scroll.Y - ScrollTarget.Y) < 0.5f
+                            && Math.Abs(Scale.X - ScaleTarget.X) < 0.005f
+                            && Math.Abs(Scale.Y - ScaleTarget.Y) < 0.005f;
+            
+            if (completed)
+            {
+                Scroll = ScrollTarget;
+                Scale = ScaleTarget;
+            }
         }
 
         public Scope GetTargetScope()

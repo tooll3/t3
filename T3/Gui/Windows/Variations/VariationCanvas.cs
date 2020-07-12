@@ -128,7 +128,7 @@ namespace T3.Gui.Windows.Variations
             var right = (center + extend) * ThumbnailSize;
             //UserSettings.Config.ZoomSpeed = 20000;
 
-            FitAreaOnCanvas(new ImRect(left, right));
+            //FitAreaOnCanvas(new ImRect(left, right));
         }
 
         private void InitializeCanvasTexture()
@@ -186,8 +186,9 @@ namespace T3.Gui.Windows.Variations
         private void Invalidate()
         {
             var scaleChanged = Math.Abs(Scale.X - _lastScale) > 0.01f;
-            var scrollChanged = Scroll != _lastScroll;
-
+            var scrollChanged = Math.Abs(Scroll.X - _lastScroll.X) > 0.1f 
+                                ||Math.Abs(Scroll.Y - _lastScroll.Y) > 0.1f;
+            
             if (Math.Abs(_lastScatter - Scatter) > 0.01f)
             {
                 _lastScatter = Scatter;
@@ -240,10 +241,14 @@ namespace T3.Gui.Windows.Variations
         private void FillInNextVariation()
         {
             if (_updateCompleted)
+            {
                 return;
+            }
 
             if (_variationWindow.VariationParameters.Count == 0)
+            {
                 return;
+            }
 
             while (_currentOffsetIndexForFocus < SortedOffset.Length)
             {

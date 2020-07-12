@@ -95,14 +95,14 @@ namespace T3.Gui.Windows.Variations
                                     var inputSlot = instance.Inputs.Single(input2 => input2.Id == input.InputDefinition.Id);
 
                                     VariationParameters.Add(new Variation.VariationParameter()
-                                                            {
-                                                                SymbolChildUi = symbolChildUi,
-                                                                Input = input,
-                                                                InstanceIdPath = NodeOperations.BuildIdPathForInstance(instance),
-                                                                Type = p.ValueType,
-                                                                InputSlot = inputSlot,
-                                                                Strength = 1,
-                                                            });
+                                                                {
+                                                                    SymbolChildUi = symbolChildUi,
+                                                                    Input = input,
+                                                                    InstanceIdPath = NodeOperations.BuildIdPathForInstance(instance),
+                                                                    Type = p.ValueType,
+                                                                    InputSlot = inputSlot,
+                                                                    Strength = 1,
+                                                                });
                                 }
 
                                 _variationCanvas.ClearVariations();
@@ -235,10 +235,10 @@ namespace T3.Gui.Windows.Variations
                 {
                     var ty = (float)stepY / steps;
                     var inputVariationsAndWeights = new List<Tuple<Variation, float>>()
-                                                    {
-                                                        new Tuple<Variation, float>(_blendedVariations[0], 1 - ty),
-                                                        new Tuple<Variation, float>(_blendedVariations[1], ty),
-                                                    };
+                                                        {
+                                                            new Tuple<Variation, float>(_blendedVariations[0], 1 - ty),
+                                                            new Tuple<Variation, float>(_blendedVariations[1], ty),
+                                                        };
                     var newVariation = Variation.Mix(parameters, inputVariationsAndWeights, 0, GridCell.Center + new GridCell(0, stepY - steps / 2));
                     _variationCanvas.AddVariationToGrid(newVariation);
                 }
@@ -252,13 +252,13 @@ namespace T3.Gui.Windows.Variations
                         var tx = (float)stepX / steps;
                         var ty = (float)stepY / steps;
                         var inputVariationsAndWeights = new List<Tuple<Variation, float>>()
-                                                        {
-                                                            new Tuple<Variation, float>(_blendedVariations[0], (1 - tx) * (1 - ty)),
-                                                            new Tuple<Variation, float>(_blendedVariations[1], (1 - tx) * (ty)),
-                                                            new Tuple<Variation, float>(_blendedVariations[2], (tx) * (ty)),
-                                                        };
+                                                            {
+                                                                new Tuple<Variation, float>(_blendedVariations[0], (1 - tx) * (1 - ty)),
+                                                                new Tuple<Variation, float>(_blendedVariations[1], (1 - tx) * (ty)),
+                                                                new Tuple<Variation, float>(_blendedVariations[2], (tx) * (ty)),
+                                                            };
 
-                        var gridCell = GridCell.Center + new GridCell(stepX - steps/2, stepY - steps / 2);
+                        var gridCell = GridCell.Center + new GridCell(stepX - steps / 2, stepY - steps / 2);
                         var newVariation = Variation.Mix(parameters, inputVariationsAndWeights, 0, gridCell);
                         _variationCanvas.AddVariationToGrid(newVariation);
                     }
@@ -299,7 +299,7 @@ namespace T3.Gui.Windows.Variations
         public void SaveVariation(Variation variation)
         {
             _savedVariationIndex++;
-            variation.Title = "Untitled " + _savedVariationIndex;
+            variation.Title = GetRandomTitle();
             if (_variationsForSymbols.TryGetValue(_compositionSymbolId, out var list))
             {
                 list.Add(variation);
@@ -309,6 +309,21 @@ namespace T3.Gui.Windows.Variations
                 _variationsForSymbols[_compositionSymbolId] = new List<Variation> { variation };
             }
         }
+
+        private string GetRandomTitle()
+        {
+            return RandomNames[_random.Next(RandomNames.Length)] + " " + RandomNames[_random.Next(RandomNames.Length)];
+        }
+
+        private static Random _random = new Random();
+        private static string[] RandomNames =
+            {
+                "Ace", "Age", "Ego", "Aid", "Aim", "Air", "Ape", "Barf", "Ass", "Axe", "Bad", "Big", "Boa", "Bro", "Bug", "Bum", "Cat", "Cow", "Cult", "Dog",
+                "Duck", "Eel", "Egg", "Eye", "Funk", "Fix", "Fox", "Fun", "Gut", "Hack", "Freak", "Cyber", "Dope", "Hip", "Bit",
+                "Mega", "Bomb", "Hot", "Jump", "Cult", "Ice", "Mad", "Mix", "Mud", "Off", "Ohm", "Oil", "One", "Two", "Four", "Five", "Six", "Pet", "Pig",
+                "Poo", "Pop", "Pot", "Pub", "Raw", "Red", "Green", "Pink", "Black", "White", "Orange", "Fine", "Fog", "Sad", "Sea", "Sex", "Shy", "Sin", "Sir",
+                "Ska", "Toy", "Tea", "Retro", "Monkey", "Top", "Wet", "Zoo"
+            };
 
         public IOutputUi OutputUi { get; set; }
 
