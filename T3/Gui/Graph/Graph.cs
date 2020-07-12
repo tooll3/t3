@@ -314,12 +314,12 @@ namespace T3.Gui.Graph
 
                 if (UserSettings.Config.UseArcConnections)
                 {
-                    Im.DrawArcConnection(new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
-                                         SourcePosition,
-                                         TargetNodeArea,
-                                         TargetPosition,
-                                         color,
-                                         thickness);
+                    ArcConnection.Draw(new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
+                                                    SourcePosition,
+                                                    TargetNodeArea,
+                                                    TargetPosition,
+                                                    color,
+                                                    thickness);
                 }
                 else
                 {

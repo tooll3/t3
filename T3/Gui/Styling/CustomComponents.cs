@@ -250,6 +250,8 @@ namespace T3.Gui
             ImGui.PopStyleColor();
             ImGui.PopFont();
         }
+        
+        
 
         public static void FillWithStripes(ImDrawListPtr drawList, ImRect areaOnScreen, float patternWidth=16)
         {
@@ -271,6 +273,99 @@ namespace T3.Gui
             }
 
             drawList.PopClipRect();
+        }
+
+        public static void DrawSplitter(bool splitVertically, float thickness, ref float size0, ref float size1, float minSize0, float minSize1)
+        {
+            var backupPos = ImGui.GetCursorPos();
+            if (splitVertically)
+                ImGui.SetCursorPosY(backupPos.Y + size0);
+            else
+                ImGui.SetCursorPosX(backupPos.X + size0);
+
+            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
+
+            // We don't draw while active/pressed because as we move the panes the splitter button will be 1 frame late
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 1));
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.6f, 0.6f, 0.6f, 0.10f));
+            ImGui.Button("##Splitter", new Vector2(!splitVertically ? thickness : -1.0f, splitVertically ? thickness : -1.0f));
+            ImGui.PopStyleColor(3);
+
+            ImGui.SetItemAllowOverlap(); // This is to allow having other buttons OVER our splitter. 
+
+            if (ImGui.IsAnyItemHovered())
+            {
+                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS);
+            }
+
+            if (ImGui.IsItemActive())
+            {
+                var mouseDelta = splitVertically ? ImGui.GetIO().MouseDelta.Y : ImGui.GetIO().MouseDelta.X;
+
+                //// Minimum pane size
+                //if (mouse_delta < min_size0 - size0)
+                //    mouse_delta = min_size0 - size0;
+                //if (mouse_delta > size1 - min_size1)
+                //    mouse_delta = size1 - min_size1;
+
+                // Apply resize
+                size0 += mouseDelta;
+                size1 -= mouseDelta;
+            }
+
+            ImGui.SetCursorPos(backupPos);
+        }
+
+        public static void DrawContentRegion()
+        {
+            ImGui.GetForegroundDrawList().AddRect(
+                                                  ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
+                                                  ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos(),
+                                                  Color.White);
+        }
+
+        public static void ToggleButton(string str_id, ref bool v)
+        {
+            var p = ImGui.GetCursorScreenPos();
+            var drawList = ImGui.GetWindowDrawList();
+
+            var height = ImGui.GetFrameHeight();
+            var width = height * 1.55f;
+            var radius = height * 0.50f;
+
+            ImGui.InvisibleButton(str_id, new Vector2(width, height));
+            if (ImGui.IsItemClicked())
+                v = !v;
+
+            var t = v ? 1.0f : 0.0f;
+
+            //ImGuiContext & g = *GImGui;
+            //var g = ImGui.GetCurrentContext();
+            //float ANIM_SPEED = 0.08f;
+            //if (g.LastActiveId == g.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
+            //{
+            //    float t_anim = ImSaturate(g.LastActiveIdTimer / ANIM_SPEED);
+            //    t = v ? (t_anim) : (1.0f - t_anim);
+            //}
+
+            var colBg = ImGui.IsItemHovered()
+                            ? Color.White
+                            : Color.Red;
+
+            drawList.AddRectFilled(p, new Vector2(p.X + width, p.Y + height), colBg, height * 0.5f);
+            drawList.AddCircleFilled(new Vector2(p.X + radius + t * (width - radius * 2.0f), p.Y + radius), radius - 1.5f, Color.White);
+        }
+
+        public static void EmptyWindowMessage(string message)
+        {
+            var center = (ImGui.GetWindowContentRegionMax() + ImGui.GetWindowContentRegionMin()) / 2;
+            var textSize = ImGui.CalcTextSize(message);
+            center -= textSize * 0.5f;
+            ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + center);
+
+            ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.4f).Rgba);
+            ImGui.Text(message);
+            ImGui.PopStyleColor();
         }
     }
 }

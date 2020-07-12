@@ -430,6 +430,7 @@
     <Compile Include="Gui\OutputUi\ValueOutputUi.cs" />
     <Compile Include="Gui\Styling\Fonts.cs" />
     <Compile Include="Gui\Styling\Icons.cs" />
+    <Compile Include="Gui\UiHelpers\ArcConnection.cs" />
     <Compile Include="Gui\UiHelpers\CurvePlot.cs" />
     <Compile Include="Gui\UiHelpers\EnumCache.cs" />
     <Compile Include="Gui\UiHelpers\FileOperations.cs" />

@@ -28,7 +28,7 @@ namespace UiHelpers
 
         private const float TAU = Pi / 180;
 
-        public static void DrawArcConnection(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color, float thickness)
+        public static void Draw(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color, float thickness)
         {
             var drawList = ImGui.GetWindowDrawList();
 
