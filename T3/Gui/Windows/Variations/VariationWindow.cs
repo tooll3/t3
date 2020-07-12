@@ -42,8 +42,22 @@ namespace T3.Gui.Windows.Variations
 
         protected override void DrawContent()
         {
-            ImGui.BeginChild("#params", new Vector2(200, -1));
+            ImGui.BeginChild("params", new Vector2(200, -1));
             {
+                DrawSidePanelContent();
+            }
+            ImGui.EndChild();
+
+            ImGui.SameLine();
+            ImGui.BeginChild("canvas", new Vector2(-1, -1));
+            {
+                _variationCanvas.Draw();
+            }
+            ImGui.EndChild();
+        }
+
+        private void DrawSidePanelContent()
+        {
                 ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.01f, 0, 3);
                 _compositionSymbolId = SelectionManager.GetCompositionForSelection()?.SymbolChildId ?? Guid.Empty;
 
@@ -118,7 +132,15 @@ namespace T3.Gui.Windows.Variations
 
                 ImGui.Separator();
                 ImGui.PushFont(Fonts.FontBold);
-                ImGui.Text("Saved");
+                var itemWidth = ImGui.GetContentRegionAvail().X- 16;
+                ImGui.Text("Snapshots");
+                ImGui.SameLine(itemWidth);
+                if (CustomComponents.IconButton(Icon.Trash, "##line", new Vector2(16, 16)))
+                {
+                    
+                }
+                CustomComponents.TooltipForLastItem("Remove not liked snapshots");
+
                 ImGui.PopFont();
 
                 if (_compositionSymbolId != Guid.Empty && _variationsForSymbols.TryGetValue(_compositionSymbolId, out var savedForComposition))
@@ -200,16 +222,6 @@ namespace T3.Gui.Windows.Variations
                         savedForComposition.Remove(deleteThis);
                     }
                 }
-            }
-            ImGui.EndChild();
-
-            ImGui.SameLine();
-
-            ImGui.BeginChild("canvas", new Vector2(-1, -1));
-            {
-                _variationCanvas.Draw();
-            }
-            ImGui.EndChild();
         }
 
         private void LayoutBlendedVariations()

@@ -374,5 +374,27 @@ namespace T3.Gui
         }
 
         private static Color EmptyMessageColor = new Color(0.3f);
+
+        public static void TooltipForLastItem(string message)
+        {
+            if (!ImGui.IsItemHovered())
+            {
+                _hoverStartTime = -1;
+                return;
+            }
+
+            if (_hoverStartTime <= 0)
+                _hoverStartTime = ImGui.GetTime();
+
+            var hoverDuration = ImGui.GetTime() - _hoverStartTime;
+            if (!(hoverDuration > 0.4))
+                return;
+            
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
+            ImGui.SetTooltip(message);
+            ImGui.PopStyleVar();
+        }
+
+        private static double _hoverStartTime;
     }
 }
