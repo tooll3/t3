@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -7,7 +8,6 @@ using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Interaction;
-
 
 namespace T3.Gui.InputUi
 {
@@ -18,32 +18,32 @@ namespace T3.Gui.InputUi
         public override IInputUi Clone()
         {
             return new FloatInputUi()
-                   {
-                       _max = _max,
-                       _min = _min,
-                       _scale = _scale,
-                       _clamp = _clamp,
-                       InputDefinition = InputDefinition,
-                       Parent = Parent,
-                       PosOnCanvas = PosOnCanvas,
-                       Relevancy = Relevancy,
-                       Size = Size
-                   };
+                       {
+                           Max = Max,
+                           Min = Min,
+                           _scale = _scale,
+                           Clamp = Clamp,
+                           InputDefinition = InputDefinition,
+                           Parent = Parent,
+                           PosOnCanvas = PosOnCanvas,
+                           Relevancy = Relevancy,
+                           Size = Size
+                       };
         }
 
         protected override InputEditStateFlags DrawEditControl(string name, ref float value)
         {
             ImGui.PushID(Id.GetHashCode());
-            var inputEditState = SingleValueEdit.Draw(ref value, -Vector2.UnitX, _min, _max, _clamp, _scale);
+            var inputEditState = SingleValueEdit.Draw(ref value, -Vector2.UnitX, Min, Max, Clamp, Scale);
             ImGui.PopID();
             return inputEditState;
         }
 
-        public  InputEditStateFlags DrawEditControl(ref float value)
+        public InputEditStateFlags DrawEditControl(ref float value)
         {
-            return SingleValueEdit.Draw(ref value, -Vector2.UnitX, _min, _max, _clamp, _scale);
+            return SingleValueEdit.Draw(ref value, -Vector2.UnitX, Min, Max, Clamp, Scale);
         }
-        
+
         protected override void DrawReadOnlyControl(string name, ref float value)
         {
             ImGui.PushStyleColor(ImGuiCol.Text, Color.Blue.Rgba);
@@ -58,10 +58,10 @@ namespace T3.Gui.InputUi
             // The op body captures the mouse event first.
             //
             //SingleValueEdit.Draw(ref floatValue,  -Vector2.UnitX);
-            
+
             return string.Format(T3Ui.FloatNumberFormat, floatValue);
         }
-        
+
         protected override void DrawAnimatedValue(string name, InputSlot<float> inputSlot, Animator animator)
         {
             double time = EvaluationContext.GlobalTimeInBars;
@@ -77,7 +77,7 @@ namespace T3.Gui.InputUi
                     var key = (previousU != null)
                                   ? curve.GetV(previousU.Value).Clone()
                                   : new VDefinition();
-                    
+
                     key.Value = value;
                     curve.AddOrUpdateV(time, key);
                 }
@@ -88,10 +88,10 @@ namespace T3.Gui.InputUi
         {
             base.DrawSettings();
 
-            ImGui.DragFloat("Min", ref _min);
-            ImGui.DragFloat("Max", ref _max);
+            ImGui.DragFloat("Min", ref Min);
+            ImGui.DragFloat("Max", ref Max);
             ImGui.DragFloat("Scale", ref _scale);
-            ImGui.Checkbox("Clamp Range", ref _clamp);
+            ImGui.Checkbox("Clamp Range", ref Clamp);
         }
 
         public override void Write(JsonTextWriter writer)
@@ -99,17 +99,17 @@ namespace T3.Gui.InputUi
             base.Write(writer);
 
             // ReSharper disable CompareOfFloatsByEqualityOperator
-            if (_min != DefaultMin)
-                writer.WriteValue("Min", _min);
+            if (Min != DefaultMin)
+                writer.WriteValue("Min", Min);
 
-            if (_max != DefaultMax)
-                writer.WriteValue("Max", _max);
+            if (Max != DefaultMax)
+                writer.WriteValue("Max", Max);
 
             if (_scale != DefaultScale)
                 writer.WriteValue("Scale", _scale);
-            
-            if(_clamp != false)
-                writer.WriteValue("Clamp", _clamp);
+
+            if (Clamp != false)
+                writer.WriteValue("Clamp", Clamp);
             // ReSharper enable CompareOfFloatsByEqualityOperator
         }
 
@@ -117,19 +117,36 @@ namespace T3.Gui.InputUi
         {
             base.Read(inputToken);
 
-            _min = inputToken["Min"]?.Value<float>() ?? DefaultMin;
-            _max = inputToken["Max"]?.Value<float>() ?? DefaultMax;
+            Min = inputToken["Min"]?.Value<float>() ?? DefaultMin;
+            Max = inputToken["Max"]?.Value<float>() ?? DefaultMax;
             _scale = inputToken["Scale"]?.Value<float>() ?? DefaultScale;
-            _clamp = inputToken["Clamp"]?.Value<bool>() ?? false;
+            Clamp = inputToken["Clamp"]?.Value<bool>() ?? false;
         }
 
-        private float _min = DefaultMin;
-        private float _max = DefaultMax;
+        public float Min = DefaultMin;
+        public float Max = DefaultMax;
         private float _scale = DefaultScale;
-        private bool _clamp = false;
+        public float Scale => GetScaleFromRange(_scale, Min, Max);
+
+        public bool Clamp = false;
 
         private const float DefaultScale = 0.0f;
         private const float DefaultMin = -9999999f;
         private const float DefaultMax = 9999999f;
+
+        public static float GetScaleFromRange(float scale, float min, float max)
+        {
+            // Automatically set scale from range
+            if (scale > 0)
+                return scale;
+
+            // A lame hack because we can't set infinity values in parameter properties
+            if (min < -9999 || max > 9999)
+            {
+                return 0.01f;
+            }
+
+            return Math.Abs(min - max) / 100;
+        }
     }
 }

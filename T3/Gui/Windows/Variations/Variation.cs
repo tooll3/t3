@@ -86,13 +86,6 @@ namespace T3.Gui.Windows.Variations
 
             foreach (var param in variationParameters)
             {
-                //var inconsistentParameters = !useDefault && !neighboursAndWeights.First().Item1.ValuesForParameters.ContainsKey(param);
-                // if (useDefault)
-                // {
-                //     valuesForParameters.Add(param, param.InputSlot.Input.Value);
-                //     continue;
-                // }
-
                 if (param.Type == typeof(float))
                 {
                     var value = 0f;
@@ -101,8 +94,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         if (!neighbourVariation.ValuesForParameters.TryGetValue(param, out var matchingParam))
                             matchingParam = param.InputSlot.Input.Value;
-
-                        //var matchingParam = neighbourVariation.ValuesForParameters[param];
+                        
                         if (matchingParam is InputValue<float> floatInput)
                         {
                             value += floatInput.Value * weight;
@@ -110,33 +102,10 @@ namespace T3.Gui.Windows.Variations
                         }
                     }
 
-                    value *= 1f / sumWeight + ((float)Random.NextDouble() - 0.5f) * scatter;
-                    value += Random.NextFloat(-scatter, scatter);
+                    value *= 1f / sumWeight;
+                    value += Random.NextFloat(-scatter, scatter) * param.ParameterScale * param.ScatterStrength;
                     valuesForParameters.Add(param, new InputValue<float>(value));
                 }
-
-                // if (param.Type == typeof(Vector2))
-                // {
-                //     var value = Vector2.Zero;
-                //     var sumWeight = 0f;
-                //     foreach (var (neighbourVariation, weight) in neighboursAndWeights)
-                //     {
-                //         var matchingParam = neighbourVariation.ValuesForParameters[param];
-                //         if (matchingParam is InputValue<Vector2> typedInput)
-                //         {
-                //             value += typedInput.Value * weight;
-                //             sumWeight += weight;
-                //         }
-                //     }
-                //
-                //     value *= 1f / sumWeight;
-                //     value += new Vector2(
-                //                          Random.NextFloat(-scatter, scatter),
-                //                          Random.NextFloat(-scatter, scatter)
-                //                         );
-                //
-                //     valuesForParameters.Add(param, new InputValue<Vector2>(value));
-                // }
 
                 if (param.Type == typeof(Vector2))
                 {
@@ -146,8 +115,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         if (!neighbourVariation.ValuesForParameters.TryGetValue(param, out var matchingParam))
                             matchingParam = param.InputSlot.Input.Value;
-
-                        //var matchingParam = neighbourVariation.ValuesForParameters[param];
+                        
                         if (matchingParam is InputValue<Vector2> typedInput)
                         {
                             value += typedInput.Value * weight;
@@ -159,7 +127,7 @@ namespace T3.Gui.Windows.Variations
                     value += new Vector2(
                                          Random.NextFloat(-scatter, scatter),
                                          Random.NextFloat(-scatter, scatter)
-                                        );
+                                        ) * param.ParameterScale * param.ScatterStrength;
 
                     valuesForParameters.Add(param, new InputValue<Vector2>(value));
                 }
@@ -173,7 +141,6 @@ namespace T3.Gui.Windows.Variations
                         if (!neighbourVariation.ValuesForParameters.TryGetValue(param, out var matchingParam))
                             matchingParam = param.InputSlot.Input.Value;
                         
-                        //var matchingParam = neighbourVariation.ValuesForParameters[param];
                         if (matchingParam is InputValue<Vector3> typedInput)
                         {
                             value += typedInput.Value * weight;
@@ -186,7 +153,7 @@ namespace T3.Gui.Windows.Variations
                                          Random.NextFloat(-scatter, scatter),
                                          Random.NextFloat(-scatter, scatter),
                                          Random.NextFloat(-scatter, scatter)
-                                        );
+                                        ) * param.ParameterScale * param.ScatterStrength;
 
                     valuesForParameters.Add(param, new InputValue<Vector3>(value));
                 }
@@ -213,7 +180,7 @@ namespace T3.Gui.Windows.Variations
                                          Random.NextFloat(-scatter, scatter),
                                          Random.NextFloat(-scatter, scatter),
                                          Random.NextFloat(-scatter, scatter)
-                                        );
+                                        ) * param.ParameterScale * param.ScatterStrength;
 
                     valuesForParameters.Add(param, new InputValue<Vector4>(value));
                 }
@@ -249,7 +216,11 @@ namespace T3.Gui.Windows.Variations
             public IInputSlot InputSlot { get; set; }
             public SymbolChild.Input Input;
             public Type Type;
-            public float Strength = 1;
+            public float ScatterStrength = 1;
+            public float ParameterScale = 1;
+            public float ParameterMin = float.NegativeInfinity;
+            public float ParameterMax = float.PositiveInfinity;
+            public bool ParameterClamp = false;
         }
 
         public readonly Dictionary<VariationParameter, InputValue> ValuesForParameters;

@@ -54,7 +54,7 @@ namespace T3.Gui
                            () => new ValueOutputUi<System.Numerics.Vector2>());
             RegisterUiType(typeof(System.Numerics.Vector3), new Size2UiProperties(), () => new Float3InputUi(),
                            () => new ValueOutputUi<System.Numerics.Vector3>());
-            RegisterUiType(typeof(System.Numerics.Vector4), new Size2UiProperties(), () => new Vector4InputUi(),
+            RegisterUiType(typeof(System.Numerics.Vector4), new Size2UiProperties(), () => new Float4InputUi(),
                            () => new ValueOutputUi<System.Numerics.Vector4>());
             RegisterUiType(typeof(System.Text.StringBuilder), new StringUiProperties(), () => new FallbackInputUi<StringBuilder>(),
                            () => new ValueOutputUi<System.Text.StringBuilder>());

@@ -9,13 +9,13 @@ using T3.Gui.Interaction;
 
 namespace T3.Gui.InputUi.SingleControl
 {
-    public class Vector4InputUi : InputValueUi<Vector4>
+    public class Float4InputUi : InputValueUi<Vector4>
     {
         public override bool IsAnimatable => true;
 
         public override IInputUi Clone()
         {
-            return new Vector4InputUi()
+            return new Float4InputUi()
                    {
                        InputDefinition = InputDefinition,
                        Parent = Parent,
@@ -42,7 +42,7 @@ namespace T3.Gui.InputUi.SingleControl
                                                            size: size, 
                                                            min: 0, 
                                                            max:1, 
-                                                           true,     // clamping at 1 means that HDRs values have to done with the color picker
+                                                           true,     // clamping at 1 means that HDRs values have to be done with the color picker
                                                            0.01f,    // we can't use auto, because range differs 
                                                            "{0:0.00}"); // limit precision display, because we don't have much space
                 ImGui.PopID();

@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.InputUi;
+using T3.Gui.InputUi.SingleControl;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -44,9 +47,11 @@ namespace T3.Gui.Windows.Variations
         {
             ImGui.BeginChild("params", new Vector2(200, -1));
             {
+                ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(4,4));
                 DrawSidePanelContent();
+                ImGui.EndChild();
             }
-            ImGui.EndChild();
+            ImGui.PopStyleVar();
 
             ImGui.SameLine();
             ImGui.BeginChild("canvas", new Vector2(-1, -1));
@@ -58,170 +63,212 @@ namespace T3.Gui.Windows.Variations
 
         private void DrawSidePanelContent()
         {
-                ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.01f, 0, 3);
-                _compositionSymbolId = SelectionManager.GetCompositionForSelection()?.SymbolChildId ?? Guid.Empty;
+            // List selected operators and parameters
+            ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.1f, 0, 100);
+            _compositionSymbolId = SelectionManager.GetCompositionForSelection()?.SymbolChildId ?? Guid.Empty;
 
-                var selectedSymbolChildUis = SelectionManager.GetSelectedSymbolChildUis();
+            var selectedSymbolChildUis = SelectionManager.GetSelectedSymbolChildUis();
 
-                // Remove no longer selected parameters
-                var symbolChildUis = selectedSymbolChildUis as SymbolChildUi[] ?? selectedSymbolChildUis.ToArray();
-                for (var index = VariationParameters.Count - 1; index >= 0; index--)
+            // Remove no longer selected parameters
+            var symbolChildUis = selectedSymbolChildUis as SymbolChildUi[] ?? selectedSymbolChildUis.ToArray();
+            for (var index = VariationParameters.Count - 1; index >= 0; index--)
+            {
+                if (!symbolChildUis.Contains(VariationParameters[index].SymbolChildUi))
                 {
-                    if (!symbolChildUis.Contains(VariationParameters[index].SymbolChildUi))
-                    {
-                        VariationParameters.RemoveAt(index);
-                    }
+                    VariationParameters.RemoveAt(index);
                 }
+            }
 
-                foreach (var symbolChildUi in symbolChildUis)
-                {
-                    ImGui.PushFont(Fonts.FontBold);
-                    ImGui.Selectable(symbolChildUi.SymbolChild.ReadableName);
-                    ImGui.PopFont();
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-                    ImGui.PushID(symbolChildUi.Id.GetHashCode());
-
-                    foreach (var input in symbolChildUi.SymbolChild.InputValues.Values)
-                    {
-                        var p = input.DefaultValue;
-
-                        // TODO: check if input is connected
-                        if (p.ValueType == typeof(float)
-                            || p.ValueType == typeof(Vector2)
-                            || p.ValueType == typeof(Vector3)
-                            || p.ValueType == typeof(Vector4)
-                            )
-                        {
-                            var matchingParam =
-                                VariationParameters.FirstOrDefault(variationParam =>
-                                                                       input == variationParam.Input && symbolChildUi.Id == variationParam.SymbolChildUi.Id);
-                            var selected = matchingParam != null;
-
-                            if (ImGui.Selectable(input.Name, selected))
-                            {
-                                if (selected)
-                                {
-                                    VariationParameters.Remove(matchingParam);
-                                }
-                                else
-                                {
-                                    var instance = SelectionManager.GetInstanceForSymbolChildUi(symbolChildUi);
-                                    var inputSlot = instance.Inputs.Single(input2 => input2.Id == input.InputDefinition.Id);
-
-                                    VariationParameters.Add(new Variation.VariationParameter()
-                                                                {
-                                                                    SymbolChildUi = symbolChildUi,
-                                                                    Input = input,
-                                                                    InstanceIdPath = NodeOperations.BuildIdPathForInstance(instance),
-                                                                    Type = p.ValueType,
-                                                                    InputSlot = inputSlot,
-                                                                    Strength = 1,
-                                                                });
-                                }
-
-                                _variationCanvas.ClearVariations();
-                            }
-                        }
-                    }
-
-                    ImGui.PopID();
-
-                    ImGui.Dummy(Spacing);
-                    ImGui.PopStyleColor();
-                }
-
-                ImGui.Separator();
+            foreach (var symbolChildUi in symbolChildUis)
+            {
+                ImGui.Indent(5);
                 ImGui.PushFont(Fonts.FontBold);
-                var itemWidth = ImGui.GetContentRegionAvail().X- 16;
-                ImGui.Text("Snapshots");
-                ImGui.SameLine(itemWidth);
-                if (CustomComponents.IconButton(Icon.Trash, "##line", new Vector2(16, 16)))
-                {
-                    
-                }
-                CustomComponents.TooltipForLastItem("Remove not liked snapshots");
-
+                ImGui.Selectable(symbolChildUi.SymbolChild.ReadableName);
                 ImGui.PopFont();
+                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                ImGui.PushID(symbolChildUi.Id.GetHashCode());
 
-                if (_compositionSymbolId != Guid.Empty && _variationsForSymbols.TryGetValue(_compositionSymbolId, out var savedForComposition))
+                foreach (var input in symbolChildUi.SymbolChild.InputValues.Values)
                 {
-                    Variation deleteThis = null;
-                    foreach (var variation in savedForComposition)
+                    var p = input.DefaultValue;
+
+                    // TODO: check if input is connected
+                    if (p.ValueType == typeof(float)
+                        || p.ValueType == typeof(Vector2)
+                        || p.ValueType == typeof(Vector3)
+                        || p.ValueType == typeof(Vector4)
+                        )
                     {
-                        var isMatching = CheckFavoriteMatchesNodeSelection(variation);
-                        ImGui.PushStyleColor(ImGuiCol.Text, isMatching ? Color.Gray.Rgba : NonMatchingVarationsColor);
-                        ImGui.PushID(variation.GetHashCode());
+                        var matchingParam =
+                            VariationParameters.FirstOrDefault(variationParam =>
+                                                                   input == variationParam.Input && symbolChildUi.Id == variationParam.SymbolChildUi.Id);
+                        var selected = matchingParam != null;
+
+                        if (ImGui.Selectable(input.Name, selected))
                         {
-                            var isSelected = _blendedVariations.Contains(variation);
-                            if (CustomComponents.IconButton(isSelected ? Icon.ChevronRight : Icon.Pin, "selection", new Vector2(16, 16)))
+                            if (selected)
                             {
-                                if (isSelected)
-                                {
-                                    _blendedVariations.Remove(variation);
-                                }
-                                else
-                                {
-                                    _blendedVariations.Add(variation);
-                                }
-
-                                LayoutBlendedVariations();
-                            }
-
-                            ImGui.SameLine();
-
-                            if (ImGui.Selectable(variation.Title, false, 0, new Vector2(ImGui.GetWindowWidth() - 32, 0)))
-                            {
-                                SelectVariation(variation);
-                            }
-
-                            if (ImGui.IsItemHovered())
-                            {
-                                if (_lastHoveredVariation == null)
-                                {
-                                    variation.KeepCurrentAndApplyNewValues();
-                                    _lastHoveredVariation = variation;
-                                }
-                                else if (_lastHoveredVariation != variation)
-                                {
-                                    _lastHoveredVariation.RestoreValues();
-                                    variation.KeepCurrentAndApplyNewValues();
-                                    _lastHoveredVariation = variation;
-                                }
-
-                                // Hover relevant operators
-                                foreach (var param in _lastHoveredVariation.ValuesForParameters.Keys)
-                                {
-                                    T3Ui.AddHoveredId(param.SymbolChildUi.Id);
-                                }
+                                VariationParameters.Remove(matchingParam);
                             }
                             else
                             {
-                                var wasHoveredBefore = _lastHoveredVariation == variation;
-                                if (wasHoveredBefore)
+                                var instance = SelectionManager.GetInstanceForSymbolChildUi(symbolChildUi);
+                                var inputSlot = instance.Inputs.Single(input2 => input2.Id == input.InputDefinition.Id);
+                                
+                                //var xxx = symbolChildUi.SymbolChild.Symbol
+                                var scale = 1f;
+                                var min = float.NegativeInfinity;
+                                var max = float.PositiveInfinity;
+                                var clamp = false;
+                                
+                                var symbolUi = SymbolUiRegistry.Entries[symbolChildUi.SymbolChild.Symbol.Id];
+                                var inputUi = symbolUi.InputUis[input.InputDefinition.Id];
+                                switch (inputUi)
                                 {
-                                    _lastHoveredVariation.RestoreValues();
-                                    _lastHoveredVariation = null;
+                                    case FloatInputUi floatInputUi:
+                                        scale = floatInputUi.Scale;
+                                        min = floatInputUi.Min;
+                                        max = floatInputUi.Max;
+                                        clamp = floatInputUi.Clamp;
+                                        break;
+                                    case Float2InputUi float2InputUi:
+                                        scale = float2InputUi.Scale;
+                                        min = float2InputUi.Min;
+                                        max = float2InputUi.Max;
+                                        clamp = float2InputUi.Clamp;
+                                        break;
+                                    case Float3InputUi float3InputUi:
+                                        scale = float3InputUi.Scale;
+                                        min = float3InputUi.Min;
+                                        max = float3InputUi.Max;
+                                        clamp = float3InputUi.Clamp;
+                                        break;
+                                    case Float4InputUi float4InputUi:
+                                        scale = 0.02f; // Reasonable default for color variations
+                                        break;
                                 }
+
+                                VariationParameters.Add(new Variation.VariationParameter()
+                                                            {
+                                                                SymbolChildUi = symbolChildUi,
+                                                                Input = input,
+                                                                InstanceIdPath = NodeOperations.BuildIdPathForInstance(instance),
+                                                                Type = p.ValueType,
+                                                                InputSlot = inputSlot,
+                                                                ParameterScale = scale,
+                                                                ParameterMin = min,
+                                                                ParameterMax = max,
+                                                                ParameterClamp = clamp,
+                                                            });
                             }
 
-                            ImGui.SameLine();
+                            _variationCanvas.ClearVariations();
+                        }
+                    }
+                }
 
-                            // Delete button
-                            if (CustomComponents.IconButton(Icon.Loop, "selection", new Vector2(16, 16)))
+                ImGui.PopID();
+
+                ImGui.Dummy(Spacing);
+                ImGui.PopStyleColor();
+            }
+
+            // List Snapshots
+
+            if (_compositionSymbolId != Guid.Empty && _variationsForSymbols.TryGetValue(_compositionSymbolId, out var savedForComposition))
+            {
+                ImGui.Separator();
+                
+                // Header
+                ImGui.PushFont(Fonts.FontBold);
+                var itemWidth = ImGui.GetContentRegionAvail().X - 16;
+                ImGui.Text("Snapshots");
+                ImGui.PopFont();
+                ImGui.SameLine(itemWidth);
+                
+                if (CustomComponents.IconButton(Icon.Trash, "##line", new Vector2(16, 16)))
+                {
+                    Log.Debug("Not implemented");
+                }
+                CustomComponents.TooltipForLastItem("Remove not liked snapshots");
+
+                Variation deleteAfterIteration = null;
+                foreach (var variation in savedForComposition)
+                {
+                    var isMatching = CheckFavoriteMatchesNodeSelection(variation);
+                    ImGui.PushStyleColor(ImGuiCol.Text, isMatching ? Color.Gray.Rgba : NonMatchingVarationsColor);
+                    ImGui.PushID(variation.GetHashCode());
+                    {
+                        var isSelected = _blendedVariations.Contains(variation);
+                        if (CustomComponents.IconButton(isSelected ? Icon.ChevronRight : Icon.Pin, "selection", new Vector2(16, 16)))
+                        {
+                            if (isSelected)
                             {
-                                deleteThis = variation;
+                                _blendedVariations.Remove(variation);
+                            }
+                            else
+                            {
+                                _blendedVariations.Add(variation);
+                            }
+
+                            LayoutBlendedVariations();
+                        }
+
+                        ImGui.SameLine();
+
+                        if (ImGui.Selectable(variation.Title, false, 0, new Vector2(ImGui.GetWindowWidth() - 32, 0)))
+                        {
+                            SelectVariation(variation);
+                        }
+
+                        if (ImGui.IsItemHovered())
+                        {
+                            if (_lastHoveredVariation == null)
+                            {
+                                variation.KeepCurrentAndApplyNewValues();
+                                _lastHoveredVariation = variation;
+                            }
+                            else if (_lastHoveredVariation != variation)
+                            {
+                                _lastHoveredVariation.RestoreValues();
+                                variation.KeepCurrentAndApplyNewValues();
+                                _lastHoveredVariation = variation;
+                            }
+
+                            // Hover relevant operators
+                            foreach (var param in _lastHoveredVariation.ValuesForParameters.Keys)
+                            {
+                                T3Ui.AddHoveredId(param.SymbolChildUi.Id);
+                            }
+                        }
+                        else
+                        {
+                            var wasHoveredBefore = _lastHoveredVariation == variation;
+                            if (wasHoveredBefore)
+                            {
+                                _lastHoveredVariation.RestoreValues();
+                                _lastHoveredVariation = null;
                             }
                         }
 
-                        ImGui.PopStyleColor();
-                        ImGui.PopID();
+                        ImGui.SameLine();
+
+                        // Delete button
+                        if (CustomComponents.IconButton(Icon.Loop, "selection", new Vector2(16, 16)))
+                        {
+                            deleteAfterIteration = variation;
+                        }
                     }
 
-                    if (deleteThis != null)
-                    {
-                        savedForComposition.Remove(deleteThis);
-                    }
+                    ImGui.PopStyleColor();
+                    ImGui.PopID();
                 }
+
+                if (deleteAfterIteration != null)
+                {
+                    savedForComposition.Remove(deleteAfterIteration);
+                }
+            }
         }
 
         private void LayoutBlendedVariations()
@@ -328,6 +375,7 @@ namespace T3.Gui.Windows.Variations
         }
 
         private static Random _random = new Random();
+
         private static string[] RandomNames =
             {
                 "Ace", "Age", "Ego", "Aid", "Aim", "Air", "Ape", "Barf", "Ass", "Axe", "Bad", "Big", "Boa", "Bro", "Bug", "Bum", "Cat", "Cow", "Cult", "Dog",

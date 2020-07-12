@@ -9,7 +9,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Interaction;
 
-
 namespace T3.Gui.InputUi
 {
     public class Float2InputUi : InputValueUi<Vector2>
@@ -20,10 +19,10 @@ namespace T3.Gui.InputUi
         {
             return new Float2InputUi()
                    {
-                       _max = _max,
-                       _min = _min,
+                       Max = Max,
+                       Min = Min,
                        _scale = _scale,
-                       _clamp = _clamp,
+                       Clamp = Clamp,
                        InputDefinition = InputDefinition,
                        Parent = Parent,
                        PosOnCanvas = PosOnCanvas,
@@ -35,7 +34,7 @@ namespace T3.Gui.InputUi
         protected override InputEditStateFlags DrawEditControl(string name, ref Vector2 float2Value)
         {
             float2Value.CopyTo(_components);
-            var inputEditState = VectorValueEdit.Draw(_components, _min, _max, _scale, _clamp);
+            var inputEditState = VectorValueEdit.Draw(_components, Min, Max, Scale, Clamp);
             float2Value = new Vector2(_components[0], _components[1]);
 
             return inputEditState;
@@ -74,7 +73,7 @@ namespace T3.Gui.InputUi
                 _components[index] = (float)curves[index].GetSampledValue(time);
             }
 
-            var inputEditState = VectorValueEdit.Draw(_components, _min, _max, _scale, _clamp);
+            var inputEditState = VectorValueEdit.Draw(_components, Min, Max, Scale, Clamp);
             if (inputEditState == InputEditStateFlags.Nothing)
                 return;
 
@@ -90,10 +89,10 @@ namespace T3.Gui.InputUi
         {
             base.DrawSettings();
 
-            ImGui.DragFloat("Min", ref _min);
-            ImGui.DragFloat("Max", ref _max);
+            ImGui.DragFloat("Min", ref Min);
+            ImGui.DragFloat("Max", ref Max);
             ImGui.DragFloat("Scale", ref _scale);
-            ImGui.Checkbox("Clamp Range", ref _clamp);
+            ImGui.Checkbox("Clamp Range", ref Clamp);
         }
 
         public override void Write(JsonTextWriter writer)
@@ -101,17 +100,17 @@ namespace T3.Gui.InputUi
             base.Write(writer);
 
             // ReSharper disable CompareOfFloatsByEqualityOperator
-            if (_min != DefaultMin)
-                writer.WriteValue("Min", _min);
+            if (Min != DefaultMin)
+                writer.WriteValue("Min", Min);
 
-            if (_max != DefaultMax)
-                writer.WriteValue("Max", _max);
+            if (Max != DefaultMax)
+                writer.WriteValue("Max", Max);
 
             if (_scale != DefaultScale)
                 writer.WriteValue("Scale", _scale);
             
-            if(_clamp != false)
-                writer.WriteValue("Clamp", _clamp);
+            if(Clamp != false)
+                writer.WriteValue("Clamp", Clamp);
             // ReSharper enable CompareOfFloatsByEqualityOperator
         }
 
@@ -119,16 +118,17 @@ namespace T3.Gui.InputUi
         {
             base.Read(inputToken);
 
-            _min = inputToken["Min"]?.Value<float>() ?? DefaultMin;
-            _max = inputToken["Max"]?.Value<float>() ?? DefaultMax;
+            Min = inputToken["Min"]?.Value<float>() ?? DefaultMin;
+            Max = inputToken["Max"]?.Value<float>() ?? DefaultMax;
             _scale = inputToken["Scale"]?.Value<float>() ?? DefaultScale;
-            _clamp = inputToken["Clamp"]?.Value<bool>() ?? false;
+            Clamp = inputToken["Clamp"]?.Value<bool>() ?? false;
         }
 
-        private float _min = DefaultMin;
-        private float _max = DefaultMax;
+        public float Min = DefaultMin;
+        public float Max = DefaultMax;
         private float _scale = DefaultScale;
-        private bool _clamp = false;
+        public float Scale => FloatInputUi.GetScaleFromRange(_scale, Min, Max);
+        public bool Clamp = false;
 
         private const float DefaultScale = 0.0f;
         private const float DefaultMin = -9999999f;

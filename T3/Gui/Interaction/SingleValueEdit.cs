@@ -60,19 +60,7 @@ namespace T3.Gui.Interaction
                                                string format = "{0:0.000}"
                                                )
         {
-            // Automatically set scale from range
-            if (scale <= 0)
-            {
-                // A lame hack because we can't set infinity values in parameter properties
-                if (min < -9999 || max > 9999)
-                {
-                    scale = 0.01f;
-                }
-                else
-                {
-                    scale = (float)Math.Abs(min - max) / 100;
-                }
-            }
+
             
             var io = ImGui.GetIO();
             var id = ImGui.GetID("jog");
