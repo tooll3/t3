@@ -1,6 +1,8 @@
 ﻿using ImGuiNET;
 using System;
+using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 using T3.Core;
 using T3.Core.Logging;
@@ -250,14 +252,12 @@ namespace T3.Gui
             ImGui.PopStyleColor();
             ImGui.PopFont();
         }
-        
-        
 
-        public static void FillWithStripes(ImDrawListPtr drawList, ImRect areaOnScreen, float patternWidth=16)
+        public static void FillWithStripes(ImDrawListPtr drawList, ImRect areaOnScreen, float patternWidth = 16)
         {
             drawList.PushClipRect(areaOnScreen.Min, areaOnScreen.Max);
             var lineColor = new Color(0f, 0f, 0f, 0.2f);
-            var stripeOffset = GraphCanvas.Current == null ? patternWidth : (patternWidth/2 * GraphCanvas.Current.Scale.X);
+            var stripeOffset = GraphCanvas.Current == null ? patternWidth : (patternWidth / 2 * GraphCanvas.Current.Scale.X);
             var lineWidth = stripeOffset / 2.7f;
 
             var h = areaOnScreen.GetHeight();
@@ -358,14 +358,21 @@ namespace T3.Gui
 
         public static void EmptyWindowMessage(string message)
         {
-            var center = (ImGui.GetWindowContentRegionMax() + ImGui.GetWindowContentRegionMin()) / 2;
-            var textSize = ImGui.CalcTextSize(message);
-            center -= textSize * 0.5f;
-            ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + center);
+            var center = (ImGui.GetWindowContentRegionMax() + ImGui.GetWindowContentRegionMin()) / 2 + ImGui.GetWindowPos();
+            var lines = message.Split('\n').ToArray();
+            var textLineHeight = ImGui.GetTextLineHeight();
+            var y = center.Y - lines.Length * textLineHeight / 2;
+            var drawList = ImGui.GetWindowDrawList();
 
-            ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.4f).Rgba);
-            ImGui.Text(message);
-            ImGui.PopStyleColor();
+            foreach (var line in lines)
+            {
+                var textSize = ImGui.CalcTextSize(line);
+                var position = new Vector2(center.X - textSize.X / 2, y);
+                drawList.AddText(position, EmptyMessageColor, line);
+                y += textLineHeight;
+            }
         }
+
+        private static Color EmptyMessageColor = new Color(0.3f);
     }
 }

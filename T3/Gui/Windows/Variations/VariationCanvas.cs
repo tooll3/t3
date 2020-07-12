@@ -43,7 +43,7 @@ namespace T3.Gui.Windows.Variations
             var instance = outputWindow.ShownInstance;
             if (instance == null || instance.Outputs == null || instance.Outputs.Count == 0)
             {
-                ImGui.Text("Nothing selected");
+                CustomComponents.EmptyWindowMessage("To explore variations\nselect a graph operator and\none or more of its parameters.");
                 return;
             }
 
