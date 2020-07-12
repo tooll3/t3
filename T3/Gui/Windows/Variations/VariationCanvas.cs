@@ -50,7 +50,7 @@ namespace T3.Gui.Windows.Variations
             _firstOutputSlot = instance.Outputs[0];
             if (!(_firstOutputSlot is Slot<Texture2D> textureSlot))
             {
-                ImGui.Text("Output should be texture");
+                CustomComponents.EmptyWindowMessage("Output window must be pinned\nto a texture operator.");
                 _firstOutputSlot = null;
                 return;
             }
@@ -70,6 +70,8 @@ namespace T3.Gui.Windows.Variations
             FillInNextVariation();
             UpdateCanvas();
             Invalidate();
+
+
 
             var drawlist = ImGui.GetWindowDrawList();
 
@@ -91,15 +93,19 @@ namespace T3.Gui.Windows.Variations
             }
 
             _hoveringVariation?.RestoreValues();
-            if (ImGui.IsWindowHovered())
+            var size = THelpers.GetContentRegionArea();
+            ImGui.InvisibleButton("variationCanvas", size.GetSize());
+
+            if (ImGui.IsItemHovered())
             {
                 _hoveringVariation = CreateVariationAtMouseMouse();
 
                 if (_hoveringVariation != null)
                 {
-                    if (ImGui.IsMouseReleased(0))
+                    if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                     {
                         var savedVariation = _hoveringVariation.Clone();
+                        
                         _variationWindow.SaveVariation(savedVariation);
                         savedVariation.ApplyPermanently();
                     }
@@ -128,7 +134,7 @@ namespace T3.Gui.Windows.Variations
             var right = (center + extend) * ThumbnailSize;
             //UserSettings.Config.ZoomSpeed = 20000;
 
-            //FitAreaOnCanvas(new ImRect(left, right));
+            FitAreaOnCanvas(new ImRect(left, right));
         }
 
         private void InitializeCanvasTexture()
@@ -312,7 +318,7 @@ namespace T3.Gui.Windows.Variations
                 posInCell.Y -= halfSize.Y;
             }
 
-            ImGui.GetForegroundDrawList().AddRect(region.Min, region.Max, Color.Orange);
+            ImGui.GetWindowDrawList().AddRect(region.Min, region.Max, Color.Orange);
 
             var clamp = cellSize / 2f * HoverEdgeBlendFactor;
             var xWeight = posInCell.X.Clamp(-clamp.X, clamp.X) / clamp.X / 2 + 0.5f;
@@ -445,7 +451,7 @@ namespace T3.Gui.Windows.Variations
             new GridCell(-1, 0),
         };
 
-        public float Scatter = 0.5f;
+        public float Scatter = 20f;
         private float _lastScatter;
         private ISlot _firstOutputSlot;
 

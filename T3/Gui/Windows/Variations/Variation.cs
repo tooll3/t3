@@ -4,6 +4,7 @@ using System.Linq;
 using T3.Core;
 using T3.Core.Operator;
 using SharpDX;
+using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
@@ -17,7 +18,8 @@ namespace T3.Gui.Windows.Variations
     {
         public GridCell GridCell;
         public bool ThumbnailNeedsUpdate;
-        public string Title; 
+        public string Title;
+        public bool IsLiked;
 
         private Variation(Dictionary<VariationParameter, InputValue> valuesForParameters)
         {
@@ -31,23 +33,34 @@ namespace T3.Gui.Windows.Variations
             newVariation.UpdateUndoCommand();
             return newVariation;
         }
-
         
+
+        public List<Instance> GetInvolvedInstances()
+        {
+            var instances = new HashSet<Instance>();
+
+            foreach (var p in ValuesForParameters.Keys)
+            {
+                instances.Add(NodeOperations.GetInstanceFromIdPath(p.InstanceIdPath));
+            }
+
+            return instances.ToList();
+        }
+
         public void KeepCurrentAndApplyNewValues()
         {
             _changeCommand = CreateChangeCommand();
             _changeCommand.Do();
         }
 
-        
         public void ApplyPermanently()
         {
             if (_changeCommand == null)
                 return;
-            
+
             UndoRedoStack.AddAndExecute(_changeCommand);
         }
-        
+
         public void RestoreValues()
         {
             _changeCommand?.Undo();
@@ -65,7 +78,7 @@ namespace T3.Gui.Windows.Variations
         {
             _changeCommand = CreateChangeCommand();
         }
-        
+
         public static Variation Mix(IEnumerable<VariationParameter> variationParameters,
                                     IReadOnlyCollection<Tuple<Variation, float>> neighboursAndWeights, float scatter,
                                     GridCell cell = new GridCell())
@@ -78,10 +91,11 @@ namespace T3.Gui.Windows.Variations
                 {
                     valuesForParameters.Add(param, param.InputSlot.Input.Value);
                 }
+
                 return new Variation(valuesForParameters)
-                       {
-                           GridCell = cell,
-                       };
+                           {
+                               GridCell = cell,
+                           };
             }
 
             foreach (var param in variationParameters)
@@ -94,7 +108,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         if (!neighbourVariation.ValuesForParameters.TryGetValue(param, out var matchingParam))
                             matchingParam = param.InputSlot.Input.Value;
-                        
+
                         if (matchingParam is InputValue<float> floatInput)
                         {
                             value += floatInput.Value * weight;
@@ -115,7 +129,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         if (!neighbourVariation.ValuesForParameters.TryGetValue(param, out var matchingParam))
                             matchingParam = param.InputSlot.Input.Value;
-                        
+
                         if (matchingParam is InputValue<Vector2> typedInput)
                         {
                             value += typedInput.Value * weight;
@@ -140,7 +154,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         if (!neighbourVariation.ValuesForParameters.TryGetValue(param, out var matchingParam))
                             matchingParam = param.InputSlot.Input.Value;
-                        
+
                         if (matchingParam is InputValue<Vector3> typedInput)
                         {
                             value += typedInput.Value * weight;
@@ -166,7 +180,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         if (!neighbourVariation.ValuesForParameters.TryGetValue(param, out var matchingParam))
                             matchingParam = param.InputSlot.Input.Value;
-                            
+
                         if (matchingParam is InputValue<Vector4> typedInput)
                         {
                             value += typedInput.Value * weight;
@@ -187,9 +201,9 @@ namespace T3.Gui.Windows.Variations
             }
 
             return new Variation(valuesForParameters)
-                   {
-                       GridCell = cell,
-                   };
+                       {
+                           GridCell = cell,
+                       };
         }
 
         private MacroCommand CreateChangeCommand()
@@ -199,9 +213,9 @@ namespace T3.Gui.Windows.Variations
             foreach (var (param, value) in ValuesForParameters)
             {
                 var newCommand = new ChangeInputValueCommand(param.Instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input)
-                                 {
-                                     Value = value,
-                                 };
+                                     {
+                                         Value = value,
+                                     };
                 commands.Add(newCommand);
             }
 
@@ -221,7 +235,9 @@ namespace T3.Gui.Windows.Variations
             public float ParameterMin = float.NegativeInfinity;
             public float ParameterMax = float.PositiveInfinity;
             public bool ParameterClamp = false;
+            public bool IsHidden;
         }
+
 
         public readonly Dictionary<VariationParameter, InputValue> ValuesForParameters;
 

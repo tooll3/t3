@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
@@ -54,13 +55,15 @@ namespace T3.Gui.Windows.Variations
             ImGui.PopStyleVar();
 
             ImGui.SameLine();
-            ImGui.BeginChild("canvas", new Vector2(-1, -1));
+            ImGui.BeginChild("canvas", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
             {
                 _variationCanvas.Draw();
             }
             ImGui.EndChild();
         }
 
+        private static float _strengthBeforeDrag = 0;
+        
         private void DrawSidePanelContent()
         {
             // List selected operators and parameters
@@ -87,9 +90,11 @@ namespace T3.Gui.Windows.Variations
                 ImGui.PopFont();
                 ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
                 ImGui.PushID(symbolChildUi.Id.GetHashCode());
-
+                
+                var keepX = ImGui.GetCursorPosX();
                 foreach (var input in symbolChildUi.SymbolChild.InputValues.Values)
                 {
+                    ImGui.PushID(input.InputDefinition.Id.GetHashCode());
                     var p = input.DefaultValue;
 
                     // TODO: check if input is connected
@@ -104,6 +109,36 @@ namespace T3.Gui.Windows.Variations
                                                                    input == variationParam.Input && symbolChildUi.Id == variationParam.SymbolChildUi.Id);
                         var selected = matchingParam != null;
 
+                        if (matchingParam != null)
+                        {
+                            var keep = ImGui.GetCursorPos();
+                            var formattedStrength = $"×{matchingParam.ScatterStrength:F1}";
+                            var size = ImGui.CalcTextSize(formattedStrength);
+                            ImGui.SetCursorPosX(ImGui.GetContentRegionAvail().X- size.X - 5);
+                            ImGui.Text(formattedStrength);
+                            ImGui.SetCursorPos(keep);
+                            ImGui.SetCursorPosX(ImGui.GetContentRegionAvail().X- 50);
+                            ImGui.InvisibleButton("ScatterStrengthFactor", new Vector2(50, ImGui.GetTextLineHeight()));
+                            if (ImGui.IsItemHovered() || ImGui.IsItemActive())
+                            {
+                                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
+                            }
+                            if (ImGui.IsItemActivated())
+                            {
+                                _strengthBeforeDrag = matchingParam.ScatterStrength;
+                            }
+                            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                            {
+                                matchingParam.ScatterStrength = (_strengthBeforeDrag + ImGui.GetMouseDragDelta().X * 0.02f).Clamp(0, 100f);
+                            }
+                            if (ImGui.IsItemDeactivated())
+                            {
+                                _variationCanvas.ClearVariations();
+                            }
+                            ImGui.SameLine();
+                            ImGui.SetCursorPosX(keepX);
+                        }
+                        
                         if (ImGui.Selectable(input.Name, selected))
                         {
                             if (selected)
@@ -165,16 +200,17 @@ namespace T3.Gui.Windows.Variations
                             _variationCanvas.ClearVariations();
                         }
                     }
+                    ImGui.PopID();
                 }
 
                 ImGui.PopID();
 
                 ImGui.Dummy(Spacing);
                 ImGui.PopStyleColor();
+                ImGui.Unindent(5);
             }
 
             // List Snapshots
-
             if (_compositionSymbolId != Guid.Empty && _variationsForSymbols.TryGetValue(_compositionSymbolId, out var savedForComposition))
             {
                 ImGui.Separator();
@@ -254,9 +290,10 @@ namespace T3.Gui.Windows.Variations
                         ImGui.SameLine();
 
                         // Delete button
-                        if (CustomComponents.IconButton(Icon.Loop, "selection", new Vector2(16, 16)))
+                        if (CustomComponents.IconButton(variation.IsLiked ? Icon.Heart : Icon.HeartOutlined, "selection", new Vector2(16, 16)))
                         {
-                            deleteAfterIteration = variation;
+                            variation.IsLiked = !variation.IsLiked;
+                            //deleteAfterIteration = variation;
                         }
                     }
 
