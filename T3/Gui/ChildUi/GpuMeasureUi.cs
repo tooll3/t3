@@ -29,7 +29,7 @@ namespace T3.Gui.ChildUi
                 ImGui.Text(symbolChild.Name);
             }
 
-            ImGui.Text($"{measaureInstance.LastMeasureInMicroSeconds}us");
+            ImGui.Text($"{measaureInstance.LastMeasureInMicroSeconds}µs");
             ImGui.EndGroup();
             ImGui.PopFont();
             
