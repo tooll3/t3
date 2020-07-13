@@ -1,11 +1,13 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
@@ -43,12 +45,17 @@ namespace T3.Gui
         
         private void TriggerGlobalActionsFromKeyBindings()
         {
-            foreach (var (id, action) in UserActionRegistry.Entries)
+            if (KeyboardBinding.Triggered(UserActions.Undo))
             {
-                if (KeyboardBinding.Triggered(id))
-                {
-                    action();
-                }
+                UndoRedoStack.Undo();
+            }
+            else if (KeyboardBinding.Triggered(UserActions.Redo))
+            {
+                UndoRedoStack.Redo();
+            }
+            else if (KeyboardBinding.Triggered(UserActions.Save))
+            {
+                Task.Run(Save);
             }
         }
 
@@ -63,7 +70,7 @@ namespace T3.Gui
                 {
                     if (ImGui.MenuItem("Save"))
                     {
-                        Task.Run(() => UiModel.Save()); // Async save
+                        Task.Run(Save); // Async save
                     }
                     ImGui.EndMenu();
                 }
@@ -72,12 +79,12 @@ namespace T3.Gui
                 {
                     if (ImGui.MenuItem("Undo", "CTRL+Z", false, UndoRedoStack.CanUndo))
                     {
-                        UserActionRegistry.Entries[UserActions.Undo]();
+                        UndoRedoStack.Undo();
                     }
 
                     if (ImGui.MenuItem("Redo", "CTRL+Y", false, UndoRedoStack.CanRedo))
                     {
-                        UserActionRegistry.Entries[UserActions.Redo]();
+                        UndoRedoStack.Redo();
                     }
                     ImGui.Separator();
                     if (ImGui.MenuItem("Cut", "CTRL+X")) { }
@@ -98,6 +105,21 @@ namespace T3.Gui
             ImGui.PopStyleVar(2);
         }
 
+        private readonly object _saveLocker = new object();
+        private readonly Stopwatch _saveStopwatch = new Stopwatch();
+
+        private void Save()
+        {
+            lock (_saveLocker)
+            {
+                _saveStopwatch.Restart();
+
+                UiModel.Save();
+
+                _saveStopwatch.Stop();
+                Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
+            }
+        }
 
         public static void AddHoveredId(Guid id)
         {

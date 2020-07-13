@@ -63,15 +63,6 @@ namespace T3.Gui
 
     public static class UserActionRegistry
     {
-        public static Dictionary<UserActions, Action> Entries { get; }
-            = new Dictionary<UserActions, Action>
-              {
-                  { UserActions.Undo, UndoRedoStack.Undo },
-                  { UserActions.Redo, UndoRedoStack.Redo },
-                  { UserActions.Save, T3Ui.UiModel.Save },
-
-              };
-
         public static readonly HashSet<UserActions> DeferredActions = new HashSet<UserActions>();
 
         public static bool WasActionQueued(UserActions action)
