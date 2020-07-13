@@ -225,7 +225,7 @@ namespace T3.Gui.Windows.TimeLine
         {
             var isPlaying = Math.Abs(Playback.PlaybackSpeed) > 0.01f;
             var wasPlaying = Math.Abs(_lastPlaybackSpeed) > 0.01f;
-            
+
             if(!isPlaying && wasPlaying) 
             {
                 if (!IsCurrentTimeVisible())
@@ -242,7 +242,9 @@ namespace T3.Gui.Windows.TimeLine
         private bool IsCurrentTimeVisible()
         {
             var timePosInScreen = TransformPosition(new Vector2((float)this.Playback.TimeInBars,0));
-            return ImRect.RectWithSize(WindowPos, WindowSize).Contains(timePosInScreen);
+            var timelineArea = ImRect.RectWithSize(WindowPos, WindowSize);
+            timePosInScreen.Y = timelineArea.GetCenter().Y; // Adjust potential vertical scrolling of timeline area
+            return timelineArea.Contains(timePosInScreen);
         }
         
         
