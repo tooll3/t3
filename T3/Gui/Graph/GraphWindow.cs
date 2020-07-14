@@ -35,6 +35,8 @@ namespace T3.Gui.Graph
                             : new Playback();
 
             _playback.Bpm = ProjectSettings.Config.SoundtrackBpm;
+            if(_playback is StreamPlayback streamPlayback)
+                streamPlayback.SetMuteMode(UserSettings.Config.AudioMuted);
 
             // Legacy work-around
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
