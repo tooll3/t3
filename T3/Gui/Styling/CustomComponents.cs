@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using System;
+using System.Configuration;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -8,6 +9,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.Styling;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui
@@ -375,23 +377,32 @@ namespace T3.Gui
 
         private static Color EmptyMessageColor = new Color(0.3f);
 
-        public static void TooltipForLastItem(string message)
+        public static void TooltipForLastItem(string message, string additionalNotes= null)
         {
-            if (!ImGui.IsItemHovered())
+            if (!ImGui.IsAnyItemHovered())
             {
                 _hoverStartTime = -1;
                 return;
             }
 
+            if (!ImGui.IsItemHovered())
+                return;
+
             if (_hoverStartTime <= 0)
                 _hoverStartTime = ImGui.GetTime();
 
             var hoverDuration = ImGui.GetTime() - _hoverStartTime;
-            if (!(hoverDuration > 0.4))
+            if (!(hoverDuration > UserSettings.Config.TooltipDelay))
                 return;
             
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
-            ImGui.SetTooltip(message);
+            ImGui.BeginTooltip();
+            ImGui.Text(message);
+            if (!string.IsNullOrEmpty(additionalNotes))
+            {
+                ImGui.TextColored(Color.Gray, additionalNotes);
+            }
+            ImGui.EndTooltip();
             ImGui.PopStyleVar();
         }
 

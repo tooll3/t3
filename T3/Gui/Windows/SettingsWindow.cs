@@ -36,6 +36,7 @@ namespace T3.Gui.Windows
             ImGui.DragFloat("Scroll damping", ref UserSettings.Config.ZoomSpeed);
             
             ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
+            ImGui.DragFloat("Tooltip delay", ref UserSettings.Config.TooltipDelay);
             
             if (ImGui.TreeNode("Undo Queue"))
             {

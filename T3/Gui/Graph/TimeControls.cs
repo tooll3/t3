@@ -65,6 +65,9 @@ namespace T3.Gui.Graph
                 playback.TimeDisplayMode =
                     (Playback.TimeDisplayModes)(((int)playback.TimeDisplayMode + 1) % Enum.GetNames(typeof(Playback.TimeDisplayModes)).Length);
             }
+            CustomComponents.TooltipForLastItem("Timeline format",
+                                                "Click to toggle through BPM, Frames and Normal time modes");
+
 
             DrawTimeSettingsContextMenu(ref playback);
 
@@ -80,6 +83,7 @@ namespace T3.Gui.Graph
                 {
                     UserSettings.Config.KeepBeatTimeRunningInPause = !UserSettings.Config.KeepBeatTimeRunningInPause;
                 }
+                CustomComponents.TooltipForLastItem("Keep beat time running", "This will keep updating the output [Time]\nwhich is useful for procedural animation and syncing.");
 
                 if (UserSettings.Config.KeepBeatTimeRunningInPause)
                 {
@@ -112,7 +116,7 @@ namespace T3.Gui.Graph
                 //var volume = Im.Clamp(BpmDetection.LastVolume,0,1);
                 var volume = BeatTiming.SyncPrecision;
                 ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - volume * (max.Y - min.Y)), Color.Orange);
-
+                
                 ImGui.SameLine();
 
                 ImGui.Button("Sync");
@@ -120,7 +124,7 @@ namespace T3.Gui.Graph
                 {
                     T3Ui.BeatTiming.TriggerSyncTap();
                 }
-                
+
                 ImGui.SameLine();
 
                 ImGui.PushButtonRepeat(true);
@@ -148,6 +152,8 @@ namespace T3.Gui.Graph
                 {
                     playback.TimeInBars = playback.LoopRange.Start;
                 }
+                CustomComponents.TooltipForLastItem("Jump to beginning",
+                                                    KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToStartTime));
 
                 ImGui.SameLine();
 
@@ -157,6 +163,8 @@ namespace T3.Gui.Graph
                 {
                     UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
                 }
+                CustomComponents.TooltipForLastItem("Jump to previous keyframe",
+                                                    KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToPreviousKeyframe));
 
                 ImGui.SameLine();
 
@@ -176,6 +184,10 @@ namespace T3.Gui.Graph
                         playback.PlaybackSpeed = -1;
                     }
                 }
+                CustomComponents.TooltipForLastItem("Play backwards",
+                                                    "Play backwards (and faster): " +
+                                                    KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackBackwards, false) +
+                                                    "\n Previous frame:" + KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackPreviousFrame, false));
 
                 ImGui.SameLine();
 
@@ -195,6 +207,13 @@ namespace T3.Gui.Graph
                         playback.PlaybackSpeed = 1;
                     }
                 }
+
+                CustomComponents.TooltipForLastItem("Start playback",
+                                                    "Play forward (and faster): " +
+                                                    KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackForward, false) +
+                                                    "\n Play half speed (and slower): " +
+                                                    KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackForwardHalfSpeed, false)+
+                                                    "\n Next frame:" + KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackNextFrame, false));
 
                 const float editFrameRate = 30;
                 const float frameDuration = 1 / editFrameRate;
@@ -259,7 +278,6 @@ namespace T3.Gui.Graph
                     playback.PlaybackSpeed = playback.PlaybackSpeed == 0 ? 1 : 0;
                 }
 
-                
                 ImGui.SameLine();
 
                 // Next Keyframe
@@ -269,16 +287,17 @@ namespace T3.Gui.Graph
                     UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
                 }
 
+                CustomComponents.TooltipForLastItem("Jump to next keyframe",
+                                                    KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToNextKeyframe));
                 ImGui.SameLine();
 
-                // End
-                if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", ControlSize))
-                {
-                    playback.TimeInBars = playback.LoopRange.End;
-                }
-
-                ImGui.SameLine();
-
+                // // End
+                // if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", ControlSize))
+                // {
+                //     playback.TimeInBars = playback.LoopRange.End;
+                // }
+                //
+                // ImGui.SameLine();
                 // Loop
                 if (CustomComponents.ToggleButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize))
                 {
@@ -290,6 +309,8 @@ namespace T3.Gui.Graph
                     }
                 }
 
+                CustomComponents.TooltipForLastItem("Loop playback","This will initialize one bar around current time.");
+
                 ImGui.SameLine();
             }
 
@@ -298,6 +319,8 @@ namespace T3.Gui.Graph
             {
                 timeLineCanvas.Mode = (TimeLineCanvas.Modes)(((int)timeLineCanvas.Mode + 1) % Enum.GetNames(typeof(TimeLineCanvas.Modes)).Length);
             }
+
+            CustomComponents.TooltipForLastItem("Toggle keyframe view between Dope sheet and Curve mode.");
 
             ImGui.SameLine();
 
@@ -312,14 +335,25 @@ namespace T3.Gui.Graph
             ImGui.SameLine();
 
             // ToggleHover
-            var icon = Icon.HoverPreviewSmall;
-            if (UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Disabled)
+            Icon icon;
+            string tooltip;
+            string additionalTooltip=null;
+            switch (UserSettings.Config.HoverMode)
             {
-                icon = Icon.HoverPreviewDisabled;
-            }
-            else if (UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live)
-            {
-                icon = Icon.HoverPreviewPlay;
+                case GraphCanvas.HoverModes.Disabled:
+                    icon = Icon.HoverPreviewDisabled;
+                    tooltip = "No preview images on hover";
+                    break;
+                case GraphCanvas.HoverModes.Live:
+                    icon = Icon.HoverPreviewPlay;
+                    tooltip = "Live Hover Preview - Render explicit thumbnail image.";
+                    additionalTooltip = "This can interfere with the rendering of the current output.";
+                    break;
+                default:
+                    icon = Icon.HoverPreviewSmall;
+                    tooltip = "Last - Show the current state of the operator.";
+                    additionalTooltip = "This can be outdated if operator is not require for current output.";
+                    break;
             }
 
             if (CustomComponents.IconButton(icon, "##hoverPreview", ControlSize))
@@ -327,6 +361,8 @@ namespace T3.Gui.Graph
                 UserSettings.Config.HoverMode =
                     (GraphCanvas.HoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
             }
+
+            CustomComponents.TooltipForLastItem(tooltip,additionalTooltip);
 
             ImGui.SameLine();
 
@@ -361,6 +397,7 @@ namespace T3.Gui.Graph
                         newTimeClip.TimeRange = new TimeRange((float)playback.TimeInBars, originalEndTime);
                     }
                 }
+                CustomComponents.TooltipForLastItem("Cut timeclip below mouse");
             }
         }
 
@@ -373,11 +410,10 @@ namespace T3.Gui.Graph
             {
                 ImGui.PopStyleVar(2);
                 return;
-
             }
 
             T3Ui.OpenedPopUpName = "##TimeSettings";
-            
+
             ImGui.PushFont(Fonts.FontLarge);
             ImGui.Text("Playback settings");
             ImGui.PopFont();
@@ -406,7 +442,7 @@ namespace T3.Gui.Graph
                             playback.Bpm = bpm;
                             ProjectSettings.Config.SoundtrackBpm = bpm;
                         }
-                        
+
                         if (modified)
                         {
                             var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
@@ -447,9 +483,8 @@ namespace T3.Gui.Graph
                     }
 
                     ImGui.EndTabItem();
-                    
                 }
-                
+
                 if (ImGui.BeginTabItem("System Audio"))
                 {
                     CustomComponents.HelpText("Uses Windows core audio input for BPM detection");
@@ -458,7 +493,7 @@ namespace T3.Gui.Graph
                     if (isInitialized)
                     {
                         var currentDevice = BeatTiming.SystemAudioInput.LoopBackDevices[BeatTiming.SystemAudioInput.SelectedDeviceIndex];
-                        if (ImGui.BeginCombo("Device selection",currentDevice.ToString()))
+                        if (ImGui.BeginCombo("Device selection", currentDevice.ToString()))
                         {
                             for (var index = 0; index < BeatTiming.SystemAudioInput.LoopBackDevices.Count; index++)
                             {
