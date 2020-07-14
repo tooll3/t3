@@ -334,7 +334,7 @@ namespace T3.Gui.Windows.TimeLine
                     var color = Color.Orange;
                     color.Rgba.W =MathUtils.Remap(availableSpace, 40, 60, 0, 1).Clamp(0, 1); 
                     ImGui.PushFont(Fonts.FontSmall);
-                    _drawList.AddText(min, color, $"{vDef.Value:G3}");
+                    _drawList.AddText(min, color, $"{lastVDef.Value:G3}");
                     ImGui.PopFont();
                 }
             }            
