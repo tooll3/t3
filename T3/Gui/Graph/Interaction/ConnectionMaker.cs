@@ -369,7 +369,15 @@ namespace T3.Gui.Graph
                                                      + new Vector2(SelectableNodeMovement.SnapPadding.X, 0),
                                  primaryOutput.ValueType, primaryOutput.ValueType, false);
         }
+        
+        
         #endregion
+
+
+        // public static void SplitConnectionWithDraggedNode(Symbol.Connection connection, SymbolChildUi childUi)
+        // {
+        //     // Implement
+        // } 
 
         public static void CompleteAtSymbolInputNode(Symbol parentSymbol, Symbol.InputDefinition inputDef)
         {

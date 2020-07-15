@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.InputUi;
@@ -59,15 +60,22 @@ namespace T3.Gui.Graph.Interaction
                 if (_draggedNodeId != node.Id)
                     return;
 
+                var singleDraggedNode = (_draggedNodes.Count == 1) ? _draggedNodes[0] : null;
                 _draggedNodeId = Guid.Empty;
                 _draggedNodes.Clear();
 
-                var varDragging = ImGui.GetMouseDragDelta(0).LengthSquared() > 0.0f;
-                if (varDragging)
+                var wasDragging = ImGui.GetMouseDragDelta(0).LengthSquared() > 0.0f;
+                if (wasDragging)
                 {
                     _moveCommand.StoreCurrentValues();
                     UndoRedoStack.Add(_moveCommand);
 
+                    if (singleDraggedNode != null && ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame != null)
+                    {
+                        // Implement split
+                    }
+
+                    // Reorder inputs nodes if dragged
                     var selectedInputs = SelectionManager.GetSelectedNodes<IInputUi>().ToList();
                     if (selectedInputs.Count > 0)
                     {
@@ -205,7 +213,6 @@ namespace T3.Gui.Graph.Interaction
                 UndoRedoStack.AddAndExecute(macro);
             }
         }
-
 
         private static void HandleNodeDragging(ISelectableNode draggedNode)
         {
@@ -428,7 +435,7 @@ namespace T3.Gui.Graph.Interaction
 
         private static Guid _draggedNodeId = Guid.Empty;
         private static List<ISelectableNode> _draggedNodes = new List<ISelectableNode>();
-        
+
         private static class ShakeDetector
         {
             public static bool TestDragForShake(Vector2 mousePosition)
