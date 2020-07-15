@@ -45,9 +45,19 @@ namespace T3.Gui.Graph.Interaction
             {
                 if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((int)Key.Tab))
                     return;
-
-                //Log.Debug("open create with tab");
-                OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos + new Vector2(-4,-20)), null, null, false);
+                
+                if (SelectionManager.GetSelectedSymbolChildUis().Count() == 1)
+                {
+                    var childUi = SelectionManager.GetSelectedSymbolChildUis().ToList()[0];
+                    {
+                        var instance = SelectionManager.GetInstanceForSymbolChildUi(childUi);
+                        ConnectionMaker.OpenBrowserWithSingleSelection(this, childUi, instance);
+                    }
+                }
+                else
+                {
+                    OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null, null, false);                    
+                }
                 return;
             }
             

@@ -214,7 +214,6 @@ namespace T3.Gui.Graph
         }
 
         #region related to SymbolBrowser
-        
         /// <remarks>
         /// Assumes that a temp connection has be created earlier and is now dropped on the background
         /// </remarks>
@@ -293,8 +292,16 @@ namespace T3.Gui.Graph
                                                                           targetSlotId: c.TargetSlotId);
                         UndoRedoStack.AddAndExecute(new AddConnectionCommand(parent, newConnectionToSource, 0));
                         break;
+
                     case TempConnection.Status.TargetIsDraftNode:
                         var inputDef = newSymbolChild.Symbol.GetInputMatchingType(c.ConnectionType);
+                        if (inputDef == null)
+                        {
+                            Log.Warning("Failed to complete node creation");
+                            Reset();
+                            return;
+                        }
+
                         var newConnectionToInput = new Symbol.Connection(sourceParentOrChildId: c.SourceParentOrChildId,
                                                                          sourceSlotId: c.SourceSlotId,
                                                                          targetParentOrChildId: newSymbolChild.Id,
@@ -307,14 +314,11 @@ namespace T3.Gui.Graph
             Reset();
         }
 
-
-
         public static void SplitConnectionWithSymbolBrowser(Symbol parent, SymbolBrowser symbolBrowser, Symbol.Connection connection, Vector2 positionInCanvas)
         {
             // Todo: Fix me for output nodes
             var child = parent.Children.Single(child2 => child2.Id == connection.TargetParentOrChildId);
             var inputDef = child.Symbol.InputDefinitions.Single(i => i.Id == connection.TargetSlotId);
-            
 
             TempConnections.Clear();
             var connectionType = inputDef.DefaultValue.ValueType;
@@ -332,8 +336,39 @@ namespace T3.Gui.Graph
 
             symbolBrowser.OpenAt(positionInCanvas, connectionType, connectionType, false);
             parent.RemoveConnection(connection);
-        }        
-        
+        }
+
+        public static void OpenBrowserWithSingleSelection(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance)
+        {
+            if (instance.Outputs.Count < 1)
+                return;
+
+            var primaryOutput = instance.Outputs[0];
+            var connections = instance.Parent.Symbol.Connections.FindAll(connection => connection.SourceParentOrChildId == instance.SymbolChildId
+                                                                                       && connection.SourceSlotId == primaryOutput.Id);
+
+            TempConnections.Clear();
+            TempConnections.Add(new TempConnection(sourceParentOrChildId: instance.SymbolChildId,
+                                                   sourceSlotId: primaryOutput.Id,
+                                                   targetParentOrChildId: UseDraftChildId,
+                                                   targetSlotId: NotConnectedId,
+                                                   primaryOutput.ValueType));
+            if (connections.Count > 0)
+            {
+                foreach (var c in connections)
+                {
+                    TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
+                                                           sourceSlotId: NotConnectedId,
+                                                           targetParentOrChildId: c.TargetParentOrChildId,
+                                                           targetSlotId: c.TargetSlotId,
+                                                           primaryOutput.ValueType));
+                }
+            }
+
+            symbolBrowser.OpenAt(childUi.PosOnCanvas + new Vector2(childUi.Size.X, 0)
+                                                     + new Vector2(SelectableNodeMovement.SnapPadding.X, 0),
+                                 primaryOutput.ValueType, primaryOutput.ValueType, false);
+        }
         #endregion
 
         public static void CompleteAtSymbolInputNode(Symbol parentSymbol, Symbol.InputDefinition inputDef)
@@ -559,12 +594,9 @@ namespace T3.Gui.Graph
                 public int SlotIndex;
             }
         }
-        
-
 
         public class ConnectionSplitHelper
         {
-
             public static void PrepareNewFrame(GraphCanvas graphCanvas)
             {
                 _mousePosition = ImGui.GetMousePos();
@@ -578,21 +610,22 @@ namespace T3.Gui.Graph
                     var hoverDuration = time - _hoverStartTime;
                     var radius = EaseFunctions.EaseOutElastic((float)hoverDuration) * 4;
                     var drawList = ImGui.GetForegroundDrawList();
-                    
+
                     //BestMatchLastFrame.Connection.
-                    drawList.AddCircleFilled(_bestMatchYetForCurrentFrame.PositionOnScreen, radius , _bestMatchYetForCurrentFrame.Color, 30);
-                    ImGui.SetCursorScreenPos(_bestMatchYetForCurrentFrame.PositionOnScreen - Vector2.One * radius/2);
-                    if(ImGui.InvisibleButton("splitMe", Vector2.One * radius))
+                    drawList.AddCircleFilled(_bestMatchYetForCurrentFrame.PositionOnScreen, radius, _bestMatchYetForCurrentFrame.Color, 30);
+                    ImGui.SetCursorScreenPos(_bestMatchYetForCurrentFrame.PositionOnScreen - Vector2.One * radius / 2);
+                    if (ImGui.InvisibleButton("splitMe", Vector2.One * radius))
                     {
                     }
 
                     if (ImGui.IsItemClicked())
                     {
-                        SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol, 
-                                                         graphCanvas._symbolBrowser, 
-                                                         _bestMatchYetForCurrentFrame.Connection, 
+                        SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol,
+                                                         graphCanvas._symbolBrowser,
+                                                         _bestMatchYetForCurrentFrame.Connection,
                                                          graphCanvas.InverseTransformPosition(_bestMatchYetForCurrentFrame.PositionOnScreen));
                     }
+
                     CustomComponents.TooltipForLastItem("Split and insert new node");
                 }
                 else
@@ -619,20 +652,19 @@ namespace T3.Gui.Graph
 
                 _bestMatchYetForCurrentFrame = new PotentialConnectionSplit()
                                                    {
-                                                       Connection =  connection,
-                                                       PositionOnScreen =  position,
+                                                       Connection = connection,
+                                                       PositionOnScreen = position,
                                                        Color = color,
                                                    };
                 _bestMatchDistance = distance;
             }
-            
-            
+
             public static PotentialConnectionSplit BestMatchLastFrame;
             private static PotentialConnectionSplit _bestMatchYetForCurrentFrame;
             private static float _bestMatchDistance = float.PositiveInfinity;
             private const int SnapDistance = 50;
             private static Vector2 _mousePosition;
-            private static double _hoverStartTime =-1;
+            private static double _hoverStartTime = -1;
 
             public class PotentialConnectionSplit
             {
@@ -640,7 +672,6 @@ namespace T3.Gui.Graph
                 public Symbol.Connection Connection;
                 public Color Color;
             }
-
         }
     }
 }
