@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -473,7 +473,15 @@ namespace T3.Core
             FileInfo[] files = di.GetFiles("*" + SymbolExtension).ToArray();
             foreach (FileInfo file in files)
             {
-                File.Delete(file.FullName);
+                try
+                {
+                    File.Delete(file.FullName);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning("Failed to deleted " + file + e);
+                }
+                
             }
 
             Json json = new Json();

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -197,7 +197,14 @@ namespace T3.Gui
             FileInfo[] files = di.GetFiles("*" + SymbolUiExtension).ToArray();
             foreach (FileInfo file in files)
             {
-                File.Delete(file.FullName);
+                try
+                {
+                    File.Delete(file.FullName);
+                }
+                catch(Exception e)
+                {
+                    Log.Warning("Failed to deleted file " + file + " " +e);
+                }
             }
 
             // store all symbols in corresponding files
