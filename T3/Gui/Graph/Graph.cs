@@ -298,7 +298,8 @@ namespace T3.Gui.Graph
                                                                 thickness,
                                                                 ref hoverPositionOnLine);
 
-                    if (isHovering)
+                    const float minDistanceToTargetSocket = 10;
+                    if (isHovering && Vector2.Distance(hoverPositionOnLine, TargetPosition) > minDistanceToTargetSocket)
                     {
                         ConnectionMaker.ConnectionSplitHelper.RegisterAsPotentialSplit(Connection, ColorForType, hoverPositionOnLine);
                     }
