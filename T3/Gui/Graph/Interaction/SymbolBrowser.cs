@@ -56,7 +56,7 @@ namespace T3.Gui.Graph.Interaction
                 }
                 else
                 {
-                    OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos), null, null, false);                    
+                    OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos+ new Vector2(-4,-20)), null, null, false);                    
                 }
                 return;
             }
