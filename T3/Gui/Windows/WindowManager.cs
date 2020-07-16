@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -236,8 +236,11 @@ namespace T3.Gui.Windows
                 {
                     if (config.Title.StartsWith("Graph#"))
                     {
-                        matchingWindow = new GraphWindow();
-                        matchingWindow.Config = config;
+                        if(GraphWindow.CanOpenAnotherWindow())
+                        {
+                            matchingWindow = new GraphWindow();
+                            matchingWindow.Config = config;
+                        }
                     }
                     else if (config.Title.StartsWith("Output#"))
                     {

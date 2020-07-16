@@ -50,6 +50,16 @@ namespace T3.Gui.Graph
             GraphWindowInstances.Add(this);
         }
 
+        public static bool CanOpenAnotherWindow()
+        {
+            if (_instanceCounter > 0)
+            {
+                Log.Error("only one graph window supported for now");
+                return false;
+            }
+            return true;
+        }
+
         public static Instance FindIdInNestedChildren(Instance instance, Guid childId)
         {
             foreach (var child in instance.Children)
