@@ -374,10 +374,39 @@ namespace T3.Gui.Graph
         #endregion
 
 
-        // public static void SplitConnectionWithDraggedNode(Symbol.Connection connection, SymbolChildUi childUi)
-        // {
-        //     // Implement
-        // } 
+        public static void SplitConnectionWithDraggedNode(Symbol.Connection connection, Instance instance)
+        {
+            return;
+            //
+            // var parent = instance.Parent;
+            // var sourceInstance = instance.Parent.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
+            // var targetInstance = instance.Parent.Children.SingleOrDefault(child => child.SymbolChildId == connection.TargetParentOrChildId);
+            // if (sourceInstance == null || targetInstance == null)
+            // {
+            //     Log.Warning("Can't split this connection");
+            //     return;
+            // }
+            //
+            // var outputDef = sourceInstance.Symbol.OutputDefinitions.Single(outDef => outDef.Id == connection.SourceSlotId);
+            // var connectionType = outputDef.ValueType;
+            //
+            // // Check if nodes primary input is not connected
+            // var firstMatchingInput = instance.Inputs.FirstOrDefault(input => input.MappedType == connectionType);
+            //
+            // if (instance.Outputs.Count < 1)
+            // {
+            //     Log.Warning("Can't use node without outputs for splitting");
+            //     return;
+            // }
+
+            // var primaryOutput = instance.Outputs[0];
+            // if(primaryOutput.c)
+            // Check if nodes primary output connected
+            // Check if node primary input matches type
+
+        } 
+        
+        
 
         public static void CompleteAtSymbolInputNode(Symbol parentSymbol, Symbol.InputDefinition inputDef)
         {
@@ -609,7 +638,7 @@ namespace T3.Gui.Graph
             {
                 _mousePosition = ImGui.GetMousePos();
                 BestMatchLastFrame = _bestMatchYetForCurrentFrame;
-                if (BestMatchLastFrame != null)
+                if (BestMatchLastFrame != null && TempConnections.Count ==0)
                 {
                     var time = ImGui.GetTime();
                     if (_hoverStartTime < 0)
@@ -618,15 +647,14 @@ namespace T3.Gui.Graph
                     var hoverDuration = time - _hoverStartTime;
                     var radius = EaseFunctions.EaseOutElastic((float)hoverDuration) * 4;
                     var drawList = ImGui.GetForegroundDrawList();
-
-                    //BestMatchLastFrame.Connection.
+                    
                     drawList.AddCircleFilled(_bestMatchYetForCurrentFrame.PositionOnScreen, radius, _bestMatchYetForCurrentFrame.Color, 30);
                     ImGui.SetCursorScreenPos(_bestMatchYetForCurrentFrame.PositionOnScreen - Vector2.One * radius / 2);
-                    if (ImGui.InvisibleButton("splitMe", Vector2.One * radius))
-                    {
-                    }
-
-                    if (ImGui.IsItemClicked())
+                    
+                    ImGui.InvisibleButton("splitMe", Vector2.One * radius);
+                    if (ImGui.IsItemDeactivated() 
+                        && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() < 4
+                        )
                     {
                         SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol,
                                                          graphCanvas._symbolBrowser,

@@ -299,7 +299,8 @@ namespace T3.Gui.Graph
                                                                 ref hoverPositionOnLine);
 
                     const float minDistanceToTargetSocket = 10;
-                    if (isHovering && Vector2.Distance(hoverPositionOnLine, TargetPosition) > minDistanceToTargetSocket)
+                    if (isHovering && Vector2.Distance(hoverPositionOnLine, TargetPosition) > minDistanceToTargetSocket
+                                   && Vector2.Distance(hoverPositionOnLine, SourcePosition) > minDistanceToTargetSocket)
                     {
                         ConnectionMaker.ConnectionSplitHelper.RegisterAsPotentialSplit(Connection, ColorForType, hoverPositionOnLine);
                     }

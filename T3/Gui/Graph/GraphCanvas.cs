@@ -178,7 +178,7 @@ namespace T3.Gui.Graph
                 if(showGrid)
                     DrawGrid();
                 
-                if (ImGui.IsWindowHovered())
+                if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
                 {
                     ConnectionMaker.ConnectionSplitHelper.PrepareNewFrame(this);
                 }

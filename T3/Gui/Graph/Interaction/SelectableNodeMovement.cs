@@ -70,9 +70,11 @@ namespace T3.Gui.Graph.Interaction
                     _moveCommand.StoreCurrentValues();
                     UndoRedoStack.Add(_moveCommand);
 
-                    if (singleDraggedNode != null && ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame != null)
+                    if (singleDraggedNode != null && ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
                     {
-                        // Implement split
+                        ConnectionMaker.SplitConnectionWithDraggedNode(ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame.Connection, 
+                                                                       SelectionManager.GetInstanceForSymbolChildUi(childUi)
+                                                                       );
                     }
 
                     // Reorder inputs nodes if dragged
