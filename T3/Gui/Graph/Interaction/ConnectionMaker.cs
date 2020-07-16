@@ -374,36 +374,68 @@ namespace T3.Gui.Graph
         #endregion
 
 
-        public static void SplitConnectionWithDraggedNode(Symbol.Connection connection, Instance instance)
+        public static void SplitConnectionWithDraggedNode(SymbolChildUi childUi, Symbol.Connection oldConnection, Instance instance)
         {
-            return;
-            //
-            // var parent = instance.Parent;
-            // var sourceInstance = instance.Parent.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
-            // var targetInstance = instance.Parent.Children.SingleOrDefault(child => child.SymbolChildId == connection.TargetParentOrChildId);
-            // if (sourceInstance == null || targetInstance == null)
-            // {
-            //     Log.Warning("Can't split this connection");
-            //     return;
-            // }
-            //
-            // var outputDef = sourceInstance.Symbol.OutputDefinitions.Single(outDef => outDef.Id == connection.SourceSlotId);
-            // var connectionType = outputDef.ValueType;
-            //
-            // // Check if nodes primary input is not connected
-            // var firstMatchingInput = instance.Inputs.FirstOrDefault(input => input.MappedType == connectionType);
-            //
-            // if (instance.Outputs.Count < 1)
-            // {
-            //     Log.Warning("Can't use node without outputs for splitting");
-            //     return;
-            // }
+            var parent = instance.Parent;
+            var sourceInstance = instance.Parent.Children.SingleOrDefault(child => child.SymbolChildId == oldConnection.SourceParentOrChildId);
+            var targetInstance = instance.Parent.Children.SingleOrDefault(child => child.SymbolChildId == oldConnection.TargetParentOrChildId);
+            if (sourceInstance == null || targetInstance == null)
+            {
+                Log.Warning("Can't split this connection");
+                return;
+            }
+            
+            var outputDef = sourceInstance.Symbol.OutputDefinitions.Single(outDef => outDef.Id == oldConnection.SourceSlotId);
+            var connectionType = outputDef.ValueType;
+            
+            // Check if nodes primary input is not connected
+            var 
+                firstMatchingInput = instance.Inputs.FirstOrDefault(input => input.ValueType == connectionType);
+            if (instance.Outputs.Count < 1)
+            {
+                Log.Warning("Can't use node without outputs for splitting");
+                return;
+            }
+            var primaryOutput = instance.Outputs[0];
 
-            // var primaryOutput = instance.Outputs[0];
-            // if(primaryOutput.c)
-            // Check if nodes primary output connected
-            // Check if node primary input matches type
+            if (primaryOutput == null 
+                || firstMatchingInput == null
+                //|| primaryOutput.IsConnected 
+                || firstMatchingInput.IsConnected)
+            {
+                Log.Warning("Op doesn't match connection type");
+                return;
+            }
+            
+            // TempConnections.Add(new TempConnection(sourceParentOrChildId: connection.SourceParentOrChildId,
+            //                                        sourceSlotId: connection.SourceSlotId,
+            //                                        targetParentOrChildId: UseDraftChildId,
+            //                                        targetSlotId: NotConnectedId,
+            //                                        connectionType));
+            //
+            // TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
+            //                                        sourceSlotId: NotConnectedId,
+            //                                        targetParentOrChildId: connection.TargetParentOrChildId,
+            //                                        targetSlotId: connection.TargetSlotId,
+            //                                        connectionType));
 
+
+            var connectionCommands = new List<ICommand>();
+            
+            connectionCommands.Add(new DeleteConnectionCommand(parent.Symbol, oldConnection,0));
+            connectionCommands.Add(new AddConnectionCommand(parent.Symbol, new Symbol.Connection(oldConnection.SourceParentOrChildId,
+                                                                                                 oldConnection.SourceSlotId,
+                                                                                                 childUi.SymbolChild.Id,
+                                                                                                 firstMatchingInput.Id
+                                                                                                 ),0 ));
+            
+            connectionCommands.Add(new AddConnectionCommand(parent.Symbol, new Symbol.Connection(childUi.SymbolChild.Id,
+                                                                                                 primaryOutput.Id,
+                                                                                                 oldConnection.TargetParentOrChildId,
+                                                                                                 oldConnection.TargetSlotId
+                                                                                                ),0 ));
+            var marcoCommand = new MacroCommand("Insert node to connection", connectionCommands);
+            UndoRedoStack.AddAndExecute(marcoCommand);
         } 
         
         

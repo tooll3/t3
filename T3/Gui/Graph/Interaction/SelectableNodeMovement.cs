@@ -72,9 +72,10 @@ namespace T3.Gui.Graph.Interaction
 
                     if (singleDraggedNode != null && ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
                     {
-                        ConnectionMaker.SplitConnectionWithDraggedNode(ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame.Connection, 
-                                                                       SelectionManager.GetInstanceForSymbolChildUi(childUi)
-                                                                       );
+                        var instanceForSymbolChildUi = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
+                        ConnectionMaker.SplitConnectionWithDraggedNode(childUi, 
+                                                                       ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame.Connection, 
+                                                                       instanceForSymbolChildUi);
                     }
 
                     // Reorder inputs nodes if dragged
