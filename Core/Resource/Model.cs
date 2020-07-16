@@ -479,9 +479,8 @@ namespace T3.Core
                 }
                 catch (Exception e)
                 {
-                    Log.Warning("Failed to deleted " + file + e);
+                    Log.Warning("Failed to deleted file '" + file + "': " + e);
                 }
-                
             }
 
             Json json = new Json();

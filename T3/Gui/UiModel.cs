@@ -201,9 +201,9 @@ namespace T3.Gui
                 {
                     File.Delete(file.FullName);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
-                    Log.Warning("Failed to deleted file " + file + " " +e);
+                    Log.Warning("Failed to deleted file '" + file + "': " + e);
                 }
             }
 
