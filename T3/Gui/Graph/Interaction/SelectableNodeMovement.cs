@@ -149,7 +149,7 @@ namespace T3.Gui.Graph.Interaction
             var outputConnections = new List<Symbol.Connection>();
             Type inputConnectionType = null;
             Type outputConnectionType = null;
-
+            var outConnectionInputIndex = 0;
             foreach (var nod in _draggedNodes)
             {
                 if (!(nod is SymbolChildUi childUi))
@@ -167,6 +167,8 @@ namespace T3.Gui.Graph.Interaction
                     var lastTargetId = Guid.Empty;
                     var lastInputId = Guid.Empty;
                     var multiInputSlotIndex = 0;
+                    
+                    
                     foreach (var connectionToInput in connectionsToInput)
                     {
                         removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, connectionToInput, multiInputSlotIndex));
@@ -191,7 +193,8 @@ namespace T3.Gui.Graph.Interaction
                                                                         && _draggedNodes.All(c2 => c2.Id != c.TargetParentOrChildId));
                     foreach (var outputConnection in connectionsToOutput)
                     {
-                        removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, outputConnection, 0));
+                        outConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(outputConnection);
+                        removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, outputConnection, outConnectionInputIndex));
                         outputConnections.Add(outputConnection);
                         outputConnectionType = output.ValueType;
                     }
@@ -207,7 +210,7 @@ namespace T3.Gui.Graph.Interaction
                                                           sourceSlotId: inputConnections[0].SourceSlotId,
                                                           targetParentOrChildId: outputConnections[0].TargetParentOrChildId,
                                                           targetSlotId: outputConnections[0].TargetSlotId);
-                removeCommands.Add(new AddConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, newConnection, 0));
+                removeCommands.Add(new AddConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, newConnection, outConnectionInputIndex));
             }
 
             if (removeCommands.Count > 0)

@@ -280,7 +280,6 @@ namespace T3.Gui.Graph.Interaction
         {
             var commands = new List<ICommand>();
             var parent = GraphCanvas.Current.CompositionOp.Symbol;
-            //var newChildUi = NodeOperations.CreateInstance(symbol, parent, PosOnCanvas);
 
             var addSymbolChildCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = PosOnCanvas };
             commands.Add(addSymbolChildCommand);
@@ -296,11 +295,9 @@ namespace T3.Gui.Graph.Interaction
 
             if (_prepareCommand != null)
             {
-                _prepareCommand.Undo();
                 commands.Add(_prepareCommand);
             }
 
-            //var newSymbolChild = newChildUi.SymbolChild;
             foreach (var c in ConnectionMaker.TempConnections)
             {
                 switch (c.GetStatus())
@@ -311,7 +308,7 @@ namespace T3.Gui.Graph.Interaction
                                                                           sourceSlotId: outputDef.Id,
                                                                           targetParentOrChildId: c.TargetParentOrChildId,
                                                                           targetSlotId: c.TargetSlotId);
-                        var addConnectionCommand = new AddConnectionCommand(parent, newConnectionToSource, 0);
+                        var addConnectionCommand = new AddConnectionCommand(parent, newConnectionToSource, c.MultiInputIndex);
                         addConnectionCommand.Do();
                         commands.Add(addConnectionCommand);
                         break;
@@ -321,7 +318,6 @@ namespace T3.Gui.Graph.Interaction
                         if (inputDef == null)
                         {
                             Log.Warning("Failed to complete node creation");
-                            //ConnectionMaker.Reset();
                             return;
                         }
 
@@ -329,7 +325,7 @@ namespace T3.Gui.Graph.Interaction
                                                                          sourceSlotId: c.SourceSlotId,
                                                                          targetParentOrChildId: newSymbolChild.Id,
                                                                          targetSlotId: inputDef.Id);
-                        var connectionCommand = new AddConnectionCommand(parent, newConnectionToInput, 0);
+                        var connectionCommand = new AddConnectionCommand(parent, newConnectionToInput, c.MultiInputIndex);
                         connectionCommand.Do();
                         commands.Add(connectionCommand);
                         break;

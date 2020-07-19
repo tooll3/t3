@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 
 namespace T3.Gui.Commands
@@ -78,6 +79,12 @@ namespace T3.Gui.Commands
             foreach (var childToCopy in _childrenToCopy)
             {
                 SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == childToCopy.ChildId);
+                if (symbolChildToCopy == null)
+                {
+                    Log.Warning("Skipping attempt to copy undefined operator. This can be related to undo/redo operations. Please try to reproduce and tell pixtur");
+                    continue;
+                }
+                
                 var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
                 targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, childToCopy.AddedId, sourceCompositionSymbolUi, childToCopy.ChildId,
                                                                    _targetPosition + childToCopy.RelativePosition);

@@ -314,7 +314,7 @@ namespace T3.Gui.Graph
             Reset();
         }
 
-        public static void SplitConnectionWithSymbolBrowser(Symbol parent, SymbolBrowser symbolBrowser, Symbol.Connection connection, Vector2 positionInCanvas)
+        public static void SplitConnectionWithSymbolBrowser(Symbol parentSymbol, SymbolBrowser symbolBrowser, Symbol.Connection connection, Vector2 positionInCanvas)
         {
             if (connection.IsConnectedToSymbolOutput)
             {
@@ -328,11 +328,12 @@ namespace T3.Gui.Graph
             }
 
             // Todo: Fix me for output nodes
-            var child = parent.Children.Single(child2 => child2.Id == connection.TargetParentOrChildId);
+            var child = parentSymbol.Children.Single(child2 => child2.Id == connection.TargetParentOrChildId);
             var inputDef = child.Symbol.InputDefinitions.Single(i => i.Id == connection.TargetSlotId);
 
             var commands = new List<ICommand>();
-            commands.Add(new DeleteConnectionCommand(parent, connection, 0));
+            var multiInputIndex = parentSymbol.GetMultiInputIndexFor(connection);
+            commands.Add(new DeleteConnectionCommand(parentSymbol, connection, multiInputIndex));
             var prepareCommand = new MacroCommand("Split", commands);
             UndoRedoStack.AddAndExecute(prepareCommand);
 
@@ -348,7 +349,8 @@ namespace T3.Gui.Graph
                                                    sourceSlotId: NotConnectedId,
                                                    targetParentOrChildId: connection.TargetParentOrChildId,
                                                    targetSlotId: connection.TargetSlotId,
-                                                   connectionType));
+                                                   connectionType,
+                                                   multiInputIndex));
 
             symbolBrowser.OpenAt(positionInCanvas, connectionType, connectionType, false, prepareCommand);
         }
@@ -362,27 +364,36 @@ namespace T3.Gui.Graph
             var connections = instance.Parent.Symbol.Connections.FindAll(connection => connection.SourceParentOrChildId == instance.SymbolChildId
                                                                                        && connection.SourceSlotId == primaryOutput.Id);
 
+            
             TempConnections.Clear();
             TempConnections.Add(new TempConnection(sourceParentOrChildId: instance.SymbolChildId,
                                                    sourceSlotId: primaryOutput.Id,
                                                    targetParentOrChildId: UseDraftChildId,
                                                    targetSlotId: NotConnectedId,
                                                    primaryOutput.ValueType));
+            
+            var commands = new List<ICommand>();
+            
             if (connections.Count > 0)
             {
-                foreach (var c in connections)
+                foreach (var oldConnection in connections)
                 {
+                    var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
+                    commands.Add(new DeleteConnectionCommand(instance.Parent.Symbol, oldConnection, multiInputIndex));
                     TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
                                                            sourceSlotId: NotConnectedId,
-                                                           targetParentOrChildId: c.TargetParentOrChildId,
-                                                           targetSlotId: c.TargetSlotId,
-                                                           primaryOutput.ValueType));
+                                                           targetParentOrChildId: oldConnection.TargetParentOrChildId,
+                                                           targetSlotId: oldConnection.TargetSlotId,
+                                                           primaryOutput.ValueType,
+                                                           multiInputIndex));
                 }
             }
+            var prepareCommand = new MacroCommand("insert operator", commands);
+            prepareCommand.Do();
 
             symbolBrowser.OpenAt(childUi.PosOnCanvas + new Vector2(childUi.Size.X, 0)
                                                      + new Vector2(SelectableNodeMovement.SnapPadding.X, 0),
-                                 primaryOutput.ValueType, primaryOutput.ValueType, false, null);
+                                 primaryOutput.ValueType, primaryOutput.ValueType, false, prepareCommand);
         }
         #endregion
 
@@ -420,21 +431,10 @@ namespace T3.Gui.Graph
                 return;
             }
 
-            // TempConnections.Add(new TempConnection(sourceParentOrChildId: connection.SourceParentOrChildId,
-            //                                        sourceSlotId: connection.SourceSlotId,
-            //                                        targetParentOrChildId: UseDraftChildId,
-            //                                        targetSlotId: NotConnectedId,
-            //                                        connectionType));
-            //
-            // TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
-            //                                        sourceSlotId: NotConnectedId,
-            //                                        targetParentOrChildId: connection.TargetParentOrChildId,
-            //                                        targetSlotId: connection.TargetSlotId,
-            //                                        connectionType));
-
             var connectionCommands = new List<ICommand>();
+            var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
 
-            connectionCommands.Add(new DeleteConnectionCommand(parent.Symbol, oldConnection, 0));
+            connectionCommands.Add(new DeleteConnectionCommand(parent.Symbol, oldConnection, multiInputIndex));
             connectionCommands.Add(new AddConnectionCommand(parent.Symbol, new Symbol.Connection(oldConnection.SourceParentOrChildId,
                                                                                                  oldConnection.SourceSlotId,
                                                                                                  childUi.SymbolChild.Id,
@@ -445,7 +445,7 @@ namespace T3.Gui.Graph
                                                                                                  primaryOutput.Id,
                                                                                                  oldConnection.TargetParentOrChildId,
                                                                                                  oldConnection.TargetSlotId
-                                                                                                ), 0));
+                                                                                                ), multiInputIndex));
             var marcoCommand = new MacroCommand("Insert node to connection", connectionCommands);
             UndoRedoStack.AddAndExecute(marcoCommand);
         }
@@ -538,13 +538,15 @@ namespace T3.Gui.Graph
 
         public class TempConnection : Symbol.Connection
         {
-            public TempConnection(Guid sourceParentOrChildId, Guid sourceSlotId, Guid targetParentOrChildId, Guid targetSlotId, Type type) :
+            public TempConnection(Guid sourceParentOrChildId, Guid sourceSlotId, Guid targetParentOrChildId, Guid targetSlotId, Type type, int multiInputIndex=0) :
                 base(sourceParentOrChildId, sourceSlotId, targetParentOrChildId, targetSlotId)
             {
                 ConnectionType = type;
+                MultiInputIndex = multiInputIndex;
             }
 
             public readonly Type ConnectionType;
+            public int MultiInputIndex;
 
             public Status GetStatus()
             {
