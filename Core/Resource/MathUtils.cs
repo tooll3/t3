@@ -150,6 +150,11 @@ namespace T3.Core
         {
             return (int)(a + (b - a) * t);
         }
+
+        public static double Log2(double value)
+        {
+            return Math.Log10(value) / Math.Log10(2.0);
+        }
     }
 
     public class EaseFunctions
