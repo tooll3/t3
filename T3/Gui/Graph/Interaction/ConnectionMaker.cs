@@ -10,6 +10,7 @@ using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
+using T3.Operators.Types.Id_5a4b23ff_588e_4dcc_833c_4fb5fb6fcb8f;
 using UiHelpers;
 
 namespace T3.Gui.Graph
@@ -27,7 +28,6 @@ namespace T3.Gui.Graph
         {
             return TempConnections.Count == 1
                    && TempConnections[0].TargetSlotId == NotConnectedId
-                   //&& inputDef.DefaultValue.ValueType == _draftConnectionType;
                    && TempConnections[0].ConnectionType == valueType;
         }
 
@@ -47,7 +47,6 @@ namespace T3.Gui.Graph
 
         public static bool IsInputSlotCurrentConnectionTarget(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, int multiInputIndex = 0)
         {
-            // return ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, 0);
             return TempConnections.Count == 1
                    && TempConnections[0].TargetParentOrChildId == targetUi.SymbolChild.Id
                    && TempConnections[0].TargetSlotId == inputDef.Id;
@@ -167,6 +166,51 @@ namespace T3.Gui.Graph
         {
             TempConnections.Clear();
             ConnectionSnapEndHelper.ResetSnapping();
+        }
+
+        public static MacroCommand AdjustGraphLayoutForNewNode(Symbol parent, Symbol.Connection connection)
+        {
+            if (connection.IsConnectedToSymbolOutput || connection.IsConnectedToSymbolInput)
+            {
+                Log.Debug("relayouting is not not supported for input and output nodes yet");
+                return null;
+            }
+
+            var sourceNode = parent.Children.Single(child => child.Id == connection.SourceParentOrChildId);
+            var targetNode = parent.Children.Single(child => child.Id == connection.TargetParentOrChildId);
+
+            var symbolUi = SymbolUiRegistry.Entries[parent.Id];
+            var sourceNodeUi = symbolUi.ChildUis.Single(node => node.Id == sourceNode.Id);
+            var targetNodeUi = symbolUi.ChildUis.Single(node => node.Id == targetNode.Id);
+            var center = (sourceNodeUi.PosOnCanvas + targetNodeUi.PosOnCanvas) / 2;
+            var commands = new List<ICommand>();
+
+            var changedSymbols = new List<ISelectableNode>();
+            
+            var requiredGap = SymbolChildUi.DefaultOpSize.X + SelectableNodeMovement.SnapPadding.X;
+            var xSource = sourceNodeUi.PosOnCanvas.X + sourceNodeUi.Size.X;
+            var xTarget = targetNodeUi.PosOnCanvas.X;
+
+            var currentGap = xTarget - xSource - SelectableNodeMovement.SnapPadding.X;
+            if (currentGap > requiredGap)
+                return null;
+
+            var offset = Math.Min( requiredGap - currentGap, requiredGap);
+            
+            foreach (var childUi in symbolUi.ChildUis)
+            {
+                if (childUi.PosOnCanvas.X > center.X)
+                    continue;
+
+                changedSymbols.Add(childUi);
+                var pos = childUi.PosOnCanvas;
+                
+                pos.X -= offset;
+                childUi.PosOnCanvas = pos;
+            }
+
+            commands.Add(new ChangeSelectableCommand(symbolUi.Symbol.Id,changedSymbols));
+            return new MacroCommand("adjust layout", commands);
         }
 
         public static void CompleteAtInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input, int multiInputIndex = 0,
@@ -314,7 +358,8 @@ namespace T3.Gui.Graph
             Reset();
         }
 
-        public static void SplitConnectionWithSymbolBrowser(Symbol parentSymbol, SymbolBrowser symbolBrowser, Symbol.Connection connection, Vector2 positionInCanvas)
+        public static void SplitConnectionWithSymbolBrowser(Symbol parentSymbol, SymbolBrowser symbolBrowser, Symbol.Connection connection,
+                                                            Vector2 positionInCanvas)
         {
             if (connection.IsConnectedToSymbolOutput)
             {
@@ -334,6 +379,11 @@ namespace T3.Gui.Graph
             var commands = new List<ICommand>();
             var multiInputIndex = parentSymbol.GetMultiInputIndexFor(connection);
             commands.Add(new DeleteConnectionCommand(parentSymbol, connection, multiInputIndex));
+
+            var adjustLayoutCommand = AdjustGraphLayoutForNewNode(parentSymbol, connection);
+            if(adjustLayoutCommand != null)
+                commands.Add(adjustLayoutCommand);
+            
             var prepareCommand = new MacroCommand("Split", commands);
             UndoRedoStack.AddAndExecute(prepareCommand);
 
@@ -364,16 +414,15 @@ namespace T3.Gui.Graph
             var connections = instance.Parent.Symbol.Connections.FindAll(connection => connection.SourceParentOrChildId == instance.SymbolChildId
                                                                                        && connection.SourceSlotId == primaryOutput.Id);
 
-            
             TempConnections.Clear();
             TempConnections.Add(new TempConnection(sourceParentOrChildId: instance.SymbolChildId,
                                                    sourceSlotId: primaryOutput.Id,
                                                    targetParentOrChildId: UseDraftChildId,
                                                    targetSlotId: NotConnectedId,
                                                    primaryOutput.ValueType));
-            
+
             var commands = new List<ICommand>();
-            
+
             if (connections.Count > 0)
             {
                 foreach (var oldConnection in connections)
@@ -388,6 +437,14 @@ namespace T3.Gui.Graph
                                                            multiInputIndex));
                 }
             }
+
+            if (connections.Count > 0)
+            {
+                var adjustLayoutCommand = AdjustGraphLayoutForNewNode(instance.Parent.Symbol, connections[0]);
+                if (adjustLayoutCommand != null) 
+                    commands.Add(adjustLayoutCommand);
+            }
+            
             var prepareCommand = new MacroCommand("insert operator", commands);
             prepareCommand.Do();
 
@@ -433,6 +490,22 @@ namespace T3.Gui.Graph
 
             var connectionCommands = new List<ICommand>();
             var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
+            var layoutCommand = AdjustGraphLayoutForNewNode(parent.Symbol, oldConnection);
+            if(layoutCommand !=null)
+                connectionCommands.Add(layoutCommand);
+
+            var parentUi = SymbolUiRegistry.Entries[parent.Symbol.Id];
+            var sourceUi = parentUi.ChildUis.Single(child => child.Id == sourceInstance.SymbolChildId);
+            var targetUi = parentUi.ChildUis.Single(child => child.Id == targetInstance.SymbolChildId);
+            var isSnappedHorizontally = (Math.Abs(sourceUi.PosOnCanvas.Y - targetUi.PosOnCanvas.Y) < 0.01f)
+                                      && Math.Abs(sourceUi.PosOnCanvas.X + sourceUi.Size.X + SelectableNodeMovement.SnapPadding.X)-  targetUi.PosOnCanvas.X < 0.1f;
+            
+            if (isSnappedHorizontally)
+            {
+                childUi.PosOnCanvas = sourceUi.PosOnCanvas + new Vector2(sourceUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0);
+                connectionCommands.Add(new ChangeSelectableCommand(parent.Symbol.Id, new List<ISelectableNode>() { childUi}));
+            }
+            
 
             connectionCommands.Add(new DeleteConnectionCommand(parent.Symbol, oldConnection, multiInputIndex));
             connectionCommands.Add(new AddConnectionCommand(parent.Symbol, new Symbol.Connection(oldConnection.SourceParentOrChildId,
@@ -479,27 +552,6 @@ namespace T3.Gui.Graph
             ConnectionSnapEndHelper.ResetSnapping();
         }
 
-        // private static List<Symbol.Connection> FindConnectionsFromOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, int outputIndex)
-        // {
-        //     var outputId = sourceUi.SymbolChild.Symbol.OutputDefinitions[outputIndex].Id;
-        //     return parentSymbol.Connections.FindAll(c => c.SourceSlotId == outputId
-        //                                                  && c.SourceParentOrChildId == sourceUi.SymbolChild.Id);
-        // }
-        //
-        // private static List<Symbol.Connection> FindConnectionsFromOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, Symbol.OutputDefinition output)
-        // {
-        //     var outputId = output.Id;
-        //     return parentSymbol.Connections.FindAll(c => c.SourceSlotId == outputId
-        //                                                  && c.SourceParentOrChildId == sourceUi.SymbolChild.Id);
-        // }
-        //
-        // private static Symbol.Connection FindConnectionToInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, int inputIndex)
-        // {
-        //     var inputId = targetUi.SymbolChild.Symbol.InputDefinitions[inputIndex].Id;
-        //     return parentSymbol.Connections.Find(c => c.TargetSlotId == inputId
-        //                                               && c.TargetParentOrChildId == targetUi.SymbolChild.Id);
-        // }
-
         private static Symbol.Connection FindConnectionToInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input,
                                                                    int multiInputIndex = 0)
         {
@@ -538,7 +590,8 @@ namespace T3.Gui.Graph
 
         public class TempConnection : Symbol.Connection
         {
-            public TempConnection(Guid sourceParentOrChildId, Guid sourceSlotId, Guid targetParentOrChildId, Guid targetSlotId, Type type, int multiInputIndex=0) :
+            public TempConnection(Guid sourceParentOrChildId, Guid sourceSlotId, Guid targetParentOrChildId, Guid targetSlotId, Type type,
+                                  int multiInputIndex = 0) :
                 base(sourceParentOrChildId, sourceSlotId, targetParentOrChildId, targetSlotId)
             {
                 ConnectionType = type;
@@ -700,10 +753,12 @@ namespace T3.Gui.Graph
                         && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() < 4
                         )
                     {
+                        var posOnScreen = graphCanvas.InverseTransformPosition(_bestMatchYetForCurrentFrame.PositionOnScreen) - SymbolChildUi.DefaultOpSize/2;
+                        
                         SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol,
                                                          graphCanvas._symbolBrowser,
                                                          _bestMatchYetForCurrentFrame.Connection,
-                                                         graphCanvas.InverseTransformPosition(_bestMatchYetForCurrentFrame.PositionOnScreen));
+                                                         posOnScreen);
                     }
 
                     CustomComponents.TooltipForLastItem("Split and insert new node");

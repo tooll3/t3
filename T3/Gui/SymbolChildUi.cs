@@ -29,7 +29,7 @@ namespace T3.Gui
             FadedOut,
         }
         
-        internal static Vector2 DefaultOpSize { get; } = new Vector2(110, 25);
+        public static Vector2 DefaultOpSize { get; } = new Vector2(110, 25);
         
         public Dictionary<Guid, ConnectionStyles> ConnectionStyleOverrides { get; } = new Dictionary<Guid, ConnectionStyles>();
         
