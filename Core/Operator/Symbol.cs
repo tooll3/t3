@@ -141,6 +141,13 @@ namespace T3.Core.Operator
             public int MultiInputIndex { get; set; }
         }
 
+        public int GetMultiInputIndexFor(Connection con)
+        {
+            return Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
+                                            && c.TargetSlotId == con.TargetSlotId)
+                              .FindIndex(cc => cc == con); // todo: fix this mess! connection rework!
+        }
+
         public void SetInstanceType(Type instanceType)
         {
             InstanceType = instanceType;

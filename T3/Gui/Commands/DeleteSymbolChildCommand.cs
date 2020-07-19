@@ -65,10 +65,7 @@ namespace T3.Gui.Commands
                     var entry = new ConnectionEntry
                                 {
                                     Connection = con,
-                                    MultiInputIndex = compositionSymbol
-                                                      .Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
-                                                                                && c.TargetSlotId == con.TargetSlotId)
-                                                      .FindIndex(cc => cc == con) // todo: fix this mess! connection rework!
+                                    MultiInputIndex = compositionSymbol.GetMultiInputIndexFor(con)
                                 };
                     _removedConnections.Add(entry);
                     compositionSymbol.RemoveConnection(con);
