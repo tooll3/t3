@@ -173,10 +173,14 @@ namespace T3.Gui.Graph
 
             private static void InitTempConnection(ConnectionLineUi newLine)
             {
-                var c = newLine.Connection;
-                if (!ConnectionMaker.TempConnections.Contains(c))
+                if (!(newLine.Connection is ConnectionMaker.TempConnection c))
                     return;
-                    
+
+                newLine.ColorForType = TypeUiRegistry.Entries[c.ConnectionType].Color;
+                
+                // if (!ConnectionMaker.TempConnections.Contains(c))
+                //     return;
+
                 // if (!Equals(newLine.Connection, ConnectionMaker.TempConnections))
                 //     return;
 
@@ -184,8 +188,8 @@ namespace T3.Gui.Graph
                 {
                     if (ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame != null)
                     {
-                        newLine.TargetPosition = new Vector2(  ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame.Area.Min.X,
-                                                               ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame.Area.GetCenter().Y);
+                        newLine.TargetPosition = new Vector2(ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame.Area.Min.X,
+                                                             ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame.Area.GetCenter().Y);
                     }
                     else
                     {
@@ -197,12 +201,12 @@ namespace T3.Gui.Graph
                 else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
                     newLine.TargetPosition = GraphCanvas.Current.TransformPosition(SymbolBrowser.Current.PosOnCanvas);
-                    newLine.ColorForType = Color.White;
+                    //newLine.ColorForType = Color.White;
                 }
                 else if (c.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
                 {
                     newLine.SourcePosition = ImGui.GetMousePos();
-                    newLine.ColorForType = Color.White;
+                    //newLine.ColorForType = Color.White;
                 }
                 else if (c.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {

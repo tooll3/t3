@@ -238,7 +238,7 @@ namespace T3.Gui.Graph
                                                          targetParentOrChildId: UseDraftChildId,
                                                          targetSlotId: NotConnectedId,
                                                          firstConnectionType));
-                    symbolBrowser.OpenAt(canvasPosition, firstConnectionType, null, false);
+                    symbolBrowser.OpenAt(canvasPosition, firstConnectionType, null, false, null);
                 }
                 else if (TempConnections[0].SourceParentOrChildId == NotConnectedId)
                 {
@@ -247,7 +247,7 @@ namespace T3.Gui.Graph
                                                          targetParentOrChildId: TempConnections[0].TargetParentOrChildId,
                                                          targetSlotId: TempConnections[0].TargetSlotId,
                                                          firstConnectionType));
-                    symbolBrowser.OpenAt(canvasPosition, null, firstConnectionType, false);
+                    symbolBrowser.OpenAt(canvasPosition, null, firstConnectionType, false, null);
                 }
             }
             // Multiple TempConnections only work when they are connected to outputs 
@@ -269,7 +269,7 @@ namespace T3.Gui.Graph
                                                                firstConnectionType));
                     }
 
-                    symbolBrowser.OpenAt(canvasPosition, firstConnectionType, null, onlyMultiInputs: true);
+                    symbolBrowser.OpenAt(canvasPosition, firstConnectionType, null, onlyMultiInputs: true, null);
                 }
             }
             else
@@ -316,9 +316,25 @@ namespace T3.Gui.Graph
 
         public static void SplitConnectionWithSymbolBrowser(Symbol parent, SymbolBrowser symbolBrowser, Symbol.Connection connection, Vector2 positionInCanvas)
         {
+            if (connection.IsConnectedToSymbolOutput)
+            {
+                Log.Debug("Splitting connections to output is not implemented yet");
+                return;
+            }
+            else if (connection.IsConnectedToSymbolInput)
+            {
+                Log.Debug("Splitting connections from inputs is not implemented yet");
+                return;
+            }
+
             // Todo: Fix me for output nodes
             var child = parent.Children.Single(child2 => child2.Id == connection.TargetParentOrChildId);
             var inputDef = child.Symbol.InputDefinitions.Single(i => i.Id == connection.TargetSlotId);
+
+            var commands = new List<ICommand>();
+            commands.Add(new DeleteConnectionCommand(parent, connection, 0));
+            var prepareCommand = new MacroCommand("Split", commands);
+            UndoRedoStack.AddAndExecute(prepareCommand);
 
             TempConnections.Clear();
             var connectionType = inputDef.DefaultValue.ValueType;
@@ -334,8 +350,7 @@ namespace T3.Gui.Graph
                                                    targetSlotId: connection.TargetSlotId,
                                                    connectionType));
 
-            symbolBrowser.OpenAt(positionInCanvas, connectionType, connectionType, false);
-            parent.RemoveConnection(connection);
+            symbolBrowser.OpenAt(positionInCanvas, connectionType, connectionType, false, prepareCommand);
         }
 
         public static void OpenBrowserWithSingleSelection(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance)
@@ -367,12 +382,9 @@ namespace T3.Gui.Graph
 
             symbolBrowser.OpenAt(childUi.PosOnCanvas + new Vector2(childUi.Size.X, 0)
                                                      + new Vector2(SelectableNodeMovement.SnapPadding.X, 0),
-                                 primaryOutput.ValueType, primaryOutput.ValueType, false);
+                                 primaryOutput.ValueType, primaryOutput.ValueType, false, null);
         }
-        
-        
         #endregion
-
 
         public static void SplitConnectionWithDraggedNode(SymbolChildUi childUi, Symbol.Connection oldConnection, Instance instance)
         {
@@ -384,21 +396,22 @@ namespace T3.Gui.Graph
                 Log.Warning("Can't split this connection");
                 return;
             }
-            
+
             var outputDef = sourceInstance.Symbol.OutputDefinitions.Single(outDef => outDef.Id == oldConnection.SourceSlotId);
             var connectionType = outputDef.ValueType;
-            
+
             // Check if nodes primary input is not connected
-            var 
+            var
                 firstMatchingInput = instance.Inputs.FirstOrDefault(input => input.ValueType == connectionType);
             if (instance.Outputs.Count < 1)
             {
                 Log.Warning("Can't use node without outputs for splitting");
                 return;
             }
+
             var primaryOutput = instance.Outputs[0];
 
-            if (primaryOutput == null 
+            if (primaryOutput == null
                 || firstMatchingInput == null
                 //|| primaryOutput.IsConnected 
                 || firstMatchingInput.IsConnected)
@@ -406,7 +419,7 @@ namespace T3.Gui.Graph
                 Log.Warning("Op doesn't match connection type");
                 return;
             }
-            
+
             // TempConnections.Add(new TempConnection(sourceParentOrChildId: connection.SourceParentOrChildId,
             //                                        sourceSlotId: connection.SourceSlotId,
             //                                        targetParentOrChildId: UseDraftChildId,
@@ -419,26 +432,23 @@ namespace T3.Gui.Graph
             //                                        targetSlotId: connection.TargetSlotId,
             //                                        connectionType));
 
-
             var connectionCommands = new List<ICommand>();
-            
-            connectionCommands.Add(new DeleteConnectionCommand(parent.Symbol, oldConnection,0));
+
+            connectionCommands.Add(new DeleteConnectionCommand(parent.Symbol, oldConnection, 0));
             connectionCommands.Add(new AddConnectionCommand(parent.Symbol, new Symbol.Connection(oldConnection.SourceParentOrChildId,
                                                                                                  oldConnection.SourceSlotId,
                                                                                                  childUi.SymbolChild.Id,
                                                                                                  firstMatchingInput.Id
-                                                                                                 ),0 ));
-            
+                                                                                                ), 0));
+
             connectionCommands.Add(new AddConnectionCommand(parent.Symbol, new Symbol.Connection(childUi.SymbolChild.Id,
                                                                                                  primaryOutput.Id,
                                                                                                  oldConnection.TargetParentOrChildId,
                                                                                                  oldConnection.TargetSlotId
-                                                                                                ),0 ));
+                                                                                                ), 0));
             var marcoCommand = new MacroCommand("Insert node to connection", connectionCommands);
             UndoRedoStack.AddAndExecute(marcoCommand);
-        } 
-        
-        
+        }
 
         public static void CompleteAtSymbolInputNode(Symbol parentSymbol, Symbol.InputDefinition inputDef)
         {
@@ -670,7 +680,7 @@ namespace T3.Gui.Graph
             {
                 _mousePosition = ImGui.GetMousePos();
                 BestMatchLastFrame = _bestMatchYetForCurrentFrame;
-                if (BestMatchLastFrame != null && TempConnections.Count ==0)
+                if (BestMatchLastFrame != null && TempConnections.Count == 0)
                 {
                     var time = ImGui.GetTime();
                     if (_hoverStartTime < 0)
@@ -679,12 +689,12 @@ namespace T3.Gui.Graph
                     var hoverDuration = time - _hoverStartTime;
                     var radius = EaseFunctions.EaseOutElastic((float)hoverDuration) * 4;
                     var drawList = ImGui.GetForegroundDrawList();
-                    
+
                     drawList.AddCircleFilled(_bestMatchYetForCurrentFrame.PositionOnScreen, radius, _bestMatchYetForCurrentFrame.Color, 30);
                     ImGui.SetCursorScreenPos(_bestMatchYetForCurrentFrame.PositionOnScreen - Vector2.One * radius / 2);
-                    
+
                     ImGui.InvisibleButton("splitMe", Vector2.One * radius);
-                    if (ImGui.IsItemDeactivated() 
+                    if (ImGui.IsItemDeactivated()
                         && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() < 4
                         )
                     {

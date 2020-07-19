@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Commands;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -20,8 +22,9 @@ namespace T3.Gui.Graph.Interaction
     public class SymbolBrowser
     {
         #region public API ------------------------------------------------------------------------
-        public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType, bool onlyMultiInputs)
+        public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType, bool onlyMultiInputs, MacroCommand prepareCommand)
         {
+            _prepareCommand = prepareCommand;
             _isOpen = true;
             PosOnCanvas = positionOnCanvas;
             _focusInputNextTime = true;
@@ -30,7 +33,7 @@ namespace T3.Gui.Graph.Interaction
             _filter.SearchString = "";
             _selectedSymbolUi = null;
             _filter.OnlyMultiInputs = onlyMultiInputs;
-            _filter.UpdateIfNecessary(); 
+            _filter.UpdateIfNecessary();
             DisableImGuiKeyboardNavigation();
 
             if (_selectedSymbolUi == null && _filter.MatchingSymbolUis.Count > 0)
@@ -45,7 +48,7 @@ namespace T3.Gui.Graph.Interaction
             {
                 if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((int)Key.Tab))
                     return;
-                
+
                 if (SelectionManager.GetSelectedSymbolChildUis().Count() == 1)
                 {
                     var childUi = SelectionManager.GetSelectedSymbolChildUis().ToList()[0];
@@ -56,14 +59,15 @@ namespace T3.Gui.Graph.Interaction
                 }
                 else
                 {
-                    OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos+ new Vector2(-4,-20)), null, null, false);                    
+                    OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos + new Vector2(-4, -20)), null, null, false, null);
                 }
+
                 return;
             }
-            
+
             T3Ui.OpenedPopUpName = "SymbolBrowser";
             Current = this;
-            
+
             _filter.UpdateIfNecessary();
 
             ImGui.PushID(UiId);
@@ -131,9 +135,8 @@ namespace T3.Gui.Graph.Interaction
                     CreateInstance(_selectedSymbolUi.Symbol);
                 }
             }
-            
-            
-            if(_filter.WasUpdated)
+
+            if (_filter.WasUpdated)
             {
                 _selectedSymbolUi = _filter.MatchingSymbolUis.Count > 0
                                         ? _filter.MatchingSymbolUis[0]
@@ -148,7 +151,7 @@ namespace T3.Gui.Graph.Interaction
             {
                 ConnectionMaker.Cancel();
                 //Log.Debug("Closing...");
-                Close();
+                Cancel();
             }
 
             ImGui.PopStyleVar();
@@ -160,6 +163,17 @@ namespace T3.Gui.Graph.Interaction
                     PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
                 }
             }
+        }
+
+        private void Cancel()
+        {
+            if (_prepareCommand != null)
+            {
+                _prepareCommand.Undo();
+                _prepareCommand = null;
+            }
+
+            Close();
         }
 
         private void Close()
@@ -264,42 +278,76 @@ namespace T3.Gui.Graph.Interaction
 
         private void CreateInstance(Symbol symbol)
         {
+            var commands = new List<ICommand>();
             var parent = GraphCanvas.Current.CompositionOp.Symbol;
-            var newChildUi = NodeOperations.CreateInstance(symbol, parent, PosOnCanvas);
+            //var newChildUi = NodeOperations.CreateInstance(symbol, parent, PosOnCanvas);
+
+            var addSymbolChildCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = PosOnCanvas };
+            commands.Add(addSymbolChildCommand);
+            addSymbolChildCommand.Do();
+            var newSymbolChild = parent.Children.Single(entry => entry.Id == addSymbolChildCommand.AddedChildId);
+
+            // Select new node
+            var symbolUi = SymbolUiRegistry.Entries[parent.Id];
+            var newChildUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+
             var newInstance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == newChildUi.Id);
             SelectionManager.SetSelection(newChildUi, newInstance);
 
-            // TODO: Refactor this by moving it to connectionMaker
-            // if (ConnectionMaker.TempConnections.Count > 0 && symbol.InputDefinitions.Any())
-            // {
-            //     var temp = ConnectionMaker.TempConnections;
-            //     if (temp.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
-            //     {
-            //         // connecting to output
-            //         ConnectionMaker.CompleteConnectionFromBuiltNode(parent, newChildUi.SymbolChild,
-            //                                                         symbol.GetOutputMatchingType(_filter.FilterInputType));
-            //     }
-            //     else
-            //     {
-            //         // connecting to input
-            //         ConnectionMaker.CompleteConnectionsIntoBuiltNode(parent, newChildUi.SymbolChild, symbol.GetInputMatchingType(_filter.FilterInputType));
-            //     }
-            // }
-            // else
-            // {
-            //     ConnectionMaker.Cancel();
-            // }
-            ConnectionMaker.CompleteConnectsToBuiltNode(parent, newChildUi.SymbolChild);
-            
-            
-            ConnectionMaker.Cancel();
+            if (_prepareCommand != null)
+            {
+                _prepareCommand.Undo();
+                commands.Add(_prepareCommand);
+            }
 
+            //var newSymbolChild = newChildUi.SymbolChild;
+            foreach (var c in ConnectionMaker.TempConnections)
+            {
+                switch (c.GetStatus())
+                {
+                    case ConnectionMaker.TempConnection.Status.SourceIsDraftNode:
+                        var outputDef = newSymbolChild.Symbol.GetOutputMatchingType(c.ConnectionType);
+                        var newConnectionToSource = new Symbol.Connection(sourceParentOrChildId: newSymbolChild.Id,
+                                                                          sourceSlotId: outputDef.Id,
+                                                                          targetParentOrChildId: c.TargetParentOrChildId,
+                                                                          targetSlotId: c.TargetSlotId);
+                        var addConnectionCommand = new AddConnectionCommand(parent, newConnectionToSource, 0);
+                        addConnectionCommand.Do();
+                        commands.Add(addConnectionCommand);
+                        break;
+
+                    case ConnectionMaker.TempConnection.Status.TargetIsDraftNode:
+                        var inputDef = newSymbolChild.Symbol.GetInputMatchingType(c.ConnectionType);
+                        if (inputDef == null)
+                        {
+                            Log.Warning("Failed to complete node creation");
+                            //ConnectionMaker.Reset();
+                            return;
+                        }
+
+                        var newConnectionToInput = new Symbol.Connection(sourceParentOrChildId: c.SourceParentOrChildId,
+                                                                         sourceSlotId: c.SourceSlotId,
+                                                                         targetParentOrChildId: newSymbolChild.Id,
+                                                                         targetSlotId: inputDef.Id);
+                        var connectionCommand = new AddConnectionCommand(parent, newConnectionToInput, 0);
+                        connectionCommand.Do();
+                        commands.Add(connectionCommand);
+                        break;
+                }
+            }
+
+            var newCommand = new MacroCommand("Insert and connect node", commands);
+            UndoRedoStack.Add(newCommand);
+            ConnectionMaker.Cancel();
             Close();
         }
 
         private readonly SymbolFilter _filter = new SymbolFilter();
-        
-        
+
+        /// <summary>
+        /// required correctly restore original state when closing the browser  
+        /// </summary>
+        private MacroCommand _prepareCommand;
         #endregion
 
         // This has to be called on open

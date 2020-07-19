@@ -524,7 +524,7 @@ namespace T3.Gui.Graph
 
             if (ImGui.MenuItem("Add Node"))
             {
-                _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null, false);
+                _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null, false, null);
             }
 
             if (ImGui.MenuItem("Add input parameter"))
