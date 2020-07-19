@@ -196,7 +196,8 @@ namespace T3.Gui.Graph
 
                 if (ConnectionMaker.TempConnections.Count > 0 && ImGui.IsMouseReleased(0))
                 {
-                    var droppedOnBackground = ImGui.IsWindowHovered() && !ImGui.IsAnyItemHovered();
+                    var isAnyItemHovered = ImGui.IsAnyItemHovered();
+                    var droppedOnBackground = ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isAnyItemHovered;
                     if (droppedOnBackground)
                     {
                         ConnectionMaker.InitSymbolBrowserAtPosition(_symbolBrowser,
@@ -211,7 +212,6 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                
                 DrawList.PopClipRect();
                 DrawContextMenu();
 

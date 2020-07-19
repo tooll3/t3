@@ -210,11 +210,22 @@ namespace T3.Gui.InputUi
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
                     
+                    
                     if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         if (IsAnimatable)
                             animator.CreateInputUpdateAction<float>(inputSlot);
                     }
+
+                    if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > 4)
+                    {
+                        if (ConnectionMaker.TempConnections.Count == 0)
+                        {
+                            ConnectionMaker.StartFromInputSlot(compositionUi.Symbol, symbolChildUi, InputDefinition);
+                        }
+                    }
+                    
+                    
                     if(ImGui.IsItemHovered() && IsAnimatable) 
                         ImGui.SetTooltip($"Click to animate\n{input.DefaultValue.ValueType}");
 
