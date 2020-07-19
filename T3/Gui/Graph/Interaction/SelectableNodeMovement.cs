@@ -64,7 +64,7 @@ namespace T3.Gui.Graph.Interaction
                 _draggedNodeId = Guid.Empty;
                 _draggedNodes.Clear();
 
-                var wasDragging = ImGui.GetMouseDragDelta(0).LengthSquared() > 0.0f;
+                var wasDragging = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > 0.0f;
                 if (wasDragging)
                 {
                     _moveCommand.StoreCurrentValues();

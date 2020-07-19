@@ -15,63 +15,70 @@ namespace T3.Gui.ChildUi.Animators
             var modified = false;
             var h = innerRect.GetHeight();
             var graphRect = innerRect;
-            graphRect.Min.X = graphRect.Max.X - graphRect.GetWidth() * 0.5f;// GraphWidthRatio * h;
+            graphRect.Min.X = graphRect.Max.X - graphRect.GetWidth() * 0.5f; // GraphWidthRatio * h;
 
             // Draw interaction
             ImGui.SetCursorScreenPos(graphRect.Min);
-            ImGui.InvisibleButton("dragMicroGraph", graphRect.GetSize());
-            
-            if (ImGui.IsItemHovered() || _dragState != DragMode.Off)
-            { 
-                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
-            }
+            var isActive = false;
 
-            var isActive = ImGui.IsItemActive();
+            if (ImGui.GetIO().KeyCtrl)
+            {
+                ImGui.InvisibleButton("dragMicroGraph", graphRect.GetSize());
+
+                if (ImGui.IsItemHovered() || _dragState != DragMode.Off)
+                {
+                    ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
+                }
+                isActive = ImGui.IsItemActive();
+            }
+            
             if (isActive)
             {
-                 var dragDelta = ImGui.GetMouseDragDelta(0, 1);
-                 switch (_dragState)
-                 {
-                     case DragMode.Off:
-                     case DragMode.Undecided:
-                     {
-                         if (dragDelta.LengthSquared() > 10)
-                         {
-                             _dragState = Math.Abs(dragDelta.X) > Math.Abs(dragDelta.Y) 
-                                              ? DragMode.DraggingHorizontally : 
-                                              DragMode.DraggingVertically;
-                             _dragStartPosition = ImGui.GetMousePos();
-                             _dragStartSmoothing = smoothing;
-                             _dragStartOffset = offset;
-                         }
+                var dragDelta = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 1);
+                switch (_dragState)
+                {
+                    case DragMode.Off:
+                    case DragMode.Undecided:
+                    {
+                        if (dragDelta.LengthSquared() > 10)
+                        {
+                            _dragState = Math.Abs(dragDelta.X) > Math.Abs(dragDelta.Y)
+                                             ? DragMode.DraggingHorizontally
+                                             : DragMode.DraggingVertically;
+                            _dragStartPosition = ImGui.GetMousePos();
+                            _dragStartSmoothing = smoothing;
+                            _dragStartOffset = offset;
+                        }
 
-                         break;
-                     }
-                     
-                     case DragMode.DraggingHorizontally:
-                         if (Math.Abs(dragDelta.X) > 0.5f)
-                         {
-                             smoothing = (_dragStartSmoothing - (_dragStartPosition.X - ImGui.GetMousePos().X)/100).Clamp(0, 1);
-                             modified = true;
-                         }
-                         break;
-                
-                     case DragMode.DraggingVertically:
-                         if (Math.Abs(dragDelta.Y) > 0.5f)
-                         {
-                             var logScale = ((float)Math.Pow(1.02f,Math.Abs(dragDelta.Y)) -1)/100;
-                             offset = _dragStartOffset + (dragDelta.Y < 0 ? logScale : -logScale);
-                             modified = true;
-                         }
-                         break;
-                 }
+                        break;
+                    }
+
+                    case DragMode.DraggingHorizontally:
+                        if (Math.Abs(dragDelta.X) > 0.5f)
+                        {
+                            smoothing = (_dragStartSmoothing - (_dragStartPosition.X - ImGui.GetMousePos().X) / 100).Clamp(0, 1);
+                            modified = true;
+                        }
+
+                        break;
+
+                    case DragMode.DraggingVertically:
+                        if (Math.Abs(dragDelta.Y) > 0.5f)
+                        {
+                            var logScale = ((float)Math.Pow(1.02f, Math.Abs(dragDelta.Y)) - 1) / 100;
+                            offset = _dragStartOffset + (dragDelta.Y < 0 ? logScale : -logScale);
+                            modified = true;
+                        }
+
+                        break;
+                }
             }
-            else if (ImGui.IsItemDeactivated())
+            
+            if (!isActive || ImGui.IsItemDeactivated())
             {
                 _dragState = DragMode.Off;
             }
-            
-            
+
             // horizontal line
             var lh1 = graphRect.Min + Vector2.UnitY * h / 2;
             var lh2 = new Vector2(graphRect.Max.X, lh1.Y + 1);
@@ -79,12 +86,12 @@ namespace T3.Gui.ChildUi.Animators
 
             // Vertical start line
             var lv1 = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * 0.1f + 0.5f);
-            
+
             var lv2 = new Vector2(lv1.X + 1, graphRect.Max.Y);
             drawList.AddRectFilled(lv1, lv2, GraphLineColor);
 
             // Fragment line 
-            var width = graphRect.GetWidth() - (lv1.X - graphRect.Min.X  );  //h * (GraphWidthRatio - leftPaddingH);
+            var width = graphRect.GetWidth() - (lv1.X - graphRect.Min.X); //h * (GraphWidthRatio - leftPaddingH);
             var dx = new Vector2(fragment * width - 1, 0);
             drawList.AddRectFilled(lv1 + dx, lv2 + dx, FragmentLineColor);
 
@@ -115,7 +122,7 @@ namespace T3.Gui.ChildUi.Animators
             if (h > 14)
             {
                 ImGui.PushFont(Fonts.FontSmall);
-                
+
                 var labelSize = ImGui.CalcTextSize(valueText);
 
                 var color = isActive && _dragState == DragMode.DraggingVertically ? Color.Red : Color.White;
@@ -124,6 +131,7 @@ namespace T3.Gui.ChildUi.Animators
                                                             )), color, valueText);
                 ImGui.PopFont();
             }
+
             return modified;
         }
 
@@ -144,7 +152,7 @@ namespace T3.Gui.ChildUi.Animators
         private static readonly Color FragmentLineColor = Color.Orange;
         private static readonly Color CurveLineColor = new Color(1, 1, 1, 0.5f);
         private const float JumpDistanceDragScale = 1.05f;
-        
+
         private static readonly Vector2[] GraphLinePoints = new Vector2[4];
     }
 }

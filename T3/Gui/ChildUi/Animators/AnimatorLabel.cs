@@ -42,15 +42,23 @@ namespace T3.Gui.ChildUi.Animators
             var speedRect = selectableScreenRect;
             speedRect.Max.X = speedRect.Min.X +  speedRect.GetWidth() * 0.2f;
             ImGui.SetCursorScreenPos(speedRect.Min);
-            ImGui.InvisibleButton("rateButton", speedRect.GetSize());
-            if (ImGui.IsItemHovered())
-            {
-                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS);
-            }
 
-            if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+            var isActive = false;
+            if (ImGui.GetIO().KeyCtrl)
             {
-                var dragDelta = ImGui.GetMouseDragDelta(0, 1);
+                ImGui.InvisibleButton("rateButton", speedRect.GetSize());
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS);
+                }
+
+                isActive = ImGui.IsItemActive();
+            }
+            
+
+            if (isActive && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+            {
+                var dragDelta = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 1);
                 if (Math.Abs(dragDelta.Y) > 40)
                 {
                     if (dragDelta.Y > 0 && currentRateIndex > 0)
