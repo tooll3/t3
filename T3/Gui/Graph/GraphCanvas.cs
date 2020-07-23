@@ -76,7 +76,7 @@ namespace T3.Gui.Graph
             // Validation that instance is valid
             // TODO: only do in debug mode
             var op = NodeOperations.GetInstanceFromIdPath(_compositionPath);
-            var matchingChild = op.Children.Single(child => child == instance);
+            var matchingChild = op.Children.SingleOrDefault(child => child == instance);
             if (matchingChild == null)
             {
                 throw new ArgumentException("Can't OpenChildNode because Instance is not a child of current composition");
