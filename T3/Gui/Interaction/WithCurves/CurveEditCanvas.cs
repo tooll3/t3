@@ -56,7 +56,7 @@ namespace T3.Gui.Interaction.WithCurves
         {
             var hoverNewKeyframe = !ImGui.IsAnyItemActive()
                                    && ImGui.IsWindowHovered()
-                                   && ImGui.GetIO().KeyCtrl
+                                   && ImGui.GetIO().KeyAlt
                                    && ImGui.IsWindowHovered();
             if (!hoverNewKeyframe)
                 return;

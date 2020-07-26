@@ -142,7 +142,7 @@ namespace T3.Gui.Graph
 
                 // Tooltip
                 if (ImGui.IsItemHovered() 
-                && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip)
+                    && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip)
                 {
                     SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
 
@@ -208,7 +208,8 @@ namespace T3.Gui.Graph
                     && !clickWasDrag
                     && !ParameterWindow.IsAnyInstanceVisible()
                     && !justOpenedChild
-                    && string.IsNullOrEmpty(T3Ui.OpenedPopUpName))
+                    && string.IsNullOrEmpty(T3Ui.OpenedPopUpName)
+                    && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0)
                 {
                     SelectionManager.SetSelection(childUi, instance);
                     ImGui.OpenPopup("parameterContextPopup");
@@ -914,7 +915,7 @@ namespace T3.Gui.Graph
         public static float SlotGaps = 2;
         public static float OutputSlotMargin = 1;
         #endregion
-
+        
         private static readonly string UnfoldLabel = (char)Icon.ChevronLeft + "##size";
         private static readonly string FoldLabel = (char)Icon.ChevronDown + "##size";
         private static readonly List<IInputUi> VisibleInputs = new List<IInputUi>(15); // A static variable to avoid GC allocations

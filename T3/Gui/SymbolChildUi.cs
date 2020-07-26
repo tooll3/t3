@@ -58,6 +58,7 @@ namespace T3.Gui
             Rendered = 1<<2,
             PreventTooltip = 1<<3,
             PreventOpenSubGraph = 1<<4,
+            PreventOpenParameterPopUp = 1<<5,
         }
         
         public virtual SymbolChildUi Clone()

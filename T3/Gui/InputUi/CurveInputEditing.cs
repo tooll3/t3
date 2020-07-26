@@ -17,9 +17,28 @@ namespace T3.Gui.InputUi
     public static class CurveInputEditing
     {
         private static readonly Dictionary<Curve, CurveInteraction> InteractionForCurve = new Dictionary<Curve, CurveInteraction>();
-        
-        public static InputEditStateFlags DrawCanvasForCurve(Curve curve)
+
+        [Flags]
+        public enum CurveEditingFlags
         {
+            None = 0,
+            FillChild = 1<<1,
+            PreventMouseInteractions = 1<<2,
+        }
+
+        private static CurveEditingFlags _flags;
+
+        public static ScalableCanvas GetCanvasForCurve(Curve curve)
+        {
+            if (!InteractionForCurve.TryGetValue(curve, out var curveInteraction))
+                return null;
+
+            return curveInteraction.Canvas;
+        }
+
+        public static InputEditStateFlags DrawCanvasForCurve(Curve curve, CurveEditingFlags flags = 0)
+        {
+            _flags = flags;
             if (!InteractionForCurve.TryGetValue(curve, out var curveInteraction))
             {
                 curveInteraction = new CurveInteraction()
@@ -43,6 +62,8 @@ namespace T3.Gui.InputUi
         {
             public List<Curve> Curves = new List<Curve>();
             private readonly SingleCurveEditCanvas _canvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + InteractionForCurve.Count };
+
+            public ScalableCanvas Canvas => _canvas;
 
             public InputEditStateFlags EditState { get; set; } = InputEditStateFlags.Nothing;
 
@@ -80,6 +101,9 @@ namespace T3.Gui.InputUi
 
             protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
             {
+                if ((_flags & CurveEditingFlags.PreventMouseInteractions) != 0)
+                    return;
+                
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
@@ -88,13 +112,14 @@ namespace T3.Gui.InputUi
                 if (!ImGui.IsItemActive())
                     return;
 
-                if (ImGui.GetIO().KeyCtrl)
-                {
-                    if (isSelected)
-                        SelectedKeyframes.Remove(vDef);
-
-                    return;
-                }
+                // Sadly, this hotkey interferes with the "Allow in graph custom ui hot key"
+                // if (ImGui.GetIO().KeyCtrl)
+                // {
+                //     if (isSelected)
+                //         SelectedKeyframes.Remove(vDef);
+                //
+                //     return;
+                // }
 
                 if (!isSelected)
                 {
@@ -195,8 +220,12 @@ namespace T3.Gui.InputUi
 
                 public void Draw(Curve curve, CurveInteraction interaction)
                 {
+
+                    var height = (_flags & CurveEditingFlags.FillChild) == CurveEditingFlags.FillChild 
+                                     ? ImGui.GetContentRegionAvail().Y 
+                                     : DefaultCurveParameterHeight;
                     
-                    DrawCurveCanvas(DrawCanvasContent, DefaultCurveParameterHeight);
+                    DrawCurveCanvas(DrawCanvasContent, height);
 
                     void DrawCanvasContent()
                     {
@@ -211,6 +240,18 @@ namespace T3.Gui.InputUi
                         }
 
                         interaction.HandleFenceSelection();
+                        
+                        // Handle keyboard interaction 
+                        if (ImGui.IsWindowHovered() && KeyboardBinding.Triggered(UserActions.FocusSelection))
+                        {
+                            interaction.ViewAllOrSelectedKeys();
+                        }
+                        
+                        if (ImGui.IsWindowHovered() && KeyboardBinding.Triggered(UserActions.DeleteSelection))
+                        {
+                            interaction.DeleteSelectedKeyframes();
+                        }
+                        
                         interaction.DrawContextMenu();
                         HandleCreateNewKeyframes(curve);
                         if (NeedToAdjustScopeAfterFirstRendering)
@@ -222,7 +263,7 @@ namespace T3.Gui.InputUi
                     }
                 }
                 private const float DefaultCurveParameterHeight = 100;
-                private readonly StandardTimeRaster _standardRaster = new StandardTimeRaster();
+                private readonly StandardValueRaster _standardRaster = new StandardValueRaster() {EnableSnapping =  true};
                 private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
                 public bool NeedToAdjustScopeAfterFirstRendering = true;
             }

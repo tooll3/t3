@@ -8,7 +8,7 @@ using T3.Gui.UiHelpers;
 namespace T3.Gui.Windows.TimeLine
 {
     /// <summary>
-    /// A time raster that calculate required labels and spacing logarithmically. 
+    /// A time raster (vertical lines) that calculate required labels and spacing logarithmically. 
     /// </summary>
     public class StandardValueRaster : TimeRaster
     {
@@ -20,6 +20,8 @@ namespace T3.Gui.Windows.TimeLine
             var scroll = TimeLineCanvas.Current.NestedTimeOffset;
             DrawTimeTicks(scale, -scroll / scale, TimeLineCanvas.Current);
         }
+
+        public bool EnableSnapping; 
 
         public void Draw(ICanvas canvas)
         {
@@ -96,8 +98,9 @@ namespace T3.Gui.Windows.TimeLine
         
         public override  SnapResult CheckForSnap(double time, float canvasScale)
         {
-            // Disable snapping for normal mode
-            return null;
+            return !EnableSnapping 
+                       ? null 
+                       : base.CheckForSnap(time, canvasScale);
         }
 
         private readonly Raster[] _blendRasters = new Raster[2];

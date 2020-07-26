@@ -50,7 +50,7 @@ namespace T3.Gui.Windows.TimeLine
         }
         
         private Playback _lastPlayback;
-        private readonly StandardTimeRaster _standardRaster = new StandardTimeRaster();
+        private readonly StandardValueRaster _standardRaster = new StandardValueRaster();
         private readonly BeatTimeRaster _beatRaster = new BeatTimeRaster();
     }
 }

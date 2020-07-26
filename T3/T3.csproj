@@ -459,7 +459,7 @@
     <Compile Include="Gui\Windows\TimeLine\LayerClip.cs" />
     <Compile Include="Gui\Windows\TimeLine\LayersArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\LoopRange.cs" />
-    <Compile Include="Gui\Windows\TimeLine\StandardTimeRaster.cs" />
+    <Compile Include="Gui\Windows\TimeLine\StandardValueRaster.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeLineCanvas.cs" />
     <Compile Include="Gui\Windows\TimeLine\TimeLineImage.cs" />
     <Compile Include="Gui\Windows\TimeLine\ClipRange.cs" />
