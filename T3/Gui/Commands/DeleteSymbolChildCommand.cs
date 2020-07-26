@@ -68,7 +68,7 @@ namespace T3.Gui.Commands
                                     MultiInputIndex = compositionSymbol.GetMultiInputIndexFor(con)
                                 };
                     _removedConnections.Add(entry);
-                    compositionSymbol.RemoveConnection(con);
+                    compositionSymbol.RemoveConnection(con, entry.MultiInputIndex);
                 }
 
                 compositionSymbolUi.RemoveChild(childEntry.ChildId);
