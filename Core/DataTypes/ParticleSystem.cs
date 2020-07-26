@@ -58,11 +58,13 @@ namespace T3.Core.DataTypes
             resourceManager.CreateStructuredBufferSrv(ParticleBuffer, ref ParticleBufferSrv);
         }
 
+        private const int ParticleIndexSizeInBytes = 8;
+
         private void InitDeadParticleIndices()
         {
             // init the buffer 
             var resourceManager = ResourceManager.Instance();
-            resourceManager.SetupStructuredBuffer(4*MaxCount, 4, ref DeadParticleIndices);
+            resourceManager.SetupStructuredBuffer(ParticleIndexSizeInBytes*MaxCount, ParticleIndexSizeInBytes, ref DeadParticleIndices);
             resourceManager.CreateStructuredBufferUav(DeadParticleIndices, UnorderedAccessViewBufferFlags.Append, ref DeadParticleIndicesUav);
             
             // init counter of the dead list buffer (must be done due to uav binding)
@@ -91,7 +93,7 @@ namespace T3.Core.DataTypes
         private void InitAliveParticleIndices()
         {
             var resourceManager = ResourceManager.Instance();
-            resourceManager.SetupStructuredBuffer(4*MaxCount, 4, ref AliveParticleIndices);
+            resourceManager.SetupStructuredBuffer(ParticleIndexSizeInBytes*MaxCount, ParticleIndexSizeInBytes, ref AliveParticleIndices);
             resourceManager.CreateStructuredBufferUav(AliveParticleIndices, UnorderedAccessViewBufferFlags.Counter, ref AliveParticleIndicesUav);
             resourceManager.CreateStructuredBufferSrv(AliveParticleIndices, ref AliveParticleIndicesSrv);
         }
