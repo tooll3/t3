@@ -67,6 +67,9 @@ namespace T3.Gui.Graph
             // 3. Draw Nodes and their sockets and set positions for connection lines
             foreach (var instance in children)
             {
+                if (graphSymbol != GraphCanvas.Current.CompositionOp.Symbol)
+                    break;
+                
                 var childUi = _childUis.Single(ui => ui.Id == instance.SymbolChildId);
                 GraphNode.Draw(childUi, instance);
             }
