@@ -36,7 +36,7 @@ namespace T3.Gui.ChildUi
                 ImGui.Text(symbolChild.Name);
             }
 
-            ImGui.Text($"{valueInstance.Float.TypedInputValue.Value:0.00}");
+            ImGui.Text($"{valueInstance.Float.Value:0.00}");
             ImGui.EndGroup();
             ImGui.PopFont();
             

@@ -10,7 +10,7 @@ namespace T3.Gui.Windows.TimeLine
     /// <summary>
     /// A time raster that calculate required labels and spacing logarithmically. 
     /// </summary>
-    public class StandardTimeRaster : TimeRaster
+    public class StandardValueRaster : TimeRaster
     {
         public override void Draw(Playback playback)
         {
