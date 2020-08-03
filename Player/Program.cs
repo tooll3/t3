@@ -164,7 +164,7 @@ namespace T3
             _model.Load();
             
             var symbols = SymbolRegistry.Entries;
-            var demoSymbol = symbols.First(entry => entry.Value.Name == "Synchotron").Value;
+            var demoSymbol = symbols.First(entry => entry.Value.Name == "Scene1").Value;
             // create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
