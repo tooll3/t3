@@ -106,6 +106,13 @@ namespace T3.Core.Operator
     {
         public override Type Type { get; } = typeof(T);
 
+        protected Action<T, EvaluationContext> _updateCallback = null;
+        public Action<T, EvaluationContext> OnUpdateCallback
+        {
+            get => _updateCallback;
+            set => _updateCallback = value;
+        }
+
         protected Instance()
         {
             SetupInputAndOutputsFromType();
