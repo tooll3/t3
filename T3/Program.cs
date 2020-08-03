@@ -333,9 +333,6 @@ namespace T3
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
             ShaderResourceView backgroundSrv = null;
 
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             unsafe
             {
                 // disable imgui ini file settings
@@ -346,15 +343,20 @@ namespace T3
             startupStopWatch.Stop();
             Log.Debug($"startup took {startupStopWatch.ElapsedMilliseconds}ms.");
             
-            //T3Style.Init();
+
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            Int64 lastElapsedTicks = stopwatch.ElapsedTicks;
 
             // Main loop
             RenderLoop.Run(form, () =>
                                  {
                                      Int64 ticks = stopwatch.ElapsedTicks;
-                                     ImGui.GetIO().DeltaTime = (float)(ticks) / Stopwatch.Frequency;
+                                     Int64 ticksDiff = ticks - lastElapsedTicks;
+                                     ImGui.GetIO().DeltaTime = (float)((double)(ticksDiff) / Stopwatch.Frequency);
+                                     lastElapsedTicks = ticks;
+                                     Log.Debug($"delta: {ImGui.GetIO().DeltaTime}");
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
-                                     stopwatch.Restart();
 
                                      bool fullScreenBorderStyle = form.FormBorderStyle == FormBorderStyle.None;
                                      if (IsFullScreen != fullScreenBorderStyle) 

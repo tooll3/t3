@@ -174,10 +174,15 @@ namespace T3
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
+            Int64 lastElapsedTicks = stopwatch.ElapsedTicks;
 
             // Main loop
             RenderLoop.Run(form, () =>
                                  {
+                                     Int64 ticks = stopwatch.ElapsedTicks;
+                                     Int64 ticksDiff = ticks - lastElapsedTicks;
+                                     lastElapsedTicks = ticks;
+                                     // Console.WriteLine($"delta: {((double)(ticksDiff) / Stopwatch.Frequency)}");
                                      _playback.Update(1.0f);
                                      if (_playback.StreamPos >= _playback.StreamLength)
                                      {
