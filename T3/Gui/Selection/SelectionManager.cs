@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ImGuiNET;
+using SharpDX;
+using SharpDX.Mathematics.Interop;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Interfaces;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
+using T3.Gui.Windows;
 
 namespace T3.Gui.Selection
 {
@@ -12,12 +18,13 @@ namespace T3.Gui.Selection
     {
         public static void Clear()
         {
+            Selection.ForEach(RemoveTransformCallback);
             Selection.Clear();
         }
 
         public static void SetSelectionToParent(Instance instance)
         {
-            Selection.Clear();
+            Clear();
             _parent = instance;
         }
 
@@ -27,13 +34,13 @@ namespace T3.Gui.Selection
             {
                 Log.Warning("Setting selection to a SymbolChildUi without providing instance will lead to problems.");
             }
-            Selection.Clear();
+            Clear();
             AddSelection(node);
         }
 
         public static void SetSelection(SymbolChildUi node, Instance instance)
         {
-            Selection.Clear();
+            Clear();
             AddSelection(node, instance);
         }
 
@@ -54,12 +61,51 @@ namespace T3.Gui.Selection
             
             Selection.Add(node);
             if (instance != null)
+            {
                 ChildUiInstanceIdPaths[node] = NodeOperations.BuildIdPathForInstance(instance);
+                if (instance is ITransformable transformable)
+                {
+                    transformable.TransformCallback = TransformCallback;
+                    RegisteredTransformCallbacks[node] = transformable;
+                }
+            }
         }
+
+        // todo: move this to the right place when drawing is clear
+        private static void TransformCallback(ITransformable transform, EvaluationContext context)
+        {
+            var objectToClipSpace = Matrix.Multiply(Matrix.Multiply(context.ObjectToWorld,  context.WorldToCamera), context.CameraToClipSpace);
+            var t = transform.Translation;
+            Vector4 originInClipSpace = Vector4.Transform(new Vector4(t.X, t.Y, t.Z, 1.0f), objectToClipSpace);
+            originInClipSpace *= 1.0f / originInClipSpace.W;
+            var viewports = ResourceManager.Instance().Device.ImmediateContext.Rasterizer.GetViewports<RawViewportF>();
+            var originInViewport = new System.Numerics.Vector2(viewports[0].Width * (originInClipSpace.X * 0.5f + 0.5f),
+                                                               viewports[0].Height * (1.0f - (originInClipSpace.Y * 0.5f + 0.5f)));
+
+            var canvas = ImageOutputCanvas.Current;
+            originInViewport = canvas.TransformDirection(originInViewport);
+            var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
+            var originInScreen = topLeftOnScreen + originInViewport;
+
+            // ImGui.GetWindowDrawList().AddCircleFilled(textPos, 6.0f, 0xFFFFFFFF);
+            // need foreground draw list atm as texture is drawn afterwards to output view
+            ImGui.GetForegroundDrawList().AddCircleFilled(originInScreen, 6.0f, 0xFFFFFFFF);
+            // Log.Debug($"origin: {originInViewport}");
+        }
+
 
         public static void RemoveSelection(ISelectableNode node)
         {
             Selection.Remove(node);
+            RemoveTransformCallback(node);
+        }
+
+        private static void RemoveTransformCallback(ISelectableNode node)
+        {
+            if (RegisteredTransformCallbacks.TryGetValue(node, out var transformable))
+            {
+                transformable.TransformCallback = null;
+            }
         }
 
         public static IEnumerable<T> GetSelectedNodes<T>() where T : ISelectableNode
@@ -169,5 +215,6 @@ namespace T3.Gui.Selection
         //private static readonly List<ISelectableNode> NodesSelectedLastFrame = new List<ISelectableNode>();
         //private static List<ISelectableNode> _lastFrameSelection = new List<ISelectableNode>();
         private static readonly Dictionary<SymbolChildUi, List<Guid>> ChildUiInstanceIdPaths = new Dictionary<SymbolChildUi, List<Guid>>();
+        private static readonly Dictionary<ISelectableNode, ITransformable> RegisteredTransformCallbacks = new Dictionary<ISelectableNode, ITransformable>(10);
     }
 }
