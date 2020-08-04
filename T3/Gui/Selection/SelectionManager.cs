@@ -74,7 +74,7 @@ namespace T3.Gui.Selection
         // todo: move this to the right place when drawing is clear
         private static void TransformCallback(ITransformable transform, EvaluationContext context)
         {
-            var objectToClipSpace = Matrix.Multiply(Matrix.Multiply(context.ObjectToWorld,  context.WorldToCamera), context.CameraToClipSpace);
+            var objectToClipSpace = context.ObjectToWorld * context.WorldToCamera * context.CameraToClipSpace;
             var t = transform.Translation;
             Vector4 originInClipSpace = Vector4.Transform(new Vector4(t.X, t.Y, t.Z, 1.0f), objectToClipSpace);
             originInClipSpace *= 1.0f / originInClipSpace.W;
@@ -83,9 +83,9 @@ namespace T3.Gui.Selection
                                                                viewports[0].Height * (1.0f - (originInClipSpace.Y * 0.5f + 0.5f)));
 
             var canvas = ImageOutputCanvas.Current;
-            originInViewport = canvas.TransformDirection(originInViewport);
+            var originInCanvas = canvas.TransformDirection(originInViewport);
             var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
-            var originInScreen = topLeftOnScreen + originInViewport;
+            var originInScreen = topLeftOnScreen + originInCanvas;
 
             // ImGui.GetWindowDrawList().AddCircleFilled(textPos, 6.0f, 0xFFFFFFFF);
             // need foreground draw list atm as texture is drawn afterwards to output view
