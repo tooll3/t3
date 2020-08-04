@@ -355,7 +355,7 @@ namespace T3
                                      Int64 ticksDiff = ticks - lastElapsedTicks;
                                      ImGui.GetIO().DeltaTime = (float)((double)(ticksDiff) / Stopwatch.Frequency);
                                      lastElapsedTicks = ticks;
-                                     Log.Debug($"delta: {ImGui.GetIO().DeltaTime}");
+                                     // Log.Debug($"delta: {ImGui.GetIO().DeltaTime}");
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
 
                                      bool fullScreenBorderStyle = form.FormBorderStyle == FormBorderStyle.None;
