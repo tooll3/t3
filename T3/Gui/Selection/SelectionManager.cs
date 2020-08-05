@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using ImGuiNET;
-using SharpDX;
-using SharpDX.Mathematics.Interop;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Gui.Graph.Interaction;
-using T3.Gui.InputUi;
 using T3.Gui.Windows;
+
+using Vector2 = System.Numerics.Vector2;
+using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Gui.Selection
 {
@@ -76,11 +75,12 @@ namespace T3.Gui.Selection
         {
             var objectToClipSpace = context.ObjectToWorld * context.WorldToCamera * context.CameraToClipSpace;
             var t = transform.Translation;
-            Vector4 originInClipSpace = Vector4.Transform(new Vector4(t.X, t.Y, t.Z, 1.0f), objectToClipSpace);
-            originInClipSpace *= 1.0f / originInClipSpace.W;
-            var viewports = ResourceManager.Instance().Device.ImmediateContext.Rasterizer.GetViewports<RawViewportF>();
-            var originInViewport = new System.Numerics.Vector2(viewports[0].Width * (originInClipSpace.X * 0.5f + 0.5f),
-                                                               viewports[0].Height * (1.0f - (originInClipSpace.Y * 0.5f + 0.5f)));
+            SharpDX.Vector4 originInClipSpace = SharpDX.Vector4.Transform(new SharpDX.Vector4(t.X, t.Y, t.Z, 1.0f), objectToClipSpace);
+            Vector3 originInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z)/originInClipSpace.W;
+            var viewports = ResourceManager.Instance().Device.ImmediateContext.Rasterizer.GetViewports<SharpDX.Mathematics.Interop.RawViewportF>();
+            var viewport = viewports[0];
+            var originInViewport = new Vector2(viewport.Width * (originInNdc.X * 0.5f + 0.5f),
+                                               viewport.Height * (1.0f - (originInNdc.Y * 0.5f + 0.5f)));
 
             var canvas = ImageOutputCanvas.Current;
             var originInCanvas = canvas.TransformDirection(originInViewport);
@@ -90,7 +90,43 @@ namespace T3.Gui.Selection
             // ImGui.GetWindowDrawList().AddCircleFilled(textPos, 6.0f, 0xFFFFFFFF);
             // need foreground draw list atm as texture is drawn afterwards to output view
             ImGui.GetForegroundDrawList().AddCircleFilled(originInScreen, 6.0f, 0xFFFFFFFF);
-            // Log.Debug($"origin: {originInViewport}");
+
+
+            // example interaction for moving origin within plane parallel to cam
+            var mousePosInScreen = ImGui.GetIO().MousePos;
+            var screenSquaredMin = originInScreen - new Vector2(10.0f, 10.0f);
+            var screenSquaredMax = originInScreen + new Vector2(10.0f, 10.0f);
+
+            if (mousePosInScreen.X > screenSquaredMin.X && mousePosInScreen.X < screenSquaredMax.X &&
+                mousePosInScreen.Y > screenSquaredMin.Y && mousePosInScreen.Y < screenSquaredMax.Y &&
+                ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            {
+                _isGizmoDragging = true;
+                _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
+            }
+
+            if (_isGizmoDragging)
+            {
+                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                {
+                    _isGizmoDragging = false;
+                }
+                else
+                {
+                    Vector2 newOriginInScreen = mousePosInScreen - _offsetToOriginAtDragStart;
+                    // transform back to object space
+                    var clipSpaceToObject = objectToClipSpace;
+                    clipSpaceToObject.Invert();
+                    var newOriginInCanvas = newOriginInScreen - topLeftOnScreen;
+                    var newOriginInViewport = canvas.InverseTransformDirection(newOriginInCanvas);
+                    var newOriginInClipSpace = new SharpDX.Vector4(2.0f * newOriginInViewport.X / viewport.Width - 1.0f,
+                                                                   -(2.0f * newOriginInViewport.Y / viewport.Height - 1.0f),
+                                                                   originInNdc.Z, 1);
+                    var newOriginInObject = SharpDX.Vector4.Transform(newOriginInClipSpace, clipSpaceToObject);
+                    Vector3 newTranslation = new Vector3(newOriginInObject.X, newOriginInObject.Y, newOriginInObject.Z)/newOriginInObject.W;
+                    transform.Translation = newTranslation;
+                }
+            }
         }
 
 
@@ -216,5 +252,7 @@ namespace T3.Gui.Selection
         //private static List<ISelectableNode> _lastFrameSelection = new List<ISelectableNode>();
         private static readonly Dictionary<SymbolChildUi, List<Guid>> ChildUiInstanceIdPaths = new Dictionary<SymbolChildUi, List<Guid>>();
         private static readonly Dictionary<ISelectableNode, ITransformable> RegisteredTransformCallbacks = new Dictionary<ISelectableNode, ITransformable>(10);
+        private static Vector2 _offsetToOriginAtDragStart;
+        private static bool _isGizmoDragging;
     }
 }
