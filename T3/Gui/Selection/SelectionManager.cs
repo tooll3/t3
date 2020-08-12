@@ -70,13 +70,46 @@ namespace T3.Gui.Selection
             }
         }
 
+        private static Vector2 ObjectPosToScreenPos(SharpDX.Vector4 posInObject, SharpDX.Matrix objectToClipSpace)
+        {
+            SharpDX.Vector4 originInClipSpace = SharpDX.Vector4.Transform(posInObject, objectToClipSpace);
+            Vector3 posInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z) / originInClipSpace.W;
+            var viewports = ResourceManager.Instance().Device.ImmediateContext.Rasterizer.GetViewports<SharpDX.Mathematics.Interop.RawViewportF>();
+            var viewport = viewports[0];
+            var originInViewport = new Vector2(viewport.Width * (posInNdc.X * 0.5f + 0.5f),
+                                               viewport.Height * (1.0f - (posInNdc.Y * 0.5f + 0.5f)));
+
+            var canvas = ImageOutputCanvas.Current;
+            var posInCanvas = canvas.TransformDirection(originInViewport);
+            var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
+            var posInScreen = topLeftOnScreen + posInCanvas;
+
+            return posInScreen;
+        }
+        
         // todo: move this to the right place when drawing is clear
         private static void TransformCallback(ITransformable transform, EvaluationContext context)
         {
+            // terminology of the matrices:
+            // objectToClipSpace means in this context the transform without application of the ITransformable values. These are
+            // named 'local'. So localToObject is the matrix of applying the ITransformable values and localToClipSpace to transform
+            // points from the local system (including trans/rot of ITransformable) to the projected space. Scale is ignored for
+            // local here as the local values are only used for drawing and therefore we don't want to draw anything scaled by this values.
             var objectToClipSpace = context.ObjectToWorld * context.WorldToCamera * context.CameraToClipSpace;
+
+            var s = transform.Scale;
+            var r = transform.Rotation;
+            float yaw = SharpDX.MathUtil.DegreesToRadians(r.Y);
+            float pitch = SharpDX.MathUtil.DegreesToRadians(r.X);
+            float roll = SharpDX.MathUtil.DegreesToRadians(r.Z);
             var t = transform.Translation;
-            SharpDX.Vector4 originInClipSpace = SharpDX.Vector4.Transform(new SharpDX.Vector4(t.X, t.Y, t.Z, 1.0f), objectToClipSpace);
-            Vector3 originInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z)/originInClipSpace.W;
+            var localToObject = SharpDX.Matrix.Transformation(SharpDX.Vector3.Zero, SharpDX.Quaternion.Identity, SharpDX.Vector3.One,
+                                                              SharpDX.Vector3.Zero, SharpDX.Quaternion.RotationYawPitchRoll(yaw, pitch, roll),
+                                                              new SharpDX.Vector3(t.X, t.Y, t.Z));
+            var localToClipSpace = localToObject * objectToClipSpace;
+
+            SharpDX.Vector4 originInClipSpace = SharpDX.Vector4.Transform(new SharpDX.Vector4(t.X, t.Y, t.Z, 1), objectToClipSpace);
+            Vector3 originInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z) / originInClipSpace.W;
             var viewports = ResourceManager.Instance().Device.ImmediateContext.Rasterizer.GetViewports<SharpDX.Mathematics.Interop.RawViewportF>();
             var viewport = viewports[0];
             var originInViewport = new Vector2(viewport.Width * (originInNdc.X * 0.5f + 0.5f),
@@ -89,8 +122,21 @@ namespace T3.Gui.Selection
 
             // ImGui.GetWindowDrawList().AddCircleFilled(textPos, 6.0f, 0xFFFFFFFF);
             // need foreground draw list atm as texture is drawn afterwards to output view
-            ImGui.GetForegroundDrawList().AddCircleFilled(originInScreen, 6.0f, 0xFFFFFFFF);
+            var fgDrawList = ImGui.GetForegroundDrawList();
+            fgDrawList.AddCircleFilled(originInScreen, 6.0f, 0xFFFFFFFF);
 
+            // draw the gizmo axis
+            Vector2 xAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(1.0f, 0.0f, 0.0f, 1.0f), localToClipSpace);
+            Vector2 xAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(10.0f, 0.0f, 0.0f, 1.0f), localToClipSpace);
+            fgDrawList.AddLine(xAxisStartInScreen, xAxisEndInScreen, 0x7F0000FF, 4.0f);
+
+            Vector2 yAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 1.0f, 0.0f, 1.0f), localToClipSpace);
+            Vector2 yAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 10.0f, 0.0f, 1.0f), localToClipSpace);
+            fgDrawList.AddLine(yAxisStartInScreen, yAxisEndInScreen, 0x7F00FF00, 4.0f);
+            
+            Vector2 zAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 0.0f, 1.0f, 1.0f), localToClipSpace);
+            Vector2 zAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 0.0f, 10.0f, 1.0f), localToClipSpace);
+            fgDrawList.AddLine(zAxisStartInScreen, zAxisEndInScreen, 0x7FFF0000, 4.0f);
 
             // example interaction for moving origin within plane parallel to cam
             var mousePosInScreen = ImGui.GetIO().MousePos;
@@ -123,7 +169,7 @@ namespace T3.Gui.Selection
                                                                    -(2.0f * newOriginInViewport.Y / viewport.Height - 1.0f),
                                                                    originInNdc.Z, 1);
                     var newOriginInObject = SharpDX.Vector4.Transform(newOriginInClipSpace, clipSpaceToObject);
-                    Vector3 newTranslation = new Vector3(newOriginInObject.X, newOriginInObject.Y, newOriginInObject.Z)/newOriginInObject.W;
+                    Vector3 newTranslation = new Vector3(newOriginInObject.X, newOriginInObject.Y, newOriginInObject.Z) / newOriginInObject.W;
                     transform.Translation = newTranslation;
                 }
             }
