@@ -6,6 +6,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
+using T3.Gui.Selection;
 using T3.Gui.Styling;
 using Vector2 = System.Numerics.Vector2;
 
@@ -62,7 +63,8 @@ namespace T3.Gui.Windows.Output
                 _imageCanvas.PreventMouseInteraction = CameraSelectionHandling.SelectedCamera != null;
                 _imageCanvas.Update();
 
-                _cameraInteraction.Update(CameraSelectionHandling.SelectedCamera);
+                if(!SelectionManager._isGizmoDragging)
+                    _cameraInteraction.Update(CameraSelectionHandling.SelectedCamera);
 
                 // move down to avoid overlapping with toolbar
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));

@@ -299,6 +299,8 @@ namespace T3.Gui.Selection
         private static readonly Dictionary<SymbolChildUi, List<Guid>> ChildUiInstanceIdPaths = new Dictionary<SymbolChildUi, List<Guid>>();
         private static readonly Dictionary<ISelectableNode, ITransformable> RegisteredTransformCallbacks = new Dictionary<ISelectableNode, ITransformable>(10);
         private static Vector2 _offsetToOriginAtDragStart;
-        private static bool _isGizmoDragging;
+        public static bool _isGizmoDragging;
+        
+        
     }
 }
