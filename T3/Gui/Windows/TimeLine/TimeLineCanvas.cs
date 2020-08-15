@@ -96,6 +96,7 @@ namespace T3.Gui.Windows.TimeLine
                     Playback.TimeInBars = InverseTransformPosition(ImGui.GetMousePos()).X;
                 }
             }
+            Current = null;
         }
 
         #region handle nested timelines ----------------------------------
