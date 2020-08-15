@@ -18,6 +18,10 @@ namespace T3.Gui.ChildUi
 
             var innerRect = selectableScreenRect;
             innerRect.Expand(-7);
+            
+            if (innerRect.GetHeight() < 0)
+                return  SymbolChildUi.CustomUiResult.None;;
+            
 
             var curve = sampleCurve.Curve.Value;
             if (curve == null)
