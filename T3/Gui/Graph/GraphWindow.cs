@@ -6,7 +6,6 @@ using System.Linq;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Operator.Slots;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -104,7 +103,6 @@ namespace T3.Gui.Graph
             _currentWindow = null;
         }
 
-        
         private void FitViewToSelection()
         {
             var selection = SelectionManager.GetSelectedSymbolChildUis().ToArray();
@@ -141,79 +139,98 @@ namespace T3.Gui.Graph
         {
             if (SelectionManager.FitViewToSelectionRequested)
                 FitViewToSelection();
-
+            
             _imageBackground.Draw();
             
             ImGui.SetCursorPos(Vector2.Zero);
-
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
+            THelpers.DebugContentRect("window");
             {
-                var dl = ImGui.GetWindowDrawList();
+                var drawList = ImGui.GetWindowDrawList();
+                var contentHeight =0; 
                 
-                var isTimelineCollapsed = _customTimeLineHeight <= TimeLineCanvas.TimeLineDragHeight;
-                var calculatedTimelineHeight = isTimelineCollapsed
-                                         ? (_timeLineCanvas.SelectedAnimationParameters.Count * DopeSheetArea.LayerHeight)
-                                           + _timeLineCanvas.LayersArea.LastHeight
-                                           + TimeLineCanvas.TimeLineDragHeight
-                                           + 2
-                                         : _customTimeLineHeight;
-
-                if (CustomComponents.SplitFromBottom(ref calculatedTimelineHeight))
+                if (!UserSettings.Config.HideUiElementsInGraphWindow)
                 {
-                    _customTimeLineHeight = calculatedTimelineHeight;
+                    var currentTimelineHeight = UsingCustomTimelineHeight ? _customTimeLineHeight : ComputedTimelineHeight;
+                     if (CustomComponents.SplitFromBottom(ref currentTimelineHeight))
+                     {
+                          _customTimeLineHeight = (int)currentTimelineHeight;
+                     }
+                    
+                    contentHeight = (int)ImGui.GetWindowHeight() - (int)currentTimelineHeight - 4; // Hack that also depends on when a window-title is being rendered
                 }
 
-                const float imGuiTitleHeight = 4; // Hack that also depends on when a window-title is being rendered
-                var graphHeight = ImGui.GetWindowHeight() - calculatedTimelineHeight - imGuiTitleHeight;
-                ImGui.BeginChild("##graph", new Vector2(0, graphHeight), false,
-                                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
+                ImGui.BeginChild("##graph", new Vector2(0, contentHeight), false,
+                                 ImGuiWindowFlags.NoScrollbar 
+                                 | ImGuiWindowFlags.NoMove 
+                                 | ImGuiWindowFlags.NoScrollWithMouse 
+                                 | ImGuiWindowFlags.NoDecoration 
+                                 | ImGuiWindowFlags.NoTitleBar
+                                 | ImGuiWindowFlags.ChildWindow);
                 {
-                    THelpers.DebugContentRect();
-                    dl.ChannelsSplit(2);
-                    dl.ChannelsSetCurrent(1);
+                    drawList.ChannelsSplit(2);
+                    drawList.ChannelsSetCurrent(1);
                     {
-                        TitleAndBreadCrumbs.Draw(_graphCanvas.CompositionOp);
-
-                        ImGui.SetCursorPos(
-                                           new Vector2(
-                                                       ImGui.GetWindowContentRegionMin().X,
-                                                       ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
-
-                        if (CustomComponents.IconButton(isTimelineCollapsed ? Icon.ChevronUp : Icon.ChevronDown,
-                                                        "##TimelineToggle", TimeControls.ControlSize))
+                        if (!UserSettings.Config.HideUiElementsInGraphWindow)
                         {
-                            _customTimeLineHeight = isTimelineCollapsed ? 200 : TimeLineCanvas.TimeLineDragHeight;
+                            TitleAndBreadCrumbs.Draw(_graphCanvas.CompositionOp);    
                         }
-
-                        ImGui.SameLine();
-
-                        TimeControls.DrawTimeControls(ref _playback, _timeLineCanvas);
-                        if (_imageBackground.IsActive)
-                        {
-                            _imageBackground.DrawResolutionSelector();
-                            ImGui.SameLine();
-                            if (ImGui.Button("Clear"))
-                            {
-                                _currentWindow._imageBackground.BackgroundNodePath = null;
-                            }
-                        }
+                        DrawControlsAtBottom();
                     }
-                    dl.ChannelsSetCurrent(0);
+                    
+                    drawList.ChannelsSetCurrent(0);
                     {
-                        _graphCanvas.Draw(dl, showGrid: !_imageBackground.IsActive);
+                        _graphCanvas.Draw(drawList, showGrid: !_imageBackground.IsActive);
                     }
-                    dl.ChannelsMerge();
+                    drawList.ChannelsMerge();
                 }
                 ImGui.EndChild();
-                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
-                ImGui.BeginChild("##timeline", Vector2.Zero, false,
-                                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
+                
+                if (!UserSettings.Config.HideUiElementsInGraphWindow)
                 {
-                    _timeLineCanvas.Draw(_graphCanvas.CompositionOp);
+                    var availableRestHeight = ImGui.GetContentRegionAvail().Y;
+                    if (availableRestHeight <= 3)
+                    {
+                        Log.Warning($"skipping rending of timeline because layout is inconsistent: only {availableRestHeight}px left.");
+                    }
+                    else
+                    {
+                        ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
+                        ImGui.BeginChild("##timeline", Vector2.Zero, false,
+                                         ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
+                        {
+                            _timeLineCanvas.Draw(_graphCanvas.CompositionOp);
+                        }
+                        ImGui.EndChild();
+                    }
                 }
-                ImGui.EndChild();
             }
-            ImGui.PopStyleVar();
+        }
+
+        private void DrawControlsAtBottom()
+        {
+            ImGui.SetCursorPos(
+                               new Vector2(
+                                           ImGui.GetWindowContentRegionMin().X,
+                                           ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
+
+            if (CustomComponents.IconButton(UsingCustomTimelineHeight ? Icon.ChevronUp : Icon.ChevronDown,
+                                            "##TimelineToggle", TimeControls.ControlSize))
+            {
+                _customTimeLineHeight = UsingCustomTimelineHeight ? UseComputedHeight : 200;
+            }
+
+            ImGui.SameLine();
+
+            TimeControls.DrawTimeControls(ref _playback, _timeLineCanvas);
+            if (_imageBackground.IsActive)
+            {
+                _imageBackground.DrawResolutionSelector();
+                ImGui.SameLine();
+                if (ImGui.Button("Clear"))
+                {
+                    _currentWindow._imageBackground.BackgroundNodePath = null;
+                }
+            }
         }
 
         protected override void Close()
@@ -231,9 +248,6 @@ namespace T3.Gui.Graph
         {
             public static void Draw(Instance compositionOp)
             {
-                if (UserSettings.Config.HideUiElementsInGraphWindow)
-                    return;
-
                 DrawBreadcrumbs(compositionOp);
                 DrawNameAndDescription(compositionOp);
             }
@@ -326,25 +340,24 @@ namespace T3.Gui.Graph
                     }
                 }
             }
+
             private static bool _justAddedDescription;
         }
 
-
-        private void PrepareTimelineLayout()
-        {
-            //var animationParameters = GetAnimationParametersForSelectedNodes(compositionOp);
-
-
-             
-        }
         
-        private bool _isCollapsed;
-
         private readonly ImageBackground _imageBackground = new ImageBackground();
 
         private readonly GraphCanvas _graphCanvas;
         private Playback _playback;
-        private float _customTimeLineHeight = TimeLineCanvas.TimeLineDragHeight;
+        private const int UseComputedHeight = -1;
+        private int _customTimeLineHeight = UseComputedHeight;
+        private bool UsingCustomTimelineHeight => _customTimeLineHeight > UseComputedHeight;
+
+        private float ComputedTimelineHeight => (_timeLineCanvas.SelectedAnimationParameters.Count * DopeSheetArea.LayerHeight)
+                                              + _timeLineCanvas.LayersArea.LastHeight
+                                              + TimeLineCanvas.TimeLineDragHeight
+                                              + 2;
+
         private readonly TimeLineCanvas _timeLineCanvas;
     }
 }
