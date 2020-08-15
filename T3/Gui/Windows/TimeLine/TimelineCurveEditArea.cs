@@ -6,6 +6,7 @@ using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.InputUi;
@@ -29,7 +30,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         
-        public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters, bool bringCurvesIntoView = false)
+        public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters, bool bringCurvesIntoView = false)
         {
             _compositionOp = compositionOp;
             AnimationParameters = animationParameters;
@@ -222,7 +223,7 @@ namespace T3.Gui.Windows.TimeLine
         {
             _snapThresholdOnCanvas = SnapDistance / canvasScale;;
             var maxForce = 0.0;
-            var bestSnapTime = double.NaN;
+            var bestSnapTime = Double.NaN;
 
             foreach (var vDefinition in GetAllKeyframes())
             {
@@ -232,7 +233,7 @@ namespace T3.Gui.Windows.TimeLine
                 CheckForSnapping(targetTime, vDefinition.U, maxForce: ref maxForce, bestSnapTime: ref bestSnapTime);
             }
 
-            return double.IsNaN(bestSnapTime)
+            return Double.IsNaN(bestSnapTime)
                        ? null
                        : new SnapResult(bestSnapTime, maxForce);
         }

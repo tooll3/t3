@@ -28,9 +28,9 @@ namespace T3.Gui.Windows.TimeLine
             TimeLineCanvas = timeLineCanvas;
         }
 
-        private GraphWindow.AnimationParameter _currentAnimationParameter;
+        private TimeLineCanvas.AnimationParameter _currentAnimationParameter;
 
-        public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
+        public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters)
         {
             _drawList = ImGui.GetWindowDrawList();
             AnimationParameters = animationParameters;
@@ -77,7 +77,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.EndGroup();
         }
 
-        private void DrawProperty(GraphWindow.AnimationParameter parameter)
+        private void DrawProperty(TimeLineCanvas.AnimationParameter parameter)
         {
             var min = ImGui.GetCursorScreenPos();
             var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight - 1);
@@ -158,7 +158,7 @@ namespace T3.Gui.Windows.TimeLine
 
         public readonly HashSet<int> PinnedParameters = new HashSet<int>();
 
-        private void HandleCreateNewKeyframes(GraphWindow.AnimationParameter parameter, ImRect layerArea)
+        private void HandleCreateNewKeyframes(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea)
         {
             var hoverNewKeyframe = !ImGui.IsAnyItemActive()
                                    && ImGui.IsWindowHovered()
@@ -191,7 +191,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
         }
 
-        private void InsertNewKeyframe(GraphWindow.AnimationParameter parameter, float time, bool setPlaybackTime = false, float increment = 0)
+        private void InsertNewKeyframe(TimeLineCanvas.AnimationParameter parameter, float time, bool setPlaybackTime = false, float increment = 0)
         {
             foreach (var curve in parameter.Curves)
             {
@@ -224,7 +224,7 @@ namespace T3.Gui.Windows.TimeLine
                 GrayCurveColor,
             };
 
-        private void DrawCurveLines(GraphWindow.AnimationParameter parameter, ImRect layerArea)
+        private void DrawCurveLines(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea)
         {
             const float padding = 2;
             // Lines
@@ -277,7 +277,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        private void DrawCurveGradient(GraphWindow.AnimationParameter parameter, ImRect layerArea)
+        private void DrawCurveGradient(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea)
         {
             if (parameter.Curves.Count() != 4)
                 return;
@@ -315,7 +315,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        private void DrawKeyframe(VDefinition vDef, ImRect layerArea, GraphWindow.AnimationParameter parameter, VDefinition lastVDef)
+        private void DrawKeyframe(VDefinition vDef, ImRect layerArea, TimeLineCanvas.AnimationParameter parameter, VDefinition lastVDef)
         {
             var posOnScreen = new Vector2(
                                           TimeLineCanvas.Current.TransformX((float)vDef.U) - KeyframeIconWidth / 2 + 1,

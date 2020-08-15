@@ -11,6 +11,7 @@ using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Interaction.WithCurves;
+using T3.Gui.Selection;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -40,41 +41,37 @@ namespace T3.Gui.Windows.TimeLine
 
         public bool FoundTimeClipForCurrentTime => LayersArea.FoundClipWithinCurrentTime;
 
-
-        
-        
-        public void Draw(Instance compositionOp, List<GraphWindow.AnimationParameter> animationParameters)
+        public void Draw(Instance compositionOp)
         {
             Current = this;
+            SelectedAnimationParameters = GetAnimationParametersForSelectedNodes(compositionOp);
             UpdateLocalTimeTranslation(compositionOp);
             ScrollToTimeAfterStopped();
 
-            
             var modeChanged = UpdateMode();
-            DrawCurveCanvas(drawAdditionalCanvasContent:DrawCanvasContent);
+            DrawCurveCanvas(drawAdditionalCanvasContent: DrawCanvasContent);
 
             void DrawCanvasContent()
             {
                 _timeLineImage.Draw(Drawlist, Playback);
                 ImGui.SetScrollY(0);
 
-                HandleDeferredActions(animationParameters);
+                HandleDeferredActions();
 
                 if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
                     DeleteSelectedElements();
 
                 _timeRasterSwitcher.Draw(Playback);
 
-                
                 switch (Mode)
                 {
                     case Modes.DopeView:
                         LayersArea.Draw(compositionOp, Playback);
-                        DopeSheetArea.Draw(compositionOp, animationParameters);
+                        DopeSheetArea.Draw(compositionOp, SelectedAnimationParameters);
                         break;
                     case Modes.CurveEditor:
                         _horizontalRaster.Draw(this);
-                        _timelineCurveEditArea.Draw(compositionOp, animationParameters, bringCurvesIntoView: modeChanged);
+                        _timelineCurveEditArea.Draw(compositionOp, SelectedAnimationParameters, bringCurvesIntoView: modeChanged);
                         break;
                 }
 
@@ -88,11 +85,12 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     _clipRange.Draw(this, compositionTimeClip, Drawlist, SnapHandlerForU);
                 }
+
                 _timeSelectionRange.Draw(Drawlist);
-                
+
                 _currentTimeMarker.Draw(Playback);
                 DrawDragTimeArea();
-                
+
                 if (FenceState == SelectionFence.States.CompletedAsClick)
                 {
                     Playback.TimeInBars = InverseTransformPosition(ImGui.GetMousePos()).X;
@@ -100,13 +98,12 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-
         #region handle nested timelines ----------------------------------
         private void UpdateLocalTimeTranslation(Instance compositionOp)
         {
             _nestedTimeScale = 1f;
             _nestedTimeOffset = 0f;
-            
+
             var parents = GraphCanvas.GetParents(compositionOp).Reverse().ToList();
             parents.Add(compositionOp);
             foreach (var p in parents)
@@ -119,69 +116,65 @@ namespace T3.Gui.Windows.TimeLine
                 _nestedTimeScale *= scale;
                 _nestedTimeOffset += clip.TimeRange.Start - clip.SourceRange.Start * scale;
             }
-            
+
             // ImGui.Text($"localScale: {_nestedTimeScale}   localScroll: {_nestedTimeOffset}");
         }
 
-        
         /// <summary>
         /// Override the default implement to support time clip nesting 
         /// </summary>
         public override Vector2 TransformPosition(Vector2 posOnCanvas)
         {
-            var localScale = new Vector2(_nestedTimeScale,1);
-            var localScroll = new Vector2(_nestedTimeOffset,0);
-            
+            var localScale = new Vector2(_nestedTimeScale, 1);
+            var localScroll = new Vector2(_nestedTimeOffset, 0);
+
             return (posOnCanvas * localScale + localScroll) * Scale + Scroll + WindowPos;
         }
-        
-        
+
         public override Vector2 InverseTransformPosition(Vector2 posOnScreen)
         {
-            var localScale = new Vector2(_nestedTimeScale,1);
-            var localScroll = new Vector2(_nestedTimeOffset,0);
-            
-            return (posOnScreen- localScroll * Scale - Scroll - WindowPos) / (localScale * Scale);
+            var localScale = new Vector2(_nestedTimeScale, 1);
+            var localScroll = new Vector2(_nestedTimeOffset, 0);
+
+            return (posOnScreen - localScroll * Scale - Scroll - WindowPos) / (localScale * Scale);
         }
-        
 
         public float TransformGlobalTime(float time)
         {
             return base.TransformPosition(new Vector2(time, 0)).X;
         }
-        
+
         public float NestedTimeScale => Scale.X * _nestedTimeScale;
-        public float NestedTimeOffset => (Scroll.X - _nestedTimeOffset) + _nestedTimeOffset;        
-        
+        public float NestedTimeOffset => (Scroll.X - _nestedTimeOffset) + _nestedTimeOffset;
         #endregion
 
-        private void HandleDeferredActions(List<GraphWindow.AnimationParameter> animationParameters)
+        private void HandleDeferredActions()
         {
             if (UserActionRegistry.WasActionQueued(UserActions.PlaybackJumpToNextKeyframe))
             {
-                var nextKeyframeTime = double.PositiveInfinity;
-                foreach (var next in animationParameters
+                var nextKeyframeTime = Double.PositiveInfinity;
+                foreach (var next in SelectedAnimationParameters
                                     .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetNextU(Playback.TimeInBars + 0.001f))
-                                    .Where(next => next != null && next.Value < nextKeyframeTime))
+                                    .Where<double?>(next => next != null && next.Value < nextKeyframeTime))
                 {
                     nextKeyframeTime = next.Value;
                 }
 
-                if (!double.IsPositiveInfinity(nextKeyframeTime))
+                if (!Double.IsPositiveInfinity(nextKeyframeTime))
                     Playback.TimeInBars = nextKeyframeTime;
             }
 
             if (UserActionRegistry.WasActionQueued(UserActions.PlaybackJumpToPreviousKeyframe))
             {
-                var prevKeyframeTime = double.NegativeInfinity;
-                foreach (var next in animationParameters
+                var prevKeyframeTime = Double.NegativeInfinity;
+                foreach (var next in SelectedAnimationParameters
                                     .SelectMany(animationParam => animationParam.Curves, (param, curve) => curve.GetPreviousU(Playback.TimeInBars - 0.001f))
-                                    .Where(previous => previous != null && previous.Value > prevKeyframeTime))
+                                    .Where<double?>(previous => previous != null && previous.Value > prevKeyframeTime))
                 {
                     prevKeyframeTime = next.Value;
                 }
 
-                if (!double.IsNegativeInfinity(prevKeyframeTime))
+                if (!Double.IsNegativeInfinity(prevKeyframeTime))
                     Playback.TimeInBars = prevKeyframeTime;
             }
         }
@@ -211,7 +204,7 @@ namespace T3.Gui.Windows.TimeLine
                 var draggedTime = InverseTransformX(Io.MousePos.X);
                 if (ImGui.GetIO().KeyShift)
                 {
-                    SnapHandlerForU.CheckForSnapping(ref draggedTime, Scale.X, new List<IValueSnapAttractor> { _currentTimeMarker});
+                    SnapHandlerForU.CheckForSnapping(ref draggedTime, Scale.X, new List<IValueSnapAttractor> { _currentTimeMarker });
                 }
 
                 Playback.TimeInBars = draggedTime;
@@ -220,34 +213,31 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorPos(Vector2.Zero);
         }
 
-
         private void ScrollToTimeAfterStopped()
         {
             var isPlaying = Math.Abs(Playback.PlaybackSpeed) > 0.01f;
             var wasPlaying = Math.Abs(_lastPlaybackSpeed) > 0.01f;
 
-            if(!isPlaying && wasPlaying) 
+            if (!isPlaying && wasPlaying)
             {
                 if (!IsCurrentTimeVisible())
                 {
                     var time = Playback.TimeInBars - InverseTransformDirection(new Vector2(WindowSize.X, 0)).X / 2;
-                    ScrollTarget.X = (float)(- time * ScaleTarget.X);
+                    ScrollTarget.X = (float)(-time * ScaleTarget.X);
                 }
             }
 
             _lastPlaybackSpeed = Playback.PlaybackSpeed;
         }
-        
-        
+
         private bool IsCurrentTimeVisible()
         {
-            var timePosInScreen = TransformPosition(new Vector2((float)this.Playback.TimeInBars,0));
+            var timePosInScreen = TransformPosition(new Vector2((float)this.Playback.TimeInBars, 0));
             var timelineArea = ImRect.RectWithSize(WindowPos, WindowSize);
             timePosInScreen.Y = timelineArea.GetCenter().Y; // Adjust potential vertical scrolling of timeline area
             return timelineArea.Contains(timePosInScreen);
         }
-        
-        
+
         #region view modes
         private bool UpdateMode()
         {
@@ -299,6 +289,44 @@ namespace T3.Gui.Windows.TimeLine
         private Modes _lastMode = Modes.CurveEditor; // Make different to force initial update
         #endregion
 
+        // TODO: this is horrible and should be refactored
+        private List<AnimationParameter> GetAnimationParametersForSelectedNodes(Instance compositionOp)
+        {
+            var selection = SelectionManager.GetSelectedNodes<ISelectableNode>();
+            var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
+            var animator = symbolUi.Symbol.Animator;
+            var pinnedParams = (from child in compositionOp.Children
+                                from input in child.Inputs
+                                where animator.IsInputSlotAnimated(input)
+                                from pinnedInputSlot in DopeSheetArea.PinnedParameters
+                                where pinnedInputSlot == input.GetHashCode()
+                                select new AnimationParameter()
+                                           {
+                                               Instance = child,
+                                               Input = input,
+                                               Curves = animator.GetCurvesForInput(input),
+                                               ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == child.SymbolChildId)
+                                           }).ToList();
+
+            var curvesForSelection = (from child in compositionOp.Children
+                                      from selectedElement in selection
+                                      where child.SymbolChildId == selectedElement.Id
+                                      from input in child.Inputs
+                                      where animator.IsInputSlotAnimated(input)
+                                      select new AnimationParameter()
+                                                 {
+                                                     Instance = child,
+                                                     Input = input,
+                                                     Curves = animator.GetCurvesForInput(input),
+                                                     ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == selectedElement.Id)
+                                                 }).ToList();
+
+            pinnedParams.AddRange(curvesForSelection.FindAll(sp => pinnedParams.All(pp => pp.Input != sp.Input)));
+            return pinnedParams;
+        }
+
+        public List<AnimationParameter> SelectedAnimationParameters = new List<AnimationParameter>();
+
 
 
         internal readonly Playback Playback;
@@ -321,9 +349,16 @@ namespace T3.Gui.Windows.TimeLine
         private float _nestedTimeScale = 1;
         private float _nestedTimeOffset;
         private double _lastPlaybackSpeed;
-        
 
         // Styling
         public const float TimeLineDragHeight = 40;
+
+        public struct AnimationParameter
+        {
+            public IEnumerable<Curve> Curves;
+            public IInputSlot Input;
+            public Instance Instance;
+            public SymbolChildUi ChildUi;
+        }
     }
 }

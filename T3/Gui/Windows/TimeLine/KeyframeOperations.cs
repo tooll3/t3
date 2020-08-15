@@ -10,7 +10,7 @@ namespace T3.Gui.Windows.TimeLine
 {
     internal static class KeyframeOperations
     {
-        public static void DeleteSelectedKeyframesFromAnimationParameters(HashSet<VDefinition> selectedKeyframes, IEnumerable<GraphWindow.AnimationParameter> animationParameters)
+        public static void DeleteSelectedKeyframesFromAnimationParameters(HashSet<VDefinition> selectedKeyframes, IEnumerable<TimeLineCanvas.AnimationParameter> animationParameters)
         {
             foreach (var param in animationParameters)
             {

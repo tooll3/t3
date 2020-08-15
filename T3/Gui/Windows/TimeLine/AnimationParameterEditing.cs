@@ -50,7 +50,7 @@ namespace T3.Gui.Windows.TimeLine
             TimeLineCanvas.Current.SetScopeToCanvasArea(bounds, flipY:true);
         }
 
-        protected List<GraphWindow.AnimationParameter> AnimationParameters;
+        protected List<TimeLineCanvas.AnimationParameter> AnimationParameters;
         protected TimeLineCanvas TimeLineCanvas; // This gets initialized in constructor of implementations 
     }
 }

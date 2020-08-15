@@ -34,6 +34,7 @@ namespace T3.Gui.UiHelpers
             public bool UseJogDialControl = false;
             public float ZoomSpeed = 12;
             public float TooltipDelay = 1.2f;
+            public bool HideUiElementsInGraphWindow = false;
         }
 
         public static Guid GetLastOpenOpForWindow(string windowTitle)
