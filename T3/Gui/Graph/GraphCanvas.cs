@@ -128,6 +128,11 @@ namespace T3.Gui.Graph
             return GetTargetScope();
         }
 
+        public void MakeCurrent()
+        {
+            Current = this;
+        }
+
         #region drawing UI ====================================================================
         public void Draw(ImDrawListPtr dl, bool showGrid)
         {
@@ -141,7 +146,7 @@ namespace T3.Gui.Graph
             }
             UpdateCanvas();
 
-            Current = this;
+            MakeCurrent();
             ChildUis = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis;
             DrawList = dl;
             ImGui.BeginGroup();

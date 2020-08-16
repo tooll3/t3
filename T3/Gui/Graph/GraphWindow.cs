@@ -172,6 +172,7 @@ namespace T3.Gui.Graph
                     {
                         if (!UserSettings.Config.HideUiElementsInGraphWindow)
                         {
+                            _graphCanvas.MakeCurrent();
                             TitleAndBreadCrumbs.Draw(_graphCanvas.CompositionOp);    
                         }
                         DrawControlsAtBottom();
