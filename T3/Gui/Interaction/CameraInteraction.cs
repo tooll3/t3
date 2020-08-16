@@ -5,14 +5,7 @@ using T3.Core.Operator.Interfaces;
 
 namespace T3.Gui.Graph.Interaction
 {
-    // Mock for view internal fallback camera (if no operator selected)
-    public class ViewCamera : ICamera
-    {
-        public Vector3 CameraPosition { get; set; }
-        public Vector3 CameraTarget { get; set; } = new Vector3(0,0,10);
-        public float CameraRoll { get; set; }
-    }
-    
+
     public class CameraInteraction
     {
         public void Update(ICamera camera)

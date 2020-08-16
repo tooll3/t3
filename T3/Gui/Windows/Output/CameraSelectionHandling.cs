@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Core.Operator.Interfaces;
 using T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6;
 
 namespace T3.Gui.Windows.Output
@@ -30,17 +31,17 @@ namespace T3.Gui.Windows.Output
             {
                 if (activeCamerasInComposition == null || activeCamerasInComposition.Count == 0)
                 {
-                    SelectedCamera = null;
+                    SelectedCameraOp = null;
                     return;
                 }
 
                 var idForLambda = selectedCameraId;
-                SelectedCamera = activeCamerasInComposition.FirstOrDefault(cam => cam.SymbolChildId == idForLambda);
+                SelectedCameraOp = activeCamerasInComposition.FirstOrDefault(cam => cam.SymbolChildId == idForLambda);
 
-                if (SelectedCamera == null)
+                if (SelectedCameraOp == null)
                 {
-                    SelectedCamera = activeCamerasInComposition.First();
-                    selectedCameraId = SelectedCamera.SymbolChildId;
+                    SelectedCameraOp = activeCamerasInComposition.First();
+                    selectedCameraId = SelectedCameraOp.SymbolChildId;
                 }
                 else if (selectedCameraId == Guid.Empty)
                 {
@@ -54,7 +55,7 @@ namespace T3.Gui.Windows.Output
                                           ? null
                                           : SymbolRegistry.Entries[instanceSelectedInOutput.Parent.Symbol.Id]
                                                           .Children
-                                                          .Single(child => child.Id == SelectedCamera.SymbolChildId);
+                                                          .Single(child => child.Id == SelectedCameraOp.SymbolChildId);
 
             var label = isCameraControlDisabled ? "No Camera" : selectedSymbolChild.ReadableName;
 
@@ -62,7 +63,7 @@ namespace T3.Gui.Windows.Output
             {
                 if (ImGui.Selectable("No Camera", selectedCameraId == DisableCameraId))
                 {
-                    SelectedCamera = null;
+                    SelectedCameraOp = null;
                     selectedCameraId = DisableCameraId;
                     
                 }
@@ -73,7 +74,7 @@ namespace T3.Gui.Windows.Output
                     {
                         var symbolChild = SymbolRegistry.Entries[instanceSelectedInOutput.Parent.Symbol.Id].Children
                                                         .Single(child => child.Id == cam.SymbolChildId);
-                        ImGui.Selectable(symbolChild.ReadableName, cam == SelectedCamera);
+                        ImGui.Selectable(symbolChild.ReadableName, cam == SelectedCameraOp);
                         if (ImGui.IsItemActivated())
                         {
                             selectedCameraId = cam.SymbolChildId;
@@ -92,7 +93,7 @@ namespace T3.Gui.Windows.Output
             ImGui.SameLine();
         }
 
-        public static Camera SelectedCamera { get; private set; }
+        public static Camera SelectedCameraOp { get; private set; }
         public static readonly Guid DisableCameraId = Guid.NewGuid();
     }
 }

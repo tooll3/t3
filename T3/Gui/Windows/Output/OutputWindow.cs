@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using ImGuiNET;
 using SharpDX;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Interfaces;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
@@ -60,17 +62,22 @@ namespace T3.Gui.Windows.Output
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
                 _imageCanvas.SetAsCurrent();
-                _imageCanvas.PreventMouseInteraction = CameraSelectionHandling.SelectedCamera != null;
-                _imageCanvas.Update();
-
-                if(!SelectionManager._isGizmoDragging)
-                    _cameraInteraction.Update(CameraSelectionHandling.SelectedCamera);
 
                 // move down to avoid overlapping with toolbar
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
-                DrawOutput(_pinning.GetPinnedOrSelectedInstance(), _pinning.GetPinnedEvaluationInstance());
+                var renderedType = DrawOutput(_pinning.GetPinnedOrSelectedInstance(), _pinning.GetPinnedEvaluationInstance());
                 _imageCanvas.Deactivate();
-
+                
+                ICamera cameraOp = CameraSelectionHandling.SelectedCameraOp;
+                var allowCameraInteraction = !SelectionManager._isGizmoDragging && (cameraOp != null || renderedType == typeof(Command));
+                if (allowCameraInteraction )
+                {
+                    ICamera interactiveCamera = cameraOp ?? _viewCamera;
+                    _cameraInteraction.Update(interactiveCamera);
+                }
+                
+                _imageCanvas.PreventMouseInteraction = allowCameraInteraction;
+                _imageCanvas.Update();
                 DrawToolbar();
             }
             ImGui.EndChild();
@@ -108,24 +115,24 @@ namespace T3.Gui.Windows.Output
             ImGui.PopStyleColor();
         }
 
-        private void DrawOutput(Instance instanceForOutput, Instance instanceForEvaluation= null)
+        private Type DrawOutput(Instance instanceForOutput, Instance instanceForEvaluation= null)
         {
             if (instanceForEvaluation == null)
                 instanceForEvaluation = instanceForOutput;
                     
             if (instanceForEvaluation == null || instanceForEvaluation.Outputs.Count <= 0)
-                return;
+                return null;
 
             var evaluatedSymbolUi = SymbolUiRegistry.Entries[instanceForEvaluation.Symbol.Id];
 
             // Todo: use output from pinning...
             var evalOutput = instanceForEvaluation.Outputs[0];
             if (!evaluatedSymbolUi.OutputUis.TryGetValue(evalOutput.Id, out IOutputUi evaluatedOutputUi))
-                return;
+                return null;
 
             _evaluationContext.Reset();
             _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
-            
+            _evaluationContext.SetViewFromCamera(_viewCamera);
             
             // Ugly hack to hide final target
             if (instanceForOutput != instanceForEvaluation)
@@ -137,18 +144,20 @@ namespace T3.Gui.Windows.Output
                 ImGui.EndChild();
 
                 if (instanceForOutput == null || instanceForOutput.Outputs.Count == 0)
-                    return;
+                    return null;
                     
                 var viewOutput = instanceForOutput.Outputs[0];
                 var viewSymbolUi = SymbolUiRegistry.Entries[instanceForOutput.Symbol.Id];
                 if (!viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
-                    return;
+                    return null;
 
-                viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute:false);    
+                viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute:false);
+                return viewOutputUi.Type;
             }
             else
             {
                 evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext);
+                return evalOutput.ValueType;
             }
         }
 
@@ -157,6 +166,7 @@ namespace T3.Gui.Windows.Output
         private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
         private readonly ViewSelectionPinning _pinning = new ViewSelectionPinning();
         private readonly CameraInteraction _cameraInteraction = new CameraInteraction();
+        private readonly ViewCamera _viewCamera = new ViewCamera();
 
         private Guid _selectedCameraId = Guid.Empty;
         private static int _instanceCounter;
