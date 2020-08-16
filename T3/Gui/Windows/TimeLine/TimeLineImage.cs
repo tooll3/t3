@@ -12,7 +12,7 @@ namespace T3.Gui.Windows.TimeLine
         public void Draw(ImDrawListPtr drawlist, Playback playback)
         {
             if (!_initialized)
-                Initialize();
+                LoadSoundImage();
             
             var songDurationInBars = (float)(playback.GetSongDurationInSecs() * playback.Bpm / 240);
             var xMin= TimeLineCanvas.Current.TransformGlobalTime(0);
@@ -30,7 +30,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        private void Initialize()
+        public static void LoadSoundImage()
         {
             var resourceManager = ResourceManager.Instance();
             if (resourceManager == null)
@@ -38,12 +38,11 @@ namespace T3.Gui.Windows.TimeLine
 
             var imagePath = ProjectSettings.Config.SoundtrackFilepath + ".waveform.png";
             
-            
             (_, _srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
             _initialized = true;
         }
 
-        private bool _initialized;
+        private static bool _initialized;
         private static uint _srvResId;
     }
 }

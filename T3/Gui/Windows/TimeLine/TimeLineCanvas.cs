@@ -99,6 +99,8 @@ namespace T3.Gui.Windows.TimeLine
             Current = null;
         }
 
+
+        
         #region handle nested timelines ----------------------------------
         private void UpdateLocalTimeTranslation(Instance compositionOp)
         {

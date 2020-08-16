@@ -1,24 +1,24 @@
-﻿using ImGuiNET;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
+using T3.Gui.Graph;
 using T3.Gui.Interaction.Timing;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
-using T3.Gui.Windows.TimeLine;
-using UiHelpers;
 using Icon = T3.Gui.Styling.Icon;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
-namespace T3.Gui.Graph
+namespace T3.Gui.Windows.TimeLine
 {
     internal static class TimeControls
     {
@@ -65,9 +65,9 @@ namespace T3.Gui.Graph
                 playback.TimeDisplayMode =
                     (Playback.TimeDisplayModes)(((int)playback.TimeDisplayMode + 1) % Enum.GetNames(typeof(Playback.TimeDisplayModes)).Length);
             }
+
             CustomComponents.TooltipForLastItem("Timeline format",
                                                 "Click to toggle through BPM, Frames and Normal time modes");
-
 
             DrawTimeSettingsContextMenu(ref playback);
 
@@ -83,7 +83,9 @@ namespace T3.Gui.Graph
                 {
                     UserSettings.Config.KeepBeatTimeRunningInPause = !UserSettings.Config.KeepBeatTimeRunningInPause;
                 }
-                CustomComponents.TooltipForLastItem("Keep beat time running", "This will keep updating the output [Time]\nwhich is useful for procedural animation and syncing.");
+
+                CustomComponents.TooltipForLastItem("Keep beat time running",
+                                                    "This will keep updating the output [Time]\nwhich is useful for procedural animation and syncing.");
 
                 if (UserSettings.Config.KeepBeatTimeRunningInPause)
                 {
@@ -116,7 +118,7 @@ namespace T3.Gui.Graph
                 //var volume = Im.Clamp(BpmDetection.LastVolume,0,1);
                 var volume = BeatTiming.SyncPrecision;
                 ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - volume * (max.Y - min.Y)), Color.Orange);
-                
+
                 ImGui.SameLine();
 
                 ImGui.Button("Sync");
@@ -152,6 +154,7 @@ namespace T3.Gui.Graph
                 {
                     playback.TimeInBars = playback.LoopRange.Start;
                 }
+
                 CustomComponents.TooltipForLastItem("Jump to beginning",
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToStartTime));
 
@@ -163,6 +166,7 @@ namespace T3.Gui.Graph
                 {
                     UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
                 }
+
                 CustomComponents.TooltipForLastItem("Jump to previous keyframe",
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToPreviousKeyframe));
 
@@ -184,6 +188,7 @@ namespace T3.Gui.Graph
                         playback.PlaybackSpeed = -1;
                     }
                 }
+
                 CustomComponents.TooltipForLastItem("Play backwards",
                                                     "Play backwards (and faster): " +
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackBackwards, false) +
@@ -212,7 +217,7 @@ namespace T3.Gui.Graph
                                                     "Play forward (and faster): " +
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackForward, false) +
                                                     "\n Play half speed (and slower): " +
-                                                    KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackForwardHalfSpeed, false)+
+                                                    KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackForwardHalfSpeed, false) +
                                                     "\n Next frame:" + KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackNextFrame, false));
 
                 const float editFrameRate = 30;
@@ -309,7 +314,7 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                CustomComponents.TooltipForLastItem("Loop playback","This will initialize one bar around current time.");
+                CustomComponents.TooltipForLastItem("Loop playback", "This will initialize one bar around current time.");
 
                 ImGui.SameLine();
             }
@@ -337,7 +342,7 @@ namespace T3.Gui.Graph
             // ToggleHover
             Icon icon;
             string tooltip;
-            string additionalTooltip=null;
+            string additionalTooltip = null;
             switch (UserSettings.Config.HoverMode)
             {
                 case GraphCanvas.HoverModes.Disabled:
@@ -362,7 +367,7 @@ namespace T3.Gui.Graph
                     (GraphCanvas.HoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
             }
 
-            CustomComponents.TooltipForLastItem(tooltip,additionalTooltip);
+            CustomComponents.TooltipForLastItem(tooltip, additionalTooltip);
 
             ImGui.SameLine();
 
@@ -397,6 +402,7 @@ namespace T3.Gui.Graph
                         newTimeClip.TimeRange = new TimeRange((float)playback.TimeInBars, originalEndTime);
                     }
                 }
+
                 CustomComponents.TooltipForLastItem("Cut timeclip below mouse");
             }
         }
@@ -423,7 +429,8 @@ namespace T3.Gui.Graph
                 if (ImGui.BeginTabItem("AudioFile"))
                 {
                     ImGui.Text("Soundtrack");
-                    var modified = FileOperations.DrawSoundFilePicker(FileOperations.FilePickerTypes.File, ref ProjectSettings.Config.SoundtrackFilepath);
+                    var filepathModified =
+                        FileOperations.DrawSoundFilePicker(FileOperations.FilePickerTypes.File, ref ProjectSettings.Config.SoundtrackFilepath);
 
                     var isInitialized = playback is StreamPlayback;
                     if (isInitialized)
@@ -443,7 +450,7 @@ namespace T3.Gui.Graph
                             ProjectSettings.Config.SoundtrackBpm = bpm;
                         }
 
-                        if (modified)
+                        if (filepathModified)
                         {
                             var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
                             var result = matchBpmPattern.Match(ProjectSettings.Config.SoundtrackFilepath);
@@ -453,6 +460,9 @@ namespace T3.Gui.Graph
                                 ProjectSettings.Config.SoundtrackBpm = bpm;
                                 playback.Bpm = bpm;
                             }
+
+                            var job = new AsyncImageGenerator(ProjectSettings.Config.SoundtrackFilepath);
+                            job.Run();
                         }
                     }
                     else
@@ -526,6 +536,32 @@ namespace T3.Gui.Graph
 
             ImGui.EndPopup();
             ImGui.PopStyleVar(2);
+        }
+
+        private class AsyncImageGenerator
+        {
+            public AsyncImageGenerator(string filepath)
+            {
+                _generator = new SoundImageGenerator(filepath);
+            }
+
+            public void Run()
+            {
+                Task.Run(GenerateAsync);
+            }
+
+            private void GenerateAsync()
+            {
+                var imageFilePath = _generator.GenerateSoundSpectrumAndVolume();
+                if (imageFilePath == null)
+                {
+                    Log.Debug("could not create filepath");
+                }
+
+                TimeLineImage.LoadSoundImage();
+            }
+
+            private readonly SoundImageGenerator _generator;
         }
 
         public static readonly Vector2 ControlSize = new Vector2(45, 26);

@@ -377,7 +377,6 @@
     <Compile Include="Gui\Graph\Interaction\SymbolFilter.cs" />
     <Compile Include="Gui\Graph\RenameInstanceOverlay.cs" />
     <Compile Include="Gui\Graph\Rendering\SrvManager.cs" />
-    <Compile Include="Gui\Graph\TimeControls.cs" />
     <Compile Include="Gui\InputUi\CurveInputEditing.cs" />
     <Compile Include="Gui\InputUi\CurveInputUi.cs" />
     <Compile Include="Gui\InputUi\EnumInputUi.cs" />
@@ -436,6 +435,7 @@
     <Compile Include="Gui\UiHelpers\CurvePlot.cs" />
     <Compile Include="Gui\UiHelpers\EnumCache.cs" />
     <Compile Include="Gui\UiHelpers\FileOperations.cs" />
+    <Compile Include="Gui\UiHelpers\SoundImageGenerator.cs" />
     <Compile Include="Gui\UiHelpers\GradientEditor.cs" />
     <Compile Include="Gui\UiHelpers\ModalDialog.cs" />
     <Compile Include="Gui\UiHelpers\ProjectSettings.cs" />
@@ -447,6 +447,7 @@
     <Compile Include="Gui\Windows\Output\EditResolutionDialog.cs" />
     <Compile Include="Gui\Windows\Output\OutputWindow.cs" />
     <Compile Include="Gui\Windows\Output\ResolutionHandling.cs" />
+    <Compile Include="Gui\Windows\TimeLine\TimeControls.cs" />
     <Compile Include="Gui\Windows\ViewSelectionPinning.cs" />
     <Compile Include="Gui\Windows\SymbolLibrary.cs" />
     <Compile Include="Gui\Windows\TimeLine\BeatTimeRaster.cs" />
