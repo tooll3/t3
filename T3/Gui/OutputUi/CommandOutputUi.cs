@@ -1,4 +1,5 @@
-﻿using SharpDX;
+﻿using System;
+using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
@@ -11,8 +12,18 @@ using Device = SharpDX.Direct3D11.Device;
 
 namespace T3.Gui.OutputUi
 {
-    public class CommandOutputUi : OutputUi<Command>
+    public class CommandOutputUi : OutputUi<Command>, IGizmoSupport
     {
+        public bool GizmosEnabled { get; set; } = false;
+
+        public CommandOutputUi()
+        {
+            // create op for drawing grid
+            Guid gridPlaneGizmoId = Guid.Parse("e5588101-5686-4b02-ab7d-e58199ba552e");
+            var gridPlaneGizmoSymbol = SymbolRegistry.Entries[gridPlaneGizmoId];
+            _gridInstance = gridPlaneGizmoSymbol.CreateInstance(Guid.NewGuid());
+        }
+
         protected override void Recompute(ISlot slot, EvaluationContext context)
         {
             // invalidate
@@ -33,6 +44,12 @@ namespace T3.Gui.OutputUi
 
             // evaluate the op
             slot.Update(context);
+
+            if (GizmosEnabled)
+            {
+                _gridInstance.Outputs[0].Invalidate();
+                _gridInstance.Outputs[0].Update(context);
+            }
 
             // restore prev setup
             deviceContext.Rasterizer.SetViewports(prevViewports);
@@ -102,5 +119,6 @@ namespace T3.Gui.OutputUi
         private ShaderResourceView _colorBufferSrv;
 
         private RenderTargetView _colorBufferRtv;
+        private Instance _gridInstance;
     }
 }

@@ -156,6 +156,8 @@ namespace T3.Gui.Windows.Output
             }
             else
             {
+                if (evaluatedOutputUi is IGizmoSupport gizmo)
+                    gizmo.GizmosEnabled = true;
                 evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext);
                 return evalOutput.ValueType;
             }
