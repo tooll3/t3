@@ -280,6 +280,11 @@ namespace T3
 
                                           RebuildBackBuffer(form, device, ref _renderView, ref _backBuffer, ref _swapChain);
                                       };
+            form.Closing += (sender, args) =>
+                            {
+                                args.Cancel = T3Ui.UiModel.IsSaving;
+                                Log.Debug($"Cancel closing because save-operation is in progress.");
+                            };
             form.WindowState = FormWindowState.Maximized;
 
             // second render view

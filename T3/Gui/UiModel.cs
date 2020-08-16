@@ -189,6 +189,7 @@ namespace T3.Gui
         public override void Save()
         {
             Log.Debug("Saving...");
+            IsSaving = true;
             
             // first save core data
             base.Save();
@@ -229,7 +230,11 @@ namespace T3.Gui
                     resourceManager.CreateOperatorEntry(symbol.SourcePath, symbol.Id.ToString(), OperatorUpdating.Update);
                 }
             }
+
+            IsSaving = false;
         }
+
+        public bool IsSaving { get; set; }
 
         public static void UpdateUiEntriesForSymbol(Symbol symbol)
         {
