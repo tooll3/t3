@@ -1,17 +1,21 @@
 ﻿using System;
-using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core.Animation;
-using T3.Core.Operator;
-using T3.Core.Operator.Slots;
-using T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6;
+using T3.Core.Operator.Interfaces;
 
 namespace T3.Gui.Graph.Interaction
 {
+    // Mock for view internal fallback camera (if no operator selected)
+    public class ViewCamera : ICamera
+    {
+        public Vector3 CameraPosition { get; set; }
+        public Vector3 CameraTarget { get; set; } = new Vector3(0,0,10);
+        public float CameraRoll { get; set; }
+    }
+    
     public class CameraInteraction
     {
-        public void Update(Camera camera)
+        public void Update(ICamera camera)
         {
             if (camera == null)
                 return;
@@ -46,31 +50,8 @@ namespace T3.Gui.Graph.Interaction
             if (!updateRequired)
                 return;
 
-            UpdateCameraValue(camera.Position, _smoothedSetup.Position);
-            UpdateCameraValue(camera.Target, _smoothedSetup.Target);
-        }
-
-        private void UpdateCameraValue(InputSlot<Vector3> cameraInput, Vector3 value)
-        {
-            var animator = cameraInput.Parent.Parent.Symbol.Animator;
-            if (animator.IsInputSlotAnimated(cameraInput))
-            {
-                var curves = animator.GetCurvesForInput(cameraInput).ToArray();
-                double time = EvaluationContext.GlobalTimeInBars;
-                SharpDX.Vector3 newValue = new SharpDX.Vector3(value.X, value.Y, value.Z);
-                for (int i = 0; i < 3; i++)
-                {
-                    var key = curves[i].GetV(time);
-                    if (key == null)
-                        key = new VDefinition() { U = time };
-                    key.Value = newValue[i];
-                    curves[i].AddOrUpdateV(time, key);
-                }
-            }
-            else
-            {
-                cameraInput.SetTypedInputValue(value);
-            }
+            camera.CameraPosition = _smoothedSetup.Position;
+            camera.CameraTarget = _smoothedSetup.Target;
         }
 
         private bool ComputeSmoothMovement()
@@ -283,12 +264,12 @@ namespace T3.Gui.Graph.Interaction
             public Vector3 Left;
             public Vector3 ViewDistance;
 
-            public void ComputeForCamera(Camera camera)
+            public void ComputeForCamera(ICamera camera)
             {
-                ViewDistance = camera.Target.Value - camera.Position.Value;
+                ViewDistance = camera.CameraTarget - camera.CameraPosition;
 
                 var worldUp = Vector3.UnitY;
-                var rolledUp = Vector3.Normalize(Vector3.Transform(worldUp, Matrix4x4.CreateFromAxisAngle(ViewDistance, camera.Roll.Value)));
+                var rolledUp = Vector3.Normalize(Vector3.Transform(worldUp, Matrix4x4.CreateFromAxisAngle(ViewDistance, camera.CameraRoll)));
 
                 Left = Vector3.Normalize(Vector3.Cross(rolledUp, ViewDistance));
                 Up = Vector3.Normalize(Vector3.Cross(ViewDistance, Left));
@@ -318,16 +299,16 @@ namespace T3.Gui.Graph.Interaction
                 Target = other.Target;
             }
 
-            public void SetTo(Camera cameraInstance)
+            public void SetTo(ICamera cameraInstance)
             {
-                Position = cameraInstance.Position.Value;
-                Target = cameraInstance.Target.Value;
+                Position = cameraInstance.CameraPosition;
+                Target = cameraInstance.CameraTarget;
             }
 
-            public bool Matches(Camera cameraInstance)
+            public bool Matches(ICamera cameraInstance)
             {
-                return Vector3.Distance(cameraInstance.Position.Value, Position) < StopDistanceThreshold
-                       && Vector3.Distance(cameraInstance.Target.Value, Target) < StopDistanceThreshold;
+                return Vector3.Distance(cameraInstance.CameraPosition, Position) < StopDistanceThreshold
+                       && Vector3.Distance(cameraInstance.CameraTarget, Target) < StopDistanceThreshold;
             }
 
             public void BlendTo(CameraSetup intended, float cameraMoveFriction)
@@ -350,7 +331,7 @@ namespace T3.Gui.Graph.Interaction
 
         private Vector3 _moveVelocity;
         private Vector2 _orbitVelocity;
-        private Camera _lastCameraNode;
+        private ICamera _lastCameraNode;
         private static float _deltaTime;
 
         private const float RenderWindowHeight = 450; // TODO: this should be derived from output window size
