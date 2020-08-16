@@ -1,4 +1,5 @@
 ﻿using System;
+using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Selection;
@@ -18,12 +19,22 @@ namespace T3.Gui.OutputUi
 
         public void DrawValue(ISlot slot, EvaluationContext context, bool recompute)
         {
-            if (recompute)
+            var drawList = ImGui.GetWindowDrawList();
+            drawList.ChannelsSplit(2);
+            drawList.ChannelsSetCurrent(1);
             {
-                Recompute(slot, context);
+                SelectionManager.SetDrawList(drawList);
+                if (recompute)
+                {
+                    Recompute(slot, context);
+                }
             }
-
-            DrawTypedValue(slot);
+            drawList.ChannelsSetCurrent(0);
+            {
+                DrawTypedValue(slot);
+            }
+            drawList.ChannelsMerge();
+            SelectionManager.StopDrawList();
         }
 
         protected virtual void Recompute(ISlot slot, EvaluationContext context)

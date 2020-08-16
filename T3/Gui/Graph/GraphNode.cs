@@ -155,6 +155,7 @@ namespace T3.Gui.Graph
                     {
                         ImGui.BeginTooltip();
                         {
+                            SelectionManager.SetDrawList(drawList);
                             ImageCanvasForTooltips.Update();
                             ImageCanvasForTooltips.SetAsCurrent();
                             if (instance.Outputs.Count > 0)
@@ -176,6 +177,7 @@ namespace T3.Gui.Graph
                                 ImGui.PopFont();
                             }
                             ImageCanvasForTooltips.Deactivate();
+                            SelectionManager.StopDrawList();
                         }
                         ImGui.EndTooltip();
                     }

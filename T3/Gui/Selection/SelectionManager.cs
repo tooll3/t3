@@ -7,7 +7,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Windows;
-
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
@@ -33,6 +32,7 @@ namespace T3.Gui.Selection
             {
                 Log.Warning("Setting selection to a SymbolChildUi without providing instance will lead to problems.");
             }
+
             Clear();
             AddSelection(node);
         }
@@ -48,7 +48,7 @@ namespace T3.Gui.Selection
             _parent = null;
             if (Selection.Contains(node))
                 return;
-            
+
             Selection.Add(node);
         }
 
@@ -57,7 +57,7 @@ namespace T3.Gui.Selection
             _parent = null;
             if (Selection.Contains(node))
                 return;
-            
+
             Selection.Add(node);
             if (instance != null)
             {
@@ -86,10 +86,16 @@ namespace T3.Gui.Selection
 
             return posInScreen;
         }
-        
+
         // todo: move this to the right place when drawing is clear
         private static void TransformCallback(ITransformable transform, EvaluationContext context)
         {
+            if (!IsDrawListValid)
+            {
+                Log.Warning("can't draw gizmo without initialized draw list");
+                return;
+            }
+
             // terminology of the matrices:
             // objectToClipSpace means in this context the transform without application of the ITransformable values. These are
             // named 'local'. So localToObject is the matrix of applying the ITransformable values and localToClipSpace to transform
@@ -122,21 +128,23 @@ namespace T3.Gui.Selection
 
             // ImGui.GetWindowDrawList().AddCircleFilled(textPos, 6.0f, 0xFFFFFFFF);
             // need foreground draw list atm as texture is drawn afterwards to output view
-            var fgDrawList = ImGui.GetForegroundDrawList();
-            fgDrawList.AddCircleFilled(originInScreen, 6.0f, 0xFFFFFFFF);
+
+            var centerPadding = 0.2f;
+            var length = 1f;
+            var lineThickness = 2;
 
             // draw the gizmo axis
-            Vector2 xAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(1.0f, 0.0f, 0.0f, 1.0f), localToClipSpace);
-            Vector2 xAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(10.0f, 0.0f, 0.0f, 1.0f), localToClipSpace);
-            fgDrawList.AddLine(xAxisStartInScreen, xAxisEndInScreen, 0x7F0000FF, 4.0f);
+            Vector2 xAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(centerPadding, 0.0f, 0.0f, 1.0f), localToClipSpace);
+            Vector2 xAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(length, 0.0f, 0.0f, 1.0f), localToClipSpace);
+            _drawList.AddLine(xAxisStartInScreen, xAxisEndInScreen, 0x7F0000FF, lineThickness);
 
-            Vector2 yAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 1.0f, 0.0f, 1.0f), localToClipSpace);
-            Vector2 yAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 10.0f, 0.0f, 1.0f), localToClipSpace);
-            fgDrawList.AddLine(yAxisStartInScreen, yAxisEndInScreen, 0x7F00FF00, 4.0f);
-            
-            Vector2 zAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 0.0f, 1.0f, 1.0f), localToClipSpace);
-            Vector2 zAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 0.0f, 10.0f, 1.0f), localToClipSpace);
-            fgDrawList.AddLine(zAxisStartInScreen, zAxisEndInScreen, 0x7FFF0000, 4.0f);
+            Vector2 yAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, centerPadding, 0.0f, 1.0f), localToClipSpace);
+            Vector2 yAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, length, 0.0f, 1.0f), localToClipSpace);
+            _drawList.AddLine(yAxisStartInScreen, yAxisEndInScreen, 0x7F00FF00, lineThickness);
+
+            Vector2 zAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 0.0f, centerPadding, 1.0f), localToClipSpace);
+            Vector2 zAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 0.0f, length, 1.0f), localToClipSpace);
+            _drawList.AddLine(zAxisStartInScreen, zAxisEndInScreen, 0x7FFF0000, lineThickness);
 
             // example interaction for moving origin within plane parallel to cam
             var mousePosInScreen = ImGui.GetIO().MousePos;
@@ -175,6 +183,19 @@ namespace T3.Gui.Selection
             }
         }
 
+        public static void SetDrawList(ImDrawListPtr drawList)
+        {
+            _drawList = drawList;
+            IsDrawListValid = true;
+        }
+
+        public static void StopDrawList()
+        {
+            IsDrawListValid = false;
+        }
+
+        private static ImDrawListPtr _drawList = null;
+        private static bool IsDrawListValid;
 
         public static void RemoveSelection(ISelectableNode node)
         {
@@ -209,7 +230,6 @@ namespace T3.Gui.Selection
             return Selection.Count > 0;
         }
 
-        
         /// <summary>
         /// This is called at the beginning of each frame.
         /// 
@@ -224,7 +244,7 @@ namespace T3.Gui.Selection
             //     if (!_lastFrameSelection.Contains(n))
             //         NodesSelectedLastFrame.Add(n);
             // }
-        
+
             //_lastFrameSelection = Selection;
             FitViewToSelectionRequested = _fitViewToSelectionTriggered;
             _fitViewToSelectionTriggered = false;
@@ -243,6 +263,7 @@ namespace T3.Gui.Selection
                     Clear();
                     return null;
                 }
+
                 var idPath = ChildUiInstanceIdPaths[firstNode];
                 return NodeOperations.GetInstanceFromIdPath(idPath);
             }
@@ -257,12 +278,11 @@ namespace T3.Gui.Selection
 
             if (!(Selection[0] is SymbolChildUi firstNode))
                 return null;
-            
+
             var idPath = ChildUiInstanceIdPaths[firstNode];
             var instanceFromIdPath = NodeOperations.GetInstanceFromIdPath(idPath);
             return instanceFromIdPath?.Parent;
         }
-        
 
         public static IEnumerable<SymbolChildUi> GetSelectedSymbolChildUis()
         {
@@ -283,24 +303,23 @@ namespace T3.Gui.Selection
             var idPath = ChildUiInstanceIdPaths[symbolChildUi];
             return (NodeOperations.GetInstanceFromIdPath(idPath));
         }
-        
+
         public static void FitViewToSelection()
         {
             _fitViewToSelectionTriggered = true;
         }
 
-
         public static bool FitViewToSelectionRequested { get; private set; }
         private static bool _fitViewToSelectionTriggered = false;
         private static Instance _parent;
+
         private static readonly List<ISelectableNode> Selection = new List<ISelectableNode>();
+
         //private static readonly List<ISelectableNode> NodesSelectedLastFrame = new List<ISelectableNode>();
         //private static List<ISelectableNode> _lastFrameSelection = new List<ISelectableNode>();
         private static readonly Dictionary<SymbolChildUi, List<Guid>> ChildUiInstanceIdPaths = new Dictionary<SymbolChildUi, List<Guid>>();
         private static readonly Dictionary<ISelectableNode, ITransformable> RegisteredTransformCallbacks = new Dictionary<ISelectableNode, ITransformable>(10);
         private static Vector2 _offsetToOriginAtDragStart;
         public static bool _isGizmoDragging;
-        
-        
     }
 }
