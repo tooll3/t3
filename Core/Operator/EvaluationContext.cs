@@ -40,7 +40,7 @@ namespace T3.Core.Operator
         public static double BeatTime { get; set; }
         public double TimeInBars { get; set; }
         public static double GlobalTimeInSecs { get; set; }
-        public Size2 RequestedResolution;
+        public Size2 RequestedResolution { get; set; }
 
         public Matrix CameraToClipSpace { get; set; } = Matrix.Identity;
         public Matrix WorldToCamera { get; set; } = Matrix.Identity;

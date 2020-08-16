@@ -20,6 +20,7 @@ namespace T3.Gui.Windows
         public static bool WindowRegionsVisible;
         public static bool ItemRegionsVisible;
         public static float LimitArcConnectionRadius = 100;
+        public static float GizmoSize = 100f;
 
         protected override void DrawContent()
         {
@@ -30,12 +31,12 @@ namespace T3.Gui.Windows
 
             ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
             ImGui.Checkbox("HideTimeline", ref UserSettings.Config.HideUiElementsInGraphWindow);
+            ImGui.DragFloat("Gizmo size", ref GizmoSize);
             ImGui.DragFloat("Limit arc connection radius", ref LimitArcConnectionRadius);
             
             ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
 
             ImGui.DragFloat("Scroll damping", ref UserSettings.Config.ZoomSpeed);
-            
             
             ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
             ImGui.DragFloat("Tooltip delay", ref UserSettings.Config.TooltipDelay);

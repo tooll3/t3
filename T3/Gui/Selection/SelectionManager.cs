@@ -129,8 +129,9 @@ namespace T3.Gui.Selection
             // ImGui.GetWindowDrawList().AddCircleFilled(textPos, 6.0f, 0xFFFFFFFF);
             // need foreground draw list atm as texture is drawn afterwards to output view
 
-            var centerPadding = 0.2f;
-            var length = 1f;
+            var scale = CalcGizmoScale(context, localToObject, viewport.Width, viewport.Height, 45f, SettingsWindow.GizmoSize);
+            var centerPadding = 0.2f * scale / canvas.Scale.X;
+            var length = 1f * scale / canvas.Scale.Y;
             var lineThickness = 2;
 
             // draw the gizmo axis
@@ -181,6 +182,16 @@ namespace T3.Gui.Selection
                     transform.Translation = newTranslation;
                 }
             }
+        }
+
+        // Calculates the scale for a gizmo based on the distance to the cam
+        private static float CalcGizmoScale(EvaluationContext context, SharpDX.Matrix localToObject, float width, float height, float fovInDegree,
+                                            float gizmoSize)
+        {
+            var localToCamera = localToObject * context.ObjectToWorld * context.WorldToCamera;
+            var distance = localToCamera.TranslationVector.Length(); // distance of local origin to cam
+            var denom = Math.Sqrt(width * width + height * height) * Math.Tan(SharpDX.MathUtil.DegreesToRadians(fovInDegree));
+            return (float)Math.Max(0.0001, (distance / denom) * gizmoSize);
         }
 
         public static void SetDrawList(ImDrawListPtr drawList)
