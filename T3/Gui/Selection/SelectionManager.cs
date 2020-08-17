@@ -138,12 +138,12 @@ namespace T3.Gui.Selection
             var lineThickness = 2;
 
             // Draw the gizmo axis
+            var mousePosInScreen = ImGui.GetIO().MousePos;
             DrawGizmoAxis(Vector4.UnitX, Color.Red, GizmoDraggingModes.PositionXAxis);
             DrawGizmoAxis(Vector4.UnitY, Color.Green, GizmoDraggingModes.PositionYAxis);
             DrawGizmoAxis(Vector4.UnitZ, Color.Blue, GizmoDraggingModes.PositionZAxis);
 
             // example interaction for moving origin within plane parallel to cam
-            var mousePosInScreen = ImGui.GetIO().MousePos;
             var screenSquaredMin = originInScreen - new Vector2(10.0f, 10.0f);
             var screenSquaredMax = originInScreen + new Vector2(10.0f, 10.0f);
 
