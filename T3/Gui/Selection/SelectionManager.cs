@@ -9,6 +9,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
+using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
@@ -137,9 +138,9 @@ namespace T3.Gui.Selection
             var lineThickness = 2;
 
             // Draw the gizmo axis
-            DrawGizmoAxis(Vector4.UnitX, Color.Red);
-            DrawGizmoAxis(Vector4.UnitY, Color.Green);
-            DrawGizmoAxis(Vector4.UnitZ, Color.Blue);
+            DrawGizmoAxis(Vector4.UnitX, Color.Red, GizmoDraggingModes.PositionXAxis);
+            DrawGizmoAxis(Vector4.UnitY, Color.Green, GizmoDraggingModes.PositionYAxis);
+            DrawGizmoAxis(Vector4.UnitZ, Color.Blue, GizmoDraggingModes.PositionZAxis);
 
             // example interaction for moving origin within plane parallel to cam
             var mousePosInScreen = ImGui.GetIO().MousePos;
@@ -150,15 +151,15 @@ namespace T3.Gui.Selection
                 mousePosInScreen.Y > screenSquaredMin.Y && mousePosInScreen.Y < screenSquaredMax.Y &&
                 ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
-                _isGizmoDragging = true;
+                CurrentDraggingMode = GizmoDraggingModes.PositionInScreenPlane;
                 _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
             }
 
-            if (_isGizmoDragging)
+            if (CurrentDraggingMode == GizmoDraggingModes.PositionInScreenPlane)
             {
                 if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                 {
-                    _isGizmoDragging = false;
+                    CurrentDraggingMode = GizmoDraggingModes.None;
                 }
                 else
                 {
@@ -177,13 +178,64 @@ namespace T3.Gui.Selection
                 }
             }
             
-            void DrawGizmoAxis(SharpDX.Vector4 axis2, Color color)
+            void DrawGizmoAxis(SharpDX.Vector4 axis2, Color color, GizmoDraggingModes mode)
             {
                 Vector2 xAxisStartInScreen = ObjectPosToScreenPos(axis2 * centerPadding + Vector4.UnitW, localToClipSpace);
                 Vector2 xAxisEndInScreen = ObjectPosToScreenPos(axis2*length + Vector4.UnitW, localToClipSpace);
-                _drawList.AddLine(xAxisStartInScreen, xAxisEndInScreen, color, lineThickness);
+
+                var isHovering = false;
+                if (CurrentDraggingMode == GizmoDraggingModes.None)
+                {
+                    isHovering = IsPointOnLine(mousePosInScreen, xAxisStartInScreen, xAxisEndInScreen);
+
+                    if (isHovering && ImGui.IsMouseClicked(0))
+                    {
+                        CurrentDraggingMode = mode;
+                    }
+                    
+                }
+                else if (CurrentDraggingMode == mode)
+                {
+                    if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                    {
+                        CurrentDraggingMode = GizmoDraggingModes.None;
+                    }
+                    else
+                    {
+                        var newPos = GetClosestPointOnLine(mousePosInScreen, xAxisStartInScreen, xAxisEndInScreen);
+                        _drawList.AddCircle(newPos, 10, color);
+                        isHovering = true;
+                    }
+                }
+                
+                _drawList.AddLine(xAxisStartInScreen, xAxisEndInScreen, color,  lineThickness * (isHovering ? 3:1));
             }
         }
+
+        private static bool IsPointOnLine(Vector2 point, Vector2 lineStart, Vector2 lineEnd, float threshold=3)
+        {
+            var rect = new ImRect(lineStart, lineEnd).MakePositive();
+            rect.Expand(threshold);
+            if (!rect.Contains(point))
+                return false;
+            
+            var v = (lineEnd - lineStart);
+            var vLen = v.Length();
+                    
+            var d = Vector2.Dot(v, point-lineStart) / vLen;
+            var positionOnLine = lineStart + v * d/vLen;
+            return Vector2.Distance(point, positionOnLine) <= threshold;
+        }
+        
+        private static Vector2 GetClosestPointOnLine(Vector2 point, Vector2 lineStart, Vector2 lineEnd)
+        {
+            var v = (lineEnd - lineStart);
+            var vLen = v.Length();
+                    
+            var d = Vector2.Dot(v, point-lineStart) / vLen;
+            return  lineStart + v * d/vLen;
+        }
+        
 
         public enum GizmoDraggingModes
         {
@@ -194,7 +246,7 @@ namespace T3.Gui.Selection
             PositionZAxis,
         }
 
-        public static GizmoDraggingModes GizmoDraggingMode = GizmoDraggingModes.None;
+        public static GizmoDraggingModes CurrentDraggingMode = GizmoDraggingModes.None;
 
         // Calculates the scale for a gizmo based on the distance to the cam
         private static float CalcGizmoScale(EvaluationContext context, SharpDX.Matrix localToObject, float width, float height, float fovInDegree,
@@ -343,6 +395,6 @@ namespace T3.Gui.Selection
         private static readonly Dictionary<SymbolChildUi, List<Guid>> ChildUiInstanceIdPaths = new Dictionary<SymbolChildUi, List<Guid>>();
         private static readonly Dictionary<ISelectableNode, ITransformable> RegisteredTransformCallbacks = new Dictionary<ISelectableNode, ITransformable>(10);
         private static Vector2 _offsetToOriginAtDragStart;
-        public static bool _isGizmoDragging;
+        //public static bool _isGizmoDragging;
     }
 }

@@ -71,7 +71,7 @@ namespace T3.Gui.Windows.Output
                 _imageCanvas.Deactivate();
                 
                 ICamera cameraOp = CameraSelectionHandling.SelectedCameraOp;
-                var allowCameraInteraction = !SelectionManager._isGizmoDragging && (cameraOp != null || renderedType == typeof(Command));
+                var allowCameraInteraction = SelectionManager.CurrentDraggingMode == SelectionManager.GizmoDraggingModes.None  && (cameraOp != null || renderedType == typeof(Command));
                 if (allowCameraInteraction )
                 {
                     ICamera interactiveCamera = cameraOp ?? _viewCamera;
