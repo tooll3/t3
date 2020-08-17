@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using ImGuiNET;
+using SharpDX;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
@@ -129,23 +131,15 @@ namespace T3.Gui.Selection
             // ImGui.GetWindowDrawList().AddCircleFilled(textPos, 6.0f, 0xFFFFFFFF);
             // need foreground draw list atm as texture is drawn afterwards to output view
 
-            var scale = CalcGizmoScale(context, localToObject, viewport.Width, viewport.Height, 45f, SettingsWindow.GizmoSize);
-            var centerPadding = 0.2f * scale / canvas.Scale.X;
-            var length = 1f * scale / canvas.Scale.Y;
+            var gizmoScale = CalcGizmoScale(context, localToObject, viewport.Width, viewport.Height, 45f, SettingsWindow.GizmoSize);
+            var centerPadding = 0.2f * gizmoScale / canvas.Scale.X;
+            var length = 1f * gizmoScale / canvas.Scale.Y;
             var lineThickness = 2;
 
-            // draw the gizmo axis
-            Vector2 xAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(centerPadding, 0.0f, 0.0f, 1.0f), localToClipSpace);
-            Vector2 xAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(length, 0.0f, 0.0f, 1.0f), localToClipSpace);
-            _drawList.AddLine(xAxisStartInScreen, xAxisEndInScreen, 0x7F0000FF, lineThickness);
-
-            Vector2 yAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, centerPadding, 0.0f, 1.0f), localToClipSpace);
-            Vector2 yAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, length, 0.0f, 1.0f), localToClipSpace);
-            _drawList.AddLine(yAxisStartInScreen, yAxisEndInScreen, 0x7F00FF00, lineThickness);
-
-            Vector2 zAxisStartInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 0.0f, centerPadding, 1.0f), localToClipSpace);
-            Vector2 zAxisEndInScreen = ObjectPosToScreenPos(new SharpDX.Vector4(0.0f, 0.0f, length, 1.0f), localToClipSpace);
-            _drawList.AddLine(zAxisStartInScreen, zAxisEndInScreen, 0x7FFF0000, lineThickness);
+            // Draw the gizmo axis
+            DrawGizmoAxis(Vector4.UnitX, Color.Red);
+            DrawGizmoAxis(Vector4.UnitY, Color.Green);
+            DrawGizmoAxis(Vector4.UnitZ, Color.Blue);
 
             // example interaction for moving origin within plane parallel to cam
             var mousePosInScreen = ImGui.GetIO().MousePos;
@@ -182,7 +176,25 @@ namespace T3.Gui.Selection
                     transform.Translation = newTranslation;
                 }
             }
+            
+            void DrawGizmoAxis(SharpDX.Vector4 axis2, Color color)
+            {
+                Vector2 xAxisStartInScreen = ObjectPosToScreenPos(axis2 * centerPadding + Vector4.UnitW, localToClipSpace);
+                Vector2 xAxisEndInScreen = ObjectPosToScreenPos(axis2*length + Vector4.UnitW, localToClipSpace);
+                _drawList.AddLine(xAxisStartInScreen, xAxisEndInScreen, color, lineThickness);
+            }
         }
+
+        public enum GizmoDraggingModes
+        {
+            None,
+            PositionInScreenPlane,
+            PositionXAxis,
+            PositionYAxis,
+            PositionZAxis,
+        }
+
+        public static GizmoDraggingModes GizmoDraggingMode = GizmoDraggingModes.None;
 
         // Calculates the scale for a gizmo based on the distance to the cam
         private static float CalcGizmoScale(EvaluationContext context, SharpDX.Matrix localToObject, float width, float height, float fovInDegree,
