@@ -8,6 +8,7 @@ using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Windows;
+using T3.Gui.Windows.Output;
 using Device = SharpDX.Direct3D11.Device;
 
 namespace T3.Gui.OutputUi
@@ -26,6 +27,8 @@ namespace T3.Gui.OutputUi
 
         protected override void Recompute(ISlot slot, EvaluationContext context)
         {
+            var originalCamMatrix = context.WorldToCamera;
+            var orginalViewMatrx = context.CameraToClipSpace;
             // invalidate
             StartInvalidation(slot);
 
@@ -47,6 +50,16 @@ namespace T3.Gui.OutputUi
 
             if (GizmosEnabled)
             {
+                var cam = CameraSelectionHandling.SelectedCameraOp;
+                if (cam != null)
+                {
+                    context.SetViewFromCamera(cam);
+                }
+                else
+                {
+                    context.WorldToCamera = originalCamMatrix;
+                    context.CameraToClipSpace = orginalViewMatrx;
+                }
                 _gridInstance.Outputs[0].Invalidate();
                 _gridInstance.Outputs[0].Update(context);
             }

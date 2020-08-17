@@ -62,10 +62,12 @@ namespace T3.Gui.Windows.Output
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
                 _imageCanvas.SetAsCurrent();
+                
 
                 // move down to avoid overlapping with toolbar
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
-                var renderedType = DrawOutput(_pinning.GetPinnedOrSelectedInstance(), _pinning.GetPinnedEvaluationInstance());
+                var pinnedOrSelectedInstance = _pinning.GetPinnedOrSelectedInstance();
+                var renderedType = DrawOutput(pinnedOrSelectedInstance, _pinning.GetPinnedEvaluationInstance());
                 _imageCanvas.Deactivate();
                 
                 ICamera cameraOp = CameraSelectionHandling.SelectedCameraOp;
@@ -73,7 +75,17 @@ namespace T3.Gui.Windows.Output
                 if (allowCameraInteraction )
                 {
                     ICamera interactiveCamera = cameraOp ?? _viewCamera;
+                    if (pinnedOrSelectedInstance is ICamera cam)
+                    {
+                        interactiveCamera = cam;
+                        
+                    }
                     _cameraInteraction.Update(interactiveCamera);
+                    _lastInteractiveCam = interactiveCamera;
+                }
+                else
+                {
+                    _lastInteractiveCam = null;
                 }
                 
                 _imageCanvas.PreventMouseInteraction = allowCameraInteraction;
@@ -84,6 +96,7 @@ namespace T3.Gui.Windows.Output
         }
 
         public Instance ShownInstance => _pinning.GetPinnedOrSelectedInstance();
+        private ICamera _lastInteractiveCam;
 
         private void DrawToolbar()
         {
@@ -132,7 +145,7 @@ namespace T3.Gui.Windows.Output
 
             _evaluationContext.Reset();
             _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
-            _evaluationContext.SetViewFromCamera(_viewCamera);
+            _evaluationContext.SetViewFromCamera(_lastInteractiveCam ?? _viewCamera);
             
             // Ugly hack to hide final target
             if (instanceForOutput != instanceForEvaluation)
