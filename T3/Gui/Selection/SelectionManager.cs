@@ -129,7 +129,6 @@ namespace T3.Gui.Selection
             var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
             var originInScreen = topLeftOnScreen + originInCanvas;
 
-            // ImGui.GetWindowDrawList().AddCircleFilled(textPos, 6.0f, 0xFFFFFFFF);
             // need foreground draw list atm as texture is drawn afterwards to output view
 
             var gizmoScale = CalcGizmoScale(context, localToObject, viewport.Width, viewport.Height, 45f, SettingsWindow.GizmoSize);
@@ -137,47 +136,12 @@ namespace T3.Gui.Selection
             var length = 1f * gizmoScale / canvas.Scale.Y;
             var lineThickness = 2;
 
-            // Draw the gizmo axis
             var mousePosInScreen = ImGui.GetIO().MousePos;
             DrawGizmoAxis(Vector4.UnitX, Color.Red, GizmoDraggingModes.PositionXAxis);
             DrawGizmoAxis(Vector4.UnitY, Color.Green, GizmoDraggingModes.PositionYAxis);
             DrawGizmoAxis(Vector4.UnitZ, Color.Blue, GizmoDraggingModes.PositionZAxis);
+            HandleDragInScreenSpace();
 
-            // example interaction for moving origin within plane parallel to cam
-            var screenSquaredMin = originInScreen - new Vector2(10.0f, 10.0f);
-            var screenSquaredMax = originInScreen + new Vector2(10.0f, 10.0f);
-
-            if (mousePosInScreen.X > screenSquaredMin.X && mousePosInScreen.X < screenSquaredMax.X &&
-                mousePosInScreen.Y > screenSquaredMin.Y && mousePosInScreen.Y < screenSquaredMax.Y &&
-                ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-            {
-                CurrentDraggingMode = GizmoDraggingModes.PositionInScreenPlane;
-                _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
-            }
-
-            if (CurrentDraggingMode == GizmoDraggingModes.PositionInScreenPlane)
-            {
-                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-                {
-                    CurrentDraggingMode = GizmoDraggingModes.None;
-                }
-                else
-                {
-                    Vector2 newOriginInScreen = mousePosInScreen - _offsetToOriginAtDragStart;
-                    // transform back to object space
-                    var clipSpaceToObject = objectToClipSpace;
-                    clipSpaceToObject.Invert();
-                    var newOriginInCanvas = newOriginInScreen - topLeftOnScreen;
-                    var newOriginInViewport = canvas.InverseTransformDirection(newOriginInCanvas);
-                    var newOriginInClipSpace = new SharpDX.Vector4(2.0f * newOriginInViewport.X / viewport.Width - 1.0f,
-                                                                   -(2.0f * newOriginInViewport.Y / viewport.Height - 1.0f),
-                                                                   originInNdc.Z, 1);
-                    var newOriginInObject = SharpDX.Vector4.Transform(newOriginInClipSpace, clipSpaceToObject);
-                    Vector3 newTranslation = new Vector3(newOriginInObject.X, newOriginInObject.Y, newOriginInObject.Z) / newOriginInObject.W;
-                    transform.Translation = newTranslation;
-                }
-            }
-            
             void DrawGizmoAxis(SharpDX.Vector4 axis2, Color color, GizmoDraggingModes mode)
             {
                 Vector2 xAxisStartInScreen = ObjectPosToScreenPos(axis2 * centerPadding + Vector4.UnitW, localToClipSpace);
@@ -191,6 +155,7 @@ namespace T3.Gui.Selection
                     if (isHovering && ImGui.IsMouseClicked(0))
                     {
                         CurrentDraggingMode = mode;
+                        _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
                     }
                     
                 }
@@ -205,10 +170,61 @@ namespace T3.Gui.Selection
                         var newPos = GetClosestPointOnLine(mousePosInScreen, xAxisStartInScreen, xAxisEndInScreen);
                         _drawList.AddCircle(newPos, 10, color);
                         isHovering = true;
+                        
+                        Vector2 newOriginInScreen = newPos - _offsetToOriginAtDragStart;
+                        // transform back to object space
+                        var clipSpaceToObject = objectToClipSpace;
+                        clipSpaceToObject.Invert();
+                        var newOriginInViewport = canvas.InverseTransformDirection(newOriginInScreen);
+                        var newOriginInClipSpace = new SharpDX.Vector4(2.0f * newOriginInViewport.X / viewport.Width - 1.0f,
+                                                                       -(2.0f * newOriginInViewport.Y / viewport.Height - 1.0f),
+                                                                       originInNdc.Z, 1);
+                        var newOriginInObject = SharpDX.Vector4.Transform(newOriginInClipSpace, clipSpaceToObject);
+                        Vector3 newTranslation = new Vector3(newOriginInObject.X, newOriginInObject.Y, newOriginInObject.Z) / newOriginInObject.W;
+                        Log.Debug("Translation " + (newTranslation));
+                        //transform.Translation = newTranslation;
                     }
                 }
                 
                 _drawList.AddLine(xAxisStartInScreen, xAxisEndInScreen, color,  lineThickness * (isHovering ? 3:1));
+            }
+
+            // example interaction for moving origin within plane parallel to cam
+            void HandleDragInScreenSpace()
+            {
+                var screenSquaredMin = originInScreen - new Vector2(10.0f, 10.0f);
+                var screenSquaredMax = originInScreen + new Vector2(10.0f, 10.0f);
+
+                if (mousePosInScreen.X > screenSquaredMin.X && mousePosInScreen.X < screenSquaredMax.X &&
+                    mousePosInScreen.Y > screenSquaredMin.Y && mousePosInScreen.Y < screenSquaredMax.Y &&
+                    ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                {
+                    CurrentDraggingMode = GizmoDraggingModes.PositionInScreenPlane;
+                    _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
+                }
+
+                if (CurrentDraggingMode == GizmoDraggingModes.PositionInScreenPlane)
+                {
+                    if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                    {
+                        CurrentDraggingMode = GizmoDraggingModes.None;
+                    }
+                    else
+                    {
+                        Vector2 newOriginInScreen = mousePosInScreen - _offsetToOriginAtDragStart;
+                        // transform back to object space
+                        var clipSpaceToObject = objectToClipSpace;
+                        clipSpaceToObject.Invert();
+                        var newOriginInCanvas = newOriginInScreen - topLeftOnScreen;
+                        var newOriginInViewport = canvas.InverseTransformDirection(newOriginInCanvas);
+                        var newOriginInClipSpace = new SharpDX.Vector4(2.0f * newOriginInViewport.X / viewport.Width - 1.0f,
+                                                                       -(2.0f * newOriginInViewport.Y / viewport.Height - 1.0f),
+                                                                       originInNdc.Z, 1);
+                        var newOriginInObject = SharpDX.Vector4.Transform(newOriginInClipSpace, clipSpaceToObject);
+                        Vector3 newTranslation = new Vector3(newOriginInObject.X, newOriginInObject.Y, newOriginInObject.Z) / newOriginInObject.W;
+                        transform.Translation = newTranslation;
+                    }
+                }
             }
         }
 
