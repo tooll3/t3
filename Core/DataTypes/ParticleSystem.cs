@@ -26,7 +26,7 @@ namespace T3.Core.DataTypes
         public Buffer ParticleCountConstBuffer;
 
         public int MaxCount { get; set; } = 20480;
-        public readonly int ParticleSizeInBytes = 64;
+        public readonly int ParticleSizeInBytes = 80;
         private uint _initDeadListShaderResId = ResourceManager.NullResource;
         public int ParticleSystemSizeInBytes => MaxCount * ParticleSizeInBytes;
 
