@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -411,7 +413,7 @@ namespace T3.Gui.Windows.TimeLine
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
-            ImGui.SetNextWindowSize(new Vector2(400, 200));
+            ImGui.SetNextWindowSize(new Vector2(400, 300));
             if (!ImGui.BeginPopupContextItem("##TimeSettings"))
             {
                 ImGui.PopStyleVar(2);
@@ -465,15 +467,14 @@ namespace T3.Gui.Windows.TimeLine
                             job.Run();
                         }
                     }
-                    else
+
+                    if (ImGui.Button(isInitialized ? "Update" : "Load"))
                     {
-                        if (ImGui.Button("Load"))
+                        if (playback is StreamPlayback streamPlayback)
                         {
-                            Utilities.Dispose(ref playback);
-                            playback = new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath);
+                            streamPlayback.LoadFile(ProjectSettings.Config.SoundtrackFilepath);
                         }
                     }
-
                     ImGui.EndTabItem();
                 }
 
@@ -542,11 +543,18 @@ namespace T3.Gui.Windows.TimeLine
         {
             public AsyncImageGenerator(string filepath)
             {
+                if (FilePathsInProgress.Contains(filepath))
+                {
+                    Log.Debug($"Skipping {filepath} because its being processed right now.");
+                    return;
+                }
+
                 _generator = new SoundImageGenerator(filepath);
             }
 
             public void Run()
             {
+                FilePathsInProgress.Add(_generator.Filepath);
                 Task.Run(GenerateAsync);
             }
 
@@ -559,9 +567,11 @@ namespace T3.Gui.Windows.TimeLine
                 }
 
                 TimeLineImage.LoadSoundImage();
+                FilePathsInProgress.Remove(_generator.Filepath);
             }
 
             private readonly SoundImageGenerator _generator;
+            private static readonly HashSet<string> FilePathsInProgress = new HashSet<string>();
         }
 
         public static readonly Vector2 ControlSize = new Vector2(45, 26);

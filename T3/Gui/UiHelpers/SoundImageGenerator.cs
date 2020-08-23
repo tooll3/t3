@@ -13,12 +13,12 @@ namespace T3.Gui.UiHelpers
     {
         public SoundImageGenerator(string filepath)
         {
-            _filepath = filepath;
+            Filepath = filepath;
         }
 
         public string GenerateSoundSpectrumAndVolume()
         {
-            var soundFilePath = _filepath;
+            var soundFilePath = Filepath;
             if (String.IsNullOrEmpty(soundFilePath) || !File.Exists(soundFilePath))
                 return null;
 
@@ -179,7 +179,7 @@ namespace T3.Gui.UiHelpers
         private const float MaxIntensity = 500;
         private const int ColorSteps = 255;
         private const int PaletteSize = 3 * ColorSteps;
-        private readonly string _filepath;
+        public readonly string Filepath;
 
         private float[] _fftBuffer = new float[SpectrumLength];
         

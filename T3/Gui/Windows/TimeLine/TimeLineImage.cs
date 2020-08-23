@@ -3,6 +3,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine

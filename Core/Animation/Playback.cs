@@ -1,5 +1,6 @@
 ﻿using System;
 using ManagedBass;
+using T3.Core.Logging;
 using T3.Core.Operator;
 
 //using ImGuiNET;
@@ -73,13 +74,19 @@ namespace T3.Core.Animation
 
     public class StreamPlayback : Playback
     {
-        private readonly int _soundStreamHandle;
-        private readonly float _defaultPlaybackFrequency;
+        private int _soundStreamHandle;
+        private float _defaultPlaybackFrequency;
 
-        public StreamPlayback(string filename)
+        public StreamPlayback(string filepath)
         {
+            LoadFile(filepath);
+        }
+
+        public void LoadFile(string filepath)
+        {
+            Bass.Free();
             Bass.Init();
-            _soundStreamHandle = Bass.CreateStream(filename);
+            _soundStreamHandle = Bass.CreateStream(filepath);
             Bass.ChannelGetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, out _defaultPlaybackFrequency);
         }
 
