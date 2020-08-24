@@ -66,7 +66,7 @@ namespace T3.Gui.Graph.Interaction
             }
 
             T3Ui.OpenedPopUpName = "SymbolBrowser";
-            Current = this;
+            //Current = this;
 
             _filter.UpdateIfNecessary();
 
@@ -371,12 +371,12 @@ namespace T3.Gui.Graph.Interaction
         private ImDrawListPtr _drawList;
         private Vector2 _posInWindow;
 
-        private bool _isOpen;
+        public bool _isOpen;
         private static readonly Vector2 ResultListSize = new Vector2(300, 200);
 
         private SymbolUi _selectedSymbolUi;
         private static readonly int UiId = "DraftNode".GetHashCode();
         private bool _keepNavEnableKeyboard;
-        public static SymbolBrowser Current;
+        //public static SymbolBrowser Current;
     }
 }

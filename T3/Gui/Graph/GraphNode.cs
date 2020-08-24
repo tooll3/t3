@@ -142,7 +142,8 @@ namespace T3.Gui.Graph
 
                 // Tooltip
                 if (ImGui.IsItemHovered() 
-                    && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip)
+                    && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
+                    && !GraphCanvas.Current._symbolBrowser._isOpen)
                 {
                     SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
 
