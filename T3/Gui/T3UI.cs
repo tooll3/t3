@@ -33,6 +33,7 @@ namespace T3.Gui
         public void Draw()
         {
             OpenedPopUpName = String.Empty;
+            KeyboardBinding.UpdatePressedKeysCount();
             SelectionManager.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             WindowManager.Draw();

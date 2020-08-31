@@ -78,8 +78,31 @@ namespace T3.Gui
         public bool NeedsWindowHover;
         public readonly KeyCombination Combination;
 
+
+        /// <summary>
+        /// This method is required to be called at the beginning of each frame
+        /// </summary>
+        public static void UpdatePressedKeysCount()
+        {
+            var io = ImGui.GetIO();
+            _pressedKeyCount = 0;
+            for (int c = 0; c < 128; c++)
+            {
+                if (io.KeysDown[c]
+                    && Math.Abs(io.KeysDownDurationPrev[c]) < 0.001f)
+                {
+                    _pressedKeyCount++;
+                }
+            }
+        }
+
+        private static int _pressedKeyCount;
+        
         public static bool Triggered(UserActions action)
         {
+            if (_pressedKeyCount == 0)
+                return false;
+            
             if (ImGui.IsAnyItemActive())
                 return false;
 
@@ -172,8 +195,8 @@ namespace T3.Gui
                       new KeyboardBinding(UserActions.Save, new KeyCombination(Key.S, ctrl: true)),
                       new KeyboardBinding(UserActions.FocusSelection, new KeyCombination(Key.F)) { NeedsWindowHover = true },
                       new KeyboardBinding(UserActions.Duplicate, new KeyCombination(Key.D, ctrl: true)) { NeedsWindowFocus = true },
-                      new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Backspace)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Delete)) { NeedsWindowFocus = true },
+                      new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Backspace)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.CopyToClipboard, new KeyCombination(Key.C, ctrl: true)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.PasteFromClipboard, new KeyCombination(Key.V, ctrl: true)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.InsertKeyframe, new KeyCombination(Key.C)) { NeedsWindowFocus = true },
