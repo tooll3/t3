@@ -461,14 +461,14 @@ namespace T3.Gui.Graph
 
                 if (ImGui.MenuItem("Duplicate as new type", oneElementSelected))
                 {
-                    _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name;
-                    _nameSpaceForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Namespace;
+                    _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name ?? string.Empty;
+                    _nameSpaceForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Namespace ?? string.Empty;
                     _duplicateSymbolDialog.ShowNextFrame();
                 }
 
                 if (ImGui.MenuItem("Combine as new type"))
                 {
-                    _nameSpaceForDialogEdits = CompositionOp.Symbol.Namespace;
+                    _nameSpaceForDialogEdits = CompositionOp.Symbol.Namespace ?? string.Empty;
                     _combineToSymbolDialog.ShowNextFrame();
                 }
 
