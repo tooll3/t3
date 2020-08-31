@@ -14,7 +14,7 @@ namespace T3.Gui.UiHelpers
     {
         private const string ResourcesFolder = "Resources";
 
-        public static string PickResourceFilePath(string initialPath= "")
+        public static string PickResourceFilePath(string initialPath = "")
         {
             using (var openFileDialog = new OpenFileDialog())
             {
