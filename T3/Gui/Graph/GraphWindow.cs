@@ -78,7 +78,7 @@ namespace T3.Gui.Graph
         }
 
         private static int _instanceCounter;
-        private static readonly List<Window> GraphWindowInstances = new List<Window>();
+        public static readonly List<Window> GraphWindowInstances = new List<Window>();
 
         public override List<Window> GetInstances()
         {
@@ -348,7 +348,7 @@ namespace T3.Gui.Graph
         
         private readonly ImageBackground _imageBackground = new ImageBackground();
 
-        private readonly GraphCanvas _graphCanvas;
+        public readonly GraphCanvas _graphCanvas;
         private Playback _playback;
         private const int UseComputedHeight = -1;
         private int _customTimeLineHeight = UseComputedHeight;

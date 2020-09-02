@@ -99,29 +99,9 @@ namespace T3.Gui
         public bool NeedsWindowHover;
         public readonly KeyCombination Combination;
 
-
-        /// <summary>
-        /// This method is required to be called at the beginning of each frame
-        /// </summary>
-        public static void UpdatePressedKeysCount()
-        {
-            var io = ImGui.GetIO();
-            _pressedKeyCount = 0;
-            for (int c = 0; c < 128; c++)
-            {
-                if (io.KeysDown[c]
-                    && Math.Abs(io.KeysDownDurationPrev[c]) < 0.001f)
-                {
-                    _pressedKeyCount++;
-                }
-            }
-        }
-
-        private static int _pressedKeyCount;
-        
         public static bool Triggered(UserActions action)
         {
-            if (_pressedKeyCount == 0)
+            if (ImGui.GetIO().KeysDown.Count == 0)
                 return false;
             
             if (ImGui.IsAnyItemActive())
@@ -222,27 +202,27 @@ namespace T3.Gui
                       new KeyboardBinding(UserActions.PasteFromClipboard, new KeyCombination(Key.V, ctrl: true)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.InsertKeyframe, new KeyCombination(Key.C)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)) { NeedsWindowFocus = true },
-                      new KeyboardBinding(UserActions.LoadBookmark1, new KeyCombination(Key.D1)),
-                      new KeyboardBinding(UserActions.LoadBookmark2, new KeyCombination(Key.D2)),
-                      new KeyboardBinding(UserActions.LoadBookmark3, new KeyCombination(Key.D3)),
-                      new KeyboardBinding(UserActions.LoadBookmark4, new KeyCombination(Key.D4)),
-                      new KeyboardBinding(UserActions.LoadBookmark5, new KeyCombination(Key.D5)),
-                      new KeyboardBinding(UserActions.LoadBookmark6, new KeyCombination(Key.D6)),
-                      new KeyboardBinding(UserActions.LoadBookmark7, new KeyCombination(Key.D7)),
-                      new KeyboardBinding(UserActions.LoadBookmark8, new KeyCombination(Key.D8)),
-                      new KeyboardBinding(UserActions.LoadBookmark9, new KeyCombination(Key.D9)),
-                      new KeyboardBinding(UserActions.LoadBookmark0, new KeyCombination(Key.D0)),
+                      new KeyboardBinding(UserActions.LoadBookmark1, new KeyCombination(Key.D1, ctrl: true)),
+                      new KeyboardBinding(UserActions.LoadBookmark2, new KeyCombination(Key.D2, ctrl: true)),
+                      new KeyboardBinding(UserActions.LoadBookmark3, new KeyCombination(Key.D3, ctrl: true)),
+                      new KeyboardBinding(UserActions.LoadBookmark4, new KeyCombination(Key.D4, ctrl: true)),
+                      new KeyboardBinding(UserActions.LoadBookmark5, new KeyCombination(Key.D5, ctrl: true)),
+                      new KeyboardBinding(UserActions.LoadBookmark6, new KeyCombination(Key.D6, ctrl: true)),
+                      new KeyboardBinding(UserActions.LoadBookmark7, new KeyCombination(Key.D7, ctrl: true)),
+                      new KeyboardBinding(UserActions.LoadBookmark8, new KeyCombination(Key.D8, ctrl: true)),
+                      new KeyboardBinding(UserActions.LoadBookmark9, new KeyCombination(Key.D9, ctrl: true)),
+                      new KeyboardBinding(UserActions.LoadBookmark0, new KeyCombination(Key.D0, ctrl: true)),
 
-                      new KeyboardBinding(UserActions.SaveBookmark1, new KeyCombination(Key.D1, ctrl: true)),
-                      new KeyboardBinding(UserActions.SaveBookmark2, new KeyCombination(Key.D2, ctrl: true)),
-                      new KeyboardBinding(UserActions.SaveBookmark3, new KeyCombination(Key.D3, ctrl: true)),
-                      new KeyboardBinding(UserActions.SaveBookmark4, new KeyCombination(Key.D4, ctrl: true)),
-                      new KeyboardBinding(UserActions.SaveBookmark5, new KeyCombination(Key.D5, ctrl: true)),
-                      new KeyboardBinding(UserActions.SaveBookmark6, new KeyCombination(Key.D6, ctrl: true)),
-                      new KeyboardBinding(UserActions.SaveBookmark7, new KeyCombination(Key.D7, ctrl: true)),
-                      new KeyboardBinding(UserActions.SaveBookmark8, new KeyCombination(Key.D8, ctrl: true)),
-                      new KeyboardBinding(UserActions.SaveBookmark9, new KeyCombination(Key.D9, ctrl: true)),
-                      new KeyboardBinding(UserActions.SaveBookmark0, new KeyCombination(Key.D0, ctrl: true)),
+                      new KeyboardBinding(UserActions.SaveBookmark1, new KeyCombination(Key.D1, ctrl: true, shift: true)),
+                      new KeyboardBinding(UserActions.SaveBookmark2, new KeyCombination(Key.D2, ctrl: true, shift: true)),
+                      new KeyboardBinding(UserActions.SaveBookmark3, new KeyCombination(Key.D3, ctrl: true, shift: true)),
+                      new KeyboardBinding(UserActions.SaveBookmark4, new KeyCombination(Key.D4, ctrl: true, shift: true)),
+                      new KeyboardBinding(UserActions.SaveBookmark5, new KeyCombination(Key.D5, ctrl: true, shift: true)),
+                      new KeyboardBinding(UserActions.SaveBookmark6, new KeyCombination(Key.D6, ctrl: true, shift: true)),
+                      new KeyboardBinding(UserActions.SaveBookmark7, new KeyCombination(Key.D7, ctrl: true, shift: true)),
+                      new KeyboardBinding(UserActions.SaveBookmark8, new KeyCombination(Key.D8, ctrl: true, shift: true)),
+                      new KeyboardBinding(UserActions.SaveBookmark9, new KeyCombination(Key.D9, ctrl: true, shift: true)),
+                      new KeyboardBinding(UserActions.SaveBookmark0, new KeyCombination(Key.D0, ctrl: true, shift: true)),
                       
                       new KeyboardBinding(UserActions.LoadLayout0, new KeyCombination(Key.F1)),
                       new KeyboardBinding(UserActions.LoadLayout1, new KeyCombination(Key.F2)),

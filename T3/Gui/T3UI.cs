@@ -33,7 +33,6 @@ namespace T3.Gui
         public void Draw()
         {
             OpenedPopUpName = String.Empty;
-            KeyboardBinding.UpdatePressedKeysCount();
             SelectionManager.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             WindowManager.Draw();
@@ -96,6 +95,13 @@ namespace T3.Gui
                     {
                         FileReferenceOperations.FixOperatorFilepathsCommand_Executed();
                     }
+
+                    if (ImGui.BeginMenu("Bookmarks"))
+                    {
+                        GraphBookmarkNavigation.DrawBookmarksMenu();
+                        ImGui.EndMenu();
+                    }
+                    
                     ImGui.EndMenu();
                 }
                 WindowManager.DrawWindowsMenu();

@@ -20,6 +20,7 @@ using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
+using T3.Gui.Windows;
 using T3.Gui.Windows.TimeLine;
 using UiHelpers;
 
@@ -57,17 +58,25 @@ namespace T3.Gui.Graph
             }
 
             _compositionPath = childIdPath;
-            CompositionOp = NodeOperations.GetInstanceFromIdPath(childIdPath);
+            var comp = NodeOperations.GetInstanceFromIdPath(childIdPath);
+            if (comp == null)
+            {
+                Log.Error("Can't resolve instance for id-path " + childIdPath);
+                return;
+            }
+            CompositionOp = comp; 
 
             SelectionManager.Clear();
             TimeLineCanvas.Current?.ClearSelection();
 
-            UserSettings.SaveLastViewedOpForWindow(_window, CompositionOp.SymbolChildId);
-
-            var newProps = UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.SymbolChildId)
-                               ? UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId]
-                               : GuessViewProperties();
-
+            var newProps = GuessViewProperties();
+            if (CompositionOp != null)
+            {
+                UserSettings.SaveLastViewedOpForWindow(_window, CompositionOp.SymbolChildId);
+                if (UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.SymbolChildId))
+                    newProps = UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId];
+            }
+            
             SetScopeWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);
         }
 
@@ -145,6 +154,12 @@ namespace T3.Gui.Graph
                 return;
             }
             UpdateCanvas();
+            if (this.CompositionOp == null)
+            {
+                Log.Error("WTF");
+                return;
+            }
+            GraphBookmarkNavigation.HandleForCanvas(this);
 
             MakeCurrent();
             ChildUis = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis;
