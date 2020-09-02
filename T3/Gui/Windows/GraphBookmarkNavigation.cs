@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using T3.Core.Logging;
@@ -23,7 +24,6 @@ namespace T3.Gui.Windows
             if (ImGui.IsWindowFocused() && !HasInteractedInCurrentFrame())
                 return;
 
-            
             for (var i = 0; i < _saveBookmarkActions.Length; i++)
             {
                 if (KeyboardBinding.Triggered(_saveBookmarkActions[i]))
@@ -42,7 +42,6 @@ namespace T3.Gui.Windows
             }
         }
 
-
         private static GraphWindow GetCurrentGraphWindow()
         {
             GraphWindow current = null;
@@ -56,40 +55,56 @@ namespace T3.Gui.Windows
             }
 
             return current;
-        } 
-        
-        
+        }
+
         public static void DrawBookmarksMenu()
         {
             var currentWindow = GetCurrentGraphWindow();
-            
-            if (ImGui.BeginMenu("Load Graph Bookmark"))
+
+            if (ImGui.BeginMenu("Load graph bookmark"))
             {
-                for (int i = 0; i < 10; i++)
+                // for (int i = 0; i < 10; i++)
+                // {
+                //     if (ImGui.MenuItem("Bookmark " + (i + 1), "F" + (i + 1), false, enabled: DoesBookmarkExist(i)))
+                //     {
+                //         LoadBookmark(currentWindow._graphCanvas, i);
+                //     }
+                // }
+                //
+                // ImGui.EndMenu();
+
+                
+                for (var index = 0; index < _loadBookmarkActions.Length; index++)
                 {
-                    if (ImGui.MenuItem("Bookmark " + (i + 1), "F" + (i + 1), false, enabled: DoesBookmarkExist(i)))
+                    var action = _loadBookmarkActions[index];
+                    var shortcuts = KeyboardBinding.ListKeyboardShortcuts(action, showLabel:false);
+                    var isAvailable = DoesBookmarkExist(index);
+                    if (ImGui.MenuItem(action.ToString(), shortcuts, false, enabled: isAvailable))
                     {
-                        LoadBookmark(currentWindow._graphCanvas, i);
+                        LoadBookmark(currentWindow._graphCanvas, index);
                     }
                 }
 
                 ImGui.EndMenu();
+                
             }
 
-            if (ImGui.BeginMenu("Save layouts"))
+            if (ImGui.BeginMenu("Save graph bookmark"))
             {
-                for (int i = 0; i < 10; i++)
+                for (var index = 0; index < _saveBookmarkActions.Length; index++)
                 {
-                    if (ImGui.MenuItem("Bookmark " + (i + 1), "Ctrl+F" + (i + 1)))
+                    var action = _saveBookmarkActions[index];
+                    var shortcuts = KeyboardBinding.ListKeyboardShortcuts(action, showLabel:false);
+                    
+                    if (ImGui.MenuItem(action.ToString(), shortcuts))
                     {
-                        SaveBookmark(currentWindow._graphCanvas, i);
+                        SaveBookmark(currentWindow._graphCanvas, index);
                     }
                 }
 
                 ImGui.EndMenu();
             }
         }
-
 
         private static void LoadBookmark(GraphCanvas canvas, int index)
         {
@@ -106,11 +121,12 @@ namespace T3.Gui.Windows
                 Log.Error("Invalid node path");
                 return;
             }
+
             canvas.SetComposition(bookmark.IdPath, ScalableCanvas.Transition.Undefined);
             canvas.SetVisibleRange(bookmark.ViewScope.Scale, bookmark.ViewScope.Scroll);
             //SelectionManager.SetSelection(bookmark.SelectedChildIds);
         }
-        
+
         private static void SaveBookmark(GraphCanvas canvas, int index)
         {
             Log.Debug("Saving bookmark " + index);
@@ -121,15 +137,16 @@ namespace T3.Gui.Windows
             {
                 bookmarks.AddRange(new Bookmark[index + 1 - bookmarks.Count]);
             }
-            
+
             bookmarks[index] = new Bookmark()
                                    {
                                        IdPath = NodeOperations.BuildIdPathForInstance(canvas.CompositionOp),
                                        ViewScope = canvas.GetTargetScope(),
                                        SelectedChildIds = SelectionManager.GetSelectedNodes<SymbolChildUi>().Select(s => s.Id).ToList()
-                                   };;
+                                   };
+            ;
         }
-        
+
         private static readonly UserActions[] _loadBookmarkActions =
             {
                 UserActions.LoadBookmark0,
@@ -174,12 +191,12 @@ namespace T3.Gui.Windows
 
             return null;
         }
-        
+
         public class Bookmark
         {
             // Fixme: Deserialization doesn't work and results into new (incorrect) random Ids
             //[JsonConverter(typeof(List<Guid>))]
-            public List<Guid> IdPath= new List<Guid>();
+            public List<Guid> IdPath = new List<Guid>();
             public ScalableCanvas.Scope ViewScope;
             public List<Guid> SelectedChildIds = new List<Guid>();
         }
