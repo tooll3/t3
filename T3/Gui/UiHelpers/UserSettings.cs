@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using T3.Gui.Graph;
 using T3.Gui.Interaction;
+using T3.Gui.Windows;
 
 namespace T3.Gui.UiHelpers
 {
@@ -35,6 +36,7 @@ namespace T3.Gui.UiHelpers
             public float ZoomSpeed = 12;
             public float TooltipDelay = 1.2f;
             public bool HideUiElementsInGraphWindow = false;
+            public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new List<GraphBookmarkNavigation.Bookmark>();
         }
 
         public static Guid GetLastOpenOpForWindow(string windowTitle)
@@ -47,4 +49,6 @@ namespace T3.Gui.UiHelpers
             Config.LastOpsForWindows[window.Config.Title] = opInstanceId;
         }
     }
+
+    
 }
