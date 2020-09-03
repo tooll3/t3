@@ -156,7 +156,8 @@ namespace T3.Gui
             // create instance of project op, all children are create automatically
             Guid dashboardId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
             var dashboardSymbol = symbols[dashboardId];
-            RootInstance = dashboardSymbol.CreateInstance(Guid.NewGuid());
+            Guid dashboardInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
+            RootInstance = dashboardSymbol.CreateInstance(dashboardInstanceId);
         }
 
         public override void Load()
