@@ -21,8 +21,19 @@ namespace T3.Gui.Windows
     {
         public static void HandleForCanvas(GraphCanvas canvas)
         {
-            if (ImGui.IsWindowFocused() && !HasInteractedInCurrentFrame())
+            var isNotFocused = !ImGui.IsWindowFocused();
+            if (isNotFocused)
+            {
+                Log.Debug("not focused");
                 return;
+            }
+
+            var alreadyInteracted = HasInteractedInCurrentFrame();
+            if (alreadyInteracted)
+            {
+                Log.Debug("already interacted");
+                return;
+            }
 
             for (var i = 0; i < _saveBookmarkActions.Length; i++)
             {
@@ -63,17 +74,6 @@ namespace T3.Gui.Windows
 
             if (ImGui.BeginMenu("Load graph bookmark"))
             {
-                // for (int i = 0; i < 10; i++)
-                // {
-                //     if (ImGui.MenuItem("Bookmark " + (i + 1), "F" + (i + 1), false, enabled: DoesBookmarkExist(i)))
-                //     {
-                //         LoadBookmark(currentWindow._graphCanvas, i);
-                //     }
-                // }
-                //
-                // ImGui.EndMenu();
-
-                
                 for (var index = 0; index < _loadBookmarkActions.Length; index++)
                 {
                     var action = _loadBookmarkActions[index];
@@ -201,12 +201,13 @@ namespace T3.Gui.Windows
             public List<Guid> SelectedChildIds = new List<Guid>();
         }
 
-        private static int _lastInteractionFrame;
 
         private static bool HasInteractedInCurrentFrame()
         {
             var frameIndex = ImGui.GetFrameCount();
             return _lastInteractionFrame == frameIndex;
         }
+        
+        private static int _lastInteractionFrame;
     }
 }
