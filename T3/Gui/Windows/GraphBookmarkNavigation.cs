@@ -21,17 +21,15 @@ namespace T3.Gui.Windows
     {
         public static void HandleForCanvas(GraphCanvas canvas)
         {
-            var isNotFocused = !ImGui.IsWindowFocused();
-            if (isNotFocused)
-            {
-                Log.Debug("not focused");
-                return;
-            }
+            // var isNotFocused = !ImGui.IsWindowFocused();
+            // if (isNotFocused)
+            // {
+            //     return;
+            // }
 
             var alreadyInteracted = HasInteractedInCurrentFrame();
             if (alreadyInteracted)
             {
-                Log.Debug("already interacted");
                 return;
             }
 
