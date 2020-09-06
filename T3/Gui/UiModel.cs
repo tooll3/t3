@@ -67,7 +67,11 @@ namespace T3.Gui
                            () => new ValueOutputUi<Core.DataTypes.Gradient>());
             RegisterUiType(typeof(Core.DataTypes.ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<Core.DataTypes.ParticleSystem>(),
                            () => new ValueOutputUi<Core.DataTypes.ParticleSystem>());
-
+            
+            RegisterUiType(typeof(EvaluationContext.GizmoVisibility), new FallBackUiProperties(), () => new EnumInputUi<EvaluationContext.GizmoVisibility>(),
+                           () => new ValueOutputUi<EvaluationContext.GizmoVisibility>());
+            
+            
             // sharpdx types
             RegisterUiType(typeof(SharpDX.Int3), new Size2UiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
             RegisterUiType(typeof(SharpDX.Size2), new Size2UiProperties(), () => new Size2InputUi(), () => new ValueOutputUi<Size2>());

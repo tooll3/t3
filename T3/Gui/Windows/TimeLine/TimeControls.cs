@@ -176,7 +176,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 // Play backwards
                 var isPlayingBackwards = playback.PlaybackSpeed < 0;
-                if (CustomComponents.ToggleButton(Icon.PlayBackwards,
+                if (CustomComponents.ToggleIconButton(Icon.PlayBackwards,
                                                   label: isPlayingBackwards ? $"{(int)playback.PlaybackSpeed}x##backwards" : "##backwards",
                                                   ref isPlayingBackwards,
                                                   ControlSize))
@@ -200,7 +200,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 // Play forward
                 var isPlaying = playback.PlaybackSpeed > 0;
-                if (CustomComponents.ToggleButton(Icon.PlayForwards,
+                if (CustomComponents.ToggleIconButton(Icon.PlayForwards,
                                                   label: isPlaying ? $"{(int)playback.PlaybackSpeed}x##forward" : "##forward",
                                                   ref isPlaying,
                                                   ControlSize))
@@ -306,7 +306,7 @@ namespace T3.Gui.Windows.TimeLine
                 //
                 // ImGui.SameLine();
                 // Loop
-                if (CustomComponents.ToggleButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize))
+                if (CustomComponents.ToggleIconButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize))
                 {
                     var loopRangeMatchesTime = playback.LoopRange.IsValid && playback.LoopRange.Contains(playback.TimeInBars);
                     if (playback.IsLooping && !loopRangeMatchesTime)

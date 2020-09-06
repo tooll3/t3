@@ -45,5 +45,13 @@ namespace T3.Core.Operator
         public Matrix CameraToClipSpace { get; set; } = Matrix.Identity;
         public Matrix WorldToCamera { get; set; } = Matrix.Identity;
         public Matrix ObjectToWorld { get; set; } = Matrix.Identity;
+        public GizmoVisibility ShowGizmos;
+
+        public enum GizmoVisibility
+        {
+            Inherit = -1,
+            Off =0,
+            On =1,
+        } 
     }
 }

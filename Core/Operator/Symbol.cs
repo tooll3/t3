@@ -361,8 +361,16 @@ namespace T3.Core.Operator
         private static InputDefinition CreateInputDefinition(Guid id, string name, bool isMultiInput, Type valueType)
         {
             // create new input definition
-            InputValue defaultValue = InputValueCreators.Entries[valueType]();
-            return new InputDefinition { Id = id, Name = name, DefaultValue = defaultValue, IsMultiInput = isMultiInput };
+            try
+            {
+                InputValue defaultValue = InputValueCreators.Entries[valueType]();
+                return new InputDefinition { Id = id, Name = name, DefaultValue = defaultValue, IsMultiInput = isMultiInput };
+            }
+            catch
+            {
+                Log.Error("Can't create default value for " + valueType);
+                return null;
+            }
         }
 
         public void SwapInputs(int indexA, int indexB)

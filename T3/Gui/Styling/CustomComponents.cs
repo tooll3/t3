@@ -118,7 +118,7 @@ namespace T3.Gui
             return clicked;
         }
 
-        public static bool ToggleButton(Icon icon, string label, ref bool isSelected, Vector2 size, bool trigger = false)
+        public static bool ToggleIconButton(Icon icon, string label, ref bool isSelected, Vector2 size, bool trigger = false)
         {
             var wasSelected = isSelected;
             var clicked = false;

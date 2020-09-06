@@ -245,6 +245,11 @@ namespace T3.Core
             RegisterType(typeof(ParticleSystem), "ParticleSystem",
                          () => new InputValue<ParticleSystem>(new ParticleSystem()));
             
+            RegisterType(typeof(EvaluationContext.GizmoVisibility), "GizmoVisibility",
+                         InputDefaultValueCreator<EvaluationContext.GizmoVisibility>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<EvaluationContext.GizmoVisibility>);
+            
             // sharpdx types
             RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",
                          InputDefaultValueCreator<PrimitiveTopology>,

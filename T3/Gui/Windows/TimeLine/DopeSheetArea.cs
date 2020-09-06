@@ -111,7 +111,7 @@ namespace T3.Gui.Windows.TimeLine
 
             var hash = parameter.Input.GetHashCode();
             var pinned = PinnedParameters.Contains(hash);
-            if (CustomComponents.ToggleButton(Icon.Pin, "pin", ref pinned, new Vector2(16, 16)))
+            if (CustomComponents.ToggleIconButton(Icon.Pin, "pin", ref pinned, new Vector2(16, 16)))
             {
                 if (pinned)
                 {

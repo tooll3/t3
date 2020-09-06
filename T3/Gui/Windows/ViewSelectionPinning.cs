@@ -24,7 +24,7 @@ namespace T3.Gui.Windows
             if (pinnedOrSelectedInstance == null)
                 return;
 
-            if (CustomComponents.ToggleButton(Icon.Pin, "##pin", ref _isPinned, new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight)))
+            if (CustomComponents.ToggleIconButton(Icon.Pin, "##pin", ref _isPinned, new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight)))
             {
                 if (_isPinned)
                     PinSelectionToView();
