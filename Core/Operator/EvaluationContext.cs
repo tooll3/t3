@@ -14,9 +14,7 @@ namespace T3.Core.Operator
 
         public void Reset()
         {
-            ;
             TimeInBars = GlobalTimeInBars;
-            _lastFrameTime = GlobalTimeInBars;
         }
 
         public void SetViewFromCamera(ICamera camera)
