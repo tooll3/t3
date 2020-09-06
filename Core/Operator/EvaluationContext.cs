@@ -30,7 +30,7 @@ namespace T3.Core.Operator
 
             ObjectToWorld = Matrix.Identity;
         }
-        
+
         private static ICamera _defaultCamera = new ViewCamera();
 
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
@@ -58,13 +58,13 @@ namespace T3.Core.Operator
         public Matrix CameraToClipSpace { get; set; } = Matrix.Identity;
         public Matrix WorldToCamera { get; set; } = Matrix.Identity;
         public Matrix ObjectToWorld { get; set; } = Matrix.Identity;
-        public GizmoVisibility ShowGizmos;
+        public GizmoVisibility ShowGizmos { get; set; }
 
         public enum GizmoVisibility
         {
             Inherit = -1,
-            Off =0,
-            On =1,
-        } 
+            Off = 0,
+            On = 1,
+        }
     }
 }
