@@ -5,8 +5,7 @@ using T3.Core.Operator;
 namespace T3.Gui.Interaction.Timing
 {
     /// <summary>
-    /// Override the default Playback to support continuous playback synchornized
-    /// to BPM
+    /// Override the default Playback to support continuous playback synchronized to BPM
     /// </summary>
     public class BeatTimingPlayback : Playback
     {

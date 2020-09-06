@@ -23,6 +23,8 @@ namespace T3.Core.Animation
         public int Beat => (int)(TimeInBars * 4) % 4 + 1;
         public int Tick => (int)(TimeInBars * 16) % 4 + 1;
 
+
+
         public virtual void Update(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning = false)
         {
             UpdateTime(timeSinceLastFrameInSecs, keepBeatTimeRunning);
@@ -33,9 +35,12 @@ namespace T3.Core.Animation
                                  : TimeInBars - (LoopRange.End - LoopRange.Start);
             }
 
-            // TODO: setting the context time here is kind of awkward
+            
+            // FIXME: With multiple graphs, this break frame duration  
             EvaluationContext.GlobalTimeInBars = TimeInBars;
+            var frameDurationInBars = BeatTime - EvaluationContext.BeatTime; 
             EvaluationContext.BeatTime = BeatTime;
+            EvaluationContext.LastFrameDuration = BarsToSeconds(frameDurationInBars);
             EvaluationContext.GlobalTimeInSecs = TimeInSecs;
         }
 
@@ -70,6 +75,12 @@ namespace T3.Core.Animation
         public virtual void Dispose()
         {
         }
+        
+                
+        private double BarsToSeconds(double timeInBars)
+        {
+            return timeInBars * 240 / Bpm;
+        } 
     }
 
     public class StreamPlayback : Playback
@@ -197,6 +208,7 @@ namespace T3.Core.Animation
         {
             Bass.Free();
         }
+
 
         private bool IsTimeWithinAudioTrack => _timeInSeconds >= 0 && _timeInSeconds < GetSongDurationInSecs();
         private double _timeInSeconds; // We use this outside of stream range
