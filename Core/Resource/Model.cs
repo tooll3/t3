@@ -243,7 +243,7 @@ namespace T3.Core
                              return gradient;
                          });
             RegisterType(typeof(ParticleSystem), "ParticleSystem",
-                         () => new InputValue<ParticleSystem>(new ParticleSystem()));
+                         () => new InputValue<ParticleSystem>(null));
             
             RegisterType(typeof(EvaluationContext.GizmoVisibility), "GizmoVisibility",
                          InputDefaultValueCreator<EvaluationContext.GizmoVisibility>,
