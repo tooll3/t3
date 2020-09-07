@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using SharpDX;
+using T3.Core.DataTypes;
 using T3.Core.Operator.Interfaces;
 using Vector3 = SharpDX.Vector3;
 
@@ -66,5 +67,7 @@ namespace T3.Core.Operator
             Off = 0,
             On = 1,
         }
+
+        public ParticleSystem ParticleSystem;
     }
 }
