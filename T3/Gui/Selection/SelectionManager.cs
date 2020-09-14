@@ -180,8 +180,10 @@ namespace T3.Gui.Selection
                         if (!_plane.Intersects(ref rayInObject, out SharpDX.Vector3 intersectionPoint))
                             Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
 
-                        SharpDX.Vector3 offset = (intersectionPoint - _startIntersectionPoint) * gizmoAxis;
-                        SharpDX.Vector3 newOrigin = _originAtDragStart + offset;
+                        SharpDX.Vector3 offsetAlongAxis = (intersectionPoint - _startIntersectionPoint) * gizmoAxis;
+                        var offsetWithRotation = SharpDX.Vector3.TransformNormal(offsetAlongAxis, localToObject);
+                        
+                        SharpDX.Vector3 newOrigin = _originAtDragStart + offsetWithRotation;
                         transform.Translation = new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z);
                     }
                 }
