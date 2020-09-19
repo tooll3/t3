@@ -23,14 +23,14 @@ namespace T3.Gui.Interaction.WithCurves
         public string ImGuiTitle = "timeline";
 
         
-        protected void DrawCurveCanvas(Action drawAdditionalCanvasContent, float height = 0)
+        protected void DrawCurveCanvas(Action drawAdditionalCanvasContent, float height = 0, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
         {
 
             ImGui.BeginChild(ImGuiTitle, new Vector2(0, height), true,
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
                 Drawlist = ImGui.GetWindowDrawList();
-                UpdateCanvas();
+                UpdateCanvas(flags);
                 SetScaleToParentCanvas(GraphCanvas.Current);
                 Drawlist = ImGui.GetWindowDrawList();
 

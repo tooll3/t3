@@ -6,6 +6,7 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Gui.Commands;
+using T3.Gui.Graph;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.WithCurves;
 using T3.Gui.Windows.TimeLine;
@@ -20,7 +21,7 @@ namespace T3.Gui.InputUi
     /// </remarks>
     public static class CurveInputEditing
     {
-        public static InputEditStateFlags DrawCanvasForCurve(Curve curve, CurveEditingFlags flags = 0)
+        public static InputEditStateFlags DrawCanvasForCurve(Curve curve, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
         {
             //Log.Debug("ID " + ImGui.GetID("") );
             var imGuiId = ImGui.GetID("");
@@ -98,7 +99,7 @@ namespace T3.Gui.InputUi
 
             protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
             {
-                if ((_flags & CurveEditingFlags.PreventMouseInteractions) != 0)
+                if ((_flags & T3Ui.EditingFlags.PreventMouseInteractions) != 0)
                     return;
 
                 if (ImGui.IsItemHovered())
@@ -237,11 +238,11 @@ namespace T3.Gui.InputUi
 
                 public void Draw(Curve curve, CurveInteraction interaction)
                 {
-                    var height = (_flags & CurveEditingFlags.ExpandVertically) == CurveEditingFlags.ExpandVertically
+                    var height = (_flags & T3Ui.EditingFlags.ExpandVertically) == T3Ui.EditingFlags.ExpandVertically
                                      ? ImGui.GetContentRegionAvail().Y
                                      : DefaultCurveParameterHeight;
 
-                    DrawCurveCanvas(DrawCanvasContent, height);
+                    DrawCurveCanvas(DrawCanvasContent, height, T3Ui.EditingFlags.PreventZoomWithMouseWheel);
 
                     void DrawCanvasContent()
                     {
@@ -273,7 +274,7 @@ namespace T3.Gui.InputUi
                         if (NeedToAdjustScopeAfterFirstRendering)
                         {
                             var bounds = GetBoundsOnCanvas(interaction.GetAllKeyframes());
-                            SetScopeToCanvasArea(bounds, flipY: true);
+                            SetScopeToCanvasArea(bounds, flipY: true, GraphCanvas.Current);
                             NeedToAdjustScopeAfterFirstRendering = false;
                         }
                     }
@@ -288,16 +289,8 @@ namespace T3.Gui.InputUi
 
         private static readonly Dictionary<uint, CurveInteraction> InteractionForCurve = new Dictionary<uint, CurveInteraction>();
 
-        [Flags]
-        public enum CurveEditingFlags
-        {
-            None = 0,
-            ExpandVertically = 1 << 1,
-            PreventMouseInteractions = 1 << 2,
-            PreventZoomWithMouse = 1 <<3, 
-        }
 
-        private static CurveEditingFlags _flags;
+        private static T3Ui.EditingFlags _flags;
 
         public enum MoveDirections
         {

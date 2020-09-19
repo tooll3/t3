@@ -155,5 +155,15 @@ namespace T3.Gui
         public static bool DraggingIsInProgress = false;
         public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
         public const string FloatNumberFormat = "{0:F2}";
+        
+        [Flags]
+        public enum EditingFlags
+        {
+            None = 0,
+            ExpandVertically = 1 << 1,
+            PreventMouseInteractions = 1 << 2,
+            PreventZoomWithMouseWheel = 1 <<3,
+            PreventPanningWithMouse = 1 <<4, 
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace T3.Gui.Interaction
         /// <summary>
         /// This needs to be called by the inherited class before drawing its interface. 
         /// </summary>
-        public void UpdateCanvas()
+        public void UpdateCanvas(T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
         {
             Io = ImGui.GetIO();
             _mouse = ImGui.GetMousePos();
@@ -28,7 +28,7 @@ namespace T3.Gui.Interaction
             WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
             WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
             DampScaling();
-            HandleInteraction();
+            HandleInteraction(flags);
         }
 
         protected void DampScaling()
@@ -193,17 +193,28 @@ namespace T3.Gui.Interaction
             Scroll = ScrollTarget  * parent.Scale;
         }
 
-        public void SetScopeToCanvasArea(ImRect area, bool flipY = false)
+        public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent= null)
         {
             WindowSize = ImGui.GetContentRegionMax() - ImGui.GetWindowContentRegionMin();
             ScaleTarget = WindowSize / area.GetSize();
+            
             if (flipY)
             {
                 ScaleTarget.Y *= -1;
             }
+            
+            if (parent != null)
+            {
+                ScaleTarget /= parent.Scale;
+            }
 
             ScrollTarget = new Vector2(-area.Min.X * ScaleTarget.X,
                                        -area.Max.Y * ScaleTarget.Y);
+
+            // if (parent != null)
+            // {
+            //     ScrollTarget /= parent.Scale;
+            // }
         }
 
         public void FitAreaOnCanvas(ImRect area, bool flipY = false)
@@ -275,7 +286,7 @@ namespace T3.Gui.Interaction
             }
         }
 
-        protected virtual void HandleInteraction()
+        protected virtual void HandleInteraction(T3Ui.EditingFlags flags)
         {
             var isDraggingConnection = (ConnectionMaker.TempConnections.Count > 0) && ImGui.IsWindowFocused();
 
@@ -285,8 +296,11 @@ namespace T3.Gui.Interaction
             if (PreventMouseInteraction)
                 return;
 
-            if ((ImGui.IsMouseDragging(ImGuiMouseButton.Right)
-                 || (ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)))
+            if ((flags & T3Ui.EditingFlags.PreventPanningWithMouse) == 0 
+                && (
+                       ImGui.IsMouseDragging(ImGuiMouseButton.Right) 
+                    || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
+                )
             {
                 ScrollTarget += Io.MouseDelta;
                 UserScrolledCanvas = true;
@@ -296,8 +310,11 @@ namespace T3.Gui.Interaction
                 UserScrolledCanvas = false;
             }
 
-            ZoomWithMouseWheel();
-            ZoomWithMiddleMouseDrag();
+            if ((flags & T3Ui.EditingFlags.PreventZoomWithMouseWheel) == 0)
+            {
+                ZoomWithMouseWheel();
+                ZoomWithMiddleMouseDrag();
+            }
         }
 
         private void ZoomWithMouseWheel()

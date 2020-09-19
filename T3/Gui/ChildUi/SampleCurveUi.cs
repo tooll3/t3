@@ -34,10 +34,10 @@ namespace T3.Gui.ChildUi
             ImGui.BeginChild("curve" + instance.SymbolChildId.GetHashCode(), innerRect.GetSize());
             {
                 var preventEditingUnlessCtrlPressed = ImGui.GetIO().KeyCtrl
-                                                          ? CurveInputEditing.CurveEditingFlags.None
-                                                          : CurveInputEditing.CurveEditingFlags.PreventMouseInteractions;
+                                                          ? T3Ui.EditingFlags.None
+                                                          : T3Ui.EditingFlags.PreventMouseInteractions;
 
-                CurveInputEditing.DrawCanvasForCurve(curve, CurveInputEditing.CurveEditingFlags.ExpandVertically
+                CurveInputEditing.DrawCanvasForCurve(curve, T3Ui.EditingFlags.ExpandVertically
                                                             | preventEditingUnlessCtrlPressed);
 
                 DrawSamplePointIndicator();
