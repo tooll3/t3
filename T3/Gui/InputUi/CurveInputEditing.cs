@@ -241,8 +241,10 @@ namespace T3.Gui.InputUi
                     var height = (_flags & T3Ui.EditingFlags.ExpandVertically) == T3Ui.EditingFlags.ExpandVertically
                                      ? ImGui.GetContentRegionAvail().Y
                                      : DefaultCurveParameterHeight;
-
-                    DrawCurveCanvas(DrawCanvasContent, height, T3Ui.EditingFlags.PreventZoomWithMouseWheel);
+                    
+                    var preventZoomWithMouseWheel = ImGui.GetIO().KeyCtrl ? T3Ui.EditingFlags.None 
+                                                        : T3Ui.EditingFlags.PreventZoomWithMouseWheel | T3Ui.EditingFlags.PreventPanningWithMouse;
+                    DrawCurveCanvas(DrawCanvasContent, height, preventZoomWithMouseWheel);
 
                     void DrawCanvasContent()
                     {

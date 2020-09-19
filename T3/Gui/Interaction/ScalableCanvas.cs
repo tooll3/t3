@@ -211,10 +211,6 @@ namespace T3.Gui.Interaction
             ScrollTarget = new Vector2(-area.Min.X * ScaleTarget.X,
                                        -area.Max.Y * ScaleTarget.Y);
 
-            // if (parent != null)
-            // {
-            //     ScrollTarget /= parent.Scale;
-            // }
         }
 
         public void FitAreaOnCanvas(ImRect area, bool flipY = false)
@@ -329,7 +325,7 @@ namespace T3.Gui.Interaction
 
             if (IsCurveCanvas)
             {
-                if (ImGui.GetIO().KeyCtrl)
+                if (ImGui.GetIO().KeyAlt)
                 {
                     ScaleTarget.X *= zoomDelta;
                 }
