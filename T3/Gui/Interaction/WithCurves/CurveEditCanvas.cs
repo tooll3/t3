@@ -62,14 +62,14 @@ namespace T3.Gui.Interaction.WithCurves
                 return;
             
             var hoverTime = InverseTransformX(ImGui.GetIO().MousePos.X);
-            SnapHandlerForU.CheckForSnapping(ref hoverTime, TimeLineCanvas.Current.Scale.X);
+            SnapHandlerForU.CheckForSnapping(ref hoverTime, Scale.X);
 
             if (ImGui.IsMouseReleased(0))
             {
                 var dragDistance = ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length();
                 if (dragDistance < 2)
                 {
-                    TimeLineCanvas.Current.ClearSelection();
+                    ClearSelection();
 
                     InsertNewKeyframe(curve, hoverTime);
                 }
