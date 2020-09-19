@@ -114,8 +114,8 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ImGui.NET, Version=1.75.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\ImGui.NET.1.75.0\lib\netstandard2.0\ImGui.NET.dll</HintPath>
+    <Reference Include="ImGui.NET, Version=1.78.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\ImGui.NET.1.78.0\lib\netstandard2.0\ImGui.NET.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ManagedBass, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
@@ -559,9 +559,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\build\Microsoft.CodeAnalysis.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\build\Microsoft.CodeAnalysis.Analyzers.props'))" />
-    <Error Condition="!Exists('..\packages\ImGui.NET.1.75.0\build\net40\ImGui.NET.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ImGui.NET.1.75.0\build\net40\ImGui.NET.targets'))" />
+    <Error Condition="!Exists('..\packages\ImGui.NET.1.78.0\build\net40\ImGui.NET.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ImGui.NET.1.78.0\build\net40\ImGui.NET.targets'))" />
   </Target>
-  <Import Project="..\packages\ImGui.NET.1.75.0\build\net40\ImGui.NET.targets" Condition="Exists('..\packages\ImGui.NET.1.75.0\build\net40\ImGui.NET.targets')" />
+  <Import Project="..\packages\ImGui.NET.1.78.0\build\net40\ImGui.NET.targets" Condition="Exists('..\packages\ImGui.NET.1.78.0\build\net40\ImGui.NET.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
