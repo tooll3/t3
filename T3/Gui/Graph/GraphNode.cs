@@ -152,7 +152,8 @@ namespace T3.Gui.Graph
 
                     ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
                     if (UserSettings.Config.HoverMode != GraphCanvas.HoverModes.Disabled
-                        && !ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                        && !ImGui.IsMouseDragging(ImGuiMouseButton.Left)
+                        && !RenameInstanceOverlay.IsOpen)
                     {
                         ImGui.BeginTooltip();
                         {
@@ -196,7 +197,7 @@ namespace T3.Gui.Graph
                 // A horrible work around to prevent exception because CompositionOp changed during drawing.
                 // A better solution would defer setting the compositionOp to the beginning of next frame.
                 var justOpenedChild = false;
-                if (hovered && ImGui.IsMouseDoubleClicked(0))
+                if (hovered && ImGui.IsMouseDoubleClicked(0) && !RenameInstanceOverlay.IsOpen)
                 {
                     GraphCanvas.Current.SetCompositionToChildInstance(instance);
                     ImGui.CloseCurrentPopup();

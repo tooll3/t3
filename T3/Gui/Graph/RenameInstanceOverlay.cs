@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Graph
@@ -39,7 +40,13 @@ namespace T3.Gui.Graph
             if (_focusedInstanceId == Guid.Empty)
                 return;
 
-            var symbolChild = GraphCanvas.Current.CompositionOp.Symbol.Children.Single(child => child.Id == _focusedInstanceId);
+            var symbolChild = GraphCanvas.Current.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == _focusedInstanceId);
+            if (symbolChild == null)
+            {
+                Log.Error("canceling rename overlay of no longer valid selection");
+                _focusedInstanceId = Guid.Empty;
+                return;
+            }
             var parentSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
             var symbolChildUi = parentSymbolUi.ChildUis.Single(child => child.Id == _focusedInstanceId);
 
@@ -59,6 +66,8 @@ namespace T3.Gui.Graph
             }
         }
 
+        public static bool IsOpen => _focusedInstanceId != Guid.Empty;
+        
         private static Guid _focusedInstanceId;
     }
 }
