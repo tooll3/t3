@@ -450,7 +450,7 @@ namespace T3.Gui.Graph
 
             symbolBrowser.OpenAt(childUi.PosOnCanvas + new Vector2(childUi.Size.X, 0)
                                                      + new Vector2(SelectableNodeMovement.SnapPadding.X, 0),
-                                 primaryOutput.ValueType, primaryOutput.ValueType, false, prepareCommand);
+                                 primaryOutput.ValueType, null, false, prepareCommand);
         }
         #endregion
 
