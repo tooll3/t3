@@ -73,9 +73,9 @@ namespace T3.Gui.ChildUi.Animators
                         break;
                 }
             }
-            
-            if (!isActive || ImGui.IsItemDeactivated())
+            else if (ImGui.IsItemDeactivated())
             {
+                Log.Debug("Deactivated");
                 _dragState = DragMode.Off;
             }
 
