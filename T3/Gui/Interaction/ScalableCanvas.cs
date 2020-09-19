@@ -31,8 +31,6 @@ namespace T3.Gui.Interaction
             HandleInteraction();
         }
 
-
-
         protected void DampScaling()
         {
             // Damp scaling
@@ -45,7 +43,6 @@ namespace T3.Gui.Interaction
             var pp2 = Vector2.Lerp(p2, p2Target, f);
             var scaleT = (pp2 - pp1) / WindowSize;
 
-
             Scale = scaleT;
             Scroll = pp1;
 
@@ -53,7 +50,7 @@ namespace T3.Gui.Interaction
                             && Math.Abs(Scroll.Y - ScrollTarget.Y) < 0.5f
                             && Math.Abs(Scale.X - ScaleTarget.X) < 0.005f
                             && Math.Abs(Scale.Y - ScaleTarget.Y) < 0.005f;
-            
+
             if (completed)
             {
                 Scroll = ScrollTarget;
@@ -69,15 +66,12 @@ namespace T3.Gui.Interaction
                            Scroll = ScrollTarget
                        };
         }
-        
 
         public void SetVisibleRange(Vector2 scale, Vector2 scroll)
         {
             ScaleTarget = scale;
             ScrollTarget = scroll;
         }
-        
-        
 
         public void SetVisibleVRange(float valueScale, float valueScroll)
         {
@@ -112,7 +106,7 @@ namespace T3.Gui.Interaction
         /// </summary>
         public float TransformY(float yOnCanvas)
         {
-            return TransformPosition(new Vector2(0,yOnCanvas)).Y;
+            return TransformPosition(new Vector2(0, yOnCanvas)).Y;
         }
 
         /// <summary>
@@ -190,20 +184,29 @@ namespace T3.Gui.Interaction
             ScaleTarget = Vector2.One;
         }
 
+        public void SetScaleToParentCanvas(ScalableCanvas parent)
+        {
+            if (parent == null)
+                return;
+
+            Scale = ScaleTarget * parent.Scale;
+            Scroll = ScrollTarget  * parent.Scale;
+        }
+
         public void SetScopeToCanvasArea(ImRect area, bool flipY = false)
         {
-            WindowSize = ImGui.GetContentRegionMax()- ImGui.GetWindowContentRegionMin();
+            WindowSize = ImGui.GetContentRegionMax() - ImGui.GetWindowContentRegionMin();
             ScaleTarget = WindowSize / area.GetSize();
             if (flipY)
             {
                 ScaleTarget.Y *= -1;
             }
-            
+
             ScrollTarget = new Vector2(-area.Min.X * ScaleTarget.X,
                                        -area.Max.Y * ScaleTarget.Y);
         }
-        
-        public void FitAreaOnCanvas(ImRect area, bool flipY=false)
+
+        public void FitAreaOnCanvas(ImRect area, bool flipY = false)
         {
             var height = area.GetHeight();
             var width = area.GetWidth();
@@ -255,8 +258,9 @@ namespace T3.Gui.Interaction
                 )
             {
                 scale = Vector2.One;
-                scroll= Vector2.Zero;
+                scroll = Vector2.Zero;
             }
+
             ScaleTarget = scale;
             Scale = scale * (transition == Transition.JumpIn ? 0.3f : 1.5f);
 
@@ -274,7 +278,7 @@ namespace T3.Gui.Interaction
         protected virtual void HandleInteraction()
         {
             var isDraggingConnection = (ConnectionMaker.TempConnections.Count > 0) && ImGui.IsWindowFocused();
-            
+
             if (!ImGui.IsWindowHovered() && !isDraggingConnection)
                 return;
 
@@ -282,7 +286,7 @@ namespace T3.Gui.Interaction
                 return;
 
             if ((ImGui.IsMouseDragging(ImGuiMouseButton.Right)
-                    || (ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)))
+                 || (ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)))
             {
                 ScrollTarget += Io.MouseDelta;
                 UserScrolledCanvas = true;
@@ -299,10 +303,10 @@ namespace T3.Gui.Interaction
         private void ZoomWithMouseWheel()
         {
             UserZoomedCanvas = false;
-            
-            var focusCenter = (_mouse - Scroll - WindowPos) / Scale;
+
+            var focusCenter = (_mouse - ScrollTarget - WindowPos) / ScaleTarget;
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
-            
+
             if (Math.Abs(zoomDelta - 1) < 0.001f)
                 return;
 
@@ -312,7 +316,7 @@ namespace T3.Gui.Interaction
                 {
                     ScaleTarget.X *= zoomDelta;
                 }
-                else if(ImGui.GetIO().KeyShift)
+                else if (ImGui.GetIO().KeyShift)
                 {
                     ScaleTarget.Y *= zoomDelta;
                 }
@@ -325,6 +329,7 @@ namespace T3.Gui.Interaction
             {
                 ScaleTarget *= zoomDelta;
             }
+
             if (Math.Abs(zoomDelta) > 0.1f)
                 UserZoomedCanvas = true;
 
@@ -356,7 +361,6 @@ namespace T3.Gui.Interaction
                 }
             }
 
-            
             zoomSum = zoomSum.Clamp(0.02f, 100f);
             return zoomSum;
         }
@@ -368,25 +372,25 @@ namespace T3.Gui.Interaction
                 _mousePosWhenMiddlePressed = ImGui.GetMousePos();
                 _scaleWhenMiddlePressed = ScaleTarget;
             }
-            
-            if (ImGui.IsMouseDragging(ImGuiMouseButton.Middle,0))
+
+            if (ImGui.IsMouseDragging(ImGuiMouseButton.Middle, 0))
             {
                 var delta = ImGui.GetMousePos() - _mousePosWhenMiddlePressed;
                 if (IsCurveCanvas)
                 {
-                    
                 }
                 else
                 {
-                    var f = (float)Math.Pow(1.1f, delta.Y/40f);
+                    var f = (float)Math.Pow(1.1f, delta.Y / 40f);
                     ScaleTarget = _scaleWhenMiddlePressed * f;
                 }
+
                 var focusCenter = (_mousePosWhenMiddlePressed - Scroll - WindowPos) / Scale;
                 var shift = ScrollTarget + (focusCenter * ScaleTarget);
                 ScrollTarget += _mousePosWhenMiddlePressed - shift - WindowPos;
             }
         }
-        
+
         private Vector2 _mousePosWhenMiddlePressed;
         private Vector2 _scaleWhenMiddlePressed;
 

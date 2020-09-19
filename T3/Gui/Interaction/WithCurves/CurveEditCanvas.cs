@@ -4,6 +4,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Gui.Commands;
+using T3.Gui.Graph;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Styling;
 using T3.Gui.Windows.TimeLine;
@@ -21,14 +22,16 @@ namespace T3.Gui.Interaction.WithCurves
 
         public string ImGuiTitle = "timeline";
 
+        
         protected void DrawCurveCanvas(Action drawAdditionalCanvasContent, float height = 0)
         {
-            Drawlist = ImGui.GetWindowDrawList();
 
             ImGui.BeginChild(ImGuiTitle, new Vector2(0, height), true,
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
+                Drawlist = ImGui.GetWindowDrawList();
                 UpdateCanvas();
+                SetScaleToParentCanvas(GraphCanvas.Current);
                 Drawlist = ImGui.GetWindowDrawList();
 
                 drawAdditionalCanvasContent();
