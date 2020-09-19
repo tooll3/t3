@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Gui.Commands;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.WithCurves;
@@ -12,30 +13,15 @@ using T3.Gui.Windows.TimeLine;
 namespace T3.Gui.InputUi
 {
     /// <summary>
-    /// Handles editing of Curve-Inputs in parameter window.
+    /// Handles editing of Curve-Inputs in parameter windows and Graph CustomUi.
     /// </summary>
+    /// <remarks>
+    /// The view settings (selection, zoom, scale, etc) for each canvas are stored in a dictionary of <see cref="CurveInteraction"/> instances.  
+    /// </remarks>
     public static class CurveInputEditing
     {
-        private static readonly Dictionary<Curve, CurveInteraction> InteractionForCurve = new Dictionary<Curve, CurveInteraction>();
 
-        [Flags]
-        public enum CurveEditingFlags
-        {
-            None = 0,
-            FillChild = 1<<1,
-            PreventMouseInteractions = 1<<2,
-        }
-
-        private static CurveEditingFlags _flags;
-
-        public static ScalableCanvas GetCanvasForCurve(Curve curve)
-        {
-            if (!InteractionForCurve.TryGetValue(curve, out var curveInteraction))
-                return null;
-
-            return curveInteraction.Canvas;
-        }
-
+        
         public static InputEditStateFlags DrawCanvasForCurve(Curve curve, CurveEditingFlags flags = 0)
         {
             _flags = flags;
@@ -53,6 +39,15 @@ namespace T3.Gui.InputUi
             curveInteraction.Draw();
 
             return curveInteraction.EditState;
+        }
+        
+        
+        public static ScalableCanvas GetCanvasForCurve(Curve curve)
+        {
+            if (!InteractionForCurve.TryGetValue(curve, out var curveInteraction))
+                return null;
+
+            return curveInteraction.Canvas;
         }
 
         /// <summary>
@@ -72,6 +67,9 @@ namespace T3.Gui.InputUi
                 _canvas.Draw(Curves[0], this);
             }
 
+            #region  implement editing
+            
+            
             protected override IEnumerable<Curve> GetAllCurves()
             {
                 return Curves;
@@ -112,7 +110,7 @@ namespace T3.Gui.InputUi
                 if (!ImGui.IsItemActive())
                     return;
 
-                // Sadly, this hotkey interferes with the "Allow in graph custom ui hot key"
+                // Sadly, this hotkey interferes with the "Allow manipulation in graph custom ui hot key"
                 // if (ImGui.GetIO().KeyCtrl)
                 // {
                 //     if (isSelected)
@@ -181,6 +179,7 @@ namespace T3.Gui.InputUi
             }
 
             private static ChangeKeyframesCommand _changeKeyframesCommand;
+            #endregion
 
             private void HandleFenceSelection()
             {
@@ -268,7 +267,19 @@ namespace T3.Gui.InputUi
                 public bool NeedToAdjustScopeAfterFirstRendering = true;
             }
         }
+        
+        
+        private static readonly Dictionary<Curve, CurveInteraction> InteractionForCurve = new Dictionary<Curve, CurveInteraction>();
 
+        [Flags]
+        public enum CurveEditingFlags
+        {
+            None = 0,
+            FillChild = 1<<1,
+            PreventMouseInteractions = 1<<2,
+        }
+
+        private static CurveEditingFlags _flags;
         public enum MoveDirections
         {
             Undecided = 0,
