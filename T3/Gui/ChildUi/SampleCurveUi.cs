@@ -37,7 +37,7 @@ namespace T3.Gui.ChildUi
                                                           ? CurveInputEditing.CurveEditingFlags.None
                                                           : CurveInputEditing.CurveEditingFlags.PreventMouseInteractions;
 
-                CurveInputEditing.DrawCanvasForCurve(curve, CurveInputEditing.CurveEditingFlags.FillChild
+                CurveInputEditing.DrawCanvasForCurve(curve, CurveInputEditing.CurveEditingFlags.ExpandVertically
                                                             | preventEditingUnlessCtrlPressed);
 
                 DrawSamplePointIndicator();

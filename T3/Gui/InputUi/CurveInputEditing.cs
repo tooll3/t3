@@ -20,19 +20,19 @@ namespace T3.Gui.InputUi
     /// </remarks>
     public static class CurveInputEditing
     {
-
-        
         public static InputEditStateFlags DrawCanvasForCurve(Curve curve, CurveEditingFlags flags = 0)
         {
+            //Log.Debug("ID " + ImGui.GetID("") );
+            var imGuiId = ImGui.GetID("");
             _flags = flags;
-            if (!InteractionForCurve.TryGetValue(curve, out var curveInteraction))
+            if (!InteractionForCurve.TryGetValue(imGuiId, out var curveInteraction))
             {
                 curveInteraction = new CurveInteraction()
                                        {
                                            Curves = new List<Curve>() { curve }
                                        };
 
-                InteractionForCurve.Add(curve, curveInteraction);
+                InteractionForCurve.Add(imGuiId, curveInteraction);
             }
 
             curveInteraction.EditState = InputEditStateFlags.Nothing;
@@ -40,14 +40,15 @@ namespace T3.Gui.InputUi
 
             return curveInteraction.EditState;
         }
-        
-        
+
         public static ScalableCanvas GetCanvasForCurve(Curve curve)
         {
-            if (!InteractionForCurve.TryGetValue(curve, out var curveInteraction))
-                return null;
+            return null;
 
-            return curveInteraction.Canvas;
+            // if (!InteractionForCurve.TryGetValue(curve, out var curveInteraction))
+            //     return null;
+            //
+            // return curveInteraction.Canvas;
         }
 
         /// <summary>
@@ -56,20 +57,18 @@ namespace T3.Gui.InputUi
         private class CurveInteraction : CurveEditing
         {
             public List<Curve> Curves = new List<Curve>();
-            private readonly SingleCurveEditCanvas _canvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + InteractionForCurve.Count };
+            private readonly SingleCurveEditCanvas _singleCurveCanvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + InteractionForCurve.Count };
 
-            public ScalableCanvas Canvas => _canvas;
+            //public ScalableCanvas Canvas => _canvas;
 
             public InputEditStateFlags EditState { get; set; } = InputEditStateFlags.Nothing;
 
             public void Draw()
             {
-                _canvas.Draw(Curves[0], this);
+                _singleCurveCanvas.Draw(Curves[0], this);
             }
 
-            #region  implement editing
-            
-            
+            #region implement editing ---------------------------------------------------------------
             protected override IEnumerable<Curve> GetAllCurves()
             {
                 return Curves;
@@ -77,7 +76,7 @@ namespace T3.Gui.InputUi
 
             protected override void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false)
             {
-                _canvas.NeedToAdjustScopeAfterFirstRendering = true;
+                _singleCurveCanvas.NeedToAdjustScopeAfterFirstRendering = true;
             }
 
             protected override void DeleteSelectedKeyframes()
@@ -101,14 +100,29 @@ namespace T3.Gui.InputUi
             {
                 if ((_flags & CurveEditingFlags.PreventMouseInteractions) != 0)
                     return;
-                
+
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
                 }
 
+
+
                 if (!ImGui.IsItemActive())
+                {
+                    if (ImGui.IsItemDeactivated())
+                    {
+                        if (_changeKeyframesCommand != null)
+                        {
+                            CompleteDragCommand();
+                        }
+                        else
+                        {
+                            Log.Error("Deactivated keyframe dragging without valid command?");
+                        }
+                    }
                     return;
+                }
 
                 // Sadly, this hotkey interferes with the "Allow manipulation in graph custom ui hot key"
                 // if (ImGui.GetIO().KeyCtrl)
@@ -134,28 +148,28 @@ namespace T3.Gui.InputUi
 
                 if (_changeKeyframesCommand == null)
                 {
-                    _canvas.StartDragCommand();
+                    StartDragCommand();
                 }
 
-                var newDragPosition = _canvas.InverseTransformPosition(ImGui.GetIO().MousePos);
+                var newDragPosition = _singleCurveCanvas.InverseTransformPosition(ImGui.GetIO().MousePos);
                 double u = newDragPosition.X;
-                _canvas.SnapHandlerForU.CheckForSnapping(ref u, _canvas.Scale.X);
+                _singleCurveCanvas.SnapHandlerForU.CheckForSnapping(ref u, _singleCurveCanvas.Scale.X);
 
                 double v = newDragPosition.Y;
-                _canvas.SnapHandlerForV.CheckForSnapping(ref v, _canvas.Scale.Y);
+                _singleCurveCanvas.SnapHandlerForV.CheckForSnapping(ref v, _singleCurveCanvas.Scale.Y);
 
                 UpdateDragCommand(u - vDef.U, v - vDef.Value);
-                
+
                 EditState = InputEditStateFlags.Modified;
             }
 
-            public ICommand StartDragCommand()
+            private ICommand StartDragCommand()
             {
                 _changeKeyframesCommand = new ChangeKeyframesCommand(Guid.Empty, SelectedKeyframes);
                 return _changeKeyframesCommand;
             }
 
-            public void UpdateDragCommand(double dt, double dv)
+            private void UpdateDragCommand(double dt, double dv)
             {
                 foreach (var vDefinition in SelectedKeyframes)
                 {
@@ -166,7 +180,9 @@ namespace T3.Gui.InputUi
                 RebuildCurveTables();
                 EditState = InputEditStateFlags.Modified;
             }
+            
 
+            // FIXME: This needs to be called
             public void CompleteDragCommand()
             {
                 if (_changeKeyframesCommand == null)
@@ -181,13 +197,15 @@ namespace T3.Gui.InputUi
             private static ChangeKeyframesCommand _changeKeyframesCommand;
             #endregion
 
+            #region handle selection ----------------------------------------------------------------
+            
             private void HandleFenceSelection()
             {
                 _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
                 switch (_fenceState)
                 {
                     case SelectionFence.States.Updated:
-                        var boundsInCanvas = _canvas.InverseTransformRect(SelectionFence.BoundsInScreen).MakePositive();
+                        var boundsInCanvas = _singleCurveCanvas.InverseTransformRect(SelectionFence.BoundsInScreen).MakePositive();
                         SelectedKeyframes.Clear();
                         foreach (var point in GetAllKeyframes())
                         {
@@ -204,8 +222,8 @@ namespace T3.Gui.InputUi
             }
 
             private SelectionFence.States _fenceState = SelectionFence.States.Inactive;
+            #endregion
 
-            
             /// <summary>
             /// Implement canvas for showing and manipulating curve
             /// </summary>
@@ -219,11 +237,10 @@ namespace T3.Gui.InputUi
 
                 public void Draw(Curve curve, CurveInteraction interaction)
                 {
-
-                    var height = (_flags & CurveEditingFlags.FillChild) == CurveEditingFlags.FillChild 
-                                     ? ImGui.GetContentRegionAvail().Y 
+                    var height = (_flags & CurveEditingFlags.ExpandVertically) == CurveEditingFlags.ExpandVertically
+                                     ? ImGui.GetContentRegionAvail().Y
                                      : DefaultCurveParameterHeight;
-                    
+
                     DrawCurveCanvas(DrawCanvasContent, height);
 
                     void DrawCanvasContent()
@@ -239,18 +256,18 @@ namespace T3.Gui.InputUi
                         }
 
                         interaction.HandleFenceSelection();
-                        
+
                         // Handle keyboard interaction 
                         if (ImGui.IsWindowHovered() && KeyboardBinding.Triggered(UserActions.FocusSelection))
                         {
                             interaction.ViewAllOrSelectedKeys();
                         }
-                        
+
                         if (ImGui.IsWindowHovered() && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                         {
                             interaction.DeleteSelectedKeyframes();
                         }
-                        
+
                         interaction.DrawContextMenu();
                         HandleCreateNewKeyframes(curve);
                         if (NeedToAdjustScopeAfterFirstRendering)
@@ -261,25 +278,27 @@ namespace T3.Gui.InputUi
                         }
                     }
                 }
+
                 private const float DefaultCurveParameterHeight = 100;
-                private readonly StandardValueRaster _standardRaster = new StandardValueRaster() {EnableSnapping =  true};
+                private readonly StandardValueRaster _standardRaster = new StandardValueRaster() { EnableSnapping = true };
                 private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
                 public bool NeedToAdjustScopeAfterFirstRendering = true;
             }
         }
-        
-        
-        private static readonly Dictionary<Curve, CurveInteraction> InteractionForCurve = new Dictionary<Curve, CurveInteraction>();
+
+        private static readonly Dictionary<uint, CurveInteraction> InteractionForCurve = new Dictionary<uint, CurveInteraction>();
 
         [Flags]
         public enum CurveEditingFlags
         {
             None = 0,
-            FillChild = 1<<1,
-            PreventMouseInteractions = 1<<2,
+            ExpandVertically = 1 << 1,
+            PreventMouseInteractions = 1 << 2,
+            PreventZoomWithMouse = 1 <<3, 
         }
 
         private static CurveEditingFlags _flags;
+
         public enum MoveDirections
         {
             Undecided = 0,
