@@ -62,8 +62,6 @@ namespace T3.Gui.Windows
                     }
                 }
                 ImGui.SameLine();
-
-                ImGui.SameLine();
                 ImGui.InputText("##Filter", ref _filterString, 100);
                 ImGui.Separator();
                 ImGui.BeginChild("scrolling");
@@ -98,13 +96,14 @@ namespace T3.Gui.Windows
                             ImGui.PopStyleColor();
                         }
                     }
-
-                    _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - 5;
+                    ImGui.TextColored(Color.Gray, "---");    // Indicator for end
                     if (_shouldScrollToBottom)
                     {
-                        ImGui.SetScrollHereY(1);
+                        ImGui.SetScrollY(ImGui.GetScrollMaxY()+ ImGui.GetFrameHeight()  );
                         _shouldScrollToBottom = false;
                     }
+                    _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - ImGui.GetFrameHeight();
+
                 }
                 ImGui.EndChild();
             }
