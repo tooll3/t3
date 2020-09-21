@@ -53,7 +53,7 @@ namespace T3.Gui.Graph
         {
             if (_instanceCounter > 0)
             {
-                Log.Error("only one graph window supported for now");
+                //Log.Error("only one graph window supported for now");
                 return false;
             }
 
@@ -191,7 +191,7 @@ namespace T3.Gui.Graph
                     var availableRestHeight = ImGui.GetContentRegionAvail().Y;
                     if (availableRestHeight <= 3)
                     {
-                        Log.Warning($"skipping rending of timeline because layout is inconsistent: only {availableRestHeight}px left.");
+                        //Log.Warning($"skipping rending of timeline because layout is inconsistent: only {availableRestHeight}px left.");
                     }
                     else
                     {
