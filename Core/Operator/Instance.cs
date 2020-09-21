@@ -56,10 +56,16 @@ namespace T3.Core.Operator
             }
         }
 
-        public void AddConnection(Symbol.Connection connection, int multiInputIndex)
+        public bool AddConnection(Symbol.Connection connection, int multiInputIndex)
         {
             var (_, sourceSlot, _, targetSlot) = GetInstancesForConnection(connection);
-            targetSlot.AddConnection(sourceSlot, multiInputIndex);
+            if (targetSlot != null)
+            {
+                targetSlot.AddConnection(sourceSlot, multiInputIndex);
+                return true;
+            }
+
+            return false;
         }
 
         public void RemoveConnection(Symbol.Connection connection, int index)
@@ -89,7 +95,7 @@ namespace T3.Core.Operator
             ISlot targetSlot;
             if (targetInstance != null)
             {
-                targetSlot = targetInstance.Inputs.Single(e => e.Id == connection.TargetSlotId);
+                targetSlot = targetInstance.Inputs.SingleOrDefault(e => e.Id == connection.TargetSlotId);
             }
             else
             {

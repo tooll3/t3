@@ -430,6 +430,7 @@ namespace T3.Core.Operator
 
             // create connections between instances
             var conHashToCount = new Dictionary<ulong, int>(Connections.Count);
+            var invalidConnections = new List<Connection>();
             foreach (var connection in Connections)
             {
                 ulong highPart = 0xFFFFFFFF & (ulong)connection.TargetSlotId.GetHashCode();
@@ -438,9 +439,20 @@ namespace T3.Core.Operator
                 if (!conHashToCount.TryGetValue(hash, out int count))
                     conHashToCount.Add(hash, 0);
 
-                newInstance.AddConnection(connection, count);
-
+                var valid = newInstance.AddConnection(connection, count);
+                if (!valid)
+                {
+                    Log.Warning("Skipping connection to no longer existing targets");
+                    invalidConnections.Add(connection);
+                    continue;
+                }
+ 
                 conHashToCount[hash] = count + 1;
+            }
+
+            foreach (var c in invalidConnections)
+            {
+                Connections.Remove(c);
             }
 
             // connect animations if available
