@@ -171,8 +171,13 @@ namespace T3.Gui.Selection
 
                         var rayInObject = GetPickRayInObject(mousePosInScreen);
                         _plane = GetIntersectionPlane(mode, rayInObject.Direction, _originAtDragStart);
+                        _initialObjectToLocal = localToObject;
+                        _initialObjectToLocal.Invert();
+                        var rayInLocal = rayInObject;
+                        rayInLocal.Direction = SharpDX.Vector3.TransformNormal(rayInObject.Direction, _initialObjectToLocal);
+                        rayInLocal.Position = SharpDX.Vector3.TransformCoordinate(rayInObject.Position, _initialObjectToLocal);
 
-                        if (!_plane.Intersects(ref rayInObject, out _startIntersectionPoint))
+                        if (!_plane.Intersects(ref rayInLocal, out _startIntersectionPoint))
                             Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
                     }
                 }
@@ -187,13 +192,16 @@ namespace T3.Gui.Selection
                         isHovering = true;
 
                         var rayInObject = GetPickRayInObject(mousePosInScreen);
-                        if (!_plane.Intersects(ref rayInObject, out SharpDX.Vector3 intersectionPoint))
+                        var rayInLocal = rayInObject;
+                        rayInLocal.Direction = SharpDX.Vector3.TransformNormal(rayInObject.Direction, _initialObjectToLocal);
+                        rayInLocal.Position = SharpDX.Vector3.TransformCoordinate(rayInObject.Position, _initialObjectToLocal);
+
+                        if (!_plane.Intersects(ref rayInLocal, out SharpDX.Vector3 intersectionPoint))
                             Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
 
-                        SharpDX.Vector3 offsetAlongAxis = (intersectionPoint - _startIntersectionPoint) * gizmoAxis;
-                        var offsetWithRotation = SharpDX.Vector3.TransformNormal(offsetAlongAxis, localToObject);
-
-                        SharpDX.Vector3 newOrigin = _originAtDragStart + offsetWithRotation;
+                        SharpDX.Vector3 offsetInLocal = (intersectionPoint - _startIntersectionPoint) * gizmoAxis;
+                        var offsetInObject = SharpDX.Vector3.TransformNormal(offsetInLocal, localToObject);
+                        SharpDX.Vector3 newOrigin = _originAtDragStart + offsetInObject;
                         transform.Translation = new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z);
                     }
                 }
