@@ -11,6 +11,7 @@ using T3.Core.Logging;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
+using T3.Gui.Interaction;
 using T3.Gui.Interaction.Timing;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
@@ -37,6 +38,7 @@ namespace T3.Gui
             SrvManager.FreeUnusedTextures();
             WindowManager.Draw();
             BeatTiming.Update();
+            SingleValueEdit.InputTabOrderIndex = 0;
             
             SwapHoveringBuffers();
             TriggerGlobalActionsFromKeyBindings();

@@ -61,15 +61,25 @@ namespace T3.Gui.Interaction
                                                )
         {
 
+            InputTabOrderIndex++;
+            var id = ImGui.GetID("jog");
+            
+            var shouldFocus = InputTabOrderIndex == InputTabFocusIndex;
+            if (shouldFocus)
+            {
+                SetState(InputStates.TextInput);
+                _activeJogDialId = id;
+                _jogDialText = FormatValueForButton(ref value);
+            }
             
             var io = ImGui.GetIO();
-            var id = ImGui.GetID("jog");
+            
             _numberFormat = format;
             if (id == _activeJogDialId)
             {
                 switch (_state)
                 {
-                    case JogDialStates.Dialing:
+                    case InputStates.Dialing:
                         ImGui.PushStyleColor(ImGuiCol.Button, Color.Black.Rgba);
                         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Black.Rgba);
                         ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Black.Rgba);
@@ -84,17 +94,17 @@ namespace T3.Gui.Interaction
                             {
                                 if (io.KeyCtrl)
                                 {
-                                    SetState(JogDialStates.Inactive);
+                                    SetState(InputStates.Inactive);
                                     return InputEditStateFlags.ResetToDefault;
                                 }
                                 else
                                 {
-                                    SetState(JogDialStates.StartedTextInput);
+                                    SetState(InputStates.StartedTextInput);
                                 }
                             }
                             else
                             {
-                                SetState(JogDialStates.Inactive);
+                                SetState(InputStates.Inactive);
                             }
 
                             break;
@@ -102,7 +112,7 @@ namespace T3.Gui.Interaction
 
                         if (ImGui.IsItemDeactivated())
                         {
-                            SetState(JogDialStates.Inactive);
+                            SetState(InputStates.Inactive);
                             break;
                         }
 
@@ -117,36 +127,55 @@ namespace T3.Gui.Interaction
 
                         break;
 
-                    case JogDialStates.StartedTextInput:
+                    case InputStates.StartedTextInput:
                         ImGui.SetKeyboardFocusHere();
-                        SetState(JogDialStates.TextInput);
-                        goto case JogDialStates.TextInput;
+                        SetState(InputStates.TextInput);
+                        goto case InputStates.TextInput;
 
-                    case JogDialStates.TextInput:
+                    case InputStates.TextInput:
                         ImGui.PushStyleColor(ImGuiCol.Text, double.IsNaN(_editValue)
                                                                 ? Color.Red.Rgba
                                                                 : Color.White.Rgba);
                         ImGui.SetNextItemWidth(size.X);
                         ImGui.InputText("##dialInput", ref _jogDialText, 20);
+                        
+                        // Keep Focusing until Tab-Key released
+                        if (shouldFocus)
+                        {
+                            ImGui.SetKeyboardFocusHere(-1);
+                            if (!ImGui.IsItemFocused())
+                            {
+                                if (ImGui.IsKeyReleased((int)Key.Tab))
+                                {
+                                    InputTabFocusIndex = -1;
+                                }
+                            }
+                        }
+                        
                         ImGui.PopStyleColor();
-
+                        if (ImGui.IsKeyPressed((int)Key.Tab) && InputTabFocusIndex == -1)
+                        {
+                            InputTabFocusIndex = InputTabOrderIndex +  (ImGui.GetIO().KeyShift ? -1 :1);
+                        }
+                        
                         if (ImGui.IsItemDeactivated())
                         {
-                            SetState(JogDialStates.Inactive);
+                            SetState(InputStates.Inactive);
                             ImGui.SetKeyboardFocusHere();    // Clear focus so next time value will be completely selected
                             if (double.IsNaN(_editValue))
                                 _editValue = _startValue;
                         }
-
                         _editValue = Evaluate(_jogDialText);
                         break;
                 }
 
                 value = _editValue;
-                if (_state == JogDialStates.Inactive)
+                if (_state == InputStates.Inactive)
                 {
                     return InputEditStateFlags.Finished;
                 }
+                
+
 
                 //_editValue = Math.Round(_editValue * 100) / 100;
                 return Math.Abs(_editValue - _startValue) > 0.0001f ? InputEditStateFlags.Modified : InputEditStateFlags.Started;
@@ -162,37 +191,41 @@ namespace T3.Gui.Interaction
                 _editValue = value;
                 _startValue = value;
                 _jogDialText = FormatValueForButton(ref value);
-                SetState(JogDialStates.Dialing);
+                SetState(InputStates.Dialing);
             }
+
 
             return InputEditStateFlags.Nothing;
         }
 
 
-        private static void SetState(JogDialStates newState)
+        private static void SetState(InputStates newState)
         {
             switch (newState)
             {
-                case JogDialStates.Inactive:
+                case InputStates.Inactive:
                 {
                     _activeJogDialId = 0;
                     break;
                 }
 
-                case JogDialStates.Dialing:
+                case InputStates.Dialing:
                     _center = ImGui.GetMousePos();
                     _timeOpened = ImGui.GetTime();
                     break;
 
-                case JogDialStates.StartedTextInput:
+                case InputStates.StartedTextInput:
                     break;
 
-                case JogDialStates.TextInput:
+                case InputStates.TextInput:
                     break;
             }
 
             _state = newState;
         }
+
+        public static int InputTabOrderIndex = 0;
+        public static int InputTabFocusIndex = -1;    // if not -1 tries to set keyboard focus to input field.  
 
         private static double Evaluate(string expression)
         {
@@ -291,7 +324,7 @@ namespace T3.Gui.Interaction
         private static readonly Color ValueIndicatorColor = new Color(1,1,1,0.06f); 
 
         
-        private enum JogDialStates
+        private enum InputStates
         {
             Inactive,
             Dialing,
@@ -304,7 +337,7 @@ namespace T3.Gui.Interaction
         private static double _editValue;
         private static double _startValue;
         private static string _jogDialText = "";
-        private static JogDialStates _state = JogDialStates.Inactive;
+        private static InputStates _state = InputStates.Inactive;
 
         private static string _numberFormat = "{0:0.000}";
         private static double _timeOpened;
