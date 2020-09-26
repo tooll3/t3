@@ -35,6 +35,7 @@ namespace T3.Gui
         DeleteSelection,
         CopyToClipboard,
         PasteFromClipboard,
+        LayoutSelection,
         LoadLayout0,
         LoadLayout1,
         LoadLayout2,
@@ -245,6 +246,8 @@ namespace T3.Gui
                       new KeyboardBinding(UserActions.SaveLayout7, new KeyCombination(Key.F8, ctrl: true)),
                       new KeyboardBinding(UserActions.SaveLayout8, new KeyCombination(Key.F9, ctrl: true)),
                       new KeyboardBinding(UserActions.SaveLayout9, new KeyCombination(Key.F10, ctrl: true)),
+                      
+                      new KeyboardBinding(UserActions.LayoutSelection, new KeyCombination(Key.G)),
                   };
     }
 }

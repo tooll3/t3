@@ -193,6 +193,11 @@ namespace T3.Gui.Graph
                     PasteClipboard();
                 }
 
+                if (KeyboardBinding.Triggered(UserActions.LayoutSelection))
+                {
+                    SelectableNodeMovement.ArrangeOps();
+                }
+
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                 if(showGrid)

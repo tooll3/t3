@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
+using T3.Operators.Types.Id_f52db9a4_fde9_49ca_9ef7_131825c34e65;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
@@ -373,48 +375,97 @@ namespace T3.Gui.Graph.Interaction
             return Alignment.NoSnapped;
         }
 
-        // private static double RecursivelyAlignChildrenOfSelectedOps(SymbolChildUi childUi, List<ISelectableNode> freshlySnappedOpWidgets)
-        // {
-        //     var connectedInstances = GetConnectedInstances(childUi);
-        //     var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.SymbolChildId];
-        //     var connectedChildUis = connectedInstances
-        //                            .Select(ci => parentUi.ChildUis.Single(childUi2 => childUi2.Id == ci.SymbolChildId))
-        //                            .ToList();
-        //     
-        //     var compositionSymbol = GraphCanvas.Current.CompositionOp.Symbol;
-        //     
-        //     // var childUis = (from con in compositionSymbol.Connections
-        //     //                 where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
-        //     //                 from childUi in compositionSymbolUi.ChildUis
-        //     //                 where con.SourceParentOrChildId == childUi.Id
-        //     //                 select childUi).Distinct();            
-        //
-        //     foreach (var connectedChild in connectedChildUis)
-        //     {
-        //         if (childUi.IsSelected)
-        //             continue;
-        //         
-        //         
-        //     }
-        //     return 0;
-        // }
+        public static void ArrangeOps()
+        {
+            var commands = new List<ICommand>();
+            
+            var freshlySnapped = new List<ISelectableNode>();
+            foreach (var n in SelectionManager.GetSelectedSymbolChildUis())
+            {
+                RecursivelyAlignChildren(n, commands, freshlySnapped);
+            }
+            var command = new MacroCommand("arrange", commands);
+            UndoRedoStack.Add(command);
+        }
+        
+        public static float RecursivelyAlignChildren(SymbolChildUi childUi, List<ICommand> commands, List<ISelectableNode> freshlySnappedOpWidgets)
+        {
+            if (freshlySnappedOpWidgets == null)
+                freshlySnappedOpWidgets = new List<ISelectableNode>();
+            
+            var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+            var compositionSymbol = GraphCanvas.Current.CompositionOp.Symbol;
+            var connectedChildUis = (from con in compositionSymbol.Connections
+                                     where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
+                                     from sourceChildUi in parentUi.ChildUis
+                                     where con.SourceParentOrChildId == sourceChildUi.Id
+                                           && con.TargetParentOrChildId == childUi.Id
+                                     select sourceChildUi).Distinct().ToArray();
+            
+            // Order connections by input definition order
+            var connections = (from con in compositionSymbol.Connections
+                                     where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
+                                     from sourceChildUi in parentUi.ChildUis
+                                     where con.SourceParentOrChildId == sourceChildUi.Id
+                                           && con.TargetParentOrChildId == childUi.Id
+                                     select con).Distinct().ToArray();
 
-        // private static List<Instance> GetConnectedInstances(SymbolChildUi childUi)
-        // {
-        //     var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
-        //
-        //     var connectedInstances = new List<Instance>();
-        //     foreach (var i in instance.Inputs)
-        //     {
-        //         if (!i.IsConnected)
-        //             continue;
-        //
-        //         var connection = instance.Parent.Symbol.Connections.Single(c => c.TargetParentOrChildId == instance.SymbolChildId);
-        //         connectedInstances.Add(instance.Parent.Children.Single(child => child.SymbolChildId == connection.SourceParentOrChildId));
-        //     }
-        //
-        //     return connectedInstances;
-        // }
+            // Sort the incoming operators into the correct input order and ignore operators that can't be auto-layouted   
+            var sortedInputOps = new List<SymbolChildUi>();
+            foreach (var inputDef in childUi.SymbolChild.Symbol.InputDefinitions)
+            {
+                var matchingConnections = connections.Where(c => c.TargetSlotId == inputDef.Id).ToArray();
+                var connectedOpsForInput=  matchingConnections.SelectMany(c => connectedChildUis.Where(ccc => ccc.Id == c.SourceParentOrChildId));
+                
+                foreach (var op in connectedOpsForInput)
+                {
+                    var connection = matchingConnections.Single(c4 => c4.SourceParentOrChildId == op.Id && c4.TargetSlotId == inputDef.Id);
+                    var output = op.SymbolChild.Symbol.OutputDefinitions.Single(output2 => output2.Id == connection.SourceSlotId);
+                    var connectionsFromOutput = compositionSymbol.Connections.Where(c5 => c5.SourceSlotId == output.Id 
+                                                                                          && c5.SourceParentOrChildId == op.Id 
+                                                                                          && c5.TargetParentOrChildId != childUi.Id);
+                    var opHasUnpredictableConnections = connectionsFromOutput.Any();
+                    if (!opHasUnpredictableConnections)
+                    {
+                        sortedInputOps.Add(op);
+                    }
+                }
+            }
+
+            float verticalOffset = 0;
+            var snappedCount = 0;
+            foreach (var connectedChildUi in sortedInputOps)
+            {
+                if (freshlySnappedOpWidgets.Contains(connectedChildUi))
+                    continue;
+
+                
+                var thumbnailPadding = HasThumbnail(connectedChildUi) ? connectedChildUi.Size.X : 0;
+                if (snappedCount > 0)
+                    verticalOffset += thumbnailPadding;
+                
+                var moveCommand = new ChangeSelectableCommand(compositionSymbol.Id, new List<ISelectableNode>() {connectedChildUi}); 
+                connectedChildUi.PosOnCanvas = childUi.PosOnCanvas + new Vector2(- (childUi.Size.X + SnapPadding.X + 20),verticalOffset);
+                moveCommand.StoreCurrentValues();
+                commands.Add(moveCommand);
+
+                freshlySnappedOpWidgets.Add(connectedChildUi);
+                verticalOffset += RecursivelyAlignChildren(connectedChildUi, commands, freshlySnappedOpWidgets);
+
+                freshlySnappedOpWidgets.Add(connectedChildUi);
+                SelectionManager.AddSelection(connectedChildUi);
+                snappedCount++;
+            }
+            
+            var requiredHeight =Math.Max(verticalOffset, childUi.Size.Y);
+            return requiredHeight + SnapPadding.Y;
+        }
+
+        private static bool HasThumbnail(SymbolChildUi childUi)
+        {
+            return childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0 && childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
+        }
+        
 
         private enum Alignment
         {
