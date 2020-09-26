@@ -13,7 +13,7 @@ using Device = SharpDX.Direct3D11.Device;
 
 namespace T3.Gui.OutputUi
 {
-    public class CommandOutputUi : OutputUi<Command>, IGizmoSupport
+    public class CommandOutputUi : OutputUi<Command>
     {
         public bool GizmosEnabled { get; set; } = false;
 
@@ -48,7 +48,7 @@ namespace T3.Gui.OutputUi
             // evaluate the op
             slot.Update(context);
 
-            if (GizmosEnabled)
+            if (context.ShowGizmos != EvaluationContext.GizmoVisibility.Off)
             {
                 var cam = CameraSelectionHandling.SelectedCameraOp;
                 if (cam != null)

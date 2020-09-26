@@ -410,7 +410,6 @@
     <Compile Include="Gui\Interaction\VectorValueEdit.cs" />
     <Compile Include="Gui\OutputUi\CommandOutputUi.cs" />
     <Compile Include="Gui\OutputUi\FloatOutputUi.cs" />
-    <Compile Include="Gui\OutputUi\IGizmoSupport.cs" />
     <Compile Include="Gui\OutputUi\StringListOutputUi.cs" />
     <Compile Include="Gui\Selection\SelectionManager.cs" />
     <Compile Include="Gui\Styling\CustomComponents.cs" />
