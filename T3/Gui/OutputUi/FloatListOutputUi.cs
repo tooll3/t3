@@ -27,11 +27,30 @@ namespace T3.Gui.OutputUi
                 var v = typedSlot.Value;
                 var outputString =  v == null? "NULL" : string.Join(", ", v);
                 ImGui.Text($"{outputString}");
-                if (v != null && v.Count > 3)
+
+                if (v == null)
+                    return;
+                
+                if (v.Count > 3)
                 {
-                    var length = Math.Min(100, v.Count);
+                    var length = Math.Min(256, v.Count);
                     var floatList = v.GetRange(0, length).ToArray();
                     ImGui.PlotLines("##values", ref floatList[0], length);
+                }
+
+                if (v.Count > 0)
+                {
+                    var min = float.PositiveInfinity;
+                    var max = float.NegativeInfinity;
+                    var sum = 0f;
+                    foreach (var number in v)
+                    {
+                        sum += number;
+                        min = Math.Min(min, number);
+                        max = Math.Max(max, number);
+                    }
+                
+                    ImGui.Text($"{v.Count} [{min:G5} .. {max:G5}] ∅{sum/v.Count:G5}");
                 }
             }
             else
