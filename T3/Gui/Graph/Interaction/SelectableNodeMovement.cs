@@ -420,8 +420,8 @@ namespace T3.Gui.Graph.Interaction
                 
                 foreach (var op in connectedOpsForInput)
                 {
-                    var connection = matchingConnections.Single(c4 => c4.SourceParentOrChildId == op.Id && c4.TargetSlotId == inputDef.Id);
-                    var output = op.SymbolChild.Symbol.OutputDefinitions.Single(output2 => output2.Id == connection.SourceSlotId);
+                    //var connection = matchingConnections.Single(c4 => c4.SourceParentOrChildId == op.Id && c4.TargetSlotId == inputDef.Id);
+                    //var output = op.SymbolChild.Symbol.OutputDefinitions.Single(output2 => output2.Id == connection.SourceSlotId);
                     var connectionsFromOutput = compositionSymbol.Connections.Where(c5 => c5.SourceParentOrChildId == op.Id
                                                                                           && c5.TargetParentOrChildId != childUi.Id);
                     var opHasUnpredictableConnections = connectionsFromOutput.Any();
