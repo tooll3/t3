@@ -712,12 +712,17 @@ namespace T3.Gui.Graph
                     _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                                             ColorVariations.OperatorHover.Apply(colorForType));
 
-                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
 
                     var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
                     var output = instance.Outputs.Single(output2 => output2.Id == outputDef.Id);
 
-                    ImGui.SetTooltip($".{outputDef.Name}<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates");
+                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
+                    ImGui.BeginTooltip();
+                    ImGui.Text($".{outputDef.Name}");
+                    ImGui.PushFont(Fonts.FontSmall);
+                    ImGui.TextColored(Color.Gray,$"<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates");
+                    ImGui.PopFont();
+                    ImGui.EndTooltip();
                     ImGui.PopStyleVar();
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                     {
@@ -801,8 +806,32 @@ namespace T3.Gui.Graph
                                            );
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
-                    ImGui.SetTooltip($"-> .{inputDef.Name}<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
+                    ImGui.BeginTooltip();
+                    {
+                        var connectionSource = "";
+                        var connection = GraphCanvas.Current.CompositionOp.Symbol.Connections.SingleOrDefault(c => c.TargetParentOrChildId == targetUi.Id
+                                                                                        && c.TargetSlotId == inputDef.Id);
+                        if (connection != null)
+                        {
+                            var sourceOp= GraphCanvas.Current.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
+                            if(sourceOp != null)
+                                connectionSource = sourceOp.ReadableName;
+                        }
+
+                        if (!string.IsNullOrEmpty(connectionSource))
+                        {
+                            ImGui.PushFont(Fonts.FontSmall);
+                            ImGui.TextColored(Color.Gray,$"{connectionSource} -> ");
+                            ImGui.PopFont();
+                        } 
+                        ImGui.Text($".{inputDef.Name}");
+                        ImGui.PushFont(Fonts.FontSmall);
+                        ImGui.TextColored(Color.Gray,$"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
+                        ImGui.PopFont();
+                    }
+                    ImGui.EndTooltip(); 
                     ImGui.PopStyleVar();
+                    
                     if (ImGui.IsItemClicked(0))
                     {
                         ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
@@ -857,8 +886,36 @@ namespace T3.Gui.Graph
                                            );
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
-                    ImGui.SetTooltip($"-> .{inputDef.Name}[{multiInputIndex}] <{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
+                    ImGui.BeginTooltip();
+                    {
+                        var connectionSource = "";
+                        var connections = GraphCanvas.Current.CompositionOp.Symbol.Connections.Where(c => c.TargetParentOrChildId == targetUi.Id
+                                                                                                                   && c.TargetSlotId == inputDef.Id).ToList();
+                        if (connections.Count > 0 && connections.Count > multiInputIndex)
+                        {
+                            var connection = connections[multiInputIndex];
+                            
+                            var sourceOp= GraphCanvas.Current.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
+                            if(sourceOp != null)
+                                connectionSource = sourceOp.ReadableName;
+                        }
+                        
+
+                        if (!string.IsNullOrEmpty(connectionSource))
+                        {
+                            ImGui.PushFont(Fonts.FontSmall);
+                            ImGui.TextColored(Color.Gray,$"{connectionSource} -> ");
+                            ImGui.PopFont();
+                        } 
+                        ImGui.Text($".{inputDef.Name}");
+                        ImGui.PushFont(Fonts.FontSmall);
+                        ImGui.TextColored(Color.Gray,$"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
+                        ImGui.PopFont();
+                        //ImGui.PopStyleVar();
+                    }
+                    ImGui.EndTooltip(); 
                     ImGui.PopStyleVar();
+                    //ImGui.SetTooltip($"-> .{inputDef.Name}[{multiInputIndex}] <{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                     if (ImGui.IsItemClicked(0))
                     {
                         ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex);
