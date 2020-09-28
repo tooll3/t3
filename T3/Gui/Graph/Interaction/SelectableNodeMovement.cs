@@ -387,8 +387,8 @@ namespace T3.Gui.Graph.Interaction
             var command = new MacroCommand("arrange", commands);
             UndoRedoStack.Add(command);
         }
-        
-        public static float RecursivelyAlignChildren(SymbolChildUi childUi, List<ICommand> commands, List<ISelectableNode> freshlySnappedOpWidgets)
+
+        private static float RecursivelyAlignChildren(SymbolChildUi childUi, List<ICommand> commands, List<ISelectableNode> freshlySnappedOpWidgets)
         {
             if (freshlySnappedOpWidgets == null)
                 freshlySnappedOpWidgets = new List<ISelectableNode>();
@@ -410,7 +410,8 @@ namespace T3.Gui.Graph.Interaction
                                            && con.TargetParentOrChildId == childUi.Id
                                      select con).Distinct().ToArray();
 
-            // Sort the incoming operators into the correct input order and ignore operators that can't be auto-layouted   
+            // Sort the incoming operators into the correct input order and
+            // ignore operators that can't be auto-layouted because their outputs have connection to multiple operators
             var sortedInputOps = new List<SymbolChildUi>();
             foreach (var inputDef in childUi.SymbolChild.Symbol.InputDefinitions)
             {
@@ -421,8 +422,7 @@ namespace T3.Gui.Graph.Interaction
                 {
                     var connection = matchingConnections.Single(c4 => c4.SourceParentOrChildId == op.Id && c4.TargetSlotId == inputDef.Id);
                     var output = op.SymbolChild.Symbol.OutputDefinitions.Single(output2 => output2.Id == connection.SourceSlotId);
-                    var connectionsFromOutput = compositionSymbol.Connections.Where(c5 => c5.SourceSlotId == output.Id 
-                                                                                          && c5.SourceParentOrChildId == op.Id 
+                    var connectionsFromOutput = compositionSymbol.Connections.Where(c5 => c5.SourceParentOrChildId == op.Id
                                                                                           && c5.TargetParentOrChildId != childUi.Id);
                     var opHasUnpredictableConnections = connectionsFromOutput.Any();
                     if (!opHasUnpredictableConnections)
