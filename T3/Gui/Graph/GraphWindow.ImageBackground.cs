@@ -51,6 +51,7 @@ namespace T3.Gui.Graph
                 
                 _imageCanvas.SetAsCurrent();
                 _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
+                _evaluationContext.SetDefaultCamera();
                 viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: true);
                 _imageCanvas.Deactivate();
             }

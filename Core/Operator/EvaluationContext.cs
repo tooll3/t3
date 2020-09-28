@@ -23,7 +23,7 @@ namespace T3.Core.Operator
             var fov = MathUtil.DegreesToRadians(45);
             float aspectRatio = (float)RequestedResolution.Width / RequestedResolution.Height;
             CameraToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, 0.01f, 1000);
-
+            
             Vector3 eye = new Vector3(camera.CameraPosition.X, camera.CameraPosition.Y, camera.CameraPosition.Z);
             Vector3 target = new Vector3(camera.CameraTarget.X, camera.CameraTarget.Y, camera.CameraTarget.Z);
             Vector3 up = Vector3.Up;
@@ -32,6 +32,15 @@ namespace T3.Core.Operator
             ObjectToWorld = Matrix.Identity;
         }
 
+        public void SetDefaultCamera()
+        {
+            ObjectToWorld = Matrix.Identity;
+            WorldToCamera = Matrix.LookAtRH( new Vector3(0,0,2.41f), Vector3.Zero, Vector3.Up);
+            var fov = MathUtil.DegreesToRadians(45);
+            float aspectRatio = (float)RequestedResolution.Width / RequestedResolution.Height;
+            CameraToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, 0.01f, 1000);
+        }
+        
         private static ICamera _defaultCamera = new ViewCamera();
 
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
