@@ -42,6 +42,7 @@ namespace T3.Gui.Graph
                 framesSinceLastUpdate = Math.Min(framesSinceLastUpdate, output.DirtyFlag.FramesSinceLastUpdate);                
             }
 
+            SymbolChildUi.CustomUiResult customUiResult;
             _drawList = Graph.DrawList;
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
@@ -97,7 +98,7 @@ namespace T3.Gui.Graph
                                            : ColorVariations.Operator.Apply(backgroundColor));
 
                 // Custom ui
-                var customUiResult = childUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
+                customUiResult = childUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
 
                 // Size toggle
                 if (customUiResult == SymbolChildUi.CustomUiResult.None && GraphCanvas.Current.Scale.X > 0.7f)
@@ -312,7 +313,7 @@ namespace T3.Gui.Graph
 
 
                 // Render input Label
-                {
+                if((customUiResult & SymbolChildUi.CustomUiResult.PreventInputLabels) != 0) {
                     var inputLabelOpacity = MathUtils.Remap(GraphCanvas.Current.Scale.X,
                                                             0.75f, 1.5f,
                                                             0f, 1f);
