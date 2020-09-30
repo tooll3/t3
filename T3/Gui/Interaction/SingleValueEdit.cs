@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
+using System.Globalization;
 using ImGuiNET;
+using SharpDX;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.InputUi;
@@ -22,13 +24,12 @@ namespace T3.Gui.Interaction
                                                Vector2 size,
                                                int min = int.MinValue,
                                                int max = int.MaxValue,
-                                               bool clamp= false,
+                                               bool clamp = false,
                                                float scale = 0.1f,
-                                               string format = "{0:0}"
-                                               )
+                                               string format = "{0:0}")
         {
             double doubleValue = value;
-            var result = Draw(ref doubleValue, size, min, max,clamp, scale, format);
+            var result = Draw(ref doubleValue, size, min, max, clamp, scale, format);
             value = (int)doubleValue;
             return result;
         }
@@ -40,10 +41,9 @@ namespace T3.Gui.Interaction
                                                Vector2 size,
                                                float min = float.NegativeInfinity,
                                                float max = float.PositiveInfinity,
-                                               bool clamp= false,
+                                               bool clamp = false,
                                                float scale = 0.01f,
-                                               string format = "{0:0.000}"
-                                                )
+                                               string format = "{0:0.000}")
         {
             double floatValue = value;
             var result = Draw(ref floatValue, size, min, max, clamp, scale, format);
@@ -57,13 +57,11 @@ namespace T3.Gui.Interaction
                                                double max = double.PositiveInfinity,
                                                bool clamp = false,
                                                float scale = 1,
-                                               string format = "{0:0.000}"
-                                               )
+                                               string format = "{0:0.000}")
         {
-
             InputTabOrderIndex++;
             var id = ImGui.GetID("jog");
-            
+
             var shouldFocus = InputTabOrderIndex == InputTabFocusIndex;
             if (shouldFocus)
             {
@@ -71,9 +69,9 @@ namespace T3.Gui.Interaction
                 _activeJogDialId = id;
                 _jogDialText = FormatValueForButton(ref value);
             }
-            
+
             var io = ImGui.GetIO();
-            
+
             _numberFormat = format;
             if (id == _activeJogDialId)
             {
@@ -118,11 +116,11 @@ namespace T3.Gui.Interaction
 
                         if (UserSettings.Config.UseJogDialControl)
                         {
-                            JogDialOverlay.Draw(io, min, max, scale, clamp);
+                            JogDialOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, io, _center, min, max, scale, clamp);
                         }
                         else
                         {
-                            SliderLadder.Draw(io, min, max, scale, (float)(ImGui.GetTime() - _timeOpened), clamp);                            
+                            SliderLadder.Draw(io, min, max, scale, (float)(ImGui.GetTime() - _timeOpened), clamp);
                         }
 
                         break;
@@ -138,7 +136,7 @@ namespace T3.Gui.Interaction
                                                                 : Color.White.Rgba);
                         ImGui.SetNextItemWidth(size.X);
                         ImGui.InputText("##dialInput", ref _jogDialText, 20);
-                        
+
                         // Keep Focusing until Tab-Key released
                         if (shouldFocus)
                         {
@@ -151,20 +149,21 @@ namespace T3.Gui.Interaction
                                 }
                             }
                         }
-                        
+
                         ImGui.PopStyleColor();
                         if (ImGui.IsKeyPressed((int)Key.Tab) && InputTabFocusIndex == -1)
                         {
-                            InputTabFocusIndex = InputTabOrderIndex +  (ImGui.GetIO().KeyShift ? -1 :1);
+                            InputTabFocusIndex = InputTabOrderIndex + (ImGui.GetIO().KeyShift ? -1 : 1);
                         }
-                        
+
                         if (ImGui.IsItemDeactivated())
                         {
                             SetState(InputStates.Inactive);
-                            ImGui.SetKeyboardFocusHere();    // Clear focus so next time value will be completely selected
+                            ImGui.SetKeyboardFocusHere(); // Clear focus so next time value will be completely selected
                             if (double.IsNaN(_editValue))
                                 _editValue = _startValue;
                         }
+
                         _editValue = Evaluate(_jogDialText);
                         break;
                 }
@@ -174,17 +173,15 @@ namespace T3.Gui.Interaction
                 {
                     return InputEditStateFlags.Finished;
                 }
-                
-
 
                 //_editValue = Math.Round(_editValue * 100) / 100;
                 return Math.Abs(_editValue - _startValue) > 0.0001f ? InputEditStateFlags.Modified : InputEditStateFlags.Started;
             }
 
             DrawButtonWithDynamicLabel(FormatValueForButton(ref value), ref size);
-            
+
             DrawValueRangeIndicator(value, min, max);
-            
+
             if (ImGui.IsItemActivated())
             {
                 _activeJogDialId = id;
@@ -194,10 +191,8 @@ namespace T3.Gui.Interaction
                 SetState(InputStates.Dialing);
             }
 
-
             return InputEditStateFlags.Nothing;
         }
-
 
         private static void SetState(InputStates newState)
         {
@@ -225,7 +220,7 @@ namespace T3.Gui.Interaction
         }
 
         public static int InputTabOrderIndex = 0;
-        public static int InputTabFocusIndex = -1;    // if not -1 tries to set keyboard focus to input field.  
+        public static int InputTabFocusIndex = -1; // if not -1 tries to set keyboard focus to input field.  
 
         private static double Evaluate(string expression)
         {
@@ -248,8 +243,7 @@ namespace T3.Gui.Interaction
             // Don't use rounding for integers
             return (_numberFormat == "{0:0}")
                        ? "" + (int)value
-                       : string.Format(_numberFormat, value);    
-            
+                       : string.Format(_numberFormat, value);
         }
 
         /// <summary>
@@ -263,7 +257,6 @@ namespace T3.Gui.Interaction
             ImGui.GetWindowDrawList().AddText(keepPos + new Vector2(4, 4), color1, label);
         }
 
-        
         private static void DrawValueRangeIndicator(double value, double min, double max)
         {
             if (!double.IsInfinity(min) || !double.IsInfinity(max))
@@ -279,7 +272,7 @@ namespace T3.Gui.Interaction
 
                 var end = MathUtils.Remap(value, min, max, 0, itemSize.X);
                 var orgCenter = center;
-                
+
                 if (center > end)
                 {
                     var t = center;
@@ -290,40 +283,40 @@ namespace T3.Gui.Interaction
                 var p1 = itemPos + new Vector2((float)center, 0);
                 var p2 = itemPos + new Vector2((float)end, itemSize.Y);
                 ImGui.GetWindowDrawList().AddRectFilled(p1, p2, ValueIndicatorColor);
-                
+
                 // Indicate center
                 var alignment = center < orgCenter ? -1 : 0;
                 ImGui.GetWindowDrawList().AddRectFilled(
-                                                        ImGui.GetItemRectMin() + new Vector2((float)orgCenter + alignment, 0), 
-                                                        ImGui.GetItemRectMin() + new Vector2((float)orgCenter+ alignment+1, itemSize.Y), 
+                                                        ImGui.GetItemRectMin() + new Vector2((float)orgCenter + alignment, 0),
+                                                        ImGui.GetItemRectMin() + new Vector2((float)orgCenter + alignment + 1, itemSize.Y),
                                                         ValueIndicatorColor);
-                
+
                 // Indicate overflow
                 if (value < min)
                 {
                     var triangleCenter = new Vector2(itemPos.X + 5, itemPos.Y + itemSize.Y - 5);
-                    ImGui.GetWindowDrawList().AddTriangleFilled( 
+                    ImGui.GetWindowDrawList().AddTriangleFilled(
                                                                 triangleCenter + new Vector2(-3, 0),
                                                                 triangleCenter + new Vector2(2, -4),
                                                                 triangleCenter + new Vector2(2, 4),
-                                                                new Color(1,1,1,0.2f)
-                                                                );
+                                                                new Color(1, 1, 1, 0.2f)
+                                                               );
                 }
                 else if (value > max)
                 {
                     var triangleCenter = new Vector2(itemPos.X + itemSize.X - 3, itemPos.Y + itemSize.Y - 5);
-                    ImGui.GetWindowDrawList().AddTriangleFilled( 
+                    ImGui.GetWindowDrawList().AddTriangleFilled(
                                                                 triangleCenter + new Vector2(-2, -4),
                                                                 triangleCenter + new Vector2(3, 0),
                                                                 triangleCenter + new Vector2(-2, 4),
-                                                                new Color(1,1,1,0.2f)
-                                                               );                    
+                                                                new Color(1, 1, 1, 0.2f)
+                                                               );
                 }
             }
         }
-        private static readonly Color ValueIndicatorColor = new Color(1,1,1,0.06f); 
 
-        
+        private static readonly Color ValueIndicatorColor = new Color(1, 1, 1, 0.06f);
+
         private enum InputStates
         {
             Inactive,
@@ -366,17 +359,17 @@ namespace T3.Gui.Interaction
             }
 
             private static readonly RangeDef[] Ranges =
-            {
-                new RangeDef(-4f * OuterRangeHeight, -3f * OuterRangeHeight, 1000, "x1000", 2),
-                new RangeDef(-3f * OuterRangeHeight, -2f * OuterRangeHeight, 100, "x100", 1),
-                new RangeDef(-2f * OuterRangeHeight, -1f * OuterRangeHeight, 10, "x10", 0),
-                new RangeDef(-1f * OuterRangeHeight, 1f * OuterRangeHeight, 1, "", 0),
-                new RangeDef(1f * OuterRangeHeight, 2f * OuterRangeHeight, 0.1f, "x0.1", 0),
-                new RangeDef(2f * OuterRangeHeight, 3f * OuterRangeHeight, 0.01f, "x0.01", 1),
-            };
+                {
+                    new RangeDef(-4f * OuterRangeHeight, -3f * OuterRangeHeight, 1000, "x1000", 2),
+                    new RangeDef(-3f * OuterRangeHeight, -2f * OuterRangeHeight, 100, "x100", 1),
+                    new RangeDef(-2f * OuterRangeHeight, -1f * OuterRangeHeight, 10, "x10", 0),
+                    new RangeDef(-1f * OuterRangeHeight, 1f * OuterRangeHeight, 1, "", 0),
+                    new RangeDef(1f * OuterRangeHeight, 2f * OuterRangeHeight, 0.1f, "x0.1", 0),
+                    new RangeDef(2f * OuterRangeHeight, 3f * OuterRangeHeight, 0.01f, "x0.01", 1),
+                };
 
             private static RangeDef _lockedRange;
-            
+
             public static void Draw(ImGuiIOPtr io, double min, double max, float scale, float timeSinceVisible, bool clamp)
             {
                 var foreground = ImGui.GetForegroundDrawList();
@@ -395,24 +388,24 @@ namespace T3.Gui.Interaction
 
                 foreach (var range in Ranges)
                 {
-                    var isActiveRange = range == _lockedRange 
-                                        || (_lockedRange == null &&  pNow.Y > range.YMin && pNow.Y < range.YMax);
+                    var isActiveRange = range == _lockedRange
+                                        || (_lockedRange == null && pNow.Y > range.YMin && pNow.Y < range.YMax);
                     var opacity = (timeSinceVisible * 4 - range.FadeInDelay / 4).Clamp(0, 1);
 
                     var isCenterRange = Math.Abs(range.ScaleFactor - 1) < 0.001f;
                     if (isActiveRange)
                     {
                         activeScaleFactor = range.ScaleFactor;
-                        if(_lockedRange == null && Math.Abs(ImGui.GetMouseDragDelta().X) > 30)
+                        if (_lockedRange == null && Math.Abs(ImGui.GetMouseDragDelta().X) > 30)
                         {
                             _lockedRange = range;
                         }
                     }
-                    
+
                     if (!isCenterRange)
                     {
-                        var centerColor = (isActiveRange ? RangeActiveColor : RangeCenterColor)*opacity;
-                        
+                        var centerColor = (isActiveRange ? RangeActiveColor : RangeCenterColor) * opacity;
+
                         foreground.AddRectFilledMultiColor(
                                                            new Vector2(-RangeWidth, range.YMin) + _center,
                                                            new Vector2(0, range.YMax - RangePadding) + _center,
@@ -437,7 +430,6 @@ namespace T3.Gui.Interaction
                                            range.Label);
                     }
                 }
-                
 
                 var deltaSinceLastStep = pLast.X - _lastStepPosX;
                 var delta = deltaSinceLastStep / StepSize;
@@ -446,7 +438,7 @@ namespace T3.Gui.Interaction
                     ImGui.PushFont(Fonts.FontSmall);
                     foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x0.01");
                     ImGui.PopFont();
-                    
+
                     delta *= 0.01f;
                 }
                 else if (io.KeyShift)
@@ -457,19 +449,19 @@ namespace T3.Gui.Interaction
 
                     delta *= 10f;
                 }
-                
+
                 if (!(Math.Abs(deltaSinceLastStep) >= StepSize))
                     return;
-                
+
                 _editValue += delta * activeScaleFactor * scale;
                 if (activeScaleFactor > 1)
                 {
                     _editValue = Math.Round(_editValue / (activeScaleFactor * scale)) * (activeScaleFactor * scale);
                 }
 
-                if(clamp)
+                if (clamp)
                     _editValue = _editValue.Clamp(min, max);
-                
+
                 _lastStepPosX = pNow.X;
             }
 
@@ -486,98 +478,162 @@ namespace T3.Gui.Interaction
         /// <summary>
         /// Draws a circular dial to manipulate values with various speeds
         /// </summary>
-        private static class JogDialOverlay
+        public static class JogDialOverlay
         {
-            public static void Draw(ImGuiIOPtr io, double min, double max, float scale, bool clamp)
+            public static bool Draw(ref double value, bool restarted, ImGuiIOPtr io, Vector2 center, double min = double.NegativeInfinity, double max = double.PositiveInfinity,
+                                    float scale = 0.1f, bool clamp = false)
             {
+                var modified = false;
+                if (restarted)
+                    _originalValue = value;
+                
                 var foreground = ImGui.GetForegroundDrawList();
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
 
-                var pLast = io.MousePos - io.MouseDelta - _center;
-                var pNow = io.MousePos - _center;
+                var pLast = io.MousePos - io.MouseDelta - center;
+                var pNow = io.MousePos - center;
 
                 var distanceToCenter = pNow.Length();
 
                 var r = NeutralRadius;
-                float activeSpeed = 0;
-                int index = 0;
-                var rot = (float)MathUtils.Fmod(((_editValue - _startValue) * RadialIndicatorSpeed), 2 * Math.PI);
-                foreach (var segmentSpeed in SegmentSpeeds)
+
+                const int ringCount = 2;
+                var activeLog10Speed = 1f;
+                var baseLog10Speed = 1;
+                if (io.KeyCtrl)
                 {
-                    var isLastSegment = index == SegmentSpeeds.Length - 1;
+                    baseLog10Speed++;
+                }
+                if (io.KeyShift)
+                {
+                    baseLog10Speed--;
+                }
+
+                var isInNeutralPosition = true;
+                for (int ringIndex = 0; ringIndex < 2; ringIndex++)
+                {
+                    var isLastSegment = ringIndex == ringCount - 1;
                     var isActive =
                         (distanceToCenter > r && distanceToCenter < r + SegmentWidth) ||
                         (isLastSegment && distanceToCenter > r + SegmentWidth);
 
-                    if (isActive)
-                        activeSpeed = segmentSpeed;
-
+                    var log10Speed = baseLog10Speed + ringIndex;
                     if (isActive)
                     {
-                        const float opening = 3.14f * 1.75f;
-
-                        foreground.PathArcTo(
-                                             _center,
-                                             radius: r + SegmentWidth / 2,
-                                             rot,
-                                             rot + opening,
-                                             num_segments: 64);
-                        foreground.PathStroke(ActiveSegmentColor, false, SegmentWidth - Padding);
+                        activeLog10Speed = log10Speed;
+                        isInNeutralPosition = false;
                     }
-                    else
+
+                    foreground.AddCircle(center,
+                                         radius: r + SegmentWidth / 2,
+                                         SegmentColor,
+                                         num_segments: 64,
+                                         thickness: SegmentWidth - Padding);
+
+                    // Draw ticks
+                    for (int lineIndex = 0; lineIndex < 100; lineIndex++)
                     {
-                        foreground.AddCircle(_center,
-                                             radius: r + SegmentWidth / 2,
-                                             SegmentColor,
-                                             num_segments: 64,
-                                             thickness: SegmentWidth - Padding);
+                        var f = lineIndex * 0.01f;
+                        var alpha = (lineIndex == 0)
+                                        ? 1
+                                        : (lineIndex % 10) == 0
+                                            ? 0.3f
+                                            : 0.2f;
+                        alpha *= isActive ? 1 : 0.4f;
+                        var color = new Color(0, 0, 0, alpha);
+                        DrawTick(-f, color);
                     }
 
+                    var valueTickAlpha = isActive ? 1 : 0.4f;
+                    var valueTickColor = new Color(1,1,1, valueTickAlpha);
+                    DrawTick(value / Math.Pow(10, log10Speed-1), valueTickColor);
+                    
+                    DrawValueDifference(_originalValue / Math.Pow(10, log10Speed-1), value / Math.Pow(10, log10Speed-1), valueTickColor);
                     r += SegmentWidth;
-                    index++;
                 }
 
-                var aLast = (float)Math.Atan2(pLast.X, pLast.Y);
-                var aNow = (float)Math.Atan2(pNow.X, pNow.Y);
-                var delta = aLast - aNow;
-                if (delta > 1.5f)
+                if (!isInNeutralPosition)
                 {
-                    delta -= (float)(2 * Math.PI);
-                }
-                else if (delta < -1.5f)
-                {
-                    delta += (float)(2 * Math.PI);
+                    var lastDialRatio = MathUtils.Fmod(-Math.Atan2(pLast.X, pLast.Y) / (Math.PI * 2) + 0.5f, 1);
+                    lastDialRatio = Math.Round(lastDialRatio * 100f) / 100f;
+
+                    var dialRatio = MathUtils.Fmod(-Math.Atan2(pNow.X, pNow.Y) / (Math.PI * 2) + 0.5f, 1);
+                    dialRatio = Math.Round(dialRatio * 100f) / 100f;
+                    
+                    var pow = Math.Pow(10, activeLog10Speed-1);
+
+                    var delta = dialRatio - lastDialRatio;
+                    if (delta > 0.5)
+                        delta -= 1;
+                    else if (delta < -0.5)
+                        delta += 1;
+                    
+                    if (Math.Abs(delta) > 0.001f)
+                    {
+                        
+                        var offset = 0f; 
+                        if (delta < 0)
+                        {
+                            if (lastDialRatio >= 1 || lastDialRatio < dialRatio)
+                            {
+                                offset = -1;
+                            }
+                        }
+                        else
+                        {
+                            if (lastDialRatio >= 1 || lastDialRatio > dialRatio)
+                            {
+                                offset = 1;
+                            }
+                        }
+
+                        var lowerPart = MathUtils.Fmod(value, pow);
+                        var roundedUpperPart = value - lowerPart;
+
+                        var newLowerPart = pow * dialRatio;
+                        value = roundedUpperPart + newLowerPart + offset * pow;
+                        if (clamp)
+                        {
+                            value = value.Clamp(min, max);
+                        }
+                        modified = true;
+                    }
                 }
 
-                delta = (float)Math.Round(delta * 50) / 50;
-                if (ImGui.GetIO().KeyAlt)
+                return modified;
+
+                void DrawTick(double f, Color color)
                 {
-                    activeSpeed *= 0.01f;
-                }
-                else if (ImGui.GetIO().KeyShift)
-                {
-                    activeSpeed *= 10;
+                    var rads = -3.141578 * 2 * (f + 0.5f);
+                    var d = new Vector2((float)Math.Sin(rads), (float)Math.Cos(rads));
+                    foreground.AddLine(center + (r) * d, center + (r + SegmentWidth) * d, color);
                 }
 
-                _editValue += delta * activeSpeed * scale * 100;
-                
-                if(clamp)
-                    _editValue = _editValue.Clamp(min, max);
+                void DrawValueDifference(double orgValue, double newValue, Color color)
+                {
+                    var rads1 = -3.141578 * 2 * (orgValue + 0.5f + 0.25f);
+                    var rads2 = -3.141578 * 2 * (newValue + 0.5f + 0.25f);
+
+                    var clamped = (rads1 - rads2).Clamp(-3.1415f *2, 3.1415f *2);
+                    rads2 = rads1 -clamped;
+                    foreground.PathArcTo(
+                                         center,
+                                         radius: r + SegmentWidth * 0.01f,
+                                         a_min: -(float)rads1,
+                                         a_max: -(float)rads2,
+                                         num_segments: 64);
+                    foreground.PathStroke(ActiveSegmentColor, false, 1);
+                }
             }
-
+            private static double _originalValue;
             private const float SegmentWidth = 90;
-            private const float NeutralRadius = 10;
+            private const float NeutralRadius = 15;
             private const float RadialIndicatorSpeed = (float)(2 * Math.PI / 20);
             private const float Padding = 2;
 
-            private static readonly float[] SegmentSpeeds = new[]
-                                                   {
-                                                       (float)(0.5f / Math.PI),
-                                                       (float)(20 * 0.5f / Math.PI)
-                                                   };
-
-            private static readonly Color SegmentColor = new Color(1f, 1f, 1f, 0.05f);
-            private static readonly Color ActiveSegmentColor = new Color(1f, 1f, 1f, 0.05f);
+            private static readonly Color SegmentColor = new Color(0.2f, 0.2f, 0.2f, 0.35f);
+            private static readonly Color ActiveSegmentColor = new Color(1f, 1f, 1f, 0.5f);
+            
         }
     }
 }
