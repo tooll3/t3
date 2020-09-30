@@ -807,16 +807,22 @@ namespace T3.Gui.Graph
                                            );
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
+                    Symbol.Connection connection;
+                    SymbolChild sourceOp = null;
+                    SymbolChild.Output output = null;
                     ImGui.BeginTooltip();
                     {
                         var connectionSource = "";
-                        var connection = GraphCanvas.Current.CompositionOp.Symbol.Connections.SingleOrDefault(c => c.TargetParentOrChildId == targetUi.Id
+                        connection = GraphCanvas.Current.CompositionOp.Symbol.Connections.SingleOrDefault(c => c.TargetParentOrChildId == targetUi.Id
                                                                                         && c.TargetSlotId == inputDef.Id);
                         if (connection != null)
                         {
-                            var sourceOp= GraphCanvas.Current.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
-                            if(sourceOp != null)
-                                connectionSource = sourceOp.ReadableName;
+                            sourceOp= GraphCanvas.Current.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
+                            if (sourceOp != null)
+                            {
+                                output = sourceOp.Outputs[connection.SourceSlotId];
+                                connectionSource = sourceOp.ReadableName + "." +  output.OutputDefinition.Name;
+                            }
                         }
 
                         if (!string.IsNullOrEmpty(connectionSource))
@@ -835,7 +841,17 @@ namespace T3.Gui.Graph
                     
                     if (ImGui.IsItemClicked(0))
                     {
-                        ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                        var createCopy = ImGui.GetIO().KeyCtrl && connection != null && sourceOp != null;
+                        if (createCopy)
+                        {
+                            var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+                            var sourceOpUi = parentUi.ChildUis.Single(ui => ui.Id == sourceOp.Id);
+                            ConnectionMaker.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, sourceOpUi, output.OutputDefinition);    
+                        }
+                        else
+                        {
+                            ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);    
+                        }
                     }
                 }
             }
@@ -897,8 +913,13 @@ namespace T3.Gui.Graph
                             var connection = connections[multiInputIndex];
                             
                             var sourceOp= GraphCanvas.Current.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
-                            if(sourceOp != null)
-                                connectionSource = sourceOp.ReadableName;
+                            if (sourceOp != null)
+                            {
+                                
+                                var output = sourceOp.Outputs[connection.SourceSlotId];
+                                connectionSource = sourceOp.ReadableName + "." +  output.OutputDefinition.Name;
+                                //connectionSource = sourceOp.ReadableName;
+                            }
                         }
                         
 
