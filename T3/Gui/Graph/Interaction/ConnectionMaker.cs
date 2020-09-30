@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using ImGuiNET;
+using Microsoft.CodeAnalysis.CSharp;
+using SharpDX;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
+using T3.Gui.OutputUi;
 using T3.Gui.Selection;
+using T3.Gui.Styling;
+using T3.Gui.UiHelpers;
+using T3.Gui.Windows;
 using T3.Operators.Types.Id_5a4b23ff_588e_4dcc_833c_4fb5fb6fcb8f;
 using UiHelpers;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.Graph
 {
@@ -186,7 +193,7 @@ namespace T3.Gui.Graph
             var commands = new List<ICommand>();
 
             var changedSymbols = new List<ISelectableNode>();
-            
+
             var requiredGap = SymbolChildUi.DefaultOpSize.X + SelectableNodeMovement.SnapPadding.X;
             var xSource = sourceNodeUi.PosOnCanvas.X + sourceNodeUi.Size.X;
             var xTarget = targetNodeUi.PosOnCanvas.X;
@@ -195,8 +202,8 @@ namespace T3.Gui.Graph
             if (currentGap > requiredGap)
                 return null;
 
-            var offset = Math.Min( requiredGap - currentGap, requiredGap);
-            
+            var offset = Math.Min(requiredGap - currentGap, requiredGap);
+
             foreach (var childUi in symbolUi.ChildUis)
             {
                 if (childUi.PosOnCanvas.X > center.X)
@@ -204,12 +211,12 @@ namespace T3.Gui.Graph
 
                 changedSymbols.Add(childUi);
                 var pos = childUi.PosOnCanvas;
-                
+
                 pos.X -= offset;
                 childUi.PosOnCanvas = pos;
             }
 
-            commands.Add(new ChangeSelectableCommand(symbolUi.Symbol.Id,changedSymbols));
+            commands.Add(new ChangeSelectableCommand(symbolUi.Symbol.Id, changedSymbols));
             return new MacroCommand("adjust layout", commands);
         }
 
@@ -381,9 +388,9 @@ namespace T3.Gui.Graph
             commands.Add(new DeleteConnectionCommand(parentSymbol, connection, multiInputIndex));
 
             var adjustLayoutCommand = AdjustGraphLayoutForNewNode(parentSymbol, connection);
-            if(adjustLayoutCommand != null)
+            if (adjustLayoutCommand != null)
                 commands.Add(adjustLayoutCommand);
-            
+
             var prepareCommand = new MacroCommand("Split", commands);
             UndoRedoStack.AddAndExecute(prepareCommand);
 
@@ -441,10 +448,10 @@ namespace T3.Gui.Graph
             if (connections.Count > 0)
             {
                 var adjustLayoutCommand = AdjustGraphLayoutForNewNode(instance.Parent.Symbol, connections[0]);
-                if (adjustLayoutCommand != null) 
+                if (adjustLayoutCommand != null)
                     commands.Add(adjustLayoutCommand);
             }
-            
+
             var prepareCommand = new MacroCommand("insert operator", commands);
             prepareCommand.Do();
 
@@ -491,21 +498,21 @@ namespace T3.Gui.Graph
             var connectionCommands = new List<ICommand>();
             var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
             var layoutCommand = AdjustGraphLayoutForNewNode(parent.Symbol, oldConnection);
-            if(layoutCommand !=null)
+            if (layoutCommand != null)
                 connectionCommands.Add(layoutCommand);
 
             var parentUi = SymbolUiRegistry.Entries[parent.Symbol.Id];
             var sourceUi = parentUi.ChildUis.Single(child => child.Id == sourceInstance.SymbolChildId);
             var targetUi = parentUi.ChildUis.Single(child => child.Id == targetInstance.SymbolChildId);
             var isSnappedHorizontally = (Math.Abs(sourceUi.PosOnCanvas.Y - targetUi.PosOnCanvas.Y) < 0.01f)
-                                      && Math.Abs(sourceUi.PosOnCanvas.X + sourceUi.Size.X + SelectableNodeMovement.SnapPadding.X)-  targetUi.PosOnCanvas.X < 0.1f;
-            
+                                        && Math.Abs(sourceUi.PosOnCanvas.X + sourceUi.Size.X + SelectableNodeMovement.SnapPadding.X) - targetUi.PosOnCanvas.X <
+                                        0.1f;
+
             if (isSnappedHorizontally)
             {
                 childUi.PosOnCanvas = sourceUi.PosOnCanvas + new Vector2(sourceUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0);
-                connectionCommands.Add(new ChangeSelectableCommand(parent.Symbol.Id, new List<ISelectableNode>() { childUi}));
+                connectionCommands.Add(new ChangeSelectableCommand(parent.Symbol.Id, new List<ISelectableNode>() { childUi }));
             }
-            
 
             connectionCommands.Add(new DeleteConnectionCommand(parent.Symbol, oldConnection, multiInputIndex));
             connectionCommands.Add(new AddConnectionCommand(parent.Symbol, new Symbol.Connection(oldConnection.SourceParentOrChildId,
@@ -753,15 +760,82 @@ namespace T3.Gui.Graph
                         && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() < 4
                         )
                     {
-                        var posOnScreen = graphCanvas.InverseTransformPosition(_bestMatchYetForCurrentFrame.PositionOnScreen) - SymbolChildUi.DefaultOpSize/2;
-                        
+                        var posOnScreen = graphCanvas.InverseTransformPosition(_bestMatchYetForCurrentFrame.PositionOnScreen) - SymbolChildUi.DefaultOpSize / 2;
+
                         SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol,
                                                          graphCanvas._symbolBrowser,
                                                          _bestMatchYetForCurrentFrame.Connection,
                                                          posOnScreen);
                     }
 
-                    CustomComponents.TooltipForLastItem("Split and insert new node");
+                    ImGui.BeginTooltip();
+                    {
+                        var connection = _bestMatchYetForCurrentFrame.Connection;
+                        
+                        ISlot outputSlot = null;
+                        SymbolChild.Output output = null;
+                        Symbol.OutputDefinition outputDefinition = null;
+                        
+                        var sourceOpInstance = graphCanvas.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
+                        var sourceOp =  graphCanvas.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
+                        if (sourceOpInstance != null)
+                        {
+                            outputDefinition = sourceOpInstance.Symbol.OutputDefinitions.Single(outDef => outDef.Id == connection.SourceSlotId);
+                            output = sourceOp.Outputs[connection.SourceSlotId];
+                            outputSlot = sourceOpInstance.Outputs.Single(slot => slot.Id == outputDefinition.Id);
+                        }
+
+                        SymbolChild.Input input = null;
+                        var targetOp = graphCanvas.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.TargetParentOrChildId);
+                        if (targetOp != null)
+                        {
+                            input = targetOp.InputValues[connection.TargetSlotId];
+                        }
+                        
+                        
+                        if (outputSlot != null && output != null && input != null)
+                        {
+                            ImGui.PushFont(Fonts.FontSmall);
+                            var connectionSource = sourceOp.ReadableName + "." + output.OutputDefinition.Name;
+                            ImGui.TextColored(Color.Gray, connectionSource);
+                            
+                            var connectionTarget = "->" + targetOp.ReadableName + "." + input.InputDefinition.Name;
+                            ImGui.TextColored(Color.Gray, connectionTarget);
+                            ImGui.PopFont();
+
+                            var width = 160f;
+                            ImGui.BeginChild("thumbnail", new Vector2(width, width*9/16f));
+                            {
+                                SelectionManager.SetDrawList(drawList);
+                                ImageCanvasForTooltips.Update();
+                                ImageCanvasForTooltips.SetAsCurrent();
+                                
+                                //var sourceOpUi = SymbolUiRegistry.Entries[graphCanvas.CompositionOp.Symbol.Id].ChildUis.Single(childUi => childUi.Id == sourceOp.Id);
+                                var sourceOpUi = SymbolUiRegistry.Entries[sourceOpInstance.Symbol.Id];
+                                IOutputUi outputUi = sourceOpUi.OutputUis[output.OutputDefinition.Id];
+                                EvaluationContext.Reset();
+                                EvaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
+                                outputUi.DrawValue(outputSlot, EvaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
+
+                                if (!string.IsNullOrEmpty(sourceOpUi.Description))
+                                {
+                                    ImGui.Spacing();
+                                    ImGui.PushFont(Fonts.FontSmall);
+                                    ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, 0.5f).Rgba);
+                                    ImGui.TextWrapped(sourceOpUi.Description);
+                                    ImGui.PopStyleColor();
+                                    ImGui.PopFont();
+                                }
+                                ImageCanvasForTooltips.Deactivate();
+                                SelectionManager.StopDrawList();
+                            }
+                            ImGui.EndChild();
+                            
+                            T3Ui.AddHoveredId(targetOp.Id);
+                            T3Ui.AddHoveredId(sourceOp.Id);
+                        }
+                    }
+                    ImGui.EndTooltip();
                 }
                 else
                 {
@@ -793,7 +867,10 @@ namespace T3.Gui.Graph
                                                    };
                 _bestMatchDistance = distance;
             }
-
+            
+            private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
+            private static readonly EvaluationContext EvaluationContext = new EvaluationContext();
+            
             public static PotentialConnectionSplit BestMatchLastFrame;
             private static PotentialConnectionSplit _bestMatchYetForCurrentFrame;
             private static float _bestMatchDistance = float.PositiveInfinity;
