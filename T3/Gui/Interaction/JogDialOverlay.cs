@@ -17,17 +17,17 @@ namespace T3.Gui.Interaction
                                 float scale = 0.1f, bool clamp = false)
         {
             var modified = false;
+            _drawList = ImGui.GetForegroundDrawList();
+            _io = ImGui.GetIO();
+            
             if (restarted)
             {
-                Log.Debug("restarted with " + value);
                 _originalValue = value;
                 _unclampedValue = value;
                 _min = min;
                 _max = max;
                 _clamp = clamp;
                 _center = center;
-                _drawList = ImGui.GetForegroundDrawList();
-                _io = ImGui.GetIO();
                 _state = States.WaitingInNeutral;
             }
 
@@ -154,16 +154,18 @@ namespace T3.Gui.Interaction
                 if (_state == States.WaitingInNeutral)
                 {
                     _state = States.Manipulating;
-                    // if (dialRatio > 0.95f)
-                    // {
-                    //     var dialValue1 = ComputeDialValue(_unclampedValue, dialRatio);
-                    //     var dialValue2 = ComputeDialValue(_unclampedValue, 0);
-                    //
-                    //     // if (Math.Abs(dialValue1 - _unclampedValue) > Math.Abs(dialValue2 - _unclampedValue))
-                    //     // {
-                    //     //     dialRatio = dialValue2;
-                    //     // }
-                    // }
+                    if (dialRatio > 0.9f)
+                    {
+                        _unclampedValue = ComputeDialValue(_originalValue, dialRatio - 1);
+                        return true;
+                        // var dialValue1 = ComputeDialValue(_unclampedValue, dialRatio);
+                        // var dialValue2 = ComputeDialValue(_unclampedValue, 0);
+
+                        // if (Math.Abs(dialValue1 - _unclampedValue) > Math.Abs(dialValue2 - _unclampedValue))
+                        // {
+                        //     dialRatio = dialValue2;
+                        // }
+                    }
                 }
 
                 var delta = dialRatio - lastDialRatio;
