@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Gui.Styling;
 
 namespace T3.Gui.Interaction
@@ -11,20 +12,23 @@ namespace T3.Gui.Interaction
     /// </summary>
     public static class JogDialOverlay
     {
-        public static bool Draw(ref double value, bool restarted,  Vector2 center, double min = double.NegativeInfinity,
+        public static bool Draw(ref double value, bool restarted, Vector2 center, double min = double.NegativeInfinity,
                                 double max = double.PositiveInfinity,
                                 float scale = 0.1f, bool clamp = false)
         {
             var modified = false;
             if (restarted)
             {
+                Log.Debug("restarted with " + value);
                 _originalValue = value;
+                _unclampedValue = value;
                 _min = min;
                 _max = max;
                 _clamp = clamp;
                 _center = center;
                 _drawList = ImGui.GetForegroundDrawList();
                 _io = ImGui.GetIO();
+                _state = States.WaitingInNeutral;
             }
 
             for (int ringIndex = 0; ringIndex < RingCount; ringIndex++)
@@ -33,15 +37,22 @@ namespace T3.Gui.Interaction
             }
 
             if (modified)
-                value = _value;
-            
+            {
+                value = ClampedValue;
+            }
+
             return modified;
         }
 
         private const int RingCount = 2;
-        //private static float[] _dampedValues = new float[RingCount];
-        private static double _value;
+        private static double _unclampedValue;
+
+        private static double ClampedValue => _clamp
+                                                  ? _unclampedValue.Clamp(_min, _max)
+                                                  : _unclampedValue;
+
         private static float _baseLog10Speed = 1;
+        private static double _originalValue;
 
         private static float AdjustedBaseLog10Scale
         {
@@ -49,19 +60,18 @@ namespace T3.Gui.Interaction
             {
                 if (_io.KeyCtrl)
                 {
-                    return _baseLog10Speed++;
+                    return _baseLog10Speed+1;
                 }
 
                 if (_io.KeyShift)
                 {
-                    return _baseLog10Speed--;
+                    return _baseLog10Speed-1;
                 }
 
                 return _baseLog10Speed;
             }
         }
 
-        private static double _originalValue;
         private static double _min;
         private static double _max;
         private static bool _clamp;
@@ -75,8 +85,16 @@ namespace T3.Gui.Interaction
 
         private static readonly Color SegmentColor = new Color(0.2f, 0.2f, 0.2f, 0.35f);
         private static readonly Color ActiveSegmentColor = new Color(1f, 1f, 1f, 0.5f);
-        
-        
+
+        private enum States
+        {
+            Hidden,
+            WaitingInNeutral,
+            Manipulating,
+        }
+
+        private static States _state = States.Hidden;
+
         private static class DialRing
         {
             internal static bool Draw(int ringIndex)
@@ -92,7 +110,7 @@ namespace T3.Gui.Interaction
                 DrawValueLabels();
 
                 var valueTickColor = new Color(1, 1, 1, IsActive ? 1 : 0.4f);
-                DrawTick(_value / Pow, valueTickColor, lineThickness: IsActive ? 2 : 1);
+                DrawTick(ClampedValue / Pow, valueTickColor, lineThickness: IsActive ? 2 : 1);
                 DrawValueDifference();
                 return HandleInteraction();
             }
@@ -108,7 +126,7 @@ namespace T3.Gui.Interaction
                     alpha *= IsActive ? 1 : 0.4f;
                     var color = new Color(0, 0, 0, alpha);
                     var lineThickness = lineIndex == 0 ? 4 : 1;
-                    var dialValue = ComputeDialValue(_value, f);
+                    var dialValue = ComputeDialValue(_unclampedValue, f);
                     if (!_clamp || (dialValue >= _min && dialValue <= _max))
                     {
                         DrawTick(f, color, lineThickness);
@@ -116,20 +134,37 @@ namespace T3.Gui.Interaction
                 }
             }
 
+            private static float GetDialRatio(Vector2 mousePos)
+            {
+                var p = mousePos - _center;
+                return (float)Math.Round(MathUtils.Fmod(-Math.Atan2(p.X, p.Y) / (Math.PI * 2), 1) * 100) / 100;
+            }
+
             private static bool HandleInteraction()
             {
                 if (!IsActive)
                     return false;
-                
-                var pLast = _io.MousePos - _io.MouseDelta - _center;
-                var pNow = _io.MousePos - _center;
-                
-                var modified = false;
-                var lastDialRatio = MathUtils.Fmod(-Math.Atan2(pLast.X, pLast.Y) / (Math.PI * 2), 1);
-                lastDialRatio = Math.Round(lastDialRatio * 100f) / 100f;
 
-                var dialRatio = MathUtils.Fmod(-Math.Atan2(pNow.X, pNow.Y) / (Math.PI * 2), 1);
-                dialRatio = Math.Round(dialRatio * 100f) / 100f;
+                var pLast = _io.MousePos - _io.MouseDelta;
+                var pNow = _io.MousePos;
+
+                var lastDialRatio = GetDialRatio(pLast);
+                var dialRatio = GetDialRatio(pNow);
+
+                if (_state == States.WaitingInNeutral)
+                {
+                    _state = States.Manipulating;
+                    // if (dialRatio > 0.95f)
+                    // {
+                    //     var dialValue1 = ComputeDialValue(_unclampedValue, dialRatio);
+                    //     var dialValue2 = ComputeDialValue(_unclampedValue, 0);
+                    //
+                    //     // if (Math.Abs(dialValue1 - _unclampedValue) > Math.Abs(dialValue2 - _unclampedValue))
+                    //     // {
+                    //     //     dialRatio = dialValue2;
+                    //     // }
+                    // }
+                }
 
                 var delta = dialRatio - lastDialRatio;
                 if (delta > 0.5)
@@ -139,7 +174,7 @@ namespace T3.Gui.Interaction
 
                 if (!(Math.Abs(delta) > 0.001f))
                     return false;
-                
+
                 var offset = 0f;
                 if (delta < 0)
                 {
@@ -156,15 +191,13 @@ namespace T3.Gui.Interaction
                     }
                 }
 
-                var dialedValue = ComputeDialValue(_value, dialRatio);
-                _value = dialedValue + offset * Pow;
-                if (_clamp)
-                {
-                    _value = _value.Clamp(_min, _max);
-                }
+                //Log.Debug($"lastF {lastDialRatio} -> {dialRatio}  v:{_unclampedValue} delta:{delta}  offset:{offset}  log:{Log10Scale}");
+                var dialedValue = ComputeDialValue(_unclampedValue, dialRatio);
+                _unclampedValue = dialedValue + offset * Pow;
+
                 return true;
             }
-            
+
             private static void DrawTick(double f, Color color, int lineThickness)
             {
                 var rads = -3.141578 * 2 * (f);
@@ -172,29 +205,12 @@ namespace T3.Gui.Interaction
                 _drawList.AddLine(_center + (Radius) * d, _center + (Radius + RingWidth) * d, color, lineThickness);
             }
 
-            private static void DrawValueLabels()
-            {
-                var d = Vector2.UnitY;
-                var lowerPart = MathUtils.Fmod(_value, Pow);
-                var roundedUpperPart = _value - lowerPart;
-                ImGui.PushFont(Fonts.FontLarge);
-                _drawList.AddText(_center + (Radius + RingWidth / 2) * d + new Vector2(10f, 0),
-                                  Color.Black,
-                                  "" + (roundedUpperPart + Pow));
 
-                var smallerLabel = $"{roundedUpperPart}";
-                var size = ImGui.CalcTextSize(smallerLabel);
-                _drawList.AddText(_center + (Radius + RingWidth / 2) * d + new Vector2(-10f - size.X, 0),
-                                  Color.Black,
-                                  smallerLabel);
-
-                ImGui.PopFont();
-            }
 
             private static void DrawValueDifference()
             {
                 var rads1 = -3.141578 * 2 * (_originalValue + 0.5f - 0.25f);
-                var rads2 = -3.141578 * 2 * (_value + 0.5f - 0.25f);
+                var rads2 = -3.141578 * 2 * (_unclampedValue + 0.5f - 0.25f);
 
                 var clamped = (rads1 - rads2).Clamp(-3.1415f * 2, 3.1415f * 2);
                 rads2 = rads1 - clamped;
@@ -207,6 +223,67 @@ namespace T3.Gui.Interaction
                 _drawList.PathStroke(ActiveSegmentColor, false, 1);
             }
 
+            
+                        private static void DrawValueLabels()
+            {
+                var shouldDraw = IsActive || _state == States.WaitingInNeutral && _ringIndex == 0;
+                if (!shouldDraw)
+                    return;
+                
+                var d = Vector2.UnitY;
+                var dialRatio = _state == States.WaitingInNeutral 
+                                    ?0.5f
+                                    :GetDialRatio(_io.MousePos);
+
+                var lowerPart = MathUtils.Fmod(_unclampedValue, Pow);
+                var roundedUpperPart = _unclampedValue - lowerPart;
+                ImGui.PushFont(Fonts.FontLarge);
+                const float padding = 10;
+
+                var isOnLeft = dialRatio <= 0.5f;
+                const float transitionRange = 0.06f;
+
+                var transition = isOnLeft
+                                    ? MathUtils.Remap(dialRatio, 0, transitionRange, 1, 0).Clamp(0, 1)
+                                    : MathUtils.Remap(dialRatio, 1 - transitionRange, 1, 0, 1).Clamp(0, 1);
+
+                {
+                    var smallerLabel = $"{roundedUpperPart:G5}";
+                    var size = ImGui.CalcTextSize(smallerLabel);
+
+                    var color = isOnLeft
+                                    ? new Color(1, 1, 1, 1f)
+                                    : new Color(1, 1, 1,  1-transition);
+                    var x = isOnLeft
+                                ? MathUtils.Lerp(-padding - size.X, -size.X / 2, transition)
+                                : MathUtils.Lerp(-padding - size.X, -padding - size.X -padding, transition);
+
+                    _drawList.AddText(_center + (Radius + RingWidth / 2) * d + new Vector2(x, 0),
+                                      color,
+                                      smallerLabel);
+                }
+
+                // Right / Upper
+                {
+                    var upperLabel = $"{(roundedUpperPart + Pow):G5}";
+                    var size = ImGui.CalcTextSize(upperLabel);
+                    
+                    var color = isOnLeft 
+                        ? new Color(1, 1, 1, 1-transition)
+                        : new Color(1, 1, 1, 1f);
+                    
+                    
+                    var x = isOnLeft
+                                ? MathUtils.Lerp(padding , padding + size.X, transition)
+                                : MathUtils.Lerp(padding, -size.X / 2, transition);
+                    _drawList.AddText(_center + (Radius + RingWidth / 2) * d + new Vector2(x, 0),
+                                      color,
+                                      upperLabel);
+                }
+
+                ImGui.PopFont();
+            }
+            
             private static double ComputeDialValue(double value, double dialRatio)
             {
                 var pow = Math.Pow(10, Log10Scale - 1);
@@ -223,7 +300,7 @@ namespace T3.Gui.Interaction
             private static float Log10Scale => AdjustedBaseLog10Scale + _ringIndex;
             private static float Radius => NeutralRadius + _ringIndex * RingWidth;
 
-            private static bool  IsActive =>
+            private static bool IsActive =>
                 (DistanceToCenter > Radius && DistanceToCenter < Radius + RingWidth) ||
                 (IsOuterSegment && DistanceToCenter > Radius + RingWidth);
 
