@@ -110,16 +110,18 @@ namespace T3.Gui.ChildUi
         {
             var modified = false;
             var valueText = $"{remapValue.Value:G5}";
-            ImGui.PushID(remapValue.GetHashCode());
+            var hashCode = remapValue.GetHashCode();
+            ImGui.PushID(hashCode);
 
-            ImGui.PushFont(Fonts.FontSmall);
 
             // Draw aligned label
             {
+                ImGui.PushFont(Fonts.FontSmall);
                 var labelSize = ImGui.CalcTextSize(valueText);
                 var space = screenRect.GetSize() - labelSize;
                 var position = screenRect.Min + space * alignment;
                 drawList.AddText(MathUtils.Floor(position), color, valueText);
+                ImGui.PopFont();
             }
 
             // InputGizmo
@@ -128,31 +130,43 @@ namespace T3.Gui.ChildUi
                 var space = screenRect.GetSize() - labelSize;
                 var position = screenRect.Min + space * alignment;
                 ImGui.SetCursorScreenPos(position);
-                ImGui.InvisibleButton("button", labelSize);
-                double value = remapValue.TypedInputValue.Value;
-                if (ImGui.IsItemActivated())
+                if (ImGui.GetIO().KeyCtrl || _jogDialValue != null)
                 {
-                    _jogDailCenter = ImGui.GetIO().MousePos;
-                }
-
-                if (ImGui.IsItemActive())
-                {
-                    modified = JogDialOverlay.Draw(ref value, ImGui.IsItemActivated(),  _jogDailCenter);
-                    if (modified)
+                    ImGui.InvisibleButton("button", labelSize);
+                    double value = remapValue.TypedInputValue.Value;
+                    if (ImGui.IsItemActivated() && ImGui.GetIO().KeyCtrl)
                     {
-                        remapValue.TypedInputValue.Value = (float)value;
-                        remapValue.Input.IsDefault = false;
-                        remapValue.DirtyFlag.Invalidate();
+                        _jogDailCenter = ImGui.GetIO().MousePos;
+                        _jogDialValue = remapValue;
+                    }
+
+                    if (_jogDialValue == remapValue)
+                    {
+                        if (ImGui.IsItemActive())
+                        {
+                            modified = JogDialOverlay.Draw(ref value, ImGui.IsItemActivated(), _jogDailCenter, Double.NegativeInfinity, Double.PositiveInfinity,
+                                                           0.01f);
+                            if (modified)
+                            {
+                                remapValue.TypedInputValue.Value = (float)value;
+                                remapValue.Input.IsDefault = false;
+                                remapValue.DirtyFlag.Invalidate();
+                            }
+                        }
+                        else
+                        {
+                            _jogDialValue = null;
+                        }
                     }
                 }
             }
-            ImGui.PopFont();
             ImGui.PopID();
 
             return modified;
         }
 
         private static Vector2 _jogDailCenter;
+        private static InputSlot<float> _jogDialValue;
         private static readonly Color GraphLineColor = new Color(0, 0, 0, 0.3f);
         private static readonly Vector2[] GraphLinePoints = new Vector2[4];
     }

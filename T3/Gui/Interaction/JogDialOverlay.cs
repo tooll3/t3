@@ -22,6 +22,7 @@ namespace T3.Gui.Interaction
             
             if (restarted)
             {
+                _baseLog10Speed = (int)Math.Log10(scale)+3;
                 _originalValue = value;
                 _unclampedValue = value;
                 _min = min;
@@ -154,48 +155,33 @@ namespace T3.Gui.Interaction
                 if (_state == States.WaitingInNeutral)
                 {
                     _state = States.Manipulating;
-                    if (dialRatio > 0.9f)
+                    if (dialRatio > 0.75f)
                     {
-                        _unclampedValue = ComputeDialValue(_originalValue, dialRatio - 1);
-                        return true;
-                        // var dialValue1 = ComputeDialValue(_unclampedValue, dialRatio);
-                        // var dialValue2 = ComputeDialValue(_unclampedValue, 0);
-
-                        // if (Math.Abs(dialValue1 - _unclampedValue) > Math.Abs(dialValue2 - _unclampedValue))
-                        // {
-                        //     dialRatio = dialValue2;
-                        // }
+                        var ratioForOriginalValue = _originalValue / Pow;
+                        if (ratioForOriginalValue < 0.5f)
+                        {
+                            _unclampedValue = ComputeDialValue(_originalValue, dialRatio - 1);
+                            return true;
+                        }
                     }
                 }
 
-                var delta = dialRatio - lastDialRatio;
-                if (delta > 0.5)
-                    delta -= 1;
-                else if (delta < -0.5)
-                    delta += 1;
-
-                if (!(Math.Abs(delta) > 0.001f))
-                    return false;
-
-                var offset = 0f;
-                if (delta < 0)
-                {
-                    if (lastDialRatio >= 1 || lastDialRatio < dialRatio)
-                    {
-                        offset = -1;
-                    }
-                }
-                else
-                {
-                    if (lastDialRatio >= 1 || lastDialRatio > dialRatio)
-                    {
-                        offset = 1;
-                    }
-                }
-
-                //Log.Debug($"lastF {lastDialRatio} -> {dialRatio}  v:{_unclampedValue} delta:{delta}  offset:{offset}  log:{Log10Scale}");
+                var oldValue = _unclampedValue;
                 var dialedValue = ComputeDialValue(_unclampedValue, dialRatio);
-                _unclampedValue = dialedValue + offset * Pow;
+
+                var oldValueRatio = oldValue / Pow;
+                var newValueRatio = dialedValue / Pow;
+                var valueRatioDelta = oldValueRatio - newValueRatio;
+                if (valueRatioDelta > 0.75f)
+                {
+                    dialedValue += Pow;
+                }
+                else if (valueRatioDelta < -0.75f)
+                {
+                    dialedValue -= Pow;
+                }
+                _unclampedValue = dialedValue;
+                //Log.Debug($"F {lastDialRatio:0.00} -> {dialRatio:0.00}    v:{oldValue:G5}->{_unclampedValue:G5}  ratioD: {valueRatioDelta:G4}     dialDelta:{delta:G4}           offset:{offset:G4}  log:{Log10Scale}");
 
                 return true;
             }
