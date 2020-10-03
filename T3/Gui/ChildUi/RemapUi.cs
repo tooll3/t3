@@ -137,7 +137,7 @@ namespace T3.Gui.ChildUi
 
                 if (ImGui.IsItemActive())
                 {
-                    modified = SingleValueEdit.JogDialOverlay.Draw(ref value, ImGui.IsItemActivated(), ImGui.GetIO(), _jogDailCenter);
+                    modified = JogDialOverlay.Draw(ref value, ImGui.IsItemActivated(),  _jogDailCenter);
                     if (modified)
                     {
                         remapValue.TypedInputValue.Value = (float)value;
