@@ -309,7 +309,7 @@ namespace T3.Gui.Interaction
             if ((flags & T3Ui.EditingFlags.PreventZoomWithMouseWheel) == 0)
             {
                 ZoomWithMouseWheel();
-                ZoomWithMiddleMouseDrag();
+                //ZoomWithMiddleMouseDrag();
             }
         }
 
