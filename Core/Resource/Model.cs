@@ -380,6 +380,10 @@ namespace T3.Core
                              int height = jsonToken["Height"].Value<int>();
                              return new Size2(width, height);
                          });
+
+            RegisterType(typeof(SharpDX.Vector4[]), "Vector4[]",
+                         () => new InputValue<SharpDX.Vector4[]>(new SharpDX.Vector4[0]));
+                                                                     //{X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f}));            
             
         }
 

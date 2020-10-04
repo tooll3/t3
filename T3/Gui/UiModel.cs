@@ -138,6 +138,10 @@ namespace T3.Gui
             RegisterUiType(typeof(SharpDX.Mathematics.Interop.RawRectangle), new ShaderUiProperties(), () => new FallbackInputUi<RawRectangle>(),
                            () => new ValueOutputUi<RawRectangle>());
 
+            // custom sharp dx types
+            RegisterUiType(typeof(SharpDX.Vector4[]), new ShaderUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
+                           () => new Vector4ArrayOutputUi());
+
             // register custom UIs for symbol children
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c.Counter), CounterUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05.GpuMeasure), GpuMeasureUi.DrawChildUi);

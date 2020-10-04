@@ -155,6 +155,8 @@ namespace T3.Core
         {
             return Math.Log10(value) / Math.Log10(2.0);
         }
+
+        public const float Pi2 = (float)Math.PI * 2;
     }
 
     public class EaseFunctions
