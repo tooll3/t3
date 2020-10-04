@@ -59,7 +59,7 @@ namespace T3.Gui.Interaction
         {
             get
             {
-                if (_io.KeyCtrl)
+                if (_io.KeyAlt)
                 {
                     return _baseLog10Speed+1;
                 }

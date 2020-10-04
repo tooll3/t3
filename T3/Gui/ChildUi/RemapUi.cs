@@ -58,7 +58,7 @@ namespace T3.Gui.ChildUi
             //       |   #      |
             //           3
             //            
-            drawList.PushClipRect(graphRect.Min, graphRect.Max, false);
+            drawList.PushClipRect(graphRect.Min, graphRect.Max, true);
 
             var h = graphRect.GetHeight();
 
@@ -161,7 +161,6 @@ namespace T3.Gui.ChildUi
                 }
             }
             ImGui.PopID();
-
             return modified;
         }
 
