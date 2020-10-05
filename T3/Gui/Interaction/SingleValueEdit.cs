@@ -158,15 +158,15 @@ namespace T3.Gui.Interaction
                             TabFocusIndex = CurrentTabIndex + (ImGui.GetIO().KeyShift ? -1 : 1);
                         }
 
-                        var cancelInputAfterFocusLos = !shouldFocus && !ImGui.IsItemActive();
-                        if (cancelInputAfterFocusLos)
+                        var cancelInputAfterFocusLoss = !shouldFocus && !ImGui.IsItemActive();
+                        if (cancelInputAfterFocusLoss)
                         {
                             // NOTE: This happens after canceling editing by closing the input
                             // and reopen the state. Sadly there doesn't appear to be a simple fix for this.
                         }
 
                         
-                        if (ImGui.IsItemDeactivated() || cancelInputAfterFocusLos )
+                        if (ImGui.IsItemDeactivated() )
                         {
                             //Log.Debug(" is item deactivated #" + CurrentTabIndex);
                             SetState(InputStates.Inactive);
