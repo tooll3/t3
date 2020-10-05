@@ -22,7 +22,7 @@ namespace T3.Gui.Interaction
             
             if (restarted)
             {
-                _baseLog10Speed = (int)Math.Log10(scale)+3;
+                _baseLog10Speed = (int)(Math.Log10(scale)+3.5f);
                 _originalValue = value;
                 _unclampedValue = value;
                 _min = min;
