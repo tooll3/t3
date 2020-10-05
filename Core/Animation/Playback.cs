@@ -122,9 +122,16 @@ namespace T3.Core.Animation
             Bass.ChannelSetPosition(_soundStreamHandle, soundStreamPos);
         }
 
+        private static bool _printedInitErrorOnce = false;
+
         public override float GetSongDurationInSecs()
         {
             var length = Bass.ChannelGetLength(_soundStreamHandle);
+            if (length < 0 && !_printedInitErrorOnce)
+            {
+                Log.Error("Failed to initialize audio playback. Possible reasons are: A: Your PC doesn't have a sound card installed. B: You headphone are speaker are not plugged in.");
+                _printedInitErrorOnce = true;
+            }
             return (float)Bass.ChannelBytes2Seconds(_soundStreamHandle, length);
         }
 
