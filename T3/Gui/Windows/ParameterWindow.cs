@@ -55,6 +55,13 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
+            // Insert invisible spill over input to catch accidental imgui focus attempts
+            {
+                ImGui.SetNextItemWidth(2);
+                string tmpBuffer = "";
+                ImGui.InputText("##imgui workaround", ref tmpBuffer, 1);
+                ImGui.SameLine();
+            }
             var instance = SelectionManager.GetSelectedInstance();
             if (instance != null)
             {
@@ -73,11 +80,12 @@ namespace T3.Gui.Windows
                 DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi);
 
                 ImGui.PushFont(Fonts.FontSmall);
-                var symbolUi= SymbolUiRegistry.Entries[instance.Symbol.Id];
+                var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
                 if (!string.IsNullOrEmpty(symbolUi.Description))
                 {
                     ImGui.Text(symbolUi.Description);
                 }
+
                 ImGui.PopFont();
                 return;
             }
@@ -97,8 +105,8 @@ namespace T3.Gui.Windows
             }
         }
 
-        public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi, 
-                                           SymbolUi compositionSymbolUi)
+        public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
+                                          SymbolUi compositionSymbolUi)
         {
             foreach (var inputSlot in instance.Inputs)
             {
@@ -142,12 +150,12 @@ namespace T3.Gui.Windows
         {
             // namespace and symbol
             {
-                ImGui.SetCursorPos( ImGui.GetCursorPos()+ Vector2.One * 5);
+                ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
                 ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
                 ImGui.Text(op.Symbol.Namespace ?? "");
                 ImGui.PopStyleColor();
                 ImGui.SameLine();
-                ImGui.Dummy(new Vector2(10,0));
+                ImGui.Dummy(new Vector2(10, 0));
                 ImGui.SameLine();
                 ImGui.Text(op.Symbol.Name);
                 ImGui.Dummy(Vector2.One * 5);
@@ -183,7 +191,7 @@ namespace T3.Gui.Windows
                     ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
                     ImGui.SetCursorScreenPos(ImGui.GetItemRectMin());
                     ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.2f).Rgba);
-                    ImGui.SetCursorPos( ImGui.GetCursorPos()+ Vector2.One * 5);
+                    ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
                     ImGui.Text("Untitled instance");
                     ImGui.PopStyleColor();
                     ImGui.PopStyleVar();
@@ -199,7 +207,7 @@ namespace T3.Gui.Windows
         {
             return T3Ui.WindowManager.IsAnyInstanceVisible<ParameterWindow>();
         }
-        
+
         private static readonly List<Window> ParameterWindowInstances = new List<Window>();
         private ChangeSymbolChildNameCommand _symbolChildNameCommand;
         private static ChangeInputValueCommand _inputValueCommandInFlight;

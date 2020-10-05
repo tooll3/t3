@@ -38,7 +38,9 @@ namespace T3.Gui
             SrvManager.FreeUnusedTextures();
             WindowManager.Draw();
             BeatTiming.Update();
-            SingleValueEdit.InputTabOrderIndex = 0;
+
+            SingleValueEdit.StartNextFrame();
+
             
             SwapHoveringBuffers();
             TriggerGlobalActionsFromKeyBindings();

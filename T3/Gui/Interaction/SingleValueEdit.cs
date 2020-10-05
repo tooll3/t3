@@ -59,17 +59,19 @@ namespace T3.Gui.Interaction
                                                float scale = 1,
                                                string format = "{0:0.000}")
         {
-            InputTabOrderIndex++;
+            CurrentTabIndex++;
             var id = ImGui.GetID("jog");
 
-            var shouldFocus = InputTabOrderIndex == InputTabFocusIndex;
+            var shouldFocus = CurrentTabIndex == TabFocusIndex;
             if (shouldFocus)
             {
+                
+                //Log.Debug("  ShouldFocus for index " + TabFocusIndex  +  "  state " + _state );
                 SetState(InputStates.TextInput);
                 _activeJogDialId = id;
                 _jogDialText = FormatValueForButton(ref value);
             }
-
+            
             var io = ImGui.GetIO();
 
             _numberFormat = format;
@@ -145,19 +147,28 @@ namespace T3.Gui.Interaction
                             {
                                 if (ImGui.IsKeyReleased((int)Key.Tab))
                                 {
-                                    InputTabFocusIndex = -1;
+                                    TabFocusIndex = -1;
                                 }
                             }
                         }
 
                         ImGui.PopStyleColor();
-                        if (ImGui.IsKeyPressed((int)Key.Tab) && InputTabFocusIndex == -1)
+                        if (ImGui.IsKeyPressed((int)Key.Tab) && TabFocusIndex == -1)
                         {
-                            InputTabFocusIndex = InputTabOrderIndex + (ImGui.GetIO().KeyShift ? -1 : 1);
+                            TabFocusIndex = CurrentTabIndex + (ImGui.GetIO().KeyShift ? -1 : 1);
                         }
 
-                        if (ImGui.IsItemDeactivated())
+                        var cancelInputAfterFocusLos = !shouldFocus && !ImGui.IsItemActive();
+                        if (cancelInputAfterFocusLos)
                         {
+                            // NOTE: This happens after canceling editing by closing the input
+                            // and reopen the state. Sadly there doesn't appear to be a simple fix for this.
+                        }
+
+                        
+                        if (ImGui.IsItemDeactivated() || cancelInputAfterFocusLos )
+                        {
+                            //Log.Debug(" is item deactivated #" + CurrentTabIndex);
                             SetState(InputStates.Inactive);
                             ImGui.SetKeyboardFocusHere(); // Clear focus so next time value will be completely selected
                             if (double.IsNaN(_editValue))
@@ -167,6 +178,7 @@ namespace T3.Gui.Interaction
                         _editValue = Evaluate(_jogDialText);
                         break;
                 }
+                
 
                 value = _editValue;
                 if (_state == InputStates.Inactive)
@@ -174,7 +186,6 @@ namespace T3.Gui.Interaction
                     return InputEditStateFlags.Finished;
                 }
 
-                //_editValue = Math.Round(_editValue * 100) / 100;
                 return Math.Abs(_editValue - _startValue) > 0.0001f ? InputEditStateFlags.Modified : InputEditStateFlags.Started;
             }
 
@@ -219,8 +230,9 @@ namespace T3.Gui.Interaction
             _state = newState;
         }
 
-        public static int InputTabOrderIndex = 0;
-        public static int InputTabFocusIndex = -1; // if not -1 tries to set keyboard focus to input field.  
+        public static int CurrentTabIndex = 0;
+        public static int LastMaxTabIndex;
+        public static int TabFocusIndex = -1; // if not -1 tries to set keyboard focus to input field.  
 
         private static double Evaluate(string expression)
         {
@@ -473,6 +485,21 @@ namespace T3.Gui.Interaction
             private static readonly Color RangeCenterColor = new Color(0.3f, 0.3f, 0.3f, 0.8f);
             private static readonly Color RangeOuterColor = new Color(0.3f, 0.3f, 0.3f, 0.0f);
             private static readonly Color RangeActiveColor = new Color(0.0f, 0.0f, 0.0f, 0.7f);
+        }
+
+        /// <summary>
+        /// This is a horrible attempt to work around imguis current limitation that button elements can't have a tab focus
+        /// </summary>
+        public static void StartNextFrame()
+        {
+            LastMaxTabIndex = CurrentTabIndex;
+            CurrentTabIndex = 0;
+            
+            if (TabFocusIndex > LastMaxTabIndex)
+            {
+                Log.Debug("fixing tab overflow");
+                TabFocusIndex = -1;
+            }
         }
     }
 }
