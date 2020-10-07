@@ -139,7 +139,7 @@ namespace T3.Gui
                            () => new ValueOutputUi<RawRectangle>());
 
             // custom sharp dx types
-            RegisterUiType(typeof(SharpDX.Vector4[]), new ShaderUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
+            RegisterUiType(typeof(SharpDX.Vector4[]), new FloatUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
                            () => new Vector4ArrayOutputUi());
 
             // register custom UIs for symbol children
