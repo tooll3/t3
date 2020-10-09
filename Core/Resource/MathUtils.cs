@@ -5,6 +5,9 @@ namespace T3.Core
 {
     public static class MathUtils
     {
+        public static float ToRad => (float)(Math.PI / 180.0);
+        public static float ToDegree => (float)(180.0 / Math.PI);
+        
         public static float PerlinNoise(float value, float period, int octaves, int seed)
         {
             var noiseSum = 0.0f;
