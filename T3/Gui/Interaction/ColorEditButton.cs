@@ -27,7 +27,6 @@ namespace T3.Gui.Interaction
             edited |= DrawPopup(ref color, _previousColor, ImGuiColorEditFlags.AlphaBar);
             return edited;
         }
-        
 
         private static bool DrawPopup(ref Vector4 color, Vector4 previousColor, ImGuiColorEditFlags flags)
         {
@@ -98,6 +97,7 @@ namespace T3.Gui.Interaction
         }
 
 
+
         private static bool HandleQuickSliders(ref Vector4 color, Vector2 buttonPosition)
         {
             var edited = false;
@@ -111,66 +111,85 @@ namespace T3.Gui.Interaction
             {
                 _rightClickedItemId = 0;
             }
-            
-            var drawList = ImGui.GetForegroundDrawList();
-            const int barHeight = 100;
-            const int barWidth = 10;
 
             var pCenter = buttonPosition + Vector2.One * ImGui.GetFrameHeight() / 2;
-            
-            if (ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.IsItemActive())
+
+            var showAlphaSlider = ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.IsItemActive();
+            if (showAlphaSlider)
             {
-                var pMin = pCenter + new Vector2(15, -barHeight * color.W);
-                var pMax = pMin + new Vector2(barWidth, barHeight);
-                var area = new ImRect(pMin, pMax);
-                drawList.AddRectFilled(pMin - Vector2.One, pMax + Vector2.One, new Color(0.1f, 0.1f, 0.1f));
-                CustomComponents.FillWithStripes(drawList, area);
-                var opaqueColor = color;
-                opaqueColor.W = 1;
-                var transparentColor = color;
-                transparentColor.W = 0;
-                drawList.AddRectFilledMultiColor(pMin, pMax,
-                                                 ImGui.ColorConvertFloat4ToU32(transparentColor),
-                                                 ImGui.ColorConvertFloat4ToU32(transparentColor),
-                                                 ImGui.ColorConvertFloat4ToU32(opaqueColor),
-                                                 ImGui.ColorConvertFloat4ToU32(opaqueColor));
-                drawList.AddRectFilled(pCenter, pCenter + new Vector2(barWidth + 15, 1), Color.Black);
-            
+                var valuePos = color.W;
+                VerticalColorSlider(color, pCenter, valuePos);
+
                 color.W = (_previousColor.W - ImGui.GetMouseDragDelta().Y / 100).Clamp(0, 1);
                 edited = true;
             }
-            
-            if (ImGui.IsMouseDragging(ImGuiMouseButton.Right) && ImGui.GetID(string.Empty) == _rightClickedItemId)
+
+            var showBrightnessSlider = ImGui.IsMouseDragging(ImGuiMouseButton.Right) && ImGui.GetID(string.Empty) == _rightClickedItemId;
+            if (showBrightnessSlider)
             {
                 var hsb = new Color(color).AsHsl;
-                var previousHsb =new Color(_previousColor).AsHsl; 
-                var pMin = pCenter + new Vector2(15, -barHeight * hsb.Z);
-                var pMax = pMin + new Vector2(barWidth, barHeight);
-                var area = new ImRect(pMin, pMax);
-                drawList.AddRectFilled(pMin - Vector2.One, pMax + Vector2.One, new Color(0.1f, 0.1f, 0.1f));
-                CustomComponents.FillWithStripes(drawList, area);
-                
-                // Draw Slider
-                var opaqueColor = color;
-                opaqueColor.W = 1;
-                var transparentColor = color;
-                transparentColor.W = 0;
-                drawList.AddRectFilledMultiColor(pMin, pMax,
-                                                 ImGui.ColorConvertFloat4ToU32(transparentColor),
-                                                 ImGui.ColorConvertFloat4ToU32(transparentColor),
-                                                 ImGui.ColorConvertFloat4ToU32(opaqueColor),
-                                                 ImGui.ColorConvertFloat4ToU32(opaqueColor));
-                
-                
-                drawList.AddRectFilled(pCenter, pCenter + new Vector2(barWidth + 15, 1), Color.Black);
+                var previousHsb = new Color(_previousColor).AsHsl;
+
+                var valuePos = hsb.Z;
+                VerticalColorSlider(color, pCenter, valuePos);
 
                 var newBrightness = (previousHsb.Z - ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Y / 100).Clamp(0, 1);
                 color = Color.ColorFromHsl(previousHsb.X, previousHsb.Y, newBrightness, _previousColor.W);
                 edited = true;
             }
+
             return edited;
         }
-        
+
+        public static void VerticalColorSlider(Vector4 color, Vector2 pCenter, float valuePos)
+        {
+            const int barHeight = 100;
+            const int barWidth = 10;
+            var drawList = ImGui.GetForegroundDrawList();
+            var pMin = pCenter + new Vector2(15, -barHeight * valuePos);
+            var pMax = pMin + new Vector2(barWidth, barHeight);
+            var area = new ImRect(pMin, pMax);
+            drawList.AddRectFilled(pMin - Vector2.One, pMax + Vector2.One, new Color(0.1f, 0.1f, 0.1f));
+            CustomComponents.FillWithStripes(drawList, area);
+
+            // Draw Slider
+            var opaqueColor = color;
+            opaqueColor.W = 1;
+            var transparentColor = color;
+            transparentColor.W = 0;
+            drawList.AddRectFilledMultiColor(pMin, pMax,
+                                             ImGui.ColorConvertFloat4ToU32(transparentColor),
+                                             ImGui.ColorConvertFloat4ToU32(transparentColor),
+                                             ImGui.ColorConvertFloat4ToU32(opaqueColor),
+                                             ImGui.ColorConvertFloat4ToU32(opaqueColor));
+
+            drawList.AddRectFilled(pCenter, pCenter + new Vector2(barWidth + 15, 1), Color.Black);
+        }
+
+        public static void ColorWheelPicker(Vector4 color, Vector2 pCenter, float valuePos)
+        {
+            const int barHeight = 100;
+            const int barWidth = 10;
+            var drawList = ImGui.GetForegroundDrawList();
+            var pMin = pCenter + new Vector2(15, -barHeight * valuePos);
+            var pMax = pMin + new Vector2(barWidth, barHeight);
+            var area = new ImRect(pMin, pMax);
+            drawList.AddRectFilled(pMin - Vector2.One, pMax + Vector2.One, new Color(0.1f, 0.1f, 0.1f));
+            CustomComponents.FillWithStripes(drawList, area);
+
+            // Draw Slider
+            var opaqueColor = color;
+            opaqueColor.W = 1;
+            var transparentColor = color;
+            transparentColor.W = 0;
+            drawList.AddRectFilledMultiColor(pMin, pMax,
+                                             ImGui.ColorConvertFloat4ToU32(transparentColor),
+                                             ImGui.ColorConvertFloat4ToU32(transparentColor),
+                                             ImGui.ColorConvertFloat4ToU32(opaqueColor),
+                                             ImGui.ColorConvertFloat4ToU32(opaqueColor));
+
+            drawList.AddRectFilled(pCenter, pCenter + new Vector2(barWidth + 15, 1), Color.Black);
+        }
         
         
         
@@ -184,6 +203,7 @@ namespace T3.Gui.Interaction
 
             return r;
         }
+
         private static uint _rightClickedItemId;
         private static readonly Vector4[] ColorPalette = IntializePalette(32);
         private static int _colorPaletteIndex;
