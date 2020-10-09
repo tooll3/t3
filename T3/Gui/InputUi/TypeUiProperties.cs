@@ -5,6 +5,11 @@
         public Color Color { get; set; } = TypeUiRegistry.ColorForValues;
     }
 
+    public class PointListUiProperties : ITypeUiProperties
+    {
+        public Color Color { get; set; } = TypeUiRegistry.ColorForPoints;
+    }
+    
     public class StringUiProperties : ITypeUiProperties
     {
         public Color Color { get; set; } = TypeUiRegistry.ColorForString;
