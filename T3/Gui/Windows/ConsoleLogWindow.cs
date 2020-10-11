@@ -102,8 +102,7 @@ namespace T3.Gui.Windows
                         ImGui.SetScrollY(ImGui.GetScrollMaxY()+ ImGui.GetFrameHeight()  );
                         _shouldScrollToBottom = false;
                     }
-                    _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - ImGui.GetFrameHeight() *3;
-
+                    _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - ImGui.GetWindowHeight();
                 }
                 ImGui.EndChild();
             }
