@@ -195,6 +195,8 @@ namespace T3.Core
 
             
             // t3 core types
+            RegisterType(typeof(BufferWithViews), "BufferWithViews",
+                         () => new InputValue<BufferWithViews>(null));
             RegisterType(typeof(Command), "Command",
                          () => new InputValue<Command>(null));
             RegisterType(typeof(Animation.Curve), "Curve",
@@ -220,6 +222,10 @@ namespace T3.Core
                              }
                              return curve;
                          });
+            RegisterType(typeof(EvaluationContext.GizmoVisibility), "GizmoVisibility",
+                         InputDefaultValueCreator<EvaluationContext.GizmoVisibility>,
+                         (writer, obj) => writer.WriteValue(obj.ToString()),
+                         JsonToEnumValue<EvaluationContext.GizmoVisibility>);
             RegisterType(typeof(DataTypes.Gradient), "Gradient",
                          InputDefaultValueCreator<Gradient>,
                          (writer, obj) =>
@@ -244,11 +250,6 @@ namespace T3.Core
                          });
             RegisterType(typeof(ParticleSystem), "ParticleSystem",
                          () => new InputValue<ParticleSystem>(null));
-            
-            RegisterType(typeof(EvaluationContext.GizmoVisibility), "GizmoVisibility",
-                         InputDefaultValueCreator<EvaluationContext.GizmoVisibility>,
-                         (writer, obj) => writer.WriteValue(obj.ToString()),
-                         JsonToEnumValue<EvaluationContext.GizmoVisibility>);
             
             // sharpdx types
             RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",

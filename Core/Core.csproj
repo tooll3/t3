@@ -107,6 +107,7 @@
     <Compile Include="Animation\TimeRange.cs" />
     <Compile Include="Animation\Utils.cs" />
     <Compile Include="Animation\VDefinition.cs" />
+    <Compile Include="DataTypes\BufferWithViews.cs" />
     <Compile Include="DataTypes\EmitterCounter.cs" />
     <Compile Include="DataTypes\Gradient.cs" />
     <Compile Include="DataTypes\IEditableInputType.cs" />
