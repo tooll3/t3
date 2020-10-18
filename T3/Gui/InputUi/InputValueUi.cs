@@ -11,6 +11,7 @@ using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Presets;
 using T3.Core.Operator.Slots;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
@@ -237,6 +238,16 @@ namespace T3.Gui.InputUi
                     ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
                     CustomComponents.ContextMenuForItem(() =>
                                                         {
+                                                            if (ImGui.MenuItem("Save in Preset"))
+                                                            {
+                                                                var composition = SelectionManager.GetSelectedComposition();
+                                                                if (composition == null)
+                                                                {
+                                                                    composition = inputSlot.Parent.Parent;
+                                                                }
+                                                                PresetRegistry.AddInputToCompositionPreset(composition, inputSlot.Parent, input);
+                                                            }
+
                                                             if (ImGui.MenuItem("Set as default", !input.IsDefault))
                                                                 input.SetCurrentValueAsDefault();
 
@@ -245,8 +256,8 @@ namespace T3.Gui.InputUi
                                                                 input.ResetToDefault();
                                                                 foreach (var compositionInstance in compositionUi.Symbol.InstancesOfSymbol)
                                                                 {
-                                                                    var inputParent = compositionInstance.Children.Single(c => c.SymbolChildId == inputSlot.Parent.SymbolChildId);
-                                                                    var slot = inputParent.Inputs.Single(i => i.Id == inputSlot.Id);
+                                                                    var instance = compositionInstance.Children.Single(c => c.SymbolChildId == inputSlot.Parent.SymbolChildId);
+                                                                    var slot = instance.Inputs.Single(i => i.Id == inputSlot.Id);
                                                                     slot.DirtyFlag.Invalidate(); 
                                                                 }
                                                             }

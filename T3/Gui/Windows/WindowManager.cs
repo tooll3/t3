@@ -8,6 +8,7 @@ using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.Output;
+using T3.Gui.Windows.Presets;
 using T3.Gui.Windows.Variations;
 
 namespace T3.Gui.Windows
@@ -25,6 +26,7 @@ namespace T3.Gui.Windows
                            new ConsoleLogWindow(),
                            new SettingsWindow(),
                            new SymbolLibrary(),
+                           new PresetsWindow(),
                        };
             
         }

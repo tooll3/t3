@@ -23,10 +23,13 @@ namespace T3.Gui.Selection
             Selection.Clear();
         }
 
+        /// <summary>
+        /// This called when clicking on background
+        /// </summary>
         public static void SetSelectionToParent(Instance instance)
         {
             Clear();
-            _parent = instance;
+            _selectedComposition = instance;
         }
 
         public static void SetSelection(ISelectableNode node)
@@ -48,7 +51,7 @@ namespace T3.Gui.Selection
 
         public static void AddSelection(ISelectableNode node)
         {
-            _parent = null;
+            _selectedComposition = null;
             if (Selection.Contains(node))
                 return;
 
@@ -57,7 +60,7 @@ namespace T3.Gui.Selection
 
         public static void AddSelection(SymbolChildUi node, Instance instance)
         {
-            _parent = null;
+            _selectedComposition = null;
             if (Selection.Contains(node))
                 return;
 
@@ -499,7 +502,7 @@ namespace T3.Gui.Selection
         public static Instance GetSelectedInstance()
         {
             if (Selection.Count == 0)
-                return _parent;
+                return _selectedComposition;
 
             if (Selection[0] is SymbolChildUi firstNode)
             {
@@ -517,10 +520,15 @@ namespace T3.Gui.Selection
             return null;
         }
 
+        public static Instance GetSelectedComposition()
+        {
+            return _selectedComposition;
+        }
+
         public static Instance GetCompositionForSelection()
         {
             if (Selection.Count == 0)
-                return _parent;
+                return _selectedComposition;
 
             if (!(Selection[0] is SymbolChildUi firstNode))
                 return null;
@@ -557,7 +565,7 @@ namespace T3.Gui.Selection
 
         public static bool FitViewToSelectionRequested { get; private set; }
         private static bool _fitViewToSelectionTriggered = false;
-        private static Instance _parent;
+        private static Instance _selectedComposition;
 
         private static readonly List<ISelectableNode> Selection = new List<ISelectableNode>();
 

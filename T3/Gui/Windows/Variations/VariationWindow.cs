@@ -24,7 +24,7 @@ namespace T3.Gui.Windows.Variations
         public VariationWindow()
         {
             _variationCanvas = new VariationCanvas(this);
-            Config.Title = "Presets";
+            Config.Title = "Variations";
             Config.Visible = true;
         }
 
