@@ -304,6 +304,11 @@ namespace T3.Gui.Graph.Interaction
                 {
                     case ConnectionMaker.TempConnection.Status.SourceIsDraftNode:
                         var outputDef = newSymbolChild.Symbol.GetOutputMatchingType(c.ConnectionType);
+                        if (outputDef == null)
+                        {
+                            Log.Error("Failed to find matching output connection type "+ c.ConnectionType);
+                            return;
+                        }
                         var newConnectionToSource = new Symbol.Connection(sourceParentOrChildId: newSymbolChild.Id,
                                                                           sourceSlotId: outputDef.Id,
                                                                           targetParentOrChildId: c.TargetParentOrChildId,
