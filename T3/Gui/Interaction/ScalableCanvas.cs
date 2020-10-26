@@ -346,6 +346,9 @@ namespace T3.Gui.Interaction
             if (Math.Abs(zoomDelta) > 0.1f)
                 UserZoomedCanvas = true;
 
+            ScaleTarget.X= ScaleTarget.X.Clamp(0.1f, 30);
+            ScaleTarget.Y= ScaleTarget.Y.Clamp(0.1f, 30);
+
             var shift = ScrollTarget + (focusCenter * ScaleTarget);
             ScrollTarget += _mouse - shift - WindowPos;
         }
