@@ -15,7 +15,8 @@ namespace T3.Gui.ChildUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
-            if (!(instance is Counter counter))
+            if (!(instance is Counter counter)
+                || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))                
                 return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());

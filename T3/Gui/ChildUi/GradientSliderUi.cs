@@ -13,7 +13,8 @@ namespace T3.Gui.ChildUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
         {
-            if (!(instance is GradientSlider gradientSlider))
+            if (!(instance is GradientSlider gradientSlider)
+                || !ImGui.IsRectVisible(selectableScreenRect.Min, selectableScreenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
             var innerRect = selectableScreenRect;
@@ -25,17 +26,17 @@ namespace T3.Gui.ChildUi
                 //Log.Warning("Can't draw undefined gradient");
                 return SymbolChildUi.CustomUiResult.None;
             }
-            
+
             if (GradientEditor.Draw(gradient, drawList, innerRect))
             {
                 gradientSlider.Gradient.DirtyFlag.Invalidate();
             }
 
-            var x = gradientSlider.SamplePos.Value.Clamp(0,1)* innerRect.GetWidth() ;
+            var x = gradientSlider.SamplePos.Value.Clamp(0, 1) * innerRect.GetWidth();
             var pMin = new Vector2(innerRect.Min.X + x, innerRect.Min.Y);
-            var pMax = new Vector2(innerRect.Min.X + x+2, innerRect.Max.Y);
-            drawList.AddRectFilled(pMin, pMax, Color.Orange );
-            
+            var pMax = new Vector2(innerRect.Min.X + x + 2, innerRect.Max.Y);
+            drawList.AddRectFilled(pMin, pMax, Color.Orange);
+
             return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
         }
     }

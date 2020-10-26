@@ -341,6 +341,7 @@
     <Compile Include="Gui\ChildUi\Animators\AnimatorLabel.cs" />
     <Compile Include="Gui\ChildUi\Animators\SpeedRate.cs" />
     <Compile Include="Gui\ChildUi\GpuMeasureUi.cs" />
+    <Compile Include="Gui\ChildUi\LfoUi.cs" />
     <Compile Include="Gui\ChildUi\RemapUi.cs" />
     <Compile Include="Gui\ChildUi\SampleCurveUi.cs" />
     <Compile Include="Gui\ChildUi\StringUi.cs" />

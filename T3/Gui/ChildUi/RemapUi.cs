@@ -20,7 +20,8 @@ namespace T3.Gui.ChildUi
 
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
-            if (!(instance is Remap remap))
+            if (!(instance is Remap remap)
+                || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
             screenRect.Max.X -= screenRect.GetWidth() * 0.15f; // Leave some padding at right for mode-label
@@ -101,7 +102,7 @@ namespace T3.Gui.ChildUi
                                       );
             drawList.PopClipRect();
 
-            return SymbolChildUi.CustomUiResult.Rendered  | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
         }
 
         private const float TriangleSize = 4;
@@ -112,7 +113,6 @@ namespace T3.Gui.ChildUi
             var valueText = $"{remapValue.Value:G5}";
             var hashCode = remapValue.GetHashCode();
             ImGui.PushID(hashCode);
-
 
             // Draw aligned label
             {
