@@ -44,8 +44,8 @@ namespace T3.Core
 
     public class Command
     {
-        public Action<EvaluationContext> PrepareAction;
-        public Action<EvaluationContext> RestoreAction;
+        public Action<EvaluationContext> PrepareAction { get; set; }
+        public Action<EvaluationContext> RestoreAction { get; set; }
     }
 
 
