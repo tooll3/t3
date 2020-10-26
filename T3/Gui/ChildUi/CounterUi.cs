@@ -45,7 +45,7 @@ namespace T3.Gui.ChildUi
             }
 
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered;
+            return SymbolChildUi.CustomUiResult.Rendered |  SymbolChildUi.CustomUiResult.PreventInputLabels;
         }
     }
 }

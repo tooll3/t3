@@ -313,7 +313,7 @@ namespace T3.Gui.Graph
 
 
                 // Render input Label
-                if((customUiResult & SymbolChildUi.CustomUiResult.PreventInputLabels) != 0) {
+                if((customUiResult & SymbolChildUi.CustomUiResult.PreventInputLabels) == 0) {
                     var inputLabelOpacity = MathUtils.Remap(GraphCanvas.Current.Scale.X,
                                                             0.75f, 1.5f,
                                                             0f, 1f);

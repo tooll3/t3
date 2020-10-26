@@ -47,6 +47,7 @@ namespace T3.Gui.ChildUi
             return SymbolChildUi.CustomUiResult.Rendered
                    | SymbolChildUi.CustomUiResult.PreventTooltip
                    | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
                    | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
 
             void DrawSamplePointIndicator()

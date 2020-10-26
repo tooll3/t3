@@ -31,7 +31,7 @@ namespace T3.Gui.ChildUi
                 jitter2d.JumpDistance.Input.IsDefault = false;
                 jitter2d.JumpDistance.DirtyFlag.Invalidate();
             }
-            return SymbolChildUi.CustomUiResult.Rendered;
+            return SymbolChildUi.CustomUiResult.Rendered  | SymbolChildUi.CustomUiResult.PreventInputLabels;
         }
     }
 }

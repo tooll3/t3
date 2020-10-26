@@ -41,7 +41,7 @@ namespace T3.Gui.ChildUi
             ImGui.PopFont();
             
             ImGui.PopClipRect();
-            return SymbolChildUi.CustomUiResult.Rendered;
+            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace T3.Gui.ChildUi
             ImGui.SameLine();
             ImGui.Text($"  {valueSlider.Result.Value:0.00}");
             
-            return SymbolChildUi.CustomUiResult.Rendered;
+            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
         }
         private static Vector2 _handleWSize = new Vector2(10,20);
     }

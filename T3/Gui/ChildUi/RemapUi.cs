@@ -101,7 +101,7 @@ namespace T3.Gui.ChildUi
                                       );
             drawList.PopClipRect();
 
-            return SymbolChildUi.CustomUiResult.Rendered;
+            return SymbolChildUi.CustomUiResult.Rendered  | SymbolChildUi.CustomUiResult.PreventInputLabels;
         }
 
         private const float TriangleSize = 4;
