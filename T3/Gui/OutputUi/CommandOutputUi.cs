@@ -5,6 +5,7 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using System.Diagnostics;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Windows;
@@ -42,9 +43,12 @@ namespace T3.Gui.OutputUi
             var prevViewports = deviceContext.Rasterizer.GetViewports<RawViewportF>();
             var prevTargets = deviceContext.OutputMerger.GetRenderTargets(1);
             deviceContext.Rasterizer.SetViewport(new SharpDX.Viewport(0, 0, size.Width, size.Height, 0.0f, 1.0f));
-            deviceContext.OutputMerger.SetTargets(_colorBufferRtv);
+            //deviceContext.OutputMerger.SetTargets(_colorBufferRtv);
+            deviceContext.OutputMerger.SetTargets(_depthBufferDsv, _colorBufferRtv);
+            
             deviceContext.ClearRenderTargetView(_colorBufferRtv, new RawColor4(0.0f, 0.0f, 0.0f, 1.0f));
-
+            deviceContext.ClearDepthStencilView(_depthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
+            
             // evaluate the op
             slot.Update(context);
 
@@ -60,6 +64,7 @@ namespace T3.Gui.OutputUi
                     context.WorldToCamera = originalCamMatrix;
                     context.CameraToClipSpace = orginalViewMatrx;
                 }
+
                 _gridInstance.Outputs[0].Invalidate();
                 _gridInstance.Outputs[0].Update(context);
             }
@@ -99,39 +104,75 @@ namespace T3.Gui.OutputUi
 
         private bool UpdateTextures(Device device, Size2 size, Format format)
         {
-            if (_colorBuffer != null
-                && _colorBuffer.Description.Width == size.Width
-                && _colorBuffer.Description.Height == size.Height
-                && _colorBuffer.Description.Format == format)
-                return false; // nothing changed
+            // Initialize color buffer
+            {
+                if (_colorBuffer != null
+                    && _colorBuffer.Description.Width == size.Width
+                    && _colorBuffer.Description.Height == size.Height
+                    && _colorBuffer.Description.Format == format)
+                    return false; // nothing changed
 
-            _colorBuffer?.Dispose();
-            _colorBufferSrv?.Dispose();
-            _colorBufferRtv?.Dispose();
+                _colorBuffer?.Dispose();
+                _colorBufferSrv?.Dispose();
+                _colorBufferRtv?.Dispose();
 
-            var colorDesc = new Texture2DDescription()
-                                {
-                                    ArraySize = 1,
-                                    BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource,
-                                    CpuAccessFlags = CpuAccessFlags.None,
-                                    Format = format,
-                                    Width = size.Width,
-                                    Height = size.Height,
-                                    MipLevels = 1,
-                                    OptionFlags = ResourceOptionFlags.None,
-                                    SampleDescription = new SampleDescription(1, 0),
-                                    Usage = ResourceUsage.Default
-                                };
-            _colorBuffer = new Texture2D(device, colorDesc);
-            _colorBufferSrv = new ShaderResourceView(device, _colorBuffer);
-            _colorBufferRtv = new RenderTargetView(device, _colorBuffer);
+                var colorDesc = new Texture2DDescription()
+                                    {
+                                        ArraySize = 1,
+                                        BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource,
+                                        CpuAccessFlags = CpuAccessFlags.None,
+                                        Format = format,
+                                        Width = size.Width,
+                                        Height = size.Height,
+                                        MipLevels = 1,
+                                        OptionFlags = ResourceOptionFlags.None,
+                                        SampleDescription = new SampleDescription(1, 0),
+                                        Usage = ResourceUsage.Default
+                                    };
+                _colorBuffer = new Texture2D(device, colorDesc);
+                _colorBufferSrv = new ShaderResourceView(device, _colorBuffer);
+                _colorBufferRtv = new RenderTargetView(device, _colorBuffer);
+            }
+            
+            // Initialize depth buffer 
+            {
+                Core.Utilities.Dispose(ref _depthBufferDsv);
+                Core.Utilities.Dispose(ref _depthBuffer);
+
+                var depthDesc = new Texture2DDescription()
+                                    {
+                                        ArraySize = 1,
+                                        BindFlags = BindFlags.DepthStencil | BindFlags.ShaderResource,
+                                        CpuAccessFlags = CpuAccessFlags.None,
+                                        Format = Format.R32_Typeless,
+                                        Width = size.Width,
+                                        Height = size.Height,
+                                        MipLevels = 1,
+                                        OptionFlags = ResourceOptionFlags.None,
+                                        SampleDescription = new SampleDescription(1, 0),
+                                        Usage = ResourceUsage.Default
+                                    };
+                
+                _depthBuffer = new Texture2D(device, depthDesc);
+                var depthViewDesc = new DepthStencilViewDescription()
+                                        {
+                                            Format = Format.D32_Float,
+                                            Dimension = DepthStencilViewDimension.Texture2D
+                                        };
+                _depthBufferDsv = new DepthStencilView(device, _depthBuffer, depthViewDesc);
+                //Log.Debug("new depth stencil view");
+            }
+
             return true;
         }
 
         private Texture2D _colorBuffer;
         private ShaderResourceView _colorBufferSrv;
-
+        
         private RenderTargetView _colorBufferRtv;
+        private Texture2D _depthBuffer;
+        
+        private DepthStencilView _depthBufferDsv;
         private Instance _gridInstance;
     }
 }

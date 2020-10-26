@@ -67,7 +67,11 @@ namespace T3.Gui.Windows
             ImGui.Image((IntPtr)srv, sizeOnScreen);
 
             string format = "";
-            if (UserSettings.Config.ShowExplicitTextureFormatInOutputWindow)
+            if (srv == null)
+            {
+                format = "null?";
+            } 
+            else if (UserSettings.Config.ShowExplicitTextureFormatInOutputWindow)
             {
                 format = srv.Description.Format.ToString();
             }
