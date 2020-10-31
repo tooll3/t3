@@ -365,6 +365,7 @@ namespace T3.Core
             RegisterType(typeof(SharpDX.Mathematics.Interop.RawViewportF), "RawViewportF",
                          () => new InputValue<RawViewportF>(new RawViewportF
                                                             {X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f}));
+                                                            //{X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f}));            
             RegisterType(typeof(SharpDX.Size2), "Size2",
                          InputDefaultValueCreator<Size2>,
                          (writer, obj) =>
@@ -384,8 +385,9 @@ namespace T3.Core
 
             RegisterType(typeof(SharpDX.Vector4[]), "Vector4[]",
                          () => new InputValue<SharpDX.Vector4[]>(new SharpDX.Vector4[0]));
-                                                                     //{X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f}));            
             
+            RegisterType(typeof(RenderTargetReference), "RenderTargetRef",
+                         () => new InputValue<RenderTargetReference>());
         }
 
         public static void RegisterType(Type type, string typeName,

@@ -12,6 +12,7 @@ using SharpDX.Direct3D;
 using SharpDX.Mathematics.Interop;
 using T3.Compilation;
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.ChildUi;
@@ -143,7 +144,10 @@ namespace T3.Gui
             // custom sharp dx types
             RegisterUiType(typeof(SharpDX.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
                            () => new Vector4ArrayOutputUi());
-
+            
+            RegisterUiType(typeof(RenderTargetReference), new TextureUiProperties(),  () => new FallbackInputUi<RenderTargetReference>(),
+                           () => new ValueOutputUi<RenderTargetReference>());
+            
             // register custom UIs for symbol children
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c.Counter), CounterUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05.GpuMeasure), GpuMeasureUi.DrawChildUi);

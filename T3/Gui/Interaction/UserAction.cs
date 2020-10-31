@@ -254,7 +254,7 @@ namespace T3.Gui
                       new KeyboardBinding(UserActions.SaveLayout9, new KeyCombination(Key.F10, ctrl: true)),
                       
                       new KeyboardBinding(UserActions.LayoutSelection, new KeyCombination(Key.G)),
-                      new KeyboardBinding(UserActions.ToggleFullScreenGraph, new KeyCombination(Key.F11)),
+                      new KeyboardBinding(UserActions.ToggleFullScreenGraph, new KeyCombination(Key.F11, ctrl: true)),
                   };
     }
 }
