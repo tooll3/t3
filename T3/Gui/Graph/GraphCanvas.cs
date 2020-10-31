@@ -664,9 +664,18 @@ namespace T3.Gui.Graph
                     SymbolUiRegistry.Entries.Add(containerSymbolUi.Symbol.Id, containerSymbolUi);
                     var cmd = new CopySymbolChildrenCommand(containerSymbolUi, null, compositionSymbolUi,
                                                             InverseTransformPosition(ImGui.GetMousePos()));
-                    cmd.Do();
+                    cmd.Do(); // FIXME: Shouldn't this be UndoRedoQueue.AddAndExecute() ? 
                     SymbolUiRegistry.Entries.Remove(containerSymbolUi.Symbol.Id);
                     SymbolRegistry.Entries.Remove(containerSymbol.Id);
+                    
+                    // Select new operators
+                    SelectionManager.Clear();
+                    
+                    foreach (var id in cmd.NewSymbolChildIds)
+                    {
+                        var newChildUi = compositionSymbolUi.ChildUis.Single(c => c.Id == id);
+                        SelectionManager.AddSelection(newChildUi);
+                    }
                 }
             }
             catch (Exception)

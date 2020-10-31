@@ -63,6 +63,7 @@ namespace T3.Gui.Commands
             {
                 parentSymbolUi.RemoveChild(child.AddedId);
             }
+            NewSymbolChildIds.Clear();
         }
 
         public void Do()
@@ -89,6 +90,7 @@ namespace T3.Gui.Commands
                 targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, childToCopy.AddedId, sourceCompositionSymbolUi, childToCopy.ChildId,
                                                                    _targetPosition + childToCopy.RelativePosition);
                 SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
+                NewSymbolChildIds.Add(newSymbolChild.Id);
                 var newSymbolInputs = newSymbolChild.InputValues;
                 foreach (var (id, input) in symbolChildToCopy.InputValues)
                 {
@@ -117,6 +119,8 @@ namespace T3.Gui.Commands
                 targetCompositionSymbolUi.Symbol.AddConnection(connection);
             }
         }
+        
+        public List<Guid> NewSymbolChildIds = new List<Guid>(); //This primarily used for selecting the new children
 
         struct Entry
         {
