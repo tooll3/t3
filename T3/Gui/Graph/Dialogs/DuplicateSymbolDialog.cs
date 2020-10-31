@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
@@ -10,31 +11,45 @@ namespace T3.Gui.Graph.Dialogs
 {
     public class DuplicateSymbolDialog : ModalDialog
     {
-        public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, ref string nameSpace, ref string combineName)
+        public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, ref string nameSpace, ref string combineName, ref string description)
         {
+            DialogSize = new Vector2(500, 280);
+
             if (BeginDialog("Duplicate as new symbol"))
             {
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.Text("Namespace");
-                ImGui.SameLine();
+                // Name and namespace
+                {
+                    ImGui.PushFont(Fonts.FontSmall);
+                    ImGui.Text("Namespace");
+                    ImGui.SameLine();
 
-                ImGui.SetCursorPosX(250 + 20); // Not sure how else to layout this
-                ImGui.Text("Name");
-                ImGui.PopFont();
+                    ImGui.SetCursorPosX(250 + 20); // Not sure how else to layout this
+                    ImGui.Text("Name");
+                    ImGui.PopFont();
 
-                ImGui.SetNextItemWidth(250);
-                ImGui.InputText("##namespace", ref nameSpace, 255);
+                    ImGui.SetNextItemWidth(250);
+                    ImGui.InputText("##namespace", ref nameSpace, 255);
 
-                ImGui.SetNextItemWidth(150);
-                ImGui.SameLine();
+                    ImGui.SetNextItemWidth(150);
+                    ImGui.SameLine();
 
-                if (ImGui.IsWindowAppearing())
-                    ImGui.SetKeyboardFocusHere();
+                    if (ImGui.IsWindowAppearing())
+                        ImGui.SetKeyboardFocusHere();
 
-                ImGui.InputText("##name", ref combineName, 255);
+                    ImGui.InputText("##name", ref combineName, 255);
 
-                CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
-                ImGui.Spacing();
+                    CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
+                    ImGui.Spacing();
+                }
+                
+                // Description
+                {
+                    ImGui.PushFont(Fonts.FontSmall);
+                    ImGui.Text("Description");
+                    ImGui.PopFont();
+                    ImGui.SetNextItemWidth(460);
+                    ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));
+                }
 
                 if (CustomComponents.DisablableButton("Duplicate", NodeOperations.IsNewSymbolNameValid(combineName)))
                 {
@@ -42,7 +57,8 @@ namespace T3.Gui.Graph.Dialogs
                     NodeOperations.DuplicateAsNewType(compositionSymbolUi,
                                                       selectedChildUis.First().SymbolChild,
                                                       newTypeName: combineName,
-                                                      nameSpace: nameSpace);
+                                                      nameSpace: nameSpace,
+                                                      description);
                     ImGui.CloseCurrentPopup();
                 }
 

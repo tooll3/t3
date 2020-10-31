@@ -240,8 +240,8 @@ namespace T3.Gui.Graph
                 DrawList.PopClipRect();
                 DrawContextMenu();
 
-                _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits);
-                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits);
+                _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits, ref _symbolDescriptionForDialog);
+                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits, ref _symbolDescriptionForDialog);
                 _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
                 _addInputDialog.Draw(GetSelectedSymbol());
                 _addOutputDialog.Draw(GetSelectedSymbol());
@@ -483,12 +483,14 @@ namespace T3.Gui.Graph
                 {
                     _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name ?? string.Empty;
                     _nameSpaceForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Namespace ?? string.Empty;
+                    _symbolDescriptionForDialog = "";
                     _duplicateSymbolDialog.ShowNextFrame();
                 }
 
                 if (ImGui.MenuItem("Combine as new type"))
                 {
                     _nameSpaceForDialogEdits = CompositionOp.Symbol.Namespace ?? string.Empty;
+                    _symbolDescriptionForDialog = "";
                     _combineToSymbolDialog.ShowNextFrame();
                 }
 
@@ -734,6 +736,7 @@ namespace T3.Gui.Graph
         private List<SymbolChildUi> ChildUis { get; set; }
         public readonly SymbolBrowser _symbolBrowser = new SymbolBrowser();
         private string _symbolNameForDialogEdits = "";
+        private string _symbolDescriptionForDialog = "";
         private string _nameSpaceForDialogEdits = "";
         private readonly GraphWindow _window;
 

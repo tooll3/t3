@@ -227,10 +227,11 @@ namespace T3.Gui.Graph
             {
                 _imageBackground.DrawResolutionSelector();
                 ImGui.SameLine();
-                if (ImGui.Button("Clear"))
+                if (ImGui.Button("Clear BG"))
                 {
                     _currentWindow._imageBackground.BackgroundNodePath = null;
                 }
+                ImGui.SameLine();
             }
         }
 

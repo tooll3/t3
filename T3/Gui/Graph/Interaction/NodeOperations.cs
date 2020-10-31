@@ -84,8 +84,9 @@ namespace T3.Gui.Graph.Interaction
 
             return result;
         }
-
-        public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName, string nameSpace)
+        
+        public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren,  string newSymbolName,
+                                            string nameSpace, string description)
         {
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
             Dictionary<Symbol.Connection, Guid> connectionToNewSlotIdMap = new Dictionary<Symbol.Connection, Guid>();
@@ -219,6 +220,8 @@ namespace T3.Gui.Graph.Interaction
             newSymbol.PendingSource = newSource;
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
             var newSymbolUi = new SymbolUi(newSymbol);
+            newSymbolUi.Description = description;
+            
             SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
             newSymbol.Namespace = nameSpace;
 
@@ -384,7 +387,7 @@ namespace T3.Gui.Graph.Interaction
             public int MultiInputIndex { get; set; }
         }
 
-        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newTypeName, string nameSpace)
+        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newTypeName, string nameSpace, string description)
         {
             var sourceSymbol = symbolChildToDuplicate.Symbol;
 
@@ -431,6 +434,8 @@ namespace T3.Gui.Graph.Interaction
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
             var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];
             var newSymbolUi = sourceSymbolUi.CloneForNewSymbol(newSymbol, oldToNewIdMap);
+            newSymbolUi.Description = description;
+            
             SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
             newSymbol.Namespace = nameSpace;
 

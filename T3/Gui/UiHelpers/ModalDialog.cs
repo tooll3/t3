@@ -52,7 +52,8 @@ namespace T3.Gui.UiHelpers
                 ImGui.OpenPopup(title);
             }
 
-            ImGui.SetNextWindowSize(new Vector2(500, 200), ImGuiCond.FirstUseEver);
+
+            ImGui.SetNextWindowSize(DialogSize, ImGuiCond.FirstUseEver);
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(20, 20));
 
             if (!ImGui.BeginPopupModal(title))
@@ -80,5 +81,6 @@ namespace T3.Gui.UiHelpers
         }
 
         private bool _shouldShowNextFrame;
+        protected Vector2 DialogSize = new Vector2(500, 200);
     }
 }
