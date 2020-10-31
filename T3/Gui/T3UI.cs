@@ -7,6 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Commands;
@@ -77,6 +78,11 @@ namespace T3.Gui
                     {
                         Task.Run(Save); // Async save
                     }
+
+                    if (ImGui.MenuItem("Quit"))
+                    {
+                        Application.Exit();
+                    }
                     ImGui.EndMenu();
                 }
 
@@ -92,9 +98,9 @@ namespace T3.Gui
                         UndoRedoStack.Redo();
                     }
                     ImGui.Separator();
-                    if (ImGui.MenuItem("Cut", "CTRL+X")) { }
-                    if (ImGui.MenuItem("Copy", "CTRL+C")) { }
-                    if (ImGui.MenuItem("Paste", "CTRL+V")) { }
+                    //if (ImGui.MenuItem("Cut", "CTRL+X")) { }
+                    //if (ImGui.MenuItem("Copy", "CTRL+C")) { }
+                    //if (ImGui.MenuItem("Paste", "CTRL+V")) { }
 
                     if (ImGui.MenuItem("Fix File references", ""))
                     {
