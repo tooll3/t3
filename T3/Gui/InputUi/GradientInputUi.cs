@@ -46,6 +46,7 @@ namespace T3.Gui.InputUi
         
         protected override void DrawReadOnlyControl(string name, ref Gradient value)
         {
+            ImGui.NewLine();
         }
     }
 }
