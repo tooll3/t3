@@ -279,7 +279,8 @@ namespace T3.Gui.Graph
 
                 if (childUi.IsSelected)
                 {
-                    drawList.AddRect(_selectableScreenRect.Min - Vector2.One, _selectableScreenRect.Max + Vector2.One, Color.White, 2);
+                    drawList.AddRect(_selectableScreenRect.Min - Vector2.One*2, _selectableScreenRect.Max + Vector2.One*2, Color.Black);
+                    drawList.AddRect(_selectableScreenRect.Min - Vector2.One, _selectableScreenRect.Max + Vector2.One, Color.White);
                 }
             }
             ImGui.PopID();
