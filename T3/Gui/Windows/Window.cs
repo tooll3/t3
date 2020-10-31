@@ -117,8 +117,12 @@ namespace T3.Gui.Windows
         }
 
         public WindowConfig Config = new WindowConfig();
-        
 
+        public void ApplySizeAndPosition()
+        {
+            ImGui.SetWindowPos(Config.Title, WindowManager.GetPixelPositionFromRelative(Config.Position));
+            ImGui.SetWindowSize(Config.Title, WindowManager.GetPixelPositionFromRelative(Config.Size));
 
+        }
     }
 }

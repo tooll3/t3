@@ -77,6 +77,7 @@ namespace T3.Gui
         SaveBookmark7,
         SaveBookmark8,
         SaveBookmark9,
+        ToggleFullScreenGraph
     }
 
     public static class UserActionRegistry
@@ -98,6 +99,7 @@ namespace T3.Gui
         public readonly UserActions Action;
         public bool NeedsWindowFocus;
         public bool NeedsWindowHover;
+        public bool KeyPressOnly;
         public readonly KeyCombination Combination;
 
         public static bool Triggered(UserActions action)
@@ -119,8 +121,11 @@ namespace T3.Gui
                     continue;
 
                 var c = binding.Combination;
+
+                var isKeyPressed = (!binding.KeyPressOnly || ImGui.IsKeyPressed((int)c.Key));
                 if (io.KeysDown[(int)c.Key]
                     && Math.Abs(io.KeysDownDurationPrev[(int)c.Key]) < 0.001f
+                    && isKeyPressed
                     && ((!c.Alt && !io.KeyAlt) || (c.Alt && io.KeyAlt)) // There is probably a smarty way to say this.
                     && ((!c.Ctrl && !io.KeyCtrl) || (c.Ctrl && io.KeyCtrl))
                     && ((!c.Shift && !io.KeyShift) || (c.Shift && io.KeyShift))
@@ -170,11 +175,12 @@ namespace T3.Gui
             }
         }
 
-        private KeyboardBinding(UserActions action, KeyCombination combination, bool needsWindowFocus = false)
+        private KeyboardBinding(UserActions action, KeyCombination combination, bool needsWindowFocus = false, bool keyPressOnly = false)
         {
             Action = action;
             Combination = combination;
             NeedsWindowFocus = needsWindowFocus;
+            KeyPressOnly = keyPressOnly;
         }
 
         private static readonly List<KeyboardBinding> Bindings
@@ -248,6 +254,7 @@ namespace T3.Gui
                       new KeyboardBinding(UserActions.SaveLayout9, new KeyCombination(Key.F10, ctrl: true)),
                       
                       new KeyboardBinding(UserActions.LayoutSelection, new KeyCombination(Key.G)),
+                      new KeyboardBinding(UserActions.ToggleFullScreenGraph, new KeyCombination(Key.F11)),
                   };
     }
 }

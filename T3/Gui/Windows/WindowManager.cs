@@ -18,55 +18,54 @@ namespace T3.Gui.Windows
         public WindowManager()
         {
             _windows = new List<Window>()
-                       {
-                           new GraphWindow(),
-                           new ParameterWindow(),
-                           new VariationWindow(),
-                           new OutputWindow(),
-                           new ConsoleLogWindow(),
-                           new SettingsWindow(),
-                           new SymbolLibrary(),
-                           new PresetsWindow(),
-                       };
-            
+                           {
+                               new GraphWindow(),
+                               new ParameterWindow(),
+                               new VariationWindow(),
+                               new OutputWindow(),
+                               new ConsoleLogWindow(),
+                               new SettingsWindow(),
+                               new SymbolLibrary(),
+                               new PresetsWindow(),
+                           };
         }
 
         private readonly UserActions[] _loadLayoutActions =
-        {
-            UserActions.LoadLayout0,
-            UserActions.LoadLayout1,
-            UserActions.LoadLayout2,
-            UserActions.LoadLayout3,
-            UserActions.LoadLayout4,
-            UserActions.LoadLayout5,
-            UserActions.LoadLayout6,
-            UserActions.LoadLayout7,
-            UserActions.LoadLayout8,
-            UserActions.LoadLayout9,
-        };
+            {
+                UserActions.LoadLayout0,
+                UserActions.LoadLayout1,
+                UserActions.LoadLayout2,
+                UserActions.LoadLayout3,
+                UserActions.LoadLayout4,
+                UserActions.LoadLayout5,
+                UserActions.LoadLayout6,
+                UserActions.LoadLayout7,
+                UserActions.LoadLayout8,
+                UserActions.LoadLayout9,
+            };
 
         private readonly UserActions[] _saveLayoutActions =
-        {
-            UserActions.SaveLayout0,
-            UserActions.SaveLayout1,
-            UserActions.SaveLayout2,
-            UserActions.SaveLayout3,
-            UserActions.SaveLayout4,
-            UserActions.SaveLayout5,
-            UserActions.SaveLayout6,
-            UserActions.SaveLayout7,
-            UserActions.SaveLayout8,
-            UserActions.SaveLayout9,
-        };
+            {
+                UserActions.SaveLayout0,
+                UserActions.SaveLayout1,
+                UserActions.SaveLayout2,
+                UserActions.SaveLayout3,
+                UserActions.SaveLayout4,
+                UserActions.SaveLayout5,
+                UserActions.SaveLayout6,
+                UserActions.SaveLayout7,
+                UserActions.SaveLayout8,
+                UserActions.SaveLayout9,
+            };
 
         public void Draw()
         {
             Initialize();
             if (!_hasBeenInitialized)
                 return;
-            
+
             UpdateAppWindowSize();
-            
+
             for (var i = 0; i < _saveLayoutActions.Length; i++)
             {
                 if (KeyboardBinding.Triggered(_saveLayoutActions[i]))
@@ -74,6 +73,13 @@ namespace T3.Gui.Windows
 
                 if (KeyboardBinding.Triggered(_loadLayoutActions[i]))
                     LoadLayout(i);
+
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.ToggleFullScreenGraph))
+            {
+                _graphWindowRenderedAsBackground = !_graphWindowRenderedAsBackground;
+                ToggleFullScreenGraph();
             }
 
             foreach (var windowType in _windows)
@@ -86,7 +92,6 @@ namespace T3.Gui.Windows
 
             if (_metricsWindowVisible)
                 ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
-            
         }
 
         private void Initialize()
@@ -99,12 +104,11 @@ namespace T3.Gui.Windows
             {
                 LoadLayout(UserSettings.Config.WindowLayoutIndex);
             }
+
             _appWindowSize = ImGui.GetIO().DisplaySize;
             _hasBeenInitialized = true;
         }
 
-        private bool _graphWindowAsBackground = false;
-        
         public void DrawWindowsMenu()
         {
             if (ImGui.BeginMenu("Windows"))
@@ -112,31 +116,13 @@ namespace T3.Gui.Windows
                 if (ImGui.MenuItem("FullScreen", "", Program.IsFullScreen))
                     Program.IsFullScreen = !Program.IsFullScreen;
 
-                if (ImGui.MenuItem("Graph Window as background", "", ref _graphWindowAsBackground))
+                if (ImGui.MenuItem("Graph Window as background", "", ref _graphWindowRenderedAsBackground))
                 {
-                    {
-                        foreach (var w in _windows)
-                        {
-                            if (w is GraphWindow graphWindow)
-                            {
-                                if (_graphWindowAsBackground)
-                                {
-                                    graphWindow.Config.Position = Vector2.Zero;
-                                    graphWindow.Config.Size = ImGui.GetIO().DisplaySize;
-                                    graphWindow.WindowFlags |= ImGuiWindowFlags.NoDecoration;
-                                }
-                                else
-                                {
-                                    graphWindow.WindowFlags &= ~ImGuiWindowFlags.NoDecoration;
-                                }
-                            }
-                        }
-                    }
+                    ToggleFullScreenGraph();
                 }
-                    
-                
+
                 ImGui.Separator();
-                
+
                 foreach (var window in _windows)
                 {
                     window.DrawMenuItemToggle();
@@ -186,6 +172,62 @@ namespace T3.Gui.Windows
             }
         }
 
+        
+        private void ToggleFullScreenGraph()
+        {
+            if (_graphWindowRenderedAsBackground)
+            {
+                var graphWindowIndex = 0;
+                foreach (var w in _windows)
+                {
+                    if (w is GraphWindow graphWindow)
+                    {
+                        if (graphWindowIndex == 0)
+                        {
+                            var pos = GetRelativePositionFromPixel(new Vector2(0, MainMenuBarHeight));
+                            graphWindow.Config.Position = pos;
+                            graphWindow.Config.Size = new Vector2(1, 1 -pos.Y); 
+                            graphWindow.WindowFlags |= ImGuiWindowFlags.NoDecoration;
+                            graphWindow.ApplySizeAndPosition();
+                            graphWindowIndex++;
+                        }
+                        else
+                        {
+                            graphWindow.Config.Visible = false;
+                            Log.Warning("Closing other graph window");
+                        }
+                    }
+                    else
+                    {
+                        w.Config.Visible = false;
+                    }
+                }
+
+                Program.IsFullScreen = true;
+            }
+            else
+            {
+                foreach (var graphWindow in GetGraphWindows())
+                {
+                    graphWindow.WindowFlags &= ~ImGuiWindowFlags.NoDecoration;
+                }
+
+                Program.IsFullScreen = false;
+            }
+        }
+
+        private IEnumerable<GraphWindow> GetGraphWindows()
+        {
+            foreach (var w in _windows)
+            {
+                if (!(w is GraphWindow graphWindow))
+                    continue;
+
+                yield return graphWindow;
+            }
+        }
+
+
         private void SaveLayout(int index)
         {
             var allWindowConfigs = GetAllWindows().Select(window => window.Config).ToList();
@@ -224,8 +266,6 @@ namespace T3.Gui.Windows
 
             ApplyConfigurations(configurations);
 
-
-
             UserSettings.Config.WindowLayoutIndex = index;
         }
 
@@ -238,7 +278,7 @@ namespace T3.Gui.Windows
                 {
                     if (config.Title.StartsWith("Graph#"))
                     {
-                        if(GraphWindow.CanOpenAnotherWindow())
+                        if (GraphWindow.CanOpenAnotherWindow())
                         {
                             matchingWindow = new GraphWindow();
                             matchingWindow.Config = config;
@@ -254,6 +294,7 @@ namespace T3.Gui.Windows
                         matchingWindow = new ParameterWindow();
                         matchingWindow.Config = config;
                     }
+
                     // else
                     // {
                     //     Log.Error($"Can't find type of window '{config.Title}'");
@@ -264,7 +305,7 @@ namespace T3.Gui.Windows
                     matchingWindow.Config = config;
                 }
             }
-            
+
             // Close Windows without configurations
             foreach (var w in GetAllWindows())
             {
@@ -274,7 +315,8 @@ namespace T3.Gui.Windows
                     w.Config.Visible = false;
                 }
             }
-            ApplyLayout();            
+
+            ApplyLayout();
         }
 
         private static string GetLayoutFilename(int index)
@@ -291,8 +333,7 @@ namespace T3.Gui.Windows
         {
             foreach (var window in GetAllWindows())
             {
-                ImGui.SetWindowPos(window.Config.Title, GetPixelPositionFromRelative(window.Config.Position));
-                ImGui.SetWindowSize(window.Config.Title, GetPixelPositionFromRelative(window.Config.Size));
+                window.ApplySizeAndPosition();
             }
         }
 
@@ -308,7 +349,7 @@ namespace T3.Gui.Windows
 
         private static Vector2 _appWindowSize;
 
-        private  IEnumerable<Window> GetAllWindows()
+        private IEnumerable<Window> GetAllWindows()
         {
             foreach (var window in _windows)
             {
@@ -337,13 +378,15 @@ namespace T3.Gui.Windows
             ApplyConfigurations(allWindowConfigs);
         }
 
-        public bool IsAnyInstanceVisible<T>() where T: Window
+        public bool IsAnyInstanceVisible<T>() where T : Window
         {
             return GetAllWindows().OfType<T>().Any(w => w.Config.Visible);
         }
-        
+
         private const string LayoutFileNameFormat = "layout{0}.json";
         private const string ConfigFolderName = ".t3";
+        private const float MainMenuBarHeight = 25; 
+        private bool _graphWindowRenderedAsBackground;
 
         private readonly List<Window> _windows;
         private bool _demoWindowVisible;
