@@ -24,7 +24,7 @@ namespace UiHelpers
         ///        +-------------------+rA   \---+      B        |
         ///                                      +---------------+
         /// </remarks>
-        private const float Pi = 3.141578f;
+        private const float Pi = 3.141592f;
 
         private const float TAU = Pi / 180;
 

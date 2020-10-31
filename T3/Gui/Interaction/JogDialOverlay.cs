@@ -188,7 +188,7 @@ namespace T3.Gui.Interaction
 
             private static void DrawTick(double f, Color color, int lineThickness)
             {
-                var rads = -3.141578 * 2 * (f);
+                var rads = -3.141592 * 2 * (f);
                 var d = new Vector2((float)Math.Sin(rads), (float)Math.Cos(rads));
                 _drawList.AddLine(_center + (Radius) * d, _center + (Radius + RingWidth) * d, color, lineThickness);
             }
@@ -197,8 +197,8 @@ namespace T3.Gui.Interaction
 
             private static void DrawValueDifference()
             {
-                var rads1 = -3.141578 * 2 * (_originalValue + 0.5f - 0.25f);
-                var rads2 = -3.141578 * 2 * (_unclampedValue + 0.5f - 0.25f);
+                var rads1 = -3.141592 * 2 * (_originalValue + 0.5f - 0.25f);
+                var rads2 = -3.141592 * 2 * (_unclampedValue + 0.5f - 0.25f);
 
                 var clamped = (rads1 - rads2).Clamp(-3.1415f * 2, 3.1415f * 2);
                 rads2 = rads1 - clamped;

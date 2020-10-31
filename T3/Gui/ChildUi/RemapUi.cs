@@ -4,10 +4,7 @@ using SharpDX;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Operator.Slots;
 using T3.Gui.ChildUi.Animators;
-using T3.Gui.Interaction;
-using T3.Gui.Styling;
 using T3.Operators.Types.Id_f0acd1a4_7a98_43ab_a807_6d1bd3e92169;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
@@ -33,10 +30,10 @@ namespace T3.Gui.ChildUi
             graphRect.Min.Y = center.Y - size.Y * 0.15f;
             graphRect.Max.Y = center.Y + size.Y * 0.15f;
 
-            DrawValueLabel(drawList, screenRect, new Vector2(GraphRangePadding / 2, 0), remap.RangeInMin, Color.White);
-            DrawValueLabel(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 0), remap.RangeInMax, Color.White);
-            DrawValueLabel(drawList, screenRect, new Vector2(GraphRangePadding / 2, 1), remap.RangeOutMin, Color.White);
-            DrawValueLabel(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 1), remap.RangeOutMax, Color.White);
+            ValueLabel.Draw(drawList, screenRect, new Vector2(GraphRangePadding / 2, 0), remap.RangeInMin, Color.White);
+            ValueLabel.Draw(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 0), remap.RangeInMax, Color.White);
+            ValueLabel.Draw(drawList, screenRect, new Vector2(GraphRangePadding / 2, 1), remap.RangeOutMin, Color.White);
+            ValueLabel.Draw(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 1), remap.RangeOutMax, Color.White);
 
             // Draw interaction
             ImGui.SetCursorScreenPos(graphRect.Min);
@@ -107,65 +104,7 @@ namespace T3.Gui.ChildUi
 
         private const float TriangleSize = 4;
 
-        private static bool DrawValueLabel(ImDrawListPtr drawList, ImRect screenRect, Vector2 alignment, InputSlot<float> remapValue, Color color)
-        {
-            var modified = false;
-            var valueText = $"{remapValue.Value:G5}";
-            var hashCode = remapValue.GetHashCode();
-            ImGui.PushID(hashCode);
 
-            // Draw aligned label
-            {
-                ImGui.PushFont(Fonts.FontSmall);
-                var labelSize = ImGui.CalcTextSize(valueText);
-                var space = screenRect.GetSize() - labelSize;
-                var position = screenRect.Min + space * alignment;
-                drawList.AddText(MathUtils.Floor(position), color, valueText);
-                ImGui.PopFont();
-            }
-
-            // InputGizmo
-            {
-                var labelSize = screenRect.GetSize() / 2;
-                var space = screenRect.GetSize() - labelSize;
-                var position = screenRect.Min + space * alignment;
-                ImGui.SetCursorScreenPos(position);
-                if (ImGui.GetIO().KeyCtrl || _jogDialValue != null)
-                {
-                    ImGui.InvisibleButton("button", labelSize);
-                    double value = remapValue.TypedInputValue.Value;
-                    if (ImGui.IsItemActivated() && ImGui.GetIO().KeyCtrl)
-                    {
-                        _jogDailCenter = ImGui.GetIO().MousePos;
-                        _jogDialValue = remapValue;
-                    }
-
-                    if (_jogDialValue == remapValue)
-                    {
-                        if (ImGui.IsItemActive())
-                        {
-                            modified = JogDialOverlay.Draw(ref value, ImGui.IsItemActivated(), _jogDailCenter, Double.NegativeInfinity, Double.PositiveInfinity,
-                                                           0.01f);
-                            if (modified)
-                            {
-                                remapValue.TypedInputValue.Value = (float)value;
-                                remapValue.Input.IsDefault = false;
-                                remapValue.DirtyFlag.Invalidate();
-                            }
-                        }
-                        else
-                        {
-                            _jogDialValue = null;
-                        }
-                    }
-                }
-            }
-            ImGui.PopID();
-            return modified;
-        }
-
-        private static Vector2 _jogDailCenter;
-        private static InputSlot<float> _jogDialValue;
         private static readonly Color GraphLineColor = new Color(0, 0, 0, 0.3f);
         private static readonly Vector2[] GraphLinePoints = new Vector2[4];
     }
