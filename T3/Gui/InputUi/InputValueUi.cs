@@ -13,6 +13,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Presets;
 using T3.Core.Operator.Slots;
+using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
@@ -238,15 +239,6 @@ namespace T3.Gui.InputUi
                     ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
                     CustomComponents.ContextMenuForItem(() =>
                                                         {
-                                                            if (ImGui.MenuItem("Save in Preset"))
-                                                            {
-                                                                var composition = SelectionManager.GetSelectedComposition();
-                                                                if (composition == null)
-                                                                {
-                                                                    composition = inputSlot.Parent.Parent;
-                                                                }
-                                                                PresetRegistry.AddInputToCompositionPreset(composition, inputSlot.Parent, input);
-                                                            }
 
                                                             if (ImGui.MenuItem("Set as default", !input.IsDefault))
                                                                 input.SetCurrentValueAsDefault();
@@ -262,8 +254,43 @@ namespace T3.Gui.InputUi
                                                                 }
                                                             }
 
+                                                            // if (ImGui.MenuItem("Publish as Input"))
+                                                            // {
+                                                            //     var composition = SelectionManager.GetSelectedComposition();
+                                                            //     if (composition == null)
+                                                            //     {
+                                                            //         composition = inputSlot.Parent.Parent;
+                                                            //     }
+                                                            //
+                                                            //     NodeOperations.AddInputToSymbol(input.Name, input.InputDefinition.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol);
+                                                            //
+                                                            //     var updatedComposition = NodeOperations.GetInstanceFromIdPath(NodeOperations.BuildIdPathForInstance(composition)); 
+                                                            //     
+                                                            //     var newInput = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
+                                                            //     if (newInput != null)
+                                                            //     {
+                                                            //         var cmd = new AddConnectionCommand(updatedComposition.Symbol, 
+                                                            //                                            new Symbol.Connection(sourceParentOrChildId: ConnectionMaker.UseSymbolContainerId,
+                                                            //                                                                  sourceSlotId:newInput.Id,
+                                                            //                                                                  targetParentOrChildId:symbolChildUi.Id,
+                                                            //                                                                  targetSlotId:input.InputDefinition.Id
+                                                            //                                                                 ), 0);
+                                                            //         cmd.Do();
+                                                            //     }
+                                                            // }
+
                                                             if (ImGui.MenuItem("Parameters settings"))
                                                                 editState = InputEditStateFlags.ShowOptions;
+                                                            
+                                                            if (ImGui.MenuItem("Save in Preset"))
+                                                            {
+                                                                var composition = SelectionManager.GetSelectedComposition();
+                                                                if (composition == null)
+                                                                {
+                                                                    composition = inputSlot.Parent.Parent;
+                                                                }
+                                                                PresetRegistry.AddInputToCompositionPreset(composition, inputSlot.Parent, input);
+                                                            }
                                                         });
 
                     ImGui.PopStyleVar();

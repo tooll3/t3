@@ -576,7 +576,7 @@ namespace T3.Gui.Graph
         /// <summary>
         /// A special Id that indicates that the source of target of a connection is not a child but an input or output node
         /// </summary>
-        private static readonly Guid UseSymbolContainerId = Guid.Empty;
+        public static readonly Guid UseSymbolContainerId = Guid.Empty;
 
         /// <summary>
         /// A special id indicating that the connection is ending in the <see cref="SymbolBrowser"/>
