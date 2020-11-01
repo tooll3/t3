@@ -817,7 +817,7 @@ namespace T3.Core
             }
         }
 
-        private static Texture2D CreateTexture2DFromBitmap(Device device, BitmapSource bitmapSource)
+        public static Texture2D CreateTexture2DFromBitmap(Device device, BitmapSource bitmapSource)
         {
             // Allocate DataStream to receive the WIC image pixels
             int stride = bitmapSource.Size.Width * 4;
