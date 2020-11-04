@@ -14,6 +14,7 @@ namespace T3.Gui.InputUi
     public class FloatInputUi : InputValueUi<float>
     {
         public override bool IsAnimatable => true;
+        public override bool IsVariable => true;
 
         public override IInputUi Clone()
         {
@@ -81,6 +82,23 @@ namespace T3.Gui.InputUi
                     key.Value = value;
                     curve.AddOrUpdateV(time, key);
                 }
+            }
+        }
+
+        protected override void DrawVariedValue(string name, InputSlot<float> inputSlot, Variator variator)
+        {
+            var variation = variator.GetVariationForInput(inputSlot);
+            if (variation == null)
+            {
+                return;
+            }
+
+            const int index = 0; // for testing just index 0, question where to get the index from?
+            float value = variation.Values[index];
+            var editState = DrawEditControl(name, ref value);
+            if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
+            {
+                variation.Values[index] = value;
             }
         }
 

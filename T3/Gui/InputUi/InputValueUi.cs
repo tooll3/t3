@@ -32,6 +32,7 @@ namespace T3.Gui.InputUi
         public Guid Id => InputDefinition.Id;
         public Relevancy Relevancy { get; set; } = Relevancy.Optional;
         public virtual bool IsAnimatable => false;
+        public virtual bool IsVariable => false;
         protected Type MappedType { get; set; }
 
         public abstract IInputUi Clone();
@@ -47,6 +48,10 @@ namespace T3.Gui.InputUi
         }
 
         protected virtual void DrawAnimatedValue(string name, InputSlot<T> inputSlot, Animator animator)
+        {
+        }
+
+        protected virtual void DrawVariedValue(string name, InputSlot<T> inputSlot, Variator variator)
         {
         }
         
@@ -66,6 +71,8 @@ namespace T3.Gui.InputUi
             var typeColor = TypeUiRegistry.Entries[Type].Color;
             var animator = compositionUi.Symbol.Animator;
             bool isAnimated = IsAnimatable && animator.IsInputSlotAnimated(inputSlot);
+            var variator = compositionUi.Symbol.Variator;
+            bool isVaried = IsVariable && variator.IsInputSlotVaried(inputSlot);
             MappedType = inputSlot.MappedType;
 
             if (inputSlot is InputSlot<T> typedInputSlot)
@@ -179,7 +186,6 @@ namespace T3.Gui.InputUi
                         animator.RemoveAnimationFrom(inputSlot);
                     }
 
-
                     ImGui.PopStyleColor();
                     ImGui.SameLine();
 
@@ -208,6 +214,42 @@ namespace T3.Gui.InputUi
                     ImGui.PopStyleColor(2);
                     ImGui.PopItemWidth();
                 }
+                else if (isVaried)
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Button, Color.Blue.Rgba);
+                    if (ImGui.Button("V", new Vector2(ConnectionAreaWidth, 0.0f)))
+                    {
+                        variator.RemoveVariationFrom(inputSlot);
+                    }
+
+                    ImGui.PopStyleColor();
+                    ImGui.SameLine();
+
+                    // Draw Name
+                    ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
+                    ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
+                    CustomComponents.ContextMenuForItem(() =>
+                                                        {
+                                                            if (ImGui.MenuItem("Parameters settings"))
+                                                                editState = InputEditStateFlags.ShowOptions;
+                                                        });
+                    ImGui.PopStyleVar();
+                    ImGui.SameLine();
+
+                    // Draw control
+                    ImGui.PushItemWidth(200.0f);
+                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Blue.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.FrameBgActive, Color.Black.Rgba);
+                    ImGui.PushFont(Fonts.FontBold);
+
+                    ImGui.SetNextItemWidth(-1);
+
+                    DrawVariedValue(name, typedInputSlot, variator); // todo: command integration
+
+                    ImGui.PopFont();
+                    ImGui.PopStyleColor(2);
+                    ImGui.PopItemWidth();
+                }
                 else
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
@@ -218,7 +260,7 @@ namespace T3.Gui.InputUi
                         if (IsAnimatable)
                             animator.CreateInputUpdateAction<float>(inputSlot);
                     }
-
+                    
                     if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > 4)
                     {
                         if (ConnectionMaker.TempConnections.Count == 0)
@@ -226,12 +268,18 @@ namespace T3.Gui.InputUi
                             ConnectionMaker.StartFromInputSlot(compositionUi.Symbol, symbolChildUi, InputDefinition);
                         }
                     }
-                    
-                    
-                    if(ImGui.IsItemHovered() && IsAnimatable) 
+
+                    if (ImGui.IsItemHovered() && IsAnimatable)
                         ImGui.SetTooltip($"Click to animate\n{input.DefaultValue.ValueType}");
 
                     ImGui.PopStyleColor();
+                    ImGui.SameLine();
+
+                    if (IsVariable && ImGui.Button("v", new Vector2(ConnectionAreaWidth, 0.0f)))
+                    {
+                        variator.AddVariationTo(inputSlot);
+                    }
+
                     ImGui.SameLine();
 
                     // Draw Name
