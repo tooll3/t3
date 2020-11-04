@@ -37,6 +37,7 @@ namespace T3.Core.Operator
             if (inputSlot is Slot<float> floatInputSlot)
             {
                 var newVariation = new Variation(floatInputSlot.Value);
+                newVariation.Values.Add(floatInputSlot.Value + 5.0f); // for testing
                 _inputVariations.Add(new VariationId(inputSlot), newVariation);
 
                 floatInputSlot.UpdateAction = context => { floatInputSlot.Value = newVariation.GetVariedValue(context.VariationSetup); };
