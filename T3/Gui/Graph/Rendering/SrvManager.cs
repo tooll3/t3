@@ -29,18 +29,19 @@ namespace T3.Gui.Graph.Rendering
 
         private static ShaderResourceView CreateNewSrv(Texture2D texture)
         {
-            ShaderResourceView srv;
+            if ((texture.Description.BindFlags & BindFlags.DepthStencil) > 0)
+                return null; // skip here for depth/stencil to prevent warning below
+            
             try
             {
-                srv = new ShaderResourceView(ResourceManager.Instance().Device, texture);
+                return new ShaderResourceView(ResourceManager.Instance().Device, texture);
             }
             catch (Exception e)
             {
-                Log.Warning("ImageOutputCanvas::DrawTexture(...) - Could not create ShaderResourceView for texture.");
+                Log.Warning("SrvManager::CreateNewSrv(...) - Could not create ShaderResourceView for texture.");
                 Log.Warning(e.Message);
                 return null;
             }
-            return srv;
         }
 
         
