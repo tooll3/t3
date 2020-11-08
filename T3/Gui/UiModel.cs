@@ -20,6 +20,7 @@ using T3.Gui.InputUi;
 using T3.Gui.InputUi.SingleControl;
 using T3.Gui.OutputUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Gui
 {
@@ -143,7 +144,10 @@ namespace T3.Gui
 
             // custom sharp dx types
             RegisterUiType(typeof(SharpDX.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
-                           () => new Vector4ArrayOutputUi());
+                           () => new ValueOutputUi<SharpDX.Vector4[]>());
+            
+            RegisterUiType(typeof(Point[]), new PointListUiProperties(),  () => new FallbackInputUi<Point[]>(),
+                           () => new PointArrayOutputUi());
             
             RegisterUiType(typeof(RenderTargetReference), new TextureUiProperties(),  () => new FallbackInputUi<RenderTargetReference>(),
                            () => new ValueOutputUi<RenderTargetReference>());

@@ -18,6 +18,7 @@ using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Point = T3.Core.DataTypes.Point;
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core
@@ -388,6 +389,10 @@ namespace T3.Core
             
             RegisterType(typeof(RenderTargetReference), "RenderTargetRef",
                          () => new InputValue<RenderTargetReference>());
+            
+            RegisterType(typeof(Point[]), "Point",
+                         () => new InputValue<Point[]>());
+
         }
 
         public static void RegisterType(Type type, string typeName,
