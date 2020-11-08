@@ -155,7 +155,7 @@ namespace T3.Gui.Interaction
                 if (_state == States.WaitingInNeutral)
                 {
                     _state = States.Manipulating;
-                    if (dialRatio > 0.75f)
+                    if (dialRatio > 0.75f && _originalValue >= 0)
                     {
                         var ratioForOriginalValue = _originalValue / Pow;
                         if (ratioForOriginalValue < 0.5f)
