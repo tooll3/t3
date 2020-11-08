@@ -6,19 +6,13 @@ using UiHelpers;
 
 namespace T3.Gui.ChildUi.Animators
 {
-    public static class AnimatorLabel
+    public static class RateEditLabel
     {
         public static bool Draw(ref float rate, ImRect selectableScreenRect, ImDrawListPtr drawList,  string nodeLabel)
         {
             var modified = false;
             var h = selectableScreenRect.GetHeight();
-            // Draw Type label
-            if (h > 30)
-            {
-                ImGui.PushFont(Fonts.FontSmall);
-                drawList.AddText(selectableScreenRect.Min + new Vector2(4, 2), Color.White, nodeLabel);
-                ImGui.PopFont();
-            }
+            
 
             // Draw Rate Label
             var font = h > 33
@@ -38,13 +32,17 @@ namespace T3.Gui.ChildUi.Animators
             drawList.AddText(new Vector2(selectableScreenRect.Min.X + 3, selectableScreenRect.Max.Y - labelSize.Y), Color.White, label);
             ImGui.PopFont();
 
+            var isActive = false;
+            var editUnlocked = ImGui.GetIO().KeyCtrl;
+            //var highlight = editUnlocked;
+            
             // Speed Interaction
             var speedRect = selectableScreenRect;
             speedRect.Max.X = speedRect.Min.X +  speedRect.GetWidth() * 0.2f;
             ImGui.SetCursorScreenPos(speedRect.Min);
 
-            var isActive = false;
-            if (ImGui.GetIO().KeyCtrl)
+            
+            if (editUnlocked)
             {
                 ImGui.InvisibleButton("rateButton", speedRect.GetSize());
                 if (ImGui.IsItemHovered())
@@ -55,7 +53,6 @@ namespace T3.Gui.ChildUi.Animators
                 isActive = ImGui.IsItemActive();
             }
             
-
             if (isActive && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
                 var dragDelta = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 1);
@@ -76,6 +73,16 @@ namespace T3.Gui.ChildUi.Animators
                 }
             }
 
+            var highlight = editUnlocked && (isActive  || !ImGui.IsAnyItemActive());
+            
+            // Draw Type label
+            if (h > 30)
+            {
+                ImGui.PushFont(Fonts.FontSmall);
+                drawList.AddText(selectableScreenRect.Min + new Vector2(4, 2), highlight ? T3Style.ValueLabelColorHover : T3Style.ValueLabelColor, nodeLabel);
+                ImGui.PopFont();
+            }
+            
             return modified;
         }
     }

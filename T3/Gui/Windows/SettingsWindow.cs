@@ -78,6 +78,9 @@ namespace T3.Gui.Windows
                 ImGui.DragFloat("Input Slot Margin Y", ref GraphNode.InputSlotMargin, 0.1f, 0, 10f);
                 ImGui.DragFloat("Input Slot Thickness", ref GraphNode.InputSlotThickness, 0.1f, 0, 10f);
                 ImGui.DragFloat("Output Slot Margin", ref GraphNode.OutputSlotMargin, 0.1f, 0, 10f);
+
+                ImGui.ColorEdit4("ValueLabelColor", ref T3Style.ValueLabelColor.Rgba);
+                ImGui.ColorEdit4("ValueLabelColorHover", ref T3Style.ValueLabelColorHover.Rgba);
                 ImGui.TreePop();
             }
             if (ImGui.TreeNode("ImGui Styles"))

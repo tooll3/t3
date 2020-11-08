@@ -30,10 +30,10 @@ namespace T3.Gui.ChildUi
             graphRect.Min.Y = center.Y - size.Y * 0.15f;
             graphRect.Max.Y = center.Y + size.Y * 0.15f;
 
-            ValueLabel.Draw(drawList, screenRect, new Vector2(GraphRangePadding / 2, 0), remap.RangeInMin, Color.White);
-            ValueLabel.Draw(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 0), remap.RangeInMax, Color.White);
-            ValueLabel.Draw(drawList, screenRect, new Vector2(GraphRangePadding / 2, 1), remap.RangeOutMin, Color.White);
-            ValueLabel.Draw(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 1), remap.RangeOutMax, Color.White);
+            ValueLabel.Draw(drawList, screenRect, new Vector2(GraphRangePadding / 2, 0), remap.RangeInMin);
+            ValueLabel.Draw(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 0), remap.RangeInMax);
+            ValueLabel.Draw(drawList, screenRect, new Vector2(GraphRangePadding / 2, 1), remap.RangeOutMin);
+            ValueLabel.Draw(drawList, screenRect, new Vector2(1 - GraphRangePadding / 2, 1), remap.RangeOutMax);
 
             // Draw interaction
             ImGui.SetCursorScreenPos(graphRect.Min);
@@ -63,17 +63,17 @@ namespace T3.Gui.ChildUi
             // Horizontal line
             var lhMin = graphRect.Min + Vector2.UnitY * h / 2;
             var lhMax = new Vector2(graphRect.Max.X, lhMin.Y + 1);
-            drawList.AddRectFilled(lhMin, lhMax, GraphLineColor);
+            drawList.AddRectFilled(lhMin, lhMax, T3Style.GraphAxisColor);
 
             // Vertical start line
             var lv1Min = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * GraphRangePadding);
             var lv1Max = new Vector2(lv1Min.X + 1, graphRect.Max.Y);
-            drawList.AddRectFilled(lv1Min, lv1Max, GraphLineColor);
+            drawList.AddRectFilled(lv1Min, lv1Max, T3Style.GraphAxisColor);
 
             // Vertical end line
             var lv2Min = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * (1 - GraphRangePadding));
             var lv2Max = new Vector2(lv2Min.X + 1, graphRect.Max.Y);
-            drawList.AddRectFilled(lv2Min, lv2Max, GraphLineColor);
+            drawList.AddRectFilled(lv2Min, lv2Max, T3Style.GraphAxisColor);
 
             var inputX = MathUtils.Lerp(lv1Min.X, lv2Min.X, inFragment);
             GraphLinePoints[0].X = inputX;
@@ -103,9 +103,7 @@ namespace T3.Gui.ChildUi
         }
 
         private const float TriangleSize = 4;
-
-
-        private static readonly Color GraphLineColor = new Color(0, 0, 0, 0.3f);
+        
         private static readonly Vector2[] GraphLinePoints = new Vector2[4];
     }
 }

@@ -82,18 +82,18 @@ namespace T3.Gui.ChildUi.Animators
             // horizontal line
             var lh1 = graphRect.Min + Vector2.UnitY * h / 2;
             var lh2 = new Vector2(graphRect.Max.X, lh1.Y + 1);
-            drawList.AddRectFilled(lh1, lh2, GraphLineColor);
+            drawList.AddRectFilled(lh1, lh2, T3Style.GraphAxisColor);
 
             // Vertical start line
             var lv1 = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * 0.1f + 0.5f);
 
             var lv2 = new Vector2(lv1.X + 1, graphRect.Max.Y);
-            drawList.AddRectFilled(lv1, lv2, GraphLineColor);
+            drawList.AddRectFilled(lv1, lv2, T3Style.GraphAxisColor);
 
             // Fragment line 
             var width = graphRect.GetWidth() - (lv1.X - graphRect.Min.X); //h * (GraphWidthRatio - leftPaddingH);
             var dx = new Vector2(fragment * width - 1, 0);
-            drawList.AddRectFilled(lv1 + dx, lv2 + dx, FragmentLineColor);
+            drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.FragmentLineColor);
 
             // Draw graph
             //        lv
@@ -115,7 +115,7 @@ namespace T3.Gui.ChildUi.Animators
             GraphLinePoints[3].X = graphRect.Max.X + 1;
             GraphLinePoints[3].Y = y;
 
-            var curveLineColor = isActive && _dragState == DragMode.DraggingHorizontally ? Color.Red : CurveLineColor;
+            var curveLineColor = isActive && _dragState == DragMode.DraggingHorizontally ? T3Style.GraphLineColorHover : T3Style.GraphLineColor;
             drawList.AddPolyline(ref GraphLinePoints[0], 4, curveLineColor, false, 1);
 
             // Draw offset label
@@ -147,11 +147,8 @@ namespace T3.Gui.ChildUi.Animators
             DraggingVertically,
             DraggingHorizontally,
         }
-
-        private static readonly Color GraphLineColor = new Color(0, 0, 0, 0.3f);
-        private static readonly Color FragmentLineColor = Color.Orange;
-        private static readonly Color CurveLineColor = new Color(1, 1, 1, 0.5f);
-        private const float JumpDistanceDragScale = 1.05f;
+        
+        //private static readonly Color CurveLineColor = new Color(1, 1, 1, 0.5f);
 
         private static readonly Vector2[] GraphLinePoints = new Vector2[4];
     }

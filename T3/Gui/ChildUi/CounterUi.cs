@@ -20,7 +20,7 @@ namespace T3.Gui.ChildUi
                 return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
-            if (AnimatorLabel.Draw(ref counter.Rate.TypedInputValue.Value,
+            if (RateEditLabel.Draw(ref counter.Rate.TypedInputValue.Value,
                                    screenRect, drawList, nameof(counter)))
             {
                 counter.Rate.Input.IsDefault = false;

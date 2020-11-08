@@ -14,6 +14,16 @@ namespace T3.Gui
     public static class T3Style
     {
         public static Color ConnectedParameterColor = new Color(0.6f, 0.6f, 1f, 1f);
+        public static Color ValueLabelColor = new Color(1, 1, 1, 0.5f);
+        public static Color ValueLabelColorHover = new Color(1, 1, 1, 1.2f);
+        
+        public static Color GraphLineColor = new Color(1, 1, 1, 0.3f);
+        public static Color GraphLineColorHover = new Color(1, 1, 1, 0.7f);
+        
+        public static Color GraphAxisColor = new Color(0, 0, 0, 0.3f);
+
+        public static readonly Color FragmentLineColor = Color.Orange;
+        
         public static float ToolBarHeight = 25; 
 
         public static void Apply()

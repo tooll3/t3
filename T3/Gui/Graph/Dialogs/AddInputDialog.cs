@@ -76,6 +76,13 @@ namespace T3.Gui.Graph.Dialogs
                 {
                     NodeOperations.AddInputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
                     // NodeOperations.AddOutputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
+                    var symbolUi = SymbolUiRegistry.Entries[symbol.Id];
+                    var inputUi = symbolUi.InputUis.Values.SingleOrDefault(i => i.InputDefinition.Name == _parameterName);
+                    if (inputUi is FloatInputUi floatInputUi)
+                    {
+                        floatInputUi.Min = -1;
+                        floatInputUi.Max = 42;
+                    }
                 }
 
                 ImGui.SameLine();
