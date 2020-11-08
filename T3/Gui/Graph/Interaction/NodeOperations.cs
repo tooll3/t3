@@ -537,7 +537,7 @@ namespace T3.Gui.Graph.Interaction
                 {
                     operatorResource.OperatorAssembly = newAssembly;
                     operatorResource.Updated = true;
-                    symbol.SourcePath = string.Empty;
+                    symbol.SourcePath = String.Empty;
                     symbol.PendingSource = newSource;
                     symbol.DeprecatedSourcePath = originalPath;
                     return;
@@ -562,9 +562,9 @@ namespace T3.Gui.Graph.Interaction
 
         public static bool IsNewSymbolNameValid(string newSymbolName)
         {
-            return !string.IsNullOrEmpty(newSymbolName)
+            return !String.IsNullOrEmpty(newSymbolName)
                    && ValidTypeNamePattern.IsMatch(newSymbolName)
-                   && !SymbolRegistry.Entries.Values.Any(value => string.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase));
+                   && !SymbolRegistry.Entries.Values.Any(value => String.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase));
         }
 
         private static readonly Regex ValidTypeNamePattern = new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
@@ -889,7 +889,7 @@ namespace T3.Gui.Graph.Interaction
         private static SyntaxTree GetSyntaxTree(Symbol symbol)
         {
             string source = symbol.PendingSource; // there's intermediate source, so use this
-            if (string.IsNullOrEmpty(source))
+            if (String.IsNullOrEmpty(source))
             {
                 string path = @"Operators\Types\" + symbol.Name + ".cs";
                 try
@@ -904,13 +904,29 @@ namespace T3.Gui.Graph.Interaction
                 }
             }
 
-            if (string.IsNullOrEmpty(source))
+            if (String.IsNullOrEmpty(source))
             {
                 Log.Info("Source was empty, skip compilation.");
                 return null;
             }
 
             return CSharpSyntaxTree.ParseText(source);
+        }
+
+        public static IEnumerable<Instance> GetParentInstances(Instance compositionOp, bool includeChildInstance = false)
+        {
+            var parents = new List<Instance>();
+            var op = compositionOp;
+            if (includeChildInstance)
+                parents.Add(op);
+
+            while (op.Parent != null)
+            {
+                op = op.Parent;
+                parents.Insert(0, op);
+            }
+
+            return parents;
         }
     }
 }

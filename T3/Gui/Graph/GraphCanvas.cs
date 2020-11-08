@@ -362,25 +362,9 @@ namespace T3.Gui.Graph
             }
         }
 
-        public static IEnumerable<Instance> GetParents(Instance compositionOp, bool includeCompositionOp = false)
-        {
-            var parents = new List<Instance>();
-            var op = compositionOp;
-            if (includeCompositionOp)
-                parents.Add(op);
-
-            while (op.Parent != null)
-            {
-                op = op.Parent;
-                parents.Insert(0, op);
-            }
-
-            return parents;
-        }
-
         public IEnumerable<Symbol> GetParentSymbols()
         {
-            return GetParents(CompositionOp, includeCompositionOp: true).Select(p => p.Symbol);
+            return NodeOperations.GetParentInstances(CompositionOp, includeChildInstance: true).Select(p => p.Symbol);
         }
 
         private void FocusViewToSelection()

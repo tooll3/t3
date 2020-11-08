@@ -80,6 +80,20 @@ namespace T3.Gui.Graph
         private static int _instanceCounter;
         public static readonly List<Window> GraphWindowInstances = new List<Window>();
 
+        public static IEnumerable<GraphWindow> GetVisibleInstances()
+        {
+            foreach (var i in GraphWindowInstances)
+            {
+                if (!(i is GraphWindow graphWindow))
+                    continue;
+                
+                if (!i.Config.Visible)
+                    continue;
+
+                yield return graphWindow;
+            }
+        }
+        
         public override List<Window> GetInstances()
         {
             return GraphWindowInstances;
@@ -257,7 +271,7 @@ namespace T3.Gui.Graph
             public static void DrawBreadcrumbs(Instance compositionOp)
             {
                 ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
-                IEnumerable<Instance> parents = GraphCanvas.GetParents(compositionOp);
+                IEnumerable<Instance> parents = NodeOperations.GetParentInstances(compositionOp);
 
                 ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
                 ImGui.PushFont(Fonts.FontSmall);

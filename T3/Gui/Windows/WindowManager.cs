@@ -216,6 +216,7 @@ namespace T3.Gui.Windows
             }
         }
 
+        
         private IEnumerable<GraphWindow> GetGraphWindows()
         {
             foreach (var w in _windows)

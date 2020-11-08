@@ -107,7 +107,7 @@ namespace T3.Gui.Windows.TimeLine
             _nestedTimeScale = 1f;
             _nestedTimeOffset = 0f;
 
-            var parents = GraphCanvas.GetParents(compositionOp).Reverse().ToList();
+            var parents = NodeOperations.GetParentInstances(compositionOp).Reverse().ToList();
             parents.Add(compositionOp);
             foreach (var p in parents)
             {
