@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using SharpDX;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Interfaces;
@@ -76,7 +77,7 @@ namespace T3.Core.Operator
             On = 1,
         }
 
-        public VariationSetup VariationSetup { get; } = new VariationSetup();
+        public Dictionary<Variator.VariationId, VariationSelector> VariationOverwrites { get; } = new Dictionary<Variator.VariationId, VariationSelector>();
         
         public ParticleSystem ParticleSystem;
     }

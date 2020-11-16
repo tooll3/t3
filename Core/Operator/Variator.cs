@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator
 {
-    public class VariationSetup
+    public class VariationSelector
     {
         public int Index1 { get; set; } = 0;
         public int Index2 { get; set; } = 0;
@@ -14,7 +14,7 @@ namespace T3.Core.Operator
 
     public class Variator : SymbolExtension
     {
-        struct VariationId
+        public struct VariationId
         {
             public VariationId(Guid instanceId, Guid inputId, int index = 0)
             {
@@ -30,6 +30,7 @@ namespace T3.Core.Operator
 
             public readonly Guid InstanceId;
             public readonly Guid InputId;
+            public static VariationId EmptySet = new VariationId(Guid.Empty, Guid.Empty);
         }
 
         public void AddVariationTo(IInputSlot inputSlot)
@@ -40,7 +41,11 @@ namespace T3.Core.Operator
                 newVariation.Values.Add(floatInputSlot.Value + 5.0f); // for testing
                 _inputVariations.Add(new VariationId(inputSlot), newVariation);
 
-                floatInputSlot.UpdateAction = context => { floatInputSlot.Value = newVariation.GetVariedValue(context.VariationSetup); };
+                floatInputSlot.UpdateAction = context =>
+                                              {
+                                                  context.VariationOverwrites.TryGetValue(VariationId.EmptySet, out var selector);
+                                                  floatInputSlot.Value = newVariation.GetVariedValue(selector);
+                                              };
                 floatInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
         }
@@ -57,10 +62,7 @@ namespace T3.Core.Operator
 
         public Variation GetVariationForInput(IInputSlot inputSlot)
         {
-            if (_inputVariations.TryGetValue(new VariationId(inputSlot), out var variation))
-                return variation;
-
-            return null;
+            return _inputVariations.TryGetValue(new VariationId(inputSlot), out var variation) ? variation : null;
         }
 
         public class Variation
@@ -72,9 +74,12 @@ namespace T3.Core.Operator
 
             public List<float> Values { get; } = new List<float>(10);
 
-            public float GetVariedValue(VariationSetup setup)
+            public float GetVariedValue(VariationSelector selector)
             {
-                return GetBlendedValue(setup.Index1, setup.Index2, setup.Weight);
+                if (selector == null)
+                    selector = Selector;
+
+                return GetBlendedValue(selector.Index1, selector.Index2, selector.Weight);
             }
 
             public float GetBlendedValue(int index1, int index2, float weight)
@@ -85,6 +90,8 @@ namespace T3.Core.Operator
 
                 return MathUtils.Lerp(Values[index1], Values[index2], weight);
             }
+
+            public VariationSelector Selector { get; } = new VariationSelector();
         }
 
         private readonly Dictionary<VariationId, Variation> _inputVariations = new Dictionary<VariationId, Variation>(20);
