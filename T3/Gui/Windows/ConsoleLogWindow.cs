@@ -33,6 +33,10 @@ namespace T3.Gui.Windows
                         _logEntries.RemoveAt(0);
                     }
                 }
+                
+                //ImGui.Text(_isAtBottom ? "Bottom!": "Not at bottom");
+                CustomComponents.ToggleButton("Scroll", ref _shouldScrollToBottom, Vector2.Zero);
+                ImGui.SameLine();
 
                 ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
                 if (ImGui.Button("Clear"))
@@ -97,12 +101,17 @@ namespace T3.Gui.Windows
                         }
                     }
                     ImGui.TextColored(Color.Gray, "---");    // Indicator for end
+                    ImGui.TextColored(Color.Gray, "");
                     if (_shouldScrollToBottom)
                     {
                         ImGui.SetScrollY(ImGui.GetScrollMaxY()+ ImGui.GetFrameHeight()  );
-                        _shouldScrollToBottom = false;
+                        //_shouldScrollToBottom = false;
+                        _isAtBottom = true;
                     }
-                    _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - ImGui.GetWindowHeight();
+                    else
+                    {
+                        _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - ImGui.GetWindowHeight();
+                    }
                 }
                 ImGui.EndChild();
             }
@@ -153,6 +162,7 @@ namespace T3.Gui.Windows
         
         public LogEntry.EntryLevel Filter { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        
         private bool FilterIsActive => !string.IsNullOrEmpty(_filterString);
         private const float LinePadding = 3;
         private List<LogEntry> _logEntries = new List<LogEntry>();

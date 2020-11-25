@@ -99,9 +99,9 @@ namespace T3.Gui
             var clicked = false;
             if (isSelected)
             {
-                ImGui.PushStyleColor(ImGuiCol.Button, Color.Red.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Button, Color.Gray.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Gray.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Gray.Rgba);
             }
 
             if (ImGui.Button(label, size) || trigger)
@@ -326,37 +326,37 @@ namespace T3.Gui
                                                   Color.White);
         }
 
-        public static void ToggleButton(string str_id, ref bool v)
-        {
-            var p = ImGui.GetCursorScreenPos();
-            var drawList = ImGui.GetWindowDrawList();
-
-            var height = ImGui.GetFrameHeight();
-            var width = height * 1.55f;
-            var radius = height * 0.50f;
-
-            ImGui.InvisibleButton(str_id, new Vector2(width, height));
-            if (ImGui.IsItemClicked())
-                v = !v;
-
-            var t = v ? 1.0f : 0.0f;
-
-            //ImGuiContext & g = *GImGui;
-            //var g = ImGui.GetCurrentContext();
-            //float ANIM_SPEED = 0.08f;
-            //if (g.LastActiveId == g.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
-            //{
-            //    float t_anim = ImSaturate(g.LastActiveIdTimer / ANIM_SPEED);
-            //    t = v ? (t_anim) : (1.0f - t_anim);
-            //}
-
-            var colBg = ImGui.IsItemHovered()
-                            ? Color.White
-                            : Color.Red;
-
-            drawList.AddRectFilled(p, new Vector2(p.X + width, p.Y + height), colBg, height * 0.5f);
-            drawList.AddCircleFilled(new Vector2(p.X + radius + t * (width - radius * 2.0f), p.Y + radius), radius - 1.5f, Color.White);
-        }
+        // public static void ToggleButton(string str_id, ref bool v)
+        // {
+        //     var p = ImGui.GetCursorScreenPos();
+        //     var drawList = ImGui.GetWindowDrawList();
+        //
+        //     var height = ImGui.GetFrameHeight();
+        //     var width = height * 1.55f;
+        //     var radius = height * 0.50f;
+        //
+        //     ImGui.InvisibleButton(str_id, new Vector2(width, height));
+        //     if (ImGui.IsItemClicked())
+        //         v = !v;
+        //
+        //     var t = v ? 1.0f : 0.0f;
+        //
+        //     //ImGuiContext & g = *GImGui;
+        //     //var g = ImGui.GetCurrentContext();
+        //     //float ANIM_SPEED = 0.08f;
+        //     //if (g.LastActiveId == g.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
+        //     //{
+        //     //    float t_anim = ImSaturate(g.LastActiveIdTimer / ANIM_SPEED);
+        //     //    t = v ? (t_anim) : (1.0f - t_anim);
+        //     //}
+        //
+        //     var colBg = ImGui.IsItemHovered()
+        //                     ? Color.White
+        //                     : Color.Red;
+        //
+        //     drawList.AddRectFilled(p, new Vector2(p.X + width, p.Y + height), colBg, height * 0.5f);
+        //     drawList.AddCircleFilled(new Vector2(p.X + radius + t * (width - radius * 2.0f), p.Y + radius), radius - 1.5f, Color.White);
+        // }
 
         public static void EmptyWindowMessage(string message)
         {
