@@ -16,6 +16,7 @@ using UiHelpers;
 
 namespace T3.Gui.Graph
 {
+    
     /// <summary>Rendering a node graph</summary>
     /// <remarks>
     /// Rendering the graph is complicated because:
@@ -40,13 +41,15 @@ namespace T3.Gui.Graph
     ///</remarks>
     public static class Graph
     {
+        
         public static void DrawGraph(ImDrawListPtr drawList)
         {
             DrawList = drawList;
 
             var graphSymbol = GraphCanvas.Current.CompositionOp.Symbol;
-            var allConnections = new List<Symbol.Connection>(graphSymbol.Connections);
-            allConnections.AddRange(ConnectionMaker.TempConnections);
+            AllConnections.Clear();
+            AllConnections.AddRange(graphSymbol.Connections);
+            AllConnections.AddRange(ConnectionMaker.TempConnections);
 
             var children = GraphCanvas.Current.CompositionOp.Children;
 
@@ -59,7 +62,7 @@ namespace T3.Gui.Graph
             Connections.Init();
 
             // 2. Collect which nodes are connected to which lines
-            foreach (var c in allConnections)
+            foreach (var c in AllConnections)
             {
                 Connections.CreateAndSortLineUi(c);
             }
@@ -335,5 +338,9 @@ namespace T3.Gui.Graph
         private static SymbolUi _symbolUi;
         private static OrderedDictionary<Guid, IOutputUi> _outputUisById;
         private static OrderedDictionary<Guid, IInputUi> _inputUisById;
+        
+        // Try to avoid allocations
+        private static readonly List<Symbol.Connection> AllConnections = new  List<Symbol.Connection>(100);
+
     }
 }
