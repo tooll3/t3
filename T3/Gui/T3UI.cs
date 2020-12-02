@@ -14,10 +14,12 @@ using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
+using T3.Gui.Interaction.PresetControl;
 using T3.Gui.Interaction.Timing;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
+using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
 namespace T3.Gui
 {
@@ -35,7 +37,9 @@ namespace T3.Gui
 
         public void Draw()
         {
-            OpenedPopUpName = String.Empty;
+            OpenedPopUpName = string.Empty;
+            _presetSystem.Update();
+            
             SelectionManager.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             WindowManager.Draw();
@@ -157,6 +161,7 @@ namespace T3.Gui
         public static readonly UiModel UiModel;
         private static UserSettings _userSettings;
         private static ProjectSettings _projectSettings;
+        private static PresetSystem _presetSystem = new PresetSystem();
         public static readonly BeatTiming BeatTiming;
         public static readonly WindowManager WindowManager;
         public static string OpenedPopUpName;    // This is reset on Frame start and can be useful for allow context menu to stay open even if a

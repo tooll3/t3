@@ -142,6 +142,10 @@
       <HintPath>..\packages\Microsoft.CodeAnalysis.Scripting.Common.3.3.1\lib\netstandard2.0\Microsoft.CodeAnalysis.Scripting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -398,6 +402,9 @@
     <Compile Include="Gui\Interaction\CameraInteraction.cs" />
     <Compile Include="Gui\Interaction\ColorEditButton.cs" />
     <Compile Include="Gui\Interaction\JogDialOverlay.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\InputCommands\PresetCommand.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Midi\MidiDevice.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\PresetSystem.cs" />
     <Compile Include="Gui\Interaction\Timing\BeatTiming.cs" />
     <Compile Include="Gui\Interaction\Timing\BeatTimingPlayback.cs" />
     <Compile Include="Gui\Interaction\Timing\BpmDetection.cs" />
