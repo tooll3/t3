@@ -113,6 +113,7 @@
     <Compile Include="DataTypes\IEditableInputType.cs" />
     <Compile Include="DataTypes\ParticleSystem.cs" />
     <Compile Include="DataTypes\Point.cs" />
+    <Compile Include="DataTypes\PointLightStack.cs" />
     <Compile Include="DataTypes\RenderTargetReference.cs" />
     <Compile Include="Logging\ConsoleWriter.cs" />
     <Compile Include="Logging\ILogWriter.cs" />

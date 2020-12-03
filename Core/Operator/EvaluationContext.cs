@@ -18,6 +18,7 @@ namespace T3.Core.Operator
         public void Reset()
         {
             TimeInBars = GlobalTimeInBars;
+            PointLights.Clear();
         }
 
         public void SetViewFromCamera(ICamera camera)
@@ -48,9 +49,7 @@ namespace T3.Core.Operator
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
         public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000.0;
         public static double GlobalTimeInBars { get; set; }
-        //public Buffer _fogParameters = null;
-        public Buffer FogParameters { get; set; }
-
+        
         /// <summary>
         /// The primary time used for user interactions and keyframe manipulation.
         /// This is where there time marker in the timeline is displayed. 
@@ -71,6 +70,10 @@ namespace T3.Core.Operator
         public Matrix CameraToClipSpace { get; set; } = Matrix.Identity;
         public Matrix WorldToCamera { get; set; } = Matrix.Identity;
         public Matrix ObjectToWorld { get; set; } = Matrix.Identity;
+        
+        public Buffer FogParameters { get; set; }
+        public PointLightStack PointLights { get; } = new PointLightStack();
+
         public GizmoVisibility ShowGizmos { get; set; }
 
         public enum GizmoVisibility
