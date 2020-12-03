@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using SharpDX;
+using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Interfaces;
 using Vector3 = SharpDX.Vector3;
@@ -47,6 +48,8 @@ namespace T3.Core.Operator
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
         public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000.0;
         public static double GlobalTimeInBars { get; set; }
+        //public Buffer _fogParameters = null;
+        public Buffer FogParameters { get; set; }
 
         /// <summary>
         /// The primary time used for user interactions and keyframe manipulation.

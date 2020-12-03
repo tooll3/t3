@@ -423,6 +423,7 @@
     <Compile Include="Gui\OutputUi\FloatOutputUi.cs" />
     <Compile Include="Gui\OutputUi\StringListOutputUi.cs" />
     <Compile Include="Gui\OutputUi\PointArrayOutputUi.cs" />
+    <Compile Include="Gui\PresetControl\PresetDevice.cs" />
     <Compile Include="Gui\Selection\SelectionManager.cs" />
     <Compile Include="Gui\Styling\CustomComponents.cs" />
     <Compile Include="Gui\InputUi\IInputUi.cs" />
