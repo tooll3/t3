@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using NAudio.Midi;
+using T3.Core.Logging;
 using T3.Gui.Interaction.PresetControl.InputCommands;
 using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
 namespace T3.Gui.Interaction.PresetControl.Midi
 {
-    public abstract class MidiDevice : IControllerInputDevice, MidiConnectionManager.IMidiConsumer
+    public abstract class MidiDevice : IControllerInputDevice, MidiInConnectionManager.IMidiConsumer
     {
         public MidiDevice()
         {
-            MidiConnectionManager.RegisterConsumer(this);
+            MidiInConnectionManager.RegisterConsumer(this);
         }
 
         /// <summary>
@@ -22,29 +23,34 @@ namespace T3.Gui.Interaction.PresetControl.Midi
         /// - adjust display to indicate valid key combinations, e.g. highlight preset buttons valid for deletion
         /// - enforce an order for valid commands (e.g. CUE+P01+P02  CUE+P02+01) 
         /// </remarks>
-        public void Update(PresetSystem manager)
+        public virtual void Update(PresetSystem manager, MidiIn midiIn)
         {
             ProcessSignals();
 
             var isAnyButtonPressed = _signalsForNextCommand.Values.Any(signal => signal.IsPressed);
-            
+
             if (!_buttonCombinationStarted || isAnyButtonPressed)
                 return;
-            
-            foreach (var ctc in CommandTriggerCombinations)
-            {
-                var command = ctc.MatchesCommandPresses(_signalsForNextCommand.Values.ToList());
-                if (command == null)
-                    continue;
 
-                if (command.IsInstant)
-                    command.ExecuteOnce(manager);
+            if (CommandTriggerCombinations != null)
+            {
+                foreach (var ctc in CommandTriggerCombinations)
+                {
+                    var command = ctc.MatchesCommandPresses(_signalsForNextCommand.Values.ToList());
+                    if (command == null)
+                        continue;
+
+                    if (command.IsInstant)
+                        command.ExecuteOnce(manager);
+                }
             }
 
             _signalsForNextCommand.Clear();
 
             _buttonCombinationStarted = false;
         }
+
+        public abstract int GetProductNameHash();
 
         private void ProcessSignals()
         {
@@ -212,7 +218,6 @@ namespace T3.Gui.Interaction.PresetControl.Midi
         }
         #endregion
 
-
         protected class ButtonSignal
         {
             public int ControllerId;
@@ -224,8 +229,100 @@ namespace T3.Gui.Interaction.PresetControl.Midi
         }
     }
 
-    public class Apc40Device : MidiDevice
+    public class ApcMiniDevice : MidiDevice
     {
+        private static int _currentPresetIndex = 0;
+        private static int _pageIndex = 0;
+
+        public override void Update(PresetSystem manager, MidiIn midiIn)
+        {
+            base.Update(manager, midiIn);
+            SendStatusToApc();
+        }
+
+        private void SendStatusToApc()
+        {
+            //var midiOut = ApcMiniController.GetConnectedController();
+            var midiOut = MidiOutConnectionManager.GetConnectedController(_productNameHash);
+            if (midiOut == null)
+                return;
+
+            UpdatePresetLeds(midiOut);
+            UpdatePageLeds(midiOut);
+        }
+
+        private const int PRESET_ROWS = 7;
+        private const int PRESET_COLUMNS = 8;
+        private const int PAGE_PRESET_COUNT = PRESET_COLUMNS * PRESET_ROWS;
+
+        private readonly int _productNameHash = "APC MINI".GetHashCode();
+
+        public override int GetProductNameHash()
+        {
+            return _productNameHash;
+        }
+
+        private void UpdatePageLeds(MidiOut midiOut)
+        {
+            for (var i = 0; i < PRESET_COLUMNS; i++)
+            {
+                var isActivePresetInPage = i == _currentPresetIndex / PAGE_PRESET_COUNT;
+                var colorForInactivePage =
+                    isActivePresetInPage ? ApcButtonColor.RedBlinking : ApcButtonColor.Off;
+
+                var colorForActivePage = i == _pageIndex ? ApcButtonColor.Red : colorForInactivePage;
+                SendColor(midiOut, i, colorForActivePage);
+            }
+        }
+
+        private void UpdatePresetLeds(MidiOut midiOut)
+        {
+            var pageOffset = _pageIndex * PAGE_PRESET_COUNT;
+
+            for (var index = 0; index < PAGE_PRESET_COUNT; index++)
+            {
+                var apcButtonRow = index / PRESET_COLUMNS + 1;
+                var apcButtonColumn = index % PRESET_COLUMNS;
+                var apcButtonIndex = apcButtonRow * PRESET_COLUMNS + apcButtonColumn;
+
+                var presetIndex = index + pageOffset;
+                var isCurrentIndex = presetIndex == _currentPresetIndex;
+                //var p = TryLoadingPreset(presetIndex);
+
+                //                    Log.Debug("isCurrent " + presetIndex + " ==" + _currentPresetIndex + " " + isCurrentIndex);
+
+                // var isValid = p != null;
+                // if (isValid)
+                // {
+                var colorForComplete = true ? ApcButtonColor.Green : ApcButtonColor.Yellow;
+                var colorForActive = isCurrentIndex ? ApcButtonColor.Red : colorForComplete;
+                //
+                SendColor(midiOut, apcButtonIndex, colorForActive);
+                // }
+                // else
+                // {
+                //     var colorForEmpty = isCurrentIndex ? ApcButtonColor.RedBlinking : ApcButtonColor.Off;
+                //     SendColor(midiOut, apcButtonIndex, colorForEmpty);
+                // }
+            }
+        }
+
+        private static void SendColor(MidiOut midiOut, int apcControlIndex, ApcButtonColor colorCode)
+        {
+            midiOut.Send(MidiMessage.StartNote(apcControlIndex, (int)colorCode, 1).RawData);
+            midiOut.Send(MidiMessage.StopNote(apcControlIndex, 0, 1).RawData);
+        }
+
+        private enum ApcButtonColor
+        {
+            Off,
+            Green,
+            GreenBlinking,
+            Red,
+            RedBlinking,
+            Yellow,
+            YellowBlinking,
+        }
     }
 
     public class NanoControl8 : MidiDevice
@@ -256,5 +353,12 @@ namespace T3.Gui.Interaction.PresetControl.Midi
         private static readonly ControllerRange NanoControlSolo1To8 = new ControllerRange(32, 32 + 7);
         private static readonly ControllerRange NanoControlMute1To8 = new ControllerRange(48, 48 + 7);
         private static readonly ControllerRange NanoControlR1To8 = new ControllerRange(64, 64 + 7);
+
+        public override int GetProductNameHash()
+        {
+            return _productNameHash;
+        }
+
+        private readonly int _productNameHash = "Korg NanoControl".GetHashCode(); //Todo: this needs the correct product name
     }
 }

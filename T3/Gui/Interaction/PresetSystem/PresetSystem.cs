@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using NAudio.Midi;
 using T3.Core.Operator;
 using T3.Gui.Interaction.PresetControl.Midi;
+using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
 namespace T3.Gui.Interaction.PresetControl
 {
@@ -23,9 +25,14 @@ namespace T3.Gui.Interaction.PresetControl
     {
         public PresetSystem()
         {
+            // Scan for output devices (e.g. to update LEDs etc.)
+            MidiOutConnectionManager.Init();
+            
+            // Get input devices
             _inputDevices = new List<IControllerInputDevice>()
                                 {
                                     new NanoControl8(),
+                                    new ApcMiniDevice(),
                                 };
         }
         
@@ -33,7 +40,12 @@ namespace T3.Gui.Interaction.PresetControl
         {
             foreach (var inputDevice in _inputDevices)
             {
-                inputDevice.Update(this);
+                // TODO: support generic input controllers with arbitrary DeviceId 
+                var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(inputDevice.GetProductNameHash());
+                if (midiIn == null)
+                    continue;
+                
+                inputDevice.Update(this, midiIn);
             }
         }
 
@@ -50,7 +62,8 @@ namespace T3.Gui.Interaction.PresetControl
     
     public interface IControllerInputDevice
     {
-        void Update(PresetSystem manager);
+        void Update(PresetSystem manager, MidiIn midiIn);
+        int GetProductNameHash();
     }
 
     public class PresetConfiguration

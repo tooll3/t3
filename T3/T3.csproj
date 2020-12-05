@@ -404,6 +404,7 @@
     <Compile Include="Gui\Interaction\JogDialOverlay.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\InputCommands\PresetCommand.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\MidiDevice.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Midi\MidiOutConnectionManager.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\PresetSystem.cs" />
     <Compile Include="Gui\Interaction\Timing\BeatTiming.cs" />
     <Compile Include="Gui\Interaction\Timing\BeatTimingPlayback.cs" />
