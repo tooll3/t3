@@ -2,25 +2,11 @@
 using System.Collections.Generic;
 using NAudio.Midi;
 using T3.Core.Operator;
-using T3.Gui.Interaction.PresetControl.Midi;
+using T3.Gui.Interaction.PresetSystem.Midi;
 using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
 namespace T3.Gui.Interaction.PresetControl
 {
-    /*
-    T3.UIFrameUpdate()
-     ControlInterfaceManager.Update()
-     - GetActiveComposition
-     - each Interface
-       Interface.Update(this) 
-        UiGraphInterface.Update(Manager)
-        - UpdateParameterVisualization
-        - UpdatePresetStatusVisualization
-        - CheckForCommands
-           
-           Command.Execute(Manager)
-    */
-
     public class PresetSystem
     {
         public PresetSystem()
@@ -34,6 +20,9 @@ namespace T3.Gui.Interaction.PresetControl
                                     new NanoControl8(),
                                     new ApcMiniDevice(),
                                 };
+            
+            // Adding dummy configuration
+            _presetConfigurationForCompositions[Guid.Empty] = new PresetConfiguration();
         }
         
         public void Update()
@@ -45,10 +34,26 @@ namespace T3.Gui.Interaction.PresetControl
                 if (midiIn == null)
                     continue;
                 
-                inputDevice.Update(this, midiIn);
+                inputDevice.Update(this, midiIn, ConfigForActiveComposition);
+            }
+        }
+        
+        
+        public void InitializeForComposition(Guid symbolId)
+        {
+            _presetConfigurationForCompositions[symbolId] = new PresetConfiguration(); // TODO: this should be deserialized
+        }
+
+        public PresetConfiguration ConfigForActiveComposition
+        {
+            get
+            {
+                _presetConfigurationForCompositions.TryGetValue(_activeCompositionId, out var config);
+                return config;
             }
         }
 
+        private Guid _activeCompositionId = Guid.Empty;
         private readonly List<IControllerInputDevice> _inputDevices;
 
         private Dictionary<Guid, PresetConfiguration> _presetConfigurationForCompositions =
@@ -56,17 +61,11 @@ namespace T3.Gui.Interaction.PresetControl
 
         public Instance ActiveComposition;
     }
-
-
-
     
     public interface IControllerInputDevice
     {
-        void Update(PresetSystem manager, MidiIn midiIn);
+        void Update(PresetSystem presetSystem, MidiIn midiIn, PresetConfiguration config);
         int GetProductNameHash();
     }
 
-    public class PresetConfiguration
-    {
-    }
 }
