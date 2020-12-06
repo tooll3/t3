@@ -2,6 +2,14 @@
 {
     public class Preset
     {
-        public bool IsPlaceholder;
+        public States State = States.InActive;
+
+        public enum States
+        {
+            Undefined,
+            InActive,
+            Active,
+            Modified,
+        }
     }
 }

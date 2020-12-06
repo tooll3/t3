@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NAudio.Midi;
-
 using T3.Gui.Interaction.PresetSystem.InputCommands;
 using T3.Gui.Interaction.PresetSystem.Model;
 using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
@@ -10,19 +9,11 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 {
     public abstract class MidiDevice : IControllerInputDevice, MidiInConnectionManager.IMidiConsumer
     {
-        public MidiDevice()
+        protected MidiDevice()
         {
             MidiInConnectionManager.RegisterConsumer(this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>
-        /// Mental notes / further ideas
-        /// - adjust display to indicate valid key combinations, e.g. highlight preset buttons valid for deletion
-        /// - enforce an order for valid commands (e.g. CUE+P01+P02  CUE+P02+01) 
-        /// </remarks>
         public virtual void Update(PresetSystem presetSystem, MidiIn midiIn, PresetContext context)
         {
             ProcessSignals();
@@ -51,8 +42,9 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         }
 
         public abstract int GetProductNameHash();
-        //public abstract PresetAddress GetAddressForIndex(int index);
 
+        // ------------------------------------------------------------------------------------
+        #region SignalProcessing
         private void ProcessSignals()
         {
             lock (_signalsSinceLastUpdate)
@@ -87,13 +79,9 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             lock (this)
             {
-                // if (!(sender is MidiIn midiIn) || msg.MidiEvent == null)
-                //     return;
-
                 if (msg.MidiEvent == null)
                     return;
 
-                //var device = MidiConnectionManager.GetDescriptionForMidiIn(midiIn);
                 ButtonSignal newSignal = null;
                 switch (msg.MidiEvent.CommandCode)
                 {
@@ -102,7 +90,6 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
                         if (msg.MidiEvent is NoteEvent noteEvent)
                         {
-                            //Log.Debug($"{msg.MidiEvent.CommandCode}   :{noteEvent.NoteNumber}");
                             newSignal = new ButtonSignal()
                                             {
                                                 Channel = noteEvent.Channel,
@@ -117,7 +104,6 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                     case MidiCommandCode.ControlChange:
                         if (msg.MidiEvent is ControlChangeEvent controlChangeEvent)
                         {
-                            //Log.Debug($"ControlChange/{controlChangeEvent.CommandCode}  Controller :{controlChangeEvent.Controller}  #{(int)controlChangeEvent.Controller} Value:{controlChangeEvent.ControllerValue}");
                             newSignal = new ButtonSignal()
                                             {
                                                 Channel = controlChangeEvent.Channel,
@@ -141,18 +127,43 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             //throw new NotImplementedException();
         }
+        #endregion
+
+        //---------------------------------------------------------------------------------
+        #region SendColors
+        protected delegate int ComputeColorForIndex(int index);
+
+        protected void UpdateRangeLeds(MidiOut midiOut, ButtonRange range, ComputeColorForIndex computeColorForIndex)
+        {
+            foreach (var buttonIndex in range.Indices())
+            {
+                var mappedIndex = range.GetMappedIndex(buttonIndex);
+                SendColor(midiOut, buttonIndex, computeColorForIndex(mappedIndex));
+            }
+        }
+
+        private static void SendColor(MidiOut midiOut, int apcControlIndex, int colorCode)
+        {
+            if (CacheControllerColors[apcControlIndex] == (int)colorCode)
+                return;
+
+            const int defaultChannel = 1;
+            var noteOnEvent = new NoteOnEvent(0, defaultChannel, apcControlIndex, (int)colorCode, 50);
+            midiOut.Send(noteOnEvent.GetAsShortMessage());
+
+            //Previous implementation from T2
+            //midiOut.Send(MidiMessage.StartNote(apcControlIndex, (int)colorCode, 1).RawData);
+            //midiOut.Send(MidiMessage.StopNote(apcControlIndex, 0, 1).RawData);
+            CacheControllerColors[apcControlIndex] = (int)colorCode;
+        }
+
+        private static readonly int[] CacheControllerColors = Enumerable.Repeat(-1, 256).ToArray();
 
         protected List<CommandTriggerCombination> CommandTriggerCombinations;
 
         private readonly Dictionary<int, ButtonSignal> _signalsForNextCommand = new Dictionary<int, ButtonSignal>();
         private readonly List<ButtonSignal> _signalsSinceLastUpdate = new List<ButtonSignal>();
         private bool _buttonCombinationStarted;
-
-        // ====================================================================
-        #region signal matching
- 
         #endregion
-
-
     }
 }

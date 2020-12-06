@@ -56,7 +56,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
             return Groups.Count <= index ? null : Groups[index];
         }
 
-        public ParameterGroup GetGroupAtAddress(PresetAddress address)
+        public ParameterGroup GetGroupForAddress(PresetAddress address)
         {
             return address.GroupColumn >= Groups.Count 
                        ? null 
@@ -108,9 +108,11 @@ namespace T3.Gui.Interaction.PresetSystem.Model
 
             Presets[address.GroupColumn, address.SceneRow] = preset;
         }
+
         #endregion
 
 
+        //----------------------------------------------------
         #region grip helpers
         private T[,] ResizeArray<T>(T[,] original, int x, int y)
         {
@@ -133,6 +135,6 @@ namespace T3.Gui.Interaction.PresetSystem.Model
             return localAddress - ViewWindow;
         }
         #endregion
-
+        
     }
 }

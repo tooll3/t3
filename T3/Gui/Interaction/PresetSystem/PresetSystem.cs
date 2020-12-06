@@ -186,7 +186,7 @@ namespace T3.Gui.Interaction.PresetSystem
             ActiveContext.ActiveGroupId = ActiveContext.Groups[index].Id;
         }
         
-        public void SavePresetAtIndex(Preset preset, int buttonRangeIndex)
+        public void SavePresetAtIndex(int buttonRangeIndex)
         {
             if (ActiveContext == null)
             {
@@ -195,8 +195,8 @@ namespace T3.Gui.Interaction.PresetSystem
             }
             
             var address = ActiveContext.GetAddressFromButtonIndex(buttonRangeIndex);
-            var groupForAddress = ActiveContext.GetGroupAtAddress(address);
-            if (groupForAddress == null)
+            var group = ActiveContext.GetGroupForAddress(address);
+            if (group == null)
             {
                 Log.Warning($"Can't save preset for undefined group at {address}");
                 return;
@@ -207,12 +207,14 @@ namespace T3.Gui.Interaction.PresetSystem
             {
                 ActiveContext.CreateSceneAt(address);
             }
-            
-            ActiveContext.SetPresetAt(new Preset(), address);
+
+            var newPreset = new Preset();
+            ActiveContext.SetPresetAt(newPreset, address);
+            group.SetActivePreset(newPreset);
             Log.Debug($"Saved preset at {address}");
         }
         
-        public void ApplyPresetAtIndex(int buttonRangeIndex)
+        public void ActivatePresetAtIndex(int buttonRangeIndex)
         {
             if (ActiveContext == null)
             {
@@ -227,18 +229,23 @@ namespace T3.Gui.Interaction.PresetSystem
                 Log.Info($"There is no preset at {address}");
                 return;
             }
+
+            var group = ActiveContext.GetGroupForAddress(address);
+            group.SetActivePreset(preset);
+
+            preset.State = Preset.States.Active;
             Log.Debug($"would apply preset at {address}");
         }
         
         #endregion
 
         /// <summary>
-        /// Is only changes by explicity user actions:
+        /// Is only changes by explicitly user actions:
         /// - switching to a composition with a preset context
         /// - creating a context (e.g. by added parameters to blending)
         /// - switching e.g. with the midi controllers 
         /// </summary>
-        public PresetContext ActiveContext { get; private set; }
+        private PresetContext ActiveContext { get; set; }
 
         private SymbolUi _nextCompositionUi;
         private SymbolChildUi _nextSymbolChildUi;

@@ -36,7 +36,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
             Log.Debug($"{this}.Execute({string.Join("", Indices)})");
             foreach (var index in Indices)
             {
-                presetSystem.SavePresetAtIndex(new Preset(), index);
+                presetSystem.SavePresetAtIndex(index);
             }
         }
     }
@@ -56,7 +56,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
                 Log.Error("Cant apply preset without valid indices");
                 return;
             }
-            presetSystem.ApplyPresetAtIndex(Indices[0]);
+            presetSystem.ActivatePresetAtIndex(Indices[0]);
         }
     }
     

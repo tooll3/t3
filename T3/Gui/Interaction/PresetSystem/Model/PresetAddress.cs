@@ -9,9 +9,9 @@
             IsValid = isValid;
         }
 
-        public int GroupColumn;
-        public int SceneRow;
-        public bool IsValid;
+        public readonly int GroupColumn;
+        public readonly int SceneRow;
+        public readonly bool IsValid;
 
         public bool IsValidForContext(PresetContext config)
         {
