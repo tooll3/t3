@@ -255,6 +255,18 @@ namespace T3.Gui
             ImGui.PopFont();
         }
 
+        /// <summary>
+        /// A small label that can be used to structure context menus
+        /// </summary>
+        public static void HintLabel(string label)
+        {
+            ImGui.PushFont(Fonts.FontSmall);
+            ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+            ImGui.Text(label);
+            ImGui.PopStyleColor();
+            ImGui.PopFont();
+        }
+
         public static void FillWithStripes(ImDrawListPtr drawList, ImRect areaOnScreen, float patternWidth = 16)
         {
             drawList.PushClipRect(areaOnScreen.Min, areaOnScreen.Max);

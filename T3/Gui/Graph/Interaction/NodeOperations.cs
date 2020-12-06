@@ -928,5 +928,17 @@ namespace T3.Gui.Graph.Interaction
 
             return parents;
         }
+
+        public static void InvalidateInputInAllSymbolInstances(Symbol compositionSymbol, IInputSlot inputSlot)
+        {
+            foreach (var compositionInstance in compositionSymbol.InstancesOfSymbol)
+            {
+                var instance =
+                    compositionInstance.Children.Single(c => c.SymbolChildId ==
+                                                             inputSlot.Parent.SymbolChildId);
+                var slot = instance.Inputs.Single(i => i.Id == inputSlot.Id);
+                slot.DirtyFlag.Invalidate();
+            }
+        }
     }
 }

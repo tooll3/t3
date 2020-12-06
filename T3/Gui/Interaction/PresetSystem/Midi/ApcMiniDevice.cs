@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NAudio.Midi;
-using T3.Core.Logging;
-using T3.Gui.Interaction.PresetControl;
 using T3.Gui.Interaction.PresetSystem.InputCommands;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
@@ -18,7 +16,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                                              };
         }
 
-        public override void Update(PresetControl.PresetSystem presetSystem, MidiIn midiIn, PresetConfiguration config)
+        public override void Update(PresetSystem presetSystem, MidiIn midiIn, PresetConfiguration config)
         {
             base.Update(presetSystem, midiIn, config);
 
@@ -27,7 +25,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                 return;
 
             UpdatePresetLeds(midiOut, config);
-            UpdatePageLeds(midiOut);
+            UpdateGroupLeds(midiOut, config);
         }
 
         public override int GetProductNameHash()
@@ -73,16 +71,24 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             }
         }
 
-        private void UpdatePageLeds(MidiOut midiOut)
+        private void UpdateGroupLeds(MidiOut midiOut, PresetConfiguration config)
         {
             for (var i = 0; i < PresetColumns; i++)
             {
-                var isActivePresetInPage = i == _currentPresetIndex / PagePresetCount;
-                var colorForInactivePage =
-                    isActivePresetInPage ? ApcButtonColor.RedBlinking : ApcButtonColor.Off;
+                var g = config.GetGroupAtIndex(i);
+                
+                // var isActivePresetInPage = i == _currentPresetIndex / PagePresetCount;
+                // var colorForInactivePage =
+                //     isActivePresetInPage ? ApcButtonColor.RedBlinking : ApcButtonColor.Off;
 
-                var colorForActivePage = i == _pageIndex ? ApcButtonColor.Red : colorForInactivePage;
-                SendColor(midiOut, i, colorForActivePage);
+                var isUndefined = g == null;
+                var color = isUndefined
+                                ? ApcButtonColor.Off
+                                : g.Id == config.ActiveGroupId
+                                    ? ApcButtonColor.Red
+                                    : ApcButtonColor.Yellow;
+                
+                SendColor(midiOut, i, color);
             }
         }
 

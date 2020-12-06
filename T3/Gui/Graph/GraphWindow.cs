@@ -94,6 +94,8 @@ namespace T3.Gui.Graph
             }
         }
         
+        
+        
         public override List<Window> GetInstances()
         {
             return GraphWindowInstances;

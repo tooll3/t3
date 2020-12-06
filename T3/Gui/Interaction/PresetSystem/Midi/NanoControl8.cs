@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using T3.Gui.Interaction.PresetControl;
 using T3.Gui.Interaction.PresetSystem.InputCommands;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi

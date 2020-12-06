@@ -1,14 +1,13 @@
 ﻿using T3.Core.Logging;
-using T3.Gui.Interaction.PresetControl;
 using T3.Gui.Interaction.PresetSystem.Midi;
 
 namespace T3.Gui.Interaction.PresetSystem.InputCommands
 {
     public abstract class InputCommand
     {
-        public abstract void ExecuteOnce(PresetControl.PresetSystem presetSystem, MidiDevice midiDevice);
+        public abstract void ExecuteOnce(PresetSystem presetSystem, MidiDevice midiDevice);
 
-        public bool UpdateExecution(PresetControl.PresetSystem presetSystem)
+        public bool UpdateExecution(PresetSystem presetSystem)
         {
             return true; // complete?
         }
@@ -31,7 +30,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
         {
         }
 
-        public override void ExecuteOnce(PresetControl.PresetSystem presetSystem, MidiDevice midiDevice)
+        public override void ExecuteOnce(PresetSystem presetSystem, MidiDevice midiDevice)
         {
             Log.Debug($"SavePresetCommand.Execute({Indices})");
             foreach (var index in Indices)
@@ -48,7 +47,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
         {
         }
 
-        public override void ExecuteOnce(PresetControl.PresetSystem presetSystem, MidiDevice midiDevice)
+        public override void ExecuteOnce(PresetSystem presetSystem, MidiDevice midiDevice)
         {
             Log.Debug($"ApplyPresetCommand.Execute({Indices})");
             // foreach (var index in Indices)
@@ -56,6 +55,19 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
             //     var address = MidiDevice.GetAddressForIndex(index);
             //     presetSystem.ConfigForActiveComposition.SetPresetAt(new Preset(), address);
             // }
+        }
+    }
+    
+    public class ActivateGroupCommand : ButtonsPressCommand
+    {
+        public ActivateGroupCommand(int[] indices) : base(indices)
+        {
+        }
+
+        public override void ExecuteOnce(PresetSystem presetSystem, MidiDevice midiDevice)
+        {
+            Log.Debug($"{this}.Execute({Indices})");
+
         }
     }
 }
