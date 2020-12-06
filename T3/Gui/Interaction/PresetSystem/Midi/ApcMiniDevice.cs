@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NAudio.Midi;
+using T3.Core.Logging;
 using T3.Gui.Interaction.PresetControl;
 using T3.Gui.Interaction.PresetSystem.InputCommands;
 
@@ -86,18 +88,22 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
         private static void SendColor(MidiOut midiOut, int apcControlIndex, ApcButtonColor colorCode)
         {
-            if (_cacheControllerColors[apcControlIndex] == colorCode)
+            if (_cacheControllerColors[apcControlIndex] == (int)colorCode)
                  return;
-            
-            //TODO: The midi connection is unreliable sometimes drops signals  
-            midiOut.Send(MidiMessage.StartNote(apcControlIndex, (int)colorCode, 1).RawData);
-            midiOut.Send(MidiMessage.ChangeControl(apcControlIndex, (int)colorCode, 1).RawData);    // A lame attempt to increase stability
-            midiOut.Send(MidiMessage.ChangeControl(apcControlIndex, (int)colorCode, 1).RawData);
-            midiOut.Send(MidiMessage.StopNote(apcControlIndex, 0, 1).RawData);
-            _cacheControllerColors[apcControlIndex] = colorCode;
+
+            const int defaultChannel=1; 
+              
+            //Log.Debug($" Sending color: {apcControlIndex} {colorCode}");
+            var noteOnEvent = new NoteOnEvent(0, defaultChannel, apcControlIndex, (int)colorCode, 50);
+            midiOut.Send(noteOnEvent.GetAsShortMessage());
+
+            //Previous implementation from T2
+            //midiOut.Send(MidiMessage.StartNote(apcControlIndex, (int)colorCode, 1).RawData);
+            //midiOut.Send(MidiMessage.StopNote(apcControlIndex, 0, 1).RawData);
+            _cacheControllerColors[apcControlIndex] = (int)colorCode;
         }
         
-        private static readonly ApcButtonColor[] _cacheControllerColors = new ApcButtonColor[256];
+        private static readonly int[] _cacheControllerColors = Enumerable.Repeat((int)ApcButtonColor.Undefined, 256).ToArray();// new ApcButtonColor[256];
 
         private static readonly int _currentPresetIndex = 0;
         private static readonly int _pageIndex = 0;
@@ -110,6 +116,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
         private enum ApcButtonColor
         {
+            Undefined = -1,
             Off,
             Green,
             GreenBlinking,
