@@ -60,7 +60,7 @@ namespace T3.Gui.Interaction.PresetSystem
             }
 
             SetOrCreateContextForActiveComposition();
-            var group = ActiveContext.CreateNewGroup(_nextNameFor);
+            var group = ActiveContext.AppendNewGroup(_nextNameFor);
             group.AddParameterToIndex(CreateParameter(), 0);
             ActiveContext.ActiveGroupId = group.Id;
         }
@@ -131,7 +131,7 @@ namespace T3.Gui.Interaction.PresetSystem
             CustomComponents.HintLabel("Group");
             if (ActiveContext != null)
             {
-                foreach (var group in ActiveContext.ParameterGroups)
+                foreach (var group in ActiveContext.Groups)
                 {
                     ImGui.PushID(group.Id.GetHashCode());
 
@@ -177,13 +177,13 @@ namespace T3.Gui.Interaction.PresetSystem
             if (ActiveContext == null)
                 return;
 
-            if (ActiveContext.ParameterGroups.Count <= index)
+            if (ActiveContext.Groups.Count <= index)
             {
-                Log.Warning($"Tried activate group at {index}. There are only {ActiveContext.ParameterGroups.Count} defined.");
+                Log.Warning($"Tried activate group at {index}. There are only {ActiveContext.Groups.Count} defined.");
                 return;
             }
 
-            ActiveContext.ActiveGroupId = ActiveContext.ParameterGroups[index].Id;
+            ActiveContext.ActiveGroupId = ActiveContext.Groups[index].Id;
         }
         
         public void SavePresetAtIndex(Preset preset, int buttonRangeIndex)
@@ -193,14 +193,41 @@ namespace T3.Gui.Interaction.PresetSystem
                 Log.Error($"Can't execute SavePresetAtIndex without valid context");
                 return;
             }
+            
+            var address = ActiveContext.GetAddressFromButtonIndex(buttonRangeIndex);
+            var groupForAddress = ActiveContext.GetGroupAtAddress(address);
+            if (groupForAddress == null)
+            {
+                Log.Warning($"Can't save preset for undefined group at {address}");
+                return;
+            }
 
-            var address = new PresetAddress(buttonRangeIndex % 8, buttonRangeIndex / 8);
-
+            var scene = ActiveContext.GetSceneAt(address);
+            if (scene == null)
+            {
+                ActiveContext.CreateSceneAt(address);
+            }
+            
+            ActiveContext.SetPresetAt(new Preset(), address);
+            Log.Debug($"Saved preset at {address}");
         }
         
-        public void AppPresetAtIndex(int index)
+        public void ApplyPresetAtIndex(int buttonRangeIndex)
         {
-            //throw new NotImplementedException();
+            if (ActiveContext == null)
+            {
+                Log.Error($"Can't execute ApplyPresetAtIndex without valid context");
+                return;
+            }
+            
+            var address = ActiveContext.GetAddressFromButtonIndex(buttonRangeIndex);
+            var preset = ActiveContext.TryGetPresetAt(address);
+            if (preset == null)
+            {
+                Log.Info($"There is no preset at {address}");
+                return;
+            }
+            Log.Debug($"would apply preset at {address}");
         }
         
         #endregion

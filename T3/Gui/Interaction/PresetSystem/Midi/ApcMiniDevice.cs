@@ -51,7 +51,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                 var presetIndex = index + pageOffset;
                 var isCurrentIndex = presetIndex == _currentPresetIndex;
                 var address = new PresetAddress(apcButtonColumn, apcButtonRow);
-                var p = config.TryGetPreset(address);
+                var p = config.TryGetPresetAt(address);
 
                 var isValid = p != null;
                 if (isValid)

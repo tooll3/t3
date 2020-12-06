@@ -4,23 +4,39 @@
     {
         public PresetAddress(int groupIndex, int sceneIndex, bool isValid = true)
         {
-            ParameterGroupColumn = groupIndex;
+            GroupColumn = groupIndex;
             SceneRow = sceneIndex;
             IsValid = isValid;
         }
 
-        public int ParameterGroupColumn;
+        public int GroupColumn;
         public int SceneRow;
         public bool IsValid;
 
         public bool IsValidForContext(PresetContext config)
         {
-            return ParameterGroupColumn >= 0
+            return GroupColumn >= 0
                    && SceneRow >= 0
-                   && ParameterGroupColumn < config.Presets.GetLength(0)
+                   && GroupColumn < config.Presets.GetLength(0)
                    && SceneRow < config.Presets.GetLength(1);
         }
 
+        public static PresetAddress operator +(PresetAddress a, PresetAddress b)
+        {
+            return new PresetAddress(a.GroupColumn + b.GroupColumn,
+                                     a.SceneRow + b.SceneRow);
+        }
+
+        public static PresetAddress operator -(PresetAddress a, PresetAddress b)
+        {
+            return new PresetAddress(a.GroupColumn - b.GroupColumn,
+                                     a.SceneRow - b.SceneRow);
+        }
+
         public static PresetAddress NotAnAddress = new PresetAddress(-1, -1, false);
+        public override string ToString()
+        {
+            return IsValid ? $"{GroupColumn}:{SceneRow}" : "NaA";
+        }
     }
 }

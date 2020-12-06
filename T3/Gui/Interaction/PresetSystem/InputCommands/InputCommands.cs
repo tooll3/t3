@@ -56,7 +56,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
                 Log.Error("Cant apply preset without valid indices");
                 return;
             }
-            presetSystem.AppPresetAtIndex(Indices[0]);
+            presetSystem.ApplyPresetAtIndex(Indices[0]);
         }
     }
     
