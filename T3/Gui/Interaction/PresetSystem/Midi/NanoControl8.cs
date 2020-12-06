@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using T3.Gui.Interaction.PresetSystem.InputCommands;
+using T3.Gui.Interaction.PresetSystem.Model;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
 {
@@ -36,11 +37,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             return _productNameHash;
         }
-
-        public override PresetConfiguration.PresetAddress GetAddressForIndex(int index)
-        {
-            return PresetConfiguration.PresetAddress.NotAnAddress;
-        }
+        
 
         private readonly int _productNameHash = "Korg NanoControl".GetHashCode(); //Todo: this needs the correct product name
     }

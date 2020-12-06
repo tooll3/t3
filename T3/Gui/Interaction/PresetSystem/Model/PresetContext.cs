@@ -2,22 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace T3.Gui.Interaction.PresetSystem
+namespace T3.Gui.Interaction.PresetSystem.Model
 {
     /// <summary>
     /// Model of a single composition
     /// </summary>
-    public class PresetConfiguration
+    public class PresetContext
     {
         public List<PresetScene> Scenes = new List<PresetScene>();
         public List<ParameterGroup> ParameterGroups = new List<ParameterGroup>();
         public Preset[,] Presets = new Preset[4, 4];
         public PresetAddress ViewWindow;
         public Guid ActiveGroupId = Guid.Empty;
+        public Guid ActiveSceneId = Guid.Empty;
+        public Guid CompositionId = Guid.Empty;
 
         public Preset TryGetPreset(PresetAddress address)
         {
-            if (!address.IsValidForConfig(this))
+            if (!address.IsValidForContext(this))
                 return null;
 
             var p = Presets[address.ParameterGroupColumn, address.SceneRow];
@@ -35,7 +37,7 @@ namespace T3.Gui.Interaction.PresetSystem
         
         public void SetPresetAt(Preset preset, PresetAddress address)
         {
-            var needToExtendGrid = !address.IsValidForConfig(this);
+            var needToExtendGrid = !address.IsValidForContext(this);
             if (needToExtendGrid)
             {
                 Presets = ResizeArray(Presets,
@@ -78,30 +80,6 @@ namespace T3.Gui.Interaction.PresetSystem
             }
 
             return newGroup;
-        }
-
-        public struct PresetAddress
-        {
-            public PresetAddress(int groupIndex, int sceneIndex, bool isValid = true)
-            {
-                ParameterGroupColumn = groupIndex;
-                SceneRow = sceneIndex;
-                IsValid = isValid;
-            }
-
-            public int ParameterGroupColumn;
-            public int SceneRow;
-            public bool IsValid;
-
-            public bool IsValidForConfig(PresetConfiguration config)
-            {
-                return ParameterGroupColumn >= 0
-                       && SceneRow >= 0
-                       && ParameterGroupColumn < config.Presets.GetLength(0)
-                       && SceneRow < config.Presets.GetLength(1);
-            }
-
-            public static PresetAddress NotAnAddress = new PresetAddress(-1, -1, false);
         }
     }
 }

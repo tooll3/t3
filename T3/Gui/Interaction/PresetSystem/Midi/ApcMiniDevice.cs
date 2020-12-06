@@ -2,6 +2,7 @@
 using System.Linq;
 using NAudio.Midi;
 using T3.Gui.Interaction.PresetSystem.InputCommands;
+using T3.Gui.Interaction.PresetSystem.Model;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
 {
@@ -11,37 +12,33 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             CommandTriggerCombinations = new List<CommandTriggerCombination>()
                                              {
-                                                 new CommandTriggerCombination(new[] { ButtonUp, SceneTrigger1To64 }, typeof(SavePresetCommand), this),
+                                                 new CommandTriggerCombination(new[] { Shift, SceneTrigger1To64 }, typeof(SavePresetCommand), this),
                                                  new CommandTriggerCombination(new[] { SceneTrigger1To64 }, typeof(ApplyPresetCommand), this),
                                                  new CommandTriggerCombination(new[] { ChannelButtons1To8 }, typeof(ActivateGroupCommand), this),
                                              };
         }
 
-        public override void Update(PresetSystem presetSystem, MidiIn midiIn, PresetConfiguration config)
+        public override void Update(PresetSystem presetSystem, MidiIn midiIn, PresetContext context)
         {
-            base.Update(presetSystem, midiIn, config);
+            base.Update(presetSystem, midiIn, context);
+            if (context == null)
+                return;
 
             var midiOut = MidiOutConnectionManager.GetConnectedController(_productNameHash);
             if (midiOut == null)
                 return;
 
-            UpdatePresetLeds(midiOut, config);
-            UpdateGroupLeds(midiOut, config);
+            UpdatePresetLeds(midiOut, context);
+            UpdateGroupLeds(midiOut, context);
         }
 
         public override int GetProductNameHash()
         {
             return _productNameHash;
         }
+        
 
-        public override PresetConfiguration.PresetAddress GetAddressForIndex(int index)
-        {
-            return SceneTrigger1To64.IncludesButtonIndex(index) 
-                       ? new PresetConfiguration.PresetAddress(index% 8, index/8) 
-                       : PresetConfiguration.PresetAddress.NotAnAddress;
-        }
-
-        private void UpdatePresetLeds(MidiOut midiOut, PresetConfiguration config)
+        private void UpdatePresetLeds(MidiOut midiOut, PresetContext config)
         {
             var pageOffset = _pageIndex * PagePresetCount;
 
@@ -53,7 +50,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
                 var presetIndex = index + pageOffset;
                 var isCurrentIndex = presetIndex == _currentPresetIndex;
-                var address = new PresetConfiguration.PresetAddress(apcButtonColumn, apcButtonRow);
+                var address = new PresetAddress(apcButtonColumn, apcButtonRow);
                 var p = config.TryGetPreset(address);
 
                 var isValid = p != null;
@@ -71,7 +68,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             }
         }
 
-        private void UpdateGroupLeds(MidiOut midiOut, PresetConfiguration config)
+        private void UpdateGroupLeds(MidiOut midiOut, PresetContext config)
         {
             foreach(var buttonIndex in ChannelButtons1To8.Indices())
             {
@@ -91,22 +88,20 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
         private static void SendColor(MidiOut midiOut, int apcControlIndex, ApcButtonColor colorCode)
         {
-            if (_cacheControllerColors[apcControlIndex] == (int)colorCode)
+            if (CacheControllerColors[apcControlIndex] == (int)colorCode)
                  return;
 
             const int defaultChannel=1; 
-              
-            //Log.Debug($" Sending color: {apcControlIndex} {colorCode}");
             var noteOnEvent = new NoteOnEvent(0, defaultChannel, apcControlIndex, (int)colorCode, 50);
             midiOut.Send(noteOnEvent.GetAsShortMessage());
 
             //Previous implementation from T2
             //midiOut.Send(MidiMessage.StartNote(apcControlIndex, (int)colorCode, 1).RawData);
             //midiOut.Send(MidiMessage.StopNote(apcControlIndex, 0, 1).RawData);
-            _cacheControllerColors[apcControlIndex] = (int)colorCode;
+            CacheControllerColors[apcControlIndex] = (int)colorCode;
         }
         
-        private static readonly int[] _cacheControllerColors = Enumerable.Repeat((int)ApcButtonColor.Undefined, 256).ToArray();// new ApcButtonColor[256];
+        private static readonly int[] CacheControllerColors = Enumerable.Repeat((int)ApcButtonColor.Undefined, 256).ToArray();// new ApcButtonColor[256];
 
         private static readonly int _currentPresetIndex = 0;
         private static readonly int _pageIndex = 0;

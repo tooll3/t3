@@ -3,6 +3,7 @@ using System.Linq;
 using NAudio.Midi;
 
 using T3.Gui.Interaction.PresetSystem.InputCommands;
+using T3.Gui.Interaction.PresetSystem.Model;
 using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
@@ -22,7 +23,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         /// - adjust display to indicate valid key combinations, e.g. highlight preset buttons valid for deletion
         /// - enforce an order for valid commands (e.g. CUE+P01+P02  CUE+P02+01) 
         /// </remarks>
-        public virtual void Update(PresetSystem presetSystem, MidiIn midiIn, PresetConfiguration config)
+        public virtual void Update(PresetSystem presetSystem, MidiIn midiIn, PresetContext context)
         {
             ProcessSignals();
 
@@ -50,7 +51,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         }
 
         public abstract int GetProductNameHash();
-        public abstract PresetConfiguration.PresetAddress GetAddressForIndex(int index);
+        //public abstract PresetAddress GetAddressForIndex(int index);
 
         private void ProcessSignals()
         {

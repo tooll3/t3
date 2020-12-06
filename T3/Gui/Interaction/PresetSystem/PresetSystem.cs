@@ -9,6 +9,7 @@ using T3.Core.Operator.Slots;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.PresetSystem.Dialogs;
 using T3.Gui.Interaction.PresetSystem.Midi;
+using T3.Gui.Interaction.PresetSystem.Model;
 using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
 namespace T3.Gui.Interaction.PresetSystem
@@ -20,15 +21,12 @@ namespace T3.Gui.Interaction.PresetSystem
             // Scan for output devices (e.g. to update LEDs etc.)
             MidiOutConnectionManager.Init();
 
-            // Get input devices
             _inputDevices = new List<IControllerInputDevice>()
                                 {
                                     new NanoControl8(),
                                     new ApcMiniDevice(),
                                 };
 
-            // Adding dummy configuration
-            _presetConfigurationForCompositions[Guid.Empty] = new PresetConfiguration();
         }
 
         public void Update()
@@ -38,9 +36,7 @@ namespace T3.Gui.Interaction.PresetSystem
                 return;
 
             _activeCompositionId = primaryGraphWindow._graphCanvas.CompositionOp.Symbol.Id;
-            var activeConfig = ConfigForActiveComposition;
-            if (activeConfig == null)
-                return;
+            _contextForCompositions.TryGetValue(_activeCompositionId, out var activeContext);
 
             foreach (var inputDevice in _inputDevices)
             {
@@ -49,7 +45,7 @@ namespace T3.Gui.Interaction.PresetSystem
                 if (midiIn == null)
                     continue;
 
-                inputDevice.Update(this, midiIn, ConfigForActiveComposition);
+                inputDevice.Update(this, midiIn, activeContext);
             }
 
             AddGroupDialog.Draw(ref _nextNameFor);
@@ -63,10 +59,10 @@ namespace T3.Gui.Interaction.PresetSystem
                 return;
             }
 
-            var activeConfiguration = GetOrCreateActiveConfiguration();
-            var group = activeConfiguration.CreateNewGroup(_nextNameFor);
+            SetOrCreateContextForActiveComposition();
+            var group = ActiveContext.CreateNewGroup(_nextNameFor);
             group.AddParameterToIndex(CreateParameter(), 0);
-            activeConfiguration.ActiveGroupId = group.Id;
+            ActiveContext.ActiveGroupId = group.Id;
         }
 
         private GroupParameter CreateParameter()
@@ -85,8 +81,8 @@ namespace T3.Gui.Interaction.PresetSystem
 
         public void CreateNewParameterForActiveGroup(int index)
         {
-            var activeConfiguration = GetOrCreateActiveConfiguration();
-            var activeGroup = activeConfiguration.ActiveGroup;
+            SetOrCreateContextForActiveComposition();
+            var activeGroup = ActiveContext.ActiveGroup;
             if (activeGroup == null)
             {
                 Log.Warning("Can't save parameter without active group");
@@ -96,40 +92,31 @@ namespace T3.Gui.Interaction.PresetSystem
             activeGroup.AddParameterToIndex(CreateParameter(), index);
         }
 
-        private void InsertNewParameter(ParameterGroup @group, int index)
+        private void SetOrCreateContextForActiveComposition()
         {
-        }
-
-        private PresetConfiguration GetOrCreateActiveConfiguration()
-        {
-            if (!_presetConfigurationForCompositions.TryGetValue(_activeCompositionId, out var activeConfiguration))
+            if (_contextForCompositions.TryGetValue(_activeCompositionId, out var context))
             {
-                activeConfiguration = new PresetConfiguration();
-                _presetConfigurationForCompositions[_activeCompositionId] = activeConfiguration;
+                ActiveContext = context;
+                return;
             }
 
-            return activeConfiguration;
+            ActiveContext = new PresetContext()
+                                 {
+                                     CompositionId = _activeCompositionId,
+                                 };
+            _contextForCompositions[_activeCompositionId] = ActiveContext;
         }
 
-        public void InitializeForComposition(Guid symbolId)
+        private PresetScene GetOrCreateActiveScene()
         {
-            _presetConfigurationForCompositions[symbolId] = new PresetConfiguration(); // TODO: this should be deserialized
-        }
-
-        public PresetConfiguration ConfigForActiveComposition
-        {
-            get
-            {
-                _presetConfigurationForCompositions.TryGetValue(_activeCompositionId, out var config);
-                return config;
-            }
+            return null;
         }
 
         private Guid _activeCompositionId = Guid.Empty;
         private readonly List<IControllerInputDevice> _inputDevices;
 
-        private readonly Dictionary<Guid, PresetConfiguration> _presetConfigurationForCompositions =
-            new Dictionary<Guid, PresetConfiguration>();
+        private readonly Dictionary<Guid, PresetContext> _contextForCompositions =
+            new Dictionary<Guid, PresetContext>();
 
         //public Instance ActiveComposition;
 
@@ -142,9 +129,9 @@ namespace T3.Gui.Interaction.PresetSystem
             _nextNameFor = symbolChildUi.SymbolChild.ReadableName;
 
             CustomComponents.HintLabel("Group");
-            if (ConfigForActiveComposition != null)
+            if (ActiveContext != null)
             {
-                foreach (var group in ConfigForActiveComposition.ParameterGroups)
+                foreach (var group in ActiveContext.ParameterGroups)
                 {
                     ImGui.PushID(group.Id.GetHashCode());
 
@@ -177,43 +164,67 @@ namespace T3.Gui.Interaction.PresetSystem
 
             if (ImGui.MenuItem("+ Add Group"))
             {
-                GetOrCreateActiveConfiguration();
-                //T3Ui.PresetSystem.CreateNewGroupForInput();
-
+                SetOrCreateContextForActiveComposition();
                 AddGroupDialog.ShowNextFrame();
             }
 
             ImGui.EndMenu();
         }
 
-        #region trigger commands 
+        #region trigger commands
         public void ActivateGroupAtIndex(int index)
         {
-            var activeConfig = ConfigForActiveComposition;
-            if (activeConfig == null)
+            if (ActiveContext == null)
                 return;
 
-            if (activeConfig.ParameterGroups.Count <= index)
+            if (ActiveContext.ParameterGroups.Count <= index)
             {
-                Log.Warning($"Tried activate group at {index}. There are only {activeConfig.ParameterGroups.Count} defined.");
+                Log.Warning($"Tried activate group at {index}. There are only {ActiveContext.ParameterGroups.Count} defined.");
                 return;
             }
 
-            activeConfig.ActiveGroupId = activeConfig.ParameterGroups[index].Id;
+            ActiveContext.ActiveGroupId = ActiveContext.ParameterGroups[index].Id;
         }
-        #endregion
         
+        public void SavePresetAtIndex(Preset preset, int buttonRangeIndex)
+        {
+            if (ActiveContext == null)
+            {
+                Log.Error($"Can't execute SavePresetAtIndex without valid context");
+                return;
+            }
+
+            var address = new PresetAddress(buttonRangeIndex % 8, buttonRangeIndex / 8);
+
+        }
+        
+        public void AppPresetAtIndex(int index)
+        {
+            //throw new NotImplementedException();
+        }
+        
+        #endregion
+
+        /// <summary>
+        /// Is only changes by explicity user actions:
+        /// - switching to a composition with a preset context
+        /// - creating a context (e.g. by added parameters to blending)
+        /// - switching e.g. with the midi controllers 
+        /// </summary>
+        public PresetContext ActiveContext { get; private set; }
+
         private SymbolUi _nextCompositionUi;
         private SymbolChildUi _nextSymbolChildUi;
         private IInputSlot _nextInputSlotFor;
         private string _nextNameFor;
         private static readonly AddGroupDialog AddGroupDialog = new AddGroupDialog();
 
+        
     }
 
     public interface IControllerInputDevice
     {
-        void Update(PresetSystem presetSystem, MidiIn midiIn, PresetConfiguration config);
+        void Update(PresetSystem presetSystem, MidiIn midiIn, PresetContext context);
         int GetProductNameHash();
     }
 }

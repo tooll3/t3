@@ -1,5 +1,6 @@
 ﻿using T3.Core.Logging;
 using T3.Gui.Interaction.PresetSystem.Midi;
+using T3.Gui.Interaction.PresetSystem.Model;
 
 namespace T3.Gui.Interaction.PresetSystem.InputCommands
 {
@@ -32,11 +33,10 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
 
         public override void ExecuteOnce(PresetSystem presetSystem, MidiDevice midiDevice)
         {
-            Log.Debug($"SavePresetCommand.Execute({Indices})");
+            Log.Debug($"{this}.Execute({string.Join("", Indices)})");
             foreach (var index in Indices)
             {
-                var address = midiDevice.GetAddressForIndex(index);
-                presetSystem.ConfigForActiveComposition.SetPresetAt(new Preset(), address);
+                presetSystem.SavePresetAtIndex(new Preset(), index);
             }
         }
     }
@@ -45,16 +45,18 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
     {
         public ApplyPresetCommand(int[] indices) : base(indices)
         {
+
         }
 
         public override void ExecuteOnce(PresetSystem presetSystem, MidiDevice midiDevice)
         {
-            Log.Debug($"ApplyPresetCommand.Execute({Indices})");
-            // foreach (var index in Indices)
-            // {
-            //     var address = MidiDevice.GetAddressForIndex(index);
-            //     presetSystem.ConfigForActiveComposition.SetPresetAt(new Preset(), address);
-            // }
+            Log.Debug($"{this}.Execute({string.Join("", Indices)})");
+            if (Indices.Length < 1)
+            {
+                Log.Error("Cant apply preset without valid indices");
+                return;
+            }
+            presetSystem.AppPresetAtIndex(Indices[0]);
         }
     }
     
@@ -66,7 +68,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
 
         public override void ExecuteOnce(PresetSystem presetSystem, MidiDevice midiDevice)
         {
-            Log.Debug($"{this}.Execute({Indices})");
+            Log.Debug($"{this}.Execute({string.Join("", Indices)})");
             if (Indices.Length == 0)
             {
                 Log.Error("Indices are undefined?");
