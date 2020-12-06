@@ -186,11 +186,29 @@ namespace T3.Gui.Interaction.PresetSystem
             ImGui.EndMenu();
         }
 
+        #region trigger commands 
+        public void ActivateGroupAtIndex(int index)
+        {
+            var activeConfig = ConfigForActiveComposition;
+            if (activeConfig == null)
+                return;
+
+            if (activeConfig.ParameterGroups.Count <= index)
+            {
+                Log.Warning($"Tried activate group at {index}. There are only {activeConfig.ParameterGroups.Count} defined.");
+                return;
+            }
+
+            activeConfig.ActiveGroupId = activeConfig.ParameterGroups[index].Id;
+        }
+        #endregion
+        
         private SymbolUi _nextCompositionUi;
         private SymbolChildUi _nextSymbolChildUi;
         private IInputSlot _nextInputSlotFor;
         private string _nextNameFor;
         private static readonly AddGroupDialog AddGroupDialog = new AddGroupDialog();
+
     }
 
     public interface IControllerInputDevice

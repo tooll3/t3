@@ -404,7 +404,7 @@
     <Compile Include="Gui\Interaction\JogDialOverlay.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Dialogs\AddGroupDialog.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\InputCommands\CommandTriggers.cs" />
-    <Compile Include="Gui\Interaction\PresetSystem\InputCommands\PresetCommand.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\InputCommands\InputCommands.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\ApcMiniDevice.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\MidiDevice.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\MidiOutConnectionManager.cs" />

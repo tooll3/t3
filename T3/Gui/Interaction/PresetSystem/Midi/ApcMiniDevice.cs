@@ -11,8 +11,9 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             CommandTriggerCombinations = new List<CommandTriggerCombination>()
                                              {
-                                                 new CommandTriggerCombination(new[] { ControlUp, SceneTrigger1To64 }, typeof(SavePresetCommand), this),
+                                                 new CommandTriggerCombination(new[] { ButtonUp, SceneTrigger1To64 }, typeof(SavePresetCommand), this),
                                                  new CommandTriggerCombination(new[] { SceneTrigger1To64 }, typeof(ApplyPresetCommand), this),
+                                                 new CommandTriggerCombination(new[] { ChannelButtons1To8 }, typeof(ActivateGroupCommand), this),
                                              };
         }
 
@@ -35,7 +36,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
         public override PresetConfiguration.PresetAddress GetAddressForIndex(int index)
         {
-            return SceneTrigger1To64.IncludesIndex(index) 
+            return SceneTrigger1To64.IncludesButtonIndex(index) 
                        ? new PresetConfiguration.PresetAddress(index% 8, index/8) 
                        : PresetConfiguration.PresetAddress.NotAnAddress;
         }
@@ -60,7 +61,6 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                 {
                     var colorForComplete = true ? ApcButtonColor.Green : ApcButtonColor.Yellow;
                     var colorForPlaceholders = p.IsPlaceholder ? ApcButtonColor.Yellow : colorForComplete;
-
                     SendColor(midiOut, apcButtonIndex, colorForPlaceholders);
                 }
                 else
@@ -73,22 +73,19 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
         private void UpdateGroupLeds(MidiOut midiOut, PresetConfiguration config)
         {
-            for (var i = 0; i < PresetColumns; i++)
+            foreach(var buttonIndex in ChannelButtons1To8.Indices())
             {
-                var g = config.GetGroupAtIndex(i);
+                var mappedIndex = ChannelButtons1To8.GetMappedIndex(buttonIndex);
+                var g = config.GetGroupAtIndex(mappedIndex);
                 
-                // var isActivePresetInPage = i == _currentPresetIndex / PagePresetCount;
-                // var colorForInactivePage =
-                //     isActivePresetInPage ? ApcButtonColor.RedBlinking : ApcButtonColor.Off;
-
                 var isUndefined = g == null;
                 var color = isUndefined
                                 ? ApcButtonColor.Off
                                 : g.Id == config.ActiveGroupId
                                     ? ApcButtonColor.Red
-                                    : ApcButtonColor.Yellow;
+                                    : ApcButtonColor.Off;
                 
-                SendColor(midiOut, i, color);
+                SendColor(midiOut, buttonIndex, color);
             }
         }
 
@@ -132,27 +129,29 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             YellowBlinking,
         }
 
-        private static readonly ControllerRange SceneTrigger1To64 = new ControllerRange(0, 63);
-        private static readonly ControllerRange Sliders1To9 = new ControllerRange(48, 48 + 8);
+        private static readonly ButtonRange SceneTrigger1To64 = new ButtonRange(0, 63);
+        private static readonly ButtonRange Sliders1To9 = new ButtonRange(48, 48 + 8);
 
-        private static readonly ControllerRange ControlUp = new ControllerRange(64);
-        private static readonly ControllerRange ControlDown = new ControllerRange(64);
-        private static readonly ControllerRange ControlLeft = new ControllerRange(64);
-        private static readonly ControllerRange ControlRight = new ControllerRange(64);
-        private static readonly ControllerRange ControlVolume = new ControllerRange(64);
-        private static readonly ControllerRange ControlPan = new ControllerRange(64);
-        private static readonly ControllerRange ControlSend = new ControllerRange(64);
-        private static readonly ControllerRange ControlDevice = new ControllerRange(64);
+        private static readonly ButtonRange ButtonUp = new ButtonRange(64);
+        private static readonly ButtonRange ButtonDown = new ButtonRange(65);
+        private static readonly ButtonRange ButtonLeft = new ButtonRange(66);
+        private static readonly ButtonRange ButtonRight = new ButtonRange(67);
+        private static readonly ButtonRange ButtonVolume = new ButtonRange(68);
+        private static readonly ButtonRange ButtonPan = new ButtonRange(69);
+        private static readonly ButtonRange ButtonSend = new ButtonRange(70);
+        private static readonly ButtonRange ButtonDevice = new ButtonRange(71);
+        
+        private static readonly ButtonRange ChannelButtons1To8 = new ButtonRange(64,71);
 
-        private static readonly ControllerRange SceneLaunch1ClipStop = new ControllerRange(82);
-        private static readonly ControllerRange SceneLaunch2ClipStop = new ControllerRange(83);
-        private static readonly ControllerRange SceneLaunch3ClipStop = new ControllerRange(84);
-        private static readonly ControllerRange SceneLaunch4ClipStop = new ControllerRange(85);
-        private static readonly ControllerRange SceneLaunch5ClipStop = new ControllerRange(86);
-        private static readonly ControllerRange SceneLaunch6ClipStop = new ControllerRange(87);
-        private static readonly ControllerRange SceneLaunch7ClipStop = new ControllerRange(88);
-        private static readonly ControllerRange SceneLaunch8ClipStop = new ControllerRange(89);
+        private static readonly ButtonRange SceneLaunch1ClipStop = new ButtonRange(82);
+        private static readonly ButtonRange SceneLaunch2ClipStop = new ButtonRange(83);
+        private static readonly ButtonRange SceneLaunch3ClipStop = new ButtonRange(84);
+        private static readonly ButtonRange SceneLaunch4ClipStop = new ButtonRange(85);
+        private static readonly ButtonRange SceneLaunch5ClipStop = new ButtonRange(86);
+        private static readonly ButtonRange SceneLaunch6ClipStop = new ButtonRange(87);
+        private static readonly ButtonRange SceneLaunch7ClipStop = new ButtonRange(88);
+        private static readonly ButtonRange SceneLaunch8ClipStop = new ButtonRange(89);
 
-        private static readonly ControllerRange Shift = new ControllerRange(98);
+        private static readonly ButtonRange Shift = new ButtonRange(98);
     }
 }

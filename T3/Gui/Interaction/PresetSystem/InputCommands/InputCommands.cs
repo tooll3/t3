@@ -67,6 +67,13 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
         public override void ExecuteOnce(PresetSystem presetSystem, MidiDevice midiDevice)
         {
             Log.Debug($"{this}.Execute({Indices})");
+            if (Indices.Length == 0)
+            {
+                Log.Error("Indices are undefined?");
+                return;
+            }
+
+            presetSystem.ActivateGroupAtIndex(Indices[0]);
 
         }
     }

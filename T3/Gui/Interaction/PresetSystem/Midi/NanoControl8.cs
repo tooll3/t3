@@ -9,28 +9,28 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             CommandTriggerCombinations = new List<CommandTriggerCombination>()
                                              {
-                                                 new CommandTriggerCombination(new[] { ManagerSet, NanoControlR1To8 }, typeof(SavePresetCommand), this),
-                                                 new CommandTriggerCombination(new[] { NanoControlR1To8 }, typeof(ApplyPresetCommand), this),
+                                                 new CommandTriggerCombination(new[] { ManagerSet, NanoButtonR1To8 }, typeof(SavePresetCommand), this),
+                                                 new CommandTriggerCombination(new[] { NanoButtonR1To8 }, typeof(ApplyPresetCommand), this),
                                              };
         }
 
-        private static readonly ControllerRange ControlRewind = new ControllerRange(43);
-        private static readonly ControllerRange ControlFastForward = new ControllerRange(44);
-        private static readonly ControllerRange ControlStop = new ControllerRange(42);
-        private static readonly ControllerRange ControlPlay = new ControllerRange(41);
-        private static readonly ControllerRange ControlRecord = new ControllerRange(45);
-        private static readonly ControllerRange ControlLoop = new ControllerRange(46);
-        private static readonly ControllerRange TextPrevious = new ControllerRange(58);
-        private static readonly ControllerRange TrackNext = new ControllerRange(59);
-        private static readonly ControllerRange ManagerSet = new ControllerRange(60);
-        private static readonly ControllerRange ManagerNext = new ControllerRange(61);
-        private static readonly ControllerRange ManagerPrevious = new ControllerRange(62);
+        private static readonly ButtonRange ButtonRewind = new ButtonRange(43);
+        private static readonly ButtonRange ButtonFastForward = new ButtonRange(44);
+        private static readonly ButtonRange ButtonStop = new ButtonRange(42);
+        private static readonly ButtonRange ButtonPlay = new ButtonRange(41);
+        private static readonly ButtonRange ButtonRecord = new ButtonRange(45);
+        private static readonly ButtonRange ButtonLoop = new ButtonRange(46);
+        private static readonly ButtonRange TextPrevious = new ButtonRange(58);
+        private static readonly ButtonRange TrackNext = new ButtonRange(59);
+        private static readonly ButtonRange ManagerSet = new ButtonRange(60);
+        private static readonly ButtonRange ManagerNext = new ButtonRange(61);
+        private static readonly ButtonRange ManagerPrevious = new ButtonRange(62);
 
-        private static readonly ControllerRange NanoControlSlider1To8 = new ControllerRange(0, 0 + 7);
-        private static readonly ControllerRange NanoControlKnob1To8 = new ControllerRange(16, 16 + 7);
-        private static readonly ControllerRange NanoControlSolo1To8 = new ControllerRange(32, 32 + 7);
-        private static readonly ControllerRange NanoControlMute1To8 = new ControllerRange(48, 48 + 7);
-        private static readonly ControllerRange NanoControlR1To8 = new ControllerRange(64, 64 + 7);
+        private static readonly ButtonRange NanoButtonSlider1To8 = new ButtonRange(0, 0 + 7);
+        private static readonly ButtonRange NanoButtonKnob1To8 = new ButtonRange(16, 16 + 7);
+        private static readonly ButtonRange NanoButtonSolo1To8 = new ButtonRange(32, 32 + 7);
+        private static readonly ButtonRange NanoButtonMute1To8 = new ButtonRange(48, 48 + 7);
+        private static readonly ButtonRange NanoButtonR1To8 = new ButtonRange(64, 64 + 7);
 
         public override int GetProductNameHash()
         {

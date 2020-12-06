@@ -58,7 +58,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             {
                 foreach (var signal in _signalsSinceLastUpdate)
                 {
-                    if (_signalsForNextCommand.TryGetValue(signal.ControllerId, out var existingEvent))
+                    if (_signalsForNextCommand.TryGetValue(signal.ButtonIndex, out var existingEvent))
                     {
                         if (signal.IsPressed)
                         {
@@ -73,7 +73,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                     else
                     {
                         signal.PressCount = 1;
-                        _signalsForNextCommand[signal.ControllerId] = signal;
+                        _signalsForNextCommand[signal.ButtonIndex] = signal;
                         _buttonCombinationStarted = true;
                     }
                 }
@@ -105,7 +105,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                             newSignal = new ButtonSignal()
                                             {
                                                 Channel = noteEvent.Channel,
-                                                ControllerId = noteEvent.NoteNumber,
+                                                ButtonIndex = noteEvent.NoteNumber,
                                                 ControllerValue = noteEvent.Velocity,
                                                 IsPressed = msg.MidiEvent.CommandCode != MidiCommandCode.NoteOff,
                                             };
@@ -120,7 +120,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                             newSignal = new ButtonSignal()
                                             {
                                                 Channel = controlChangeEvent.Channel,
-                                                ControllerId = (int)controlChangeEvent.Controller,
+                                                ButtonIndex = (int)controlChangeEvent.Controller,
                                                 ControllerValue = controlChangeEvent.ControllerValue,
                                                 IsPressed = controlChangeEvent.ControllerValue != 0,
                                             };

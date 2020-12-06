@@ -4,23 +4,36 @@ using T3.Gui.Interaction.PresetSystem.Midi;
 
 namespace T3.Gui.Interaction.PresetSystem.InputCommands
 {
-    public readonly struct ControllerRange
+    public readonly struct ButtonRange
     {
-        public ControllerRange(int index)
+        public ButtonRange(int index)
         {
             _index = index;
             _lastIndex = index;
         }
 
-        public ControllerRange(int index, int lastIndex)
+        public ButtonRange(int index, int lastIndex)
         {
             _index = index;
             _lastIndex = lastIndex;
         }
 
-        public bool IncludesIndex(int index)
+        public bool IncludesButtonIndex(int index)
         {
             return index >= _index && index <= _lastIndex;
+        }
+
+        public int GetMappedIndex(int buttonIndex)
+        {
+            return buttonIndex - _index;
+        }
+
+        public IEnumerable<int> Indices()
+        {
+            for (int index = _index; index <= _lastIndex; index++)
+            {
+                yield return index;
+            }
         }
 
         public bool IsRange => _lastIndex > _index;
@@ -31,7 +44,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
 
     public class ButtonSignal
     {
-        public int ControllerId;
+        public int ButtonIndex;
         public float PressTime;
         public float ControllerValue;
         public bool IsPressed;
@@ -41,7 +54,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
     
     public class CommandTriggerCombination
     {
-        public CommandTriggerCombination(ControllerRange[] keyRanges, Type commandType, MidiDevice midiDevice)
+        public CommandTriggerCombination(ButtonRange[] keyRanges, Type commandType, MidiDevice midiDevice)
         {
             _keyRanges = keyRanges;
             _commandType = commandType;
@@ -58,13 +71,16 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
                 var foundMatchingSignal = false;
                 foreach (var givenSignal in buttonSignals)
                 {
-                    if (!requiredControlRanges.IncludesIndex(givenSignal.ControllerId))
+                    if (!requiredControlRanges.IncludesButtonIndex(givenSignal.ButtonIndex))
                         continue;
 
                     matchedSignalCount++;
                     foundMatchingSignal = true;
                     if (requiredControlRanges.IsRange)
-                        MatchingRangeIndices.Add(givenSignal.ControllerId);
+                    {
+                        var mappedIndex = requiredControlRanges.GetMappedIndex(givenSignal.ButtonIndex);
+                        MatchingRangeIndices.Add(mappedIndex);
+                    }
                 }
 
                 if (!foundMatchingSignal)
@@ -80,7 +96,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
             return command;
         }
 
-        private readonly ControllerRange[] _keyRanges;
+        private readonly ButtonRange[] _keyRanges;
         private readonly Type _commandType;
         private static readonly List<int> MatchingRangeIndices = new List<int>(10);
         private readonly MidiDevice _midiDevice;
