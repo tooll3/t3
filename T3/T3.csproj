@@ -405,8 +405,9 @@
     <Compile Include="Gui\Interaction\PresetSystem\Dialogs\AddGroupDialog.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\InputCommands\CommandTriggers.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\InputCommands\InputCommands.cs" />
-    <Compile Include="Gui\Interaction\PresetSystem\Midi\ApcMiniDevice.cs" />
-    <Compile Include="Gui\Interaction\PresetSystem\Midi\MidiDevice.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Midi\Apc40Mk2.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Midi\ApcMini.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Midi\AbstractMidiDevice.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\MidiOutConnectionManager.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\NanoControl8.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Model\GroupParameter.cs" />

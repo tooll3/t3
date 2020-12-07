@@ -3,7 +3,7 @@ using T3.Gui.Interaction.PresetSystem.InputCommands;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
 {
-    public class NanoControl8 : MidiDevice
+    public class NanoControl8 : AbstractMidiDevice
     {
         public NanoControl8()
         {

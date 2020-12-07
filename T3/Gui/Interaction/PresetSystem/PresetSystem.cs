@@ -23,8 +23,9 @@ namespace T3.Gui.Interaction.PresetSystem
 
             _inputDevices = new List<IControllerInputDevice>()
                                 {
+                                    new Apc40Mk2(),
                                     new NanoControl8(),
-                                    new ApcMiniDevice(),
+                                    new ApcMini(),
                                 };
 
         }

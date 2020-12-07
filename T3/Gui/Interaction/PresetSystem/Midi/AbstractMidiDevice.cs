@@ -7,9 +7,9 @@ using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
 {
-    public abstract class MidiDevice : IControllerInputDevice, MidiInConnectionManager.IMidiConsumer
+    public abstract class AbstractMidiDevice : IControllerInputDevice, MidiInConnectionManager.IMidiConsumer
     {
-        protected MidiDevice()
+        protected AbstractMidiDevice()
         {
             MidiInConnectionManager.RegisterConsumer(this);
         }

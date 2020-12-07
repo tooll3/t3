@@ -5,9 +5,9 @@ using T3.Gui.Interaction.PresetSystem.Model;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
 {
-    public class ApcMiniDevice : MidiDevice
+    public class ApcMini : AbstractMidiDevice
     {
-        public ApcMiniDevice()
+        public ApcMini()
         {
             CommandTriggerCombinations = new List<CommandTriggerCombination>()
                                              {

@@ -54,7 +54,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
     
     public class CommandTriggerCombination
     {
-        public CommandTriggerCombination(ButtonRange[] keyRanges, Type commandType, MidiDevice midiDevice)
+        public CommandTriggerCombination(ButtonRange[] keyRanges, Type commandType, AbstractMidiDevice midiDevice)
         {
             _keyRanges = keyRanges;
             _commandType = commandType;
@@ -99,6 +99,6 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
         private readonly ButtonRange[] _keyRanges;
         private readonly Type _commandType;
         private static readonly List<int> MatchingRangeIndices = new List<int>(10);
-        private readonly MidiDevice _midiDevice;
+        private readonly AbstractMidiDevice _midiDevice;
     }
 }

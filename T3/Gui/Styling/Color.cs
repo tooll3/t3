@@ -1,7 +1,6 @@
 ﻿using System;
 using ImGuiNET;
 using System.Numerics;
-using T3.Operators.Types.Id_1677fd74_6e54_479a_b478_c2ac77288f9c;
 
 namespace T3.Gui
 {
@@ -75,6 +74,12 @@ namespace T3.Gui
         {
             ImGui.ColorConvertHSVtoRGB(h, s, v, out float r, out float g, out float b);
             return new Color(r, g, b, a);
+        }
+
+        static public Color FromString(string hex)
+        {
+            var systemColor =  System.Drawing.ColorTranslator.FromHtml(hex);
+            return new Color(systemColor.R, systemColor.G, systemColor.B, systemColor.A);
         }
 
         public static implicit operator uint(Color color)
