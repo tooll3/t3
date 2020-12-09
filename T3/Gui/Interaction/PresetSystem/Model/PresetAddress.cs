@@ -1,4 +1,7 @@
-﻿namespace T3.Gui.Interaction.PresetSystem.Model
+﻿using Newtonsoft.Json;
+using T3.Core;
+
+namespace T3.Gui.Interaction.PresetSystem.Model
 {
     public struct PresetAddress
     {
@@ -13,7 +16,7 @@
         public readonly int SceneRow;
         public readonly bool IsValid;
 
-        public bool IsValidForContext(PresetContext config)
+        public bool IsValidForContext(CompositionContext config)
         {
             return GroupColumn >= 0
                    && SceneRow >= 0
@@ -37,6 +40,14 @@
         public override string ToString()
         {
             return IsValid ? $"{GroupColumn}:{SceneRow}" : "NaA";
+        }
+        
+        public void ToJson(JsonTextWriter writer)
+        {
+            writer.WriteStartObject();
+            writer.WriteValue("GroupColumn", GroupColumn);
+            writer.WriteValue("SceneRow", SceneRow);
+            writer.WriteEndObject();
         }
     }
 }

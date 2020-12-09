@@ -414,7 +414,7 @@
     <Compile Include="Gui\Interaction\PresetSystem\Model\ParameterGroup.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Model\Preset.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Model\PresetAddress.cs" />
-    <Compile Include="Gui\Interaction\PresetSystem\Model\PresetContext.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Model\CompositionContext.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Model\PresetScene.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\PresetSystem.cs" />
     <Compile Include="Gui\Interaction\Timing\BeatTiming.cs" />

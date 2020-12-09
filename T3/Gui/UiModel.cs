@@ -3,6 +3,7 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -24,6 +25,11 @@ using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Gui
 {
+    public static class TypeByNameRegistry
+    {
+        public static Dictionary<string, Type> Entries { get; } = new Dictionary<string, Type>();
+    }
+
     public class UiModel : Core.Model
     {
         public UiModel(Assembly operatorAssembly) 
@@ -37,6 +43,9 @@ namespace T3.Gui
             TypeUiRegistry.Entries.Add(type, uiProperties);
             InputUiFactory.Entries.Add(type, inputUi);
             OutputUiFactory.Entries.Add(type, outputUi);
+            
+            var typeFullName = type.ToString();
+            TypeByNameRegistry.Entries[typeFullName]= type;
         }
 
         private void Init()

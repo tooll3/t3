@@ -17,7 +17,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                                              };
         }
 
-        public override void Update(PresetSystem presetSystem, MidiIn midiIn, PresetContext context)
+        public override void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context)
         {
             base.Update(presetSystem, midiIn, context);
             if (context == null)

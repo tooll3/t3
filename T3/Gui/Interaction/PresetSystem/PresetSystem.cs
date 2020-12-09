@@ -6,6 +6,7 @@ using NAudio.Midi;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.PresetSystem.Dialogs;
 using T3.Gui.Interaction.PresetSystem.Midi;
@@ -27,18 +28,42 @@ namespace T3.Gui.Interaction.PresetSystem
                                     new NanoControl8(),
                                     new ApcMini(),
                                 };
-
         }
 
+        private Guid _lastCompositionId;
+        
+        //---------------------------------------------------------------------------------
+        #region API from T3 UI
         public void Update()
         {
+            // Sync with composition selected in UI
             var primaryGraphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
             if (primaryGraphWindow == null)
                 return;
 
-            _activeCompositionId = primaryGraphWindow._graphCanvas.CompositionOp.Symbol.Id;
-            _contextForCompositions.TryGetValue(_activeCompositionId, out var activeContext);
+            _activeCompositionInstance = primaryGraphWindow._graphCanvas.CompositionOp;
+            _activeCompositionId = _activeCompositionInstance.Symbol.Id;
+            _contextForCompositions.TryGetValue(_activeCompositionId, out var contextForCurrentComposition);
 
+            // Attempt to read settings for composition
+            if (contextForCurrentComposition == null)
+            {
+                if (_activeCompositionId != _lastCompositionId)
+                {
+                    var newContext = CompositionContext.ReadFromJson(_activeCompositionId);
+                    if (newContext != null)
+                    {
+                        _contextForCompositions[_activeCompositionId] = newContext;
+                        ActiveContext = newContext;
+                    }
+                    else
+                    {
+                        _lastCompositionId = _activeCompositionId;
+                    }
+                }
+            }
+
+            // Update Midi Devices 
             foreach (var inputDevice in _inputDevices)
             {
                 // TODO: support generic input controllers with arbitrary DeviceId 
@@ -46,80 +71,26 @@ namespace T3.Gui.Interaction.PresetSystem
                 if (midiIn == null)
                     continue;
 
-                inputDevice.Update(this, midiIn, activeContext);
+                inputDevice.Update(this, midiIn, ActiveContext);
             }
 
+            // Draw Ui
             AddGroupDialog.Draw(ref _nextNameFor);
         }
 
         public void CreateNewGroupForInput()
         {
-            if (!(_nextInputSlotFor.Input.Value is InputValue<float> v))
-            {
-                Log.Warning("Sorry, but for now only float parameters can be blended. Is " + _nextInputSlotFor.MappedType);
-                return;
-            }
+            // if (!(_nextInputSlotFor.Input.Value is InputValue<float> v))
+            // {
+            //     Log.Warning("Sorry, but for now only float parameters can be blended. Is " + _nextInputSlotFor.MappedType);
+            //     return;
+            // }
 
             SetOrCreateContextForActiveComposition();
             var group = ActiveContext.AppendNewGroup(_nextNameFor);
             group.AddParameterToIndex(CreateParameter(), 0);
             ActiveContext.ActiveGroupId = group.Id;
         }
-
-        private GroupParameter CreateParameter()
-        {
-            var newParameter = new GroupParameter
-                                   {
-                                       Id = new Guid(),
-                                       SymbolChildId = _nextSymbolChildUi.Id,
-                                       InputId = _nextInputSlotFor.Id,
-                                       ComponentIndex = 0,
-                                       InputType = _nextInputSlotFor.ValueType,
-                                       Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlotFor.Input.Name,
-                                   };
-            return newParameter;
-        }
-
-        public void CreateNewParameterForActiveGroup(int index)
-        {
-            SetOrCreateContextForActiveComposition();
-            var activeGroup = ActiveContext.ActiveGroup;
-            if (activeGroup == null)
-            {
-                Log.Warning("Can't save parameter without active group");
-                return;
-            }
-
-            activeGroup.AddParameterToIndex(CreateParameter(), index);
-        }
-
-        private void SetOrCreateContextForActiveComposition()
-        {
-            if (_contextForCompositions.TryGetValue(_activeCompositionId, out var context))
-            {
-                ActiveContext = context;
-                return;
-            }
-
-            ActiveContext = new PresetContext()
-                                 {
-                                     CompositionId = _activeCompositionId,
-                                 };
-            _contextForCompositions[_activeCompositionId] = ActiveContext;
-        }
-
-        private PresetScene GetOrCreateActiveScene()
-        {
-            return null;
-        }
-
-        private Guid _activeCompositionId = Guid.Empty;
-        private readonly List<IControllerInputDevice> _inputDevices;
-
-        private readonly Dictionary<Guid, PresetContext> _contextForCompositions =
-            new Dictionary<Guid, PresetContext>();
-
-        //public Instance ActiveComposition;
 
         public void DrawInputContextMenu(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
@@ -171,8 +142,10 @@ namespace T3.Gui.Interaction.PresetSystem
 
             ImGui.EndMenu();
         }
+        #endregion
 
-        #region trigger commands
+        //---------------------------------------------------------------------------------
+        #region API calls from commands
         public void ActivateGroupAtIndex(int index)
         {
             if (ActiveContext == null)
@@ -186,7 +159,7 @@ namespace T3.Gui.Interaction.PresetSystem
 
             ActiveContext.ActiveGroupId = ActiveContext.Groups[index].Id;
         }
-        
+
         public void SavePresetAtIndex(int buttonRangeIndex)
         {
             if (ActiveContext == null)
@@ -194,7 +167,7 @@ namespace T3.Gui.Interaction.PresetSystem
                 Log.Error($"Can't execute SavePresetAtIndex without valid context");
                 return;
             }
-            
+
             var address = ActiveContext.GetAddressFromButtonIndex(buttonRangeIndex);
             var group = ActiveContext.GetGroupForAddress(address);
             if (group == null)
@@ -209,12 +182,13 @@ namespace T3.Gui.Interaction.PresetSystem
                 ActiveContext.CreateSceneAt(address);
             }
 
-            var newPreset = new Preset();
+            var newPreset = CreatePresetForGroup(group);
             ActiveContext.SetPresetAt(newPreset, address);
             group.SetActivePreset(newPreset);
             Log.Debug($"Saved preset at {address}");
+            ActiveContext.WriteToJson();
         }
-        
+
         public void ActivatePresetAtIndex(int buttonRangeIndex)
         {
             if (ActiveContext == null)
@@ -222,7 +196,7 @@ namespace T3.Gui.Interaction.PresetSystem
                 Log.Error($"Can't execute ApplyPresetAtIndex without valid context");
                 return;
             }
-            
+
             var address = ActiveContext.GetAddressFromButtonIndex(buttonRangeIndex);
             var preset = ActiveContext.TryGetPresetAt(address);
             if (preset == null)
@@ -234,11 +208,122 @@ namespace T3.Gui.Interaction.PresetSystem
             var group = ActiveContext.GetGroupForAddress(address);
             group.SetActivePreset(preset);
 
+            Log.Debug($"Applying preset at {address}");
+            ApplyGroupPreset(group, preset);
             preset.State = Preset.States.Active;
-            Log.Debug($"would apply preset at {address}");
         }
-        
         #endregion
+
+        //---------------------------------------------------------------------------------
+        #region InternalImplementation
+        private GroupParameter CreateParameter()
+        {
+            var newParameter = new GroupParameter
+                                   {
+                                       Id = Guid.NewGuid(),
+                                       SymbolChildId = _nextSymbolChildUi.Id,
+                                       InputId = _nextInputSlotFor.Id,
+                                       // ComponentIndex = 0,
+                                       // InputType = _nextInputSlotFor.ValueType,
+                                       Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlotFor.Input.Name,
+                                   };
+            return newParameter;
+        }
+
+        private void CreateNewParameterForActiveGroup(int index)
+        {
+            SetOrCreateContextForActiveComposition();
+            var activeGroup = ActiveContext.ActiveGroup;
+            if (activeGroup == null)
+            {
+                Log.Warning("Can't save parameter without active group");
+                return;
+            }
+
+            activeGroup.AddParameterToIndex(CreateParameter(), index);
+        }
+
+        private void SetOrCreateContextForActiveComposition()
+        {
+            if (_contextForCompositions.TryGetValue(_activeCompositionId, out var existingContext))
+            {
+                ActiveContext = existingContext;
+                return;
+            }
+
+            ActiveContext = new CompositionContext()
+                                {
+                                    CompositionId = _activeCompositionId,
+                                };
+            _contextForCompositions[_activeCompositionId] = ActiveContext;
+        }
+
+        private PresetScene GetOrCreateActiveScene()
+        {
+            return null;
+        }
+
+        private Preset CreatePresetForGroup(ParameterGroup group)
+        {
+            if (ActiveContext.CompositionId != _activeCompositionInstance.Symbol.Id)
+            {
+                Log.Error("Can't create preset because composition instance does not match");
+                return null;
+            }
+
+            var newPreset = new Preset();
+            //var operatorSymbol = SymbolRegistry.Entries[_activeCompositionId];
+            foreach (var parameter in group.Parameters)
+            {
+                //var symbolChild = operatorSymbol.Children.Single(child => child.Id == parameter.SymbolChildId);
+                var instance = _activeCompositionInstance.Children.Single(c => c.SymbolChildId == parameter.SymbolChildId);
+                var input = instance.Inputs.Single(inp => inp.Id == parameter.InputId);
+                newPreset.ValuesForGroupParameterIds[parameter.Id] = input.Input.Value.Clone();
+            }
+
+            return newPreset;
+        }
+
+        private void ApplyGroupPreset(ParameterGroup group, Preset preset)
+        {
+            var commands = new List<ICommand>();
+            var symbol = _activeCompositionInstance.Symbol;
+            //var symbolUi = SymbolUiRegistry.Entries[ActiveContext.CompositionId];
+
+            foreach (var parameter in group.Parameters)
+            {
+                var symbolChild = symbol.Children.Single(s => s.Id == parameter.SymbolChildId);
+                var input = symbolChild.InputValues[parameter.InputId];
+
+                //var presetValuesForGroupParameterId = preset.ValuesForGroupParameterIds[parameter.Id];
+                if (preset.ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var presetValuesForGroupParameterId))
+                {
+                    var newCommand = new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
+                                         {
+                                             Value = presetValuesForGroupParameterId,
+                                         };
+                    commands.Add(newCommand);
+                }
+                else
+                {
+                    Log.Warning($"Preset doesn't contain value for parameter {parameter.Title}");
+                }
+
+                ;
+            }
+
+            var command = new MacroCommand("Set Preset Values", commands);
+            UndoRedoStack.AddAndExecute(command);
+        }
+        #endregion
+
+        private Guid _activeCompositionId = Guid.Empty;
+        private readonly List<IControllerInputDevice> _inputDevices;
+
+        private readonly Dictionary<Guid, CompositionContext> _contextForCompositions =
+            new Dictionary<Guid, CompositionContext>();
+
+        //public Instance ActiveComposition;
 
         /// <summary>
         /// Is only changes by explicitly user actions:
@@ -246,20 +331,20 @@ namespace T3.Gui.Interaction.PresetSystem
         /// - creating a context (e.g. by added parameters to blending)
         /// - switching e.g. with the midi controllers 
         /// </summary>
-        private PresetContext ActiveContext { get; set; }
+        private CompositionContext ActiveContext { get; set; }
 
         private SymbolUi _nextCompositionUi;
         private SymbolChildUi _nextSymbolChildUi;
         private IInputSlot _nextInputSlotFor;
         private string _nextNameFor;
-        private static readonly AddGroupDialog AddGroupDialog = new AddGroupDialog();
 
-        
+        private Instance _activeCompositionInstance;
+        private static readonly AddGroupDialog AddGroupDialog = new AddGroupDialog();
     }
 
     public interface IControllerInputDevice
     {
-        void Update(PresetSystem presetSystem, MidiIn midiIn, PresetContext context);
+        void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context);
         int GetProductNameHash();
     }
 }

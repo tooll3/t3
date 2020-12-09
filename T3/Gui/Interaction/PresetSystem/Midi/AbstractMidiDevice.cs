@@ -14,7 +14,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             MidiInConnectionManager.RegisterConsumer(this);
         }
 
-        public virtual void Update(PresetSystem presetSystem, MidiIn midiIn, PresetContext context)
+        public virtual void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context)
         {
             ProcessSignals();
 
