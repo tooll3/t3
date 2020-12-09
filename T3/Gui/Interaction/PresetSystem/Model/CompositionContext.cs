@@ -53,6 +53,15 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         public Guid ActiveGroupId = Guid.Empty;
         public ParameterGroup ActiveGroup => Groups.SingleOrDefault(g => g.Id == ActiveGroupId);
 
+        public void SetGroupAsActive(ParameterGroup group)
+        {
+            if (!Groups.Exists(g => g.Id == group.Id))
+            {
+                Log.Error("Can't set id with unknown id as active");
+            }
+            ActiveGroupId = group.Id;
+        }
+        
         public ParameterGroup GetGroupAtIndex(int index)
         {
             return Groups.Count <= index ? null : Groups[index];
@@ -85,6 +94,27 @@ namespace T3.Gui.Interaction.PresetSystem.Model
             }
 
             return newGroup;
+        }
+
+        public IEnumerable<Preset> GetPresetsForGroup(ParameterGroup group)
+        {
+            var groupIndex = GetIndexForGroup(group);
+            if (groupIndex == -1)
+            {
+                yield break;
+            }
+            for(int sceneIndex=0; sceneIndex < Presets.GetLength(1); sceneIndex++)
+            {
+                var preset = Presets[groupIndex, sceneIndex];
+                if (preset == null)
+                    continue;
+                yield return preset;
+            }
+        }
+
+        public int GetIndexForGroup(ParameterGroup group)
+        {
+            return Groups.IndexOf(group);
         }
         #endregion
 

@@ -122,7 +122,10 @@ namespace T3.Gui.Interaction.PresetSystem
                                                   : ImGui.MenuItem(slotId + "+");
 
                             if (wasSelected)
+                            {
+                                ActiveContext.SetGroupAsActive(group);
                                 CreateNewParameterForActiveGroup(parameterIndex);
+                            }
 
                             ImGui.PopID();
                         }
@@ -185,7 +188,7 @@ namespace T3.Gui.Interaction.PresetSystem
             var newPreset = CreatePresetForGroup(group);
             ActiveContext.SetPresetAt(newPreset, address);
             group.SetActivePreset(newPreset);
-            Log.Debug($"Saved preset at {address}");
+            //Log.Debug($"Saved preset at {address}");
             ActiveContext.WriteToJson();
         }
 
@@ -207,8 +210,9 @@ namespace T3.Gui.Interaction.PresetSystem
 
             var group = ActiveContext.GetGroupForAddress(address);
             group.SetActivePreset(preset);
+            ActiveContext.SetGroupAsActive(group);
 
-            Log.Debug($"Applying preset at {address}");
+            //Log.Debug($"Applying preset at {address}");
             ApplyGroupPreset(group, preset);
             preset.State = Preset.States.Active;
         }
@@ -216,6 +220,26 @@ namespace T3.Gui.Interaction.PresetSystem
 
         //---------------------------------------------------------------------------------
         #region InternalImplementation
+        private void CreateNewParameterForActiveGroup(int parameterIndex)
+        {
+            SetOrCreateContextForActiveComposition();
+            var activeGroup = ActiveContext.ActiveGroup;
+            if (activeGroup == null)
+            {
+                Log.Warning("Can't save parameter without active group");
+                return;
+            }
+
+            var newParameter = activeGroup.AddParameterToIndex(CreateParameter(), parameterIndex);
+            var instance = _activeCompositionInstance.Children.Single(c => c.SymbolChildId == newParameter.SymbolChildId);
+            var input = instance.Inputs.Single(inp => inp.Id == newParameter.InputId);
+            foreach (var preset in ActiveContext.GetPresetsForGroup(activeGroup))
+            {
+                preset.ValuesForGroupParameterIds[newParameter.Id] = input.Input.Value.Clone();
+            }
+        }
+        
+        
         private GroupParameter CreateParameter()
         {
             var newParameter = new GroupParameter
@@ -229,20 +253,8 @@ namespace T3.Gui.Interaction.PresetSystem
                                    };
             return newParameter;
         }
-
-        private void CreateNewParameterForActiveGroup(int index)
-        {
-            SetOrCreateContextForActiveComposition();
-            var activeGroup = ActiveContext.ActiveGroup;
-            if (activeGroup == null)
-            {
-                Log.Warning("Can't save parameter without active group");
-                return;
-            }
-
-            activeGroup.AddParameterToIndex(CreateParameter(), index);
-        }
-
+        
+        
         private void SetOrCreateContextForActiveComposition()
         {
             if (_contextForCompositions.TryGetValue(_activeCompositionId, out var existingContext))
@@ -308,8 +320,6 @@ namespace T3.Gui.Interaction.PresetSystem
                 {
                     Log.Warning($"Preset doesn't contain value for parameter {parameter.Title}");
                 }
-
-                ;
             }
 
             var command = new MacroCommand("Set Preset Values", commands);

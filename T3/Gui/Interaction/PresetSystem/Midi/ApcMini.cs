@@ -68,18 +68,18 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                                 return (int)color1;
                             });
 
-            UpdateRangeLeds(midiOut, SceneLaunch1To8,
-                            mappedIndex =>
-                            {
-                                var g1 = context.GetGroupAtIndex(mappedIndex);
-                                var isUndefined1 = g1 == null;
-                                var color2 = isUndefined1
-                                                 ? ApcButtonColor.Off
-                                                 : g1.Id == context.ActiveGroupId
-                                                     ? ApcButtonColor.Red
-                                                     : ApcButtonColor.Off;
-                                return (int)color2;
-                            });
+            // UpdateRangeLeds(midiOut, SceneLaunch1To8,
+            //                 mappedIndex =>
+            //                 {
+            //                     var g1 = context.GetGroupAtIndex(mappedIndex);
+            //                     var isUndefined1 = g1 == null;
+            //                     var color2 = isUndefined1
+            //                                      ? ApcButtonColor.Off
+            //                                      : g1.Id == context.ActiveGroupId
+            //                                          ? ApcButtonColor.Red
+            //                                          : ApcButtonColor.Off;
+            //                     return (int)color2;
+            //                 });
         }
 
         public override int GetProductNameHash()

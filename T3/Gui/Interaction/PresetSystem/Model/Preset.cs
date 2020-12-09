@@ -31,7 +31,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
                 writer.WritePropertyName("ParameterId");
                 writer.WriteValue(parameterId);
                 writer.WritePropertyName("Type");
-                writer.WriteValue( value.GetType().AssemblyQualifiedName);
+                writer.WriteValue( value.ValueType.ToString());
                 writer.WritePropertyName("Value");
                 value.ToJson(writer);
                 writer.WriteEndObject();

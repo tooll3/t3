@@ -17,7 +17,7 @@ namespace T3.Gui.Interaction.PresetSystem
         // TODO: Do not serialize
         public Preset ActivePreset { get; set; }
 
-        public void AddParameterToIndex(GroupParameter parameter, int index)
+        public GroupParameter AddParameterToIndex(GroupParameter parameter, int index)
         {
             // Extend list
             while (Parameters.Count <= index)
@@ -26,6 +26,7 @@ namespace T3.Gui.Interaction.PresetSystem
             }
 
             Parameters[index] = parameter;
+            return parameter;
         }
 
         public void SetActivePreset(Preset preset)

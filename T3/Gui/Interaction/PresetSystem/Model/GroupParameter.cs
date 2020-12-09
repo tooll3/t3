@@ -15,14 +15,15 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         // public int ComponentIndex;    // for handling Vector inputs
         // public Type InputType;
 
-        public static void ToJson(GroupParameter obj, JsonTextWriter writer)
+        public static void ToJson(GroupParameter parameter, JsonTextWriter writer)
         {
             writer.WriteStartObject();
-            if (obj != null)
+            if (parameter != null)
             {
-                writer.WriteValue("Id", obj.Id);
-                writer.WriteObject("SymbolChildId", obj.SymbolChildId);
-                writer.WriteObject("InputId", obj.InputId);
+                writer.WriteValue("Id", parameter.Id);
+                writer.WriteObject("SymbolChildId", parameter.SymbolChildId);
+                writer.WriteObject("InputId", parameter.InputId);
+                writer.WriteObject("Title", parameter.Title);
             }
             writer.WriteEndObject();
         }

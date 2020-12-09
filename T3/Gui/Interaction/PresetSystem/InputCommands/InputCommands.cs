@@ -32,7 +32,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
 
         public override void ExecuteOnce(PresetSystem presetSystem, AbstractMidiDevice midiDevice)
         {
-            Log.Debug($"{this}.Execute({string.Join("", Indices)})");
+            Log.Debug($"{this}.Execute({string.Join(", ", Indices)})");
             foreach (var index in Indices)
             {
                 presetSystem.SavePresetAtIndex(index);
@@ -49,7 +49,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
 
         public override void ExecuteOnce(PresetSystem presetSystem, AbstractMidiDevice midiDevice)
         {
-            Log.Debug($"{this}.Execute({string.Join("", Indices)})");
+            Log.Debug($"{this}.Execute({string.Join(", ", Indices)})");
             if (Indices.Length < 1)
             {
                 Log.Error("Cant apply preset without valid indices");
@@ -67,7 +67,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
 
         public override void ExecuteOnce(PresetSystem presetSystem, AbstractMidiDevice midiDevice)
         {
-            Log.Debug($"{this}.Execute({string.Join("", Indices)})");
+            Log.Debug($"{this}.Execute({string.Join(", ", Indices)})");
             if (Indices.Length == 0)
             {
                 Log.Error("Indices are undefined?");
