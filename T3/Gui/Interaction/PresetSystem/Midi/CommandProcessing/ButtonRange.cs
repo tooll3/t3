@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
 {
+    /// <summary>
+    /// Describes either a single or range of buttons on a midi device  
+    /// </summary>
     public readonly struct ButtonRange
     {
         public ButtonRange(int index)
@@ -33,6 +37,23 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                 yield return index;
             }
         }
+
+        public IEnumerable<int> GetMatchingIndicesFromSignals(List<ButtonSignal> signals)
+        {
+            if(signals.Count == 0)
+                return new List<int>();
+
+            var matches = new List<int>();
+            foreach (var s in signals)
+            {
+                if(IncludesButtonIndex(s.ButtonId))
+                    matches.Add(GetMappedIndex(s.ButtonId));
+            }
+
+            return matches;
+        }
+
+
 
         public bool IsRange => _lastIndex > _index;
 

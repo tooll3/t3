@@ -9,8 +9,11 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             CommandTriggerCombinations = new List<CommandTriggerCombination>()
                                              {
-                                                 new CommandTriggerCombination(new[] { ManagerSet, NanoButtonR1To8 }, typeof(SavePresetCommand), this),
-                                                 new CommandTriggerCombination(new[] { NanoButtonR1To8 }, typeof(ApplyPresetCommand), this),
+                                                 new CommandTriggerCombination(typeof(ApplyPresetCommand), InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(typeof(SavePresetCommand), InputModes.Save, new[] { ManagerSet, NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(typeof(ActivateGroupCommand), InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 // new CommandTriggerCombination(new[] { ManagerSet, NanoButtonR1To8 }, typeof(SavePresetCommand), this),
+                                                 // new CommandTriggerCombination(new[] { NanoButtonR1To8 }, typeof(ApplyPresetCommand), this),
                                              };
         }
 

@@ -9,16 +9,25 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
     {
         public ApcMini()
         {
-            CommandTriggerCombinations = new List<CommandTriggerCombination>()
+            CommandTriggerCombinations = new List<CommandTriggerCombination>
                                              {
-                                                 new CommandTriggerCombination(new[] { Shift, SceneTrigger1To64 }, typeof(SavePresetCommand), this),
-                                                 new CommandTriggerCombination(new[] { SceneTrigger1To64 }, typeof(ApplyPresetCommand), this),
-                                                 new CommandTriggerCombination(new[] { ChannelButtons1To8 }, typeof(ActivateGroupCommand), this),
+                                                 new CommandTriggerCombination(typeof(ApplyPresetCommand), InputModes.Default, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(typeof(SavePresetCommand), InputModes.Save, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(typeof(ActivateGroupCommand), InputModes.Default, new[] { ChannelButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                              };
+            
+            ModeButtons = new List<ModeButton>
+                              {
+                                  new ModeButton(Shift, InputModes.Save),
+                                  new ModeButton(SceneLaunch1ClipStop, InputModes.Delete),
+                              };
         }
 
+
+        
         public override void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context)
         {
+            _updateCount++;
             base.Update(presetSystem, midiIn, context);
             if (context == null)
                 return;
@@ -26,7 +35,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             var midiOut = MidiOutConnectionManager.GetConnectedController(_productNameHash);
             if (midiOut == null)
                 return;
-
+            
             UpdateRangeLeds(midiOut, SceneTrigger1To64,
                             mappedIndex =>
                             {
@@ -52,7 +61,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                                         break;
                                 }
 
-                                return (int)color;
+                                return WarningColor(mappedIndex, (int)color);
                             });
 
             UpdateRangeLeds(midiOut, ChannelButtons1To8,
@@ -86,6 +95,28 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             return _productNameHash;
         }
+        
+        private int WarningColor(int index, int orgColor)
+        {
+            var indicatedStatus = (_updateCount + index / 8) % 30 < 4;
+            if (!indicatedStatus)
+            {
+                return orgColor;
+            }
+
+            if (ActiveMode == InputModes.Save)
+            {
+                return (int)ApcButtonColor.Yellow;
+            }
+            else if (ActiveMode == InputModes.Delete)
+            {
+                return (int)ApcButtonColor.Red;
+            }
+
+            return orgColor;
+        }
+
+        private int _updateCount = 0;        
         
         private readonly int _productNameHash = "APC MINI".GetHashCode();
 

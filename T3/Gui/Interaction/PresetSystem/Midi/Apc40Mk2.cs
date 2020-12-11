@@ -12,9 +12,9 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             CommandTriggerCombinations = new List<CommandTriggerCombination>()
                                              {
-                                                 new CommandTriggerCombination(new[] { Shift, SceneTrigger1To40 }, typeof(SavePresetCommand), this),
-                                                 new CommandTriggerCombination(new[] { SceneTrigger1To40 }, typeof(ApplyPresetCommand), this),
-                                                 new CommandTriggerCombination(new[] { ClipStopButtons1To8 }, typeof(ActivateGroupCommand), this),
+                                                 new CommandTriggerCombination(typeof(ApplyPresetCommand), InputModes.Default, new[] { Shift, SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(typeof(SavePresetCommand), InputModes.Save, new[] { Shift, SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(typeof(ActivateGroupCommand), InputModes.Default, new[] { ClipStopButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                              };
         }
 

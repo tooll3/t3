@@ -407,9 +407,10 @@
     <Compile Include="Gui\Interaction\PresetSystem\Midi\Apc40Mk2.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\ApcMini.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\AbstractMidiDevice.cs" />
-    <Compile Include="Gui\Interaction\PresetSystem\Midi\ButtonRange.cs" />
-    <Compile Include="Gui\Interaction\PresetSystem\Midi\ButtonSignal.cs" />
-    <Compile Include="Gui\Interaction\PresetSystem\Midi\CommandTriggerCombination.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Midi\CommandProcessing\ButtonRange.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Midi\CommandProcessing\ButtonSignal.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Midi\CommandProcessing\CommandTriggerCombination.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Midi\CommandProcessing\ModeButton.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\MidiOutConnectionManager.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\NanoControl8.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Model\GroupParameter.cs" />

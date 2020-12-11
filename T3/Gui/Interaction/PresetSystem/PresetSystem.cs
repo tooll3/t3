@@ -64,14 +64,14 @@ namespace T3.Gui.Interaction.PresetSystem
             }
 
             // Update Midi Devices 
-            foreach (var inputDevice in _inputDevices)
+            foreach (var connectedDevice in _inputDevices)
             {
                 // TODO: support generic input controllers with arbitrary DeviceId 
-                var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(inputDevice.GetProductNameHash());
+                var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(connectedDevice.GetProductNameHash());
                 if (midiIn == null)
                     continue;
 
-                inputDevice.Update(this, midiIn, ActiveContext);
+                connectedDevice.Update(this, midiIn, ActiveContext);
             }
 
             // Draw Ui
