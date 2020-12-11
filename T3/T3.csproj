@@ -410,6 +410,7 @@
     <Compile Include="Gui\Interaction\PresetSystem\Midi\CommandProcessing\ButtonRange.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\CommandProcessing\ButtonSignal.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\CommandProcessing\CommandTriggerCombination.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Midi\CommandProcessing\ControlChangeSignal.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\CommandProcessing\ModeButton.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\MidiOutConnectionManager.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\NanoControl8.cs" />

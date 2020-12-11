@@ -43,17 +43,11 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
     {
         public ApplyPresetCommand(int[] indices) : base(indices)
         {
-
         }
 
         public override void ExecuteOnce(PresetSystem presetSystem)
         {
             Log.Debug($"{this}.Execute({string.Join(", ", Indices)})");
-            if (Indices.Length < 1)
-            {
-                Log.Error("Cant apply preset without valid indices");
-                return;
-            }
             presetSystem.ActivatePresetAtIndex(Indices[0]);
         }
     }
@@ -67,14 +61,20 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
         public override void ExecuteOnce(PresetSystem presetSystem)
         {
             Log.Debug($"{this}.Execute({string.Join(", ", Indices)})");
-            if (Indices.Length == 0)
-            {
-                Log.Error("Indices are undefined?");
-                return;
-            }
-
             presetSystem.ActivateGroupAtIndex(Indices[0]);
-
         }
     }
+    
+    public class RemovePresetCommand : ButtonsPressCommand
+    {
+        public RemovePresetCommand(int[] indices) : base(indices)
+        {
+        }
+
+        public override void ExecuteOnce(PresetSystem presetSystem)
+        {
+            Log.Debug($"{this}.Execute({string.Join(", ", Indices)})");
+            presetSystem.RemovePresetAtIndex(Indices[0]);
+        }
+    }    
 }

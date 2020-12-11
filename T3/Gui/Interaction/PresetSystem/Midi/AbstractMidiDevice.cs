@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NAudio.Midi;
+using T3.Core.Logging;
 using T3.Gui.Interaction.PresetSystem.Model;
 using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
@@ -11,6 +12,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
     {
         protected AbstractMidiDevice()
         {
+            //if(MidiInConnectionManager.GetMidiInForProductNameHash(GetProductNameHash()) != null)
             MidiInConnectionManager.RegisterConsumer(this);
         }
 
@@ -63,7 +65,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
             var isAnyButtonPressed = _signalsForButtonCombination.Values.Any(signal => (signal.State == ButtonSignal.States.JustPressed
                                                                                         || signal.State == ButtonSignal.States.Hold));
-            
+
             foreach (var ctc in CommandTriggerCombinations)
             {
                 var command = ctc.GetMatchingCommand(_signalsForButtonCombination.Values.ToList(), ActiveMode, releasedMode);
@@ -133,48 +135,38 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             {
                 if (msg.MidiEvent == null)
                     return;
-
-                ButtonSignal newSignal = null;
+                
                 switch (msg.MidiEvent.CommandCode)
                 {
                     case MidiCommandCode.NoteOff:
                     case MidiCommandCode.NoteOn:
-
-                        if (msg.MidiEvent is NoteEvent noteEvent)
-                        {
-                            newSignal = new ButtonSignal()
-                                            {
-                                                Channel = noteEvent.Channel,
-                                                ButtonId = noteEvent.NoteNumber,
-                                                ControllerValue = noteEvent.Velocity,
-                                                State = msg.MidiEvent.CommandCode == MidiCommandCode.NoteOn
-                                                            ? ButtonSignal.States.JustPressed
-                                                            : ButtonSignal.States.Released,
-                                            };
-                        }
-
-                        break;
+                        if (!(msg.MidiEvent is NoteEvent noteEvent))
+                            return;
+                        
+                        Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {noteEvent.NoteNumber}  Value: {noteEvent.Velocity}");
+                        _signalsSinceLastUpdate.Add(new ButtonSignal()
+                                                        {
+                                                            Channel = noteEvent.Channel,
+                                                            ButtonId = noteEvent.NoteNumber,
+                                                            ControllerValue = noteEvent.Velocity,
+                                                            State = msg.MidiEvent.CommandCode == MidiCommandCode.NoteOn
+                                                                        ? ButtonSignal.States.JustPressed
+                                                                        : ButtonSignal.States.Released,
+                                                        });
+                        return;
 
                     case MidiCommandCode.ControlChange:
-                        if (msg.MidiEvent is ControlChangeEvent controlChangeEvent)
-                        {
-                            newSignal = new ButtonSignal()
-                                            {
-                                                Channel = controlChangeEvent.Channel,
-                                                ButtonId = (int)controlChangeEvent.Controller,
-                                                ControllerValue = controlChangeEvent.ControllerValue,
-                                                State = controlChangeEvent.ControllerValue == 0
-                                                            ? ButtonSignal.States.JustPressed
-                                                            : ButtonSignal.States.Released,
-                                            };
-                        }
-
-                        break;
-                }
-
-                if (newSignal != null)
-                {
-                    _signalsSinceLastUpdate.Add(newSignal);
+                        if (!(msg.MidiEvent is ControlChangeEvent controlChangeEvent))
+                            return;
+                        
+                        Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {controlChangeEvent.Controller}  Value: {controlChangeEvent.ControllerValue}");
+                        _controlSignalsSinceLastUpdate.Add(new ControlChangeSignal()
+                                                               {
+                                                                   Channel = controlChangeEvent.Channel,
+                                                                   ControllerId = (int)controlChangeEvent.Controller,
+                                                                   ControllerValue = controlChangeEvent.ControllerValue,
+                                                               });
+                        return;
                 }
             }
         }
@@ -202,7 +194,6 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             if (CacheControllerColors[apcControlIndex] == colorCode)
                 return;
-
             const int defaultChannel = 1;
             var noteOnEvent = new NoteOnEvent(0, defaultChannel, apcControlIndex, colorCode, 50);
             midiOut.Send(noteOnEvent.GetAsShortMessage());
@@ -215,6 +206,8 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         private readonly Dictionary<int, ButtonSignal> _signalsForButtonCombination = new Dictionary<int, ButtonSignal>();
 
         private readonly List<ButtonSignal> _signalsSinceLastUpdate = new List<ButtonSignal>();
+
+        private readonly List<ControlChangeSignal> _controlSignalsSinceLastUpdate = new List<ControlChangeSignal>();
         //private bool _buttonCombinationStarted;
     }
 }

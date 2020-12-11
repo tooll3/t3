@@ -13,6 +13,8 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                                              {
                                                  new CommandTriggerCombination(typeof(ApplyPresetCommand), InputModes.Default, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                                  new CommandTriggerCombination(typeof(SavePresetCommand), InputModes.Save, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(typeof(RemovePresetCommand), InputModes.Delete, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 
                                                  new CommandTriggerCombination(typeof(ActivateGroupCommand), InputModes.Default, new[] { ChannelButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                              };
             

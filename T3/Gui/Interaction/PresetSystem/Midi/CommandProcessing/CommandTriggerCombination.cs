@@ -45,7 +45,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             
             if (_executesAt == ExecutesAt.SingleRangeButtonPressed)
             {
-                if (_releasedIndices.Count == 0 && _justPressedIndices.Count > 0)
+                if (_holdIndices.Count == 0 && _justPressedIndices.Count > 0)
                 {
                     return Activator.CreateInstance(_commandType, _justPressedIndices.ToArray()) as ButtonsPressCommand;
                 }

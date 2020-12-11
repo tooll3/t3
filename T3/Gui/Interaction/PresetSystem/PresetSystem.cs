@@ -188,7 +188,6 @@ namespace T3.Gui.Interaction.PresetSystem
             var newPreset = CreatePresetForGroup(group);
             ActiveContext.SetPresetAt(newPreset, address);
             group.SetActivePreset(newPreset);
-            //Log.Debug($"Saved preset at {address}");
             ActiveContext.WriteToJson();
         }
 
@@ -216,6 +215,31 @@ namespace T3.Gui.Interaction.PresetSystem
             ApplyGroupPreset(group, preset);
             preset.State = Preset.States.Active;
         }
+        
+        public void RemovePresetAtIndex(int buttonRangeIndex)
+        {
+            if (ActiveContext == null)
+            {
+                Log.Error($"Can't execute ApplyPresetAtIndex without valid context");
+                return;
+            }
+
+            var address = ActiveContext.GetAddressFromButtonIndex(buttonRangeIndex);
+            var preset = ActiveContext.TryGetPresetAt(address);
+            if (preset == null)
+            {
+                Log.Info($"There is no preset at {address}");
+                return;
+            }
+
+            var group = ActiveContext.GetGroupForAddress(address);
+            group.SetActivePreset(null);
+            ActiveContext.Presets[address.GroupColumn, address.SceneRow] = null;
+            ApplyGroupPreset(group, preset);
+            preset.State = Preset.States.Active;
+            ActiveContext.WriteToJson();
+        }
+        
         #endregion
 
         //---------------------------------------------------------------------------------

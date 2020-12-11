@@ -35,6 +35,8 @@ namespace T3.Gui.Interaction.PresetSystem
                 ActivePreset.State = Preset.States.InActive;
 
             ActivePreset = preset;
+            if(preset !=null)
+                preset.State = Preset.States.Active;
         }
 
         public void ToJson(JsonTextWriter writer)
