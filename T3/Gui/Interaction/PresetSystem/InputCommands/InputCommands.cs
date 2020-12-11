@@ -1,11 +1,10 @@
 ﻿using T3.Core.Logging;
-using T3.Gui.Interaction.PresetSystem.Midi;
 
 namespace T3.Gui.Interaction.PresetSystem.InputCommands
 {
     public abstract class InputCommand
     {
-        public abstract void ExecuteOnce(PresetSystem presetSystem, AbstractMidiDevice midiDevice);
+        public abstract void ExecuteOnce(PresetSystem presetSystem);
 
         public bool UpdateExecution(PresetSystem presetSystem)
         {
@@ -30,7 +29,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
         {
         }
 
-        public override void ExecuteOnce(PresetSystem presetSystem, AbstractMidiDevice midiDevice)
+        public override void ExecuteOnce(PresetSystem presetSystem)
         {
             Log.Debug($"{this}.Execute({string.Join(", ", Indices)})");
             foreach (var index in Indices)
@@ -47,7 +46,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
 
         }
 
-        public override void ExecuteOnce(PresetSystem presetSystem, AbstractMidiDevice midiDevice)
+        public override void ExecuteOnce(PresetSystem presetSystem)
         {
             Log.Debug($"{this}.Execute({string.Join(", ", Indices)})");
             if (Indices.Length < 1)
@@ -65,7 +64,7 @@ namespace T3.Gui.Interaction.PresetSystem.InputCommands
         {
         }
 
-        public override void ExecuteOnce(PresetSystem presetSystem, AbstractMidiDevice midiDevice)
+        public override void ExecuteOnce(PresetSystem presetSystem)
         {
             Log.Debug($"{this}.Execute({string.Join(", ", Indices)})");
             if (Indices.Length == 0)

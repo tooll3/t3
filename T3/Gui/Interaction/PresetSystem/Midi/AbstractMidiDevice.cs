@@ -32,7 +32,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                         continue;
 
                     if (command.IsInstant)
-                        command.ExecuteOnce(presetSystem, this);
+                        command.ExecuteOnce(presetSystem);
                 }
             }
 
