@@ -1,19 +1,16 @@
 ﻿using System.Collections.Generic;
-using T3.Gui.Interaction.PresetSystem.InputCommands;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
 {
     public class NanoControl8 : AbstractMidiDevice
     {
-        public NanoControl8()
+        public NanoControl8(PresetSystem presetSystem)
         {
             CommandTriggerCombinations = new List<CommandTriggerCombination>()
                                              {
-                                                 new CommandTriggerCombination(typeof(ApplyPresetCommand), InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 new CommandTriggerCombination(typeof(SavePresetCommand), InputModes.Save, new[] { ManagerSet, NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 new CommandTriggerCombination(typeof(ActivateGroupCommand), InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 // new CommandTriggerCombination(new[] { ManagerSet, NanoButtonR1To8 }, typeof(SavePresetCommand), this),
-                                                 // new CommandTriggerCombination(new[] { NanoButtonR1To8 }, typeof(ApplyPresetCommand), this),
+                                                 new CommandTriggerCombination(presetSystem.ActivatePresetAtIndex, InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(presetSystem.SavePresetAtIndex, InputModes.Save, new[] { ManagerSet, NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(presetSystem.ActivateGroupAtIndex, InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                              };
         }
 
@@ -39,7 +36,6 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             return _productNameHash;
         }
-        
 
         private readonly int _productNameHash = "Korg NanoControl".GetHashCode(); //Todo: this needs the correct product name
     }

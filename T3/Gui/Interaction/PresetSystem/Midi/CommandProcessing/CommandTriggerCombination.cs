@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using T3.Gui.Interaction.PresetSystem.InputCommands;
+using T3.Gui.Graph;
+//using T3.Gui.Interaction.PresetSystem.InputCommands;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
 {
@@ -10,20 +11,21 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
     /// <remarks>
     /// The requirements turned out to be quite complicated. This sketch might give an overview:
     /// - https://www.figma.com/file/lLlkKILVbLuv1mxuTq6jMb/Interaction?node-id=823%3A57
-    ///
     ///  
     /// </remarks>
     public class CommandTriggerCombination
     {
-        public CommandTriggerCombination(Type commandType, AbstractMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges, ExecutesAt executesAt)
+        public CommandTriggerCombination(Action<int> singleIndexAction, AbstractMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges, ExecutesAt executesAt)
         {
             _keyRanges = keyRanges;
-            _commandType = commandType;
             _requiredInputMode = requiredInputMode;
             _executesAt = executesAt;
+            _singleIndexAction = singleIndexAction;
         }
 
-        public InputCommand GetMatchingCommand(List<ButtonSignal> buttonSignals, AbstractMidiDevice.InputModes activeMode,
+        
+        
+        public void InvokeMatchingCommands(List<ButtonSignal> buttonSignals, AbstractMidiDevice.InputModes activeMode,
                                                AbstractMidiDevice.InputModes releasedMode)
         {
             UpdateMatchingRangeIndices(buttonSignals);
@@ -31,72 +33,41 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             if (_executesAt == ExecutesAt.ModeButtonReleased)
             {
                 if (releasedMode != _requiredInputMode)
-                    return null;
+                    return;
+
+                if (_activatedIndices.Count > 0)
+                {
+                    _singleIndexAction?.Invoke(_activatedIndices[0]);
+                }
                 
-                if(_activatedIndices.Count > 0)
-                    return Activator.CreateInstance(_commandType, _activatedIndices.ToArray()) as ButtonsPressCommand;
-                
-                return null;
+                return;
             }
 
             if (_requiredInputMode != AbstractMidiDevice.InputModes.None && activeMode != _requiredInputMode)
-                return null;
+                return;
 
             
             if (_executesAt == ExecutesAt.SingleRangeButtonPressed)
             {
                 if (_holdIndices.Count == 0 && _justPressedIndices.Count > 0)
                 {
-                    return Activator.CreateInstance(_commandType, _justPressedIndices.ToArray()) as ButtonsPressCommand;
+                    _singleIndexAction?.Invoke(_justPressedIndices[0]);
                 }
 
-                return null;
+                return;
             }
 
             if (_executesAt == ExecutesAt.AllCombinedButtonsReleased)
             {
                 if (_releasedIndices.Count > 0 && _justPressedIndices.Count == 0 && _holdIndices.Count == 0)
                 {
-                    return Activator.CreateInstance(_commandType, _releasedIndices.ToArray()) as ButtonsPressCommand;
+                    _singleIndexAction?.Invoke(_releasedIndices[0]);
                 }
-
-                // var matchedSignalCount = 0;
-                // _matchingMappedIndices.Clear();
-                // foreach (var requiredControlRanges in _keyRanges)
-                // {
-                //     var foundMatchingSignal = false;
-                //     foreach (var givenSignal in buttonSignals)
-                //     {
-                //         if (!requiredControlRanges.IncludesButtonIndex(givenSignal.ButtonId))
-                //             continue;
-                //
-                //         matchedSignalCount++;
-                //         foundMatchingSignal = true;
-                //         if (requiredControlRanges.IsRange)
-                //         {
-                //             var mappedIndex = requiredControlRanges.GetMappedIndex(givenSignal.ButtonId);
-                //             _matchingMappedIndices.Add(mappedIndex);
-                //         }
-                //     }
-                //
-                //     if (!foundMatchingSignal)
-                //         return null;
-                // }
             }
-            
-
-            // All button pressed must be account for...
-            // if (matchedSignalCount != buttonSignals.Count)
-            //     return null;
-
-            //var indices = _matchingMappedIndices.ToArray();
-            //var command = Activator.CreateInstance(_commandType, indices) as ButtonsPressCommand;
-            return null;
         }
 
         private void UpdateMatchingRangeIndices(List<ButtonSignal> buttonSignals)
         {
-            //_matchingMappedIndices.Clear();
             _releasedIndices.Clear();
             _justPressedIndices.Clear();
             _holdIndices.Clear();
@@ -147,9 +118,10 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         private static readonly List<int> _justPressedIndices = new List<int>(10);
         private static readonly List<int> _holdIndices = new List<int>(10);
 
-        private readonly ButtonRange[] _keyRanges;
-        private readonly Type _commandType;
+        private readonly ButtonRange[] _keyRanges; 
         private readonly AbstractMidiDevice.InputModes _requiredInputMode;
-        private readonly ExecutesAt _executesAt;
+        private readonly ExecutesAt _executesAt;        
+        private readonly Action<int> _singleIndexAction;
+
     }
 }

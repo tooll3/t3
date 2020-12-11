@@ -403,7 +403,6 @@
     <Compile Include="Gui\Interaction\ColorEditButton.cs" />
     <Compile Include="Gui\Interaction\JogDialOverlay.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Dialogs\AddGroupDialog.cs" />
-    <Compile Include="Gui\Interaction\PresetSystem\InputCommands\InputCommands.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\Apc40Mk2.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\ApcMini.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\AbstractMidiDevice.cs" />

@@ -1,47 +1,23 @@
 ﻿using System.Collections.Generic;
 using NAudio.Midi;
 using T3.Core.Logging;
-using T3.Gui.Interaction.PresetSystem.InputCommands;
+//using T3.Gui.Interaction.PresetSystem.InputCommands;
 using T3.Gui.Interaction.PresetSystem.Model;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
 {
     public class Apc40Mk2 : AbstractMidiDevice
     {
-        public Apc40Mk2()
+        public Apc40Mk2(PresetSystem presetSystem)
         {
             CommandTriggerCombinations = new List<CommandTriggerCombination>()
                                              {
-                                                 new CommandTriggerCombination(typeof(ApplyPresetCommand), InputModes.Default, new[] { Shift, SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 new CommandTriggerCombination(typeof(SavePresetCommand), InputModes.Save, new[] { Shift, SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 new CommandTriggerCombination(typeof(ActivateGroupCommand), InputModes.Default, new[] { ClipStopButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(presetSystem.ActivatePresetAtIndex, InputModes.Default, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(presetSystem.SavePresetAtIndex, InputModes.Save, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(presetSystem.ActivateGroupAtIndex, InputModes.Default, new[] { ClipStopButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                              };
         }
 
-        // void InitDevice(unsigned char mode = 0x42)
-        // {
-        //     if (!m_bFoundOut)
-        //         return;
-        //
-        //     std::vector<unsigned char> message;
-        //
-        //     message.push_back(0xF0); // MIDI excl start
-        //     message.push_back(0x47); // Manu ID
-        //     message.push_back(0x7F); // DevID
-        //     message.push_back(0x73); // Prod Model ID
-        //     message.push_back(0x60); // Msg Type ID (0x60=Init?)
-        //     message.push_back(0x00); // Num Data Bytes (most sign.)
-        //     message.push_back(0x04); // Num Data Bytes (least sign.)
-        //     message.push_back(mode); // Device Mode (0x40=unset, 0x41=Ableton, 0x42=Ableton with full ctrl)
-        //     message.push_back(0x01); // PC Ver Major (?)
-        //     message.push_back(0x01); // PC Ver Minor (?)
-        //     message.push_back(0x01); // PC Bug Fix Lvl (?)
-        //     message.push_back(0xF7); // MIDI excl end
-        //
-        //     m_pRtMidiOut->sendMessage(&message);
-        // }
-
-        private bool _initialized = false;
 
         public override void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context)
         {
@@ -55,7 +31,8 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
             if (!_initialized)
             {
-                Log.Debug("Sending init message to APC40...");
+                // NOTE: This invocation doesn't seem to have an effect
+                Log.Debug("Sending init SysEx message to APC40...");
                 var buffer = new byte[]
                                  {
                                      0xF0, // MIDI excl start
@@ -237,5 +214,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             White = 3,
             Yellow = 12,
         };
+        
+        private bool _initialized;
     }
 }

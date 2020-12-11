@@ -24,13 +24,14 @@ namespace T3.Gui.Interaction.PresetSystem
 
             _inputDevices = new List<IControllerInputDevice>()
                                 {
-                                    new Apc40Mk2(),
-                                    new NanoControl8(),
-                                    new ApcMini(),
+                                    new Apc40Mk2(this),
+                                    new NanoControl8(this),
+                                    new ApcMini(this),
                                 };
         }
 
         private Guid _lastCompositionId;
+        
         
         //---------------------------------------------------------------------------------
         #region API from T3 UI
@@ -374,6 +375,11 @@ namespace T3.Gui.Interaction.PresetSystem
 
         private Instance _activeCompositionInstance;
         private static readonly AddGroupDialog AddGroupDialog = new AddGroupDialog();
+
+        public void ActivateGroupAction(int obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public interface IControllerInputDevice

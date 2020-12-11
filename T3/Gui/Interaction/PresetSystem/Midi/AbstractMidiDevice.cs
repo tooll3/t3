@@ -36,7 +36,6 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             if (_signalsForButtonCombination.Count == 0)
                 return;
 
-            //var allButtonsReleased = _signalsForNextCommand.Values.Any(signal => signal.IsPressed);
             var releasedMode = InputModes.None;
 
             // Update modes
@@ -68,12 +67,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
             foreach (var ctc in CommandTriggerCombinations)
             {
-                var command = ctc.GetMatchingCommand(_signalsForButtonCombination.Values.ToList(), ActiveMode, releasedMode);
-                if (command == null)
-                    continue;
-
-                if (command.IsInstant)
-                    command.ExecuteOnce(presetSystem);
+                ctc.InvokeMatchingCommands(_signalsForButtonCombination.Values.ToList(), ActiveMode, releasedMode);
             }
 
             if (!isAnyButtonPressed)
@@ -82,9 +76,10 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             }
         }
 
+        public abstract int GetProductNameHash();
+
         protected List<CommandTriggerCombination> CommandTriggerCombinations;
         protected List<ModeButton> ModeButtons;
-        public abstract int GetProductNameHash();
 
         // ------------------------------------------------------------------------------------
         #region Process button Signals
@@ -100,28 +95,13 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
                 foreach (var newSignal in _signalsSinceLastUpdate)
                 {
-                    // Update previous signals
                     if (_signalsForButtonCombination.TryGetValue(newSignal.ButtonId, out var earlierSignal))
                     {
                         earlierSignal.State = newSignal.State;
-                        // if (newSignal.State == ButtonSignal.States.JustPressed)
-                        // {
-                        //     Log.Warning("Signal update for a just pressed state should not occur.");
-                        //     continue;
-                        // }
-                        // if (newSignal.IsPressed)
-                        // {
-                        //     _buttonCombinationStarted = true;
-                        // }
-                        // else
-                        // {
-                        //     earlierSignal.IsPressed = false;
-                        // }
                     }
                     else
                     {
                         _signalsForButtonCombination[newSignal.ButtonId] = newSignal;
-                        //_buttonCombinationStarted = true;
                     }
                 }
 
@@ -204,10 +184,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         #endregion
 
         private readonly Dictionary<int, ButtonSignal> _signalsForButtonCombination = new Dictionary<int, ButtonSignal>();
-
         private readonly List<ButtonSignal> _signalsSinceLastUpdate = new List<ButtonSignal>();
-
         private readonly List<ControlChangeSignal> _controlSignalsSinceLastUpdate = new List<ControlChangeSignal>();
-        //private bool _buttonCombinationStarted;
     }
 }
