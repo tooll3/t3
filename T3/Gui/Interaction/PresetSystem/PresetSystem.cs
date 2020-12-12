@@ -65,6 +65,10 @@ namespace T3.Gui.Interaction.PresetSystem
                     }
                 }
             }
+            else
+            {
+                ActiveContext = contextForCurrentComposition;
+            }
 
             // Update Midi Devices 
             foreach (var connectedDevice in _inputDevices)
@@ -188,8 +192,8 @@ namespace T3.Gui.Interaction.PresetSystem
                     continue;
 
                 var symbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == parameter.SymbolChildId);
-                var instance = _activeCompositionInstance.Children.Single(child => child.SymbolChildId == parameter.SymbolChildId);
-                if (symbolChildUi != null)
+                var instance = _activeCompositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == parameter.SymbolChildId);
+                if (symbolChildUi != null && instance != null )
                 {
                     SelectionManager.AddSelection(symbolChildUi,instance);
                 }
