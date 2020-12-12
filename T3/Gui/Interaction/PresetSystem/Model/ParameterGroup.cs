@@ -16,6 +16,7 @@ namespace T3.Gui.Interaction.PresetSystem
 
         // TODO: Do not serialize
         public Preset ActivePreset { get; set; }
+        public List<Preset> BlendedPresets { get; set; } = new List<Preset>();
 
         public GroupParameter AddParameterToIndex(GroupParameter parameter, int index)
         {
@@ -33,12 +34,23 @@ namespace T3.Gui.Interaction.PresetSystem
         {
             if (ActivePreset != null)
                 ActivePreset.State = Preset.States.InActive;
+            
+            StopBlending();
 
             ActivePreset = preset;
             if(preset !=null)
                 preset.State = Preset.States.Active;
         }
 
+        public void StopBlending()
+        {
+            foreach (var p in BlendedPresets)
+            {
+                p.State = Preset.States.InActive;
+            }
+            BlendedPresets.Clear();
+        }
+        
         public void ToJson(JsonTextWriter writer)
         {
             writer.WriteValue("Id", Id);
@@ -79,5 +91,7 @@ namespace T3.Gui.Interaction.PresetSystem
             return newGroup;
             //Guid parameterId = Guid.Parse(presetToken["ParameterId"].Value<string>());
         }
+
+
     }
 }

@@ -42,7 +42,7 @@ namespace T3.Gui.Interaction.PresetSystem.Dialogs
                 //     ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));
                 // }
 
-                if (CustomComponents.DisablableButton("Duplicate", !string.IsNullOrEmpty( name)))
+                if (CustomComponents.DisablableButton("Create Blend Group", !string.IsNullOrEmpty( name)))
                 {
                     T3Ui.PresetSystem.CreateNewGroupForInput();
                     ImGui.CloseCurrentPopup();

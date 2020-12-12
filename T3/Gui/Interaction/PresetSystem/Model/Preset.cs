@@ -19,6 +19,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
             InActive,
             Active,
             Modified,
+            IsBlended,
         }
 
         public void ToJson(JsonTextWriter writer)

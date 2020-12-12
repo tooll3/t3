@@ -8,15 +8,30 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
     {
         public ApcMini(PresetSystem presetSystem)
         {
-            CommandTriggerCombinations = new List<CommandTriggerCombination>
-                                             {
-                                                 new CommandTriggerCombination(presetSystem.ActivatePresetAtIndex, InputModes.Default, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 new CommandTriggerCombination(presetSystem.SavePresetAtIndex, InputModes.Save, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 new CommandTriggerCombination(presetSystem.RemovePresetAtIndex, InputModes.Delete, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 
-                                                 new CommandTriggerCombination(presetSystem.ActivateGroupAtIndex, InputModes.Default, new[] { ChannelButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                             };
-            
+            CommandTriggerCombinations
+                = new List<CommandTriggerCombination>
+                      {
+                          new CommandTriggerCombination(presetSystem.ActivatePresetAtIndex, InputModes.Default,
+                                                        new[] { SceneTrigger1To64 },
+                                                        CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                          new CommandTriggerCombination(presetSystem.SavePresetAtIndex, InputModes.Save, new[] { SceneTrigger1To64 },
+                                                        CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                          new CommandTriggerCombination(presetSystem.RemovePresetAtIndex, InputModes.Delete, new[] { SceneTrigger1To64 },
+                                                        CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+
+                          new CommandTriggerCombination(presetSystem.ActivateGroupAtIndex, InputModes.Default,
+                                                        new[] { ChannelButtons1To8 },
+                                                        CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+
+                          new CommandTriggerCombination(presetSystem.StartBlendingPresets, InputModes.Default,
+                                                        new[] { SceneTrigger1To64 },
+                                                        CommandTriggerCombination.ExecutesAt.AllCombinedButtonsReleased),
+
+                          new CommandTriggerCombination(presetSystem.BlendValuesUpdate, InputModes.Default,
+                                                        new[] { Sliders1To9 },
+                                                        CommandTriggerCombination.ExecutesAt.ControllerChange),
+                      };
+
             ModeButtons = new List<ModeButton>
                               {
                                   new ModeButton(Shift, InputModes.Save),
@@ -24,8 +39,6 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                               };
         }
 
-
-        
         public override void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context)
         {
             _updateCount++;
@@ -36,7 +49,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             var midiOut = MidiOutConnectionManager.GetConnectedController(_productNameHash);
             if (midiOut == null)
                 return;
-            
+
             UpdateRangeLeds(midiOut, SceneTrigger1To64,
                             mappedIndex =>
                             {
@@ -59,6 +72,9 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                                         break;
                                     case Preset.States.Modified:
                                         color = ApcButtonColor.YellowBlinking;
+                                        break;
+                                    case Preset.States.IsBlended:
+                                        color = ApcButtonColor.RedBlinking;
                                         break;
                                 }
 
@@ -96,7 +112,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             return _productNameHash;
         }
-        
+
         private int WarningColor(int index, int orgColor)
         {
             var indicatedStatus = (_updateCount + index / 8) % 30 < 4;
@@ -117,8 +133,8 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             return orgColor;
         }
 
-        private int _updateCount = 0;        
-        
+        private int _updateCount = 0;
+
         private readonly int _productNameHash = "APC MINI".GetHashCode();
 
         private enum ApcButtonColor

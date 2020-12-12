@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using ImGuiNET;
 using NAudio.Midi;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -31,8 +33,7 @@ namespace T3.Gui.Interaction.PresetSystem
         }
 
         private Guid _lastCompositionId;
-        
-        
+
         //---------------------------------------------------------------------------------
         #region API from T3 UI
         public void Update()
@@ -96,7 +97,7 @@ namespace T3.Gui.Interaction.PresetSystem
         public void DrawInputContextMenu(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
             // Save relevant creation details
-            _nextCompositionUi = compositionUi;
+            //_nextCompositionUi = compositionUi;
             _nextSymbolChildUi = symbolChildUi;
             _nextInputSlotFor = inputSlot;
             _nextNameFor = symbolChildUi.SymbolChild.ReadableName;
@@ -149,7 +150,7 @@ namespace T3.Gui.Interaction.PresetSystem
         #endregion
 
         //---------------------------------------------------------------------------------
-        #region API calls from commands
+        #region API calls from midi inputs
         public void ActivateGroupAtIndex(int index)
         {
             if (ActiveContext == null)
@@ -209,6 +210,7 @@ namespace T3.Gui.Interaction.PresetSystem
             }
 
             var group = ActiveContext.GetGroupForAddress(address);
+
             group.SetActivePreset(preset);
             ActiveContext.SetGroupAsActive(group);
 
@@ -216,7 +218,7 @@ namespace T3.Gui.Interaction.PresetSystem
             ApplyGroupPreset(group, preset);
             preset.State = Preset.States.Active;
         }
-        
+
         public void RemovePresetAtIndex(int buttonRangeIndex)
         {
             if (ActiveContext == null)
@@ -240,7 +242,46 @@ namespace T3.Gui.Interaction.PresetSystem
             preset.State = Preset.States.Active;
             ActiveContext.WriteToJson();
         }
-        
+
+        public void StartBlendingPresets(int[] indices)
+        {
+            Log.Debug(" Start blending " + String.Join(", ", indices));
+
+            for (var groupIndex = 0; groupIndex < ActiveContext.Groups.Count; groupIndex++)
+            {
+                var @group = ActiveContext.Groups[groupIndex];
+                if (@group == null)
+                    continue;
+
+                var startedNewBlendGroup = false;
+                foreach (var index in indices)
+                {
+                    var address = ActiveContext.GetAddressFromButtonIndex(index);
+                    if (address.GroupColumn != groupIndex)
+                        continue;
+
+                    if (!startedNewBlendGroup)
+                    {
+                        group.StopBlending();
+                        startedNewBlendGroup = true;
+                    }
+
+                    var preset = ActiveContext.Presets[address.GroupColumn, address.SceneRow];
+                    preset.State = Preset.States.IsBlended;
+                    group.BlendedPresets.Add(preset);
+                }
+            }
+        }
+
+        public void BlendValuesUpdate(int index, float value)
+        {
+            var group = ActiveContext.Groups[index];
+            if (group == null)
+                return;
+
+            BlendGroupPresets(group, value / 127f);
+            //Log.Debug(" Blend values updated :" + index + "  " +  String.Join(", ",value));
+        }
         #endregion
 
         //---------------------------------------------------------------------------------
@@ -263,8 +304,7 @@ namespace T3.Gui.Interaction.PresetSystem
                 preset.ValuesForGroupParameterIds[newParameter.Id] = input.Input.Value.Clone();
             }
         }
-        
-        
+
         private GroupParameter CreateParameter()
         {
             var newParameter = new GroupParameter
@@ -278,8 +318,7 @@ namespace T3.Gui.Interaction.PresetSystem
                                    };
             return newParameter;
         }
-        
-        
+
         private void SetOrCreateContextForActiveComposition()
         {
             if (_contextForCompositions.TryGetValue(_activeCompositionId, out var existingContext))
@@ -325,14 +364,12 @@ namespace T3.Gui.Interaction.PresetSystem
         {
             var commands = new List<ICommand>();
             var symbol = _activeCompositionInstance.Symbol;
-            //var symbolUi = SymbolUiRegistry.Entries[ActiveContext.CompositionId];
 
             foreach (var parameter in group.Parameters)
             {
                 var symbolChild = symbol.Children.Single(s => s.Id == parameter.SymbolChildId);
                 var input = symbolChild.InputValues[parameter.InputId];
 
-                //var presetValuesForGroupParameterId = preset.ValuesForGroupParameterIds[parameter.Id];
                 if (preset.ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var presetValuesForGroupParameterId))
                 {
                     var newCommand = new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
@@ -350,13 +387,77 @@ namespace T3.Gui.Interaction.PresetSystem
             var command = new MacroCommand("Set Preset Values", commands);
             UndoRedoStack.AddAndExecute(command);
         }
+
+        private void BlendGroupPresets(ParameterGroup group, float blendValue)
+        {
+            var commands = new List<ICommand>();
+            var symbol = _activeCompositionInstance.Symbol;
+
+            if (group.BlendedPresets.Count < 2)
+            {
+                Log.Warning($"Select at least two presets for blending ({group.BlendedPresets.Count} selected)");
+                return;
+            }
+
+            var count = group.BlendedPresets.Count;
+            var clampedBlend = blendValue.Clamp(0, 1);
+            var t = clampedBlend * (count - 1);
+            var index0 = (int)t.Clamp(0, count -2);
+            var index1 = index0 + 1;
+            var localBlendFactor = t - index0;
+
+            foreach (var parameter in group.Parameters)
+            {
+                var symbolChild = symbol.Children.Single(s => s.Id == parameter.SymbolChildId);
+                var input = symbolChild.InputValues[parameter.InputId];
+
+                if (!group.BlendedPresets[index0].ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var valueA)
+                    || !group.BlendedPresets[index1].ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var valueB))
+                    continue;
+
+                if (valueA is InputValue<float> floatValueA && valueB is InputValue<float> floatValueB)
+                {
+                    var blendedValue = MathUtils.Lerp(floatValueA.Value, floatValueB.Value, localBlendFactor);
+                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
+                                     {
+                                         Value = new InputValue<float>(blendedValue),
+                                     });
+                }
+                else if (valueA is InputValue<Vector2> vec2ValueA && valueB is InputValue<Vector2> vec2ValueB)
+                {
+                    var blendedValue = MathUtils.Lerp(vec2ValueA.Value, vec2ValueB.Value, localBlendFactor);
+                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
+                                     {
+                                         Value = new InputValue<Vector2>(blendedValue),
+                                     });
+                }
+                else if (valueA is InputValue<Vector3> vec3ValueA && valueB is InputValue<Vector3> vec3ValueB)
+                {
+                    var blendedValue = MathUtils.Lerp(vec3ValueA.Value, vec3ValueB.Value, localBlendFactor);
+                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
+                                     {
+                                         Value = new InputValue<Vector3>(blendedValue),
+                                     });
+                }
+                else if (valueA is InputValue<Vector4> vec4ValueA && valueB is InputValue<Vector4> vec4ValueB)
+                {
+                    var blendedValue = MathUtils.Lerp(vec4ValueA.Value, vec4ValueB.Value, localBlendFactor);
+                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
+                                     {
+                                         Value = new InputValue<Vector4>(blendedValue),
+                                     });
+                }
+            }
+
+            var command = new MacroCommand("Set Preset Values", commands);
+            command.Do(); // No Undo... boo! 
+        }
         #endregion
 
         private Guid _activeCompositionId = Guid.Empty;
         private readonly List<IControllerInputDevice> _inputDevices;
 
-        private readonly Dictionary<Guid, CompositionContext> _contextForCompositions =
-            new Dictionary<Guid, CompositionContext>();
+        private readonly Dictionary<Guid, CompositionContext> _contextForCompositions = new Dictionary<Guid, CompositionContext>();
 
         //public Instance ActiveComposition;
 
@@ -368,23 +469,12 @@ namespace T3.Gui.Interaction.PresetSystem
         /// </summary>
         private CompositionContext ActiveContext { get; set; }
 
-        private SymbolUi _nextCompositionUi;
+        //private SymbolUi _nextCompositionUi;
         private SymbolChildUi _nextSymbolChildUi;
         private IInputSlot _nextInputSlotFor;
         private string _nextNameFor;
 
         private Instance _activeCompositionInstance;
         private static readonly AddGroupDialog AddGroupDialog = new AddGroupDialog();
-
-        public void ActivateGroupAction(int obj)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public interface IControllerInputDevice
-    {
-        void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context);
-        int GetProductNameHash();
     }
 }

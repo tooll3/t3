@@ -143,7 +143,23 @@ namespace T3.Core
         {
             return new Vector2(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t);
         }
+        
+        public static Vector3 Lerp(Vector3 a, Vector3 b, float t)
+        {
+            return new Vector3(a.X + (b.X - a.X) * t, 
+                               a.Y + (b.Y - a.Y) * t,
+                               a.Z + (b.Z - a.Z) * t);
+        }
 
+        public static Vector4 Lerp(Vector4 a, Vector4 b, float t)
+        {
+            return new Vector4(a.X + (b.X - a.X) * t, 
+                               a.Y + (b.Y - a.Y) * t,
+                               a.Z + (b.Z - a.Z) * t,
+                               a.W + (b.W - a.W) * t);
+        }
+
+        
         public static double Lerp(double a, double b, double t)
         {
             return (double)(a + (b - a) * t);

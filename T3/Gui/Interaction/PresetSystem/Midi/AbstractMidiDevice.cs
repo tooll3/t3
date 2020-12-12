@@ -8,6 +8,12 @@ using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
 {
+    public interface IControllerInputDevice
+    {
+        void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context);
+        int GetProductNameHash();
+    }    
+    
     public abstract class AbstractMidiDevice : IControllerInputDevice, MidiInConnectionManager.IMidiConsumer
     {
         protected AbstractMidiDevice()
@@ -31,9 +37,18 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
         public virtual void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context)
         {
-            ProcessSignals();
+            CombineButtonSignals();
 
-            if (_signalsForButtonCombination.Count == 0)
+            lock (_controlSignalsSinceLastUpdate)
+            {
+                foreach (var ctc in CommandTriggerCombinations)
+                {
+                    ctc.InvokeMatchingControlCommands(_controlSignalsSinceLastUpdate.ToList(), ActiveMode);
+                }
+                _controlSignalsSinceLastUpdate.Clear();
+            }
+            
+            if (_combinedButtonSignals.Count == 0)
                 return;
 
             var releasedMode = InputModes.None;
@@ -41,7 +56,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             // Update modes
             foreach (var modeButton in ModeButtons)
             {
-                var matchingSignal = _signalsForButtonCombination.Values.SingleOrDefault(s => modeButton.ButtonRange.IncludesButtonIndex(s.ButtonId));
+                var matchingSignal = _combinedButtonSignals.Values.SingleOrDefault(s => modeButton.ButtonRange.IncludesButtonIndex(s.ButtonId));
                 if (matchingSignal == null)
                     continue;
 
@@ -62,17 +77,17 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             if (CommandTriggerCombinations == null)
                 return;
 
-            var isAnyButtonPressed = _signalsForButtonCombination.Values.Any(signal => (signal.State == ButtonSignal.States.JustPressed
+            var isAnyButtonPressed = _combinedButtonSignals.Values.Any(signal => (signal.State == ButtonSignal.States.JustPressed
                                                                                         || signal.State == ButtonSignal.States.Hold));
 
             foreach (var ctc in CommandTriggerCombinations)
             {
-                ctc.InvokeMatchingCommands(_signalsForButtonCombination.Values.ToList(), ActiveMode, releasedMode);
+                ctc.InvokeMatchingButtonCommands(_combinedButtonSignals.Values.ToList(), ActiveMode, releasedMode);
             }
 
             if (!isAnyButtonPressed)
             {
-                _signalsForButtonCombination.Clear();
+                _combinedButtonSignals.Clear();
             }
         }
 
@@ -83,29 +98,29 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
         // ------------------------------------------------------------------------------------
         #region Process button Signals
-        private void ProcessSignals()
+        private void CombineButtonSignals()
         {
-            lock (_signalsSinceLastUpdate)
+            lock (_buttonSignalsSinceLastUpdate)
             {
-                foreach (var earlierSignal in _signalsForButtonCombination.Values)
+                foreach (var earlierSignal in _combinedButtonSignals.Values)
                 {
                     if (earlierSignal.State == ButtonSignal.States.JustPressed)
                         earlierSignal.State = ButtonSignal.States.Hold;
                 }
 
-                foreach (var newSignal in _signalsSinceLastUpdate)
+                foreach (var newSignal in _buttonSignalsSinceLastUpdate)
                 {
-                    if (_signalsForButtonCombination.TryGetValue(newSignal.ButtonId, out var earlierSignal))
+                    if (_combinedButtonSignals.TryGetValue(newSignal.ButtonId, out var earlierSignal))
                     {
                         earlierSignal.State = newSignal.State;
                     }
                     else
                     {
-                        _signalsForButtonCombination[newSignal.ButtonId] = newSignal;
+                        _combinedButtonSignals[newSignal.ButtonId] = newSignal;
                     }
                 }
 
-                _signalsSinceLastUpdate.Clear();
+                _buttonSignalsSinceLastUpdate.Clear();
             }
         }
 
@@ -123,8 +138,8 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                         if (!(msg.MidiEvent is NoteEvent noteEvent))
                             return;
                         
-                        Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {noteEvent.NoteNumber}  Value: {noteEvent.Velocity}");
-                        _signalsSinceLastUpdate.Add(new ButtonSignal()
+                        //Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {noteEvent.NoteNumber}  Value: {noteEvent.Velocity}");
+                        _buttonSignalsSinceLastUpdate.Add(new ButtonSignal()
                                                         {
                                                             Channel = noteEvent.Channel,
                                                             ButtonId = noteEvent.NoteNumber,
@@ -139,7 +154,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                         if (!(msg.MidiEvent is ControlChangeEvent controlChangeEvent))
                             return;
                         
-                        Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {controlChangeEvent.Controller}  Value: {controlChangeEvent.ControllerValue}");
+                        //Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {controlChangeEvent.Controller}  Value: {controlChangeEvent.ControllerValue}");
                         _controlSignalsSinceLastUpdate.Add(new ControlChangeSignal()
                                                                {
                                                                    Channel = controlChangeEvent.Channel,
@@ -183,8 +198,8 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         private static readonly int[] CacheControllerColors = Enumerable.Repeat(-1, 256).ToArray();
         #endregion
 
-        private readonly Dictionary<int, ButtonSignal> _signalsForButtonCombination = new Dictionary<int, ButtonSignal>();
-        private readonly List<ButtonSignal> _signalsSinceLastUpdate = new List<ButtonSignal>();
+        private readonly Dictionary<int, ButtonSignal> _combinedButtonSignals = new Dictionary<int, ButtonSignal>();
+        private readonly List<ButtonSignal> _buttonSignalsSinceLastUpdate = new List<ButtonSignal>();
         private readonly List<ControlChangeSignal> _controlSignalsSinceLastUpdate = new List<ControlChangeSignal>();
     }
 }

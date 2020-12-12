@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using T3.Gui.Graph;
+
+//using System.Linq;
+//using T3.Gui.Graph;
 //using T3.Gui.Interaction.PresetSystem.InputCommands;
 
 namespace T3.Gui.Interaction.PresetSystem.Midi
@@ -15,21 +17,37 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
     /// </remarks>
     public class CommandTriggerCombination
     {
-        public CommandTriggerCombination(Action<int> singleIndexAction, AbstractMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges, ExecutesAt executesAt)
+        public CommandTriggerCombination(Action<int> indexAction, AbstractMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges,
+                                         ExecutesAt executesAt)
         {
             _keyRanges = keyRanges;
             _requiredInputMode = requiredInputMode;
             _executesAt = executesAt;
-            _singleIndexAction = singleIndexAction;
+            _indexAction = indexAction;
         }
 
-        
-        
-        public void InvokeMatchingCommands(List<ButtonSignal> buttonSignals, AbstractMidiDevice.InputModes activeMode,
-                                               AbstractMidiDevice.InputModes releasedMode)
+        public CommandTriggerCombination(Action<int[]> action, AbstractMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges, ExecutesAt executesAt)
+        {
+            _keyRanges = keyRanges;
+            _requiredInputMode = requiredInputMode;
+            _executesAt = executesAt;
+            _indicesAction = action;
+        }
+
+        public CommandTriggerCombination(Action<int, float> action, AbstractMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges,
+                                         ExecutesAt executesAt)
+        {
+            _keyRanges = keyRanges;
+            _requiredInputMode = requiredInputMode;
+            _executesAt = executesAt;
+            _controllerValueUpdateAction = action;
+        }
+
+        public void InvokeMatchingButtonCommands(List<ButtonSignal> buttonSignals, AbstractMidiDevice.InputModes activeMode,
+                                                 AbstractMidiDevice.InputModes releasedMode)
         {
             UpdateMatchingRangeIndices(buttonSignals);
-            
+
             if (_executesAt == ExecutesAt.ModeButtonReleased)
             {
                 if (releasedMode != _requiredInputMode)
@@ -37,21 +55,22 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
                 if (_activatedIndices.Count > 0)
                 {
-                    _singleIndexAction?.Invoke(_activatedIndices[0]);
+                    _indexAction?.Invoke(_activatedIndices[0]);
+                    _indicesAction?.Invoke(_activatedIndices.ToArray());
                 }
-                
+
                 return;
             }
 
             if (_requiredInputMode != AbstractMidiDevice.InputModes.None && activeMode != _requiredInputMode)
                 return;
 
-            
             if (_executesAt == ExecutesAt.SingleRangeButtonPressed)
             {
                 if (_holdIndices.Count == 0 && _justPressedIndices.Count > 0)
                 {
-                    _singleIndexAction?.Invoke(_justPressedIndices[0]);
+                    _indexAction?.Invoke(_justPressedIndices[0]);
+                    _indicesAction?.Invoke(_activatedIndices.ToArray());
                 }
 
                 return;
@@ -59,10 +78,39 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
             if (_executesAt == ExecutesAt.AllCombinedButtonsReleased)
             {
-                if (_releasedIndices.Count > 0 && _justPressedIndices.Count == 0 && _holdIndices.Count == 0)
+                if (_releasedIndices.Count > 1 && _justPressedIndices.Count == 0 && _holdIndices.Count == 0)
                 {
-                    _singleIndexAction?.Invoke(_releasedIndices[0]);
+                    //_indexAction?.Invoke(_releasedIndices[0]);
+                    _indicesAction?.Invoke(_activatedIndices.ToArray());
                 }
+            }
+        }
+
+        public void InvokeMatchingControlCommands(List<ControlChangeSignal> controlSignals, AbstractMidiDevice.InputModes activeMode)
+        {
+            if (_requiredInputMode != AbstractMidiDevice.InputModes.None && activeMode != _requiredInputMode)
+                return;
+
+            if (_executesAt != ExecutesAt.ControllerChange)
+                return;
+
+            foreach (var signal in controlSignals)
+            {
+                foreach (var range in _keyRanges)
+                {
+                    if (!range.IncludesButtonIndex(signal.ControllerId))
+                        continue;
+
+
+                    var mappedIndex = range.GetMappedIndex(signal.ControllerId);
+                    _controllerValueUpdateAction.Invoke(mappedIndex, signal.ControllerValue);
+                }
+
+                // if (_holdIndices.Count == 0 && _justPressedIndices.Count > 0)
+                // {
+                //     _indexAction?.Invoke(_justPressedIndices[0]);
+                //     _indicesAction?.Invoke(_activatedIndices.ToArray());
+                // }
             }
         }
 
@@ -99,17 +147,19 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                                 _holdIndices.Add(mappedIndex);
                                 break;
                         }
+
                         _activatedIndices.Add(mappedIndex);
                     }
                 }
             }
         }
-        
+
         public enum ExecutesAt
         {
             SingleRangeButtonPressed,
             AllCombinedButtonsReleased,
             ModeButtonReleased,
+            ControllerChange
         }
 
         // ReSharper disable InconsistentNaming
@@ -118,10 +168,11 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         private static readonly List<int> _justPressedIndices = new List<int>(10);
         private static readonly List<int> _holdIndices = new List<int>(10);
 
-        private readonly ButtonRange[] _keyRanges; 
+        private readonly ButtonRange[] _keyRanges;
         private readonly AbstractMidiDevice.InputModes _requiredInputMode;
-        private readonly ExecutesAt _executesAt;        
-        private readonly Action<int> _singleIndexAction;
-
+        private readonly ExecutesAt _executesAt;
+        private readonly Action<int> _indexAction;
+        private readonly Action<int[]> _indicesAction;
+        private readonly Action<int, float> _controllerValueUpdateAction;
     }
 }
