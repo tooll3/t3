@@ -13,6 +13,7 @@ using T3.Gui.Graph;
 using T3.Gui.Interaction.PresetSystem.Dialogs;
 using T3.Gui.Interaction.PresetSystem.Midi;
 using T3.Gui.Interaction.PresetSystem.Model;
+using T3.Gui.Selection;
 using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
 namespace T3.Gui.Interaction.PresetSystem
@@ -78,6 +79,8 @@ namespace T3.Gui.Interaction.PresetSystem
 
             // Draw Ui
             AddGroupDialog.Draw(ref _nextNameFor);
+
+            UpdateInputReferences();
         }
 
         public void CreateNewGroupForInput()
@@ -147,6 +150,61 @@ namespace T3.Gui.Interaction.PresetSystem
 
             ImGui.EndMenu();
         }
+
+        private void UpdateInputReferences()
+        {
+            _groupForBlendedParameters.Clear();
+            if (ActiveContext == null)
+                return;
+
+            for (var groupIndex = 0; groupIndex < ActiveContext.Groups.Count; groupIndex++)
+            {
+                var group = ActiveContext.Groups[groupIndex];
+                group.Index = groupIndex;
+
+                foreach (var parameter in @group.Parameters)
+                {
+                    if (parameter == null)
+                        continue;
+
+                    _groupForBlendedParameters[parameter.GetHashForInput()] = @group;
+                }
+            }
+        }
+
+        private void SelectUiElementsForGroup(ParameterGroup group)
+        {
+            if (ActiveContext == null)
+                return;
+
+            SelectionManager.Clear();
+
+            if (!SymbolUiRegistry.Entries.TryGetValue(_activeCompositionId, out var symbolUi))
+                return;
+
+            foreach (var parameter in @group.Parameters)
+            {
+                if (parameter == null)
+                    continue;
+
+                var symbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == parameter.SymbolChildId);
+                var instance = _activeCompositionInstance.Children.Single(child => child.SymbolChildId == parameter.SymbolChildId);
+                if (symbolChildUi != null)
+                {
+                    SelectionManager.AddSelection(symbolChildUi,instance);
+                }
+            }
+
+            SelectionManager.FitViewToSelection();
+        }
+
+        public ParameterGroup GetBlendGroupForHashedInput(int symbolChildInputHash)
+        {
+            _groupForBlendedParameters.TryGetValue(symbolChildInputHash, out var result);
+            return result;
+        }
+
+        private readonly Dictionary<int, ParameterGroup> _groupForBlendedParameters = new Dictionary<int, ParameterGroup>(100);
         #endregion
 
         //---------------------------------------------------------------------------------
@@ -162,7 +220,9 @@ namespace T3.Gui.Interaction.PresetSystem
                 return;
             }
 
-            ActiveContext.ActiveGroupId = ActiveContext.Groups[index].Id;
+            var group = ActiveContext.Groups[index];
+            ActiveContext.ActiveGroupId = group.Id;
+            SelectUiElementsForGroup(group);
         }
 
         public void SavePresetAtIndex(int buttonRangeIndex)
@@ -267,6 +327,9 @@ namespace T3.Gui.Interaction.PresetSystem
                     }
 
                     var preset = ActiveContext.Presets[address.GroupColumn, address.SceneRow];
+                    if (preset == null)
+                        return;
+                    
                     preset.State = Preset.States.IsBlended;
                     group.BlendedPresets.Add(preset);
                 }
@@ -402,7 +465,7 @@ namespace T3.Gui.Interaction.PresetSystem
             var count = group.BlendedPresets.Count;
             var clampedBlend = blendValue.Clamp(0, 1);
             var t = clampedBlend * (count - 1);
-            var index0 = (int)t.Clamp(0, count -2);
+            var index0 = (int)t.Clamp(0, count - 2);
             var index1 = index0 + 1;
             var localBlendFactor = t - index0;
 

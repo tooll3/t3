@@ -42,5 +42,10 @@ namespace T3.Gui.Interaction.PresetSystem.Model
                                    };
             return newParameter;
         }
+
+        public int GetHashForInput()
+        {
+            return Utilities.Hash(SymbolChildId,InputId);
+        }
     }
 }

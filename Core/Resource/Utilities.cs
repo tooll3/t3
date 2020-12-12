@@ -38,6 +38,17 @@ namespace T3.Core
         {
             return CastTo<T>.From(intInputSlot.GetValue(context));
         }
+        
+        public static int Hash<T>(T a, T b)
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 31 + a.GetHashCode();
+                hash = hash * 31 + b.GetHashCode();
+                return hash;
+            }
+        }
     }
 
     public static class CastTo<TTarget>

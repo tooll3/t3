@@ -13,6 +13,8 @@ namespace T3.Gui.Interaction.PresetSystem
         public Guid Id = Guid.NewGuid();
         public string Title;
         public List<GroupParameter> Parameters = new List<GroupParameter>(16);
+        
+        public int Index { get; internal set; }
 
         // TODO: Do not serialize
         public Preset ActivePreset { get; set; }

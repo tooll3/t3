@@ -259,7 +259,12 @@ namespace T3.Gui.InputUi
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
 
-                    if (ImGui.Button("", new Vector2(ConnectionAreaWidth, 0.0f)))
+                    var hash = Utilities.Hash(symbolChildUi.SymbolChild.Id, input.InputDefinition.Id);
+                    var blendGroup = T3Ui.PresetSystem.GetBlendGroupForHashedInput(hash);
+                    
+                    var label = blendGroup == null ? "" : "G" + (blendGroup.Index + 1);
+                    
+                    if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         if (IsAnimatable)
                             animator.CreateInputUpdateAction<float>(inputSlot);
