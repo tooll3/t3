@@ -13,6 +13,7 @@ using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
+using T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6;
 using UiHelpers;
 
 namespace T3.Gui.Windows
@@ -65,6 +66,12 @@ namespace T3.Gui.Windows
             var sizeOnScreen = ImageOutputCanvas.Current.TransformDirection(size);
             var srv = SrvManager.GetSrvForTexture(texture);
             ImGui.Image((IntPtr)srv, sizeOnScreen);
+
+            if (ImGui.IsMouseHoveringRect(topLeftOnScreen, topLeftOnScreen + sizeOnScreen))
+            {
+                var relativePosition = (ImGui.GetMousePos() - topLeftOnScreen) / sizeOnScreen;
+                MouseInput.Set(relativePosition, ImGui.IsMouseDown(ImGuiMouseButton.Left));
+            }
 
             string format = "";
             if (srv == null)

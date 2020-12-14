@@ -187,14 +187,11 @@ namespace T3.Gui.Interaction.PresetSystem.Model
                         for (var sceneIndex = 0; sceneIndex < Presets.GetLength(1); sceneIndex++)
                         {
                             writer.WriteStartObject();
+                            writer.WriteComment($"preset {groupIndex}:{sceneIndex}");
                             var address = new PresetAddress(groupIndex, sceneIndex);
                             var preset = TryGetPresetAt(address);
-                            if (preset != null)
-                            {
-                                preset.ToJson(writer);
-                            }
+                            preset?.ToJson(writer);
 
-                            writer.WriteComment($"preset {groupIndex}:{sceneIndex}");
                             writer.WriteEndObject();
                         }
                     }

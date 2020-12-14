@@ -340,9 +340,14 @@ namespace T3.Gui.Interaction.PresetSystem
             }
         }
 
-        public void BlendValuesUpdate(int index, float value)
+        public void BlendValuesUpdate(int groupIndex, float value)
         {
-            var group = ActiveContext.Groups[index];
+            if (groupIndex < 0 || groupIndex >= ActiveContext.Groups.Count)
+            {
+                Log.Warning("Can't blend undefined group index " + groupIndex);
+                return;
+            }
+            var group = ActiveContext.Groups[groupIndex];
             if (group == null)
                 return;
 
@@ -364,7 +369,12 @@ namespace T3.Gui.Interaction.PresetSystem
             }
 
             var newParameter = activeGroup.AddParameterToIndex(CreateParameter(), parameterIndex);
-            var instance = _activeCompositionInstance.Children.Single(c => c.SymbolChildId == newParameter.SymbolChildId);
+            var instance = _activeCompositionInstance.Children.SingleOrDefault(c => c.SymbolChildId == newParameter.SymbolChildId);
+            if (instance == null)
+            {
+                Log.Warning("Can't find correct instance of parameter view");
+                return;
+            }
             var input = instance.Inputs.Single(inp => inp.Id == newParameter.InputId);
             foreach (var preset in ActiveContext.GetPresetsForGroup(activeGroup))
             {
@@ -434,7 +444,13 @@ namespace T3.Gui.Interaction.PresetSystem
 
             foreach (var parameter in group.Parameters)
             {
-                var symbolChild = symbol.Children.Single(s => s.Id == parameter.SymbolChildId);
+                var symbolChild = symbol.Children.SingleOrDefault(s => s.Id == parameter.SymbolChildId);
+                if (symbolChild == null)
+                {
+                    Log.Error("Can't find symbol child");
+                    return;
+                }
+                    
                 var input = symbolChild.InputValues[parameter.InputId];
 
                 if (preset.ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var presetValuesForGroupParameterId))
