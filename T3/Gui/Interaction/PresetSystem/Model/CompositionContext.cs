@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Logging;
-using T3.Core.Operator;
 
 namespace T3.Gui.Interaction.PresetSystem.Model
 {
@@ -20,7 +19,8 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         public readonly List<ParameterGroup> Groups = new List<ParameterGroup>();
         public Preset[,] Presets = new Preset[4, 4];
         public PresetAddress ViewWindow;
-
+        public bool IsGroupExpanded { get; set; }
+        
         //----------------------------------------------------------------------------------------
         #region scenes
         public Guid ActiveSceneId = Guid.Empty;
@@ -51,6 +51,24 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         //----------------------------------------------------------------------------------------
         #region groups
         public Guid ActiveGroupId = Guid.Empty;
+
+        public int ActiveGroupIndex
+        {
+            get
+            {
+                if (ActiveGroupId == Guid.Empty)
+                    return -1;
+
+                for (var i = 0; i < Groups.Count; i++)
+                {
+                    if (Groups[i].Id == ActiveGroupId)
+                        return i;
+                }
+
+                return -1;
+            }
+        }
+
         public ParameterGroup ActiveGroup => Groups.SingleOrDefault(g => g.Id == ActiveGroupId);
 
         public void SetGroupAsActive(ParameterGroup group)
@@ -64,7 +82,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         
         public ParameterGroup GetGroupAtIndex(int index)
         {
-            return Groups.Count <= index ? null : Groups[index];
+            return (index<0 || index >= Groups.Count)  ? null : Groups[index];
         }
 
         public ParameterGroup GetGroupForAddress(PresetAddress address)
@@ -158,8 +176,9 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         /// <summary>
         /// Maps a button to an correct address by applying view window   
         /// </summary>
-        public PresetAddress GetAddressFromButtonIndex(int buttonRangeIndex, int columnCount = 8)
+        public PresetAddress GetAddressFromButtonIndex(int buttonRangeIndex)
         {
+            var columnCount = IsGroupExpanded ? 1 : 8;
             var localAddress = new PresetAddress(buttonRangeIndex % columnCount, buttonRangeIndex / columnCount);
             return localAddress - ViewWindow;
         }
@@ -302,5 +321,6 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         }
         
         protected static string PresetPath { get; } = @"Resources\presets\";
+        
     }
 }

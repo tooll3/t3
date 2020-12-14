@@ -215,18 +215,19 @@ namespace T3.Gui.Interaction.PresetSystem
         #region API calls from midi inputs
         public void ActivateGroupAtIndex(int index)
         {
-            if (ActiveContext == null)
+            if (!TryGetGroup(index, out var group))
                 return;
 
-            if (ActiveContext.Groups.Count <= index)
+            var isGroupTriggeredAgain = ActiveContext.ActiveGroup == group;
+            if (isGroupTriggeredAgain)
             {
-                Log.Warning($"Tried activate group at {index}. There are only {ActiveContext.Groups.Count} defined.");
-                return;
+                ActiveContext.IsGroupExpanded = !ActiveContext.IsGroupExpanded;
             }
-
-            var group = ActiveContext.Groups[index];
-            ActiveContext.ActiveGroupId = group.Id;
-            SelectUiElementsForGroup(group);
+            else
+            {
+                ActiveContext.ActiveGroupId = @group.Id;
+                SelectUiElementsForGroup(group);
+            }
         }
 
         public void SavePresetAtIndex(int buttonRangeIndex)
@@ -342,18 +343,55 @@ namespace T3.Gui.Interaction.PresetSystem
 
         public void BlendValuesUpdate(int groupIndex, float value)
         {
-            if (groupIndex < 0 || groupIndex >= ActiveContext.Groups.Count)
-            {
-                Log.Warning("Can't blend undefined group index " + groupIndex);
-                return;
-            }
-            var group = ActiveContext.Groups[groupIndex];
-            if (group == null)
+            if(!TryGetGroup(groupIndex, out var @group))
                 return;
 
             BlendGroupPresets(group, value / 127f);
-            //Log.Debug(" Blend values updated :" + index + "  " +  String.Join(", ",value));
         }
+
+        
+        public void AppendPresetToCurrentGroup()
+        {
+            
+        }
+
+        public void ToggleFocusGroupMode(int groupIndex)
+        {
+            if (!TryGetGroup(groupIndex, out var group))
+                return;
+
+
+
+        }        
+        /// <summary>
+        /// Tries to get get a group by index. Verifies Context, indeces, etc.  
+        /// </summary>
+        private bool TryGetGroup(int groupIndex, out ParameterGroup @group)
+        {
+            group = null;
+            if (ActiveContext == null || ActiveContext.Groups == null)
+            {
+                Log.Warning("Active context is undefined");
+                return false;
+            }
+
+            if (groupIndex < 0 || groupIndex >= ActiveContext.Groups.Count)
+            {
+                Log.Warning("Can't blend undefined group index " + groupIndex);
+                return false;
+            }
+
+            @group = ActiveContext.Groups[groupIndex];
+            if (@group == null)
+            {
+                Log.Warning($"can't find group with index {groupIndex}");
+                return false;
+            }
+
+            return true;
+        }
+
+
         #endregion
 
         //---------------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ImGuiNET;
 using NAudio.Midi;
 using T3.Gui.Interaction.PresetSystem.Model;
 
@@ -30,6 +31,10 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                           new CommandTriggerCombination(presetSystem.BlendValuesUpdate, InputModes.Default,
                                                         new[] { Sliders1To9 },
                                                         CommandTriggerCombination.ExecutesAt.ControllerChange),
+                          
+                          // new CommandTriggerCombination(presetSystem.BlendValuesUpdate, InputModes.Default,
+                          //                               new[] { Sliders1To9 },
+                          //                               CommandTriggerCombination.ExecutesAt.ControllerChange),                          
                       };
 
             ModeButtons = new List<ModeButton>
@@ -78,21 +83,43 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                                         break;
                                 }
 
-                                return WarningColor(mappedIndex, (int)color);
+                                return AddModeHighlight(mappedIndex, (int)color);
                             });
 
-            UpdateRangeLeds(midiOut, ChannelButtons1To8,
-                            mappedIndex =>
-                            {
-                                var g = context.GetGroupAtIndex(mappedIndex);
-                                var isUndefined = g == null;
-                                var color1 = isUndefined
-                                                 ? ApcButtonColor.Off
-                                                 : g.Id == context.ActiveGroupId
-                                                     ? ApcButtonColor.Red
-                                                     : ApcButtonColor.Off;
-                                return (int)color1;
-                            });
+
+            if (context.IsGroupExpanded)
+            {
+                var activeIndex = context.ActiveGroupIndex; 
+                UpdateRangeLeds(midiOut, ChannelButtons1To8,
+                                mappedIndex =>
+                                {
+                                    var colorForGroupButton =
+                                        mappedIndex == activeIndex
+                                            ? ApcButtonColor.Red
+                                            : (ImGui.GetFrameCount() + mappedIndex) % 30 < 3
+                                                ? ApcButtonColor.Red
+                                                : ApcButtonColor.Off;
+                                            
+                                    return (int)colorForGroupButton;
+                                });
+            }
+            else
+            {
+                UpdateRangeLeds(midiOut, ChannelButtons1To8,
+                                mappedIndex =>
+                                {
+                                    var group = context.GetGroupAtIndex(mappedIndex);
+                                    var isGroupDefined = group != null;
+                                    
+                                    var colorForGroupButton =
+                                        isGroupDefined
+                                                ? group.Id == context.ActiveGroupId
+                                                    ? ApcButtonColor.Red
+                                                    : ApcButtonColor.Off
+                                                : ApcButtonColor.Off;
+                                    return (int)colorForGroupButton;
+                                });
+            }
 
             // UpdateRangeLeds(midiOut, SceneLaunch1To8,
             //                 mappedIndex =>
@@ -113,7 +140,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             return _productNameHash;
         }
 
-        private int WarningColor(int index, int orgColor)
+        private int AddModeHighlight(int index, int orgColor)
         {
             var indicatedStatus = (_updateCount + index / 8) % 30 < 4;
             if (!indicatedStatus)
