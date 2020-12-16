@@ -69,6 +69,9 @@ namespace T3.Gui.Interaction.PresetSystem
             {
                 ActiveContext = contextForCurrentComposition;
             }
+            
+            // Update active context
+            
 
             // Update Midi Devices 
             foreach (var connectedDevice in _inputDevices)
@@ -85,6 +88,22 @@ namespace T3.Gui.Interaction.PresetSystem
             AddGroupDialog.Draw(ref _nextNameFor);
 
             UpdateInputReferences();
+        }
+
+        private void HighlightIdenticalPresets()
+        {
+            var activePreset = ActiveContext?.ActiveGroup?.ActivePreset;
+            //activePreset?.UpdateStateIfCurrentOrModified(ActiveContext?.ActiveGroup, _activeCompositionInstance);
+
+            var activeGroup = ActiveContext?.ActiveGroup;
+            if (activeGroup == null || _activeCompositionInstance == null)
+                return;
+            
+            foreach (var preset in ActiveContext.GetPresetsForGroup(activeGroup))
+            {
+                var isActive = preset == activePreset;
+                preset.UpdateStateIfCurrentOrModified(activeGroup, _activeCompositionInstance, isActive);
+            }
         }
 
         public void CreateNewGroupForInput()
@@ -228,6 +247,7 @@ namespace T3.Gui.Interaction.PresetSystem
                 ActiveContext.ActiveGroupId = @group.Id;
                 SelectUiElementsForGroup(group);
             }
+            HighlightIdenticalPresets();
         }
 
         public void SavePresetAtIndex(int buttonRangeIndex)
@@ -239,8 +259,13 @@ namespace T3.Gui.Interaction.PresetSystem
             }
 
             var address = ActiveContext.GetAddressFromButtonIndex(buttonRangeIndex);
+            CreatePresetAtAddress(address);
+        }
+
+        private void CreatePresetAtAddress(PresetAddress address)
+        {
             var group = ActiveContext.GetGroupForAddress(address);
-            if (group == null)
+            if (@group == null)
             {
                 Log.Warning($"Can't save preset for undefined group at {address}");
                 return;
@@ -252,9 +277,9 @@ namespace T3.Gui.Interaction.PresetSystem
                 ActiveContext.CreateSceneAt(address);
             }
 
-            var newPreset = CreatePresetForGroup(group);
+            var newPreset = CreatePresetForGroup(@group);
             ActiveContext.SetPresetAt(newPreset, address);
-            group.SetActivePreset(newPreset);
+            @group.SetActivePreset(newPreset);
             ActiveContext.WriteToJson();
         }
 
@@ -282,6 +307,7 @@ namespace T3.Gui.Interaction.PresetSystem
             //Log.Debug($"Applying preset at {address}");
             ApplyGroupPreset(group, preset);
             preset.State = Preset.States.Active;
+            HighlightIdenticalPresets();
         }
 
         public void RemovePresetAtIndex(int buttonRangeIndex)
@@ -349,20 +375,35 @@ namespace T3.Gui.Interaction.PresetSystem
             BlendGroupPresets(group, value / 127f);
         }
 
-        
+
         public void AppendPresetToCurrentGroup()
         {
+            if (ActiveContext == null)
+                return;
             
-        }
-
-        public void ToggleFocusGroupMode(int groupIndex)
-        {
-            if (!TryGetGroup(groupIndex, out var group))
+            var group = ActiveContext.ActiveGroup;
+            if (group == null)
                 return;
 
-
-
-        }        
+            var sceneRowsCount = ActiveContext.Presets.GetLength(1);
+            var address = new PresetAddress(group.Index, 0);
+            int minFreeIndex = sceneRowsCount;
+            int sceneRowIndex = sceneRowsCount-1;
+            for (; sceneRowIndex >= 0; sceneRowIndex--)
+            {
+                address.SceneRow = sceneRowIndex;
+                var preset = ActiveContext.TryGetPresetAt(address);
+                if (preset == null)
+                {
+                    minFreeIndex = sceneRowIndex;    
+                }
+            }
+            
+            address.SceneRow = minFreeIndex;
+            CreatePresetAtAddress(address);
+        }
+        
+        
         /// <summary>
         /// Tries to get get a group by index. Verifies Context, indeces, etc.  
         /// </summary>
@@ -467,7 +508,12 @@ namespace T3.Gui.Interaction.PresetSystem
             foreach (var parameter in group.Parameters)
             {
                 //var symbolChild = operatorSymbol.Children.Single(child => child.Id == parameter.SymbolChildId);
-                var instance = _activeCompositionInstance.Children.Single(c => c.SymbolChildId == parameter.SymbolChildId);
+                var instance = _activeCompositionInstance.Children.SingleOrDefault(c => c.SymbolChildId == parameter.SymbolChildId);
+                if (instance == null)
+                {
+                    Log.Error("Failed to get instance to focus parameters " + parameter.Title);
+                    continue;
+                }
                 var input = instance.Inputs.Single(inp => inp.Id == parameter.InputId);
                 newPreset.ValuesForGroupParameterIds[parameter.Id] = input.Input.Value.Clone();
             }

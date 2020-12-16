@@ -13,7 +13,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         }
 
         public readonly int GroupColumn;
-        public readonly int SceneRow;
+        public int SceneRow;
         public readonly bool IsValid;
 
         public bool IsValidForContext(CompositionContext config)

@@ -43,6 +43,14 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             _controllerValueUpdateAction = action;
         }
 
+        public CommandTriggerCombination(Action action, AbstractMidiDevice.InputModes requiredInputMode, ButtonRange[] keyRanges, ExecutesAt executesAt)
+        {
+            _keyRanges = keyRanges;
+            _requiredInputMode = requiredInputMode;
+            _executesAt = executesAt;
+            _actionWithoutParameters = action;
+        }
+        
         public void InvokeMatchingButtonCommands(List<ButtonSignal> buttonSignals, AbstractMidiDevice.InputModes activeMode,
                                                  AbstractMidiDevice.InputModes releasedMode)
         {
@@ -76,6 +84,19 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                 return;
             }
 
+            if (_executesAt == ExecutesAt.SingleActionButtonPressed)
+            {
+                if(buttonSignals.Count == 1
+                   && _keyRanges[0].IncludesButtonIndex(buttonSignals[0].ButtonId)
+                   && buttonSignals[0].State == ButtonSignal.States.JustPressed
+                )
+                {
+                    _actionWithoutParameters?.Invoke();
+                }
+                return;
+            }
+
+            
             if (_executesAt == ExecutesAt.AllCombinedButtonsReleased)
             {
                 if (_releasedIndices.Count > 1 && _justPressedIndices.Count == 0 && _holdIndices.Count == 0)
@@ -159,6 +180,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             SingleRangeButtonPressed,
             AllCombinedButtonsReleased,
             ModeButtonReleased,
+            SingleActionButtonPressed,
             ControllerChange
         }
 
@@ -171,8 +193,10 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         private readonly ButtonRange[] _keyRanges;
         private readonly AbstractMidiDevice.InputModes _requiredInputMode;
         private readonly ExecutesAt _executesAt;
+        private readonly Action _actionWithoutParameters;
         private readonly Action<int> _indexAction;
         private readonly Action<int[]> _indicesAction;
         private readonly Action<int, float> _controllerValueUpdateAction;
+
     }
 }

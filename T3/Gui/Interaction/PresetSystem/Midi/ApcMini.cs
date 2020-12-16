@@ -32,9 +32,10 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                                                         new[] { Sliders1To9 },
                                                         CommandTriggerCombination.ExecutesAt.ControllerChange),
                           
-                          // new CommandTriggerCombination(presetSystem.BlendValuesUpdate, InputModes.Default,
-                          //                               new[] { Sliders1To9 },
-                          //                               CommandTriggerCombination.ExecutesAt.ControllerChange),                          
+                          new CommandTriggerCombination(presetSystem.AppendPresetToCurrentGroup, InputModes.Default,
+                                                        new[] { SceneLaunch8ClipStopAll },
+                                                        CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),                          
+                          
                       };
 
             ModeButtons = new List<ModeButton>
@@ -96,7 +97,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                                     var colorForGroupButton =
                                         mappedIndex == activeIndex
                                             ? ApcButtonColor.Red
-                                            : (ImGui.GetFrameCount() + mappedIndex) % 30 < 3
+                                            : (ImGui.GetFrameCount() - mappedIndex) % 30 < 3
                                                 ? ApcButtonColor.Red
                                                 : ApcButtonColor.Off;
                                             
