@@ -94,6 +94,16 @@ namespace T3.Gui.Interaction.PresetSystem
             //Guid parameterId = Guid.Parse(presetToken["ParameterId"].Value<string>());
         }
 
+        
+        public int FindNextFreeIndex()
+        {
+            for (var i = 0; i < Parameters.Count; i++)
+            {
+                if (Parameters[i] == null)
+                    return i;
+            }
 
+            return Parameters.Count;
+        }
     }
 }

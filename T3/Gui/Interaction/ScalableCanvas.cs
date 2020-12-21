@@ -5,6 +5,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
+using T3.Gui.Windows.TimeLine;
 using UiHelpers;
 
 namespace T3.Gui.Interaction
@@ -346,8 +347,16 @@ namespace T3.Gui.Interaction
             if (Math.Abs(zoomDelta) > 0.1f)
                 UserZoomedCanvas = true;
 
-            ScaleTarget.X= ScaleTarget.X.Clamp(0.1f, 30);
-            ScaleTarget.Y= ScaleTarget.Y.Clamp(0.1f, 30);
+            if (this is TimeLineCanvas)
+            {
+                ScaleTarget.X= ScaleTarget.X.Clamp(0.01f, 5000);
+                ScaleTarget.Y= ScaleTarget.Y.Clamp(0.01f, 5000);
+            }
+            else
+            {
+                ScaleTarget.X= ScaleTarget.X.Clamp(0.1f, 30);
+                ScaleTarget.Y= ScaleTarget.Y.Clamp(0.1f, 30);
+            }
 
             var shift = ScrollTarget + (focusCenter * ScaleTarget);
             ScrollTarget += _mouse - shift - WindowPos;

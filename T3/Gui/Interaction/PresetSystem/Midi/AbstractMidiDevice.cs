@@ -12,8 +12,8 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
     {
         void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context);
         int GetProductNameHash();
-    }    
-    
+    }
+
     public abstract class AbstractMidiDevice : IControllerInputDevice, MidiInConnectionManager.IMidiConsumer
     {
         protected AbstractMidiDevice()
@@ -39,15 +39,19 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
         {
             CombineButtonSignals();
 
+            ControlChangeSignal[] controlChangeSignals = null;
+            
             lock (_controlSignalsSinceLastUpdate)
             {
-                foreach (var ctc in CommandTriggerCombinations)
-                {
-                    ctc.InvokeMatchingControlCommands(_controlSignalsSinceLastUpdate.ToList(), ActiveMode);
-                }
+                controlChangeSignals = _controlSignalsSinceLastUpdate.ToArray();
                 _controlSignalsSinceLastUpdate.Clear();
             }
-            
+
+            foreach (var ctc in CommandTriggerCombinations)
+            {
+                ctc.InvokeMatchingControlCommands(controlChangeSignals, ActiveMode);
+            }
+
             if (_combinedButtonSignals.Count == 0)
                 return;
 
@@ -78,7 +82,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                 return;
 
             var isAnyButtonPressed = _combinedButtonSignals.Values.Any(signal => (signal.State == ButtonSignal.States.JustPressed
-                                                                                        || signal.State == ButtonSignal.States.Hold));
+                                                                                  || signal.State == ButtonSignal.States.Hold));
 
             foreach (var ctc in CommandTriggerCombinations)
             {
@@ -130,30 +134,30 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             {
                 if (msg.MidiEvent == null)
                     return;
-                
+
                 switch (msg.MidiEvent.CommandCode)
                 {
                     case MidiCommandCode.NoteOff:
                     case MidiCommandCode.NoteOn:
                         if (!(msg.MidiEvent is NoteEvent noteEvent))
                             return;
-                        
+
                         //Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {noteEvent.NoteNumber}  Value: {noteEvent.Velocity}");
                         _buttonSignalsSinceLastUpdate.Add(new ButtonSignal()
-                                                        {
-                                                            Channel = noteEvent.Channel,
-                                                            ButtonId = noteEvent.NoteNumber,
-                                                            ControllerValue = noteEvent.Velocity,
-                                                            State = msg.MidiEvent.CommandCode == MidiCommandCode.NoteOn
-                                                                        ? ButtonSignal.States.JustPressed
-                                                                        : ButtonSignal.States.Released,
-                                                        });
+                                                              {
+                                                                  Channel = noteEvent.Channel,
+                                                                  ButtonId = noteEvent.NoteNumber,
+                                                                  ControllerValue = noteEvent.Velocity,
+                                                                  State = msg.MidiEvent.CommandCode == MidiCommandCode.NoteOn
+                                                                              ? ButtonSignal.States.JustPressed
+                                                                              : ButtonSignal.States.Released,
+                                                              });
                         return;
 
                     case MidiCommandCode.ControlChange:
                         if (!(msg.MidiEvent is ControlChangeEvent controlChangeEvent))
                             return;
-                        
+
                         //Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {controlChangeEvent.Controller}  Value: {controlChangeEvent.ControllerValue}");
                         _controlSignalsSinceLastUpdate.Add(new ControlChangeSignal()
                                                                {

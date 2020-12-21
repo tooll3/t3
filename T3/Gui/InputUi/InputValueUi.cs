@@ -306,9 +306,14 @@ namespace T3.Gui.InputUi
                                                                 NodeOperations.InvalidateInputInAllSymbolInstances(compositionSymbol, inputSlot);
                                                             }
 
-                                                            if (ImGui.BeginMenu("Add to Blending", true))
+                                                            if (blendGroup == null && ImGui.BeginMenu("Add to Blending", true))
                                                             {
                                                                 T3Ui.PresetSystem.DrawInputContextMenu(inputSlot, compositionUi, symbolChildUi);
+                                                            }
+
+                                                            if (blendGroup != null && ImGui.MenuItem("Remove blending"))
+                                                            {
+                                                                T3Ui.PresetSystem.RemoveBlending(hash);
                                                             }
 
                                                             // if (ImGui.MenuItem("Publish as Input"))

@@ -175,6 +175,21 @@ namespace T3.Core
             return Math.Log10(value) / Math.Log10(2.0);
         }
 
+        
+        public static float RoundValue(float i, float stepsPerUnit, float stepRatio)
+        {
+            float u = 1 / stepsPerUnit;
+            float v = stepRatio / (2 * stepsPerUnit);
+            float m = i % u;
+            float r = m - (m < v
+                          ? 0
+                          : (m > (u - v))
+                              ? u
+                              : ((m - v) / (1 - 2 * stepsPerUnit * v)));
+            float y = i - r;
+            return y;
+        }
+        
         public const float Pi2 = (float)Math.PI * 2;
     }
 

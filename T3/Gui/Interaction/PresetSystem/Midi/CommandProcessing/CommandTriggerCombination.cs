@@ -107,7 +107,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             }
         }
 
-        public void InvokeMatchingControlCommands(List<ControlChangeSignal> controlSignals, AbstractMidiDevice.InputModes activeMode)
+        public void InvokeMatchingControlCommands(IEnumerable<ControlChangeSignal> controlSignals, AbstractMidiDevice.InputModes activeMode)
         {
             if (_requiredInputMode != AbstractMidiDevice.InputModes.None && activeMode != _requiredInputMode)
                 return;

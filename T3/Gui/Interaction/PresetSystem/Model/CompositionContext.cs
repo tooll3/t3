@@ -20,7 +20,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         public Preset[,] Presets = new Preset[4, 4];
         public PresetAddress ViewWindow;
         public bool IsGroupExpanded { get; set; }
-        
+
         //----------------------------------------------------------------------------------------
         #region scenes
         public Guid ActiveSceneId = Guid.Empty;
@@ -43,7 +43,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
             }
 
             Scenes[address.SceneRow] = newScene;
-            ActiveGroupId = newScene.Id;
+            ActiveSceneId = newScene.Id;
             return new PresetScene();
         }
         #endregion
@@ -77,12 +77,13 @@ namespace T3.Gui.Interaction.PresetSystem.Model
             {
                 Log.Error("Can't set id with unknown id as active");
             }
+
             ActiveGroupId = group.Id;
         }
-        
+
         public ParameterGroup GetGroupAtIndex(int index)
         {
-            return (index<0 || index >= Groups.Count)  ? null : Groups[index];
+            return (index < 0 || index >= Groups.Count) ? null : Groups[index];
         }
 
         public ParameterGroup GetGroupForAddress(PresetAddress address)
@@ -121,7 +122,8 @@ namespace T3.Gui.Interaction.PresetSystem.Model
             {
                 yield break;
             }
-            for(int sceneIndex=0; sceneIndex < Presets.GetLength(1); sceneIndex++)
+
+            for (int sceneIndex = 0; sceneIndex < Presets.GetLength(1); sceneIndex++)
             {
                 var preset = Presets[groupIndex, sceneIndex];
                 if (preset == null)
@@ -161,14 +163,30 @@ namespace T3.Gui.Interaction.PresetSystem.Model
 
         //----------------------------------------------------
         #region grip helpers
-        private T[,] ResizeArray<T>(T[,] original, int x, int y)
+        /// <summary>
+        /// Extends the size of a two dimensional array.
+        /// </summary>
+        /// <remarks>
+        /// Using a for-loop to copy the original values is BAD.
+        /// However using array.Copy lead to inconsistency and data loss
+        /// </remarks>
+        private static T[,] ResizeArray<T>(T[,] original, int newSizeX, int newSizeY)
         {
-            T[,] newArray = new T[x, y];
-            var minX = Math.Min(original.GetLength(0), newArray.GetLength(0));
-            var minY = Math.Min(original.GetLength(1), newArray.GetLength(1));
+            const int x = 0;
+            const int y = 1;
 
-            for (var i = 0; i < minY; ++i)
-                Array.Copy(original, i * original.GetLength(0), newArray, i * newArray.GetLength(0), minX);
+            T[,] newArray = new T[newSizeX, newSizeY];
+            var minX = Math.Min(original.GetLength(x), newArray.GetLength(x));
+            var minY = Math.Min(original.GetLength(y), newArray.GetLength(y));
+
+            for (var columnIndex = 0; columnIndex < minX; columnIndex++)
+            {
+                for (var rowIndex = 0; rowIndex < minY; rowIndex++)
+                {
+                    newArray[columnIndex, rowIndex] = original[columnIndex, rowIndex];
+                    //Array.Copy(original, rowIndex * original.GetLength(0), newArray, rowIndex * newArray.GetLength(0), minX);
+                }
+            }
 
             return newArray;
         }
@@ -179,7 +197,11 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         public PresetAddress GetAddressFromButtonIndex(int buttonRangeIndex)
         {
             var columnCount = IsGroupExpanded ? 1 : 8;
-            var localAddress = new PresetAddress(buttonRangeIndex % columnCount, buttonRangeIndex / columnCount);
+            var localAddress = new PresetAddress(
+                                                 IsGroupExpanded
+                                                     ? ActiveGroupIndex
+                                                     : buttonRangeIndex % columnCount,
+                                                 buttonRangeIndex / columnCount);
             return localAddress - ViewWindow;
         }
         #endregion
@@ -310,17 +332,17 @@ namespace T3.Gui.Interaction.PresetSystem.Model
                 {
                     newContext.Groups.Add(ParameterGroup.FromJson(groupToken));
                 }
-                
+
                 // Scene
                 foreach (var sceneToken in (JArray)jToken["Scenes"])
                 {
                     newContext.Scenes.Add(PresetScene.FromJson(sceneToken));
                 }
+
                 return newContext;
             }
         }
-        
+
         protected static string PresetPath { get; } = @"Resources\presets\";
-        
     }
 }
