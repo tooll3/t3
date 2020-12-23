@@ -69,7 +69,7 @@ namespace T3.Gui.Interaction.PresetSystem
             }
             
             // Update active context
-            if (ActivatePresets.BlendSettingForCompositionIds.TryGetValue(ActiveContext.CompositionId, out var blendSetting))
+            if (ActivatePresets.BlendSettingForCompositionIds.TryGetValue(ActiveContext?.CompositionId ?? Guid.Empty, out var blendSetting))
             {
                 if (blendSetting.WasActivatedLastFrame)
                 {
