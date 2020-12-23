@@ -22,17 +22,17 @@ namespace T3.Core.DataTypes
     {
         public StructuredList(int count) : base(typeof(T))
         {
-            _typedElements = new T[count];
+            TypedElements = new T[count];
         }
 
-        public T[] _typedElements { get; }
-        public override object Elements => _typedElements;
+        public T[] TypedElements { get; }
+        public override object Elements => TypedElements;
         public override int ElementSizeInBytes => Marshal.SizeOf<T>();
-        public override int TotalSizeInBytes => _typedElements.Length * ElementSizeInBytes;
+        public override int TotalSizeInBytes => TypedElements.Length * ElementSizeInBytes;
 
         public override void WriteToStream(DataStream stream)
         {
-            stream.WriteRange(_typedElements);
+            stream.WriteRange(TypedElements);
         }
     }
 }
