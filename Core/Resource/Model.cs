@@ -392,9 +392,12 @@ namespace T3.Core
             
             RegisterType(typeof(Point[]), "Point",
                          () => new InputValue<Point[]>());
-
+            
+            RegisterType(typeof(StructuredList), "StructuredList",
+                         () => new InputValue<StructuredList>());
         }
 
+        
         public static void RegisterType(Type type, string typeName,
                                         Func<InputValue> defaultValueCreator,
                                         Action<JsonTextWriter, object> valueToJsonConverter,
