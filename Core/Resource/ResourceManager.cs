@@ -400,9 +400,15 @@ namespace T3.Core
                 data.WriteRange(bufferData);
                 data.Position = 0;
 
-                if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
-                {
-                    var bufferDesc = new BufferDescription
+                SetupStructuredBuffer(data, sizeInBytes, stride, ref buffer);
+            }
+        }
+
+        public void SetupStructuredBuffer(DataStream data, int sizeInBytes, int stride, ref Buffer buffer) 
+        {
+            if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
+            {
+                var bufferDesc = new BufferDescription
                                      {
                                          Usage = ResourceUsage.Default,
                                          BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
@@ -410,12 +416,11 @@ namespace T3.Core
                                          OptionFlags = ResourceOptionFlags.BufferStructured,
                                          StructureByteStride = stride
                                      };
-                    buffer = new Buffer(Device, data, bufferDesc);
-                }
-                else
-                {
-                    Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer);
-                }
+                buffer = new Buffer(Device, data, bufferDesc);
+            }
+            else
+            {
+                Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), buffer);
             }
         }
 
