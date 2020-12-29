@@ -399,6 +399,7 @@
     <Compile Include="Gui\InputUi\SingleControl\SingleControlInputUi.cs" />
     <Compile Include="Gui\InputUi\SingleControl\Size2InputUi.cs" />
     <Compile Include="Gui\InputUi\SingleControl\StringListInputUi.cs" />
+    <Compile Include="Gui\InputUi\StructuredListInputUi.cs" />
     <Compile Include="Gui\Interaction\CameraInteraction.cs" />
     <Compile Include="Gui\Interaction\ColorEditButton.cs" />
     <Compile Include="Gui\Interaction\JogDialOverlay.cs" />

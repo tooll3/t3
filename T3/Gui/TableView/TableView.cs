@@ -2,15 +2,17 @@ using System.Numerics;
 using System.Reflection;
 using ImGuiNET;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Gui.Styling;
 
 namespace T3.Gui.TableView
 {
     public static class TableList
     {
-        public static void Draw(StructuredList list)
+        public static bool Draw(StructuredList list)
         {
             const float width = 60;
+            var modified = false;
             ImGui.PushFont(Fonts.FontSmall);
             {
                 FieldInfo[] members = list.Type.GetFields();
@@ -51,6 +53,7 @@ namespace T3.Gui.TableView
                         if (o is float f)
                         {
                             DrawFloatManipulation(ref f, fieldIndex);
+                            fi.SetValue(obj, f);
                         }
                         else if (o is Vector4 vector4)
                         {
@@ -72,12 +75,16 @@ namespace T3.Gui.TableView
                 }
             }
             ImGui.PopFont();
+            return modified;
 
             void DrawFloatManipulation(ref float f, int index = 0)
             {
                 ImGui.PushID(index);
                 ImGui.SetNextItemWidth(width);
-                ImGui.DragFloat("##sdf", ref f);
+                if (ImGui.DragFloat("##sdf", ref f))
+                {
+                    Log.Debug("Changed");
+                }
                 ImGui.SameLine();
                 ImGui.PopID();
             }

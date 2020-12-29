@@ -161,7 +161,7 @@ namespace T3.Gui
             RegisterUiType(typeof(RenderTargetReference), new TextureUiProperties(),  () => new FallbackInputUi<RenderTargetReference>(),
                            () => new ValueOutputUi<RenderTargetReference>());
             
-            RegisterUiType(typeof(StructuredList), new TextureUiProperties(),  () => new FallbackInputUi<StructuredList>(),
+            RegisterUiType(typeof(StructuredList), new TextureUiProperties(),  () => new StructuredListInputUi(),
                            () => new StructuredListOutputUi());
             
             
