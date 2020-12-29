@@ -33,7 +33,7 @@ namespace T3.Core.DataTypes
         
         public override object GetElement(int index)
         {
-            if (index > 0 && index < TypedElements.Length)
+            if (index >= 0 && index < TypedElements.Length)
             {
                 return TypedElements[index];
             }
