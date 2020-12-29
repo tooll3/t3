@@ -62,21 +62,29 @@ namespace T3.Gui.TableView
                     ImGui.PushID(objectIndex);
                     var obj = list[objectIndex];
 
+                    var objModified = false;
                     for (var fieldIndex = 0; fieldIndex < members.Length; fieldIndex++)
                     {
                         FieldInfo fi = members[fieldIndex];
                         var o = fi.GetValue(obj);
                         if (o is float f)
                         {
-                            DrawFloatManipulation(ref f, fieldIndex);
-                            fi.SetValue(obj, f);
+                            if (DrawFloatManipulation(ref f, fieldIndex))
+                            {
+                                fi.SetValue(obj, f);
+                                objModified = true;
+                            }
                         }
                         else if (o is Vector4 vector4)
                         {
-                            DrawFloatManipulation(ref vector4.X, fieldIndex * 100 + 0);
-                            DrawFloatManipulation(ref vector4.Y, fieldIndex * 100 + 1);
-                            DrawFloatManipulation(ref vector4.Z, fieldIndex * 100 + 2);
-                            DrawFloatManipulation(ref vector4.W, fieldIndex * 100 + 3);
+                            if (DrawFloatManipulation(ref vector4.X, fieldIndex * 100 + 0)
+                                | DrawFloatManipulation(ref vector4.Y, fieldIndex * 100 + 1)
+                                | DrawFloatManipulation(ref vector4.Z, fieldIndex * 100 + 2)
+                                | DrawFloatManipulation(ref vector4.W, fieldIndex * 100 + 3))
+                            {
+                                fi.SetValue(obj, vector4);
+                                objModified = true;
+                            }
                         }
                         else
                         {
@@ -86,7 +94,11 @@ namespace T3.Gui.TableView
                         }
                     }
 
-                    list[objectIndex] = obj;
+                    if (objModified)
+                    {
+                        list[objectIndex] = obj;
+                    }
+                    
                     if(ImGui.Button("+"))
                     {
 
@@ -97,9 +109,6 @@ namespace T3.Gui.TableView
                     {
 
                     }
-                    //ImGui.SameLine();
-                    
-                    //ImGui.NewLine();
                     ImGui.PopID();
                 }
             }
@@ -107,16 +116,14 @@ namespace T3.Gui.TableView
             ImGui.EndChild();
             return modified;
 
-            void DrawFloatManipulation(ref float f, int index = 0)
+            bool DrawFloatManipulation(ref float f, int index = 0)
             {
                 ImGui.PushID(index);
                 ImGui.SetNextItemWidth(valueColumnWidth);
-                if (ImGui.DragFloat("##sdf", ref f))
-                {
-                    Log.Debug("Changed");
-                }
+                var fieldModified = ImGui.DragFloat("##sdf", ref f);
                 ImGui.SameLine();
                 ImGui.PopID();
+                return fieldModified;
             }
         }
     }
