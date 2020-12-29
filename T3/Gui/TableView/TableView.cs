@@ -41,10 +41,10 @@ namespace T3.Gui.TableView
                 ImGui.NewLine();
 
                 // Values
-                for (var objectIndex = 0; objectIndex < list.GetCount(); objectIndex++)
+                for (var objectIndex = 0; objectIndex < list.NumElements; objectIndex++)
                 {
                     ImGui.PushID(objectIndex);
-                    var obj = list.GetElement(objectIndex);
+                    var obj = list[objectIndex];
 
                     for (var fieldIndex = 0; fieldIndex < members.Length; fieldIndex++)
                     {
@@ -69,6 +69,8 @@ namespace T3.Gui.TableView
                             ImGui.SameLine();
                         }
                     }
+
+                    list[objectIndex] = obj;
 
                     ImGui.NewLine();
                     ImGui.PopID();
