@@ -72,6 +72,23 @@ namespace UiHelpers
             return new ImRect(ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
                               ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
         }
+        
+        
+        
+        // This has to be called on open
+        public static void DisableImGuiKeyboardNavigation()
+        {
+            // Keep navigation setting to restore after window gets closed
+            _keepNavEnableKeyboard = (ImGui.GetIO().ConfigFlags & ImGuiConfigFlags.NavEnableKeyboard) != ImGuiConfigFlags.None;
+            ImGui.GetIO().ConfigFlags &= ~ImGuiConfigFlags.NavEnableKeyboard;
+        }
+
+        public static void RestoreImGuiKeyboardNavigation()
+        {
+            if (_keepNavEnableKeyboard)
+                ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+        }
+        private static bool _keepNavEnableKeyboard;
     }
 
     /// <summary>
