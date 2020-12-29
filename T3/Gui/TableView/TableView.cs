@@ -20,6 +20,7 @@ namespace T3.Gui.TableView
                 FieldInfo[] members = list.Type.GetFields();
 
                 ImGui.SameLine(lineNumberWidth);
+                
                 // List Header 
                 foreach (var fi in members)
                 {
@@ -49,16 +50,17 @@ namespace T3.Gui.TableView
                     var cursorScreenPos = ImGui.GetCursorScreenPos();
 
                     var isLineVisible = ImGui.IsRectVisible(cursorScreenPos,
-                                        cursorScreenPos + new Vector2(1000, 60));
+                                                            cursorScreenPos + new Vector2(1000, 60));
 
                     if (!isLineVisible)
                     {
                         ImGui.Dummy(new Vector2(1, ImGui.GetFrameHeight()));
                         continue;
                     }
+
                     ImGui.Text("" + objectIndex);
                     ImGui.SameLine(40);
-                    
+
                     ImGui.PushID(objectIndex);
                     var obj = list[objectIndex];
 
@@ -98,17 +100,19 @@ namespace T3.Gui.TableView
                     {
                         list[objectIndex] = obj;
                     }
-                    
-                    if(ImGui.Button("+"))
-                    {
 
+                    if (ImGui.Button("+"))
+                    {
+                        list.Insert(objectIndex, obj);
                     }
+
                     ImGui.SameLine();
 
-                    if(ImGui.Button("-"))
+                    if (ImGui.Button("-"))
                     {
-
+                        list.Remove(objectIndex);
                     }
+
                     ImGui.PopID();
                 }
             }
