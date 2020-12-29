@@ -132,7 +132,12 @@ namespace T3.Gui.Windows
                     {
                         ImGui.PushID(instance.SymbolChildId.GetHashCode());
                         var instanceParent = instance.Parent;
-                        var symbolChild = instanceParent.Symbol.Children.Single(child => child.Id == instance.SymbolChildId);
+                        var symbolChild = instanceParent.Symbol.Children.SingleOrDefault(child => child.Id == instance.SymbolChildId);
+                        if (symbolChild == null)
+                        {
+                            Log.Error($"Can't find SymbolChild of Instance {instance.Symbol.Name} ({instance.SymbolChildId}) in parent {instanceParent.Symbol.Name}");
+                            continue;
+                        }
 
                         if(ImGui.Selectable(symbolChild.ReadableName))
                         {
