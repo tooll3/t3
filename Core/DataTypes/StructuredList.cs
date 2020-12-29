@@ -24,6 +24,8 @@ namespace T3.Core.DataTypes
         public abstract StructuredList Clone();
         public abstract StructuredList Join(params StructuredList[] other);
         // public abstract StructuredList Filter(Func<object, bool> filter);
+        public abstract void Insert(int index, object obj);
+        public abstract void Remove(int index);
     }
 
     public class StructuredList<T> : StructuredList where T : struct
@@ -33,7 +35,7 @@ namespace T3.Core.DataTypes
             TypedElements = new T[count];
         }
 
-        public T[] TypedElements { get; }
+        public T[] TypedElements { get; private set; }
         
         public override object Elements => TypedElements;
 
@@ -95,6 +97,35 @@ namespace T3.Core.DataTypes
             }
 
             return newList;
+        }
+
+        public override void Insert(int index, object obj)
+        {
+            var objType = obj.GetType();
+            if (objType != Type)
+            {
+                Log.Warning($"StructuredList.Insert: trying to insert element with type '{objType.Name} but expecting type: {Type.Name}. Skipping insertion.");
+                return;
+            }
+            var newArray = new T[TypedElements.Length + 1];
+            Array.Copy(TypedElements, newArray, index);
+            newArray[index] = (T)obj;
+            Array.Copy(TypedElements, index, newArray, index + 1, NumElements - index);
+            TypedElements = newArray;
+        }
+
+        public override void Remove(int index)
+        {
+            if (index < 0 || index >= NumElements)
+            {
+                Log.Warning($"StructuredList.Remove: invalid index {index}");
+                return;
+            }
+            
+            var newArray = new T[TypedElements.Length - 1];
+            Array.Copy(TypedElements, newArray, index);
+            Array.Copy(TypedElements, index + 1, newArray, index, NumElements - index - 1);
+            TypedElements = newArray;
         }
 
         // public override StructuredList Filter(Func<object, bool> filter)
