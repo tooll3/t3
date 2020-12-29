@@ -11,25 +11,28 @@ namespace T3.Gui.TableView
     {
         public static bool Draw(StructuredList list)
         {
-            const float width = 60;
+            ImGui.BeginChild("child");
+            const float valueColumnWidth = 60;
+            const float lineNumberWidth = 50;
             var modified = false;
             ImGui.PushFont(Fonts.FontSmall);
             {
                 FieldInfo[] members = list.Type.GetFields();
 
+                ImGui.SameLine(lineNumberWidth);
                 // List Header 
                 foreach (var fi in members)
                 {
                     if (fi.FieldType == typeof(float))
                     {
-                        ImGui.Selectable(" " + fi.Name, false, ImGuiSelectableFlags.None, new Vector2(width, 30));
+                        ImGui.Selectable(" " + fi.Name, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, 30));
                     }
                     else if (fi.FieldType == typeof(Vector4))
                     {
                         bool isFirst = true;
                         foreach (var c in new[] { ".x", ".y", ".z", ".w" })
                         {
-                            ImGui.Selectable((isFirst ? " " + fi.Name : "_") + "\n" + c, false, ImGuiSelectableFlags.None, new Vector2(width, 30));
+                            ImGui.Selectable((isFirst ? " " + fi.Name : "_") + "\n" + c, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, 30));
                             ImGui.SameLine();
                             isFirst = false;
                         }
@@ -43,6 +46,19 @@ namespace T3.Gui.TableView
                 // Values
                 for (var objectIndex = 0; objectIndex < list.NumElements; objectIndex++)
                 {
+                    var cursorScreenPos = ImGui.GetCursorScreenPos();
+
+                    var isLineVisible = ImGui.IsRectVisible(cursorScreenPos,
+                                        cursorScreenPos + new Vector2(1000, 60));
+
+                    if (!isLineVisible)
+                    {
+                        ImGui.Dummy(new Vector2(1, ImGui.GetFrameHeight()));
+                        continue;
+                    }
+                    ImGui.Text("" + objectIndex);
+                    ImGui.SameLine(40);
+                    
                     ImGui.PushID(objectIndex);
                     var obj = list[objectIndex];
 
@@ -64,25 +80,37 @@ namespace T3.Gui.TableView
                         }
                         else
                         {
-                            ImGui.SetNextItemWidth(width);
+                            ImGui.SetNextItemWidth(valueColumnWidth);
                             ImGui.Text("?");
                             ImGui.SameLine();
                         }
                     }
 
                     list[objectIndex] = obj;
+                    if(ImGui.Button("+"))
+                    {
 
-                    ImGui.NewLine();
+                    }
+                    ImGui.SameLine();
+
+                    if(ImGui.Button("-"))
+                    {
+
+                    }
+                    //ImGui.SameLine();
+                    
+                    //ImGui.NewLine();
                     ImGui.PopID();
                 }
             }
             ImGui.PopFont();
+            ImGui.EndChild();
             return modified;
 
             void DrawFloatManipulation(ref float f, int index = 0)
             {
                 ImGui.PushID(index);
-                ImGui.SetNextItemWidth(width);
+                ImGui.SetNextItemWidth(valueColumnWidth);
                 if (ImGui.DragFloat("##sdf", ref f))
                 {
                     Log.Debug("Changed");

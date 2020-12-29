@@ -47,7 +47,6 @@ namespace T3.Gui
             SwapHoveringBuffers();
             TriggerGlobalActionsFromKeyBindings();
             DrawAppMenu();
-            //TableView.TableList.Draw();
         }
         
         private void TriggerGlobalActionsFromKeyBindings()
