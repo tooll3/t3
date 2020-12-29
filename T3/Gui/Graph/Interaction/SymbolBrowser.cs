@@ -11,6 +11,7 @@ using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
+using UiHelpers;
 
 namespace T3.Gui.Graph.Interaction
 {
@@ -34,7 +35,7 @@ namespace T3.Gui.Graph.Interaction
             _selectedSymbolUi = null;
             _filter.OnlyMultiInputs = onlyMultiInputs;
             _filter.UpdateIfNecessary();
-            DisableImGuiKeyboardNavigation();
+            THelpers.DisableImGuiKeyboardNavigation();
 
             if (_selectedSymbolUi == null && _filter.MatchingSymbolUis.Count > 0)
             {
@@ -178,7 +179,7 @@ namespace T3.Gui.Graph.Interaction
 
         private void Close()
         {
-            RestoreImGuiKeyboardNavigation();
+            THelpers.RestoreImGuiKeyboardNavigation();
             //T3Ui.OpenedPopUpName = null;
             _isOpen = false;
         }
@@ -351,19 +352,7 @@ namespace T3.Gui.Graph.Interaction
         private MacroCommand _prepareCommand;
         #endregion
 
-        // This has to be called on open
-        private void DisableImGuiKeyboardNavigation()
-        {
-            // Keep navigation setting to restore after window gets closed
-            _keepNavEnableKeyboard = (ImGui.GetIO().ConfigFlags & ImGuiConfigFlags.NavEnableKeyboard) != ImGuiConfigFlags.None;
-            ImGui.GetIO().ConfigFlags &= ~ImGuiConfigFlags.NavEnableKeyboard;
-        }
 
-        private void RestoreImGuiKeyboardNavigation()
-        {
-            if (_keepNavEnableKeyboard)
-                ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
-        }
 
         public Vector2 PosOnCanvas { get; private set; }
 
@@ -381,7 +370,6 @@ namespace T3.Gui.Graph.Interaction
 
         private SymbolUi _selectedSymbolUi;
         private static readonly int UiId = "DraftNode".GetHashCode();
-        private bool _keepNavEnableKeyboard;
         //public static SymbolBrowser Current;
     }
 }
