@@ -162,7 +162,7 @@ namespace T3.Gui
                            () => new ValueOutputUi<RenderTargetReference>());
             
             RegisterUiType(typeof(StructuredList), new TextureUiProperties(),  () => new FallbackInputUi<StructuredList>(),
-                           () => new ValueOutputUi<StructuredList>());
+                           () => new StructuredListOutputUi());
             
             
             // register custom UIs for symbol children

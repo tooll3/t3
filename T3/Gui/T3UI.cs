@@ -1,6 +1,5 @@
 ﻿using ImGuiNET;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
@@ -8,7 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using T3.Core.Logging;
-using T3.graph;
+//using T3.graph;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
@@ -16,10 +15,8 @@ using T3.Gui.Interaction;
 using T3.Gui.Interaction.PresetSystem;
 using T3.Gui.Interaction.Timing;
 using T3.Gui.Selection;
-using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
-using T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6;
 
 namespace T3.Gui
 {
@@ -50,139 +47,9 @@ namespace T3.Gui
             SwapHoveringBuffers();
             TriggerGlobalActionsFromKeyBindings();
             DrawAppMenu();
-            TableTest();
+            //TableView.TableList.Draw();
         }
-
-        private void TableTest()
-        {
-            ImGui.Begin("Test");
-            const float width = 60;
-            ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing,2);
-
-            ImGui.PushFont(Fonts.FontSmall);
-            FieldInfo[] members = typeof(Population).GetFields();
-
-            // List Header 
-            foreach (var fi in members)
-            {
-                if (fi.FieldType == typeof(float))
-                {
-                    ImGui.Selectable(" " + fi.Name, false, ImGuiSelectableFlags.None, new Vector2(width, 30));
-                }
-                else if (fi.FieldType == typeof(Vector4))
-                {
-                    bool isFirst = true;
-                    foreach(var c in new[] { ".x", ".y", ".z", ".w" })
-                    {
-                        ImGui.Selectable((isFirst ? " " + fi.Name : "_")  + "\n" + c, false, ImGuiSelectableFlags.None, new Vector2(width, 30));
-                        ImGui.SameLine();
-                        isFirst = false;
-                    }
-                }
-
-                ImGui.SameLine();
-            }
-
-            ImGui.NewLine();
-
-            // Values
-            for (var objectIndex = 0; objectIndex < _testPopulations.Length; objectIndex++)
-            {
-                ImGui.PushID(objectIndex);
-                var obj = _testPopulations[objectIndex];
-                
-                for (var fieldIndex = 0; fieldIndex < members.Length; fieldIndex++)
-                {
-                    FieldInfo fi = members[fieldIndex];
-                    var o = fi.GetValue(obj);
-                    if (o is float f)
-                    {
-                        DrawFloatManipulation(ref f, fieldIndex);
-                    }
-                    else if (o is Vector4 vector4)
-                    {
-                        DrawFloatManipulation(ref vector4.X, fieldIndex * 100 + 0);
-                        DrawFloatManipulation(ref vector4.Y, fieldIndex * 100 + 1);
-                        DrawFloatManipulation(ref vector4.Z, fieldIndex * 100 + 2);
-                        DrawFloatManipulation(ref vector4.W, fieldIndex * 100 + 3);
-                    }
-                    else
-                    {
-                        ImGui.SetNextItemWidth(width);
-                        ImGui.Text("?");
-                        ImGui.SameLine();
-                    }
-                }
-
-                ImGui.NewLine();
-                ImGui.PopID();
-            }
-
-            ImGui.PopFont();
-            ImGui.PopStyleVar();
-            ImGui.End();
-
-            void DrawFloatManipulation(ref float f, int index=0)
-            {
-                ImGui.PushID(index);
-                ImGui.SetNextItemWidth(width);
-                ImGui.DragFloat("##sdf", ref f);
-                ImGui.SameLine();
-                ImGui.PopID();
-            }
-        }
-
         
-        
-        private IEnumerable<float> GetVectorFloats(Vector4 vector4)
-        {
-            yield return vector4.X;
-            yield return vector4.Y;
-            yield return vector4.Z;
-            yield return vector4.W;
-        } 
-
-        private static Population[] _testPopulations =
-            {
-                new Population
-                    {
-                        occurationRatio = 3,
-                        trail = new Vector4(1, 2, 2, 1),
-                        preferredLevel = new Vector4(1, 2, 2, 1),
-                        lookDistance = 2,
-                        lookRotation = 3,
-                        moveDistance = 5,
-                        moveRotation = 2,
-                        acceleration = 1,
-                        friction = 4
-                    },
-                new Population
-                    {
-                        occurationRatio = 3,
-                        trail = new Vector4(1, 2, 2, 1),
-                        preferredLevel = new Vector4(1, 2, 2, 1),
-                        lookDistance = 2,
-                        lookRotation = 3,
-                        moveDistance = 5,
-                        moveRotation = 2,
-                        acceleration = 1,
-                        friction = 4
-                    },
-            };
-
-        public struct Population
-        {
-            public float occurationRatio;
-            public Vector4 trail; // Vec4 that could also include negative trails (for consumption)
-            public Vector4 preferredLevel; // Vec4 that should also include negative values (for avoiding)
-            public float lookDistance;
-            public float lookRotation;
-            public float moveDistance;
-            public float moveRotation;
-            public float acceleration;
-            public float friction;
-        }
-
         private void TriggerGlobalActionsFromKeyBindings()
         {
             if (KeyboardBinding.Triggered(UserActions.Undo))

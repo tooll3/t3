@@ -18,6 +18,11 @@ namespace T3.Core.DataTypes
         public abstract int ElementSizeInBytes { get; }
         public abstract int TotalSizeInBytes { get; }
         public abstract void WriteToStream(DataStream stream);
+
+        public int GetCount()
+        {
+            return TotalSizeInBytes / ElementSizeInBytes;
+        }
     }
 
     public class StructuredList<T> : StructuredList where T : struct
