@@ -153,11 +153,7 @@ namespace T3.Gui.Windows
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
                 ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
                 var namespaceForEdit = op.Symbol.Namespace ?? "";
-
-                // if (ImGui.InputText("##symbolNameSpace", ref namespaceForEdit, 256))
-                // {
-                //     op.Symbol.Namespace = namespaceForEdit;
-                // }
+                
 
                 if (CustomComponents.InputWithTypeAheadSearch("##namespace", ref namespaceForEdit, SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
                 {

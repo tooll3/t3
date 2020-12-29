@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
@@ -27,8 +28,9 @@ namespace T3.Gui.Graph.Dialogs
                     ImGui.PopFont();
 
                     ImGui.SetNextItemWidth(250);
-                    ImGui.InputText("##namespace", ref nameSpace, 255);
-
+                    CustomComponents.InputWithTypeAheadSearch("##namespace", ref nameSpace,
+                                                              SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i));
+                        
                     ImGui.SetNextItemWidth(150);
                     ImGui.SameLine();
 

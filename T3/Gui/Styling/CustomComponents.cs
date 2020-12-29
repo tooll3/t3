@@ -382,6 +382,7 @@ namespace T3.Gui
 
                 ImGui.SetNextWindowPos(new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y));
                 ImGui.SetNextWindowSize(new Vector2(ImGui.GetItemRectSize().X, 0));
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(7, 7));
                 if (ImGui.Begin("##popup", ref _isSearchResultWindowOpen,
                                 ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.Tooltip |
                                 ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.ChildWindow))
@@ -412,6 +413,7 @@ namespace T3.Gui
                 }
 
                 ImGui.End();
+                ImGui.PopStyleVar();
             }
 
             if (lostFocus)
