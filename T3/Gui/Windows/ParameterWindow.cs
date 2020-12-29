@@ -145,14 +145,24 @@ namespace T3.Gui.Windows
                 ImGui.PopID();
             }
         }
-
+        
         private void DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi)
         {
             // namespace and symbol
             {
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
                 ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
-                ImGui.Text(op.Symbol.Namespace ?? "");
+                var namespaceForEdit = op.Symbol.Namespace ?? "";
+
+                // if (ImGui.InputText("##symbolNameSpace", ref namespaceForEdit, 256))
+                // {
+                //     op.Symbol.Namespace = namespaceForEdit;
+                // }
+
+                if (CustomComponents.InputWithTypeAheadSearch("##namespace", ref namespaceForEdit, SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
+                {
+                    op.Symbol.Namespace = namespaceForEdit;
+                }
                 ImGui.PopStyleColor();
                 ImGui.SameLine();
                 ImGui.Dummy(new Vector2(10, 0));

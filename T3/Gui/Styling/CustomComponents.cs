@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Numerics;
@@ -338,6 +339,93 @@ namespace T3.Gui
                                                   Color.White);
         }
 
+        private static bool _isSearchResultWindowOpen;
+
+        public static bool InputWithTypeAheadSearch(string id, ref string text, IOrderedEnumerable<string> items)
+        {
+            
+            if (_isSearchResultWindowOpen)
+            {
+                if (ImGui.IsKeyPressed((int)Key.CursorDown, true))
+                {
+                    if (_lastResults.Count > 0)
+                    {
+                        _selectedResultIndex++;
+                        _selectedResultIndex %= _lastResults.Count;
+                    }
+                }
+                else if (ImGui.IsKeyPressed((int)Key.CursorUp, true))
+                {
+                    if (_lastResults.Count > 0)
+                    {
+                        _selectedResultIndex--;
+                        if (_selectedResultIndex < 0)
+                            _selectedResultIndex = _lastResults.Count - 1;
+                    }
+                }
+            }
+            
+            var wasChanged = ImGui.InputText(id, ref text, 256);
+
+            if (ImGui.IsItemActivated())
+            {
+                _lastResults.Clear();
+                _selectedResultIndex = -1;
+                THelpers.DisableImGuiKeyboardNavigation();
+            }
+
+            var lostFocus = ImGui.IsItemDeactivated();
+
+            if (ImGui.IsItemFocused() || ImGui.IsItemActive() || _isSearchResultWindowOpen)
+            {
+                _isSearchResultWindowOpen = true;
+
+                ImGui.SetNextWindowPos(new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y));
+                ImGui.SetNextWindowSize(new Vector2(ImGui.GetItemRectSize().X, 0));
+                if (ImGui.Begin("##popup", ref _isSearchResultWindowOpen,
+                                ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.Tooltip |
+                                ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.ChildWindow))
+                {
+                    _lastResults.Clear();
+                    int index = 0;
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Gray.Rgba);
+                    foreach (var word in items)
+                    {
+                        if (word != text && word.Contains(text))
+                        {
+                            var isSelected = index == _selectedResultIndex;
+                            ImGui.Selectable(word, isSelected);
+                            
+                            if (ImGui.IsItemClicked() || (isSelected && ImGui.IsKeyPressed((int)Key.Return)))
+                            {
+                                text = word;
+                                wasChanged = true;
+                                _isSearchResultWindowOpen = false;
+                            }
+
+                            _lastResults.Add(word);
+                            if (++index > 30)
+                                break;
+                        }
+                    }
+                    ImGui.PopStyleColor();
+                }
+
+                ImGui.End();
+            }
+
+            if (lostFocus)
+            {
+                THelpers.RestoreImGuiKeyboardNavigation();
+                _isSearchResultWindowOpen = false;
+            }
+
+            return wasChanged;
+        }
+
+        private static List<string> _lastResults = new List<string>();
+        private static int _selectedResultIndex = 0;
+
         // public static void ToggleButton(string str_id, ref bool v)
         // {
         //     var p = ImGui.GetCursorScreenPos();
@@ -389,7 +477,7 @@ namespace T3.Gui
 
         private static Color EmptyMessageColor = new Color(0.3f);
 
-        public static void TooltipForLastItem(string message, string additionalNotes= null)
+        public static void TooltipForLastItem(string message, string additionalNotes = null)
         {
             if (!ImGui.IsAnyItemHovered())
             {
@@ -406,14 +494,15 @@ namespace T3.Gui
             var hoverDuration = ImGui.GetTime() - _hoverStartTime;
             if (!(hoverDuration > UserSettings.Config.TooltipDelay))
                 return;
-            
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5,5));
+
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
             ImGui.BeginTooltip();
             ImGui.Text(message);
             if (!string.IsNullOrEmpty(additionalNotes))
             {
                 ImGui.TextColored(Color.Gray, additionalNotes);
             }
+
             ImGui.EndTooltip();
             ImGui.PopStyleVar();
         }

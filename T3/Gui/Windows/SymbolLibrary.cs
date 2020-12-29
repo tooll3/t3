@@ -33,10 +33,7 @@ namespace T3.Gui.Windows
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             {
-                if (!ImGui.IsMouseDown(0))
-                {
-                    StopDrag();
-                }
+
 
                 ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
                 if (ImGui.Button("Clear"))
@@ -66,6 +63,11 @@ namespace T3.Gui.Windows
                 ImGui.EndChild();
             }
             ImGui.PopStyleVar();
+            
+            if (ImGui.IsMouseReleased(0))
+            {
+                StopDrag();
+            }
         }
 
         private void DrawTree()
@@ -178,8 +180,10 @@ namespace T3.Gui.Windows
                 if (T3Ui.DraggingIsInProgress)
                 {
                     ImGui.SameLine();
+                    ImGui.PushID("DropButton");
                     ImGui.Button("  <-", new Vector2(50, 15));
                     HandleDropTarget(subtree);
+                    ImGui.PopID();
                 }
             }
 
@@ -235,7 +239,16 @@ namespace T3.Gui.Windows
                 var payload = ImGui.AcceptDragDropPayload("Symbol");
                 if (ImGui.IsMouseReleased(0))
                 {
-                    var myString = Marshal.PtrToStringAuto(payload.Data);
+                    string myString = null;
+                    try
+                    {
+                        myString = Marshal.PtrToStringAuto(payload.Data);
+                    }
+                    catch (NullReferenceException)
+                    {
+                        Log.Error("unable to get drop data");                        
+                    }
+                    
                     if (myString != null)
                     {
                         var guidString = myString.Split('|')[0];
