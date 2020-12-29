@@ -90,6 +90,10 @@ namespace T3.Core.DataTypes
             int startIndex = TypedElements.Length;
             foreach (var sourceList in lists)
             {
+                if (Type != sourceList.Type)
+                {
+                    continue;
+                }
                 var sourceArray = (T[])sourceList.Elements;
                 var numElements = sourceList.NumElements;
                 Array.Copy(sourceArray, 0, newList.TypedElements, startIndex, numElements);
