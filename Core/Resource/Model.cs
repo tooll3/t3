@@ -251,6 +251,12 @@ namespace T3.Core
                          });
             RegisterType(typeof(ParticleSystem), "ParticleSystem",
                          () => new InputValue<ParticleSystem>(null));
+            RegisterType(typeof(Point[]), "Point",
+                         () => new InputValue<Point[]>());
+            RegisterType(typeof(RenderTargetReference), "RenderTargetRef",
+                         () => new InputValue<RenderTargetReference>());
+            RegisterType(typeof(StructuredList), "StructuredList",
+                         () => new InputValue<StructuredList>());
             
             // sharpdx types
             RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",
@@ -366,7 +372,6 @@ namespace T3.Core
             RegisterType(typeof(SharpDX.Mathematics.Interop.RawViewportF), "RawViewportF",
                          () => new InputValue<RawViewportF>(new RawViewportF
                                                             {X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f}));
-                                                            //{X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f}));            
             RegisterType(typeof(SharpDX.Size2), "Size2",
                          InputDefaultValueCreator<Size2>,
                          (writer, obj) =>
@@ -383,18 +388,8 @@ namespace T3.Core
                              int height = jsonToken["Height"].Value<int>();
                              return new Size2(width, height);
                          });
-
             RegisterType(typeof(SharpDX.Vector4[]), "Vector4[]",
                          () => new InputValue<SharpDX.Vector4[]>(new SharpDX.Vector4[0]));
-            
-            RegisterType(typeof(RenderTargetReference), "RenderTargetRef",
-                         () => new InputValue<RenderTargetReference>());
-            
-            RegisterType(typeof(Point[]), "Point",
-                         () => new InputValue<Point[]>());
-            
-            RegisterType(typeof(StructuredList), "StructuredList",
-                         () => new InputValue<StructuredList>());
         }
 
         

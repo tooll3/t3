@@ -82,8 +82,13 @@ namespace T3.Gui
                            () => new ValueOutputUi<Core.DataTypes.Gradient>());
             RegisterUiType(typeof(Core.DataTypes.ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<Core.DataTypes.ParticleSystem>(),
                            () => new ValueOutputUi<Core.DataTypes.ParticleSystem>());
-            
-            
+            RegisterUiType(typeof(Core.DataTypes.Point[]), new PointListUiProperties(), () => new FallbackInputUi<Point[]>(),
+                           () => new PointArrayOutputUi());
+            RegisterUiType(typeof(Core.DataTypes.RenderTargetReference), new TextureUiProperties(),
+                           () => new FallbackInputUi<Core.DataTypes.RenderTargetReference>(),
+                           () => new ValueOutputUi<Core.DataTypes.RenderTargetReference>());
+            RegisterUiType(typeof(Core.DataTypes.StructuredList), new FloatUiProperties(), () => new StructuredListInputUi(),
+                           () => new StructuredListOutputUi());
             
             // sharpdx types
             RegisterUiType(typeof(SharpDX.Int3), new Size2UiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
@@ -150,20 +155,8 @@ namespace T3.Gui
                            () => new ValueOutputUi<RawViewportF>());
             RegisterUiType(typeof(SharpDX.Mathematics.Interop.RawRectangle), new ShaderUiProperties(), () => new FallbackInputUi<RawRectangle>(),
                            () => new ValueOutputUi<RawRectangle>());
-
-            // custom sharp dx types
             RegisterUiType(typeof(SharpDX.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
                            () => new ValueOutputUi<SharpDX.Vector4[]>());
-            
-            RegisterUiType(typeof(Point[]), new PointListUiProperties(),  () => new FallbackInputUi<Point[]>(),
-                           () => new PointArrayOutputUi());
-            
-            RegisterUiType(typeof(RenderTargetReference), new TextureUiProperties(),  () => new FallbackInputUi<RenderTargetReference>(),
-                           () => new ValueOutputUi<RenderTargetReference>());
-            
-            RegisterUiType(typeof(StructuredList), new FloatUiProperties(),  () => new StructuredListInputUi(),
-                           () => new StructuredListOutputUi());
-            
             
             // register custom UIs for symbol children
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c.Counter), CounterUi.DrawChildUi);
@@ -178,6 +171,7 @@ namespace T3.Gui
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_f0acd1a4_7a98_43ab_a807_6d1bd3e92169.Remap), RemapUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c.LFO), LfoUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_bfe540ef_f8ad_45a2_b557_cd419d9c8e44.DataList), DataListUi.DrawChildUi);
+            
             Load();
 
             var symbols = SymbolRegistry.Entries;
