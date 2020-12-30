@@ -1,9 +1,7 @@
-using System;
 using System.Numerics;
 using System.Reflection;
 using ImGuiNET;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Gui.Styling;
 
 namespace T3.Gui.TableView
@@ -18,6 +16,7 @@ namespace T3.Gui.TableView
         public static bool Draw(StructuredList list, Vector2 size)
         {
             ImGui.BeginChild("child", size);
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(2,2));
             const float valueColumnWidth = 60;
             const float lineNumberWidth = 50;
             const float headerHeight = 30;
@@ -26,6 +25,8 @@ namespace T3.Gui.TableView
             {
                 FieldInfo[] members = list.Type.GetFields();
 
+                ImGui.AlignTextToFramePadding();
+                ImGui.Text($"[{list.NumElements}]");
                 ImGui.SameLine(lineNumberWidth);
                 
                 // List Header 
@@ -69,8 +70,9 @@ namespace T3.Gui.TableView
                         continue;
                     }
 
-                    ImGui.Text("" + objectIndex);
-                    ImGui.SameLine(40);
+                    ImGui.AlignTextToFramePadding();
+                    ImGui.Text(objectIndex+".");
+                    ImGui.SameLine(lineNumberWidth);
 
                     ImGui.PushID(objectIndex);
                     var obj = list[objectIndex];
@@ -145,6 +147,7 @@ namespace T3.Gui.TableView
                 }
             }
             ImGui.PopFont();
+            ImGui.PopStyleVar();
             ImGui.EndChild();
             return listModified;
 
