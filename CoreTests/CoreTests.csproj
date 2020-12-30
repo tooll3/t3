@@ -221,6 +221,7 @@
     <Compile Include="SimpleOperatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OperatorInputFunctionTests.cs" />
+    <Compile Include="StructGenerationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
