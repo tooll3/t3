@@ -30,7 +30,11 @@ namespace T3.Gui.OutputUi
                 }
                 else
                 {
-                    TableView.TableList.Draw(typedSlot.Value);
+                    var modified = TableView.TableList.Draw(typedSlot.Value);
+                    if (modified)
+                    {
+                        typedSlot.DirtyFlag.Invalidate();
+                    }
                 }
             }
             else

@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using System.Reflection;
 using ImGuiNET;
@@ -11,10 +12,16 @@ namespace T3.Gui.TableView
     {
         public static bool Draw(StructuredList list)
         {
-            ImGui.BeginChild("child");
+            return Draw(list, Vector2.Zero);
+        }
+        
+        public static bool Draw(StructuredList list, Vector2 size)
+        {
+            ImGui.BeginChild("child", size);
             const float valueColumnWidth = 60;
             const float lineNumberWidth = 50;
-            var modified = false;
+            const float headerHeight = 30;
+            var listModified = false;
             ImGui.PushFont(Fonts.FontSmall);
             {
                 FieldInfo[] members = list.Type.GetFields();
@@ -26,14 +33,18 @@ namespace T3.Gui.TableView
                 {
                     if (fi.FieldType == typeof(float))
                     {
-                        ImGui.Selectable(" " + fi.Name, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, 30));
+                        ImGui.Selectable(" " + fi.Name, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, headerHeight));
+                    }
+                    else if (fi.FieldType == typeof(string))
+                    {
+                        ImGui.Selectable(" " + fi.Name, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, headerHeight));
                     }
                     else if (fi.FieldType == typeof(Vector4))
                     {
                         bool isFirst = true;
                         foreach (var c in new[] { ".x", ".y", ".z", ".w" })
                         {
-                            ImGui.Selectable((isFirst ? " " + fi.Name : "_") + "\n" + c, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, 30));
+                            ImGui.Selectable((isFirst ? " " + fi.Name : "_") + "\n" + c, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, headerHeight));
                             ImGui.SameLine();
                             isFirst = false;
                         }
@@ -50,7 +61,7 @@ namespace T3.Gui.TableView
                     var cursorScreenPos = ImGui.GetCursorScreenPos();
 
                     var isLineVisible = ImGui.IsRectVisible(cursorScreenPos,
-                                                            cursorScreenPos + new Vector2(1000, 60));
+                                                            cursorScreenPos + new Vector2(1000, ImGui.GetFrameHeight()));
 
                     if (!isLineVisible)
                     {
@@ -77,6 +88,22 @@ namespace T3.Gui.TableView
                                 objModified = true;
                             }
                         }
+                        else if (fi.FieldType == typeof(string))
+                        {
+                            if(!(o is string s))
+                                s = string.Empty;
+                            
+                            ImGui.PushID(fi.Name);
+                            ImGui.SetNextItemWidth(valueColumnWidth);
+                            if (ImGui.InputText("##sdf", ref s, 256))
+                            {
+                                fi.SetValue(obj, s);
+                                objModified = true;
+                            }
+                            
+                            ImGui.SameLine();
+                            ImGui.PopID();
+                        }
                         else if (o is Vector4 vector4)
                         {
                             if (DrawFloatManipulation(ref vector4.X, fieldIndex * 100 + 0)
@@ -99,6 +126,7 @@ namespace T3.Gui.TableView
                     if (objModified)
                     {
                         list[objectIndex] = obj;
+                        listModified = true;
                     }
 
                     if (ImGui.Button("+"))
@@ -112,13 +140,13 @@ namespace T3.Gui.TableView
                     {
                         list.Remove(objectIndex);
                     }
-
+                    
                     ImGui.PopID();
                 }
             }
             ImGui.PopFont();
             ImGui.EndChild();
-            return modified;
+            return listModified;
 
             bool DrawFloatManipulation(ref float f, int index = 0)
             {
