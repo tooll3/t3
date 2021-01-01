@@ -26,6 +26,7 @@ namespace T3.Core.DataTypes
         // public abstract StructuredList Filter(Func<object, bool> filter);
         public abstract void Insert(int index, object obj);
         public abstract void Remove(int index);
+        public abstract void SetLength(int length);
     }
 
     public class StructuredList<T> : StructuredList where T : struct
@@ -132,8 +133,23 @@ namespace T3.Core.DataTypes
             TypedElements = newArray;
         }
 
-        // public override StructuredList Filter(Func<object, bool> filter)
-        // {
-        // }
+        public override void SetLength(int length)
+        {
+            
+            if (length < 0)
+            {
+                Log.Error($"Cannot set length of structured list to negative value {length}");
+                return;
+            }
+
+            if (length == TypedElements.Length)
+                return;
+            
+            var newArray = new T[length];
+            var matchingElementCount = Math.Min(length, TypedElements.Length);
+            
+            Array.Copy(TypedElements, newArray, matchingElementCount);
+            TypedElements = newArray;
+        }
     }
 }
