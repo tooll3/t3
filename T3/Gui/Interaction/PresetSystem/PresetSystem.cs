@@ -169,7 +169,7 @@ namespace T3.Gui.Interaction.PresetSystem
                 var activeGroup = ActiveContext?.ActiveGroup;
                 if (activeGroup != null)
                 {
-                    if (ImGui.MenuItem("Append to G" + activeGroup.Index))
+                    if (ImGui.MenuItem("Append to G" + (activeGroup.Index + 1)))
                     {
                         var index = activeGroup.FindNextFreeIndex();
                         CreateNewParameterForActiveGroup(index);

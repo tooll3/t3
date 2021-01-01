@@ -318,29 +318,7 @@ namespace T3.Gui.InputUi
 
                                                             if (ImGui.MenuItem("Publish as Input"))
                                                             {
-                                                                var composition = SelectionManager.GetSelectedComposition();
-                                                                if (composition == null)
-                                                                {
-                                                                    composition = inputSlot.Parent.Parent;
-                                                                }
-                                                            
-                                                                NodeOperations.AddInputToSymbol(input.Name, input.InputDefinition.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol);
-
-                                                                NodeOperations.UpdateChangedOperators();
-
-                                                                var updatedComposition = NodeOperations.GetInstanceFromIdPath(NodeOperations.BuildIdPathForInstance(composition)); 
-                                                                
-                                                                var newInput = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
-                                                                if (newInput != null)
-                                                                {
-                                                                    var cmd = new AddConnectionCommand(updatedComposition.Symbol, 
-                                                                                                       new Symbol.Connection(sourceParentOrChildId: ConnectionMaker.UseSymbolContainerId,
-                                                                                                                             sourceSlotId:newInput.Id,
-                                                                                                                             targetParentOrChildId:symbolChildUi.Id,
-                                                                                                                             targetSlotId:input.InputDefinition.Id
-                                                                                                                            ), 0);
-                                                                    cmd.Do();
-                                                                }
+                                                                PublishAsInput(inputSlot, symbolChildUi, input);
                                                             }
 
                                                             if (ImGui.MenuItem("Parameters settings"))
@@ -403,6 +381,40 @@ namespace T3.Gui.InputUi
             }
 
             return editState;
+        }
+
+        private static void PublishAsInput(IInputSlot inputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
+        {
+            var composition = SelectionManager.GetSelectedComposition();
+            if (composition == null)
+            {
+                composition = inputSlot.Parent.Parent;
+            }
+
+            if (composition == null)
+            {
+                Log.Warning("Can't publish input to undefined composition");
+                return;
+            }
+
+            NodeOperations.AddInputToSymbol(input.Name, input.InputDefinition.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol);
+            NodeOperations.UpdateChangedOperators();
+
+            var updatedComposition = NodeOperations.GetInstanceFromIdPath(NodeOperations.BuildIdPathForInstance(composition));
+
+            var newInput = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
+            if (newInput != null)
+            {
+                var cmd = new AddConnectionCommand(updatedComposition.Symbol,
+                                                   new Symbol.Connection(sourceParentOrChildId: ConnectionMaker.UseSymbolContainerId,
+                                                                         sourceSlotId: newInput.Id,
+                                                                         targetParentOrChildId: symbolChildUi.Id,
+                                                                         targetSlotId: input.InputDefinition.Id
+                                                                        ), 0);
+                cmd.Do();
+                newInput.DefaultValue = input.Value.Clone();
+                inputSlot.DirtyFlag.Invalidate();
+            }
         }
 
         public virtual void DrawSettings()

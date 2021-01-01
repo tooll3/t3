@@ -370,7 +370,12 @@ namespace T3
                                          form.FormBorderStyle = fullScreenBorderStyle ? FormBorderStyle.Sizable : FormBorderStyle.None;
                                      }
                                      
-                                     NodeOperations.UpdateChangedOperators();
+                                     //NodeOperations.UpdateChangedOperators();
+                                     var modifiedSymbols = resourceManager.UpdateChangedOperatorTypes();
+                                     foreach (var symbol in modifiedSymbols)
+                                     {
+                                         UiModel.UpdateUiEntriesForSymbol(symbol);
+                                     }
 
                                      DirtyFlag.IncrementGlobalTicks();
                                      T3Metrics.UiRenderingStarted();

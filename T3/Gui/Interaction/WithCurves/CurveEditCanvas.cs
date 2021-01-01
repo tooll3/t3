@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.Snapping;
@@ -186,6 +187,12 @@ namespace T3.Gui.Interaction.WithCurves
             foreach (var manipulators in TimeObjectManipulators)
             {
                 manipulators.CompleteDragCommand();
+            }
+
+            if (_macro == null)
+            {
+                Log.Warning("Can't complete no valid valid drag command?");
+                return;
             }
             UndoRedoStack.AddAndExecute(_macro);
         }
