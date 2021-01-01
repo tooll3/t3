@@ -842,12 +842,26 @@ namespace T3.Gui.Graph
                     
                     if (ImGui.IsItemClicked(0))
                     {
-                        var createCopy = ImGui.GetIO().KeyCtrl && connection != null && sourceOp != null;
+                        var createCopy = ImGui.GetIO().KeyCtrl && connection != null;
                         if (createCopy)
                         {
-                            var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-                            var sourceOpUi = parentUi.ChildUis.Single(ui => ui.Id == sourceOp.Id);
-                            ConnectionMaker.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, sourceOpUi, output.OutputDefinition);    
+                            if (sourceOp != null)
+                            {
+                                Log.Debug("Cloning connection from source op...");
+                                var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+                                var sourceOpUi = parentUi.ChildUis.Single(ui => ui.Id == sourceOp.Id);
+                                ConnectionMaker.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, sourceOpUi, output.OutputDefinition);
+                            }
+                            else if(connection.IsConnectedToSymbolInput)
+                            {
+                                Log.Debug("Cloning connection from input node...");
+                                var inputDef2 = GraphCanvas.Current.CompositionOp.Symbol.InputDefinitions.Single(id => id.Id == connection.SourceSlotId);
+                                ConnectionMaker.StartFromInputNode(inputDef2);
+                            }
+                            else
+                            {
+                                Log.Warning("This should not happen. Please contact customer support.");
+                            }
                         }
                         else
                         {
