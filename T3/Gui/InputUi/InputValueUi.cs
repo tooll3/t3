@@ -303,7 +303,7 @@ namespace T3.Gui.InputUi
                                                             {
                                                                 input.ResetToDefault();
 
-                                                                NodeOperations.InvalidateInputInAllSymbolInstances(compositionSymbol, inputSlot);
+                                                                compositionSymbol.InvalidateInputInAllChildInstances(inputSlot);
                                                             }
 
                                                             if (blendGroup == null && ImGui.BeginMenu("Add to Blending", true))

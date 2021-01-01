@@ -718,5 +718,17 @@ namespace T3.Core.Operator
             public bool IsConnectedToSymbolInput => SourceParentOrChildId == Guid.Empty;
         }
         #endregion
+
+        public void InvalidateInputInAllChildInstances(IInputSlot inputSlot)
+        {
+            var childId = inputSlot.Parent.SymbolChildId;
+            var inputId = inputSlot.Id;
+            foreach (var symbolInstance in InstancesOfSymbol)
+            {
+                var childInstance = symbolInstance.Children.Single(c => c.SymbolChildId == childId);
+                var slot = childInstance.Inputs.Single(i => i.Id == inputId);
+                slot.DirtyFlag.Invalidate();
+            }
+        }
     }
 }
