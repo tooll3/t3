@@ -41,8 +41,10 @@ namespace T3.Gui.TableView
                 ImGui.SameLine(lineNumberWidth);
 
                 // List Header 
-                foreach (var fi in members)
+
+                for (var fieldIndex = 0; fieldIndex < members.Length; fieldIndex++)
                 {
+                    var fi = members[fieldIndex];
                     if (TypeComponents.TryGetValue(fi.FieldType, out var components))
                     {
                         bool isFirst = true;
@@ -50,6 +52,11 @@ namespace T3.Gui.TableView
                         {
                             ImGui.Selectable((isFirst ? " " + fi.Name : "_") + "\n" + c, false, ImGuiSelectableFlags.None,
                                              new Vector2(valueColumnWidth, headerHeight));
+                            if (ImGui.IsItemHovered())
+                            {
+                                ImGui.SetTooltip(fieldIndex + ": " +fi.Name);
+                            }
+                            
                             ImGui.SameLine();
                             isFirst = false;
                         }
@@ -57,6 +64,10 @@ namespace T3.Gui.TableView
                     else
                     {
                         ImGui.Selectable(" " + fi.Name, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, headerHeight));
+                        if (ImGui.IsItemHovered())
+                        {
+                            ImGui.SetTooltip(fieldIndex + ": " +fi.Name);
+                        }
                     }
 
                     ImGui.SameLine();
