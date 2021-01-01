@@ -19,6 +19,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Windows;
 using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
@@ -369,11 +370,7 @@ namespace T3
                                          form.FormBorderStyle = fullScreenBorderStyle ? FormBorderStyle.Sizable : FormBorderStyle.None;
                                      }
                                      
-                                     var modifiedSymbols = resourceManager.UpdateChangedOperatorTypes();
-                                     foreach (var symbol in modifiedSymbols)
-                                     {
-                                         UiModel.UpdateUiEntriesForSymbol(symbol);
-                                     }
+                                     NodeOperations.UpdateChangedOperators();
 
                                      DirtyFlag.IncrementGlobalTicks();
                                      T3Metrics.UiRenderingStarted();

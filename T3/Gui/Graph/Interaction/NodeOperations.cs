@@ -940,5 +940,14 @@ namespace T3.Gui.Graph.Interaction
                 slot.DirtyFlag.Invalidate();
             }
         }
+
+        public static void UpdateChangedOperators()
+        {
+            var modifiedSymbols = ResourceManager.Instance().UpdateChangedOperatorTypes();
+            foreach (var symbol in modifiedSymbols)
+            {
+                UiModel.UpdateUiEntriesForSymbol(symbol);
+            }
+        }
     }
 }

@@ -316,30 +316,32 @@ namespace T3.Gui.InputUi
                                                                 T3Ui.PresetSystem.RemoveBlending(hash);
                                                             }
 
-                                                            // if (ImGui.MenuItem("Publish as Input"))
-                                                            // {
-                                                            //     var composition = SelectionManager.GetSelectedComposition();
-                                                            //     if (composition == null)
-                                                            //     {
-                                                            //         composition = inputSlot.Parent.Parent;
-                                                            //     }
-                                                            //
-                                                            //     NodeOperations.AddInputToSymbol(input.Name, input.InputDefinition.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol);
-                                                            //
-                                                            //     var updatedComposition = NodeOperations.GetInstanceFromIdPath(NodeOperations.BuildIdPathForInstance(composition)); 
-                                                            //     
-                                                            //     var newInput = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
-                                                            //     if (newInput != null)
-                                                            //     {
-                                                            //         var cmd = new AddConnectionCommand(updatedComposition.Symbol, 
-                                                            //                                            new Symbol.Connection(sourceParentOrChildId: ConnectionMaker.UseSymbolContainerId,
-                                                            //                                                                  sourceSlotId:newInput.Id,
-                                                            //                                                                  targetParentOrChildId:symbolChildUi.Id,
-                                                            //                                                                  targetSlotId:input.InputDefinition.Id
-                                                            //                                                                 ), 0);
-                                                            //         cmd.Do();
-                                                            //     }
-                                                            // }
+                                                            if (ImGui.MenuItem("Publish as Input"))
+                                                            {
+                                                                var composition = SelectionManager.GetSelectedComposition();
+                                                                if (composition == null)
+                                                                {
+                                                                    composition = inputSlot.Parent.Parent;
+                                                                }
+                                                            
+                                                                NodeOperations.AddInputToSymbol(input.Name, input.InputDefinition.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol);
+
+                                                                NodeOperations.UpdateChangedOperators();
+
+                                                                var updatedComposition = NodeOperations.GetInstanceFromIdPath(NodeOperations.BuildIdPathForInstance(composition)); 
+                                                                
+                                                                var newInput = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
+                                                                if (newInput != null)
+                                                                {
+                                                                    var cmd = new AddConnectionCommand(updatedComposition.Symbol, 
+                                                                                                       new Symbol.Connection(sourceParentOrChildId: ConnectionMaker.UseSymbolContainerId,
+                                                                                                                             sourceSlotId:newInput.Id,
+                                                                                                                             targetParentOrChildId:symbolChildUi.Id,
+                                                                                                                             targetSlotId:input.InputDefinition.Id
+                                                                                                                            ), 0);
+                                                                    cmd.Do();
+                                                                }
+                                                            }
 
                                                             if (ImGui.MenuItem("Parameters settings"))
                                                                 editState = InputEditStateFlags.ShowOptions;
