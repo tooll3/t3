@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Reflection;
 using ImGuiNET;
@@ -12,13 +14,22 @@ namespace T3.Gui.TableView
         {
             return Draw(list, Vector2.Zero);
         }
-        
+
+        public static Dictionary<Type, string[]> TypeComponents = new Dictionary<Type, string[]>()
+                                                                      {
+                                                                          { typeof(Vector2), new[] { ".x", ".y" } },
+                                                                          { typeof(Vector3), new[] { ".x", ".y", ".z" } },
+                                                                          { typeof(Vector4), new[] { ".R", ".G", ".B", ".A" } },
+                                                                          { typeof(Quaternion), new[] { ".x", ".y", ".z", ".w" } },
+                                                                      };
+
         public static bool Draw(StructuredList list, Vector2 size)
         {
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(3, 3));
             ImGui.BeginChild("child", size);
-            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(2,2));
-            const float valueColumnWidth = 60;
-            const float lineNumberWidth = 50;
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(2, 2));
+            const float valueColumnWidth = 50;
+            const float lineNumberWidth = 40;
             const float headerHeight = 30;
             var listModified = false;
             ImGui.PushFont(Fonts.FontSmall);
@@ -28,27 +39,24 @@ namespace T3.Gui.TableView
                 ImGui.AlignTextToFramePadding();
                 ImGui.Text($"[{list.NumElements}]");
                 ImGui.SameLine(lineNumberWidth);
-                
+
                 // List Header 
                 foreach (var fi in members)
                 {
-                    if (fi.FieldType == typeof(float))
-                    {
-                        ImGui.Selectable(" " + fi.Name, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, headerHeight));
-                    }
-                    else if (fi.FieldType == typeof(string))
-                    {
-                        ImGui.Selectable(" " + fi.Name, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, headerHeight));
-                    }
-                    else if (fi.FieldType == typeof(Vector4))
+                    if (TypeComponents.TryGetValue(fi.FieldType, out var components))
                     {
                         bool isFirst = true;
-                        foreach (var c in new[] { ".x", ".y", ".z", ".w" })
+                        foreach (var c in components)
                         {
-                            ImGui.Selectable((isFirst ? " " + fi.Name : "_") + "\n" + c, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, headerHeight));
+                            ImGui.Selectable((isFirst ? " " + fi.Name : "_") + "\n" + c, false, ImGuiSelectableFlags.None,
+                                             new Vector2(valueColumnWidth, headerHeight));
                             ImGui.SameLine();
                             isFirst = false;
                         }
+                    }
+                    else
+                    {
+                        ImGui.Selectable(" " + fi.Name, false, ImGuiSelectableFlags.None, new Vector2(valueColumnWidth, headerHeight));
                     }
 
                     ImGui.SameLine();
@@ -71,7 +79,7 @@ namespace T3.Gui.TableView
                     }
 
                     ImGui.AlignTextToFramePadding();
-                    ImGui.Text(objectIndex+".");
+                    ImGui.Text(objectIndex + ".");
                     ImGui.SameLine(lineNumberWidth);
 
                     ImGui.PushID(objectIndex);
@@ -92,9 +100,9 @@ namespace T3.Gui.TableView
                         }
                         else if (fi.FieldType == typeof(string))
                         {
-                            if(!(o is string s))
+                            if (!(o is string s))
                                 s = string.Empty;
-                            
+
                             ImGui.PushID(fi.Name);
                             ImGui.SetNextItemWidth(valueColumnWidth);
                             if (ImGui.InputText("##sdf", ref s, 256))
@@ -102,21 +110,52 @@ namespace T3.Gui.TableView
                                 fi.SetValue(obj, s);
                                 objModified = true;
                             }
-                            
+
                             ImGui.SameLine();
                             ImGui.PopID();
                         }
+                        else if (o is Vector2 vector2)
+                        {
+                            if (DrawFloatManipulation(ref vector2.X, fieldIndex * 100 + 0)
+                                | DrawFloatManipulation(ref vector2.Y, fieldIndex * 100 + 1))
+                            {
+                                fi.SetValue(obj, vector2);
+                                objModified = true;
+                            }
+                        }
+                        else if (o is Vector3 vector3)
+                        {
+                            if (DrawFloatManipulation(ref vector3.X, fieldIndex * 200 + 0)
+                                | DrawFloatManipulation(ref vector3.Y, fieldIndex * 200 + 1)
+                                | DrawFloatManipulation(ref vector3.Z, fieldIndex * 200 + 2))
+                            {
+                                fi.SetValue(obj, vector3);
+                                objModified = true;
+                            }
+                        }
                         else if (o is Vector4 vector4)
                         {
-                            if (DrawFloatManipulation(ref vector4.X, fieldIndex * 100 + 0)
-                                | DrawFloatManipulation(ref vector4.Y, fieldIndex * 100 + 1)
-                                | DrawFloatManipulation(ref vector4.Z, fieldIndex * 100 + 2)
-                                | DrawFloatManipulation(ref vector4.W, fieldIndex * 100 + 3))
+                            if (DrawFloatManipulation(ref vector4.X, fieldIndex * 300 + 0)
+                                | DrawFloatManipulation(ref vector4.Y, fieldIndex * 300 + 1)
+                                | DrawFloatManipulation(ref vector4.Z, fieldIndex * 300 + 2)
+                                | DrawFloatManipulation(ref vector4.W, fieldIndex * 300 + 3))
                             {
                                 fi.SetValue(obj, vector4);
                                 objModified = true;
                             }
                         }
+                        else if (o is Quaternion q)
+                        {
+                            if (DrawFloatManipulation(ref q.X, fieldIndex * 400 + 0)
+                                | DrawFloatManipulation(ref q.Y, fieldIndex * 400 + 1)
+                                | DrawFloatManipulation(ref q.Z, fieldIndex * 400 + 2)
+                                | DrawFloatManipulation(ref q.W, fieldIndex * 400 + 3))
+                            {
+                                fi.SetValue(obj, q);
+                                objModified = true;
+                            }
+                        }
+
                         else
                         {
                             ImGui.SetNextItemWidth(valueColumnWidth);
@@ -142,20 +181,34 @@ namespace T3.Gui.TableView
                     {
                         list.Remove(objectIndex);
                     }
-                    
+
                     ImGui.PopID();
                 }
             }
             ImGui.PopFont();
-            ImGui.PopStyleVar();
+            ImGui.PopStyleVar(); // FramePadding
             ImGui.EndChild();
+            ImGui.PopStyleVar(); // WindowPadding
+            
             return listModified;
 
             bool DrawFloatManipulation(ref float f, int index = 0)
             {
                 ImGui.PushID(index);
                 ImGui.SetNextItemWidth(valueColumnWidth);
+                var grayedOut = (Math.Abs(f) < 0.0001f);
+                if (grayedOut)
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Text, Color.DarkGray.Rgba);
+                }
+                
                 var fieldModified = ImGui.DragFloat("##sdf", ref f);
+
+                if (grayedOut)
+                {
+                    ImGui.PopStyleColor();
+                }
+                
                 ImGui.SameLine();
                 ImGui.PopID();
                 return fieldModified;
