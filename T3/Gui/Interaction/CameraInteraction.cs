@@ -311,7 +311,7 @@ namespace T3.Gui.Graph.Interaction
                 Target = Vector3.Lerp(Target, intended.Target, f);
             }
 
-            private const float DefaultCameraPositionZ = 10;
+            private const float DefaultCameraPositionZ = 2.416f;
         }
 
         private static ViewAxis _viewAxis = new ViewAxis();
