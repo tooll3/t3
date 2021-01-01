@@ -1,4 +1,6 @@
 ﻿using System.Runtime.InteropServices;
+using System;
+using System.Numerics;
 
 namespace T3.Core.DataTypes
 {
@@ -6,8 +8,22 @@ namespace T3.Core.DataTypes
     public struct Point
     {
         [FieldOffset(0)]
-        public SharpDX.Vector4 Position;
+        public Vector3 Position;
+
+        [FieldOffset(12)]
+        public float W;
+
         [FieldOffset(16)]
-        public SharpDX.Quaternion Orientation;    
+        public Quaternion Orientation;
+
+        public static Point Separator()
+        {
+            return new Point
+                       {
+                           Position = Vector3.Zero,
+                           W = Single.NaN,
+                           Orientation = Quaternion.Identity
+                       };
+        }
     }
 }
