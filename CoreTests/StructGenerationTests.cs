@@ -47,6 +47,7 @@ namespace OperatorTests
             var instance = Activator.CreateInstance(type);
             int size = Marshal.SizeOf(instance);
             Assert.AreEqual(explicitSize, size);
+            assemblyBuilder.Save(assemblyName.Name + ".dll");
         }
     }
 }
