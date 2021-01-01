@@ -360,13 +360,13 @@ namespace T3.Gui.InputUi
                     if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified ||
                         (editState & InputEditStateFlags.Finished) == InputEditStateFlags.Finished)
                     {
-                        inputSlot.DirtyFlag.Invalidate();
+                        compositionSymbol.InvalidateInputInAllChildInstances(inputSlot);
                     }
 
                     if ((editState & InputEditStateFlags.ResetToDefault) == InputEditStateFlags.ResetToDefault)
                     {
                         input.ResetToDefault();
-                        inputSlot.DirtyFlag.Invalidate();
+                        compositionSymbol.InvalidateInputInAllChildInstances(inputSlot);
                     }
 
                     input.IsDefault &= (editState & InputEditStateFlags.Modified) != InputEditStateFlags.Modified;
