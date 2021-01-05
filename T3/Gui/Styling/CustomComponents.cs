@@ -392,7 +392,7 @@ namespace T3.Gui
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Gray.Rgba);
                     foreach (var word in items)
                     {
-                        if (word != text && word.Contains(text))
+                        if (word != null && word != text && word.Contains(text))
                         {
                             var isSelected = index == _selectedResultIndex;
                             ImGui.Selectable(word, isSelected);
