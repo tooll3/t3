@@ -85,7 +85,9 @@ namespace T3.Core.Operator
 
         public Dictionary<Variator.VariationId, VariationSelector> VariationOverwrites { get; } = new Dictionary<Variator.VariationId, VariationSelector>();
 
-        public Dictionary<string, float> Variables { get; } = new Dictionary<string, float>();
+        public Dictionary<string, float> FloatVariables { get; } = new Dictionary<string, float>();
+        public StructuredList IteratedList { get; set; }
+        public int IteratedListIndex { get; set; }
 
         public ParticleSystem ParticleSystem;
     }

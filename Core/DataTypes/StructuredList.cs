@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SharpDX;
 using T3.Core.Logging;
@@ -151,5 +149,7 @@ namespace T3.Core.DataTypes
             Array.Copy(TypedElements, newArray, matchingElementCount);
             TypedElements = newArray;
         }
+        
+
     }
 }
