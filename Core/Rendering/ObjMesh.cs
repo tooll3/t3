@@ -10,23 +10,25 @@ namespace T3.Core.Rendering
     public class ObjMesh
     {
         public readonly List<SharpDX.Vector3> Vertices = new List<SharpDX.Vector3>();
-        public readonly List<SharpDX.Vector2> TexCoords = new List<SharpDX.Vector2>();
         public readonly List<SharpDX.Vector3> Normals = new List<SharpDX.Vector3>();
+        public readonly List<SharpDX.Vector2> TexCoords = new List<SharpDX.Vector2>();
         public readonly List<Face> Faces = new List<Face>();
-        
-        public ObjMesh(string objFilePath)
+
+        public static ObjMesh LoadFromFile(string objFilePath)
         {
             try
             {
                 if (string.IsNullOrEmpty(objFilePath) || !(new FileInfo(objFilePath).Exists))
-                    return;
+                    return null;
             }
             catch (Exception e)
             {
                 Log.Warning("Failed to load object path:" + objFilePath + "\\n" + e);
-                return;
+                return null;
             }
-            
+
+            var mesh = new ObjMesh();
+
             using (var stream = new StreamReader(objFilePath))
             {
                 try
@@ -42,14 +44,14 @@ namespace T3.Core.Rendering
                                 float x = float.Parse(lineEntries[1], CultureInfo.InvariantCulture);
                                 float y = float.Parse(lineEntries[2], CultureInfo.InvariantCulture);
                                 float z = float.Parse(lineEntries[3], CultureInfo.InvariantCulture);
-                                Vertices.Add(new Vector3(x, y, z));
+                                mesh.Vertices.Add(new Vector3(x, y, z));
                                 break;
                             }
                             case "vt":
                             {
                                 float u = float.Parse(lineEntries[1], CultureInfo.InvariantCulture);
                                 float v = float.Parse(lineEntries[2], CultureInfo.InvariantCulture);
-                                TexCoords.Add(new Vector2(u, v));
+                                mesh.TexCoords.Add(new Vector2(u, v));
                                 break;
                             }
                             case "vn":
@@ -57,7 +59,7 @@ namespace T3.Core.Rendering
                                 float x = float.Parse(lineEntries[1], CultureInfo.InvariantCulture);
                                 float y = float.Parse(lineEntries[2], CultureInfo.InvariantCulture);
                                 float z = float.Parse(lineEntries[3], CultureInfo.InvariantCulture);
-                                Normals.Add(new Vector3(x, y, z));
+                                mesh.Normals.Add(new Vector3(x, y, z));
                                 break;
                             }
                             case "f":
@@ -80,7 +82,7 @@ namespace T3.Core.Rendering
                                 int v2t = int.Parse(v2entries[1], CultureInfo.InvariantCulture) - 1;
                                 int v2n = int.Parse(v2entries[2], CultureInfo.InvariantCulture) - 1;
 
-                                Faces.Add(new Face(v0v, v0n, v0t, v1v, v1n, v1t, v2v, v2n, v2t));
+                                mesh.Faces.Add(new Face(v0v, v0n, v0t, v1v, v1n, v1t, v2v, v2n, v2t));
                                 break;
                             }
                         }
@@ -89,8 +91,11 @@ namespace T3.Core.Rendering
                 catch (Exception e)
                 {
                     Log.Error("Failed to load point cloud:" + e.Message);
+                    return null;
                 }
             }
+
+            return mesh;
         }
 
         public struct Face
@@ -119,6 +124,108 @@ namespace T3.Core.Rendering
             public int V2;
             public int V2n;
             public int V2t;
-        }    
+        }
+
+        #region joining vertices
+        public List<Vertex> DistinctVertices
+        {
+            get
+            {
+                if (_distinctVertexList == null)
+                {
+                    _distinctVertexList = new DistinctVertexList(Faces);
+                }
+
+                return _distinctVertexList.Vertices;
+            }
+        }
+
+        public int GetVertexIndex(int positionIndex, int normalIndex, int textureCoordsIndex)
+        {
+            var hash = Vertex.GetHashForIndices(positionIndex, normalIndex, textureCoordsIndex);
+        
+            if (_distinctVertexList.VertexIndicesByHash.TryGetValue(hash, out var index))
+            {
+                return index;
+            }
+        
+            return -1;
+        }
+
+        public struct Vertex
+        {
+            public readonly int PositionIndex;
+            public readonly int NormalIndex;
+            public readonly int TextureCoordsIndex;
+            public readonly long Hash;
+
+            public Vertex(int positionIndex, int normalIndex, int textureCoordsIndex)
+            {
+                PositionIndex = positionIndex;
+                NormalIndex = normalIndex;
+                TextureCoordsIndex = textureCoordsIndex;
+                Hash = GetHashForIndices(positionIndex, normalIndex, textureCoordsIndex);
+            }
+
+            // public override int GetHashCode()
+            // {
+            //     return Hash;
+            // }
+
+            public static long GetHashForIndices(int pos, int normal, int textureCoords)
+            {
+                //unchecked
+                //{
+                    // long hash = 171;
+                    // hash = hash * 23 + pos * 37;
+                    // hash = hash * 23 + normal;
+                    // hash = hash * 23 + textureCoords;
+                    // return hash;
+                    return (long)pos << 42 | normal << 21 | textureCoords;
+                
+            }
+        }
+
+        private class DistinctVertexList
+        {
+            public DistinctVertexList(List<ObjMesh.Face> faces)
+            {
+                for (int faceIndex = 0; faceIndex < faces.Count; faceIndex++)
+                {
+                    var face = faces[faceIndex];
+
+                    SortInMergedVertex(face.V0, face.V0n, face.V0t);
+                    SortInMergedVertex(face.V1, face.V1n, face.V1t);
+                    SortInMergedVertex(face.V2, face.V2n, face.V2t);
+                }
+            }
+
+            private void SortInMergedVertex(int posIndex, int normalIndex, int texCoordIndex)
+            {
+                var vert = new Vertex(posIndex, normalIndex, texCoordIndex);
+                if (VertexIndicesByHash.ContainsKey(vert.Hash))
+                    return;
+
+                VertexIndicesByHash[vert.Hash] = Vertices.Count;
+                Vertices.Add(vert);
+            }
+
+            // public int GetIndexOf(Vertex vertex)
+            // {
+            //     if (!VertexIndicesByHash.ContainsKey(vertex.Hash))
+            //     {
+            //         Log.Warning("This vertex has not been added?");
+            //         return 0;
+            //     }
+            //
+            //     return VertexIndicesByHash[vertex.Hash];
+            // }
+
+            public readonly List<Vertex> Vertices = new List<Vertex>();
+            public Dictionary<long, int> VertexIndicesByHash = new Dictionary<long, int>();
+        }
+
+        private DistinctVertexList _distinctVertexList;
+        #endregion
     }
 }

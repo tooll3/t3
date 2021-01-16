@@ -152,6 +152,7 @@
     <Compile Include="Operator\Variator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\ObjMesh.cs" />
+    <Compile Include="Rendering\PrbDataTypes.cs" />
     <Compile Include="Resource\Json.cs" />
     <Compile Include="Resource\MathUtils.cs" />
     <Compile Include="Resource\Model.cs" />
