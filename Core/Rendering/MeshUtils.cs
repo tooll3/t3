@@ -16,7 +16,7 @@ namespace T3.Core.Rendering
             var t2 = st2.Y;
 
             var t = new Vector3(q1.X*t2 - q2.X*t1, q1.Y*t2 - q2.Y*t1, q1.Z*t2 - q2.Z*t1)*1.0f/(s1*t2 - s2*t1);
-            var bt = new Vector3(-q1.X*s2 + q2.X*s1, -q1.Y*s2 + q2.Y*s1, -q1.Z*s2 + q2.Z*s1)*1.0f/(s1*t2 - s2*t1);
+            //var bt = new Vector3(-q1.X*s2 + q2.X*s1, -q1.Y*s2 + q2.Y*s1, -q1.Z*s2 + q2.Z*s1)*1.0f/(s1*t2 - s2*t1);
 
             bitangent = Vector3.Cross(normal, t);
             bitangent.Normalize();
