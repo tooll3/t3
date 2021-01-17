@@ -172,7 +172,7 @@ namespace T3.Core.Rendering
 
             public static long GetHashForIndices(int pos, int normal, int textureCoords)
             {
-                return (long)pos << 42 | normal << 21 | textureCoords;
+                return (long)pos << 42 | (long)normal << 21 | (long)textureCoords;
             }
         }
 

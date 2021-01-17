@@ -112,6 +112,7 @@
     <Compile Include="DataTypes\Gradient.cs" />
     <Compile Include="DataTypes\IEditableInputType.cs" />
     <Compile Include="DataTypes\ParticleSystem.cs" />
+    <Compile Include="DataTypes\PbrMaterialTextures.cs" />
     <Compile Include="DataTypes\Point.cs" />
     <Compile Include="DataTypes\PointLightStack.cs" />
     <Compile Include="DataTypes\RenderTargetReference.cs" />
