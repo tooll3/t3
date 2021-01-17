@@ -9,7 +9,7 @@ namespace T3.Core.Rendering
 {
     public class ObjMesh
     {
-        public readonly List<SharpDX.Vector3> Vertices = new List<SharpDX.Vector3>();
+        public readonly List<SharpDX.Vector3> Positions = new List<SharpDX.Vector3>();
         public readonly List<SharpDX.Vector3> Normals = new List<SharpDX.Vector3>();
         public readonly List<SharpDX.Vector2> TexCoords = new List<SharpDX.Vector2>();
         public readonly List<Face> Faces = new List<Face>();
@@ -44,7 +44,7 @@ namespace T3.Core.Rendering
                                 float x = float.Parse(lineEntries[1], CultureInfo.InvariantCulture);
                                 float y = float.Parse(lineEntries[2], CultureInfo.InvariantCulture);
                                 float z = float.Parse(lineEntries[3], CultureInfo.InvariantCulture);
-                                mesh.Vertices.Add(new Vector3(x, y, z));
+                                mesh.Positions.Add(new Vector3(x, y, z));
                                 break;
                             }
                             case "vt":
@@ -126,29 +126,31 @@ namespace T3.Core.Rendering
             public int V2t;
         }
 
+
+
         #region joining vertices
         public List<Vertex> DistinctVertices
         {
             get
             {
-                if (_distinctVertexList == null)
+                if (Vertices == null)
                 {
-                    _distinctVertexList = new DistinctVertexList(Faces);
+                    InitializeVertices();
                 }
 
-                return _distinctVertexList.Vertices;
+                return Vertices;
             }
         }
 
         public int GetVertexIndex(int positionIndex, int normalIndex, int textureCoordsIndex)
         {
             var hash = Vertex.GetHashForIndices(positionIndex, normalIndex, textureCoordsIndex);
-        
-            if (_distinctVertexList.VertexIndicesByHash.TryGetValue(hash, out var index))
+
+            if (VertexIndicesByHash.TryGetValue(hash, out var index))
             {
                 return index;
             }
-        
+
             return -1;
         }
 
@@ -157,75 +159,69 @@ namespace T3.Core.Rendering
             public readonly int PositionIndex;
             public readonly int NormalIndex;
             public readonly int TextureCoordsIndex;
-            public readonly long Hash;
+
+            //public readonly long Hash;
 
             public Vertex(int positionIndex, int normalIndex, int textureCoordsIndex)
             {
                 PositionIndex = positionIndex;
                 NormalIndex = normalIndex;
                 TextureCoordsIndex = textureCoordsIndex;
-                Hash = GetHashForIndices(positionIndex, normalIndex, textureCoordsIndex);
+                //Hash = GetHashForIndices(positionIndex, normalIndex, textureCoordsIndex);
             }
-
-            // public override int GetHashCode()
-            // {
-            //     return Hash;
-            // }
 
             public static long GetHashForIndices(int pos, int normal, int textureCoords)
             {
-                //unchecked
-                //{
-                    // long hash = 171;
-                    // hash = hash * 23 + pos * 37;
-                    // hash = hash * 23 + normal;
-                    // hash = hash * 23 + textureCoords;
-                    // return hash;
-                    return (long)pos << 42 | normal << 21 | textureCoords;
-                
+                return (long)pos << 42 | normal << 21 | textureCoords;
             }
         }
 
-        private class DistinctVertexList
+        private void InitializeVertices()
         {
-            public DistinctVertexList(List<ObjMesh.Face> faces)
+            Vertices = new List<Vertex>();
+            for (int faceIndex = 0; faceIndex < Faces.Count; faceIndex++)
             {
-                for (int faceIndex = 0; faceIndex < faces.Count; faceIndex++)
-                {
-                    var face = faces[faceIndex];
+                var face = Faces[faceIndex];
 
-                    SortInMergedVertex(face.V0, face.V0n, face.V0t);
-                    SortInMergedVertex(face.V1, face.V1n, face.V1t);
-                    SortInMergedVertex(face.V2, face.V2n, face.V2t);
-                }
+                SortInMergedVertex(face.V0, face.V0n, face.V0t, ref face);
+                SortInMergedVertex(face.V1, face.V1n, face.V1t, ref face);
+                SortInMergedVertex(face.V2, face.V2n, face.V2t, ref face);
             }
-
-            private void SortInMergedVertex(int posIndex, int normalIndex, int texCoordIndex)
-            {
-                var vert = new Vertex(posIndex, normalIndex, texCoordIndex);
-                if (VertexIndicesByHash.ContainsKey(vert.Hash))
-                    return;
-
-                VertexIndicesByHash[vert.Hash] = Vertices.Count;
-                Vertices.Add(vert);
-            }
-
-            // public int GetIndexOf(Vertex vertex)
-            // {
-            //     if (!VertexIndicesByHash.ContainsKey(vertex.Hash))
-            //     {
-            //         Log.Warning("This vertex has not been added?");
-            //         return 0;
-            //     }
-            //
-            //     return VertexIndicesByHash[vertex.Hash];
-            // }
-
-            public readonly List<Vertex> Vertices = new List<Vertex>();
-            public Dictionary<long, int> VertexIndicesByHash = new Dictionary<long, int>();
         }
 
-        private DistinctVertexList _distinctVertexList;
+        private int SortInMergedVertex(int posIndex, int normalIndex, int texCoordIndex, ref Face face)
+        {
+            var vertHash = Vertex.GetHashForIndices(posIndex, normalIndex, texCoordIndex);
+            
+            if (VertexIndicesByHash.TryGetValue(vertHash, out var index))
+            {
+                return index;
+            }
+            
+            Vector3 tangent, bitangent;
+            MeshUtils.CalcTBNSpace(p0: Positions[face.V0],
+                                   uv0: TexCoords[face.V0t],
+                                   p1: Positions[face.V1],
+                                   uv1: TexCoords[face.V1t],
+                                   p2: Positions[face.V2],
+                                   uv2: TexCoords[face.V2t],
+                                   normal: Normals[normalIndex],
+                                   tangent: out tangent,
+                                   bitangent: out bitangent);            
+            
+            var vert = new Vertex(posIndex, normalIndex, texCoordIndex);
+            var newIndex = Vertices.Count;
+            VertexIndicesByHash[vertHash] = newIndex;
+            VertexBinormals.Add(bitangent);
+            VertexTangents.Add(tangent);
+            Vertices.Add(vert);
+            return newIndex;
+        }
+
+        public List<Vertex> Vertices;
+        public readonly List<SharpDX.Vector3> VertexTangents = new List<Vector3>();
+        public readonly List<SharpDX.Vector3> VertexBinormals = new List<Vector3>();
+        private readonly Dictionary<long, int> VertexIndicesByHash = new Dictionary<long, int>();
         #endregion
     }
 }
