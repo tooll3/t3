@@ -28,7 +28,7 @@ namespace T3.Gui.Graph.Dialogs
                     ImGui.PopFont();
 
                     ImGui.SetNextItemWidth(250);
-                    CustomComponents.InputWithTypeAheadSearch("##namespace", ref nameSpace,
+                    InputWithTypeAheadSearch.Draw("##namespace", ref nameSpace,
                                                               SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i));
                         
                     ImGui.SetNextItemWidth(150);

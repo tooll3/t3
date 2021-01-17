@@ -155,7 +155,7 @@ namespace T3.Gui.Windows
                 var namespaceForEdit = op.Symbol.Namespace ?? "";
                 
 
-                if (CustomComponents.InputWithTypeAheadSearch("##namespace", ref namespaceForEdit, SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
+                if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit, SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
                 {
                     op.Symbol.Namespace = namespaceForEdit;
                 }
