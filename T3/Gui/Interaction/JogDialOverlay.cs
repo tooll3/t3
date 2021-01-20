@@ -232,8 +232,8 @@ namespace T3.Gui.Interaction
                 const float transitionRange = 0.06f;
 
                 var transition = isOnLeft
-                                    ? MathUtils.Remap(dialRatio, 0, transitionRange, 1, 0).Clamp(0, 1)
-                                    : MathUtils.Remap(dialRatio, 1 - transitionRange, 1, 0, 1).Clamp(0, 1);
+                                    ? MathUtils.RemapAndClamp(dialRatio, 0, transitionRange, 1, 0).Clamp(0, 1)
+                                    : MathUtils.RemapAndClamp(dialRatio, 1 - transitionRange, 1, 0, 1).Clamp(0, 1);
 
                 {
                     var smallerLabel = $"{roundedUpperPart:G5}";

@@ -85,7 +85,7 @@ namespace T3.Gui.Graph
                 var backgroundColor = typeColor;
                 if (framesSinceLastUpdate > 2)
                 {
-                    var fadeFactor = MathUtils.Remap(framesSinceLastUpdate, 0f, 60f, 0f, 0.5f);
+                    var fadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 0.5f);
                     //backgroundColor.Rgba.W *= fadeFactor;
                     backgroundColor = Color.Mix(backgroundColor, Color.Black, fadeFactor);
                 }
@@ -315,7 +315,7 @@ namespace T3.Gui.Graph
 
                 // Render input Label
                 if((customUiResult & SymbolChildUi.CustomUiResult.PreventInputLabels) == 0) {
-                    var inputLabelOpacity = MathUtils.Remap(GraphCanvas.Current.Scale.X,
+                    var inputLabelOpacity = MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X,
                                                             0.75f, 1.5f,
                                                             0f, 1f);
 
@@ -328,7 +328,7 @@ namespace T3.Gui.Graph
                         var label = inputDefinition.Name;
                         if (inputDefinition.IsMultiInput)
                         {
-                            label += " [...]";
+                            label = "  " + label + " [...]";
                         }
 
                         var labelSize = ImGui.CalcTextSize(label);
@@ -386,7 +386,20 @@ namespace T3.Gui.Graph
                             var line = showGaps
                                            ? connectedLines[socketIndex >> 1]
                                            : connectedLines[socketIndex];
-
+                            if (socketHeight > 10)
+                            {
+                                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 
+                                                   MathUtils.RemapAndClamp(socketHeight, 10, 20, 0, 0.5f).Clamp(0,0.5f));
+                                ImGui.PushFont(Fonts.FontSmall);
+                                //ImGui.SetCursorScreenPos(targetPos +  new Vector2(0, -ImGui.GetFontSize()/2));
+                                //ImGui.Value(socketIndex % 4 == 0 ? ">" : "", socketIndex);
+                                _drawList.AddText(targetPos +  new Vector2(7, -ImGui.GetFontSize()/2),
+                                                  new Color(MathUtils.RemapAndClamp(socketHeight, 10, 20, 0, 0.5f).Clamp(0,0.5f)), 
+                                                  (socketIndex % 4 == 0 ? "." : "") + socketIndex
+                                                   );
+                                ImGui.PopFont();
+                                ImGui.PopStyleVar();
+                            }
                             line.TargetPosition = targetPos;
                             line.TargetNodeArea = connectionBorderArea;
                             line.IsSelected |= childUi.IsSelected;
@@ -754,7 +767,7 @@ namespace T3.Gui.Graph
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
-            var thickness = MathUtils.Remap(GraphCanvas.Current.Scale.X, 0.5f, 1f, 3f, UsableSlotThickness);
+            var thickness = MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1f, 3f, UsableSlotThickness);
 
             var opRect = _usableScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;

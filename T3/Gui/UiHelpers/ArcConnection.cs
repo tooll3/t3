@@ -173,7 +173,7 @@ namespace UiHelpers
             
             void FnDrawBezierFallback()
             {
-                var tangentLength = MathUtils.Remap(Vector2.Distance(pointA, pointB),
+                var tangentLength = MathUtils.RemapAndClamp(Vector2.Distance(pointA, pointB),
                                                     30, 300,
                                                     5, 200);
                 drawList.PathLineTo(pointA);

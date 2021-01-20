@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
 
 namespace T3.Gui.Graph.Interaction
@@ -328,8 +329,8 @@ namespace T3.Gui.Graph.Interaction
         private static float _deltaTime;
 
         private const float RenderWindowHeight = 450; // TODO: this should be derived from output window size
-        private const float StopDistanceThreshold = 0.01f;
-        private const float RotateMouseSensitivity = 0.01f;
+        private const float StopDistanceThreshold = 0.0001f;
+        private const float RotateMouseSensitivity = 0.001f;
         private const float OrbitHorizontalDamping = 0.2f;
         private const float CameraMoveDamping = 0.12f;
         private const float CameraDamping = 0.5f;

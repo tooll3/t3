@@ -99,7 +99,7 @@ namespace T3.Core
             return v - mod * Math.Floor(v / mod);
         }
 
-        public static float Remap(float value, float inMin, float inMax, float outMin, float outMax)
+        public static float RemapAndClamp(float value, float inMin, float inMax, float outMin, float outMax)
         {
             var factor = (value - inMin) / (inMax - inMin);
             var v = factor * (outMax - outMin) + outMin;

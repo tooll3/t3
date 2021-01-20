@@ -317,7 +317,7 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    var tangentLength = MathUtils.Remap(Vector2.Distance(SourcePosition, TargetPosition),
+                    var tangentLength = MathUtils.RemapAndClamp(Vector2.Distance(SourcePosition, TargetPosition),
                                                         30, 300,
                                                         5, 200);
                     DrawList.AddBezierCurve(

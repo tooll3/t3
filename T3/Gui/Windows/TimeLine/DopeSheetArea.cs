@@ -259,7 +259,7 @@ namespace T3.Gui.Windows.TimeLine
                                                   lastValue));
                     }
 
-                    lastValue = MathUtils.Remap((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
+                    lastValue = MathUtils.RemapAndClamp((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
                     positions.Add(new Vector2(
                                               TimeLineCanvas.Current.TransformX((float)u),
                                               lastValue));
@@ -332,7 +332,7 @@ namespace T3.Gui.Windows.TimeLine
                 if (availableSpace > 40)
                 {
                     var color = Color.Orange;
-                    color.Rgba.W =MathUtils.Remap(availableSpace, 40, 60, 0, 1).Clamp(0, 1); 
+                    color.Rgba.W =MathUtils.RemapAndClamp(availableSpace, 40, 60, 0, 1).Clamp(0, 1); 
                     ImGui.PushFont(Fonts.FontSmall);
                     _drawList.AddText(min, color, $"{lastVDef.Value:G3}");
                     ImGui.PopFont();

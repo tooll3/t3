@@ -113,7 +113,7 @@ namespace T3.Core.DataTypes
                         return step.Color;
                     }
 
-                    float amount = MathUtils.Remap(t, previousStep.NormalizedPosition, step.NormalizedPosition, 0, 1);
+                    float amount = MathUtils.RemapAndClamp(t, previousStep.NormalizedPosition, step.NormalizedPosition, 0, 1);
 
                     return Vector4.Lerp(previousStep.Color, step.Color, amount);
                 }
