@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SharpDX;
 using T3.Core.Logging;
 
@@ -20,11 +23,14 @@ namespace T3.Core.DataTypes
         public abstract int TotalSizeInBytes { get; }
         public abstract void WriteToStream(DataStream stream);
         public abstract StructuredList Clone();
+
         public abstract StructuredList Join(params StructuredList[] other);
+
         // public abstract StructuredList Filter(Func<object, bool> filter);
         public abstract void Insert(int index, object obj);
         public abstract void Remove(int index);
         public abstract void SetLength(int length);
+        public abstract string Write(JsonTextWriter writerNotUsed);
     }
 
     public class StructuredList<T> : StructuredList where T : struct
@@ -35,7 +41,7 @@ namespace T3.Core.DataTypes
         }
 
         public T[] TypedElements { get; private set; }
-        
+
         public override object Elements => TypedElements;
 
         public override object this[int i]
@@ -93,6 +99,7 @@ namespace T3.Core.DataTypes
                 {
                     continue;
                 }
+
                 var sourceArray = (T[])sourceList.Elements;
                 var numElements = sourceList.NumElements;
                 Array.Copy(sourceArray, 0, newList.TypedElements, startIndex, numElements);
@@ -110,6 +117,7 @@ namespace T3.Core.DataTypes
                 Log.Warning($"StructuredList.Insert: trying to insert element with type '{objType.Name} but expecting type: {Type.Name}. Skipping insertion.");
                 return;
             }
+
             var newArray = new T[TypedElements.Length + 1];
             Array.Copy(TypedElements, newArray, index);
             newArray[index] = (T)obj;
@@ -124,7 +132,7 @@ namespace T3.Core.DataTypes
                 Log.Warning($"StructuredList.Remove: invalid index {index}");
                 return;
             }
-            
+
             var newArray = new T[TypedElements.Length - 1];
             Array.Copy(TypedElements, newArray, index);
             Array.Copy(TypedElements, index + 1, newArray, index, NumElements - index - 1);
@@ -133,7 +141,6 @@ namespace T3.Core.DataTypes
 
         public override void SetLength(int length)
         {
-            
             if (length < 0)
             {
                 Log.Error($"Cannot set length of structured list to negative value {length}");
@@ -142,14 +149,48 @@ namespace T3.Core.DataTypes
 
             if (length == TypedElements.Length)
                 return;
-            
+
             var newArray = new T[length];
             var matchingElementCount = Math.Min(length, TypedElements.Length);
-            
+
             Array.Copy(TypedElements, newArray, matchingElementCount);
             TypedElements = newArray;
         }
-        
 
+        public override string Write(JsonTextWriter writerNotUsed)
+        {
+            using (var sw = new StringWriter())
+            using (var writer = new JsonTextWriter(sw))
+            {
+                writer.Formatting = Formatting.Indented;
+                writer.WritePropertyName("StructureList");
+                writer.WriteStartArray();
+
+                var fieldInfos = Type.GetFields();
+
+                foreach (var entry in TypedElements)
+                {
+                    writer.WriteStartObject();
+
+                    foreach (var fieldInfo in fieldInfos)
+                    {
+                        var name = fieldInfo.Name;
+                        writer.WritePropertyName(name);
+                        var value = fieldInfo.GetValue(entry);
+                        TypeValueToJsonConverters.Entries[fieldInfo.FieldType](writer, value);
+                    }
+
+                    writer.WriteEndObject();
+                }
+
+                writer.WriteEndArray();
+                var json = sw.ToString();
+                return json;
+            }
+        }
+
+        public void Read(JToken inputToken)
+        {
+        }
     }
 }
