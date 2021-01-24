@@ -38,9 +38,16 @@ namespace T3.Core.DataTypes
         {
             get
             {
+                if (_currentSize == 0)
+                {
+
+                    return GetDefaultBuffer();
+                }
+                
                 if (_isConstBufferDirty)
                 {
-                    UpdateConstBuffer();
+                    UpdateConstBuffer(ref _pointLights, ref _constBuffer , _currentSize);
+                    _isConstBufferDirty = false;
                 }
 
                 return _constBuffer;
@@ -76,19 +83,19 @@ namespace T3.Core.DataTypes
             }
         }
 
-        private void UpdateConstBuffer()
+        private static void UpdateConstBuffer(ref PointLight[] pointLights, ref Buffer constBuffer, int activeLightCount)
         {
             var size = Marshal.SizeOf<PointLight>() * MaxPointLights + 16;
             using (var data = new DataStream(size, true, true))
             {
-                foreach (var light in _pointLights)
+                foreach (var light in pointLights)
                 {
                     data.Write(light);
                 }
-                data.Write(_currentSize);
+                data.Write(activeLightCount);
                 data.Position = 0;
 
-                if (_constBuffer == null)
+                if (constBuffer == null)
                 {
                     var bufferDesc = new BufferDescription
                                          {
@@ -96,20 +103,39 @@ namespace T3.Core.DataTypes
                                              SizeInBytes = size,
                                              BindFlags = BindFlags.ConstantBuffer
                                          };
-                    _constBuffer = new Buffer(ResourceManager.Instance().Device, data, bufferDesc) { DebugName = "PointLightsConstBuffer" };
+                    constBuffer = new Buffer(ResourceManager.Instance().Device, data, bufferDesc) { DebugName = "PointLightsConstBuffer" };
                 }
                 else
                 {
-                    ResourceManager.Instance().Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), _constBuffer, 0);
+                    ResourceManager.Instance().Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), constBuffer, 0);
                 }
             }
-
-            _isConstBufferDirty = false;
         }
 
-        private readonly PointLight[] _pointLights = new PointLight[MaxPointLights];
+        private Buffer GetDefaultBuffer()
+        {
+            if (_defaultConstBuffer == null)
+            {
+                _defaultPointLights[0] = new PointLight
+                                             {
+                                                 Position = new Vector3(4,10,4),
+                                                 Intensity = 10, 
+                                                 Color = new System.Numerics.Vector4(1,1,1,1),
+                                                 Range = 100
+                                             };
+                UpdateConstBuffer(ref _defaultPointLights, ref _defaultConstBuffer, 1);
+            }
+
+            return _defaultConstBuffer;
+        }
+        
+
+        private PointLight[] _pointLights = new PointLight[MaxPointLights];
         private int _currentSize = 0;
         private bool _isConstBufferDirty = true;
         private Buffer _constBuffer = null;
+        
+        private static PointLight[] _defaultPointLights = new PointLight[MaxPointLights];
+        private static Buffer _defaultConstBuffer;
     }
 }
