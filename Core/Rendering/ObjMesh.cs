@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using SharpDX;
+using SharpDX.DirectWrite;
 using T3.Core.Logging;
 
 namespace T3.Core.Rendering
@@ -13,6 +14,7 @@ namespace T3.Core.Rendering
         public readonly List<SharpDX.Vector3> Normals = new List<SharpDX.Vector3>();
         public readonly List<SharpDX.Vector2> TexCoords = new List<SharpDX.Vector2>();
         public readonly List<Face> Faces = new List<Face>();
+        public readonly List<Line> Lines = new List<Line>();
 
         public static ObjMesh LoadFromFile(string objFilePath)
         {
@@ -85,6 +87,13 @@ namespace T3.Core.Rendering
                                 mesh.Faces.Add(new Face(v0v, v0n, v0t, v1v, v1n, v1t, v2v, v2n, v2t));
                                 break;
                             }
+                            case "l":
+                            {
+                                mesh.Lines.Add(new Line(int.Parse(lineEntries[1], CultureInfo.InvariantCulture) - 1,
+                                                        int.Parse(lineEntries[2], CultureInfo.InvariantCulture) - 1
+                                                       ));
+                                break;
+                            }
                         }
                     }
                 }
@@ -126,19 +135,29 @@ namespace T3.Core.Rendering
             public int V2t;
         }
 
+        public struct Line
+        {
+            public Line(int v0, int v2)
+            {
+                V0 = v0;
+                V2 = v2;
+            }
 
+            public int V0;
+            public int V2;
+        }
 
         #region joining vertices
-        public List<Vertex> DistinctVertices
+        public List<Vertex> DistinctDistinctVertices
         {
             get
             {
-                if (Vertices == null)
+                if (_distinctVertices == null)
                 {
                     InitializeVertices();
                 }
 
-                return Vertices;
+                return _distinctVertices;
             }
         }
 
@@ -178,7 +197,7 @@ namespace T3.Core.Rendering
 
         private void InitializeVertices()
         {
-            Vertices = new List<Vertex>();
+            _distinctVertices = new List<Vertex>();
             for (int faceIndex = 0; faceIndex < Faces.Count; faceIndex++)
             {
                 var face = Faces[faceIndex];
@@ -192,12 +211,12 @@ namespace T3.Core.Rendering
         private int SortInMergedVertex(int posIndex, int normalIndex, int texCoordIndex, ref Face face)
         {
             var vertHash = Vertex.GetHashForIndices(posIndex, normalIndex, texCoordIndex);
-            
+
             if (VertexIndicesByHash.TryGetValue(vertHash, out var index))
             {
                 return index;
             }
-            
+
             Vector3 tangent, bitangent;
             MeshUtils.CalcTBNSpace(p0: Positions[face.V0],
                                    uv0: TexCoords[face.V0t],
@@ -207,18 +226,18 @@ namespace T3.Core.Rendering
                                    uv2: TexCoords[face.V2t],
                                    normal: Normals[normalIndex],
                                    tangent: out tangent,
-                                   bitangent: out bitangent);            
-            
+                                   bitangent: out bitangent);
+
             var vert = new Vertex(posIndex, normalIndex, texCoordIndex);
-            var newIndex = Vertices.Count;
+            var newIndex = _distinctVertices.Count;
             VertexIndicesByHash[vertHash] = newIndex;
             VertexBinormals.Add(bitangent);
             VertexTangents.Add(tangent);
-            Vertices.Add(vert);
+            _distinctVertices.Add(vert);
             return newIndex;
         }
 
-        public List<Vertex> Vertices;
+        private List<Vertex> _distinctVertices;
         public readonly List<SharpDX.Vector3> VertexTangents = new List<Vector3>();
         public readonly List<SharpDX.Vector3> VertexBinormals = new List<Vector3>();
         private readonly Dictionary<long, int> VertexIndicesByHash = new Dictionary<long, int>();
