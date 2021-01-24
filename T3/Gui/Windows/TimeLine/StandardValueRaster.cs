@@ -14,7 +14,7 @@ namespace T3.Gui.Windows.TimeLine
     {
         public override void Draw(Playback playback)
         {
-            var unitInSecs = UnitsPerSecond * playback.Bpm / 240f;
+            var unitInSecs = UnitsPerSecond * playback.Bpm / 240f * 4;
 
             var scale = TimeLineCanvas.Current.NestedTimeScale / unitInSecs;
             var scroll = TimeLineCanvas.Current.NestedTimeOffset;
