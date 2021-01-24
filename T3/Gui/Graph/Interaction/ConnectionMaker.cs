@@ -806,7 +806,7 @@ namespace T3.Gui.Graph
                             var width = 160f;
                             ImGui.BeginChild("thumbnail", new Vector2(width, width*9/16f));
                             {
-                                SelectionManager.SetDrawList(drawList);
+                                TransformGizmoHandling.SetDrawList(drawList);
                                 ImageCanvasForTooltips.Update();
                                 ImageCanvasForTooltips.SetAsCurrent();
                                 
@@ -827,7 +827,7 @@ namespace T3.Gui.Graph
                                     ImGui.PopFont();
                                 }
                                 ImageCanvasForTooltips.Deactivate();
-                                SelectionManager.StopDrawList();
+                                TransformGizmoHandling.StopDrawList();
                             }
                             ImGui.EndChild();
                             

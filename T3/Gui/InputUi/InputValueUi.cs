@@ -151,7 +151,7 @@ namespace T3.Gui.InputUi
                                 var parent = selectedInstance.Parent;
                                 var selectionTargetInstance = parent.Children.Single(instance => instance.SymbolChildId == sourceUi.Id);
                                 SelectionManager.SetSelection(sourceSymbolChildUi, selectionTargetInstance);
-                                SelectionManager.FitViewToSelection();
+                                FitViewToSelectionHandling.FitViewToSelection();
                             }
                         }
 

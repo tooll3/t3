@@ -116,7 +116,7 @@ namespace T3.Gui.Windows
                         var parentSymbolUi = SymbolUiRegistry.Entries[parentInstance.Symbol.Id];
                         var instanceChildUi = parentSymbolUi.ChildUis.Single(childUi => childUi.Id == pinnedOrSelectedInstance.SymbolChildId);
                         SelectionManager.SetSelection(instanceChildUi, pinnedOrSelectedInstance);
-                        SelectionManager.FitViewToSelection();
+                        FitViewToSelectionHandling.FitViewToSelection();
                     }
                 }
 

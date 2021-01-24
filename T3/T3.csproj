@@ -442,7 +442,9 @@
     <Compile Include="Gui\OutputUi\PointArrayOutputUi.cs" />
     <Compile Include="Gui\OutputUi\StructuredListOutputUi.cs" />
     <Compile Include="Gui\PresetControl\PresetDevice.cs" />
+    <Compile Include="Gui\Selection\FitViewToSelectionHandling.cs" />
     <Compile Include="Gui\Selection\SelectionManager.cs" />
+    <Compile Include="Gui\Selection\TransformGizmoHandling.cs" />
     <Compile Include="Gui\Styling\CustomComponents.cs" />
     <Compile Include="Gui\InputUi\IInputUi.cs" />
     <Compile Include="Gui\InputUi\FallbackInputUi.cs" />

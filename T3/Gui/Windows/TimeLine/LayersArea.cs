@@ -216,7 +216,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 var instance = _compositionOp.Children.Single(child => child.SymbolChildId == symbolChildUi.Id);
                 SelectionManager.SetSelection(symbolChildUi, instance);
-                SelectionManager.FitViewToSelection();
+                FitViewToSelectionHandling.FitViewToSelection();
                 SelectedItems.Clear();
                 SelectedItems.Add(timeClip);
             }

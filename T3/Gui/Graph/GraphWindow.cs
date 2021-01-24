@@ -153,7 +153,7 @@ namespace T3.Gui.Graph
 
         protected override void DrawContent()
         {
-            if (SelectionManager.FitViewToSelectionRequested)
+            if (FitViewToSelectionHandling.FitViewToSelectionRequested)
                 FitViewToSelection();
             
             _imageBackground.Draw();

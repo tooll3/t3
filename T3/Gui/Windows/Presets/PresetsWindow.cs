@@ -86,7 +86,7 @@ namespace T3.Gui.Windows.Presets
                     {
                         var childInstance = selectedComposition.Children.Single(child => child.SymbolChildId == reference.SymbolChildId);
                         SelectionManager.SetSelection(childUi, childInstance);
-                        SelectionManager.FitViewToSelection();
+                        FitViewToSelectionHandling.FitViewToSelection();
                     }
                     
                     foreach (var param in reference.DrivenInputs)

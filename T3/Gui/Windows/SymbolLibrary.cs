@@ -146,7 +146,7 @@ namespace T3.Gui.Windows
 
                             var childUi = SymbolUiRegistry.Entries[compositionSymbol.Id].ChildUis.Single(cUi => cUi.Id == instance.SymbolChildId);
                             SelectionManager.SetSelection(childUi, instance);
-                            SelectionManager.FitViewToSelection();
+                            FitViewToSelectionHandling.FitViewToSelection();
                         }
                         ImGui.PopID();
                     }

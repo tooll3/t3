@@ -23,7 +23,7 @@ namespace T3.Gui.OutputUi
             drawList.ChannelsSplit(2);
             drawList.ChannelsSetCurrent(1);
             {
-                SelectionManager.SetDrawList(drawList);
+                TransformGizmoHandling.SetDrawList(drawList);
                 if (recompute)
                 {
                     Recompute(slot, context);
@@ -34,7 +34,7 @@ namespace T3.Gui.OutputUi
                 DrawTypedValue(slot);
             }
             drawList.ChannelsMerge();
-            SelectionManager.StopDrawList();
+            TransformGizmoHandling.StopDrawList();
         }
 
         protected virtual void Recompute(ISlot slot, EvaluationContext context)

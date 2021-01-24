@@ -37,7 +37,7 @@ namespace T3.Gui
             OpenedPopUpName = string.Empty;
             PresetSystem.Update();
 
-            SelectionManager.ProcessNewFrame();
+            FitViewToSelectionHandling.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             WindowManager.Draw();
             BeatTiming.Update();

@@ -287,7 +287,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
             var filepath = GetFilepathForCompositionId(compositionId);
             if (!File.Exists(filepath))
             {
-                Log.Error($"Could not find symbol file containing the id '{compositionId}'");
+                //Log.Error($"Could not find symbol file containing the id '{compositionId}'");
                 return null;
             }
 

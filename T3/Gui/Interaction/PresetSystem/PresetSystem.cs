@@ -487,7 +487,7 @@ namespace T3.Gui.Interaction.PresetSystem
                 }
             }
 
-            SelectionManager.FitViewToSelection();
+            FitViewToSelectionHandling.FitViewToSelection();
         }
 
         private readonly Dictionary<int, ParameterGroup> _groupForBlendedParameters = new Dictionary<int, ParameterGroup>(100);
