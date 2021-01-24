@@ -1,4 +1,9 @@
 ﻿using System.Runtime.InteropServices;
+using SharpDX;
+using SharpDX.Direct3D11;
+using SharpDX.DXGI;
+using T3.Core.Operator;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.Rendering
 {
@@ -33,6 +38,117 @@ namespace T3.Core.Rendering
         public SharpDX.Int3 VertexIndices;
 
         [FieldOffset(3 * 4)]
+        private readonly float __padding;
+    }
+
+    public static class PbrContextSettings
+    {
+        public static void SetDefaultToContext(EvaluationContext context)
+        {
+            if (!_wasInitialized)
+                Init();
+
+            context.PbrMaterialParams = _defaultParameterBuffer;
+            context.PbrMaterialTextures.AlbedoColorMap = _baseColorMapSrv;
+            context.PbrMaterialTextures.NormalMap = _normalMapSrv;
+            context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap = _rsmoMapSrv;
+            context.PbrMaterialTextures.EmissiveColorMap = _emissiveColorMapSrv;
+        }
+
+        private static void Init()
+        {
+            var content = new PbrMaterialParams
+                              {
+                                  BaseColor = Vector4.One,
+                                  EmissiveColor = new Vector4(0, 0, 0, 1),
+                                  Roughness = 0.5f,
+                                  Specular = 10,
+                                  Metal = 0
+                              };
+            ResourceManager.Instance().SetupConstBuffer(content, ref _defaultParameterBuffer);
+
+            var resourceManager = ResourceManager.Instance();
+            var device = resourceManager.Device;
+
+            WhitePixelTexture = CreateFallBackTexture(new Vector4(1, 1, 1, 1));
+            _baseColorMapSrv = new ShaderResourceView(device, WhitePixelTexture);
+            _emissiveColorMapSrv = new ShaderResourceView(device, WhitePixelTexture);
+
+            RsmoFallbackTexture = CreateFallBackTexture(new Vector4(0, 1, 0, 0));
+            _rsmoMapSrv = new ShaderResourceView(device, RsmoFallbackTexture);
+
+            NormalFallbackTexture = CreateFallBackTexture(new Vector4(0.5f, 0.5f, 1, 0));
+            _normalMapSrv = new ShaderResourceView(device, NormalFallbackTexture);
+
+            _wasInitialized = true;
+        }
+
+        private static Texture2D CreateFallBackTexture(Vector4 c)
+        {
+            var resourceManager = ResourceManager.Instance();
+            var device = resourceManager.Device;
+
+            var colorDesc = new Texture2DDescription()
+                                {
+                                    ArraySize = 1,
+                                    BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource | BindFlags.UnorderedAccess,
+                                    CpuAccessFlags = CpuAccessFlags.None,
+                                    Format = Format.R16G16B16A16_Float,
+                                    Width = 1,
+                                    Height = 1,
+                                    MipLevels = 0,
+                                    OptionFlags = ResourceOptionFlags.None,
+                                    SampleDescription = new SampleDescription(1, 0),
+                                    Usage = ResourceUsage.Default
+                                };
+
+            var colorBuffer = new Texture2D(device, colorDesc);
+            var colorBufferRtv = new RenderTargetView(device, colorBuffer);
+            device.ImmediateContext.ClearRenderTargetView(colorBufferRtv, new Color(c.X, c.Y, c.Z, c.W));
+            return colorBuffer;
+        }
+
+        private static ShaderResourceView _baseColorMapSrv;
+        private static ShaderResourceView _rsmoMapSrv;
+        private static ShaderResourceView _normalMapSrv;
+        private static ShaderResourceView _emissiveColorMapSrv;
+        private static Buffer _defaultParameterBuffer = null;
+        
+        public static Texture2D WhitePixelTexture;
+        public static Texture2D RsmoFallbackTexture;
+        public static Texture2D NormalFallbackTexture;
+        private static bool _wasInitialized;
+    }
+
+    public class PbrMaterialTextures
+    {
+        public ShaderResourceView AlbedoColorMap;
+        public ShaderResourceView EmissiveColorMap;
+        public ShaderResourceView RoughnessSpecularMetallicOcclusionMap;
+        public ShaderResourceView NormalMap;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = PbrMaterialParams.Stride)]
+    public struct PbrMaterialParams
+    {
+        [FieldOffset(0)]
+        public Vector4 BaseColor;
+
+        [FieldOffset(4 * 4)]
+        public Vector4 EmissiveColor;
+
+        [FieldOffset(8 * 4)]
+        public float Roughness;
+
+        [FieldOffset(9 * 4)]
+        public float Specular;
+
+        [FieldOffset(10 * 4)]
+        public float Metal;
+
+        [FieldOffset(11 * 4)]
         private float __padding;
+
+        public const int Stride = 12 * 4;
     }
 }

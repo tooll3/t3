@@ -4,6 +4,7 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Rendering;
 using Vector3 = SharpDX.Vector3;
 
 namespace T3.Core.Operator
@@ -19,6 +20,7 @@ namespace T3.Core.Operator
         {
             TimeInBars = GlobalTimeInBars;
             PointLights.Clear();
+            PbrContextSettings.SetDefaultToContext(this);
         }
 
         public void SetViewFromCamera(ICamera camera)
