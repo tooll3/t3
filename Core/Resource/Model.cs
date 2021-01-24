@@ -137,6 +137,26 @@ namespace T3.Core
                              list.AddRange(entries.Select(entry => entry.Value<string>()));
                              return list;
                          });
+            RegisterType(typeof(System.Numerics.Quaternion), "Quaternion",
+                         () => new InputValue<System.Numerics.Quaternion>(System.Numerics.Quaternion.Identity),
+                         (writer, obj) =>
+                         {
+                             var quat = (System.Numerics.Quaternion)obj;
+                             writer.WriteStartObject();
+                             writer.WriteValue("X", quat.X);
+                             writer.WriteValue("Y", quat.Y);
+                             writer.WriteValue("Z", quat.Z);
+                             writer.WriteValue("W", quat.W);
+                             writer.WriteEndObject();
+                         },
+                         jsonToken =>
+                         {
+                             float x = jsonToken["X"].Value<float>();
+                             float y = jsonToken["Y"].Value<float>();
+                             float z = jsonToken["Z"].Value<float>();
+                             float w = jsonToken["W"].Value<float>();
+                             return new System.Numerics.Quaternion(x, y, z, w);
+                         });
             RegisterType(typeof(System.Numerics.Vector2), "Vector2",
                          InputDefaultValueCreator<System.Numerics.Vector2>,
                          (writer, obj) =>
