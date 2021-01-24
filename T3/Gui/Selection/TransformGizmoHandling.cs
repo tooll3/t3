@@ -74,7 +74,7 @@ namespace T3.Gui.Selection
 
             var gizmoScale = CalcGizmoScale(context, localToObject, viewport.Width, viewport.Height, 45f, SettingsWindow.GizmoSize);
             var centerPadding = 0.2f * gizmoScale / canvas.Scale.X;
-            var length = 1f * gizmoScale / canvas.Scale.Y;
+            var length = 2f * gizmoScale / canvas.Scale.Y;
             var planeGizmoSize = 0.5f * gizmoScale / canvas.Scale.X;
             var lineThickness = 2;
 
@@ -111,7 +111,7 @@ namespace T3.Gui.Selection
                         _originAtDragStart = localToObject.TranslationVector;
 
                         var rayInObject = GetPickRayInObject(mousePosInScreen);
-                        _plane = GetIntersectionPlane(mode, rayInObject.Direction, _originAtDragStart);
+                        _plane = GetPlaneForDragMode(mode, rayInObject.Direction, _originAtDragStart);
                         _initialObjectToLocal = localToObject;
                         _initialObjectToLocal.Invert();
                         var rayInLocal = rayInObject;
@@ -175,7 +175,7 @@ namespace T3.Gui.Selection
                         _originAtDragStart = localToObject.TranslationVector;
 
                         var rayInObject = GetPickRayInObject(mousePosInScreen);
-                        _plane = GetIntersectionPlane(mode, rayInObject.Direction, _originAtDragStart);
+                        _plane = GetPlaneForDragMode(mode, rayInObject.Direction, _originAtDragStart);
                         _initialObjectToLocal = localToObject;
                         _initialObjectToLocal.Invert();
                         var rayInLocal = rayInObject;
@@ -217,7 +217,6 @@ namespace T3.Gui.Selection
                 return false;
             }
 
-            // example interaction for moving origin within plane parallel to cam
             void HandleDragInScreenSpace()
             {
                 var screenSquaredMin = originInScreen - new Vector2(10.0f, 10.0f);
@@ -279,7 +278,7 @@ namespace T3.Gui.Selection
         }
         
         
-        private static SharpDX.Plane GetIntersectionPlane(GizmoDraggingModes mode, SharpDX.Vector3 normDir, SharpDX.Vector3 origin)
+        private static SharpDX.Plane GetPlaneForDragMode(GizmoDraggingModes mode, SharpDX.Vector3 normDir, SharpDX.Vector3 origin)
         {
             switch (mode)
             {
@@ -386,24 +385,18 @@ namespace T3.Gui.Selection
 
         public static void RemoveTransformCallback(ISelectableNode node)
         {
-            if (TransformGizmoHandling.RegisteredTransformCallbacks.TryGetValue(node, out var transformable))
+            if (RegisteredTransformCallbacks.TryGetValue(node, out var transformable))
             {
                 transformable.TransformCallback = null;
             }
         }        
         
         public static readonly Dictionary<ISelectableNode, ITransformable> RegisteredTransformCallbacks = new Dictionary<ISelectableNode, ITransformable>(10);
-     
-        
         
         private static Vector2 _offsetToOriginAtDragStart;
         private static SharpDX.Vector3 _originAtDragStart;
-
         private static Plane _plane;
-
         private static SharpDX.Vector3 _startIntersectionPoint;
-
         private static Matrix _initialObjectToLocal;
-        
     }
 }
