@@ -120,6 +120,8 @@ namespace T3.Gui
                 WindowManager.DrawWindowsMenu();
 
                 _statusErrorLine.Draw();
+
+                T3Metrics.DrawRenderPerformanceGraph(ImGui.GetCursorScreenPos() + new Vector2(100,6));
                 ImGui.EndMainMenuBar();
             }
 
