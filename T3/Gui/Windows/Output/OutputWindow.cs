@@ -56,6 +56,7 @@ namespace T3.Gui.Windows.Output
         }
         #endregion
 
+        
         protected override void DrawContent()
         {
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
@@ -70,7 +71,7 @@ namespace T3.Gui.Windows.Output
                 var renderedType = DrawOutput(pinnedOrSelectedInstance, _pinning.GetPinnedEvaluationInstance());
                 _imageCanvas.Deactivate();
                 
-                ICamera cameraOp = CameraSelectionHandling.SelectedCameraOp;
+                ICamera cameraOp = _camSelectionHandling.SelectedCameraOp;
                 var allowCameraInteraction = TransformGizmoHandling.CurrentDraggingMode == TransformGizmoHandling.GizmoDraggingModes.None  && (cameraOp != null || renderedType == typeof(Command));
                 if (allowCameraInteraction )
                 {
@@ -133,7 +134,7 @@ namespace T3.Gui.Windows.Output
             ImGui.SameLine();
             
 
-            CameraSelectionHandling.DrawCameraSelection(_pinning, ref _selectedCameraId);
+            _camSelectionHandling.DrawCameraSelection(_pinning, ref _selectedCameraId);
             ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
             ImGui.PopStyleColor();
         }
@@ -187,11 +188,14 @@ namespace T3.Gui.Windows.Output
         private readonly EvaluationContext _evaluationContext = new EvaluationContext();
         public static readonly List<Window> OutputWindowInstances = new List<Window>();
         private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
+        
         private readonly ViewSelectionPinning _pinning = new ViewSelectionPinning();
         private readonly CameraInteraction _cameraInteraction = new CameraInteraction();
         private readonly ViewCamera _viewCamera = new ViewCamera();
 
-        private Guid _selectedCameraId = Guid.Empty;
+        private Guid _selectedCameraId = CameraSelectionHandling.DisableCameraId;
+        private CameraSelectionHandling _camSelectionHandling = new CameraSelectionHandling();
+        
         private static int _instanceCounter;
         private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
 

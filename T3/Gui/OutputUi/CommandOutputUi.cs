@@ -54,16 +54,8 @@ namespace T3.Gui.OutputUi
 
             if (context.ShowGizmos != EvaluationContext.GizmoVisibility.Off)
             {
-                var cam = CameraSelectionHandling.SelectedCameraOp;
-                if (cam != null)
-                {
-                    context.SetViewFromCamera(cam);
-                }
-                else
-                {
-                    context.WorldToCamera = originalCamMatrix;
-                    context.CameraToClipSpace = orginalViewMatrx;
-                }
+                context.WorldToCamera = originalCamMatrix;
+                context.CameraToClipSpace = orginalViewMatrx;
 
                 _gridInstance.Outputs[0].Invalidate();
                 _gridInstance.Outputs[0].Update(context);

@@ -8,12 +8,12 @@ using T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6;
 
 namespace T3.Gui.Windows.Output
 {
-    public static class CameraSelectionHandling
+    public class CameraSelectionHandling
     {
         /// <summary>
         /// 
         /// </summary>
-        public static void DrawCameraSelection(ViewSelectionPinning pinning, ref Guid selectedCameraId)
+        public void DrawCameraSelection(ViewSelectionPinning pinning, ref Guid selectedCameraId)
         {
             var instanceSelectedInOutput = pinning.GetPinnedOrSelectedInstance();
             var isCameraControlDisabled = selectedCameraId == DisableCameraId;
@@ -57,7 +57,7 @@ namespace T3.Gui.Windows.Output
                                                           .Children
                                                           .Single(child => child.Id == SelectedCameraOp.SymbolChildId);
 
-            var label = isCameraControlDisabled ? "No Camera" : selectedSymbolChild.ReadableName;
+            var label = isCameraControlDisabled ? "Default" : selectedSymbolChild.ReadableName;
 
             if (ImGui.BeginCombo("##CameraSelection", label))
             {
@@ -93,7 +93,7 @@ namespace T3.Gui.Windows.Output
             ImGui.SameLine();
         }
 
-        public static Camera SelectedCameraOp { get; private set; }
         public static readonly Guid DisableCameraId = Guid.NewGuid();
+        public Camera SelectedCameraOp { get; private set; }
     }
 }

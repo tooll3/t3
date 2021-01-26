@@ -9,7 +9,7 @@ namespace T3.Core.Operator.Interfaces
         float CameraRoll { get; set; }
     }
     
-    // Mock for view internal fallback camera (if no operator selected)
+    // Mock view internal fallback camera (if no operator selected)
     // Todo: Find a better location of this class
     public class ViewCamera : ICamera
     {
