@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using T3.Core.Animation;
 using T3.Gui.Graph;
 using T3.Gui.Interaction;
 using T3.Gui.Windows;
@@ -36,6 +37,10 @@ namespace T3.Gui.UiHelpers
             public float ZoomSpeed = 12;
             public float TooltipDelay = 1.2f;
             public bool HideUiElementsInGraphWindow = false;
+            
+            [JsonConverter(typeof(StringEnumConverter))]
+            public Playback.TimeDisplayModes TimeDisplayMode = Playback.TimeDisplayModes.Bars;
+            
             public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new List<GraphBookmarkNavigation.Bookmark>();
         }
 
@@ -49,6 +54,4 @@ namespace T3.Gui.UiHelpers
             Config.LastOpsForWindows[window.Config.Title] = opInstanceId;
         }
     }
-
-    
 }

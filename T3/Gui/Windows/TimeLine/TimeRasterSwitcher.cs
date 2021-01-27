@@ -1,5 +1,6 @@
 ﻿using T3.Core.Animation;
 using T3.Gui.Interaction.Snapping;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
 {
@@ -12,9 +13,9 @@ namespace T3.Gui.Windows.TimeLine
         public void Draw(Playback playback)
         {
             _lastPlayback = playback;
-            if(playback.TimeDisplayMode != Playback.TimeDisplayModes.Bars)
+            if(UserSettings.Config.TimeDisplayMode != Playback.TimeDisplayModes.Bars)
             {
-                switch (playback.TimeDisplayMode)
+                switch (UserSettings.Config.TimeDisplayMode)
                 {
                     case Playback.TimeDisplayModes.Secs:
                         _standardRaster.UnitsPerSecond = 1;
@@ -39,7 +40,7 @@ namespace T3.Gui.Windows.TimeLine
         {
             get
             {
-                switch (_lastPlayback.TimeDisplayMode)
+                switch (UserSettings.Config.TimeDisplayMode)
                 {
                     case Playback.TimeDisplayModes.Bars:
                         return _beatRaster;

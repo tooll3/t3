@@ -17,7 +17,6 @@ namespace T3.Core.Animation
         public double Bpm = 120;
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
-        public TimeDisplayModes TimeDisplayMode { get; set; } = TimeDisplayModes.Bars;
 
         public int Bar => (int)(TimeInBars) + 1;
         public int Beat => (int)(TimeInBars * 4) % 4 + 1;

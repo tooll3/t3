@@ -29,7 +29,7 @@ namespace T3.Gui.Windows.TimeLine
             // Current Time
             var delta = 0.0;
             string formattedTime = "";
-            switch (playback.TimeDisplayMode)
+            switch ( UserSettings.Config.TimeDisplayMode)
             {
                 case Playback.TimeDisplayModes.Bars:
                     formattedTime = $"{playback.Bar:0}. {playback.Beat:0}. {playback.Tick:0}.";
@@ -53,7 +53,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 playback.PlaybackSpeed = 0;
                 playback.TimeInBars += delta;
-                if (playback.TimeDisplayMode == Playback.TimeDisplayModes.F30)
+                if (UserSettings.Config.TimeDisplayMode == Playback.TimeDisplayModes.F30)
                 {
                     playback.TimeInSecs = Math.Floor(playback.TimeInSecs * 30) / 30;
                 }
@@ -62,10 +62,10 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SameLine();
 
             // Time Mode with context menu
-            if (ImGui.Button(playback.TimeDisplayMode.ToString(), ControlSize))
+            if (ImGui.Button(UserSettings.Config.TimeDisplayMode.ToString(), ControlSize))
             {
-                playback.TimeDisplayMode =
-                    (Playback.TimeDisplayModes)(((int)playback.TimeDisplayMode + 1) % Enum.GetNames(typeof(Playback.TimeDisplayModes)).Length);
+                UserSettings.Config.TimeDisplayMode =
+                    (Playback.TimeDisplayModes)(((int)UserSettings.Config.TimeDisplayMode + 1) % Enum.GetNames(typeof(Playback.TimeDisplayModes)).Length);
             }
 
             CustomComponents.TooltipForLastItem("Timeline format",
@@ -442,7 +442,7 @@ namespace T3.Gui.Windows.TimeLine
                         if (ImGui.Checkbox("Use BPM Rate", ref ProjectSettings.Config.UseBpmRate))
                         {
                             if (!ProjectSettings.Config.UseBpmRate)
-                                playback.TimeDisplayMode = Playback.TimeDisplayModes.Secs;
+                                UserSettings.Config.TimeDisplayMode = Playback.TimeDisplayModes.Secs;
                         }
 
                         if (ProjectSettings.Config.UseBpmRate)
