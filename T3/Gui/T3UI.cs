@@ -75,7 +75,14 @@ namespace T3.Gui
                 {
                     if (ImGui.MenuItem("Save"))
                     {
-                        Task.Run(Save); // Async save
+                        if (_saveStopwatch.IsRunning)
+                        {
+                            Log.Warning("Can't exit while saving is in progress");
+                        }
+                        else
+                        {
+                            Task.Run(Save); // Async save
+                        }
                     }
 
                     if (ImGui.MenuItem("Quit"))
