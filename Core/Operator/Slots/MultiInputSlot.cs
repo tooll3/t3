@@ -40,5 +40,19 @@ namespace T3.Core.Operator.Slots
         {
             return GetCollectedTypedInputs();
         }
+
+        public void GetValues(ref T[] resources, EvaluationContext context)
+        {
+            var connectedInputs = GetCollectedTypedInputs();
+            if (connectedInputs.Count != resources.Length)
+            {
+                resources = new T[connectedInputs.Count];
+            }
+
+            for (int i = 0; i < connectedInputs.Count; i++)
+            {
+                resources[i] = connectedInputs[i].GetValue(context);
+            }
+        }
     }
 }
