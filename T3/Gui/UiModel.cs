@@ -143,6 +143,8 @@ namespace T3.Gui
                            () => new ShaderResourceViewOutputUi());
             RegisterUiType(typeof(SharpDX.Direct3D11.Texture2D), new ShaderUiProperties(), () => new FallbackInputUi<Texture2D>(),
                            () => new Texture2dOutputUi());
+            RegisterUiType(typeof(SharpDX.Direct3D11.Texture3D), new ShaderUiProperties(), () => new FallbackInputUi<Texture3D>(),
+                           () => new ValueOutputUi<SharpDX.Direct3D11.Texture3D>());
             RegisterUiType(typeof(SharpDX.Direct3D11.TextureAddressMode), new ShaderUiProperties(), () => new EnumInputUi<TextureAddressMode>(),
                            () => new ValueOutputUi<TextureAddressMode>());
             RegisterUiType(typeof(SharpDX.Direct3D11.UnorderedAccessView), new TextureUiProperties(), () => new FallbackInputUi<UnorderedAccessView>(),

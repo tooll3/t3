@@ -354,6 +354,8 @@ namespace T3.Core
                          () => new InputValue<ShaderResourceView>(null));
             RegisterType(typeof(SharpDX.Direct3D11.Texture2D), "Texture2D",
                          () => new InputValue<Texture2D>(null));
+            RegisterType(typeof(SharpDX.Direct3D11.Texture3D), "Texture3D",
+                         () => new InputValue<Texture3D>(null));
             RegisterType(typeof(SharpDX.Direct3D11.TextureAddressMode), "TextureAddressMode",
                          InputDefaultValueCreator<TextureAddressMode>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
