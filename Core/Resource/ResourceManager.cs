@@ -855,7 +855,7 @@ namespace T3.Core
             }
         }
 
-        public void CreateTexture(string filename, ref Texture2D texture)
+        public void CreateTexture2d(string filename, ref Texture2D texture)
         {
             try
             {
@@ -949,7 +949,7 @@ namespace T3.Core
             }
 
             Texture2D texture = null;
-            CreateTexture(filename, ref texture);
+            CreateTexture2d(filename, ref texture);
             string name = Path.GetFileName(filename);
             var textureResourceEntry = new TextureResource(GetNextResourceId(), name, texture);
             Resources.Add(textureResourceEntry.Id, textureResourceEntry);
@@ -969,13 +969,13 @@ namespace T3.Core
             Resources.TryGetValue(textureId, out var resource);
             if (resource is TextureResource textureResource)
             {
-                CreateTexture(path, ref textureResource.Texture);
+                CreateTexture2d(path, ref textureResource.Texture);
                 texture = textureResource.Texture;
             }
         }
 
         // returns true if the texture changed
-        public bool CreateTexture(Texture2DDescription description, string name, ref uint id, ref Texture2D texture)
+        public bool CreateTexture2d(Texture2DDescription description, string name, ref uint id, ref Texture2D texture)
         {
             if (texture != null && texture.Description.Equals(description))
             {
