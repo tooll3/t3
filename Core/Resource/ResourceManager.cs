@@ -156,9 +156,9 @@ namespace T3.Core
         }
     }
 
-    public class TextureResource : Resource
+    public class Texture2dResource : Resource
     {
-        public TextureResource(uint id, string name, Texture2D texture)
+        public Texture2dResource(uint id, string name, Texture2D texture)
             : base(id, name)
         {
             Texture = texture;
@@ -888,7 +888,7 @@ namespace T3.Core
 
             foreach (var (id, resourceEntry) in Resources)
             {
-                if (resourceEntry is TextureResource textureResource)
+                if (resourceEntry is Texture2dResource textureResource)
                 {
                     if (textureResource.Texture == texture)
                         return id;
@@ -902,7 +902,7 @@ namespace T3.Core
         {
             if (Resources.TryGetValue(textureId, out var resource))
             {
-                if (resource is TextureResource textureResource)
+                if (resource is Texture2dResource textureResource)
                 {
                     shaderResourceView?.Dispose();
                     shaderResourceView = new ShaderResourceView(Device, textureResource.Texture) { DebugName = name };
@@ -951,7 +951,7 @@ namespace T3.Core
             Texture2D texture = null;
             CreateTexture2d(filename, ref texture);
             string name = Path.GetFileName(filename);
-            var textureResourceEntry = new TextureResource(GetNextResourceId(), name, texture);
+            var textureResourceEntry = new Texture2dResource(GetNextResourceId(), name, texture);
             Resources.Add(textureResourceEntry.Id, textureResourceEntry);
             _textures.Add(textureResourceEntry);
 
@@ -967,7 +967,7 @@ namespace T3.Core
         public void UpdateTextureFromFile(uint textureId, string path, ref Texture2D texture)
         {
             Resources.TryGetValue(textureId, out var resource);
-            if (resource is TextureResource textureResource)
+            if (resource is Texture2dResource textureResource)
             {
                 CreateTexture2d(path, ref textureResource.Texture);
                 texture = textureResource.Texture;
@@ -983,9 +983,9 @@ namespace T3.Core
             }
 
             Resources.TryGetValue(id, out var resource);
-            TextureResource textureResource = resource as TextureResource;
+            Texture2dResource texture2dResource = resource as Texture2dResource;
 
-            if (textureResource == null)
+            if (texture2dResource == null)
             {
                 // no entry so far, if texture is also null then create a new one
                 if (texture == null)
@@ -994,21 +994,56 @@ namespace T3.Core
                 }
 
                 // new texture, create resource entry
-                textureResource = new TextureResource(GetNextResourceId(), name, texture);
-                Resources.Add(textureResource.Id, textureResource);
-                _textures.Add(textureResource);
+                texture2dResource = new Texture2dResource(GetNextResourceId(), name, texture);
+                Resources.Add(texture2dResource.Id, texture2dResource);
+                _textures.Add(texture2dResource);
             }
             else
             {
-                textureResource.Texture?.Dispose();
-                textureResource.Texture = new Texture2D(Device, description);
-                texture = textureResource.Texture;
+                texture2dResource.Texture?.Dispose();
+                texture2dResource.Texture = new Texture2D(Device, description);
+                texture = texture2dResource.Texture;
             }
 
-            id = textureResource.Id;
+            id = texture2dResource.Id;
 
             return true;
         }
+        
+        // public bool CreateTexture3d(Texture3DDescription description, string name, ref uint id, ref Texture3D texture)
+        // {
+        //     if (texture != null && texture.Description.Equals(description))
+        //     {
+        //         return false; // no change
+        //     }
+        //
+        //     Resources.TryGetValue(id, out var resource);
+        //     Texture2dResource texture2dResource = resource as Texture2dResource;
+        //
+        //     if (texture2dResource == null)
+        //     {
+        //         // no entry so far, if texture is also null then create a new one
+        //         if (texture == null)
+        //         {
+        //             texture = new Texture3D(Device, description);
+        //         }
+        //
+        //         // new texture, create resource entry
+        //         texture2dResource = new Texture2dResource(GetNextResourceId(), name, texture);
+        //         Resources.Add(texture2dResource.Id, texture2dResource);
+        //         _textures.Add(texture2dResource);
+        //     }
+        //     else
+        //     {
+        //         texture2dResource.Texture?.Dispose();
+        //         texture2dResource.Texture = new Texture3D(Device, description);
+        //         texture = texture2dResource.Texture;
+        //     }
+        //
+        //     id = texture2dResource.Id;
+        //
+        //     return true;
+        // }
 
         private readonly Stopwatch _operatorUpdateStopwatch = new Stopwatch();
         private readonly List<Symbol> _modifiedSymbols = new List<Symbol>();
@@ -1065,7 +1100,7 @@ namespace T3.Core
         private readonly List<VertexShaderResource> _vertexShaders = new List<VertexShaderResource>();
         private readonly List<PixelShaderResource> _pixelShaders = new List<PixelShaderResource>();
         private readonly List<ComputeShaderResource> _computeShaders = new List<ComputeShaderResource>();
-        private readonly List<TextureResource> _textures = new List<TextureResource>();
+        private readonly List<Texture2dResource> _textures = new List<Texture2dResource>();
         private readonly List<ShaderResourceViewResource> _shaderResourceViews = new List<ShaderResourceViewResource>();
         private readonly List<OperatorResource> _operators = new List<OperatorResource>(100);
         private readonly FileSystemWatcher _hlslFileWatcher;
