@@ -166,6 +166,17 @@ namespace T3.Core
 
         public Texture2D Texture;
     }
+    
+    public class Texture3dResource : Resource
+    {
+        public Texture3dResource(uint id, string name, Texture3D texture)
+            : base(id, name)
+        {
+            Texture = texture;
+        }
+
+        public Texture3D Texture;
+    }
 
     public class ShaderResourceViewResource : Resource
     {
@@ -897,16 +908,39 @@ namespace T3.Core
 
             return NullResource;
         }
+        
+        public uint GetIdForTexture(Texture3D texture)
+        {
+            if (texture == null)
+                return NullResource;
+
+            foreach (var (id, resourceEntry) in Resources)
+            {
+                if (resourceEntry is Texture3dResource textureResource)
+                {
+                    if (textureResource.Texture == texture)
+                        return id;
+                }
+            }
+
+            return NullResource;
+        }
 
         public void CreateShaderResourceView(uint textureId, string name, ref ShaderResourceView shaderResourceView)
         {
             if (Resources.TryGetValue(textureId, out var resource))
             {
-                if (resource is Texture2dResource textureResource)
+                if (resource is Texture2dResource texture2dResource)
                 {
                     shaderResourceView?.Dispose();
-                    shaderResourceView = new ShaderResourceView(Device, textureResource.Texture) { DebugName = name };
-                    Log.Info($"Created shader resource view '{name}' for texture '{textureResource.Name}'.");
+                    shaderResourceView = new ShaderResourceView(Device, texture2dResource.Texture) { DebugName = name };
+                    Log.Info($"Created shader resource view '{name}' for texture '{texture2dResource.Name}'.");
+                }
+                else if (resource is Texture3dResource texture3dResource)
+                {
+                    shaderResourceView?.Dispose();
+                    shaderResourceView = new ShaderResourceView(Device, texture3dResource.Texture) { DebugName = name };
+                    Log.Info($"Created shader resource view '{name}' for texture '{texture3dResource.Name}'.");
                 }
                 else
                 {
@@ -953,7 +987,7 @@ namespace T3.Core
             string name = Path.GetFileName(filename);
             var textureResourceEntry = new Texture2dResource(GetNextResourceId(), name, texture);
             Resources.Add(textureResourceEntry.Id, textureResourceEntry);
-            _textures.Add(textureResourceEntry);
+            _2dTextures.Add(textureResourceEntry);
 
             uint shaderResourceViewId = CreateShaderResourceView(textureResourceEntry.Id, name);
 
@@ -996,7 +1030,7 @@ namespace T3.Core
                 // new texture, create resource entry
                 texture2dResource = new Texture2dResource(GetNextResourceId(), name, texture);
                 Resources.Add(texture2dResource.Id, texture2dResource);
-                _textures.Add(texture2dResource);
+                _2dTextures.Add(texture2dResource);
             }
             else
             {
@@ -1010,40 +1044,40 @@ namespace T3.Core
             return true;
         }
         
-        // public bool CreateTexture3d(Texture3DDescription description, string name, ref uint id, ref Texture3D texture)
-        // {
-        //     if (texture != null && texture.Description.Equals(description))
-        //     {
-        //         return false; // no change
-        //     }
-        //
-        //     Resources.TryGetValue(id, out var resource);
-        //     Texture2dResource texture2dResource = resource as Texture2dResource;
-        //
-        //     if (texture2dResource == null)
-        //     {
-        //         // no entry so far, if texture is also null then create a new one
-        //         if (texture == null)
-        //         {
-        //             texture = new Texture3D(Device, description);
-        //         }
-        //
-        //         // new texture, create resource entry
-        //         texture2dResource = new Texture2dResource(GetNextResourceId(), name, texture);
-        //         Resources.Add(texture2dResource.Id, texture2dResource);
-        //         _textures.Add(texture2dResource);
-        //     }
-        //     else
-        //     {
-        //         texture2dResource.Texture?.Dispose();
-        //         texture2dResource.Texture = new Texture3D(Device, description);
-        //         texture = texture2dResource.Texture;
-        //     }
-        //
-        //     id = texture2dResource.Id;
-        //
-        //     return true;
-        // }
+        public bool CreateTexture3d(Texture3DDescription description, string name, ref uint id, ref Texture3D texture)
+        {
+            if (texture != null && texture.Description.Equals(description))
+            {
+                return false; // no change
+            }
+        
+            Resources.TryGetValue(id, out var resource);
+            Texture3dResource texture3dResource = resource as Texture3dResource;
+        
+            if (texture3dResource == null)
+            {
+                // no entry so far, if texture is also null then create a new one
+                if (texture == null)
+                {
+                    texture = new Texture3D(Device, description);
+                }
+        
+                // new texture, create resource entry
+                texture3dResource = new Texture3dResource(GetNextResourceId(), name, texture);
+                Resources.Add(texture3dResource.Id, texture3dResource);
+                _3dTextures.Add(texture3dResource);
+            }
+            else
+            {
+                texture3dResource.Texture?.Dispose();
+                texture3dResource.Texture = new Texture3D(Device, description);
+                texture = texture3dResource.Texture;
+            }
+        
+            id = texture3dResource.Id;
+        
+            return true;
+        }
 
         private readonly Stopwatch _operatorUpdateStopwatch = new Stopwatch();
         private readonly List<Symbol> _modifiedSymbols = new List<Symbol>();
@@ -1100,7 +1134,8 @@ namespace T3.Core
         private readonly List<VertexShaderResource> _vertexShaders = new List<VertexShaderResource>();
         private readonly List<PixelShaderResource> _pixelShaders = new List<PixelShaderResource>();
         private readonly List<ComputeShaderResource> _computeShaders = new List<ComputeShaderResource>();
-        private readonly List<Texture2dResource> _textures = new List<Texture2dResource>();
+        private readonly List<Texture2dResource> _2dTextures = new List<Texture2dResource>();
+        private readonly List<Texture3dResource> _3dTextures = new List<Texture3dResource>();
         private readonly List<ShaderResourceViewResource> _shaderResourceViews = new List<ShaderResourceViewResource>();
         private readonly List<OperatorResource> _operators = new List<OperatorResource>(100);
         private readonly FileSystemWatcher _hlslFileWatcher;
