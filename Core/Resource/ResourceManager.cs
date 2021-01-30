@@ -952,6 +952,61 @@ namespace T3.Core
                 Log.Error($"Trying to look up texture resource with id {textureId} but did not found it.");
             }
         }
+        
+        
+        public void CreateUnorderedAccessView(uint textureId, string name, ref UnorderedAccessView unorderedAccessView)
+        {
+            if (Resources.TryGetValue(textureId, out var resource))
+            {
+                if (resource is Texture2dResource texture2dResource)
+                {
+                    unorderedAccessView?.Dispose();
+                    unorderedAccessView = new UnorderedAccessView(Device, texture2dResource.Texture) { DebugName = name };
+                    Log.Info($"Created unordered resource view '{name}' for texture '{texture2dResource.Name}'.");
+                }
+                else if (resource is Texture3dResource texture3dResource)
+                {
+                    unorderedAccessView?.Dispose();
+                    unorderedAccessView = new UnorderedAccessView(Device, texture3dResource.Texture) { DebugName = name };
+                    Log.Info($"Created unordered resource view '{name}' for texture '{texture3dResource.Name}'.");
+                }
+                else
+                {
+                    Log.Error("Trying to generate unordered resource view from a resource that's not a texture resource");
+                }
+            }
+            else
+            {
+                Log.Error($"Trying to look up texture resource with id {textureId} but did not found it.");
+            }
+        }
+        
+        public void CreateRenderTargetView(uint textureId, string name, ref RenderTargetView renderTargetView)
+        {
+            if (Resources.TryGetValue(textureId, out var resource))
+            {
+                if (resource is Texture2dResource texture2dResource)
+                {
+                    renderTargetView?.Dispose();
+                    renderTargetView = new RenderTargetView(Device, texture2dResource.Texture) { DebugName = name };
+                    Log.Info($"Created render target view '{name}' for texture '{texture2dResource.Name}'.");
+                }
+                else if (resource is Texture3dResource texture3dResource)
+                {
+                    renderTargetView?.Dispose();
+                    renderTargetView = new RenderTargetView(Device, texture3dResource.Texture) { DebugName = name };
+                    Log.Info($"Created render target view '{name}' for texture '{texture3dResource.Name}'.");
+                }
+                else
+                {
+                    Log.Error("Trying to generate render target view from a resource that's not a texture resource");
+                }
+            }
+            else
+            {
+                Log.Error($"Trying to look up texture resource with id {textureId} but did not found it.");
+            }
+        }
 
         public uint CreateShaderResourceView(uint textureId, string name)
         {
