@@ -33,9 +33,9 @@ namespace T3.Core.Rendering
 
             using (var stream = new StreamReader(objFilePath))
             {
+                var line = "";
                 try
                 {
-                    string line;
                     while ((line = stream.ReadLine()) != null)
                     {
                         var lineEntries = line.Split(' ');
@@ -99,7 +99,7 @@ namespace T3.Core.Rendering
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Failed to load point cloud:" + e.Message);
+                    Log.Error($"Failed to load point cloud:{e.Message} '{line}'");
                     return null;
                 }
             }
