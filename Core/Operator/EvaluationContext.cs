@@ -74,7 +74,7 @@ namespace T3.Core.Operator
         public Matrix ObjectToWorld { get; set; } = Matrix.Identity;
         
         // Render settings
-        public Buffer FogParameters { get; set; }
+        public Buffer FogParameters { get; set; } = FogSettings.DefaultSettingsBuffer;
         public Buffer PbrMaterialParams { get; set; }
         public PbrMaterialTextures PbrMaterialTextures { get; set; } = new PbrMaterialTextures();
         public PointLightStack PointLights { get; } = new PointLightStack();
