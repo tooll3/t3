@@ -89,8 +89,8 @@ namespace T3.Gui
                            () => new ValueOutputUi<Core.DataTypes.RenderTargetReference>());
             RegisterUiType(typeof(Core.DataTypes.StructuredList), new FloatUiProperties(), () => new StructuredListInputUi(),
                            () => new StructuredListOutputUi());
-            RegisterUiType(typeof(Core.DataTypes.Texture3d), new FallBackUiProperties(), () => new FallbackInputUi<Core.DataTypes.Texture3d>(),
-                           () => new ValueOutputUi<Core.DataTypes.Texture3d>());
+            RegisterUiType(typeof(Core.DataTypes.Texture3dWithViews), new FallBackUiProperties(), () => new FallbackInputUi<Core.DataTypes.Texture3dWithViews>(),
+                           () => new ValueOutputUi<Core.DataTypes.Texture3dWithViews>());
             
             // sharpdx types
             RegisterUiType(typeof(SharpDX.Int3), new Size2UiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());

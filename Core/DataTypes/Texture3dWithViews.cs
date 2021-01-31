@@ -2,7 +2,7 @@
 
 namespace T3.Core.DataTypes
 {
-    public class Texture3d
+    public class Texture3dWithViews
     {
         public SharpDX.Direct3D11.Texture3D Texture;
         public SharpDX.Direct3D11.ShaderResourceView Srv;

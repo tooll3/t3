@@ -117,7 +117,7 @@
     <Compile Include="DataTypes\RenderTargetReference.cs" />
     <Compile Include="DataTypes\StructuredList.cs" />
     <Compile Include="DataTypes\StructuredListUtils.cs" />
-    <Compile Include="DataTypes\Texture3d.cs" />
+    <Compile Include="DataTypes\Texture3dWithViews.cs" />
     <Compile Include="Logging\ConsoleWriter.cs" />
     <Compile Include="Logging\ILogWriter.cs" />
     <Compile Include="Logging\Log.cs" />

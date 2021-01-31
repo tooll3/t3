@@ -277,7 +277,7 @@ namespace T3.Core
                          () => new InputValue<RenderTargetReference>());
             RegisterType(typeof(StructuredList), "StructuredList",
                          () => new InputValue<StructuredList>());
-            RegisterType(typeof(Texture3d), "Texture3d", () => new InputValue<Texture3d>(new Texture3d()));
+            RegisterType(typeof(Texture3dWithViews), "Texture3d", () => new InputValue<Texture3dWithViews>(new Texture3dWithViews()));
             
             // sharpdx types
             RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",
