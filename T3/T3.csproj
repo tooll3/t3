@@ -441,6 +441,7 @@
     <Compile Include="Gui\OutputUi\StringListOutputUi.cs" />
     <Compile Include="Gui\OutputUi\PointArrayOutputUi.cs" />
     <Compile Include="Gui\OutputUi\StructuredListOutputUi.cs" />
+    <Compile Include="Gui\OutputUi\Texture3dOutputUi.cs" />
     <Compile Include="Gui\PresetControl\PresetDevice.cs" />
     <Compile Include="Gui\Selection\FitViewToSelectionHandling.cs" />
     <Compile Include="Gui\Selection\SelectionManager.cs" />
