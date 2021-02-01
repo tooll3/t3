@@ -4,6 +4,7 @@ using System.Numerics;
 using ImGuiNET;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
@@ -26,7 +27,15 @@ namespace T3.Gui.OutputUi
             if (slot is Slot<ShaderResourceView> typedSlot)
             {
                 var value = typedSlot.Value;
-                if (value?.Description.Dimension == ShaderResourceViewDimension.Texture2D)
+                if (value == null)
+                    return;
+                
+                if (value.IsDisposed)
+                {
+                    Log.Error("Tried to access disposed slot value in " + slot.Parent.Symbol.Name, slot.Parent.SymbolChildId);
+                    return;
+                }
+                if (value.Description.Dimension == ShaderResourceViewDimension.Texture2D)
                 {
                     //TODO: This causes exception when rendered in output window
                     //ImGui.Image((IntPtr)value, new Vector2(100.0f, 100.0f));
