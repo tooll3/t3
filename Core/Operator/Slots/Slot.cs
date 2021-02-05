@@ -60,14 +60,14 @@ namespace T3.Core.Operator.Slots
 
         public void AddConnection(ISlot sourceSlot, int index = 0)
         {
-            if (!IsConnected)
+            if (!IsConnected && sourceSlot != null)
             {
                 UpdateAction = ConnectedUpdate;
                 DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
                 DirtyFlag.Reference = DirtyFlag.Target - 1;
             }
-
-            InputConnection.Insert(index, (Slot<T>)sourceSlot);
+            if(sourceSlot!= null)
+                InputConnection.Insert(index, (Slot<T>)sourceSlot);
         }
 
         public void RemoveConnection(int index = 0)

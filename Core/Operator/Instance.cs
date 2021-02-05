@@ -82,13 +82,13 @@ namespace T3.Core.Operator
             ISlot sourceSlot;
             if (sourceInstance != null)
             {
-                sourceSlot = sourceInstance.Outputs.Single(output => output.Id == connection.SourceSlotId);
+                sourceSlot = sourceInstance.Outputs.SingleOrDefault(output => output.Id == connection.SourceSlotId);
             }
             else
             {
                 Debug.Assert(connection.SourceParentOrChildId == Guid.Empty);
                 sourceInstance = compositionInstance;
-                sourceSlot = sourceInstance.Inputs.Single(input => input.Id == connection.SourceSlotId);
+                sourceSlot = sourceInstance.Inputs.SingleOrDefault(input => input.Id == connection.SourceSlotId);
             }
 
             var targetInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.TargetParentOrChildId);
@@ -101,7 +101,7 @@ namespace T3.Core.Operator
             {
                 Debug.Assert(connection.TargetParentOrChildId == Guid.Empty);
                 targetInstance = compositionInstance;
-                targetSlot = targetInstance.Outputs.Single(e => e.Id == connection.TargetSlotId);
+                targetSlot = targetInstance.Outputs.SingleOrDefault(e => e.Id == connection.TargetSlotId);
             }
 
             return (sourceInstance, sourceSlot, targetInstance, targetSlot);
