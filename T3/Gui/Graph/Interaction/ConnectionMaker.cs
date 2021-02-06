@@ -172,6 +172,7 @@ namespace T3.Gui.Graph
         public static void Cancel()
         {
             TempConnections.Clear();
+            _isDisconnectingFromInput = false;
             ConnectionSnapEndHelper.ResetSnapping();
         }
 
@@ -276,6 +277,7 @@ namespace T3.Gui.Graph
             if (_isDisconnectingFromInput)
             {
                 TempConnections.Clear();
+                _isDisconnectingFromInput = false;
                 return;
             }
 
