@@ -226,7 +226,10 @@ namespace T3.Gui.Graph.Interaction
                                         ? TypeUiRegistry.GetPropertiesForType(symbolUi.Symbol.OutputDefinitions[0]?.ValueType).Color
                                         : Color.Gray;
                         ImGui.PushStyleColor(ImGuiCol.Header, ColorVariations.Operator.Apply(color).Rgba);
-                        ImGui.PushStyleColor(ImGuiCol.HeaderHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
+
+                        var hoverColor = ColorVariations.OperatorHover.Apply(color).Rgba;
+                        hoverColor.W = 0.1f;
+                        ImGui.PushStyleColor(ImGuiCol.HeaderHovered, hoverColor);
                         ImGui.PushStyleColor(ImGuiCol.HeaderActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
                         ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
 
