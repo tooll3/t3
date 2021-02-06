@@ -46,7 +46,7 @@ namespace T3.Gui.OutputUi
             //deviceContext.OutputMerger.SetTargets(_colorBufferRtv);
             deviceContext.OutputMerger.SetTargets(_depthBufferDsv, _colorBufferRtv);
             
-            deviceContext.ClearRenderTargetView(_colorBufferRtv, new RawColor4(0.0f, 0.0f, 0.0f, 1.0f));
+            deviceContext.ClearRenderTargetView(_colorBufferRtv, new RawColor4(0.1f, 0.1f, 0.1f, 1.0f));
             deviceContext.ClearDepthStencilView(_depthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
             
             // evaluate the op
