@@ -9,25 +9,29 @@ namespace T3.Core.DataTypes
     [StructLayout(LayoutKind.Explicit, Size = 3 * 16)]
     public struct PointLight
     {
-        public PointLight(System.Numerics.Vector3 position, float intensity, System.Numerics.Vector4 color, float range)
+        public PointLight(System.Numerics.Vector3 position, float intensity, System.Numerics.Vector4 color, float range, float decay =2)
         {
             Position = position;
             Intensity = intensity;
             Color = color;
             Range = range;
+            Decay = decay;
         }
 
         [FieldOffset(0)]
         public System.Numerics.Vector3 Position;
 
-        [FieldOffset(12)]
+        [FieldOffset(3*4)]
         public float Intensity;
 
-        [FieldOffset(16)]
+        [FieldOffset(4*4)]
         public System.Numerics.Vector4 Color;
 
-        [FieldOffset(32)]
+        [FieldOffset(8*4)]
         public float Range;
+        
+        [FieldOffset(9*4)]
+        public float Decay;
     }
 
     public class PointLightStack
@@ -121,14 +125,16 @@ namespace T3.Core.DataTypes
                                                  Position = new Vector3(4,10,4),
                                                  Intensity = 10, 
                                                  Color = new System.Numerics.Vector4(1,0.93f,0.95f,1),
-                                                 Range = 100
+                                                 Range = 100,
+                                                 Decay = 2
                                              };
                 _defaultPointLights[1] = new PointLight
                                              {
                                                  Position = new Vector3(-4,-10,-4),
                                                  Intensity = 6, 
                                                  Color = new System.Numerics.Vector4(0.97f,0.96f,1,1),
-                                                 Range = 100
+                                                 Range = 100,
+                                                 Decay = 2,
                                              };
                 
                 UpdateConstBuffer(ref _defaultPointLights, ref _defaultConstBuffer, 2);
