@@ -243,8 +243,8 @@ namespace T3.Gui.Graph
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits, ref _symbolDescriptionForDialog);
                 _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits, ref _symbolDescriptionForDialog);
                 _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
-                _addInputDialog.Draw(GetSelectedSymbol());
-                _addOutputDialog.Draw(GetSelectedSymbol());
+                _addInputDialog.Draw(CompositionOp.Symbol);
+                _addOutputDialog.Draw(CompositionOp.Symbol);
                 EditNodeOutputDialog.Draw();
             }
             ImGui.EndGroup();
@@ -325,6 +325,7 @@ namespace T3.Gui.Graph
             var selectedChildUi = GetSelectedChildUis().FirstOrDefault();
             return selectedChildUi != null ? selectedChildUi.SymbolChild.Symbol : CompositionOp.Symbol;
         }
+
 
         private void DrawDropHandler()
         {
