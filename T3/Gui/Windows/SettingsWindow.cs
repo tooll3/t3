@@ -28,6 +28,7 @@ namespace T3.Gui.Windows
 
             ImGui.Separator();
             ImGui.Checkbox("Show Graph thumbnails", ref UserSettings.Config.ShowThumbnails);
+            ImGui.Checkbox("Drag snapped nodes", ref UserSettings.Config.SmartGroupDragging);
 
             ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
             ImGui.Checkbox("HideTimeline", ref UserSettings.Config.HideUiElementsInGraphWindow);

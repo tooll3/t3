@@ -28,6 +28,7 @@ namespace T3.Gui.UiHelpers
 
             public bool AudioMuted;
             public bool ShowThumbnails = true;
+            public bool SmartGroupDragging = true;
             public int WindowLayoutIndex = 0;
             public bool KeepBeatTimeRunningInPause = false;
             public bool ShowExplicitTextureFormatInOutputWindow = false;

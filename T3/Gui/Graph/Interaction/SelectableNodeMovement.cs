@@ -8,6 +8,7 @@ using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
+using T3.Gui.UiHelpers;
 using T3.Operators.Types.Id_f52db9a4_fde9_49ca_9ef7_131825c34e65;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
@@ -37,7 +38,9 @@ namespace T3.Gui.Graph.Interaction
                     else
                     {
                         var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-                        _draggedNodes = FindSnappedNeighbours(parentUi, node).ToList();
+                        if(UserSettings.Config.SmartGroupDragging)
+                            _draggedNodes = FindSnappedNeighbours(parentUi, node).ToList();
+                        
                         _draggedNodes.Add(node);
                     }
 
