@@ -617,7 +617,7 @@ namespace T3.Gui.Graph
                 try
                 {
                     Clipboard.SetText(writer.ToString(), TextDataFormat.UnicodeText);
-                    Log.Info(Clipboard.GetText(TextDataFormat.UnicodeText));
+                    //Log.Info(Clipboard.GetText(TextDataFormat.UnicodeText));
                 }
                 catch (Exception)
                 {
@@ -659,7 +659,8 @@ namespace T3.Gui.Graph
                     foreach (var id in cmd.NewSymbolChildIds)
                     {
                         var newChildUi = compositionSymbolUi.ChildUis.Single(c => c.Id == id);
-                        SelectionManager.AddSelection(newChildUi);
+                        var instance = CompositionOp.Children.Single(c2 => c2.SymbolChildId == id);
+                        SelectionManager.AddSelection(newChildUi, instance);
                     }
                 }
             }
