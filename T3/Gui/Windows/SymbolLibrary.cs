@@ -141,7 +141,7 @@ namespace T3.Gui.Windows
 
                         if(ImGui.Selectable(symbolChild.ReadableName))
                         {
-                            graphWindow?._graphCanvas.SetComposition(NodeOperations.BuildIdPathForInstance(instanceParent),
+                            graphWindow?.GraphCanvas.SetComposition(NodeOperations.BuildIdPathForInstance(instanceParent),
                                                                      ScalableCanvas.Transition.Undefined);
 
                             var childUi = SymbolUiRegistry.Entries[compositionSymbol.Id].ChildUis.Single(cUi => cUi.Id == instance.SymbolChildId);

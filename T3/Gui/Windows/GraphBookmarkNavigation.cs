@@ -79,7 +79,7 @@ namespace T3.Gui.Windows
                     var isAvailable = DoesBookmarkExist(index);
                     if (ImGui.MenuItem(action.ToString(), shortcuts, false, enabled: isAvailable))
                     {
-                        LoadBookmark(currentWindow._graphCanvas, index);
+                        LoadBookmark(currentWindow.GraphCanvas, index);
                     }
                 }
 
@@ -96,7 +96,7 @@ namespace T3.Gui.Windows
                     
                     if (ImGui.MenuItem(action.ToString(), shortcuts))
                     {
-                        SaveBookmark(currentWindow._graphCanvas, index);
+                        SaveBookmark(currentWindow.GraphCanvas, index);
                     }
                 }
 

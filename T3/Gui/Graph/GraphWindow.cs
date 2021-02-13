@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -41,7 +41,7 @@ namespace T3.Gui.Graph
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
             var shownOpInstance = FindIdInNestedChildren(T3Ui.UiModel.RootInstance, opId) ?? T3Ui.UiModel.RootInstance;
             var path = NodeOperations.BuildIdPathForInstance(shownOpInstance);
-            _graphCanvas = new GraphCanvas(this, path);
+            GraphCanvas = new GraphCanvas(this, path);
 
             _timeLineCanvas = new TimeLineCanvas(ref _playback);
 
@@ -138,7 +138,7 @@ namespace T3.Gui.Graph
 
             area.Expand(400);
 
-            _graphCanvas.FitAreaOnCanvas(area);
+            GraphCanvas.FitAreaOnCanvas(area);
         }
 
         public static void SetBackgroundOutput(Instance instance)
@@ -188,17 +188,19 @@ namespace T3.Gui.Graph
                     {
                         if (!UserSettings.Config.HideUiElementsInGraphWindow)
                         {
-                            _graphCanvas.MakeCurrent();
-                            TitleAndBreadCrumbs.Draw(_graphCanvas.CompositionOp);    
+                            GraphCanvas.MakeCurrent();
+                            TitleAndBreadCrumbs.Draw(GraphCanvas.CompositionOp);    
                         }
                         DrawControlsAtBottom();
                     }
                     
                     drawList.ChannelsSetCurrent(0);
                     {
-                        _graphCanvas.Draw(drawList, showGrid: !_imageBackground.IsActive);
+                        GraphCanvas.Draw(drawList, showGrid: !_imageBackground.IsActive);
                     }
                     drawList.ChannelsMerge();
+                    
+                    EditDescriptionDialog.Draw(GraphCanvas.CompositionOp.Symbol );
                 }
                 ImGui.EndChild();
                 
@@ -215,7 +217,7 @@ namespace T3.Gui.Graph
                         ImGui.BeginChild("##timeline", Vector2.Zero, false,
                                          ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
                         {
-                            _timeLineCanvas.Draw(_graphCanvas.CompositionOp);
+                            _timeLineCanvas.Draw(GraphCanvas.CompositionOp);
                         }
                         ImGui.EndChild();
                     }
@@ -300,7 +302,7 @@ namespace T3.Gui.Graph
                 ImGui.PopStyleColor();
             }
 
-            public static void DrawNameAndDescription(Instance compositionOp)
+            private static void DrawNameAndDescription(Instance compositionOp)
             {
                 ImGui.SetCursorPosX(8);
                 ImGui.PushFont(Fonts.FontLarge);
@@ -314,58 +316,37 @@ namespace T3.Gui.Graph
 
                 var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
 
-                if (symbolUi.Description == null)
+                if (!string.IsNullOrEmpty(symbolUi.Description))
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-
+                    var desc = symbolUi.Description;
                     ImGui.PushFont(Fonts.FontSmall);
-                    if (ImGui.Button("add description..."))
+                    ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
                     {
-                        symbolUi.Description = " ";
-                        _justAddedDescription = false;
+                        var sizeMatchingDescription = ImGui.CalcTextSize(desc) + new Vector2(20, 40);
+                        sizeMatchingDescription.X = Math.Max(300, sizeMatchingDescription.X);
+                        ImGui.Indent(9);
+                        ImGui.TextWrapped(desc);
                     }
-
-                    ImGui.PopFont();
                     ImGui.PopStyleColor(2);
+                    ImGui.PopFont();
                 }
-                else
-                {
-                    if (symbolUi.Description == string.Empty)
-                    {
-                        symbolUi.Description = null;
-                    }
-                    else
-                    {
-                        var desc = symbolUi.Description;
-                        ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
-                        ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-                        {
-                            var sizeMatchingDescription = ImGui.CalcTextSize(desc) + new Vector2(20, 40);
-                            sizeMatchingDescription.X = Math.Max(300, sizeMatchingDescription.X);
-                            if (_justAddedDescription)
-                            {
-                                ImGui.SetKeyboardFocusHere();
-                                _justAddedDescription = false;
-                            }
+                
+                ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
 
-                            ImGui.InputTextMultiline("##description", ref desc, 3000, sizeMatchingDescription);
-                        }
-                        ImGui.PopStyleColor(2);
-                        ImGui.PopFont();
-                        symbolUi.Description = desc;
-                    }
-                }
+                ImGui.PushFont(Fonts.FontSmall);
+                if (ImGui.Button("Edit description..."))
+                    EditDescriptionDialog.ShowNextFrame();
+                
+                ImGui.PopFont();
+                ImGui.PopStyleColor(2);
             }
-
-            private static bool _justAddedDescription;
         }
-
         
         private readonly ImageBackground _imageBackground = new ImageBackground();
 
-        public readonly GraphCanvas _graphCanvas;
+        public readonly GraphCanvas GraphCanvas;
         private Playback _playback;
         private const int UseComputedHeight = -1;
         private int _customTimeLineHeight = UseComputedHeight;
@@ -377,5 +358,7 @@ namespace T3.Gui.Graph
                                               + 2;
 
         private readonly TimeLineCanvas _timeLineCanvas;
+        
+        private static readonly EditSymbolDescriptionDialog EditDescriptionDialog = new EditSymbolDescriptionDialog();
     }
 }

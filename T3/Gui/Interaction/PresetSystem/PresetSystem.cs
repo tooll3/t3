@@ -42,7 +42,7 @@ namespace T3.Gui.Interaction.PresetSystem
             if (primaryGraphWindow == null)
                 return;
 
-            _activeCompositionInstance = primaryGraphWindow._graphCanvas.CompositionOp;
+            _activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
             _activeCompositionId = _activeCompositionInstance.Symbol.Id;
             _contextForCompositions.TryGetValue(_activeCompositionId, out var contextForCurrentComposition);
 

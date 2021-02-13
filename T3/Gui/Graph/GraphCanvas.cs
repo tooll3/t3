@@ -156,7 +156,7 @@ namespace T3.Gui.Graph
             UpdateCanvas();
             if (this.CompositionOp == null)
             {
-                Log.Error("WTF");
+                Log.Error("Can't show graph for undefined CompositionOp");
                 return;
             }
             GraphBookmarkNavigation.HandleForCanvas(this);
