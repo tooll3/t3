@@ -197,7 +197,7 @@ namespace T3.Gui.Graph
                 // A horrible work around to prevent exception because CompositionOp changed during drawing.
                 // A better solution would defer setting the compositionOp to the beginning of next frame.
                 var justOpenedChild = false;
-                if (hovered && ImGui.IsMouseDoubleClicked(0) && !RenameInstanceOverlay.IsOpen)
+                if (hovered && ImGui.IsMouseDoubleClicked(0) && !RenameInstanceOverlay.IsOpen && ImGui.IsWindowFocused())
                 {
                     GraphCanvas.Current.SetCompositionToChildInstance(instance);
                     ImGui.CloseCurrentPopup();
