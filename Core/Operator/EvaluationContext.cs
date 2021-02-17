@@ -9,6 +9,13 @@ using Vector3 = SharpDX.Vector3;
 
 namespace T3.Core.Operator
 {
+    public enum GizmoVisibility
+    {
+        Inherit = -1,
+        Off = 0,
+        On = 1,
+    }
+
     public class EvaluationContext
     {
         public EvaluationContext()
@@ -81,12 +88,6 @@ namespace T3.Core.Operator
 
         public GizmoVisibility ShowGizmos { get; set; }
 
-        public enum GizmoVisibility
-        {
-            Inherit = -1,
-            Off = 0,
-            On = 1,
-        }
 
         public Dictionary<Variator.VariationId, VariationSelector> VariationOverwrites { get; } = new Dictionary<Variator.VariationId, VariationSelector>();
 

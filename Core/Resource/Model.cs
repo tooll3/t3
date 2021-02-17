@@ -243,10 +243,10 @@ namespace T3.Core
                              }
                              return curve;
                          });
-            RegisterType(typeof(EvaluationContext.GizmoVisibility), "GizmoVisibility",
-                         InputDefaultValueCreator<EvaluationContext.GizmoVisibility>,
+            RegisterType(typeof(T3.Core.Operator.GizmoVisibility), "GizmoVisibility",
+                         InputDefaultValueCreator<T3.Core.Operator.GizmoVisibility>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
-                         JsonToEnumValue<EvaluationContext.GizmoVisibility>);
+                         JsonToEnumValue<T3.Core.Operator.GizmoVisibility>);
             RegisterType(typeof(DataTypes.Gradient), "Gradient",
                          InputDefaultValueCreator<Gradient>,
                          (writer, obj) =>

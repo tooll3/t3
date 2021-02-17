@@ -52,7 +52,7 @@ namespace T3.Gui.OutputUi
             // evaluate the op
             slot.Update(context);
 
-            if (context.ShowGizmos != EvaluationContext.GizmoVisibility.Off)
+            if (context.ShowGizmos != T3.Core.Operator.GizmoVisibility.Off)
             {
                 context.WorldToCamera = originalCamMatrix;
                 context.CameraToClipSpace = orginalViewMatrx;

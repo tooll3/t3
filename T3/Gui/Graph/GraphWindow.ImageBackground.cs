@@ -33,7 +33,7 @@ namespace T3.Gui.Graph
                 if (BackgroundNodePath == null)
                     return;
 
-                _evaluationContext.ShowGizmos = EvaluationContext.GizmoVisibility.Off;
+                _evaluationContext.ShowGizmos = T3.Core.Operator.GizmoVisibility.Off;
                 _evaluationContext.Reset();
                 _imageCanvas.PreventMouseInteraction = true;
                 _imageCanvas.Update();

@@ -124,12 +124,12 @@ namespace T3.Gui.Windows.Output
 
             ImGui.SameLine();
 
-            var showGizmos = _evaluationContext.ShowGizmos != EvaluationContext.GizmoVisibility.Off;
+            var showGizmos = _evaluationContext.ShowGizmos != T3.Core.Operator.GizmoVisibility.Off;
             if (CustomComponents.ToggleIconButton(Icon.Grid, "##gizmos", ref showGizmos, Vector2.One * ImGui.GetFrameHeight()))
             {
                 _evaluationContext.ShowGizmos = showGizmos
-                                                    ? EvaluationContext.GizmoVisibility.On
-                                                    : EvaluationContext.GizmoVisibility.Off;
+                                                    ? T3.Core.Operator.GizmoVisibility.On
+                                                    : T3.Core.Operator.GizmoVisibility.Off;
             }
             ImGui.SameLine();
             
