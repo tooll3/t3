@@ -147,6 +147,7 @@
     <Compile Include="Operator\Slots\Research\Size2Slot.cs" />
     <Compile Include="Operator\Slots\Slot.cs" />
     <Compile Include="Operator\Slots\TimeClipSlot.cs" />
+    <Compile Include="Operator\Slots\TransformCallbackSlot.cs" />
     <Compile Include="Operator\Symbol.cs" />
     <Compile Include="Operator\SymbolChild.cs" />
     <Compile Include="Operator\SymbolRegistry.cs" />
