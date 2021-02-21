@@ -86,16 +86,14 @@ namespace T3.Gui.Graph
             {
                 if (!(i is GraphWindow graphWindow))
                     continue;
-                
+
                 if (!i.Config.Visible)
                     continue;
 
                 yield return graphWindow;
             }
         }
-        
-        
-        
+
         public override List<Window> GetInstances()
         {
             return GraphWindowInstances;
@@ -155,31 +153,32 @@ namespace T3.Gui.Graph
         {
             if (FitViewToSelectionHandling.FitViewToSelectionRequested)
                 FitViewToSelection();
-            
+
             _imageBackground.Draw();
-            
+
             ImGui.SetCursorPos(Vector2.Zero);
             THelpers.DebugContentRect("window");
             {
                 var drawList = ImGui.GetWindowDrawList();
-                var contentHeight =0; 
-                
+                var contentHeight = 0;
+
                 if (!UserSettings.Config.HideUiElementsInGraphWindow)
                 {
                     var currentTimelineHeight = UsingCustomTimelineHeight ? _customTimeLineHeight : ComputedTimelineHeight;
-                     if (CustomComponents.SplitFromBottom(ref currentTimelineHeight))
-                     {
-                          _customTimeLineHeight = (int)currentTimelineHeight;
-                     }
-                    
-                    contentHeight = (int)ImGui.GetWindowHeight() - (int)currentTimelineHeight - 4; // Hack that also depends on when a window-title is being rendered
+                    if (CustomComponents.SplitFromBottom(ref currentTimelineHeight))
+                    {
+                        _customTimeLineHeight = (int)currentTimelineHeight;
+                    }
+
+                    contentHeight = (int)ImGui.GetWindowHeight() - (int)currentTimelineHeight -
+                                    4; // Hack that also depends on when a window-title is being rendered
                 }
 
                 ImGui.BeginChild("##graph", new Vector2(0, contentHeight), false,
-                                 ImGuiWindowFlags.NoScrollbar 
-                                 | ImGuiWindowFlags.NoMove 
-                                 | ImGuiWindowFlags.NoScrollWithMouse 
-                                 | ImGuiWindowFlags.NoDecoration 
+                                 ImGuiWindowFlags.NoScrollbar
+                                 | ImGuiWindowFlags.NoMove
+                                 | ImGuiWindowFlags.NoScrollWithMouse
+                                 | ImGuiWindowFlags.NoDecoration
                                  | ImGuiWindowFlags.NoTitleBar
                                  | ImGuiWindowFlags.ChildWindow);
                 {
@@ -189,21 +188,22 @@ namespace T3.Gui.Graph
                         if (!UserSettings.Config.HideUiElementsInGraphWindow)
                         {
                             GraphCanvas.MakeCurrent();
-                            TitleAndBreadCrumbs.Draw(GraphCanvas.CompositionOp);    
+                            TitleAndBreadCrumbs.Draw(GraphCanvas.CompositionOp);
                         }
+
                         DrawControlsAtBottom();
                     }
-                    
+
                     drawList.ChannelsSetCurrent(0);
                     {
                         GraphCanvas.Draw(drawList, showGrid: !_imageBackground.IsActive);
                     }
                     drawList.ChannelsMerge();
-                    
-                    EditDescriptionDialog.Draw(GraphCanvas.CompositionOp.Symbol );
+
+                    EditDescriptionDialog.Draw(GraphCanvas.CompositionOp.Symbol);
                 }
                 ImGui.EndChild();
-                
+
                 if (!UserSettings.Config.HideUiElementsInGraphWindow)
                 {
                     var availableRestHeight = ImGui.GetContentRegionAvail().Y;
@@ -232,25 +232,30 @@ namespace T3.Gui.Graph
                                            ImGui.GetWindowContentRegionMin().X,
                                            ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
 
-            if (CustomComponents.IconButton(UsingCustomTimelineHeight ? Icon.ChevronUp : Icon.ChevronDown,
-                                            "##TimelineToggle", TimeControls.ControlSize))
+            ImGui.BeginChild("TimeControls");
             {
-                _customTimeLineHeight = UsingCustomTimelineHeight ? UseComputedHeight : 200;
-            }
-
-            ImGui.SameLine();
-
-            TimeControls.DrawTimeControls(ref _playback, _timeLineCanvas);
-            if (_imageBackground.IsActive)
-            {
-                _imageBackground.DrawResolutionSelector();
-                ImGui.SameLine();
-                if (ImGui.Button("Clear BG"))
+                if (CustomComponents.IconButton(UsingCustomTimelineHeight ? Icon.ChevronUp : Icon.ChevronDown,
+                                                "##TimelineToggle", TimeControls.ControlSize))
                 {
-                    _currentWindow._imageBackground.BackgroundNodePath = null;
+                    _customTimeLineHeight = UsingCustomTimelineHeight ? UseComputedHeight : 200;
                 }
+
                 ImGui.SameLine();
+
+                TimeControls.DrawTimeControls(ref _playback, _timeLineCanvas);
+                if (_imageBackground.IsActive)
+                {
+                    _imageBackground.DrawResolutionSelector();
+                    ImGui.SameLine();
+                    if (ImGui.Button("Clear BG"))
+                    {
+                        _currentWindow._imageBackground.BackgroundNodePath = null;
+                    }
+
+                    ImGui.SameLine();
+                }
             }
+            ImGui.EndChild();
         }
 
         protected override void Close()
@@ -331,19 +336,19 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleColor(2);
                     ImGui.PopFont();
                 }
-                
+
                 ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
                 ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
 
                 ImGui.PushFont(Fonts.FontSmall);
                 if (ImGui.Button("Edit description..."))
                     EditDescriptionDialog.ShowNextFrame();
-                
+
                 ImGui.PopFont();
                 ImGui.PopStyleColor(2);
             }
         }
-        
+
         private readonly ImageBackground _imageBackground = new ImageBackground();
 
         public readonly GraphCanvas GraphCanvas;
@@ -353,12 +358,12 @@ namespace T3.Gui.Graph
         private bool UsingCustomTimelineHeight => _customTimeLineHeight > UseComputedHeight;
 
         private float ComputedTimelineHeight => (_timeLineCanvas.SelectedAnimationParameters.Count * DopeSheetArea.LayerHeight)
-                                              + _timeLineCanvas.LayersArea.LastHeight
-                                              + TimeLineCanvas.TimeLineDragHeight
-                                              + 2;
+                                                + _timeLineCanvas.LayersArea.LastHeight
+                                                + TimeLineCanvas.TimeLineDragHeight
+                                                + 2;
 
         private readonly TimeLineCanvas _timeLineCanvas;
-        
+
         private static readonly EditSymbolDescriptionDialog EditDescriptionDialog = new EditSymbolDescriptionDialog();
     }
 }

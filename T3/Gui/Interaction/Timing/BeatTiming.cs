@@ -16,7 +16,7 @@ namespace T3.Gui.Interaction.Timing
     public class BeatTiming
     {
         public void TriggerSyncTap() => _syncTriggered = true;
-        public void TriggerReset() =>   _resetTriggered = true;
+        public void TriggerResyncMeasure() =>   _resyncMeasureTriggered = true;
         public void TriggerDelaySync() => _delayTriggered = true;
         public void TriggerAdvanceSync() =>_advanceTriggered = true;
         
@@ -153,12 +153,24 @@ namespace T3.Gui.Interaction.Timing
 
             const float precision = 0.5f;
             SyncPrecision = (float)(Math.Max(0, 1-Math.Abs(timeInBar) / barDuration * 2) - precision) * 1/(1-precision);
+
+            if (_resyncMeasureTriggered)
+            {
+                _resyncMeasureTriggered = false;
+                _measureStartTime = time;
+            }
+
+            if (_syncTriggered || _resyncMeasureTriggered)
+            {
+                AddTapAndShiftTimings(time);
+                
+            }
+
             
             if (_syncTriggered)
             {
                 _syncTriggered = false;
-                AddTapAndShiftTimings(time);
-
+                
                 // Fix BPM if completely out of control
                 if (double.IsNaN(Bpm) || Bpm < 20 || Bpm > 200)
                 {
@@ -166,13 +178,6 @@ namespace T3.Gui.Interaction.Timing
                     _tappedMeasureStartTime = 0;
                     _dampedBeatDuration = 0.5;
                     _tapTimes.Clear();
-                }
-                
-                Log.Debug("Sync Hit precision: " + SyncPrecision);
-                var needToJumpSync = SyncPrecision < 0f;
-                if (needToJumpSync)
-                {
-                    _measureStartTime = time;
                 }
 
                 _tappedMeasureStartTime = time;
@@ -184,7 +189,7 @@ namespace T3.Gui.Interaction.Timing
 
                     var barCount = timeSinceResync / barDuration;
                     var barCountInt = Math.Round(barCount);
-                    var isNotTappingAndNotAbandoned = barCount > 2 && barCount < 200;
+                    var isNotTappingAndNotAbandoned = barCount > 4 && barCount < 128;
                     if (isNotTappingAndNotAbandoned)
                     {
                         var mod = barCount - barCountInt;
@@ -200,8 +205,9 @@ namespace T3.Gui.Interaction.Timing
                             }
                             else
                             {
-                                Log.Debug("Resync-Offset:" + mod + " shift:" + beatShift + " new BPM" + (60 / _beatDuration));
+                                Log.Debug($"Refine from {barCount:0.0}bars :{mod:0.00} shift:{beatShift:0.00} new BPM{(60 / newBeatDuration):0.00}");
                                 _beatDuration = newBeatDuration;
+                                _measureStartTime = time;
                             }
                         }
                     }
@@ -211,15 +217,16 @@ namespace T3.Gui.Interaction.Timing
             }
 
             // Smooth offset and beat duration to avoid jumps
-            _dampedBeatDuration = Lerp(_dampedBeatDuration, _beatDuration, 0.05f);
+            _dampedBeatDuration = Lerp(_dampedBeatDuration, _beatDuration, 0.03f);
 
             // Slide start-time to match last beat-trigger
             var tappedTimeInMeasure = time - _tappedMeasureStartTime;
             var differenceToTapping = tappedTimeInMeasure - timeInMeasure; 
 
-            var isTimingOff = Math.Abs(differenceToTapping) > 0.03f; 
+            var isTimingOff = Math.Abs(differenceToTapping) > 0.03f;
+            var slideSpeed = 0.0001f;
             if(isTimingOff)
-                _measureStartTime += (differenceToTapping > 0) ? -0.01f : 0.01f;   
+                _measureStartTime += (differenceToTapping > 0) ? -slideSpeed : slideSpeed;   
 
             // Check for next measure               
             if (timeInMeasure > measureDuration)
@@ -299,7 +306,6 @@ namespace T3.Gui.Interaction.Timing
 
         private bool _delayTriggered;
         private bool _advanceTriggered;
-        
-
+        private bool _resyncMeasureTriggered;
     }
 }

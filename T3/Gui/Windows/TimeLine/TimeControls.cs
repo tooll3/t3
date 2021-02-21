@@ -29,7 +29,7 @@ namespace T3.Gui.Windows.TimeLine
             // Current Time
             var delta = 0.0;
             string formattedTime = "";
-            switch ( UserSettings.Config.TimeDisplayMode)
+            switch (UserSettings.Config.TimeDisplayMode)
             {
                 case Playback.TimeDisplayModes.Bars:
                     formattedTime = $"{playback.Bar:0}. {playback.Beat:0}. {playback.Tick:0}.";
@@ -128,6 +128,14 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     T3Ui.BeatTiming.TriggerSyncTap();
                 }
+                else if (ImGui.IsItemHovered() && ImGui.IsWindowFocused() && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+                {
+                    Log.Debug("Resync!");
+                    T3Ui.BeatTiming.TriggerResyncMeasure();
+                }
+
+                CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.",
+                                                    KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToStartTime));
 
                 ImGui.SameLine();
 
@@ -177,9 +185,9 @@ namespace T3.Gui.Windows.TimeLine
                 // Play backwards
                 var isPlayingBackwards = playback.PlaybackSpeed < 0;
                 if (CustomComponents.ToggleIconButton(Icon.PlayBackwards,
-                                                  label: isPlayingBackwards ? $"{(int)playback.PlaybackSpeed}x##backwards" : "##backwards",
-                                                  ref isPlayingBackwards,
-                                                  ControlSize))
+                                                      label: isPlayingBackwards ? $"{(int)playback.PlaybackSpeed}x##backwards" : "##backwards",
+                                                      ref isPlayingBackwards,
+                                                      ControlSize))
                 {
                     if (playback.PlaybackSpeed != 0)
                     {
@@ -201,9 +209,9 @@ namespace T3.Gui.Windows.TimeLine
                 // Play forward
                 var isPlaying = playback.PlaybackSpeed > 0;
                 if (CustomComponents.ToggleIconButton(Icon.PlayForwards,
-                                                  label: isPlaying ? $"{(int)playback.PlaybackSpeed}x##forward" : "##forward",
-                                                  ref isPlaying,
-                                                  ControlSize))
+                                                      label: isPlaying ? $"{(int)playback.PlaybackSpeed}x##forward" : "##forward",
+                                                      ref isPlaying,
+                                                      ControlSize))
                 {
                     if (Math.Abs(playback.PlaybackSpeed) > 0.001f)
                     {
@@ -475,6 +483,7 @@ namespace T3.Gui.Windows.TimeLine
                             streamPlayback.LoadFile(ProjectSettings.Config.SoundtrackFilepath);
                         }
                     }
+
                     ImGui.EndTabItem();
                 }
 
