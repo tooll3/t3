@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using ImGuiNET;
 using SharpDX;
 using T3.Core;
@@ -27,9 +28,7 @@ namespace T3.Gui.Selection
             var canvas = ImageOutputCanvas.Current;
             var posInCanvas = canvas.TransformDirection(originInViewport);
             var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
-            var posInScreen = topLeftOnScreen + posInCanvas;
-
-            return posInScreen;
+            return topLeftOnScreen + posInCanvas;
         }
         
         /// <summary>
@@ -50,6 +49,8 @@ namespace T3.Gui.Selection
             // local here as the local values are only used for drawing and therefore we don't want to draw anything scaled by this values.
             var objectToClipSpace = context.ObjectToWorld * context.WorldToCamera * context.CameraToClipSpace;
 
+
+            
             var s = transform.Scale;
             var r = transform.Rotation;
             float yaw = SharpDX.MathUtil.DegreesToRadians(r.Y);
@@ -62,7 +63,14 @@ namespace T3.Gui.Selection
             var localToClipSpace = localToObject * objectToClipSpace;
 
             SharpDX.Vector4 originInClipSpace = SharpDX.Vector4.Transform(new SharpDX.Vector4(t.X, t.Y, t.Z, 1), objectToClipSpace);
+            
+            // Don't draw gizmo behind camera
             Vector3 originInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z) / originInClipSpace.W;
+            if ((originInNdc.Z > 1 || Math.Abs(originInNdc.X) > 2 
+                                  || Math.Abs(originInNdc.Y) > 2) 
+                && CurrentDraggingMode == GizmoDraggingModes.None)
+                return;
+            
             var viewports = ResourceManager.Instance().Device.ImmediateContext.Rasterizer.GetViewports<SharpDX.Mathematics.Interop.RawViewportF>();
             var viewport = viewports[0];
             var originInViewport = new Vector2(viewport.Width * (originInNdc.X * 0.5f + 0.5f),
@@ -73,7 +81,6 @@ namespace T3.Gui.Selection
             var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
             var originInScreen = topLeftOnScreen + originInCanvas;
 
-            // need foreground draw list atm as texture is drawn afterwards to output view
 
             var gizmoScale = CalcGizmoScale(context, localToObject, viewport.Width, viewport.Height, 45f, SettingsWindow.GizmoSize);
             var centerPadding = 0.2f * gizmoScale / canvas.Scale.X;
@@ -83,29 +90,33 @@ namespace T3.Gui.Selection
 
             var mousePosInScreen = ImGui.GetIO().MousePos;
 
-            var isHoveringSomething = DrawGizmoAxis(SharpDX.Vector3.UnitX, Color.Red, GizmoDraggingModes.PositionXAxis);
-            isHoveringSomething |= DrawGizmoAxis(SharpDX.Vector3.UnitY, Color.Green, GizmoDraggingModes.PositionYAxis);
-            isHoveringSomething |= DrawGizmoAxis(SharpDX.Vector3.UnitZ, Color.Blue, GizmoDraggingModes.PositionZAxis);
+            var isHoveringSomething = DoGizmoAxis(SharpDX.Vector3.UnitX, Color.Red, GizmoDraggingModes.PositionXAxis);
+            isHoveringSomething |= DoGizmoAxis(SharpDX.Vector3.UnitY, Color.Green, GizmoDraggingModes.PositionYAxis);
+            isHoveringSomething |= DoGizmoAxis(SharpDX.Vector3.UnitZ, Color.Blue, GizmoDraggingModes.PositionZAxis);
 
             if (!isHoveringSomething)
             {
-                DrawGizmoPlane(SharpDX.Vector3.UnitX, SharpDX.Vector3.UnitY, Color.Blue, GizmoDraggingModes.PositionOnXyPlane);
-                DrawGizmoPlane(SharpDX.Vector3.UnitX, SharpDX.Vector3.UnitZ, Color.Green, GizmoDraggingModes.PositionOnXzPlane);
-                DrawGizmoPlane(SharpDX.Vector3.UnitY, SharpDX.Vector3.UnitZ, Color.Red, GizmoDraggingModes.PositionOnYzPlane);
+                isHoveringSomething |= DoGizmoPlane(SharpDX.Vector3.UnitX, SharpDX.Vector3.UnitY, Color.Blue, GizmoDraggingModes.PositionOnXyPlane);
+                isHoveringSomething |= DoGizmoPlane(SharpDX.Vector3.UnitX, SharpDX.Vector3.UnitZ, Color.Green, GizmoDraggingModes.PositionOnXzPlane);
+                isHoveringSomething |= DoGizmoPlane(SharpDX.Vector3.UnitY, SharpDX.Vector3.UnitZ, Color.Red, GizmoDraggingModes.PositionOnYzPlane);
             }
 
-            HandleDragInScreenSpace();
+            if (!isHoveringSomething)
+            {
+                HandleDragInScreenSpace();
+            }
 
             // Returns true if hovered or active
-            bool DrawGizmoAxis(SharpDX.Vector3 gizmoAxis, Color color, GizmoDraggingModes mode)
+            bool DoGizmoAxis(SharpDX.Vector3 gizmoAxis, Color color, GizmoDraggingModes mode)
             {
-                Vector2 xAxisStartInScreen = ObjectPosToScreenPos(gizmoAxis * centerPadding, localToClipSpace);
-                Vector2 xAxisEndInScreen = ObjectPosToScreenPos(gizmoAxis * length, localToClipSpace);
+                var axisStartInScreen = ObjectPosToScreenPos(gizmoAxis * centerPadding, localToClipSpace);
+                var axisEndInScreen = ObjectPosToScreenPos(gizmoAxis * length, localToClipSpace);
+
 
                 var isHovering = false;
                 if (CurrentDraggingMode == GizmoDraggingModes.None)
                 {
-                    isHovering = IsPointOnLine(mousePosInScreen, xAxisStartInScreen, xAxisEndInScreen);
+                    isHovering = IsPointOnLine(mousePosInScreen, axisStartInScreen, axisEndInScreen);
 
                     if (isHovering && ImGui.IsMouseClicked(0))
                     {
@@ -150,12 +161,12 @@ namespace T3.Gui.Selection
                     }
                 }
 
-                _drawList.AddLine(xAxisStartInScreen, xAxisEndInScreen, color, lineThickness * (isHovering ? 3 : 1));
+                _drawList.AddLine(axisStartInScreen, axisEndInScreen, color, lineThickness * (isHovering ? 3 : 1));
                 return isHovering;
             }
 
             // Returns true if hovered or active
-            bool DrawGizmoPlane(SharpDX.Vector3 gizmoAxis1, SharpDX.Vector3 gizmoAxis2, Color color, GizmoDraggingModes mode)
+            bool DoGizmoPlane(SharpDX.Vector3 gizmoAxis1, SharpDX.Vector3 gizmoAxis2, Color color, GizmoDraggingModes mode)
             {
                 var origin = (gizmoAxis1 + gizmoAxis2) * centerPadding;
                 Vector2[] pointsOnScreen =
@@ -225,16 +236,21 @@ namespace T3.Gui.Selection
                 var screenSquaredMin = originInScreen - new Vector2(10.0f, 10.0f);
                 var screenSquaredMax = originInScreen + new Vector2(10.0f, 10.0f);
 
-                if (mousePosInScreen.X > screenSquaredMin.X && mousePosInScreen.X < screenSquaredMax.X &&
-                    mousePosInScreen.Y > screenSquaredMin.Y && mousePosInScreen.Y < screenSquaredMax.Y &&
-                    ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-                {
-                    CurrentDraggingMode = GizmoDraggingModes.PositionInScreenPlane;
-                    _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
-                }
+                var isHovering = false;
 
-                if (CurrentDraggingMode == GizmoDraggingModes.PositionInScreenPlane)
+                if (CurrentDraggingMode == GizmoDraggingModes.None)
                 {
+                    isHovering = (mousePosInScreen.X > screenSquaredMin.X && mousePosInScreen.X < screenSquaredMax.X &&
+                                  mousePosInScreen.Y > screenSquaredMin.Y && mousePosInScreen.Y < screenSquaredMax.Y);
+                    if (isHovering && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                    {
+                        CurrentDraggingMode = GizmoDraggingModes.PositionInScreenPlane;
+                        _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
+                    }
+                }
+                else if (CurrentDraggingMode == GizmoDraggingModes.PositionInScreenPlane)
+                {
+                    isHovering = true;
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
                         CurrentDraggingMode = GizmoDraggingModes.None;
@@ -255,6 +271,10 @@ namespace T3.Gui.Selection
                         transform.Translation = newTranslation;
                     }
                 }
+                var color2 = Color.Orange;
+                color2.Rgba.W = isHovering ? 0.4f : 0.2f;
+                _drawList.AddRectFilled(screenSquaredMin, screenSquaredMax, color2);
+                //_drawList.AddConvexPolyFilled(ref pointsOnScreen[0], 4, color2);
             }
 
             Ray GetPickRayInObject(Vector2 posInScreen)
@@ -287,23 +307,31 @@ namespace T3.Gui.Selection
             {
                 case GizmoDraggingModes.PositionXAxis:
                 {
-                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitY)) < 0.5 ? SharpDX.Vector3.UnitY : SharpDX.Vector3.UnitZ;
+                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitY)) < 0.5 
+                                         ? SharpDX.Vector3.UnitY 
+                                         : SharpDX.Vector3.UnitZ;
                     return new Plane(origin, origin + SharpDX.Vector3.UnitX, origin + secondAxis);
                 }
                 case GizmoDraggingModes.PositionYAxis:
                 {
-                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitX)) < 0.5f ? SharpDX.Vector3.UnitX : SharpDX.Vector3.UnitZ;
+                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitX)) < 0.5f 
+                                         ? SharpDX.Vector3.UnitX 
+                                         : SharpDX.Vector3.UnitZ;
                     return new Plane(origin, origin + SharpDX.Vector3.UnitY, origin + secondAxis);
                 }
                 case GizmoDraggingModes.PositionZAxis:
                 {
-                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitX)) < 0.5f ? SharpDX.Vector3.UnitX : SharpDX.Vector3.UnitY;
+                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitX)) < 0.5f 
+                                         ? SharpDX.Vector3.UnitX 
+                                         : SharpDX.Vector3.UnitY;
                     return new Plane(origin, origin + SharpDX.Vector3.UnitZ, origin + secondAxis);
                 }
                 case GizmoDraggingModes.PositionOnXyPlane:
                     return new Plane(origin, origin + SharpDX.Vector3.UnitX, origin + SharpDX.Vector3.UnitY);
+                
                 case GizmoDraggingModes.PositionOnXzPlane:
                     return new Plane(origin, origin + SharpDX.Vector3.UnitX, origin + SharpDX.Vector3.UnitZ);
+                
                 case GizmoDraggingModes.PositionOnYzPlane:
                     return new Plane(origin, origin + SharpDX.Vector3.UnitY, origin + SharpDX.Vector3.UnitZ);
             }
@@ -371,14 +399,17 @@ namespace T3.Gui.Selection
             var denom = Math.Sqrt(width * width + height * height) * Math.Tan(SharpDX.MathUtil.DegreesToRadians(fovInDegree));
             return (float)Math.Max(0.0001, (distance / denom) * gizmoSize);
         }
-
+        
+        /// <summary>
+        /// need foreground draw list atm as texture is drawn afterwards to output view
+        /// </summary>
         public static void SetDrawList(ImDrawListPtr drawList)
         {
             _drawList = drawList;
             IsDrawListValid = true;
         }
 
-        public static void StopDrawList()
+        public static void RestoreDrawList()
         {
             IsDrawListValid = false;
         }

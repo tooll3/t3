@@ -179,7 +179,7 @@ namespace T3.Gui.Graph
                             }
 
                             ImageCanvasForTooltips.Deactivate();
-                            TransformGizmoHandling.StopDrawList();
+                            TransformGizmoHandling.RestoreDrawList();
                         }
                         ImGui.EndTooltip();
                     }

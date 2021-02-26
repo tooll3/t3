@@ -34,7 +34,7 @@ namespace T3.Gui.OutputUi
                 DrawTypedValue(slot);
             }
             drawList.ChannelsMerge();
-            TransformGizmoHandling.StopDrawList();
+            TransformGizmoHandling.RestoreDrawList();
         }
 
         protected virtual void Recompute(ISlot slot, EvaluationContext context)

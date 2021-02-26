@@ -829,7 +829,7 @@ namespace T3.Gui.Graph
                                     ImGui.PopFont();
                                 }
                                 ImageCanvasForTooltips.Deactivate();
-                                TransformGizmoHandling.StopDrawList();
+                                TransformGizmoHandling.RestoreDrawList();
                             }
                             ImGui.EndChild();
                             
