@@ -29,7 +29,8 @@ namespace T3.Gui.OutputUi
         protected override void Recompute(ISlot slot, EvaluationContext context)
         {
             var originalCamMatrix = context.WorldToCamera;
-            var orginalViewMatrx = context.CameraToClipSpace;
+            var originalViewMatrix = context.CameraToClipSpace;
+            
             // invalidate
             StartInvalidation(slot);
 
@@ -55,7 +56,7 @@ namespace T3.Gui.OutputUi
             if (context.ShowGizmos != T3.Core.Operator.GizmoVisibility.Off)
             {
                 context.WorldToCamera = originalCamMatrix;
-                context.CameraToClipSpace = orginalViewMatrx;
+                context.CameraToClipSpace = originalViewMatrix;
 
                 _gridInstance.Outputs[0].Invalidate();
                 _gridInstance.Outputs[0].Update(context);

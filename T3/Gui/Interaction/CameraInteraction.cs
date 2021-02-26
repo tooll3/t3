@@ -9,7 +9,7 @@ namespace T3.Gui.Graph.Interaction
 
     public class CameraInteraction
     {
-        public void Update(ICamera camera)
+        public void Update(ICamera camera, bool allowCameraInteraction)
         {
             if (camera == null)
                 return;
@@ -34,7 +34,7 @@ namespace T3.Gui.Graph.Interaction
                 _lastCameraNode = camera;
             }
 
-            if (ImGui.IsWindowFocused() && ImGui.IsWindowHovered())
+            if (allowCameraInteraction && ImGui.IsWindowFocused() && ImGui.IsWindowHovered())
             {
                 ManipulateCameraByMouse();
                 ManipulateCameraByKeyboard();

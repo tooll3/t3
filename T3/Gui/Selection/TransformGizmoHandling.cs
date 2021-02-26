@@ -32,6 +32,9 @@ namespace T3.Gui.Selection
             return posInScreen;
         }
         
+        /// <summary>
+        /// Called from <see cref="ITransformable"/> nodes during update
+        /// </summary>
         public static void TransformCallback(ITransformable transform, EvaluationContext context)
         {
             if (!IsDrawListValid)
