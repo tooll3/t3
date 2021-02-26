@@ -66,25 +66,10 @@ namespace T3.Core.Rendering
                             }
                             case "f":
                             {
-                                var v0 = lineEntries[1];
-                                var v0entries = v0.Split('/');
-                                int v0v = int.Parse(v0entries[0], CultureInfo.InvariantCulture) - 1;
-                                int v0t = int.Parse(v0entries[1], CultureInfo.InvariantCulture) - 1;
-                                int v0n = int.Parse(v0entries[2], CultureInfo.InvariantCulture) - 1;
-
-                                var v1 = lineEntries[2];
-                                var v1entries = v1.Split('/');
-                                int v1v = int.Parse(v1entries[0], CultureInfo.InvariantCulture) - 1;
-                                int v1t = int.Parse(v1entries[1], CultureInfo.InvariantCulture) - 1;
-                                int v1n = int.Parse(v1entries[2], CultureInfo.InvariantCulture) - 1;
-
-                                var v2 = lineEntries[3];
-                                var v2entries = v2.Split('/');
-                                int v2v = int.Parse(v2entries[0], CultureInfo.InvariantCulture) - 1;
-                                int v2t = int.Parse(v2entries[1], CultureInfo.InvariantCulture) - 1;
-                                int v2n = int.Parse(v2entries[2], CultureInfo.InvariantCulture) - 1;
-
-                                mesh.Faces.Add(new Face(v0v, v0n, v0t, v1v, v1n, v1t, v2v, v2n, v2t));
+                                SplitFaceIndices(lineEntries[1], out var v0v, out var v0t, out var v0n);
+                                SplitFaceIndices(lineEntries[2], out var v1v, out var v1t, out var v1n);
+                                SplitFaceIndices(lineEntries[3], out var v2v, out var v2t, out var v2n);
+                                mesh.Faces.Add(new Face( v0v, v0n, v0t, v1v, v1n, v1t, v2v, v2n, v2t));                                
                                 break;
                             }
                             case "l":
@@ -106,6 +91,23 @@ namespace T3.Core.Rendering
 
             return mesh;
         }
+
+        private static void SplitFaceIndices(string v0, out int positionIndex, out int textureIndex, out int normalIndex)
+        {
+            var v0Entries = v0.Split('/');
+            positionIndex = int.Parse(v0Entries[0], CultureInfo.InvariantCulture) - 1;
+            if (string.IsNullOrEmpty(v0Entries[1]))
+            {
+                textureIndex = 0;
+                normalIndex = int.Parse(v0Entries[2], CultureInfo.InvariantCulture) - 1;
+            }
+            else
+            {
+                textureIndex = int.Parse(v0Entries[1], CultureInfo.InvariantCulture) - 1;
+                normalIndex = int.Parse(v0Entries[2], CultureInfo.InvariantCulture) - 1;
+            }
+        }
+        
 
         public struct Face
         {
@@ -197,6 +199,10 @@ namespace T3.Core.Rendering
 
         private void InitializeVertices()
         {
+            if (TexCoords.Count == 0)
+            {
+                TexCoords.Add(Vector2.Zero);
+            }
             _distinctVertices = new List<Vertex>();
             for (int faceIndex = 0; faceIndex < Faces.Count; faceIndex++)
             {
