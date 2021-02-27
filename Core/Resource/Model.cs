@@ -218,6 +218,8 @@ namespace T3.Core
             // t3 core types
             RegisterType(typeof(BufferWithViews), "BufferWithViews",
                          () => new InputValue<BufferWithViews>(null));
+
+            
             RegisterType(typeof(Command), "Command",
                          () => new InputValue<Command>(null));
             RegisterType(typeof(Animation.Curve), "Curve",
@@ -271,14 +273,18 @@ namespace T3.Core
                          });
             RegisterType(typeof(ParticleSystem), "ParticleSystem",
                          () => new InputValue<ParticleSystem>(null));
+            
             RegisterType(typeof(Point[]), "Point",
                          () => new InputValue<Point[]>());
             RegisterType(typeof(RenderTargetReference), "RenderTargetRef",
                          () => new InputValue<RenderTargetReference>());
             RegisterType(typeof(StructuredList), "StructuredList",
                          () => new InputValue<StructuredList>());
-            RegisterType(typeof(Texture3dWithViews), "Texture3dWithViews", () => new InputValue<Texture3dWithViews>(new Texture3dWithViews()));
-            
+            RegisterType(typeof(Texture3dWithViews), "Texture3dWithViews", 
+                         () => new InputValue<Texture3dWithViews>(new Texture3dWithViews()));
+            RegisterType(typeof(MeshBuffers), "MeshBuffers",
+                         () => new InputValue<MeshBuffers>(null));
+
             // sharpdx types
             RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",
                          InputDefaultValueCreator<PrimitiveTopology>,
