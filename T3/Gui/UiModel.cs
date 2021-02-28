@@ -16,10 +16,12 @@ using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Interfaces;
 using T3.Gui.ChildUi;
 using T3.Gui.InputUi;
 using T3.Gui.InputUi.SingleControl;
 using T3.Gui.OutputUi;
+
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
 
@@ -178,13 +180,25 @@ namespace T3.Gui
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_f0acd1a4_7a98_43ab_a807_6d1bd3e92169.Remap), RemapUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c.LFO), LfoUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_bfe540ef_f8ad_45a2_b557_cd419d9c8e44.DataList), DataListUi.DrawChildUi);
-            
+            CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227.LoadObj), DescriptiveUi.DrawChildUi);
+
+            foreach (var symbolEntry in SymbolRegistry.Entries)
+            {
+                var valueInstanceType = symbolEntry.Value.InstanceType;
+                if(typeof(IDescriptiveGraphNode).IsAssignableFrom(valueInstanceType))
+                {
+                    CustomChildUiRegistry.Entries.Add(valueInstanceType, DescriptiveUi.DrawChildUi);
+                }
+            }
+
             Load();
 
             var symbols = SymbolRegistry.Entries;
             foreach (var symbolEntry in symbols)
             {
                 UpdateUiEntriesForSymbol(symbolEntry.Value);
+
+                
             }
 
             // create instance of project op, all children are create automatically

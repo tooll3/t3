@@ -347,6 +347,7 @@
     <Compile Include="Gui\ChildUi\DataListUi.cs" />
     <Compile Include="Gui\ChildUi\GpuMeasureUi.cs" />
     <Compile Include="Gui\ChildUi\LfoUi.cs" />
+    <Compile Include="Gui\ChildUi\DescriptiveUi.cs" />
     <Compile Include="Gui\ChildUi\RemapUi.cs" />
     <Compile Include="Gui\ChildUi\SampleCurveUi.cs" />
     <Compile Include="Gui\ChildUi\StringUi.cs" />

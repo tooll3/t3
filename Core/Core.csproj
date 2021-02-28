@@ -131,6 +131,7 @@
     <Compile Include="Operator\EvaluationContext.cs" />
     <Compile Include="Operator\Instance.cs" />
     <Compile Include="Operator\Interfaces\ICamera.cs" />
+    <Compile Include="Operator\Interfaces\IDescriptiveGraphNode.cs" />
     <Compile Include="Operator\Interfaces\ITransformable.cs" />
     <Compile Include="Operator\Presets\PresetRegistry.cs" />
     <Compile Include="Operator\Presets\SymbolPresetLibrary.cs" />
