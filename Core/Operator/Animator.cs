@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SharpDX;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
+using Vector2 = System.Numerics.Vector2;
+using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.Operator
 {
@@ -227,6 +230,37 @@ namespace T3.Core.Operator
                 intInputSlot.UpdateAction = context => { intInputSlot.Value = (int)newCurve.GetSampledValue(context.TimeInBars); };
                 intInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
+            else if (inputSlot is Slot<Size2> size2InputSlot)
+            {
+                var newCurveX = new Curve();
+                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
+                                                                               {
+                                                                                   Value = size2InputSlot.Value.Width,
+                                                                                   InType = VDefinition.Interpolation.Constant,
+                                                                                   OutType = VDefinition.Interpolation.Constant,
+                                                                                   InEditMode = VDefinition.EditMode.Constant,
+                                                                                   OutEditMode = VDefinition.EditMode.Constant,
+                                                                               });
+                _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
+
+                var newCurveY = new Curve();
+                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
+                                                                               {
+                                                                                   Value = size2InputSlot.Value.Height,
+                                                                                   InType = VDefinition.Interpolation.Constant,
+                                                                                   OutType = VDefinition.Interpolation.Constant,
+                                                                                   InEditMode = VDefinition.EditMode.Constant,
+                                                                                   OutEditMode = VDefinition.EditMode.Constant,
+                                                                               });
+                _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
+
+                size2InputSlot.UpdateAction = context =>
+                                                {
+                                                    size2InputSlot.Value.Width = (int)newCurveX.GetSampledValue(context.TimeInBars);
+                                                    size2InputSlot.Value.Height = (int)newCurveY.GetSampledValue(context.TimeInBars);
+                                                };
+                size2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+            }            
             else
             {
                 Log.Error("Could not create update action.");

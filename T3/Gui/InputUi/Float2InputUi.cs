@@ -33,9 +33,9 @@ namespace T3.Gui.InputUi
 
         protected override InputEditStateFlags DrawEditControl(string name, ref Vector2 float2Value)
         {
-            float2Value.CopyTo(_components);
-            var inputEditState = VectorValueEdit.Draw(_components, Min, Max, Scale, Clamp);
-            float2Value = new Vector2(_components[0], _components[1]);
+            float2Value.CopyTo(Components);
+            var inputEditState = VectorValueEdit.Draw(Components, Min, Max, Scale, Clamp);
+            float2Value = new Vector2(Components[0], Components[1]);
 
             return inputEditState;
         }
@@ -62,25 +62,25 @@ namespace T3.Gui.InputUi
         {
             double time = EvaluationContext.GlobalTimeInBars;
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-            if (curves.Length < _components.Length)
+            if (curves.Length < Components.Length)
             {
                 DrawReadOnlyControl(name, ref inputSlot.Value);
                 return;
             }
 
-            for (var index = 0; index < _components.Length; index++)
+            for (var index = 0; index < Components.Length; index++)
             {
-                _components[index] = (float)curves[index].GetSampledValue(time);
+                Components[index] = (float)curves[index].GetSampledValue(time);
             }
 
-            var inputEditState = VectorValueEdit.Draw(_components, Min, Max, Scale, Clamp);
+            var inputEditState = VectorValueEdit.Draw(Components, Min, Max, Scale, Clamp);
             if (inputEditState == InputEditStateFlags.Nothing)
                 return;
 
-            for (var index = 0; index < _components.Length; index++)
+            for (var index = 0; index < Components.Length; index++)
             {
                 var key = curves[index].GetV(time) ?? new VDefinition { U = time };
-                key.Value = _components[index];
+                key.Value = Components[index];
                 curves[index].AddOrUpdateV(time, key);
             }
         }
@@ -134,6 +134,6 @@ namespace T3.Gui.InputUi
         private const float DefaultMin = -9999999f;
         private const float DefaultMax = 9999999f;
         
-        private static float[] _components = new float[2];
+        private static readonly float[] Components = new float[2];
     }
 }

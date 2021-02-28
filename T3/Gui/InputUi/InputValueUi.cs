@@ -455,6 +455,10 @@ namespace T3.Gui.InputUi
         }
 
         public Type Type { get; } = typeof(T);
+        
+        /// <summary>
+        /// Defines position of inputNode within graph 
+        /// </summary>
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = SymbolChildUi.DefaultOpSize;
         public bool IsSelected => SelectionManager.IsNodeSelected(this);
