@@ -16,29 +16,79 @@ namespace T3.Gui.Selection
 {
     static class TransformGizmoHandling
     {
-        private static Vector2 ObjectPosToScreenPos(SharpDX.Vector3 posInObject, SharpDX.Matrix objectToClipSpace)
-        {
-            SharpDX.Vector3 originInClipSpace = SharpDX.Vector3.TransformCoordinate(posInObject, objectToClipSpace);
-            Vector3 posInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z);// / originInClipSpace.W;
-            var viewports = ResourceManager.Instance().Device.ImmediateContext.Rasterizer.GetViewports<SharpDX.Mathematics.Interop.RawViewportF>();
-            var viewport = viewports[0];
-            var originInViewport = new Vector2(viewport.Width * (posInNdc.X * 0.5f + 0.5f),
-                                               viewport.Height * (1.0f - (posInNdc.Y * 0.5f + 0.5f)));
 
-            var canvas = ImageOutputCanvas.Current;
-            var posInCanvas = canvas.TransformDirection(originInViewport);
-            var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
-            return topLeftOnScreen + posInCanvas;
+        public static GizmoDraggingModes CurrentDraggingMode = GizmoDraggingModes.None;
+        public static void RegisterSelectedTransformable(SymbolChildUi node, ITransformable transformable)
+        {
+            if (SelectedTransformables.Contains(transformable))
+                return;
+            
+            SelectedTransformables.Add(transformable);
+            transformable.TransformCallback = TransformCallback;
         }
+        public static void ClearDeselectedTransformableNode(ITransformable transformable)
+        {
+            if (SelectedTransformables.Contains(transformable))
+            {
+                Log.Warning("trying to deselect an unregistered transformable?");
+                return;
+            }
+
+            transformable.TransformCallback = null;
+            SelectedTransformables.Remove(transformable);
+        }
+
+        public static void ClearSelectedTransformables()
+        {
+            foreach (var selectedTransformable in SelectedTransformables)
+            {
+                selectedTransformable.TransformCallback = null;
+            }
+
+            SelectedTransformables.Clear();
+        }
+
+        
+        /// <summary>
+        /// need foreground draw list atm as texture is drawn afterwards to output view
+        /// </summary>
+        public static void SetDrawList(ImDrawListPtr drawList)
+        {
+            _drawList = drawList;
+            _isDrawListValid = true;
+        }
+
+        public static void RestoreDrawList()
+        {
+            _isDrawListValid = false;
+        }
+
+        private static Vector3 _selectedCenter;
+
+        public static Vector3 GetLatestSelectionCenter()
+        {
+            if(SelectedTransformables.Count == 0)
+                return Vector3.Zero;
+            
+
+            return _selectedCenter;
+        }
+        
         
         /// <summary>
         /// Called from <see cref="ITransformable"/> nodes during update
         /// </summary>
-        public static void TransformCallback(ITransformable transform, EvaluationContext context)
+        public static void TransformCallback(ITransformable transformable, EvaluationContext context)
         {
-            if (!IsDrawListValid)
+            if (!_isDrawListValid)
             {
                 Log.Warning("can't draw gizmo without initialized draw list");
+                return;
+            }
+
+            if (!SelectedTransformables.Contains(transformable))
+            {
+                Log.Warning("transform-callback from non-selected node?" + transformable);
                 return;
             }
 
@@ -50,13 +100,16 @@ namespace T3.Gui.Selection
             var objectToClipSpace = context.ObjectToWorld * context.WorldToCamera * context.CameraToClipSpace;
 
 
-            
-            var s = transform.Scale;
-            var r = transform.Rotation;
+            var s = transformable.Scale;
+            var r = transformable.Rotation;
             float yaw = SharpDX.MathUtil.DegreesToRadians(r.Y);
             float pitch = SharpDX.MathUtil.DegreesToRadians(r.X);
             float roll = SharpDX.MathUtil.DegreesToRadians(r.Z);
-            var t = transform.Translation;
+            var t = transformable.Translation;
+            
+            var c=SharpDX.Vector3.TransformNormal(new SharpDX.Vector3(t.X,t.Y, t.Z), context.ObjectToWorld);
+            _selectedCenter = new Vector3(c.X, c.Y, c.Z);
+
             var localToObject = SharpDX.Matrix.Transformation(SharpDX.Vector3.Zero, SharpDX.Quaternion.Identity, SharpDX.Vector3.One,
                                                               SharpDX.Vector3.Zero, SharpDX.Quaternion.RotationYawPitchRoll(yaw, pitch, roll),
                                                               new SharpDX.Vector3(t.X, t.Y, t.Z));
@@ -157,7 +210,7 @@ namespace T3.Gui.Selection
                         SharpDX.Vector3 offsetInLocal = (intersectionPoint - _startIntersectionPoint) * gizmoAxis;
                         var offsetInObject = SharpDX.Vector3.TransformNormal(offsetInLocal, localToObject);
                         SharpDX.Vector3 newOrigin = _originAtDragStart + offsetInObject;
-                        transform.Translation = new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z);
+                        transformable.Translation = new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z);
                     }
                 }
 
@@ -221,7 +274,7 @@ namespace T3.Gui.Selection
                         SharpDX.Vector3 offsetInLocal = (intersectionPoint - _startIntersectionPoint);
                         var offsetInObject = SharpDX.Vector3.TransformNormal(offsetInLocal, localToObject);
                         SharpDX.Vector3 newOrigin = _originAtDragStart + offsetInObject;
-                        transform.Translation = new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z);
+                        transformable.Translation = new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z);
                     }
                 }
 
@@ -268,7 +321,7 @@ namespace T3.Gui.Selection
                                                                        originInNdc.Z, 1);
                         var newOriginInObject = SharpDX.Vector4.Transform(newOriginInClipSpace, clipSpaceToObject);
                         Vector3 newTranslation = new Vector3(newOriginInObject.X, newOriginInObject.Y, newOriginInObject.Z) / newOriginInObject.W;
-                        transform.Translation = newTranslation;
+                        transformable.Translation = newTranslation;
                     }
                 }
                 var color2 = Color.Orange;
@@ -300,7 +353,31 @@ namespace T3.Gui.Selection
             }
         }
         
+        // Calculates the scale for a gizmo based on the distance to the cam
+        private static float CalcGizmoScale(EvaluationContext context, SharpDX.Matrix localToObject, float width, float height, float fovInDegree,
+                                            float gizmoSize)
+        {
+            var localToCamera = localToObject * context.ObjectToWorld * context.WorldToCamera;
+            var distance = localToCamera.TranslationVector.Length(); // distance of local origin to cam
+            var denom = Math.Sqrt(width * width + height * height) * Math.Tan(SharpDX.MathUtil.DegreesToRadians(fovInDegree));
+            return (float)Math.Max(0.0001, (distance / denom) * gizmoSize);
+        }
         
+        private static Vector2 ObjectPosToScreenPos(SharpDX.Vector3 posInObject, SharpDX.Matrix objectToClipSpace)
+        {
+            SharpDX.Vector3 originInClipSpace = SharpDX.Vector3.TransformCoordinate(posInObject, objectToClipSpace);
+            Vector3 posInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z);// / originInClipSpace.W;
+            var viewports = ResourceManager.Instance().Device.ImmediateContext.Rasterizer.GetViewports<SharpDX.Mathematics.Interop.RawViewportF>();
+            var viewport = viewports[0];
+            var originInViewport = new Vector2(viewport.Width * (posInNdc.X * 0.5f + 0.5f),
+                                               viewport.Height * (1.0f - (posInNdc.Y * 0.5f + 0.5f)));
+
+            var canvas = ImageOutputCanvas.Current;
+            var posInCanvas = canvas.TransformDirection(originInViewport);
+            var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
+            return topLeftOnScreen + posInCanvas;
+        }
+
         private static SharpDX.Plane GetPlaneForDragMode(GizmoDraggingModes mode, SharpDX.Vector3 normDir, SharpDX.Vector3 origin)
         {
             switch (mode)
@@ -388,49 +465,18 @@ namespace T3.Gui.Selection
             PositionOnYzPlane,
         }
 
-        public static GizmoDraggingModes CurrentDraggingMode = GizmoDraggingModes.None;
-
-        // Calculates the scale for a gizmo based on the distance to the cam
-        private static float CalcGizmoScale(EvaluationContext context, SharpDX.Matrix localToObject, float width, float height, float fovInDegree,
-                                            float gizmoSize)
-        {
-            var localToCamera = localToObject * context.ObjectToWorld * context.WorldToCamera;
-            var distance = localToCamera.TranslationVector.Length(); // distance of local origin to cam
-            var denom = Math.Sqrt(width * width + height * height) * Math.Tan(SharpDX.MathUtil.DegreesToRadians(fovInDegree));
-            return (float)Math.Max(0.0001, (distance / denom) * gizmoSize);
-        }
-        
-        /// <summary>
-        /// need foreground draw list atm as texture is drawn afterwards to output view
-        /// </summary>
-        public static void SetDrawList(ImDrawListPtr drawList)
-        {
-            _drawList = drawList;
-            IsDrawListValid = true;
-        }
-
-        public static void RestoreDrawList()
-        {
-            IsDrawListValid = false;
-        }
 
         private static ImDrawListPtr _drawList = null;
-        private static bool IsDrawListValid;
+        private static bool _isDrawListValid;
 
-        public static void RemoveTransformCallback(ISelectableNode node)
-        {
-            if (RegisteredTransformCallbacks.TryGetValue(node, out var transformable))
-            {
-                transformable.TransformCallback = null;
-            }
-        }        
-        
-        public static readonly Dictionary<ISelectableNode, ITransformable> RegisteredTransformCallbacks = new Dictionary<ISelectableNode, ITransformable>(10);
-        
+        private static readonly HashSet<ITransformable> SelectedTransformables = new HashSet<ITransformable>();
+            
         private static Vector2 _offsetToOriginAtDragStart;
         private static SharpDX.Vector3 _originAtDragStart;
         private static Plane _plane;
         private static SharpDX.Vector3 _startIntersectionPoint;
         private static Matrix _initialObjectToLocal;
+
+
     }
 }

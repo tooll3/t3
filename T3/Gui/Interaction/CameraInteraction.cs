@@ -3,6 +3,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
+using T3.Gui.Selection;
 
 namespace T3.Gui.Graph.Interaction
 {
@@ -248,6 +249,14 @@ namespace T3.Gui.Graph.Interaction
             {
                 _moveVelocity = Vector3.Zero;
                 _intendedSetup.Reset();
+                _manipulatedByKeyboard = true;
+            }
+            
+            if (ImGui.IsKeyDown((int)Key.C))
+            {
+                _moveVelocity = Vector3.Zero;
+                //_intendedSetup.Reset();
+                _intendedSetup.Target = TransformGizmoHandling.GetLatestSelectionCenter();
                 _manipulatedByKeyboard = true;
             }
         }

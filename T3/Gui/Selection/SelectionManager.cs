@@ -21,7 +21,7 @@ namespace T3.Gui.Selection
     {
         public static void Clear()
         {
-            Selection.ForEach(TransformGizmoHandling.RemoveTransformCallback);
+            TransformGizmoHandling.ClearSelectedTransformables();
             Selection.Clear();
         }
 
@@ -73,7 +73,8 @@ namespace T3.Gui.Selection
                 if (instance is ITransformable transformable)
                 {
                     transformable.TransformCallback = TransformGizmoHandling.TransformCallback;
-                    TransformGizmoHandling.RegisteredTransformCallbacks[node] = transformable;
+                    TransformGizmoHandling.RegisterSelectedTransformable(node, transformable);
+                    
                 }
             }
         }
@@ -154,10 +155,13 @@ namespace T3.Gui.Selection
             return result;
         }
 
-        public static void RemoveSelection(ISelectableNode node)
+        public static void RemoveSelection(ISelectableNode node, Instance instance)
         {
             Selection.Remove(node);
-            TransformGizmoHandling.RemoveTransformCallback(node);
+            if (instance is ITransformable transformable)
+            {
+                TransformGizmoHandling.ClearDeselectedTransformableNode(transformable);
+            }
         }
 
         

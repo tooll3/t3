@@ -122,7 +122,7 @@ namespace T3.Gui.Graph.Interaction
                     {
                         if (ImGui.GetIO().KeyShift)
                         {
-                            SelectionManager.RemoveSelection(node);
+                            SelectionManager.RemoveSelection(node, instance);
                         }
                     }
                 }
