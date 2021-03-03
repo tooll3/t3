@@ -13,7 +13,7 @@ namespace T3.Gui.ChildUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
         {
-            if (!(instance is GradientSlider gradientSlider)
+            if (!(instance is SampleGradient gradientSlider)
                 || !ImGui.IsRectVisible(selectableScreenRect.Min, selectableScreenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
