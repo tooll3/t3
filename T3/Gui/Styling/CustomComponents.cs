@@ -412,11 +412,13 @@ namespace T3.Gui
 
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
             ImGui.BeginTooltip();
+            ImGui.PushTextWrapPos(300);
             ImGui.Text(message);
             if (!string.IsNullOrEmpty(additionalNotes))
             {
                 ImGui.TextColored(Color.Gray, additionalNotes);
             }
+            ImGui.PopTextWrapPos();
 
             ImGui.EndTooltip();
             ImGui.PopStyleVar();

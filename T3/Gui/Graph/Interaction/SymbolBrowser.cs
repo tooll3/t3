@@ -70,6 +70,8 @@ namespace T3.Gui.Graph.Interaction
             //Current = this;
 
             _filter.UpdateIfNecessary();
+            if(_filter.WasUpdated)
+                UpdateExampleLinks();
 
             ImGui.PushID(UiId);
             {
@@ -166,6 +168,22 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
+        private readonly Dictionary<Guid, List<Guid>> _exampleSymbols = new Dictionary<Guid, List<Guid>>(30);
+
+        private void UpdateExampleLinks()
+        {
+            _exampleSymbols.Clear();
+            foreach (var symbolUi in _filter.MatchingSymbolUis)
+            {
+                var examples = SymbolUiRegistry.Entries.Values
+                                               .Where(c => c.Symbol.Name == symbolUi.Symbol.Name + "Example")
+                                               .Select(c=> c.Symbol.Id)
+                                               .ToList();
+                if (examples.Count != 0)
+                    _exampleSymbols[symbolUi.Symbol.Id] = examples;
+            }
+        }
+
         private void Cancel()
         {
             if (_prepareCommand != null)
@@ -240,7 +258,11 @@ namespace T3.Gui.Graph.Interaction
                             _selectedItemWasChanged = false;
                         }
 
+                        
                         ImGui.Selectable("", isSelected);
+                        
+                        if(!string.IsNullOrEmpty(symbolUi.Description))
+                            CustomComponents.TooltipForLastItem(symbolUi.Description);
 
                         if (ImGui.IsItemActivated())
                         {
@@ -248,12 +270,29 @@ namespace T3.Gui.Graph.Interaction
                         }
 
                         ImGui.SameLine();
+                        
                         ImGui.Text(symbolUi.Symbol.Name);
-                        if (!String.IsNullOrEmpty(symbolUi.Symbol.Namespace))
+                        ImGui.SameLine();
+                        
+                        if (!string.IsNullOrEmpty(symbolUi.Symbol.Namespace))
                         {
-                            ImGui.SameLine();
                             ImGui.TextDisabled(symbolUi.Symbol.Namespace);
+                            ImGui.SameLine();
                         }
+
+                        if (!string.IsNullOrEmpty(symbolUi.Description))
+                        {
+                            ImGui.TextDisabled("(?)");
+                            ImGui.SameLine();
+                        }
+
+                        if (_exampleSymbols.TryGetValue(symbolUi.Symbol.Id, out var examples))
+                        {
+                            ImGui.TextDisabled($"{examples.Count} examples");
+                            ImGui.SameLine();
+                        }
+                        
+                        ImGui.NewLine();
 
                         ImGui.PopStyleColor(4);
                     }
@@ -369,10 +408,9 @@ namespace T3.Gui.Graph.Interaction
         private Vector2 _posInWindow;
 
         public bool _isOpen;
-        private static readonly Vector2 ResultListSize = new Vector2(300, 200);
+        private static readonly Vector2 ResultListSize = new Vector2(400, 300);
 
         private SymbolUi _selectedSymbolUi;
         private static readonly int UiId = "DraftNode".GetHashCode();
-        //public static SymbolBrowser Current;
     }
 }
