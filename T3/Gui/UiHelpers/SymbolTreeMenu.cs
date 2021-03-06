@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,22 +15,23 @@ using T3.Gui.Interaction;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
+using T3.Gui.Windows;
 
-namespace T3.Gui.Windows
+namespace T3.Gui.UiHelpers
 {
     /// <summary>
     /// Shows a tree of all defined symbols sorted by namespace 
     /// </summary>
-    public class SymbolLibrary : Window
+    public class SymbolTreeMenu
     {
-        public SymbolLibrary()
-        {
-            _filter.SearchString = "";
-            Config.Title = "Symbol Library";
-            _treeNode.PopulateCompleteTree();
-        }
+        // public SymbolTreeMenu()
+        // {
+        //     _filter.SearchString = "";
+        //     Config.Title = "Symbol Library";
+        //     PopulateTree();
+        // }
 
-        protected override void DrawContent()
+        public void Draw()
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             {
@@ -273,12 +275,7 @@ namespace T3.Gui.Windows
             _treeNode.PopulateCompleteTree();
         }
 
-        public override List<Window> GetInstances()
-        {
-            return new List<Window>();
-        }
-        
-        private NamespaceTreeNode _treeNode = new NamespaceTreeNode("root");
+        private NamespaceTreeNode _treeNode;
 
         private static IntPtr _dropData = new IntPtr(0);
         private static string _guidSting;

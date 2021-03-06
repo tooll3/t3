@@ -476,9 +476,11 @@
     <Compile Include="Gui\UiHelpers\ProjectSettings.cs" />
     <Compile Include="Gui\UiHelpers\Settings.cs" />
     <Compile Include="Gui\UiHelpers\StatusErrorLine.cs" />
+    <Compile Include="Gui\UiHelpers\SymbolTreeMenu.cs" />
     <Compile Include="Gui\UiHelpers\UserSettings.cs" />
     <Compile Include="Gui\Windows\GraphBookmarkNavigation.cs" />
     <Compile Include="Gui\Windows\ImageOutputCanvas.cs" />
+    <Compile Include="Gui\Windows\NamespaceTreeNode.cs" />
     <Compile Include="Gui\Windows\Output\CameraSelectionHandling.cs" />
     <Compile Include="Gui\Windows\Output\EditResolutionDialog.cs" />
     <Compile Include="Gui\Windows\Output\OutputWindow.cs" />
