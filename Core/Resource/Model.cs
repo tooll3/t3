@@ -561,6 +561,10 @@ namespace T3.Core
                 // remove old source file and its entry in project 
                 RemoveSourceFileFromProject(symbol.DeprecatedSourcePath);
                 File.Delete(symbol.DeprecatedSourcePath);
+                
+                // adjust path of file resource
+                ResourceManager.Instance().RenameOperatorResource(symbol.DeprecatedSourcePath, sourcePath);
+
                 symbol.DeprecatedSourcePath = string.Empty;
             }
 

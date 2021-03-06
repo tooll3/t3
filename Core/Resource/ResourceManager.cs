@@ -242,6 +242,24 @@ namespace T3.Core
             return null;
         }
 
+        public void RenameOperatorResource(string oldPath, string newPath)
+        {
+            var extension = Path.GetExtension(newPath);
+            if (extension != ".cs")
+            {
+                Log.Info($"Ignoring file rename to invalid extension '{extension}' in '{newPath}'.");
+                return;
+            }
+
+            if (_fileResources.TryGetValue(oldPath, out var fileResource))
+            {
+                Log.Info($"renamed file resource from '{oldPath}' to '{newPath}'");
+                fileResource.Path = newPath;
+                _fileResources.Remove(oldPath);
+                _fileResources.Add(newPath, fileResource);
+            }
+        }
+
         public const uint NullResource = 0;
         private uint _resourceIdCounter = 1;
 
@@ -815,22 +833,7 @@ namespace T3.Core
 
         private void OnRenamed(object sender, RenamedEventArgs renamedEventArgs)
         {
-            //Log.Info($"renamed file from '{renamedEventArgs.OldFullPath}' to '{renamedEventArgs.FullPath}'");
-
-            var extension = Path.GetExtension(renamedEventArgs.FullPath);
-            if (extension != ".cs")
-            {
-                Log.Info($"Ignoring file rename to invalid extension '{extension}' in '{renamedEventArgs.FullPath}'.");
-                return;
-            }
-
-            if (_fileResources.TryGetValue(renamedEventArgs.OldFullPath, out var fileResource))
-            {
-                Log.Info($"renamed file resource from '{renamedEventArgs.OldFullPath}' to '{renamedEventArgs.FullPath}'");
-                fileResource.Path = renamedEventArgs.FullPath;
-                _fileResources.Remove(renamedEventArgs.OldFullPath);
-                _fileResources.Add(renamedEventArgs.FullPath, fileResource);
-            }
+            RenameOperatorResource(renamedEventArgs.OldFullPath, renamedEventArgs.FullPath);
         }
 
         public static Texture2D CreateTexture2DFromBitmap(Device device, BitmapSource bitmapSource)
