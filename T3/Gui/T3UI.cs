@@ -124,6 +124,12 @@ namespace T3.Gui
                     ImGui.EndMenu();
                 }
 
+                if (ImGui.BeginMenu("Add"))
+                {
+                    SymbolTreeMenu.Draw();
+                    ImGui.EndMenu();
+                }
+
                 WindowManager.DrawWindowsMenu();
 
                 T3Metrics.DrawRenderPerformanceGraph(ImGui.GetCursorScreenPos() + new Vector2(100,6));

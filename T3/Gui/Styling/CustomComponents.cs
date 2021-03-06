@@ -392,7 +392,7 @@ namespace T3.Gui
 
         private static Color EmptyMessageColor = new Color(0.3f);
 
-        public static void TooltipForLastItem(string message, string additionalNotes = null)
+        public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)
         {
             if (!ImGui.IsAnyItemHovered())
             {
@@ -407,7 +407,7 @@ namespace T3.Gui
                 _hoverStartTime = ImGui.GetTime();
 
             var hoverDuration = ImGui.GetTime() - _hoverStartTime;
-            if (!(hoverDuration > UserSettings.Config.TooltipDelay))
+            if (useHoverDelay && !(hoverDuration > UserSettings.Config.TooltipDelay))
                 return;
 
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));

@@ -44,7 +44,7 @@ namespace T3.Gui.Windows
                 {
                     _selectedSymbol = null;
                 }
-                
+
                 ImGui.Separator();
 
                 ImGui.BeginChild("scrolling");
@@ -61,7 +61,7 @@ namespace T3.Gui.Windows
                 ImGui.EndChild();
             }
             ImGui.PopStyleVar();
-            
+
             if (ImGui.IsMouseReleased(0))
             {
                 StopDrag();
@@ -73,9 +73,8 @@ namespace T3.Gui.Windows
             DrawNode(_treeNode);
         }
 
-        
-        private static Symbol _selectedSymbol= null; 
-        
+        private static Symbol _selectedSymbol = null;
+
         private void DrawList()
         {
             _filter.UpdateIfNecessary();
@@ -102,7 +101,7 @@ namespace T3.Gui.Windows
                     var parents = NodeOperations.GetParentInstances(symbolInstance, includeChildInstance: true).ToList();
                     if (parents.Count < 2)
                         continue;
-                    
+
                     var compositionSymbol = parents[parents.Count - 2].Symbol;
                     var instance = parents[parents.Count - 1];
 
@@ -112,7 +111,7 @@ namespace T3.Gui.Windows
                         usagesInSymbolInstances[compositionSymbol] = list;
                     }
 
-                    if (list.All(c => c.SymbolChildId != instance.SymbolChildId)) 
+                    if (list.All(c => c.SymbolChildId != instance.SymbolChildId))
                     {
                         list.Add(instance);
                     }
@@ -121,11 +120,11 @@ namespace T3.Gui.Windows
                 foreach (var (compositionSymbol, instances) in usagesInSymbolInstances)
                 {
                     ImGui.PushFont(Fonts.FontBold);
-                    ImGui.TextColored(Color.Gray,compositionSymbol.Name);
+                    ImGui.TextColored(Color.Gray, compositionSymbol.Name);
                     ImGui.PopFont();
                     ImGui.SameLine();
                     ImGui.TextColored(Color.Gray, " - " + compositionSymbol.Namespace);
-                    
+
                     foreach (var instance in instances)
                     {
                         ImGui.PushID(instance.SymbolChildId.GetHashCode());
@@ -137,15 +136,16 @@ namespace T3.Gui.Windows
                             continue;
                         }
 
-                        if(ImGui.Selectable(symbolChild.ReadableName))
+                        if (ImGui.Selectable(symbolChild.ReadableName))
                         {
                             graphWindow?.GraphCanvas.SetComposition(NodeOperations.BuildIdPathForInstance(instanceParent),
-                                                                     ScalableCanvas.Transition.Undefined);
+                                                                    ScalableCanvas.Transition.Undefined);
 
                             var childUi = SymbolUiRegistry.Entries[compositionSymbol.Id].ChildUis.Single(cUi => cUi.Id == instance.SymbolChildId);
                             SelectionManager.SetSelection(childUi, instance);
                             FitViewToSelectionHandling.FitViewToSelection();
                         }
+
                         ImGui.PopID();
                     }
                 }
@@ -160,37 +160,49 @@ namespace T3.Gui.Windows
 
         private void DrawNode(NamespaceTreeNode subtree)
         {
-            ImGui.PushID(subtree.Name);
-            ImGui.SetNextItemWidth(10);
-            if (ImGui.TreeNode(subtree.Name))
+            if (subtree.Name == "root")
             {
-                HandleDropTarget(subtree);
-
-                foreach (var subspace in subtree.Children)
-                {
-                    DrawNode(subspace);
-                }
-
-                foreach (var symbol in subtree.Symbols)
-                {
-                    DrawSymbolItem(symbol);
-                }
-
-                ImGui.TreePop();
+                DrawNodeItems(subtree);
             }
             else
             {
-                if (T3Ui.DraggingIsInProgress)
+                ImGui.PushID(subtree.Name);
+                ImGui.SetNextItemWidth(10);
+                if (ImGui.TreeNode(subtree.Name))
                 {
-                    ImGui.SameLine();
-                    ImGui.PushID("DropButton");
-                    ImGui.Button("  <-", new Vector2(50, 15));
                     HandleDropTarget(subtree);
-                    ImGui.PopID();
+
+                    DrawNodeItems(subtree);
+
+                    ImGui.TreePop();
                 }
+                else
+                {
+                    if (T3Ui.DraggingIsInProgress)
+                    {
+                        ImGui.SameLine();
+                        ImGui.PushID("DropButton");
+                        ImGui.Button("  <-", new Vector2(50, 15));
+                        HandleDropTarget(subtree);
+                        ImGui.PopID();
+                    }
+                }
+
+                ImGui.PopID();
+            }
+        }
+
+        private void DrawNodeItems(NamespaceTreeNode subtree)
+        {
+            foreach (var subspace in subtree.Children)
+            {
+                DrawNode(subspace);
             }
 
-            ImGui.PopID();
+            foreach (var symbol in subtree.Symbols)
+            {
+                DrawSymbolItem(symbol);
+            }
         }
 
         private static void DrawSymbolItem(Symbol symbol)
@@ -228,7 +240,6 @@ namespace T3.Gui.Windows
                         ImGui.EndDragDropSource();
                     }
                 }
-                
 
                 ImGui.PopStyleColor(4);
             }
@@ -249,9 +260,9 @@ namespace T3.Gui.Windows
                     }
                     catch (NullReferenceException)
                     {
-                        Log.Error("unable to get drop data");                        
+                        Log.Error("unable to get drop data");
                     }
-                    
+
                     if (myString != null)
                     {
                         var guidString = myString.Split('|')[0];
@@ -277,7 +288,7 @@ namespace T3.Gui.Windows
         {
             return new List<Window>();
         }
-        
+
         private NamespaceTreeNode _treeNode = new NamespaceTreeNode("root");
 
         private static IntPtr _dropData = new IntPtr(0);

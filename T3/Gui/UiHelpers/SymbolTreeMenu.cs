@@ -1,198 +1,61 @@
-﻿
-using System;
-using ImGuiNET;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Numerics;
+using ImGuiNET;
 using System.Runtime.InteropServices;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
-using T3.Gui.Interaction;
-using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using T3.Gui.Windows;
+using UiHelpers;
 
 namespace T3.Gui.UiHelpers
 {
     /// <summary>
     /// Shows a tree of all defined symbols sorted by namespace 
     /// </summary>
-    public class SymbolTreeMenu
+    public static class SymbolTreeMenu
     {
-        // public SymbolTreeMenu()
-        // {
-        //     _filter.SearchString = "";
-        //     Config.Title = "Symbol Library";
-        //     PopulateTree();
-        // }
-
-        public void Draw()
+        public static void Draw()
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
-            {
-                ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
-                if (ImGui.Button("Clear"))
-                {
-                    _filter.SearchString = "";
-                }
-
-                ImGui.SameLine();
-                if (ImGui.InputText("##Filter", ref _filter.SearchString, 100))
-                {
-                    _selectedSymbol = null;
-                }
-                
-                ImGui.Separator();
-
-                ImGui.BeginChild("scrolling");
-                {
-                    if (string.IsNullOrEmpty(_filter.SearchString))
-                    {
-                        DrawTree();
-                    }
-                    else
-                    {
-                        DrawList();
-                    }
-                }
-                ImGui.EndChild();
-            }
-            ImGui.PopStyleVar();
-            
-            if (ImGui.IsMouseReleased(0))
-            {
-                StopDrag();
-            }
+            TreeNode.PopulateCompleteTree();
+            DrawNodesRecursively(TreeNode);
         }
 
-        private void DrawTree()
+        private static void DrawNodesRecursively(NamespaceTreeNode subtree)
         {
-            DrawNode(_treeNode);
-        }
-
-        
-        private static Symbol _selectedSymbol= null; 
-        
-        private void DrawList()
-        {
-            _filter.UpdateIfNecessary();
-            foreach (var symbolUi in _filter.MatchingSymbolUis)
+            if (subtree.Name == "root")
             {
-                DrawSymbolItem(symbolUi.Symbol);
-            }
-
-            var showUsages = _filter.MatchingSymbolUis.Count == 1 || _selectedSymbol != null;
-            if (showUsages)
-            {
-                var symbol = _selectedSymbol ?? _filter.MatchingSymbolUis[0].Symbol;
-                ImGui.Separator();
-                ImGui.PushFont(Fonts.FontLarge);
-                ImGui.Text("Is used these Symbols...");
-                ImGui.PopFont();
-                CustomComponents.HelpText("Note: This only includes currently loaded (instanced) Operators.");
-
-                var graphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
-
-                var usagesInSymbolInstances = new Dictionary<Symbol, List<Instance>>();
-                foreach (var symbolInstance in symbol.InstancesOfSymbol)
-                {
-                    var parents = NodeOperations.GetParentInstances(symbolInstance, includeChildInstance: true).ToList();
-                    if (parents.Count < 2)
-                        continue;
-                    
-                    var compositionSymbol = parents[parents.Count - 2].Symbol;
-                    var instance = parents[parents.Count - 1];
-
-                    if (!usagesInSymbolInstances.TryGetValue(compositionSymbol, out var list))
-                    {
-                        list = new List<Instance>();
-                        usagesInSymbolInstances[compositionSymbol] = list;
-                    }
-
-                    if (list.All(c => c.SymbolChildId != instance.SymbolChildId)) 
-                    {
-                        list.Add(instance);
-                    }
-                }
-
-                foreach (var (compositionSymbol, instances) in usagesInSymbolInstances)
-                {
-                    ImGui.PushFont(Fonts.FontBold);
-                    ImGui.TextColored(Color.Gray,compositionSymbol.Name);
-                    ImGui.PopFont();
-                    ImGui.SameLine();
-                    ImGui.TextColored(Color.Gray, " - " + compositionSymbol.Namespace);
-                    
-                    foreach (var instance in instances)
-                    {
-                        ImGui.PushID(instance.SymbolChildId.GetHashCode());
-                        var instanceParent = instance.Parent;
-                        var symbolChild = instanceParent.Symbol.Children.SingleOrDefault(child => child.Id == instance.SymbolChildId);
-                        if (symbolChild == null)
-                        {
-                            Log.Error($"Can't find SymbolChild of Instance {instance.Symbol.Name} ({instance.SymbolChildId}) in parent {instanceParent.Symbol.Name}");
-                            continue;
-                        }
-
-                        if(ImGui.Selectable(symbolChild.ReadableName))
-                        {
-                            graphWindow?.GraphCanvas.SetComposition(NodeOperations.BuildIdPathForInstance(instanceParent),
-                                                                     ScalableCanvas.Transition.Undefined);
-
-                            var childUi = SymbolUiRegistry.Entries[compositionSymbol.Id].ChildUis.Single(cUi => cUi.Id == instance.SymbolChildId);
-                            SelectionManager.SetSelection(childUi, instance);
-                            FitViewToSelectionHandling.FitViewToSelection();
-                        }
-                        ImGui.PopID();
-                    }
-                }
-            }
-        }
-
-        private void StopDrag()
-        {
-            T3Ui.DraggingIsInProgress = false;
-            _dropData = T3Ui.NotDroppingPointer;
-        }
-
-        private void DrawNode(NamespaceTreeNode subtree)
-        {
-            ImGui.PushID(subtree.Name);
-            ImGui.SetNextItemWidth(10);
-            if (ImGui.TreeNode(subtree.Name))
-            {
-                HandleDropTarget(subtree);
-
-                foreach (var subspace in subtree.Children)
-                {
-                    DrawNode(subspace);
-                }
-
-                foreach (var symbol in subtree.Symbols)
-                {
-                    DrawSymbolItem(symbol);
-                }
-
-                ImGui.TreePop();
+                DrawContent(subtree);
             }
             else
             {
-                if (T3Ui.DraggingIsInProgress)
+                ImGui.PushID(subtree.Name);
+                if (ImGui.BeginMenu(subtree.Name))
                 {
-                    ImGui.SameLine();
-                    ImGui.PushID("DropButton");
-                    ImGui.Button("  <-", new Vector2(50, 15));
-                    HandleDropTarget(subtree);
-                    ImGui.PopID();
+                    DrawContent(subtree);
+
+                    ImGui.EndMenu();
                 }
+
+                ImGui.PopID();
+            }
+        }
+
+        private static void DrawContent(NamespaceTreeNode subtree)
+        {
+            foreach (var subspace in subtree.Children)
+            {
+                DrawNodesRecursively(subspace);
             }
 
-            ImGui.PopID();
+            foreach (var symbol in subtree.Symbols)
+            {
+                DrawSymbolItem(symbol);
+            }
         }
 
         private static void DrawSymbolItem(Symbol symbol)
@@ -202,15 +65,32 @@ namespace T3.Gui.UiHelpers
                 var color = symbol.OutputDefinitions.Count > 0
                                 ? TypeUiRegistry.GetPropertiesForType(symbol.OutputDefinitions[0]?.ValueType).Color
                                 : Color.Gray;
+
                 ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(color).Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
                 ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
-                //ImGui.Selectable("", symbol == _selectedSymbol);
 
                 if (ImGui.Button(symbol.Name))
                 {
-                    _selectedSymbol = symbol;
+                    //_selectedSymbol = symbol;
+                }
+
+                if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
+                {
+                    if (!string.IsNullOrEmpty(symbolUi.Description))
+                    {
+                        ImGui.SameLine();
+                        ImGui.TextDisabled("(?)");
+                        if (ImGui.IsItemHovered())
+                        {
+                            ImGui.BeginTooltip();
+                            ImGui.PushTextWrapPos(ImGui.GetFontSize() * 25.0f);
+                            ImGui.TextUnformatted(symbolUi.Description);
+                            ImGui.PopTextWrapPos();
+                            ImGui.EndTooltip();
+                        }
+                    }
                 }
 
                 if (ImGui.IsItemActive())
@@ -226,59 +106,23 @@ namespace T3.Gui.UiHelpers
 
                         ImGui.SetDragDropPayload("Symbol", _dropData, (uint)(_guidSting.Length * sizeof(Char)));
 
-                        ImGui.Button(symbol.Name + "Dropping");
+                        ImGui.Button(symbol.Name + " (Dropping)");
                         ImGui.EndDragDropSource();
                     }
                 }
-                
+                else if(ImGui.IsItemDeactivated())
+                {
+                    _dropData = new IntPtr(0);
+                }
 
                 ImGui.PopStyleColor(4);
             }
             ImGui.PopID();
         }
 
-        private void HandleDropTarget(NamespaceTreeNode subtree)
-        {
-            if (ImGui.BeginDragDropTarget())
-            {
-                var payload = ImGui.AcceptDragDropPayload("Symbol");
-                if (ImGui.IsMouseReleased(0))
-                {
-                    string myString = null;
-                    try
-                    {
-                        myString = Marshal.PtrToStringAuto(payload.Data);
-                    }
-                    catch (NullReferenceException)
-                    {
-                        Log.Error("unable to get drop data");                        
-                    }
-                    
-                    if (myString != null)
-                    {
-                        var guidString = myString.Split('|')[0];
-                        var guid = Guid.Parse(guidString);
-                        Log.Debug("dropped symbol here" + payload + " " + myString + "  " + guid);
-                        MoveSymbolToNamespace(guid, subtree);
-                    }
-                }
-
-                ImGui.EndDragDropTarget();
-            }
-        }
-
-        private void MoveSymbolToNamespace(Guid symbolId, NamespaceTreeNode nameSpace)
-        {
-            var symbol = SymbolRegistry.Entries[symbolId];
-            symbol.Namespace = nameSpace.GetAsString();
-            Log.Debug($"moving {symbol.Name} to {symbol.Namespace}");
-            _treeNode.PopulateCompleteTree();
-        }
-
-        private NamespaceTreeNode _treeNode;
+        private static readonly NamespaceTreeNode TreeNode = new NamespaceTreeNode("root");
 
         private static IntPtr _dropData = new IntPtr(0);
         private static string _guidSting;
-        private SymbolFilter _filter = new SymbolFilter();
     }
 }
