@@ -286,8 +286,9 @@ namespace T3.Gui.Selection
 
             void HandleDragInScreenSpace()
             {
-                var screenSquaredMin = originInScreen - new Vector2(10.0f, 10.0f);
-                var screenSquaredMax = originInScreen + new Vector2(10.0f, 10.0f);
+                const float gizmoSize = 4;
+                var screenSquaredMin = originInScreen - new Vector2(gizmoSize, gizmoSize);
+                var screenSquaredMax = originInScreen + new Vector2(gizmoSize, gizmoSize);
 
                 var isHovering = false;
 
@@ -325,7 +326,7 @@ namespace T3.Gui.Selection
                     }
                 }
                 var color2 = Color.Orange;
-                color2.Rgba.W = isHovering ? 0.4f : 0.2f;
+                color2.Rgba.W = isHovering ? 0.8f : 0.3f;
                 _drawList.AddRectFilled(screenSquaredMin, screenSquaredMax, color2);
                 //_drawList.AddConvexPolyFilled(ref pointsOnScreen[0], 4, color2);
             }

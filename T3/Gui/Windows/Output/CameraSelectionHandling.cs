@@ -49,7 +49,7 @@ namespace T3.Gui.Windows.Output
                 }
             }
 
-            ImGui.SetNextItemWidth(100);
+            ImGui.SetNextItemWidth(115);
 
             var selectedSymbolChild = isCameraControlDisabled
                                           ? null
@@ -57,7 +57,7 @@ namespace T3.Gui.Windows.Output
                                                           .Children
                                                           .Single(child => child.Id == SelectedCameraOp.SymbolChildId);
 
-            var label = isCameraControlDisabled ? "Default" : selectedSymbolChild.ReadableName;
+            var label = isCameraControlDisabled ? "Viewer Cam" : selectedSymbolChild.ReadableName;
 
             if (ImGui.BeginCombo("##CameraSelection", label))
             {

@@ -85,7 +85,8 @@ namespace T3.Core.Operator
         public Buffer PbrMaterialParams { get; set; }
         public PbrMaterialTextures PbrMaterialTextures { get; set; } = new PbrMaterialTextures();
         public PointLightStack PointLights { get; } = new PointLightStack();
-
+        public System.Numerics.Vector4 BackgroundColor { get; set; } = new System.Numerics.Vector4(0.1f, 0.1f, 0.1f, 1.0f);
+        
         public GizmoVisibility ShowGizmos { get; set; }
 
 

@@ -7,6 +7,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.Interaction;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -131,8 +132,13 @@ namespace T3.Gui.Windows.Output
 
             _camSelectionHandling.DrawCameraSelection(_pinning, ref _selectedCameraId);
             ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
+            
+            ImGui.SameLine();
+            ColorEditButton.Draw(ref _backgroundColor, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight()));
             ImGui.PopStyleColor();
         }
+
+        
 
         private Type DrawOutput(Instance instanceForOutput, Instance instanceForEvaluation = null)
         {
@@ -153,6 +159,7 @@ namespace T3.Gui.Windows.Output
             _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
             var usedCam = _lastInteractiveCam ?? _outputWindowViewCamera;
             _evaluationContext.SetViewFromCamera(usedCam);
+            _evaluationContext.BackgroundColor = _backgroundColor;
 
             // Ugly hack to hide final target
             if (instanceForOutput != instanceForEvaluation)
@@ -180,6 +187,8 @@ namespace T3.Gui.Windows.Output
                 return evalOutput.ValueType;
             }
         }
+        
+        private System.Numerics.Vector4 _backgroundColor = new System.Numerics.Vector4(0.1f, 0.1f, 0.1f, 1.0f);
 
         private readonly EvaluationContext _evaluationContext = new EvaluationContext();
         public static readonly List<Window> OutputWindowInstances = new List<Window>();

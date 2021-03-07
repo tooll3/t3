@@ -46,8 +46,13 @@ namespace T3.Gui.OutputUi
             deviceContext.Rasterizer.SetViewport(new SharpDX.Viewport(0, 0, size.Width, size.Height, 0.0f, 1.0f));
             //deviceContext.OutputMerger.SetTargets(_colorBufferRtv);
             deviceContext.OutputMerger.SetTargets(_depthBufferDsv, _colorBufferRtv);
-            
-            deviceContext.ClearRenderTargetView(_colorBufferRtv, new RawColor4(0.1f, 0.1f, 0.1f, 1.0f));
+
+            //var colorRgba = new RawColor4(0.1f, 0.1f, 0.1f, 1.0f);
+            var colorRgba = new RawColor4(context.BackgroundColor.X,
+                                          context.BackgroundColor.Y,
+                                          context.BackgroundColor.Z,
+                                          context.BackgroundColor.W);
+            deviceContext.ClearRenderTargetView(_colorBufferRtv, colorRgba);
             deviceContext.ClearDepthStencilView(_depthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
             
             // evaluate the op
