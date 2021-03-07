@@ -70,9 +70,7 @@ namespace T3.Gui.Graph.Interaction
             //Current = this;
 
             _filter.UpdateIfNecessary();
-            if(_filter.WasUpdated)
-                UpdateExampleLinks();
-
+            
             ImGui.PushID(UiId);
             {
                 _posInWindow = GraphCanvas.Current.ChildPosFromCanvas(PosOnCanvas);
@@ -168,21 +166,8 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
-        private readonly Dictionary<Guid, List<Guid>> _exampleSymbols = new Dictionary<Guid, List<Guid>>(30);
 
-        private void UpdateExampleLinks()
-        {
-            _exampleSymbols.Clear();
-            foreach (var symbolUi in _filter.MatchingSymbolUis)
-            {
-                var examples = SymbolUiRegistry.Entries.Values
-                                               .Where(c => c.Symbol.Name == symbolUi.Symbol.Name + "Example")
-                                               .Select(c=> c.Symbol.Id)
-                                               .ToList();
-                if (examples.Count != 0)
-                    _exampleSymbols[symbolUi.Symbol.Id] = examples;
-            }
-        }
+
 
         private void Cancel()
         {
@@ -286,7 +271,7 @@ namespace T3.Gui.Graph.Interaction
                             ImGui.SameLine();
                         }
 
-                        if (_exampleSymbols.TryGetValue(symbolUi.Symbol.Id, out var examples))
+                        if (ExampleSymbolLinking.ExampleSymbols.TryGetValue(symbolUi.Symbol.Id, out var examples))
                         {
                             ImGui.TextDisabled($"{examples.Count} examples");
                             ImGui.SameLine();

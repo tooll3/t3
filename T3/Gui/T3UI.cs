@@ -30,6 +30,7 @@ namespace T3.Gui
             _projectSettings = new ProjectSettings();
             BeatTiming = new BeatTiming();
             WindowManager = new WindowManager();
+            ExampleSymbolLinking.UpdateExampleLinks();
         }
 
         public void Draw()

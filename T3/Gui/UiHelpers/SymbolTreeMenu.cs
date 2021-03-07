@@ -2,7 +2,9 @@
 using ImGuiNET;
 using System.Runtime.InteropServices;
 using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
+using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using T3.Gui.Windows;
 
@@ -71,27 +73,7 @@ namespace T3.Gui.UiHelpers
                     //_selectedSymbol = symbol;
                 }
 
-                if (ImGui.IsItemActive())
-                {
-                    if (ImGui.BeginDragDropSource())
-                    {
-                        if (_dropData == new IntPtr(0))
-                        {
-                            _guidSting = symbol.Id + "|";
-                            _dropData = Marshal.StringToHGlobalUni(_guidSting);
-                            T3Ui.DraggingIsInProgress = true;
-                        }
-
-                        ImGui.SetDragDropPayload("Symbol", _dropData, (uint)(_guidSting.Length * sizeof(Char)));
-
-                        ImGui.Button(symbol.Name + " (creating instance)");
-                        ImGui.EndDragDropSource();
-                    }
-                }
-                else if(ImGui.IsItemDeactivated())
-                {
-                    _dropData = new IntPtr(0);
-                }
+                HandleDragAndDropForSymbolItem(symbol);
                 
                 if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
                 {
@@ -110,10 +92,49 @@ namespace T3.Gui.UiHelpers
                     }
                 }
 
+                if (ExampleSymbolLinking.ExampleSymbols.TryGetValue(symbol.Id, out var examples))
+                {
+                    ImGui.PushFont(Fonts.FontSmall);
+                    ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+                    for (var index = 0; index < examples.Count; index++)
+                    {
+                        var exampleId = examples[index];
+                        ImGui.SameLine();
+                        ImGui.Button($"EXAMPLE");
+                        HandleDragAndDropForSymbolItem(SymbolRegistry.Entries[exampleId]);
+                    }
+                    ImGui.PopStyleVar();
+                    ImGui.PopFont();
+                }
 
                 ImGui.PopStyleColor(4);
             }
             ImGui.PopID();
+        }
+
+        private static void HandleDragAndDropForSymbolItem(Symbol symbol)
+        {
+            if (ImGui.IsItemActive())
+            {
+                if (ImGui.BeginDragDropSource())
+                {
+                    if (_dropData == new IntPtr(0))
+                    {
+                        _guidSting = symbol.Id + "|";
+                        _dropData = Marshal.StringToHGlobalUni(_guidSting);
+                        T3Ui.DraggingIsInProgress = true;
+                    }
+
+                    ImGui.SetDragDropPayload("Symbol", _dropData, (uint)(_guidSting.Length * sizeof(Char)));
+
+                    ImGui.Button(symbol.Name + " (creating instance)");
+                    ImGui.EndDragDropSource();
+                }
+            }
+            else if (ImGui.IsItemDeactivated())
+            {
+                _dropData = new IntPtr(0);
+            }
         }
 
         private static readonly NamespaceTreeNode TreeNode = new NamespaceTreeNode(NamespaceTreeNode.RootNodeId);
