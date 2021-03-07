@@ -782,9 +782,12 @@ namespace T3.Gui.Graph
                         var sourceOp =  graphCanvas.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
                         if (sourceOpInstance != null)
                         {
-                            outputDefinition = sourceOpInstance.Symbol.OutputDefinitions.Single(outDef => outDef.Id == connection.SourceSlotId);
-                            output = sourceOp.Outputs[connection.SourceSlotId];
-                            outputSlot = sourceOpInstance.Outputs.Single(slot => slot.Id == outputDefinition.Id);
+                            outputDefinition = sourceOpInstance.Symbol.OutputDefinitions.SingleOrDefault(outDef => outDef.Id == connection.SourceSlotId);
+                            if (outputDefinition != null && sourceOp != null)
+                            {
+                                output = sourceOp.Outputs[connection.SourceSlotId];
+                                outputSlot = sourceOpInstance.Outputs.Single(slot => slot.Id == outputDefinition.Id);
+                            }
                         }
 
                         SymbolChild.Input input = null;
