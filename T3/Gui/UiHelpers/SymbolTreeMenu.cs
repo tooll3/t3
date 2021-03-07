@@ -76,6 +76,28 @@ namespace T3.Gui.UiHelpers
                     //_selectedSymbol = symbol;
                 }
 
+                if (ImGui.IsItemActive())
+                {
+                    if (ImGui.BeginDragDropSource())
+                    {
+                        if (_dropData == new IntPtr(0))
+                        {
+                            _guidSting = symbol.Id + "|";
+                            _dropData = Marshal.StringToHGlobalUni(_guidSting);
+                            T3Ui.DraggingIsInProgress = true;
+                        }
+
+                        ImGui.SetDragDropPayload("Symbol", _dropData, (uint)(_guidSting.Length * sizeof(Char)));
+
+                        ImGui.Button(symbol.Name + " (creating instance)");
+                        ImGui.EndDragDropSource();
+                    }
+                }
+                else if(ImGui.IsItemDeactivated())
+                {
+                    _dropData = new IntPtr(0);
+                }
+                
                 if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
                 {
                     if (!string.IsNullOrEmpty(symbolUi.Description))
@@ -93,27 +115,6 @@ namespace T3.Gui.UiHelpers
                     }
                 }
 
-                if (ImGui.IsItemActive())
-                {
-                    if (ImGui.BeginDragDropSource())
-                    {
-                        if (_dropData == new IntPtr(0))
-                        {
-                            _guidSting = symbol.Id.ToString() + "|";
-                            _dropData = Marshal.StringToHGlobalUni(_guidSting);
-                            T3Ui.DraggingIsInProgress = true;
-                        }
-
-                        ImGui.SetDragDropPayload("Symbol", _dropData, (uint)(_guidSting.Length * sizeof(Char)));
-
-                        ImGui.Button(symbol.Name + " (Dropping)");
-                        ImGui.EndDragDropSource();
-                    }
-                }
-                else if(ImGui.IsItemDeactivated())
-                {
-                    _dropData = new IntPtr(0);
-                }
 
                 ImGui.PopStyleColor(4);
             }
