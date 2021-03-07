@@ -55,7 +55,7 @@ namespace T3.Gui.UiHelpers
             }
         }
 
-        private static void DrawSymbolItem(Symbol symbol)
+        public static void DrawSymbolItem(Symbol symbol)
         {
             ImGui.PushID(symbol.Id.GetHashCode());
             {

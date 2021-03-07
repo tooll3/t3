@@ -9,11 +9,10 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
-using T3.Gui.InputUi;
 using T3.Gui.Interaction;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
-using T3.Gui.TypeColors;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows
 {
@@ -44,6 +43,14 @@ namespace T3.Gui.Windows
                 {
                     _selectedSymbol = null;
                 }
+                
+                ImGui.SameLine();
+                if (ImGui.Button("Update"))
+                {
+                    _treeNode.PopulateCompleteTree();
+                    ExampleSymbolLinking.UpdateExampleLinks();
+                }
+                CustomComponents.TooltipForLastItem("Rescans the current symbol tree. This can useful after renaming namespaces.");
 
                 ImGui.Separator();
 
@@ -73,14 +80,14 @@ namespace T3.Gui.Windows
             DrawNode(_treeNode);
         }
 
-        private static Symbol _selectedSymbol = null;
+        
 
         private void DrawList()
         {
             _filter.UpdateIfNecessary();
             foreach (var symbolUi in _filter.MatchingSymbolUis)
             {
-                DrawSymbolItem(symbolUi.Symbol);
+                SymbolTreeMenu.DrawSymbolItem(symbolUi.Symbol);
             }
 
             var showUsages = _filter.MatchingSymbolUis.Count == 1 || _selectedSymbol != null;
@@ -155,7 +162,7 @@ namespace T3.Gui.Windows
         private void StopDrag()
         {
             T3Ui.DraggingIsInProgress = false;
-            _dropData = T3Ui.NotDroppingPointer;
+            //_dropData = T3Ui.NotDroppingPointer;
         }
 
         private void DrawNode(NamespaceTreeNode subtree)
@@ -194,58 +201,20 @@ namespace T3.Gui.Windows
 
         private void DrawNodeItems(NamespaceTreeNode subtree)
         {
-            foreach (var subspace in subtree.Children)
+            // Using a for loop to prevent modification during iteration exception
+            for (var index = 0; index < subtree.Children.Count; index++)
             {
+                var subspace = subtree.Children[index];
                 DrawNode(subspace);
             }
 
-            foreach (var symbol in subtree.Symbols)
+            for (var index = 0; index < subtree.Symbols.ToList().Count; index++)
             {
-                DrawSymbolItem(symbol);
+                var symbol = subtree.Symbols.ToList()[index];
+                SymbolTreeMenu.DrawSymbolItem(symbol);
             }
         }
-
-        private static void DrawSymbolItem(Symbol symbol)
-        {
-            ImGui.PushID(symbol.Id.GetHashCode());
-            {
-                var color = symbol.OutputDefinitions.Count > 0
-                                ? TypeUiRegistry.GetPropertiesForType(symbol.OutputDefinitions[0]?.ValueType).Color
-                                : Color.Gray;
-                ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(color).Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
-                //ImGui.Selectable("", symbol == _selectedSymbol);
-
-                if (ImGui.Button(symbol.Name))
-                {
-                    _selectedSymbol = symbol;
-                }
-
-                if (ImGui.IsItemActive())
-                {
-                    if (ImGui.BeginDragDropSource())
-                    {
-                        if (_dropData == new IntPtr(0))
-                        {
-                            _guidSting = symbol.Id.ToString() + "|";
-                            _dropData = Marshal.StringToHGlobalUni(_guidSting);
-                            T3Ui.DraggingIsInProgress = true;
-                        }
-
-                        ImGui.SetDragDropPayload("Symbol", _dropData, (uint)(_guidSting.Length * sizeof(Char)));
-
-                        ImGui.Button(symbol.Name + "Dropping");
-                        ImGui.EndDragDropSource();
-                    }
-                }
-
-                ImGui.PopStyleColor(4);
-            }
-            ImGui.PopID();
-        }
-
+        
         private void HandleDropTarget(NamespaceTreeNode subtree)
         {
             if (ImGui.BeginDragDropTarget())
@@ -290,9 +259,7 @@ namespace T3.Gui.Windows
         }
 
         private NamespaceTreeNode _treeNode = new NamespaceTreeNode(NamespaceTreeNode.RootNodeId);
-
-        private static IntPtr _dropData = new IntPtr(0);
-        private static string _guidSting;
-        private SymbolFilter _filter = new SymbolFilter();
+        private readonly SymbolFilter _filter = new SymbolFilter();
+        private static Symbol _selectedSymbol;
     }
 }

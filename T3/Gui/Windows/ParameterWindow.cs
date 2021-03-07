@@ -81,9 +81,21 @@ namespace T3.Gui.Windows
 
                 ImGui.PushFont(Fonts.FontSmall);
                 var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+                
                 if (!string.IsNullOrEmpty(symbolUi.Description))
                 {
-                    ImGui.Text(symbolUi.Description);
+                    var desc = symbolUi.Description;
+                    if (ImGui.InputTextMultiline("##name", ref desc, 2000, new Vector2(400, 500), ImGuiInputTextFlags.Multiline))
+                    {
+                        symbolUi.Description = desc;
+                    }
+                }
+                else
+                {
+                    if (ImGui.Button("Add description"))
+                    {
+                        symbolUi.Description = "once upon a time...";
+                    }
                 }
 
                 ImGui.PopFont();
