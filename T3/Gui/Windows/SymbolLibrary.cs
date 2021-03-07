@@ -160,7 +160,7 @@ namespace T3.Gui.Windows
 
         private void DrawNode(NamespaceTreeNode subtree)
         {
-            if (subtree.Name == "root")
+            if (subtree.Name == NamespaceTreeNode.RootNodeId)
             {
                 DrawNodeItems(subtree);
             }
@@ -289,7 +289,7 @@ namespace T3.Gui.Windows
             return new List<Window>();
         }
 
-        private NamespaceTreeNode _treeNode = new NamespaceTreeNode("root");
+        private NamespaceTreeNode _treeNode = new NamespaceTreeNode(NamespaceTreeNode.RootNodeId);
 
         private static IntPtr _dropData = new IntPtr(0);
         private static string _guidSting;

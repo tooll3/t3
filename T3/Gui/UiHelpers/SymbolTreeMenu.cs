@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Numerics;
 using ImGuiNET;
 using System.Runtime.InteropServices;
-using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
-using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using T3.Gui.Windows;
-using UiHelpers;
 
 namespace T3.Gui.UiHelpers
 {
@@ -25,9 +19,10 @@ namespace T3.Gui.UiHelpers
             DrawNodesRecursively(TreeNode);
         }
 
+        
         private static void DrawNodesRecursively(NamespaceTreeNode subtree)
         {
-            if (subtree.Name == "root")
+            if (subtree.Name == NamespaceTreeNode.RootNodeId)
             {
                 DrawContent(subtree);
             }
@@ -121,8 +116,8 @@ namespace T3.Gui.UiHelpers
             ImGui.PopID();
         }
 
-        private static readonly NamespaceTreeNode TreeNode = new NamespaceTreeNode("root");
-
+        private static readonly NamespaceTreeNode TreeNode = new NamespaceTreeNode(NamespaceTreeNode.RootNodeId);
+        
         private static IntPtr _dropData = new IntPtr(0);
         private static string _guidSting;
     }

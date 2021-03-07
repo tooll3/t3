@@ -42,8 +42,8 @@ namespace T3.Gui.Windows
         public void PopulateCompleteTree()
         {
             //_treeNode = new NamespaceTreeNode("root");
-            this.Name = "root";
-            this.Clear();
+            Name = RootNodeId;
+            Clear();
 
             foreach (var symbol in SymbolRegistry.Entries)
             {
@@ -98,5 +98,6 @@ namespace T3.Gui.Windows
         }
 
         public readonly List<Symbol> Symbols = new List<Symbol>();
+        public const string RootNodeId = "root";
     }
 }
