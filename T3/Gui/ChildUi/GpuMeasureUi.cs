@@ -12,14 +12,16 @@ namespace T3.Gui.ChildUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
         {
-            if (!(instance is GpuMeasure measaureInstance))
+            if (!(instance is GpuMeasure measureInstance))
                 return SymbolChildUi.CustomUiResult.None;
 
-            var symbolChild = measaureInstance.Parent.Symbol.Children.Single(c => c.Id == measaureInstance.SymbolChildId);
+            var symbolChild = measureInstance.Parent.Symbol.Children.Single(c => c.Id == measureInstance.SymbolChildId);
             ImGui.PushClipRect(selectableScreenRect.Min, selectableScreenRect.Max, true);
             
             float h = selectableScreenRect.GetHeight();
             var font = h > 50 ? Fonts.FontLarge : h > 25 ? Fonts.FontNormal : Fonts.FontSmall;
+            
+            drawList.AddCircleFilled(selectableScreenRect.GetCenter(), measureInstance.LastMeasureInMs * 5, _color);
 
             ImGui.PushFont(font);
             ImGui.SetCursorScreenPos(selectableScreenRect.Min + new Vector2(10,0));
@@ -29,12 +31,14 @@ namespace T3.Gui.ChildUi
                 ImGui.Text(symbolChild.Name);
             }
 
-            ImGui.Text($"{measaureInstance.LastMeasureInMicroSeconds}µs");
+            ImGui.Text($"{measureInstance.LastMeasureInMicroSeconds}µs");
             ImGui.EndGroup();
             ImGui.PopFont();
             
             ImGui.PopClipRect();
             return SymbolChildUi.CustomUiResult.Rendered;
         }
+
+        private static Color _color = new Color(0.8f, 0.6f, 0.2f, 0.2f);
     }
 }
