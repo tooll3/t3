@@ -371,7 +371,7 @@ namespace T3.Gui.Graph.Interaction
             Close();
         }
 
-        private readonly SymbolFilter _filter = new SymbolFilter();
+        
 
         /// <summary>
         /// required correctly restore original state when closing the browser  
@@ -380,9 +380,9 @@ namespace T3.Gui.Graph.Interaction
         #endregion
 
 
-
+        private readonly SymbolFilter _filter = new SymbolFilter();
+        
         public Vector2 PosOnCanvas { get; private set; }
-
         public Vector2 OutputPositionOnScreen => _posInScreen + _size;
 
         private readonly Vector2 _size = SymbolChildUi.DefaultOpSize;

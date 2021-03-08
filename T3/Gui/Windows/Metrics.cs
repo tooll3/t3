@@ -16,7 +16,7 @@ namespace T3.Gui.Windows
             WatchImgRenderTime.Restart();
             WatchImgRenderTime.Start();
         }
-
+        
         public static void UiRenderingCompleted()
         {
             WatchImgRenderTime.Stop();
@@ -25,7 +25,6 @@ namespace T3.Gui.Windows
 
         public static void Draw()
         {
-            //RenderDurationPlot.Draw(_uiRenderDurationMs);
             RenderDurationPlot.Draw(_uiRenderDurationMs);
             DeltaTime.Draw(ImGui.GetIO().DeltaTime * 1000);
             ImGui.Text("Vertices:" + ImGui.GetIO().MetricsRenderVertices);
@@ -37,13 +36,25 @@ namespace T3.Gui.Windows
         private const float ExpectedFramerate = 60;
         private const float ExpectedFrameDurationMs = 1 / ExpectedFramerate * 1000;
 
-        private static float _peakUiRenderDurationMs = 0;
-        private static float _peakDeltaTimeMs = 0;
+        private static float _peakUiRenderDurationMs;
+        private static float _peakDeltaTimeMs;
 
-        public static void DrawRenderPerformanceGraph(Vector2 screenPosition)
+        public static void DrawRenderPerformanceGraph()
         {
+            var offsetFromAppMenu = new Vector2(100, 6);
+            var screenPosition = ImGui.GetCursorScreenPos() + offsetFromAppMenu;
+            
             const float barWidth = 120;
             const float barHeight = 3;
+            ImGui.SameLine(0, offsetFromAppMenu.X);
+            if (ImGui.InvisibleButton("performanceGraph", new Vector2(barWidth, ImGui.GetFrameHeight())))
+            {
+                SettingsWindow.UseVSync = !SettingsWindow.UseVSync;
+            }
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.SetTooltip($"UI: {_peakUiRenderDurationMs:0.0}ms\nRender: {_peakDeltaTimeMs:0.0}ms\n VSync: {(SettingsWindow.UseVSync?"On":"Off")} (Click to toggle)");
+            }
             const float normalFramerateLevelAt = 0.5f;
             const float frameTimingScaleFactor = barWidth / normalFramerateLevelAt / ExpectedFramerate;
 

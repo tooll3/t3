@@ -133,7 +133,7 @@ namespace T3.Gui
 
                 WindowManager.DrawWindowsMenu();
 
-                T3Metrics.DrawRenderPerformanceGraph(ImGui.GetCursorScreenPos() + new Vector2(100,6));
+                T3Metrics.DrawRenderPerformanceGraph();
                 _statusErrorLine.Draw();
 
                 ImGui.EndMainMenuBar();

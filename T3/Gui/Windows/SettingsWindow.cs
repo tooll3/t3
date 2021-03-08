@@ -13,9 +13,8 @@ namespace T3.Gui.Windows
         {
             Config.Title = "Settings";
         }
-        public static bool UseVSync => _vSync;
 
-        private static bool _vSync = true;
+        public static bool UseVSync = true;
 
         public static bool WindowRegionsVisible;
         public static bool ItemRegionsVisible;
@@ -65,7 +64,7 @@ namespace T3.Gui.Windows
             
             ImGui.Separator();
             ImGui.Text("Debug options...");
-            ImGui.Checkbox("VSync", ref _vSync);
+            ImGui.Checkbox("VSync", ref UseVSync);
             ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
             ImGui.Checkbox("Show Item Regions", ref ItemRegionsVisible);
             
