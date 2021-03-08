@@ -144,7 +144,8 @@ namespace T3.Gui.Graph
                     && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
                     && !GraphCanvas.Current._symbolBrowser._isOpen)
                 {
-                    SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
+                    if(UserSettings.Config.SmartGroupDragging)
+                        SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
 
                     //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                     T3Ui.AddHoveredId(childUi.SymbolChild.Id);
@@ -197,11 +198,19 @@ namespace T3.Gui.Graph
                 // A horrible work around to prevent exception because CompositionOp changed during drawing.
                 // A better solution would defer setting the compositionOp to the beginning of next frame.
                 var justOpenedChild = false;
-                if (hovered && ImGui.IsMouseDoubleClicked(0) && !RenameInstanceOverlay.IsOpen && ImGui.IsWindowFocused())
+                if (hovered && ImGui.IsMouseDoubleClicked(0) && !RenameInstanceOverlay.IsOpen)
                 {
-                    GraphCanvas.Current.SetCompositionToChildInstance(instance);
-                    ImGui.CloseCurrentPopup();
-                    justOpenedChild = true;
+                    Log.Debug("double click");
+                    if (ImGui.IsWindowFocused())
+                    {
+                        GraphCanvas.Current.SetCompositionToChildInstance(instance);
+                        ImGui.CloseCurrentPopup();
+                        justOpenedChild = true;
+                    }
+                    else
+                    {
+                        Log.Debug("but not focused");
+                    }
                 }
 
                 // Show Parameter window as context menu
@@ -211,6 +220,7 @@ namespace T3.Gui.Graph
                 if (isClicked
                     && !clickWasDrag
                     && !ParameterWindow.IsAnyInstanceVisible()
+                    && !ImGui.GetIO().KeyShift
                     && !justOpenedChild
                     && string.IsNullOrEmpty(T3Ui.OpenedPopUpName)
                     && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0)
