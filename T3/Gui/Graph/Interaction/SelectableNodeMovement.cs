@@ -414,7 +414,8 @@ namespace T3.Gui.Graph.Interaction
                                      select con).Distinct().ToArray();
 
             // Sort the incoming operators into the correct input order and
-            // ignore operators that can't be auto-layouted because their outputs have connection to multiple operators
+            // ignore operators that can't be auto-layouted because their outputs
+            // have connection to multiple operators
             var sortedInputOps = new List<SymbolChildUi>();
             foreach (var inputDef in childUi.SymbolChild.Symbol.InputDefinitions)
             {
@@ -423,8 +424,6 @@ namespace T3.Gui.Graph.Interaction
                 
                 foreach (var op in connectedOpsForInput)
                 {
-                    //var connection = matchingConnections.Single(c4 => c4.SourceParentOrChildId == op.Id && c4.TargetSlotId == inputDef.Id);
-                    //var output = op.SymbolChild.Symbol.OutputDefinitions.Single(output2 => output2.Id == connection.SourceSlotId);
                     var connectionsFromOutput = compositionSymbol.Connections.Where(c5 => c5.SourceParentOrChildId == op.Id
                                                                                           && c5.TargetParentOrChildId != childUi.Id);
                     var opHasUnpredictableConnections = connectionsFromOutput.Any();
@@ -448,7 +447,7 @@ namespace T3.Gui.Graph.Interaction
                     verticalOffset += thumbnailPadding;
                 
                 var moveCommand = new ChangeSelectableCommand(compositionSymbol.Id, new List<ISelectableNode>() {connectedChildUi}); 
-                connectedChildUi.PosOnCanvas = childUi.PosOnCanvas + new Vector2(- (childUi.Size.X + SnapPadding.X + 20),verticalOffset);
+                connectedChildUi.PosOnCanvas = childUi.PosOnCanvas + new Vector2(- (childUi.Size.X + SnapPadding.X),verticalOffset);
                 moveCommand.StoreCurrentValues();
                 commands.Add(moveCommand);
 
@@ -479,7 +478,7 @@ namespace T3.Gui.Graph.Interaction
             SnappedToLeft,
         }
 
-        public static readonly Vector2 SnapPadding = new Vector2(20, 20);
+        public static readonly Vector2 SnapPadding = new Vector2(40, 20);
 
         private static readonly Vector2[] SnapOffsetsInCanvas =
             {
