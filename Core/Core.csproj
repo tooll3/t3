@@ -133,8 +133,6 @@
     <Compile Include="Operator\Interfaces\ICamera.cs" />
     <Compile Include="Operator\Interfaces\IDescriptiveGraphNode.cs" />
     <Compile Include="Operator\Interfaces\ITransformable.cs" />
-    <Compile Include="Operator\Presets\PresetRegistry.cs" />
-    <Compile Include="Operator\Presets\SymbolPresetLibrary.cs" />
     <Compile Include="Operator\Slots\DirtyFlag.cs" />
     <Compile Include="Operator\Slots\DirtyFlagTrigger.cs" />
     <Compile Include="Operator\Slots\IInputSlot.cs" />

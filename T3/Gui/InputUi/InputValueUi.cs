@@ -2,16 +2,12 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using T3.Core;
-using T3.Core.Animation;
-using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Operator.Presets;
 using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
@@ -323,17 +319,7 @@ namespace T3.Gui.InputUi
 
                                                             if (ImGui.MenuItem("Parameters settings"))
                                                                 editState = InputEditStateFlags.ShowOptions;
-
-                                                            if (ImGui.MenuItem("Save in Preset"))
-                                                            {
-                                                                var composition = SelectionManager.GetSelectedComposition();
-                                                                if (composition == null)
-                                                                {
-                                                                    composition = inputSlot.Parent.Parent;
-                                                                }
-
-                                                                PresetRegistry.AddInputToCompositionPreset(composition, inputSlot.Parent, input);
-                                                            }
+                                                            
                                                         });
 
                     ImGui.PopStyleVar();
