@@ -128,7 +128,6 @@ namespace T3.Gui.Windows.TimeLine
 
         private void DrawAllLayers(IReadOnlyCollection<ITimeClip> clips)
         {
-            FoundClipWithinCurrentTime = false;
             if (clips.Count == 0)
                 return;
 
@@ -158,14 +157,8 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight));
         }
 
-        /// <summary>
-        ///  This will updated during redraw and thus has one frame delay
-        /// </summary>
-        public bool FoundClipWithinCurrentTime;
-
         private void DrawClip(ITimeClip timeClip, ImRect layerArea, int minLayerIndex)
         {
-            FoundClipWithinCurrentTime |= timeClip.TimeRange.Contains(_playback.TimeInBars);
 
             var xStartTime = TimeLineCanvas.Current.TransformX(timeClip.TimeRange.Start) + 1;
             var xEndTime = TimeLineCanvas.Current.TransformX(timeClip.TimeRange.End);
@@ -188,6 +181,7 @@ namespace T3.Gui.Windows.TimeLine
 
             var isSelected = ClipSelection.SelectedClips.Contains(timeClip);
 
+
             var color = new Color(0.8f, 0.8f, 0.4f, 0.4f);
             _drawList.AddRectFilled(position, position + clipSize - new Vector2(1, 0), color);
 
@@ -195,11 +189,15 @@ namespace T3.Gui.Windows.TimeLine
             var timeStretched = Math.Abs(timeClip.TimeRange.Duration - timeClip.SourceRange.Duration) > 0.001;
             if (timeStretched)
             {
-                _drawList.AddRectFilled(position, position + new Vector2(clipSize.X - 1, 2), Color.Red);
+                _drawList.AddRectFilled(position + new Vector2(0, clipSize.Y - 2), 
+                                        position + new Vector2(clipSize.X - 1, clipSize.Y), 
+                                        Color.Red);
             }
             else if (timeRemapped)
             {
-                _drawList.AddRectFilled(position, position + new Vector2(clipSize.X - 1, 2), Color.Orange);
+                _drawList.AddRectFilled(position + new Vector2(0, clipSize.Y - 2), 
+                                        position + new Vector2(clipSize.X - 1, clipSize.Y), 
+                                        Color.Orange);
             }
 
             if (isSelected)
@@ -214,6 +212,28 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.PopFont();
             ImGui.PopClipRect();
 
+            if (isSelected && timeRemapped && ClipSelection.Count == 1)
+            {
+                //var verticalOffset = 100;
+                var verticalOffset = ImGui.GetContentRegionMax().Y + ImGui.GetWindowPos().Y - position.Y - LayerHeight;
+                var horizontalOffset =  TimeLineCanvas.Current.TransformDirection(new Vector2(timeClip.SourceRange.Start - timeClip.TimeRange.Start,0)).X;
+                var startPosition = position + new Vector2(0, LayerHeight);
+                _drawList.AddBezierCurve(startPosition, 
+                                         startPosition + new Vector2(0,verticalOffset),
+                                         startPosition +  new Vector2(horizontalOffset,0),
+                                         startPosition +  new Vector2(horizontalOffset,verticalOffset), 
+                                         _timeRemappingColor,1);
+                
+                horizontalOffset =  TimeLineCanvas.Current.TransformDirection(new Vector2(timeClip.SourceRange.End - timeClip.TimeRange.End,0)).X;
+                var endPosition = position + new Vector2(clipSize.X, LayerHeight);
+                _drawList.AddBezierCurve(endPosition, 
+                                         endPosition + new Vector2(0,verticalOffset),
+                                         endPosition +  new Vector2(horizontalOffset,0),
+                                         endPosition +  new Vector2(horizontalOffset,verticalOffset), 
+                                         _timeRemappingColor,1);
+                
+            }
+            
             ImGui.SetCursorScreenPos(showSizeHandles ? (position + _handleOffset) : position);
 
             var wasClicked = ImGui.InvisibleButton("body", bodySize);
@@ -271,7 +291,7 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.SetCursorScreenPos(position);
             var aHandleClicked = ImGui.InvisibleButton("startHandle", handleSize);
-            if (ImGui.IsItemHovered())
+            if (ImGui.IsItemHovered() || ImGui.IsItemActive())
             {
                 _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.White);
                 _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Black);
@@ -281,6 +301,11 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.SetCursorScreenPos(position + new Vector2(bodyWidth + HandleWidth, 0));
             aHandleClicked |= ImGui.InvisibleButton("endHandle", handleSize);
+            if (ImGui.IsItemHovered() || ImGui.IsItemActive())
+            {
+                _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.White);
+                _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Black);
+            }
             HandleDragging(timeClip, isSelected, false, HandleDragMode.End, position);
 
             if (aHandleClicked)
@@ -576,6 +601,7 @@ namespace T3.Gui.Windows.TimeLine
         private Instance _compositionOp;
         private readonly ValueSnapHandler _snapHandler;
         private Playback _playback;
+        private readonly Color _timeRemappingColor = Color.Orange.Fade(0.5f);
 
         /// <summary>
         /// Maps selection of <see cref="ITimeClip"/>s

@@ -8,16 +8,18 @@ namespace T3.Gui.Windows.TimeLine
 {
     public class ClipRange : IValueSnapAttractor
     {
+        /// <summary>
+        /// Visualizes the mapped time area within a <see cref="TimeClip"/> content  
+        /// </summary>
         public void Draw(TimeLineCanvas canvas, ITimeClip timeClip, ImDrawListPtr drawlist, ValueSnapHandler snapHandler)
         {
             if (timeClip == null)
                 return;
 
             _timeClip = timeClip;
-            
-            //_playback = playback;
 
-            ImGui.PushStyleColor(ImGuiCol.Button, TimeRangeMarkerColor.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Button, _timeRangeMarkerColor.Rgba);
+            var manipulationEnabled = ImGui.GetIO().KeyAlt;
 
             // Range start
             {
@@ -27,32 +29,35 @@ namespace T3.Gui.Windows.TimeLine
                 // Shade outside
                 drawlist.AddRectFilled(
                                        new Vector2(0, 0),
-                                       new Vector2(xRangeStart, TimeRangeShadowSize.Y),
-                                       TimeRangeOutsideColor);
+                                       new Vector2(xRangeStart, _timeRangeShadowSize.Y),
+                                       _timeRangeOutsideColor);
 
                 // Shadow
                 drawlist.AddRectFilled(
-                                       rangeStartPos - new Vector2(TimeRangeShadowSize.X - 1, 0),
-                                       rangeStartPos + new Vector2(0, TimeRangeShadowSize.Y),
-                                       TimeRangeShadowColor);
+                                       rangeStartPos - new Vector2(_timeRangeShadowSize.X - 1, 0),
+                                       rangeStartPos + new Vector2(0, _timeRangeShadowSize.Y),
+                                       _timeRangeShadowColor);
 
                 // Line
-                drawlist.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), TimeRangeShadowColor);
+                drawlist.AddRectFilled(rangeStartPos, rangeStartPos + new Vector2(1, 9999), _timeRangeShadowColor);
 
-                SetCursorToBottom(
-                                  xRangeStart - TimeRangeHandleSize.X,
-                                  TimeRangeHandleSize.Y);
-
-                ImGui.Button("##StartPos", TimeRangeHandleSize);
-
-                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                if (manipulationEnabled)
                 {
-                    var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
-                    snapHandler.CheckForSnapping(ref newTime, canvas.Scale.X, new List<IValueSnapAttractor> {this});
-                    var delta = newTime - timeClip.SourceRange.Start;
-                    var speed =  timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
-                    timeClip.SourceRange.Start = newTime;
-                    timeClip.TimeRange.Start += delta * speed;
+                    SetCursorToBottom(
+                                      xRangeStart - _timeRangeHandleSize.X,
+                                      _timeRangeHandleSize.Y);
+
+                    ImGui.Button("##StartPos", _timeRangeHandleSize);
+
+                    if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                    {
+                        var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
+                        snapHandler.CheckForSnapping(ref newTime, canvas.Scale.X, new List<IValueSnapAttractor> { this });
+                        var delta = newTime - timeClip.SourceRange.Start;
+                        var speed = timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
+                        timeClip.SourceRange.Start = newTime;
+                        timeClip.TimeRange.Start += delta * speed;
+                    }
                 }
             }
 
@@ -66,32 +71,35 @@ namespace T3.Gui.Windows.TimeLine
                 if (rangeEndX < windowMaxX)
                     drawlist.AddRectFilled(
                                            rangeEndPos,
-                                           rangeEndPos + new Vector2(windowMaxX - rangeEndX, TimeRangeShadowSize.Y),
-                                           TimeRangeOutsideColor);
+                                           rangeEndPos + new Vector2(windowMaxX - rangeEndX, _timeRangeShadowSize.Y),
+                                           _timeRangeOutsideColor);
 
                 // Shadow
                 drawlist.AddRectFilled(
-                                       rangeEndPos,
-                                       rangeEndPos + TimeRangeShadowSize,
-                                       TimeRangeShadowColor);
+                                       rangeEndPos + new Vector2(1,0),
+                                       rangeEndPos + _timeRangeShadowSize,
+                                       _timeRangeShadowColor);
 
                 // Line
-                drawlist.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), TimeRangeShadowColor);
+                drawlist.AddRectFilled(rangeEndPos, rangeEndPos + new Vector2(1, 9999), _timeRangeShadowColor);
 
-                SetCursorToBottom(
-                                  rangeEndX,
-                                  TimeRangeHandleSize.Y);
-
-                ImGui.Button("##EndPos", TimeRangeHandleSize);
-
-                if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                if (manipulationEnabled)
                 {
-                    var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
-                    snapHandler.CheckForSnapping(ref newTime, canvas.Scale.X, new List<IValueSnapAttractor> {this});
-                    var delta = newTime - timeClip.SourceRange.End;
-                    var speed =  timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
-                    timeClip.SourceRange.End = newTime;
-                    timeClip.TimeRange.End += delta * speed;
+                    SetCursorToBottom(
+                                      rangeEndX,
+                                      _timeRangeHandleSize.Y);
+
+                    ImGui.Button("##EndPos", _timeRangeHandleSize);
+
+                    if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                    {
+                        var newTime = canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
+                        snapHandler.CheckForSnapping(ref newTime, canvas.Scale.X, new List<IValueSnapAttractor> { this });
+                        var delta = newTime - timeClip.SourceRange.End;
+                        var speed = timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
+                        timeClip.SourceRange.End = newTime;
+                        timeClip.TimeRange.End += delta * speed;
+                    }
                 }
             }
 
@@ -105,21 +113,20 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SetCursorScreenPos(p);
         }
 
-        private static readonly Vector2 TimeRangeHandleSize = new Vector2(10, 20);
-        private static readonly Vector2 TimeRangeShadowSize = new Vector2(5, 9999);
-        private static readonly Color TimeRangeShadowColor = new Color(0, 0, 0, 0.5f);
-        private static readonly Color TimeRangeOutsideColor = new Color(0.0f, 0.0f, 0.0f, 0.3f);
-        private static readonly Color TimeRangeMarkerColor = new Color(1f, 1, 1f, 0.3f);
+        private static readonly Vector2 _timeRangeHandleSize = new Vector2(10, 20);
+        private static readonly Vector2 _timeRangeShadowSize = new Vector2(1, 9999);
+        private static readonly Color _timeRangeShadowColor = Color.Orange.Fade(0.2f);
+        private static readonly Color _timeRangeOutsideColor = Color.Orange.Fade(0.1f);
+        private static readonly Color _timeRangeMarkerColor = Color.Orange.Fade(0.5f);
 
         //private static Playback _playback;
         private static ITimeClip _timeClip;
         #region implement snapping interface -----------------------------------
-
         SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
         {
             if (_timeClip == null)
                 return null;
-            
+
             SnapResult bestSnapResult = null;
 
             ValueSnapHandler.CheckForBetterSnapping(targetTime, _timeClip.SourceRange.Start, canvasScale, ref bestSnapResult);

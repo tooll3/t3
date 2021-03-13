@@ -219,5 +219,10 @@ namespace T3.Gui
                 return new Vector3(hue, sat, lum);
             }
         }
+
+        public Color Fade(float f)
+        {
+            return new Color(Rgba.X, Rgba.Y, Rgba.Z, Rgba.W * f);
+        }
     }
 }

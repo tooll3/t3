@@ -39,7 +39,6 @@ namespace T3.Gui.Windows.TimeLine
             SnapHandlerForU.AddSnapAttractor(LayersArea);
         }
 
-        public bool FoundTimeClipForCurrentTime => LayersArea.FoundClipWithinCurrentTime;
 
         public void Draw(Instance compositionOp)
         {
