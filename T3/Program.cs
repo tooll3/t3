@@ -66,7 +66,9 @@ namespace T3
 
         protected override void WndProc(ref System.Windows.Forms.Message m)
         {
-            base.WndProc(ref m);
+            var filterAltKeyToPreventFocusLoss = (m.Msg == WM_SYSKEYDOWN ||m.Msg == WM_SYSKEYUP)  && (int)m.WParam == VK_ALT;
+            if(!filterAltKeyToPreventFocusLoss)
+                base.WndProc(ref m);
 
             ImGuiIOPtr io = ImGui.GetIO();
             switch (m.Msg)
