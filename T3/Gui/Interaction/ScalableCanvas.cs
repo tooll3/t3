@@ -47,10 +47,11 @@ namespace T3.Gui.Interaction
             Scale = scaleT;
             Scroll = pp1;
 
-            var completed = Math.Abs(Scroll.X - ScrollTarget.X) < 0.5f
-                            && Math.Abs(Scroll.Y - ScrollTarget.Y) < 0.5f
-                            && Math.Abs(Scale.X - ScaleTarget.X) < 0.005f
-                            && Math.Abs(Scale.Y - ScaleTarget.Y) < 0.005f;
+            
+            var completed = Math.Abs(Scroll.X - ScrollTarget.X) < 1f
+                            && Math.Abs(Scroll.Y - ScrollTarget.Y) < 1f
+                            && Math.Abs(Scale.X - ScaleTarget.X) < 0.05f
+                            && Math.Abs(Scale.Y - ScaleTarget.Y) < 0.05f;
 
             if (completed)
             {
@@ -86,7 +87,8 @@ namespace T3.Gui.Interaction
         /// </summary>
         public virtual Vector2 TransformPosition(Vector2 posOnCanvas)
         {
-            return posOnCanvas * Scale + Scroll + WindowPos;
+            var v = posOnCanvas * Scale + Scroll + WindowPos;
+            return new Vector2((int)v.X, (int)v.Y);
         }
 
         public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
