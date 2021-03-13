@@ -23,6 +23,9 @@ namespace T3.Gui.Windows.TimeLine
 
         public void Draw(ImDrawListPtr drawlist)
         {
+            if (!_isDragging && !ImGui.GetIO().KeyAlt)
+                return;
+            
             _selectionTimeRange = _timeLineCanvas.GetSelectionTimeRange();
             if (!_selectionTimeRange.IsValid || _selectionTimeRange.Duration <= 0)
                 return;
