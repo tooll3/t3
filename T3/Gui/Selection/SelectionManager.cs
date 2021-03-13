@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
@@ -45,12 +44,6 @@ namespace T3.Gui.Selection
             AddSelection(node);
         }
 
-        public static void SetSelection(SymbolChildUi node, Instance instance)
-        {
-            Clear();
-            AddSelection(node, instance);
-        }
-
         public static void AddSelection(ISelectableNode node)
         {
             _selectedComposition = null;
@@ -60,26 +53,45 @@ namespace T3.Gui.Selection
             Selection.Add(node);
         }
 
-        public static void AddSelection(SymbolChildUi node, Instance instance)
+        /// <summary>
+        /// Replaces current selection with symbol child
+        /// </summary>
+        public static void SetSelectionToChildUi(SymbolChildUi node, Instance instance)
+        {
+            Clear();
+            AddSymbolChildToSelection(node, instance);
+        }
+
+        public static void SelectCompositionChild(Instance compositionOp, Guid id, bool replaceSelection = true)
+        {
+            if (!NodeOperations.TryGetUiAndInstanceInComposition(id, compositionOp, out var childUi, out var instance))
+                return;
+            
+            if (replaceSelection)
+            {
+                Clear();
+            }
+
+            AddSymbolChildToSelection(childUi, instance);
+        }
+
+        public static void AddSymbolChildToSelection(SymbolChildUi childUi, Instance instance)
         {
             _selectedComposition = null;
-            if (Selection.Contains(node))
+            if (Selection.Contains(childUi))
                 return;
 
-            Selection.Add(node);
+            Selection.Add(childUi);
             if (instance != null)
             {
-                ChildUiInstanceIdPaths[node] = NodeOperations.BuildIdPathForInstance(instance);
+                ChildUiInstanceIdPaths[childUi] = NodeOperations.BuildIdPathForInstance(instance);
                 if (instance is ITransformable transformable)
                 {
                     transformable.TransformCallback = TransformGizmoHandling.TransformCallback;
-                    TransformGizmoHandling.RegisterSelectedTransformable(node, transformable);
-                    
+                    TransformGizmoHandling.RegisterSelectedTransformable(childUi, transformable);
                 }
             }
         }
-
-
 
         public static IEnumerable<T> GetSelectedNodes<T>() where T : ISelectableNode
         {
@@ -100,9 +112,7 @@ namespace T3.Gui.Selection
             return Selection.Count > 0;
         }
 
-
-
-        public static Instance GetSelectedInstance()
+        public static Instance GetFirstSelectedInstance()
         {
             if (Selection.Count == 0)
                 return _selectedComposition;
@@ -141,7 +151,7 @@ namespace T3.Gui.Selection
             return instanceFromIdPath?.Parent;
         }
 
-        public static IEnumerable<SymbolChildUi> GetSelectedSymbolChildUis()
+        public static IEnumerable<SymbolChildUi> GetSelectedChildUis()
         {
             var result = new List<SymbolChildUi>();
             foreach (var s in Selection)
@@ -155,7 +165,19 @@ namespace T3.Gui.Selection
             return result;
         }
 
-        public static void RemoveSelection(ISelectableNode node, Instance instance)
+        public static void DeselectCompositionChild(Instance compositionOp, Guid symbolChildId)
+        {
+            if (!NodeOperations.TryGetUiAndInstanceInComposition(symbolChildId, compositionOp, out var childUi, out var instance))
+                return;
+
+            Selection.Remove(childUi);
+            if (instance is ITransformable transformable)
+            {
+                TransformGizmoHandling.ClearDeselectedTransformableNode(transformable);
+            }
+        }
+
+        public static void DeselectNode(ISelectableNode node, Instance instance)
         {
             Selection.Remove(node);
             if (instance is ITransformable transformable)
@@ -164,18 +186,14 @@ namespace T3.Gui.Selection
             }
         }
 
-        
         public static Instance GetInstanceForSymbolChildUi(SymbolChildUi symbolChildUi)
         {
             var idPath = ChildUiInstanceIdPaths[symbolChildUi];
             return (NodeOperations.GetInstanceFromIdPath(idPath));
         }
 
-
-        
-        
         private static Instance _selectedComposition;
-        private static readonly List<ISelectableNode> Selection = new List<ISelectableNode>();
+        public static readonly List<ISelectableNode> Selection = new List<ISelectableNode>();
         private static readonly Dictionary<SymbolChildUi, List<Guid>> ChildUiInstanceIdPaths = new Dictionary<SymbolChildUi, List<Guid>>();
     }
 }

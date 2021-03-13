@@ -143,10 +143,10 @@ namespace T3.Gui.InputUi
                             // Try to find instance
                             if (sourceUi is SymbolChildUi sourceSymbolChildUi)
                             {
-                                var selectedInstance = SelectionManager.GetSelectedInstance();
+                                var selectedInstance = SelectionManager.GetFirstSelectedInstance();
                                 var parent = selectedInstance.Parent;
                                 var selectionTargetInstance = parent.Children.Single(instance => instance.SymbolChildId == sourceUi.Id);
-                                SelectionManager.SetSelection(sourceSymbolChildUi, selectionTargetInstance);
+                                SelectionManager.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
                                 FitViewToSelectionHandling.FitViewToSelection();
                             }
                         }

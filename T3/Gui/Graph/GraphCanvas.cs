@@ -127,7 +127,7 @@ namespace T3.Gui.Graph
             var previousCompChildUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis
                                                       .SingleOrDefault(childUi => childUi.Id == previousCompositionOp.SymbolChildId);
             if (previousCompChildUi != null)
-                SelectionManager.AddSelection(previousCompChildUi, previousCompositionOp);
+                SelectionManager.AddSymbolChildToSelection(previousCompChildUi, previousCompositionOp);
         }
 
         private Scope GuessViewProperties()
@@ -294,7 +294,7 @@ namespace T3.Gui.Graph
                         Log.Warning("Can't find instance");
                     }
 
-                    SelectionManager.AddSelection(symbolChildUi, instance);
+                    SelectionManager.AddSymbolChildToSelection(symbolChildUi, instance);
                 }
                 else
                 {
@@ -353,7 +353,7 @@ namespace T3.Gui.Graph
                         var childUi = NodeOperations.CreateInstance(symbol, parent, posOnCanvas);
 
                         var instance = CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
-                        SelectionManager.SetSelection(childUi, instance);
+                        SelectionManager.SetSelectionToChildUi(childUi, instance);
 
                         T3Ui.DraggingIsInProgress = false;
                     }
@@ -660,7 +660,7 @@ namespace T3.Gui.Graph
                     {
                         var newChildUi = compositionSymbolUi.ChildUis.Single(c => c.Id == id);
                         var instance = CompositionOp.Children.Single(c2 => c2.SymbolChildId == id);
-                        SelectionManager.AddSelection(newChildUi, instance);
+                        SelectionManager.AddSymbolChildToSelection(newChildUi, instance);
                     }
                 }
             }

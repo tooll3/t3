@@ -111,7 +111,7 @@ namespace T3.Gui.Graph.Interaction
 
                         if (node is SymbolChildUi childUi2)
                         {
-                            SelectionManager.AddSelection(childUi2, instance);
+                            SelectionManager.AddSymbolChildToSelection(childUi2, instance);
                         }
                         else
                         {
@@ -122,7 +122,7 @@ namespace T3.Gui.Graph.Interaction
                     {
                         if (ImGui.GetIO().KeyShift)
                         {
-                            SelectionManager.RemoveSelection(node, instance);
+                            SelectionManager.DeselectNode(node, instance);
                         }
                     }
                 }
@@ -138,7 +138,7 @@ namespace T3.Gui.Graph.Interaction
             {
                 if (node is SymbolChildUi childUi2)
                 {
-                    SelectionManager.SetSelection(childUi2, instance);
+                    SelectionManager.SetSelectionToChildUi(childUi2, instance);
                 }
                 else
                 {
@@ -383,7 +383,7 @@ namespace T3.Gui.Graph.Interaction
             var commands = new List<ICommand>();
             
             var freshlySnapped = new List<ISelectableNode>();
-            foreach (var n in SelectionManager.GetSelectedSymbolChildUis())
+            foreach (var n in SelectionManager.GetSelectedChildUis())
             {
                 RecursivelyAlignChildren(n, commands, freshlySnapped);
             }

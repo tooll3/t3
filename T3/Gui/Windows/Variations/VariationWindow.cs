@@ -35,7 +35,7 @@ namespace T3.Gui.Windows.Variations
             var match = true;
             foreach (var param in variation.ValuesForParameters.Keys)
             {
-                if (!SelectionManager.GetSelectedSymbolChildUis().Contains(param.SymbolChildUi))
+                if (!SelectionManager.GetSelectedChildUis().Contains(param.SymbolChildUi))
                 {
                     match = false;
                 }
@@ -70,7 +70,7 @@ namespace T3.Gui.Windows.Variations
             ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.1f, 0, 100);
             _compositionSymbolId = SelectionManager.GetCompositionForSelection()?.SymbolChildId ?? Guid.Empty;
 
-            var selectedSymbolChildUis = SelectionManager.GetSelectedSymbolChildUis();
+            var selectedSymbolChildUis = SelectionManager.GetSelectedChildUis();
 
             // Remove no longer selected parameters
             var symbolChildUis = selectedSymbolChildUis as SymbolChildUi[] ?? selectedSymbolChildUis.ToArray();
@@ -377,7 +377,7 @@ namespace T3.Gui.Windows.Variations
                 VariationParameters.Add(param);
                 if (!alreadyAdded.Contains(param.SymbolChildUi))
                 {
-                    SelectionManager.AddSelection(param.SymbolChildUi, NodeOperations.GetInstanceFromIdPath(param.InstanceIdPath));
+                    SelectionManager.AddSymbolChildToSelection(param.SymbolChildUi, NodeOperations.GetInstanceFromIdPath(param.InstanceIdPath));
                     alreadyAdded.Add(param.SymbolChildUi);
                 }
             }

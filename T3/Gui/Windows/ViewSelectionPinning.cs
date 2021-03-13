@@ -51,7 +51,7 @@ namespace T3.Gui.Windows
                         _isPinned = false;
                     }
 
-                    var instanceSelectedInGraph = SelectionManager.GetSelectedInstance();
+                    var instanceSelectedInGraph = SelectionManager.GetFirstSelectedInstance();
                     if (instanceSelectedInGraph != pinnedOrSelectedInstance)
                     {
                         // var selectionIsPartOfTree = instanceSelectedInGraph.Outputs[0].DirtyFlag.FramesSinceLastUpdate < 2;
@@ -104,7 +104,7 @@ namespace T3.Gui.Windows
                 {
                     if (ImGui.MenuItem("Pin as start operator"))
                     {
-                        PinSelectionAsEvaluationStart(SelectionManager.GetSelectedInstance());
+                        PinSelectionAsEvaluationStart(SelectionManager.GetFirstSelectedInstance());
                     }
                 }
 
@@ -115,7 +115,7 @@ namespace T3.Gui.Windows
                         var parentInstance = pinnedOrSelectedInstance.Parent;
                         var parentSymbolUi = SymbolUiRegistry.Entries[parentInstance.Symbol.Id];
                         var instanceChildUi = parentSymbolUi.ChildUis.Single(childUi => childUi.Id == pinnedOrSelectedInstance.SymbolChildId);
-                        SelectionManager.SetSelection(instanceChildUi, pinnedOrSelectedInstance);
+                        SelectionManager.SetSelectionToChildUi(instanceChildUi, pinnedOrSelectedInstance);
                         FitViewToSelectionHandling.FitViewToSelection();
                     }
                 }
@@ -144,7 +144,7 @@ namespace T3.Gui.Windows
 
         private void PinSelectionToView()
         {
-            _pinnedInstancePath = NodeOperations.BuildIdPathForInstance(SelectionManager.GetSelectedInstance());
+            _pinnedInstancePath = NodeOperations.BuildIdPathForInstance(SelectionManager.GetFirstSelectedInstance());
             //_pinnedEvaluationInstancePath = null;
         }
 
@@ -156,10 +156,10 @@ namespace T3.Gui.Windows
         public Instance GetPinnedOrSelectedInstance()
         {
             if (!_isPinned)
-                return SelectionManager.GetSelectedInstance();
+                return SelectionManager.GetFirstSelectedInstance();
 
             var instance = NodeOperations.GetInstanceFromIdPath(_pinnedInstancePath);
-            return instance ?? SelectionManager.GetSelectedInstance();
+            return instance ?? SelectionManager.GetFirstSelectedInstance();
         }
 
         public Instance GetPinnedEvaluationInstance()

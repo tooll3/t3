@@ -483,7 +483,7 @@ namespace T3.Gui.Interaction.PresetSystem
                 var instance = _activeCompositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == parameter.SymbolChildId);
                 if (symbolChildUi != null && instance != null)
                 {
-                    SelectionManager.AddSelection(symbolChildUi, instance);
+                    SelectionManager.AddSymbolChildToSelection(symbolChildUi, instance);
                 }
             }
 

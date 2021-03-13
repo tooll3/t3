@@ -50,9 +50,9 @@ namespace T3.Gui.Graph.Interaction
                 if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((int)Key.Tab))
                     return;
 
-                if (SelectionManager.GetSelectedSymbolChildUis().Count() == 1)
+                if (SelectionManager.GetSelectedChildUis().Count() == 1)
                 {
-                    var childUi = SelectionManager.GetSelectedSymbolChildUis().ToList()[0];
+                    var childUi = SelectionManager.GetSelectedChildUis().ToList()[0];
                     {
                         var instance = SelectionManager.GetInstanceForSymbolChildUi(childUi);
                         ConnectionMaker.OpenBrowserWithSingleSelection(this, childUi, instance);
@@ -319,7 +319,7 @@ namespace T3.Gui.Graph.Interaction
             var newChildUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
 
             var newInstance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == newChildUi.Id);
-            SelectionManager.SetSelection(newChildUi, newInstance);
+            SelectionManager.SetSelectionToChildUi(newChildUi, newInstance);
 
             if (_prepareCommand != null)
             {

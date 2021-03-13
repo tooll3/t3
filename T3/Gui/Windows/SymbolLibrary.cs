@@ -149,7 +149,7 @@ namespace T3.Gui.Windows
                                                                     ScalableCanvas.Transition.Undefined);
 
                             var childUi = SymbolUiRegistry.Entries[compositionSymbol.Id].ChildUis.Single(cUi => cUi.Id == instance.SymbolChildId);
-                            SelectionManager.SetSelection(childUi, instance);
+                            SelectionManager.SetSelectionToChildUi(childUi, instance);
                             FitViewToSelectionHandling.FitViewToSelection();
                         }
 

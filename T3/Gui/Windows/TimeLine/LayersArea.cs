@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
-using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
@@ -36,10 +35,10 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.BeginGroup();
             {
+                ClipSelection.UpdateForComposition(compositionOp);
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(0, 3)); // keep some padding 
                 _minScreenPos = ImGui.GetCursorScreenPos();
-                var allTimeClips = NodeOperations.GetAllTimeClips(_compositionOp);
-                DrawAllLayers(allTimeClips);
+                DrawAllLayers(ClipSelection.AllClips);
                 DrawContextMenu();
             }
             ImGui.EndGroup();
@@ -52,7 +51,7 @@ namespace T3.Gui.Windows.TimeLine
             if (!_contextMenuIsOpen && !ImGui.IsWindowHovered())
                 return;
 
-            if (SelectedItems.Count == 0)
+            if (ClipSelection.Count == 0)
                 return;
 
             // This is a horrible hack to distinguish right mouse click from right mouse drag
@@ -64,23 +63,52 @@ namespace T3.Gui.Windows.TimeLine
             if (ImGui.BeginPopupContextWindow("context_menu"))
             {
                 _contextMenuIsOpen = true;
-                if (ImGui.MenuItem("Delete", null, false, SelectedItems.Count > 0))
+                if (ImGui.MenuItem("Delete", null, false, ClipSelection.Count > 0))
                 {
-                    UndoRedoStack.AddAndExecute(new TimeClipDeleteCommand(_compositionOp, SelectedItems));
-                    SelectedItems.Clear();
+                    UndoRedoStack.AddAndExecute(new TimeClipDeleteCommand(_compositionOp, ClipSelection.SelectedClips));
+                    ClipSelection.Clear();
                 }
 
-                if (ImGui.MenuItem("Clear Time Stretch", null, false, SelectedItems.Count > 0))
+                if (ImGui.MenuItem("Clear Time Stretch", null, false, ClipSelection.Count > 0))
                 {
-                    var moveTimeClipCommand = new MoveTimeClipsCommand(_compositionOp, SelectedItems.ToList());
-                    foreach (var clip in SelectedItems)
+                    var moveTimeClipCommand = new MoveTimeClipsCommand(_compositionOp, ClipSelection.SelectedClips.ToList());
+                    foreach (var clip in ClipSelection.SelectedClips)
                     {
                         clip.SourceRange = clip.TimeRange.Clone();
                     }
 
                     moveTimeClipCommand.StoreCurrentValues();
                     UndoRedoStack.AddAndExecute(moveTimeClipCommand);
-                    SelectedItems.Clear();
+                    ClipSelection.Clear();
+                }
+
+                if (ImGui.MenuItem("Cut at time"))
+                {
+                    ImGui.SameLine();
+
+                    var timeInBars = _playback.TimeInBars;
+                    var matchingClips = ClipSelection.AllClips.Where(clip => clip.TimeRange.Contains(timeInBars));
+
+                    foreach (var clip in matchingClips)
+                    {
+                        var compositionSymbolUi = SymbolUiRegistry.Entries[_compositionOp.Symbol.Id];
+                        var symbolChildUi = compositionSymbolUi.ChildUis.Single(child => child.Id == clip.Id);
+
+                        Vector2 newPos = symbolChildUi.PosOnCanvas;
+                        newPos.Y += symbolChildUi.Size.Y + 5.0f;
+                        var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, new[] { symbolChildUi }, compositionSymbolUi, newPos);
+                        cmd.Do();
+
+                        // Set new end to the original time clip
+                        float originalEndTime = clip.TimeRange.End;
+                        clip.TimeRange = new TimeRange(clip.TimeRange.Start, (float)_playback.TimeInBars);
+
+                        // Apply new time range to newly added instance
+                        Guid newChildId = cmd.OldToNewIdDict[clip.Id];
+                        var newInstance = _compositionOp.Children.Single(child => child.SymbolChildId == newChildId);
+                        var newTimeClip = newInstance.Outputs.OfType<ITimeClipProvider>().Single().TimeClip;
+                        newTimeClip.TimeRange = new TimeRange((float)_playback.TimeInBars, originalEndTime);
+                    }
                 }
 
                 ImGui.EndPopup();
@@ -98,7 +126,7 @@ namespace T3.Gui.Windows.TimeLine
 
         public float LastHeight;
 
-        private void DrawAllLayers(List<ITimeClip> clips)
+        private void DrawAllLayers(IReadOnlyCollection<ITimeClip> clips)
         {
             FoundClipWithinCurrentTime = false;
             if (clips.Count == 0)
@@ -118,15 +146,15 @@ namespace T3.Gui.Windows.TimeLine
             var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight * (_maxLayerIndex - _minLayerIndex + 1) + 1);
             var layerArea = new ImRect(min, max);
             LastHeight = max.Y - min.Y;
-            
+
             _drawList.AddRectFilled(new Vector2(min.X, max.Y - 2),
                                     new Vector2(max.X, max.Y - 1), new Color(0, 0, 0, 0.4f));
-            
+
             foreach (var clip in clips)
             {
                 DrawClip(clip, layerArea, _minLayerIndex);
             }
-            
+
             ImGui.SetCursorScreenPos(min + new Vector2(0, LayerHeight));
         }
 
@@ -158,10 +186,9 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.PushID(symbolChildUi.Id.GetHashCode());
 
-            var isSelected = SelectedItems.Contains(timeClip);
-            //symbolChildUi.IsSelected = isSelected;
+            var isSelected = ClipSelection.SelectedClips.Contains(timeClip);
 
-            var color = new Color(0.5f);
+            var color = new Color(0.8f, 0.8f, 0.4f, 0.4f);
             _drawList.AddRectFilled(position, position + clipSize - new Vector2(1, 0), color);
 
             var timeRemapped = timeClip.TimeRange != timeClip.SourceRange;
@@ -215,10 +242,9 @@ namespace T3.Gui.Windows.TimeLine
             if (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(0))
             {
                 var instance = _compositionOp.Children.Single(child => child.SymbolChildId == symbolChildUi.Id);
-                SelectionManager.SetSelection(symbolChildUi, instance);
+                SelectionManager.SetSelectionToChildUi(symbolChildUi, instance);
                 FitViewToSelectionHandling.FitViewToSelection();
-                SelectedItems.Clear();
-                SelectedItems.Add(timeClip);
+                ClipSelection.Select(timeClip);
             }
 
             if (ImGui.IsItemHovered())
@@ -245,6 +271,12 @@ namespace T3.Gui.Windows.TimeLine
 
             ImGui.SetCursorScreenPos(position);
             var aHandleClicked = ImGui.InvisibleButton("startHandle", handleSize);
+            if (ImGui.IsItemHovered())
+            {
+                _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.White);
+                _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Black);
+            }
+
             HandleDragging(timeClip, isSelected, false, HandleDragMode.Start, position);
 
             ImGui.SetCursorScreenPos(position + new Vector2(bodyWidth + HandleWidth, 0));
@@ -299,7 +331,9 @@ namespace T3.Gui.Windows.TimeLine
             if (ImGui.GetIO().KeyCtrl)
             {
                 if (isSelected)
-                    SelectedItems.Remove(timeClip);
+                {
+                    ClipSelection.Deselect(timeClip);
+                }
 
                 return;
             }
@@ -311,7 +345,7 @@ namespace T3.Gui.Windows.TimeLine
                     TimeLineCanvas.Current.ClearSelection();
                 }
 
-                SelectedItems.Add(timeClip);
+                ClipSelection.Select(timeClip);
             }
 
             var mousePos = ImGui.GetIO().MousePos;
@@ -366,13 +400,13 @@ namespace T3.Gui.Windows.TimeLine
         #region implement interface --------------------------------------------
         void ITimeObjectManipulation.ClearSelection()
         {
-            SelectedItems.Clear();
+            ClipSelection.Clear();
         }
 
         public void UpdateSelectionForArea(ImRect screenArea, SelectionFence.SelectModes selectMode)
         {
             if (selectMode == SelectionFence.SelectModes.Replace)
-                SelectedItems.Clear();
+                ClipSelection.Clear();
 
             var startTime = TimeLineCanvas.Current.InverseTransformX(screenArea.Min.X);
             var endTime = TimeLineCanvas.Current.InverseTransformX(screenArea.Max.X);
@@ -390,17 +424,18 @@ namespace T3.Gui.Windows.TimeLine
             {
                 case SelectionFence.SelectModes.Add:
                 case SelectionFence.SelectModes.Replace:
-                    SelectedItems.UnionWith(matchingClips);
+                    ClipSelection.AddSelection(matchingClips);
                     break;
+
                 case SelectionFence.SelectModes.Remove:
-                    SelectedItems.ExceptWith(matchingClips);
+                    ClipSelection.Deselect(matchingClips);
                     break;
             }
         }
 
         ICommand ITimeObjectManipulation.StartDragCommand()
         {
-            _moveClipsCommand = new MoveTimeClipsCommand(_compositionOp, SelectedItems.ToList());
+            _moveClipsCommand = new MoveTimeClipsCommand(_compositionOp, ClipSelection.SelectedClips.ToList());
             return _moveClipsCommand;
         }
 
@@ -408,7 +443,7 @@ namespace T3.Gui.Windows.TimeLine
         {
             var dragContent = ImGui.GetIO().KeyAlt;
 
-            foreach (var clip in SelectedItems)
+            foreach (var clip in ClipSelection.SelectedClips)
             {
                 if (dragContent)
                 {
@@ -441,7 +476,7 @@ namespace T3.Gui.Windows.TimeLine
         void ITimeObjectManipulation.UpdateDragAtStartPointCommand(double dt, double dv)
         {
             var trim = !ImGui.GetIO().KeyAlt;
-            foreach (var clip in SelectedItems)
+            foreach (var clip in ClipSelection.SelectedClips)
             {
                 // Keep 1 frame min duration
                 var org = clip.TimeRange.Start;
@@ -455,7 +490,7 @@ namespace T3.Gui.Windows.TimeLine
         void ITimeObjectManipulation.UpdateDragAtEndPointCommand(double dt, double dv)
         {
             var trim = !ImGui.GetIO().KeyAlt;
-            foreach (var clip in SelectedItems)
+            foreach (var clip in ClipSelection.SelectedClips)
             {
                 // Keep 1 frame min duration
                 var org = clip.TimeRange.End;
@@ -468,7 +503,7 @@ namespace T3.Gui.Windows.TimeLine
 
         void ITimeObjectManipulation.UpdateDragStretchCommand(double scaleU, double scaleV, double originU, double originV)
         {
-            foreach (var clip in SelectedItems)
+            foreach (var clip in ClipSelection.SelectedClips)
             {
                 clip.TimeRange.Start = (float)(originU + (clip.TimeRange.Start - originU) * scaleU);
                 clip.TimeRange.End = (float)Math.Max(originU + (clip.TimeRange.End - originU) * scaleU, clip.TimeRange.Start + MinDuration);
@@ -480,7 +515,7 @@ namespace T3.Gui.Windows.TimeLine
         public TimeRange GetSelectionTimeRange()
         {
             var timeRange = TimeRange.Undefined;
-            foreach (var s in SelectedItems)
+            foreach (var s in ClipSelection.SelectedClips)
             {
                 timeRange.Unite(s.TimeRange.Start);
                 timeRange.Unite(s.TimeRange.End);
@@ -496,12 +531,12 @@ namespace T3.Gui.Windows.TimeLine
 
             // Update reference in macro-command 
             _moveClipsCommand.StoreCurrentValues();
-            // UndoRedoStack.Add(_moveClipsCommand);
             _moveClipsCommand = null;
         }
 
         void ITimeObjectManipulation.DeleteSelectedElements()
         {
+            Log.Assert("Deleting not implemented yet");
             //TODO: Implement
         }
         #endregion
@@ -513,12 +548,12 @@ namespace T3.Gui.Windows.TimeLine
         SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
         {
             SnapResult bestSnapResult = null;
-                
+
             var allClips = NodeOperations.GetAllTimeClips(_compositionOp);
 
             foreach (var clip in allClips)
             {
-                if (SelectedItems.Contains(clip))
+                if (ClipSelection.Contains(clip))
                     continue;
 
                 ValueSnapHandler.CheckForBetterSnapping(targetTime, clip.TimeRange.Start, canvasScale, ref bestSnapResult);
@@ -531,7 +566,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private Vector2 _minScreenPos;
 
-        public readonly HashSet<ITimeClip> SelectedItems = new HashSet<ITimeClip>();
+        //public readonly HashSet<ITimeClip> SelectedTimeClips = new HashSet<ITimeClip>();
         private static MoveTimeClipsCommand _moveClipsCommand;
         private const int LayerHeight = 18;
         private const float HandleWidth = 5;
@@ -541,5 +576,89 @@ namespace T3.Gui.Windows.TimeLine
         private Instance _compositionOp;
         private readonly ValueSnapHandler _snapHandler;
         private Playback _playback;
+
+        /// <summary>
+        /// Maps selection of <see cref="ITimeClip"/>s
+        /// to <see cref="SelectionManager"/> with <see cref="ISelectableNode"/>s.
+        /// </summary>
+        private static class ClipSelection
+        {
+            public static void UpdateForComposition(Instance compositionOp)
+            {
+                _compositionOp = compositionOp;
+                _compositionTimeClips.Clear();
+
+                // Avoiding Linq for GC reasons 
+                foreach (var child in compositionOp.Children)
+                {
+                    foreach (var output in child.Outputs)
+                    {
+                        if (output is ITimeClipProvider clipProvider)
+                        {
+                            _compositionTimeClips[clipProvider.TimeClip.Id] = clipProvider.TimeClip;
+                        }
+                    }
+                }
+
+                _selectedClips.Clear();
+                foreach (var selectedGraphNode in SelectionManager.Selection)
+                {
+                    if (_compositionTimeClips.TryGetValue(selectedGraphNode.Id, out var selectedTimeClip))
+                    {
+                        _selectedClips.Add(selectedTimeClip);
+                    }
+                }
+            }
+
+            public static IEnumerable<ITimeClip> SelectedClips => _selectedClips;
+            public static int Count => _selectedClips.Count;
+
+            public static IReadOnlyCollection<ITimeClip> AllClips => _compositionTimeClips.Values;
+
+            public static void Clear()
+            {
+                SelectionManager.Clear(); // assumes that clearing the timeline selection also clearing graph selection is a meaningful interaction
+                _selectedClips.Clear();
+            }
+
+            public static void Select(ITimeClip timeClip)
+            {
+                SelectionManager.SelectCompositionChild(_compositionOp, timeClip.Id, replaceSelection:true);
+                _selectedClips.Add(timeClip);
+            }
+
+            public static void Deselect(ITimeClip timeClip)
+            {
+                SelectionManager.DeselectCompositionChild(_compositionOp, timeClip.Id);
+                _selectedClips.Remove(timeClip);
+            }
+            
+            public static void Deselect(List<ITimeClip> matchingClips)
+            {
+                matchingClips.ForEach(Deselect);
+            }
+
+            public static void AddSelection(List<ITimeClip> matchingClips)
+            {
+                foreach (var timeClip in matchingClips)
+                {
+                    SelectionManager.SelectCompositionChild(_compositionOp, timeClip.Id, replaceSelection:false);
+                    _selectedClips.Add(timeClip);
+                }
+            }
+
+
+            public static bool Contains(ITimeClip clip)
+            {
+                return _selectedClips.Contains(clip);
+            }
+
+            /// <summary>
+            /// Reusing static collections to avoid GC leaks
+            /// </summary>
+            private static readonly Dictionary<Guid, ITimeClip> _compositionTimeClips = new Dictionary<Guid, ITimeClip>(100);
+            private static readonly List<ITimeClip> _selectedClips = new List<ITimeClip>(100);
+            private static Instance _compositionOp;
+        }
     }
 }

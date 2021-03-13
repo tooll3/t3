@@ -379,42 +379,7 @@ namespace T3.Gui.Windows.TimeLine
 
             CustomComponents.TooltipForLastItem(tooltip, additionalTooltip);
 
-            ImGui.SameLine();
 
-            // Cut
-            if (timeLineCanvas.FoundTimeClipForCurrentTime)
-            {
-                if (CustomComponents.IconButton(Icon.ConnectedParameter, "##CutClip", ControlSize))
-                {
-                    var timeInBars = playback.TimeInBars;
-                    var matchingClips = timeLineCanvas.LayersArea.SelectedItems
-                                                      .Where(clip => clip.TimeRange.Contains(timeInBars));
-
-                    var compOp = GraphCanvas.Current.CompositionOp;
-                    foreach (var clip in matchingClips)
-                    {
-                        var compositionSymbolUi = SymbolUiRegistry.Entries[compOp.Symbol.Id];
-                        var symbolChildUi = compositionSymbolUi.ChildUis.Single(child => child.Id == clip.Id);
-
-                        Vector2 newPos = symbolChildUi.PosOnCanvas;
-                        newPos.Y += symbolChildUi.Size.Y + 5.0f;
-                        var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, new[] { symbolChildUi }, compositionSymbolUi, newPos);
-                        cmd.Do();
-
-                        // set new end to the original time clip
-                        float originalEndTime = clip.TimeRange.End;
-                        clip.TimeRange = new TimeRange(clip.TimeRange.Start, (float)playback.TimeInBars);
-
-                        // apply new time range to newly added instance
-                        Guid newChildId = cmd.OldToNewIdDict[clip.Id];
-                        var newInstance = compOp.Children.Single(child => child.SymbolChildId == newChildId);
-                        var newTimeClip = newInstance.Outputs.OfType<ITimeClipProvider>().Single().TimeClip;
-                        newTimeClip.TimeRange = new TimeRange((float)playback.TimeInBars, originalEndTime);
-                    }
-                }
-
-                CustomComponents.TooltipForLastItem("Cut timeclip below mouse");
-            }
         }
 
         private static void DrawTimeSettingsContextMenu(ref Playback playback)

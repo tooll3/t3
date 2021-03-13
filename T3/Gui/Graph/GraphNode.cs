@@ -112,14 +112,14 @@ namespace T3.Gui.Graph
 
                     if (childUi.Style == SymbolChildUi.Styles.Default)
                     {
-                        if (ImGui.Button(UnfoldLabel, new Vector2(16, 16)))
+                        if (ImGui.Button(_unfoldLabel, new Vector2(16, 16)))
                         {
                             childUi.Style = SymbolChildUi.Styles.Expanded;
                         }
                     }
                     else if (childUi.Style != SymbolChildUi.Styles.Default)
                     {
-                        if (ImGui.Button(FoldLabel, new Vector2(16, 16)))
+                        if (ImGui.Button(_foldLabel, new Vector2(16, 16)))
                         {
                             childUi.Style = SymbolChildUi.Styles.Default;
                         }
@@ -158,15 +158,15 @@ namespace T3.Gui.Graph
                         ImGui.BeginTooltip();
                         {
                             TransformGizmoHandling.SetDrawList(drawList);
-                            ImageCanvasForTooltips.Update();
-                            ImageCanvasForTooltips.SetAsCurrent();
+                            _imageCanvasForTooltips.Update();
+                            _imageCanvasForTooltips.SetAsCurrent();
                             if (instance.Outputs.Count > 0)
                             {
                                 var firstOutput = instance.Outputs[0];
                                 IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
-                                EvaluationContext.Reset();
-                                EvaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
-                                outputUi.DrawValue(firstOutput, EvaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
+                                _evaluationContext.Reset();
+                                _evaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
+                                outputUi.DrawValue(firstOutput, _evaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
                             }
 
                             if (!string.IsNullOrEmpty(symbolUi.Description))
@@ -179,7 +179,7 @@ namespace T3.Gui.Graph
                                 ImGui.PopFont();
                             }
 
-                            ImageCanvasForTooltips.Deactivate();
+                            _imageCanvasForTooltips.Deactivate();
                             TransformGizmoHandling.RestoreDrawList();
                         }
                         ImGui.EndTooltip();
@@ -200,16 +200,11 @@ namespace T3.Gui.Graph
                 var justOpenedChild = false;
                 if (hovered && ImGui.IsMouseDoubleClicked(0) && !RenameInstanceOverlay.IsOpen)
                 {
-                    Log.Debug("double click");
                     if (ImGui.IsWindowFocused())
                     {
                         GraphCanvas.Current.SetCompositionToChildInstance(instance);
                         ImGui.CloseCurrentPopup();
                         justOpenedChild = true;
-                    }
-                    else
-                    {
-                        Log.Debug("but not focused");
                     }
                 }
 
@@ -225,7 +220,7 @@ namespace T3.Gui.Graph
                     && string.IsNullOrEmpty(T3Ui.OpenedPopUpName)
                     && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0)
                 {
-                    SelectionManager.SetSelection(childUi, instance);
+                    SelectionManager.SetSelectionToChildUi(childUi, instance);
                     ImGui.OpenPopup("parameterContextPopup");
                 }
 
@@ -571,7 +566,7 @@ namespace T3.Gui.Graph
                                                   && ConnectionMaker.TempConnections[0].TargetParentOrChildId == ConnectionMaker.NotConnectedId
                                                   && ConnectionMaker.TempConnections[0].SourceParentOrChildId != childUi.Id;
 
-            VisibleInputs.Clear();
+            _visibleInputs.Clear();
             foreach (var inputUi in symbolUi.InputUis.Values)
             {
                 bool inputIsConnectionTarget = false;
@@ -586,13 +581,13 @@ namespace T3.Gui.Graph
 
                 if (inputUi.Relevancy != Relevancy.Optional || inputIsConnectionTarget)
                 {
-                    VisibleInputs.Add(inputUi);
+                    _visibleInputs.Add(inputUi);
                 }
                 else if (ConnectionMaker.IsMatchingInputType(inputUi.Type))
                 {
                     if (isNodeHoveredAsConnectionTarget)
                     {
-                        VisibleInputs.Add(inputUi);
+                        _visibleInputs.Add(inputUi);
                     }
                     else
                     {
@@ -601,7 +596,7 @@ namespace T3.Gui.Graph
                 }
             }
 
-            return VisibleInputs;
+            return _visibleInputs;
         }
 
         private enum SocketDirections
@@ -1036,13 +1031,13 @@ namespace T3.Gui.Graph
         public static float OutputSlotMargin = 1;
         #endregion
 
-        private static readonly string UnfoldLabel = (char)Icon.ChevronLeft + "##size";
-        private static readonly string FoldLabel = (char)Icon.ChevronDown + "##size";
-        private static readonly List<IInputUi> VisibleInputs = new List<IInputUi>(15); // A static variable to avoid GC allocations
+        private static readonly string _unfoldLabel = (char)Icon.ChevronLeft + "##size";
+        private static readonly string _foldLabel = (char)Icon.ChevronDown + "##size";
+        private static readonly List<IInputUi> _visibleInputs = new List<IInputUi>(15); // A static variable to avoid GC allocations
 
-        private static readonly EvaluationContext EvaluationContext = new EvaluationContext();
+        private static readonly EvaluationContext _evaluationContext = new EvaluationContext();
 
-        private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
+        private static readonly ImageOutputCanvas _imageCanvasForTooltips = new ImageOutputCanvas();
         private static Guid _hoveredNodeIdForConnectionTarget;
 
         private static ImRect _usableScreenRect;

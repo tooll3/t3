@@ -119,7 +119,7 @@ namespace T3.Gui.Graph
 
         private void FitViewToSelection()
         {
-            var selection = SelectionManager.GetSelectedSymbolChildUis().ToArray();
+            var selection = SelectionManager.GetSelectedChildUis().ToArray();
 
             if (selection.Length == 0)
                 return;

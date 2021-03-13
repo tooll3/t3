@@ -24,17 +24,17 @@ namespace T3.Core.Logging
         }
 
         #region API for logging
-        public static void Debug(String message)
+        public static void Debug(string message)
         {
             DoLog(new LogEntry(LogEntry.EntryLevel.Debug, message));
         }
 
-        public static void Debug(String message, Guid sourceId)
+        public static void Debug(string message, Guid sourceId)
         {
             DoLog(new LogEntry(LogEntry.EntryLevel.Debug, sourceId, message));
         }
 
-        public static void DebugFormat(String message, params object[] args)
+        public static void DebugFormat(string message, params object[] args)
         {
             var messageString = FormatMessageWithArguments(message, args);
             DoLog(new LogEntry(LogEntry.EntryLevel.Debug, messageString));
@@ -45,40 +45,50 @@ namespace T3.Core.Logging
             DoLog(new LogEntry(LogEntry.EntryLevel.Info, message));
         }
 
-        public static void Info(String message, Guid sourceId)
+        public static void Info(string message, Guid sourceId)
         {
             DoLog(new LogEntry(LogEntry.EntryLevel.Info, sourceId, message));
         }
 
-        public static void InfoFormat(String message, params object[] args)
+        public static void InfoFormat(string message, params object[] args)
         {
             var messageString = FormatMessageWithArguments(message, args);
             DoLog(new LogEntry(LogEntry.EntryLevel.Info, messageString));
         }
 
 
-        public static void Warning(String message)
+        public static void Warning(string message)
         {
             DoLog(new LogEntry(LogEntry.EntryLevel.Warning, message));
         }
 
-        public static void Warning(String message, Guid sourceId)
+        public static void Warning(string message, Guid sourceId)
         {
             DoLog(new LogEntry(LogEntry.EntryLevel.Warning, sourceId, message));
         }
 
-        public static void WarningFormat(String message, params object[] args)
-        {
-            var messageString = FormatMessageWithArguments(message, args);
-            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, messageString));
-        }
+        // public static void WarningFormat(string message, params object[] args)
+        // {
+        //     var messageString = FormatMessageWithArguments(message, args);
+        //     DoLog(new LogEntry(LogEntry.EntryLevel.Warning, messageString));
+        // }
 
-        public static void Error(String message, params object[] args)
+        public static void Error(string message, params object[] args)
         {
             var messageString = FormatMessageWithArguments(message, args);
             DoLog(new LogEntry(LogEntry.EntryLevel.Error, messageString));
         }
 
+        public static void Assert(string message)
+        {
+            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, message));
+        }
+        
+        public static void Assert(string message, Guid sourceId)
+        {
+            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, sourceId, message));
+        }
+        
         private const int DEFAULT_LINE_LENGTH = 100;
         private static readonly StringBuilder _accumulatedInfoLine = new StringBuilder(String.Empty, DEFAULT_LINE_LENGTH);
         public static void AccumulateAsInfoLine(String c, int lineLength = DEFAULT_LINE_LENGTH)

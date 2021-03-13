@@ -78,7 +78,7 @@ namespace T3.Gui.Graph
             TempConnections.Clear();
             _isDisconnectingFromInput = false;
 
-            var selectedSymbolChildUis = SelectionManager.GetSelectedSymbolChildUis().ToList();
+            var selectedSymbolChildUis = SelectionManager.GetSelectedChildUis().ToList();
             if (selectedSymbolChildUis.Count > 1 && selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id))
             {
                 Log.Debug("Magic would happen here?");

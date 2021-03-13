@@ -23,6 +23,9 @@ namespace T3.Gui.Graph.Interaction
 {
     internal static class NodeOperations
     {
+        /// <summary>
+        /// This is slow and should be refactored into something else
+        /// </summary>
         public static List<ITimeClip> GetAllTimeClips(Instance compositionOp)
         {
             var timeClips = new List<ITimeClip>();
@@ -33,7 +36,7 @@ namespace T3.Gui.Graph.Interaction
                     timeClips.Add(clipProvider.TimeClip);
                 }
             }
-
+        
             return timeClips;
         }
         
@@ -936,6 +939,26 @@ namespace T3.Gui.Graph.Interaction
             {
                 UiModel.UpdateUiEntriesForSymbol(symbol);
             }
+        }
+
+        public static bool TryGetUiAndInstanceInComposition(Guid id, Instance compositionOp, out SymbolChildUi childUi, out Instance instance)
+        {
+            instance = compositionOp.Children.SingleOrDefault(child => child.SymbolChildId == id);
+            if (instance == null)
+            {
+                Log.Assert($"Can't select child with id {id} in composition {compositionOp}");
+                childUi = null;
+                return false;
+            }
+
+            childUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id].ChildUis.SingleOrDefault(ui => ui.Id == id);
+            if (childUi == null)
+            {
+                Log.Assert($"Can't select child with id {id} in composition {compositionOp}");
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -62,7 +62,7 @@ namespace T3.Gui.Windows
                 ImGui.InputText("##imgui workaround", ref tmpBuffer, 1);
                 ImGui.SameLine();
             }
-            var instance = SelectionManager.GetSelectedInstance();
+            var instance = SelectionManager.GetFirstSelectedInstance();
             if (instance != null)
             {
                 if (instance.Parent == null)
