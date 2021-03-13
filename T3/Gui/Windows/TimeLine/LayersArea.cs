@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -100,14 +101,24 @@ namespace T3.Gui.Windows.TimeLine
                         cmd.Do();
 
                         // Set new end to the original time clip
-                        float originalEndTime = clip.TimeRange.End;
-                        clip.TimeRange = new TimeRange(clip.TimeRange.Start, (float)_playback.TimeInBars);
+                        float orgTimeRangeEnd = clip.TimeRange.End;
+                        float originalSourceDuration = clip.SourceRange.Duration;
+                        float normalizedCutPosition = ((float)_playback.TimeInBars - clip.TimeRange.Start) / clip.TimeRange.Duration;
+                        
+                        clip.TimeRange.End = (float)_playback.TimeInBars;// = new TimeRange(clip.TimeRange.Start, (float)_playback.TimeInBars);
+
 
                         // Apply new time range to newly added instance
                         Guid newChildId = cmd.OldToNewIdDict[clip.Id];
                         var newInstance = _compositionOp.Children.Single(child => child.SymbolChildId == newChildId);
                         var newTimeClip = newInstance.Outputs.OfType<ITimeClipProvider>().Single().TimeClip;
-                        newTimeClip.TimeRange = new TimeRange((float)_playback.TimeInBars, originalEndTime);
+                        
+                        //newTimeClip.TimeRange.Start = (float)_playback.TimeInBars; // = new TimeRange((float)_playback.TimeInBars, originalEndTime);
+                        newTimeClip.TimeRange = new TimeRange((float)_playback.TimeInBars, orgTimeRangeEnd);
+                        newTimeClip.SourceRange.Start = newTimeClip.SourceRange.Start + originalSourceDuration * normalizedCutPosition;
+                        newTimeClip.SourceRange.End = clip.SourceRange.End;
+
+                        clip.SourceRange.End = originalSourceDuration * normalizedCutPosition;
                     }
                 }
 
@@ -195,7 +206,7 @@ namespace T3.Gui.Windows.TimeLine
             }
             else if (timeRemapped)
             {
-                _drawList.AddRectFilled(position + new Vector2(0, clipSize.Y - 2), 
+                _drawList.AddRectFilled(position + new Vector2(0, clipSize.Y - 1), 
                                         position + new Vector2(clipSize.X - 1, clipSize.Y), 
                                         Color.Orange);
             }
@@ -236,6 +247,7 @@ namespace T3.Gui.Windows.TimeLine
             
             ImGui.SetCursorScreenPos(showSizeHandles ? (position + _handleOffset) : position);
 
+            var somethingElseWasHovered = ImGui.IsAnyItemHovered();
             var wasClicked = ImGui.InvisibleButton("body", bodySize);
 
             if (ImGui.IsItemHovered())
@@ -259,7 +271,7 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.EndTooltip();
             }
 
-            if (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(0))
+            if (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(0) && !somethingElseWasHovered)
             {
                 var instance = _compositionOp.Children.Single(child => child.SymbolChildId == symbolChildUi.Id);
                 SelectionManager.SetSelectionToChildUi(symbolChildUi, instance);
@@ -290,8 +302,9 @@ namespace T3.Gui.Windows.TimeLine
             var handleSize = showSizeHandles ? new Vector2(HandleWidth, LayerHeight) : Vector2.One;
 
             ImGui.SetCursorScreenPos(position);
+            somethingElseWasHovered = ImGui.IsAnyItemHovered();
             var aHandleClicked = ImGui.InvisibleButton("startHandle", handleSize);
-            if (ImGui.IsItemHovered() || ImGui.IsItemActive())
+            if ((!somethingElseWasHovered && ImGui.IsItemHovered()) || ImGui.IsItemActive())
             {
                 _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.White);
                 _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Black);
@@ -306,6 +319,7 @@ namespace T3.Gui.Windows.TimeLine
                 _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.White);
                 _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Black);
             }
+            
             HandleDragging(timeClip, isSelected, false, HandleDragMode.End, position);
 
             if (aHandleClicked)
@@ -422,7 +436,7 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        #region implement interface --------------------------------------------
+        #region implement TimeObject interface --------------------------------------------
         void ITimeObjectManipulation.ClearSelection()
         {
             ClipSelection.Clear();
@@ -643,7 +657,10 @@ namespace T3.Gui.Windows.TimeLine
 
             public static void Clear()
             {
-                SelectionManager.Clear(); // assumes that clearing the timeline selection also clearing graph selection is a meaningful interaction
+                foreach (var c in _selectedClips)
+                {
+                    SelectionManager.DeselectCompositionChild(_compositionOp, c.Id);
+                }
                 _selectedClips.Clear();
             }
 

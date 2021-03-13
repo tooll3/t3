@@ -16,7 +16,6 @@ namespace T3.Core.Animation
         private TimeRange _sourceRange = new TimeRange(0.0f, 4.0f);
         public ref TimeRange SourceRange => ref _sourceRange;
 
-        public string Name { get; set; } = string.Empty;
         public int LayerIndex { get; set; } = 0;
 
         public Type DataType => typeof(TimeClip);
@@ -74,6 +73,17 @@ namespace T3.Core.Animation
             Log.Error($"Trying to assign output data of type '{outputData.GetType()}' to 'TimeClip'.");
 
             return false;
+        }
+
+        public TimeClip Clone()
+        {
+            return new TimeClip()
+                       {
+                           Id = Guid.NewGuid(),
+                           TimeRange = _timeRange,
+                           SourceRange = _sourceRange,
+                           LayerIndex = LayerIndex
+                       };
         }
     }
 }

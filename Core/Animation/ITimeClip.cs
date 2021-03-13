@@ -16,6 +16,5 @@ namespace T3.Core.Animation
         ref TimeRange TimeRange { get; }
         ref TimeRange SourceRange { get; }
         int LayerIndex { get; set; }
-        string Name { get; }
     }
 }
