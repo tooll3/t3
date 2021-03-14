@@ -22,6 +22,10 @@ namespace T3.Gui
         
         public static Color GraphAxisColor = new Color(0, 0, 0, 0.3f);
 
+        public static Color ButtonColor = new Color(0.15f, 0.15f, 0.15f, 1f);
+        public static Color TextMuted = new Color(0.5f);
+        public static Color TextDisabled = new Color(0.328f, 0.328f, 0.328f, 1.000f);
+
         public static readonly Color FragmentLineColor = Color.Orange;
         
         public static float ToolBarHeight = 25; 
@@ -58,8 +62,8 @@ namespace T3.Gui
                 }
 
                 _colors[(int)ImGuiCol.Text] = new Vector4(1, 1, 1, 0.85f);
-                _colors[(int)ImGuiCol.TextDisabled] = new Vector4(0.328f, 0.328f, 0.328f, 1.000f);
-                _colors[(int)ImGuiCol.Button] = new Vector4(0.15f, 0.15f, 0.15f, 1f);
+                _colors[(int)ImGuiCol.TextDisabled] = TextDisabled;
+                _colors[(int)ImGuiCol.Button] = ButtonColor;
                 _colors[(int)ImGuiCol.Border] = new Vector4(0, 0.00f, 0.00f, 0.97f);
                 _colors[(int)ImGuiCol.BorderShadow] = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
                 _colors[(int)ImGuiCol.FrameBg] = new Vector4(0.13f, 0.13f, 0.13f, 0.80f);

@@ -257,9 +257,9 @@ namespace T3.Gui.InputUi
 
                     var hash = Utilities.Hash(symbolChildUi.SymbolChild.Id, input.InputDefinition.Id);
                     var blendGroup = T3Ui.PresetSystem.GetBlendGroupForHashedInput(hash);
-                    
+
                     var label = blendGroup == null ? "" : "G" + (blendGroup.Index + 1);
-                    
+
                     if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         if (IsAnimatable)
@@ -280,51 +280,69 @@ namespace T3.Gui.InputUi
                     ImGui.PopStyleColor();
                     ImGui.SameLine();
 
-                    // if (IsVariable && ImGui.Button("v", new Vector2(ConnectionAreaWidth, 0.0f)))
-                    // {
-                    //     variator.AddVariationTo(inputSlot);
-                    // }
 
                     ImGui.SameLine();
 
                     // Draw Name
                     ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
-                    ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
+
+                    if (input.IsDefault)
+                    {
+                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, T3Style.ButtonColor.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, T3Style.TextMuted.Rgba);
+                        ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
+                        ImGui.PopStyleColor(2);
+                        ImGui.SameLine();
+                    }
+                    else
+                    {
+                        var isClicked = ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
+                        ImGui.SameLine();
+                        if (!input.IsDefault)
+                        {
+                            Icons.Draw(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6,2), new Color(0.5f));
+                            if (isClicked)
+                            {
+                                UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));
+                            }
+                        }
+                    }
+
+                
+
                     CustomComponents.ContextMenuForItem(() =>
+                                                    {
+                                                        if (ImGui.MenuItem("Set as default", !input.IsDefault))
+                                                            input.SetCurrentValueAsDefault();
+
+                                                        if (ImGui.MenuItem("Reset to default", !input.IsDefault))
                                                         {
-                                                            if (ImGui.MenuItem("Set as default", !input.IsDefault))
-                                                                input.SetCurrentValueAsDefault();
+                                                            UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));
+                                                        }
 
-                                                            if (ImGui.MenuItem("Reset to default", !input.IsDefault))
-                                                            {
-                                                                input.ResetToDefault();
+                                                        if (blendGroup == null && ImGui.BeginMenu("Add to Blending", true))
+                                                        {
+                                                            T3Ui.PresetSystem.DrawInputContextMenu(inputSlot, compositionUi, symbolChildUi);
+                                                        }
 
-                                                                compositionSymbol.InvalidateInputInAllChildInstances(inputSlot);
-                                                            }
+                                                        if (blendGroup != null && ImGui.MenuItem("Remove blending"))
+                                                        {
+                                                            T3Ui.PresetSystem.RemoveBlending(hash);
+                                                        }
 
-                                                            if (blendGroup == null && ImGui.BeginMenu("Add to Blending", true))
-                                                            {
-                                                                T3Ui.PresetSystem.DrawInputContextMenu(inputSlot, compositionUi, symbolChildUi);
-                                                            }
+                                                        if (ImGui.MenuItem("Publish as Input"))
+                                                        {
+                                                            PublishAsInput(inputSlot, symbolChildUi, input);
+                                                        }
 
-                                                            if (blendGroup != null && ImGui.MenuItem("Remove blending"))
-                                                            {
-                                                                T3Ui.PresetSystem.RemoveBlending(hash);
-                                                            }
-
-                                                            if (ImGui.MenuItem("Publish as Input"))
-                                                            {
-                                                                PublishAsInput(inputSlot, symbolChildUi, input);
-                                                            }
-
-                                                            if (ImGui.MenuItem("Parameters settings"))
-                                                                editState = InputEditStateFlags.ShowOptions;
+                                                        if (ImGui.MenuItem("Parameters settings"))
+                                                            editState = InputEditStateFlags.ShowOptions;
                                                             
-                                                        });
+                                                    });
 
                     ImGui.PopStyleVar();
 
-                    ImGui.SameLine();
+                    
 
                     // Draw control
                     ImGui.PushItemWidth(200.0f);
@@ -448,7 +466,9 @@ namespace T3.Gui.InputUi
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = SymbolChildUi.DefaultOpSize;
         public bool IsSelected => SelectionManager.IsNodeSelected(this);
-
+        
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly string _revertLabel = $"{(char)Icon.Revert}##revert";
         private const Relevancy DefaultRelevancy = Relevancy.Optional;
     }
 }

@@ -115,6 +115,7 @@ namespace T3.Gui.Styling
             new IconSource(Icon.Heart, 33, new Vector2(16,16)),
             new IconSource(Icon.Trash, 34, new Vector2(16,16)),
             new IconSource(Icon.Grid, 35, new Vector2(16,16)),
+            new IconSource(Icon.Revert, 36, new Vector2(16,16)),
         };
 
         public const string IconAtlasPath = @"Resources\t3\t3-icons.png";
@@ -158,5 +159,6 @@ namespace T3.Gui.Styling
         Heart,
         Trash,
         Grid,
+        Revert
     }
 }
