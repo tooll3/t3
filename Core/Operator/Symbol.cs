@@ -47,6 +47,10 @@ namespace T3.Core.Operator
         internal Symbol(Type instanceType, Guid id, Guid[] orderedInputIds, IEnumerable<SymbolChild> children)
             : this(instanceType, id, orderedInputIds)
         {
+            foreach (var child in children)
+            {
+                child.Parent = this;
+            }
             Children.AddRange(children);
         }
 
@@ -485,16 +489,18 @@ namespace T3.Core.Operator
             {
                 Debug.Assert(i < childInstance.Outputs.Count);
                 childInstance.Outputs[i].Id = childSymbol.OutputDefinitions[i].Id;
+                var symbolChildOutput = symbolChild.Outputs[childInstance.Outputs[i].Id];
                 if (childSymbol.OutputDefinitions[i].OutputDataType != null)
                 {
                     // output is using data, so link it
                     if (childInstance.Outputs[i] is IOutputDataUser outputDataConsumer)
                     {
-                        outputDataConsumer.SetOutputData(symbolChild.Outputs[childInstance.Outputs[i].Id].OutputData);
+                        outputDataConsumer.SetOutputData(symbolChildOutput.OutputData);
                     }
                 }
 
-                childInstance.Outputs[i].DirtyFlag.Trigger = symbolChild.Outputs[childInstance.Outputs[i].Id].DirtyFlagTrigger;
+                childInstance.Outputs[i].DirtyFlag.Trigger = symbolChildOutput.DirtyFlagTrigger;
+                childInstance.Outputs[i].IsDisabled = symbolChildOutput.IsDisabled;
             }
 
             parentInstance.Children.Add(childInstance);
@@ -586,7 +592,7 @@ namespace T3.Core.Operator
 
         public Guid AddChild(Symbol symbol, Guid addedChildId)
         {
-            var newChild = new SymbolChild(symbol, addedChildId);
+            var newChild = new SymbolChild(symbol, addedChildId, this);
             Children.Add(newChild);
 
             var childInstances = new List<Instance>(InstancesOfSymbol.Count);

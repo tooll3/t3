@@ -139,7 +139,7 @@ namespace T3.Core
 
                 foreach (var (id, output) in child.Outputs)
                 {
-                    if (output.DirtyFlagTrigger != output.OutputDefinition.DirtyFlagTrigger || output.OutputData != null)
+                    if (output.DirtyFlagTrigger != output.OutputDefinition.DirtyFlagTrigger || output.OutputData != null || output.IsDisabled)
                     {
                         Writer.WriteStartObject();
                         Writer.WriteValue("Id", id);
@@ -157,6 +157,11 @@ namespace T3.Core
                         if (output.DirtyFlagTrigger != output.OutputDefinition.DirtyFlagTrigger)
                         {
                             Writer.WriteObject("DirtyFlagTrigger", output.DirtyFlagTrigger);
+                        }
+
+                        if (output.IsDisabled)
+                        {
+                            Writer.WriteValue("IsDisabled", output.IsDisabled);
                         }
 
                         Writer.WriteEndObject();
@@ -186,7 +191,7 @@ namespace T3.Core
                 throw new ArgumentException($"Failed to load symbol {symbolId}.\nThis is frequently caused by instances of a missing Symbol.\nDon't forget to look to references in Dashboard operator.");
             }
             
-            var symbolChild = new SymbolChild(symbol, childId);
+            var symbolChild = new SymbolChild(symbol, childId, null);
 
             var nameToken = symbolChildJson["Name"];
             if (nameToken != null)
@@ -212,6 +217,12 @@ namespace T3.Core
                 if (dirtyFlagJson != null)
                 {
                     symbolChild.Outputs[outputId].DirtyFlagTrigger = (DirtyFlagTrigger)Enum.Parse(typeof(DirtyFlagTrigger), dirtyFlagJson.Value<string>());
+                }
+                
+                var isDisabledJson = outputJson["IsDisabled"];
+                if (isDisabledJson != null)
+                {
+                    symbolChild.Outputs[outputId].IsDisabled = isDisabledJson.Value<bool>();
                 }
             }
 

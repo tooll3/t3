@@ -447,16 +447,13 @@ namespace T3.Gui.Graph
                     ImGui.EndMenu();
                 }
 
-                bool IsDisabledState(SymbolChildUi selectedChildUi, bool state) => selectedChildUi.GetInstance(CompositionOp).Outputs.First().IsDisabled == state;
-                bool allSelectedDisabled = selectedChildUis.TrueForAll(selectedChildUi => IsDisabledState(selectedChildUi, true));
-                bool allSelectedEnabled = selectedChildUis.TrueForAll(selectedChildUi => IsDisabledState(selectedChildUi, false));
+                bool allSelectedDisabled = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
+                bool allSelectedEnabled = selectedChildUis.TrueForAll(selectedChildUi => !selectedChildUi.IsDisabled);
                 if (!allSelectedDisabled && ImGui.MenuItem("Disable"))
                 {
                     foreach (var selectedChildUi in selectedChildUis)
                     {
-                        var output = selectedChildUi.GetInstance(CompositionOp).Outputs.FirstOrDefault();
-                        if (output != null)
-                            output.IsDisabled = true;
+                        selectedChildUi.IsDisabled = true;
                     }
                 }
 
@@ -464,9 +461,7 @@ namespace T3.Gui.Graph
                 {
                     foreach (var selectedChildUi in selectedChildUis)
                     {
-                        var output = selectedChildUi.GetInstance(CompositionOp).Outputs.FirstOrDefault();
-                        if (output != null)
-                            output.IsDisabled = false;
+                        selectedChildUi.IsDisabled = false;
                     }
                 }
 

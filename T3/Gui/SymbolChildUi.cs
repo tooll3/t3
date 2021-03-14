@@ -41,6 +41,24 @@ namespace T3.Gui
         public bool IsSelected => SelectionManager.IsNodeSelected(this);
         public Styles Style { get; set; }
 
+        public bool IsDisabled {
+            get => SymbolChild.Outputs.FirstOrDefault().Value?.IsDisabled ?? false;
+            set 
+                {
+                    var childOutput = SymbolChild.Outputs.FirstOrDefault().Value;
+                    if (childOutput != null)
+                        childOutput.IsDisabled = value;
+
+                    foreach (var parentInstance in SymbolChild.Parent.InstancesOfSymbol)
+                    {
+                        var childInstance = parentInstance.Children.Single(child => child.SymbolChildId == Id);
+                        var output = childInstance.Outputs.FirstOrDefault();
+                        if (output != null)
+                            output.IsDisabled = value;
+                    }
+                }
+        }
+
         public CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
         {
             if (!CustomChildUiRegistry.Entries.TryGetValue(instance.Type, out var drawFunction))

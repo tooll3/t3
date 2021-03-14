@@ -17,6 +17,8 @@ namespace T3.Core.Operator
         public Symbol Symbol { get; }
 
         public Guid Id { get; }
+        
+        public Symbol Parent { get; set; }
 
         public string Name { get; set; } = string.Empty;
 
@@ -25,10 +27,11 @@ namespace T3.Core.Operator
         public Dictionary<InputDefinitionId, Input> InputValues { get; } = new Dictionary<InputDefinitionId, Input>();
         public Dictionary<Guid, Output> Outputs { get; } = new Dictionary<Guid, Output>();
 
-        public SymbolChild(Symbol symbol, Guid childId)
+        public SymbolChild(Symbol symbol, Guid childId, Symbol parent)
         {
             Symbol = symbol;
             Id = childId;
+            Parent = parent;
 
             foreach (var inputDefinition in symbol.InputDefinitions)
             {
@@ -50,6 +53,8 @@ namespace T3.Core.Operator
             public Symbol.OutputDefinition OutputDefinition { get; }
             public IOutputData OutputData { get; }
 
+            public bool IsDisabled { get; set; }
+            
             public DirtyFlagTrigger DirtyFlagTrigger
             {
                 get => _dirtyFlagTrigger ?? OutputDefinition.DirtyFlagTrigger;
