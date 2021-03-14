@@ -129,6 +129,12 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     ImGui.PopStyleColor(3);
                 }
+                
+                // Disabled indicator
+                if (instance.Outputs.Count > 0 && instance.Outputs[0].IsDisabled)
+                {
+                    drawList.AddLine(_usableScreenRect.Min, _usableScreenRect.Max, T3Style.Colors.WarningColor,2);
+                }
 
                 // Interaction
                 ImGui.SetCursorScreenPos(_selectableScreenRect.Min);

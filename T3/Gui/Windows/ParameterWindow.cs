@@ -81,7 +81,7 @@ namespace T3.Gui.Windows
 
                 ImGui.PushFont(Fonts.FontSmall);
                 var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
-                
+
                 if (!string.IsNullOrEmpty(symbolUi.Description))
                 {
                     var desc = symbolUi.Description;
@@ -157,7 +157,7 @@ namespace T3.Gui.Windows
                 ImGui.PopID();
             }
         }
-        
+
         private void DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi)
         {
             // namespace and symbol
@@ -165,12 +165,13 @@ namespace T3.Gui.Windows
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
                 ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
                 var namespaceForEdit = op.Symbol.Namespace ?? "";
-                
 
-                if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit, SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
+                if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
+                                                  SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
                 {
                     op.Symbol.Namespace = namespaceForEdit;
                 }
+
                 ImGui.PopStyleColor();
                 ImGui.SameLine();
                 ImGui.Dummy(new Vector2(10, 0));
@@ -181,8 +182,9 @@ namespace T3.Gui.Windows
 
             // SymbolChild Name
             {
-                ImGui.PushFont(Fonts.FontLarge);
-                ImGui.SetNextItemWidth(-1);
+                //ImGui.PushFont(Fonts.FontLarge);
+
+                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 100);
 
                 var nameForEdit = symbolChildUi.SymbolChild.Name;
 
@@ -191,6 +193,8 @@ namespace T3.Gui.Windows
                     _symbolChildNameCommand.NewName = nameForEdit;
                     symbolChildUi.SymbolChild.Name = nameForEdit;
                 }
+
+                var keepPos = ImGui.GetCursorScreenPos();
 
                 if (ImGui.IsItemActivated())
                 {
@@ -205,14 +209,35 @@ namespace T3.Gui.Windows
 
                 // Fake placeholder text
                 if (string.IsNullOrEmpty(nameForEdit))
+                    ImGui.GetWindowDrawList().AddText(ImGui.GetItemRectMin() + new Vector2(5, 5),
+                                                      T3Style.Colors.TextMuted,
+                                                      "Untitled instance");
+
+                ImGui.SameLine();
+            }
+
+            // Disabled toggle
+            {
+                ImGui.PushFont(Fonts.FontBold);
+                if (symbolChildUi.IsDisabled)
                 {
-                    ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
-                    ImGui.SetCursorScreenPos(ImGui.GetItemRectMin());
-                    ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.2f).Rgba);
-                    ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
-                    ImGui.Text("Untitled instance");
+                    ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.WarningColor.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Rgba);
+                    if (ImGui.Button("DISABLED", new Vector2(100, 0)))
+                    {
+                        UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, false));
+                    }
+                    ImGui.PopStyleColor(2);
+                }
+                else
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+                    if (ImGui.Button("ENABLED", new Vector2(100, 0)))
+                    {
+                        UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, true));
+                    }
+
                     ImGui.PopStyleColor();
-                    ImGui.PopStyleVar();
                 }
 
                 ImGui.PopFont();

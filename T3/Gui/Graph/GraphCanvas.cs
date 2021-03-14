@@ -451,18 +451,22 @@ namespace T3.Gui.Graph
                 bool allSelectedEnabled = selectedChildUis.TrueForAll(selectedChildUi => !selectedChildUi.IsDisabled);
                 if (!allSelectedDisabled && ImGui.MenuItem("Disable"))
                 {
-                    foreach (var selectedChildUi in selectedChildUis)
+                    var commands = new List<ICommand>();
+                    foreach (var selectedChildUi in selectedChildUis) 
                     {
-                        selectedChildUi.IsDisabled = true;
+                        commands.Add(new ChangeInstanceIsDisabledCommand(selectedChildUi, true));
                     }
+                    UndoRedoStack.AddAndExecute(new MacroCommand("Disable operators", commands));
                 }
 
                 if (!allSelectedEnabled && ImGui.MenuItem("Enable"))
                 {
+                    var commands = new List<ICommand>();
                     foreach (var selectedChildUi in selectedChildUis)
                     {
-                        selectedChildUi.IsDisabled = false;
+                        commands.Add(new ChangeInstanceIsDisabledCommand(selectedChildUi, false));
                     }
+                    UndoRedoStack.AddAndExecute(new MacroCommand("Enable operators", commands));
                 }
 
                 if (ImGui.MenuItem("Delete"))
