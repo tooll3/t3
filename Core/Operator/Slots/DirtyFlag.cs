@@ -30,7 +30,7 @@ namespace T3.Core.Operator.Slots
             }
             else
             {
-                Log.Error("Double invalidation of a slot. Please notify cynic about current setup.");
+                //Log.Error("Double invalidation of a slot. Please notify cynic about current setup.");
             }
         }
 
