@@ -715,11 +715,44 @@ namespace T3.Gui.Graph
                 _bestMatchDistance = distance;
             }
 
+            public static void RegisterAsPotentialTarget(IOutputUi outputUi, ImRect areaOnScreen)
+            {
+                if (TempConnections == null || TempConnections.Count == 0)
+                    return;
+
+                if (TempConnections.All(c => c.ConnectionType != outputUi.Type))
+                    return;
+
+                var distance = Vector2.Distance(areaOnScreen.Min, _mousePosition);
+                if (distance > SnapDistance || distance > _bestMatchDistance)
+                {
+                    return;
+                }
+
+                _bestMatchYetForCurrentFrame = new PotentialConnectionTarget()
+                                                   {
+                                                       TargetParentOrChildId = UseSymbolContainerId,
+                                                       TargetInputId = outputUi.OutputDefinition.Id,
+                                                       Area = areaOnScreen,
+                                                       Name = outputUi.OutputDefinition.Name,
+                                                       SlotIndex = 0
+                                                   };
+                _bestMatchDistance = distance;
+            }
+            
+            
             public static bool IsNextBestTarget(SymbolChildUi childUi, Guid inputDefinitionId, int socketIndex)
             {
                 return BestMatchLastFrame != null && BestMatchLastFrame.TargetParentOrChildId == childUi.SymbolChild.Id
                                                   && BestMatchLastFrame.TargetInputId == inputDefinitionId
                                                   && BestMatchLastFrame.SlotIndex == socketIndex;
+            }
+            
+            public static bool IsNextBestTarget(IOutputUi outputUi)
+            {
+                return BestMatchLastFrame != null && BestMatchLastFrame.TargetParentOrChildId == UseSymbolContainerId
+                                                  && BestMatchLastFrame.TargetInputId == outputUi.Id
+                                                  && BestMatchLastFrame.SlotIndex == 0;
             }
 
             public static PotentialConnectionTarget BestMatchLastFrame;

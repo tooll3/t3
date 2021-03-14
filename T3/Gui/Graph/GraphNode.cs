@@ -305,7 +305,7 @@ namespace T3.Gui.Graph
                 ImGui.InvisibleButton("input", usableSlotArea.GetSize());
                 THelpers.DebugItemRect("input-slot");
 
-                // Note: isItemHovered does not work when being dragged from another item
+                // Note: isItemHovered does not work when a connection is being dragged from another item
                 var hovered = ConnectionMaker.TempConnections.Count > 0
                                   ? usableSlotArea.Contains(ImGui.GetMousePos())
                                   : ImGui.IsItemHovered();
