@@ -120,7 +120,7 @@ namespace T3.Gui.InputUi
                             ImGui.SameLine();
 
                             ImGui.SetNextItemWidth(-1);
-                            ImGui.PushStyleColor(ImGuiCol.Text, T3Style.ConnectedParameterColor.Rgba);
+                            ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.ConnectedParameterColor.Rgba);
                             var slot = allInputs[multiInputIndex];
                             DrawReadOnlyControl("##multiInputParam", ref slot.Value);
                             ImGui.PopStyleColor();
@@ -288,8 +288,8 @@ namespace T3.Gui.InputUi
 
                     if (input.IsDefault)
                     {
-                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, T3Style.ButtonColor.Rgba);
-                        ImGui.PushStyleColor(ImGuiCol.Text, T3Style.TextMuted.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, T3Style.Colors.ButtonColor.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
                         ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
                         ImGui.PopStyleColor(2);
                         ImGui.SameLine();

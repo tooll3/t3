@@ -13,18 +13,25 @@ namespace T3.Gui
     /// </remarks>
     public static class T3Style
     {
-        public static Color ConnectedParameterColor = new Color(0.6f, 0.6f, 1f, 1f);
-        public static Color ValueLabelColor = new Color(1, 1, 1, 0.5f);
-        public static Color ValueLabelColorHover = new Color(1, 1, 1, 1.2f);
-        
-        public static Color GraphLineColor = new Color(1, 1, 1, 0.3f);
-        public static Color GraphLineColorHover = new Color(1, 1, 1, 0.7f);
-        
-        public static Color GraphAxisColor = new Color(0, 0, 0, 0.3f);
+        public static class Colors
+        {
+            public static Color ConnectedParameterColor = new Color(0.6f, 0.6f, 1f, 1f);
+            public static Color ValueLabelColor = new Color(1, 1, 1, 0.5f);
+            public static Color ValueLabelColorHover = new Color(1, 1, 1, 1.2f);
+            
+            public static Color GraphLineColor = new Color(1, 1, 1, 0.3f);
+            public static Color GraphLineColorHover = new Color(1, 1, 1, 0.7f);
+            
+            public static Color GraphAxisColor = new Color(0, 0, 0, 0.3f);
 
-        public static Color ButtonColor = new Color(0.15f, 0.15f, 0.15f, 1f);
-        public static Color TextMuted = new Color(0.5f);
-        public static Color TextDisabled = new Color(0.328f, 0.328f, 0.328f, 1.000f);
+            public static Color ButtonColor = new Color(0.15f, 0.15f, 0.15f, 1f);
+            public static Color ButtonHoverColor = new Color(43, 65, 80, 255);
+            public static Color TextMuted = new Color(0.5f);
+            public static Color TextDisabled = new Color(0.328f, 0.328f, 0.328f, 1.000f);
+            public static Color WarningColor = new Color(203, 19,113, 255);
+        }
+        
+        
 
         public static readonly Color FragmentLineColor = Color.Orange;
         
@@ -62,8 +69,9 @@ namespace T3.Gui
                 }
 
                 _colors[(int)ImGuiCol.Text] = new Vector4(1, 1, 1, 0.85f);
-                _colors[(int)ImGuiCol.TextDisabled] = TextDisabled;
-                _colors[(int)ImGuiCol.Button] = ButtonColor;
+                _colors[(int)ImGuiCol.TextDisabled] = Colors.TextDisabled;
+                _colors[(int)ImGuiCol.Button] = Colors.ButtonColor;
+                _colors[(int)ImGuiCol.ButtonHovered] = Colors.ButtonHoverColor;
                 _colors[(int)ImGuiCol.Border] = new Vector4(0, 0.00f, 0.00f, 0.97f);
                 _colors[(int)ImGuiCol.BorderShadow] = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
                 _colors[(int)ImGuiCol.FrameBg] = new Vector4(0.13f, 0.13f, 0.13f, 0.80f);

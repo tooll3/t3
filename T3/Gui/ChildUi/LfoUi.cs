@@ -88,12 +88,12 @@ namespace T3.Gui.ChildUi
                 // Horizontal line
                 var lh1 = graphRect.Min + Vector2.UnitY * h / 2;
                 var lh2 = new Vector2(graphRect.Max.X, lh1.Y + 1);
-                drawList.AddRectFilled(lh1, lh2, T3Style.GraphAxisColor);
+                drawList.AddRectFilled(lh1, lh2, T3Style.Colors.GraphAxisColor);
 
                 // Vertical start line 
                 var lv1 = graphRect.Min + Vector2.UnitX * (int)(graphWidth * relativeX);
                 var lv2 = new Vector2(lv1.X + 1, graphRect.Max.Y);
-                drawList.AddRectFilled(lv1, lv2, T3Style.GraphAxisColor);
+                drawList.AddRectFilled(lv1, lv2, T3Style.Colors.GraphAxisColor);
 
                 // Fragment line 
                 //var width = graphRect.GetWidth() - (lv1.X - graphRect.Min.X); //h * (GraphWidthRatio - leftPaddingH);
@@ -118,7 +118,7 @@ namespace T3.Gui.ChildUi
                                                     ) + graphRect.Min;
                 }
 
-                var curveLineColor = highlightEditable ? T3Style.GraphLineColorHover : T3Style.GraphLineColor;
+                var curveLineColor = highlightEditable ? T3Style.Colors.GraphLineColorHover : T3Style.Colors.GraphLineColor;
                 drawList.AddPolyline(ref GraphLinePoints[0], GraphListSteps, curveLineColor, false, 1.5f);
             }
 

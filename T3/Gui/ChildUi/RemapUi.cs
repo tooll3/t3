@@ -63,17 +63,17 @@ namespace T3.Gui.ChildUi
             // Horizontal line
             var lhMin = graphRect.Min + Vector2.UnitY * h / 2;
             var lhMax = new Vector2(graphRect.Max.X, lhMin.Y + 1);
-            drawList.AddRectFilled(lhMin, lhMax, T3Style.GraphAxisColor);
+            drawList.AddRectFilled(lhMin, lhMax, T3Style.Colors.GraphAxisColor);
 
             // Vertical start line
             var lv1Min = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * GraphRangePadding);
             var lv1Max = new Vector2(lv1Min.X + 1, graphRect.Max.Y);
-            drawList.AddRectFilled(lv1Min, lv1Max, T3Style.GraphAxisColor);
+            drawList.AddRectFilled(lv1Min, lv1Max, T3Style.Colors.GraphAxisColor);
 
             // Vertical end line
             var lv2Min = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * (1 - GraphRangePadding));
             var lv2Max = new Vector2(lv2Min.X + 1, graphRect.Max.Y);
-            drawList.AddRectFilled(lv2Min, lv2Max, T3Style.GraphAxisColor);
+            drawList.AddRectFilled(lv2Min, lv2Max, T3Style.Colors.GraphAxisColor);
 
             var inputX = MathUtils.Lerp(lv1Min.X, lv2Min.X, inFragment);
             GraphLinePoints[0].X = inputX;

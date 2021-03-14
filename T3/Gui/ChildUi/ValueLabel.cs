@@ -74,7 +74,7 @@ namespace T3.Gui.ChildUi
                 var labelSize = ImGui.CalcTextSize(valueText);
                 var space = screenRect.GetSize() - labelSize;
                 var position = screenRect.Min + space * alignment;
-                drawList.AddText(MathUtils.Floor(position), highlight ? T3Style.ValueLabelColorHover : T3Style.ValueLabelColor, valueText);
+                drawList.AddText(MathUtils.Floor(position), highlight ? T3Style.Colors.ValueLabelColorHover : T3Style.Colors.ValueLabelColor, valueText);
                 ImGui.PopFont();
             }            
             ImGui.PopID();
