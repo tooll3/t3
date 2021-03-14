@@ -228,9 +228,35 @@ namespace T3.Gui.Graph.Interaction
             SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
             newSymbol.Namespace = nameSpace;
 
-            // apply content to new symbol
+            // Apply content to new symbol
             var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, newSymbolUi, Vector2.Zero);
             cmd.Do();
+            
+            // Initialize output positions
+            if (newSymbolUi.OutputUis.Count > 0)
+            {
+                var minY = float.PositiveInfinity;
+                var maxY = float.NegativeInfinity;
+                
+                var maxX = float.NegativeInfinity;
+                
+                foreach (var childUi in newSymbolUi.ChildUis)
+                {
+                    minY = MathUtils.Min(childUi.PosOnCanvas.Y, minY);
+                    maxY = MathUtils.Max(childUi.PosOnCanvas.Y, maxY);
+                    
+                    maxX = MathUtils.Max(childUi.PosOnCanvas.X, maxX);
+                }
+                
+                var firstOutputPosition = new Vector2(maxX + 300, (maxY + minY) / 2);
+
+                foreach (var outputUi in newSymbolUi.OutputUis.Values)
+                {
+                    outputUi.PosOnCanvas = firstOutputPosition;
+                    firstOutputPosition += new Vector2(0, 100);
+                }
+            }
+            
             cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
 
             var selectedChildrenIds = (from child in selectedChildren select child.Id).ToList();
