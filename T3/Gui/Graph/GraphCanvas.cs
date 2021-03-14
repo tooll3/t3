@@ -447,6 +447,20 @@ namespace T3.Gui.Graph
                     ImGui.EndMenu();
                 }
 
+                const bool allSelectedDisabled = false;
+                const bool allSelectedEnabled = false;
+                if (!allSelectedDisabled && ImGui.MenuItem("Disable"))
+                {
+                    // TODO: @cynic needs implementation
+                    Log.Assert("Would disable selected ops");
+                }
+
+                if (!allSelectedEnabled && ImGui.MenuItem("Enable"))
+                {
+                    // TODO: @cynic needs implementation
+                    Log.Assert("Would enable selected ops");
+                }
+
                 if (ImGui.MenuItem("Delete"))
                 {
                     DeleteSelectedElements();
