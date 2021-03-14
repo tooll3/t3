@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core;
 using T3.Gui;
@@ -191,12 +192,14 @@ namespace UiHelpers
             if (drawList._Path.Size < 2)
                 return false;
 
+            const float distance = 6;
+
             var p1 = drawList._Path[0];
             var p2 = drawList._Path[drawList._Path.Size - 1];
-            // foreground.AddRect(p1, p2, Color.Orange);
+            //foreground.AddRect(p1, p2, Color.Orange);
             var r = new ImRect(p2, p1).MakePositive();
 
-            r.Expand(4);
+            r.Expand(distance);
             var mousePos = ImGui.GetMousePos();
             if (!r.Contains(mousePos))
                 return false;
@@ -207,18 +210,23 @@ namespace UiHelpers
                 var p = drawList._Path[i];
 
                 r = new ImRect(pLast, p).MakePositive();
-                r.Expand(4);
-                // foreground.AddRect(r.Min, r.Max, Color.Gray);
+                r.Expand(distance);
+                //foreground.AddRect(r.Min, r.Max, Color.Gray);
                 if (r.Contains(mousePos))
-                {
-                    // foreground.AddRect(r.Min, r.Max, Color.Orange);
+                { 
+                    //foreground.AddRect(r.Min, r.Max, Color.Orange);
                     var v = (pLast - p);
                     var vLen = v.Length();
                     
                     var d = Vector2.Dot(v, mousePos-p) / vLen;
                     positionOnLine = p + v * d/vLen;
-                    // foreground.AddCircleFilled(positionOnLine, 4f, Color.Red);
-                    return true;
+                    //foreground.AddCircleFilled(positionOnLine, 4f, Color.Red);
+                    if (Vector2.Distance(mousePos, positionOnLine) <= distance)
+                    {
+                        return true;
+                    }
+
+                    return false;
                 }
 
                 pLast = p;
