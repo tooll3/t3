@@ -139,7 +139,7 @@ namespace T3.Gui
                 if (!OutputUis.TryGetValue(output.Id, out var value) || (value.Type != output.ValueType))
                 {
                     Log.Debug($"Found no output ui entry for symbol child output '{output.Name}' - creating a new one");
-                    OutputUis.Remove(output.Id); //FIXME: What does this line do? 
+                    OutputUis.Remove(output.Id); // if type has changed remove the old entry
                     var outputUiCreator = outputUiFactory[output.ValueType];
                     var newOutputUi = outputUiCreator();
                     newOutputUi.OutputDefinition = output;
