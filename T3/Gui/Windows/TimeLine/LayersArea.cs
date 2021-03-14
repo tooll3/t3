@@ -9,6 +9,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
+using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
@@ -247,7 +248,6 @@ namespace T3.Gui.Windows.TimeLine
             
             ImGui.SetCursorScreenPos(showSizeHandles ? (position + _handleOffset) : position);
 
-            var somethingElseWasHovered = ImGui.IsAnyItemHovered();
             var wasClicked = ImGui.InvisibleButton("body", bodySize);
 
             if (ImGui.IsItemHovered())
@@ -271,12 +271,18 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.EndTooltip();
             }
 
-            if (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(0) && !somethingElseWasHovered)
+            if (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(0))
             {
-                var instance = _compositionOp.Children.Single(child => child.SymbolChildId == symbolChildUi.Id);
-                SelectionManager.SetSelectionToChildUi(symbolChildUi, instance);
-                FitViewToSelectionHandling.FitViewToSelection();
-                ClipSelection.Select(timeClip);
+                //var instance = _compositionOp.Children.Single(child => child.SymbolChildId == symbolChildUi.Id);
+                //SelectionManager.SetSelectionToChildUi(symbolChildUi, instance);
+                
+                //FitViewToSelectionHandling.FitViewToSelection();
+                //ClipSelection.Select(timeClip);
+                var primaryGraphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
+                if (primaryGraphWindow != null && NodeOperations.TryGetUiAndInstanceInComposition(timeClip.Id, _compositionOp, out var childUi, out var instance))
+                {
+                    primaryGraphWindow.GraphCanvas.SetCompositionToChildInstance(instance);
+                }
             }
 
             if (ImGui.IsItemHovered())
@@ -297,14 +303,17 @@ namespace T3.Gui.Windows.TimeLine
                 }
             }
 
+            if (wasClicked)
+            {
+                FitViewToSelectionHandling.FitViewToSelection();
+            }
             HandleDragging(timeClip, isSelected, wasClicked, HandleDragMode.Body, position);
 
             var handleSize = showSizeHandles ? new Vector2(HandleWidth, LayerHeight) : Vector2.One;
 
             ImGui.SetCursorScreenPos(position);
-            somethingElseWasHovered = ImGui.IsAnyItemHovered();
             var aHandleClicked = ImGui.InvisibleButton("startHandle", handleSize);
-            if ((!somethingElseWasHovered && ImGui.IsItemHovered()) || ImGui.IsItemActive())
+            if (ImGui.IsItemHovered() || ImGui.IsItemActive())
             {
                 _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.White);
                 _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Black);
@@ -666,7 +675,11 @@ namespace T3.Gui.Windows.TimeLine
 
             public static void Select(ITimeClip timeClip)
             {
-                SelectionManager.SelectCompositionChild(_compositionOp, timeClip.Id, replaceSelection:true);
+                foreach (var c in _selectedClips)
+                {
+                    SelectionManager.DeselectCompositionChild(_compositionOp, c.Id);
+                }
+                SelectionManager.SelectCompositionChild(_compositionOp, timeClip.Id, replaceSelection:false);
                 _selectedClips.Add(timeClip);
             }
 
