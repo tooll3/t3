@@ -10,6 +10,7 @@ namespace T3.Core.Operator.Slots
         DirtyFlag DirtyFlag { get; set; }
         int Invalidate();
         void Update(EvaluationContext context);
+        void Disable(bool disable);
         void AddConnection(ISlot source, int index = 0);
         void RemoveConnection(int index = 0);
         bool IsConnected { get; }

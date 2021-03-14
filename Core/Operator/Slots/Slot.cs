@@ -46,6 +46,21 @@ namespace T3.Core.Operator.Slots
             }
         }
 
+        public void Disable(bool disable) 
+        {
+            if (disable)
+            {
+                _defaultUpdateAction = _updateAction;
+                _updateAction = context => { };
+                DirtyFlag.Invalidate();
+            } 
+            else
+            {
+                SetUpdateActionBackToDefault();
+                DirtyFlag.Invalidate();
+            }
+        }
+
         public void ConnectedUpdate(EvaluationContext context)
         {
             Value = InputConnection[0].GetValue(context);
