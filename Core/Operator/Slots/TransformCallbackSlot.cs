@@ -26,5 +26,25 @@ namespace T3.Core.Operator.Slots
                 base.UpdateAction = Update;
             }
         }
+        
+        protected override void SetDisabled(bool isDisabled)
+        {
+            if (isDisabled == _isDisabled)
+                return;
+
+            if (isDisabled)
+            {
+                _defaultUpdateAction = _baseUpdateAction;
+                base.UpdateAction = EmptyAction;
+                DirtyFlag.Invalidate();
+            }
+            else
+            {
+                SetUpdateActionBackToDefault();
+                DirtyFlag.Invalidate();
+            }
+
+            _isDisabled = isDisabled;
+        }
     }
 }

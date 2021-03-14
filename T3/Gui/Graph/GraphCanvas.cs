@@ -447,18 +447,27 @@ namespace T3.Gui.Graph
                     ImGui.EndMenu();
                 }
 
-                const bool allSelectedDisabled = false;
-                const bool allSelectedEnabled = false;
+                bool IsDisabledState(SymbolChildUi selectedChildUi, bool state) => selectedChildUi.GetInstance(CompositionOp).Outputs.First().IsDisabled == state;
+                bool allSelectedDisabled = selectedChildUis.TrueForAll(selectedChildUi => IsDisabledState(selectedChildUi, true));
+                bool allSelectedEnabled = selectedChildUis.TrueForAll(selectedChildUi => IsDisabledState(selectedChildUi, false));
                 if (!allSelectedDisabled && ImGui.MenuItem("Disable"))
                 {
-                    // TODO: @cynic needs implementation
-                    Log.Assert("Would disable selected ops");
+                    foreach (var selectedChildUi in selectedChildUis)
+                    {
+                        var output = selectedChildUi.GetInstance(CompositionOp).Outputs.FirstOrDefault();
+                        if (output != null)
+                            output.IsDisabled = true;
+                    }
                 }
 
                 if (!allSelectedEnabled && ImGui.MenuItem("Enable"))
                 {
-                    // TODO: @cynic needs implementation
-                    Log.Assert("Would enable selected ops");
+                    foreach (var selectedChildUi in selectedChildUis)
+                    {
+                        var output = selectedChildUi.GetInstance(CompositionOp).Outputs.FirstOrDefault();
+                        if (output != null)
+                            output.IsDisabled = false;
+                    }
                 }
 
                 if (ImGui.MenuItem("Delete"))

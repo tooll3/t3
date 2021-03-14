@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
@@ -71,6 +72,11 @@ namespace T3.Gui
                        Style = Style,
                        SymbolChild = SymbolChild,
                    };
+        }
+
+        public Instance GetInstance(Instance compositionOp)
+        {
+            return compositionOp.Children.Single(child => child.SymbolChildId == Id);
         }
     }
 }

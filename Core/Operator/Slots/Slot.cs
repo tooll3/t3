@@ -14,6 +14,36 @@ namespace T3.Core.Operator.Slots
         public T Value; // { get; set; }
         public bool IsMultiInput { get; protected set; } = false;
 
+        protected bool _isDisabled = false;
+
+        protected virtual void SetDisabled(bool isDisabled)
+        {
+            if (isDisabled == _isDisabled)
+                return;
+
+            if (isDisabled)
+            {
+                _defaultUpdateAction = _updateAction;
+                UpdateAction = EmptyAction;
+                DirtyFlag.Invalidate();
+            }
+            else
+            {
+                SetUpdateActionBackToDefault();
+                DirtyFlag.Invalidate();
+            }
+
+            _isDisabled = isDisabled;
+        }
+
+        public bool IsDisabled 
+        {
+            get => _isDisabled;
+            set => SetDisabled(value);
+        }
+
+        protected void EmptyAction(EvaluationContext context) { }
+
         public Slot()
         {
             // UpdateAction = Update;
@@ -43,21 +73,6 @@ namespace T3.Core.Operator.Slots
                 _updateAction?.Invoke(context);
                 DirtyFlag.Clear();
                 DirtyFlag.SetUpdated();
-            }
-        }
-
-        public void Disable(bool disable) 
-        {
-            if (disable)
-            {
-                _defaultUpdateAction = _updateAction;
-                _updateAction = context => { };
-                DirtyFlag.Invalidate();
-            } 
-            else
-            {
-                SetUpdateActionBackToDefault();
-                DirtyFlag.Invalidate();
             }
         }
 
