@@ -139,10 +139,11 @@ namespace T3.Gui
                 if (!OutputUis.TryGetValue(output.Id, out var value) || (value.Type != output.ValueType))
                 {
                     Log.Debug($"Found no output ui entry for symbol child output '{output.Name}' - creating a new one");
-                    OutputUis.Remove(output.Id);
+                    OutputUis.Remove(output.Id); //FIXME: What does this line do? 
                     var outputUiCreator = outputUiFactory[output.ValueType];
                     var newOutputUi = outputUiCreator();
                     newOutputUi.OutputDefinition = output;
+                    newOutputUi.PosOnCanvas = ComputeNewOutputUiPositionOnCanvas(ChildUis, OutputUis);
                     OutputUis.Add(output.Id, newOutputUi);
                 }
             }
@@ -153,6 +154,42 @@ namespace T3.Gui
                 Log.Debug($"OutputUi '{outputUiToRemove.Value.Id}' still existed but no corresponding input definition anymore. Removing the ui.");
                 OutputUis.Remove(outputUiToRemove.Key);
             }
+        }
+
+
+        private static Vector2 ComputeNewOutputUiPositionOnCanvas(List<SymbolChildUi> childUis, OrderedDictionary<Guid, IOutputUi> outputUis)
+        {
+            if (outputUis.Count > 0)
+            {
+                var maxPos = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
+                foreach (var output in outputUis.Values)
+                {
+                    maxPos = Vector2.Max(maxPos, output.PosOnCanvas);
+                }
+
+                return maxPos + new Vector2(0, 100);
+            }
+
+            // FIXME: childUis are always undefined at this point?
+            if (childUis.Count > 0)
+            {
+                var minY = float.PositiveInfinity;
+                var maxY = float.NegativeInfinity;
+                
+                var maxX = float.NegativeInfinity;
+                
+                foreach (var childUi in childUis)
+                {
+                    minY = MathUtils.Min(childUi.PosOnCanvas.Y, minY);
+                    maxY = MathUtils.Max(childUi.PosOnCanvas.Y, maxY);
+                    
+                    maxX = MathUtils.Max(childUi.PosOnCanvas.X, maxX);
+                }
+
+                return new Vector2(maxX + 100, (maxY + minY) / 2);
+            }
+            Log.Warning("Assuming default output position");
+            return new Vector2(300, 200);
         }
 
         private Vector2 GetCanvasPositionForNextInputUi(SymbolUi symbolUi)
