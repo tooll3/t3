@@ -44,19 +44,22 @@ namespace T3.Gui
         public bool IsDisabled {
             get => SymbolChild.Outputs.FirstOrDefault().Value?.IsDisabled ?? false;
             set 
+            {
+                var firstOutputDef = SymbolChild.Symbol.OutputDefinitions.FirstOrDefault();
+                if (firstOutputDef != null)
                 {
-                    var childOutput = SymbolChild.Outputs.FirstOrDefault().Value;
-                    if (childOutput != null)
-                        childOutput.IsDisabled = value;
-
-                    foreach (var parentInstance in SymbolChild.Parent.InstancesOfSymbol)
-                    {
-                        var childInstance = parentInstance.Children.Single(child => child.SymbolChildId == Id);
-                        var output = childInstance.Outputs.FirstOrDefault();
-                        if (output != null)
-                            output.IsDisabled = value;
-                    }
+                    var childOutput = SymbolChild.Outputs[firstOutputDef.Id];
+                    childOutput.IsDisabled = value;
                 }
+
+                foreach (var parentInstance in SymbolChild.Parent.InstancesOfSymbol)
+                {
+                    var childInstance = parentInstance.Children.Single(child => child.SymbolChildId == Id);
+                    var output = childInstance.Outputs.FirstOrDefault();
+                    if (output != null)
+                        output.IsDisabled = value;
+                }
+            }
         }
 
         public CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
