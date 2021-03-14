@@ -4,6 +4,7 @@ using T3.Core.Operator;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
+using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using UiHelpers;
 
@@ -49,9 +50,18 @@ namespace T3.Gui.Graph
                                              LastScreenRect.Max.Y + GraphNode.InputSlotThickness + GraphNode.InputSlotMargin),
                                  ColorVariations.OperatorInputZone.Apply(typeColor));
 
-                var label = string.Format($"{outputDef.Name}");
+                // Label
+                {
+                    var isScaledDown = GraphCanvas.Current.Scale.X < 1;
+                    drawList.PushClipRect(LastScreenRect.Min, LastScreenRect.Max, true);
+                    ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontBold);
 
-                drawList.AddText(LastScreenRect.Min, ColorVariations.OperatorLabel.Apply(typeColor), label);
+                    var label = string.Format($"{outputDef.Name}");
+                    drawList.AddText(LastScreenRect.Min, ColorVariations.OperatorLabel.Apply(typeColor), label);
+                    
+                    ImGui.PopFont();
+                    drawList.PopClipRect();
+                }
 
                 if (outputUi.IsSelected)
                 {
