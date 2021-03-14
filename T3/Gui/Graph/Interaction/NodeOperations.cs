@@ -88,8 +88,8 @@ namespace T3.Gui.Graph.Interaction
             return result;
         }
         
-        public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren,  string newSymbolName,
-                                            string nameSpace, string description)
+        public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName,
+                                            string nameSpace, string description, bool shouldBeTimeClip)
         {
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
             Dictionary<Symbol.Connection, Guid> connectionToNewSlotIdMap = new Dictionary<Symbol.Connection, Guid>();

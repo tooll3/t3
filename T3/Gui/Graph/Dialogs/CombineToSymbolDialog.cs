@@ -13,7 +13,7 @@ namespace T3.Gui.Graph.Dialogs
     {
         public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, ref string nameSpace, ref string combineName, ref string description)
         {
-            DialogSize = new Vector2(500, 280);
+            DialogSize = new Vector2(500, 350);
 
             if (BeginDialog("Combine into symbol"))
             {
@@ -52,10 +52,13 @@ namespace T3.Gui.Graph.Dialogs
                     ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));
                 }
 
+                ImGui.Checkbox("Combine as time clip", ref _shouldBeTimeClip);
+
                 if (CustomComponents.DisablableButton("Combine", NodeOperations.IsNewSymbolNameValid(combineName)))
                 {
                     var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
-                    NodeOperations.CombineAsNewType(compositionSymbolUi, selectedChildUis, combineName, nameSpace, description);
+                    NodeOperations.CombineAsNewType(compositionSymbolUi, selectedChildUis, combineName, nameSpace, description, _shouldBeTimeClip);
+                    _shouldBeTimeClip = false; // Making timeclips this is normally a one off operation
                     ImGui.CloseCurrentPopup();
                 }
 
@@ -70,5 +73,7 @@ namespace T3.Gui.Graph.Dialogs
 
             EndDialog();
         }
+
+        private static bool _shouldBeTimeClip;
     }
 }
