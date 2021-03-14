@@ -181,6 +181,9 @@ namespace T3.Gui.Graph
                 if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
                     DeleteSelectedElements();
 
+                if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
+                    ToggleDisabledForSelectedElements();
+
                 if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
                 {
                     var selectedChildren = GetSelectedChildUis();
@@ -579,6 +582,8 @@ namespace T3.Gui.Graph
 
         private bool _contextMenuIsOpen;
 
+        
+        
         private void DeleteSelectedElements()
         {
             var selectedChildren = GetSelectedChildUis();
@@ -596,6 +601,32 @@ namespace T3.Gui.Graph
             }
 
             SelectionManager.Clear();
+        }
+        
+        private void ToggleDisabledForSelectedElements()
+        {
+            var selectedChildren = GetSelectedChildUis();
+
+            if (!selectedChildren.Any())
+            {
+                if (T3Ui.HoveredIdsLastFrame.Count == 1 && CompositionOp != null)
+                {
+                    var hoveredChildUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis.SingleOrDefault(c => c.Id == T3Ui.HoveredIdsLastFrame.First());
+                    if (hoveredChildUi == null)
+                        return;
+                    selectedChildren = new List<SymbolChildUi> { hoveredChildUi };
+                }
+            }
+
+            var allSelectedDisabled = selectedChildren.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
+            var shouldDisable = !allSelectedDisabled;
+
+            var commands = new List<ICommand>();
+            foreach (var selectedChildUi in selectedChildren) 
+            {
+                commands.Add(new ChangeInstanceIsDisabledCommand(selectedChildUi, shouldDisable));
+            }
+            UndoRedoStack.AddAndExecute(new MacroCommand("Disable/Enable", commands));
         }
 
         private static List<SymbolChildUi> GetSelectedChildUis()
