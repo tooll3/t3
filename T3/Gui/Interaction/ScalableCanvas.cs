@@ -312,7 +312,18 @@ namespace T3.Gui.Interaction
             if ((flags & T3Ui.EditingFlags.PreventZoomWithMouseWheel) == 0)
             {
                 ZoomWithMouseWheel();
-                //ZoomWithMiddleMouseDrag();
+                ZoomWithMiddleMouseDrag();
+                
+                if (this is TimeLineCanvas)
+                {
+                    ScaleTarget.X= ScaleTarget.X.Clamp(0.01f, 5000);
+                    ScaleTarget.Y= ScaleTarget.Y.Clamp(0.01f, 5000);
+                }
+                else
+                {
+                    ScaleTarget.X= ScaleTarget.X.Clamp(0.1f, 30);
+                    ScaleTarget.Y= ScaleTarget.Y.Clamp(0.1f, 30);
+                }                
             }
         }
 
@@ -349,16 +360,7 @@ namespace T3.Gui.Interaction
             if (Math.Abs(zoomDelta) > 0.1f)
                 UserZoomedCanvas = true;
 
-            if (this is TimeLineCanvas)
-            {
-                ScaleTarget.X= ScaleTarget.X.Clamp(0.01f, 5000);
-                ScaleTarget.Y= ScaleTarget.Y.Clamp(0.01f, 5000);
-            }
-            else
-            {
-                ScaleTarget.X= ScaleTarget.X.Clamp(0.1f, 30);
-                ScaleTarget.Y= ScaleTarget.Y.Clamp(0.1f, 30);
-            }
+
 
             var shift = ScrollTarget + (focusCenter * ScaleTarget);
             ScrollTarget += _mouse - shift - WindowPos;
@@ -403,12 +405,15 @@ namespace T3.Gui.Interaction
             if (ImGui.IsMouseDragging(ImGuiMouseButton.Middle, 0))
             {
                 var delta = ImGui.GetMousePos() - _mousePosWhenMiddlePressed;
+                var deltaMax = Math.Abs(delta.X) > Math.Abs(delta.Y)
+                                   ? -delta.X
+                                   : delta.Y;
                 if (IsCurveCanvas)
                 {
                 }
                 else
                 {
-                    var f = (float)Math.Pow(1.1f, delta.Y / 40f);
+                    var f = (float)Math.Pow(1.1f, -deltaMax / 40f);
                     ScaleTarget = _scaleWhenMiddlePressed * f;
                 }
 
