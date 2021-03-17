@@ -215,13 +215,17 @@ namespace T3.Gui.Graph
                 }
 
                 // Show Parameter window as context menu
-                var isClicked = ImGui.IsItemHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left);
-                var clickWasDrag = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() > UserSettings.Config.ClickTreshold;
-
-                if (isClicked
-                    && !clickWasDrag
-                    && !ParameterWindow.IsAnyInstanceVisible()
-                    && !ImGui.GetIO().KeyShift
+                var activatedWithLeftMouse = ImGui.IsItemHovered() 
+                                             && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
+                                             && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickTreshold
+                                             && !ParameterWindow.IsAnyInstanceVisible()
+                                             && !ImGui.GetIO().KeyShift;    // allow double click to open
+                
+                var activatedWithMiddleMouse = ImGui.IsItemHovered() 
+                                             && ImGui.IsMouseReleased(ImGuiMouseButton.Middle)
+                                             && ImGui.GetMouseDragDelta(ImGuiMouseButton.Middle, 0).Length() < UserSettings.Config.ClickTreshold;
+                
+                if ((activatedWithLeftMouse || activatedWithMiddleMouse)
                     && !justOpenedChild
                     && string.IsNullOrEmpty(T3Ui.OpenedPopUpName)
                     && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0)
@@ -776,7 +780,7 @@ namespace T3.Gui.Graph
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
-            var thickness = MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1f, 3f, UsableSlotThickness);
+            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.7f, 1.2f, UsableSlotThickness/2, UsableSlotThickness);
 
             var opRect = _usableScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
@@ -1030,7 +1034,7 @@ namespace T3.Gui.Graph
 
         #region style variables
         public static Vector2 LabelPos = new Vector2(4, 2);
-        public static float UsableSlotThickness = 10;
+        public static float UsableSlotThickness = 14;
         public static float InputSlotThickness = 3;
         public static float InputSlotMargin = 1;
         public static float SlotGaps = 2;
