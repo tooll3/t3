@@ -16,6 +16,7 @@ using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -358,7 +359,7 @@ namespace T3.Gui.Windows.TimeLine
                 var keyframeSize = new Vector2(10, 24);
                 if (ImGui.InvisibleButton("##key", keyframeSize))
                 {
-                    var justClicked = ImGui.GetMouseDragDelta().LengthSquared() < 1;
+                    var justClicked = ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickTreshold;
                     if (justClicked)
                     {
                         UpdateSelectionOnClickOrDrag(vDef, isSelected);

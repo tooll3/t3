@@ -15,6 +15,7 @@ using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -373,7 +374,7 @@ namespace T3.Gui.Windows.TimeLine
                                          : ImGuiMouseCursor.ResizeEW);
             }
 
-            if (!wasClicked && (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 1f)))
+            if (!wasClicked && (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, UserSettings.Config.ClickTreshold)))
                 return;
 
             if (ImGui.GetIO().KeyCtrl)

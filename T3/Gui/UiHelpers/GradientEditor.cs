@@ -120,7 +120,7 @@ namespace T3.Gui.UiHelpers
 
                     if (ImGui.IsItemHovered()
                         && ImGui.IsMouseReleased(0)
-                        && ImGui.GetIO().MouseDragMaxDistanceAbs[0].LengthSquared() < 2
+                        && ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length() < UserSettings.Config.ClickTreshold
                         && !ImGui.IsPopupOpen("##colorEdit"))
                     {
                         T3Ui.OpenedPopUpName = "##colorEdit";

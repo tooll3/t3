@@ -15,6 +15,7 @@ using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.InputUi
 {
@@ -215,42 +216,6 @@ namespace T3.Gui.InputUi
                     ImGui.PopStyleColor(2);
                     ImGui.PopItemWidth();
                 }
-                // else if (isVaried)
-                // {
-                //     ImGui.PushStyleColor(ImGuiCol.Button, Color.Blue.Rgba);
-                //     if (ImGui.Button("V", new Vector2(ConnectionAreaWidth, 0.0f)))
-                //     {
-                //         variator.RemoveVariationFrom(inputSlot);
-                //     }
-                //
-                //     ImGui.PopStyleColor();
-                //     ImGui.SameLine();
-                //
-                //     // Draw Name
-                //     ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
-                //     ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
-                //     CustomComponents.ContextMenuForItem(() =>
-                //                                         {
-                //                                             if (ImGui.MenuItem("Parameters settings"))
-                //                                                 editState = InputEditStateFlags.ShowOptions;
-                //                                         });
-                //     ImGui.PopStyleVar();
-                //     ImGui.SameLine();
-                //
-                //     // Draw control
-                //     ImGui.PushItemWidth(200.0f);
-                //     ImGui.PushStyleColor(ImGuiCol.Text, Color.Blue.Rgba);
-                //     ImGui.PushStyleColor(ImGuiCol.FrameBgActive, Color.Black.Rgba);
-                //     ImGui.PushFont(Fonts.FontBold);
-                //
-                //     ImGui.SetNextItemWidth(-1);
-                //
-                //     DrawVariedValue(name, typedInputSlot, variator); // todo: command integration
-                //
-                //     ImGui.PopFont();
-                //     ImGui.PopStyleColor(2);
-                //     ImGui.PopItemWidth();
-                // }
                 else
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
@@ -266,7 +231,7 @@ namespace T3.Gui.InputUi
                             animator.CreateInputUpdateAction<float>(inputSlot);
                     }
 
-                    if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > 4)
+                    if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickTreshold)
                     {
                         if (ConnectionMaker.TempConnections.Count == 0)
                         {
@@ -300,7 +265,7 @@ namespace T3.Gui.InputUi
                         ImGui.SameLine();
                         if (!input.IsDefault)
                         {
-                            Icons.Draw(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6,2), new Color(0.5f));
+                            Icons.DrawIconAtPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6,2));
                             if (isClicked)
                             {
                                 UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));

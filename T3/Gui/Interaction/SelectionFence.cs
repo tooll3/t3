@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Interaction
@@ -32,7 +33,7 @@ namespace T3.Gui.Interaction
 
             var positionInScreen = ImGui.GetMousePos();
 
-            if (state == States.PressedButNotMoved && (positionInScreen - _startPositionInScreen).LengthSquared() < 4)
+            if (state == States.PressedButNotMoved && (positionInScreen - _startPositionInScreen).Length() < UserSettings.Config.ClickTreshold)
                 return state;
 
             BoundsInScreen = ImRect.RectBetweenPoints(_startPositionInScreen, ImGui.GetMousePos());

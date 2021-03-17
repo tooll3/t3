@@ -216,7 +216,7 @@ namespace T3.Gui.Graph
 
                 // Show Parameter window as context menu
                 var isClicked = ImGui.IsItemHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left);
-                var clickWasDrag = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).LengthSquared() > 1;
+                var clickWasDrag = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() > UserSettings.Config.ClickTreshold;
 
                 if (isClicked
                     && !clickWasDrag
@@ -716,7 +716,7 @@ namespace T3.Gui.Graph
                 }
 
                 var isMouseReleasedWithoutDrag =
-                    ImGui.IsMouseReleased(ImGuiMouseButton.Left) && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() < 4;
+                    ImGui.IsMouseReleased(ImGuiMouseButton.Left) && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickTreshold;
                 if (isMouseReleasedWithoutDrag)
                 {
                     //Graph.Connections.GetLinesFromNodeOutput(childUi, outputDef.Id);

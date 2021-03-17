@@ -40,6 +40,7 @@ namespace T3.Gui.Windows
             
             ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
             ImGui.DragFloat("Tooltip delay", ref UserSettings.Config.TooltipDelay);
+            ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickTreshold);
             
             if (ImGui.TreeNode("Undo Queue"))
             {

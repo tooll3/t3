@@ -4,6 +4,7 @@ using T3.Core.Operator;
 using T3.Gui.Graph;
 using T3.Gui.InputUi;
 using T3.Gui.Styling;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 using String = T3.Operators.Types.Id_5880cbc3_a541_4484_a06a_0e6f77cdbe8e.String;
 
@@ -63,7 +64,7 @@ namespace T3.Gui.ChildUi
                 usableArea.Expand(GraphCanvas.Current.Scale.X < 0.75f ? 0 : -4);
                 if (usableArea.Contains(ImGui.GetMousePos())
                     && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
-                    && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).LengthSquared() < 4)
+                    && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickTreshold)
                 {
                     _focusedInstanceId = instance.SymbolChildId;
                 }

@@ -792,7 +792,7 @@ namespace T3.Gui.Graph
 
                     ImGui.InvisibleButton("splitMe", Vector2.One * radius);
                     if (ImGui.IsItemDeactivated()
-                        && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() < 4
+                        && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickTreshold
                         )
                     {
                         var posOnScreen = graphCanvas.InverseTransformPosition(_bestMatchYetForCurrentFrame.PositionOnScreen) - SymbolChildUi.DefaultOpSize / 2;

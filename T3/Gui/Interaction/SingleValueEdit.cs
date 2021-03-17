@@ -89,7 +89,7 @@ namespace T3.Gui.Interaction
 
                         if (ImGui.IsMouseReleased(0))
                         {
-                            var wasClick = ImGui.GetIO().MouseDragMaxDistanceSqr[0] < 4;
+                            var wasClick = ImGui.GetIO().MouseDragMaxDistanceSqr[0] < UserSettings.Config.ClickTreshold;
                             if (wasClick)
                             {
                                 if (io.KeyCtrl)

@@ -38,6 +38,7 @@ namespace T3.Gui.UiHelpers
             public float ZoomSpeed = 12;
             public float TooltipDelay = 1.2f;
             public bool HideUiElementsInGraphWindow = false;
+            public float ClickTreshold = 5; // Increase for high-res display and pen tablets
             
             [JsonConverter(typeof(StringEnumConverter))]
             public Playback.TimeDisplayModes TimeDisplayMode = Playback.TimeDisplayModes.Bars;

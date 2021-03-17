@@ -4,6 +4,7 @@ using ImGuiNET;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Styling;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.ChildUi.Animators
@@ -40,7 +41,7 @@ namespace T3.Gui.ChildUi.Animators
                     case DragMode.Off:
                     case DragMode.Undecided:
                     {
-                        if (dragDelta.LengthSquared() > 10)
+                        if (dragDelta.Length() > UserSettings.Config.ClickTreshold)
                         {
                             _dragState = Math.Abs(dragDelta.X) > Math.Abs(dragDelta.Y)
                                              ? DragMode.DraggingHorizontally
