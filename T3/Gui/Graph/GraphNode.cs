@@ -755,9 +755,16 @@ namespace T3.Gui.Graph
                     ImGui.PopFont();
                     ImGui.EndTooltip();
                     ImGui.PopStyleVar();
-                    if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
+                    
+                    if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta().Length() > UserSettings.Config.ClickTreshold)
                     {
                         ConnectionMaker.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
+                        
+                    }
+
+                    if (ImGui.IsItemDeactivated() && ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickTreshold )
+                    {
+                        ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current._symbolBrowser, childUi,instance, output.Id);
                     }
 
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))

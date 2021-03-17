@@ -367,6 +367,71 @@ namespace T3.Gui.Graph
             Reset();
         }
 
+
+        public static void OpenSymbolBrowserAtOutput(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance,
+                                                       Guid outputId)
+        {
+            var primaryOutput = instance.Outputs.SingleOrDefault(o => o.Id == outputId);
+            if (primaryOutput == null)
+                return;
+            
+            InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
+        }
+        
+
+        public static void OpenBrowserWithSingleSelection(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance)
+        {
+            if (instance.Outputs.Count < 1)
+                return;
+            
+            var primaryOutput = instance.Outputs[0];
+            InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
+        }        
+
+        private static void InsertSymbolBrowser(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance, ISlot primaryOutput)
+        {
+            var connections = instance.Parent.Symbol.Connections.FindAll(connection => connection.SourceParentOrChildId == instance.SymbolChildId
+                                                                                       && connection.SourceSlotId == primaryOutput.Id);
+
+            TempConnections.Clear();
+            TempConnections.Add(new TempConnection(sourceParentOrChildId: instance.SymbolChildId,
+                                                   sourceSlotId: primaryOutput.Id,
+                                                   targetParentOrChildId: UseDraftChildId,
+                                                   targetSlotId: NotConnectedId,
+                                                   primaryOutput.ValueType));
+
+            var commands = new List<ICommand>();
+
+            if (connections.Count > 0)
+            {
+                foreach (var oldConnection in connections)
+                {
+                    var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
+                    commands.Add(new DeleteConnectionCommand(instance.Parent.Symbol, oldConnection, multiInputIndex));
+                    TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
+                                                           sourceSlotId: NotConnectedId,
+                                                           targetParentOrChildId: oldConnection.TargetParentOrChildId,
+                                                           targetSlotId: oldConnection.TargetSlotId,
+                                                           primaryOutput.ValueType,
+                                                           multiInputIndex));
+                }
+            }
+
+            if (connections.Count > 0)
+            {
+                var adjustLayoutCommand = AdjustGraphLayoutForNewNode(instance.Parent.Symbol, connections[0]);
+                if (adjustLayoutCommand != null)
+                    commands.Add(adjustLayoutCommand);
+            }
+
+            var prepareCommand = new MacroCommand("insert operator", commands);
+            prepareCommand.Do();
+
+            symbolBrowser.OpenAt(childUi.PosOnCanvas + new Vector2(childUi.Size.X, 0)
+                                                     + new Vector2(SelectableNodeMovement.SnapPadding.X, 0),
+                                 primaryOutput.ValueType, null, false, prepareCommand);
+        }
+
         public static void SplitConnectionWithSymbolBrowser(Symbol parentSymbol, SymbolBrowser symbolBrowser, Symbol.Connection connection,
                                                             Vector2 positionInCanvas)
         {
@@ -414,53 +479,6 @@ namespace T3.Gui.Graph
             symbolBrowser.OpenAt(positionInCanvas, connectionType, connectionType, false, prepareCommand);
         }
 
-        public static void OpenBrowserWithSingleSelection(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance)
-        {
-            if (instance.Outputs.Count < 1)
-                return;
-
-            var primaryOutput = instance.Outputs[0];
-            var connections = instance.Parent.Symbol.Connections.FindAll(connection => connection.SourceParentOrChildId == instance.SymbolChildId
-                                                                                       && connection.SourceSlotId == primaryOutput.Id);
-
-            TempConnections.Clear();
-            TempConnections.Add(new TempConnection(sourceParentOrChildId: instance.SymbolChildId,
-                                                   sourceSlotId: primaryOutput.Id,
-                                                   targetParentOrChildId: UseDraftChildId,
-                                                   targetSlotId: NotConnectedId,
-                                                   primaryOutput.ValueType));
-
-            var commands = new List<ICommand>();
-
-            if (connections.Count > 0)
-            {
-                foreach (var oldConnection in connections)
-                {
-                    var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
-                    commands.Add(new DeleteConnectionCommand(instance.Parent.Symbol, oldConnection, multiInputIndex));
-                    TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
-                                                           sourceSlotId: NotConnectedId,
-                                                           targetParentOrChildId: oldConnection.TargetParentOrChildId,
-                                                           targetSlotId: oldConnection.TargetSlotId,
-                                                           primaryOutput.ValueType,
-                                                           multiInputIndex));
-                }
-            }
-
-            if (connections.Count > 0)
-            {
-                var adjustLayoutCommand = AdjustGraphLayoutForNewNode(instance.Parent.Symbol, connections[0]);
-                if (adjustLayoutCommand != null)
-                    commands.Add(adjustLayoutCommand);
-            }
-
-            var prepareCommand = new MacroCommand("insert operator", commands);
-            prepareCommand.Do();
-
-            symbolBrowser.OpenAt(childUi.PosOnCanvas + new Vector2(childUi.Size.X, 0)
-                                                     + new Vector2(SelectableNodeMovement.SnapPadding.X, 0),
-                                 primaryOutput.ValueType, null, false, prepareCommand);
-        }
         #endregion
 
         public static void SplitConnectionWithDraggedNode(SymbolChildUi childUi, Symbol.Connection oldConnection, Instance instance)
