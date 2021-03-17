@@ -28,7 +28,6 @@ namespace T3.Gui.Styling
             ImGui.PopFont();
         }
 
-
         public static void Draw(Icon icon, Vector2 screenPosition)
         {
             var keepPosition = ImGui.GetCursorScreenPos();
@@ -37,7 +36,6 @@ namespace T3.Gui.Styling
             ImGui.SetCursorScreenPos(keepPosition);
         }
 
-
         public static void Draw(Icon icon, Vector2 screenPosition, Color color)
         {
             ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
@@ -45,13 +43,50 @@ namespace T3.Gui.Styling
             ImGui.PopStyleColor();
         }
 
-
         public static void Draw(Icon icon, ImRect area)
         {
             var fonts = ImGui.GetIO().Fonts;
             var g = IconFont.FindGlyph((char)icon);
             ImGui.SetCursorScreenPos(area.Min);
-            ImGui.Image(fonts.TexID, area.GetSize(), new Vector2(g.U0, g.V0), new Vector2(g.U1, g.V1));
+            ImGui.Image(fonts.TexID, area.GetSize(), new Vector2(g.V0, g.U0), new Vector2(g.V1, g.U1));
+        }
+
+        public static void DrawIconAtPosition(Icon icon, Vector2 screenPos)
+        {
+            ImFontGlyphPtr g = IconFont.FindGlyph((char)icon);
+            var uvRange = GetCorrectUvRangeFromBrokenGlyphStructure(g);
+            var size = GetCorrectSizeFromBrokenGlyphStructure(g);
+            ImGui.GetWindowDrawList().AddImage(ImGui.GetIO().Fonts.TexID , 
+                                               screenPos, 
+                                               screenPos+ size,  
+                                               uvRange.Min, 
+                                               uvRange.Max, 
+                                               T3Style.Colors.TextMuted);
+
+            // var dl = ImGui.GetForegroundDrawList();
+            // dl.AddImage(ImGui.GetIO().Fonts.TexID, Vector2.Zero, Vector2.One * 512, Vector2.Zero, Vector2.One);
+            // dl.AddRect(uvRange.Min * 512,
+            //            uvRange.Max * 512,
+            //            Color.Orange);
+        }
+
+        /// <summary>
+        /// It looks like ImGui.net v1.77 returns a somewhat corrupted glyph. 
+        /// </summary>
+        private static ImRect GetCorrectUvRangeFromBrokenGlyphStructure(ImFontGlyphPtr g)
+        {
+            return new ImRect(
+                              new Vector2(g.Y1, g.U0),  // NOTE: Y1?!, well... 
+                              new Vector2(g.V0, g.U1)
+                             );
+        }
+        
+        /// <summary>
+        /// It looks like ImGui.net v1.77 returns a somewhat corrupted glyph. 
+        /// </summary>
+        private static Vector2 GetCorrectSizeFromBrokenGlyphStructure(ImFontGlyphPtr g)
+        {
+            return new Vector2(g.X1, g.Y0);
         }
 
         /// <summary>
@@ -60,11 +95,10 @@ namespace T3.Gui.Styling
         public static void DrawCentered(Icon icon)
         {
             var g = IconFont.FindGlyph((char)icon);
-            var iconSize = new Vector2(g.X1-g.X0, g.Y1- g.Y0)/2;
+            var iconSize = new Vector2(g.X1 - g.X0, g.Y1 - g.Y0) / 2;
             var center = (ImGui.GetItemRectMax() + ImGui.GetItemRectMin()) / 2 - iconSize;
-            Draw(icon, center );
+            Draw(icon, center);
         }
-
 
         public class IconSource
         {
@@ -79,52 +113,52 @@ namespace T3.Gui.Styling
             public readonly char Char;
         }
 
-        public static readonly IconSource[] CustomIcons = {
-            new IconSource(Icon.KeyFrameSelected, 0, new Vector2(16, 25)),
-            new IconSource(Icon.KeyFrame, 1, new Vector2(16, 25)),
-            new IconSource(Icon.LastKeyframe, 2, new Vector2(16,25)),
-            new IconSource(Icon.FirstKeyframe,3 , new Vector2(16,25)),
-            new IconSource(Icon.JumpToRangeStart,4 , new Vector2(16,16)),
-            new IconSource(Icon.JumpToPreviousKeyframe,5 , new Vector2(16,16)),
-            new IconSource(Icon.PlayBackwards,6 , new Vector2(16,16)),
-            new IconSource(Icon.PlayForwards,7 , new Vector2(16,16)),
-            new IconSource(Icon.JumpToNextKeyframe,8 , new Vector2(16,16)),
-            new IconSource(Icon.JumpToRangeEnd,9 , new Vector2(16,16)),
-            new IconSource(Icon.Loop,10 , new Vector2(32,16)),
-            new IconSource(Icon.BeatGrid,12 , new Vector2(16,16)),
-            new IconSource(Icon.ConnectedParameter,13 , new Vector2(16,16)),
-            new IconSource(Icon.Stripe4PxPattern,14, new Vector2(16,16)),
-            new IconSource(Icon.CurveKeyframe,15, new Vector2(16,16)),
-            new IconSource(Icon.CurveKeyframeSelected,16, new Vector2(16,16)),
-            new IconSource(Icon.CurrentTimeMarkerHandle,17, new Vector2(16,16)),
-            new IconSource(Icon.FollowTime,18, new Vector2(16,16)),
-            new IconSource(Icon.ToggleAudioOn,19, new Vector2(16,16)),
-            new IconSource(Icon.ToggleAudioOff,20, new Vector2(16,16)),
-            new IconSource(Icon.Warning, 21, new Vector2(16,16)),
-            new IconSource(Icon.HoverPreviewSmall, 22, new Vector2(16,16)),
-            new IconSource(Icon.HoverPreviewPlay, 23, new Vector2(16,16)),
-            new IconSource(Icon.HoverPreviewDisabled, 24, new Vector2(16,16)),
-            new IconSource(Icon.ConstantKeyframeSelected, 25, new Vector2(16,25)),
-            new IconSource(Icon.ConstantKeyframe, 26, new Vector2(16,25)),
-            new IconSource(Icon.ChevronLeft, 27, new Vector2(16,16)),
-            new IconSource(Icon.ChevronRight, 28, new Vector2(16,16)),
-            new IconSource(Icon.ChevronUp, 29, new Vector2(16,16)),
-            new IconSource(Icon.ChevronDown, 30, new Vector2(16,16)),
-            new IconSource(Icon.Pin, 31, new Vector2(16,16)),
-            new IconSource(Icon.HeartOutlined, 32, new Vector2(16,16)),
-            new IconSource(Icon.Heart, 33, new Vector2(16,16)),
-            new IconSource(Icon.Trash, 34, new Vector2(16,16)),
-            new IconSource(Icon.Grid, 35, new Vector2(16,16)),
-            new IconSource(Icon.Revert, 36, new Vector2(16,16)),
-        };
+        public static readonly IconSource[] CustomIcons =
+            {
+                new IconSource(Icon.KeyFrameSelected, 0, new Vector2(16, 25)),
+                new IconSource(Icon.KeyFrame, 1, new Vector2(16, 25)),
+                new IconSource(Icon.LastKeyframe, 2, new Vector2(16, 25)),
+                new IconSource(Icon.FirstKeyframe, 3, new Vector2(16, 25)),
+                new IconSource(Icon.JumpToRangeStart, 4, new Vector2(16, 16)),
+                new IconSource(Icon.JumpToPreviousKeyframe, 5, new Vector2(16, 16)),
+                new IconSource(Icon.PlayBackwards, 6, new Vector2(16, 16)),
+                new IconSource(Icon.PlayForwards, 7, new Vector2(16, 16)),
+                new IconSource(Icon.JumpToNextKeyframe, 8, new Vector2(16, 16)),
+                new IconSource(Icon.JumpToRangeEnd, 9, new Vector2(16, 16)),
+                new IconSource(Icon.Loop, 10, new Vector2(32, 16)),
+                new IconSource(Icon.BeatGrid, 12, new Vector2(16, 16)),
+                new IconSource(Icon.ConnectedParameter, 13, new Vector2(16, 16)),
+                new IconSource(Icon.Stripe4PxPattern, 14, new Vector2(16, 16)),
+                new IconSource(Icon.CurveKeyframe, 15, new Vector2(16, 16)),
+                new IconSource(Icon.CurveKeyframeSelected, 16, new Vector2(16, 16)),
+                new IconSource(Icon.CurrentTimeMarkerHandle, 17, new Vector2(16, 16)),
+                new IconSource(Icon.FollowTime, 18, new Vector2(16, 16)),
+                new IconSource(Icon.ToggleAudioOn, 19, new Vector2(16, 16)),
+                new IconSource(Icon.ToggleAudioOff, 20, new Vector2(16, 16)),
+                new IconSource(Icon.Warning, 21, new Vector2(16, 16)),
+                new IconSource(Icon.HoverPreviewSmall, 22, new Vector2(16, 16)),
+                new IconSource(Icon.HoverPreviewPlay, 23, new Vector2(16, 16)),
+                new IconSource(Icon.HoverPreviewDisabled, 24, new Vector2(16, 16)),
+                new IconSource(Icon.ConstantKeyframeSelected, 25, new Vector2(16, 25)),
+                new IconSource(Icon.ConstantKeyframe, 26, new Vector2(16, 25)),
+                new IconSource(Icon.ChevronLeft, 27, new Vector2(16, 16)),
+                new IconSource(Icon.ChevronRight, 28, new Vector2(16, 16)),
+                new IconSource(Icon.ChevronUp, 29, new Vector2(16, 16)),
+                new IconSource(Icon.ChevronDown, 30, new Vector2(16, 16)),
+                new IconSource(Icon.Pin, 31, new Vector2(16, 16)),
+                new IconSource(Icon.HeartOutlined, 32, new Vector2(16, 16)),
+                new IconSource(Icon.Heart, 33, new Vector2(16, 16)),
+                new IconSource(Icon.Trash, 34, new Vector2(16, 16)),
+                new IconSource(Icon.Grid, 35, new Vector2(16, 16)),
+                new IconSource(Icon.Revert, 36, new Vector2(16, 16)),
+            };
 
         public const string IconAtlasPath = @"Resources\t3\t3-icons.png";
     }
-    
-    
+
     public enum Icon
     {
-        KeyFrameSelected=64,
+        KeyFrameSelected = 64,
         KeyFrame,
         LastKeyframe,
         FirstKeyframe,
@@ -137,14 +171,14 @@ namespace T3.Gui.Styling
         Loop,
         BeatGrid,
         ConnectedParameter,
-        Stripe4PxPattern,    
+        Stripe4PxPattern,
         CurveKeyframe,
         CurveKeyframeSelected,
         CurrentTimeMarkerHandle,
         FollowTime,
         ToggleAudioOn,
         ToggleAudioOff,
-        Warning,    
+        Warning,
         HoverPreviewSmall,
         HoverPreviewPlay,
         HoverPreviewDisabled,
