@@ -365,14 +365,13 @@ namespace T3.Gui.Graph.Interaction
                 }
             }
 
-            var newCommand = new MacroCommand("Insert and connect node", commands);
+            var newCommand = new MacroCommand("Insert Op", commands);
             UndoRedoStack.Add(newCommand);
             ConnectionMaker.Cancel();
             Close();
         }
 
         
-
         /// <summary>
         /// required correctly restore original state when closing the browser  
         /// </summary>

@@ -38,6 +38,14 @@ namespace T3.Gui.Commands
             }
         }
 
+        public static string GetNextUndoTitle()
+        {
+            if (!CanUndo)
+                return null;
+
+            return _undoStack.Peek().Name;
+        }
+
         public static void Undo()
         {
             if (CanUndo)

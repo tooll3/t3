@@ -64,7 +64,8 @@ namespace T3.Gui.Graph
                 Log.Error("Can't resolve instance for id-path " + childIdPath);
                 return;
             }
-            CompositionOp = comp; 
+
+            CompositionOp = comp;
 
             SelectionManager.Clear();
             TimeLineCanvas.Current?.ClearSelection();
@@ -76,7 +77,7 @@ namespace T3.Gui.Graph
                 if (UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.SymbolChildId))
                     newProps = UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId];
             }
-            
+
             SetScopeWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);
         }
 
@@ -153,12 +154,14 @@ namespace T3.Gui.Graph
                 Log.Error("unable to get composition op");
                 return;
             }
+
             UpdateCanvas();
             if (this.CompositionOp == null)
             {
                 Log.Error("Can't show graph for undefined CompositionOp");
                 return;
             }
+
             GraphBookmarkNavigation.HandleForCanvas(this);
 
             MakeCurrent();
@@ -203,15 +206,16 @@ namespace T3.Gui.Graph
 
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
-                if(showGrid)
+                if (showGrid)
                     DrawGrid();
-                
+
                 if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
                 {
                     ConnectionMaker.ConnectionSplitHelper.PrepareNewFrame(this);
                 }
+
                 _symbolBrowser.Draw();
-                
+
                 Graph.DrawGraph(DrawList);
                 RenameInstanceOverlay.Draw();
                 HandleFenceSelection();
@@ -225,7 +229,8 @@ namespace T3.Gui.Graph
                 if (ConnectionMaker.TempConnections.Count > 0 && ImGui.IsMouseReleased(0))
                 {
                     var isAnyItemHovered = ImGui.IsAnyItemHovered();
-                    var droppedOnBackground = ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isAnyItemHovered;
+                    var droppedOnBackground =
+                        ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isAnyItemHovered;
                     if (droppedOnBackground)
                     {
                         ConnectionMaker.InitSymbolBrowserAtPosition(_symbolBrowser,
@@ -243,8 +248,10 @@ namespace T3.Gui.Graph
                 DrawList.PopClipRect();
                 DrawContextMenu();
 
-                _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits, ref _symbolDescriptionForDialog);
-                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits, ref _symbolDescriptionForDialog);
+                _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
+                                            ref _symbolDescriptionForDialog);
+                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
+                                            ref _symbolDescriptionForDialog);
                 _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
                 _addInputDialog.Draw(CompositionOp.Symbol);
                 _addOutputDialog.Draw(CompositionOp.Symbol);
@@ -274,7 +281,7 @@ namespace T3.Gui.Graph
                     break;
             }
         }
-        
+
         private SelectionFence.States _fenceState = SelectionFence.States.Inactive;
 
         private void HandleSelectionFenceUpdate(ImRect boundsInScreen)
@@ -284,7 +291,6 @@ namespace T3.Gui.Graph
                                  let rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size)
                                  where rect.Overlaps(boundsInCanvas)
                                  select child).ToList();
-
 
             SelectionManager.Clear();
             foreach (var node in nodesToSelect)
@@ -305,7 +311,7 @@ namespace T3.Gui.Graph
                 }
             }
         }
-        
+
         /// <remarks>
         /// This method is completed, because it has to handle several edge cases and has potential to remove previous user data:
         /// - We have to preserve the previous state.
@@ -319,16 +325,14 @@ namespace T3.Gui.Graph
         public void OpenSymbolBrowserForOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef)
         {
             ConnectionMaker.InitSymbolBrowserAtPosition(_symbolBrowser,
-                                        childUi.PosOnCanvas + new Vector2(childUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0));
+                                                        childUi.PosOnCanvas + new Vector2(childUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0));
         }
-        
 
         private Symbol GetSelectedSymbol()
         {
             var selectedChildUi = GetSelectedChildUis().FirstOrDefault();
             return selectedChildUi != null ? selectedChildUi.SymbolChild.Symbol : CompositionOp.Symbol;
         }
-
 
         private void DrawDropHandler()
         {
@@ -408,88 +412,184 @@ namespace T3.Gui.Graph
         private void DrawContextMenuContent()
         {
             var selectedChildUis = GetSelectedChildUis();
-            if (selectedChildUis.Count > 0)
+            var nextUndoTitle = UndoRedoStack.CanUndo ? $" ({UndoRedoStack.GetNextUndoTitle()})" : string.Empty;
+            if (ImGui.MenuItem("Undo" + nextUndoTitle,
+                               shortcut: KeyboardBinding.ListKeyboardShortcuts(UserActions.Undo, false),
+                               selected: false,
+                               enabled: UndoRedoStack.CanUndo))
             {
-                bool oneElementSelected = selectedChildUis.Count == 1;
-                var label = oneElementSelected
-                                ? $"Selected {selectedChildUis[0].SymbolChild.ReadableName}..."
-                                : $"Selected {selectedChildUis.Count} items...";
+                UndoRedoStack.Undo();
+            }
 
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-                ImGui.Text(label);
-                ImGui.PopStyleColor();
-                ImGui.PopFont();
+            ImGui.Separator();
 
-                if (ImGui.BeginMenu("Styles"))
+            // ------ for selection -----------------------
+            //if (selectedChildUis.Count > 0)
+            //{
+
+            var oneOpSelected = selectedChildUis.Count == 1;
+            var someOpsSelected = selectedChildUis.Count > 0;
+
+            var label = oneOpSelected
+                            ? $"{selectedChildUis[0].SymbolChild.ReadableName}..."
+                            : $"{selectedChildUis.Count} selected items...";
+
+            ImGui.PushFont(Fonts.FontSmall);
+            ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+            ImGui.Text(label);
+            ImGui.PopStyleColor();
+            ImGui.PopFont();
+
+            // Enable / Disable
+            var allSelectedDisabled = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
+            var allSelectedEnabled = selectedChildUis.TrueForAll(selectedChildUi => !selectedChildUi.IsDisabled);
+            if (!allSelectedDisabled && ImGui.MenuItem("Disable",
+                                                       KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleDisabled, false),
+                                                       selected:false,
+                                                       enabled: selectedChildUis.Count >0 ))
+            {
+                var commands = new List<ICommand>();
+                foreach (var selectedChildUi in selectedChildUis)
                 {
-                    if (ImGui.MenuItem("Default", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Default)))
-                    {
-                        foreach (var childUi in selectedChildUis)
-                        {
-                            childUi.Style = SymbolChildUi.Styles.Default;
-                        }
-                    }
-
-                    if (ImGui.MenuItem("Resizable", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable)))
-                    {
-                        foreach (var childUi in selectedChildUis)
-                        {
-                            childUi.Style = SymbolChildUi.Styles.Resizable;
-                        }
-                    }
-
-                    if (ImGui.MenuItem("Expanded", "", selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable)))
-                    {
-                        foreach (var childUi in selectedChildUis)
-                        {
-                            childUi.Style = SymbolChildUi.Styles.Expanded;
-                        }
-                    }
-
-                    ImGui.EndMenu();
+                    commands.Add(new ChangeInstanceIsDisabledCommand(selectedChildUi, true));
                 }
 
-                bool allSelectedDisabled = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
-                bool allSelectedEnabled = selectedChildUis.TrueForAll(selectedChildUi => !selectedChildUi.IsDisabled);
-                if (!allSelectedDisabled && ImGui.MenuItem("Disable"))
+                UndoRedoStack.AddAndExecute(new MacroCommand("Disable operators", commands));
+            }
+
+            if (!allSelectedEnabled && ImGui.MenuItem("Enable", 
+                                                      KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleDisabled, false),
+                                                      selected: false,
+                                                      enabled: someOpsSelected))
+            {
+                var commands = new List<ICommand>();
+                foreach (var selectedChildUi in selectedChildUis)
                 {
-                    var commands = new List<ICommand>();
-                    foreach (var selectedChildUi in selectedChildUis) 
+                    commands.Add(new ChangeInstanceIsDisabledCommand(selectedChildUi, false));
+                }
+
+                UndoRedoStack.AddAndExecute(new MacroCommand("Enable operators", commands));
+            }
+
+            if (ImGui.MenuItem("Rename", oneOpSelected))
+            {
+                RenameInstanceOverlay.OpenForSymbolChildUi(selectedChildUis[0]);
+            }
+            
+            if (ImGui.MenuItem("Arrange sub graph",
+                               KeyboardBinding.ListKeyboardShortcuts(UserActions.LayoutSelection, false),
+                               selected: false,
+                               enabled: someOpsSelected))
+            {
+                SelectableNodeMovement.ArrangeOps();
+            }
+            
+            if (ImGui.BeginMenu("Display as..."))
+            {
+                if (ImGui.MenuItem("Small", "", 
+                                   selected: selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Default), 
+                                   enabled: someOpsSelected))
+                {
+                    foreach (var childUi in selectedChildUis)
                     {
-                        commands.Add(new ChangeInstanceIsDisabledCommand(selectedChildUi, true));
+                        childUi.Style = SymbolChildUi.Styles.Default;
                     }
-                    UndoRedoStack.AddAndExecute(new MacroCommand("Disable operators", commands));
                 }
 
-                if (!allSelectedEnabled && ImGui.MenuItem("Enable"))
+                if (ImGui.MenuItem("Resizable", "", 
+                                   selected: selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable),
+                                   enabled:someOpsSelected))
                 {
-                    var commands = new List<ICommand>();
-                    foreach (var selectedChildUi in selectedChildUis)
+                    foreach (var childUi in selectedChildUis)
                     {
-                        commands.Add(new ChangeInstanceIsDisabledCommand(selectedChildUi, false));
+                        childUi.Style = SymbolChildUi.Styles.Resizable;
                     }
-                    UndoRedoStack.AddAndExecute(new MacroCommand("Enable operators", commands));
                 }
 
-                if (ImGui.MenuItem("Delete"))
+                if (ImGui.MenuItem("Expanded", "", 
+                                   selected:selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable),
+                                   enabled:someOpsSelected))
                 {
-                    DeleteSelectedElements();
-                }
-
-                if (ImGui.MenuItem("Rename", oneElementSelected))
-                {
-                    RenameInstanceOverlay.OpenForSymbolChildUi(selectedChildUis[0]);
+                    foreach (var childUi in selectedChildUis)
+                    {
+                        childUi.Style = SymbolChildUi.Styles.Expanded;
+                    }
                 }
                 
-                if (ImGui.MenuItem("Rename Symbol", oneElementSelected))
+                ImGui.Separator();
+
+                if (ImGui.MenuItem("Set as graph background",
+                                   "",
+                                   selected: false,
+                                   enabled: oneOpSelected))
+                {
+                    SelectableNodeMovement.ArrangeOps();
+                }
+
+
+
+                ImGui.EndMenu();
+            }
+
+            ImGui.Separator();
+
+            if (ImGui.MenuItem("Copy",
+                               KeyboardBinding.ListKeyboardShortcuts(UserActions.CopyToClipboard, false),
+                               selected:false,
+                               enabled:someOpsSelected))
+            {
+                CopySelectionToClipboard(selectedChildUis);
+            }
+
+            if (ImGui.MenuItem("Paste", KeyboardBinding.ListKeyboardShortcuts(UserActions.PasteFromClipboard, false)))
+            {
+                PasteClipboard();
+            }
+
+            var selectedInputUis = GetSelectedInputUis().ToArray();
+            var selectedOutputUis = GetSelectedOutputUis().ToArray();
+            
+            if (ImGui.MenuItem("Delete", 
+                               shortcut:"Del",  // dynamic assigned shortcut is too long
+                               selected:false,
+                               enabled:someOpsSelected || selectedInputUis.Length > 0 || selectedOutputUis.Length > 0))
+            {
+                DeleteSelectedElements();
+
+                if (selectedInputUis.Length > 0)
+                {
+                    var symbol = GetSelectedSymbol();
+                    NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
+                }
+
+                
+                if (selectedOutputUis.Length > 0)
+                {
+                    var symbol = GetSelectedSymbol();
+                    NodeOperations.RemoveOutputsFromSymbol(selectedOutputUis.Select(entry => entry.Id).ToArray(), symbol);
+                }
+            }
+
+            if (ImGui.MenuItem("Duplicate",
+                               KeyboardBinding.ListKeyboardShortcuts(UserActions.Duplicate, false),
+                               selected: false,
+                               enabled: selectedChildUis.Count > 0))
+            {
+                CopySelectionToClipboard(selectedChildUis);
+                PasteClipboard();
+            }
+
+            ImGui.Separator();
+            if (ImGui.BeginMenu("Symbol definition..."))
+            {
+                if (ImGui.MenuItem("Rename Symbol", oneOpSelected))
                 {
                     _renameSymbolDialog.ShowNextFrame();
                     _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name;
                     //NodeOperations.RenameSymbol(selectedChildUis[0].SymbolChild.Symbol, "NewName");
                 }
 
-                if (ImGui.MenuItem("Duplicate as new type", oneElementSelected))
+                if (ImGui.MenuItem("Duplicate as new type...", oneOpSelected))
                 {
                     _symbolNameForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Name ?? string.Empty;
                     _nameSpaceForDialogEdits = selectedChildUis[0].SymbolChild.Symbol.Namespace ?? string.Empty;
@@ -497,93 +597,40 @@ namespace T3.Gui.Graph
                     _duplicateSymbolDialog.ShowNextFrame();
                 }
 
-                if (ImGui.MenuItem("Combine as new type"))
+                if (ImGui.MenuItem("Combine into new type...", someOpsSelected))
                 {
                     _nameSpaceForDialogEdits = CompositionOp.Symbol.Namespace ?? string.Empty;
                     _symbolDescriptionForDialog = "";
                     _combineToSymbolDialog.ShowNextFrame();
                 }
 
-                if (ImGui.MenuItem("Copy"))
+                ImGui.EndMenu();
+            }
+            //}
+
+            if (ImGui.BeginMenu("Add..."))
+            {
+                if (ImGui.MenuItem("Add Node..."))
                 {
-                    CopySelectionToClipboard(selectedChildUis);
+                    _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null, false, null);
                 }
-                
-                if (oneElementSelected && ImGui.MenuItem("Set at background image"))
+
+                if (ImGui.MenuItem("Add input parameter..."))
                 {
-                    var instance =CompositionOp.Children.Single(child => child.SymbolChildId == selectedChildUis[0].Id);
-                    GraphWindow.SetBackgroundOutput(instance);
+                    _addInputDialog.ShowNextFrame();
                 }
-                ImGui.Separator();
-            }
 
-            var selectedInputUis = GetSelectedInputUis().ToArray();
-            if (selectedInputUis.Length > 0)
-            {
-                var oneElementSelected = selectedInputUis.Length == 1;
-                var label = oneElementSelected
-                                ? $"Input {selectedInputUis[0].InputDefinition.Name}..."
-                                : $"Selected {selectedInputUis.Length} inputs...";
-
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-                ImGui.Text(label);
-                ImGui.PopStyleColor();
-                ImGui.PopFont();
-
-                if (ImGui.MenuItem("Remove input(s)"))
+                if (ImGui.MenuItem("Add output..."))
                 {
-                    var symbol = GetSelectedSymbol();
-                    NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
+                    _addOutputDialog.ShowNextFrame();
                 }
-            }
 
-            var selectedOutputUis = GetSelectedOutputUis().ToArray();
-            if (selectedOutputUis.Length > 0)
-            {
-                var oneElementSelected = selectedOutputUis.Length == 1;
-                var label = oneElementSelected
-                                ? $"Output {selectedOutputUis[0].OutputDefinition.Name}..."
-                                : $"Selected {selectedOutputUis.Length} outputs...";
-
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-                ImGui.Text(label);
-                ImGui.PopStyleColor();
-                ImGui.PopFont();
-
-                if (ImGui.MenuItem("Remove output(s)"))
-                {
-                    var symbol = GetSelectedSymbol();
-                    NodeOperations.RemoveOutputsFromSymbol(selectedOutputUis.Select(entry => entry.Id).ToArray(), symbol);
-                }
-            }
-
-            if (ImGui.MenuItem("Add Node"))
-            {
-                _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null, false, null);
-            }
-
-            if (ImGui.MenuItem("Add input parameter"))
-            {
-                _addInputDialog.ShowNextFrame();
-            }
-
-            if (ImGui.MenuItem("Add output"))
-            {
-                _addOutputDialog.ShowNextFrame();
-            }
-
-            if (ImGui.MenuItem("Paste"))
-            {
-                PasteClipboard();
+                ImGui.EndMenu();
             }
         }
 
         private bool _contextMenuIsOpen;
 
-        
-        
         private void DeleteSelectedElements()
         {
             var selectedChildren = GetSelectedChildUis();
@@ -602,7 +649,7 @@ namespace T3.Gui.Graph
 
             SelectionManager.Clear();
         }
-        
+
         private void ToggleDisabledForSelectedElements()
         {
             var selectedChildren = GetSelectedChildUis();
@@ -611,7 +658,8 @@ namespace T3.Gui.Graph
             {
                 if (T3Ui.HoveredIdsLastFrame.Count == 1 && CompositionOp != null)
                 {
-                    var hoveredChildUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis.SingleOrDefault(c => c.Id == T3Ui.HoveredIdsLastFrame.First());
+                    var hoveredChildUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis
+                                                         .SingleOrDefault(c => c.Id == T3Ui.HoveredIdsLastFrame.First());
                     if (hoveredChildUi == null)
                         return;
                     selectedChildren = new List<SymbolChildUi> { hoveredChildUi };
@@ -622,10 +670,11 @@ namespace T3.Gui.Graph
             var shouldDisable = !allSelectedDisabled;
 
             var commands = new List<ICommand>();
-            foreach (var selectedChildUi in selectedChildren) 
+            foreach (var selectedChildUi in selectedChildren)
             {
                 commands.Add(new ChangeInstanceIsDisabledCommand(selectedChildUi, shouldDisable));
             }
+
             UndoRedoStack.AddAndExecute(new MacroCommand("Disable/Enable", commands));
         }
 
@@ -705,10 +754,10 @@ namespace T3.Gui.Graph
                     cmd.Do(); // FIXME: Shouldn't this be UndoRedoQueue.AddAndExecute() ? 
                     SymbolUiRegistry.Entries.Remove(containerSymbolUi.Symbol.Id);
                     SymbolRegistry.Entries.Remove(containerSymbol.Id);
-                    
+
                     // Select new operators
                     SelectionManager.Clear();
-                    
+
                     foreach (var id in cmd.NewSymbolChildIds)
                     {
                         var newChildUi = compositionSymbolUi.ChildUis.Single(c => c.Id == id);
