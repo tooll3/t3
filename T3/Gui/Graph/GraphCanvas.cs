@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -518,12 +519,16 @@ namespace T3.Gui.Graph
                 
                 ImGui.Separator();
 
-                if (ImGui.MenuItem("Set as graph background",
+                var isImage =oneOpSelected 
+                             && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions.Count > 0
+                             && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
+                if (ImGui.MenuItem("Set image as graph background",
                                    "",
                                    selected: false,
-                                   enabled: oneOpSelected))
+                                   enabled: isImage))
                 {
-                    SelectableNodeMovement.ArrangeOps();
+                    var instance =CompositionOp.Children.Single(child => child.SymbolChildId == selectedChildUis[0].Id);
+                    GraphWindow.SetBackgroundOutput(instance);
                 }
 
 
