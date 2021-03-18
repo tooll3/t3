@@ -755,22 +755,38 @@ namespace T3.Gui.Graph
                     ImGui.PopFont();
                     ImGui.EndTooltip();
                     ImGui.PopStyleVar();
-                    
-                    if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta().Length() > UserSettings.Config.ClickTreshold)
+
+                    if (ImGui.IsItemActivated())
                     {
-                        ConnectionMaker.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
-                        
+                        Log.Debug("Start dragging " + output.Id);
+                        _draggedOutputOpId = childUi.Id;
+                        _draggedOutputDefId = outputDef.Id;
                     }
 
-                    if (ImGui.IsItemDeactivated() && ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickTreshold )
+                    // Clicked
+                    else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
-                        ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current._symbolBrowser, childUi,instance, output.Id);
+                        _draggedOutputOpId = Guid.Empty;
+                        _draggedOutputDefId = Guid.Empty;
+                        if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickTreshold )
+                        {
+                            ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current._symbolBrowser, childUi,instance, output.Id);
+                        }
                     }
-
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                     {
                         GraphCanvas.Current.EditNodeOutputDialog.OpenForOutput(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
                     }
+                }
+            }
+            else if(_draggedOutputOpId == childUi.Id && _draggedOutputDefId == outputDef.Id)
+            {
+                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left)
+                    && ImGui.GetMouseDragDelta().Length() > UserSettings.Config.ClickTreshold)
+                {
+                    _draggedOutputOpId = Guid.Empty;
+                    _draggedOutputDefId = Guid.Empty;
+                    ConnectionMaker.StartFromOutputSlot(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
                 }
             }
             else
@@ -784,6 +800,9 @@ namespace T3.Gui.Graph
                                        );
             }
         }
+
+        private static Guid _draggedOutputOpId;
+        private static Guid _draggedOutputDefId;
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
