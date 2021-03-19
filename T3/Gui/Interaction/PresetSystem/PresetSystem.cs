@@ -201,11 +201,14 @@ namespace T3.Gui.Interaction.PresetSystem
             for (var parameterIndex = 0; parameterIndex < parameterGroup.Parameters.Count; parameterIndex++)
             {
                 var p = parameterGroup.Parameters[parameterIndex];
-                if (p.GetHashForInput() != symbolChildInputHash)
+                if (p == null || p.GetHashForInput() != symbolChildInputHash)
                     continue;
 
                 parameterGroup.Parameters[parameterIndex] = null;
             }
+
+            ActiveContext.PurgeNullParametersInGroup(parameterGroup);
+            UpdateInputReferences();
         }
 
         public void ActivateGroupAtIndex(int index)
@@ -490,7 +493,6 @@ namespace T3.Gui.Interaction.PresetSystem
             FitViewToSelectionHandling.FitViewToSelection();
         }
 
-        private readonly Dictionary<int, ParameterGroup> _groupForBlendedParameters = new Dictionary<int, ParameterGroup>(100);
 
         private void CreatePresetAtAddress(PresetAddress address)
         {
@@ -579,6 +581,9 @@ namespace T3.Gui.Interaction.PresetSystem
             //var operatorSymbol = SymbolRegistry.Entries[_activeCompositionId];
             foreach (var parameter in group.Parameters)
             {
+                if (parameter == null)
+                    continue;
+                
                 //var symbolChild = operatorSymbol.Children.Single(child => child.Id == parameter.SymbolChildId);
                 var instance = _activeCompositionInstance.Children.SingleOrDefault(c => c.SymbolChildId == parameter.SymbolChildId);
                 if (instance == null)
@@ -601,6 +606,9 @@ namespace T3.Gui.Interaction.PresetSystem
 
             foreach (var parameter in group.Parameters)
             {
+                if (parameter == null)
+                    continue;
+                
                 var symbolChild = symbol.Children.SingleOrDefault(s => s.Id == parameter.SymbolChildId);
                 if (symbolChild == null)
                 {
@@ -692,6 +700,8 @@ namespace T3.Gui.Interaction.PresetSystem
             var command = new MacroCommand("Set Preset Values", commands);
             command.Do(); // No Undo... boo! 
         }
+
+        
         #endregion
 
         private Guid _activeCompositionId = Guid.Empty;
@@ -699,6 +709,9 @@ namespace T3.Gui.Interaction.PresetSystem
 
         private readonly Dictionary<Guid, CompositionContext> _contextForCompositions = new Dictionary<Guid, CompositionContext>();
 
+        private readonly Dictionary<int, ParameterGroup> _groupForBlendedParameters = new Dictionary<int, ParameterGroup>(100);
+
+        
         /// <summary>
         /// Is only changes by explicitly user actions:
         /// - switching to a composition with a preset context

@@ -32,7 +32,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
             var isModified = false;
             foreach (var param in parameterGroup.Parameters)
             {
-                if (!ValuesForGroupParameterIds.TryGetValue(param.Id, out var inputValue))
+                if (param == null || !ValuesForGroupParameterIds.TryGetValue(param.Id, out var inputValue))
                     return; // Don't update state if not all parameters are defined 
                 
                 var instanceChild = activeCompositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == param.SymbolChildId);

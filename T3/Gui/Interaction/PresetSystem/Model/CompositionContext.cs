@@ -136,6 +136,46 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         {
             return Groups.IndexOf(group);
         }
+        
+        public void PurgeNullParametersInGroup(ParameterGroup paramGroup)
+        {
+            var obsoleteParamIndices = new List<int>();
+            var validParamIds = new HashSet<Guid>();
+            
+            for (var parameterIndex = paramGroup.Parameters.Count - 1; parameterIndex >= 0; parameterIndex--)
+            {
+                var p = paramGroup.Parameters[parameterIndex];
+                if (p != null)
+                {
+                    validParamIds.Add(p.Id);
+                    continue;
+                } 
+                
+                obsoleteParamIndices.Add(parameterIndex);
+            }
+
+            foreach (var i in obsoleteParamIndices)
+            {
+                paramGroup.Parameters.RemoveAt(i);
+            }
+            
+            foreach (var preset in Presets)
+            {
+                if (preset == null)
+                    continue;
+                
+                foreach (var parameterId in preset.ValuesForGroupParameterIds.Keys.ToList())
+                {
+                    if (validParamIds.Contains(parameterId))
+                        continue;
+                    
+                    preset.ValuesForGroupParameterIds.Remove(parameterId);
+                }
+            }
+
+            WriteToJson();
+        }
+        
         #endregion
 
         //----------------------------------------------------------------------------------------
