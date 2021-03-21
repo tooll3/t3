@@ -149,7 +149,8 @@ namespace T3.Gui.Windows.TimeLine
                 for (var index = 0; index < list.Count; index++)
                 {
                     var vDef = list[index].Value;
-                    DrawKeyframe(vDef, layerArea, parameter, lastVDef);
+                    var nextVDef = (index < list.Count - 1) ? list[index + 1].Value : null;
+                    DrawKeyframe(vDef, layerArea, parameter, nextVDef);
                     lastVDef = vDef;
                 }
             }
@@ -316,30 +317,31 @@ namespace T3.Gui.Windows.TimeLine
             }
         }
 
-        private void DrawKeyframe(VDefinition vDef, ImRect layerArea, TimeLineCanvas.AnimationParameter parameter, VDefinition lastVDef)
+        private void DrawKeyframe(VDefinition vDef, ImRect layerArea, TimeLineCanvas.AnimationParameter parameter,
+                                  VDefinition nextVDef)
         {
             var posOnScreen = new Vector2(
                                           TimeLineCanvas.Current.TransformX((float)vDef.U) - KeyframeIconWidth / 2 + 1,
                                           layerArea.Min.Y);
 
-            var showValue = vDef.OutEditMode == VDefinition.EditMode.Constant && lastVDef != null;
-            if (showValue)
+            if (vDef.OutEditMode == VDefinition.EditMode.Constant)
             {
-                var min = new Vector2(
-                                              TimeLineCanvas.Current.TransformX((float)lastVDef.U) + KeyframeIconWidth / 2 + 1,
-                                              layerArea.Min.Y + 5);
+                var availableSpace = nextVDef != null
+                                         ? TimeLineCanvas.Current.TransformX((float)nextVDef.U) - posOnScreen.X
+                                         : 9999;
 
-                var availableSpace = posOnScreen.X - min.X;
-                if (availableSpace > 40)
+                if (availableSpace > 30)
                 {
-                    var color = Color.Orange;
-                    color.Rgba.W =MathUtils.RemapAndClamp(availableSpace, 40, 60, 0, 1).Clamp(0, 1); 
+                    var labelPos = new Vector2(posOnScreen.X + KeyframeIconWidth / 2 + 1,
+                                               layerArea.Min.Y + 5);
+
+                    var color = Color.Orange.Fade(MathUtils.RemapAndClamp(availableSpace, 30, 50, 0, 1).Clamp(0, 1));
                     ImGui.PushFont(Fonts.FontSmall);
-                    _drawList.AddText(min, color, $"{lastVDef.Value:G3}");
+                    _drawList.AddText(labelPos, color, $"{vDef.Value:G3}");
                     ImGui.PopFont();
                 }
-            }            
-            
+            }
+
             var keyHash = (int)vDef.GetHashCode();
             ImGui.PushID(keyHash);
             {
@@ -374,8 +376,6 @@ namespace T3.Gui.Windows.TimeLine
                     if (_changeKeyframesCommand != null)
                         TimeLineCanvas.Current.CompleteDragCommand();
                 }
-
-
 
                 HandleCurvePointDragging(vDef, isSelected);
 
@@ -475,8 +475,8 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             var newDragTime = TimeLineCanvas.Current.InverseTransformX(ImGui.GetIO().MousePos.X);
-            
-            if(!ImGui.GetIO().KeyShift)
+
+            if (!ImGui.GetIO().KeyShift)
                 _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X);
 
             TimeLineCanvas.Current.UpdateDragCommand(newDragTime - vDef.U, 0);

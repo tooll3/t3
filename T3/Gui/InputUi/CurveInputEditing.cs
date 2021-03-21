@@ -106,9 +106,7 @@ namespace T3.Gui.InputUi
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
                 }
-
-
-
+                
                 if (!ImGui.IsItemActive())
                 {
                     if (ImGui.IsItemDeactivated())
