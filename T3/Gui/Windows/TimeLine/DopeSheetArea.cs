@@ -107,30 +107,41 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.EndTooltip();
             }
 
-            ImGui.PushStyleColor(ImGuiCol.Text, layerHovered ? Color.White.Rgba : Color.Gray);
-            ImGui.PushFont(Fonts.FontBold);
-
-            var hash = parameter.Input.GetHashCode();
-            var pinned = PinnedParameters.Contains(hash);
-            if (CustomComponents.ToggleIconButton(Icon.Pin, "pin", ref pinned, new Vector2(16, 16)))
+            // Draw label and pinning
             {
-                if (pinned)
+                var hash = parameter.Input.GetHashCode();
+                ImGui.PushID(hash);
+                var label = $"{parameter.ChildUi.SymbolChild.ReadableName}.{parameter.Input.Input.Name}";
+                var opLabelSize = ImGui.CalcTextSize(label);
+                var buttonSize = opLabelSize + new Vector2(16, 0);
+                var isPinned = PinnedParameters.Contains(hash);
+                if (ImGui.InvisibleButton("label", buttonSize))
                 {
-                    PinnedParameters.Add(hash);
+                    if (!isPinned)
+                    {
+                        PinnedParameters.Add(hash);
+                    }
+                    else
+                    {
+                        PinnedParameters.Remove(hash);
+                    }
                 }
-                else
-                {
-                    PinnedParameters.Remove(hash);
-                }
+
+                var lastPos = ImGui.GetItemRectMin();
+                var iconColor = isPinned? Color.Orange : Color.Black;
+                iconColor = iconColor.Fade(ImGui.IsItemHovered() ? 1 : 0.8f);
+                
+                Icons.DrawIconAtScreenPosition(Icon.Pin, lastPos, _drawList, iconColor);
+                var labelColor = layerHovered
+                                     ? Color.White
+                                     : isPinned
+                                         ? Color.Orange
+                                         : Color.Gray;
+                _drawList.AddText( lastPos+ new Vector2(20,0), labelColor, label);
+                ImGui.PopID();
             }
-
-            ImGui.SameLine();
-            ImGui.Text("  " + parameter.ChildUi.SymbolChild.ReadableName);
-            ImGui.PopFont();
-            ImGui.SameLine();
-            ImGui.Text("." + parameter.Input.Input.Name);
-            ImGui.PopStyleColor();
-
+            
+            // Draw curves and gradients...
             if (parameter.Curves.Count() == 4)
             {
                 DrawCurveGradient(parameter, layerArea);
@@ -145,13 +156,11 @@ namespace T3.Gui.Windows.TimeLine
             foreach (var curve in parameter.Curves)
             {
                 var list = curve.GetPointTable();
-                VDefinition lastVDef = null;
                 for (var index = 0; index < list.Count; index++)
                 {
                     var vDef = list[index].Value;
                     var nextVDef = (index < list.Count - 1) ? list[index + 1].Value : null;
                     DrawKeyframe(vDef, layerArea, parameter, nextVDef);
-                    lastVDef = vDef;
                 }
             }
 

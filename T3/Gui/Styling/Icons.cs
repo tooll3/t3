@@ -51,23 +51,49 @@ namespace T3.Gui.Styling
             ImGui.Image(fonts.TexID, area.GetSize(), new Vector2(g.V0, g.U0), new Vector2(g.V1, g.U1));
         }
 
-        public static void DrawIconAtPosition(Icon icon, Vector2 screenPos)
+        public static void DrawIconAtScreenPosition(Icon icon, Vector2 screenPos)
+        {
+            GetGlyphDefinition(icon, out var uvRange, out var size);
+            ImGui.GetWindowDrawList().AddImage(ImGui.GetIO().Fonts.TexID,
+                                               screenPos,
+                                               screenPos + size,
+                                               uvRange.Min,
+                                               uvRange.Max,
+                                               T3Style.Colors.TextMuted);
+        }
+
+        public static void DrawIconAtScreenPosition(Icon icon, 
+                                                    Vector2 screenPos, 
+                                                    ImDrawListPtr drawList)
+        {
+            GetGlyphDefinition(icon, out var uvRange, out var size);
+            drawList.AddImage(ImGui.GetIO().Fonts.TexID,
+                              screenPos,
+                              screenPos + size,
+                              uvRange.Min,
+                              uvRange.Max,
+                              T3Style.Colors.TextMuted);
+        }
+
+        public static void DrawIconAtScreenPosition(Icon icon, 
+                                                    Vector2 screenPos, 
+                                                    ImDrawListPtr drawList,
+                                                    Color color)
+        {
+            GetGlyphDefinition(icon, out var uvRange, out var size);
+            drawList.AddImage(ImGui.GetIO().Fonts.TexID,
+                              screenPos,
+                              screenPos + size,
+                              uvRange.Min,
+                              uvRange.Max,
+                              color);
+        }
+        
+        private static void GetGlyphDefinition(Icon icon, out ImRect uvRange, out Vector2 size)
         {
             ImFontGlyphPtr g = IconFont.FindGlyph((char)icon);
-            var uvRange = GetCorrectUvRangeFromBrokenGlyphStructure(g);
-            var size = GetCorrectSizeFromBrokenGlyphStructure(g);
-            ImGui.GetWindowDrawList().AddImage(ImGui.GetIO().Fonts.TexID , 
-                                               screenPos, 
-                                               screenPos+ size,  
-                                               uvRange.Min, 
-                                               uvRange.Max, 
-                                               T3Style.Colors.TextMuted);
-
-            // var dl = ImGui.GetForegroundDrawList();
-            // dl.AddImage(ImGui.GetIO().Fonts.TexID, Vector2.Zero, Vector2.One * 512, Vector2.Zero, Vector2.One);
-            // dl.AddRect(uvRange.Min * 512,
-            //            uvRange.Max * 512,
-            //            Color.Orange);
+            uvRange = GetCorrectUvRangeFromBrokenGlyphStructure(g);
+            size = GetCorrectSizeFromBrokenGlyphStructure(g);
         }
 
         /// <summary>
@@ -76,11 +102,11 @@ namespace T3.Gui.Styling
         private static ImRect GetCorrectUvRangeFromBrokenGlyphStructure(ImFontGlyphPtr g)
         {
             return new ImRect(
-                              new Vector2(g.Y1, g.U0),  // NOTE: Y1?!, well... 
+                              new Vector2(g.Y1, g.U0), // NOTE: Y1?!, well... 
                               new Vector2(g.V0, g.U1)
                              );
         }
-        
+
         /// <summary>
         /// It looks like ImGui.net v1.77 returns a somewhat corrupted glyph. 
         /// </summary>

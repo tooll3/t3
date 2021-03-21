@@ -267,7 +267,7 @@ namespace T3.Gui.InputUi
                         ImGui.SameLine();
                         if (!input.IsDefault)
                         {
-                            Icons.DrawIconAtPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6,2));
+                            Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6,2));
                             if (isClicked)
                             {
                                 UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));
