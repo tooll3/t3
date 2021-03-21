@@ -12,6 +12,7 @@ using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
@@ -543,6 +544,11 @@ namespace T3.Gui.Graph
                 ImGui.EndMenu();
             }
 
+            if (ImGui.MenuItem("Export", oneOpSelected))
+            {
+                ExportInstance(selectedChildUis.Single());
+            }
+            
             ImGui.Separator();
 
             if (ImGui.MenuItem("Copy",
@@ -638,6 +644,87 @@ namespace T3.Gui.Graph
                 }
 
                 ImGui.EndMenu();
+            }
+        }
+
+        public class ExportInfo 
+        {
+            public Dictionary<Guid, Instance> CollectedInstances { get; } = new Dictionary<Guid, Instance>(200);
+            public HashSet<Guid> UniqueSymbols { get; } = new HashSet<Guid>();
+
+            public bool Add(Instance instance)
+            {
+                if (CollectedInstances.ContainsKey(instance.SymbolChildId))
+                    return false;
+
+                CollectedInstances.Add(instance.SymbolChildId, instance);
+                UniqueSymbols.Add(instance.Symbol.Id);
+                return true;
+            }
+
+            public void PrintInfo()
+            {
+                Log.Info($"Collected {CollectedInstances.Count} instances for export in {UniqueSymbols.Count} different symbols");
+            }
+        }
+
+        private void ExportInstance(SymbolChildUi childUi)
+        {
+            Log.Info("export");
+            // collect all ops and types
+            var instance = CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+            if (instance.Outputs.Count >= 1 && instance.Outputs.First().ValueType == typeof(Texture2D))
+            {
+                // traverse starting at output and collect everything
+                var exportInfo = new ExportInfo();
+                Traverse(instance.Outputs.First(), exportInfo);
+                exportInfo.PrintInfo();
+            } 
+            else
+            {
+                Log.Warning("Can only export ops with 'Texture2D' output");
+            }
+        }
+        
+        public static void Traverse(ISlot slot, ExportInfo exportInfo)
+        {
+            if (slot is IInputSlot)
+            {
+                if (slot.IsConnected)
+                {
+                    Traverse(slot.GetConnection(0), exportInfo);
+                }
+            }
+            else if (slot.IsConnected)
+            {
+                // slot is an output of an composition op
+                Traverse(slot.GetConnection(0), exportInfo);
+            }
+            else
+            {
+                Instance parent = slot.Parent;
+                Log.Info(parent.Symbol.Name);
+                if (!exportInfo.Add(parent))
+                    return; // already visited
+
+                foreach (var input in parent.Inputs)
+                {
+                    if (input.IsConnected)
+                    {
+                        if (input.IsMultiInput)
+                        {
+                            var multiInput = (IMultiInputSlot)input;
+                            foreach (var entry in multiInput.GetCollectedInputs())
+                            {
+                                Traverse(entry, exportInfo);
+                            }
+                        }
+                        else
+                        {
+                            Traverse(input.GetConnection(0), exportInfo);
+                        }
+                    }
+                }
             }
         }
 
