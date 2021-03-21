@@ -101,7 +101,6 @@ namespace T3.Gui.Windows
                         }
                     }
                     ImGui.TextColored(Color.Gray, "---");    // Indicator for end
-                    ImGui.TextColored(Color.Gray, "");
                     if (_shouldScrollToBottom)
                     {
                         ImGui.SetScrollY(ImGui.GetScrollMaxY()+ ImGui.GetFrameHeight()  );

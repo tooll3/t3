@@ -22,6 +22,7 @@ using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
+using T3.Gui.Windows.Output;
 using T3.Gui.Windows.TimeLine;
 using UiHelpers;
 
@@ -425,9 +426,6 @@ namespace T3.Gui.Graph
             ImGui.Separator();
 
             // ------ for selection -----------------------
-            //if (selectedChildUis.Count > 0)
-            //{
-
             var oneOpSelected = selectedChildUis.Count == 1;
             var someOpsSelected = selectedChildUis.Count > 0;
 
@@ -531,6 +529,15 @@ namespace T3.Gui.Graph
                     GraphWindow.SetBackgroundOutput(instance);
                 }
 
+                var outputWindow = OutputWindow.OutputWindowInstances.SingleOrDefault(ow => ow.Config.Visible) as OutputWindow;
+                if (ImGui.MenuItem("Pin to output", enabled:outputWindow != null && oneOpSelected))
+                {
+                    var instance =CompositionOp.Children.Single(child => child.SymbolChildId == selectedChildUis[0].Id);
+                    if (outputWindow != null && instance != null)
+                    {
+                        outputWindow.Pinning.PinInstance(instance);
+                    }
+                } 
 
 
                 ImGui.EndMenu();

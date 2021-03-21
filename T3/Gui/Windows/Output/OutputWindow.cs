@@ -66,8 +66,8 @@ namespace T3.Gui.Windows.Output
 
                 // Move down to avoid overlapping with toolbar
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
-                var pinnedOrSelectedInstance = _pinning.GetPinnedOrSelectedInstance();
-                var renderedType = DrawOutput(pinnedOrSelectedInstance, _pinning.GetPinnedEvaluationInstance());
+                var pinnedOrSelectedInstance = Pinning.GetPinnedOrSelectedInstance();
+                var renderedType = DrawOutput(pinnedOrSelectedInstance, Pinning.GetPinnedEvaluationInstance());
                 _imageCanvas.Deactivate();
 
                 ICamera cameraOp = _camSelectionHandling.SelectedCameraOp;
@@ -89,7 +89,7 @@ namespace T3.Gui.Windows.Output
             ImGui.EndChild();
         }
 
-        public Instance ShownInstance => _pinning.GetPinnedOrSelectedInstance();
+        public Instance ShownInstance => Pinning.GetPinnedOrSelectedInstance();
         private ICamera _lastInteractiveCam;
         private bool allowCameraInteraction;
 
@@ -97,7 +97,7 @@ namespace T3.Gui.Windows.Output
         {
             ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.6f).Rgba);
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin());
-            _pinning.DrawPinning();
+            Pinning.DrawPinning();
 
             ImGui.PushStyleColor(ImGuiCol.Text, Math.Abs(_imageCanvas.Scale.X - 1f) < 0.001f ? Color.Black.Rgba : Color.White);
             if (ImGui.Button("1:1"))
@@ -130,7 +130,7 @@ namespace T3.Gui.Windows.Output
 
             ImGui.SameLine();
 
-            _camSelectionHandling.DrawCameraSelection(_pinning, ref _selectedCameraId);
+            _camSelectionHandling.DrawCameraSelection(Pinning, ref _selectedCameraId);
             ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
             
             ImGui.SameLine();
@@ -194,7 +194,7 @@ namespace T3.Gui.Windows.Output
         public static readonly List<Window> OutputWindowInstances = new List<Window>();
         private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
 
-        private readonly ViewSelectionPinning _pinning = new ViewSelectionPinning();
+        public ViewSelectionPinning Pinning { get; } = new ViewSelectionPinning();
         private readonly CameraInteraction _cameraInteraction = new CameraInteraction();
         private readonly ViewCamera _outputWindowViewCamera = new ViewCamera();
 

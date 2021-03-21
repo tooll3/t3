@@ -144,8 +144,15 @@ namespace T3.Gui.Windows
 
         private void PinSelectionToView()
         {
-            _pinnedInstancePath = NodeOperations.BuildIdPathForInstance(SelectionManager.GetFirstSelectedInstance());
+            var firstSelectedInstance = SelectionManager.GetFirstSelectedInstance();
+            PinInstance(firstSelectedInstance);
             //_pinnedEvaluationInstancePath = null;
+        }
+
+        public void PinInstance(Instance instance)
+        {
+            _pinnedInstancePath = NodeOperations.BuildIdPathForInstance(instance);
+            _isPinned = true;
         }
 
         private void PinSelectionAsEvaluationStart(Instance instance)
