@@ -65,5 +65,10 @@ namespace T3.Core.Logging
             }
             return result;
         }
+        
+        public double SecondsSinceStart => (TimeStamp - _startTime).TotalSeconds;
+        public double SecondsAgo => (DateTime.Now - TimeStamp).TotalSeconds;
+
+        private static readonly DateTime _startTime = DateTime.Now;
     }
 }

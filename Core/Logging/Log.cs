@@ -116,15 +116,17 @@ namespace T3.Core.Logging
             return messageString;
         }
 
-        private static void LogDebug(LogEntry.EntryLevel level, String message)
-        {
-            DoLog(new LogEntry(level, Guid.Empty, message));
-        }
+        // private static void LogDebug(LogEntry.EntryLevel level, String message)
+        // {
+        //     DoLog(new LogEntry(level, Guid.Empty, message));
+        // }
 
         private static void DoLog(LogEntry entry)
         {
             _instance._logWriters.ForEach(writer => writer.ProcessEntry(entry));
         }
+
+
 
         private static readonly Log _instance = new Log();
         private readonly List<ILogWriter> _logWriters = new List<ILogWriter>();

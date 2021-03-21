@@ -1,11 +1,11 @@
-﻿using System.CodeDom.Compiler;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.Styling;
-using UiHelpers;
+using T3.Gui.Windows;
 
 namespace T3.Gui.UiHelpers
 {
@@ -14,75 +14,103 @@ namespace T3.Gui.UiHelpers
     /// </summary>
     public class StatusErrorLine : ILogWriter
     {
-        public StatusErrorLine() : base()
+        public StatusErrorLine()
         {
             Log.AddWriter(this);
         }
 
-
         public void Draw()
         {
-            if (_lastEntryTime <=0)
+            if (_logEntries.Count == 0)
+            {
+                ImGui.Text("Log empty");
                 return;
+            }
 
-            var shadeFactor = Color.Mix(Color.Red, new Color(0.3f), 
-                                        ((float) (ImGui.GetTime() - _lastEntryTime)/3).Clamp(0,1));
-            ImGui.PushStyleColor(ImGuiCol.Text, shadeFactor.Rgba);
-            
+            var lastEntry = _logEntries[_logEntries.Count - 1];
+            var color = ConsoleLogWindow.GetColorForLogLevel(lastEntry.Level)
+                                        .Fade(MathUtils.RemapAndClamp((float)lastEntry.SecondsAgo, 0, 1.5f, 1, 0.4f));
+
             ImGui.PushFont(Fonts.FontBold);
 
-            var width = ImGui.CalcTextSize(_errorMessage);
-            ImGui.SetCursorPosX(ImGui.GetContentRegionAvail().X - width.X);
+            var logMessage = lastEntry.Message;
+            if (lastEntry.Level == LogEntry.EntryLevel.Error)
+            {
+                logMessage = ExtractMeaningfulMessage(logMessage);
+            }
+
+            var width = ImGui.CalcTextSize(logMessage);
+            var availableSpace = ImGui.GetWindowContentRegionWidth();
+            ImGui.SetCursorPosX(availableSpace - width.X);
+
+            ImGui.TextColored(color, logMessage);
+            if (ImGui.IsItemClicked())
+            {
+                _logEntries.Clear();
+            }
             
-            ImGui.Text(_errorMessage);
+            if (ImGui.IsItemHovered())
+            {
+                
+                ImGui.BeginTooltip();
+                {
+                    var lastEntryTime = double.PositiveInfinity;
+                    foreach (var entry in _logEntries)
+                    {
+                        var timeSinceLastEntry = entry.SecondsSinceStart - lastEntryTime;
+                        if(timeSinceLastEntry > 1)
+                            ImGui.Spacing();
+
+                        lastEntryTime = entry.SecondsSinceStart;
+                        var entryLevel = entry.Level;
+                        ImGui.SetCursorPosX(-2);
+                        ImGui.Value("", (float)entry.SecondsSinceStart);    // Print with ImGui to avoid allocation
+                        ImGui.SameLine(80);
+                        ImGui.TextColored(ConsoleLogWindow.GetColorForLogLevel(entryLevel), entry.Message);
+                    }
+                }
+                ImGui.EndTooltip();
+            }
             ImGui.PopFont();
-            ImGui.PopStyleColor();
         }
-        
+
         public void Dispose()
         {
-            
         }
 
         public LogEntry.EntryLevel Filter { get; set; }
+
         public void ProcessEntry(LogEntry entry)
         {
-            if (entry.Level != LogEntry.EntryLevel.Error)
-                return;
-
-            _errorMessage = ExtractMeaningfulMessage(ref entry);
-            _lastEntryTime = ImGui.GetTime();
-        }
-
-        private string ExtractMeaningfulMessage(ref LogEntry entry)
-        {
-            var shaderErrorMatch = ShaderErrorPattern.Match(entry.Message);
-            if (shaderErrorMatch.Success)
+            if (_logEntries.Count > 20)
             {
-                var shaderName = shaderErrorMatch.Groups[1].Value;
-                var lineNumber = shaderErrorMatch.Groups[2].Value;
-                var errorMessage = shaderErrorMatch.Groups[3].Value;
-
-                errorMessage = errorMessage.Split('\n').First();
-                
-                //var errorMessage = shaderErrorMatch.Groups[3].Value;
-                return  $"{errorMessage} >>>> {shaderName}:{lineNumber}";
+                _logEntries.RemoveAt(0);
             }
 
-            return entry.Message;
+            _logEntries.Add(entry);
         }
 
-        
+        private string ExtractMeaningfulMessage(string message)
+        {
+            var shaderErrorMatch = _shaderErrorPattern.Match(message);
+            if (!shaderErrorMatch.Success)
+                return message;
+            
+            var shaderName = shaderErrorMatch.Groups[1].Value;
+            var lineNumber = shaderErrorMatch.Groups[2].Value;
+            var errorMessage = shaderErrorMatch.Groups[3].Value;
+
+            errorMessage = errorMessage.Split('\n').First();
+            return $"{errorMessage} >>>> {shaderName}:{lineNumber}";
+        }
+
         /// <summary>
         /// Matches errors like....
         ///
-        ///  Failed to compile shader 'ComputeWobble': C:\Users\pixtur\coding\t3\Resources\compute-ColorGrade.hlsl(32,12-56): warning X3206: implicit truncation of vector type
         /// Failed to compile shader 'ComputeWobble': C:\Users\pixtur\coding\t3\Resources\compute-ColorGrade.hlsl(32,12-56): warning X3206: implicit truncation of vector type
         /// </summary>
-        private static Regex ShaderErrorPattern = new Regex(@"Failed to compile shader.*\\(.*)\.hlsl\((.*)\):(.*)");
-        
+        private static readonly Regex _shaderErrorPattern = new Regex(@"Failed to compile shader.*\\(.*)\.hlsl\((.*)\):(.*)");
 
-        private string _errorMessage;
-        private double _lastEntryTime;
+        private readonly List<LogEntry> _logEntries = new List<LogEntry>();
     }
 }

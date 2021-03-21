@@ -14,7 +14,7 @@ namespace T3.Gui.Windows
     /// </summary>
     public class ConsoleLogWindow : Window, ILogWriter
     {
-        public ConsoleLogWindow() : base()
+        public ConsoleLogWindow()
         {
             Log.AddWriter(this);
             Config.Title = "Console";
@@ -77,27 +77,25 @@ namespace T3.Gui.Windows
                             if (FilterIsActive && !entry.Message.Contains(_filterString))
                                 continue;
 
-                            var colorHoveredElements = T3Ui.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f;
 
-                            var color = _colorForLogLevel[entry.Level];
-                            color.W = colorHoveredElements;
-                            ImGui.PushStyleColor(ImGuiCol.Text, color);
-                            var timeInSeconds= (entry.TimeStamp - _startTime).Ticks / 10000000f;
+                            var entryLevel = entry.Level;
+                            var color = GetColorForLogLevel(entryLevel)
+                               .Fade( T3Ui.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f);
+                            
+                            //var timeInSeconds= (entry.TimeStamp - _startTime).Ticks / 10000000f;
                             // Hack to hide ":" render prefix problem
                             ImGui.SetCursorPosX(-2);
                             
                             // FIXME: It should be possible to pass NULL to avoid prefixing. 
                             // This seems to be broken in imgui.net
-                            ImGui.Value("", timeInSeconds);    // Print with ImGui to avoid allocation
+                            ImGui.Value("", (float)entry.SecondsSinceStart);    // Print with ImGui to avoid allocation
                             ImGui.SameLine(80);
-                            ImGui.Text(entry.Message);
+                            ImGui.TextColored(color, entry.Message);
 
                             if (IsLineHovered())
                             {
                                 T3Ui.AddHoveredId(entry.SourceId);
                             }
-
-                            ImGui.PopStyleColor();
                         }
                     }
                     ImGui.TextColored(Color.Gray, "---");    // Indicator for end
@@ -117,6 +115,13 @@ namespace T3.Gui.Windows
             ImGui.PopStyleVar();
         }
 
+        public static Color GetColorForLogLevel(LogEntry.EntryLevel entryLevel)
+        {
+            return _colorForLogLevel.TryGetValue(entryLevel, out var color) 
+                       ? color 
+                       : T3Style.Colors.TextMuted;
+        }
+
         public override List<Window> GetInstances()
         {
             return new List<Window>();
@@ -130,12 +135,12 @@ namespace T3.Gui.Windows
             return lineRect.Contains(ImGui.GetMousePos());
         }
         
-        private readonly Dictionary<LogEntry.EntryLevel, Vector4> _colorForLogLevel = new Dictionary<LogEntry.EntryLevel, Vector4>()
+        private static readonly Dictionary<LogEntry.EntryLevel, Color> _colorForLogLevel = new Dictionary<LogEntry.EntryLevel, Color>()
                                                                                           {
-                                                                                              {LogEntry.EntryLevel.Debug, new Vector4(1,1,1,0.6f) },
-                                                                                              {LogEntry.EntryLevel.Info, new Vector4(1,1,1,0.6f) },
-                                                                                              {LogEntry.EntryLevel.Warning, new Vector4(1,0.5f,0.5f,0.9f) },
-                                                                                              {LogEntry.EntryLevel.Error, new Vector4(1,0.2f,0.2f,1f) },
+                                                                                              {LogEntry.EntryLevel.Debug, new Color(1,1,1,0.6f) },
+                                                                                              {LogEntry.EntryLevel.Info, new Color(1,1,1,0.6f) },
+                                                                                              {LogEntry.EntryLevel.Warning, new Color(1,0.5f,0.5f,0.9f) },
+                                                                                              {LogEntry.EntryLevel.Error, new Color(1,0.2f,0.2f,1f) },
                                                                                           };
 
 
