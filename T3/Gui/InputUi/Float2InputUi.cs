@@ -76,12 +76,18 @@ namespace T3.Gui.InputUi
             var inputEditState = VectorValueEdit.Draw(Components, Min, Max, Scale, Clamp);
             if (inputEditState == InputEditStateFlags.Nothing)
                 return;
-
-            for (var index = 0; index < Components.Length; index++)
+            
+            Curve.UpdateCurveValues(curves, time, Components);
+        }
+        
+        
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        {
+            if (inputValue is InputValue<Vector2> float2InputValue)
             {
-                var key = curves[index].GetV(time) ?? new VDefinition { U = time };
-                key.Value = Components[index];
-                curves[index].AddOrUpdateV(time, key);
+                Vector2 value = float2InputValue.Value;
+                var curves = animator.GetCurvesForInput(inputSlot).ToArray();
+                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeInBars, new [] { value.X, value.Y});   
             }
         }
 

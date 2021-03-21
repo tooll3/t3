@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
@@ -70,6 +71,16 @@ namespace T3.Gui.InputUi.SingleControl
             }
         }
 
+        
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        {
+            if (inputValue is InputValue<int> float3InputValue)
+            {
+                int value = float3InputValue.Value;
+                var curves = animator.GetCurvesForInput(inputSlot).ToArray();
+                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeInBars, new [] { (float)value});   
+            }
+        }
         
         protected override string GetSlotValueAsString(ref int value)
         {

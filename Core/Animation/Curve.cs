@@ -223,5 +223,15 @@ namespace T3.Core.Animation
         }
 
         private CurveState _state = new CurveState();
+
+        public static void UpdateCurveValues(Curve[] curves, double time, float[] values)
+        {
+            for (var index = 0; index < curves.Length; index++)
+            {
+                var key = curves[index].GetV(time) ?? new VDefinition { U = time };
+                key.Value = values[index];
+                curves[index].AddOrUpdateV(time, key);
+            }
+        }
     }
 }

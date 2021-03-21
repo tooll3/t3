@@ -104,5 +104,15 @@ namespace T3.Gui.InputUi.SingleControl
                 }
             }
         }
+        
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        {
+            if (inputValue is InputValue<Vector4> float4InputValue)
+            {
+                Vector4 value = float4InputValue.Value;
+                var curves = animator.GetCurvesForInput(inputSlot).ToArray();
+                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeInBars, new [] { value.X, value.Y, value.Z, value.W});   
+            }
+        }
     }
 }

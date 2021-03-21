@@ -81,6 +81,16 @@ namespace T3.Gui.InputUi.SingleControl
                 curves[index].AddOrUpdateV(time, key);
             }
         }
+        
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        {
+            if (inputValue is InputValue<Size2> float2InputValue)
+            {
+                Size2 value = float2InputValue.Value;
+                var curves = animator.GetCurvesForInput(inputSlot).ToArray();
+                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeInBars, new [] { (float)value.Width, (float)value.Height});   
+            }
+        }
 
         public override void DrawSettings()
         {

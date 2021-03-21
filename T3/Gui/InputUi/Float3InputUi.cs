@@ -80,7 +80,7 @@ namespace T3.Gui.InputUi
             if (inputEditState == InputEditStateFlags.Nothing)
                 return;
 
-            UpdateCurveValues(curves, time, _components);
+            Curve.UpdateCurveValues(curves, time, _components);
         }
 
         public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
@@ -89,17 +89,7 @@ namespace T3.Gui.InputUi
             {
                 Vector3 value = float3InputValue.Value;
                 var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-                UpdateCurveValues(curves, EvaluationContext.GlobalTimeInBars, new [] { value.X, value.Y, value.Z});   
-            }
-        }
-
-        private void UpdateCurveValues(Curve[] curves, double time, float[] values)
-        {
-            for (var index = 0; index < curves.Length; index++)
-            {
-                var key = curves[index].GetV(time) ?? new VDefinition { U = time };
-                key.Value = values[index];
-                curves[index].AddOrUpdateV(time, key);
+                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeInBars, new [] { value.X, value.Y, value.Z});   
             }
         }
 

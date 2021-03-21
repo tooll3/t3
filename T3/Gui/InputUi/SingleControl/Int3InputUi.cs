@@ -1,5 +1,9 @@
-﻿using ImGuiNET;
+﻿using System.Linq;
+using ImGuiNET;
 using SharpDX;
+using T3.Core.Animation;
+using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 
 namespace T3.Gui.InputUi.SingleControl
 {
@@ -24,6 +28,16 @@ namespace T3.Gui.InputUi.SingleControl
         protected override void DrawReadOnlyControl(string name, ref Int3 value)
         {
             DrawEditControl(name, ref value);
+        }
+        
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        {
+            if (inputValue is InputValue<Int3> float3InputValue)
+            {
+                Int3 value = float3InputValue.Value;
+                var curves = animator.GetCurvesForInput(inputSlot).ToArray();
+                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeInBars, new [] { (float)value.X, (float)value.Y, (float)value.Z});   
+            }
         }
     }
 }
