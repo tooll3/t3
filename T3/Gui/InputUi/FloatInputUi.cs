@@ -85,20 +85,20 @@ namespace T3.Gui.InputUi
             }
         }
 
-        protected override void DrawVariedValue(string name, InputSlot<float> inputSlot, Variator variator)
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator)
         {
-            var variation = variator.GetVariationForInput(inputSlot);
-            if (variation == null)
+            if (inputValue is InputValue<float> floatInputValue)
             {
-                return;
-            }
+                float value = floatInputValue.Value;
 
-            const int index = 0; // for testing just index 0, question where to get the index from?
-            float value = variation.Values[index];
-            var editState = DrawEditControl(name, ref value);
-            if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
-            {
-                variation.Values[index] = value;
+                double time = EvaluationContext.GlobalTimeInBars;
+                var curves = animator.GetCurvesForInput(inputSlot);
+                foreach (var curve in curves)
+                {
+                    var key = curve.GetV(time) ?? new VDefinition { U = time };
+                    key.Value = value;
+                    curve.AddOrUpdateV(time, key);
+                }
             }
         }
 

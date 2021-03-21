@@ -41,7 +41,7 @@ namespace T3.Gui.InputUi
             return inputEditState;
         }
 
-        private static float[] _components = new float[3];
+        private float[] _components = new float[3];
 
         protected override void DrawReadOnlyControl(string name, ref Vector3 float3Value)
         {
@@ -80,10 +80,25 @@ namespace T3.Gui.InputUi
             if (inputEditState == InputEditStateFlags.Nothing)
                 return;
 
-            for (var index = 0; index < _components.Length; index++)
+            UpdateCurveValues(curves, time, _components);
+        }
+
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        {
+            if (inputValue is InputValue<Vector3> float3InputValue)
+            {
+                Vector3 value = float3InputValue.Value;
+                var curves = animator.GetCurvesForInput(inputSlot).ToArray();
+                UpdateCurveValues(curves, EvaluationContext.GlobalTimeInBars, new [] { value.X, value.Y, value.Z});   
+            }
+        }
+
+        private void UpdateCurveValues(Curve[] curves, double time, float[] values)
+        {
+            for (var index = 0; index < curves.Length; index++)
             {
                 var key = curves[index].GetV(time) ?? new VDefinition { U = time };
-                key.Value = _components[index];
+                key.Value = values[index];
                 curves[index].AddOrUpdateV(time, key);
             }
         }

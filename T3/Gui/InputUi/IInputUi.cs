@@ -34,6 +34,9 @@ namespace T3.Gui.InputUi
         Relevancy Relevancy { get; set; }
         bool IsAnimatable { get; }
 
+
+        void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator);
+        
         InputEditStateFlags DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
         string GetSlotValue(IInputSlot inputSlot);
         void DrawSettings();

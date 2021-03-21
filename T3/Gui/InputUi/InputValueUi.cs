@@ -34,6 +34,14 @@ namespace T3.Gui.InputUi
 
         public abstract IInputUi Clone();
 
+        public virtual void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        {
+            if (!IsAnimatable)
+                Log.Warning("Should only be called for animated input types");
+            else
+                Log.Warning("Input type has no implementation to insert values into animation curves");
+        }
+
         /// <summary>
         /// Wraps the implementation of an parameter control to handle <see cref="InputEditStateFlags"/>
         /// </summary>
@@ -47,10 +55,6 @@ namespace T3.Gui.InputUi
         }
 
         protected virtual void DrawAnimatedValue(string name, InputSlot<T> inputSlot, Animator animator)
-        {
-        }
-
-        protected virtual void DrawVariedValue(string name, InputSlot<T> inputSlot, Variator variator)
         {
         }
 
@@ -72,8 +76,6 @@ namespace T3.Gui.InputUi
             var compositionSymbol = compositionUi.Symbol;
             var animator = compositionSymbol.Animator;
             bool isAnimated = IsAnimatable && animator.IsInputSlotAnimated(inputSlot);
-            // var variator = compositionUi.Symbol.Variator;
-            // bool isVaried = IsVariable && variator.IsInputSlotVaried(inputSlot);
             MappedType = inputSlot.MappedType;
 
             if (inputSlot is InputSlot<T> typedInputSlot)
@@ -185,7 +187,7 @@ namespace T3.Gui.InputUi
                     ImGui.PushStyleColor(ImGuiCol.Button, Color.Orange.Rgba);
                     if (ImGui.Button("A", new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
-                        animator.RemoveAnimationFrom(inputSlot);
+                        animator.RemoveAnimationFrom(inputSlot); // todo: add remove animation cmd
                     }
 
                     ImGui.PopStyleColor();
@@ -228,7 +230,7 @@ namespace T3.Gui.InputUi
                     if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         if (IsAnimatable)
-                            animator.CreateInputUpdateAction<float>(inputSlot);
+                            animator.CreateInputUpdateAction<float>(inputSlot); // todo: create command
                     }
 
                     if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickTreshold)

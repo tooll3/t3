@@ -367,6 +367,11 @@ namespace T3.Core.Operator
             return _animatedInputCurves.ContainsKey(new CurveId(inputSlot));
         }
 
+        public bool IsAnimated(Guid symbolChildId, Guid inputId) 
+        {
+            return _animatedInputCurves.ContainsKey(new CurveId(symbolChildId, inputId));
+        }
+ 
         public bool IsInstanceAnimated(Instance instance)
         {
             using (var e = _animatedInputCurves.Keys.GetEnumerator())
