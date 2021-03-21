@@ -260,7 +260,23 @@ namespace T3.Core.Operator
                                                     size2InputSlot.Value.Height = (int)newCurveY.GetSampledValue(context.TimeInBars);
                                                 };
                 size2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
-            }            
+            }
+            else if (inputSlot is Slot<bool> boolInputSlot)
+            {
+                var newCurve = new Curve();
+                newCurve.AddOrUpdateV(EvaluationContext.GlobalTimeInBars, new VDefinition()
+                                                                              {
+                                                                                  Value = boolInputSlot.Value ? 1 :0,
+                                                                                  InType = VDefinition.Interpolation.Constant,
+                                                                                  OutType = VDefinition.Interpolation.Constant,
+                                                                                  InEditMode = VDefinition.EditMode.Constant,
+                                                                                  OutEditMode = VDefinition.EditMode.Constant,
+                                                                              });
+                _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
+
+                boolInputSlot.UpdateAction = context => { boolInputSlot.Value = newCurve.GetSampledValue(context.TimeInBars) > 0.5f; };
+                boolInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+            }
             else
             {
                 Log.Error("Could not create update action.");
