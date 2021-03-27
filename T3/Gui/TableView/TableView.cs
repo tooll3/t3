@@ -76,7 +76,7 @@ namespace T3.Gui.TableView
                 ImGui.NewLine();
 
                 // Values
-                for (var objectIndex = 0; objectIndex < list.NumElements; objectIndex++)
+                for (var objectIndex = 0; objectIndex < Math.Min(list.NumElements, 9999); objectIndex++)
                 {
                     var cursorScreenPos = ImGui.GetCursorScreenPos();
 
