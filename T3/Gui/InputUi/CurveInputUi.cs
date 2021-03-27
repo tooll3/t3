@@ -36,7 +36,7 @@ namespace T3.Gui.InputUi
             
             ImGui.Dummy(Vector2.One);    // Add Line Break
 
-            return CurveInputEditing.DrawCanvasForCurve(curve);
+            return CurveInputEditing.DrawCanvasForCurve(curve, T3Ui.EditingFlags.PreventZoomWithMouseWheel);
         }
         
         protected override void DrawReadOnlyControl(string name, ref Curve value)

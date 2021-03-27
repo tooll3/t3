@@ -25,7 +25,7 @@ namespace T3.Gui.InputUi
         {
             //Log.Debug("ID " + ImGui.GetID("") );
             var imGuiId = ImGui.GetID("");
-            _flags = flags;
+            _interactionFlags = flags;
             if (!InteractionForCurve.TryGetValue(imGuiId, out var curveInteraction))
             {
                 curveInteraction = new CurveInteraction()
@@ -99,14 +99,14 @@ namespace T3.Gui.InputUi
 
             protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
             {
-                if ((_flags & T3Ui.EditingFlags.PreventMouseInteractions) != 0)
+                if ((_interactionFlags & T3Ui.EditingFlags.PreventMouseInteractions) != 0)
                     return;
 
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
                 }
-                
+
                 if (!ImGui.IsItemActive())
                 {
                     if (ImGui.IsItemDeactivated())
@@ -120,6 +120,7 @@ namespace T3.Gui.InputUi
                             Log.Error("Deactivated keyframe dragging without valid command?");
                         }
                     }
+
                     return;
                 }
 
@@ -179,7 +180,6 @@ namespace T3.Gui.InputUi
                 RebuildCurveTables();
                 EditState = InputEditStateFlags.Modified;
             }
-            
 
             // FIXME: This needs to be called
             public void CompleteDragCommand()
@@ -197,7 +197,6 @@ namespace T3.Gui.InputUi
             #endregion
 
             #region handle selection ----------------------------------------------------------------
-            
             private void HandleFenceSelection()
             {
                 _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
@@ -236,13 +235,25 @@ namespace T3.Gui.InputUi
 
                 public void Draw(Curve curve, CurveInteraction interaction)
                 {
-                    var height = (_flags & T3Ui.EditingFlags.ExpandVertically) == T3Ui.EditingFlags.ExpandVertically
+                    var height = (_interactionFlags & T3Ui.EditingFlags.ExpandVertically) == T3Ui.EditingFlags.ExpandVertically
                                      ? ImGui.GetContentRegionAvail().Y
                                      : DefaultCurveParameterHeight;
+
+                    var interactionFlags = T3Ui.EditingFlags.PreventZoomWithMouseWheel
+                                     | T3Ui.EditingFlags.PreventMouseInteractions
+                                     | T3Ui.EditingFlags.PreventPanningWithMouse;
                     
-                    var preventZoomWithMouseWheel = ImGui.GetIO().KeyCtrl ? T3Ui.EditingFlags.None 
-                                                        : T3Ui.EditingFlags.PreventZoomWithMouseWheel | T3Ui.EditingFlags.PreventPanningWithMouse;
-                    DrawCurveCanvas(DrawCanvasContent, height, preventZoomWithMouseWheel);
+                    var interactionDisabled = (_interactionFlags & interactionFlags) != T3Ui.EditingFlags.None;
+                    if (interactionDisabled)
+                    {
+                        var reenableThroughHotkey = ImGui.GetIO().KeyCtrl;
+                        if (reenableThroughHotkey)
+                        {
+                            _interactionFlags &= ~interactionFlags;
+                        }
+                    }
+
+                    DrawCurveCanvas(DrawCanvasContent, height, _interactionFlags);
 
                     void DrawCanvasContent()
                     {
@@ -280,7 +291,7 @@ namespace T3.Gui.InputUi
                     }
                 }
 
-                private const float DefaultCurveParameterHeight = 100;
+                private const float DefaultCurveParameterHeight = 130;
                 private readonly StandardValueRaster _standardRaster = new StandardValueRaster() { EnableSnapping = true };
                 private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
                 public bool NeedToAdjustScopeAfterFirstRendering = true;
@@ -289,8 +300,7 @@ namespace T3.Gui.InputUi
 
         private static readonly Dictionary<uint, CurveInteraction> InteractionForCurve = new Dictionary<uint, CurveInteraction>();
 
-
-        private static T3Ui.EditingFlags _flags;
+        private static T3Ui.EditingFlags _interactionFlags;
 
         public enum MoveDirections
         {

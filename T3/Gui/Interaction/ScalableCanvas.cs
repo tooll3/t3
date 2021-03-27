@@ -47,7 +47,6 @@ namespace T3.Gui.Interaction
             Scale = scaleT;
             Scroll = pp1;
 
-            
             var completed = Math.Abs(Scroll.X - ScrollTarget.X) < 1f
                             && Math.Abs(Scroll.Y - ScrollTarget.Y) < 1f
                             && Math.Abs(Scale.X - ScaleTarget.X) < 0.05f
@@ -193,27 +192,26 @@ namespace T3.Gui.Interaction
                 return;
 
             Scale = ScaleTarget * parent.Scale;
-            Scroll = ScrollTarget  * parent.Scale;
+            Scroll = ScrollTarget * parent.Scale;
         }
 
-        public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent= null)
+        public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null)
         {
             WindowSize = ImGui.GetContentRegionMax() - ImGui.GetWindowContentRegionMin();
             ScaleTarget = WindowSize / area.GetSize();
-            
+
             if (flipY)
             {
                 ScaleTarget.Y *= -1;
             }
-            
+
             if (parent != null)
             {
                 ScaleTarget /= parent.Scale;
             }
-
+            
             ScrollTarget = new Vector2(-area.Min.X * ScaleTarget.X,
                                        -area.Max.Y * ScaleTarget.Y);
-
         }
 
         public void FitAreaOnCanvas(ImRect area, bool flipY = false)
@@ -295,10 +293,10 @@ namespace T3.Gui.Interaction
             if (PreventMouseInteraction)
                 return;
 
-            if ((flags & T3Ui.EditingFlags.PreventPanningWithMouse) == 0 
+            if ((flags & T3Ui.EditingFlags.PreventPanningWithMouse) == 0
                 && (
-                       ImGui.IsMouseDragging(ImGuiMouseButton.Right) 
-                    || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
+                       ImGui.IsMouseDragging(ImGuiMouseButton.Right)
+                       || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
                 )
             {
                 ScrollTarget += Io.MouseDelta;
@@ -313,17 +311,20 @@ namespace T3.Gui.Interaction
             {
                 ZoomWithMouseWheel();
                 ZoomWithMiddleMouseDrag();
-                
-                if (this is TimeLineCanvas)
+
+                if (!IsCurveCanvas)
                 {
-                    ScaleTarget.X= ScaleTarget.X.Clamp(0.01f, 5000);
-                    ScaleTarget.Y= ScaleTarget.Y.Clamp(0.01f, 5000);
+                    if (this is TimeLineCanvas)
+                    {
+                        ScaleTarget.X = ScaleTarget.X.Clamp(0.01f, 5000);
+                        ScaleTarget.Y = ScaleTarget.Y.Clamp(0.01f, 5000);
+                    }
+                    else
+                    {
+                        ScaleTarget.X = ScaleTarget.X.Clamp(0.1f, 30);
+                        ScaleTarget.Y = ScaleTarget.Y.Clamp(0.1f, 30);
+                    }
                 }
-                else
-                {
-                    ScaleTarget.X= ScaleTarget.X.Clamp(0.1f, 30);
-                    ScaleTarget.Y= ScaleTarget.Y.Clamp(0.1f, 30);
-                }                
             }
         }
 
@@ -359,8 +360,6 @@ namespace T3.Gui.Interaction
 
             if (Math.Abs(zoomDelta) > 0.1f)
                 UserZoomedCanvas = true;
-
-
 
             var shift = ScrollTarget + (focusCenter * ScaleTarget);
             ScrollTarget += _mouse - shift - WindowPos;
