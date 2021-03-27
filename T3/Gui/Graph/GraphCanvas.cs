@@ -190,6 +190,11 @@ namespace T3.Gui.Graph
                 if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
                     ToggleDisabledForSelectedElements();
 
+                if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
+                    PinSelectedToOutputWindow();
+
+
+                
                 if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
                 {
                     var selectedChildren = GetSelectedChildUis();
@@ -530,14 +535,9 @@ namespace T3.Gui.Graph
                     GraphWindow.SetBackgroundOutput(instance);
                 }
 
-                var outputWindow = OutputWindow.OutputWindowInstances.SingleOrDefault(ow => ow.Config.Visible) as OutputWindow;
-                if (ImGui.MenuItem("Pin to output", enabled:outputWindow != null && oneOpSelected))
+                if (ImGui.MenuItem("Pin to output", oneOpSelected))
                 {
-                    var instance =CompositionOp.Children.Single(child => child.SymbolChildId == selectedChildUis[0].Id);
-                    if (outputWindow != null && instance != null)
-                    {
-                        outputWindow.Pinning.PinInstance(instance);
-                    }
+                    PinSelectedToOutputWindow();
                 } 
 
 
@@ -644,6 +644,29 @@ namespace T3.Gui.Graph
                 }
 
                 ImGui.EndMenu();
+            }
+        }
+
+        private void PinSelectedToOutputWindow()
+        {
+            var outputWindow = OutputWindow.OutputWindowInstances.SingleOrDefault(ow => ow.Config.Visible) as OutputWindow;
+            if (outputWindow == null)
+            {
+                Log.Warning("Can't pin selection without visible output window");
+                return;
+            }
+
+            var selection = GetSelectedChildUis();
+            if (selection.Count != 1)
+            {
+                Log.Warning("Please select only one operator to pin to output window");
+                return;                
+            }
+            
+            var instance = CompositionOp.Children.Single(child => child.SymbolChildId == selection[0].Id);
+            if (instance != null)
+            {
+                outputWindow.Pinning.PinInstance(instance);
             }
         }
 

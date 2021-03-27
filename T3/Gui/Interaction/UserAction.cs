@@ -31,6 +31,7 @@ namespace T3.Gui
         Redo,
         Save,
         FocusSelection,
+        PinToOutputWindow,
         Duplicate,
         DeleteSelection,
         CopyToClipboard,
@@ -211,6 +212,8 @@ namespace T3.Gui
                       new KeyboardBinding(UserActions.InsertKeyframe, new KeyCombination(Key.C)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.ToggleDisabled, new KeyCombination(Key.D)) { NeedsWindowFocus = true },
+                      new KeyboardBinding(UserActions.PinToOutputWindow, new KeyCombination(Key.P)) { NeedsWindowFocus = true },
+                      
                       new KeyboardBinding(UserActions.LoadBookmark1, new KeyCombination(Key.D1, ctrl: true)),
                       new KeyboardBinding(UserActions.LoadBookmark2, new KeyCombination(Key.D2, ctrl: true)),
                       new KeyboardBinding(UserActions.LoadBookmark3, new KeyCombination(Key.D3, ctrl: true)),

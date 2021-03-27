@@ -758,7 +758,6 @@ namespace T3.Gui.Graph
 
                     if (ImGui.IsItemActivated())
                     {
-                        Log.Debug("Start dragging " + output.Id);
                         _draggedOutputOpId = childUi.Id;
                         _draggedOutputDefId = outputDef.Id;
                     }
