@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using SharpDX;
+using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using T3.Core.Logging;
 
@@ -11,6 +13,8 @@ namespace T3.Core.Rendering
     public class ObjMesh
     {
         public readonly List<SharpDX.Vector3> Positions = new List<SharpDX.Vector3>();
+        public readonly List<SharpDX.Vector4> Colors = new List<Vector4>();
+        
         public readonly List<SharpDX.Vector3> Normals = new List<SharpDX.Vector3>();
         public readonly List<SharpDX.Vector2> TexCoords = new List<SharpDX.Vector2>();
         public readonly List<Face> Faces = new List<Face>();
@@ -47,6 +51,14 @@ namespace T3.Core.Rendering
                                 float y = float.Parse(lineEntries[2], CultureInfo.InvariantCulture);
                                 float z = float.Parse(lineEntries[3], CultureInfo.InvariantCulture);
                                 mesh.Positions.Add(new Vector3(x, y, z));
+                                var vertexIncludesColor = lineEntries.Length == 7;
+                                if (vertexIncludesColor)
+                                {
+                                    float r = float.Parse(lineEntries[4], CultureInfo.InvariantCulture);
+                                    float g = float.Parse(lineEntries[5], CultureInfo.InvariantCulture);
+                                    float b = float.Parse(lineEntries[6], CultureInfo.InvariantCulture);
+                                    mesh.Colors.Add(new Vector4(r, g, b, 1));
+                                }
                                 break;
                             }
                             case "vt":
@@ -87,10 +99,17 @@ namespace T3.Core.Rendering
                     Log.Error($"Failed to load point cloud:{e.Message} '{line}'");
                     return null;
                 }
+
+                if (mesh.Colors.Count > 0 && mesh.Colors.Count != mesh.Positions.Count)
+                {
+                    Log.Warning("Optional OBJ color information not defined for all vertices");
+                }
             }
 
             return mesh;
         }
+
+        
 
         private static void SplitFaceIndices(string v0, out int positionIndex, out int textureIndex, out int normalIndex)
         {
@@ -157,11 +176,14 @@ namespace T3.Core.Rendering
                 if (_distinctVertices == null)
                 {
                     InitializeVertices();
+                    UpdateVertexSorting(SortDirections.ZForward);
                 }
-
                 return _distinctVertices;
             }
         }
+        
+        
+        
 
         public int GetVertexIndex(int positionIndex, int normalIndex, int textureCoordsIndex)
         {
@@ -180,14 +202,16 @@ namespace T3.Core.Rendering
             public readonly int PositionIndex;
             public readonly int NormalIndex;
             public readonly int TextureCoordsIndex;
+            public int PresortIndex;    // An internal helper
 
             //public readonly long Hash;
 
-            public Vertex(int positionIndex, int normalIndex, int textureCoordsIndex)
+            public Vertex(int positionIndex, int normalIndex, int textureCoordsIndex, int index)
             {
                 PositionIndex = positionIndex;
                 NormalIndex = normalIndex;
                 TextureCoordsIndex = textureCoordsIndex;
+                PresortIndex = index;
                 //Hash = GetHashForIndices(positionIndex, normalIndex, textureCoordsIndex);
             }
 
@@ -197,7 +221,7 @@ namespace T3.Core.Rendering
             }
         }
 
-        private void InitializeVertices()
+        private void InitializeVertices( )
         {
             if (TexCoords.Count == 0)
             {
@@ -213,6 +237,8 @@ namespace T3.Core.Rendering
                 SortInMergedVertex(face.V2, face.V2n, face.V2t, ref face);
             }
         }
+
+
 
         private int SortInMergedVertex(int posIndex, int normalIndex, int texCoordIndex, ref Face face)
         {
@@ -234,18 +260,64 @@ namespace T3.Core.Rendering
                                    tangent: out tangent,
                                    bitangent: out bitangent);
 
-            var vert = new Vertex(posIndex, normalIndex, texCoordIndex);
             var newIndex = _distinctVertices.Count;
+            var vert = new Vertex(posIndex, normalIndex, texCoordIndex, newIndex);
             VertexIndicesByHash[vertHash] = newIndex;
             VertexBinormals.Add(bitangent);
             VertexTangents.Add(tangent);
             _distinctVertices.Add(vert);
             return newIndex;
         }
+        
+        /// <summary>
+        /// Vertex sorting is implement through an index look-up table
+        /// </summary>
+        public void UpdateVertexSorting(SortDirections sortDirection)
+        {
+            SortedVertexIndices = Enumerable.Range(0, _distinctVertices.Count).ToList();
+            switch (sortDirection)
+            {
+                case SortDirections.XForward:
+                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v1].PositionIndex].X.
+                                                 CompareTo(Positions[_distinctVertices[v2].PositionIndex].X));
+                    break;
+                case SortDirections.XBackwards:
+                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v2].PositionIndex].X.
+                                                 CompareTo(Positions[_distinctVertices[v1].PositionIndex].X));
+                    break;
+                case SortDirections.YForward:
+                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v1].PositionIndex].Y.
+                                                 CompareTo(Positions[_distinctVertices[v2].PositionIndex].Y));
+                    break;
+                case SortDirections.YBackwards:
+                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v2].PositionIndex].Y.
+                                                 CompareTo(Positions[_distinctVertices[v1].PositionIndex].Y));
+                    break;
+                case SortDirections.ZForward:
+                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v1].PositionIndex].Z.
+                                                 CompareTo(Positions[_distinctVertices[v2].PositionIndex].Z));
+                    break;
+                case SortDirections.ZBackwards:
+                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v2].PositionIndex].Z.
+                                                 CompareTo(Positions[_distinctVertices[v1].PositionIndex].Z));
+                    break;
+            }
+        }
+
+        public enum SortDirections
+        {
+            XForward,
+            XBackwards,
+            YForward,
+            YBackwards,
+            ZForward,
+            ZBackwards,
+        }
 
         private List<Vertex> _distinctVertices;
         public readonly List<SharpDX.Vector3> VertexTangents = new List<Vector3>();
         public readonly List<SharpDX.Vector3> VertexBinormals = new List<Vector3>();
+        public List<int> SortedVertexIndices;
         private readonly Dictionary<long, int> VertexIndicesByHash = new Dictionary<long, int>();
         #endregion
     }
