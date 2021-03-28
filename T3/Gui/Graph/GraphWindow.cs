@@ -151,6 +151,9 @@ namespace T3.Gui.Graph
 
         protected override void DrawContent()
         {
+            if (GraphCanvas.CompositionOp == null)
+                return;
+            
             if (FitViewToSelectionHandling.FitViewToSelectionRequested)
                 FitViewToSelection();
 
