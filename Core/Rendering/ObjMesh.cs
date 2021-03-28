@@ -176,7 +176,6 @@ namespace T3.Core.Rendering
                 if (_distinctVertices == null)
                 {
                     InitializeVertices();
-                    UpdateVertexSorting(SortDirections.ZForward);
                 }
                 return _distinctVertices;
             }
@@ -202,16 +201,14 @@ namespace T3.Core.Rendering
             public readonly int PositionIndex;
             public readonly int NormalIndex;
             public readonly int TextureCoordsIndex;
-            public int PresortIndex;    // An internal helper
 
             //public readonly long Hash;
 
-            public Vertex(int positionIndex, int normalIndex, int textureCoordsIndex, int index)
+            public Vertex(int positionIndex, int normalIndex, int textureCoordsIndex)
             {
                 PositionIndex = positionIndex;
                 NormalIndex = normalIndex;
                 TextureCoordsIndex = textureCoordsIndex;
-                PresortIndex = index;
                 //Hash = GetHashForIndices(positionIndex, normalIndex, textureCoordsIndex);
             }
 
@@ -261,7 +258,7 @@ namespace T3.Core.Rendering
                                    bitangent: out bitangent);
 
             var newIndex = _distinctVertices.Count;
-            var vert = new Vertex(posIndex, normalIndex, texCoordIndex, newIndex);
+            var vert = new Vertex(posIndex, normalIndex, texCoordIndex);
             VertexIndicesByHash[vertHash] = newIndex;
             VertexBinormals.Add(bitangent);
             VertexTangents.Add(tangent);
@@ -301,6 +298,8 @@ namespace T3.Core.Rendering
                     SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v2].PositionIndex].Z.
                                                  CompareTo(Positions[_distinctVertices[v1].PositionIndex].Z));
                     break;
+                case SortDirections.Ignore:
+                    break;
             }
         }
 
@@ -312,6 +311,7 @@ namespace T3.Core.Rendering
             YBackwards,
             ZForward,
             ZBackwards,
+            Ignore,
         }
 
         private List<Vertex> _distinctVertices;
