@@ -803,7 +803,14 @@ namespace T3.Gui.Graph
                     var targetDir = new DirectoryInfo(targetPath).Parent.FullName;
                     if (!Directory.Exists(targetDir))
                         Directory.CreateDirectory(targetDir);
-                    File.Copy(resourcePath, targetPath);
+                    try
+                    {
+                        File.Copy(resourcePath, targetPath);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"Error exporting resource '{resourcePath}': '{e.Message}'");
+                    }
                 }
             } 
             else
