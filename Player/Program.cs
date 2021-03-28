@@ -13,6 +13,7 @@ using CommandLine;
 using CommandLine.Text;
 using T3.Core;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using Color = SharpDX.Color;
@@ -178,9 +179,36 @@ namespace T3
             // create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
+
             _playback = new StreamPlayback(@"Resources\proj-partial\soundtrack\partial.mp3");
-            _playback.PlaybackSpeed = 1.0;
             _playback.Bpm = 120;
+            
+            // sample some frames to preload all shaders and resources
+            var songDurationInSecs = _playback.GetSongDurationInSecs();
+            for (double timeInSecs = 0; timeInSecs < songDurationInSecs; timeInSecs += 10.0)
+            {
+                Log.Info($"Pre-evaluate at: {timeInSecs}s");
+                EvaluationContext.GlobalTimeInSecs = timeInSecs;
+                EvaluationContext.GlobalTimeInBars = timeInSecs / 120.0 * 240.0;
+
+                DirtyFlag.IncrementGlobalTicks();
+                DirtyFlag.InvalidationRefFrame++;
+
+                context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
+                context.OutputMerger.SetTargets(_renderView);
+
+                _evalContext.Reset();
+                _evalContext.RequestedResolution = new Size2(options.Width, options.Height);
+
+                if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
+                {
+                    textureOutput.Invalidate();
+                    textureOutput.GetValue(_evalContext);
+                }
+            }
+
+            // start playback           
+            _playback.PlaybackSpeed = 1.0;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
