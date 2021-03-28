@@ -673,16 +673,16 @@ namespace T3.Gui.Graph
 
         public class ExportInfo 
         {
-            public Dictionary<Guid, Instance> CollectedInstances { get; } = new Dictionary<Guid, Instance>(200);
+            public HashSet<Instance> CollectedInstances { get; } = new HashSet<Instance>();
             public HashSet<Symbol> UniqueSymbols { get; } = new HashSet<Symbol>();
             public HashSet<string> UniqueResourcePaths { get; } = new HashSet<string>();
 
             public bool AddInstance(Instance instance)
             {
-                if (CollectedInstances.ContainsKey(instance.SymbolChildId))
+                if (CollectedInstances.Contains(instance))
                     return false;
 
-                CollectedInstances.Add(instance.SymbolChildId, instance);
+                CollectedInstances.Add(instance);
                 return true;
             }
 
@@ -703,6 +703,10 @@ namespace T3.Gui.Graph
             public void PrintInfo()
             {
                 Log.Info($"Collected {CollectedInstances.Count} instances for export in {UniqueSymbols.Count} different symbols");
+                foreach (var resourcePath in UniqueResourcePaths)
+                {
+                    Log.Info(resourcePath);
+                }
             }
         }
 
@@ -716,7 +720,6 @@ namespace T3.Gui.Graph
                 // traverse starting at output and collect everything
                 var exportInfo = new ExportInfo();
                 CollectChildSymbols(instance.Symbol, exportInfo);
-                exportInfo.PrintInfo();
                 
                 string exportDir = "Export";
                 try
@@ -780,6 +783,7 @@ namespace T3.Gui.Graph
                 
                 // copy referenced resources
                 Traverse(instance.Outputs.First(), exportInfo);
+                exportInfo.PrintInfo();
                 var resourcePaths = exportInfo.UniqueResourcePaths;
                 resourcePaths.Add(ProjectSettings.Config.SoundtrackFilepath);
                 resourcePaths.Add(@"Resources\hash-functions.hlsl");
@@ -834,6 +838,8 @@ namespace T3.Gui.Graph
                 {
                     Traverse(slot.GetConnection(0), exportInfo);
                 }
+
+                CheckInputForResourcePath(slot, exportInfo);
             }
             else if (slot.IsConnected)
             {
@@ -850,19 +856,8 @@ namespace T3.Gui.Graph
 
                 foreach (var input in parent.Inputs)
                 {
-                    var inputUi = SymbolUiRegistry.Entries[parent.Symbol.Id].InputUis[input.Id];
-                    if (inputUi is StringInputUi stringInputUi)
-                    {
-                        if (stringInputUi.Usage == StringInputUi.UsageType.FilePath)
-                        {
-                            if (input is InputSlot<string> stringInput)
-                            {
-                                // Log.Info($"{stringInputUi.InputDefinition.Name}: {stringInput.TypedInputValue.Value}");
-                                exportInfo.AddResourcePath(stringInput.TypedInputValue.Value);
-                            }
-                        }
-                    }
-                    
+                    CheckInputForResourcePath(input, exportInfo);
+
                     if (input.IsConnected)
                     {
                         if (input.IsMultiInput)
@@ -878,6 +873,23 @@ namespace T3.Gui.Graph
                             Traverse(input.GetConnection(0), exportInfo);
                         }
                     }
+                }
+            }
+        }
+
+        private static void CheckInputForResourcePath(ISlot inputSlot, ExportInfo exportInfo)
+        {
+            var parent = inputSlot.Parent;
+            var inputUi = SymbolUiRegistry.Entries[parent.Symbol.Id].InputUis[inputSlot.Id];
+            if (inputUi is StringInputUi stringInputUi && stringInputUi.Usage == StringInputUi.UsageType.FilePath)
+            {
+                var compositionSymbol = parent.Parent.Symbol;
+                var parentSymbolChild = compositionSymbol.Children.Single(child => child.Id == parent.SymbolChildId);
+                var value = parentSymbolChild.InputValues[inputSlot.Id].Value;
+                if (value is InputValue<string> stringValue)
+                {
+                    // Log.Info($"{stringInputUi.InputDefinition.Name}: {stringValue.Value}");
+                    exportInfo.AddResourcePath(stringValue.Value);
                 }
             }
         }
