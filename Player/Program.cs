@@ -60,8 +60,8 @@ namespace T3
                                               h =>
                                               {
                                                   h.AdditionalNewLineAfterOption = false;
-                                                  h.Heading = "still::home - v0.3";
-                                                  h.Copyright = "Copyright (c) 2020 lucid, pixtur and cynic";
+                                                  h.Heading = "still::partial - v0.1";
+                                                  h.Copyright = "Copyright (c) 2021 lucid & pixtur";
                                                   h.AutoVersion = false;
                                                   return h;
                                               },
@@ -87,11 +87,11 @@ namespace T3
 
             _vsync = !options.NoVsync;
             Console.WriteLine($"using vsync: {_vsync}, windowed: {options.Windowed}, size: {options.Size}, loop: {options.Loop}, logging: {options.Logging}");
-            var form = new RenderForm("still::home")
+            var form = new RenderForm("still::partial")
                            {
                                ClientSize = options.Size,
                                AllowUserResizing = false, 
-                               Icon = new Icon(@"Resources\proj-numbers\home.ico")
+                               Icon = new Icon(@"Resources\t3\t3.ico")
                            };
 
             // SwapChain description
@@ -159,16 +159,26 @@ namespace T3
             FullScreenVertexShaderId = resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
             FullScreenPixelShaderId = resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
 
-            var operatorsAssembly = Assembly.GetAssembly(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value));
+            Assembly operatorsAssembly;
+            try
+            {
+                operatorsAssembly = Assembly.LoadFrom("Operators.dll");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error loading operator assembly: '{e.Message}'");
+                return;
+            }
+
             _model = new Model(operatorsAssembly, options.Logging);
             _model.Load();
             
             var symbols = SymbolRegistry.Entries;
-            var demoSymbol = symbols.First(entry => entry.Value.Name == "Scene1").Value;
+            var demoSymbol = symbols.First(entry => entry.Value.Name == "EmitParticlesAtMeshSliceExample").Value;
             // create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
-            _playback = new StreamPlayback(@"Resources\proj-synchotron\soundtrack\synthjam.mp3");
+            _playback = new StreamPlayback(@"Resources\proj-partial\soundtrack\partial.mp3");
             _playback.PlaybackSpeed = 1.0;
             _playback.Bpm = 120;
 
@@ -176,6 +186,15 @@ namespace T3
             stopwatch.Start();
             Int64 lastElapsedTicks = stopwatch.ElapsedTicks;
 
+            var rasterizerDesc = new RasterizerStateDescription()
+                                 {
+                                     FillMode = FillMode.Solid,
+                                     CullMode = CullMode.None,
+                                     IsScissorEnabled = false,
+                                     IsDepthClipEnabled = false
+                                 };
+            var rasterizerState = new RasterizerState(device, rasterizerDesc);
+            
             // Main loop
             RenderLoop.Run(form, () =>
                                  {
@@ -212,6 +231,7 @@ namespace T3
                                          Texture2D tex = textureOutput.GetValue(_evalContext);
                                          if (tex != null)
                                          {
+                                             context.Rasterizer.State = rasterizerState;
                                              if (resourceManager.Resources[FullScreenVertexShaderId] is VertexShaderResource vsr)
                                                  context.VertexShader.Set(vsr.VertexShader);
                                              if (resourceManager.Resources[FullScreenPixelShaderId] is PixelShaderResource psr)

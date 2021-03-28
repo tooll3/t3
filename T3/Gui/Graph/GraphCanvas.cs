@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharpDX.Direct3D11;
+using T3.Compilation;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -673,15 +674,29 @@ namespace T3.Gui.Graph
         public class ExportInfo 
         {
             public Dictionary<Guid, Instance> CollectedInstances { get; } = new Dictionary<Guid, Instance>(200);
-            public HashSet<Guid> UniqueSymbols { get; } = new HashSet<Guid>();
+            public HashSet<Symbol> UniqueSymbols { get; } = new HashSet<Symbol>();
+            public HashSet<string> UniqueResourcePaths { get; } = new HashSet<string>();
 
-            public bool Add(Instance instance)
+            public bool AddInstance(Instance instance)
             {
                 if (CollectedInstances.ContainsKey(instance.SymbolChildId))
                     return false;
 
                 CollectedInstances.Add(instance.SymbolChildId, instance);
-                UniqueSymbols.Add(instance.Symbol.Id);
+                return true;
+            }
+
+            public void AddResourcePath(string path)
+            {
+                UniqueResourcePaths.Add(path);
+            }
+
+            public bool AddSymbol(Symbol symbol) 
+            {
+                if (UniqueSymbols.Contains(symbol))
+                    return false;
+
+                UniqueSymbols.Add(symbol);
                 return true;
             }
 
@@ -700,15 +715,117 @@ namespace T3.Gui.Graph
             {
                 // traverse starting at output and collect everything
                 var exportInfo = new ExportInfo();
-                Traverse(instance.Outputs.First(), exportInfo);
+                CollectChildSymbols(instance.Symbol, exportInfo);
                 exportInfo.PrintInfo();
+                
+                string exportDir = "Export";
+                try
+                {
+                    Directory.Delete(exportDir, true);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+                Directory.CreateDirectory(exportDir);
+
+                // generate Operators assembly
+                var operatorAssemblySources = exportInfo.UniqueSymbols.Select(symbol =>
+                                                                    {
+                                                                        var source = File.ReadAllText(symbol.SourcePath);
+                                                                        return source;
+                                                                    }).ToList();
+                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\GpuQuery.cs"));
+                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\BmFont.cs"));
+                var references = OperatorUpdating.CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
+                
+                // copy player and dependent assemblies to export dir
+                var currentDir = Directory.GetCurrentDirectory();
+                var playerFileNames = new List<string>
+                                          {
+                                              currentDir + @"\Player\bin\Release\bass.dll",
+                                              currentDir + @"\Player\bin\Release\basswasapi.dll",
+                                              currentDir + @"\Player\bin\Release\CommandLine.dll",
+                                              currentDir + @"\Player\bin\Release\Player.exe",
+                                              currentDir + @"\Player\bin\Release\Player.exe.config",
+                                              currentDir + @"\Player\bin\Release\SharpDX.Desktop.dll",
+                                          };
+                playerFileNames.ForEach(s => CopyFile(s, exportDir));
+                
+                var referencedAssemblies = references.Where(r => r.Display.Contains(currentDir))
+                                                     .Select(r => r.Display)
+                                                     .Distinct()
+                                                     .ToArray();
+                foreach (var asmPath in referencedAssemblies)
+                {
+                    CopyFile(asmPath, exportDir);
+                }
+
+                // generate exported .t3 files
+                Json json = new Json();
+                string symbolExportDir = exportDir + Path.DirectorySeparatorChar + @"Operators\Types\";
+                if (Directory.Exists(symbolExportDir))
+                    Directory.Delete(symbolExportDir, true);
+                Directory.CreateDirectory(symbolExportDir);
+                foreach (var symbol in exportInfo.UniqueSymbols)
+                {
+                    using (var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + ".t3"))
+                    using (var writer = new JsonTextWriter(sw))
+                    {
+                        json.Writer = writer;
+                        json.Writer.Formatting = Formatting.Indented;
+                        json.WriteSymbol(symbol);
+                    }
+                }
+                
+                // copy referenced resources
+                Traverse(instance.Outputs.First(), exportInfo);
+                var resourcePaths = exportInfo.UniqueResourcePaths;
+                resourcePaths.Add(ProjectSettings.Config.SoundtrackFilepath);
+                resourcePaths.Add(@"Resources\hash-functions.hlsl");
+                resourcePaths.Add(@"Resources\noise-functions.hlsl");
+                resourcePaths.Add(@"Resources\particle.hlsl");
+                resourcePaths.Add(@"Resources\pbr.hlsl");
+                resourcePaths.Add(@"Resources\point.hlsl");
+                resourcePaths.Add(@"Resources\point-light.hlsl");
+                resourcePaths.Add(@"Resources\utils.hlsl");
+                resourcePaths.Add(@"Resources\lib\dx11\fullscreen-texture.hlsl");
+                resourcePaths.Add(@"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl");
+                resourcePaths.Add(@"Resources\lib\particles\particle-dead-list-init.hlsl");
+                resourcePaths.Add(@"Resources\t3\t3.ico");
+                foreach (var resourcePath in resourcePaths)
+                {
+                    var targetPath = exportDir + Path.DirectorySeparatorChar + resourcePath;
+                    var targetDir = new DirectoryInfo(targetPath).Parent.FullName;
+                    if (!Directory.Exists(targetDir))
+                        Directory.CreateDirectory(targetDir);
+                    File.Copy(resourcePath, targetPath);
+                }
             } 
             else
             {
                 Log.Warning("Can only export ops with 'Texture2D' output");
             }
         }
-        
+
+        public static void CopyFile(string sourcePath, string targetDir)
+        {
+            var fi = new FileInfo(sourcePath);
+            var targetPath = targetDir + Path.DirectorySeparatorChar + fi.Name;
+            File.Copy(sourcePath, targetPath);
+        }
+
+        public static void CollectChildSymbols(Symbol symbol, ExportInfo exportInfo)
+        {
+            if (!exportInfo.AddSymbol(symbol))
+                return; // already visited
+
+            foreach (var symbolChild in symbol.Children)
+            {
+                CollectChildSymbols(symbolChild.Symbol, exportInfo);
+            }
+        }
+
         public static void Traverse(ISlot slot, ExportInfo exportInfo)
         {
             if (slot is IInputSlot)
@@ -722,16 +839,30 @@ namespace T3.Gui.Graph
             {
                 // slot is an output of an composition op
                 Traverse(slot.GetConnection(0), exportInfo);
+                exportInfo.AddInstance(slot.Parent);
             }
             else
             {
                 Instance parent = slot.Parent;
-                Log.Info(parent.Symbol.Name);
-                if (!exportInfo.Add(parent))
+                // Log.Info(parent.Symbol.Name);
+                if (!exportInfo.AddInstance(parent))
                     return; // already visited
 
                 foreach (var input in parent.Inputs)
                 {
+                    var inputUi = SymbolUiRegistry.Entries[parent.Symbol.Id].InputUis[input.Id];
+                    if (inputUi is StringInputUi stringInputUi)
+                    {
+                        if (stringInputUi.Usage == StringInputUi.UsageType.FilePath)
+                        {
+                            if (input is InputSlot<string> stringInput)
+                            {
+                                // Log.Info($"{stringInputUi.InputDefinition.Name}: {stringInput.TypedInputValue.Value}");
+                                exportInfo.AddResourcePath(stringInput.TypedInputValue.Value);
+                            }
+                        }
+                    }
+                    
                     if (input.IsConnected)
                     {
                         if (input.IsMultiInput)

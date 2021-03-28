@@ -261,6 +261,7 @@ __pycache__/
 
 # t3 
 .t3/
+Export/
 T3/ImGui
 T3/imgui.ini
 imgui.ini

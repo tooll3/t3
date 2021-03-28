@@ -47,6 +47,7 @@ namespace T3.Compilation
 
         public static Assembly CompileSymbolFromSource(string source, string symbolName)
         {
+            // return CompileSymbolsFromSource((source, symbolName));
             var operatorsAssembly = ResourceManager.Instance().OperatorsAssembly;
             var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
@@ -111,6 +112,66 @@ namespace T3.Compilation
             }
 
             return null;
+        }
+
+        public static List<MetadataReference> CompileSymbolsFromSource(string exportPath, params string[] sources) 
+        {
+            var operatorsAssembly = ResourceManager.Instance().OperatorsAssembly;
+            var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
+            var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
+            var coreAssembly = typeof(ResourceManager).Assembly;
+            referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
+            // referencedAssemblies.Add(MetadataReference.CreateFromFile(operatorsAssembly.Location));
+            foreach (var asmName in referencedAssembliesNames)
+            {
+                var asm = Assembly.Load(asmName);
+                if (asm != null)
+                {
+                    referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
+                }
+
+                // in order to get dependencies of the used assemblies that are not part of T3 references itself
+                var subAsmNames = asm.GetReferencedAssemblies();
+                foreach (var subAsmName in subAsmNames)
+                {
+                    var subAsm = Assembly.Load(subAsmName);
+                    if (subAsm != null)
+                    {
+                        referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
+                    }
+                }
+            }
+        
+            var syntaxTrees = sources.Select(s => CSharpSyntaxTree.ParseText(s));
+            var compilation = CSharpCompilation.Create("Operators",
+                                                       syntaxTrees,
+                                                       referencedAssemblies.ToArray(),
+                                                       new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
+                                                          .WithOptimizationLevel(OptimizationLevel.Release));
+        
+            using (var dllStream = new FileStream(exportPath + Path.DirectorySeparatorChar + "Operators.dll", FileMode.Create))
+            // using (var pdbStream = new FileStream(exportPath + Path.DirectorySeparatorChar + "Operators.pdb", FileMode.Create))
+            using (var pdbStream = new MemoryStream())
+            {
+                var emitResult = compilation.Emit(dllStream, pdbStream);
+                Log.Info($"compilation results of 'export':");
+                if (!emitResult.Success)
+                {
+                    foreach (var entry in emitResult.Diagnostics)
+                    {
+                        if (entry.WarningLevel == 0)
+                            Log.Error(entry.GetMessage());
+                        else
+                            Log.Warning(entry.GetMessage());
+                    }
+                }
+                else
+                {
+                    Log.Info($"Compilation of 'export' successful.");
+                }
+            }
+
+            return referencedAssemblies;
         }
     }
 }

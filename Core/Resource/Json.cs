@@ -298,7 +298,7 @@ namespace T3.Core
             var animatorData = (JArray)o["Animator"];
 
             string namespaceId = id.ToString().ToLower().Replace('-', '_');
-            string instanceTypeName = "T3.Operators.Types.Id_" + namespaceId + "." + name + ", Operators";
+            string instanceTypeName = "T3.Operators.Types.Id_" + namespaceId + "." + name + ", Operators, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
             Type instanceType = Type.GetType(instanceTypeName);
             if (instanceType == null)
             {
