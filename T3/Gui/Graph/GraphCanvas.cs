@@ -888,8 +888,12 @@ namespace T3.Gui.Graph
                 var value = parentSymbolChild.InputValues[inputSlot.Id].Value;
                 if (value is InputValue<string> stringValue)
                 {
-                    // Log.Info($"{stringInputUi.InputDefinition.Name}: {stringValue.Value}");
-                    exportInfo.AddResourcePath(stringValue.Value);
+                    var resourcePath = stringValue.Value;
+                    exportInfo.AddResourcePath(resourcePath);
+                    if (resourcePath.EndsWith(".fnt"))
+                    {
+                        exportInfo.AddResourcePath(resourcePath.Replace(".fnt", ".png"));
+                    }
                 }
             }
         }
