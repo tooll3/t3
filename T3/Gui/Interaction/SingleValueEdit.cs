@@ -166,7 +166,7 @@ namespace T3.Gui.Interaction
                         }
 
                         
-                        if (ImGui.IsItemDeactivated() )
+                        if (ImGui.IsItemDeactivated() || !ImGui.IsWindowFocused())
                         {
                             //Log.Debug(" is item deactivated #" + CurrentTabIndex);
                             SetState(InputStates.Inactive);
@@ -174,6 +174,7 @@ namespace T3.Gui.Interaction
                             if (double.IsNaN(_editValue))
                                 _editValue = _startValue;
                         }
+
 
                         _editValue = Evaluate(_jogDialText);
                         break;
