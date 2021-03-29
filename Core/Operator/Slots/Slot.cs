@@ -163,7 +163,7 @@ namespace T3.Core.Operator.Slots
             {
                 Instance parent = Parent;
 
-                bool outputDirty = false;
+                bool outputDirty = DirtyFlag.IsDirty;
                 foreach (var input in parent.Inputs)
                 {
                     if (input.IsConnected)

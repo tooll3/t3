@@ -119,9 +119,7 @@ namespace T3.Gui.Selection
             
             // Don't draw gizmo behind camera
             Vector3 originInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z) / originInClipSpace.W;
-            if ((originInNdc.Z > 1 || Math.Abs(originInNdc.X) > 2 
-                                  || Math.Abs(originInNdc.Y) > 2) 
-                && CurrentDraggingMode == GizmoDraggingModes.None)
+            if ((originInNdc.Z > 1 || Math.Abs(originInNdc.X) > 2 || Math.Abs(originInNdc.Y) > 2) && CurrentDraggingMode == GizmoDraggingModes.None)
                 return;
             
             var viewports = ResourceManager.Instance().Device.ImmediateContext.Rasterizer.GetViewports<SharpDX.Mathematics.Interop.RawViewportF>();

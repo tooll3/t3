@@ -380,8 +380,8 @@ namespace T3.Gui.InputUi
                                                    new Symbol.Connection(sourceParentOrChildId: ConnectionMaker.UseSymbolContainerId,
                                                                          sourceSlotId: newInput.Id,
                                                                          targetParentOrChildId: symbolChildUi.Id,
-                                                                         targetSlotId: input.InputDefinition.Id
-                                                                        ), 0);
+                                                                         targetSlotId: input.InputDefinition.Id),
+                                                   0);
                 cmd.Do();
                 newInput.DefaultValue = input.Value.Clone();
                 inputSlot.DirtyFlag.Invalidate();
