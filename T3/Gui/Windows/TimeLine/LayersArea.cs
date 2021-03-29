@@ -195,8 +195,12 @@ namespace T3.Gui.Windows.TimeLine
             var isSelected = ClipSelection.SelectedClips.Contains(timeClip);
 
 
-            var color = new Color(0.8f, 0.8f, 0.4f, 0.4f);
-            _drawList.AddRectFilled(position, position + clipSize - new Vector2(1, 0), color);
+            var color = new Color(0.6f, 0.6f, 0.3f, 0.6f);
+            var itemRectMax = position + clipSize - new Vector2(1, 0);
+            _drawList.AddRectFilled(position, itemRectMax, color);
+            
+            var shadowColor = new Color(0.0f, 0.0f, 0.0f, 0.4f);
+            _drawList.AddRect(position - Vector2.One, itemRectMax + Vector2.One, shadowColor);
 
             var timeRemapped = timeClip.TimeRange != timeClip.SourceRange;
             var timeStretched = Math.Abs(timeClip.TimeRange.Duration - timeClip.SourceRange.Duration) > 0.001;
@@ -214,9 +218,9 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             if (isSelected)
-                _drawList.AddRect(position - Vector2.One, position + clipSize - new Vector2(1, 0) + Vector2.One, Color.White);
+                _drawList.AddRect(position - Vector2.One, itemRectMax + Vector2.One, Color.White);
 
-            ImGui.PushClipRect(position, position + clipSize - new Vector2(1, 0), true);
+            ImGui.PushClipRect(position, itemRectMax, true);
             var label = timeStretched
                             ? symbolChildUi.SymbolChild.ReadableName + $" ({GetSpeed(timeClip)}%)"
                             : symbolChildUi.SymbolChild.ReadableName;

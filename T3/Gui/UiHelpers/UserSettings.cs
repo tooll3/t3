@@ -35,7 +35,7 @@ namespace T3.Gui.UiHelpers
             public bool UseArcConnections = false;
             public float SnapStrength = 5;
             public bool UseJogDialControl = false;
-            public float ZoomSpeed = 12;
+            public float ScrollSmoothing = 0.06f;
             public float TooltipDelay = 1.2f;
             public bool HideUiElementsInGraphWindow = false;
             public float ClickTreshold = 5; // Increase for high-res display and pen tablets

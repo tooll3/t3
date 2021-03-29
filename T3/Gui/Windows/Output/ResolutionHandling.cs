@@ -33,12 +33,12 @@ namespace T3.Gui.Windows.Output
                     ImGui.PopID();
                 }
 
-                if (ImGui.Selectable("+ Add"))
-                {
-                    _resolutionForEdit =  new Resolution("untitled", 1,1);
-                    Resolutions.Add(_resolutionForEdit);
-                    resolutionDialog.ShowNextFrame();
-                }
+                // if (ImGui.Selectable("+ Add"))
+                // {
+                //     _resolutionForEdit =  new Resolution("untitled", 1,1);
+                //     Resolutions.Add(_resolutionForEdit);
+                //     resolutionDialog.ShowNextFrame();
+                // }
                 ImGui.EndCombo();
             }
         }
@@ -57,8 +57,8 @@ namespace T3.Gui.Windows.Output
                                                                    new Resolution("8k", 1920*4, 1080*4),
                                                                };
 
-        public static Resolution DefaultResolution = Resolutions[0];
-        private static Resolution _resolutionForEdit;
+        public static readonly Resolution DefaultResolution = Resolutions[0];
+        private static readonly Resolution _resolutionForEdit = new Resolution("untitled", 255,255);
         
         public class Resolution
         {

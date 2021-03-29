@@ -36,7 +36,7 @@ namespace T3.Gui.Windows
             
             ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
 
-            ImGui.DragFloat("Scroll damping", ref UserSettings.Config.ZoomSpeed);
+            ImGui.DragFloat("Scroll smoothing", ref UserSettings.Config.ScrollSmoothing);
             
             ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
             ImGui.DragFloat("Tooltip delay", ref UserSettings.Config.TooltipDelay);
