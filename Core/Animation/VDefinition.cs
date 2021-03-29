@@ -45,10 +45,10 @@ namespace T3.Core.Animation
         public VDefinition()
         {
             Value = 0.0;
-            InType = Interpolation.Spline;
-            OutType = Interpolation.Spline;
-            InEditMode = EditMode.Smooth;
-            OutEditMode = EditMode.Smooth;
+            InType = Interpolation.Linear;
+            OutType = Interpolation.Linear;
+            InEditMode = EditMode.Linear;
+            OutEditMode = EditMode.Linear;
             InTangentAngle = 0.0;
             OutTangentAngle = 0.0;
         }
