@@ -930,17 +930,21 @@ namespace T3.Gui.Graph
         {
             var selectedChildren = GetSelectedChildUis();
 
-            if (!selectedChildren.Any())
+            
+            var isNodeHovered = T3Ui.HoveredIdsLastFrame.Count == 1 && CompositionOp != null;
+            if (isNodeHovered)
             {
-                if (T3Ui.HoveredIdsLastFrame.Count == 1 && CompositionOp != null)
-                {
-                    var hoveredChildUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis
-                                                         .SingleOrDefault(c => c.Id == T3Ui.HoveredIdsLastFrame.First());
-                    if (hoveredChildUi == null)
-                        return;
-                    selectedChildren = new List<SymbolChildUi> { hoveredChildUi };
-                }
+                var hoveredChildUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis
+                                                     .SingleOrDefault(c => c.Id == T3Ui.HoveredIdsLastFrame.First());
+                if (hoveredChildUi == null)
+                    return;
+                
+                selectedChildren = new List<SymbolChildUi> { hoveredChildUi };
             }
+            
+            // if (!selectedChildren.Any())
+            // {
+            // }
 
             var allSelectedDisabled = selectedChildren.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
             var shouldDisable = !allSelectedDisabled;

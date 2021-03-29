@@ -148,7 +148,8 @@ namespace T3.Gui.Graph
                 // Tooltip
                 if (ImGui.IsItemHovered()
                     && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
-                    && !GraphCanvas.Current._symbolBrowser._isOpen)
+                    && !GraphCanvas.Current._symbolBrowser._isOpen
+                    && ImGui.IsWindowFocused())
                 {
                     if(UserSettings.Config.SmartGroupDragging)
                         SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
@@ -199,7 +200,8 @@ namespace T3.Gui.Graph
                     _hoveredNodeIdForConnectionTarget = childUi.Id;
                 }
 
-                var hovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId);
+                var hovered = ImGui.IsWindowFocused() 
+                              && (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId)) ;
 
                 // A horrible work around to prevent exception because CompositionOp changed during drawing.
                 // A better solution would defer setting the compositionOp to the beginning of next frame.
