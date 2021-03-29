@@ -16,7 +16,7 @@ namespace T3.Gui.Interaction
     /// </summary>
     public class ScalableCanvas : ICanvas
     {
-        protected float ZoomSpeed = 12;
+        //protected float UserSetting. = 12;
 
         /// <summary>
         /// This needs to be called by the inherited class before drawing its interface. 
@@ -39,7 +39,7 @@ namespace T3.Gui.Interaction
             var p2 = Scroll + WindowSize * Scale;
             var p1Target = ScrollTarget;
             var p2Target = ScrollTarget + WindowSize * ScaleTarget;
-            var f = Math.Min(Io.DeltaTime * ZoomSpeed, 1);
+            var f = Math.Min(Io.DeltaTime / UserSettings.Config.ScrollSmoothing.Clamp(0.01f, 0.99f), 1);
             var pp1 = Vector2.Lerp(p1, p1Target, f);
             var pp2 = Vector2.Lerp(p2, p2Target, f);
             var scaleT = (pp2 - pp1) / WindowSize;
