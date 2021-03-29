@@ -35,6 +35,7 @@ namespace T3.Gui.Graph
 
                 _evaluationContext.ShowGizmos = T3.Core.Operator.GizmoVisibility.Off;
                 _evaluationContext.Reset();
+                _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
                 _imageCanvas.PreventMouseInteraction = true;
                 _imageCanvas.Update();
                 
