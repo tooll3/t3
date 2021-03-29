@@ -172,6 +172,7 @@ namespace T3.Gui.Selection
                     if (isHovering && ImGui.IsMouseClicked(0))
                     {
                         CurrentDraggingMode = mode;
+                        _currentInteractionTransformable = transformable;
                         _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
                         _originAtDragStart = localToObject.TranslationVector;
 
@@ -187,11 +188,12 @@ namespace T3.Gui.Selection
                             Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
                     }
                 }
-                else if (CurrentDraggingMode == mode)
+                else if (CurrentDraggingMode == mode && _currentInteractionTransformable == transformable)
                 {
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
                         CurrentDraggingMode = GizmoDraggingModes.None;
+                        _currentInteractionTransformable = null;
                     }
                     else
                     {
@@ -236,6 +238,7 @@ namespace T3.Gui.Selection
                     if (isHovering && ImGui.IsMouseClicked(0))
                     {
                         CurrentDraggingMode = mode;
+                        _currentInteractionTransformable = transformable;
                         _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
                         _originAtDragStart = localToObject.TranslationVector;
 
@@ -251,11 +254,12 @@ namespace T3.Gui.Selection
                             Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
                     }
                 }
-                else if (CurrentDraggingMode == mode)
+                else if (CurrentDraggingMode == mode && _currentInteractionTransformable == transformable)
                 {
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
                         CurrentDraggingMode = GizmoDraggingModes.None;
+                        _currentInteractionTransformable = null;
                     }
                     else
                     {
@@ -475,7 +479,6 @@ namespace T3.Gui.Selection
         private static Plane _plane;
         private static SharpDX.Vector3 _startIntersectionPoint;
         private static Matrix _initialObjectToLocal;
-
-
+        private static ITransformable _currentInteractionTransformable;
     }
 }
