@@ -196,7 +196,7 @@ namespace T3.Gui.Windows.TimeLine
                 var posOnScreen = new Vector2(
                                               TimeLineCanvas.Current.TransformX(hoverTime) - KeyframeIconWidth / 2 + 1,
                                               layerArea.Min.Y);
-                Icons.Draw(Icon.KeyFrame, posOnScreen);
+                Icons.Draw(Icon.DopeSheetKeyframeLinear, posOnScreen);
             }
 
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -359,9 +359,21 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     Icons.Draw(isSelected ? Icon.ConstantKeyframeSelected : Icon.ConstantKeyframe, posOnScreen);
                 }
+                else if (vDef.OutEditMode == VDefinition.EditMode.Horizontal)
+                {
+                    Icons.Draw(isSelected ? Icon.DopeSheetKeyframeHorizontalSelected : Icon.DopeSheetKeyframeHorizontal, posOnScreen);
+                }
+                else if (vDef.OutEditMode == VDefinition.EditMode.Cubic)
+                {
+                    Icons.Draw(isSelected ? Icon.DopeSheetKeyframeCubicSelected : Icon.DopeSheetKeyframeCubic, posOnScreen);
+                }
+                else if (vDef.OutEditMode == VDefinition.EditMode.Smooth)
+                {
+                    Icons.Draw(isSelected ? Icon.DopeSheetKeyframeSmoothSelected : Icon.DopeSheetKeyframeSmooth, posOnScreen);
+                }
                 else
                 {
-                    Icons.Draw(isSelected ? Icon.KeyFrameSelected : Icon.KeyFrame, posOnScreen);
+                    Icons.Draw(isSelected ? Icon.DopeSheetKeyframeLinearSelected : Icon.DopeSheetKeyframeLinear, posOnScreen);
                 }
 
                 ImGui.SetCursorScreenPos(posOnScreen);

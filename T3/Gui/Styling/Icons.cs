@@ -141,8 +141,8 @@ namespace T3.Gui.Styling
 
         public static readonly IconSource[] CustomIcons =
             {
-                new IconSource(Icon.KeyFrameSelected, 0, new Vector2(16, 25)),
-                new IconSource(Icon.KeyFrame, 1, new Vector2(16, 25)),
+                new IconSource(Icon.DopeSheetKeyframeLinearSelected, 0, new Vector2(16, 25)),
+                new IconSource(Icon.DopeSheetKeyframeLinear, 1, new Vector2(16, 25)),
                 new IconSource(Icon.LastKeyframe, 2, new Vector2(16, 25)),
                 new IconSource(Icon.FirstKeyframe, 3, new Vector2(16, 25)),
                 new IconSource(Icon.JumpToRangeStart, 4, new Vector2(16, 16)),
@@ -177,6 +177,14 @@ namespace T3.Gui.Styling
                 new IconSource(Icon.Trash, 34, new Vector2(16, 16)),
                 new IconSource(Icon.Grid, 35, new Vector2(16, 16)),
                 new IconSource(Icon.Revert, 36, new Vector2(16, 16)),
+                
+                new IconSource(Icon.DopeSheetKeyframeSmoothSelected, 37, new Vector2(16, 25)),
+                new IconSource(Icon.DopeSheetKeyframeSmooth, 38, new Vector2(16, 25)),
+                
+                new IconSource(Icon.DopeSheetKeyframeCubicSelected, 39, new Vector2(16, 25)),
+                new IconSource(Icon.DopeSheetKeyframeCubic, 40, new Vector2(16, 25)),
+                new IconSource(Icon.DopeSheetKeyframeHorizontalSelected, 41, new Vector2(16, 25)),
+                new IconSource(Icon.DopeSheetKeyframeHorizontal, 42, new Vector2(16, 25)),
             };
 
         public const string IconAtlasPath = @"Resources\t3\t3-icons.png";
@@ -184,8 +192,8 @@ namespace T3.Gui.Styling
 
     public enum Icon
     {
-        KeyFrameSelected = 64,
-        KeyFrame,
+        DopeSheetKeyframeLinearSelected = 64,
+        DopeSheetKeyframeLinear,
         LastKeyframe,
         FirstKeyframe,
         JumpToRangeStart,
@@ -219,6 +227,12 @@ namespace T3.Gui.Styling
         Heart,
         Trash,
         Grid,
-        Revert
+        Revert,
+        DopeSheetKeyframeSmoothSelected,
+        DopeSheetKeyframeSmooth,
+        DopeSheetKeyframeCubicSelected,
+        DopeSheetKeyframeCubic,
+        DopeSheetKeyframeHorizontalSelected,
+        DopeSheetKeyframeHorizontal
     }
 }
