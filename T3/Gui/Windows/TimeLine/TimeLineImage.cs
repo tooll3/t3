@@ -14,14 +14,23 @@ namespace T3.Gui.Windows.TimeLine
         {
             if (!_initialized)
                 LoadSoundImage();
+
+            var contentRegionMin = ImGui.GetWindowContentRegionMin();
+            var contentRegionMax = ImGui.GetWindowContentRegionMax();
+            var windowPos = ImGui.GetWindowPos();
+            
+            var size = contentRegionMax - contentRegionMin;
+            var yMin = (contentRegionMin + windowPos).Y;
+            
+            drawlist.AddRectFilled(contentRegionMin + windowPos, 
+                                   contentRegionMax + windowPos, new Color(0,0,0,0.3f));
             
             var songDurationInBars = (float)(playback.GetSongDurationInSecs() * playback.Bpm / 240);
             var xMin= TimeLineCanvas.Current.TransformGlobalTime(0);
             var xMax = TimeLineCanvas.Current.TransformGlobalTime(songDurationInBars);
 
-            var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
-            var yMin = (ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos()).Y;
 
+            
             var resourceManager = ResourceManager.Instance();
             if (resourceManager.Resources.TryGetValue(_srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
             {

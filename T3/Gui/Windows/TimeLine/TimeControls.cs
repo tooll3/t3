@@ -379,6 +379,7 @@ namespace T3.Gui.Windows.TimeLine
 
             CustomComponents.TooltipForLastItem(tooltip, additionalTooltip);
 
+            ImGui.SameLine();
 
         }
 
