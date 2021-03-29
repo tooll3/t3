@@ -40,6 +40,7 @@ namespace T3.Gui.Interaction
 
             var drawList = ImGui.GetWindowDrawList();
             drawList.AddRectFilled(BoundsInScreen.Min, BoundsInScreen.Max, new Color(0.1f), 1);
+            drawList.AddRect(BoundsInScreen.Min - Vector2.One, BoundsInScreen.Max + Vector2.One, new Color(0,0,0, 0.4f), 1);
             state = States.Updated;
             return state;
         }
