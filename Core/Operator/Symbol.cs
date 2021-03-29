@@ -532,14 +532,14 @@ namespace T3.Core.Operator
                     if (multiInputIndex == 0)
                     {
                         Connections.Add(connection);
-                        Log.Info($"Added MI with index {multiInputIndex} at existing index {Connections.Count - 1}");
+                        //Log.Info($"Added MI with index {multiInputIndex} at existing index {Connections.Count - 1}");
                     }
                     else
                     {
                         var existingConnection = existingConnections[multiInputIndex - 1];
                         int existingAtIndex = Connections.FindIndex(c => c == existingConnection); // == is intended
                         Connections.Insert(existingAtIndex + 1, connection);
-                        Log.Info($"Added MI with index {multiInputIndex} at existing index {existingAtIndex}");
+                        //Log.Info($"Added MI with index {multiInputIndex} at existing index {existingAtIndex}");
                     }
                 }
                 else
@@ -548,7 +548,7 @@ namespace T3.Core.Operator
                     var existingConnection = existingConnections[multiInputIndex];
                     int existingAtIndex = Connections.FindIndex(c => c == existingConnection); // == is intended
                     Connections.Insert(existingAtIndex, connection);
-                    Log.Info($"Added MI with index {multiInputIndex} at existing index {existingAtIndex}");
+                    //Log.Info($"Added MI with index {multiInputIndex} at existing index {existingAtIndex}");
                 }
             }
             else
