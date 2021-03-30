@@ -110,6 +110,7 @@ namespace T3.Gui.Commands
                     }
 
                     newOutput.DirtyFlagTrigger = output.DirtyFlagTrigger;
+                    newOutput.IsDisabled = output.IsDisabled;
                 }
             }
 
