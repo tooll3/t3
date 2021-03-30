@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using T3.Core.Animation;
-using T3.Gui.Interaction.Snapping;
+using T3.Gui.Windows.TimeLine.Raster;
 
 namespace T3.Gui.Windows.TimeLine
 {
     /// <summary>
-    /// A <see cref="TimeRaster"/> that displays Bars, Beats and ticks 
+    /// A <see cref="AbstractTimeRaster"/> that displays Bars, Beats and ticks 
     /// </summary>
-    public class BeatTimeRaster : TimeRaster
+    public class BeatTimeRaster : AbstractTimeRaster
     {
         public override void Draw(Playback playback)
         {
@@ -24,7 +24,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private double _bpm = 240;
 
-        protected override string BuildLabel(Raster raster, double timeInBars)
+        protected override string BuildLabel(Raster raster, double timeInSeconds)
         {
             var output = "";
             foreach (char c in raster.Label)
@@ -32,19 +32,19 @@ namespace T3.Gui.Windows.TimeLine
                 // bars
                 if (c == 'b')
                 {
-                    var bars = (int)(timeInBars) + 1;
+                    var bars = (int)(timeInSeconds) + 1;
                     output += $"{bars}.";
                 }
                 // beats
                 else if (c == '.')
                 {
-                    var beats = (int)(timeInBars*4)%4 + 1;
+                    var beats = (int)(timeInSeconds*4)%4 + 1;
                     output += $".{beats}";
                 }
                 // ticks
                 else if (c == ':')
                 {
-                    var ticks = (int)(timeInBars*16)%4 + 1;
+                    var ticks = (int)(timeInSeconds*16)%4 + 1;
                     output += $":{ticks}";
                 }
                 else

@@ -4,13 +4,14 @@ using System.Globalization;
 using T3.Core.Animation;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.UiHelpers;
+using T3.Gui.Windows.TimeLine.Raster;
 
 namespace T3.Gui.Windows.TimeLine
 {
     /// <summary>
     /// A time raster (vertical lines) that calculate required labels and spacing logarithmically. 
     /// </summary>
-    public class StandardValueRaster : TimeRaster
+    public class StandardValueRaster : AbstractTimeRaster
     {
         public override void Draw(Playback playback)
         {
@@ -21,7 +22,12 @@ namespace T3.Gui.Windows.TimeLine
             DrawTimeTicks(scale, -scroll / scale, TimeLineCanvas.Current);
         }
 
-        public bool EnableSnapping; 
+        /// <summary>
+        /// Normally time rasters don't snap by default.
+        /// When <see cref="StandardValueRaster"/> is used inside curve editors,
+        /// default snapping is enabled.  
+        /// </summary>
+        public bool EnableSnapping = false; 
 
         public void Draw(ICanvas canvas)
         {
@@ -34,14 +40,14 @@ namespace T3.Gui.Windows.TimeLine
 
         public float UnitsPerSecond { get; set; } = 1;
 
-        protected override string BuildLabel(Raster raster, double time)
+        protected override string BuildLabel(Raster raster, double timeInSeconds)
         {
             var output = "";
             foreach (var c in raster.Label)
             {
                 if (c == 'N')
                 {
-                    output += time.ToString("G5", CultureInfo.InvariantCulture);
+                    output += timeInSeconds.ToString("G5", CultureInfo.InvariantCulture);
                 }
                 else
                 {

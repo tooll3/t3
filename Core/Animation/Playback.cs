@@ -9,20 +9,46 @@ namespace T3.Core.Animation
 {
     public class Playback : IDisposable
     {
+        /// <summary>
+        /// The absolute current time as controlled by the timeline interaction.
+        /// </summary>
         public virtual double TimeInBars { get; set; }
+        
+        /// <summary>
+        /// Convenience function to convert from internal TimeInBars mapped to seconds for current BPM. 
+        /// </summary>
         public double TimeInSecs { get => TimeInBars * 240 / Bpm; set => TimeInBars = value / Bpm * 240f; }
 
+        /// <summary>
+        /// The current time used for animation (would advance from <see cref="TimeInBars"/> if keepBeatTimeRunning is active. 
+        /// </summary>
         public double BeatTime { get; set; }
         public TimeRange LoopRange;
+        
         public double Bpm = 120;
+        
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
+        
+        private static int GetBeatTimeBar(double timeInBars)
+        {
+            return (int)(timeInBars) + 1;
+        }
 
-        public int Bar => (int)(TimeInBars) + 1;
-        public int Beat => (int)(TimeInBars * 4) % 4 + 1;
-        public int Tick => (int)(TimeInBars * 16) % 4 + 1;
+        private static int GetBeatTimeBeat(double timeInBars)
+        {
+            return (int)(timeInBars * 4) % 4 + 1;
+        }
 
+        private static int GetBeatTimeTick(double timeInBars)
+        {
+            return (int)(timeInBars * 16) % 4 + 1;
+        }
 
+        public static string FormatTimeInBars(double timeInBars)
+        {
+            return $"{GetBeatTimeBar(timeInBars):0}.{GetBeatTimeBeat(timeInBars):0}.{GetBeatTimeTick(timeInBars):0}.";
+        }
 
         public virtual void Update(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning = false)
         {

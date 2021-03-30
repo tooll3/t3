@@ -32,7 +32,7 @@ namespace T3.Gui.Windows.TimeLine
             switch (UserSettings.Config.TimeDisplayMode)
             {
                 case Playback.TimeDisplayModes.Bars:
-                    formattedTime = $"{playback.Bar:0}. {playback.Beat:0}. {playback.Tick:0}.";
+                    formattedTime = Playback.FormatTimeInBars(playback.TimeInBars);
                     break;
 
                 case Playback.TimeDisplayModes.Secs:
@@ -425,7 +425,7 @@ namespace T3.Gui.Windows.TimeLine
                             playback.Bpm = bpm;
                             ProjectSettings.Config.SoundtrackBpm = bpm;
                         }
-
+                        
                         if (filepathModified)
                         {
                             var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");

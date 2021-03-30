@@ -6,6 +6,7 @@ using ImGuiNET;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
+using T3.Gui.Windows.TimeLine.Raster;
 
 namespace T3.Gui.Windows.TimeLine
 {
@@ -19,7 +20,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private ICanvas _canvas;
         
-        private static string BuildLabel(TimeRaster.Raster raster, double time)
+        private static string BuildLabel(AbstractTimeRaster.Raster raster, double time)
         {
             var output = "";
             foreach (var c in raster.Label)
@@ -37,7 +38,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         
-        private IEnumerable<TimeRaster.Raster> GetRastersForScale(double scale, out float fadeFactor)
+        private IEnumerable<AbstractTimeRaster.Raster> GetRastersForScale(double scale, out float fadeFactor)
         {
             const float density = 1.0f;
             var uPerPixel = scale;
@@ -48,12 +49,12 @@ namespace T3.Gui.Windows.TimeLine
             if (logScaleMod < 0.5)
             {
                 fadeFactor = 1-logScaleMod*2;
-                _blendRasters[0]=new TimeRaster.Raster()
+                _blendRasters[0]=new AbstractTimeRaster.Raster()
                                     {
                                         Label = "N",
                                         Spacing = (float)Math.Pow(10, logScaleFloor)*50,
                                     };
-                _blendRasters[1]= new TimeRaster.Raster()
+                _blendRasters[1]= new AbstractTimeRaster.Raster()
                                     {
                                         Label = "N",
                                         Spacing = (float)Math.Pow(10, logScaleFloor)*10,
@@ -64,12 +65,12 @@ namespace T3.Gui.Windows.TimeLine
             else
             {
                 fadeFactor = 1-(logScaleMod - 0.5f)*2;
-                _blendRasters[0]= new TimeRaster.Raster()
+                _blendRasters[0]= new AbstractTimeRaster.Raster()
                                     {
                                         Label = "N",
                                         Spacing = (float)Math.Pow(10, logScaleFloor)*100,
                                     };
-                _blendRasters[1]= new TimeRaster.Raster()
+                _blendRasters[1]= new AbstractTimeRaster.Raster()
                                     {
                                         Label = "N",
                                         Spacing = (float)Math.Pow(10, logScaleFloor)*50,
@@ -80,7 +81,7 @@ namespace T3.Gui.Windows.TimeLine
             return _blendRasters;
         }
         
-        private readonly TimeRaster.Raster[] _blendRasters = new TimeRaster.Raster[2];
+        private readonly AbstractTimeRaster.Raster[] _blendRasters = new AbstractTimeRaster.Raster[2];
         
         
         private void DrawLines(double scale, double scroll)

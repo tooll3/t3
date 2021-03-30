@@ -1,6 +1,7 @@
 ﻿using T3.Core.Animation;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.UiHelpers;
+using T3.Gui.Windows.TimeLine.Raster;
 
 namespace T3.Gui.Windows.TimeLine
 {
@@ -12,14 +13,10 @@ namespace T3.Gui.Windows.TimeLine
     {
         public void Draw(Playback playback)
         {
-            _lastPlayback = playback;
             if(UserSettings.Config.TimeDisplayMode != Playback.TimeDisplayModes.Bars)
             {
                 switch (UserSettings.Config.TimeDisplayMode)
                 {
-                    case Playback.TimeDisplayModes.Secs:
-                        _standardRaster.UnitsPerSecond = 1;
-                        break;
                     case Playback.TimeDisplayModes.F30:
                         _standardRaster.UnitsPerSecond = 30;
                         break;
@@ -36,7 +33,7 @@ namespace T3.Gui.Windows.TimeLine
             return ActiveRaster?.CheckForSnap(value, canvasScale);
         }
 
-        private TimeRaster ActiveRaster
+        private AbstractTimeRaster ActiveRaster
         {
             get
             {
@@ -44,14 +41,16 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     case Playback.TimeDisplayModes.Bars:
                         return _beatRaster;
+                    case Playback.TimeDisplayModes.Secs:
+                        return _siTimeRaster;
                     default:
                         return _standardRaster;
                 }
             }
         }
         
-        private Playback _lastPlayback;
         private readonly StandardValueRaster _standardRaster = new StandardValueRaster();
         private readonly BeatTimeRaster _beatRaster = new BeatTimeRaster();
+        private readonly SiTimeRaster _siTimeRaster = new SiTimeRaster();
     }
 }

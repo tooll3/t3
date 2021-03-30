@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
@@ -8,21 +7,20 @@ using T3.Core.Animation;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
-using UiHelpers;
 
-namespace T3.Gui.Windows.TimeLine
+namespace T3.Gui.Windows.TimeLine.Raster
 {
-    public abstract class TimeRaster : IValueSnapAttractor
+    public abstract class AbstractTimeRaster : IValueSnapAttractor
     {
         public abstract void Draw(Playback playback);
-        protected abstract string BuildLabel(Raster raster, double time);
+        protected abstract string BuildLabel(Raster raster, double timeInSeconds);
 
-        protected virtual IEnumerable<Raster> GetRastersForScale(double scale, out float fadeFactor)
+        protected virtual IEnumerable<Raster> GetRastersForScale(double invertedScale, out float fadeFactor)
         {
-            var scaleRange = ScaleRanges.FirstOrDefault(range => range.ScaleMax * Density > scale);
+            var scaleRange = ScaleRanges.FirstOrDefault(range => range.ScaleMax > invertedScale / Density);
             fadeFactor = scaleRange == null
                              ? 1
-                             : 1 - (float)MathUtils.Remap(scale, scaleRange.ScaleMin * Density, scaleRange.ScaleMax * Density, 0, 1);
+                             : 1 - (float)MathUtils.Remap(invertedScale, scaleRange.ScaleMin * Density, scaleRange.ScaleMax * Density, 0, 1);
 
             return scaleRange?.Rasters;
         }
@@ -39,9 +37,10 @@ namespace T3.Gui.Windows.TimeLine
 
             _usedPositions.Clear();
 
-            scale = 1 / scale;
+            
+            var invertedScale = 1 / scale;
 
-            var rasters = GetRastersForScale(scale, out var fadeFactor);
+            var rasters = GetRastersForScale(invertedScale, out var fadeFactor);
 
             if (rasters == null)
                 return;
@@ -60,9 +59,9 @@ namespace T3.Gui.Windows.TimeLine
                 var textAlpha = raster.FadeLabels ? fadeFactor : 1;
                 var textColor = new Color(textAlpha);
 
-                while (t / scale < width)
+                while (t / invertedScale < width)
                 {
-                    var xIndex = (int)(t / scale);
+                    var xIndex = (int)(t / invertedScale);
 
                     if (xIndex > 0 && xIndex < width && !_usedPositions.ContainsKey(xIndex))
                     {
@@ -99,7 +98,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();
         protected List<ScaleRange> ScaleRanges;
-        private const float Density = 0.02f;
+        protected const float Density = 0.02f;
         private const double Epsilon = 0.001f;
 
         public class ScaleRange

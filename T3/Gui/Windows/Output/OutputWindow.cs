@@ -59,6 +59,7 @@ namespace T3.Gui.Windows.Output
 
         protected override void DrawContent()
         {
+            
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
