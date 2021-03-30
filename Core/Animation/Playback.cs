@@ -233,12 +233,25 @@ namespace T3.Core.Animation
             }
 
             long soundStreamPos = Bass.ChannelGetPosition(_soundStreamHandle);
+            
+            if (_playbackSpeed > 0)
+            {
+                UpdateFftBuffer();
+            } 
             return Bass.ChannelBytes2Seconds(_soundStreamHandle, soundStreamPos);
         }
 
         public override void Dispose()
         {
             Bass.Free();
+        }
+        private const int FftSize = 256;
+        public static readonly float[] FftBuffer =  new float[FftSize];
+
+        private void UpdateFftBuffer()
+        {
+            const int get256FftValues = (int)DataFlags.FFT512;
+            Bass.ChannelGetData(_soundStreamHandle, FftBuffer, get256FftValues);
         }
 
 
