@@ -63,6 +63,7 @@ namespace T3.Core.Operator
         /// The primary time used for user interactions and keyframe manipulation.
         /// This is where there time marker in the timeline is displayed. 
         /// </summary>
+        /// <remarks>Also see <see cref="EvaluationContext"/>.<see cref="BeatTime"/> and .<see cref="GlobalTimeInSecs"/></remarks>
         public double TimeInBars { get; set; }
 
         /// <summary>
