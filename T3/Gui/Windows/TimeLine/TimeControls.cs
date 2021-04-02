@@ -239,6 +239,13 @@ namespace T3.Gui.Windows.TimeLine
                     var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
                     playback.TimeInBars = rounded - frameDuration;
                 }
+                
+                // Step to previous frame
+                if (KeyboardBinding.Triggered(UserActions.PlaybackJumpBack))
+                {
+                    //var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
+                    playback.TimeInBars -= 1;
+                }
 
                 // Step to next frame
                 if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))

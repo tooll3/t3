@@ -21,7 +21,7 @@ namespace T3.Gui.ChildUi
 
             if (innerRect.GetHeight() < 0)
                 return SymbolChildUi.CustomUiResult.None;
-            ;
+            
 
             var curve = sampleCurve.Curve.Value;
             if (curve == null)
@@ -30,6 +30,7 @@ namespace T3.Gui.ChildUi
                 return SymbolChildUi.CustomUiResult.None;
             }
 
+            ImGui.PushClipRect(innerRect.Min, innerRect.Max, true);
             ImGui.SetCursorScreenPos(innerRect.Min);
             ImGui.BeginChild("curve" + instance.SymbolChildId.GetHashCode(), innerRect.GetSize());
             {
@@ -43,6 +44,7 @@ namespace T3.Gui.ChildUi
                 DrawSamplePointIndicator();
             }
             ImGui.EndChild();
+            ImGui.PopClipRect();
 
             return SymbolChildUi.CustomUiResult.Rendered
                    | SymbolChildUi.CustomUiResult.PreventTooltip
