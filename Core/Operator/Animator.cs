@@ -23,21 +23,21 @@ namespace T3.Core.Operator
     {
         struct CurveId
         {
-            public CurveId(Guid instanceId, Guid inputId, int index = 0)
+            public CurveId(Guid symbolChildId, Guid inputId, int index = 0)
             {
-                InstanceId = instanceId; // TODO: Shouldn't this be symbolChildId?
+                SymbolChildId = symbolChildId;
                 InputId = inputId;
                 Index = index;
             }
 
             public CurveId(IInputSlot inputSlot, int index = 0)
             {
-                InstanceId = inputSlot.Parent.SymbolChildId;
+                SymbolChildId = inputSlot.Parent.SymbolChildId;
                 InputId = inputSlot.Id;
                 Index = index;
             }
 
-            public readonly Guid InstanceId;
+            public readonly Guid SymbolChildId;
             public readonly Guid InputId;
             public readonly int Index;
         }
@@ -55,7 +55,7 @@ namespace T3.Core.Operator
         {
             foreach (var (id, curve) in _animatedInputCurves)
             {
-                if (!childrenToCopyAnimationsFrom.Contains(id.InstanceId))
+                if (!childrenToCopyAnimationsFrom.Contains(id.SymbolChildId))
                     continue;
 
                 CloneAndAddCurve(targetAnimator, oldToNewIdDict, id, curve);
@@ -67,7 +67,7 @@ namespace T3.Core.Operator
             List<CurveId> elementsToDelete = new List<CurveId>();
             foreach (var (id, curve) in _animatedInputCurves)
             {
-                if (!instanceIds.Contains(id.InstanceId))
+                if (!instanceIds.Contains(id.SymbolChildId))
                     continue;
 
                 elementsToDelete.Add(id);
@@ -81,7 +81,7 @@ namespace T3.Core.Operator
 
         private static void CloneAndAddCurve(Animator targetAnimator, Dictionary<Guid, Guid> oldToNewIdDict, CurveId id, Curve curve)
         {
-            Guid newInstanceId = oldToNewIdDict[id.InstanceId];
+            Guid newInstanceId = oldToNewIdDict[id.SymbolChildId];
             var newCurveId = new CurveId(newInstanceId, id.InputId, id.Index);
             var newCurve = curve.TypedClone();
             targetAnimator._animatedInputCurves.Add(newCurveId, newCurve);
@@ -288,7 +288,7 @@ namespace T3.Core.Operator
             // gather all inputs that correspond to stored ids
             var relevantInputs = from curveEntry in _animatedInputCurves
                                  from childInstance in childInstances
-                                 where curveEntry.Key.InstanceId == childInstance.SymbolChildId
+                                 where curveEntry.Key.SymbolChildId == childInstance.SymbolChildId
                                  from inputSlot in childInstance.Inputs
                                  where curveEntry.Key.InputId == inputSlot.Id
                                  group (inputSlot, curveEntry.Value) by (Id: childInstance.SymbolChildId, inputSlot.Id)
@@ -393,7 +393,7 @@ namespace T3.Core.Operator
             inputSlot.SetUpdateActionBackToDefault();
             inputSlot.DirtyFlag.Trigger &= ~DirtyFlagTrigger.Animated;
             var curveKeysToRemove = (from curveId in _animatedInputCurves.Keys
-                                     where curveId.InstanceId == inputSlot.Parent.SymbolChildId
+                                     where curveId.SymbolChildId == inputSlot.Parent.SymbolChildId
                                      where curveId.InputId == inputSlot.Id
                                      select curveId).ToArray(); // ToArray is needed to remove from collection in batch
             foreach (var curveKey in curveKeysToRemove)
@@ -418,7 +418,7 @@ namespace T3.Core.Operator
             {
                 while (e.MoveNext())
                 {
-                    if (e.Current.InstanceId == instance.SymbolChildId)
+                    if (e.Current.SymbolChildId == instance.SymbolChildId)
                     {
                         return true;
                     }
@@ -434,7 +434,7 @@ namespace T3.Core.Operator
         public IEnumerable<Curve> GetCurvesForInput(IInputSlot inputSlot)
         {
             return from curve in _animatedInputCurves
-                   where curve.Key.InstanceId == inputSlot.Parent.SymbolChildId
+                   where curve.Key.SymbolChildId == inputSlot.Parent.SymbolChildId
                    where curve.Key.InputId == inputSlot.Id
                    orderby curve.Key.Index
                    select curve.Value;
@@ -452,7 +452,7 @@ namespace T3.Core.Operator
             {
                 writer.WriteStartObject();
 
-                writer.WriteValue("InstanceId", entry.Key.InstanceId);
+                writer.WriteValue("InstanceId", entry.Key.SymbolChildId);
                 writer.WriteValue("InputId", entry.Key.InputId);
                 if (entry.Key.Index != 0)
                 {
