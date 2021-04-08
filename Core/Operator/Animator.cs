@@ -87,7 +87,7 @@ namespace T3.Core.Operator
             targetAnimator._animatedInputCurves.Add(newCurveId, newCurve);
         }
 
-        public void CreateInputUpdateAction<T>(IInputSlot inputSlot)
+        public void CreateInputUpdateAction(IInputSlot inputSlot)
         {
             if (inputSlot is Slot<float> floatInputSlot)
             {
@@ -401,6 +401,12 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Remove(curveKey);
             }
         }
+        
+        public bool TryGetFirstInputAnimationCurve(IInputSlot inputSlot, out Curve curve)
+        {
+            return _animatedInputCurves.TryGetValue(new CurveId(inputSlot), out curve);
+        }
+
 
         public bool IsInputSlotAnimated(IInputSlot inputSlot)
         {
@@ -483,6 +489,7 @@ namespace T3.Core.Operator
         }
 
         private readonly Dictionary<CurveId, Curve> _animatedInputCurves = new Dictionary<CurveId, Curve>();
+
 
         public static void UpdateVector3InputValue(InputSlot<Vector3> inputSlot, Vector3 value)
         {

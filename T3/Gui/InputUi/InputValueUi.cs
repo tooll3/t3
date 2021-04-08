@@ -2,10 +2,13 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -16,6 +19,7 @@ using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
 using T3.Gui.UiHelpers;
+using T3.Gui.Windows.TimeLine;
 
 namespace T3.Gui.InputUi
 {
@@ -75,7 +79,9 @@ namespace T3.Gui.InputUi
             var typeColor = TypeUiRegistry.Entries[Type].Color;
             var compositionSymbol = compositionUi.Symbol;
             var animator = compositionSymbol.Animator;
-            bool isAnimated = IsAnimatable && animator.IsInputSlotAnimated(inputSlot);
+
+            Curve animationCurve = null;
+            bool isAnimated = IsAnimatable && animator.TryGetFirstInputAnimationCurve(inputSlot, out  animationCurve);
             MappedType = inputSlot.MappedType;
 
             if (inputSlot is InputSlot<T> typedInputSlot)
@@ -184,13 +190,37 @@ namespace T3.Gui.InputUi
                 }
                 else if (isAnimated)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Button, Color.Orange.Rgba);
-                    if (ImGui.Button("A", new Vector2(ConnectionAreaWidth, 0.0f)))
+                    var hasKeyframeAtCurrentTime = animationCurve.HasVAt(EvaluationContext.GlobalTimeInBars);
+                    var hasKeyframeBefore = animationCurve.ExistVBefore(EvaluationContext.GlobalTimeInBars);
+                    var hasKeyframeAfter = animationCurve.ExistVAfter(EvaluationContext.GlobalTimeInBars);
+
+                    var sb = new StringBuilder();
+                    sb.Append(hasKeyframeBefore ? "<" : " ");
+                    sb.Append(hasKeyframeAtCurrentTime ? "X": " ");
+                    sb.Append(hasKeyframeAfter ? ">" : " ");
+
+                    if (hasKeyframeAtCurrentTime)
                     {
-                        animator.RemoveAnimationFrom(inputSlot); // todo: add remove animation cmd
+                        ImGui.PushStyleColor(ImGuiCol.Button, Color.Orange.Rgba);
+                        if (ImGui.Button(sb.ToString(), new Vector2(ConnectionAreaWidth, 0.0f)))
+                        {
+                            AnimationOperations.RemoveKeyframeFromCurves(animator.GetCurvesForInput(inputSlot),
+                                                                         EvaluationContext.GlobalTimeInBars);
+                        }
+
+                        ImGui.PopStyleColor();
+                    }
+                    else
+                    {
+                        ImGui.PushStyleColor(ImGuiCol.Text, Color.Orange.Rgba);
+                        if (ImGui.Button(sb.ToString(), new Vector2(ConnectionAreaWidth, 0.0f)))
+                        {
+                            AnimationOperations.InsertKeyframeToCurves(animator.GetCurvesForInput(inputSlot),
+                                                                       EvaluationContext.GlobalTimeInBars);
+                        }
+                        ImGui.PopStyleColor();
                     }
 
-                    ImGui.PopStyleColor();
                     ImGui.SameLine();
 
                     // Draw Name
@@ -198,6 +228,38 @@ namespace T3.Gui.InputUi
                     ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
                     CustomComponents.ContextMenuForItem(() =>
                                                         {
+                                                            if (ImGui.MenuItem("Jump To Previous Keyframe", hasKeyframeBefore))
+                                                            {
+                                                                UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
+                                                            }
+
+                                                            if (ImGui.MenuItem("Jump To Next Keyframe", hasKeyframeBefore))
+                                                            {
+                                                                UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
+                                                            }
+
+                                                            if (hasKeyframeAtCurrentTime)
+                                                            {
+                                                                if (ImGui.MenuItem("Remove keyframe"))
+                                                                {
+                                                                    AnimationOperations.RemoveKeyframeFromCurves(animator.GetCurvesForInput(inputSlot),
+                                                                        EvaluationContext.GlobalTimeInBars);
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if (ImGui.MenuItem("Insert keyframe"))
+                                                                {
+                                                                    AnimationOperations.InsertKeyframeToCurves(animator.GetCurvesForInput(inputSlot),
+                                                                        EvaluationContext.GlobalTimeInBars);
+                                                                }
+                                                            }
+
+                                                            ImGui.Separator();
+                                                            
+                                                            if (ImGui.MenuItem("Remove Animation"))
+                                                                animator.RemoveAnimationFrom(inputSlot);
+
                                                             if (ImGui.MenuItem("Parameters settings"))
                                                                 editState = InputEditStateFlags.ShowOptions;
                                                         });
@@ -230,7 +292,7 @@ namespace T3.Gui.InputUi
                     if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         if (IsAnimatable)
-                            animator.CreateInputUpdateAction<float>(inputSlot); // todo: create command
+                            animator.CreateInputUpdateAction(inputSlot); // todo: create command
                     }
 
                     if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickTreshold)

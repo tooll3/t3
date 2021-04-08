@@ -204,23 +204,14 @@ namespace T3.Gui.Windows.TimeLine
 
         private void InsertNewKeyframe(TimeLineCanvas.AnimationParameter parameter, float time, bool setPlaybackTime = false, float increment = 0)
         {
-            foreach (var curve in parameter.Curves)
+            var curves = parameter.Curves;
+            var newKeyframes = AnimationOperations.InsertKeyframeToCurves(curves, time, increment);
+
+            foreach (var k in newKeyframes)
             {
-                var value = curve.GetSampledValue(time);
-                var previousU = curve.GetPreviousU(time);
-
-                var key = (previousU != null)
-                              ? curve.GetV(previousU.Value).Clone()
-                              : new VDefinition();
-
-                key.Value = value + increment;
-                key.U = time;
-
-                var oldKey = key;
-                curve.AddOrUpdateV(time, key);
-                SelectedKeyframes.Add(oldKey);
+                SelectedKeyframes.Add(k);
             }
-
+            
             if (setPlaybackTime)
                 TimeLineCanvas.Current.Playback.TimeInBars = time;
         }
