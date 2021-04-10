@@ -1,16 +1,7 @@
 ﻿using ImGuiNET;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using SharpDX.Mathematics.Interop;
-using SharpDX.WIC;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using T3.Core;
 using UiHelpers;
-using static T3.ImGuiDx11Impl;
 
 namespace T3.Gui.Styling
 {
@@ -59,7 +50,7 @@ namespace T3.Gui.Styling
                                                screenPos + size,
                                                uvRange.Min,
                                                uvRange.Max,
-                                               T3Style.Colors.TextMuted);
+                                               Color.White);
         }
 
         public static void DrawIconAtScreenPosition(Icon icon, 
@@ -72,7 +63,7 @@ namespace T3.Gui.Styling
                               screenPos + size,
                               uvRange.Min,
                               uvRange.Max,
-                              T3Style.Colors.TextMuted);
+                              Color.White);
         }
 
         public static void DrawIconAtScreenPosition(Icon icon, 
@@ -87,6 +78,21 @@ namespace T3.Gui.Styling
                               uvRange.Min,
                               uvRange.Max,
                               color);
+        }
+
+        public static void DrawIconOnLastItem(Icon icon)
+        {
+            var pos = ImGui.GetItemRectMin();
+            var size = ImGui.GetItemRectMax() - pos;
+            GetGlyphDefinition(icon, out var uvRange, out var iconSize);
+            var centerOffset = MathUtils.Floor((size - iconSize)/2);
+            var alignedPos = pos + centerOffset;
+            ImGui.GetWindowDrawList().AddImage(ImGui.GetIO().Fonts.TexID,
+                                               alignedPos,
+                                               alignedPos + iconSize,
+                                               uvRange.Min,
+                                               uvRange.Max,
+                                               Color.White);
         }
         
         private static void GetGlyphDefinition(Icon icon, out ImRect uvRange, out Vector2 size)
@@ -112,7 +118,7 @@ namespace T3.Gui.Styling
         /// </summary>
         private static Vector2 GetCorrectSizeFromBrokenGlyphStructure(ImFontGlyphPtr g)
         {
-            return new Vector2(g.X1, g.Y0);
+            return new Vector2(g.Y0, g.X1);
         }
 
         /// <summary>
@@ -133,11 +139,19 @@ namespace T3.Gui.Styling
                 SourceArea = ImRect.RectWithSize(new Vector2(SlotSize * slotIndex, 0), size);
                 Char = (char)icon;
             }
+            
+            public IconSource(Icon icon, Vector2 pos, Vector2 size)
+            {
+                SourceArea = ImRect.RectWithSize(pos, size);
+                Char = (char)icon;
+            }
 
             private const int SlotSize = 16;
             public readonly ImRect SourceArea;
             public readonly char Char;
         }
+        
+        
 
         public static readonly IconSource[] CustomIcons =
             {
@@ -185,6 +199,16 @@ namespace T3.Gui.Styling
                 new IconSource(Icon.DopeSheetKeyframeCubic, 40, new Vector2(16, 25)),
                 new IconSource(Icon.DopeSheetKeyframeHorizontalSelected, 41, new Vector2(16, 25)),
                 new IconSource(Icon.DopeSheetKeyframeHorizontal, 42, new Vector2(16, 25)),
+                
+                new IconSource(Icon.KeyframeToggleOnBoth, new Vector2(43 * 16, 0), new Vector2(23, 15)),
+                new IconSource(Icon.KeyframeToggleOnLeft, new Vector2(45 * 16, 0), new Vector2(23, 15)),
+                new IconSource(Icon.KeyframeToggleOnRight, new Vector2(47 * 16, 0), new Vector2(23, 15)),
+                new IconSource(Icon.KeyframeToggleOnNone, new Vector2(49 * 16, 0), new Vector2(23, 15)),
+                
+                new IconSource(Icon.KeyframeToggleOffBoth, new Vector2(43 * 16, 16), new Vector2(23, 15)),
+                new IconSource(Icon.KeyframeToggleOffLeft, new Vector2(45 * 16, 16), new Vector2(23, 15)),
+                new IconSource(Icon.KeyframeToggleOffRight, new Vector2(47 * 16, 16), new Vector2(23, 15)),
+                new IconSource(Icon.KeyframeToggleOffNone, new Vector2(49 * 16, 16), new Vector2(23, 15)),
             };
 
         public const string IconAtlasPath = @"Resources\t3\t3-icons.png";
@@ -233,6 +257,14 @@ namespace T3.Gui.Styling
         DopeSheetKeyframeCubicSelected,
         DopeSheetKeyframeCubic,
         DopeSheetKeyframeHorizontalSelected,
-        DopeSheetKeyframeHorizontal
+        DopeSheetKeyframeHorizontal,
+        KeyframeToggleOnBoth,
+        KeyframeToggleOnLeft,
+        KeyframeToggleOnRight,
+        KeyframeToggleOnNone,
+        KeyframeToggleOffBoth,
+        KeyframeToggleOffLeft,
+        KeyframeToggleOffRight,
+        KeyframeToggleOffNone,
     }
 }

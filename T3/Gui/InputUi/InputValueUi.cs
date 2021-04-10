@@ -38,7 +38,7 @@ namespace T3.Gui.InputUi
 
         public abstract IInputUi Clone();
 
-        public virtual void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        public virtual void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator)
         {
             if (!IsAnimatable)
                 Log.Warning("Should only be called for animated input types");
@@ -72,6 +72,18 @@ namespace T3.Gui.InputUi
             return string.Empty;
         }
 
+        private readonly Icon[] _keyframeButtonIcons = new[]
+                                                           {
+                                                               Icon.KeyframeToggleOffNone,
+                                                               Icon.KeyframeToggleOffLeft,
+                                                               Icon.KeyframeToggleOffRight,
+                                                               Icon.KeyframeToggleOffBoth,
+                                                               Icon.KeyframeToggleOnNone,
+                                                               Icon.KeyframeToggleOnLeft,
+                                                               Icon.KeyframeToggleOnRight,
+                                                               Icon.KeyframeToggleOnBoth,
+                                                           };
+
         public InputEditStateFlags DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
             var name = inputSlot.Input.Name;
@@ -81,7 +93,7 @@ namespace T3.Gui.InputUi
             var animator = compositionSymbol.Animator;
 
             Curve animationCurve = null;
-            bool isAnimated = IsAnimatable && animator.TryGetFirstInputAnimationCurve(inputSlot, out  animationCurve);
+            bool isAnimated = IsAnimatable && animator.TryGetFirstInputAnimationCurve(inputSlot, out animationCurve);
             MappedType = inputSlot.MappedType;
 
             if (inputSlot is InputSlot<T> typedInputSlot)
@@ -194,32 +206,31 @@ namespace T3.Gui.InputUi
                     var hasKeyframeBefore = animationCurve.ExistVBefore(EvaluationContext.GlobalTimeInBars);
                     var hasKeyframeAfter = animationCurve.ExistVAfter(EvaluationContext.GlobalTimeInBars);
 
-                    var sb = new StringBuilder();
-                    sb.Append(hasKeyframeBefore ? "<" : " ");
-                    sb.Append(hasKeyframeAtCurrentTime ? "X": " ");
-                    sb.Append(hasKeyframeAfter ? ">" : " ");
+                    var iconIndex = 0;
+                    const int leftBit = 1 << 0;
+                    const int rightBit = 1 << 1;
+                    const int onBit = 1 << 2;
 
-                    if (hasKeyframeAtCurrentTime)
+                    if (hasKeyframeBefore) iconIndex |= leftBit;
+                    if (hasKeyframeAfter) iconIndex |= rightBit;
+                    if (hasKeyframeAtCurrentTime) iconIndex |= onBit;
+                    var icon = _keyframeButtonIcons[iconIndex];
+
+                    if (ImGui.Button("##icon", new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
-                        ImGui.PushStyleColor(ImGuiCol.Button, Color.Orange.Rgba);
-                        if (ImGui.Button(sb.ToString(), new Vector2(ConnectionAreaWidth, 0.0f)))
+                        if (hasKeyframeAtCurrentTime)
                         {
                             AnimationOperations.RemoveKeyframeFromCurves(animator.GetCurvesForInput(inputSlot),
                                                                          EvaluationContext.GlobalTimeInBars);
                         }
-
-                        ImGui.PopStyleColor();
-                    }
-                    else
-                    {
-                        ImGui.PushStyleColor(ImGuiCol.Text, Color.Orange.Rgba);
-                        if (ImGui.Button(sb.ToString(), new Vector2(ConnectionAreaWidth, 0.0f)))
+                        else
                         {
                             AnimationOperations.InsertKeyframeToCurves(animator.GetCurvesForInput(inputSlot),
                                                                        EvaluationContext.GlobalTimeInBars);
                         }
-                        ImGui.PopStyleColor();
                     }
+
+                    Icons.DrawIconOnLastItem(icon);
 
                     ImGui.SameLine();
 
@@ -256,7 +267,7 @@ namespace T3.Gui.InputUi
                                                             }
 
                                                             ImGui.Separator();
-                                                            
+
                                                             if (ImGui.MenuItem("Remove Animation"))
                                                                 animator.RemoveAnimationFrom(inputSlot);
 
@@ -266,17 +277,14 @@ namespace T3.Gui.InputUi
                     ImGui.PopStyleVar();
                     ImGui.SameLine();
 
-                    // Draw control
                     ImGui.PushItemWidth(200.0f);
                     ImGui.PushStyleColor(ImGuiCol.Text, Color.Orange.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.FrameBgActive, Color.Black.Rgba);
-                    ImGui.PushFont(Fonts.FontBold);
 
                     ImGui.SetNextItemWidth(-1);
 
                     DrawAnimatedValue(name, typedInputSlot, animator); // todo: command integration
 
-                    ImGui.PopFont();
                     ImGui.PopStyleColor(2);
                     ImGui.PopItemWidth();
                 }
@@ -309,7 +317,6 @@ namespace T3.Gui.InputUi
                     ImGui.PopStyleColor();
                     ImGui.SameLine();
 
-
                     ImGui.SameLine();
 
                     // Draw Name
@@ -329,7 +336,7 @@ namespace T3.Gui.InputUi
                         ImGui.SameLine();
                         if (!input.IsDefault)
                         {
-                            Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6,2));
+                            Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 2));
                             if (isClicked)
                             {
                                 UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));
@@ -337,41 +344,37 @@ namespace T3.Gui.InputUi
                         }
                     }
 
-                
-
                     CustomComponents.ContextMenuForItem(() =>
-                                                    {
-                                                        if (ImGui.MenuItem("Set as default", !input.IsDefault))
-                                                            input.SetCurrentValueAsDefault();
-
-                                                        if (ImGui.MenuItem("Reset to default", !input.IsDefault))
                                                         {
-                                                            UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));
-                                                        }
+                                                            if (ImGui.MenuItem("Set as default", !input.IsDefault))
+                                                                input.SetCurrentValueAsDefault();
 
-                                                        if (blendGroup == null && ImGui.BeginMenu("Add to Blending", true))
-                                                        {
-                                                            T3Ui.PresetSystem.DrawInputContextMenu(inputSlot, compositionUi, symbolChildUi);
-                                                        }
+                                                            if (ImGui.MenuItem("Reset to default", !input.IsDefault))
+                                                            {
+                                                                UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id,
+                                                                                                input));
+                                                            }
 
-                                                        if (blendGroup != null && ImGui.MenuItem("Remove blending"))
-                                                        {
-                                                            T3Ui.PresetSystem.RemoveBlending(hash);
-                                                        }
+                                                            if (blendGroup == null && ImGui.BeginMenu("Add to Blending", true))
+                                                            {
+                                                                T3Ui.PresetSystem.DrawInputContextMenu(inputSlot, compositionUi, symbolChildUi);
+                                                            }
 
-                                                        if (ImGui.MenuItem("Publish as Input"))
-                                                        {
-                                                            PublishAsInput(inputSlot, symbolChildUi, input);
-                                                        }
+                                                            if (blendGroup != null && ImGui.MenuItem("Remove blending"))
+                                                            {
+                                                                T3Ui.PresetSystem.RemoveBlending(hash);
+                                                            }
 
-                                                        if (ImGui.MenuItem("Parameters settings"))
-                                                            editState = InputEditStateFlags.ShowOptions;
-                                                            
-                                                    });
+                                                            if (ImGui.MenuItem("Publish as Input"))
+                                                            {
+                                                                PublishAsInput(inputSlot, symbolChildUi, input);
+                                                            }
+
+                                                            if (ImGui.MenuItem("Parameters settings"))
+                                                                editState = InputEditStateFlags.ShowOptions;
+                                                        });
 
                     ImGui.PopStyleVar();
-
-                    
 
                     // Draw control
                     ImGui.PushItemWidth(200.0f);
@@ -409,6 +412,7 @@ namespace T3.Gui.InputUi
                 }
             }
             else
+
             {
                 Debug.Assert(false);
             }
@@ -488,14 +492,15 @@ namespace T3.Gui.InputUi
         }
 
         public Type Type { get; } = typeof(T);
-        
+
         /// <summary>
         /// Defines position of inputNode within graph 
         /// </summary>
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
+
         public Vector2 Size { get; set; } = SymbolChildUi.DefaultOpSize;
         public bool IsSelected => SelectionManager.IsNodeSelected(this);
-        
+
         // ReSharper disable once StaticMemberInGenericType
         private static readonly string _revertLabel = $"{(char)Icon.Revert}##revert";
         private const Relevancy DefaultRelevancy = Relevancy.Optional;

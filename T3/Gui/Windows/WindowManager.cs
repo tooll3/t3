@@ -19,11 +19,11 @@ namespace T3.Gui.Windows
             _windows = new List<Window>()
                            {
                                new GraphWindow(),
+                               new SettingsWindow(),
                                new ParameterWindow(),
                                new VariationWindow(),
                                new OutputWindow(),
                                new ConsoleLogWindow(),
-                               new SettingsWindow(),
                                new SymbolLibrary(),
                            };
         }
@@ -90,6 +90,7 @@ namespace T3.Gui.Windows
 
             if (_metricsWindowVisible)
                 ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
+            
         }
 
         private void Initialize()
@@ -133,6 +134,8 @@ namespace T3.Gui.Windows
 
                 if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
                     _demoWindowVisible = !_demoWindowVisible;
+
+
 
                 if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
                     _metricsWindowVisible = !_metricsWindowVisible;
