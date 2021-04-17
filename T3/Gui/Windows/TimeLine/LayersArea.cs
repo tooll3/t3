@@ -97,6 +97,7 @@ namespace T3.Gui.Windows.TimeLine
                         var compositionSymbolUi = SymbolUiRegistry.Entries[_compositionOp.Symbol.Id];
                         var symbolChildUi = compositionSymbolUi.ChildUis.Single(child => child.Id == clip.Id);
 
+                        var originalName = symbolChildUi.SymbolChild.ReadableName;
                         Vector2 newPos = symbolChildUi.PosOnCanvas;
                         newPos.Y += symbolChildUi.Size.Y + 5.0f;
                         var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, new[] { symbolChildUi }, compositionSymbolUi, newPos);
@@ -107,20 +108,26 @@ namespace T3.Gui.Windows.TimeLine
                         float originalSourceDuration = clip.SourceRange.Duration;
                         float normalizedCutPosition = ((float)_playback.TimeInBars - clip.TimeRange.Start) / clip.TimeRange.Duration;
                         
-                        clip.TimeRange.End = (float)_playback.TimeInBars;// = new TimeRange(clip.TimeRange.Start, (float)_playback.TimeInBars);
-
-
+                        clip.TimeRange.End = (float)_playback.TimeInBars;
+                        
                         // Apply new time range to newly added instance
                         Guid newChildId = cmd.OldToNewIdDict[clip.Id];
                         var newInstance = _compositionOp.Children.Single(child => child.SymbolChildId == newChildId);
                         var newTimeClip = newInstance.Outputs.OfType<ITimeClipProvider>().Single().TimeClip;
                         
-                        //newTimeClip.TimeRange.Start = (float)_playback.TimeInBars; // = new TimeRange((float)_playback.TimeInBars, originalEndTime);
+                        var newSymbolChildUi = compositionSymbolUi.ChildUis.Single(child => child.Id == newChildId);
+                        var renameCommand = new ChangeSymbolChildNameCommand(newSymbolChildUi, compositionSymbolUi.Symbol);
+                        renameCommand.NewName = originalName;
+                        renameCommand.Do();
+                        
+                        newSymbolChildUi.SymbolChild.Name = originalName;
+                            
                         newTimeClip.TimeRange = new TimeRange((float)_playback.TimeInBars, orgTimeRangeEnd);
                         newTimeClip.SourceRange.Start = newTimeClip.SourceRange.Start + originalSourceDuration * normalizedCutPosition;
                         newTimeClip.SourceRange.End = clip.SourceRange.End;
 
-                        clip.SourceRange.End = originalSourceDuration * normalizedCutPosition;
+                        clip.SourceRange.Duration = originalSourceDuration * normalizedCutPosition;
+                        
                     }
                 }
 
