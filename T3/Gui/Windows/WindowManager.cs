@@ -119,6 +119,12 @@ namespace T3.Gui.Windows
                 {
                     ToggleFullScreenGraph();
                 }
+                
+                if (ImGui.MenuItem("Hide Title and Timeline", "", ref UserSettings.Config.HideUiElementsInGraphWindow))
+                {
+                    //UserSettings.Config.HideUiElementsInGraphWindow = !UserSettings.Config.HideUiElementsInGraphWindow;
+                }
+                
 
                 ImGui.Separator();
 
