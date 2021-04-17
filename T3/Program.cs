@@ -386,7 +386,7 @@ namespace T3
                                      ImGui.NewFrame();
                                      context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
                                      context.OutputMerger.SetTargets(_renderView);
-                                     context.ClearRenderTargetView(_renderView, new Color(0.45f, 0.55f, 0.6f, 1.0f));
+                                     context.ClearRenderTargetView(_renderView, T3Style.Colors.WindowBackground.AsSharpDx);
 
                                      form2.Visible = T3Ui.ShowSecondaryRenderWindow;
                                      if (T3Ui.ShowSecondaryRenderWindow)
@@ -394,7 +394,7 @@ namespace T3
                                          context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
                                          context.Rasterizer.SetViewport(new Viewport(0, 0, form2.ClientSize.Width, form2.ClientSize.Height, 0.0f, 1.0f));
                                          context.OutputMerger.SetTargets(_renderView2);
-                                         context.ClearRenderTargetView(_renderView2, new Color(0.45f, 0.55f, 0.6f, 1.0f));
+                                         context.ClearRenderTargetView(_renderView2, T3Style.Colors.WindowBackground.AsSharpDx);
 
                                          if (resourceManager.Resources[FullScreenVertexShaderId] is VertexShaderResource vsr)
                                              context.VertexShader.Set(vsr.VertexShader);

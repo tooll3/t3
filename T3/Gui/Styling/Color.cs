@@ -87,6 +87,9 @@ namespace T3.Gui
         {
             return ImGui.ColorConvertFloat4ToU32(color.Rgba);
         }
+        
+
+        
 
         public static implicit operator Color(uint @uint)
         {
@@ -224,5 +227,7 @@ namespace T3.Gui
         {
             return new Color(Rgba.X, Rgba.Y, Rgba.Z, Rgba.W * f);
         }
+        
+        public SharpDX.Color AsSharpDx => new SharpDX.Color(Rgba.X, Rgba.Y,Rgba.Z,Rgba.Z);
     }
 }

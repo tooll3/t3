@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using ImGuiNET;
 using SharpDX;
 using T3.Core;
