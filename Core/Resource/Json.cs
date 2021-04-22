@@ -118,17 +118,17 @@ namespace T3.Core
 
                 Writer.WritePropertyName("InputValues");
                 Writer.WriteStartArray();
-                foreach (var inputValueEntry in child.InputValues)
+                foreach (var (id, inputValue) in child.InputValues)
                 {
-                    if (inputValueEntry.Value.IsDefault)
+                    if (inputValue.IsDefault)
                         continue;
 
                     Writer.WriteStartObject();
-                    Writer.WriteValue("Id", inputValueEntry.Key);
-                    Writer.WriteComment(inputValueEntry.Value.Name);
-                    Writer.WriteObject("Type", inputValueEntry.Value.Value.ValueType);
+                    Writer.WriteValue("Id", id);
+                    Writer.WriteComment(inputValue.Name);
+                    Writer.WriteObject("Type", inputValue.Value.ValueType);
                     Writer.WritePropertyName("Value");
-                    inputValueEntry.Value.Value.ToJson(Writer);
+                    inputValue.Value.ToJson(Writer);
                     Writer.WriteEndObject();
                 }
 
