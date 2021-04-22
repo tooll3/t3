@@ -68,7 +68,7 @@ namespace T3.Core.Operator.Slots
 
         public void Update(EvaluationContext context)
         {
-            if (DirtyFlag.IsDirty)
+            if (DirtyFlag.IsDirty || IsConnected)
             {
                 _updateAction?.Invoke(context);
                 DirtyFlag.Clear();
