@@ -26,7 +26,10 @@ namespace T3.Core.Rendering
         public SharpDX.Vector2 Texcoord;
 
         [FieldOffset(14 * 4)]
-        private SharpDX.Vector2 __padding; //Todo: clarify if 16 byte padding is required 
+        public float Selection; 
+
+        [FieldOffset(15 * 4)]
+        private float __padding; 
 
         public const int Stride = 16 * 4;
     }
