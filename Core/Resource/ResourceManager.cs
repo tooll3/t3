@@ -680,11 +680,14 @@ namespace T3.Core
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
-                    if (Resources[id] is ComputeShaderResource)
+                    if (Resources[id] is ComputeShaderResource csResource)
                     {
-                        fileResource.FileChangeAction -= fileChangedAction;
-                        fileResource.FileChangeAction += fileChangedAction;
-                        return id;
+                        if (csResource.EntryPoint == entryPoint)
+                        {
+                            fileResource.FileChangeAction -= fileChangedAction;
+                            fileResource.FileChangeAction += fileChangedAction;
+                            return id;
+                        }
                     }
                 }
             }
