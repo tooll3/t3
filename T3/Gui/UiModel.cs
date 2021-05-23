@@ -180,7 +180,10 @@ namespace T3.Gui
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_f0acd1a4_7a98_43ab_a807_6d1bd3e92169.Remap), RemapUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c.LFO), LfoUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_bfe540ef_f8ad_45a2_b557_cd419d9c8e44.DataList), DataListUi.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4.Boolean), BooleanUi.DrawChildUi);
+            
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227.LoadObj), DescriptiveUi.DrawChildUi);
+            
 
             foreach (var symbolEntry in SymbolRegistry.Entries)
             {

@@ -134,6 +134,12 @@ namespace T3.Gui.Styling
 
         public class IconSource
         {
+            public IconSource(Icon icon, int slotIndex)
+            {
+                SourceArea = ImRect.RectWithSize(new Vector2(SlotSize * slotIndex, 0), new Vector2(16,16));
+                Char = (char)icon;
+            }            
+            
             public IconSource(Icon icon, int slotIndex, Vector2 size)
             {
                 SourceArea = ImRect.RectWithSize(new Vector2(SlotSize * slotIndex, 0), size);
@@ -159,38 +165,38 @@ namespace T3.Gui.Styling
                 new IconSource(Icon.DopeSheetKeyframeLinear, 1, new Vector2(16, 25)),
                 new IconSource(Icon.LastKeyframe, 2, new Vector2(16, 25)),
                 new IconSource(Icon.FirstKeyframe, 3, new Vector2(16, 25)),
-                new IconSource(Icon.JumpToRangeStart, 4, new Vector2(16, 16)),
-                new IconSource(Icon.JumpToPreviousKeyframe, 5, new Vector2(16, 16)),
-                new IconSource(Icon.PlayBackwards, 6, new Vector2(16, 16)),
-                new IconSource(Icon.PlayForwards, 7, new Vector2(16, 16)),
-                new IconSource(Icon.JumpToNextKeyframe, 8, new Vector2(16, 16)),
-                new IconSource(Icon.JumpToRangeEnd, 9, new Vector2(16, 16)),
+                new IconSource(Icon.JumpToRangeStart, 4),
+                new IconSource(Icon.JumpToPreviousKeyframe, 5),
+                new IconSource(Icon.PlayBackwards, 6),
+                new IconSource(Icon.PlayForwards, 7),
+                new IconSource(Icon.JumpToNextKeyframe, 8),
+                new IconSource(Icon.JumpToRangeEnd, 9),
                 new IconSource(Icon.Loop, 10, new Vector2(32, 16)),
-                new IconSource(Icon.BeatGrid, 12, new Vector2(16, 16)),
-                new IconSource(Icon.ConnectedParameter, 13, new Vector2(16, 16)),
-                new IconSource(Icon.Stripe4PxPattern, 14, new Vector2(16, 16)),
-                new IconSource(Icon.CurveKeyframe, 15, new Vector2(16, 16)),
-                new IconSource(Icon.CurveKeyframeSelected, 16, new Vector2(16, 16)),
-                new IconSource(Icon.CurrentTimeMarkerHandle, 17, new Vector2(16, 16)),
-                new IconSource(Icon.FollowTime, 18, new Vector2(16, 16)),
-                new IconSource(Icon.ToggleAudioOn, 19, new Vector2(16, 16)),
-                new IconSource(Icon.ToggleAudioOff, 20, new Vector2(16, 16)),
-                new IconSource(Icon.Warning, 21, new Vector2(16, 16)),
-                new IconSource(Icon.HoverPreviewSmall, 22, new Vector2(16, 16)),
-                new IconSource(Icon.HoverPreviewPlay, 23, new Vector2(16, 16)),
-                new IconSource(Icon.HoverPreviewDisabled, 24, new Vector2(16, 16)),
+                new IconSource(Icon.BeatGrid, 12),
+                new IconSource(Icon.ConnectedParameter, 13),
+                new IconSource(Icon.Stripe4PxPattern, 14),
+                new IconSource(Icon.CurveKeyframe, 15),
+                new IconSource(Icon.CurveKeyframeSelected, 16),
+                new IconSource(Icon.CurrentTimeMarkerHandle, 17),
+                new IconSource(Icon.FollowTime, 18),
+                new IconSource(Icon.ToggleAudioOn, 19),
+                new IconSource(Icon.ToggleAudioOff, 20),
+                new IconSource(Icon.Warning, 21),
+                new IconSource(Icon.HoverPreviewSmall, 22),
+                new IconSource(Icon.HoverPreviewPlay, 23),
+                new IconSource(Icon.HoverPreviewDisabled, 24),
                 new IconSource(Icon.ConstantKeyframeSelected, 25, new Vector2(16, 25)),
                 new IconSource(Icon.ConstantKeyframe, 26, new Vector2(16, 25)),
-                new IconSource(Icon.ChevronLeft, 27, new Vector2(16, 16)),
-                new IconSource(Icon.ChevronRight, 28, new Vector2(16, 16)),
-                new IconSource(Icon.ChevronUp, 29, new Vector2(16, 16)),
-                new IconSource(Icon.ChevronDown, 30, new Vector2(16, 16)),
-                new IconSource(Icon.Pin, 31, new Vector2(16, 16)),
-                new IconSource(Icon.HeartOutlined, 32, new Vector2(16, 16)),
-                new IconSource(Icon.Heart, 33, new Vector2(16, 16)),
-                new IconSource(Icon.Trash, 34, new Vector2(16, 16)),
-                new IconSource(Icon.Grid, 35, new Vector2(16, 16)),
-                new IconSource(Icon.Revert, 36, new Vector2(16, 16)),
+                new IconSource(Icon.ChevronLeft, 27),
+                new IconSource(Icon.ChevronRight, 28),
+                new IconSource(Icon.ChevronUp, 29),
+                new IconSource(Icon.ChevronDown, 30),
+                new IconSource(Icon.Pin, 31),
+                new IconSource(Icon.HeartOutlined, 32),
+                new IconSource(Icon.Heart, 33),
+                new IconSource(Icon.Trash, 34),
+                new IconSource(Icon.Grid, 35),
+                new IconSource(Icon.Revert, 36),
                 
                 new IconSource(Icon.DopeSheetKeyframeSmoothSelected, 37, new Vector2(16, 25)),
                 new IconSource(Icon.DopeSheetKeyframeSmooth, 38, new Vector2(16, 25)),
@@ -209,6 +215,7 @@ namespace T3.Gui.Styling
                 new IconSource(Icon.KeyframeToggleOffLeft, new Vector2(45 * 16, 16), new Vector2(23, 15)),
                 new IconSource(Icon.KeyframeToggleOffRight, new Vector2(47 * 16, 16), new Vector2(23, 15)),
                 new IconSource(Icon.KeyframeToggleOffNone, new Vector2(49 * 16, 16), new Vector2(23, 15)),
+                new IconSource(Icon.Checkmark,  51),
             };
 
         public const string IconAtlasPath = @"Resources\t3\t3-icons.png";
@@ -266,5 +273,6 @@ namespace T3.Gui.Styling
         KeyframeToggleOffLeft,
         KeyframeToggleOffRight,
         KeyframeToggleOffNone,
+        Checkmark, 
     }
 }
