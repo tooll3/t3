@@ -220,6 +220,8 @@ namespace T3
             return true;
         }
     }
+    
+    
 
     public class Program
     {
@@ -270,6 +272,9 @@ namespace T3
 
             _controller = new ImGuiDx11Impl(device, form.Width, form.Height);
 
+            form.KeyDown += HandleKeyDown;
+            form.KeyUp += HandleKeyUp;
+            
             form.ResizeBegin += (sender, args) => _inResize = true;
             form.ResizeEnd += (sender, args) =>
                               {
@@ -288,6 +293,7 @@ namespace T3
                                 args.Cancel = T3Ui.UiModel.IsSaving;
                                 Log.Debug($"Cancel closing because save-operation is in progress.");
                             };
+            
             form.WindowState = FormWindowState.Maximized;
 
             // second render view
@@ -455,7 +461,29 @@ namespace T3
             buffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
             rtv = new RenderTargetView(device, buffer);
         }
+        
+        private static void HandleKeyDown(object sender, KeyEventArgs e)
+        {
+            var keyIndex = (int)e.KeyCode;
+            if (keyIndex >= Core.IO.KeyHandler.PressedKeys.Length)
+            {
+                Log.Warning($"Ignoring out of range key code {e.KeyCode} with index {keyIndex}");
+            }
+            else
+            {
+                Core.IO.KeyHandler.PressedKeys[keyIndex] = true;
+            }
+        }
 
+        private static void HandleKeyUp(object sender, KeyEventArgs e)
+        {
+            var keyIndex = (int)e.KeyCode;
+            if (keyIndex < Core.IO.KeyHandler.PressedKeys.Length)
+            {
+                Core.IO.KeyHandler.PressedKeys[keyIndex] = false;
+            }
+        }
+        
         private static T3Ui _t3ui = null;
         private static bool _inResize;
         private static bool _inResize2;

@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using T3.Core.IO;
 using T3.Core.Logging;
 //using T3.graph;
 using T3.Gui.Commands;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using T3.Core.Animation;
+using T3.Core.IO;
 using T3.Gui.Graph;
 using T3.Gui.Interaction;
 using T3.Gui.Windows;

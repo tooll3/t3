@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using T3.Core.Animation;
+using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;

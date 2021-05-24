@@ -13,6 +13,7 @@ using CommandLine;
 using CommandLine.Text;
 using T3.Core;
 using T3.Core.Animation;
+using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -129,6 +130,8 @@ namespace T3
             factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAll);
 
             bool startedWindowed = options.Windowed;
+            form.KeyDown += HandleKeyDown;
+            form.KeyUp += HandleKeyUp;
             form.KeyUp += (sender, keyArgs) =>
                           {
                               if (startedWindowed && keyArgs.Alt && keyArgs.KeyCode == Keys.Enter)
@@ -288,6 +291,30 @@ namespace T3
             factory.Dispose();
         }
 
+
+        private static void HandleKeyDown(object sender, KeyEventArgs e)
+        {
+            var keyIndex = (int)e.KeyCode;
+            if (keyIndex >= Core.IO.KeyHandler.PressedKeys.Length)
+            {
+                Log.Warning($"Ignoring out of range key code {e.KeyCode} with index {keyIndex}");
+            }
+            else
+            {
+                Core.IO.KeyHandler.PressedKeys[keyIndex] = true;
+            }
+        }
+
+        private static void HandleKeyUp(object sender, KeyEventArgs e)
+        {
+            var keyIndex = (int)e.KeyCode;
+            if (keyIndex < Core.IO.KeyHandler.PressedKeys.Length)
+            {
+                Core.IO.KeyHandler.PressedKeys[keyIndex] = false;
+            }
+        }
+
+        
         private static void RebuildBackBuffer(RenderForm form, Device device, ref RenderTargetView rtv, ref Texture2D buffer, ref SwapChain swapChain)
         {
             rtv.Dispose();

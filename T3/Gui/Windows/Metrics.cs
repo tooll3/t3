@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Text;
 using T3.Core;
+using T3.Core.IO;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 
