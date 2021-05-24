@@ -3,7 +3,7 @@ using System.IO;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 
-namespace T3.Gui.UiHelpers
+namespace T3.Core.IO
 {
     /// <summary>
     /// Implements writing and reading configuration files 
@@ -12,11 +12,15 @@ namespace T3.Gui.UiHelpers
     {
         public static T Config;
 
-        public Settings(string filepath)
+        protected Settings(string filepath, bool saveOnQuit)
         {
-            AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
+            if(saveOnQuit)
+                AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
+            
             Config = TryLoading(filepath) ?? new T();
+            _instance = this;
         }
+        
 
         private T TryLoading(string filepath)
         {
@@ -45,7 +49,7 @@ namespace T3.Gui.UiHelpers
             return null;
         }
 
-        private void SaveSettings(T configuration)
+        public void SaveSettings(T configuration)
         {
             Log.Debug($"Saving {_filepath}...");
             var serializer = JsonSerializer.Create();
@@ -61,6 +65,12 @@ namespace T3.Gui.UiHelpers
             SaveSettings(Config);
         }
 
+        public static void Save()
+        {
+            _instance.SaveSettings(Config);
+        }
+
+        private static Settings<T> _instance;
         private string _filepath;
     }
 }

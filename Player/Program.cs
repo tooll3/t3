@@ -6,6 +6,7 @@ using SharpDX.Windows;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -45,7 +46,7 @@ namespace T3
             [Option(Default = false, Required = false, HelpText = "Loops the demo")]
             public bool Loop { get; set; }
             
-            [Option(Default = false, Required = false, HelpText = "Show log messages.")]
+            [Option(Default = true, Required = false, HelpText = "Show log messages.")]
             public bool Logging { get; set; }
         }
 
@@ -87,6 +88,7 @@ namespace T3
             if (options == null)
                 return;
 
+            
             _vsync = !options.NoVsync;
             Console.WriteLine($"using vsync: {_vsync}, windowed: {options.Windowed}, size: {options.Size}, loop: {options.Loop}, logging: {options.Logging}");
             var form = new RenderForm("still::partial")
@@ -95,6 +97,8 @@ namespace T3
                                AllowUserResizing = false, 
                                Icon = new Icon(@"Resources\t3\t3.ico")
                            };
+            
+            var tmp = new ProjectSettings(saveOnQuit:false);
 
             // SwapChain description
             var desc = new SwapChainDescription()
@@ -130,8 +134,10 @@ namespace T3
             factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAll);
 
             bool startedWindowed = options.Windowed;
+
             form.KeyDown += HandleKeyDown;
             form.KeyUp += HandleKeyUp;
+            
             form.KeyUp += (sender, keyArgs) =>
                           {
                               if (startedWindowed && keyArgs.Alt && keyArgs.KeyCode == Keys.Enter)
@@ -178,13 +184,22 @@ namespace T3
             _model.Load();
             
             var symbols = SymbolRegistry.Entries;
-            var demoSymbol = symbols.First(entry => entry.Value.Name == "PartialMain").Value;
+            var demoSymbol = symbols.First(entry => entry.Value.Name == ProjectSettings.Config.MainOperatorName).Value;
+
             // create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
 
-            _playback = new StreamPlayback(@"Resources\proj-partial\soundtrack\partial.mp3");
-            _playback.Bpm = 120;
+            //var soundTrackPath = @"Resources\proj-partial\soundtrack\partial.mp3";
+            if (File.Exists(ProjectSettings.Config.SoundtrackFilepath))
+            {
+                _playback = new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath);
+                _playback.Bpm = ProjectSettings.Config.SoundtrackBpm;
+            }
+            else
+            {
+                _playback = new Playback();
+            }
             
             // sample some frames to preload all shaders and resources
             var songDurationInSecs = _playback.GetSongDurationInSecs();
@@ -234,18 +249,26 @@ namespace T3
                                      lastElapsedTicks = ticks;
                                      // Console.WriteLine($"delta: {((double)(ticksDiff) / Stopwatch.Frequency)}");
                                      _playback.Update(1.0f);
-                                     if (_playback.StreamPos >= _playback.StreamLength)
+
+                                     if (_playback is StreamPlayback streamPlayback)
                                      {
-                                         if (options.Loop)
+                                         if (streamPlayback.StreamPos >= streamPlayback.StreamLength)
                                          {
-                                             _playback.TimeInBars = 0.0;
-                                             _playback.PlaybackSpeed = 1.0; // restart the stream
-                                         }
-                                         else
-                                         {
-                                             Application.Exit();
+                                             if (options.Loop)
+                                             {
+                                                 _playback.TimeInBars = 0.0;
+                                                 _playback.PlaybackSpeed = 1.0; // restart the stream
+                                             }
+                                             else
+                                             {
+                                                 Application.Exit();
+                                             }
                                          }
                                      }
+                                     // else
+                                     // {
+                                     //     _playback = EvaluationContext.RunTimeInSecs;
+                                     // }
 
                                      DirtyFlag.IncrementGlobalTicks();
                                      DirtyFlag.InvalidationRefFrame++;
@@ -332,7 +355,7 @@ namespace T3
         private static Model _model;
         private static Instance _project;
         private static EvaluationContext _evalContext;
-        private static StreamPlayback _playback;
+        private static Playback _playback;
         public static uint FullScreenVertexShaderId { get; private set; }
         public static uint FullScreenPixelShaderId { get; private set; }
     }

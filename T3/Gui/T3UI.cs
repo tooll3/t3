@@ -27,8 +27,8 @@ namespace T3.Gui
         {
             var operatorsAssembly = Assembly.GetAssembly(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value));
             UiModel = new UiModel(operatorsAssembly);
-            _userSettings = new UserSettings();
-            _projectSettings = new ProjectSettings();
+            var tmp = new UserSettings(saveOnQuit:true);
+            var tmp2 = new ProjectSettings(saveOnQuit:true);
             BeatTiming = new BeatTiming();
             WindowManager = new WindowManager();
             ExampleSymbolLinking.UpdateExampleLinks();
@@ -175,8 +175,6 @@ namespace T3.Gui
 
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel;
-        private static UserSettings _userSettings;
-        private static ProjectSettings _projectSettings;
         public static readonly PresetSystem PresetSystem = new PresetSystem();
         public static readonly BeatTiming BeatTiming;
         public static readonly WindowManager WindowManager;

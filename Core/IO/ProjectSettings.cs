@@ -1,21 +1,24 @@
-﻿using System;
-
-namespace T3.Gui.UiHelpers
+﻿namespace T3.Core.IO
 {
     /// <summary>
     /// Saves view layout and currently open node 
     /// </summary>
     public class ProjectSettings : Settings<ProjectSettings.ConfigData>
     {
-        public ProjectSettings() : base("projectSettings.json")
+        public ProjectSettings(bool saveOnQuit) : base("projectSettings.json", saveOnQuit)
         {
         }
+
+
 
         public class ConfigData
         {
             public string SoundtrackFilepath = "";
             public bool UseBpmRate = true;
             public float SoundtrackBpm = 120;
+            public string MainOperatorName = "";
         }
+
+
     }
 }

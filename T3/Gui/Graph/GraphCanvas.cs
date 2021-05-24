@@ -718,6 +718,10 @@ namespace T3.Gui.Graph
             var instance = CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
             if (instance.Outputs.Count >= 1 && instance.Outputs.First().ValueType == typeof(Texture2D))
             {
+                // Update project settings
+                ProjectSettings.Config.MainOperatorName = instance.Symbol.Name;
+                ProjectSettings.Save();
+                
                 // traverse starting at output and collect everything
                 var exportInfo = new ExportInfo();
                 CollectChildSymbols(instance.Symbol, exportInfo);
@@ -787,6 +791,7 @@ namespace T3.Gui.Graph
                 exportInfo.PrintInfo();
                 var resourcePaths = exportInfo.UniqueResourcePaths;
                 resourcePaths.Add(ProjectSettings.Config.SoundtrackFilepath);
+                resourcePaths.Add(@"projectSettings.json");
                 resourcePaths.Add(@"Resources\hash-functions.hlsl");
                 resourcePaths.Add(@"Resources\noise-functions.hlsl");
                 resourcePaths.Add(@"Resources\particle.hlsl");
@@ -800,12 +805,14 @@ namespace T3.Gui.Graph
                 resourcePaths.Add(@"Resources\t3\t3.ico");
                 foreach (var resourcePath in resourcePaths)
                 {
-                    var targetPath = exportDir + Path.DirectorySeparatorChar + resourcePath;
-                    var targetDir = new DirectoryInfo(targetPath).Parent.FullName;
-                    if (!Directory.Exists(targetDir))
-                        Directory.CreateDirectory(targetDir);
                     try
                     {
+                        var targetPath = exportDir + Path.DirectorySeparatorChar + resourcePath;
+                    
+                        var targetDir = new DirectoryInfo(targetPath).Parent.FullName;
+                        if (!Directory.Exists(targetDir))
+                            Directory.CreateDirectory(targetDir);
+                        
                         File.Copy(resourcePath, targetPath);
                     }
                     catch (Exception e)

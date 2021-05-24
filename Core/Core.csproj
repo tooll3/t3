@@ -120,6 +120,8 @@
     <Compile Include="DataTypes\StructuredListUtils.cs" />
     <Compile Include="DataTypes\Texture3dWithViews.cs" />
     <Compile Include="IO\KeyboardInput.cs" />
+    <Compile Include="IO\ProjectSettings.cs" />
+    <Compile Include="IO\Settings.cs" />
     <Compile Include="Logging\ConsoleWriter.cs" />
     <Compile Include="Logging\ILogWriter.cs" />
     <Compile Include="Logging\Log.cs" />

@@ -15,7 +15,7 @@ namespace T3.Gui.UiHelpers
     /// </summary>
     public class UserSettings : Settings<UserSettings.ConfigData>
     {
-        public UserSettings() : base("userSettings.json")
+        public UserSettings(bool saveOnQuit) : base("userSettings.json", saveOnQuit:saveOnQuit)
         {
         }
 
