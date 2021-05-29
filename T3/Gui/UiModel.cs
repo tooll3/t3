@@ -72,6 +72,9 @@ namespace T3.Gui
             RegisterUiType(typeof(System.Text.StringBuilder), new StringUiProperties(), () => new FallbackInputUi<StringBuilder>(),
                            () => new ValueOutputUi<System.Text.StringBuilder>());
 
+            RegisterUiType(typeof(DateTime), new FloatUiProperties(), () => new FallbackInputUi<DateTime>(),
+                           () => new ValueOutputUi<DateTime>());
+            
             // t3 core types
             RegisterUiType(typeof(Core.DataTypes.BufferWithViews), new FallBackUiProperties(), () => new FallbackInputUi<Core.DataTypes.BufferWithViews>(),
                            () => new ValueOutputUi<Core.DataTypes.BufferWithViews>());

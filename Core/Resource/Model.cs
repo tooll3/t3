@@ -215,6 +215,10 @@ namespace T3.Core
                          () => new InputValue<StringBuilder>(new StringBuilder()));
 
             
+            RegisterType(typeof(DateTime), "DateTime",
+                         () => new InputValue<DateTime>(new DateTime()));
+
+            
             // t3 core types
             RegisterType(typeof(BufferWithViews), "BufferWithViews",
                          () => new InputValue<BufferWithViews>(null));
