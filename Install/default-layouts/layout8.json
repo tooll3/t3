@@ -1,0 +1,110 @@
+[
+  {
+    "Title": "Graph##1",
+    "Visible": true,
+    "Position": {
+      "X": 0.761257768,
+      "Y": 0.485576928
+    },
+    "Size": {
+      "X": 0.237189442,
+      "Y": 0.511675835
+    }
+  },
+  {
+    "Title": "Settings",
+    "Visible": false,
+    "Position": {
+      "X": 0.0,
+      "Y": 0.8870854
+    },
+    "Size": {
+      "X": 0.105078124,
+      "Y": 0.113620326
+    }
+  },
+  {
+    "Title": "Parameters##1",
+    "Visible": true,
+    "Position": {
+      "X": 0.760093153,
+      "Y": 0.01510989
+    },
+    "Size": {
+      "X": 0.238354042,
+      "Y": 0.4697802
+    }
+  },
+  {
+    "Title": "Variations",
+    "Visible": true,
+    "Position": {
+      "X": 0.023291925,
+      "Y": 0.0412087925
+    },
+    "Size": {
+      "X": 0.0124223605,
+      "Y": 0.0219780225
+    }
+  },
+  {
+    "Title": "Output##0",
+    "Visible": true,
+    "Position": {
+      "X": 0.00271739135,
+      "Y": 0.01717033
+    },
+    "Size": {
+      "X": 0.7585404,
+      "Y": 0.793956041
+    }
+  },
+  {
+    "Title": "Output##1",
+    "Visible": false,
+    "Position": {
+      "X": 967.0,
+      "Y": 24.0
+    },
+    "Size": {
+      "X": 881.0,
+      "Y": 450.0
+    }
+  },
+  {
+    "Title": "Output##2",
+    "Visible": false,
+    "Position": {
+      "X": 0.00078125,
+      "Y": 0.0197600573
+    },
+    "Size": {
+      "X": 0.373046875,
+      "Y": 0.5010586
+    }
+  },
+  {
+    "Title": "Console",
+    "Visible": false,
+    "Position": {
+      "X": 0.1046875,
+      "Y": 0.8870854
+    },
+    "Size": {
+      "X": 0.6550781,
+      "Y": 0.111503176
+    }
+  },
+  {
+    "Title": "Symbol Library",
+    "Visible": false,
+    "Position": {
+      "X": 0.0,
+      "Y": 0.0
+    },
+    "Size": {
+      "X": 0.0,
+      "Y": 0.0
+    }
+  }
+]
