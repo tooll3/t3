@@ -131,6 +131,9 @@ namespace T3.Gui
             RegisterUiType(typeof(SharpDX.Direct3D11.FillMode), new ShaderUiProperties(), () => new EnumInputUi<FillMode>(),
                            () => new ValueOutputUi<FillMode>());
             RegisterUiType(typeof(SharpDX.Direct3D11.Filter), new ShaderUiProperties(), () => new EnumInputUi<Filter>(), () => new ValueOutputUi<Filter>());
+            RegisterUiType(typeof(GeometryShader), new ShaderUiProperties(), () => new FallbackInputUi<GeometryShader>(),
+                           () => new ValueOutputUi<GeometryShader>());
+            
             RegisterUiType(typeof(SharpDX.Direct3D11.InputLayout), new ShaderUiProperties(), () => new FallbackInputUi<InputLayout>(),
                            () => new ValueOutputUi<InputLayout>());
             RegisterUiType(typeof(SharpDX.Direct3D11.PixelShader), new ShaderUiProperties(), () => new FallbackInputUi<PixelShader>(),

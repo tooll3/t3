@@ -156,6 +156,27 @@ namespace T3.Core
         }
     }
 
+    public class GeometryShaderResource : ShaderResource
+    {
+        public GeometryShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob, GeometryShader geometryShader) :
+            base(id, name, entryPoint, blob)
+        {
+            GeometryShader = geometryShader;
+        }
+
+        public GeometryShader GeometryShader;
+
+        public override void Update(string path)
+        {
+            if (UpToDate)
+                return;
+
+            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "gs_5_0", ref GeometryShader, ref _blob);
+            UpToDate = true;
+        }
+    }
+    
+    
     public class Texture2dResource : Resource
     {
         public Texture2dResource(uint id, string name, Texture2D texture)
@@ -220,6 +241,11 @@ namespace T3.Core
         public ComputeShader GetComputeShader(uint resourceId)
         {
             return GetResource<ComputeShaderResource>(resourceId).ComputeShader;
+        }
+        
+        public GeometryShader GetGeometryShader(uint resourceId)
+        {
+            return GetResource<GeometryShaderResource>(resourceId).GeometryShader;
         }
 
         public ShaderBytecode GetComputeShaderBytecode(uint resourceId)
@@ -720,6 +746,58 @@ namespace T3.Core
 
             return resourceEntry.Id;
         }
+        
+        
+        public uint CreateGeometryShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
+        {
+            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
+                return NullResource;
+
+            bool foundFileEntryForPath = _fileResources.TryGetValue(srcFile, out var fileResource);
+            if (foundFileEntryForPath)
+            {
+                foreach (var id in fileResource.ResourceIds)
+                {
+                    if (Resources[id] is GeometryShaderResource gsResource)
+                    {
+                        if (gsResource.EntryPoint == entryPoint)
+                        {
+                            fileResource.FileChangeAction -= fileChangedAction;
+                            fileResource.FileChangeAction += fileChangedAction;
+                            return id;
+                        }
+                    }
+                }
+            }
+
+            GeometryShader shader = null;
+            ShaderBytecode blob = null;
+            CompileShader(srcFile, entryPoint, name, "gs_5_0", ref shader, ref blob);
+            if (shader == null)
+            {
+                Log.Info($"Failed to create geometry shader '{name}'.");
+                return NullResource;
+            }
+
+            var resourceEntry = new GeometryShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
+            Resources.Add(resourceEntry.Id, resourceEntry);
+            _geometryShaders.Add(resourceEntry);
+            if (fileResource == null)
+            {
+                fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
+                _fileResources.Add(srcFile, fileResource);
+            }
+            else
+            {
+                // file resource already exists, so just add the id of the new type resource
+                fileResource.ResourceIds.Add(resourceEntry.Id);
+            }
+
+            fileResource.FileChangeAction -= fileChangedAction;
+            fileResource.FileChangeAction += fileChangedAction;
+
+            return resourceEntry.Id;
+        }
 
         public void UpdateVertexShaderFromFile(string path, uint id, ref VertexShader vertexShader)
         {
@@ -751,6 +829,16 @@ namespace T3.Core
             }
         }
 
+        public void UpdateGeometryShaderFromFile(string path, uint id, ref GeometryShader geometryShader)
+        {
+            Resources.TryGetValue(id, out var resource);
+            if (resource is GeometryShaderResource gsResource)
+            {
+                gsResource.Update(path);
+                geometryShader = gsResource.GeometryShader;
+            }
+        }
+        
         public uint CreateOperatorEntry(string srcFile, string name, OperatorResource.UpdateDelegate updateHandler)
         {
             // todo: code below is redundant with all file resources -> refactor
@@ -1195,6 +1283,7 @@ namespace T3.Core
         private readonly List<VertexShaderResource> _vertexShaders = new List<VertexShaderResource>();
         private readonly List<PixelShaderResource> _pixelShaders = new List<PixelShaderResource>();
         private readonly List<ComputeShaderResource> _computeShaders = new List<ComputeShaderResource>();
+        private readonly List<GeometryShaderResource> _geometryShaders = new List<GeometryShaderResource>();
         private readonly List<Texture2dResource> _2dTextures = new List<Texture2dResource>();
         private readonly List<Texture3dResource> _3dTextures = new List<Texture3dResource>();
         private readonly List<ShaderResourceViewResource> _shaderResourceViews = new List<ShaderResourceViewResource>();

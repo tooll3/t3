@@ -340,6 +340,8 @@ namespace T3.Core
                          InputDefaultValueCreator<Filter>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
                          JsonToEnumValue<Filter>);
+            RegisterType(typeof(SharpDX.Direct3D11.GeometryShader), "GeometryShader",
+                         () => new InputValue<GeometryShader>(null));
             RegisterType(typeof(SharpDX.Direct3D11.InputLayout), "InputLayout",
                          () => new InputValue<InputLayout>(null));
             RegisterType(typeof(SharpDX.Direct3D11.PixelShader), "PixelShader",
