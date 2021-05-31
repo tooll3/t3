@@ -156,6 +156,7 @@
     <Compile Include="Operator\SymbolRegistry.cs" />
     <Compile Include="Operator\Variator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rendering\DefaultRenderingStates.cs" />
     <Compile Include="Rendering\FogSettings.cs" />
     <Compile Include="Rendering\MeshUtils.cs" />
     <Compile Include="Rendering\ObjMesh.cs" />
