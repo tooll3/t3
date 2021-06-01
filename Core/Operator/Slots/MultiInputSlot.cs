@@ -53,6 +53,8 @@ namespace T3.Core.Operator.Slots
             {
                 resources[i] = connectedInputs[i].GetValue(context);
             }
+            
+            DirtyFlag.Clear();
         }
     }
 }
