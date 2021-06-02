@@ -47,8 +47,8 @@ namespace UiHelpers
             }
 
             var d = pointB - pointA;
-
-            var maxRadius = SettingsWindow.LimitArcConnectionRadius * GraphCanvas.Current.Scale.X;
+            const float limitArcConnectionRadius = 100;
+            var maxRadius = limitArcConnectionRadius * GraphCanvas.Current.Scale.X;
             const float shrinkArkAngle = 0.8f;
             const float edgeFactor = 0.4f; // 0 -> overlap  ... 1 concentric around node edge
             const float outlineWidth = 3;

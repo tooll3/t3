@@ -6,6 +6,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
@@ -130,9 +131,8 @@ namespace T3.Gui.Selection
             var originInCanvas = canvas.TransformDirection(originInViewport);
             var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
             var originInScreen = topLeftOnScreen + originInCanvas;
-
-
-            var gizmoScale = CalcGizmoScale(context, localToObject, viewport.Width, viewport.Height, 45f, SettingsWindow.GizmoSize);
+            
+            var gizmoScale = CalcGizmoScale(context, localToObject, viewport.Width, viewport.Height, 45f, UserSettings.Config.GizmoSize);
             var centerPadding = 0.2f * gizmoScale / canvas.Scale.X;
             var length = 2f * gizmoScale / canvas.Scale.Y;
             var planeGizmoSize = 0.5f * gizmoScale / canvas.Scale.X;

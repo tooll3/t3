@@ -29,9 +29,9 @@ namespace T3.Gui.UiHelpers
 
             public bool AudioMuted;
             public bool ShowThumbnails = true;
-            public bool SmartGroupDragging = true;
+            public bool SmartGroupDragging = false;
             public int WindowLayoutIndex = 0;
-            public bool KeepBeatTimeRunningInPause = false;
+            public bool KeepBeatTimeRunningInPause = true;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = false;
             public float SnapStrength = 5;
@@ -40,6 +40,7 @@ namespace T3.Gui.UiHelpers
             public float TooltipDelay = 1.2f;
             public bool HideUiElementsInGraphWindow = false;
             public float ClickTreshold = 5; // Increase for high-res display and pen tablets
+            public float GizmoSize = 100;
             
             [JsonConverter(typeof(StringEnumConverter))]
             public Playback.TimeDisplayModes TimeDisplayMode = Playback.TimeDisplayModes.Bars;
