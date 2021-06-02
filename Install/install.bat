@@ -5,3 +5,4 @@ mkdir ..\T3\bin\Release\
 copy dependencies\*.dll ..\T3\bin\Release\
 
 Xcopy /E /I default-layouts ..\.t3
+Xcopy /E /I default-dashboard ..\Operators\Types
