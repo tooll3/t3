@@ -41,11 +41,10 @@ namespace T3.Gui.Windows
 
         public void PopulateCompleteTree()
         {
-            //_treeNode = new NamespaceTreeNode("root");
             Name = RootNodeId;
             Clear();
 
-            foreach (var symbol in SymbolRegistry.Entries)
+            foreach (var symbol in SymbolRegistry.Entries.OrderBy(pair => pair.Value.Namespace + pair.Value.Name))
             {
                 SortInOperator(symbol.Value);
             }

@@ -11,7 +11,8 @@ using T3.Gui.Windows;
 namespace T3.Gui.UiHelpers
 {
     /// <summary>
-    /// Shows a tree of all defined symbols sorted by namespace 
+    /// Shows a tree of all defined symbols sorted by namespace.
+    /// This is used by <see cref="SymbolBrowser"/> and <see cref="T3Ui.DrawAppMenu"/>
     /// </summary>
     public static class SymbolTreeMenu
     {
@@ -20,7 +21,6 @@ namespace T3.Gui.UiHelpers
             TreeNode.PopulateCompleteTree();
             DrawNodesRecursively(TreeNode);
         }
-
         
         private static void DrawNodesRecursively(NamespaceTreeNode subtree)
         {

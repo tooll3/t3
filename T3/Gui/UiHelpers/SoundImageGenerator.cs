@@ -113,7 +113,7 @@ namespace T3.Gui.UiHelpers
 
                 if (sampleIndex % 1000 == 0)
                 {
-                    Log.Debug($"   computing sound image {100.0 * sampleIndex / numSamples:0}% complete");
+                    Log.Debug($"   computing sound image {100.0 * sampleIndex / (float)numSamples:0} % complete");
                 }
 
                 foreach (var region in _regions)

@@ -8,6 +8,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph;
+using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction;
 using T3.Gui.Selection;
@@ -30,6 +31,8 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
+            _renameNamespaceDialog.Draw(_subtreeNodeToRename);
+            
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             {
                 ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
@@ -58,7 +61,7 @@ namespace T3.Gui.Windows
                 {
                     if (string.IsNullOrEmpty(_filter.SearchString))
                     {
-                        DrawTree();
+                        DrawNode(_treeNode);
                     }
                     else
                     {
@@ -74,13 +77,6 @@ namespace T3.Gui.Windows
                 StopDrag();
             }
         }
-
-        private void DrawTree()
-        {
-            DrawNode(_treeNode);
-        }
-
-        
 
         private void DrawList()
         {
@@ -165,6 +161,8 @@ namespace T3.Gui.Windows
             //_dropData = T3Ui.NotDroppingPointer;
         }
 
+        private NamespaceTreeNode _subtreeNodeToRename;
+        
         private void DrawNode(NamespaceTreeNode subtree)
         {
             if (subtree.Name == NamespaceTreeNode.RootNodeId)
@@ -175,7 +173,26 @@ namespace T3.Gui.Windows
             {
                 ImGui.PushID(subtree.Name);
                 ImGui.SetNextItemWidth(10);
-                if (ImGui.TreeNode(subtree.Name))
+
+                var isOpen = ImGui.TreeNode(subtree.Name);
+                CustomComponents.ContextMenuForItem(() =>
+                                                    {
+                                                        if (ImGui.MenuItem("Rename Namespace"))
+                                                        {
+                                                            _subtreeNodeToRename = subtree;
+                                                            _renameNamespaceDialog.ShowNextFrame();
+                                                        }
+                                                    },
+                                                    "#bla");
+                
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.Text("here");
+                    ImGui.EndTooltip();
+                }
+                
+                if (isOpen)
                 {
                     HandleDropTarget(subtree);
 
@@ -261,5 +278,6 @@ namespace T3.Gui.Windows
         private NamespaceTreeNode _treeNode = new NamespaceTreeNode(NamespaceTreeNode.RootNodeId);
         private readonly SymbolFilter _filter = new SymbolFilter();
         private static Symbol _selectedSymbol;
+        private static RenameNamespaceDialog _renameNamespaceDialog = new RenameNamespaceDialog();
     }
 }

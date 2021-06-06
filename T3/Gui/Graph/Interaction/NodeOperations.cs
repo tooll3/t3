@@ -17,6 +17,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
+using T3.Gui.Windows;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace T3.Gui.Graph.Interaction
@@ -985,6 +986,22 @@ namespace T3.Gui.Graph.Interaction
             }
 
             return true;
+        }
+        
+        
+        public static void RenameSpaceSpaces(NamespaceTreeNode node, string nameSpace)
+        {
+            var orgNameSpace = node.GetAsString();
+            foreach (var symbol in SymbolRegistry.Entries.Values)
+            {
+                if (!symbol.Namespace.StartsWith(orgNameSpace))
+                    continue;
+                
+                //var newNameSpace = parent + "."
+                var newNameSpace = Regex.Replace(symbol.Namespace, orgNameSpace, nameSpace);
+                Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
+                symbol.Namespace = newNameSpace;
+            }
         }
     }
 }
