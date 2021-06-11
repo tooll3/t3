@@ -10,7 +10,7 @@ using T3.Core.Logging;
 namespace T3.Gui.Interaction.PresetSystem.Model
 {
     /// <summary>
-    /// Model of a single composition
+    /// Presets model of a single composition
     /// </summary>
     public class CompositionContext
     {

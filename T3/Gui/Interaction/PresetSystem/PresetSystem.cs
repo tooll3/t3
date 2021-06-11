@@ -13,6 +13,7 @@ using T3.Gui.Interaction.PresetSystem.Dialogs;
 using T3.Gui.Interaction.PresetSystem.Midi;
 using T3.Gui.Interaction.PresetSystem.Model;
 using T3.Gui.Selection;
+using T3.Gui.Styling;
 using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 using T3.Operators.Types.Id_a53f3873_a5aa_4bcc_aa06_0745d98209d6;
 
@@ -107,15 +108,11 @@ namespace T3.Gui.Interaction.PresetSystem
 
             UpdateInputReferences();
         }
+        
+        
 
         public void CreateNewGroupForInput()
         {
-            // if (!(_nextInputSlotFor.Input.Value is InputValue<float> v))
-            // {
-            //     Log.Warning("Sorry, but for now only float parameters can be blended. Is " + _nextInputSlotFor.MappedType);
-            //     return;
-            // }
-
             SetOrCreateContextForActiveComposition();
             var group = ActiveContext.AppendNewGroup(_nextNameFor);
             group.AddParameterToIndex(CreateParameter(), 0);
@@ -171,7 +168,7 @@ namespace T3.Gui.Interaction.PresetSystem
                 {
                     if (ImGui.MenuItem("Append to G" + (activeGroup.Index + 1)))
                     {
-                        var index = activeGroup.FindNextFreeIndex();
+                        var index = activeGroup.FindNextFreeParameterIndex();
                         CreateNewParameterForActiveGroup(index);
                     }
                 }
@@ -277,7 +274,7 @@ namespace T3.Gui.Interaction.PresetSystem
             }
         }
 
-        private void ActivatePreset(ParameterGroup @group, Preset preset)
+        public void ActivatePreset(ParameterGroup @group, Preset preset)
         {
             @group.SetActivePreset(preset);
             ActiveContext.SetGroupAsActive(@group);
@@ -296,6 +293,11 @@ namespace T3.Gui.Interaction.PresetSystem
             }
 
             var address = ActiveContext.GetAddressFromButtonIndex(buttonRangeIndex);
+            RemovePresetAtAddress(address);
+        }
+
+        public void RemovePresetAtAddress(PresetAddress address)
+        {
             var preset = ActiveContext.TryGetPresetAt(address);
             if (preset == null)
             {
@@ -304,9 +306,9 @@ namespace T3.Gui.Interaction.PresetSystem
             }
 
             var group = ActiveContext.GetGroupForAddress(address);
-            group.SetActivePreset(null);
+            @group.SetActivePreset(null);
             ActiveContext.Presets[address.GroupColumn, address.SceneRow] = null;
-            ApplyGroupPreset(group, preset);
+            ApplyGroupPreset(@group, preset);
             preset.State = Preset.States.Active;
             ActiveContext.WriteToJson();
         }
@@ -493,8 +495,7 @@ namespace T3.Gui.Interaction.PresetSystem
             FitViewToSelectionHandling.FitViewToSelection();
         }
 
-
-        private void CreatePresetAtAddress(PresetAddress address)
+        public void CreatePresetAtAddress(PresetAddress address)
         {
             var group = ActiveContext.GetGroupForAddress(address);
             if (@group == null)
@@ -583,7 +584,7 @@ namespace T3.Gui.Interaction.PresetSystem
             {
                 if (parameter == null)
                     continue;
-                
+
                 //var symbolChild = operatorSymbol.Children.Single(child => child.Id == parameter.SymbolChildId);
                 var instance = _activeCompositionInstance.Children.SingleOrDefault(c => c.SymbolChildId == parameter.SymbolChildId);
                 if (instance == null)
@@ -608,7 +609,7 @@ namespace T3.Gui.Interaction.PresetSystem
             {
                 if (parameter == null)
                     continue;
-                
+
                 var symbolChild = symbol.Children.SingleOrDefault(s => s.Id == parameter.SymbolChildId);
                 if (symbolChild == null)
                 {
@@ -636,7 +637,7 @@ namespace T3.Gui.Interaction.PresetSystem
             UndoRedoStack.AddAndExecute(command);
         }
 
-        private void BlendGroupPresets(ParameterGroup group, float blendValue)
+        public void BlendGroupPresets(ParameterGroup group, float blendValue)
         {
             var commands = new List<ICommand>();
             var symbol = _activeCompositionInstance.Symbol;
@@ -700,8 +701,6 @@ namespace T3.Gui.Interaction.PresetSystem
             var command = new MacroCommand("Set Preset Values", commands);
             command.Do(); // No Undo... boo! 
         }
-
-        
         #endregion
 
         private Guid _activeCompositionId = Guid.Empty;
@@ -711,14 +710,13 @@ namespace T3.Gui.Interaction.PresetSystem
 
         private readonly Dictionary<int, ParameterGroup> _groupForBlendedParameters = new Dictionary<int, ParameterGroup>(100);
 
-        
         /// <summary>
-        /// Is only changes by explicitly user actions:
+        /// Is only changes by explicit user actions:
         /// - switching to a composition with a preset context
         /// - creating a context (e.g. by added parameters to blending)
         /// - switching e.g. with the midi controllers 
         /// </summary>
-        private CompositionContext ActiveContext { get; set; }
+        public CompositionContext ActiveContext { get; private set; }
 
         private Guid _lastCompositionId;
 

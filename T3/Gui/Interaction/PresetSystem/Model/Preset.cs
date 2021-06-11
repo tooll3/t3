@@ -13,6 +13,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
     public class Preset
     {
         public States State = States.InActive;
+        public string Title = String.Empty;
         public Dictionary<Guid, InputValue> ValuesForGroupParameterIds = new Dictionary<Guid, InputValue>();
 
         public enum States
@@ -89,6 +90,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
 
         public void ToJson(JsonTextWriter writer)
         {
+            writer.WriteObject("Title", Title);
             writer.WritePropertyName("Values");
             writer.WriteStartArray();
             foreach (var (parameterId, value) in ValuesForGroupParameterIds)
@@ -110,6 +112,11 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         {
             var newPreset = new Preset();
             newPreset.State = States.InActive;
+            if (reader["Name"] != null)
+            {
+                newPreset.Title = reader["Name"].Value<string>() ?? string.Empty;
+            }
+            
             foreach (var presetToken in (JArray)reader["Values"])
             {
                 Guid parameterId = Guid.Parse(presetToken["ParameterId"].Value<string>());

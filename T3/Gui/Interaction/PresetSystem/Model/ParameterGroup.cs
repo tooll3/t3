@@ -95,7 +95,7 @@ namespace T3.Gui.Interaction.PresetSystem
         }
 
         
-        public int FindNextFreeIndex()
+        public int FindNextFreeParameterIndex()
         {
             for (var i = 0; i < Parameters.Count; i++)
             {
