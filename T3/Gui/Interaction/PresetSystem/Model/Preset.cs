@@ -90,7 +90,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
 
         public void ToJson(JsonTextWriter writer)
         {
-            writer.WriteObject("Title", Title);
+            writer.WriteObject(nameof(Title), Title);
             writer.WritePropertyName("Values");
             writer.WriteStartArray();
             foreach (var (parameterId, value) in ValuesForGroupParameterIds)
@@ -110,11 +110,11 @@ namespace T3.Gui.Interaction.PresetSystem.Model
 
         public static Preset FromJson(JToken reader)
         {
-            var newPreset = new Preset();
-            newPreset.State = States.InActive;
-            if (reader["Name"] != null)
+            var newPreset = new Preset { State = States.InActive };
+            
+            if (reader[ nameof(Title)] != null)
             {
-                newPreset.Title = reader["Name"].Value<string>() ?? string.Empty;
+                newPreset.Title = reader[nameof(Title)].Value<string>() ?? string.Empty;
             }
             
             foreach (var presetToken in (JArray)reader["Values"])

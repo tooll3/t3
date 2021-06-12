@@ -613,8 +613,8 @@ namespace T3.Gui.Interaction.PresetSystem
                 var symbolChild = symbol.Children.SingleOrDefault(s => s.Id == parameter.SymbolChildId);
                 if (symbolChild == null)
                 {
-                    Log.Error("Can't find symbol child");
-                    return;
+                    //Log.Error("Can't find symbol child");
+                    continue;
                 }
 
                 var input = symbolChild.InputValues[parameter.InputId];
@@ -657,7 +657,10 @@ namespace T3.Gui.Interaction.PresetSystem
 
             foreach (var parameter in group.Parameters)
             {
-                var symbolChild = symbol.Children.Single(s => s.Id == parameter.SymbolChildId);
+                var symbolChild = symbol.Children.SingleOrDefault(s => s.Id == parameter.SymbolChildId);
+                if (symbolChild == null)
+                    continue;
+                
                 var input = symbolChild.InputValues[parameter.InputId];
 
                 if (!group.BlendedPresets[index0].ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var valueA)
