@@ -23,10 +23,10 @@ namespace T3.Gui.Windows.Variations
 {
     public class VariationCanvas : ScalableCanvas
     {
-        public VariationCanvas(VariationWindow variationWindow)
+        public VariationCanvas(ExplorationWindow explorationWindow)
         {
             ResetView();
-            _variationWindow = variationWindow;
+            _explorationWindow = explorationWindow;
         }
 
         public void Draw()
@@ -61,7 +61,7 @@ namespace T3.Gui.Windows.Variations
                 if (!symbolUi.OutputUis.ContainsKey(_firstOutputSlot.Id))
                     return;
 
-                _variationWindow.OutputUi = symbolUi.OutputUis[_firstOutputSlot.Id];
+                _explorationWindow.OutputUi = symbolUi.OutputUis[_firstOutputSlot.Id];
             }
 
             if (textureSlot.Value == null)
@@ -106,7 +106,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         var savedVariation = _hoveringVariation.Clone();
                         
-                        _variationWindow.SaveVariation(savedVariation);
+                        _explorationWindow.SaveVariation(savedVariation);
                         savedVariation.ApplyPermanently();
                     }
 
@@ -251,7 +251,7 @@ namespace T3.Gui.Windows.Variations
                 return;
             }
 
-            if (_variationWindow.VariationParameters.Count == 0)
+            if (_explorationWindow.VariationParameters.Count == 0)
             {
                 return;
             }
@@ -350,7 +350,7 @@ namespace T3.Gui.Windows.Variations
                 neighbours.Add(new Tuple<Variation, float>(variationBottomRight, weight));
             }
 
-            return Variation.Mix(_variationWindow.VariationParameters, neighbours, 0);
+            return Variation.Mix(_explorationWindow.VariationParameters, neighbours, 0);
         }
 
         private Variation CreateVariationForCell(GridCell cell)
@@ -365,7 +365,7 @@ namespace T3.Gui.Windows.Variations
                     neighboursAndWeights.Add(new Tuple<Variation, float>(neighbour, 1));
             }
 
-            return Variation.Mix(_variationWindow.VariationParameters, neighboursAndWeights, Scatter, cell);
+            return Variation.Mix(_explorationWindow.VariationParameters, neighboursAndWeights, Scatter, cell);
         }
 
         private void RenderThumbnail(Variation variation)
@@ -386,7 +386,7 @@ namespace T3.Gui.Windows.Variations
             // DrawValue will use the current ImageOutputCanvas for rendering
             _imageCanvas.SetAsCurrent();
             ImGui.PushClipRect(new Vector2(0,0), new Vector2(1,1), true);
-            _variationWindow.OutputUi.DrawValue(_firstOutputSlot, EvaluationContext);
+            _explorationWindow.OutputUi.DrawValue(_firstOutputSlot, EvaluationContext);
             ImGui.PopClipRect();
             _imageCanvas.Deactivate();
 
@@ -436,7 +436,7 @@ namespace T3.Gui.Windows.Variations
         private Texture2D _canvasTexture;
         private ShaderResourceView _canvasTextureSrv;
         private RenderTargetView _canvasTextureRtv;
-        private readonly VariationWindow _variationWindow;
+        private readonly ExplorationWindow _explorationWindow;
         private Variation _hoveringVariation;
 
         private static readonly GridCell[] NeighbourOffsets =

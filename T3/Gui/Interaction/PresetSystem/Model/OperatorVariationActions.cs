@@ -11,7 +11,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
     /// <summary>
     /// Implements operators on to preset groups
     /// </summary>
-    public partial class CompositionContext
+    public partial class OperatorVariation
     {
         internal ParameterGroup GetBlendGroupForHashedInput(int symbolChildInputHash)
         {
@@ -196,14 +196,14 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         //---------------------------------------------------------------------------------
         #region InternalImplementation
         /// <summary>
-        /// Tries to get get a group by index. Verifies Context, indices, etc.  
+        /// Tries to get get a group by index. Verifies indices, etc.  
         /// </summary>
         internal bool TryGetGroup(int groupIndex, out ParameterGroup group)
         {
             group = null;
             if (Groups == null)
             {
-                Log.Warning("groups context is undefined");
+                Log.Warning("groups for variations is undefined");
                 return false;
             }
 
@@ -227,15 +227,15 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         {
             preset = null;
 
-            var activeContextPresets = Presets;
-            if (activeContextPresets == null)
+            var activeVariationsPresets = Presets;
+            if (activeVariationsPresets == null)
                 return false;
 
-            if (address.GroupColumn < 0 || address.GroupColumn >= activeContextPresets.GetLength(0)
-                                        || address.SceneRow < 0 || address.SceneRow >= activeContextPresets.GetLength(1))
+            if (address.GroupColumn < 0 || address.GroupColumn >= activeVariationsPresets.GetLength(0)
+                                        || address.SceneRow < 0 || address.SceneRow >= activeVariationsPresets.GetLength(1))
                 return false;
 
-            preset = activeContextPresets[address.GroupColumn, address.SceneRow];
+            preset = activeVariationsPresets[address.GroupColumn, address.SceneRow];
             return preset != null;
         }
 

@@ -10,7 +10,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 {
     public interface IControllerInputDevice
     {
-        void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context);
+        void Update(PresetSystem presetSystem, MidiIn midiIn, OperatorVariation context);
         int GetProductNameHash();
     }
 
@@ -35,7 +35,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
         public InputModes ActiveMode = InputModes.Default;
 
-        public virtual void Update(PresetSystem presetSystem, MidiIn midiIn, CompositionContext context)
+        public virtual void Update(PresetSystem presetSystem, MidiIn midiIn, OperatorVariation context)
         {
             CombineButtonSignals();
 

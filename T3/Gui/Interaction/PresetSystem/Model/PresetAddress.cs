@@ -16,7 +16,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         public int SceneRow;
         public readonly bool IsValid;
 
-        public bool IsValidForContext(CompositionContext config)
+        public bool IsValidForContext(OperatorVariation config)
         {
             return GroupColumn >= 0
                    && SceneRow >= 0

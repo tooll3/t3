@@ -21,11 +21,11 @@ namespace T3.Gui.Windows
                                new GraphWindow(),
                                new SettingsWindow(),
                                new ParameterWindow(),
-                               new VariationWindow(),
+                               new ExplorationWindow(),
                                new OutputWindow(),
                                new ConsoleLogWindow(),
                                new SymbolLibrary(),
-                               new PresetsWindow(),
+                               new VariationsWindow(),
                            };
         }
 

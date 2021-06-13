@@ -44,24 +44,24 @@ namespace T3.Gui.Interaction.PresetSystem
             
             var activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
             _activeCompositionId = activeCompositionInstance.Symbol.Id;
-            _contextForCompositions.TryGetValue(_activeCompositionId, out var contextForCurrentComposition);
+            _variationForOperators.TryGetValue(_activeCompositionId, out var variationForComposition);
 
             // Attempt to read settings for composition
-            if (contextForCurrentComposition != null)
+            if (variationForComposition != null)
             {
-                ActiveContext = contextForCurrentComposition;
-                ActiveContext.CompositionInstance = activeCompositionInstance;
+                ActiveOperatorVariation = variationForComposition;
+                ActiveOperatorVariation.CompositionInstance = activeCompositionInstance;
             }
             else
             {
                 if (_activeCompositionId != _lastCompositionId)
                 {
-                    var newContext = CompositionContext.ReadFromJson(_activeCompositionId);
-                    if (newContext != null)
+                    var newOpVariation = OperatorVariation.ReadFromJson(_activeCompositionId);
+                    if (newOpVariation != null)
                     {
-                        _contextForCompositions[_activeCompositionId] = newContext;
-                        ActiveContext = newContext;
-                        ActiveContext.CompositionInstance = activeCompositionInstance;
+                        _variationForOperators[_activeCompositionId] = newOpVariation;
+                        ActiveOperatorVariation = newOpVariation;
+                        ActiveOperatorVariation.CompositionInstance = activeCompositionInstance;
                     }
                     else
                     {
@@ -70,29 +70,29 @@ namespace T3.Gui.Interaction.PresetSystem
                 }
             }
 
-            // Update active context
-            if (ActiveContext != null)
+            // Update active op variation
+            if (ActiveOperatorVariation != null)
             {
-                if (ActivatePresets.BlendSettingForCompositionIds.TryGetValue(ActiveContext.CompositionId, out var blendSetting))
+                if (ActivatePresets.BlendSettingForCompositionIds.TryGetValue(ActiveOperatorVariation.CompositionId, out var blendSetting))
                 {
                     if (blendSetting.WasActivatedLastFrame)
                     {
                         Log.Debug("Blend setting was updated");
-                        if (ActiveContext.TryGetGroup(blendSetting.GroupIndex, out var group))
+                        if (ActiveOperatorVariation.TryGetGroup(blendSetting.GroupIndex, out var group))
                         {
-                            if (group != ActiveContext.ActiveGroup)
+                            if (group != ActiveOperatorVariation.ActiveGroup)
                             {
                                 ActivateGroupAtIndex(blendSetting.GroupIndex);
                             }
 
                             //ActivateOrCreatePresetAtIndex(blendSetting.PresetAIndex);
-                            ActiveContext.TryActivatePresetAtAddress(new PresetAddress(blendSetting.GroupIndex, blendSetting.PresetAIndex));
+                            ActiveOperatorVariation.TryActivatePresetAtAddress(new PresetAddress(blendSetting.GroupIndex, blendSetting.PresetAIndex));
                             blendSetting.WasActivatedLastFrame = false;
                         }
                     }
                 }
                 
-                ActiveContext.UpdateInputReferences();
+                ActiveOperatorVariation.UpdateInputReferences();
             }
 
             // Update Midi Devices 
@@ -103,7 +103,7 @@ namespace T3.Gui.Interaction.PresetSystem
                 if (midiIn == null)
                     continue;
 
-                connectedDevice.Update(this, midiIn, ActiveContext);
+                connectedDevice.Update(this, midiIn, ActiveOperatorVariation);
             }
 
             // Draw Ui
@@ -120,9 +120,9 @@ namespace T3.Gui.Interaction.PresetSystem
             _nextNameFor = symbolChildUi.SymbolChild.ReadableName;
 
             CustomComponents.HintLabel("Group");
-            if (ActiveContext != null)
+            if (ActiveOperatorVariation != null)
             {
-                foreach (var group in ActiveContext.Groups)
+                foreach (var group in ActiveOperatorVariation.Groups)
                 {
                     ImGui.PushID(group.Id.GetHashCode());
 
@@ -142,7 +142,7 @@ namespace T3.Gui.Interaction.PresetSystem
 
                             if (wasSelected)
                             {
-                                ActiveContext.SetGroupAsActive(group);
+                                ActiveOperatorVariation.SetGroupAsActive(group);
                                 CreateNewParameterForActiveGroup(parameterIndex);
                             }
 
@@ -155,7 +155,7 @@ namespace T3.Gui.Interaction.PresetSystem
                     ImGui.PopID();
                 }
 
-                var activeGroup = ActiveContext?.ActiveGroup;
+                var activeGroup = ActiveOperatorVariation?.ActiveGroup;
                 if (activeGroup != null)
                 {
                     if (ImGui.MenuItem("Append to G" + (activeGroup.Index + 1)))
@@ -168,7 +168,7 @@ namespace T3.Gui.Interaction.PresetSystem
 
             if (ImGui.MenuItem("+ Add Group"))
             {
-                SetOrCreateContextForActiveComposition();
+                SetOrCreateVariationsForActiveComposition();
                 AddGroupDialog.ShowNextFrame();
             }
 
@@ -178,9 +178,9 @@ namespace T3.Gui.Interaction.PresetSystem
         
         internal void CreateNewGroupForInput()
         {
-            SetOrCreateContextForActiveComposition();
+            SetOrCreateVariationsForActiveComposition();
             
-            var group = ActiveContext.AppendNewGroup(_nextNameFor);
+            var group = ActiveOperatorVariation.AppendNewGroup(_nextNameFor);
             group.AddParameterToIndex(new GroupParameter
                                           {
                                               Id = Guid.NewGuid(),
@@ -188,13 +188,13 @@ namespace T3.Gui.Interaction.PresetSystem
                                               InputId = _nextInputSlotFor.Id,
                                               Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlotFor.Input.Name,
                                           }, 0);
-            ActiveContext.SetGroupAsActive(group);
+            ActiveOperatorVariation.SetGroupAsActive(group);
         }
 
         private void CreateNewParameterForActiveGroup(int parameterIndex)
         {
-            SetOrCreateContextForActiveComposition();
-            var activeGroup = ActiveContext.ActiveGroup;
+            SetOrCreateVariationsForActiveComposition();
+            var activeGroup = ActiveOperatorVariation.ActiveGroup;
             if (activeGroup == null)
             {
                 Log.Warning("Can't save parameter without active group");
@@ -210,7 +210,7 @@ namespace T3.Gui.Interaction.PresetSystem
                                    };
             activeGroup.AddParameterToIndex(newParameter, parameterIndex);
             
-            var instance = ActiveContext.CompositionInstance.Children.SingleOrDefault(c => c.SymbolChildId == newParameter.SymbolChildId);
+            var instance = ActiveOperatorVariation.CompositionInstance.Children.SingleOrDefault(c => c.SymbolChildId == newParameter.SymbolChildId);
             if (instance == null)
             {
                 Log.Warning("Can't find correct instance of parameter view");
@@ -218,30 +218,30 @@ namespace T3.Gui.Interaction.PresetSystem
             }
 
             var input = instance.Inputs.Single(inp => inp.Id == newParameter.InputId);
-            foreach (var preset in ActiveContext.GetPresetsForGroup(activeGroup))
+            foreach (var preset in ActiveOperatorVariation.GetPresetsForGroup(activeGroup))
             {
                 preset.ValuesForGroupParameterIds[newParameter.Id] = input.Input.Value.Clone();
             }
         }
 
-        private void SetOrCreateContextForActiveComposition()
+        private void SetOrCreateVariationsForActiveComposition()
         {
-            if (_contextForCompositions.TryGetValue(_activeCompositionId, out var existingContext))
+            if (_variationForOperators.TryGetValue(_activeCompositionId, out var existingOpVariation))
             {
-                ActiveContext = existingContext;
+                ActiveOperatorVariation = existingOpVariation;
                 return;
             }
 
-            ActiveContext = new CompositionContext()
+            ActiveOperatorVariation = new OperatorVariation()
                                 {
                                     CompositionId = _activeCompositionId,
                                 };
-            _contextForCompositions[_activeCompositionId] = ActiveContext;
+            _variationForOperators[_activeCompositionId] = ActiveOperatorVariation;
         }
 
         private void SelectUiElementsForGroup(ParameterGroup group)
         {
-            if (ActiveContext == null)
+            if (ActiveOperatorVariation == null)
                 return;
 
             SelectionManager.Clear();
@@ -255,7 +255,7 @@ namespace T3.Gui.Interaction.PresetSystem
                     continue;
 
                 var symbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == parameter.SymbolChildId);
-                var instance = ActiveContext.CompositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == parameter.SymbolChildId);
+                var instance = ActiveOperatorVariation.CompositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == parameter.SymbolChildId);
                 if (symbolChildUi != null && instance != null)
                 {
                     SelectionManager.AddSymbolChildToSelection(symbolChildUi, instance);
@@ -268,12 +268,12 @@ namespace T3.Gui.Interaction.PresetSystem
         
         public void ActivateGroupAtIndex(int index)
         {
-            if (ActiveContext == null)
+            if (ActiveOperatorVariation == null)
                 return;
 
-            var focusSelection = ActiveContext.ActivateGroupAtIndex(index);
+            var focusSelection = ActiveOperatorVariation.ActivateGroupAtIndex(index);
             if(focusSelection)
-                SelectUiElementsForGroup(ActiveContext.ActiveGroup);
+                SelectUiElementsForGroup(ActiveOperatorVariation.ActiveGroup);
             
         }
         
@@ -281,53 +281,53 @@ namespace T3.Gui.Interaction.PresetSystem
         #region API calls from midi inputs
         public void SavePresetAtIndex(int buttonRangeIndex)
         {
-            if (ActiveContext == null)
+            if (ActiveOperatorVariation == null)
             {
-                Log.Error($"Can't execute SavePresetAtIndex without valid context");
+                Log.Error($"Can't execute SavePresetAtIndex without valid operator variation");
                 return;
             }
 
-            ActiveContext.SavePresetAtIndex(buttonRangeIndex);
+            ActiveOperatorVariation.SavePresetAtIndex(buttonRangeIndex);
         }
         
         
 
         public void ActivateOrCreatePresetAtIndex(int buttonRangeIndex)
         {
-            if (ActiveContext == null)
+            if (ActiveOperatorVariation == null)
             {
-                Log.Error($"Can't execute ApplyPresetAtIndex without valid context");
+                Log.Error($"Can't execute ApplyPresetAtIndex without valid operator variation");
                 return;
             }
             
-            ActiveContext.ActivateOrCreatePresetAtIndex(buttonRangeIndex);
+            ActiveOperatorVariation.ActivateOrCreatePresetAtIndex(buttonRangeIndex);
         }
 
         public void RemovePresetAtIndex(int buttonRangeIndex)
         {
-            if (ActiveContext == null)
+            if (ActiveOperatorVariation == null)
             {
-                Log.Error($"Can't execute ApplyPresetAtIndex without valid context");
+                Log.Error($"Can't execute ApplyPresetAtIndex without valid operator variation");
                 return;
             }
 
-            ActiveContext.RemovePresetAtIndex(buttonRangeIndex);
+            ActiveOperatorVariation.RemovePresetAtIndex(buttonRangeIndex);
         }
 
         public void StartBlendingPresets(int[] indices)
         {
             Log.Debug(" Start blending " + String.Join(", ", indices));
-            ActiveContext?.StartBlendingPresets(indices);
+            ActiveOperatorVariation?.StartBlendingPresets(indices);
         }
         
         internal void BlendValuesUpdate(int groupIndex, float value)
         {
-            ActiveContext?.BlendValuesUpdate(groupIndex, value);
+            ActiveOperatorVariation?.BlendValuesUpdate(groupIndex, value);
         }
 
         public void AppendPresetToCurrentGroup()
         {
-            ActiveContext?.AppendPresetToCurrentGroup();
+            ActiveOperatorVariation?.AppendPresetToCurrentGroup();
         }
         
 
@@ -336,16 +336,16 @@ namespace T3.Gui.Interaction.PresetSystem
         private Guid _activeCompositionId = Guid.Empty;
         private readonly List<IControllerInputDevice> _inputDevices;
 
-        private readonly Dictionary<Guid, CompositionContext> _contextForCompositions = new Dictionary<Guid, CompositionContext>();
+        private readonly Dictionary<Guid, OperatorVariation> _variationForOperators = new Dictionary<Guid, OperatorVariation>();
 
 
         /// <summary>
         /// Only changes by explicit user actions:
-        /// - switching to a composition with a preset context
+        /// - switching to a composition with operator variations
         /// - creating a context (e.g. by added parameters to blending)
         /// - switching e.g. with the midi controllers 
         /// </summary>
-        public CompositionContext ActiveContext { get; private set; }
+        public OperatorVariation ActiveOperatorVariation { get; private set; }
 
         private Guid _lastCompositionId;
 

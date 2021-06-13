@@ -17,14 +17,14 @@ using Vector4 = System.Numerics.Vector4;
 namespace T3.Gui.Windows.Variations
 {
     /// <summary>
-    /// Renders the <see cref="VariationWindow"/>
+    /// Renders the <see cref="ExplorationWindow"/>
     /// </summary>
-    public class VariationWindow : Window
+    public class ExplorationWindow : Window
     {
-        public VariationWindow()
+        public ExplorationWindow()
         {
             _variationCanvas = new VariationCanvas(this);
-            Config.Title = "Variations";
+            Config.Title = "Explore Variations";
             Config.Visible = true;
         }
 

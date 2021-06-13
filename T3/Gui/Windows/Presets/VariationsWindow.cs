@@ -10,11 +10,11 @@ using T3.Gui.Styling;
 
 namespace T3.Gui.Windows
 {
-    public class PresetsWindow : Window
+    public class VariationsWindow : Window
     {
-        public PresetsWindow()
+        public VariationsWindow()
         {
-            Config.Title = "Presets";
+            Config.Title = "Variations";
         }
 
         protected override void DrawContent()
@@ -25,7 +25,7 @@ namespace T3.Gui.Windows
         public void DrawWindowContent()
         {
             var presetSystem = T3Ui.PresetSystem;
-            var activeContext = presetSystem.ActiveContext;
+            var activeContext = presetSystem.ActiveOperatorVariation;
 
             if (activeContext == null)
             {
@@ -126,7 +126,7 @@ namespace T3.Gui.Windows
                         {
                             if (ImGui.GetIO().KeyCtrl)
                             {
-                                presetSystem.ActiveContext?.RemovePresetAtAddress(new PresetAddress(groupIndex, sceneIndex));
+                                presetSystem.ActiveOperatorVariation?.RemovePresetAtAddress(new PresetAddress(groupIndex, sceneIndex));
                             }
                             else if (ImGui.GetIO().KeyShift)
                             {
@@ -140,7 +140,7 @@ namespace T3.Gui.Windows
                                     if (group.BlendedPresets.Count == 0)
                                     {
                                         var lastActivePreset = group.ActivePreset;
-                                        presetSystem.ActiveContext?.ActivatePreset(group, preset);
+                                        presetSystem.ActiveOperatorVariation?.ActivatePreset(group, preset);
 
                                         if (lastActivePreset != null)
                                         {
@@ -155,7 +155,7 @@ namespace T3.Gui.Windows
                             }
                             else
                             {
-                                presetSystem.ActiveContext?.ActivatePreset(group, preset);
+                                presetSystem.ActiveOperatorVariation?.ActivatePreset(group, preset);
                             }
                         }
                         if (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
@@ -170,7 +170,7 @@ namespace T3.Gui.Windows
                         ImGui.PushStyleColor(ImGuiCol.Button, _emptySlotColor.Rgba);
                         if (ImGui.Button("+", new Vector2(ColumnWidth, GridRowHeight)))
                         {
-                            presetSystem.ActiveContext?.CreatePresetAtAddress(new PresetAddress(groupIndex, sceneIndex));
+                            presetSystem.ActiveOperatorVariation?.CreatePresetAtAddress(new PresetAddress(groupIndex, sceneIndex));
                         }
 
                         ImGui.PopStyleColor();
@@ -188,7 +188,7 @@ namespace T3.Gui.Windows
                     {
                         if (DrawBlendSlider(ref _blendValue, group))
                         {
-                            presetSystem.ActiveContext?.BlendGroupPresets(activeContext.ActiveGroup, _blendValue);
+                            presetSystem.ActiveOperatorVariation?.BlendGroupPresets(activeContext.ActiveGroup, _blendValue);
                         }
                     }
                     else
@@ -204,7 +204,7 @@ namespace T3.Gui.Windows
             ImGui.PopStyleVar();
             ImGui.PopFont();
 
-            // if (presetSystem.ActiveContext.ActiveGroup != null && activeContext.ActiveGroup.BlendedPresets.Count > 1)
+            // if (presetSystem.ActiveOperatorVariation.ActiveGroup != null && activeContext.ActiveGroup.BlendedPresets.Count > 1)
             // {
             //     if (DrawBlendSlider(ref _blendValue))
             //     {

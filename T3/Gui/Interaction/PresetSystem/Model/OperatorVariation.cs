@@ -14,7 +14,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
     /// <summary>
     /// Manages preset data for a composition
     /// </summary>
-    public partial class CompositionContext
+    public partial class OperatorVariation
     {
         public Guid CompositionId = Guid.Empty;
         public Instance CompositionInstance { get; internal set; }
@@ -327,7 +327,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
             return $"{id}_presets.json";
         }
 
-        public static CompositionContext ReadFromJson(Guid compositionId)
+        public static OperatorVariation ReadFromJson(Guid compositionId)
         {
             var filepath = GetFilepathForCompositionId(compositionId);
             if (!File.Exists(filepath))
@@ -344,7 +344,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
                 //Json json = new Json { Reader = jsonReader };
                 var jToken = JToken.ReadFrom(jsonReader);
 
-                var newContext = new CompositionContext()
+                var newOpVariation = new OperatorVariation()
                                      {
                                          CompositionId = Guid.Parse(jToken["Id"].Value<string>()),
                                      };
@@ -356,14 +356,14 @@ namespace T3.Gui.Interaction.PresetSystem.Model
                     var presetIndex = 0;
                     var jsonPresets = (JArray)jToken["Presets"];
 
-                    newContext.Presets = new Preset[groupCount, sceneCount];
+                    newOpVariation.Presets = new Preset[groupCount, sceneCount];
 
                     for (var groupIndex = 0; groupIndex < groupCount; groupIndex++)
                     {
                         for (var sceneIndex = 0; sceneIndex < sceneCount; sceneIndex++)
                         {
                             var presetToken = jsonPresets[presetIndex];
-                            newContext.Presets[groupIndex, sceneIndex] = presetToken.HasValues
+                            newOpVariation.Presets[groupIndex, sceneIndex] = presetToken.HasValues
                                                                              ? Preset.FromJson(presetToken)
                                                                              : null;
 
@@ -375,16 +375,16 @@ namespace T3.Gui.Interaction.PresetSystem.Model
                 // Groups
                 foreach (var groupToken in (JArray)jToken["Groups"])
                 {
-                    newContext.Groups.Add(ParameterGroup.FromJson(groupToken));
+                    newOpVariation.Groups.Add(ParameterGroup.FromJson(groupToken));
                 }
 
                 // Scene
                 foreach (var sceneToken in (JArray)jToken["Scenes"])
                 {
-                    newContext.Scenes.Add(PresetScene.FromJson(sceneToken));
+                    newOpVariation.Scenes.Add(PresetScene.FromJson(sceneToken));
                 }
 
-                return newContext;
+                return newOpVariation;
             }
         }
         #endregion
