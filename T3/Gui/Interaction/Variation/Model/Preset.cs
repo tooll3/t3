@@ -8,7 +8,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 
-namespace T3.Gui.Interaction.PresetSystem.Model
+namespace T3.Gui.Interaction.Variation.Model
 {
     public class Preset
     {

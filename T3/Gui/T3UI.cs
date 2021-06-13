@@ -13,7 +13,7 @@ using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
-using T3.Gui.Interaction.PresetSystem;
+using T3.Gui.Interaction.Variation;
 using T3.Gui.Interaction.Timing;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
@@ -37,7 +37,7 @@ namespace T3.Gui
         public void Draw()
         {
             OpenedPopUpName = string.Empty;
-            PresetSystem.Update();
+            VariationHandling.Update();
 
             FitViewToSelectionHandling.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
@@ -175,7 +175,7 @@ namespace T3.Gui
 
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel;
-        public static readonly PresetSystem PresetSystem = new PresetSystem();
+        public static readonly VariationHandling VariationHandling = new VariationHandling();
         public static readonly BeatTiming BeatTiming;
         public static readonly WindowManager WindowManager;
 

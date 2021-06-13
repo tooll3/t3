@@ -1,4 +1,4 @@
-﻿namespace T3.Gui.Interaction.PresetSystem.Midi
+﻿namespace T3.Gui.Interaction.Variation.Midi
 {
     /// <summary>
     /// Used to save captured note and control events from MidiInputs

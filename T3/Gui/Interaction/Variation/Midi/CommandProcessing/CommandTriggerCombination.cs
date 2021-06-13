@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 //using System.Linq;
 //using T3.Gui.Graph;
-//using T3.Gui.Interaction.PresetSystem.InputCommands;
+//using T3.Gui.Interaction.VariationHandling.InputCommands;
 
-namespace T3.Gui.Interaction.PresetSystem.Midi
+namespace T3.Gui.Interaction.Variation.Midi
 {
     /// <summary>
     /// Creates matching commands if input signals are matching. 

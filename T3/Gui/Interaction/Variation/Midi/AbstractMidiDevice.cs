@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using NAudio.Midi;
 using T3.Core.Logging;
-using T3.Gui.Interaction.PresetSystem.Model;
+using T3.Gui.Interaction.Variation.Model;
 using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
-namespace T3.Gui.Interaction.PresetSystem.Midi
+namespace T3.Gui.Interaction.Variation.Midi
 {
     public interface IControllerInputDevice
     {
-        void Update(PresetSystem presetSystem, MidiIn midiIn, OperatorVariation context);
+        void Update(VariationHandling variationHandling, MidiIn midiIn, OperatorVariation activeVariation);
         int GetProductNameHash();
     }
 
@@ -35,7 +35,7 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
 
         public InputModes ActiveMode = InputModes.Default;
 
-        public virtual void Update(PresetSystem presetSystem, MidiIn midiIn, OperatorVariation context)
+        public virtual void Update(VariationHandling variationHandling, MidiIn midiIn, OperatorVariation activeVariation)
         {
             CombineButtonSignals();
 

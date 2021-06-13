@@ -1,28 +1,28 @@
 ﻿using System.Collections.Generic;
 using NAudio.Midi;
 using T3.Core.Logging;
-//using T3.Gui.Interaction.PresetSystem.InputCommands;
-using T3.Gui.Interaction.PresetSystem.Model;
+using T3.Gui.Interaction.Variation.Model;
+//using T3.Gui.Interaction.VariationHandling.InputCommands;
 
-namespace T3.Gui.Interaction.PresetSystem.Midi
+namespace T3.Gui.Interaction.Variation.Midi
 {
     public class Apc40Mk2 : AbstractMidiDevice
     {
-        public Apc40Mk2(PresetSystem presetSystem)
+        public Apc40Mk2(VariationHandling variationHandling)
         {
             CommandTriggerCombinations = new List<CommandTriggerCombination>()
                                              {
-                                                 new CommandTriggerCombination(presetSystem.ActivateOrCreatePresetAtIndex, InputModes.Default, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 new CommandTriggerCombination(presetSystem.SavePresetAtIndex, InputModes.Save, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 new CommandTriggerCombination(presetSystem.ActivateGroupAtIndex, InputModes.Default, new[] { ClipStopButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(variationHandling.ActivateOrCreatePresetAtIndex, InputModes.Default, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(variationHandling.SavePresetAtIndex, InputModes.Save, new[] { SceneTrigger1To40 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 new CommandTriggerCombination(variationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { ClipStopButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                              };
         }
 
 
-        public override void Update(PresetSystem presetSystem, MidiIn midiIn, OperatorVariation context)
+        public override void Update(VariationHandling variationHandling, MidiIn midiIn, OperatorVariation activeVariation)
         {
-            base.Update(presetSystem, midiIn, context);
-            if (context == null)
+            base.Update(variationHandling, midiIn, activeVariation);
+            if (activeVariation == null)
                 return;
 
             var midiOut = MidiOutConnectionManager.GetConnectedController(_productNameHash);
@@ -55,8 +55,8 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             UpdateRangeLeds(midiOut, SceneTrigger1To40,
                             mappedIndex =>
                             {
-                                var address = context.GetAddressFromButtonIndex(mappedIndex);
-                                var p = context.TryGetPresetAt(address);
+                                var address = activeVariation.GetAddressFromButtonIndex(mappedIndex);
+                                var p = activeVariation.TryGetPresetAt(address);
                                 var color = Apc40Colors.Off;
                                 if (p == null)
                                     return (int)color;
@@ -84,11 +84,11 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             UpdateRangeLeds(midiOut, ClipStopButtons1To8,
                             mappedIndex =>
                             {
-                                var g = context.GetGroupAtIndex(mappedIndex);
+                                var g = activeVariation.GetGroupAtIndex(mappedIndex);
                                 var isUndefined = g == null;
                                 var color1 = isUndefined
                                                  ? Apc40Colors.Off
-                                                 : g.Id == context.ActiveGroupId
+                                                 : g.Id == activeVariation.ActiveGroupId
                                                      ? Apc40Colors.Red
                                                      : Apc40Colors.Off;
                                 return (int)color1;
@@ -97,11 +97,11 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             UpdateRangeLeds(midiOut, SceneLaunch1To5,
                             mappedIndex =>
                             {
-                                var g1 = context.GetGroupAtIndex(mappedIndex);
+                                var g1 = activeVariation.GetGroupAtIndex(mappedIndex);
                                 var isUndefined1 = g1 == null;
                                 var color2 = isUndefined1
                                                  ? Apc40Colors.Off
-                                                 : g1.Id == context.ActiveGroupId
+                                                 : g1.Id == activeVariation.ActiveGroupId
                                                      ? Apc40Colors.Red
                                                      : Apc40Colors.Off;
                                 return (int)color2;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace T3.Gui.Interaction.PresetSystem.Midi
+namespace T3.Gui.Interaction.Variation.Midi
 {
     /// <summary>
     /// Describes either a single or range of buttons on a midi device  

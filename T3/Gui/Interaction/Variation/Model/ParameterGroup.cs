@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using T3.Gui.Interaction.PresetSystem.Model;
-
 using T3.Core;
+using T3.Gui.Interaction.Variation.Model;
 
-namespace T3.Gui.Interaction.PresetSystem
+namespace T3.Gui.Interaction.Variation
 {
     public class ParameterGroup
     {
@@ -58,7 +57,7 @@ namespace T3.Gui.Interaction.PresetSystem
             writer.WriteValue("Id", Id);
             writer.WriteObject("Title", Title);
             
-            // TODO: Implement PresetSystem.FindPresetInGroup(group,preset);
+            // TODO: Implement VariationHandling.FindPresetInGroup(group,preset);
             // if (ActivePreset != null)
             // {
             //     writer.WritePropertyName("ActivePresetAddress");

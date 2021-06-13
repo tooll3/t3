@@ -1,4 +1,4 @@
-﻿namespace T3.Gui.Interaction.PresetSystem.Midi
+﻿namespace T3.Gui.Interaction.Variation.Midi
 {
     public class ModeButton
     {

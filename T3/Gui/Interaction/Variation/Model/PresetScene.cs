@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core;
 
 
-namespace T3.Gui.Interaction.PresetSystem.Model
+namespace T3.Gui.Interaction.Variation.Model
 {
     public class PresetScene
     {

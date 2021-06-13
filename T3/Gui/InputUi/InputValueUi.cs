@@ -293,7 +293,7 @@ namespace T3.Gui.InputUi
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
 
                     var hash = Utilities.Hash(symbolChildUi.SymbolChild.Id, input.InputDefinition.Id);
-                    var blendGroup = T3Ui.PresetSystem.ActiveOperatorVariation?.GetBlendGroupForHashedInput(hash);
+                    var blendGroup = T3Ui.VariationHandling.ActiveOperatorVariation?.GetBlendGroupForHashedInput(hash);
 
                     var label = blendGroup == null ? "" : "G" + (blendGroup.Index + 1);
 
@@ -357,12 +357,12 @@ namespace T3.Gui.InputUi
 
                                                             if (blendGroup == null && ImGui.BeginMenu("Add to Blending", true))
                                                             {
-                                                                T3Ui.PresetSystem.DrawInputContextMenu(inputSlot, compositionUi, symbolChildUi);
+                                                                T3Ui.VariationHandling.DrawInputContextMenu(inputSlot, compositionUi, symbolChildUi);
                                                             }
 
                                                             if (blendGroup != null && ImGui.MenuItem("Remove blending"))
                                                             {
-                                                                T3Ui.PresetSystem.ActiveOperatorVariation?.RemoveBlending(hash);
+                                                                T3Ui.VariationHandling.ActiveOperatorVariation?.RemoveBlending(hash);
                                                             }
 
                                                             if (ImGui.MenuItem("Publish as Input"))

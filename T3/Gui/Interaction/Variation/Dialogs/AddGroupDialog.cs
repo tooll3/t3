@@ -7,7 +7,7 @@ using T3.Gui.Graph.Interaction;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 
-namespace T3.Gui.Interaction.PresetSystem.Dialogs
+namespace T3.Gui.Interaction.Variation.Dialogs
 {
     public class AddGroupDialog : ModalDialog
     {
@@ -44,7 +44,7 @@ namespace T3.Gui.Interaction.PresetSystem.Dialogs
 
                 if (CustomComponents.DisablableButton("Create Blend Group", !string.IsNullOrEmpty( name)))
                 {
-                    T3Ui.PresetSystem.CreateNewGroupForInput();
+                    T3Ui.VariationHandling.CreateNewGroupForInput();
                     ImGui.CloseCurrentPopup();
                 }
 

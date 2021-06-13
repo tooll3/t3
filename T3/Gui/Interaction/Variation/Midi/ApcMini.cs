@@ -1,38 +1,38 @@
 ﻿using System.Collections.Generic;
 using ImGuiNET;
 using NAudio.Midi;
-using T3.Gui.Interaction.PresetSystem.Model;
+using T3.Gui.Interaction.Variation.Model;
 
-namespace T3.Gui.Interaction.PresetSystem.Midi
+namespace T3.Gui.Interaction.Variation.Midi
 {
     public class ApcMini : AbstractMidiDevice
     {
-        public ApcMini(PresetSystem presetSystem)
+        public ApcMini(VariationHandling variationHandling)
         {
             CommandTriggerCombinations
                 = new List<CommandTriggerCombination>
                       {
-                          new CommandTriggerCombination(presetSystem.ActivateOrCreatePresetAtIndex, InputModes.Default,
+                          new CommandTriggerCombination(variationHandling.ActivateOrCreatePresetAtIndex, InputModes.Default,
                                                         new[] { SceneTrigger1To64 },
                                                         CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                          new CommandTriggerCombination(presetSystem.SavePresetAtIndex, InputModes.Save, new[] { SceneTrigger1To64 },
+                          new CommandTriggerCombination(variationHandling.SavePresetAtIndex, InputModes.Save, new[] { SceneTrigger1To64 },
                                                         CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                          new CommandTriggerCombination(presetSystem.RemovePresetAtIndex, InputModes.Delete, new[] { SceneTrigger1To64 },
+                          new CommandTriggerCombination(variationHandling.RemovePresetAtIndex, InputModes.Delete, new[] { SceneTrigger1To64 },
                                                         CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
 
-                          new CommandTriggerCombination(presetSystem.ActivateGroupAtIndex, InputModes.Default,
+                          new CommandTriggerCombination(variationHandling.ActivateGroupAtIndex, InputModes.Default,
                                                         new[] { ChannelButtons1To8 },
                                                         CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
 
-                          new CommandTriggerCombination(presetSystem.StartBlendingPresets, InputModes.Default,
+                          new CommandTriggerCombination(variationHandling.StartBlendingPresets, InputModes.Default,
                                                         new[] { SceneTrigger1To64 },
                                                         CommandTriggerCombination.ExecutesAt.AllCombinedButtonsReleased),
 
-                          new CommandTriggerCombination(presetSystem.BlendValuesUpdate, InputModes.Default,
+                          new CommandTriggerCombination(variationHandling.BlendValuesUpdate, InputModes.Default,
                                                         new[] { Sliders1To9 },
                                                         CommandTriggerCombination.ExecutesAt.ControllerChange),
                           
-                          new CommandTriggerCombination(presetSystem.AppendPresetToCurrentGroup, InputModes.Default,
+                          new CommandTriggerCombination(variationHandling.AppendPresetToCurrentGroup, InputModes.Default,
                                                         new[] { SceneLaunch8ClipStopAll },
                                                         CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),                          
                           
@@ -45,11 +45,11 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                               };
         }
 
-        public override void Update(PresetSystem presetSystem, MidiIn midiIn, OperatorVariation context)
+        public override void Update(VariationHandling variationHandling, MidiIn midiIn, OperatorVariation activeVariation)
         {
             _updateCount++;
-            base.Update(presetSystem, midiIn, context);
-            if (context == null)
+            base.Update(variationHandling, midiIn, activeVariation);
+            if (activeVariation == null)
                 return;
 
             var midiOut = MidiOutConnectionManager.GetConnectedController(_productNameHash);
@@ -59,8 +59,8 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             UpdateRangeLeds(midiOut, SceneTrigger1To64,
                             mappedIndex =>
                             {
-                                var address = context.GetAddressFromButtonIndex(mappedIndex);
-                                var p = context.TryGetPresetAt(address);
+                                var address = activeVariation.GetAddressFromButtonIndex(mappedIndex);
+                                var p = activeVariation.TryGetPresetAt(address);
                                 var color = ApcButtonColor.Off;
                                 if (p == null)
                                     return (int)color;
@@ -88,9 +88,9 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                             });
 
 
-            if (context.IsGroupExpanded)
+            if (activeVariation.IsGroupExpanded)
             {
-                var activeIndex = context.ActiveGroupIndex; 
+                var activeIndex = activeVariation.ActiveGroupIndex; 
                 UpdateRangeLeds(midiOut, ChannelButtons1To8,
                                 mappedIndex =>
                                 {
@@ -109,12 +109,12 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
                 UpdateRangeLeds(midiOut, ChannelButtons1To8,
                                 mappedIndex =>
                                 {
-                                    var group = context.GetGroupAtIndex(mappedIndex);
+                                    var group = activeVariation.GetGroupAtIndex(mappedIndex);
                                     var isGroupDefined = group != null;
                                     
                                     var colorForGroupButton =
                                         isGroupDefined
-                                                ? group.Id == context.ActiveGroupId
+                                                ? group.Id == activeVariation.ActiveGroupId
                                                     ? ApcButtonColor.Red
                                                     : ApcButtonColor.Off
                                                 : ApcButtonColor.Off;
@@ -125,11 +125,11 @@ namespace T3.Gui.Interaction.PresetSystem.Midi
             // UpdateRangeLeds(midiOut, SceneLaunch1To8,
             //                 mappedIndex =>
             //                 {
-            //                     var g1 = context.GetGroupAtIndex(mappedIndex);
+            //                     var g1 = activeVariation.GetGroupAtIndex(mappedIndex);
             //                     var isUndefined1 = g1 == null;
             //                     var color2 = isUndefined1
             //                                      ? ApcButtonColor.Off
-            //                                      : g1.Id == context.ActiveGroupId
+            //                                      : g1.Id == activeVariation.ActiveGroupId
             //                                          ? ApcButtonColor.Red
             //                                          : ApcButtonColor.Off;
             //                     return (int)color2;
