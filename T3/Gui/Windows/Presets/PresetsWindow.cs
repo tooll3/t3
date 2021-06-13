@@ -126,7 +126,7 @@ namespace T3.Gui.Windows
                         {
                             if (ImGui.GetIO().KeyCtrl)
                             {
-                                presetSystem.RemovePresetAtAddress(new PresetAddress(groupIndex, sceneIndex));
+                                presetSystem.ActiveContext?.RemovePresetAtAddress(new PresetAddress(groupIndex, sceneIndex));
                             }
                             else if (ImGui.GetIO().KeyShift)
                             {
@@ -140,7 +140,7 @@ namespace T3.Gui.Windows
                                     if (group.BlendedPresets.Count == 0)
                                     {
                                         var lastActivePreset = group.ActivePreset;
-                                        presetSystem.ActivatePreset(group, preset);
+                                        presetSystem.ActiveContext?.ActivatePreset(group, preset);
 
                                         if (lastActivePreset != null)
                                         {
@@ -155,7 +155,7 @@ namespace T3.Gui.Windows
                             }
                             else
                             {
-                                presetSystem.ActivatePreset(group, preset);
+                                presetSystem.ActiveContext?.ActivatePreset(group, preset);
                             }
                         }
                         if (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
@@ -170,7 +170,7 @@ namespace T3.Gui.Windows
                         ImGui.PushStyleColor(ImGuiCol.Button, _emptySlotColor.Rgba);
                         if (ImGui.Button("+", new Vector2(ColumnWidth, GridRowHeight)))
                         {
-                            presetSystem.CreatePresetAtAddress(new PresetAddress(groupIndex, sceneIndex));
+                            presetSystem.ActiveContext?.CreatePresetAtAddress(new PresetAddress(groupIndex, sceneIndex));
                         }
 
                         ImGui.PopStyleColor();
@@ -188,7 +188,7 @@ namespace T3.Gui.Windows
                     {
                         if (DrawBlendSlider(ref _blendValue, group))
                         {
-                            presetSystem.BlendGroupPresets(activeContext.ActiveGroup, _blendValue);
+                            presetSystem.ActiveContext?.BlendGroupPresets(activeContext.ActiveGroup, _blendValue);
                         }
                     }
                     else

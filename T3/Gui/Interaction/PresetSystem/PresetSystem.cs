@@ -35,20 +35,24 @@ namespace T3.Gui.Interaction.PresetSystem
         }
 
         //---------------------------------------------------------------------------------
-        #region API from T3 UI
         public void Update()
         {
             // Sync with composition selected in UI
             var primaryGraphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
             if (primaryGraphWindow == null)
                 return;
-
-            _activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
-            _activeCompositionId = _activeCompositionInstance.Symbol.Id;
+            
+            var activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
+            _activeCompositionId = activeCompositionInstance.Symbol.Id;
             _contextForCompositions.TryGetValue(_activeCompositionId, out var contextForCurrentComposition);
 
             // Attempt to read settings for composition
-            if (contextForCurrentComposition == null)
+            if (contextForCurrentComposition != null)
+            {
+                ActiveContext = contextForCurrentComposition;
+                ActiveContext.CompositionInstance = activeCompositionInstance;
+            }
+            else
             {
                 if (_activeCompositionId != _lastCompositionId)
                 {
@@ -57,16 +61,13 @@ namespace T3.Gui.Interaction.PresetSystem
                     {
                         _contextForCompositions[_activeCompositionId] = newContext;
                         ActiveContext = newContext;
+                        ActiveContext.CompositionInstance = activeCompositionInstance;
                     }
                     else
                     {
                         _lastCompositionId = _activeCompositionId;
                     }
                 }
-            }
-            else
-            {
-                ActiveContext = contextForCurrentComposition;
             }
 
             // Update active context
@@ -77,7 +78,7 @@ namespace T3.Gui.Interaction.PresetSystem
                     if (blendSetting.WasActivatedLastFrame)
                     {
                         Log.Debug("Blend setting was updated");
-                        if (TryGetGroup(blendSetting.GroupIndex, out var group))
+                        if (ActiveContext.TryGetGroup(blendSetting.GroupIndex, out var group))
                         {
                             if (group != ActiveContext.ActiveGroup)
                             {
@@ -85,11 +86,13 @@ namespace T3.Gui.Interaction.PresetSystem
                             }
 
                             //ActivateOrCreatePresetAtIndex(blendSetting.PresetAIndex);
-                            TryActivatePresetAtAddress(new PresetAddress(blendSetting.GroupIndex, blendSetting.PresetAIndex));
+                            ActiveContext.TryActivatePresetAtAddress(new PresetAddress(blendSetting.GroupIndex, blendSetting.PresetAIndex));
                             blendSetting.WasActivatedLastFrame = false;
                         }
                     }
                 }
+                
+                ActiveContext.UpdateInputReferences();
             }
 
             // Update Midi Devices 
@@ -106,17 +109,6 @@ namespace T3.Gui.Interaction.PresetSystem
             // Draw Ui
             AddGroupDialog.Draw(ref _nextNameFor);
 
-            UpdateInputReferences();
-        }
-        
-        
-
-        public void CreateNewGroupForInput()
-        {
-            SetOrCreateContextForActiveComposition();
-            var group = ActiveContext.AppendNewGroup(_nextNameFor);
-            group.AddParameterToIndex(CreateParameter(), 0);
-            ActiveContext.ActiveGroupId = group.Id;
         }
 
         public void DrawInputContextMenu(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
@@ -182,291 +174,69 @@ namespace T3.Gui.Interaction.PresetSystem
 
             ImGui.EndMenu();
         }
-
-        public ParameterGroup GetBlendGroupForHashedInput(int symbolChildInputHash)
+        
+        
+        internal void CreateNewGroupForInput()
         {
-            _groupForBlendedParameters.TryGetValue(symbolChildInputHash, out var result);
-            return result;
+            SetOrCreateContextForActiveComposition();
+            
+            var group = ActiveContext.AppendNewGroup(_nextNameFor);
+            group.AddParameterToIndex(new GroupParameter
+                                          {
+                                              Id = Guid.NewGuid(),
+                                              SymbolChildId = _nextSymbolChildUi.Id,
+                                              InputId = _nextInputSlotFor.Id,
+                                              Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlotFor.Input.Name,
+                                          }, 0);
+            ActiveContext.SetGroupAsActive(group);
         }
 
-        public void RemoveBlending(int symbolChildInputHash)
+        private void CreateNewParameterForActiveGroup(int parameterIndex)
         {
-            _groupForBlendedParameters.TryGetValue(symbolChildInputHash, out var parameterGroup);
-            if (parameterGroup == null)
-                return;
-
-            for (var parameterIndex = 0; parameterIndex < parameterGroup.Parameters.Count; parameterIndex++)
+            SetOrCreateContextForActiveComposition();
+            var activeGroup = ActiveContext.ActiveGroup;
+            if (activeGroup == null)
             {
-                var p = parameterGroup.Parameters[parameterIndex];
-                if (p == null || p.GetHashForInput() != symbolChildInputHash)
-                    continue;
-
-                parameterGroup.Parameters[parameterIndex] = null;
-            }
-
-            ActiveContext.PurgeNullParametersInGroup(parameterGroup);
-            UpdateInputReferences();
-        }
-
-        public void ActivateGroupAtIndex(int index)
-        {
-            if (!TryGetGroup(index, out var group))
-                return;
-
-            var isGroupTriggeredAgain = ActiveContext.ActiveGroup == group;
-            if (isGroupTriggeredAgain)
-            {
-                ActiveContext.IsGroupExpanded = !ActiveContext.IsGroupExpanded;
-            }
-            else
-            {
-                ActiveContext.ActiveGroupId = @group.Id;
-                SelectUiElementsForGroup(group);
-            }
-
-            HighlightIdenticalPresets();
-        }
-
-        public void SavePresetAtIndex(int buttonRangeIndex)
-        {
-            if (ActiveContext == null)
-            {
-                Log.Error($"Can't execute SavePresetAtIndex without valid context");
+                Log.Warning("Can't save parameter without active group");
                 return;
             }
 
-            var address = ActiveContext.GetAddressFromButtonIndex(buttonRangeIndex);
-            CreatePresetAtAddress(address);
-        }
-        #endregion
-
-        //---------------------------------------------------------------------------------
-        #region API calls from midi inputs
-        public void ActivateOrCreatePresetAtIndex(int buttonRangeIndex)
-        {
-            if (ActiveContext == null)
+            var newParameter = new GroupParameter
+                                   {
+                                       Id = Guid.NewGuid(),
+                                       SymbolChildId = _nextSymbolChildUi.Id,
+                                       InputId = _nextInputSlotFor.Id,
+                                       Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlotFor.Input.Name,
+                                   };
+            activeGroup.AddParameterToIndex(newParameter, parameterIndex);
+            
+            var instance = ActiveContext.CompositionInstance.Children.SingleOrDefault(c => c.SymbolChildId == newParameter.SymbolChildId);
+            if (instance == null)
             {
-                Log.Error($"Can't execute ApplyPresetAtIndex without valid context");
+                Log.Warning("Can't find correct instance of parameter view");
                 return;
             }
 
-            var address = ActiveContext.GetAddressFromButtonIndex(buttonRangeIndex);
-            if (!TryGetPreset(address, out var preset))
-            {
-                Log.Info($"There is no preset at {address}. Creating one.");
-                CreatePresetAtAddress(address);
-                return;
-            }
-
-            Log.Info($"Activating preset at {address}...");
-
-            var group = ActiveContext.GetGroupForAddress(address);
-            ActivatePreset(group, preset);
-            HighlightIdenticalPresets();
-        }
-
-        private void TryActivatePresetAtAddress(PresetAddress address)
-        {
-            if (TryGetGroup(address.GroupColumn, out var group)
-                && TryGetPreset(address, out var preset))
-            {
-                ActivatePreset(@group, preset);
-            }
-        }
-
-        public void ActivatePreset(ParameterGroup @group, Preset preset)
-        {
-            @group.SetActivePreset(preset);
-            ActiveContext.SetGroupAsActive(@group);
-
-            ApplyGroupPreset(@group, preset);
-            preset.State = Preset.States.Active;
-            HighlightIdenticalPresets();
-        }
-
-        public void RemovePresetAtIndex(int buttonRangeIndex)
-        {
-            if (ActiveContext == null)
-            {
-                Log.Error($"Can't execute ApplyPresetAtIndex without valid context");
-                return;
-            }
-
-            var address = ActiveContext.GetAddressFromButtonIndex(buttonRangeIndex);
-            RemovePresetAtAddress(address);
-        }
-
-        public void RemovePresetAtAddress(PresetAddress address)
-        {
-            var preset = ActiveContext.TryGetPresetAt(address);
-            if (preset == null)
-            {
-                Log.Info($"There is no preset at {address}");
-                return;
-            }
-
-            var group = ActiveContext.GetGroupForAddress(address);
-            @group.SetActivePreset(null);
-            ActiveContext.Presets[address.GroupColumn, address.SceneRow] = null;
-            ApplyGroupPreset(@group, preset);
-            preset.State = Preset.States.Active;
-            ActiveContext.WriteToJson();
-        }
-
-        public void StartBlendingPresets(int[] indices)
-        {
-            Log.Debug(" Start blending " + String.Join(", ", indices));
-            if (ActiveContext == null)
-                return;
-
-            for (var groupIndex = 0; groupIndex < ActiveContext.Groups.Count; groupIndex++)
-            {
-                var @group = ActiveContext.Groups[groupIndex];
-                if (@group == null)
-                    continue;
-
-                var startedNewBlendGroup = false;
-                foreach (var index in indices)
-                {
-                    var address = ActiveContext.GetAddressFromButtonIndex(index);
-                    if (address.GroupColumn != groupIndex)
-                        continue;
-
-                    if (!startedNewBlendGroup)
-                    {
-                        group.StopBlending();
-                        startedNewBlendGroup = true;
-                    }
-
-                    if (!TryGetPreset(address, out var preset))
-                        return;
-
-                    preset.State = Preset.States.IsBlended;
-                    group.BlendedPresets.Add(preset);
-                }
-            }
-        }
-
-        public void BlendValuesUpdate(int groupIndex, float value)
-        {
-            if (!TryGetGroup(groupIndex, out var @group))
-                return;
-
-            BlendGroupPresets(group, value / 127f);
-        }
-
-        public void AppendPresetToCurrentGroup()
-        {
-            if (ActiveContext == null)
-                return;
-
-            var group = ActiveContext.ActiveGroup;
-            if (group == null)
-                return;
-
-            var sceneRowsCount = ActiveContext.Presets.GetLength(1);
-            var address = new PresetAddress(group.Index, 0);
-            int minFreeIndex = sceneRowsCount;
-            int sceneRowIndex = sceneRowsCount - 1;
-            for (; sceneRowIndex >= 0; sceneRowIndex--)
-            {
-                address.SceneRow = sceneRowIndex;
-                var preset = ActiveContext.TryGetPresetAt(address);
-                if (preset == null)
-                {
-                    minFreeIndex = sceneRowIndex;
-                }
-            }
-
-            address.SceneRow = minFreeIndex;
-            CreatePresetAtAddress(address);
-        }
-        #endregion
-
-        //---------------------------------------------------------------------------------
-        #region InternalImplementation
-        /// <summary>
-        /// Tries to get get a group by index. Verifies Context, indeces, etc.  
-        /// </summary>
-        private bool TryGetGroup(int groupIndex, out ParameterGroup @group)
-        {
-            group = null;
-            if (ActiveContext == null || ActiveContext.Groups == null)
-            {
-                Log.Warning("Active context is undefined");
-                return false;
-            }
-
-            if (groupIndex < 0 || groupIndex >= ActiveContext.Groups.Count)
-            {
-                Log.Warning("Can't blend undefined group index " + groupIndex);
-                return false;
-            }
-
-            @group = ActiveContext.Groups[groupIndex];
-            if (@group == null)
-            {
-                Log.Warning($"can't find group with index {groupIndex}");
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool TryGetPreset(PresetAddress address, out Preset preset)
-        {
-            preset = null;
-
-            var activeContextPresets = ActiveContext?.Presets;
-            if (activeContextPresets == null)
-                return false;
-
-            if (address.GroupColumn < 0 || address.GroupColumn >= activeContextPresets.GetLength(0)
-                                        || address.SceneRow < 0 || address.SceneRow >= activeContextPresets.GetLength(1))
-                return false;
-
-            preset = activeContextPresets[address.GroupColumn, address.SceneRow];
-            return preset != null;
-        }
-
-        private void HighlightIdenticalPresets()
-        {
-            var activePreset = ActiveContext?.ActiveGroup?.ActivePreset;
-            //activePreset?.UpdateStateIfCurrentOrModified(ActiveContext?.ActiveGroup, _activeCompositionInstance);
-
-            var activeGroup = ActiveContext?.ActiveGroup;
-            if (activeGroup == null || _activeCompositionInstance == null)
-                return;
-
+            var input = instance.Inputs.Single(inp => inp.Id == newParameter.InputId);
             foreach (var preset in ActiveContext.GetPresetsForGroup(activeGroup))
             {
-                if (preset == null)
-                    continue;
-
-                var isActive = preset == activePreset;
-                preset.UpdateStateIfCurrentOrModified(activeGroup, _activeCompositionInstance, isActive);
+                preset.ValuesForGroupParameterIds[newParameter.Id] = input.Input.Value.Clone();
             }
         }
 
-        private void UpdateInputReferences()
+        private void SetOrCreateContextForActiveComposition()
         {
-            _groupForBlendedParameters.Clear();
-            if (ActiveContext == null)
-                return;
-
-            for (var groupIndex = 0; groupIndex < ActiveContext.Groups.Count; groupIndex++)
+            if (_contextForCompositions.TryGetValue(_activeCompositionId, out var existingContext))
             {
-                var group = ActiveContext.Groups[groupIndex];
-                group.Index = groupIndex;
-
-                foreach (var parameter in @group.Parameters)
-                {
-                    if (parameter == null)
-                        continue;
-
-                    _groupForBlendedParameters[parameter.GetHashForInput()] = @group;
-                }
+                ActiveContext = existingContext;
+                return;
             }
+
+            ActiveContext = new CompositionContext()
+                                {
+                                    CompositionId = _activeCompositionId,
+                                };
+            _contextForCompositions[_activeCompositionId] = ActiveContext;
         }
 
         private void SelectUiElementsForGroup(ParameterGroup group)
@@ -485,7 +255,7 @@ namespace T3.Gui.Interaction.PresetSystem
                     continue;
 
                 var symbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == parameter.SymbolChildId);
-                var instance = _activeCompositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == parameter.SymbolChildId);
+                var instance = ActiveContext.CompositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == parameter.SymbolChildId);
                 if (symbolChildUi != null && instance != null)
                 {
                     SelectionManager.AddSymbolChildToSelection(symbolChildUi, instance);
@@ -494,216 +264,73 @@ namespace T3.Gui.Interaction.PresetSystem
 
             FitViewToSelectionHandling.FitViewToSelection();
         }
-
-        public void CreatePresetAtAddress(PresetAddress address)
+        
+        
+        public void ActivateGroupAtIndex(int index)
         {
-            var group = ActiveContext.GetGroupForAddress(address);
-            if (@group == null)
+            if (ActiveContext == null)
+                return;
+
+            var focusSelection = ActiveContext.ActivateGroupAtIndex(index);
+            if(focusSelection)
+                SelectUiElementsForGroup(ActiveContext.ActiveGroup);
+            
+        }
+        
+        //---------------------------------------------------------------------------------
+        #region API calls from midi inputs
+        public void SavePresetAtIndex(int buttonRangeIndex)
+        {
+            if (ActiveContext == null)
             {
-                Log.Warning($"Can't save preset for undefined group at {address}");
+                Log.Error($"Can't execute SavePresetAtIndex without valid context");
                 return;
             }
 
-            var scene = ActiveContext.GetSceneAt(address);
-            if (scene == null)
-            {
-                ActiveContext.CreateSceneAt(address);
-            }
+            ActiveContext.SavePresetAtIndex(buttonRangeIndex);
+        }
+        
+        
 
-            var newPreset = CreatePresetForGroup(@group);
-            ActiveContext.SetPresetAt(newPreset, address);
-            @group.SetActivePreset(newPreset);
-            ActiveContext.WriteToJson();
+        public void ActivateOrCreatePresetAtIndex(int buttonRangeIndex)
+        {
+            if (ActiveContext == null)
+            {
+                Log.Error($"Can't execute ApplyPresetAtIndex without valid context");
+                return;
+            }
+            
+            ActiveContext.ActivateOrCreatePresetAtIndex(buttonRangeIndex);
         }
 
-        private void CreateNewParameterForActiveGroup(int parameterIndex)
+        public void RemovePresetAtIndex(int buttonRangeIndex)
         {
-            SetOrCreateContextForActiveComposition();
-            var activeGroup = ActiveContext.ActiveGroup;
-            if (activeGroup == null)
+            if (ActiveContext == null)
             {
-                Log.Warning("Can't save parameter without active group");
+                Log.Error($"Can't execute ApplyPresetAtIndex without valid context");
                 return;
             }
 
-            var newParameter = activeGroup.AddParameterToIndex(CreateParameter(), parameterIndex);
-            var instance = _activeCompositionInstance.Children.SingleOrDefault(c => c.SymbolChildId == newParameter.SymbolChildId);
-            if (instance == null)
-            {
-                Log.Warning("Can't find correct instance of parameter view");
-                return;
-            }
-
-            var input = instance.Inputs.Single(inp => inp.Id == newParameter.InputId);
-            foreach (var preset in ActiveContext.GetPresetsForGroup(activeGroup))
-            {
-                preset.ValuesForGroupParameterIds[newParameter.Id] = input.Input.Value.Clone();
-            }
+            ActiveContext.RemovePresetAtIndex(buttonRangeIndex);
         }
 
-        private GroupParameter CreateParameter()
+        public void StartBlendingPresets(int[] indices)
         {
-            var newParameter = new GroupParameter
-                                   {
-                                       Id = Guid.NewGuid(),
-                                       SymbolChildId = _nextSymbolChildUi.Id,
-                                       InputId = _nextInputSlotFor.Id,
-                                       // ComponentIndex = 0,
-                                       // InputType = _nextInputSlotFor.ValueType,
-                                       Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlotFor.Input.Name,
-                                   };
-            return newParameter;
+            Log.Debug(" Start blending " + String.Join(", ", indices));
+            ActiveContext?.StartBlendingPresets(indices);
         }
-
-        private void SetOrCreateContextForActiveComposition()
+        
+        internal void BlendValuesUpdate(int groupIndex, float value)
         {
-            if (_contextForCompositions.TryGetValue(_activeCompositionId, out var existingContext))
-            {
-                ActiveContext = existingContext;
-                return;
-            }
-
-            ActiveContext = new CompositionContext()
-                                {
-                                    CompositionId = _activeCompositionId,
-                                };
-            _contextForCompositions[_activeCompositionId] = ActiveContext;
+            ActiveContext?.BlendValuesUpdate(groupIndex, value);
         }
 
-        private Preset CreatePresetForGroup(ParameterGroup group)
+        public void AppendPresetToCurrentGroup()
         {
-            if (ActiveContext.CompositionId != _activeCompositionInstance.Symbol.Id)
-            {
-                Log.Error("Can't create preset because composition instance does not match");
-                return null;
-            }
-
-            var newPreset = new Preset();
-            //var operatorSymbol = SymbolRegistry.Entries[_activeCompositionId];
-            foreach (var parameter in group.Parameters)
-            {
-                if (parameter == null)
-                    continue;
-
-                //var symbolChild = operatorSymbol.Children.Single(child => child.Id == parameter.SymbolChildId);
-                var instance = _activeCompositionInstance.Children.SingleOrDefault(c => c.SymbolChildId == parameter.SymbolChildId);
-                if (instance == null)
-                {
-                    Log.Error("Failed to get instance to focus parameters " + parameter.Title);
-                    continue;
-                }
-
-                var input = instance.Inputs.Single(inp => inp.Id == parameter.InputId);
-                newPreset.ValuesForGroupParameterIds[parameter.Id] = input.Input.Value.Clone();
-            }
-
-            return newPreset;
+            ActiveContext?.AppendPresetToCurrentGroup();
         }
+        
 
-        private void ApplyGroupPreset(ParameterGroup group, Preset preset)
-        {
-            var commands = new List<ICommand>();
-            var symbol = _activeCompositionInstance.Symbol;
-
-            foreach (var parameter in group.Parameters)
-            {
-                if (parameter == null)
-                    continue;
-
-                var symbolChild = symbol.Children.SingleOrDefault(s => s.Id == parameter.SymbolChildId);
-                if (symbolChild == null)
-                {
-                    //Log.Error("Can't find symbol child");
-                    continue;
-                }
-
-                var input = symbolChild.InputValues[parameter.InputId];
-
-                if (preset.ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var presetValuesForGroupParameterId))
-                {
-                    var newCommand = new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
-                                         {
-                                             Value = presetValuesForGroupParameterId,
-                                         };
-                    commands.Add(newCommand);
-                }
-                else
-                {
-                    Log.Warning($"Preset doesn't contain value for parameter {parameter.Title}");
-                }
-            }
-
-            var command = new MacroCommand("Set Preset Values", commands);
-            UndoRedoStack.AddAndExecute(command);
-        }
-
-        public void BlendGroupPresets(ParameterGroup group, float blendValue)
-        {
-            var commands = new List<ICommand>();
-            var symbol = _activeCompositionInstance.Symbol;
-
-            if (group.BlendedPresets.Count < 2)
-            {
-                Log.Warning($"Select at least two presets for blending ({group.BlendedPresets.Count} selected)");
-                return;
-            }
-
-            var count = group.BlendedPresets.Count;
-            var clampedBlend = blendValue.Clamp(0, 1);
-            var t = clampedBlend * (count - 1);
-            var index0 = (int)t.Clamp(0, count - 2);
-            var index1 = index0 + 1;
-            var localBlendFactor = t - index0;
-
-            foreach (var parameter in group.Parameters)
-            {
-                var symbolChild = symbol.Children.SingleOrDefault(s => s.Id == parameter.SymbolChildId);
-                if (symbolChild == null)
-                    continue;
-                
-                var input = symbolChild.InputValues[parameter.InputId];
-
-                if (!group.BlendedPresets[index0].ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var valueA)
-                    || !group.BlendedPresets[index1].ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var valueB))
-                    continue;
-
-                if (valueA is InputValue<float> floatValueA && valueB is InputValue<float> floatValueB)
-                {
-                    var blendedValue = MathUtils.Lerp(floatValueA.Value, floatValueB.Value, localBlendFactor);
-                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
-                                     {
-                                         Value = new InputValue<float>(blendedValue),
-                                     });
-                }
-                else if (valueA is InputValue<Vector2> vec2ValueA && valueB is InputValue<Vector2> vec2ValueB)
-                {
-                    var blendedValue = MathUtils.Lerp(vec2ValueA.Value, vec2ValueB.Value, localBlendFactor);
-                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
-                                     {
-                                         Value = new InputValue<Vector2>(blendedValue),
-                                     });
-                }
-                else if (valueA is InputValue<Vector3> vec3ValueA && valueB is InputValue<Vector3> vec3ValueB)
-                {
-                    var blendedValue = MathUtils.Lerp(vec3ValueA.Value, vec3ValueB.Value, localBlendFactor);
-                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
-                                     {
-                                         Value = new InputValue<Vector3>(blendedValue),
-                                     });
-                }
-                else if (valueA is InputValue<Vector4> vec4ValueA && valueB is InputValue<Vector4> vec4ValueB)
-                {
-                    var blendedValue = MathUtils.Lerp(vec4ValueA.Value, vec4ValueB.Value, localBlendFactor);
-                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
-                                     {
-                                         Value = new InputValue<Vector4>(blendedValue),
-                                     });
-                }
-            }
-
-            var command = new MacroCommand("Set Preset Values", commands);
-            command.Do(); // No Undo... boo! 
-        }
         #endregion
 
         private Guid _activeCompositionId = Guid.Empty;
@@ -711,10 +338,9 @@ namespace T3.Gui.Interaction.PresetSystem
 
         private readonly Dictionary<Guid, CompositionContext> _contextForCompositions = new Dictionary<Guid, CompositionContext>();
 
-        private readonly Dictionary<int, ParameterGroup> _groupForBlendedParameters = new Dictionary<int, ParameterGroup>(100);
 
         /// <summary>
-        /// Is only changes by explicit user actions:
+        /// Only changes by explicit user actions:
         /// - switching to a composition with a preset context
         /// - creating a context (e.g. by added parameters to blending)
         /// - switching e.g. with the midi controllers 
@@ -727,7 +353,6 @@ namespace T3.Gui.Interaction.PresetSystem
         private IInputSlot _nextInputSlotFor;
         private string _nextNameFor;
 
-        private Instance _activeCompositionInstance;
         private static readonly AddGroupDialog AddGroupDialog = new AddGroupDialog();
     }
 }

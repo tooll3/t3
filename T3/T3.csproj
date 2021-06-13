@@ -423,6 +423,7 @@
     <Compile Include="Gui\Interaction\PresetSystem\Midi\CommandProcessing\ModeButton.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\MidiOutConnectionManager.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Midi\NanoControl8.cs" />
+    <Compile Include="Gui\Interaction\PresetSystem\Model\ContextOperations.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Model\GroupParameter.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Model\ParameterGroup.cs" />
     <Compile Include="Gui\Interaction\PresetSystem\Model\Preset.cs" />

@@ -6,19 +6,23 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Logging;
+using T3.Core.Operator;
 
 namespace T3.Gui.Interaction.PresetSystem.Model
 {
+    
     /// <summary>
-    /// Presets model of a single composition
+    /// Manages preset data for a composition
     /// </summary>
-    public class CompositionContext
+    public partial class CompositionContext
     {
         public Guid CompositionId = Guid.Empty;
+        public Instance CompositionInstance { get; internal set; }
+
         public readonly List<PresetScene> Scenes = new List<PresetScene>();
         public readonly List<ParameterGroup> Groups = new List<ParameterGroup>();
         public Preset[,] Presets = new Preset[4, 4];
-        public PresetAddress ViewWindow;
+        private readonly PresetAddress _viewWindow = new PresetAddress();
         public bool IsGroupExpanded { get; set; }
 
         //----------------------------------------------------------------------------------------
@@ -202,7 +206,7 @@ namespace T3.Gui.Interaction.PresetSystem.Model
         #endregion
 
         //----------------------------------------------------
-        #region grip helpers
+        #region grid helpers
         /// <summary>
         /// Extends the size of a two dimensional array.
         /// </summary>
@@ -242,10 +246,11 @@ namespace T3.Gui.Interaction.PresetSystem.Model
                                                      ? ActiveGroupIndex
                                                      : buttonRangeIndex % columnCount,
                                                  buttonRangeIndex / columnCount);
-            return localAddress - ViewWindow;
+            return localAddress - _viewWindow;
         }
         #endregion
 
+        #region serialization
         public void WriteToJson()
         {
             var compositionId = GetFilepathForCompositionId(CompositionId);
@@ -382,7 +387,8 @@ namespace T3.Gui.Interaction.PresetSystem.Model
                 return newContext;
             }
         }
+        #endregion
 
-        protected static string PresetPath { get; } = @"Resources\presets\";
+        private static string PresetPath { get; } = @"Resources\presets\";
     }
 }
