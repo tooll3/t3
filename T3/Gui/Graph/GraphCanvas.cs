@@ -831,7 +831,14 @@ namespace T3.Gui.Graph
         {
             var fi = new FileInfo(sourcePath);
             var targetPath = targetDir + Path.DirectorySeparatorChar + fi.Name;
-            File.Copy(sourcePath, targetPath);
+            try
+            {
+                File.Copy(sourcePath, targetPath);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to copy resource file for export: {sourcePath}  {e.Message}");
+            }
         }
 
         public static void CollectChildSymbols(Symbol symbol, ExportInfo exportInfo)

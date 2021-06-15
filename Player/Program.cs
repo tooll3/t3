@@ -249,7 +249,8 @@ namespace T3
                                      Int64 ticksDiff = ticks - lastElapsedTicks;
                                      lastElapsedTicks = ticks;
                                      // Console.WriteLine($"delta: {((double)(ticksDiff) / Stopwatch.Frequency)}");
-                                     _playback.Update(1.0f);
+                                     var secondsSinceLastFrame = (float)((double)(ticksDiff) / Stopwatch.Frequency);
+                                     _playback.Update(secondsSinceLastFrame);
 
                                      if (_playback is StreamPlayback streamPlayback)
                                      {

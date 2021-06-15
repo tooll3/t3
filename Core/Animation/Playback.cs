@@ -65,7 +65,7 @@ namespace T3.Core.Animation
             EvaluationContext.GlobalTimeInBars = TimeInBars;
             var frameDurationInBars = BeatTime - EvaluationContext.BeatTime; 
             EvaluationContext.BeatTime = BeatTime;
-            EvaluationContext.LastFrameDuration = BarsToSeconds(frameDurationInBars);
+            EvaluationContext.LastFrameDuration = timeSinceLastFrameInSecs;
             EvaluationContext.GlobalTimeInSecs = TimeInSecs;
         }
 

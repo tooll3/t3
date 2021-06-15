@@ -210,7 +210,19 @@ namespace T3.Gui.Interaction.Timing
                                 _measureStartTime = time;
                             }
                         }
+                        else
+                        {
+                            Log.Debug("something");
+                        }
                     }
+                    else
+                    {
+                        Log.Debug("Not tapping r abandoned barcount " + barCount);
+                    }
+                }
+                else
+                {
+                    Log.Debug("WTF");
                 }
 
                 _lastResyncTime = time;
