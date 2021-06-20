@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ManagedBass, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ManagedBass.3.0.0\lib\net45\ManagedBass.dll</HintPath>
@@ -169,6 +172,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DdsImport\DdsImport\DdsImport.vcxproj">
+      <Project>{c27b1a08-cf2c-4c37-950d-55a5f67a0ef6}</Project>
+      <Name>DdsImport</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
