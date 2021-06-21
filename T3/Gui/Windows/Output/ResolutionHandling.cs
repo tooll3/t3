@@ -55,6 +55,7 @@ namespace T3.Gui.Windows.Output
                                                                    new Resolution("1080p",  1920, 1080),
                                                                    new Resolution("4k", 1920*2, 1080*2),
                                                                    new Resolution("8k", 1920*4, 1080*4),
+                                                                   new Resolution("4k Portrait", 1080*2, 1920*2),
                                                                };
 
         public static readonly Resolution DefaultResolution = Resolutions[0];

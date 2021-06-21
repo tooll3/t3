@@ -46,7 +46,7 @@ namespace T3.Gui.Interaction.Variation.Model
 
                 if (inputValue is InputValue<float> floatA && input.Input.Value is InputValue<float> floatB)
                 {
-                    isModified |= Math.Abs(floatA.Value - floatB.Value) > 0.001f;
+                    isModified |= Math.Abs(floatA.Value - floatB.Value) > 0.0001f;
                     continue;
                 }
 

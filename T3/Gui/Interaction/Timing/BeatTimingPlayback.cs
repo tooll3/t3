@@ -18,6 +18,7 @@ namespace T3.Gui.Interaction.Timing
             // TODO: setting the context time here is kind of awkward
             EvaluationContext.GlobalTimeInBars = TimeInBars;
             EvaluationContext.BeatTime = BeatTime;
+            EvaluationContext.BPM = Bpm;
             EvaluationContext.GlobalTimeInSecs = TimeInSecs;
         }
     }

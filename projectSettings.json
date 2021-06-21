@@ -1,5 +1,6 @@
 {
-  "SoundtrackFilepath": "Resources\\proj-partial\\soundtrack\\partial.mp3",
+  "SoundtrackFilepath": "Resources\\proj-lazers\\soundtrack\\Plaster - Mainframe - 06 Unicore (Part 3).mp3",
   "UseBpmRate": true,
-  "SoundtrackBpm": 120.0
+  "SoundtrackBpm": 120.0,
+  "MainOperatorName": "ClimateWatch"
 }

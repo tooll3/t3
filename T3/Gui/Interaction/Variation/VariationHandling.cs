@@ -29,14 +29,13 @@ namespace T3.Gui.Interaction.Variation
                                 };
         }
 
-        //---------------------------------------------------------------------------------
         public void Update()
         {
             // Sync with composition selected in UI
             var primaryGraphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
             if (primaryGraphWindow == null)
                 return;
-            
+
             var activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
             _activeCompositionId = activeCompositionInstance.Symbol.Id;
             _variationForOperators.TryGetValue(_activeCompositionId, out var variationForComposition);
@@ -68,6 +67,7 @@ namespace T3.Gui.Interaction.Variation
             // Update active op variation
             if (ActiveOperatorVariation != null)
             {
+                // Check for auto updates from animated or driven Operators
                 if (ActivatePresets.BlendSettingForCompositionIds.TryGetValue(ActiveOperatorVariation.CompositionId, out var blendSetting))
                 {
                     if (blendSetting.WasActivatedLastFrame)
@@ -86,7 +86,11 @@ namespace T3.Gui.Interaction.Variation
                         }
                     }
                 }
-                
+
+                foreach (var group in ActiveOperatorVariation.Groups)
+                {
+                    ActiveOperatorVariation.UpdateBlendTransition(group);
+                }
                 ActiveOperatorVariation.UpdateInputReferences();
             }
 
@@ -102,17 +106,15 @@ namespace T3.Gui.Interaction.Variation
             }
 
             // Draw Ui
-            AddGroupDialog.Draw(ref _nextNameFor);
-
+            AddGroupDialog.Draw(ref _nextName);
         }
 
         public void DrawInputContextMenu(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
         {
             // Save relevant creation details
-            //_nextCompositionUi = compositionUi;
             _nextSymbolChildUi = symbolChildUi;
-            _nextInputSlotFor = inputSlot;
-            _nextNameFor = symbolChildUi.SymbolChild.ReadableName;
+            _nextInputSlot = inputSlot;
+            _nextName = symbolChildUi.SymbolChild.ReadableName;
 
             CustomComponents.HintLabel("Group");
             if (ActiveOperatorVariation != null)
@@ -169,19 +171,18 @@ namespace T3.Gui.Interaction.Variation
 
             ImGui.EndMenu();
         }
-        
-        
+
         internal void CreateNewGroupForInput()
         {
             SetOrCreateVariationsForActiveComposition();
-            
-            var group = ActiveOperatorVariation.AppendNewGroup(_nextNameFor);
+
+            var group = ActiveOperatorVariation.AppendNewGroup(_nextName);
             group.AddParameterToIndex(new GroupParameter
                                           {
                                               Id = Guid.NewGuid(),
                                               SymbolChildId = _nextSymbolChildUi.Id,
-                                              InputId = _nextInputSlotFor.Id,
-                                              Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlotFor.Input.Name,
+                                              InputId = _nextInputSlot.Id,
+                                              Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlot.Input.Name,
                                           }, 0);
             ActiveOperatorVariation.SetGroupAsActive(group);
         }
@@ -200,11 +201,11 @@ namespace T3.Gui.Interaction.Variation
                                    {
                                        Id = Guid.NewGuid(),
                                        SymbolChildId = _nextSymbolChildUi.Id,
-                                       InputId = _nextInputSlotFor.Id,
-                                       Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlotFor.Input.Name,
+                                       InputId = _nextInputSlot.Id,
+                                       Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlot.Input.Name,
                                    };
             activeGroup.AddParameterToIndex(newParameter, parameterIndex);
-            
+
             var instance = ActiveOperatorVariation.CompositionInstance.Children.SingleOrDefault(c => c.SymbolChildId == newParameter.SymbolChildId);
             if (instance == null)
             {
@@ -228,9 +229,9 @@ namespace T3.Gui.Interaction.Variation
             }
 
             ActiveOperatorVariation = new OperatorVariation()
-                                {
-                                    CompositionId = _activeCompositionId,
-                                };
+                                          {
+                                              CompositionId = _activeCompositionId,
+                                          };
             _variationForOperators[_activeCompositionId] = ActiveOperatorVariation;
         }
 
@@ -259,19 +260,17 @@ namespace T3.Gui.Interaction.Variation
 
             FitViewToSelectionHandling.FitViewToSelection();
         }
-        
-        
+
         public void ActivateGroupAtIndex(int index)
         {
             if (ActiveOperatorVariation == null)
                 return;
 
             var focusSelection = ActiveOperatorVariation.ActivateGroupAtIndex(index);
-            if(focusSelection)
+            if (focusSelection)
                 SelectUiElementsForGroup(ActiveOperatorVariation.ActiveGroup);
-            
         }
-        
+
         //---------------------------------------------------------------------------------
         #region API calls from midi inputs
         public void SavePresetAtIndex(int buttonRangeIndex)
@@ -284,8 +283,6 @@ namespace T3.Gui.Interaction.Variation
 
             ActiveOperatorVariation.SavePresetAtIndex(buttonRangeIndex);
         }
-        
-        
 
         public void ActivateOrCreatePresetAtIndex(int buttonRangeIndex)
         {
@@ -294,7 +291,7 @@ namespace T3.Gui.Interaction.Variation
                 Log.Error($"Can't execute ApplyPresetAtIndex without valid operator variation");
                 return;
             }
-            
+
             ActiveOperatorVariation.ActivateOrCreatePresetAtIndex(buttonRangeIndex);
         }
 
@@ -314,7 +311,7 @@ namespace T3.Gui.Interaction.Variation
             Log.Debug(" Start blending " + String.Join(", ", indices));
             ActiveOperatorVariation?.StartBlendingPresets(indices);
         }
-        
+
         internal void BlendValuesUpdate(int groupIndex, float value)
         {
             ActiveOperatorVariation?.BlendValuesUpdate(groupIndex, value);
@@ -324,15 +321,12 @@ namespace T3.Gui.Interaction.Variation
         {
             ActiveOperatorVariation?.AppendPresetToCurrentGroup();
         }
-        
-
         #endregion
 
         private Guid _activeCompositionId = Guid.Empty;
         private readonly List<IControllerInputDevice> _inputDevices;
 
         private readonly Dictionary<Guid, OperatorVariation> _variationForOperators = new Dictionary<Guid, OperatorVariation>();
-
 
         /// <summary>
         /// Only changes by explicit user actions:
@@ -345,8 +339,8 @@ namespace T3.Gui.Interaction.Variation
         private Guid _lastCompositionId;
 
         private SymbolChildUi _nextSymbolChildUi;
-        private IInputSlot _nextInputSlotFor;
-        private string _nextNameFor;
+        private IInputSlot _nextInputSlot;
+        private string _nextName;
 
         private static readonly AddGroupDialog AddGroupDialog = new AddGroupDialog();
     }

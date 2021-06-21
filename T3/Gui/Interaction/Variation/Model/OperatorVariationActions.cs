@@ -60,7 +60,7 @@ namespace T3.Gui.Interaction.Variation.Model
                 return true;
             }
 
-            HighlightIdenticalPresets();
+            HighlightIdenticalPresets(group);
             return false;
         }
 
@@ -86,7 +86,7 @@ namespace T3.Gui.Interaction.Variation.Model
 
             var group = GetGroupForAddress(address);
             ActivatePreset(group, preset);
-            HighlightIdenticalPresets();
+            HighlightIdenticalPresets(group);
         }
 
         internal void TryActivatePresetAtAddress(PresetAddress address)
@@ -103,9 +103,17 @@ namespace T3.Gui.Interaction.Variation.Model
             group.SetActivePreset(preset);
             SetGroupAsActive(group);
 
-            ApplyGroupPreset(group, preset);
+            if (group.BlendTransitionDuration > 0)
+            {
+                StartBlendTransitionIntoPreset(group, preset);
+            }
+            else
+            {
+                ApplyGroupPreset(group, preset);
+            }
+            
             preset.State = Preset.States.Active;
-            HighlightIdenticalPresets();
+            HighlightIdenticalPresets(group);
         }
 
         internal void RemovePresetAtIndex(int buttonRangeIndex)
@@ -239,22 +247,23 @@ namespace T3.Gui.Interaction.Variation.Model
             return preset != null;
         }
 
-        private void HighlightIdenticalPresets()
+        private void HighlightIdenticalPresets(ParameterGroup group)
         {
-            var activePreset = ActiveGroup?.ActivePreset;
             //activePreset?.UpdateStateIfCurrentOrModified(ActiveGroup, _activeCompositionInstance);
 
-            var activeGroup = ActiveGroup;
-            if (activeGroup == null || CompositionInstance == null)
+            //var activeGroup = ActiveGroup;
+            if (group == null || CompositionInstance == null)
                 return;
+            
+            var activePreset = group.ActivePreset;
 
-            foreach (var preset in GetPresetsForGroup(activeGroup))
+            foreach (var preset in GetPresetsForGroup(group))
             {
                 if (preset == null)
                     continue;
 
                 var isActive = preset == activePreset;
-                preset.UpdateStateIfCurrentOrModified(activeGroup, CompositionInstance, isActive);
+                preset.UpdateStateIfCurrentOrModified(group, CompositionInstance, isActive);
             }
         }
 
@@ -303,8 +312,31 @@ namespace T3.Gui.Interaction.Variation.Model
             WriteToJson();
         }
 
+        internal void StartBlendTransitionIntoPreset(ParameterGroup group, Preset targetPreset)
+        {
+            group.BlendStartPreset = CreatePresetForGroup(group);
+            group.BlendTargetPreset = targetPreset;
+            //_transitionStartTime = EvaluationContext.BeatTime;
+            group.BlendTransitionProgress = 0;
+        }
 
-
+        internal void UpdateBlendTransition(ParameterGroup group)
+        {
+            if (@group?.BlendStartPreset == null)
+                return;
+            
+            group.BlendTransitionProgress += (float)EvaluationContext.LastFrameDuration / group.BlendTransitionDuration;
+            if (group.BlendTransitionProgress >= 1)
+            {
+                ApplyGroupPreset(group, group.BlendTargetPreset);
+                group.BlendStartPreset = null;
+                group.BlendTargetPreset = null;
+                return;
+            }
+            
+            BlendTwoPresets(group, group.BlendStartPreset, group.BlendTargetPreset, group.BlendTransitionProgress);
+        }
+        
         private Preset CreatePresetForGroup(ParameterGroup group)
         {
             if (CompositionId != CompositionInstance.Symbol.Id)
@@ -314,17 +346,14 @@ namespace T3.Gui.Interaction.Variation.Model
             }
 
             var newPreset = new Preset();
-            //var operatorSymbol = SymbolRegistry.Entries[_activeCompositionId];
             foreach (var parameter in group.Parameters)
             {
                 if (parameter == null)
                     continue;
 
-                //var symbolChild = operatorSymbol.Children.Single(child => child.Id == parameter.SymbolChildId);
                 var instance = CompositionInstance.Children.SingleOrDefault(c => c.SymbolChildId == parameter.SymbolChildId);
                 if (instance == null)
                 {
-                    //Log.Error("Failed to get instance to focus parameters " + parameter.Title);
                     continue;
                 }
 
@@ -374,9 +403,6 @@ namespace T3.Gui.Interaction.Variation.Model
 
         internal void BlendGroupPresets(ParameterGroup group, float blendValue)
         {
-            var commands = new List<ICommand>();
-            var symbol = CompositionInstance.Symbol;
-
             if (group.BlendedPresets.Count < 2)
             {
                 Log.Warning($"Select at least two presets for blending ({group.BlendedPresets.Count} selected)");
@@ -390,6 +416,16 @@ namespace T3.Gui.Interaction.Variation.Model
             var index1 = index0 + 1;
             var localBlendFactor = t - index0;
 
+            var groupBlendedPresetA = group.BlendedPresets[index0];
+            var groupBlendedPresetB = group.BlendedPresets[index1];
+            
+            BlendTwoPresets(group, groupBlendedPresetA, groupBlendedPresetB, localBlendFactor);
+        }
+
+        private void BlendTwoPresets(ParameterGroup group, Preset groupBlendedPresetA, Preset groupBlendedPresetB, float localBlendFactor)
+        {
+            var commands = new List<ICommand>();
+            var symbol = CompositionInstance.Symbol;
             foreach (var parameter in group.Parameters)
             {
                 var symbolChild = symbol.Children.SingleOrDefault(s => s.Id == parameter.SymbolChildId);
@@ -398,8 +434,8 @@ namespace T3.Gui.Interaction.Variation.Model
 
                 var input = symbolChild.InputValues[parameter.InputId];
 
-                if (!group.BlendedPresets[index0].ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var valueA)
-                    || !group.BlendedPresets[index1].ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var valueB))
+                if (!groupBlendedPresetA.ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var valueA)
+                    || !groupBlendedPresetB.ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var valueB))
                     continue;
 
                 if (valueA is InputValue<float> floatValueA && valueB is InputValue<float> floatValueB)
@@ -442,6 +478,6 @@ namespace T3.Gui.Interaction.Variation.Model
         #endregion
         
         private readonly Dictionary<int, ParameterGroup> _groupForBlendedParameters = new Dictionary<int, ParameterGroup>(100);
-
+        
     }
 }

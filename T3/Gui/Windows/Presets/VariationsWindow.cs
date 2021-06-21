@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Operator;
 using T3.Gui.Interaction.Variation;
 using T3.Gui.Interaction.Variation.Model;
 using T3.Gui.Styling;
@@ -33,10 +36,10 @@ namespace T3.Gui.Windows
                 return;
             }
 
-            if (CustomComponents.DisablableButton("save preset", activeOpVariation.ActiveGroup != null))
-            {
-                presetSystem.AppendPresetToCurrentGroup();
-            }
+            // if (CustomComponents.DisablableButton("save preset", activeOpVariation.ActiveGroup != null))
+            // {
+            //     presetSystem.AppendPresetToCurrentGroup();
+            // }
 
             var topLeftCorner = ImGui.GetCursorScreenPos();
 
@@ -61,33 +64,20 @@ namespace T3.Gui.Windows
                     {
                         presetSystem.ActivateGroupAtIndex(groupIndex);
                     }
+
                     ImGui.PopStyleColor(3);
 
                     for (var sceneIndex = 0; sceneIndex < GroupRows * GridColumns; sceneIndex++)
                     {
-                        DrawPresetToggle(sceneIndex, activeOpVariation, groupIndex, @group, presetSystem);
-                        if(sceneIndex == 0 || (sceneIndex +1) % GridColumns > 0)
+                        DrawPresetToggle(sceneIndex, activeOpVariation, groupIndex, group, presetSystem);
+                        if (sceneIndex == 0 || (sceneIndex + 1) % GridColumns > 0)
                             ImGui.SameLine();
                     }
 
                     ImGui.EndGroup();
-                    ImGui.SameLine();
-                    ImGui.BeginGroup();
-                    {
-                        ImGui.Dummy(new Vector2(SliderWidth, GroupHeaderHeight));
-                        if (group.BlendedPresets.Count > 1)
-                        {
-                            if (DrawBlendSlider(ref _blendValue, group))
-                            {
-                                presetSystem.ActiveOperatorVariation?.BlendGroupPresets(activeOpVariation.ActiveGroup, _blendValue);
-                            }
-                        }
-                        else
-                        {
-                            ImGui.SameLine(50);
-                        }
-                    }
-                    ImGui.EndGroup();
+                    
+                    DrawBlendOrTransitionSlider(activeOpVariation, group, presetSystem);
+                    
                     ImGui.PopID();
                 }
             }
@@ -118,28 +108,12 @@ namespace T3.Gui.Windows
 
                     for (var sceneIndex = 0; sceneIndex < GroupRows; sceneIndex++)
                     {
-                        DrawPresetToggle(sceneIndex, activeOpVariation, groupIndex, @group, presetSystem);
+                        DrawPresetToggle(sceneIndex, activeOpVariation, groupIndex, group, presetSystem);
                     }
 
                     ImGui.EndGroup();
-                    ImGui.SameLine();
-                    ImGui.BeginGroup();
-                    {
-                        ImGui.Dummy(new Vector2(SliderWidth, GroupHeaderHeight));
-                        if (group.BlendedPresets.Count > 1)
-                        {
-                            if (DrawBlendSlider(ref _blendValue, group))
-                            {
-                                presetSystem.ActiveOperatorVariation?.BlendGroupPresets(activeOpVariation.ActiveGroup, _blendValue);
-                            }
-                        }
-                        else
-                        {
-                            ImGui.SameLine(50);
-                        }
-                    }
-                    ImGui.EndGroup();
-                    ImGui.SameLine();
+                    DrawBlendOrTransitionSlider(activeOpVariation, group, presetSystem);
+
                     ImGui.PopID();
                 }
             }
@@ -156,7 +130,22 @@ namespace T3.Gui.Windows
             // }
         }
 
-        private static void DrawPresetToggle(int sceneIndex, OperatorVariation activeOpVariation, int groupIndex, ParameterGroup @group,
+        private static void DrawBlendOrTransitionSlider(OperatorVariation activeOpVariation, ParameterGroup group, VariationHandling presetSystem)
+        {
+            ImGui.SameLine();
+            if (group.IsTransitionActive)
+            {
+                DrawBlendSlider(ref group.BlendTransitionProgress, activeOpVariation, group,
+                                new List<Preset>() { group.BlendStartPreset, group.BlendTargetPreset });
+            }
+            else
+            {
+                if (DrawBlendSlider(ref _blendValue, activeOpVariation, group, group.BlendedPresets))
+                    presetSystem.ActiveOperatorVariation?.BlendGroupPresets(activeOpVariation.ActiveGroup, _blendValue);
+            }
+        }
+
+        private static void DrawPresetToggle(int sceneIndex, OperatorVariation activeOpVariation, int groupIndex, ParameterGroup group,
                                              VariationHandling presetSystem)
         {
             Preset preset = null;
@@ -183,10 +172,10 @@ namespace T3.Gui.Windows
                         break;
                     case Preset.States.Modified:
                         textColor = Color.White;
-                        backgroundColor = _activePresetColor;
+                        backgroundColor = Color.Green;
                         break;
                     case Preset.States.IsBlended:
-                        float f = @group.BlendedPresets.IndexOf(preset) / (float)@group.BlendedPresets.Count;
+                        float f = group.BlendedPresets.IndexOf(preset) / (float)group.BlendedPresets.Count;
                         textColor = Color.White;
 
                         backgroundColor = f >= 0
@@ -221,32 +210,32 @@ namespace T3.Gui.Windows
                     }
                     else if (ImGui.GetIO().KeyShift)
                     {
-                        if (@group.BlendedPresets.Contains(preset))
+                        if (group.BlendedPresets.Contains(preset))
                         {
-                            @group.BlendedPresets.Remove(preset);
+                            group.BlendedPresets.Remove(preset);
                             preset.State = Preset.States.InActive;
                         }
                         else
                         {
-                            if (@group.BlendedPresets.Count == 0)
+                            if (group.BlendedPresets.Count == 0)
                             {
-                                var lastActivePreset = @group.ActivePreset;
-                                presetSystem.ActiveOperatorVariation?.ActivatePreset(@group, preset);
+                                var lastActivePreset = group.ActivePreset;
+                                presetSystem.ActiveOperatorVariation?.ActivatePreset(group, preset);
 
                                 if (lastActivePreset != null)
                                 {
                                     lastActivePreset.State = Preset.States.IsBlended;
-                                    @group.BlendedPresets.Add(lastActivePreset);
+                                    group.BlendedPresets.Add(lastActivePreset);
                                 }
                             }
 
-                            @group.BlendedPresets.Add(preset);
+                            group.BlendedPresets.Add(preset);
                             preset.State = Preset.States.IsBlended;
                         }
                     }
                     else
                     {
-                        presetSystem.ActiveOperatorVariation?.ActivatePreset(@group, preset);
+                        presetSystem.ActiveOperatorVariation?.ActivatePreset(group, preset);
                     }
                 }
 
@@ -272,51 +261,80 @@ namespace T3.Gui.Windows
         }
 
         private static Preset _renamePresetReference;
-        private static float _blendValue;
-
-        private static bool DrawBlendSlider(ref float value, ParameterGroup group)
+        private static float[] BlendDurations = new[] { 0, 0.25f, 0.5f, 1, 2, 4, 16, 32, 64, 128 }; 
+        
+        private static bool DrawBlendSlider(ref float value, OperatorVariation activeOpVariation, ParameterGroup group,  List<Preset> presets)
         {
-            //const float sliderWidth = 30;
-            var buttonSize = new Vector2(SliderWidth, SliderHeight);
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, _presetColor.Rgba);
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, _presetColor.Rgba);
-            ImGui.PushStyleColor(ImGuiCol.Button, _presetColor.Rgba);
-            ImGui.Button(".", buttonSize);
-            ImGui.PopStyleColor(3);
-
             var edited = false;
-            if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
+            ImGui.BeginGroup();
             {
-                ImGui.GetID(string.Empty);
-                _previousValue = value;
+                ImGui.Text(group.BlendTransitionDuration.ToString(CultureInfo.InvariantCulture));
+                ImGui.SetNextWindowPos(ImGui.GetItemRectMin());
+                CustomComponents.ContextMenuForItem(() =>
+                                                    {
+                                                        foreach (var d in BlendDurations)
+                                                        {
+                                                            var seconds = d * 240 / EvaluationContext.BPM;
+                                                            var isCurrent = Math.Abs(group.BlendTransitionDuration - d) < 0.01f;
+                                                            if (ImGui.MenuItem($"{d} bars", $"({seconds}s)", isCurrent))
+                                                            {
+                                                                group.BlendTransitionDuration = d;
+                                                            }    
+                                                        }
+                                                        
+                                                    }, null, "contextMenu", ImGuiPopupFlags.MouseButtonLeft);
+                
+                ImGui.Dummy(new Vector2(SliderWidth, GroupHeaderHeight - ImGui.GetFrameHeight()));
+
+                if (presets.Count > 1)
+                {
+                    //const float sliderWidth = 30;
+                    var buttonSize = new Vector2(SliderWidth, SliderHeight);
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, _presetColor.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.ButtonActive, _presetColor.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Button, _presetColor.Rgba);
+                    ImGui.Button("", buttonSize);
+                    ImGui.PopStyleColor(3);
+
+                    if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
+                    {
+                        ImGui.GetID(string.Empty);
+                        _previousValue = value;
+                    }
+
+                    if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                    {
+                    }
+
+                    var drawList = ImGui.GetWindowDrawList();
+                    var topLeft = ImGui.GetItemRectMin();
+                    var sliderPosition = topLeft + new Vector2(0, SliderHeight * value - 1);
+                    drawList.AddRectFilled(sliderPosition, sliderPosition + new Vector2(SliderWidth, 2), Color.Orange);
+                    
+                    // Draw Labels
+                    for (var index = 0; index < presets.Count; index++)
+                    {
+                        var f = index / ((float)presets.Count - 1);
+                        var preset = presets[index];
+
+                        var title = string.IsNullOrEmpty(preset.Title) ? "-" : preset.Title;
+                        drawList.AddText(new Vector2(topLeft.X, topLeft.Y + f * (SliderHeight - GridRowHeight)), Color.White, title);
+                    }
+
+                    // interaction
+                    var isDragging = ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.IsItemActive();
+                    if (isDragging)
+                    {
+                        value = (_previousValue + ImGui.GetMouseDragDelta().Y / SliderHeight).Clamp(0, 1);
+                        edited = true;
+                    }
+                }
+                else
+                {
+                    ImGui.SameLine(50);
+                }
             }
-
-            if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-            {
-            }
-
-            var drawList = ImGui.GetWindowDrawList();
-            var topLeft = ImGui.GetItemRectMin();
-            var sliderPosition = topLeft + new Vector2(0, SliderHeight * value - 1);
-            drawList.AddRectFilled(sliderPosition, sliderPosition + new Vector2(SliderWidth, 2), Color.Orange);
-
-            // Draw Labels
-            for (var index = 0; index < @group.BlendedPresets.Count; index++)
-            {
-                var f = index / ((float)group.BlendedPresets.Count - 1);
-                var preset = @group.BlendedPresets[index];
-
-                var title = string.IsNullOrEmpty(preset.Title) ? "-" : preset.Title;
-                drawList.AddText(new Vector2(topLeft.X, topLeft.Y + f * (SliderHeight - GridRowHeight)), Color.White, title);
-            }
-
-            // interaction
-            var isDragging = ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.IsItemActive();
-            if (isDragging)
-            {
-                value = (_previousValue + ImGui.GetMouseDragDelta().Y / SliderHeight).Clamp(0, 1);
-                edited = true;
-            }
+            ImGui.EndGroup();
 
             return edited;
         }
@@ -327,6 +345,8 @@ namespace T3.Gui.Windows
         {
             return new List<Window>();
         }
+        
+        private static float _blendValue;
 
         private const float GroupHeaderHeight = 30;
         private const float SliderHeight = GroupRows * (GridRowHeight + 1);
@@ -339,7 +359,9 @@ namespace T3.Gui.Windows
 
         private static readonly Color _activeGroupColor = Color.White;
         private static readonly Color _mutedTextColor = Color.Gray;
+        
         private static readonly Color _activePresetColor = Color.Orange;
+        private static readonly Color _modifiedPresetColor = Color.Orange;
         private static readonly Color _emptySlotColor = Color.FromString("#0f0f0f");
 
         private static readonly Color _blendStartColor = Color.FromString("#ee01ba");

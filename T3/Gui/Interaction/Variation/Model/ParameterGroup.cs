@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
+using T3.Core.Operator;
 using T3.Gui.Interaction.Variation.Model;
 
 namespace T3.Gui.Interaction.Variation
@@ -104,5 +105,12 @@ namespace T3.Gui.Interaction.Variation
 
             return Parameters.Count;
         }
+        
+        public Preset BlendStartPreset;
+        public Preset BlendTargetPreset;
+        public bool IsTransitionActive => BlendTargetPreset != null;
+        public float BlendTransitionProgress;
+        public float BlendTransitionDuration { get; internal set; } = 4;
+        
     }
 }

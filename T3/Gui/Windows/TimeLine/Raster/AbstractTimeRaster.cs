@@ -46,7 +46,7 @@ namespace T3.Gui.Windows.TimeLine.Raster
                 return;
 
             // Debug string 
-            // drawList.AddText(topLeft + new Vector2(20, 20), Color.Red, $"Scale: {pixelsPerU:0.1}  f={scaleRange:0}");
+            // drawList.AddText(topLeft + new Vector2(20, 20), Color.Red, $"Stretch: {pixelsPerU:0.1}  f={scaleRange:0}");
             ImGui.PushFont(Fonts.FontSmall);
 
             foreach (var raster in rasters)

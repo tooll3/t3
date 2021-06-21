@@ -65,6 +65,7 @@ namespace T3.Core.Operator
         /// </summary>
         /// <remarks>Also see <see cref="EvaluationContext"/>.<see cref="BeatTime"/> and .<see cref="GlobalTimeInSecs"/></remarks>
         public double TimeInBars { get; set; }
+        
 
         /// <summary>
         /// If "keep running" option is enabled, this time is still running even if (audio) playback has been stopped.
@@ -72,6 +73,7 @@ namespace T3.Core.Operator
         /// </summary>
         public static double GlobalTimeInSecs { get; set; }
 
+        public static double BPM { get; set; }
         public static double BeatTime { get; set; }
         public static double LastFrameDuration { get; set; }
 

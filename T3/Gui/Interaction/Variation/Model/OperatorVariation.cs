@@ -19,12 +19,15 @@ namespace T3.Gui.Interaction.Variation.Model
         public Guid CompositionId = Guid.Empty;
         public Instance CompositionInstance { get; internal set; }
 
+        
         public readonly List<PresetScene> Scenes = new List<PresetScene>();
         public readonly List<ParameterGroup> Groups = new List<ParameterGroup>();
         public Preset[,] Presets = new Preset[4, 4];
         private readonly PresetAddress _viewWindow = new PresetAddress();
         public bool IsGroupExpanded { get; set; }
 
+
+        
         //----------------------------------------------------------------------------------------
         #region scenes
         public Guid ActiveSceneId = Guid.Empty;
