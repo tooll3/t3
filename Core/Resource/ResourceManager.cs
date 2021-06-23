@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -1132,13 +1132,37 @@ namespace T3.Core
             }
 
             Texture2D texture = null;
-            CreateTexture2d(filename, ref texture);
+            ShaderResourceView srv = null;
+            uint shaderResourceViewId = NullResource;
+            if (filename.ToLower().EndsWith(".dds"))
+            {
+                DdsImport.CreateDdsTextureFromFile(Device.NativePointer, Device.ImmediateContext.NativePointer, filename,
+                                                   out IntPtr texPtr, out IntPtr srvPtr);
+
+                texture = new Texture2D(texPtr);
+                srv = new ShaderResourceView(srvPtr);
+            } 
+            else
+            {
+                CreateTexture2d(filename, ref texture);
+            }
+
             string name = Path.GetFileName(filename);
             var textureResourceEntry = new Texture2dResource(GetNextResourceId(), name, texture);
             Resources.Add(textureResourceEntry.Id, textureResourceEntry);
             _2dTextures.Add(textureResourceEntry);
 
-            uint shaderResourceViewId = CreateShaderResourceView(textureResourceEntry.Id, name);
+            if (srv == null)
+            {
+                shaderResourceViewId = CreateShaderResourceView(textureResourceEntry.Id, name);
+            } 
+            else
+            {
+                var textureViewResourceEntry = new ShaderResourceViewResource(GetNextResourceId(), name, srv, textureResourceEntry.Id);
+                Resources.Add(textureViewResourceEntry.Id, textureViewResourceEntry);
+                _shaderResourceViews.Add(textureViewResourceEntry);
+                shaderResourceViewId = textureViewResourceEntry.Id;
+            }
 
             var fileResource = new FileResource(filename, new[] { textureResourceEntry.Id, shaderResourceViewId });
             fileResource.FileChangeAction += fileChangeAction;
