@@ -256,8 +256,21 @@ namespace T3.Gui.Interaction.Variation.Model
         #region serialization
         public void WriteToJson()
         {
-            var compositionId = GetFilepathForCompositionId(CompositionId);
-            using (var sw = new StreamWriter(compositionId))
+            if (!Directory.Exists(PresetFolderPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(PresetFolderPath);
+                }
+                catch(Exception e)
+                {
+                    Log.Warning($"Can't create folder for variations: {PresetFolderPath}: {e.Message}");
+                    return;
+                }
+            }
+
+            var filePath = GetFilepathForCompositionId(CompositionId);
+            using (var sw = new StreamWriter(filePath))
             using (var writer = new JsonTextWriter(sw))
             {
                 writer.Formatting = Formatting.Indented;
@@ -322,7 +335,7 @@ namespace T3.Gui.Interaction.Variation.Model
 
         private static string GetFilepathForCompositionId(Guid id)
         {
-            return PresetPath + GetFilenameForCompositionId(id);
+            return PresetFolderPath + GetFilenameForCompositionId(id);
         }
 
         private static string GetFilenameForCompositionId(Guid id)
@@ -392,6 +405,6 @@ namespace T3.Gui.Interaction.Variation.Model
         }
         #endregion
 
-        private static string PresetPath { get; } = @"Resources\presets\";
+        private static string PresetFolderPath { get; } = @"Resources\Variations\";
     }
 }
