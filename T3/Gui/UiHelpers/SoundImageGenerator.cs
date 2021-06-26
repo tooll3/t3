@@ -46,7 +46,7 @@ namespace T3.Gui.UiHelpers
             {
                 sampleLength = (long)( sampleLength * numSamples / (double)maxSamples) + 100;
                 numSamples = streamLength / sampleLength;
-                Log.Debug($"Limitting texture size to {numSamples} samples");
+                Log.Debug($"Limittng texture size to {numSamples} samples");
             }
             
             Bass.ChannelPlay(stream);
@@ -113,7 +113,8 @@ namespace T3.Gui.UiHelpers
 
                 if (sampleIndex % 1000 == 0)
                 {
-                    Log.Debug($"   computing sound image {100.0 * sampleIndex / (float)numSamples:0} % complete");
+                    var percentage = (int)(100.0 * sampleIndex / (float)numSamples);
+                    Log.Debug($"   computing sound image {percentage}%% complete");
                 }
 
                 foreach (var region in _regions)

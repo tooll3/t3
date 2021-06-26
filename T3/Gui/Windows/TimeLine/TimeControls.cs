@@ -436,25 +436,29 @@ namespace T3.Gui.Windows.TimeLine
                         
                         if (filepathModified)
                         {
-                            var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
-                            var result = matchBpmPattern.Match(ProjectSettings.Config.SoundtrackFilepath);
-                            if (result.Success)
-                            {
-                                float.TryParse(result.Groups[1].Value, out bpm);
-                                ProjectSettings.Config.SoundtrackBpm = bpm;
-                                playback.Bpm = bpm;
-                            }
-
-                            var job = new AsyncImageGenerator(ProjectSettings.Config.SoundtrackFilepath);
-                            job.Run();
+                            UpdateImageAndBpmFromSoundtrackConfig(playback);
                         }
                     }
 
-                    if (ImGui.Button(isInitialized ? "Update" : "Load"))
+                    var label = isInitialized ? "Update" : "Load";
+                    
+                    if (CustomComponents.DisablableButton(label, _computeSoundImageTask == null))
                     {
                         if (playback is StreamPlayback streamPlayback)
                         {
                             streamPlayback.LoadFile(ProjectSettings.Config.SoundtrackFilepath);
+                        }
+                        else
+                        {
+                            if (File.Exists(ProjectSettings.Config.SoundtrackFilepath))
+                            {
+                                playback = new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath);
+                                UpdateImageAndBpmFromSoundtrackConfig(playback);
+                            }
+                            else
+                            {
+                                Log.Warning($"Can't initialize soundtrack for missing file {ProjectSettings.Config.SoundtrackFilepath}");
+                            }
                         }
                     }
 
@@ -472,6 +476,7 @@ namespace T3.Gui.Windows.TimeLine
                     {
                         if (ImGui.Button("Initialize"))
                         {
+
                             playback = new BeatTimingPlayback();
                         }
                     }
@@ -522,6 +527,22 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.PopStyleVar(2);
         }
 
+        private static void UpdateImageAndBpmFromSoundtrackConfig(Playback playback)
+        {
+            float bpm;
+            var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
+            var result = matchBpmPattern.Match(ProjectSettings.Config.SoundtrackFilepath);
+            if (result.Success)
+            {
+                float.TryParse(result.Groups[1].Value, out bpm);
+                ProjectSettings.Config.SoundtrackBpm = bpm;
+                playback.Bpm = bpm;
+            }
+
+            _computeSoundImageTask = new AsyncImageGenerator(ProjectSettings.Config.SoundtrackFilepath);
+            _computeSoundImageTask.Run();
+        }
+
         private class AsyncImageGenerator
         {
             public AsyncImageGenerator(string filepath)
@@ -544,6 +565,7 @@ namespace T3.Gui.Windows.TimeLine
             private void GenerateAsync()
             {
                 var imageFilePath = _generator.GenerateSoundSpectrumAndVolume();
+                _computeSoundImageTask = null;
                 if (imageFilePath == null)
                 {
                     Log.Debug("could not create filepath");
@@ -558,5 +580,6 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         public static readonly Vector2 ControlSize = new Vector2(45, 26);
+        private static AsyncImageGenerator _computeSoundImageTask;
     }
 }

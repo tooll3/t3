@@ -885,7 +885,7 @@ namespace T3.Core
             // Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
             if (!_fileResources.TryGetValue(fileSystemEventArgs.FullPath, out var fileResource))
             {
-                Log.Warning("Invalid FileResource?");
+                //Log.Warning("Invalid FileResource?");
                 return;
             }
 
