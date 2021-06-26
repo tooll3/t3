@@ -192,7 +192,12 @@ namespace T3.Gui
             {
                 var childUi = new SymbolChildUi();
                 var childId = Guid.Parse(childEntry["ChildId"].Value<string>());
-                childUi.SymbolChild = symbol.Children.Single(child => child.Id == childId);
+                childUi.SymbolChild = symbol.Children.SingleOrDefault(child => child.Id == childId);
+                if (childUi.SymbolChild == null)
+                {
+                    Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for undefined child {childId}");
+                    continue;
+                }
 
                 JToken positionToken = childEntry["Position"];
                 childUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
