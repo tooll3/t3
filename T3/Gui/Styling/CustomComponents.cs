@@ -370,12 +370,17 @@ namespace T3.Gui
         //     drawList.AddCircleFilled(new Vector2(p.X + radius + t * (width - radius * 2.0f), p.Y + radius), radius - 1.5f, Color.White);
         // }
 
-        public static void EmptyWindowMessage(string message)
+        public static bool EmptyWindowMessage(string message, string buttonLabel = null)
         {
             var center = (ImGui.GetWindowContentRegionMax() + ImGui.GetWindowContentRegionMin()) / 2 + ImGui.GetWindowPos();
             var lines = message.Split('\n').ToArray();
+
+            var lineCount = lines.Length;
+            if (!string.IsNullOrEmpty(buttonLabel))
+                lineCount++;
+            
             var textLineHeight = ImGui.GetTextLineHeight();
-            var y = center.Y - lines.Length * textLineHeight / 2;
+            var y = center.Y - lineCount * textLineHeight / 2;
             var drawList = ImGui.GetWindowDrawList();
 
             foreach (var line in lines)
@@ -385,6 +390,18 @@ namespace T3.Gui
                 drawList.AddText(position, EmptyMessageColor, line);
                 y += textLineHeight;
             }
+
+            
+            if (!string.IsNullOrEmpty(buttonLabel))
+            {
+                y += 10;
+                var style = ImGui.GetStyle(); 
+                var textSize = ImGui.CalcTextSize(buttonLabel) + style.FramePadding;
+                var position = new Vector2(center.X - textSize.X / 2, y);
+                ImGui.SetCursorScreenPos(position);
+                return ImGui.Button(buttonLabel);
+            }
+            return false;
         }
 
         private static Color EmptyMessageColor = new Color(0.3f);

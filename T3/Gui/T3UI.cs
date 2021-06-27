@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using T3.Core.IO;
 using T3.Core.Logging;
 //using T3.graph;
 using T3.Gui.Commands;
+using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
@@ -163,6 +165,21 @@ namespace T3.Gui
         {
             _hoveredIdsForNextFrame.Add(id);
         }
+        
+        public static void CenterHoveredId(Guid symbolChildId)
+        {
+            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+            if (primaryGraphWindow == null)
+                return;
+
+            var compositionOp = primaryGraphWindow.GraphCanvas.CompositionOp;
+
+            var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
+            var sourceSymbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == symbolChildId);
+            var selectionTargetInstance = compositionOp.Children.Single(instance => instance.SymbolChildId == symbolChildId);
+            SelectionManager.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
+            FitViewToSelectionHandling.FitViewToSelection();
+        }
 
         private static void SwapHoveringBuffers()
         {
@@ -196,5 +213,7 @@ namespace T3.Gui
             PreventZoomWithMouseWheel = 1 << 3,
             PreventPanningWithMouse = 1 << 4,
         }
+
+
     }
 }

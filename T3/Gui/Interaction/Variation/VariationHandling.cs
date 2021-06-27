@@ -32,7 +32,7 @@ namespace T3.Gui.Interaction.Variation
         public void Update()
         {
             // Sync with composition selected in UI
-            var primaryGraphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
+            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
             if (primaryGraphWindow == null)
                 return;
 
@@ -177,13 +177,17 @@ namespace T3.Gui.Interaction.Variation
             SetOrCreateVariationsForActiveComposition();
 
             var group = ActiveOperatorVariation.AppendNewGroup(_nextName);
-            group.AddParameterToIndex(new GroupParameter
-                                          {
-                                              Id = Guid.NewGuid(),
-                                              SymbolChildId = _nextSymbolChildUi.Id,
-                                              InputId = _nextInputSlot.Id,
-                                              Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlot.Input.Name,
-                                          }, 0);
+
+            if (_nextSymbolChildUi != null && _nextInputSlot != null)
+            {
+                group.AddParameterToIndex(new GroupParameter
+                                              {
+                                                  Id = Guid.NewGuid(),
+                                                  SymbolChildId = _nextSymbolChildUi.Id,
+                                                  InputId = _nextInputSlot.Id,
+                                                  Title = _nextSymbolChildUi.SymbolChild.ReadableName + "." + _nextInputSlot.Input.Name,
+                                              }, 0);
+            }
             ActiveOperatorVariation.SetGroupAsActive(group);
         }
 
@@ -273,6 +277,16 @@ namespace T3.Gui.Interaction.Variation
 
         //---------------------------------------------------------------------------------
         #region API calls from midi inputs
+        public void ShowAddGroupDialog()
+        {
+            _nextSymbolChildUi = null;
+            _nextInputSlot = null;
+            _nextName = "Group";
+            SetOrCreateVariationsForActiveComposition();
+            AddGroupDialog.ShowNextFrame();
+        }
+        
+        
         public void SavePresetAtIndex(int buttonRangeIndex)
         {
             if (ActiveOperatorVariation == null)

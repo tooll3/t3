@@ -110,7 +110,7 @@ namespace T3.Gui.Interaction.Variation
         public Preset BlendTargetPreset;
         public bool IsTransitionActive => BlendTargetPreset != null;
         public float BlendTransitionProgress;
-        public float BlendTransitionDuration { get; internal set; } = 4;
+        public float BlendTransitionDuration { get; internal set; } = 0;
         
     }
 }

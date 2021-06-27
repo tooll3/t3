@@ -122,6 +122,22 @@ namespace T3.Gui.Interaction.Variation.Model
             return newGroup;
         }
 
+        public void RemoveGroup(ParameterGroup group)
+        {
+            var groupIndex = GetIndexForGroup(group);
+            if (groupIndex == -1)
+            {
+                Log.Warning("Group not found");
+                return;
+            }
+
+            if (ActiveGroup == group)
+            {
+                ActiveGroupId = Guid.Empty;
+            }
+            Groups.RemoveAt(groupIndex);
+        }
+
         public IEnumerable<Preset> GetPresetsForGroup(ParameterGroup group)
         {
             var groupIndex = GetIndexForGroup(group);
