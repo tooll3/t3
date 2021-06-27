@@ -42,6 +42,7 @@ namespace T3.Gui.Windows
                 ImGui.Checkbox("HideTimeline", ref UserSettings.Config.HideUiElementsInGraphWindow);
                 ImGui.DragFloat("Gizmo size", ref UserSettings.Config.GizmoSize);
                 ImGui.DragFloat("Tooltip delay", ref UserSettings.Config.TooltipDelay);
+                ImGui.Checkbox("Save after symbol creating", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
                 ImGui.TreePop();
             }
 

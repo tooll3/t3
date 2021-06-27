@@ -41,6 +41,7 @@ namespace T3.Gui.UiHelpers
             public bool HideUiElementsInGraphWindow = false;
             public float ClickTreshold = 5; // Increase for high-res display and pen tablets
             public float GizmoSize = 100;
+            public bool AutoSaveAfterSymbolCreation = true;
             
             [JsonConverter(typeof(StringEnumConverter))]
             public Playback.TimeDisplayModes TimeDisplayMode = Playback.TimeDisplayModes.Bars;

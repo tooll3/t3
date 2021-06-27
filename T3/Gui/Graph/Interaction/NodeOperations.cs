@@ -17,6 +17,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
@@ -70,7 +71,7 @@ namespace T3.Gui.Graph.Interaction
                 catch (InvalidOperationException)
                 {
                     return null;
-                }
+            }
             }
 
             return instance;
@@ -314,6 +315,9 @@ namespace T3.Gui.Graph.Interaction
 
             var deleteCmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
             UndoRedoStack.AddAndExecute(deleteCmd);
+            
+            if(UserSettings.Config.AutoSaveAfterSymbolCreation)
+                T3Ui.SaveInBackground();
         }
 
         class ClassRenameRewriter : CSharpSyntaxRewriter

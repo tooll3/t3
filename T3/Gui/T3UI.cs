@@ -65,7 +65,7 @@ namespace T3.Gui
             }
             else if (KeyboardBinding.Triggered(UserActions.Save))
             {
-                Task.Run(Save);
+                SaveInBackground();
             }
         }
 
@@ -77,21 +77,20 @@ namespace T3.Gui
             {
                 if (ImGui.BeginMenu("File"))
                 {
-                    if (ImGui.MenuItem("Save"))
+                    var isSaving = _saveStopwatch.IsRunning;
+                    if (ImGui.MenuItem("Save", !isSaving))
                     {
-                        if (_saveStopwatch.IsRunning)
-                        {
-                            Log.Warning("Can't exit while saving is in progress");
-                        }
-                        else
-                        {
-                            Task.Run(Save); // Async save
-                        }
+                        SaveInBackground();
                     }
 
-                    if (ImGui.MenuItem("Quit"))
+                    if (ImGui.MenuItem("Quit", !isSaving))
                     {
                         Application.Exit();
+                    }
+
+                    if (ImGui.IsItemHovered())
+                    {
+                        ImGui.SetTooltip("Can't exit while saving is in progress");
                     }
 
                     ImGui.EndMenu();
@@ -145,10 +144,20 @@ namespace T3.Gui
             ImGui.PopStyleVar(2);
         }
 
-        private readonly object _saveLocker = new object();
-        private readonly Stopwatch _saveStopwatch = new Stopwatch();
+        private static readonly object _saveLocker = new object();
+        private static readonly Stopwatch _saveStopwatch = new Stopwatch();
 
-        private void Save()
+        public static void SaveInBackground()
+        {
+            if (_saveStopwatch.IsRunning)
+            {
+                Log.Debug("Can't save while saving is in progress");
+                return;
+            }
+            Task.Run(Save);
+        }
+        
+        private static void Save()
         {
             lock (_saveLocker)
             {
