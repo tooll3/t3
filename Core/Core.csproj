@@ -36,7 +36,7 @@
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DdsImport, Version=1.0.7841.27819, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="DdsImport, Version=1.0.7851.34389, Culture=neutral, PublicKeyToken=null">
       <HintPath>dependency\DdsImport.dll</HintPath>
     </Reference>
     <Reference Include="ManagedBass, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

@@ -151,7 +151,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DdsTextureLoader11\DdsTextureLoader11.vcxproj">
       <Project>{83596b5b-b5d0-4ce7-9db1-aaa3f8eed887}</Project>
-      <Name>DdsTextureLoader11</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
