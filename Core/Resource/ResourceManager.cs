@@ -463,6 +463,7 @@ namespace T3.Core
         {
             if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
             {
+                buffer?.Dispose();
                 var bufferDesc = new BufferDescription
                                      {
                                          Usage = ResourceUsage.Default,
@@ -483,6 +484,7 @@ namespace T3.Core
         {
             if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
             {
+                buffer?.Dispose();
                 var bufferDesc = new BufferDescription
                                  {
                                      Usage = ResourceUsage.Default,
