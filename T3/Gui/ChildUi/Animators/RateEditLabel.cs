@@ -27,7 +27,9 @@ namespace T3.Gui.ChildUi.Animators
 
             ImGui.SetCursorScreenPos(selectableScreenRect.Min + Vector2.One * 4);
 
-            var label = currentRateIndex == -1 ? "?" : SpeedRate.RelevantRates[currentRateIndex].Label;
+            var label = currentRateIndex == -1 
+                            ? $"{rate:0.0}" 
+                            : SpeedRate.RelevantRates[currentRateIndex].Label;
             var labelSize = ImGui.CalcTextSize(label);
             drawList.AddText(new Vector2(selectableScreenRect.Min.X + 3, selectableScreenRect.Max.Y - labelSize.Y), Color.White, label);
             ImGui.PopFont();
