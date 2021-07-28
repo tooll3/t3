@@ -55,7 +55,7 @@ namespace T3.Gui.OutputUi
                 Texture2D texture = RenderTo2dTexture(texture3d);
                 ImageOutputCanvas.Current.DrawTexture(texture);
                 ResourceManager.Instance().SecondRenderWindowTexture = texture;
-                ImGui.SliderInt("z-pos", ref _zPosIndex, 0, texture3d.Texture?.Description.Depth - 1 ?? 0);
+                ImGui.SliderInt("z-pos", ref _zPosIndex, 0, texture3d?.Texture?.Description.Depth - 1 ?? 0);
             }
             else
             {
