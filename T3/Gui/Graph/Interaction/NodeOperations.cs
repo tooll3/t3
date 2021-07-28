@@ -333,7 +333,10 @@ namespace T3.Gui.Graph.Interaction
                 var genericName = GenericName(Identifier("Instance"))
                    .WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList<TypeSyntax>(IdentifierName(_newSymbolName)))
                                             .WithGreaterThanToken(Token(TriviaList(), SyntaxKind.GreaterThanToken, TriviaList(LineFeed))));
+                
+                var baseInterfaces = node.BaseList?.Types.RemoveAt(0).Select((e) => e).ToArray();
                 var baseList = BaseList(SingletonSeparatedList<BaseTypeSyntax>(SimpleBaseType(genericName)));
+                baseList = baseList.AddTypes(baseInterfaces);
                 baseList = baseList.WithColonToken(Token(TriviaList(), SyntaxKind.ColonToken, TriviaList(Space)));
                 classDeclaration = classDeclaration.WithBaseList(baseList);
                 return classDeclaration;
