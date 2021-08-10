@@ -203,7 +203,7 @@ namespace T3
             if (usingSoundtrack)
             {
                 var songDurationInSecs = _playback.GetSongDurationInSecs();
-                for (double timeInSecs = 0; timeInSecs < songDurationInSecs; timeInSecs += 10.0)
+                for (double timeInSecs = 0; timeInSecs < songDurationInSecs; timeInSecs += 1.0)
                 {
                     Log.Info($"Pre-evaluate at: {timeInSecs}s");
                     EvaluationContext.GlobalTimeInSecs = timeInSecs;
