@@ -757,6 +757,7 @@ namespace T3.Gui.Graph
                                               currentDir + @"\Player\bin\Release\Player.exe",
                                               currentDir + @"\Player\bin\Release\Player.exe.config",
                                               currentDir + @"\Player\bin\Release\SharpDX.Desktop.dll",
+                                              currentDir + @"\Player\bin\Release\System.Runtime.CompilerServices.Unsafe.dll",  // required for svg
                                           };
                 playerFileNames.ForEach(s => CopyFile(s, exportDir));
                 
