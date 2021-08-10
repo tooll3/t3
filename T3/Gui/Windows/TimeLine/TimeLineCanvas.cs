@@ -84,9 +84,9 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     _clipRange.Draw(this, compositionTimeClip, Drawlist, SnapHandlerForU);
                 }
-
+                
                 _timeSelectionRange.Draw(Drawlist);
-
+                
                 _currentTimeMarker.Draw(Playback);
                 DrawDragTimeArea();
 

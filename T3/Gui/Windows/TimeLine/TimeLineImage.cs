@@ -23,8 +23,8 @@ namespace T3.Gui.Windows.TimeLine
             var size = contentRegionMax - contentRegionMin;
             var yMin = (contentRegionMin + windowPos).Y;
             
-            drawlist.AddRectFilled(contentRegionMin + windowPos, 
-                                   contentRegionMax + windowPos, new Color(0,0,0,0.3f));
+            // drawlist.AddRectFilled(contentRegionMin + windowPos, 
+            //                        contentRegionMax + windowPos, new Color(0,0,0,0.3f));
             
             var songDurationInBars = (float)(playback.GetSongDurationInSecs() * playback.Bpm / 240);
             var xMin= TimeLineCanvas.Current.TransformGlobalTime(0);
