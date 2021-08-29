@@ -13,7 +13,7 @@ namespace T3.Gui.Graph.Dialogs
         {
             if (BeginDialog("Edit node output"))
             {
-                ImGui.Text("Define the dirty flag behavior for " + _outputDefinition.Name);
+                ImGui.TextUnformatted("Define the dirty flag behavior for " + _outputDefinition.Name);
 
                 var symbolChild = _symbolChildUi.SymbolChild;
                 var outputEntry = symbolChild.Outputs[_outputDefinition.Id];

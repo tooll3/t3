@@ -63,7 +63,7 @@ namespace T3.Gui.Windows
 
                 // Group Title
                 ImGui.PushFont(Fonts.FontLarge);
-                ImGui.Text(activeGroup.Title);
+                ImGui.TextUnformatted(activeGroup.Title);
                 ImGui.PopFont();
 
                 // Functions
@@ -76,7 +76,7 @@ namespace T3.Gui.Windows
                 
                 if (ImGui.BeginPopupModal("Delete?"))
                 {
-                    ImGui.Text("Delete this Variation group?.\nThis operation cannot be undone!\n\n");
+                    ImGui.TextUnformatted("Delete this Variation group?.\nThis operation cannot be undone!\n\n");
                     ImGui.Separator();
 
                     if (ImGui.Button("OK", new Vector2(120, 0)))
@@ -111,7 +111,7 @@ namespace T3.Gui.Windows
 
                         ImGui.PushFont(Fonts.FontSmall);
                         ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
-                        ImGui.Text(lastSymbolChild.ReadableName);
+                        ImGui.TextUnformatted(lastSymbolChild.ReadableName);
                         ImGui.PopStyleColor();
                         ImGui.PopFont();
                         if (ImGui.IsItemHovered())
@@ -127,7 +127,7 @@ namespace T3.Gui.Windows
 
                     if (lastSymbolChild != null && lastSymbolChild.InputValues.TryGetValue(param.InputId, out var input))
                     {
-                        ImGui.Text(input.Name);
+                        ImGui.TextUnformatted(input.Name);
 
                         var valueInPreset = activePreset?.ValuesForGroupParameterIds[param.Id];
                         if (input.Value is InputValue<float> floatValue
@@ -139,7 +139,7 @@ namespace T3.Gui.Windows
                             var highlightIfModified = isModified ? Color.Orange.Rgba : Color.Gray;
                             ImGui.SameLine(100);
                             ImGui.PushStyleColor(ImGuiCol.Text, highlightIfModified);
-                            ImGui.Text($"{currentValue:G4}");
+                            ImGui.TextUnformatted($"{currentValue:G4}");
                             ImGui.PopStyleColor();
                         }
                     }
@@ -392,7 +392,7 @@ namespace T3.Gui.Windows
             var edited = false;
             ImGui.BeginGroup();
             {
-                ImGui.Text(GetDurationLabel(group.BlendTransitionDuration));
+                ImGui.TextUnformatted(GetDurationLabel(group.BlendTransitionDuration));
                 ImGui.SetNextWindowPos(ImGui.GetItemRectMin());
                 CustomComponents.ContextMenuForItem(() =>
                                                     {

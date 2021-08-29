@@ -13,7 +13,7 @@ namespace T3.Gui.Graph.Dialogs
             if (BeginDialog("Rename symbol"))
             {
                 ImGui.PushFont(Fonts.FontSmall);
-                ImGui.Text("Name");
+                ImGui.TextUnformatted("Name");
                 ImGui.PopFont();
 
                 ImGui.SetNextItemWidth(150);

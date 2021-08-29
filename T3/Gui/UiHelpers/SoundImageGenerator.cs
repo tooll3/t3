@@ -46,7 +46,7 @@ namespace T3.Gui.UiHelpers
             {
                 sampleLength = (long)( sampleLength * numSamples / (double)maxSamples) + 100;
                 numSamples = streamLength / sampleLength;
-                Log.Debug($"Limittng texture size to {numSamples} samples");
+                Log.Debug($"Limitting texture size to {numSamples} samples");
             }
             
             Bass.ChannelPlay(stream);

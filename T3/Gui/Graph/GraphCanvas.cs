@@ -443,7 +443,7 @@ namespace T3.Gui.Graph
 
             ImGui.PushFont(Fonts.FontSmall);
             ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-            ImGui.Text(label);
+            ImGui.TextUnformatted(label);
             ImGui.PopStyleColor();
             ImGui.PopFont();
 

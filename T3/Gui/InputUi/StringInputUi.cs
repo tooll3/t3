@@ -46,7 +46,7 @@ namespace T3.Gui.InputUi
             if (value == null)
             {
                 // value was null!
-                ImGui.Text(name + " is null?!");
+                ImGui.TextUnformatted(name + " is null?!");
                 return InputEditStateFlags.Nothing;
             }
 
@@ -84,7 +84,7 @@ namespace T3.Gui.InputUi
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One*5);
                 ImGui.BeginTooltip();
-                ImGui.Text(value);
+                //ImGui.TextUnformatted(value);
                 ImGui.EndTooltip();
                 ImGui.PopStyleVar();
             }
@@ -142,7 +142,7 @@ namespace T3.Gui.InputUi
             ImGui.Combo("##dropDownStringUsage", ref index, valueNames, valueNames.Length);
             Usage = (UsageType)index;
             ImGui.SameLine();
-            ImGui.Text("Usage");
+            ImGui.TextUnformatted("Usage");
         }
 
         public override void Write(JsonTextWriter writer)

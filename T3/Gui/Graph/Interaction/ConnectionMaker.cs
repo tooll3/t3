@@ -694,7 +694,7 @@ namespace T3.Gui.Graph
                     ImGui.SetNextWindowPos(_mousePosition + new Vector2(-textSize.X - 20, -textSize.Y / 2));
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
                     ImGui.BeginTooltip();
-                    ImGui.Text(BestMatchLastFrame.Name);
+                    ImGui.TextUnformatted(BestMatchLastFrame.Name);
                     ImGui.EndTooltip();
                     ImGui.PopStyleVar();
                 }

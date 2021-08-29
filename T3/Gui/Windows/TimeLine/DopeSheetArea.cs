@@ -94,12 +94,12 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.BeginTooltip();
 
                 ImGui.PushFont(Fonts.FontSmall);
-                ImGui.Text(parameter.Input.Input.Name);
+                ImGui.TextUnformatted(parameter.Input.Input.Name);
 
                 foreach (var curve in parameter.Curves)
                 {
                     var v = curve.GetSampledValue(mouseTime);
-                    ImGui.Text($"{v:0.00}");
+                    ImGui.TextUnformatted($"{v:0.00}");
                 }
 
                 ImGui.PopFont();

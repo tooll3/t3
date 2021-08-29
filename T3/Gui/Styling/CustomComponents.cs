@@ -160,7 +160,7 @@ namespace T3.Gui
                 if (title != null)
                 {
                     ImGui.PushFont(Fonts.FontLarge);
-                    ImGui.Text(title);
+                    ImGui.TextUnformatted(title);
                     ImGui.PopFont();
                 }
 
@@ -248,7 +248,7 @@ namespace T3.Gui
         {
             ImGui.PushFont(Fonts.FontSmall);
             ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-            ImGui.Text(text);
+            ImGui.TextUnformatted(text);
             ImGui.PopStyleColor();
             ImGui.PopFont();
         }
@@ -260,7 +260,7 @@ namespace T3.Gui
         {
             ImGui.PushFont(Fonts.FontSmall);
             ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-            ImGui.Text(label);
+            ImGui.TextUnformatted(label);
             ImGui.PopStyleColor();
             ImGui.PopFont();
         }
@@ -427,7 +427,7 @@ namespace T3.Gui
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);
-            ImGui.Text(message);
+            ImGui.TextUnformatted(message);
             if (!string.IsNullOrEmpty(additionalNotes))
             {
                 ImGui.TextColored(Color.Gray, additionalNotes);

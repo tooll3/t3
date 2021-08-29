@@ -37,7 +37,7 @@ namespace T3.Gui.TableView
                 FieldInfo[] members = list.Type.GetFields();
 
                 ImGui.AlignTextToFramePadding();
-                ImGui.Text($"[{list.NumElements}]");
+                ImGui.TextUnformatted($"[{list.NumElements}]");
                 ImGui.SameLine(lineNumberWidth);
 
                 // List Header 
@@ -90,7 +90,7 @@ namespace T3.Gui.TableView
                     }
 
                     ImGui.AlignTextToFramePadding();
-                    ImGui.Text(objectIndex + ".");
+                    ImGui.TextUnformatted(objectIndex + ".");
                     ImGui.SameLine(lineNumberWidth);
 
                     ImGui.PushID(objectIndex);
@@ -170,7 +170,7 @@ namespace T3.Gui.TableView
                         else
                         {
                             ImGui.SetNextItemWidth(valueColumnWidth);
-                            ImGui.Text("?");
+                            ImGui.TextUnformatted("?");
                             ImGui.SameLine();
                         }
                     }

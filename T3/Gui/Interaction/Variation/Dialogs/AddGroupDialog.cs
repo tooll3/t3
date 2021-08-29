@@ -20,7 +20,7 @@ namespace T3.Gui.Interaction.Variation.Dialogs
                 // Name and namespace
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.Text("Name of parameter group");
+                    ImGui.TextUnformatted("Name of parameter group");
                     ImGui.SameLine();
                     ImGui.PopFont();
                 
@@ -36,7 +36,7 @@ namespace T3.Gui.Interaction.Variation.Dialogs
                 // // Description
                 // {
                 //     ImGui.PushFont(Fonts.FontSmall);
-                //     ImGui.Text("Description");
+                //     ImGui.TextUnformatted("Description");
                 //     ImGui.PopFont();
                 //     ImGui.SetNextItemWidth(460);
                 //     ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));

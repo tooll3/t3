@@ -28,7 +28,7 @@ namespace T3.Gui.Windows
         {
             RenderDurationPlot.Draw(_uiRenderDurationMs);
             DeltaTime.Draw(ImGui.GetIO().DeltaTime * 1000);
-            ImGui.Text("Vertices:" + ImGui.GetIO().MetricsRenderVertices);
+            ImGui.TextUnformatted("Vertices:" + ImGui.GetIO().MetricsRenderVertices);
             DrawPressedKeys();
         }
 
@@ -110,7 +110,7 @@ namespace T3.Gui.Windows
         private static void DrawPressedKeys()
         {
             var io = ImGui.GetIO();
-            ImGui.Text(
+            ImGui.TextUnformatted(
                        (io.KeyAlt ? "Alt" : "")
                        + (io.KeyCtrl ? "Ctrl" : "")
                        + (io.KeyShift ? "Shift" : ""));
@@ -125,7 +125,7 @@ namespace T3.Gui.Windows
                 sb.Append($"{k} [{i}]");
             }
 
-            ImGui.Text("Pressed keys:" + sb);
+            ImGui.TextUnformatted("Pressed keys:" + sb);
         }
 
         private static float _uiRenderDurationMs;

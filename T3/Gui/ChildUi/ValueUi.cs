@@ -33,10 +33,10 @@ namespace T3.Gui.ChildUi
             ImGui.BeginGroup();
             if (!string.IsNullOrEmpty(symbolChild.Name))
             {
-                ImGui.Text(symbolChild.Name);
+                ImGui.TextUnformatted(symbolChild.Name);
             }
 
-            ImGui.Text($"{valueInstance.Float.Value:0.00}");
+            ImGui.TextUnformatted($"{valueInstance.Float.Value:0.00}");
             ImGui.EndGroup();
             ImGui.PopFont();
             

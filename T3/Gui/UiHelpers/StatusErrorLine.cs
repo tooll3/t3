@@ -23,7 +23,7 @@ namespace T3.Gui.UiHelpers
         {
             if (_logEntries.Count == 0)
             {
-                ImGui.Text("Log empty");
+                ImGui.TextUnformatted("Log empty");
                 return;
             }
 

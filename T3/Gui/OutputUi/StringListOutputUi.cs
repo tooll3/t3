@@ -24,7 +24,7 @@ namespace T3.Gui.OutputUi
             {
                 var stringValue = typedSlot.Value;
                 var outputString = stringValue == null ? "null" : string.Join(", ", stringValue);
-                ImGui.Text(outputString);
+                ImGui.TextUnformatted(outputString);
             }
             else
             {

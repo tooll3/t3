@@ -30,11 +30,11 @@ namespace T3.Gui.OutputUi
                         ImGui.Value("", f);
                         break;
                     case string s:
-                        ImGui.Text(s);
+                        ImGui.TextUnformatted(s);
                         break;
                     default:
                         var t = value?.ToString();
-                        ImGui.Text(t ?? typeof(T).ToString());
+                        ImGui.TextUnformatted(t ?? typeof(T).ToString());
                         break;
                 }
             }

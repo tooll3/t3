@@ -26,7 +26,7 @@ namespace T3.Gui.OutputUi
             {
                 var v = typedSlot.Value;
                 var outputString =  v == null? "NULL" : string.Join(", ", v);
-                ImGui.Text($"{outputString}");
+                ImGui.TextUnformatted($"{outputString}");
 
                 if (v == null)
                     return;
@@ -50,7 +50,7 @@ namespace T3.Gui.OutputUi
                         max = Math.Max(max, number);
                     }
                 
-                    ImGui.Text($"{v.Count} [{min:G5} .. {max:G5}] ∅{sum/v.Count:G5}");
+                    ImGui.TextUnformatted($"{v.Count} [{min:G5} .. {max:G5}] ∅{sum/v.Count:G5}");
                 }
             }
             else

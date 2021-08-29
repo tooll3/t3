@@ -119,7 +119,7 @@ namespace T3.Gui.Windows.TimeLine
                 _nestedTimeOffset += clip.TimeRange.Start - clip.SourceRange.Start * scale;
             }
 
-            // ImGui.Text($"localScale: {_nestedTimeScale}   localScroll: {_nestedTimeOffset}");
+            // ImGui.TextUnformatted($"localScale: {_nestedTimeScale}   localScroll: {_nestedTimeOffset}");
         }
 
         /// <summary>

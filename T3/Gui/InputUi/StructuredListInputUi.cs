@@ -25,7 +25,7 @@ namespace T3.Gui.InputUi
             if (slist == null)
             {
                 // value was null!
-                ImGui.Text(name + " is null?!");
+                ImGui.TextUnformatted(name + " is null?!");
                 return InputEditStateFlags.Nothing;
             }
             
@@ -51,10 +51,10 @@ namespace T3.Gui.InputUi
         {
             if (slist == null)
             {
-                ImGui.Text("NULL?");
+                ImGui.TextUnformatted("NULL?");
                 return;
             }
-            //ImGui.Text($"{value.Type.Name}[{value.GetCount()}]");
+            //ImGui.TextUnformatted($"{value.Type.Name}[{value.GetCount()}]");
             ImGui.NewLine();
             
                         var modified = TableView.TableList.Draw(slist);

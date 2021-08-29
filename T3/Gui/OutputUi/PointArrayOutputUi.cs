@@ -32,7 +32,7 @@ namespace T3.Gui.OutputUi
                 for (var index = 0; index < v.Length && index < 50; index++)
                 {
                     var position = v[index].Position;
-                    ImGui.Text($"{position}");
+                    ImGui.TextUnformatted($"{position}");
                 }
             }
             else

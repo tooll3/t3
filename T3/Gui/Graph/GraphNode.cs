@@ -755,7 +755,7 @@ namespace T3.Gui.Graph
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     ImGui.BeginTooltip();
-                    ImGui.Text($".{outputDef.Name}");
+                    ImGui.TextUnformatted($".{outputDef.Name}");
                     ImGui.PushFont(Fonts.FontSmall);
                     ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates");
                     ImGui.PopFont();
@@ -890,7 +890,7 @@ namespace T3.Gui.Graph
                             ImGui.PopFont();
                         }
 
-                        ImGui.Text($".{inputDef.Name}");
+                        ImGui.TextUnformatted($".{inputDef.Name}");
                         ImGui.PushFont(Fonts.FontSmall);
                         ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                         ImGui.PopFont();
@@ -1002,7 +1002,7 @@ namespace T3.Gui.Graph
                             ImGui.PopFont();
                         }
 
-                        ImGui.Text($".{inputDef.Name}");
+                        ImGui.TextUnformatted($".{inputDef.Name}");
                         ImGui.PushFont(Fonts.FontSmall);
                         ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                         ImGui.PopFont();

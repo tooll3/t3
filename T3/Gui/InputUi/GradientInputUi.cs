@@ -25,7 +25,7 @@ namespace T3.Gui.InputUi
             if (gradient == null)
             {
                 // value was null!
-                ImGui.Text(name + " is null?!");
+                ImGui.TextUnformatted(name + " is null?!");
                 return InputEditStateFlags.Nothing;
             }
             

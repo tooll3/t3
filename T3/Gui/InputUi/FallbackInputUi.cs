@@ -19,14 +19,14 @@ namespace T3.Gui.InputUi
 
         protected override InputEditStateFlags DrawEditControl(string name, ref T value)
         {
-            ImGui.Text(""); // Print an empty text to force layout to next line
+            ImGui.TextUnformatted(""); // Print an empty text to force layout to next line
             return InputEditStateFlags.Nothing;
         }
 
         protected override void DrawReadOnlyControl(string name, ref T value)
         {
             // ToDo: it would be great to print the name of the connected op here.
-            ImGui.Text(""); // Print an empty text to force layout to next line
+            ImGui.TextUnformatted(""); // Print an empty text to force layout to next line
         }
     }
 }

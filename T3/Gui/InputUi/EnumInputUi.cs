@@ -92,7 +92,7 @@ namespace T3.Gui.InputUi
 
         protected override void DrawReadOnlyControl(string name, ref T value)
         {
-            ImGui.Text(value.ToString());
+            ImGui.TextUnformatted(value.ToString());
         }
     }
 }

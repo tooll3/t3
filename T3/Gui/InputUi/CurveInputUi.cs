@@ -30,7 +30,7 @@ namespace T3.Gui.InputUi
             if (curve == null)
             {
                 // value was null!
-                ImGui.Text(name + " is null?!");
+                ImGui.TextUnformatted(name + " is null?!");
                 return InputEditStateFlags.Nothing;
             }
             

@@ -41,7 +41,7 @@ namespace T3.Gui.ChildUi
             }
             
             ImGui.SameLine();
-            ImGui.Text($"  {valueSlider.Result.Value:0.00}");
+            ImGui.TextUnformatted($"  {valueSlider.Result.Value:0.00}");
             
             return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
         }

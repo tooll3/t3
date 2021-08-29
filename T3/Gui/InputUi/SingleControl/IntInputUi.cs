@@ -98,7 +98,7 @@ namespace T3.Gui.InputUi.SingleControl
             {
                 var enumInfo = EnumCache.Instance.GetEnumEntry(MappedType);
                 int nameIndex = Array.IndexOf(enumInfo.ValuesAsInt, value);
-                ImGui.Text(nameIndex != -1 ? enumInfo.ValueNames[nameIndex] : "Invalid enum value.");
+                ImGui.TextUnformatted(nameIndex != -1 ? enumInfo.ValueNames[nameIndex] : "Invalid enum value.");
             }
             else
             {

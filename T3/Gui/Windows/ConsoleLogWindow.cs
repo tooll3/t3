@@ -34,7 +34,7 @@ namespace T3.Gui.Windows
                     }
                 }
                 
-                //ImGui.Text(_isAtBottom ? "Bottom!": "Not at bottom");
+                //ImGui.TextUnformatted(_isAtBottom ? "Bottom!": "Not at bottom");
                 CustomComponents.ToggleButton("Scroll", ref _shouldScrollToBottom, Vector2.Zero);
                 ImGui.SameLine();
 

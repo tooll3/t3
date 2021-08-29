@@ -257,7 +257,7 @@ namespace T3.Gui.Graph.Interaction
 
                         ImGui.SameLine();
                         
-                        ImGui.Text(symbolUi.Symbol.Name);
+                        ImGui.TextUnformatted(symbolUi.Symbol.Name);
                         ImGui.SameLine();
                         
                         if (!string.IsNullOrEmpty(symbolUi.Symbol.Namespace))

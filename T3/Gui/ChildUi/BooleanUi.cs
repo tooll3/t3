@@ -39,7 +39,7 @@ namespace T3.Gui.ChildUi
             var label = string.IsNullOrEmpty(symbolChild.Name)
                             ? refValue ? "True" : "False"
                             : symbolChild.ReadableName;
-            ImGui.Text(label);
+            ImGui.TextUnformatted(label);
 
             ImGui.PopClipRect();
             ImGui.PopID();

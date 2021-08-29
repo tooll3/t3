@@ -311,7 +311,7 @@ namespace T3.Gui.Graph
 
                         ImGui.SameLine();
                         ImGui.PopID();
-                        ImGui.Text(">");
+                        ImGui.TextUnformatted(">");
                     }
                 }
                 ImGui.PopFont();
@@ -322,11 +322,11 @@ namespace T3.Gui.Graph
             {
                 ImGui.SetCursorPosX(8);
                 ImGui.PushFont(Fonts.FontLarge);
-                ImGui.Text(compositionOp.Symbol.Name);
+                ImGui.TextUnformatted(compositionOp.Symbol.Name);
                 ImGui.SameLine();
 
                 ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.3f).Rgba);
-                ImGui.Text("  - " + compositionOp.Symbol.Namespace);
+                ImGui.TextUnformatted("  - " + compositionOp.Symbol.Namespace);
                 ImGui.PopFont();
                 ImGui.PopStyleColor();
 

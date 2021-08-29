@@ -266,18 +266,18 @@ namespace T3.Gui.Windows.TimeLine
             {
                 ImGui.BeginTooltip();
                 {
-                    ImGui.Text($"In: {timeClip.TimeRange.Start}");
-                    ImGui.Text($"Out: {timeClip.TimeRange.End}");
+                    ImGui.TextUnformatted($"In: {timeClip.TimeRange.Start}");
+                    ImGui.TextUnformatted($"Out: {timeClip.TimeRange.End}");
                     if (timeRemapped)
                     {
-                        ImGui.Text($"Source In: {timeClip.SourceRange.Start}");
-                        ImGui.Text($"Source Out: {timeClip.SourceRange.End}");
+                        ImGui.TextUnformatted($"Source In: {timeClip.SourceRange.Start}");
+                        ImGui.TextUnformatted($"Source Out: {timeClip.SourceRange.End}");
                     }
 
                     if (timeStretched)
                     {
                         var speed = GetSpeed(timeClip);
-                        ImGui.Text($"Speed: {speed:0.}%");
+                        ImGui.TextUnformatted($"Speed: {speed:0.}%");
                     }
                 }
                 ImGui.EndTooltip();

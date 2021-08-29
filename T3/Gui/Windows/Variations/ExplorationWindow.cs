@@ -115,7 +115,7 @@ namespace T3.Gui.Windows.Variations
                             var formattedStrength = $"×{matchingParam.ScatterStrength:F1}";
                             var size = ImGui.CalcTextSize(formattedStrength);
                             ImGui.SetCursorPosX(ImGui.GetContentRegionAvail().X- size.X - 5);
-                            ImGui.Text(formattedStrength);
+                            ImGui.TextUnformatted(formattedStrength);
                             ImGui.SetCursorPos(keep);
                             ImGui.SetCursorPosX(ImGui.GetContentRegionAvail().X- 50);
                             ImGui.InvisibleButton("ScatterStrengthFactor", new Vector2(50, ImGui.GetTextLineHeight()));
@@ -218,7 +218,7 @@ namespace T3.Gui.Windows.Variations
                 // Header
                 ImGui.PushFont(Fonts.FontBold);
                 var itemWidth = ImGui.GetContentRegionAvail().X - 16;
-                ImGui.Text("Snapshots");
+                ImGui.TextUnformatted("Snapshots");
                 ImGui.PopFont();
                 ImGui.SameLine(itemWidth);
                 

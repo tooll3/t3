@@ -26,7 +26,7 @@ namespace T3.Gui.OutputUi
                 var list = typedSlot.Value;
                 if (list == null)
                 {
-                    ImGui.Text("NULL?");
+                    ImGui.TextUnformatted("NULL?");
                 }
                 else
                 {

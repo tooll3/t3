@@ -36,9 +36,9 @@ namespace T3.Gui.ChildUi
             ImGui.BeginGroup();
             if (!string.IsNullOrEmpty(symbolChild.Name))
             {
-                ImGui.Text(symbolChild.Name);
+                ImGui.TextUnformatted(symbolChild.Name);
             }
-            ImGui.Text(descriptiveString);
+            ImGui.TextUnformatted(descriptiveString);
 
             ImGui.EndGroup();
             ImGui.PopFont();

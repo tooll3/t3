@@ -11,7 +11,7 @@ namespace T3.Gui.Windows.Output
             {
                 ImGui.SetNextItemWidth(120);
                 ImGui.AlignTextToFramePadding();
-                ImGui.Text("Name:");
+                ImGui.TextUnformatted("Name:");
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(250);
                 ImGui.InputText("##parameterName", ref resolution.Title, 255);
@@ -20,7 +20,7 @@ namespace T3.Gui.Windows.Output
 
                 ImGui.SetNextItemWidth(120);
                 ImGui.AlignTextToFramePadding();
-                ImGui.Text("Resolution:");
+                ImGui.TextUnformatted("Resolution:");
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(250);
 

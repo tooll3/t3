@@ -21,14 +21,14 @@ namespace T3.Gui.Graph.Dialogs
             {
                 ImGui.SetNextItemWidth(120);
                 ImGui.AlignTextToFramePadding();
-                ImGui.Text("Name:");
+                ImGui.TextUnformatted("Name:");
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(250);
                 ImGui.InputText("##outputName", ref _parameterName, 255);
 
                 ImGui.SetNextItemWidth(80);
                 ImGui.AlignTextToFramePadding();
-                ImGui.Text("Type:");
+                ImGui.TextUnformatted("Type:");
                 ImGui.SameLine();
 
                 ImGui.SetNextItemWidth(250);

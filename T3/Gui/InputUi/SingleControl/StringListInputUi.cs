@@ -19,14 +19,14 @@ namespace T3.Gui.InputUi.SingleControl
         protected override bool DrawSingleEditControl(string name, ref List<string> list)
         {
             var outputString = string.Join(", ", list);
-            ImGui.Text($"{outputString}");
+            ImGui.TextUnformatted($"{outputString}");
             return false;
         }
 
         protected override void DrawReadOnlyControl(string name, ref List<string> list)
         {
             var outputString = list != null ? string.Join(", ", list) : "<null>";
-            ImGui.Text(outputString);
+            ImGui.TextUnformatted(outputString);
         }
     }
 }

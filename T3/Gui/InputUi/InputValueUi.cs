@@ -468,7 +468,7 @@ namespace T3.Gui.InputUi
             ImGui.Combo("##dropDownRelevancy", ref index, valueNames, valueNames.Length);
             Relevancy = (Relevancy)index;
             ImGui.SameLine();
-            ImGui.Text("Relevancy");
+            ImGui.TextUnformatted("Relevancy");
         }
 
         public virtual void Write(JsonTextWriter writer)

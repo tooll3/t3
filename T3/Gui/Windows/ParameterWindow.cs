@@ -109,7 +109,7 @@ namespace T3.Gui.Windows
             {
                 ImGui.PushID(input.Id.GetHashCode());
                 ImGui.PushFont(Fonts.FontLarge);
-                ImGui.Text(input.InputDefinition.Name);
+                ImGui.TextUnformatted(input.InputDefinition.Name);
                 ImGui.PopFont();
                 input.DrawSettings();
                 ImGui.Spacing();
@@ -176,7 +176,7 @@ namespace T3.Gui.Windows
                 ImGui.SameLine();
                 ImGui.Dummy(new Vector2(10, 0));
                 ImGui.SameLine();
-                ImGui.Text(op.Symbol.Name);
+                ImGui.TextUnformatted(op.Symbol.Name);
                 ImGui.Dummy(Vector2.One * 5);
             }
 

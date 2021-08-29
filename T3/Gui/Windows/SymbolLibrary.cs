@@ -92,7 +92,7 @@ namespace T3.Gui.Windows
                 var symbol = _selectedSymbol ?? _filter.MatchingSymbolUis[0].Symbol;
                 ImGui.Separator();
                 ImGui.PushFont(Fonts.FontLarge);
-                ImGui.Text("Is used these Symbols...");
+                ImGui.TextUnformatted("Is used these Symbols...");
                 ImGui.PopFont();
                 CustomComponents.HelpText("Note: This only includes currently loaded (instanced) Operators.");
 
@@ -188,7 +188,7 @@ namespace T3.Gui.Windows
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.BeginTooltip();
-                    ImGui.Text("here");
+                    ImGui.TextUnformatted("here");
                     ImGui.EndTooltip();
                 }
                 

@@ -20,11 +20,11 @@ namespace T3.Gui.Graph.Dialogs
                 // namespace and title
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.Text("Namespace");
+                    ImGui.TextUnformatted("Namespace");
                     ImGui.SameLine();
 
                     ImGui.SetCursorPosX(250 + 20); // Not sure how else to layout this
-                    ImGui.Text("Name");
+                    ImGui.TextUnformatted("Name");
                     ImGui.PopFont();
 
                     ImGui.SetNextItemWidth(250);
@@ -46,7 +46,7 @@ namespace T3.Gui.Graph.Dialogs
                 // Description
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.Text("Description");
+                    ImGui.TextUnformatted("Description");
                     ImGui.PopFont();
                     ImGui.SetNextItemWidth(460);
                     ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));

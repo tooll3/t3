@@ -29,7 +29,7 @@ namespace T3.Gui.InputUi.SingleControl
 
         protected override void DrawReadOnlyControl(string name, ref bool value)
         {
-            ImGui.Text(value.ToString());
+            ImGui.TextUnformatted(value.ToString());
         }
         
 

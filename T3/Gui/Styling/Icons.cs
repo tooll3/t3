@@ -15,7 +15,7 @@ namespace T3.Gui.Styling
         public static void Draw(Icon icon)
         {
             ImGui.PushFont(IconFont);
-            ImGui.Text(((char)(int)icon).ToString());
+            ImGui.TextUnformatted(((char)(int)icon).ToString());
             ImGui.PopFont();
         }
 

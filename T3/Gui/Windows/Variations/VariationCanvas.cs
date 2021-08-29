@@ -36,7 +36,7 @@ namespace T3.Gui.Windows.Variations
             var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) as OutputWindow;
             if (outputWindow == null)
             {
-                ImGui.Text("No output window found");
+                ImGui.TextUnformatted("No output window found");
                 return;
             }
 

@@ -21,7 +21,7 @@ namespace T3.Gui.Graph.Dialogs
                 }
 
                 ImGui.PushFont(Fonts.FontSmall);
-                ImGui.Text("Namespace");
+                ImGui.TextUnformatted("Namespace");
                 ImGui.PopFont();
 
                 ImGui.SetNextItemWidth(150);

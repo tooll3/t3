@@ -28,10 +28,10 @@ namespace T3.Gui.ChildUi
             ImGui.BeginGroup();
             if (!string.IsNullOrEmpty(symbolChild.Name))
             {
-                ImGui.Text(symbolChild.Name);
+                ImGui.TextUnformatted(symbolChild.Name);
             }
 
-            ImGui.Text($"{measureInstance.LastMeasureInMicroSeconds}µs");
+            ImGui.TextUnformatted($"{measureInstance.LastMeasureInMicroSeconds}µs");
             ImGui.EndGroup();
             ImGui.PopFont();
             

@@ -405,14 +405,14 @@ namespace T3.Gui.Windows.TimeLine
             T3Ui.OpenedPopUpName = "##TimeSettings";
 
             ImGui.PushFont(Fonts.FontLarge);
-            ImGui.Text("Playback settings");
+            ImGui.TextUnformatted("Playback settings");
             ImGui.PopFont();
 
             if (ImGui.BeginTabBar("##timeMode"))
             {
                 if (ImGui.BeginTabItem("AudioFile"))
                 {
-                    ImGui.Text("Soundtrack");
+                    ImGui.TextUnformatted("Soundtrack");
                     var filepathModified =
                         FileOperations.DrawSoundFilePicker(FileOperations.FilePickerTypes.File, ref ProjectSettings.Config.SoundtrackFilepath);
 
