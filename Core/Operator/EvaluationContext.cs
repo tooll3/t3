@@ -25,7 +25,7 @@ namespace T3.Core.Operator
 
         public void Reset()
         {
-            TimeInBars = GlobalTimeInBars;
+            TimeInBars = BeatTime;
             PointLights.Clear();
             PbrContextSettings.SetDefaultToContext(this);
         }
