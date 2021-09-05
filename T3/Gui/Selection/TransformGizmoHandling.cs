@@ -92,6 +92,11 @@ namespace T3.Gui.Selection
                 return;
             }
 
+            if (context.ShowGizmos == GizmoVisibility.Off)
+            {
+                return;
+            }
+
             // terminology of the matrices:
             // objectToClipSpace means in this context the transform without application of the ITransformable values. These are
             // named 'local'. So localToObject is the matrix of applying the ITransformable values and localToClipSpace to transform
