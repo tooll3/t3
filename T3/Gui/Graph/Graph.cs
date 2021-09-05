@@ -167,7 +167,10 @@ namespace T3.Gui.Graph
                 else if (c.SourceParentOrChildId != ConnectionMaker.NotConnectedId
                          && c.SourceParentOrChildId != ConnectionMaker.UseDraftChildId)
                 {
-                    var sourceNode = _childUis.Single(childUi => childUi.Id == c.SourceParentOrChildId);
+                    var sourceNode = _childUis.SingleOrDefault(childUi => childUi.Id == c.SourceParentOrChildId);
+                    if (sourceNode == null)
+                        return;
+                    
                     if (!_linesFromNodes.ContainsKey(sourceNode))
                         _linesFromNodes.Add(sourceNode, new List<ConnectionLineUi>());
 
