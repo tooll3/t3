@@ -35,7 +35,7 @@ namespace T3.Gui.InputUi.SingleControl
 
         protected override void DrawAnimatedValue(string name, InputSlot<bool> inputSlot, Animator animator)
         {
-            double time = EvaluationContext.GlobalTimeInBars;
+            double time = EvaluationContext.GlobalTimeForKeyframes;
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
             if (curves.Length != 1)
             {
@@ -67,7 +67,7 @@ namespace T3.Gui.InputUi.SingleControl
             {
                 bool value = boolInputValue.Value;
                 var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeInBars, new [] {value ? 1f :0f });   
+                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeForKeyframes, new [] {value ? 1f :0f });   
             }
         }        
     }

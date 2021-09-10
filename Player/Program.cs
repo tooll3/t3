@@ -207,7 +207,7 @@ namespace T3
                 {
                     Log.Info($"Pre-evaluate at: {timeInSecs}s");
                     EvaluationContext.GlobalTimeInSecs = timeInSecs;
-                    EvaluationContext.GlobalTimeInBars = timeInSecs / 120.0 * 240.0;
+                    EvaluationContext.GlobalTimeForKeyframes = timeInSecs / 120.0 * 240.0;
 
                     DirtyFlag.IncrementGlobalTicks();
                     DirtyFlag.InvalidationRefFrame++;

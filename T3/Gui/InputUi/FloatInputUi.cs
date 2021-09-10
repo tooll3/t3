@@ -65,7 +65,7 @@ namespace T3.Gui.InputUi
 
         protected override void DrawAnimatedValue(string name, InputSlot<float> inputSlot, Animator animator)
         {
-            double time = EvaluationContext.GlobalTimeInBars;
+            double time = EvaluationContext.GlobalTimeForKeyframes;
             var curves = animator.GetCurvesForInput(inputSlot);
             foreach (var curve in curves)
             {
@@ -91,7 +91,7 @@ namespace T3.Gui.InputUi
             {
                 float value = floatInputValue.Value;
 
-                double time = EvaluationContext.GlobalTimeInBars;
+                double time = EvaluationContext.GlobalTimeForKeyframes;
                 var curves = animator.GetCurvesForInput(inputSlot);
                 foreach (var curve in curves)
                 {

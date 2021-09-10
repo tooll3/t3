@@ -63,7 +63,7 @@ namespace T3.Gui.InputUi
 
         protected override void DrawAnimatedValue(string name, InputSlot<Vector3> inputSlot, Animator animator)
         {
-            double time = EvaluationContext.GlobalTimeInBars;
+            double time = EvaluationContext.GlobalTimeForKeyframes;
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
             if (curves.Length < _components.Length)
             {
@@ -89,7 +89,7 @@ namespace T3.Gui.InputUi
             {
                 Vector3 value = float3InputValue.Value;
                 var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeInBars, new [] { value.X, value.Y, value.Z});   
+                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeForKeyframes, new [] { value.X, value.Y, value.Z});   
             }
         }
 

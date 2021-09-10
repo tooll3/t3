@@ -31,17 +31,17 @@ namespace T3.Core.Operator.Slots
 
         private void UpdateWithTimeRangeCheck(EvaluationContext context)
         {
-            if ((context.TimeInBars < TimeClip.TimeRange.Start) || (context.TimeInBars >= TimeClip.TimeRange.End))
+            if ((context.TimeForKeyframes < TimeClip.TimeRange.Start) || (context.TimeForKeyframes >= TimeClip.TimeRange.End))
                 return;
 
             // TODO: Setting local time should flag time accessors as dirty 
-            var prevTime = context.TimeInBars;
-            double factor = (context.TimeInBars - TimeClip.TimeRange.Start) / (TimeClip.TimeRange.End - TimeClip.TimeRange.Start);
-            context.TimeInBars = factor * (TimeClip.SourceRange.End - TimeClip.SourceRange.Start) + TimeClip.SourceRange.Start;
+            var prevTime = context.TimeForKeyframes;
+            double factor = (context.TimeForKeyframes - TimeClip.TimeRange.Start) / (TimeClip.TimeRange.End - TimeClip.TimeRange.Start);
+            context.TimeForKeyframes = factor * (TimeClip.SourceRange.End - TimeClip.SourceRange.Start) + TimeClip.SourceRange.Start;
             
             _baseUpdateAction(context);
 
-            context.TimeInBars = prevTime;
+            context.TimeForKeyframes = prevTime;
         }
 
         private Action<EvaluationContext> _baseUpdateAction;

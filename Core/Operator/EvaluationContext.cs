@@ -25,7 +25,8 @@ namespace T3.Core.Operator
 
         public void Reset()
         {
-            TimeInBars = BeatTime;
+            TimeForKeyframes = GlobalTimeForKeyframes;
+            TimeForEffects = GlobalTimeForEffects;
             PointLights.Clear();
             PbrContextSettings.SetDefaultToContext(this);
         }
@@ -57,15 +58,23 @@ namespace T3.Core.Operator
 
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
         public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000.0;
-        public static double GlobalTimeInBars { get; set; }
+        
+        
+        public static double GlobalTimeForKeyframes { get; set; }
         
         /// <summary>
         /// The primary time used for user interactions and keyframe manipulation.
-        /// This is where there time marker in the timeline is displayed. 
+        /// This is where there time marker in the timeline is displayed.
+        ///
+        /// While evaluating the graph it can be overridden for sub graphs by <see cref="SetCommandTime"/>.
         /// </summary>
-        /// <remarks>Also see <see cref="EvaluationContext"/>.<see cref="BeatTime"/> and .<see cref="GlobalTimeInSecs"/></remarks>
-        public double TimeInBars { get; set; }
+        /// <remarks>Also see <see cref="EvaluationContext"/>.<see cref="GlobalTimeForEffects"/> and .<see cref="GlobalTimeInSecs"/></remarks>
+        public double TimeForKeyframes { get; set; }
         
+        /// <summary>
+        /// Although similar to KeyframeTime, this one keeps running in pause mode, if Keep Running is active.
+        /// </summary>
+        public double TimeForEffects { get; set; }
 
         /// <summary>
         /// If "keep running" option is enabled, this time is still running even if (audio) playback has been stopped.
@@ -74,7 +83,12 @@ namespace T3.Core.Operator
         public static double GlobalTimeInSecs { get; set; }
 
         public static double BPM { get; set; }
-        public static double BeatTime { get; set; }
+        
+        /// <summary>
+        /// This time keeps running
+        /// </summary>
+        public static double GlobalTimeForEffects { get; set; }
+        
         public static double LastFrameDuration { get; set; }
 
         public Size2 RequestedResolution { get; set; }

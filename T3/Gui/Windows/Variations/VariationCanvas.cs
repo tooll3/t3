@@ -380,7 +380,7 @@ namespace T3.Gui.Windows.Variations
 
             // Render variation
             EvaluationContext.Reset();
-            EvaluationContext.TimeInBars = 13.4f;
+            EvaluationContext.TimeForKeyframes = 13.4f;
             
             // NOTE: This is horrible hack to prevent _imageCanvas from being rendered by imgui
             // DrawValue will use the current ImageOutputCanvas for rendering

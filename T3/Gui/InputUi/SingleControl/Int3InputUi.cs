@@ -36,7 +36,7 @@ namespace T3.Gui.InputUi.SingleControl
             {
                 Int3 value = float3InputValue.Value;
                 var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeInBars, new [] { (float)value.X, (float)value.Y, (float)value.Z});   
+                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeForKeyframes, new [] { (float)value.X, (float)value.Y, (float)value.Z});   
             }
         }
     }

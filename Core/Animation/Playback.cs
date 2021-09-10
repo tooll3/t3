@@ -62,9 +62,9 @@ namespace T3.Core.Animation
 
             
             // FIXME: With multiple graphs, this break frame duration  
-            EvaluationContext.GlobalTimeInBars = TimeInBars;
-            var frameDurationInBars = BeatTime - EvaluationContext.BeatTime; 
-            EvaluationContext.BeatTime = BeatTime;
+            EvaluationContext.GlobalTimeForKeyframes = TimeInBars;
+            var frameDurationInBars = BeatTime - EvaluationContext.GlobalTimeForEffects; 
+            EvaluationContext.GlobalTimeForEffects = BeatTime;
             EvaluationContext.BPM = Bpm;
             EvaluationContext.LastFrameDuration = timeSinceLastFrameInSecs;
             EvaluationContext.GlobalTimeInSecs = TimeInSecs;

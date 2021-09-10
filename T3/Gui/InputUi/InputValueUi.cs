@@ -202,9 +202,9 @@ namespace T3.Gui.InputUi
                 }
                 else if (isAnimated)
                 {
-                    var hasKeyframeAtCurrentTime = animationCurve.HasVAt(EvaluationContext.GlobalTimeInBars);
-                    var hasKeyframeBefore = animationCurve.ExistVBefore(EvaluationContext.GlobalTimeInBars);
-                    var hasKeyframeAfter = animationCurve.ExistVAfter(EvaluationContext.GlobalTimeInBars);
+                    var hasKeyframeAtCurrentTime = animationCurve.HasVAt(EvaluationContext.GlobalTimeForKeyframes);
+                    var hasKeyframeBefore = animationCurve.ExistVBefore(EvaluationContext.GlobalTimeForKeyframes);
+                    var hasKeyframeAfter = animationCurve.ExistVAfter(EvaluationContext.GlobalTimeForKeyframes);
 
                     var iconIndex = 0;
                     const int leftBit = 1 << 0;
@@ -221,12 +221,12 @@ namespace T3.Gui.InputUi
                         if (hasKeyframeAtCurrentTime)
                         {
                             AnimationOperations.RemoveKeyframeFromCurves(animator.GetCurvesForInput(inputSlot),
-                                                                         EvaluationContext.GlobalTimeInBars);
+                                                                         EvaluationContext.GlobalTimeForKeyframes);
                         }
                         else
                         {
                             AnimationOperations.InsertKeyframeToCurves(animator.GetCurvesForInput(inputSlot),
-                                                                       EvaluationContext.GlobalTimeInBars);
+                                                                       EvaluationContext.GlobalTimeForKeyframes);
                         }
                     }
 
@@ -254,7 +254,7 @@ namespace T3.Gui.InputUi
                                                                 if (ImGui.MenuItem("Remove keyframe"))
                                                                 {
                                                                     AnimationOperations.RemoveKeyframeFromCurves(animator.GetCurvesForInput(inputSlot),
-                                                                        EvaluationContext.GlobalTimeInBars);
+                                                                        EvaluationContext.GlobalTimeForKeyframes);
                                                                 }
                                                             }
                                                             else
@@ -262,7 +262,7 @@ namespace T3.Gui.InputUi
                                                                 if (ImGui.MenuItem("Insert keyframe"))
                                                                 {
                                                                     AnimationOperations.InsertKeyframeToCurves(animator.GetCurvesForInput(inputSlot),
-                                                                        EvaluationContext.GlobalTimeInBars);
+                                                                        EvaluationContext.GlobalTimeForKeyframes);
                                                                 }
                                                             }
 
