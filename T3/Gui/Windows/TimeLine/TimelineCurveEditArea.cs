@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -13,6 +14,7 @@ using T3.Gui.InputUi;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Interaction.WithCurves;
+using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using UiHelpers;
 
@@ -29,44 +31,158 @@ namespace T3.Gui.Windows.TimeLine
             TimeLineCanvas = timeLineCanvas;
         }
 
+        private StringBuilder _stringBuilder = new StringBuilder(100);
         
-        public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters, bool bringCurvesIntoView = false)
+        public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters, bool fitCurvesVertically = false)
         {
             _compositionOp = compositionOp;
             AnimationParameters = animationParameters;
 
-            if (bringCurvesIntoView)
-                ViewAllOrSelectedKeys();
+            if (fitCurvesVertically)
+            {
+                var bounds = GetBoundsOnCanvas(GetSelectedOrAllPoints());
+                TimeLineCanvas.Current.SetVerticalScopeToCanvasArea(bounds, flipY:true);
+            }
+                
+            
 
             ImGui.BeginGroup();
             {
+                var drawList = ImGui.GetWindowDrawList();
+                drawList.ChannelsSplit(3);
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                     ViewAllOrSelectedKeys(alsoChangeTimeRange:true);
                 
                 if(KeyboardBinding.Triggered(UserActions.Duplicate))
                     DuplicateSelectedKeyframes(TimeLineCanvas.Playback.TimeInBars);                
                 
+                var lineStartPosition = ImGui.GetCursorPos();
+                
+                ImGui.PushFont(Fonts.FontSmall);
                 foreach (var param in animationParameters)
                 {
+                    ImGui.PushID(param.Input.GetHashCode());
+                    drawList.ChannelsSetCurrent(1);
+                    var hash = param.Input.GetHashCode();
+                    var isParamPinned = PinnedParameterComponents.ContainsKey(hash);
+
+                    _stringBuilder.Clear();
+                    _stringBuilder.Append(param.Instance.Symbol.Name);
+                    _stringBuilder.Append(".");
+                    _stringBuilder.Append(param.Input.Input.Name);
+                    var paramName = _stringBuilder.ToString();// param.Instance.Symbol.Name + "." + param.Input.Input.Name;
+
+                    var cursorPosition = lineStartPosition; 
+                    ImGui.SetCursorPos(cursorPosition);
+                    
+                    if (DrawPinButton(isParamPinned, paramName))
+                    {
+                        if (isParamPinned)
+                        {
+                            PinnedParameterComponents.Remove(hash);
+                            isParamPinned = false;
+                        }
+                        else
+                        {
+                            PinnedParameterComponents[hash] = 0xffff;
+                            isParamPinned = true;
+                        }
+                    }
+                    
+                    cursorPosition += new Vector2(ImGui.GetItemRectSize().X,0 );
+                    
+                    var isParamHovered = ImGui.IsItemHovered();
+
+                    var curveNames = param.Input.ValueType == typeof(Vector4) 
+                                         ? DopeSheetArea.ColorCurveNames 
+                                         : DopeSheetArea.CurveNames;
+                    
                     var curveIndex = 0;
                     foreach (var curve in param.Curves)
                     {
-                        var color = DopeSheetArea._curveColors[curveIndex % DopeSheetArea._curveColors.Length];
-                        DrawCurveLine(curve, TimeLineCanvas, color);
+                        //ImGui.SameLine();
+                        ImGui.SetCursorPos(cursorPosition);
+                        
+                        var componentName = curveNames[curveIndex % curveNames.Length];
+                        var bit = 1 << curveIndex;
+
+                        var isParamComponentPinned = isParamPinned && (PinnedParameterComponents[hash] & bit) != 0; 
+                        if (DrawPinButton(isParamComponentPinned, componentName))
+                        {
+                            if (isParamComponentPinned)
+                            {
+                                var flags = PinnedParameterComponents[hash] ^ bit;
+                                if (flags == 0)
+                                {
+                                    PinnedParameterComponents.Remove(hash);
+                                    isParamPinned = false;
+                                }
+                                else
+                                {
+                                    PinnedParameterComponents[hash] = flags;
+                                }
+                            }
+                            else
+                            {
+                                if (isParamPinned)
+                                {
+                                    PinnedParameterComponents[hash] |= bit;
+                                }
+                                else
+                                {
+                                    PinnedParameterComponents[hash] = bit;
+                                }
+                            }
+
+                            isParamComponentPinned = !isParamComponentPinned;
+                        }
+                        cursorPosition += new Vector2(ImGui.GetItemRectSize().X,0 );
+                        ImGui.SetCursorPos(cursorPosition);
+                        
+                        var isParamComponentHovered = ImGui.IsItemHovered();
+
+                        drawList.ChannelsSetCurrent(0);
+
+                        var shouldDrawCurve = PinnedParameterComponents.Count == 0 || isParamComponentPinned;
+                        if (shouldDrawCurve)
+                        {
+                            var color = DopeSheetArea.CurveColors[curveIndex % DopeSheetArea.CurveColors.Length];
+                            DrawCurveLine(curve, TimeLineCanvas, color, isParamHovered || isParamComponentHovered);
+                            var keepCursorPos = ImGui.GetCursorPos();
+                            drawList.ChannelsSetCurrent(1);
+                            foreach (var keyframe in curve.GetVDefinitions().ToList())
+                            {
+                                CurvePoint.Draw(keyframe, TimeLineCanvas, SelectedKeyframes.Contains(keyframe), this);
+                            }
+                        }
                         curveIndex++;
                     }
+                    ImGui.PopID();
+                    lineStartPosition += new Vector2(0, 24);
                 }
+                drawList.ChannelsMerge();
+                ImGui.PopFont();
 
-                foreach (var keyframe in GetAllKeyframes().ToArray())
-                {
-                    CurvePoint.Draw(keyframe, TimeLineCanvas, SelectedKeyframes.Contains(keyframe), this);
-                }
+                // foreach (var keyframe in GetAllKeyframes().ToArray())
+                // {
+                //     CurvePoint.Draw(keyframe, TimeLineCanvas, SelectedKeyframes.Contains(keyframe), this);
+                // }
 
                 DrawContextMenu();
             }
             ImGui.EndGroup();
 
             RebuildCurveTables();
+        }
+
+        private static bool DrawPinButton(bool isParamComponentPinned, string componentName)
+        {
+            
+            var buttonColor = isParamComponentPinned ? Color.Orange : Color.Gray;
+            ImGui.PushStyleColor(ImGuiCol.Text, buttonColor.Rgba);
+            var result = ImGui.Button(componentName);
+            ImGui.PopStyleColor();
+            return result;
         }
 
         protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
@@ -260,7 +376,7 @@ namespace T3.Gui.Windows.TimeLine
         #endregion
 
 
-        public static void DrawCurveLine(Curve curve, ICanvas canvas, Color color)
+        public static void DrawCurveLine(Curve curve, ICanvas canvas, Color color, bool isParamHovered = false)
         {
             const float step = 3f;
             var width = ImGui.GetWindowWidth();
@@ -271,7 +387,7 @@ namespace T3.Gui.Windows.TimeLine
 
             var steps = (int)(width / step);
             if (_curveLinePoints.Length != steps)
-            {
+            { 
                 _curveLinePoints = new Vector2[steps];
             }
 
@@ -282,7 +398,7 @@ namespace T3.Gui.Windows.TimeLine
                 x += step;
             }
 
-            ImGui.GetWindowDrawList().AddPolyline(ref _curveLinePoints[0], steps, color, false, 1);
+            ImGui.GetWindowDrawList().AddPolyline(ref _curveLinePoints[0], steps, color, false, isParamHovered? 3: 1);
         }
 
         
@@ -291,5 +407,7 @@ namespace T3.Gui.Windows.TimeLine
         private Instance _compositionOp;
         public readonly ValueSnapHandler SnapHandlerU;
         public readonly ValueSnapHandler SnapHandlerV;
+        
+        public readonly Dictionary<int, int> PinnedParameterComponents = new Dictionary<int, int>();
     }
 }

@@ -70,7 +70,7 @@ namespace T3.Gui.Windows.TimeLine
                         break;
                     case Modes.CurveEditor:
                         _horizontalRaster.Draw(this);
-                        _timelineCurveEditArea.Draw(compositionOp, SelectedAnimationParameters, bringCurvesIntoView: modeChanged);
+                        _timelineCurveEditArea.Draw(compositionOp, SelectedAnimationParameters, fitCurvesVertically: modeChanged);
                         break;
                 }
 

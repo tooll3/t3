@@ -213,6 +213,24 @@ namespace T3.Gui.Interaction
             ScrollTarget = new Vector2(-area.Min.X * ScaleTarget.X,
                                        -area.Max.Y * ScaleTarget.Y);
         }
+        
+        public void SetVerticalScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null)
+        {
+            WindowSize = ImGui.GetContentRegionMax() - ImGui.GetWindowContentRegionMin();
+            ScaleTarget.Y = WindowSize.Y / area.GetSize().Y;
+
+            if (flipY)
+            {
+                ScaleTarget.Y *= -1;
+            }
+
+            if (parent != null)
+            {
+                ScaleTarget.Y /= parent.Scale.Y;
+            }
+            
+            ScrollTarget.Y = -area.Max.Y * ScaleTarget.Y;
+        }
 
         public void FitAreaOnCanvas(ImRect area, bool flipY = false)
         {

@@ -218,12 +218,21 @@ namespace T3.Gui.Windows.TimeLine
 
         private static readonly Color GrayCurveColor = new Color(1f, 1f, 1.0f, 0.3f);
 
-        internal static readonly Color[] _curveColors =
+        internal static readonly Color[] CurveColors =
             {
                 new Color(1f, 0.2f, 0.2f, 0.3f),
                 new Color(0.1f, 1f, 0.2f, 0.3f),
                 new Color(0.1f, 0.4f, 1.0f, 0.5f),
                 GrayCurveColor,
+            };
+
+        internal static readonly string[] CurveNames =
+            {
+                "X", "Y", "Z", "W", "5", "6", "7", "8", "9", "10", "11", "12"
+            };
+        internal static readonly string[] ColorCurveNames =
+            {
+                "R", "G", "B", "A"
             };
 
         private void DrawCurveLines(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea)
@@ -272,7 +281,7 @@ namespace T3.Gui.Windows.TimeLine
                 _drawList.AddPolyline(
                                       ref positions.ToArray()[0],
                                       positions.Count,
-                                      parameter.Curves.Count() > 1 ? _curveColors[curveIndex % 4] : GrayCurveColor,
+                                      parameter.Curves.Count() > 1 ? CurveColors[curveIndex % 4] : GrayCurveColor,
                                       false,
                                       2);
                 curveIndex++;
