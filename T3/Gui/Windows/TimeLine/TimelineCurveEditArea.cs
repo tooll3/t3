@@ -48,9 +48,12 @@ namespace T3.Gui.Windows.TimeLine
                 
                 foreach (var param in animationParameters)
                 {
+                    var curveIndex = 0;
                     foreach (var curve in param.Curves)
                     {
-                        DrawCurveLine(curve, TimeLineCanvas);
+                        var color = DopeSheetArea._curveColors[curveIndex % DopeSheetArea._curveColors.Length];
+                        DrawCurveLine(curve, TimeLineCanvas, color);
+                        curveIndex++;
                     }
                 }
 
@@ -257,7 +260,7 @@ namespace T3.Gui.Windows.TimeLine
         #endregion
 
 
-        public static void DrawCurveLine(Curve curve, ICanvas canvas)
+        public static void DrawCurveLine(Curve curve, ICanvas canvas, Color color)
         {
             const float step = 3f;
             var width = ImGui.GetWindowWidth();
@@ -279,7 +282,7 @@ namespace T3.Gui.Windows.TimeLine
                 x += step;
             }
 
-            ImGui.GetWindowDrawList().AddPolyline(ref _curveLinePoints[0], steps, Color.Gray, false, 1);
+            ImGui.GetWindowDrawList().AddPolyline(ref _curveLinePoints[0], steps, color, false, 1);
         }
 
         

@@ -260,7 +260,7 @@ namespace T3.Gui.InputUi
                         _standardRaster.Draw(this);
                         _horizontalRaster.Draw(this);
                         curve.UpdateTangents();
-                        TimelineCurveEditArea.DrawCurveLine(curve, this);
+                        TimelineCurveEditArea.DrawCurveLine(curve, this, Color.Gray);
 
                         foreach (var keyframe in interaction.GetAllKeyframes().ToArray())
                         {

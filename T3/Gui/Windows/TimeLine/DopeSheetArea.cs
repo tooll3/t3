@@ -218,7 +218,7 @@ namespace T3.Gui.Windows.TimeLine
 
         private static readonly Color GrayCurveColor = new Color(1f, 1f, 1.0f, 0.3f);
 
-        private readonly Color[] _curveColors =
+        internal static readonly Color[] _curveColors =
             {
                 new Color(1f, 0.2f, 0.2f, 0.3f),
                 new Color(0.1f, 1f, 0.2f, 0.3f),
