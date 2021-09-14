@@ -57,19 +57,34 @@ namespace T3.Gui.Interaction.WithCurves
                      var editModes = selectedInterpolations as VDefinition.EditMode[] ?? selectedInterpolations.ToArray();
 
                      if (ImGui.MenuItem("Smooth", null, editModes.Contains(VDefinition.EditMode.Smooth)))
+                     {
                          OnSmooth();
+                         UpdateAllTangents();
+                     }
 
                      if (ImGui.MenuItem("Cubic", null, editModes.Contains(VDefinition.EditMode.Cubic)))
+                     {
                          OnCubic();
+                         UpdateAllTangents();
+                     }
 
                      if (ImGui.MenuItem("Horizontal", null, editModes.Contains(VDefinition.EditMode.Horizontal)))
+                     {
                          OnHorizontal();
+                         UpdateAllTangents();
+                     }
 
                      if (ImGui.MenuItem("Constant", null, editModes.Contains(VDefinition.EditMode.Constant)))
+                     {
                          OnConstant();
+                         UpdateAllTangents();
+                     }
 
                      if (ImGui.MenuItem("Linear", null, editModes.Contains(VDefinition.EditMode.Linear)))
+                     {
                          OnLinear();
+                         UpdateAllTangents();
+                     }
 
                      if (ImGui.BeginMenu("Before curve..."))
                      {
@@ -116,6 +131,14 @@ namespace T3.Gui.Interaction.WithCurves
                          DuplicateSelectedKeyframes(TimeLineCanvas.Current.Playback.TimeInBars);
                  }, ref _contextMenuIsOpen
                 );
+        }
+
+        private void UpdateAllTangents()
+        {
+            foreach (var curve in GetAllCurves())
+            {
+                curve.UpdateTangents();
+            }
         }
 
         private bool _contextMenuIsOpen;
