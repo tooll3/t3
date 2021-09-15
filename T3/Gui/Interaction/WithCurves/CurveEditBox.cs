@@ -4,6 +4,8 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.Operator;
+using T3.Gui.Commands;
 using T3.Gui.UiHelpers;
 using UiHelpers;
 
@@ -25,11 +27,21 @@ namespace T3.Gui.Interaction.WithCurves
 
         private HashSet<VDefinition> _selectedKeyframes;
         
-        public void Draw(HashSet<VDefinition> selectedKeyframes )
+        public void Draw(HashSet<VDefinition> selectedKeyframes, Instance compositionOp)
         {
             if (selectedKeyframes.Count <= 1)
                 return;
+
+            if (!ImGui.GetIO().KeyAlt)
+            {
+                if (_changeKeyframesCommand != null)
+                {
+                    CompleteDragCommand();
+                }
+                return;
+            }
             
+            _compositionOp = compositionOp;
             _selectedKeyframes = selectedKeyframes;
             var drawlist = ImGui.GetWindowDrawList();
 
@@ -111,13 +123,13 @@ namespace T3.Gui.Interaction.WithCurves
             MoveHandle(
                 "+##both", Direction.Both,
                 screenPos: center - new Vector2(1, 1) * MoveRingInnerRadius,
-                size: Vector2.One * MoveRingInnerRadius * 2);
+                size: Vector2.One * MoveRingInnerRadius * 2f);
 
 
         }
 
         private const float MoveRingOuterRadius = 25;
-        private const float MoveRingInnerRadius = 10;
+        private const float MoveRingInnerRadius = 3;
 
         private enum Direction
         {
@@ -151,11 +163,6 @@ namespace T3.Gui.Interaction.WithCurves
             if (scale < 0)
                 scale = 0;
 
-            
-            foreach (var ep in _selectedKeyframes)
-            {
-                //scaleFunction(scale, ep);
-            }
         }
 
 
@@ -163,7 +170,9 @@ namespace T3.Gui.Interaction.WithCurves
         {
             ImGui.SetCursorScreenPos(screenPos);
 
+            ImGui.PushStyleColor(ImGuiCol.Button, new Color(0.2f).Rgba);
             ImGui.Button(labelAndId, size);
+            ImGui.PopStyleColor();
 
             if (ImGui.IsItemActive() || ImGui.IsItemHovered())
             {
@@ -180,9 +189,23 @@ namespace T3.Gui.Interaction.WithCurves
                 }
             }
 
-            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                return;
+            if (ImGui.IsItemActivated())
+            {
+                if (_changeKeyframesCommand == null)
+                {
+                    _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, _selectedKeyframes);
+                }      
+            }
 
+            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+            {
+                if (_changeKeyframesCommand != null)
+                {
+                    CompleteDragCommand();
+                }
+                return;
+            }
+            
             var delta = _canvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
             switch (direction)
             {
@@ -193,20 +216,27 @@ namespace T3.Gui.Interaction.WithCurves
                     delta.X = 0;
                     break;
             }
-
-
+            
             foreach (var ep in _selectedKeyframes)
             {
-                //ep.PosOnCanvas += delta;
+                ep.U += delta.X;
+                ep.Value += delta.Y;
             }
         }
-
-        // private IEnumerable<CurvePointUi> CurvePointsControls =>
-        //     from selectedElement in _selectionHandler.SelectedElements
-        //     let curvePoint = selectedElement as CurvePointUi
-        //     where curvePoint != null
-        //     select curvePoint;
-
+        
+        public void CompleteDragCommand()
+        {
+            if (_changeKeyframesCommand == null)
+                return;
+            
+            // Update reference in macro command
+            _changeKeyframesCommand.StoreCurrentValues();
+            UndoRedoStack.Add(_changeKeyframesCommand);
+            _changeKeyframesCommand = null;
+        }
+        
+        private static ChangeKeyframesCommand _changeKeyframesCommand;
+        
         private ImRect GetBoundingBox()
         {
             var minU = float.PositiveInfinity;
@@ -238,18 +268,16 @@ namespace T3.Gui.Interaction.WithCurves
         }
         
         private ImRect _bounds;
-        //private readonly SelectionHandler _selectionHandler;
         private readonly ICanvas _canvas;
-
 
         // Styling
         private const float DragHandleSize = 10;
         private static readonly Vector2 VerticalHandleOffset = new Vector2(0, DragHandleSize);
         private static readonly Vector2 HorizontalHandleOffset = new Vector2(DragHandleSize, 0);
-        // private static Vector2 _handleOffset = new Vector2(DragHandleSize, DragHandleSize);
 
         private static readonly Color SelectBoxBorderColor = new Color(1, 1, 1, 0.2f);
         private static readonly Color SelectBoxBorderFill = new Color(1, 1, 1, 0.05f);
+        private Instance _compositionOp;
     }
 }
 

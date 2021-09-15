@@ -29,6 +29,7 @@ namespace T3.Gui.Windows.TimeLine
             SnapHandlerU = snapHandlerForU;
             SnapHandlerV = snapHandlerV;
             TimeLineCanvas = timeLineCanvas;
+            _curveEditBox = new CurveEditBox(timeLineCanvas);
         }
 
         private StringBuilder _stringBuilder = new StringBuilder(100);
@@ -43,9 +44,7 @@ namespace T3.Gui.Windows.TimeLine
                 var bounds = GetBoundsOnCanvas(GetSelectedOrAllPoints());
                 TimeLineCanvas.Current.SetVerticalScopeToCanvasArea(bounds, flipY:true);
             }
-                
             
-
             ImGui.BeginGroup();
             {
                 var drawList = ImGui.GetWindowDrawList();
@@ -169,6 +168,7 @@ namespace T3.Gui.Windows.TimeLine
                 // }
 
                 DrawContextMenu();
+                _curveEditBox.Draw(SelectedKeyframes, _compositionOp);
             }
             ImGui.EndGroup();
 
@@ -407,6 +407,7 @@ namespace T3.Gui.Windows.TimeLine
         private Instance _compositionOp;
         public readonly ValueSnapHandler SnapHandlerU;
         public readonly ValueSnapHandler SnapHandlerV;
+        public CurveEditBox _curveEditBox;
         
         public readonly Dictionary<int, int> PinnedParameterComponents = new Dictionary<int, int>();
     }
