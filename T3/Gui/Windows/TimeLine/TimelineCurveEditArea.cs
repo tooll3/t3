@@ -150,6 +150,8 @@ namespace T3.Gui.Windows.TimeLine
                             {
                                 CurvePoint.Draw(keyframe, TimeLineCanvas, SelectedKeyframes.Contains(keyframe), this);
                             }
+
+                            HandleCreateNewKeyframes(curve);
                         }
                         curveIndex++;
                     }
@@ -166,6 +168,59 @@ namespace T3.Gui.Windows.TimeLine
 
             RebuildCurveTables();
         }
+        
+        private void HandleCreateNewKeyframes(Curve curve)
+        {
+            var hoverNewKeyframe = !ImGui.IsAnyItemActive()
+                                   && ImGui.IsWindowHovered()
+                                   && ImGui.GetIO().KeyAlt
+                                   && ImGui.IsWindowHovered();
+            if (!hoverNewKeyframe)
+                return;
+            
+            var hoverTime = TimeLineCanvas.InverseTransformX(ImGui.GetIO().MousePos.X);
+            TimeLineCanvas.SnapHandlerForU.CheckForSnapping(ref hoverTime, TimeLineCanvas.Scale.X);
+
+            if (ImGui.IsMouseReleased(0))
+            {
+                var dragDistance = ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length();
+                if (dragDistance < 2)
+                {
+                    ClearSelection();
+
+                    InsertNewKeyframe(curve, hoverTime);
+                }
+            }
+            else
+            {
+                var sampledValue = (float)curve.GetSampledValue(hoverTime);
+                var posOnCanvas = new Vector2(hoverTime, sampledValue);
+                var posOnScreen = TimeLineCanvas.TransformPosition(posOnCanvas) - new Vector2(KeyframeIconWidth / 2 + 1, KeyframeIconWidth / 2 + 1);
+                Icons.Draw(Icon.CurveKeyframe, posOnScreen);
+                //var drawlist = ImGui.GetWindowDrawList();
+                //drawlist.AddText(posOnScreen + Vector2.One*20, Color.Gray, $"Insert at\n{hoverTime:0.00}  {sampledValue:0.00}");
+            }
+
+            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+        }
+        
+        
+        private void InsertNewKeyframe(Curve curve, float u)
+        {
+            var value = curve.GetSampledValue(u);
+            var previousU = curve.GetPreviousU(u);
+
+            var key = (previousU != null)
+                          ? curve.GetV(previousU.Value).Clone()
+                          : new VDefinition();
+
+            key.Value = value;
+            key.U = u;
+            curve.AddOrUpdateV(u, key);
+            curve.UpdateTangents();
+        }
+
+        private const int KeyframeIconWidth = 16;
 
         private static bool DrawPinButton(bool isParamComponentPinned, string componentName)
         {
@@ -250,6 +305,7 @@ namespace T3.Gui.Windows.TimeLine
                 SnapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
             
             UpdateDragCommand(u - vDef.U, v - vDef.Value);
+            
         }
         
         void ITimeObjectManipulation.DeleteSelectedElements()
@@ -307,6 +363,13 @@ namespace T3.Gui.Windows.TimeLine
                 vDefinition.Value += dv;
             }
             RebuildCurveTables();
+            foreach (var ap in AnimationParameters)
+            {
+                foreach (var c in ap.Curves)
+                {
+                    c.UpdateTangents();
+                }
+            }
         }
 
         public void CompleteDragCommand()
@@ -317,7 +380,6 @@ namespace T3.Gui.Windows.TimeLine
             CurveInputEditing.MoveDirection = CurveInputEditing.MoveDirections.Undecided;
             // Update reference in macro command
             _changeKeyframesCommand.StoreCurrentValues();
-            //UndoRedoStack.Add(_changeKeyframesCommand);
             _changeKeyframesCommand = null;
         }
 
