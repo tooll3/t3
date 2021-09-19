@@ -353,7 +353,7 @@ namespace T3.Gui.Windows.TimeLine
         private double _lastPlaybackSpeed;
 
         // Styling
-        public const float TimeLineDragHeight = 55;
+        public const float TimeLineDragHeight = 30;
 
         public struct AnimationParameter
         {

@@ -627,7 +627,7 @@ namespace T3.Gui.Windows.TimeLine
 
         void ITimeObjectManipulation.DeleteSelectedElements()
         {
-            KeyframeOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters);
+            AnimationOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters);
             RebuildCurveTables();
         }
         #endregion

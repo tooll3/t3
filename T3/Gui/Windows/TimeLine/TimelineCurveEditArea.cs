@@ -160,6 +160,12 @@ namespace T3.Gui.Windows.TimeLine
                 }
                 drawList.ChannelsMerge();
                 ImGui.PopFont();
+                if (_addKeyframesCommands.Count > 0)
+                {
+                    var command = new MacroCommand("Insert keyframes", _addKeyframesCommands);
+                    UndoRedoStack.AddAndExecute(command);
+                    _addKeyframesCommands.Clear();
+                }
 
                 DrawContextMenu();
                 // _curveEditBox.Draw(SelectedKeyframes, _compositionOp);
@@ -186,9 +192,7 @@ namespace T3.Gui.Windows.TimeLine
                 var dragDistance = ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length();
                 if (dragDistance < 2)
                 {
-                    ClearSelection();
-
-                    InsertNewKeyframe(curve, hoverTime);
+                    _addKeyframesCommands.Add(InsertNewKeyframe(curve, hoverTime));
                 }
             }
             else
@@ -197,16 +201,17 @@ namespace T3.Gui.Windows.TimeLine
                 var posOnCanvas = new Vector2(hoverTime, sampledValue);
                 var posOnScreen = TimeLineCanvas.TransformPosition(posOnCanvas) - new Vector2(KeyframeIconWidth / 2 + 1, KeyframeIconWidth / 2 + 1);
                 Icons.Draw(Icon.CurveKeyframe, posOnScreen);
-                //var drawlist = ImGui.GetWindowDrawList();
-                //drawlist.AddText(posOnScreen + Vector2.One*20, Color.Gray, $"Insert at\n{hoverTime:0.00}  {sampledValue:0.00}");
             }
 
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
         }
+
+        private List<AddKeyframesCommand> _addKeyframesCommands = new List<AddKeyframesCommand>();
         
         
-        private void InsertNewKeyframe(Curve curve, float u)
+        private AddKeyframesCommand InsertNewKeyframe(Curve curve, float u)
         {
+            
             var value = curve.GetSampledValue(u);
             var previousU = curve.GetPreviousU(u);
 
@@ -216,8 +221,11 @@ namespace T3.Gui.Windows.TimeLine
 
             key.Value = value;
             key.U = u;
-            curve.AddOrUpdateV(u, key);
-            curve.UpdateTangents();
+
+            var command = new AddKeyframesCommand(curve, key);
+            //curve.AddOrUpdateV(u, key);
+
+            return command;
         }
 
         private const int KeyframeIconWidth = 16;
@@ -310,7 +318,7 @@ namespace T3.Gui.Windows.TimeLine
         
         void ITimeObjectManipulation.DeleteSelectedElements()
         {
-            KeyframeOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters);
+            AnimationOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters);
             RebuildCurveTables();
         }
         

@@ -361,11 +361,13 @@
     <Compile Include="Gui\ChildUi\ValueSliderUi.cs" />
     <Compile Include="Gui\ChildUi\ValueUi.cs" />
     <Compile Include="Gui\Commands\AddConnectionCommand.cs" />
+    <Compile Include="Gui\Commands\AddKeyframeCommand.cs" />
     <Compile Include="Gui\Commands\ChangeInstanceIsDisabledCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolChildNameCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolNameCommand.cs" />
     <Compile Include="Gui\Commands\ChangeSymbolNamespaceCommand.cs" />
     <Compile Include="Gui\Commands\CopySymbolChildrenCommand.cs" />
+    <Compile Include="Gui\Commands\DeleteKeyframeCommand.cs" />
     <Compile Include="Gui\Commands\DeleteSymbolChildCommand.cs" />
     <Compile Include="Gui\Commands\DeleteConnectionCommand.cs" />
     <Compile Include="Gui\Commands\ChangeKeyframesCommand.cs" />
@@ -505,7 +507,6 @@
     <Compile Include="Gui\Windows\TimeLine\DopeSheetArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\ITimeObjectManipulation.cs" />
     <Compile Include="Gui\Windows\TimeLine\AnimationParameterEditing.cs" />
-    <Compile Include="Gui\Windows\TimeLine\KeyframeOperations.cs" />
     <Compile Include="Gui\Windows\TimeLine\LayerClip.cs" />
     <Compile Include="Gui\Windows\TimeLine\LayersArea.cs" />
     <Compile Include="Gui\Windows\TimeLine\LoopRange.cs" />
