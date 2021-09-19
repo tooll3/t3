@@ -34,6 +34,10 @@ namespace T3.Gui.Interaction.Snapping
         /// </summary>
         public event Action<double> SnappedEvent;
 
+        
+        /// <summary>
+        /// Override to float precision 
+        /// </summary>
         public bool CheckForSnapping(ref float time, float canvasScale, List<IValueSnapAttractor> ignoreSnapAttractors = null)
         {
             double d = time;
@@ -79,6 +83,9 @@ namespace T3.Gui.Interaction.Snapping
         }
 
 
+        /// <summary>
+        /// This is method is called from all snapHandlers 
+        /// </summary>
         public static bool CheckForBetterSnapping(double targetTime, double anchorTime, float canvasScale, ref SnapResult bestSnapResult)
         {
             var snapThresholdOnCanvas = UserSettings.Config.SnapStrength / canvasScale;

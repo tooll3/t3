@@ -6,23 +6,23 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.Interaction.Snapping;
 using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Interaction.WithCurves
 {
-    public class CurveEditBox
+    /// <summary>
+    /// Note: This component is currently not used because most interactions can be completed by dragging keyframes with
+    /// snapping or using the TimeRangeSelection's scale functionality. 
+    /// </summary>
+    public class CurveEditBox : IValueSnapAttractor
     {
-
-        public CurveEditBox(ICanvas canvas)
+        public CurveEditBox(ICanvas canvas, ValueSnapHandler snapHandler)
         {
             _canvas = canvas;
+            _snapHandler = snapHandler;
             //_selectionHandler = selectionHandler;
-        }
-
-        private void ManipulateKeyframeValue(ref VDefinition vDef, float value)
-        {
-            
         }
 
         private HashSet<VDefinition> _selectedKeyframes;
@@ -124,9 +124,15 @@ namespace T3.Gui.Interaction.WithCurves
                 "+##both", Direction.Both,
                 screenPos: center - new Vector2(1, 1) * MoveRingInnerRadius,
                 size: Vector2.One * MoveRingInnerRadius * 2f);
-
-
         }
+        
+        #region implement snapping interface -----------------------------------
+        SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
+        {
+            SnapResult bestSnapResult = null;
+            return bestSnapResult;
+        }
+        #endregion
 
         private const float MoveRingOuterRadius = 25;
         private const float MoveRingInnerRadius = 3;
@@ -164,8 +170,12 @@ namespace T3.Gui.Interaction.WithCurves
                 scale = 0;
 
         }
-
-
+        
+        private double _uDragStarted;
+        private double _boundUMaxDragStarted;
+        private double _boundUMinDragStarted;
+        private double _lastU;
+        
         private void MoveHandle(string labelAndId, Direction direction, Vector2 screenPos, Vector2 size)
         {
             ImGui.SetCursorScreenPos(screenPos);
@@ -174,55 +184,56 @@ namespace T3.Gui.Interaction.WithCurves
             ImGui.Button(labelAndId, size);
             ImGui.PopStyleColor();
 
-            if (ImGui.IsItemActive() || ImGui.IsItemHovered())
+            var isMouseDragging = ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left);
+            if (isMouseDragging)
             {
-                switch (direction)
-                {
-                    case Direction.Horizontal:
-                        ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW); break;
-                    case Direction.Vertical:
-                        ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS); break;
-                    case Direction.Both:
-                        ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll); break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
-                }
-            }
-
-            if (ImGui.IsItemActivated())
-            {
+                var u = _canvas.InverseTransformX(ImGui.GetIO().MousePos.X);
                 if (_changeKeyframesCommand == null)
                 {
-                    _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, _selectedKeyframes);
-                }      
-            }
-
-            if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-            {
-                if (_changeKeyframesCommand != null)
-                {
-                    CompleteDragCommand();
+                    StartDragCommand();
+                    _uDragStarted = u;
+                    _lastU = u;
+                    _boundUMaxDragStarted = _bounds.Max.X;
+                    _boundUMinDragStarted = _bounds.Min.X;
+                    //_lastBoundsMin = _boundUMinDragStarted;
                 }
-                return;
+
+                var totalDeltaU = u - _uDragStarted;
+                if (!ImGui.GetIO().KeyShift)
+                {
+                    var newBoundsMax = totalDeltaU + _boundUMaxDragStarted;
+                    var newBoundsMin = totalDeltaU + _boundUMinDragStarted;
+                
+                    if (_snapHandler.CheckForSnapping(ref newBoundsMin, _canvas.Scale.X, new List<IValueSnapAttractor> { this }))
+                    {
+                        totalDeltaU = newBoundsMin - _boundUMinDragStarted;
+                    }
+                    else if (_snapHandler.CheckForSnapping(ref newBoundsMax, _canvas.Scale.X, new List<IValueSnapAttractor> { this }))
+                    {
+                        totalDeltaU =  newBoundsMax - _boundUMaxDragStarted;
+                    }
+                }
+
+                var newU = totalDeltaU + _uDragStarted;
+                var deltaU =  newU - _lastU;
+                _lastU = newU;
+                
+                foreach (var ep in _selectedKeyframes)
+                {
+                    ep.U += deltaU;
+                }
             }
-            
-            var delta = _canvas.InverseTransformDirection(ImGui.GetIO().MouseDelta);
-            switch (direction)
+            else if (ImGui.IsItemDeactivated())
             {
-                case Direction.Horizontal:
-                    delta.Y = 0;
-                    break;
-                case Direction.Vertical:
-                    delta.X = 0;
-                    break;
-            }
-            
-            foreach (var ep in _selectedKeyframes)
-            {
-                ep.U += delta.X;
-                ep.Value += delta.Y;
+                CompleteDragCommand();
             }
         }
+
+        public void StartDragCommand()
+        {
+            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, _selectedKeyframes);
+        }
+        
         
         public void CompleteDragCommand()
         {
@@ -278,6 +289,7 @@ namespace T3.Gui.Interaction.WithCurves
         private static readonly Color SelectBoxBorderColor = new Color(1, 1, 1, 0.2f);
         private static readonly Color SelectBoxBorderFill = new Color(1, 1, 1, 0.05f);
         private Instance _compositionOp;
+        private readonly ValueSnapHandler _snapHandler;
     }
 }
 

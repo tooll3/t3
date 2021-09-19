@@ -5,11 +5,8 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
-using T3.Gui.Graph;
 using T3.Gui.InputUi;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
@@ -29,7 +26,7 @@ namespace T3.Gui.Windows.TimeLine
             SnapHandlerU = snapHandlerForU;
             SnapHandlerV = snapHandlerV;
             TimeLineCanvas = timeLineCanvas;
-            _curveEditBox = new CurveEditBox(timeLineCanvas);
+            // _curveEditBox = new CurveEditBox(timeLineCanvas, snapHandlerForU);
         }
 
         private StringBuilder _stringBuilder = new StringBuilder(100);
@@ -162,13 +159,8 @@ namespace T3.Gui.Windows.TimeLine
                 drawList.ChannelsMerge();
                 ImGui.PopFont();
 
-                // foreach (var keyframe in GetAllKeyframes().ToArray())
-                // {
-                //     CurvePoint.Draw(keyframe, TimeLineCanvas, SelectedKeyframes.Contains(keyframe), this);
-                // }
-
                 DrawContextMenu();
-                _curveEditBox.Draw(SelectedKeyframes, _compositionOp);
+                // _curveEditBox.Draw(SelectedKeyframes, _compositionOp);
             }
             ImGui.EndGroup();
 
@@ -407,7 +399,7 @@ namespace T3.Gui.Windows.TimeLine
         private Instance _compositionOp;
         public readonly ValueSnapHandler SnapHandlerU;
         public readonly ValueSnapHandler SnapHandlerV;
-        public CurveEditBox _curveEditBox;
+        // public CurveEditBox _curveEditBox;
         
         public readonly Dictionary<int, int> PinnedParameterComponents = new Dictionary<int, int>();
     }
