@@ -53,6 +53,7 @@ namespace T3.Gui.Windows.TimeLine
                     DuplicateSelectedKeyframes(TimeLineCanvas.Playback.TimeInBars);                
                 
                 var lineStartPosition = ImGui.GetCursorPos();
+                var visibleCurveCount = 0;
                 
                 ImGui.PushFont(Fonts.FontSmall);
                 foreach (var param in animationParameters)
@@ -144,8 +145,8 @@ namespace T3.Gui.Windows.TimeLine
                         {
                             var color = DopeSheetArea.CurveColors[curveIndex % DopeSheetArea.CurveColors.Length];
                             DrawCurveLine(curve, TimeLineCanvas, color, isParamHovered || isParamComponentHovered);
-                            var keepCursorPos = ImGui.GetCursorPos();
                             drawList.ChannelsSetCurrent(1);
+                            visibleCurveCount++;
                             foreach (var keyframe in curve.GetVDefinitions().ToList())
                             {
                                 CurvePoint.Draw(keyframe, TimeLineCanvas, SelectedKeyframes.Contains(keyframe), this);
@@ -167,6 +168,11 @@ namespace T3.Gui.Windows.TimeLine
                     _addKeyframesCommands.Clear();
                 }
 
+                if (visibleCurveCount == 0 && PinnedParameterComponents.Count > 0)
+                {
+                    PinnedParameterComponents.Clear();
+                } 
+                
                 DrawContextMenu();
                 // _curveEditBox.Draw(SelectedKeyframes, _compositionOp);
             }
@@ -469,8 +475,6 @@ namespace T3.Gui.Windows.TimeLine
         private Instance _compositionOp;
         public readonly ValueSnapHandler SnapHandlerU;
         public readonly ValueSnapHandler SnapHandlerV;
-        // public CurveEditBox _curveEditBox;
-        
         public readonly Dictionary<int, int> PinnedParameterComponents = new Dictionary<int, int>();
     }
 }
