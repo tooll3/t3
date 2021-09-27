@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using T3.Core.Animation;
 using T3.Gui.Windows.TimeLine.Raster;
 
@@ -24,36 +25,39 @@ namespace T3.Gui.Windows.TimeLine
 
         private double _bpm = 240;
 
+        private static StringBuilder _stringBuilder = new StringBuilder(20);
+        
         protected override string BuildLabel(Raster raster, double timeInSeconds)
         {
-            var output = "";
+            _stringBuilder.Clear();
+            
             foreach (char c in raster.Label)
             {
                 // bars
                 if (c == 'b')
                 {
                     var bars = (int)(timeInSeconds) + 1;
-                    output += $"{bars}.";
+                    _stringBuilder.Append($"{bars}.");
                 }
                 // beats
                 else if (c == '.')
                 {
                     var beats = (int)(timeInSeconds*4)%4 + 1;
-                    output += $".{beats}";
+                    _stringBuilder.Append( $".{beats}");
                 }
                 // ticks
                 else if (c == ':')
                 {
                     var ticks = (int)(timeInSeconds*16)%4 + 1;
-                    output += $":{ticks}";
+                    _stringBuilder.Append($":{ticks}");
                 }
                 else
                 {
-                    output += c;
+                    _stringBuilder.Append(c);
                 }
             }
 
-            return output;
+            return _stringBuilder.ToString();
         }
 
         private List<ScaleRange> InitializeTimeScaleDefinitions()

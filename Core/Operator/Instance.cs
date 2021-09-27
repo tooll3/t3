@@ -18,6 +18,21 @@ namespace T3.Core.Operator
         public List<Instance> Children { get; set; } = new List<Instance>();
         public List<IInputSlot> Inputs { get; set; } = new List<IInputSlot>();
 
+        /// <summary>
+        /// get input without GC allocations 
+        /// </summary>
+        public IInputSlot GetInput(Guid guid)
+        {
+            //return Inputs.SingleOrDefault(input => input.Id == guid);
+            foreach (var i in Inputs)
+            {
+                if (i.Id == guid)
+                    return i;
+            }
+
+            return null;
+        }
+        
         public void Dispose() => Dispose(true);
 
         protected virtual void Dispose(bool disposing)

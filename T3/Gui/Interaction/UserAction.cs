@@ -59,7 +59,7 @@ namespace T3.Gui
         SaveLayout7,
         SaveLayout8,
         SaveLayout9,
-        
+
         LoadBookmark0,
         LoadBookmark1,
         LoadBookmark2,
@@ -107,16 +107,21 @@ namespace T3.Gui
 
         public static bool Triggered(UserActions action)
         {
-            if (ImGui.GetIO().KeysDown.Count == 0)
+            if (!_anyKeysPressed)
                 return false;
-            
+
             if (ImGui.IsAnyItemActive())
                 return false;
 
             var io = ImGui.GetIO();
-            var bindingsForAction = Bindings.FindAll(b => b.Action == action);
-            foreach (var binding in bindingsForAction)
+            foreach (var binding in Bindings)
             {
+                if (binding.Action != action)
+                    continue;
+
+                //var bindingsForAction = Bindings.FindAll(b => b.Action == action);
+                //foreach (var binding in bindingsForActions)
+                //{
                 if (binding.NeedsWindowFocus && !ImGui.IsWindowFocused())
                     continue;
 
@@ -134,6 +139,7 @@ namespace T3.Gui
                     && ((!c.Shift && !io.KeyShift) || (c.Shift && io.KeyShift))
                     )
                     return true;
+                //}
             }
 
             return false;
@@ -215,7 +221,7 @@ namespace T3.Gui
                       new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.ToggleDisabled, new KeyCombination(Key.D)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.PinToOutputWindow, new KeyCombination(Key.P)) { NeedsWindowFocus = true },
-                      
+
                       new KeyboardBinding(UserActions.LoadBookmark1, new KeyCombination(Key.D1, ctrl: true)),
                       new KeyboardBinding(UserActions.LoadBookmark2, new KeyCombination(Key.D2, ctrl: true)),
                       new KeyboardBinding(UserActions.LoadBookmark3, new KeyCombination(Key.D3, ctrl: true)),
@@ -237,7 +243,7 @@ namespace T3.Gui
                       new KeyboardBinding(UserActions.SaveBookmark8, new KeyCombination(Key.D8, ctrl: true, shift: true)),
                       new KeyboardBinding(UserActions.SaveBookmark9, new KeyCombination(Key.D9, ctrl: true, shift: true)),
                       new KeyboardBinding(UserActions.SaveBookmark0, new KeyCombination(Key.D0, ctrl: true, shift: true)),
-                      
+
                       new KeyboardBinding(UserActions.LoadLayout0, new KeyCombination(Key.F1)),
                       new KeyboardBinding(UserActions.LoadLayout1, new KeyCombination(Key.F2)),
                       new KeyboardBinding(UserActions.LoadLayout2, new KeyCombination(Key.F3)),
@@ -259,9 +265,16 @@ namespace T3.Gui
                       new KeyboardBinding(UserActions.SaveLayout7, new KeyCombination(Key.F8, ctrl: true)),
                       new KeyboardBinding(UserActions.SaveLayout8, new KeyCombination(Key.F9, ctrl: true)),
                       new KeyboardBinding(UserActions.SaveLayout9, new KeyCombination(Key.F10, ctrl: true)),
-                      
+
                       new KeyboardBinding(UserActions.LayoutSelection, new KeyCombination(Key.G)),
                       new KeyboardBinding(UserActions.ToggleFullScreenGraph, new KeyCombination(Key.F11, ctrl: true)),
                   };
+
+        public static void InitFrame()
+        {
+            _anyKeysPressed = ImGui.GetIO().KeysDown.Count > 0;
+        }
+
+        private static bool _anyKeysPressed;
     }
 }

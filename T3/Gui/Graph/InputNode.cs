@@ -59,8 +59,9 @@ namespace T3.Gui.Graph
                     ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontBold);
                     
                     // Index
-                    var nameLabel = string.Format($"{inputDef.Name}");
-                    var size = ImGui.CalcTextSize(nameLabel);
+                    //var nameLabel = string.Format($"{inputDef.Name}");
+                    //var nameLabel = inputDef.Name;
+                    var size = ImGui.CalcTextSize(inputDef.Name);
                     var yPos = _lastScreenRect.GetCenter().Y - size.Y / 2;
                     drawList.AddText(new Vector2(_lastScreenRect.Min.X - 20, yPos),
                                      ColorVariations.ConnectionLines.Apply(typeColor),
@@ -73,7 +74,7 @@ namespace T3.Gui.Graph
 
                     drawList.AddText(labelPos,
                                      ColorVariations.OperatorLabel.Apply(typeColor),
-                                     nameLabel);
+                                     inputDef.Name);
                     ImGui.PopFont();
                     drawList.PopClipRect();
                 }

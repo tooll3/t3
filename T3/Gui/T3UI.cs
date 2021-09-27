@@ -43,6 +43,7 @@ namespace T3.Gui
 
             FitViewToSelectionHandling.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
+            KeyboardBinding.InitFrame();
             WindowManager.Draw();
             BeatTiming.Update();
 

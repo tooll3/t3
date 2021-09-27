@@ -16,7 +16,6 @@ using UiHelpers;
 
 namespace T3.Gui.Graph
 {
-    
     /// <summary>Rendering a node graph</summary>
     /// <remarks>
     /// Rendering the graph is complicated because:
@@ -41,7 +40,6 @@ namespace T3.Gui.Graph
     ///</remarks>
     public static class Graph
     {
-        
         public static void DrawGraph(ImDrawListPtr drawList)
         {
             DrawList = drawList;
@@ -72,7 +70,7 @@ namespace T3.Gui.Graph
             {
                 if (graphSymbol != GraphCanvas.Current.CompositionOp.Symbol)
                     break;
-                
+
                 var childUi = _childUis.Single(ui => ui.Id == instance.SymbolChildId);
                 GraphNode.Draw(childUi, instance);
             }
@@ -170,7 +168,7 @@ namespace T3.Gui.Graph
                     var sourceNode = _childUis.SingleOrDefault(childUi => childUi.Id == c.SourceParentOrChildId);
                     if (sourceNode == null)
                         return;
-                    
+
                     if (!_linesFromNodes.ContainsKey(sourceNode))
                         _linesFromNodes.Add(sourceNode, new List<ConnectionLineUi>());
 
@@ -186,7 +184,7 @@ namespace T3.Gui.Graph
                     return;
 
                 newLine.ColorForType = TypeUiRegistry.Entries[c.ConnectionType].Color;
-                
+
                 // if (!ConnectionMaker.TempConnections.Contains(c))
                 //     return;
 
@@ -229,16 +227,22 @@ namespace T3.Gui.Graph
 
             public IEnumerable<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
             {
-                return _linesFromNodes.ContainsKey(childUi)
-                           ? _linesFromNodes[childUi].FindAll(l => l.Connection.SourceSlotId == outputId)
-                           : NoLines;
+                if (_linesFromNodes.TryGetValue(childUi, out var lines))
+                {
+                    return lines.FindAll(l => l.Connection.SourceSlotId == outputId);
+                }
+
+                return NoLines;
             }
 
             public List<ConnectionLineUi> GetLinesToNodeInputSlot(SymbolChildUi childUi, Guid inputId)
             {
-                return _linesIntoNodes.ContainsKey(childUi)
-                           ? _linesIntoNodes[childUi].FindAll(l => l.Connection.TargetSlotId == inputId)
-                           : NoLines;
+                if (_linesFromNodes.TryGetValue(childUi, out var lines))
+                {
+                    return lines.FindAll(l => l.Connection.TargetSlotId == inputId);
+                }
+
+                return NoLines;
             }
 
             public List<ConnectionLineUi> GetLinesIntoNode(SymbolChildUi childUi)
@@ -297,19 +301,19 @@ namespace T3.Gui.Graph
                 if (IsAboutToBeReplaced)
                     color = Color.Mix(color, Color.Red, (float)Math.Sin(ImGui.GetTime() * 10) / 2 + 0.5f);
 
-                var usageFactor =  Math.Max(0,1- FramesSinceLastUsage/ 50f);
-                var thickness = ((1 - 1 / (UpdateCount + 1f)) * 3 + 1) * 0.5f *  (usageFactor * 2 + 1);
+                var usageFactor = Math.Max(0, 1 - FramesSinceLastUsage / 50f);
+                var thickness = ((1 - 1 / (UpdateCount + 1f)) * 3 + 1) * 0.5f * (usageFactor * 2 + 1);
 
                 if (UserSettings.Config.UseArcConnections)
                 {
                     var hoverPositionOnLine = Vector2.Zero;
                     var isHovering = ArcConnection.Draw(new ImRect(SourcePosition, SourcePosition + new Vector2(10, 10)),
-                                                                SourcePosition,
-                                                                TargetNodeArea,
-                                                                TargetPosition,
-                                                                color,
-                                                                thickness,
-                                                                ref hoverPositionOnLine);
+                                                        SourcePosition,
+                                                        TargetNodeArea,
+                                                        TargetPosition,
+                                                        color,
+                                                        thickness,
+                                                        ref hoverPositionOnLine);
 
                     const float minDistanceToTargetSocket = 10;
                     if (isHovering && Vector2.Distance(hoverPositionOnLine, TargetPosition) > minDistanceToTargetSocket
@@ -321,8 +325,8 @@ namespace T3.Gui.Graph
                 else
                 {
                     var tangentLength = MathUtils.RemapAndClamp(Vector2.Distance(SourcePosition, TargetPosition),
-                                                        30, 300,
-                                                        5, 200);
+                                                                30, 300,
+                                                                5, 200);
                     DrawList.AddBezierCurve(
                                             SourcePosition,
                                             SourcePosition + new Vector2(tangentLength, 0),
@@ -341,9 +345,8 @@ namespace T3.Gui.Graph
         private static SymbolUi _symbolUi;
         private static OrderedDictionary<Guid, IOutputUi> _outputUisById;
         private static OrderedDictionary<Guid, IInputUi> _inputUisById;
-        
-        // Try to avoid allocations
-        private static readonly List<Symbol.Connection> AllConnections = new  List<Symbol.Connection>(100);
 
+        // Try to avoid allocations
+        private static readonly List<Symbol.Connection> AllConnections = new List<Symbol.Connection>(100);
     }
 }

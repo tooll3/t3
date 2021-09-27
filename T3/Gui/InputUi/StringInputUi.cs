@@ -84,7 +84,7 @@ namespace T3.Gui.InputUi
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One*5);
                 ImGui.BeginTooltip();
-                //ImGui.TextUnformatted(value);
+                ImGui.TextUnformatted(value);
                 ImGui.EndTooltip();
                 ImGui.PopStyleVar();
             }
