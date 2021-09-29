@@ -50,7 +50,6 @@ namespace T3.Gui.Graph
             AdjustGroupLayoutAfterResize(childUi, newNodeSize);
             _usableScreenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas,
                                                                              childUi.PosOnCanvas + childUi.Size));
-            _usableScreenRect.Floor();
             _selectableScreenRect = _usableScreenRect;
             _isVisible = ImGui.IsRectVisible(_selectableScreenRect.Min, _selectableScreenRect.Max);
 
@@ -293,12 +292,13 @@ namespace T3.Gui.Graph
                     }
 
                     // Label
-                    if (customUiResult == SymbolChildUi.CustomUiResult.None)
+                    if (customUiResult == SymbolChildUi.CustomUiResult.None 
+                        && _selectableScreenRect.GetHeight() > 8)
                     {
                         drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
                         ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 ? Fonts.FontSmall : Fonts.FontBold);
                         var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
-
+                    
                         drawList.AddText(_usableScreenRect.Min + LabelPos,
                                          ColorVariations.OperatorLabel.Apply(typeColor),
                                          string.Format(isRenamed ? ("\"" + childUi.SymbolChild.ReadableName + "\"") : childUi.SymbolChild.ReadableName));

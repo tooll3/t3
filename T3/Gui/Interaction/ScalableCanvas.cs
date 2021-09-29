@@ -90,6 +90,13 @@ namespace T3.Gui.Interaction
             return new Vector2((int)v.X, (int)v.Y);
         }
 
+        public virtual Vector2 TransformPositionFloat(Vector2 posOnCanvas)
+        {
+            var v = posOnCanvas * Scale + Scroll + WindowPos;
+            return new Vector2(v.X, v.Y);
+        }
+
+        
         public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
         {
             return MathUtils.Floor(posOnCanvas * Scale + Scroll + WindowPos);
@@ -155,7 +162,15 @@ namespace T3.Gui.Interaction
 
         public ImRect TransformRect(ImRect canvasRect)
         {
-            return new ImRect(TransformPosition(canvasRect.Min), TransformPosition(canvasRect.Max));
+            // NOTE: We have to floor the size instead to min max position to avoid jittering  
+            var min = TransformPositionFloat(canvasRect.Min);
+            var max = TransformPositionFloat(canvasRect.Max);
+            var size = max - min;
+            min.X = (int)min.X;
+            min.Y = (int)min.Y;
+            size.X = (int)size.X;
+            size.Y = (int)size.Y;
+            return new ImRect(min, min+size);
         }
 
         public ImRect InverseTransformRect(ImRect screenRect)

@@ -1,6 +1,7 @@
 using ImGuiNET;
 using System.Numerics;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Gui;
 using T3.Gui.Windows;
 
@@ -293,10 +294,11 @@ namespace UiHelpers
 
         public void Floor()
         {
+            var size = Max - Min;
             Min.X = (int)Min.X;
             Min.Y = (int)Min.Y;
-            Max.X = (int)Max.X;
-            Max.Y = (int)Max.Y;
+            Max.X = Min.X + (int)size.X;
+            Max.Y = Min.Y + (int)size.Y;
         }
 
         bool IsInverted()
