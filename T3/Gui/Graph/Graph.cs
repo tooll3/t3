@@ -351,7 +351,7 @@ namespace T3.Gui.Graph
                                             TargetPosition,
                                             color,
                                             thickness,
-                                            num_segments: 30);
+                                            num_segments: 20);
                 }
             }
         }

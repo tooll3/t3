@@ -31,6 +31,12 @@ namespace UiHelpers
 
         public static bool Draw(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color, float thickness, ref Vector2 hoverPosition)
         {
+            var r2 = rectA;
+            r2.Add(rectB);
+            
+            if (!ImGui.IsRectVisible(r2.Min, r2.Max))
+                return false;
+            
             var drawList = ImGui.GetWindowDrawList();
 
             var fallbackRectSize = new Vector2(120, 50) * GraphCanvas.Current.Scale;
