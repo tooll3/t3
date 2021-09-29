@@ -129,15 +129,15 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar();
                     ImGui.PopStyleColor(3);
                 }
-                
+
                 // Disabled indicator
                 if (instance.Outputs.Count > 0 && instance.Outputs[0].IsDisabled)
                 {
-                    drawList.AddLine(_usableScreenRect.Min+ new Vector2(3,2), _usableScreenRect.Max- new Vector2(3,2), T3Style.Colors.WarningColor,3);
+                    drawList.AddLine(_usableScreenRect.Min + new Vector2(3, 2), _usableScreenRect.Max - new Vector2(3, 2), T3Style.Colors.WarningColor, 3);
                     drawList.AddLine(
-                                     new Vector2(_usableScreenRect.Min.X+3, _usableScreenRect.Max.Y-2), 
-                                     new Vector2(_usableScreenRect.Max.X-3, _usableScreenRect.Min.Y+2), 
-                                     T3Style.Colors.WarningColor,3);
+                                     new Vector2(_usableScreenRect.Min.X + 3, _usableScreenRect.Max.Y - 2),
+                                     new Vector2(_usableScreenRect.Max.X - 3, _usableScreenRect.Min.Y + 2),
+                                     T3Style.Colors.WarningColor, 3);
                 }
 
                 // Interaction
@@ -155,7 +155,7 @@ namespace T3.Gui.Graph
                     && !GraphCanvas.Current._symbolBrowser._isOpen
                     && ImGui.IsWindowFocused())
                 {
-                    if(UserSettings.Config.SmartGroupDragging)
+                    if (UserSettings.Config.SmartGroupDragging)
                         SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
 
                     //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -204,8 +204,8 @@ namespace T3.Gui.Graph
                     _hoveredNodeIdForConnectionTarget = childUi.Id;
                 }
 
-                var hovered = ImGui.IsWindowFocused() 
-                              && (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId)) ;
+                var hovered = ImGui.IsWindowFocused()
+                              && (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId));
 
                 // A horrible work around to prevent exception because CompositionOp changed during drawing.
                 // A better solution would defer setting the compositionOp to the beginning of next frame.
@@ -221,16 +221,16 @@ namespace T3.Gui.Graph
                 }
 
                 // Show Parameter window as context menu
-                var activatedWithLeftMouse = ImGui.IsItemHovered() 
+                var activatedWithLeftMouse = ImGui.IsItemHovered()
                                              && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
                                              && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickTreshold
                                              && !ParameterWindow.IsAnyInstanceVisible()
-                                             && !ImGui.GetIO().KeyShift;    // allow double click to open
-                
-                var activatedWithMiddleMouse = ImGui.IsItemHovered() 
-                                             && ImGui.IsMouseReleased(ImGuiMouseButton.Middle)
-                                             && ImGui.GetMouseDragDelta(ImGuiMouseButton.Middle, 0).Length() < UserSettings.Config.ClickTreshold;
-                
+                                             && !ImGui.GetIO().KeyShift; // allow double click to open
+
+                var activatedWithMiddleMouse = ImGui.IsItemHovered()
+                                               && ImGui.IsMouseReleased(ImGuiMouseButton.Middle)
+                                               && ImGui.GetMouseDragDelta(ImGuiMouseButton.Middle, 0).Length() < UserSettings.Config.ClickTreshold;
+
                 if ((activatedWithLeftMouse || activatedWithMiddleMouse)
                     && !justOpenedChild
                     && string.IsNullOrEmpty(T3Ui.OpenedPopUpName)
@@ -773,18 +773,19 @@ namespace T3.Gui.Graph
                     {
                         _draggedOutputOpId = Guid.Empty;
                         _draggedOutputDefId = Guid.Empty;
-                        if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickTreshold )
+                        if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickTreshold)
                         {
-                            ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current._symbolBrowser, childUi,instance, output.Id);
+                            ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current._symbolBrowser, childUi, instance, output.Id);
                         }
                     }
+
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                     {
                         GraphCanvas.Current.EditNodeOutputDialog.OpenForOutput(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
                     }
                 }
             }
-            else if(_draggedOutputOpId == childUi.Id && _draggedOutputDefId == outputDef.Id)
+            else if (_draggedOutputOpId == childUi.Id && _draggedOutputDefId == outputDef.Id)
             {
                 if (ImGui.IsMouseDragging(ImGuiMouseButton.Left)
                     && ImGui.GetMouseDragDelta().Length() > UserSettings.Config.ClickTreshold)
@@ -811,7 +812,7 @@ namespace T3.Gui.Graph
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
-            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.7f, 1.2f, UsableSlotThickness/2, UsableSlotThickness);
+            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.7f, 1.2f, UsableSlotThickness / 2, UsableSlotThickness);
 
             var opRect = _usableScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
