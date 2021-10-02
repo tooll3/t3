@@ -484,6 +484,26 @@ namespace T3.Gui.Windows.TimeLine
                     ImGui.EndTabItem();
                 }
 
+                if (ImGui.BeginTabItem("OSC"))
+                {
+                    CustomComponents.HelpText("Use OSC to send events to /beatTimer on every beat.");
+                    var isInitialized = playback is BeatTimingPlayback;
+                    if (isInitialized)
+                    {
+                        ImGui.TextUnformatted($"Last received beat {OscBeatTiming.BeatCounter}");
+                    }
+                    else
+                    {
+                        if (ImGui.Button("Initialize"))
+                        {
+                            OscBeatTiming.Init();
+                            playback = new BeatTimingPlayback();
+                        }
+                    }
+
+                    ImGui.EndTabItem();
+                }
+                
                 if (ImGui.BeginTabItem("System Audio"))
                 {
                     CustomComponents.HelpText("Uses Windows core audio input for BPM detection");

@@ -8,7 +8,7 @@ using T3.Core.Logging;
 namespace T3.Gui.Interaction.Timing
 {
     /// <summary>
-    /// A helper to provide continuous a BeatTime for live si tuations.
+    /// A helper to provide continuous a BeatTime for live situations.
     /// The timing can be driven by BPM detection or beat tapping.
     /// </summary>
     /// <remarks>
@@ -214,10 +214,6 @@ namespace T3.Gui.Interaction.Timing
                         {
                             Log.Debug("something");
                         }
-                    }
-                    else
-                    {
-                        Log.Debug("Not tapping r abandoned barcount " + barCount);
                     }
                 }
                 else

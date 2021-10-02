@@ -149,6 +149,10 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Rug.Osc, Version=1.2.5.17694, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Rug.Osc.1.2.5\lib\Rug.Osc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -414,6 +418,7 @@
     <Compile Include="Gui\Interaction\CameraInteraction.cs" />
     <Compile Include="Gui\Interaction\ColorEditButton.cs" />
     <Compile Include="Gui\Interaction\JogDialOverlay.cs" />
+    <Compile Include="Gui\Interaction\Timing\OscBeatTiming.cs" />
     <Compile Include="Gui\Interaction\Variation\Dialogs\AddGroupDialog.cs" />
     <Compile Include="Gui\Interaction\Variation\Midi\Apc40Mk2.cs" />
     <Compile Include="Gui\Interaction\Variation\Midi\ApcMini.cs" />
