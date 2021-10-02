@@ -324,6 +324,9 @@ namespace T3.Core
             _hlslFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.hlsl");
             _hlslFileWatcher.IncludeSubdirectories = true;
             _hlslFileWatcher.Changed += OnChanged;
+            _hlslFileWatcher.Created += OnChanged;
+            _hlslFileWatcher.Deleted += OnChanged;
+            _hlslFileWatcher.Renamed += OnChanged;
             _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // creation time needed for visual studio (2017)
             _hlslFileWatcher.EnableRaisingEvents = true;
 
