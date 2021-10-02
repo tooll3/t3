@@ -33,7 +33,7 @@ namespace T3.Gui.UiHelpers
             public int WindowLayoutIndex = 0;
             public bool KeepBeatTimeRunningInPause = true;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
-            public bool UseArcConnections = false;
+            public bool UseArcConnections = true;
             public float SnapStrength = 5;
             public bool UseJogDialControl = false;
             public float ScrollSmoothing = 0.06f;
