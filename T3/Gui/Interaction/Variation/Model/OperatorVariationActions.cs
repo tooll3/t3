@@ -217,7 +217,7 @@ namespace T3.Gui.Interaction.Variation.Model
 
             if (groupIndex < 0 || groupIndex >= Groups.Count)
             {
-                Log.Warning("Can't blend undefined group index " + groupIndex);
+                // Log.Warning("Can't blend undefined group index " + groupIndex);
                 return false;
             }
 

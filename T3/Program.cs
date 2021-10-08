@@ -34,7 +34,7 @@ namespace T3
         {
             MouseMove += (o, e) => ImGui.GetIO().MousePos = new System.Numerics.Vector2(e.X, e.Y);
         }
-        
+
         #region WM Message Ids
         private const int WM_LBUTTONDOWN = 0x0201;
         private const int WM_LBUTTONUP = 0x0202;
@@ -66,8 +66,8 @@ namespace T3
 
         protected override void WndProc(ref System.Windows.Forms.Message m)
         {
-            var filterAltKeyToPreventFocusLoss = (m.Msg == WM_SYSKEYDOWN ||m.Msg == WM_SYSKEYUP)  && (int)m.WParam == VK_ALT;
-            if(!filterAltKeyToPreventFocusLoss)
+            var filterAltKeyToPreventFocusLoss = (m.Msg == WM_SYSKEYDOWN || m.Msg == WM_SYSKEYUP) && (int)m.WParam == VK_ALT;
+            if (!filterAltKeyToPreventFocusLoss)
                 base.WndProc(ref m);
 
             ImGuiIOPtr io = ImGui.GetIO();
@@ -220,42 +220,40 @@ namespace T3
             return true;
         }
     }
-    
-    
 
     public class Program
     {
         private static ImGuiDx11Impl _controller;
         public static Device Device { get; private set; }
         public static bool IsFullScreen { get; set; } = false;
-        
-        
+
         [STAThread]
         private static void Main()
         {
-            CultureInfo.CurrentCulture = new CultureInfo("en-US");;
-            
+            CultureInfo.CurrentCulture = new CultureInfo("en-US");
+            ;
+
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
-            
+
             var form = new ImGuiDx11RenderForm("T3 ImGui Test")
                            {
                                ClientSize = new Size(1920, 1080),
-                               Icon = new Icon(@"Resources\t3\t3.ico", 48, 48)//, 256, 256)
+                               Icon = new Icon(@"Resources\t3\t3.ico", 48, 48) //, 256, 256)
                            };
 
             // SwapChain description
             var desc = new SwapChainDescription()
-                       {
-                           BufferCount = 3,
-                           ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
-                                                                 new Rational(60, 1), Format.R8G8B8A8_UNorm),
-                           IsWindowed = true,
-                           OutputHandle = form.Handle,
-                           SampleDescription = new SampleDescription(1, 0),
-                           SwapEffect = SwapEffect.Discard,
-                           Usage = Usage.RenderTargetOutput
-                       };
+                           {
+                               BufferCount = 3,
+                               ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
+                                                                     new Rational(60, 1), Format.R8G8B8A8_UNorm),
+                               IsWindowed = true,
+                               OutputHandle = form.Handle,
+                               SampleDescription = new SampleDescription(1, 0),
+                               SwapEffect = SwapEffect.Discard,
+                               Usage = Usage.RenderTargetOutput
+                           };
 
             // Create Device and SwapChain
             Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, desc, out var device, out _swapChain);
@@ -274,7 +272,7 @@ namespace T3
 
             form.KeyDown += HandleKeyDown;
             form.KeyUp += HandleKeyUp;
-            
+
             form.ResizeBegin += (sender, args) => _inResize = true;
             form.ResizeEnd += (sender, args) =>
                               {
@@ -293,7 +291,7 @@ namespace T3
                                 args.Cancel = T3Ui.UiModel.IsSaving;
                                 Log.Debug($"Cancel closing because save-operation is in progress.");
                             };
-            
+
             form.WindowState = FormWindowState.Maximized;
 
             // second render view
@@ -301,7 +299,6 @@ namespace T3
             desc.OutputHandle = form2.Handle;
 
             _swapChain2 = new SwapChain(factory, device, desc);
-            
 
             _swapChain2.ResizeBuffers(3, form2.ClientSize.Width, form2.ClientSize.Height,
                                       _swapChain2.Description.ModeDescription.Format, _swapChain2.Description.Flags);
@@ -333,8 +330,10 @@ namespace T3
             //resourceManager.CreatePixelShader(@"Resources\\ps-pos-only-fixed-color.hlsl", "main", "ps-pos-only-fixed-color");
             var di = new DirectoryInfo(".");
             Console.WriteLine(di.FullName);
-            FullScreenVertexShaderId = resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
-            FullScreenPixelShaderId = resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
+            FullScreenVertexShaderId =
+                resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
+            FullScreenPixelShaderId =
+                resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
             (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\images\chipmunk.jpg", null);
 
             // setup file watching the operator source
@@ -352,11 +351,11 @@ namespace T3
                 // disable imgui ini file settings
                 ImGui.GetIO().NativePtr->IniFilename = null;
             }
+
             ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
 
             startupStopWatch.Stop();
             Log.Debug($"startup took {startupStopWatch.ElapsedMilliseconds}ms.");
-            
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -372,12 +371,39 @@ namespace T3
                                      // Log.Debug($"delta: {ImGui.GetIO().DeltaTime}");
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
 
-                                     bool fullScreenBorderStyle = form.FormBorderStyle == FormBorderStyle.None;
-                                     if (IsFullScreen != fullScreenBorderStyle) 
+                                     bool isFullScreenBorderStyle = form.FormBorderStyle == FormBorderStyle.None;
+                                     if (isFullScreenBorderStyle != IsFullScreen)
                                      {
-                                         form.FormBorderStyle = fullScreenBorderStyle ? FormBorderStyle.Sizable : FormBorderStyle.None;
+                                         if (IsFullScreen)
+                                         {
+                                             form.FormBorderStyle = FormBorderStyle.Sizable;
+                                             form.WindowState = FormWindowState.Normal;
+                                             form.FormBorderStyle = FormBorderStyle.None;
+                                             form.Bounds = Screen.AllScreens[0].Bounds;
+
+                                             if (T3Ui.ShowSecondaryRenderWindow)
+                                             {
+                                                 form2.WindowState = FormWindowState.Normal;
+                                                 form2.FormBorderStyle = FormBorderStyle.None;
+                                                 form2.Bounds = Screen.AllScreens[1].Bounds;
+                                             }
+                                             else
+                                             {
+                                                 form2.WindowState = FormWindowState.Normal;
+                                                 form2.FormBorderStyle = FormBorderStyle.None;
+                                                 form2.Bounds = Screen.AllScreens[0].Bounds;
+                                             }
+                                         
                                      }
-                                     
+                                         else
+                                         {
+                                             form.FormBorderStyle = FormBorderStyle.Sizable;
+                                             form2.FormBorderStyle = FormBorderStyle.Sizable;
+                                         }
+                                         //form.FormBorderStyle = isFullScreenBorderStyle ? FormBorderStyle.Sizable : FormBorderStyle.None;
+                                         //form2.FormBorderStyle = fullScreenBorderStyle ? FormBorderStyle.Sizable : FormBorderStyle.None;
+                                     }
+
                                      //NodeOperations.UpdateChangedOperators();
                                      var modifiedSymbols = resourceManager.UpdateChangedOperatorTypes();
                                      foreach (var symbol in modifiedSymbols)
@@ -406,10 +432,11 @@ namespace T3
                                              context.VertexShader.Set(vsr.VertexShader);
                                          if (resourceManager.Resources[FullScreenPixelShaderId] is PixelShaderResource psr)
                                              context.PixelShader.Set(psr.PixelShader);
-                                         
+
                                          if (resourceManager.SecondRenderWindowTexture != null && !resourceManager.SecondRenderWindowTexture.IsDisposed)
                                          {
-                                             if (backgroundSrv == null || backgroundSrv.Resource.NativePointer != resourceManager.SecondRenderWindowTexture.NativePointer)
+                                             if (backgroundSrv == null || backgroundSrv.Resource.NativePointer !=
+                                                 resourceManager.SecondRenderWindowTexture.NativePointer)
                                              {
                                                  backgroundSrv?.Dispose();
                                                  backgroundSrv = new ShaderResourceView(device, resourceManager.SecondRenderWindowTexture);
@@ -461,7 +488,7 @@ namespace T3
             buffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
             rtv = new RenderTargetView(device, buffer);
         }
-        
+
         private static void HandleKeyDown(object sender, KeyEventArgs e)
         {
             var keyIndex = (int)e.KeyCode;
@@ -483,7 +510,7 @@ namespace T3
                 Core.IO.KeyHandler.PressedKeys[keyIndex] = false;
             }
         }
-        
+
         private static T3Ui _t3ui = null;
         private static bool _inResize;
         private static bool _inResize2;
