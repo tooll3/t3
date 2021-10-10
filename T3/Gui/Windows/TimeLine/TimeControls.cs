@@ -129,7 +129,7 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     T3Ui.BeatTiming.TriggerSyncTap();
                 }
-                else if (ImGui.IsItemHovered() && ImGui.IsWindowFocused() && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+                else if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
                 {
                     Log.Debug("Resync!");
                     T3Ui.BeatTiming.TriggerResyncMeasure();
@@ -491,6 +491,9 @@ namespace T3.Gui.Windows.TimeLine
                     if (isInitialized)
                     {
                         ImGui.TextUnformatted($"Last received beat {OscBeatTiming.BeatCounter}");
+                        var v = ProjectSettings.Config.SlideHack;
+                        ImGui.InputDouble("BPM Scale factor", ref v );
+                        ProjectSettings.Config.SlideHack = v;
                     }
                     else
                     {

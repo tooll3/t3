@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using ImGuiNET;
+using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Interaction.Timing
 {
@@ -101,6 +103,10 @@ namespace T3.Gui.Interaction.Timing
             _bpmDetection.AddFffSample(SystemAudioInput.LastFftBuffer);
         }
 
+        
+        
+        
+        
         /// <remarks>
         /// This code seems much too complicated, but getting flexible and coherent beat detection
         /// seems to be much trickier, than I though. After playing with a couple of methods, it 
@@ -130,13 +136,13 @@ namespace T3.Gui.Interaction.Timing
 
             if (_advanceTriggered)
             {
-                _tappedMeasureStartTime += 0.01f;
+                _measureStartTime += 0.01f;
                 _advanceTriggered = false;
             }
             
             if (_delayTriggered)
             {
-                _tappedMeasureStartTime -= 0.01f;
+                _measureStartTime -= 0.01f;
                 _delayTriggered = false;
             }
             
@@ -234,7 +240,9 @@ namespace T3.Gui.Interaction.Timing
             var isTimingOff = Math.Abs(differenceToTapping) > 0.03f;
             var slideSpeed = 0.0001f;
             if(isTimingOff)
-                _measureStartTime += (differenceToTapping > 0) ? -slideSpeed : slideSpeed;   
+                _measureStartTime += (differenceToTapping > 0) ? -slideSpeed : slideSpeed;
+
+            _measureStartTime += ProjectSettings.Config.SlideHack;
 
             // Check for next measure               
             if (timeInMeasure > measureDuration)
@@ -279,7 +287,6 @@ namespace T3.Gui.Interaction.Timing
             }
         
             _beatDuration = sum / (_tapTimes.Count - 1);
-            //_tappedMeasureStartTime = time - _beatDuration;
         }
         
         
