@@ -292,16 +292,18 @@ namespace T3.Gui.Graph
                     }
 
                     // Label
-                    if (customUiResult == SymbolChildUi.CustomUiResult.None 
+                    if (customUiResult == SymbolChildUi.CustomUiResult.None
                         && _selectableScreenRect.GetHeight() > 8)
                     {
                         drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
                         ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 ? Fonts.FontSmall : Fonts.FontBold);
                         var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
-                    
+
                         drawList.AddText(_usableScreenRect.Min + LabelPos,
                                          ColorVariations.OperatorLabel.Apply(typeColor),
-                                         string.Format(isRenamed ? ("\"" + childUi.SymbolChild.ReadableName + "\"") : childUi.SymbolChild.ReadableName));
+                                         string.Format(isRenamed
+                                                           ? $"\"{childUi.SymbolChild.ReadableName}\""
+                                                           : childUi.SymbolChild.ReadableName));
                         ImGui.PopFont();
                         drawList.PopClipRect();
                     }
@@ -357,7 +359,7 @@ namespace T3.Gui.Graph
                         var label = inputDefinition.Name;
                         if (inputDefinition.IsMultiInput)
                         {
-                            label = "  " + label + " [...]";
+                            label = $"  {label} [...]";
                         }
 
                         var labelSize = ImGui.CalcTextSize(label);
@@ -520,11 +522,11 @@ namespace T3.Gui.Graph
                     line.IsSelected |= childUi.IsSelected;
                 }
 
-                if (_isVisible)
                 {
                     DrawOutput(childUi, outputDef, usableArea, colorForType, hovered);
 
                     // Visualize update
+                    if (_isVisible)
                     {
                         if (dirtyFlagNumUpdatesWithinFrame > 0)
                         {
@@ -767,41 +769,44 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                                            ColorVariations.OperatorHover.Apply(colorForType));
-
-                    var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
-                    var output = instance.Outputs.Single(output2 => output2.Id == outputDef.Id);
-
-                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
-                    ImGui.BeginTooltip();
-                    ImGui.TextUnformatted($".{outputDef.Name}");
-                    ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates");
-                    ImGui.PopFont();
-                    ImGui.EndTooltip();
-                    ImGui.PopStyleVar();
-
-                    if (ImGui.IsItemActivated())
+                    if (_isVisible)
                     {
-                        _draggedOutputOpId = childUi.Id;
-                        _draggedOutputDefId = outputDef.Id;
-                    }
+                        _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
+                                                ColorVariations.OperatorHover.Apply(colorForType));
 
-                    // Clicked
-                    else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-                    {
-                        _draggedOutputOpId = Guid.Empty;
-                        _draggedOutputDefId = Guid.Empty;
-                        if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickTreshold)
+                        var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+                        var output = instance.Outputs.Single(output2 => output2.Id == outputDef.Id);
+
+                        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
+                        ImGui.BeginTooltip();
+                        ImGui.TextUnformatted($".{outputDef.Name}");
+                        ImGui.PushFont(Fonts.FontSmall);
+                        ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates");
+                        ImGui.PopFont();
+                        ImGui.EndTooltip();
+                        ImGui.PopStyleVar();
+
+                        if (ImGui.IsItemActivated())
                         {
-                            ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current._symbolBrowser, childUi, instance, output.Id);
+                            _draggedOutputOpId = childUi.Id;
+                            _draggedOutputDefId = outputDef.Id;
                         }
-                    }
 
-                    if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
-                    {
-                        GraphCanvas.Current.EditNodeOutputDialog.OpenForOutput(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
+                        // Clicked
+                        else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                        {
+                            _draggedOutputOpId = Guid.Empty;
+                            _draggedOutputDefId = Guid.Empty;
+                            if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickTreshold)
+                            {
+                                ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current._symbolBrowser, childUi, instance, output.Id);
+                            }
+                        }
+
+                        if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
+                        {
+                            GraphCanvas.Current.EditNodeOutputDialog.OpenForOutput(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
+                        }
                     }
                 }
             }

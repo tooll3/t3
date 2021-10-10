@@ -393,8 +393,7 @@ namespace T3
                                                  form2.FormBorderStyle = FormBorderStyle.None;
                                                  form2.Bounds = Screen.AllScreens[0].Bounds;
                                              }
-                                         
-                                     }
+                                         }
                                          else
                                          {
                                              form.FormBorderStyle = FormBorderStyle.Sizable;

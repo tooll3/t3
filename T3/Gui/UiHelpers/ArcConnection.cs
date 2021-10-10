@@ -33,6 +33,8 @@ namespace UiHelpers
         {
             var r2 = rectA;
             r2.Add(rectB);
+            r2.Add(pointB);
+            r2.Add(pointA);
             
             if (!ImGui.IsRectVisible(r2.Min, r2.Max))
                 return false;
