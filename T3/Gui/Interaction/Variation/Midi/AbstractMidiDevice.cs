@@ -40,7 +40,7 @@ namespace T3.Gui.Interaction.Variation.Midi
             CombineButtonSignals();
 
             ControlChangeSignal[] controlChangeSignals = null;
-            
+
             lock (_controlSignalsSinceLastUpdate)
             {
                 controlChangeSignals = _controlSignalsSinceLastUpdate.ToArray();
@@ -158,13 +158,17 @@ namespace T3.Gui.Interaction.Variation.Midi
                         if (!(msg.MidiEvent is ControlChangeEvent controlChangeEvent))
                             return;
 
-                        //Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {controlChangeEvent.Controller}  Value: {controlChangeEvent.ControllerValue}");
-                        _controlSignalsSinceLastUpdate.Add(new ControlChangeSignal()
-                                                               {
-                                                                   Channel = controlChangeEvent.Channel,
-                                                                   ControllerId = (int)controlChangeEvent.Controller,
-                                                                   ControllerValue = controlChangeEvent.ControllerValue,
-                                                               });
+                        lock (_controlSignalsSinceLastUpdate)
+                        {
+                            //Log.Debug($"{msg.MidiEvent.CommandCode}  NoteNumber: {controlChangeEvent.Controller}  Value: {controlChangeEvent.ControllerValue}");
+                            _controlSignalsSinceLastUpdate.Add(new ControlChangeSignal()
+                                                                   {
+                                                                       Channel = controlChangeEvent.Channel,
+                                                                       ControllerId = (int)controlChangeEvent.Controller,
+                                                                       ControllerValue = controlChangeEvent.ControllerValue,
+                                                                   });
+                        }
+
                         return;
                 }
             }
