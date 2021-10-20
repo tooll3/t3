@@ -151,11 +151,17 @@ namespace T3.Gui.Windows.Output
 
             var evaluatedSymbolUi = SymbolUiRegistry.Entries[instanceForEvaluation.Symbol.Id];
 
-            // Todo: use output from pinning...
+            // Todo: support different outputs...
             var evalOutput = instanceForEvaluation.Outputs[0];
             if (!evaluatedSymbolUi.OutputUis.TryGetValue(evalOutput.Id, out IOutputUi evaluatedOutputUi))
                 return null;
 
+            if (_imageCanvas.ViewMode !=  ImageOutputCanvas.Modes.Fitted 
+                && evaluatedOutputUi is CommandOutputUi)
+            {
+                _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
+            }
+            
             _evaluationContext.Reset();
             _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
             var usedCam = _lastInteractiveCam ?? _outputWindowViewCamera;
