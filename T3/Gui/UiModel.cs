@@ -189,7 +189,7 @@ namespace T3.Gui
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4.Boolean), BooleanUi.DrawChildUi);
             
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227.LoadObj), DescriptiveUi.DrawChildUi);
-            
+            CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c.ComputeShader), DescriptiveUi.DrawChildUi);
 
             foreach (var symbolEntry in SymbolRegistry.Entries)
             {

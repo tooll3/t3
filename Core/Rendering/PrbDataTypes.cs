@@ -1,8 +1,11 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using T3.Core.Logging;
 using T3.Core.Operator;
+using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.Rendering
@@ -56,6 +59,7 @@ namespace T3.Core.Rendering
             context.PbrMaterialTextures.NormalMap = _normalMapSrv;
             context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap = _rsmoMapSrv;
             context.PbrMaterialTextures.EmissiveColorMap = _emissiveColorMapSrv;
+            context.PbrMaterialTextures.BrdfLookUpMap = _pbrLookUpTexture;
         }
 
         private static void Init()
@@ -83,6 +87,9 @@ namespace T3.Core.Rendering
             NormalFallbackTexture = CreateFallBackTexture(new Vector4(0.5f, 0.5f, 1, 0));
             _normalMapSrv = new ShaderResourceView(device, NormalFallbackTexture);
 
+            var filePath = @"Resources\common\images\BRDF-LookUp.dds";
+            _pbrLookUpTexture = LoadTexture(filePath);
+            
             _wasInitialized = true;
         }
 
@@ -111,10 +118,32 @@ namespace T3.Core.Rendering
             return colorBuffer;
         }
 
+        private static ShaderResourceView LoadTexture(string imagePath)
+        {
+            var resourceManager = ResourceManager.Instance();
+            try
+            {
+                var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
+                // if (resourceManager.Resources.TryGetValue(textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
+                //     return textureResource.Texture;
+                
+                if (resourceManager.Resources.TryGetValue(srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
+                    return srvResource.ShaderResourceView;                
+
+                Log.Warning($"Failed loading texture {imagePath}");
+            }
+            catch(Exception e)
+            {
+                Log.Warning($"Failed loading texture {imagePath} " + e );
+            }
+            return null;
+        }
+
         private static ShaderResourceView _baseColorMapSrv;
         private static ShaderResourceView _rsmoMapSrv;
         private static ShaderResourceView _normalMapSrv;
         private static ShaderResourceView _emissiveColorMapSrv;
+        private static ShaderResourceView _pbrLookUpTexture;
         private static Buffer _defaultParameterBuffer = null;
         
         public static Texture2D WhitePixelTexture;
@@ -129,6 +158,7 @@ namespace T3.Core.Rendering
         public ShaderResourceView EmissiveColorMap;
         public ShaderResourceView RoughnessSpecularMetallicOcclusionMap;
         public ShaderResourceView NormalMap;
+        public ShaderResourceView BrdfLookUpMap;
     }
 
     [StructLayout(LayoutKind.Explicit, Size = PbrMaterialParams.Stride)]
