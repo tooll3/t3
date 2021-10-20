@@ -60,6 +60,7 @@ namespace T3.Core.Rendering
             context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap = _rsmoMapSrv;
             context.PbrMaterialTextures.EmissiveColorMap = _emissiveColorMapSrv;
             context.PbrMaterialTextures.BrdfLookUpMap = _pbrLookUpTexture;
+            context.ContextTextures["PrefilteredSpecular"] = _prefilteredBrdfTexture;
         }
 
         private static void Init()
@@ -86,9 +87,9 @@ namespace T3.Core.Rendering
 
             NormalFallbackTexture = CreateFallBackTexture(new Vector4(0.5f, 0.5f, 1, 0));
             _normalMapSrv = new ShaderResourceView(device, NormalFallbackTexture);
-
-            var filePath = @"Resources\common\images\BRDF-LookUp.dds";
-            _pbrLookUpTexture = LoadTexture(filePath);
+            
+            _pbrLookUpTexture = LoadTextureAsSRV(@"Resources\common\images\BRDF-LookUp.dds");
+            _prefilteredBrdfTexture = LoadTexture(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
             
             _wasInitialized = true;
         }
@@ -118,14 +119,12 @@ namespace T3.Core.Rendering
             return colorBuffer;
         }
 
-        private static ShaderResourceView LoadTexture(string imagePath)
+        private static ShaderResourceView LoadTextureAsSRV(string imagePath)
         {
             var resourceManager = ResourceManager.Instance();
             try
             {
                 var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
-                // if (resourceManager.Resources.TryGetValue(textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
-                //     return textureResource.Texture;
                 
                 if (resourceManager.Resources.TryGetValue(srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
                     return srvResource.ShaderResourceView;                
@@ -139,11 +138,31 @@ namespace T3.Core.Rendering
             return null;
         }
 
+        private static Texture2D LoadTexture(string imagePath)
+        {
+            var resourceManager = ResourceManager.Instance();
+            try
+            {
+                var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
+                if (resourceManager.Resources.TryGetValue(textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
+                     return textureResource.Texture;
+                
+                Log.Warning($"Failed loading texture {imagePath}");
+            }
+            catch(Exception e)
+            {
+                Log.Warning($"Failed loading texture {imagePath} " + e );
+            }
+            return null;
+        }
+
+        
         private static ShaderResourceView _baseColorMapSrv;
         private static ShaderResourceView _rsmoMapSrv;
         private static ShaderResourceView _normalMapSrv;
         private static ShaderResourceView _emissiveColorMapSrv;
         private static ShaderResourceView _pbrLookUpTexture;
+        private static Texture2D _prefilteredBrdfTexture;
         private static Buffer _defaultParameterBuffer = null;
         
         public static Texture2D WhitePixelTexture;
