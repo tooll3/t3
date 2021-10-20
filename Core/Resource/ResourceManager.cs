@@ -940,7 +940,7 @@ namespace T3.Core
             {
                 // Copy the content of the WIC to the buffer
                 bitmapSource.CopyPixels(stride, buffer);
-                int mipLevels = (int)Math.Log(Math.Max(bitmapSource.Size.Width, bitmapSource.Size.Height), 2.0) + 1;
+                int mipLevels = (int)Math.Log(bitmapSource.Size.Width, 2.0) + 1;
                 var texDesc = new Texture2DDescription()
                               {
                                   Width = bitmapSource.Size.Width,
@@ -985,9 +985,9 @@ namespace T3.Core
                 factory.Dispose();
                 Log.Info($"Created texture '{name}' from '{filename}'");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Log.Info($"Info: couldn't access file '{filename}' as it was locked.");
+                Log.Info($"Info: couldn't access file '{filename}': {e.Message}.");
             }
         }
 
