@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Numerics;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.Snapping;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Timeline
 {
@@ -173,5 +174,8 @@ namespace T3.Gui.Timeline
         readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();
         //private List<DrawingVisual> m_Children = new List<DrawingVisual>();
         //private DrawingVisual m_DrawingVisual;
+        public SnapResult CheckForSnap(double value, float canvasScale) {
+            throw new NotImplementedException();
+        }
     }
 }
