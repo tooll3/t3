@@ -2,7 +2,7 @@
   "profiles": {
     "t3": {
       "commandName": "Project",
-      "workingDirectory": "C:\\Users\\cynic\\dev\\t3"
+      "workingDirectory": ".."
     }
   }
 }

@@ -1,8 +1,8 @@
-mkdir ..\T3\bin\Debug\
-copy dependencies\*.dll ..\T3\bin\Debug\
+mkdir ..\T3\bin\Debug\net5.0-windows
+copy dependencies\*.dll ..\T3\bin\Debug\net5.0-windows\
 
-mkdir ..\T3\bin\Release\
-copy dependencies\*.dll ..\T3\bin\Release\
+mkdir ..\T3\bin\Release\net5.0-windows
+copy dependencies\*.dll ..\T3\bin\Release\net5.0-windows\
 
 Xcopy /E /I default-layouts ..\.t3
 
