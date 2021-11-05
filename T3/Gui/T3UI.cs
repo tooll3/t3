@@ -31,7 +31,6 @@ namespace T3.Gui
             UiModel = new UiModel(operatorsAssembly);
             var tmp = new UserSettings(saveOnQuit:true);
             var tmp2 = new ProjectSettings(saveOnQuit:true);
-            BeatTiming = new BeatTiming();
             WindowManager = new WindowManager();
             ExampleSymbolLinking.UpdateExampleLinks();
         }
@@ -45,7 +44,7 @@ namespace T3.Gui
             SrvManager.FreeUnusedTextures();
             KeyboardBinding.InitFrame();
             WindowManager.Draw();
-            BeatTiming.Update();
+            BeatTiming.Update(ImGui.GetTime());
 
             SingleValueEdit.StartNextFrame();
 
@@ -203,7 +202,6 @@ namespace T3.Gui
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel;
         public static readonly VariationHandling VariationHandling = new VariationHandling();
-        public static readonly BeatTiming BeatTiming;
         public static readonly WindowManager WindowManager;
 
         public static string OpenedPopUpName; // This is reset on Frame start and can be useful for allow context menu to stay open even if a

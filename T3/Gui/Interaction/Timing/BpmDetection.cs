@@ -18,7 +18,7 @@ namespace T3.Gui.Interaction.Timing
         /// <summary>
         /// This should be called once a frame with a fresh set of fftSamples
         /// </summary>
-        public void AddFffSample(float[] fftBuffer)
+        public void AddFftSample(float[] fftBuffer)
         {
             BpmRangeMin = BpmRangeMin.Clamp(50, 200);
             BpmRangeMax = BpmRangeMax.Clamp(BpmRangeMin, 200);

@@ -109,30 +109,32 @@ namespace T3.Gui.Windows.TimeLine
 
             if (hideTimeControls)
             {
-                if (ImGui.Button($"{T3Ui.BeatTiming.DampedBpm:0.0} BPM?"))
+                if (ImGui.Button($"{BeatTiming.Bpm:0.0} BPM?"))
                 {
-                    T3Ui.BeatTiming.SetBpmFromSystemAudio();
+                    //T3Ui.BeatTiming.SetBpmFromSystemAudio();
                     // if (newBpm > 0)
                     //     playback.Bpm = newBpm;
                 }
 
                 var min = ImGui.GetItemRectMin();
                 var max = ImGui.GetItemRectMax();
-                //var volume = Im.Clamp(BpmDetection.LastVolume,0,1);
-                var volume = BeatTiming.SyncPrecision;
-                ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - volume * (max.Y - min.Y)), Color.Orange);
+                var bar = (float) Math.Pow(1 - BeatTiming.BeatTime % 1,4);
+                var height = 1;
+                
+                //var volume = BeatTiming.SyncPrecision;
+                ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - height * (max.Y - min.Y)), Color.Orange.Fade(bar));
 
                 ImGui.SameLine();
 
                 ImGui.Button("Sync");
                 if (ImGui.IsItemActivated())
                 {
-                    T3Ui.BeatTiming.TriggerSyncTap();
+                    BeatTiming.TriggerSyncTap();
                 }
                 else if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
                 {
                     Log.Debug("Resync!");
-                    T3Ui.BeatTiming.TriggerResyncMeasure();
+                    BeatTiming.TriggerResyncMeasure();
                 }
 
                 CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.",
@@ -144,14 +146,14 @@ namespace T3.Gui.Windows.TimeLine
                 {
                     if (ImGui.ArrowButton("##left", ImGuiDir.Left))
                     {
-                        T3Ui.BeatTiming.TriggerDelaySync();
+                        BeatTiming.TriggerDelaySync();
                     }
 
                     ImGui.SameLine();
 
                     if (ImGui.ArrowButton("##right", ImGuiDir.Right))
                     {
-                        T3Ui.BeatTiming.TriggerAdvanceSync();
+                        BeatTiming.TriggerAdvanceSync();
                     }
 
                     ImGui.SameLine();
@@ -487,8 +489,8 @@ namespace T3.Gui.Windows.TimeLine
                 if (ImGui.BeginTabItem("OSC"))
                 {
                     CustomComponents.HelpText("Use OSC to send events to /beatTimer on every beat.");
-                    var isInitialized = playback is BeatTimingPlayback;
-                    if (isInitialized)
+                    //var isInitialized = playback is BeatTimingPlayback;
+                    if (OscBeatTiming.Initialized)
                     {
                         ImGui.TextUnformatted($"Last received beat {OscBeatTiming.BeatCounter}");
                         var v = ProjectSettings.Config.SlideHack;
@@ -507,41 +509,41 @@ namespace T3.Gui.Windows.TimeLine
                     ImGui.EndTabItem();
                 }
                 
-                if (ImGui.BeginTabItem("System Audio"))
-                {
-                    CustomComponents.HelpText("Uses Windows core audio input for BPM detection");
-                    CustomComponents.HelpText("Tab the Sync button to set begin of measure and to improve BPM detection.");
-                    var isInitialized = playback is BeatTimingPlayback && T3Ui.BeatTiming.UseSystemAudio;
-                    if (isInitialized)
-                    {
-                        var currentDevice = BeatTiming.SystemAudioInput.LoopBackDevices[BeatTiming.SystemAudioInput.SelectedDeviceIndex];
-                        if (ImGui.BeginCombo("Device selection", currentDevice.ToString()))
-                        {
-                            for (var index = 0; index < BeatTiming.SystemAudioInput.LoopBackDevices.Count; index++)
-                            {
-                                var d = BeatTiming.SystemAudioInput.LoopBackDevices[index];
-                                if (ImGui.Selectable(d.ToString()))
-                                {
-                                    BeatTiming.SystemAudioInput.SetDeviceIndex(index);
-                                }
-                            }
-
-                            ImGui.EndCombo();
-                        }
-                    }
-                    else
-                    {
-                        if (ImGui.Button("Initialize"))
-                        {
-                            playback = new BeatTimingPlayback();
-                            T3Ui.BeatTiming.UseSystemAudio = true;
-                        }
-
-                        CustomComponents.HelpText("This can take several seconds...");
-                    }
-
-                    ImGui.EndTabItem();
-                }
+                // if (ImGui.BeginTabItem("System Audio"))
+                // {
+                //     CustomComponents.HelpText("Uses Windows core audio input for BPM detection");
+                //     CustomComponents.HelpText("Tab the Sync button to set begin of measure and to improve BPM detection.");
+                //     var isInitialized = playback is BeatTimingPlayback && T3Ui.BeatTiming.UseSystemAudio;
+                //     if (isInitialized)
+                //     {
+                //         var currentDevice = BeatTiming.SystemAudioInput.LoopBackDevices[BeatTiming.SystemAudioInput.SelectedDeviceIndex];
+                //         if (ImGui.BeginCombo("Device selection", currentDevice.ToString()))
+                //         {
+                //             for (var index = 0; index < BeatTiming.SystemAudioInput.LoopBackDevices.Count; index++)
+                //             {
+                //                 var d = BeatTiming.SystemAudioInput.LoopBackDevices[index];
+                //                 if (ImGui.Selectable(d.ToString()))
+                //                 {
+                //                     BeatTiming.SystemAudioInput.SetDeviceIndex(index);
+                //                 }
+                //             }
+                //
+                //             ImGui.EndCombo();
+                //         }
+                //     }
+                //     else
+                //     {
+                //         if (ImGui.Button("Initialize"))
+                //         {
+                //             playback = new BeatTimingPlayback();
+                //             T3Ui.BeatTiming.UseSystemAudio = true;
+                //         }
+                //
+                //         CustomComponents.HelpText("This can take several seconds...");
+                //     }
+                //
+                //     ImGui.EndTabItem();
+                // }
 
                 ImGui.EndTabBar();
             }

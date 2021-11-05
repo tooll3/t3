@@ -44,6 +44,7 @@ namespace T3.Gui.Interaction.Timing
 
             // Wait for the listen thread to exit
             //thread.Join();
+            Initialized = true;
         }
 
         static void ListenLoop()
@@ -64,7 +65,7 @@ namespace T3.Gui.Interaction.Timing
 
                         if (oscMessage.Address == "/beatTimer")
                         {
-                            T3Ui.BeatTiming.TriggerSyncTap();
+                            BeatTiming.TriggerSyncTap();
                             BeatCounter++;
                         }
                     }
@@ -83,5 +84,6 @@ namespace T3.Gui.Interaction.Timing
         }
         private static OscReceiver _receiver;
         private static Thread _thread;
+        public static bool Initialized { get; private set; }
     }
 }
