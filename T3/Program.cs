@@ -105,10 +105,10 @@ namespace T3
                     return;
                 }
                 case WM_MOUSEWHEEL:
-                    io.MouseWheel += (short)(((uint)m.WParam >> 16) & 0xffff) / 120.0f; // TODO (float)WHEEL_DELTA;
+                    io.MouseWheel += (short)(((uint)(long)m.WParam >> 16) & 0xffff) / 120.0f; // TODO (float)WHEEL_DELTA;
                     return;
                 case WM_MOUSEHWHEEL:
-                    io.MouseWheelH += (short)(((uint)m.WParam >> 16) & 0xffff) / 120.0f; // TODO (float)WHEEL_DELTA;
+                    io.MouseWheelH += (short)(((uint)(long)m.WParam >> 16) & 0xffff) / 120.0f; // TODO (float)WHEEL_DELTA;
                     return;
                 case WM_KEYDOWN:
                 case WM_SYSKEYDOWN:
