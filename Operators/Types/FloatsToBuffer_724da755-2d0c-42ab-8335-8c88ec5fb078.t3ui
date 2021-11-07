@@ -1,0 +1,22 @@
+{
+  "Id": "724da755-2d0c-42ab-8335-8c88ec5fb078"/*FloatsToBuffer*/,
+  "InputUis": [
+    {
+      "InputId": "49556d12-4cd1-4341-b9d8-c356668d296c"/*Params*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "Id": "fa45d013-5a1c-45a0-9b05-a4a4edfb06f9"/*TypoGridBuffer*/,
+  "Description": "once upon a time...",
+  "InputUis": [
+    {
+      "InputId": "86144b95-9272-4d02-a1a7-67c6544c3bb9"/*Height*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "00b52213-7d87-457a-8a17-f33d471cdafe"/*BufferSize*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "e4aa7336-3d09-470e-b09c-352efbc706f3"/*CellSize*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "92985ef6-b9c1-4892-bb76-c9cbad69ec8a"/*CellPadding*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "e815d72e-1c71-42b7-a0a2-994c6e9f2954"/*Text*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "18b86e6a-3a7f-4fe4-9716-57ac19528cfd"/*TextCycle*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "1f34d82f-455e-4d6b-8c36-b058fbb5de3d"/*WrapText*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
+      "InputId": "a9a4470c-980c-4fff-936b-da0d28584e02"/*TextOffset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
+      "InputId": "df1a4a1e-f1fb-4fb5-8416-422d224c3d23"/*HighlightCharacters*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "6e6e8ce0-2b62-41f5-893d-9a20219faf82"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "b8cf7ab8-be34-4c0b-affc-ce09748fd6f1"/*VertexCount*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

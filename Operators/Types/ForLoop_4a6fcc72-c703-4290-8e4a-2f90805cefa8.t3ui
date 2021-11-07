@@ -1,0 +1,38 @@
+{
+  "Id": "4a6fcc72-c703-4290-8e4a-2f90805cefa8"/*ForLoop*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "51d969ee-c373-4bfd-9290-b60070b8872c"/*Command*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "3d488da4-a984-4588-af58-146bf32cbc88"/*Variable*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "726914f5-6ab8-4910-b225-323258aa9879"/*End*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c4ed1524-4175-42ce-8590-10ec63318c16"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

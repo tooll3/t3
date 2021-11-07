@@ -1,0 +1,22 @@
+{
+  "Id": "57a1ee33-702a-41ad-a17e-b43033d58638"/*RtvFromTexture2d*/,
+  "InputUis": [
+    {
+      "InputId": "73cf7c5d-cf0c-49db-91e8-dafe812e0232"/*Texture*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "515e87c9-4cf8-4948-ba64-f6261f7fe5fc"/*RenderTargetView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

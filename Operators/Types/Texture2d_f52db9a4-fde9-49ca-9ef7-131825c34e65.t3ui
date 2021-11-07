@@ -1,0 +1,72 @@
+{
+  "Id": "f52db9a4-fde9-49ca-9ef7-131825c34e65"/*Texture2d*/,
+  "InputUis": [
+    {
+      "InputId": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "58ff26e7-6beb-44cb-910b-fe467402cee9"/*MipLevels*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "940d3d3c-607a-460c-a7fe-22876960d706"/*ArraySize*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "67cd82c3-504b-4c80-8c49-5b303733ed52"/*Format*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "98353ef2-a18d-43e5-8828-ed8bd182ddd1"/*ResourceUsage*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "cfebc37f-6813-416a-9073-e48d31074115"/*BindFlags*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "da0d06bd-f5cc-400b-8e79-35756df9b2d5"/*CpuAccessFlags*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "2c9e4cb0-0333-439e-abcc-1148a840a260"/*ResourceOptionFlags*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "007129e4-0eae-4cb9-a142-90c1c171a5fb"/*Texture*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

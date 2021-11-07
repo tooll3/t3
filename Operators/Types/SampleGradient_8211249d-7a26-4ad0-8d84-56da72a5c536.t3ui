@@ -1,0 +1,39 @@
+{
+  "Id": "8211249d-7a26-4ad0-8d84-56da72a5c536"/*SampleGradient*/,
+  "InputUis": [
+    {
+      "InputId": "eff10fad-cf95-4133-91db-efc41258cd1b"/*Gradient*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      }
+    },
+    {
+      "InputId": "a4527e01-f19a-4200-85e5-00144f3ce061"/*SamplePos*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": 197.0,
+        "Y": 328.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "963611e7-f55e-4c94-96e6-34e195558a2b"/*Color*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "9f3d0701-86e8-436e-8652-918ba23b2cef"/*OutGradient*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

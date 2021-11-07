@@ -1,0 +1,71 @@
+{
+  "Id": "e712e801-863d-45c5-9ef8-fbe90dcb8375"/*DetectBpm*/,
+  "InputUis": [
+    {
+      "InputId": "3d2d523e-6578-488c-92fa-9e2a3a773e11"/*LowerLimit*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "25920975-44fd-4959-be50-b895dd3a6493"/*UpperLimit*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "a4763489-0977-4c7e-bacb-89c010d4a12d"/*BufferDurationSec*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "d68c056d-7e66-4fe7-8260-7ba43f272dc6"/*LowestBpm*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "17208fff-ab9a-46aa-ab1c-a1ae426ca5df"/*HighestBpm*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "f50cd488-9914-491d-9861-621a9c93019d"/*LockItFactor*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "7ba20a6a-13f9-47a2-9d46-b8ac59210f08"/*FftInput*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "8f3fae32-e216-4596-9067-c56234fb51e6"/*DetectedBpm*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "e907a286-bd65-44b5-acbb-b880cd192348"/*Measurements*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

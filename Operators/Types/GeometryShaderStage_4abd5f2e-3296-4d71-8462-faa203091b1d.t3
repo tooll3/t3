@@ -1,0 +1,25 @@
+{
+  "Name": "GeometryShaderStage",
+  "Id": "4abd5f2e-3296-4d71-8462-faa203091b1d",
+  "Namespace": "lib.dx11.draw",
+  "Inputs": [
+    {
+      "Id": "2a217f9d-2f9f-418a-8568-f767905384d5"/*GeometryShader*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "380b3ea4-aab8-4e19-bd31-9af3aef834b4"/*ConstantBuffers*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "d17f9020-a7ad-4419-b11a-c48667cfc52e"/*ShaderResources*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "7173630b-d7fd-4aa1-9398-d7e028e5df03"/*SamplerStates*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

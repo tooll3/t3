@@ -1,0 +1,59 @@
+{
+  "Id": "9d6dbf28-9983-4584-abba-6281ce51d583"/*QuadMesh*/,
+  "Description": "Generates are tesselated mesh.\n\nAlso known as: Plane, Quad",
+  "InputUis": [
+    {
+      "InputId": "18a5f3be-92a7-438c-b32b-e0da7c7a5736"/*Segments*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "0295dd65-95b4-4e02-8d61-4622f59d4fc4"/*Stretch*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "44fc1e7b-b1d1-4199-b373-8b7c4cc060d2"/*Scale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "7f01d9b9-c612-4a2d-a52f-b56c54fb62af"/*Pivot*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "b2a1c96a-4aef-412a-b006-2ef285dd2479"/*Center*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "a89e41bf-5395-41f0-9804-a782ed4c0f30"/*Rotation*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Scale": 0.1
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "9c86f704-a28f-4d2a-b7c0-15648f982462"/*Data*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

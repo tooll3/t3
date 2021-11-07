@@ -1,0 +1,83 @@
+{
+  "Id": "01458940-287f-4d31-9906-998efa9a2641"/*NormalMap*/,
+  "Description": "Converts a brightnes of an image into normal map that can be use with [SetMaterial].",
+  "InputUis": [
+    {
+      "InputId": "3b04296a-14e5-40e0-91a2-eda0314b0490"/*LightMap*/,
+      "Position": {
+        "X": -232.20236,
+        "Y": 166.03333
+      }
+    },
+    {
+      "InputId": "ab21289c-f91c-4991-a7e5-ecb0c0954f02"/*Impact*/,
+      "Position": {
+        "X": -235.75668,
+        "Y": 261.74847
+      },
+      "Scale": 0.1
+    },
+    {
+      "InputId": "3e9bce35-7de1-42de-80e5-8eec29e92422"/*SampleRadius*/,
+      "Position": {
+        "X": -235.75668,
+        "Y": 306.74847
+      }
+    },
+    {
+      "InputId": "b16de87a-4099-42fe-9a73-97d8fa112d4d"/*Resolution*/,
+      "Position": {
+        "X": -235.75668,
+        "Y": 351.74847
+      }
+    },
+    {
+      "InputId": "82464caa-a407-4f6d-a062-cef322d131f0"/*Twist*/,
+      "Position": {
+        "X": -235.75668,
+        "Y": 396.74847
+      }
+    },
+    {
+      "InputId": "ae06f89e-d5a4-43a3-957d-718b66d76918"/*WriteAngleAndStrength*/,
+      "Position": {
+        "X": -235.75668,
+        "Y": 441.74847
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "0ee24b1d-4988-45d6-b179-ff42a640cc77"/*_ImageFxShaderSetup2*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 116.467834,
+        "Y": 304.73657
+      },
+      "Position": {
+        "X": 65.802284,
+        "Y": 100.50006
+      }
+    },
+    {
+      "ChildId": "381a39d6-8963-4476-831e-f3dc79359961"/*BoolToFloats*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -21.057678,
+        "Y": 510.95566
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "b1fa156b-a959-42f8-9a81-30a667d60554"/*Output*/,
+      "Position": {
+        "X": 268.53693,
+        "Y": 114.43436
+      }
+    }
+  ]
+}

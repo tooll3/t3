@@ -1,0 +1,24 @@
+{
+  "Id": "e6072ecf-30d2-4c52-afa1-3b195d61617b"/*ContextFloat*/,
+  "Description": "Fetches a float variable from the context. \nUse [SetContextVariable] to set variable further up the graph.",
+  "InputUis": [
+    {
+      "InputId": "015d1ea0-ea51-4038-893a-4af2f8584631"/*Variable*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "e368ba33-827e-4e08-aa19-ba894b40906a"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

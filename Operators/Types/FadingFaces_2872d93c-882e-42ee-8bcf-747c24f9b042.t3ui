@@ -1,0 +1,265 @@
+{
+  "Id": "2872d93c-882e-42ee-8bcf-747c24f9b042"/*FadingFaces*/,
+  "Description": "A example how to use the unsplash API and combine it with feed back effects.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "bec9adf3-9fd5-49ad-b0d3-f434ef0f8491"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 935.6587,
+        "Y": 30.08252
+      }
+    },
+    {
+      "ChildId": "3a28b510-36b7-4038-ae78-42159d7adafc"/*AdjustColors*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1227.916,
+        "Y": 50.406494
+      }
+    },
+    {
+      "ChildId": "aa45a027-461c-4adb-8a58-f97a27aece7a"/*FluidFeedback*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 1085.6587,
+        "Y": 30.08252
+      }
+    },
+    {
+      "ChildId": "ce310eba-9b99-4237-b18f-ad094f5b389b"/*LoadImageFromUrl*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 748.793,
+        "Y": 291.7964
+      }
+    },
+    {
+      "ChildId": "e4beacf2-0716-4fe7-9b1a-f7e4b0874534"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 116.666306,
+        "Y": 195.76196
+      }
+    },
+    {
+      "ChildId": "ba535981-5add-4940-968d-b96442f2d1de"/*FloatToInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 333.18085,
+        "Y": 227.46576
+      }
+    },
+    {
+      "ChildId": "07de26af-434a-4858-8f01-40aa0afee56a"/*UnsplashAPI*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 581.7989,
+        "Y": 336.4564
+      }
+    },
+    {
+      "ChildId": "2910d367-2bf0-4500-81cd-f03dcc095e62"/*HasValueIncreased*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 652.93604,
+        "Y": 130.03271
+      }
+    },
+    {
+      "ChildId": "9bb02b7f-48a4-45dd-a309-447108af7614"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 782.93604,
+        "Y": 130.03271
+      }
+    },
+    {
+      "ChildId": "c5b8c948-ffca-4f2c-b121-133f4ceb9c35"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1357.916,
+        "Y": 50.406494
+      }
+    },
+    {
+      "ChildId": "375f68df-eac4-450f-aa35-39d1448ad4ce"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 1487.916,
+        "Y": 50.406494
+      }
+    },
+    {
+      "ChildId": "e6d6e226-c196-4447-b29e-40c28e390740"/*Text*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1288.9968,
+        "Y": 327.36206
+      }
+    },
+    {
+      "ChildId": "e0505fcc-dc61-4c86-a088-0bf9bf15172a"/*StringConcat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 1158.9968,
+        "Y": 327.36206
+      }
+    },
+    {
+      "ChildId": "b0688003-9799-41ef-9fb6-05289bad6099"/*String*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1009.2991,
+        "Y": 332.11963
+      }
+    },
+    {
+      "ChildId": "f9e2425f-72af-4cff-82ac-613c14f69e7e"/*String*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1009.2991,
+        "Y": 375.11966
+      }
+    },
+    {
+      "ChildId": "33fc65f9-8d72-49c4-b59e-e0f08b26c525"/*LFO*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 935.6587,
+        "Y": 162.08252
+      }
+    },
+    {
+      "ChildId": "3e02263f-8ebf-4e87-877e-3e9e61a51d03"/*Float2ToVector2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 935.6587,
+        "Y": 205.08252
+      }
+    },
+    {
+      "ChildId": "e5e063dc-04d3-49ed-95b2-87666db98861"/*LFO*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 805.6587,
+        "Y": 205.08252
+      }
+    },
+    {
+      "ChildId": "f3de8f5f-06e1-49d7-b0f2-dc4ab61748a6"/*Float4ToVector4*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 782.93604,
+        "Y": 74.032715
+      }
+    },
+    {
+      "ChildId": "1856de70-1877-44b6-9e24-408ca25518c9"/*LFO*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 652.93604,
+        "Y": 74.032715
+      }
+    },
+    {
+      "ChildId": "fc3ab785-4062-42a7-843f-bd635bc39718"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1617.916,
+        "Y": 50.406494
+      }
+    },
+    {
+      "ChildId": "58234ad5-a304-4262-b029-10173d07f18c"/*Once*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 430.19403,
+        "Y": 381.45544
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "65cc5be1-6daa-4602-a0f7-88bf30f592f5"/*Output*/,
+      "Position": {
+        "X": 1635.1012,
+        "Y": -321.15967
+      }
+    },
+    {
+      "OutputId": "c634622e-c842-49dc-8a12-aa9730634949"/*ColorBuffer*/,
+      "Position": {
+        "X": 1820.2955,
+        "Y": -64.466354
+      }
+    }
+  ]
+}

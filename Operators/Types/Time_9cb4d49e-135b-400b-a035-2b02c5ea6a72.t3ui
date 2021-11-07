@@ -1,0 +1,36 @@
+{
+  "Id": "9cb4d49e-135b-400b-a035-2b02c5ea6a72"/*Time*/,
+  "InputUis": [
+    {
+      "InputId": "8da7d58d-10a5-4378-8f44-b98f87ec2697"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "2d9c040d-5244-40ac-8090-d8d57323487b"/*SpeedFactor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "b20573fe-7a7e-48e1-9370-744288ca6e32"/*TimeInBars*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "a606b326-f3af-470b-b6e5-3175f7a54e31"/*TimeInSecs*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

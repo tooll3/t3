@@ -1,0 +1,13 @@
+{
+  "Name": "CamPosition",
+  "Id": "2ed26fb7-fe66-4ed6-8b8d-230d87ae5c77",
+  "Namespace": "lib.exec.context",
+  "Inputs": [
+    {
+      "Id": "eb265bf8-7ec5-4089-88ce-d8054d338ea7"/*Variable*/,
+      "DefaultValue": "i"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

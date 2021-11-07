@@ -1,0 +1,51 @@
+{
+  "Id": "b238b288-6e9b-4b91-bac9-3d7566416028"/*Paint*/,
+  "Description": "A quick hack to allow sketching with mouse.",
+  "InputUis": [
+    {
+      "InputId": "b81392e2-303e-43f4-985f-db6e5f923304"/*IsActve*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "c427f009-7e04-4168-82e6-5ebe2640204d"/*MousePos*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "520a2023-7450-4314-9cac-850d6d692461"/*IsMouseButtonDown*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "276071f1-0879-4208-8deb-65ee44e4d1cf"/*MaxPointCount*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b0d76cab-8e7e-4845-b7e4-202424dfa12d"/*TriggerReset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "09d2546e-b6d3-4e5c-884f-eabe8d51c38c"/*PointList*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

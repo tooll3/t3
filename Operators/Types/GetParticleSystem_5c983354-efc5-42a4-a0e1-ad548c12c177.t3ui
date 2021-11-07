@@ -1,0 +1,22 @@
+{
+  "Id": "5c983354-efc5-42a4-a0e1-ad548c12c177"/*GetParticleSystem*/,
+  "InputUis": [
+    {
+      "InputId": "8109f618-2c24-4340-bf01-80fcf7a924db"/*Override*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "5403d6a2-c93c-4045-a7d0-14653a1c1ad7"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

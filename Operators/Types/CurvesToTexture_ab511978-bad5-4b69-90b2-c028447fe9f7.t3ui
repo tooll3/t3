@@ -1,0 +1,22 @@
+{
+  "Id": "ab511978-bad5-4b69-90b2-c028447fe9f7"/*CurvesToTexture*/,
+  "InputUis": [
+    {
+      "InputId": "83c5a68a-2685-4506-8d79-d0db7d739102"/*Curves*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "0322ffc8-84bd-4aa3-a59e-def5b212d4a1"/*CurveTexture*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

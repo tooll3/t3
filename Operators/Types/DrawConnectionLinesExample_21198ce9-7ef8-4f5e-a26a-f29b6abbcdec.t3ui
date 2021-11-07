@@ -1,0 +1,214 @@
+{
+  "Id": "21198ce9-7ef8-4f5e-a26a-f29b6abbcdec"/*DrawConnectionLinesExample*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "061cf4d2-c671-4b59-8f06-57fcb01b68b3"/*PointsOnSphere*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 434.3838,
+        "Y": 228.50977
+      }
+    },
+    {
+      "ChildId": "58e3206e-577e-4642-9957-4d5e146ee3ef"/*KeepPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 450.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "b8a2e06f-d23a-4c18-8b25-68b0e06a21c8"/*ApplyNoise*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 600.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "96839259-1359-49fc-8af3-ace5688a6948"/*DrawConnectionLines*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 778.9038,
+        "Y": 81.09473
+      }
+    },
+    {
+      "ChildId": "c26ebdfe-4f15-42ce-a7a7-51263e0a715a"/*DrawPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 778.9038,
+        "Y": 25.094727
+      }
+    },
+    {
+      "ChildId": "63111127-81b5-4c31-8547-2fa4eb4b4b35"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 928.9038,
+        "Y": 25.094727
+      }
+    },
+    {
+      "ChildId": "4eca52ea-6aa7-4360-9a8a-5b3277289cf1"/*Time*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 450.0,
+        "Y": 146.0
+      }
+    },
+    {
+      "ChildId": "c5b187d3-72e2-4a9a-ac99-a1555daebd1b"/*PointsFromMeshData*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 150.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "ee8faec1-6b5c-4e9c-a1fb-af228461de75"/*PointCloudFromObj*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "ad550184-4f5f-4d3e-b377-b355f03789ea"/*TransformPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 300.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "9f5b9234-c303-4810-9e77-9637739059c1"/*LFO*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 300.0,
+        "Y": 83.0
+      }
+    },
+    {
+      "ChildId": "23cc5895-adc9-4ab6-86e4-efac51394728"/*PointAttributeFromNoise*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 584.3838,
+        "Y": 228.50977
+      }
+    },
+    {
+      "ChildId": "3bc66e22-5b67-4ce4-8517-91ef12c1cb81"/*DrawConnectionLines*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 778.657,
+        "Y": 222.69922
+      }
+    },
+    {
+      "ChildId": "d1bafaa5-31f8-43df-9a28-4a3e57bc5c99"/*DrawPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 778.657,
+        "Y": 278.69922
+      }
+    },
+    {
+      "ChildId": "d0c860e5-c350-4ef2-9432-b0bdf85ea268"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 928.657,
+        "Y": 222.69922
+      }
+    },
+    {
+      "ChildId": "4e37e402-847b-46c1-a91b-c378a1d11b89"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 1078.9038,
+        "Y": 25.094727
+      }
+    },
+    {
+      "ChildId": "e8e7233d-d922-4e71-8aaa-7c5ef23fbef5"/*Time*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 434.3838,
+        "Y": 271.50977
+      }
+    },
+    {
+      "ChildId": "7796c065-b969-4002-a029-1a6c2060a5a2"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1228.9038,
+        "Y": 25.094727
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "3c42f59b-1595-423b-b605-2c6f24ff6ed5"/*ColorBuffer*/,
+      "Position": {
+        "X": 1528.9038,
+        "Y": 139.34961
+      }
+    }
+  ]
+}

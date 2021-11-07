@@ -1,0 +1,21 @@
+{
+  "Name": "DepthStencilStateOp",
+  "Id": "04858a08-f0fe-4536-9152-686659f0ab58",
+  "Namespace": "lib.dx11.draw",
+  "Inputs": [
+    {
+      "Id": "956b735b-c38a-4e8e-8186-caf4d36d4d20"/*EnableZTest*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "2342df71-a162-4db7-afc3-514916239897"/*EnableZWrite*/,
+      "DefaultValue": true
+    },
+    {
+      "Id": "27f1f703-7333-49e5-a024-4606e34e8427"/*Comparison*/,
+      "DefaultValue": "LessEqual"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,0 +1,46 @@
+{
+  "Id": "05cf9ea7-045d-421f-8ed3-2c2f6b325a46"/*CompareInt*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "e2d09267-1227-40ed-8c91-0d44f4e00ee5"/*Value*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    },
+    {
+      "InputId": "9814676e-07dc-40de-98a5-f69b94f58f89"/*TestValue*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 328.0
+      }
+    },
+    {
+      "InputId": "5bf37ae4-bb84-42ee-96f9-52c2adefa669"/*Mode*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      }
+    },
+    {
+      "InputId": "e4ccfad6-6894-4abe-a8f6-742af53b1a60"/*Precision*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 418.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ff14eb99-aafd-46e1-9d24-ca6647f700d1"/*IsTrue*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

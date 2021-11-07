@@ -1,0 +1,13 @@
+{
+  "Name": "SrvFromTexture2d",
+  "Id": "c2078514-cf1d-439c-a732-0d7b31b5084a",
+  "Namespace": "lib.dx11.tex",
+  "Inputs": [
+    {
+      "Id": "d5afa102-2f88-431e-9cd4-af91e41f88f6"/*Texture*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

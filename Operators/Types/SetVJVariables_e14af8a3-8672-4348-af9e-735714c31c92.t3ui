@@ -1,0 +1,101 @@
+{
+  "Id": "e14af8a3-8672-4348-af9e-735714c31c92"/*SetVJVariables*/,
+  "Description": "A small helper that sets LFO speed factor variables from MidiControllers into context.",
+  "InputUis": [
+    {
+      "InputId": "4aaf265f-2c98-4fc2-8cb7-ea1438dcfef4"/*SubGraph*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "0fbc2d52-b596-4a68-9904-034a9ca31883"/*SetContextVariable*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 162.23761,
+        "Y": -159.20192
+      }
+    },
+    {
+      "ChildId": "b6fe4c79-da43-444a-94d9-c3ebed7e3354"/*Midi SignalA*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -137.76239,
+        "Y": -159.20192
+      }
+    },
+    {
+      "ChildId": "6c8ae24c-f800-4394-8b47-4971cde45532"/*ValueToRate*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 12.23761,
+        "Y": -159.20192
+      }
+    },
+    {
+      "ChildId": "dd97c14c-205f-4ead-80ac-116aa0bdd7ec"/*SetContextVariable*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 162.23761,
+        "Y": -242.20192
+      }
+    },
+    {
+      "ChildId": "c80255ff-4885-4493-8750-df548447b4a2"/*Midi SignalB*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -137.76239,
+        "Y": -242.20192
+      }
+    },
+    {
+      "ChildId": "15ff0080-5986-4c4f-a4ad-d99395788d33"/*ValueToRate*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 12.23761,
+        "Y": -242.20192
+      }
+    },
+    {
+      "ChildId": "71f6614e-aed8-4de8-b279-214b0c5a408c"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 312.2376,
+        "Y": -242.20192
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "741a3753-2021-411f-b3ea-000edd548aeb"/*Output*/,
+      "Position": {
+        "X": 745.80347,
+        "Y": 96.45459
+      }
+    }
+  ]
+}

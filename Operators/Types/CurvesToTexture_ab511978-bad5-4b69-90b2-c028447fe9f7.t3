@@ -1,0 +1,40 @@
+{
+  "Name": "CurvesToTexture",
+  "Id": "ab511978-bad5-4b69-90b2-c028447fe9f7",
+  "Namespace": "lib.math.curve",
+  "Inputs": [
+    {
+      "Id": "83c5a68a-2685-4506-8d79-d0db7d739102"/*Curves*/,
+      "DefaultValue": {
+        "Curve": {
+          "PreCurve": "Constant",
+          "PostCurve": "Constant",
+          "Keys": [
+            {
+              "Time": 0.0,
+              "Value": 0.0,
+              "InType": "Spline",
+              "OutType": "Spline",
+              "InEditMode": "Smooth",
+              "OutEditMode": "Smooth",
+              "InTangentAngle": 0.0,
+              "OutTangentAngle": 3.141592653589793
+            },
+            {
+              "Time": 1.0,
+              "Value": 1.0,
+              "InType": "Spline",
+              "OutType": "Spline",
+              "InEditMode": "Smooth",
+              "OutEditMode": "Smooth",
+              "InTangentAngle": 0.0,
+              "OutTangentAngle": -3.141592653589793
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

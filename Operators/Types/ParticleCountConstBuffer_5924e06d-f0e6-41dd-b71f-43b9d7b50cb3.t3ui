@@ -1,0 +1,14 @@
+{
+  "Id": "5924e06d-f0e6-41dd-b71f-43b9d7b50cb3"/*ParticleCountConstBuffer*/,
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "7ce24d2e-c4b8-4f56-8086-8af4fac1abb2"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

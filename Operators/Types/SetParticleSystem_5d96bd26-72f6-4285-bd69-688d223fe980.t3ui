@@ -1,0 +1,31 @@
+{
+  "Id": "5d96bd26-72f6-4285-bd69-688d223fe980"/*SetParticleSystem*/,
+  "InputUis": [
+    {
+      "InputId": "9704b2cf-8795-486c-9810-2bd24e181273"/*SubTree*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b34677fc-766a-4846-8c4a-843d4e9dc168"/*ParticleSystem*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "6df2babc-d859-4124-866e-86c3fbcfdd2a"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

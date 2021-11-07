@@ -1,0 +1,13 @@
+{
+  "Name": "Once",
+  "Id": "e8d2b4ac-0ba2-400f-9c82-e5dd15a23d32",
+  "Namespace": "lib.exec",
+  "Inputs": [
+    {
+      "Id": "1da5310b-ecad-4f5b-871f-b0321a521ef6"/*Trigger*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

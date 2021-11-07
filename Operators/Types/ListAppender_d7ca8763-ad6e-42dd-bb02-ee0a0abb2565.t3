@@ -1,0 +1,17 @@
+{
+  "Name": "ListAppender",
+  "Id": "d7ca8763-ad6e-42dd-bb02-ee0a0abb2565",
+  "Namespace": "user.cynic",
+  "Inputs": [
+    {
+      "Id": "8a14713b-e625-4539-90f5-99a9c1963399"/*Input*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "869b79a2-40d0-42a3-a0a7-b00579888543"/*Count*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

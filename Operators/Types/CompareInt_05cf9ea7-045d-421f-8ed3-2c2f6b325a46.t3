@@ -1,0 +1,25 @@
+{
+  "Name": "CompareInt",
+  "Id": "05cf9ea7-045d-421f-8ed3-2c2f6b325a46",
+  "Namespace": "lib.math.int",
+  "Inputs": [
+    {
+      "Id": "e2d09267-1227-40ed-8c91-0d44f4e00ee5"/*Value*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "9814676e-07dc-40de-98a5-f69b94f58f89"/*TestValue*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "5bf37ae4-bb84-42ee-96f9-52c2adefa669"/*Mode*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "e4ccfad6-6894-4abe-a8f6-742af53b1a60"/*Precision*/,
+      "DefaultValue": 0.001
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

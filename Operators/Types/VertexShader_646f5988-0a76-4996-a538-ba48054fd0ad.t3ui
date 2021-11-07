@@ -1,0 +1,39 @@
+{
+  "Id": "646f5988-0a76-4996-a538-ba48054fd0ad"/*VertexShader*/,
+  "InputUis": [
+    {
+      "InputId": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "FilePath"
+    },
+    {
+      "InputId": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "c8a59cf8-6612-4d57-bcfd-3aeea351ba50"/*DebugName*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ed31838b-14b5-4875-a0fc-dc427e874362"/*Shader*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

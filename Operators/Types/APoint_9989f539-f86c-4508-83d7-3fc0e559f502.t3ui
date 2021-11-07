@@ -1,0 +1,51 @@
+{
+  "Id": "9989f539-f86c-4508-83d7-3fc0e559f502"/*APoint*/,
+  "Description": "A single point. You can use [JoinLists] and [ListToBuffer] to convert to GPU points.",
+  "InputUis": [
+    {
+      "InputId": "a0a453db-d8f1-415a-9a98-3c88a25b15e7"/*Position*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "55a3370f-1768-414f-b38d-4accc5e93914"/*RotationAxis*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "e9859381-eb88-4856-91c5-60d30ac6035a"/*RotationAngle*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*W*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "53cde701-435f-42e4-b598-db0e607a238c"/*AddSeparator*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d9c04756-8922-496d-8380-120f280ef65b"/*ResultList*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "Id": "2b00bb7a-92cc-41e5-a5f6-bc3e8b16c5eb"/*KeyboardInput*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "a275fc1a-4036-483e-af54-6546fa03699c"/*Key*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "73adae59-a27d-4d93-8aa6-fb845784befd"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "55a1258c-3920-4f78-874a-b0652bac885b"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

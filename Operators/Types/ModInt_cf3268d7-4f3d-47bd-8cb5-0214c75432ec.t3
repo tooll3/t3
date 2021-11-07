@@ -1,0 +1,17 @@
+{
+  "Name": "ModInt",
+  "Id": "cf3268d7-4f3d-47bd-8cb5-0214c75432ec",
+  "Namespace": "lib.math.int",
+  "Inputs": [
+    {
+      "Id": "3528f4d3-3529-4551-9dc1-e1dafe6b0669"/*Value*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "ccdea113-c046-4ec2-b1fb-30d6e15db7ce"/*Mod*/,
+      "DefaultValue": 1
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

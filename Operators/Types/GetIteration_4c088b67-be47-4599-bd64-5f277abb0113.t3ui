@@ -1,0 +1,22 @@
+{
+  "Id": "4c088b67-be47-4599-bd64-5f277abb0113"/*GetIteration*/,
+  "Description": "Returns index and progress of iteration",
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c3a199dc-993c-4f43-a4aa-f355e6584a64"/*Progress*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "821fd3f7-2956-44e0-9412-6d33d1edb016"/*Index*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

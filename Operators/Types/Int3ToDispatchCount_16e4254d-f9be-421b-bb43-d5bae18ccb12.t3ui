@@ -1,0 +1,29 @@
+{
+  "Id": "16e4254d-f9be-421b-bb43-d5bae18ccb12"/*Int3ToDispatchCount*/,
+  "InputUis": [
+    {
+      "InputId": "3749863b-a703-44cf-b78f-a92cf3590422"/*Size*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "ed385d57-5c79-4109-826d-e82ab76214d3"/*ThreadGroups*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "3b7c2a16-9fbe-469f-99f5-f2bde57e16b1"/*DispatchCount*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

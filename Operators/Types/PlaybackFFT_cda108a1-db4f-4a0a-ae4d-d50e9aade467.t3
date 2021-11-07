@@ -1,0 +1,13 @@
+{
+  "Name": "PlaybackFFT",
+  "Id": "cda108a1-db4f-4a0a-ae4d-d50e9aade467",
+  "Namespace": "lib.math.floats",
+  "Inputs": [
+    {
+      "Id": "6888315d-ef77-4814-87e9-91528d600c72"/*IsEnabled*/,
+      "DefaultValue": true
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

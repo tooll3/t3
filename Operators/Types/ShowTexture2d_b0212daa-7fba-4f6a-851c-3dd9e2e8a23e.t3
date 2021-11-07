@@ -1,0 +1,17 @@
+{
+  "Name": "ShowTexture2d",
+  "Id": "b0212daa-7fba-4f6a-851c-3dd9e2e8a23e",
+  "Namespace": "lib.dx11.draw",
+  "Inputs": [
+    {
+      "Id": "5a3e1fa0-21fc-4c2e-a4bb-45a311f24c00"/*Command*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "5095c803-fa2a-408c-ab56-8057e49648d5"/*Texture*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

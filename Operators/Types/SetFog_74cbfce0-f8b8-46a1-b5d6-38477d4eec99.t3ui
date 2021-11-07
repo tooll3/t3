@@ -1,0 +1,44 @@
+{
+  "Id": "74cbfce0-f8b8-46a1-b5d6-38477d4eec99"/*SetFog*/,
+  "Description": "Set fog rendering properties for the sub tree.",
+  "InputUis": [
+    {
+      "InputId": "afadb109-37b2-49aa-8c32-627cc35fd574"/*Command*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "7a331539-33ea-48b9-8930-daf93dd33d7c"/*Distance*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "53479387-1c04-4fbc-b093-043075495e10"/*Bias*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "ef8c86ee-16c0-446e-9ce0-c6342adbf32a"/*Color*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "7c2134d1-45c6-4dc7-b591-a4a5113f5747"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

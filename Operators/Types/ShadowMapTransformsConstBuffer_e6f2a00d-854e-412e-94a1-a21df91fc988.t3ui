@@ -1,0 +1,43 @@
+{
+  "Id": "e6f2a00d-854e-412e-94a1-a21df91fc988"/*ShadowMapTransformsConstBuffer*/,
+  "InputUis": [
+    {
+      "InputId": "94d229a4-8bbf-4be4-a2f1-9b52cc785490"/*Position*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "14038263-253a-4025-a7e5-fd6ca7dfb949"/*Target*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "5783c091-816e-43a7-94ba-2e0df6380b0d"/*NearFarClip*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "82c12036-6f0e-4da6-913c-0a2c37919466"/*Size*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "9b622d38-52e8-4a6d-8c03-4fc6eb8051b0"/*Buffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

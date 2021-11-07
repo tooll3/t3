@@ -1,0 +1,17 @@
+{
+  "Name": "ResetSubtreeTrigger",
+  "Id": "38b85057-fbcb-4ab1-9b40-cfb090750150",
+  "Namespace": "lib.exec",
+  "Inputs": [
+    {
+      "Id": "7cc4e43b-18a2-4564-a511-05eb0d8ec7d2"/*Command*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "2975f7be-f21f-4ff4-b477-8fcc19d5f808"/*Trigger*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

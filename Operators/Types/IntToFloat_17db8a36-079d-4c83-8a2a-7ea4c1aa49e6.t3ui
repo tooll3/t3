@@ -1,0 +1,22 @@
+{
+  "Id": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6"/*IntToFloat*/,
+  "InputUis": [
+    {
+      "InputId": "01809b63-4b4a-47be-9588-98d5998ddb0c"/*IntValue*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "db1073a1-b9d8-4d52-bc5c-7ae8c0ee1ac3"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

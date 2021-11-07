@@ -1,0 +1,13 @@
+{
+  "Name": "PlayVideo",
+  "Id": "914fb032-d7eb-414b-9e09-2bdd7049e049",
+  "Namespace": "lib.img.generate",
+  "Inputs": [
+    {
+      "Id": "0e255347-08bc-4363-9ffa-ab863a1cea8e"/*Path*/,
+      "DefaultValue": "Resources\\images\\frog3.jpg"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,0 +1,36 @@
+{
+  "Id": "80dff680-5abf-484a-b9e0-81d72f3b7aa4"/*GetBufferComponents*/,
+  "InputUis": [
+    {
+      "InputId": "7a13b834-21e5-4cef-ad5b-23c3770ea763"/*BufferWithViews*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "f03246a7-e39f-4a41-a0c3-22bc976a6000"/*UnorderedAccessView*/,
+      "Position": {
+        "X": -13.550136,
+        "Y": 63.14363
+      }
+    },
+    {
+      "OutputId": "a7d11905-eb9e-42a4-a077-11d2c1cb41b2"/*Buffer*/,
+      "Position": {
+        "X": -7.0460706,
+        "Y": -68.02168
+      }
+    },
+    {
+      "OutputId": "1368ab8e-d75e-429f-8ecd-0944f3ede9ab"/*ShaderResourceView*/,
+      "Position": {
+        "X": -14.9051485,
+        "Y": 106.77506
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "Id": "d3dbc1cf-0642-4e36-85eb-95bd5a2950b5"/*SetTime*/,
+  "InputUis": [
+    {
+      "InputId": "6220e7dc-7aed-48b8-b419-29393988bbbe"/*SubTree*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "cd3c6854-29de-4c52-9ed8-7ba8d847fc34"/*NewTime*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "46046e85-d4de-4a24-8cdf-1945755d0f88"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

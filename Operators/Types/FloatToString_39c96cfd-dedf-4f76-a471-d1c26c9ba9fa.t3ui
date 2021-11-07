@@ -1,0 +1,32 @@
+{
+  "Id": "39c96cfd-dedf-4f76-a471-d1c26c9ba9fa"/*FloatToString*/,
+  "InputUis": [
+    {
+      "InputId": "f36e4078-2608-4308-ab5f-077c05b1181a"/*Value*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Min": -221.0,
+      "Max": 302.0
+    },
+    {
+      "InputId": "b2b32c44-62d8-4acb-a9a7-4856ec7a33bb"/*Format*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c63a1977-a594-490d-b5fb-de4d40bad016"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

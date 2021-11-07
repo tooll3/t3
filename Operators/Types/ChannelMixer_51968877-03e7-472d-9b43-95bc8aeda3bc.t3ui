@@ -1,0 +1,134 @@
+{
+  "Id": "51968877-03e7-472d-9b43-95bc8aeda3bc"/*ChannelMixer*/,
+  "Description": "Adjusts the color of an incoming image.\n\nEach row defined a color-channel of the output where as the incoming components are multiplied by a factor summed up .\nFinnally a value is added to each component.\n\nYou can do a lot of things with this operator, like\n- converting to grayscale\n- extracting an alpha channel to grayscale\n- invert an image\n- swap color channels.\n\nCheck the presets for examples.\nFor a more natural color correction try [Adjust Color]",
+  "InputUis": [
+    {
+      "InputId": "28bb7ff9-190a-4624-9361-c4a530851bfd"/*Texture2d*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -8.08049,
+        "Y": 292.35626
+      }
+    },
+    {
+      "InputId": "5f3e8fc7-5b51-4502-aac2-d4cc282c985a"/*MultiplyR*/,
+      "Position": {
+        "X": -8.08049,
+        "Y": 337.35626
+      }
+    },
+    {
+      "InputId": "76e01cd7-15b8-4962-a96f-592e67ae51c5"/*MultiplyG*/,
+      "Position": {
+        "X": -8.08049,
+        "Y": 382.35626
+      }
+    },
+    {
+      "InputId": "1f380edd-ed50-49a4-976d-cce13783851d"/*MultiplyB*/,
+      "Position": {
+        "X": -8.08049,
+        "Y": 432.35626
+      }
+    },
+    {
+      "InputId": "e68ed87b-fb06-43b2-a51f-a37a85fb6d87"/*MultiplyA*/,
+      "Position": {
+        "X": -8.08049,
+        "Y": 477.35626
+      }
+    },
+    {
+      "InputId": "1a0acd15-34d1-4b8f-9739-f78ba204f315"/*Add*/,
+      "Position": {
+        "X": -8.08049,
+        "Y": 522.35626
+      }
+    },
+    {
+      "InputId": "8e25ab02-ef93-441c-8a16-78555093c5a6"/*GenerateMipmaps*/,
+      "Position": {
+        "X": -8.08049,
+        "Y": 567.35626
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "d417a36e-fe49-4115-8cb7-ea2de2844f10"/*Vector4ToFloat4*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 121.91951,
+        "Y": 342.35632
+      }
+    },
+    {
+      "ChildId": "80db9bd5-cec6-49af-9cba-f33ef5752a31"/*Vector4ToFloat4*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 121.91951,
+        "Y": 387.35623
+      }
+    },
+    {
+      "ChildId": "1e6b6da4-4c9d-4bfe-a0ea-144116dbbe20"/*Vector4ToFloat4*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 121.91951,
+        "Y": 432.35626
+      }
+    },
+    {
+      "ChildId": "af62d574-9d8e-4165-b544-3080ce7184b5"/*_ImageFxShaderSetup2*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 125.87869,
+        "Y": 596.3439
+      },
+      "Position": {
+        "X": 425.39984,
+        "Y": 21.665028
+      }
+    },
+    {
+      "ChildId": "0d751e5a-ab98-447a-86ae-998e16b4f99c"/*Vector4ToFloat4*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 121.91951,
+        "Y": 477.35626
+      }
+    },
+    {
+      "ChildId": "0c6358fd-a9d2-4d8b-b9d6-5c435bd01708"/*Vector4ToFloat4*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 121.91951,
+        "Y": 522.35626
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "9cedcad7-1c8d-4aee-9168-67deae14248d"/*Output*/,
+      "Position": {
+        "X": 939.8677,
+        "Y": 642.9786
+      }
+    }
+  ]
+}

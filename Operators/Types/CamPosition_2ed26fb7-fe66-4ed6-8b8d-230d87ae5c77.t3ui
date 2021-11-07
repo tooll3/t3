@@ -1,0 +1,38 @@
+{
+  "Id": "2ed26fb7-fe66-4ed6-8b8d-230d87ae5c77"/*CamPosition*/,
+  "Description": "Returns the currentCamera properties",
+  "InputUis": [
+    {
+      "InputId": "eb265bf8-7ec5-4089-88ce-d8054d338ea7"/*Variable*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "20e33049-c2fa-4c9f-8607-318b279b72ec"/*Position*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "5a38f00b-342a-46e5-9410-fbf403f2313e"/*Direction*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "a2213e94-0fe5-4ca6-a13d-9a265d50e707"/*AspectRatio*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    }
+  ]
+}

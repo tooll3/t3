@@ -1,0 +1,21 @@
+{
+  "Name": "NormalizeVector3",
+  "Id": "7805285e-e74b-48f5-8228-20bbb178e828",
+  "Namespace": "lib.math.vec3",
+  "Inputs": [
+    {
+      "Id": "2405182f-a918-451a-b039-46e71a541e4d"/*A*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "8ae77ac6-7417-4f74-9409-0ded96407f23"/*Factor*/,
+      "DefaultValue": 1.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

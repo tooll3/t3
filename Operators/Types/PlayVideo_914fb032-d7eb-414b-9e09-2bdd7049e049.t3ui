@@ -1,0 +1,31 @@
+{
+  "Id": "914fb032-d7eb-414b-9e09-2bdd7049e049"/*PlayVideo*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "0e255347-08bc-4363-9ffa-ab863a1cea8e"/*Path*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 46.995968
+      },
+      "Usage": "FilePath"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "440d022e-f706-4265-9d04-cff099117845"/*ShaderResourceView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "fa56b47f-1b16-45d5-80cd-32c5a872acf4"/*Texture*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

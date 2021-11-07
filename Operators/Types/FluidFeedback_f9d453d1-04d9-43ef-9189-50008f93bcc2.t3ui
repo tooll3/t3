@@ -1,0 +1,251 @@
+{
+  "Id": "f9d453d1-04d9-43ef-9189-50008f93bcc2"/*FluidFeedback*/,
+  "Description": "An example how feedback combined with displacement can lead to a variety of effects.",
+  "InputUis": [
+    {
+      "InputId": "ebd35d33-dc73-46ae-a82c-2060d750018a"/*Command*/,
+      "Position": {
+        "X": -213.66393,
+        "Y": -142.10484
+      }
+    },
+    {
+      "InputId": "a7669abe-65c7-4745-97a6-d0d80f6a3150"/*Displacement*/,
+      "Position": {
+        "X": -227.14854,
+        "Y": -72.88376
+      },
+      "Min": -0.1,
+      "Max": 0.1,
+      "Scale": 0.001
+    },
+    {
+      "InputId": "78b314b8-f9d2-4723-9b11-c07ba926db86"/*Shade*/,
+      "Position": {
+        "X": -254.34756,
+        "Y": 61.967983
+      },
+      "Min": -1.0,
+      "Max": 1.0,
+      "Scale": 0.01
+    },
+    {
+      "InputId": "8060756f-72a4-490b-9677-872b70e73b3a"/*BlurRadius*/,
+      "Position": {
+        "X": -254.34756,
+        "Y": 106.96799
+      },
+      "Min": 0.0,
+      "Max": 10.0,
+      "Scale": 0.01,
+      "Clamp": true
+    },
+    {
+      "InputId": "297a2220-0648-47d3-82a1-c1077a1326a4"/*Twist*/,
+      "Position": {
+        "X": -254.34756,
+        "Y": 151.96799
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Scale": 1.0
+    },
+    {
+      "InputId": "98662eab-90b9-4af1-8ff3-ba6709b5038e"/*Zoom*/,
+      "Position": {
+        "X": -254.34756,
+        "Y": 196.96799
+      },
+      "Min": -1.0,
+      "Max": 1.0,
+      "Scale": 0.001
+    },
+    {
+      "InputId": "859977e7-afaf-44b5-956a-d42da972330c"/*Rotate*/,
+      "Position": {
+        "X": -254.34756,
+        "Y": 241.96799
+      },
+      "Min": -1.0,
+      "Max": 1.0,
+      "Scale": 0.01
+    },
+    {
+      "InputId": "41c080de-575f-4041-b605-8f55e4bcf797"/*SampleDistance*/,
+      "Position": {
+        "X": -254.34756,
+        "Y": 286.96802
+      }
+    },
+    {
+      "InputId": "4109af01-5c9a-4a9f-af7f-87fbcdcece3d"/*Offset*/,
+      "Position": {
+        "X": -254.34756,
+        "Y": 331.96786
+      },
+      "Scale": 0.001
+    },
+    {
+      "InputId": "806221f8-6e31-45ec-b62e-5baac6c1fd54"/*DisplaceOffset*/,
+      "Position": {
+        "X": -254.34756,
+        "Y": 376.9679
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "b47840dc-b5f2-42cc-b69e-5564f1ad74bd"/*UseRenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -255.1246,
+        "Y": -371.90958
+      }
+    },
+    {
+      "ChildId": "87fd5df5-1ffc-4657-a1a8-12dcf38f83ed"/*RenderTarget*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 140.0
+      },
+      "Position": {
+        "X": 955.4473,
+        "Y": 13.150006
+      }
+    },
+    {
+      "ChildId": "ea960f3c-c97b-4f3d-9666-32afee61ea51"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 352.15564,
+        "Y": 63.000122
+      }
+    },
+    {
+      "ChildId": "e023537b-986c-4b61-abb9-ed903aa14883"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 710.66113,
+        "Y": -19.256287
+      }
+    },
+    {
+      "ChildId": "7ac57f4b-1c8e-43b1-ab34-d468305ae03d"/*Displace*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 114.0
+      },
+      "Position": {
+        "X": 174.1076,
+        "Y": -260.45108
+      }
+    },
+    {
+      "ChildId": "edb0e231-37b5-4c9f-b0a5-d62efd5218a0"/*Blur*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -26.235,
+        "Y": -237.07773
+      }
+    },
+    {
+      "ChildId": "59718b21-1928-4978-a6f5-908abd91dafd"/*Multiply*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -104.347565,
+        "Y": 61.967983
+      }
+    },
+    {
+      "ChildId": "5afa91c9-a4a7-4ced-b033-a6759266336e"/*Multiply*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -128.97897,
+        "Y": 386.3718
+      }
+    },
+    {
+      "ChildId": "b6c4bbc5-5258-4f9e-8ce7-cdfb30e564c3"/*Multiply*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -77.148544,
+        "Y": -72.88376
+      }
+    },
+    {
+      "ChildId": "8d61f73b-d0bd-4d57-9abc-7081de1236a8"/*Transform*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 864.3395,
+        "Y": 440.68097
+      }
+    },
+    {
+      "ChildId": "1ea9e027-967b-46b1-a476-3131332e6805"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 309.9998,
+        "Y": 443.9741
+      }
+    },
+    {
+      "ChildId": "a2811fc0-9a57-44da-8b2d-404b43cdc177"/*Transform*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 560.66113,
+        "Y": 311.1521
+      }
+    },
+    {
+      "ChildId": "85406d51-c21b-41f4-a56e-bd2746663d5b"/*RenderQuad*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 410.66113,
+        "Y": 311.1521
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "b9baba42-18b6-4792-929d-bf628ce8a488"/*ColorBuffer*/,
+      "Position": {
+        "X": 1219.6484,
+        "Y": -13.266916
+      }
+    }
+  ]
+}

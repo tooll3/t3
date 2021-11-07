@@ -1,0 +1,39 @@
+{
+  "Name": "GradientsToTexture",
+  "Id": "2c53eee7-eb38-449b-ad2a-d7a674952e5b",
+  "Namespace": "lib.color",
+  "Inputs": [
+    {
+      "Id": "588be11f-d0db-4e51-8dbb-92a25408511c"/*Gradients*/,
+      "DefaultValue": {
+        "Gradient": {
+          "Interpolation": "Linear",
+          "Steps": [
+            {
+              "Id": "372193d4-a346-41ce-a094-be09ccf8bc6e",
+              "NormalizedPosition": 0.0,
+              "Color": {
+                "R": 1.0,
+                "G": 0.0,
+                "B": 1.0,
+                "A": 1.0
+              }
+            },
+            {
+              "Id": "c72948ff-4fd1-42d7-8e76-76cef601d60d",
+              "NormalizedPosition": 1.0,
+              "Color": {
+                "R": 0.0,
+                "G": 0.0,
+                "B": 1.0,
+                "A": 1.0
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

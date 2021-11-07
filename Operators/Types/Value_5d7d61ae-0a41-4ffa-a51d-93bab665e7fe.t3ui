@@ -1,0 +1,24 @@
+{
+  "Id": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe"/*Value*/,
+  "InputUis": [
+    {
+      "InputId": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -1E+14,
+      "Max": 1E+15
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "f83f1835-477e-4bb6-93f0-14bf273b8e94"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "Name": "FilesInFolder",
+  "Id": "f90fcd0a-eab9-4e2a-b393-e8d3a0380823",
+  "Namespace": "lib.io.file",
+  "Inputs": [
+    {
+      "Id": "ca9778e7-072c-4304-9043-eeb2dc4ca5d7"/*Folder*/,
+      "DefaultValue": "."
+    },
+    {
+      "Id": "8b746651-16a5-4274-85db-0168d30c86b2"/*Filter*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "e14a4aae-e253-4d14-80ef-a90271cd306a"/*TriggerUpdate*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

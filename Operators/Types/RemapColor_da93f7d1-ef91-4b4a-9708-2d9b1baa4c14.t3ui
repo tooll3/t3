@@ -1,0 +1,68 @@
+{
+  "Id": "da93f7d1-ef91-4b4a-9708-2d9b1baa4c14"/*RemapColor*/,
+  "Description": "Replaces the colors of an image with a gradient depending on its brightness. \nThis can be used to emulate gradient curves or level adjustments.\n\nNote that you can use the gradient's alpha channel to control the intensity of the effect.",
+  "InputUis": [
+    {
+      "InputId": "876f6f64-7cb4-4060-8571-e0b78b437d41"/*Image*/,
+      "Position": {
+        "X": -274.2086,
+        "Y": -216.70993
+      }
+    },
+    {
+      "InputId": "cb52ff49-17de-4e36-b918-5de6973a234a"/*Resolution*/,
+      "Position": {
+        "X": -288.13916,
+        "Y": 664.9001
+      }
+    },
+    {
+      "InputId": "f10896b4-b8fa-4e16-a7ec-4a641ddda926"/*Bias*/,
+      "Position": {
+        "X": -288.13916,
+        "Y": 709.9
+      }
+    },
+    {
+      "InputId": "c45d487b-3221-44c7-bf9e-b982a65280f6"/*Gradient*/,
+      "Position": {
+        "X": -288.13916,
+        "Y": 754.9
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "d51fa2bf-5b33-403d-bb05-4eb858a83c53"/*_multiImageFxSetup*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 193.62566,
+        "Y": 863.8263
+      },
+      "Position": {
+        "X": 288.54022,
+        "Y": -277.3032
+      }
+    },
+    {
+      "ChildId": "fdffba0b-5f7e-4a97-af75-21dfe98a569d"/*GradientsToTexture*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 14.83253,
+        "Y": -17.902258
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "16e37306-05e1-4de6-babd-80a8d1472a2f"/*TextureOutput*/,
+      "Position": {
+        "X": 577.0464,
+        "Y": -29.479145
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "Name": "Draw",
+  "Id": "9b28e6b9-1d1f-42d8-8a9e-33497b1df820",
+  "Namespace": "lib.dx11.draw",
+  "Inputs": [
+    {
+      "Id": "8716b11a-ef71-437e-9930-bb747da818a7"/*VertexCount*/,
+      "DefaultValue": 3
+    },
+    {
+      "Id": "b381b3ed-f043-4001-9bbc-3e3915f38235"/*VertexStartLocation*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,0 +1,71 @@
+{
+  "Id": "5efaf208-ba62-42ce-b3df-059b37fc1382"/*OutputMergerStage*/,
+  "InputUis": [
+    {
+      "InputId": "394d374f-2125-4ecb-8a69-cc7b2c3c6cb7"/*DepthStencilView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "9c131da6-ad56-4e15-9730-754096b3b765"/*RenderTargetViews*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "0ed97939-643b-445e-879c-e18c4430aa03"/*UnorderedAccessViews*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "1d5faad5-3be5-426c-b464-ad490ea3d1aa"/*DepthStencilState*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "6c7907d7-70f7-4db7-83ea-22ee48610994"/*DepthStencilReference*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "e0bc9cf8-42c8-4632-b958-7a96f6d03ba2"/*BlendState*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "ccee2ec3-586f-4396-8b20-cc99484e1b64"/*BlendFactor*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "03166157-1e18-4513-8af5-398c6f4fcb1e"/*BlendSampleMask*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "cee8c3f0-64ea-4e4d-b967-ec7e3688dd03"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

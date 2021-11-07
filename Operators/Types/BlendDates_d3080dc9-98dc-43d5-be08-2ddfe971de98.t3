@@ -1,0 +1,25 @@
+{
+  "Name": "BlendDates",
+  "Id": "d3080dc9-98dc-43d5-be08-2ddfe971de98",
+  "Namespace": "lib.string",
+  "Inputs": [
+    {
+      "Id": "cf78f62d-afae-4b5a-9de6-ad26f2b34317"/*TimeA*/,
+      "DefaultValue": "2021-04-17 17:00"
+    },
+    {
+      "Id": "f2a0aad4-dda9-4e75-b62c-e5472ef925e5"/*TimeB*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "0f980d15-cbae-481e-8eb5-dedc334f9733"/*Mix*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "67c37764-7897-4047-8ba1-0dfe21d5e616"/*Format*/,
+      "DefaultValue": "hh\\:mm\\:ss\\:ff"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

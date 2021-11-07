@@ -1,0 +1,21 @@
+{
+  "Name": "BoolToInt",
+  "Id": "cd43942a-887e-4e34-bc54-0c2e5e8bc2af",
+  "Namespace": "lib.math.bool",
+  "Inputs": [
+    {
+      "Id": "c644165f-3901-4dbf-8091-05f958e668e5"/*BoolValue*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "9b64f287-d14a-493e-a1c7-dcbcdc703849"/*ResultForFalse*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "cbbb6b8a-0dc9-4a85-8abc-e4c9c1c9c8be"/*ResultForTrue*/,
+      "DefaultValue": 1
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

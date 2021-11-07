@@ -1,0 +1,47 @@
+{
+  "Id": "d3080dc9-98dc-43d5-be08-2ddfe971de98"/*BlendDates*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "cf78f62d-afae-4b5a-9de6-ad26f2b34317"/*TimeA*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "f2a0aad4-dda9-4e75-b62c-e5472ef925e5"/*TimeB*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "0f980d15-cbae-481e-8eb5-dedc334f9733"/*Mix*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "67c37764-7897-4047-8ba1-0dfe21d5e616"/*Format*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "7a1575c3-5c35-4b0b-bde7-5746a3172502"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

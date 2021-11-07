@@ -1,0 +1,21 @@
+{
+  "Name": "ExecRepeatedly",
+  "Id": "46420979-1e56-4de3-a6ca-0447be1b9813",
+  "Namespace": "lib.exec",
+  "Inputs": [
+    {
+      "Id": "d9de54b8-6d05-4cad-a1eb-bfa770a4520d"/*Command*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "fb4c2356-5fa9-4beb-a909-805323d5f7c1"/*RepeatCount*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "4ca4cf19-975e-479a-bd43-c49c96ce51b6"/*SkipFrameCount*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

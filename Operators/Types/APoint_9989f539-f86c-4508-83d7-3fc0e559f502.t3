@@ -1,0 +1,37 @@
+{
+  "Name": "APoint",
+  "Id": "9989f539-f86c-4508-83d7-3fc0e559f502",
+  "Namespace": "lib.point.cpu",
+  "Inputs": [
+    {
+      "Id": "a0a453db-d8f1-415a-9a98-3c88a25b15e7"/*Position*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "55a3370f-1768-414f-b38d-4accc5e93914"/*RotationAxis*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 1.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "e9859381-eb88-4856-91c5-60d30ac6035a"/*RotationAngle*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*W*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "53cde701-435f-42e4-b598-db0e607a238c"/*AddSeparator*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,0 +1,39 @@
+{
+  "Id": "b72d968b-0045-408d-a2f9-5c739c692a66"/*SoundInput*/,
+  "InputUis": [
+    {
+      "InputId": "e8a10146-ef7f-459c-a1f8-eef621a2c522"/*DeviceIndex*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": 36.0,
+        "Y": 334.0
+      },
+      "Min": -100.0,
+      "Max": 100.0
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "b438986f-6ef9-40d5-8a2c-b00c01578ebc"/*Result*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 38.0
+      }
+    },
+    {
+      "OutputId": "b3efdf25-4692-456d-aa48-563cfb0b9deb"/*FftBuffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "d7d2a87c-4231-4f8b-904f-6e5f5d01b1d8"/*AvailableData*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

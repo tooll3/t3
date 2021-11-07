@@ -1,0 +1,185 @@
+{
+  "Id": "bf7fcd04-0cf6-4518-86cc-48f74483d98d"/*RoundedRect*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "6b6887d4-ebaa-4489-b993-5027789ce1c7"/*Image*/,
+      "Position": {
+        "X": -195.9,
+        "Y": -128.16379
+      }
+    },
+    {
+      "InputId": "a20d31a3-115f-4d38-a988-2a41f6e5cbea"/*Fill*/,
+      "Position": {
+        "X": -195.9,
+        "Y": -83.16377
+      }
+    },
+    {
+      "InputId": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*Outline*/,
+      "Position": {
+        "X": -195.9,
+        "Y": -38.163773
+      }
+    },
+    {
+      "InputId": "d4c20bfc-3943-4c5d-a8f8-5175fa152e91"/*Background*/,
+      "Position": {
+        "X": -195.9,
+        "Y": 6.8362274
+      }
+    },
+    {
+      "InputId": "c608e4c4-c545-45ed-8e37-95a53f6871d0"/*Stretch*/,
+      "Position": {
+        "X": -212.96689,
+        "Y": 122.20885
+      }
+    },
+    {
+      "InputId": "ee2f51f9-38bb-4613-b234-173218cb3aae"/*Center*/,
+      "Position": {
+        "X": -217.06284,
+        "Y": 188.51869
+      }
+    },
+    {
+      "InputId": "d2401798-593b-4cc3-85d8-3570ddec1f2a"/*Scale*/,
+      "Position": {
+        "X": -212.96689,
+        "Y": 257.20883
+      }
+    },
+    {
+      "InputId": "ef3d0313-50a1-42d3-b3cb-e8ea1b93cd34"/*Round*/,
+      "Position": {
+        "X": -212.96689,
+        "Y": 302.20883
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "80bd2460-c28d-490c-981b-77a6e89f3983"/*Stroke*/,
+      "Position": {
+        "X": -198.84459,
+        "Y": 373.71017
+      }
+    },
+    {
+      "InputId": "be43e160-f9a0-4991-b764-2b5e533b37cc"/*Feather*/,
+      "Position": {
+        "X": -198.84459,
+        "Y": 418.71017
+      },
+      "Min": -1.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "574e7268-27aa-46b6-a13f-8ab63f5990d9"/*FeatherBias*/,
+      "Position": {
+        "X": -198.84459,
+        "Y": 463.71017
+      },
+      "Min": -10.0,
+      "Max": 10.0,
+      "Scale": 0.1
+    },
+    {
+      "InputId": "202340b4-0629-40a1-9399-0cda047df116"/*Rotate*/,
+      "Position": {
+        "X": -198.84459,
+        "Y": 553.7102
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Scale": 2.0
+    },
+    {
+      "InputId": "07e57992-ea38-4e3b-8d69-cb4e99ae587c"/*Resolution*/,
+      "Position": {
+        "X": -196.89319,
+        "Y": 648.59174
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "3b04103f-1853-4ca8-b753-ce42d42e16c0"/*Vector4ToFloat4*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -20.982021,
+        "Y": -98.211716
+      }
+    },
+    {
+      "ChildId": "3eade3a0-95d8-4c6e-835e-945af6dfd902"/*Vector4ToFloat4*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -23.49123,
+        "Y": 15.887933
+      }
+    },
+    {
+      "ChildId": "624bc5a4-40ec-4ca6-a01e-d7a4f44f989d"/*Vector2ToFloat2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -31.638813,
+        "Y": 131.50772
+      }
+    },
+    {
+      "ChildId": "17626164-1e7e-46cd-9904-caf0c6b6113c"/*Vector2ToFloat2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -31.638813,
+        "Y": 187.50772
+      }
+    },
+    {
+      "ChildId": "cae1229c-4a86-48e1-bf7f-ed6b3bea46bf"/*_ImageFxShaderSetupStatic*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 111.97416,
+        "Y": 812.71466
+      },
+      "Position": {
+        "X": 419.3124,
+        "Y": -167.22983
+      }
+    },
+    {
+      "ChildId": "d2b77680-42d7-4801-9eb1-73edaf4b9397"/*Vector4ToFloat4*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -20.982021,
+        "Y": -42.211716
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "babd085b-5099-4ddb-87d6-ab9d983067f1"/*TextureOutput*/,
+      "Position": {
+        "X": 577.0464,
+        "Y": -29.479145
+      }
+    }
+  ]
+}

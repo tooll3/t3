@@ -1,0 +1,59 @@
+{
+  "Id": "c47ab830-aae7-4f8f-b67c-9119bcbaf7df"/*CubeMesh*/,
+  "Description": "Generates are Mesh that can be rendered with [DrawMesh].",
+  "InputUis": [
+    {
+      "InputId": "e445a6da-0b66-46ae-ad2b-650e9cc50798"/*Segments*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "97c9849e-751c-49a9-823d-0af839fa503e"/*Stretch*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "9a7d34a1-ca39-48bc-b977-9a786d23f3b1"/*Scale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "febfae90-13e8-4f0a-8ccf-b8825ea525f8"/*Pivot*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "f4a78f77-8d8c-4b7b-8545-ea80947b428d"/*Center*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "e641c244-9dc8-444d-8dee-c3e9b710f9db"/*Rotation*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Scale": 0.1
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "35660e2b-5005-44a2-bf57-db9a3f1b791d"/*Data*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

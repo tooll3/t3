@@ -1,0 +1,17 @@
+{
+  "Name": "HasValueDecreased",
+  "Id": "f376121a-2360-4232-9724-0db6937062c3",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "0ce24e8e-7d35-41a1-85a5-0c55d4247a90"/*Value*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "332d2377-c5d3-448d-851f-26e3439720dc"/*Threshold*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

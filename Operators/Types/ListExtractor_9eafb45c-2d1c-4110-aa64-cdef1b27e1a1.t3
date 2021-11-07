@@ -1,0 +1,15 @@
+{
+  "Name": "ListExtractor",
+  "Id": "9eafb45c-2d1c-4110-aa64-cdef1b27e1a1",
+  "Namespace": "user.cynic",
+  "Inputs": [
+    {
+      "Id": "0f77f6e3-b585-4904-b452-d39a18f7e990"/*Input*/,
+      "DefaultValue": {
+        "Values": []
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

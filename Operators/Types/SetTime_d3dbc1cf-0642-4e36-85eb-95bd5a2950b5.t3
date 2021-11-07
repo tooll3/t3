@@ -1,0 +1,17 @@
+{
+  "Name": "SetTime",
+  "Id": "d3dbc1cf-0642-4e36-85eb-95bd5a2950b5",
+  "Namespace": "lib.io.time",
+  "Inputs": [
+    {
+      "Id": "6220e7dc-7aed-48b8-b419-29393988bbbe"/*SubTree*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "cd3c6854-29de-4c52-9ed8-7ba8d847fc34"/*NewTime*/,
+      "DefaultValue": 0.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

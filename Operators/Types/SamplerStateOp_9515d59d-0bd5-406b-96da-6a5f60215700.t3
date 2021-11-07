@@ -1,0 +1,45 @@
+{
+  "Name": "SamplerStateOp",
+  "Id": "9515d59d-0bd5-406b-96da-6a5f60215700",
+  "Namespace": "lib.dx11.draw",
+  "Inputs": [
+    {
+      "Id": "a870921f-a28c-4501-9f31-38a18b0acdcc"/*Filter*/,
+      "DefaultValue": "MinMagMipLinear"
+    },
+    {
+      "Id": "e7c95fd5-14d1-434f-a140-f22ef69076ab"/*AddressU*/,
+      "DefaultValue": "Wrap"
+    },
+    {
+      "Id": "fdeb503f-09c6-48d1-8853-7426f68cdec3"/*AddressV*/,
+      "DefaultValue": "Wrap"
+    },
+    {
+      "Id": "93d8bf26-5067-4ccc-b4cb-e03970686462"/*AddressW*/,
+      "DefaultValue": "Wrap"
+    },
+    {
+      "Id": "4b51422e-1da7-4a28-b55f-47881d42f801"/*MipLoadBias*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "1cce7427-2062-42fd-838e-328def3ecb30"/*MaximumAnisotropy*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "393a3e40-5c58-48c7-84d2-c4e8d03f7373"/*ComparisonFunction*/,
+      "DefaultValue": "Never"
+    },
+    {
+      "Id": "05531ef5-72aa-4868-915f-a40d26da9e80"/*MinimumLod*/,
+      "DefaultValue": -999999.0
+    },
+    {
+      "Id": "7d5346db-df9c-4bce-9f39-065983253a7f"/*MaximumLod*/,
+      "DefaultValue": 999999.0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
