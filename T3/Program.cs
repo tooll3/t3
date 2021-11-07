@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+using ImGuiNET;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -466,7 +466,14 @@ namespace T3
                                          _swapChain2.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
                                  });
 
-            _controller.Dispose();
+            try
+            {
+                _controller.Dispose();
+            }
+            catch(Exception e)
+            {
+                Log.Warning("Exception during shutdown: " + e);
+            }
 
             // Release all resources
             _renderView.Dispose();

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Timers;
 using System.Windows.Forms.VisualStyles;
-using System.Windows.Threading;
 using ManagedBass;
 using ManagedBass.Wasapi;
 using T3.Core.Logging;
@@ -51,8 +51,8 @@ namespace T3.Gui.Interaction.Timing
         /// take several seconds. So this class should only be instantiated on demand.</summary>
         public SystemAudioInput()
         {
-            _timer.Interval = TimeSpan.FromMilliseconds(1 / 44.1f * 1000);
-            _timer.Tick += TimerUpdateEventHandler;
+            _timer.Interval = 1 / 44.1f * 1000.0;
+            _timer.Elapsed += TimerUpdateEventHandler;
             // ReSharper disable once RedundantDelegateCreation
             _wasapiProcedure = new WasapiProcedure(Process); // capture to avoid freeing by GC
             _initialized = false;
@@ -77,7 +77,7 @@ namespace T3.Gui.Interaction.Timing
                 BassWasapi.Stop();
                 BassWasapi.Free();
                 _timer.Stop();
-                _timer.IsEnabled = false;
+                _timer.Enabled = false;
                 return;
             }
 
@@ -105,7 +105,7 @@ namespace T3.Gui.Interaction.Timing
 
             BassWasapi.Start();
             System.Threading.Thread.Sleep(500);
-            _timer.IsEnabled = true;
+            _timer.Enabled = true;
             _timer.Start();
         }
 
@@ -193,7 +193,7 @@ namespace T3.Gui.Interaction.Timing
 
         //private const int FftBufferResolution = 512;
 
-        private readonly DispatcherTimer _timer = new DispatcherTimer(); //timer that refreshes the display
+        private readonly Timer _timer = new Timer(); //timer that refreshes the display
 
         private readonly WasapiProcedure _wasapiProcedure;
         public int LastIntLevel;
