@@ -1,0 +1,17 @@
+# Blender v2.91.2 OBJ File: 'partial-storyboarding-test-with-pencil-v02.blend'
+# www.blender.org
+mtllib plane-xz.mtl
+o Plane
+v -0.500000 0.000000 0.500000
+v 0.500000 0.000000 0.500000
+v -0.500000 0.000000 -0.500000
+v 0.500000 0.000000 -0.500000
+vt 1.000000 0.000000
+vt 0.000000 1.000000
+vt 0.000000 0.000000
+vt 1.000000 1.000000
+vn 0.0000 1.0000 0.0000
+usemtl None
+s off
+f 2/1/1 3/2/1 1/3/1
+f 2/1/1 4/4/1 3/2/1
