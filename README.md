@@ -26,39 +26,19 @@ Ideally, it would be better to sign-up. It's free and only takes a minute or so.
 
 3. Clone:
 ```git clone git@github.com:still-scene/t3.git```
-
-4. After cloning adjust the file `.git\config` and replace these lines...
-```
-[submodule "Operators"]
-	url = git@github.com:still-scene/Operators.git
-[submodule "Resources"]
-	url = git@github.com:still-scene/Resources.git
-```
-... with...
-```
-[submodule "Operators"]
-	url = https://github.com/still-scene/Operators.git
-[submodule "Resources"]
-	url = https://github.com/still-scene/Resources.git
-```
-
-5. In the terminal window initialize and update the submodules...
-```
-git submodule init
-git submodule update
-```
+Note: As of 2021-11-05 we no longer use submodules, so you don't have to care about setting up those.
 
 
 #### If you have a git account
 
    1. If you have a git account, we recommend using ssh. Make sure you have an ssh-key installed correctly. Github has [excellent documentation](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) on that topic.
       
-   2. With Fork you just clone the repository. All submodule dependencies should be pulled automatically.
+   2. With Fork you just clone the repository.
 
    3. If you're using the command line
 
       ```git clone 
-      git clone  --recursive git@github.com:still-scene/t3.git
+      git clone  git@github.com:still-scene/t3.git
       ```
 
 ### Completing the installation
