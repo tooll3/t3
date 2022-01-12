@@ -18,5 +18,5 @@
 *.zip filter=lfs diff=lfs merge=lfs -text
 *.tga filter=lfs diff=lfs merge=lfs -text
 *.mjpeg filter=lfs diff=lfs merge=lfs -text
-
 *.asc filter=lfs diff=lfs merge=lfs -text
+
