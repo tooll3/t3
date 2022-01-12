@@ -242,7 +242,7 @@ namespace T3.Gui.Windows.TimeLine
                 var verticalOffset = ImGui.GetContentRegionMax().Y + ImGui.GetWindowPos().Y - position.Y - LayerHeight;
                 var horizontalOffset =  TimeLineCanvas.Current.TransformDirection(new Vector2(timeClip.SourceRange.Start - timeClip.TimeRange.Start,0)).X;
                 var startPosition = position + new Vector2(0, LayerHeight);
-                _drawList.AddBezierCurve(startPosition, 
+                _drawList.AddBezierCubic(startPosition, 
                                          startPosition + new Vector2(0,verticalOffset),
                                          startPosition +  new Vector2(horizontalOffset,0),
                                          startPosition +  new Vector2(horizontalOffset,verticalOffset), 
@@ -250,7 +250,7 @@ namespace T3.Gui.Windows.TimeLine
                 
                 horizontalOffset =  TimeLineCanvas.Current.TransformDirection(new Vector2(timeClip.SourceRange.End - timeClip.TimeRange.End,0)).X;
                 var endPosition = position + new Vector2(clipSize.X, LayerHeight);
-                _drawList.AddBezierCurve(endPosition, 
+                _drawList.AddBezierCubic(endPosition, 
                                          endPosition + new Vector2(0,verticalOffset),
                                          endPosition +  new Vector2(horizontalOffset,0),
                                          endPosition +  new Vector2(horizontalOffset,verticalOffset), 

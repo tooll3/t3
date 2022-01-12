@@ -119,7 +119,7 @@ namespace T3.Gui.ChildUi
                 }
 
                 var curveLineColor = highlightEditable ? T3Style.Colors.GraphLineColorHover : T3Style.Colors.GraphLineColor;
-                drawList.AddPolyline(ref GraphLinePoints[0], GraphListSteps, curveLineColor, false, 1.5f);
+                drawList.AddPolyline(ref GraphLinePoints[0], GraphListSteps, curveLineColor, ImDrawFlags.None, 1.5f);
             }
 
             ImGui.PopID();

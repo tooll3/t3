@@ -85,7 +85,7 @@ namespace T3.Gui.Windows
                 if (!string.IsNullOrEmpty(symbolUi.Description))
                 {
                     var desc = symbolUi.Description;
-                    if (ImGui.InputTextMultiline("##name", ref desc, 2000, new Vector2(400, 500), ImGuiInputTextFlags.Multiline))
+                    if (ImGui.InputTextMultiline("##name", ref desc, 2000, new Vector2(400, 500), ImGuiInputTextFlags.None))
                     {
                         symbolUi.Description = desc;
                     }

@@ -40,7 +40,7 @@ namespace T3.Gui.UiHelpers
             }
 
             var width = ImGui.CalcTextSize(logMessage);
-            var availableSpace = ImGui.GetWindowContentRegionWidth();
+            var availableSpace = ImGui.GetWindowContentRegionMax().X;
             ImGui.SetCursorPosX(availableSpace - width.X);
 
             ImGui.TextColored(color, logMessage);

@@ -117,7 +117,7 @@ namespace T3.Gui.ChildUi.Animators
             GraphLinePoints[3].Y = y;
 
             var curveLineColor = isActive && _dragState == DragMode.DraggingHorizontally ? T3Style.Colors.GraphLineColorHover : T3Style.Colors.GraphLineColor;
-            drawList.AddPolyline(ref GraphLinePoints[0], 4, curveLineColor, false, 1);
+            drawList.AddPolyline(ref GraphLinePoints[0], 4, curveLineColor, ImDrawFlags.None, 1);
 
             // Draw offset label
             if (h > 14)

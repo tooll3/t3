@@ -309,7 +309,7 @@ namespace T3.Gui.Graph.Interaction
                 var areaOnCanvas = new ImRect(snappedNeighbour.PosOnCanvas, snappedNeighbour.PosOnCanvas + snappedNeighbour.Size);
                 var areaOnScreen = GraphCanvas.Current.TransformRect(areaOnCanvas);
                 areaOnScreen.Expand(expandOnScreen);
-                drawList.AddRect(areaOnScreen.Min, areaOnScreen.Max, color, rounding: 10, rounding_corners: ImDrawCornerFlags.All, thickness: 4);
+                drawList.AddRect(areaOnScreen.Min, areaOnScreen.Max, color, rounding: 10, ImDrawFlags.RoundCornersAll, thickness: 4);
             }
         }
 
