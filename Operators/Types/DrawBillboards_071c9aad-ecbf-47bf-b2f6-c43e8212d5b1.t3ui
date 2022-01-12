@@ -1,6 +1,6 @@
 {
   "Id": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1"/*DrawBillboards*/,
-  "Description": "Draws points as animated camera aligned sprites.",
+  "Description": "Draws points as animated camera aligned sprites, where W defines the animation.\n",
   "InputUis": [
     {
       "InputId": "2548a5d8-b2ab-4783-9298-c2e261d390f0"/*Color*/,

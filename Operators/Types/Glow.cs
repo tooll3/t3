@@ -31,6 +31,9 @@ namespace T3.Operators.Types.Id_d392d4af_4c78_4f4a_bc3f_4c54c8c73538
         [Input(Guid = "4c9b9135-f27b-414e-bed7-f9e5640dc526")]
         public readonly InputSlot<float> Offset = new InputSlot<float>();
 
+        [Input(Guid = "7f6dba80-bf4e-4e55-bd9a-ac1e2a077898")]
+        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+
     }
 }
 
