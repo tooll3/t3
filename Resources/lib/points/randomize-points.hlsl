@@ -56,10 +56,12 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-    float4 hash4 = hash42( i.x * 1.431 + 111 + floor(Seed) * 137.1);
+    float rand = (i.x + 0.5) * 1.431 + 111 + floor(Seed+0.5) * 37.1;
+    float4 hash4 = hash42(rand);
     hash4 =  GetGain(hash4, clamp(Bias, 0.001, 0.999)) * 2 -1;
     
-    float4 hashRot = (hash42( i.x * 1.431 + 237 + floor(Seed) * 117.1) * 2 -1);
+    //float4 hashRot = (hash42( i.x * 1.431 + 237 + floor(Seed+ 0.5) * 117.1) * 2 -1);
+    float4 hashRot = hash42( float2(rand, 23.1));
 
     float4 rot = SourcePoints[i.x].rotation;
 
