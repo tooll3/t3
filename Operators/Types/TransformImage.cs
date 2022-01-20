@@ -30,6 +30,9 @@ namespace T3.Operators.Types.Id_32e18957_3812_4f64_8663_18454518d005
 
         [Input(Guid = "b3edcd1e-e0ce-43a7-98e9-1568e2329ed5")]
         public readonly InputSlot<bool> Mirror = new InputSlot<bool>();
+
+        [Input(Guid = "4d8073e1-720d-4cac-bc4c-00be40c8687e")]
+        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
     }
 }
 

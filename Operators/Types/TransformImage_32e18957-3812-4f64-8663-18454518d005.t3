@@ -39,6 +39,10 @@
     {
       "Id": "b3edcd1e-e0ce-43a7-98e9-1568e2329ed5"/*Mirror*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "4d8073e1-720d-4cac-bc4c-00be40c8687e"/*WrapMode*/,
+      "DefaultValue": "Clamp"
     }
   ],
   "Children": [
@@ -56,6 +60,11 @@
           "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
           "Type": "System.String",
           "Value": "Resources\\lib\\img\\fx\\img-fx-TransformImage.hlsl"
+        },
+        {
+          "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Clamp"
         }
       ],
       "Outputs": []
@@ -140,6 +149,12 @@
       "SourceSlotId": "5c76dc8d-3a28-4b93-b3a0-e008c1ff14e9",
       "TargetParentOrChildId": "601e6674-47e3-479d-b4c4-c1d66e03dde5",
       "TargetSlotId": "6aa3113a-7f53-4dc6-a79e-2d818c5c5c25"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "4d8073e1-720d-4cac-bc4c-00be40c8687e",
+      "TargetParentOrChildId": "601e6674-47e3-479d-b4c4-c1d66e03dde5",
+      "TargetSlotId": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"
     },
     {
       "SourceParentOrChildId": "bf478418-fbc1-4e6c-a85b-c53129d432e9",
