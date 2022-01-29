@@ -17,10 +17,11 @@ namespace T3.Gui.Windows.TimeLine.Raster
 
         protected virtual IEnumerable<Raster> GetRastersForScale(double invertedScale, out float fadeFactor)
         {
-            var scaleRange = ScaleRanges.FirstOrDefault(range => range.ScaleMax > invertedScale / Density);
+            var density = UserSettings.Config.TimeRasterDensity * 0.02f;
+            var scaleRange = ScaleRanges.FirstOrDefault(range => range.ScaleMax > invertedScale / density);
             fadeFactor = scaleRange == null
                              ? 1
-                             : 1 - (float)MathUtils.Remap(invertedScale, scaleRange.ScaleMin * Density, scaleRange.ScaleMax * Density, 0, 1);
+                             : 1 - (float)MathUtils.Remap(invertedScale, scaleRange.ScaleMin * density, scaleRange.ScaleMax * density, 0, 1);
 
             return scaleRange?.Rasters;
         }
@@ -46,7 +47,6 @@ namespace T3.Gui.Windows.TimeLine.Raster
                 return;
 
             // Debug string 
-            // drawList.AddText(topLeft + new Vector2(20, 20), Color.Red, $"Stretch: {pixelsPerU:0.1}  f={scaleRange:0}");
             ImGui.PushFont(Fonts.FontSmall);
 
             foreach (var raster in rasters)
@@ -98,7 +98,6 @@ namespace T3.Gui.Windows.TimeLine.Raster
 
         private readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();
         protected List<ScaleRange> ScaleRanges;
-        protected const float Density = 0.02f;
         private const double Epsilon = 0.001f;
 
         public class ScaleRange

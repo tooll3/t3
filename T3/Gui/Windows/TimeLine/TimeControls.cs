@@ -33,7 +33,7 @@ namespace T3.Gui.Windows.TimeLine
             switch (UserSettings.Config.TimeDisplayMode)
             {
                 case Playback.TimeDisplayModes.Bars:
-                    formattedTime = Playback.FormatTimeInBars(playback.TimeInBars);
+                    formattedTime = Playback.FormatTimeInBars(playback.TimeInBars, UserSettings.Config.CountBarsFromZero ? 0 : 1);
                     break;
 
                 case Playback.TimeDisplayModes.Secs:
@@ -422,6 +422,7 @@ namespace T3.Gui.Windows.TimeLine
                     if (isInitialized)
                     {
                         var bpm = (float)playback.Bpm;
+                        var soundtrackOffset = (float)playback.SoundtrackOffsetInSecs;
 
                         if (ImGui.Checkbox("Use BPM Rate", ref ProjectSettings.Config.UseBpmRate))
                         {
@@ -431,9 +432,14 @@ namespace T3.Gui.Windows.TimeLine
 
                         if (ProjectSettings.Config.UseBpmRate)
                         {
-                            ImGui.DragFloat("BPM", ref bpm);
+                            ImGui.DragFloat("BPM", ref bpm, 0.02f);
                             playback.Bpm = bpm;
                             ProjectSettings.Config.SoundtrackBpm = bpm;
+                            
+                            ImGui.DragFloat("Offset", ref soundtrackOffset, 0.01f);
+                            playback.SoundtrackOffsetInSecs = soundtrackOffset;
+                            ProjectSettings.Config.SoundtrackOffset = soundtrackOffset;
+
                         }
                         
                         if (filepathModified)

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Gui.Interaction.Snapping;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine.Raster
 {
@@ -13,9 +15,10 @@ namespace T3.Gui.Windows.TimeLine.Raster
         public override void Draw(Playback playback)
         {
             //var hasChanged = Math.Abs(1 - playback.Bpm) > 0.001f;
-            if (ScaleRanges == null)
+            if (ScaleRanges == null || Math.Abs(UserSettings.Config.TimeRasterDensity - _initializedDenisty) > 0.0001f)
             {
-                ScaleRanges = InitializeTimeScaleDefinitions();
+                ScaleRanges = InitializeTimeScaleDefinitions(UserSettings.Config.TimeRasterDensity * 0.02f);
+                _initializedDenisty = UserSettings.Config.TimeRasterDensity;
             }
 
             var scale = TimeLineCanvas.Current.NestedTimeScale;
@@ -86,7 +89,8 @@ namespace T3.Gui.Windows.TimeLine.Raster
         
         //private new const float Density = 1f;
         private const float BeatTimeFactor = 0.5f;
-        private static List<ScaleRange> InitializeTimeScaleDefinitions()
+        private float _initializedDenisty;
+        private static List<ScaleRange> InitializeTimeScaleDefinitions(float Density)
         {
             return new List<ScaleRange>
                        {

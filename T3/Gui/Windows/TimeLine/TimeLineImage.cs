@@ -27,10 +27,8 @@ namespace T3.Gui.Windows.TimeLine
             //                        contentRegionMax + windowPos, new Color(0,0,0,0.3f));
             
             var songDurationInBars = (float)(playback.GetSongDurationInSecs() * playback.Bpm / 240);
-            var xMin= TimeLineCanvas.Current.TransformGlobalTime(0);
-            var xMax = TimeLineCanvas.Current.TransformGlobalTime(songDurationInBars);
-
-
+            var xMin= TimeLineCanvas.Current.TransformGlobalTime((float)playback.SoundtrackOffsetInBars);
+            var xMax = TimeLineCanvas.Current.TransformGlobalTime(songDurationInBars + (float)playback.SoundtrackOffsetInBars);
             
             var resourceManager = ResourceManager.Instance();
             if (resourceManager.Resources.TryGetValue(_srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)

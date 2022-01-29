@@ -42,7 +42,10 @@ namespace T3.Gui.UiHelpers
             public float ClickTreshold = 5; // Increase for high-res display and pen tablets
             public float GizmoSize = 100;
             public bool AutoSaveAfterSymbolCreation = true;
-            
+
+            public float TimeRasterDensity = 1f;
+            public bool CountBarsFromZero = true; 
+
             [JsonConverter(typeof(StringEnumConverter))]
             public Playback.TimeDisplayModes TimeDisplayMode = Playback.TimeDisplayModes.Bars;
             

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using T3.Core.Animation;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine.Raster;
 
 namespace T3.Gui.Windows.TimeLine
@@ -36,19 +37,19 @@ namespace T3.Gui.Windows.TimeLine
                 // bars
                 if (c == 'b')
                 {
-                    var bars = (int)(timeInSeconds) + 1;
+                    var bars = (int)(timeInSeconds) + (UserSettings.Config.CountBarsFromZero ? 0 : 1);
                     _stringBuilder.Append($"{bars}.");
                 }
                 // beats
                 else if (c == '.')
                 {
-                    var beats = (int)(timeInSeconds*4)%4 + 1;
+                    var beats = (int)(timeInSeconds*4)%4 + (UserSettings.Config.CountBarsFromZero ? 0 : 1);
                     _stringBuilder.Append( $".{beats}");
                 }
                 // ticks
                 else if (c == ':')
                 {
-                    var ticks = (int)(timeInSeconds*16)%4 + 1;
+                    var ticks = (int)(timeInSeconds*16)%4 + (UserSettings.Config.CountBarsFromZero ? 0 : 1);
                     _stringBuilder.Append($":{ticks}");
                 }
                 else
