@@ -22,18 +22,39 @@ namespace T3.Core
 
         public static void Swap<T>(this IList<T> list, int indexA, int indexB)
         {
-            var tmp = list[indexA];
-            list[indexA] = list[indexB];
-            list[indexB] = tmp;
+            (list[indexA], list[indexB]) = (list[indexB], list[indexA]);
         }
 
         public static void Swap<T>(ref T a, ref T b)
         {
-            T tmp = a;
-            a = b;
-            b = tmp;
+            (a, b) = (b, a);
         }
 
+        public static float[] GetFloatsFromVector<T>(T v)
+        {
+            if (v is float v1)
+            {
+                return new[] { v1 };
+            }
+            
+            if (v is System.Numerics.Vector2 v2)
+            {
+                return new[] { v2.X, v2.Y };
+            }
+            
+            if (v is System.Numerics.Vector3 v3)
+            {
+                return new[] { v3.X, v3.Y, v3.Z };
+            }
+
+            if (v is System.Numerics.Vector4 v4)
+            {
+                return new[] { v4.X, v4.Y, v4.Z, v4.W };
+            }
+            return Array.Empty<float>();
+        }
+        
+        
         public static T GetEnumValue<T>(this InputSlot<int> intInputSlot, EvaluationContext context) where T : Enum
         {
             return CastTo<T>.From(intInputSlot.GetValue(context));
