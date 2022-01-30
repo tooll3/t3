@@ -1,5 +1,3 @@
-using System;
-using System.Security.Policy;
 using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -19,7 +17,10 @@ namespace T3.Operators.Types.Id_436e93a8_03c0_4366_8d9a_2245e5bcaa6c
 
         private void Update(EvaluationContext context)
         {
-            var value = Value.GetValue(context);
+            var value = OverrideTime.IsConnected
+                            ? OverrideTime.GetValue(context)
+                            : (float)context.TimeForEffects;            
+            
             var seed = Seed.GetValue(context);
             var period = Frequency.GetValue(context);
             var octaves = Octaves.GetValue(context);
@@ -32,9 +33,6 @@ namespace T3.Operators.Types.Id_436e93a8_03c0_4366_8d9a_2245e5bcaa6c
             Result.Value = (noiseSum + 1f) * 0.5f * (rangeMax - rangeMin) + rangeMin;
         }
 
-
-        [Input(Guid = "eabbaf77-5f74-4303-9453-6fa44facc5db")]
-        public readonly InputSlot<float> Value = new InputSlot<float>();
 
         [Input(Guid = "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f")]
         public readonly InputSlot<int> Seed = new InputSlot<int>();
@@ -50,5 +48,8 @@ namespace T3.Operators.Types.Id_436e93a8_03c0_4366_8d9a_2245e5bcaa6c
 
         [Input(Guid = "557AE817-EC36-4866-8FED-64490E9255BE")]
         public readonly InputSlot<float> RangeMax = new InputSlot<float>();
+        
+        [Input(Guid = "eabbaf77-5f74-4303-9453-6fa44facc5db")]
+        public readonly InputSlot<float> OverrideTime = new InputSlot<float>();
     }
 }
