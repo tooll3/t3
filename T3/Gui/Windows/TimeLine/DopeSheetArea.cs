@@ -282,7 +282,7 @@ namespace T3.Gui.Windows.TimeLine
                                       ref positions.ToArray()[0],
                                       positions.Count,
                                       parameter.Curves.Count() > 1 ? CurveColors[curveIndex % 4] : GrayCurveColor,
-                                      false,
+                                      ImDrawFlags.None,
                                       2);
                 curveIndex++;
             }

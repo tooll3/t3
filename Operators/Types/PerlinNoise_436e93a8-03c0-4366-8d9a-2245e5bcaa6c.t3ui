@@ -2,14 +2,6 @@
   "Id": "436e93a8-03c0-4366-8d9a-2245e5bcaa6c"/*PerlinNoise*/,
   "InputUis": [
     {
-      "InputId": "eabbaf77-5f74-4303-9453-6fa44facc5db"/*Value*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -2.7436478,
-        "Y": -144.5552
-      }
-    },
-    {
       "InputId": "bd43ee20-1ff1-4c49-ac87-87ca4a1fe66f"/*Seed*/,
       "Position": {
         "X": -2.7436478,
@@ -42,6 +34,14 @@
       "Position": {
         "X": -2.7436478,
         "Y": 125.44479
+      }
+    },
+    {
+      "InputId": "eabbaf77-5f74-4303-9453-6fa44facc5db"/*OverrideTime*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -2.7436478,
+        "Y": -144.5552
       }
     }
   ],

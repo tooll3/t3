@@ -185,12 +185,6 @@ namespace T3.Gui.Windows
                                                     },
                                                     "#bla");
                 
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.BeginTooltip();
-                    ImGui.TextUnformatted("here");
-                    ImGui.EndTooltip();
-                }
                 
                 if (isOpen)
                 {

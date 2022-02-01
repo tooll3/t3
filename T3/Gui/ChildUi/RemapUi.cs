@@ -89,7 +89,7 @@ namespace T3.Gui.ChildUi
             GraphLinePoints[3].X = outputX;
             GraphLinePoints[3].Y = graphRect.Max.Y;
 
-            drawList.AddPolyline(ref GraphLinePoints[0], 4, Color.Orange, false, 1);
+            drawList.AddPolyline(ref GraphLinePoints[0], 4, Color.Orange, ImDrawFlags.None, 1);
 
             var triangleSize = TriangleSize;
             drawList.AddTriangleFilled(GraphLinePoints[3],

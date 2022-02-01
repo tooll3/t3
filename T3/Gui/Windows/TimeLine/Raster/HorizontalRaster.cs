@@ -121,8 +121,8 @@ namespace T3.Gui.Windows.TimeLine
                         var value = scroll-t;
                         _usedPositions[yIndex] = value;
 
-                        var y = topLeft.Y + yIndex;
-                        drawList.AddRect(
+                        var y = (int)(topLeft.Y + yIndex);
+                        drawList.AddRectFilled(
                                          new Vector2(topLeft.X,y ),
                                          new Vector2(topLeft.X + viewWidth, y+1), lineColor);
 

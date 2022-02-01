@@ -26,28 +26,30 @@ namespace T3.Core.Animation
         public TimeRange LoopRange;
         
         public double Bpm = 120;
+        public double SoundtrackOffsetInSecs = 0;
+        public double SoundtrackOffsetInBars => SoundtrackOffsetInSecs * Bpm / 240;
         
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
         
-        private static int GetBeatTimeBar(double timeInBars)
+        private static int GetBeatTimeBar(double timeInBars, int startCountFrom)
         {
-            return (int)(timeInBars) + 1;
+            return (int)(timeInBars) + startCountFrom;   // NOTE:  We count bars from Zero because it matches the current time
         }
 
-        private static int GetBeatTimeBeat(double timeInBars)
+        private static int GetBeatTimeBeat(double timeInBars, int startCountFrom)
         {
-            return (int)(timeInBars * 4) % 4 + 1;
+            return (int)(timeInBars * 4) % 4 + startCountFrom;
         }
 
-        private static int GetBeatTimeTick(double timeInBars)
+        private static int GetBeatTimeTick(double timeInBars, int startCountFrom)
         {
-            return (int)(timeInBars * 16) % 4 + 1;
+            return (int)(timeInBars * 16) % 4 + startCountFrom;
         }
 
-        public static string FormatTimeInBars(double timeInBars)
+        public static string FormatTimeInBars(double timeInBars, int startCountFrom)
         {
-            return $"{GetBeatTimeBar(timeInBars):0}.{GetBeatTimeBeat(timeInBars):0}.{GetBeatTimeTick(timeInBars):0}.";
+            return $"{GetBeatTimeBar(timeInBars, startCountFrom):0}.{GetBeatTimeBeat(timeInBars, startCountFrom):0}.{GetBeatTimeTick(timeInBars,startCountFrom):0}.";
         }
 
         public virtual void Update(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning = false)
@@ -84,12 +86,12 @@ namespace T3.Core.Animation
 
             if (isPlaying)
             {
-                TimeInBars += timeSinceLastFrameInSecs * PlaybackSpeed * Bpm / 240f;
+                TimeInBars += timeSinceLastFrameInSecs * PlaybackSpeed * Bpm / 240f + SoundtrackOffsetInSecs;
                 BeatTime = TimeInBars;
             }
             else if (keepBeatTimeRunning)
             {
-                BeatTime += timeSinceLastFrameInSecs * Bpm / 240f;
+                BeatTime += timeSinceLastFrameInSecs * Bpm / 240f + SoundtrackOffsetInSecs;
             }
         }
 
@@ -129,10 +131,10 @@ namespace T3.Core.Animation
 
         public override double TimeInBars
         {
-            get => GetCurrentStreamTime() * Bpm / 240f;
+            get => (GetCurrentStreamTime() +  SoundtrackOffsetInSecs) * Bpm / 240f;
             set
             {
-                _timeInSeconds = value * 240f / Bpm;
+                _timeInSeconds = value * 240f / Bpm - SoundtrackOffsetInSecs;
                 if (IsTimeWithinAudioTrack)
                 {
                     SetStreamPositionFromTime();

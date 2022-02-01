@@ -34,6 +34,9 @@ namespace T3.Gui.Windows
                 ImGui.Separator();
                 ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
                 ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickTreshold);
+
+                ImGui.DragFloat("Timeline Raster Density", ref UserSettings.Config.TimeRasterDensity, 0.01f);
+                ImGui.Checkbox("Count Bars from Zero", ref UserSettings.Config.CountBarsFromZero);
                 ImGui.TreePop();
             }
 

@@ -142,19 +142,18 @@ namespace T3.Gui.Interaction
                         if (shouldFocus)
                         {
                             ImGui.SetKeyboardFocusHere(-1);
-                            if (!ImGui.IsItemFocused())
+                            if (ImGui.IsKeyReleased((int)Key.Tab))
                             {
-                                if (ImGui.IsKeyReleased((int)Key.Tab))
-                                {
-                                    TabFocusIndex = -1;
-                                }
+                                TabFocusIndex = -1;
                             }
                         }
 
                         ImGui.PopStyleColor();
+                        var completedAfterTabbing = false;
                         if (ImGui.IsKeyPressed((int)Key.Tab) && TabFocusIndex == -1)
                         {
                             TabFocusIndex = CurrentTabIndex + (ImGui.GetIO().KeyShift ? -1 : 1);
+                            completedAfterTabbing = true;
                         }
 
                         var cancelInputAfterFocusLoss = !shouldFocus && !ImGui.IsItemActive();
@@ -165,11 +164,9 @@ namespace T3.Gui.Interaction
                         }
 
                         
-                        if (ImGui.IsItemDeactivated() || !ImGui.IsWindowFocused())
+                        if (completedAfterTabbing || ImGui.IsKeyPressed((int)Key.Esc) || ImGui.IsItemDeactivated() || !ImGui.IsWindowFocused())
                         {
-                            //Log.Debug(" is item deactivated #" + CurrentTabIndex);
                             SetState(InputStates.Inactive);
-                            ImGui.SetKeyboardFocusHere(); // Clear focus so next time value will be completely selected
                             if (double.IsNaN(_editValue))
                                 _editValue = _startValue;
                         }

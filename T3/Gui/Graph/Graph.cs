@@ -344,7 +344,8 @@ namespace T3.Gui.Graph
                     var tangentLength = MathUtils.RemapAndClamp(Vector2.Distance(SourcePosition, TargetPosition),
                                                                 30, 300,
                                                                 5, 200);
-                    DrawList.AddBezierCurve(
+                    
+                    DrawList.AddBezierCubic(
                                             SourcePosition,
                                             SourcePosition + new Vector2(tangentLength, 0),
                                             TargetPosition + new Vector2(-tangentLength, 0),

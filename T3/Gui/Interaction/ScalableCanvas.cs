@@ -26,12 +26,22 @@ namespace T3.Gui.Interaction
             Io = ImGui.GetIO();
             _mouse = ImGui.GetMousePos();
 
-            WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
-            WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
+            if (FillMode == FillModes.FillWindow)
+            {
+                WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
+                WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
+            }
+            else
+            {
+                WindowSize = ImGui.GetContentRegionAvail();
+                WindowPos = ImGui.GetCursorScreenPos();
+            }
             DampScaling();
             HandleInteraction(flags);
         }
 
+        
+        
         protected void DampScaling()
         {
             // Damp scaling
@@ -57,6 +67,24 @@ namespace T3.Gui.Interaction
                 Scroll = ScrollTarget;
                 Scale = ScaleTarget;
             }
+            
+            if (float.IsNaN(ScaleTarget.X))
+                ScaleTarget.X = 1;
+            
+            if (float.IsNaN(ScaleTarget.Y))
+                ScaleTarget.Y = 1;
+            
+            if (float.IsNaN(Scale.X) || float.IsNaN(Scale.Y))
+                Scale = ScaleTarget;
+            
+            if (float.IsNaN(ScrollTarget.X))
+                ScrollTarget.X = 1;
+            
+            if (float.IsNaN(ScrollTarget.Y))
+                ScrollTarget.Y = 1;
+            
+            if (float.IsNaN(Scroll.X) || float.IsNaN(Scroll.Y))
+                Scroll = ScrollTarget;            
         }
 
         public Scope GetTargetScope()
@@ -212,9 +240,19 @@ namespace T3.Gui.Interaction
 
         public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null)
         {
-            WindowSize = ImGui.GetContentRegionMax() - ImGui.GetWindowContentRegionMin();
-            ScaleTarget = WindowSize / area.GetSize();
+            //WindowSize = ImGui.GetContentRegionMax() - ImGui.GetWindowContentRegionMin();
 
+            var areaSize = area.GetSize();
+            if (areaSize.X == 0)
+                areaSize.X = 1;
+
+            if (areaSize.Y == 0)
+                areaSize.Y = 1;
+            
+            ScaleTarget = WindowSize / areaSize;
+
+
+            
             if (flipY)
             {
                 ScaleTarget.Y *= -1;
@@ -469,6 +507,14 @@ namespace T3.Gui.Interaction
             public Vector2 Scale;
             public Vector2 Scroll;
         }
+
+        public enum FillModes
+        {
+            FillWindow,
+            FillAvailableContentRegion,
+        }
+        
+        public FillModes FillMode = FillModes.FillWindow;
 
         protected bool UserZoomedCanvas;
         protected bool UserScrolledCanvas;

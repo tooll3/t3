@@ -466,7 +466,7 @@ namespace T3.Gui.Windows.TimeLine
                 x += step;
             }
 
-            ImGui.GetWindowDrawList().AddPolyline(ref _curveLinePoints[0], steps, color, false, isParamHovered? 3: 1);
+            ImGui.GetWindowDrawList().AddPolyline(ref _curveLinePoints[0], steps, color, ImDrawFlags.None, isParamHovered? 3: 1);
         }
 
         

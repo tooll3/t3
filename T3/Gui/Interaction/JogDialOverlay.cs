@@ -208,7 +208,7 @@ namespace T3.Gui.Interaction
                                     a_min: -(float)rads1,
                                     a_max: -(float)rads2,
                                     num_segments: 64);
-                _drawList.PathStroke(ActiveSegmentColor, false, 1);
+                _drawList.PathStroke(ActiveSegmentColor, ImDrawFlags.None, 1);
             }
 
             

@@ -176,8 +176,8 @@ namespace UiHelpers
 
             
             var isHovering = TestHover(ref drawList, ref hoverPosition );
-            drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, false, thickness + outlineWidth);
-            drawList.PathStroke(color, false, thickness);
+            drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, ImDrawFlags.None, thickness + outlineWidth);
+            drawList.PathStroke(color, ImDrawFlags.None, thickness);
             return isHovering;
             
             void FnDrawBezierFallback()
@@ -186,7 +186,7 @@ namespace UiHelpers
                                                     30, 300,
                                                     5, 200);
                 drawList.PathLineTo(pointA);
-                drawList.PathBezierCurveTo(pointA + new Vector2(tangentLength, 0),
+                drawList.PathBezierCubicCurveTo(pointA + new Vector2(tangentLength, 0),
                                            pointB + new Vector2(-tangentLength, 0),
                                            pointB,
                                            30

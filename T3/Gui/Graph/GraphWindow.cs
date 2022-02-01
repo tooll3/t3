@@ -35,6 +35,7 @@ namespace T3.Gui.Graph
                             : new Playback();
 
             _playback.Bpm = ProjectSettings.Config.SoundtrackBpm;
+            _playback.SoundtrackOffsetInSecs = ProjectSettings.Config.SoundtrackOffset;
             if (_playback is StreamPlayback streamPlayback)
                 streamPlayback.SetMuteMode(UserSettings.Config.AudioMuted);
 

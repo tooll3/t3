@@ -93,7 +93,7 @@ namespace T3.Gui.UiHelpers
                 {
                     try
                     {
-                        Process.Start(value);
+                        Process.Start(new ProcessStartInfo(value) { UseShellExecute = true });
                     }
                     catch (Win32Exception e)
                     {

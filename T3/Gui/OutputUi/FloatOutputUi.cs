@@ -1,10 +1,6 @@
-﻿using ImGuiNET;
-using System;
-using System.Diagnostics;
-using T3.Core.Operator;
+﻿using System.Diagnostics;
 using T3.Core.Operator.Slots;
 using T3.Gui.UiHelpers;
-using UiHelpers;
 
 namespace T3.Gui.OutputUi
 {
@@ -42,6 +38,7 @@ namespace T3.Gui.OutputUi
         }
         
         private ISlot _lastSlot;
-        private readonly CurvePlot _curve = new CurvePlot("", resolution: 200, width:150);
+        private readonly CurvePlotCanvas _curve = new(resolution: 500);
+        private readonly VectorCurvePlotCanvas<float> _curve2 = new(resolution: 500);
     }
 }

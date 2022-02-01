@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
@@ -68,7 +69,6 @@ namespace T3.Gui.Graph.Interaction
             }
 
             T3Ui.OpenedPopUpName = "SymbolBrowser";
-            //Current = this;
 
             _filter.UpdateIfNecessary();
             
@@ -78,6 +78,7 @@ namespace T3.Gui.Graph.Interaction
                 _posInScreen = GraphCanvas.Current.TransformPosition(PosOnCanvas);
                 _drawList = ImGui.GetWindowDrawList();
 
+                ImGui.SetNextWindowFocus();
                 DrawMatchesList();
                 DrawSearchInput();
             }

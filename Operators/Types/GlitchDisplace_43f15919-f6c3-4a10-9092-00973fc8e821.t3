@@ -18,8 +18,8 @@
     {
       "Id": "990ac61f-09b7-42ad-a2ed-4fa27b7e491b"/*Scatter*/,
       "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 0.1,
+        "Y": 0.1
       }
     },
     {
@@ -276,12 +276,6 @@
       "Outputs": []
     },
     {
-      "Id": "3d668b12-5252-4717-8ca2-bd62e3e91afa"/*Layer2d*/,
-      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "19550727-9b1f-4841-a53d-34acd7933dce"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
@@ -385,18 +379,6 @@
       "Outputs": []
     },
     {
-      "Id": "1e8d2560-3509-4e65-9dd4-f879f3d51480"/*Camera*/,
-      "SymbolId": "746d886c-5ab6-44b1-bb15-f3ce2fadf7e6",
-      "InputValues": [
-        {
-          "Id": "764ca304-fc86-48a9-9c82-a04fac7eadb2"/*Roll*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "6e7b7227-f50e-4c8d-85c7-b2493fb1ce01"/*GetTextureSize*/,
       "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
       "InputValues": [],
@@ -439,12 +421,6 @@
       "SourceSlotId": "5e847363-142d-4da9-a5b3-3a7aa2541bed",
       "TargetParentOrChildId": "2e0c9a1e-bfd6-471c-aad4-b59313403260",
       "TargetSlotId": "8716b11a-ef71-437e-9930-bb747da818a7"
-    },
-    {
-      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "7914bb8b-8444-4438-a156-b00d099ce659",
-      "TargetParentOrChildId": "3d668b12-5252-4717-8ca2-bd62e3e91afa",
-      "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

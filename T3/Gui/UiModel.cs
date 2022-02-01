@@ -64,11 +64,11 @@ namespace T3.Gui
             RegisterUiType(typeof(System.Collections.Generic.List<string>), new StringUiProperties(), () => new StringListInputUi(),
                            () => new StringListOutputUi());
             RegisterUiType(typeof(System.Numerics.Vector2), new Size2UiProperties(), () => new Float2InputUi(),
-                           () => new ValueOutputUi<System.Numerics.Vector2>());
+                           () => new VectorOutputUi<System.Numerics.Vector2>());
             RegisterUiType(typeof(System.Numerics.Vector3), new Size2UiProperties(), () => new Float3InputUi(),
-                           () => new ValueOutputUi<System.Numerics.Vector3>());
+                           () => new VectorOutputUi<System.Numerics.Vector3>());
             RegisterUiType(typeof(System.Numerics.Vector4), new Size2UiProperties(), () => new Float4InputUi(),
-                           () => new ValueOutputUi<System.Numerics.Vector4>());
+                           () => new VectorOutputUi<System.Numerics.Vector4>());
             RegisterUiType(typeof(System.Text.StringBuilder), new StringUiProperties(), () => new FallbackInputUi<StringBuilder>(),
                            () => new ValueOutputUi<System.Text.StringBuilder>());
 

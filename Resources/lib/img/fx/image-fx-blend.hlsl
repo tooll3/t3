@@ -49,7 +49,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             
         // multiply
         case 2:
-            rgb = tA.rgb * tB.rgb;
+            rgb =  tA.rgb * tB.rgb;
             break;
         //
         case 3:
@@ -58,7 +58,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         
         // overlay
         case 4:
-            rgb = float3( 
+            rgb =  float3( 
                 tA.r < 0.5?(2.0 * tA.r * tB.r) : (1.0-2.0*(1.0-tA.r)*(1.0- tB.r)),
                 tA.g < 0.5?(2.0 * tA.g * tB.g) : (1.0-2.0*(1.0-tA.g)*(1.0- tB.g)),
                 tA.b < 0.5?(2.0 * tA.b * tB.b) : (1.0-2.0*(1.0-tA.b)*(1.0- tB.b)));
@@ -72,6 +72,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             rgb = tA.rgb;
             break;
     }
+
+    rgb = lerp(tA.rgb, rgb, tB.a);
     
     switch( (int)AlphaMode) {
         case 1:
