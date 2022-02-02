@@ -92,6 +92,10 @@ namespace T3.Gui
             RegisterUiType(typeof(Core.DataTypes.RenderTargetReference), new TextureUiProperties(),
                            () => new FallbackInputUi<Core.DataTypes.RenderTargetReference>(),
                            () => new ValueOutputUi<Core.DataTypes.RenderTargetReference>());
+            RegisterUiType(typeof(Object), new FloatUiProperties(),
+                           () => new FallbackInputUi<Object>(),
+                           () => new ValueOutputUi<Object>());
+
             RegisterUiType(typeof(Core.DataTypes.StructuredList), new FloatUiProperties(), () => new StructuredListInputUi(),
                            () => new StructuredListOutputUi());
             RegisterUiType(typeof(Core.DataTypes.Texture3dWithViews), new FallBackUiProperties(), () => new FallbackInputUi<Core.DataTypes.Texture3dWithViews>(),

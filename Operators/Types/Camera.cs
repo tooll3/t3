@@ -1,7 +1,7 @@
 ﻿using System;
 using SharpDX;
 using T3.Core;
-using T3.Core.Logging;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -14,13 +14,21 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
         [Output(Guid = "2E1742D8-9BA3-4236-A0CD-A2B02C9F5924", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
         public readonly Slot<Command> Output = new Slot<Command>();
 
+        [Output(Guid = "761245E2-AC0B-435A-841E-7C9EDC804606")]
+        public readonly Slot<Object> Reference = new Slot<Object>();
+        
         public Camera()
         {
             Output.UpdateAction = Update;
+            //Reference.Value = new BoxedObject();
+            Reference.Value = this;
         }
 
         private void Update(EvaluationContext context)
         {
+            Reference.DirtyFlag.Clear();
+            
+            
             float fov = MathUtil.DegreesToRadians(Fov.GetValue(context));
             float aspectRatio = AspectRatio.GetValue(context);
             if (aspectRatio < 0.0001f)
@@ -28,7 +36,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
                 aspectRatio = (float)context.RequestedResolution.Width / context.RequestedResolution.Height;
             }
             System.Numerics.Vector2 clip = NearFarClip.GetValue(context);
-            Matrix cameraToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
+            CameraToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
 
             var positionValue = Position.GetValue(context);
             Vector3 eye = new Vector3(positionValue.X, positionValue.Y, positionValue.Z);
@@ -49,20 +57,22 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
                                                                  MathUtil.DegreesToRadians(rOffset.X),
                                                                  MathUtil.DegreesToRadians(rOffset.Z));
             
-            
-            var worldToCamera2= worldToCamera * rollRotation * additionalTranslation * additionalRotation;
+            WorldToCamera2= worldToCamera * rollRotation * additionalTranslation * additionalRotation;
             
             var prevWorldToCamera = context.WorldToCamera;
             var prevCameraToClipSpace = context.CameraToClipSpace;
             
-            context.WorldToCamera = worldToCamera2;
-            context.CameraToClipSpace = cameraToClipSpace;
+            context.WorldToCamera = WorldToCamera2;
+            context.CameraToClipSpace = CameraToClipSpace;
             
             Command.GetValue(context);
             
             context.CameraToClipSpace = prevCameraToClipSpace;
             context.WorldToCamera = prevWorldToCamera;
         }
+
+        public Matrix CameraToClipSpace { get; private set; }
+        public Matrix WorldToCamera2 { get; private set; }
 
         // Implement ICamera 
         public System.Numerics.Vector3 CameraPosition
@@ -101,12 +111,11 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
         [Input(Guid = "764CA304-FC86-48A9-9C82-A04FAC7EADB2")]
         public readonly InputSlot<float> Roll = new InputSlot<float>();
         
-        
         [Input(Guid = "FEE19916-846F-491A-A2EE-1E7B1AC8E533")]
         public readonly InputSlot<System.Numerics.Vector3> PositionOffset = new InputSlot<System.Numerics.Vector3>();
-
         
         [Input(Guid = "D4D0F046-297B-440A-AEF8-C2F0426EF4F5")]
         public readonly InputSlot<System.Numerics.Vector3> RotationOffset = new InputSlot<System.Numerics.Vector3>();
+
     }
 }
