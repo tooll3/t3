@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Numerics;
 using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Gui;
 using T3.Gui.Graph;
 using T3.Gui.Windows;
@@ -100,8 +101,26 @@ namespace UiHelpers
                         rA = (float)(1f / Math.Tan(alpha) * (d.X - dt) + d.Y - rB * Math.Sin(alpha));
                         cA = pointA + new Vector2(0, rA);
 
-                        drawList.PathArcTo(cB, rB, Pi / 2, Pi / 2 + alpha * shrinkArkAngle);
-                        drawList.PathArcTo(cA, rA, 1.5f * Pi + alpha * shrinkArkAngle, 1.5f * Pi);
+                        
+                        if (rB > 0.00001)
+                        {
+                            drawList.PathArcTo(cB, rB, Pi / 2, Pi / 2 + alpha * shrinkArkAngle);
+                        }
+                        else
+                        {
+                            
+                        }
+
+                        
+                        if (rA > 0.00001)
+                        {
+                            drawList.PathArcTo(cA, rA, 1.5f * Pi + alpha * shrinkArkAngle, 1.5f * Pi);
+                        }
+                        else
+                        {
+                            
+                        }
+
                         if (exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
                     }
@@ -110,8 +129,26 @@ namespace UiHelpers
                         rA = d.X - rB;
                         cA = pointA + new Vector2(0, rA);
 
-                        drawList.PathArcTo(cB, rB, 0.5f * Pi, Pi);
-                        drawList.PathArcTo(cA, rA, 2 * Pi, 1.5f * Pi);
+                        
+                        if (rB > 0.00001)
+                        {
+                            drawList.PathArcTo(cB, rB, 0.5f * Pi, Pi);
+                        }
+                        else
+                        {
+                            
+                        }
+
+                       
+                        if (rA > 0.00001)
+                        {
+                            drawList.PathArcTo(cA, rA, 2 * Pi, 1.5f * Pi);
+                        }
+                        else
+                        {
+                            
+                        }
+
                         if (exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
                     }
@@ -150,8 +187,25 @@ namespace UiHelpers
                         rA = (float)(1f / Math.Tan(alpha) * (d.X - dt) - d.Y - rB * Math.Sin(alpha));
                         cA = pointA - new Vector2(0, rA);
 
-                        drawList.PathArcTo(cB, rB, 1.5f * Pi, 1.5f * Pi - alpha * shrinkArkAngle);
-                        drawList.PathArcTo(cA, rA, 0.5f * Pi - alpha * shrinkArkAngle, 0.5f * Pi);
+                        
+                        if (rB > 0.00001)
+                        {
+                            drawList.PathArcTo(cB, rB, 1.5f * Pi, 1.5f * Pi - alpha * shrinkArkAngle);
+                        }
+                        else
+                        {
+                            
+                        }
+
+                        if (rA > 0.00001)
+                        {
+                            drawList.PathArcTo(cA, rA, 0.5f * Pi - alpha * shrinkArkAngle, 0.5f * Pi);
+                        }
+                        else 
+                        {
+                             
+                        }
+                        
                         if (exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
 
@@ -161,8 +215,27 @@ namespace UiHelpers
                         rA = d.X - rB;
                         cA = pointA - new Vector2(0, rA);
 
-                        drawList.PathArcTo(cB, rB, 1.5f * Pi, Pi);
-                        drawList.PathArcTo(cA, rA, 2 * Pi, 2.5f * Pi);
+                        
+                        if (rB > 0.00001)
+                        {
+                            drawList.PathArcTo(cB, rB, 1.5f * Pi, Pi);
+                        }
+                        else
+                        {
+                            
+                        }
+
+                        
+                        if (rA > 0.00001)
+                        {
+                            drawList.PathArcTo(cA, rA, 2 * Pi, 2.5f * Pi);
+
+                        }
+                        else
+                        {
+                            
+                        }
+
                         if (exceededMaxRadius)
                             drawList.PathLineTo(pointAOrg);
                     }
