@@ -4,10 +4,6 @@
   "Namespace": "lib.3d.rendering",
   "Inputs": [
     {
-      "Id": "665d15da-d1a2-4f1c-af7f-4a1d223e5ec3"/*Variable*/,
-      "DefaultValue": "i"
-    },
-    {
       "Id": "a3190889-5473-4870-97cf-93e6cf94132b"/*CameraReference*/,
       "DefaultValue": null
     }

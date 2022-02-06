@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "78c3486a-3a82-4e61-81fd-3da904fd7aed"/*Texture2d2*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -1086.1727,
         "Y": -73.2712
@@ -11,6 +12,7 @@
     },
     {
       "InputId": "5537a990-0d27-4e91-912e-8f913a734722"/*Texture2d*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -1086.1727,
         "Y": -28.271202

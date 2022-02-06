@@ -3,14 +3,6 @@
   "Description": "Gets properties of a camera operator further down (further left) in the render graph. This can be useful for effects like motion blur.",
   "InputUis": [
     {
-      "InputId": "665d15da-d1a2-4f1c-af7f-4a1d223e5ec3"/*Variable*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      },
-      "Usage": "Default"
-    },
-    {
       "InputId": "a3190889-5473-4870-97cf-93e6cf94132b"/*CameraReference*/,
       "Position": {
         "X": -200.0,
@@ -21,17 +13,17 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "740ec7ee-2859-4dd1-97c2-781b5cbff352"/*WorldToCamera*/,
+      "OutputId": "fb108d2d-04b0-427d-888d-79eb7ebf1e96"/*Buffer*/,
       "Position": {
-        "X": 0.0,
-        "Y": 300.0
+        "X": 300.0,
+        "Y": 200.0
       }
     },
     {
-      "OutputId": "7fb6fe30-5d12-4522-9e41-7bafbb8e5cce"/*CameraToClipSpace*/,
+      "OutputId": "8edc2db1-a214-4b77-a334-fa4bf1ff1ab7"/*PreviousBuffer*/,
       "Position": {
-        "X": 0.0,
-        "Y": 400.0
+        "X": 300.0,
+        "Y": 300.0
       }
     }
   ]

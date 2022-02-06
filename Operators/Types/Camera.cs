@@ -6,10 +6,11 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e;
 
 namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
 {
-    public class Camera : Instance<Camera>, ICamera
+    public class Camera : Instance<Camera>, ICamera, ICameraPropertiesProvider
     {
         [Output(Guid = "2E1742D8-9BA3-4236-A0CD-A2B02C9F5924", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
         public readonly Slot<Command> Output = new Slot<Command>();
@@ -20,17 +21,16 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
         public Camera()
         {
             Output.UpdateAction = Update;
-            //Reference.Value = new BoxedObject();
             Reference.Value = this;
         }
 
         private void Update(EvaluationContext context)
         {
             Reference.DirtyFlag.Clear();
+            LastObjectToWorld = context.ObjectToWorld;
             
-            
-            float fov = MathUtil.DegreesToRadians(Fov.GetValue(context));
-            float aspectRatio = AspectRatio.GetValue(context);
+            var fov = MathUtil.DegreesToRadians(Fov.GetValue(context));
+            var aspectRatio = AspectRatio.GetValue(context);
             if (aspectRatio < 0.0001f)
             {
                 aspectRatio = (float)context.RequestedResolution.Width / context.RequestedResolution.Height;
@@ -39,14 +39,13 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             CameraToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
 
             var positionValue = Position.GetValue(context);
-            Vector3 eye = new Vector3(positionValue.X, positionValue.Y, positionValue.Z);
+            var eye = new Vector3(positionValue.X, positionValue.Y, positionValue.Z);
             var targetValue = Target.GetValue(context);
-            Vector3 target = new Vector3(targetValue.X, targetValue.Y, targetValue.Z);
+            var target = new Vector3(targetValue.X, targetValue.Y, targetValue.Z);
             var upValue = Up.GetValue(context);
-            Vector3 up = new Vector3(upValue.X, upValue.Y, upValue.Z);
-            Matrix worldToCamera = Matrix.LookAtRH(eye, target, up);
-
-            //var worldToCamera = Matrix.LookAtLH(position, target, new Vector3(0, 1, 0));
+            var up = new Vector3(upValue.X, upValue.Y, upValue.Z);
+            var worldToCameraRoot = Matrix.LookAtRH(eye, target, up);
+            
             var rollRotation = Matrix.RotationAxis(new Vector3(0, 0, 1), -(float)Roll.GetValue(context));
 
             var pOffset = PositionOffset.GetValue(context);
@@ -57,12 +56,13 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
                                                                  MathUtil.DegreesToRadians(rOffset.X),
                                                                  MathUtil.DegreesToRadians(rOffset.Z));
             
-            WorldToCamera2= worldToCamera * rollRotation * additionalTranslation * additionalRotation;
+            WorldToCamera= worldToCameraRoot * rollRotation * additionalTranslation * additionalRotation;
             
+            // Set properties and evaluate sub tree
             var prevWorldToCamera = context.WorldToCamera;
             var prevCameraToClipSpace = context.CameraToClipSpace;
             
-            context.WorldToCamera = WorldToCamera2;
+            context.WorldToCamera = WorldToCamera;
             context.CameraToClipSpace = CameraToClipSpace;
             
             Command.GetValue(context);
@@ -71,8 +71,9 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             context.WorldToCamera = prevWorldToCamera;
         }
 
-        public Matrix CameraToClipSpace { get; private set; }
-        public Matrix WorldToCamera2 { get; private set; }
+        public Matrix CameraToClipSpace { get; set; }
+        public Matrix WorldToCamera { get; set; }
+        public Matrix LastObjectToWorld { get; set; }
 
         // Implement ICamera 
         public System.Numerics.Vector3 CameraPosition
@@ -93,6 +94,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             set { Animator.UpdateFloatInputValue(Roll, value); }
 
         }
+
 
         [Input(Guid = "047B8FAE-468C-48A7-8F3A-5FAC8DD5B3C6")]
         public readonly InputSlot<Command> Command = new InputSlot<Command>();
