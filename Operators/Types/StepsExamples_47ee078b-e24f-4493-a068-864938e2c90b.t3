@@ -440,6 +440,11 @@
           "Id": "abe64676-ccf7-4163-b4da-26d8b7179af4"/*Increment*/,
           "Type": "System.Int32",
           "Value": -2
+        },
+        {
+          "Id": "11f9cdb5-84fc-4413-8ca7-77e12047f521"/*DefaultValue*/,
+          "Type": "System.Int32",
+          "Value": 10000
         }
       ],
       "Outputs": []
