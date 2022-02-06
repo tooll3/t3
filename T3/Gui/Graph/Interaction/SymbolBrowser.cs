@@ -187,6 +187,8 @@ namespace T3.Gui.Graph.Interaction
             THelpers.RestoreImGuiKeyboardNavigation();
             //T3Ui.OpenedPopUpName = null;
             _isOpen = false;
+            var win = GraphWindow.GetPrimaryGraphWindow();
+            win?.Focus();
         }
 
         private void DrawMatchesList()

@@ -112,6 +112,13 @@ namespace T3.Gui.Graph
         }
 
         private static GraphWindow _currentWindow;
+        private bool _focusOnNextFrame;
+
+        public void Focus()
+        {
+            _focusOnNextFrame = true;
+        }
+        
 
         protected override void DrawAllInstances()
         {
@@ -194,6 +201,12 @@ namespace T3.Gui.Graph
                                  | ImGuiWindowFlags.NoTitleBar
                                  | ImGuiWindowFlags.ChildWindow);
                 {
+                    if (_focusOnNextFrame)
+                    {
+                        ImGui.SetWindowFocus();
+                        _focusOnNextFrame = false;
+                    }
+                    
                     drawList.ChannelsSplit(2);
                     drawList.ChannelsSetCurrent(1);
                     {
