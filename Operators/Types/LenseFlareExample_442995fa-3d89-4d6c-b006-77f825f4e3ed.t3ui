@@ -1,0 +1,214 @@
+{
+  "Id": "442995fa-3d89-4d6c-b006-77f825f4e3ed"/*LenseFlareExample*/,
+  "Description": "Shows a simple lense flare example.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "778f1699-d9b9-4aa6-863d-a673bf830857"/*AppendPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 455.04688,
+        "Y": 405.56934
+      }
+    },
+    {
+      "ChildId": "5367cbdf-bf6e-4c73-bba4-db09875a5c88"/*_LenseFlareSprites*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 300.0,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "69bd5593-9277-4532-9ac3-38ef6a2898f7"/*ListToBuffer*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 450.0,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "4256dc78-d422-4404-8cd8-260757b826d4"/*DrawSprites*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 600.0,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "7abc7621-b654-44e8-b352-89b1f6c9e706"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 750.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "5ce342fd-23b6-4bad-832b-9ffa4e09f550"/*Blob*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 450.0,
+        "Y": 404.0
+      }
+    },
+    {
+      "ChildId": "afb7f15b-5fa8-4439-b0e5-5bee0ee0b4e4"/*PointLight*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 900.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "a13e3a7d-3810-4772-8b02-6afc9b2a9f7c"/*TorusMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 450.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "ac820ae5-3dd3-4df2-b033-d9f6178ab363"/*DrawMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 600.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "31b5bbf2-f8a0-4e8d-bd0b-66363b1a30ca"/*_LenseFlareSprites*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 300.0,
+        "Y": 162.0
+      }
+    },
+    {
+      "ChildId": "05f6261c-edf8-4982-b511-a2c6c61925ac"/*_LenseFlareSprites*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 300.0,
+        "Y": 218.0
+      }
+    },
+    {
+      "ChildId": "c9c72b34-b7af-41e2-9a09-56de269e8a15"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "273391b0-691c-4232-a29e-b66618eaf271"/*Glow*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1350.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "5a80f5e0-1ee5-4844-84e8-c5731405b310"/*RandomCamera*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1050.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "9ef2c9ef-a0e8-4d5e-a306-86ae2034a807"/*OscillateVec3*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 750.0,
+        "Y": 95.0
+      }
+    },
+    {
+      "ChildId": "e4a9ff79-0cfa-41d3-9dae-ab167f19fa06"/*DustParticles*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 600.0,
+        "Y": 63.0
+      }
+    },
+    {
+      "ChildId": "15b202a0-19b8-4ba4-b68a-39464416fd74"/*CountInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 150.0,
+        "Y": 106.0
+      }
+    },
+    {
+      "ChildId": "df98975d-92d7-4e79-a346-ef2626074d91"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 106.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "d794d1bc-d322-4868-a894-a26ff5ff7805"/*ImgOutput*/,
+      "Position": {
+        "X": 1650.0,
+        "Y": 202.78467
+      }
+    }
+  ]
+}

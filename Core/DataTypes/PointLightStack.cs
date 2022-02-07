@@ -142,8 +142,25 @@ namespace T3.Core.DataTypes
 
             return _defaultConstBuffer;
         }
+
+        public int Count => _currentSize > 0 ? _currentSize : 2; 
         
 
+        public PointLight GetPointLight(int index)
+        {
+            var useDefaultLights = _currentSize == 0;
+            
+            if (index >= Count)
+            {
+                Log.Warning($"Requested light index {index} exceed current count of {Count}");
+                index = Count - 1;
+            }
+
+            return useDefaultLights
+                       ? _defaultPointLights[index]
+                       : _pointLights[index];
+        }
+        
         private PointLight[] _pointLights = new PointLight[MaxPointLights];
         private int _currentSize = 0;
         private bool _isConstBufferDirty = true;

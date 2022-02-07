@@ -65,7 +65,8 @@ namespace T3.Core.DataTypes
 
         public override void WriteToStream(DataStream stream)
         {
-            stream.WriteRange(TypedElements);
+            if(NumElements > 0)
+                stream.WriteRange(TypedElements);
         }
 
         public override StructuredList Clone()

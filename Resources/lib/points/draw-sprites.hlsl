@@ -1,14 +1,15 @@
 #include "point.hlsl"
 #include "hash-functions.hlsl"
 
-static const float3 Corners[] = 
+static const float4 Corners[] = 
 {
-  float3(-1, -1, 0),
-  float3(1, -1, 0), 
-  float3(1,  1, 0), 
-  float3(1,  1, 0), 
-  float3(-1,  1, 0), 
-  float3(-1, -1, 0),  
+    //   px py  u v
+  float4(-1, -1, 0,1),
+  float4( 1, -1, 1,1), 
+  float4( 1,  1, 1,0), 
+  float4( 1,  1, 1,0), 
+  float4(-1,  1, 0,0), 
+  float4(-1, -1, 0,1),  
 };
 
 cbuffer Transforms : register(b0)
@@ -50,9 +51,21 @@ struct psInput
     float2 texCoord : TEXCOORD;
 };
 
+
+struct Sprite
+{
+    float2 PosInClipSpace;
+    float2 Size;
+    float Rotation;
+    float4 Color;
+    float2 UvMin;
+    float2 UvMax;
+    float3 __padding;
+};
+
 sampler texSampler : register(s0);
 
-StructuredBuffer<Point> Points : t0;
+StructuredBuffer<Sprite> Sprites : t0;
 Texture2D<float4> texture2 : register(t1);
 
 psInput vsMain(uint id: SV_VertexID)
@@ -61,9 +74,11 @@ psInput vsMain(uint id: SV_VertexID)
     float discardFactor = 1;
     int quadIndex = id % 6;
     int particleId = id / 6;
-    float3 cornerFactors = Corners[quadIndex];
+    float4 cornerFactors = Corners[quadIndex];
 
-    Point p = Points[particleId];
+    float4 aspect = float4(CameraToClipSpace[1][1] / CameraToClipSpace[0][0],1,1,1);    
+
+    Sprite p = Sprites[particleId];
 
     float3 axis = cornerFactors;
 
@@ -73,26 +88,35 @@ psInput vsMain(uint id: SV_VertexID)
     axis.xy = (axis.xy + Offset) * Stretch * float2(1,atlasRatio);
     axis.z = 0;
 
-    float4 rotation = qmul( normalize(p.rotation), rotate_angle_axis((Rotate + 180)/180*PI , RotateAxis));
+    output.position = float4( cornerFactors.x * p.Size.x / aspect.x + p.PosInClipSpace.x,
+                              cornerFactors.y * p.Size.y + p.PosInClipSpace.y,
+                              0,1);
 
+    output.texCoord = lerp(p.UvMin, p.UvMax, cornerFactors.zw);
 
-    axis = rotate_vector(axis, rotation) * Size * lerp(1,p.w, UseWForSize);
-    float3 pInObject = p.position + axis;
-    output.position  = mul(float4(pInObject,1), ObjectToClipSpace);
+    // output.position = float4( cornerFactors.x * 0.1 + p.PosInClipSpace.x,
+    //                           cornerFactors.y * 0.1 + p.PosInClipSpace.y,
+    //                           0,1);                              
+
+    // float4 rotation = qmul( normalize(p.rotation), rotate_angle_axis((Rotate + 180)/180*PI , RotateAxis));
+
+    // axis = rotate_vector(axis, rotation) * Size * lerp(1,p.w, UseWForSize);
+    // float3 pInObject = p.position + axis;
+    // output.position  = mul(float4(pInObject,1), ObjectToClipSpace);
     
-    output.texCoord = cornerFactors.xy /2 +0.5;
+    // output.texCoord = cornerFactors.xy /2 +0.5;
 
-    int randomParticleId = (int)(hash11((particleId + 13.2) * 123.17) * 12345.3);
+    // int randomParticleId = (int)(hash11((particleId + 13.2) * 123.17) * 12345.3);
 
-    float textureCelX = (float)randomParticleId % (TextureCellsX);
-    float textureCelY = (int)(((float)randomParticleId / TextureCellsX) % (float)(TextureCellsY));
+    // float textureCelX = (float)randomParticleId % (TextureCellsX);
+    // float textureCelY = (int)(((float)randomParticleId / TextureCellsX) % (float)(TextureCellsY));
 
     
-    //output.texCoord = float2(textureCelX, textureCelY) * 1;
-    output.texCoord *= atlasResolution;
-    output.texCoord += atlasResolution * float2(textureCelX, textureCelY);
+    // //output.texCoord = float2(textureCelX, textureCelY) * 1;
+    // output.texCoord *= atlasResolution;
+    // output.texCoord += atlasResolution * float2(textureCelX, textureCelY);
 
-    output.color = Color;
+    output.color = Color * p.Color;
     return output;    
 }
 
