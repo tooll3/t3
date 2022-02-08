@@ -229,22 +229,26 @@ namespace T3.Gui.Graph
             }
 
             
-            public IEnumerable<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
+            
+            private static readonly List<ConnectionLineUi> _resultConnection = new List<ConnectionLineUi>(20); 
+            public List<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
             {
+                _resultConnection.Clear();
+                
                 if (!_linesFromNodes.TryGetValue(childUi, out var lines))
-                    yield break;
+                    return NoLines;
                 
                 foreach (var l in lines)
                 {
-                    if (l.Connection.SourceSlotId == outputId)
-                    {
-                        yield return l;
-                    }
+                    if (l.Connection.SourceSlotId != outputId)
+                        continue;
+                    
+                    _resultConnection.Add(l);
                 }
 
+                return _resultConnection;
             }
 
-            private static readonly List<ConnectionLineUi> _resultConnection = new List<ConnectionLineUi>(20); 
             public List<ConnectionLineUi> GetLinesToNodeInputSlot(SymbolChildUi childUi, Guid inputId)
             {
                 _resultConnection.Clear();
