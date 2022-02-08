@@ -1167,12 +1167,7 @@
           "Value": false
         }
       ],
-      "Outputs": [
-        {
-          "Id": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f"/*ReferenceLayout*/,
-          "IsDisabled": true
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "c783fc05-e6ed-4da0-a210-4ad72cbbde3e"/*LoadTexture2d*/,
