@@ -22,7 +22,7 @@
         {
           "Id": "fdbad44a-2504-453b-bfae-976828372cc0"/*Thickness*/,
           "Type": "System.Single",
-          "Value": 0.07
+          "Value": -0.00999999
         }
       ],
       "Outputs": []

@@ -29,8 +29,6 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             //Matrix worldToView = context.WorldToCamera * context.CameraProjection;
             //var worldToClipSpace = context.WorldToCamera
             //var viewToWorld = Matrix.Invert(worldToClipSpace);
-
-            
             
             var color = Color.GetValue(context);
             var randomizeColor = RandomizeColor.GetValue(context);
@@ -169,6 +167,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
                     // var oldObjectToWorld = context.ObjectTWorld;
                     // context.ObjectTWorld = objectToWorld * context.ObjectTWorld;
                     //
+                    
                     // // Transforom UV to pick correct texture cell
                     // if (TextureCellsRows == 0)
                     //     TextureCellsRows = 1;
