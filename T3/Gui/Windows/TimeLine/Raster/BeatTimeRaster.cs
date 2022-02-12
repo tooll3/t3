@@ -21,7 +21,7 @@ namespace T3.Gui.Windows.TimeLine
             }
             var scale = TimeLineCanvas.Current.NestedTimeScale;
             var scroll = TimeLineCanvas.Current.NestedTimeOffset;
-            DrawTimeTicks(scale,-scroll / scale,TimeLineCanvas.Current);            
+            DrawTimeTicks(scale,scroll / scale,TimeLineCanvas.Current);            
         }
 
         private double _bpm = 240;

@@ -24,7 +24,7 @@ namespace T3.Gui.Windows.TimeLine.Raster
             var scale = TimeLineCanvas.Current.NestedTimeScale;
             var scroll = TimeLineCanvas.Current.NestedTimeOffset;
 
-            DrawTimeTicks(scale, -scroll / scale, TimeLineCanvas.Current);
+            DrawTimeTicks(scale, scroll / scale, TimeLineCanvas.Current);
         }
 
         private const double Epsilon = 0.01f;

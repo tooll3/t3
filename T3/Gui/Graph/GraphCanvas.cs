@@ -1072,14 +1072,14 @@ namespace T3.Gui.Graph
         {
             var color = new Color(0, 0, 0, 0.3f);
             var gridSize = Math.Abs(64.0f * Scale.X);
-            for (var x = Scroll.X % gridSize; x < WindowSize.X; x += gridSize)
+            for (var x = (-Scroll.X*Scale.X) % gridSize; x < WindowSize.X; x += gridSize)
             {
                 DrawList.AddLine(new Vector2(x, 0.0f) + WindowPos,
                                  new Vector2(x, WindowSize.Y) + WindowPos,
                                  color);
             }
 
-            for (var y = Scroll.Y % gridSize; y < WindowSize.Y; y += gridSize)
+            for (var y = (-Scroll.Y*Scale.Y) % gridSize; y < WindowSize.Y; y += gridSize)
             {
                 DrawList.AddLine(
                                  new Vector2(0.0f, y) + WindowPos,

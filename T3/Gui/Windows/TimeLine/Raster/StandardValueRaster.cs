@@ -19,7 +19,7 @@ namespace T3.Gui.Windows.TimeLine
 
             var scale = TimeLineCanvas.Current.NestedTimeScale / unitInSecs;
             var scroll = TimeLineCanvas.Current.NestedTimeOffset;
-            DrawTimeTicks(scale, -scroll / scale, TimeLineCanvas.Current);
+            DrawTimeTicks(scale, scroll / scale, TimeLineCanvas.Current);
         }
 
         /// <summary>
@@ -34,8 +34,8 @@ namespace T3.Gui.Windows.TimeLine
             var unitInSecs = UnitsPerSecond;
 
             var scale = canvas.Scale.X / unitInSecs;
-            var scroll = canvas.Scroll.X;
-            DrawTimeTicks(scale, -scroll / scale, canvas);
+            var scroll = canvas.Scroll.X * canvas.Scale.X;
+            DrawTimeTicks(scale, scroll / scale, canvas);
         }
 
         public float UnitsPerSecond { get; set; } = 1;

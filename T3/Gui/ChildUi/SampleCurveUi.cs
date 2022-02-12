@@ -39,7 +39,8 @@ namespace T3.Gui.ChildUi
                                                           : T3Ui.EditingFlags.PreventMouseInteractions;
 
                 CurveInputEditing.DrawCanvasForCurve(curve, T3Ui.EditingFlags.ExpandVertically
-                                                            | preventEditingUnlessCtrlPressed);
+                                                            | preventEditingUnlessCtrlPressed
+                                                            | T3Ui.EditingFlags.PreventZoomWithMouseWheel);
 
                 DrawSamplePointIndicator();
             }
