@@ -9,7 +9,7 @@
     },
     {
       "Id": "59ba312f-c74f-4e76-8830-57c2effa0ff1"/*SpriteCount*/,
-      "DefaultValue": 0
+      "DefaultValue": 1
     },
     {
       "Id": "f21dbefd-ea54-4901-a806-b1a2c5ee140f"/*Distance*/,
@@ -21,7 +21,7 @@
     },
     {
       "Id": "ccf77198-7682-4f6b-96f2-986e6827a4df"/*Size*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.04
     },
     {
       "Id": "c8347ca9-c700-4195-a23f-0f220f5823e2"/*Stretch*/,
@@ -29,6 +29,14 @@
         "X": 1.0,
         "Y": 1.0
       }
+    },
+    {
+      "Id": "000a17ca-36a2-43ef-8fda-314366c9e204"/*Rotation*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "93728b1f-cbfa-4065-9de1-bf8641fade7e"/*RotationSpread*/,
+      "DefaultValue": 0.0
     },
     {
       "Id": "2a1285b1-63ea-46a5-8d96-b7ba33edd88b"/*RandomizeSize*/,
@@ -99,8 +107,15 @@
     {
       "Id": "00ed2d51-4cf0-43d6-adaa-ce42e5eb8439"/*InnerFxZone*/,
       "DefaultValue": {
-        "X": 0.0,
+        "X": -0.01999998,
         "Y": 0.0
+      }
+    },
+    {
+      "Id": "be4366c5-9e1c-430a-8f34-f31321a7df2c"/*MattBoxZone*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.5
       }
     },
     {

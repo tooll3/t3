@@ -29,7 +29,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             //Matrix worldToView = context.WorldToCamera * context.CameraProjection;
             //var worldToClipSpace = context.WorldToCamera
             //var viewToWorld = Matrix.Invert(worldToClipSpace);
-            
+
             var color = Color.GetValue(context);
             var randomizeColor = RandomizeColor.GetValue(context);
             var size = Size.GetValue(context);
@@ -40,17 +40,21 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             var randomizeSpread = RandomizeSpread.GetValue(context);
             var positionFactor = PositionFactor.GetValue(context);
             var randomizePosition = RandomizePosition.GetValue(context);
-            
+
             var referencedLightIndex = LightIndex.GetValue(context);
 
             var innerFxZone = InnerFxZone.GetValue(context);
             var edgeFxZone = EdgeFxZone.GetValue(context);
             var zoneFxScale = FxZoneScale.GetValue(context);
             var zoneFxBrightness = FxZoneBrightness.GetValue(context);
-            
+
+            var matteBoxZone = MattBoxZone.GetValue(context);
+
             var rand = new Random(RandomSeed.GetValue(context));
-            var fxZoneMode = (ZoneFxModes) FxZoneMode.GetValue(context);
-            
+            var fxZoneMode = (ZoneFxModes)FxZoneMode.GetValue(context);
+
+            var rotation = Rotation.GetValue(context);
+            var rotationSpread = RotationSpread.GetValue(context);
 
             int startLightIndex = 0;
             int endLightIndex = context.PointLights.Count;
@@ -73,7 +77,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
 
                 // Ignore light sources behind
                 var hideFactor = posInViewDx.Z < 0 ? 0 : 1;
-                
+
                 posInViewDx /= posInViewDx.W;
                 var lightPosInView2D = new Vector2(posInViewDx.X, posInViewDx.Y);
 
@@ -82,63 +86,49 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
                 {
                     _sprites = new StructuredList<Sprite>(count);
                 }
-                
+
                 // Render Planes
                 for (var i = 0; i < count; ++i)
                 {
-                    var f  =  (float)i / count - 0.5f;
+                    var f = (float)i / count - 0.5f;
                     var positionOnLine = (float)((-distance
-                                                  + f * spread  + spread * randomizeSpread * (rand.NextDouble() - 0.5)
+                                                  + f * spread + spread * randomizeSpread * (rand.NextDouble() - 0.5)
                                                   + randomizeSpread * (rand.NextDouble() - 0.5) + 1));
 
                     Vector2 objectScreenPos = lightPosInView2D * positionOnLine * positionFactor + (new Vector2(1, 1) - positionFactor) * lightPosInView2D;
 
-                    objectScreenPos += new Vector2((float)(randomizePosition.X * (rand.NextDouble() - 0.5)), (float)(randomizePosition.Y * (rand.NextDouble() - 0.5)));
-                    
+                    objectScreenPos += new Vector2((float)(randomizePosition.X * (rand.NextDouble() - 0.5)),
+                                                   (float)(randomizePosition.Y * (rand.NextDouble() - 0.5)));
+
                     var sizeWithRandom = size * (float)(1.0 + randomizeSize * (rand.NextDouble() - 0.5)) / 0.2f;
 
                     var spriteColor = Vector4.Clamp(new Vector4(
-                                                  color.X + randomizeColor.X * (float)(rand.NextDouble() - 0.5) * 4,
-                                                  color.Y + randomizeColor.Y * (float)(rand.NextDouble() - 0.5) * 4,
-                                                  color.Z + randomizeColor.Z * (float)(rand.NextDouble() - 0.5) * 4,
-                                                  color.W * (1 - randomizeColor.W * (float)(rand.NextDouble() * 2))
-                                                 ) * pointLight.Color, Vector4.Zero, Vector4.One);
+                                                                color.X + randomizeColor.X * (float)(rand.NextDouble() - 0.5) * 4,
+                                                                color.Y + randomizeColor.Y * (float)(rand.NextDouble() - 0.5) * 4,
+                                                                color.Z + randomizeColor.Z * (float)(rand.NextDouble() - 0.5) * 4,
+                                                                color.W * (1 - randomizeColor.W * (float)(rand.NextDouble() * 2))
+                                                               ) * pointLight.Color, Vector4.Zero, new Vector4(100,100,100,1));
 
+                    var triggerPosition = fxZoneMode == ZoneFxModes.Lights
+                                              ? lightPosInView2D
+                                              : objectScreenPos;
+
+                    var d = GetDistanceToEdge(triggerPosition);
+                    var cInnerZone = MathUtils.SmootherStep(innerFxZone.Y, innerFxZone.X, 1-d);
+                    var cEdgeZone = MathUtils.SmootherStep(edgeFxZone.X, edgeFxZone.Y, 1-d);
+                    var cMatteBox = MathUtils.SmootherStep(matteBoxZone.Y, matteBoxZone.X, 1 - d);
+
+                    var totalTriggerAmount = (cInnerZone + cEdgeZone) * cMatteBox;
                     
-                    // Center Trigger
-                    if (fxZoneMode != ZoneFxModes.Off)
-                    {
-                        var triggerPosition = fxZoneMode == ZoneFxModes.Lights
-                                                  ? lightPosInView2D
-                                                  : objectScreenPos;
+                    sizeWithRandom *= (1 + zoneFxScale * totalTriggerAmount).Clamp(0, 100);
                     
-                        var centerTriggerAmount = innerFxZone.X > 0.0001
-                                                      ? Math.Max(0, innerFxZone.X - triggerPosition.Length()) / innerFxZone.X
-                                                      : 0;
-                        float smoothEdgeTriggerAmount = 0;
-                        
-                        if (edgeFxZone.X > 0 && edgeFxZone.Y > 0)
-                        {
-                            var insideEdgeTriggerAmountY = Math.Min(edgeFxZone.X, Math.Max(0, Math.Abs(triggerPosition.Y) - 1 + edgeFxZone.X)) /
-                                                           edgeFxZone.X;
-                            var outsideEdgeTriggerAmountY = Math.Min(edgeFxZone.Y, Math.Max(0, -Math.Abs(triggerPosition.Y) + 1 + edgeFxZone.Y)) /
-                                                            edgeFxZone.Y;
+                    var brightness = (zoneFxBrightness * totalTriggerAmount+1).Clamp(0, 100);
+                    spriteColor.X *= brightness;
+                    spriteColor.Y *= brightness;
+                    spriteColor.Z *= brightness;
                     
-                            var insideEdgeTriggerAmountX = Math.Min(edgeFxZone.X, Math.Max(0, Math.Abs(triggerPosition.X) - 1 + edgeFxZone.X)) /
-                                                           edgeFxZone.X;
-                            var outsideEdgeTriggerAmountX = Math.Min(edgeFxZone.Y, Math.Max(0, -Math.Abs(triggerPosition.X) + 1 + edgeFxZone.Y)) /
-                                                            edgeFxZone.Y;
-                    
-                            var edgeTriggerAmount = Math.Max(insideEdgeTriggerAmountY * outsideEdgeTriggerAmountY,
-                                                             insideEdgeTriggerAmountX * outsideEdgeTriggerAmountX);
-                            var t = edgeTriggerAmount;
-                            smoothEdgeTriggerAmount = t * t * (3 - 2 * t);
-                        }
-                    
-                        var totalTriggerAmount = centerTriggerAmount + smoothEdgeTriggerAmount;
-                        sizeWithRandom *= (1 + zoneFxScale * totalTriggerAmount).Clamp(0,100);
-                        spriteColor.W += (zoneFxBrightness * totalTriggerAmount).Clamp(0,1);
-                    }
+                    spriteColor.W *= cMatteBox;
+
 
                     // Fade with incomming alpha from FlatShaders and Materials
                     //color.W *= materialAlpha;
@@ -166,8 +156,8 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
                     //
                     // var oldObjectToWorld = context.ObjectTWorld;
                     // context.ObjectTWorld = objectToWorld * context.ObjectTWorld;
-                    //
                     
+
                     // // Transforom UV to pick correct texture cell
                     // if (TextureCellsRows == 0)
                     //     TextureCellsRows = 1;
@@ -187,17 +177,15 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
                     // var prevTransformUV = context.TextureMatrix;
                     // context.TextureMatrix = transformUV * prevTransformUV;
 
-                    
                     _tempList.Add(new Sprite
                                       {
                                           PosInClipSpace = objectScreenPos,
                                           Size = sizeWithRandom * stretch * hideFactor,
                                           Color = spriteColor,
-                                          Rotation = 0,
+                                          Rotation = rotation + f * rotationSpread * 180,
                                           UvMin = Vector2.Zero,
                                           UvMax = Vector2.One,
-                                      });                    
-                    
+                                      });
                 }
             }
 
@@ -213,6 +201,22 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             }
 
             OutBuffer.Value = _sprites;
+        }
+
+        private float GetDistanceToEdge(Vector2 posInClipSpace)
+        {
+            var p = (posInClipSpace /2 + Vector2.One * 0.5f);
+            float dToRight = 1 - p.X;
+            float dToLeft = p.X;
+            float dToUp = p.Y;
+            float dToBottom = 1 - p.Y;
+
+            float d = MathF.Min(dToLeft, dToRight);
+            d = MathF.Min(d, dToUp);
+            d = MathF.Min(d, dToBottom);
+            d *= 2;
+
+            return d;
         }
 
         private List<Sprite> _tempList = new List<Sprite>(100);
@@ -277,13 +281,19 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
         [Input(Guid = "C8347CA9-C700-4195-A23F-0F220F5823E2")]
         public readonly InputSlot<Vector2> Stretch = new();
 
+        [Input(Guid = "000A17CA-36A2-43EF-8FDA-314366C9E204")]
+        public readonly InputSlot<float> Rotation = new();
+
+        [Input(Guid = "93728B1F-CBFA-4065-9DE1-BF8641FADE7E")]
+        public readonly InputSlot<float> RotationSpread = new();
+
+        
         [Input(Guid = "2A1285B1-63EA-46A5-8D96-B7BA33EDD88B")]
         public readonly InputSlot<float> RandomizeSize = new();
 
         [Input(Guid = "BC1D9FDC-EA07-4C0D-BE2D-02FA955F9E5A")]
         public readonly InputSlot<float> RandomizeSpread = new();
 
-        
         [Input(Guid = "7244CC40-8F0A-4381-80A3-EB818E262C88", MappedType = typeof(ColorSources))]
         public readonly InputSlot<int> ColorSource = new();
 
@@ -298,7 +308,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
 
         [Input(Guid = "9CFFFB1A-675E-410C-96DA-C02BD6B3A81A")]
         public readonly InputSlot<int> RandomSeed = new();
-        
+
         [Input(Guid = "1C250003-CF16-44DF-9A5E-F9FCF331617C")]
         public readonly InputSlot<Vector2> PositionFactor = new();
 
@@ -307,19 +317,20 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
 
         [Input(Guid = "C1B5F49F-3538-48AA-8D16-92D48FCF08CB", MappedType = typeof(ZoneFxModes))]
         public readonly InputSlot<int> FxZoneMode = new();
-        
+
         [Input(Guid = "1C11CB25-05F8-4422-AA16-DB57E8CD2E0B")]
         public readonly InputSlot<Vector2> EdgeFxZone = new();
-        
+
         [Input(Guid = "00ED2D51-4CF0-43D6-ADAA-CE42E5EB8439")]
         public readonly InputSlot<Vector2> InnerFxZone = new();
+
+        [Input(Guid = "BE4366C5-9E1C-430A-8F34-F31321A7DF2C")]
+        public readonly InputSlot<Vector2> MattBoxZone = new();
 
         [Input(Guid = "0D98C14C-3F62-47E2-8FE8-A85208D9C02D")]
         public readonly InputSlot<float> FxZoneScale = new();
 
         [Input(Guid = "520EE127-F542-4AD8-A6EA-4A24A70ADE4D")]
         public readonly InputSlot<float> FxZoneBrightness = new();
-
-        
     }
 }

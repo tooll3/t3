@@ -45,6 +45,20 @@
       }
     },
     {
+      "InputId": "000a17ca-36a2-43ef-8fda-314366c9e204"/*Rotation*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
+      "InputId": "93728b1f-cbfa-4065-9de1-bf8641fade7e"/*RotationSpread*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      }
+    },
+    {
       "InputId": "2a1285b1-63ea-46a5-8d96-b7ba33edd88b"/*RandomizeSize*/,
       "Position": {
         "X": -200.0,
@@ -126,6 +140,13 @@
       "Position": {
         "X": -200.0,
         "Y": 720.0
+      }
+    },
+    {
+      "InputId": "be4366c5-9e1c-430a-8f34-f31321a7df2c"/*MattBoxZone*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 765.0
       }
     },
     {

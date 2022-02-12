@@ -78,21 +78,38 @@ psInput vsMain(uint id: SV_VertexID)
 
     float4 aspect = float4(CameraToClipSpace[1][1] / CameraToClipSpace[0][0],1,1,1);    
 
-    Sprite p = Sprites[particleId];
+    Sprite sprite = Sprites[particleId];
 
     float3 axis = cornerFactors;
 
     float2 atlasResolution = 1./float2(TextureCellsX, TextureCellsY);
     float atlasRatio = (float)TextureCellsX/TextureCellsY;
 
-    axis.xy = (axis.xy + Offset) * Stretch * float2(1,atlasRatio);
-    axis.z = 0;
+    float2 corner = float2(cornerFactors.x * sprite.Size.x, 
+                          cornerFactors.y * sprite.Size.y);
 
-    output.position = float4( cornerFactors.x * p.Size.x / aspect.x + p.PosInClipSpace.x,
-                              cornerFactors.y * p.Size.y + p.PosInClipSpace.y,
-                              0,1);
 
-    output.texCoord = lerp(p.UvMin, p.UvMax, cornerFactors.zw);
+    float imageRotationRad = (-sprite.Rotation - 90) / 180 * PI;     
+
+    float sina = sin(-imageRotationRad - PI/2);
+    float cosa = cos(-imageRotationRad - PI/2);
+
+    //p.x *=aspectRatio;
+
+    corner = float2(
+        cosa * corner.x - sina * corner.y,
+        cosa * corner.y + sina * corner.x 
+    );                              
+
+    // float2 p = float2( cornerFactors.x * sprite.Size.x / aspect.x + sprite.PosInClipSpace.x,
+    //                           cornerFactors.y * sprite.Size.y + sprite.PosInClipSpace.y);
+
+    float2 p = float2( corner.x / aspect.x + sprite.PosInClipSpace.x,
+                       corner.y + sprite.PosInClipSpace.y);
+
+    output.position = float4(p, 0,1);
+
+    output.texCoord = lerp(sprite.UvMin, sprite.UvMax, cornerFactors.zw);
 
     // output.position = float4( cornerFactors.x * 0.1 + p.PosInClipSpace.x,
     //                           cornerFactors.y * 0.1 + p.PosInClipSpace.y,
@@ -116,7 +133,7 @@ psInput vsMain(uint id: SV_VertexID)
     // output.texCoord *= atlasResolution;
     // output.texCoord += atlasResolution * float2(textureCelX, textureCelY);
 
-    output.color = Color * p.Color;
+    output.color = sprite.Color;// float4(1,1,1,1);// Color * sprite.Color;
     return output;    
 }
 
@@ -126,5 +143,5 @@ float4 psMain(psInput input) : SV_TARGET
     float4 imgColor = texture2.Sample(texSampler, input.texCoord);
     float4 color = input.color * imgColor;
 
-    return clamp(float4(color.rgb, color.a), 0, float4(100,100,100,1));
+    return clamp(float4(color.rgb, color.a), 0, float4(1000,1000,1000,1));
 }

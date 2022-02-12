@@ -57,18 +57,6 @@
       "Outputs": []
     },
     {
-      "Id": "4f609824-74f2-427e-b8b0-06a183d7d93a"/*LoadTexture2d*/,
-      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
-      "InputValues": [
-        {
-          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
-          "Type": "System.String",
-          "Value": "Resources\\images\\perlin-noise-rgb.png"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "4eef7996-aa35-4368-981b-a1326231c3a3"/*VertexShader*/,
       "SymbolId": "646f5988-0a76-4996-a538-ba48054fd0ad",
       "InputValues": [
@@ -200,12 +188,6 @@
     {
       "Id": "4167d9f5-553e-4215-9814-4f1716710dc5"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "60936dc8-cc9c-467e-9a93-4daea36718fd"/*SrvFromTexture2d*/,
-      "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
       "InputValues": [],
       "Outputs": []
     },
@@ -397,12 +379,6 @@
       "SourceSlotId": "b409694a-0980-4992-8525-01871b940cd7",
       "TargetParentOrChildId": "54aa90df-e6a5-488b-95ca-868120123dd7",
       "TargetSlotId": "35a52074-1e82-4352-91c3-d8e464f73bc7"
-    },
-    {
-      "SourceParentOrChildId": "4f609824-74f2-427e-b8b0-06a183d7d93a",
-      "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
-      "TargetParentOrChildId": "60936dc8-cc9c-467e-9a93-4daea36718fd",
-      "TargetSlotId": "d5afa102-2f88-431e-9cd4-af91e41f88f6"
     },
     {
       "SourceParentOrChildId": "ddad4d49-61dd-471d-a8b8-c388c8f9d0a0",
