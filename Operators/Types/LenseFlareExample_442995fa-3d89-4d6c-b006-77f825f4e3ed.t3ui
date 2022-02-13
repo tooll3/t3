@@ -91,61 +91,6 @@
       }
     },
     {
-      "ChildId": "87111a64-bd67-4273-8234-924b3ecfae70"/*DrawShimmer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -282.84302,
-        "Y": 2126.633
-      }
-    },
-    {
-      "ChildId": "b0731171-0421-42db-9c7f-a16eededb35a"/*_LenseFlareSprites*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -626.3266,
-        "Y": 2135.1777
-      }
-    },
-    {
-      "ChildId": "f365e75e-b766-4ca3-a5d3-406b98ee5de7"/*ListToBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": -476.3266,
-        "Y": 2135.1777
-      }
-    },
-    {
-      "ChildId": "4168cc5b-a538-4457-bc90-5fe43dbe4a16"/*DrawShimmer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -910.51935,
-        "Y": 2519.397
-      }
-    },
-    {
-      "ChildId": "67a6b5c4-98b8-4625-bdd5-b5ff187cfea5"/*DrawShimmer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -639.3422,
-        "Y": 2400.7185
-      }
-    },
-    {
       "ChildId": "23c4a568-54f4-45bb-812d-dd15e635017f"/*LenseFlareSetup*/,
       "Size": {
         "X": 110.0,
@@ -198,39 +143,6 @@
       "Position": {
         "X": -624.88354,
         "Y": 419.07846
-      }
-    },
-    {
-      "ChildId": "d292b23a-0ff7-48ca-90a5-74c0a0af866d"/*PointLight*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": -58.853027,
-        "Y": 2003.6925
-      }
-    },
-    {
-      "ChildId": "bff4811f-a72e-4616-9913-dfc247d59589"/*PerlinNoise3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -609.73706,
-        "Y": 1903.5271
-      }
-    },
-    {
-      "ChildId": "5c17b679-2d58-44a0-b33e-57d46a2c6e03"/*OscillateVec3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -292.36426,
-        "Y": 1850.0292
       }
     },
     {
