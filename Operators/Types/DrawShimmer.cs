@@ -37,6 +37,15 @@ namespace T3.Operators.Types.Id_c87b140b_1109_4eff_bf77_98bff3fc3e17
 
         [Input(Guid = "f9070783-1989-4fcd-9db1-f370f36be71e")]
         public readonly InputSlot<float> NoiseProgress = new InputSlot<float>();
+
+        [Input(Guid = "7c6c2ad1-b7d5-4496-822e-1720356b59d7")]
+        public readonly InputSlot<bool> MultiSampling4x = new InputSlot<bool>();
+
+        [Input(Guid = "66aeff41-c6af-4a06-9813-e526308968c2")]
+        public readonly InputSlot<float> CircularCompletion = new InputSlot<float>();
+
+        [Input(Guid = "647fcd91-534c-4433-a338-e1ac77ec5f2b")]
+        public readonly InputSlot<float> CircularCompletionEdge = new InputSlot<float>();
     }
 }
 

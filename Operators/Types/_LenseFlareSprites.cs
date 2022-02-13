@@ -56,6 +56,8 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             var rotation = Rotation.GetValue(context);
             var rotationSpread = RotationSpread.GetValue(context);
 
+            var rotateTowards = (Categories)RotateTowards.GetValue(context);
+
             int startLightIndex = 0;
             int endLightIndex = context.PointLights.Count;
 
@@ -66,6 +68,9 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             }
 
             _tempList.Clear();
+
+            var aspectRatio = (float)context.RequestedResolution.Width / (float)context.RequestedResolution.Height;
+
 
             for (int lightIndex = startLightIndex; lightIndex < endLightIndex; lightIndex++)
             {
@@ -128,36 +133,27 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
                     spriteColor.Z *= brightness;
                     
                     spriteColor.W *= cMatteBox;
-
-
-                    // Fade with incomming alpha from FlatShaders and Materials
+                    
+                    // This might actually be a good idea. Maybe we should do this later..
+                    // Fade with incoming alpha from FlatShaders and Materials
                     //color.W *= materialAlpha;
 
-                    //objectToWorld = Matrix.Scaling(scale, scale, 1) * objectToWorld;
-
-                    // var autoRotation = 0f;
-                    // if (AutoRotate == 1)
-                    // {
-                    //     //rotateToCenter = (float)(Math.Atan2( objectScreenPos.X- lightScreenPos.X, objectScreenPos.Y - lightScreenPos.Y) + 3.1415/2) * RotateToLight;
-                    //     autoRotation = (float)(Math.Atan2(objectScreenPos.X - lightScreenPos.X, objectScreenPos.Y - lightScreenPos.Y) + 3.1415 / 2);
-                    // }
-                    // else if (AutoRotate == 2)
-                    // {
-                    //     autoRotation = (float)(Math.Atan2(objectScreenPos.X, objectScreenPos.Y) + 3.1415 / 2);
-                    // }
-                    //
-                    // objectToWorld = Matrix.Translation(OffsetX, OffsetY, 0)
-                    //                 * Matrix.RotationZ((float)(
-                    //                                               (RotateValue) / 180 * Math.PI
-                    //                                               - autoRotation
-                    //                                               + (RotateRandom / 180 * Math.PI) * (rand.NextDouble() - 0.5)
-                    //                                               + (RotateEntities / 180 * Math.PI) * i / Count
-                    //                                           )) * objectToWorld;
-                    //
-                    // var oldObjectToWorld = context.ObjectTWorld;
-                    // context.ObjectTWorld = objectToWorld * context.ObjectTWorld;
+                    float spriteRotation = rotation;
                     
-
+                    switch (rotateTowards)
+                    {
+                        case Categories.Object:
+                            break;
+                        case Categories.Light:
+                            spriteRotation -= (float)(Math.Atan2((objectScreenPos.X - lightPosInView2D.X) *aspectRatio , objectScreenPos.Y - lightPosInView2D.Y)+MathF.PI) * (180 / MathF.PI);
+                            break;
+                        case Categories.ScreenCenter:
+                            spriteRotation -= (float)(Math.Atan2(objectScreenPos.X, objectScreenPos.Y) + MathF.PI) * 180f / MathF.PI;    
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    
                     // // Transforom UV to pick correct texture cell
                     // if (TextureCellsRows == 0)
                     //     TextureCellsRows = 1;
@@ -182,7 +178,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
                                           PosInClipSpace = objectScreenPos,
                                           Size = sizeWithRandom * stretch * hideFactor,
                                           Color = spriteColor,
-                                          Rotation = rotation + f * rotationSpread * 180,
+                                          RotationDeg = spriteRotation + f * rotationSpread * 180,
                                           UvMin = Vector2.Zero,
                                           UvMax = Vector2.One,
                                       });
@@ -206,12 +202,12 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
         private float GetDistanceToEdge(Vector2 posInClipSpace)
         {
             var p = (posInClipSpace /2 + Vector2.One * 0.5f);
-            float dToRight = 1 - p.X;
-            float dToLeft = p.X;
-            float dToUp = p.Y;
-            float dToBottom = 1 - p.Y;
+            var dToRight = 1 - p.X;
+            var dToLeft = p.X;
+            var dToUp = p.Y;
+            var dToBottom = 1 - p.Y;
 
-            float d = MathF.Min(dToLeft, dToRight);
+            var d = MathF.Min(dToLeft, dToRight);
             d = MathF.Min(d, dToUp);
             d = MathF.Min(d, dToBottom);
             d *= 2;
@@ -231,7 +227,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             public Vector2 Size;
 
             [FieldOffset(4 * 4)]
-            public float Rotation;
+            public float RotationDeg;
 
             [FieldOffset(5 * 4)]
             public Vector4 Color;
@@ -332,5 +328,15 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
 
         [Input(Guid = "520EE127-F542-4AD8-A6EA-4A24A70ADE4D")]
         public readonly InputSlot<float> FxZoneBrightness = new();
+
+        private enum Categories
+        {
+            Object,
+            Light,
+            ScreenCenter,
+        }
+        
+        [Input(Guid = "205ED310-E01C-4B0C-9C24-E404476CE036", MappedType = typeof(Categories))]
+        public readonly InputSlot<int> RotateTowards = new();
     }
 }

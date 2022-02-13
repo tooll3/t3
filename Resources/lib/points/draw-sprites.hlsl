@@ -30,18 +30,7 @@ cbuffer Transforms : register(b0)
 cbuffer Params : register(b2)
 {
     float4 Color;
-
-    float2 Stretch;
-    float2 Offset;
-
     float Size;
-    float UseWForSize;
-    float __padding;
-    float Rotate;
-
-    float3 RotateAxis;
-    float TextureCellsX;
-    float TextureCellsY;
 };
 
 struct psInput
@@ -82,11 +71,11 @@ psInput vsMain(uint id: SV_VertexID)
 
     float3 axis = cornerFactors;
 
-    float2 atlasResolution = 1./float2(TextureCellsX, TextureCellsY);
-    float atlasRatio = (float)TextureCellsX/TextureCellsY;
+    // float2 atlasResolution = 1./float2(TextureCellsX, TextureCellsY);
+    // float atlasRatio = (float)TextureCellsX/TextureCellsY;
 
     float2 corner = float2(cornerFactors.x * sprite.Size.x, 
-                          cornerFactors.y * sprite.Size.y);
+                          cornerFactors.y * sprite.Size.y) * Size;
 
 
     float imageRotationRad = (-sprite.Rotation - 90) / 180 * PI;     
@@ -141,7 +130,7 @@ float4 psMain(psInput input) : SV_TARGET
 {
     //return float4(input.texCoord, 0,1);
     float4 imgColor = texture2.Sample(texSampler, input.texCoord);
-    float4 color = input.color * imgColor;
+    float4 color = input.color * imgColor * Color;
 
     return clamp(float4(color.rgb, color.a), 0, float4(1000,1000,1000,1));
 }

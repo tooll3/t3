@@ -100,8 +100,8 @@
     {
       "Id": "1c11cb25-05f8-4422-aa16-db57e8cd2e0b"/*EdgeFxZone*/,
       "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 0.91,
+        "Y": 1.5
       }
     },
     {
@@ -125,6 +125,10 @@
     {
       "Id": "520ee127-f542-4ad8-a6ea-4a24a70ade4d"/*FxZoneBrightness*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "205ed310-e01c-4b0c-9c24-e404476ce036"/*RotateTowards*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

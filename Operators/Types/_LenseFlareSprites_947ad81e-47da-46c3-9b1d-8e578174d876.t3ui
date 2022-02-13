@@ -49,7 +49,8 @@
       "Position": {
         "X": -200.0,
         "Y": 270.0
-      }
+      },
+      "Scale": 1.0
     },
     {
       "InputId": "93728b1f-cbfa-4065-9de1-bf8641fade7e"/*RotationSpread*/,
@@ -161,6 +162,13 @@
       "Position": {
         "X": -200.0,
         "Y": 810.0
+      }
+    },
+    {
+      "InputId": "205ed310-e01c-4b0c-9c24-e404476ce036"/*RotateTowards*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 855.0
       }
     }
   ],
