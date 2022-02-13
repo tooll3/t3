@@ -12,7 +12,11 @@
       "DefaultValue": 1
     },
     {
-      "Id": "f21dbefd-ea54-4901-a806-b1a2c5ee140f"/*Distance*/,
+      "Id": "9f85d1f1-37d2-4f7e-9efd-70cb415c4cee"/*Brightness*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "f21dbefd-ea54-4901-a806-b1a2c5ee140f"/*DistanceFromLight*/,
       "DefaultValue": 0.0
     },
     {
