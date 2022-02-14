@@ -25,10 +25,21 @@ namespace T3.Operators.Types.Id_f8aed421_5e0e_4d1f_993c_1801153ebba8
             PeakDetected.UpdateAction = Update;
         }
 
+        private double _lastEvalTime = 0;
+
         private void Update(EvaluationContext context)
         {
             var band = (FrequencyBands)Band.GetValue(context);
             var mode = (Modes)Mode.GetValue(context);
+            var decay = Decay.GetValue(context);
+            var modulo = UseModulo.GetValue(context);
+
+            var t = context.TimeForEffects;
+            if (Math.Abs(t - _lastEvalTime) < 0.001f) 
+                return;
+
+            _lastEvalTime = t;
+
             //var a = _SetAudioAnalysis.AudioAnalysisResult;
 
             var results = band == FrequencyBands.Bass
@@ -37,8 +48,6 @@ namespace T3.Operators.Types.Id_f8aed421_5e0e_4d1f_993c_1801153ebba8
 
             var peakDetected = results.PeakCount > _lastPeakCount;
             
-            var decay = Decay.GetValue(context);
-            var modulo = UseModulo.GetValue(context);
             var usingModulo = modulo > 0;
             var isModuloPeak = peakDetected && (!usingModulo || results.PeakCount % modulo == 0);
 

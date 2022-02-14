@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "50fda27a-bd94-4438-9cef-0aaa16fae12b"/*LightIndex*/,
-      "DefaultValue": 0
+      "DefaultValue": -1
     },
     {
       "Id": "59ba312f-c74f-4e76-8830-57c2effa0ff1"/*SpriteCount*/,

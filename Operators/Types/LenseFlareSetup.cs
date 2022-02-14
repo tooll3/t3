@@ -16,6 +16,9 @@ namespace T3.Operators.Types.Id_eb4d5014_2619_4368_a1b8_521db8372243
         [Input(Guid = "5dd9abed-da33-4f80-ba83-a817d2105add")]
         public readonly InputSlot<int> RandomSeed = new InputSlot<int>();
 
+        [Input(Guid = "ba661368-fae7-4a7b-b70c-30e21250e1eb")]
+        public readonly InputSlot<int> LightIndex = new InputSlot<int>();
+
 
     }
 }
