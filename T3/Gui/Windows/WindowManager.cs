@@ -113,8 +113,8 @@ namespace T3.Gui.Windows
         {
             if (ImGui.BeginMenu("Windows"))
             {
-                if (ImGui.MenuItem("FullScreen", "", Program.IsFullScreen))
-                    Program.IsFullScreen = !Program.IsFullScreen;
+                if (ImGui.MenuItem("FullScreen", "", Program.IsFullScreenRequested))
+                    Program.IsFullScreenRequested = !Program.IsFullScreenRequested;
 
                 if (ImGui.MenuItem("Graph Window as background", "", ref _graphWindowRenderedAsBackground))
                 {
@@ -211,7 +211,7 @@ namespace T3.Gui.Windows
                     }
                 }
 
-                Program.IsFullScreen = true;
+                Program.IsFullScreenRequested = true;
             }
             else
             {
@@ -220,7 +220,7 @@ namespace T3.Gui.Windows
                     graphWindow.WindowFlags &= ~ImGuiWindowFlags.NoDecoration;
                 }
 
-                Program.IsFullScreen = false;
+                Program.IsFullScreenRequested = false;
             }
         }
 
