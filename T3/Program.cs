@@ -20,6 +20,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
@@ -221,6 +222,7 @@ namespace T3
         }
     }
 
+    
     public class Program
     {
         private static ImGuiDx11Impl _controller;
@@ -243,7 +245,7 @@ namespace T3
                            };
 
             // SwapChain description
-            var desc = new SwapChainDescription()
+            var swapChainDescription = new SwapChainDescription()
                            {
                                BufferCount = 3,
                                ModeDescription = new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
@@ -256,35 +258,35 @@ namespace T3
                            };
 
             // Create Device and SwapChain
-            Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, desc, out var device, out _swapChain);
+            Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, swapChainDescription, out var device, out _mainWindow.SwapChain);
             var context = device.ImmediateContext;
             Device = device;
 
             // Ignore all windows events
-            var factory = _swapChain.GetParent<Factory>();
+            Factory factory = _mainWindow.SwapChain.GetParent<Factory>();
             factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAll);
 
             // New RenderTargetView from the backbuffer
-            _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
-            _renderView = new RenderTargetView(device, _backBuffer);
+            _mainWindow.BackBufferTexture = Texture2D.FromSwapChain<Texture2D>(_mainWindow.SwapChain, 0);
+            _mainWindow.RenderTargetView = new RenderTargetView(device, _mainWindow.BackBufferTexture);
 
             _controller = new ImGuiDx11Impl(device, form.Width, form.Height);
 
             form.KeyDown += HandleKeyDown;
             form.KeyUp += HandleKeyUp;
 
-            form.ResizeBegin += (sender, args) => _inResize = true;
+            form.ResizeBegin += (sender, args) => _mainWindow.isResizingRightNow = true;
             form.ResizeEnd += (sender, args) =>
                               {
-                                  RebuildBackBuffer(form, device, ref _renderView, ref _backBuffer, ref _swapChain);
-                                  _inResize = false;
+                                  RebuildBackBuffer(form, device, ref _mainWindow.RenderTargetView, ref _mainWindow.BackBufferTexture, ref _mainWindow.SwapChain);
+                                  _mainWindow.isResizingRightNow = false;
                               };
             form.ClientSizeChanged += (sender, args) =>
                                       {
-                                          if (_inResize)
+                                          if (_mainWindow.isResizingRightNow)
                                               return;
 
-                                          RebuildBackBuffer(form, device, ref _renderView, ref _backBuffer, ref _swapChain);
+                                          RebuildBackBuffer(form, device, ref _mainWindow.RenderTargetView, ref _mainWindow.BackBufferTexture, ref _mainWindow.SwapChain);
                                       };
             form.Closing += (sender, args) =>
                             {
@@ -293,33 +295,8 @@ namespace T3
                             };
 
             form.WindowState = FormWindowState.Maximized;
-
-            // second render view
-            var form2 = new ImGuiDx11RenderForm("T3 Render Window") { ClientSize = new Size(640, 480) };
-            desc.OutputHandle = form2.Handle;
-
-            _swapChain2 = new SwapChain(factory, device, desc);
-
-            _swapChain2.ResizeBuffers(3, form2.ClientSize.Width, form2.ClientSize.Height,
-                                      _swapChain2.Description.ModeDescription.Format, _swapChain2.Description.Flags);
-            _backBuffer2 = Texture2D.FromSwapChain<Texture2D>(_swapChain2, 0);
-            _renderView2 = new RenderTargetView(device, _backBuffer2);
-
-            form2.ResizeBegin += (sender, args) => _inResize2 = true;
-            form2.ResizeEnd += (sender, args) =>
-                               {
-                                   RebuildBackBuffer(form2, device, ref _renderView2, ref _backBuffer2, ref _swapChain2);
-                                   _inResize2 = false;
-                               };
-            form2.ClientSizeChanged += (sender, args) =>
-                                       {
-                                           if (_inResize2)
-                                               return;
-
-                                           RebuildBackBuffer(form2, device, ref _renderView2, ref _backBuffer2, ref _swapChain2);
-                                       };
-            // form2.WindowState = FormWindowState.Maximized;
-            form2.Show();
+            _viewerWindow.Initialize("t3 Viewer Window ", factory, device, true);
+            _viewerWindow.RenderForm.Show();
 
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
@@ -368,9 +345,9 @@ namespace T3
                                      Int64 ticksDiff = ticks - lastElapsedTicks;
                                      ImGui.GetIO().DeltaTime = (float)((double)(ticksDiff) / Stopwatch.Frequency);
                                      lastElapsedTicks = ticks;
-                                     // Log.Debug($"delta: {ImGui.GetIO().DeltaTime}");
                                      ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(form.ClientSize.Width, form.ClientSize.Height);
 
+                                     // Toggling full screen
                                      bool isFullScreenBorderStyle = form.FormBorderStyle == FormBorderStyle.None;
                                      if (isFullScreenBorderStyle != IsFullScreen)
                                      {
@@ -379,28 +356,30 @@ namespace T3
                                              form.FormBorderStyle = FormBorderStyle.Sizable;
                                              form.WindowState = FormWindowState.Normal;
                                              form.FormBorderStyle = FormBorderStyle.None;
-                                             form.Bounds = Screen.AllScreens[0].Bounds;
+                                             var screenIndexForMainScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? 1: 0;
+                                             var screenIndexFor2ndScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? 0: 1;;
+                                             form.Bounds = Screen.AllScreens[screenIndexForMainScreen].Bounds;
 
                                              if (T3Ui.ShowSecondaryRenderWindow)
                                              {
-                                                 form2.WindowState = FormWindowState.Normal;
-                                                 form2.FormBorderStyle = FormBorderStyle.None;
-                                                 form2.Bounds = Screen.AllScreens[1].Bounds;
+                                                 _viewerWindow.RenderForm.WindowState = FormWindowState.Normal;
+                                                 _viewerWindow.RenderForm.FormBorderStyle = FormBorderStyle.None;
+                                                 _viewerWindow.RenderForm.Bounds = Screen.AllScreens[screenIndexFor2ndScreen].Bounds;
                                              }
                                              else
                                              {
-                                                 form2.WindowState = FormWindowState.Normal;
-                                                 form2.FormBorderStyle = FormBorderStyle.None;
-                                                 form2.Bounds = Screen.AllScreens[0].Bounds;
+                                                 _viewerWindow.RenderForm.WindowState = FormWindowState.Normal;
+                                                 _viewerWindow.RenderForm.FormBorderStyle = FormBorderStyle.None;
+                                                 _viewerWindow.RenderForm.Bounds = Screen.AllScreens[screenIndexForMainScreen].Bounds;
                                              }
                                          }
                                          else
                                          {
                                              form.FormBorderStyle = FormBorderStyle.Sizable;
-                                             form2.FormBorderStyle = FormBorderStyle.Sizable;
+                                             _viewerWindow.RenderForm.FormBorderStyle = FormBorderStyle.Sizable;
                                          }
                                          //form.FormBorderStyle = isFullScreenBorderStyle ? FormBorderStyle.Sizable : FormBorderStyle.None;
-                                         //form2.FormBorderStyle = fullScreenBorderStyle ? FormBorderStyle.Sizable : FormBorderStyle.None;
+                                         //_viewerWindow.RenderForm.FormBorderStyle = fullScreenBorderStyle ? FormBorderStyle.Sizable : FormBorderStyle.None;
                                      }
 
                                      //NodeOperations.UpdateChangedOperators();
@@ -416,19 +395,21 @@ namespace T3
 
                                      ImGui.NewFrame();
                                      context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
-                                     context.OutputMerger.SetTargets(_renderView);
-                                     context.ClearRenderTargetView(_renderView, T3Style.Colors.WindowBackground.AsSharpDx);
+                                     context.OutputMerger.SetTargets(_mainWindow.RenderTargetView);
+                                     context.ClearRenderTargetView(_mainWindow.RenderTargetView, T3Style.Colors.WindowBackground.AsSharpDx);
 
-                                     form2.Visible = T3Ui.ShowSecondaryRenderWindow;
+                                     // Render 2nd view
+                                     _viewerWindow.RenderForm.Visible = T3Ui.ShowSecondaryRenderWindow;
                                      if (T3Ui.ShowSecondaryRenderWindow)
                                      {
                                          context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-                                         context.Rasterizer.SetViewport(new Viewport(0, 0, form2.ClientSize.Width, form2.ClientSize.Height, 0.0f, 1.0f));
-                                         context.OutputMerger.SetTargets(_renderView2);
-                                         context.ClearRenderTargetView(_renderView2, T3Style.Colors.WindowBackground.AsSharpDx);
+                                         context.Rasterizer.SetViewport(new Viewport(0, 0, _viewerWindow.RenderForm.ClientSize.Width, _viewerWindow.RenderForm.ClientSize.Height, 0.0f, 1.0f));
+                                         context.OutputMerger.SetTargets(_viewerWindow.RenderTargetView);
+                                         context.ClearRenderTargetView(_viewerWindow.RenderTargetView, T3Style.Colors.WindowBackground.AsSharpDx);
 
                                          if (resourceManager.Resources[FullScreenVertexShaderId] is VertexShaderResource vsr)
                                              context.VertexShader.Set(vsr.VertexShader);
+                                         
                                          if (resourceManager.Resources[FullScreenPixelShaderId] is PixelShaderResource psr)
                                              context.PixelShader.Set(psr.PixelShader);
 
@@ -453,17 +434,17 @@ namespace T3
                                      _t3ui.Draw();
 
                                      context.Rasterizer.SetViewport(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
-                                     context.OutputMerger.SetTargets(_renderView);
+                                     context.OutputMerger.SetTargets(_mainWindow.RenderTargetView);
 
                                      ImGui.Render();
                                      _controller.RenderImDrawData(ImGui.GetDrawData());
 
                                      T3Metrics.UiRenderingCompleted();
 
-                                     _swapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
+                                     _mainWindow.SwapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
 
                                      if (T3Ui.ShowSecondaryRenderWindow)
-                                         _swapChain2.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
+                                         _viewerWindow.SwapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
                                  });
 
             try
@@ -476,13 +457,13 @@ namespace T3
             }
 
             // Release all resources
-            _renderView.Dispose();
-            _backBuffer.Dispose();
+            _mainWindow.RenderTargetView.Dispose();
+            _mainWindow.BackBufferTexture.Dispose();
             context.ClearState();
             context.Flush();
             device.Dispose();
             context.Dispose();
-            _swapChain.Dispose();
+            _mainWindow.SwapChain.Dispose();
             factory.Dispose();
         }
 
@@ -517,15 +498,92 @@ namespace T3
             }
         }
 
+
+ 
+        
+        private class WindowParameters
+        {
+            public SwapChain SwapChain;
+            public RenderTargetView RenderTargetView;
+            public Texture2D BackBufferTexture;
+            public bool isResizingRightNow;
+            public ImGuiDx11RenderForm RenderForm;
+
+
+            
+            
+            public void Initialize(string windowTitle, Factory factory, Device device, bool disableClose)
+            {
+                RenderForm = disableClose ?  new NoCloseRenderForm(windowTitle) { ClientSize = new Size(640, 480) }: 
+                                 new ImGuiDx11RenderForm(windowTitle) { ClientSize = new Size(640, 480) };
+                var swapChainDescription = new SwapChainDescription()
+                                               {
+                                                   BufferCount = 3,
+                                                   ModeDescription = new ModeDescription(RenderForm.ClientSize.Width, RenderForm.ClientSize.Height,
+                                                                                         new Rational(60, 1), Format.R8G8B8A8_UNorm),
+                                                   IsWindowed = true,
+                                                   OutputHandle = RenderForm.Handle,
+                                                   SampleDescription = new SampleDescription(1, 0),
+                                                   SwapEffect = SwapEffect.Discard,
+                                                   Usage = Usage.RenderTargetOutput
+                                               };
+                
+                SwapChain = new SwapChain(factory, device, swapChainDescription);
+
+                SwapChain.ResizeBuffers(bufferCount: 3, RenderForm.ClientSize.Width, RenderForm.ClientSize.Height,
+                                        SwapChain.Description.ModeDescription.Format, SwapChain.Description.Flags);
+                
+                BackBufferTexture = Texture2D.FromSwapChain<Texture2D>(SwapChain, 0);
+                RenderTargetView = new RenderTargetView(device, BackBufferTexture);
+
+                RenderForm.ResizeBegin += (sender, args) => isResizingRightNow = true;
+                RenderForm.ResizeEnd += (sender, args) =>
+                                   {
+                                       RebuildBackBuffer(RenderForm, device, ref RenderTargetView, ref BackBufferTexture, ref SwapChain);
+                                       isResizingRightNow = false;
+                                   };
+                RenderForm.ClientSizeChanged += (sender, args) =>
+                                           {
+                                               if (isResizingRightNow)
+                                                   return;
+
+                                               RebuildBackBuffer(RenderForm, device, ref RenderTargetView, ref BackBufferTexture, ref SwapChain);
+                                           };                
+            }            
+
+            private class NoCloseRenderForm : ImGuiDx11RenderForm
+            {
+                private const int CP_NOCLOSE_BUTTON = 0x200;
+            
+                protected override CreateParams CreateParams
+                {
+                    get
+                    {
+                        CreateParams myCp = base.CreateParams;
+                        myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON ;
+                        return myCp;
+                    }
+                }
+
+                public NoCloseRenderForm(string title) : base(title)
+                {
+                }
+            }
+            
+        }
+
+        private static WindowParameters _mainWindow = new WindowParameters();
+        private static WindowParameters _viewerWindow  = new WindowParameters();
+        
         private static T3Ui _t3ui = null;
-        private static bool _inResize;
-        private static bool _inResize2;
-        private static SwapChain _swapChain;
-        private static SwapChain _swapChain2;
-        private static RenderTargetView _renderView;
-        private static Texture2D _backBuffer;
-        private static Texture2D _backBuffer2;
-        private static RenderTargetView _renderView2;
+        // private static bool _inResize;
+        // private static bool _inResize2;
+        // private static SwapChain _swapChain;
+        // private static SwapChain _swapChain2;
+        // private static RenderTargetView _mainWindowRtv;
+        // private static Texture2D _mainWindowBackBuffer;
+        // private static Texture2D _secondaryWindowBackBuffer;
+        // private static RenderTargetView _secondaryWindowRtv;
         public static uint FullScreenVertexShaderId { get; private set; }
         public static uint FullScreenPixelShaderId { get; private set; }
     }
