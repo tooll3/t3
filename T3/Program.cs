@@ -70,20 +70,10 @@ namespace T3
 
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
+            SharedResources.Initialize(resourceManager);
 
             _t3ui = new T3Ui();
-
-            //resourceManager.CreateVertexShader(@"Resources\\vs-fullscreen-tri-pos-only.hlsl", "main", "vs-fullscreen-tri-pos-only");
-            //resourceManager.CreatePixelShader(@"Resources\\ps-pos-only-fixed-color.hlsl", "main", "ps-pos-only-fixed-color");
-            var di = new DirectoryInfo(".");
-            Console.WriteLine(di.FullName);
-            FullScreenVertexShaderId =
-                resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
-            FullScreenPixelShaderId =
-                resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
-
-            (uint texId, uint srvId) = resourceManager.CreateTextureFromFile(@"Resources\images\chipmunk.jpg", null);
-
+            
             // Setup file watching the operator source
             resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;
             foreach (var (_, symbol) in SymbolRegistry.Entries)
@@ -92,7 +82,7 @@ namespace T3
             }
 
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
-            ShaderResourceView backgroundSrv = null;
+            ShaderResourceView viewWindowBackgroundSrv = null;
 
             unsafe
             {
@@ -140,24 +130,33 @@ namespace T3
                 {
                     _viewer.PrepareRenderingFrame(_deviceContext);
 
-                    if (resourceManager.Resources[FullScreenVertexShaderId] is VertexShaderResource vsr)
+                    if (resourceManager.Resources[SharedResources.FullScreenVertexShaderId] is VertexShaderResource vsr)
                         _deviceContext.VertexShader.Set(vsr.VertexShader);
 
-                    if (resourceManager.Resources[FullScreenPixelShaderId] is PixelShaderResource psr)
+                    if (resourceManager.Resources[SharedResources.FullScreenPixelShaderId] is PixelShaderResource psr)
                         _deviceContext.PixelShader.Set(psr.PixelShader);
 
                     if (resourceManager.SecondRenderWindowTexture != null && !resourceManager.SecondRenderWindowTexture.IsDisposed)
                     {
-                        if (backgroundSrv == null || backgroundSrv.Resource.NativePointer != resourceManager.SecondRenderWindowTexture.NativePointer)
+                        Log.Debug($"using TextureId:{resourceManager.SecondRenderWindowTexture}, debug name:{resourceManager.SecondRenderWindowTexture.DebugName}");
+                        if (viewWindowBackgroundSrv == null || viewWindowBackgroundSrv.Resource.NativePointer != resourceManager.SecondRenderWindowTexture.NativePointer)
                         {
-                            backgroundSrv?.Dispose();
-                            backgroundSrv = new ShaderResourceView(device, resourceManager.SecondRenderWindowTexture);
+                            viewWindowBackgroundSrv?.Dispose();
+                            viewWindowBackgroundSrv = new ShaderResourceView(device, resourceManager.SecondRenderWindowTexture);
                         }
 
-                        _deviceContext.PixelShader.SetShaderResource(0, backgroundSrv);
+                        _deviceContext.Rasterizer.State = SharedResources.ViewWindowRasterizerState;
+                        _deviceContext.PixelShader.SetShaderResource(0, viewWindowBackgroundSrv);
                     }
-                    else if (resourceManager.Resources[srvId] is ShaderResourceViewResource srvr)
+                    else if (resourceManager.Resources[ SharedResources.ViewWindowDefaultSrvId] is ShaderResourceViewResource srvr)
+                    {
                         _deviceContext.PixelShader.SetShaderResource(0, srvr.ShaderResourceView);
+                        Log.Debug($"using Default TextureId:{srvr.TextureId}, debug name:{srvr.ShaderResourceView.DebugName}");
+                    }
+                    else
+                    {
+                        Log.Debug("invalid srv for 2nd render view");
+                    }
 
                     _deviceContext.Draw(3, 0);
                     _deviceContext.PixelShader.SetShaderResource(0, null);
@@ -267,7 +266,42 @@ namespace T3
         private static T3Ui _t3ui = null;
         private static DeviceContext _deviceContext;
 
-        public static uint FullScreenVertexShaderId { get; private set; }
-        public static uint FullScreenPixelShaderId { get; private set; }
+    }
+
+    /// <summary>
+    /// A collection of rendering resource used across the T3 UI
+    /// </summary>
+    public static class SharedResources
+    {
+        public static void Initialize(ResourceManager resourceManager)
+        {
+            FullScreenVertexShaderId =
+                resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
+            FullScreenPixelShaderId =
+                resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
+            
+            ViewWindowRasterizerState = new RasterizerState(ResourceManager.Instance().Device, new RasterizerStateDescription
+                                                                                {
+                                                                                    FillMode = FillMode.Solid, // Wireframe
+                                                                                    CullMode = CullMode.None,
+                                                                                    IsFrontCounterClockwise = true,
+                                                                                    DepthBias = 0,
+                                                                                    DepthBiasClamp = 0,
+                                                                                    SlopeScaledDepthBias = 0,
+                                                                                    IsDepthClipEnabled = false,
+                                                                                    IsScissorEnabled = default,
+                                                                                    IsMultisampleEnabled = false,
+                                                                                    IsAntialiasedLineEnabled = false
+                                                                                }); 
+            
+
+            (uint texId, var tmpId ) = resourceManager.CreateTextureFromFile(@"Resources\images\chipmunk.jpg", null);
+            ViewWindowDefaultSrvId = tmpId;
+        }
+        
+        public static uint FullScreenVertexShaderId;
+        public static uint FullScreenPixelShaderId;
+        public static RasterizerState ViewWindowRasterizerState;
+        public static uint ViewWindowDefaultSrvId;
     }
 }
