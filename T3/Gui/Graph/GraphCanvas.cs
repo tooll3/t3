@@ -651,7 +651,7 @@ namespace T3.Gui.Graph
 
         private void PinSelectedToOutputWindow()
         {
-            var outputWindow = OutputWindow.OutputWindowInstances.SingleOrDefault(ow => ow.Config.Visible) as OutputWindow;
+            var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(ow => ow.Config.Visible) as OutputWindow;
             if (outputWindow == null)
             {
                 Log.Warning("Can't pin selection without visible output window");
