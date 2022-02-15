@@ -1,4 +1,5 @@
 using SharpDX.Direct3D11;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -47,6 +48,15 @@ namespace T3.Operators.Types.Id_ca4fe8c4_cf61_4196_84e4_d69dc8869a25
             NormalMap.Value = context.PbrMaterialTextures.NormalMap;
             BrdfLookupMap.Value = context.PbrMaterialTextures.BrdfLookUpMap;
             PrefilteredSpecularMap.Value = context.PrbPrefilteredSpecular;
+
+            PbrParameterBuffer.DirtyFlag.Clear();
+            AlbedoColorMap.DirtyFlag.Clear();
+            EmissiveColorMap.DirtyFlag.Clear();
+            RoughnessSpecularMetallicOcclusionMap.DirtyFlag.Clear();
+            NormalMap.DirtyFlag.Clear();
+            BrdfLookupMap.DirtyFlag.Clear();
+
+            
         }
     }
 }
