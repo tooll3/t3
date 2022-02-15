@@ -32,6 +32,7 @@ namespace T3.Gui.Graph
                     if (selectedInstances.Count == 1)
                     {
                         justOpened = true;
+                        ImGui.SetKeyboardFocusHere();
                         _focusedInstanceId = selectedInstances[0].SymbolChild.Id;
                     }
                 }
@@ -56,7 +57,7 @@ namespace T3.Gui.Graph
             
             var text = symbolChild.Name;
             ImGui.SetNextItemWidth(150);
-            ImGui.InputText("##input", ref text, 256);
+            ImGui.InputText("##input", ref text, 256, ImGuiInputTextFlags.AutoSelectAll);
             symbolChild.Name = text;
             
             ImGui.SetKeyboardFocusHere();
