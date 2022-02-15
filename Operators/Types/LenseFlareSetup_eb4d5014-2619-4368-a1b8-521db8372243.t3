@@ -1129,12 +1129,12 @@
         {
           "Id": "f21dbefd-ea54-4901-a806-b1a2c5ee140f"/*DistanceFromLight*/,
           "Type": "System.Single",
-          "Value": 1.13
+          "Value": 1.09
         },
         {
           "Id": "792e9b7e-9094-4bf9-8aed-d8b3fcdee358"/*Spread*/,
           "Type": "System.Single",
-          "Value": 5.1
+          "Value": 2.17
         },
         {
           "Id": "ccf77198-7682-4f6b-96f2-986e6827a4df"/*Size*/,
@@ -1149,7 +1149,7 @@
         {
           "Id": "bc1d9fdc-ea07-4c0d-be2d-02fa955f9e5a"/*RandomizeSpread*/,
           "Type": "System.Single",
-          "Value": 1.4
+          "Value": 2.06
         },
         {
           "Id": "7d9da46c-2d1f-48f8-bdc5-bb7e29c363c7"/*Color*/,
@@ -1165,9 +1165,9 @@
           "Id": "53351cf3-71a5-4cb3-ad81-60abc7718d4b"/*RandomizeColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
+            "X": 0.53,
+            "Y": 0.53,
+            "Z": 0.53,
             "W": 0.41000003
           }
         },

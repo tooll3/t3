@@ -39,7 +39,7 @@ namespace T3.Operators.Types.Id_3af25959_fd3f_4608_b521_5860d82554df
                                             "Adapt\nAlcatraz\nAltair \nAndromeda\nASD\nArchee\nBauknecht\nBlack Maiden\nBrain Control\nBrainstorm\nCNCD\nCTRL+ALT+Test\nCLRSRC\nCocoon\nConspiracy\nDeranged\nDesire\nEinklang\nElude\nElyssis\nEphidrena\nExcess\nFarbrausch\nFairlight\nHaujobb\nHolon\nLoonies\nKakiarts\nMercury\nMFX\nNeuro\nNoSYS Productions\nNuance\nPlastic\nPoo-Brain \nPortal Process\nPrismbeings \nOutracks\nQuite\nRabenauge\nRebels\nRGBA\nScarab\nStravaganza\nSynesthetics\nTBC\nThe Black Lotus\nThe Electronic Knights \nTpolm\nTraction\n",
                                         };
 
-        private enum Categories
+        public enum Categories
         {
             Colors,
             Drugs,
