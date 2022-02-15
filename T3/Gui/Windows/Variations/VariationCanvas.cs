@@ -6,6 +6,7 @@ using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
+using t3.App;
 using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;

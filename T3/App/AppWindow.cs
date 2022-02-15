@@ -25,7 +25,7 @@ namespace t3.App
             Form = disableClose
                        ? new NoCloseRenderForm(windowTitle)
                              {
-                                 ClientSize = new Size(640, 480),
+                                 ClientSize = new Size(640, 360+20),
                                  Icon = new Icon(@"Resources\t3\t3.ico", 48, 48)
                              }
                        : new ImGuiDx11RenderForm(windowTitle)

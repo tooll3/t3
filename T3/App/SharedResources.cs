@@ -30,7 +30,7 @@ namespace t3.App
                                                                                                    }); 
             
 
-            (uint texId, var tmpId ) = resourceManager.CreateTextureFromFile(@"Resources\images\chipmunk.jpg", null);
+            (uint texId, var tmpId ) = resourceManager.CreateTextureFromFile(@"Resources\t3\t3-background.png", null);
             ViewWindowDefaultSrvId = tmpId;
         }
         
