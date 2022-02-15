@@ -103,14 +103,14 @@ namespace T3.Gui.Styling
         }
 
         /// <summary>
-        /// It looks like ImGui.net v1.77 returns a somewhat corrupted glyph. 
+        /// It looks like ImGui.net v1.83 returns a somewhat strange glyph definition. 
         /// </summary>
         private static ImRect GetCorrectUvRangeFromBrokenGlyphStructure(ImFontGlyphPtr g)
         {
-            return new ImRect(
-                              new Vector2(g.Y1, g.U0), // NOTE: Y1?!, well... 
-                              new Vector2(g.V0, g.U1)
-                             );
+            return new ImRect(             //-- U  -- V ---
+                              new Vector2(g.X1,   g.Y1),    // Min    
+                              new Vector2(g.U0, g.V0)   // Max
+                              );
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace T3.Gui.Styling
         /// </summary>
         private static Vector2 GetCorrectSizeFromBrokenGlyphStructure(ImFontGlyphPtr g)
         {
-            return new Vector2(g.Y0, g.X1);
+            return new Vector2(g.X0, g.Y0);
         }
 
         /// <summary>
