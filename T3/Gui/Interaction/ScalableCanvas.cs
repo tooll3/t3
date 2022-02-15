@@ -205,6 +205,11 @@ namespace T3.Gui.Interaction
             if (areaSize.Y == 0)
                 areaSize.Y = 1;
 
+            if (Scale.X == 0 || Scale.Y == 0)
+            {
+                Scale = Vector2.One;
+            }
+
             ScaleTarget = WindowSize / areaSize;
 
             if (flipY)

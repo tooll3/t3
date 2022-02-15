@@ -32,10 +32,12 @@ namespace T3.Gui.UiHelpers
             }
 
             var padding = (max - min) * 0.2f;
+            if (padding < 0.001f)
+                padding = 0.05f;
             min -= padding;
             max += padding;
 
-            dl.PushClipRect(_canvas.WindowPos, _canvas.WindowPos + _canvas.WindowSize, true);
+            
             if (ImGui.IsWindowHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
                 _paused = !_paused;
@@ -53,6 +55,7 @@ namespace T3.Gui.UiHelpers
             }
             
             _canvas.UpdateCanvas();
+            dl.PushClipRect(_canvas.WindowPos, _canvas.WindowPos + _canvas.WindowSize, true);
             
             _raster.Draw(_canvas);
 
