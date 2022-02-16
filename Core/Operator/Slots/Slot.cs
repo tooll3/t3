@@ -92,6 +92,7 @@ namespace T3.Core.Operator.Slots
         {
             if (!IsConnected && sourceSlot != null)
             {
+                _actionBeforeAddingConnecting = UpdateAction;
                 UpdateAction = ConnectedUpdate;
                 DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
                 DirtyFlag.Reference = DirtyFlag.Target - 1;
@@ -99,6 +100,8 @@ namespace T3.Core.Operator.Slots
             if(sourceSlot!= null)
                 InputConnection.Insert(index, (Slot<T>)sourceSlot);
         }
+
+        private Action<EvaluationContext> _actionBeforeAddingConnecting;
 
         public void RemoveConnection(int index = 0)
         {
@@ -116,8 +119,15 @@ namespace T3.Core.Operator.Slots
 
             if (!IsConnected)
             {
-                // if no connection is set anymore restore the default update action
-                SetUpdateActionBackToDefault();
+                if (_actionBeforeAddingConnecting != null)
+                {
+                    UpdateAction = _actionBeforeAddingConnecting;
+                }
+                else
+                {
+                    // if no connection is set anymore restore the default update action
+                    SetUpdateActionBackToDefault();
+                }
                 DirtyFlag.Invalidate();
             }
         }
