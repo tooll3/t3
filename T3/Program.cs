@@ -138,7 +138,7 @@ namespace T3
 
                     if (resourceManager.SecondRenderWindowTexture != null && !resourceManager.SecondRenderWindowTexture.IsDisposed)
                     {
-                        Log.Debug($"using TextureId:{resourceManager.SecondRenderWindowTexture}, debug name:{resourceManager.SecondRenderWindowTexture.DebugName}");
+                        //Log.Debug($"using TextureId:{resourceManager.SecondRenderWindowTexture}, debug name:{resourceManager.SecondRenderWindowTexture.DebugName}");
                         if (viewWindowBackgroundSrv == null || viewWindowBackgroundSrv.Resource.NativePointer != resourceManager.SecondRenderWindowTexture.NativePointer)
                         {
                             viewWindowBackgroundSrv?.Dispose();
@@ -151,7 +151,7 @@ namespace T3
                     else if (resourceManager.Resources[ SharedResources.ViewWindowDefaultSrvId] is ShaderResourceViewResource srvr)
                     {
                         _deviceContext.PixelShader.SetShaderResource(0, srvr.ShaderResourceView);
-                        Log.Debug($"using Default TextureId:{srvr.TextureId}, debug name:{srvr.ShaderResourceView.DebugName}");
+                        //Log.Debug($"using Default TextureId:{srvr.TextureId}, debug name:{srvr.ShaderResourceView.DebugName}");
                     }
                     else
                     {

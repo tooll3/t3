@@ -60,7 +60,7 @@ namespace T3.Gui.Graph
             ImGui.InputText("##input", ref text, 256, ImGuiInputTextFlags.AutoSelectAll);
             symbolChild.Name = text;
             
-            ImGui.SetKeyboardFocusHere();
+            //ImGui.SetKeyboardFocusHere();
             if (!justOpened && (ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((int)Key.Return)))
             {
                 _focusedInstanceId = Guid.Empty;

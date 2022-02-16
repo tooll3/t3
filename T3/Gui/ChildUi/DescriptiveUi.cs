@@ -36,7 +36,10 @@ namespace T3.Gui.ChildUi
             ImGui.BeginGroup();
             if (!string.IsNullOrEmpty(symbolChild.Name))
             {
-                ImGui.TextUnformatted(symbolChild.Name);
+                var isRenamed = !string.IsNullOrEmpty(symbolChild.Name);
+                ImGui.TextUnformatted(isRenamed
+                                          ? $"\"{symbolChild.ReadableName}\""
+                                          : symbolChild.ReadableName);
             }
             ImGui.TextUnformatted(descriptiveString);
 
