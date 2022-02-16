@@ -11,7 +11,7 @@
       }
     },
     {
-      "InputId": "3d99ccde-2bc3-4a25-962d-dab4fc6c554a"/*DisplaceMap*/,
+      "InputId": "3d99ccde-2bc3-4a25-962d-dab4fc6c554a"/*DepthMap*/,
       "Relevancy": "Required",
       "Position": {
         "X": -553.8882,

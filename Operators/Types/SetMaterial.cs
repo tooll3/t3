@@ -100,6 +100,9 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
         [Input(Guid = "2C91C306-1815-4B22-A70F-746232F024D7")]
         public readonly InputSlot<Vector4> EmissiveColor = new InputSlot<Vector4>();
 
+        [Input(Guid = "6D859756-0243-42C5-973D-6DE2DCDC5609")]
+        public readonly InputSlot<Texture2D> EmissiveColorMap = new InputSlot<Texture2D>();
+        
         [Input(Guid = "9D5CA726-28B0-4F3D-A5AA-F0AE3E2043A9")]
         public readonly InputSlot<float> Specular = new InputSlot<float>();
 
@@ -115,7 +118,5 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
         [Input(Guid = "C8003FBD-C6CE-440C-9F1F-6B15B5EE5274")]
         public readonly InputSlot<Texture2D> RoughnessSpecularMetallicOcclusionMap = new InputSlot<Texture2D>();
 
-        [Input(Guid = "6D859756-0243-42C5-973D-6DE2DCDC5609")]
-        public readonly InputSlot<Texture2D> EmissiveColorMap = new InputSlot<Texture2D>();
     }
 }

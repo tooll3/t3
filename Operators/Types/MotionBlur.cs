@@ -14,7 +14,7 @@ namespace T3.Operators.Types.Id_196e14c7_3a71_4afd_a53b_e51d0fe8f414
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "3d99ccde-2bc3-4a25-962d-dab4fc6c554a")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> DisplaceMap = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> DepthMap = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "d757058a-a31e-487f-b002-cc06bc478535")]
         public readonly InputSlot<Object> CameraReference = new InputSlot<Object>();

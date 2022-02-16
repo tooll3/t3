@@ -8,7 +8,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "3d99ccde-2bc3-4a25-962d-dab4fc6c554a"/*DisplaceMap*/,
+      "Id": "3d99ccde-2bc3-4a25-962d-dab4fc6c554a"/*DepthMap*/,
       "DefaultValue": null
     },
     {
