@@ -45,10 +45,25 @@ struct vsOutput
 //         : x2 / ((1 / bias1 - 2) * (1 - x2) + 1) / 2 + 0.5;
 // }
 
-float DepthToLinear(float depth) 
+float DepthToSceneZ(float depth) 
 {
-    return (2.0 * Near) / (Far + Near - depth * (Far - Near));
+    //return (2.0 * Near) / (Far + Near - depth * (Far - Near));
+    //return (Near) / (Far +Near - depth * (Far -Near));
+    float n = Near;
+    float f = Far;
+    return (2.0 * n) / (f + n - depth * (f - n)) * (Far-Near) + Near;    
 }
+
+
+float DepthToLinearNormalized(float depth) 
+{
+    //return (2.0 * Near) / (Far + Near - depth * (Far - Near));
+    //return (Near) / (Far +Near - depth * (Far -Near));
+    float n = Near;
+    float f = Far;
+    return (2.0 * n) / (f + n - depth * (f - n));    
+}
+
 
 SamplerState samLinear
 {
@@ -80,13 +95,17 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     //return float4(Passes, 0,0,1);
     //return DepthTexture.Sample(samLinear, psInput.texCoord.xy);
     float refDepth = DepthTexture.SampleLevel(samLinear, psInput.texCoord,0).r;
+
     float2 texelSize = float2(1.0/textureSize.x, 1.0/textureSize.y);
     float factor = 0;
     float factorIncrement = 1.0/(Passes*float(KERNEL_SIZE));
     
     //float refSceneZ = ( DepthRange.x) / (DepthRange.y + DepthRange.x - refDepth * (DepthRange.y - DepthRange.x));    
-    float refSceneZ = DepthToLinear(refDepth);
-    
+    float refSceneZ = DepthToSceneZ(refDepth);
+    //return float4(refSceneZ.xxx,1);
+
+
+    //return float4(Near,Far,0,1);    
     //return float4(refSceneZ.rrr * 2,1);
 
     for (int j = 0; j < Passes; j++)
@@ -102,7 +121,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             float depth = DepthTexture.SampleLevel(samLinear, offset,0).r;
                         
             //float sceneZ = ( DepthRange.x) / (DepthRange.y + DepthRange.x - depth * (DepthRange.y - DepthRange.x));    
-            float sceneZ = DepthToLinear(depth);
+            float sceneZ = DepthToSceneZ(depth);
             if (sceneZ > refSceneZ)
             {
               factor += factorIncrement;
@@ -119,6 +138,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     //return float4(AOColor.rgb,1);
         
     float fadeInBackgroundFactor =    clamp(( refSceneZ - DepthClip.x ) /  (DepthClip.y - DepthClip.x), 0,1);
+    //return float4(fadeInBackgroundFactor,0,0,1);
     
     AOColor = lerp( float3(1,1,1), AOColor, Color.a);           // fade with color Alpha    
     AOColor = lerp ( AOColor,  float3(1,1,1), (fadeInBackgroundFactor));
