@@ -27,10 +27,12 @@ namespace T3.Operators.Types.Id_436e93a8_03c0_4366_8d9a_2245e5bcaa6c
             //var zoom = Zoom.GetValue(context);
             var rangeMin = RangeMin.GetValue(context);
             var rangeMax = RangeMax.GetValue(context);
+            var scale = Scale.GetValue(context);
 
             //var noiseSum = ComputePerlinNoise(value, period, octaves, seed);
             var noiseSum  = MathUtils.PerlinNoise(value, period, octaves, seed);
-            Result.Value = (noiseSum + 1f) * 0.5f * (rangeMax - rangeMin) + rangeMin;
+            var dist = rangeMax - rangeMin;
+            Result.Value = ((scale * noiseSum + 1f) * 0.5f * dist + rangeMin);
         }
 
 
@@ -51,5 +53,9 @@ namespace T3.Operators.Types.Id_436e93a8_03c0_4366_8d9a_2245e5bcaa6c
         
         [Input(Guid = "eabbaf77-5f74-4303-9453-6fa44facc5db")]
         public readonly InputSlot<float> OverrideTime = new InputSlot<float>();
+        
+        [Input(Guid = "E704CF6C-963E-4701-BA3D-127B880676FA")]
+        public readonly InputSlot<float> Scale = new InputSlot<float>();
+        
     }
 }

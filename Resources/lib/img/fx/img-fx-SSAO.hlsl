@@ -110,8 +110,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     for (int j = 0; j < Passes; j++)
     {
-        float2 randomCoords= float2( fmod( psInput.texCoord.x + 1.412* j + NoiseOffset.x,1) , 
-                                     fmod( psInput.texCoord.y + 1.1123* j + NoiseOffset.y,1));
+        float2 randomCoords= float2( fmod( psInput.texCoord.x * 21.7 + 2.412* j + NoiseOffset.x,1) , 
+                                     fmod( psInput.texCoord.y * 23.91  + 1.1123* j + NoiseOffset.y,1));
         float3 random = NoiseTexture.Sample(samLinear, randomCoords).rgb;
         random = normalize(random * 2.0 - 1.0);
         for (int i = 0; i < KERNEL_SIZE; i++)

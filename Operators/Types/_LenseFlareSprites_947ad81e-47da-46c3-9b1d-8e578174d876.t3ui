@@ -81,10 +81,10 @@
       }
     },
     {
-      "InputId": "7244cc40-8f0a-4381-80a3-eb818e262c88"/*ColorSource*/,
+      "InputId": "d6554b75-f320-4e8b-bcb0-6b484c29f6d3"/*MixPointLightColor*/,
       "Position": {
         "X": -200.0,
-        "Y": 315.0
+        "Y": 540.0
       }
     },
     {
@@ -99,13 +99,6 @@
       "Position": {
         "X": -200.0,
         "Y": 360.0
-      }
-    },
-    {
-      "InputId": "77eac715-d2ee-4bd5-93f5-1e9e7119a0e6"/*TextureCells*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 405.0
       }
     },
     {

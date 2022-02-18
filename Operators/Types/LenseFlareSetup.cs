@@ -19,6 +19,9 @@ namespace T3.Operators.Types.Id_eb4d5014_2619_4368_a1b8_521db8372243
         [Input(Guid = "ba661368-fae7-4a7b-b70c-30e21250e1eb")]
         public readonly InputSlot<int> LightIndex = new InputSlot<int>();
 
+        [Input(Guid = "aab1250a-de9c-4bfd-ab0f-8d4eed8b57e2")]
+        public readonly InputSlot<System.Numerics.Vector4> RandomizeColor = new InputSlot<System.Numerics.Vector4>();
+
 
     }
 }

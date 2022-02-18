@@ -341,16 +341,11 @@
           "Value": 1.0
         },
         {
-          "Id": "f1334f45-4335-4198-9b6e-ab9e8384aa32"/*Speed*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
           "Id": "61bb0df6-6c8a-4f3a-b7f4-9d979377cab8"/*Resolution*/,
           "Type": "SharpDX.Size2",
           "Value": {
-            "Width": 64,
-            "Height": 64
+            "Width": 16,
+            "Height": 16
           }
         },
         {

@@ -44,6 +44,8 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             var positionFactor = PositionFactor.GetValue(context);
             var randomizePosition = RandomizePosition.GetValue(context);
 
+            var mixPointLightColor = MixPointLightColor.GetValue(context);
+
             var referencedLightIndex = LightIndex.GetValue(context);
 
             var innerFxZone = InnerFxZone.GetValue(context);
@@ -113,12 +115,11 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
 
                         var sizeWithRandom = size * (float)(1.0 + randomizeSize * (rand.NextDouble() - 0.5)) / 0.2f;
 
-                        var spriteColor = Vector4.Clamp(new Vector4(
-                                                                    (color.X + randomizeColor.X * (float)(rand.NextDouble() - 0.5) * 4) * pointLight.Color.X,
-                                                                    (color.Y + randomizeColor.Y * (float)(rand.NextDouble() - 0.5) * 4) * pointLight.Color.Y,
-                                                                    (color.Z + randomizeColor.Z * (float)(rand.NextDouble() - 0.5) * 4) * pointLight.Color.Z,
-                                                                    color.W * (1 - randomizeColor.W * (float)(rand.NextDouble() * 2))
-                                                                   ), Vector4.Zero, new Vector4(100, 100, 100, 1));
+                        var colorWithLight = new Vector4((color.X + randomizeColor.X * (float)(rand.NextDouble() - 0.5) * 4)* MathUtils.Lerp(1f, pointLight.Color.X, mixPointLightColor),
+                                                 (color.Y + randomizeColor.Y * (float)(rand.NextDouble() - 0.5) * 4) * MathUtils.Lerp(1f, pointLight.Color.Y, mixPointLightColor),
+                                                 (color.Z + randomizeColor.Z * (float)(rand.NextDouble() - 0.5) * 4) * MathUtils.Lerp(1f, pointLight.Color.Z, mixPointLightColor),
+                                                 color.W * (1 - randomizeColor.W * (float)(rand.NextDouble() * 2)));
+                        var spriteColor = Vector4.Clamp(colorWithLight, Vector4.Zero, new Vector4(100, 100, 100, 1));
 
                         var triggerPosition = fxZoneMode == ZoneFxModes.Lights
                                                   ? lightPosInView2D
@@ -255,11 +256,11 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
 
         private StructuredList<Sprite> _sprites = new StructuredList<Sprite>(10);
 
-        private enum ColorSources
-        {
-            Light,
-            Global,
-        }
+        // private enum ColorSources
+        // {
+        //     Light,
+        //     Global,
+        // }
 
         private enum ZoneFxModes
         {
@@ -301,17 +302,20 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
         [Input(Guid = "BC1D9FDC-EA07-4C0D-BE2D-02FA955F9E5A")]
         public readonly InputSlot<float> RandomizeSpread = new();
 
-        [Input(Guid = "7244CC40-8F0A-4381-80A3-EB818E262C88", MappedType = typeof(ColorSources))]
-        public readonly InputSlot<int> ColorSource = new();
-
+        // [Input(Guid = "7244CC40-8F0A-4381-80A3-EB818E262C88", MappedType = typeof(ColorSources))]
+        // public readonly InputSlot<int> ColorSource = new();
+        
+        [Input(Guid = "D6554B75-F320-4E8B-BCB0-6B484C29F6D3")]
+        public readonly InputSlot<float> MixPointLightColor = new();
+        
         [Input(Guid = "7D9DA46C-2D1F-48F8-BDC5-BB7E29C363C7")]
         public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "53351CF3-71A5-4CB3-AD81-60ABC7718D4B")]
         public readonly InputSlot<Vector4> RandomizeColor = new();
 
-        [Input(Guid = "77EAC715-D2EE-4BD5-93F5-1E9E7119A0E6")]
-        public readonly InputSlot<Vector2> TextureCells = new();
+        // [Input(Guid = "77EAC715-D2EE-4BD5-93F5-1E9E7119A0E6")]
+        // public readonly InputSlot<Vector2> TextureCells = new();
 
         [Input(Guid = "9CFFFB1A-675E-410C-96DA-C02BD6B3A81A")]
         public readonly InputSlot<int> RandomSeed = new();
