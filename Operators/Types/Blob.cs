@@ -40,6 +40,9 @@ namespace T3.Operators.Types.Id_c8590f8f_cca1_434a_a880_67bb91920e1a
 
         [Input(Guid = "8232e748-5fc2-488d-8559-ac9ff621f95d")]
         public readonly InputSlot<float> Rotate = new InputSlot<float>();
+
+        [Input(Guid = "fca535e3-ea35-455f-b4ef-0a9d7feacef8")]
+        public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
     }
 }
 

@@ -85,6 +85,13 @@
       "Min": -180.0,
       "Max": 180.0,
       "Scale": 2.0
+    },
+    {
+      "InputId": "fca535e3-ea35-455f-b4ef-0a9d7feacef8"/*GenerateMips*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      }
     }
   ],
   "SymbolChildUis": [
@@ -147,7 +154,7 @@
       "ChildId": "96ed4415-be06-49d3-83b7-7f242a8da8ba"/*_ImageFxShaderSetupStatic*/,
       "Size": {
         "X": 110.0,
-        "Y": 283.0
+        "Y": 296.0
       },
       "Position": {
         "X": 446.71823,

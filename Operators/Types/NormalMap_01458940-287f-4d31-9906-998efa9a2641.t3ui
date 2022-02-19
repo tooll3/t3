@@ -48,18 +48,6 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "0ee24b1d-4988-45d6-b179-ff42a640cc77"/*_ImageFxShaderSetup2*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 116.467834,
-        "Y": 304.73657
-      },
-      "Position": {
-        "X": 65.802284,
-        "Y": 100.50006
-      }
-    },
-    {
       "ChildId": "381a39d6-8963-4476-831e-f3dc79359961"/*BoolToFloats*/,
       "Size": {
         "X": 110.0,
@@ -69,14 +57,25 @@
         "X": -21.057678,
         "Y": 510.95566
       }
+    },
+    {
+      "ChildId": "7cf1c6fe-79f7-47bf-9524-4405ab4218fd"/*_ImageFxShaderSetupStatic*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 114.0
+      },
+      "Position": {
+        "X": 344.9021,
+        "Y": 283.4281
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "b1fa156b-a959-42f8-9a81-30a667d60554"/*Output*/,
       "Position": {
-        "X": 268.53693,
-        "Y": 114.43436
+        "X": 527.64526,
+        "Y": 163.02536
       }
     }
   ]

@@ -45,7 +45,7 @@
         {
           "Id": "ccf77198-7682-4f6b-96f2-986e6827a4df"/*Size*/,
           "Type": "System.Single",
-          "Value": 0.007
+          "Value": 0.03
         },
         {
           "Id": "d6554b75-f320-4e8b-bcb0-6b484c29f6d3"/*MixPointLightColor*/,
@@ -230,7 +230,7 @@
         {
           "Id": "7c6c2ad1-b7d5-4496-822e-1720356b59d7"/*MultiSampling4x*/,
           "Type": "System.Boolean",
-          "Value": true
+          "Value": false
         },
         {
           "Id": "793ce198-9956-4dc9-9a4b-393208143f49"/*ShimmerGradient*/,
@@ -356,6 +356,11 @@
           "Id": "ccf77198-7682-4f6b-96f2-986e6827a4df"/*Size*/,
           "Type": "System.Single",
           "Value": 0.341
+        },
+        {
+          "Id": "d6554b75-f320-4e8b-bcb0-6b484c29f6d3"/*MixPointLightColor*/,
+          "Type": "System.Single",
+          "Value": 1.0
         },
         {
           "Id": "7d9da46c-2d1f-48f8-bdc5-bb7e29c363c7"/*Color*/,
@@ -684,7 +689,12 @@
           }
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "e44490fc-bf15-4e36-8b81-4d7c45949dbc"/*DrawShimmer*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "740c40f1-c864-4cc2-bb5c-af8c4bc1a4c3"/*Sparkle*/,
@@ -871,7 +881,12 @@
           "Value": false
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "d2d834bd-00f4-46a0-ad20-3f399e107229"/*DrawSprites*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "4dbb0179-291b-4a49-8465-a8c821d78a8a"/*Star*/,
@@ -908,7 +923,7 @@
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0,
-            "W": 0.11
+            "W": 0.04
           }
         },
         {
@@ -1128,7 +1143,12 @@
           "Value": false
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "d2d834bd-00f4-46a0-ad20-3f399e107229"/*DrawSprites*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "f267d537-e3cd-43ea-8cf5-e7d2b121d799"/*RandomColorEdgeGlow*/,
@@ -1164,6 +1184,11 @@
           "Id": "bc1d9fdc-ea07-4c0d-be2d-02fa955f9e5a"/*RandomizeSpread*/,
           "Type": "System.Single",
           "Value": 2.06
+        },
+        {
+          "Id": "d6554b75-f320-4e8b-bcb0-6b484c29f6d3"/*MixPointLightColor*/,
+          "Type": "System.Single",
+          "Value": 1.0
         },
         {
           "Id": "7d9da46c-2d1f-48f8-bdc5-bb7e29c363c7"/*Color*/,
@@ -1253,6 +1278,11 @@
         },
         {
           "Id": "93728b1f-cbfa-4065-9de1-bf8641fade7e"/*RotationSpread*/,
+          "Type": "System.Single",
+          "Value": 1.0
+        },
+        {
+          "Id": "d6554b75-f320-4e8b-bcb0-6b484c29f6d3"/*MixPointLightColor*/,
           "Type": "System.Single",
           "Value": 1.0
         },
