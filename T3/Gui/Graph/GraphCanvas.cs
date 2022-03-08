@@ -222,7 +222,7 @@ namespace T3.Gui.Graph
                     ConnectionMaker.ConnectionSplitHelper.PrepareNewFrame(this);
                 }
 
-                _symbolBrowser.Draw();
+                SymbolBrowser.Draw();
 
                 Graph.DrawGraph(DrawList);
                 RenameInstanceOverlay.Draw();
@@ -241,7 +241,7 @@ namespace T3.Gui.Graph
                         ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem | ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isAnyItemHovered;
                     if (droppedOnBackground)
                     {
-                        ConnectionMaker.InitSymbolBrowserAtPosition(_symbolBrowser,
+                        ConnectionMaker.InitSymbolBrowserAtPosition(SymbolBrowser,
                                                                     InverseTransformPosition(ImGui.GetIO().MousePos));
                     }
                     else
@@ -332,7 +332,7 @@ namespace T3.Gui.Graph
         /// </remarks>
         public void OpenSymbolBrowserForOutput(SymbolChildUi childUi, Symbol.OutputDefinition outputDef)
         {
-            ConnectionMaker.InitSymbolBrowserAtPosition(_symbolBrowser,
+            ConnectionMaker.InitSymbolBrowserAtPosition(SymbolBrowser,
                                                         childUi.PosOnCanvas + new Vector2(childUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0));
         }
 
@@ -630,7 +630,7 @@ namespace T3.Gui.Graph
             {
                 if (ImGui.MenuItem("Add Node..."))
                 {
-                    _symbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null, false, null);
+                    SymbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null, false, null);
                 }
 
                 if (ImGui.MenuItem("Add input parameter..."))
@@ -877,12 +877,11 @@ namespace T3.Gui.Graph
 
         //public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private List<SymbolChildUi> ChildUis { get; set; }
-        public readonly SymbolBrowser _symbolBrowser = new SymbolBrowser();
+        public readonly SymbolBrowser SymbolBrowser = new SymbolBrowser();
         private string _symbolNameForDialogEdits = "";
         private string _symbolDescriptionForDialog = "";
         private string _nameSpaceForDialogEdits = "";
         private readonly GraphWindow _window;
-        private readonly PlayerExporter _playerExporter;
 
         public enum HoverModes
         {

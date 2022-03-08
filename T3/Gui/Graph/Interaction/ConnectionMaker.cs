@@ -816,7 +816,7 @@ namespace T3.Gui.Graph
                         var posOnScreen = graphCanvas.InverseTransformPosition(_bestMatchYetForCurrentFrame.PositionOnScreen) - SymbolChildUi.DefaultOpSize / 2;
 
                         SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol,
-                                                         graphCanvas._symbolBrowser,
+                                                         graphCanvas.SymbolBrowser,
                                                          _bestMatchYetForCurrentFrame.Connection,
                                                          posOnScreen);
                     }

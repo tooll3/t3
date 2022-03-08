@@ -158,7 +158,7 @@ namespace T3.Gui.Graph
                     // Tooltip
                     if (ImGui.IsItemHovered()
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
-                        && !GraphCanvas.Current._symbolBrowser._isOpen
+                        && !GraphCanvas.Current.SymbolBrowser._isOpen
                         && ImGui.IsWindowFocused())
                     {
                         if (UserSettings.Config.SmartGroupDragging)
@@ -799,7 +799,7 @@ namespace T3.Gui.Graph
                             _draggedOutputDefId = Guid.Empty;
                             if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickTreshold)
                             {
-                                ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current._symbolBrowser, childUi, instance, output.Id);
+                                ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current.SymbolBrowser, childUi, instance, output.Id);
                             }
                         }
 

@@ -210,7 +210,7 @@ namespace T3.Gui.Graph
                 }
                 else if (c.TargetParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
-                    newLine.TargetPosition = GraphCanvas.Current.TransformPosition(GraphCanvas.Current._symbolBrowser.PosOnCanvas);
+                    newLine.TargetPosition = GraphCanvas.Current.TransformPosition(GraphCanvas.Current.SymbolBrowser.PosOnCanvas);
                     //newLine.ColorForType = Color.White;
                 }
                 else if (c.SourceParentOrChildId == ConnectionMaker.NotConnectedId)
@@ -220,7 +220,7 @@ namespace T3.Gui.Graph
                 }
                 else if (c.SourceParentOrChildId == ConnectionMaker.UseDraftChildId)
                 {
-                    newLine.SourcePosition = GraphCanvas.Current._symbolBrowser.OutputPositionOnScreen;
+                    newLine.SourcePosition = GraphCanvas.Current.SymbolBrowser.OutputPositionOnScreen;
                 }
                 else
                 {
