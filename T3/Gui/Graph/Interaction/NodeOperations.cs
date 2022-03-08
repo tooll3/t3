@@ -492,7 +492,7 @@ namespace T3.Gui.Graph.Interaction
             cmd.Do();
             cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
 
-            // now copy connection from/to inputs/outputs that are not copied with the command 
+            // Now copy connection from/to inputs/outputs that are not copied with the command 
             // todo: same code as in Symbol.SetInstanceType, factor out common code
             var connectionsToCopy = sourceSymbol.Connections.FindAll(c => c.IsConnectedToSymbolInput || c.IsConnectedToSymbolOutput);
             var connectionEntriesToReplace = new List<ConnectionEntry>(connectionsToCopy.Count);
@@ -523,7 +523,7 @@ namespace T3.Gui.Graph.Interaction
                 newSymbol.AddConnection(newConnection, conEntry.MultiInputIndex);
             }
 
-            // copy the values of the input of the duplicated type: default values of symbol and the ones in composition context
+            // Copy the values of the input of the duplicated type: default values of symbol and the ones in composition context
             foreach (var sourceInputDef in sourceSymbol.InputDefinitions)
             {
                 Guid newInputId = oldToNewIdMap[sourceInputDef.Id];
@@ -531,7 +531,7 @@ namespace T3.Gui.Graph.Interaction
                 correspondingInputDef.DefaultValue = sourceInputDef.DefaultValue.Clone();
             }
 
-            // create instance
+            // Create instance
             var mousePos = GraphCanvas.Current.InverseTransformPosition(ImGui.GetMousePos());
             var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) { PosOnCanvas = mousePos };
             UndoRedoStack.AddAndExecute(addCommand);
@@ -546,13 +546,19 @@ namespace T3.Gui.Graph.Interaction
                 newInput.IsDefault = input.Value.IsDefault;
             }
 
-            // update the positions
+            // Update the positions
             var sourceSelectables = sourceSymbolUi.GetSelectables().ToArray();
             var newSelectables = newSymbolUi.GetSelectables().ToArray();
             Debug.Assert(sourceSelectables.Length == newSelectables.Length);
             for (int i = 0; i < sourceSelectables.Length; i++)
             {
                 newSelectables[i].PosOnCanvas = sourceSelectables[i].PosOnCanvas; // todo: check if this is enough or if id check needed
+            }
+
+            // Copy names of instances
+            for (var index = 0; index < sourceSymbol.Children.Count; index++)
+            {
+                newSymbol.Children[index].Name = sourceSymbol.Children[index].Name;
             }
 
             return newSymbol;
