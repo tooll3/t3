@@ -78,6 +78,8 @@ namespace T3
         [STAThread]
         private static void Main(string[] args)
         {
+            var tmp = new ProjectSettings(saveOnQuit: false);            
+            
             Options options = ParseCommandLine(args);
             if (options == null)
                 return;
@@ -90,9 +92,7 @@ namespace T3
                                AllowUserResizing = false,
                                Icon = new Icon(@"Resources\t3\t3.ico")
                            };
-
-            var tmp = new ProjectSettings(saveOnQuit: false);
-
+            
             // SwapChain description
             var desc = new SwapChainDescription()
                            {

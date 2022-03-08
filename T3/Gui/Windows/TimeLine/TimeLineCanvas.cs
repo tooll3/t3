@@ -130,7 +130,8 @@ namespace T3.Gui.Windows.TimeLine
             var localScale = new Vector2(_nestedTimeScale, 1);
             var localScroll = new Vector2(_nestedTimeOffset, 0);
 
-            return (posOnCanvas * localScale + localScroll) * Scale + Scroll + WindowPos;
+            // TODO: Verify that nested scroll is not inverted!
+            return (posOnCanvas * localScale - localScroll) * Scale - Scroll * Scale + WindowPos;
         }
 
         public override Vector2 InverseTransformPosition(Vector2 posOnScreen)
@@ -138,7 +139,7 @@ namespace T3.Gui.Windows.TimeLine
             var localScale = new Vector2(_nestedTimeScale, 1);
             var localScroll = new Vector2(_nestedTimeOffset, 0);
 
-            return (posOnScreen - localScroll * Scale - Scroll - WindowPos) / (localScale * Scale);
+            return (posOnScreen + localScroll * Scale + Scroll * Scale - WindowPos) / (localScale * Scale);
         }
 
         public float TransformGlobalTime(float time)
@@ -147,7 +148,7 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         public float NestedTimeScale => Scale.X * _nestedTimeScale;
-        public float NestedTimeOffset => (Scroll.X - _nestedTimeOffset) + _nestedTimeOffset;
+        public float NestedTimeOffset => (Scroll.X * Scale.X + _nestedTimeOffset) + _nestedTimeOffset;
         #endregion
 
         private void HandleDeferredActions()
@@ -225,7 +226,7 @@ namespace T3.Gui.Windows.TimeLine
                 if (!IsCurrentTimeVisible())
                 {
                     var time = Playback.TimeInBars - InverseTransformDirection(new Vector2(WindowSize.X, 0)).X / 2;
-                    ScrollTarget.X = (float)(-time * ScaleTarget.X);
+                    ScrollTarget.X = (float)(time);
                 }
             }
 

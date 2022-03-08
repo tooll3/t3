@@ -79,15 +79,15 @@
     {
       "OutputId": "8bb0b18f-4fad-4348-a4fa-95b40c4167a4"/*DepthBuffer*/,
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 29.03888,
+        "Y": -47.246216
       }
     },
     {
       "OutputId": "152312a6-729b-49cb-9ac5-a63105694a6b"/*VelocityBuffer*/,
       "Position": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 29.03888,
+        "Y": -97.246216
       }
     }
   ]

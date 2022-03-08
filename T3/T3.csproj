@@ -10,8 +10,13 @@
     <ItemGroup>
       <PackageReference Include="ImGui.NET" Version="1.86.0" />
       <PackageReference Include="Microsoft.CodeAnalysis" Version="3.11.0" />
-      <PackageReference Include="Rug.Osc" Version="1.2.5" />
-      <PackageReference Include="SharpDX.Desktop" Version="4.2.0" />
+      <PackageReference Include="Rug.Osc" Version="1.2.5">
+		<NoWarn>NU1701</NoWarn>
+</PackageReference>
+      <PackageReference Include="SharpDX.Desktop" Version="4.2.0">
+		<NoWarn>NU1701</NoWarn>
+</PackageReference>
+ 
     </ItemGroup>
 
     <ItemGroup>

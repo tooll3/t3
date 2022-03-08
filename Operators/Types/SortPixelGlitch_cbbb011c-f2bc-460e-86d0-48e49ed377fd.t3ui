@@ -29,14 +29,16 @@
       "Position": {
         "X": 375.0395,
         "Y": 1253.7502
-      }
+      },
+      "Scale": 0.01
     },
     {
       "InputId": "f2eaa551-64f8-475f-b80a-a2b659393157"/*Extend*/,
       "Position": {
         "X": 375.0395,
         "Y": 1298.7502
-      }
+      },
+      "Scale": 0.01
     },
     {
       "InputId": "0d589063-aadf-47e5-8eb0-1c9beba104d0"/*BackgroundColor*/,

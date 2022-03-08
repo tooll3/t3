@@ -6,18 +6,16 @@ using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
+using t3.App;
 using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Gui.Graph;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
-using T3.Gui.Selection;
-using T3.Gui.UiHelpers;
 using T3.Gui.Windows.Output;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
+// ReSharper disable InconsistentNaming
 
 namespace T3.Gui.Windows.Variations
 {
@@ -73,12 +71,12 @@ namespace T3.Gui.Windows.Variations
 
 
 
-            var drawlist = ImGui.GetWindowDrawList();
+            var drawList = ImGui.GetWindowDrawList();
 
             // Draw Canvas Texture
             var rectOnScreen = ImRect.RectWithSize(WindowPos, new Vector2(_canvasTexture.Description.Width, _canvasTexture.Description.Height));
 
-            drawlist.AddImage((IntPtr)_canvasTextureSrv, rectOnScreen.Min, rectOnScreen.Max);
+            drawList.AddImage((IntPtr)_canvasTextureSrv, rectOnScreen.Min, rectOnScreen.Max);
 
             foreach (var variation in _variationByGridIndex.Values)
             {
@@ -88,7 +86,7 @@ namespace T3.Gui.Windows.Variations
                 var screenRect = GetScreenRectForCell(variation.GridCell);
                 if (variation.ThumbnailNeedsUpdate)
                 {
-                    drawlist.AddRectFilled(screenRect.Min, screenRect.Max, NeedsUpdateColor);
+                    drawList.AddRectFilled(screenRect.Min, screenRect.Max, NeedsUpdateColor);
                 }
             }
 
@@ -382,7 +380,7 @@ namespace T3.Gui.Windows.Variations
             EvaluationContext.Reset();
             EvaluationContext.TimeForKeyframes = 13.4f;
             
-            // NOTE: This is horrible hack to prevent _imageCanvas from being rendered by imgui
+            // NOTE: This is horrible hack to prevent _imageCanvas from being rendered by ImGui
             // DrawValue will use the current ImageOutputCanvas for rendering
             _imageCanvas.SetAsCurrent();
             ImGui.PushClipRect(new Vector2(0,0), new Vector2(1,1), true);
@@ -403,9 +401,9 @@ namespace T3.Gui.Windows.Variations
                                                                    0.0f, 1.0f));
                 deviceContext.OutputMerger.SetTargets(_canvasTextureRtv);
 
-                var vertexShader = resourceManager.GetVertexShader(Program.FullScreenVertexShaderId);
+                var vertexShader = resourceManager.GetVertexShader(SharedResources.FullScreenVertexShaderId);
                 deviceContext.VertexShader.Set(vertexShader);
-                var pixelShader = resourceManager.GetPixelShader(Program.FullScreenPixelShaderId);
+                var pixelShader = resourceManager.GetPixelShader(SharedResources.FullScreenPixelShaderId);
                 deviceContext.PixelShader.Set(pixelShader);
                 deviceContext.PixelShader.SetShaderResource(0, previewTextureSrv);
 
@@ -441,21 +439,21 @@ namespace T3.Gui.Windows.Variations
 
         private static readonly GridCell[] NeighbourOffsets =
         {
-            new GridCell(-1, -1),
-            new GridCell(0, -1),
-            new GridCell(1, -1),
-            new GridCell(1, 0),
-            new GridCell(1, 1),
-            new GridCell(0, 1),
-            new GridCell(-1, 1),
-            new GridCell(-1, 0),
+            new(-1, -1),
+            new(0, -1),
+            new(1, -1),
+            new(1, 0),
+            new(1, 1),
+            new(0, 1),
+            new(-1, 1),
+            new(-1, 0),
         };
 
         public float Scatter = 20f;
         private float _lastScatter;
         private ISlot _firstOutputSlot;
 
-        private static readonly EvaluationContext EvaluationContext = new EvaluationContext()
+        private static readonly EvaluationContext EvaluationContext = new()
                                                                       {
                                                                           RequestedResolution = new Size2((int)ThumbnailSize.X, (int)ThumbnailSize.Y)
                                                                       };

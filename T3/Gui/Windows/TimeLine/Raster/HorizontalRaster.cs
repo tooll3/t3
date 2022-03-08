@@ -15,7 +15,7 @@ namespace T3.Gui.Windows.TimeLine
         public void Draw(ICanvas canvas)
         {
             _canvas = canvas;
-            DrawLines(canvas.Scale.Y , -canvas.Scroll.Y / canvas.Scale.Y);
+            DrawLines(canvas.Scale.Y , canvas.Scroll.Y); // ???????????
         }
 
         private ICanvas _canvas;

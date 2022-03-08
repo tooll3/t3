@@ -92,6 +92,10 @@ namespace T3.Gui
             RegisterUiType(typeof(Core.DataTypes.RenderTargetReference), new TextureUiProperties(),
                            () => new FallbackInputUi<Core.DataTypes.RenderTargetReference>(),
                            () => new ValueOutputUi<Core.DataTypes.RenderTargetReference>());
+            RegisterUiType(typeof(Object), new FloatUiProperties(),
+                           () => new FallbackInputUi<Object>(),
+                           () => new ValueOutputUi<Object>());
+
             RegisterUiType(typeof(Core.DataTypes.StructuredList), new FloatUiProperties(), () => new StructuredListInputUi(),
                            () => new StructuredListOutputUi());
             RegisterUiType(typeof(Core.DataTypes.Texture3dWithViews), new FallBackUiProperties(), () => new FallbackInputUi<Core.DataTypes.Texture3dWithViews>(),
@@ -190,6 +194,8 @@ namespace T3.Gui
             
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227.LoadObj), DescriptiveUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c.ComputeShader), DescriptiveUi.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad.VertexShader), DescriptiveUi.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985.PixelShader), DescriptiveUi.DrawChildUi);
 
             foreach (var symbolEntry in SymbolRegistry.Entries)
             {

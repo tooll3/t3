@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "t3", "t3\t3.csproj", "{A573
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{CE0B5F13-C6DF-4591-B2E3-0CD9588D9764}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators", "Operators\Operators.csproj", "{E36592ED-4678-4260-B65F-70DC8955F0DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Operators", "Operators\Operators.csproj", "{E36592ED-4678-4260-B65F-70DC8955F0DE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Player", "Player\Player.csproj", "{897610DF-608C-49F3-A533-6B272A4A115B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{E36592ED-4678-4260-B65F-70DC8955F0DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E36592ED-4678-4260-B65F-70DC8955F0DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E36592ED-4678-4260-B65F-70DC8955F0DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{897610DF-608C-49F3-A533-6B272A4A115B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{897610DF-608C-49F3-A533-6B272A4A115B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{897610DF-608C-49F3-A533-6B272A4A115B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{897610DF-608C-49F3-A533-6B272A4A115B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

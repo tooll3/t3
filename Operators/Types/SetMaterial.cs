@@ -43,29 +43,44 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
             Utilities.Dispose(ref _baseColorMapSrv);
             var tex = BaseColorMap.GetValue(context) ?? PbrContextSettings.WhitePixelTexture;
             _baseColorMapSrv = new ShaderResourceView(device, tex);
+            var prevAlbedoColorMap = context.PbrMaterialTextures.AlbedoColorMap;
+            
+            
             context.PbrMaterialTextures.AlbedoColorMap = _baseColorMapSrv;
 
             Utilities.Dispose(ref _normalMapSrv);
             var tex2 = NormalMap.GetValue(context) ?? PbrContextSettings.NormalFallbackTexture;
             _normalMapSrv = new ShaderResourceView(device, tex2);
+            var prevNormalMap = context.PbrMaterialTextures.NormalMap;
+            
+            
             context.PbrMaterialTextures.NormalMap = _normalMapSrv;
 
             Utilities.Dispose(ref _rsmoMapSrv);
             var tex3 = RoughnessSpecularMetallicOcclusionMap.GetValue(context) ?? PbrContextSettings.RsmoFallbackTexture;
             _rsmoMapSrv = new ShaderResourceView(device, tex3);
+            var prevRoughnessSpecularMetallicOcclusionMap = context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap;
+            
+            
             context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap = _rsmoMapSrv;
 
             Utilities.Dispose(ref _emissiveColorMapSrv);
             var tex4 = EmissiveColorMap.GetValue(context) ?? PbrContextSettings.WhitePixelTexture;
             _emissiveColorMapSrv = new ShaderResourceView(device, tex4);
+            var prevEmissiveColorMap = context.PbrMaterialTextures.EmissiveColorMap;
+            
             context.PbrMaterialTextures.EmissiveColorMap = _emissiveColorMapSrv;
 
             var previousParameters = context.PbrMaterialParams;
             context.PbrMaterialParams = _parameterBuffer;
             
-            
             SubTree.GetValue(context);
-                context.PbrMaterialParams = previousParameters;
+            
+            context.PbrMaterialParams = previousParameters;
+            context.PbrMaterialTextures.AlbedoColorMap = prevAlbedoColorMap;
+            context.PbrMaterialTextures.NormalMap = prevNormalMap;
+            context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap = prevRoughnessSpecularMetallicOcclusionMap;
+            context.PbrMaterialTextures.EmissiveColorMap = prevEmissiveColorMap;
         }
 
         private ShaderResourceView _baseColorMapSrv;
@@ -85,6 +100,9 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
         [Input(Guid = "2C91C306-1815-4B22-A70F-746232F024D7")]
         public readonly InputSlot<Vector4> EmissiveColor = new InputSlot<Vector4>();
 
+        [Input(Guid = "6D859756-0243-42C5-973D-6DE2DCDC5609")]
+        public readonly InputSlot<Texture2D> EmissiveColorMap = new InputSlot<Texture2D>();
+        
         [Input(Guid = "9D5CA726-28B0-4F3D-A5AA-F0AE3E2043A9")]
         public readonly InputSlot<float> Specular = new InputSlot<float>();
 
@@ -100,7 +118,5 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
         [Input(Guid = "C8003FBD-C6CE-440C-9F1F-6B15B5EE5274")]
         public readonly InputSlot<Texture2D> RoughnessSpecularMetallicOcclusionMap = new InputSlot<Texture2D>();
 
-        [Input(Guid = "6D859756-0243-42C5-973D-6DE2DCDC5609")]
-        public readonly InputSlot<Texture2D> EmissiveColorMap = new InputSlot<Texture2D>();
     }
 }

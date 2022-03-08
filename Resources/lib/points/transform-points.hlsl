@@ -6,6 +6,8 @@ cbuffer Params : register(b0)
 {
     float4x4 TransformMatrix;
     float UpdateRotation;
+    float ScaleW;
+    float OffsetW;
 }
 
 
@@ -43,13 +45,10 @@ void main(uint3 i : SV_DispatchThreadID)
             cross(crossXY, rotatedXDir), 
             crossXY );
 
-        rotation = normalize(q_from_matrix(transpose(orientationDest)));
-    }
-    else {
-
+        rotation = normalize(q_from_matrix(transpose(orientationDest)));        
     }
 
     ResultPoints[i.x].rotation = rotation;
-    ResultPoints[i.x].w = SourcePoints[i.x].w;
+    ResultPoints[i.x].w = SourcePoints[i.x].w * ScaleW + OffsetW;
 }
 

@@ -212,6 +212,11 @@
             "Z": 1E-06,
             "W": 0.0
           }
+        },
+        {
+          "Id": "e882e0f0-03f9-46e6-ac7a-709e6fa66613"/*Multisampling*/,
+          "Type": "System.Int32",
+          "Value": 1
         }
       ],
       "Outputs": []
@@ -451,6 +456,12 @@
     {
       "SourceParentOrChildId": "41ea3bd7-59c7-4dd4-9dbf-373567bb559f",
       "SourceSlotId": "fe020a5c-91e1-441f-be0d-ab5900d150eb",
+      "TargetParentOrChildId": "d00c0edc-62e2-4edc-9797-0451ce292417",
+      "TargetSlotId": "be02a84b-a666-4119-bb6e-fee1a3df0981"
+    },
+    {
+      "SourceParentOrChildId": "e5cef408-7948-414b-8392-05a47d214a8d",
+      "SourceSlotId": "7a76d147-4b8e-48cf-aa3e-aac3aa90e888",
       "TargetParentOrChildId": "d00c0edc-62e2-4edc-9797-0451ce292417",
       "TargetSlotId": "be02a84b-a666-4119-bb6e-fee1a3df0981"
     },

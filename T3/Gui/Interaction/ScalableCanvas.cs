@@ -2,8 +2,8 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
-using T3.Core.Logging;
 using T3.Gui.Graph;
+using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
 using UiHelpers;
@@ -16,8 +16,6 @@ namespace T3.Gui.Interaction
     /// </summary>
     public class ScalableCanvas : ICanvas
     {
-        //protected float UserSetting. = 12;
-
         /// <summary>
         /// This needs to be called by the inherited class before drawing its interface. 
         /// </summary>
@@ -36,102 +34,36 @@ namespace T3.Gui.Interaction
                 WindowSize = ImGui.GetContentRegionAvail();
                 WindowPos = ImGui.GetCursorScreenPos();
             }
-            DampScaling();
+
+            if (!UsingParentCanvas)
+                DampScaling();
+
             HandleInteraction(flags);
-        }
-
-        
-        
-        protected void DampScaling()
-        {
-            // Damp scaling
-            var p1 = Scroll;
-            var p2 = Scroll + WindowSize * Scale;
-            var p1Target = ScrollTarget;
-            var p2Target = ScrollTarget + WindowSize * ScaleTarget;
-            var f = Math.Min(Io.DeltaTime / UserSettings.Config.ScrollSmoothing.Clamp(0.01f, 0.99f), 1);
-            var pp1 = Vector2.Lerp(p1, p1Target, f);
-            var pp2 = Vector2.Lerp(p2, p2Target, f);
-            var scaleT = (pp2 - pp1) / WindowSize;
-
-            Scale = scaleT;
-            Scroll = pp1;
-
-            var completed = Math.Abs(Scroll.X - ScrollTarget.X) < 1f
-                            && Math.Abs(Scroll.Y - ScrollTarget.Y) < 1f
-                            && Math.Abs(Scale.X - ScaleTarget.X) < 0.05f
-                            && Math.Abs(Scale.Y - ScaleTarget.Y) < 0.05f;
-
-            if (completed)
-            {
-                Scroll = ScrollTarget;
-                Scale = ScaleTarget;
-            }
-            
-            if (float.IsNaN(ScaleTarget.X))
-                ScaleTarget.X = 1;
-            
-            if (float.IsNaN(ScaleTarget.Y))
-                ScaleTarget.Y = 1;
-            
-            if (float.IsNaN(Scale.X) || float.IsNaN(Scale.Y))
-                Scale = ScaleTarget;
-            
-            if (float.IsNaN(ScrollTarget.X))
-                ScrollTarget.X = 1;
-            
-            if (float.IsNaN(ScrollTarget.Y))
-                ScrollTarget.Y = 1;
-            
-            if (float.IsNaN(Scroll.X) || float.IsNaN(Scroll.Y))
-                Scroll = ScrollTarget;            
-        }
-
-        public Scope GetTargetScope()
-        {
-            return new Scope()
-                       {
-                           Scale = ScaleTarget,
-                           Scroll = ScrollTarget
-                       };
-        }
-
-        public void SetVisibleRange(Vector2 scale, Vector2 scroll)
-        {
-            ScaleTarget = scale;
-            ScrollTarget = scroll;
-        }
-
-        public void SetVisibleVRange(float valueScale, float valueScroll)
-        {
-            ScaleTarget = new Vector2(ScaleTarget.X, valueScale);
-            ScrollTarget = new Vector2(ScrollTarget.X, valueScroll);
         }
 
         #region implement ICanvas =================================================================
         /// <summary>
-        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Convert canvas position (e.g. of an Operator) into screen position  
         /// </summary>
         public virtual Vector2 TransformPosition(Vector2 posOnCanvas)
         {
-            var v = posOnCanvas * Scale + Scroll + WindowPos;
+            var v = posOnCanvas * Scale - Scroll * Scale + WindowPos;
             return new Vector2((int)v.X, (int)v.Y);
         }
 
         public virtual Vector2 TransformPositionFloat(Vector2 posOnCanvas)
         {
-            var v = posOnCanvas * Scale + Scroll + WindowPos;
+            var v = posOnCanvas * Scale - Scroll * Scale + WindowPos;
             return new Vector2(v.X, v.Y);
         }
 
-        
         public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
         {
-            return MathUtils.Floor(posOnCanvas * Scale + Scroll + WindowPos);
+            return MathUtils.Floor(posOnCanvas * Scale - Scroll * Scale + WindowPos);
         }
 
         /// <summary>
-        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// Convert canvas position (e.g. of an Operator) to screen position  
         /// </summary>
         public float TransformX(float xOnCanvas)
         {
@@ -139,7 +71,7 @@ namespace T3.Gui.Interaction
         }
 
         /// <summary>
-        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        ///  Convert canvas position (e.g. of an Operator) to screen position 
         /// </summary>
         public float TransformY(float yOnCanvas)
         {
@@ -147,11 +79,11 @@ namespace T3.Gui.Interaction
         }
 
         /// <summary>
-        /// Convert at screen space position (e.g. from mouse) to canvas coordinates applying canvas zoom and scrolling 
+        /// Convert a screen space position (e.g. from mouse) to canvas coordinates  
         /// </summary>
         public virtual Vector2 InverseTransformPosition(Vector2 screenPos)
         {
-            return (screenPos - Scroll - WindowPos) / Scale;
+            return (screenPos - WindowPos) / Scale + Scroll;
         }
 
         /// <summary>
@@ -198,7 +130,7 @@ namespace T3.Gui.Interaction
             min.Y = (int)min.Y;
             size.X = (int)size.X;
             size.Y = (int)size.Y;
-            return new ImRect(min, min+size);
+            return new ImRect(min, min + size);
         }
 
         public ImRect InverseTransformRect(ImRect screenRect)
@@ -211,7 +143,7 @@ namespace T3.Gui.Interaction
         /// </summary>
         public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
         {
-            return posOnCanvas * Scale + Scroll;
+            return posOnCanvas * Scale - Scroll * Scale;
         }
 
         public Vector2 WindowPos { get; private set; }
@@ -224,35 +156,62 @@ namespace T3.Gui.Interaction
         protected Vector2 ScrollTarget = new Vector2(0.0f, 0.0f);
         #endregion
 
+        public Scope GetTargetScope()
+        {
+            return new Scope()
+                       {
+                           Scale = ScaleTarget,
+                           Scroll = ScrollTarget
+                       };
+        }
+
+        public void SetVisibleRange(Vector2 scale, Vector2 scroll)
+        {
+            ScaleTarget = scale;
+            ScrollTarget = scroll;
+        }
+
+        public void SetVisibleVRange(float valueScale, float valueScroll)
+        {
+            ScaleTarget = new Vector2(ScaleTarget.X, valueScale);
+            ScrollTarget = new Vector2(ScrollTarget.X, valueScroll);
+        }
+
         public void SetScaleToMatchPixels()
         {
             ScaleTarget = Vector2.One;
         }
 
+        /// <summary>
+        /// This is a horrible hack: We sacrifice smooth interpolated scaling so we can use...
+        /// - ... ScaleTarget for the local view
+        /// - ... Scale for the view transformed to the parent canvas
+        /// </summary>
         public void SetScaleToParentCanvas(ScalableCanvas parent)
         {
             if (parent == null)
                 return;
 
             Scale = ScaleTarget * parent.Scale;
-            Scroll = ScrollTarget * parent.Scale;
+            Scroll = ScrollTarget;
         }
 
         public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null)
         {
-            //WindowSize = ImGui.GetContentRegionMax() - ImGui.GetWindowContentRegionMin();
-
             var areaSize = area.GetSize();
             if (areaSize.X == 0)
                 areaSize.X = 1;
 
             if (areaSize.Y == 0)
                 areaSize.Y = 1;
-            
+
+            if (Scale.X == 0 || Scale.Y == 0)
+            {
+                Scale = Vector2.One;
+            }
+
             ScaleTarget = WindowSize / areaSize;
 
-
-            
             if (flipY)
             {
                 ScaleTarget.Y *= -1;
@@ -262,11 +221,11 @@ namespace T3.Gui.Interaction
             {
                 ScaleTarget /= parent.Scale;
             }
-            
-            ScrollTarget = new Vector2(-area.Min.X * ScaleTarget.X,
-                                       -area.Max.Y * ScaleTarget.Y);
+
+            ScrollTarget = new Vector2(area.Min.X,
+                                       area.Max.Y);
         }
-        
+
         public void SetVerticalScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null)
         {
             WindowSize = ImGui.GetContentRegionMax() - ImGui.GetWindowContentRegionMin();
@@ -281,15 +240,15 @@ namespace T3.Gui.Interaction
             {
                 ScaleTarget.Y /= parent.Scale.Y;
             }
-            
-            ScrollTarget.Y = -area.Max.Y * ScaleTarget.Y;
+
+            ScrollTarget.Y = area.Max.Y;
         }
 
-        public void FitAreaOnCanvas(ImRect area, bool flipY = false)
+        public void FitAreaOnCanvas(ImRect areaOnCanvas, bool flipY = false)
         {
-            var height = area.GetHeight();
-            var width = area.GetWidth();
-            var targetAspect = width / height;
+            var heightOnCanvas = areaOnCanvas.GetHeight();
+            var widthOnCanvas = areaOnCanvas.GetWidth();
+            var aspectOnCanvas = widthOnCanvas / heightOnCanvas;
 
             // Use a fallback resolution to fix initial call from constructor
             // where img has not been initialized yet.
@@ -299,19 +258,21 @@ namespace T3.Gui.Interaction
             }
 
             float scale;
-            if (targetAspect > WindowSize.X / WindowSize.Y)
+            if (aspectOnCanvas > WindowSize.X / WindowSize.Y)
             {
-                scale = WindowSize.X / width;
+                // Center in a high window...
+                scale = WindowSize.X / widthOnCanvas;
                 ScrollTarget = new Vector2(
-                                           -area.Min.X * scale,
-                                           -area.Min.Y * scale + (WindowSize.Y - height * scale) / 2);
+                                           areaOnCanvas.Min.X,
+                                           areaOnCanvas.Min.Y - (WindowSize.Y / scale - heightOnCanvas) / 2);
             }
             else
             {
-                scale = WindowSize.Y / height;
+                // Center in a wide window... 
+                scale = WindowSize.Y / heightOnCanvas;
                 ScrollTarget = new Vector2(
-                                           -area.Min.X * scale + (WindowSize.X - width * scale) / 2,
-                                           -area.Min.Y * scale);
+                                           areaOnCanvas.Min.X - (WindowSize.X / scale - widthOnCanvas) / 2,
+                                           areaOnCanvas.Min.Y);
             }
 
             ScaleTarget = new Vector2(scale, scale);
@@ -341,17 +302,72 @@ namespace T3.Gui.Interaction
             }
 
             ScaleTarget = scale;
-            Scale = scale * (transition == Transition.JumpIn ? 0.3f : 1.5f);
-
             ScrollTarget = scroll;
-            if (transition == Transition.JumpIn)
-                Scroll = ScrollTarget + WindowSize * 0.5f;
-            else
+
+            switch (transition)
             {
-                var delta = WindowSize / 2;
-                var scrollIs = delta * Scale;
-                Scroll = ScrollTarget - scrollIs;
+                case Transition.JumpIn:
+                    Scale = ScaleTarget * 0.3f;
+                    var sizeOnCanvas = WindowSize / Scale;
+                    Scroll = ScrollTarget - sizeOnCanvas / 2;
+                    break;
+
+                case Transition.JumpOut:
+                    Scale = ScaleTarget * 3f;
+                    var sizeOnCanvas2 = WindowSize / Scale;
+                    Scroll = ScrollTarget + sizeOnCanvas2 / 2;
+
+                    break;
+                default:
+                    Scroll = ScaleTarget;
+                    Scroll = ScrollTarget;
+                    break;
             }
+        }
+
+        protected void DampScaling()
+        {
+            // Damp scaling
+            var minInCanvas = Scroll;
+            var maxInCanvas = Scroll + WindowSize / Scale;
+            var minTargetInCanvas = ScrollTarget;
+            var maxTargetInCanvas = ScrollTarget + WindowSize / ScaleTarget;
+
+            var f = Math.Min(Io.DeltaTime / UserSettings.Config.ScrollSmoothing.Clamp(0.01f, 0.99f), 1);
+
+            var min = Vector2.Lerp(minInCanvas, minTargetInCanvas, f);
+            var max = Vector2.Lerp(maxInCanvas, maxTargetInCanvas, f);
+            Scale = WindowSize / (max - min);
+            Scroll = min;
+
+            var completed = Math.Abs(Scroll.X - ScrollTarget.X) < 1f
+                            && Math.Abs(Scroll.Y - ScrollTarget.Y) < 1f
+                            && Math.Abs(Scale.X - ScaleTarget.X) < 0.05f
+                            && Math.Abs(Scale.Y - ScaleTarget.Y) < 0.05f;
+
+            if (completed)
+            {
+                Scroll = ScrollTarget;
+                Scale = ScaleTarget;
+            }
+
+            if (float.IsNaN(ScaleTarget.X))
+                ScaleTarget.X = 1;
+
+            if (float.IsNaN(ScaleTarget.Y))
+                ScaleTarget.Y = 1;
+
+            if (float.IsNaN(Scale.X) || float.IsNaN(Scale.Y))
+                Scale = ScaleTarget;
+
+            if (float.IsNaN(ScrollTarget.X))
+                ScrollTarget.X = 0;
+
+            if (float.IsNaN(ScrollTarget.Y))
+                ScrollTarget.Y = 0;
+
+            if (float.IsNaN(Scroll.X) || float.IsNaN(Scroll.Y))
+                Scroll = ScrollTarget;
         }
 
         protected virtual void HandleInteraction(T3Ui.EditingFlags flags)
@@ -370,7 +386,7 @@ namespace T3.Gui.Interaction
                        || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
                 )
             {
-                ScrollTarget += Io.MouseDelta;
+                ScrollTarget -= Io.MouseDelta / (ParentScale * ScaleTarget);
                 UserScrolledCanvas = true;
             }
             else
@@ -381,30 +397,36 @@ namespace T3.Gui.Interaction
             if ((flags & T3Ui.EditingFlags.PreventZoomWithMouseWheel) == 0)
             {
                 ZoomWithMouseWheel();
-                ZoomWithMiddleMouseDrag();
+                //ZoomWithMiddleMouseDrag();
 
-                if (!IsCurveCanvas)
-                {
-                    if (this is TimeLineCanvas)
-                    {
-                        ScaleTarget.X = ScaleTarget.X.Clamp(0.01f, 5000);
-                        ScaleTarget.Y = ScaleTarget.Y.Clamp(0.01f, 5000);
-                    }
-                    else
-                    {
-                        ScaleTarget.X = ScaleTarget.X.Clamp(0.1f, 30);
-                        ScaleTarget.Y = ScaleTarget.Y.Clamp(0.1f, 30);
-                    }
-                }
+                ScaleTarget = ClampScaleToValidRange(ScaleTarget);
             }
+        }
+
+        private Vector2 ClampScaleToValidRange(Vector2 scale)
+        {
+            if (IsCurveCanvas)
+                return scale;
+
+            return this is TimeLineCanvas
+                       ? new Vector2(scale.X.Clamp(0.01f, 5000), scale.Y.Clamp(0.01f, 5000))
+                       : new Vector2(scale.X.Clamp(0.1f, 11), scale.Y.Clamp(0.1f, 11));
         }
 
         private void ZoomWithMouseWheel()
         {
             UserZoomedCanvas = false;
 
-            var focusCenter = (_mouse - ScrollTarget - WindowPos) / ScaleTarget;
+            var focusCenterOnCanvas = InverseTransformPosition(_mouse);
+            //DrawCanvasDebugInfos();
+
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
+            var clamped = ClampScaleToValidRange(ScaleTarget * zoomDelta);
+            if (clamped == ScaleTarget)
+                return;
+
+            var cornerOnCanvas = ScrollTarget;
+            var cornerToFocus = focusCenterOnCanvas - cornerOnCanvas;
 
             if (Math.Abs(zoomDelta - 1) < 0.001f)
                 return;
@@ -432,8 +454,24 @@ namespace T3.Gui.Interaction
             if (Math.Abs(zoomDelta) > 0.1f)
                 UserZoomedCanvas = true;
 
-            var shift = ScrollTarget + (focusCenter * ScaleTarget);
-            ScrollTarget += _mouse - shift - WindowPos;
+            //var shift = ScrollTarget * ScaleTarget + (focusCenter * ScaleTarget / parentZoom);
+            ScrollTarget = (focusCenterOnCanvas - cornerToFocus / zoomDelta);
+        }
+
+        private void DrawCanvasDebugInfos()
+        {
+            var focusCenterOnCanvas = InverseTransformPosition(_mouse);
+            var dl = ImGui.GetForegroundDrawList();
+
+            var focusOnScreen = TransformPosition(focusCenterOnCanvas);
+            dl.AddCircle(focusOnScreen, 30, Color.Green);
+            dl.AddText(focusOnScreen + new Vector2(0, 0), Color.Orange, $"{focusCenterOnCanvas.X:0.0} {focusCenterOnCanvas.Y:0.0} ");
+
+            var wp = ImGui.GetWindowPos();
+            dl.AddRectFilled(wp, wp + new Vector2(200, 100), Color.Black.Fade(0.4f));
+            dl.AddText(wp + new Vector2(0, 0), Color.Orange, $"SCAL: {ScaleTarget.X:0.0} {ScaleTarget.Y:0.0} ");
+            dl.AddText(wp + new Vector2(0, 16), Color.Orange, $"SCRL: {ScrollTarget.X:0.0} {ScrollTarget.Y:0.0} ");
+            dl.AddText(wp + new Vector2(0, 32), Color.Orange, $"CNVS: {focusCenterOnCanvas.X:0.0} {focusCenterOnCanvas.Y:0.0} ");
         }
 
         private bool IsCurveCanvas => Scale.Y < 0;
@@ -464,46 +502,39 @@ namespace T3.Gui.Interaction
             return zoomSum;
         }
 
-        private void ZoomWithMiddleMouseDrag()
-        {
-            if (ImGui.IsMouseClicked(ImGuiMouseButton.Middle))
-            {
-                _mousePosWhenMiddlePressed = ImGui.GetMousePos();
-                _scaleWhenMiddlePressed = ScaleTarget;
-            }
+        // private void ZoomWithMiddleMouseDrag()
+        // {
+        //     if (ImGui.IsMouseClicked(ImGuiMouseButton.Middle))
+        //     {
+        //         _mousePosWhenMiddlePressed = ImGui.GetMousePos();
+        //         _scaleWhenMiddlePressed = ScaleTarget;
+        //     }
+        //
+        //     if (ImGui.IsMouseDragging(ImGuiMouseButton.Middle, 0))
+        //     {
+        //         var delta = ImGui.GetMousePos() - _mousePosWhenMiddlePressed;
+        //         var deltaMax = Math.Abs(delta.X) > Math.Abs(delta.Y)
+        //                            ? -delta.X
+        //                            : delta.Y;
+        //         if (IsCurveCanvas)
+        //         {
+        //         }
+        //         else
+        //         {
+        //             var f = (float)Math.Pow(1.1f, -deltaMax / 40f);
+        //             ScaleTarget = _scaleWhenMiddlePressed * f;
+        //             var focusCenter = (_mousePosWhenMiddlePressed - Scroll*Scale - WindowPos) / Scale; // ????????
+        //             var shift = ScrollTarget * ScaleTarget + (focusCenter * ScaleTarget);
+        //             ScrollTarget -= (_mousePosWhenMiddlePressed - shift - WindowPos) * ScaleTarget;
+        //         }
+        //     }
+        // }
 
-            if (ImGui.IsMouseDragging(ImGuiMouseButton.Middle, 0))
-            {
-                var delta = ImGui.GetMousePos() - _mousePosWhenMiddlePressed;
-                var deltaMax = Math.Abs(delta.X) > Math.Abs(delta.Y)
-                                   ? -delta.X
-                                   : delta.Y;
-                if (IsCurveCanvas)
-                {
-                }
-                else
-                {
-                    var f = (float)Math.Pow(1.1f, -deltaMax / 40f);
-                    ScaleTarget = _scaleWhenMiddlePressed * f;
-                }
-
-                var focusCenter = (_mousePosWhenMiddlePressed - Scroll - WindowPos) / Scale;
-                var shift = ScrollTarget + (focusCenter * ScaleTarget);
-                ScrollTarget += _mousePosWhenMiddlePressed - shift - WindowPos;
-            }
-        }
-
-        private Vector2 _mousePosWhenMiddlePressed;
-        private Vector2 _scaleWhenMiddlePressed;
+        private bool UsingParentCanvas => GraphCanvas.Current != this && GraphCanvas.Current != null;
+        private Vector2 ParentScale => UsingParentCanvas ? GraphCanvas.Current.ScaleTarget : Vector2.One;
 
         public struct Scope
         {
-            public Scope(Vector2 scale, Vector2 scroll)
-            {
-                Scale = scale;
-                Scroll = scroll;
-            }
-
             public Vector2 Scale;
             public Vector2 Scroll;
         }
@@ -513,7 +544,7 @@ namespace T3.Gui.Interaction
             FillWindow,
             FillAvailableContentRegion,
         }
-        
+
         public FillModes FillMode = FillModes.FillWindow;
 
         protected bool UserZoomedCanvas;

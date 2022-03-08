@@ -44,6 +44,20 @@
         "X": -461.1681,
         "Y": 1054.401
       }
+    },
+    {
+      "InputId": "4af2dbdd-1005-465e-a193-756ed2b29a33"/*ScaleW*/,
+      "Position": {
+        "X": -461.1681,
+        "Y": 1099.401
+      }
+    },
+    {
+      "InputId": "af0cff8a-126e-47bd-bb60-9198567f85e0"/*OffsetW*/,
+      "Position": {
+        "X": -461.1681,
+        "Y": 1144.401
+      }
     }
   ],
   "SymbolChildUis": [

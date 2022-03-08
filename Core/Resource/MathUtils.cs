@@ -191,6 +191,33 @@ namespace T3.Core
         }
         
         public const float Pi2 = (float)Math.PI * 2;
+        
+        
+        
+        public static SharpDX.Vector3 ToSharpDx(this Vector3 source)
+        {
+            return new SharpDX.Vector3(source.X, source.Y, source.Z);
+        }
+        
+        public static Vector3 ToNumerics(this SharpDX.Vector3 source)
+        {
+            return new Vector3(source.X, source.Y, source.Z);
+        }
+        
+        public static SharpDX.Vector4 ToSharpDx(this Vector4 source)
+        {
+            return new SharpDX.Vector4(source.X, source.Y, source.Z, source.W);
+        }
+        
+        public static Vector4 ToNumerics(this SharpDX.Vector4 source)
+        {
+            return new Vector4(source.X, source.Y, source.Z, source.W);
+        }
+        
+        public static SharpDX.Vector4 ToSharpDxVector4(this Vector3 source, float w)
+        {
+            return new SharpDX.Vector4(source.X, source.Y, source.Z, w);
+        }
     }
 
     public class EaseFunctions

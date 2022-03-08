@@ -90,7 +90,7 @@ namespace T3.Gui.Windows.TimeLine
                     ImGui.SameLine();
 
                     var timeInBars = _playback.TimeInBars;
-                    var matchingClips = ClipSelection.AllClips.Where(clip => clip.TimeRange.Contains(timeInBars));
+                    var matchingClips = ClipSelection.AllOrSelectedClips.Where(clip => clip.TimeRange.Contains(timeInBars)).ToList();
 
                     foreach (var clip in matchingClips)
                     {
@@ -671,8 +671,9 @@ namespace T3.Gui.Windows.TimeLine
                 }
             }
 
-            public static IEnumerable<ITimeClip> SelectedClips => _selectedClips;
+            public static List<ITimeClip> SelectedClips => _selectedClips;
             public static int Count => _selectedClips.Count;
+            public static IReadOnlyCollection<ITimeClip> AllOrSelectedClips => _selectedClips.Count > 0 ? _selectedClips : AllClips;
 
             public static IReadOnlyCollection<ITimeClip> AllClips => _compositionTimeClips.Values;
 

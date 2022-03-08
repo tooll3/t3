@@ -19,6 +19,7 @@ using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
+using UiHelpers;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace T3.Gui.Graph.Interaction
@@ -38,17 +39,18 @@ namespace T3.Gui.Graph.Interaction
                     timeClips.Add(clipProvider.TimeClip);
                 }
             }
-        
+
             return timeClips;
         }
-        
+
         public static ITimeClip GetCompositionTimeClip(Instance compositionOp)
-        {    
+        {
             var timeClips = new List<ITimeClip>();
             foreach (var clipProvider in compositionOp.Outputs.OfType<ITimeClipProvider>())
             {
                 timeClips.Add(clipProvider.TimeClip);
             }
+
             return timeClips.FirstOrDefault();
         }
 
@@ -84,7 +86,7 @@ namespace T3.Gui.Graph.Interaction
 
             return result;
         }
-        
+
         public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName,
                                             string nameSpace, string description, bool shouldBeTimeClip)
         {
@@ -221,7 +223,7 @@ namespace T3.Gui.Graph.Interaction
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
             var newSymbolUi = new SymbolUi(newSymbol);
             newSymbolUi.Description = description;
-            
+
             SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
             newSymbol.Namespace = nameSpace;
 
@@ -229,23 +231,13 @@ namespace T3.Gui.Graph.Interaction
             var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, newSymbolUi, Vector2.Zero);
             cmd.Do();
             
+
+            var newChildrenArea = GetAreaFromChildren(newSymbolUi.ChildUis);
+            
             // Initialize output positions
             if (newSymbolUi.OutputUis.Count > 0)
             {
-                var minY = float.PositiveInfinity;
-                var maxY = float.NegativeInfinity;
-                
-                var maxX = float.NegativeInfinity;
-                
-                foreach (var childUi in newSymbolUi.ChildUis)
-                {
-                    minY = MathUtils.Min(childUi.PosOnCanvas.Y, minY);
-                    maxY = MathUtils.Max(childUi.PosOnCanvas.Y, maxY);
-                    
-                    maxX = MathUtils.Max(childUi.PosOnCanvas.X, maxX);
-                }
-                
-                var firstOutputPosition = new Vector2(maxX + 300, (maxY + minY) / 2);
+                var firstOutputPosition = new Vector2(newChildrenArea.Max.X + 300, (newChildrenArea.Min.Y + newChildrenArea.Max.Y) / 2);
 
                 foreach (var outputUi in newSymbolUi.OutputUis.Values)
                 {
@@ -253,7 +245,7 @@ namespace T3.Gui.Graph.Interaction
                     firstOutputPosition += new Vector2(0, 100);
                 }
             }
-            
+
             cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
 
             var selectedChildrenIds = (from child in selectedChildren select child.Id).ToList();
@@ -281,8 +273,10 @@ namespace T3.Gui.Graph.Interaction
                 newSymbol.AddConnection(newConnection);
             }
 
-            var mousePos = GraphCanvas.Current.InverseTransformPosition(ImGui.GetMousePos());
-            var addCommand = new AddSymbolChildCommand(compositionSymbolUi.Symbol, newSymbol.Id) { PosOnCanvas = mousePos };
+            var originalChildrenArea = GetAreaFromChildren(selectedChildren);
+            var addCommand = new AddSymbolChildCommand(compositionSymbolUi.Symbol, newSymbol.Id)
+                                 { PosOnCanvas = originalChildrenArea.GetCenter() };
+            
             UndoRedoStack.AddAndExecute(addCommand);
             var newSymbolChildId = addCommand.AddedChildId;
 
@@ -310,9 +304,29 @@ namespace T3.Gui.Graph.Interaction
 
             var deleteCmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
             UndoRedoStack.AddAndExecute(deleteCmd);
-            
-            if(UserSettings.Config.AutoSaveAfterSymbolCreation)
+
+            if (UserSettings.Config.AutoSaveAfterSymbolCreation)
                 T3Ui.SaveInBackground();
+        }
+
+        private static ImRect GetAreaFromChildren(List<SymbolChildUi> childUis)
+        {
+            if (childUis.Count == 0)
+            {
+                return new ImRect(new Vector2(-100, -100),
+                                  new Vector2(100, 100));
+            }
+
+            Vector2 min = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
+            Vector2 max = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
+
+            foreach (var childUi in childUis)
+            {
+                min = Vector2.Min(min, childUi.PosOnCanvas);
+                max = Vector2.Max(max, childUi.PosOnCanvas + childUi.Size);
+            }
+
+            return new ImRect(min, max);
         }
 
         class ClassRenameRewriter : CSharpSyntaxRewriter
@@ -333,7 +347,7 @@ namespace T3.Gui.Graph.Interaction
                 var genericName = GenericName(Identifier("Instance"))
                    .WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList<TypeSyntax>(IdentifierName(_newSymbolName)))
                                             .WithGreaterThanToken(Token(TriviaList(), SyntaxKind.GreaterThanToken, TriviaList(LineFeed))));
-                
+
                 var baseInterfaces = node.BaseList?.Types.RemoveAt(0).Select((e) => e).ToArray();
                 var baseList = BaseList(SingletonSeparatedList<BaseTypeSyntax>(SimpleBaseType(genericName)));
                 baseList = baseList.AddTypes(baseInterfaces);
@@ -390,7 +404,8 @@ namespace T3.Gui.Graph.Interaction
                     return node;
 
                 string idValue = nameSyntax.Identifier.ValueText;
-                if (!(idValue == "InputSlot" || idValue == "MultiInputSlot" || idValue == "Slot" || idValue == "TimeClipSlot" || idValue == "TransformCallbackSlot"))
+                if (!(idValue == "InputSlot" || idValue == "MultiInputSlot" || idValue == "Slot" || idValue == "TimeClipSlot" ||
+                      idValue == "TransformCallbackSlot"))
                     return node; // no input/multi-input/slot/timeclip-slot (output)
 
                 var attrList = node.AttributeLists[0];
@@ -419,7 +434,8 @@ namespace T3.Gui.Graph.Interaction
             public int MultiInputIndex { get; set; }
         }
 
-        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newTypeName, string nameSpace, string description)
+        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newTypeName, string nameSpace,
+                                                string description)
         {
             var sourceSymbol = symbolChildToDuplicate.Symbol;
 
@@ -467,7 +483,7 @@ namespace T3.Gui.Graph.Interaction
             var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];
             var newSymbolUi = sourceSymbolUi.CloneForNewSymbol(newSymbol, oldToNewIdMap);
             newSymbolUi.Description = description;
-            
+
             SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
             newSymbol.Namespace = nameSpace;
 
@@ -476,19 +492,19 @@ namespace T3.Gui.Graph.Interaction
             cmd.Do();
             cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
 
-            // now copy connection from/to inputs/outputs that are not copied with the command 
+            // Now copy connection from/to inputs/outputs that are not copied with the command 
             // todo: same code as in Symbol.SetInstanceType, factor out common code
             var connectionsToCopy = sourceSymbol.Connections.FindAll(c => c.IsConnectedToSymbolInput || c.IsConnectedToSymbolOutput);
             var connectionEntriesToReplace = new List<ConnectionEntry>(connectionsToCopy.Count);
             foreach (var con in connectionsToCopy)
             {
                 var entry = new ConnectionEntry
-                            {
-                                Connection = con,
-                                MultiInputIndex = sourceSymbol.Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
-                                                                                        && c.TargetSlotId == con.TargetSlotId)
-                                                              .FindIndex(cc => cc == con)
-                            };
+                                {
+                                    Connection = con,
+                                    MultiInputIndex = sourceSymbol.Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
+                                                                                            && c.TargetSlotId == con.TargetSlotId)
+                                                                  .FindIndex(cc => cc == con)
+                                };
                 connectionEntriesToReplace.Add(entry);
             }
 
@@ -507,7 +523,7 @@ namespace T3.Gui.Graph.Interaction
                 newSymbol.AddConnection(newConnection, conEntry.MultiInputIndex);
             }
 
-            // copy the values of the input of the duplicated type: default values of symbol and the ones in composition context
+            // Copy the values of the input of the duplicated type: default values of symbol and the ones in composition context
             foreach (var sourceInputDef in sourceSymbol.InputDefinitions)
             {
                 Guid newInputId = oldToNewIdMap[sourceInputDef.Id];
@@ -515,7 +531,7 @@ namespace T3.Gui.Graph.Interaction
                 correspondingInputDef.DefaultValue = sourceInputDef.DefaultValue.Clone();
             }
 
-            // create instance
+            // Create instance
             var mousePos = GraphCanvas.Current.InverseTransformPosition(ImGui.GetMousePos());
             var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) { PosOnCanvas = mousePos };
             UndoRedoStack.AddAndExecute(addCommand);
@@ -530,13 +546,19 @@ namespace T3.Gui.Graph.Interaction
                 newInput.IsDefault = input.Value.IsDefault;
             }
 
-            // update the positions
+            // Update the positions
             var sourceSelectables = sourceSymbolUi.GetSelectables().ToArray();
             var newSelectables = newSymbolUi.GetSelectables().ToArray();
             Debug.Assert(sourceSelectables.Length == newSelectables.Length);
             for (int i = 0; i < sourceSelectables.Length; i++)
             {
                 newSelectables[i].PosOnCanvas = sourceSelectables[i].PosOnCanvas; // todo: check if this is enough or if id check needed
+            }
+
+            // Copy names of instances
+            for (var index = 0; index < sourceSymbol.Children.Count; index++)
+            {
+                newSymbol.Children[index].Name = sourceSymbol.Children[index].Name;
             }
 
             return newSymbol;
@@ -655,7 +677,7 @@ namespace T3.Gui.Graph.Interaction
 
             return newRoot.RemoveNodes(nodeFinder.NodesToRemove, SyntaxRemoveOptions.KeepNoTrivia);
         }
-        
+
         public static void RemoveOutputsFromSymbol(Guid[] outputIdsToRemove, Symbol symbol)
         {
             var syntaxTree = GetSyntaxTree(symbol);
@@ -675,7 +697,7 @@ namespace T3.Gui.Graph.Interaction
                 Log.Error("Compilation after removing outputs failed, aborting the remove.");
             }
         }
-        
+
         private static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource)
         {
             var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, symbol.Name);
@@ -989,8 +1011,7 @@ namespace T3.Gui.Graph.Interaction
 
             return true;
         }
-        
-        
+
         public static void RenameSpaceSpaces(NamespaceTreeNode node, string nameSpace)
         {
             var orgNameSpace = node.GetAsString();
@@ -998,7 +1019,7 @@ namespace T3.Gui.Graph.Interaction
             {
                 if (!symbol.Namespace.StartsWith(orgNameSpace))
                     continue;
-                
+
                 //var newNameSpace = parent + "."
                 var newNameSpace = Regex.Replace(symbol.Namespace, orgNameSpace, nameSpace);
                 Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");

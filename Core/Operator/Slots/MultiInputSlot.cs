@@ -41,7 +41,7 @@ namespace T3.Core.Operator.Slots
             return GetCollectedTypedInputs();
         }
 
-        public void GetValues(ref T[] resources, EvaluationContext context)
+        public void GetValues(ref T[] resources, EvaluationContext context, bool clearDirty= true)
         {
             var connectedInputs = GetCollectedTypedInputs();
             if (connectedInputs.Count != resources.Length)
@@ -54,7 +54,8 @@ namespace T3.Core.Operator.Slots
                 resources[i] = connectedInputs[i].GetValue(context);
             }
             
-            DirtyFlag.Clear();
+            if(clearDirty)
+                DirtyFlag.Clear();
         }
     }
 }

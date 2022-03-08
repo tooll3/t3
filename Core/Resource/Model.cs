@@ -282,6 +282,8 @@ namespace T3.Core
                          () => new InputValue<Point[]>());
             RegisterType(typeof(RenderTargetReference), "RenderTargetRef",
                          () => new InputValue<RenderTargetReference>());
+            RegisterType(typeof(Object), "Object",
+                         () => new InputValue<Object>());
             RegisterType(typeof(StructuredList), "StructuredList",
                          () => new InputValue<StructuredList>());
             RegisterType(typeof(Texture3dWithViews), "Texture3dWithViews", 

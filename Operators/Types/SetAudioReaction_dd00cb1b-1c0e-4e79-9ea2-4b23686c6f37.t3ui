@@ -8,6 +8,13 @@
         "X": -289.94696,
         "Y": 73.12234
       }
+    },
+    {
+      "InputId": "a8900010-bf6d-44e4-bd72-28427a5dadd8"/*InputSource*/,
+      "Position": {
+        "X": -289.94696,
+        "Y": 118.12234
+      }
     }
   ],
   "SymbolChildUis": [

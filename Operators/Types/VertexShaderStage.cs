@@ -25,9 +25,11 @@ namespace T3.Operators.Types.Id_a9600440_4203_4315_bdb1_4dfd603b4515
             var deviceContext = device.ImmediateContext;
             var vsStage = deviceContext.VertexShader;
 
-            ConstantBuffers.GetValues(ref _constantBuffers, context);
-            ShaderResources.GetValues(ref _shaderResourceViews, context);
-            SamplerStates.GetValues(ref _samplerStates, context);
+            ConstantBuffers.GetValues(ref _constantBuffers, context, clearDirty:false);
+            
+            ShaderResources.GetValues(ref _shaderResourceViews, context, clearDirty:false);
+            
+            SamplerStates.GetValues(ref _samplerStates, context, clearDirty:false);
 
             _prevConstantBuffers = vsStage.GetConstantBuffers(0, _constantBuffers.Length);
             _prevShaderResourceViews = vsStage.GetShaderResources(0, _shaderResourceViews.Length);

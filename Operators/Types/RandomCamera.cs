@@ -5,24 +5,32 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable SuggestVarOrType_SimpleTypes
 
 namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 {
-    public class RandomCamera : Instance<RandomCamera>
+    public class RandomCamera : Instance<RandomCamera>, ICameraPropertiesProvider
     {
         [Output(Guid = "14a63b62-5fbb-4f82-8cf3-d0faf279eff8", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Command> Output = new Slot<Command>();
 
+        [Output(Guid = "451245E2-AC0B-435A-841E-7C9EDC804606")]
+        public readonly Slot<Object> Reference = new Slot<Object>();        
+        
         public RandomCamera()
         {
             Output.UpdateAction = Update;
+            Reference.Value = this;
         }
 
         private void Update(EvaluationContext context)
         {
+            Reference.DirtyFlag.Clear();
+            LastObjectToWorld = context.ObjectToWorld;
+            
             float fov = MathUtil.DegreesToRadians(Fov.GetValue(context));
             float aspectRatio = AspectRatio.GetValue(context);
             if (aspectRatio < 0.0001f)
@@ -31,17 +39,13 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             }
             System.Numerics.Vector2 clip = NearFarClip.GetValue(context);
             
-            Matrix cameraToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
+            CameraToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
 
-            // var pos = Position.GetValue(context);
-            // Vector3 eye = new Vector3(pos.X, pos.Y, pos.Z);
-            
             Vector3 p = new Vector3(0,0, Radius.GetValue(context));
             var seed = Seed.GetValue(context);
             var wobbleSpeed = WobbleSpeed.GetValue(context);
             var wobbleComplexity = (int)MathUtils.Clamp(WobbleComplexity.GetValue(context),1,8);
 
-            //var offset = 
             var rotOffset =  RotationOffset.GetValue(context);
 
             // Orbit rotation
@@ -71,7 +75,6 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             var adjustedViewDirection = Vector3.TransformNormal(viewDirection, rotateAim);
             target = eye + adjustedViewDirection;
 
-            
             // Computing matrix
             var u = Up.GetValue(context);
             Vector3 up = new Vector3(u.X, u.Y, u.Z);
@@ -80,13 +83,15 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             var rotateAroundViewDirection = Matrix.RotationAxis(adjustedViewDirection, roll);
             up = Vector3.TransformNormal(up, rotateAroundViewDirection);
             
-            Matrix worldToCamera = Matrix.LookAtRH(eye, target, up);
+            WorldToCamera = Matrix.LookAtRH(eye, target, up);
 
+            // Set properties and evaluate sub tree
             var prevCameraToClipSpace = context.CameraToClipSpace;
-            context.CameraToClipSpace = cameraToClipSpace;
-
             var prevWorldToCamera = context.WorldToCamera;
-            context.WorldToCamera = worldToCamera;
+            
+            context.CameraToClipSpace = CameraToClipSpace;
+            context.WorldToCamera = WorldToCamera;
+            
             Command.GetValue(context);
             
             context.CameraToClipSpace = prevCameraToClipSpace;
@@ -104,13 +109,11 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             }
         }
 
-        // private static float GetWobbleOffset(float wobbleFactor, float wobbleSpeed, int seedOffset)
-        // {
-        //     return Math.Abs(wobbleFactor) < 0.001f 
-        //                ? 0 
-        //                : MathUtils.PerlinNoise((float)EvaluationContext.BeatTime * wobbleSpeed , 1, 3, 1- 123* seedOffset) * wobbleFactor;
-        // }
-
+        public Matrix CameraToClipSpace { get; set; }
+        public Matrix WorldToCamera { get; set; }
+        public Matrix LastObjectToWorld { get; set; }
+        
+        
         [Input(Guid = "33752356-8348-4938-8f73-6257e6bb1c1f")]
         public readonly InputSlot<Command> Command = new InputSlot<Command>();
         

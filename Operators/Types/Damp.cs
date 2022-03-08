@@ -21,12 +21,18 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
             var v = Value.GetValue(context);
             var damping = Damping.GetValue(context);
 
+            var t = context.TimeForEffects;
+            if (Math.Abs(t - _lastEvalTime) < 0.001f)
+                return;
+            _lastEvalTime = t;
+
             var f = (float)(damping * EvaluationContext.LastFrameDuration).Clamp(0f,1f);
             _dampedValue = MathUtils.Lerp(v,_dampedValue, f);
             Result.Value = _dampedValue;
         }
 
         private float _dampedValue;
+        private double _lastEvalTime; 
         
         [Input(Guid = "795aca79-dd10-4f28-a290-a30e7b27b436")]
         public readonly InputSlot<float> Value = new InputSlot<float>();

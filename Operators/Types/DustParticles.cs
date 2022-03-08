@@ -52,6 +52,9 @@ namespace T3.Operators.Types.Id_d14233a2_8240_47d3_bb92_0854f6d3b218
         [Input(Guid = "e3a995dc-ec77-439c-8aed-e47df5e2b923")]
         public readonly InputSlot<System.Numerics.Vector3> OffsetVolume = new InputSlot<System.Numerics.Vector3>();
 
+        [Input(Guid = "49337c9b-7016-4093-b695-f7d1dd948fa1")]
+        public readonly InputSlot<float> FadeNearest = new InputSlot<float>();
+
 
     }
 }

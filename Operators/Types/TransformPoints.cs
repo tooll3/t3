@@ -42,6 +42,12 @@ namespace T3.Operators.Types.Id_7f6c64fe_ca2e_445e_a9b4_c70291ce354e
 
         [Input(Guid = "0192b746-ff90-4c26-a7d4-754b6ec8006b")]
         public readonly InputSlot<bool> UpdateRotation = new InputSlot<bool>();
+
+        [Input(Guid = "4af2dbdd-1005-465e-a193-756ed2b29a33")]
+        public readonly InputSlot<float> ScaleW = new InputSlot<float>();
+
+        [Input(Guid = "af0cff8a-126e-47bd-bb60-9198567f85e0")]
+        public readonly InputSlot<float> OffsetW = new InputSlot<float>();
         
         
         

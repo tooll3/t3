@@ -4,11 +4,12 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
 {
-    public class PixelShader : Instance<PixelShader>
+    public class PixelShader : Instance<PixelShader>, IDescriptiveGraphNode
     {
         [Output(Guid = "9C6E72F8-5CE6-42C3-ABAA-1829D2C066C1")]
         public readonly Slot<SharpDX.Direct3D11.PixelShader> Shader = new Slot<SharpDX.Direct3D11.PixelShader>();
@@ -20,6 +21,13 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
             Shader.UpdateAction = Update;
         }
 
+        public string GetDescriptiveString()
+        {
+            return _description;
+        }
+
+        private string _description = "PixelShader";
+        
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
@@ -40,6 +48,15 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
                         Log.Error($"Invalid sourcePath for shader: {sourcePath}: " + e.Message);
                         return;
                     }
+                    
+                    try
+                    {
+                        _description =  "PixelShader\n" + Path.GetFileName(sourcePath);
+                    }
+                    catch
+                    {
+                        Log.Warning($"Unable to get filename from {sourcePath}", SymbolChildId);
+                    }                    
                 }
                 _pixelShaderResId = resourceManager.CreatePixelShaderFromFile(sourcePath, entryPoint, debugName,
                                                                               () => Shader.DirtyFlag.Invalidate());

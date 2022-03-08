@@ -6,9 +6,9 @@
     {
       "Id": "e445a6da-0b66-46ae-ad2b-650e9cc50798"/*Segments*/,
       "DefaultValue": {
-        "X": 0,
-        "Y": 0,
-        "Z": 0
+        "X": 1,
+        "Y": 1,
+        "Z": 1
       }
     },
     {

@@ -43,11 +43,11 @@
     },
     {
       "Id": "c310f731-bc13-44e7-a827-d8e4f996ff99"/*Passes*/,
-      "DefaultValue": 15.0
+      "DefaultValue": 10.0
     },
     {
       "Id": "592b84f4-e53c-499a-ab83-150e0eabfcdf"/*Size*/,
-      "DefaultValue": 10.0
+      "DefaultValue": 8.0
     },
     {
       "Id": "9ac4806b-bbcf-4b29-ac15-4bc7f52ef192"/*MixOriginal*/,
@@ -243,6 +243,11 @@
           "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
           "Type": "System.Boolean",
           "Value": true
+        },
+        {
+          "Id": "e882e0f0-03f9-46e6-ac7a-709e6fa66613"/*Multisampling*/,
+          "Type": "System.Int32",
+          "Value": 1
         }
       ],
       "Outputs": []
@@ -336,17 +341,17 @@
           "Value": 1.0
         },
         {
-          "Id": "f1334f45-4335-4198-9b6e-ab9e8384aa32"/*Speed*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
           "Id": "61bb0df6-6c8a-4f3a-b7f4-9d979377cab8"/*Resolution*/,
           "Type": "SharpDX.Size2",
           "Value": {
-            "Width": 256,
-            "Height": 256
+            "Width": 16,
+            "Height": 16
           }
+        },
+        {
+          "Id": "74ca5916-20ee-4a1f-a41e-342c12d2126a"/*GenerateMipmaps*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []

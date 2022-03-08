@@ -25,7 +25,7 @@
     },
     {
       "Id": "f1334f45-4335-4198-9b6e-ab9e8384aa32"/*Speed*/,
-      "DefaultValue": 35.0
+      "DefaultValue": 5.0
     },
     {
       "Id": "edb719cd-be40-4758-9c13-98cf14d1a5c5"/*Scale*/,
@@ -37,6 +37,10 @@
         "Width": 0,
         "Height": 0
       }
+    },
+    {
+      "Id": "74ca5916-20ee-4a1f-a41e-342c12d2126a"/*GenerateMipmaps*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
@@ -75,6 +79,12 @@
       "SourceSlotId": "4525c76c-cdcf-47f3-aa96-335cfc5b5c1b",
       "TargetParentOrChildId": "c083e018-013a-4b05-a516-6c6af93d3ebb",
       "TargetSlotId": "36abde68-0d79-4fb6-b8ce-ac8a27b66850"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "74ca5916-20ee-4a1f-a41e-342c12d2126a",
+      "TargetParentOrChildId": "c083e018-013a-4b05-a516-6c6af93d3ebb",
+      "TargetSlotId": "3ca67d25-72ec-487b-91b3-ece912b76462"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

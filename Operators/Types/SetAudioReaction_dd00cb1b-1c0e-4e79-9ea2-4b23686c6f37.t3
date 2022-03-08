@@ -6,6 +6,10 @@
     {
       "Id": "d243af8f-7b1d-4110-912b-2c430726becc"/*Command*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "a8900010-bf6d-44e4-bd72-28427a5dadd8"/*InputSource*/,
+      "DefaultValue": 1
     }
   ],
   "Children": [
@@ -58,6 +62,12 @@
       "SourceSlotId": "9c0c1734-453e-4f88-b20a-47c7e34b7caa",
       "TargetParentOrChildId": "a3f5be43-ac3b-4e5b-a433-292c9ebcfe1f",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "a8900010-bf6d-44e4-bd72-28427a5dadd8",
+      "TargetParentOrChildId": "a7a36d51-2b6d-459d-a211-3015c475d363",
+      "TargetSlotId": "57bb8790-4c02-422a-833b-0b1cf0f3e781"
     }
   ]
 }

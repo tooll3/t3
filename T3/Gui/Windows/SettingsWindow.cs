@@ -37,6 +37,9 @@ namespace T3.Gui.Windows
 
                 ImGui.DragFloat("Timeline Raster Density", ref UserSettings.Config.TimeRasterDensity, 0.01f);
                 ImGui.Checkbox("Count Bars from Zero", ref UserSettings.Config.CountBarsFromZero);
+                
+                ImGui.Checkbox("Swap Main & 2nd windows when fullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen);
+                 
                 ImGui.TreePop();
             }
 

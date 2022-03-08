@@ -61,6 +61,10 @@
     {
       "Id": "8232e748-5fc2-488d-8559-ac9ff621f95d"/*Rotate*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "fca535e3-ea35-455f-b4ef-0a9d7feacef8"/*GenerateMips*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
@@ -147,6 +151,12 @@
       "SourceSlotId": "8a908810-2482-4088-8b21-a7ee15531e64",
       "TargetParentOrChildId": "67a09b70-b68c-4297-8625-1caad37a0387",
       "TargetSlotId": "36f14238-5bb8-4521-9533-f4d1e8fb802b"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "fca535e3-ea35-455f-b4ef-0a9d7feacef8",
+      "TargetParentOrChildId": "96ed4415-be06-49d3-83b7-7f242a8da8ba",
+      "TargetSlotId": "480d6c19-a33c-48b3-b9fa-aaf8bd31e6d9"
     },
     {
       "SourceParentOrChildId": "44619228-581c-435d-a3e8-c3a5a8a2e98e",
