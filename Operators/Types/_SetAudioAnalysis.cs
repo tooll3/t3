@@ -1,10 +1,7 @@
-using System;
 using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Operators.Types.Id_08ad4c93_81ee_4c21_9bff_b5b03f7dd1f7;
 
 namespace T3.Operators.Types.Id_ecbafbeb_c14b_4507_953f_80bc6676d077
 {
