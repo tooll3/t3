@@ -16,6 +16,9 @@ namespace T3.Operators.Types.Id_ab6ab34f_4c6e_41ef_af69_48bb9393651b
 
         [Input(Guid = "e14366ed-0591-424d-a8ab-36f8380dd614")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GTargets = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+
+        [Input(Guid = "10a6c6d5-9685-4bde-a1b6-e5456c886898")]
+        public readonly InputSlot<bool> SetWTo01 = new InputSlot<bool>();
     }
 }
 
