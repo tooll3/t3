@@ -869,6 +869,7 @@ namespace T3.Gui.Graph
                 var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
                 _selectableItems.AddRange(symbolUi.InputUis.Values);
                 _selectableItems.AddRange(symbolUi.OutputUis.Values);
+                _selectableItems.AddRange(symbolUi.Annotations.Values);
 
                 return _selectableItems;
             }
