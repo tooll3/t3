@@ -12,7 +12,6 @@ using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
@@ -185,15 +184,19 @@ namespace T3.Gui.Graph
                 }
 
                 if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
+                {
                     DeleteSelectedElements();
+                }
 
                 if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
+                {
                     ToggleDisabledForSelectedElements();
+                }
 
                 if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
+                {
                     PinSelectedToOutputWindow();
-
-
+                }
                 
                 if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
                 {
@@ -428,6 +431,25 @@ namespace T3.Gui.Graph
             {
                 UndoRedoStack.Undo();
             }
+            
+            if (ImGui.MenuItem("New Annotation",
+                               shortcut: "",
+                               selected: false,
+                               enabled: true))
+            {
+                var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                var a = new Annotation()
+                            {
+                                Id = Guid.NewGuid(),
+                                Title = "null",
+                                Description = "null",
+                                Color = Color.Gray,
+                                PosOnCanvas = InverseTransformPosition(ImGui.GetMousePos()),
+                                Size = new Vector2(100, 140)
+                            };
+                symbolUi.Annotations[a.Id] = a;
+            }
+            
 
             ImGui.Separator();
 

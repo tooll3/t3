@@ -5,7 +5,6 @@ using System.Numerics;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
@@ -24,13 +23,18 @@ namespace T3.Gui
             UpdateConsistencyWithSymbol(); // this sets up all missing elements
         }
 
-        public SymbolUi(Symbol symbol, List<SymbolChildUi> childUis, OrderedDictionary<Guid, IInputUi> inputs, OrderedDictionary<Guid, IOutputUi> outputs)
+        public SymbolUi(Symbol symbol, 
+                        List<SymbolChildUi> childUis, 
+                        OrderedDictionary<Guid, IInputUi> inputs, 
+                        OrderedDictionary<Guid, IOutputUi> outputs,
+                        OrderedDictionary<Guid, Annotation> annotations
+            )
         {
             Symbol = symbol;
             ChildUis = childUis;
             InputUis = inputs;
             OutputUis = outputs;
-
+            Annotations = annotations;
             UpdateConsistencyWithSymbol();
         }
 
@@ -63,8 +67,16 @@ namespace T3.Gui
                 clonedOutputUi.OutputDefinition = newSymbol.OutputDefinitions.Single(outputDef => outputDef.Id == newOutputId);
                 outputUis.Add(clonedOutputUi.Id, clonedOutputUi);
             }
+
+            var annotations = new OrderedDictionary<Guid, Annotation>(OutputUis.Count);
+            foreach (var (_, annotation) in Annotations)
+            {
+                var clonedAnnotation = annotation.Clone();
+                //Guid newAnnotationId = oldToNewIds[clonedAnnotation];
+                annotations.Add(clonedAnnotation.Id, clonedAnnotation);
+            }
             
-            return new SymbolUi(newSymbol, childUis, inputUis, outputUis);
+            return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations);
         }
         
 
@@ -253,10 +265,35 @@ namespace T3.Gui
         public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();    // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
         public OrderedDictionary<Guid, IInputUi> InputUis { get; } = new OrderedDictionary<Guid, IInputUi>();
         public OrderedDictionary<Guid, IOutputUi> OutputUis { get; }= new OrderedDictionary<Guid, IOutputUi>();
+        public OrderedDictionary<Guid, Annotation> Annotations { get; }= new OrderedDictionary<Guid, Annotation>();
     }
 
     public static class SymbolUiRegistry
     {
         public static Dictionary<Guid, SymbolUi> Entries { get; } = new Dictionary<Guid, SymbolUi>(20);
+    }
+
+    public class Annotation : ISelectableNode
+    {
+        public string Title;
+        public string Description;
+        public Color Color;
+        public Guid Id { get; set; }
+        public Vector2 PosOnCanvas { get; set; }
+        public Vector2 Size { get; set; }
+        public bool IsSelected { get; set; }
+
+        public Annotation Clone()
+        {
+            return new Annotation
+                       {
+                           Id = Guid.NewGuid(),
+                           Title = this.Title,
+                           Description = this.Description,
+                           Color = this.Color,
+                           PosOnCanvas = this.PosOnCanvas,
+                           Size = this.Size
+                       };
+        }
     }
 }

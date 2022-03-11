@@ -40,6 +40,13 @@ namespace T3.Gui.Graph
     ///</remarks>
     public static class Graph
     {
+        private enum Channels
+        {
+            Annotations = 0,
+            Operators = 1,
+        }
+
+        
         public static void DrawGraph(ImDrawListPtr drawList, bool needsReinit= true)
         {
             DrawList = drawList;
@@ -56,8 +63,7 @@ namespace T3.Gui.Graph
                 AllConnections.Clear();
                 AllConnections.AddRange(graphSymbol.Connections);
                 AllConnections.AddRange(ConnectionMaker.TempConnections);
-
-
+                
                 // 1. Initializes lists of ConnectionLineUis
                 Connections.Init();
 
@@ -67,15 +73,25 @@ namespace T3.Gui.Graph
                     Connections.CreateAndSortLineUi(c);
                 }
             }
-
+            
+            drawList.ChannelsSplit(2);
+            DrawList.ChannelsSetCurrent((int)Channels.Operators);
+            
             // 3. Draw Nodes and their sockets and set positions for connection lines
-            foreach (var instance in children)
+            for (var childIndex = 0; childIndex < children.Count; childIndex++)
             {
+                var instance = children[childIndex];
                 if (graphSymbol != GraphCanvas.Current.CompositionOp.Symbol)
                     break;
 
-                var childUi = _childUis.Single(ui => ui.Id == instance.SymbolChildId);
-                GraphNode.Draw(childUi, instance);
+                foreach (var childUi in _childUis)  // Don't use linq to avoid allocations
+                {
+                    if (childUi.Id != instance.SymbolChildId)
+                        continue;
+                    
+                    GraphNode.Draw(childUi, instance);
+                    break;
+                }
             }
 
             // 4. Draw Inputs Nodes
@@ -116,6 +132,16 @@ namespace T3.Gui.Graph
             {
                 line.Draw();
             }
+            
+            // 7. Draw Annotations
+            drawList.ChannelsSetCurrent((int)Channels.Annotations);
+            foreach (var annotation in _symbolUi.Annotations.Values)
+            {
+                //var posOnScreen = GraphCanvas.Current.TransformPosition(annotation.Position);
+                //drawList.AddRectFilled(  posOnScreen, posOnScreen + new Vector2(300,300), Color.Green);
+                AnnotationElement.Draw(annotation);
+            }
+            drawList.ChannelsMerge();
         }
 
         internal class ConnectionSorter
