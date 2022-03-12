@@ -3,6 +3,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
+using t3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
@@ -11,7 +12,8 @@ namespace T3.Gui.Graph.Dialogs
 {
     public class CombineToSymbolDialog : ModalDialog
     {
-        public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, ref string nameSpace, ref string combineName, ref string description)
+        public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, List<Annotation> selectedAnnotations, ref string nameSpace,
+                         ref string combineName, ref string description)
         {
             DialogSize = new Vector2(500, 350);
 
@@ -57,7 +59,7 @@ namespace T3.Gui.Graph.Dialogs
                 if (CustomComponents.DisablableButton("Combine", NodeOperations.IsNewSymbolNameValid(combineName)))
                 {
                     var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
-                    NodeOperations.CombineAsNewType(compositionSymbolUi, selectedChildUis, combineName, nameSpace, description, _shouldBeTimeClip);
+                    NodeOperations.CombineAsNewType(compositionSymbolUi, selectedChildUis, selectedAnnotations, combineName, nameSpace, description, _shouldBeTimeClip);
                     _shouldBeTimeClip = false; // Making timeclips this is normally a one off operation
                     ImGui.CloseCurrentPopup();
                 }

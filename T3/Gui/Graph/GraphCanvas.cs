@@ -268,7 +268,10 @@ namespace T3.Gui.Graph
 
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
-                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
+                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), 
+                                            SelectionManager.GetSelectedNodes<Annotation>().ToList(), 
+                                            ref _nameSpaceForDialogEdits, 
+                                            ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
                 _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
                 _addInputDialog.Draw(CompositionOp.Symbol);

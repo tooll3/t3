@@ -20,9 +20,6 @@ namespace T3.Gui.Graph
     /// </summary>
     static class AnnotationElement
     {
-        private static Color _backgroundColor = new Color(0, 0, 0, 0.2f);
-        private static Color _backgroundColorHover = new Color(0, 0, 0, 0.4f);
-        
         internal static void Draw(Annotation annotation)
         {
             ImGui.PushID(annotation.Id.GetHashCode());
@@ -33,16 +30,16 @@ namespace T3.Gui.Graph
 
                 // Keep height of title area at a minimum height when zooming out
                 var clickableArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + titleSize));
-                var height = MathF.Min(16,_screenArea.GetHeight());
+                var height = MathF.Min(16, _screenArea.GetHeight());
                 clickableArea.Max.Y = clickableArea.Min.Y + height;
-                
+
                 _isVisible = ImGui.IsRectVisible(_screenArea.Min, _screenArea.Max);
 
                 if (!_isVisible)
                     return;
 
                 var drawList = GraphCanvas.Current.DrawList;
-                
+
                 // Resize indicator
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
@@ -57,10 +54,9 @@ namespace T3.Gui.Graph
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);
                 }
 
-                
                 // Background
                 drawList.AddRectFilled(_screenArea.Min, _screenArea.Max, _backgroundColor);
-                
+
                 // Interaction
                 ImGui.SetCursorScreenPos(clickableArea.Min);
                 ImGui.InvisibleButton("node", clickableArea.GetSize());
@@ -71,19 +67,16 @@ namespace T3.Gui.Graph
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                 }
-                
+
                 // Header
                 drawList.AddRectFilled(clickableArea.Min, clickableArea.Max,
                                        hovered
                                            ? _backgroundColorHover
                                            : _backgroundColor);
-                
 
                 HandleDragging(annotation);
                 var shouldRename = ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left);
                 Renaming.Draw(annotation, shouldRename);
-                
-
 
                 if (annotation.IsSelected)
                 {
@@ -127,7 +120,7 @@ namespace T3.Gui.Graph
                     {
                         var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
 
-                        if(!ImGui.GetIO().KeyCtrl)
+                        if (!ImGui.GetIO().KeyCtrl)
                             _draggedNodes = FindAnnotatedOps(parentUi, annotation).ToList();
                         _draggedNodes.Add(annotation);
                     }
@@ -249,15 +242,15 @@ namespace T3.Gui.Graph
 
                 if (_focusedAnnotationId != annotation.Id)
                     return;
-                
+
                 var positionInScreen = _screenArea.Min;
                 ImGui.SetCursorScreenPos(positionInScreen);
 
                 var text = annotation.Title;
-                
+
                 ImGui.SetNextItemWidth(150);
                 ImGui.InputTextMultiline("##renameAnnotation", ref text, 256, _screenArea.GetSize());
-                if(!ImGui.IsItemDeactivated())
+                if (!ImGui.IsItemDeactivated())
                     annotation.Title = text;
 
                 if (!justOpened && (ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((int)Key.Esc)))
@@ -277,9 +270,12 @@ namespace T3.Gui.Graph
         private static ChangeSelectableCommand _moveCommand;
 
         private static Guid _draggedNodeId = Guid.Empty;
-        private static List<ISelectableNode> _draggedNodes = new List<ISelectableNode>();
+        private static List<ISelectableNode> _draggedNodes = new();
 
         private static bool _isVisible;
         private static ImRect _screenArea;
+
+        private static Color _backgroundColor = new Color(0, 0, 0, 0.2f);
+        private static Color _backgroundColorHover = new Color(0, 0, 0, 0.4f);
     }
 }

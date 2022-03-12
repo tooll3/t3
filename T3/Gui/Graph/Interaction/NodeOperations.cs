@@ -17,6 +17,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
+using t3.Gui.Graph;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using UiHelpers;
@@ -87,9 +88,12 @@ namespace T3.Gui.Graph.Interaction
             return result;
         }
 
-        public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName,
+        public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, List<Annotation> selectedAnnotations,
+                                            string newSymbolName,
                                             string nameSpace, string description, bool shouldBeTimeClip)
         {
+            var executedCommands = new List<ICommand>();
+
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
             Dictionary<Symbol.Connection, Guid> connectionToNewSlotIdMap = new Dictionary<Symbol.Connection, Guid>();
 
@@ -228,12 +232,12 @@ namespace T3.Gui.Graph.Interaction
             newSymbol.Namespace = nameSpace;
 
             // Apply content to new symbol
-            var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, newSymbolUi, Vector2.Zero);
-            cmd.Do();
-            
+            var copyCmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, newSymbolUi, Vector2.Zero);
+            copyCmd.Do();
+            executedCommands.Add(copyCmd);
 
             var newChildrenArea = GetAreaFromChildren(newSymbolUi.ChildUis);
-            
+
             // Initialize output positions
             if (newSymbolUi.OutputUis.Count > 0)
             {
@@ -246,7 +250,7 @@ namespace T3.Gui.Graph.Interaction
                 }
             }
 
-            cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
+            copyCmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
 
             var selectedChildrenIds = (from child in selectedChildren select child.Id).ToList();
             compositionSymbol.Animator.RemoveAnimationsFromInstances(selectedChildrenIds);
@@ -273,11 +277,24 @@ namespace T3.Gui.Graph.Interaction
                 newSymbol.AddConnection(newConnection);
             }
 
+            // Insert annotations
+            foreach (var annotation in selectedAnnotations)
+            {
+                var annotationClone = annotation.Clone();
+                annotationClone.PosOnCanvas += copyCmd.PositionOffset;
+                var addAnnotationCommand = new AddAnnotationCommand(newSymbolUi, annotationClone);
+                addAnnotationCommand.Do();
+                executedCommands.Add(addAnnotationCommand);
+            }
+
+            // Insert instance of new symbol
             var originalChildrenArea = GetAreaFromChildren(selectedChildren);
             var addCommand = new AddSymbolChildCommand(compositionSymbolUi.Symbol, newSymbol.Id)
                                  { PosOnCanvas = originalChildrenArea.GetCenter() };
-            
-            UndoRedoStack.AddAndExecute(addCommand);
+
+            addCommand.Do();
+            executedCommands.Add(addCommand);
+
             var newSymbolChildId = addCommand.AddedChildId;
 
             foreach (var con in inputConnections.Reverse()) // reverse for multi input order preservation
@@ -303,7 +320,18 @@ namespace T3.Gui.Graph.Interaction
             }
 
             var deleteCmd = new DeleteSymbolChildrenCommand(compositionSymbolUi, selectedChildren);
-            UndoRedoStack.AddAndExecute(deleteCmd);
+            deleteCmd.Do();
+            executedCommands.Add(deleteCmd);
+
+            // Delete original annotations
+            foreach (var annotation in selectedAnnotations)
+            {
+                var deleteAnnotationCommand = new DeleteAnnotationCommand(compositionSymbolUi, annotation);
+                deleteAnnotationCommand.Do();
+                executedCommands.Add(deleteAnnotationCommand);
+            }
+
+            UndoRedoStack.Add(new MacroCommand("Combine into symbol", executedCommands));
 
             if (UserSettings.Config.AutoSaveAfterSymbolCreation)
                 T3Ui.SaveInBackground();

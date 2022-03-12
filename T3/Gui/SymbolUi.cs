@@ -40,7 +40,7 @@ namespace T3.Gui
         }
 
         public SymbolUi CloneForNewSymbol(Symbol newSymbol, Dictionary<Guid, Guid> oldToNewIds)
-        {
+        { 
             var childUis = new List<SymbolChildUi>(ChildUis.Count);
             // foreach (var sourceChildUi in ChildUis)
             // {

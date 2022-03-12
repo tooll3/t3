@@ -35,6 +35,8 @@ namespace T3.Gui.Commands
                 upperLeftCorner = Vector2.Min(upperLeftCorner, childToCopy.PosOnCanvas);
             }
 
+            PositionOffset =  targetPosition - upperLeftCorner;
+
             foreach (var childToCopy in symbolChildrenToCopy)
             {
                 Entry entry = new Entry(childToCopy.Id, Guid.NewGuid(), childToCopy.PosOnCanvas - upperLeftCorner, childToCopy.Size);
@@ -89,6 +91,7 @@ namespace T3.Gui.Commands
                 var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
                 targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, childToCopy.AddedId, sourceCompositionSymbolUi, childToCopy.ChildId,
                                                                    _targetPosition + childToCopy.RelativePosition);
+                
                 SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
                 NewSymbolChildIds.Add(newSymbolChild.Id);
                 var newSymbolInputs = newSymbolChild.InputValues;
@@ -144,5 +147,6 @@ namespace T3.Gui.Commands
         private readonly Guid _targetSymbolId;
         private readonly List<Entry> _childrenToCopy = new List<Entry>();
         private readonly List<Symbol.Connection> _connectionsToCopy = new List<Symbol.Connection>();
+        public Vector2 PositionOffset;
     }
 }
