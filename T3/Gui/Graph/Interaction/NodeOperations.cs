@@ -302,7 +302,7 @@ namespace T3.Gui.Graph.Interaction
                 compositionSymbol.AddConnection(newConnection);
             }
 
-            var deleteCmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
+            var deleteCmd = new DeleteSymbolChildrenCommand(compositionSymbolUi, selectedChildren);
             UndoRedoStack.AddAndExecute(deleteCmd);
 
             if (UserSettings.Config.AutoSaveAfterSymbolCreation)

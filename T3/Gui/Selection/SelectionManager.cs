@@ -101,7 +101,7 @@ namespace T3.Gui.Selection
                     yield return typedItem;
             }
         }
-
+        
         public static bool IsNodeSelected(ISelectableNode node)
         {
             return Selection.Contains(node);

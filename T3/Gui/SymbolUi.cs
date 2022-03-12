@@ -5,6 +5,7 @@ using System.Numerics;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using t3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;

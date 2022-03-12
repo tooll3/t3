@@ -13,6 +13,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using t3.Gui.Graph;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
@@ -695,13 +696,12 @@ namespace T3.Gui.Graph
                         {
                             Id = Guid.NewGuid(),
                             Title = "null",
-                            Description = "null",
                             Color = Color.Gray,
                             PosOnCanvas = area.Min,
                             Size = area.GetSize()
                         };
-            symbolUi.Annotations[a.Id] = a;
-            SelectionManager.SetSelection(a);
+            var command = new AddAnnotationCommand(symbolUi, a);
+            UndoRedoStack.AddAndExecute(command);
         }
 
         private void PinSelectedToOutputWindow()
@@ -731,12 +731,20 @@ namespace T3.Gui.Graph
 
         private void DeleteSelectedElements()
         {
-            var selectedChildren = GetSelectedChildUis();
-            if (selectedChildren.Any())
+            var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+            
+            var commands = new List<ICommand>();
+            var selectedChildUis = GetSelectedChildUis();
+            if (selectedChildUis.Any())
             {
-                var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                var cmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
-                UndoRedoStack.AddAndExecute(cmd);
+                var cmd = new DeleteSymbolChildrenCommand(compositionSymbolUi, selectedChildUis);
+                commands.Add(cmd);
+            }
+
+            foreach (var selectedAnnotation in SelectionManager.GetSelectedNodes<Annotation>())
+            {
+                var cmd = new DeleteAnnotationCommand(compositionSymbolUi, selectedAnnotation);
+                commands.Add(cmd);
             }
 
             var selectedInputUis = SelectionManager.GetSelectedNodes<IInputUi>().ToList();
@@ -745,6 +753,8 @@ namespace T3.Gui.Graph
                 NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
             }
 
+            var deleteCommand = new MacroCommand("Delete elements", commands);
+            UndoRedoStack.AddAndExecute(deleteCommand);
             SelectionManager.Clear();
         }
 

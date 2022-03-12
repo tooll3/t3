@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using t3.Gui.Graph;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using Truncon.Collections;
@@ -143,7 +144,6 @@ namespace T3.Gui
                 Writer.WriteStartObject(); 
                 Writer.WriteObject("Id", annotation.Id);
                 Writer.WriteObject("Title", annotation.Title);
-                Writer.WriteObject("Description", annotation.Description);
                 Writer.WritePropertyName("Position");
                 vec2Writer(Writer, annotation.PosOnCanvas);
                 Writer.WritePropertyName("Size");
@@ -298,7 +298,6 @@ namespace T3.Gui
                     
                     annotation.Id = Guid.Parse(annotationEntry["Id"].Value<string>());
                     annotation.Title = annotationEntry["Title"].Value<string>();
-                    annotation.Description = annotationEntry["Description"].Value<string>();
                     annotation.PosOnCanvas = (Vector2)vector2Converter(annotationEntry["Position"]);
                     annotation.Size = (Vector2)vector2Converter(annotationEntry["Size"]);
                     annotationDict[annotation.Id] = annotation;
