@@ -325,6 +325,12 @@ namespace T3.Gui.Graph
 
                     SelectionManager.AddSymbolChildToSelection(symbolChildUi, instance);
                 }
+                if (node is Annotation annotation)
+                {
+                    var rect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
+                    if (boundsInCanvas.Contains(rect))
+                        SelectionManager.AddSelection(node);
+                }
                 else
                 {
                     SelectionManager.AddSelection(node);
