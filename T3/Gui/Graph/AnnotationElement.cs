@@ -7,8 +7,6 @@ using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using t3.Gui.Graph;
-using T3.Gui.Graph.Interaction;
-using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
@@ -29,13 +27,16 @@ namespace T3.Gui.Graph
         {
             ImGui.PushID(annotation.Id.GetHashCode());
             {
-                _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size));
+                _screenArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size));
                 var titleSize = annotation.Size;
                 titleSize.Y = MathF.Min(titleSize.Y, 20);
 
-                var lastClickableRect = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + titleSize));
-
-                _isVisible = ImGui.IsRectVisible(_lastScreenRect.Min, _lastScreenRect.Max);
+                // Keep height of title area at a minimum height when zooming out
+                var clickableArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + titleSize));
+                var height = MathF.Min(16,_screenArea.GetHeight());
+                clickableArea.Max.Y = clickableArea.Min.Y + height;
+                
+                _isVisible = ImGui.IsRectVisible(_screenArea.Min, _screenArea.Max);
 
                 if (!_isVisible)
                     return;
@@ -45,7 +46,7 @@ namespace T3.Gui.Graph
                 // Resize indicator
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
-                    ImGui.SetCursorScreenPos(_lastScreenRect.Max - new Vector2(10, 10));
+                    ImGui.SetCursorScreenPos(_screenArea.Max - new Vector2(10, 10));
                     ImGui.Button("##resize", new Vector2(10, 10));
                     if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                     {
@@ -58,13 +59,11 @@ namespace T3.Gui.Graph
 
                 
                 // Background
-                drawList.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max, _backgroundColor);
-
-
+                drawList.AddRectFilled(_screenArea.Min, _screenArea.Max, _backgroundColor);
                 
                 // Interaction
-                ImGui.SetCursorScreenPos(lastClickableRect.Min);
-                ImGui.InvisibleButton("node", lastClickableRect.GetSize());
+                ImGui.SetCursorScreenPos(clickableArea.Min);
+                ImGui.InvisibleButton("node", clickableArea.GetSize());
 
                 THelpers.DebugItemRect();
                 var hovered = ImGui.IsItemHovered();
@@ -74,7 +73,7 @@ namespace T3.Gui.Graph
                 }
                 
                 // Header
-                drawList.AddRectFilled(lastClickableRect.Min, lastClickableRect.Max,
+                drawList.AddRectFilled(clickableArea.Min, clickableArea.Max,
                                        hovered
                                            ? _backgroundColorHover
                                            : _backgroundColor);
@@ -89,8 +88,8 @@ namespace T3.Gui.Graph
                 if (annotation.IsSelected)
                 {
                     const float thickness = 1;
-                    drawList.AddRect(_lastScreenRect.Min - Vector2.One * thickness,
-                                     _lastScreenRect.Max + Vector2.One * thickness,
+                    drawList.AddRect(_screenArea.Min - Vector2.One * thickness,
+                                     _screenArea.Max + Vector2.One * thickness,
                                      Color.White, 0f, 0, thickness);
                 }
 
@@ -99,8 +98,8 @@ namespace T3.Gui.Graph
                     var isScaledDown = GraphCanvas.Current.Scale.X < 1;
                     ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontBold);
 
-                    drawList.PushClipRect(_lastScreenRect.Min, _lastScreenRect.Max, true);
-                    var labelPos = _lastScreenRect.Min + new Vector2(4, 4);
+                    drawList.PushClipRect(_screenArea.Min, _screenArea.Max, true);
+                    var labelPos = _screenArea.Min + new Vector2(4, 4);
 
                     drawList.AddText(labelPos,
                                      ColorVariations.OperatorLabel.Apply(Color.White),
@@ -241,6 +240,7 @@ namespace T3.Gui.Graph
                         justOpened = true;
                         ImGui.SetKeyboardFocusHere();
                         _focusedAnnotationId = annotation.Id;
+                        _changeAnnotationTextCommand = new ChangeAnnotationTextCommand(annotation, annotation.Title);
                     }
                 }
 
@@ -250,24 +250,26 @@ namespace T3.Gui.Graph
                 if (_focusedAnnotationId != annotation.Id)
                     return;
                 
-                var positionInScreen = _lastScreenRect.Min;
+                var positionInScreen = _screenArea.Min;
                 ImGui.SetCursorScreenPos(positionInScreen);
 
                 var text = annotation.Title;
                 
                 ImGui.SetNextItemWidth(150);
-                ImGui.InputTextMultiline("##renameAnnotation", ref text, 256, _lastScreenRect.GetSize());
+                ImGui.InputTextMultiline("##renameAnnotation", ref text, 256, _screenArea.GetSize());
                 if(!ImGui.IsItemDeactivated())
                     annotation.Title = text;
 
                 if (!justOpened && (ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((int)Key.Esc)))
                 {
                     _focusedAnnotationId = Guid.Empty;
+                    _changeAnnotationTextCommand.NewText = annotation.Title;
+                    UndoRedoStack.AddAndExecute(_changeAnnotationTextCommand);
                 }
             }
 
             private static Guid _focusedAnnotationId;
-            public static bool IsOpen => _focusedAnnotationId != Guid.Empty;
+            private static ChangeAnnotationTextCommand _changeAnnotationTextCommand;
         }
 
         private static bool _isDragging;
@@ -278,6 +280,6 @@ namespace T3.Gui.Graph
         private static List<ISelectableNode> _draggedNodes = new List<ISelectableNode>();
 
         private static bool _isVisible;
-        private static ImRect _lastScreenRect;
+        private static ImRect _screenArea;
     }
 }
