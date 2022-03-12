@@ -206,6 +206,7 @@ namespace T3.Gui.Graph
                         ImGui.SetWindowFocus();
                         _focusOnNextFrame = false;
                     }
+                    ImGui.SetScrollX(0);
                     
                     drawList.ChannelsSplit(2);
                     drawList.ChannelsSetCurrent(1);
