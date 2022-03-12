@@ -90,6 +90,10 @@ namespace T3.Gui
 
             foreach (var outputUi in OutputUis)
                 yield return outputUi.Value;
+
+            foreach (var annotation in Annotations)
+                yield return annotation.Value;
+
         }
 
         public void UpdateConsistencyWithSymbol()

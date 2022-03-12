@@ -80,7 +80,8 @@ namespace T3.Gui
         SaveBookmark7,
         SaveBookmark8,
         SaveBookmark9,
-        ToggleFullScreenGraph
+        ToggleFullScreenGraph,
+        AddAnnotation,
     }
 
     public static class UserActionRegistry
@@ -268,6 +269,7 @@ namespace T3.Gui
 
                       new KeyboardBinding(UserActions.LayoutSelection, new KeyCombination(Key.G)),
                       new KeyboardBinding(UserActions.ToggleFullScreenGraph, new KeyCombination(Key.F11, ctrl: true)),
+                      new KeyboardBinding(UserActions.AddAnnotation, new KeyCombination(Key.A)){ NeedsWindowFocus = true },
                   };
 
         public static void InitFrame()

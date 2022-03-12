@@ -197,7 +197,7 @@ namespace T3.Gui.Graph
                 {
                     PinSelectedToOutputWindow();
                 }
-                
+
                 if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
                 {
                     var selectedChildren = GetSelectedChildUis();
@@ -215,6 +215,12 @@ namespace T3.Gui.Graph
                     SelectableNodeMovement.ArrangeOps();
                 }
 
+                if (KeyboardBinding.Triggered(UserActions.AddAnnotation))
+                {
+                    AddAnnotation();
+                }
+
+                
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                 if (showGrid)
@@ -271,6 +277,8 @@ namespace T3.Gui.Graph
             ImGui.EndGroup();
             Current = null;
         }
+
+
 
         private void HandleFenceSelection()
         {
@@ -431,25 +439,6 @@ namespace T3.Gui.Graph
             {
                 UndoRedoStack.Undo();
             }
-            
-            if (ImGui.MenuItem("New Annotation",
-                               shortcut: "",
-                               selected: false,
-                               enabled: true))
-            {
-                var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                var a = new Annotation()
-                            {
-                                Id = Guid.NewGuid(),
-                                Title = "null",
-                                Description = "null",
-                                Color = Color.Gray,
-                                PosOnCanvas = InverseTransformPosition(ImGui.GetMousePos()),
-                                Size = new Vector2(100, 140)
-                            };
-                symbolUi.Annotations[a.Id] = a;
-            }
-            
 
             ImGui.Separator();
 
@@ -472,8 +461,8 @@ namespace T3.Gui.Graph
             var allSelectedEnabled = selectedChildUis.TrueForAll(selectedChildUi => !selectedChildUi.IsDisabled);
             if (!allSelectedDisabled && ImGui.MenuItem("Disable",
                                                        KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleDisabled, false),
-                                                       selected:false,
-                                                       enabled: selectedChildUis.Count >0 ))
+                                                       selected: false,
+                                                       enabled: selectedChildUis.Count > 0))
             {
                 var commands = new List<ICommand>();
                 foreach (var selectedChildUi in selectedChildUis)
@@ -484,7 +473,7 @@ namespace T3.Gui.Graph
                 UndoRedoStack.AddAndExecute(new MacroCommand("Disable operators", commands));
             }
 
-            if (!allSelectedEnabled && ImGui.MenuItem("Enable", 
+            if (!allSelectedEnabled && ImGui.MenuItem("Enable",
                                                       KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleDisabled, false),
                                                       selected: false,
                                                       enabled: someOpsSelected))
@@ -502,7 +491,7 @@ namespace T3.Gui.Graph
             {
                 RenameInstanceOverlay.OpenForSymbolChildUi(selectedChildUis[0]);
             }
-            
+
             if (ImGui.MenuItem("Arrange sub graph",
                                KeyboardBinding.ListKeyboardShortcuts(UserActions.LayoutSelection, false),
                                selected: false,
@@ -510,11 +499,11 @@ namespace T3.Gui.Graph
             {
                 SelectableNodeMovement.ArrangeOps();
             }
-            
+
             if (ImGui.BeginMenu("Display as..."))
             {
-                if (ImGui.MenuItem("Small", "", 
-                                   selected: selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Default), 
+                if (ImGui.MenuItem("Small", "",
+                                   selected: selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Default),
                                    enabled: someOpsSelected))
                 {
                     foreach (var childUi in selectedChildUis)
@@ -523,9 +512,9 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                if (ImGui.MenuItem("Resizable", "", 
+                if (ImGui.MenuItem("Resizable", "",
                                    selected: selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable),
-                                   enabled:someOpsSelected))
+                                   enabled: someOpsSelected))
                 {
                     foreach (var childUi in selectedChildUis)
                     {
@@ -533,50 +522,49 @@ namespace T3.Gui.Graph
                     }
                 }
 
-                if (ImGui.MenuItem("Expanded", "", 
-                                   selected:selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable),
-                                   enabled:someOpsSelected))
+                if (ImGui.MenuItem("Expanded", "",
+                                   selected: selectedChildUis.Any(child => child.Style == SymbolChildUi.Styles.Resizable),
+                                   enabled: someOpsSelected))
                 {
                     foreach (var childUi in selectedChildUis)
                     {
                         childUi.Style = SymbolChildUi.Styles.Expanded;
                     }
                 }
-                
+
                 ImGui.Separator();
 
-                var isImage =oneOpSelected 
-                             && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions.Count > 0
-                             && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
+                var isImage = oneOpSelected
+                              && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions.Count > 0
+                              && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
                 if (ImGui.MenuItem("Set image as graph background",
                                    "",
                                    selected: false,
                                    enabled: isImage))
                 {
-                    var instance =CompositionOp.Children.Single(child => child.SymbolChildId == selectedChildUis[0].Id);
+                    var instance = CompositionOp.Children.Single(child => child.SymbolChildId == selectedChildUis[0].Id);
                     GraphWindow.SetBackgroundOutput(instance);
                 }
 
                 if (ImGui.MenuItem("Pin to output", oneOpSelected))
                 {
                     PinSelectedToOutputWindow();
-                } 
-
+                }
 
                 ImGui.EndMenu();
             }
 
             if (ImGui.MenuItem("Export", oneOpSelected))
             {
-                PlayerExporter.ExportInstance(this,selectedChildUis.Single());
+                PlayerExporter.ExportInstance(this, selectedChildUis.Single());
             }
-            
+
             ImGui.Separator();
 
             if (ImGui.MenuItem("Copy",
                                KeyboardBinding.ListKeyboardShortcuts(UserActions.CopyToClipboard, false),
-                               selected:false,
-                               enabled:someOpsSelected))
+                               selected: false,
+                               enabled: someOpsSelected))
             {
                 CopySelectionToClipboard(selectedChildUis);
             }
@@ -588,11 +576,11 @@ namespace T3.Gui.Graph
 
             var selectedInputUis = GetSelectedInputUis().ToArray();
             var selectedOutputUis = GetSelectedOutputUis().ToArray();
-            
-            if (ImGui.MenuItem("Delete", 
-                               shortcut:"Del",  // dynamic assigned shortcut is too long
-                               selected:false,
-                               enabled:someOpsSelected || selectedInputUis.Length > 0 || selectedOutputUis.Length > 0))
+
+            if (ImGui.MenuItem("Delete",
+                               shortcut: "Del", // dynamic assigned shortcut is too long
+                               selected: false,
+                               enabled: someOpsSelected || selectedInputUis.Length > 0 || selectedOutputUis.Length > 0))
             {
                 DeleteSelectedElements();
 
@@ -602,7 +590,6 @@ namespace T3.Gui.Graph
                     NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), symbol);
                 }
 
-                
                 if (selectedOutputUis.Length > 0)
                 {
                     var symbol = GetSelectedSymbol();
@@ -665,8 +652,56 @@ namespace T3.Gui.Graph
                     _addOutputDialog.ShowNextFrame();
                 }
 
+                if (ImGui.MenuItem("Add Annotation",
+                                   shortcut: KeyboardBinding.ListKeyboardShortcuts(UserActions.AddAnnotation, false),
+                                   selected: false,
+                                   enabled: true))
+                {
+                    AddAnnotation();
+                }
+
                 ImGui.EndMenu();
             }
+        }
+        
+        private void AddAnnotation()
+        {
+            var size = new Vector2(100, 140);
+            var posOnCanvas = InverseTransformPosition(ImGui.GetMousePos());
+            var area = new ImRect(posOnCanvas, posOnCanvas + size);
+                    
+            if (SelectionManager.IsAnythingSelected())
+            {
+                for (var index = 0; index < SelectionManager.Selection.Count; index++)
+                {
+                    var node = SelectionManager.Selection[index];
+                    var nodeArea = new ImRect(node.PosOnCanvas,
+                                              node.PosOnCanvas + node.Size);
+
+                    if (index == 0)
+                    {
+                        area = nodeArea;
+                    }
+                    else
+                    {
+                        area.Add(nodeArea);
+                    }
+                }
+                area.Expand(60);
+            }
+
+            var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+            var a = new Annotation()
+                        {
+                            Id = Guid.NewGuid(),
+                            Title = "null",
+                            Description = "null",
+                            Color = Color.Gray,
+                            PosOnCanvas = area.Min,
+                            Size = area.GetSize()
+                        };
+            symbolUi.Annotations[a.Id] = a;
+            SelectionManager.SetSelection(a);
         }
 
         private void PinSelectedToOutputWindow()
@@ -682,16 +717,15 @@ namespace T3.Gui.Graph
             if (selection.Count != 1)
             {
                 Log.Warning("Please select only one operator to pin to output window");
-                return;                
+                return;
             }
-            
+
             var instance = CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == selection[0].Id);
             if (instance != null)
             {
                 outputWindow.Pinning.PinInstance(instance);
             }
         }
-
 
         private bool _contextMenuIsOpen;
 
@@ -718,7 +752,6 @@ namespace T3.Gui.Graph
         {
             var selectedChildren = GetSelectedChildUis();
 
-            
             var isNodeHovered = T3Ui.HoveredIdsLastFrame.Count == 1 && CompositionOp != null;
             if (isNodeHovered)
             {
@@ -726,13 +759,9 @@ namespace T3.Gui.Graph
                                                      .SingleOrDefault(c => c.Id == T3Ui.HoveredIdsLastFrame.First());
                 if (hoveredChildUi == null)
                     return;
-                
+
                 selectedChildren = new List<SymbolChildUi> { hoveredChildUi };
             }
-            
-            // if (!selectedChildren.Any())
-            // {
-            // }
 
             var allSelectedDisabled = selectedChildren.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
             var shouldDisable = !allSelectedDisabled;
@@ -844,14 +873,14 @@ namespace T3.Gui.Graph
         {
             var color = new Color(0, 0, 0, 0.3f);
             var gridSize = Math.Abs(64.0f * Scale.X);
-            for (var x = (-Scroll.X*Scale.X) % gridSize; x < WindowSize.X; x += gridSize)
+            for (var x = (-Scroll.X * Scale.X) % gridSize; x < WindowSize.X; x += gridSize)
             {
                 DrawList.AddLine(new Vector2(x, 0.0f) + WindowPos,
                                  new Vector2(x, WindowSize.Y) + WindowPos,
                                  color);
             }
 
-            for (var y = (-Scroll.Y*Scale.Y) % gridSize; y < WindowSize.Y; y += gridSize)
+            for (var y = (-Scroll.Y * Scale.Y) % gridSize; y < WindowSize.Y; y += gridSize)
             {
                 DrawList.AddLine(
                                  new Vector2(0.0f, y) + WindowPos,
