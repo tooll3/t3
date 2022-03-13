@@ -1,6 +1,9 @@
 ﻿using System;
+using Core.Resource;
 using ImGuiNET;
-using System.Numerics;
+using T3.Core;
+using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Gui
 {
@@ -79,7 +82,7 @@ namespace T3.Gui
 
         static public Color FromString(string hex)
         {
-            var systemColor =  System.Drawing.ColorTranslator.FromHtml(hex);
+            var systemColor = System.Drawing.ColorTranslator.FromHtml(hex);
             return new Color(systemColor.R, systemColor.G, systemColor.B, systemColor.A);
         }
 
@@ -88,9 +91,12 @@ namespace T3.Gui
             return ImGui.ColorConvertFloat4ToU32(color.Rgba);
         }
         
-
+        public Vector4 Lab 
+            {
+                get => OkLab.RgbAToOkLab(Rgba);
+                set => Rgba = OkLab.OkLabToRgba(value);
+            }
         
-
         public static implicit operator Color(uint @uint)
         {
             return new Color(ImGui.ColorConvertU32ToFloat4(@uint));
@@ -106,42 +112,48 @@ namespace T3.Gui
             c.Rgba.W *= f;
             return c;
         }
-        
+
         public static Color Mix(Color c1, Color c2, float t)
         {
-                return new Color(
-                                 c1.Rgba.X + (c2.Rgba.X - c1.Rgba.X) * t,
-                                 c1.Rgba.Y + (c2.Rgba.Y - c1.Rgba.Y) * t,
-                                 c1.Rgba.Z + (c2.Rgba.Z - c1.Rgba.Z) * t,
-                                 c1.Rgba.W + (c2.Rgba.W - c1.Rgba.W) * t
-                                 );
+            return new Color(
+                             c1.Rgba.X + (c2.Rgba.X - c1.Rgba.X) * t,
+                             c1.Rgba.Y + (c2.Rgba.Y - c1.Rgba.Y) * t,
+                             c1.Rgba.Z + (c2.Rgba.Z - c1.Rgba.Z) * t,
+                             c1.Rgba.W + (c2.Rgba.W - c1.Rgba.W) * t
+                            );
         }
 
+        public static Color MixOkLab(Color c1, Color c2, float t)
+        {
+            var labMix= MathUtils.Lerp(c1.Lab, c2.Lab, t);
+            return new Color(OkLab.OkLabToRgba(labMix));
+        }
+        
         public static Color GetStyleColor(ImGuiCol color)
         {
             unsafe
             {
                 var c = ImGui.GetStyleColorVec4(color);
-                return new Color(c->X, c->Y, c->Z,c->W);
+                return new Color(c->X, c->Y, c->Z, c->W);
             }
         }
 
         /// <summary>
         /// This is a variation of the normal HSV function in that it returns a desaturated "white" colors brightness above 0.5   
         /// </summary>
-        public static Color ColorFromHsl(float h, float s, float l, float a=1)
+        public static Color ColorFromHsl(float h, float s, float l, float a = 1)
         {
             float r, g, b, m, c, x;
 
             h /= 60;
-            if (h < 0) h = 6 - (-h%6);
+            if (h < 0) h = 6 - (-h % 6);
             h %= 6;
 
             s = Math.Max(0, Math.Min(1, s));
             l = Math.Max(0, Math.Min(1, l));
 
-            c = (1 - Math.Abs((2*l) - 1))*s;
-            x = c*(1 - Math.Abs((h%2) - 1));
+            c = (1 - Math.Abs((2 * l) - 1)) * s;
+            x = c * (1 - Math.Abs((h % 2) - 1));
 
             if (h < 1)
             {
@@ -180,9 +192,9 @@ namespace T3.Gui
                 b = x;
             }
 
-            m = l - c/2;
+            m = l - c / 2;
 
-            return new Color(r+m, g+m, b+m,a);
+            return new Color(r + m, g + m, b + m, a);
         }
 
         public Vector3 AsHsl
@@ -192,7 +204,7 @@ namespace T3.Gui
                 float r = Rgba.X;
                 float g = Rgba.Y;
                 float b = Rgba.Z;
-                
+
                 float tmp = (r < g) ? r : g;
                 float min = (tmp < b) ? tmp : b;
 
@@ -227,7 +239,11 @@ namespace T3.Gui
         {
             return new Color(Rgba.X, Rgba.Y, Rgba.Z, Rgba.W * f);
         }
-        
-        public SharpDX.Color AsSharpDx => new SharpDX.Color(Rgba.X, Rgba.Y,Rgba.Z,Rgba.Z);
+
+        public float R => Rgba.X;
+        public float G => Rgba.Y;
+        public float B => Rgba.Z;
+
+        public SharpDX.Color AsSharpDx => new SharpDX.Color(Rgba.X, Rgba.Y, Rgba.Z, Rgba.Z);
     }
 }

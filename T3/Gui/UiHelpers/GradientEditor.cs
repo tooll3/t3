@@ -26,30 +26,87 @@ namespace T3.Gui.UiHelpers
                 CustomComponents.FillWithStripes(drawList, areaOnScreen);
             }
 
-            //gradient.Steps.OrderBy(o => o.NormalizedPosition);
             gradient.Steps.Sort((x, y) => x.NormalizedPosition.CompareTo(y.NormalizedPosition));
 
             // Draw Gradient
-            var lastColor = ImGui.ColorConvertFloat4ToU32(gradient.Steps[0].Color);
-            var lastPos = areaOnScreen.Min;
+            var minPos = areaOnScreen.Min;
             var maxPos = areaOnScreen.Max;
-            foreach (var step in gradient.Steps)
+
+            uint leftColor = ImGui.ColorConvertFloat4ToU32(gradient.Steps[0].Color);
+
+            // Draw complex gradient
+            if (gradient.Interpolation == Gradient.Interpolations.Smooth || gradient.Interpolation == Gradient.Interpolations.OkLab)
             {
-                var color = ImGui.ColorConvertFloat4ToU32(step.Color);
-                maxPos.X = areaOnScreen.Min.X + areaOnScreen.GetWidth() * step.NormalizedPosition;
-                drawList.AddRectFilledMultiColor(lastPos,
-                                                 maxPos,
-                                                 lastColor,
-                                                 color,
-                                                 color,
-                                                 lastColor);
-                lastPos.X = maxPos.X;
-                lastColor = color;
+                var f = 0f;
+                
+                
+                for (var stepIndex = 0; stepIndex < gradient.Steps.Count; stepIndex++)
+                {
+                    var step = gradient.Steps[stepIndex];
+                    
+                    var steps = 5;
+
+                    var rightF = step.NormalizedPosition;
+                    var rangeF = (rightF - f);
+                    var stepSizeF = rangeF / steps;
+                    
+
+                    var pixelStepSize = (areaOnScreen.GetWidth() * rangeF) / steps;
+                    maxPos.X = minPos.X + pixelStepSize;
+                    
+                    for (int i = 0; i < steps; i++)
+                    {
+                        var nextF = f+ stepSizeF;
+                        var nextColor = ImGui.ColorConvertFloat4ToU32(gradient.Sample(nextF));
+
+                        drawList.AddRectFilledMultiColor(minPos,
+                                                         maxPos,
+                                                         leftColor,
+                                                         nextColor,
+                                                         nextColor,
+                                                         leftColor);
+                        maxPos.X += pixelStepSize;
+                        minPos.X += pixelStepSize;
+                        
+                        f = nextF;
+                        leftColor = nextColor;
+                    }
+                }
+            }
+            // Linear gradient
+            else
+            {
+                foreach (var step in gradient.Steps)
+                {
+                    uint rightColor = ImGui.ColorConvertFloat4ToU32(step.Color);
+                    maxPos.X = areaOnScreen.Min.X + areaOnScreen.GetWidth() * step.NormalizedPosition;
+                    if (gradient.Interpolation == Gradient.Interpolations.Hold)
+                    {
+                        drawList.AddRectFilledMultiColor(minPos,
+                                                         maxPos,
+                                                         leftColor,
+                                                         leftColor,
+                                                         leftColor,
+                                                         leftColor);
+                    }
+                    else
+                    {
+                        drawList.AddRectFilledMultiColor(minPos,
+                                                         maxPos,
+                                                         leftColor,
+                                                         rightColor,
+                                                         rightColor,
+                                                         leftColor);
+                    }
+
+                    minPos.X = maxPos.X;
+                    leftColor = rightColor;
+                }
             }
 
-            if (lastPos.X < areaOnScreen.Max.X)
+            if (minPos.X < areaOnScreen.Max.X)
             {
-                drawList.AddRectFilled(lastPos, areaOnScreen.Max, lastColor);
+                drawList.AddRectFilled(minPos, areaOnScreen.Max, leftColor);
             }
 
             // Draw handles

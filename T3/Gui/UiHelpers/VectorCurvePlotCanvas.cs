@@ -30,6 +30,10 @@ namespace T3.Gui.UiHelpers
             {
                 _componentCount = 3;
             }
+            else if (typeof(T) == typeof(Vector4))
+            {
+                _componentCount = 4;
+            }
         }
 
         private readonly int _componentCount = 1;
@@ -156,6 +160,7 @@ namespace T3.Gui.UiHelpers
                 new Color(1f, 0.2f, 0.2f, 0.3f),
                 new Color(0.1f, 1f, 0.2f, 0.3f),
                 new Color(0.1f, 0.4f, 1.0f, 0.5f),
+                new Color(0.5f, 0.5f, 0.5f, 0.5f),
                 GrayCurveColor,
             };
         
@@ -164,6 +169,7 @@ namespace T3.Gui.UiHelpers
                 new Color(1f, 0.5f, 0.5f, 1f),
                 new Color(0.4f, 1f, 0.5f, 1f),
                 new Color(0.6f, 0.671f, 1.0f, 1f),
+                new Color(0.6f, 0.6f, 0.6f, 1f),
                 GrayCurveColor,
             };        
     }
