@@ -59,7 +59,7 @@ namespace T3.Gui.Interaction
                                                string format = "{0:0.000}")
         {
             CurrentTabIndex++;
-            var id = ImGui.GetID("jog");
+            var componentId = ImGui.GetID("valueEdit");
 
             var shouldFocus = CurrentTabIndex == TabFocusIndex;
             if (shouldFocus)
@@ -67,14 +67,14 @@ namespace T3.Gui.Interaction
                 
                 //Log.Debug("  ShouldFocus for index " + TabFocusIndex  +  "  state " + _state );
                 SetState(InputStates.TextInput);
-                _activeJogDialId = id;
+                _activeJogDialId = componentId;
                 _jogDialText = FormatValueForButton(ref value);
             }
             
             var io = ImGui.GetIO();
 
             _numberFormat = format;
-            if (id == _activeJogDialId)
+            if (componentId == _activeJogDialId)
             {
                 switch (_state)
                 {
@@ -187,20 +187,75 @@ namespace T3.Gui.Interaction
             }
 
             DrawButtonWithDynamicLabel(FormatValueForButton(ref value), ref size);
-
+            
             DrawValueRangeIndicator(value, min, max);
 
             if (ImGui.IsItemActivated())
             {
-                _activeJogDialId = id;
+                _activeJogDialId = componentId;
                 _editValue = value;
                 _startValue = value;
                 _jogDialText = FormatValueForButton(ref value);
                 SetState(InputStates.Dialing);
             }
+            else
+            {
+                var isHovered = ImGui.IsItemHovered();
+                    
+                if ( _state == InputStates.Inactive)
+                {
+                    var isHoveredComponent = _activeHoverComponentId == componentId;
+                    if (isHoveredComponent)
+                    {
+                        if (isHovered)
+                        {
+                            T3Ui.MouseWheelFieldHovered = true;
+                            var dl = ImGui.GetForegroundDrawList();
+                            dl.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Gray);
+                        
+                            var wheel = ImGui.GetIO().MouseWheel;
+                            if (wheel == 0)
+                                return InputEditStateFlags.Nothing;
+                            
+                            var factor = 1f;
+                            if (ImGui.GetIO().KeyShift)
+                            {
+                                factor = 0.1f;
+                            }
+                            else if (ImGui.GetIO().KeyCtrl)
+                            {
+                                factor = 10f;
+                            }
+                            
+                            value += wheel * scale * 10 * factor;
+                            _hovereddComponentModifiedByWheel = true;
+                            return InputEditStateFlags.Modified;
+                        }
+
+                        var didModify = _hovereddComponentModifiedByWheel;
+                        _hovereddComponentModifiedByWheel = false;
+                            
+                        return didModify 
+                                   ? InputEditStateFlags.ModifiedAndFinished 
+                                   : InputEditStateFlags.Nothing;
+                    }
+
+                    if (isHovered)
+                    {
+                        T3Ui.MouseWheelFieldHovered = true;
+                        _hovereddComponentModifiedByWheel = false;
+                        _activeHoverComponentId = componentId;
+                        return InputEditStateFlags.Started;
+                    }
+                }
+            }
 
             return InputEditStateFlags.Nothing;
         }
+
+        private static bool _hovereddComponentModifiedByWheel;
+        
+        
 
         private static void SetState(InputStates newState)
         {
@@ -284,21 +339,19 @@ namespace T3.Gui.Interaction
 
                 if (center > end)
                 {
-                    var t = center;
-                    center = end;
-                    end = t;
+                    (center, end) = (end, center);
                 }
 
                 var p1 = itemPos + new Vector2((float)center, 0);
                 var p2 = itemPos + new Vector2((float)end, itemSize.Y);
-                ImGui.GetWindowDrawList().AddRectFilled(p1, p2, ValueIndicatorColor);
+                ImGui.GetWindowDrawList().AddRectFilled(p1, p2, _valueIndicatorColor);
 
                 // Indicate center
                 var alignment = center < orgCenter ? -1 : 0;
                 ImGui.GetWindowDrawList().AddRectFilled(
                                                         ImGui.GetItemRectMin() + new Vector2((float)orgCenter + alignment, 0),
                                                         ImGui.GetItemRectMin() + new Vector2((float)orgCenter + alignment + 1, itemSize.Y),
-                                                        ValueIndicatorColor);
+                                                        _valueIndicatorColor);
 
                 // Indicate overflow
                 if (value < min)
@@ -324,7 +377,7 @@ namespace T3.Gui.Interaction
             }
         }
 
-        private static readonly Color ValueIndicatorColor = new Color(1, 1, 1, 0.06f);
+        private static readonly Color _valueIndicatorColor = new Color(1, 1, 1, 0.06f);
 
         private enum InputStates
         {
@@ -335,6 +388,7 @@ namespace T3.Gui.Interaction
         }
 
         private static uint _activeJogDialId;
+        private static uint _activeHoverComponentId;
         private static Vector2 _center;
         private static double _editValue;
         private static double _startValue;
