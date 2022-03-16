@@ -38,25 +38,23 @@ namespace T3.Gui.UiHelpers
             if (gradient.Interpolation == Gradient.Interpolations.Smooth || gradient.Interpolation == Gradient.Interpolations.OkLab)
             {
                 var f = 0f;
-                
-                
+
                 for (var stepIndex = 0; stepIndex < gradient.Steps.Count; stepIndex++)
                 {
                     var step = gradient.Steps[stepIndex];
-                    
+
                     var steps = 5;
 
                     var rightF = step.NormalizedPosition;
                     var rangeF = (rightF - f);
                     var stepSizeF = rangeF / steps;
-                    
 
                     var pixelStepSize = (areaOnScreen.GetWidth() * rangeF) / steps;
                     maxPos.X = minPos.X + pixelStepSize;
-                    
+
                     for (int i = 0; i < steps; i++)
                     {
-                        var nextF = f+ stepSizeF;
+                        var nextF = f + stepSizeF;
                         var nextColor = ImGui.ColorConvertFloat4ToU32(gradient.Sample(nextF));
 
                         drawList.AddRectFilledMultiColor(minPos,
@@ -67,7 +65,7 @@ namespace T3.Gui.UiHelpers
                                                          leftColor);
                         maxPos.X += pixelStepSize;
                         minPos.X += pixelStepSize;
-                        
+
                         f = nextF;
                         leftColor = nextColor;
                     }
@@ -185,13 +183,8 @@ namespace T3.Gui.UiHelpers
                         ImGui.SetNextWindowPos(new Vector2(handleArea.Min.X, handleArea.Max.Y));
                     }
 
-                    if (ImGui.BeginPopupContextItem("##colorEdit"))
-                    {
-                        anyHandleHovered = true;
-                        modified = ImGui.ColorPicker4("edit", ref step.Color,
-                                                      ImGuiColorEditFlags.Float | ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreview);
-                        ImGui.EndPopup();
-                    }
+                    //anyHandleHovered = true;
+                    modified = ColorEditPopup.DrawPopup(ref step.Color, step.Color);
 
                     ImGui.PopID();
                 }

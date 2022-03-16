@@ -240,10 +240,71 @@ namespace T3.Gui
             return new Color(Rgba.X, Rgba.Y, Rgba.Z, Rgba.W * f);
         }
 
-        public float R => Rgba.X;
-        public float G => Rgba.Y;
-        public float B => Rgba.Z;
+        public float R { get => Rgba.X; set => Rgba.X = value; }
+        public float G { get => Rgba.Y; set => Rgba.Y = value; }
+        public float B { get => Rgba.Z; set => Rgba.Z = value; }
+        public float A { get => Rgba.W; set => Rgba.W = value; }
 
+        /**
+         * Normalized from [0..1]
+         */
+        public float Hue
+        { 
+            get
+            {
+                ImGui.ColorConvertRGBtoHSV(R,G,B, out float h, out var s, out var v );
+                return h;
+            } 
+            set
+            {
+                ImGui.ColorConvertRGBtoHSV(R,G,B, out float h, out var s, out var v );
+                h = value;
+                ImGui.ColorConvertHSVtoRGB(h, s, v, out var r, out var g, out var b);
+                R = r;
+                G = g;
+                B = b;
+            }
+        }
+
+        
+        public float Saturation
+        { 
+            get
+            {
+                ImGui.ColorConvertRGBtoHSV(R,G,B, out float h, out var s, out var v );
+                return s;
+            } 
+            set
+            {
+                ImGui.ColorConvertRGBtoHSV(R,G,B, out float h, out var s, out var v );
+                s = value;
+                ImGui.ColorConvertHSVtoRGB(h, s, v, out var r, out var g, out var b);
+                R = r;
+                G = g;
+                B = b;
+            }
+        }
+        
+        
+        public float V
+        { 
+            get
+            {
+                ImGui.ColorConvertRGBtoHSV(R,G,B, out float h, out var s, out var v );
+                return v;
+            } 
+            set
+            {
+                ImGui.ColorConvertRGBtoHSV(R,G,B, out float h, out var s, out var v );
+                v = value;
+                ImGui.ColorConvertHSVtoRGB(h, s, v, out var r, out var g, out var b);
+                R = r;
+                G = g;
+                B = b;
+            }
+        }
+        
+        
         public SharpDX.Color AsSharpDx => new SharpDX.Color(Rgba.X, Rgba.Y, Rgba.Z, Rgba.Z);
     }
 }

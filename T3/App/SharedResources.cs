@@ -1,5 +1,6 @@
 ﻿using SharpDX.Direct3D11;
 using T3.Core;
+using T3.Core.Logging;
 
 namespace t3.App
 {
@@ -32,11 +33,22 @@ namespace t3.App
 
             (uint texId, var tmpId ) = resourceManager.CreateTextureFromFile(@"Resources\t3\t3-background.png", null);
             ViewWindowDefaultSrvId = tmpId;
+            
+            (uint texResourceId3, var srvResourceId ) = resourceManager.CreateTextureFromFile(@"Resources\t3\t3-colorpicker.png", null);
+            if (ResourceManager.Instance().Resources[srvResourceId] is ShaderResourceViewResource srvResource)
+            {
+                ColorPickerImageSrv = srvResource.ShaderResourceView;
+            }
+            else
+            {
+                Log.Warning("Color picker texture not found");
+            }
         }
         
         public static uint FullScreenVertexShaderId;
         public static uint FullScreenPixelShaderId;
         public static RasterizerState ViewWindowRasterizerState;
         public static uint ViewWindowDefaultSrvId;
+        public static ShaderResourceView ColorPickerImageSrv;
     }
 }

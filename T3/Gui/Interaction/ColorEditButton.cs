@@ -24,7 +24,7 @@ namespace T3.Gui.Interaction
 
             var edited = false;
             edited |= HandleQuickSliders(ref color, buttonPosition);
-            edited |= DrawPopup(ref color, _previousColor, ImGuiColorEditFlags.AlphaBar);
+            edited |= ColorEditPopup.DrawPopup(ref color, _previousColor);
             return edited;
         }
 
@@ -95,8 +95,6 @@ namespace T3.Gui.Interaction
 
             ColorPalette[_colorPaletteIndex++ % ColorPalette.Length] = potentialColor;
         }
-
-
 
         private static bool HandleQuickSliders(ref Vector4 color, Vector2 buttonPosition)
         {
@@ -190,9 +188,7 @@ namespace T3.Gui.Interaction
 
             drawList.AddRectFilled(pCenter, pCenter + new Vector2(barWidth + 15, 1), Color.Black);
         }
-        
-        
-        
+
         private static Vector4[] IntializePalette(int length)
         {
             var r = new Vector4[length];
