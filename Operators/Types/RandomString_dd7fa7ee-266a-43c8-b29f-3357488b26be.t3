@@ -10,6 +10,10 @@
     {
       "Id": "9b705b88-a644-498a-b831-5d0243e01c41"/*Category*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "27ee26ef-de40-4d92-9dd8-43abae92aac8"/*TriggerIncrement*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
@@ -56,6 +60,12 @@
       "SourceSlotId": "4e36b984-43ff-447b-8e1d-a099fefd4d74",
       "TargetParentOrChildId": "5f0f0745-cb7f-4191-92c8-c1cd062dcfae",
       "TargetSlotId": "286cbbfb-796d-499f-93d3-d467512110be"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "27ee26ef-de40-4d92-9dd8-43abae92aac8",
+      "TargetParentOrChildId": "5f0f0745-cb7f-4191-92c8-c1cd062dcfae",
+      "TargetSlotId": "eefdb8ca-68e7-4e39-b302-22eb8930fb8c"
     },
     {
       "SourceParentOrChildId": "3af5dc6c-89f4-44b0-8c89-13b006d318cb",

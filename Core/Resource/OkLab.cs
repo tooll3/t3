@@ -47,7 +47,7 @@ namespace Core.Resource
                               );
         }
 
-        public static Vector4 ToLinear(Vector4 c)
+        public static Vector4 Degamma(Vector4 c)
         {
             const float gamma = 2.2f;
             return new Vector4(
@@ -58,7 +58,7 @@ namespace Core.Resource
                               );
         }
         
-        public static Vector4 ToSRgb(Vector4 c)
+        public static Vector4 ToGamma(Vector4 c)
         {
             const float gamma = 2.2f;
             return new Vector4(
@@ -71,11 +71,11 @@ namespace Core.Resource
         
         public static Vector4 Mix(Vector4 c1, Vector4 c2, float t)
         {
-            var c1Linear = ToLinear(c1);
-            var c2Linear = ToLinear(c2);
+            var c1Linear = Degamma(c1);
+            var c2Linear = Degamma(c2);
                 
             var labMix= MathUtils.Lerp( RgbAToOkLab(c1Linear), RgbAToOkLab(c2Linear), t);
-            return ToSRgb(OkLab.OkLabToRgba(labMix));
+            return ToGamma(OkLab.OkLabToRgba(labMix));
         }
     }
 }

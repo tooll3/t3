@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
             _phase = Phase.GetValue(context);
             _blending = Blending.GetValue(context);
             var reset = TriggerReset.GetValue(context);
-            var jump = TriggerCount.GetValue(context);
+            var jump = TriggerIncrement.GetValue(context);
             var f = (LFO.SpeedFactors)AllowSpeedFactor.GetValue(context);
             switch (f)
             {
@@ -53,7 +53,9 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
                     break;
                 
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    Log.Debug($"Incorrect speed factor mode {f} in Counter", SymbolChildId);
+                    _speedFactor = 1;
+                    break;
             }
             
             if (!_initialized || reset || float.IsNaN(_count))
@@ -130,7 +132,7 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
                 ? (float)((_beatTime - _lastJumpTime) * _rate).Clamp(0, 1)
                 : (float)(_beatTime - _lastJumpTime).Clamp(0, 1);
 
-        private bool UseRate => _rate > -1;
+        private bool UseRate => _rate > -1 && !TriggerIncrement.IsConnected;
 
         private float _speedFactor=1;
         private float _rate;
@@ -170,7 +172,7 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
         // private bool _lastCountTriggered;
 
         [Input(Guid = "eefdb8ca-68e7-4e39-b302-22eb8930fb8c")]
-        public readonly InputSlot<bool> TriggerCount = new InputSlot<bool>();
+        public readonly InputSlot<bool> TriggerIncrement = new InputSlot<bool>();
 
         [Input(Guid = "7BFBAE6B-FA0B-4E5A-8040-E0BE3600AFEB")]
         public readonly InputSlot<bool> TriggerReset = new InputSlot<bool>();

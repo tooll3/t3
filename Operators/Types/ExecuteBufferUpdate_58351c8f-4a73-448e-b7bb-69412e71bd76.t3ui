@@ -3,6 +3,7 @@
   "InputUis": [
     {
       "InputId": "51110d89-083e-42b8-b566-87b144dfbed9"/*UpdateCommand*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
