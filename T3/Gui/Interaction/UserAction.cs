@@ -120,9 +120,6 @@ namespace T3.Gui
                 if (binding.Action != action)
                     continue;
 
-                //var bindingsForAction = Bindings.FindAll(b => b.Action == action);
-                //foreach (var binding in bindingsForActions)
-                //{
                 if (binding.NeedsWindowFocus && !ImGui.IsWindowFocused())
                     continue;
 
@@ -131,19 +128,14 @@ namespace T3.Gui
 
                 var c = binding.Combination;
 
-                var isKeyPressed = (!binding.KeyPressOnly || ImGui.IsKeyPressed((ImGuiKey)c.Key));
-                if (io.KeysDown[(int)c.Key]
-                    
-                    // This function became obsolete with ImGui v1.87. So far I couldn't reproduce any issues without this check, though
-                    //&& Math.Abs(io.KeysDownDurationPrev[(int)c.Key]) < 0.001f FIXME
-                    
+                var isKeyPressed = (!binding.KeyPressOnly || ImGui.IsKeyPressed((ImGuiKey)c.Key, false));
+                if (ImGui.IsKeyPressed((ImGuiKey)c.Key, false)
                     && isKeyPressed
                     && ((!c.Alt && !io.KeyAlt) || (c.Alt && io.KeyAlt)) // There is probably a smarty way to express this.
                     && ((!c.Ctrl && !io.KeyCtrl) || (c.Ctrl && io.KeyCtrl))
                     && ((!c.Shift && !io.KeyShift) || (c.Shift && io.KeyShift))
                     )
                     return true;
-                //}
             }
 
             return false;
