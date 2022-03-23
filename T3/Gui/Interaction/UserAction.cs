@@ -131,11 +131,14 @@ namespace T3.Gui
 
                 var c = binding.Combination;
 
-                var isKeyPressed = (!binding.KeyPressOnly || ImGui.IsKeyPressed((int)c.Key));
+                var isKeyPressed = (!binding.KeyPressOnly || ImGui.IsKeyPressed((ImGuiKey)c.Key));
                 if (io.KeysDown[(int)c.Key]
-                    && Math.Abs(io.KeysDownDurationPrev[(int)c.Key]) < 0.001f
+                    
+                    // This function became obsolete with ImGui v1.87. So far I couldn't reproduce any issues without this check, though
+                    //&& Math.Abs(io.KeysDownDurationPrev[(int)c.Key]) < 0.001f FIXME
+                    
                     && isKeyPressed
-                    && ((!c.Alt && !io.KeyAlt) || (c.Alt && io.KeyAlt)) // There is probably a smarty way to say this.
+                    && ((!c.Alt && !io.KeyAlt) || (c.Alt && io.KeyAlt)) // There is probably a smarty way to express this.
                     && ((!c.Ctrl && !io.KeyCtrl) || (c.Ctrl && io.KeyCtrl))
                     && ((!c.Shift && !io.KeyShift) || (c.Shift && io.KeyShift))
                     )

@@ -319,7 +319,7 @@ namespace T3.Gui.Windows
                     ImGui.SetKeyboardFocusHere();
                     preset.Title = text;
 
-                    if ((ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((int)Key.Return) || ImGui.IsMouseClicked(ImGuiMouseButton.Left)))
+                    if ((ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((ImGuiKey)Key.Return) || ImGui.IsMouseClicked(ImGuiMouseButton.Left)))
                     {
                         _renamePresetReference = null;
                         activeOpVariation.WriteToJson();

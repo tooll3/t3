@@ -253,7 +253,7 @@ namespace T3.Gui.Graph
                 if (!ImGui.IsItemDeactivated())
                     annotation.Title = text;
 
-                if (!justOpened && (ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((int)Key.Esc)))
+                if (!justOpened && (ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((ImGuiKey)Key.Esc)))
                 {
                     _focusedAnnotationId = Guid.Empty;
                     _changeAnnotationTextCommand.NewText = annotation.Title;

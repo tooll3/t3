@@ -225,7 +225,7 @@ namespace T3.Gui
             {
                 ImGui.PushFont(Fonts.FontBold);
                 if (ImGui.Button(label)
-                    || (enableTriggerWithReturn && ImGui.IsKeyPressed((int)Key.Return)))
+                    || (enableTriggerWithReturn && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
                 {
                     ImGui.PopFont();
                     return true;
@@ -448,7 +448,7 @@ namespace T3.Gui
             
             if (_isSearchResultWindowOpen)
             {
-                if (ImGui.IsKeyPressed((int)Key.CursorDown, true))
+                if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorDown, true))
                 {
                     if (_lastResults.Count > 0)
                     {
@@ -456,7 +456,7 @@ namespace T3.Gui
                         _selectedResultIndex %= _lastResults.Count;
                     }
                 }
-                else if (ImGui.IsKeyPressed((int)Key.CursorUp, true))
+                else if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorUp, true))
                 {
                     if (_lastResults.Count > 0)
                     {
@@ -504,7 +504,7 @@ namespace T3.Gui
                             var isSelected = index == _selectedResultIndex;
                             ImGui.Selectable(word, isSelected);
                             
-                            if (ImGui.IsItemClicked() || (isSelected && ImGui.IsKeyPressed((int)Key.Return)))
+                            if (ImGui.IsItemClicked() || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
                             {
                                 text = word;
                                 wasChanged = true;

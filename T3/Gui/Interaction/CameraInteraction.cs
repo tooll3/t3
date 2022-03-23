@@ -210,50 +210,50 @@ namespace T3.Gui.Graph.Interaction
             var viewDirLength = _viewAxis.ViewDistance.Length();
             var acc = CameraAcceleration * _deltaTime * 60 * viewDirLength;
 
-            if (ImGui.IsKeyDown((int)Key.A) || ImGui.IsKeyDown((int)Key.CursorLeft))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.A) || ImGui.IsKeyDown((ImGuiKey)Key.CursorLeft))
             {
                 _moveVelocity += _viewAxis.Left * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((int)Key.D) || ImGui.IsKeyDown((int)Key.CursorRight))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.D) || ImGui.IsKeyDown((ImGuiKey)Key.CursorRight))
             {
                 _moveVelocity -= _viewAxis.Left * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((int)Key.W) || ImGui.IsKeyDown((int)Key.CursorUp))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.W) || ImGui.IsKeyDown((ImGuiKey)Key.CursorUp))
             {
                 _moveVelocity += Vector3.Normalize(_viewAxis.ViewDistance) * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((int)Key.S) || ImGui.IsKeyDown((int)Key.CursorDown))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.S) || ImGui.IsKeyDown((ImGuiKey)Key.CursorDown))
             {
                 _moveVelocity -= Vector3.Normalize(_viewAxis.ViewDistance) * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((int)Key.E))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.E))
             {
                 _moveVelocity += _viewAxis.Up * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((int)Key.X))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.X))
             {
                 _moveVelocity -= _viewAxis.Up * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((int)Key.F))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.F))
             {
                 _moveVelocity = Vector3.Zero;
                 _intendedSetup.Reset();
                 _manipulatedByKeyboard = true;
             }
             
-            if (ImGui.IsKeyDown((int)Key.C))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.C))
             {
                 _moveVelocity = Vector3.Zero;
                 //_intendedSetup.Reset();

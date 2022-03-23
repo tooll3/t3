@@ -49,7 +49,7 @@ namespace T3.Gui.Graph.Interaction
         {
             if (!_isOpen)
             {
-                if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((int)Key.Tab))
+                if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((ImGuiKey)Key.Tab))
                     return;
 
                 if (SelectionManager.GetSelectedChildUis().Count() == 1)
@@ -106,7 +106,7 @@ namespace T3.Gui.Graph.Interaction
             ImGui.InputText("##filter", ref _filter.SearchString, 10);
             _drawList.AddRect(_posInScreen, _posInScreen + _size, Color.Gray);
 
-            if (ImGui.IsKeyReleased((int)Key.CursorDown))
+            if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorDown))
             {
                 if (_filter.MatchingSymbolUis.Count > 0)
                 {
@@ -118,7 +118,7 @@ namespace T3.Gui.Graph.Interaction
                     _selectedItemWasChanged = true;
                 }
             }
-            else if (ImGui.IsKeyReleased((int)Key.CursorUp))
+            else if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorUp))
             {
                 if (_filter.MatchingSymbolUis.Count > 0)
                 {
@@ -131,7 +131,7 @@ namespace T3.Gui.Graph.Interaction
                     _selectedItemWasChanged = true;
                 }
             }
-            else if (ImGui.IsKeyPressed((int)Key.Return))
+            else if (ImGui.IsKeyPressed((ImGuiKey)Key.Return))
             {
                 if (_selectedSymbolUi != null)
                 {
@@ -150,7 +150,7 @@ namespace T3.Gui.Graph.Interaction
             var clickedOutside = ImGui.IsMouseClicked(ImGuiMouseButton.Left) && ImGui.IsWindowHovered();
             if (clickedOutside
                 || ImGui.IsMouseClicked(ImGuiMouseButton.Right)
-                || ImGui.GetIO().KeysDownDuration[(int)Key.Esc] > 0)
+                || ImGui.IsKeyDown((ImGuiKey)Key.Esc))
             {
                 ConnectionMaker.Cancel();
                 //Log.Debug("Closing...");

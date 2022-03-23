@@ -142,7 +142,7 @@ namespace T3.Gui.Interaction
                         if (shouldFocus)
                         {
                             ImGui.SetKeyboardFocusHere(-1);
-                            if (ImGui.IsKeyReleased((int)Key.Tab))
+                            if (ImGui.IsKeyReleased((ImGuiKey)Key.Tab))
                             {
                                 TabFocusIndex = -1;
                             }
@@ -150,7 +150,7 @@ namespace T3.Gui.Interaction
 
                         ImGui.PopStyleColor();
                         var completedAfterTabbing = false;
-                        if (ImGui.IsKeyPressed((int)Key.Tab) && TabFocusIndex == -1)
+                        if (ImGui.IsKeyPressed((ImGuiKey)Key.Tab) && TabFocusIndex == -1)
                         {
                             TabFocusIndex = CurrentTabIndex + (ImGui.GetIO().KeyShift ? -1 : 1);
                             completedAfterTabbing = true;
@@ -164,7 +164,7 @@ namespace T3.Gui.Interaction
                         }
 
                         
-                        if (completedAfterTabbing || ImGui.IsKeyPressed((int)Key.Esc) || ImGui.IsItemDeactivated() || !ImGui.IsWindowFocused())
+                        if (completedAfterTabbing || ImGui.IsKeyPressed((ImGuiKey)Key.Esc) || ImGui.IsItemDeactivated() || !ImGui.IsWindowFocused())
                         {
                             SetState(InputStates.Inactive);
                             if (double.IsNaN(_editValue))
