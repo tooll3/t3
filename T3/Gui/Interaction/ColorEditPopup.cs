@@ -38,9 +38,9 @@ namespace T3.Gui.Interaction
 
                 {
                     //var previousC = new Color(previousColor);
-                    ImGui.ColorConvertRGBtoHSV(previousColor.X, previousColor.Y, previousColor.Z, out var phNormalized, out var plinearSaturation, out var pv);
-                    var pHueAngle = (phNormalized + 0.25f) * 2 * MathF.PI;
-                    var pWarpedSaturation = MathF.Pow(plinearSaturation, 1 / saturationWarp);
+                    ImGui.ColorConvertRGBtoHSV(previousColor.X, previousColor.Y, previousColor.Z, out var prevHueNormalized, out var prevLinearSaturation, out var pv);
+                    var pHueAngle = (prevHueNormalized + 0.25f) * 2 * MathF.PI;
+                    var pWarpedSaturation = MathF.Pow(prevLinearSaturation, 1 / saturationWarp);
                     var pPickedColorPos = new Vector2(MathF.Sin(pHueAngle), MathF.Cos(pHueAngle)) * size / 2 * pWarpedSaturation + size / 2;
                     drawList.AddCircle(windowPos + pPickedColorPos, 2, Color.Black.Fade(0.3f));
                     drawList.AddCircle(windowPos + pPickedColorPos, 1, Color.White.Fade(0.5f));
@@ -74,8 +74,8 @@ namespace T3.Gui.Interaction
                     var barHeight = wheelRadius;
                     const float barWidth =10;
                     var pMin = windowPos + new Vector2(size.X + 10, 0);
-                    var valueBarSize = new Vector2(barWidth, barHeight);
-                    var pMax = pMin + valueBarSize;
+                    var visibleBarSize = new Vector2(barWidth, barHeight);
+                    var pMax = pMin + visibleBarSize;
                     drawList.AddRectFilled(pMin - Vector2.One, pMax + Vector2.One, Color.Black);
                     
                     var brightColor = cColor;
@@ -95,10 +95,17 @@ namespace T3.Gui.Interaction
                     drawList.AddRectFilled(handlePos - Vector2.One, handlePos + new Vector2(barWidth + 2, 2), Color.Black);
                     drawList.AddRectFilled(handlePos, handlePos + new Vector2(barWidth + 2, 1), Color.White);       
                     ImGui.SetCursorScreenPos(pMin - new Vector2(10,0));
-                    ImGui.InvisibleButton("intensitySlider", new Vector2(valueBarSize.X * 3, valueBarSize.Y ));
+                    ImGui.InvisibleButton("intensitySlider", new Vector2(visibleBarSize.X * 4, visibleBarSize.Y ));
                     if (ImGui.IsItemActive())
                     {
-                        cColor.V = (1- (ImGui.GetMousePos() - pMin).Y / barHeight).Clamp(0,100);
+                        var clampUpperValue = ImGui.GetIO().KeyCtrl ? 100 : 1;
+                        var normalizedValue = (1- (ImGui.GetMousePos() - pMin).Y / barHeight).Clamp(0,clampUpperValue);
+                        if (normalizedValue > 1)
+                        {
+                            normalizedValue = MathF.Pow(normalizedValue, 3);
+                        }
+                        cColor.V = normalizedValue;
+                        
                         edited = true;
                     }
                 }
