@@ -2,6 +2,7 @@ using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
 
 namespace T3.Operators.Types.Id_42cb88bc_beb8_4d89_ac99_44b77be5f03e
 {
@@ -25,7 +26,7 @@ namespace T3.Operators.Types.Id_42cb88bc_beb8_4d89_ac99_44b77be5f03e
         [Input(Guid = "70f4cc27-f901-4faa-aa2e-b4cd2a50ff73")]
         public readonly InputSlot<bool> EnableZTest = new InputSlot<bool>();
 
-        [Input(Guid = "6c36bf68-e22f-419d-9ec0-f60a83d6a560")]
+        [Input(Guid = "6c36bf68-e22f-419d-9ec0-f60a83d6a560", MappedType = typeof(PickBlendMode.BlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "329d8248-5f9f-4ad3-9b97-0f142e91ba05")]

@@ -16,7 +16,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
 {
     public class _LenseFlareSprites : Instance<_LenseFlareSprites>
     {
-        [Output(Guid = "B26730FF-B1FF-40A7-91AF-B10026ED4C32")]
+        [Output(Guid = "B26730FF-B1FF-40A7-91AF-B10026ED4C32", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<StructuredList> OutBuffer = new Slot<StructuredList>();
 
         public _LenseFlareSprites()
