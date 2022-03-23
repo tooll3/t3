@@ -93,6 +93,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 tAnchor = posInWorld + v.Tangent * lookUpDistance;
     float3 tAnchor2 = posInWorld - v.Tangent * lookUpDistance;
 
+    weight *= selection;
     float3 newTangent  = normalize( tAnchor + GetNoise(tAnchor, variationOffset) * weight - newPos);
     float3 newTangent2  = -normalize( tAnchor2 + GetNoise(tAnchor2, variationOffset) * weight - newPos);
     ResultVertices[i.x].Tangent = lerp(newTangent, newTangent2, 0.5);
