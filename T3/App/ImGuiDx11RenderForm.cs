@@ -2,6 +2,8 @@
 using System.Windows.Forms;
 using ImGuiNET;
 using SharpDX.Windows;
+using T3.Core.Logging;
+using T3.Gui;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable IdentifierTypo
@@ -156,7 +158,7 @@ namespace t3.App
             }
         }
 
-        private static bool UpdateMouseCursor()
+        private  bool UpdateMouseCursor()
         {
             ImGuiIOPtr io = ImGui.GetIO();
             if (((uint)io.ConfigFlags & (uint)ImGuiConfigFlags.NoMouseCursorChange) > 0)
@@ -167,38 +169,45 @@ namespace t3.App
             {
                 // Hide OS mouse cursor if imgui is drawing it or if it wants no cursor
                 Cursor.Current = null;
+                return true;
             }
-            else
+
+
+            Cursor newCursor = null;
+            
+            // Show OS mouse cursor
+            switch (imgui_cursor)
             {
-                // Show OS mouse cursor
-                switch (imgui_cursor)
-                {
-                    case ImGuiMouseCursor.Arrow:
-                        Cursor.Current = Cursors.Arrow;
-                        break;
-                    case ImGuiMouseCursor.TextInput:
-                        Cursor.Current = Cursors.IBeam;
-                        break;
-                    case ImGuiMouseCursor.ResizeAll:
-                        Cursor.Current = Cursors.SizeAll;
-                        break;
-                    case ImGuiMouseCursor.ResizeEW:
-                        Cursor.Current = Cursors.SizeWE;
-                        break;
-                    case ImGuiMouseCursor.ResizeNS:
-                        Cursor.Current = Cursors.SizeNS;
-                        break;
-                    case ImGuiMouseCursor.ResizeNESW:
-                        Cursor.Current = Cursors.SizeNESW;
-                        break;
-                    case ImGuiMouseCursor.ResizeNWSE:
-                        Cursor.Current = Cursors.SizeNWSE;
-                        break;
-                    case ImGuiMouseCursor.Hand:
-                        Cursor.Current = Cursors.Hand;
-                        break;
-                }
+                case ImGuiMouseCursor.Arrow:
+                    newCursor = Cursors.Arrow;
+                    break;
+                case ImGuiMouseCursor.TextInput:
+                    newCursor = Cursors.IBeam;
+                    break;
+                case ImGuiMouseCursor.ResizeAll:
+                    newCursor = Cursors.SizeAll;
+                    break;
+                case ImGuiMouseCursor.ResizeEW:
+                    newCursor = Cursors.SizeWE;
+                    break;
+                case ImGuiMouseCursor.ResizeNS:
+                    newCursor = Cursors.SizeNS;
+                    break;
+                case ImGuiMouseCursor.ResizeNESW:
+                    newCursor = Cursors.SizeNESW;
+                    break;
+                case ImGuiMouseCursor.ResizeNWSE:
+                    newCursor = Cursors.SizeNWSE;
+                    break;
+                case ImGuiMouseCursor.Hand:
+                    newCursor = Cursors.Hand;
+                    break;
             }
+            
+            if (Cursor.Current != newCursor)
+            {
+                Cursor = newCursor;
+            } 
 
             return true;
         }
