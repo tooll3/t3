@@ -1,4 +1,5 @@
-﻿using SharpDX.Mathematics.Interop;
+﻿using SharpDX.Direct3D11;
+using SharpDX.Mathematics.Interop;
 using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -26,8 +27,12 @@ namespace T3.Operators.Types.Id_fbd7f0f0_36a3_4fbb_91e1_cb33d4666d09
 
             ScissorRectangles.GetValue(context);
             _prevViewports = rasterizer.GetViewports<RawViewportF>();
+            
             Viewports.GetValues(ref _viewports, context);
-            rasterizer.State = RasterizerState.GetValue(context);
+
+            _prevState = rasterizer.State; 
+            var newState = RasterizerState.GetValue(context);
+            rasterizer.State = newState;
 
             if (_viewports.Length > 0)
                 rasterizer.SetViewports(_viewports, _viewports.Length);
@@ -38,6 +43,7 @@ namespace T3.Operators.Types.Id_fbd7f0f0_36a3_4fbb_91e1_cb33d4666d09
             var deviceContext = ResourceManager.Instance().Device.ImmediateContext;
             var rasterizer = deviceContext.Rasterizer;
             rasterizer.SetViewports(_prevViewports, _prevViewports.Length);
+            rasterizer.State = _prevState;
         }
 
         private RawViewportF[] _viewports = new RawViewportF[0];
@@ -49,5 +55,7 @@ namespace T3.Operators.Types.Id_fbd7f0f0_36a3_4fbb_91e1_cb33d4666d09
         public readonly MultiInputSlot<RawViewportF> Viewports = new MultiInputSlot<RawViewportF>();
         [Input(Guid = "3F71BE22-9DC2-4E47-8B3A-1EF3C9ECBD9D")]
         public readonly MultiInputSlot<RawRectangle> ScissorRectangles = new MultiInputSlot<RawRectangle>();
+
+        private RasterizerState _prevState;
     }
 }
