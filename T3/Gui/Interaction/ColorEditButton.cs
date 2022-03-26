@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Interaction
@@ -11,15 +12,16 @@ namespace T3.Gui.Interaction
         public static bool Draw(ref Vector4 color, Vector2 size)
         {
             var buttonPosition = ImGui.GetCursorScreenPos();
-            if (ImGui.ColorButton("##thumbnail", color, ImGuiColorEditFlags.AlphaPreviewHalf, size))
-            {
+            ImGui.ColorButton("##thumbnail", color, ImGuiColorEditFlags.AlphaPreviewHalf, size);
+            
+            // Don't you ImGui.IsItemActivated() to allow quick switching between color thumbnails
+            if (ImGui.IsItemHovered( ImGuiHoveredFlags.AllowWhenBlockedByPopup)
+                && ImGui.IsMouseReleased(0)
+                && ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length() < UserSettings.Config.ClickTreshold
+                && !ImGui.IsPopupOpen("##colorEdit")
+                )
+            {            
                 ImGui.OpenPopup("##colorEdit");
-            }
-
-            if (ImGui.IsItemActivated())
-            {
-                _previousColor = color;
-                CollectNewColorsInPalette(color);
             }
 
             var edited = false;
