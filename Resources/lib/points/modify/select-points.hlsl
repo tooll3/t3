@@ -1,7 +1,6 @@
 #include "hash-functions.hlsl"
 #include "noise-functions.hlsl"
 #include "point.hlsl"
-#include "pbr.hlsl"
 
 cbuffer Transforms : register(b0)
 {
@@ -27,10 +26,11 @@ cbuffer Params : register(b1)
     float Strength;
     float Phase;
     float Threshold;
+    float DiscardNonSelected;
 }
 
-StructuredBuffer<PbrVertex> SourceVertices : t0;        
-RWStructuredBuffer<PbrVertex> ResultVertices : u0;   
+StructuredBuffer<Point> SourcePoints : t0;        
+RWStructuredBuffer<Point> ResultPoints : u0;   
 
 static const float NoisePhase = 0;
 
@@ -51,14 +51,15 @@ static const float ModeInvert = 4.5;
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
+
     uint numStructs, stride;
-    SourceVertices.GetDimensions(numStructs, stride);
+    SourcePoints.GetDimensions(numStructs, stride);
     if(i.x >= numStructs) {
         return;
     }
     
-    ResultVertices[i.x] = SourceVertices[i.x];
-    float3 posInObject = SourceVertices[i.x].Position;
+    ResultPoints[i.x] = SourcePoints[i.x];
+    float3 posInObject = SourcePoints[i.x].position;
 
     float3 posInVolume = mul(float4(posInObject,1), TransformVolume).xyz;
 
@@ -92,28 +93,40 @@ void main(uint3 i : SV_DispatchThreadID)
         s = smoothstep(Threshold+ FallOff, Threshold, noise);
     }
 
-
+    float w = SourcePoints[i.x].w;
     if(SelectMode < ModeOverride) 
     {
         s *= Strength;
     }
     else if(SelectMode < ModeAdd) 
     {
-        s+= SourceVertices[i.x].Selected * Strength;
+        s+= w * Strength;
     }
     else if(SelectMode < ModeSub) 
     {
-        s=  SourceVertices[i.x].Selected - s * Strength;
+        s=  w - s * Strength;
     }
     else if(SelectMode < ModeMultiply) 
     {
-        s= lerp(SourceVertices[i.x].Selected, SourceVertices[i.x].Selected * s, Strength);
+        s= lerp(w, w * s, Strength);
     }
     else if(SelectMode < ModeInvert) 
     {
-        s = s * (1- SourceVertices[i.x].Selected);
+        s = s * (1- w);
     }
 
-    ResultVertices[i.x].Selected = ClampResult < 0.5 ? s : saturate(s);
+    // float newW = ClampResult < 0.5 ? s : saturate(s);
+    
+    // if(DiscardNonSelected > 0.5 newW <= 0) {
+    //     newW = sqrt(-1);
+    // }
+    
+    float newW = (DiscardNonSelected > 0.5 && s <=0)
+                  ? sqrt(-1)
+                  : (ClampResult > 0.5) 
+                    ? saturate(s) 
+                    : s;
+
+    ResultPoints[i.x].w = newW;
 }
 

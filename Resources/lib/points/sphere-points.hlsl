@@ -11,7 +11,13 @@ cbuffer Params : register(b0)
 
 RWStructuredBuffer<Point> ResultPoints : u0;    // output
 
+
+
 static float phi = PI *  (3. - sqrt(5.));  // golden angle in radians
+
+// Fix orientation so z aligns with sphere normal
+static float4 rot4 = rotate_angle_axis( -PI/2 , float3(1,0,0));    
+static float4 rot5 = qmul(rot4,  rotate_angle_axis( PI/2 , float3(0,0,1)));    
 
 [numthreads(256,4,1)]
 void main(uint3 dtID : SV_DispatchThreadID)
@@ -34,14 +40,19 @@ void main(uint3 dtID : SV_DispatchThreadID)
     float3 position = float3(x,y,z);
     ResultPoints[dtID.x].position = position * Radius + Center;
     ResultPoints[dtID.x].w = 1;
- 
-    float4 rot = rotate_angle_axis( -theta, float3(0,1,0));
 
-    // float angle2 = (2-t) * PI;
-    // float angle3 = (dot( float3(0,1,0), position ) + 1) * PI / 2;
+
+    float4 rot = rotate_angle_axis( theta, float3(0,-1,0));
     float angle4 = atan2( y, radius)  - PI/2;
-    float4 rot2 = rotate_angle_axis( angle4 , float3(0,0,1));
-    
-    ResultPoints[dtID.x].rotation = qmul(rot,rot2);
+    float4 rot2 = rotate_angle_axis( angle4 , float3(0,0,1));    
+    ResultPoints[dtID.x].rotation = qmul( qmul(rot,rot2) , rot5);
+
+
+
+
+    // float4 rot = rotate_angle_axis( -theta, float3(0,1,0));
+    // float angle4 = atan2( y, radius)  - PI/2;
+    // float4 rot2 = rotate_angle_axis( angle4 , float3(0,0,1));    
+    // ResultPoints[dtID.x].rotation = qmul(rot,rot2);
 }
 

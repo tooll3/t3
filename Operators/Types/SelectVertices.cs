@@ -29,17 +29,17 @@ namespace T3.Operators.Types.Id_6184ac2d_c17d_47de_a314_15e1c670f969
         [Input(Guid = "b3230397-8052-4bd6-8ecb-747f62c1bb3d")]
         public readonly InputSlot<float> FallOff = new InputSlot<float>();
 
-        [Input(Guid = "a9807f1e-bd65-4006-a42e-a1d8f67387f9", MappedType = typeof(Shapes))]
+        [Input(Guid = "a9807f1e-bd65-4006-a42e-a1d8f67387f9")]
         public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
 
-        [Input(Guid = "ca4fe7d8-5e78-493b-a209-3ee6be0d0a90", MappedType = typeof(Modes))]
+        [Input(Guid = "ca4fe7d8-5e78-493b-a209-3ee6be0d0a90")]
         public readonly InputSlot<int> Mode = new InputSlot<int>();
-        
-        [Input(Guid = "C1223666-D19A-4FA5-96C6-3582E0A685D0")]
-        public readonly InputSlot<float> Strength = new InputSlot<float>();
-        
-        [Input(Guid = "A7ED94CF-5038-4AD4-90B2-DB6CB2CB142A")]
+
+        [Input(Guid = "a7ed94cf-5038-4ad4-90b2-db6cb2cb142a")]
         public readonly InputSlot<bool> ClampResult = new InputSlot<bool>();
+
+        [Input(Guid = "c1223666-d19a-4fa5-96c6-3582e0a685d0")]
+        public readonly InputSlot<float> Strength = new InputSlot<float>();
 
         [Input(Guid = "b0942a49-f562-4c46-9a10-3b4de8a3c5b2")]
         public readonly InputSlot<float> Phase = new InputSlot<float>();

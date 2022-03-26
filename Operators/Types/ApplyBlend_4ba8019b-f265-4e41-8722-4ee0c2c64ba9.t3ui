@@ -3,6 +3,7 @@
   "InputUis": [
     {
       "InputId": "1295b412-d9db-4805-9d28-0e3c7fc6e08c"/*GPoints*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -519.987,
         "Y": 144.45346
@@ -10,6 +11,7 @@
     },
     {
       "InputId": "3ed0658d-8193-4225-85ca-9663a2980c21"/*PointsB*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -548.6248,
         "Y": 371.529
