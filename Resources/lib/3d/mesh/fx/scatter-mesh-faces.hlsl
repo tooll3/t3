@@ -196,5 +196,17 @@ void main(uint3 i : SV_DispatchThreadID)
     tranformVertex(faceVertices.y, influence, pCenter, direction);
     tranformVertex(faceVertices.z, influence, pCenter, direction);
 
+    pos0 = ResultVertices[faceVertices.x].Position;
+    pos1 = ResultVertices[faceVertices.y].Position;
+    pos2 = ResultVertices[faceVertices.z].Position;
+
+    float3 n = cross(pos1 - pos0, pos2 - pos0);
+
+    float i2 = saturate(influence * 10);
+    pos0 = ResultVertices[faceVertices.x].Normal = lerp(ResultVertices[faceVertices.x].Normal, n, i2);
+    pos1 = ResultVertices[faceVertices.y].Normal = lerp(ResultVertices[faceVertices.y].Normal, n, i2);
+    pos2 = ResultVertices[faceVertices.z].Normal = lerp(ResultVertices[faceVertices.z].Normal, n, i2);
+
+
 }
 
