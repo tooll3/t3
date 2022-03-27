@@ -17,7 +17,12 @@
       "Id": "a53ec53a-2dfa-4a73-852a-ea87261e08a1"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710"/*FloatsToBuffer*/,
+          "DirtyFlagTrigger": "None"
+        }
+      ]
     },
     {
       "Id": "147352aa-0e96-4be4-8770-69015bc35277"/*ComputeShader*/,
@@ -45,7 +50,12 @@
           }
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "c382284f-7e37-4eb0-b284-bc735247f26b"/*ComputeShaderStage*/,
+          "DirtyFlagTrigger": "None"
+        }
+      ]
     },
     {
       "Id": "11dda7f9-60f0-4871-a986-658ddbbc9f10"/*ExecuteBufferUpdate*/,

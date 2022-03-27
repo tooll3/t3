@@ -30,7 +30,7 @@ namespace T3.Operators.Types.Id_6184ac2d_c17d_47de_a314_15e1c670f969
         public readonly InputSlot<float> FallOff = new InputSlot<float>();
 
         [Input(Guid = "a9807f1e-bd65-4006-a42e-a1d8f67387f9")]
-        public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
+        public readonly InputSlot<int> VolumeShape = new InputSlot<int>(); 
 
         [Input(Guid = "ca4fe7d8-5e78-493b-a209-3ee6be0d0a90")]
         public readonly InputSlot<int> Mode = new InputSlot<int>();
