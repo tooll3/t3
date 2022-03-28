@@ -499,7 +499,7 @@
           }
         },
         {
-          "Id": "a867c29a-3cca-49c0-92ae-a7d094b5213b"/*ScatterPosition*/,
+          "Id": "a867c29a-3cca-49c0-92ae-a7d094b5213b"/*Dither*/,
           "Type": "System.Single",
           "Value": 6.8
         },
@@ -514,7 +514,7 @@
           "Value": 1
         },
         {
-          "Id": "1e1f40ea-15af-4191-b3ce-d2edc3eee243"/*SoftRadius*/,
+          "Id": "1e1f40ea-15af-4191-b3ce-d2edc3eee243"/*FallOff*/,
           "Type": "System.Single",
           "Value": 10.0
         }

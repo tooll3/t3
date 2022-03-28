@@ -110,12 +110,7 @@
           "Value": false
         }
       ],
-      "Outputs": [
-        {
-          "Id": "d2d834bd-00f4-46a0-ad20-3f399e107229"/*DrawSprites*/,
-          "IsDisabled": true
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "556b52e6-4b8c-437c-a829-143bf503ef00"/*ListToBuffer*/,
@@ -891,12 +886,7 @@
           "Value": false
         }
       ],
-      "Outputs": [
-        {
-          "Id": "d2d834bd-00f4-46a0-ad20-3f399e107229"/*DrawSprites*/,
-          "IsDisabled": true
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "4dbb0179-291b-4a49-8465-a8c821d78a8a"/*Star*/,
@@ -1153,12 +1143,7 @@
           "Value": false
         }
       ],
-      "Outputs": [
-        {
-          "Id": "d2d834bd-00f4-46a0-ad20-3f399e107229"/*DrawSprites*/,
-          "IsDisabled": true
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "f267d537-e3cd-43ea-8cf5-e7d2b121d799"/*RandomColorEdgeGlow*/,

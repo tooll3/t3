@@ -7,6 +7,20 @@
         "X": 0.0,
         "Y": 0.0
       }
+    },
+    {
+      "InputId": "48762e06-8377-464b-8fb9-c7d3b51c3f8e"/*Min*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "5755454f-98fe-49ef-9611-a7c3750c4f9a"/*Max*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
     }
   ],
   "SymbolChildUis": [],

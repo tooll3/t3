@@ -505,11 +505,6 @@
             "Y": -0.00999999,
             "Z": 0.0
           }
-        },
-        {
-          "Id": "2cbbb3eb-7e40-4a0a-9ed9-460953384750"/*UseWAsWeight*/,
-          "Type": "System.Single",
-          "Value": 0.54
         }
       ],
       "Outputs": []

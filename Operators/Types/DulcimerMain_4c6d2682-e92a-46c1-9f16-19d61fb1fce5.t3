@@ -1887,7 +1887,7 @@
       "SymbolId": "697bbc2d-0b2e-4013-bbc3-d58a28a79f31",
       "InputValues": [
         {
-          "Id": "e1c9d413-00b9-4d5d-81b6-6fa960a159be"/*RotateAxis*/,
+          "Id": "e1c9d413-00b9-4d5d-81b6-6fa960a159be"/*Rotate*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
@@ -1901,12 +1901,12 @@
           "Value": 0.0
         },
         {
-          "Id": "36e2d2a8-4910-4c83-b9ff-ced8df59c7f1"/*VolumeSizeMagnitude*/,
+          "Id": "36e2d2a8-4910-4c83-b9ff-ced8df59c7f1"/*VolumeSize*/,
           "Type": "System.Single",
           "Value": 0.02
         },
         {
-          "Id": "1e1f40ea-15af-4191-b3ce-d2edc3eee243"/*SoftRadius*/,
+          "Id": "1e1f40ea-15af-4191-b3ce-d2edc3eee243"/*FallOff*/,
           "Type": "System.Single",
           "Value": 1.71
         },

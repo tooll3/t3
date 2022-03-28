@@ -59,6 +59,11 @@ void main(uint3 i : SV_DispatchThreadID)
     }
     
     ResultPoints[i.x] = SourcePoints[i.x];
+
+    if(isnan(SourcePoints[i.x].w)) {
+        return;
+    }
+
     float3 posInObject = SourcePoints[i.x].position;
 
     float3 posInVolume = mul(float4(posInObject,1), TransformVolume).xyz;
