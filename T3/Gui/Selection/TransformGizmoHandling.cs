@@ -6,6 +6,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Operator.Slots;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using UiHelpers;
@@ -14,6 +15,9 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Gui.Selection
 {
+    /**
+     * Handles the interaction with 3d-gizmos for operators selected in the graph.  
+     */
     static class TransformGizmoHandling
     {
 
@@ -50,7 +54,7 @@ namespace T3.Gui.Selection
 
         
         /// <summary>
-        /// need foreground draw list atm as texture is drawn afterwards to output view
+        /// We need the foreground draw list at the moment when the output texture is drawn to the to output view...
         /// </summary>
         public static void SetDrawList(ImDrawListPtr drawList)
         {
@@ -78,7 +82,7 @@ namespace T3.Gui.Selection
         /// <summary>
         /// Called from <see cref="ITransformable"/> operators during update call
         /// </summary>
-        public static void TransformCallback(ITransformable transformable, EvaluationContext context)
+        public static void TransformCallback(Instance instance,  EvaluationContext context)
         {
             if (!_isDrawListValid)
             {
@@ -86,6 +90,9 @@ namespace T3.Gui.Selection
                 return;
             }
 
+            if(instance is not ITransformable transformable)
+                return;
+            
             if (!SelectedTransformables.Contains(transformable))
             {
                 Log.Warning("transform-callback from non-selected node?" + transformable);
@@ -104,13 +111,13 @@ namespace T3.Gui.Selection
             // local here as the local values are only used for drawing and therefore we don't want to draw anything scaled by this values.
             var objectToClipSpace = context.ObjectToWorld * context.WorldToCamera * context.CameraToClipSpace;
 
-
-            var s = transformable.Scale;
-            var r = transformable.Rotation;
-            float yaw = SharpDX.MathUtil.DegreesToRadians(r.Y);
-            float pitch = SharpDX.MathUtil.DegreesToRadians(r.X);
-            float roll = SharpDX.MathUtil.DegreesToRadians(r.Z);
-            var t = transformable.Translation;
+            var s = TryGetVectorFromInput(transformable.ScaleInput,1);
+            var r = TryGetVectorFromInput(transformable.RotationInput,0);
+            var t = TryGetVectorFromInput(transformable.TranslationInput,0);
+            
+            var yaw = SharpDX.MathUtil.DegreesToRadians(r.Y);
+            var pitch = SharpDX.MathUtil.DegreesToRadians(r.X);
+            var roll = SharpDX.MathUtil.DegreesToRadians(r.Z);
             
             var c=SharpDX.Vector3.TransformNormal(new SharpDX.Vector3(t.X,t.Y, t.Z), context.ObjectToWorld);
             _selectedCenter = new Vector3(c.X, c.Y, c.Z);
@@ -216,7 +223,7 @@ namespace T3.Gui.Selection
                         SharpDX.Vector3 offsetInLocal = (intersectionPoint - _startIntersectionPoint) * gizmoAxis;
                         var offsetInObject = SharpDX.Vector3.TransformNormal(offsetInLocal, localToObject);
                         SharpDX.Vector3 newOrigin = _originAtDragStart + offsetInObject;
-                        transformable.Translation = new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z);
+                        TrySetVector3ToInput(transformable.TranslationInput, new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z));
                     }
                 }
 
@@ -284,7 +291,7 @@ namespace T3.Gui.Selection
                         SharpDX.Vector3 offsetInLocal = (intersectionPoint - _startIntersectionPoint);
                         var offsetInObject = SharpDX.Vector3.TransformNormal(offsetInLocal, localToObject);
                         SharpDX.Vector3 newOrigin = _originAtDragStart + offsetInObject;
-                        transformable.Translation = new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z);
+                        TrySetVector3ToInput(transformable.TranslationInput, new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z));
                     }
                 }
 
@@ -332,7 +339,7 @@ namespace T3.Gui.Selection
                                                                        originInNdc.Z, 1);
                         var newOriginInObject = SharpDX.Vector4.Transform(newOriginInClipSpace, clipSpaceToObject);
                         Vector3 newTranslation = new Vector3(newOriginInObject.X, newOriginInObject.Y, newOriginInObject.Z) / newOriginInObject.W;
-                        transformable.Translation = newTranslation;
+                        TrySetVector3ToInput(transformable.TranslationInput, newTranslation);
                     }
                 }
                 var color2 = Color.Orange;
@@ -363,7 +370,31 @@ namespace T3.Gui.Selection
                 return new SharpDX.Ray(rayStartInObject, rayDir);
             }
         }
-        
+
+        private static Vector3 TryGetVectorFromInput(IInputSlot input, float defaultValue=0)
+        {
+            return input switch
+                       {
+                           InputSlot<Vector3> vec3Input => vec3Input.Value,
+                           InputSlot<Vector2> vec2Input => new Vector3(vec2Input.Value.X, vec2Input.Value.Y, defaultValue),
+                           _                            => new Vector3(defaultValue, defaultValue, defaultValue)
+                       };
+        }
+
+        private static void TrySetVector3ToInput(IInputSlot input, Vector3 vector3)
+        {
+            switch (input)
+            {
+                case InputSlot<Vector3> vec3Input:
+                    vec3Input.SetTypedInputValue(vector3);
+                    break;
+                case InputSlot<Vector2> vec2Input:
+                    vec2Input.SetTypedInputValue(new Vector2(vec2Input.Value.X, vec2Input.Value.Y));
+                    break;
+            }
+        }
+
+
         // Calculates the scale for a gizmo based on the distance to the cam
         private static float CalcGizmoScale(EvaluationContext context, SharpDX.Matrix localToObject, float width, float height, float fovInDegree,
                                             float gizmoSize)
@@ -480,7 +511,7 @@ namespace T3.Gui.Selection
         private static ImDrawListPtr _drawList = null;
         private static bool _isDrawListValid;
 
-        private static readonly HashSet<ITransformable> SelectedTransformables = new HashSet<ITransformable>();
+        private static readonly HashSet<ITransformable> SelectedTransformables = new();
             
         private static Vector2 _offsetToOriginAtDragStart;
         private static SharpDX.Vector3 _originAtDragStart;

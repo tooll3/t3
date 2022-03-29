@@ -7,9 +7,9 @@ namespace T3.Core.Operator.Slots
 {
     public class TransformCallbackSlot<T> : Slot<T>
     {
-        public Action<ITransformable, EvaluationContext> TransformCallback { get; set; }
+        public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
-        public ITransformable TransformableOp { get; set; }
+        public Instance TransformableOp { get; set; }
 
         private new void Update(EvaluationContext context)
         {

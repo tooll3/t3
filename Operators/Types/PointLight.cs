@@ -17,12 +17,11 @@ namespace T3.Operators.Types.Id_9c67a8c8_839f_4f67_a949_08cb38b9dffd
             Output.TransformableOp = this;
         }
 
-        System.Numerics.Vector3 ITransformable.Translation { get => Position.Value; set => Position.SetTypedInputValue(value); }
-        System.Numerics.Vector3 ITransformable.Rotation { get => System.Numerics.Vector3.Zero; set { } }
-        System.Numerics.Vector3 ITransformable.Scale { get => System.Numerics.Vector3.One; set { } }
+        IInputSlot ITransformable.TranslationInput => Position;
+        IInputSlot ITransformable.RotationInput => null;
+        IInputSlot ITransformable.ScaleInput => null;
 
-        public Action<ITransformable, EvaluationContext> TransformCallback { get => Output.TransformCallback; set => Output.TransformCallback = value; }
-
+        public Action<Instance, EvaluationContext> TransformCallback { get => Output.TransformCallback; set => Output.TransformCallback = value; }
         [Input(Guid = "55dc52d8-51a6-497a-9624-b118e0e27c65")]
         public readonly InputSlot<Command> Command = new InputSlot<Command>();
 

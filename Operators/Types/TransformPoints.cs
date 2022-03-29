@@ -18,13 +18,11 @@ namespace T3.Operators.Types.Id_7f6c64fe_ca2e_445e_a9b4_c70291ce354e
         {
             Output.TransformableOp = this;
         }        
-        // implementation of ITransformable
-        System.Numerics.Vector3 ITransformable.Translation { get => Translation.Value; set => Translation.SetTypedInputValue(value); }
-        System.Numerics.Vector3 ITransformable.Rotation { get => Rotation.Value; set => Rotation.SetTypedInputValue(value); }
-        System.Numerics.Vector3 ITransformable.Scale { get => Scale.Value; set => Scale.SetTypedInputValue(value); }
+        IInputSlot ITransformable.TranslationInput => Translation;
+        IInputSlot ITransformable.RotationInput => Rotation;
+        IInputSlot ITransformable.ScaleInput => Scale;
+        public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
-        public Action<ITransformable, EvaluationContext> TransformCallback { get => Output.TransformCallback; set => Output.TransformCallback = value; }
-        
         [Input(Guid = "565ff364-c3d9-4c60-a9a0-79fdd36d3477")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
