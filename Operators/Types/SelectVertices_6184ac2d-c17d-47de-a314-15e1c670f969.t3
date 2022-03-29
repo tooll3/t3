@@ -8,6 +8,10 @@
       "DefaultValue": null
     },
     {
+      "Id": "a9807f1e-bd65-4006-a42e-a1d8f67387f9"/*VolumeShape*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "9fcdd319-5120-402b-ac8e-07aa711bdaf5"/*Center*/,
       "DefaultValue": {
         "X": 0.0,
@@ -37,11 +41,7 @@
     },
     {
       "Id": "b3230397-8052-4bd6-8ecb-747f62c1bb3d"/*FallOff*/,
-      "DefaultValue": 0.001
-    },
-    {
-      "Id": "a9807f1e-bd65-4006-a42e-a1d8f67387f9"/*VolumeShape*/,
-      "DefaultValue": 0
+      "DefaultValue": 1.0
     },
     {
       "Id": "ca4fe7d8-5e78-493b-a209-3ee6be0d0a90"/*Mode*/,

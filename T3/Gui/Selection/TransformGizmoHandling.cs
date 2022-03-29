@@ -76,7 +76,7 @@ namespace T3.Gui.Selection
         
         
         /// <summary>
-        /// Called from <see cref="ITransformable"/> nodes during update
+        /// Called from <see cref="ITransformable"/> operators during update call
         /// </summary>
         public static void TransformCallback(ITransformable transformable, EvaluationContext context)
         {
@@ -122,7 +122,7 @@ namespace T3.Gui.Selection
 
             SharpDX.Vector4 originInClipSpace = SharpDX.Vector4.Transform(new SharpDX.Vector4(t.X, t.Y, t.Z, 1), objectToClipSpace);
             
-            // Don't draw gizmo behind camera
+            // Don't draw gizmo behind camera (view plane)
             Vector3 originInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z) / originInClipSpace.W;
             if ((originInNdc.Z > 1 || Math.Abs(originInNdc.X) > 2 || Math.Abs(originInNdc.Y) > 2) && CurrentDraggingMode == GizmoDraggingModes.None)
                 return;

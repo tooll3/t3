@@ -1,4 +1,3 @@
-using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -13,7 +12,7 @@ namespace T3.Operators.Types.Id_daacabd8_0338_4998_898f_94580abd8eac
         [Input(Guid = "d2ca131d-1bab-47ce-b0e7-382c61d6a176")]
         public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> InputMesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
 
-        [Input(Guid = "a795f91b-75e7-4b95-a8c7-28cbbe17fc04")]
+        [Input(Guid = "a795f91b-75e7-4b95-a8c7-28cbbe17fc04", MappedType = typeof(Directions))]
         public readonly InputSlot<int> Direction = new InputSlot<int>();
 
         [Input(Guid = "de7b5f05-d936-43af-a18d-bc27692dc9ed")]
