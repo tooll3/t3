@@ -1204,11 +1204,6 @@
           "Value": 0.44
         },
         {
-          "Id": "c770d786-386e-4867-920b-979f5586160b"/*RotateAngle*/,
-          "Type": "System.Single",
-          "Value": 1265.0
-        },
-        {
           "Id": "3a7828e2-f58e-4229-b6c2-636cd5dbd011"/*VolumeCenter*/,
           "Type": "System.Numerics.Vector3",
           "Value": {

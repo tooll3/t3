@@ -87,7 +87,6 @@ namespace T3.Gui.Selection
                 ChildUiInstanceIdPaths[childUi] = NodeOperations.BuildIdPathForInstance(instance);
                 if (instance is ITransformable transformable)
                 {
-                    transformable.TransformCallback = TransformGizmoHandling.TransformCallback;
                     TransformGizmoHandling.RegisterSelectedTransformable(childUi, transformable);
                 }
             }

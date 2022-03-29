@@ -1900,11 +1900,6 @@
           }
         },
         {
-          "Id": "c770d786-386e-4867-920b-979f5586160b"/*RotateAngle*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
           "Id": "36e2d2a8-4910-4c83-b9ff-ced8df59c7f1"/*VolumeSize*/,
           "Type": "System.Single",
           "Value": 0.02

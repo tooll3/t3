@@ -26,7 +26,7 @@ namespace T3.Operators.Types.Id_348652c3_abf5_4fe9_873b_89d1acaaf0ff
         IInputSlot ITransformable.RotationInput => null;
         IInputSlot ITransformable.ScaleInput => null;
 
-        public Action<Instance, EvaluationContext> TransformCallback { get => Output.TransformCallback; set => Output.TransformCallback = value; }
+        public Action<Instance, EvaluationContext> TransformCallback { get; set; }
         
         [Input(Guid = "53aeef4f-37f8-40a6-b552-cb35f5fb887c")]
         public readonly InputSlot<Vector3> Position = new InputSlot<Vector3>();

@@ -22,8 +22,8 @@ namespace T3.Operators.Types.Id_3ee8f66d_68df_43c1_b0eb_407259bf7e86
         IInputSlot ITransformable.RotationInput => null;
         IInputSlot ITransformable.ScaleInput => null;
 
-        public Action<Instance, EvaluationContext> TransformCallback { get => OutBuffer.TransformCallback; set => OutBuffer.TransformCallback = value; }
-
+        public Action<Instance, EvaluationContext> TransformCallback { get; set; }
+        
         [Input(Guid = "72eda38f-fc49-4b1f-b7c0-97e07bee4f7c")]
         public readonly InputSlot<int> CountX = new InputSlot<int>();
 
