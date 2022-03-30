@@ -34,8 +34,8 @@ namespace T3.Operators.Types.Id_284d2183_197d_47fd_b130_873cced78b1c
             float pitch = MathUtil.DegreesToRadians(r.X);
             float roll = MathUtil.DegreesToRadians(r.Z);
             var t = Translation.GetValue(context);
-            var objectToParentObject = Matrix.Transformation(Vector3.Zero, Quaternion.Identity, new Vector3(s.X, s.Y, s.Z), Vector3.Zero,
-                                                             Quaternion.RotationYawPitchRoll(yaw, pitch, roll), new Vector3(t.X, t.Y, t.Z));
+            var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
+                                                             rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
             
             var previousWorldTobject = context.ObjectToWorld;
             context.ObjectToWorld = Matrix.Multiply(objectToParentObject, context.ObjectToWorld);

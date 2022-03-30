@@ -83,8 +83,6 @@ namespace T3.Gui.Selection
         /// </summary>
         public static void TransformCallback(Instance instance, EvaluationContext context)
         {
-            Log.Debug($"TransformCallback with {instance}");
-            
             if (!_isDrawListValid)
             {
                 Log.Warning("can't draw gizmo without initialized draw list");
@@ -125,9 +123,9 @@ namespace T3.Gui.Selection
             var c = SharpDX.Vector3.TransformNormal(new SharpDX.Vector3(t.X, t.Y, t.Z), context.ObjectToWorld);
             _selectedCenter = new Vector3(c.X, c.Y, c.Z);
 
-            _localToObject = SharpDX.Matrix.Transformation(SharpDX.Vector3.Zero, SharpDX.Quaternion.Identity, SharpDX.Vector3.One,
-                                                          SharpDX.Vector3.Zero, SharpDX.Quaternion.RotationYawPitchRoll(yaw, pitch, roll),
-                                                          new SharpDX.Vector3(t.X, t.Y, t.Z));
+            _localToObject = SharpDX.Matrix.Transformation(scalingCenter: SharpDX.Vector3.Zero, scalingRotation: SharpDX.Quaternion.Identity, scaling: SharpDX.Vector3.One,
+                                                          rotationCenter: SharpDX.Vector3.Zero, rotation: SharpDX.Quaternion.RotationYawPitchRoll(yaw, pitch, roll),
+                                                          translation: new SharpDX.Vector3(t.X, t.Y, t.Z));
             _localToClipSpace = _localToObject * _objectToClipSpace;
 
             SharpDX.Vector4 originInClipSpace = SharpDX.Vector4.Transform(new SharpDX.Vector4(t.X, t.Y, t.Z, 1), _objectToClipSpace);
