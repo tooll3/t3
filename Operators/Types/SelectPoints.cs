@@ -1,15 +1,26 @@
 using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_371d72b8_69d4_4ced_beda_271386ad2fd6
 {
-    public class SelectPoints : Instance<SelectPoints>
+    public class SelectPoints : Instance<SelectPoints>, ITransformable
     {
-
         [Output(Guid = "d81a0df4-54b4-4587-8f0f-32a740261d73")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> Result2 = new Slot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> Result2 = new TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews>();
+
+        public SelectPoints()
+        {
+            Result2.TransformableOp = this;
+        }
+
+        IInputSlot ITransformable.TranslationInput => Center;
+        IInputSlot ITransformable.RotationInput => Rotate;
+        IInputSlot ITransformable.ScaleInput => Scale;
+        public Action<Instance, EvaluationContext> TransformCallback { get; set; }
+
 
         [Input(Guid = "f9a61731-c35e-48fd-b297-922fb4c3da4a")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
