@@ -214,7 +214,7 @@ namespace T3.Gui.Windows.Variations
             {
                 var newCommand = new ChangeInputValueCommand(param.Instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input)
                                      {
-                                         Value = value,
+                                         NewValue = value,
                                      };
                 commands.Add(newCommand);
             }

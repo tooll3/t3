@@ -138,14 +138,14 @@ namespace T3.Gui.Windows
 
                 if ((editState & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
                 {
-                    if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.Value.ValueType != inputSlot.Input.Value.ValueType)
+                    if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.NewValue.ValueType != inputSlot.Input.Value.ValueType)
                         _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
-                    _inputValueCommandInFlight.Value.Assign(inputSlot.Input.Value);
+                    _inputValueCommandInFlight.NewValue.Assign(inputSlot.Input.Value);
                 }
 
                 if ((editState & InputEditStateFlags.Finished) != InputEditStateFlags.Nothing)
                 {
-                    if (_inputValueCommandInFlight != null && _inputValueCommandInFlight.Value.ValueType == inputSlot.Input.Value.ValueType)
+                    if (_inputValueCommandInFlight != null && _inputValueCommandInFlight.NewValue.ValueType == inputSlot.Input.Value.ValueType)
                         UndoRedoStack.Add(_inputValueCommandInFlight);
                 }
 

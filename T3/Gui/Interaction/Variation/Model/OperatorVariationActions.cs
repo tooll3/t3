@@ -387,7 +387,7 @@ namespace T3.Gui.Interaction.Variation.Model
                 {
                     var newCommand = new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
                                          {
-                                             Value = presetValuesForGroupParameterId,
+                                             NewValue = presetValuesForGroupParameterId,
                                          };
                     commands.Add(newCommand);
                 }
@@ -443,7 +443,7 @@ namespace T3.Gui.Interaction.Variation.Model
                     var blendedValue = MathUtils.Lerp(floatValueA.Value, floatValueB.Value, localBlendFactor);
                     commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
                                      {
-                                         Value = new InputValue<float>(blendedValue),
+                                         NewValue = new InputValue<float>(blendedValue),
                                      });
                 }
                 else if (valueA is InputValue<Vector2> vec2ValueA && valueB is InputValue<Vector2> vec2ValueB)
@@ -451,7 +451,7 @@ namespace T3.Gui.Interaction.Variation.Model
                     var blendedValue = MathUtils.Lerp(vec2ValueA.Value, vec2ValueB.Value, localBlendFactor);
                     commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
                                      {
-                                         Value = new InputValue<Vector2>(blendedValue),
+                                         NewValue = new InputValue<Vector2>(blendedValue),
                                      });
                 }
                 else if (valueA is InputValue<Vector3> vec3ValueA && valueB is InputValue<Vector3> vec3ValueB)
@@ -459,7 +459,7 @@ namespace T3.Gui.Interaction.Variation.Model
                     var blendedValue = MathUtils.Lerp(vec3ValueA.Value, vec3ValueB.Value, localBlendFactor);
                     commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
                                      {
-                                         Value = new InputValue<Vector3>(blendedValue),
+                                         NewValue = new InputValue<Vector3>(blendedValue),
                                      });
                 }
                 else if (valueA is InputValue<Vector4> vec4ValueA && valueB is InputValue<Vector4> vec4ValueB)
@@ -467,7 +467,7 @@ namespace T3.Gui.Interaction.Variation.Model
                     var blendedValue = MathUtils.Lerp(vec4ValueA.Value, vec4ValueB.Value, localBlendFactor);
                     commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
                                      {
-                                         Value = new InputValue<Vector4>(blendedValue),
+                                         NewValue = new InputValue<Vector4>(blendedValue),
                                      });
                 }
             }

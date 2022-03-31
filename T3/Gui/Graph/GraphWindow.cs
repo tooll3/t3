@@ -176,7 +176,7 @@ namespace T3.Gui.Graph
             ImGui.SetCursorPos(Vector2.Zero);
             THelpers.DebugContentRect("window");
             
-            if(!(_imageBackground.IsActive && TransformGizmoHandling.CurrentDraggingMode != TransformGizmoHandling.GizmoDraggingModes.None))
+            if(!(_imageBackground.IsActive && TransformGizmoHandling.IsDragging))
             {
                 var drawList = ImGui.GetWindowDrawList();
                 var contentHeight = 0;
