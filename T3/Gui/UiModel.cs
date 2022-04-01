@@ -336,7 +336,7 @@ namespace T3.Gui
                     resourceManager.CreateOperatorEntry(symbol.SourcePath, symbol.Id.ToString(), OperatorUpdating.Update);
                 }
 
-                symbolUi.HasBeenModified = false;
+                symbolUi.ClearModifiedFlag();
             }
             
             ResourceManager.Instance().EnableOperatorFileWatcher();

@@ -347,7 +347,11 @@ namespace T3.Gui.InputUi
                     CustomComponents.ContextMenuForItem(() =>
                                                         {
                                                             if (ImGui.MenuItem("Set as default", !input.IsDefault))
+                                                            {
                                                                 input.SetCurrentValueAsDefault();
+                                                                var symbolUi = SymbolUiRegistry.Entries[symbolChildUi.SymbolChild.Symbol.Id];
+                                                                symbolUi.FlagAsModified();
+                                                            }
 
                                                             if (ImGui.MenuItem("Reset to default", !input.IsDefault))
                                                             {

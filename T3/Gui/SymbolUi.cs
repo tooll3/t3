@@ -274,7 +274,18 @@ namespace T3.Gui
 
         public string Description { get; set; }
 
-        public bool HasBeenModified { get; set; }
+        public bool HasBeenModified { get; private set; }
+
+        public void FlagAsModified()
+        {
+            HasBeenModified = true;
+        }
+
+        public void ClearModifiedFlag()
+        {
+            HasBeenModified = false;
+        }
+        
         // public Styles DefaultStyleForInstances { get; set; }  // TODO: Implement inheritance for display styles? 
         public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();    // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
         public OrderedDictionary<Guid, IInputUi> InputUis { get; } = new OrderedDictionary<Guid, IInputUi>();

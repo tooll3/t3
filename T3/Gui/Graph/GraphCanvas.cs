@@ -169,7 +169,7 @@ namespace T3.Gui.Graph
 
             MakeCurrent();
             var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-            symbolUi.HasBeenModified = true;
+            symbolUi.FlagAsModified();
             ChildUis = symbolUi.ChildUis;
             DrawList = dl;
             ImGui.BeginGroup();

@@ -21,7 +21,7 @@ namespace T3.Gui.Commands
             compositionSymbol.AddConnection(_addedConnection, _multiInputIndex);
 
             var symbolUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-            symbolUi.HasBeenModified = true;
+            symbolUi.FlagAsModified();
         }
 
         public void Undo()
@@ -30,7 +30,7 @@ namespace T3.Gui.Commands
             compositionSymbol.RemoveConnection(_addedConnection, _multiInputIndex);
             
             var symbolUi = SymbolUiRegistry.Entries[_compositionSymbolId];
-            symbolUi.HasBeenModified = true;
+            symbolUi.FlagAsModified();
         }
 
         private readonly Guid _compositionSymbolId;
