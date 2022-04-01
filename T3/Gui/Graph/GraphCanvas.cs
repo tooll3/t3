@@ -168,7 +168,9 @@ namespace T3.Gui.Graph
             GraphBookmarkNavigation.HandleForCanvas(this);
 
             MakeCurrent();
-            ChildUis = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis;
+            var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+            symbolUi.FlagAsModified();
+            ChildUis = symbolUi.ChildUis;
             DrawList = dl;
             ImGui.BeginGroup();
             {

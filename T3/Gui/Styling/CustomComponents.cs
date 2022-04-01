@@ -189,7 +189,7 @@ namespace T3.Gui
         {
             // This is a horrible hack to distinguish right mouse click from right mouse drag
             //var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
-            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickTreshold;
+            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
 
             if (!contextMenuIsOpen)
             {

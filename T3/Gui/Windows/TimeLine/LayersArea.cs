@@ -385,7 +385,7 @@ namespace T3.Gui.Windows.TimeLine
                                          : ImGuiMouseCursor.ResizeEW);
             }
 
-            if (!wasClicked && (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, UserSettings.Config.ClickTreshold)))
+            if (!wasClicked && (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, UserSettings.Config.ClickThreshold)))
                 return;
 
             if (ImGui.GetIO().KeyCtrl)

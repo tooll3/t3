@@ -64,7 +64,7 @@ namespace T3.Gui.ChildUi
                 usableArea.Expand(GraphCanvas.Current.Scale.X < 0.75f ? 0 : -4);
                 if (usableArea.Contains(ImGui.GetMousePos())
                     && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
-                    && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickTreshold)
+                    && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickThreshold)
                 {
                     _focusedInstanceId = instance.SymbolChildId;
                 }

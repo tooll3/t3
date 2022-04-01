@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SharpDX;
 using T3.Compilation;
 using T3.Core;
 using T3.Core.Animation;
@@ -22,6 +22,7 @@ using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using UiHelpers;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.Graph.Interaction
 {
@@ -227,7 +228,8 @@ namespace T3.Gui.Graph.Interaction
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
             var newSymbolUi = new SymbolUi(newSymbol);
             newSymbolUi.Description = description;
-
+            newSymbolUi.FlagAsModified();
+            
             SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
             newSymbol.Namespace = nameSpace;
 
@@ -334,7 +336,7 @@ namespace T3.Gui.Graph.Interaction
             UndoRedoStack.Add(new MacroCommand("Combine into symbol", executedCommands));
 
             if (UserSettings.Config.AutoSaveAfterSymbolCreation)
-                T3Ui.SaveInBackground();
+                T3Ui.SaveInBackground(false);
         }
 
         private static ImRect GetAreaFromChildren(List<SymbolChildUi> childUis)
@@ -696,7 +698,12 @@ namespace T3.Gui.Graph.Interaction
             {
                 Log.Error("Compilation after removing inputs failed, aborting the remove.");
             }
+
+            FlagDependentOpsAsModified(symbol);
         }
+
+
+        
 
         private static SyntaxNode RemoveNodesByIdFromTree(Guid[] inputIdsToRemove, SyntaxNode root)
         {
@@ -746,6 +753,8 @@ namespace T3.Gui.Graph.Interaction
 
             return false;
         }
+        
+                
 
         class InputNodeByTypeFinder : CSharpSyntaxRewriter
         {
@@ -1053,6 +1062,35 @@ namespace T3.Gui.Graph.Interaction
                 Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
                 symbol.Namespace = newNameSpace;
             }
+        }
+        
+        
+        
+        private static void FlagDependentOpsAsModified(Symbol symbol)
+        {
+            foreach (var dependent in GetDependentSymbolsWithInstances(symbol))
+            {
+                var symbolUi = SymbolUiRegistry.Entries[dependent.Id];
+                symbolUi.FlagAsModified();
+            }
+        }
+
+        private static List<Symbol> GetDependentSymbolsWithInstances(Symbol symbol)
+        {
+            List<Symbol> result = new List<Symbol>();
+            foreach (var s in SymbolRegistry.Entries.Values)
+            {
+                foreach (var ss in s.Children)
+                {
+                    if( ss.Symbol.Id != symbol.Id)
+                        continue;
+                    
+                    result.Add(s);
+                    break;
+                }
+            }
+
+            return result;
         }
     }
 }

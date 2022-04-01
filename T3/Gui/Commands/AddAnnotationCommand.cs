@@ -23,12 +23,13 @@ namespace T3.Gui.Commands
         public void Do()
         {
             _symbolUi.Annotations[_newAnnotation.Id] = _newAnnotation;
+            _symbolUi.FlagAsModified();
         }
         
         public void Undo()
         {
             _symbolUi.Annotations.Remove(_newAnnotation.Id);
-
+            _symbolUi.FlagAsModified();
         }
     }
 }

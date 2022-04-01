@@ -41,6 +41,8 @@ namespace T3.Gui
 
         public SymbolUi CloneForNewSymbol(Symbol newSymbol, Dictionary<Guid, Guid> oldToNewIds)
         { 
+            HasBeenModified = true;
+
             var childUis = new List<SymbolChildUi>(ChildUis.Count);
             // foreach (var sourceChildUi in ChildUis)
             // {
@@ -232,6 +234,8 @@ namespace T3.Gui
 
         public Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size)
         {
+            HasBeenModified = true;
+
             Symbol.AddChild(symbolToAdd, addedChildId);
             var childUi = new SymbolChildUi
                           {
@@ -246,6 +250,7 @@ namespace T3.Gui
         
         public Guid AddChildAsCopyFromSource(Symbol symbolToAdd, Guid addedChildId, SymbolUi sourceCompositionSymbolUi, Guid sourceChildId, Vector2 posInCanvas)
         {
+            HasBeenModified = true;
             Symbol.AddChild(symbolToAdd, addedChildId);
             var sourceChildUi = sourceCompositionSymbolUi.ChildUis.Single(child => child.Id == sourceChildId);
             var childUi = sourceChildUi.Clone();
@@ -258,6 +263,8 @@ namespace T3.Gui
 
         public void RemoveChild(Guid id)
         {
+            HasBeenModified = true;
+            
             Symbol.RemoveChild(id); // remove from symbol
 
             // now remove ui entry
@@ -266,6 +273,19 @@ namespace T3.Gui
         }
 
         public string Description { get; set; }
+
+        public bool HasBeenModified { get; private set; }
+
+        public void FlagAsModified()
+        {
+            HasBeenModified = true;
+        }
+
+        public void ClearModifiedFlag()
+        {
+            HasBeenModified = false;
+        }
+        
         // public Styles DefaultStyleForInstances { get; set; }  // TODO: Implement inheritance for display styles? 
         public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();    // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
         public OrderedDictionary<Guid, IInputUi> InputUis { get; } = new OrderedDictionary<Guid, IInputUi>();

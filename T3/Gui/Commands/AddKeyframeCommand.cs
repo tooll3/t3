@@ -8,12 +8,10 @@ namespace T3.Gui.Commands
         public string Name => "Add keyframe";
         public bool IsUndoable => true;
         
-        private Curve _curve;
-        private VDefinition _originalKey;
-        private VDefinition _newKey;
+        private readonly Curve _curve;
+        private readonly VDefinition _originalKey;
+        private readonly VDefinition _newKey;
         
-        private readonly Dictionary<VDefinition, VDefinition> _originalDefForReferences = new Dictionary<VDefinition, VDefinition>();
-        private readonly Dictionary<VDefinition, VDefinition> _newDefForReferences = new Dictionary<VDefinition, VDefinition>();
 
         public AddKeyframesCommand(Curve curve, VDefinition newKey)
         {

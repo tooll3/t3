@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using T3.Core.IO;
 using T3.Core.Logging;
+using t3.Gui.AutoBackup;
 //using T3.graph;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
@@ -37,6 +38,7 @@ namespace T3.Gui
 
         public void Draw()
         {
+            _autoBackup.Enabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;
             VariationHandling.Update();
             MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
@@ -67,7 +69,8 @@ namespace T3.Gui
             }
             else if (KeyboardBinding.Triggered(UserActions.Save))
             {
-                SaveInBackground();
+                var saveAll = !UserSettings.Config.SaveOnlyModified;
+                SaveInBackground(saveAll);
             }
         }
 
@@ -79,13 +82,17 @@ namespace T3.Gui
             {
                 if (ImGui.BeginMenu("File"))
                 {
-                    var isSaving = _saveStopwatch.IsRunning;
-                    if (ImGui.MenuItem("Save", !isSaving))
+                    if (ImGui.MenuItem("Save",KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
                     {
-                        SaveInBackground();
+                        SaveInBackground(false);
                     }
-
-                    if (ImGui.MenuItem("Quit", !isSaving))
+                    
+                    if (ImGui.MenuItem("Save All", KeyboardBinding.ListKeyboardShortcuts(UserActions.SaveAll, false), false, !IsCurrentlySaving))
+                    {
+                        SaveInBackground(true);
+                    }
+                    
+                    if (ImGui.MenuItem("Quit", !IsCurrentlySaving))
                     {
                         Application.Exit();
                     }
@@ -149,28 +156,46 @@ namespace T3.Gui
         private static readonly object _saveLocker = new object();
         private static readonly Stopwatch _saveStopwatch = new Stopwatch();
 
-        public static void SaveInBackground()
+        public static void SaveInBackground(bool saveAll)
         {
             if (_saveStopwatch.IsRunning)
             {
                 Log.Debug("Can't save while saving is in progress");
                 return;
             }
-            Task.Run(Save);
+
+            if (saveAll)
+            {
+                Task.Run(SaveAll);
+            }
+            else
+            {
+                Task.Run(SaveModified);
+            }
         }
         
-        private static void Save()
+        public static void SaveModified()
         {
             lock (_saveLocker)
             {
                 _saveStopwatch.Restart();
-
-                UiModel.Save();
-
+                UiModel.SaveModifiedSymbols();
                 _saveStopwatch.Stop();
                 Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
             }
         }
+        
+        private static void SaveAll()
+        {
+            lock (_saveLocker)
+            {
+                _saveStopwatch.Restart();
+                UiModel.SaveAll();
+                _saveStopwatch.Stop();
+                Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
+            }
+        }
+        
 
         public static void AddHoveredId(Guid id)
         {
@@ -215,7 +240,10 @@ namespace T3.Gui
         public static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }
         public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
         public const string FloatNumberFormat = "{0:F2}";
-
+        public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
+        
+        private static readonly AutoBackup _autoBackup = new();
+        
         [Flags]
         public enum EditingFlags
         {

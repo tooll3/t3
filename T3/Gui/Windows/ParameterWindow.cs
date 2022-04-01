@@ -70,8 +70,12 @@ namespace T3.Gui.Windows
 
                 var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
                 var symbolChildUi = parentUi.ChildUis.Single(childUi => childUi.Id == instance.SymbolChildId);
+                var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
 
-                DrawSelectedSymbolHeader(instance, symbolChildUi);
+                if (DrawSelectedSymbolHeader(instance, symbolChildUi))
+                {
+                    symbolUi.FlagAsModified();
+                }
 
                 var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
                 var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
@@ -80,7 +84,6 @@ namespace T3.Gui.Windows
                 DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi);
 
                 ImGui.PushFont(Fonts.FontSmall);
-                var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
 
                 if (!string.IsNullOrEmpty(symbolUi.Description))
                 {
@@ -88,6 +91,7 @@ namespace T3.Gui.Windows
                     if (ImGui.InputTextMultiline("##name", ref desc, 2000, new Vector2(400, 500), ImGuiInputTextFlags.None))
                     {
                         symbolUi.Description = desc;
+                        symbolUi.FlagAsModified();
                     }
                 }
                 else
@@ -95,6 +99,7 @@ namespace T3.Gui.Windows
                     if (ImGui.Button("Add description"))
                     {
                         symbolUi.Description = "once upon a time...";
+                        symbolUi.FlagAsModified();
                     }
                 }
 
@@ -158,8 +163,10 @@ namespace T3.Gui.Windows
             }
         }
 
-        private void DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi)
+        private bool DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi)
         {
+            var modified = false;
+            
             // namespace and symbol
             {
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
@@ -170,6 +177,7 @@ namespace T3.Gui.Windows
                                                   SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
                 {
                     op.Symbol.Namespace = namespaceForEdit;
+                    modified = true;
                 }
 
                 ImGui.PopStyleColor();
@@ -178,6 +186,7 @@ namespace T3.Gui.Windows
                 ImGui.SameLine();
                 ImGui.TextUnformatted(op.Symbol.Name);
                 ImGui.Dummy(Vector2.One * 5);
+                
             }
 
             // SymbolChild Name
@@ -244,6 +253,7 @@ namespace T3.Gui.Windows
             }
 
             ImGui.Dummy(new Vector2(0.0f, 5.0f));
+            return modified;
         }
 
         public static bool IsAnyInstanceVisible()

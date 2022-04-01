@@ -292,40 +292,43 @@ namespace T3.Gui.Windows.TimeLine
         private Modes _lastMode = Modes.CurveEditor; // Make different to force initial update
         #endregion
 
+        
+        
         // TODO: this is horrible and should be refactored
         private List<AnimationParameter> GetAnimationParametersForSelectedNodes(Instance compositionOp)
         {
             var selection = SelectionManager.GetSelectedNodes<ISelectableNode>();
             var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
             var animator = symbolUi.Symbol.Animator;
-            var pinnedParams = (from child in compositionOp.Children
-                                from input in child.Inputs
-                                where animator.IsInputSlotAnimated(input)
-                                from pinnedInputSlot in DopeSheetArea.PinnedParameters
-                                where pinnedInputSlot == input.GetHashCode()
-                                select new AnimationParameter()
-                                           {
-                                               Instance = child,
-                                               Input = input,
-                                               Curves = animator.GetCurvesForInput(input),
-                                               ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == child.SymbolChildId)
-                                           }).ToList();
+            
+            // No Linq to avoid allocations
+            _pinnedParams.Clear();
+            foreach (Instance child in compositionOp.Children)
+            foreach (var input in child.Inputs)
+            {
+                if (animator.IsInputSlotAnimated(input))
+                    foreach (var pinnedInputSlot in DopeSheetArea.PinnedParameters)
+                    {
+                        if (pinnedInputSlot == input.GetHashCode())
+                            _pinnedParams.Add(new AnimationParameter() { Instance = child, Input = input, Curves = animator.GetCurvesForInput(input), ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == child.SymbolChildId) });
+                    }
+            }
 
-            var curvesForSelection = (from child in compositionOp.Children
-                                      from selectedElement in selection
-                                      where child.SymbolChildId == selectedElement.Id
-                                      from input in child.Inputs
-                                      where animator.IsInputSlotAnimated(input)
-                                      select new AnimationParameter()
-                                                 {
-                                                     Instance = child,
-                                                     Input = input,
-                                                     Curves = animator.GetCurvesForInput(input),
-                                                     ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == selectedElement.Id)
-                                                 }).ToList();
+            _curvesForSelection.Clear();
+            
+            foreach (Instance child in compositionOp.Children)
+            foreach (var selectedElement in selection)
+            {
+                if (child.SymbolChildId == selectedElement.Id)
+                    foreach (var input in child.Inputs)
+                    {
+                        if (animator.IsInputSlotAnimated(input))
+                            _curvesForSelection.Add(new AnimationParameter() { Instance = child, Input = input, Curves = animator.GetCurvesForInput(input), ChildUi = symbolUi.ChildUis.Single(childUi => childUi.Id == selectedElement.Id) });
+                    }
+            }
 
-            pinnedParams.AddRange(curvesForSelection.FindAll(sp => pinnedParams.All(pp => pp.Input != sp.Input)));
-            return pinnedParams;
+            _pinnedParams.AddRange(_curvesForSelection.FindAll(sp => _pinnedParams.All(pp => pp.Input != sp.Input)));
+            return _pinnedParams;
         }
 
         public List<AnimationParameter> SelectedAnimationParameters = new List<AnimationParameter>();
@@ -352,6 +355,8 @@ namespace T3.Gui.Windows.TimeLine
         private float _nestedTimeScale = 1;
         private float _nestedTimeOffset;
         private double _lastPlaybackSpeed;
+        private readonly List<AnimationParameter> _pinnedParams = new(20);
+        private List<AnimationParameter> _curvesForSelection = new(64);
 
         // Styling
         public const float TimeLineDragHeight = 30;
