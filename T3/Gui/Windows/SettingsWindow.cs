@@ -80,6 +80,19 @@ namespace T3.Gui.Windows
                     ImGui.TreePop();
                 }
                 
+                if (ImGui.TreeNode("Modified Symbols"))
+                {
+                    foreach (var symbolUi in UiModel.GetModifiedSymbolUis())
+                    {
+                        if (symbolUi.HasBeenModified)
+                        {
+                            ImGui.TextUnformatted(symbolUi.Symbol.Namespace + ". " +  symbolUi.Symbol.Name);
+                        }
+                    }
+                    
+                    ImGui.TreePop();
+                }                
+                
                 ImGui.TreePop();
             }
 

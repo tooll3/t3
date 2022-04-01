@@ -19,12 +19,18 @@ namespace T3.Gui.Commands
         {
             var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
             compositionSymbol.AddConnection(_addedConnection, _multiInputIndex);
+
+            var symbolUi = SymbolUiRegistry.Entries[_compositionSymbolId];
+            symbolUi.HasBeenModified = true;
         }
 
         public void Undo()
         {
             var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
             compositionSymbol.RemoveConnection(_addedConnection, _multiInputIndex);
+            
+            var symbolUi = SymbolUiRegistry.Entries[_compositionSymbolId];
+            symbolUi.HasBeenModified = true;
         }
 
         private readonly Guid _compositionSymbolId;

@@ -165,7 +165,7 @@ namespace T3.Gui
             {
                 _saveStopwatch.Restart();
 
-                UiModel.Save();
+                UiModel.SaveAll();
 
                 _saveStopwatch.Stop();
                 Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");

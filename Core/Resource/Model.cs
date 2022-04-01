@@ -53,8 +53,8 @@ namespace T3.Core
     public class Model
     {
         public Assembly OperatorsAssembly { get; }
-        protected string Path { get; } = @"Operators\Types\";
-        protected string SymbolExtension { get; } = ".t3";
+        protected string OperatorTypesFolder { get; } = @"Operators\Types\";
+
 
         public Model(Assembly operatorAssembly, bool enabledLogging)
         {
@@ -448,7 +448,7 @@ namespace T3.Core
 
         public virtual void Load()
         {
-            var symbolFiles = Directory.GetFiles(Path, $"*{SymbolExtension}");
+            var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}");
             foreach (var symbolFile in symbolFiles)
             {
                 ReadSymbolFromFile(symbolFile);
@@ -495,7 +495,7 @@ namespace T3.Core
                 var symbol = json.ReadSymbol(this);
                 if (symbol != null)
                 {
-                    symbol.SourcePath = Path + symbol.Name + ".cs";
+                    symbol.SourcePath = OperatorTypesFolder + symbol.Name + SourceExtension;
                     SymbolRegistry.Entries.Add(symbol.Id, symbol);
                 }
 
@@ -505,7 +505,7 @@ namespace T3.Core
 
         public Symbol ReadSymbolWithId(Guid id)
         {
-            var symbolFile = Directory.GetFiles(Path, $"*{id}*{SymbolExtension}").FirstOrDefault();
+            var symbolFile = Directory.GetFiles(OperatorTypesFolder, $"*{id}*{SymbolExtension}").FirstOrDefault();
             if (symbolFile == null)
             {
                 Log.Error($"Could not find symbol file containing the id '{id}'");
@@ -516,12 +516,12 @@ namespace T3.Core
             return symbol;
         }
 
-        public virtual void Save()
+        public virtual void SaveAll()
         {
             ResourceManager.Instance().DisableOperatorFileWatcher(); // don't update ops if file is written during save
             
             // remove all old t3 files before storing to get rid off invalid ones
-            DirectoryInfo di = new DirectoryInfo(Path);
+            DirectoryInfo di = new DirectoryInfo(OperatorTypesFolder);
             FileInfo[] files = di.GetFiles("*" + SymbolExtension).ToArray();
             foreach (FileInfo file in files)
             {
@@ -539,7 +539,7 @@ namespace T3.Core
             // store all symbols in corresponding files
             foreach (var (_, symbol) in SymbolRegistry.Entries)
             {
-                using (var sw = new StreamWriter(Path + symbol.Name + "_" + symbol.Id + SymbolExtension))
+                using (var sw = new StreamWriter(OperatorTypesFolder + symbol.Name + "_" + symbol.Id + SymbolExtension))
                 using (var writer = new JsonTextWriter(sw))
                 {
                     json.Writer = writer;
@@ -556,9 +556,55 @@ namespace T3.Core
             ResourceManager.Instance().EnableOperatorFileWatcher();
         }
         
+        public void SaveModifiedSymbol(Symbol symbol)
+        {
+            RemoveObsoleteSymbolFiles(symbol);
+
+            Json json = new Json();
+
+            using (var sw = new StreamWriter(GetFilePathForSymbol(symbol)))
+            using (var writer = new JsonTextWriter(sw))
+            {
+                json.Writer = writer;
+                json.Writer.Formatting = Formatting.Indented;
+                json.WriteSymbol(symbol);
+            }
+
+            if (!string.IsNullOrEmpty(symbol.PendingSource))
+            {
+                WriteSymbolSourceToFile(symbol);
+            }
+        }
+
+        
+        private void RemoveObsoleteSymbolFiles(Symbol symbol)
+        {
+            if (string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
+                return;
+            
+            foreach (var fileExtension in FileExtensions)
+            {
+                var sourceFilepath = Path.Combine(OperatorTypesFolder, symbol.DeprecatedSourcePath + "_" + symbol.Id + fileExtension);
+                try
+                {
+                    File.Delete(sourceFilepath);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning("Failed to deleted file '" + sourceFilepath + "': " + e);
+                }
+            }
+            symbol.DeprecatedSourcePath = String.Empty;
+        }
+
+        private string GetFilePathForSymbol(Symbol symbol)
+        {
+            return OperatorTypesFolder + symbol.Name + "_" + symbol.Id + SymbolExtension;
+        }
+
         private void WriteSymbolSourceToFile(Symbol symbol)
         {
-            string sourcePath = Path + symbol.Name + ".cs";
+            string sourcePath = OperatorTypesFolder + symbol.Name + ".cs";
             using (var sw = new StreamWriter(sourcePath))
             {
                 sw.Write(symbol.PendingSource);
@@ -642,5 +688,17 @@ namespace T3.Core
             var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, string.Empty);
             File.WriteAllText(projectFilePath, newContent);
         }
+        
+        private static string SymbolExtension { get; } = ".t3";
+        private static string SymbolUiExtension { get; } = ".t3ui";
+        private static string SourceExtension { get; } = ".cs";
+        
+        private static List<string> FileExtensions= new ()
+                                                    {
+                                                        SymbolExtension,
+                                                        SymbolUiExtension,
+                                                        SourceExtension,
+                                                    };
+
     }
 }
