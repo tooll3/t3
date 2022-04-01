@@ -26,33 +26,33 @@ namespace T3.Gui.Selection
 
         public static void RegisterSelectedTransformable(SymbolChildUi node, ITransformable transformable)
         {
-            if (_selectedTransformables.Contains(transformable))
+            if (SelectedTransformables.Contains(transformable))
                 return;
 
             transformable.TransformCallback = TransformCallback;
-            _selectedTransformables.Add(transformable);
+            SelectedTransformables.Add(transformable);
         }
 
         public static void ClearDeselectedTransformableNode(ITransformable transformable)
         {
-            if (_selectedTransformables.Contains(transformable))
+            if (SelectedTransformables.Contains(transformable))
             {
                 Log.Warning("trying to deselect an unregistered transformable?");
                 return;
             }
 
             transformable.TransformCallback = null;
-            _selectedTransformables.Remove(transformable);
+            SelectedTransformables.Remove(transformable);
         }
 
         public static void ClearSelectedTransformables()
         {
-            foreach (var selectedTransformable in _selectedTransformables)
+            foreach (var selectedTransformable in SelectedTransformables)
             {
                 selectedTransformable.TransformCallback = null;
             }
 
-            _selectedTransformables.Clear();
+            SelectedTransformables.Clear();
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace T3.Gui.Selection
 
         public static Vector3 GetLatestSelectionCenter()
         {
-            if (_selectedTransformables.Count == 0)
+            if (SelectedTransformables.Count == 0)
                 return Vector3.Zero;
 
             return _selectedCenter;
@@ -97,7 +97,7 @@ namespace T3.Gui.Selection
 
             _transformable = tmp;
 
-            if (!_selectedTransformables.Contains(_transformable))
+            if (!SelectedTransformables.Contains(_transformable))
             {
                 Log.Warning("transform-callback from non-selected node?" + _transformable);
                 return;
@@ -532,13 +532,12 @@ namespace T3.Gui.Selection
 
         private static uint _dragInteractionWindowId;
 
-        private static readonly HashSet<ITransformable> _selectedTransformables = new();
+        private static readonly HashSet<ITransformable> SelectedTransformables = new();
         private static Instance _instance;
         private static ITransformable _transformable;
 
         private static GizmoParts _draggedGizmoPart = GizmoParts.None;
         private static ITransformable _draggedTransformable;
-        private static Instance _currentInteractionInstance;
         private static ChangeInputValueCommand _inputValueCommandInFlight;
 
         private static float _centerPadding;
