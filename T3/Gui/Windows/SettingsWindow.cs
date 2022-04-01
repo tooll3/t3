@@ -40,6 +40,7 @@ namespace T3.Gui.Windows
                 ImGui.Checkbox("Count Bars from Zero", ref UserSettings.Config.CountBarsFromZero);
                 
                 ImGui.Checkbox("Swap Main & 2nd windows when fullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen);
+                ImGui.Checkbox("Enable Auto Backup", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
                  
                 ImGui.TreePop();
             }

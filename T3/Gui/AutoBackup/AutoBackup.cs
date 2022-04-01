@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using T3.Core.Logging;
+using T3.Gui;
 
 namespace t3.Gui.AutoBackup
 {
@@ -16,82 +17,66 @@ namespace t3.Gui.AutoBackup
 
         public bool Enabled
         {
-            get
-            {
-                return _enabled;
-            }
+            get => _enabled;
             set
             {
                 if (value == _enabled)
                     return;
+
                 _enabled = value;
                 if (_enabled)
                     Start();
                 else
-                    Stop();
+                    DisposeCurrent();
             }
         }
 
         public AutoBackup()
         {
-            SecondsBetweenSaves = 60*5;
+            SecondsBetweenSaves = 60 * 5;
             Enabled = false;
         }
 
         public void Dispose()
         {
-            Stop();
+            DisposeCurrent();
         }
 
         private void Start()
         {
-            Stop();
+            DisposeCurrent();
             _autoEvent = new AutoResetEvent(false);
-            _timer = new Timer(CreateBackupCallback, _autoEvent, 0, SecondsBetweenSaves*1000);
+            _timer = new Timer(CreateBackupCallback, _autoEvent, 0, SecondsBetweenSaves * 1000);
         }
 
-        private void Stop()
+        private void DisposeCurrent()
         {
-            if (_autoEvent != null)
-                _autoEvent.WaitOne();
-
-            if (_timer != null)
-            {
-                _timer.Dispose();
-            }
-                
-
-            if (_autoEvent != null)
-                _autoEvent.Dispose();
+            _autoEvent?.WaitOne();
+            _timer?.Dispose();
+            _autoEvent?.Dispose();
         }
-
 
         private static void CreateBackupCallback(Object stateInfo)
         {
-            Log.Debug("CreateBackupCallback()");
-            AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
+            if (T3Ui.IsCurrentlySaving)
+            {
+                Log.Debug("Skipped backup because saving is in progress.");
+                return;
+            }
+            
+            T3Ui.SaveModified();
+            Log.Debug("Running backup");
+            var autoEvent = (AutoResetEvent)stateInfo;
             autoEvent.Reset();
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-            
-//            var metaOpsToStore = App.Current.Model.MetaOpManager.ChangedMetaOperators.ToList();
-//            var savedOperatorCount = metaOpsToStore.Count();
-
-            //FIXME: can we check if home-op has been modified?
-
-            // if (savedOperatorCount == 0)
-            // {
-            //     //Logger.Info("Skipped backup, nothing changed", savedOperatorCount);
-            //     autoEvent.Set();
-            //     return;
-            // }
 
             var index = GetIndexOfLastBackup();
             index++;
             ReduceNumberOfBackups();
 
-            var zipFilePath = Path.Join( BackupDirectory,$"#{index:D5}-{DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss_fff")}.zip");
+            var zipFilePath = Path.Join(BackupDirectory, $"#{index:D5}-{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.zip");
             var tempPath = @"Temp\" + Guid.NewGuid() + @"\";
 
             try
@@ -100,7 +85,7 @@ namespace t3.Gui.AutoBackup
                 var tempOperatorsPath = tempPath + OperatorsDirectory + @"\";
 
                 var zipPath = Path.GetDirectoryName(zipFilePath);
-                if (!Directory.Exists(zipPath))
+                if (!string.IsNullOrEmpty(zipPath) && !Directory.Exists(zipPath))
                     Directory.CreateDirectory(zipPath);
 
                 if (!Directory.Exists(tempConfigPath))
@@ -110,32 +95,26 @@ namespace t3.Gui.AutoBackup
                     Directory.CreateDirectory(tempOperatorsPath);
 
                 CopyDirectory(ConfigDirectory, tempConfigPath, "*");
-                // App.Current.Model.StoreHomeOperator(tempConfigPath, clearChangedFlags:false);
-                // App.Current.ProjectSettings.SaveAs(tempConfigPath + "ProjectSettings.json");
-                // App.Current.UserSettings.SaveAs(tempConfigPath + "UserSettings.json");
-                // App.Current.OperatorPresetManager.SavePresetsAs(tempConfigPath + "Presets.json");
 
                 CopyDirectory(OperatorsDirectory, tempOperatorsPath, "*");
-                //MetaManager.WriteOperators(metaOpsToStore, tempOperatorsPath, clearChangedFlags: false);
 
-                var filesToBackup = new Dictionary<String, String[]>();
-                filesToBackup[ConfigDirectory] = Directory.GetFiles(tempConfigPath, "*");
-                filesToBackup[OperatorsDirectory] = Directory.GetFiles(tempOperatorsPath, "*");
+                var directoryWithFiles = new Dictionary<string, string[]>
+                                             {
+                                                 [ConfigDirectory] = Directory.GetFiles(tempConfigPath, "*"),
+                                                 [OperatorsDirectory] = Directory.GetFiles(tempOperatorsPath, "*")
+                                             };
 
-                using (ZipArchive archive = ZipFile.Open(zipFilePath, ZipArchiveMode.Create))
+                using ZipArchive archive = ZipFile.Open(zipFilePath, ZipArchiveMode.Create);
+
+                foreach (var (directory, value) in directoryWithFiles)
                 {
-                    foreach (var fileEntry in filesToBackup)
+                    foreach (var file in value)
                     {
-                        foreach (var file in fileEntry.Value)
-                        {
-                            archive.CreateEntryFromFile(file, fileEntry.Key + @"\" + Path.GetFileName(file),
-                                CompressionLevel.Fastest);
-                        }
+                        archive.CreateEntryFromFile(file,
+                                                    Path.Join(directory, Path.GetFileName(file)),
+                                                    CompressionLevel.Fastest);
                     }
                 }
-
-                //var names = metaOpsToStore.Select(metaOperator => metaOperator.Name).ToArray();
-                //Logger.Info("Backing up {0} changed ops: {1}", savedOperatorCount, String.Join(", ", names));
             }
             catch (Exception ex)
             {
@@ -169,7 +148,7 @@ namespace t3.Gui.AutoBackup
                 CopyDirectory(folder, dest, searchPattern);
             }
         }
-        
+
         private static void DeletePath(string path)
         {
             try
@@ -196,41 +175,43 @@ namespace t3.Gui.AutoBackup
 
         public static void RestoreLast()
         {
-            var lastFile = GetLatestsArchiveFile();
+            var lastFile = GetLatestArchiveFile();
             if (lastFile == null)
                 return;
 
             var latestArchiveName = lastFile.FullName;
 
-            using (ZipArchive archive = ZipFile.Open(latestArchiveName, ZipArchiveMode.Read))
+            using ZipArchive archive = ZipFile.Open(latestArchiveName, ZipArchiveMode.Read);
+
+            const string destinationDirectoryName = ".";
+
+            foreach (var file in archive.Entries)
             {
-                const string DESTINATION_DIRECTORY_NAME = ".";
+                var completeFileName = Path.Combine(destinationDirectoryName, file.FullName);
 
-
-                foreach (ZipArchiveEntry file in archive.Entries)
+                if (file.Name == "")
                 {
-                    var completeFileName = Path.Combine(DESTINATION_DIRECTORY_NAME, file.FullName);
-
-                    if (file.Name == "")
-                    {
-                        // Assuming Empty for Directory
-                        Directory.CreateDirectory(Path.GetDirectoryName(completeFileName));
+                    // Assuming Empty for Directory
+                    var directoryName = Path.GetDirectoryName(completeFileName);
+                    if (string.IsNullOrEmpty(directoryName))
                         continue;
-                    }
 
-                    if(File.Exists(completeFileName))
-                    {
-                        File.Delete(completeFileName);   
-                    }
-                    file.ExtractToFile(completeFileName, true);
+                    Directory.CreateDirectory(directoryName);
+                    continue;
                 }
+
+                if (File.Exists(completeFileName))
+                {
+                    File.Delete(completeFileName);
+                }
+
+                file.ExtractToFile(completeFileName, true);
             }
         }
 
-
         public static DateTime? GetTimeOfLastBackup()
         {
-            var lastFile = GetLatestsArchiveFile();
+            var lastFile = GetLatestArchiveFile();
             if (lastFile == null)
                 return null;
 
@@ -238,8 +219,7 @@ namespace t3.Gui.AutoBackup
 
             if (!result.Success)
                 return null;
-            
-            var index = result.Groups[1].Value;
+
             var year = result.Groups[2].Value;
             var month = result.Groups[3].Value;
             var day = result.Groups[4].Value;
@@ -253,10 +233,9 @@ namespace t3.Gui.AutoBackup
             return date;
         }
 
-
-        public static int GetIndexOfLastBackup()
+        private static int GetIndexOfLastBackup()
         {
-            var lastFile = GetLatestsArchiveFile();
+            var lastFile = GetLatestArchiveFile();
             if (lastFile == null)
                 return -1;
 
@@ -269,8 +248,7 @@ namespace t3.Gui.AutoBackup
             return index;
         }
 
-
-        private static FileInfo GetLatestsArchiveFile()
+        private static FileInfo GetLatestArchiveFile()
         {
             if (!Directory.Exists(BackupDirectory))
                 return null;
@@ -279,17 +257,16 @@ namespace t3.Gui.AutoBackup
             return backupDirectory.GetFiles().OrderByDescending(f => f.LastWriteTime).FirstOrDefault();
         }
 
-
         /*
          * Reduce the number of backups by removing some of the older backups. The older the backup the
-         * less versions are kept. We're using the binary representation of the backup index to seperate
+         * less versions are kept. We're using the binary representation of the backup index to separate
          * the deleted versions from the ones we keep.
          * 
          * This algorithm is a hard to describe in words, but it basically thins out the backup-copies 
          * according to their respective binary code:
          * 
          *     bits    significant bit
-         *     43210   bit         theshold for 2 saves per generation
+         *     43210   bit         threshold for 2 saves per generation
          *     ------- ----------- ------------------------------------   
          * 10. 01011 - 1           +0 keep(level0/1st)          <- example of 10 saved versions
          *  9. 01001 - 0           +0 keep(level0/2nd)      
@@ -305,11 +282,11 @@ namespace t3.Gui.AutoBackup
          * 
          * This means that we're keeping N*log2 backups (e.g. 3*16 out of 65536 saved versions) where N is the backup density.
          */
-        public static void ReduceNumberOfBackups(int backupDensity=3)
+        private static void ReduceNumberOfBackups(int backupDensity = 3)
         {
             // Gather list of backups with indexes and find latest index
             var regexMatchIndex = new Regex(@"#(\d\d\d\d\d)-(\d\d\d\d)_(\d\d)_(\d\d)-(\d\d)_(\d\d)_(\d\d)_(\d\d\d)");
-            var backupFilepathsByIndex = new Dictionary<int, string>();
+            var backupFilePathsByIndex = new Dictionary<int, string>();
             var highestIndex = int.MinValue;
 
             if (!Directory.Exists(BackupDirectory))
@@ -325,9 +302,9 @@ namespace t3.Gui.AutoBackup
                 if (index > highestIndex)
                     highestIndex = index;
 
-                backupFilepathsByIndex[index] = filename;
+                backupFilePathsByIndex[index] = filename;
             }
-            
+
             // Iterate over all files and thin out the backups
             var limit = 0;
             var limitCount = 0;
@@ -348,11 +325,11 @@ namespace t3.Gui.AutoBackup
                 // Remove
                 else
                 {
-                    if (!backupFilepathsByIndex.ContainsKey(i))
+                    if (!backupFilePathsByIndex.ContainsKey(i))
                         continue;
-                    
-                    Log.Debug($"removing... old backup {backupFilepathsByIndex[i]} (level 2^{b})...");
-                    File.Delete(backupFilepathsByIndex[i]);
+
+                    //Log.Debug($"removing... old backup {backupFilePathsByIndex[i]} (level 2^{b})...");
+                    File.Delete(backupFilePathsByIndex[i]);
                 }
             }
         }
@@ -362,27 +339,30 @@ namespace t3.Gui.AutoBackup
          */
         private static int GetSignificantBit(int n)
         {
-            var a= new bool[32];
+            var a = new bool[32];
             var rest = n;
 
             // Break down integer into bits
-            while(rest > 0) {
-                var h = (int)Math.Floor( Math.Log(rest,2));
-                rest = rest - (int)Math.Pow(2,h);
-                a[h]=true;
+            while (rest > 0)
+            {
+                var h = (int)Math.Floor(Math.Log(rest, 2));
+                rest = rest - (int)Math.Pow(2, h);
+                a[h] = true;
             }
 
-            rest=n+1; 
-            while(rest > 0) {
-                var h = (int)Math.Floor( Math.Log(rest,2));
-                rest = rest - (int)Math.Pow(2,h);
-                if(a[h] == false) {
+            rest = n + 1;
+            while (rest > 0)
+            {
+                var h = (int)Math.Floor(Math.Log(rest, 2));
+                rest = rest - (int)Math.Pow(2, h);
+                if (a[h] == false)
+                {
                     return h;
                 }
             }
+
             return 0;
         }
-    
 
         private bool _enabled;
         private Timer _timer;

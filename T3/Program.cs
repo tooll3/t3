@@ -96,8 +96,6 @@ namespace T3
             startupStopWatch.Stop();
             Log.Debug($"startup took {startupStopWatch.ElapsedMilliseconds}ms.");
 
-            _autoBackup.Enabled = true;
-
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             Int64 lastElapsedTicks = stopwatch.ElapsedTicks;
@@ -269,6 +267,5 @@ namespace T3
         private static T3Ui _t3ui = null;
         private static DeviceContext _deviceContext;
 
-        private static AutoBackup _autoBackup = new() { Enabled = true, SecondsBetweenSaves = 10};
     }
 }
