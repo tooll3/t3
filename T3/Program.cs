@@ -17,6 +17,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui;
+using t3.Gui.AutoBackup;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
@@ -94,6 +95,8 @@ namespace T3
 
             startupStopWatch.Stop();
             Log.Debug($"startup took {startupStopWatch.ElapsedMilliseconds}ms.");
+
+            _autoBackup.Enabled = true;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -266,5 +269,6 @@ namespace T3
         private static T3Ui _t3ui = null;
         private static DeviceContext _deviceContext;
 
+        private static AutoBackup _autoBackup = new() { Enabled = true, SecondsBetweenSaves = 10};
     }
 }
