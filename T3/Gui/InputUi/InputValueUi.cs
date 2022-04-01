@@ -303,7 +303,7 @@ namespace T3.Gui.InputUi
                             animator.CreateInputUpdateAction(inputSlot); // todo: create command
                     }
 
-                    if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickTreshold)
+                    if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickThreshold)
                     {
                         if (ConnectionMaker.TempConnections.Count == 0)
                         {

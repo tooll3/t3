@@ -17,7 +17,7 @@ namespace T3.Gui.Interaction
             // Don't you ImGui.IsItemActivated() to allow quick switching between color thumbnails
             if (ImGui.IsItemHovered( ImGuiHoveredFlags.AllowWhenBlockedByPopup)
                 && ImGui.IsMouseReleased(0)
-                && ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length() < UserSettings.Config.ClickTreshold
+                && ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length() < UserSettings.Config.ClickThreshold
                 && !ImGui.IsPopupOpen("##colorEdit")
                 )
             {            

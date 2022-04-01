@@ -28,18 +28,18 @@ namespace T3.Gui.Windows
             {
                 ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
                 ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
-                ImGui.Checkbox("Save Only Modified Symbols", ref UserSettings.Config.SaveOnlyModified);
                 ImGui.DragFloat("Scroll smoothing", ref UserSettings.Config.ScrollSmoothing);
                 ImGui.Checkbox("Show Graph thumbnails", ref UserSettings.Config.ShowThumbnails);
                 ImGui.Checkbox("Drag snapped nodes", ref UserSettings.Config.SmartGroupDragging);
                 ImGui.Separator();
                 ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
-                ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickTreshold);
+                ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickThreshold);
 
                 ImGui.DragFloat("Timeline Raster Density", ref UserSettings.Config.TimeRasterDensity, 0.01f);
                 ImGui.Checkbox("Count Bars from Zero", ref UserSettings.Config.CountBarsFromZero);
                 
                 ImGui.Checkbox("Swap Main & 2nd windows when fullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen);
+                ImGui.Checkbox("Save Only Modified Symbols", ref UserSettings.Config.SaveOnlyModified);
                 ImGui.Checkbox("Enable Auto Backup", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
                  
                 ImGui.TreePop();

@@ -142,7 +142,7 @@ namespace T3.Gui.Graph
                 _draggedNodeId = Guid.Empty;
                 _draggedNodes.Clear();
 
-                var wasDragging = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > UserSettings.Config.ClickTreshold;
+                var wasDragging = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > UserSettings.Config.ClickThreshold;
                 if (wasDragging)
                 {
                     _moveCommand.StoreCurrentValues();
@@ -171,7 +171,7 @@ namespace T3.Gui.Graph
                 _moveCommand = null;
             }
 
-            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickTreshold;
+            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
                 && !wasDraggingRight
                 && ImGui.IsItemHovered()

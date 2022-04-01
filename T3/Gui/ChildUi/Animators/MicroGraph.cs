@@ -41,7 +41,7 @@ namespace T3.Gui.ChildUi.Animators
                     case DragMode.Off:
                     case DragMode.Undecided:
                     {
-                        if (dragDelta.Length() > UserSettings.Config.ClickTreshold)
+                        if (dragDelta.Length() > UserSettings.Config.ClickThreshold)
                         {
                             _dragState = Math.Abs(dragDelta.X) > Math.Abs(dragDelta.Y)
                                              ? DragMode.DraggingHorizontally

@@ -231,13 +231,13 @@ namespace T3.Gui.Graph
                     // Show Parameter window as context menu
                     var activatedWithLeftMouse = ImGui.IsItemHovered()
                                                  && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
-                                                 && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickTreshold
+                                                 && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickThreshold
                                                  && !ParameterWindow.IsAnyInstanceVisible()
                                                  && !ImGui.GetIO().KeyShift; // allow double click to open
 
                     var activatedWithMiddleMouse = ImGui.IsItemHovered()
                                                    && ImGui.IsMouseReleased(ImGuiMouseButton.Middle)
-                                                   && ImGui.GetMouseDragDelta(ImGuiMouseButton.Middle, 0).Length() < UserSettings.Config.ClickTreshold;
+                                                   && ImGui.GetMouseDragDelta(ImGuiMouseButton.Middle, 0).Length() < UserSettings.Config.ClickThreshold;
 
                     if ((activatedWithLeftMouse || activatedWithMiddleMouse)
                         && !justOpenedChild
@@ -748,7 +748,7 @@ namespace T3.Gui.Graph
                 }
 
                 var isMouseReleasedWithoutDrag =
-                    ImGui.IsMouseReleased(ImGuiMouseButton.Left) && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickTreshold;
+                    ImGui.IsMouseReleased(ImGuiMouseButton.Left) && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickThreshold;
                 if (isMouseReleasedWithoutDrag)
                 {
                     //Graph.Connections.GetLinesFromNodeOutput(childUi, outputDef.Id);
@@ -797,7 +797,7 @@ namespace T3.Gui.Graph
                         {
                             _draggedOutputOpId = Guid.Empty;
                             _draggedOutputDefId = Guid.Empty;
-                            if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickTreshold)
+                            if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickThreshold)
                             {
                                 ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current.SymbolBrowser, childUi, instance, output.Id);
                             }
@@ -813,7 +813,7 @@ namespace T3.Gui.Graph
             else if (_draggedOutputOpId == childUi.Id && _draggedOutputDefId == outputDef.Id)
             {
                 if (ImGui.IsMouseDragging(ImGuiMouseButton.Left)
-                    && ImGui.GetMouseDragDelta().Length() > UserSettings.Config.ClickTreshold)
+                    && ImGui.GetMouseDragDelta().Length() > UserSettings.Config.ClickThreshold)
                 {
                     _draggedOutputOpId = Guid.Empty;
                     _draggedOutputDefId = Guid.Empty;
