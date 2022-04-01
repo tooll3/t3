@@ -28,6 +28,7 @@ namespace T3.Gui.Windows
             {
                 ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
                 ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
+                ImGui.Checkbox("Save Only Modified Symbols", ref UserSettings.Config.SaveOnlyModified);
                 ImGui.DragFloat("Scroll smoothing", ref UserSettings.Config.ScrollSmoothing);
                 ImGui.Checkbox("Show Graph thumbnails", ref UserSettings.Config.ShowThumbnails);
                 ImGui.Checkbox("Drag snapped nodes", ref UserSettings.Config.SmartGroupDragging);

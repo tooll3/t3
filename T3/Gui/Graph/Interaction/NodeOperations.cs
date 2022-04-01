@@ -228,7 +228,8 @@ namespace T3.Gui.Graph.Interaction
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
             var newSymbolUi = new SymbolUi(newSymbol);
             newSymbolUi.Description = description;
-
+            newSymbolUi.FlagAsModified();
+            
             SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
             newSymbol.Namespace = nameSpace;
 
@@ -335,7 +336,7 @@ namespace T3.Gui.Graph.Interaction
             UndoRedoStack.Add(new MacroCommand("Combine into symbol", executedCommands));
 
             if (UserSettings.Config.AutoSaveAfterSymbolCreation)
-                T3Ui.SaveInBackground();
+                T3Ui.SaveInBackground(false);
         }
 
         private static ImRect GetAreaFromChildren(List<SymbolChildUi> childUis)

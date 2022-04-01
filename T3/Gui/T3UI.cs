@@ -67,7 +67,8 @@ namespace T3.Gui
             }
             else if (KeyboardBinding.Triggered(UserActions.Save))
             {
-                SaveInBackground();
+                var saveAll = !UserSettings.Config.SaveOnlyModified;
+                SaveInBackground(saveAll);
             }
         }
 
@@ -80,11 +81,16 @@ namespace T3.Gui
                 if (ImGui.BeginMenu("File"))
                 {
                     var isSaving = _saveStopwatch.IsRunning;
-                    if (ImGui.MenuItem("Save", !isSaving))
+                    if (ImGui.MenuItem("Save",KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !isSaving))
                     {
-                        SaveInBackground();
+                        SaveInBackground(false);
                     }
-
+                    
+                    if (ImGui.MenuItem("Save All", KeyboardBinding.ListKeyboardShortcuts(UserActions.SaveAll, false), false, !isSaving))
+                    {
+                        SaveInBackground(true);
+                    }
+                    
                     if (ImGui.MenuItem("Quit", !isSaving))
                     {
                         Application.Exit();
@@ -149,28 +155,46 @@ namespace T3.Gui
         private static readonly object _saveLocker = new object();
         private static readonly Stopwatch _saveStopwatch = new Stopwatch();
 
-        public static void SaveInBackground()
+        public static void SaveInBackground(bool saveAll)
         {
             if (_saveStopwatch.IsRunning)
             {
                 Log.Debug("Can't save while saving is in progress");
                 return;
             }
-            Task.Run(Save);
+
+            if (saveAll)
+            {
+                Task.Run(SaveAll);
+            }
+            else
+            {
+                Task.Run(SaveModified);
+            }
         }
         
-        private static void Save()
+        private static void SaveModified()
         {
             lock (_saveLocker)
             {
                 _saveStopwatch.Restart();
-
                 UiModel.SaveModifiedSymbols();
-
                 _saveStopwatch.Stop();
                 Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
             }
         }
+        
+        private static void SaveAll()
+        {
+            lock (_saveLocker)
+            {
+                _saveStopwatch.Restart();
+                UiModel.SaveAll();
+                _saveStopwatch.Stop();
+                Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
+            }
+        }
+        
 
         public static void AddHoveredId(Guid id)
         {

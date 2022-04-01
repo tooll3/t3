@@ -31,6 +31,7 @@ namespace T3.Gui
         Undo,
         Redo,
         Save,
+        SaveAll,
         FocusSelection,
         PinToOutputWindow,
         Duplicate,
