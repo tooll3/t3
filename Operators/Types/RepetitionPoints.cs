@@ -15,12 +15,12 @@ using Vector4 = SharpDX.Vector4;
 
 namespace T3.Operators.Types.Id_73d99108_f49a_48fb_aa5d_707c00abb1c2
 {
-    public class RepitionPoints : Instance<RepitionPoints>
+    public class RepetitionPoints : Instance<RepetitionPoints>
     {
         [Output(Guid = "46c3b7f4-3590-46d7-871f-b98685f62c07")]
         public readonly Slot<StructuredList> ResultList = new();
 
-        public RepitionPoints()
+        public RepetitionPoints()
         {
             ResultList.UpdateAction = Update;
             //_pointListWithSeparator.TypedElements[2] = Point.Separator();

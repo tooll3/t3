@@ -21,6 +21,7 @@ cbuffer Params : register(b1)
     float4 Color;    
     float Size;
     float SegmentCount;
+    float UseWForSize;
 };
 
 cbuffer FogParams : register(b2)
@@ -60,11 +61,11 @@ StructuredBuffer<PbrVertex> PbrVertices : t0;
 StructuredBuffer<int3> FaceIndices : t1;
 StructuredBuffer<Point> Points : t2;
 
+
 Texture2D<float4> BaseColorMap : register(t3);
 Texture2D<float4> EmissiveColorMap : register(t4);
 Texture2D<float4> RSMOMap : register(t5);
 Texture2D<float4> NormalMap : register(t6);
-
 TextureCube<float4> PrefilteredSpecular: register(t7);
 Texture2D<float4> BRDFLookup : register(t8);
 
@@ -90,7 +91,7 @@ psInput vsMain(uint id: SV_VertexID)
 
     float4x4 orientationMatrix = transpose(quaternion_to_matrix(Points[instanceIndex].rotation));
 
-    posInObject.xyz *= Points[instanceIndex].w * Size;
+    posInObject.xyz *= (UseWForSize ? Points[instanceIndex].w : 1) * Size;
     posInObject = mul( float4(posInObject.xyz, 1), orientationMatrix) ;
 
     posInObject += float4(Points[instanceIndex].position, 0); 
