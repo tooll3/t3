@@ -6,6 +6,9 @@ using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.Graph;
+using T3.Gui.Graph.Dialogs;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -55,6 +58,8 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
+            
+            
             // Insert invisible spill over input to catch accidental imgui focus attempts
             {
                 ImGui.SetNextItemWidth(2);
@@ -68,6 +73,8 @@ namespace T3.Gui.Windows
                 if (instance.Parent == null)
                     return;
 
+                EditDescriptionDialog.Draw(instance.Symbol);
+                
                 var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
                 var symbolChildUi = parentUi.ChildUis.Single(childUi => childUi.Id == instance.SymbolChildId);
                 var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
@@ -85,24 +92,26 @@ namespace T3.Gui.Windows
 
                 ImGui.PushFont(Fonts.FontSmall);
 
+                ImGui.Dummy(new Vector2(10,10));
+                ImGui.Indent();
+                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10,10));
+
+
                 if (!string.IsNullOrEmpty(symbolUi.Description))
                 {
-                    var desc = symbolUi.Description;
-                    if (ImGui.InputTextMultiline("##name", ref desc, 2000, new Vector2(400, 500), ImGuiInputTextFlags.None))
-                    {
-                        symbolUi.Description = desc;
-                        symbolUi.FlagAsModified();
-                    }
+                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                    ImGui.TextWrapped(symbolUi.Description);
+                    ImGui.PopStyleColor();                        
                 }
-                else
-                {
-                    if (ImGui.Button("Add description"))
-                    {
-                        symbolUi.Description = "once upon a time...";
-                        symbolUi.FlagAsModified();
-                    }
-                }
-
+                
+                if (ImGui.Button("Edit description..."))
+                    EditDescriptionDialog.ShowNextFrame();                
+                
+                SymbolBrowser.ListExampleOperators(symbolUi);
+                
+                ImGui.PopStyleVar();
+                ImGui.Unindent();
+                
                 ImGui.PopFont();
                 return;
             }
@@ -122,6 +131,8 @@ namespace T3.Gui.Windows
             }
         }
 
+        
+        
         public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
                                           SymbolUi compositionSymbolUi)
         {
@@ -260,7 +271,8 @@ namespace T3.Gui.Windows
         {
             return T3Ui.WindowManager.IsAnyInstanceVisible<ParameterWindow>();
         }
-
+        
+        private static readonly EditSymbolDescriptionDialog EditDescriptionDialog = new EditSymbolDescriptionDialog();
         private static readonly List<Window> ParameterWindowInstances = new List<Window>();
         private ChangeSymbolChildNameCommand _symbolChildNameCommand;
         private static ChangeInputValueCommand _inputValueCommandInFlight;
