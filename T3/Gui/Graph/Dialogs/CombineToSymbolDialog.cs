@@ -56,7 +56,7 @@ namespace T3.Gui.Graph.Dialogs
 
                 ImGui.Checkbox("Combine as time clip", ref _shouldBeTimeClip);
 
-                if (CustomComponents.DisablableButton("Combine", NodeOperations.IsNewSymbolNameValid(combineName)))
+                if (CustomComponents.DisablableButton("Combine", NodeOperations.IsNewSymbolNameValid(combineName), enableTriggerWithReturn:false))
                 {
                     var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
                     NodeOperations.CombineAsNewType(compositionSymbolUi, selectedChildUis, selectedAnnotations, combineName, nameSpace, description, _shouldBeTimeClip);

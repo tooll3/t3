@@ -219,7 +219,7 @@ namespace T3.Gui
             ImGui.PopStyleVar(2);
         }
 
-        public static bool DisablableButton(string label, bool isEnabled, bool enableTriggerWithReturn = true)
+        public static bool DisablableButton(string label, bool isEnabled, bool enableTriggerWithReturn = false)
         {
             if (isEnabled)
             {
