@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using SharpDX.Direct3D11;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.InputUi;
@@ -47,7 +48,7 @@ namespace T3.Gui.Graph.Interaction
                 }
                 else if (_moveCommand != null)
                 {
-                    if (ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
+                    if (!T3Ui.IsCurrentlySaving && ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
                     {
                         _moveCommand.StoreCurrentValues();
                         UndoRedoStack.Add(_moveCommand);
@@ -158,7 +159,12 @@ namespace T3.Gui.Graph.Interaction
                 if (!(nod is SymbolChildUi childUi))
                     continue;
 
-                var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+                var instance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
+                if (instance == null)
+                {
+                    Log.Error("Can't disconnect missing instance");
+                    continue;
+                }
 
                 foreach (var input in instance.Inputs)
                 {

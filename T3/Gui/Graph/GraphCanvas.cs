@@ -179,14 +179,14 @@ namespace T3.Gui.Graph
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                     FocusViewToSelection();
 
-                if (KeyboardBinding.Triggered(UserActions.Duplicate))
+                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.Duplicate))
                 {
                     var selectedChildren = GetSelectedChildUis();
                     CopySelectionToClipboard(selectedChildren);
                     PasteClipboard();
                 }
 
-                if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
+                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                 {
                     DeleteSelectedElements();
                 }
@@ -208,7 +208,7 @@ namespace T3.Gui.Graph
                         CopySelectionToClipboard(selectedChildren);
                 }
 
-                if (KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
+                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
                 {
                     PasteClipboard();
                 }
@@ -218,7 +218,7 @@ namespace T3.Gui.Graph
                     SelectableNodeMovement.ArrangeOps();
                 }
 
-                if (KeyboardBinding.Triggered(UserActions.AddAnnotation))
+                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
                 {
                     AddAnnotation();
                 }
