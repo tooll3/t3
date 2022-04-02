@@ -167,10 +167,16 @@ namespace T3.Gui.Graph.Interaction
                     || symbolUi.Symbol.Namespace.Contains("_"))
                     relevancy *= 0.1f;
                 
-                if (Regex.Match(symbolUi.Symbol.Namespace, @"^lib\..*", RegexOptions.IgnoreCase) != Match.Empty)
+                if (symbolUi.Symbol.Namespace.StartsWith("lib"))
                 {
-                    relevancy *= 1.6f;
+                    relevancy *= 3f;
                 }
+                
+                if (symbolUi.Symbol.Namespace.StartsWith("examples"))
+                {
+                    relevancy *= 2f;
+                }
+
             }
             
             if (symbolName.StartsWith("_"))
@@ -182,8 +188,6 @@ namespace T3.Gui.Graph.Interaction
             {
                 relevancy *= 0.01f;
             }
-            Log.Debug($"Count {symbolUi.Symbol.Name} {count} relevancy {relevancy}");
-
             
             // TODO: Implement
             // if (IsCompositionOperatorInNamespaceOf(symbolUi))
