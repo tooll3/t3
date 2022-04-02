@@ -1,6 +1,6 @@
 {
   "Id": "697bbc2d-0b2e-4013-bbc3-d58a28a79f31"/*SoftTransformPoints*/,
-  "Description": "Transforms points inside a volume. This is almost identical to \ncombining [SelectPoints] -> [TransformPoints]. Note that we provide\nthe rotation as axis and angle instead of 3 Euler angles to allow multiple\nrevolutions.\n",
+  "Description": "Transforms points inside a volume. Experimenting with different FallOff parameters can provide a wide variety of effects.\n\nWe provide the rotation not as 3 combined euler angles to allow multiple revolutions.\n\nThis Operator is almost identical to combining [SelectPoints] -> [TransformPoints]. \n",
   "InputUis": [
     {
       "InputId": "5fac3f09-d6dd-4cba-8575-983353e60af4"/*Points*/,
