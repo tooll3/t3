@@ -89,7 +89,9 @@ namespace T3.Gui.Graph.Interaction
             return result;
         }
 
-        public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, List<Annotation> selectedAnnotations,
+        public static void CombineAsNewType(SymbolUi compositionSymbolUi, 
+                                            List<SymbolChildUi> selectedChildUis, 
+                                            List<Annotation> selectedAnnotations,
                                             string newSymbolName,
                                             string nameSpace, string description, bool shouldBeTimeClip)
         {
@@ -100,7 +102,7 @@ namespace T3.Gui.Graph.Interaction
 
             // get all the connections that go into the selection (selected ops as target)
             var compositionSymbol = compositionSymbolUi.Symbol;
-            var potentialTargetIds = from child in selectedChildren select child.Id;
+            var potentialTargetIds = from child in selectedChildUis select child.Id;
             var inputConnections = (from con in compositionSymbol.Connections
                                     from id in potentialTargetIds
                                     where con.TargetParentOrChildId == id
@@ -234,7 +236,7 @@ namespace T3.Gui.Graph.Interaction
             newSymbol.Namespace = nameSpace;
 
             // Apply content to new symbol
-            var copyCmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, newSymbolUi, Vector2.Zero);
+            var copyCmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildUis,  selectedAnnotations, newSymbolUi, Vector2.Zero);
             copyCmd.Do();
             executedCommands.Add(copyCmd);
 
@@ -254,7 +256,7 @@ namespace T3.Gui.Graph.Interaction
 
             copyCmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
 
-            var selectedChildrenIds = (from child in selectedChildren select child.Id).ToList();
+            var selectedChildrenIds = (from child in selectedChildUis select child.Id).ToList();
             compositionSymbol.Animator.RemoveAnimationsFromInstances(selectedChildrenIds);
 
             foreach (var con in connectionsFromNewInputs)
@@ -278,19 +280,9 @@ namespace T3.Gui.Graph.Interaction
                 var newConnection = new Symbol.Connection(sourceId, sourceSlotId, targetId, targetSlotId);
                 newSymbol.AddConnection(newConnection);
             }
-
-            // Insert annotations
-            foreach (var annotation in selectedAnnotations)
-            {
-                var annotationClone = annotation.Clone();
-                annotationClone.PosOnCanvas += copyCmd.PositionOffset;
-                var addAnnotationCommand = new AddAnnotationCommand(newSymbolUi, annotationClone);
-                addAnnotationCommand.Do();
-                executedCommands.Add(addAnnotationCommand);
-            }
-
+            
             // Insert instance of new symbol
-            var originalChildrenArea = GetAreaFromChildren(selectedChildren);
+            var originalChildrenArea = GetAreaFromChildren(selectedChildUis);
             var addCommand = new AddSymbolChildCommand(compositionSymbolUi.Symbol, newSymbol.Id)
                                  { PosOnCanvas = originalChildrenArea.GetCenter() };
 
@@ -321,7 +313,7 @@ namespace T3.Gui.Graph.Interaction
                 compositionSymbol.AddConnection(newConnection);
             }
 
-            var deleteCmd = new DeleteSymbolChildrenCommand(compositionSymbolUi, selectedChildren);
+            var deleteCmd = new DeleteSymbolChildrenCommand(compositionSymbolUi, selectedChildUis);
             deleteCmd.Do();
             executedCommands.Add(deleteCmd);
 
@@ -518,7 +510,11 @@ namespace T3.Gui.Graph.Interaction
             newSymbol.Namespace = nameSpace;
 
             // apply content to new symbol
-            var cmd = new CopySymbolChildrenCommand(sourceSymbolUi, null, newSymbolUi, Vector2.One);
+            var cmd = new CopySymbolChildrenCommand(sourceSymbolUi, 
+                                                    null, 
+                                                    sourceSymbolUi.Annotations.Values.ToList(), 
+                                                    newSymbolUi, 
+                                                    Vector2.One);
             cmd.Do();
             cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
 

@@ -181,8 +181,7 @@ namespace T3.Gui.Graph
 
                 if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.Duplicate))
                 {
-                    var selectedChildren = GetSelectedChildUis();
-                    CopySelectionToClipboard(selectedChildren);
+                    CopySelectedNodesToClipboard();
                     PasteClipboard();
                 }
 
@@ -203,9 +202,7 @@ namespace T3.Gui.Graph
 
                 if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
                 {
-                    var selectedChildren = GetSelectedChildUis();
-                    if (selectedChildren.Any())
-                        CopySelectionToClipboard(selectedChildren);
+                    CopySelectedNodesToClipboard();
                 }
 
                 if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
@@ -578,7 +575,7 @@ namespace T3.Gui.Graph
                                selected: false,
                                enabled: someOpsSelected))
             {
-                CopySelectionToClipboard(selectedChildUis);
+                CopySelectedNodesToClipboard();
             }
 
             if (ImGui.MenuItem("Paste", KeyboardBinding.ListKeyboardShortcuts(UserActions.PasteFromClipboard, false)))
@@ -614,7 +611,7 @@ namespace T3.Gui.Graph
                                selected: false,
                                enabled: selectedChildUis.Count > 0))
             {
-                CopySelectionToClipboard(selectedChildUis);
+                CopySelectedNodesToClipboard();
                 PasteClipboard();
             }
 
@@ -811,14 +808,20 @@ namespace T3.Gui.Graph
             return SelectionManager.GetSelectedNodes<IOutputUi>();
         }
 
-        private void CopySelectionToClipboard(List<SymbolChildUi> selectedChildren)
+        private void CopySelectedNodesToClipboard()
         {
+            var selectedChildren = SelectionManager.GetSelectedNodes<SymbolChildUi>();
+            var selectedAnnotations = SelectionManager.GetSelectedNodes<Annotation>().ToList();
+            
             var containerOp = new Symbol(typeof(object), Guid.NewGuid());
             var newContainerUi = new SymbolUi(containerOp);
             SymbolUiRegistry.Entries.Add(newContainerUi.Symbol.Id, newContainerUi);
 
             var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-            var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, newContainerUi,
+            var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, 
+                                                    selectedChildren,
+                                                    selectedAnnotations,
+                                                    newContainerUi,
                                                     InverseTransformPosition(ImGui.GetMousePos()));
             cmd.Do();
 
@@ -867,7 +870,10 @@ namespace T3.Gui.Graph
                     var containerSymbolUi = UiJson.ReadSymbolUi(symbolUiJson);
                     var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
                     SymbolUiRegistry.Entries.Add(containerSymbolUi.Symbol.Id, containerSymbolUi);
-                    var cmd = new CopySymbolChildrenCommand(containerSymbolUi, null, compositionSymbolUi,
+                    var cmd = new CopySymbolChildrenCommand(containerSymbolUi, 
+                                                            null,
+                                                            containerSymbolUi.Annotations.Values.ToList(),
+                                                            compositionSymbolUi,
                                                             InverseTransformPosition(ImGui.GetMousePos()));
                     cmd.Do(); // FIXME: Shouldn't this be UndoRedoQueue.AddAndExecute() ? 
                     SymbolUiRegistry.Entries.Remove(containerSymbolUi.Symbol.Id);
@@ -881,6 +887,12 @@ namespace T3.Gui.Graph
                         var newChildUi = compositionSymbolUi.ChildUis.Single(c => c.Id == id);
                         var instance = CompositionOp.Children.Single(c2 => c2.SymbolChildId == id);
                         SelectionManager.AddSymbolChildToSelection(newChildUi, instance);
+                    }
+
+                    foreach (var id in cmd.NewSymbolAnnotationIds)
+                    {
+                        var annotation = compositionSymbolUi.Annotations[id];
+                        SelectionManager.AddSelection(annotation);
                     }
                 }
             }

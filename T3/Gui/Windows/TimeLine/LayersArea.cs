@@ -100,7 +100,11 @@ namespace T3.Gui.Windows.TimeLine
                         var originalName = symbolChildUi.SymbolChild.ReadableName;
                         Vector2 newPos = symbolChildUi.PosOnCanvas;
                         newPos.Y += symbolChildUi.Size.Y + 5.0f;
-                        var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, new[] { symbolChildUi }, compositionSymbolUi, newPos);
+                        var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, 
+                                                                new[] { symbolChildUi },
+                                                                null,
+                                                                compositionSymbolUi, 
+                                                                newPos);
                         cmd.Do();
 
                         // Set new end to the original time clip
