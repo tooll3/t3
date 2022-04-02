@@ -140,9 +140,9 @@ namespace T3.Gui
         public static bool IconButton(Icon icon, string label, Vector2 size)
         {
             ImGui.PushFont(Icons.IconFont);
-            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.3f));
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-
+            
             var clicked = ImGui.Button((char)(int)icon + label, size);
 
             ImGui.PopStyleVar(2);

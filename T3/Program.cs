@@ -91,7 +91,7 @@ namespace T3
                 ImGui.GetIO().NativePtr->IniFilename = null;
             }
 
-            ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+            //ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
 
             startupStopWatch.Stop();
             Log.Debug($"startup took {startupStopWatch.ElapsedMilliseconds}ms.");

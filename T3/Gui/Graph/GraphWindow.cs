@@ -258,12 +258,13 @@ namespace T3.Gui.Graph
                                            ImGui.GetWindowContentRegionMin().X,
                                            ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
 
-            ImGui.BeginChild("TimeControls");
+            ImGui.BeginChild("TimeControls", Vector2.Zero, false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
             {
-                if (CustomComponents.IconButton(UsingCustomTimelineHeight ? Icon.ChevronUp : Icon.ChevronDown,
+                if (CustomComponents.IconButton(UsingCustomTimelineHeight ?  Icon.ChevronDown : Icon.ChevronUp,
                                                 "##TimelineToggle", TimeControls.ControlSize))
                 {
                     _customTimeLineHeight = UsingCustomTimelineHeight ? UseComputedHeight : 200;
+                    UserSettings.Config.HideUiElementsInGraphWindow = false;
                 }
 
                 ImGui.SameLine();
