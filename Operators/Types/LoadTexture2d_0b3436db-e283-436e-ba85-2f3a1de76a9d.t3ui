@@ -1,5 +1,6 @@
 {
   "Id": "0b3436db-e283-436e-ba85-2f3a1de76a9d"/*LoadTexture2d*/,
+  "Description": "Loads an image file. \n\nSome notes: \n\n- Resources are cached, so that when you access that filename again, it will load much faster.\n- An ImageBuffer will forward their size so that image fx operators will produce buffers of idential sizes.\n- Mipmaps will be created automatically.\n\nMost image types are supported, but only 8bit.\n\n",
   "InputUis": [
     {
       "InputId": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,

@@ -112,7 +112,7 @@ namespace T3.Gui.UiHelpers
             ImGui.PopID();
         }
 
-        private static void HandleDragAndDropForSymbolItem(Symbol symbol)
+        public static void HandleDragAndDropForSymbolItem(Symbol symbol)
         {
             if (ImGui.IsItemActive())
             {

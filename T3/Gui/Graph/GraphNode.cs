@@ -158,7 +158,7 @@ namespace T3.Gui.Graph
                     // Tooltip
                     if (ImGui.IsItemHovered()
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
-                        && !GraphCanvas.Current.SymbolBrowser._isOpen
+                        && !GraphCanvas.Current.SymbolBrowser.IsOpen
                         && ImGui.IsWindowFocused())
                     {
                         if (UserSettings.Config.SmartGroupDragging)
