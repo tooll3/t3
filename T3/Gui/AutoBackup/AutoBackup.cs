@@ -33,7 +33,7 @@ namespace t3.Gui.AutoBackup
 
         public AutoBackup()
         {
-            SecondsBetweenSaves = 60 * 5;
+            SecondsBetweenSaves = 3 * 60;
             Enabled = false;
         }
 
@@ -65,7 +65,6 @@ namespace t3.Gui.AutoBackup
             }
             
             T3Ui.SaveModified();
-            Log.Debug("Running backup");
             var autoEvent = (AutoResetEvent)stateInfo;
             autoEvent.Reset();
 
