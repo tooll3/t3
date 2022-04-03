@@ -63,44 +63,42 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
         return; // out of bounds
 
 
-    float3 position = points[DTid.x].position;
-    float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + position * 1000 + Time % 123 ) -0.5f)  * ParticleGridCellSize * 2;
-    //position+= jitter;
+    //float3 position = points[DTid.x].position;
 
     //points[DTid.x].w = 0.1;
 
     if(DTid.x != (int)(CenterPointIndex) % pointCount )
         return;
  
-    //int startIndex = particleGridIndexBuffer[DTid.x];
-    //int endIndex = particleGridCountBuffer[DTid.x] - particke  + startIndex;
-
+    // Look up by particle index
+    /*
     const uint2 gridCell = particleGridCellBuffer[DTid.x];
     const uint cellIndex = gridCell.x;
     const uint gridEntryIndex =  gridCell.y;
 
     const uint rangeStartIndex = particleGridIndexBuffer[cellIndex];
     const uint rangeLength = particleGridCountBuffer[cellIndex];
-    //const uint particleOffset =  rangeStartIndex - rangeLength + gridEntryIndex;
     const uint endIndex = rangeStartIndex + rangeLength;
     for(uint i=rangeStartIndex; i < endIndex; ++i) 
     {
         uint pointIndex = particleGridBuffer[i];
         points[pointIndex].w = 1;
     }
+    */
 
+    float3 position = Center;
+    float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + position * 1000 + Time * 934 % 123.123 ) -0.5f)  * ParticleGridCellSize; // - (ParticleGridCellSize * 0.5);
+    //position+= jitter;
 
-    // int startIndex, endIndex;
-    // if(ParticleGridFind(Center, startIndex, endIndex)) 
-    // {
-    //     for(uint i=startIndex; i < endIndex; ++i) 
-    //     {
-    //         uint pointIndex = particleGridBuffer[i];
-    //         points[pointIndex].w = 1;
-    //     }
-    // }
-
-
+    int startIndex, endIndex;
+    if(ParticleGridFind(position, startIndex, endIndex)) 
+    {
+        for(uint i=startIndex; i < endIndex; ++i) 
+        {
+            uint pointIndex = particleGridBuffer[i];
+            points[pointIndex].w = 1;
+        }
+    }
 
 /*
  
