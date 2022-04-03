@@ -1,6 +1,6 @@
 {
-  "Id": "f61ceb9b-74f8-4883-88ea-7e6c35b63bbd"/*NearestNeighboughTest2*/,
-  "Description": "",
+  "Id": "f61ceb9b-74f8-4883-88ea-7e6c35b63bbd"/*_BuildSpatialHashMap*/,
+  "Description": "Building a spatial hashmap can be an important basis for complex simulations that require nearest neighbour search.\nThe implementation in based on work by Guillaume Boissé and involves a multiple compute buffers and calculating an exclusive prefix sum.\n\nSome documentation can be fould here: https://www.figma.com/file/wBNGUlaACjaCDOTdeBvBvR/ComputeShader-Ideas?node-id=8%3A0\n\n",
   "InputUis": [
     {
       "InputId": "4bae9eaa-42d8-4c1c-8776-3abebcce20e2"/*PointsA_*/,
@@ -19,42 +19,9 @@
       "Max": 100.0,
       "Scale": 0.01,
       "Clamp": true
-    },
-    {
-      "InputId": "5f11283d-be8a-4b91-8af6-6575b2249d82"/*IsEnabled*/,
-      "Position": {
-        "X": 444.31647,
-        "Y": 1467.7786
-      }
-    },
-    {
-      "InputId": "959f6c5a-c19b-492e-9e4f-1e758e261ff5"/*CenterPointIndex*/,
-      "Position": {
-        "X": 444.31647,
-        "Y": 1512.7786
-      }
-    },
-    {
-      "InputId": "bfc32514-26e7-4cb4-bc45-21b5c1a02307"/*Center*/,
-      "Position": {
-        "X": 444.31647,
-        "Y": 1557.7786
-      }
     }
   ],
   "SymbolChildUis": [
-    {
-      "ChildId": "869fef2e-318d-4887-b1e3-059722c719a6"/*FloatsToBuffer*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 109.896416,
-        "Y": 86.29051
-      },
-      "Position": {
-        "X": 2676.789,
-        "Y": 1683.3032
-      }
-    },
     {
       "ChildId": "8e391859-097a-42f0-84cc-03521c79a51c"/*GetSRVProperties*/,
       "Size": {
@@ -64,17 +31,6 @@
       "Position": {
         "X": 731.8302,
         "Y": 671.5469
-      }
-    },
-    {
-      "ChildId": "41f580f8-7372-4e59-9df8-e4db46e1554a"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
-      "Position": {
-        "X": 3531.7222,
-        "Y": 1028.7281
       }
     },
     {
@@ -95,8 +51,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": 442.48907,
-        "Y": 2030.0995
+        "X": 512.96387,
+        "Y": 1600.5193
       }
     },
     {
@@ -228,8 +184,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 1158.1257,
-        "Y": 1945.3673
+        "X": 1157.5068,
+        "Y": 1967.5732
       }
     },
     {
@@ -251,8 +207,8 @@
         "Y": 490.9287
       },
       "Position": {
-        "X": 3231.3386,
-        "Y": 1034.5729
+        "X": 2709.0825,
+        "Y": 1007.9415
       }
     },
     {
@@ -298,39 +254,6 @@
       "Position": {
         "X": 1735.6475,
         "Y": 1184.5764
-      }
-    },
-    {
-      "ChildId": "1e957beb-a62f-4b77-ad48-d9e2a23e73d0"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 2676.789,
-        "Y": 1627.3032
-      }
-    },
-    {
-      "ChildId": "65981e07-a6a6-4c9c-9331-64daaa61fa5d"/*FlagNeighbours*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 179.0
-      },
-      "Position": {
-        "X": 3009.621,
-        "Y": 1625.106
-      }
-    },
-    {
-      "ChildId": "25b480ea-a1d9-41a8-9c08-628110757385"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 2822.4126,
-        "Y": 1665.222
       }
     },
     {
@@ -396,8 +319,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": 592.4891,
-        "Y": 2030.0995
+        "X": 662.96387,
+        "Y": 1600.5193
       }
     },
     {
@@ -407,160 +330,52 @@
         "Y": 23.0
       },
       "Position": {
-        "X": 442.48907,
-        "Y": 2073.0994
-      }
-    },
-    {
-      "ChildId": "dc7d1fde-a6e7-4816-b423-ec37d059070a"/*Time*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 2507.2375,
-        "Y": 1993.7806
-      }
-    },
-    {
-      "ChildId": "17e96b9d-1508-4a40-814c-9320e5fa4d32"/*PickPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 1606.8674,
-        "Y": 2324.6428
-      }
-    },
-    {
-      "ChildId": "70a2cae3-88d1-4cd3-870c-c22ba2c9c419"/*DrawPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 2382.267,
-        "Y": 2367.1733
-      }
-    },
-    {
-      "ChildId": "6f4499eb-d6ec-436e-ba70-75da204389bd"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 1808.7769,
-        "Y": 2213.5771
-      }
-    },
-    {
-      "ChildId": "772b2a15-9391-491d-85ae-83f6f415fab8"/*Vector3ToFloat3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 2487.1729,
-        "Y": 1717.976
-      }
-    },
-    {
-      "ChildId": "f469235e-21a6-4ff9-ad2a-132d1f5d6b11"/*Multiply*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 1515.651,
-        "Y": 2465.3289
-      }
-    },
-    {
-      "ChildId": "037fe49e-77ab-41bb-a9b9-79cff3776d8b"/*QuadMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1997.959,
-        "Y": 2769.3477
-      }
-    },
-    {
-      "ChildId": "d566e243-4310-4886-9d9b-34d17311fac5"/*DrawMeshAtPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
-      "Position": {
-        "X": 2226.1245,
-        "Y": 2702.7993
-      }
-    },
-    {
-      "ChildId": "7e08ebaa-77b7-4a8c-8063-64f9ef9c728a"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
-      "Position": {
-        "X": 2532.267,
-        "Y": 2367.1733
-      }
-    },
-    {
-      "ChildId": "9b7bbd8c-3542-4fe3-bb67-1b64946de26a"/*_FloorPointsToGird*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 1756.8674,
-        "Y": 2324.6428
-      }
-    },
-    {
-      "ChildId": "a5942803-d6e1-4f9b-a63e-3d15b9971e87"/*DrawMeshAtPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 2258.2986,
-        "Y": 2943.1567
-      }
-    },
-    {
-      "ChildId": "d030811d-237d-4613-8573-097cf21f6755"/*APoint*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 1044.0117,
-        "Y": 2563.0042
-      }
-    },
-    {
-      "ChildId": "4ddfc5d8-1e41-4bad-b990-29e00e897b8a"/*ListToBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 1194.0117,
-        "Y": 2563.0042
+        "X": 512.96387,
+        "Y": 1643.5193
       }
     }
   ],
   "OutputUis": [
     {
-      "OutputId": "9a01a420-8611-410e-8b6a-61a3c8988a5e"/*OutBuffer*/,
+      "OutputId": "13f0d2c2-a18b-457b-a3cf-cfd0c755b9a9"/*CountBuffer*/,
       "Position": {
-        "X": 3725.2158,
-        "Y": 1028.7762
+        "X": 3747.5938,
+        "Y": 1989.9536
+      }
+    },
+    {
+      "OutputId": "6c026a5f-a724-4240-bb96-077d65266f66"/*CellIndicesBuffer*/,
+      "Position": {
+        "X": 3753.4258,
+        "Y": 1793.0824
+      }
+    },
+    {
+      "OutputId": "eeb282ee-ad73-471c-89ab-ae7cc8de6b15"/*RangeIndexBuffer*/,
+      "Position": {
+        "X": 3747.5938,
+        "Y": 2039.9536
+      }
+    },
+    {
+      "OutputId": "b4505f1e-ab0e-45be-8e46-8e3b37ec59ec"/*IndexToPointBuffer*/,
+      "Position": {
+        "X": 3751.6086,
+        "Y": 1858.4712
+      }
+    },
+    {
+      "OutputId": "fb96e3d2-9a0f-466a-9b1d-997a4aa3e625"/*GridHashBuffer*/,
+      "Position": {
+        "X": 3751.6086,
+        "Y": 1908.4712
+      }
+    },
+    {
+      "OutputId": "59d09aa6-051c-4906-9f32-f65e66979c56"/*Update*/,
+      "Position": {
+        "X": 3749.775,
+        "Y": 849.28375
       }
     }
   ]

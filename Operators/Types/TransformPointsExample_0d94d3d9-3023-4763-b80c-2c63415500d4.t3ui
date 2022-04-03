@@ -62,7 +62,7 @@
       "ChildId": "209b3b9f-72a6-468d-9c02-a97d6fd24e2c"/*PointsOnSphere*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
         "X": 38.657227,
@@ -233,6 +233,28 @@
       "Position": {
         "X": 1412.7725,
         "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "269fdfaa-58b5-47ad-bfc0-0e47c61be4ec"/*LFO*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -261.34274,
+        "Y": 99.392334
+      }
+    },
+    {
+      "ChildId": "6849f724-6bae-4912-ab26-a7e675345fae"/*FloatToInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -111.34277,
+        "Y": 99.392334
       }
     }
   ],
