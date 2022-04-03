@@ -1,9 +1,9 @@
 {
   "Id": "95558338-81a5-4ecc-9d5c-1c6fb5f6f4fa"/*DrawSprites*/,
-  "Description": "Draws 2D Sprites defined in a sprite buffer. This can be used to render things like lense flare quads or other effects.",
+  "Description": "Draws 2D Sprites defined in a sprite buffer. This can be used to render things like lense flare quads or other effects.\n\nAdditionally to a Point-buffer Sprites also contain attributes like UV and color.",
   "InputUis": [
     {
-      "InputId": "f25285d7-e23c-499a-8711-76cdbab79cea"/*GPoints*/,
+      "InputId": "f25285d7-e23c-499a-8711-76cdbab79cea"/*SpriteBuffer*/,
       "Relevancy": "Required",
       "Position": {
         "X": -605.3908,

@@ -12,7 +12,7 @@ namespace T3.Operators.Types.Id_95558338_81a5_4ecc_9d5c_1c6fb5f6f4fa
         public readonly Slot<Command> Output = new Slot<Command>();
 
         [Input(Guid = "f25285d7-e23c-499a-8711-76cdbab79cea")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> SpriteBuffer = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
         [Input(Guid = "333c119c-79d0-410c-a20a-5d035a7192ee")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
