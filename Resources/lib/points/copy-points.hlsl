@@ -1,5 +1,5 @@
 #include "hash-functions.hlsl"
-#include "point.hlsl"
+#include "lib/shared/point.hlsl"
 
 StructuredBuffer<Point> SourcePoints : t0;         // input
 RWStructuredBuffer<Point> ResultPoints : u0; 

@@ -1,6 +1,6 @@
 #include "hash-functions.hlsl"
 #include "noise-functions.hlsl"
-#include "point.hlsl"
+#include "lib/shared/point.hlsl"
 
 cbuffer Transforms : register(b0)
 {

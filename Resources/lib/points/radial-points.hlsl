@@ -1,5 +1,5 @@
 #include "hash-functions.hlsl"
-#include "point.hlsl"
+#include "lib/shared/point.hlsl"
 
 
 cbuffer Params : register(b0)

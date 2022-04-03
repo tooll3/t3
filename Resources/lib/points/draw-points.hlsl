@@ -1,4 +1,4 @@
-#include "point.hlsl"
+#include "lib/shared/point.hlsl"
 #include "point-light.hlsl"
 
 static const float3 Corners[] = 
