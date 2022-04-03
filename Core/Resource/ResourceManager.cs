@@ -564,7 +564,15 @@ namespace T3.Core
 
             public Stream Open(IncludeType type, string fileName, Stream parentStream)
             {
-                _streamReader = new StreamReader(Path.Combine(ResourcesFolder, fileName));
+                try
+                {
+                    _streamReader = new StreamReader(Path.Combine(ResourcesFolder, fileName));
+                }
+                catch(DirectoryNotFoundException e )
+                {
+                    Log.Error($"Can't open file {ResourcesFolder}/{fileName}  {e.Message}");
+                    return null;
+                }
                 return _streamReader.BaseStream;
             }
 
