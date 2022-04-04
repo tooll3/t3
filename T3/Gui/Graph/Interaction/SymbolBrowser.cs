@@ -305,6 +305,14 @@ namespace T3.Gui.Graph.Interaction
             
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.One); // Padding between panels
             ImGui.SameLine();
+
+            if (ImGui.GetContentRegionAvail().X < 250)
+            {
+                ImGui.PopStyleVar();
+                return;
+            }
+            
+            
             if (ImGui.BeginChildFrame(998, new Vector2(250, _resultListSize.Y)))
             {
                 if (!string.IsNullOrEmpty(itemForHelp.Description))
