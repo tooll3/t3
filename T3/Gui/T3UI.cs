@@ -253,7 +253,5 @@ namespace T3.Gui
             PreventZoomWithMouseWheel = 1 << 3,
             PreventPanningWithMouse = 1 << 4,
         }
-
-
     }
 }

@@ -821,6 +821,7 @@ namespace T3.Gui.Graph
                                                          posOnScreen);
                     }
 
+                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     ImGui.BeginTooltip();
                     {
                         var connection = _bestMatchYetForCurrentFrame.Connection;
@@ -892,6 +893,7 @@ namespace T3.Gui.Graph
                         }
                     }
                     ImGui.EndTooltip();
+                    ImGui.PopStyleVar();
                 }
                 else
                 {

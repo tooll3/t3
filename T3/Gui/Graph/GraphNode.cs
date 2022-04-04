@@ -187,15 +187,15 @@ namespace T3.Gui.Graph
                                                        recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
                                 }
 
-                                if (!string.IsNullOrEmpty(symbolUi.Description))
-                                {
-                                    ImGui.Spacing();
-                                    ImGui.PushFont(Fonts.FontSmall);
-                                    ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, 0.5f).Rgba);
-                                    ImGui.TextWrapped(symbolUi.Description);
-                                    ImGui.PopStyleColor();
-                                    ImGui.PopFont();
-                                }
+                                // if (!string.IsNullOrEmpty(symbolUi.Description))
+                                // {
+                                //     ImGui.Spacing();
+                                //     ImGui.PushFont(Fonts.FontSmall);
+                                //     ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, 0.5f).Rgba);
+                                //     ImGui.TextWrapped(symbolUi.Description);
+                                //     ImGui.PopStyleColor();
+                                //     ImGui.PopFont();
+                                // }
 
                                 _imageCanvasForTooltips.Deactivate();
                                 TransformGizmoHandling.RestoreDrawList();
@@ -437,7 +437,7 @@ namespace T3.Gui.Graph
 
                             line.TargetPosition = targetPos;
                             line.TargetNodeArea = connectionBorderArea;
-                            line.IsSelected |= childUi.IsSelected;
+                            line.IsSelected |= childUi.IsSelected | isSocketHovered;
                             line.FramesSinceLastUsage = framesSinceLastUpdate;
                             line.IsAboutToBeReplaced = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, socketIndex);
                         }
@@ -469,7 +469,7 @@ namespace T3.Gui.Graph
                         line.TargetPosition = new Vector2(usableSlotArea.Max.X - 4,
                                                           usableSlotArea.GetCenter().Y);
                         line.TargetNodeArea = connectionBorderArea;
-                        line.IsSelected |= childUi.IsSelected;
+                        line.IsSelected |= childUi.IsSelected | hovered;
                         line.IsAboutToBeReplaced = isAboutToBeReconnected;
                         line.FramesSinceLastUsage = framesSinceLastUpdate;
                     }
@@ -510,7 +510,7 @@ namespace T3.Gui.Graph
                 {
                     line.SourcePosition = new Vector2(usableArea.Max.X, usableArea.GetCenter().Y);
                     line.SourceNodeArea = _selectableScreenRect;
-
+                    line.IsSelected |= hovered;
                     line.ColorForType = colorForType;
                     line.UpdateCount = output.DirtyFlag.NumUpdatesWithinFrame;
 

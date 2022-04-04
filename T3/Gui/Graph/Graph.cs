@@ -348,6 +348,9 @@ namespace T3.Gui.Graph
                 if (IsAboutToBeReplaced)
                     color = Color.Mix(color, Color.Red, (float)Math.Sin(ImGui.GetTime() * 10) / 2 + 0.5f);
 
+                if(!IsSelected)
+                    color = color.Fade(0.6f);
+                
                 var usageFactor = Math.Max(0, 1 - FramesSinceLastUsage / 50f);
                 var thickness = ((1 - 1 / (UpdateCount + 1f)) * 3 + 1) * 0.5f * (usageFactor * 2 + 1);
 

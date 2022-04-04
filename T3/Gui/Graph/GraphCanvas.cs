@@ -904,7 +904,7 @@ namespace T3.Gui.Graph
 
         private void DrawGrid()
         {
-            var color = new Color(0, 0, 0, 0.3f);
+            var color = new Color(0, 0, 0, 0.15f);
             var gridSize = Math.Abs(64.0f * Scale.X);
             for (var x = (-Scroll.X * Scale.X) % gridSize; x < WindowSize.X; x += gridSize)
             {
