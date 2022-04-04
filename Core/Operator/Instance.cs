@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using T3.Core.Logging;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
@@ -101,7 +102,11 @@ namespace T3.Core.Operator
             }
             else
             {
-                Debug.Assert(connection.SourceParentOrChildId == Guid.Empty);
+                if (connection.SourceParentOrChildId != Guid.Empty)
+                {
+                    Log.Error($"connection has incorrect Source: { connection.SourceParentOrChildId}");
+                    return (null, null, null, null);
+                }
                 sourceInstance = compositionInstance;
                 sourceSlot = sourceInstance.Inputs.SingleOrDefault(input => input.Id == connection.SourceSlotId);
             }
