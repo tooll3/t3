@@ -266,9 +266,6 @@ namespace T3.Gui.Selection
                 if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                 {
                     CompletePositionDragging();
-                    // _draggedGizmoPart = GizmoParts.None;
-                    // _draggedTransformable = null;
-                    // _dragInteractionWindowId = 0;
                 }
             }
 
@@ -386,7 +383,7 @@ namespace T3.Gui.Selection
                     vec3Input.SetTypedInputValue(vector3);
                     break;
                 case InputSlot<Vector2> vec2Input:
-                    vec2Input.SetTypedInputValue(new Vector2(vec2Input.Value.X, vec2Input.Value.Y));
+                    vec2Input.SetTypedInputValue(new Vector2(vector3.X, vector3.Y));
                     break;
             }
         }
