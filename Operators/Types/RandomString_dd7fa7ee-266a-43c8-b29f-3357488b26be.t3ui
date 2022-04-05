@@ -15,13 +15,6 @@
         "X": -200.0,
         "Y": 45.0
       }
-    },
-    {
-      "InputId": "27ee26ef-de40-4d92-9dd8-43abae92aac8"/*TriggerIncrement*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
     }
   ],
   "SymbolChildUis": [
@@ -51,11 +44,11 @@
       "ChildId": "5f0f0745-cb7f-4191-92c8-c1cd062dcfae"/*Counter*/,
       "Size": {
         "X": 110.0,
-        "Y": 49.0
+        "Y": 36.0
       },
       "Position": {
-        "X": 0.0,
-        "Y": 56.0
+        "X": -0.19548035,
+        "Y": 85.84247
       }
     },
     {

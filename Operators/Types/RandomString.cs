@@ -17,9 +17,6 @@ namespace T3.Operators.Types.Id_dd7fa7ee_266a_43c8_b29f_3357488b26be
         [Input(Guid = "9b705b88-a644-498a-b831-5d0243e01c41", MappedType = typeof(MockStrings.Categories))]
         public readonly InputSlot<int> Category = new InputSlot<int>();
 
-        [Input(Guid = "27ee26ef-de40-4d92-9dd8-43abae92aac8")]
-        public readonly InputSlot<bool> TriggerIncrement = new InputSlot<bool>();
-
 
     }
 }
