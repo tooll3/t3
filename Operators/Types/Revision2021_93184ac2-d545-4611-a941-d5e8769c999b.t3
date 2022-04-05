@@ -361,25 +361,7 @@
       "Id": "a8ebfc32-b93e-4ae7-beb8-de0cdbe90982"/*RevisionPanic*/,
       "SymbolId": "eb13f8e8-0fe1-47f0-8e86-45f85cf2f0f6",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "2a4db967-6143-445f-8afd-8bb1db2d1041"/*RevisionPanic*/,
-          "OutputData": {
-            "Type": "T3.Core.Animation.TimeClip",
-            "TimeClip": {
-              "TimeRange": {
-                "Start": 708.0,
-                "End": 753.9166
-              },
-              "SourceRange": {
-                "Start": 708.0,
-                "End": 753.9166
-              },
-              "LayerIndex": 0
-            }
-          }
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "8d473373-b8e6-4787-94de-dca595ef79b0"/*FadeBlack*/,
@@ -503,12 +485,6 @@
       "SourceSlotId": "4e152b23-485d-4032-a62d-5c94153cdb45",
       "TargetParentOrChildId": "4829d5f3-e7ef-475f-b9c4-7c35877395be",
       "TargetSlotId": "c1be39f5-9516-4a25-a57d-20aa56d68fa7"
-    },
-    {
-      "SourceParentOrChildId": "8d473373-b8e6-4787-94de-dca595ef79b0",
-      "SourceSlotId": "f916f73c-ef64-40b5-9994-04292e6a0a9a",
-      "TargetParentOrChildId": "5dca1afe-65ed-4754-b5d0-a10a6a676855",
-      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
       "SourceParentOrChildId": "f574d14f-40ce-4db8-a17d-8c060fc5af44",

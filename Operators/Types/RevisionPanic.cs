@@ -8,8 +8,8 @@ namespace T3.Operators.Types.Id_eb13f8e8_0fe1_47f0_8e86_45f85cf2f0f6
     public class RevisionPanic : Instance<RevisionPanic>
     {
 
-        [Output(Guid = "2a4db967-6143-445f-8afd-8bb1db2d1041")]
-        public readonly TimeClipSlot<T3.Core.Command> Output2 = new TimeClipSlot<T3.Core.Command>();
+        [Output(Guid = "bf45ca13-829b-46e4-ba46-886e3890c1be")]
+        public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new Slot<SharpDX.Direct3D11.Texture2D>();
 
 
     }
