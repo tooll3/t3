@@ -288,6 +288,16 @@ namespace T3.Gui.Graph
                     }
 
                     ImGui.SameLine();
+                    
+
+                    var showGizmos = _imageBackground.ShowGizmos != T3.Core.Operator.GizmoVisibility.Off;
+                    if (CustomComponents.ToggleIconButton(Icon.Grid, "##gizmos", ref showGizmos, Vector2.One * ImGui.GetFrameHeight()))
+                    {
+                        _imageBackground.ShowGizmos = showGizmos
+                                                            ? T3.Core.Operator.GizmoVisibility.On
+                                                            : T3.Core.Operator.GizmoVisibility.Off;
+                    }                    
+                    ImGui.SameLine();
                 }
             }
             ImGui.EndChild();
