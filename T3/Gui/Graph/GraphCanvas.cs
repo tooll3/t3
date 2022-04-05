@@ -220,6 +220,20 @@ namespace T3.Gui.Graph
                     AddAnnotation();
                 }
 
+                if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
+                {
+                    var selectedImage = SelectionManager.GetFirstSelectedInstance();
+                    if (selectedImage != null)
+                    {
+                        GraphWindow.SetBackgroundOutput(selectedImage);
+                    } 
+                }
+                
+                if (KeyboardBinding.Triggered(UserActions.ClearBackgroundImage))
+                {
+                    GraphWindow.ClearBackground();
+                }
+
                 
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
@@ -547,7 +561,7 @@ namespace T3.Gui.Graph
                               && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions.Count > 0
                               && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
                 if (ImGui.MenuItem("Set image as graph background",
-                                   "",
+                                   KeyboardBinding.ListKeyboardShortcuts(UserActions.PinToOutputWindow, false),
                                    selected: false,
                                    enabled: isImage))
                 {

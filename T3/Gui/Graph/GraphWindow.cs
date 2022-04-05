@@ -162,6 +162,14 @@ namespace T3.Gui.Graph
                                                                      ? NodeOperations.BuildIdPathForInstance(instance)
                                                                      : null;
         }
+        
+        public static void ClearBackground()
+        {
+            if (_currentWindow == null)
+                return;
+
+            _currentWindow._imageBackground.BackgroundNodePath = null;
+        }
 
         protected override void DrawContent()
         {
@@ -276,7 +284,7 @@ namespace T3.Gui.Graph
                     ImGui.SameLine();
                     if (ImGui.Button("Clear BG"))
                     {
-                        _currentWindow._imageBackground.BackgroundNodePath = null;
+                        ClearBackground();
                     }
 
                     ImGui.SameLine();
