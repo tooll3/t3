@@ -1,5 +1,5 @@
 {
-  "Name": "DrawQuadsW",
+  "Name": "DrawVaryingQuads",
   "Id": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981",
   "Namespace": "lib.point.draw",
   "Inputs": [

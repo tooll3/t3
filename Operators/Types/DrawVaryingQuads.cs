@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_ffc0a7ed_fe61_4188_8db9_0b0f07c6b981
 {
-    public class DrawQuadsW : Instance<DrawQuadsW>
+    public class DrawVaryingQuads : Instance<DrawVaryingQuads>
     {
         [Output(Guid = "65bf6652-0187-4c5f-8e1f-ccc4254b843b")]
         public readonly Slot<Command> Output = new Slot<Command>();

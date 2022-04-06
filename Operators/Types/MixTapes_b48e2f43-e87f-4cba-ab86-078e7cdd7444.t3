@@ -46,7 +46,7 @@
         {
           "Id": "a4d48d80-936c-4bbb-a2e8-32f86edd4ab2"/*Rate*/,
           "Type": "System.Single",
-          "Value": 1.0
+          "Value": 8.0
         },
         {
           "Id": "6ca8a8b2-f252-4687-805e-fb7a86a16567"/*AllowSpeedFactor*/,
@@ -279,7 +279,7 @@
         {
           "Id": "a4d48d80-936c-4bbb-a2e8-32f86edd4ab2"/*Rate*/,
           "Type": "System.Single",
-          "Value": 1.0
+          "Value": 0.25
         },
         {
           "Id": "8a5033c2-7d22-44d7-9472-d23677b11388"/*Amplitude*/,

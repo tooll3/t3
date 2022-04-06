@@ -1,5 +1,5 @@
 {
-  "Id": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981"/*DrawQuadsW*/,
+  "Id": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981"/*DrawVaryingQuads*/,
   "Description": "Draws instances at Point-positions with the W-attribute driving properties like Color, Size and Offset; This can be especially useful in compbination with [CollectSpawnPoints].",
   "InputUis": [
     {
@@ -433,8 +433,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 204.1556,
-        "Y": 1219.522
+        "X": 124.69442,
+        "Y": 1187.6653
       }
     },
     {
@@ -455,8 +455,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 177.67876,
-        "Y": 1336.8691
+        "X": 114.27372,
+        "Y": 1281.3033
       }
     },
     {
