@@ -22,8 +22,12 @@ cbuffer Params : register(b1)
     float Frequency;
     float Phase;
     float Variation;
+
     float3 AmountDistribution;
     float RotationLookupDistance;
+
+    float3 NoiseOffset;
+
     float UseWAsWeight;
 
 }
@@ -42,7 +46,7 @@ static float3 variationOffset;
 void GetTranslationAndRotation(float weight, float3 pointPos, float4 rotation, 
                                out float3 offset, out float4 newRotation) 
 {    
-    offset = GetNoise(pointPos, variationOffset) * weight;
+    offset = GetNoise(pointPos + NoiseOffset, variationOffset) * weight;
 
     float3 xDir = rotate_vector(float3(RotationLookupDistance,0,0), rotation);
     float3 offsetAtPosXDir = GetNoise(pointPos + xDir, variationOffset) * weight;

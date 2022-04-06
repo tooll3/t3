@@ -91,59 +91,28 @@ void main(uint3 i : SV_DispatchThreadID)
         float distance = 1-abs(mod( posInVolume.y * 1 + Phase, 2) - 1);
         s = smoothstep(Threshold + 0.5+ FallOff, Threshold + 0.5 , distance);
     }
-    // else if(VolumeShape < VolumeNoise) 
-    // {
-    //     float3 noiseLookup = (posInVolume * 0.91 + Phase );
-    //     float noise = snoise(noiseLookup);
-    //     s = smoothstep(Threshold+ FallOff, Threshold, noise);
-    // }
 
-    //float dBiased = Bias2(s, Bias);
     float dBiased =  Bias2(s, Bias);
-    // dBiased *= UseWAsWeight < 0 ? lerp(1, 1- p.w, -UseWAsWeight) 
-    //                             : lerp(1, p.w, UseWAsWeight);
+
     if(UseWAsWeight > 0.50) {
         dBiased *= p.w;
     }
-    //dBiased = 0;
 
-    //dBiased = 1;
-
-    //float4 rotation = rotate_angle_axis(RotateAngle * dBiased * PI/180, normalize(RotateAxis));
-    //rotate_angle_axis(RotateAngle * dBiased * PI/180, normalize(RotateAxis));
     float3 rot = RotateAxis * PI/180 * dBiased;
-    // float4 rotation = rotate_angle_axis(rot.x, float3(1,0,0) );
-    // rotation = qmul(rotation,  rotate_angle_axis(rot.y, float3(0,1,0) ));
-    // rotation = qmul(rotation,  rotate_angle_axis(rot.z, float3(0,0,1) ));
 
     float4 rotationX = rotate_angle_axis(rot.x, float3(1,0,0) );
     float4 rotationY = rotate_angle_axis(rot.y, float3(0,1,0) );
     float4 rotationZ = rotate_angle_axis(rot.z, float3(0,0,1) );
 
-
-
-    //float4 volumeCenter =  mul(float4(0,0,0,1), TransformVolume); //._m00_m01_m02_m03.xyz;
-    //volumeCenter.xyz /= volumeCenter.w;
-
     float3 volumeCenter =  TransformVolume._m30_m31_m32_m03.xyz;
-
     float3 posInVolume2 = posInObject + volumeCenter.xyz;
-    //float test = length(posInVolume2);
-    //posInVolume2 = rotate_vector(posInVolume2, rotation);
 
     posInVolume2 = rotate_vector(posInVolume2, rotationX);
     posInVolume2 = rotate_vector(posInVolume2, rotationY);
     posInVolume2 = rotate_vector(posInVolume2, rotationZ);
     
-    //float3 volumePosition = TransformVolume._m00_m01_m02_m03;
-
-    //float3 rotatedPosInVolume = 
-    
     ResultPoints[i.x].position = lerp(p.position, -volumeCenter.xyz + posInVolume2 * Scale * ScaleMagnitude,  dBiased) + dBiased * Translate;
-    //ResultPoints[i.x].position.z+= 1/test;
-    
     ResultPoints[i.x].rotation = qmul(p.rotation, rotationX);
-
     ResultPoints[i.x].w = SourcePoints[i.x].w;
 }
 

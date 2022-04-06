@@ -20,6 +20,7 @@ cbuffer Params : register(b1)
 {
     float4x4 TransformVolume;
     float FallOff;
+    float Bias;
     float VolumeShape;
     float SelectMode;
     float ClampResult;
@@ -47,6 +48,13 @@ static const float ModeSub = 2.5;
 static const float ModeMultiply = 3.5;
 static const float ModeInvert = 4.5;
 
+
+float Bias2(float x, float bias)
+{
+    return bias<0  
+            ? pow(x, clamp(bias+1,0.005,1))
+            : 1-pow(1-x, clamp(1-bias, 0.005,1));
+}
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -98,6 +106,8 @@ void main(uint3 i : SV_DispatchThreadID)
         s = smoothstep(Threshold+ FallOff, Threshold, noise);
     }
 
+    s =  Bias2(s, Bias);
+
     float w = SourcePoints[i.x].w;
     if(SelectMode < ModeOverride) 
     {
@@ -119,12 +129,6 @@ void main(uint3 i : SV_DispatchThreadID)
     {
         s = s * (1- w);
     }
-
-    // float newW = ClampResult < 0.5 ? s : saturate(s);
-    
-    // if(DiscardNonSelected > 0.5 newW <= 0) {
-    //     newW = sqrt(-1);
-    // }
     
     float newW = (DiscardNonSelected > 0.5 && s <=0)
                   ? sqrt(-1)

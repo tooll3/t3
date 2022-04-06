@@ -1,0 +1,105 @@
+{
+  "Name": "ImageSequenceClip",
+  "Id": "927a77d5-7bf0-477b-b288-4bb48d4980cd",
+  "Namespace": "lib.img.generate",
+  "Inputs": [
+    {
+      "Id": "a1e08fde-2d9b-4a2d-bf09-a5e54ad8cfa0"/*FilePath*/,
+      "DefaultValue": ""
+    }
+  ],
+  "Children": [
+    {
+      "Id": "c9937e67-dc65-4f44-9b3e-fc2a160c704e"/*FilesInFolder*/,
+      "SymbolId": "f90fcd0a-eab9-4e2a-b393-e8d3a0380823",
+      "InputValues": [
+        {
+          "Id": "ca9778e7-072c-4304-9043-eeb2dc4ca5d7"/*Folder*/,
+          "Type": "System.String",
+          "Value": "C:\\Users\\pixtur\\Desktop\\reference-footage\\TagHeuer\\jpg-high-quality"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "207b563b-3df8-4a68-8db3-fce1564ca5c5"/*Time*/,
+      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "faba6557-4c87-4ff9-8b8e-c6905f2b4973"/*Multiply*/,
+      "SymbolId": "17b60044-9125-4961-8a79-ca94697b3726",
+      "InputValues": [
+        {
+          "Id": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"/*B*/,
+          "Type": "System.Single",
+          "Value": 30.0
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "97e97bce-6dde-492c-8d18-73f45c6f2df1"/*FloatToInt*/,
+      "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "5491d337-5724-4f20-969e-7cdca220a446"/*PickFromStrings*/,
+      "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "a7141bee-87ed-4e99-bc5a-8be6a348fc6d"/*LoadTexture2d*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [],
+      "Outputs": []
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "a7141bee-87ed-4e99-bc5a-8be6a348fc6d",
+      "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "36fd10a5-404e-46b9-a93a-e1bf495dd52d"
+    },
+    {
+      "SourceParentOrChildId": "97e97bce-6dde-492c-8d18-73f45c6f2df1",
+      "SourceSlotId": "1eb7c5c4-0982-43f4-b14d-524571e3cdda",
+      "TargetParentOrChildId": "5491d337-5724-4f20-969e-7cdca220a446",
+      "TargetSlotId": "12ce5fe3-750f-47ed-9507-416cb327a615"
+    },
+    {
+      "SourceParentOrChildId": "c9937e67-dc65-4f44-9b3e-fc2a160c704e",
+      "SourceSlotId": "99bd5b48-7a28-44a7-91e4-98b33cfda20f",
+      "TargetParentOrChildId": "5491d337-5724-4f20-969e-7cdca220a446",
+      "TargetSlotId": "8d5e77a6-1ec4-4979-ad26-f7862049bce1"
+    },
+    {
+      "SourceParentOrChildId": "faba6557-4c87-4ff9-8b8e-c6905f2b4973",
+      "SourceSlotId": "e011dd8c-1b9c-458f-8960-e6c38e83ca74",
+      "TargetParentOrChildId": "97e97bce-6dde-492c-8d18-73f45c6f2df1",
+      "TargetSlotId": "af866a6c-1ab0-43c0-9e8a-5d25c300e128"
+    },
+    {
+      "SourceParentOrChildId": "5491d337-5724-4f20-969e-7cdca220a446",
+      "SourceSlotId": "467bb46e-3391-48a7-b0eb-f7fd9d77b60f",
+      "TargetParentOrChildId": "a7141bee-87ed-4e99-bc5a-8be6a348fc6d",
+      "TargetSlotId": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "a1e08fde-2d9b-4a2d-bf09-a5e54ad8cfa0",
+      "TargetParentOrChildId": "c9937e67-dc65-4f44-9b3e-fc2a160c704e",
+      "TargetSlotId": "ca9778e7-072c-4304-9043-eeb2dc4ca5d7"
+    },
+    {
+      "SourceParentOrChildId": "207b563b-3df8-4a68-8db3-fce1564ca5c5",
+      "SourceSlotId": "a606b326-f3af-470b-b6e5-3175f7a54e31",
+      "TargetParentOrChildId": "faba6557-4c87-4ff9-8b8e-c6905f2b4973",
+      "TargetSlotId": "372288fa-3794-47ba-9f91-59240513217a"
+    }
+  ]
+}

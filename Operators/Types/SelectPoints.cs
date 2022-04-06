@@ -61,6 +61,9 @@ namespace T3.Operators.Types.Id_371d72b8_69d4_4ced_beda_271386ad2fd6
         [Input(Guid = "e577a3fb-0655-48b2-998a-1080e872c2cd")]
         public readonly InputSlot<bool> DiscardNonSelected = new InputSlot<bool>();
 
+        [Input(Guid = "bdfbbc26-6815-4c5e-b67f-fbe0bbf1f58b")]
+        public readonly InputSlot<float> Bias = new InputSlot<float>();
+
 
         
         private enum Shapes
