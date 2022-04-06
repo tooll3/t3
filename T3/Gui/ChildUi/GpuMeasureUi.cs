@@ -20,8 +20,12 @@ namespace T3.Gui.ChildUi
             
             float h = selectableScreenRect.GetHeight();
             var font = h > 50 ? Fonts.FontLarge : h > 25 ? Fonts.FontNormal : Fonts.FontSmall;
-            
-            drawList.AddCircleFilled(selectableScreenRect.GetCenter(), measureInstance.LastMeasureInMs * 5, _color);
+
+            var radius = measureInstance.LastMeasureInMs * 5;
+            if (radius > 2)
+            {
+                drawList.AddCircleFilled(selectableScreenRect.GetCenter(), radius, _color);
+            }
 
             ImGui.PushFont(font);
             ImGui.SetCursorScreenPos(selectableScreenRect.Min + new Vector2(10,0));
