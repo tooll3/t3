@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -25,9 +26,22 @@ namespace T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72
             var contextTimeForKeyframes = (float)context.TimeForKeyframes;
             var contextTimeForEffects = (float)context.TimeForEffects;
 
-            var time = (Modes)Mode.GetValue(context) == Modes.EffectTimeInBars
-                           ? contextTimeForEffects
-                           : contextTimeForKeyframes;
+            float time = 0;
+
+            switch ((Modes)Mode.GetValue(context))
+            {
+                case Modes.EffectTimeInBars:
+                    time = contextTimeForEffects;
+                    break;
+                case Modes.KeyframeTimeInBars:
+                    time = contextTimeForKeyframes;
+                    break;
+                case Modes.KeyframeTimeInSecs:
+                    time = contextTimeForKeyframes * 240 / (float)EvaluationContext.BPM;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             
             TimeInBars.Value = time * SpeedFactor.GetValue(context);
             TimeInSecs.Value = (float)EvaluationContext.GlobalTimeInSecs * SpeedFactor.GetValue(context);
@@ -38,6 +52,7 @@ namespace T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72
         {
             EffectTimeInBars,
             KeyframeTimeInBars,
+            KeyframeTimeInSecs,
         }
         
         [Input(Guid = "8DA7D58D-10A5-4378-8F44-B98F87EC2697", MappedType = typeof(Modes))]
