@@ -87,7 +87,9 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (ImGui.MenuItem("Cut at time"))
                 {
-                    ImGui.SameLine();
+                    // FIXME: This command is incomplete and like to lead to inconsistent data.
+                    // On the other hand, added it to the UndoRedoQueue prevents an obvious crash...
+                    var commands = new List<ICommand>();
 
                     var timeInBars = _playback.TimeInBars;
                     var matchingClips = ClipSelection.AllOrSelectedClips.Where(clip => clip.TimeRange.Contains(timeInBars)).ToList();
@@ -105,6 +107,7 @@ namespace T3.Gui.Windows.TimeLine
                                                                 null,
                                                                 compositionSymbolUi, 
                                                                 newPos);
+                        commands.Add(cmd);
                         cmd.Do();
 
                         // Set new end to the original time clip
@@ -123,6 +126,7 @@ namespace T3.Gui.Windows.TimeLine
                         var renameCommand = new ChangeSymbolChildNameCommand(newSymbolChildUi, compositionSymbolUi.Symbol);
                         renameCommand.NewName = originalName;
                         renameCommand.Do();
+                        commands.Add(renameCommand);
                         
                         newSymbolChildUi.SymbolChild.Name = originalName;
                             
@@ -131,8 +135,10 @@ namespace T3.Gui.Windows.TimeLine
                         newTimeClip.SourceRange.End = clip.SourceRange.End;
 
                         clip.SourceRange.Duration = originalSourceDuration * normalizedCutPosition;
-                        
                     }
+
+                    var macroCommands = new MacroCommand("split clip", commands);
+                    UndoRedoStack.Add(macroCommands);
                 }
 
                 ImGui.EndPopup();

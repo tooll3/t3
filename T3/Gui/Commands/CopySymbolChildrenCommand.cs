@@ -60,7 +60,8 @@ namespace T3.Gui.Commands
             }
 
             _connectionsToCopy.Reverse(); // to keep multi input order
-            _annotationsToCopy.AddRange(selectedAnnotations);
+            if(selectedAnnotations != null && selectedAnnotations.Count > 1)
+                _annotationsToCopy.AddRange(selectedAnnotations);
         }
 
         public void Undo()
