@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Commands;
 
 namespace t3.Gui.Interaction.Presets.Model
 {
@@ -14,8 +16,8 @@ namespace t3.Gui.Interaction.Presets.Model
     public class SymbolVariationPool
     {
         public Guid SymbolId;
-        public List<Variation2> Variations;
-        public List<Variation2> Presets;
+        public List<VariationModel> Variations;
+        public List<VariationModel> Presets_;
 
         public static SymbolVariationPool InitVariationPoolForSymbol(Guid compositionId)
         {
@@ -25,7 +27,7 @@ namespace t3.Gui.Interaction.Presets.Model
                               };
 
             newPool.Variations = LoadVariations(compositionId, VariationType.SymbolVariation);
-            newPool.Presets = LoadVariations(compositionId, VariationType.Preset);
+            newPool.Presets_ = LoadVariations(compositionId, VariationType.Preset);
             return newPool;
         }
 
@@ -34,18 +36,16 @@ namespace t3.Gui.Interaction.Presets.Model
             Preset,
             SymbolVariation,
         }
-        
-        private static List<Variation2> LoadVariations(Guid compositionId, VariationType variationType)
+
+        private static List<VariationModel> LoadVariations(Guid compositionId, VariationType variationType)
         {
-            
             var filepath = variationType == VariationType.SymbolVariation
                                ? $".t3/Variations/{compositionId}.var"
                                : $".Presets/{compositionId}.var";
 
             if (!File.Exists(filepath))
             {
-                //Log.Error($"Could not find symbol file containing the id '{compositionId}'");
-                return null;
+                return new List<VariationModel>();
             }
 
             Log.Info($"Reading presets definition for : {compositionId}");
@@ -53,7 +53,7 @@ namespace t3.Gui.Interaction.Presets.Model
             using var sr = new StreamReader(filepath);
             using var jsonReader = new JsonTextReader(sr);
 
-            var result = new List<Variation2>();
+            var result = new List<VariationModel>();
 
             try
             {
@@ -65,8 +65,8 @@ namespace t3.Gui.Interaction.Presets.Model
                         Log.Error("No variations?");
                         continue;
                     }
-                        
-                    var newVariation = Variation2.FromJson(sceneToken);
+
+                    var newVariation = VariationModel.FromJson(compositionId, sceneToken);
                     if (newVariation == null)
                     {
                         Log.Warning($"Failed to parse variation json:" + sceneToken);
@@ -80,39 +80,11 @@ namespace t3.Gui.Interaction.Presets.Model
             catch (Exception e)
             {
                 Log.Error($"Failed to load presets and variations for {compositionId}: {e.Message}");
-                return null;
+                return new List<VariationModel>();
             }
 
             return result;
 
-            // newOpVariation.Presets = new Preset[groupCount, sceneCount];
-            //
-            // for (var groupIndex = 0; groupIndex < groupCount; groupIndex++)
-            // {
-            //     for (var sceneIndex = 0; sceneIndex < sceneCount; sceneIndex++)
-            //     {
-            //         var presetToken = jsonPresets[presetIndex];
-            //         newOpVariation.Presets[groupIndex, sceneIndex] = presetToken.HasValues
-            //                                                              ? Preset.FromJson(presetToken)
-            //                                                              : null;
-            //
-            //         presetIndex++;
-            //     }
-            // }
-
-            // // Groups
-            // foreach (var groupToken in (JArray)jToken["Groups"])
-            // {
-            //     newOpVariation.Groups.Add(ParameterGroup.FromJson(groupToken));
-            // }
-            //
-            // // Scene
-            // foreach (var sceneToken in (JArray)jToken["Scenes"])
-            // {
-            //     //newOpVariation.Scenes.Add(PresetScene.FromJson(sceneToken));
-            // }
-
-            //return newOpVariation;
         }
 
         private static string GetFilepathForCompositionId(Guid id)
@@ -127,71 +99,52 @@ namespace t3.Gui.Interaction.Presets.Model
         {
             return $"{id}_variations.json";
         }
-    }
 
-    /// <summary>
-    /// Base class for serialization 
-    /// </summary>
-    public class Variation2
-    {
-        public Guid Id;
-        public string Title;
-        public int ActivationIndex;
-        public bool IsPreset;
-        public DateTime PublishedDate;
-
-        //public static abstract string GetFileFolder();
-        public static string FileFolder;
-
-        /// <summary>
-        /// Changes by SymbolChildId
-        /// </summary>
-        public Dictionary<Guid, Dictionary<Guid, InputValue>> InputValuesForChildIds;
-
-        public static Variation2 FromJson(JToken jToken)
+        public void ApplyPreset(Instance instance, int presetIndex)
         {
-            var newVariation = new Variation2
-                                   {
-                                       Id = Guid.Parse(jToken["Id"].Value<string>()),
-                                   };
-
-            newVariation.InputValuesForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>();
-
-            var changesToken = (JObject)jToken["InputValuesForChildIds"];
-            if (changesToken == null)
-                return newVariation;
-            
-            foreach (var (symbolChildIdString, changes2)  in changesToken)
+            var preset = Presets_.FirstOrDefault(c => c.ActivationIndex == presetIndex);
+            if (preset == null)
             {
-                var changeList = new Dictionary<Guid, InputValue>();
-                if (changes2 is not JObject o)
-                    continue;
-                    
-                foreach (var (inputIdString, change)  in o)
-                {
-                    var inputId = Guid.Parse(inputIdString);
-                    Log.Debug($"found value for input {inputId}: {change}");
-                    changeList[inputId] = null;
-                }
+                Log.Error($"Can't find preset with index {presetIndex}");
+                return;
+            }
 
-                if (changeList.Count > 0)
+            var commands = new List<ICommand>();
+            var parentSymbol = instance.Parent.Symbol;
+
+            if (preset.InputValuesForChildIds.TryGetValue(Guid.Empty, out var parametersForOp))
+            {
+                var symbolChild = parentSymbol.Children.SingleOrDefault(s => s.Id == instance.SymbolChildId);
+                if (symbolChild != null)
                 {
-                    var symbolId = Guid.Parse(symbolChildIdString);
-                    newVariation.InputValuesForChildIds[symbolId] = changeList;
+                    foreach (var (childId, parametersForInputs) in preset.InputValuesForChildIds)
+                    {
+                        if (childId != Guid.Empty)
+                        {
+                            Log.Warning("Didn't export childId in preset");
+                            continue;
+                        }
+                        
+                        foreach (var (inputId, parameter) in parametersForInputs)
+                        {
+                            if (parameter == null)
+                            {
+                                continue;
+                            }
+
+                            var input = symbolChild.InputValues[inputId];
+                            var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, input)
+                                                 {
+                                                     NewValue = parameter,
+                                                 };
+                            commands.Add(newCommand);
+                        }
+                    }
                 }
             }
 
-            return newVariation;
+            var command = new MacroCommand("Set Preset Values", commands);
+            UndoRedoStack.AddAndExecute(command);
         }
     }
-
-    // public class SymbolPreset : Variation2
-    // {
-    //     //public new string FileFolder = ".Presets/";
-    // }
-    //
-    // public class SymbolVariation : Variation2
-    // {
-    //     //public new string FileFolder = ".t3/Variations";
-    // }
 }

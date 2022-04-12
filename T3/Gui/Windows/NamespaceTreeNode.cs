@@ -96,7 +96,7 @@ namespace T3.Gui.Windows
             return Children.FirstOrDefault(n => n.Name == name);
         }
 
-        public readonly List<Symbol> Symbols = new List<Symbol>();
+        public readonly List<Symbol> Symbols = new();
         public const string RootNodeId = "root";
     }
 }

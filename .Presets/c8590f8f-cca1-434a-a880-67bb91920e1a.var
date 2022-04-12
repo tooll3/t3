@@ -1,0 +1,27 @@
+{
+    "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
+    "Variations": [
+        {
+            "Id": "77666666-9996-401e-9aa6-328dd6292beb",
+            "Title": "Sharp",
+            "ActivationIndex": 1,
+            "IsPreset": true,
+            "InputValuesForChildIds": {
+                "00000000-0000-0000-0000-000000000000": {
+                    "8846aa50-e4d0-433c-9e5b-013a93f17f79": 0.4
+                }
+            }
+        },
+        {
+            "Id": "88666666-9996-401e-9aa6-328dd6292beb",
+            "Title": "Blurry",
+            "ActivationIndex": 2,
+            "IsPreset": true,
+            "InputValuesForChildIds": {
+                "00000000-0000-0000-0000-000000000000": {
+                    "8846aa50-e4d0-433c-9e5b-013a93f17f79": 1.5
+                }
+            }
+        }
+    ]
+}

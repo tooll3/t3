@@ -231,7 +231,6 @@ namespace T3.Gui
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel;
         public static readonly VariationHandling VariationHandling = new VariationHandling();
-        public static readonly PresetHandling PresetHandling = new PresetHandling();
         public static readonly WindowManager WindowManager;
 
         public static string OpenedPopUpName; // This is reset on Frame start and can be useful for allow context menu to stay open even if a
