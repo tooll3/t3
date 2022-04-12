@@ -9,7 +9,7 @@
     },
     {
       "Id": "a9dd6368-455d-4b1d-8685-02d8f7640ecf"/*Format*/,
-      "DefaultValue": "{0:0.000}"
+      "DefaultValue": "{0:0}"
     }
   ],
   "Children": [],

@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "4bae9eaa-42d8-4c1c-8776-3abebcce20e2"/*PointsA_*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 443.15173,
         "Y": 760.34796

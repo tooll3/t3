@@ -28,6 +28,11 @@
           "Value": 0.29999998
         },
         {
+          "Id": "8060756f-72a4-490b-9677-872b70e73b3a"/*BlurRadius*/,
+          "Type": "System.Single",
+          "Value": 2.37
+        },
+        {
           "Id": "297a2220-0648-47d3-82a1-c1077a1326a4"/*Twist*/,
           "Type": "System.Single",
           "Value": 130.0
@@ -208,7 +213,7 @@
             "X": 1.0,
             "Y": 0.68122244,
             "Z": 0.0,
-            "W": 1.0
+            "W": 0.25
           }
         }
       ],
@@ -245,7 +250,7 @@
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
-            "Y": 0.46,
+            "Y": 0.381,
             "Z": 0.0
           }
         },
@@ -551,15 +556,15 @@
         {
           "Id": "d3197979-b418-4182-b1c9-f3126b175f8d"/*Strength*/,
           "Type": "System.Single",
-          "Value": 24.7
+          "Value": 41.9
         },
         {
           "Id": "6d10c73c-37b8-443b-94d9-854b04027a3c"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.98912805,
-            "Y": 0.98070866,
-            "Z": 1.0,
+            "X": 1.0,
+            "Y": 0.8613783,
+            "Z": 0.8492041,
             "W": 1.0
           }
         }
