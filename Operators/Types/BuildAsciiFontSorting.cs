@@ -117,14 +117,16 @@ namespace T3.Operators.Types.Id_b536f791_ae9a_45a7_a153_e2f36a65cfb3
                     var pixel = bitmapImage.GetPixel(xIndex, yIndex);
                     letterBrightnessArray[letterIndex].Brightness += (pixel.R + pixel.G + pixel.B) * 1f;
                 }
-            }
+            }       
 
             // Filter valid characters
             filterCharCount = 0;
+            var random = new Random(23);
             if (!string.IsNullOrEmpty(filterCharacters))
             {
                 for (var index = 0; index < letterBrightnessArray.Length; index++)
                 {
+                    letterBrightnessArray[index].Brightness += random.NextFloat(0, 0.6f);
                     var c = letterBrightnessArray[index];
                     var char2 = (char)c.Index;
                     if (filterCharacters.IndexOf(char2) == -1)
