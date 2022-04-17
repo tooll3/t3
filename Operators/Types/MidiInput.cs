@@ -230,6 +230,10 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                         Control.Input.IsDefault = false;
                         Control.DirtyFlag.Invalidate();
 
+                        TeachTrigger.TypedInputValue.Value = false;
+                        TeachTrigger.Input.IsDefault = false;
+                        TeachTrigger.DirtyFlag.Invalidate();
+
                         _trainedDeviceName = _lastMessageDevice.ProductName;
                         _trainedChannel = signal.Channel;
                         _trainedControllerId = signal.ControllerId;

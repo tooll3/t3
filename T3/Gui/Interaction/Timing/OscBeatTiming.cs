@@ -34,13 +34,7 @@ namespace T3.Gui.Interaction.Timing
 
             // Start the listen thread
             _thread.Start();
-
-            // wait for a key press to exit
-            //Log.Debug("Press any key to exit");
-            //Console.ReadKey(true);
-
-            // close the Reciver 
-            //receiver.Close();
+            
 
             // Wait for the listen thread to exit
             //thread.Join();
