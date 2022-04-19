@@ -9,7 +9,7 @@ using T3.Gui.Commands;
 namespace T3.Gui.Interaction.Variation.Model
 {
     /// <summary>
-    /// Implements operators on to preset groups
+    /// Implements operations on to preset groups
     /// </summary>
     public partial class OperatorVariation
     {

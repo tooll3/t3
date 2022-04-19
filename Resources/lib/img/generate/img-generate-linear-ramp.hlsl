@@ -8,6 +8,7 @@ cbuffer ParamConstants : register(b0)
     float PingPong;
     float Repeat;
     float Bias;
+    float Offset;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -57,6 +58,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
 
     float c=  dot(p-Center, angle);
+    c += Offset;
     c = PingPong > 0.5 
         ? (Repeat < 0.5 ? (abs(c) / Width)
                         : 1-abs( fmod(c,Width *2) -Width)  / Width)

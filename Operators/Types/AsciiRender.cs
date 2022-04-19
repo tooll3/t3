@@ -39,6 +39,12 @@ namespace T3.Operators.Types.Id_42e6319e_669c_4524_8d0d_9416a86afdb3
         [Input(Guid = "4a300626-b562-4a5e-bfc5-9ffcd99dc0d5")]
         public readonly InputSlot<string> FilterCharacters = new InputSlot<string>();
 
+        [Input(Guid = "68801326-950b-4675-8450-56abf64e8518")]
+        public readonly InputSlot<float> MixInColors = new InputSlot<float>();
+
+        [Input(Guid = "011db3c0-4b2b-4040-934a-c52f671b40fd")]
+        public readonly InputSlot<float> Randomize = new InputSlot<float>();
+
     }
 }
 

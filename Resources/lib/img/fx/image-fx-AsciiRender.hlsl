@@ -1,3 +1,5 @@
+#include "hash-functions.hlsl"
+
 cbuffer ParamConstants : register(b0)
 {
     float4 Fill;
@@ -6,6 +8,8 @@ cbuffer ParamConstants : register(b0)
     float2 FontCharSize;
     float ScaleFactor;
     float Bias;
+    float MaxInColors;
+    float Scatter;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -63,8 +67,15 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         ? pow( grayScale, Bias+1)
         : 1-pow( clamp(1-grayScale,0,10), -Bias+1);    
 
+
+    float randomOffset = hash12(cellTiles * 123.12 );
+    dBiased += randomOffset * Scatter;
+
     float4 letter = FontSortingOrder.SampleLevel(texSamplerPoint, float2( dBiased ,0.4),0);
+    //return float4(letter.x * 1, 0,0,1);
     
+
+
     float letterIndex = letter * 256;
     float rowIndex = floor(letterIndex / 16);
     float columnIndex = floor(letterIndex % 16);
@@ -80,5 +91,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         return lerp(lerp(orgColor, Background, Background.a), Fill, colorFromFont.r);
     }
 
-    return lerp(Background, Fill, colorFromFont.r);
+    return lerp(Background,  
+                lerp(1, colFromImageA, MaxInColors) *  Fill, 
+                colorFromFont.r);
 }

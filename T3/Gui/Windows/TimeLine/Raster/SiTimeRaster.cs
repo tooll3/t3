@@ -21,7 +21,7 @@ namespace T3.Gui.Windows.TimeLine.Raster
                 _initializedDenisty = UserSettings.Config.TimeRasterDensity;
             }
 
-            var scale = TimeLineCanvas.Current.NestedTimeScale;
+            var scale = TimeLineCanvas.Current.NestedTimeScale * playback.Bpm / 120;
             var scroll = TimeLineCanvas.Current.NestedTimeOffset;
 
             DrawTimeTicks(scale, scroll / scale, TimeLineCanvas.Current);

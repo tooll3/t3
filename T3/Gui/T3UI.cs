@@ -16,11 +16,13 @@ using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
+using t3.Gui.Interaction.Presets;
 using T3.Gui.Interaction.Variation;
 using T3.Gui.Interaction.Timing;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
+using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
 
 namespace T3.Gui
 {
@@ -38,9 +40,16 @@ namespace T3.Gui
 
         public void Draw()
         {
+            if(ForwardBeatTaps.BeatTapTriggered)
+                BeatTiming.TriggerSyncTap();
+            
+            if(ForwardBeatTaps.ResyncTriggered)
+                BeatTiming.TriggerResyncMeasure();
+
             _autoBackup.Enabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;
             VariationHandling.Update();
+            PresetHandling.Update();
             MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
             MouseWheelFieldHovered = false;
 

@@ -111,6 +111,17 @@ namespace T3.Gui.Selection
             return Selection.Count > 0;
         }
 
+        /// <summary>
+        /// Returns null if more than onl
+        /// </summary>
+        public static Instance GetSelectedInstance()
+        {
+            if (Selection.Count != 1)
+                return null;
+
+            return GetFirstSelectedInstance();
+        }
+        
         public static Instance GetFirstSelectedInstance()
         {
             if (Selection.Count == 0)

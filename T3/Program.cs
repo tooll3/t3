@@ -219,8 +219,12 @@ namespace T3
                 
                 var screenIndexForMainScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? secondScreenIndex : 0;
                 var screenIndexForSecondScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? 0 : secondScreenIndex;
-                
-                _main.Form.Bounds = Screen.AllScreens[screenIndexForMainScreen].Bounds;
+
+                var formBounds = Screen.AllScreens[screenIndexForMainScreen].Bounds;
+                formBounds.Width = formBounds.Width;
+                formBounds.Height = formBounds.Height;
+                _main.Form.Bounds = formBounds;
+
 
                 if (T3Ui.ShowSecondaryRenderWindow)
                 {
@@ -232,7 +236,7 @@ namespace T3
                 {
                     _viewer.Form.WindowState = FormWindowState.Normal;
                     _viewer.Form.FormBorderStyle = FormBorderStyle.None;
-                    _viewer.Form.Bounds = Screen.AllScreens[screenIndexForMainScreen].Bounds;
+                    _viewer.Form.Bounds = Screen.AllScreens[screenIndexForSecondScreen].Bounds;
                 }
             }
             else

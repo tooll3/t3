@@ -72,6 +72,20 @@
         "Y": 1192.891
       },
       "Usage": "Default"
+    },
+    {
+      "InputId": "68801326-950b-4675-8450-56abf64e8518"/*MixInColors*/,
+      "Position": {
+        "X": -51.309982,
+        "Y": 1237.891
+      }
+    },
+    {
+      "InputId": "011db3c0-4b2b-4040-934a-c52f671b40fd"/*Randomize*/,
+      "Position": {
+        "X": -51.309982,
+        "Y": 1282.891
+      }
     }
   ],
   "SymbolChildUis": [
@@ -127,7 +141,7 @@
       },
       "Position": {
         "X": 589.014,
-        "Y": 697.92316
+        "Y": 723.92316
       }
     },
     {
@@ -233,7 +247,7 @@
       "ChildId": "0b697258-cd9b-4fee-8c03-ceb89cbbfdcf"/*FloatsToBuffer*/,
       "Size": {
         "X": 110.0,
-        "Y": 218.0
+        "Y": 244.0
       },
       "Position": {
         "X": 589.014,
