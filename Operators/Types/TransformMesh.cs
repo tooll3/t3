@@ -16,14 +16,11 @@ namespace T3.Operators.Types.Id_026e6917_6e6f_4ee3_b2d4_58f4f1de74c9
             Result.TransformableOp = this;
         }        
         
-        // implementation of ITransformable
-        System.Numerics.Vector3 ITransformable.Translation { get => Translation.Value; set => Translation.SetTypedInputValue(value); }
-        System.Numerics.Vector3 ITransformable.Rotation { get => Rotation.Value; set => Rotation.SetTypedInputValue(value); }
-        System.Numerics.Vector3 ITransformable.Scale { get => Scale.Value; set => Scale.SetTypedInputValue(value); }
-        //public Action<ITransformable, EvaluationContext> TransformCallback { get; set; }
+        IInputSlot ITransformable.TranslationInput => Translation;
+        IInputSlot ITransformable.RotationInput => Rotation;
+        IInputSlot ITransformable.ScaleInput => Scale;
+        public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
-        public Action<ITransformable, EvaluationContext> TransformCallback { get => Result.TransformCallback; set => Result.TransformCallback = value; }
-        
         [Input(Guid = "c2c9afc7-3474-40c3-be82-b9f48c92a2c5")]
         public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
 

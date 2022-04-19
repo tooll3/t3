@@ -140,9 +140,9 @@ namespace T3.Gui
         public static bool IconButton(Icon icon, string label, Vector2 size)
         {
             ImGui.PushFont(Icons.IconFont);
-            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.3f));
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-
+            
             var clicked = ImGui.Button((char)(int)icon + label, size);
 
             ImGui.PopStyleVar(2);
@@ -189,7 +189,7 @@ namespace T3.Gui
         {
             // This is a horrible hack to distinguish right mouse click from right mouse drag
             //var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
-            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickTreshold;
+            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
 
             if (!contextMenuIsOpen)
             {
@@ -219,13 +219,13 @@ namespace T3.Gui
             ImGui.PopStyleVar(2);
         }
 
-        public static bool DisablableButton(string label, bool isEnabled, bool enableTriggerWithReturn = true)
+        public static bool DisablableButton(string label, bool isEnabled, bool enableTriggerWithReturn = false)
         {
             if (isEnabled)
             {
                 ImGui.PushFont(Fonts.FontBold);
                 if (ImGui.Button(label)
-                    || (enableTriggerWithReturn && ImGui.IsKeyPressed((int)Key.Return)))
+                    || (enableTriggerWithReturn && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
                 {
                     ImGui.PopFont();
                     return true;
@@ -448,7 +448,7 @@ namespace T3.Gui
             
             if (_isSearchResultWindowOpen)
             {
-                if (ImGui.IsKeyPressed((int)Key.CursorDown, true))
+                if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorDown, true))
                 {
                     if (_lastResults.Count > 0)
                     {
@@ -456,7 +456,7 @@ namespace T3.Gui
                         _selectedResultIndex %= _lastResults.Count;
                     }
                 }
-                else if (ImGui.IsKeyPressed((int)Key.CursorUp, true))
+                else if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorUp, true))
                 {
                     if (_lastResults.Count > 0)
                     {
@@ -504,7 +504,7 @@ namespace T3.Gui
                             var isSelected = index == _selectedResultIndex;
                             ImGui.Selectable(word, isSelected);
                             
-                            if (ImGui.IsItemClicked() || (isSelected && ImGui.IsKeyPressed((int)Key.Return)))
+                            if (ImGui.IsItemClicked() || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
                             {
                                 text = word;
                                 wasChanged = true;

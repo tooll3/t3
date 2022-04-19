@@ -388,6 +388,11 @@
           "Id": "8caa4f2b-bfab-455e-a594-09b0cfb500fc"/*RotateImage*/,
           "Type": "System.Single",
           "Value": 180.0
+        },
+        {
+          "Id": "e39e2fd3-6820-4353-b098-44127303bb51"/*Width*/,
+          "Type": "System.Single",
+          "Value": 1.4300001
         }
       ],
       "Outputs": []

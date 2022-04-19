@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SharpDX;
 using T3.Compilation;
 using T3.Core;
 using T3.Core.Animation;
@@ -17,10 +17,12 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
+using t3.Gui.Graph;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using UiHelpers;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.Graph.Interaction
 {
@@ -87,15 +89,20 @@ namespace T3.Gui.Graph.Interaction
             return result;
         }
 
-        public static void CombineAsNewType(SymbolUi compositionSymbolUi, List<SymbolChildUi> selectedChildren, string newSymbolName,
+        public static void CombineAsNewType(SymbolUi compositionSymbolUi, 
+                                            List<SymbolChildUi> selectedChildUis, 
+                                            List<Annotation> selectedAnnotations,
+                                            string newSymbolName,
                                             string nameSpace, string description, bool shouldBeTimeClip)
         {
+            var executedCommands = new List<ICommand>();
+
             Dictionary<Guid, Guid> oldToNewIdMap = new Dictionary<Guid, Guid>();
             Dictionary<Symbol.Connection, Guid> connectionToNewSlotIdMap = new Dictionary<Symbol.Connection, Guid>();
 
             // get all the connections that go into the selection (selected ops as target)
             var compositionSymbol = compositionSymbolUi.Symbol;
-            var potentialTargetIds = from child in selectedChildren select child.Id;
+            var potentialTargetIds = from child in selectedChildUis select child.Id;
             var inputConnections = (from con in compositionSymbol.Connections
                                     from id in potentialTargetIds
                                     where con.TargetParentOrChildId == id
@@ -223,17 +230,18 @@ namespace T3.Gui.Graph.Interaction
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
             var newSymbolUi = new SymbolUi(newSymbol);
             newSymbolUi.Description = description;
-
+            newSymbolUi.FlagAsModified();
+            
             SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
             newSymbol.Namespace = nameSpace;
 
             // Apply content to new symbol
-            var cmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildren, newSymbolUi, Vector2.Zero);
-            cmd.Do();
-            
+            var copyCmd = new CopySymbolChildrenCommand(compositionSymbolUi, selectedChildUis,  selectedAnnotations, newSymbolUi, Vector2.Zero);
+            copyCmd.Do();
+            executedCommands.Add(copyCmd);
 
             var newChildrenArea = GetAreaFromChildren(newSymbolUi.ChildUis);
-            
+
             // Initialize output positions
             if (newSymbolUi.OutputUis.Count > 0)
             {
@@ -246,9 +254,9 @@ namespace T3.Gui.Graph.Interaction
                 }
             }
 
-            cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
+            copyCmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
 
-            var selectedChildrenIds = (from child in selectedChildren select child.Id).ToList();
+            var selectedChildrenIds = (from child in selectedChildUis select child.Id).ToList();
             compositionSymbol.Animator.RemoveAnimationsFromInstances(selectedChildrenIds);
 
             foreach (var con in connectionsFromNewInputs)
@@ -272,12 +280,15 @@ namespace T3.Gui.Graph.Interaction
                 var newConnection = new Symbol.Connection(sourceId, sourceSlotId, targetId, targetSlotId);
                 newSymbol.AddConnection(newConnection);
             }
-
-            var originalChildrenArea = GetAreaFromChildren(selectedChildren);
+            
+            // Insert instance of new symbol
+            var originalChildrenArea = GetAreaFromChildren(selectedChildUis);
             var addCommand = new AddSymbolChildCommand(compositionSymbolUi.Symbol, newSymbol.Id)
                                  { PosOnCanvas = originalChildrenArea.GetCenter() };
-            
-            UndoRedoStack.AddAndExecute(addCommand);
+
+            addCommand.Do();
+            executedCommands.Add(addCommand);
+
             var newSymbolChildId = addCommand.AddedChildId;
 
             foreach (var con in inputConnections.Reverse()) // reverse for multi input order preservation
@@ -302,11 +313,22 @@ namespace T3.Gui.Graph.Interaction
                 compositionSymbol.AddConnection(newConnection);
             }
 
-            var deleteCmd = new DeleteSymbolChildCommand(compositionSymbolUi, selectedChildren);
-            UndoRedoStack.AddAndExecute(deleteCmd);
+            var deleteCmd = new DeleteSymbolChildrenCommand(compositionSymbolUi, selectedChildUis);
+            deleteCmd.Do();
+            executedCommands.Add(deleteCmd);
+
+            // Delete original annotations
+            foreach (var annotation in selectedAnnotations)
+            {
+                var deleteAnnotationCommand = new DeleteAnnotationCommand(compositionSymbolUi, annotation);
+                deleteAnnotationCommand.Do();
+                executedCommands.Add(deleteAnnotationCommand);
+            }
+
+            UndoRedoStack.Add(new MacroCommand("Combine into symbol", executedCommands));
 
             if (UserSettings.Config.AutoSaveAfterSymbolCreation)
-                T3Ui.SaveInBackground();
+                T3Ui.SaveInBackground(false);
         }
 
         private static ImRect GetAreaFromChildren(List<SymbolChildUi> childUis)
@@ -488,7 +510,11 @@ namespace T3.Gui.Graph.Interaction
             newSymbol.Namespace = nameSpace;
 
             // apply content to new symbol
-            var cmd = new CopySymbolChildrenCommand(sourceSymbolUi, null, newSymbolUi, Vector2.One);
+            var cmd = new CopySymbolChildrenCommand(sourceSymbolUi, 
+                                                    null, 
+                                                    sourceSymbolUi.Annotations.Values.ToList(), 
+                                                    newSymbolUi, 
+                                                    Vector2.One);
             cmd.Do();
             cmd.OldToNewIdDict.ToList().ForEach(x => oldToNewIdMap.Add(x.Key, x.Value));
 
@@ -668,7 +694,12 @@ namespace T3.Gui.Graph.Interaction
             {
                 Log.Error("Compilation after removing inputs failed, aborting the remove.");
             }
+
+            FlagDependentOpsAsModified(symbol);
         }
+
+
+        
 
         private static SyntaxNode RemoveNodesByIdFromTree(Guid[] inputIdsToRemove, SyntaxNode root)
         {
@@ -718,6 +749,8 @@ namespace T3.Gui.Graph.Interaction
 
             return false;
         }
+        
+                
 
         class InputNodeByTypeFinder : CSharpSyntaxRewriter
         {
@@ -1025,6 +1058,35 @@ namespace T3.Gui.Graph.Interaction
                 Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
                 symbol.Namespace = newNameSpace;
             }
+        }
+        
+        
+        
+        private static void FlagDependentOpsAsModified(Symbol symbol)
+        {
+            foreach (var dependent in GetDependentSymbolsWithInstances(symbol))
+            {
+                var symbolUi = SymbolUiRegistry.Entries[dependent.Id];
+                symbolUi.FlagAsModified();
+            }
+        }
+
+        private static List<Symbol> GetDependentSymbolsWithInstances(Symbol symbol)
+        {
+            List<Symbol> result = new List<Symbol>();
+            foreach (var s in SymbolRegistry.Entries.Values)
+            {
+                foreach (var ss in s.Children)
+                {
+                    if( ss.Symbol.Id != symbol.Id)
+                        continue;
+                    
+                    result.Add(s);
+                    break;
+                }
+            }
+
+            return result;
         }
     }
 }

@@ -87,7 +87,13 @@ namespace T3.Operators.Types.Id_f8aed421_5e0e_4d1f_993c_1801153ebba8
                     break;
 
                 case Modes.MovingSum:
-                    _movingSum += Math.Pow(results.AccumulatedEnergy, decay);
+                    if (double.IsNaN(_movingSum))
+                        _movingSum = 0;
+                    
+                    var step =Math.Pow(results.AccumulatedEnergy, decay);
+                    if (!double.IsNaN(step))
+                        _movingSum += step;
+
                     value = (float)(_movingSum % 10000);
                     break;
 

@@ -192,16 +192,16 @@
       "Outputs": []
     },
     {
-      "Id": "e5f415ff-b35b-465f-9969-3a655b7197bf"/*ForLoop*/,
+      "Id": "e5f415ff-b35b-465f-9969-3a655b7197bf"/*Loop*/,
       "SymbolId": "4a6fcc72-c703-4290-8e4a-2f90805cefa8",
       "InputValues": [
         {
-          "Id": "3d488da4-a984-4588-af58-146bf32cbc88"/*Variable*/,
+          "Id": "3d488da4-a984-4588-af58-146bf32cbc88"/*VariableName*/,
           "Type": "System.String",
           "Value": "r"
         },
         {
-          "Id": "726914f5-6ab8-4910-b225-323258aa9879"/*End*/,
+          "Id": "726914f5-6ab8-4910-b225-323258aa9879"/*Count*/,
           "Type": "System.Single",
           "Value": 10.0
         }
@@ -315,16 +315,16 @@
       "Outputs": []
     },
     {
-      "Id": "fde47613-ec55-46cc-941d-b8e8662bfded"/*ForLoop*/,
+      "Id": "fde47613-ec55-46cc-941d-b8e8662bfded"/*Loop*/,
       "SymbolId": "4a6fcc72-c703-4290-8e4a-2f90805cefa8",
       "InputValues": [
         {
-          "Id": "3d488da4-a984-4588-af58-146bf32cbc88"/*Variable*/,
+          "Id": "3d488da4-a984-4588-af58-146bf32cbc88"/*VariableName*/,
           "Type": "System.String",
           "Value": "m"
         },
         {
-          "Id": "726914f5-6ab8-4910-b225-323258aa9879"/*End*/,
+          "Id": "726914f5-6ab8-4910-b225-323258aa9879"/*Count*/,
           "Type": "System.Single",
           "Value": 1.0
         }

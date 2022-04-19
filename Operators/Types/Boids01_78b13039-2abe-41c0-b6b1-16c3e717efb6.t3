@@ -53,32 +53,32 @@
         {
           "Id": "bb9a7b9e-05f2-4383-b8eb-c73f21125ea3"/*CohesionRadius*/,
           "Type": "System.Single",
-          "Value": 0.39
+          "Value": 0.157
         },
         {
           "Id": "44836f44-717a-4bb7-b115-15270da62e1c"/*CohesionDrive*/,
           "Type": "System.Single",
-          "Value": 0.023
+          "Value": -0.49
         },
         {
           "Id": "d33de75a-02ae-4fc3-99a7-b28227acb531"/*AlignmentRadius*/,
           "Type": "System.Single",
-          "Value": 0.007999999
+          "Value": -0.45
         },
         {
           "Id": "43c6242b-8393-4e99-9b6a-97ce22d59e3d"/*AlignmentDrive*/,
           "Type": "System.Single",
-          "Value": 0.065
+          "Value": 0.03
         },
         {
           "Id": "d894dd3d-7151-47d2-b665-d60318fe096d"/*SeparationRadius*/,
           "Type": "System.Single",
-          "Value": 0.011
+          "Value": 0.134
         },
         {
           "Id": "cbb63479-1a21-4427-9441-2e1dc73d3f3c"/*SeparationDrive*/,
           "Type": "System.Single",
-          "Value": 0.115
+          "Value": 0.172
         },
         {
           "Id": "0ef87235-ea06-406a-b291-5808bd947d8c"/*MaxSpeed*/,

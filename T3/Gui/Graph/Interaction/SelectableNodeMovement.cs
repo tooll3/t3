@@ -9,7 +9,6 @@ using T3.Gui.Commands;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
-using T3.Operators.Types.Id_f52db9a4_fde9_49ca_9ef7_131825c34e65;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
@@ -49,7 +48,7 @@ namespace T3.Gui.Graph.Interaction
                 }
                 else if (_moveCommand != null)
                 {
-                    if (ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
+                    if (!T3Ui.IsCurrentlySaving && ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
                     {
                         _moveCommand.StoreCurrentValues();
                         UndoRedoStack.Add(_moveCommand);
@@ -69,7 +68,7 @@ namespace T3.Gui.Graph.Interaction
                 _draggedNodeId = Guid.Empty;
                 _draggedNodes.Clear();
 
-                var wasDragging = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > UserSettings.Config.ClickTreshold;
+                var wasDragging = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > UserSettings.Config.ClickThreshold;
                 if (wasDragging)
                 {
                     _moveCommand.StoreCurrentValues();
@@ -130,7 +129,7 @@ namespace T3.Gui.Graph.Interaction
                 _moveCommand = null;
             }
 
-            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickTreshold;
+            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
                 && !wasDraggingRight
                 && ImGui.IsItemHovered()
@@ -160,7 +159,12 @@ namespace T3.Gui.Graph.Interaction
                 if (!(nod is SymbolChildUi childUi))
                     continue;
 
-                var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
+                var instance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
+                if (instance == null)
+                {
+                    Log.Error("Can't disconnect missing instance");
+                    continue;
+                }
 
                 foreach (var input in instance.Inputs)
                 {
@@ -245,7 +249,7 @@ namespace T3.Gui.Graph.Interaction
             var bestDistanceInCanvas = float.PositiveInfinity;
             var targetSnapPositionInCanvas = Vector2.Zero;
 
-            foreach (var offset in SnapOffsetsInCanvas)
+            foreach (var offset in _snapOffsetsInCanvas)
             {
                 var heightAffectFactor = 0;
                 if (Math.Abs(offset.X) < 0.01f)
@@ -480,7 +484,7 @@ namespace T3.Gui.Graph.Interaction
 
         public static readonly Vector2 SnapPadding = new Vector2(40, 20);
 
-        private static readonly Vector2[] SnapOffsetsInCanvas =
+        private static readonly Vector2[] _snapOffsetsInCanvas =
             {
                 new Vector2(SymbolChildUi.DefaultOpSize.X + SnapPadding.X, 0),
                 new Vector2(-SymbolChildUi.DefaultOpSize.X - +SnapPadding.X, 0),

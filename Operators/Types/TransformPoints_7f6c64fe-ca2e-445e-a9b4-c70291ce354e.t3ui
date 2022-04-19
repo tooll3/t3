@@ -1,9 +1,10 @@
 {
   "Id": "7f6c64fe-ca2e-445e-a9b4-c70291ce354e"/*TransformPoints*/,
-  "Description": "Transforms incoming points",
+  "Description": "Transforms incoming points.\n\nTips: \n- Try to activate .WIsWeight and combine this operator with [SelectPoints].\n- Changing the Space to Point can be used to offset the points.\n\n\n",
   "InputUis": [
     {
       "InputId": "565ff364-c3d9-4c60-a9a0-79fdd36d3477"/*Points*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -488.51422,
         "Y": 626.3017
@@ -58,6 +59,20 @@
         "X": -461.1681,
         "Y": 1144.401
       }
+    },
+    {
+      "InputId": "1ab4671f-7977-4e7e-bb06-f828ae32e3af"/*Space*/,
+      "Position": {
+        "X": -461.1681,
+        "Y": 1189.401
+      }
+    },
+    {
+      "InputId": "56cd97c5-f4f1-4eb4-a53c-312373ee7706"/*WIsWeight*/,
+      "Position": {
+        "X": -461.1681,
+        "Y": 1234.401
+      }
     }
   ],
   "SymbolChildUis": [
@@ -87,8 +102,8 @@
       "ChildId": "d45b52bf-0959-402f-820c-8fecb68d4be3"/*FloatsToBuffer*/,
       "Style": "Resizable",
       "Size": {
-        "X": 108.263535,
-        "Y": 209.40137
+        "X": 104.165405,
+        "Y": 302.01947
       },
       "Position": {
         "X": 178.24501,
@@ -225,6 +240,28 @@
       "Position": {
         "X": -263.48126,
         "Y": 1133.9249
+      }
+    },
+    {
+      "ChildId": "514a4521-daf0-4cec-8a3f-f07f72dfcdf5"/*IntToFloat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -263.48126,
+        "Y": 1189.9249
+      }
+    },
+    {
+      "ChildId": "861a27b4-9585-4d83-95fb-7cda90632189"/*BoolToFloats*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -232.58942,
+        "Y": 1285.1086
       }
     }
   ],

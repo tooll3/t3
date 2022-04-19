@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using T3.Core;
-using UiHelpers;
 
 namespace T3.Gui.Interaction.Timing
 {

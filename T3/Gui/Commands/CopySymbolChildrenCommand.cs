@@ -5,6 +5,7 @@ using System.Numerics;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using t3.Gui.Graph;
 
 namespace T3.Gui.Commands
 {
@@ -16,7 +17,10 @@ namespace T3.Gui.Commands
 
         public Dictionary<Guid, Guid> OldToNewIdDict { get; } = new Dictionary<Guid, Guid>();
 
-        public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi, IEnumerable<SymbolChildUi> symbolChildrenToCopy, SymbolUi targetCompositionUi,
+        public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi, 
+                                         IEnumerable<SymbolChildUi> symbolChildrenToCopy, 
+                                         List<Annotation> selectedAnnotations,
+                                         SymbolUi targetCompositionUi,
                                          Vector2 targetPosition)
         {
             _sourceSymbolId = sourceCompositionUi.Symbol.Id;
@@ -34,6 +38,8 @@ namespace T3.Gui.Commands
             {
                 upperLeftCorner = Vector2.Min(upperLeftCorner, childToCopy.PosOnCanvas);
             }
+
+            PositionOffset =  targetPosition - upperLeftCorner;
 
             foreach (var childToCopy in symbolChildrenToCopy)
             {
@@ -54,6 +60,8 @@ namespace T3.Gui.Commands
             }
 
             _connectionsToCopy.Reverse(); // to keep multi input order
+            if(selectedAnnotations != null && selectedAnnotations.Count > 1)
+                _annotationsToCopy.AddRange(selectedAnnotations);
         }
 
         public void Undo()
@@ -62,6 +70,11 @@ namespace T3.Gui.Commands
             foreach (var child in _childrenToCopy)
             {
                 parentSymbolUi.RemoveChild(child.AddedId);
+            }
+
+            foreach (var annotation in _annotationsToCopy)
+            {
+                parentSymbolUi.Annotations.Remove(annotation.Id);
             }
             NewSymbolChildIds.Clear();
         }
@@ -89,6 +102,7 @@ namespace T3.Gui.Commands
                 var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
                 targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, childToCopy.AddedId, sourceCompositionSymbolUi, childToCopy.ChildId,
                                                                    _targetPosition + childToCopy.RelativePosition);
+                
                 SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
                 NewSymbolChildIds.Add(newSymbolChild.Id);
                 var newSymbolInputs = newSymbolChild.InputValues;
@@ -119,10 +133,18 @@ namespace T3.Gui.Commands
             {
                 targetCompositionSymbolUi.Symbol.AddConnection(connection);
             }
+
+            foreach (var annotation in _annotationsToCopy)
+            {
+                targetCompositionSymbolUi.Annotations[annotation.Id] = annotation;
+                targetCompositionSymbolUi.Annotations[annotation.Id].PosOnCanvas += PositionOffset;
+                NewSymbolAnnotationIds.Add(annotation.Id);
+            }
         }
         
-        public List<Guid> NewSymbolChildIds = new List<Guid>(); //This primarily used for selecting the new children
-
+        public readonly List<Guid> NewSymbolChildIds = new(); //This primarily used for selecting the new children
+        public List<Guid> NewSymbolAnnotationIds = new(); //This primarily used for selecting the new children
+        
         struct Entry
         {
             public Entry(Guid childId, Guid addedId, Vector2 relativePosition, Vector2 size)
@@ -143,6 +165,8 @@ namespace T3.Gui.Commands
         private readonly Guid _sourceSymbolId;
         private readonly Guid _targetSymbolId;
         private readonly List<Entry> _childrenToCopy = new List<Entry>();
+        private readonly List<Annotation> _annotationsToCopy = new();
         private readonly List<Symbol.Connection> _connectionsToCopy = new List<Symbol.Connection>();
+        public Vector2 PositionOffset;
     }
 }

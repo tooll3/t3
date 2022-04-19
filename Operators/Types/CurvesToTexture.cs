@@ -1,5 +1,4 @@
-using System.Diagnostics;
-using System.IO;
+using System.Collections.Generic;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -17,26 +16,38 @@ namespace T3.Operators.Types.Id_ab511978_bad5_4b69_90b2_c028447fe9f7
     {
         [Output(Guid = "0322FFC8-84BD-4AA3-A59E-DEF5B212D4A1")]
         public readonly Slot<Texture2D> CurveTexture = new Slot<Texture2D>();
-
         
-
         public CurvesToTexture()
         {
             CurveTexture.UpdateAction = Update;
         }
 
-        private float[] _floatBuffer = new float[0];
+        private readonly List<Curve> _curves = new List<Curve>(4);
         
         private void Update(EvaluationContext context)
         {
+            _curves.Clear();
+            if (Curves.IsConnected)
+            {
+                foreach (var curveInput in Curves.CollectedInputs)
+                {
+                    var curve = curveInput.GetValue(context);
+                    if (curve == null)
+                        continue;
+                    
+                    _curves.Add(curve);
+                }
+            }
+            else
+            {
+                if(Curves.Value != null)
+                    _curves.Add(Curves.Value);
+            }
             
-            if (!Curves.IsConnected)
-                return;
-            
-            var curveCount = Curves.CollectedInputs.Count;
+            var curveCount = _curves.Count;
             if (curveCount == 0)
                 return;
-            
+
             const int sampleCount = 256;
             const int entrySizeInBytes = sizeof(float);
             const int curveSizeInBytes = sampleCount * entrySizeInBytes;
@@ -57,14 +68,14 @@ namespace T3.Operators.Types.Id_ab511978_bad5_4b69_90b2_c028447fe9f7
                                       SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
                                   };
 
-                foreach (var curveInput in Curves.CollectedInputs)
+                foreach (var curve in _curves)
                 {
-                    var curve = curveInput.GetValue(context);
-                    if (curve == null)
-                    {
-                        dataStream.Seek(curveSizeInBytes, SeekOrigin.Current);
-                        continue;
-                    }
+                    // var curve = curveInput.GetValue(context);
+                    // if (curve == null)
+                    // {
+                    //     dataStream.Seek(curveSizeInBytes, SeekOrigin.Current);
+                    //     continue;
+                    // }
 
                     for (var sampleIndex = 0; sampleIndex < sampleCount; sampleIndex++)
                     {

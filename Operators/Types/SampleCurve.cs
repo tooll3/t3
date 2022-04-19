@@ -29,10 +29,14 @@ namespace T3.Operators.Types.Id_b724ea74_d5d7_4928_9cd1_7a7850e4e179
             
             CurveOutput.Value = c;
             
+            Result.DirtyFlag.Clear();
+            CurveOutput.DirtyFlag.Clear();
+            
             if (c == null)
                 return;
-            
+
             Result.Value = (float)c.GetSampledValue(u);
+            
         }
 
         [Input(Guid = "108CB829-5F9E-4A45-BC6B-7CF40A0A0F89")]

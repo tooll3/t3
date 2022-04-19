@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using ImGuiNET;
 using SharpDX;
+using SharpDX.Mathematics.Interop;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Operator.Slots;
+using T3.Gui.Commands;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using UiHelpers;
@@ -14,18 +17,22 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Gui.Selection
 {
+    /**
+     * Handles the interaction with 3d-gizmos for operators selected in the graph.  
+     */
     static class TransformGizmoHandling
     {
+        public static bool IsDragging => _draggedGizmoPart != GizmoParts.None;
 
-        public static GizmoDraggingModes CurrentDraggingMode = GizmoDraggingModes.None;
         public static void RegisterSelectedTransformable(SymbolChildUi node, ITransformable transformable)
         {
             if (SelectedTransformables.Contains(transformable))
                 return;
-            
-            SelectedTransformables.Add(transformable);
+
             transformable.TransformCallback = TransformCallback;
+            SelectedTransformables.Add(transformable);
         }
+
         public static void ClearDeselectedTransformableNode(ITransformable transformable)
         {
             if (SelectedTransformables.Contains(transformable))
@@ -48,9 +55,8 @@ namespace T3.Gui.Selection
             SelectedTransformables.Clear();
         }
 
-        
         /// <summary>
-        /// need foreground draw list atm as texture is drawn afterwards to output view
+        /// We need the foreground draw list at the moment when the output texture is drawn to the to output view...
         /// </summary>
         public static void SetDrawList(ImDrawListPtr drawList)
         {
@@ -67,18 +73,16 @@ namespace T3.Gui.Selection
 
         public static Vector3 GetLatestSelectionCenter()
         {
-            if(SelectedTransformables.Count == 0)
+            if (SelectedTransformables.Count == 0)
                 return Vector3.Zero;
-            
 
             return _selectedCenter;
         }
-        
-        
+
         /// <summary>
-        /// Called from <see cref="ITransformable"/> nodes during update
+        /// Called from <see cref="ITransformable"/> operators during update call
         /// </summary>
-        public static void TransformCallback(ITransformable transformable, EvaluationContext context)
+        public static void TransformCallback(Instance instance, EvaluationContext context)
         {
             if (!_isDrawListValid)
             {
@@ -86,9 +90,16 @@ namespace T3.Gui.Selection
                 return;
             }
 
-            if (!SelectedTransformables.Contains(transformable))
+            if (instance is not ITransformable tmp)
+                return;
+
+            _instance = instance;
+
+            _transformable = tmp;
+
+            if (!SelectedTransformables.Contains(_transformable))
             {
-                Log.Warning("transform-callback from non-selected node?" + transformable);
+                Log.Warning("transform-callback from non-selected node?" + _transformable);
                 return;
             }
 
@@ -97,273 +108,309 @@ namespace T3.Gui.Selection
                 return;
             }
 
-            // terminology of the matrices:
+            // Terminology of the matrices:
             // objectToClipSpace means in this context the transform without application of the ITransformable values. These are
             // named 'local'. So localToObject is the matrix of applying the ITransformable values and localToClipSpace to transform
             // points from the local system (including trans/rot of ITransformable) to the projected space. Scale is ignored for
             // local here as the local values are only used for drawing and therefore we don't want to draw anything scaled by this values.
-            var objectToClipSpace = context.ObjectToWorld * context.WorldToCamera * context.CameraToClipSpace;
+            _objectToClipSpace = context.ObjectToWorld * context.WorldToCamera * context.CameraToClipSpace;
 
+            //var s = TryGetVectorFromInput(_transformable.ScaleInput, 1);
+            var r = TryGetVectorFromInput(_transformable.RotationInput, 0);
+            var t = TryGetVectorFromInput(_transformable.TranslationInput, 0);
 
-            var s = transformable.Scale;
-            var r = transformable.Rotation;
-            float yaw = SharpDX.MathUtil.DegreesToRadians(r.Y);
-            float pitch = SharpDX.MathUtil.DegreesToRadians(r.X);
-            float roll = SharpDX.MathUtil.DegreesToRadians(r.Z);
-            var t = transformable.Translation;
-            
-            var c=SharpDX.Vector3.TransformNormal(new SharpDX.Vector3(t.X,t.Y, t.Z), context.ObjectToWorld);
+            var yaw = SharpDX.MathUtil.DegreesToRadians(r.Y);
+            var pitch = SharpDX.MathUtil.DegreesToRadians(r.X);
+            var roll = SharpDX.MathUtil.DegreesToRadians(r.Z);
+
+            var c = SharpDX.Vector3.TransformNormal(new SharpDX.Vector3(t.X, t.Y, t.Z), context.ObjectToWorld);
             _selectedCenter = new Vector3(c.X, c.Y, c.Z);
 
-            var localToObject = SharpDX.Matrix.Transformation(SharpDX.Vector3.Zero, SharpDX.Quaternion.Identity, SharpDX.Vector3.One,
-                                                              SharpDX.Vector3.Zero, SharpDX.Quaternion.RotationYawPitchRoll(yaw, pitch, roll),
-                                                              new SharpDX.Vector3(t.X, t.Y, t.Z));
-            var localToClipSpace = localToObject * objectToClipSpace;
+            _localToObject = SharpDX.Matrix.Transformation(scalingCenter: SharpDX.Vector3.Zero, scalingRotation: SharpDX.Quaternion.Identity,
+                                                           scaling: SharpDX.Vector3.One,
+                                                           rotationCenter: SharpDX.Vector3.Zero,
+                                                           rotation: SharpDX.Quaternion.RotationYawPitchRoll(yaw, pitch, roll),
+                                                           translation: new SharpDX.Vector3(t.X, t.Y, t.Z));
+            _localToClipSpace = _localToObject * _objectToClipSpace;
 
-            SharpDX.Vector4 originInClipSpace = SharpDX.Vector4.Transform(new SharpDX.Vector4(t.X, t.Y, t.Z, 1), objectToClipSpace);
-            
-            // Don't draw gizmo behind camera
-            Vector3 originInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z) / originInClipSpace.W;
-            if ((originInNdc.Z > 1 || Math.Abs(originInNdc.X) > 2 || Math.Abs(originInNdc.Y) > 2) && CurrentDraggingMode == GizmoDraggingModes.None)
+            SharpDX.Vector4 originInClipSpace = SharpDX.Vector4.Transform(new SharpDX.Vector4(t.X, t.Y, t.Z, 1), _objectToClipSpace);
+
+            // Don't draw gizmo behind camera (view plane)
+            _originInClipSpace = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z) / originInClipSpace.W;
+            if ((_originInClipSpace.Z > 1 || Math.Abs(_originInClipSpace.X) > 2 || Math.Abs(_originInClipSpace.Y) > 2) && _draggedGizmoPart == GizmoParts.None)
                 return;
-            
+
             var viewports = ResourceManager.Instance().Device.ImmediateContext.Rasterizer.GetViewports<SharpDX.Mathematics.Interop.RawViewportF>();
-            var viewport = viewports[0];
-            var originInViewport = new Vector2(viewport.Width * (originInNdc.X * 0.5f + 0.5f),
-                                               viewport.Height * (1.0f - (originInNdc.Y * 0.5f + 0.5f)));
+            _viewport = viewports[0];
+            var originInViewport = new Vector2(_viewport.Width * (_originInClipSpace.X * 0.5f + 0.5f),
+                                               _viewport.Height * (1.0f - (_originInClipSpace.Y * 0.5f + 0.5f)));
 
-            var canvas = ImageOutputCanvas.Current;
-            var originInCanvas = canvas.TransformDirection(originInViewport);
-            var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
-            var originInScreen = topLeftOnScreen + originInCanvas;
-            
-            var gizmoScale = CalcGizmoScale(context, localToObject, viewport.Width, viewport.Height, 45f, UserSettings.Config.GizmoSize);
-            var centerPadding = 0.2f * gizmoScale / canvas.Scale.X;
-            var length = 2f * gizmoScale / canvas.Scale.Y;
-            var planeGizmoSize = 0.5f * gizmoScale / canvas.Scale.X;
-            var lineThickness = 2;
+            _canvas = ImageOutputCanvas.Current;
+            var originInCanvas = _canvas.TransformDirection(originInViewport);
+            _topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
+            _originInScreen = _topLeftOnScreen + originInCanvas;
 
-            var mousePosInScreen = ImGui.GetIO().MousePos;
+            var gizmoScale = CalcGizmoScale(context, _localToObject, _viewport.Width, _viewport.Height, 45f, UserSettings.Config.GizmoSize);
+            _centerPadding = 0.2f * gizmoScale / _canvas.Scale.X;
+            _gizmoLength = 2f * gizmoScale / _canvas.Scale.Y;
+            _planeGizmoSize = 0.5f * gizmoScale / _canvas.Scale.X;
+            //var lineThickness = 2;
 
-            var isHoveringSomething = DoGizmoAxis(SharpDX.Vector3.UnitX, Color.Red, GizmoDraggingModes.PositionXAxis);
-            isHoveringSomething |= DoGizmoAxis(SharpDX.Vector3.UnitY, Color.Green, GizmoDraggingModes.PositionYAxis);
-            isHoveringSomething |= DoGizmoAxis(SharpDX.Vector3.UnitZ, Color.Blue, GizmoDraggingModes.PositionZAxis);
+            _mousePosInScreen = ImGui.GetIO().MousePos;
+
+            var isHoveringSomething = HandleDragOnAxis(SharpDX.Vector3.UnitX, Color.Red, GizmoParts.PositionXAxis);
+            isHoveringSomething |= HandleDragOnAxis(SharpDX.Vector3.UnitY, Color.Green, GizmoParts.PositionYAxis);
+            isHoveringSomething |= HandleDragOnAxis(SharpDX.Vector3.UnitZ, Color.Blue, GizmoParts.PositionZAxis);
 
             if (!isHoveringSomething)
             {
-                isHoveringSomething |= DoGizmoPlane(SharpDX.Vector3.UnitX, SharpDX.Vector3.UnitY, Color.Blue, GizmoDraggingModes.PositionOnXyPlane);
-                isHoveringSomething |= DoGizmoPlane(SharpDX.Vector3.UnitX, SharpDX.Vector3.UnitZ, Color.Green, GizmoDraggingModes.PositionOnXzPlane);
-                isHoveringSomething |= DoGizmoPlane(SharpDX.Vector3.UnitY, SharpDX.Vector3.UnitZ, Color.Red, GizmoDraggingModes.PositionOnYzPlane);
+                isHoveringSomething |= HandleDragOnPlane(SharpDX.Vector3.UnitX, SharpDX.Vector3.UnitY, Color.Blue, GizmoParts.PositionOnXyPlane);
+                isHoveringSomething |= HandleDragOnPlane(SharpDX.Vector3.UnitX, SharpDX.Vector3.UnitZ, Color.Green, GizmoParts.PositionOnXzPlane);
+                isHoveringSomething |= HandleDragOnPlane(SharpDX.Vector3.UnitY, SharpDX.Vector3.UnitZ, Color.Red, GizmoParts.PositionOnYzPlane);
             }
 
             if (!isHoveringSomething)
             {
                 HandleDragInScreenSpace();
             }
+        }
 
-            // Returns true if hovered or active
-            bool DoGizmoAxis(SharpDX.Vector3 gizmoAxis, Color color, GizmoDraggingModes mode)
+        // Returns true if hovered or active
+        static bool HandleDragOnAxis(SharpDX.Vector3 gizmoAxis, Color color, GizmoParts mode)
+        {
+            var axisStartInScreen = ObjectPosToScreenPos(gizmoAxis * _centerPadding);
+            var axisEndInScreen = ObjectPosToScreenPos(gizmoAxis * _gizmoLength);
+
+            var isHovering = false;
+            if (!IsDragging)
             {
-                var axisStartInScreen = ObjectPosToScreenPos(gizmoAxis * centerPadding, localToClipSpace);
-                var axisEndInScreen = ObjectPosToScreenPos(gizmoAxis * length, localToClipSpace);
+                isHovering = IsPointOnLine(_mousePosInScreen, axisStartInScreen, axisEndInScreen);
 
-
-                var isHovering = false;
-                if (CurrentDraggingMode == GizmoDraggingModes.None)
+                if (isHovering && ImGui.IsMouseClicked(0))
                 {
-                    isHovering = IsPointOnLine(mousePosInScreen, axisStartInScreen, axisEndInScreen);
-
-                    if (isHovering && ImGui.IsMouseClicked(0))
-                    {
-                        CurrentDraggingMode = mode;
-                        _currentInteractionTransformable = transformable;
-                        _currentInteractionWindowId = ImGui.GetID("");
-                        _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
-                        _originAtDragStart = localToObject.TranslationVector;
-
-                        var rayInObject = GetPickRayInObject(mousePosInScreen);
-                        _plane = GetPlaneForDragMode(mode, rayInObject.Direction, _originAtDragStart);
-                        _initialObjectToLocal = localToObject;
-                        _initialObjectToLocal.Invert();
-                        var rayInLocal = rayInObject;
-                        rayInLocal.Direction = SharpDX.Vector3.TransformNormal(rayInObject.Direction, _initialObjectToLocal);
-                        rayInLocal.Position = SharpDX.Vector3.TransformCoordinate(rayInObject.Position, _initialObjectToLocal);
-
-                        if (!_plane.Intersects(ref rayInLocal, out _startIntersectionPoint))
-                            Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
-                    }
+                    StartPositionDragging(mode);
                 }
-                else if (CurrentDraggingMode == mode && _currentInteractionTransformable == transformable && _currentInteractionWindowId == ImGui.GetID(""))
+            }
+            else if (_draggedGizmoPart == mode
+                     && _draggedTransformable == _transformable
+                     && _dragInteractionWindowId == ImGui.GetID(""))
+            {
+                isHovering = true;
+                
+                var rayInObject = GetPickRayInObject(_mousePosInScreen);
+                var rayInLocal = rayInObject;
+                rayInLocal.Direction = SharpDX.Vector3.TransformNormal(rayInObject.Direction, _initialObjectToLocal);
+                rayInLocal.Position = SharpDX.Vector3.TransformCoordinate(rayInObject.Position, _initialObjectToLocal);
+
+                if (!_plane.Intersects(ref rayInLocal, out SharpDX.Vector3 intersectionPoint))
+                    Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
+
+                SharpDX.Vector3 offsetInLocal = (intersectionPoint - _initialIntersectionPoint) * gizmoAxis;
+                var offsetInObject = SharpDX.Vector3.TransformNormal(offsetInLocal, _localToObject);
+                SharpDX.Vector3 newOrigin = _initialOrigin + offsetInObject;
+
+                UpdatePositionDragging(newOrigin);
+
+                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                 {
-                    if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-                    {
-                        CurrentDraggingMode = GizmoDraggingModes.None;
-                        _currentInteractionTransformable = null;
-                        _currentInteractionWindowId = 0;
-                    }
-                    else
-                    {
-                        isHovering = true;
-
-                        var rayInObject = GetPickRayInObject(mousePosInScreen);
-                        var rayInLocal = rayInObject;
-                        rayInLocal.Direction = SharpDX.Vector3.TransformNormal(rayInObject.Direction, _initialObjectToLocal);
-                        rayInLocal.Position = SharpDX.Vector3.TransformCoordinate(rayInObject.Position, _initialObjectToLocal);
-
-                        if (!_plane.Intersects(ref rayInLocal, out SharpDX.Vector3 intersectionPoint))
-                            Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
-
-                        SharpDX.Vector3 offsetInLocal = (intersectionPoint - _startIntersectionPoint) * gizmoAxis;
-                        var offsetInObject = SharpDX.Vector3.TransformNormal(offsetInLocal, localToObject);
-                        SharpDX.Vector3 newOrigin = _originAtDragStart + offsetInObject;
-                        transformable.Translation = new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z);
-                    }
+                    CompletePositionDragging();
                 }
-
-                _drawList.AddLine(axisStartInScreen, axisEndInScreen, color, lineThickness * (isHovering ? 3 : 1));
-                return isHovering;
             }
 
-            // Returns true if hovered or active
-            bool DoGizmoPlane(SharpDX.Vector3 gizmoAxis1, SharpDX.Vector3 gizmoAxis2, Color color, GizmoDraggingModes mode)
+            _drawList.AddLine(axisStartInScreen, axisEndInScreen, color, 2 * (isHovering ? 3 : 1));
+            return isHovering;
+        }
+
+        // Returns true if hovered or active
+        static bool HandleDragOnPlane(SharpDX.Vector3 gizmoAxis1, SharpDX.Vector3 gizmoAxis2, Color color, GizmoParts mode)
+        {
+            var origin = (gizmoAxis1 + gizmoAxis2) * _centerPadding;
+            Vector2[] pointsOnScreen =
+                {
+                    ObjectPosToScreenPos(origin),
+                    ObjectPosToScreenPos(origin + gizmoAxis1 * _planeGizmoSize),
+                    ObjectPosToScreenPos(origin + (gizmoAxis1 + gizmoAxis2) * _planeGizmoSize),
+                    ObjectPosToScreenPos(origin + gizmoAxis2 * _planeGizmoSize),
+                };
+            var isHovering = false;
+
+            if (!IsDragging)
             {
-                var origin = (gizmoAxis1 + gizmoAxis2) * centerPadding;
-                Vector2[] pointsOnScreen =
-                    {
-                        ObjectPosToScreenPos(origin, localToClipSpace),
-                        ObjectPosToScreenPos(origin + gizmoAxis1 * planeGizmoSize, localToClipSpace),
-                        ObjectPosToScreenPos(origin + (gizmoAxis1 + gizmoAxis2) * planeGizmoSize, localToClipSpace),
-                        ObjectPosToScreenPos(origin + gizmoAxis2 * planeGizmoSize, localToClipSpace),
-                    };
-                var isHovering = false;
+                isHovering = IsPointInQuad(_mousePosInScreen, pointsOnScreen);
 
-                if (CurrentDraggingMode == GizmoDraggingModes.None)
+                if (isHovering && ImGui.IsMouseClicked(0))
                 {
-                    isHovering = IsPointInQuad(mousePosInScreen, pointsOnScreen);
-
-                    if (isHovering && ImGui.IsMouseClicked(0))
-                    {
-                        CurrentDraggingMode = mode;
-                        _currentInteractionTransformable = transformable;
-                        _currentInteractionWindowId = ImGui.GetID("");
-                        _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
-                        _originAtDragStart = localToObject.TranslationVector;
-
-                        var rayInObject = GetPickRayInObject(mousePosInScreen);
-                        _plane = GetPlaneForDragMode(mode, rayInObject.Direction, _originAtDragStart);
-                        _initialObjectToLocal = localToObject;
-                        _initialObjectToLocal.Invert();
-                        var rayInLocal = rayInObject;
-                        rayInLocal.Direction = SharpDX.Vector3.TransformNormal(rayInObject.Direction, _initialObjectToLocal);
-                        rayInLocal.Position = SharpDX.Vector3.TransformCoordinate(rayInObject.Position, _initialObjectToLocal);
-
-                        if (!_plane.Intersects(ref rayInLocal, out _startIntersectionPoint))
-                            Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
-                    }
+                    StartPositionDragging(mode);
                 }
-                else if (CurrentDraggingMode == mode && _currentInteractionTransformable == transformable && _currentInteractionWindowId == ImGui.GetID(""))
+            }
+            else if (_draggedGizmoPart == mode
+                     && _draggedTransformable == _transformable
+                     && _dragInteractionWindowId == ImGui.GetID(""))
+            {
+                isHovering = true;
+
+                var rayInObject = GetPickRayInObject(_mousePosInScreen);
+                var rayInLocal = rayInObject;
+                rayInLocal.Direction = SharpDX.Vector3.TransformNormal(rayInObject.Direction, _initialObjectToLocal);
+                rayInLocal.Position = SharpDX.Vector3.TransformCoordinate(rayInObject.Position, _initialObjectToLocal);
+
+                if (!_plane.Intersects(ref rayInLocal, out SharpDX.Vector3 intersectionPoint))
+                    Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
+
+                SharpDX.Vector3 offsetInLocal = (intersectionPoint - _initialIntersectionPoint);
+                var offsetInObject = SharpDX.Vector3.TransformNormal(offsetInLocal, _localToObject);
+                SharpDX.Vector3 newOrigin = _initialOrigin + offsetInObject;
+                //TrySetVector3ToInput(_transformable.TranslationInput, new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z));
+                UpdatePositionDragging(newOrigin);
+                
+                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                 {
-                    if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-                    {
-                        CurrentDraggingMode = GizmoDraggingModes.None;
-                        _currentInteractionTransformable = null;
-                        _currentInteractionWindowId = 0;
-                    }
-                    else
-                    {
-                        isHovering = true;
-
-                        var rayInObject = GetPickRayInObject(mousePosInScreen);
-                        var rayInLocal = rayInObject;
-                        rayInLocal.Direction = SharpDX.Vector3.TransformNormal(rayInObject.Direction, _initialObjectToLocal);
-                        rayInLocal.Position = SharpDX.Vector3.TransformCoordinate(rayInObject.Position, _initialObjectToLocal);
-
-                        if (!_plane.Intersects(ref rayInLocal, out SharpDX.Vector3 intersectionPoint))
-                            Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
-
-                        SharpDX.Vector3 offsetInLocal = (intersectionPoint - _startIntersectionPoint);
-                        var offsetInObject = SharpDX.Vector3.TransformNormal(offsetInLocal, localToObject);
-                        SharpDX.Vector3 newOrigin = _originAtDragStart + offsetInObject;
-                        transformable.Translation = new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z);
-                    }
+                    CompletePositionDragging();
                 }
-
-                var color2 = color;
-                color2.Rgba.W = isHovering ? 0.4f : 0.2f;
-                _drawList.AddConvexPolyFilled(ref pointsOnScreen[0], 4, color2);
-                return false;
             }
 
-            void HandleDragInScreenSpace()
+            var color2 = color;
+            color2.Rgba.W = isHovering ? 0.4f : 0.2f;
+            _drawList.AddConvexPolyFilled(ref pointsOnScreen[0], 4, color2);
+            return isHovering;
+        }
+
+        private static void HandleDragInScreenSpace()
+        {
+            const float gizmoSize = 4;
+            var screenSquaredMin = _originInScreen - new Vector2(gizmoSize, gizmoSize);
+            var screenSquaredMax = _originInScreen + new Vector2(gizmoSize, gizmoSize);
+
+            var isHovering = false;
+
+            if (_draggedGizmoPart == GizmoParts.None)
             {
-                const float gizmoSize = 4;
-                var screenSquaredMin = originInScreen - new Vector2(gizmoSize, gizmoSize);
-                var screenSquaredMax = originInScreen + new Vector2(gizmoSize, gizmoSize);
-
-                var isHovering = false;
-
-                if (CurrentDraggingMode == GizmoDraggingModes.None)
+                isHovering = (_mousePosInScreen.X > screenSquaredMin.X && _mousePosInScreen.X < screenSquaredMax.X &&
+                              _mousePosInScreen.Y > screenSquaredMin.Y && _mousePosInScreen.Y < screenSquaredMax.Y);
+                if (isHovering && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                 {
-                    isHovering = (mousePosInScreen.X > screenSquaredMin.X && mousePosInScreen.X < screenSquaredMax.X &&
-                                  mousePosInScreen.Y > screenSquaredMin.Y && mousePosInScreen.Y < screenSquaredMax.Y);
-                    if (isHovering && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-                    {
-                        CurrentDraggingMode = GizmoDraggingModes.PositionInScreenPlane;
-                        _offsetToOriginAtDragStart = mousePosInScreen - originInScreen;
-                    }
+                    _draggedGizmoPart = GizmoParts.PositionInScreenPlane;
+                    _initialOffsetToOrigin = _mousePosInScreen - _originInScreen;
                 }
-                else if (CurrentDraggingMode == GizmoDraggingModes.PositionInScreenPlane)
+            }
+            else if (_draggedGizmoPart == GizmoParts.PositionInScreenPlane)
+            {
+                isHovering = true;
+                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                 {
-                    isHovering = true;
-                    if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-                    {
-                        CurrentDraggingMode = GizmoDraggingModes.None;
-                    }
-                    else
-                    {
-                        Vector2 newOriginInScreen = mousePosInScreen - _offsetToOriginAtDragStart;
-                        // transform back to object space
-                        var clipSpaceToObject = objectToClipSpace;
-                        clipSpaceToObject.Invert();
-                        var newOriginInCanvas = newOriginInScreen - topLeftOnScreen;
-                        var newOriginInViewport = canvas.InverseTransformDirection(newOriginInCanvas);
-                        var newOriginInClipSpace = new SharpDX.Vector4(2.0f * newOriginInViewport.X / viewport.Width - 1.0f,
-                                                                       -(2.0f * newOriginInViewport.Y / viewport.Height - 1.0f),
-                                                                       originInNdc.Z, 1);
-                        var newOriginInObject = SharpDX.Vector4.Transform(newOriginInClipSpace, clipSpaceToObject);
-                        Vector3 newTranslation = new Vector3(newOriginInObject.X, newOriginInObject.Y, newOriginInObject.Z) / newOriginInObject.W;
-                        transformable.Translation = newTranslation;
-                    }
+                    _draggedGizmoPart = GizmoParts.None;
                 }
-                var color2 = Color.Orange;
-                color2.Rgba.W = isHovering ? 0.8f : 0.3f;
-                _drawList.AddRectFilled(screenSquaredMin, screenSquaredMax, color2);
-                //_drawList.AddConvexPolyFilled(ref pointsOnScreen[0], 4, color2);
+                else
+                {
+                    Vector2 newOriginInScreen = _mousePosInScreen - _initialOffsetToOrigin;
+                    // transform back to object space
+                    var clipSpaceToObject = _objectToClipSpace;
+                    clipSpaceToObject.Invert();
+                    var newOriginInCanvas = newOriginInScreen - _topLeftOnScreen;
+                    var newOriginInViewport = _canvas.InverseTransformDirection(newOriginInCanvas);
+                    var newOriginInClipSpace = new SharpDX.Vector4(2.0f * newOriginInViewport.X / _viewport.Width - 1.0f,
+                                                                   -(2.0f * newOriginInViewport.Y / _viewport.Height - 1.0f),
+                                                                   _originInClipSpace.Z, 1);
+                    var newOriginInObject = SharpDX.Vector4.Transform(newOriginInClipSpace, clipSpaceToObject);
+                    Vector3 newTranslation = new Vector3(newOriginInObject.X, newOriginInObject.Y, newOriginInObject.Z) / newOriginInObject.W;
+                    TrySetVector3ToInput(_transformable.TranslationInput, newTranslation);
+                }
             }
 
-            Ray GetPickRayInObject(Vector2 posInScreen)
+            var color2 = Color.Orange;
+            color2.Rgba.W = isHovering ? 0.8f : 0.3f;
+            _drawList.AddRectFilled(screenSquaredMin, screenSquaredMax, color2);
+            //_drawList.AddConvexPolyFilled(ref pointsOnScreen[0], 4, color2);
+        }
+
+        private static void StartPositionDragging(GizmoParts mode)
+        {
+            _draggedGizmoPart = mode;
+            _inputValueCommandInFlight = new ChangeInputValueCommand(_instance.Parent.Symbol,
+                                                                     _instance.SymbolChildId,
+                                                                     _transformable.TranslationInput.Input);
+
+            _draggedTransformable = _transformable;
+            _dragInteractionWindowId = ImGui.GetID("");
+            _initialOffsetToOrigin = _mousePosInScreen - _originInScreen;
+            _initialOrigin = _localToObject.TranslationVector;
+
+            var rayInObject = GetPickRayInObject(_mousePosInScreen);
+            _plane = GetPlaneForDragMode(mode, rayInObject.Direction, _localToObject.TranslationVector);
+            _initialObjectToLocal = _localToObject;
+            _initialObjectToLocal.Invert();
+            var rayInLocal = rayInObject;
+            rayInLocal.Direction = SharpDX.Vector3.TransformNormal(rayInObject.Direction, _initialObjectToLocal);
+            rayInLocal.Position = SharpDX.Vector3.TransformCoordinate(rayInObject.Position, _initialObjectToLocal);
+
+            if (!_plane.Intersects(ref rayInLocal, out _initialIntersectionPoint))
+                Log.Debug($"Couldn't intersect pick ray with gizmo axis plane, something seems to be broken.");
+        }
+
+        private static void UpdatePositionDragging(SharpDX.Vector3 newOrigin)
+        {
+            TrySetVector3ToInput(_transformable.TranslationInput, new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z));
+            InputValue value = _transformable.TranslationInput.Input.Value;
+
+            _inputValueCommandInFlight.AssignValue(value);
+        }
+
+        private static void CompletePositionDragging()
+        {
+            UndoRedoStack.Add(_inputValueCommandInFlight);
+            _inputValueCommandInFlight = null;
+
+            _draggedGizmoPart = GizmoParts.None;
+            _draggedTransformable = null;
+            _dragInteractionWindowId = 0;
+        }
+
+        private static Vector3 TryGetVectorFromInput(IInputSlot input, float defaultValue = 0)
+        {
+            return input switch
+                       {
+                           InputSlot<Vector3> vec3Input => vec3Input.Value,
+                           InputSlot<Vector2> vec2Input => new Vector3(vec2Input.Value.X, vec2Input.Value.Y, defaultValue),
+                           _                            => new Vector3(defaultValue, defaultValue, defaultValue)
+                       };
+        }
+
+        private static void TrySetVector3ToInput(IInputSlot input, Vector3 vector3)
+        {
+            switch (input)
             {
-                var clipSpaceToObject = objectToClipSpace;
-                clipSpaceToObject.Invert();
-                var newOriginInCanvas = posInScreen - topLeftOnScreen;
-                var newOriginInViewport = canvas.InverseTransformDirection(newOriginInCanvas);
-
-                float xInClipSpace = 2.0f * newOriginInViewport.X / viewport.Width - 1.0f;
-                float yInClipSpace = -(2.0f * newOriginInViewport.Y / viewport.Height - 1.0f);
-
-                var rayStartInClipSpace = new SharpDX.Vector3(xInClipSpace, yInClipSpace, 0);
-                var rayStartInObject = SharpDX.Vector3.TransformCoordinate(rayStartInClipSpace, clipSpaceToObject);
-
-                var rayEndInClipSpace = new SharpDX.Vector3(xInClipSpace, yInClipSpace, 1);
-                var rayEndInObject = SharpDX.Vector3.TransformCoordinate(rayEndInClipSpace, clipSpaceToObject);
-
-                var rayDir = (rayEndInObject - rayStartInObject);
-                rayDir.Normalize();
-
-                return new SharpDX.Ray(rayStartInObject, rayDir);
+                case InputSlot<Vector3> vec3Input:
+                    vec3Input.SetTypedInputValue(vector3);
+                    break;
+                case InputSlot<Vector2> vec2Input:
+                    vec2Input.SetTypedInputValue(new Vector2(vector3.X, vector3.Y));
+                    break;
             }
         }
-        
+
+        #region math
+        private static Ray GetPickRayInObject(Vector2 posInScreen)
+        {
+            var clipSpaceToObject = _objectToClipSpace;
+            clipSpaceToObject.Invert();
+            var newOriginInCanvas = posInScreen - _topLeftOnScreen;
+            var newOriginInViewport = _canvas.InverseTransformDirection(newOriginInCanvas);
+
+            float xInClipSpace = 2.0f * newOriginInViewport.X / _viewport.Width - 1.0f;
+            float yInClipSpace = -(2.0f * newOriginInViewport.Y / _viewport.Height - 1.0f);
+
+            var rayStartInClipSpace = new SharpDX.Vector3(xInClipSpace, yInClipSpace, 0);
+            var rayStartInObject = SharpDX.Vector3.TransformCoordinate(rayStartInClipSpace, clipSpaceToObject);
+
+            var rayEndInClipSpace = new SharpDX.Vector3(xInClipSpace, yInClipSpace, 1);
+            var rayEndInObject = SharpDX.Vector3.TransformCoordinate(rayEndInClipSpace, clipSpaceToObject);
+
+            var rayDir = (rayEndInObject - rayStartInObject);
+            rayDir.Normalize();
+
+            return new SharpDX.Ray(rayStartInObject, rayDir);
+        }
+
         // Calculates the scale for a gizmo based on the distance to the cam
         private static float CalcGizmoScale(EvaluationContext context, SharpDX.Matrix localToObject, float width, float height, float fovInDegree,
                                             float gizmoSize)
@@ -373,11 +420,11 @@ namespace T3.Gui.Selection
             var denom = Math.Sqrt(width * width + height * height) * Math.Tan(SharpDX.MathUtil.DegreesToRadians(fovInDegree));
             return (float)Math.Max(0.0001, (distance / denom) * gizmoSize);
         }
-        
-        private static Vector2 ObjectPosToScreenPos(SharpDX.Vector3 posInObject, SharpDX.Matrix objectToClipSpace)
+
+        private static Vector2 ObjectPosToScreenPos(SharpDX.Vector3 posInObject)
         {
-            SharpDX.Vector3 originInClipSpace = SharpDX.Vector3.TransformCoordinate(posInObject, objectToClipSpace);
-            Vector3 posInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z);// / originInClipSpace.W;
+            SharpDX.Vector3 originInClipSpace = SharpDX.Vector3.TransformCoordinate(posInObject, _localToClipSpace);
+            Vector3 posInNdc = new Vector3(originInClipSpace.X, originInClipSpace.Y, originInClipSpace.Z); // / originInClipSpace.W;
             var viewports = ResourceManager.Instance().Device.ImmediateContext.Rasterizer.GetViewports<SharpDX.Mathematics.Interop.RawViewportF>();
             var viewport = viewports[0];
             var originInViewport = new Vector2(viewport.Width * (posInNdc.X * 0.5f + 0.5f),
@@ -385,42 +432,42 @@ namespace T3.Gui.Selection
 
             var canvas = ImageOutputCanvas.Current;
             var posInCanvas = canvas.TransformDirection(originInViewport);
-            var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
-            return topLeftOnScreen + posInCanvas;
+            //var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(System.Numerics.Vector2.Zero);
+            return _topLeftOnScreen + posInCanvas;
         }
 
-        private static SharpDX.Plane GetPlaneForDragMode(GizmoDraggingModes mode, SharpDX.Vector3 normDir, SharpDX.Vector3 origin)
+        private static SharpDX.Plane GetPlaneForDragMode(GizmoParts mode, SharpDX.Vector3 normDir, SharpDX.Vector3 origin)
         {
             switch (mode)
             {
-                case GizmoDraggingModes.PositionXAxis:
+                case GizmoParts.PositionXAxis:
                 {
-                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitY)) < 0.5 
-                                         ? SharpDX.Vector3.UnitY 
+                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitY)) < 0.5
+                                         ? SharpDX.Vector3.UnitY
                                          : SharpDX.Vector3.UnitZ;
                     return new Plane(origin, origin + SharpDX.Vector3.UnitX, origin + secondAxis);
                 }
-                case GizmoDraggingModes.PositionYAxis:
+                case GizmoParts.PositionYAxis:
                 {
-                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitX)) < 0.5f 
-                                         ? SharpDX.Vector3.UnitX 
+                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitX)) < 0.5f
+                                         ? SharpDX.Vector3.UnitX
                                          : SharpDX.Vector3.UnitZ;
                     return new Plane(origin, origin + SharpDX.Vector3.UnitY, origin + secondAxis);
                 }
-                case GizmoDraggingModes.PositionZAxis:
+                case GizmoParts.PositionZAxis:
                 {
-                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitX)) < 0.5f 
-                                         ? SharpDX.Vector3.UnitX 
+                    var secondAxis = Math.Abs(SharpDX.Vector3.Dot(normDir, SharpDX.Vector3.UnitX)) < 0.5f
+                                         ? SharpDX.Vector3.UnitX
                                          : SharpDX.Vector3.UnitY;
                     return new Plane(origin, origin + SharpDX.Vector3.UnitZ, origin + secondAxis);
                 }
-                case GizmoDraggingModes.PositionOnXyPlane:
+                case GizmoParts.PositionOnXyPlane:
                     return new Plane(origin, origin + SharpDX.Vector3.UnitX, origin + SharpDX.Vector3.UnitY);
-                
-                case GizmoDraggingModes.PositionOnXzPlane:
+
+                case GizmoParts.PositionOnXzPlane:
                     return new Plane(origin, origin + SharpDX.Vector3.UnitX, origin + SharpDX.Vector3.UnitZ);
-                
-                case GizmoDraggingModes.PositionOnYzPlane:
+
+                case GizmoParts.PositionOnYzPlane:
                     return new Plane(origin, origin + SharpDX.Vector3.UnitY, origin + SharpDX.Vector3.UnitZ);
             }
 
@@ -434,7 +481,7 @@ namespace T3.Gui.Selection
             rect.Expand(threshold);
             if (!rect.Contains(point))
                 return false;
-            
+
             var positionOnLine = GetClosestPointOnLine(point, lineStart, lineEnd);
             return Vector2.Distance(point, positionOnLine) <= threshold;
         }
@@ -447,24 +494,25 @@ namespace T3.Gui.Selection
             var d = Vector2.Dot(v, point - lineStart) / vLen;
             return lineStart + v * d / vLen;
         }
-        
-        private static bool IsPointInTriangle(Vector2 p, Vector2 p0, Vector2 p1, Vector2 p2) {
+
+        private static bool IsPointInTriangle(Vector2 p, Vector2 p0, Vector2 p1, Vector2 p2)
+        {
             var A = 0.5f * (-p1.Y * p2.X + p0.Y * (-p1.X + p2.X) + p0.X * (p1.Y - p2.Y) + p1.X * p2.Y);
             var sign = A < 0 ? -1 : 1;
             var s = (p0.Y * p2.X - p0.X * p2.Y + (p2.Y - p0.Y) * p.X + (p0.X - p2.X) * p.Y) * sign;
             var t = (p0.X * p1.Y - p0.Y * p1.X + (p0.Y - p1.Y) * p.X + (p1.X - p0.X) * p.Y) * sign;
-    
+
             return s > 0 && t > 0 && (s + t) < 2 * A * sign;
         }
-        
+
         private static bool IsPointInQuad(Vector2 p, Vector2[] corners)
         {
             return IsPointInTriangle(p, corners[0], corners[1], corners[2])
                    || IsPointInTriangle(p, corners[0], corners[2], corners[3]);
         }
-        
+        #endregion
 
-        public enum GizmoDraggingModes
+        public enum GizmoParts
         {
             None,
             PositionInScreenPlane,
@@ -476,18 +524,41 @@ namespace T3.Gui.Selection
             PositionOnYzPlane,
         }
 
-
         private static ImDrawListPtr _drawList = null;
         private static bool _isDrawListValid;
 
-        private static readonly HashSet<ITransformable> SelectedTransformables = new HashSet<ITransformable>();
-            
-        private static Vector2 _offsetToOriginAtDragStart;
-        private static SharpDX.Vector3 _originAtDragStart;
-        private static Plane _plane;
-        private static SharpDX.Vector3 _startIntersectionPoint;
+        private static uint _dragInteractionWindowId;
+
+        private static readonly HashSet<ITransformable> SelectedTransformables = new();
+        private static Instance _instance;
+        private static ITransformable _transformable;
+
+        private static GizmoParts _draggedGizmoPart = GizmoParts.None;
+        private static ITransformable _draggedTransformable;
+        private static ChangeInputValueCommand _inputValueCommandInFlight;
+
+        private static float _centerPadding;
+        private static float _gizmoLength;
+        private static float _planeGizmoSize;
+
+        private static RawViewportF _viewport;
+        private static Vector2 _mousePosInScreen;
+        private static ImageOutputCanvas _canvas;
+        private static Vector2 _topLeftOnScreen;
+
+        private static Vector2 _originInScreen;
+        private static Vector3 _originInClipSpace;
+
+        // Keep values when interaction started
+        private static SharpDX.Vector3 _initialOrigin;
+        private static Vector2 _initialOffsetToOrigin;
         private static Matrix _initialObjectToLocal;
-        private static ITransformable _currentInteractionTransformable;
-        private static uint _currentInteractionWindowId;
+        private static SharpDX.Vector3 _initialIntersectionPoint;
+
+        private static Plane _plane;
+
+        private static Matrix _objectToClipSpace;
+        private static Matrix _localToObject;
+        private static Matrix _localToClipSpace;
     }
 }

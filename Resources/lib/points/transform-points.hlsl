@@ -1,6 +1,6 @@
 #include "hash-functions.hlsl"
 #include "noise-functions.hlsl"
-#include "point.hlsl"
+#include "lib/shared/point.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -8,12 +8,17 @@ cbuffer Params : register(b0)
     float UpdateRotation;
     float ScaleW;
     float OffsetW;
+    float CoordinateSpace;
+    float WIsWeight;
 }
 
 
 StructuredBuffer<Point> SourcePoints : t0;        
 RWStructuredBuffer<Point> ResultPoints : u0;   
 
+static const float PointSpace = 0;
+static const float ObjectSpace = 1;
+static const float WorldSpace = 2;
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -21,16 +26,27 @@ void main(uint3 i : SV_DispatchThreadID)
     uint numStructs, stride;
     SourcePoints.GetDimensions(numStructs, stride);
     if(i.x >= numStructs) {
-        ResultPoints[i.x].w = 0 ;
         return;
     }
 
-    ResultPoints[i.x].position = mul(float4(SourcePoints[i.x].position,1), TransformMatrix).xyz;
-
-    // Transform rotation is kind of tricky. There might be more efficient ways to do this.
+    float w = SourcePoints[i.x].w;
+    float3 pOrg = SourcePoints[i.x].position;
+    float3 p = pOrg;
 
     float4 rotation = SourcePoints[i.x].rotation;
+    float4 orgRot = rotation;
 
+    if(CoordinateSpace < 0.5) {
+        p.xyz = 0;
+        rotation = float4(0,0,0,1);
+    }
+
+    float3 pLocal = p;
+    p = mul(float4(p,1), TransformMatrix).xyz;
+
+    float4 newRotation = rotation;
+
+    // Transform rotation is kind of tricky. There might be more efficient ways to do this.
     if(UpdateRotation > 0.5) 
     {
         float3 xDir = rotate_vector(float3(1,0,0), rotation);
@@ -45,10 +61,29 @@ void main(uint3 i : SV_DispatchThreadID)
             cross(crossXY, rotatedXDir), 
             crossXY );
 
-        rotation = normalize(q_from_matrix(transpose(orientationDest)));        
+        newRotation = normalize(q_from_matrix(transpose(orientationDest)));        
+        if(CoordinateSpace  < 0.5) {
+            newRotation = qmul(orgRot, newRotation);
+        }
     }
 
-    ResultPoints[i.x].rotation = rotation;
+    if(WIsWeight > 0.5) {
+        float3 weightedOffset = (p - pLocal) * w;
+        p = pLocal + weightedOffset;
+
+        newRotation = q_slerp(rotation,newRotation, w);
+    }
+
+    if(CoordinateSpace < 0.5) {     
+        p.xyz = rotate_vector(p.xyz, orgRot).xyz;
+        p += pOrg;
+    } 
+
+    ResultPoints[i.x].position = p.xyz;
+
+
+
+    ResultPoints[i.x].rotation = newRotation;
     ResultPoints[i.x].w = SourcePoints[i.x].w * ScaleW + OffsetW;
 }
 

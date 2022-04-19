@@ -5,7 +5,7 @@ namespace T3.Gui.Commands
 {
     public class DeleteKeyframesCommand : ICommand
     {
-        public string Name => "Add keyframe";
+        public string Name => "Delete keyframe";
         public bool IsUndoable => true;
         
         private Curve _curve;

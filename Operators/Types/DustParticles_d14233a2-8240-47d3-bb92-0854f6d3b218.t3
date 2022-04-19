@@ -491,7 +491,7 @@
           }
         },
         {
-          "Id": "663e5d09-da7a-447c-abdd-984cc3ef5e4a"/*Scale*/,
+          "Id": "663e5d09-da7a-447c-abdd-984cc3ef5e4a"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 1.0,
@@ -500,7 +500,7 @@
           }
         },
         {
-          "Id": "3a7828e2-f58e-4229-b6c2-636cd5dbd011"/*VolumePosition*/,
+          "Id": "3a7828e2-f58e-4229-b6c2-636cd5dbd011"/*VolumeCenter*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.0,
@@ -509,7 +509,7 @@
           }
         },
         {
-          "Id": "76a7afbe-4782-4b3c-bc35-cc818cf06ab2"/*VolumeSize*/,
+          "Id": "76a7afbe-4782-4b3c-bc35-cc818cf06ab2"/*VolumeStretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 100.0,
@@ -518,12 +518,12 @@
           }
         },
         {
-          "Id": "36e2d2a8-4910-4c83-b9ff-ced8df59c7f1"/*VolumeSizeMagnitude*/,
+          "Id": "36e2d2a8-4910-4c83-b9ff-ced8df59c7f1"/*VolumeSize*/,
           "Type": "System.Single",
           "Value": 1.0
         },
         {
-          "Id": "1e1f40ea-15af-4191-b3ce-d2edc3eee243"/*SoftRadius*/,
+          "Id": "1e1f40ea-15af-4191-b3ce-d2edc3eee243"/*FallOff*/,
           "Type": "System.Single",
           "Value": 0.86
         },

@@ -229,7 +229,7 @@ namespace T3.Gui
             base.Load();
 
             UiJson json = new UiJson();
-            var symbolUiFiles = Directory.GetFiles(Path, $"*{SymbolUiExtension}");
+            var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}");
             foreach (var symbolUiFile in symbolUiFiles)
             {
                 SymbolUi symbolUi = json.ReadSymbolUi(symbolUiFile);
@@ -250,16 +250,16 @@ namespace T3.Gui
 
         private string SymbolUiExtension = ".t3ui";
 
-        public override void Save()
+        public override void SaveAll()
         {
             Log.Debug("Saving...");
             IsSaving = true;
             
             // first save core data
-            base.Save();
+            base.SaveAll();
 
             // remove all old ui files before storing to get rid off invalid ones
-            DirectoryInfo di = new DirectoryInfo(Path);
+            DirectoryInfo di = new DirectoryInfo(OperatorTypesFolder);
             FileInfo[] files = di.GetFiles("*" + SymbolUiExtension).ToArray();
             foreach (FileInfo file in files)
             {
@@ -279,7 +279,7 @@ namespace T3.Gui
             foreach (var (_, symbolUi) in SymbolUiRegistry.Entries)
             {
                 var symbol = symbolUi.Symbol;
-                using (var sw = new StreamWriter(Path + symbol.Name + "_" + symbol.Id + SymbolUiExtension))
+                using (var sw = new StreamWriter(OperatorTypesFolder + symbol.Name + "_" + symbol.Id + SymbolUiExtension))
                 using (var writer = new JsonTextWriter(sw))
                 {
                     json.Writer = writer;
@@ -287,7 +287,7 @@ namespace T3.Gui
                     json.WriteSymbolUi(symbolUi);
                 }
                 
-                var opResource = resourceManager.GetOperatorFileResource(Path + symbol.Name + ".cs");
+                var opResource = resourceManager.GetOperatorFileResource(OperatorTypesFolder + symbol.Name + ".cs");
                 if (opResource == null)
                 {
                     // if the source wasn't registered before do this now
@@ -298,7 +298,53 @@ namespace T3.Gui
             IsSaving = false;
         }
 
-        public bool IsSaving { get; set; }
+        public static IEnumerable<SymbolUi> GetModifiedSymbolUis()
+        {
+            return SymbolUiRegistry.Entries.Values.Where(symbolUi => symbolUi.HasBeenModified);
+        } 
+        
+        public void SaveModifiedSymbols()
+        {
+            // Don't update ops if file is written during save
+            ResourceManager.Instance().DisableOperatorFileWatcher(); 
+            
+            var modifiedSymbolUis = GetModifiedSymbolUis().ToList();
+            
+            Log.Debug($"Saving {modifiedSymbolUis.Count} modified symbols...");
+            IsSaving = true;
+            
+            var resourceManager = ResourceManager.Instance();
+            UiJson json = new UiJson();
+            foreach (var symbolUi in modifiedSymbolUis)
+            {
+                // First save core data and remove obsolete files
+                SaveModifiedSymbol(symbolUi.Symbol);
+                
+                var symbol = symbolUi.Symbol;
+                using (var sw = new StreamWriter(OperatorTypesFolder + symbol.Name + "_" + symbol.Id + SymbolUiExtension))
+                using (var writer = new JsonTextWriter(sw))
+                {
+                    json.Writer = writer;
+                    json.Writer.Formatting = Formatting.Indented;
+                    json.WriteSymbolUi(symbolUi);
+                }
+                
+                var opResource = resourceManager.GetOperatorFileResource(OperatorTypesFolder + symbol.Name + ".cs");
+                if (opResource == null)
+                {
+                    // If the source wasn't registered before do this now
+                    resourceManager.CreateOperatorEntry(symbol.SourcePath, symbol.Id.ToString(), OperatorUpdating.Update);
+                }
+
+                symbolUi.ClearModifiedFlag();
+            }
+            
+            ResourceManager.Instance().EnableOperatorFileWatcher();
+            IsSaving = false;
+        }        
+        
+
+        public bool IsSaving { get; private set; }
 
         public static void UpdateUiEntriesForSymbol(Symbol symbol)
         {

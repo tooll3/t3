@@ -303,7 +303,7 @@ namespace T3.Gui.InputUi
                             animator.CreateInputUpdateAction(inputSlot); // todo: create command
                     }
 
-                    if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickTreshold)
+                    if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickThreshold)
                     {
                         if (ConnectionMaker.TempConnections.Count == 0)
                         {
@@ -347,7 +347,11 @@ namespace T3.Gui.InputUi
                     CustomComponents.ContextMenuForItem(() =>
                                                         {
                                                             if (ImGui.MenuItem("Set as default", !input.IsDefault))
+                                                            {
                                                                 input.SetCurrentValueAsDefault();
+                                                                var symbolUi = SymbolUiRegistry.Entries[symbolChildUi.SymbolChild.Symbol.Id];
+                                                                symbolUi.FlagAsModified();
+                                                            }
 
                                                             if (ImGui.MenuItem("Reset to default", !input.IsDefault))
                                                             {

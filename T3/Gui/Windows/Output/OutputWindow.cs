@@ -72,7 +72,7 @@ namespace T3.Gui.Windows.Output
                 _imageCanvas.Deactivate();
 
                 ICamera cameraOp = _camSelectionHandling.SelectedCameraOp;
-                allowCameraInteraction = TransformGizmoHandling.CurrentDraggingMode == TransformGizmoHandling.GizmoDraggingModes.None
+                allowCameraInteraction = !TransformGizmoHandling.IsDragging
                                          && (cameraOp != null || renderedType == typeof(Command));
 
                 _lastInteractiveCam = cameraOp ?? _outputWindowViewCamera;

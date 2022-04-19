@@ -6,6 +6,10 @@ using System;
 
 namespace T3.Operators.Types.Id_e712e801_863d_45c5_9ef8_fbe90dcb8375
 {
+    /// <summary>
+    /// This is an older implementation. A slighted updated
+    /// algorithm can be found in <see cref="T3.Gui.Interaction.Timing.BpmDetection"/>
+    /// </summary>
     public class DetectBpm : Instance<DetectBpm>
     {
         [Output(Guid = "E907A286-BD65-44B5-ACBB-B880CD192348")]
@@ -75,7 +79,6 @@ namespace T3.Operators.Types.Id_e712e801_863d_45c5_9ef8_fbe90dcb8375
 
                 _bpmEnergies[bpm - _bpmRangeMin] = m;
             }
-
             
             foreach(var offset in _searchOffsets)
             {
@@ -89,8 +92,7 @@ namespace T3.Operators.Types.Id_e712e801_863d_45c5_9ef8_fbe90dcb8375
                 bestMeasurement = m;
                 bestBpm = bpm;
             }
-
-
+            
             DetectedBpm.Value = bestBpm;
             _currentBpm = bestBpm;
             Measurements.Value = _bpmEnergies;

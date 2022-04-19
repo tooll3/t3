@@ -21,7 +21,7 @@ namespace T3.Gui.Commands
             _isAnimated = inputParent.Animator.IsAnimated(_childId, _inputId);
 
             OriginalValue = input.Value.Clone();
-            Value = input.Value.Clone();
+            NewValue = input.Value.Clone();
         }
 
         public void Undo()
@@ -34,45 +34,49 @@ namespace T3.Gui.Commands
 
         public void Do()
         {
+            AssignValue(NewValue);
+        }
+
+        public void AssignValue(InputValue value)
+        {
+            var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
+            var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
+
+
+
             if (_isAnimated)
             {
-                var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
-                var animator = inputParentSymbol.Animator;
-                var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
+                NewValue.Assign(value);
                 var symbolUi = SymbolUiRegistry.Entries[symbolChild.Symbol.Id];
                 var inputUi = symbolUi.InputUis[_inputId];
+                var animator = inputParentSymbol.Animator;
 
                 foreach (var parentInstance in inputParentSymbol.InstancesOfSymbol)
                 {
                     var instance = parentInstance.Children.Single(child => child.SymbolChildId == symbolChild.Id);
                     var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
-                    inputUi.ApplyValueToAnimation(inputSlot, Value, animator);
+                    inputUi.ApplyValueToAnimation(inputSlot, NewValue, animator);
                     inputSlot.DirtyFlag.Invalidate(true);
                 }
             }
             else
-                AssignValue(Value);
-        }
-
-        private void AssignValue(InputValue value)
-        {
-            var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
-            var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
-            var input = symbolChild.InputValues[_inputId];
-            input.Value.Assign(value);
-            input.IsDefault = false;
-            
-            foreach (var parentInstance in inputParentSymbol.InstancesOfSymbol)
             {
-                var instance = parentInstance.Children.Single(child => child.SymbolChildId == symbolChild.Id);
-                var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
-                inputSlot.DirtyFlag.Invalidate(true);
+                var input = symbolChild.InputValues[_inputId];
+                input.Value.Assign(value);
+                input.IsDefault = false;
+                
+                foreach (var parentInstance in inputParentSymbol.InstancesOfSymbol)
+                {
+                    var instance = parentInstance.Children.Single(child => child.SymbolChildId == symbolChild.Id);
+                    var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
+                    inputSlot.DirtyFlag.Invalidate(true);
+                }
             }
         }
         
 
         public InputValue OriginalValue { get; set; }
-        public InputValue Value { get; set; }
+        public InputValue NewValue { get; set; }
 
         private readonly Guid _inputParentSymbolId;
         private readonly Guid _childId;

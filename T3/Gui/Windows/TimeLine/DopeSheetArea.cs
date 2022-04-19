@@ -382,7 +382,7 @@ namespace T3.Gui.Windows.TimeLine
                 var keyframeSize = new Vector2(10, 24);
                 if (ImGui.InvisibleButton("##key", keyframeSize))
                 {
-                    var justClicked = ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickTreshold;
+                    var justClicked = ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickThreshold;
                     if (justClicked)
                     {
                         UpdateSelectionOnClickOrDrag(vDef, isSelected);

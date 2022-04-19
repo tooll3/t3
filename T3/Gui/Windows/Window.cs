@@ -73,8 +73,9 @@ namespace T3.Gui.Windows
                 if (windowPos.Y <= 0) windowPos.Y = 0;
                 ImGui.SetWindowPos(windowPos);
 
+                var preventMouseScrolling = T3Ui.MouseWheelFieldWasHoveredLastFrame ? ImGuiWindowFlags.NoScrollWithMouse : ImGuiWindowFlags.None;
                 if (PreventWindowDragging)
-                    ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax()- ImGui.GetWindowContentRegionMin(), false, ImGuiWindowFlags.NoMove);
+                    ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax()- ImGui.GetWindowContentRegionMin(), false, ImGuiWindowFlags.NoMove| preventMouseScrolling);
 
                 DrawContent();
 

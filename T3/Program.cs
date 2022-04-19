@@ -17,6 +17,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui;
+using t3.Gui.AutoBackup;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
@@ -90,7 +91,7 @@ namespace T3
                 ImGui.GetIO().NativePtr->IniFilename = null;
             }
 
-            ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+            //ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
 
             startupStopWatch.Stop();
             Log.Debug($"startup took {startupStopWatch.ElapsedMilliseconds}ms.");
@@ -211,22 +212,31 @@ namespace T3
                 _main.Form.FormBorderStyle = FormBorderStyle.Sizable;
                 _main.Form.WindowState = FormWindowState.Normal;
                 _main.Form.FormBorderStyle = FormBorderStyle.None;
-                var screenIndexForMainScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? 1 : 0;
-                var screenIndexFor2ndScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? 0 : 1;
-                ;
-                _main.Form.Bounds = Screen.AllScreens[screenIndexForMainScreen].Bounds;
+
+                var screenCount = Screen.AllScreens.Length;
+                var hasSecondScreen = screenCount > 1;
+                var secondScreenIndex = hasSecondScreen ? 1 : 0;
+                
+                var screenIndexForMainScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? secondScreenIndex : 0;
+                var screenIndexForSecondScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? 0 : secondScreenIndex;
+
+                var formBounds = Screen.AllScreens[screenIndexForMainScreen].Bounds;
+                formBounds.Width = formBounds.Width;
+                formBounds.Height = formBounds.Height;
+                _main.Form.Bounds = formBounds;
+
 
                 if (T3Ui.ShowSecondaryRenderWindow)
                 {
                     _viewer.Form.WindowState = FormWindowState.Normal;
                     _viewer.Form.FormBorderStyle = FormBorderStyle.None;
-                    _viewer.Form.Bounds = Screen.AllScreens[screenIndexFor2ndScreen].Bounds;
+                    _viewer.Form.Bounds = Screen.AllScreens[screenIndexForSecondScreen].Bounds;
                 }
                 else
                 {
                     _viewer.Form.WindowState = FormWindowState.Normal;
                     _viewer.Form.FormBorderStyle = FormBorderStyle.None;
-                    _viewer.Form.Bounds = Screen.AllScreens[screenIndexForMainScreen].Bounds;
+                    _viewer.Form.Bounds = Screen.AllScreens[screenIndexForSecondScreen].Bounds;
                 }
             }
             else

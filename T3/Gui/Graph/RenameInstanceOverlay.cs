@@ -25,7 +25,7 @@ namespace T3.Gui.Graph
                 if (ImGui.IsWindowFocused()
                     && !ImGui.IsAnyItemActive() 
                     && !ImGui.IsAnyItemFocused() 
-                    && ImGui.IsKeyPressed((int)Key.Return)
+                    && ImGui.IsKeyPressed((ImGuiKey)Key.Return)
                     && string.IsNullOrEmpty(T3Ui.OpenedPopUpName))
                 {
                     var selectedInstances = SelectionManager.GetSelectedNodes<SymbolChildUi>().ToList();
@@ -61,7 +61,7 @@ namespace T3.Gui.Graph
             symbolChild.Name = text;
             
             //ImGui.SetKeyboardFocusHere();
-            if (!justOpened && (ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((int)Key.Return)))
+            if (!justOpened && (ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
             {
                 _focusedInstanceId = Guid.Empty;
             }

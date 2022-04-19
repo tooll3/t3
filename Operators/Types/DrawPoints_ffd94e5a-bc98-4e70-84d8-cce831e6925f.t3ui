@@ -3,6 +3,7 @@
   "InputUis": [
     {
       "InputId": "5df18658-ef86-4c0f-8bb4-4ac3fbbf9a33"/*GPoints*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 610.5747,
         "Y": 3899.9446

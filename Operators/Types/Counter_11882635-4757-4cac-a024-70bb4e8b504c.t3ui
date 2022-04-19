@@ -3,7 +3,7 @@
   "Description": "A very versatile operator that uses beat time to increment values periodically.\n\nNote that you can adjust many properties directly within the graph while holding CTRL+key.",
   "InputUis": [
     {
-      "InputId": "eefdb8ca-68e7-4e39-b302-22eb8930fb8c"/*TriggerCount*/,
+      "InputId": "eefdb8ca-68e7-4e39-b302-22eb8930fb8c"/*TriggerIncrement*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0

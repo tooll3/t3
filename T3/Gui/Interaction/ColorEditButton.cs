@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Interaction
@@ -11,20 +12,21 @@ namespace T3.Gui.Interaction
         public static bool Draw(ref Vector4 color, Vector2 size)
         {
             var buttonPosition = ImGui.GetCursorScreenPos();
-            if (ImGui.ColorButton("##thumbnail", color, ImGuiColorEditFlags.AlphaPreviewHalf, size))
-            {
+            ImGui.ColorButton("##thumbnail", color, ImGuiColorEditFlags.AlphaPreviewHalf, size);
+            
+            // Don't you ImGui.IsItemActivated() to allow quick switching between color thumbnails
+            if (ImGui.IsItemHovered( ImGuiHoveredFlags.AllowWhenBlockedByPopup)
+                && ImGui.IsMouseReleased(0)
+                && ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length() < UserSettings.Config.ClickThreshold
+                && !ImGui.IsPopupOpen("##colorEdit")
+                )
+            {            
                 ImGui.OpenPopup("##colorEdit");
-            }
-
-            if (ImGui.IsItemActivated())
-            {
-                _previousColor = color;
-                CollectNewColorsInPalette(color);
             }
 
             var edited = false;
             edited |= HandleQuickSliders(ref color, buttonPosition);
-            edited |= DrawPopup(ref color, _previousColor, ImGuiColorEditFlags.AlphaBar);
+            edited |= ColorEditPopup.DrawPopup(ref color, _previousColor);
             return edited;
         }
 
@@ -95,8 +97,6 @@ namespace T3.Gui.Interaction
 
             ColorPalette[_colorPaletteIndex++ % ColorPalette.Length] = potentialColor;
         }
-
-
 
         private static bool HandleQuickSliders(ref Vector4 color, Vector2 buttonPosition)
         {
@@ -190,9 +190,7 @@ namespace T3.Gui.Interaction
 
             drawList.AddRectFilled(pCenter, pCenter + new Vector2(barWidth + 15, 1), Color.Black);
         }
-        
-        
-        
+
         private static Vector4[] IntializePalette(int length)
         {
             var r = new Vector4[length];

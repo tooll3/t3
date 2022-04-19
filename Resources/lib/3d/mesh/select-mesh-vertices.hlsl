@@ -1,6 +1,6 @@
 #include "hash-functions.hlsl"
 #include "noise-functions.hlsl"
-#include "point.hlsl"
+#include "lib/shared/point.hlsl"
 #include "pbr.hlsl"
 
 cbuffer Transforms : register(b0)
@@ -82,7 +82,7 @@ void main(uint3 i : SV_DispatchThreadID)
     }
     else if(VolumeShape < VolumeZebra) 
     {
-        float distance = abs(mod( posInVolume.y * 10 + Phase, 2) - 1);
+        float distance = 1-abs(mod( posInVolume.y * 1 + Phase, 2) - 1);
         s = smoothstep(Threshold + 0.5+ FallOff, Threshold + 0.5 , distance);
     }
     else if(VolumeShape < VolumeNoise) 

@@ -31,8 +31,11 @@ namespace T3.Gui
         Undo,
         Redo,
         Save,
+        SaveAll,
         FocusSelection,
         PinToOutputWindow,
+        DisplayImageAsBackground,
+        ClearBackgroundImage,
         Duplicate,
         DeleteSelection,
         CopyToClipboard,
@@ -80,7 +83,8 @@ namespace T3.Gui
         SaveBookmark7,
         SaveBookmark8,
         SaveBookmark9,
-        ToggleFullScreenGraph
+        ToggleFullScreenGraph,
+        AddAnnotation,
     }
 
     public static class UserActionRegistry
@@ -119,9 +123,6 @@ namespace T3.Gui
                 if (binding.Action != action)
                     continue;
 
-                //var bindingsForAction = Bindings.FindAll(b => b.Action == action);
-                //foreach (var binding in bindingsForActions)
-                //{
                 if (binding.NeedsWindowFocus && !ImGui.IsWindowFocused())
                     continue;
 
@@ -130,16 +131,14 @@ namespace T3.Gui
 
                 var c = binding.Combination;
 
-                var isKeyPressed = (!binding.KeyPressOnly || ImGui.IsKeyPressed((int)c.Key));
-                if (io.KeysDown[(int)c.Key]
-                    && Math.Abs(io.KeysDownDurationPrev[(int)c.Key]) < 0.001f
+                var isKeyPressed = (!binding.KeyPressOnly || ImGui.IsKeyPressed((ImGuiKey)c.Key, false));
+                if (ImGui.IsKeyPressed((ImGuiKey)c.Key, false)
                     && isKeyPressed
-                    && ((!c.Alt && !io.KeyAlt) || (c.Alt && io.KeyAlt)) // There is probably a smarty way to say this.
+                    && ((!c.Alt && !io.KeyAlt) || (c.Alt && io.KeyAlt)) // There is probably a smarty way to express this.
                     && ((!c.Ctrl && !io.KeyCtrl) || (c.Ctrl && io.KeyCtrl))
                     && ((!c.Shift && !io.KeyShift) || (c.Shift && io.KeyShift))
                     )
                     return true;
-                //}
             }
 
             return false;
@@ -149,7 +148,7 @@ namespace T3.Gui
         {
             var bindings = Bindings.FindAll(b => b.Action == action);
             if (bindings.Count == 0)
-                return "No shortcut";
+                return "";
 
             var shortCuts = bindings.Select(binding => binding.Combination.ToString()).ToList();
             return (showLabel
@@ -221,6 +220,8 @@ namespace T3.Gui
                       new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.ToggleDisabled, new KeyCombination(Key.D)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.PinToOutputWindow, new KeyCombination(Key.P)) { NeedsWindowFocus = true },
+                      new KeyboardBinding(UserActions.DisplayImageAsBackground, new KeyCombination(Key.P, ctrl:true)) { NeedsWindowFocus = true },
+                      new KeyboardBinding(UserActions.ClearBackgroundImage, new KeyCombination(Key.P, ctrl:true, shift: true)) { NeedsWindowFocus = true },
 
                       new KeyboardBinding(UserActions.LoadBookmark1, new KeyCombination(Key.D1, ctrl: true)),
                       new KeyboardBinding(UserActions.LoadBookmark2, new KeyCombination(Key.D2, ctrl: true)),
@@ -268,6 +269,7 @@ namespace T3.Gui
 
                       new KeyboardBinding(UserActions.LayoutSelection, new KeyCombination(Key.G)),
                       new KeyboardBinding(UserActions.ToggleFullScreenGraph, new KeyCombination(Key.F11, ctrl: true)),
+                      new KeyboardBinding(UserActions.AddAnnotation, new KeyCombination(Key.A)){ NeedsWindowFocus = true },
                   };
 
         public static void InitFrame()

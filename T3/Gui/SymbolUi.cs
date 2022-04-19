@@ -5,7 +5,7 @@ using System.Numerics;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Gui.Graph;
+using t3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
@@ -24,18 +24,25 @@ namespace T3.Gui
             UpdateConsistencyWithSymbol(); // this sets up all missing elements
         }
 
-        public SymbolUi(Symbol symbol, List<SymbolChildUi> childUis, OrderedDictionary<Guid, IInputUi> inputs, OrderedDictionary<Guid, IOutputUi> outputs)
+        public SymbolUi(Symbol symbol, 
+                        List<SymbolChildUi> childUis, 
+                        OrderedDictionary<Guid, IInputUi> inputs, 
+                        OrderedDictionary<Guid, IOutputUi> outputs,
+                        OrderedDictionary<Guid, Annotation> annotations
+            )
         {
             Symbol = symbol;
             ChildUis = childUis;
             InputUis = inputs;
             OutputUis = outputs;
-
+            Annotations = annotations;
             UpdateConsistencyWithSymbol();
         }
 
         public SymbolUi CloneForNewSymbol(Symbol newSymbol, Dictionary<Guid, Guid> oldToNewIds)
-        {
+        { 
+            HasBeenModified = true;
+
             var childUis = new List<SymbolChildUi>(ChildUis.Count);
             // foreach (var sourceChildUi in ChildUis)
             // {
@@ -63,8 +70,16 @@ namespace T3.Gui
                 clonedOutputUi.OutputDefinition = newSymbol.OutputDefinitions.Single(outputDef => outputDef.Id == newOutputId);
                 outputUis.Add(clonedOutputUi.Id, clonedOutputUi);
             }
+
+            var annotations = new OrderedDictionary<Guid, Annotation>(OutputUis.Count);
+            foreach (var (_, annotation) in Annotations)
+            {
+                var clonedAnnotation = annotation.Clone();
+                //Guid newAnnotationId = oldToNewIds[clonedAnnotation];
+                annotations.Add(clonedAnnotation.Id, clonedAnnotation);
+            }
             
-            return new SymbolUi(newSymbol, childUis, inputUis, outputUis);
+            return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations);
         }
         
 
@@ -78,6 +93,10 @@ namespace T3.Gui
 
             foreach (var outputUi in OutputUis)
                 yield return outputUi.Value;
+
+            foreach (var annotation in Annotations)
+                yield return annotation.Value;
+
         }
 
         public void UpdateConsistencyWithSymbol()
@@ -215,6 +234,8 @@ namespace T3.Gui
 
         public Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size)
         {
+            HasBeenModified = true;
+
             Symbol.AddChild(symbolToAdd, addedChildId);
             var childUi = new SymbolChildUi
                           {
@@ -229,6 +250,7 @@ namespace T3.Gui
         
         public Guid AddChildAsCopyFromSource(Symbol symbolToAdd, Guid addedChildId, SymbolUi sourceCompositionSymbolUi, Guid sourceChildId, Vector2 posInCanvas)
         {
+            HasBeenModified = true;
             Symbol.AddChild(symbolToAdd, addedChildId);
             var sourceChildUi = sourceCompositionSymbolUi.ChildUis.Single(child => child.Id == sourceChildId);
             var childUi = sourceChildUi.Clone();
@@ -241,6 +263,8 @@ namespace T3.Gui
 
         public void RemoveChild(Guid id)
         {
+            HasBeenModified = true;
+            
             Symbol.RemoveChild(id); // remove from symbol
 
             // now remove ui entry
@@ -249,10 +273,24 @@ namespace T3.Gui
         }
 
         public string Description { get; set; }
+
+        public bool HasBeenModified { get; private set; }
+
+        public void FlagAsModified()
+        {
+            HasBeenModified = true;
+        }
+
+        public void ClearModifiedFlag()
+        {
+            HasBeenModified = false;
+        }
+        
         // public Styles DefaultStyleForInstances { get; set; }  // TODO: Implement inheritance for display styles? 
         public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();    // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
         public OrderedDictionary<Guid, IInputUi> InputUis { get; } = new OrderedDictionary<Guid, IInputUi>();
         public OrderedDictionary<Guid, IOutputUi> OutputUis { get; }= new OrderedDictionary<Guid, IOutputUi>();
+        public OrderedDictionary<Guid, Annotation> Annotations { get; }= new OrderedDictionary<Guid, Annotation>();
     }
 
     public static class SymbolUiRegistry

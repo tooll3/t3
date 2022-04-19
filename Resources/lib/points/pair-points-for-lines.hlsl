@@ -1,10 +1,11 @@
-#include "point.hlsl"
+#include "lib/shared/point.hlsl"
 
 cbuffer Params : register(b0)
 {
     float CountA;
     float CountB;
     float ResultCount;
+    float InitWTo01;
 }
 
 
@@ -26,9 +27,13 @@ void main(uint3 i : SV_DispatchThreadID)
 
     if(pairElement == 1) {
         ResultPoints[i.x] = PointsB[pairIndex % (uint)CountB];
+        if(InitWTo01 > 0.5)
+            ResultPoints[i.x].w = 1;
     }
     else {
         ResultPoints[i.x] = PointsA[pairIndex % (uint)CountA];
+        if(InitWTo01 > 0.5)
+            ResultPoints[i.x].w = 0;
     }
 
     if( pairElement == 2)

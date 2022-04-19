@@ -36,6 +36,9 @@ namespace T3.Operators.Types.Id_112ea923_a349_412f_8dd3_4d9d9fc42dc6
         [Input(Guid = "118618a7-c836-46ac-aa45-f738fc9e2e3e")]
         public readonly InputSlot<float> DeviceIndex = new InputSlot<float>();
 
+        [Input(Guid = "f2e2898f-bd68-4750-9058-2be39e63bd28")]
+        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+
         [Output(Guid = "6ba78564-8315-49ef-9d47-eb96e0a52fd5")]
         public readonly Slot<T3.Core.Command> Detection = new Slot<T3.Core.Command>();
         

@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "0bdecd80-161e-4f7f-be42-ca9c8758ced0"/*DrawQuadsW*/,
+      "Id": "0bdecd80-161e-4f7f-be42-ca9c8758ced0"/*DrawVaryingQuads*/,
       "SymbolId": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981",
       "InputValues": [
         {

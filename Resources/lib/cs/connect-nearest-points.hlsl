@@ -1,4 +1,4 @@
-#include "point.hlsl"
+#include "lib/shared/point.hlsl"
 #include "hash-functions.hlsl"
 
 StructuredBuffer<uint> particleGridBuffer :register(t0);
@@ -23,10 +23,11 @@ cbuffer Params : register(b0)
     // float ClampAccelleration;
     float Time;
     float ScatterLookUp;
+    float TestIndex;
 }
 
-static const uint            ParticleGridEntryCount = 32;
-static const uint            ParticleGridCellCount = 30000;
+static const uint            ParticleGridEntryCount = 4;
+static const uint            ParticleGridCellCount = 20;
 //static const float           ParticleGridCellSize = 0.1f;
 
 
@@ -68,7 +69,28 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
 
     uint pairCount;
     pointIndexPairs.GetDimensions(pairCount, stride);
-        
+
+
+    float3 position = 0;
+    if(TestIndex >= 0) {
+        //pointIndexPairs[DTid.x] = uint2( 0, 0);
+
+
+        int pointIndex = (int)TestIndex;
+        float3 position = points[pointIndex].position;
+        uint startIndex, endIndex;
+        if(ParticleGridFind(position, startIndex, endIndex)) 
+        {
+            for(uint i=startIndex; i < endIndex; ++i) 
+            {
+                uint otherIndex = particleGridBuffer[i];
+                pointIndexPairs[DTid.x] = uint2( 1, otherIndex);
+            }
+        } 
+        return;
+    }
+
+
     uint indexWithingStep = DTid.x;
     if(indexWithingStep >= LinesPerSteps)
         return;
@@ -77,32 +99,56 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
 
     uint pairIndex = stepIndex * (int)(LinesPerSteps + 0.5) + indexWithingStep;
 
-    uint shuffle = hash11(CurrentStep * 0.123 - indexWithingStep ) * ScatterLookUp * pointCount;
+    //uint shuffle = hash11(CurrentStep * 0.123 - indexWithingStep ) * ScatterLookUp * pointCount;
+    //uint pointIndex = (CurrentStep + shuffle + indexWithingStep ) % pointCount;
 
-    uint pointIndex = (CurrentStep + shuffle + indexWithingStep ) % pointCount;
+
+
+
+    uint pointIndex = indexWithingStep % pointCount;
 
     if(pairIndex >= pairCount)
         return;
+    
+    // const uint2 gridCell = particleGridCellBuffer[pointIndex];
+    // const uint cellIndex = gridCell.x;
+    // const uint gridEntryIndex =  gridCell.y;
 
-    float3 position = points[pointIndex].position;
-    float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + position * 100 + Time % 123.1 ) -0.5f)  * ParticleGridCellSize;
-    position+= jitter;
+    // const uint rangeStartIndex = particleGridIndexBuffer[cellIndex];
+    // const uint rangeLength = particleGridCountBuffer[cellIndex];
+    // const uint endIndex = rangeStartIndex + rangeLength;
+    // for(uint i=rangeStartIndex; i < endIndex; ++i) 
+    // {
+    //     uint point2Index = particleGridBuffer[i];
+    //     //points[pointIndex].w = 1;
+
+    //     pointIndexPairs[pairIndex] = int2( pointIndex, point2Index);
+    // }
+
+    // if(pointIndex != 10) {
+    //      pointIndexPairs[pairIndex] = int2( 4, pointIndex);
+    //      return;
+    // }
+        
+
+    //float3 position = points[pointIndex].position;
+    //float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + position * 100 + Time % 123.1 ) -0.5f)  * ParticleGridCellSize;
+    //position+= jitter;
 
     uint startIndex, endIndex;
     if(ParticleGridFind(position, startIndex, endIndex)) 
     {
         const uint particleCount = endIndex - startIndex;
-        endIndex = max(startIndex + 32 , endIndex);
+        endIndex = max(startIndex + 64 , endIndex);
 
-        float minDistance = 0.5;
+        float minDistance = 100000;
         uint closestIndex = -1;
 
         for(uint i=startIndex; i < endIndex; ++i) 
         {
             uint otherIndex = particleGridBuffer[i];
-            if( otherIndex == DTid.x 
-            || otherIndex < DTid.x
-            )
+            
+            if( otherIndex <= DTid.x)
                 continue;
 
             float3 otherPos = points[otherIndex].position;
@@ -114,17 +160,18 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
             {
                 minDistance = distance;
                 closestIndex = otherIndex;
-                break;
+                //break;
             }
         }
 
-        if(closestIndex != -1) {
+        if(closestIndex != -1 || minDistance > 0.3) {
 
-            pointIndexPairs[pairIndex] = uint2( pointIndex, closestIndex);
+            pointIndexPairs[pointIndex] = uint2( pointIndex, closestIndex);
             //pointIndexPairs[pairIndex] = uint2( pointIndex, pointIndex+5);
         }
         else {
-            pointIndexPairs[pairIndex] = int2( 0, 0);
+            //pointIndexPairs[pairIndex] = int2( 5, pointIndex);
         }
     }
+    
 }

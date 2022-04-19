@@ -25,13 +25,12 @@ namespace T3.Operators.Types.Id_d8c5330f_59b5_4907_b845_a02def3042fa
         {
             Output.TransformableOp = this;
         }
-        
-        System.Numerics.Vector3 ITransformable.Translation { get => new Vector3(Position.Value.X, Position.Value.Y,0); 
-            set => Position.SetTypedInputValue(new Vector2(value.X, value.Y)); }
-        System.Numerics.Vector3 ITransformable.Rotation { get => System.Numerics.Vector3.Zero; set { } }
-        System.Numerics.Vector3 ITransformable.Scale { get => System.Numerics.Vector3.One; set { } }
 
-        public Action<ITransformable, EvaluationContext> TransformCallback { get => Output.TransformCallback; set => Output.TransformCallback = value; }
+        IInputSlot ITransformable.TranslationInput => Position;
+        IInputSlot ITransformable.RotationInput => null;
+        IInputSlot ITransformable.ScaleInput => null;
+
+        public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
 
         [Input(Guid = "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc")]

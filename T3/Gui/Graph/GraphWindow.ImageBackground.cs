@@ -52,11 +52,14 @@ namespace T3.Gui.Graph
                     return;
                 
                 _imageCanvas.SetAsCurrent();
+                _evaluationContext.ShowGizmos = ShowGizmos;                
                 _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
                 _evaluationContext.SetDefaultCamera();
                 viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: true);
                 _imageCanvas.Deactivate();
             }
+
+            public GizmoVisibility ShowGizmos;
             
             private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
 

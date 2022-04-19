@@ -1,4 +1,4 @@
-#include "point.hlsl"
+#include "lib/shared/point.hlsl"
 
 
 // static const float3 Quad[] = 

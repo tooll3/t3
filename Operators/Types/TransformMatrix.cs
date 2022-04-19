@@ -26,8 +26,8 @@ namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81
             float pitch = MathUtil.DegreesToRadians(r.X);
             float roll = MathUtil.DegreesToRadians(r.Z);
             var t = Translation.GetValue(context);
-            var objectToParentObject = Matrix.Transformation(Vector3.Zero, Quaternion.Identity, new Vector3(s.X, s.Y, s.Z), Vector3.Zero,
-                                                             Quaternion.RotationYawPitchRoll(yaw, pitch, roll), new Vector3(t.X, t.Y, t.Z));
+            var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
+                                                             rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
 
 
             // transpose all as mem layout in hlsl constant buffer is row based

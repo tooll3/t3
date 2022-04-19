@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
+using Core.Resource;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using T3.Core.Animation;
 using T3.Core.Logging;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.DataTypes
 {
@@ -41,9 +41,9 @@ namespace T3.Core.DataTypes
             writer.WriteEndObject();
         }
 
-        public List<Step> Steps = CreateDefaultSteps();
-        public Interpolations Interpolation;
-
+        public List<Step> Steps { get; set; } = CreateDefaultSteps();
+        public Interpolations Interpolation { get; set; }
+        
         public virtual void Read(JToken inputToken)
         {
             Steps.Clear();
@@ -104,22 +104,36 @@ namespace T3.Core.DataTypes
             t = t.Clamp(0, 1);
             Step previousStep = null;
 
-            foreach (var step in Steps)
-            {
-                if (step.NormalizedPosition >= t)
+                foreach (var step in Steps)
                 {
-                    if (previousStep == null || previousStep.NormalizedPosition >= step.NormalizedPosition)
+                    if (step.NormalizedPosition >= t)
                     {
-                        return step.Color;
+                        if (previousStep == null || previousStep.NormalizedPosition >= step.NormalizedPosition)
+                        {
+                            return step.Color;
+                        }
+                        
+                        float amount = 0;   // Hold
+                        switch (Interpolation)
+                        {
+                            case Interpolations.Linear:
+                                amount = MathUtils.RemapAndClamp(t, previousStep.NormalizedPosition, step.NormalizedPosition, 0, 1);
+                                break;
+                            case Interpolations.Smooth:
+                                amount = MathUtils.RemapAndClamp(t, previousStep.NormalizedPosition, step.NormalizedPosition, 0, 1);
+                                amount = MathUtils.SmootherStep(0, 1, amount);
+                                break;
+                            
+                            case Interpolations.OkLab:
+                                amount = MathUtils.RemapAndClamp(t, previousStep.NormalizedPosition, step.NormalizedPosition, 0, 1);
+                                return OkLab.Mix(previousStep.Color, step.Color, amount);
+                        }
+
+                        return Vector4.Lerp(previousStep.Color, step.Color, amount);
                     }
 
-                    float amount = MathUtils.RemapAndClamp(t, previousStep.NormalizedPosition, step.NormalizedPosition, 0, 1);
-
-                    return Vector4.Lerp(previousStep.Color, step.Color, amount);
+                    previousStep = step;
                 }
-
-                previousStep = step;
-            }
 
             return previousStep?.Color ?? Vector4.One;
         }
@@ -155,6 +169,7 @@ namespace T3.Core.DataTypes
             Linear,
             Hold,
             Smooth,
+            OkLab
         }
     }
 }

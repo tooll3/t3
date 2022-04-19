@@ -33,12 +33,14 @@ namespace T3.Gui.Windows
                 ImGui.Checkbox("Drag snapped nodes", ref UserSettings.Config.SmartGroupDragging);
                 ImGui.Separator();
                 ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
-                ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickTreshold);
+                ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickThreshold);
 
                 ImGui.DragFloat("Timeline Raster Density", ref UserSettings.Config.TimeRasterDensity, 0.01f);
                 ImGui.Checkbox("Count Bars from Zero", ref UserSettings.Config.CountBarsFromZero);
                 
                 ImGui.Checkbox("Swap Main & 2nd windows when fullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen);
+                ImGui.Checkbox("Save Only Modified Symbols", ref UserSettings.Config.SaveOnlyModified);
+                ImGui.Checkbox("Enable Auto Backup", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
                  
                 ImGui.TreePop();
             }
@@ -79,6 +81,19 @@ namespace T3.Gui.Windows
                     ImGui.Unindent();
                     ImGui.TreePop();
                 }
+                
+                if (ImGui.TreeNode("Modified Symbols"))
+                {
+                    foreach (var symbolUi in UiModel.GetModifiedSymbolUis())
+                    {
+                        if (symbolUi.HasBeenModified)
+                        {
+                            ImGui.TextUnformatted(symbolUi.Symbol.Namespace + ". " +  symbolUi.Symbol.Name);
+                        }
+                    }
+                    
+                    ImGui.TreePop();
+                }                
                 
                 ImGui.TreePop();
             }

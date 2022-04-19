@@ -49,7 +49,7 @@
     },
     {
       "Id": "059554d5-bee7-4724-bf62-3d492aaae62c"/*WSpeed*/,
-      "DefaultValue": 0.5
+      "DefaultValue": 1.0
     },
     {
       "Id": "7d0f3c5d-4860-4dde-ad33-22376520b59d"/*GradientForW*/,
@@ -58,21 +58,21 @@
           "Interpolation": "Linear",
           "Steps": [
             {
-              "Id": "c205ab45-bae2-44f7-8c5d-868739dc6068",
+              "Id": "2106784b-20aa-4202-8158-b46ddc2aeb96",
               "NormalizedPosition": 0.0,
               "Color": {
                 "R": 1.0,
-                "G": 0.0,
-                "B": 1.0,
+                "G": 0.98725796,
+                "B": 0.99049765,
                 "A": 1.0
               }
             },
             {
-              "Id": "32acf39b-1341-4c4b-a844-a7452080fa93",
+              "Id": "27e3b9fe-4708-4508-9303-8d7e150ecdb9",
               "NormalizedPosition": 1.0,
               "Color": {
-                "R": 0.0,
-                "G": 0.0,
+                "R": 1.0,
+                "G": 1.0,
                 "B": 1.0,
                 "A": 1.0
               }
@@ -90,7 +90,7 @@
           "Keys": [
             {
               "Time": 0.0,
-              "Value": 0.0,
+              "Value": 0.7031277418136597,
               "InType": "Spline",
               "OutType": "Spline",
               "InEditMode": "Smooth",
@@ -100,7 +100,7 @@
             },
             {
               "Time": 1.0,
-              "Value": 1.0,
+              "Value": 1.8280762434005737,
               "InType": "Spline",
               "OutType": "Spline",
               "InEditMode": "Smooth",
@@ -492,7 +492,12 @@
           }
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "0322ffc8-84bd-4aa3-a59e-def5b212d4a1"/*CurvesToTexture*/,
+          "DirtyFlagTrigger": "Animated"
+        }
+      ]
     },
     {
       "Id": "5da36661-863a-4b93-ab6c-60ef7f804fec"/*SrvFromTexture2d*/,
@@ -509,6 +514,68 @@
     {
       "Id": "1c7f6ec2-08fa-40e8-b892-d69fd2028ee2"/*ContextCBuffers*/,
       "SymbolId": "d32a5484-880c-41d4-88ea-6ee1a3e61f0b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "86852d52-3e74-484d-8031-feb878fac096"/*CurvesToTexture*/,
+      "SymbolId": "ab511978-bad5-4b69-90b2-c028447fe9f7",
+      "InputValues": [
+        {
+          "Id": "83c5a68a-2685-4506-8d79-d0db7d739102"/*Curves*/,
+          "Type": "T3.Core.Animation.Curve",
+          "Value": {
+            "Curve": {
+              "PreCurve": "Constant",
+              "PostCurve": "Constant",
+              "Keys": [
+                {
+                  "Time": 0.0,
+                  "Value": 0.0,
+                  "InType": "Spline",
+                  "OutType": "Spline",
+                  "InEditMode": "Smooth",
+                  "OutEditMode": "Smooth",
+                  "InTangentAngle": 0.0,
+                  "OutTangentAngle": 3.141592653589793
+                },
+                {
+                  "Time": 1.0,
+                  "Value": 1.0,
+                  "InType": "Spline",
+                  "OutType": "Spline",
+                  "InEditMode": "Smooth",
+                  "OutEditMode": "Smooth",
+                  "InTangentAngle": 0.0,
+                  "OutTangentAngle": -3.141592653589793
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0322ffc8-84bd-4aa3-a59e-def5b212d4a1"/*CurvesToTexture*/,
+          "DirtyFlagTrigger": "Animated"
+        }
+      ]
+    },
+    {
+      "Id": "687f69ff-ab79-40d4-901c-70b9b972fd96"/*ImageLevels*/,
+      "SymbolId": "592a2b6f-d4e3-43e0-9e73-034cca3b3900",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "20028ece-817d-4599-af9a-8db5b8034862"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c6a2ad6d-b7d9-4081-807e-8761ef111f16"/*RenderTarget*/,
+      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
       "InputValues": [],
       "Outputs": []
     }
@@ -543,6 +610,12 @@
       "SourceSlotId": "6176e442-a1b5-4762-be92-3f65df4ccdae",
       "TargetParentOrChildId": "1db9c018-a463-4d23-a655-259291c5913f",
       "TargetSlotId": "2342df71-a162-4db7-afc3-514916239897"
+    },
+    {
+      "SourceParentOrChildId": "86852d52-3e74-484d-8031-feb878fac096",
+      "SourceSlotId": "0322ffc8-84bd-4aa3-a59e-def5b212d4a1",
+      "TargetParentOrChildId": "20028ece-817d-4599-af9a-8db5b8034862",
+      "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
     },
     {
       "SourceParentOrChildId": "c23c4a14-31a7-4532-9f6d-6b1b7a0f8029",
@@ -683,6 +756,12 @@
       "TargetSlotId": "d5afa102-2f88-431e-9cd4-af91e41f88f6"
     },
     {
+      "SourceParentOrChildId": "c6a2ad6d-b7d9-4081-807e-8761ef111f16",
+      "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
+      "TargetParentOrChildId": "687f69ff-ab79-40d4-901c-70b9b972fd96",
+      "TargetSlotId": "f434bac8-b7d8-4787-adf2-1782d6588da8"
+    },
+    {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "0555c899-3049-4d47-a2da-0febf6871754",
       "TargetParentOrChildId": "6d6e8cce-7381-433a-bc80-652136fb4af4",
@@ -711,6 +790,12 @@
       "SourceSlotId": "5e847363-142d-4da9-a5b3-3a7aa2541bed",
       "TargetParentOrChildId": "c2071334-0705-4904-9bdd-9b5455bf0b5c",
       "TargetSlotId": "8716b11a-ef71-437e-9930-bb747da818a7"
+    },
+    {
+      "SourceParentOrChildId": "20028ece-817d-4599-af9a-8db5b8034862",
+      "SourceSlotId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f",
+      "TargetParentOrChildId": "c6a2ad6d-b7d9-4081-807e-8761ef111f16",
+      "TargetSlotId": "4da253b7-4953-439a-b03f-1d515a78bddf"
     },
     {
       "SourceParentOrChildId": "54e8751f-26ec-4bfe-8655-adec6a021318",

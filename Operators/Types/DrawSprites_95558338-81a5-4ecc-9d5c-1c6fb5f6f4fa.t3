@@ -4,7 +4,7 @@
   "Namespace": "lib.3d.rendering",
   "Inputs": [
     {
-      "Id": "f25285d7-e23c-499a-8711-76cdbab79cea"/*GPoints*/,
+      "Id": "f25285d7-e23c-499a-8711-76cdbab79cea"/*SpriteBuffer*/,
       "DefaultValue": null
     },
     {

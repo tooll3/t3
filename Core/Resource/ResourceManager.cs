@@ -564,7 +564,15 @@ namespace T3.Core
 
             public Stream Open(IncludeType type, string fileName, Stream parentStream)
             {
-                _streamReader = new StreamReader(Path.Combine(ResourcesFolder, fileName));
+                try
+                {
+                    _streamReader = new StreamReader(Path.Combine(ResourcesFolder, fileName));
+                }
+                catch(DirectoryNotFoundException e )
+                {
+                    Log.Error($"Can't open file {ResourcesFolder}/{fileName}  {e.Message}");
+                    return null;
+                }
                 return _streamReader.BaseStream;
             }
 
@@ -1107,6 +1115,9 @@ namespace T3.Core
             }
         }
 
+        /**
+         * Returns a textureViewResourceEntryId
+         */
         public uint CreateShaderResourceView(uint textureId, string name)
         {
             ShaderResourceView textureView = null;
@@ -1118,7 +1129,7 @@ namespace T3.Core
         }
 
         /* TODO, ResourceUsage usage, BindFlags bindFlags, CpuAccessFlags cpuAccessFlags, ResourceOptionFlags miscFlags, int loadFlags*/
-        public (uint, uint) CreateTextureFromFile(string filename, Action fileChangeAction)
+        public (uint textureId, uint srvResourceId) CreateTextureFromFile(string filename, Action fileChangeAction)
         {
             if (!File.Exists(filename))
             {
@@ -1138,7 +1149,7 @@ namespace T3.Core
 
             Texture2D texture = null;
             ShaderResourceView srv = null;
-            uint shaderResourceViewId = NullResource;
+            uint srvResourceId = NullResource;
             if (filename.ToLower().EndsWith(".dds"))
             {
                 DdsImport.CreateDdsTextureFromFile(Device.NativePointer, Device.ImmediateContext.NativePointer, filename,
@@ -1159,21 +1170,21 @@ namespace T3.Core
 
             if (srv == null)
             {
-                shaderResourceViewId = CreateShaderResourceView(textureResourceEntry.Id, name);
+                srvResourceId = CreateShaderResourceView(textureResourceEntry.Id, name);
             } 
             else
             {
                 var textureViewResourceEntry = new ShaderResourceViewResource(GetNextResourceId(), name, srv, textureResourceEntry.Id);
                 Resources.Add(textureViewResourceEntry.Id, textureViewResourceEntry);
                 _shaderResourceViews.Add(textureViewResourceEntry);
-                shaderResourceViewId = textureViewResourceEntry.Id;
+                srvResourceId = textureViewResourceEntry.Id;
             }
 
-            var fileResource = new FileResource(filename, new[] { textureResourceEntry.Id, shaderResourceViewId });
+            var fileResource = new FileResource(filename, new[] { textureResourceEntry.Id, srvResourceId });
             fileResource.FileChangeAction += fileChangeAction;
             _fileResources.Add(filename, fileResource);
 
-            return (textureResourceEntry.Id, shaderResourceViewId);
+            return (textureResourceEntry.Id, srvResourceId);
         }
 
         public void UpdateTextureFromFile(uint textureId, string path, ref Texture2D texture)

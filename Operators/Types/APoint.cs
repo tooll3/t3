@@ -23,11 +23,11 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
             _pointListWithSeparator.TypedElements[1] = Point.Separator();
         }
         
-        System.Numerics.Vector3 ITransformable.Translation { get => Position.Value; set => Position.SetTypedInputValue(value); }
-        System.Numerics.Vector3 ITransformable.Rotation { get => System.Numerics.Vector3.Zero; set { } }
-        System.Numerics.Vector3 ITransformable.Scale { get => System.Numerics.Vector3.One; set { } }
+        IInputSlot ITransformable.TranslationInput => Position;
+        IInputSlot ITransformable.RotationInput => null;
+        IInputSlot ITransformable.ScaleInput => null;
 
-        public Action<ITransformable, EvaluationContext> TransformCallback { get; set; }
+        public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
         private void Update(EvaluationContext context)
         {

@@ -6,6 +6,9 @@ using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.Graph;
+using T3.Gui.Graph.Dialogs;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -55,6 +58,8 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
+            
+            
             // Insert invisible spill over input to catch accidental imgui focus attempts
             {
                 ImGui.SetNextItemWidth(2);
@@ -68,10 +73,16 @@ namespace T3.Gui.Windows
                 if (instance.Parent == null)
                     return;
 
+                EditDescriptionDialog.Draw(instance.Symbol);
+                
                 var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
                 var symbolChildUi = parentUi.ChildUis.Single(childUi => childUi.Id == instance.SymbolChildId);
+                var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
 
-                DrawSelectedSymbolHeader(instance, symbolChildUi);
+                if (DrawSelectedSymbolHeader(instance, symbolChildUi))
+                {
+                    symbolUi.FlagAsModified();
+                }
 
                 var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
                 var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
@@ -80,24 +91,27 @@ namespace T3.Gui.Windows
                 DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi);
 
                 ImGui.PushFont(Fonts.FontSmall);
-                var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+
+                ImGui.Dummy(new Vector2(10,10));
+                ImGui.Indent();
+                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10,10));
+
 
                 if (!string.IsNullOrEmpty(symbolUi.Description))
                 {
-                    var desc = symbolUi.Description;
-                    if (ImGui.InputTextMultiline("##name", ref desc, 2000, new Vector2(400, 500), ImGuiInputTextFlags.None))
-                    {
-                        symbolUi.Description = desc;
-                    }
+                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                    ImGui.TextWrapped(symbolUi.Description);
+                    ImGui.PopStyleColor();                        
                 }
-                else
-                {
-                    if (ImGui.Button("Add description"))
-                    {
-                        symbolUi.Description = "once upon a time...";
-                    }
-                }
-
+                
+                if (ImGui.Button("Edit description..."))
+                    EditDescriptionDialog.ShowNextFrame();                
+                
+                SymbolBrowser.ListExampleOperators(symbolUi);
+                
+                ImGui.PopStyleVar();
+                ImGui.Unindent();
+                
                 ImGui.PopFont();
                 return;
             }
@@ -117,6 +131,8 @@ namespace T3.Gui.Windows
             }
         }
 
+        
+        
         public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
                                           SymbolUi compositionSymbolUi)
         {
@@ -138,14 +154,14 @@ namespace T3.Gui.Windows
 
                 if ((editState & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
                 {
-                    if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.Value.ValueType != inputSlot.Input.Value.ValueType)
+                    if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.NewValue.ValueType != inputSlot.Input.Value.ValueType)
                         _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
-                    _inputValueCommandInFlight.Value.Assign(inputSlot.Input.Value);
+                    _inputValueCommandInFlight.NewValue.Assign(inputSlot.Input.Value);
                 }
 
                 if ((editState & InputEditStateFlags.Finished) != InputEditStateFlags.Nothing)
                 {
-                    if (_inputValueCommandInFlight != null && _inputValueCommandInFlight.Value.ValueType == inputSlot.Input.Value.ValueType)
+                    if (_inputValueCommandInFlight != null && _inputValueCommandInFlight.NewValue.ValueType == inputSlot.Input.Value.ValueType)
                         UndoRedoStack.Add(_inputValueCommandInFlight);
                 }
 
@@ -158,8 +174,10 @@ namespace T3.Gui.Windows
             }
         }
 
-        private void DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi)
+        private bool DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi)
         {
+            var modified = false;
+            
             // namespace and symbol
             {
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
@@ -170,6 +188,7 @@ namespace T3.Gui.Windows
                                                   SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
                 {
                     op.Symbol.Namespace = namespaceForEdit;
+                    modified = true;
                 }
 
                 ImGui.PopStyleColor();
@@ -178,6 +197,7 @@ namespace T3.Gui.Windows
                 ImGui.SameLine();
                 ImGui.TextUnformatted(op.Symbol.Name);
                 ImGui.Dummy(Vector2.One * 5);
+                
             }
 
             // SymbolChild Name
@@ -244,13 +264,15 @@ namespace T3.Gui.Windows
             }
 
             ImGui.Dummy(new Vector2(0.0f, 5.0f));
+            return modified;
         }
 
         public static bool IsAnyInstanceVisible()
         {
             return T3Ui.WindowManager.IsAnyInstanceVisible<ParameterWindow>();
         }
-
+        
+        private static readonly EditSymbolDescriptionDialog EditDescriptionDialog = new EditSymbolDescriptionDialog();
         private static readonly List<Window> ParameterWindowInstances = new List<Window>();
         private ChangeSymbolChildNameCommand _symbolChildNameCommand;
         private static ChangeInputValueCommand _inputValueCommandInFlight;

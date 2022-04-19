@@ -400,7 +400,7 @@
       }
     },
     {
-      "ChildId": "c00c8275-de25-4a15-b229-5e9f1a805f5c"/*DrawQuadsW*/,
+      "ChildId": "c00c8275-de25-4a15-b229-5e9f1a805f5c"/*DrawVaryingQuads*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -490,10 +490,10 @@
   ],
   "OutputUis": [
     {
-      "OutputId": "2a4db967-6143-445f-8afd-8bb1db2d1041"/*Output2*/,
+      "OutputId": "bf45ca13-829b-46e4-ba46-886e3890c1be"/*Output*/,
       "Position": {
-        "X": 2493.3208,
-        "Y": 333.74402
+        "X": 2605.7197,
+        "Y": 336.9688
       }
     }
   ]

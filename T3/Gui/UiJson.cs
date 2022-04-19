@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using t3.Gui.Graph;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using Truncon.Collections;
@@ -28,6 +29,7 @@ namespace T3.Gui
             WriteInputUis(symbolUi);
             WriteChildUis(symbolUi);
             WriteOutputUis(symbolUi);
+            WriteAnnotations(symbolUi);
 
             Writer.WriteEndObject();
         }
@@ -125,7 +127,33 @@ namespace T3.Gui
 
             Writer.WriteEndArray();
         }
+        
+        
+        
+        public void WriteAnnotations(SymbolUi symbolUi)
+        {
+            if (symbolUi.Annotations.Count == 0)
+                return;
+            
+            var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
+            Writer.WritePropertyName("Annotations");
+            Writer.WriteStartArray();
 
+            foreach (var annotation in symbolUi.Annotations.Values)
+            {
+                Writer.WriteStartObject(); 
+                Writer.WriteObject("Id", annotation.Id);
+                Writer.WriteObject("Title", annotation.Title);
+                Writer.WritePropertyName("Position");
+                vec2Writer(Writer, annotation.PosOnCanvas);
+                Writer.WritePropertyName("Size");
+                vec2Writer(Writer, annotation.Size);
+                Writer.WriteEndObject();
+            }
+
+            Writer.WriteEndArray();
+        }        
+        
         public SymbolUi ReadSymbolUi(string filePath)
         {
             using (var streamReader = new StreamReader(filePath))
@@ -259,8 +287,25 @@ namespace T3.Gui
                     Log.Error($"Error creating output ui for non registered type '{type.Name}'.");
                 }
             }
+            
+            var annotationDict = new OrderedDictionary<Guid, Annotation>();
+            var annotationsArray = (JArray)mainObject["Annotations"];
+            if (annotationsArray != null)
+            {
+                foreach (var annotationEntry in annotationsArray)
+                {
+                    var annotation = new Annotation();
+                    
+                    annotation.Id = Guid.Parse(annotationEntry["Id"].Value<string>());
+                    annotation.Title = annotationEntry["Title"].Value<string>();
+                    annotation.PosOnCanvas = (Vector2)vector2Converter(annotationEntry["Position"]);
+                    annotation.Size = (Vector2)vector2Converter(annotationEntry["Size"]);
+                    annotationDict[annotation.Id] = annotation;
+                }
+            }
+            
 
-            var newSymbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict);
+            var newSymbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict);
             newSymbolUi.Description = mainObject["Description"]?.Value<string>();
             return newSymbolUi;
         }

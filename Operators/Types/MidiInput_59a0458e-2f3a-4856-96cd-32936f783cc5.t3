@@ -44,6 +44,10 @@
     {
       "Id": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
+      "DefaultValue": 0.15
     }
   ],
   "Children": [],

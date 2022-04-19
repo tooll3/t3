@@ -17,6 +17,13 @@
       },
       "Min": -100.0,
       "Max": 100.0
+    },
+    {
+      "InputId": "76cf4a72-2d25-48cb-a1ec-08d0ddabb053"/*Interpolation*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      }
     }
   ],
   "SymbolChildUis": [],

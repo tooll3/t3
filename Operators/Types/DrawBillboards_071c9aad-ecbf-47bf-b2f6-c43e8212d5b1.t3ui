@@ -1,6 +1,6 @@
 {
   "Id": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1"/*DrawBillboards*/,
-  "Description": "Draws points as animated camera aligned sprites, where W defines the animation.\n",
+  "Description": "Draws points as animated camera aligned sprites. \nThe point's .W attributes control the lookup within the \"animation\" tracks for color and size.\n\nThis can be used for particle like animations or to generate procedural designs.\n",
   "InputUis": [
     {
       "InputId": "2548a5d8-b2ab-4783-9298-c2e261d390f0"/*Color*/,
@@ -456,6 +456,50 @@
       "Position": {
         "X": 620.08356,
         "Y": 223.4418
+      }
+    },
+    {
+      "ChildId": "86852d52-3e74-484d-8031-feb878fac096"/*CurvesToTexture*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 471.84375,
+        "Y": 1623.626
+      }
+    },
+    {
+      "ChildId": "687f69ff-ab79-40d4-901c-70b9b972fd96"/*ImageLevels*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 921.84375,
+        "Y": 1623.626
+      }
+    },
+    {
+      "ChildId": "20028ece-817d-4599-af9a-8db5b8034862"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 621.84375,
+        "Y": 1623.626
+      }
+    },
+    {
+      "ChildId": "c6a2ad6d-b7d9-4081-807e-8761ef111f16"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 771.84375,
+        "Y": 1623.626
       }
     }
   ],

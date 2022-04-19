@@ -82,7 +82,7 @@
         {
           "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
           "Type": "System.Single",
-          "Value": 0.021
+          "Value": 0.061
         }
       ],
       "Outputs": []
@@ -274,12 +274,12 @@
         {
           "Id": "168efb4d-e4cb-4264-b845-b6ede38c1919"/*Amplitude*/,
           "Type": "System.Single",
-          "Value": 1.0
+          "Value": 2.14
         },
         {
           "Id": "fb8cf1db-a1ac-4563-aca0-73a4726d46a4"/*Decay*/,
           "Type": "System.Single",
-          "Value": 0.9
+          "Value": 2.95
         }
       ],
       "Outputs": [
@@ -373,7 +373,7 @@
         {
           "Id": "a2b624b4-ed36-45ec-a901-efe6d45aa067"/*Decay*/,
           "Type": "System.Single",
-          "Value": 0.04
+          "Value": 0.46
         }
       ],
       "Outputs": []

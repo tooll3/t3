@@ -1,4 +1,4 @@
-#include "point.hlsl"
+#include "lib/shared/point.hlsl"
 #include "pbr.hlsl"
 
 cbuffer Params : register(b0)

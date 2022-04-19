@@ -46,6 +46,7 @@ namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
 
         protected override void Dispose(bool disposing)
         {
+            // Combining dispose with a static property?
             _analyzer.Dispose();
         }
 

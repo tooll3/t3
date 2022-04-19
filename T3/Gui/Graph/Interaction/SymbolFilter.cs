@@ -74,6 +74,7 @@ namespace T3.Gui.Graph.Interaction
 
             foreach (var symbolUi in SymbolUiRegistry.Entries.Values)
             {
+                // Prevent graph cycles
                 if (parentSymbolIds.Contains(symbolUi.Symbol.Id))
                     continue;
 
@@ -93,14 +94,18 @@ namespace T3.Gui.Graph.Interaction
                     if (matchingOutputDef == null)
                         continue;
                 }
-
-                if (!_currentRegex.IsMatch(symbolUi.Symbol.Name))
+                
+                if (!(_currentRegex.IsMatch(symbolUi.Symbol.Name) 
+                    || symbolUi.Symbol.Namespace.Contains(SearchString)))
                     continue;
 
                 MatchingSymbolUis.Add(symbolUi);
             }
 
-            MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _currentSearchString, "")).Reverse().Take(30).ToList();
+            MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _currentSearchString, ""))
+                                                 .Reverse()
+                                                 .Take(30)
+                                                 .ToList();
         }
 
 
@@ -155,37 +160,35 @@ namespace T3.Gui.Graph.Interaction
             {
                 relevancy *= 2.5f;
             }
-
-            // Bump up if query occurs in description
-            if (query.Length > 2)
-            {
-                if (symbolUi.Description != null && symbolUi.Description.IndexOf(query, StringComparison.InvariantCultureIgnoreCase) != -1)
-                {
-                    relevancy *= 1.2f;
-                }
-            }
             
             if (!string.IsNullOrEmpty(symbolUi.Symbol.Namespace))
             {
-                if (symbolUi.Symbol.Namespace.Contains("dx11"))
-                    relevancy *= 0.10f;
-
-                // TODO: Implement
-                // if (symbolUi.InstanceCount > 0)
-                // {
-                //     relevancy *= -0.5 / symbolUi.InstanceCount + 2.0;
-                // }
-
-                //relevancy *= 2 - 1.0 / (0.3 * _numberOfMetaOperatorUsage[symbolUi.ID] + 0.7);
-
-                //relevancy *= (1 + (1.0 / (op.Name.Length + op.Namespace.Length)) * 0.05);
-
-                if (Regex.Match(symbolUi.Symbol.Namespace, @"^lib\..*", RegexOptions.IgnoreCase) != Match.Empty)
+                if (symbolUi.Symbol.Namespace.Contains("dx11")
+                    || symbolUi.Symbol.Namespace.Contains("_"))
+                    relevancy *= 0.1f;
+                
+                if (symbolUi.Symbol.Namespace.StartsWith("lib"))
                 {
-                    relevancy *= 1.6f;
+                    relevancy *= 3f;
                 }
+                
+                if (symbolUi.Symbol.Namespace.StartsWith("examples"))
+                {
+                    relevancy *= 2f;
+                }
+
+            }
+            
+            if (symbolName.StartsWith("_"))
+            {
+                relevancy *= 0.1f;
             }
 
+            if (symbolName.Contains("OBSOLETE"))
+            {
+                relevancy *= 0.01f;
+            }
+            
             // TODO: Implement
             // if (IsCompositionOperatorInNamespaceOf(symbolUi))
             // {

@@ -1,5 +1,6 @@
 {
   "Id": "16d10dc8-63b9-4ddf-90b8-41caef99d945"/*DrawQuads*/,
+  "Description": "Draws 3d rotated quads at point positions.\n\nThis can be useful for drawing oriented sprite like shapes.\nPlease note that the oriention is to aligned towards the camera. ",
   "InputUis": [
     {
       "InputId": "ad6b28be-ba14-4063-baf9-cfaf0096f1ea"/*GPoints*/,

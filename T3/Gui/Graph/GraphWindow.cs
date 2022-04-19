@@ -162,6 +162,14 @@ namespace T3.Gui.Graph
                                                                      ? NodeOperations.BuildIdPathForInstance(instance)
                                                                      : null;
         }
+        
+        public static void ClearBackground()
+        {
+            if (_currentWindow == null)
+                return;
+
+            _currentWindow._imageBackground.BackgroundNodePath = null;
+        }
 
         protected override void DrawContent()
         {
@@ -176,7 +184,7 @@ namespace T3.Gui.Graph
             ImGui.SetCursorPos(Vector2.Zero);
             THelpers.DebugContentRect("window");
             
-            if(!(_imageBackground.IsActive && TransformGizmoHandling.CurrentDraggingMode != TransformGizmoHandling.GizmoDraggingModes.None))
+            if(!(_imageBackground.IsActive && TransformGizmoHandling.IsDragging))
             {
                 var drawList = ImGui.GetWindowDrawList();
                 var contentHeight = 0;
@@ -206,6 +214,7 @@ namespace T3.Gui.Graph
                         ImGui.SetWindowFocus();
                         _focusOnNextFrame = false;
                     }
+                    ImGui.SetScrollX(0);
                     
                     drawList.ChannelsSplit(2);
                     drawList.ChannelsSetCurrent(1);
@@ -257,12 +266,13 @@ namespace T3.Gui.Graph
                                            ImGui.GetWindowContentRegionMin().X,
                                            ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
 
-            ImGui.BeginChild("TimeControls");
+            ImGui.BeginChild("TimeControls", Vector2.Zero, false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
             {
-                if (CustomComponents.IconButton(UsingCustomTimelineHeight ? Icon.ChevronUp : Icon.ChevronDown,
+                if (CustomComponents.IconButton(UsingCustomTimelineHeight ?  Icon.ChevronDown : Icon.ChevronUp,
                                                 "##TimelineToggle", TimeControls.ControlSize))
                 {
                     _customTimeLineHeight = UsingCustomTimelineHeight ? UseComputedHeight : 200;
+                    UserSettings.Config.HideUiElementsInGraphWindow = false;
                 }
 
                 ImGui.SameLine();
@@ -274,9 +284,19 @@ namespace T3.Gui.Graph
                     ImGui.SameLine();
                     if (ImGui.Button("Clear BG"))
                     {
-                        _currentWindow._imageBackground.BackgroundNodePath = null;
+                        ClearBackground();
                     }
 
+                    ImGui.SameLine();
+                    
+
+                    var showGizmos = _imageBackground.ShowGizmos != T3.Core.Operator.GizmoVisibility.Off;
+                    if (CustomComponents.ToggleIconButton(Icon.Grid, "##gizmos", ref showGizmos, Vector2.One * ImGui.GetFrameHeight()))
+                    {
+                        _imageBackground.ShowGizmos = showGizmos
+                                                            ? T3.Core.Operator.GizmoVisibility.On
+                                                            : T3.Core.Operator.GizmoVisibility.Off;
+                    }                    
                     ImGui.SameLine();
                 }
             }

@@ -36,6 +36,9 @@ namespace T3.Operators.Types.Id_2c3d2c26_ac45_42e9_8f13_6ea338333568
 
         [Input(Guid = "e47e9e63-9c94-4c29-9555-2452fa498d57")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
+
+        [Input(Guid = "c38647f6-c6ea-40a0-b872-0df6d4168c05")]
+        public readonly InputSlot<float> Offset = new InputSlot<float>();
     }
 }
 

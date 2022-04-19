@@ -17,6 +17,9 @@ namespace T3.Operators.Types.Id_44d57201_addf_455c_9e31_709b018ba29f
         [Input(Guid = "db5ec31c-ea35-4780-a054-67ce9fbe80ec")]
         public readonly InputSlot<float> CellSize = new InputSlot<float>();
 
+        [Input(Guid = "34fe157f-dfe8-4cc0-aa66-6cda433155fb")]
+        public readonly InputSlot<int> TestIndex = new InputSlot<int>();
+
         [Input(Guid = "e84dcbfa-04e4-4acd-8fcd-b1da20abd71f")]
         public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
 

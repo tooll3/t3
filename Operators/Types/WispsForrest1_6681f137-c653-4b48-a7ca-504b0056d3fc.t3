@@ -262,7 +262,7 @@
       "Outputs": []
     },
     {
-      "Id": "e7154192-27a1-4f7b-989b-d380280b2fa2"/*DrawQuadsW*/,
+      "Id": "e7154192-27a1-4f7b-989b-d380280b2fa2"/*DrawVaryingQuads*/,
       "SymbolId": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981",
       "InputValues": [
         {

@@ -810,7 +810,7 @@ namespace T3.Gui.Graph
 
                     ImGui.InvisibleButton("splitMe", Vector2.One * radius);
                     if (ImGui.IsItemDeactivated()
-                        && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickTreshold
+                        && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickThreshold
                         )
                     {
                         var posOnScreen = graphCanvas.InverseTransformPosition(_bestMatchYetForCurrentFrame.PositionOnScreen) - SymbolChildUi.DefaultOpSize / 2;
@@ -821,6 +821,7 @@ namespace T3.Gui.Graph
                                                          posOnScreen);
                     }
 
+                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     ImGui.BeginTooltip();
                     {
                         var connection = _bestMatchYetForCurrentFrame.Connection;
@@ -892,6 +893,7 @@ namespace T3.Gui.Graph
                         }
                     }
                     ImGui.EndTooltip();
+                    ImGui.PopStyleVar();
                 }
                 else
                 {

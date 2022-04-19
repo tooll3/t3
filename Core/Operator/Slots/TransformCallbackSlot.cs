@@ -7,13 +7,12 @@ namespace T3.Core.Operator.Slots
 {
     public class TransformCallbackSlot<T> : Slot<T>
     {
-        public Action<ITransformable, EvaluationContext> TransformCallback { get; set; }
-
         public ITransformable TransformableOp { get; set; }
 
         private new void Update(EvaluationContext context)
         {
-            TransformCallback?.Invoke(TransformableOp, context);
+            // FIXME: Casting is ugly. TransformCall should us ITransformable instead 
+            TransformableOp.TransformCallback?.Invoke(TransformableOp as Instance, context);
             if (_baseUpdateAction == null)
             {
                 Log.Warning("Failed to call base transform gizmo update for " + Parent.SymbolChildId, this.Parent.SymbolChildId);

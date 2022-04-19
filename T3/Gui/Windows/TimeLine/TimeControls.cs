@@ -27,6 +27,18 @@ namespace T3.Gui.Windows.TimeLine
     {
         internal static void DrawTimeControls(ref Playback playback, TimeLineCanvas timeLineCanvas)
         {
+            // Settings
+            if (CustomComponents.IconButton(Icon.Settings, "##timelineSettings", ControlSize))
+            {
+                //playback.TimeInBars = playback.LoopRange.Start;
+                ImGui.OpenPopup("##TimeSettings");
+            }
+
+            CustomComponents.TooltipForLastItem("Timeline Settings",
+                                                "Switch between soundtrack and VJ modes. Control BPM and other inputs.");
+
+            ImGui.SameLine();            
+            
             // Current Time
             var delta = 0.0;
             string formattedTime = "";
@@ -50,7 +62,7 @@ namespace T3.Gui.Windows.TimeLine
                     break;
             }
 
-            if (CustomComponents.JogDial(formattedTime, ref delta, new Vector2(100, 0)))
+            if (CustomComponents.JogDial(formattedTime, ref delta, new Vector2(100, ControlSize.Y)))
             {
                 playback.PlaybackSpeed = 0;
                 playback.TimeInBars += delta;
@@ -61,7 +73,7 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             ImGui.SameLine();
-
+            
             // Time Mode with context menu
             if (ImGui.Button(UserSettings.Config.TimeDisplayMode.ToString(), ControlSize))
             {
@@ -73,8 +85,9 @@ namespace T3.Gui.Windows.TimeLine
                                                 "Click to toggle through BPM, Frames and Normal time modes");
 
             DrawTimeSettingsContextMenu(ref playback);
-
             ImGui.SameLine();
+            
+
 
             // Continue Beat indicator
             {
@@ -97,7 +110,7 @@ namespace T3.Gui.Windows.TimeLine
                     var bar = (int)(playback.BeatTime) % 4;
                     const int gridSize = 4;
                     var drawList = ImGui.GetWindowDrawList();
-                    var min = center - new Vector2(8, 9) + new Vector2(beat * gridSize, bar * gridSize);
+                    var min = center - new Vector2(8, 7) + new Vector2(beat * gridSize, bar * gridSize);
                     drawList.AddRectFilled(min, min + new Vector2(gridSize - 1, gridSize - 1), Color.Orange);
                 }
 
@@ -163,7 +176,11 @@ namespace T3.Gui.Windows.TimeLine
             else
             {
                 // Jump to start
-                if (CustomComponents.IconButton(Icon.JumpToRangeStart, "##jumpToBeginning", ControlSize))
+                var isSelected = playback.TimeInBars != playback.LoopRange.Start;
+                if (CustomComponents.ToggleIconButton(Icon.JumpToRangeStart, 
+                                                      label: "##jumpToBeginning",
+                                                      isSelected: ref isSelected,
+                                                      ControlSize))
                 {
                     playback.TimeInBars = playback.LoopRange.Start;
                 }
@@ -189,7 +206,7 @@ namespace T3.Gui.Windows.TimeLine
                 var isPlayingBackwards = playback.PlaybackSpeed < 0;
                 if (CustomComponents.ToggleIconButton(Icon.PlayBackwards,
                                                       label: isPlayingBackwards ? $"{(int)playback.PlaybackSpeed}x##backwards" : "##backwards",
-                                                      ref isPlayingBackwards,
+                                                      isSelected: ref isPlayingBackwards,
                                                       ControlSize))
                 {
                     if (playback.PlaybackSpeed != 0)
@@ -390,7 +407,6 @@ namespace T3.Gui.Windows.TimeLine
             CustomComponents.TooltipForLastItem(tooltip, additionalTooltip);
 
             ImGui.SameLine();
-
         }
 
         private static void DrawTimeSettingsContextMenu(ref Playback playback)
@@ -610,7 +626,7 @@ namespace T3.Gui.Windows.TimeLine
             private static readonly HashSet<string> FilePathsInProgress = new HashSet<string>();
         }
 
-        public static readonly Vector2 ControlSize = new Vector2(45, 26);
+        public static readonly Vector2 ControlSize = new Vector2(45, 30);
         private static AsyncImageGenerator _computeSoundImageTask;
     }
 }

@@ -54,7 +54,7 @@ namespace T3.Gui.Graph.Dialogs
                     ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));
                 }
 
-                if (CustomComponents.DisablableButton("Duplicate", NodeOperations.IsNewSymbolNameValid(combineName)))
+                if (CustomComponents.DisablableButton("Duplicate", NodeOperations.IsNewSymbolNameValid(combineName), enableTriggerWithReturn:false))
                 {
                     var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
                     NodeOperations.DuplicateAsNewType(compositionSymbolUi,

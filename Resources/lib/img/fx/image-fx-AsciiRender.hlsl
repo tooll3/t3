@@ -1,3 +1,5 @@
+#include "hash-functions.hlsl"
+
 cbuffer ParamConstants : register(b0)
 {
     float4 Fill;
@@ -6,6 +8,8 @@ cbuffer ParamConstants : register(b0)
     float2 FontCharSize;
     float ScaleFactor;
     float Bias;
+    float MaxInColors;
+    float Scatter;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -30,13 +34,14 @@ struct vsOutput
 
 Texture2D<float4> ImageA : register(t0);
 Texture2D<float4> ImageB : register(t1);
-Texture2D<float> ImageC : register(t2);
+Texture2D<float> FontSortingOrder : register(t2);
 
 sampler texSampler : register(s0);
+
 sampler texSamplerPoint : register(s1);
 
 
-#define mod(x,y) (x-y*floor(x/y))
+#define mod(x,y) ((x)-(y)*floor((x)/(y)))
 
 float4 psMain(vsOutput psInput) : SV_TARGET
 {    
@@ -62,19 +67,31 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         ? pow( grayScale, Bias+1)
         : 1-pow( clamp(1-grayScale,0,10), -Bias+1);    
 
-    float letter = ImageC.Sample(texSamplerPoint, float2( dBiased ,0));
+
+    float randomOffset = hash12(cellTiles * 123.12 );
+    dBiased += randomOffset * Scatter;
+
+    float4 letter = FontSortingOrder.SampleLevel(texSamplerPoint, float2( dBiased ,0.4),0);
+    //return float4(letter.x * 1, 0,0,1);
+    
+
 
     float letterIndex = letter * 256;
     float rowIndex = floor(letterIndex / 16);
     float columnIndex = floor(letterIndex % 16);
 
     float2 letterPos = float2( columnIndex , rowIndex) / 16;
-    float4 colorFromFont = ImageB.Sample(texSamplerPoint, pInCell / 16 + letterPos);    
+    float2 uv = pInCell / 16 + letterPos;
+    
+    float4 colorFromFont = ImageB.SampleLevel(texSamplerPoint, uv,0);    
+    colorFromFont.rgb *= 0.6;
 
     if(Background.a  < 1) {
         float4 orgColor =  ImageA.Sample(texSampler, psInput.texCoord);
         return lerp(lerp(orgColor, Background, Background.a), Fill, colorFromFont.r);
     }
 
-    return lerp(Background, Fill, colorFromFont.r);
+    return lerp(Background,  
+                lerp(1, colFromImageA, MaxInColors) *  Fill, 
+                colorFromFont.r);
 }

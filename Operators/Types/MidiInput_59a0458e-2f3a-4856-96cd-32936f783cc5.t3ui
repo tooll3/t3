@@ -64,6 +64,13 @@
         "X": -200.0,
         "Y": 360.0
       }
+    },
+    {
+      "InputId": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
     }
   ],
   "SymbolChildUis": [],
