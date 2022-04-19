@@ -74,7 +74,6 @@ namespace T3.Gui.Windows
 
                 if (KeyboardBinding.Triggered(_loadLayoutActions[i]))
                     LoadLayout(i);
-
             }
 
             if (KeyboardBinding.Triggered(UserActions.ToggleFullScreenGraph))
@@ -93,7 +92,6 @@ namespace T3.Gui.Windows
 
             if (_metricsWindowVisible)
                 ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
-            
         }
 
         private void Initialize()
@@ -122,12 +120,11 @@ namespace T3.Gui.Windows
                 {
                     ToggleFullScreenGraph();
                 }
-                
+
                 if (ImGui.MenuItem("Hide Title and Timeline", "", ref UserSettings.Config.HideUiElementsInGraphWindow))
                 {
                     //UserSettings.Config.HideUiElementsInGraphWindow = !UserSettings.Config.HideUiElementsInGraphWindow;
                 }
-                
 
                 ImGui.Separator();
 
@@ -143,8 +140,6 @@ namespace T3.Gui.Windows
 
                 if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
                     _demoWindowVisible = !_demoWindowVisible;
-
-
 
                 if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
                     _metricsWindowVisible = !_metricsWindowVisible;
@@ -182,34 +177,40 @@ namespace T3.Gui.Windows
             }
         }
 
-        
         private void ToggleFullScreenGraph()
         {
             if (_graphWindowRenderedAsBackground)
             {
                 var graphWindowIndex = 0;
-                foreach (var w in _windows)
+                foreach (var windowType in _windows)
                 {
-                    if (w is GraphWindow graphWindow)
+                    foreach (var w in windowType.GetInstances())
                     {
-                        if (graphWindowIndex == 0)
+                        switch (w)
                         {
-                            var pos = GetRelativePositionFromPixel(new Vector2(0, MainMenuBarHeight));
-                            graphWindow.Config.Position = pos;
-                            graphWindow.Config.Size = new Vector2(1, 1 -pos.Y); 
-                            graphWindow.WindowFlags |= ImGuiWindowFlags.NoDecoration;
-                            graphWindow.ApplySizeAndPosition();
-                            graphWindowIndex++;
+                            case GraphWindow graphWindow1 when graphWindowIndex == 0:
+                            {
+                                var pos = GetRelativePositionFromPixel(new Vector2(0, MainMenuBarHeight));
+                                graphWindow1.Config.Position = pos;
+                                graphWindow1.Config.Size = new Vector2(1, 1 - pos.Y);
+                                graphWindow1.WindowFlags |= ImGuiWindowFlags.NoDecoration;
+                                graphWindow1.ApplySizeAndPosition();
+                                graphWindowIndex++;
+                                break;
+                            }
+                            case GraphWindow graphWindow2:
+                                graphWindow2.Config.Visible = false;
+                                Log.Warning("Closing other graph window");
+                                break;
+                            case OutputWindow outputWindow:
+                                Log.Debug($"Closing {outputWindow.Config.Title}");
+                                w.Config.Visible = false;
+                                break;
+                            case ParameterWindow parameterWindow:
+                                Log.Debug($"Closing {parameterWindow.Config.Title}");
+                                w.Config.Visible = false;
+                                break;
                         }
-                        else
-                        {
-                            graphWindow.Config.Visible = false;
-                            Log.Warning("Closing other graph window");
-                        }
-                    }
-                    else
-                    {
-                        w.Config.Visible = false;
                     }
                 }
 
@@ -226,7 +227,6 @@ namespace T3.Gui.Windows
             }
         }
 
-        
         private IEnumerable<GraphWindow> GetGraphWindows()
         {
             foreach (var w in _windows)
@@ -237,7 +237,6 @@ namespace T3.Gui.Windows
                 yield return graphWindow;
             }
         }
-
 
         private void SaveLayout(int index)
         {
@@ -396,7 +395,7 @@ namespace T3.Gui.Windows
 
         private const string LayoutFileNameFormat = "layout{0}.json";
         private const string ConfigFolderName = ".t3";
-        private const float MainMenuBarHeight = 25; 
+        private const float MainMenuBarHeight = 25;
         private bool _graphWindowRenderedAsBackground;
 
         private readonly List<Window> _windows;
