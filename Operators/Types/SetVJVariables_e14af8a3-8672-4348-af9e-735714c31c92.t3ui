@@ -3,6 +3,13 @@
   "Description": "A small helper that sets LFO speed factor variables from MidiControllers into context.",
   "InputUis": [
     {
+      "InputId": "693345bd-0cd8-4dca-9416-42a9bdcbc293"/*Image*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "4aaf265f-2c98-4fc2-8cb7-ea1438dcfef4"/*SubGraph*/,
       "Position": {
         "X": -200.0,
@@ -87,14 +94,87 @@
         "X": 312.2376,
         "Y": -242.20192
       }
+    },
+    {
+      "ChildId": "e9d0e6f2-05ff-402f-acb1-d2c249641799"/*ForwardBeatTaps*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 155.54837,
+        "Y": -59.33072
+      }
+    },
+    {
+      "ChildId": "4e7ff83d-fea7-4c55-ba7c-d5f992c0ba38"/*MidiInput*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -344.72723,
+        "Y": 170.43439
+      }
+    },
+    {
+      "ChildId": "9ea76be6-91d8-4b55-9909-f1266acea5d8"/*HasValueIncreased*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -194.72723,
+        "Y": 170.43439
+      }
+    },
+    {
+      "ChildId": "196fdbc3-2a93-4c33-9c7c-04af058146ad"/*MidiInput*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -344.72723,
+        "Y": 233.43439
+      }
+    },
+    {
+      "ChildId": "e209cd98-a57f-4b43-8508-039139cdb3d3"/*HasValueIncreased*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -194.72723,
+        "Y": 233.43439
+      }
+    },
+    {
+      "ChildId": "5de123d1-764d-4f5f-806f-aa027fc9f699"/*ExecuteTextureUpdate*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 530.54474,
+        "Y": -94.18991
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "741a3753-2021-411f-b3ea-000edd548aeb"/*Output*/,
       "Position": {
-        "X": 745.80347,
-        "Y": 96.45459
+        "X": 735.0519,
+        "Y": -192.9437
+      }
+    },
+    {
+      "OutputId": "a8127182-4b8d-4be2-8c50-9ce475d2699d"/*Output2*/,
+      "Position": {
+        "X": 735.0519,
+        "Y": -92.943695
       }
     }
   ]
