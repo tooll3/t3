@@ -26,8 +26,8 @@ namespace T3.Gui.Windows
                                new OutputWindow(),
                                new ConsoleLogWindow(),
                                new SymbolLibrary(),
+                               new LegacyVariationsWindow(),
                                new VariationsWindow(),
-                               new PresetsWindow(),
                            };
         }
 

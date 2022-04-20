@@ -17,7 +17,7 @@ using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
 using t3.Gui.Interaction.Presets;
-using T3.Gui.Interaction.Variation;
+using T3.Gui.Interaction.LegacyVariations;
 using T3.Gui.Interaction.Timing;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
@@ -49,7 +49,7 @@ namespace T3.Gui
             _autoBackup.Enabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;
             VariationHandling.Update();
-            PresetHandling.Update();
+            t3.Gui.Interaction.Presets.VariationHandling.Update();
             MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
             MouseWheelFieldHovered = false;
 
@@ -237,7 +237,7 @@ namespace T3.Gui
 
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel;
-        public static readonly VariationHandling VariationHandling = new VariationHandling();
+        public static readonly LegacyVariationHandling VariationHandling = new LegacyVariationHandling();
         public static readonly WindowManager WindowManager;
 
         public static string OpenedPopUpName; // This is reset on Frame start and can be useful for allow context menu to stay open even if a
