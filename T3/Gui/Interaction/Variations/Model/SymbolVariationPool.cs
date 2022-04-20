@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
@@ -33,7 +34,7 @@ namespace t3.Gui.Interaction.Variations.Model
 
         private static List<Variation> LoadVariations(Guid compositionId)
         {
-            var filepath = $".Variations/{compositionId}.var";
+            var filepath = GetFilePathForVariationId(compositionId);
 
             if (!File.Exists(filepath))
             {
@@ -50,24 +51,28 @@ namespace t3.Gui.Interaction.Variations.Model
             try
             {
                 var jToken = JToken.ReadFrom(jsonReader);
-                foreach (var sceneToken in (JArray)jToken["Variations"])
+                var jArray = (JArray)jToken["Variations"];
+                if (jArray != null)
                 {
-                    if (sceneToken == null)
+                    foreach (var sceneToken in jArray)
                     {
-                        Log.Error("No variations?");
-                        continue;
-                    }
+                        if (sceneToken == null)
+                        {
+                            Log.Error("No variations?");
+                            continue;
+                        }
 
-                    var newVariation = Variation.FromJson(compositionId, sceneToken);
-                    if (newVariation == null)
-                    {
-                        Log.Warning($"Failed to parse variation json:" + sceneToken);
-                        continue;
-                    }
+                        var newVariation = Variation.FromJson(compositionId, sceneToken);
+                        if (newVariation == null)
+                        {
+                            Log.Warning($"Failed to parse variation json:" + sceneToken);
+                            continue;
+                        }
 
-                    //TODO: this needs to be implemented
-                    newVariation.IsPreset = true;
-                    result.Add(newVariation);
+                        //TODO: this needs to be implemented
+                        newVariation.IsPreset = true;
+                        result.Add(newVariation);
+                    }
                 }
             }
             catch (Exception e)
@@ -77,9 +82,120 @@ namespace t3.Gui.Interaction.Variations.Model
             }
 
             return result;
-
         }
 
+        private void SaveVariations()
+        {
+            if (Variations.Count == 0)
+                return;
+
+            var filePath = GetFilePathForVariationId(SymbolId);
+
+            //Log.Info($"Reading presets definition for : {compositionId}");
+
+            using var sw = new StreamWriter(filePath);
+            using var writer = new JsonTextWriter(sw);
+
+            try
+            {
+                writer.Formatting = Formatting.Indented;
+                writer.WriteStartObject();
+
+                writer.WriteValue("Id", SymbolId);
+
+                // Presets
+                {
+                    // writer.WriteValue("GroupCount", Presets.GetLength(0));
+                    // writer.WriteValue("SceneCount", Presets.GetLength(1));
+                    writer.WritePropertyName("Variations");
+                    writer.WriteStartArray();
+                    // for (var groupIndex = 0; groupIndex < Presets.GetLength(0); groupIndex++)
+                    // {
+                    //     for (var sceneIndex = 0; sceneIndex < Presets.GetLength(1); sceneIndex++)
+                    //     {
+                    //         writer.WriteStartObject();
+                    //         writer.WriteComment($"preset {groupIndex}:{sceneIndex}");
+                    //         var address = new PresetAddress(groupIndex, sceneIndex);
+                    //         var preset = TryGetPresetAt(address);
+                    //         preset?.ToJson(writer);
+                    //
+                    //         writer.WriteEndObject();
+                    //     }
+                    // }
+
+                    writer.WriteEndArray();
+                }
+
+                // // Groups
+                // {
+                //     writer.WritePropertyName("Groups");
+                //     writer.WriteStartArray();
+                //     foreach (var @group in Groups)
+                //     {
+                //         writer.WriteStartObject();
+                //         @group?.ToJson(writer);
+                //         writer.WriteEndObject();
+                //     }
+                //
+                //     writer.WriteEndArray();
+                // }
+
+                // // Scenes
+                // {
+                //     writer.WritePropertyName("Scenes");
+                //     writer.WriteStartArray();
+                //     foreach (var scene in Scenes)
+                //     {
+                //         writer.WriteStartObject();
+                //         scene?.ToJson(writer);
+                //         writer.WriteEndObject();
+                //     }
+                //
+                //     writer.WriteEndArray();
+                // }
+                writer.WriteEndObject();
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Saving variations failed: {e.Message}");
+            }
+
+            // using var sr = new StreamReader(filepath);
+            // using var jsonReader = new JsonTextReader(sr);
+            //
+            // var result = new List<Variation>();
+            //
+            // try
+            // {
+            //     var jToken = JToken.ReadFrom(jsonReader);
+            //     foreach (var sceneToken in (JArray)jToken["Variations"])
+            //     {
+            //         if (sceneToken == null)
+            //         {
+            //             Log.Error("No variations?");
+            //             continue;
+            //         }
+            //
+            //         var newVariation = Variation.FromJson(compositionId, sceneToken);
+            //         if (newVariation == null)
+            //         {
+            //             Log.Warning($"Failed to parse variation json:" + sceneToken);
+            //             continue;
+            //         }
+            //
+            //         //TODO: this needs to be implemented
+            //         newVariation.IsPreset = true;
+            //         result.Add(newVariation);
+            //     }
+            // }
+            // catch (Exception e)
+            // {
+            //     Log.Error($"Failed to load presets and variations for {compositionId}: {e.Message}");
+            //     return new List<Variation>();
+            // }
+            //
+            // return result;
+        }
 
         public void ApplyPreset(Instance instance, int variationIndex)
         {
@@ -93,37 +209,34 @@ namespace t3.Gui.Interaction.Variations.Model
             var commands = new List<ICommand>();
             var parentSymbol = instance.Parent.Symbol;
 
-            if (variation.InputValuesForChildIds.TryGetValue(Guid.Empty, out var parametersForOp))
+            var symbolChild = parentSymbol.Children.SingleOrDefault(s => s.Id == instance.SymbolChildId);
+            if (symbolChild != null)
             {
-                var symbolChild = parentSymbol.Children.SingleOrDefault(s => s.Id == instance.SymbolChildId);
-                if (symbolChild != null)
+                foreach (var (childId, parametersForInputs) in variation.InputValuesForChildIds)
                 {
-                    foreach (var (childId, parametersForInputs) in variation.InputValuesForChildIds)
+                    if (childId != Guid.Empty)
                     {
-                        if (childId != Guid.Empty)
+                        Log.Warning("Didn't export childId in preset");
+                        continue;
+                    }
+
+                    foreach (var (inputId, parameter) in parametersForInputs)
+                    {
+                        if (parameter == null)
                         {
-                            Log.Warning("Didn't export childId in preset");
                             continue;
                         }
-                        
-                        foreach (var (inputId, parameter) in parametersForInputs)
-                        {
-                            if (parameter == null)
-                            {
-                                continue;
-                            }
 
-                            var input = symbolChild.InputValues[inputId];
-                            var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, input)
-                                                 {
-                                                     NewValue = parameter,
-                                                 };
-                            commands.Add(newCommand);
-                        }
+                        var input = symbolChild.InputValues[inputId];
+                        var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, input)
+                                             {
+                                                 NewValue = parameter,
+                                             };
+                        commands.Add(newCommand);
                     }
                 }
             }
-
+            
             var command = new MacroCommand("Set Preset Values", commands);
             UndoRedoStack.AddAndExecute(command);
         }
@@ -131,14 +244,10 @@ namespace t3.Gui.Interaction.Variations.Model
         /// <summary>
         /// Save non-default parameters of single selected Instance as preset for its Symbol.  
         /// </summary>
-        /// <param name="instance"></param>
         public void CreatePresetOfInstanceSymbol(Instance instance)
         {
-            var symbol = instance.Symbol;
-            
-
             var changes = new Dictionary<Guid, InputValue>();
-            
+
             foreach (var input in instance.Inputs)
             {
                 if (input.Input.IsDefault)
@@ -162,7 +271,7 @@ namespace t3.Gui.Interaction.Variations.Model
                                    {
                                        Id = Guid.NewGuid(),
                                        Title = "untitled",
-                                       ActivationIndex = Variations.Count+1,    //TODO: First find the highest activation index
+                                       ActivationIndex = Variations.Count + 1, //TODO: First find the highest activation index
                                        IsPreset = true,
                                        PublishedDate = DateTime.Now,
                                        InputValuesForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>
@@ -170,9 +279,16 @@ namespace t3.Gui.Interaction.Variations.Model
                                                                         [Guid.Empty] = changes
                                                                     },
                                    };
-            
-            var command = new AddPresetOrVariationCommand( instance.Symbol, newVariation);
+
+            var command = new AddPresetOrVariationCommand(instance.Symbol, newVariation);
             UndoRedoStack.AddAndExecute(command);
+            SaveVariations();
+        }
+
+        private static string GetFilePathForVariationId(Guid compositionId)
+        {
+            var filepath = $".Variations/{compositionId}.var";
+            return filepath;
         }
     }
 }
