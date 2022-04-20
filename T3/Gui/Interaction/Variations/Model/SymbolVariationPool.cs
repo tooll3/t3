@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using t3.Gui.Commands.Variations;
 using t3.Gui.Interaction.Presets.Model;
 
 namespace t3.Gui.Interaction.Variations.Model
@@ -127,9 +128,51 @@ namespace t3.Gui.Interaction.Variations.Model
             UndoRedoStack.AddAndExecute(command);
         }
 
-        public void CreatePreset(Instance instance)
+        /// <summary>
+        /// Save non-default parameters of single selected Instance as preset for its Symbol.  
+        /// </summary>
+        /// <param name="instance"></param>
+        public void CreatePresetOfInstanceSymbol(Instance instance)
         {
-            // ToBe implemented
+            var symbol = instance.Symbol;
+            
+
+            var changes = new Dictionary<Guid, InputValue>();
+            
+            foreach (var input in instance.Inputs)
+            {
+                if (input.Input.IsDefault)
+                {
+                    continue;
+                }
+
+                if (input.Input.Value is InputValue<float> floatValue)
+                {
+                    changes[input.Id] = floatValue;
+                }
+            }
+
+            if (changes.Count == 0)
+            {
+                Log.Warning("All values are default. Nothing to save in preset");
+                return;
+            }
+
+            var newVariation = new Variation
+                                   {
+                                       Id = Guid.NewGuid(),
+                                       Title = "untitled",
+                                       ActivationIndex = Variations.Count+1,    //TODO: First find the highest activation index
+                                       IsPreset = true,
+                                       PublishedDate = DateTime.Now,
+                                       InputValuesForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>
+                                                                    {
+                                                                        [Guid.Empty] = changes
+                                                                    },
+                                   };
+            
+            var command = new AddPresetOrVariationCommand( instance.Symbol, newVariation);
+            UndoRedoStack.AddAndExecute(command);
         }
     }
 }

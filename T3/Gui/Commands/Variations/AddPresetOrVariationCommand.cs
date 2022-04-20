@@ -2,26 +2,25 @@
 using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui;
+using T3.Gui.Commands;
 using t3.Gui.Interaction.Presets;
 using t3.Gui.Interaction.Presets.Model;
 
-namespace T3.Gui.Commands
+namespace t3.Gui.Commands.Variations
 {
     public class AddPresetOrVariationCommand : ICommand
     {
         public string Name => "Add Preset";
         public bool IsUndoable => true;
         
-        private Symbol _symbol;
-        private Variation _newVariation;
+        private readonly Symbol _symbol;
+        private readonly Variation _newVariation;
         
-        private readonly Dictionary<Variation, Variation> _originalDefForReferences = new Dictionary<Variation, Variation>();
-        private readonly Dictionary<Variation, Variation> _newDefForReferences = new Dictionary<Variation, Variation>();
-
-        public AddPresetOrVariationCommand(Symbol symbolUi, Variation annotation)
+        public AddPresetOrVariationCommand(Symbol symbol, Variation variation)
         {
-            _symbol = symbolUi;
-            _newVariation = annotation;
+            _symbol = symbol;
+            _newVariation = variation;
         }
         
         public void Do()

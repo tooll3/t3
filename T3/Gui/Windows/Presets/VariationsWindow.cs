@@ -57,7 +57,7 @@ namespace t3.Gui.Windows.Presets
                             }
                             if (ImGui.Button("Create"))
                             {
-                                VariationHandling.ActiveInstancePresetPool.CreatePreset(instance);
+                                VariationHandling.ActiveInstancePresetPool.CreatePresetOfInstanceSymbol(instance);
                             }
                         }
                     }
