@@ -26,6 +26,29 @@ namespace t3.Gui.Windows.Presets
 
         public void DrawWindowContent()
         {
+            // Mock implementation
+            // if (ImGui.Button("Save Screenshot"))
+            // {
+            //     var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(w => w.Config.Visible);
+            //     if (outputWindow is OutputWindow outWindow)
+            //     {
+            //         if (outWindow.ShownInstance.Outputs.Count > 0)
+            //         {
+            //             var outputSlot = outWindow.ShownInstance.Outputs[0];
+            //             if (outputSlot is Slot<Texture2D> texture2dSlot)
+            //             {
+            //                 var texture = texture2dSlot.Value;
+            //                 var srv = SrvManager.GetSrvForTexture(texture);
+            //                 // D3DX11SaveTextureToFile()
+            //                 // SharpDX.Direct3D9.Texture.ToFile(
+            //                 //                                  renderSetup.D3DImageContainer.SharedTexture,
+            //                 //                                  filePath,
+            //                 //                                  SharpDX.Direct3D9.ImageFileFormat.Png);
+            //             }
+            //         } 
+            //     }
+            // }
+            
             if (ImGui.BeginTabBar("##presets"))
             {
                 if (ImGui.BeginTabItem("Presets"))
@@ -78,24 +101,31 @@ namespace t3.Gui.Windows.Presets
 
         private static void DrawPresetButton(Variation variation, Instance instance)
         {
+            ImGui.PushID(variation.ActivationIndex);
             var setCorrectly = DoesPresetVariationMatch(variation, instance);
 
-            var s = "";
-            switch (setCorrectly)
+            var color = setCorrectly == MatchTypes.NoMatch
+                            ? Color.Gray
+                            : Color.White;
+            
+            ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
+            ImGui.Button(variation.ToString());
+            ImGui.PopStyleColor();
+            
+            
+            if (ImGui.IsItemActive())
             {
-                case MatchTypes.NoMatch:
-                    break;
-                case MatchTypes.PresetParamsMatch:
-                    s = "<< Has other changes";
-                    break;
-                case MatchTypes.PresetAndDefaultParamsMatch:
-                    s = "<<<";
-                    break;
+                if(  ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                {
+                    var delta = ImGui.GetMouseDragDelta().X;
+                    if (MathF.Abs(delta) > 0)
+                    {
+                        _blendStrength = delta * 0.01f;
+                        VariationHandling.ActivePoolForPresets.UpdateBlendPreset(instance, variation.ActivationIndex, _blendStrength);
+                    }
+                }
             }
-            
-            ImGui.Selectable(variation.ToString() + s);
-            
-            if (ImGui.IsItemActivated())
+            else if (ImGui.IsItemDeactivated())
             {
                 if (_hoveredVariation != null)
                 {
@@ -105,11 +135,10 @@ namespace t3.Gui.Windows.Presets
                 {
                     Log.Warning("Clicked without hovering variation button first?");
                 }
-
-                _hoveredVariation = null;
-            }
             
-            if (ImGui.IsItemHovered())
+                _hoveredVariation = null;
+            }            
+            else if (ImGui.IsItemHovered())
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
                 
@@ -129,6 +158,28 @@ namespace t3.Gui.Windows.Presets
                 VariationHandling.ActivePoolForPresets.StopHover();
                 _hoveredVariation = null;
             }
+
+            if (ImGui.IsItemActivated())
+            {
+                _blendStrength = 0;
+            }
+            
+
+            
+            if (ImGui.IsItemDeactivated())
+            {
+                //_variationCanvas.ClearVariations();
+            }
+
+            if (setCorrectly == MatchTypes.PresetParamsMatch)
+            {
+                ImGui.SameLine();
+                if (ImGui.Button("Reset others"))
+                {
+                    VariationHandling.ActivePoolForPresets.ApplyPreset(instance, variation.ActivationIndex, true);
+                }
+            }
+            ImGui.PopID();
             
             // if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             // {
@@ -141,6 +192,7 @@ namespace t3.Gui.Windows.Presets
         }
 
         private static Variation _hoveredVariation;
+        private static float _blendStrength = 1;
         
 
         private static MatchTypes DoesPresetVariationMatch(Variation variation, Instance instance)

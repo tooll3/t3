@@ -131,7 +131,7 @@ namespace t3.Gui.Interaction.Variations.Model
         #endregion
 
 
-        public void ApplyPreset(Instance instance, int variationIndex)
+        public void ApplyPreset(Instance instance, int variationIndex, bool resetOtherNonDefaults= false)
         {
             var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
             if (variation == null)
@@ -154,24 +154,32 @@ namespace t3.Gui.Interaction.Variations.Model
                         continue;
                     }
 
-                    foreach (var (inputId, parameter) in parametersForInputs)
+                    foreach (var input in instance.Inputs)
                     {
-                        if (parameter == null)
+                        if (parametersForInputs.TryGetValue(input.Id, out var param))
                         {
-                            continue;
+                            if (param == null)
+                                continue;
+                            
+                            var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, input.Input)
+                                                 {
+                                                     NewValue = param,
+                                                 };
+                            commands.Add(newCommand);
+                            
                         }
-
-                        var input = symbolChild.InputValues[inputId];
-                        var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, input)
-                                             {
-                                                 NewValue = parameter,
-                                             };
-                        commands.Add(newCommand);
+                        else
+                        {
+                            if (resetOtherNonDefaults)
+                            {
+                                commands.Add(new ResetInputToDefault(instance.Parent.Symbol, instance.SymbolChildId, input.Input));                                
+                            }
+                        }
                     }
                 }
             }
 
-            var command = new MacroCommand("Set Preset Values", commands);
+            var command = new MacroCommand("Apply Preset Values", commands);
             UndoRedoStack.AddAndExecute(command);
         }
 
@@ -225,6 +233,58 @@ namespace t3.Gui.Interaction.Variations.Model
             _activeBlendCommand.Do();
         }
 
+        public void UpdateBlendPreset(Instance instance, int variationIndex, float blend)
+        {
+            var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
+            if (variation == null)
+            {
+                Log.Error($"Can't find preset with index {variationIndex}");
+                return;
+            }
+            
+            if(_activeBlendCommand != null)
+                _activeBlendCommand.Undo();
+
+            var commands = new List<ICommand>();
+            var parentSymbol = instance.Parent.Symbol;
+
+            var symbolChild = parentSymbol.Children.SingleOrDefault(s => s.Id == instance.SymbolChildId);
+            if (symbolChild != null)
+            {
+                foreach (var (childId, parametersForInputs) in variation.InputValuesForChildIds)
+                {
+                    if (childId != Guid.Empty)
+                    {
+                        Log.Warning("Didn't expect childId in preset");
+                        continue;
+                    }
+
+                    foreach (var (inputId, parameter) in parametersForInputs)
+                    {
+                        if (parameter == null)
+                        {
+                            continue;
+                        }
+
+                        var input = symbolChild.InputValues[inputId];
+
+                        if (!ValueUtils.BlendMethods.TryGetValue(input.DefaultValue.ValueType, out var blendFunction))
+                            continue;
+                        
+                        var mixed = blendFunction(parameter, input.Value, blend);
+                        var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, input)
+                                             {
+                                                 NewValue = mixed,
+                                             };
+                        commands.Add(newCommand);
+                    }
+                }
+            }
+
+            _activeBlendCommand =new MacroCommand("Set Preset Values", commands);
+            _activeBlendCommand.Do();
+        }
+        
         public void StopHover()
         {
             if (_activeBlendCommand == null)
