@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using T3.Core.Operator;
 using T3.Gui.Graph;
-using t3.Gui.Interaction.Presets.Model;
 using t3.Gui.Interaction.Variations.Model;
 using T3.Gui.Selection;
 

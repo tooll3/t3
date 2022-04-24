@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
@@ -9,7 +10,6 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using t3.Gui.Commands.Variations;
-using t3.Gui.Interaction.Presets.Model;
 
 namespace t3.Gui.Interaction.Variations.Model
 {
@@ -84,7 +84,7 @@ namespace t3.Gui.Interaction.Variations.Model
             return result;
         }
 
-        private void SaveVariations()
+        private void SaveVariationsToFile()
         {
             if (Variations.Count == 0)
                 return;
@@ -105,96 +105,22 @@ namespace t3.Gui.Interaction.Variations.Model
 
                 // Presets
                 {
-                    // writer.WriteValue("GroupCount", Presets.GetLength(0));
-                    // writer.WriteValue("SceneCount", Presets.GetLength(1));
                     writer.WritePropertyName("Variations");
                     writer.WriteStartArray();
-                    // for (var groupIndex = 0; groupIndex < Presets.GetLength(0); groupIndex++)
-                    // {
-                    //     for (var sceneIndex = 0; sceneIndex < Presets.GetLength(1); sceneIndex++)
-                    //     {
-                    //         writer.WriteStartObject();
-                    //         writer.WriteComment($"preset {groupIndex}:{sceneIndex}");
-                    //         var address = new PresetAddress(groupIndex, sceneIndex);
-                    //         var preset = TryGetPresetAt(address);
-                    //         preset?.ToJson(writer);
-                    //
-                    //         writer.WriteEndObject();
-                    //     }
-                    // }
+                    foreach (var v in Variations)
+                    {
+                        v.ToJson(writer);
+                    }
 
                     writer.WriteEndArray();
                 }
 
-                // // Groups
-                // {
-                //     writer.WritePropertyName("Groups");
-                //     writer.WriteStartArray();
-                //     foreach (var @group in Groups)
-                //     {
-                //         writer.WriteStartObject();
-                //         @group?.ToJson(writer);
-                //         writer.WriteEndObject();
-                //     }
-                //
-                //     writer.WriteEndArray();
-                // }
-
-                // // Scenes
-                // {
-                //     writer.WritePropertyName("Scenes");
-                //     writer.WriteStartArray();
-                //     foreach (var scene in Scenes)
-                //     {
-                //         writer.WriteStartObject();
-                //         scene?.ToJson(writer);
-                //         writer.WriteEndObject();
-                //     }
-                //
-                //     writer.WriteEndArray();
-                // }
                 writer.WriteEndObject();
             }
             catch (Exception e)
             {
                 Log.Error($"Saving variations failed: {e.Message}");
             }
-
-            // using var sr = new StreamReader(filepath);
-            // using var jsonReader = new JsonTextReader(sr);
-            //
-            // var result = new List<Variation>();
-            //
-            // try
-            // {
-            //     var jToken = JToken.ReadFrom(jsonReader);
-            //     foreach (var sceneToken in (JArray)jToken["Variations"])
-            //     {
-            //         if (sceneToken == null)
-            //         {
-            //             Log.Error("No variations?");
-            //             continue;
-            //         }
-            //
-            //         var newVariation = Variation.FromJson(compositionId, sceneToken);
-            //         if (newVariation == null)
-            //         {
-            //             Log.Warning($"Failed to parse variation json:" + sceneToken);
-            //             continue;
-            //         }
-            //
-            //         //TODO: this needs to be implemented
-            //         newVariation.IsPreset = true;
-            //         result.Add(newVariation);
-            //     }
-            // }
-            // catch (Exception e)
-            // {
-            //     Log.Error($"Failed to load presets and variations for {compositionId}: {e.Message}");
-            //     return new List<Variation>();
-            // }
-            //
-            // return result;
         }
 
         public void ApplyPreset(Instance instance, int variationIndex)
@@ -236,7 +162,7 @@ namespace t3.Gui.Interaction.Variations.Model
                     }
                 }
             }
-            
+
             var command = new MacroCommand("Set Preset Values", commands);
             UndoRedoStack.AddAndExecute(command);
         }
@@ -255,10 +181,11 @@ namespace t3.Gui.Interaction.Variations.Model
                     continue;
                 }
 
-                if (input.Input.Value is InputValue<float> floatValue)
+                if (BlendMethods.ContainsKey(input.Input.Value.ValueType))
                 {
-                    changes[input.Id] = floatValue;
+                    changes[input.Id] = input.Input.Value.Clone();
                 }
+
             }
 
             if (changes.Count == 0)
@@ -282,7 +209,7 @@ namespace t3.Gui.Interaction.Variations.Model
 
             var command = new AddPresetOrVariationCommand(instance.Symbol, newVariation);
             UndoRedoStack.AddAndExecute(command);
-            SaveVariations();
+            SaveVariationsToFile();
         }
 
         private static string GetFilePathForVariationId(Guid compositionId)
@@ -290,5 +217,83 @@ namespace t3.Gui.Interaction.Variations.Model
             var filepath = $".Variations/{compositionId}.var";
             return filepath;
         }
+
+        public static readonly Dictionary<Type, Func<InputValue, InputValue, float, InputValue>> BlendMethods =
+            new()
+                {
+                    { typeof(float), (a, b, t) =>
+                                                 {
+                                                     if (a is not InputValue<float> aValue || b is not InputValue<float> bValue)
+                                                         return null;
+                                                     
+                                                     var r= MathUtils.Lerp(aValue.Value, bValue.Value, t);
+                                                     return new InputValue<float>(r);
+                                                 } },
+                    { typeof(Vector2), (a, b, t) =>
+                                                 {
+                                                     if (a is not InputValue<Vector2> aValue || b is not InputValue<Vector2> bValue)
+                                                         return null;
+                                                     
+                                                     var r= MathUtils.Lerp(aValue.Value, bValue.Value, t);
+                                                     return new InputValue<Vector2>(r);
+                                                 } },
+                    { typeof(Vector3), (a, b, t) =>
+                                                   {
+                                                       if (a is not InputValue<Vector3> aValue || b is not InputValue<Vector3> bValue)
+                                                           return null;
+                                                     
+                                                       var r= MathUtils.Lerp(aValue.Value, bValue.Value, t);
+                                                       return new InputValue<Vector3>(r);
+                                                   } },
+                    { typeof(Vector4), (a, b, t) =>
+                                                   {
+                                                       if (a is not InputValue<Vector4> aValue || b is not InputValue<Vector4> bValue)
+                                                           return null;
+                                                     
+                                                       var r= MathUtils.Lerp(aValue.Value, bValue.Value, t);
+                                                       return new InputValue<Vector4>(r);
+                                                   } },
+                    
+                    { typeof(Quaternion), (a, b, t) =>
+                                                   {
+                                                       if (a is not InputValue<Quaternion> aValue || b is not InputValue<Quaternion> bValue)
+                                                           return null;
+                                                     
+                                                       var r= Quaternion.Slerp(aValue.Value, bValue.Value, t);
+                                                       return new InputValue<Quaternion>(r);
+                                                   } },                    
+                    { typeof(int), (a, b, t) =>
+                                                   {
+                                                       if (a is not InputValue<int> aValue || b is not InputValue<int> bValue)
+                                                           return null;
+                                                     
+                                                       var r= MathUtils.Lerp(aValue.Value, bValue.Value, t);
+                                                       return new InputValue<int>(r);
+                                                   } },
+                    
+                    { typeof(SharpDX.Int3), (a, b, t) =>
+                                               {
+                                                   if (a is not InputValue<SharpDX.Int3> aValue || b is not InputValue<SharpDX.Int3> bValue)
+                                                       return null;
+                                                     
+                                                   var r= new SharpDX.Int3(MathUtils.Lerp(aValue.Value.X, bValue.Value.X, t), 
+                                                                           MathUtils.Lerp(aValue.Value.Y, bValue.Value.Y, t),
+                                                                           MathUtils.Lerp(aValue.Value.Z, bValue.Value.Z, t)
+                                                                           );
+                                                   return new InputValue<SharpDX.Int3>(r);
+                                               } },
+                    
+                    { typeof(SharpDX.Size2), (a, b, t) =>
+                                                        {
+                                                            if (a is not InputValue<SharpDX.Size2> aValue || b is not InputValue<SharpDX.Size2> bValue)
+                                                                return null;
+                                                     
+                                                            var r= new SharpDX.Size2(MathUtils.Lerp(aValue.Value.Width, bValue.Value.Width, t), 
+                                                                                    MathUtils.Lerp(aValue.Value.Height, bValue.Value.Height, t)
+                                                                                   );
+                                                            return new InputValue<SharpDX.Size2>(r);
+                                                        } },                    
+                    
+                };
     }
 }

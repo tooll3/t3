@@ -24,7 +24,7 @@ namespace T3.Gui.Interaction.LegacyVariations.Model
             
             return new PresetScene()
                        {
-                           Id = Guid.Parse(sceneToken["Id"].Value<string>()),
+                           Id = Guid.Parse(sceneToken["Id"].Value<string>() ?? string.Empty),
                            Title = sceneToken.Value<string>("Title"),
                        };
         }

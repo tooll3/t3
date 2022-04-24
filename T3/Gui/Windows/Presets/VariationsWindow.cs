@@ -33,12 +33,12 @@ namespace t3.Gui.Windows.Presets
                     }
                     else
                     {
+                        var instance = VariationHandling.ActiveInstanceForPresets;
                         if (presetPool.Variations.Count == 0)
                         {
                             CustomComponents.EmptyWindowMessage($"No Presets for {VariationHandling.ActiveInstanceForPresets.Symbol.Name}");
                         }
                         else {
-                            var instance = VariationHandling.ActiveInstanceForPresets;
                             if (instance == null)
                             {
                                 CustomComponents.EmptyWindowMessage($"NULL?!");    
@@ -55,10 +55,10 @@ namespace t3.Gui.Windows.Presets
                                     }
                                 }
                             }
-                            if (ImGui.Button("Create"))
-                            {
-                                VariationHandling.ActiveInstancePresetPool.CreatePresetOfInstanceSymbol(instance);
-                            }
+                        }
+                        if (ImGui.Button("Create"))
+                        {
+                            VariationHandling.ActiveInstancePresetPool.CreatePresetOfInstanceSymbol(instance);
                         }
                     }
 
