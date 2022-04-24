@@ -689,6 +689,7 @@ namespace T3.Core
             File.WriteAllText(projectFilePath, newContent);
         }
         
+        
         private static string SymbolExtension { get; } = ".t3";
         private static string SymbolUiExtension { get; } = ".t3ui";
         private static string SourceExtension { get; } = ".cs";

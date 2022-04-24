@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
+using Core.Resource;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
@@ -32,6 +32,8 @@ namespace t3.Gui.Interaction.Variations.Model
             return newPool;
         }
 
+        #region serialization
+        
         private static List<Variation> LoadVariations(Guid compositionId)
         {
             var filepath = GetFilePathForVariationId(compositionId);
@@ -91,8 +93,6 @@ namespace t3.Gui.Interaction.Variations.Model
 
             var filePath = GetFilePathForVariationId(SymbolId);
 
-            //Log.Info($"Reading presets definition for : {compositionId}");
-
             using var sw = new StreamWriter(filePath);
             using var writer = new JsonTextWriter(sw);
 
@@ -122,6 +122,14 @@ namespace t3.Gui.Interaction.Variations.Model
                 Log.Error($"Saving variations failed: {e.Message}");
             }
         }
+        
+        private static string GetFilePathForVariationId(Guid compositionId)
+        {
+            var filepath = $".Variations/{compositionId}.var";
+            return filepath;
+        }
+        #endregion
+
 
         public void ApplyPreset(Instance instance, int variationIndex)
         {
@@ -142,7 +150,7 @@ namespace t3.Gui.Interaction.Variations.Model
                 {
                     if (childId != Guid.Empty)
                     {
-                        Log.Warning("Didn't export childId in preset");
+                        Log.Warning("Didn't expect childId in preset");
                         continue;
                     }
 
@@ -167,6 +175,85 @@ namespace t3.Gui.Interaction.Variations.Model
             UndoRedoStack.AddAndExecute(command);
         }
 
+        public void BeginHoverPreset(Instance instance, int variationIndex)
+        {
+            var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
+            if (variation == null)
+            {
+                Log.Error($"Can't find preset with index {variationIndex}");
+                return;
+            }
+
+            if (_activeBlendCommand != null)
+            {
+                Log.Error("Can't start blending while blending already in progress");
+                return;
+            }
+
+            var commands = new List<ICommand>();
+            var parentSymbol = instance.Parent.Symbol;
+
+            var symbolChild = parentSymbol.Children.SingleOrDefault(s => s.Id == instance.SymbolChildId);
+            if (symbolChild != null)
+            {
+                foreach (var (childId, parametersForInputs) in variation.InputValuesForChildIds)
+                {
+                    if (childId != Guid.Empty)
+                    {
+                        Log.Warning("Didn't expect childId in preset");
+                        continue;
+                    }
+
+                    foreach (var (inputId, parameter) in parametersForInputs)
+                    {
+                        if (parameter == null)
+                        {
+                            continue;
+                        }
+
+                        var input = symbolChild.InputValues[inputId];
+                        var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, input)
+                                             {
+                                                 NewValue = parameter,
+                                             };
+                        commands.Add(newCommand);
+                    }
+                }
+            }
+
+            _activeBlendCommand =new MacroCommand("Set Preset Values", commands);
+            _activeBlendCommand.Do();
+        }
+
+        public void StopHover()
+        {
+            if (_activeBlendCommand == null)
+            {
+                Log.Error("Can't stop non existing blend command");
+                return;
+            }
+            
+            _activeBlendCommand.Undo();
+            _activeBlendCommand = null;
+        }
+
+        public void ApplyHovered()
+        {
+            if (_activeBlendCommand == null)
+            {
+                Log.Error("Can't apply non existing blend command");
+                return;
+            }
+            
+            UndoRedoStack.Add(_activeBlendCommand);
+            _activeBlendCommand = null;
+        }
+        
+        
+
+        private MacroCommand _activeBlendCommand = null;
+        
+        
         /// <summary>
         /// Save non-default parameters of single selected Instance as preset for its Symbol.  
         /// </summary>
@@ -181,11 +268,10 @@ namespace t3.Gui.Interaction.Variations.Model
                     continue;
                 }
 
-                if (BlendMethods.ContainsKey(input.Input.Value.ValueType))
+                if (ValueUtils.BlendMethods.ContainsKey(input.Input.Value.ValueType))
                 {
                     changes[input.Id] = input.Input.Value.Clone();
                 }
-
             }
 
             if (changes.Count == 0)
@@ -212,88 +298,9 @@ namespace t3.Gui.Interaction.Variations.Model
             SaveVariationsToFile();
         }
 
-        private static string GetFilePathForVariationId(Guid compositionId)
-        {
-            var filepath = $".Variations/{compositionId}.var";
-            return filepath;
-        }
 
-        public static readonly Dictionary<Type, Func<InputValue, InputValue, float, InputValue>> BlendMethods =
-            new()
-                {
-                    { typeof(float), (a, b, t) =>
-                                                 {
-                                                     if (a is not InputValue<float> aValue || b is not InputValue<float> bValue)
-                                                         return null;
-                                                     
-                                                     var r= MathUtils.Lerp(aValue.Value, bValue.Value, t);
-                                                     return new InputValue<float>(r);
-                                                 } },
-                    { typeof(Vector2), (a, b, t) =>
-                                                 {
-                                                     if (a is not InputValue<Vector2> aValue || b is not InputValue<Vector2> bValue)
-                                                         return null;
-                                                     
-                                                     var r= MathUtils.Lerp(aValue.Value, bValue.Value, t);
-                                                     return new InputValue<Vector2>(r);
-                                                 } },
-                    { typeof(Vector3), (a, b, t) =>
-                                                   {
-                                                       if (a is not InputValue<Vector3> aValue || b is not InputValue<Vector3> bValue)
-                                                           return null;
-                                                     
-                                                       var r= MathUtils.Lerp(aValue.Value, bValue.Value, t);
-                                                       return new InputValue<Vector3>(r);
-                                                   } },
-                    { typeof(Vector4), (a, b, t) =>
-                                                   {
-                                                       if (a is not InputValue<Vector4> aValue || b is not InputValue<Vector4> bValue)
-                                                           return null;
-                                                     
-                                                       var r= MathUtils.Lerp(aValue.Value, bValue.Value, t);
-                                                       return new InputValue<Vector4>(r);
-                                                   } },
-                    
-                    { typeof(Quaternion), (a, b, t) =>
-                                                   {
-                                                       if (a is not InputValue<Quaternion> aValue || b is not InputValue<Quaternion> bValue)
-                                                           return null;
-                                                     
-                                                       var r= Quaternion.Slerp(aValue.Value, bValue.Value, t);
-                                                       return new InputValue<Quaternion>(r);
-                                                   } },                    
-                    { typeof(int), (a, b, t) =>
-                                                   {
-                                                       if (a is not InputValue<int> aValue || b is not InputValue<int> bValue)
-                                                           return null;
-                                                     
-                                                       var r= MathUtils.Lerp(aValue.Value, bValue.Value, t);
-                                                       return new InputValue<int>(r);
-                                                   } },
-                    
-                    { typeof(SharpDX.Int3), (a, b, t) =>
-                                               {
-                                                   if (a is not InputValue<SharpDX.Int3> aValue || b is not InputValue<SharpDX.Int3> bValue)
-                                                       return null;
-                                                     
-                                                   var r= new SharpDX.Int3(MathUtils.Lerp(aValue.Value.X, bValue.Value.X, t), 
-                                                                           MathUtils.Lerp(aValue.Value.Y, bValue.Value.Y, t),
-                                                                           MathUtils.Lerp(aValue.Value.Z, bValue.Value.Z, t)
-                                                                           );
-                                                   return new InputValue<SharpDX.Int3>(r);
-                                               } },
-                    
-                    { typeof(SharpDX.Size2), (a, b, t) =>
-                                                        {
-                                                            if (a is not InputValue<SharpDX.Size2> aValue || b is not InputValue<SharpDX.Size2> bValue)
-                                                                return null;
-                                                     
-                                                            var r= new SharpDX.Size2(MathUtils.Lerp(aValue.Value.Width, bValue.Value.Width, t), 
-                                                                                    MathUtils.Lerp(aValue.Value.Height, bValue.Value.Height, t)
-                                                                                   );
-                                                            return new InputValue<SharpDX.Size2>(r);
-                                                        } },                    
-                    
-                };
+
     }
+
+
 }

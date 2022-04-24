@@ -4,7 +4,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui;
 using T3.Gui.Commands;
-using t3.Gui.Interaction.Presets;
+using t3.Gui.Interaction.Variations;
 using t3.Gui.Interaction.Variations.Model;
 
 namespace t3.Gui.Commands.Variations

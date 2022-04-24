@@ -16,7 +16,6 @@ using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
-using t3.Gui.Interaction.Presets;
 using T3.Gui.Interaction.LegacyVariations;
 using T3.Gui.Interaction.Timing;
 using T3.Gui.Selection;
@@ -49,7 +48,7 @@ namespace T3.Gui
             _autoBackup.Enabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;
             VariationHandling.Update();
-            t3.Gui.Interaction.Presets.VariationHandling.Update();
+            t3.Gui.Interaction.Variations.VariationHandling.Update();
             MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
             MouseWheelFieldHovered = false;
 

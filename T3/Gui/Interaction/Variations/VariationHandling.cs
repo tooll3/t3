@@ -5,7 +5,7 @@ using T3.Gui.Graph;
 using t3.Gui.Interaction.Variations.Model;
 using T3.Gui.Selection;
 
-namespace t3.Gui.Interaction.Presets
+namespace t3.Gui.Interaction.Variations
 {
     /// <summary>
     /// Handles the live integration of variation model to the user interface.
@@ -21,8 +21,8 @@ namespace t3.Gui.Interaction.Presets
     /// </remarks>
     public static class VariationHandling
     {
-        public static SymbolVariationPool ActiveCompositionVariationPool { get; private set; }
-        public static SymbolVariationPool ActiveInstancePresetPool { get; private set; }
+        public static SymbolVariationPool ActivePoolForVariations { get; private set; }
+        public static SymbolVariationPool ActivePoolForPresets { get; private set; }
         
         public static Instance ActiveInstanceForVariations  { get; private set; }
         public static Instance ActiveInstanceForPresets  { get; private set; }
@@ -42,14 +42,14 @@ namespace t3.Gui.Interaction.Presets
             if (singleSelectedInstance != null)
             {
                 var selectedSymbolId = singleSelectedInstance.Symbol.Id;
-                ActiveInstancePresetPool = GetOrLoadVariations(selectedSymbolId);
-                ActiveCompositionVariationPool = GetOrLoadVariations(singleSelectedInstance.Parent.Symbol.Id);
+                ActivePoolForPresets = GetOrLoadVariations(selectedSymbolId);
+                ActivePoolForVariations = GetOrLoadVariations(singleSelectedInstance.Parent.Symbol.Id);
                 ActiveInstanceForPresets = singleSelectedInstance;
                 ActiveInstanceForVariations = singleSelectedInstance.Parent;
             }
             else
             {
-                ActiveInstancePresetPool = null;
+                ActivePoolForPresets = null;
                 
                 var activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
                 ActiveInstanceForVariations = activeCompositionInstance;
@@ -57,11 +57,11 @@ namespace t3.Gui.Interaction.Presets
                 // Prevent variations for library operators
                 if (activeCompositionInstance.Symbol.Namespace.StartsWith("lib."))
                 {
-                    ActiveCompositionVariationPool = null;
+                    ActivePoolForVariations = null;
                 }
                 else
                 {
-                    ActiveCompositionVariationPool = GetOrLoadVariations(activeCompositionInstance.Symbol.Id);
+                    ActivePoolForVariations = GetOrLoadVariations(activeCompositionInstance.Symbol.Id);
                 }
 
                 if (!SelectionManager.IsAnythingSelected())
