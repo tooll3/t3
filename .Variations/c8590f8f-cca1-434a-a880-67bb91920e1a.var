@@ -1,27 +1,152 @@
 {
-    "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
-    "Variations": [
-        {
-            "Id": "77666666-9996-401e-9aa6-328dd6292beb",
-            "Title": "Sharp",
-            "ActivationIndex": 1,
-            "IsPreset": true,
-            "InputValuesForChildIds": {
-                "00000000-0000-0000-0000-000000000000": {
-                    "8846aa50-e4d0-433c-9e5b-013a93f17f79": 0.4
-                }
-            }
-        },
-        {
-            "Id": "88666666-9996-401e-9aa6-328dd6292beb",
-            "Title": "Blurry",
-            "ActivationIndex": 2,
-            "IsPreset": true,
-            "InputValuesForChildIds": {
-                "00000000-0000-0000-0000-000000000000": {
-                    "8846aa50-e4d0-433c-9e5b-013a93f17f79": 1.5
-                }
-            }
+  "Id": "c8590f8f-cca1-434a-a880-67bb91920e1a",
+  "Variations": [
+    {
+      "Id": "2bb950ca-bd02-4f59-b4f5-ee64462e1ba3",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "vignette",
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          },
+          "de54f18b-6a1e-4610-8d6d-58897df6959b": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.0
+          },
+          "8a908810-2482-4088-8b21-a7ee15531e64": {
+            "X": 0.25,
+            "Y": 0.0
+          },
+          "41f4065a-0b65-4dda-9cd3-ef7802ed170b": 0.0,
+          "8846aa50-e4d0-433c-9e5b-013a93f17f79": -5.0,
+          "2d3a7e9a-9efe-486a-8c33-10a5a16dc17b": -10.0
         }
-    ]
+      }
+    },
+    {
+      "Id": "9443bff6-1413-44ad-86ff-5d70923ccc75",
+      "IsPreset": true,
+      "ActivationIndex": 6,
+      "Title": "circle",
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "41f4065a-0b65-4dda-9cd3-ef7802ed170b": 1.0,
+          "8846aa50-e4d0-433c-9e5b-013a93f17f79": 0.01
+        }
+      }
+    },
+    {
+      "Id": "538698a0-dec0-4ff8-af0f-3474edd283c9",
+      "IsPreset": true,
+      "ActivationIndex": 7,
+      "Title": "black and white",
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          },
+          "de54f18b-6a1e-4610-8d6d-58897df6959b": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "9183420a-e442-46ce-89e1-7c993e4d5e8d",
+      "IsPreset": true,
+      "ActivationIndex": 8,
+      "Title": "blue-orange",
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1": {
+            "X": 0.0,
+            "Y": 0.4056673,
+            "Z": 1.0,
+            "W": 1.0
+          },
+          "de54f18b-6a1e-4610-8d6d-58897df6959b": {
+            "X": 0.67464113,
+            "Y": 0.2658093,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "50ac08c7-8d3a-445f-8e7e-d239a4fa8a91",
+      "IsPreset": true,
+      "ActivationIndex": 9,
+      "Title": "white blob",
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          },
+          "de54f18b-6a1e-4610-8d6d-58897df6959b": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "d56a05ba-798f-4ffa-bda2-3bd0370e5909",
+      "IsPreset": true,
+      "ActivationIndex": 10,
+      "Title": "black-blob",
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          },
+          "de54f18b-6a1e-4610-8d6d-58897df6959b": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.0
+          },
+          "41f4065a-0b65-4dda-9cd3-ef7802ed170b": 1.0,
+          "8846aa50-e4d0-433c-9e5b-013a93f17f79": 0.01
+        }
+      }
+    },
+    {
+      "Id": "5b320251-9fd0-48e2-bdfd-88337b09611b",
+      "IsPreset": true,
+      "ActivationIndex": 11,
+      "Title": "pill-shape",
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8a908810-2482-4088-8b21-a7ee15531e64": {
+            "X": 0.5,
+            "Y": 0.0
+          },
+          "41f4065a-0b65-4dda-9cd3-ef7802ed170b": 0.5,
+          "8846aa50-e4d0-433c-9e5b-013a93f17f79": 0.01
+        }
+      }
+    }
+  ]
 }
