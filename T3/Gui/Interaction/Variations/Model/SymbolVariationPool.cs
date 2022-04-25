@@ -311,13 +311,11 @@ namespace t3.Gui.Interaction.Variations.Model
         
         
 
-        private MacroCommand _activeBlendCommand = null;
-        
         
         /// <summary>
         /// Save non-default parameters of single selected Instance as preset for its Symbol.  
         /// </summary>
-        public void CreatePresetOfInstanceSymbol(Instance instance)
+        public Variation CreatePresetOfInstanceSymbol(Instance instance)
         {
             var changes = new Dictionary<Guid, InputValue>();
 
@@ -337,7 +335,7 @@ namespace t3.Gui.Interaction.Variations.Model
             if (changes.Count == 0)
             {
                 Log.Warning("All values are default. Nothing to save in preset");
-                return;
+                return null;
             }
 
             var newVariation = new Variation
@@ -356,11 +354,16 @@ namespace t3.Gui.Interaction.Variations.Model
             var command = new AddPresetOrVariationCommand(instance.Symbol, newVariation);
             UndoRedoStack.AddAndExecute(command);
             SaveVariationsToFile();
+            return newVariation;
         }
 
-
-
+        public void DeleteVariation(Variation variation)
+        {
+            var command = new DeleteVariationCommand(this, variation);
+            UndoRedoStack.AddAndExecute(command);
+            SaveVariationsToFile();
+        }
+        
+        private MacroCommand _activeBlendCommand;
     }
-
-
 }

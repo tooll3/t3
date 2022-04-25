@@ -1,6 +1,8 @@
-﻿using t3.Gui.Graph;
+﻿using T3.Gui;
+using T3.Gui.Commands;
+using t3.Gui.Graph;
 
-namespace T3.Gui.Commands
+namespace t3.Gui.Commands.Annotations
 {
     public class DeleteAnnotationCommand : ICommand
     {

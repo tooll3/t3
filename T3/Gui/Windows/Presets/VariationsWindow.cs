@@ -49,6 +49,14 @@ namespace t3.Gui.Windows.Presets
             //     }
             // }
             
+            // Delete actions need be deferred to prevent collection modification during iteration
+            if (_variationToBeDeletedNextFrame != null)
+            {
+                _poolWithVariationToBeDeleted.DeleteVariation(_variationToBeDeletedNextFrame);
+                _variationToBeDeletedNextFrame = null;
+            }
+            
+            
             if (ImGui.BeginTabBar("##presets"))
             {
                 if (ImGui.BeginTabItem("Presets"))
@@ -80,7 +88,8 @@ namespace t3.Gui.Windows.Presets
                         }
                         if (ImGui.Button("Create"))
                         {
-                            VariationHandling.ActivePoolForPresets.CreatePresetOfInstanceSymbol(instance);
+                            var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetOfInstanceSymbol(instance);
+                            _variationForRenaming = newVariation;
                         }
                     }
 
@@ -101,6 +110,19 @@ namespace t3.Gui.Windows.Presets
 
         private static void DrawPresetButton(Variation variation, Instance instance)
         {
+            if (_variationForRenaming == variation)
+            {
+                ImGui.SetKeyboardFocusHere();
+                ImGui.InputText("##label", ref variation.Title, 256);
+                if (ImGui.IsItemDeactivatedAfterEdit() && ImGui.IsItemDeactivated())
+                {
+                    _variationForRenaming = null;
+                }
+                return;
+            }
+            
+            
+            
             ImGui.PushID(variation.ActivationIndex);
             var setCorrectly = DoesPresetVariationMatch(variation, instance);
 
@@ -111,7 +133,19 @@ namespace t3.Gui.Windows.Presets
             ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
             ImGui.Button(variation.ToString());
             ImGui.PopStyleColor();
-            
+            CustomComponents.ContextMenuForItem(() =>
+                                                {
+                                                    if (ImGui.MenuItem("Delete"))
+                                                    {
+                                                        _variationToBeDeletedNextFrame = variation;
+                                                        _poolWithVariationToBeDeleted = VariationHandling.ActivePoolForPresets;
+                                                    }
+
+                                                    if (ImGui.MenuItem("Rename"))
+                                                    {
+                                                        _variationForRenaming = variation;
+                                                    }
+                                                });
             
             if (ImGui.IsItemActive())
             {
@@ -180,19 +214,14 @@ namespace t3.Gui.Windows.Presets
                 }
             }
             ImGui.PopID();
-            
-            // if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-            // {
-            //     matchingParam.ScatterStrength = (_strengthBeforeDrag + ImGui.GetMouseDragDelta().X * 0.02f).Clamp(0, 100f);
-            // }
-            // if (ImGui.IsItemDeactivated())
-            // {
-            //     _variationCanvas.ClearVariations();
-            // }
         }
 
+
+        private static Variation _variationForRenaming;
         private static Variation _hoveredVariation;
         private static float _blendStrength = 1;
+        private static Variation _variationToBeDeletedNextFrame;
+        private static SymbolVariationPool _poolWithVariationToBeDeleted;
         
 
         private static MatchTypes DoesPresetVariationMatch(Variation variation, Instance instance)
