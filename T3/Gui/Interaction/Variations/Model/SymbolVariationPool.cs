@@ -131,14 +131,14 @@ namespace t3.Gui.Interaction.Variations.Model
         #endregion
 
 
-        public void ApplyPreset(Instance instance, int variationIndex, bool resetOtherNonDefaults= false)
+        public void ApplyPreset(Instance instance, Variation variation, bool resetOtherNonDefaults= false)
         {
-            var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
-            if (variation == null)
-            {
-                Log.Error($"Can't find preset with index {variationIndex}");
-                return;
-            }
+            // var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
+            // if (variation == null)
+            // {
+            //     Log.Error($"Can't find preset with index {variationIndex}");
+            //     return;
+            // }
 
             var commands = new List<ICommand>();
             var parentSymbol = instance.Parent.Symbol;
@@ -183,14 +183,14 @@ namespace t3.Gui.Interaction.Variations.Model
             UndoRedoStack.AddAndExecute(command);
         }
 
-        public void BeginHoverPreset(Instance instance, int variationIndex)
+        public void BeginHoverPreset(Instance instance, Variation variation)
         {
-            var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
-            if (variation == null)
-            {
-                Log.Error($"Can't find preset with index {variationIndex}");
-                return;
-            }
+            //var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
+            // if (variation == null)
+            // {
+            //     Log.Error($"Can't find preset with index {variationIndex}");
+            //     return;
+            // }
 
             if (_activeBlendCommand != null)
             {
@@ -233,14 +233,14 @@ namespace t3.Gui.Interaction.Variations.Model
             _activeBlendCommand.Do();
         }
 
-        public void UpdateBlendPreset(Instance instance, int variationIndex, float blend)
+        public void UpdateBlendPreset(Instance instance, Variation variation, float blend)
         {
-            var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
-            if (variation == null)
-            {
-                Log.Error($"Can't find preset with index {variationIndex}");
-                return;
-            }
+            // var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
+            // if (variation == null)
+            // {
+            //     Log.Error($"Can't find preset with index {variationIndex}");
+            //     return;
+            // }
             
             if(_activeBlendCommand != null)
                 _activeBlendCommand.Undo();

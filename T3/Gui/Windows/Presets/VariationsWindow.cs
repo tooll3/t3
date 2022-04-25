@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Core.Resource;
 using ImGuiNET;
 using T3.Core.Logging;
@@ -7,6 +8,7 @@ using T3.Core.Operator;
 using T3.Gui;
 using t3.Gui.Interaction.Variations;
 using t3.Gui.Interaction.Variations.Model;
+using T3.Gui.Styling;
 using T3.Gui.Windows;
 
 namespace t3.Gui.Windows.Presets
@@ -23,8 +25,7 @@ namespace t3.Gui.Windows.Presets
             DrawWindowContent();
         }
 
-
-        public void DrawWindowContent()
+        private void DrawWindowContent()
         {
             // Mock implementation
             // if (ImGui.Button("Save Screenshot"))
@@ -48,15 +49,14 @@ namespace t3.Gui.Windows.Presets
             //         } 
             //     }
             // }
-            
+
             // Delete actions need be deferred to prevent collection modification during iteration
             if (_variationToBeDeletedNextFrame != null)
             {
                 _poolWithVariationToBeDeleted.DeleteVariation(_variationToBeDeletedNextFrame);
                 _variationToBeDeletedNextFrame = null;
             }
-            
-            
+
             if (ImGui.BeginTabBar("##presets"))
             {
                 if (ImGui.BeginTabItem("Presets"))
@@ -73,10 +73,11 @@ namespace t3.Gui.Windows.Presets
                         {
                             CustomComponents.EmptyWindowMessage($"No Presets for {VariationHandling.ActiveInstanceForPresets.Symbol.Name}");
                         }
-                        else {
+                        else
+                        {
                             if (instance == null)
                             {
-                                CustomComponents.EmptyWindowMessage($"NULL?!");    
+                                CustomComponents.EmptyWindowMessage($"NULL?!");
                             }
                             else
                             {
@@ -86,13 +87,13 @@ namespace t3.Gui.Windows.Presets
                                 }
                             }
                         }
+
                         if (ImGui.Button("Create"))
                         {
                             var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetOfInstanceSymbol(instance);
                             _variationForRenaming = newVariation;
                         }
                     }
-
 
                     ImGui.EndTabItem();
                 }
@@ -105,33 +106,35 @@ namespace t3.Gui.Windows.Presets
             }
 
             ImGui.EndTabBar();
-
         }
 
         private static void DrawPresetButton(Variation variation, Instance instance)
         {
             if (_variationForRenaming == variation)
-            {
+            {            
+                ImGui.PushID(variation.ActivationIndex);
                 ImGui.SetKeyboardFocusHere();
                 ImGui.InputText("##label", ref variation.Title, 256);
+                
                 if (ImGui.IsItemDeactivatedAfterEdit() && ImGui.IsItemDeactivated())
                 {
                     _variationForRenaming = null;
                 }
+                ImGui.PopID();
+
                 return;
             }
-            
-            
-            
-            ImGui.PushID(variation.ActivationIndex);
+
+            ImGui.PushID(variation.Id.GetHashCode());
             var setCorrectly = DoesPresetVariationMatch(variation, instance);
 
             var color = setCorrectly == MatchTypes.NoMatch
                             ? Color.Gray
                             : Color.White;
-            
+
             ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
-            ImGui.Button(variation.ToString());
+            var sliderWidth = (int)MathF.Min(100, ImGui.GetContentRegionAvail().X * 0.3f);
+            ImGui.Button("##empty", new Vector2(-30, 0));
             ImGui.PopStyleColor();
             CustomComponents.ContextMenuForItem(() =>
                                                 {
@@ -146,16 +149,24 @@ namespace t3.Gui.Windows.Presets
                                                         _variationForRenaming = variation;
                                                     }
                                                 });
-            
+
             if (ImGui.IsItemActive())
             {
-                if(  ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                if (_hoveredVariation != variation)
+                {
+                    if(_hoveredVariation != null)
+                        VariationHandling.ActivePoolForPresets.StopHover();
+                    
+                    VariationHandling.ActivePoolForPresets.BeginHoverPreset(instance, variation);
+                }
+
+                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
                     var delta = ImGui.GetMouseDragDelta().X;
                     if (MathF.Abs(delta) > 0)
                     {
                         _blendStrength = delta * 0.01f;
-                        VariationHandling.ActivePoolForPresets.UpdateBlendPreset(instance, variation.ActivationIndex, _blendStrength);
+                        VariationHandling.ActivePoolForPresets.UpdateBlendPreset(instance, variation, _blendStrength);
                     }
                 }
             }
@@ -169,25 +180,28 @@ namespace t3.Gui.Windows.Presets
                 {
                     Log.Warning("Clicked without hovering variation button first?");
                 }
-            
+
                 _hoveredVariation = null;
-            }            
+            }
             else if (ImGui.IsItemHovered())
             {
-                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
-                
+                var posInItem = ImGui.GetMousePos() - ImGui.GetItemRectMin();
+                var sliderFactor = 1 - MathF.Max(0, MathF.Min(1, posInItem.X / sliderWidth));
+
                 if (_hoveredVariation != variation)
                 {
                     if (_hoveredVariation != null)
                     {
                         VariationHandling.ActivePoolForPresets.StopHover();
                     }
-                    
-                    VariationHandling.ActivePoolForPresets.BeginHoverPreset(instance, variation.ActivationIndex);
+
+                    VariationHandling.ActivePoolForPresets.BeginHoverPreset(instance, variation);
                     _hoveredVariation = variation;
                 }
+
+                VariationHandling.ActivePoolForPresets.UpdateBlendPreset(instance, variation, sliderFactor);
             }
-            else if(_hoveredVariation == variation)
+            else if (_hoveredVariation == variation)
             {
                 VariationHandling.ActivePoolForPresets.StopHover();
                 _hoveredVariation = null;
@@ -199,37 +213,74 @@ namespace t3.Gui.Windows.Presets
             }
             
 
-            
-            if (ImGui.IsItemDeactivated())
+            // Draw type indicators
+            var lastItemSize = ImGui.GetItemRectSize();
+            var drawList = ImGui.GetWindowDrawList();
+            var itemRectMin = ImGui.GetItemRectMin();
+
+            drawList.PushClipRect(itemRectMin, ImGui.GetItemRectMax(), true);
+
+            var position = itemRectMin + new Vector2(lastItemSize.X - _valueMatching.Count * 4 - 4, 0);
+            for (var index = 0; index < _valueMatching.Count; index++)
             {
-                //_variationCanvas.ClearVariations();
+                var matching = _valueMatching[index];
+                var slotTypeIcon = _valueSlotTypes[index];
+                Icons.DrawIconAtScreenPosition(slotTypeIcon, position, drawList, _matchColors[(int)matching]);
+                position += new Vector2(4, 0);
             }
 
+            // Draw Blend region indicator
+            drawList.AddTriangleFilled(itemRectMin,
+                                       itemRectMin + new Vector2(sliderWidth, 0),
+                                       itemRectMin + new Vector2(0, lastItemSize.Y), Color.Black.Fade(0.2f)
+                                      );
+
+            // Print label
+            drawList.AddText(itemRectMin + new Vector2(sliderWidth + 4, 3),
+                             Color.Gray,
+                             variation.ToString());
+
+            // Reset non defaults button
             if (setCorrectly == MatchTypes.PresetParamsMatch)
             {
                 ImGui.SameLine();
                 if (ImGui.Button("Reset others"))
                 {
-                    VariationHandling.ActivePoolForPresets.ApplyPreset(instance, variation.ActivationIndex, true);
+                    VariationHandling.ActivePoolForPresets.ApplyPreset(instance, variation, true);
                 }
             }
+
+            ImGui.PopClipRect();
+
             ImGui.PopID();
         }
-
 
         private static Variation _variationForRenaming;
         private static Variation _hoveredVariation;
         private static float _blendStrength = 1;
         private static Variation _variationToBeDeletedNextFrame;
         private static SymbolVariationPool _poolWithVariationToBeDeleted;
-        
+
+        private static readonly List<Icon> _valueSlotTypes = new(20);
+        private static readonly List<ValueMatches> _valueMatching = new(20);
+
+        // must match length for MatchTypes
+        private static readonly Color[] _matchColors = new[]
+                                                           {
+                                                               Color.Gray,
+                                                               Color.Gray,
+                                                               Color.Black,
+                                                               Color.Black,
+                                                           };
 
         private static MatchTypes DoesPresetVariationMatch(Variation variation, Instance instance)
         {
             var setCorrectly = true;
             var foundOneMatch = false;
             var foundUnknownNonDefaults = false;
-            
+            _valueMatching.Clear();
+            _valueSlotTypes.Clear();
+
             foreach (var (symbolChildId, values) in variation.InputValuesForChildIds)
             {
                 if (symbolChildId != Guid.Empty)
@@ -239,39 +290,75 @@ namespace t3.Gui.Windows.Presets
                 {
                     var inputIsDefault = input.Input.IsDefault;
                     var variationIncludesInput = values.ContainsKey(input.Id);
-                    
-                    if (!variationIncludesInput)
-                    {
-                        if (!inputIsDefault)
-                        {
-                            foundUnknownNonDefaults = true;
-                        }                        
+
+                    if (!ValueUtils.CompareFunctions.ContainsKey(input.ValueType))
                         continue;
+
+                    Icon icon = Icon.SlotFloat;
+
+                    if (input.ValueType == typeof(float))
+                    {
+                        icon = Icon.SlotFloat;
+                    }
+                    else if (input.ValueType == typeof(Vector2))
+                    {
+                        icon = Icon.SlotVector2;
+                    }
+                    else if (input.ValueType == typeof(Vector3))
+                    {
+                        icon = Icon.SlotVector3;
+                    }
+                    else if (input.ValueType == typeof(Vector4))
+                    {
+                        icon = Icon.SlotColor;
                     }
 
-                    foundOneMatch = true;
+                    _valueSlotTypes.Add(icon);
 
-                    if (inputIsDefault)
+                    ValueMatches matching;
+                    if (variationIncludesInput)
                     {
-                        setCorrectly = false;
+                        foundOneMatch = true;
+
+                        if (inputIsDefault)
+                        {
+                            matching = ValueMatches.NotEqual;
+                            setCorrectly = false;
+                        }
+                        else
+                        {
+                            var inputValueMatches = ValueUtils.CompareFunctions[input.ValueType](values[input.Id], input.Input.Value);
+                            matching = inputValueMatches ? ValueMatches.Equal : ValueMatches.NotEqual;
+                            setCorrectly &= inputValueMatches;
+                        }
                     }
                     else
                     {
-                        var inputValueMatches = ValueUtils.CompareFunctions[input.ValueType](values[input.Id], input.Input.Value);
-                        setCorrectly &= inputValueMatches;
+                        if (inputIsDefault)
+                        {
+                            matching = ValueMatches.IgnoredDefault;
+                        }
+                        else
+                        {
+                            matching = ValueMatches.IgnoredUndefinedNonDefault;
+                            foundUnknownNonDefaults = true;
+                        }
                     }
+
+                    _valueMatching.Add(matching);
                 }
             }
 
             if (!foundOneMatch || !setCorrectly)
             {
-                return MatchTypes.NoMatch; 
+                return MatchTypes.NoMatch;
             }
 
             if (foundUnknownNonDefaults)
             {
                 return MatchTypes.PresetParamsMatch;
             }
+
             return MatchTypes.PresetAndDefaultParamsMatch;
         }
 
@@ -280,6 +367,14 @@ namespace t3.Gui.Windows.Presets
             NoMatch,
             PresetParamsMatch,
             PresetAndDefaultParamsMatch,
+        }
+
+        private enum ValueMatches
+        {
+            NotEqual,
+            Equal,
+            IgnoredDefault,
+            IgnoredUndefinedNonDefault,
         }
 
         public override List<Window> GetInstances()
