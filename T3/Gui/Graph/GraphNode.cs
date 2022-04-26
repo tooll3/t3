@@ -838,7 +838,7 @@ namespace T3.Gui.Graph
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
-            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.7f, 1.2f, UsableSlotThickness / 2, UsableSlotThickness);
+            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1.2f, (int)(UsableSlotThickness *0.5f), UsableSlotThickness);
 
             var opRect = _usableScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
@@ -1212,7 +1212,7 @@ namespace T3.Gui.Graph
 
         #region style variables
         public static Vector2 LabelPos = new Vector2(4, 2);
-        public static float UsableSlotThickness = 14;
+        public static float UsableSlotThickness = 10;
         public static float InputSlotThickness = 3;
         public static float InputSlotMargin = 1;
         public static float SlotGaps = 2;
