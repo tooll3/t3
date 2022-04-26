@@ -184,7 +184,7 @@ namespace T3.Gui.UiHelpers
                     }
 
                     //anyHandleHovered = true;
-                    modified = ColorEditPopup.DrawPopup(ref step.Color, step.Color);
+                    modified |= ColorEditPopup.DrawPopup(ref step.Color, step.Color);
 
                     ImGui.PopID();
                 }

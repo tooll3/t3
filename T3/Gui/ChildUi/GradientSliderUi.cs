@@ -29,7 +29,8 @@ namespace T3.Gui.ChildUi
 
             if (GradientEditor.Draw(gradient, drawList, innerRect))
             {
-                gradientSlider.Gradient.DirtyFlag.Invalidate();
+                gradientSlider.Color.DirtyFlag.Invalidate();
+                gradientSlider.OutGradient.DirtyFlag.Invalidate();
             }
 
             var x = gradientSlider.SamplePos.Value.Clamp(0, 1) * innerRect.GetWidth();
