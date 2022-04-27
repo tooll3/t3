@@ -40,6 +40,9 @@ namespace T3.Operators.Types.Id_1b149f1f_529c_4418_ac9d_3871f24a9e38
         [Input(Guid = "6978ceab-98a9-4258-9c67-db41173d2aae")]
         public readonly InputSlot<float> SampleOffset = new InputSlot<float>();
 
+        [Input(Guid = "1ff7d454-b8fb-470f-beee-ec7521db8a7f")]
+        public readonly InputSlot<System.Numerics.Vector2> DisplaceMapOffset = new InputSlot<System.Numerics.Vector2>();
+
     }
 }
 
