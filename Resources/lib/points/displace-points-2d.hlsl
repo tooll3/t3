@@ -73,8 +73,8 @@ void main(uint3 i : SV_DispatchThreadID)
     float sx = SampleRadius / displaceMapWidth;
     float sy = SampleRadius / displaceMapHeight;
 
-    Points[index].position += float3(0, 0, 0.01 * gray);
-    return;
+    // Points[index].position += float3(0, 0, 0.01 * gray);
+    // return;
 
 
     float padding = 1;
