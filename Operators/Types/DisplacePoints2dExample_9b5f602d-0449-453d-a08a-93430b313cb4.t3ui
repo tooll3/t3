@@ -1,0 +1,104 @@
+{
+  "Id": "9b5f602d-0449-453d-a08a-93430b313cb4"/*DisplacePoints2dExample*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "0a3ff485-44ec-43ce-a4d2-aea3826f7c3d"/*DisplacePoints2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 450.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "a8edada1-a071-44c9-9a0a-ef775400ea55"/*RadialGPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 150.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "42b519e3-a054-4594-b1bb-f2e104a8ae7e"/*KeepPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 300.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "9d15877a-6a59-40ae-bbd4-cf6981c21512"/*DrawPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 600.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "1db2e45f-4988-4768-8acf-7145ff9f7ec8"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 172.99951
+      }
+    },
+    {
+      "ChildId": "2a958ee6-c889-41d2-826b-76a423ceb709"/*Blob*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 300.0,
+        "Y": 172.99951
+      }
+    },
+    {
+      "ChildId": "588b94bb-1f3b-48ce-acf0-392da20cd025"/*Blur*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 150.0,
+        "Y": 172.99951
+      }
+    },
+    {
+      "ChildId": "3b026da9-f8a9-4ed0-9aba-c49f75404df6"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 750.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "3192d666-6b7c-4ef4-9086-684df2f387a0"/*ColorBuffer*/,
+      "Position": {
+        "X": 1160.0,
+        "Y": 104.499756
+      }
+    }
+  ]
+}
