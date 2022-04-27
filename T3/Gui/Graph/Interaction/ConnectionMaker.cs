@@ -180,16 +180,16 @@ namespace T3.Gui.Graph
         {
             if (connection.IsConnectedToSymbolOutput || connection.IsConnectedToSymbolInput)
             {
-                Log.Debug("relayouting is not not supported for input and output nodes yet");
+                Log.Debug("re-layout is not not supported for input and output nodes yet");
                 return null;
             }
 
             var sourceNode = parent.Children.Single(child => child.Id == connection.SourceParentOrChildId);
             var targetNode = parent.Children.Single(child => child.Id == connection.TargetParentOrChildId);
 
-            var symbolUi = SymbolUiRegistry.Entries[parent.Id];
-            var sourceNodeUi = symbolUi.ChildUis.Single(node => node.Id == sourceNode.Id);
-            var targetNodeUi = symbolUi.ChildUis.Single(node => node.Id == targetNode.Id);
+            var parentSymbolUi = SymbolUiRegistry.Entries[parent.Id];
+            var sourceNodeUi = parentSymbolUi.ChildUis.Single(node => node.Id == sourceNode.Id);
+            var targetNodeUi = parentSymbolUi.ChildUis.Single(node => node.Id == targetNode.Id);
             var center = (sourceNodeUi.PosOnCanvas + targetNodeUi.PosOnCanvas) / 2;
             var commands = new List<ICommand>();
 
@@ -204,10 +204,16 @@ namespace T3.Gui.Graph
                 return null;
 
             var offset = Math.Min(requiredGap - currentGap, requiredGap);
-
-            foreach (var childUi in symbolUi.ChildUis)
+            
+            // Collect all connected ops further down the tree
+            var connectedOps = new HashSet<SymbolChild>();
+            RecursivelyAddChildren(ref connectedOps, parent, targetNodeUi.SymbolChild);
+            
+            foreach( var child in connectedOps)
             {
-                if (childUi.PosOnCanvas.X > center.X)
+                var childUi = parentSymbolUi.ChildUis.FirstOrDefault(c => c.Id == child.Id);
+                
+                if ( childUi == null || childUi.PosOnCanvas.X > center.X)
                     continue;
 
                 changedSymbols.Add(childUi);
@@ -217,8 +223,37 @@ namespace T3.Gui.Graph
                 childUi.PosOnCanvas = pos;
             }
 
-            commands.Add(new ChangeSelectableCommand(symbolUi.Symbol.Id, changedSymbols));
+            commands.Add(new ChangeSelectableCommand(parentSymbolUi.Symbol.Id, changedSymbols));
             return new MacroCommand("adjust layout", commands);
+        }
+
+        private static void RecursivelyAddChildren(ref HashSet<SymbolChild> set, Symbol parent, SymbolChild targetNode)
+        {
+            foreach (var inputDef in targetNode.Symbol.InputDefinitions)
+            {
+                var connections = parent.Connections.FindAll(c => c.TargetSlotId == inputDef.Id 
+                                                                  && c.TargetParentOrChildId == targetNode.Id);
+
+                foreach (var c in connections)
+                {
+                    if (c.SourceParentOrChildId == UseSymbolContainerId) // TODO move symbol inputs?
+                        continue;
+                    
+                    var sourceOp = parent.Children.FirstOrDefault(child => child.Id == c.SourceParentOrChildId);
+                    if (sourceOp == null)
+                    {
+                        Log.Error($"Can't find child for connection source {c.SourceParentOrChildId}");
+                        continue;
+                    }
+
+                    if (set.Contains(sourceOp))
+                        continue;
+                    
+                    
+                    set.Add(sourceOp);
+                    RecursivelyAddChildren(ref set, parent, sourceOp);
+                }
+            }
         }
 
         public static void CompleteAtInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input, int multiInputIndex = 0,
