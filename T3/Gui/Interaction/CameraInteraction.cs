@@ -204,7 +204,7 @@ namespace T3.Gui.Graph.Interaction
 
         private void ManipulateCameraByKeyboard()
         {
-            if (!ImGui.IsWindowHovered())
+            if (!ImGui.IsWindowHovered() || ImGui.GetIO().KeyCtrl)
                 return;
 
             var viewDirLength = _viewAxis.ViewDistance.Length();
