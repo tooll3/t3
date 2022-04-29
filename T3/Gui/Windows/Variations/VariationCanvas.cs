@@ -73,15 +73,18 @@ namespace T3.Gui.Windows.Variations
             HandleFenceSelection();
 
             var drawList = ImGui.GetWindowDrawList();
-
+            var modified = false;
             for (var index = 0; index < activePoolForPresets.Variations.Count; index++)
             {
-                VariationThumbnail.Draw(this,
+                modified |= VariationThumbnail.Draw(this,
                                         activePoolForPresets.Variations[index],
                                         drawList,
                                         _thumbnailCanvasRendering.CanvasTextureSrv,
                                         GetUvRectForIndex(index));
             }
+            
+            if(modified)
+                VariationPool.SaveVariationsToFile();
 
             // Draw Canvas Texture
             // var canvasSize = _thumbnailCanvasRendering.GetCanvasTextureSize();

@@ -15,7 +15,7 @@ namespace T3.Gui.Windows.Variations
 {
     public static class VariationThumbnail
     {
-        public static void Draw(VariationCanvas canvas, Variation v, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
+        public static bool Draw(VariationCanvas canvas, Variation v, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
             _canvas = canvas;
             var pMin = canvas.TransformPosition(v.PosOnCanvas);
@@ -67,16 +67,18 @@ namespace T3.Gui.Windows.Variations
             ImGui.SetCursorScreenPos(pMin);
             ImGui.PushID(v.Id.GetHashCode());
             ImGui.InvisibleButton("##thumbnail", ThumbnailSize);
-            HandleMovement(v);
+            
+            var modified = HandleMovement(v);
             ImGui.PopID();
 
             ImGui.PopClipRect();
+            return modified;
         }
 
         private static VariationCanvas _canvas;
         private static CanvasElementSelection _selection => _canvas.Selection;
 
-        private static void HandleMovement(ISelectableCanvasObject node)
+        private static bool HandleMovement(ISelectableCanvasObject node)
         {
             if (ImGui.IsItemActive())
             {
@@ -100,7 +102,7 @@ namespace T3.Gui.Windows.Variations
             else if (ImGui.IsMouseReleased(0) && _moveCommand != null)
             {
                 if (_draggedNodeId != node.Id)
-                    return;
+                    return false;
 
                 var singleDraggedNode = (_draggedNodes.Count == 1) ? _draggedNodes[0] : null;
                 _draggedNodeId = Guid.Empty;
@@ -111,6 +113,7 @@ namespace T3.Gui.Windows.Variations
                 {
                     _moveCommand.StoreCurrentValues();
                     UndoRedoStack.Add(_moveCommand);
+                    return true;
                 }
                 else
                 {
@@ -151,6 +154,7 @@ namespace T3.Gui.Windows.Variations
             //         VariationThumbnailSelection.SetSelection(node);
             //     }
             // }
+            return false;
         }
 
         private static bool _isDragging;

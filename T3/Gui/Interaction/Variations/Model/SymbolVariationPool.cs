@@ -86,7 +86,7 @@ namespace T3.Gui.Interaction.Variations.Model
             return result;
         }
 
-        private void SaveVariationsToFile()
+        public void SaveVariationsToFile()
         {
             if (Variations.Count == 0)
                 return;
