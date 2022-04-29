@@ -25,8 +25,7 @@ namespace T3.Gui.Windows.Variations
         public void Draw(SymbolVariationPool activePoolForPresets)
         {
             _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
-            
-            
+
             // var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) as OutputWindow;
             // if (outputWindow == null)
             // {
@@ -42,57 +41,48 @@ namespace T3.Gui.Windows.Variations
             // }
             //
             //
-            // // Draw Canvas Texture
-            //
-            // _firstOutputSlot = instance.Outputs[0];
-            // if (!(_firstOutputSlot is Slot<Texture2D> textureSlot))
-            // {
-            //     CustomComponents.EmptyWindowMessage("Output window must be pinned\nto a texture operator.");
-            //     _firstOutputSlot = null;
-            //     return;
-            // }
-            //
-            // // Set correct output ui
-            // {
-            //     var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
-            //     if (!symbolUi.OutputUis.ContainsKey(_firstOutputSlot.Id))
-            //         return;
-            //
-            //     _variationsWindow.OutputUi = symbolUi.OutputUis[_firstOutputSlot.Id];
-            // }
-            //
-            // if (textureSlot.Value == null)
-            //     return;
-            //
-            // FillInNextVariation();
+            var instance = VariationHandling.ActiveInstanceForPresets;
+            // Draw Canvas Texture
+            _firstOutputSlot = instance.Outputs[0];
+            if (!(_firstOutputSlot is Slot<Texture2D> textureSlot))
+            {
+                CustomComponents.EmptyWindowMessage("Output window must be pinned\nto a texture operator.");
+                _firstOutputSlot = null;
+                return;
+            }
+
+            // Set correct output ui
+            {
+                var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+                if (!symbolUi.OutputUis.ContainsKey(_firstOutputSlot.Id))
+                    return;
+
+                _variationsWindow.OutputUi = symbolUi.OutputUis[_firstOutputSlot.Id];
+            }
+
+            if (textureSlot.Value == null)
+                return;
+
+            FillInNextVariation();
             UpdateCanvas();
             HandleFenceSelection();
-            //Invalidate();
 
             var drawList = ImGui.GetWindowDrawList();
 
-            foreach (var v in activePoolForPresets.Variations)
+            for (var index = 0; index < activePoolForPresets.Variations.Count; index++)
             {
-                VariationThumbnail.Draw(this, v, drawList);
+                VariationThumbnail.Draw(this,
+                                        activePoolForPresets.Variations[index],
+                                        drawList,
+                                        _thumbnailCanvasRendering.CanvasTextureSrv,
+                                        GetUvRectForIndex(index));
             }
 
             // Draw Canvas Texture
-            var canvasSize = _thumbnailCanvasRendering.GetCanvasTextureSize();
-            var rectOnScreen = ImRect.RectWithSize(WindowPos, canvasSize);
-            drawList.AddImage((IntPtr)_thumbnailCanvasRendering.CanvasTextureSrv, rectOnScreen.Min, rectOnScreen.Max);
+            // var canvasSize = _thumbnailCanvasRendering.GetCanvasTextureSize();
+            // var rectOnScreen = ImRect.RectWithSize(WindowPos, canvasSize);
+            // drawList.AddImage((IntPtr)_thumbnailCanvasRendering.CanvasTextureSrv, rectOnScreen.Min, rectOnScreen.Max);
 
-            // foreach (var variation in _variationByGridIndex.Values)
-            // {
-            //     if (!IsCellVisible(variation.GridCell))
-            //         continue;
-            //
-            //     var screenRect = GetScreenRectForCell(variation.GridCell);
-            //     if (variation.ThumbnailNeedsUpdate)
-            //     {
-            //         drawList.AddRectFilled(screenRect.Min, screenRect.Max, _needsUpdateColor);
-            //     }
-            // }
-            //
             // _hoveringVariation?.RestoreValues();
             // var size = THelpers.GetContentRegionArea();
             // ImGui.InvisibleButton("variationCanvas", size.GetSize());
@@ -120,7 +110,6 @@ namespace T3.Gui.Windows.Variations
             // }
         }
 
-
         public void ClearVariations()
         {
             _updateCompleted = false;
@@ -136,8 +125,7 @@ namespace T3.Gui.Windows.Variations
 
             FitAreaOnCanvas(new ImRect(left, right));
         }
-        
-        
+
         private void HandleFenceSelection()
         {
             _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
@@ -145,7 +133,7 @@ namespace T3.Gui.Windows.Variations
             {
                 case SelectionFence.States.PressedButNotMoved:
                     if (SelectionFence.SelectMode == SelectionFence.SelectModes.Replace)
-                        _selection.Clear();
+                        Selection.Clear();
                     break;
 
                 case SelectionFence.States.Updated:
@@ -153,157 +141,45 @@ namespace T3.Gui.Windows.Variations
                     break;
 
                 case SelectionFence.States.CompletedAsClick:
-                    _selection.Clear();
+                    Selection.Clear();
                     break;
             }
         }
-
-        
 
         private void HandleSelectionFenceUpdate(ImRect boundsInScreen)
         {
             var boundsInCanvas = InverseTransformRect(boundsInScreen);
             var elementsToSelect = (from child in VariationPool.Variations
-                                 let rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size)
-                                 where rect.Overlaps(boundsInCanvas)
-                                 select child).ToList();
+                                    let rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size)
+                                    where rect.Overlaps(boundsInCanvas)
+                                    select child).ToList();
 
-            _selection.Clear();
+            Selection.Clear();
             foreach (var element in elementsToSelect)
             {
-                _selection.AddSelection(element);
+                Selection.AddSelection(element);
             }
         }
-        
-        // private ImRect GetScreenRectForCell(GridCell gridCell)
-        // {
-        //     var thumbnailInCanvas = ImRect.RectWithSize(new Vector2(gridCell.X, gridCell.Y) * _thumbnailSize, _thumbnailSize);
-        //     var r = TransformRect(thumbnailInCanvas);
-        //     return new ImRect((int)r.Min.X, (int)r.Min.Y, (int)r.Max.X - 1, (int)r.Max.Y - 1);
-        // }
-        //
-        // private GridCell GetScreenRectForGridCell(Vector2 screenPos)
-        // {
-        //     var centerInCanvas = InverseTransformPosition(screenPos);
-        //     return new GridCell(
-        //                         (int)(centerInCanvas.X / _thumbnailSize.X),
-        //                         (int)(centerInCanvas.Y / _thumbnailSize.Y));
-        // }
 
-        // private bool IsCellVisible(GridCell gridCell)
-        // {
-        //     var contentRegion = new ImRect(ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
-        //                                    ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
-        //
-        //     contentRegion.Expand(_thumbnailSize * Scale);
-        //
-        //     var rectOnScreen = GetScreenRectForCell(gridCell);
-        //
-        //     var visible = contentRegion.Contains(rectOnScreen);
-        //     return visible;
-        // }
-
-        // private void Invalidate()
-        // {
-        //     var scaleChanged = Math.Abs(Scale.X - _lastScale) > 0.01f;
-        //     var scrollChanged = Math.Abs(Scroll.X - _lastScroll.X) > 0.1f
-        //                         || Math.Abs(Scroll.Y - _lastScroll.Y) > 0.1f;
-        //     
-        //     // TODO: optimize performance by only invalidating thumbnails and moving part of the canvas  
-        //     if (scaleChanged || scrollChanged)
-        //     {
-        //         _lastScale = Scale.X;
-        //         _lastScroll = Scroll;
-        //
-        //         //_currentOffsetIndexForFocus = 0;
-        //         _updateCompleted = false;
-        //
-        //         // foreach (var variation in _variationByGridIndex.Values)
-        //         // {
-        //         //     variation.ThumbnailNeedsUpdate = true;
-        //         // }
-        //
-        //         // if (ImGui.IsWindowHovered())
-        //         // {
-        //         //     SetGridFocusToMousePos();
-        //         // }
-        //         // else
-        //         // {
-        //         //     SetGridFocusToWindowCenter();
-        //         // }
-        //
-        //         _thumbnailCanvasRendering.ClearTexture();
-        //     }
-        // }
-
-        // private void SetGridFocusToWindowCenter()
-        // {
-        //     var contentRegion = new ImRect(ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
-        //                                    ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
-        //     var centerInCanvas = InverseTransformPosition(contentRegion.GetCenter());
-        //     _gridFocusIndex.X = (int)(centerInCanvas.X / _thumbnailSize.X);
-        //     _gridFocusIndex.Y = (int)(centerInCanvas.Y / _thumbnailSize.Y);
-        // }
-
-        // private void SetGridFocusToMousePos()
-        // {
-        //     var centerInCanvas = InverseTransformPosition(ImGui.GetMousePos());
-        //     _gridFocusIndex.X = (int)(centerInCanvas.X / _thumbnailSize.X);
-        //     _gridFocusIndex.Y = (int)(centerInCanvas.Y / _thumbnailSize.Y);
-        // }
+        private int _updateIndex = 0;
 
         private void FillInNextVariation()
         {
-            // if (_updateCompleted)
-            // {
-            //     return;
-            // }
-            //
-            // if (_explorationWindow.VariationParameters.Count == 0)
-            // {
-            //     return;
-            // }
-            //
-            // while (_currentOffsetIndexForFocus < _sortedOffset.Length)
-            // {
-            //     var offset = _sortedOffset[_currentOffsetIndexForFocus++];
-            //     var cell = _gridFocusIndex + offset;
-            //     if (!cell.IsWithinGrid())
-            //         continue;
-            //
-            //     if (!IsCellVisible(cell))
-            //         continue;
-            //
-            //     var hasVariation = _variationByGridIndex.TryGetValue(cell.GridIndex, out var variation);
-            //     if (hasVariation)
-            //     {
-            //         if (!variation.ThumbnailNeedsUpdate)
-            //             continue;
-            //
-            //         RenderThumbnail(variation);
-            //         return;
-            //     }
-            //     else
-            //     {
-            //         variation = CreateVariationForCell(cell);
-            //         RenderThumbnail(variation);
-            //         _variationByGridIndex[cell.GridIndex] = variation;
-            //         return;
-            //     }
-            // }
-            //
-            // _updateCompleted = true;
+            var pool = VariationHandling.ActivePoolForPresets;
+
+            if (pool.Variations.Count == 0)
+                return;
+
+            _updateIndex++;
+            var usedUpdateIndex = _updateIndex % pool.Variations.Count;
+            var variation = pool.Variations[usedUpdateIndex];
+            RenderThumbnail(variation, usedUpdateIndex);
         }
 
-        private void RenderThumbnail(ExplorationVariation variation, int thumbnailIndex)
+        private void RenderThumbnail(Variation variation, int thumbnailIndex)
         {
-            variation.ThumbnailNeedsUpdate = false;
-
-            //var screenRect = GetScreenRectForCell(variation.GridCell);
-            //var posInCanvasTexture = screenRect.Min - WindowPos;
-
             // Set variation values
-            variation.KeepCurrentAndApplyNewValues();
+            VariationPool.BeginHoverPreset(VariationHandling.ActiveInstanceForPresets, variation);
 
             // Render variation
             _thumbnailCanvasRendering.EvaluationContext.Reset();
@@ -317,37 +193,53 @@ namespace T3.Gui.Windows.Variations
             ImGui.PopClipRect();
             _imageCanvas.Deactivate();
 
+            var rect = GetPixelRectForIndex(thumbnailIndex);
+
+            if (_firstOutputSlot is Slot<Texture2D> textureSlot)
+            {
+                _thumbnailCanvasRendering.CopyToCanvasTexture(textureSlot, rect);
+            }
+
+            VariationPool.StopHover();
+        }
+
+        private ImRect GetPixelRectForIndex(int thumbnailIndex)
+        {
             var columns = (int)(_thumbnailCanvasRendering.GetCanvasTextureSize().X / VariationThumbnail.ThumbnailSize.X);
             var rowIndex = thumbnailIndex / columns;
             var columnIndex = thumbnailIndex % columns;
             var posInCanvasTexture = new Vector2(columnIndex, rowIndex) * VariationThumbnail.ThumbnailSize;
-
-            if (_firstOutputSlot is Slot<Texture2D> textureSlot)
-            {
-                var rect = ImRect.RectWithSize(posInCanvasTexture, VariationThumbnail.ThumbnailSize);
-                _thumbnailCanvasRendering.CopyToCanvasTexture(textureSlot, rect);
-            }
-
-            variation.RestoreValues();
+            var rect = ImRect.RectWithSize(posInCanvasTexture, VariationThumbnail.ThumbnailSize);
+            return rect;
         }
-        
-        private static SymbolVariationPool VariationPool => VariationHandling.ActivePoolForPresets;
 
-        private Vector2 _lastScroll = Vector2.One;
+        private ImRect GetUvRectForIndex(int thumbnailIndex)
+        {
+            var r = GetPixelRectForIndex(thumbnailIndex);
+            return new ImRect(r.Min / _thumbnailCanvasRendering.GetCanvasTextureSize(),
+                              r.Max / _thumbnailCanvasRendering.GetCanvasTextureSize());
+        }
 
-        private bool _updateCompleted;
-        private readonly ImageOutputCanvas _imageCanvas = new();
-
-        private readonly VariationsWindow _variationsWindow;
-        private ISlot _firstOutputSlot;
-
-        private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
-        private SelectionFence.States _fenceState;
-        internal CanvasElementSelection _selection = new();
-        
+        /// <summary>
+        /// Implement selectionContainer
+        /// </summary>
         public IEnumerable<ISelectableCanvasObject> GetSelectables()
         {
             return VariationPool.Variations;
         }
+        
+        
+        private static SymbolVariationPool VariationPool => VariationHandling.ActivePoolForPresets;
+
+        private bool _updateCompleted;
+        private readonly ImageOutputCanvas _imageCanvas = new();
+        private readonly VariationsWindow _variationsWindow;
+        
+        private ISlot _firstOutputSlot;
+
+        private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
+        private SelectionFence.States _fenceState;
+        internal readonly CanvasElementSelection Selection = new();
+
     }
 }

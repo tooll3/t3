@@ -5,12 +5,10 @@ using Core.Resource;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Gui;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.OutputUi;
 using T3.Gui.Styling;
-using T3.Gui.Windows;
 
 namespace T3.Gui.Windows.Variations
 {

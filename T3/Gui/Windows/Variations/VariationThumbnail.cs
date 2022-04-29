@@ -3,25 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using SharpDX.Direct3D11;
 using T3.Gui.Commands;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
+using UiHelpers;
 
 namespace T3.Gui.Windows.Variations
 {
     public static class VariationThumbnail
     {
-        public static void Draw(VariationCanvas canvas, Variation v, ImDrawListPtr drawList)
+        public static void Draw(VariationCanvas canvas, Variation v, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
-            
             _canvas = canvas;
             var pMin = canvas.TransformPosition(v.PosOnCanvas);
             var sizeOnScreen = canvas.TransformDirectionFloored(ThumbnailSize);
             var pMax = pMin + sizeOnScreen;
 
             drawList.AddRectFilled(pMin, pMax, Color.DarkGray);
+            
+            // Draw Canvas Texture
+            //var canvasSize = _thumbnailCanvasRendering.GetCanvasTextureSize();
+            //var rectOnScreen = ImRect.RectWithSize(WindowPos, canvasSize);
+            drawList.AddImage((IntPtr)canvasSrv, 
+                              pMin, 
+                              pMax,
+                              uvRect.Min,
+                              uvRect.Max
+                              );
+            
+            
             drawList.AddRect(pMin, pMax, Color.Gray.Fade(0.2f));
 
             v.IsSelected = _selection.IsNodeSelected(v);
@@ -61,7 +74,7 @@ namespace T3.Gui.Windows.Variations
         }
 
         private static VariationCanvas _canvas;
-        private static CanvasElementSelection _selection => _canvas._selection;
+        private static CanvasElementSelection _selection => _canvas.Selection;
 
         private static void HandleMovement(ISelectableCanvasObject node)
         {
