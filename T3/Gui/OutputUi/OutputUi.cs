@@ -14,7 +14,7 @@ namespace T3.Gui.OutputUi
         public Type Type { get; } = typeof(T);
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = new Vector2(100, 30);
-        public bool IsSelected => SelectionManager.IsNodeSelected(this);
+        public bool IsSelected => NodeSelection.IsNodeSelected(this);
         public abstract IOutputUi Clone();
 
         public void DrawValue(ISlot slot, EvaluationContext context, bool recompute)

@@ -37,7 +37,7 @@ namespace t3.Gui.Windows.Exploration
             var match = true;
             foreach (var param in variation.ValuesForParameters.Keys)
             {
-                if (!SelectionManager.GetSelectedChildUis().Contains(param.SymbolChildUi))
+                if (!NodeSelection.GetSelectedChildUis().Contains(param.SymbolChildUi))
                 {
                     match = false;
                 }
@@ -70,9 +70,9 @@ namespace t3.Gui.Windows.Exploration
         {
             // List selected operators and parameters
             ImGui.DragFloat("Scatter", ref _variationCanvas.Scatter, 0.1f, 0, 100);
-            _compositionSymbolId = SelectionManager.GetCompositionForSelection()?.SymbolChildId ?? Guid.Empty;
+            _compositionSymbolId = NodeSelection.GetCompositionForSelection()?.SymbolChildId ?? Guid.Empty;
 
-            var selectedSymbolChildUis = SelectionManager.GetSelectedChildUis();
+            var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis();
 
             // Remove no longer selected parameters
             var symbolChildUis = selectedSymbolChildUis as SymbolChildUi[] ?? selectedSymbolChildUis.ToArray();
@@ -149,7 +149,7 @@ namespace t3.Gui.Windows.Exploration
                             }
                             else
                             {
-                                var instance = SelectionManager.GetInstanceForSymbolChildUi(symbolChildUi);
+                                var instance = NodeSelection.GetInstanceForSymbolChildUi(symbolChildUi);
                                 var inputSlot = instance.Inputs.Single(input2 => input2.Id == input.InputDefinition.Id);
                                 
                                 //var xxx = symbolChildUi.SymbolChild.Symbol
@@ -370,7 +370,7 @@ namespace t3.Gui.Windows.Exploration
             variation.UpdateUndoCommand();
 
             // Select variation
-            SelectionManager.Clear();
+            NodeSelection.Clear();
             VariationParameters.Clear();
 
             var alreadyAdded = new HashSet<SymbolChildUi>();
@@ -379,7 +379,7 @@ namespace t3.Gui.Windows.Exploration
                 VariationParameters.Add(param);
                 if (!alreadyAdded.Contains(param.SymbolChildUi))
                 {
-                    SelectionManager.AddSymbolChildToSelection(param.SymbolChildUi, NodeOperations.GetInstanceFromIdPath(param.InstanceIdPath));
+                    NodeSelection.AddSymbolChildToSelection(param.SymbolChildUi, NodeOperations.GetInstanceFromIdPath(param.InstanceIdPath));
                     alreadyAdded.Add(param.SymbolChildUi);
                 }
             }

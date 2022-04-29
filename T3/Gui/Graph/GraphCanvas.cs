@@ -71,7 +71,7 @@ namespace T3.Gui.Graph
 
             CompositionOp = comp;
 
-            SelectionManager.Clear();
+            NodeSelection.Clear();
             TimeLineCanvas.Current?.ClearSelection();
 
             var newProps = GuessViewProperties();
@@ -98,7 +98,7 @@ namespace T3.Gui.Graph
 
             var newPath = _compositionPath;
             newPath.Add(instance.SymbolChildId);
-            SelectionManager.Clear();
+            NodeSelection.Clear();
             TimeLineCanvas.Current?.ClearSelection();
             SetComposition(newPath, Transition.JumpIn);
         }
@@ -127,12 +127,12 @@ namespace T3.Gui.Graph
                 throw new ArgumentException("Can't SetCompositionToParentInstance because Instance is not a parent of current composition");
 
             SetComposition(shortenedPath, Transition.JumpOut);
-            SelectionManager.Clear();
+            NodeSelection.Clear();
             TimeLineCanvas.Current?.ClearSelection();
             var previousCompChildUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis
                                                       .SingleOrDefault(childUi => childUi.Id == previousCompositionOp.SymbolChildId);
             if (previousCompChildUi != null)
-                SelectionManager.AddSymbolChildToSelection(previousCompChildUi, previousCompositionOp);
+                NodeSelection.AddSymbolChildToSelection(previousCompChildUi, previousCompositionOp);
         }
 
         private Scope GuessViewProperties()
@@ -223,7 +223,7 @@ namespace T3.Gui.Graph
 
                 if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
                 {
-                    var selectedImage = SelectionManager.GetFirstSelectedInstance();
+                    var selectedImage = NodeSelection.GetFirstSelectedInstance();
                     if (selectedImage != null)
                     {
                         GraphWindow.SetBackgroundOutput(selectedImage);
@@ -283,7 +283,7 @@ namespace T3.Gui.Graph
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
                 _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), 
-                                            SelectionManager.GetSelectedNodes<Annotation>().ToList(), 
+                                            NodeSelection.GetSelectedNodes<Annotation>().ToList(), 
                                             ref _nameSpaceForDialogEdits, 
                                             ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
@@ -305,7 +305,7 @@ namespace T3.Gui.Graph
             {
                 case SelectionFence.States.PressedButNotMoved:
                     if (SelectionFence.SelectMode == SelectionFence.SelectModes.Replace)
-                        SelectionManager.Clear();
+                        NodeSelection.Clear();
                     break;
 
                 case SelectionFence.States.Updated:
@@ -313,8 +313,8 @@ namespace T3.Gui.Graph
                     break;
 
                 case SelectionFence.States.CompletedAsClick:
-                    SelectionManager.Clear();
-                    SelectionManager.SetSelectionToParent(CompositionOp);
+                    NodeSelection.Clear();
+                    NodeSelection.SetSelectionToParent(CompositionOp);
                     break;
             }
         }
@@ -329,7 +329,7 @@ namespace T3.Gui.Graph
                                  where rect.Overlaps(boundsInCanvas)
                                  select child).ToList();
 
-            SelectionManager.Clear();
+            NodeSelection.Clear();
             foreach (var node in nodesToSelect)
             {
                 if (node is SymbolChildUi symbolChildUi)
@@ -340,17 +340,17 @@ namespace T3.Gui.Graph
                         Log.Warning("Can't find instance");
                     }
 
-                    SelectionManager.AddSymbolChildToSelection(symbolChildUi, instance);
+                    NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
                 }
                 if (node is Annotation annotation)
                 {
                     var rect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
                     if (boundsInCanvas.Contains(rect))
-                        SelectionManager.AddSelection(node);
+                        NodeSelection.AddSelection(node);
                 }
                 else
                 {
-                    SelectionManager.AddSelection(node);
+                    NodeSelection.AddSelection(node);
                 }
             }
         }
@@ -403,7 +403,7 @@ namespace T3.Gui.Graph
                         var childUi = NodeOperations.CreateInstance(symbol, parent, posOnCanvas);
 
                         var instance = CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
-                        SelectionManager.SetSelectionToChildUi(childUi, instance);
+                        NodeSelection.SetSelectionToChildUi(childUi, instance);
 
                         T3Ui.DraggingIsInProgress = false;
                     }
@@ -425,8 +425,8 @@ namespace T3.Gui.Graph
 
         private ImRect GetSelectionBounds(float padding = 50)
         {
-            var selectedOrAll = SelectionManager.IsAnythingSelected()
-                                    ? SelectionManager.GetSelectedNodes<ISelectableNode>().ToArray()
+            var selectedOrAll = NodeSelection.IsAnythingSelected()
+                                    ? NodeSelection.GetSelectedNodes<ISelectableNode>().ToArray()
                                     : SelectableChildren.ToArray();
 
             if (selectedOrAll.Length == 0)
@@ -694,11 +694,11 @@ namespace T3.Gui.Graph
             var posOnCanvas = InverseTransformPosition(ImGui.GetMousePos());
             var area = new ImRect(posOnCanvas, posOnCanvas + size);
                     
-            if (SelectionManager.IsAnythingSelected())
+            if (NodeSelection.IsAnythingSelected())
             {
-                for (var index = 0; index < SelectionManager.Selection.Count; index++)
+                for (var index = 0; index < NodeSelection.Selection.Count; index++)
                 {
-                    var node = SelectionManager.Selection[index];
+                    var node = NodeSelection.Selection[index];
                     var nodeArea = new ImRect(node.PosOnCanvas,
                                               node.PosOnCanvas + node.Size);
 
@@ -764,13 +764,13 @@ namespace T3.Gui.Graph
                 commands.Add(cmd);
             }
 
-            foreach (var selectedAnnotation in SelectionManager.GetSelectedNodes<Annotation>())
+            foreach (var selectedAnnotation in NodeSelection.GetSelectedNodes<Annotation>())
             {
                 var cmd = new DeleteAnnotationCommand(compositionSymbolUi, selectedAnnotation);
                 commands.Add(cmd);
             }
 
-            var selectedInputUis = SelectionManager.GetSelectedNodes<IInputUi>().ToList();
+            var selectedInputUis = NodeSelection.GetSelectedNodes<IInputUi>().ToList();
             if (selectedInputUis.Count > 0)
             {
                 NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
@@ -778,7 +778,7 @@ namespace T3.Gui.Graph
 
             var deleteCommand = new MacroCommand("Delete elements", commands);
             UndoRedoStack.AddAndExecute(deleteCommand);
-            SelectionManager.Clear();
+            NodeSelection.Clear();
         }
 
         private void ToggleDisabledForSelectedElements()
@@ -810,23 +810,23 @@ namespace T3.Gui.Graph
 
         private static List<SymbolChildUi> GetSelectedChildUis()
         {
-            return SelectionManager.GetSelectedNodes<SymbolChildUi>().ToList();
+            return NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
         }
 
         private IEnumerable<IInputUi> GetSelectedInputUis()
         {
-            return SelectionManager.GetSelectedNodes<IInputUi>();
+            return NodeSelection.GetSelectedNodes<IInputUi>();
         }
 
         private IEnumerable<IOutputUi> GetSelectedOutputUis()
         {
-            return SelectionManager.GetSelectedNodes<IOutputUi>();
+            return NodeSelection.GetSelectedNodes<IOutputUi>();
         }
 
         private void CopySelectedNodesToClipboard()
         {
-            var selectedChildren = SelectionManager.GetSelectedNodes<SymbolChildUi>();
-            var selectedAnnotations = SelectionManager.GetSelectedNodes<Annotation>().ToList();
+            var selectedChildren = NodeSelection.GetSelectedNodes<SymbolChildUi>();
+            var selectedAnnotations = NodeSelection.GetSelectedNodes<Annotation>().ToList();
             
             var containerOp = new Symbol(typeof(object), Guid.NewGuid());
             var newContainerUi = new SymbolUi(containerOp);
@@ -895,19 +895,19 @@ namespace T3.Gui.Graph
                     SymbolRegistry.Entries.Remove(containerSymbol.Id);
 
                     // Select new operators
-                    SelectionManager.Clear();
+                    NodeSelection.Clear();
 
                     foreach (var id in cmd.NewSymbolChildIds)
                     {
                         var newChildUi = compositionSymbolUi.ChildUis.Single(c => c.Id == id);
                         var instance = CompositionOp.Children.Single(c2 => c2.SymbolChildId == id);
-                        SelectionManager.AddSymbolChildToSelection(newChildUi, instance);
+                        NodeSelection.AddSymbolChildToSelection(newChildUi, instance);
                     }
 
                     foreach (var id in cmd.NewSymbolAnnotationIds)
                     {
                         var annotation = compositionSymbolUi.Annotations[id];
-                        SelectionManager.AddSelection(annotation);
+                        NodeSelection.AddSelection(annotation);
                     }
                 }
             }

@@ -16,7 +16,7 @@ namespace T3.Gui.Selection
     /// - Frequently we want to select the parent operator when clicking on the background of a composition (e.g. to
     ///   to show it's parameters.  
     /// </summary>
-    public static class SelectionManager
+    public static class NodeSelection
     {
         public static void Clear()
         {

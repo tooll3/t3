@@ -140,7 +140,7 @@ namespace T3.Gui.Windows
                                    {
                                        IdPath = NodeOperations.BuildIdPathForInstance(canvas.CompositionOp),
                                        ViewScope = canvas.GetTargetScope(),
-                                       SelectedChildIds = SelectionManager.GetSelectedNodes<SymbolChildUi>().Select(s => s.Id).ToList()
+                                       SelectedChildIds = NodeSelection.GetSelectedNodes<SymbolChildUi>().Select(s => s.Id).ToList()
                                    };
             ;
         }

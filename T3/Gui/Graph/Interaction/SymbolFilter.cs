@@ -65,7 +65,7 @@ namespace T3.Gui.Graph.Interaction
 
         private void UpdateMatchingSymbols()
         {
-            var composition = SelectionManager.GetSelectedComposition();
+            var composition = NodeSelection.GetSelectedComposition();
             var parentSymbolIds = composition != null
                                      ? new HashSet<Guid>(NodeOperations.GetParentInstances(composition, includeChildInstance: true).Select(p => p.Symbol.Id))
                                      : new HashSet<Guid>();

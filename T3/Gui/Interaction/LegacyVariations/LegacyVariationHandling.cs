@@ -244,7 +244,7 @@ namespace T3.Gui.Interaction.LegacyVariations
             if (ActiveOperatorVariation == null)
                 return;
 
-            SelectionManager.Clear();
+            NodeSelection.Clear();
 
             if (!SymbolUiRegistry.Entries.TryGetValue(_activeCompositionId, out var symbolUi))
                 return;
@@ -258,7 +258,7 @@ namespace T3.Gui.Interaction.LegacyVariations
                 var instance = ActiveOperatorVariation.CompositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == parameter.SymbolChildId);
                 if (symbolChildUi != null && instance != null)
                 {
-                    SelectionManager.AddSymbolChildToSelection(symbolChildUi, instance);
+                    NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
                 }
             }
 

@@ -245,7 +245,7 @@ namespace T3.Gui.Graph
                         && string.IsNullOrEmpty(T3Ui.OpenedPopUpName)
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0)
                     {
-                        SelectionManager.SetSelectionToChildUi(childUi, instance);
+                        NodeSelection.SetSelectionToChildUi(childUi, instance);
                         ImGui.OpenPopup("parameterContextPopup");
                     }
 

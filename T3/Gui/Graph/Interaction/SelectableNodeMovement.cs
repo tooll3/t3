@@ -32,7 +32,7 @@ namespace T3.Gui.Graph.Interaction
                     _draggedNodeId = node.Id;
                     if (node.IsSelected)
                     {
-                        _draggedNodes = SelectionManager.GetSelectedNodes<ISelectableNode>().ToList();
+                        _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableNode>().ToList();
                     }
                     else
                     {
@@ -83,7 +83,7 @@ namespace T3.Gui.Graph.Interaction
                     }
 
                     // Reorder inputs nodes if dragged
-                    var selectedInputs = SelectionManager.GetSelectedNodes<IInputUi>().ToList();
+                    var selectedInputs = NodeSelection.GetSelectedNodes<IInputUi>().ToList();
                     if (selectedInputs.Count > 0)
                     {
                         var composition = GraphCanvas.Current.CompositionOp;
@@ -101,27 +101,27 @@ namespace T3.Gui.Graph.Interaction
                 }
                 else
                 {
-                    if (!SelectionManager.IsNodeSelected(node))
+                    if (!NodeSelection.IsNodeSelected(node))
                     {
                         if (!ImGui.GetIO().KeyShift)
                         {
-                            SelectionManager.Clear();
+                            NodeSelection.Clear();
                         }
 
                         if (node is SymbolChildUi childUi2)
                         {
-                            SelectionManager.AddSymbolChildToSelection(childUi2, instance);
+                            NodeSelection.AddSymbolChildToSelection(childUi2, instance);
                         }
                         else
                         {
-                            SelectionManager.AddSelection(node);
+                            NodeSelection.AddSelection(node);
                         }
                     }
                     else
                     {
                         if (ImGui.GetIO().KeyShift)
                         {
-                            SelectionManager.DeselectNode(node, instance);
+                            NodeSelection.DeselectNode(node, instance);
                         }
                     }
                 }
@@ -133,15 +133,15 @@ namespace T3.Gui.Graph.Interaction
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
                 && !wasDraggingRight
                 && ImGui.IsItemHovered()
-                && !SelectionManager.IsNodeSelected(node))
+                && !NodeSelection.IsNodeSelected(node))
             {
                 if (node is SymbolChildUi childUi2)
                 {
-                    SelectionManager.SetSelectionToChildUi(childUi2, instance);
+                    NodeSelection.SetSelectionToChildUi(childUi2, instance);
                 }
                 else
                 {
-                    SelectionManager.SetSelection(node);
+                    NodeSelection.SetSelection(node);
                 }
             }
         }
@@ -387,7 +387,7 @@ namespace T3.Gui.Graph.Interaction
             var commands = new List<ICommand>();
             
             var freshlySnapped = new List<ISelectableNode>();
-            foreach (var n in SelectionManager.GetSelectedChildUis())
+            foreach (var n in NodeSelection.GetSelectedChildUis())
             {
                 RecursivelyAlignChildren(n, commands, freshlySnapped);
             }
@@ -459,7 +459,7 @@ namespace T3.Gui.Graph.Interaction
                 verticalOffset += RecursivelyAlignChildren(connectedChildUi, commands, freshlySnappedOpWidgets);
 
                 freshlySnappedOpWidgets.Add(connectedChildUi);
-                SelectionManager.AddSelection(connectedChildUi);
+                NodeSelection.AddSelection(connectedChildUi);
                 snappedCount++;
             }
             

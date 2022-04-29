@@ -38,7 +38,7 @@ namespace t3.Gui.Interaction.Variations
             if (primaryGraphWindow == null)
                 return;
 
-            var singleSelectedInstance = SelectionManager.GetSelectedInstance();
+            var singleSelectedInstance = NodeSelection.GetSelectedInstance();
             if (singleSelectedInstance != null)
             {
                 var selectedSymbolId = singleSelectedInstance.Symbol.Id;
@@ -64,7 +64,7 @@ namespace t3.Gui.Interaction.Variations
                     ActivePoolForVariations = GetOrLoadVariations(activeCompositionInstance.Symbol.Id);
                 }
 
-                if (!SelectionManager.IsAnythingSelected())
+                if (!NodeSelection.IsAnythingSelected())
                 {
                     ActiveInstanceForPresets = ActiveInstanceForVariations;
                 }

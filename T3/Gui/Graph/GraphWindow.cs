@@ -133,7 +133,7 @@ namespace T3.Gui.Graph
 
         private void FitViewToSelection()
         {
-            var selection = SelectionManager.GetSelectedChildUis().ToArray();
+            var selection = NodeSelection.GetSelectedChildUis().ToArray();
 
             if (selection.Length == 0)
                 return;

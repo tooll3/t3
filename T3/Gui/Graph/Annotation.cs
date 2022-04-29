@@ -12,7 +12,7 @@ namespace t3.Gui.Graph
         public Guid Id { get; set; }
         public Vector2 PosOnCanvas { get; set; }
         public Vector2 Size { get; set; }
-        public bool IsSelected => SelectionManager.IsNodeSelected(this);
+        public bool IsSelected => NodeSelection.IsNodeSelected(this);
 
         public Annotation Clone()
         {

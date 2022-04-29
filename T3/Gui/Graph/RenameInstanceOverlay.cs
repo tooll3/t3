@@ -28,7 +28,7 @@ namespace T3.Gui.Graph
                     && ImGui.IsKeyPressed((ImGuiKey)Key.Return)
                     && string.IsNullOrEmpty(T3Ui.OpenedPopUpName))
                 {
-                    var selectedInstances = SelectionManager.GetSelectedNodes<SymbolChildUi>().ToList();
+                    var selectedInstances = NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
                     if (selectedInstances.Count == 1)
                     {
                         justOpened = true;

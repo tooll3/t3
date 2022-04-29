@@ -114,7 +114,7 @@ namespace T3.Gui.Graph
                     _draggedNodeId = annotation.Id;
                     if (annotation.IsSelected)
                     {
-                        _draggedNodes = SelectionManager.GetSelectedNodes<ISelectableNode>().ToList();
+                        _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableNode>().ToList();
                     }
                     else
                     {
@@ -150,20 +150,20 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    if (!SelectionManager.IsNodeSelected(annotation))
+                    if (!NodeSelection.IsNodeSelected(annotation))
                     {
                         if (!ImGui.GetIO().KeyShift)
                         {
-                            SelectionManager.Clear();
+                            NodeSelection.Clear();
                         }
 
-                        SelectionManager.AddSelection(annotation);
+                        NodeSelection.AddSelection(annotation);
                     }
                     else
                     {
                         if (ImGui.GetIO().KeyShift)
                         {
-                            SelectionManager.DeselectNode(annotation, instance);
+                            NodeSelection.DeselectNode(annotation, instance);
                         }
                     }
                 }
@@ -175,9 +175,9 @@ namespace T3.Gui.Graph
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
                 && !wasDraggingRight
                 && ImGui.IsItemHovered()
-                && !SelectionManager.IsNodeSelected(annotation))
+                && !NodeSelection.IsNodeSelected(annotation))
             {
-                SelectionManager.SetSelection(annotation);
+                NodeSelection.SetSelection(annotation);
             }
         }
 

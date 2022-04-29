@@ -221,7 +221,7 @@ namespace T3.Gui
             var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
             var sourceSymbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == symbolChildId);
             var selectionTargetInstance = compositionOp.Children.Single(instance => instance.SymbolChildId == symbolChildId);
-            SelectionManager.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
+            NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
             FitViewToSelectionHandling.FitViewToSelection();
         }
 
