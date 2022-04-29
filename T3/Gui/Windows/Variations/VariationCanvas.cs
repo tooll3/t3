@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using SharpDX.Direct3D11;
+using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Variations;
@@ -18,7 +18,6 @@ namespace T3.Gui.Windows.Variations
     {
         public VariationCanvas(VariationsWindow variationsWindow)
         {
-            ResetView();
             _variationsWindow = variationsWindow;
         }
 
@@ -42,6 +41,12 @@ namespace T3.Gui.Windows.Variations
             //
             //
             var instance = VariationHandling.ActiveInstanceForPresets;
+            if (instance != _lastInstance)
+            {
+                RefreshView();
+                _lastInstance = instance;
+            }
+
             // Draw Canvas Texture
             _firstOutputSlot = instance.Outputs[0];
             if (!(_firstOutputSlot is Slot<Texture2D> textureSlot))
@@ -63,7 +68,7 @@ namespace T3.Gui.Windows.Variations
             if (textureSlot.Value == null)
                 return;
 
-            FillInNextVariation();
+            UpdateNextVariationThumbnail();
             UpdateCanvas();
             HandleFenceSelection();
 
@@ -110,20 +115,41 @@ namespace T3.Gui.Windows.Variations
             // }
         }
 
-        public void ClearVariations()
+        private void RefreshView()
         {
+            _updateIndex = 0;
             _updateCompleted = false;
-            // _variationByGridIndex.Clear();
+            ResetView();
+            Selection.Clear();
         }
 
-        public void ResetView()
+        private void ResetView()
         {
-            var extend = new Vector2(3, 3);
-            var center = Vector2.Zero;
-            var left = (center - extend) * VariationThumbnail.ThumbnailSize;
-            var right = (center + extend) * VariationThumbnail.ThumbnailSize;
+            if (VariationPool?.Variations == null)
+                return;
+            
+            var foundOne = false;
+            
+            ImRect area = new ImRect();
+            
+            foreach (var v in VariationPool.Variations)
+            {
+                if (!foundOne)
+                {
+                    area = new ImRect(v.PosOnCanvas, v.Size);
+                    foundOne = true;
+                }
+                else
+                {   
+                    area.Add(ImRect.RectWithSize(v.PosOnCanvas,  v.Size));
+                }
+            }
 
-            FitAreaOnCanvas(new ImRect(left, right));
+            if (!foundOne)
+                return;
+            var extend = new Vector2(3, 3);
+            area.Expand(extend);
+            FitAreaOnCanvas(area);
         }
 
         private void HandleFenceSelection()
@@ -161,19 +187,28 @@ namespace T3.Gui.Windows.Variations
             }
         }
 
-        private int _updateIndex = 0;
-
-        private void FillInNextVariation()
+        private void UpdateNextVariationThumbnail()
         {
+            if (_updateCompleted)
+                return;
+
             var pool = VariationHandling.ActivePoolForPresets;
 
             if (pool.Variations.Count == 0)
+            {
+                _updateCompleted = true;
                 return;
+            }
 
+            if (_updateIndex >= pool.Variations.Count)
+            {
+                _updateCompleted = true;
+                return;
+            }
+
+            var variation = pool.Variations[_updateIndex];
+            RenderThumbnail(variation, _updateIndex);
             _updateIndex++;
-            var usedUpdateIndex = _updateIndex % pool.Variations.Count;
-            var variation = pool.Variations[usedUpdateIndex];
-            RenderThumbnail(variation, usedUpdateIndex);
         }
 
         private void RenderThumbnail(Variation variation, int thumbnailIndex)
@@ -227,19 +262,19 @@ namespace T3.Gui.Windows.Variations
         {
             return VariationPool.Variations;
         }
-        
-        
+
         private static SymbolVariationPool VariationPool => VariationHandling.ActivePoolForPresets;
 
+        private Instance _lastInstance;
+        private int _updateIndex;
         private bool _updateCompleted;
         private readonly ImageOutputCanvas _imageCanvas = new();
         private readonly VariationsWindow _variationsWindow;
-        
+
         private ISlot _firstOutputSlot;
 
         private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
         private SelectionFence.States _fenceState;
         internal readonly CanvasElementSelection Selection = new();
-
     }
 }
