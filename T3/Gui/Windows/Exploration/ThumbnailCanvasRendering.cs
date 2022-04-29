@@ -2,6 +2,7 @@
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
+using T3;
 using t3.App;
 using T3.Core;
 using T3.Core.Operator;
@@ -10,7 +11,7 @@ using T3.Gui.Graph.Rendering;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
-namespace T3.Gui.Windows.Variations
+namespace t3.Gui.Windows.Exploration
 {
     /// <summary>
     /// A helper class that manages the setup for copying a texture in a texture atlas.

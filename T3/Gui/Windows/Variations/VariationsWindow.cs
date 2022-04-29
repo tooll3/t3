@@ -8,15 +8,17 @@ using T3.Core.Operator;
 using T3.Gui;
 using t3.Gui.Interaction.Variations;
 using t3.Gui.Interaction.Variations.Model;
+using T3.Gui.OutputUi;
 using T3.Gui.Styling;
 using T3.Gui.Windows;
 
-namespace t3.Gui.Windows.Presets
+namespace t3.Gui.Windows.Variations
 {
     public class VariationsWindow : Window
     {
         public VariationsWindow()
         {
+            _variationCanvas = new VariationCanvas(this);
             Config.Title = "Variations";
         }
 
@@ -57,55 +59,69 @@ namespace t3.Gui.Windows.Presets
                 _variationToBeDeletedNextFrame = null;
             }
 
-            if (ImGui.BeginTabBar("##presets"))
+            
+            ImGui.BeginChild("canvas", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
             {
-                if (ImGui.BeginTabItem("Presets"))
-                {
-                    var presetPool = VariationHandling.ActivePoolForPresets;
-                    if (presetPool == null)
-                    {
-                        CustomComponents.EmptyWindowMessage("select one object for presets");
-                    }
-                    else
-                    {
-                        var instance = VariationHandling.ActiveInstanceForPresets;
-                        if (presetPool.Variations.Count == 0)
-                        {
-                            CustomComponents.EmptyWindowMessage($"No Presets for {VariationHandling.ActiveInstanceForPresets.Symbol.Name}");
-                        }
-                        else
-                        {
-                            if (instance == null)
-                            {
-                                CustomComponents.EmptyWindowMessage($"NULL?!");
-                            }
-                            else
-                            {
-                                foreach (var variation in VariationHandling.ActivePoolForPresets.Variations)
-                                {
-                                    DrawPresetButton(variation, instance);
-                                }
-                            }
-                        }
-
-                        if (ImGui.Button("Create"))
-                        {
-                            var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetOfInstanceSymbol(instance);
-                            _variationForRenaming = newVariation;
-                        }
-                    }
-
-                    ImGui.EndTabItem();
-                }
-
-                if (ImGui.BeginTabItem("Variations"))
-                {
-                    CustomComponents.EmptyWindowMessage("This comes later");
-                    ImGui.EndTabItem();
-                }
+                //_variationCanvas.Draw();
             }
-
-            ImGui.EndTabBar();
+            ImGui.EndChild();            
+            
+            
+            
+            
+            
+            
+            
+            
+            // if (ImGui.BeginTabBar("##presets"))
+            // {
+            //     if (ImGui.BeginTabItem("Presets"))
+            //     {
+            //         var presetPool = VariationHandling.ActivePoolForPresets;
+            //         if (presetPool == null)
+            //         {
+            //             CustomComponents.EmptyWindowMessage("select one object for presets");
+            //         }
+            //         else
+            //         {
+            //             var instance = VariationHandling.ActiveInstanceForPresets;
+            //             if (presetPool.Variations.Count == 0)
+            //             {
+            //                 CustomComponents.EmptyWindowMessage($"No Presets for {VariationHandling.ActiveInstanceForPresets.Symbol.Name}");
+            //             }
+            //             else
+            //             {
+            //                 if (instance == null)
+            //                 {
+            //                     CustomComponents.EmptyWindowMessage($"NULL?!");
+            //                 }
+            //                 else
+            //                 {
+            //                     foreach (var variation in VariationHandling.ActivePoolForPresets.Variations)
+            //                     {
+            //                         DrawPresetButton(variation, instance);
+            //                     }
+            //                 }
+            //             }
+            //
+            //             if (ImGui.Button("Create"))
+            //             {
+            //                 var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetOfInstanceSymbol(instance);
+            //                 _variationForRenaming = newVariation;
+            //             }
+            //         }
+            //
+            //         ImGui.EndTabItem();
+            //     }
+            //
+            //     if (ImGui.BeginTabItem("Variations"))
+            //     {
+            //         CustomComponents.EmptyWindowMessage("This comes later");
+            //         ImGui.EndTabItem();
+            //     }
+            // }
+            //
+            // ImGui.EndTabBar();
         }
 
         private static void DrawPresetButton(Variation variation, Instance instance)
@@ -272,6 +288,9 @@ namespace t3.Gui.Windows.Presets
                                                                Color.Black,
                                                                Color.Black,
                                                            };
+
+        private readonly VariationCanvas _variationCanvas;
+        public IOutputUi OutputUi;
 
         private static MatchTypes DoesPresetVariationMatch(Variation variation, Instance instance)
         {

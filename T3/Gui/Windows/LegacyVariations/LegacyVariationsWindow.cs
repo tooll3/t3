@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
@@ -8,11 +7,13 @@ using T3.Core;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui;
 using T3.Gui.Interaction.LegacyVariations;
 using T3.Gui.Interaction.LegacyVariations.Model;
 using T3.Gui.Styling;
+using T3.Gui.Windows;
 
-namespace T3.Gui.Windows
+namespace t3.Gui.Windows.Variations
 {
     public class LegacyVariationsWindow : Window
     {

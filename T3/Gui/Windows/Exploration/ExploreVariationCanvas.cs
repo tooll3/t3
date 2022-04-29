@@ -5,13 +5,15 @@ using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Operator.Slots;
+using T3.Gui;
 using T3.Gui.Interaction;
+using T3.Gui.Windows;
 using T3.Gui.Windows.Output;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
 
-namespace T3.Gui.Windows.Variations
+namespace t3.Gui.Windows.Exploration
 {
     public class ExploreVariationCanvas : ScalableCanvas
     {
@@ -254,7 +256,7 @@ namespace T3.Gui.Windows.Variations
             _updateCompleted = true;
         }
 
-        private Variation CreateVariationAtMouseMouse()
+        private ExplorationVariation CreateVariationAtMouseMouse()
         {
             var mousePos = ImGui.GetMousePos();
             var cellBelowMouse = GetScreenRectForGridCell(mousePos);
@@ -291,57 +293,57 @@ namespace T3.Gui.Windows.Variations
             var xWeight = posInCell.X.Clamp(-clamp.X, clamp.X) / clamp.X / 2 + 0.5f;
             var yWeight = posInCell.Y.Clamp(-clamp.Y, clamp.Y) / clamp.Y / 2 + 0.5f;
 
-            var neighbours = new List<Tuple<Variation, float>>();
+            var neighbours = new List<Tuple<ExplorationVariation, float>>();
 
             if (_variationByGridIndex.TryGetValue(cellBelowMouse.GridIndex, out var variationTopLeft))
             {
                 var weight = (1 - xWeight) * (1 - yWeight);
-                neighbours.Add(new Tuple<Variation, float>(variationTopLeft, weight));
+                neighbours.Add(new Tuple<ExplorationVariation, float>(variationTopLeft, weight));
             }
 
             if (_variationByGridIndex.TryGetValue((cellBelowMouse + new GridCell(1, 0)).GridIndex, out var variationTopRight))
             {
                 var weight = xWeight * (1 - yWeight);
-                neighbours.Add(new Tuple<Variation, float>(variationTopRight, weight));
+                neighbours.Add(new Tuple<ExplorationVariation, float>(variationTopRight, weight));
             }
 
             if (_variationByGridIndex.TryGetValue((cellBelowMouse + new GridCell(0, 1)).GridIndex, out var variationBottomLeft))
             {
                 var weight = (1 - xWeight) * yWeight;
-                neighbours.Add(new Tuple<Variation, float>(variationBottomLeft, weight));
+                neighbours.Add(new Tuple<ExplorationVariation, float>(variationBottomLeft, weight));
             }
 
             if (_variationByGridIndex.TryGetValue((cellBelowMouse + new GridCell(1, 1)).GridIndex, out var variationBottomRight))
             {
                 var weight = xWeight * yWeight;
-                neighbours.Add(new Tuple<Variation, float>(variationBottomRight, weight));
+                neighbours.Add(new Tuple<ExplorationVariation, float>(variationBottomRight, weight));
             }
 
-            return Variation.Mix(_explorationWindow.VariationParameters, neighbours, 0);
+            return ExplorationVariation.Mix(_explorationWindow.VariationParameters, neighbours, 0);
         }
 
-        private Variation CreateVariationForCell(GridCell cell)
+        private ExplorationVariation CreateVariationForCell(GridCell cell)
         {
             // Collect neighbours
-            var neighboursAndWeights = new List<Tuple<Variation, float>>();
+            var neighboursAndWeights = new List<Tuple<ExplorationVariation, float>>();
             foreach (var nOffset in _neighbourOffsets)
             {
                 var neighbourCell = cell + nOffset;
 
                 if (_variationByGridIndex.TryGetValue(neighbourCell.GridIndex, out var neighbour))
-                    neighboursAndWeights.Add(new Tuple<Variation, float>(neighbour, 1));
+                    neighboursAndWeights.Add(new Tuple<ExplorationVariation, float>(neighbour, 1));
             }
 
-            return Variation.Mix(_explorationWindow.VariationParameters, neighboursAndWeights, Scatter, cell);
+            return ExplorationVariation.Mix(_explorationWindow.VariationParameters, neighboursAndWeights, Scatter, cell);
         }
 
         
-        public void AddVariationToGrid(Variation newVariation)
+        public void AddVariationToGrid(ExplorationVariation newVariation)
         {
             _variationByGridIndex[newVariation.GridCell.GridIndex] = newVariation;
         }
 
-        private void RenderThumbnail(Variation variation)
+        private void RenderThumbnail(ExplorationVariation variation)
         {
             variation.ThumbnailNeedsUpdate = false;
 
@@ -381,14 +383,14 @@ namespace T3.Gui.Windows.Variations
         private float _lastScale;
         private Vector2 _lastScroll = Vector2.One;
         private static readonly Color _needsUpdateColor = new Color(1f, 1f, 1f, 0.05f);
-        private readonly Dictionary<int, Variation> _variationByGridIndex = new Dictionary<int, Variation>();
+        private readonly Dictionary<int, ExplorationVariation> _variationByGridIndex = new Dictionary<int, ExplorationVariation>();
         private GridCell _gridFocusIndex = _gridCenter;
         private int _currentOffsetIndexForFocus;
         private bool _updateCompleted;
         private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
 
         private readonly ExplorationWindow _explorationWindow;
-        private Variation _hoveringVariation;
+        private ExplorationVariation _hoveringVariation;
 
         private static readonly GridCell[] _neighbourOffsets =
             {
