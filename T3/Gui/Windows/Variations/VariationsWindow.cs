@@ -61,7 +61,12 @@ namespace T3.Gui.Windows.Variations
             {
                 ImGui.BeginChild("canvas", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
                 {
+                    var min = ImGui.GetWindowPos();
+                    var windowSize = ImGui.GetWindowSize();
+                           
+                    //ImGui.PushClipRect(min, min+windowSize, true);
                     _variationCanvas.Draw(VariationHandling.ActivePoolForPresets);
+                    //ImGui.PopClipRect();
                 }
                 ImGui.EndChild();
             }

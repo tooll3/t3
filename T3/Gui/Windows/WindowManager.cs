@@ -23,11 +23,11 @@ namespace T3.Gui.Windows
                                new SettingsWindow(),
                                new ParameterWindow(),
                                new ExplorationWindow(),
+                               new VariationsWindow(),
                                new OutputWindow(),
                                new ConsoleLogWindow(),
                                new SymbolLibrary(),
                                new LegacyVariationsWindow(),
-                               new VariationsWindow(),
                            };
         }
 

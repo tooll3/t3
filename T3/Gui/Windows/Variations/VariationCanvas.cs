@@ -41,10 +41,10 @@ namespace T3.Gui.Windows.Variations
             //
             //
             var instance = VariationHandling.ActiveInstanceForPresets;
-            if (instance != _lastInstance)
+            if (instance != _instance)
             {
                 RefreshView();
-                _lastInstance = instance;
+                _instance = instance;
             }
 
             // Draw Canvas Texture
@@ -117,13 +117,44 @@ namespace T3.Gui.Windows.Variations
             //     _hoveringVariation = null;
             // }
         }
+        
+        public void TryToApply(Variation variation, bool resetNonDefaults)
+        {
+            if (!_updateCompleted)
+                return;
+            
+            VariationPool.StopHover();
+            VariationPool.ApplyPreset(_instance, variation, resetNonDefaults);
+            if(resetNonDefaults)
+                TriggerThumbnailUpdate();
+        }
+
+        public void StartHover(Variation variation)
+        {
+            if (!_updateCompleted)
+                return;
+            
+            VariationPool.BeginHoverPreset(_instance, variation);
+        }
+
+        public void StopHover()
+        {
+            VariationPool.StopHover();
+        }
+        
 
         private void RefreshView()
         {
+            TriggerThumbnailUpdate();
+            Selection.Clear();
+            ResetView();
+        }
+
+        private void TriggerThumbnailUpdate()
+        {
+            _thumbnailCanvasRendering.ClearTexture();
             _updateIndex = 0;
             _updateCompleted = false;
-            ResetView();
-            Selection.Clear();
         }
 
         private void ResetView()
@@ -150,7 +181,7 @@ namespace T3.Gui.Windows.Variations
 
             if (!foundOne)
                 return;
-            var extend = new Vector2(3, 3);
+            var extend = new Vector2(20, 20);
             area.Expand(extend);
             FitAreaOnCanvas(area);
         }
@@ -268,7 +299,7 @@ namespace T3.Gui.Windows.Variations
 
         private static SymbolVariationPool VariationPool => VariationHandling.ActivePoolForPresets;
 
-        private Instance _lastInstance;
+        private Instance _instance;
         private int _updateIndex;
         private bool _updateCompleted;
         private readonly ImageOutputCanvas _imageCanvas = new();
@@ -279,5 +310,7 @@ namespace T3.Gui.Windows.Variations
         private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
         private SelectionFence.States _fenceState;
         internal readonly CanvasElementSelection Selection = new();
+
+
     }
 }

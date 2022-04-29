@@ -289,7 +289,7 @@ namespace T3.Gui.Interaction.Variations.Model
         {
             if (_activeBlendCommand == null)
             {
-                Log.Error("Can't stop non existing blend command");
+                //Log.Error("Can't stop non existing blend command");
                 return;
             }
             

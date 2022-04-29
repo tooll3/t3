@@ -57,8 +57,6 @@ namespace T3.Gui.Windows.Exploration
             var deviceContext = resourceManager.Device.ImmediateContext;
             deviceContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
 
-
-
             deviceContext.Rasterizer.SetViewport(new ViewportF(rect.Min.X,
                                                                rect.Min.Y,
                                                                rect.GetWidth(),

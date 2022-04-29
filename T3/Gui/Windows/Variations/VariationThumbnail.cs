@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using SharpDX.Direct3D11;
+using T3.Core;
 using T3.Gui.Commands;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.Selection;
@@ -15,18 +16,16 @@ namespace T3.Gui.Windows.Variations
 {
     public static class VariationThumbnail
     {
-        public static bool Draw(VariationCanvas canvas, Variation v, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
+        public static bool Draw(VariationCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
             _canvas = canvas;
-            var pMin = canvas.TransformPosition(v.PosOnCanvas);
+            var pMin = canvas.TransformPosition(variation.PosOnCanvas);
             var sizeOnScreen = canvas.TransformDirectionFloored(ThumbnailSize);
             var pMax = pMin + sizeOnScreen;
-
-            drawList.AddRectFilled(pMin, pMax, Color.DarkGray);
             
-            // Draw Canvas Texture
-            //var canvasSize = _thumbnailCanvasRendering.GetCanvasTextureSize();
-            //var rectOnScreen = ImRect.RectWithSize(WindowPos, canvasSize);
+            var areaOnScreen = new ImRect(pMin, pMax);
+            CustomComponents.FillWithStripes(drawList, areaOnScreen);
+            
             drawList.AddImage((IntPtr)canvasSrv, 
                               pMin, 
                               pMax,
@@ -37,13 +36,13 @@ namespace T3.Gui.Windows.Variations
             
             drawList.AddRect(pMin, pMax, Color.Gray.Fade(0.2f));
 
-            v.IsSelected = _selection.IsNodeSelected(v);
-            if (v.IsSelected)
+            variation.IsSelected = Selection.IsNodeSelected(variation);
+            if (variation.IsSelected)
             {
                 drawList.AddRect(pMin - Vector2.One, pMax + Vector2.One, Color.White);
             }
 
-            var bottomPadding = 15;
+            const int bottomPadding = 15;
             drawList.AddRectFilledMultiColor(pMin + new Vector2(1, sizeOnScreen.Y - bottomPadding),
                                              pMax - Vector2.One,
                                              Color.TransparentBlack,
@@ -54,57 +53,72 @@ namespace T3.Gui.Windows.Variations
             ImGui.PushClipRect(pMin, pMax, true);
             ImGui.PushFont(Fonts.FontSmall);
 
+            var fade = MathUtils.RemapAndClamp(canvas.Scale.X, 0.4f, 0.8f, 0, 1);
             drawList.AddText(pMin + new Vector2(4, sizeOnScreen.Y - bottomPadding),
-                             Color.White.Fade(0.6f),
-                             string.IsNullOrEmpty(v.Title) ? "Untitled" : v.Title);
+                             Color.White.Fade(0.6f * fade),
+                             string.IsNullOrEmpty(variation.Title) ? "Untitled" : variation.Title);
 
             drawList.AddText(pMin + new Vector2(sizeOnScreen.X - bottomPadding, sizeOnScreen.Y - bottomPadding),
-                             Color.White.Fade(0.3f),
-                             $"{v.ActivationIndex:00}");
+                             Color.White.Fade(0.3f * fade),
+                             $"{variation.ActivationIndex:00}");
 
 
             ImGui.PopFont();
             ImGui.SetCursorScreenPos(pMin);
-            ImGui.PushID(v.Id.GetHashCode());
+            ImGui.PushID(variation.Id.GetHashCode());
             ImGui.InvisibleButton("##thumbnail", ThumbnailSize);
+            if (ImGui.IsItemVisible() && ImGui.IsItemHovered())
+            {
+                if (_hoveredVariation == null)
+                {
+                    _hoveredVariation = variation;
+                    _canvas.StartHover(variation);
+                }
+            }
+            else
+            {
+                if (_hoveredVariation == variation)
+                {
+                    _canvas.StopHover();
+                    _hoveredVariation = null;
+                }
+            }
             
-            var modified = HandleMovement(v);
+            var modified = HandleMovement(variation);
             ImGui.PopID();
 
             ImGui.PopClipRect();
             return modified;
         }
 
-        private static VariationCanvas _canvas;
-        private static CanvasElementSelection _selection => _canvas.Selection;
 
-        private static bool HandleMovement(ISelectableCanvasObject node)
+
+        private static bool HandleMovement(Variation variation)
         {
             if (ImGui.IsItemActive())
             {
                 if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                 {
-                    _draggedNodeId = node.Id;
-                    if (node.IsSelected)
+                    _draggedNodeId = variation.Id;
+                    if (variation.IsSelected)
                     {
-                        _draggedNodes = _selection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
+                        _draggedNodes = Selection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
                     }
                     else
                     {
-                        _draggedNodes.Add(node);
+                        _draggedNodes.Add(variation);
                     }
 
                     _moveCommand = new ModifyCanvasElementsCommand(_canvas, _draggedNodes);
                 }
 
-                HandleNodeDragging(node);
+                HandleNodeDragging(variation);
             }
             else if (ImGui.IsMouseReleased(0) && _moveCommand != null)
             {
-                if (_draggedNodeId != node.Id)
+                if (_draggedNodeId != variation.Id)
                     return false;
 
-                var singleDraggedNode = (_draggedNodes.Count == 1) ? _draggedNodes[0] : null;
                 _draggedNodeId = Guid.Empty;
                 _draggedNodes.Clear();
 
@@ -115,23 +129,28 @@ namespace T3.Gui.Windows.Variations
                     UndoRedoStack.Add(_moveCommand);
                     return true;
                 }
+
+                if (!Selection.IsNodeSelected(variation))
+                {
+                    if (!ImGui.GetIO().KeyShift)
+                    {
+                        Selection.Clear();
+                        _hoveredVariation = null;
+                        _canvas.TryToApply(variation, false);
+                    }
+
+                    Selection.AddSelection(variation);
+                }
                 else
                 {
-                    if (!_selection.IsNodeSelected(node))
+                    if (ImGui.GetIO().KeyShift)
                     {
-                        if (!ImGui.GetIO().KeyShift)
-                        {
-                            _selection.Clear();
-                        }
-
-                        _selection.AddSelection(node);
+                        Selection.DeselectNode(variation);
                     }
                     else
                     {
-                        if (ImGui.GetIO().KeyShift)
-                        {
-                            _selection.DeselectNode(node);
-                        }
+                        _hoveredVariation = null;
+                        _canvas.TryToApply(variation, true);
                     }
                 }
 
@@ -211,6 +230,10 @@ namespace T3.Gui.Windows.Variations
             }
         }
 
+        private static Variation _hoveredVariation;
+        
+        private static VariationCanvas _canvas;
+        private static CanvasElementSelection Selection => _canvas.Selection;
         private static Guid _draggedNodeId;
         private static List<ISelectableCanvasObject> _draggedNodes = new();
         public static readonly Vector2 ThumbnailSize = new Vector2(160, (int)(160 / 16f * 9));
