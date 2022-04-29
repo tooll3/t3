@@ -66,6 +66,7 @@ namespace T3.Gui.Commands
                 var selectable = GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
+                
                 entry.PosOnCanvas = selectable.PosOnCanvas;
                 entry.Size = selectable.Size;
                 entry.IsSelected = selectable.IsSelected;
@@ -79,6 +80,7 @@ namespace T3.Gui.Commands
                 var selectable = GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
+                
                 selectable.PosOnCanvas = entry.OriginalPosOnCanvas;
                 selectable.Size = entry.OriginalSize;
             }
@@ -91,6 +93,7 @@ namespace T3.Gui.Commands
                 var selectable = GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
+                
                 selectable.PosOnCanvas = entry.PosOnCanvas;
                 selectable.Size = entry.Size;
             }

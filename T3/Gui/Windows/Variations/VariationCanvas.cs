@@ -158,39 +158,20 @@ namespace T3.Gui.Windows.Variations
             }
         }
 
-        private SymbolVariationPool _variationPool => VariationHandling.ActivePoolForPresets;
+        
 
         private void HandleSelectionFenceUpdate(ImRect boundsInScreen)
         {
             var boundsInCanvas = InverseTransformRect(boundsInScreen);
-            var elementsToSelect = (from child in _variationPool.Variations
+            var elementsToSelect = (from child in VariationPool.Variations
                                  let rect = new ImRect(child.PosOnCanvas, child.PosOnCanvas + child.Size)
                                  where rect.Overlaps(boundsInCanvas)
                                  select child).ToList();
 
             _selection.Clear();
-            foreach (var node in elementsToSelect)
+            foreach (var element in elementsToSelect)
             {
-                // if (node is SymbolChildUi symbolChildUi)
-                // {
-                //     var instance = CompositionOp.Children.FirstOrDefault(child => child.SymbolChildId == symbolChildUi.Id);
-                //     if (instance == null)
-                //     {
-                //         Log.Warning("Can't find instance");
-                //     }
-                //
-                //     VariationThumbnailSelection.AddSymbolChildToSelection(symbolChildUi, instance);
-                // }
-                // if (node is Annotation annotation)
-                // {
-                //     var rect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
-                //     if (boundsInCanvas.Contains(rect))
-                //         VariationThumbnailSelection.AddSelection(node);
-                // }
-                // else
-                // {
-                _selection.AddSelection(node);
-                //}
+                _selection.AddSelection(element);
             }
         }
         
@@ -349,20 +330,15 @@ namespace T3.Gui.Windows.Variations
 
             variation.RestoreValues();
         }
-
-        private float _lastScale;
+        
+        private static SymbolVariationPool VariationPool => VariationHandling.ActivePoolForPresets;
 
         private Vector2 _lastScroll = Vector2.One;
 
-        //private int _currentOffsetIndexForFocus;
         private bool _updateCompleted;
         private readonly ImageOutputCanvas _imageCanvas = new();
 
         private readonly VariationsWindow _variationsWindow;
-        //private ExplorationVariation _hoveringVariation;
-
-        //public float Scatter = 20f;
-        ///private float _lastScatter;
         private ISlot _firstOutputSlot;
 
         private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
@@ -371,7 +347,7 @@ namespace T3.Gui.Windows.Variations
         
         public IEnumerable<ISelectableCanvasObject> GetSelectables()
         {
-            return _variationPool.Variations;
+            return VariationPool.Variations;
         }
     }
 }

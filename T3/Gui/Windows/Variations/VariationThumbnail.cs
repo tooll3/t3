@@ -15,49 +15,55 @@ namespace T3.Gui.Windows.Variations
     {
         public static void Draw(VariationCanvas canvas, Variation v, ImDrawListPtr drawList)
         {
+            
             _canvas = canvas;
             var pMin = canvas.TransformPosition(v.PosOnCanvas);
             var sizeOnScreen = canvas.TransformDirectionFloored(ThumbnailSize);
             var pMax = pMin + sizeOnScreen;
 
-            ImGui.PushClipRect(pMin, pMax, true);
+            drawList.AddRectFilled(pMin, pMax, Color.DarkGray);
+            drawList.AddRect(pMin, pMax, Color.Gray.Fade(0.2f));
 
-            drawList.AddRectFilled(pMin, pMax, Color.Black);
-            drawList.AddRect(pMin, pMax, Color.Gray);
+            v.IsSelected = _selection.IsNodeSelected(v);
+            if (v.IsSelected)
+            {
+                drawList.AddRect(pMin - Vector2.One, pMax + Vector2.One, Color.White);
+            }
+
+            var bottomPadding = 15;
+            drawList.AddRectFilledMultiColor(pMin + new Vector2(1, sizeOnScreen.Y - bottomPadding),
+                                             pMax - Vector2.One,
+                                             Color.TransparentBlack,
+                                             Color.TransparentBlack,
+                                             Color.Black.Fade(0.4f),
+                                             Color.Black.Fade(0.4f)
+                                            );
+            ImGui.PushClipRect(pMin, pMax, true);
             ImGui.PushFont(Fonts.FontSmall);
 
-            drawList.AddRectFilledMultiColor(pMin + new Vector2(0, sizeOnScreen.Y - 20),
-                                             pMax,
-                                             Color.TransparentBlack,
-                                             Color.TransparentBlack,
-                                             Color.Black,
-                                             Color.Black
-                                            );
-
-            drawList.AddText(pMin + new Vector2(4, sizeOnScreen.Y - 20),
-                             Color.White,
+            drawList.AddText(pMin + new Vector2(4, sizeOnScreen.Y - bottomPadding),
+                             Color.White.Fade(0.6f),
                              string.IsNullOrEmpty(v.Title) ? "Untitled" : v.Title);
 
-            drawList.AddText(pMin + new Vector2(sizeOnScreen.X - 20, sizeOnScreen.Y - 20),
-                             Color.White,
+            drawList.AddText(pMin + new Vector2(sizeOnScreen.X - bottomPadding, sizeOnScreen.Y - bottomPadding),
+                             Color.White.Fade(0.3f),
                              $"{v.ActivationIndex:00}");
+
 
             ImGui.PopFont();
             ImGui.SetCursorScreenPos(pMin);
+            ImGui.PushID(v.Id.GetHashCode());
             ImGui.InvisibleButton("##thumbnail", ThumbnailSize);
             HandleMovement(v);
+            ImGui.PopID();
 
             ImGui.PopClipRect();
         }
 
         private static VariationCanvas _canvas;
         private static CanvasElementSelection _selection => _canvas._selection;
-        
 
-        /// <summary>
-        /// NOTE: This has to be called directly after ImGui.Item
-        /// </summary>
-        public static void HandleMovement(ISelectableCanvasObject node)
+        private static void HandleMovement(ISelectableCanvasObject node)
         {
             if (ImGui.IsItemActive())
             {
@@ -155,42 +161,28 @@ namespace T3.Gui.Windows.Variations
 
             var bestDistanceInCanvas = float.PositiveInfinity;
             var targetSnapPositionInCanvas = Vector2.Zero;
-
+            
             foreach (var offset in _snapOffsetsInCanvas)
             {
-                var heightAffectFactor = 0;
-                if (Math.Abs(offset.X) < 0.01f)
-                {
-                    if (offset.Y > 0)
-                    {
-                        heightAffectFactor = -1;
-                    }
-                    else
-                    {
-                        heightAffectFactor = 1;
-                    }
-                }
-
                 foreach (var neighbor in _canvas.GetSelectables())
                 {
                     if (neighbor == draggedNode || _draggedNodes.Contains(neighbor))
                         continue;
-
-                    var offset2 = new Vector2(offset.X, -neighbor.Size.Y * heightAffectFactor + offset.Y);
-                    var snapToNeighborPos = neighbor.PosOnCanvas + offset2;
-
+            
+                    var snapToNeighborPos = neighbor.PosOnCanvas + offset;
+            
                     var d = Vector2.Distance(snapToNeighborPos, newDragPosInCanvas);
                     if (!(d < bestDistanceInCanvas))
                         continue;
-
+            
                     targetSnapPositionInCanvas = snapToNeighborPos;
                     bestDistanceInCanvas = d;
                 }
             }
-
-            var snapDistanceInCanvas = _canvas.InverseTransformDirection(new Vector2(20, 0)).X;
+            
+            var snapDistanceInCanvas = _canvas.InverseTransformDirection(new Vector2(6, 6)).Length();
             var isSnapping = bestDistanceInCanvas < snapDistanceInCanvas;
-
+            
             var moveDeltaOnCanvas = isSnapping
                                         ? targetSnapPositionInCanvas - draggedNode.PosOnCanvas
                                         : newDragPosInCanvas - draggedNode.PosOnCanvas;
@@ -202,19 +194,18 @@ namespace T3.Gui.Windows.Variations
             }
         }
 
-        private static readonly Vector2 SnapPadding = new Vector2(40, 20);
+        private static Guid _draggedNodeId;
+        private static List<ISelectableCanvasObject> _draggedNodes = new();
+        public static readonly Vector2 ThumbnailSize = new Vector2(160, (int)(160 / 16f * 9));
+        
+        private static readonly Vector2 _snapPadding = new Vector2(3, 3);
         private static readonly Vector2[] _snapOffsetsInCanvas =
             {
-                new Vector2(SymbolChildUi.DefaultOpSize.X + SnapPadding.X, 0),
-                new Vector2(-SymbolChildUi.DefaultOpSize.X - +SnapPadding.X, 0),
-                new Vector2(0, SnapPadding.Y),
-                new Vector2(0, -SnapPadding.Y)
-            };
-        
-        
-        private static Guid _draggedNodeId;
-        private static List<ISelectableCanvasObject> _draggedNodes;
-        public static readonly Vector2 ThumbnailSize = new Vector2(160, 160 / 16f * 9);
+                new(ThumbnailSize.X + _snapPadding.X, 0),
+                new(-ThumbnailSize.X - _snapPadding.X, 0),
+                new(0, ThumbnailSize.Y + _snapPadding.Y),
+                new(0, -ThumbnailSize.Y - _snapPadding.Y)
+            };        
         private static ModifyCanvasElementsCommand _moveCommand;
         private static Vector2 _dragStartDelta;
     }
