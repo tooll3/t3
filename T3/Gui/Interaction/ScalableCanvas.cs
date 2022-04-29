@@ -261,7 +261,7 @@ namespace T3.Gui.Interaction
             // where img has not been initialized yet.
             if (WindowSize == Vector2.Zero)
             {
-                WindowSize = new Vector2(800, 500);
+                WindowSize = new Vector2(200, 200);
             }
 
             float scale;

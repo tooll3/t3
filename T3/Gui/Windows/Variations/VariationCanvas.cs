@@ -115,9 +115,23 @@ namespace T3.Gui.Windows.Variations
             {
                 CustomComponents.DrawContextMenuForScrollCanvas(() =>
                                                                 {
-                                                                    if (ImGui.MenuItem("Delete selected"))
+                                                                    var oneOrMoreSelected = Selection.SelectedElements.Count > 0;
+                                                                    var oneSelected = Selection.SelectedElements.Count == 1;
+                                                                    
+                                                                    if (ImGui.MenuItem("Delete selected",
+                                                                                       KeyboardBinding.ListKeyboardShortcuts(UserActions.DeleteSelection, false),
+                                                                                       false,
+                                                                                       oneOrMoreSelected))
                                                                     {
                                                                         DeleteSelectedElements();
+                                                                    }
+                                                                    
+                                                                    if (ImGui.MenuItem("Rename",
+                                                                                       "",
+                                                                                       false,
+                                                                                       oneSelected))
+                                                                    {
+                                                                        VariationThumbnail.VariationForRenaming = Selection.SelectedElements[0] as Variation;
                                                                     }
                                                                 }, ref _contextMenuIsOpen);
             }
@@ -200,7 +214,7 @@ namespace T3.Gui.Windows.Variations
             {
                 if (!foundOne)
                 {
-                    area = new ImRect(v.PosOnCanvas, v.Size);
+                    area = ImRect.RectWithSize(v.PosOnCanvas, v.Size);
                     foundOne = true;
                 }
                 else
@@ -330,13 +344,14 @@ namespace T3.Gui.Windows.Variations
             {
                 return Vector2.Zero;
             }
-
+            
             const int columns = 4;
             var columnIndex = 0;
 
             var stepWidth = VariationThumbnail.ThumbnailSize.X + VariationThumbnail.SnapPadding.X;
             var stepHeight = VariationThumbnail.ThumbnailSize.Y + VariationThumbnail.SnapPadding.Y;
-            var pos = new Vector2(area.Min.X, area.Max.Y - stepHeight);
+            
+            var pos = new Vector2(area.Min.X, area.Max.Y - VariationThumbnail.ThumbnailSize.Y);
             var rowStartPos = pos;
 
             while (true)

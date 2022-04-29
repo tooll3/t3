@@ -19,19 +19,19 @@ namespace T3.Gui.Windows.Variations
         public static bool Draw(VariationCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
             
-            // if (VariationForRenaming == variation)
-            // {
-            //     ImGui.PushID(variation.ActivationIndex);
-            //     ImGui.SetCursorScreenPos(new Vector2(30, 0));
-            //     ImGui.SetKeyboardFocusHere();
-            //     ImGui.InputText("##label", ref variation.Title, 256);
-            //
-            //     if (ImGui.IsItemDeactivatedAfterEdit() && ImGui.IsItemDeactivated())
-            //     {
-            //         VariationForRenaming = null;
-            //     }
-            //     ImGui.PopID();
-            // }            
+            if (VariationForRenaming == variation)
+            {
+                ImGui.PushID(variation.ActivationIndex);
+                ImGui.SetCursorScreenPos(new Vector2(30, 0) + ImGui.GetWindowPos());
+                ImGui.SetKeyboardFocusHere();
+                ImGui.InputText("##label", ref variation.Title, 256);
+            
+                if (ImGui.IsItemDeactivatedAfterEdit() || ImGui.IsItemDeactivated())
+                {
+                    VariationForRenaming = null;
+                }
+                ImGui.PopID();
+            }            
             
             _canvas = canvas;
             var pMin = canvas.TransformPosition(variation.PosOnCanvas);
@@ -58,7 +58,7 @@ namespace T3.Gui.Windows.Variations
             }
 
             const int bottomPadding = 15;
-            drawList.AddRectFilledMultiColor(pMin + new Vector2(1, sizeOnScreen.Y - bottomPadding),
+            drawList.AddRectFilledMultiColor(pMin + new Vector2(1, sizeOnScreen.Y - bottomPadding - 10),
                                              pMax - Vector2.One,
                                              Color.TransparentBlack,
                                              Color.TransparentBlack,
@@ -68,9 +68,9 @@ namespace T3.Gui.Windows.Variations
             ImGui.PushClipRect(pMin, pMax, true);
             ImGui.PushFont(Fonts.FontSmall);
 
-            var fade = MathUtils.RemapAndClamp(canvas.Scale.X, 0.4f, 0.8f, 0, 1);
+            var fade = MathUtils.RemapAndClamp(canvas.Scale.X, 0.3f, 0.6f, 0, 1);
             drawList.AddText(pMin + new Vector2(4, sizeOnScreen.Y - bottomPadding),
-                             Color.White.Fade(0.6f * fade),
+                             Color.White.Fade(0.8f * fade),
                              string.IsNullOrEmpty(variation.Title) ? "Untitled" : variation.Title);
 
             drawList.AddText(pMin + new Vector2(sizeOnScreen.X - bottomPadding, sizeOnScreen.Y - bottomPadding),

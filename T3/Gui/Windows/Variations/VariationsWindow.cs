@@ -54,11 +54,14 @@ namespace T3.Gui.Windows.Variations
                 if (CustomComponents.IconButton(Icon.Plus, "## addbutton", new Vector2(20, 20)))
                 {
                     var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetOfInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
-                    newVariation.PosOnCanvas =VariationCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);                     
-                    VariationThumbnail.VariationForRenaming = newVariation;
-                    _variationCanvas.Selection.SetSelection(newVariation);
-                    _variationCanvas.ResetView();
-                    _variationCanvas.TriggerThumbnailUpdate();
+                    if (newVariation != null)
+                    {
+                        newVariation.PosOnCanvas =VariationCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);                     
+                        VariationThumbnail.VariationForRenaming = newVariation;
+                        _variationCanvas.Selection.SetSelection(newVariation);
+                        _variationCanvas.ResetView();
+                        _variationCanvas.TriggerThumbnailUpdate();
+                    }
                 }
 
                 ImGui.EndChild();
@@ -72,6 +75,7 @@ namespace T3.Gui.Windows.Variations
                 {
                     _variationCanvas.Draw(drawList, VariationHandling.ActivePoolForPresets);
                 }
+                VariationCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
             }
 
             drawList.ChannelsMerge();
