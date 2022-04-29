@@ -18,6 +18,21 @@ namespace T3.Gui.Windows.Variations
     {
         public static bool Draw(VariationCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
+            
+            // if (VariationForRenaming == variation)
+            // {
+            //     ImGui.PushID(variation.ActivationIndex);
+            //     ImGui.SetCursorScreenPos(new Vector2(30, 0));
+            //     ImGui.SetKeyboardFocusHere();
+            //     ImGui.InputText("##label", ref variation.Title, 256);
+            //
+            //     if (ImGui.IsItemDeactivatedAfterEdit() && ImGui.IsItemDeactivated())
+            //     {
+            //         VariationForRenaming = null;
+            //     }
+            //     ImGui.PopID();
+            // }            
+            
             _canvas = canvas;
             var pMin = canvas.TransformPosition(variation.PosOnCanvas);
             var sizeOnScreen = canvas.TransformDirectionFloored(ThumbnailSize);
@@ -156,23 +171,6 @@ namespace T3.Gui.Windows.Variations
 
                 _moveCommand = null;
             }
-            
-            // Select for context menu with right mouse click
-            // var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
-            // if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
-            //     && !wasDraggingRight
-            //     && ImGui.IsItemHovered()
-            //     && !VariationThumbnailSelection.IsNodeSelected(node))
-            // {
-            //     if (node is SymbolChildUi childUi2)
-            //     {
-            //         VariationThumbnailSelection.SetSelectionToChildUi(childUi2, instance);
-            //     }
-            //     else
-            //     {
-            //         VariationThumbnailSelection.SetSelection(node);
-            //     }
-            // }
             return false;
         }
 
@@ -238,15 +236,16 @@ namespace T3.Gui.Windows.Variations
         private static List<ISelectableCanvasObject> _draggedNodes = new();
         public static readonly Vector2 ThumbnailSize = new Vector2(160, (int)(160 / 16f * 9));
         
-        private static readonly Vector2 _snapPadding = new Vector2(3, 3);
+        public static readonly Vector2 SnapPadding = new Vector2(3, 3);
         private static readonly Vector2[] _snapOffsetsInCanvas =
             {
-                new(ThumbnailSize.X + _snapPadding.X, 0),
-                new(-ThumbnailSize.X - _snapPadding.X, 0),
-                new(0, ThumbnailSize.Y + _snapPadding.Y),
-                new(0, -ThumbnailSize.Y - _snapPadding.Y)
+                new(ThumbnailSize.X + SnapPadding.X, 0),
+                new(-ThumbnailSize.X - SnapPadding.X, 0),
+                new(0, ThumbnailSize.Y + SnapPadding.Y),
+                new(0, -ThumbnailSize.Y - SnapPadding.Y)
             };        
         private static ModifyCanvasElementsCommand _moveCommand;
         private static Vector2 _dragStartDelta;
+        public static Variation VariationForRenaming;
     }
 }

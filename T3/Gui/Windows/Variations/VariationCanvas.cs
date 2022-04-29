@@ -2,7 +2,6 @@
 using System.Linq;
 using ImGuiNET;
 using SharpDX.Direct3D11;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Interaction;
@@ -30,7 +29,7 @@ namespace T3.Gui.Windows.Variations
             }
 
             _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
-            
+
             var instance = VariationHandling.ActiveInstanceForPresets;
             if (instance != _instance)
             {
@@ -63,18 +62,17 @@ namespace T3.Gui.Windows.Variations
             UpdateCanvas();
             HandleFenceSelection();
 
-            
             var modified = false;
             for (var index = 0; index < activePoolForPresets.Variations.Count; index++)
             {
                 modified |= VariationThumbnail.Draw(this,
-                                        activePoolForPresets.Variations[index],
-                                        drawList,
-                                        _thumbnailCanvasRendering.CanvasTextureSrv,
-                                        GetUvRectForIndex(index));
+                                                    activePoolForPresets.Variations[index],
+                                                    drawList,
+                                                    _thumbnailCanvasRendering.CanvasTextureSrv,
+                                                    GetUvRectForIndex(index));
             }
-            
-            if(modified)
+
+            if (modified)
                 VariationPool.SaveVariationsToFile();
 
             DrawContextMenu();
@@ -110,29 +108,28 @@ namespace T3.Gui.Windows.Variations
             //     _hoveringVariation = null;
             // }
         }
-        
-        
+
         private void DrawContextMenu()
         {
             if (T3Ui.OpenedPopUpName == string.Empty)
             {
-                CustomComponents.DrawContextMenuForScrollCanvas(() => {
-                                                                    if (ImGui.MenuItem("here"))
+                CustomComponents.DrawContextMenuForScrollCanvas(() =>
+                                                                {
+                                                                    if (ImGui.MenuItem("Delete selected"))
                                                                     {
-                                                                        Log.Debug("here");
+                                                                        DeleteSelectedElements();
                                                                     }
                                                                 }, ref _contextMenuIsOpen);
             }
         }
 
         private bool _contextMenuIsOpen;
-        
 
         private void DeleteSelectedElements()
         {
             if (Selection.SelectedElements.Count <= 0)
                 return;
-            
+
             var list = new List<Variation>();
             foreach (var e in Selection.SelectedElements)
             {
@@ -141,7 +138,7 @@ namespace T3.Gui.Windows.Variations
                     list.Add(v);
                 }
             }
-                
+
             _variationsWindow.DeleteVariations(list);
         }
 
@@ -149,10 +146,10 @@ namespace T3.Gui.Windows.Variations
         {
             if (!_updateCompleted)
                 return;
-            
+
             VariationPool.StopHover();
             VariationPool.ApplyPreset(_instance, variation, resetNonDefaults);
-            if(resetNonDefaults)
+            if (resetNonDefaults)
                 TriggerThumbnailUpdate();
         }
 
@@ -160,7 +157,7 @@ namespace T3.Gui.Windows.Variations
         {
             if (!_updateCompleted)
                 return;
-            
+
             VariationPool.BeginHoverPreset(_instance, variation);
         }
 
@@ -168,32 +165,38 @@ namespace T3.Gui.Windows.Variations
         {
             VariationPool.StopHover();
         }
-        
 
-        private void RefreshView()
+        public void RefreshView()
         {
             TriggerThumbnailUpdate();
             Selection.Clear();
             ResetView();
         }
 
-        private void TriggerThumbnailUpdate()
+        public void TriggerThumbnailUpdate()
         {
             _thumbnailCanvasRendering.ClearTexture();
             _updateIndex = 0;
             _updateCompleted = false;
         }
 
-        private void ResetView()
+        public void ResetView()
         {
+            if (TryToGetBoundingBox(VariationPool.Variations, 20, out var area))
+            {
+                FitAreaOnCanvas(area);
+            }
+        }
+
+        private static bool TryToGetBoundingBox(List<Variation> variations, float extend, out ImRect area)
+        {
+            area = new ImRect();
             if (VariationPool?.Variations == null)
-                return;
-            
+                return false;
+
             var foundOne = false;
-            
-            ImRect area = new ImRect();
-            
-            foreach (var v in VariationPool.Variations)
+
+            foreach (var v in variations)
             {
                 if (!foundOne)
                 {
@@ -201,16 +204,16 @@ namespace T3.Gui.Windows.Variations
                     foundOne = true;
                 }
                 else
-                {   
-                    area.Add(ImRect.RectWithSize(v.PosOnCanvas,  v.Size));
+                {
+                    area.Add(ImRect.RectWithSize(v.PosOnCanvas, v.Size));
                 }
             }
 
             if (!foundOne)
-                return;
-            var extend = new Vector2(20, 20);
-            area.Expand(extend);
-            FitAreaOnCanvas(area);
+                return false;
+
+            area.Expand(Vector2.One * extend);
+            return true;
         }
 
         private void HandleFenceSelection()
@@ -263,9 +266,8 @@ namespace T3.Gui.Windows.Variations
 
             if (_updateIndex >= pool.Variations.Count)
             {
-                //_updateCompleted = true;
-                _updateIndex = 0;
-                //return;
+                _updateCompleted = true;
+                return;
             }
 
             var variation = pool.Variations[_updateIndex];
@@ -318,6 +320,57 @@ namespace T3.Gui.Windows.Variations
         }
 
         /// <summary>
+        /// This uses a primitive algorithm: Look for the bottom edge of a all element bounding box
+        /// Then step through possible positions and check if a position would intersect with an existing element.
+        /// Wrap columns to enforce some kind of grid.  
+        /// </summary>
+        public static Vector2 FindFreePositionForNewThumbnail(List<Variation> variations)
+        {
+            if (!TryToGetBoundingBox(variations, 0, out var area))
+            {
+                return Vector2.Zero;
+            }
+
+            const int columns = 4;
+            var columnIndex = 0;
+
+            var stepWidth = VariationThumbnail.ThumbnailSize.X + VariationThumbnail.SnapPadding.X;
+            var stepHeight = VariationThumbnail.ThumbnailSize.Y + VariationThumbnail.SnapPadding.Y;
+            var pos = new Vector2(area.Min.X, area.Max.Y - stepHeight);
+            var rowStartPos = pos;
+
+            while (true)
+            {
+                var intersects = false;
+                var targetArea = new ImRect(pos, pos + VariationThumbnail.ThumbnailSize);
+
+                foreach (var v in variations)
+                {
+                    if (!targetArea.Overlaps(ImRect.RectWithSize(v.PosOnCanvas, v.Size)))
+                        continue;
+
+                    intersects = true;
+                    break;
+                }
+
+                if (!intersects)
+                    return pos;
+
+                columnIndex++;
+                if (columnIndex == columns)
+                {
+                    columnIndex = 0;
+                    rowStartPos += new Vector2(0, stepHeight);
+                    pos = rowStartPos;
+                }
+                else
+                {
+                    pos += new Vector2(stepWidth, 0);
+                }
+            }
+        }
+
+        /// <summary>
         /// Implement selectionContainer
         /// </summary>
         public IEnumerable<ISelectableCanvasObject> GetSelectables()
@@ -338,7 +391,5 @@ namespace T3.Gui.Windows.Variations
         private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
         private SelectionFence.States _fenceState;
         internal readonly CanvasElementSelection Selection = new();
-
-
     }
 }
