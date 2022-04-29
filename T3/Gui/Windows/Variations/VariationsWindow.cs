@@ -8,6 +8,7 @@ using T3.Core.Operator;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.OutputUi;
+using T3.Gui.Selection;
 using T3.Gui.Styling;
 
 namespace T3.Gui.Windows.Variations
@@ -18,6 +19,7 @@ namespace T3.Gui.Windows.Variations
         {
             _variationCanvas = new VariationCanvas(this);
             Config.Title = "Variations";
+            WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
         }
 
         protected override void DrawContent()
@@ -27,49 +29,50 @@ namespace T3.Gui.Windows.Variations
 
         private void DrawWindowContent()
         {
-            // Mock implementation
-            // if (ImGui.Button("Save Screenshot"))
-            // {
-            //     var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(w => w.Config.Visible);
-            //     if (outputWindow is OutputWindow outWindow)
-            //     {
-            //         if (outWindow.ShownInstance.Outputs.Count > 0)
-            //         {
-            //             var outputSlot = outWindow.ShownInstance.Outputs[0];
-            //             if (outputSlot is Slot<Texture2D> texture2dSlot)
-            //             {
-            //                 var texture = texture2dSlot.Value;
-            //                 var srv = SrvManager.GetSrvForTexture(texture);
-            //                 // D3DX11SaveTextureToFile()
-            //                 // SharpDX.Direct3D9.Texture.ToFile(
-            //                 //                                  renderSetup.D3DImageContainer.SharedTexture,
-            //                 //                                  filePath,
-            //                 //                                  SharpDX.Direct3D9.ImageFileFormat.Png);
-            //             }
-            //         } 
-            //     }
-            // }
-
-            // Delete actions need be deferred to prevent collection modification during iteration
-            if (_variationToBeDeletedNextFrame != null)
+            if (VariationHandling.ActiveInstanceForPresets == null || VariationHandling.ActivePoolForPresets == null)
             {
-                _poolWithVariationToBeDeleted.DeleteVariation(_variationToBeDeletedNextFrame);
-                _variationToBeDeletedNextFrame = null;
+                return;
             }
 
-            if (VariationHandling.ActivePoolForPresets != null)
+            if (VariationHandling.ActivePoolForPresets.Variations.Count == 0)
             {
-                ImGui.BeginChild("canvas", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
+                CustomComponents.EmptyWindowMessage("No presets yet");
+            }
+            
+            // Delete actions need be deferred to prevent collection modification during iteration
+            if (_variationsToBeDeletedNextFrame.Count > 0)
+            {
+                _poolWithVariationToBeDeleted.DeleteVariations(_variationsToBeDeletedNextFrame);
+                _variationsToBeDeletedNextFrame.Clear();
+            }
+
+            var drawList = ImGui.GetWindowDrawList();
+            var keepCursorPos = ImGui.GetCursorScreenPos();
+
+            drawList.ChannelsSplit(2);
+            drawList.ChannelsSetCurrent(1);
+            {
+                ImGui.BeginChild("header", new Vector2(20, 20));
+                if (CustomComponents.IconButton(Icon.Plus, "## addbutton", new Vector2(20, 20)))
                 {
-                    var min = ImGui.GetWindowPos();
-                    var windowSize = ImGui.GetWindowSize();
-                           
-                    //ImGui.PushClipRect(min, min+windowSize, true);
-                    _variationCanvas.Draw(VariationHandling.ActivePoolForPresets);
-                    //ImGui.PopClipRect();
+                    var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetOfInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
+                    _variationForRenaming = newVariation;
                 }
+
                 ImGui.EndChild();
             }
+
+            drawList.ChannelsSetCurrent(0);
+            {
+                ImGui.SetCursorScreenPos(keepCursorPos);
+
+                if (VariationHandling.ActivePoolForPresets != null)
+                {
+                    _variationCanvas.Draw(drawList, VariationHandling.ActivePoolForPresets);
+                }
+            }
+
+            drawList.ChannelsMerge();
 
             // if (ImGui.BeginTabBar("##presets"))
             // {
@@ -122,159 +125,159 @@ namespace T3.Gui.Windows.Variations
             // ImGui.EndTabBar();
         }
 
-        private static void DrawPresetButton(Variation variation, Instance instance)
-        {
-            if (_variationForRenaming == variation)
-            {
-                ImGui.PushID(variation.ActivationIndex);
-                ImGui.SetKeyboardFocusHere();
-                ImGui.InputText("##label", ref variation.Title, 256);
-
-                if (ImGui.IsItemDeactivatedAfterEdit() && ImGui.IsItemDeactivated())
-                {
-                    _variationForRenaming = null;
-                }
-
-                ImGui.PopID();
-
-                return;
-            }
-
-            ImGui.PushID(variation.Id.GetHashCode());
-            var setCorrectly = DoesPresetVariationMatch(variation, instance);
-
-            var color = setCorrectly == MatchTypes.NoMatch
-                            ? Color.Gray
-                            : Color.White;
-
-            ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
-            var sliderWidth = (int)MathF.Min(100, ImGui.GetContentRegionAvail().X * 0.3f);
-            ImGui.Button("##empty", new Vector2(-30, 0));
-            ImGui.PopStyleColor();
-            CustomComponents.ContextMenuForItem(() =>
-                                                {
-                                                    if (ImGui.MenuItem("Delete"))
-                                                    {
-                                                        _variationToBeDeletedNextFrame = variation;
-                                                        _poolWithVariationToBeDeleted = VariationHandling.ActivePoolForPresets;
-                                                    }
-
-                                                    if (ImGui.MenuItem("Rename"))
-                                                    {
-                                                        _variationForRenaming = variation;
-                                                    }
-                                                });
-
-            if (ImGui.IsItemActive())
-            {
-                if (_hoveredVariation != variation)
-                {
-                    if (_hoveredVariation != null)
-                        VariationHandling.ActivePoolForPresets.StopHover();
-
-                    VariationHandling.ActivePoolForPresets.BeginHoverPreset(instance, variation);
-                }
-
-                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                {
-                    var delta = ImGui.GetMouseDragDelta().X;
-                    if (MathF.Abs(delta) > 0)
-                    {
-                        _blendStrength = delta * 0.01f;
-                        VariationHandling.ActivePoolForPresets.UpdateBlendPreset(instance, variation, _blendStrength);
-                    }
-                }
-            }
-            else if (ImGui.IsItemDeactivated())
-            {
-                if (_hoveredVariation != null)
-                {
-                    VariationHandling.ActivePoolForPresets.ApplyHovered();
-                }
-                else
-                {
-                    Log.Warning("Clicked without hovering variation button first?");
-                }
-
-                _hoveredVariation = null;
-            }
-            else if (ImGui.IsItemHovered())
-            {
-                var posInItem = ImGui.GetMousePos() - ImGui.GetItemRectMin();
-                var sliderFactor = 1 - MathF.Max(0, MathF.Min(1, posInItem.X / sliderWidth));
-
-                if (_hoveredVariation != variation)
-                {
-                    if (_hoveredVariation != null)
-                    {
-                        VariationHandling.ActivePoolForPresets.StopHover();
-                    }
-
-                    VariationHandling.ActivePoolForPresets.BeginHoverPreset(instance, variation);
-                    _hoveredVariation = variation;
-                }
-
-                VariationHandling.ActivePoolForPresets.UpdateBlendPreset(instance, variation, sliderFactor);
-            }
-            else if (_hoveredVariation == variation)
-            {
-                VariationHandling.ActivePoolForPresets.StopHover();
-                _hoveredVariation = null;
-            }
-
-            if (ImGui.IsItemActivated())
-            {
-                _blendStrength = 0;
-            }
-
-            // Draw type indicators
-            var lastItemSize = ImGui.GetItemRectSize();
-            var drawList = ImGui.GetWindowDrawList();
-            var itemRectMin = ImGui.GetItemRectMin();
-
-            drawList.PushClipRect(itemRectMin, ImGui.GetItemRectMax(), true);
-
-            var position = itemRectMin + new Vector2(lastItemSize.X - _valueMatching.Count * 4 - 4, 0);
-            for (var index = 0; index < _valueMatching.Count; index++)
-            {
-                var matching = _valueMatching[index];
-                var slotTypeIcon = _valueSlotTypes[index];
-                Icons.DrawIconAtScreenPosition(slotTypeIcon, position, drawList, _matchColors[(int)matching]);
-                position += new Vector2(4, 0);
-            }
-
-            // Draw Blend region indicator
-            drawList.AddTriangleFilled(itemRectMin,
-                                       itemRectMin + new Vector2(sliderWidth, 0),
-                                       itemRectMin + new Vector2(0, lastItemSize.Y), Color.Black.Fade(0.2f)
-                                      );
-
-            // Print label
-            drawList.AddText(itemRectMin + new Vector2(sliderWidth + 4, 3),
-                             Color.Gray,
-                             variation.ToString());
-
-            // Reset non defaults button
-            if (setCorrectly == MatchTypes.PresetParamsMatch)
-            {
-                ImGui.SameLine();
-                if (ImGui.Button("Reset others"))
-                {
-                    VariationHandling.ActivePoolForPresets.ApplyPreset(instance, variation, true);
-                }
-            }
-
-            ImGui.PopClipRect();
-
-            ImGui.PopID();
-        }
+        // private static void DrawPresetButton(Variation variation, Instance instance)
+        // {
+        //     if (_variationForRenaming == variation)
+        //     {
+        //         ImGui.PushID(variation.ActivationIndex);
+        //         ImGui.SetKeyboardFocusHere();
+        //         ImGui.InputText("##label", ref variation.Title, 256);
+        //
+        //         if (ImGui.IsItemDeactivatedAfterEdit() && ImGui.IsItemDeactivated())
+        //         {
+        //             _variationForRenaming = null;
+        //         }
+        //
+        //         ImGui.PopID();
+        //
+        //         return;
+        //     }
+        //
+        //     ImGui.PushID(variation.Id.GetHashCode());
+        //     var setCorrectly = DoesPresetVariationMatch(variation, instance);
+        //
+        //     var color = setCorrectly == MatchTypes.NoMatch
+        //                     ? Color.Gray
+        //                     : Color.White;
+        //
+        //     ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
+        //     var sliderWidth = (int)MathF.Min(100, ImGui.GetContentRegionAvail().X * 0.3f);
+        //     ImGui.Button("##empty", new Vector2(-30, 0));
+        //     ImGui.PopStyleColor();
+        //     CustomComponents.ContextMenuForItem(() =>
+        //                                         {
+        //                                             if (ImGui.MenuItem("Delete"))
+        //                                             {
+        //                                                 _variationsToBeDeletedNextFrame.Add(variation);
+        //                                                 _poolWithVariationToBeDeleted = VariationHandling.ActivePoolForPresets;
+        //                                             }
+        //
+        //                                             if (ImGui.MenuItem("Rename"))
+        //                                             {
+        //                                                 _variationForRenaming = variation;
+        //                                             }
+        //                                         });
+        //
+        //     if (ImGui.IsItemActive())
+        //     {
+        //         if (_hoveredVariation != variation)
+        //         {
+        //             if (_hoveredVariation != null)
+        //                 VariationHandling.ActivePoolForPresets.StopHover();
+        //
+        //             VariationHandling.ActivePoolForPresets.BeginHoverPreset(instance, variation);
+        //         }
+        //
+        //         if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+        //         {
+        //             var delta = ImGui.GetMouseDragDelta().X;
+        //             if (MathF.Abs(delta) > 0)
+        //             {
+        //                 _blendStrength = delta * 0.01f;
+        //                 VariationHandling.ActivePoolForPresets.UpdateBlendPreset(instance, variation, _blendStrength);
+        //             }
+        //         }
+        //     }
+        //     else if (ImGui.IsItemDeactivated())
+        //     {
+        //         if (_hoveredVariation != null)
+        //         {
+        //             VariationHandling.ActivePoolForPresets.ApplyHovered();
+        //         }
+        //         else
+        //         {
+        //             Log.Warning("Clicked without hovering variation button first?");
+        //         }
+        //
+        //         _hoveredVariation = null;
+        //     }
+        //     else if (ImGui.IsItemHovered())
+        //     {
+        //         var posInItem = ImGui.GetMousePos() - ImGui.GetItemRectMin();
+        //         var sliderFactor = 1 - MathF.Max(0, MathF.Min(1, posInItem.X / sliderWidth));
+        //
+        //         if (_hoveredVariation != variation)
+        //         {
+        //             if (_hoveredVariation != null)
+        //             {
+        //                 VariationHandling.ActivePoolForPresets.StopHover();
+        //             }
+        //
+        //             VariationHandling.ActivePoolForPresets.BeginHoverPreset(instance, variation);
+        //             _hoveredVariation = variation;
+        //         }
+        //
+        //         VariationHandling.ActivePoolForPresets.UpdateBlendPreset(instance, variation, sliderFactor);
+        //     }
+        //     else if (_hoveredVariation == variation)
+        //     {
+        //         VariationHandling.ActivePoolForPresets.StopHover();
+        //         _hoveredVariation = null;
+        //     }
+        //
+        //     if (ImGui.IsItemActivated())
+        //     {
+        //         _blendStrength = 0;
+        //     }
+        //
+        //     // Draw type indicators
+        //     var lastItemSize = ImGui.GetItemRectSize();
+        //     var drawList = ImGui.GetWindowDrawList();
+        //     var itemRectMin = ImGui.GetItemRectMin();
+        //
+        //     drawList.PushClipRect(itemRectMin, ImGui.GetItemRectMax(), true);
+        //
+        //     var position = itemRectMin + new Vector2(lastItemSize.X - _valueMatching.Count * 4 - 4, 0);
+        //     for (var index = 0; index < _valueMatching.Count; index++)
+        //     {
+        //         var matching = _valueMatching[index];
+        //         var slotTypeIcon = _valueSlotTypes[index];
+        //         Icons.DrawIconAtScreenPosition(slotTypeIcon, position, drawList, _matchColors[(int)matching]);
+        //         position += new Vector2(4, 0);
+        //     }
+        //
+        //     // Draw Blend region indicator
+        //     drawList.AddTriangleFilled(itemRectMin,
+        //                                itemRectMin + new Vector2(sliderWidth, 0),
+        //                                itemRectMin + new Vector2(0, lastItemSize.Y), Color.Black.Fade(0.2f)
+        //                               );
+        //
+        //     // Print label
+        //     drawList.AddText(itemRectMin + new Vector2(sliderWidth + 4, 3),
+        //                      Color.Gray,
+        //                      variation.ToString());
+        //
+        //     // Reset non defaults button
+        //     if (setCorrectly == MatchTypes.PresetParamsMatch)
+        //     {
+        //         ImGui.SameLine();
+        //         if (ImGui.Button("Reset others"))
+        //         {
+        //             VariationHandling.ActivePoolForPresets.ApplyPreset(instance, variation, true);
+        //         }
+        //     }
+        //
+        //     ImGui.PopClipRect();
+        //
+        //     ImGui.PopID();
+        // }
 
         private static Variation _variationForRenaming;
-        private static Variation _hoveredVariation;
-        private static float _blendStrength = 1;
-        private static Variation _variationToBeDeletedNextFrame;
+        //private static Variation _hoveredVariation;
+        // private static float _blendStrength = 1;
+        private static readonly List<Variation> _variationsToBeDeletedNextFrame = new(20);
         private static SymbolVariationPool _poolWithVariationToBeDeleted;
-
+        //
         private static readonly List<Icon> _valueSlotTypes = new(20);
         private static readonly List<ValueMatches> _valueMatching = new(20);
 
@@ -397,6 +400,12 @@ namespace T3.Gui.Windows.Variations
         public override List<Window> GetInstances()
         {
             return new List<Window>();
+        }
+
+        public void DeleteVariations(List<Variation> selectionSelection)
+        {
+            _poolWithVariationToBeDeleted = VariationHandling.ActivePoolForPresets;
+            _variationsToBeDeletedNextFrame.AddRange(selectionSelection);
         }
     }
 }
