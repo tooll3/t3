@@ -364,6 +364,18 @@ namespace T3.Gui.Interaction.Variations.Model
             SaveVariationsToFile();
         }
         
+        public void DeleteVariations(List<Variation> variations)
+        {
+            var commands = new List<ICommand>();
+            foreach (var variation in variations)
+            {
+                commands.Add(new DeleteVariationCommand(this, variation));
+            }
+            var newCommand = new MacroCommand("Delete variations", commands);
+            UndoRedoStack.AddAndExecute(newCommand);
+            SaveVariationsToFile();
+        }
+        
         private MacroCommand _activeBlendCommand;
     }
 }

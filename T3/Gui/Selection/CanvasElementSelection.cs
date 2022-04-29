@@ -7,7 +7,7 @@ namespace T3.Gui.Selection
     {
         public void Clear()
         {
-            Selection.Clear();
+            SelectedElements.Clear();
         }
 
 
@@ -24,15 +24,15 @@ namespace T3.Gui.Selection
 
         public  void AddSelection(ISelectableCanvasObject node)
         {
-            if (Selection.Contains(node))
+            if (SelectedElements.Contains(node))
                 return;
 
-            Selection.Add(node);
+            SelectedElements.Add(node);
         }
         
         public  IEnumerable<T> GetSelectedNodes<T>() where T : ISelectableCanvasObject
         {
-            foreach (var item in Selection)
+            foreach (var item in SelectedElements)
             {
                 if (item is T typedItem)
                     yield return typedItem;
@@ -41,20 +41,20 @@ namespace T3.Gui.Selection
         
         public  bool IsNodeSelected(ISelectableCanvasObject node)
         {
-            return Selection.Contains(node);
+            return SelectedElements.Contains(node);
         }
 
         public  void DeselectNode(ISelectableCanvasObject node)
         {
-            Selection.Remove(node);
+            SelectedElements.Remove(node);
         }
 
         
         public  bool IsAnythingSelected()
         {
-            return Selection.Count > 0;
+            return SelectedElements.Count > 0;
         }
         
-        public  readonly List<ISelectableCanvasObject> Selection = new();
+        public  readonly List<ISelectableCanvasObject> SelectedElements = new();
     }
 }

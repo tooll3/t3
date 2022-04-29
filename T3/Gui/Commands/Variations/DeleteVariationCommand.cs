@@ -1,6 +1,4 @@
-﻿using T3.Core.Logging;
-using T3.Gui.Commands;
-using T3.Gui.Interaction.Variations.Model;
+﻿using T3.Gui.Interaction.Variations.Model;
 
 namespace T3.Gui.Commands.Variations
 {
@@ -11,25 +9,21 @@ namespace T3.Gui.Commands.Variations
         
         private readonly SymbolVariationPool _variationPool;
         private readonly Variation _originalVariation;
-        private readonly int _index;
         
         public DeleteVariationCommand(SymbolVariationPool pool, Variation variation)
         {
             _variationPool = pool;
             _originalVariation = variation;
-            _index = _variationPool.Variations.IndexOf(variation);
-            if(_index == -1)
-                Log.Warning("Can't find variation to delete?");
         }
         
         public void Undo()
         {
-            _variationPool.Variations.Insert(_index, _originalVariation);
+            _variationPool.Variations.Add(_originalVariation); // Warning this will change list order
         }
 
         public void Do()
         {
-            _variationPool.Variations.RemoveAt(_index);
+            _variationPool.Variations.Remove(_originalVariation);
         }
     }
 }

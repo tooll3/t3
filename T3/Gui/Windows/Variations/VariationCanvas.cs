@@ -2,6 +2,7 @@
 using System.Linq;
 using ImGuiNET;
 using SharpDX.Direct3D11;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Interaction;
@@ -21,25 +22,15 @@ namespace T3.Gui.Windows.Variations
             _variationsWindow = variationsWindow;
         }
 
-        public void Draw(SymbolVariationPool activePoolForPresets)
+        public void Draw(ImDrawListPtr drawList, SymbolVariationPool activePoolForPresets)
         {
-            _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
+            if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
+            {
+                DeleteSelectedElements();
+            }
 
-            // var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) as OutputWindow;
-            // if (outputWindow == null)
-            // {
-            //     ImGui.TextUnformatted("No output window found");
-            //     return;
-            // }
-            //
-            // var instance = outputWindow.ShownInstance;
-            // if (instance == null || instance.Outputs == null || instance.Outputs.Count == 0)
-            // {
-            //     CustomComponents.EmptyWindowMessage("To explore variations\nselect a graph operator and\none or more of its parameters.");
-            //     return;
-            // }
-            //
-            //
+            _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
+            
             var instance = VariationHandling.ActiveInstanceForPresets;
             if (instance != _instance)
             {
@@ -72,7 +63,7 @@ namespace T3.Gui.Windows.Variations
             UpdateCanvas();
             HandleFenceSelection();
 
-            var drawList = ImGui.GetWindowDrawList();
+            
             var modified = false;
             for (var index = 0; index < activePoolForPresets.Variations.Count; index++)
             {
@@ -85,6 +76,8 @@ namespace T3.Gui.Windows.Variations
             
             if(modified)
                 VariationPool.SaveVariationsToFile();
+
+            DrawContextMenu();
 
             // Draw Canvas Texture
             // var canvasSize = _thumbnailCanvasRendering.GetCanvasTextureSize();
@@ -118,6 +111,40 @@ namespace T3.Gui.Windows.Variations
             // }
         }
         
+        
+        private void DrawContextMenu()
+        {
+            if (T3Ui.OpenedPopUpName == string.Empty)
+            {
+                CustomComponents.DrawContextMenuForScrollCanvas(() => {
+                                                                    if (ImGui.MenuItem("here"))
+                                                                    {
+                                                                        Log.Debug("here");
+                                                                    }
+                                                                }, ref _contextMenuIsOpen);
+            }
+        }
+
+        private bool _contextMenuIsOpen;
+        
+
+        private void DeleteSelectedElements()
+        {
+            if (Selection.SelectedElements.Count <= 0)
+                return;
+            
+            var list = new List<Variation>();
+            foreach (var e in Selection.SelectedElements)
+            {
+                if (e is Variation v)
+                {
+                    list.Add(v);
+                }
+            }
+                
+            _variationsWindow.DeleteVariations(list);
+        }
+
         public void TryToApply(Variation variation, bool resetNonDefaults)
         {
             if (!_updateCompleted)
@@ -236,8 +263,9 @@ namespace T3.Gui.Windows.Variations
 
             if (_updateIndex >= pool.Variations.Count)
             {
-                _updateCompleted = true;
-                return;
+                //_updateCompleted = true;
+                _updateIndex = 0;
+                //return;
             }
 
             var variation = pool.Variations[_updateIndex];
