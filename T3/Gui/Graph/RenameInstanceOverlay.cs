@@ -3,6 +3,7 @@ using System.Linq;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Graph

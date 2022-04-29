@@ -9,6 +9,7 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;

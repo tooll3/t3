@@ -6,6 +6,7 @@ using ImGuiNET;
 using T3.Core.Operator;
 using T3.Gui.ChildUi;
 using T3.Gui.Graph;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 using UiHelpers;
 
@@ -14,7 +15,7 @@ namespace T3.Gui
     /// <summary>
     /// Properties needed for visual representation of an instance. Should later be moved to gui component.
     /// </summary>
-    public class SymbolChildUi : ISelectableNode
+    public class SymbolChildUi : ISelectableCanvasObject
     {
         public enum Styles
         {

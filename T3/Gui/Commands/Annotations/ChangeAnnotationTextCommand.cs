@@ -4,7 +4,7 @@ using System.Linq;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using t3.Gui.Graph;
+using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 
 namespace T3.Gui.Commands

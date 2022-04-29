@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Numerics;
-using T3.Gui;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 
-namespace t3.Gui.Graph
+namespace T3.Gui.Graph
 {
-    public class Annotation : ISelectableNode
+    public class Annotation : ISelectableCanvasObject
     {
         public string Title;
         public Color Color;

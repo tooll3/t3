@@ -5,7 +5,7 @@ using System.Numerics;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using t3.Gui.Graph;
+using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
@@ -14,7 +14,7 @@ using Truncon.Collections;
 
 namespace T3.Gui
 {
-    public class SymbolUi
+    public class SymbolUi : ISelectionContainer
     {
         public Symbol Symbol { get; }
 
@@ -83,7 +83,7 @@ namespace T3.Gui
         }
         
 
-        public IEnumerable<ISelectableNode> GetSelectables()
+        public IEnumerable<ISelectableCanvasObject> GetSelectables()
         {
             foreach (var childUi in ChildUis)
                 yield return childUi;

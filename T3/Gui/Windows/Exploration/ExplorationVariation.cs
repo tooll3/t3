@@ -11,7 +11,7 @@ using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace t3.Gui.Windows.Exploration
+namespace T3.Gui.Windows.Exploration
 {
     public class ExplorationVariation
     {

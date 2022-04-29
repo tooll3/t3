@@ -9,6 +9,7 @@ using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.WithCurves;
+using T3.Gui.Selection;
 using T3.Gui.Windows.TimeLine;
 
 namespace T3.Gui.InputUi

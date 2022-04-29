@@ -13,7 +13,7 @@ using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
 
-namespace t3.Gui.Windows.Exploration
+namespace T3.Gui.Windows.Exploration
 {
     public class ExploreVariationCanvas : ScalableCanvas
     {

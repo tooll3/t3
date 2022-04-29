@@ -12,6 +12,7 @@ using T3.Core.Operator.Slots;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.InputUi;
+using T3.Gui.Interaction.TransformGizmos;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -543,7 +544,7 @@ namespace T3.Gui.Graph
             }
         }
 
-        private static void AdjustGroupLayoutAfterResize(ISelectableNode childUi, Vector2 newNodeSize)
+        private static void AdjustGroupLayoutAfterResize(ISelectableCanvasObject childUi, Vector2 newNodeSize)
         {
             if (childUi.Size == newNodeSize)
                 return;

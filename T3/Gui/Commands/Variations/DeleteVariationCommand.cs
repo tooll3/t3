@@ -1,8 +1,8 @@
 ﻿using T3.Core.Logging;
 using T3.Gui.Commands;
-using t3.Gui.Interaction.Variations.Model;
+using T3.Gui.Interaction.Variations.Model;
 
-namespace t3.Gui.Commands.Variations
+namespace T3.Gui.Commands.Variations
 {
     public class DeleteVariationCommand : ICommand
     {

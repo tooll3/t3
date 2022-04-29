@@ -13,7 +13,7 @@ using T3.Gui.Interaction.LegacyVariations.Model;
 using T3.Gui.Styling;
 using T3.Gui.Windows;
 
-namespace t3.Gui.Windows.Variations
+namespace T3.Gui.Windows.Variations
 {
     public class LegacyVariationsWindow : Window
     {

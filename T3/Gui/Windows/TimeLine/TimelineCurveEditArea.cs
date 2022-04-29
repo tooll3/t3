@@ -11,6 +11,7 @@ using T3.Gui.InputUi;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Interaction.WithCurves;
+using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using UiHelpers;

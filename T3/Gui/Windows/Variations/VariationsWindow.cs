@@ -6,13 +6,13 @@ using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui;
-using t3.Gui.Interaction.Variations;
-using t3.Gui.Interaction.Variations.Model;
+using T3.Gui.Interaction.Variations;
+using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.OutputUi;
 using T3.Gui.Styling;
 using T3.Gui.Windows;
 
-namespace t3.Gui.Windows.Variations
+namespace T3.Gui.Windows.Variations
 {
     public class VariationsWindow : Window
     {

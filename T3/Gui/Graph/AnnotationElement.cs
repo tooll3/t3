@@ -6,7 +6,8 @@ using System.Numerics;
 using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Gui.Commands;
-using t3.Gui.Graph;
+using T3.Gui.Graph;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.TypeColors;
@@ -114,7 +115,7 @@ namespace T3.Gui.Graph
                     _draggedNodeId = annotation.Id;
                     if (annotation.IsSelected)
                     {
-                        _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableNode>().ToList();
+                        _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
                     }
                     else
                     {
@@ -125,7 +126,7 @@ namespace T3.Gui.Graph
                         _draggedNodes.Add(annotation);
                     }
 
-                    _moveCommand = new ChangeSelectableCommand(compositionSymbolId, _draggedNodes);
+                    _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
                 }
                 else if (_moveCommand != null)
                 {
@@ -181,9 +182,9 @@ namespace T3.Gui.Graph
             }
         }
 
-        private static List<ISelectableNode> FindAnnotatedOps(SymbolUi parentUi, Annotation annotation)
+        private static List<ISelectableCanvasObject> FindAnnotatedOps(SymbolUi parentUi, Annotation annotation)
         {
-            var matches = new List<ISelectableNode>();
+            var matches = new List<ISelectableCanvasObject>();
             var aRect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
 
             foreach (var n in parentUi.ChildUis)
@@ -196,7 +197,7 @@ namespace T3.Gui.Graph
             return matches;
         }
 
-        private static void HandleNodeDragging(ISelectableNode draggedNode)
+        private static void HandleNodeDragging(ISelectableCanvasObject draggedNode)
         {
             if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
@@ -267,10 +268,10 @@ namespace T3.Gui.Graph
 
         private static bool _isDragging;
         private static Vector2 _dragStartDelta;
-        private static ChangeSelectableCommand _moveCommand;
+        private static ModifyCanvasElementsCommand _moveCommand;
 
         private static Guid _draggedNodeId = Guid.Empty;
-        private static List<ISelectableNode> _draggedNodes = new();
+        private static List<ISelectableCanvasObject> _draggedNodes = new();
 
         private static bool _isVisible;
         private static ImRect _screenArea;

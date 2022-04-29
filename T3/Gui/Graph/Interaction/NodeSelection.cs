@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Gui;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.Interaction.TransformGizmos;
+using T3.Gui.Selection;
 
-namespace T3.Gui.Selection
+namespace T3.Gui.Graph.Interaction
 {
     /// <summary>
     /// Some notes on selection handling:
@@ -33,7 +36,7 @@ namespace T3.Gui.Selection
             _selectedComposition = instance;
         }
 
-        public static void SetSelection(ISelectableNode node)
+        public static void SetSelection(ISelectableCanvasObject node)
         {
             if (node is SymbolChildUi)
             {
@@ -44,7 +47,7 @@ namespace T3.Gui.Selection
             AddSelection(node);
         }
 
-        public static void AddSelection(ISelectableNode node)
+        public static void AddSelection(ISelectableCanvasObject node)
         {
             _selectedComposition = null;
             if (Selection.Contains(node))
@@ -92,7 +95,7 @@ namespace T3.Gui.Selection
             }
         }
 
-        public static IEnumerable<T> GetSelectedNodes<T>() where T : ISelectableNode
+        public static IEnumerable<T> GetSelectedNodes<T>() where T : ISelectableCanvasObject
         {
             foreach (var item in Selection)
             {
@@ -101,7 +104,7 @@ namespace T3.Gui.Selection
             }
         }
         
-        public static bool IsNodeSelected(ISelectableNode node)
+        public static bool IsNodeSelected(ISelectableCanvasObject node)
         {
             return Selection.Contains(node);
         }
@@ -187,7 +190,7 @@ namespace T3.Gui.Selection
             }
         }
 
-        public static void DeselectNode(ISelectableNode node, Instance instance)
+        public static void DeselectNode(ISelectableCanvasObject node, Instance instance)
         {
             Selection.Remove(node);
             if (instance is ITransformable transformable)
@@ -203,7 +206,7 @@ namespace T3.Gui.Selection
         }
 
         private static Instance _selectedComposition;
-        public static readonly List<ISelectableNode> Selection = new List<ISelectableNode>();
+        public static readonly List<ISelectableCanvasObject> Selection = new List<ISelectableCanvasObject>();
         private static readonly Dictionary<SymbolChildUi, List<Guid>> ChildUiInstanceIdPaths = new Dictionary<SymbolChildUi, List<Guid>>();
     }
 }

@@ -5,7 +5,7 @@ using T3.Gui.Selection;
 
 namespace T3.Gui.OutputUi
 {
-    public interface IOutputUi : ISelectableNode
+    public interface IOutputUi : ISelectableCanvasObject
     {
         Symbol.OutputDefinition OutputDefinition { get; set; }
         Type Type { get; }

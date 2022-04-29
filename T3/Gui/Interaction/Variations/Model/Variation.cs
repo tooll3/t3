@@ -7,20 +7,24 @@ using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Gui.Selection;
+using T3.Gui.Windows.Variations;
 
-namespace t3.Gui.Interaction.Variations.Model
+namespace T3.Gui.Interaction.Variations.Model
 {
     /// <summary>
     /// Base class for serialization 
     /// </summary>
-    public class Variation
+    public class Variation : ISelectableCanvasObject
     {
-        public Guid Id;
+        public Guid Id { get; set; }
         public string Title;
         public int ActivationIndex;
         public bool IsPreset;
         public DateTime PublishedDate;
-        public Vector2 PosOnCanvas;
+        public Vector2 PosOnCanvas  { get; set; }
+        public Vector2 Size  { get; set; } = VariationThumbnail.ThumbnailSize;
+        public bool IsSelected { get; set; }
 
         /// <summary>
         /// Changes by SymbolChildId

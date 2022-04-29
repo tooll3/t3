@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using T3.Core.IO;
 using T3.Core.Logging;
-using t3.Gui.AutoBackup;
+using T3.Gui.AutoBackup;
 //using T3.graph;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
@@ -48,7 +48,7 @@ namespace T3.Gui
             _autoBackup.Enabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;
             VariationHandling.Update();
-            t3.Gui.Interaction.Variations.VariationHandling.Update();
+            T3.Gui.Interaction.Variations.VariationHandling.Update();
             MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
             MouseWheelFieldHovered = false;
 
@@ -250,7 +250,7 @@ namespace T3.Gui
         public const string FloatNumberFormat = "{0:F2}";
         public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
         
-        private static readonly AutoBackup _autoBackup = new();
+        private static readonly AutoBackup.AutoBackup _autoBackup = new();
         
         [Flags]
         public enum EditingFlags

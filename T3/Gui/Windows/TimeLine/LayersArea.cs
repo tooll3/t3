@@ -650,7 +650,7 @@ namespace T3.Gui.Windows.TimeLine
 
         /// <summary>
         /// Maps selection of <see cref="ITimeClip"/>s
-        /// to <see cref="NodeSelection"/> with <see cref="ISelectableNode"/>s.
+        /// to <see cref="NodeSelection"/> with <see cref="ISelectableCanvasObject"/>s.
         /// </summary>
         private static class ClipSelection
         {

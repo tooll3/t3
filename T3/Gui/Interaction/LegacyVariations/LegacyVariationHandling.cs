@@ -5,6 +5,7 @@ using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using T3.Gui.Graph;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.LegacyVariations.Dialogs;
 using T3.Gui.Interaction.LegacyVariations.Midi;
 using T3.Gui.Interaction.LegacyVariations.Model;

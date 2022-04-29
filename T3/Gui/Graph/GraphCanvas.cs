@@ -13,8 +13,8 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
-using t3.Gui.Commands.Annotations;
-using t3.Gui.Graph;
+using T3.Gui.Commands.Annotations;
+using T3.Gui.Graph;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
@@ -426,7 +426,7 @@ namespace T3.Gui.Graph
         private ImRect GetSelectionBounds(float padding = 50)
         {
             var selectedOrAll = NodeSelection.IsAnythingSelected()
-                                    ? NodeSelection.GetSelectedNodes<ISelectableNode>().ToArray()
+                                    ? NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToArray()
                                     : SelectableChildren.ToArray();
 
             if (selectedOrAll.Length == 0)
@@ -937,7 +937,7 @@ namespace T3.Gui.Graph
             }
         }
 
-        public IEnumerable<ISelectableNode> SelectableChildren
+        public IEnumerable<ISelectableCanvasObject> SelectableChildren
         {
             get
             {
@@ -952,7 +952,7 @@ namespace T3.Gui.Graph
             }
         }
 
-        private readonly List<ISelectableNode> _selectableItems = new List<ISelectableNode>();
+        private readonly List<ISelectableCanvasObject> _selectableItems = new List<ISelectableCanvasObject>();
         #endregion
 
         #region public API

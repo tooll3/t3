@@ -8,6 +8,7 @@ using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.Interaction.TransformGizmos;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;

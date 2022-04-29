@@ -9,9 +9,9 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
-using t3.Gui.Commands.Variations;
+using T3.Gui.Commands.Variations;
 
-namespace t3.Gui.Interaction.Variations.Model
+namespace T3.Gui.Interaction.Variations.Model
 {
     /// <summary>
     /// Collects all presets and variations for a symbol 

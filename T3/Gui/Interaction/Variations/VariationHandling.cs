@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using T3.Core.Operator;
 using T3.Gui.Graph;
-using t3.Gui.Interaction.Variations.Model;
+using T3.Gui.Graph.Interaction;
+using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.Selection;
 
-namespace t3.Gui.Interaction.Variations
+namespace T3.Gui.Interaction.Variations
 {
     /// <summary>
     /// Handles the live integration of variation model to the user interface.

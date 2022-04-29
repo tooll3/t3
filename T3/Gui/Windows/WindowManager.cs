@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
-using t3.Gui.Windows.Exploration;
+using T3.Gui.Windows.Exploration;
 using T3.Gui.Windows.Output;
-using t3.Gui.Windows.Variations;
+using T3.Gui.Windows.Variations;
 
 namespace T3.Gui.Windows
 {

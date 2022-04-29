@@ -1,9 +1,10 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using T3.Gui;
 using T3.Gui.UiHelpers;
 using UiHelpers;
 
-namespace T3.Gui.Interaction
+namespace T3.Gui.Selection
 {
     /// <summary>
     /// Provides fence selection interaction

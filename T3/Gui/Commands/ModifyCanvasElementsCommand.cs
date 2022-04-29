@@ -6,9 +6,9 @@ using T3.Gui.Selection;
 
 namespace T3.Gui.Commands
 {
-    public class ChangeSelectableCommand : ICommand
+    public class ModifyCanvasElementsCommand : ICommand
     {
-        public string Name => "Move..."; // todo: put meaningful name here
+        public string Name => "Move canvas elements";
         public bool IsUndoable => true;
 
         private class Entry
@@ -23,35 +23,47 @@ namespace T3.Gui.Commands
             public bool IsSelected { get; set; }
         }
 
-        private readonly Entry[] _entries;
+        private readonly ISelectionContainer _selectionContainer;
+        private Entry[] _entries;
         private readonly Guid _compositionSymbolId;
 
-        public ChangeSelectableCommand(Guid compositionSymbolId, List<ISelectableNode> selectables)
+        public ModifyCanvasElementsCommand(Guid compositionSymbolId, List<ISelectableCanvasObject> selectables)
         {
             _compositionSymbolId = compositionSymbolId;
+            StoreSelectable(selectables);
+        }
+
+        private void StoreSelectable(List<ISelectableCanvasObject> selectables)
+        {
             _entries = new Entry[selectables.Count()];
+
             for (int i = 0; i < _entries.Length; i++)
             {
                 var selectable = selectables[i];
                 var entry = new Entry
-                            {
-                                SelectableId = selectable.Id,
-                                OriginalPosOnCanvas = selectable.PosOnCanvas,
-                                OriginalSize = selectable.Size,
-                                PosOnCanvas = selectable.PosOnCanvas,
-                                Size = selectable.Size,
-                                IsSelected = selectable.IsSelected
-                            };
+                                {
+                                    SelectableId = selectable.Id,
+                                    OriginalPosOnCanvas = selectable.PosOnCanvas,
+                                    OriginalSize = selectable.Size,
+                                    PosOnCanvas = selectable.PosOnCanvas,
+                                    Size = selectable.Size,
+                                    IsSelected = selectable.IsSelected
+                                };
                 _entries[i] = entry;
             }
         }
 
+        public ModifyCanvasElementsCommand(ISelectionContainer selectionContainer, List<ISelectableCanvasObject> selectables)
+        {
+            _selectionContainer = selectionContainer;
+            StoreSelectable(selectables);
+        }
+
         public void StoreCurrentValues()
         {
-            var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
             foreach (var entry in _entries)
             {
-                var selectable = compositionUi.GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
+                var selectable = GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
                 entry.PosOnCanvas = selectable.PosOnCanvas;
@@ -62,10 +74,9 @@ namespace T3.Gui.Commands
 
         public void Undo()
         {
-            var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
             foreach (var entry in _entries)
             {
-                var selectable = compositionUi.GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
+                var selectable = GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
                 selectable.PosOnCanvas = entry.OriginalPosOnCanvas;
@@ -75,15 +86,20 @@ namespace T3.Gui.Commands
 
         public void Do()
         {
-            var compositionUi = SymbolUiRegistry.Entries[_compositionSymbolId];
             foreach (var entry in _entries)
             {
-                var selectable = compositionUi.GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
+                var selectable = GetSelectables().SingleOrDefault(s => s.Id == entry.SelectableId);
                 if (selectable == null)
                     continue;
                 selectable.PosOnCanvas = entry.PosOnCanvas;
                 selectable.Size = entry.Size;
             }
+        }
+
+        private IEnumerable<ISelectableCanvasObject> GetSelectables()
+        {
+            var container = _compositionSymbolId == Guid.Empty ? _selectionContainer : SymbolUiRegistry.Entries[_compositionSymbolId];
+            return container.GetSelectables();
         }
     }
 }

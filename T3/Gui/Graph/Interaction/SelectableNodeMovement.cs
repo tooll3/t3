@@ -6,6 +6,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
@@ -22,7 +23,7 @@ namespace T3.Gui.Graph.Interaction
         /// <summary>
         /// NOTE: This has to be called directly after ImGui.Item
         /// </summary>
-        public static void Handle(ISelectableNode node, Instance instance = null)
+        public static void Handle(ISelectableCanvasObject node, Instance instance = null)
         {
             if (ImGui.IsItemActive())
             {
@@ -32,7 +33,7 @@ namespace T3.Gui.Graph.Interaction
                     _draggedNodeId = node.Id;
                     if (node.IsSelected)
                     {
-                        _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableNode>().ToList();
+                        _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
                     }
                     else
                     {
@@ -43,7 +44,7 @@ namespace T3.Gui.Graph.Interaction
                         _draggedNodes.Add(node);
                     }
 
-                    _moveCommand = new ChangeSelectableCommand(compositionSymbolId, _draggedNodes);
+                    _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
                     ShakeDetector.Reset();
                 }
                 else if (_moveCommand != null)
@@ -229,7 +230,7 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
-        private static void HandleNodeDragging(ISelectableNode draggedNode)
+        private static void HandleNodeDragging(ISelectableCanvasObject draggedNode)
         {
             if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
@@ -317,17 +318,17 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
-        public static List<ISelectableNode> FindSnappedNeighbours(SymbolUi parentUi, ISelectableNode childUi)
+        public static List<ISelectableCanvasObject> FindSnappedNeighbours(SymbolUi parentUi, ISelectableCanvasObject childUi)
         {
             //var pool = new HashSet<ISelectableNode>(parentUi.ChildUis);
-            var pool = new HashSet<ISelectableNode>(GraphCanvas.Current.SelectableChildren);
+            var pool = new HashSet<ISelectableCanvasObject>(GraphCanvas.Current.SelectableChildren);
             pool.Remove(childUi);
             return RecursivelyFindSnappedInPool(childUi, pool).Distinct().ToList();
         }
 
-        public static List<ISelectableNode> RecursivelyFindSnappedInPool(ISelectableNode childUi, HashSet<ISelectableNode> snapCandidates)
+        public static List<ISelectableCanvasObject> RecursivelyFindSnappedInPool(ISelectableCanvasObject childUi, HashSet<ISelectableCanvasObject> snapCandidates)
         {
-            var snappedChildren = new List<ISelectableNode>();
+            var snappedChildren = new List<ISelectableCanvasObject>();
 
             foreach (var candidate in snapCandidates.ToList())
             {
@@ -344,7 +345,7 @@ namespace T3.Gui.Graph.Interaction
 
         public const float Tolerance = 0.1f;
 
-        private static Alignment AreChildUisSnapped(ISelectableNode childA, ISelectableNode childB)
+        private static Alignment AreChildUisSnapped(ISelectableCanvasObject childA, ISelectableCanvasObject childB)
         {
             var alignedHorizontally = Math.Abs(childA.PosOnCanvas.Y - childB.PosOnCanvas.Y) < Tolerance;
             var alignedVertically = Math.Abs(childA.PosOnCanvas.X - childB.PosOnCanvas.X) < Tolerance;
@@ -386,7 +387,7 @@ namespace T3.Gui.Graph.Interaction
         {
             var commands = new List<ICommand>();
             
-            var freshlySnapped = new List<ISelectableNode>();
+            var freshlySnapped = new List<ISelectableCanvasObject>();
             foreach (var n in NodeSelection.GetSelectedChildUis())
             {
                 RecursivelyAlignChildren(n, commands, freshlySnapped);
@@ -395,10 +396,10 @@ namespace T3.Gui.Graph.Interaction
             UndoRedoStack.Add(command);
         }
 
-        private static float RecursivelyAlignChildren(SymbolChildUi childUi, List<ICommand> commands, List<ISelectableNode> freshlySnappedOpWidgets)
+        private static float RecursivelyAlignChildren(SymbolChildUi childUi, List<ICommand> commands, List<ISelectableCanvasObject> freshlySnappedOpWidgets)
         {
             if (freshlySnappedOpWidgets == null)
-                freshlySnappedOpWidgets = new List<ISelectableNode>();
+                freshlySnappedOpWidgets = new List<ISelectableCanvasObject>();
             
             var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
             var compositionSymbol = GraphCanvas.Current.CompositionOp.Symbol;
@@ -450,7 +451,7 @@ namespace T3.Gui.Graph.Interaction
                 if (snappedCount > 0)
                     verticalOffset += thumbnailPadding;
                 
-                var moveCommand = new ChangeSelectableCommand(compositionSymbol.Id, new List<ISelectableNode>() {connectedChildUi}); 
+                var moveCommand = new ModifyCanvasElementsCommand(compositionSymbol.Id, new List<ISelectableCanvasObject>() {connectedChildUi}); 
                 connectedChildUi.PosOnCanvas = childUi.PosOnCanvas + new Vector2(- (childUi.Size.X + SnapPadding.X),verticalOffset);
                 moveCommand.StoreCurrentValues();
                 commands.Add(moveCommand);
@@ -494,10 +495,10 @@ namespace T3.Gui.Graph.Interaction
 
         private static bool _isDragging;
         private static Vector2 _dragStartDelta;
-        private static ChangeSelectableCommand _moveCommand;
+        private static ModifyCanvasElementsCommand _moveCommand;
 
         private static Guid _draggedNodeId = Guid.Empty;
-        private static List<ISelectableNode> _draggedNodes = new List<ISelectableNode>();
+        private static List<ISelectableCanvasObject> _draggedNodes = new List<ISelectableCanvasObject>();
 
         private static class ShakeDetector
         {

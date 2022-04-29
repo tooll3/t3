@@ -2,6 +2,8 @@
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Gui.Graph.Interaction;
+using T3.Gui.Interaction.TransformGizmos;
 using T3.Gui.Selection;
 using Vector2 = System.Numerics.Vector2;
 

@@ -8,14 +8,16 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Gui;
 using T3.Gui.Commands;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using UiHelpers;
+using Color = T3.Gui.Color;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
-namespace T3.Gui.Selection
+namespace T3.Gui.Interaction.TransformGizmos
 {
     /**
      * Handles the interaction with 3d-gizmos for operators selected in the graph.  
