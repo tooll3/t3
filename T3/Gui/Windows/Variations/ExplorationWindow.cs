@@ -23,7 +23,7 @@ namespace T3.Gui.Windows.Variations
     {
         public ExplorationWindow()
         {
-            _variationCanvas = new VariationCanvas(this);
+            _variationCanvas = new ExploreVariationCanvas(this);
             Config.Title = "Explore Variations";
             Config.Visible = true;
         }
@@ -426,7 +426,7 @@ namespace T3.Gui.Windows.Variations
 
         private readonly Dictionary<Guid, List<Variation>> _variationsForSymbols = new Dictionary<Guid, List<Variation>>();
         private Variation _lastHoveredVariation;
-        private readonly VariationCanvas _variationCanvas;
+        private readonly ExploreVariationCanvas _variationCanvas;
         private static readonly Vector2 Spacing = new Vector2(1, 5);
         private static readonly Color NonMatchingVarationsColor = new Color(0.3f);
         private static int _savedVariationIndex = 1;
