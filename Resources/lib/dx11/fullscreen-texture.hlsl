@@ -22,7 +22,7 @@ SamplerState samLinear : register(s0);
 float4 psMain(Output input) : SV_TARGET
 {
     float2 texCoord = input.texcoord;
-    //texCoord.x = sin(texCoord.x/10.0f)*0.5+0.5;
-    return float4(colorTexture.Sample(samLinear, texCoord).rgb, 1.0);
+    //return float4(colorTexture.Sample(samLinear, texCoord).rgb, 1.0);
+    return colorTexture.Sample(samLinear, texCoord);
 }
 
