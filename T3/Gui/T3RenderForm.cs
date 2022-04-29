@@ -378,24 +378,31 @@ namespace T3
             if (_device == null)
                 return;
 
-            foreach (var entry in _srvCache)
+            try
             {
-                entry.Value.Dispose();
-            }
+                foreach (var entry in _srvCache)
+                {
+                    entry.Value.Dispose();
+                }
 
-            DisposeObj(ref _fontSampler);
-            DisposeObj(ref _fontTextureView);
-            DisposeObj(ref _ib);
-            DisposeObj(ref _vb);
-            DisposeObj(ref _blendState);
-            DisposeObj(ref _depthStencilState);
-            DisposeObj(ref _rasterizerState);
-            DisposeObj(ref _pixelShader);
-            DisposeObj(ref _pixelShaderBlob);
-            DisposeObj(ref _vertexContantBuffer);
-            DisposeObj(ref _inputLayout);
-            DisposeObj(ref _vertexShader);
-            DisposeObj(ref _vertexShaderBlob);
+                DisposeObj(ref _fontSampler);
+                DisposeObj(ref _fontTextureView);
+                DisposeObj(ref _ib);
+                DisposeObj(ref _vb);
+                DisposeObj(ref _blendState);
+                DisposeObj(ref _depthStencilState);
+                DisposeObj(ref _rasterizerState);
+                DisposeObj(ref _pixelShader);
+                DisposeObj(ref _pixelShaderBlob);
+                DisposeObj(ref _vertexContantBuffer);
+                DisposeObj(ref _inputLayout);
+                DisposeObj(ref _vertexShader);
+                DisposeObj(ref _vertexShaderBlob);
+            }
+            catch(Exception e)
+            {
+                Log.Warning($"Failed to dispose resources :{e.Message}");
+            }
         }
 
         private void SetPerFrameImGuiData(float deltaSeconds)
