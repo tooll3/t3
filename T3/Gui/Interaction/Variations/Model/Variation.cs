@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
@@ -19,6 +20,7 @@ namespace t3.Gui.Interaction.Variations.Model
         public int ActivationIndex;
         public bool IsPreset;
         public DateTime PublishedDate;
+        public Vector2 PosOnCanvas;
 
         /// <summary>
         /// Changes by SymbolChildId
@@ -39,12 +41,22 @@ namespace t3.Gui.Interaction.Variations.Model
             var newVariation = new Variation
                                    {
                                        Id = Guid.Parse(idString),
-                                       Title = jToken[nameof(Title)].Value<string>(),
-                                       ActivationIndex = jToken[nameof(ActivationIndex)].Value<int>(),
-                                       IsPreset = jToken[nameof(IsPreset)].Value<bool>(),
-                                       InputValuesForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>()
+                                       Title = jToken[nameof(Title)]?.Value<string>() ?? String.Empty,
+                                       ActivationIndex = jToken[nameof(ActivationIndex)]?.Value<int>() ?? -1,
+                                       IsPreset = jToken[nameof(IsPreset)]?.Value<bool>() ?? false,
+                                       InputValuesForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>(),
+                                       
                                    };
+            
+            
+            var positionToken = jToken[nameof(PosOnCanvas)];
+            if (positionToken != null)
+            {
+                newVariation.PosOnCanvas = new Vector2(positionToken["X"]?.Value<float>() ?? 0, 
+                                                    positionToken["Y"]?.Value<float>() ?? 0);
+            }
 
+            
             var changesToken = (JObject)jToken[nameof(InputValuesForChildIds)];
             if (changesToken == null)
                 return newVariation;
@@ -93,6 +105,8 @@ namespace t3.Gui.Interaction.Variations.Model
 
         public void ToJson(JsonTextWriter writer)
         {
+            var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
+            
             //writer.WritePropertyName(Id.ToString());
             writer.WriteStartObject();
             {
@@ -100,6 +114,10 @@ namespace t3.Gui.Interaction.Variations.Model
                 writer.WriteValue(nameof(IsPreset), IsPreset);
                 writer.WriteValue(nameof(ActivationIndex), ActivationIndex);
                 writer.WriteObject(nameof(Title), Title);
+                
+                writer.WritePropertyName(nameof(PosOnCanvas));
+                vec2Writer(writer, PosOnCanvas);
+                
                 writer.WritePropertyName(nameof(InputValuesForChildIds));
                 writer.WriteStartObject();
                 {
