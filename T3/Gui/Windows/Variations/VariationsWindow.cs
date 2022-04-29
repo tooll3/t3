@@ -59,20 +59,15 @@ namespace t3.Gui.Windows.Variations
                 _variationToBeDeletedNextFrame = null;
             }
 
-            
-            ImGui.BeginChild("canvas", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
+            if (VariationHandling.ActivePoolForPresets != null)
             {
-                //_variationCanvas.Draw();
+                ImGui.BeginChild("canvas", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
+                {
+                    _variationCanvas.Draw(VariationHandling.ActivePoolForPresets);
+                }
+                ImGui.EndChild();
             }
-            ImGui.EndChild();            
-            
-            
-            
-            
-            
-            
-            
-            
+
             // if (ImGui.BeginTabBar("##presets"))
             // {
             //     if (ImGui.BeginTabItem("Presets"))
@@ -127,15 +122,16 @@ namespace t3.Gui.Windows.Variations
         private static void DrawPresetButton(Variation variation, Instance instance)
         {
             if (_variationForRenaming == variation)
-            {            
+            {
                 ImGui.PushID(variation.ActivationIndex);
                 ImGui.SetKeyboardFocusHere();
                 ImGui.InputText("##label", ref variation.Title, 256);
-                
+
                 if (ImGui.IsItemDeactivatedAfterEdit() && ImGui.IsItemDeactivated())
                 {
                     _variationForRenaming = null;
                 }
+
                 ImGui.PopID();
 
                 return;
@@ -170,9 +166,9 @@ namespace t3.Gui.Windows.Variations
             {
                 if (_hoveredVariation != variation)
                 {
-                    if(_hoveredVariation != null)
+                    if (_hoveredVariation != null)
                         VariationHandling.ActivePoolForPresets.StopHover();
-                    
+
                     VariationHandling.ActivePoolForPresets.BeginHoverPreset(instance, variation);
                 }
 
@@ -227,7 +223,6 @@ namespace t3.Gui.Windows.Variations
             {
                 _blendStrength = 0;
             }
-            
 
             // Draw type indicators
             var lastItemSize = ImGui.GetItemRectSize();

@@ -5,12 +5,13 @@ using SharpDX.Direct3D11;
 using T3.Core.Operator.Slots;
 using T3.Gui;
 using T3.Gui.Interaction;
+using t3.Gui.Interaction.Variations.Model;
+using T3.Gui.Styling;
 using T3.Gui.Windows;
 using t3.Gui.Windows.Exploration;
 using T3.Gui.Windows.Output;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
-
 
 namespace t3.Gui.Windows.Variations
 {
@@ -22,52 +23,59 @@ namespace t3.Gui.Windows.Variations
             _variationsWindow = variationsWindow;
         }
 
-        public void Draw()
+        public void Draw(SymbolVariationPool activePoolForPresets)
         {
             _thumbnailCanvasRendering.InitializeCanvasTexture(_thumbnailSize);
 
-            var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) as OutputWindow;
-            if (outputWindow == null)
-            {
-                ImGui.TextUnformatted("No output window found");
-                return;
-            }
-
-            var instance = outputWindow.ShownInstance;
-            if (instance == null || instance.Outputs == null || instance.Outputs.Count == 0)
-            {
-                CustomComponents.EmptyWindowMessage("To explore variations\nselect a graph operator and\none or more of its parameters.");
-                return;
-            }
-
-            _firstOutputSlot = instance.Outputs[0];
-            if (!(_firstOutputSlot is Slot<Texture2D> textureSlot))
-            {
-                CustomComponents.EmptyWindowMessage("Output window must be pinned\nto a texture operator.");
-                _firstOutputSlot = null;
-                return;
-            }
-
-            // Set correct output ui
-            {
-                var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
-                if (!symbolUi.OutputUis.ContainsKey(_firstOutputSlot.Id))
-                    return;
-
-                _variationsWindow.OutputUi = symbolUi.OutputUis[_firstOutputSlot.Id];
-            }
-
-            if (textureSlot.Value == null)
-                return;
-
-            FillInNextVariation();
+            // var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) as OutputWindow;
+            // if (outputWindow == null)
+            // {
+            //     ImGui.TextUnformatted("No output window found");
+            //     return;
+            // }
+            //
+            // var instance = outputWindow.ShownInstance;
+            // if (instance == null || instance.Outputs == null || instance.Outputs.Count == 0)
+            // {
+            //     CustomComponents.EmptyWindowMessage("To explore variations\nselect a graph operator and\none or more of its parameters.");
+            //     return;
+            // }
+            //
+            //
+            // // Draw Canvas Texture
+            //
+            // _firstOutputSlot = instance.Outputs[0];
+            // if (!(_firstOutputSlot is Slot<Texture2D> textureSlot))
+            // {
+            //     CustomComponents.EmptyWindowMessage("Output window must be pinned\nto a texture operator.");
+            //     _firstOutputSlot = null;
+            //     return;
+            // }
+            //
+            // // Set correct output ui
+            // {
+            //     var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+            //     if (!symbolUi.OutputUis.ContainsKey(_firstOutputSlot.Id))
+            //         return;
+            //
+            //     _variationsWindow.OutputUi = symbolUi.OutputUis[_firstOutputSlot.Id];
+            // }
+            //
+            // if (textureSlot.Value == null)
+            //     return;
+            //
+            // FillInNextVariation();
             UpdateCanvas();
-            Invalidate();
+            //Invalidate();
 
             var drawList = ImGui.GetWindowDrawList();
 
-            // Draw Canvas Texture
+            foreach (var v in activePoolForPresets.Variations)
+            {
+                DrawPresetThumbnail(v, drawList);
+            }
 
+            // Draw Canvas Texture
             var canvasSize = _thumbnailCanvasRendering.GetCanvasTextureSize();
             var rectOnScreen = ImRect.RectWithSize(WindowPos, canvasSize);
             drawList.AddImage((IntPtr)_thumbnailCanvasRendering.CanvasTextureSrv, rectOnScreen.Min, rectOnScreen.Max);
@@ -111,6 +119,39 @@ namespace t3.Gui.Windows.Variations
             // }
         }
 
+        private void DrawPresetThumbnail(Variation v, ImDrawListPtr drawList)
+        {
+            var pMin = TransformPosition(v.PosOnCanvas);
+            var sizeOnScreen = TransformDirectionFloored(_thumbnailSize);
+            var pMax = pMin + sizeOnScreen;
+
+            ImGui.PushClipRect(pMin, pMax, true);
+
+            drawList.AddRectFilled(pMin, pMax, Color.Black);
+            drawList.AddRect(pMin, pMax, Color.Gray);
+            ImGui.PushFont(Fonts.FontSmall);
+
+            drawList.AddRectFilledMultiColor(pMin + new Vector2(0, sizeOnScreen.Y - 20),
+                                             pMax,
+                                             Color.TransparentBlack,
+                                             Color.TransparentBlack,
+                                             Color.Black,
+                                             Color.Black
+                                            );
+
+            drawList.AddText(pMin + new Vector2(4, sizeOnScreen.Y - 20),
+                             Color.White,
+                             string.IsNullOrEmpty(v.Title) ? "Untitled" : v.Title);
+
+            drawList.AddText(pMin + new Vector2(sizeOnScreen.X - 20, sizeOnScreen.Y - 20),
+                             Color.White,
+                             $"{v.ActivationIndex:00}");
+
+            ImGui.PopFont();
+
+            ImGui.PopClipRect();
+        }
+
         public void ClearVariations()
         {
             _updateCompleted = false;
@@ -123,7 +164,7 @@ namespace t3.Gui.Windows.Variations
             var center = Vector2.Zero;
             var left = (center - extend) * _thumbnailSize;
             var right = (center + extend) * _thumbnailSize;
-            
+
             FitAreaOnCanvas(new ImRect(left, right));
         }
 
@@ -155,38 +196,38 @@ namespace t3.Gui.Windows.Variations
         //     return visible;
         // }
 
-        private void Invalidate()
-        {
-            var scaleChanged = Math.Abs(Scale.X - _lastScale) > 0.01f;
-            var scrollChanged = Math.Abs(Scroll.X - _lastScroll.X) > 0.1f
-                                || Math.Abs(Scroll.Y - _lastScroll.Y) > 0.1f;
-            
-            // TODO: optimize performance by only invalidating thumbnails and moving part of the canvas  
-            if (scaleChanged || scrollChanged)
-            {
-                _lastScale = Scale.X;
-                _lastScroll = Scroll;
-
-                //_currentOffsetIndexForFocus = 0;
-                _updateCompleted = false;
-
-                // foreach (var variation in _variationByGridIndex.Values)
-                // {
-                //     variation.ThumbnailNeedsUpdate = true;
-                // }
-
-                // if (ImGui.IsWindowHovered())
-                // {
-                //     SetGridFocusToMousePos();
-                // }
-                // else
-                // {
-                //     SetGridFocusToWindowCenter();
-                // }
-
-                _thumbnailCanvasRendering.ClearTexture();
-            }
-        }
+        // private void Invalidate()
+        // {
+        //     var scaleChanged = Math.Abs(Scale.X - _lastScale) > 0.01f;
+        //     var scrollChanged = Math.Abs(Scroll.X - _lastScroll.X) > 0.1f
+        //                         || Math.Abs(Scroll.Y - _lastScroll.Y) > 0.1f;
+        //     
+        //     // TODO: optimize performance by only invalidating thumbnails and moving part of the canvas  
+        //     if (scaleChanged || scrollChanged)
+        //     {
+        //         _lastScale = Scale.X;
+        //         _lastScroll = Scroll;
+        //
+        //         //_currentOffsetIndexForFocus = 0;
+        //         _updateCompleted = false;
+        //
+        //         // foreach (var variation in _variationByGridIndex.Values)
+        //         // {
+        //         //     variation.ThumbnailNeedsUpdate = true;
+        //         // }
+        //
+        //         // if (ImGui.IsWindowHovered())
+        //         // {
+        //         //     SetGridFocusToMousePos();
+        //         // }
+        //         // else
+        //         // {
+        //         //     SetGridFocusToWindowCenter();
+        //         // }
+        //
+        //         _thumbnailCanvasRendering.ClearTexture();
+        //     }
+        // }
 
         // private void SetGridFocusToWindowCenter()
         // {
@@ -247,7 +288,6 @@ namespace t3.Gui.Windows.Variations
             // _updateCompleted = true;
         }
 
-        
         private void RenderThumbnail(ExplorationVariation variation, int thumbnailIndex)
         {
             variation.ThumbnailNeedsUpdate = false;
@@ -269,8 +309,7 @@ namespace t3.Gui.Windows.Variations
             _variationsWindow.OutputUi.DrawValue(_firstOutputSlot, _thumbnailCanvasRendering.EvaluationContext);
             ImGui.PopClipRect();
             _imageCanvas.Deactivate();
-            
-            
+
             var columns = (int)(_thumbnailCanvasRendering.GetCanvasTextureSize().X / _thumbnailSize.X);
             var rowIndex = thumbnailIndex / columns;
             var columnIndex = thumbnailIndex % columns;
@@ -284,10 +323,11 @@ namespace t3.Gui.Windows.Variations
 
             variation.RestoreValues();
         }
-        
-        
+
         private float _lastScale;
+
         private Vector2 _lastScroll = Vector2.One;
+
         //private int _currentOffsetIndexForFocus;
         private bool _updateCompleted;
         private readonly ImageOutputCanvas _imageCanvas = new();
@@ -295,15 +335,11 @@ namespace t3.Gui.Windows.Variations
         private readonly VariationsWindow _variationsWindow;
         //private ExplorationVariation _hoveringVariation;
 
-
-
         //public float Scatter = 20f;
         ///private float _lastScatter;
         private ISlot _firstOutputSlot;
 
         private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
         private static readonly Vector2 _thumbnailSize = new Vector2(160, 160 / 16f * 9);
-        
-        
     }
 }
