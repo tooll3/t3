@@ -1,0 +1,85 @@
+{
+  "Id": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
+  "Variations": [
+    {
+      "Id": "fefd48a0-f032-4b2d-8628-51b68d952c92",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 50.902542,
+        "Y": -79.13937
+      },
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "d0a735ae-795a-4683-ac66-a5899a7afd53",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 399.24426,
+        "Y": -198.8371
+      },
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f": {
+            "X": 0.0,
+            "Y": 1.0,
+            "Z": 0.23869967,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "8af3a745-c219-4cd8-b140-bb0a0982f159",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Blue",
+      "PosOnCanvas": {
+        "X": 214.25848,
+        "Y": 122.93718
+      },
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f": {
+            "X": 0.0,
+            "Y": 0.25482297,
+            "Z": 1.0,
+            "W": 1.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "5ce48d17-2ccb-4dd0-9cfa-5db4624cc782",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Pink",
+      "PosOnCanvas": {
+        "X": 615.7175,
+        "Y": 120.65909
+      },
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.437356,
+            "W": 1.0
+          }
+        }
+      }
+    }
+  ]
+}

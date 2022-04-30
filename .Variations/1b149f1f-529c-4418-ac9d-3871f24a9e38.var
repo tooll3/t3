@@ -1,0 +1,64 @@
+{
+  "Id": "1b149f1f-529c-4418-ac9d-3871f24a9e38",
+  "Variations": [
+    {
+      "Id": "349d0db8-5ffd-403a-a200-a2cee826b32a",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Displace1",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f": 0.5,
+          "77673c64-918d-46a6-aa29-c362057afee6": 0.25
+        }
+      }
+    },
+    {
+      "Id": "b2e7efb2-4b46-4569-948b-eb6635c12149",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Crazy",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f": 5.0,
+          "0eff3a75-eafc-4a5e-8a2c-10577c12e776": 1.0,
+          "dc8dfa33-1a49-4800-8c1f-89b29d7427f3": 390.0,
+          "77673c64-918d-46a6-aa29-c362057afee6": 0.1,
+          "c13b83ce-7dd2-4b4e-bf19-b994493b92a3": 2.5,
+          "b9dd77ff-7e5a-4036-a1c9-24501f1d4d9d": 0.0,
+          "6978ceab-98a9-4258-9c67-db41173d2aae": 1.0
+        }
+      }
+    },
+    {
+      "Id": "f69107b7-877f-4a10-8e03-b0a567fc7334",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f": 5.0,
+          "0eff3a75-eafc-4a5e-8a2c-10577c12e776": 1.0,
+          "dc8dfa33-1a49-4800-8c1f-89b29d7427f3": 390.0,
+          "77673c64-918d-46a6-aa29-c362057afee6": 0.5,
+          "d430113e-33fd-49b7-b1c1-32cc95154a4e": 1,
+          "c13b83ce-7dd2-4b4e-bf19-b994493b92a3": 2.5,
+          "b9dd77ff-7e5a-4036-a1c9-24501f1d4d9d": 0.0,
+          "6978ceab-98a9-4258-9c67-db41173d2aae": 1.0
+        }
+      }
+    }
+  ]
+}

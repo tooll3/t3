@@ -5,7 +5,11 @@
       "Id": "5554f54d-c48c-4aca-954e-20027aa721a9",
       "IsPreset": true,
       "ActivationIndex": 1,
-      "Title": "untitled",
+      "Title": "Lowres",
+      "PosOnCanvas": {
+        "X": -185.99564,
+        "Y": -34.694153
+      },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "99f5d952-8490-4930-b8ab-9d8e968183c6": {
@@ -19,7 +23,11 @@
       "Id": "ba9d05ec-7a86-41f5-a8a9-168ac6a567fc",
       "IsPreset": true,
       "ActivationIndex": 2,
-      "Title": "untitled",
+      "Title": "Hires",
+      "PosOnCanvas": {
+        "X": -185.99564,
+        "Y": -127.69415
+      },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "99f5d952-8490-4930-b8ab-9d8e968183c6": {
@@ -33,7 +41,11 @@
       "Id": "61bd3230-8b84-4622-8b2e-0da0af231f79",
       "IsPreset": true,
       "ActivationIndex": 3,
-      "Title": "untitled",
+      "Title": "PacMan",
+      "PosOnCanvas": {
+        "X": -22.995636,
+        "Y": -34.694153
+      },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "608de038-6c7a-43fc-ba89-374c7b1a318e": 0.5,
@@ -58,6 +70,10 @@
       "IsPreset": true,
       "ActivationIndex": 4,
       "Title": "untitled",
+      "PosOnCanvas": {
+        "X": -22.995636,
+        "Y": -127.69415
+      },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "608de038-6c7a-43fc-ba89-374c7b1a318e": 0.5,
@@ -72,6 +88,29 @@
           },
           "f3e7341c-0c81-42af-ba48-b43d345188c1": {
             "X": 1.0,
+            "Y": 180.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "7627382a-7191-4784-a156-80931d61ff11",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "Fake Sphere",
+      "PosOnCanvas": {
+        "X": -185.99564,
+        "Y": 58.305847
+      },
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "608de038-6c7a-43fc-ba89-374c7b1a318e": 0.0,
+          "99f5d952-8490-4930-b8ab-9d8e968183c6": {
+            "Width": 200,
+            "Height": 100
+          },
+          "f3e7341c-0c81-42af-ba48-b43d345188c1": {
+            "X": 360.0,
             "Y": 180.0
           }
         }
