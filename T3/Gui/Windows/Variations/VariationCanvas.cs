@@ -77,37 +77,6 @@ namespace T3.Gui.Windows.Variations
                 VariationPool.SaveVariationsToFile();
 
             DrawContextMenu();
-
-            // Draw Canvas Texture
-            // var canvasSize = _thumbnailCanvasRendering.GetCanvasTextureSize();
-            // var rectOnScreen = ImRect.RectWithSize(WindowPos, canvasSize);
-            // drawList.AddImage((IntPtr)_thumbnailCanvasRendering.CanvasTextureSrv, rectOnScreen.Min, rectOnScreen.Max);
-
-            // _hoveringVariation?.RestoreValues();
-            // var size = THelpers.GetContentRegionArea();
-            // ImGui.InvisibleButton("variationCanvas", size.GetSize());
-            //
-            // if (ImGui.IsItemHovered())
-            // {
-            //     _hoveringVariation = CreateVariationAtMouseMouse();
-            //
-            //     if (_hoveringVariation != null)
-            //     {
-            //         if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
-            //         {
-            //             var savedVariation = _hoveringVariation.Clone();
-            //
-            //             _explorationWindow.SaveVariation(savedVariation);
-            //             savedVariation.ApplyPermanently();
-            //         }
-            //
-            //         _hoveringVariation.KeepCurrentAndApplyNewValues();
-            //     }
-            // }
-            // else
-            // {
-            //     _hoveringVariation = null;
-            // }
         }
 
         private void DrawContextMenu()
@@ -151,53 +120,34 @@ namespace T3.Gui.Windows.Variations
 
         private bool _contextMenuIsOpen;
 
-        private void DeleteSelectedElements()
+
+
+        public void ApplyVariation(Variation variation, bool resetNonDefaults)
         {
-            if (Selection.SelectedElements.Count <= 0)
-                return;
-
-            var list = new List<Variation>();
-            foreach (var e in Selection.SelectedElements)
-            {
-                if (e is Variation v)
-                {
-                    list.Add(v);
-                }
-            }
-
-            _variationsWindow.DeleteVariations(list);
-        }
-
-        public void TryToApply(Variation variation, bool resetNonDefaults)
-        {
-            if (!_updateCompleted)
-                return;
-
             VariationPool.StopHover();
+            
             VariationPool.ApplyPreset(_instance, variation, resetNonDefaults);
+            
             if (resetNonDefaults)
                 TriggerThumbnailUpdate();
         }
 
         public void StartHover(Variation variation)
         {
-            if (!_updateCompleted)
-                return;
-
             VariationPool.BeginHoverPreset(_instance, variation, UserSettings.Config.PresetsResetToDefaultValues);
         }
 
+        public void StartBlendTo(Variation variation, float blend)
+        {
+            VariationPool.BeginBlendToPresent(_instance, variation, blend, UserSettings.Config.PresetsResetToDefaultValues);
+        }
+
+        
         public void StopHover()
         {
             VariationPool.StopHover();
         }
 
-        public void RefreshView()
-        {
-            TriggerThumbnailUpdate();
-            Selection.Clear();
-            ResetView();
-        }
 
         public void TriggerThumbnailUpdate()
         {
@@ -214,33 +164,7 @@ namespace T3.Gui.Windows.Variations
             }
         }
 
-        private static bool TryToGetBoundingBox(List<Variation> variations, float extend, out ImRect area)
-        {
-            area = new ImRect();
-            if (VariationPool?.Variations == null)
-                return false;
 
-            var foundOne = false;
-
-            foreach (var v in variations)
-            {
-                if (!foundOne)
-                {
-                    area = ImRect.RectWithSize(v.PosOnCanvas, v.Size);
-                    foundOne = true;
-                }
-                else
-                {
-                    area.Add(ImRect.RectWithSize(v.PosOnCanvas, v.Size));
-                }
-            }
-
-            if (!foundOne)
-                return false;
-
-            area.Expand(Vector2.One * extend);
-            return true;
-        }
 
         private void HandleFenceSelection()
         {
@@ -277,6 +201,27 @@ namespace T3.Gui.Windows.Variations
             }
         }
 
+        
+        private void DeleteSelectedElements()
+        {
+            if (Selection.SelectedElements.Count <= 0)
+                return;
+
+            var list = new List<Variation>();
+            foreach (var e in Selection.SelectedElements)
+            {
+                if (e is Variation v)
+                {
+                    list.Add(v);
+                }
+            }
+
+            _variationsWindow.DeleteVariations(list);
+        }
+        
+        
+        #region thumbnail rendering
+        
         private void UpdateNextVariationThumbnail()
         {
             if (_updateCompleted)
@@ -344,13 +289,52 @@ namespace T3.Gui.Windows.Variations
             return new ImRect(r.Min / _thumbnailCanvasRendering.GetCanvasTextureSize(),
                               r.Max / _thumbnailCanvasRendering.GetCanvasTextureSize());
         }
+        #endregion
 
+        #region layout and view 
+        
+        private void RefreshView()
+        {
+            TriggerThumbnailUpdate();
+            Selection.Clear();
+            ResetView();
+        }
+        
+        
+        private static bool TryToGetBoundingBox(List<Variation> variations, float extend, out ImRect area)
+        {
+            area = new ImRect();
+            if (VariationPool?.Variations == null)
+                return false;
+
+            var foundOne = false;
+
+            foreach (var v in variations)
+            {
+                if (!foundOne)
+                {
+                    area = ImRect.RectWithSize(v.PosOnCanvas, v.Size);
+                    foundOne = true;
+                }
+                else
+                {
+                    area.Add(ImRect.RectWithSize(v.PosOnCanvas, v.Size));
+                }
+            }
+
+            if (!foundOne)
+                return false;
+
+            area.Expand(Vector2.One * extend);
+            return true;
+        }
+        
         /// <summary>
         /// This uses a primitive algorithm: Look for the bottom edge of a all element bounding box
         /// Then step through possible positions and check if a position would intersect with an existing element.
         /// Wrap columns to enforce some kind of grid.  
         /// </summary>
-        public static Vector2 FindFreePositionForNewThumbnail(List<Variation> variations)
+        internal static Vector2 FindFreePositionForNewThumbnail(List<Variation> variations)
         {
             if (!TryToGetBoundingBox(variations, 0, out var area))
             {
@@ -397,6 +381,8 @@ namespace T3.Gui.Windows.Variations
             }
         }
 
+        #endregion
+        
         /// <summary>
         /// Implement selectionContainer
         /// </summary>

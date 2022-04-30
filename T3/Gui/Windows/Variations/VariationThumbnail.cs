@@ -93,6 +93,26 @@ namespace T3.Gui.Windows.Variations
                     _hoveredVariation = variation;
                     _canvas.StartHover(variation);
                 }
+
+                if (ImGui.GetIO().KeyAlt)
+                {
+                    var mouseX = ImGui.GetMousePos().X;
+                    var blend = (mouseX - pMin.X) / sizeOnScreen.X;
+                    _canvas.StartBlendTo(variation, blend);
+                    drawList.AddRectFilled(pMin,
+                                     new Vector2(mouseX, pMax.Y),
+                                     new Color(0.1f,0.1f,0.1f,0.7f));
+                    drawList.AddRectFilled(new Vector2(mouseX, pMin.Y),
+                                           new Vector2(mouseX, pMax.Y),
+                                           new Color(0.9f,0.9f,0.9f,0.5f));
+                    
+                    ImGui.PushFont(Fonts.FontLarge);
+                    var label = $"{blend * 100:0}%";
+                    var labelSize = ImGui.CalcTextSize(label);
+                    
+                    drawList.AddText(pMin + sizeOnScreen /2 - labelSize /2, Color.White, label );
+                    ImGui.PopFont();
+                }
             }
             else
             {
@@ -155,7 +175,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         Selection.Clear();
                         _hoveredVariation = null;
-                        _canvas.TryToApply(variation, UserSettings.Config.PresetsResetToDefaultValues);
+                        _canvas.ApplyVariation(variation, UserSettings.Config.PresetsResetToDefaultValues);
                     }
 
                     Selection.AddSelection(variation);
@@ -169,7 +189,7 @@ namespace T3.Gui.Windows.Variations
                     else
                     {
                         _hoveredVariation = null;
-                        _canvas.TryToApply(variation, true);
+                        _canvas.ApplyVariation(variation, true);
                     }
                 }
 
