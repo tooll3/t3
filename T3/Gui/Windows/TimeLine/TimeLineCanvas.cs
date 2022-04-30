@@ -297,7 +297,7 @@ namespace T3.Gui.Windows.TimeLine
         // TODO: this is horrible and should be refactored
         private List<AnimationParameter> GetAnimationParametersForSelectedNodes(Instance compositionOp)
         {
-            var selection = SelectionManager.GetSelectedNodes<ISelectableNode>();
+            var selection = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>();
             var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
             var animator = symbolUi.Symbol.Animator;
             

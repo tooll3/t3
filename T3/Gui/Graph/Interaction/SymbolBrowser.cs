@@ -9,6 +9,7 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -53,11 +54,11 @@ namespace T3.Gui.Graph.Interaction
                 if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((ImGuiKey)Key.Tab))
                     return;
 
-                if (SelectionManager.GetSelectedChildUis().Count() == 1)
+                if (NodeSelection.GetSelectedChildUis().Count() == 1)
                 {
-                    var childUi = SelectionManager.GetSelectedChildUis().ToList()[0];
+                    var childUi = NodeSelection.GetSelectedChildUis().ToList()[0];
                     {
-                        var instance = SelectionManager.GetInstanceForSymbolChildUi(childUi);
+                        var instance = NodeSelection.GetInstanceForSymbolChildUi(childUi);
                         ConnectionMaker.OpenBrowserWithSingleSelection(this, childUi, instance);
                     }
                 }
@@ -398,7 +399,7 @@ namespace T3.Gui.Graph.Interaction
             var newChildUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
 
             var newInstance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == newChildUi.Id);
-            SelectionManager.SetSelectionToChildUi(newChildUi, newInstance);
+            NodeSelection.SetSelectionToChildUi(newChildUi, newInstance);
 
             if (_prepareCommand != null)
             {

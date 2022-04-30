@@ -9,15 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using T3.Core.IO;
 using T3.Core.Logging;
-using t3.Gui.AutoBackup;
+using T3.Gui.AutoBackup;
 //using T3.graph;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
-using t3.Gui.Interaction.Presets;
-using T3.Gui.Interaction.Variation;
+using T3.Gui.Interaction.LegacyVariations;
 using T3.Gui.Interaction.Timing;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
@@ -49,7 +48,7 @@ namespace T3.Gui
             _autoBackup.Enabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;
             VariationHandling.Update();
-            PresetHandling.Update();
+            T3.Gui.Interaction.Variations.VariationHandling.Update();
             MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
             MouseWheelFieldHovered = false;
 
@@ -222,7 +221,7 @@ namespace T3.Gui
             var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
             var sourceSymbolChildUi = symbolUi.ChildUis.SingleOrDefault(childUi => childUi.Id == symbolChildId);
             var selectionTargetInstance = compositionOp.Children.Single(instance => instance.SymbolChildId == symbolChildId);
-            SelectionManager.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
+            NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
             FitViewToSelectionHandling.FitViewToSelection();
         }
 
@@ -237,7 +236,7 @@ namespace T3.Gui
 
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel;
-        public static readonly VariationHandling VariationHandling = new VariationHandling();
+        public static readonly LegacyVariationHandling VariationHandling = new LegacyVariationHandling();
         public static readonly WindowManager WindowManager;
 
         public static string OpenedPopUpName; // This is reset on Frame start and can be useful for allow context menu to stay open even if a
@@ -251,7 +250,7 @@ namespace T3.Gui
         public const string FloatNumberFormat = "{0:F2}";
         public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
         
-        private static readonly AutoBackup _autoBackup = new();
+        private static readonly AutoBackup.AutoBackup _autoBackup = new();
         
         [Flags]
         public enum EditingFlags

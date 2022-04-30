@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
-using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Gui.Graph.Interaction;
 
 namespace T3.Gui.Commands
 {
@@ -19,6 +16,7 @@ namespace T3.Gui.Commands
             _childId = symbolChildId;
             _inputId = input.InputDefinition.Id;
             _isAnimated = inputParent.Animator.IsAnimated(_childId, _inputId);
+            _wasDefault = input.IsDefault;
 
             OriginalValue = input.Value.Clone();
             NewValue = input.Value.Clone();
@@ -29,7 +27,20 @@ namespace T3.Gui.Commands
             if (_isAnimated)
                 Log.Warning("Undo of animation currently not supported");
             else
-                AssignValue(OriginalValue);
+            {
+                if (_wasDefault)
+                {
+                    var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
+                    var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
+                    var input = symbolChild.InputValues[_inputId];
+                    input.ResetToDefault();
+                    InvalidateInstances(inputParentSymbol, symbolChild);
+                }
+                else
+                {
+                    AssignValue(OriginalValue);
+                }
+            }
         }
 
         public void Do()
@@ -41,9 +52,7 @@ namespace T3.Gui.Commands
         {
             var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
             var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
-
-
-
+            
             if (_isAnimated)
             {
                 NewValue.Assign(value);
@@ -65,22 +74,27 @@ namespace T3.Gui.Commands
                 input.Value.Assign(value);
                 input.IsDefault = false;
                 
-                foreach (var parentInstance in inputParentSymbol.InstancesOfSymbol)
-                {
-                    var instance = parentInstance.Children.Single(child => child.SymbolChildId == symbolChild.Id);
-                    var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
-                    inputSlot.DirtyFlag.Invalidate(true);
-                }
+                InvalidateInstances(inputParentSymbol, symbolChild);
             }
         }
-        
 
-        public InputValue OriginalValue { get; set; }
-        public InputValue NewValue { get; set; }
+        private void InvalidateInstances(Symbol inputParentSymbol, SymbolChild symbolChild)
+        {
+            foreach (var parentInstance in inputParentSymbol.InstancesOfSymbol)
+            {
+                var instance = parentInstance.Children.Single(child => child.SymbolChildId == symbolChild.Id);
+                var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
+                inputSlot.DirtyFlag.Invalidate(true);
+            }
+        }
+
+        private InputValue OriginalValue { get; set; }
+        public InputValue NewValue { get; init; }
 
         private readonly Guid _inputParentSymbolId;
         private readonly Guid _childId;
         private readonly Guid _inputId;
-        private bool _isAnimated;
+        private readonly bool _wasDefault;
+        private readonly bool _isAnimated;
     }
 }

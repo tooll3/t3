@@ -9,7 +9,7 @@ using System.Threading;
 using T3.Core.Logging;
 using T3.Gui;
 
-namespace t3.Gui.AutoBackup
+namespace T3.Gui.AutoBackup
 {
     public class AutoBackup : IDisposable
     {

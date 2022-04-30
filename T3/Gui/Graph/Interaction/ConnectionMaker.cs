@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
-using Microsoft.CodeAnalysis.CSharp;
 using SharpDX;
 using T3.Core;
 using T3.Core.Logging;
@@ -11,12 +10,12 @@ using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
+using T3.Gui.Interaction.TransformGizmos;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
-using T3.Operators.Types.Id_5a4b23ff_588e_4dcc_833c_4fb5fb6fcb8f;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
@@ -78,7 +77,7 @@ namespace T3.Gui.Graph
             TempConnections.Clear();
             _isDisconnectingFromInput = false;
 
-            var selectedSymbolChildUis = SelectionManager.GetSelectedChildUis().ToList();
+            var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis().ToList();
             if (selectedSymbolChildUis.Count > 1 && selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id))
             {
                 Log.Debug("Magic would happen here?");
@@ -193,7 +192,7 @@ namespace T3.Gui.Graph
             var center = (sourceNodeUi.PosOnCanvas + targetNodeUi.PosOnCanvas) / 2;
             var commands = new List<ICommand>();
 
-            var changedSymbols = new List<ISelectableNode>();
+            var changedSymbols = new List<ISelectableCanvasObject>();
 
             var requiredGap = SymbolChildUi.DefaultOpSize.X + SelectableNodeMovement.SnapPadding.X;
             var xSource = sourceNodeUi.PosOnCanvas.X + sourceNodeUi.Size.X;
@@ -223,7 +222,7 @@ namespace T3.Gui.Graph
                 childUi.PosOnCanvas = pos;
             }
 
-            commands.Add(new ChangeSelectableCommand(parentSymbolUi.Symbol.Id, changedSymbols));
+            commands.Add(new ModifyCanvasElementsCommand(parentSymbolUi.Symbol.Id, changedSymbols));
             return new MacroCommand("adjust layout", commands);
         }
 
@@ -566,7 +565,7 @@ namespace T3.Gui.Graph
             if (isSnappedHorizontally)
             {
                 childUi.PosOnCanvas = sourceUi.PosOnCanvas + new Vector2(sourceUi.Size.X + SelectableNodeMovement.SnapPadding.X, 0);
-                connectionCommands.Add(new ChangeSelectableCommand(parent.Symbol.Id, new List<ISelectableNode>() { childUi }));
+                connectionCommands.Add(new ModifyCanvasElementsCommand(parent.Symbol.Id, new List<ISelectableCanvasObject>() { childUi }));
             }
 
             connectionCommands.Add(new DeleteConnectionCommand(parent.Symbol, oldConnection, multiInputIndex));

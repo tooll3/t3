@@ -7,7 +7,7 @@ using T3.Gui;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable IdentifierTypo
-namespace t3.App
+namespace T3.App
 {
     /// <summary>
     /// A RenderForm class that maps windows RenderForm events and to ImGui 

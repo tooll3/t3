@@ -267,7 +267,7 @@ namespace T3.Gui
 
         public static void FillWithStripes(ImDrawListPtr drawList, ImRect areaOnScreen, float patternWidth = 16)
         {
-            drawList.PushClipRect(areaOnScreen.Min, areaOnScreen.Max);
+            drawList.PushClipRect(areaOnScreen.Min, areaOnScreen.Max, true);
             var lineColor = new Color(0f, 0f, 0f, 0.2f);
             var stripeOffset = GraphCanvas.Current == null ? patternWidth : (patternWidth / 2 * GraphCanvas.Current.Scale.X);
             var lineWidth = stripeOffset / 2.7f;

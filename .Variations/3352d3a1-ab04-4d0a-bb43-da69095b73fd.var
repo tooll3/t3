@@ -1,0 +1,35 @@
+{
+  "Id": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
+  "Variations": [
+    {
+      "Id": "a2d31fc5-3db4-4c9f-9ce5-775f1c7f92c8",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "spiral",
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "b654ffe2-d46e-4a62-89b3-a9692d5c6481": 1000,
+          "acce4779-56d6-47c4-9c52-874fca91a3a1": 1.0,
+          "13cbb509-f90c-4ae7-a9d3-a8fc907794e3": -1.0,
+          "5a3347a2-ba87-4b38-a1a8-94bd0ef70f48": 0.0,
+          "94b2a118-f760-4043-933c-31283e6e7006": 10.0
+        }
+      }
+    },
+    {
+      "Id": "ef392fc8-b2fc-4ed2-8cfe-fef8f70472a8",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "untitled",
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "b654ffe2-d46e-4a62-89b3-a9692d5c6481": 100,
+          "acce4779-56d6-47c4-9c52-874fca91a3a1": 1.0,
+          "13cbb509-f90c-4ae7-a9d3-a8fc907794e3": 0.0,
+          "5a3347a2-ba87-4b38-a1a8-94bd0ef70f48": 0.0,
+          "94b2a118-f760-4043-933c-31283e6e7006": 1.0
+        }
+      }
+    }
+  ]
+}

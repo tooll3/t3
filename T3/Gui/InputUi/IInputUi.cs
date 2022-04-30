@@ -26,7 +26,7 @@ namespace T3.Gui.InputUi
         Optional
     }
 
-    public interface IInputUi : ISelectableNode
+    public interface IInputUi : ISelectableCanvasObject
     {
         SymbolUi Parent { get; set; }
         Symbol.InputDefinition InputDefinition { get; set; }

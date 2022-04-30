@@ -164,10 +164,10 @@ namespace T3.Gui.InputUi
                             // Try to find instance
                             if (sourceUi is SymbolChildUi sourceSymbolChildUi)
                             {
-                                var selectedInstance = SelectionManager.GetFirstSelectedInstance();
+                                var selectedInstance = NodeSelection.GetFirstSelectedInstance();
                                 var parent = selectedInstance.Parent;
                                 var selectionTargetInstance = parent.Children.Single(instance => instance.SymbolChildId == sourceUi.Id);
-                                SelectionManager.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
+                                NodeSelection.SetSelectionToChildUi(sourceSymbolChildUi, selectionTargetInstance);
                                 FitViewToSelectionHandling.FitViewToSelection();
                             }
                         }
@@ -426,7 +426,7 @@ namespace T3.Gui.InputUi
 
         private static void PublishAsInput(IInputSlot inputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
         {
-            var composition = SelectionManager.GetSelectedComposition();
+            var composition = NodeSelection.GetSelectedComposition();
             if (composition == null)
             {
                 composition = inputSlot.Parent.Parent;
@@ -503,7 +503,7 @@ namespace T3.Gui.InputUi
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
 
         public Vector2 Size { get; set; } = SymbolChildUi.DefaultOpSize;
-        public bool IsSelected => SelectionManager.IsNodeSelected(this);
+        public bool IsSelected => NodeSelection.IsNodeSelected(this);
 
         // ReSharper disable once StaticMemberInGenericType
         private static readonly string _revertLabel = $"{(char)Icon.Revert}##revert";

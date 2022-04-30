@@ -67,7 +67,7 @@ namespace T3.Gui.Windows
                 ImGui.InputText("##imgui workaround", ref tmpBuffer, 1);
                 ImGui.SameLine();
             }
-            var instance = SelectionManager.GetFirstSelectedInstance();
+            var instance = NodeSelection.GetFirstSelectedInstance();
             if (instance != null)
             {
                 if (instance.Parent == null)
@@ -116,10 +116,10 @@ namespace T3.Gui.Windows
                 return;
             }
 
-            if (!SelectionManager.IsAnythingSelected())
+            if (!NodeSelection.IsAnythingSelected())
                 return;
 
-            foreach (var input in SelectionManager.GetSelectedNodes<IInputUi>())
+            foreach (var input in NodeSelection.GetSelectedNodes<IInputUi>())
             {
                 ImGui.PushID(input.Id.GetHashCode());
                 ImGui.PushFont(Fonts.FontLarge);
@@ -167,7 +167,7 @@ namespace T3.Gui.Windows
 
                 if (editState == InputEditStateFlags.ShowOptions)
                 {
-                    SelectionManager.SetSelection(inputUi);
+                    NodeSelection.SetSelection(inputUi);
                 }
 
                 ImGui.PopID();

@@ -1,7 +1,7 @@
 {
   "Name": "MaskedBloom",
   "Id": "d40966c3-2369-40f2-8202-e5c8ab6d9cc0",
-  "Namespace": "lib.img.fx",
+  "Namespace": "lib.img.fx._",
   "Inputs": [
     {
       "Id": "29f6bc05-de55-4336-a275-f06b835c66f8"/*Image*/,

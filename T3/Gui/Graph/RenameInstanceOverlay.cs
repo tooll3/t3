@@ -3,6 +3,7 @@ using System.Linq;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Graph
@@ -28,7 +29,7 @@ namespace T3.Gui.Graph
                     && ImGui.IsKeyPressed((ImGuiKey)Key.Return)
                     && string.IsNullOrEmpty(T3Ui.OpenedPopUpName))
                 {
-                    var selectedInstances = SelectionManager.GetSelectedNodes<SymbolChildUi>().ToList();
+                    var selectedInstances = NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
                     if (selectedInstances.Count == 1)
                     {
                         justOpened = true;

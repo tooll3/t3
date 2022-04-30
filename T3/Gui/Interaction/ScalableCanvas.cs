@@ -112,6 +112,13 @@ namespace T3.Gui.Interaction
             return vectorInCanvas * Scale;
         }
 
+        public Vector2 TransformDirectionFloored(Vector2 vectorInCanvas)
+        {
+            var s= vectorInCanvas * Scale;
+            return new Vector2((int)s.X, (int)s.Y);
+        }
+
+        
         /// <summary>
         /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
         /// </summary>
@@ -254,7 +261,7 @@ namespace T3.Gui.Interaction
             // where img has not been initialized yet.
             if (WindowSize == Vector2.Zero)
             {
-                WindowSize = new Vector2(800, 500);
+                WindowSize = new Vector2(200, 200);
             }
 
             float scale;

@@ -7,8 +7,8 @@ using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
+using T3.Gui.Windows.Exploration;
 using T3.Gui.Windows.Output;
-using t3.Gui.Windows.Presets;
 using T3.Gui.Windows.Variations;
 
 namespace T3.Gui.Windows
@@ -23,11 +23,11 @@ namespace T3.Gui.Windows
                                new SettingsWindow(),
                                new ParameterWindow(),
                                new ExplorationWindow(),
+                               new VariationsWindow(),
                                new OutputWindow(),
                                new ConsoleLogWindow(),
                                new SymbolLibrary(),
-                               new VariationsWindow(),
-                               new PresetsWindow(),
+                               new LegacyVariationsWindow(),
                            };
         }
 

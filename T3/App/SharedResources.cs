@@ -2,7 +2,7 @@
 using T3.Core;
 using T3.Core.Logging;
 
-namespace t3.App
+namespace T3.App
 {
     /// <summary>
     /// A collection of rendering resource used across the T3 UI

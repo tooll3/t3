@@ -7,7 +7,7 @@ using SharpDX.DXGI;
 using T3.Gui;
 using Device = SharpDX.Direct3D11.Device;
 
-namespace t3.App
+namespace T3.App
 {
     /// <summary>
     /// Functions and properties related to rendering DX11 content into  RenderForm windows
