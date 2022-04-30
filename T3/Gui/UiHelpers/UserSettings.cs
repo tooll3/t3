@@ -45,6 +45,7 @@ namespace T3.Gui.UiHelpers
             public bool EnableAutoBackup = true;
             public bool SaveOnlyModified = false;
             public bool SwapMainAnd2ndWindowsWhenFullscreen = true;
+            public bool PresetsResetToDefaultValues = true;
 
             public float TimeRasterDensity = 1f;
             public bool CountBarsFromZero = true; 

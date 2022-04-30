@@ -133,13 +133,12 @@ namespace T3.Gui.Interaction.Variations.Model
 
         public void ApplyPreset(Instance instance, Variation variation, bool resetOtherNonDefaults= false)
         {
-            // var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
-            // if (variation == null)
-            // {
-            //     Log.Error($"Can't find preset with index {variationIndex}");
-            //     return;
-            // }
+            var command = CreateApplyCommand(instance, variation, resetOtherNonDefaults);
+            UndoRedoStack.AddAndExecute(command);
+        }
 
+        private static MacroCommand CreateApplyCommand(Instance instance, Variation variation, bool resetOtherNonDefaults)
+        {
             var commands = new List<ICommand>();
             var parentSymbol = instance.Parent.Symbol;
 
@@ -160,19 +159,18 @@ namespace T3.Gui.Interaction.Variations.Model
                         {
                             if (param == null)
                                 continue;
-                            
+
                             var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, input.Input)
                                                  {
                                                      NewValue = param,
                                                  };
                             commands.Add(newCommand);
-                            
                         }
                         else
                         {
                             if (resetOtherNonDefaults)
                             {
-                                commands.Add(new ResetInputToDefault(instance.Parent.Symbol, instance.SymbolChildId, input.Input));                                
+                                commands.Add(new ResetInputToDefault(instance.Parent.Symbol, instance.SymbolChildId, input.Input));
                             }
                         }
                     }
@@ -180,10 +178,10 @@ namespace T3.Gui.Interaction.Variations.Model
             }
 
             var command = new MacroCommand("Apply Preset Values", commands);
-            UndoRedoStack.AddAndExecute(command);
+            return command;
         }
 
-        public void BeginHoverPreset(Instance instance, Variation variation)
+        public void BeginHoverPreset(Instance instance, Variation variation, bool resetNonDefaults)
         {
             //var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
             // if (variation == null)
@@ -197,51 +195,14 @@ namespace T3.Gui.Interaction.Variations.Model
                 Log.Error("Can't start blending while blending already in progress");
                 return;
             }
-
-            var commands = new List<ICommand>();
-            var parentSymbol = instance.Parent.Symbol;
-
-            var symbolChild = parentSymbol.Children.SingleOrDefault(s => s.Id == instance.SymbolChildId);
-            if (symbolChild != null)
-            {
-                foreach (var (childId, parametersForInputs) in variation.InputValuesForChildIds)
-                {
-                    if (childId != Guid.Empty)
-                    {
-                        Log.Warning("Didn't expect childId in preset");
-                        continue;
-                    }
-
-                    foreach (var (inputId, parameter) in parametersForInputs)
-                    {
-                        if (parameter == null)
-                        {
-                            continue;
-                        }
-
-                        var input = symbolChild.InputValues[inputId];
-                        var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, input)
-                                             {
-                                                 NewValue = parameter,
-                                             };
-                        commands.Add(newCommand);
-                    }
-                }
-            }
-
-            _activeBlendCommand =new MacroCommand("Set Preset Values", commands);
+            
+            _activeBlendCommand = CreateApplyCommand(instance, variation, resetNonDefaults);
             _activeBlendCommand.Do();
         }
 
         public void UpdateBlendPreset(Instance instance, Variation variation, float blend)
         {
-            // var variation = Variations.FirstOrDefault(c => c.ActivationIndex == variationIndex);
-            // if (variation == null)
-            // {
-            //     Log.Error($"Can't find preset with index {variationIndex}");
-            //     return;
-            // }
-            
+
             if(_activeBlendCommand != null)
                 _activeBlendCommand.Undo();
 

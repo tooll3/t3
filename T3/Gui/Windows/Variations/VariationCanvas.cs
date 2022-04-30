@@ -8,6 +8,7 @@ using T3.Gui.Interaction;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.Selection;
+using T3.Gui.UiHelpers;
 using T3.Gui.Windows.Exploration;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
@@ -133,6 +134,17 @@ namespace T3.Gui.Windows.Variations
                                                                     {
                                                                         VariationThumbnail.VariationForRenaming = Selection.SelectedElements[0] as Variation;
                                                                     }
+                                                                    
+                                                                    ImGui.Separator();
+                                                                    if (ImGui.MenuItem("Automatically reset to defaults",
+                                                                                       "",
+                                                                                       UserSettings.Config.PresetsResetToDefaultValues))
+                                                                    {
+                                                                        UserSettings.Config.PresetsResetToDefaultValues =
+                                                                            !UserSettings.Config.PresetsResetToDefaultValues;
+                                                                    }
+                                                                    
+                                                                    
                                                                 }, ref _contextMenuIsOpen);
             }
         }
@@ -172,7 +184,7 @@ namespace T3.Gui.Windows.Variations
             if (!_updateCompleted)
                 return;
 
-            VariationPool.BeginHoverPreset(_instance, variation);
+            VariationPool.BeginHoverPreset(_instance, variation, UserSettings.Config.PresetsResetToDefaultValues);
         }
 
         public void StopHover()
@@ -292,7 +304,7 @@ namespace T3.Gui.Windows.Variations
         private void RenderThumbnail(Variation variation, int thumbnailIndex)
         {
             // Set variation values
-            VariationPool.BeginHoverPreset(VariationHandling.ActiveInstanceForPresets, variation);
+            VariationPool.BeginHoverPreset(VariationHandling.ActiveInstanceForPresets, variation, UserSettings.Config.PresetsResetToDefaultValues);
 
             // Render variation
             _thumbnailCanvasRendering.EvaluationContext.Reset();

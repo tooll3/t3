@@ -18,7 +18,7 @@ namespace T3.Gui.Commands.Variations
         
         public void Undo()
         {
-            _variationPool.Variations.Add(_originalVariation); // Warning this will change list order
+            _variationPool.Variations.Add(_originalVariation); // Warning this will change list order and NOT trigger saving the restored presets
         }
 
         public void Do()

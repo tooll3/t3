@@ -134,6 +134,18 @@ namespace T3.Gui.Windows.Variations
 
             return foundUnknownNonDefaults ? MatchTypes.PresetParamsMatch : MatchTypes.PresetAndDefaultParamsMatch;
         }
+        
+        public override List<Window> GetInstances()
+        {
+            return new List<Window>();
+        }
+
+        public void DeleteVariations(List<Variation> selectionSelection)
+        {
+            _poolWithVariationToBeDeleted = VariationHandling.ActivePoolForPresets;
+            _variationsToBeDeletedNextFrame.AddRange(selectionSelection);
+            VariationHandling.ActivePoolForPresets.StopHover();
+        }
 
         private static readonly List<Variation> _variationsToBeDeletedNextFrame = new(20);
         private static SymbolVariationPool _poolWithVariationToBeDeleted;
@@ -148,15 +160,6 @@ namespace T3.Gui.Windows.Variations
             PresetAndDefaultParamsMatch,
         }
 
-        public override List<Window> GetInstances()
-        {
-            return new List<Window>();
-        }
 
-        public void DeleteVariations(List<Variation> selectionSelection)
-        {
-            _poolWithVariationToBeDeleted = VariationHandling.ActivePoolForPresets;
-            _variationsToBeDeletedNextFrame.AddRange(selectionSelection);
-        }
     }
 }

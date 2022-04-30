@@ -81,7 +81,11 @@ namespace T3.Gui.Windows.Variations
             ImGui.PopFont();
             ImGui.SetCursorScreenPos(pMin);
             ImGui.PushID(variation.Id.GetHashCode());
+            
+            
             ImGui.InvisibleButton("##thumbnail", ThumbnailSize);
+            
+            
             if (ImGui.IsItemVisible() && ImGui.IsItemHovered())
             {
                 if (_hoveredVariation == null)
@@ -151,7 +155,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         Selection.Clear();
                         _hoveredVariation = null;
-                        _canvas.TryToApply(variation, false);
+                        _canvas.TryToApply(variation, UserSettings.Config.PresetsResetToDefaultValues);
                     }
 
                     Selection.AddSelection(variation);
@@ -174,7 +178,6 @@ namespace T3.Gui.Windows.Variations
             return false;
         }
 
-        private static bool _isDragging;
         
         private static void HandleNodeDragging(ISelectableCanvasObject draggedNode)
         {
@@ -193,6 +196,7 @@ namespace T3.Gui.Windows.Variations
             var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
             var newDragPosInCanvas = _canvas.InverseTransformPosition(newDragPos);
 
+            // Implement snapping to others
             var bestDistanceInCanvas = float.PositiveInfinity;
             var targetSnapPositionInCanvas = Vector2.Zero;
             
@@ -229,7 +233,8 @@ namespace T3.Gui.Windows.Variations
         }
 
         private static Variation _hoveredVariation;
-        
+        private static bool _isDragging;
+
         private static VariationCanvas _canvas;
         private static CanvasElementSelection Selection => _canvas.Selection;
         private static Guid _draggedNodeId;
