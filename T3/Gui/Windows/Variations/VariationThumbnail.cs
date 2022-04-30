@@ -57,19 +57,19 @@ namespace T3.Gui.Windows.Variations
             }
 
             const int bottomPadding = 15;
-            drawList.AddRectFilledMultiColor(pMin + new Vector2(1, sizeOnScreen.Y - bottomPadding - 10),
+            drawList.AddRectFilledMultiColor(pMin + new Vector2(1, sizeOnScreen.Y - bottomPadding - 20),
                                              pMax - Vector2.One,
                                              Color.TransparentBlack,
                                              Color.TransparentBlack,
-                                             Color.Black.Fade(0.4f),
-                                             Color.Black.Fade(0.4f)
+                                             Color.Black.Fade(0.6f),
+                                             Color.Black.Fade(0.6f)
                                             );
             ImGui.PushClipRect(pMin, pMax, true);
             ImGui.PushFont(Fonts.FontSmall);
 
             var fade = MathUtils.RemapAndClamp(canvas.Scale.X, 0.3f, 0.6f, 0, 1);
             drawList.AddText(pMin + new Vector2(4, sizeOnScreen.Y - bottomPadding),
-                             Color.White.Fade(0.8f * fade),
+                             Color.White.Fade(1f * fade),
                              string.IsNullOrEmpty(variation.Title) ? "Untitled" : variation.Title);
 
             drawList.AddText(pMin + new Vector2(sizeOnScreen.X - bottomPadding, sizeOnScreen.Y - bottomPadding),

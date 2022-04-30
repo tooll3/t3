@@ -30,6 +30,8 @@ namespace T3.Gui.Windows.Variations
             if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                 DeleteSelectedElements();
 
+            var viewNeedsRefresh = false;
+
             // Render variations to pinned output
             if (OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) is OutputWindow outputWindow)
             {
@@ -38,9 +40,13 @@ namespace T3.Gui.Windows.Variations
                     && renderInstance.Outputs[0] is Slot<Texture2D> textureSlot)
                 {
                     _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
-                    
-                    // Set correct output ui
-                    
+
+                    if (renderInstance != _lastRenderInstance)
+                    {
+                        viewNeedsRefresh = true;
+                        _lastRenderInstance = renderInstance;
+                        
+                    }
                     var symbolUi = SymbolUiRegistry.Entries[renderInstance.Symbol.Id];
                     if (symbolUi.OutputUis.ContainsKey(textureSlot.Id))
                     {
@@ -52,7 +58,10 @@ namespace T3.Gui.Windows.Variations
             
             // Get instance for variations
             var instance = VariationHandling.ActiveInstanceForPresets;
-            if (instance != _instance)
+            var instanceChanged =instance != _instance;
+            viewNeedsRefresh |= instanceChanged;
+            
+            if (viewNeedsRefresh)
             {
                 RefreshView();
                 _instance = instance;
@@ -393,26 +402,33 @@ namespace T3.Gui.Windows.Variations
         /// Then step through possible positions and check if a position would intersect with an existing element.
         /// Wrap columns to enforce some kind of grid.  
         /// </summary>
-        internal static Vector2 FindFreePositionForNewThumbnail(List<Variation> variations)
+        internal Vector2 FindFreePositionForNewThumbnail(List<Variation> variations)
         {
             if (!TryToGetBoundingBox(variations, 0, out var area))
             {
                 return Vector2.Zero;
             }
 
+            // var areaOnScreen = TransformRect(area); 
+            // ImGui.GetForegroundDrawList().AddRect(areaOnScreen.Min, areaOnScreen.Max, Color.Blue);
+            
             const int columns = 4;
             var columnIndex = 0;
 
             var stepWidth = VariationThumbnail.ThumbnailSize.X + VariationThumbnail.SnapPadding.X;
             var stepHeight = VariationThumbnail.ThumbnailSize.Y + VariationThumbnail.SnapPadding.Y;
 
-            var pos = new Vector2(area.Min.X, area.Max.Y - VariationThumbnail.ThumbnailSize.Y);
+            var pos = new Vector2(area.Min.X, 
+                                  area.Max.Y - VariationThumbnail.ThumbnailSize.Y);
             var rowStartPos = pos;
 
             while (true)
             {
                 var intersects = false;
                 var targetArea = new ImRect(pos, pos + VariationThumbnail.ThumbnailSize);
+                
+                // var targetAreaOnScreen = TransformRect(targetArea);
+                // ImGui.GetForegroundDrawList().AddRect(targetAreaOnScreen.Min, targetAreaOnScreen.Max, Color.Orange);
 
                 foreach (var v in variations)
                 {
@@ -470,5 +486,6 @@ namespace T3.Gui.Windows.Variations
         private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
         private SelectionFence.States _fenceState;
         internal readonly CanvasElementSelection Selection = new();
+        private Instance _lastRenderInstance;
     }
 }

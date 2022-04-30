@@ -56,7 +56,7 @@ namespace T3.Gui.Windows.Variations
                     var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetOfInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
                     if (newVariation != null)
                     {
-                        newVariation.PosOnCanvas =VariationCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);                     
+                        newVariation.PosOnCanvas =_variationCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);                     
                         VariationThumbnail.VariationForRenaming = newVariation;
                         _variationCanvas.Selection.SetSelection(newVariation);
                         _variationCanvas.ResetView();
@@ -75,7 +75,8 @@ namespace T3.Gui.Windows.Variations
                 {
                     _variationCanvas.Draw(drawList, VariationHandling.ActivePoolForPresets);
                 }
-                VariationCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
+                
+                //_variationCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
             }
 
             drawList.ChannelsMerge();
