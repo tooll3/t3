@@ -18,37 +18,36 @@ namespace T3.Gui.Windows.Variations
     {
         public static bool Draw(VariationCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
-            
             if (VariationForRenaming == variation)
             {
                 ImGui.PushID(variation.ActivationIndex);
                 ImGui.SetCursorScreenPos(new Vector2(30, 0) + ImGui.GetWindowPos());
                 ImGui.SetKeyboardFocusHere();
                 ImGui.InputText("##label", ref variation.Title, 256);
-            
+
                 if (ImGui.IsItemDeactivatedAfterEdit() || ImGui.IsItemDeactivated())
                 {
                     VariationForRenaming = null;
                 }
+
                 ImGui.PopID();
-            }            
-            
+            }
+
             _canvas = canvas;
             var pMin = canvas.TransformPosition(variation.PosOnCanvas);
             var sizeOnScreen = canvas.TransformDirectionFloored(ThumbnailSize);
             var pMax = pMin + sizeOnScreen;
-            
+
             var areaOnScreen = new ImRect(pMin, pMax);
             CustomComponents.FillWithStripes(drawList, areaOnScreen);
-            
-            drawList.AddImage((IntPtr)canvasSrv, 
-                              pMin, 
+
+            drawList.AddImage((IntPtr)canvasSrv,
+                              pMin,
                               pMax,
                               uvRect.Min,
                               uvRect.Max
-                              );
-            
-            
+                             );
+
             drawList.AddRect(pMin, pMax, Color.Gray.Fade(0.2f));
 
             variation.IsSelected = Selection.IsNodeSelected(variation);
@@ -77,60 +76,75 @@ namespace T3.Gui.Windows.Variations
                              Color.White.Fade(0.3f * fade),
                              $"{variation.ActivationIndex:00}");
 
-
             ImGui.PopFont();
             ImGui.SetCursorScreenPos(pMin);
             ImGui.PushID(variation.Id.GetHashCode());
-            
-            
-            ImGui.InvisibleButton("##thumbnail", ThumbnailSize);
-            
-            
-            if (ImGui.IsItemVisible() && ImGui.IsItemHovered())
-            {
-                if (_hoveredVariation == null)
-                {
-                    _hoveredVariation = variation;
-                    _canvas.StartHover(variation);
-                }
 
-                if (ImGui.GetIO().KeyAlt)
+            ImGui.InvisibleButton("##thumbnail", ThumbnailSize);
+
+            if (_canvas.IsBlendingActive)
+            {
+                if (_canvas.TryGetBlendWeight(variation, out var weight))
                 {
-                    var mouseX = ImGui.GetMousePos().X;
-                    var blend = (mouseX - pMin.X) / sizeOnScreen.X;
-                    _canvas.StartBlendTo(variation, blend);
-                    drawList.AddRectFilled(pMin,
-                                     new Vector2(mouseX, pMax.Y),
-                                     new Color(0.1f,0.1f,0.1f,0.7f));
-                    drawList.AddRectFilled(new Vector2(mouseX, pMin.Y),
-                                           new Vector2(mouseX, pMax.Y),
-                                           new Color(0.9f,0.9f,0.9f,0.5f));
-                    
-                    ImGui.PushFont(Fonts.FontLarge);
-                    var label = $"{blend * 100:0}%";
-                    var labelSize = ImGui.CalcTextSize(label);
-                    
-                    drawList.AddText(pMin + sizeOnScreen /2 - labelSize /2, Color.White, label );
-                    ImGui.PopFont();
+                    DrawBlendIndicator(drawList, areaOnScreen, weight);
                 }
             }
             else
             {
-                if (_hoveredVariation == variation)
+                // Handle hover
+                if (ImGui.IsItemVisible() && ImGui.IsItemHovered())
                 {
-                    _canvas.StopHover();
-                    _hoveredVariation = null;
+                    if (_hoveredVariation == null)
+                    {
+                        _hoveredVariation = variation;
+                        _canvas.StartHover(variation);
+                    }
+
+                    if (ImGui.GetIO().KeyAlt)
+                    {
+                        var mouseX = ImGui.GetMousePos().X;
+                        var blend = (mouseX - pMin.X) / sizeOnScreen.X;
+                        _canvas.StartBlendTo(variation, blend);
+                        DrawBlendIndicator(drawList, areaOnScreen, blend);
+                    }
+                }
+                else
+                {
+                    if (_hoveredVariation == variation)
+                    {
+                        _canvas.StopHover();
+                        _hoveredVariation = null;
+                    }
                 }
             }
-            
-            var modified = HandleMovement(variation);
-            ImGui.PopID();
 
+            var modified = false;
+            if (!_canvas.IsBlendingActive)
+            {
+                modified |= HandleMovement(variation);
+            }
+
+            ImGui.PopID();
             ImGui.PopClipRect();
             return modified;
         }
 
+        private static void DrawBlendIndicator(ImDrawListPtr drawList, ImRect areaOnScreen, float blend)
+        {
+            var x = areaOnScreen.Min.X + areaOnScreen.GetWidth() * blend;
+            drawList.AddRectFilled(new Vector2(x, areaOnScreen.Min.Y),
+                                   areaOnScreen.Max,
+                                   new Color(0.1f, 0.1f, 0.1f, 0.7f));
+            drawList.AddRectFilled(new Vector2(x, areaOnScreen.Min.Y),
+                                   new Vector2(x, areaOnScreen.Max.Y),
+                                   new Color(0.9f, 0.9f, 0.9f, 0.5f));
 
+            ImGui.PushFont(Fonts.FontLarge);
+            var label = $"{blend * 100:0}%";
+            var labelSize = ImGui.CalcTextSize(label);
+            drawList.AddText(areaOnScreen.GetCenter() - labelSize / 2, Color.White, label);
+            ImGui.PopFont();
+        }
 
         private static bool HandleMovement(Variation variation)
         {
@@ -195,10 +209,10 @@ namespace T3.Gui.Windows.Variations
 
                 _moveCommand = null;
             }
+
             return false;
         }
 
-        
         private static void HandleNodeDragging(ISelectableCanvasObject draggedNode)
         {
             if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
@@ -219,28 +233,28 @@ namespace T3.Gui.Windows.Variations
             // Implement snapping to others
             var bestDistanceInCanvas = float.PositiveInfinity;
             var targetSnapPositionInCanvas = Vector2.Zero;
-            
+
             foreach (var offset in _snapOffsetsInCanvas)
             {
                 foreach (var neighbor in _canvas.GetSelectables())
                 {
                     if (neighbor == draggedNode || _draggedNodes.Contains(neighbor))
                         continue;
-            
+
                     var snapToNeighborPos = neighbor.PosOnCanvas + offset;
-            
+
                     var d = Vector2.Distance(snapToNeighborPos, newDragPosInCanvas);
                     if (!(d < bestDistanceInCanvas))
                         continue;
-            
+
                     targetSnapPositionInCanvas = snapToNeighborPos;
                     bestDistanceInCanvas = d;
                 }
             }
-            
+
             var snapDistanceInCanvas = _canvas.InverseTransformDirection(new Vector2(6, 6)).Length();
             var isSnapping = bestDistanceInCanvas < snapDistanceInCanvas;
-            
+
             var moveDeltaOnCanvas = isSnapping
                                         ? targetSnapPositionInCanvas - draggedNode.PosOnCanvas
                                         : newDragPosInCanvas - draggedNode.PosOnCanvas;
@@ -260,15 +274,17 @@ namespace T3.Gui.Windows.Variations
         private static Guid _draggedNodeId;
         private static List<ISelectableCanvasObject> _draggedNodes = new();
         public static readonly Vector2 ThumbnailSize = new Vector2(160, (int)(160 / 16f * 9));
-        
+
         public static readonly Vector2 SnapPadding = new Vector2(3, 3);
+
         private static readonly Vector2[] _snapOffsetsInCanvas =
             {
                 new(ThumbnailSize.X + SnapPadding.X, 0),
                 new(-ThumbnailSize.X - SnapPadding.X, 0),
                 new(0, ThumbnailSize.Y + SnapPadding.Y),
                 new(0, -ThumbnailSize.Y - SnapPadding.Y)
-            };        
+            };
+
         private static ModifyCanvasElementsCommand _moveCommand;
         private static Vector2 _dragStartDelta;
         public static Variation VariationForRenaming;

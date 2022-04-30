@@ -151,7 +151,7 @@ namespace T3.Gui.Windows.Variations
         private static SymbolVariationPool _poolWithVariationToBeDeleted;
 
         private readonly VariationCanvas _variationCanvas;
-        public IOutputUi OutputUi;
+        //public IOutputUi OutputUi;
 
         private enum MatchTypes
         {

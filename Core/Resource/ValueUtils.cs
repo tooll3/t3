@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
+using SharpDX;
 using T3.Core;
 using T3.Core.Operator;
+using Quaternion = System.Numerics.Quaternion;
+using Vector2 = System.Numerics.Vector2;
+using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
+// ReSharper disable RedundantNameQualifier
 
 namespace Core.Resource
 {
@@ -102,6 +107,130 @@ namespace Core.Resource
                     },
                 };
 
+        
+        
+        /// <summary>
+        /// A set of functions that mix n values with blend factors
+        /// </summary>
+        /// <remarks>
+        /// Note that Quaternions can't be easily weight blended.
+        /// </remarks>
+        public static readonly Dictionary<Type, Func<InputValue[], float[], InputValue>> WeightedBlendMethods =
+            new()
+                {
+                    {
+                        typeof(float), (values, weights) =>
+                                       {
+                                           var sum = 0f;
+                                           for (var index = 0; index < values.Length; index++)
+                                           {
+                                               var inputV = values[index];
+                                               if (inputV is not InputValue<float> v)
+                                                   continue;
+                                               
+                                               sum += v.Value * weights[index];
+                                           }
+                                           return new InputValue<float>(sum);
+                                       }
+                    },
+                    {
+                        typeof(Vector2), (values, weights) =>
+                                       {
+                                           var sum = Vector2.Zero;
+                                           for (var index = 0; index < values.Length; index++)
+                                           {
+                                               var inputV = values[index];
+                                               if (inputV is not InputValue<Vector2> v)
+                                                   continue;
+                                               
+                                               sum += v.Value * weights[index];
+                                           }
+                                           return new InputValue<Vector2>(sum);
+                                       }
+                    },
+                    {
+                        typeof(Vector3), (values, weights) =>
+                                         {
+                                             var sum = Vector3.Zero;
+                                             for (var index = 0; index < values.Length; index++)
+                                             {
+                                                 var inputV = values[index];
+                                                 if (inputV is not InputValue<Vector3> v)
+                                                     continue;
+                                               
+                                                 sum += v.Value * weights[index];
+                                             }
+                                             return new InputValue<Vector3>(sum);
+                                         }
+                    },                    
+                    {
+                        typeof(Vector4), (values, weights) =>
+                                         {
+                                             var sum = Vector4.Zero;
+                                             for (var index = 0; index < values.Length; index++)
+                                             {
+                                                 var inputV = values[index];
+                                                 if (inputV is not InputValue<Vector4> v)
+                                                     continue;
+                                               
+                                                 sum += v.Value * weights[index];
+                                             }
+                                             return new InputValue<Vector4>(sum);
+                                         }
+                    },                                    
+
+                                        {
+                        typeof(int), (values, weights) =>
+                                       {
+                                           var sum = 0;
+                                           for (var index = 0; index < values.Length; index++)
+                                           {
+                                               var inputV = values[index];
+                                               if (inputV is not InputValue<int> v)
+                                                   continue;
+                                               
+                                               sum += (int)(v.Value * weights[index]);
+                                           }
+                                           return new InputValue<int>(sum);
+                                       }
+                    },
+                    {
+                        typeof(SharpDX.Size2), (values, weights) =>
+                                       {
+                                           var sum = new Size2();
+                                           for (var index = 0; index < values.Length; index++)
+                                           {
+                                               var inputV = values[index];
+                                               if (inputV is not InputValue<SharpDX.Size2> v)
+                                                   continue;
+                                               
+                                               sum =  new Size2(sum.Width + (int)(v.Value.Width * weights[index]),
+                                                                sum.Height + (int)(v.Value.Height * weights[index]));
+                                           }
+                                           return new InputValue<SharpDX.Size2>(sum);
+                                       }
+                    },
+                    {
+                        typeof(SharpDX.Int3), (values, weights) =>
+                                               {
+                                                   var sum = new Int3();
+                                                   for (var index = 0; index < values.Length; index++)
+                                                   {
+                                                       var inputV = values[index];
+                                                       if (inputV is not InputValue<SharpDX.Int3> v)
+                                                           continue;
+                                               
+                                                       sum =  new Int3(sum.X + (int)(v.Value.X * weights[index]),
+                                                                        sum.Y + (int)(v.Value.Y * weights[index]),
+                                                                        sum.Z + (int)(v.Value.Z * weights[index])
+                                                                        );
+                                                   }
+                                                   return new InputValue<SharpDX.Int3>(sum);
+                                               }
+                    },
+                };
+        
+        
         public static readonly Dictionary<Type, Func<InputValue, InputValue, bool>> CompareFunctions =
             new()
                 {
