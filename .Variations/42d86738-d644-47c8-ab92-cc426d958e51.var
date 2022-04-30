@@ -7,8 +7,8 @@
       "ActivationIndex": 1,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 339.20963,
-        "Y": -285.20715
+        "X": -21.926254,
+        "Y": 68.288086
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -40,8 +40,8 @@
       "ActivationIndex": 3,
       "Title": "High Contrast",
       "PosOnCanvas": {
-        "X": -31.717102,
-        "Y": -136.37537
+        "X": -184.92625,
+        "Y": 68.288086
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -73,8 +73,8 @@
       "ActivationIndex": 3,
       "Title": "Gray Tonal",
       "PosOnCanvas": {
-        "X": 176.20963,
-        "Y": -378.20715
+        "X": -184.92625,
+        "Y": -24.711914
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -106,8 +106,8 @@
       "ActivationIndex": 4,
       "Title": "Vintage Cold",
       "PosOnCanvas": {
-        "X": 339.20963,
-        "Y": -378.20715
+        "X": -21.926254,
+        "Y": -24.711914
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -139,8 +139,8 @@
       "ActivationIndex": 5,
       "Title": "Darken",
       "PosOnCanvas": {
-        "X": 217.79495,
-        "Y": 139.40106
+        "X": -21.926254,
+        "Y": 161.28809
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {

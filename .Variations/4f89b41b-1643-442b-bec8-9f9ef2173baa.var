@@ -22,8 +22,8 @@
       "ActivationIndex": 2,
       "Title": "Tiles",
       "PosOnCanvas": {
-        "X": 326.0,
-        "Y": 0.0
+        "X": 735.0096,
+        "Y": -20.667908
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -38,8 +38,8 @@
       "ActivationIndex": 3,
       "Title": "TargetArea",
       "PosOnCanvas": {
-        "X": 489.0,
-        "Y": 0.0
+        "X": 735.0096,
+        "Y": 72.33209
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -55,8 +55,8 @@
       "ActivationIndex": 4,
       "Title": "I love maths",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 93.0
+        "X": 735.0096,
+        "Y": -113.66791
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -209,8 +209,8 @@
       "ActivationIndex": 10,
       "Title": "2 by 4",
       "PosOnCanvas": {
-        "X": 326.0,
-        "Y": 186.0
+        "X": 735.0096,
+        "Y": 165.33209
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {

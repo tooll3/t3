@@ -7,8 +7,8 @@
       "ActivationIndex": 1,
       "Title": "Mosaic",
       "PosOnCanvas": {
-        "X": -7.8590307,
-        "Y": -7.1453705
+        "X": -7.859024,
+        "Y": 85.85463
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -34,8 +34,8 @@
       "ActivationIndex": 2,
       "Title": "Red Black",
       "PosOnCanvas": {
-        "X": -7.8590307,
-        "Y": 85.85463
+        "X": -7.859024,
+        "Y": 178.85463
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -270,8 +270,8 @@
       "ActivationIndex": 7,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": -7.859024,
+        "Y": -7.1453705
       },
       "InputValuesForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -317,6 +317,40 @@
           "19a0d33c-4c0e-40ce-8344-5ae17cf081e5": 3.03,
           "79feb076-bce0-43eb-9d82-89d4159886ee": 0.11,
           "55db762f-64e0-425f-a5ac-01f3edce113e": 0.03
+        }
+      }
+    },
+    {
+      "Id": "51598cd0-877d-449b-b06b-ebd4f87237d8",
+      "IsPreset": true,
+      "ActivationIndex": 8,
+      "Title": "Digital Snow",
+      "PosOnCanvas": {
+        "X": -7.859024,
+        "Y": 271.8546
+      },
+      "InputValuesForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c4891643-ed6a-4af6-9a2f-02917cf26f24": {
+            "X": 70.0,
+            "Y": 13.0
+          },
+          "bc97a9f4-0652-4f28-b13f-717e2449c001": {
+            "X": 0.0,
+            "Y": 0.98
+          },
+          "2de30579-5ed6-4c62-8b49-301381acaad5": {
+            "X": 0.0,
+            "Y": -0.5
+          },
+          "5b146cff-3114-4bbe-b9e3-6f6aea3b2725": {
+            "X": 0.0,
+            "Y": 0.52
+          },
+          "1a4ced0e-f38e-4360-adb5-a62ffa0344e1": 0.99,
+          "19a0d33c-4c0e-40ce-8344-5ae17cf081e5": 2.5,
+          "79feb076-bce0-43eb-9d82-89d4159886ee": 0.11,
+          "55db762f-64e0-425f-a5ac-01f3edce113e": 0.0
         }
       }
     }
