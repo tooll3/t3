@@ -8,14 +8,13 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
-using T3.Gui;
 using T3.Gui.Commands;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using UiHelpers;
-using Color = T3.Gui.Color;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
+// ReSharper disable RedundantNameQualifier
 
 namespace T3.Gui.Interaction.TransformGizmos
 {
@@ -28,33 +27,33 @@ namespace T3.Gui.Interaction.TransformGizmos
 
         public static void RegisterSelectedTransformable(SymbolChildUi node, ITransformable transformable)
         {
-            if (SelectedTransformables.Contains(transformable))
+            if (_selectedTransformables.Contains(transformable))
                 return;
 
             transformable.TransformCallback = TransformCallback;
-            SelectedTransformables.Add(transformable);
+            _selectedTransformables.Add(transformable);
         }
 
         public static void ClearDeselectedTransformableNode(ITransformable transformable)
         {
-            if (SelectedTransformables.Contains(transformable))
+            if (_selectedTransformables.Contains(transformable))
             {
                 Log.Warning("trying to deselect an unregistered transformable?");
                 return;
             }
 
             transformable.TransformCallback = null;
-            SelectedTransformables.Remove(transformable);
+            _selectedTransformables.Remove(transformable);
         }
 
         public static void ClearSelectedTransformables()
         {
-            foreach (var selectedTransformable in SelectedTransformables)
+            foreach (var selectedTransformable in _selectedTransformables)
             {
                 selectedTransformable.TransformCallback = null;
             }
 
-            SelectedTransformables.Clear();
+            _selectedTransformables.Clear();
         }
 
         /// <summary>
@@ -75,7 +74,7 @@ namespace T3.Gui.Interaction.TransformGizmos
 
         public static Vector3 GetLatestSelectionCenter()
         {
-            if (SelectedTransformables.Count == 0)
+            if (_selectedTransformables.Count == 0)
                 return Vector3.Zero;
 
             return _selectedCenter;
@@ -99,7 +98,7 @@ namespace T3.Gui.Interaction.TransformGizmos
 
             _transformable = tmp;
 
-            if (!SelectedTransformables.Contains(_transformable))
+            if (!_selectedTransformables.Contains(_transformable))
             {
                 Log.Warning("transform-callback from non-selected node?" + _transformable);
                 return;
@@ -118,8 +117,8 @@ namespace T3.Gui.Interaction.TransformGizmos
             _objectToClipSpace = context.ObjectToWorld * context.WorldToCamera * context.CameraToClipSpace;
 
             //var s = TryGetVectorFromInput(_transformable.ScaleInput, 1);
-            var r = TryGetVectorFromInput(_transformable.RotationInput, 0);
-            var t = TryGetVectorFromInput(_transformable.TranslationInput, 0);
+            var r = TryGetVectorFromInput(_transformable.RotationInput);
+            var t = TryGetVectorFromInput(_transformable.TranslationInput);
 
             var yaw = SharpDX.MathUtil.DegreesToRadians(r.Y);
             var pitch = SharpDX.MathUtil.DegreesToRadians(r.X);
@@ -499,12 +498,12 @@ namespace T3.Gui.Interaction.TransformGizmos
 
         private static bool IsPointInTriangle(Vector2 p, Vector2 p0, Vector2 p1, Vector2 p2)
         {
-            var A = 0.5f * (-p1.Y * p2.X + p0.Y * (-p1.X + p2.X) + p0.X * (p1.Y - p2.Y) + p1.X * p2.Y);
-            var sign = A < 0 ? -1 : 1;
+            var a = 0.5f * (-p1.Y * p2.X + p0.Y * (-p1.X + p2.X) + p0.X * (p1.Y - p2.Y) + p1.X * p2.Y);
+            var sign = a < 0 ? -1 : 1;
             var s = (p0.Y * p2.X - p0.X * p2.Y + (p2.Y - p0.Y) * p.X + (p0.X - p2.X) * p.Y) * sign;
             var t = (p0.X * p1.Y - p0.Y * p1.X + (p0.Y - p1.Y) * p.X + (p1.X - p0.X) * p.Y) * sign;
 
-            return s > 0 && t > 0 && (s + t) < 2 * A * sign;
+            return s > 0 && t > 0 && (s + t) < 2 * a * sign;
         }
 
         private static bool IsPointInQuad(Vector2 p, Vector2[] corners)
@@ -531,7 +530,7 @@ namespace T3.Gui.Interaction.TransformGizmos
 
         private static uint _dragInteractionWindowId;
 
-        private static readonly HashSet<ITransformable> SelectedTransformables = new();
+        private static readonly HashSet<ITransformable> _selectedTransformables = new();
         private static Instance _instance;
         private static ITransformable _transformable;
 
