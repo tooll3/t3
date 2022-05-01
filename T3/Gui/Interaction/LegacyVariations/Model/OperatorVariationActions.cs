@@ -386,10 +386,7 @@ namespace T3.Gui.Interaction.LegacyVariations.Model
 
                 if (preset.ValuesForGroupParameterIds.TryGetValue(parameter.Id, out var presetValuesForGroupParameterId))
                 {
-                    var newCommand = new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
-                                         {
-                                             NewValue = presetValuesForGroupParameterId,
-                                         };
+                    var newCommand = new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input, presetValuesForGroupParameterId);
                     commands.Add(newCommand);
                 }
                 else
@@ -442,34 +439,22 @@ namespace T3.Gui.Interaction.LegacyVariations.Model
                 if (valueA is InputValue<float> floatValueA && valueB is InputValue<float> floatValueB)
                 {
                     var blendedValue = MathUtils.Lerp(floatValueA.Value, floatValueB.Value, localBlendFactor);
-                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
-                                     {
-                                         NewValue = new InputValue<float>(blendedValue),
-                                     });
+                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input, new InputValue<float>(blendedValue)));
                 }
                 else if (valueA is InputValue<Vector2> vec2ValueA && valueB is InputValue<Vector2> vec2ValueB)
                 {
                     var blendedValue = MathUtils.Lerp(vec2ValueA.Value, vec2ValueB.Value, localBlendFactor);
-                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
-                                     {
-                                         NewValue = new InputValue<Vector2>(blendedValue),
-                                     });
+                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input, new InputValue<Vector2>(blendedValue)));
                 }
                 else if (valueA is InputValue<Vector3> vec3ValueA && valueB is InputValue<Vector3> vec3ValueB)
                 {
                     var blendedValue = MathUtils.Lerp(vec3ValueA.Value, vec3ValueB.Value, localBlendFactor);
-                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
-                                     {
-                                         NewValue = new InputValue<Vector3>(blendedValue),
-                                     });
+                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input, new InputValue<Vector3>(blendedValue)));
                 }
                 else if (valueA is InputValue<Vector4> vec4ValueA && valueB is InputValue<Vector4> vec4ValueB)
                 {
                     var blendedValue = MathUtils.Lerp(vec4ValueA.Value, vec4ValueB.Value, localBlendFactor);
-                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input)
-                                     {
-                                         NewValue = new InputValue<Vector4>(blendedValue),
-                                     });
+                    commands.Add(new ChangeInputValueCommand(symbol, parameter.SymbolChildId, input, new InputValue<Vector4>(blendedValue)));
                 }
             }
 

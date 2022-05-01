@@ -212,10 +212,7 @@ namespace T3.Gui.Windows.Exploration
 
             foreach (var (param, value) in ValuesForParameters)
             {
-                var newCommand = new ChangeInputValueCommand(param.Instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input)
-                                     {
-                                         NewValue = value,
-                                     };
+                var newCommand = new ChangeInputValueCommand(param.Instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input, value);
                 commands.Add(newCommand);
             }
 

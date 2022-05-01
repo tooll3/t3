@@ -150,14 +150,15 @@ namespace T3.Gui.Windows
 
                 if ((editState & InputEditStateFlags.Started) != InputEditStateFlags.Nothing)
                 {
-                    _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
+                    _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, null);
                 }
 
                 if ((editState & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
                 {
                     if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.NewValue.ValueType != inputSlot.Input.Value.ValueType)
-                        _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
-                    _inputValueCommandInFlight.NewValue.Assign(inputSlot.Input.Value);
+                        _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, null);
+                    _inputValueCommandInFlight.AssignValue(inputSlot.Input.Value);
+                    inputSlot.DirtyFlag.Invalidate();
                 }
 
                 if ((editState & InputEditStateFlags.Finished) != InputEditStateFlags.Nothing)

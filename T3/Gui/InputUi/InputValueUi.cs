@@ -220,6 +220,7 @@ namespace T3.Gui.InputUi
 
                     if (ImGui.Button("##icon", new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
+                        // TODO: this should use Undo/Redo commands
                         if (hasKeyframeAtCurrentTime)
                         {
                             AnimationOperations.RemoveKeyframeFromCurves(animator.GetCurvesForInput(inputSlot),
@@ -285,8 +286,8 @@ namespace T3.Gui.InputUi
 
                     ImGui.SetNextItemWidth(-1);
 
-                    editState |= DrawAnimatedValue(name, typedInputSlot, animator); // todo: command integration
-                    //DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
+                    editState |= DrawAnimatedValue(name, typedInputSlot, animator); 
+                    
                     
                     ImGui.PopStyleColor(2);
                     ImGui.PopItemWidth();

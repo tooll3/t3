@@ -53,6 +53,7 @@ namespace T3.Gui.InputUi
             if ((inputEditState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
             {
                 Curve.UpdateCurveValues(curves, time, FloatComponents);
+                inputSlot.SetTypedInputValue(inputSlot.Value);
             }
             return inputEditState;
         }
@@ -69,19 +70,11 @@ namespace T3.Gui.InputUi
         protected override string GetSlotValueAsString(ref T float2Value)
         {
             return string.Format(T3Ui.FloatNumberFormat, float2Value);
-        }              
-        
-        
-        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator)
-        {
-            if (inputValue is not InputValue<Vector2> float2InputValue)
-                return;
-            
-            var vector2Value = float2InputValue.Value;
-            var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-            Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeForKeyframes, new [] { vector2Value.X, vector2Value.Y});
         }
 
+
+        public abstract override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator);
+        
         public override void DrawSettings()
         {
             base.DrawSettings();
