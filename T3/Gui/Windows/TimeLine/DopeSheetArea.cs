@@ -7,6 +7,7 @@ using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using t3.Gui.Commands.Animation;
 using T3.Gui.InputUi;
 using T3.Gui.InputUi.SingleControl;
 using T3.Gui.Interaction;

@@ -6,6 +6,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui;
 using T3.Gui.Commands;
+using t3.Gui.Commands.Graph;
 using T3.Gui.Graph.Interaction;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;

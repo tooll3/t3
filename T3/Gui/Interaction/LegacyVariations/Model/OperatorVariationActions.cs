@@ -5,6 +5,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using t3.Gui.Commands.Graph;
 
 namespace T3.Gui.Interaction.LegacyVariations.Model
 {

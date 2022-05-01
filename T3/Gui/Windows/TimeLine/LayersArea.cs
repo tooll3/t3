@@ -9,6 +9,8 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
+using t3.Gui.Commands.Animation;
+using t3.Gui.Commands.Graph;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction;

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Gui;
+using T3.Gui.Commands;
 
-namespace T3.Gui.Commands
+namespace t3.Gui.Commands.Graph
 {
     public class DeleteSymbolChildrenCommand : ICommand
     {

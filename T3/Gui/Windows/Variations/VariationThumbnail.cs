@@ -6,6 +6,7 @@ using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Gui.Commands;
+using t3.Gui.Commands.Graph;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.Selection;
 using T3.Gui.Styling;

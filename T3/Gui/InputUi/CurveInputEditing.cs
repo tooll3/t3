@@ -6,6 +6,7 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Gui.Commands;
+using t3.Gui.Commands.Animation;
 using T3.Gui.Graph;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.WithCurves;
