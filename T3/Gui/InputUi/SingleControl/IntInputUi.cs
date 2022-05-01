@@ -46,14 +46,20 @@ namespace T3.Gui.InputUi.SingleControl
         }
         
         
-        protected override void DrawAnimatedValue(string name, InputSlot<int> inputSlot, Animator animator)
+        protected override InputEditStateFlags DrawAnimatedValue(string name, InputSlot<int> inputSlot, Animator animator)
         {
             double time = EvaluationContext.GlobalTimeForKeyframes;
             var curves = animator.GetCurvesForInput(inputSlot);
+
+            var wasModified = InputEditStateFlags.Nothing;
             foreach (var curve in curves)
             {
                 int value = (int)curve.GetSampledValue(time);
                 var editState = DrawEditControl(name, ref value);
+
+                if (editState != InputEditStateFlags.Nothing)
+                    wasModified = editState;
+                
                 if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
                 {
                     // Animated ints are constant by default
@@ -69,6 +75,8 @@ namespace T3.Gui.InputUi.SingleControl
                     curve.AddOrUpdateV(time, key);
                 }
             }
+
+            return wasModified;
         }
 
         

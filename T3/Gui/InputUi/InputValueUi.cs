@@ -2,11 +2,10 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using System.Text;
+using SharpDX.Direct2D1.Effects;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
@@ -59,8 +58,10 @@ namespace T3.Gui.InputUi
             return String.Empty;
         }
 
-        protected virtual void DrawAnimatedValue(string name, InputSlot<T> inputSlot, Animator animator)
+        protected virtual InputEditStateFlags DrawAnimatedValue(string name, InputSlot<T> inputSlot, Animator animator)
         {
+            Log.Warning("Animated type didn't not implement DrawAnimatedValue");
+            return InputEditStateFlags.Nothing;
         }
 
         public virtual string GetSlotValue(IInputSlot inputSlot)
@@ -284,8 +285,9 @@ namespace T3.Gui.InputUi
 
                     ImGui.SetNextItemWidth(-1);
 
-                    DrawAnimatedValue(name, typedInputSlot, animator); // todo: command integration
-
+                    editState |= DrawAnimatedValue(name, typedInputSlot, animator); // todo: command integration
+                    //DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
+                    
                     ImGui.PopStyleColor(2);
                     ImGui.PopItemWidth();
                 }

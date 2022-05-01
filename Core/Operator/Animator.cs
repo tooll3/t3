@@ -446,6 +446,43 @@ namespace T3.Core.Operator
                    select curve.Value;
         }
 
+        public IEnumerable<VDefinition> GetTimeKeys(Guid symbolChildId, Guid inputId, double time)
+        {
+            var curves = from curve in _animatedInputCurves
+                   where curve.Key.SymbolChildId == symbolChildId
+                   where curve.Key.InputId == inputId
+                   orderby curve.Key.Index
+                   select curve.Value;
+            
+            foreach (var curve in curves)
+            {
+                yield return curve.GetV(time);
+            }
+        }
+
+        public void SetTimeKeys(Guid symbolChildId, Guid inputId, double time, List<VDefinition> vDefinitions)
+        {
+            var curves = from curve in _animatedInputCurves
+                         where curve.Key.SymbolChildId == symbolChildId
+                         where curve.Key.InputId == inputId
+                         orderby curve.Key.Index
+                         select curve.Value;
+
+            var index = 0;
+            foreach (var curve in curves)
+            {
+                var vDef = vDefinitions[index++];
+                if (vDef == null)
+                {
+                    curve.RemoveKeyframeAt(time);
+                }
+                else
+                {
+                    curve.AddOrUpdateV(time, vDef);
+                }
+            }
+        }
+        
         public void Write(JsonTextWriter writer)
         {
             if (_animatedInputCurves.Count == 0)
@@ -488,7 +525,7 @@ namespace T3.Core.Operator
             }
         }
 
-        private readonly Dictionary<CurveId, Curve> _animatedInputCurves = new Dictionary<CurveId, Curve>();
+        private readonly Dictionary<CurveId, Curve> _animatedInputCurves = new();
 
 
         public static void UpdateVector3InputValue(InputSlot<Vector3> inputSlot, Vector3 value)

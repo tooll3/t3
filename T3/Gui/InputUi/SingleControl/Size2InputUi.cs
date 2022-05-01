@@ -47,7 +47,7 @@ namespace T3.Gui.InputUi.SingleControl
             ImGui.PopStyleColor();
         }
 
-        protected override void DrawAnimatedValue(string name, InputSlot<Size2> inputSlot, Animator animator)
+        protected override InputEditStateFlags DrawAnimatedValue(string name, InputSlot<Size2> inputSlot, Animator animator)
         {
             double time = EvaluationContext.GlobalTimeForKeyframes;
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
@@ -55,7 +55,7 @@ namespace T3.Gui.InputUi.SingleControl
             if (curves.Length < Components.Length)
             {
                 DrawReadOnlyControl(name, ref inputSlot.Value);
-                return;
+                return InputEditStateFlags.Nothing;
             }
 
             for (var index = 0; index < Components.Length; index++)
@@ -64,22 +64,24 @@ namespace T3.Gui.InputUi.SingleControl
             }
 
             var inputEditState = VectorValueEdit.Draw(Components, Min, Max, _scale, Clamp);
-            if (inputEditState == InputEditStateFlags.Nothing)
-                return;
-
-            for (var index = 0; index < Components.Length; index++)
+            
+            if (inputEditState != InputEditStateFlags.Nothing)
             {
-                var key = curves[index].GetV(time) ?? new VDefinition
-                                                          {
-                                                              InType = VDefinition.Interpolation.Constant,
-                                                              OutType = VDefinition.Interpolation.Constant,
-                                                              InEditMode = VDefinition.EditMode.Constant,
-                                                              OutEditMode = VDefinition.EditMode.Constant,
-                                                              U = time
-                                                          };
-                key.Value = Components[index];
-                curves[index].AddOrUpdateV(time, key);
+                for (var index = 0; index < Components.Length; index++)
+                {
+                    var key = curves[index].GetV(time) ?? new VDefinition
+                                                              {
+                                                                  InType = VDefinition.Interpolation.Constant,
+                                                                  OutType = VDefinition.Interpolation.Constant,
+                                                                  InEditMode = VDefinition.EditMode.Constant,
+                                                                  OutEditMode = VDefinition.EditMode.Constant,
+                                                                  U = time
+                                                              };
+                    key.Value = Components[index];
+                    curves[index].AddOrUpdateV(time, key);
+                }
             }
+            return inputEditState;
         }
         
         public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 

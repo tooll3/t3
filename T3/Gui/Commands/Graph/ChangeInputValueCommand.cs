@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui;
@@ -12,27 +14,38 @@ namespace t3.Gui.Commands.Graph
         public string Name => "Change Input Value";
         public bool IsUndoable => true;
 
-        public ChangeInputValueCommand(Symbol inputParent, Guid symbolChildId, SymbolChild.Input input)
+        public ChangeInputValueCommand(Symbol inputParentSymbol, Guid symbolChildId, SymbolChild.Input input)
         {
-            _inputParentSymbolId = inputParent.Id;
+            _inputParentSymbolId = inputParentSymbol.Id;
             _childId = symbolChildId;
             _inputId = input.InputDefinition.Id;
-            _isAnimated = inputParent.Animator.IsAnimated(_childId, _inputId);
+            _isAnimated = inputParentSymbol.Animator.IsAnimated(_childId, _inputId);
             _wasDefault = input.IsDefault;
+            _animationTime = EvaluationContext.GlobalTimeForKeyframes;
 
             OriginalValue = input.Value.Clone();
             NewValue = input.Value.Clone();
+
+            if (_isAnimated)
+            {
+                var animator = inputParentSymbol.Animator;
+                _originalKeyframes = animator.GetTimeKeys(symbolChildId, _inputId, _animationTime).ToList();
+            }
         }
 
         public void Undo()
         {
+            var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
             if (_isAnimated)
-                Log.Warning("Undo of animation currently not supported");
+            {
+                AssignValue(OriginalValue);
+                var animator = inputParentSymbol.Animator;
+                animator.SetTimeKeys(_childId, _inputId,_animationTime, _originalKeyframes);
+            }
             else
             {
                 if (_wasDefault)
                 {
-                    var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
                     var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
                     var input = symbolChild.InputValues[_inputId];
                     input.ResetToDefault();
@@ -98,5 +111,7 @@ namespace t3.Gui.Commands.Graph
         private readonly Guid _inputId;
         private readonly bool _wasDefault;
         private readonly bool _isAnimated;
+        private readonly double _animationTime;
+        private readonly List<VDefinition> _originalKeyframes;
     }
 }
