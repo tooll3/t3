@@ -108,6 +108,16 @@ namespace Core.Resource
                 };
 
         
+        public static readonly Dictionary<Type, Func<InputValue, string>> ToStringMethods =
+            new()
+                {
+                    { typeof(float), v => v is not InputValue<float> vv ? string.Empty : $"{vv.Value:0.000}" },
+                    { typeof(Vector2), v => v is not InputValue<System.Numerics.Vector2> vv ? string.Empty : $"{vv.Value.X:0.00} {vv.Value.Y:0.00}"},
+                    { typeof(Vector3), v => v is not InputValue<System.Numerics.Vector3> vv ? string.Empty : $"{vv.Value.X:0.00} {vv.Value.Y:0.00} {vv.Value.Z:0.00} "},
+                    { typeof(Vector4), v => v is not InputValue<System.Numerics.Vector4> vv ? string.Empty : $"{vv.Value.X:0.00} {vv.Value.Y:0.00} {vv.Value.Z:0.00} {vv.Value.W:0.00} "},
+                    { typeof(int), v => v is not InputValue<int> vv ? string.Empty : $"{vv.Value}" },
+                };
+        
         
         /// <summary>
         /// A set of functions that mix n values with blend factors
