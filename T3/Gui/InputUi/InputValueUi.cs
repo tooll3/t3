@@ -5,7 +5,6 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using SharpDX.Direct2D1.Effects;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
@@ -38,7 +37,7 @@ namespace T3.Gui.InputUi
 
         public abstract IInputUi Clone();
 
-        public virtual void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator)
+        public virtual void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time)
         {
             if (!IsAnimatable)
                 Log.Warning("Should only be called for animated input types");

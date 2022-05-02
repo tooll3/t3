@@ -80,13 +80,13 @@ namespace T3.Gui.InputUi.SingleControl
         }
 
         
-        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time) 
         {
             if (inputValue is InputValue<int> float3InputValue)
             {
                 int value = float3InputValue.Value;
                 var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeForKeyframes, new [] { (float)value});   
+                Curve.UpdateCurveValues(curves, time, new [] { (float)value});   
             }
         }
         

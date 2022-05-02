@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
-using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
@@ -40,7 +38,9 @@ namespace T3.Gui.InputUi
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
             if (curves.Length < FloatComponents.Length)
             {
+                ImGui.PushID(inputSlot.Parent.SymbolChildId.GetHashCode() + inputSlot.Id.GetHashCode());
                 DrawReadOnlyControl(name, ref inputSlot.Value);
+                ImGui.PopID();
                 return InputEditStateFlags.Nothing; 
             }
 
@@ -49,10 +49,12 @@ namespace T3.Gui.InputUi
                 FloatComponents[index] = (float)curves[index].GetSampledValue(time);
             }
             
+            ImGui.PushID(inputSlot.Parent.SymbolChildId.GetHashCode() + inputSlot.Id.GetHashCode());
             var inputEditState = DrawEditControl(name, ref inputSlot.Value);
+            ImGui.PopID();
+            
             if ((inputEditState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
             {
-                Curve.UpdateCurveValues(curves, time, FloatComponents);
                 inputSlot.SetTypedInputValue(inputSlot.Value);
             }
             return inputEditState;
@@ -73,7 +75,7 @@ namespace T3.Gui.InputUi
         }
 
 
-        public abstract override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator);
+        public abstract override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time);
         
         public override void DrawSettings()
         {

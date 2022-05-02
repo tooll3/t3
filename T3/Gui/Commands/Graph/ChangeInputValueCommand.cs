@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui;
 using T3.Gui.Commands;
@@ -25,7 +23,7 @@ namespace t3.Gui.Commands.Graph
             _animationTime = EvaluationContext.GlobalTimeForKeyframes;
 
             OriginalValue = input.Value.Clone();
-            NewValue = newValue == null ? input.Value.Clone() : newValue.Clone();
+            _newValue = newValue == null ? input.Value.Clone() : newValue.Clone();
 
             if (_isAnimated)
             {
@@ -36,7 +34,6 @@ namespace t3.Gui.Commands.Graph
 
         public void Undo()
         {
-            // Log.Debug($"Undo  {ValueAsString(NewValue)} -> {ValueAsString(OriginalValue)}");
             var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
             if (_isAnimated)
             {
@@ -60,7 +57,7 @@ namespace t3.Gui.Commands.Graph
                 else
                 {
                     animator.SetTimeKeys(_childId, _inputId,_animationTime, _originalKeyframes);
-                    AssignValue(OriginalValue, false);
+                    AssignValue(OriginalValue);
                 }
             }
             else
@@ -74,41 +71,27 @@ namespace t3.Gui.Commands.Graph
                 }
                 else
                 {
-                    AssignValue(OriginalValue, false);
+                    AssignValue(OriginalValue);
                 }
             }
         }
 
         public void Do()
         {
-            // Log.Debug($"Do  {ValueAsString(OriginalValue)} -> {ValueAsString(NewValue)}");
-            AssignValue(NewValue);
+            AssignValue(_newValue);
+        }
+        
+        public void AssignNewValue(InputValue valueToSet)
+        {
+            _newValue.Assign(valueToSet);
+            AssignValue(valueToSet);
         }
 
-        private string ValueAsString(InputValue v)
+        private void AssignValue(InputValue valueToSet)
         {
-            if (v is InputValue<float> f)
-            {
-                return f.Value.ToString(CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                return v.ToString();
-            }
-        }
-
-        public void AssignValue(InputValue valueToSet, bool updateNewValue = true)
-        {
-            if (updateNewValue)
-            {
-                NewValue.Assign(valueToSet);
-            }
-            
             var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
             var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
-            
             var input = symbolChild.InputValues[_inputId];
-            input.Value.Assign(NewValue);
             
             if (_isAnimated)
             {
@@ -120,13 +103,14 @@ namespace t3.Gui.Commands.Graph
                 {
                     var instance = parentInstance.Children.Single(child => child.SymbolChildId == symbolChild.Id);
                     var inputSlot = instance.Inputs.Single(slot => slot.Id == _inputId);
-                    inputUi.ApplyValueToAnimation(inputSlot, valueToSet, animator);
+                    inputUi.ApplyValueToAnimation(inputSlot, valueToSet, animator, _animationTime);
                     inputSlot.DirtyFlag.Invalidate(true);
                 }
             }
             else
             {
                 input.IsDefault = false;
+                input.Value.Assign(valueToSet);
                 InvalidateInstances(inputParentSymbol, symbolChild);
             }
         }
@@ -142,8 +126,7 @@ namespace t3.Gui.Commands.Graph
         }
 
         private InputValue OriginalValue { get; set; }
-        public InputValue NewValue { get; private set; }
-
+        private readonly InputValue _newValue;
         private readonly Guid _inputParentSymbolId;
         private readonly Guid _childId;
         private readonly Guid _inputId;

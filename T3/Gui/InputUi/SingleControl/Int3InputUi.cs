@@ -30,13 +30,13 @@ namespace T3.Gui.InputUi.SingleControl
             DrawEditControl(name, ref value);
         }
         
-        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time) 
         {
             if (inputValue is InputValue<Int3> float3InputValue)
             {
                 Int3 value = float3InputValue.Value;
                 var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeForKeyframes, new [] { (float)value.X, (float)value.Y, (float)value.Z});   
+                Curve.UpdateCurveValues(curves, time, new [] { (float)value.X, (float)value.Y, (float)value.Z});   
             }
         }
     }

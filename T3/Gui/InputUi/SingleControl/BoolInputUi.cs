@@ -64,13 +64,13 @@ namespace T3.Gui.InputUi.SingleControl
             return InputEditStateFlags.Nothing;
         }        
         
-        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time) 
         {
             if (inputValue is InputValue<bool> boolInputValue)
             {
                 bool value = boolInputValue.Value;
                 var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeForKeyframes, new [] {value ? 1f :0f });   
+                Curve.UpdateCurveValues(curves, time, new [] {value ? 1f :0f });   
             }
         }        
     }

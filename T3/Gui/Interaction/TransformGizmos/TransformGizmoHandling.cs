@@ -354,7 +354,7 @@ namespace T3.Gui.Interaction.TransformGizmos
             TrySetVector3ToInput(_transformable.TranslationInput, new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z));
             InputValue value = _transformable.TranslationInput.Input.Value;
 
-            _inputValueCommandInFlight.AssignValue(value);
+            _inputValueCommandInFlight.AssignNewValue(value);
         }
 
         private static void CompletePositionDragging()

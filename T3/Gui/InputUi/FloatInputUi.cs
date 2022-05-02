@@ -29,14 +29,14 @@ namespace T3.Gui.InputUi
             return SingleValueEdit.Draw(ref value, -Vector2.UnitX, Min, Max, Clamp, Scale);
         }
         
-        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator)
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time)
         {
             if (inputValue is not InputValue<float> typedInputValue)
                 return;
             
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
             FloatComponents[0] = typedInputValue.Value;
-            Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeForKeyframes, FloatComponents);
+            Curve.UpdateCurveValues(curves, time, FloatComponents);
         }        
     }
 }
