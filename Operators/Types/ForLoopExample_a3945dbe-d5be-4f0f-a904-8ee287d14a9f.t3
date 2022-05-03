@@ -16,7 +16,7 @@
       ]
     },
     {
-      "Id": "8ce39d66-2d0b-4b87-8646-95f35f09171d"/*Loop*/,
+      "Id": "8ce39d66-2d0b-4b87-8646-95f35f09171d"/*__ObsoleteLoop*/,
       "SymbolId": "4a6fcc72-c703-4290-8e4a-2f90805cefa8",
       "InputValues": [
         {
@@ -32,7 +32,7 @@
       ],
       "Outputs": [
         {
-          "Id": "c4ed1524-4175-42ce-8590-10ec63318c16"/*Loop*/,
+          "Id": "c4ed1524-4175-42ce-8590-10ec63318c16"/*__ObsoleteLoop*/,
           "DirtyFlagTrigger": "Always"
         }
       ]
@@ -67,7 +67,7 @@
       ]
     },
     {
-      "Id": "7fd45ffe-2619-401b-a1c6-38fc9b7729fd"/*Loop*/,
+      "Id": "7fd45ffe-2619-401b-a1c6-38fc9b7729fd"/*__ObsoleteLoop*/,
       "SymbolId": "4a6fcc72-c703-4290-8e4a-2f90805cefa8",
       "InputValues": [
         {

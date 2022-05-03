@@ -57,6 +57,13 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
                                                                  MathUtil.DegreesToRadians(rOffset.Z));
             
             WorldToCamera= worldToCameraRoot * rollRotation * additionalTranslation * additionalRotation;
+
+
+            if (context.BypassCameras)
+            {
+                Command.GetValue(context);
+                return;
+            }
             
             // Set properties and evaluate sub tree
             var prevWorldToCamera = context.WorldToCamera;

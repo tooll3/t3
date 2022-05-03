@@ -164,6 +164,7 @@ namespace T3.Gui.Windows.Output
             }
             
             _evaluationContext.Reset();
+            _evaluationContext.BypassCameras = true;
             _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
             var usedCam = _lastInteractiveCam ?? _outputWindowViewCamera;
             _evaluationContext.SetViewFromCamera(usedCam);
@@ -206,7 +207,7 @@ namespace T3.Gui.Windows.Output
         private readonly CameraInteraction _cameraInteraction = new CameraInteraction();
         private readonly ViewCamera _outputWindowViewCamera = new ViewCamera();
 
-        private Guid _selectedCameraId = CameraSelectionHandling.DisableCameraId;
+        private Guid _selectedCameraId = CameraSelectionHandling.ForceViewerCameraId;
         private CameraSelectionHandling _camSelectionHandling = new CameraSelectionHandling();
 
         private static int _instanceCounter;

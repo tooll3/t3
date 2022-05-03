@@ -16,7 +16,7 @@ namespace T3.Gui.Windows.Output
         public void DrawCameraSelection(ViewSelectionPinning pinning, ref Guid selectedCameraId)
         {
             var instanceSelectedInOutput = pinning.GetPinnedOrSelectedInstance();
-            var isCameraControlDisabled = selectedCameraId == DisableCameraId;
+            var isCameraControlDisabled = selectedCameraId == ForceViewerCameraId;
 
             // ReSharper disable once UseNullPropagation
             if (instanceSelectedInOutput == null)
@@ -43,7 +43,7 @@ namespace T3.Gui.Windows.Output
                     SelectedCameraOp = activeCamerasInComposition.First();
                     selectedCameraId = SelectedCameraOp.SymbolChildId;
                 }
-                else if (selectedCameraId == Guid.Empty)
+                else if (selectedCameraId == NothingSelectedId)
                 {
                     selectedCameraId = activeCamerasInComposition.First().SymbolChildId;
                 }
@@ -61,10 +61,17 @@ namespace T3.Gui.Windows.Output
 
             if (ImGui.BeginCombo("##CameraSelection", label))
             {
-                if (ImGui.Selectable("No Camera", selectedCameraId == DisableCameraId))
+                if (ImGui.Selectable("No Camera", selectedCameraId == ForceViewerCameraId))
                 {
                     SelectedCameraOp = null;
-                    selectedCameraId = DisableCameraId;
+                    selectedCameraId = ForceViewerCameraId;
+                    
+                }
+
+                if (ImGui.Selectable("Force 3rd person", selectedCameraId == PreventAllCameras))
+                {
+                    SelectedCameraOp = null;
+                    selectedCameraId = PreventAllCameras;
                     
                 }
 
@@ -93,7 +100,9 @@ namespace T3.Gui.Windows.Output
             ImGui.SameLine();
         }
 
-        public static readonly Guid DisableCameraId = Guid.NewGuid();
+        public static readonly Guid PreventAllCameras = Guid.NewGuid();
+        public static readonly Guid ForceViewerCameraId = Guid.NewGuid();
+        public static readonly Guid NothingSelectedId = Guid.NewGuid();
         public Camera SelectedCameraOp { get; private set; }
     }
 }
