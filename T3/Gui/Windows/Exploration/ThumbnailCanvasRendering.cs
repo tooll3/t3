@@ -21,8 +21,11 @@ namespace T3.Gui.Windows.Exploration
     {
         public void InitializeCanvasTexture(Vector2 thumbnailSize)
         {
-            if (_canvasTexture != null)
+            if (_initialized == true)
                 return;
+            
+            // if (_canvasTexture != null || _canvasTextureRtv == null)
+            //     return;
 
             EvaluationContext = new EvaluationContext()
                                     {
@@ -46,10 +49,14 @@ namespace T3.Gui.Windows.Exploration
             _canvasTexture = new Texture2D(Program.Device, description);
             CanvasTextureSrv = SrvManager.GetSrvForTexture(_canvasTexture);
             _canvasTextureRtv = new RenderTargetView(Program.Device, _canvasTexture);
+            _initialized = true;
         }
 
         public void CopyToCanvasTexture(Slot<Texture2D> textureSlot, ImRect rect)
         {
+            if (!_initialized)
+                return;
+            
             var previewTextureSrv = SrvManager.GetSrvForTexture(textureSlot.Value);
 
             // Setup graphics pipeline for rendering into the canvas texture
@@ -77,12 +84,17 @@ namespace T3.Gui.Windows.Exploration
 
         public void ClearTexture()
         {
+            if (!_initialized)
+                return;
+            
             Program.Device.ImmediateContext.ClearRenderTargetView(_canvasTextureRtv, new RawColor4(0, 0, 0, 0));
         }
 
         public Vector2 GetCanvasTextureSize()
         {
-            return new Vector2(_canvasTexture.Description.Width, _canvasTexture.Description.Height);
+            return _initialized 
+                       ? new Vector2(_canvasTexture.Description.Width, _canvasTexture.Description.Height)
+                       : Vector2.Zero;
         }
 
             
@@ -91,5 +103,6 @@ namespace T3.Gui.Windows.Exploration
 
         private Texture2D _canvasTexture;
         private RenderTargetView _canvasTextureRtv;
+        private bool _initialized;
     }
 }

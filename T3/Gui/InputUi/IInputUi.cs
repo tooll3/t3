@@ -35,7 +35,7 @@ namespace T3.Gui.InputUi
         bool IsAnimatable { get; }
 
 
-        void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator);
+        void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time);
         
         InputEditStateFlags DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
         string GetSlotValue(IInputSlot inputSlot);

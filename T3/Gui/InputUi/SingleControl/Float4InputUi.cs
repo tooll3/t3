@@ -1,5 +1,10 @@
-﻿using System.Numerics;
+﻿using System.Linq;
+using System.Numerics;
 using ImGuiNET;
+using T3.Core.Animation;
+using T3.Core.Logging;
+using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Gui.Interaction;
 
 namespace T3.Gui.InputUi.SingleControl
@@ -17,7 +22,17 @@ namespace T3.Gui.InputUi.SingleControl
         {
             return CloneWithType<Float4InputUi>();
         }
-        
+
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time)
+        {
+            if (inputValue is not InputValue<Vector4> typedInputValue)
+                return;
+            
+            var curves = animator.GetCurvesForInput(inputSlot).ToArray();
+            typedInputValue.Value.CopyTo(FloatComponents);
+            Curve.UpdateCurveValues(curves, time, FloatComponents);
+        }
+
         protected override InputEditStateFlags DrawEditControl(string name, ref Vector4 float4Value)
         {
             float4Value.CopyTo(FloatComponents);
@@ -29,11 +44,13 @@ namespace T3.Gui.InputUi.SingleControl
                                       FloatComponents[1],
                                       FloatComponents[2],
                                       FloatComponents[3]);
-            
-            if (ColorEditButton.Draw(ref float4Value, Vector2.Zero))
+
+            var result = ColorEditButton.Draw(ref float4Value, Vector2.Zero); 
+            if (result != InputEditStateFlags.Nothing)
             {
+                Log.Debug("Result from color picker");
                 float4Value.CopyTo(FloatComponents);
-                inputEditState |= InputEditStateFlags.Modified;
+                inputEditState |= result;
             }
             return inputEditState;
         }

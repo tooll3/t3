@@ -330,7 +330,7 @@ namespace T3.Gui.Interaction.TransformGizmos
             _draggedGizmoPart = mode;
             _inputValueCommandInFlight = new ChangeInputValueCommand(_instance.Parent.Symbol,
                                                                      _instance.SymbolChildId,
-                                                                     _transformable.TranslationInput.Input);
+                                                                     _transformable.TranslationInput.Input, _transformable.TranslationInput.Input.Value);
 
             _draggedTransformable = _transformable;
             _dragInteractionWindowId = ImGui.GetID("");
@@ -354,7 +354,7 @@ namespace T3.Gui.Interaction.TransformGizmos
             TrySetVector3ToInput(_transformable.TranslationInput, new Vector3(newOrigin.X, newOrigin.Y, newOrigin.Z));
             InputValue value = _transformable.TranslationInput.Input.Value;
 
-            _inputValueCommandInFlight.AssignValue(value);
+            _inputValueCommandInFlight.AssignNewValue(value);
         }
 
         private static void CompletePositionDragging()

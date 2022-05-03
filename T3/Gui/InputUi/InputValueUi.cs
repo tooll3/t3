@@ -5,7 +5,6 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using SharpDX.Direct2D1.Effects;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
@@ -38,7 +37,7 @@ namespace T3.Gui.InputUi
 
         public abstract IInputUi Clone();
 
-        public virtual void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator)
+        public virtual void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time)
         {
             if (!IsAnimatable)
                 Log.Warning("Should only be called for animated input types");
@@ -220,6 +219,7 @@ namespace T3.Gui.InputUi
 
                     if (ImGui.Button("##icon", new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
+                        // TODO: this should use Undo/Redo commands
                         if (hasKeyframeAtCurrentTime)
                         {
                             AnimationOperations.RemoveKeyframeFromCurves(animator.GetCurvesForInput(inputSlot),
@@ -285,8 +285,8 @@ namespace T3.Gui.InputUi
 
                     ImGui.SetNextItemWidth(-1);
 
-                    editState |= DrawAnimatedValue(name, typedInputSlot, animator); // todo: command integration
-                    //DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
+                    editState |= DrawAnimatedValue(name, typedInputSlot, animator); 
+                    
                     
                     ImGui.PopStyleColor(2);
                     ImGui.PopItemWidth();

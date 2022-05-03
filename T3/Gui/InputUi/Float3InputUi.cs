@@ -1,4 +1,8 @@
-﻿using System.Numerics;
+﻿using System.Linq;
+using System.Numerics;
+using T3.Core.Animation;
+using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Gui.Interaction;
 
 
@@ -20,6 +24,16 @@ namespace T3.Gui.InputUi
             float3Value = new Vector3(FloatComponents[0], FloatComponents[1], FloatComponents[2]);
 
             return inputEditState;
+        }
+        
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time)
+        {
+            if (inputValue is not InputValue<Vector3> typedInputValue)
+                return;
+            
+            var curves = animator.GetCurvesForInput(inputSlot).ToArray();
+            typedInputValue.Value.CopyTo(FloatComponents);
+            Curve.UpdateCurveValues(curves, time, FloatComponents);
         }
     }
 }

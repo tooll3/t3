@@ -300,6 +300,8 @@ namespace T3.Gui.Windows.Variations
             if (_updateCompleted)
                 return;
 
+            _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
+            
             var pool = VariationHandling.ActivePoolForPresets;
 
             if (pool.Variations.Count == 0)

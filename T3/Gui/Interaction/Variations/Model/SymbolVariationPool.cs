@@ -271,10 +271,7 @@ namespace T3.Gui.Interaction.Variations.Model
                             if (param == null)
                                 continue;
 
-                            var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, inputSlot.Input)
-                                                 {
-                                                     NewValue = param,
-                                                 };
+                            var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, inputSlot.Input, param);
                             commands.Add(newCommand);
                         }
                         else
@@ -319,19 +316,13 @@ namespace T3.Gui.Interaction.Variations.Model
                                 continue;
 
                             var mixed = blendFunction(inputSlot.Input.Value, parameter, blend);
-                            var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, inputSlot.Input)
-                                                 {
-                                                     NewValue = mixed,
-                                                 };
+                            var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, inputSlot.Input, mixed);
                             commands.Add(newCommand);
                         }
                         else if (!inputSlot.Input.IsDefault && resetToDefaults)
                         {
                             var mixed = blendFunction(inputSlot.Input.Value, inputSlot.Input.DefaultValue, blend);
-                            var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, inputSlot.Input)
-                                                 {
-                                                     NewValue = mixed,
-                                                 };
+                            var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, inputSlot.Input, mixed);
                             commands.Add(newCommand);
                         }
                     }
@@ -393,10 +384,7 @@ namespace T3.Gui.Interaction.Variations.Model
                     if (weightsArray.Length == values.Count)
                     {
                         var mixed2 = blendFunction(values.ToArray(), weightsArray);
-                        var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, inputSlot.Input)
-                                             {
-                                                 NewValue = mixed2,
-                                             };
+                        var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, inputSlot.Input, mixed2);
                         commands.Add(newCommand);
                     }
                 }
