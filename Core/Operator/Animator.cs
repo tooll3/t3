@@ -491,18 +491,18 @@ namespace T3.Core.Operator
             writer.WritePropertyName("Animator");
             writer.WriteStartArray();
 
-            foreach (var entry in _animatedInputCurves)
+            foreach (var (key, curve) in _animatedInputCurves.ToList().OrderBy(valuePair => valuePair.Key.Index))
             {
                 writer.WriteStartObject();
 
-                writer.WriteValue("InstanceId", entry.Key.SymbolChildId);
-                writer.WriteValue("InputId", entry.Key.InputId);
-                if (entry.Key.Index != 0)
+                writer.WriteValue("InstanceId", key.SymbolChildId);
+                writer.WriteValue("InputId", key.InputId);
+                if (key.Index != 0)
                 {
-                    writer.WriteValue("Index", entry.Key.Index);
+                    writer.WriteValue("Index", key.Index);
                 }
 
-                entry.Value.Write(writer); // write curve itself
+                curve.Write(writer); // write curve itself
 
                 writer.WriteEndObject();
             }
@@ -510,8 +510,10 @@ namespace T3.Core.Operator
             writer.WriteEndArray();
         }
 
+        
         public void Read(JToken inputToken)
         {
+            var curves = new List< KeyValuePair<CurveId, Curve>>();
             foreach (JToken entry in inputToken)
             {
                 Guid instanceId = Guid.Parse(entry["InstanceId"].Value<string>());
@@ -520,14 +522,17 @@ namespace T3.Core.Operator
                 int index = indexToken?.Value<int>() ?? 0;
                 Curve curve = new Curve();
                 curve.Read(entry);
+                curves.Add( new KeyValuePair<CurveId, Curve>(new CurveId(instanceId, inputId, index), curve));
+            }
 
-                _animatedInputCurves.Add(new CurveId(instanceId, inputId, index), curve);
+            foreach (var (key, value) in curves.OrderBy(curveId => curveId.Key.Index))
+            {
+                _animatedInputCurves.Add(key, value);
             }
         }
-
+        
         private readonly Dictionary<CurveId, Curve> _animatedInputCurves = new();
-
-
+        
         public static void UpdateVector3InputValue(InputSlot<Vector3> inputSlot, Vector3 value)
         {
             var animator = inputSlot.Parent.Parent.Symbol.Animator;
