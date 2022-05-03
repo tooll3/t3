@@ -5,15 +5,17 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Gui;
 using T3.Gui.Commands;
 using t3.Gui.Commands.Animation;
 using T3.Gui.Graph;
+using T3.Gui.InputUi;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.WithCurves;
 using T3.Gui.Selection;
 using T3.Gui.Windows.TimeLine;
 
-namespace T3.Gui.InputUi
+namespace t3.Gui.InputUi.CombinedInputs
 {
     /// <summary>
     /// Handles editing of Curve-Inputs in parameter windows and Graph CustomUi.

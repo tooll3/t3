@@ -9,6 +9,7 @@ using T3.Core.Operator;
 using T3.Gui.Commands;
 using t3.Gui.Commands.Animation;
 using T3.Gui.InputUi;
+using t3.Gui.InputUi.CombinedInputs;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Interaction.WithCurves;

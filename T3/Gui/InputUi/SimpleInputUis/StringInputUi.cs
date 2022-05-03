@@ -1,18 +1,13 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
 using System.Numerics;
-using System.Windows.Forms;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
-using T3.Core.Logging;
+using T3.Gui.InputUi;
 using T3.Gui.UiHelpers;
 
-namespace T3.Gui.InputUi
+namespace t3.Gui.InputUi.SimpleInputUis
 {
     public class StringInputUi : InputValueUi<string>
     {

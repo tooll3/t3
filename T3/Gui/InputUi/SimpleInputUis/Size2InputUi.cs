@@ -7,9 +7,11 @@ using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Gui.InputUi;
 using T3.Gui.Interaction;
+using Color = T3.Gui.Color;
 
-namespace T3.Gui.InputUi.SingleControl
+namespace t3.Gui.InputUi.SimpleInputUis
 {
     public class Size2InputUi : InputValueUi<Size2>
     {

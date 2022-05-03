@@ -11,6 +11,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.InputUi;
+using t3.Gui.InputUi.SimpleInputUis;
 
 namespace T3.Gui.Graph
 {

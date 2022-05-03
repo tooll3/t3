@@ -1,8 +1,9 @@
 ﻿using System;
 using ImGuiNET;
+using T3.Gui.InputUi;
 using T3.Gui.UiHelpers;
 
-namespace T3.Gui.InputUi
+namespace t3.Gui.InputUi.SimpleInputUis
 {
     public class EnumInputUi<T> : InputValueUi<T> where T : Enum
     {

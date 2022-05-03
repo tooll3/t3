@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using t3.Gui.InputUi.CombinedInputs;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.TimeLine;
 

@@ -19,6 +19,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Gui.ChildUi;
 using T3.Gui.InputUi;
+using t3.Gui.InputUi.SimpleInputUis;
 using T3.Gui.InputUi.SingleControl;
 using T3.Gui.OutputUi;
 
