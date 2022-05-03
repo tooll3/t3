@@ -25,6 +25,7 @@ namespace t3.Gui.Commands.Graph
             OriginalValue = input.Value.Clone();
             _newValue = newValue == null ? input.Value.Clone() : newValue.Clone();
 
+            //Log.Debug($"New command {OriginalValue} -> {newValue}");
             if (_isAnimated)
             {
                 var animator = inputParentSymbol.Animator;
@@ -50,14 +51,18 @@ namespace t3.Gui.Commands.Graph
                 var animator = inputParentSymbol.Animator;
                 if (wasNewKeyframe)
                 {
+                    //Log.Debug("  was new keyframe...");
                     animator.SetTimeKeys(_childId, _inputId,_animationTime, _originalKeyframes); // Remove keyframes
                     var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
                     InvalidateInstances(inputParentSymbol, symbolChild);
                 }
                 else
                 {
+                    //Log.Debug("  restore original keyframes...");
                     animator.SetTimeKeys(_childId, _inputId,_animationTime, _originalKeyframes);
-                    AssignValue(OriginalValue);
+                    
+                    var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
+                    InvalidateInstances(inputParentSymbol, symbolChild);
                 }
             }
             else
@@ -89,6 +94,7 @@ namespace t3.Gui.Commands.Graph
 
         private void AssignValue(InputValue valueToSet)
         {
+            //Log.Debug($"assigning value {valueToSet}");
             var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
             var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
             var input = symbolChild.InputValues[_inputId];
