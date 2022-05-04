@@ -12,6 +12,7 @@ cbuffer ParamConstants : register(b0)
     float FocusRange;
     float MaxBlurSize;
     float RadiusScale;
+    float MaxSamples;
 }
 
 
@@ -35,7 +36,9 @@ float3 depthOfField(float2 pixelSize, float2 texCoord, float focusPoint, float f
     float radius = RadiusScale;
     int samples=0;
 
-    for (float ang = 0.0; radius < MaxBlurSize && samples < 100; ang += GOLDEN_ANGLE)
+    int maxSamples = (int)clamp(MaxSamples,1,100);
+
+    for (float ang = 0.0; radius < MaxBlurSize && samples < maxSamples; ang += GOLDEN_ANGLE)
     {
         float2 tc = texCoord + float2(cos(ang), sin(ang)) * pixelSize * radius;
         float3 sampleColor = colorTexture.SampleLevel(texSampler, tc, 0).rgb;

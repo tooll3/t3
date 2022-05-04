@@ -75,6 +75,13 @@
         "X": -188.33533,
         "Y": 395.1441
       }
+    },
+    {
+      "InputId": "fa3a3202-fb06-417c-ad96-75c96c3b6208"/*MaxSamples*/,
+      "Position": {
+        "X": -188.33533,
+        "Y": 440.1441
+      }
     }
   ],
   "SymbolChildUis": [
@@ -149,11 +156,22 @@
       "ChildId": "f7960548-cf74-43ef-8a18-c6b9d98bb9c1"/*FloatsToBuffer*/,
       "Size": {
         "X": 110.0,
-        "Y": 114.0
+        "Y": 127.0
       },
       "Position": {
         "X": 261.0854,
         "Y": 55.698242
+      }
+    },
+    {
+      "ChildId": "6f6d57cc-5a3a-4ea9-b7ec-486a5e7f1e0d"/*IntToFloat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 25.95169,
+        "Y": 474.00012
       }
     }
   ],
