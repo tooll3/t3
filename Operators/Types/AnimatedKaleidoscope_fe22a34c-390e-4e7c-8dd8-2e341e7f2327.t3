@@ -950,6 +950,36 @@
       }
     },
     {
+      "InstanceId": "f15e013a-bc0e-478f-b09b-417066a4fe2e",
+      "InputId": "c1e5ce4c-6780-414e-9596-703fa7cb0392",
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 0.0,
+            "Value": 1.0199999809265137,
+            "InType": "Spline",
+            "OutType": "Constant",
+            "InEditMode": "Smooth",
+            "OutEditMode": "Constant",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 20.1935,
+            "Value": 0.33000001311302185,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Smooth",
+            "OutEditMode": "Smooth",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.141592653589793
+          }
+        ]
+      }
+    },
+    {
       "InstanceId": "947509ad-ea5f-4294-8e8f-0e2437209031",
       "InputId": "4dc44a7b-fe7c-4807-aaaa-53fb553de017",
       "Index": 1,
@@ -1082,36 +1112,6 @@
           {
             "Time": 10.0968,
             "Value": 0.47099998593330383,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Smooth",
-            "OutEditMode": "Smooth",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
-      }
-    },
-    {
-      "InstanceId": "f15e013a-bc0e-478f-b09b-417066a4fe2e",
-      "InputId": "c1e5ce4c-6780-414e-9596-703fa7cb0392",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 0.0,
-            "Value": 1.0199999809265137,
-            "InType": "Spline",
-            "OutType": "Constant",
-            "InEditMode": "Smooth",
-            "OutEditMode": "Constant",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 20.1935,
-            "Value": 0.33000001311302185,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Smooth",

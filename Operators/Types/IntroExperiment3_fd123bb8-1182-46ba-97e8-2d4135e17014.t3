@@ -1519,6 +1519,96 @@
       }
     },
     {
+      "InstanceId": "5728fbd3-343a-4cf9-af34-8b7ecf55b5ec",
+      "InputId": "79dde73a-18c5-4862-88b6-2091808f1a08",
+      "Curve": {
+        "PreCurve": "CycleWithOffset",
+        "PostCurve": "CycleWithOffset",
+        "Keys": [
+          {
+            "Time": 12.4827,
+            "Value": -2.8299999237060547,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 14.5,
+            "Value": -2.8299999237060547,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.141592653589793
+          }
+        ]
+      }
+    },
+    {
+      "InstanceId": "2beed516-3f75-4b1e-aeec-1e3ba4ebccb5",
+      "InputId": "79dde73a-18c5-4862-88b6-2091808f1a08",
+      "Curve": {
+        "PreCurve": "CycleWithOffset",
+        "PostCurve": "CycleWithOffset",
+        "Keys": [
+          {
+            "Time": 12.2742,
+            "Value": 0.6399999260902405,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.6509390383372811,
+            "OutTangentAngle": 3.792531691927074
+          },
+          {
+            "Time": 12.9744,
+            "Value": 1.1733332872390747,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.650939038337281,
+            "OutTangentAngle": -2.490653615252512
+          }
+        ]
+      }
+    },
+    {
+      "InstanceId": "dc7b3a46-812f-42b6-ae07-c8d1e6768bb0",
+      "InputId": "72a70b15-0342-427a-8c2f-e02ef31b2677",
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 12.0,
+            "Value": 0.14000001549720764,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 12.411,
+            "Value": 0.14000001549720764,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Smooth",
+            "OutEditMode": "Smooth",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.141592653589793
+          }
+        ]
+      }
+    },
+    {
       "InstanceId": "098f2c09-a7cf-44f2-b235-34ebd0f5d8e5",
       "InputId": "fb9e226b-866a-4228-bad9-bc7908bfc442",
       "Index": 1,
@@ -1581,66 +1671,6 @@
       }
     },
     {
-      "InstanceId": "5728fbd3-343a-4cf9-af34-8b7ecf55b5ec",
-      "InputId": "79dde73a-18c5-4862-88b6-2091808f1a08",
-      "Curve": {
-        "PreCurve": "CycleWithOffset",
-        "PostCurve": "CycleWithOffset",
-        "Keys": [
-          {
-            "Time": 12.4827,
-            "Value": -2.8299999237060547,
-            "InType": "Linear",
-            "OutType": "Linear",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 14.5,
-            "Value": -2.8299999237060547,
-            "InType": "Linear",
-            "OutType": "Linear",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
-      }
-    },
-    {
-      "InstanceId": "2beed516-3f75-4b1e-aeec-1e3ba4ebccb5",
-      "InputId": "79dde73a-18c5-4862-88b6-2091808f1a08",
-      "Curve": {
-        "PreCurve": "CycleWithOffset",
-        "PostCurve": "CycleWithOffset",
-        "Keys": [
-          {
-            "Time": 12.2742,
-            "Value": 0.6399999260902405,
-            "InType": "Linear",
-            "OutType": "Linear",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": 0.6509390383372811,
-            "OutTangentAngle": 3.792531691927074
-          },
-          {
-            "Time": 12.9744,
-            "Value": 1.1733332872390747,
-            "InType": "Linear",
-            "OutType": "Linear",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": 0.650939038337281,
-            "OutTangentAngle": -2.490653615252512
-          }
-        ]
-      }
-    },
-    {
       "InstanceId": "2beed516-3f75-4b1e-aeec-1e3ba4ebccb5",
       "InputId": "79dde73a-18c5-4862-88b6-2091808f1a08",
       "Index": 1,
@@ -1667,36 +1697,6 @@
             "OutEditMode": "Linear",
             "InTangentAngle": -0.5008929071992929,
             "OutTangentAngle": -3.642485560789086
-          }
-        ]
-      }
-    },
-    {
-      "InstanceId": "dc7b3a46-812f-42b6-ae07-c8d1e6768bb0",
-      "InputId": "72a70b15-0342-427a-8c2f-e02ef31b2677",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 12.0,
-            "Value": 0.14000001549720764,
-            "InType": "Linear",
-            "OutType": "Linear",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 12.411,
-            "Value": 0.14000001549720764,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Smooth",
-            "OutEditMode": "Smooth",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
           }
         ]
       }
