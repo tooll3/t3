@@ -348,6 +348,10 @@ namespace T3.Gui.Windows.Variations
         private ImRect GetPixelRectForIndex(int thumbnailIndex)
         {
             var columns = (int)(_thumbnailCanvasRendering.GetCanvasTextureSize().X / VariationThumbnail.ThumbnailSize.X);
+            if (columns == 0)
+            {
+                return ImRect.RectWithSize(Vector2.Zero, VariationThumbnail.ThumbnailSize);
+            }
             var rowIndex = thumbnailIndex / columns;
             var columnIndex = thumbnailIndex % columns;
             var posInCanvasTexture = new Vector2(columnIndex, rowIndex) * VariationThumbnail.ThumbnailSize;

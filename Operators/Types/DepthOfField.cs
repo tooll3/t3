@@ -37,6 +37,9 @@ namespace T3.Operators.Types.Id_2cd650a1_5b77_4040_895b_6049dc09206e
         [Input(Guid = "f66e71e9-aef9-41da-b722-843951e0dbd5")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> OutputTexture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
+        [Input(Guid = "fa3a3202-fb06-417c-ad96-75c96c3b6208")]
+        public readonly InputSlot<int> MaxSamples = new InputSlot<int>();
+
     }
 }
 

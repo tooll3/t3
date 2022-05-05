@@ -23,6 +23,10 @@
         "Z": 9.9999E-07,
         "W": 1.0
       }
+    },
+    {
+      "Id": "493c40f0-21e6-466b-afc2-eff570229c86"/*MaxSamples*/,
+      "DefaultValue": 50
     }
   ],
   "Children": [
@@ -294,6 +298,12 @@
       "SourceSlotId": "007129e4-0eae-4cb9-a142-90c1c171a5fb",
       "TargetParentOrChildId": "ecec8568-cc93-479f-a133-97ddf5e9dc5f",
       "TargetSlotId": "f66e71e9-aef9-41da-b722-843951e0dbd5"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "493c40f0-21e6-466b-afc2-eff570229c86",
+      "TargetParentOrChildId": "ecec8568-cc93-479f-a133-97ddf5e9dc5f",
+      "TargetSlotId": "fa3a3202-fb06-417c-ad96-75c96c3b6208"
     }
   ]
 }

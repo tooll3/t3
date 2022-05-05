@@ -9,6 +9,8 @@ namespace T3.Core.Animation
 {
     public class Playback : IDisposable
     {
+        public static Playback Current { get; private set; }
+        
         /// <summary>
         /// The absolute current time as controlled by the timeline interaction.
         /// </summary>
@@ -70,6 +72,7 @@ namespace T3.Core.Animation
             EvaluationContext.BPM = Bpm;
             EvaluationContext.LastFrameDuration = timeSinceLastFrameInSecs;
             EvaluationContext.GlobalTimeInSecs = TimeInSecs;
+            Current = this;
         }
 
         public enum TimeDisplayModes
