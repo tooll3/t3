@@ -118,6 +118,7 @@ namespace T3.Core.Operator
         public Dictionary<string, float> FloatVariables { get; } = new Dictionary<string, float>();
         public StructuredList IteratedList { get; set; }
         public int IteratedListIndex { get; set; }
+        public bool BypassCameras { get; set; }
 
         public ParticleSystem ParticleSystem;
     }

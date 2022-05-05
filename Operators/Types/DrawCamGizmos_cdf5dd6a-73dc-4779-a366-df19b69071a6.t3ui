@@ -1,0 +1,112 @@
+{
+  "Id": "cdf5dd6a-73dc-4779-a366-df19b69071a6"/*DrawCamGizmos*/,
+  "Description": "An attempt to draw camera gizmos.",
+  "InputUis": [
+    {
+      "InputId": "f322ca22-8200-449c-b09b-618cddf488d3"/*Visibility*/,
+      "Position": {
+        "X": -300.0,
+        "Y": 210.03662
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "33e26af0-6427-4b35-96c8-602f2b7498e1"/*GetCamProperties2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 300.0,
+        "Y": 122.03662
+      }
+    },
+    {
+      "ChildId": "5f05b4a1-38e7-4f72-a9d8-c8bf6af9a6b6"/*Loop*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 859.42126,
+        "Y": 4.688095
+      }
+    },
+    {
+      "ChildId": "4be31ac9-dbe8-40a3-9c5d-91c05d2919fb"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 703.10156,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "4e6ecf5b-43fa-400f-a99c-57aaf5c107f8"/*ApplyTransformMatrix*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 553.10156,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "35ccb0fa-e5e7-408b-a246-06837985deb1"/*CameraGizmo*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 403.10156,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "d162d2d2-40c8-48aa-8493-d8784fe9a5b6"/*ContextFloat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -42.093994,
+        "Y": 321.98703
+      }
+    },
+    {
+      "ChildId": "1ad18650-648d-43e8-8ca2-b5a098b87ecb"/*FloatToInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 107.906006,
+        "Y": 321.98703
+      }
+    },
+    {
+      "ChildId": "2f1c1089-2995-420a-9e5f-bd08b1fc240f"/*VisibleGizmos*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 779.3042,
+        "Y": 261.16333
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "6cee53fc-92df-4a9e-b519-da857bdf9419"/*Output*/,
+      "Position": {
+        "X": 1113.1016,
+        "Y": 79.01831
+      }
+    }
+  ]
+}

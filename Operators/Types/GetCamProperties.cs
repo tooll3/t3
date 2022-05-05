@@ -10,14 +10,6 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e
 {
-
-    public interface ICameraPropertiesProvider
-    {
-        public Matrix CameraToClipSpace { get;  set; }
-        public Matrix WorldToCamera { get; set; }
-        public Matrix LastObjectToWorld { get; set; }
-    }
-    
     public class GetCamProperties : Instance<GetCamProperties>
     {
         [Output(Guid = "FB108D2D-04B0-427D-888D-79EB7EBF1E96", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
@@ -72,6 +64,13 @@ namespace T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e
         
         private TransformsConstBuffer.TransformBufferLayout _bufferContent;
         private bool _previousBufferInitialized;
+    }
+    
+    public interface ICameraPropertiesProvider
+    {
+        public Matrix CameraToClipSpace { get;  set; }
+        public Matrix WorldToCamera { get; set; }
+        public Matrix LastObjectToWorld { get; set; }
     }
 }
 

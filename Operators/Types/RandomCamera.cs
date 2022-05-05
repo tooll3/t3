@@ -29,6 +29,9 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         private void Update(EvaluationContext context)
         {
             Reference.DirtyFlag.Clear();
+
+
+            
             LastObjectToWorld = context.ObjectToWorld;
             
             float fov = MathUtil.DegreesToRadians(Fov.GetValue(context));
@@ -85,9 +88,17 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             
             WorldToCamera = Matrix.LookAtRH(eye, target, up);
 
+                        
+            if (context.BypassCameras)
+            {
+                Command.GetValue(context);
+                return;
+            }
+            
             // Set properties and evaluate sub tree
             var prevCameraToClipSpace = context.CameraToClipSpace;
             var prevWorldToCamera = context.WorldToCamera;
+
             
             context.CameraToClipSpace = CameraToClipSpace;
             context.WorldToCamera = WorldToCamera;
