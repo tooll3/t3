@@ -3,10 +3,10 @@
   "Description": "An attempt to draw camera gizmos.",
   "InputUis": [
     {
-      "InputId": "fce4c7b7-473a-4f55-9b26-83e562462b3b"/*IntValue*/,
+      "InputId": "f322ca22-8200-449c-b09b-618cddf488d3"/*Visibility*/,
       "Position": {
         "X": -300.0,
-        "Y": 165.03662
+        "Y": 210.03662
       }
     }
   ],
@@ -31,61 +31,6 @@
       "Position": {
         "X": 859.42126,
         "Y": 4.688095
-      }
-    },
-    {
-      "ChildId": "53ff97aa-16de-4ee0-95e8-cd097474f6b5"/*Time*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -300.0,
-        "Y": 122.03662
-      }
-    },
-    {
-      "ChildId": "42c0558e-4bf3-4085-9170-2222e3373ced"/*Multiply*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -150.0,
-        "Y": 122.03662
-      }
-    },
-    {
-      "ChildId": "72363f64-af66-4206-8fd4-0be0cceebe04"/*FloatToInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 150.0,
-        "Y": 122.03662
-      }
-    },
-    {
-      "ChildId": "de99ceac-d748-471a-b29a-fd1ffe926b19"/*Add*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 0.0,
-        "Y": 122.03662
-      }
-    },
-    {
-      "ChildId": "8e44d21c-d12f-41d6-94e1-2c982f31d875"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -150.0,
-        "Y": 185.03662
       }
     },
     {
@@ -141,6 +86,17 @@
       "Position": {
         "X": 107.906006,
         "Y": 321.98703
+      }
+    },
+    {
+      "ChildId": "2f1c1089-2995-420a-9e5f-bd08b1fc240f"/*VisibleGizmos*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 779.3042,
+        "Y": 261.16333
       }
     }
   ],

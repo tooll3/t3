@@ -71,6 +71,8 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             var prevObjectToWorld = context.ObjectToWorld;
             var prevWorldToCamera = context.WorldToCamera;
             var prevCameraToClipSpace = context.CameraToClipSpace;
+            var keepCameraBypass = context.BypassCameras;
+            context.BypassCameras = false;
 
             deviceContext.Rasterizer.SetViewport(new SharpDX.Viewport(0, 0, size.Width, size.Height, 0.0f, 1.0f));
             deviceContext.OutputMerger.SetTargets(_multiSampledDepthBufferDsv, _multiSampledColorBufferRtv);
@@ -112,6 +114,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             Command.GetValue(context);
 
             // Restore context
+            context.BypassCameras = keepCameraBypass;
             context.ObjectToWorld = prevObjectToWorld;
             context.WorldToCamera = prevWorldToCamera;
             context.CameraToClipSpace = prevCameraToClipSpace;

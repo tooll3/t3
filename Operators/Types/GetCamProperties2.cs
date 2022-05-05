@@ -14,10 +14,8 @@ namespace T3.Operators.Types.Id_5b538cf5_e3b6_4674_b23e_ab55fc59ada6
 {
     public class GetCamProperties2 : Instance<GetCamProperties2>
     {
-
         [Output(Guid = "013B08CB-AF63-4FAC-BA28-DE5D1F5A869C")]
         public readonly Slot<Vector3> Position = new();
-
 
         [Output(Guid = "F9A31409-323C-43C8-B850-624050EA229E")]
         public readonly Slot<SharpDX.Vector4[]> MatrixRows = new();
@@ -76,7 +74,6 @@ namespace T3.Operators.Types.Id_5b538cf5_e3b6_4674_b23e_ab55fc59ada6
 
             var pos = new Vector3(camToWorld.M41, camToWorld.M42, camToWorld.M43);
             Position.Value = pos;
-
             MatrixRows.Value = new[] { camToWorld.Row1, camToWorld.Row2, camToWorld.Row3, camToWorld.Row4, };
         }
         

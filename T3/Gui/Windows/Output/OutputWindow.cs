@@ -64,36 +64,23 @@ namespace T3.Gui.Windows.Output
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
+                // Draw output
                 _imageCanvas.SetAsCurrent();
 
                 // Move down to avoid overlapping with toolbar
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
-                var pinnedOrSelectedInstance = Pinning.GetPinnedOrSelectedInstance();
-                var renderedType = DrawOutput(pinnedOrSelectedInstance, Pinning.GetPinnedEvaluationInstance());
+                var drawnInstance = Pinning.GetPinnedOrSelectedInstance();
+                var drawnType = DrawOutput(drawnInstance, Pinning.GetPinnedEvaluationInstance());
                 _imageCanvas.Deactivate();
 
-                ICamera cameraOp = _camSelectionHandling.SelectedCameraOp;
-                allowCameraInteraction = !TransformGizmoHandling.IsDragging
-                                         && (cameraOp != null || renderedType == typeof(Command));
-
-                _lastInteractiveCam = cameraOp ?? _outputWindowViewCamera;
-                if (pinnedOrSelectedInstance is ICamera cam)
-                {
-                    _lastInteractiveCam = cam;
-                }
-
-                _cameraInteraction.Update(_lastInteractiveCam, allowCameraInteraction);
-
-                _imageCanvas.PreventMouseInteraction = allowCameraInteraction;
+                _camSelectionHandling.Update(drawnInstance, drawnType);
+                _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction;
                 _imageCanvas.Update();
                 DrawToolbar();
             }
             ImGui.EndChild();
         }
 
-        public Instance ShownInstance => Pinning.GetPinnedOrSelectedInstance();
-        private ICamera _lastInteractiveCam;
-        private bool allowCameraInteraction;
 
         private void DrawToolbar()
         {
@@ -132,7 +119,7 @@ namespace T3.Gui.Windows.Output
 
             ImGui.SameLine();
 
-            _camSelectionHandling.DrawCameraSelection(Pinning, ref _selectedCameraId);
+            _camSelectionHandling.DrawCameraControlSelection(Pinning);
             ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
             
             ImGui.SameLine();
@@ -141,7 +128,6 @@ namespace T3.Gui.Windows.Output
         }
 
         
-
         private Type DrawOutput(Instance instanceForOutput, Instance instanceForEvaluation = null)
         {
             if (instanceForEvaluation == null)
@@ -163,11 +149,14 @@ namespace T3.Gui.Windows.Output
                 _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
             }
             
+            // Prepare context
             _evaluationContext.Reset();
-            _evaluationContext.BypassCameras = true;
+            _evaluationContext.BypassCameras = _camSelectionHandling.BypassCamera;
             _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
-            var usedCam = _lastInteractiveCam ?? _outputWindowViewCamera;
-            _evaluationContext.SetViewFromCamera(usedCam);
+            
+            // Set camera
+            //var usedCam = _lastInteractiveCam ?? _outputWindowViewCamera;
+            _evaluationContext.SetViewFromCamera(_camSelectionHandling.CameraForRendering);
             _evaluationContext.BackgroundColor = _backgroundColor;
 
             // Ugly hack to hide final target
@@ -197,22 +186,16 @@ namespace T3.Gui.Windows.Output
             }
         }
         
-        private System.Numerics.Vector4 _backgroundColor = new System.Numerics.Vector4(0.1f, 0.1f, 0.1f, 1.0f);
-
-        private readonly EvaluationContext _evaluationContext = new EvaluationContext();
-        public static readonly List<Window> OutputWindowInstances = new List<Window>();
-        private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
-
-        public ViewSelectionPinning Pinning { get; } = new ViewSelectionPinning();
-        private readonly CameraInteraction _cameraInteraction = new CameraInteraction();
-        private readonly ViewCamera _outputWindowViewCamera = new ViewCamera();
-
-        private Guid _selectedCameraId = CameraSelectionHandling.ForceViewerCameraId;
-        private CameraSelectionHandling _camSelectionHandling = new CameraSelectionHandling();
-
+        public Instance ShownInstance => Pinning.GetPinnedOrSelectedInstance();
+        public static readonly List<Window> OutputWindowInstances = new();
+        public ViewSelectionPinning Pinning { get; } = new();
+        
+        private System.Numerics.Vector4 _backgroundColor = new(0.1f, 0.1f, 0.1f, 1.0f);
+        private readonly EvaluationContext _evaluationContext = new();
+        private readonly ImageOutputCanvas _imageCanvas = new();
+        private readonly CameraSelectionHandling _camSelectionHandling = new();
         private static int _instanceCounter;
         private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
-
-        private readonly EditResolutionDialog _resolutionDialog = new EditResolutionDialog();
+        private readonly EditResolutionDialog _resolutionDialog = new();
     }
 }
