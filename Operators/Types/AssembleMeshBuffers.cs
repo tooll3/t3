@@ -7,13 +7,13 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_e0849edd_ea1b_4657_b22d_5aa646318aa8
 {
-    public class CombineMeshBuffers : Instance<CombineMeshBuffers>
+    public class AssembleMeshBuffers : Instance<AssembleMeshBuffers>
     {
         [Output(Guid = "D71893DD-6CA2-4AB7-9E04-0BD7285ECCFB")]
         public readonly Slot<MeshBuffers> MeshBuffers = new Slot<MeshBuffers>();
         
         
-        public CombineMeshBuffers()
+        public AssembleMeshBuffers()
         {
             MeshBuffers.UpdateAction = Update;
         }

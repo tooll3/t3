@@ -14,8 +14,8 @@ namespace T3.Operators.Types.Id_3f0f0c40_482d_4d79_a201_b4651a0cd3a8
         [Input(Guid = "22370faa-8381-4878-8653-2fe9297400da")]
         public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> InputMesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
 
-        [Input(Guid = "28b4025f-c744-4e12-b922-2767a49c9750")]
-        public readonly InputSlot<bool> FlatShading = new InputSlot<bool>();
+        [Input(Guid = "308f12dc-a308-472a-923e-20f0a20d54db")]
+        public readonly InputSlot<float> ShadeFlat = new InputSlot<float>();
 
         
         private enum Spaces

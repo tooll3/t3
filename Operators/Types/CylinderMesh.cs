@@ -73,48 +73,41 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                 var radiusAngleFraction = fillRatio / (vertexHullColumns - 1) * 2.0 * Math.PI;
                 var rowStep = height / rows;
 
+                var squeezeAngle = MathF.Atan2(upperRadius - lowerRadius, height);
+                
                 // Hull
                 for (var rowIndex = 0; rowIndex < rows + 1; ++rowIndex)
                 {
                     var heightFraction = rowIndex / (float)rows;
                     var rowRadius = MathUtils.Lerp(lowerRadius, upperRadius, heightFraction);
-                    var nextRowRadius = MathUtils.Lerp(lowerRadius, upperRadius, (rowIndex + 1) / (float)rows);
                     var rowLevel = height * (heightFraction - basePivot);
-                    var rowCenter = new SharpDX.Vector3(0, rowLevel, 0);
 
                     for (var columnIndex = 0; columnIndex < vertexHullColumns; ++columnIndex)
                     {
-                        var columnAngle = columnIndex * radiusAngleFraction + spinInRad + twistInRad * heightFraction + Math.PI;
+                        var columnAngle = (float)( columnIndex * radiusAngleFraction + spinInRad + twistInRad * heightFraction + Math.PI);
 
                         var u0 = columnIndex / (float)columns;
-                        var u1 = (columnIndex + 1) / (float)rows;
-
-                        var v0 = addCaps ? ((rowIndex + 1) / (float)rows)/2f
-                                         : (rowIndex + 1) / (float)rows;
                         var v1 = addCaps ? (rowIndex / (float)rows) / 2f
                                         : rowIndex / (float)rows;
 
-                        var p = new SharpDX.Vector3((float)Math.Sin(columnAngle) * rowRadius,
+                        var p = new SharpDX.Vector3(MathF.Sin(columnAngle) * rowRadius,
                                                     rowLevel,
-                                                    (float)Math.Cos(columnAngle) * rowRadius);
-
-                        var p1 = new SharpDX.Vector3((float)Math.Sin(columnAngle) * rowRadius,
-                                                     rowLevel + rowStep,
-                                                     (float)Math.Cos(columnAngle) * rowRadius
-                                                    );
-
-                        var p2 = new SharpDX.Vector3((float)Math.Sin(columnAngle + radiusAngleFraction) * nextRowRadius,
-                                                     rowLevel,
-                                                     (float)Math.Cos(columnAngle + radiusAngleFraction) * nextRowRadius
-                                                    );
+                                                    MathF.Cos(columnAngle) * rowRadius);
+                        
 
                         var uv0 = new SharpDX.Vector2(u0, v1);
-                        var uv1 = new SharpDX.Vector2(u1, v1);
-                        var uv2 = new SharpDX.Vector2(u1, v0);
+                        
+                        var normal0 = new SharpDX.Vector3(MathF.Sin(columnAngle) * MathF.Cos(squeezeAngle),
+                                                           MathF.Cos(-squeezeAngle-MathF.PI/2),
+                                                           MathF.Cos(columnAngle) * MathF.Cos(squeezeAngle)
+                                                          );
+                        
+                        var binormal0 = new SharpDX.Vector3(MathF.Sin(squeezeAngle) * MathF.Sin(columnAngle),
+                                                            MathF.Cos(-squeezeAngle),
+                                                            MathF.Sin(squeezeAngle) * MathF.Cos(columnAngle)
+                                                           );
 
-                        var normal0 = SharpDX.Vector3.Normalize(p - rowCenter);
-
-                        MeshUtils.CalcTBNSpace(p, uv0, p1, uv1, p2, uv2, normal0, out var tangent0, out var binormal0);
+                        var tangent0 = SharpDX.Vector3.Cross(normal0, binormal0);
 
                         var vertexIndex = rowIndex * vertexHullColumns + columnIndex;
                         _vertexBufferData[vertexIndex] = new PbrVertex
@@ -170,10 +163,10 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                             
                             for (var columnIndex = 0; columnIndex < vertexHullColumns; ++columnIndex)
                             {
-                                var columnAngle = columnIndex * radiusAngleFraction + spinInRad + twistInRad * (isLowerCap ? 0 : 1) + Math.PI;
+                                var columnAngle = (float)(columnIndex * radiusAngleFraction + spinInRad + twistInRad * (isLowerCap ? 0 : 1) + Math.PI);
 
-                                var xx = (float)Math.Sin(columnAngle);
-                                var yy = (float)Math.Cos(columnAngle);
+                                var xx = MathF.Sin(columnAngle);
+                                var yy = MathF.Cos(columnAngle);
                                 
                                 var p = new SharpDX.Vector3(-xx * radius,
                                                             capLevel,
