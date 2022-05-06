@@ -17,7 +17,7 @@ namespace T3.Gui.Windows.Variations
 {
     public static class VariationThumbnail
     {
-        public static bool Draw(VariationCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
+        public static bool Draw(VariationBaseCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
             if (VariationForRenaming == variation)
             {
@@ -190,7 +190,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         Selection.Clear();
                         _hoveredVariation = null;
-                        _canvas.ApplyVariation(variation, UserSettings.Config.PresetsResetToDefaultValues);
+                        _canvas.Apply(variation, UserSettings.Config.PresetsResetToDefaultValues);
                     }
 
                     Selection.AddSelection(variation);
@@ -204,7 +204,7 @@ namespace T3.Gui.Windows.Variations
                     else
                     {
                         _hoveredVariation = null;
-                        _canvas.ApplyVariation(variation, true);
+                        _canvas.Apply(variation, true);
                     }
                 }
 
@@ -270,7 +270,7 @@ namespace T3.Gui.Windows.Variations
         private static Variation _hoveredVariation;
         private static bool _isDragging;
 
-        private static VariationCanvas _canvas;
+        private static VariationBaseCanvas _canvas;
         private static CanvasElementSelection Selection => _canvas.Selection;
         private static Guid _draggedNodeId;
         private static List<ISelectableCanvasObject> _draggedNodes = new();

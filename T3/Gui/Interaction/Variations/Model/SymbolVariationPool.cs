@@ -183,7 +183,7 @@ namespace T3.Gui.Interaction.Variations.Model
         /// <summary>
         /// Save non-default parameters of single selected Instance as preset for its Symbol.  
         /// </summary>
-        public Variation CreatePresetOfInstanceSymbol(Instance instance)
+        public Variation CreatePresetForInstanceSymbol(Instance instance)
         {
             var changes = new Dictionary<Guid, InputValue>();
 
@@ -395,6 +395,68 @@ namespace T3.Gui.Interaction.Variations.Model
             return activeBlendCommand;
         }
         
+        
+        private static MatchTypes DoesPresetVariationMatch(Variation variation, Instance instance)
+        {
+            var setCorrectly = true;
+            var foundOneMatch = false;
+            var foundUnknownNonDefaults = false;
+
+            foreach (var (symbolChildId, values) in variation.InputValuesForChildIds)
+            {
+                if (symbolChildId != Guid.Empty)
+                    continue;
+
+                foreach (var input in instance.Inputs)
+                {
+                    var inputIsDefault = input.Input.IsDefault;
+                    var variationIncludesInput = values.ContainsKey(input.Id);
+
+                    if (!ValueUtils.CompareFunctions.ContainsKey(input.ValueType))
+                        continue;
+
+                    if (variationIncludesInput)
+                    {
+                        foundOneMatch = true;
+
+                        if (inputIsDefault)
+                        {
+                            setCorrectly = false;
+                        }
+                        else
+                        {
+                            var inputValueMatches = ValueUtils.CompareFunctions[input.ValueType](values[input.Id], input.Input.Value);
+                            setCorrectly &= inputValueMatches;
+                        }
+                    }
+                    else
+                    {
+                        if (inputIsDefault)
+                        {
+                        }
+                        else
+                        {
+                            foundUnknownNonDefaults = true;
+                        }
+                    }
+                }
+            }
+
+            if (!foundOneMatch || !setCorrectly)
+            {
+                return MatchTypes.NoMatch;
+            }
+
+            return foundUnknownNonDefaults ? MatchTypes.PresetParamsMatch : MatchTypes.PresetAndDefaultParamsMatch;
+        }
+        
+        private enum MatchTypes
+        {
+            NoMatch,
+            PresetParamsMatch,
+            PresetAndDefaultParamsMatch,
+        }
+
 
         private MacroCommand _activeBlendCommand;
     }
