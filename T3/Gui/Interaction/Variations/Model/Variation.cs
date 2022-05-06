@@ -29,7 +29,7 @@ namespace T3.Gui.Interaction.Variations.Model
         /// <summary>
         /// Changes by SymbolChildId
         /// </summary>
-        public Dictionary<Guid, Dictionary<Guid, InputValue>> InputValuesForChildIds;
+        public Dictionary<Guid, Dictionary<Guid, InputValue>> ParameterSetsForChildIds;
 
         public static Variation FromJson(Guid symbolId, JToken jToken)
         {
@@ -37,6 +37,8 @@ namespace T3.Gui.Interaction.Variations.Model
                 return null;
 
             var idToken = jToken[nameof(Id)];
+            
+            
 
             var idString = idToken?.Value<string>();
             if (idString == null)
@@ -48,7 +50,7 @@ namespace T3.Gui.Interaction.Variations.Model
                                        Title = jToken[nameof(Title)]?.Value<string>() ?? String.Empty,
                                        ActivationIndex = jToken[nameof(ActivationIndex)]?.Value<int>() ?? -1,
                                        IsPreset = jToken[nameof(IsPreset)]?.Value<bool>() ?? false,
-                                       InputValuesForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>(),
+                                       ParameterSetsForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>(),
                                        
                                    };
             
@@ -61,7 +63,7 @@ namespace T3.Gui.Interaction.Variations.Model
             }
 
             
-            var changesToken = (JObject)jToken[nameof(InputValuesForChildIds)];
+            var changesToken = (JObject)jToken[nameof(ParameterSetsForChildIds)];
             if (changesToken == null)
                 return newVariation;
 
@@ -100,7 +102,7 @@ namespace T3.Gui.Interaction.Variations.Model
 
                 if (changeList.Count > 0)
                 {
-                    newVariation.InputValuesForChildIds[symbolChildId] = changeList;
+                    newVariation.ParameterSetsForChildIds[symbolChildId] = changeList;
                 }
             }
 
@@ -122,10 +124,10 @@ namespace T3.Gui.Interaction.Variations.Model
                 writer.WritePropertyName(nameof(PosOnCanvas));
                 vec2Writer(writer, PosOnCanvas);
                 
-                writer.WritePropertyName(nameof(InputValuesForChildIds));
+                writer.WritePropertyName(nameof(ParameterSetsForChildIds));
                 writer.WriteStartObject();
                 {
-                    foreach (var (id, values) in InputValuesForChildIds)
+                    foreach (var (id, values) in ParameterSetsForChildIds)
                     {
                         writer.WritePropertyName(id.ToString());
                         writer.WriteStartObject();
