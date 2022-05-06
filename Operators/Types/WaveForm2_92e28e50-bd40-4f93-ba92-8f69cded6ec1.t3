@@ -512,7 +512,7 @@
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0,
-            "W": 0.07999999
+            "W": 0.015999999
           }
         }
       ],
@@ -523,9 +523,19 @@
       "SymbolId": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1",
       "InputValues": [
         {
+          "Id": "2548a5d8-b2ab-4783-9298-c2e261d390f0"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.42000002,
+            "Y": 0.42000002,
+            "Z": 0.42000002,
+            "W": 0.43
+          }
+        },
+        {
           "Id": "0e4e5d78-8fe1-4b84-a0ab-d21f9704ccda"/*Scale*/,
           "Type": "System.Single",
-          "Value": 1.87
+          "Value": 1.3199999
         },
         {
           "Id": "cc9cd2a7-70ec-4dbe-a151-c23ea08bce56"/*ApplyPointOrientation*/,
