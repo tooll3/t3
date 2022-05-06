@@ -4,6 +4,7 @@ using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
@@ -21,18 +22,52 @@ namespace T3.Gui.Windows.Variations
     {
         protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForPresets;
         protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForPresets;
+        protected override void DrawAdditionalContextMenuContent()
+        {
+            throw new System.NotImplementedException();
+        }
     }
     
     public class VariationCanvas : VariationBaseCanvas
     {
         protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForVariations;
         protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForVariations;
+        
+        protected override void DrawAdditionalContextMenuContent()
+        {
+            var oneSelected = Selection.SelectedElements.Count == 1;
+            
+            if (ImGui.MenuItem("Select affected Operators",
+                               "",
+                               false,
+                               oneSelected))
+            {
+                if (Selection.SelectedElements[0] is not Variation selectedVariation)
+                    return;
+                
+                NodeSelection.Clear();
+
+                var parentSymbolUi = SymbolUiRegistry.Entries[InstanceForBlendOperations.Symbol.Id];
+                    
+                foreach (var symbolChildUi in parentSymbolUi.ChildUis)
+                {
+                    if (selectedVariation.ParameterSetsForChildIds.ContainsKey(symbolChildUi.Id))
+                    {
+                        var instance = InstanceForBlendOperations.Children.FirstOrDefault(c => c.SymbolChildId == symbolChildUi.Id);
+                        if(instance != null)
+                            NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
+                    }
+                }
+                FitViewToSelectionHandling.FitViewToSelection();
+            }
+        }
     }
     
     public abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContainer
     {
         protected abstract Instance InstanceForBlendOperations { get; }
         protected abstract SymbolVariationPool PoolForBlendOperations { get;  }
+        protected abstract void DrawAdditionalContextMenuContent();
         
         public void Draw(ImDrawListPtr drawList)
         {
@@ -206,6 +241,8 @@ namespace T3.Gui.Windows.Variations
                                                                     {
                                                                         VariationThumbnail.VariationForRenaming = Selection.SelectedElements[0] as Variation;
                                                                     }
+                                                                    
+                                                                    DrawAdditionalContextMenuContent();
 
                                                                     ImGui.Separator();
                                                                     if (ImGui.MenuItem("Automatically reset to defaults",
@@ -215,6 +252,8 @@ namespace T3.Gui.Windows.Variations
                                                                         UserSettings.Config.PresetsResetToDefaultValues =
                                                                             !UserSettings.Config.PresetsResetToDefaultValues;
                                                                     }
+                                                                    
+                                                                    
                                                                 }, ref _contextMenuIsOpen);
             }
         }
