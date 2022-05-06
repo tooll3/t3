@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "1854458d-009c-4dfc-affe-bdbdf359b25d"/*Loop*/,
+      "ChildId": "1854458d-009c-4dfc-affe-bdbdf359b25d"/*__ObsoleteLoop*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

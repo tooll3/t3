@@ -535,7 +535,7 @@
       "Outputs": []
     },
     {
-      "Id": "c6710bb6-d1ec-4127-94b6-ce2c112da2b1"/*CombineMeshBuffers*/,
+      "Id": "c6710bb6-d1ec-4127-94b6-ce2c112da2b1"/*AssembleMeshBuffers*/,
       "SymbolId": "e0849edd-ea1b-4657-b22d-5aa646318aa8",
       "InputValues": [],
       "Outputs": []
