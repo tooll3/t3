@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.Styling;
@@ -26,16 +28,6 @@ namespace T3.Gui.Windows.Variations
 
         private void DrawWindowContent()
         {
-            if (VariationHandling.ActiveInstanceForPresets == null || VariationHandling.ActivePoolForPresets == null)
-            {
-                return;
-            }
-
-            if (VariationHandling.ActivePoolForPresets.Variations.Count == 0)
-            {
-                CustomComponents.EmptyWindowMessage("No presets yet");
-            }
-
             // Delete actions need be deferred to prevent collection modification during iteration
             if (_variationsToBeDeletedNextFrame.Count > 0)
             {
@@ -59,9 +51,9 @@ namespace T3.Gui.Windows.Variations
 
                 ImGui.SameLine();
 
-                if (_viewMode == ViewModes.Presets)
+                if (CustomComponents.IconButton(Icon.Plus, "##addbutton", new Vector2(20, 20)))
                 {
-                    if (CustomComponents.IconButton(Icon.Plus, "##addbutton", new Vector2(20, 20)))
+                    if (_viewMode == ViewModes.Presets)
                     {
                         var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
                         if (newVariation != null)
@@ -71,6 +63,19 @@ namespace T3.Gui.Windows.Variations
                             _presetCanvas.Selection.SetSelection(newVariation);
                             _presetCanvas.ResetView();
                             _presetCanvas.TriggerThumbnailUpdate();
+                        }
+                    }
+                    else if(_viewMode == ViewModes.Variations)
+                    {
+                        var selectedInstances = NodeSelection.GetSelectedInstances().ToList();
+                        var newVariation = VariationHandling.ActivePoolForVariations.CreateVariationForCompositionInstances(selectedInstances);
+                        if (newVariation != null)
+                        {
+                            newVariation.PosOnCanvas = _variationCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForVariations.Variations);
+                            VariationThumbnail.VariationForRenaming = newVariation;
+                            _variationCanvas.Selection.SetSelection(newVariation);
+                            _variationCanvas.ResetView();
+                            _variationCanvas.TriggerThumbnailUpdate();
                         }
                     }
                 }
@@ -84,9 +89,28 @@ namespace T3.Gui.Windows.Variations
 
                 if (_viewMode == ViewModes.Presets)
                 {
-                    if (VariationHandling.ActivePoolForPresets != null)
+                    if (VariationHandling.ActivePoolForPresets == null 
+                        || VariationHandling.ActiveInstanceForPresets == null 
+                        || VariationHandling.ActivePoolForPresets.Variations.Count == 0)
+                    {
+                        CustomComponents.EmptyWindowMessage("No presets yet");
+                    }
+                    else
                     {
                         _presetCanvas.Draw(drawList);
+                    }
+                }
+                else
+                {
+                    if (VariationHandling.ActivePoolForVariations == null 
+                        || VariationHandling.ActiveInstanceForVariations == null 
+                        || VariationHandling.ActivePoolForVariations.Variations.Count == 0)
+                    {
+                        CustomComponents.EmptyWindowMessage("No Variations yet\nVariations save parameters for selected Operators\nin the current composition.");
+                    }
+                    else
+                    {
+                        _variationCanvas.Draw(drawList);
                     }
                 }
             }

@@ -130,11 +130,12 @@ namespace T3.Gui.Interaction.Variations.Model
         }
         #endregion
 
+        
         public void ApplyPreset(Instance instance, Variation variation, bool resetOtherNonDefaults = false)
         {
             StopHover();
             
-            var command = CreateApplyCommand(instance, variation, resetOtherNonDefaults);
+            var command = CreateApplyPresetCommand(instance, variation, resetOtherNonDefaults);
             UndoRedoStack.AddAndExecute(command);
         }
 
@@ -142,7 +143,7 @@ namespace T3.Gui.Interaction.Variations.Model
         {
             StopHover();
             
-            _activeBlendCommand = CreateApplyCommand(instance, variation, resetNonDefaults);
+            _activeBlendCommand = CreateApplyPresetCommand(instance, variation, resetNonDefaults);
             _activeBlendCommand.Do();
         }
 
@@ -225,6 +226,68 @@ namespace T3.Gui.Interaction.Variations.Model
             return newVariation;
         }
 
+        public Variation CreateVariationForCompositionInstances(List<Instance> instances)
+        {
+            var changeSets = new Dictionary<Guid, Dictionary<Guid, InputValue>>();
+            if (instances == null || instances.Count == 0)
+            {
+                Log.Warning("Not instances to create variation for");
+                return null;
+            }
+
+            Symbol parentSymbol = null; 
+            
+            foreach (var instance in instances)
+            {
+                if (instance.Parent.Symbol.Id != SymbolId)
+                {
+                    Log.Error($"Instance {instance.SymbolChildId} is not a child of VariationPool operator {SymbolId}");
+                    return null;
+                }
+
+                parentSymbol = instance.Parent.Symbol;
+                
+                var changeSet = new Dictionary<Guid, InputValue>();
+                foreach (var input in instance.Inputs)
+                {
+                    if (input.Input.IsDefault)
+                    {
+                        continue;
+                    }
+                
+                    if (ValueUtils.BlendMethods.ContainsKey(input.Input.Value.ValueType))
+                    {
+                        changeSet[input.Id] = input.Input.Value.Clone();
+                    }
+                }
+                
+                if (changeSet.Count == 0)
+                {
+                    Log.Warning("All values are default. Nothing to save in preset");
+                    continue;
+                }
+
+                changeSets[instance.SymbolChildId] = changeSet;
+
+            }
+            
+            var newVariation = new Variation
+                                   {
+                                       Id = Guid.NewGuid(),
+                                       Title = "untitled",
+                                       ActivationIndex = Variations.Count + 1, //TODO: First find the highest activation index
+                                       IsPreset = true,
+                                       PublishedDate = DateTime.Now,
+                                       InputValuesForChildIds = changeSets,
+                                   };
+            
+            var command = new AddPresetOrVariationCommand(parentSymbol, newVariation);
+            UndoRedoStack.AddAndExecute(command);
+            SaveVariationsToFile();
+            return newVariation;
+        }        
+        
+
         public void DeleteVariation(Variation variation)
         {
             var command = new DeleteVariationCommand(this, variation);
@@ -245,7 +308,7 @@ namespace T3.Gui.Interaction.Variations.Model
             SaveVariationsToFile();
         }
 
-        private static MacroCommand CreateApplyCommand(Instance instance, Variation variation, bool resetOtherNonDefaults)
+        private static MacroCommand CreateApplyPresetCommand(Instance instance, Variation variation, bool resetOtherNonDefaults)
         {
             var commands = new List<ICommand>();
             var parentSymbol = instance.Parent.Symbol;

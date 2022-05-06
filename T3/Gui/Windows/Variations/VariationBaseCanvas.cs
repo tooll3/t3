@@ -2,6 +2,7 @@
 using System.Linq;
 using ImGuiNET;
 using SharpDX.Direct3D11;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Interaction;
@@ -21,12 +22,66 @@ namespace T3.Gui.Windows.Variations
     {
         protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForPresets;
         protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForPresets;
+
+        protected override void RenderThumbnail(Variation variation, int atlasIndex, IOutputUi outputUi, Slot<Texture2D> textureSlot)
+        {
+            // Set variation values
+            PoolForBlendOperations.BeginHoverPreset(InstanceForBlendOperations, variation, UserSettings.Config.PresetsResetToDefaultValues);
+
+            // Render variation
+            _thumbnailCanvasRendering.EvaluationContext.Reset();
+            _thumbnailCanvasRendering.EvaluationContext.TimeForKeyframes = 13.4f;
+
+            // NOTE: This is horrible hack to prevent _imageCanvas from being rendered by ImGui
+            // DrawValue will use the current ImageOutputCanvas for rendering
+            _imageCanvas.SetAsCurrent();
+            ImGui.PushClipRect(new Vector2(0, 0), new Vector2(1, 1), true);
+            outputUi.DrawValue(textureSlot, _thumbnailCanvasRendering.EvaluationContext);
+            ImGui.PopClipRect();
+            _imageCanvas.Deactivate();
+
+            var rect = GetPixelRectForIndex(atlasIndex);
+
+            _thumbnailCanvasRendering.CopyToCanvasTexture(textureSlot, rect);
+
+            PoolForBlendOperations.StopHover();
+        }
+        
+        public override void StartHover(Variation variation)
+        {
+            PoolForBlendOperations.BeginHoverPreset(_instance, variation, UserSettings.Config.PresetsResetToDefaultValues);
+        }
+
+        public override void Apply(Variation variation, bool resetNonDefaults)
+        {
+            PoolForBlendOperations.StopHover();
+            PoolForBlendOperations.ApplyPreset(_instance, variation, resetNonDefaults);
+
+            if (resetNonDefaults)
+                TriggerThumbnailUpdate();
+        }
+
     }
     
     public class VariationCanvas : VariationBaseCanvas
     {
         protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForVariations;
         protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForVariations;
+
+        public override void Apply(Variation variation, bool resetNonDefaults)
+        {
+            Log.Debug("Applying variations is not yet implemented.");
+        }
+
+        public override void StartHover(Variation variation)
+        {
+            Log.Debug("Hovering thumbnails for variations is not yet implemented.");
+        }
+
+        protected override void RenderThumbnail(Variation variation, int atlasIndex, IOutputUi outputUi, Slot<Texture2D> textureSlot)
+        {
+            Log.Debug("Rendering thumbnail for variations is not yet implemented.");
+        }
     }
     
     public abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContainer
@@ -212,19 +267,9 @@ namespace T3.Gui.Windows.Variations
 
         private bool _contextMenuIsOpen;
 
-        public void Apply(Variation variation, bool resetNonDefaults)
-        {
-            PoolForBlendOperations.StopHover();
-            PoolForBlendOperations.ApplyPreset(_instance, variation, resetNonDefaults);
+        public abstract void Apply(Variation variation, bool resetNonDefaults);
 
-            if (resetNonDefaults)
-                TriggerThumbnailUpdate();
-        }
-
-        public void StartHover(Variation variation)
-        {
-            PoolForBlendOperations.BeginHoverPreset(_instance, variation, UserSettings.Config.PresetsResetToDefaultValues);
-        }
+        public abstract void StartHover(Variation variation);
 
         public void StartBlendTo(Variation variation, float blend)
         {
@@ -245,7 +290,9 @@ namespace T3.Gui.Windows.Variations
 
         public void ResetView()
         {
-            if (TryToGetBoundingBox(PoolForBlendOperations.Variations, 20, out var area))
+            var pool = PoolForBlendOperations;
+            
+            if (TryToGetBoundingBox(pool.Variations, 20, out var area))
             {
                 FitAreaOnCanvas(area);
             }
@@ -308,7 +355,8 @@ namespace T3.Gui.Windows.Variations
         {
             if (_updateCompleted)
                 return;
-
+            
+            
             _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
             
             if (PoolForBlendOperations.Variations.Count == 0)
@@ -328,31 +376,9 @@ namespace T3.Gui.Windows.Variations
             _updateIndex++;
         }
 
-        private void RenderThumbnail(Variation variation, int thumbnailIndex, IOutputUi outputUi, Slot<Texture2D> textureSlot)
-        {
-            // Set variation values
-            PoolForBlendOperations.BeginHoverPreset(InstanceForBlendOperations, variation, UserSettings.Config.PresetsResetToDefaultValues);
+        protected abstract void RenderThumbnail(Variation variation, int atlasIndex, IOutputUi outputUi, Slot<Texture2D> textureSlot);
 
-            // Render variation
-            _thumbnailCanvasRendering.EvaluationContext.Reset();
-            _thumbnailCanvasRendering.EvaluationContext.TimeForKeyframes = 13.4f;
-
-            // NOTE: This is horrible hack to prevent _imageCanvas from being rendered by ImGui
-            // DrawValue will use the current ImageOutputCanvas for rendering
-            _imageCanvas.SetAsCurrent();
-            ImGui.PushClipRect(new Vector2(0, 0), new Vector2(1, 1), true);
-            outputUi.DrawValue(textureSlot, _thumbnailCanvasRendering.EvaluationContext);
-            ImGui.PopClipRect();
-            _imageCanvas.Deactivate();
-
-            var rect = GetPixelRectForIndex(thumbnailIndex);
-
-            _thumbnailCanvasRendering.CopyToCanvasTexture(textureSlot, rect);
-
-            PoolForBlendOperations.StopHover();
-        }
-
-        private ImRect GetPixelRectForIndex(int thumbnailIndex)
+        protected ImRect GetPixelRectForIndex(int thumbnailIndex)
         {
             var columns = (int)(_thumbnailCanvasRendering.GetCanvasTextureSize().X / VariationThumbnail.ThumbnailSize.X);
             if (columns == 0)
@@ -488,12 +514,12 @@ namespace T3.Gui.Windows.Variations
         {
             return PoolForBlendOperations.Variations;
         }
-        
-        private Instance _instance;
+
+        protected Instance _instance;
         private int _updateIndex;
         private bool _updateCompleted;
-        private readonly ImageOutputCanvas _imageCanvas = new();
-        private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
+        protected readonly ImageOutputCanvas _imageCanvas = new();
+        protected readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
         private SelectionFence.States _fenceState;
         internal readonly CanvasElementSelection Selection = new();
         private Instance _lastRenderInstance;
