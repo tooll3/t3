@@ -158,7 +158,7 @@ namespace T3.Gui.Interaction.Variations.Model
         {
             StopHover();
 
-            _activeBlendCommand = CreateWeightedBlendCommand(instance, variations, weights, resetToDefaults);
+            _activeBlendCommand = CreateWeightedBlendCommand(instance, variations, weights);
             _activeBlendCommand.Do();
         }
 
@@ -333,7 +333,7 @@ namespace T3.Gui.Interaction.Variations.Model
             return activeBlendCommand;
         }
         
-        private static MacroCommand CreateWeightedBlendCommand(Instance instance, List<Variation> variations, IEnumerable<float> weights, bool resetToDefaults)
+        private static MacroCommand CreateWeightedBlendCommand(Instance instance, List<Variation> variations, IEnumerable<float> weights)
         {
             var commands = new List<ICommand>();
             var parentSymbol = instance.Parent.Symbol;
@@ -343,7 +343,7 @@ namespace T3.Gui.Interaction.Variations.Model
             if (symbolChild != null)
             {
                 // collect variation parameters
-                var variationParameters = new List<Dictionary<Guid, InputValue>>();
+                var variationParameterSets = new List<Dictionary<Guid, InputValue>>();
                 foreach (var variation in variations)
                 {
                     foreach (var (childId, parametersForInputs) in variation.InputValuesForChildIds)
@@ -354,34 +354,35 @@ namespace T3.Gui.Interaction.Variations.Model
                             continue;
                         }
 
-                        variationParameters.Add(parametersForInputs);
+                        variationParameterSets.Add(parametersForInputs);
                     }
                 }
-
-
+                
                 foreach (var inputSlot in instance.Inputs)
                 {
                     if (!ValueUtils.WeightedBlendMethods.TryGetValue(inputSlot.Input.DefaultValue.ValueType, out var blendFunction))
                         continue;
 
                     var values = new List<InputValue>();
+                    var definedForSome = false;
                     
-                    foreach (var parametersForInputs in variationParameters)
+                    foreach (var parametersForInputs in variationParameterSets)
                     {
                         if (parametersForInputs.TryGetValue(inputSlot.Id, out var parameterValue))
                         {
                             if (parameterValue == null)
                                 continue;
                             
-                            values.Add(parameterValue);                            
+                            values.Add(parameterValue);
+                            definedForSome = true;
                         }
-                        else if (!inputSlot.Input.IsDefault && resetToDefaults)
+                        else
                         {
                             values.Add(inputSlot.Input.DefaultValue);
                         }
                     }
 
-                    if (weightsArray.Length == values.Count)
+                    if (definedForSome && weightsArray.Length == values.Count)
                     {
                         var mixed2 = blendFunction(values.ToArray(), weightsArray);
                         var newCommand = new ChangeInputValueCommand(parentSymbol, instance.SymbolChildId, inputSlot.Input, mixed2);
