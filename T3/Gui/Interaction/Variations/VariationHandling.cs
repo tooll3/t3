@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using T3.Core.Operator;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.Interaction.Variations.Midi;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.Selection;
 
@@ -28,6 +29,19 @@ namespace T3.Gui.Interaction.Variations
         public static Instance ActiveInstanceForVariations  { get; private set; }
         public static Instance ActiveInstanceForPresets  { get; private set; }
 
+        public static void Init()
+        {
+            // Scan for output devices (e.g. to update LEDs etc.)
+            MidiOutConnectionManager.Init();
+
+            _inputDevices = new List<IControllerInputDevice>()
+                                {
+                                    new Apc40Mk2(),
+                                    new NanoControl8(),
+                                    new ApcMini(),
+                                };
+        }
+        private static List<IControllerInputDevice> _inputDevices;
         
         /// <summary>
         /// Update variation handling
@@ -87,5 +101,47 @@ namespace T3.Gui.Interaction.Variations
 
 
         private static readonly Dictionary<Guid, SymbolVariationPool> _variationPoolForOperators = new();
+
+        public static void ActivateOrCreatePresetAtIndex(int obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void SavePresetAtIndex(int obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void RemovePresetAtIndex(int obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void ActivateGroupAtIndex(int obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void StartBlendingPresets(int obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void BlendValuesUpdate(int obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void AppendPresetToCurrentGroup(int obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool TryGetVariation(int activationIndex, out Variation variation)
+        {
+            // TODO: Implement
+            variation = null;
+            return false;
+        }
     }
 }

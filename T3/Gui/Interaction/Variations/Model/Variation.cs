@@ -25,6 +25,7 @@ namespace T3.Gui.Interaction.Variations.Model
         public Vector2 PosOnCanvas  { get; set; }
         public Vector2 Size  { get; set; } = VariationThumbnail.ThumbnailSize;
         public bool IsSelected { get; set; }
+        public States State { get; set; }
 
         /// <summary>
         /// Changes by SymbolChildId
@@ -147,6 +148,15 @@ namespace T3.Gui.Interaction.Variations.Model
         public override string ToString()
         {
             return $"{Title} #{ActivationIndex}";
+        }
+        
+        public enum States
+        {
+            Undefined,
+            InActive,
+            Active,
+            Modified,
+            IsBlended,
         }
     }
 }
