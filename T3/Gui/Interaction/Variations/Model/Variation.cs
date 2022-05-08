@@ -17,15 +17,20 @@ namespace T3.Gui.Interaction.Variations.Model
     /// </summary>
     public class Variation : ISelectableCanvasObject
     {
+        // Serialized fields...
         public Guid Id { get; set; }
         public string Title;
         public int ActivationIndex;
         public bool IsPreset;
-        public DateTime PublishedDate;
+        
         public Vector2 PosOnCanvas  { get; set; }
         public Vector2 Size  { get; set; } = VariationThumbnail.ThumbnailSize;
+        public DateTime PublishedDate;
+        
+        // Other properties...
         public bool IsSelected { get; set; }
         public States State { get; set; } = States.InActive;
+        public bool IsSnapshot => !IsPreset;
 
         /// <summary>
         /// Changes by SymbolChildId
@@ -38,8 +43,6 @@ namespace T3.Gui.Interaction.Variations.Model
                 return null;
 
             var idToken = jToken[nameof(Id)];
-            
-            
 
             var idString = idToken?.Value<string>();
             if (idString == null)

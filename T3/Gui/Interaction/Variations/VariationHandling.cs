@@ -21,16 +21,17 @@ namespace T3.Gui.Interaction.Variations
     /// These input slots can also include the symbols out inputs which thus can be used for defining
     /// and applying "presets" to instances of that symbol.
     ///
-    /// Most variations will modify(!) the symbol, is great while working within a single symbol
-    /// and tweaking an blending parameters. However it's potentially unintended (or dangerous) if many instances
-    /// of the modified exist. That's why applying symbol-variations is restricted for Symbols in the lib-namespace.  
+    /// Most variations will modify(!) the symbol. This is great while working within a single symbol
+    /// and tweaking an blending parameters. However it's potentially unintended (or dangerous) if the
+    /// modified symbol has many instances. That's why applying symbol-variations is restricted for Symbols
+    /// in the lib-namespace.  
     /// </remarks>
     public static class VariationHandling
     {
-        public static SymbolVariationPool ActivePoolForVariations { get; private set; }
-        public static SymbolVariationPool ActivePoolForPresets { get; private set; }
+        public static SymbolVariationPool ActivePoolForSnapshots { get; private set; }
+        public static Instance ActiveInstanceForSnapshots  { get; private set; }
         
-        public static Instance ActiveInstanceForVariations  { get; private set; }
+        public static SymbolVariationPool ActivePoolForPresets { get; private set; }
         public static Instance ActiveInstanceForPresets  { get; private set; }
 
         public static void Init()
@@ -63,30 +64,30 @@ namespace T3.Gui.Interaction.Variations
             {
                 var selectedSymbolId = singleSelectedInstance.Symbol.Id;
                 ActivePoolForPresets = GetOrLoadVariations(selectedSymbolId);
-                ActivePoolForVariations = GetOrLoadVariations(singleSelectedInstance.Parent.Symbol.Id);
+                ActivePoolForSnapshots = GetOrLoadVariations(singleSelectedInstance.Parent.Symbol.Id);
                 ActiveInstanceForPresets = singleSelectedInstance;
-                ActiveInstanceForVariations = singleSelectedInstance.Parent;
+                ActiveInstanceForSnapshots = singleSelectedInstance.Parent;
             }
             else
             {
                 ActivePoolForPresets = null;
                 
                 var activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
-                ActiveInstanceForVariations = activeCompositionInstance;
+                ActiveInstanceForSnapshots = activeCompositionInstance;
                 
                 // Prevent variations for library operators
                 if (activeCompositionInstance.Symbol.Namespace.StartsWith("lib."))
                 {
-                    ActivePoolForVariations = null;
+                    ActivePoolForSnapshots = null;
                 }
                 else
                 {
-                    ActivePoolForVariations = GetOrLoadVariations(activeCompositionInstance.Symbol.Id);
+                    ActivePoolForSnapshots = GetOrLoadVariations(activeCompositionInstance.Symbol.Id);
                 }
 
                 if (!NodeSelection.IsAnythingSelected())
                 {
-                    ActiveInstanceForPresets = ActiveInstanceForVariations;
+                    ActiveInstanceForPresets = ActiveInstanceForSnapshots;
                 }
             }
             
@@ -103,9 +104,9 @@ namespace T3.Gui.Interaction.Variations
                 if (midiIn == null)
                     continue;
 
-                if (ActivePoolForVariations != null)
+                if (ActivePoolForSnapshots != null)
                 {
-                    connectedDevice.Update(midiIn, ActivePoolForVariations.ActiveVariation);
+                    connectedDevice.Update(midiIn, ActivePoolForSnapshots.ActiveVariation);
                 }
             }
         }
@@ -129,7 +130,7 @@ namespace T3.Gui.Interaction.Variations
 
         public static void ActivateOrCreatePresetAtIndex(int activationIndex)
         {
-            if (ActivePoolForVariations == null)
+            if (ActivePoolForSnapshots == null)
             {
                 Log.Warning($"Can't save variation #{activationIndex}. No variation pool active.");
                 return;
@@ -137,7 +138,7 @@ namespace T3.Gui.Interaction.Variations
             
             if(TryGetVariation(activationIndex, out var existingVariation))
             {
-                ActivePoolForVariations.Apply(ActiveInstanceForVariations, existingVariation, UserSettings.Config.PresetsResetToDefaultValues);
+                ActivePoolForSnapshots.Apply(ActiveInstanceForSnapshots, existingVariation, UserSettings.Config.PresetsResetToDefaultValues);
                 return;
             } 
             
@@ -146,7 +147,7 @@ namespace T3.Gui.Interaction.Variations
 
         public static void SavePresetAtIndex(int activationIndex)
         {
-            if (ActivePoolForVariations == null)
+            if (ActivePoolForSnapshots == null)
             {
                 Log.Warning($"Can't save variation #{activationIndex}. No variation pool active.");
                 return;
@@ -179,10 +180,10 @@ namespace T3.Gui.Interaction.Variations
         public static bool TryGetVariation(int activationIndex, out Variation variation)
         {
             variation = null;
-            if (ActivePoolForVariations == null)
+            if (ActivePoolForSnapshots == null)
                 return false;
             
-            foreach (var v in ActivePoolForVariations.Variations)
+            foreach (var v in ActivePoolForSnapshots.Variations)
             {
                 if (v.ActivationIndex != activationIndex)
                     continue;
@@ -197,23 +198,23 @@ namespace T3.Gui.Interaction.Variations
         private const int AutoIndex=-1;
         public static Variation SaveVariationForSelectedOperators(int activationIndex = AutoIndex )
         {
-            if (ActivePoolForVariations == null)
+            if (ActivePoolForSnapshots == null)
                 return null;
             
             if (activationIndex != AutoIndex)
             {
                 if(TryGetVariation(activationIndex, out var existingVariation))
                 {
-                    ActivePoolForVariations.DeleteVariation(existingVariation);
+                    ActivePoolForSnapshots.DeleteVariation(existingVariation);
                 } 
             }
             
             var selectedInstances = NodeSelection.GetSelectedInstances().ToList();
-            var newVariation = ActivePoolForVariations.CreateVariationForCompositionInstances(selectedInstances);
+            var newVariation = ActivePoolForSnapshots.CreateVariationForCompositionInstances(selectedInstances);
             if (newVariation == null)
                 return null;
             
-            newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForVariations.Variations);
+            newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForSnapshots.Variations);
             if (activationIndex != AutoIndex)
                 newVariation.ActivationIndex = activationIndex;
                 

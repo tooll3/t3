@@ -148,8 +148,6 @@ namespace T3.Gui.Interaction.Variations.Model
         //     _activeBlendCommand = CreateApplyVariationCommand(instance, variation, resetNonDefaults);
         //     _activeBlendCommand.Do();
         // }
-
-
         
         public void Apply(Instance instance, Variation variation, bool resetOtherNonDefaults = false)
         {
@@ -159,9 +157,7 @@ namespace T3.Gui.Interaction.Variations.Model
                               : CreateApplyVariationCommand(instance, variation, resetOtherNonDefaults);;
             UndoRedoStack.AddAndExecute(command);
         }
-
         
-
         public void BeginHover(Instance instance, Variation variation, bool resetNonDefaults)
         {
             StopHover();

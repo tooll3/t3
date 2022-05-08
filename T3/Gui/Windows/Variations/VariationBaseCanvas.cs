@@ -33,10 +33,10 @@ namespace T3.Gui.Windows.Variations
         
     }
     
-    public class VariationCanvas : VariationBaseCanvas
+    public class SnapshotCanvas : VariationBaseCanvas
     {
-        protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForVariations;
-        protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForVariations;
+        protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
+        protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
         
         protected override void DrawAdditionalContextMenuContent()
         {

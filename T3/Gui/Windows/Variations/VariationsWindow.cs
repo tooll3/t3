@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.Styling;
@@ -14,7 +12,7 @@ namespace T3.Gui.Windows.Variations
         public VariationsWindow()
         {
             _presetCanvas = new PresetCanvas();
-            _variationCanvas = new VariationCanvas();
+            _snapshotCanvas = new SnapshotCanvas();
             Config.Title = "Variations";
             WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
         }
@@ -44,7 +42,7 @@ namespace T3.Gui.Windows.Variations
                 ImGui.BeginChild("header", new Vector2(ImGui.GetContentRegionAvail().X, 20));
 
                 var viewModeIndex = (int)_viewMode;
-                if (DrawSegmentedToggle(ref viewModeIndex, _options))
+                if (CustomComponents.DrawSegmentedToggle(ref viewModeIndex, _options))
                 {
                     _viewMode = (ViewModes)viewModeIndex;
                 }
@@ -68,9 +66,9 @@ namespace T3.Gui.Windows.Variations
                     else if(_viewMode == ViewModes.Variations)
                     {
                         var newVariation = VariationHandling.SaveVariationForSelectedOperators();
-                        _variationCanvas.Selection.SetSelection(newVariation);
-                        _variationCanvas.ResetView();
-                        _variationCanvas.TriggerThumbnailUpdate();
+                        _snapshotCanvas.Selection.SetSelection(newVariation);
+                        _snapshotCanvas.ResetView();
+                        _snapshotCanvas.TriggerThumbnailUpdate();
 
                     }
                 }
@@ -97,15 +95,15 @@ namespace T3.Gui.Windows.Variations
                 }
                 else
                 {
-                    if (VariationHandling.ActivePoolForVariations == null 
-                        || VariationHandling.ActiveInstanceForVariations == null 
-                        || VariationHandling.ActivePoolForVariations.Variations.Count == 0)
+                    if (VariationHandling.ActivePoolForSnapshots == null 
+                        || VariationHandling.ActiveInstanceForSnapshots == null 
+                        || VariationHandling.ActivePoolForSnapshots.Variations.Count == 0)
                     {
-                        CustomComponents.EmptyWindowMessage("No Variations yet\nVariations save parameters for selected Operators\nin the current composition.");
+                        CustomComponents.EmptyWindowMessage("No Snapshots yet.\n\nSnapshots save parameters for selected\nOperators in the current composition.");
                     }
                     else
                     {
-                        _variationCanvas.Draw(drawList);
+                        _snapshotCanvas.Draw(drawList);
                     }
                 }
             }
@@ -119,37 +117,7 @@ namespace T3.Gui.Windows.Variations
             Variations,
         }
 
-        private static readonly List<string> _options = new() { "Presets", "Variations" };
-
-        private static bool DrawSegmentedToggle(ref int currentIndex, List<string> options)
-        {
-            var changed = false;
-            for (var index = 0; index < options.Count; index++)
-            {
-                var isActive = currentIndex == index;
-                var option = options[index];
-
-                ImGui.SameLine(0);
-                ImGui.PushFont(isActive ? Fonts.FontBold : Fonts.FontNormal);
-                ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.White.Fade(0.1f).Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, isActive ? Color.White : Color.White.Fade(0.5f).Rgba);
-
-                if (ImGui.Button(option))
-                {
-                    if (!isActive)
-                    {
-                        currentIndex = index;
-                        changed = true;
-                    }
-                }
-
-                ImGui.PopFont();
-                ImGui.PopStyleColor(3);
-            }
-
-            return changed;
-        }
+        private static readonly List<string> _options = new() { "Presets", "Snapshots" };
 
         public override List<Window> GetInstances()
         {
@@ -166,6 +134,6 @@ namespace T3.Gui.Windows.Variations
         private static readonly List<Variation> _variationsToBeDeletedNextFrame = new(20);
         private static SymbolVariationPool _poolWithVariationToBeDeleted;
         private readonly PresetCanvas _presetCanvas;
-        private readonly VariationCanvas _variationCanvas;
+        private readonly SnapshotCanvas _snapshotCanvas;
     }
 }
