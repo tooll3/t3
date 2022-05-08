@@ -235,9 +235,9 @@ namespace T3.Gui.Interaction.Variations.Model
                                        IsPreset = true,
                                        PublishedDate = DateTime.Now,
                                        ParameterSetsForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>
-                                                                    {
-                                                                        [Guid.Empty] = changes
-                                                                    },
+                                                                      {
+                                                                                            [Guid.Empty] = changes
+                                                                                        },
                                    };
 
             var command = new AddPresetOrVariationCommand(instance.Symbol, newVariation);
@@ -268,8 +268,16 @@ namespace T3.Gui.Interaction.Variations.Model
                 parentSymbol = instance.Parent.Symbol;
                 
                 var changeSet = new Dictionary<Guid, InputValue>();
+                var hasAnimatableParameters = false;
+                
                 foreach (var input in instance.Inputs)
                 {
+                    if (!ValueUtils.BlendMethods.ContainsKey(input.Input.Value.ValueType))
+                        continue;
+
+                    hasAnimatableParameters = true;
+                        
+                    
                     if (input.Input.IsDefault)
                     {
                         continue;
@@ -281,11 +289,9 @@ namespace T3.Gui.Interaction.Variations.Model
                     }
                 }
                 
-                if (changeSet.Count == 0)
-                {
-                    Log.Warning("All values are default. Nothing to save in preset");
+                if (!hasAnimatableParameters)
                     continue;
-                }
+                
 
                 changeSets[instance.SymbolChildId] = changeSet;
 
@@ -375,6 +381,13 @@ namespace T3.Gui.Interaction.Variations.Model
             return command;
         }
 
+        private static MacroCommand CreateWeightedBlendSnapshotCommand(Instance compositionInstance, List<Variation> variations, IEnumerable<float> weights)
+        {
+            //TODO: Implement
+
+            return null;
+        }
+        
         
         private static MacroCommand CreateApplyPresetCommand(Instance instance, Variation variation, bool resetOtherNonDefaults)
         {
@@ -590,5 +603,23 @@ namespace T3.Gui.Interaction.Variations.Model
 
 
         private MacroCommand _activeBlendCommand;
+
+        public static bool TryGetSnapshot(int activationIndex, out Variation variation)
+        {
+            variation = null;
+            if (VariationHandling.ActivePoolForSnapshots == null)
+                return false;
+            
+            foreach (var v in VariationHandling.ActivePoolForSnapshots.Variations)
+            {
+                if (v.ActivationIndex != activationIndex)
+                    continue;
+                    
+                variation = v;
+                return true;
+            }
+
+            return false;
+        }
     }
 }

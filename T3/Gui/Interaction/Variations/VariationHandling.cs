@@ -137,13 +137,13 @@ namespace T3.Gui.Interaction.Variations
                 return;
             }
             
-            if(TryGetVariation(activationIndex, out var existingVariation))
+            if(SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
             {
                 ActivePoolForSnapshots.Apply(ActiveInstanceForSnapshots, existingVariation, UserSettings.Config.PresetsResetToDefaultValues);
                 return;
             } 
             
-            SaveVariationForSelectedOperators(activationIndex);
+            CreateOrUpdateSnapshotVariation(activationIndex);
         }
 
         public static void SavePresetAtIndex(int activationIndex)
@@ -154,13 +154,23 @@ namespace T3.Gui.Interaction.Variations
                 return;
             }
 
-            SaveVariationForSelectedOperators(activationIndex);
+            CreateOrUpdateSnapshotVariation(activationIndex);
         }
 
-        public static void RemovePresetAtIndex(int obj)
+        public static void RemovePresetAtIndex(int activationIndex)
         {
-            Log.Warning($"RemovePresetAtIndex {obj} not implemented");
-
+            if (ActivePoolForSnapshots == null)
+                return;
+            
+            //ActivePoolForSnapshots.DeleteVariation
+            if (SymbolVariationPool.TryGetSnapshot(activationIndex, out var snapshot))
+            {
+                ActivePoolForSnapshots.DeleteVariation(snapshot);
+            }
+            else
+            {
+                Log.Warning($"No preset to delete at index {activationIndex}");
+            }
         }
 
         public static void StartBlendingPresets(int[] indices)
@@ -178,27 +188,8 @@ namespace T3.Gui.Interaction.Variations
             Log.Warning($"AppendPresetToCurrentGroup {obj} not implemented");
         }
 
-        public static bool TryGetVariation(int activationIndex, out Variation variation)
-        {
-            variation = null;
-            if (ActivePoolForSnapshots == null)
-                return false;
-            
-            foreach (var v in ActivePoolForSnapshots.Variations)
-            {
-                if (v.ActivationIndex != activationIndex)
-                    continue;
-                    
-                variation = v;
-                return true;
-            }
-
-            return false;
-        }
-
-        
         private const int AutoIndex=-1;
-        public static Variation SaveVariationForSelectedOperators(int activationIndex = AutoIndex )
+        public static Variation CreateOrUpdateSnapshotVariation(int activationIndex = AutoIndex )
         {
             // Only allow for snapshots.
             if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
@@ -207,13 +198,13 @@ namespace T3.Gui.Interaction.Variations
             }
             
             // Delete previous snapshot for that index.
-            if (activationIndex != AutoIndex && TryGetVariation(activationIndex, out var existingVariation))
+            if (activationIndex != AutoIndex && SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
             {
                 ActivePoolForSnapshots.DeleteVariation(existingVariation);
             }
             
             _affectedInstances.Clear();
-            if(SubsetsForCompositions.TryGetValue(ActiveInstanceForSnapshots.Symbol.Id, out var filteredChildIds))
+            if(FocusSetsForCompositions.TryGetValue(ActiveInstanceForSnapshots.Symbol.Id, out var filteredChildIds))
             {
                 foreach (var child in ActiveInstanceForSnapshots.Children)
                 {
@@ -223,9 +214,13 @@ namespace T3.Gui.Interaction.Variations
                     }
                 }
             }
-            else
+            else if(NodeSelection.IsAnythingSelected())
             {
                 _affectedInstances.AddRange(NodeSelection.GetSelectedInstances());    
+            }
+            else
+            {
+                _affectedInstances.AddRange(ActiveInstanceForSnapshots.Children);
             }
             
             var newVariation = ActivePoolForSnapshots.CreateVariationForCompositionInstances(_affectedInstances);
@@ -239,7 +234,7 @@ namespace T3.Gui.Interaction.Variations
             return newVariation;
         }
         
-        public static readonly Dictionary<Guid, HashSet<Guid>> SubsetsForCompositions = new();
+        public static readonly Dictionary<Guid, HashSet<Guid>> FocusSetsForCompositions = new();
         private static readonly List<Instance> _affectedInstances = new(100);
     }
 }

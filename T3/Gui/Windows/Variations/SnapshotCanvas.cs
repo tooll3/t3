@@ -29,7 +29,7 @@ namespace T3.Gui.Windows.Variations
             var filteredOpCount = 0;
 
             var compositionId = VariationHandling.ActiveInstanceForSnapshots.Symbol.Id;
-            if( VariationHandling.SubsetsForCompositions.TryGetValue(compositionId, out var filterSet))
+            if( VariationHandling.FocusSetsForCompositions.TryGetValue(compositionId, out var filterSet))
             {
                 filteredOpCount = filterSet.Count;
             }
@@ -47,7 +47,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         set.Add(selectedOp.SymbolChildId);
                     }
-                    VariationHandling.SubsetsForCompositions[compositionId] = set;
+                    VariationHandling.FocusSetsForCompositions[compositionId] = set;
                 }
                 CustomComponents.TooltipForLastItem("This will limit the parameters stored in new snapshots to the Operators selected when setting the focus.");
             }
@@ -55,7 +55,7 @@ namespace T3.Gui.Windows.Variations
             {
                 if (ImGui.Button($"Clear focus ({filteredOpCount})"))
                 {
-                    VariationHandling.SubsetsForCompositions.Remove(compositionId);
+                    VariationHandling.FocusSetsForCompositions.Remove(compositionId);
                 }
 
                 if (ImGui.IsItemHovered())
@@ -102,7 +102,7 @@ namespace T3.Gui.Windows.Variations
 
         public override Variation CreateVariation()
         {
-            var newVariation = VariationHandling.SaveVariationForSelectedOperators();
+            var newVariation = VariationHandling.CreateOrUpdateSnapshotVariation();
             if (newVariation == null)
                 return new Variation();
             

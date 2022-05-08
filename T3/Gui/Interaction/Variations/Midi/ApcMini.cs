@@ -12,30 +12,13 @@ namespace T3.Gui.Interaction.Variations.Midi
             CommandTriggerCombinations
                 = new List<CommandTriggerCombination>
                       {
-                          new CommandTriggerCombination(VariationHandling.ActivateOrCreatePresetAtIndex, InputModes.Default,
-                                                        new[] { SceneTrigger1To64 },
-                                                        CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                          new CommandTriggerCombination(VariationHandling.SavePresetAtIndex, InputModes.Save, new[] { SceneTrigger1To64 },
-                                                        CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                          new CommandTriggerCombination(VariationHandling.RemovePresetAtIndex, InputModes.Delete, new[] { SceneTrigger1To64 },
-                                                        CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-
-                          // new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default,
-                          //                               new[] { ChannelButtons1To8 },
-                          //                               CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-
-                          new CommandTriggerCombination(VariationHandling.StartBlendingPresets, InputModes.Default,
-                                                        new[] { SceneTrigger1To64 },
-                                                        CommandTriggerCombination.ExecutesAt.AllCombinedButtonsReleased),
-
-                          new CommandTriggerCombination(VariationHandling.BlendValuesUpdate, InputModes.Default,
-                                                        new[] { Sliders1To9 },
-                                                        CommandTriggerCombination.ExecutesAt.ControllerChange),
-                          
-                          new CommandTriggerCombination(VariationHandling.AppendPresetToCurrentGroup, InputModes.Default,
-                                                        new[] { SceneLaunch8ClipStopAll },
-                                                        CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),                          
-                          
+                          new(VariationHandling.ActivateOrCreatePresetAtIndex, InputModes.Default, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                          new(VariationHandling.SavePresetAtIndex, InputModes.Save, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                          new(VariationHandling.RemovePresetAtIndex, InputModes.Delete, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                          new(VariationHandling.StartBlendingPresets, InputModes.Default, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.AllCombinedButtonsReleased),
+                          new(VariationHandling.BlendValuesUpdate, InputModes.Default, new[] { Sliders1To9 }, CommandTriggerCombination.ExecutesAt.ControllerChange),
+                          new(VariationHandling.AppendPresetToCurrentGroup, InputModes.Default, new[] { SceneLaunch8ClipStopAll }, CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),                          
+                          //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { ChannelButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
                       };
 
             ModeButtons = new List<ModeButton>
@@ -60,7 +43,7 @@ namespace T3.Gui.Interaction.Variations.Midi
                             mappedIndex =>
                             {
                                 var color = ApcButtonColor.Off;
-                                if (!VariationHandling.TryGetVariation(mappedIndex, out var variation))
+                                if (!SymbolVariationPool.TryGetSnapshot(mappedIndex, out var variation))
                                 {
                                     return (int)color;
                                     

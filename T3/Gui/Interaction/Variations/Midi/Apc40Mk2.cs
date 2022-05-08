@@ -57,7 +57,7 @@ namespace T3.Gui.Interaction.Variations.Midi
                             mappedIndex =>
                             {
                                 var color = Apc40Colors.Off;
-                                if (VariationHandling.TryGetVariation(mappedIndex, out var v))
+                                if (SymbolVariationPool.TryGetSnapshot(mappedIndex, out var v))
                                 {
                                     switch (v.State)
                                     {

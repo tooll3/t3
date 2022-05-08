@@ -38,7 +38,7 @@ namespace T3.Gui.Windows.Variations
             }
 
             var focusOpacity = 1f;
-            if (variation.IsSnapshot && VariationHandling.SubsetsForCompositions.TryGetValue(VariationHandling.ActiveInstanceForSnapshots.Symbol.Id, out var focusSet))
+            if (variation.IsSnapshot && VariationHandling.FocusSetsForCompositions.TryGetValue(VariationHandling.ActiveInstanceForSnapshots.Symbol.Id, out var focusSet))
             {
                 var isWithinFocus = false;
                 foreach (var childId in variation.ParameterSetsForChildIds.Keys)

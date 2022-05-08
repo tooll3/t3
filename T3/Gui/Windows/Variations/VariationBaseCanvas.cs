@@ -144,15 +144,6 @@ namespace T3.Gui.Windows.Variations
             DrawContextMenu();
         }
 
-
-
-        private readonly List<float> _blendWeights = new(3);
-        private readonly List<Vector2> _blendPoints = new(3);
-        private readonly List<Variation> _blendVariations = new(3);
-        public bool IsBlendingActive { get; private set; }
-
-        
-        
         
         public bool TryGetBlendWeight(Variation v, out float weight)
         {
@@ -200,6 +191,14 @@ namespace T3.Gui.Windows.Variations
                                                                         VariationThumbnail.VariationForRenaming = Selection.SelectedElements[0] as Variation;
                                                                     }
                                                                     
+                                                                    if (ImGui.MenuItem("Update thumbnails",
+                                                                                       ""))
+                                                                    {
+                                                                        TriggerThumbnailUpdate();
+                                                                    }
+
+
+                                                                    
                                                                     DrawAdditionalContextMenuContent();
 
                                                                     ImGui.Separator();
@@ -228,9 +227,6 @@ namespace T3.Gui.Windows.Variations
         {
             PoolForBlendOperations.StopHover();
             PoolForBlendOperations.Apply(_instance, variation, resetNonDefaults);
-
-            if (resetNonDefaults)
-                TriggerThumbnailUpdate();
         }
 
         public void StartBlendTo(Variation variation, float blend)
@@ -246,18 +242,18 @@ namespace T3.Gui.Windows.Variations
             PoolForBlendOperations.StopHover();
         }
 
-        public void TriggerThumbnailUpdate()
+        protected void TriggerThumbnailUpdate()
         {
             _thumbnailCanvasRendering.ClearTexture();
             _updateIndex = 0;
             _updateCompleted = false;
         }
 
-        public void ResetView()
+        protected void ResetView()
         {
             var pool = PoolForBlendOperations;
             
-            if (TryToGetBoundingBox(pool.Variations, 20, out var area))
+            if (TryToGetBoundingBox(pool.Variations, 40, out var area))
             {
                 FitAreaOnCanvas(area);
             }
@@ -341,8 +337,6 @@ namespace T3.Gui.Windows.Variations
             _updateIndex++;
         }
 
-        //protected abstract void RenderThumbnail(Variation variation, int atlasIndex, IOutputUi outputUi, Slot<Texture2D> textureSlot);
-
         private void RenderThumbnail(Variation variation, int atlasIndex, IOutputUi outputUi, Slot<Texture2D> textureSlot)
         {
             // Set variation values
@@ -366,8 +360,8 @@ namespace T3.Gui.Windows.Variations
 
             PoolForBlendOperations.StopHover();
         }
-        
-        protected ImRect GetPixelRectForIndex(int thumbnailIndex)
+
+        private ImRect GetPixelRectForIndex(int thumbnailIndex)
         {
             var columns = (int)(_thumbnailCanvasRendering.GetCanvasTextureSize().X / VariationThumbnail.ThumbnailSize.X);
             if (columns == 0)
@@ -504,6 +498,12 @@ namespace T3.Gui.Windows.Variations
             return PoolForBlendOperations.Variations;
         }
 
+        
+        public bool IsBlendingActive { get; private set; }
+        private readonly List<float> _blendWeights = new(3);
+        private readonly List<Vector2> _blendPoints = new(3);
+        private readonly List<Variation> _blendVariations = new(3);
+        
         private Instance _instance;
         private int _updateIndex;
         private bool _updateCompleted;

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
-using T3.Gui.Styling;
 
 namespace T3.Gui.Windows.Variations
 {
@@ -32,7 +32,15 @@ namespace T3.Gui.Windows.Variations
                 _poolWithVariationToBeDeleted.DeleteVariations(_variationsToBeDeletedNextFrame);
                 _variationsToBeDeletedNextFrame.Clear();
             }
-
+            
+            // Auto Select view or variation mode...
+            if (NodeSelection.Selection.Count == 0)
+            {
+                _viewMode = ViewModes.Snapshots;
+                // _viewMode = ViewModes.Presets;
+            }
+            
+            
             var drawList = ImGui.GetWindowDrawList();
             var keepCursorPos = ImGui.GetCursorScreenPos();
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace T3.Gui.Interaction.Variations.Midi
 {
@@ -8,33 +7,39 @@ namespace T3.Gui.Interaction.Variations.Midi
     /// </summary>
     public readonly struct ButtonRange
     {
-        public ButtonRange(int index)
+        public ButtonRange(int startIndex)
         {
-            _index = index;
-            _lastIndex = index;
+            _startIndex = startIndex;
+            _lastStartIndex = startIndex;
+            _reversed = true;
         }
 
-        public ButtonRange(int index, int lastIndex)
+        public ButtonRange(int startIndex, int lastStartIndex, bool reversed = false)
         {
-            _index = index;
-            _lastIndex = lastIndex;
+            _startIndex = startIndex;
+            _lastStartIndex = lastStartIndex;
+            _reversed = reversed;
         }
 
         public bool IncludesButtonIndex(int index)
         {
-            return index >= _index && index <= _lastIndex;
+            return index >= _startIndex && index <= _lastStartIndex;
         }
 
         public int GetMappedIndex(int buttonIndex)
         {
-            return buttonIndex - _index;
+            return _reversed 
+                       ? _lastStartIndex - (buttonIndex - _startIndex)
+                        :buttonIndex - _startIndex;
         }
 
         public IEnumerable<int> Indices()
         {
-            for (int index = _index; index <= _lastIndex; index++)
+            for (var index = _startIndex; index <= _lastStartIndex; index++)
             {
-                yield return index;
+                yield return _reversed 
+                                 ? (_lastStartIndex-_startIndex) 
+                                 :   index;
             }
         }
 
@@ -55,9 +60,10 @@ namespace T3.Gui.Interaction.Variations.Midi
 
 
 
-        public bool IsRange => _lastIndex > _index;
+        public bool IsRange => _lastStartIndex > _startIndex;
 
-        private readonly int _index;
-        private readonly int _lastIndex;
+        private readonly int _startIndex;
+        private readonly int _lastStartIndex;
+        private readonly bool _reversed;
     }
 }
