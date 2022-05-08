@@ -259,6 +259,13 @@ namespace T3.Core.Operator
             foreach (var instance in InstancesOfSymbol)
             {
                 var parent = instance.Parent;
+                //
+                if (!parent.Children.Contains(instance))
+                {
+                    Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
+                    continue;
+                }
+                    
                 var parentSymbol = parent.Symbol;
                 // get all connections that belong to this instance
                 var connectionsToReplace = parentSymbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId ||
