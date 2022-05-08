@@ -105,6 +105,22 @@ namespace Core.Resource
                                                    return new InputValue<SharpDX.Size2>(r);
                                                }
                     },
+                    
+                    {
+                        typeof(bool), (aValue, bValue, t) =>
+                                               {
+                                                   if (aValue is not InputValue<bool> aValue2 || bValue is not InputValue<bool> bValue2)
+                                                       return null;
+
+                                                   var a = aValue2.Value;
+                                                   var b = bValue2.Value;
+                                                   
+                                                   var r = a == b ? a :
+                                                           t <= 0.5f ?  a: b;
+                                                   
+                                                   return new InputValue<bool>(r);
+                                               }
+                    },
                 };
 
         
