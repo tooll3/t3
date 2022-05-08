@@ -6,7 +6,7 @@
       "IsPreset": true,
       "ActivationIndex": 1,
       "Title": "spiral",
-      "InputValuesForChildIds": {
+      "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "b654ffe2-d46e-4a62-89b3-a9692d5c6481": 1000,
           "acce4779-56d6-47c4-9c52-874fca91a3a1": 1.0,
@@ -21,7 +21,7 @@
       "IsPreset": true,
       "ActivationIndex": 2,
       "Title": "untitled",
-      "InputValuesForChildIds": {
+      "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "b654ffe2-d46e-4a62-89b3-a9692d5c6481": 100,
           "acce4779-56d6-47c4-9c52-874fca91a3a1": 1.0,

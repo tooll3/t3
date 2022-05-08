@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
-using Core.Resource;
 using ImGuiNET;
-using T3.Core.Operator;
+using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
-using T3.Gui.OutputUi;
-using T3.Gui.Styling;
 
 namespace T3.Gui.Windows.Variations
 {
@@ -15,7 +11,8 @@ namespace T3.Gui.Windows.Variations
     {
         public VariationsWindow()
         {
-            _variationCanvas = new VariationCanvas(this);
+            _presetCanvas = new PresetCanvas();
+            _snapshotCanvas = new SnapshotCanvas();
             Config.Title = "Variations";
             WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
         }
@@ -25,43 +22,50 @@ namespace T3.Gui.Windows.Variations
             DrawWindowContent();
         }
 
+        private ViewModes _viewMode = 0;
+
         private void DrawWindowContent()
         {
-            if (VariationHandling.ActiveInstanceForPresets == null || VariationHandling.ActivePoolForPresets == null)
-            {
-                return;
-            }
-
-            if (VariationHandling.ActivePoolForPresets.Variations.Count == 0)
-            {
-                CustomComponents.EmptyWindowMessage("No presets yet");
-            }
-
             // Delete actions need be deferred to prevent collection modification during iteration
             if (_variationsToBeDeletedNextFrame.Count > 0)
             {
                 _poolWithVariationToBeDeleted.DeleteVariations(_variationsToBeDeletedNextFrame);
                 _variationsToBeDeletedNextFrame.Clear();
             }
-
+            
+            // Auto Select view or variation mode...
+            if (NodeSelection.Selection.Count == 0)
+            {
+                _viewMode = ViewModes.Snapshots;
+                // _viewMode = ViewModes.Presets;
+            }
+            
+            
             var drawList = ImGui.GetWindowDrawList();
             var keepCursorPos = ImGui.GetCursorScreenPos();
 
             drawList.ChannelsSplit(2);
             drawList.ChannelsSetCurrent(1);
             {
-                ImGui.BeginChild("header", new Vector2(20, 20));
-                if (CustomComponents.IconButton(Icon.Plus, "## addbutton", new Vector2(20, 20)))
+                ImGui.BeginChild("header", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()));
+
+                var viewModeIndex = (int)_viewMode;
+                if (CustomComponents.DrawSegmentedToggle(ref viewModeIndex, _options))
                 {
-                    var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetOfInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
-                    if (newVariation != null)
-                    {
-                        newVariation.PosOnCanvas =_variationCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);                     
-                        VariationThumbnail.VariationForRenaming = newVariation;
-                        _variationCanvas.Selection.SetSelection(newVariation);
-                        _variationCanvas.ResetView();
-                        _variationCanvas.TriggerThumbnailUpdate();
-                    }
+                    _viewMode = (ViewModes)viewModeIndex;
+                }
+
+                ImGui.SameLine();
+                
+                switch (_viewMode)
+                {
+                    case ViewModes.Presets:
+                        _presetCanvas.DrawToolbarFunctions();
+                        break;
+                        
+                    case ViewModes.Snapshots:
+                        _snapshotCanvas.DrawToolbarFunctions();
+                        break;
                 }
 
                 ImGui.EndChild();
@@ -71,96 +75,61 @@ namespace T3.Gui.Windows.Variations
             {
                 ImGui.SetCursorScreenPos(keepCursorPos);
 
-                if (VariationHandling.ActivePoolForPresets != null)
+                if (_viewMode == ViewModes.Presets)
                 {
-                    _variationCanvas.Draw(drawList, VariationHandling.ActivePoolForPresets);
+                    if (VariationHandling.ActivePoolForPresets == null 
+                        || VariationHandling.ActiveInstanceForPresets == null 
+                        || VariationHandling.ActivePoolForPresets.Variations.Count == 0)
+                    {
+                        CustomComponents.EmptyWindowMessage("No presets yet.");
+                    }
+                    else
+                    {
+                        _presetCanvas.Draw(drawList);
+                    }
                 }
-                
-                //_variationCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
+                else
+                {
+                    if (VariationHandling.ActivePoolForSnapshots == null 
+                        || VariationHandling.ActiveInstanceForSnapshots == null 
+                        || VariationHandling.ActivePoolForSnapshots.Variations.Count == 0)
+                    {
+                        CustomComponents.EmptyWindowMessage("No Snapshots yet.\n\nSnapshots save parameters for selected\nOperators in the current composition.");
+                    }
+                    else
+                    {
+                        _snapshotCanvas.Draw(drawList);
+                    }
+                }
             }
 
             drawList.ChannelsMerge();
         }
 
-        private static MatchTypes DoesPresetVariationMatch(Variation variation, Instance instance)
+        private enum ViewModes
         {
-            var setCorrectly = true;
-            var foundOneMatch = false;
-            var foundUnknownNonDefaults = false;
-
-            foreach (var (symbolChildId, values) in variation.InputValuesForChildIds)
-            {
-                if (symbolChildId != Guid.Empty)
-                    continue;
-
-                foreach (var input in instance.Inputs)
-                {
-                    var inputIsDefault = input.Input.IsDefault;
-                    var variationIncludesInput = values.ContainsKey(input.Id);
-
-                    if (!ValueUtils.CompareFunctions.ContainsKey(input.ValueType))
-                        continue;
-
-                    if (variationIncludesInput)
-                    {
-                        foundOneMatch = true;
-
-                        if (inputIsDefault)
-                        {
-                            setCorrectly = false;
-                        }
-                        else
-                        {
-                            var inputValueMatches = ValueUtils.CompareFunctions[input.ValueType](values[input.Id], input.Input.Value);
-                            setCorrectly &= inputValueMatches;
-                        }
-                    }
-                    else
-                    {
-                        if (inputIsDefault)
-                        {
-                        }
-                        else
-                        {
-                            foundUnknownNonDefaults = true;
-                        }
-                    }
-                }
-            }
-
-            if (!foundOneMatch || !setCorrectly)
-            {
-                return MatchTypes.NoMatch;
-            }
-
-            return foundUnknownNonDefaults ? MatchTypes.PresetParamsMatch : MatchTypes.PresetAndDefaultParamsMatch;
+            Presets,
+            Snapshots,
         }
-        
+
+        private static readonly List<string> _options = new() { "Presets", "Snapshots" };
+
         public override List<Window> GetInstances()
         {
             return new List<Window>();
         }
 
-        public void DeleteVariations(List<Variation> selectionSelection)
+        public static void DeleteVariationsFromPool(SymbolVariationPool pool, IEnumerable<Variation> selectionSelection)
         {
-            _poolWithVariationToBeDeleted = VariationHandling.ActivePoolForPresets;
-            _variationsToBeDeletedNextFrame.AddRange(selectionSelection);
-            VariationHandling.ActivePoolForPresets.StopHover();
+            
+            _poolWithVariationToBeDeleted = pool;
+            _variationsToBeDeletedNextFrame.AddRange(selectionSelection); // TODO: mixing Snapshots and variations in same list is dangerous
+            pool.StopHover();
         }
 
         private static readonly List<Variation> _variationsToBeDeletedNextFrame = new(20);
         private static SymbolVariationPool _poolWithVariationToBeDeleted;
-
-        private readonly VariationCanvas _variationCanvas;
-        //public IOutputUi OutputUi;
-
-        private enum MatchTypes
-        {
-            NoMatch,
-            PresetParamsMatch,
-            PresetAndDefaultParamsMatch,
-        }
-
-
+        private readonly PresetCanvas _presetCanvas;
+        private readonly SnapshotCanvas _snapshotCanvas;
     }
 }

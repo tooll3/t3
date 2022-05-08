@@ -22,6 +22,9 @@ namespace T3.Gui.Interaction.Variations.Model
         public Guid SymbolId;
         public List<Variation> Variations;
 
+        public Variation ActiveVariation { get; private set; }
+        
+        
         public static SymbolVariationPool InitVariationPoolForSymbol(Guid compositionId)
         {
             var newPool = new SymbolVariationPool()
@@ -72,7 +75,7 @@ namespace T3.Gui.Interaction.Variations.Model
                         }
 
                         //TODO: this needs to be implemented
-                        newVariation.IsPreset = true;
+                        //newVariation.IsPreset = true;
                         result.Add(newVariation);
                     }
                 }
@@ -130,19 +133,37 @@ namespace T3.Gui.Interaction.Variations.Model
         }
         #endregion
 
-        public void ApplyPreset(Instance instance, Variation variation, bool resetOtherNonDefaults = false)
+        // public void ApplyVariation(Instance compositionInstance, Variation variation, bool resetOtherNonDefaults = false)
+        // {
+        //     StopHover();
+        //     
+        //     var command = CreateApplyVariationCommand(compositionInstance, variation, resetOtherNonDefaults);
+        //     UndoRedoStack.AddAndExecute(command);
+        // }
+        
+        // public void BeginHoverVariation(Instance instance, Variation variation, bool resetNonDefaults)
+        // {
+        //     StopHover();
+        //     
+        //     _activeBlendCommand = CreateApplyVariationCommand(instance, variation, resetNonDefaults);
+        //     _activeBlendCommand.Do();
+        // }
+        
+        public void Apply(Instance instance, Variation variation, bool resetOtherNonDefaults = false)
         {
             StopHover();
             
-            var command = CreateApplyCommand(instance, variation, resetOtherNonDefaults);
+            var command = variation.IsPreset ? CreateApplyPresetCommand(instance, variation, resetOtherNonDefaults)
+                              : CreateApplyVariationCommand(instance, variation, resetOtherNonDefaults);;
             UndoRedoStack.AddAndExecute(command);
         }
-
-        public void BeginHoverPreset(Instance instance, Variation variation, bool resetNonDefaults)
+        
+        public void BeginHover(Instance instance, Variation variation, bool resetNonDefaults)
         {
             StopHover();
             
-            _activeBlendCommand = CreateApplyCommand(instance, variation, resetNonDefaults);
+            _activeBlendCommand = variation.IsPreset ? CreateApplyPresetCommand(instance, variation, resetNonDefaults)
+                                      : CreateApplyVariationCommand(instance, variation, resetNonDefaults);
             _activeBlendCommand.Do();
         }
 
@@ -150,7 +171,7 @@ namespace T3.Gui.Interaction.Variations.Model
         {
             StopHover();
 
-            _activeBlendCommand = CreateBlendToCommand(instance, variation, blend, resetToDefaults);
+            _activeBlendCommand = CreateBlendToPresetCommand(instance, variation, blend, resetToDefaults);
             _activeBlendCommand.Do();
         }
 
@@ -158,7 +179,7 @@ namespace T3.Gui.Interaction.Variations.Model
         {
             StopHover();
 
-            _activeBlendCommand = CreateWeightedBlendCommand(instance, variations, weights);
+            _activeBlendCommand = CreateWeightedBlendPresetCommand(instance, variations, weights);
             _activeBlendCommand.Do();
         }
 
@@ -183,7 +204,7 @@ namespace T3.Gui.Interaction.Variations.Model
         /// <summary>
         /// Save non-default parameters of single selected Instance as preset for its Symbol.  
         /// </summary>
-        public Variation CreatePresetOfInstanceSymbol(Instance instance)
+        public Variation CreatePresetForInstanceSymbol(Instance instance)
         {
             var changes = new Dictionary<Guid, InputValue>();
 
@@ -213,10 +234,10 @@ namespace T3.Gui.Interaction.Variations.Model
                                        ActivationIndex = Variations.Count + 1, //TODO: First find the highest activation index
                                        IsPreset = true,
                                        PublishedDate = DateTime.Now,
-                                       InputValuesForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>
-                                                                    {
-                                                                        [Guid.Empty] = changes
-                                                                    },
+                                       ParameterSetsForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>
+                                                                      {
+                                                                                            [Guid.Empty] = changes
+                                                                                        },
                                    };
 
             var command = new AddPresetOrVariationCommand(instance.Symbol, newVariation);
@@ -224,6 +245,74 @@ namespace T3.Gui.Interaction.Variations.Model
             SaveVariationsToFile();
             return newVariation;
         }
+
+        public Variation CreateVariationForCompositionInstances(List<Instance> instances)
+        {
+            var changeSets = new Dictionary<Guid, Dictionary<Guid, InputValue>>();
+            if (instances == null || instances.Count == 0)
+            {
+                Log.Warning("Not instances to create variation for");
+                return null;
+            }
+
+            Symbol parentSymbol = null; 
+            
+            foreach (var instance in instances)
+            {
+                if (instance.Parent.Symbol.Id != SymbolId)
+                {
+                    Log.Error($"Instance {instance.SymbolChildId} is not a child of VariationPool operator {SymbolId}");
+                    return null;
+                }
+
+                parentSymbol = instance.Parent.Symbol;
+                
+                var changeSet = new Dictionary<Guid, InputValue>();
+                var hasAnimatableParameters = false;
+                
+                foreach (var input in instance.Inputs)
+                {
+                    if (!ValueUtils.BlendMethods.ContainsKey(input.Input.Value.ValueType))
+                        continue;
+
+                    hasAnimatableParameters = true;
+                        
+                    
+                    if (input.Input.IsDefault)
+                    {
+                        continue;
+                    }
+                
+                    if (ValueUtils.BlendMethods.ContainsKey(input.Input.Value.ValueType))
+                    {
+                        changeSet[input.Id] = input.Input.Value.Clone();
+                    }
+                }
+                
+                if (!hasAnimatableParameters)
+                    continue;
+                
+
+                changeSets[instance.SymbolChildId] = changeSet;
+
+            }
+            
+            var newVariation = new Variation
+                                   {
+                                       Id = Guid.NewGuid(),
+                                       Title = "untitled",
+                                       ActivationIndex = Variations.Count + 1, //TODO: First find the highest activation index
+                                       IsPreset = false,
+                                       PublishedDate = DateTime.Now,
+                                       ParameterSetsForChildIds = changeSets,
+                                   };
+            
+            var command = new AddPresetOrVariationCommand(parentSymbol, newVariation);
+            UndoRedoStack.AddAndExecute(command);
+            SaveVariationsToFile();
+            return newVariation;
+        }        
+        
 
         public void DeleteVariation(Variation variation)
         {
@@ -245,7 +334,62 @@ namespace T3.Gui.Interaction.Variations.Model
             SaveVariationsToFile();
         }
 
-        private static MacroCommand CreateApplyCommand(Instance instance, Variation variation, bool resetOtherNonDefaults)
+        public static MacroCommand CreateApplyVariationCommand(Instance compositionInstance, Variation variation, bool resetOtherNonDefaults)
+        {
+            var commands = new List<ICommand>();
+            var compositionSymbol = compositionInstance.Symbol;
+            
+            foreach (var (childId, parameterSets) in variation.ParameterSetsForChildIds)
+            {
+                var symbolChild = compositionSymbol.Children.SingleOrDefault(s => s.Id == childId);
+                if (symbolChild == null)
+                {
+                    Log.Warning($"Ignoring childId {childId} in variation...");
+                    continue;
+                }
+                
+                if (childId == Guid.Empty)
+                {
+                    Log.Warning("Didn't expect parent-reference id in variation");
+                    continue;
+                }
+
+                foreach (var input in symbolChild.InputValues.Values)
+                {
+                    if (!ValueUtils.BlendMethods.TryGetValue(input.Value.ValueType, out var blendFunction))
+                        continue;
+                        
+                    if (parameterSets.TryGetValue(input.InputDefinition.Id, out var param))
+                    {
+                        if (param == null)
+                            continue;
+
+                        var newCommand = new ChangeInputValueCommand(compositionSymbol, childId, input, param);
+                        commands.Add(newCommand);
+                    }
+                    else
+                    {
+                        if (resetOtherNonDefaults)
+                        {
+                            commands.Add(new ResetInputToDefault(compositionSymbol, childId, input));
+                        }
+                    }
+                }
+            }
+
+            var command = new MacroCommand("Apply Variation Values", commands);
+            return command;
+        }
+
+        private static MacroCommand CreateWeightedBlendSnapshotCommand(Instance compositionInstance, List<Variation> variations, IEnumerable<float> weights)
+        {
+            //TODO: Implement
+
+            return null;
+        }
+        
+        
+        private static MacroCommand CreateApplyPresetCommand(Instance instance, Variation variation, bool resetOtherNonDefaults)
         {
             var commands = new List<ICommand>();
             var parentSymbol = instance.Parent.Symbol;
@@ -253,7 +397,7 @@ namespace T3.Gui.Interaction.Variations.Model
             var symbolChild = parentSymbol.Children.SingleOrDefault(s => s.Id == instance.SymbolChildId);
             if (symbolChild != null)
             {
-                foreach (var (childId, parametersForInputs) in variation.InputValuesForChildIds)
+                foreach (var (childId, parametersForInputs) in variation.ParameterSetsForChildIds)
                 {
                     if (childId != Guid.Empty)
                     {
@@ -289,7 +433,7 @@ namespace T3.Gui.Interaction.Variations.Model
             return command;
         }
 
-        private static MacroCommand CreateBlendToCommand(Instance instance, Variation variation, float blend, bool resetToDefaults)
+        private static MacroCommand CreateBlendToPresetCommand(Instance instance, Variation variation, float blend, bool resetToDefaults)
         {
             var commands = new List<ICommand>();
             var parentSymbol = instance.Parent.Symbol;
@@ -297,7 +441,7 @@ namespace T3.Gui.Interaction.Variations.Model
             var symbolChild = parentSymbol.Children.SingleOrDefault(s => s.Id == instance.SymbolChildId);
             if (symbolChild != null)
             {
-                foreach (var (childId, parametersForInputs) in variation.InputValuesForChildIds)
+                foreach (var (childId, parametersForInputs) in variation.ParameterSetsForChildIds)
                 {
                     if (childId != Guid.Empty)
                     {
@@ -333,7 +477,7 @@ namespace T3.Gui.Interaction.Variations.Model
             return activeBlendCommand;
         }
         
-        private static MacroCommand CreateWeightedBlendCommand(Instance instance, List<Variation> variations, IEnumerable<float> weights)
+        private static MacroCommand CreateWeightedBlendPresetCommand(Instance instance, List<Variation> variations, IEnumerable<float> weights)
         {
             var commands = new List<ICommand>();
             var parentSymbol = instance.Parent.Symbol;
@@ -346,7 +490,7 @@ namespace T3.Gui.Interaction.Variations.Model
                 var variationParameterSets = new List<Dictionary<Guid, InputValue>>();
                 foreach (var variation in variations)
                 {
-                    foreach (var (childId, parametersForInputs) in variation.InputValuesForChildIds)
+                    foreach (var (childId, parametersForInputs) in variation.ParameterSetsForChildIds)
                     {
                         if (childId != Guid.Empty)
                         {
@@ -395,7 +539,87 @@ namespace T3.Gui.Interaction.Variations.Model
             return activeBlendCommand;
         }
         
+        
+        private static MatchTypes DoesPresetVariationMatch(Variation variation, Instance instance)
+        {
+            var setCorrectly = true;
+            var foundOneMatch = false;
+            var foundUnknownNonDefaults = false;
+
+            foreach (var (symbolChildId, values) in variation.ParameterSetsForChildIds)
+            {
+                if (symbolChildId != Guid.Empty)
+                    continue;
+
+                foreach (var input in instance.Inputs)
+                {
+                    var inputIsDefault = input.Input.IsDefault;
+                    var variationIncludesInput = values.ContainsKey(input.Id);
+
+                    if (!ValueUtils.CompareFunctions.ContainsKey(input.ValueType))
+                        continue;
+
+                    if (variationIncludesInput)
+                    {
+                        foundOneMatch = true;
+
+                        if (inputIsDefault)
+                        {
+                            setCorrectly = false;
+                        }
+                        else
+                        {
+                            var inputValueMatches = ValueUtils.CompareFunctions[input.ValueType](values[input.Id], input.Input.Value);
+                            setCorrectly &= inputValueMatches;
+                        }
+                    }
+                    else
+                    {
+                        if (inputIsDefault)
+                        {
+                        }
+                        else
+                        {
+                            foundUnknownNonDefaults = true;
+                        }
+                    }
+                }
+            }
+
+            if (!foundOneMatch || !setCorrectly)
+            {
+                return MatchTypes.NoMatch;
+            }
+
+            return foundUnknownNonDefaults ? MatchTypes.PresetParamsMatch : MatchTypes.PresetAndDefaultParamsMatch;
+        }
+        
+        private enum MatchTypes
+        {
+            NoMatch,
+            PresetParamsMatch,
+            PresetAndDefaultParamsMatch,
+        }
+
 
         private MacroCommand _activeBlendCommand;
+
+        public static bool TryGetSnapshot(int activationIndex, out Variation variation)
+        {
+            variation = null;
+            if (VariationHandling.ActivePoolForSnapshots == null)
+                return false;
+            
+            foreach (var v in VariationHandling.ActivePoolForSnapshots.Variations)
+            {
+                if (v.ActivationIndex != activationIndex)
+                    continue;
+                    
+                variation = v;
+                return true;
+            }
+
+            return false;
+        }
     }
 }

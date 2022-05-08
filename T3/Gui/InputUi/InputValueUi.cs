@@ -296,9 +296,9 @@ namespace T3.Gui.InputUi
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
 
                     var hash = Utilities.Hash(symbolChildUi.SymbolChild.Id, input.InputDefinition.Id);
-                    var blendGroup = T3Ui.VariationHandling.ActiveOperatorVariation?.GetBlendGroupForHashedInput(hash);
+                    //var blendGroup = T3Ui.VariationHandling.ActiveOperatorVariation?.GetBlendGroupForHashedInput(hash);
 
-                    var label = blendGroup == null ? "" : "G" + (blendGroup.Index + 1);
+                    var label = "";// blendGroup == null ? "" : "G" + (blendGroup.Index + 1);
 
                     if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
@@ -362,15 +362,15 @@ namespace T3.Gui.InputUi
                                                                                                 input));
                                                             }
 
-                                                            if (blendGroup == null && ImGui.BeginMenu("Add to Blending", true))
-                                                            {
-                                                                T3Ui.VariationHandling.DrawInputContextMenu(inputSlot, compositionUi, symbolChildUi);
-                                                            }
-
-                                                            if (blendGroup != null && ImGui.MenuItem("Remove blending"))
-                                                            {
-                                                                T3Ui.VariationHandling.ActiveOperatorVariation?.RemoveBlending(hash);
-                                                            }
+                                                            // if (blendGroup == null && ImGui.BeginMenu("Add to Blending", true))
+                                                            // {
+                                                            //     T3Ui.VariationHandling.DrawInputContextMenu(inputSlot, compositionUi, symbolChildUi);
+                                                            // }
+                                                            //
+                                                            // if (blendGroup != null && ImGui.MenuItem("Remove blending"))
+                                                            // {
+                                                            //     T3Ui.VariationHandling.ActiveOperatorVariation?.RemoveBlending(hash);
+                                                            // }
 
                                                             if (ImGui.MenuItem("Publish as Input"))
                                                             {

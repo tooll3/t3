@@ -17,19 +17,25 @@ namespace T3.Gui.Interaction.Variations.Model
     /// </summary>
     public class Variation : ISelectableCanvasObject
     {
+        // Serialized fields...
         public Guid Id { get; set; }
         public string Title;
         public int ActivationIndex;
         public bool IsPreset;
-        public DateTime PublishedDate;
+        
         public Vector2 PosOnCanvas  { get; set; }
         public Vector2 Size  { get; set; } = VariationThumbnail.ThumbnailSize;
+        public DateTime PublishedDate;
+        
+        // Other properties...
         public bool IsSelected { get; set; }
+        public States State { get; set; } = States.InActive;
+        public bool IsSnapshot => !IsPreset;
 
         /// <summary>
         /// Changes by SymbolChildId
         /// </summary>
-        public Dictionary<Guid, Dictionary<Guid, InputValue>> InputValuesForChildIds;
+        public Dictionary<Guid, Dictionary<Guid, InputValue>> ParameterSetsForChildIds;
 
         public static Variation FromJson(Guid symbolId, JToken jToken)
         {
@@ -48,7 +54,7 @@ namespace T3.Gui.Interaction.Variations.Model
                                        Title = jToken[nameof(Title)]?.Value<string>() ?? String.Empty,
                                        ActivationIndex = jToken[nameof(ActivationIndex)]?.Value<int>() ?? -1,
                                        IsPreset = jToken[nameof(IsPreset)]?.Value<bool>() ?? false,
-                                       InputValuesForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>(),
+                                       ParameterSetsForChildIds = new Dictionary<Guid, Dictionary<Guid, InputValue>>(),
                                        
                                    };
             
@@ -61,7 +67,7 @@ namespace T3.Gui.Interaction.Variations.Model
             }
 
             
-            var changesToken = (JObject)jToken[nameof(InputValuesForChildIds)];
+            var changesToken = (JObject)jToken[nameof(ParameterSetsForChildIds)];
             if (changesToken == null)
                 return newVariation;
 
@@ -100,7 +106,7 @@ namespace T3.Gui.Interaction.Variations.Model
 
                 if (changeList.Count > 0)
                 {
-                    newVariation.InputValuesForChildIds[symbolChildId] = changeList;
+                    newVariation.ParameterSetsForChildIds[symbolChildId] = changeList;
                 }
             }
 
@@ -122,10 +128,10 @@ namespace T3.Gui.Interaction.Variations.Model
                 writer.WritePropertyName(nameof(PosOnCanvas));
                 vec2Writer(writer, PosOnCanvas);
                 
-                writer.WritePropertyName(nameof(InputValuesForChildIds));
+                writer.WritePropertyName(nameof(ParameterSetsForChildIds));
                 writer.WriteStartObject();
                 {
-                    foreach (var (id, values) in InputValuesForChildIds)
+                    foreach (var (id, values) in ParameterSetsForChildIds)
                     {
                         writer.WritePropertyName(id.ToString());
                         writer.WriteStartObject();
@@ -145,6 +151,15 @@ namespace T3.Gui.Interaction.Variations.Model
         public override string ToString()
         {
             return $"{Title} #{ActivationIndex}";
+        }
+        
+        public enum States
+        {
+            Undefined,
+            InActive,
+            Active,
+            Modified,
+            IsBlended,
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using Operators.Utils;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using T3.Gui.Graph;
@@ -10,7 +11,7 @@ using T3.Gui.Interaction.LegacyVariations.Dialogs;
 using T3.Gui.Interaction.LegacyVariations.Midi;
 using T3.Gui.Interaction.LegacyVariations.Model;
 using T3.Gui.Selection;
-using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
+//using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 using T3.Operators.Types.Id_a53f3873_a5aa_4bcc_aa06_0745d98209d6;
 
 namespace T3.Gui.Interaction.LegacyVariations

@@ -10,7 +10,7 @@
         "X": 163.0,
         "Y": 0.0
       },
-      "InputValuesForChildIds": {
+      "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f": 0.5,
           "77673c64-918d-46a6-aa29-c362057afee6": 0.25
@@ -26,7 +26,7 @@
         "X": 326.0,
         "Y": 0.0
       },
-      "InputValuesForChildIds": {
+      "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f": 5.0,
           "0eff3a75-eafc-4a5e-8a2c-10577c12e776": 1.0,
@@ -47,7 +47,7 @@
         "X": 0.0,
         "Y": 0.0
       },
-      "InputValuesForChildIds": {
+      "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f": 5.0,
           "0eff3a75-eafc-4a5e-8a2c-10577c12e776": 1.0,

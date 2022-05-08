@@ -7,6 +7,7 @@ using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Gui.Commands;
 using t3.Gui.Commands.Graph;
+using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -17,12 +18,14 @@ namespace T3.Gui.Windows.Variations
 {
     public static class VariationThumbnail
     {
-        public static bool Draw(VariationCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
+        public static bool Draw(VariationBaseCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
+            
+            
             if (VariationForRenaming == variation)
             {
                 ImGui.PushID(variation.ActivationIndex);
-                ImGui.SetCursorScreenPos(new Vector2(30, 0) + ImGui.GetWindowPos());
+                ImGui.SetCursorScreenPos(new Vector2(30, ImGui.GetFrameHeight()) + ImGui.GetWindowPos());
                 ImGui.SetKeyboardFocusHere();
                 ImGui.InputText("##label", ref variation.Title, 256);
 
@@ -34,6 +37,19 @@ namespace T3.Gui.Windows.Variations
                 ImGui.PopID();
             }
 
+            var focusOpacity = 1f;
+            if (variation.IsSnapshot && VariationHandling.FocusSetsForCompositions.TryGetValue(VariationHandling.ActiveInstanceForSnapshots.Symbol.Id, out var focusSet))
+            {
+                var isWithinFocus = false;
+                foreach (var childId in variation.ParameterSetsForChildIds.Keys)
+                {
+                    if (focusSet.Contains(childId))
+                        isWithinFocus = true;
+                }
+
+                focusOpacity = isWithinFocus ? 1 : 0.2f;
+            }
+                
             _canvas = canvas;
             var pMin = canvas.TransformPosition(variation.PosOnCanvas);
             var sizeOnScreen = canvas.TransformDirectionFloored(ThumbnailSize);
@@ -46,10 +62,10 @@ namespace T3.Gui.Windows.Variations
                               pMin,
                               pMax,
                               uvRect.Min,
-                              uvRect.Max
+                              uvRect.Max, Color.White.Fade(focusOpacity)
                              );
 
-            drawList.AddRect(pMin, pMax, Color.Gray.Fade(0.2f));
+            drawList.AddRect(pMin, pMax, Color.Gray.Fade(0.2f * focusOpacity));
 
             variation.IsSelected = Selection.IsNodeSelected(variation);
             if (variation.IsSelected)
@@ -68,7 +84,7 @@ namespace T3.Gui.Windows.Variations
             ImGui.PushClipRect(pMin, pMax, true);
             ImGui.PushFont(Fonts.FontSmall);
 
-            var fade = MathUtils.RemapAndClamp(canvas.Scale.X, 0.3f, 0.6f, 0, 1);
+            var fade = MathUtils.RemapAndClamp(canvas.Scale.X, 0.3f, 0.6f, 0, 1) * focusOpacity;
             drawList.AddText(pMin + new Vector2(4, sizeOnScreen.Y - bottomPadding),
                              Color.White.Fade(1f * fade),
                              string.IsNullOrEmpty(variation.Title) ? "Untitled" : variation.Title);
@@ -101,6 +117,14 @@ namespace T3.Gui.Windows.Variations
                         _canvas.StartHover(variation);
                     }
 
+                    if (variation.IsSnapshot)
+                    {
+                        foreach (var childId in variation.ParameterSetsForChildIds.Keys)
+                        {
+                            T3Ui.AddHoveredId(childId);
+                        }
+                    }
+                    
                     if (ImGui.GetIO().KeyAlt)
                     {
                         var mouseX = ImGui.GetMousePos().X;
@@ -190,7 +214,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         Selection.Clear();
                         _hoveredVariation = null;
-                        _canvas.ApplyVariation(variation, UserSettings.Config.PresetsResetToDefaultValues);
+                        _canvas.Apply(variation, UserSettings.Config.PresetsResetToDefaultValues);
                     }
 
                     Selection.AddSelection(variation);
@@ -204,7 +228,7 @@ namespace T3.Gui.Windows.Variations
                     else
                     {
                         _hoveredVariation = null;
-                        _canvas.ApplyVariation(variation, true);
+                        _canvas.Apply(variation, true);
                     }
                 }
 
@@ -270,7 +294,7 @@ namespace T3.Gui.Windows.Variations
         private static Variation _hoveredVariation;
         private static bool _isDragging;
 
-        private static VariationCanvas _canvas;
+        private static VariationBaseCanvas _canvas;
         private static CanvasElementSelection Selection => _canvas.Selection;
         private static Guid _draggedNodeId;
         private static List<ISelectableCanvasObject> _draggedNodes = new();

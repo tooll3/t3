@@ -6,7 +6,7 @@
       "IsPreset": true,
       "ActivationIndex": 1,
       "Title": "default",
-      "InputValuesForChildIds": {
+      "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "99188668-b6ac-468b-a892-cd020a3862b2": 1.0,
           "3c8b43be-430f-4afe-8244-5282be49bfbc": 8.0
@@ -18,7 +18,7 @@
       "IsPreset": true,
       "ActivationIndex": 2,
       "Title": "untitled",
-      "InputValuesForChildIds": {
+      "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "99188668-b6ac-468b-a892-cd020a3862b2": 2.0,
           "3c8b43be-430f-4afe-8244-5282be49bfbc": 16.0

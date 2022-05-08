@@ -10,7 +10,7 @@
         "X": 163.0,
         "Y": 0.0
       },
-      "InputValuesForChildIds": {
+      "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "dc8c94e6-97d9-4aa5-9edd-5a8d01e4f7c4": {
             "X": 1.0,
@@ -39,7 +39,7 @@
         "X": 0.0,
         "Y": 0.0
       },
-      "InputValuesForChildIds": {
+      "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
           "dc8c94e6-97d9-4aa5-9edd-5a8d01e4f7c4": {
             "X": 0.0,

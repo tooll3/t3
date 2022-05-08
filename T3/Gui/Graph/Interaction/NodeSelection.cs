@@ -33,6 +33,7 @@ namespace T3.Gui.Graph.Interaction
         public static void SetSelectionToParent(Instance instance)
         {
             Clear();
+            _childUiInstanceIdPaths.Clear();
             _selectedComposition = instance;
         }
 
@@ -87,7 +88,7 @@ namespace T3.Gui.Graph.Interaction
             Selection.Add(childUi);
             if (instance != null)
             {
-                ChildUiInstanceIdPaths[childUi] = NodeOperations.BuildIdPathForInstance(instance);
+                _childUiInstanceIdPaths[childUi] = NodeOperations.BuildIdPathForInstance(instance);
                 if (instance is ITransformable transformable)
                 {
                     TransformGizmoHandling.RegisterSelectedTransformable(childUi, transformable);
@@ -132,20 +133,41 @@ namespace T3.Gui.Graph.Interaction
 
             if (Selection[0] is SymbolChildUi firstNode)
             {
-                if (!ChildUiInstanceIdPaths.ContainsKey(firstNode))
+                if (!_childUiInstanceIdPaths.ContainsKey(firstNode))
                 {
                     Log.Error("Failed to access id-path of selected childUi " + firstNode.SymbolChild.Name);
                     Clear();
                     return null;
                 }
 
-                var idPath = ChildUiInstanceIdPaths[firstNode];
+                var idPath = _childUiInstanceIdPaths[firstNode];
                 return NodeOperations.GetInstanceFromIdPath(idPath);
             }
 
             return null;
         }
 
+        public static IEnumerable<Instance> GetSelectedInstances()
+        {
+            foreach (var s in Selection)
+            {
+                if (s is not SymbolChildUi symbolChildUi)
+                    continue;
+                
+                if (!_childUiInstanceIdPaths.ContainsKey(symbolChildUi))
+                {
+                    Log.Error("Failed to access id-path of selected childUi " + symbolChildUi.SymbolChild.Name);
+                    Clear();
+                    break;
+                }
+
+                var idPath = _childUiInstanceIdPaths[symbolChildUi];
+                yield return NodeOperations.GetInstanceFromIdPath(idPath);
+
+            }
+        }
+
+        
         public static Instance GetSelectedComposition()
         {
             return _selectedComposition;
@@ -159,7 +181,7 @@ namespace T3.Gui.Graph.Interaction
             if (!(Selection[0] is SymbolChildUi firstNode))
                 return null;
 
-            var idPath = ChildUiInstanceIdPaths[firstNode];
+            var idPath = _childUiInstanceIdPaths[firstNode];
             var instanceFromIdPath = NodeOperations.GetInstanceFromIdPath(idPath);
             return instanceFromIdPath?.Parent;
         }
@@ -201,12 +223,12 @@ namespace T3.Gui.Graph.Interaction
 
         public static Instance GetInstanceForSymbolChildUi(SymbolChildUi symbolChildUi)
         {
-            var idPath = ChildUiInstanceIdPaths[symbolChildUi];
+            var idPath = _childUiInstanceIdPaths[symbolChildUi];
             return (NodeOperations.GetInstanceFromIdPath(idPath));
         }
 
+        public static readonly List<ISelectableCanvasObject> Selection = new();
         private static Instance _selectedComposition;
-        public static readonly List<ISelectableCanvasObject> Selection = new List<ISelectableCanvasObject>();
-        private static readonly Dictionary<SymbolChildUi, List<Guid>> ChildUiInstanceIdPaths = new Dictionary<SymbolChildUi, List<Guid>>();
+        private static readonly Dictionary<SymbolChildUi, List<Guid>> _childUiInstanceIdPaths = new();
     }
 }

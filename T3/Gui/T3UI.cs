@@ -9,19 +9,18 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using T3.Core.IO;
 using T3.Core.Logging;
-using T3.Gui.AutoBackup;
-//using T3.graph;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
-using T3.Gui.Interaction.LegacyVariations;
 using T3.Gui.Interaction.Timing;
+using T3.Gui.Interaction.Variations;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
-using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
+
+using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;   // ForwardBeatTaps
 
 namespace T3.Gui
 {
@@ -31,10 +30,12 @@ namespace T3.Gui
         {
             var operatorsAssembly = Assembly.GetAssembly(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value));
             UiModel = new UiModel(operatorsAssembly);
+            
             var tmp = new UserSettings(saveOnQuit:true);
             var tmp2 = new ProjectSettings(saveOnQuit:true);
             WindowManager = new WindowManager();
             ExampleSymbolLinking.UpdateExampleLinks();
+            VariationHandling.Init();
         }
 
         public void Draw()
@@ -47,8 +48,8 @@ namespace T3.Gui
 
             _autoBackup.Enabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;
+            
             VariationHandling.Update();
-            T3.Gui.Interaction.Variations.VariationHandling.Update();
             MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
             MouseWheelFieldHovered = false;
 
@@ -227,8 +228,8 @@ namespace T3.Gui
 
         private static void SwapHoveringBuffers()
         {
-            HoveredIdsLastFrame = _hoveredIdsForNextFrame;
-            _hoveredIdsForNextFrame = new HashSet<Guid>();
+            (HoveredIdsLastFrame, _hoveredIdsForNextFrame) = (_hoveredIdsForNextFrame, HoveredIdsLastFrame);
+            _hoveredIdsForNextFrame.Clear();
         }
 
         private static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
@@ -236,7 +237,6 @@ namespace T3.Gui
 
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel;
-        public static readonly LegacyVariationHandling VariationHandling = new LegacyVariationHandling();
         public static readonly WindowManager WindowManager;
 
         public static string OpenedPopUpName; // This is reset on Frame start and can be useful for allow context menu to stay open even if a
