@@ -25,12 +25,21 @@ namespace T3.Gui.Windows.Variations
         protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForPresets;
         protected override void DrawAdditionalContextMenuContent()
         {
-            throw new System.NotImplementedException();
+            var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
+            if (newVariation != null)
+            {
+                newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
+                VariationThumbnail.VariationForRenaming = newVariation;
+            }
+            Selection.SetSelection(newVariation);
+            ResetView();
+            TriggerThumbnailUpdate();            
         }
 
-
-        private Dictionary<Guid, List<Guid>> _selectionSetsForCompositions = new Dictionary<Guid, List<Guid>>();
-        
+        public override Variation CreateVariation()
+        {
+            throw new NotImplementedException();
+        }
     }
     
     public class SnapshotCanvas : VariationBaseCanvas
@@ -66,6 +75,21 @@ namespace T3.Gui.Windows.Variations
                 FitViewToSelectionHandling.FitViewToSelection();
             }
         }
+
+        public override Variation CreateVariation()
+        {
+            var newVariation = VariationHandling.SaveVariationForSelectedOperators();
+            if (newVariation == null)
+                return new Variation();
+            
+            Selection.SetSelection(newVariation);
+            ResetView();
+            TriggerThumbnailUpdate();
+            return new Variation();
+        }
+
+        //private static Dictionary<Guid, List<Guid>> _selectionSetsForCompositions = new Dictionary<Guid, List<Guid>>();
+        //public static List<Instance>
     }
     
     public abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContainer
@@ -73,6 +97,7 @@ namespace T3.Gui.Windows.Variations
         protected abstract Instance InstanceForBlendOperations { get; }
         protected abstract SymbolVariationPool PoolForBlendOperations { get;  }
         protected abstract void DrawAdditionalContextMenuContent();
+        public abstract Variation CreateVariation();
         
         public void Draw(ImDrawListPtr drawList)
         {

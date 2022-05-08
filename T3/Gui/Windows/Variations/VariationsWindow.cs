@@ -53,23 +53,11 @@ namespace T3.Gui.Windows.Variations
                 {
                     if (_viewMode == ViewModes.Presets)
                     {
-                        var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
-                        if (newVariation != null)
-                        {
-                            newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
-                            VariationThumbnail.VariationForRenaming = newVariation;
-                        }
-                        _presetCanvas.Selection.SetSelection(newVariation);
-                        _presetCanvas.ResetView();
-                        _presetCanvas.TriggerThumbnailUpdate();
+                        _presetCanvas.CreateVariation();
                     }
                     else if(_viewMode == ViewModes.Variations)
                     {
-                        var newVariation = VariationHandling.SaveVariationForSelectedOperators();
-                        _snapshotCanvas.Selection.SetSelection(newVariation);
-                        _snapshotCanvas.ResetView();
-                        _snapshotCanvas.TriggerThumbnailUpdate();
-
+                        _presetCanvas.CreateVariation();
                     }
                 }
 
@@ -86,7 +74,7 @@ namespace T3.Gui.Windows.Variations
                         || VariationHandling.ActiveInstanceForPresets == null 
                         || VariationHandling.ActivePoolForPresets.Variations.Count == 0)
                     {
-                        CustomComponents.EmptyWindowMessage("No presets yet");
+                        CustomComponents.EmptyWindowMessage("No presets yet.");
                     }
                     else
                     {
@@ -126,8 +114,9 @@ namespace T3.Gui.Windows.Variations
 
         public static void DeleteVariationsFromPool(SymbolVariationPool pool, IEnumerable<Variation> selectionSelection)
         {
+            
             _poolWithVariationToBeDeleted = pool;
-            _variationsToBeDeletedNextFrame.AddRange(selectionSelection);
+            _variationsToBeDeletedNextFrame.AddRange(selectionSelection); // TODO: mixing Snapshots and variations in same list is dangerous
             pool.StopHover();
         }
 
