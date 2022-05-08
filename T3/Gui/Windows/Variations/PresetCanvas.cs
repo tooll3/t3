@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Gui.Interaction.Variations;
@@ -24,6 +23,10 @@ namespace T3.Gui.Windows.Variations
 
         protected override void DrawAdditionalContextMenuContent()
         {
+        }
+
+        public override Variation CreateVariation()
+        {
             var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
             if (newVariation != null)
             {
@@ -34,11 +37,7 @@ namespace T3.Gui.Windows.Variations
             Selection.SetSelection(newVariation);
             ResetView();
             TriggerThumbnailUpdate();
-        }
-
-        public override Variation CreateVariation()
-        {
-            throw new NotImplementedException();
+            return newVariation;
         }
     }
 }

@@ -85,7 +85,7 @@ namespace T3.Gui.Interaction.Variations.Model
 
                 if (symbolForChanges == null)
                 {
-                    Log.Warning($"Can't find symbol {symbolChildIdString} for preset changes");
+                    //Log.Warning($"Can't find symbol {symbolChildIdString} for preset changes");
                     continue;
                 }
 
