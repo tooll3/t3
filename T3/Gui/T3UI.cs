@@ -228,8 +228,8 @@ namespace T3.Gui
 
         private static void SwapHoveringBuffers()
         {
-            HoveredIdsLastFrame = _hoveredIdsForNextFrame;
-            _hoveredIdsForNextFrame = new HashSet<Guid>();
+            (HoveredIdsLastFrame, _hoveredIdsForNextFrame) = (_hoveredIdsForNextFrame, HoveredIdsLastFrame);
+            _hoveredIdsForNextFrame.Clear();
         }
 
         private static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();

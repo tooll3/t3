@@ -39,7 +39,7 @@ namespace T3.Gui.Windows.Variations
             drawList.ChannelsSplit(2);
             drawList.ChannelsSetCurrent(1);
             {
-                ImGui.BeginChild("header", new Vector2(ImGui.GetContentRegionAvail().X, 20));
+                ImGui.BeginChild("header", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()));
 
                 var viewModeIndex = (int)_viewMode;
                 if (CustomComponents.DrawSegmentedToggle(ref viewModeIndex, _options))
@@ -48,17 +48,16 @@ namespace T3.Gui.Windows.Variations
                 }
 
                 ImGui.SameLine();
-
-                if (CustomComponents.IconButton(Icon.Plus, "##addbutton", new Vector2(20, 20)))
+                
+                switch (_viewMode)
                 {
-                    if (_viewMode == ViewModes.Presets)
-                    {
-                        _presetCanvas.CreateVariation();
-                    }
-                    else if(_viewMode == ViewModes.Variations)
-                    {
-                        _presetCanvas.CreateVariation();
-                    }
+                    case ViewModes.Presets:
+                        _presetCanvas.DrawToolbarFunctions();
+                        break;
+                        
+                    case ViewModes.Snapshots:
+                        _snapshotCanvas.DrawToolbarFunctions();
+                        break;
                 }
 
                 ImGui.EndChild();
@@ -102,7 +101,7 @@ namespace T3.Gui.Windows.Variations
         private enum ViewModes
         {
             Presets,
-            Variations,
+            Snapshots,
         }
 
         private static readonly List<string> _options = new() { "Presets", "Snapshots" };

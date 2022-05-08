@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Operators.Utils;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -10,6 +9,8 @@ using T3.Gui.Interaction.Variations.Midi;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.Variations;
+
+//using T3.Gui.Windows.Variations;
 
 namespace T3.Gui.Interaction.Variations
 {
@@ -195,32 +196,50 @@ namespace T3.Gui.Interaction.Variations
             return false;
         }
 
+        
         private const int AutoIndex=-1;
         public static Variation SaveVariationForSelectedOperators(int activationIndex = AutoIndex )
         {
-            if (ActivePoolForSnapshots == null)
-                return null;
-            
-            if (activationIndex != AutoIndex)
+            // Only allow for snapshots.
+            if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
             {
-                if(TryGetVariation(activationIndex, out var existingVariation))
-                {
-                    ActivePoolForSnapshots.DeleteVariation(existingVariation);
-                } 
+                return null;
             }
             
-            var selectedInstances = NodeSelection.GetSelectedInstances().ToList();
-            var newVariation = ActivePoolForSnapshots.CreateVariationForCompositionInstances(selectedInstances);
+            // Delete previous snapshot for that index.
+            if (activationIndex != AutoIndex && TryGetVariation(activationIndex, out var existingVariation))
+            {
+                ActivePoolForSnapshots.DeleteVariation(existingVariation);
+            }
+            
+            _affectedInstances.Clear();
+            if(SubsetsForCompositions.TryGetValue(ActiveInstanceForSnapshots.Symbol.Id, out var filteredChildIds))
+            {
+                foreach (var child in ActiveInstanceForSnapshots.Children)
+                {
+                    if (filteredChildIds.Contains(child.SymbolChildId))
+                    {
+                        _affectedInstances.Add(child);    
+                    }
+                }
+            }
+            else
+            {
+                _affectedInstances.AddRange(NodeSelection.GetSelectedInstances());    
+            }
+            
+            var newVariation = ActivePoolForSnapshots.CreateVariationForCompositionInstances(_affectedInstances);
             if (newVariation == null)
                 return null;
             
             newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForSnapshots.Variations);
             if (activationIndex != AutoIndex)
                 newVariation.ActivationIndex = activationIndex;
-                
-            VariationThumbnail.VariationForRenaming = newVariation;
+            
             return newVariation;
-
         }
+        
+        public static readonly Dictionary<Guid, HashSet<Guid>> SubsetsForCompositions = new();
+        private static readonly List<Instance> _affectedInstances = new(100);
     }
 }

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction;
-using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
@@ -19,85 +16,14 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.Windows.Variations
 {
-    public class PresetCanvas : VariationBaseCanvas
-    {
-        protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForPresets;
-        protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForPresets;
-        protected override void DrawAdditionalContextMenuContent()
-        {
-            var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
-            if (newVariation != null)
-            {
-                newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
-                VariationThumbnail.VariationForRenaming = newVariation;
-            }
-            Selection.SetSelection(newVariation);
-            ResetView();
-            TriggerThumbnailUpdate();            
-        }
-
-        public override Variation CreateVariation()
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
-    public class SnapshotCanvas : VariationBaseCanvas
-    {
-        protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
-        protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
-        
-        protected override void DrawAdditionalContextMenuContent()
-        {
-            var oneSelected = Selection.SelectedElements.Count == 1;
-            
-            if (ImGui.MenuItem("Select affected Operators",
-                               "",
-                               false,
-                               oneSelected))
-            {
-                if (Selection.SelectedElements[0] is not Variation selectedVariation)
-                    return;
-                
-                NodeSelection.Clear();
-
-                var parentSymbolUi = SymbolUiRegistry.Entries[InstanceForBlendOperations.Symbol.Id];
-                    
-                foreach (var symbolChildUi in parentSymbolUi.ChildUis)
-                {
-                    if (selectedVariation.ParameterSetsForChildIds.ContainsKey(symbolChildUi.Id))
-                    {
-                        var instance = InstanceForBlendOperations.Children.FirstOrDefault(c => c.SymbolChildId == symbolChildUi.Id);
-                        if(instance != null)
-                            NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
-                    }
-                }
-                FitViewToSelectionHandling.FitViewToSelection();
-            }
-        }
-
-        public override Variation CreateVariation()
-        {
-            var newVariation = VariationHandling.SaveVariationForSelectedOperators();
-            if (newVariation == null)
-                return new Variation();
-            
-            Selection.SetSelection(newVariation);
-            ResetView();
-            TriggerThumbnailUpdate();
-            return new Variation();
-        }
-
-        //private static Dictionary<Guid, List<Guid>> _selectionSetsForCompositions = new Dictionary<Guid, List<Guid>>();
-        //public static List<Instance>
-    }
-    
     public abstract class VariationBaseCanvas : ScalableCanvas, ISelectionContainer
     {
+        public abstract Variation CreateVariation();
+        public abstract void DrawToolbarFunctions();
+        
         protected abstract Instance InstanceForBlendOperations { get; }
         protected abstract SymbolVariationPool PoolForBlendOperations { get;  }
         protected abstract void DrawAdditionalContextMenuContent();
-        public abstract Variation CreateVariation();
         
         public void Draw(ImDrawListPtr drawList)
         {
@@ -217,6 +143,8 @@ namespace T3.Gui.Windows.Variations
 
             DrawContextMenu();
         }
+
+
 
         private readonly List<float> _blendWeights = new(3);
         private readonly List<Vector2> _blendPoints = new(3);
