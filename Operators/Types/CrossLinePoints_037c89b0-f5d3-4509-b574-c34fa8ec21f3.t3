@@ -16,7 +16,7 @@
         {
           "Id": "951a1792-e607-4595-b211-97be7d27694c"/*Count*/,
           "Type": "System.Int32",
-          "Value": 2
+          "Value": 3
         },
         {
           "Id": "178c1df1-5326-42d1-9251-8e2c8ad7965b"/*Center*/,
@@ -31,6 +31,11 @@
           "Id": "af75835a-04c9-4721-8c7a-a31ef8012f06"/*Pivot*/,
           "Type": "System.Single",
           "Value": 0.5
+        },
+        {
+          "Id": "ddc2ea6a-d356-46c9-b333-4cce69c02570"/*AddSeparator*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []

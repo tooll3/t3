@@ -125,6 +125,13 @@
         "X": -201.84563,
         "Y": 728.09204
       }
+    },
+    {
+      "InputId": "9c7227b6-e13e-4895-bbd3-8b92463cdecf"/*GenerateMipmaps*/,
+      "Position": {
+        "X": -201.84563,
+        "Y": 773.09204
+      }
     }
   ],
   "SymbolChildUis": [
