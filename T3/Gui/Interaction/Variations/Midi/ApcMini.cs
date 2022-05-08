@@ -20,9 +20,9 @@ namespace T3.Gui.Interaction.Variations.Midi
                           new CommandTriggerCombination(VariationHandling.RemovePresetAtIndex, InputModes.Delete, new[] { SceneTrigger1To64 },
                                                         CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
 
-                          new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default,
-                                                        new[] { ChannelButtons1To8 },
-                                                        CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                          // new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default,
+                          //                               new[] { ChannelButtons1To8 },
+                          //                               CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
 
                           new CommandTriggerCombination(VariationHandling.StartBlendingPresets, InputModes.Default,
                                                         new[] { SceneTrigger1To64 },
@@ -49,8 +49,8 @@ namespace T3.Gui.Interaction.Variations.Midi
         {
             _updateCount++;
             base.Update(midiIn, activeVariation);
-            if (activeVariation == null)
-                return;
+            // if (activeVariation == null)
+            //     return;
 
             var midiOut = MidiOutConnectionManager.GetConnectedController(_productNameHash);
             if (midiOut == null)

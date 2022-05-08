@@ -29,230 +29,230 @@ namespace T3.Gui.Windows.Variations
 
         public void DrawWindowContent()
         {
-            var activeVariation = T3Ui.VariationHandling.ActiveOperatorVariation;
-            if (activeVariation == null || activeVariation.Groups.Count == 0)
-            {
-                if (CustomComponents.EmptyWindowMessage("no variation groups\nfor symbol", "Create group"))
-                {
-                    T3Ui.VariationHandling.ShowAddGroupDialog();
-                }
-
-                return;
-            }
-
-            var width = ImGui.GetContentRegionAvail().X;
-            const float groupDetailsWidth = 200;
-
-            if (ImGui.BeginChild("groups", new Vector2(width - groupDetailsWidth, -1)))
-            {
-                DrawCompositionGroups();
-            }
-
-            ImGui.EndChild();
-
-            ImGui.SameLine();
-            if (ImGui.BeginChild("groupDetails", new Vector2(groupDetailsWidth, -1)))
-            {
-                var activeGroup = activeVariation.ActiveGroup;
-                if (activeGroup == null)
-                {
-                    CustomComponents.EmptyWindowMessage("No group selected");
-                    return;
-                }
-
-                var activePreset = activeGroup.ActivePreset;
-
-                // Group Title
-                ImGui.PushFont(Fonts.FontLarge);
-                ImGui.TextUnformatted(activeGroup.Title);
-                ImGui.PopFont();
-
-                // Functions
-                ImGui.SameLine(groupDetailsWidth - 16);
-                if (CustomComponents.IconButton(Icon.Trash, "", new Vector2(16, 16)))
-                {
-                    ImGui.OpenPopup("Delete?");
-                    
-                }
-                
-                if (ImGui.BeginPopupModal("Delete?"))
-                {
-                    ImGui.TextUnformatted("Delete this Variation group?.\nThis operation cannot be undone!\n\n");
-                    ImGui.Separator();
-
-                    if (ImGui.Button("OK", new Vector2(120, 0)))
-                    {
-                        ImGui.CloseCurrentPopup();
-                        activeVariation.RemoveGroup(activeGroup);
-                    }
-                    ImGui.SetItemDefaultFocus();
-                    ImGui.SameLine();
-                    if (ImGui.Button("Cancel", new Vector2(120, 0))) { ImGui.CloseCurrentPopup(); }
-                    ImGui.EndPopup();
-                }
-                
-
-                // Parameters
-                Guid symbolChildId = Guid.Empty;
-                SymbolChild lastSymbolChild = null;
-                var obsoleteParameters = new List<GroupParameter>();
-                foreach (var param in activeGroup.Parameters)
-                {
-                    if (param.SymbolChildId != symbolChildId)
-                    {
-                        lastSymbolChild = activeVariation.CompositionInstance.Symbol.Children.SingleOrDefault(child => child.Id == param.SymbolChildId);
-                        if (lastSymbolChild == null)
-                        {
-                            Log.Warning($"Discording obsolete variation parameter: {param.Title}");
-                            obsoleteParameters.Add(param);
-                            continue;
-                        }
-
-                        symbolChildId = lastSymbolChild.Id;
-
-                        ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
-                        ImGui.TextUnformatted(lastSymbolChild.ReadableName);
-                        ImGui.PopStyleColor();
-                        ImGui.PopFont();
-                        if (ImGui.IsItemHovered())
-                        {
-                            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                            T3Ui.AddHoveredId(symbolChildId);
-                            if (ImGui.IsItemClicked())
-                            {
-                                T3Ui.CenterHoveredId(symbolChildId);
-                            }
-                        }
-                    }
-
-                    if (lastSymbolChild != null && lastSymbolChild.InputValues.TryGetValue(param.InputId, out var input))
-                    {
-                        ImGui.TextUnformatted(input.Name);
-
-                        var valueInPreset = activePreset?.ValuesForGroupParameterIds[param.Id];
-                        if (input.Value is InputValue<float> floatValue
-                            && valueInPreset is InputValue<float> orgValue)
-                        {
-                            var isModified = Math.Abs(floatValue.Value - orgValue.Value) > 0.0001f;
-                            var currentValue = floatValue.Value;
-
-                            var highlightIfModified = isModified ? Color.Orange.Rgba : Color.Gray;
-                            ImGui.SameLine(100);
-                            ImGui.PushStyleColor(ImGuiCol.Text, highlightIfModified);
-                            ImGui.TextUnformatted($"{currentValue:G4}");
-                            ImGui.PopStyleColor();
-                        }
-                    }
-                }
-                
-                for (var index = obsoleteParameters.Count - 1; index >= 0; index--)
-                {
-                    activeGroup.Parameters.RemoveAt(index);
-                }
-            }
-            
-            ImGui.EndChild();
-        }
-
-        private static void DrawCompositionGroups()
-        {
-            var variationHandling = T3Ui.VariationHandling;
-            var activeOpVariation = variationHandling.ActiveOperatorVariation;
-
-            // if (CustomComponents.DisablableButton("save variation", activeOpVariation.ActiveGroup != null))
+            // var activeVariation = T3Ui.VariationHandling.ActiveOperatorVariation;
+            // if (activeVariation == null || activeVariation.Groups.Count == 0)
             // {
-            //     variationSystem.AppendPresetToCurrentGroup();
-            // }
-
-            var topLeftCorner = ImGui.GetCursorScreenPos();
-
-            // Scene column mode
-            ImGui.PushFont(Fonts.FontSmall);
-            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-            if (variationHandling.ActiveOperatorVariation.IsGroupExpanded)
-            {
-                var groupIndex = variationHandling.ActiveOperatorVariation.ActiveGroupIndex;
-                var group = variationHandling.ActiveOperatorVariation.ActiveGroup;
-                if (@group != null)
-                {
-                    ImGui.PushID(groupIndex);
-                    ImGui.SetCursorScreenPos(topLeftCorner);
-                    ImGui.BeginGroup();
-
-                    // Group column header
-                    ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, _activeGroupColor.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Color(0.1f).Rgba);
-                    if (ImGui.Button($"{groupIndex}\n{@group.Title}", new Vector2(ColumnWidth, GroupHeaderHeight)))
-                    {
-                        variationHandling.ActivateGroupAtIndex(groupIndex);
-                    }
-
-                    ImGui.PopStyleColor(3);
-
-                    for (var sceneIndex = 0; sceneIndex < GroupRows * GridColumns; sceneIndex++)
-                    {
-                        DrawPresetToggle(sceneIndex, activeOpVariation, groupIndex, @group, variationHandling);
-                        if (sceneIndex == 0 || (sceneIndex + 1) % GridColumns > 0)
-                            ImGui.SameLine();
-                    }
-
-                    ImGui.EndGroup();
-
-                    DrawBlendOrTransitionSlider(activeOpVariation, @group, variationHandling);
-
-                    ImGui.PopID();
-                }
-            }
-            else
-            {
-                for (var groupIndex = 0; groupIndex < activeOpVariation.Groups.Count; groupIndex++)
-                {
-                    ImGui.PushID(groupIndex);
-                    ImGui.SetCursorScreenPos(topLeftCorner + new Vector2((ColumnWidth + SliderWidth + GroupPadding) * groupIndex, 0));
-                    ImGui.BeginGroup();
-
-                    var isActiveGroup = groupIndex == activeOpVariation.ActiveGroupIndex;
-
-                    var group = activeOpVariation.Groups[groupIndex];
-                    if (@group == null)
-                        continue;
-
-                    // Group column header
-                    ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, isActiveGroup ? _activeGroupColor : _mutedTextColor.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, isActiveGroup ? new Color(0.1f) : Color.Transparent.Rgba);
-                    if (ImGui.Button($"{groupIndex}\n{@group.Title}", new Vector2(ColumnWidth, GroupHeaderHeight)))
-                    {
-                        variationHandling.ActivateGroupAtIndex(groupIndex);
-                    }
-
-                    ImGui.PopStyleColor(3);
-
-                    for (var sceneIndex = 0; sceneIndex < GroupRows; sceneIndex++)
-                    {
-                        DrawPresetToggle(sceneIndex, activeOpVariation, groupIndex, @group, variationHandling);
-                    }
-
-                    ImGui.EndGroup();
-                    DrawBlendOrTransitionSlider(activeOpVariation, @group, variationHandling);
-
-                    ImGui.PopID();
-                }
-            }
-
-            ImGui.PopStyleVar();
-            ImGui.PopFont();
-
-            // if (variationHandling.ActiveOperatorVariation.ActiveGroup != null && activeContext.ActiveGroup.BlendedPresets.Count > 1)
-            // {
-            //     if (DrawBlendSlider(ref _blendValue))
+            //     if (CustomComponents.EmptyWindowMessage("no variation groups\nfor symbol", "Create group"))
             //     {
-            //         variationHandling.BlendGroupPresets(activeContext.ActiveGroup, _blendValue);
+            //         T3Ui.VariationHandling.ShowAddGroupDialog();
+            //     }
+            //
+            //     return;
+            // }
+            //
+            // var width = ImGui.GetContentRegionAvail().X;
+            // const float groupDetailsWidth = 200;
+            //
+            // if (ImGui.BeginChild("groups", new Vector2(width - groupDetailsWidth, -1)))
+            // {
+            //     DrawCompositionGroups();
+            // }
+            //
+            // ImGui.EndChild();
+            //
+            // ImGui.SameLine();
+            // if (ImGui.BeginChild("groupDetails", new Vector2(groupDetailsWidth, -1)))
+            // {
+            //     var activeGroup = activeVariation.ActiveGroup;
+            //     if (activeGroup == null)
+            //     {
+            //         CustomComponents.EmptyWindowMessage("No group selected");
+            //         return;
+            //     }
+            //
+            //     var activePreset = activeGroup.ActivePreset;
+            //
+            //     // Group Title
+            //     ImGui.PushFont(Fonts.FontLarge);
+            //     ImGui.TextUnformatted(activeGroup.Title);
+            //     ImGui.PopFont();
+            //
+            //     // Functions
+            //     ImGui.SameLine(groupDetailsWidth - 16);
+            //     if (CustomComponents.IconButton(Icon.Trash, "", new Vector2(16, 16)))
+            //     {
+            //         ImGui.OpenPopup("Delete?");
+            //         
+            //     }
+            //     
+            //     if (ImGui.BeginPopupModal("Delete?"))
+            //     {
+            //         ImGui.TextUnformatted("Delete this Variation group?.\nThis operation cannot be undone!\n\n");
+            //         ImGui.Separator();
+            //
+            //         if (ImGui.Button("OK", new Vector2(120, 0)))
+            //         {
+            //             ImGui.CloseCurrentPopup();
+            //             activeVariation.RemoveGroup(activeGroup);
+            //         }
+            //         ImGui.SetItemDefaultFocus();
+            //         ImGui.SameLine();
+            //         if (ImGui.Button("Cancel", new Vector2(120, 0))) { ImGui.CloseCurrentPopup(); }
+            //         ImGui.EndPopup();
+            //     }
+            //     
+            //
+            //     // Parameters
+            //     Guid symbolChildId = Guid.Empty;
+            //     SymbolChild lastSymbolChild = null;
+            //     var obsoleteParameters = new List<GroupParameter>();
+            //     foreach (var param in activeGroup.Parameters)
+            //     {
+            //         if (param.SymbolChildId != symbolChildId)
+            //         {
+            //             lastSymbolChild = activeVariation.CompositionInstance.Symbol.Children.SingleOrDefault(child => child.Id == param.SymbolChildId);
+            //             if (lastSymbolChild == null)
+            //             {
+            //                 Log.Warning($"Discarding obsolete variation parameter: {param.Title}");
+            //                 obsoleteParameters.Add(param);
+            //                 continue;
+            //             }
+            //
+            //             symbolChildId = lastSymbolChild.Id;
+            //
+            //             ImGui.PushFont(Fonts.FontSmall);
+            //             ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+            //             ImGui.TextUnformatted(lastSymbolChild.ReadableName);
+            //             ImGui.PopStyleColor();
+            //             ImGui.PopFont();
+            //             if (ImGui.IsItemHovered())
+            //             {
+            //                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            //                 T3Ui.AddHoveredId(symbolChildId);
+            //                 if (ImGui.IsItemClicked())
+            //                 {
+            //                     T3Ui.CenterHoveredId(symbolChildId);
+            //                 }
+            //             }
+            //         }
+            //
+            //         if (lastSymbolChild != null && lastSymbolChild.InputValues.TryGetValue(param.InputId, out var input))
+            //         {
+            //             ImGui.TextUnformatted(input.Name);
+            //
+            //             var valueInPreset = activePreset?.ValuesForGroupParameterIds[param.Id];
+            //             if (input.Value is InputValue<float> floatValue
+            //                 && valueInPreset is InputValue<float> orgValue)
+            //             {
+            //                 var isModified = Math.Abs(floatValue.Value - orgValue.Value) > 0.0001f;
+            //                 var currentValue = floatValue.Value;
+            //
+            //                 var highlightIfModified = isModified ? Color.Orange.Rgba : Color.Gray;
+            //                 ImGui.SameLine(100);
+            //                 ImGui.PushStyleColor(ImGuiCol.Text, highlightIfModified);
+            //                 ImGui.TextUnformatted($"{currentValue:G4}");
+            //                 ImGui.PopStyleColor();
+            //             }
+            //         }
+            //     }
+            //     
+            //     for (var index = obsoleteParameters.Count - 1; index >= 0; index--)
+            //     {
+            //         activeGroup.Parameters.RemoveAt(index);
             //     }
             // }
+            //
+            // ImGui.EndChild();
         }
+
+        // private static void DrawCompositionGroups()
+        // {
+        //     var variationHandling = T3Ui.VariationHandling;
+        //     var activeOpVariation = variationHandling.ActiveOperatorVariation;
+        //
+        //     // if (CustomComponents.DisablableButton("save variation", activeOpVariation.ActiveGroup != null))
+        //     // {
+        //     //     variationSystem.AppendPresetToCurrentGroup();
+        //     // }
+        //
+        //     var topLeftCorner = ImGui.GetCursorScreenPos();
+        //
+        //     // Scene column mode
+        //     ImGui.PushFont(Fonts.FontSmall);
+        //     ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+        //     if (variationHandling.ActiveOperatorVariation.IsGroupExpanded)
+        //     {
+        //         var groupIndex = variationHandling.ActiveOperatorVariation.ActiveGroupIndex;
+        //         var group = variationHandling.ActiveOperatorVariation.ActiveGroup;
+        //         if (@group != null)
+        //         {
+        //             ImGui.PushID(groupIndex);
+        //             ImGui.SetCursorScreenPos(topLeftCorner);
+        //             ImGui.BeginGroup();
+        //
+        //             // Group column header
+        //             ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
+        //             ImGui.PushStyleColor(ImGuiCol.Text, _activeGroupColor.Rgba);
+        //             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Color(0.1f).Rgba);
+        //             if (ImGui.Button($"{groupIndex}\n{@group.Title}", new Vector2(ColumnWidth, GroupHeaderHeight)))
+        //             {
+        //                 variationHandling.ActivateGroupAtIndex(groupIndex);
+        //             }
+        //
+        //             ImGui.PopStyleColor(3);
+        //
+        //             for (var sceneIndex = 0; sceneIndex < GroupRows * GridColumns; sceneIndex++)
+        //             {
+        //                 DrawPresetToggle(sceneIndex, activeOpVariation, groupIndex, @group, variationHandling);
+        //                 if (sceneIndex == 0 || (sceneIndex + 1) % GridColumns > 0)
+        //                     ImGui.SameLine();
+        //             }
+        //
+        //             ImGui.EndGroup();
+        //
+        //             DrawBlendOrTransitionSlider(activeOpVariation, @group, variationHandling);
+        //
+        //             ImGui.PopID();
+        //         }
+        //     }
+        //     else
+        //     {
+        //         for (var groupIndex = 0; groupIndex < activeOpVariation.Groups.Count; groupIndex++)
+        //         {
+        //             ImGui.PushID(groupIndex);
+        //             ImGui.SetCursorScreenPos(topLeftCorner + new Vector2((ColumnWidth + SliderWidth + GroupPadding) * groupIndex, 0));
+        //             ImGui.BeginGroup();
+        //
+        //             var isActiveGroup = groupIndex == activeOpVariation.ActiveGroupIndex;
+        //
+        //             var group = activeOpVariation.Groups[groupIndex];
+        //             if (@group == null)
+        //                 continue;
+        //
+        //             // Group column header
+        //             ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
+        //             ImGui.PushStyleColor(ImGuiCol.Text, isActiveGroup ? _activeGroupColor : _mutedTextColor.Rgba);
+        //             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, isActiveGroup ? new Color(0.1f) : Color.Transparent.Rgba);
+        //             if (ImGui.Button($"{groupIndex}\n{@group.Title}", new Vector2(ColumnWidth, GroupHeaderHeight)))
+        //             {
+        //                 variationHandling.ActivateGroupAtIndex(groupIndex);
+        //             }
+        //
+        //             ImGui.PopStyleColor(3);
+        //
+        //             for (var sceneIndex = 0; sceneIndex < GroupRows; sceneIndex++)
+        //             {
+        //                 DrawPresetToggle(sceneIndex, activeOpVariation, groupIndex, @group, variationHandling);
+        //             }
+        //
+        //             ImGui.EndGroup();
+        //             DrawBlendOrTransitionSlider(activeOpVariation, @group, variationHandling);
+        //
+        //             ImGui.PopID();
+        //         }
+        //     }
+        //
+        //     ImGui.PopStyleVar();
+        //     ImGui.PopFont();
+        //
+        //     // if (variationHandling.ActiveOperatorVariation.ActiveGroup != null && activeContext.ActiveGroup.BlendedPresets.Count > 1)
+        //     // {
+        //     //     if (DrawBlendSlider(ref _blendValue))
+        //     //     {
+        //     //         variationHandling.BlendGroupPresets(activeContext.ActiveGroup, _blendValue);
+        //     //     }
+        //     // }
+        // }
 
         private static void DrawBlendOrTransitionSlider(OperatorVariation activeOpVariation, ParameterGroup group, LegacyVariationHandling presetSystem)
         {

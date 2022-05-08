@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Operators.Utils;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.Variations.Midi;
 using T3.Gui.Interaction.Variations.Model;
-using T3.Gui.Selection;
+using T3.Gui.UiHelpers;
+using T3.Gui.Windows.Variations;
 
 namespace T3.Gui.Interaction.Variations
 {
@@ -53,6 +57,7 @@ namespace T3.Gui.Interaction.Variations
             if (primaryGraphWindow == null)
                 return;
 
+
             var singleSelectedInstance = NodeSelection.GetSelectedInstance();
             if (singleSelectedInstance != null)
             {
@@ -84,9 +89,29 @@ namespace T3.Gui.Interaction.Variations
                     ActiveInstanceForPresets = ActiveInstanceForVariations;
                 }
             }
+            
+            UpdateMidiDevices();
         }
 
+        private static void UpdateMidiDevices()
+        {
+            // Update Midi Devices 
+            foreach (var connectedDevice in _inputDevices)
+            {
+                // TODO: support generic input controllers with arbitrary DeviceId 
+                var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(connectedDevice.GetProductNameHash());
+                if (midiIn == null)
+                    continue;
+
+                if (ActivePoolForVariations != null)
+                {
+                    connectedDevice.Update(midiIn, ActivePoolForVariations.ActiveVariation);
+                }
+            }
+        }
         
+        
+
         public static SymbolVariationPool GetOrLoadVariations(Guid symbolId)
         {
             if (_variationPoolForOperators.TryGetValue(symbolId, out var variationForComposition))
@@ -102,46 +127,99 @@ namespace T3.Gui.Interaction.Variations
 
         private static readonly Dictionary<Guid, SymbolVariationPool> _variationPoolForOperators = new();
 
-        public static void ActivateOrCreatePresetAtIndex(int obj)
+        public static void ActivateOrCreatePresetAtIndex(int activationIndex)
         {
-            throw new NotImplementedException();
+            if (ActivePoolForVariations == null)
+            {
+                Log.Warning($"Can't save variation #{activationIndex}. No variation pool active.");
+                return;
+            }
+            
+            if(TryGetVariation(activationIndex, out var existingVariation))
+            {
+                ActivePoolForVariations.Apply(ActiveInstanceForVariations, existingVariation, UserSettings.Config.PresetsResetToDefaultValues);
+                return;
+            } 
+            
+            SaveVariationForSelectedOperators(activationIndex);
         }
 
-        public static void SavePresetAtIndex(int obj)
+        public static void SavePresetAtIndex(int activationIndex)
         {
-            throw new NotImplementedException();
+            if (ActivePoolForVariations == null)
+            {
+                Log.Warning($"Can't save variation #{activationIndex}. No variation pool active.");
+                return;
+            }
+
+            SaveVariationForSelectedOperators(activationIndex);
         }
 
         public static void RemovePresetAtIndex(int obj)
         {
-            throw new NotImplementedException();
+            Log.Warning($"RemovePresetAtIndex {obj} not implemented");
+
         }
 
-        public static void ActivateGroupAtIndex(int obj)
+        public static void StartBlendingPresets(int[] indices)
         {
-            throw new NotImplementedException();
-        }
-
-        public static void StartBlendingPresets(int obj)
-        {
-            throw new NotImplementedException();
+            Log.Warning($"StartBlendingPresets {indices} not implemented");
         }
 
         public static void BlendValuesUpdate(int obj)
         {
-            throw new NotImplementedException();
+            Log.Warning($"BlendValuesUpdate {obj} not implemented");
         }
 
         public static void AppendPresetToCurrentGroup(int obj)
         {
-            throw new NotImplementedException();
+            Log.Warning($"AppendPresetToCurrentGroup {obj} not implemented");
         }
 
         public static bool TryGetVariation(int activationIndex, out Variation variation)
         {
-            // TODO: Implement
             variation = null;
+            if (ActivePoolForVariations == null)
+                return false;
+            
+            foreach (var v in ActivePoolForVariations.Variations)
+            {
+                if (v.ActivationIndex != activationIndex)
+                    continue;
+                    
+                variation = v;
+                return true;
+            }
+
             return false;
+        }
+
+        private const int AutoIndex=-1;
+        public static Variation SaveVariationForSelectedOperators(int activationIndex = AutoIndex )
+        {
+            if (ActivePoolForVariations == null)
+                return null;
+            
+            if (activationIndex != AutoIndex)
+            {
+                if(TryGetVariation(activationIndex, out var existingVariation))
+                {
+                    ActivePoolForVariations.DeleteVariation(existingVariation);
+                } 
+            }
+            
+            var selectedInstances = NodeSelection.GetSelectedInstances().ToList();
+            var newVariation = ActivePoolForVariations.CreateVariationForCompositionInstances(selectedInstances);
+            if (newVariation == null)
+                return null;
+            
+            newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForVariations.Variations);
+            if (activationIndex != AutoIndex)
+                newVariation.ActivationIndex = activationIndex;
+                
+            VariationThumbnail.VariationForRenaming = newVariation;
+            return newVariation;
+
         }
     }
 }

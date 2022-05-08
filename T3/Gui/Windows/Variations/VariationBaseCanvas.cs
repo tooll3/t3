@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using SharpDX.Direct3D11;
@@ -26,6 +27,10 @@ namespace T3.Gui.Windows.Variations
         {
             throw new System.NotImplementedException();
         }
+
+
+        private Dictionary<Guid, List<Guid>> _selectionSetsForCompositions = new Dictionary<Guid, List<Guid>>();
+        
     }
     
     public class VariationCanvas : VariationBaseCanvas
@@ -439,10 +444,10 @@ namespace T3.Gui.Windows.Variations
             ResetView();
         }
 
-        private bool TryToGetBoundingBox(List<Variation> variations, float extend, out ImRect area)
+        private static bool TryToGetBoundingBox( List<Variation> variations, float extend, out ImRect area)
         {
             area = new ImRect();
-            if (PoolForBlendOperations?.Variations == null)
+            if (variations == null)
                 return false;
 
             var foundOne = false;
@@ -472,7 +477,7 @@ namespace T3.Gui.Windows.Variations
         /// Then step through possible positions and check if a position would intersect with an existing element.
         /// Wrap columns to enforce some kind of grid.  
         /// </summary>
-        internal Vector2 FindFreePositionForNewThumbnail(List<Variation> variations)
+        internal static Vector2 FindFreePositionForNewThumbnail(List<Variation> variations)
         {
             if (!TryToGetBoundingBox(variations, 0, out var area))
             {

@@ -10,7 +10,7 @@ namespace T3.Gui.Interaction.Variations.Midi
                                              {
                                                  new CommandTriggerCombination(VariationHandling.ActivateOrCreatePresetAtIndex, InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                                  new CommandTriggerCombination(VariationHandling.SavePresetAtIndex, InputModes.Save, new[] { ManagerSet, NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
-                                                 new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
+                                                 //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { NanoButtonR1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed ),
                                              };
         }
 

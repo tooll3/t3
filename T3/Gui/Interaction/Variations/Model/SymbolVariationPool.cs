@@ -22,6 +22,9 @@ namespace T3.Gui.Interaction.Variations.Model
         public Guid SymbolId;
         public List<Variation> Variations;
 
+        public Variation ActiveVariation { get; private set; }
+        
+        
         public static SymbolVariationPool InitVariationPoolForSymbol(Guid compositionId)
         {
             var newPool = new SymbolVariationPool()

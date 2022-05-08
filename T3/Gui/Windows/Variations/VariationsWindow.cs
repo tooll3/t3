@@ -58,25 +58,20 @@ namespace T3.Gui.Windows.Variations
                         var newVariation = VariationHandling.ActivePoolForPresets.CreatePresetForInstanceSymbol(VariationHandling.ActiveInstanceForPresets);
                         if (newVariation != null)
                         {
-                            newVariation.PosOnCanvas = _presetCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
+                            newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
                             VariationThumbnail.VariationForRenaming = newVariation;
-                            _presetCanvas.Selection.SetSelection(newVariation);
-                            _presetCanvas.ResetView();
-                            _presetCanvas.TriggerThumbnailUpdate();
                         }
+                        _presetCanvas.Selection.SetSelection(newVariation);
+                        _presetCanvas.ResetView();
+                        _presetCanvas.TriggerThumbnailUpdate();
                     }
                     else if(_viewMode == ViewModes.Variations)
                     {
-                        var selectedInstances = NodeSelection.GetSelectedInstances().ToList();
-                        var newVariation = VariationHandling.ActivePoolForVariations.CreateVariationForCompositionInstances(selectedInstances);
-                        if (newVariation != null)
-                        {
-                            newVariation.PosOnCanvas = _variationCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForVariations.Variations);
-                            VariationThumbnail.VariationForRenaming = newVariation;
-                            _variationCanvas.Selection.SetSelection(newVariation);
-                            _variationCanvas.ResetView();
-                            _variationCanvas.TriggerThumbnailUpdate();
-                        }
+                        var newVariation = VariationHandling.SaveVariationForSelectedOperators();
+                        _variationCanvas.Selection.SetSelection(newVariation);
+                        _variationCanvas.ResetView();
+                        _variationCanvas.TriggerThumbnailUpdate();
+
                     }
                 }
 
