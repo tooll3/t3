@@ -66,6 +66,13 @@
         "X": 678.3147,
         "Y": 4847.4434
       }
+    },
+    {
+      "InputId": "a8590e4f-2edf-42c9-8bc2-e7b521f8cafc"/*AlphaCutOff*/,
+      "Position": {
+        "X": 678.3147,
+        "Y": 4892.4434
+      }
     }
   ],
   "SymbolChildUis": [

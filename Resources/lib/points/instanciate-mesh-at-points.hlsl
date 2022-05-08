@@ -22,6 +22,7 @@ cbuffer Params : register(b1)
     float Size;
     float SegmentCount;
     float UseWForSize;
+    float AlphaCutOff;
 };
 
 cbuffer FogParams : register(b2)
@@ -131,6 +132,9 @@ float4 psMain(psInput pin) : SV_TARGET
 {
     // Sample input textures to get shading model params.
     float4 albedo = BaseColorMap.Sample(texSampler, pin.texCoord);
+    if(AlphaCutOff > 0 && albedo.a < AlphaCutOff)
+        discard;
+
     float4 roughnessSpecularMetallic = RSMOMap.Sample(texSampler, pin.texCoord);
     float metalness = roughnessSpecularMetallic.z + Metal;
     float normalStrength = roughnessSpecularMetallic.y;
