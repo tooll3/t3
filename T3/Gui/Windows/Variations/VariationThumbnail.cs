@@ -101,6 +101,14 @@ namespace T3.Gui.Windows.Variations
                         _canvas.StartHover(variation);
                     }
 
+                    if (variation.IsSnapshot)
+                    {
+                        foreach (var childId in variation.ParameterSetsForChildIds.Keys)
+                        {
+                            T3Ui.AddHoveredId(childId);
+                        }
+                    }
+                    
                     if (ImGui.GetIO().KeyAlt)
                     {
                         var mouseX = ImGui.GetMousePos().X;
