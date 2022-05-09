@@ -24,10 +24,6 @@
       "DefaultValue": 0.1
     },
     {
-      "Id": "89e105e1-a333-465a-b8a5-7b0ee645acbf"/*Texture*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "57bb8790-4c02-422a-833b-0b1cf0f3e781"/*InputSource*/,
       "DefaultValue": 1
     },
@@ -42,6 +38,10 @@
     {
       "Id": "f2e2898f-bd68-4750-9058-2be39e63bd28"/*Visibility*/,
       "DefaultValue": "Inherit"
+    },
+    {
+      "Id": "f79c66ee-b06a-4684-b979-ef3b8ddd1e59"/*DeviceIndex2*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [
@@ -659,9 +659,9 @@
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "118618a7-c836-46ac-aa45-f738fc9e2e3e",
+      "SourceSlotId": "f79c66ee-b06a-4684-b979-ef3b8ddd1e59",
       "TargetParentOrChildId": "280d52f7-e2c5-480d-acf1-cffe351edb14",
-      "TargetSlotId": "e8a10146-ef7f-459c-a1f8-eef621a2c522"
+      "TargetSlotId": "41cfdc83-dc6b-4cc3-b814-c60177ef013f"
     },
     {
       "SourceParentOrChildId": "900e52f4-4ebd-4b83-bc4d-51d726ea57a8",

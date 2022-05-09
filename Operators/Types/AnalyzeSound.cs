@@ -24,9 +24,6 @@ namespace T3.Operators.Types.Id_112ea923_a349_412f_8dd3_4d9d9fc42dc6
         [Input(Guid = "1d92b4fa-a8e9-4c1e-891a-65bf7632bdcf")]
         public readonly InputSlot<float> HiRange = new InputSlot<float>();
 
-        [Input(Guid = "89e105e1-a333-465a-b8a5-7b0ee645acbf")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
-
         [Input(Guid = "57bb8790-4c02-422a-833b-0b1cf0f3e781", MappedType = typeof(InputSources))]
         public readonly InputSlot<int> InputSource = new InputSlot<int>();
 
@@ -38,6 +35,9 @@ namespace T3.Operators.Types.Id_112ea923_a349_412f_8dd3_4d9d9fc42dc6
 
         [Input(Guid = "f2e2898f-bd68-4750-9058-2be39e63bd28")]
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+
+        [Input(Guid = "f79c66ee-b06a-4684-b979-ef3b8ddd1e59")]
+        public readonly InputSlot<int> DeviceIndex2 = new InputSlot<int>();
 
         [Output(Guid = "6ba78564-8315-49ef-9d47-eb96e0a52fd5")]
         public readonly Slot<T3.Core.Command> Detection = new Slot<T3.Core.Command>();

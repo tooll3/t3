@@ -2,14 +2,25 @@
   "Id": "b72d968b-0045-408d-a2f9-5c739c692a66"/*SoundInput*/,
   "InputUis": [
     {
-      "InputId": "e8a10146-ef7f-459c-a1f8-eef621a2c522"/*DeviceIndex*/,
-      "Relevancy": "Relevant",
+      "InputId": "41cfdc83-dc6b-4cc3-b814-c60177ef013f"/*DeviceIndex*/,
       "Position": {
-        "X": 36.0,
-        "Y": 334.0
-      },
-      "Min": -100.0,
-      "Max": 100.0
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "e278c4c8-4c3a-4f95-beec-ce8ead827724"/*Reset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "bcd6c387-7fec-494f-b956-560728f05bff"/*Gain*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
     }
   ],
   "SymbolChildUis": [],

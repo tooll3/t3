@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -25,7 +26,7 @@ namespace T3.Operators.Types.Id_485af23d_543e_44a7_b29f_693ed9533ab5
         private void Update(EvaluationContext context)
         {
             
-            var resetHit = DetectHit(ResetTrigger.GetValue(context), ref _wasResetTrigger);
+            var resetHit = Utilities.DetectHit(ResetTrigger.GetValue(context), ref _wasResetTrigger);
 
             if (resetHit)
             {
@@ -38,22 +39,6 @@ namespace T3.Operators.Types.Id_485af23d_543e_44a7_b29f_693ed9533ab5
 
             Delta.Value = ConvertTime(timeInSecs);
             LastDuration.DirtyFlag.Clear();
-        }
-
-        private bool DetectHit(bool newValue, ref bool lastValue)
-        {
-            var hasHit = false;
-            if (newValue != lastValue)
-            {
-                if (newValue)
-                {
-                    hasHit = true;
-                }
-
-                lastValue = newValue;
-            }
-
-            return hasHit;
         }
 
         private float ConvertTime(double timeInSecs)
