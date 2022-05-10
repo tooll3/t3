@@ -48,6 +48,15 @@ namespace T3.Gui.Windows.Variations
                         set.Add(selectedOp.SymbolChildId);
                     }
                     VariationHandling.FocusSetsForCompositions[compositionId] = set;
+
+                    var childrenWhenSettingFocus = new HashSet<Guid>();
+                    foreach (var child in InstanceForBlendOperations.Children)
+                    {
+                        childrenWhenSettingFocus.Add(child.SymbolChildId);
+                    }
+
+                    VariationHandling.ChildIdsWhenFocusedForCompositions[compositionId] = childrenWhenSettingFocus;
+
                 }
                 CustomComponents.TooltipForLastItem("This will limit the parameters stored in new snapshots to the Operators selected when setting the focus.");
             }
@@ -56,6 +65,7 @@ namespace T3.Gui.Windows.Variations
                 if (ImGui.Button($"Clear focus ({filteredOpCount})"))
                 {
                     VariationHandling.FocusSetsForCompositions.Remove(compositionId);
+                    VariationHandling.ChildIdsWhenFocusedForCompositions.Remove(compositionId);
                 }
 
                 if (ImGui.IsItemHovered())

@@ -213,11 +213,26 @@ namespace T3.Gui.Interaction.Variations
                         _affectedInstances.Add(child);    
                     }
                 }
+
+                // add new children...
+                if (ChildIdsWhenFocusedForCompositions.TryGetValue(ActiveInstanceForSnapshots.Symbol.Id, out var previousChildIds))
+                {
+                    var countNewFocusItems = 0;
+                    foreach (var child in ActiveInstanceForSnapshots.Children)
+                    {
+                        if (!previousChildIds.Contains(child.SymbolChildId))
+                        {
+                            countNewFocusItems++;
+                            _affectedInstances.Add(child);    
+                        }
+                    }
+
+                    if (countNewFocusItems > 0)
+                    {
+                        Log.Debug($"Added {countNewFocusItems} items added since setting focus to snapshot.");
+                    }
+                }
             }
-            // else if(NodeSelection.IsAnythingSelected())
-            // {
-            //     _affectedInstances.AddRange(NodeSelection.GetSelectedInstances());    
-            // }
             else
             {
                 _affectedInstances.AddRange(ActiveInstanceForSnapshots.Children);
@@ -235,6 +250,10 @@ namespace T3.Gui.Interaction.Variations
         }
         
         public static readonly Dictionary<Guid, HashSet<Guid>> FocusSetsForCompositions = new();
+        /// <summary>
+        /// This set can be used to find new children since the focus was set...
+        /// </summary>
+        public static readonly Dictionary<Guid, HashSet<Guid>> ChildIdsWhenFocusedForCompositions = new();
         private static readonly List<Instance> _affectedInstances = new(100);
     }
 }
