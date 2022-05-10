@@ -48,7 +48,6 @@ namespace T3.Gui.InputUi.SingleControl
             var result = ColorEditButton.Draw(ref float4Value, Vector2.Zero); 
             if (result != InputEditStateFlags.Nothing)
             {
-                Log.Debug("Result from color picker");
                 float4Value.CopyTo(FloatComponents);
                 inputEditState |= result;
             }
