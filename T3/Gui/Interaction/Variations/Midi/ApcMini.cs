@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ImGuiNET;
 using NAudio.Midi;
 using T3.Gui.Interaction.Variations.Model;
 
@@ -12,19 +11,26 @@ namespace T3.Gui.Interaction.Variations.Midi
             CommandTriggerCombinations
                 = new List<CommandTriggerCombination>
                       {
-                          new(VariationHandling.ActivateOrCreatePresetAtIndex, InputModes.Default, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                          new(VariationHandling.SavePresetAtIndex, InputModes.Save, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                          new(VariationHandling.RemovePresetAtIndex, InputModes.Delete, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
-                          new(VariationHandling.StartBlendingPresets, InputModes.Default, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.AllCombinedButtonsReleased),
-                          new(VariationHandling.BlendValuesUpdate, InputModes.Default, new[] { Sliders1To9 }, CommandTriggerCombination.ExecutesAt.ControllerChange),
-                          new(VariationHandling.AppendPresetToCurrentGroup, InputModes.Default, new[] { SceneLaunch8ClipStopAll }, CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),                          
+                          new(VariationHandling.ActivateOrCreateSnapshotAtIndex, InputModes.Default, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                          new(VariationHandling.SaveSnapshotAtIndex, InputModes.Save, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                          
+                          new(VariationHandling.RemoveSnapshotAtIndex, InputModes.Delete, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                          
+                          new(VariationHandling.StartBlendingSnapshots, InputModes.Default, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.AllCombinedButtonsReleased),
+                          
+                          new(VariationHandling.StopBlendingTowards, InputModes.Default, new[] { Shift }, CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),
+                          new(VariationHandling.StartBlendingTowardsSnapshot, requiredInputMode: InputModes.BlendTo, new[] { SceneTrigger1To64 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
+                          new(VariationHandling.UpdateBlendingTowardsProgress, InputModes.Default, new[] { Slider9 }, CommandTriggerCombination.ExecutesAt.ControllerChange),
+                          
+                          new(VariationHandling.UpdateBlendValues, InputModes.Default, new[] { Sliders1To8 }, CommandTriggerCombination.ExecutesAt.ControllerChange),
+                          new(VariationHandling.SaveSnapshotAtNextFreeSlot, InputModes.Default, new[] { SceneLaunch8ClipStopAll }, CommandTriggerCombination.ExecutesAt.SingleActionButtonPressed),                          
                           //new CommandTriggerCombination(VariationHandling.ActivateGroupAtIndex, InputModes.Default, new[] { ChannelButtons1To8 }, CommandTriggerCombination.ExecutesAt.SingleRangeButtonPressed),
                       };
 
             ModeButtons = new List<ModeButton>
                               {
-                                  new ModeButton(Shift, InputModes.Save),
-                                  new ModeButton(SceneLaunch1ClipStop, InputModes.Delete),
+                                  new(Shift, InputModes.BlendTo),
+                                  new(SceneLaunch1ClipStop, InputModes.Delete),
                               };
         }
 
@@ -70,7 +76,9 @@ namespace T3.Gui.Interaction.Variations.Midi
                                 return AddModeHighlight(mappedIndex, (int)color);
                             });
 
-
+            // UpdateRangeLeds(midiOut, SceneLaunch8ClipStopAll, 
+            //                 mappedIndex => (int)ApcButtonColor.Red);
+            
             // if (activeVariation.IsGroupExpanded)
             // {
             //     var activeIndex = activeVariation.ActiveGroupIndex; 
@@ -162,6 +170,8 @@ namespace T3.Gui.Interaction.Variations.Midi
 
         private static readonly ButtonRange SceneTrigger1To64 = new ButtonRange(0, 63);
         private static readonly ButtonRange Sliders1To9 = new ButtonRange(48, 48 + 8);
+        private static readonly ButtonRange Sliders1To8 = new ButtonRange(48, 48 + 7);
+        private static readonly ButtonRange Slider9 = new ButtonRange(48+8, 48 + 8);
 
         private static readonly ButtonRange ChannelButtons1To8 = new ButtonRange(64, 71);
         private static readonly ButtonRange ButtonUp = new ButtonRange(64);

@@ -160,6 +160,15 @@ namespace T3.Gui.Interaction.Variations.Model
             _activeBlendCommand = CreateBlendToPresetCommand(instance, variation, blend, resetToDefaults);
             _activeBlendCommand.Do();
         }
+        
+        public void BeginBlendTowardsSnapshot(Instance instance, Variation variation, float blend, bool resetToDefaults)
+        {
+            StopHover();
+
+            _activeBlendCommand = CreateBlendTowardsVariationCommand(instance, variation, blend, resetToDefaults);
+            _activeBlendCommand.Do();
+        }
+        
 
         public void BeginWeightedBlend(Instance instance, List<Variation> variations, IEnumerable<float> weights, bool resetToDefaults)
         {
@@ -456,7 +465,47 @@ namespace T3.Gui.Interaction.Variations.Model
             var activeBlendCommand = new MacroCommand("Set Blended Snapshot Values", commands);
             return activeBlendCommand;
         }
+        
+        private static MacroCommand CreateBlendTowardsVariationCommand(Instance compositionInstance, Variation variation, float blend, bool resetToDefaults)
+        {
+            var commands = new List<ICommand>();
+            //var parentSymbol = compositionInstance.Parent.Symbol;
+            if (!variation.IsSnapshot)
+                return null;
+            
+            foreach (var child in compositionInstance.Children)
+            {
+                if (!variation.ParameterSetsForChildIds.TryGetValue(child.SymbolChildId, out var parametersForInputs))
+                    continue;
+                
+                foreach (var inputSlot in child.Inputs)
+                {
+                    if (!ValueUtils.BlendMethods.TryGetValue(inputSlot.Input.DefaultValue.ValueType, out var blendFunction))
+                        continue;
 
+                    if (parametersForInputs.TryGetValue(inputSlot.Id, out var parameter))
+                    {
+                        if (parameter == null)
+                            continue;
+
+                        var mixed = blendFunction(inputSlot.Input.Value, parameter, blend);
+                        var newCommand = new ChangeInputValueCommand(compositionInstance.Symbol, child.SymbolChildId, inputSlot.Input, mixed);
+                        commands.Add(newCommand);
+                    }
+                    else if (!inputSlot.Input.IsDefault && resetToDefaults)
+                    {
+                        var mixed = blendFunction(inputSlot.Input.Value, inputSlot.Input.DefaultValue, blend);
+                        var newCommand = new ChangeInputValueCommand(compositionInstance.Symbol, child.SymbolChildId, inputSlot.Input, mixed);
+                        commands.Add(newCommand);
+                    }
+                }
+            }
+
+            var activeBlendCommand = new MacroCommand("Blend towards snapshot", commands);
+            return activeBlendCommand;
+        }
+        
+        
         private static MacroCommand CreateApplyPresetCommand(Instance instance, Variation variation, bool resetOtherNonDefaults)
         {
             var commands = new List<ICommand>();

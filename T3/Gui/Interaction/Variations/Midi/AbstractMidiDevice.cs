@@ -25,10 +25,9 @@ namespace T3.Gui.Interaction.Variations.Midi
         public enum InputModes
         {
             Default = 1 << 1,
-            BankNavigation = 1 << 2,
-            Delete = 1 << 3,
-            Save = 1 << 4,
-            Queue = 1 << 5,
+            Delete = 1 << 2,
+            Save = 1 << 3,
+            BlendTo = 1 << 4,   
             None = 0,
         }
 

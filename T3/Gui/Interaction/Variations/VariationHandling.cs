@@ -112,8 +112,6 @@ namespace T3.Gui.Interaction.Variations
             }
         }
         
-        
-
         public static SymbolVariationPool GetOrLoadVariations(Guid symbolId)
         {
             if (_variationPoolForOperators.TryGetValue(symbolId, out var variationForComposition))
@@ -129,7 +127,7 @@ namespace T3.Gui.Interaction.Variations
 
         private static readonly Dictionary<Guid, SymbolVariationPool> _variationPoolForOperators = new();
 
-        public static void ActivateOrCreatePresetAtIndex(int activationIndex)
+        public static void ActivateOrCreateSnapshotAtIndex(int activationIndex)
         {
             if (ActivePoolForSnapshots == null)
             {
@@ -146,7 +144,7 @@ namespace T3.Gui.Interaction.Variations
             CreateOrUpdateSnapshotVariation(activationIndex);
         }
 
-        public static void SavePresetAtIndex(int activationIndex)
+        public static void SaveSnapshotAtIndex(int activationIndex)
         {
             if (ActivePoolForSnapshots == null)
             {
@@ -157,7 +155,7 @@ namespace T3.Gui.Interaction.Variations
             CreateOrUpdateSnapshotVariation(activationIndex);
         }
 
-        public static void RemovePresetAtIndex(int activationIndex)
+        public static void RemoveSnapshotAtIndex(int activationIndex)
         {
             if (ActivePoolForSnapshots == null)
                 return;
@@ -173,19 +171,58 @@ namespace T3.Gui.Interaction.Variations
             }
         }
 
-        public static void StartBlendingPresets(int[] indices)
+        public static void StartBlendingSnapshots(int[] indices)
         {
-            Log.Warning($"StartBlendingPresets {indices} not implemented");
+            Log.Warning($"StartBlendingSnapshots {indices} not implemented");
         }
 
-        public static void BlendValuesUpdate(int obj)
+        public static void StartBlendingTowardsSnapshot(int index)
+        {
+            if (ActiveInstanceForSnapshots == null || ActivePoolForSnapshots == null)
+            {
+                Log.Warning("Can't blend without active composition or variation pool");
+                return;
+            }
+
+            if (SymbolVariationPool.TryGetSnapshot(index, out var variation))
+            {
+                _blendTowardsIndex = index;
+                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, 0, UserSettings.Config.PresetsResetToDefaultValues);
+            }
+        }
+
+        private static int _blendTowardsIndex = -1;
+
+        public static void UpdateBlendingTowardsProgress(int index, float value)
+        {
+            if (ActiveInstanceForSnapshots == null || ActivePoolForSnapshots == null)
+            {
+                Log.Warning("Can't blend without active composition or variation pool");
+                return;
+            }
+
+            if (_blendTowardsIndex == -1)
+                return;
+            
+            if (SymbolVariationPool.TryGetSnapshot(_blendTowardsIndex, out var variation))
+            {
+                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, value/127.0f, UserSettings.Config.PresetsResetToDefaultValues);
+            }
+        }
+        
+        public static void StopBlendingTowards()
+        {
+            _blendTowardsIndex = -1;
+        }
+        
+        public static void UpdateBlendValues(int obj, float value)
         {
             Log.Warning($"BlendValuesUpdate {obj} not implemented");
         }
 
-        public static void AppendPresetToCurrentGroup(int obj)
+        public static void SaveSnapshotAtNextFreeSlot(int obj)
         {
-            Log.Warning($"AppendPresetToCurrentGroup {obj} not implemented");
+            Log.Warning($"SaveSnapshotAtNextFreeSlot {obj} not implemented");
         }
 
         private const int AutoIndex=-1;
