@@ -156,7 +156,14 @@ namespace T3.Gui.Windows.Output
             
             // Set camera
             //var usedCam = _lastInteractiveCam ?? _outputWindowViewCamera;
-            _evaluationContext.SetViewFromCamera(_camSelectionHandling.CameraForRendering);
+            if (_camSelectionHandling.CameraForRendering != null)
+            {
+                _evaluationContext.SetViewFromCamera(_camSelectionHandling.CameraForRendering);
+            }
+            else
+            {
+                Log.Error("Viewer camera not undefined");
+            }
             _evaluationContext.BackgroundColor = _backgroundColor;
 
             // Ugly hack to hide final target

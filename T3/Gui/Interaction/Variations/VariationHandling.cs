@@ -214,10 +214,10 @@ namespace T3.Gui.Interaction.Variations
                     }
                 }
             }
-            else if(NodeSelection.IsAnythingSelected())
-            {
-                _affectedInstances.AddRange(NodeSelection.GetSelectedInstances());    
-            }
+            // else if(NodeSelection.IsAnythingSelected())
+            // {
+            //     _affectedInstances.AddRange(NodeSelection.GetSelectedInstances());    
+            // }
             else
             {
                 _affectedInstances.AddRange(ActiveInstanceForSnapshots.Children);
