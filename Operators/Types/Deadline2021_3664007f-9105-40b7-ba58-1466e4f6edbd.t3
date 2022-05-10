@@ -17,11 +17,6 @@
           "Id": "29ef504f-c6a4-4740-a5fe-95e45117fc32"/*Reset*/,
           "Type": "System.Boolean",
           "Value": false
-        },
-        {
-          "Id": "118618a7-c836-46ac-aa45-f738fc9e2e3e"/*DeviceIndex*/,
-          "Type": "System.Single",
-          "Value": 2.0
         }
       ],
       "Outputs": []

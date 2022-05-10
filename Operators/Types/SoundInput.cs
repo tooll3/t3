@@ -32,13 +32,18 @@ namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
 
         private void Update(EvaluationContext context)
         {
-            var reinitTriggered = Utilities.DetectHit(Reset.GetValue(context), ref _wasReset);
-            // {
-            //     _analyzer.ReInit();
-            // }
-            
-            if (_analyzer == null || reinitTriggered)  
+            if(Utilities.DetectHit(Reset.GetValue(context), ref _wasReset))
+            {
+                _analyzer?.ReInit();
+            }
+
+            if (_analyzer == null)
+            {
+                // if(_analyzer != null)
+                //     _analyzer.Dispose();
+                
                 _analyzer = new Analyzer();
+            }
             
             _analyzer.SetDeviceIndex(DeviceIndex.GetValue(context));
             
@@ -122,7 +127,6 @@ namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
         
         private void Start()
         {
-            _noDataErrorShownOnce = false;
             var saveDeviceIndex = Math.Abs(_deviceIndex) % _deviceList.Count;
             if (_deviceList.Count == 0)
             {
@@ -155,6 +159,9 @@ namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
             System.Threading.Thread.Sleep(100);
             _timer.Enabled = true;
             _timer.Start();
+            Log.Debug(" Starting?");
+            _noDataErrorShownOnce = false;
+
         }
         
         private void Stop()
@@ -189,7 +196,7 @@ namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
             
         private void TimerUpdateEventHandler(object sender, EventArgs eventArgs)
         {
-            //AvailableData = BassWasapi.GetData(null, (int)DataFlags.Available);
+            AvailableData = BassWasapi.GetData(null, (int)DataFlags.Available);
 
             // Note: The DataFlags seems to be offset by one (e.g. FFT256 only fills 128 entries)
             const int get256FftValues = (int)DataFlags.FFT512; 
@@ -203,7 +210,11 @@ namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
                 return;
             }
 
-            _noDataErrorShownOnce = false;
+            if (_noDataErrorShownOnce)
+            {
+                Log.Debug($"Data available again?: {Bass.LastError}");
+                _noDataErrorShownOnce = false;
+            }
             var level = BassWasapi.GetLevel();
 
             // Required, because some programs hang the output. If the output hangs for a 75ms
