@@ -244,6 +244,50 @@
         "X": 430.19403,
         "Y": 381.45544
       }
+    },
+    {
+      "ChildId": "de894d33-c408-44a7-8d25-b82b98587200"/*FilesInFolder*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 557.6597,
+        "Y": 470.99005
+      }
+    },
+    {
+      "ChildId": "5aaa4d0b-f8d0-4cfe-bed3-ff780d0d6cb3"/*PickFromStrings*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 717.52954,
+        "Y": 434.68433
+      }
+    },
+    {
+      "ChildId": "17baf0f9-d359-413a-a88e-766ba27e64ef"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 933.7434,
+        "Y": 487.66278
+      }
+    },
+    {
+      "ChildId": "9a91021f-9d71-4f31-a805-73171c43f6bb"/*ColorGrade*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1244.406,
+        "Y": 149.74536
+      }
     }
   ],
   "OutputUis": [

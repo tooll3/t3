@@ -25,13 +25,12 @@ namespace T3.Operators.Types.Id_485af23d_543e_44a7_b29f_693ed9533ab5
 
         private void Update(EvaluationContext context)
         {
-            
             var resetHit = Utilities.DetectHit(ResetTrigger.GetValue(context), ref _wasResetTrigger);
 
             if (resetHit)
             {
                 LastDuration.Value = (float)(EvaluationContext.RunTimeInSecs - _startTime);
-                Log.Debug($"was hit after {LastDuration.Value:0.00s}");
+                //Log.Debug($"was hit after {LastDuration.Value:0.00s}");
                 _startTime = EvaluationContext.RunTimeInSecs;
             }
             
@@ -48,8 +47,12 @@ namespace T3.Operators.Types.Id_485af23d_543e_44a7_b29f_693ed9533ab5
                 case SendTimeAs.TimeInSecs:
                     return (float)timeInSecs;
                 case SendTimeAs.BeatTime:
+                {
                     var bpm = Playback.Current != null ? Playback.Current.Bpm : 120;
+                    Log.Debug($"Using bpm: {bpm}");
                     return (float)(timeInSecs * bpm / 240f);
+                }
+                    
                 default:
                     throw new ArgumentOutOfRangeException();
             }
