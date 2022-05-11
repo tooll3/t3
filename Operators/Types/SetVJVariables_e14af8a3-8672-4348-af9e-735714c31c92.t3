@@ -14,12 +14,17 @@
     {
       "Id": "4e8d6ee1-b210-48fb-ac32-e093f877de25"/*HihatThreshold*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "51bb8ea2-3afd-41ff-a9e6-7ac5a3c3fc9a"/*AudioInGain*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [
     {
-      "Id": "0fbc2d52-b596-4a68-9904-034a9ca31883"/*SetContextVariable*/,
+      "Id": "0fbc2d52-b596-4a68-9904-034a9ca31883"/*SetSpeedFactorA*/,
       "SymbolId": "2a0c932a-eb81-4a7d-aeac-836a23b0b789",
+      "Name": "SetSpeedFactorA",
       "InputValues": [
         {
           "Id": "6ee64d39-855a-4b20-a8f5-39b4f98e8036"/*VariableName*/,
@@ -69,8 +74,9 @@
       "Outputs": []
     },
     {
-      "Id": "dd97c14c-205f-4ead-80ac-116aa0bdd7ec"/*SetContextVariable*/,
+      "Id": "dd97c14c-205f-4ead-80ac-116aa0bdd7ec"/*SetSpeedFactorB*/,
       "SymbolId": "2a0c932a-eb81-4a7d-aeac-836a23b0b789",
+      "Name": "SetSpeedFactorB",
       "InputValues": [
         {
           "Id": "6ee64d39-855a-4b20-a8f5-39b4f98e8036"/*VariableName*/,
@@ -215,17 +221,12 @@
         {
           "Id": "41cfdc83-dc6b-4cc3-b814-c60177ef013f"/*DeviceIndex*/,
           "Type": "System.Int32",
-          "Value": 0
+          "Value": 3
         },
         {
           "Id": "e278c4c8-4c3a-4f95-beec-ce8ead827724"/*Reset*/,
           "Type": "System.Boolean",
           "Value": false
-        },
-        {
-          "Id": "bcd6c387-7fec-494f-b956-560728f05bff"/*Gain*/,
-          "Type": "System.Single",
-          "Value": 0.61
         }
       ],
       "Outputs": []
@@ -745,6 +746,12 @@
       "SourceSlotId": "598e38d5-2347-4b93-a7a4-a23190d95dcd",
       "TargetParentOrChildId": "e9d0e6f2-05ff-402f-acb1-d2c249641799",
       "TargetSlotId": "58b6df86-b02e-4183-9b63-1033c9dff25f"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "51bb8ea2-3afd-41ff-a9e6-7ac5a3c3fc9a",
+      "TargetParentOrChildId": "ee1e1df6-fdad-42b0-93a2-36cc509512f2",
+      "TargetSlotId": "bcd6c387-7fec-494f-b956-560728f05bff"
     }
   ]
 }

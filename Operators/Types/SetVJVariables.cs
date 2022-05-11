@@ -21,6 +21,9 @@ namespace T3.Operators.Types.Id_e14af8a3_8672_4348_af9e_735714c31c92
         [Input(Guid = "4e8d6ee1-b210-48fb-ac32-e093f877de25")]
         public readonly InputSlot<float> HihatThreshold = new InputSlot<float>();
 
+        [Input(Guid = "51bb8ea2-3afd-41ff-a9e6-7ac5a3c3fc9a")]
+        public readonly InputSlot<float> AudioInGain = new InputSlot<float>();
+
 
     }
 }
