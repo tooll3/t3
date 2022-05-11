@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NAudio.Midi;
 using Operators.Utils;
+using T3.Core.Logging;
 using T3.Gui.Interaction.Variations.Model;
 
 namespace T3.Gui.Interaction.Variations.Midi
@@ -130,6 +131,19 @@ namespace T3.Gui.Interaction.Variations.Midi
         {
             lock (this)
             {
+                if (!(sender is MidiIn midiIn) || msg.MidiEvent == null)
+                    return;
+                
+
+                var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
+
+                if (device.ProductName.GetHashCode() != GetProductNameHash())
+                {
+                    //Log.Debug($"Ingore device {device.ProductName} in AbstractMidiController");
+                    return;
+                }
+                    
+                
                 if (msg.MidiEvent == null)
                     return;
 
