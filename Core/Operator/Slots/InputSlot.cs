@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using T3.Core.DataTypes;
 
 namespace T3.Core.Operator.Slots
@@ -6,6 +7,7 @@ namespace T3.Core.Operator.Slots
     public class InputSlot<T> : Slot<T>, IInputSlot
     {
         public Type MappedType { get; set; }
+        public List<int> LimitMultiInputInvalidationToIndices { get; set; }
 
         public InputSlot(InputValue<T> typedInputValue)
         {
