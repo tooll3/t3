@@ -49,7 +49,7 @@ namespace T3.Operators.Types.Id_485af23d_543e_44a7_b29f_693ed9533ab5
                 case SendTimeAs.BeatTime:
                 {
                     var bpm = Playback.Current != null ? Playback.Current.Bpm : 120;
-                    Log.Debug($"Using bpm: {bpm}");
+                    //Log.Debug($"Using bpm: {bpm}");
                     return (float)(timeInSecs * bpm / 240f);
                 }
                     
