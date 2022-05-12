@@ -71,7 +71,7 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
     pointIndexPairs.GetDimensions(pairCount, stride);
 
 
-    float3 position = 0;
+    //float3 position = 0;
     if(TestIndex >= 0) {
         //pointIndexPairs[DTid.x] = uint2( 0, 0);
 
@@ -81,10 +81,12 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
         uint startIndex, endIndex;
         if(ParticleGridFind(position, startIndex, endIndex)) 
         {
+            int x2=0;
             for(uint i=startIndex; i < endIndex; ++i) 
             {
                 uint otherIndex = particleGridBuffer[i];
-                pointIndexPairs[DTid.x] = uint2( 1, otherIndex);
+                pointIndexPairs[DTid.x + x2] = uint2( pointIndex, otherIndex);
+                x2++;
             }
         } 
         return;
@@ -96,16 +98,12 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
         return;
 
     uint stepIndex = CurrentStep % StepCount;
-
     uint pairIndex = stepIndex * (int)(LinesPerSteps + 0.5) + indexWithingStep;
 
-    //uint shuffle = hash11(CurrentStep * 0.123 - indexWithingStep ) * ScatterLookUp * pointCount;
-    //uint pointIndex = (CurrentStep + shuffle + indexWithingStep ) % pointCount;
+    uint shuffle =  hash11(CurrentStep * 0.123 + indexWithingStep * 0.121 ) * ScatterLookUp * pointCount;
+    uint pointIndex = (CurrentStep + shuffle + indexWithingStep ) % pointCount;
 
-
-
-
-    uint pointIndex = indexWithingStep % pointCount;
+    //uint pointIndex =  (indexWithingStep + CurrentStep) % pointCount;
 
     if(pairIndex >= pairCount)
         return;
@@ -131,9 +129,9 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
     // }
         
 
-    //float3 position = points[pointIndex].position;
-    //float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + position * 100 + Time % 123.1 ) -0.5f)  * ParticleGridCellSize;
-    //position+= jitter;
+    float3 position = points[pointIndex].position;
+    float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + position * 100 + Time % 123.1 ) -0.5f)  * ParticleGridCellSize;
+    position+= jitter;
 
     uint startIndex, endIndex;
     if(ParticleGridFind(position, startIndex, endIndex)) 
@@ -144,7 +142,7 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
         float minDistance = 100000;
         uint closestIndex = -1;
 
-        for(uint i=startIndex; i < endIndex; ++i) 
+        for(uint i=startIndex ; i < endIndex; ++i) 
         {
             uint otherIndex = particleGridBuffer[i];
             
@@ -164,13 +162,14 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
             }
         }
 
-        if(closestIndex != -1 || minDistance > 0.3) {
+        if(closestIndex != -1 || minDistance > 0.01) {
 
-            pointIndexPairs[pointIndex] = uint2( pointIndex, closestIndex);
+            pointIndexPairs[pairIndex] = int2( closestIndex, pointIndex);
+            //pointIndexPairs[pointIndex] = uint2( pointIndex, closestIndex);
             //pointIndexPairs[pairIndex] = uint2( pointIndex, pointIndex+5);
         }
         else {
-            //pointIndexPairs[pairIndex] = int2( 5, pointIndex);
+            pointIndexPairs[pairIndex] = int2( closestIndex, pointIndex);
         }
     }
     
