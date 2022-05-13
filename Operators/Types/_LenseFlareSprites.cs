@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             //var viewToWorld = Matrix.Invert(worldToClipSpace);
 
             var brightness = Brightness.GetValue(context);
-            
+
             var color = Color.GetValue(context);
             var randomizeColor = RandomizeColor.GetValue(context);
             var size = Size.GetValue(context);
@@ -69,7 +69,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             _tempList.Clear();
 
             
-            if (brightness > 0.001f)
+            if (brightness > 0.00001f)
             {
             
                 if (referencedLightIndex >= 0)

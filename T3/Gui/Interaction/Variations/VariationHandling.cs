@@ -217,12 +217,12 @@ namespace T3.Gui.Interaction.Variations
         
         public static void UpdateBlendValues(int obj, float value)
         {
-            Log.Warning($"BlendValuesUpdate {obj} not implemented");
+            //Log.Warning($"BlendValuesUpdate {obj} not implemented");
         }
 
         public static void SaveSnapshotAtNextFreeSlot(int obj)
         {
-            Log.Warning($"SaveSnapshotAtNextFreeSlot {obj} not implemented");
+            //Log.Warning($"SaveSnapshotAtNextFreeSlot {obj} not implemented");
         }
 
         private const int AutoIndex=-1;
