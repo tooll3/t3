@@ -286,6 +286,28 @@ namespace T3.Gui.Interaction.Variations
             return newVariation;
         }
         
+        // TODO: Implement undo/redo!
+        public static void RemoveInstancesFromVariations(List<Instance> instances, List<Variation> variations)
+        {
+            
+            if (ActivePoolForSnapshots == null || ActiveInstanceForSnapshots == null)
+            {
+                return;
+            }
+
+            foreach (var variation in variations)
+            {
+                foreach (var instance in instances)
+                {
+                    if (!variation.ParameterSetsForChildIds.ContainsKey(instance.SymbolChildId))
+                        continue;
+
+                    variation.ParameterSetsForChildIds.Remove(instance.SymbolChildId);
+                }
+            }
+        }
+        
+        
         public static readonly Dictionary<Guid, HashSet<Guid>> FocusSetsForCompositions = new();
         /// <summary>
         /// This set can be used to find new children since the focus was set...

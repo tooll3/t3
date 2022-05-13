@@ -84,6 +84,7 @@ namespace T3.Gui.Windows.Variations
         protected override void DrawAdditionalContextMenuContent()
         {
             var oneSelected = Selection.SelectedElements.Count == 1;
+            var oneOrMoreSelected = Selection.SelectedElements.Count > 1;
             
             if (ImGui.MenuItem("Select affected Operators",
                                "",
@@ -107,6 +108,24 @@ namespace T3.Gui.Windows.Variations
                     }
                 }
                 FitViewToSelectionHandling.FitViewToSelection();
+            }
+            
+            if (ImGui.MenuItem("Remove selected Ops from Variations",
+                               "",
+                               false,
+                               oneOrMoreSelected))
+            {
+                var selectedInstances = NodeSelection.GetSelectedInstances().ToList();
+                var selectedThumbnails = new List<Variation>();
+                foreach (var thumbnail in Selection.SelectedElements)
+                {
+                    if (thumbnail is Variation v)
+                    {
+                        selectedThumbnails.Add(v);
+                    }
+                }
+            
+                VariationHandling.RemoveInstancesFromVariations(selectedInstances, selectedThumbnails);
             }
         }
 
