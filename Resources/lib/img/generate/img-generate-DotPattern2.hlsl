@@ -18,6 +18,7 @@ cbuffer ParamConstants : register(b0)
     float HighlightProbability;
     float MixOriginal;
     float ScrollOffset;
+    float HighlightSeed;
 }
 
 
@@ -298,7 +299,10 @@ float4 psMain(vsOutput psInput) : SV_TARGET
                     Contrast);
                     
     float4 color =  lerp(Background, lerp(Foreground, originalColor, MixOriginal), gray);
-    if(hashForCel < HighlightProbability) {
+
+    float2 hashForCelHighlight = hash22((HighlightSeed * 0.123 % 101.1) * cel.xy * 0.123 + float2(cel.z, cel.w)/2);
+
+    if(hashForCelHighlight.x < HighlightProbability) {
         color = Highlight;
     }
     return color;
