@@ -135,6 +135,7 @@ namespace T3.Gui.Windows.Variations
             if (newVariation == null)
                 return new Variation();
             
+            PoolForBlendOperations.SaveVariationsToFile();
             Selection.SetSelection(newVariation);
             ResetView();
             TriggerThumbnailUpdate();

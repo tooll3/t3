@@ -283,6 +283,7 @@ namespace T3.Gui.Interaction.Variations
             if (activationIndex != AutoIndex)
                 newVariation.ActivationIndex = activationIndex;
             
+            ActivePoolForSnapshots.SaveVariationsToFile();
             return newVariation;
         }
         
@@ -305,6 +306,7 @@ namespace T3.Gui.Interaction.Variations
                     variation.ParameterSetsForChildIds.Remove(instance.SymbolChildId);
                 }
             }
+            ActivePoolForSnapshots.SaveVariationsToFile();
         }
         
         
