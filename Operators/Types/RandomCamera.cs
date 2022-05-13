@@ -19,6 +19,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 
         [Output(Guid = "451245E2-AC0B-435A-841E-7C9EDC804606")]
         public readonly Slot<Object> Reference = new Slot<Object>();        
+
         
         public RandomCamera()
         {
@@ -57,8 +58,8 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             
             var rot = Matrix.RotationYawPitchRoll(
                                                   ComputeAngle(SpinAngleAndWobble,1) 
-                                                  + MathUtil.DegreesToRadians((float)(SpinRate.GetValue(context) 
-                                                                                      * (EvaluationContext.GlobalTimeForEffects + SpinOffset.GetValue(context)) * 360  
+                                                  + MathUtil.DegreesToRadians((float)(SpinRate.GetValue(context) * (context.TimeForEffects 
+                                                                                                  + SpinOffset.GetValue(context)) * 360  
                                                                                       + MathUtils.PerlinNoise(0, 1, 6, seed) * 360 ) )
                                                                                       , 
                                                   -ComputeAngle(OrbitAngleAndWobble, 2), 
@@ -85,9 +86,9 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             var roll = ComputeAngle(AimRollAngleAndWobble, 5);
             var rotateAroundViewDirection = Matrix.RotationAxis(adjustedViewDirection, roll);
             up = Vector3.TransformNormal(up, rotateAroundViewDirection);
-            
-            WorldToCamera = Matrix.LookAtRH(eye, target, up);
+            up.Normalize();
 
+            WorldToCamera = Matrix.LookAtRH(eye, target, up);
                         
             if (context.BypassCameras)
             {
@@ -115,7 +116,10 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
                 var wobble=  Math.Abs(angleAndWobble.Y) < 0.001f 
                                  ? 0 
                                  : (MathUtils.PerlinNoise((float)context.TimeForEffects * wobbleSpeed, 
-                                                         1, wobbleComplexity, seed- 123* seedIndex) -0.5f) *2 * angleAndWobble.Y ;
+                                                         1, 
+                                                         wobbleComplexity, 
+                                                         seed+ 123* seedIndex) 
+                                    -0.5f) *2 * angleAndWobble.Y ;
                 return MathUtil.DegreesToRadians(angleAndWobble.X + wobble);
             }
         }
