@@ -66,27 +66,27 @@
           "Id": "b00ecb8e-5990-4bab-afe9-265e13dcfe4a"/*ScrollSpeed*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 1.26,
-            "Y": 0.02
+            "X": 1.1735433,
+            "Y": 0.05401575
           }
         },
         {
           "Id": "71f15e21-e169-46b2-9ce5-e81efc92e220"/*ScrollProbability*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.25,
-            "Y": 1.4
+            "X": 0.23228346,
+            "Y": 1.3681102
           }
         },
         {
           "Id": "316798ed-d1de-4374-9416-0f08a9a2ca6f"/*Contrast*/,
           "Type": "System.Single",
-          "Value": 0.29
+          "Value": 0.34031495
         },
         {
           "Id": "247a2d50-9f08-48d6-b9ac-97c0bb4934cf"/*ForgroundRatio*/,
           "Type": "System.Single",
-          "Value": 0.55
+          "Value": 0.5466929
         },
         {
           "Id": "677e9249-6d6c-43f2-a5a6-5ddc8637ea0c"/*HighlightProbability*/,

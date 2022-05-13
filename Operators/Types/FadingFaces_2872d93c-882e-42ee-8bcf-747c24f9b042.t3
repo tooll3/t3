@@ -48,12 +48,12 @@
         {
           "Id": "74d63ccb-7ae5-45d9-af69-ad91b8582407"/*Exposure*/,
           "Type": "System.Single",
-          "Value": 1.42
+          "Value": 1.0
         },
         {
           "Id": "e3395a18-619b-4fcc-b16c-c04d1df8afd9"/*Contrast*/,
           "Type": "System.Single",
-          "Value": 0.0
+          "Value": 0.29999998
         },
         {
           "Id": "f6753ecc-a97e-4854-9f27-09bb9000858c"/*Saturation*/,
@@ -90,12 +90,12 @@
         {
           "Id": "98662eab-90b9-4af1-8ff3-ba6709b5038e"/*Zoom*/,
           "Type": "System.Single",
-          "Value": 0.99900013
+          "Value": 0.9980001
         },
         {
           "Id": "41c080de-575f-4041-b605-8f55e4bcf797"/*SampleDistance*/,
           "Type": "System.Single",
-          "Value": 0.28947088
+          "Value": 0.15947089
         },
         {
           "Id": "4109af01-5c9a-4a9f-af7f-87fbcdcece3d"/*Offset*/,
@@ -108,12 +108,7 @@
         {
           "Id": "806221f8-6e31-45ec-b62e-5baac6c1fd54"/*DisplaceOffset*/,
           "Type": "System.Single",
-          "Value": -0.03524735
-        },
-        {
-          "Id": "1f09da31-b853-417c-abb1-39e1199a149f"/*IsEnabled*/,
-          "Type": "System.Boolean",
-          "Value": false
+          "Value": -0.025247347
         }
       ],
       "Outputs": []
@@ -425,6 +420,11 @@
           "Id": "3396de1f-03af-43ee-a43a-55016bec70ae"/*Bias*/,
           "Type": "System.Single",
           "Value": 0.86
+        },
+        {
+          "Id": "6ca8a8b2-f252-4687-805e-fb7a86a16567"/*AllowSpeedFactor*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []

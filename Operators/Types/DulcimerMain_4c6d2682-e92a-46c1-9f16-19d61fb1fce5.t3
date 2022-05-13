@@ -253,23 +253,6 @@
       "Outputs": []
     },
     {
-      "Id": "bc544879-5b0e-407f-94b4-20d69462b381"/*AnalyzeSound*/,
-      "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
-      "InputValues": [
-        {
-          "Id": "9aff8ca6-d2f5-4bb5-9c38-af798061596c"/*HihatThreshold*/,
-          "Type": "System.Single",
-          "Value": 0.08
-        },
-        {
-          "Id": "1d92b4fa-a8e9-4c1e-891a-65bf7632bdcf"/*HiRange*/,
-          "Type": "System.Single",
-          "Value": 0.08
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "23b18ea7-6848-4282-877d-99018bc976b6"/*FloatToInt*/,
       "SymbolId": "06b4728e-852c-491a-a89d-647f7e0b5415",
       "InputValues": [],
@@ -4523,6 +4506,11 @@
             "X": 0.0,
             "Y": -0.10084967
           }
+        },
+        {
+          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
+          "Type": "System.Single",
+          "Value": 17.0
         },
         {
           "Id": "7a76d5aa-1f44-4238-9333-7c2951becc31"/*EnableZTest*/,
