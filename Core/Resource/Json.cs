@@ -188,7 +188,7 @@ namespace T3.Core
 
             if (symbol == null)
             {
-                throw new ArgumentException($"Failed to load symbol {symbolId}.");
+                Log.Warning($"Failed to load symbol {symbolId}.");
                 return null;
             }
             

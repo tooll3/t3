@@ -73,7 +73,14 @@ namespace T3
             ResourceManager resourceManager = ResourceManager.Instance();
             SharedResources.Initialize(resourceManager);
 
-            _t3ui = new T3Ui();
+            try
+            {
+                _t3ui = new T3Ui();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message + "\n" + e.StackTrace);
+            }
             
             // Setup file watching the operator source
             resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;
@@ -199,6 +206,7 @@ namespace T3
             _deviceContext.Dispose();
             _main.SwapChain.Dispose();
             factory.Dispose();
+            Log.Debug("Shutdown complete");
         }
 
         private static void HandleFullscreenToggle()

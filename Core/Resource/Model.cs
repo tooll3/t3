@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Core.Logging;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -59,7 +60,13 @@ namespace T3.Core
         public Model(Assembly operatorAssembly, bool enabledLogging)
         {
             if (enabledLogging)
+            {
                 Log.AddWriter(new ConsoleWriter());
+                
+                // Start Logging
+                
+                Log.AddWriter(FileWriter.CreateDefault());
+            }
 
             OperatorsAssembly = operatorAssembly;
 

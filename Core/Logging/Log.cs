@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-//using System.Windows.Threading;
 
 namespace T3.Core.Logging
 {
