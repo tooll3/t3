@@ -16,7 +16,8 @@
         "Y": 328.0
       },
       "Min": -100.0,
-      "Max": 100.0
+      "Max": 100.0,
+      "Scale": 0.01
     },
     {
       "InputId": "76cf4a72-2d25-48cb-a1ec-08d0ddabb053"/*Interpolation*/,

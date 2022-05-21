@@ -2,11 +2,11 @@
 #include "hash-functions.hlsl"
 //#include "lib/points/spatial-hash-map/spatial-hash-map.hlsl"
 
-StructuredBuffer<uint> GridBuffer :register(t0);         // IndexToPointBuffer
-StructuredBuffer<uint2> GridCellBuffer :register(t1);    // CellIndicesBuffer
-StructuredBuffer<uint> HashGridBuffer :register(t2);     // HashGridBuffer
-StructuredBuffer<uint> GridCountBuffer :register(t3);    // CountBuffer
-StructuredBuffer<uint> RangeIndexBuffer :register(t4);    // RangeIndexBuffer
+StructuredBuffer<uint> CellPointIndices :register(t0);         // IndexToPointBuffer
+StructuredBuffer<uint2> PointCellIndices :register(t1);    // CellIndicesBuffer -> PointCellIndices
+StructuredBuffer<uint> HashGridCells :register(t2);     // HashGridBuffer -> HashGridCells
+StructuredBuffer<uint> CellPointCounts :register(t3);    // CountBuffer -> CellPointCounts
+StructuredBuffer<uint> CellRangeIndices :register(t4);    // RangeIndexBuffer -> CellRangeIndices
  
 RWStructuredBuffer<Point> points :register(u0);
 
@@ -33,7 +33,7 @@ bool GridFind(in float3 position, out uint startIndex, out uint endIndex)
     uint cellEnd = cellBegin + ParticleGridEntryCount;
     for(i = cellBegin; i < cellEnd; ++i)
     {
-        const uint entryValue = HashGridBuffer[i];
+        const uint entryValue = HashGridCells[i];
         if(entryValue == hashValue)
             break;  // found existing entry
 
@@ -43,8 +43,8 @@ bool GridFind(in float3 position, out uint startIndex, out uint endIndex)
     if(i >= cellEnd)
         return false;
 
-    startIndex = RangeIndexBuffer[i];
-    endIndex = GridCountBuffer[i] + startIndex;
+    startIndex = CellRangeIndices[i];
+    endIndex = startIndex + CellPointCounts[i];
     return true;
 } 
 
@@ -95,7 +95,7 @@ void FlagPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
     {
         for(uint i=startIndex; i < endIndex; ++i) 
         {
-            uint pointIndex = GridBuffer[i];
+            uint pointIndex = CellPointIndices[i];
             points[pointIndex].w = 1;
         }
     } 

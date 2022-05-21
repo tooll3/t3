@@ -11,19 +11,19 @@ namespace T3.Operators.Types.Id_f61ceb9b_74f8_4883_88ea_7e6c35b63bbd
         public readonly Slot<T3.Core.Command> Update = new Slot<T3.Core.Command>();
         
         [Output(Guid = "b4505f1e-ab0e-45be-8e46-8e3b37ec59ec")]
-        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> IndexToPointBuffer = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
+        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> CellPointIndices = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
 
         [Output(Guid = "6c026a5f-a724-4240-bb96-077d65266f66")]
-        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> CellIndicesBuffer = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
+        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> PointCellIndices = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
 
         [Output(Guid = "fb96e3d2-9a0f-466a-9b1d-997a4aa3e625")]
-        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> GridHashBuffer = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
+        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> HashGridCells = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
 
         [Output(Guid = "13f0d2c2-a18b-457b-a3cf-cfd0c755b9a9")]
-        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> CountBuffer = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
+        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> CellPointCounts = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
 
         [Output(Guid = "eeb282ee-ad73-471c-89ab-ae7cc8de6b15")]
-        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> RangeIndexBuffer = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
+        public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> CellRangeIndices = new Slot<SharpDX.Direct3D11.ShaderResourceView>();
 
 
 

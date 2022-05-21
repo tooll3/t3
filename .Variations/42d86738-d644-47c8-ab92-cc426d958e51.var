@@ -403,8 +403,8 @@
       "ActivationIndex": 13,
       "Title": "Light leak",
       "PosOnCanvas": {
-        "X": -184.92625,
-        "Y": 278.00427
+        "X": -25.312805,
+        "Y": 285.91025
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {

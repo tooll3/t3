@@ -78,6 +78,8 @@ void main(uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid :
     float3 direction = float3(rotate_vector(FORWARD, self.SpriteOrientation).xy, 0); 
     float3 pos = float3(self.Position.xy, 0);
     
+    int boidTypIndex = DTid.x % 2;
+
     for(int batchIndex = 0; batchIndex < AgentCount / 1024; batchIndex++) 
     {
         // Setup shared buffer for batch
@@ -92,19 +94,19 @@ void main(uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid :
             float3 otherPos = Agents[index].Position;
             float distance =  length(otherPos - pos);
 
-            if(distance < BoidsTypes[0].AlignmentRadius)
+            if(distance < BoidsTypes[boidTypIndex].AlignmentRadius)
             {
                 averageDirection += rotate_vector(FORWARD, Agents[index].SpriteOrientation);
                 countForAlignment++;
             }
 
-            if(distance < BoidsTypes[0].CohesionRadius)
+            if(distance < BoidsTypes[boidTypIndex].CohesionRadius)
             {
                 centerForCohesion += Agents[index].Position;
                 countForCohesion++;
             }
 
-            if(distance < BoidsTypes[0].SeparationRadius)
+            if(distance < BoidsTypes[boidTypIndex].SeparationRadius)
             {
                 centerForSeparation += Agents[index].Position;
                 countForSeparation++;
@@ -119,7 +121,7 @@ void main(uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid :
         averageDirection /= countForAlignment;
         float l = length(averageDirection);
         if(l > 0.0001) {
-            direction = lerp(direction, averageDirection/l, BoidsTypes[0].AlignmentDrive);
+            direction = lerp(direction, averageDirection/l, BoidsTypes[boidTypIndex].AlignmentDrive);
         }
     }
 
@@ -130,7 +132,7 @@ void main(uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid :
         float3 toSeparation = pos - centerForSeparation;
         float lenToSeparation = length(pos - centerForSeparation);
         if(lenToSeparation > 0.0001) {
-            direction = lerp(direction, toSeparation / lenToSeparation, BoidsTypes[0].SeparationDrive );
+            direction = lerp(direction, toSeparation / lenToSeparation, BoidsTypes[boidTypIndex].SeparationDrive );
         }
     }
 
@@ -141,7 +143,7 @@ void main(uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid :
         float3 toCohesion = -(pos - centerForCohesion);
         float lenToCohesion = length(pos - centerForCohesion);
         if(lenToCohesion > 0.0001) {
-            direction = lerp(direction, toCohesion / lenToCohesion, BoidsTypes[0].CohesionDrive );
+            direction = lerp(direction, toCohesion / lenToCohesion, BoidsTypes[boidTypIndex].CohesionDrive );
         }
     }
 
@@ -162,7 +164,7 @@ void main(uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid :
     }
     
 
-    pos += direction * BoidsTypes[0].MaxSpeed;
+    pos += direction * BoidsTypes[boidTypIndex].MaxSpeed;
     pos = mod(pos + 1, 2) - 1;
     
     float4 rot = Agents[DTid.x].SpriteOrientation;

@@ -9,7 +9,7 @@
     },
     {
       "Id": "db5ec31c-ea35-4780-a054-67ce9fbe80ec"/*CellSize*/,
-      "DefaultValue": 0.1
+      "DefaultValue": 0.5
     },
     {
       "Id": "34fe157f-dfe8-4cc0-aa66-6cda433155fb"/*TestIndex*/,
@@ -21,11 +21,11 @@
     },
     {
       "Id": "7ae1d0c1-b9a7-47f1-8a0c-80bfc1219c4b"/*StepCount*/,
-      "DefaultValue": 100
+      "DefaultValue": 200
     },
     {
       "Id": "496e1983-f74e-412c-9b80-8dedd0f8c1f8"/*LinesPerStep*/,
-      "DefaultValue": 100
+      "DefaultValue": 10
     },
     {
       "Id": "ab4945b8-5e50-4f40-9689-839a4051f0ec"/*ColorOverLifetime*/,
@@ -78,7 +78,7 @@
     },
     {
       "Id": "5f64292f-24ac-4a6c-ac3f-402468b0391b"/*LineWidth*/,
-      "DefaultValue": 2.0
+      "DefaultValue": 3.0
     },
     {
       "Id": "09af14b3-b4c3-4044-b5d1-0d05ec29b6b4"/*ScatterLookUp*/,
@@ -91,23 +91,43 @@
           "Interpolation": "Linear",
           "Steps": [
             {
-              "Id": "2e4b7dc5-2585-45e7-8365-331c2bd904fd",
-              "NormalizedPosition": 0.3306288,
+              "Id": "75087173-d16e-4da2-8f8a-c4299ce816a3",
+              "NormalizedPosition": 0.0,
               "Color": {
                 "R": 1.0,
-                "G": 0.99999,
-                "B": 1.0,
+                "G": 0.009645402,
+                "B": 0.0,
+                "A": 0.0
+              }
+            },
+            {
+              "Id": "e05fe608-e82f-4753-9997-d899d8ba0dc6",
+              "NormalizedPosition": 0.11111111,
+              "Color": {
+                "R": 1.0,
+                "G": 0.93949604,
+                "B": 0.60616267,
                 "A": 1.0
               }
             },
             {
-              "Id": "b1202db4-6586-4676-a2a6-6ec740caf578",
-              "NormalizedPosition": 0.6693712,
+              "Id": "82eb8692-a550-44aa-a133-447cf4746d88",
+              "NormalizedPosition": 0.5277778,
               "Color": {
-                "R": 1.0,
-                "G": 0.99999,
-                "B": 1.0,
+                "R": 0.5885167,
+                "G": 0.58851105,
+                "B": 0.5885167,
                 "A": 1.0
+              }
+            },
+            {
+              "Id": "a60e3866-78bb-4fca-8c03-78e2ac4bd9a3",
+              "NormalizedPosition": 1.0,
+              "Color": {
+                "R": 0.10526317,
+                "G": 0.105262145,
+                "B": 0.10526317,
+                "A": 0.0
               }
             }
           ]

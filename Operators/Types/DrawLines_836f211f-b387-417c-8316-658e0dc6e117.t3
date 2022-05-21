@@ -459,12 +459,6 @@
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
-      "SourceParentOrChildId": "de82ef71-870f-46da-906d-ffd0e73d8c97",
-      "SourceSlotId": "65b394a9-06dc-4d9b-8819-15394ede2997",
-      "TargetParentOrChildId": "7c0592e7-a971-45da-b3b6-74e29ae8ab7c",
-      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
-    },
-    {
       "SourceParentOrChildId": "8a948e03-9461-4e4d-a5be-ee57ba392db9",
       "SourceSlotId": "76e7ad5d-a31d-4b1f-9c42-b63c5161117c",
       "TargetParentOrChildId": "7c0592e7-a971-45da-b3b6-74e29ae8ab7c",
