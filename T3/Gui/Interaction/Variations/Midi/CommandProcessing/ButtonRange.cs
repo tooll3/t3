@@ -10,35 +10,35 @@ namespace T3.Gui.Interaction.Variations.Midi
         public ButtonRange(int startIndex)
         {
             _startIndex = startIndex;
-            _lastStartIndex = startIndex;
+            _lastIndex = startIndex;
             _reversed = true;
         }
 
-        public ButtonRange(int startIndex, int lastStartIndex, bool reversed = false)
+        public ButtonRange(int startIndex, int lastIndex, bool reversed = false)
         {
             _startIndex = startIndex;
-            _lastStartIndex = lastStartIndex;
+            _lastIndex = lastIndex;
             _reversed = reversed;
         }
 
         public bool IncludesButtonIndex(int index)
         {
-            return index >= _startIndex && index <= _lastStartIndex;
+            return index >= _startIndex && index <= _lastIndex;
         }
 
         public int GetMappedIndex(int buttonIndex)
         {
             return _reversed 
-                       ? _lastStartIndex - (buttonIndex - _startIndex)
+                       ? _lastIndex - (buttonIndex - _startIndex)
                         :buttonIndex - _startIndex;
         }
 
         public IEnumerable<int> Indices()
         {
-            for (var index = _startIndex; index <= _lastStartIndex; index++)
+            for (var index = _startIndex; index <= _lastIndex; index++)
             {
                 yield return _reversed 
-                                 ? (_lastStartIndex-_startIndex) 
+                                 ? (_lastIndex-_startIndex) 
                                  :   index;
             }
         }
@@ -60,10 +60,10 @@ namespace T3.Gui.Interaction.Variations.Midi
 
 
 
-        public bool IsRange => _lastStartIndex > _startIndex;
+        public bool IsRange => _lastIndex > _startIndex;
 
         private readonly int _startIndex;
-        private readonly int _lastStartIndex;
+        private readonly int _lastIndex;
         private readonly bool _reversed;
     }
 }

@@ -13,7 +13,7 @@
     },
     {
       "Id": "34fe157f-dfe8-4cc0-aa66-6cda433155fb"/*TestIndex*/,
-      "DefaultValue": 0
+      "DefaultValue": -4
     },
     {
       "Id": "e84dcbfa-04e4-4acd-8fcd-b1da20abd71f"/*IsEnabled*/,
@@ -596,7 +596,7 @@
         {
           "Id": "ccdea113-c046-4ec2-b1fb-30d6e15db7ce"/*Mod*/,
           "Type": "System.Int32",
-          "Value": 10000
+          "Value": 12341
         }
       ],
       "Outputs": []

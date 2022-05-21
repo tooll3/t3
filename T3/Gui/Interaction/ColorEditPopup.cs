@@ -46,10 +46,8 @@ namespace T3.Gui.Interaction
                     drawList.AddCircle(windowPos + pPickedColorPos, 1, Color.White.Fade(0.5f));
                 }
                 
-                
                 drawList.AddCircle(windowPos + pickedColorPos, 5, Color.Black);
                 drawList.AddCircle(windowPos + pickedColorPos, 4, Color.White);
-                drawList.AddCircle(Vector2.Zero, 100, Color.Green);
                 ImGui.InvisibleButton("colorwheel", size);
                 if (ImGui.IsItemActive())
                 {

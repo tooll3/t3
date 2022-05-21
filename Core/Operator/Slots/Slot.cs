@@ -169,10 +169,12 @@ namespace T3.Core.Operator.Slots
                 // slot is an output of an composition op
                 DirtyFlag.Target = GetConnection(0).Invalidate();
             }
+            
             else
             {
                 Instance parent = Parent;
-
+                
+                
                 bool outputDirty = DirtyFlag.IsDirty;
                 foreach (var input in parent.Inputs)
                 {
@@ -180,14 +182,38 @@ namespace T3.Core.Operator.Slots
                     {
                         if (input.IsMultiInput)
                         {
-                            var multiInput = (IMultiInputSlot)input;
-                            int dirtySum = 0;
-                            foreach (var entry in multiInput.GetCollectedInputs())
+                            // NOTE: In situations with extremely large graphs (1000 of instances)
+                            // invalidation can become bottle neck. In these cases it might be justified
+                            // to limit the invalidation to "active" parts of the subgraph. The [Switch]
+                            // operator defines this list.
+                            if (input.LimitMultiInputInvalidationToIndices != null)
                             {
-                                dirtySum += entry.Invalidate();
-                            }
+                                var multiInput = (IMultiInputSlot)input;
+                                var dirtySum = 0;
+                                var index = 0;
+                                
+                                foreach (var entry in multiInput.GetCollectedInputs())
+                                {
+                                    if (!input.LimitMultiInputInvalidationToIndices.Contains(index++))
+                                        continue;
+                                    
+                                    dirtySum += entry.Invalidate();
+                                }
 
-                            input.DirtyFlag.Target = dirtySum;
+                                input.DirtyFlag.Target = dirtySum;
+                                
+                            }
+                            else
+                            {
+                                var multiInput = (IMultiInputSlot)input;
+                                int dirtySum = 0;
+                                foreach (var entry in multiInput.GetCollectedInputs())
+                                {
+                                    dirtySum += entry.Invalidate();
+                                }
+
+                                input.DirtyFlag.Target = dirtySum;
+                            }
                         }
                         else
                         {

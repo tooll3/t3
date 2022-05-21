@@ -20,11 +20,11 @@ namespace T3.Gui.Windows.Variations
     {
         public abstract Variation CreateVariation();
         public abstract void DrawToolbarFunctions();
-        
+
         protected abstract Instance InstanceForBlendOperations { get; }
-        protected abstract SymbolVariationPool PoolForBlendOperations { get;  }
+        protected abstract SymbolVariationPool PoolForBlendOperations { get; }
         protected abstract void DrawAdditionalContextMenuContent();
-        
+
         public void Draw(ImDrawListPtr drawList)
         {
             // Complete deferred actions
@@ -46,8 +46,8 @@ namespace T3.Gui.Windows.Variations
                     {
                         viewNeedsRefresh = true;
                         _lastRenderInstance = renderInstance;
-                        
                     }
+
                     var symbolUi = SymbolUiRegistry.Entries[renderInstance.Symbol.Id];
                     if (symbolUi.OutputUis.ContainsKey(textureSlot.Id))
                     {
@@ -56,23 +56,23 @@ namespace T3.Gui.Windows.Variations
                     }
                 }
             }
-            
+
             // Get instance for variations
             var instance = InstanceForBlendOperations;
-            var instanceChanged =instance != _instance;
+            var instanceChanged = instance != _instance;
             viewNeedsRefresh |= instanceChanged;
-            
+
             if (viewNeedsRefresh)
             {
                 RefreshView();
                 _instance = instance;
             }
-            
+
             UpdateCanvas();
             HandleFenceSelection();
 
             // Blending...
-            IsBlendingActive = ImGui.GetIO().KeyAlt && Selection.SelectedElements.Count is 2 or 3;
+            IsBlendingActive = ImGui.IsWindowFocused() && ImGui.GetIO().KeyAlt && Selection.SelectedElements.Count is 2 or 3;
 
             var mousePos = ImGui.GetMousePos();
             if (IsBlendingActive)
@@ -100,7 +100,7 @@ namespace T3.Gui.Windows.Variations
                     _blendWeights.Add(w);
                 }
             }
-            
+
             _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
 
             // Rendering thumbnails
@@ -126,16 +126,12 @@ namespace T3.Gui.Windows.Variations
                 }
 
                 drawList.AddCircleFilled(mousePos, 5, Color.White);
-                if (this is PresetCanvas)
-                {
-                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
-                    
-                    if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
-                    {
-                        PoolForBlendOperations.ApplyCurrentBlend();
-                    }
-                }
+                PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
 
+                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                {
+                    PoolForBlendOperations.ApplyCurrentBlend();
+                }
             }
 
             if (modified)
@@ -144,7 +140,6 @@ namespace T3.Gui.Windows.Variations
             DrawContextMenu();
         }
 
-        
         public bool TryGetBlendWeight(Variation v, out float weight)
         {
             var index = _blendVariations.IndexOf(v);
@@ -190,15 +185,13 @@ namespace T3.Gui.Windows.Variations
                                                                     {
                                                                         VariationThumbnail.VariationForRenaming = Selection.SelectedElements[0] as Variation;
                                                                     }
-                                                                    
+
                                                                     if (ImGui.MenuItem("Update thumbnails",
                                                                                        ""))
                                                                     {
                                                                         TriggerThumbnailUpdate();
                                                                     }
 
-
-                                                                    
                                                                     DrawAdditionalContextMenuContent();
 
                                                                     ImGui.Separator();
@@ -209,21 +202,18 @@ namespace T3.Gui.Windows.Variations
                                                                         UserSettings.Config.PresetsResetToDefaultValues =
                                                                             !UserSettings.Config.PresetsResetToDefaultValues;
                                                                     }
-                                                                    
-                                                                    
                                                                 }, ref _contextMenuIsOpen);
             }
         }
 
         private bool _contextMenuIsOpen;
 
- 
-        public  void StartHover(Variation variation)
+        public void StartHover(Variation variation)
         {
             PoolForBlendOperations.BeginHover(_instance, variation, UserSettings.Config.PresetsResetToDefaultValues);
         }
 
-        public  void Apply(Variation variation, bool resetNonDefaults)
+        public void Apply(Variation variation, bool resetNonDefaults)
         {
             PoolForBlendOperations.StopHover();
             PoolForBlendOperations.Apply(_instance, variation, resetNonDefaults);
@@ -252,7 +242,7 @@ namespace T3.Gui.Windows.Variations
         protected void ResetView()
         {
             var pool = PoolForBlendOperations;
-            
+
             if (TryToGetBoundingBox(pool.Variations, 40, out var area))
             {
                 FitAreaOnCanvas(area);
@@ -316,10 +306,9 @@ namespace T3.Gui.Windows.Variations
         {
             if (_updateCompleted)
                 return;
-            
-            
+
             _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
-            
+
             if (PoolForBlendOperations.Variations.Count == 0)
             {
                 _updateCompleted = true;
@@ -368,6 +357,7 @@ namespace T3.Gui.Windows.Variations
             {
                 return ImRect.RectWithSize(Vector2.Zero, VariationThumbnail.ThumbnailSize);
             }
+
             var rowIndex = thumbnailIndex / columns;
             var columnIndex = thumbnailIndex % columns;
             var posInCanvasTexture = new Vector2(columnIndex, rowIndex) * VariationThumbnail.ThumbnailSize;
@@ -391,7 +381,7 @@ namespace T3.Gui.Windows.Variations
             ResetView();
         }
 
-        private static bool TryToGetBoundingBox( List<Variation> variations, float extend, out ImRect area)
+        private static bool TryToGetBoundingBox(List<Variation> variations, float extend, out ImRect area)
         {
             area = new ImRect();
             if (variations == null)
@@ -433,14 +423,14 @@ namespace T3.Gui.Windows.Variations
 
             // var areaOnScreen = TransformRect(area); 
             // ImGui.GetForegroundDrawList().AddRect(areaOnScreen.Min, areaOnScreen.Max, Color.Blue);
-            
+
             const int columns = 4;
             var columnIndex = 0;
 
             var stepWidth = VariationThumbnail.ThumbnailSize.X + VariationThumbnail.SnapPadding.X;
             var stepHeight = VariationThumbnail.ThumbnailSize.Y + VariationThumbnail.SnapPadding.Y;
 
-            var pos = new Vector2(area.Min.X, 
+            var pos = new Vector2(area.Min.X,
                                   area.Max.Y - VariationThumbnail.ThumbnailSize.Y);
             var rowStartPos = pos;
 
@@ -448,7 +438,7 @@ namespace T3.Gui.Windows.Variations
             {
                 var intersects = false;
                 var targetArea = new ImRect(pos, pos + VariationThumbnail.ThumbnailSize);
-                
+
                 // var targetAreaOnScreen = TransformRect(targetArea);
                 // ImGui.GetForegroundDrawList().AddRect(targetAreaOnScreen.Min, targetAreaOnScreen.Max, Color.Orange);
 
@@ -498,12 +488,11 @@ namespace T3.Gui.Windows.Variations
             return PoolForBlendOperations.Variations;
         }
 
-        
         public bool IsBlendingActive { get; private set; }
         private readonly List<float> _blendWeights = new(3);
         private readonly List<Vector2> _blendPoints = new(3);
         private readonly List<Variation> _blendVariations = new(3);
-        
+
         private Instance _instance;
         private int _updateIndex;
         private bool _updateCompleted;

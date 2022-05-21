@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NAudio.Midi;
 using Operators.Utils;
+using T3.Core.Logging;
 using T3.Gui.Interaction.Variations.Model;
 
 namespace T3.Gui.Interaction.Variations.Midi
@@ -25,10 +26,9 @@ namespace T3.Gui.Interaction.Variations.Midi
         public enum InputModes
         {
             Default = 1 << 1,
-            BankNavigation = 1 << 2,
-            Delete = 1 << 3,
-            Save = 1 << 4,
-            Queue = 1 << 5,
+            Delete = 1 << 2,
+            Save = 1 << 3,
+            BlendTo = 1 << 4,   
             None = 0,
         }
 
@@ -131,6 +131,19 @@ namespace T3.Gui.Interaction.Variations.Midi
         {
             lock (this)
             {
+                if (!(sender is MidiIn midiIn) || msg.MidiEvent == null)
+                    return;
+                
+
+                var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
+
+                if (device.ProductName.GetHashCode() != GetProductNameHash())
+                {
+                    //Log.Debug($"Ingore device {device.ProductName} in AbstractMidiController");
+                    return;
+                }
+                    
+                
                 if (msg.MidiEvent == null)
                     return;
 

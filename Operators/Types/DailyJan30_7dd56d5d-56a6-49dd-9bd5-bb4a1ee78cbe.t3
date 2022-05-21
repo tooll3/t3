@@ -17,11 +17,6 @@
           "Id": "9aff8ca6-d2f5-4bb5-9c38-af798061596c"/*HihatThreshold*/,
           "Type": "System.Single",
           "Value": 0.09
-        },
-        {
-          "Id": "96c60e29-342c-4c20-8e72-5e205e03e305"/*DetectionSmoothing*/,
-          "Type": "System.Single",
-          "Value": 0.561
         }
       ],
       "Outputs": []

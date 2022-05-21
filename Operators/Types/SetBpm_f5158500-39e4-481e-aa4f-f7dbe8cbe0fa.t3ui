@@ -8,22 +8,22 @@
         "X": -200.0,
         "Y": 0.0
       }
+    },
+    {
+      "InputId": "9cc32da8-f939-4ad3-b381-6df8338a371b"/*SubGraph*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
     }
   ],
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "ed186e34-7644-4e46-8dd1-6d550733e3c3"/*Delta*/,
+      "OutputId": "05c17586-cf93-4244-9979-47e310abaf31"/*Commands*/,
       "Position": {
         "X": 0.0,
-        "Y": 100.0
-      }
-    },
-    {
-      "OutputId": "2a289ad7-153b-44fc-92b3-e800d7ca8005"/*LastDuration*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 200.0
+        "Y": 300.0
       }
     }
   ]

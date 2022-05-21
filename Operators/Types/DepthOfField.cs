@@ -40,6 +40,9 @@ namespace T3.Operators.Types.Id_2cd650a1_5b77_4040_895b_6049dc09206e
         [Input(Guid = "fa3a3202-fb06-417c-ad96-75c96c3b6208")]
         public readonly InputSlot<int> MaxSamples = new InputSlot<int>();
 
+        [Input(Guid = "01773066-ea85-488d-abb3-a08e4afcb95c")]
+        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+
     }
 }
 

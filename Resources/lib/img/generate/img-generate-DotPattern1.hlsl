@@ -177,7 +177,7 @@ static float2 P;
 float4 subDivideCel(float4 cel, float2 splitProbability) 
 {
     float4 orgCel = cel;
-    float2 hash = hash22(cel.xy + float2(Seed, cel.w) - cel.zw);
+    float2 hash = hash22(cel.xy + float2(Seed+0.1, cel.w) - cel.zw);
 
     float2 scrollFactor = hash > ScrollProbability ? 0: hash;
     float2 randomShift =(beatTime * ScrollSpeed  - orgCel.zw) * scrollFactor; //2
@@ -218,7 +218,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         return Background;
     }
     
-    float hashForCel = hash12(cel.xy + float2(Seed , cel.w));
+    float hashForCel = hash12(cel.xy + float2(Seed+0.1 , cel.w));
     
     float4 originalColor = ImageA.Sample(texSampler, P);
     float gray = lerp(

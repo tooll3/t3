@@ -15,6 +15,13 @@
         "X": 0.0,
         "Y": 45.0
       }
+    },
+    {
+      "InputId": "e896b269-d17e-417f-be1f-2d6e9addae91"/*OptimizeInvalidation*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
     }
   ],
   "SymbolChildUis": [],

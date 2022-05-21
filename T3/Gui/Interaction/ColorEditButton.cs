@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core;
 using T3.Gui.InputUi;
@@ -67,7 +68,7 @@ namespace T3.Gui.Interaction
             {
                 var valuePos = color.W;
                 VerticalColorSlider(color, pCenter, valuePos);
-                if (ImGui.GetMouseDragDelta().Y > UserSettings.Config.ClickThreshold)
+                if (MathF.Abs(ImGui.GetMouseDragDelta().Y) > UserSettings.Config.ClickThreshold)
                     _modifiedSlider = true;
 
                 color.W = (_previousColor.W - ImGui.GetMouseDragDelta().Y / 100).Clamp(0, 1);
@@ -85,7 +86,7 @@ namespace T3.Gui.Interaction
                 var valuePos = hsb.Z;
                 VerticalColorSlider(color, pCenter, valuePos);
 
-                if (ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Y > UserSettings.Config.ClickThreshold)
+                if (MathF.Abs(ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Y) > UserSettings.Config.ClickThreshold)
                 {
                     _modifiedSlider = true;
                 }

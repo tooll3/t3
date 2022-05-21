@@ -92,10 +92,22 @@ namespace T3.Gui.Interaction.Variations.Midi
                 )
                 {
                     _actionWithoutParameters?.Invoke();
+                    return; 
                 }
-                return;
             }
 
+            if (_executesAt == ExecutesAt.SingleActionButtonPressed)
+            {
+                if(buttonSignals.Count == 1
+                   && _keyRanges[0].IncludesButtonIndex(buttonSignals[0].ButtonId)
+                   && buttonSignals[0].State == ButtonSignal.States.Released
+                    )
+                {
+                    _actionWithoutParameters?.Invoke();
+                    return;
+                }
+            }
+            
             
             if (_executesAt == ExecutesAt.AllCombinedButtonsReleased)
             {

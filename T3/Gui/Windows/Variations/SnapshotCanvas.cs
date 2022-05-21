@@ -48,6 +48,15 @@ namespace T3.Gui.Windows.Variations
                         set.Add(selectedOp.SymbolChildId);
                     }
                     VariationHandling.FocusSetsForCompositions[compositionId] = set;
+
+                    var childrenWhenSettingFocus = new HashSet<Guid>();
+                    foreach (var child in InstanceForBlendOperations.Children)
+                    {
+                        childrenWhenSettingFocus.Add(child.SymbolChildId);
+                    }
+
+                    VariationHandling.ChildIdsWhenFocusedForCompositions[compositionId] = childrenWhenSettingFocus;
+
                 }
                 CustomComponents.TooltipForLastItem("This will limit the parameters stored in new snapshots to the Operators selected when setting the focus.");
             }
@@ -56,6 +65,7 @@ namespace T3.Gui.Windows.Variations
                 if (ImGui.Button($"Clear focus ({filteredOpCount})"))
                 {
                     VariationHandling.FocusSetsForCompositions.Remove(compositionId);
+                    VariationHandling.ChildIdsWhenFocusedForCompositions.Remove(compositionId);
                 }
 
                 if (ImGui.IsItemHovered())
@@ -74,6 +84,7 @@ namespace T3.Gui.Windows.Variations
         protected override void DrawAdditionalContextMenuContent()
         {
             var oneSelected = Selection.SelectedElements.Count == 1;
+            var oneOrMoreSelected = Selection.SelectedElements.Count > 1;
             
             if (ImGui.MenuItem("Select affected Operators",
                                "",
@@ -98,6 +109,24 @@ namespace T3.Gui.Windows.Variations
                 }
                 FitViewToSelectionHandling.FitViewToSelection();
             }
+            
+            if (ImGui.MenuItem("Remove selected Ops from Variations",
+                               "",
+                               false,
+                               oneOrMoreSelected))
+            {
+                var selectedInstances = NodeSelection.GetSelectedInstances().ToList();
+                var selectedThumbnails = new List<Variation>();
+                foreach (var thumbnail in Selection.SelectedElements)
+                {
+                    if (thumbnail is Variation v)
+                    {
+                        selectedThumbnails.Add(v);
+                    }
+                }
+            
+                VariationHandling.RemoveInstancesFromVariations(selectedInstances, selectedThumbnails);
+            }
         }
 
         public override Variation CreateVariation()
@@ -106,6 +135,7 @@ namespace T3.Gui.Windows.Variations
             if (newVariation == null)
                 return new Variation();
             
+            PoolForBlendOperations.SaveVariationsToFile();
             Selection.SetSelection(newVariation);
             ResetView();
             TriggerThumbnailUpdate();

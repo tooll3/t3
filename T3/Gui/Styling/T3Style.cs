@@ -84,6 +84,8 @@ namespace T3.Gui
                 _colors[(int)ImGuiCol.ResizeGrip] = new Vector4(0.00f, 0.00f, 0.00f, 0.25f);
                 _colors[(int)ImGuiCol.WindowBg] = new Vector4(0.1f,0.1f,0.1f, 0.98f);
                 _colors[(int)ImGuiCol.ModalWindowDimBg] = new Vector4(0.1f,0.1f,0.1f, 0.1f);
+                _colors[(int)ImGuiCol.MenuBarBg] = new Vector4(0.0f,0.0f,0.0f, 1.0f);
+                
             }
 
             public void Apply(ImGuiStylePtr style)

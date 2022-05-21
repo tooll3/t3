@@ -3,13 +3,17 @@
   "InputUis": [
     {
       "InputId": "714e7c0d-0137-4bc6-9e5b-93386b2efe13"/*Size*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
+      },
+      "Min": 1,
+      "Clamp": true
     },
     {
       "InputId": "71fe6847-b8e3-4cc7-895c-b10db0136e1c"/*ThreadGroups*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 0.0
