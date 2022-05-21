@@ -176,7 +176,7 @@ namespace T3.Core
             Writer.WriteEndArray();
         }
 
-        public SymbolChild ReadSymbolChild(Model model, JToken symbolChildJson)
+        private SymbolChild ReadSymbolChild(Model model, JToken symbolChildJson)
         {
             var childId = Guid.Parse(symbolChildJson["Id"].Value<string>());
             var symbolId = Guid.Parse(symbolChildJson["SymbolId"].Value<string>());
@@ -188,7 +188,8 @@ namespace T3.Core
 
             if (symbol == null)
             {
-                throw new ArgumentException($"Failed to load symbol {symbolId}.\nThis is frequently caused by instances of a missing Symbol.\nDon't forget to look to references in Dashboard operator.");
+                throw new ArgumentException($"Failed to load symbol {symbolId}.");
+                return null;
             }
             
             var symbolChild = new SymbolChild(symbol, childId, null);
@@ -283,15 +284,56 @@ namespace T3.Core
 
             var name = o["Name"].Value<string>();
             var @namespace = o["Namespace"]?.Value<string>() ?? "";
-            var symbolChildren = (from childJson in (JArray)o["Children"]
-                                  let symbolChild = ReadSymbolChild(model, childJson)
-                                  select symbolChild).ToList();
-            var connections = (from c in ((JArray)o["Connections"])
-                               let connection = ReadConnection(c)
-                               select connection).ToList();
+            var symbolChildren = new List<SymbolChild>();
+
+            var missingSymbolChildIds = new HashSet<Guid>();
+            var missingSymbolsIds = new HashSet<Guid>();
+            
+            foreach (var childJson in ((JArray)o["Children"]))
+            {
+                SymbolChild symbolChild = ReadSymbolChild(model, childJson);
+                if (symbolChild == null)
+                {
+                    var childId = Guid.Parse((childJson["Id"] ?? "").Value<string>() ?? string.Empty);
+                    var symbolId = Guid.Parse((childJson["SymbolId"] ?? "").Value<string>() ?? string.Empty);
+                    Log.Warning($"Skipping child of undefined type {symbolId} in {name}");
+
+                    if(childId != Guid.Empty)
+                        missingSymbolChildIds.Add(childId);
+                    
+                    if(symbolId != Guid.Empty)
+                        missingSymbolsIds.Add(symbolId);
+                }
+                else
+                {
+                    symbolChildren.Add(symbolChild);
+                }
+            }
+
+            var connections = new List<Symbol.Connection>();
+            foreach (var c in ((JArray)o["Connections"]))
+            {
+                Symbol.Connection connection = ReadConnection(c);
+                if (connection == null)
+                {
+                    Log.Warning($"Skipping invalid connection in {name}");
+                }
+                else if (missingSymbolChildIds.Contains(connection.TargetParentOrChildId)
+                    || missingSymbolChildIds.Contains(connection.SourceParentOrChildId)
+                   )
+                {
+                    Log.Warning("Skipping connection to child of undefined type");
+                }
+                else
+                {
+                    connections.Add(connection);
+                }
+            }
+
             var orderedInputIds = (from jsonInput in (JArray)o["Inputs"]
                                    let idAndValue = ReadSymbolInputDefaults(jsonInput)
                                    select idAndValue.Item1).ToArray();
+            
             var inputDefaultValues = (from jsonInput in (JArray)o["Inputs"]
                                       let idAndValue = ReadSymbolInputDefaults(jsonInput)
                                       select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
