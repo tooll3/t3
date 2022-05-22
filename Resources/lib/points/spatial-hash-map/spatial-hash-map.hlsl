@@ -3,7 +3,7 @@
 
 #include "lib/shared/point.hlsl"
 #include "hash-functions.hlsl"
-//#include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
+#include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
 
 StructuredBuffer<Point> _points :register(t0); 
 
@@ -15,20 +15,21 @@ RWStructuredBuffer<uint> CellRangeIndices :register(u4);   // particleGridIndexB
 
 cbuffer Params : register(b0)
 {
-    float ParticleGridCellSize;
+    float CellSize;
 }
 
 #define THREADS_PER_GROUP 256
 //static const uint            ParticleGridEntryCount = 4;
 //static const uint            ParticleGridCellCount = 20;
-static const uint            ParticleGridCellCount = 16;
-static const uint            ParticleGridEntryCount = 20000;
+//static const uint            ParticleGridCellCount = 2000;
+//static const uint            ParticleGridEntryCount = 16;
 
  
 bool ParticleGridInsert(in uint index, in float3 position)
 {
     uint i;
-    int3 cell = int3(position / ParticleGridCellSize);
+    position+=100*CellSize;
+    int3 cell = int3(position / CellSize);
     uint cellIndex = (pcg(cell.x + pcg(cell.y + pcg(cell.z))) % ParticleGridCellCount);
     uint hashValue = max(xxhash(cell.x + xxhash(cell.y + xxhash(cell.z))), 1);
     uint cellBegin = cellIndex * ParticleGridEntryCount;
@@ -56,7 +57,8 @@ bool ParticleGridInsert(in uint index, in float3 position)
 bool ParticleGridFind(in float3 position, out uint2 entry)
 {
     uint i;
-    int3 cell = int3(position / ParticleGridCellSize);
+    position+=100*CellSize;
+    int3 cell = int3(position / CellSize);
     uint cellIndex = (pcg(cell.x + pcg(cell.y + pcg(cell.z))) % ParticleGridCellCount);
     uint hashValue = max(xxhash(cell.x + xxhash(cell.y + xxhash(cell.z))), 1);
     uint cellBegin = cellIndex * ParticleGridEntryCount;
@@ -78,8 +80,9 @@ bool ParticleGridFind(in float3 position, out uint2 entry)
 
 bool GridFind(in float3 position, out uint startIndex, out uint endIndex)
 {
+    position+=100 * CellSize;
     uint i;
-    int3 cell = int3(position / ParticleGridCellSize);
+    int3 cell = int3(position / CellSize);
     uint cellIndex = (pcg(cell.x + pcg(cell.y + pcg(cell.z))) % ParticleGridCellCount);
     uint hashValue = max(xxhash(cell.x + xxhash(cell.y + xxhash(cell.z))), 1);
     uint cellBegin = cellIndex * ParticleGridEntryCount;
