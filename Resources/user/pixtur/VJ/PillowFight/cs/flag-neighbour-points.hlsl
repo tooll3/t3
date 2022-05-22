@@ -1,6 +1,6 @@
 #include "lib/shared/point.hlsl"
 #include "hash-functions.hlsl"
-//#include "lib/points/spatial-hash-map/spatial-hash-map.hlsl"
+//#include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
 
 StructuredBuffer<uint> CellPointIndices :register(t0);         // IndexToPointBuffer
 StructuredBuffer<uint2> PointCellIndices :register(t1);    // CellIndicesBuffer -> PointCellIndices
@@ -8,19 +8,21 @@ StructuredBuffer<uint> HashGridCells :register(t2);     // HashGridBuffer -> Has
 StructuredBuffer<uint> CellPointCounts :register(t3);    // CountBuffer -> CellPointCounts
 StructuredBuffer<uint> CellRangeIndices :register(t4);    // RangeIndexBuffer -> CellRangeIndices
  
-RWStructuredBuffer<Point> points :register(u0);
+RWStructuredBuffer<Point> points :register(u0); 
 
 cbuffer Params : register(b0)
 {
-    float3 Center;
+    float3 Center; 
     float GridCellSize;
 
     float Time;
     float CenterPointIndex;
 }
 
-static const uint            ParticleGridEntryCount = 4;
-static const uint            ParticleGridCellCount = 20;
+//static const uint            ParticleGridCellCount = 20000;
+//static const uint            ParticleGridEntryCount = 10;
+static const uint            ParticleGridCellCount = 16;
+static const uint            ParticleGridEntryCount = 20000;
 
 
 bool GridFind(in float3 position, out uint startIndex, out uint endIndex)

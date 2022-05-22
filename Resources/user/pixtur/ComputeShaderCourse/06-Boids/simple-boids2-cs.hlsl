@@ -79,7 +79,7 @@ bool GridFind(in float3 position, out uint startIndex, out uint endIndex)
         return false;
 
     startIndex = CellRangeIndices[i];
-    int count = min(CellPointCounts[i], 128);
+    int count = min(CellPointCounts[i], 65);
 
     endIndex = startIndex + count;
     return true;
@@ -119,41 +119,50 @@ void main(uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid :
     int startIndex, endIndex;
 
     float3 lookupPos = position;
+    bool foundOne = false;
 
     for(uint offsetIndex = 0; offsetIndex < 4; offsetIndex++) 
     {
-        //lookupPos = 
+        float3 posInCel = fmod(position, GridCellSize) - GridCellSize / 2;
+        float3 sign = posInCel < 0 ? -1 : 1;
+        //lookupPos = floor(position) + posInCel + Offsets[offsetIndex] * GridCellSize;
+        lookupPos = position +  Offsets[offsetIndex] * GridCellSize * sign;
 
-        if(!GridFind(lookupPos, startIndex, endIndex)) {
-            return;
-        }
-
-        for(uint i=startIndex; i < endIndex; ++i) 
+        if(GridFind(lookupPos, startIndex, endIndex)) 
         {
-            uint otherIndex = CellPointIndices[i];
-
-            float3 otherPos = Agents[otherIndex].Position;
-            float distance =  length(otherPos - position);
-
-            if(distance < BoidsTypes[boidTypIndex].AlignmentRadius)
+            for(uint i=startIndex; i < endIndex; ++i) 
             {
-                averageDirection += rotate_vector(FORWARD, Agents[otherIndex].SpriteOrientation);
-                countForAlignment++;
-            }
+                uint otherIndex = CellPointIndices[i];
 
-            if(distance < BoidsTypes[boidTypIndex].CohesionRadius)
-            {
-                centerForCohesion += Agents[otherIndex].Position;
-                countForCohesion++;
-            }
+                float3 otherPos = Agents[otherIndex].Position;
+                float distance =  length(otherPos - position);
 
-            if(distance < BoidsTypes[boidTypIndex].SeparationRadius)
-            {
-                centerForSeparation += Agents[otherIndex].Position;
-                countForSeparation++;
+                if(distance < BoidsTypes[boidTypIndex].AlignmentRadius)
+                {
+                    averageDirection += rotate_vector(FORWARD, Agents[otherIndex].SpriteOrientation);
+                    countForAlignment++;
+                }
+
+                if(distance < BoidsTypes[boidTypIndex].CohesionRadius)
+                {
+                    centerForCohesion += Agents[otherIndex].Position;
+                    countForCohesion++;
+                }
+
+                if(distance < BoidsTypes[boidTypIndex].SeparationRadius)
+                {
+                    centerForSeparation += Agents[otherIndex].Position;
+                    countForSeparation++;
+                }
             }
+            foundOne = true;
         }
     }
+
+    if(!foundOne) {
+        //return;
+    }
+
 
 
     // Aligment
@@ -206,7 +215,7 @@ void main(uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid :
     
 
     position += direction * BoidsTypes[boidTypIndex].MaxSpeed;
-    position = mod(position + 1, 2) - 1;
+    //position = mod(position + 1, 2) - 1;
 
     
     float4 rot = Agents[DTid.x].SpriteOrientation;

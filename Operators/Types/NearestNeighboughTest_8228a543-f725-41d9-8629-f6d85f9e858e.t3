@@ -253,7 +253,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\proj\\PillowFight\\cs\\flag-neighbour-points.hlsl"
+          "Value": "Resources\\user\\pixtur\\VJ\\PillowFight\\cs\\flag-neighbour-points.hlsl"
         },
         {
           "Id": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,

@@ -67,7 +67,7 @@
         {
           "Id": "0e4e5d78-8fe1-4b84-a0ab-d21f9704ccda"/*Scale*/,
           "Type": "System.Single",
-          "Value": 0.38
+          "Value": 0.16
         },
         {
           "Id": "7d0f3c5d-4860-4dde-ad33-22376520b59d"/*GradientForW*/,
@@ -232,7 +232,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\proj\\PillowFight\\cs\\flag-neighbour-points.hlsl"
+          "Value": "Resources\\user\\pixtur\\VJ\\PillowFight\\cs\\flag-neighbour-points.hlsl"
         },
         {
           "Id": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,
@@ -317,7 +317,7 @@
         {
           "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
           "Type": "System.Single",
-          "Value": 0.7
+          "Value": 0.33
         },
         {
           "Id": "814fc516-250f-4383-8f20-c2a358bbe4e1"/*EnableZWrite*/,
