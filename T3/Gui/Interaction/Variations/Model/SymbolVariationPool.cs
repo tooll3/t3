@@ -363,7 +363,7 @@ namespace T3.Gui.Interaction.Variations.Model
                 var symbolChild = compositionSymbol.Children.SingleOrDefault(s => s.Id == childId);
                 if (symbolChild == null)
                 {
-                    Log.Warning($"Ignoring childId {childId} in variation...");
+                    //Log.Warning($"Ignoring childId {childId} in variation...");
                     continue;
                 }
 
