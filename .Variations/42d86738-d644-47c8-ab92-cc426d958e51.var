@@ -403,8 +403,8 @@
       "ActivationIndex": 13,
       "Title": "Light leak",
       "PosOnCanvas": {
-        "X": -25.312805,
-        "Y": 285.91025
+        "X": 161.50526,
+        "Y": 286.7373
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -436,8 +436,8 @@
       "ActivationIndex": 14,
       "Title": "The Sun Above",
       "PosOnCanvas": {
-        "X": 317.30072,
-        "Y": 566.2276
+        "X": 271.47784,
+        "Y": 495.99072
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {

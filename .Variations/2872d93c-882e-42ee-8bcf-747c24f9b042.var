@@ -7,8 +7,8 @@
       "ActivationIndex": 1,
       "Title": "Default",
       "PosOnCanvas": {
-        "X": 118.99801,
-        "Y": -56.76478
+        "X": 254.58173,
+        "Y": 23.518707
       },
       "ParameterSetsForChildIds": {
         "aa45a027-461c-4adb-8a58-f97a27aece7a": {
@@ -30,8 +30,8 @@
       "ActivationIndex": 2,
       "Title": "Fluid2",
       "PosOnCanvas": {
-        "X": 357.5101,
-        "Y": -63.605972
+        "X": 489.0,
+        "Y": 23.518707
       },
       "ParameterSetsForChildIds": {
         "bec9adf3-9fd5-49ad-b0d3-f434ef0f8491": {

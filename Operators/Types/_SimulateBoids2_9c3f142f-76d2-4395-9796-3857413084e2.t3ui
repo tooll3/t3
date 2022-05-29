@@ -48,6 +48,7 @@
     },
     {
       "InputId": "8a70798c-6448-44ef-a0cb-c9bf22bcc3e1"/*BoidDefinitions*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -4660.45,
         "Y": 153.01257

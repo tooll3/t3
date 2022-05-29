@@ -805,6 +805,12 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "3626d30d-2011-427f-8501-89d3a77f3703"/*FadingFaces*/,
+      "SymbolId": "2872d93c-882e-42ee-8bcf-747c24f9b042",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

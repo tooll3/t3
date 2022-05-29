@@ -27,7 +27,6 @@ namespace T3.Operators.Types.Id_310e174e_ea52_4c54_90e6_72dc8320118a
             var size = RasterSize.GetValue(context);
             var columns = size.Width.Clamp(1, 10000);
             var rows = size.Height.Clamp(1, 10000);
-
             
             var row = index / columns;
             var column = index - (row *  columns);
@@ -36,19 +35,11 @@ namespace T3.Operators.Types.Id_310e174e_ea52_4c54_90e6_72dc8320118a
             var sizeValue = new System.Numerics.Vector2( 1f/ columns,
                                                          1f / rows  );
             
-            var x = ((float)column  / (columns) - 0.5f) * aspectRatio * 2 + sizeValue.X;
-            var y = (((float)row / (float)rows) - 0.5f ) * 2 + sizeValue.Y;
-            
-            
+            var x = ((float)column  / columns - 0.5f) * aspectRatio * 2 + sizeValue.X * aspectRatio;
+            var y = (((float)(rows- row -1) / (float)rows) - 0.5f ) * 2 + sizeValue.Y;
             
             Size.Value = sizeValue;
             Position.Value = new System.Numerics.Vector2(x, y);
-            //Position.Value = new System.Numerics.Vector2((float)MathUtils.Remap((float)column, 0, columns, 0, 1),
-            //                             (float)MathUtils.Remap((float)row, 0, rows, 0, 1));
-            //var a = A.GetValue(context);
-            //var b = B.GetValue(context);
-            //Result.Value = new System.Numerics.Vector2(a.X * b.X, a.Y * b.Y);
-            //Result.Value = a * b;
         }
         
         [Input(Guid = "854731fb-bbc9-48e7-9bcb-45bc53340945")]
