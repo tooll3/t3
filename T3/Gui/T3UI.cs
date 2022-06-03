@@ -46,7 +46,6 @@ namespace T3.Gui
             if (playback is StreamPlayback streamPlayback)
                 streamPlayback.SetMuteMode(UserSettings.Config.AudioMuted);
 
-            Playback.Current = playback;
             
             WindowManager = new WindowManager();
             ExampleSymbolLinking.UpdateExampleLinks();
