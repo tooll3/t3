@@ -22,18 +22,18 @@ namespace T3.Operators.Types.Id_32325c5b_53f7_4414_b4dd_a436e45528b0
         private void Update(EvaluationContext context)
         {
             var newTime = NewTime.GetValue(context);
-            var previousKeyframeTime = context.TimeForKeyframes;
-            context.TimeForKeyframes = newTime;
+            var previousKeyframeTime = context.LocalTime;
+            context.LocalTime = newTime;
 
-            var previousEffectTime = context.TimeForEffects;
-            context.TimeForEffects = newTime;
+            var previousEffectTime = context.LocalFxTime;
+            context.LocalFxTime = newTime;
             
             // Execute subtree
             //SubTree.DirtyFlag.Invalidate();
             Result.Value = SubTree.GetValue(context);
             //Log.Debug($"old:{previousTime} / new:{context.TimeInBars}");
-            context.TimeForKeyframes = previousKeyframeTime;
-            context.TimeForEffects = previousEffectTime;
+            context.LocalTime = previousKeyframeTime;
+            context.LocalFxTime = previousEffectTime;
             //SubTree.DirtyFlag.Clear();
         }
         

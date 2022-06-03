@@ -20,7 +20,7 @@ namespace t3.Gui.Commands.Graph
             _inputId = input.InputDefinition.Id;
             _isAnimated = inputParentSymbol.Animator.IsAnimated(_childId, _inputId);
             _wasDefault = input.IsDefault;
-            _animationTime = EvaluationContext.GlobalTimeForKeyframes;
+            _animationTime = Playback.Current.TimeInBars;
 
             OriginalValue = input.Value.Clone();
             _newValue = newValue == null ? input.Value.Clone() : newValue.Clone();

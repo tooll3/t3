@@ -25,8 +25,10 @@ namespace T3.Gui.Windows.TimeLine
 {
     internal static class TimeControls
     {
-        internal static void DrawTimeControls(ref Playback playback, TimeLineCanvas timeLineCanvas)
+        internal static void DrawTimeControls(TimeLineCanvas timeLineCanvas)
         {
+            var playback = Playback.Current;    // TODO, this should be non-static eventually
+            
             // Settings
             if (CustomComponents.IconButton(Icon.Settings, "##timelineSettings", ControlSize))
             {
@@ -91,23 +93,23 @@ namespace T3.Gui.Windows.TimeLine
 
             // Continue Beat indicator
             {
-                ImGui.PushStyleColor(ImGuiCol.Text, UserSettings.Config.KeepBeatTimeRunningInPause
+                ImGui.PushStyleColor(ImGuiCol.Text, UserSettings.Config.EnableIdleMotion
                                                         ? new Vector4(1, 1, 1, 0.5f)
                                                         : new Vector4(0, 0, 0, 0.5f));
 
                 if (CustomComponents.IconButton(Icon.BeatGrid, "##continueBeat", ControlSize))
                 {
-                    UserSettings.Config.KeepBeatTimeRunningInPause = !UserSettings.Config.KeepBeatTimeRunningInPause;
+                    UserSettings.Config.EnableIdleMotion = !UserSettings.Config.EnableIdleMotion;
                 }
 
                 CustomComponents.TooltipForLastItem("Keep beat time running",
                                                     "This will keep updating the output [Time]\nwhich is useful for procedural animation and syncing.");
 
-                if (UserSettings.Config.KeepBeatTimeRunningInPause)
+                if (UserSettings.Config.EnableIdleMotion)
                 {
                     var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax()) / 2;
-                    var beat = (int)(playback.BeatTime * 4) % 4;
-                    var bar = (int)(playback.BeatTime) % 4;
+                    var beat = (int)(playback.FxTimeInBars * 4) % 4;
+                    var bar = (int)(playback.FxTimeInBars) % 4;
                     const int gridSize = 4;
                     var drawList = ImGui.GetWindowDrawList();
                     var min = center - new Vector2(8, 7) + new Vector2(beat * gridSize, bar * gridSize);

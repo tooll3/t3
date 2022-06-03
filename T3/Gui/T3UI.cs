@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Gui.Commands;
@@ -33,6 +35,19 @@ namespace T3.Gui
             
             var tmp = new UserSettings(saveOnQuit:true);
             var tmp2 = new ProjectSettings(saveOnQuit:true);
+            
+            // Initialize
+            var playback = File.Exists(ProjectSettings.Config.SoundtrackFilepath)
+                            ? new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath)
+                            : new Playback();
+
+            playback.Bpm = ProjectSettings.Config.SoundtrackBpm;
+            playback.SoundtrackOffsetInSecs = ProjectSettings.Config.SoundtrackOffset;
+            if (playback is StreamPlayback streamPlayback)
+                streamPlayback.SetMuteMode(UserSettings.Config.AudioMuted);
+
+            Playback.Current = playback;
+            
             WindowManager = new WindowManager();
             ExampleSymbolLinking.UpdateExampleLinks();
             VariationHandling.Init();
@@ -40,6 +55,7 @@ namespace T3.Gui
 
         public void Draw()
         {
+            Playback.Current.Update(ImGui.GetIO().DeltaTime, UserSettings.Config.EnableIdleMotion);
             if(ForwardBeatTaps.BeatTapTriggered)
                 BeatTiming.TriggerSyncTap();
             

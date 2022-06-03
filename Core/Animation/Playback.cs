@@ -1,66 +1,49 @@
 ﻿using System;
+using System.Diagnostics;
 using ManagedBass;
 using T3.Core.Logging;
-using T3.Core.Operator;
-
-//using ImGuiNET;
 
 namespace T3.Core.Animation
 {
-    public class TimeFormat
-    {
-        private static int GetBeatTimeBar(double timeInBars, int startCountFrom)
-        {
-            return (int)(timeInBars) + startCountFrom;   // NOTE:  We count bars from Zero because it matches the current time
-        }
-
-        private static int GetBeatTimeBeat(double timeInBars, int startCountFrom)
-        {
-            return (int)(timeInBars * 4) % 4 + startCountFrom;
-        }
-
-        private static int GetBeatTimeTick(double timeInBars, int startCountFrom)
-        {
-            return (int)(timeInBars * 16) % 4 + startCountFrom;
-        }
-
-        public static string FormatTimeInBars(double timeInBars, int startCountFrom)
-        {
-            return $"{GetBeatTimeBar(timeInBars, startCountFrom):0}.{GetBeatTimeBeat(timeInBars, startCountFrom):0}.{GetBeatTimeTick(timeInBars,startCountFrom):0}.";
-        }
-
-        private static double BarsToSeconds(double timeInBars, double bpm)
-        {
-            return timeInBars * 240 / bpm;
-        }
-
-        public enum TimeDisplayModes
-        {
-            Secs,
-            Bars,
-            F30,
-            F60,
-        }
-    }
-
+    /// <summary>
+    /// Some notes terminology:  "Time" vs. "TimeInSecs" - Default measure for time (unless it has the "*InSecs" suffix) is a "bar".
+    /// So at 120 BPM a unit of time is 2 seconds.    
+    /// 
+    /// "Local" vs. "Playback": Local time can be overridden for by operators (like [SetCommandTime]) and [TimeClip]. These should be
+    /// used for most operators.  The global Playback time is provided the Playback used in the output. The global time should be used
+    /// for updating operators to have consistent and predictable "timing" even in sub-graphs with overridden time.
+    /// Examples for this are [Pulsate] or [Counter]. 
+    /// 
+    /// "Time" vs "FxTime"
+    ///  - FxTime keeps running if "continued playback" is activated. The effect time should be used for most Operators.
+    ///  - Time is used for all UI interactions and everything that is driven by keyframes.
+    /// 
+    /// RunTime is the time since application.
+    /// </summary>
     public class Playback : IDisposable
     {
+        public Playback()
+        {
+            Current = this;
+        }
+        
         public static Playback Current { get; private set; }
         
         /// <summary>
-        /// The absolute current time as controlled by the timeline interaction.
+        /// The absolute current time as controlled by the timeline interaction in bars.
         /// </summary>
         public virtual double TimeInBars { get; set; }
+        
+        /// <summary>
+        /// The current time used for animation (would advance from <see cref="TimeInBars"/> if Idle Motion is enabled. 
+        /// </summary>
+        public double FxTimeInBars { get; protected set; }
         
         /// <summary>
         /// Convenience function to convert from internal TimeInBars mapped to seconds for current BPM. 
         /// </summary>
         public double TimeInSecs { get => TimeInBars * 240 / Bpm; set => TimeInBars = value / Bpm * 240f; }
 
-        /// <summary>
-        /// The current time used for animation (would advance from <see cref="TimeInBars"/> if keepBeatTimeRunning is active. 
-        /// </summary>
-        public double BeatTime { get; set; }
         public TimeRange LoopRange;
         
         public double Bpm = 120;
@@ -69,41 +52,45 @@ namespace T3.Core.Animation
         
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
-
-        public virtual void Update(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning = false)
+        
+        public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000f;
+        public static double LastFrameDuration { get; private set; }
+        private static double _lastFrameStart;
+        
+        public virtual void Update(float timeSinceLastFrameInSecs, bool idleMotionEnabled = false)
         {
-            UpdateTime(timeSinceLastFrameInSecs, keepBeatTimeRunning);
+            var currentRuntime = RunTimeInSecs;
+            LastFrameDuration = currentRuntime - _lastFrameStart;
+            _lastFrameStart = currentRuntime;
+            
+            UpdateTime(timeSinceLastFrameInSecs, idleMotionEnabled);
             if (IsLooping && TimeInBars > LoopRange.End)
             {
                 TimeInBars = TimeInBars - LoopRange.End > 1.0 // Jump to start if too far out of time region
                                  ? LoopRange.Start
                                  : TimeInBars - (LoopRange.End - LoopRange.Start);
             }
+        }
 
-            
-            // FIXME: With multiple graphs, this breaks frame duration  
-            EvaluationContext.GlobalTimeForKeyframes = TimeInBars;
-            var frameDurationInBars = BeatTime - EvaluationContext.GlobalTimeForEffects; 
-            EvaluationContext.GlobalTimeForEffects = BeatTime;
-            EvaluationContext.BPM = Bpm;
-            EvaluationContext.LastFrameDuration = timeSinceLastFrameInSecs;
-            EvaluationContext.GlobalTimeInSecs = TimeInSecs;
-            Current = this;
+        
+        private double ToSecs(double timeInBars)
+        {
+            return timeInBars * 240 / Bpm;
         }
 
 
-        protected virtual void UpdateTime(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning)
+        protected virtual void UpdateTime(float timeSinceLastFrameInSecs, bool idleMotionEnabled)
         {
             var isPlaying = Math.Abs(PlaybackSpeed) > 0.001;
 
             if (isPlaying)
             {
-                TimeInBars += timeSinceLastFrameInSecs * PlaybackSpeed * Bpm / 240f + SoundtrackOffsetInSecs;
-                BeatTime = TimeInBars;
+                TimeInBars += timeSinceLastFrameInSecs * PlaybackSpeed * Bpm / 240f;
+                FxTimeInBars = TimeInBars;
             }
-            else if (keepBeatTimeRunning)
+            else if (idleMotionEnabled)
             {
-                BeatTime += timeSinceLastFrameInSecs * Bpm / 240f + SoundtrackOffsetInSecs;
+                FxTimeInBars += timeSinceLastFrameInSecs * Bpm / 240f;
             }
         }
 
@@ -116,7 +103,7 @@ namespace T3.Core.Animation
         {
         }
         
-                
+        private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
 
     }
 
@@ -149,7 +136,7 @@ namespace T3.Core.Animation
                     SetStreamPositionFromTime();
                 }
 
-                BeatTime = value;
+                FxTimeInBars = value;
             }
         }
 
@@ -212,7 +199,7 @@ namespace T3.Core.Animation
             Bass.ChannelSetAttribute(_soundStreamHandle, ChannelAttribute.Volume, shouldBeMuted ? 0 : _previousVolume);
         }
 
-        protected override void UpdateTime(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning)
+        protected override void UpdateTime(float timeSinceLastFrameInSecs, bool idleMotionEnabled)
         {
             if (_playbackSpeed < 0.0 || !IsTimeWithinAudioTrack)
             {
@@ -229,11 +216,11 @@ namespace T3.Core.Animation
             var isPlaying = Math.Abs(_playbackSpeed) > 0.001;
             if (isPlaying)
             {
-                BeatTime = TimeInBars;
+                FxTimeInBars = TimeInBars;
             }
-            else if (keepBeatTimeRunning)
+            else if (idleMotionEnabled)
             {
-                BeatTime += timeSinceLastFrameInSecs * Bpm / 240f;
+                FxTimeInBars += timeSinceLastFrameInSecs * Bpm / 240f;
             }
         }
 

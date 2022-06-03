@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Gui.Graph.Interaction;
@@ -49,8 +50,8 @@ namespace T3.Gui.Windows.Output
         
         public void Update(Instance drawnInstance, Type drawnType)
         {
-            _hasAnimationTimeChanged = Math.Abs(_lastUpdateTime - EvaluationContext.GlobalTimeForKeyframes) > 0.001f;
-            _lastUpdateTime = EvaluationContext.GlobalTimeForKeyframes;
+            _hasAnimationTimeChanged = Math.Abs(_lastUpdateTime - Playback.Current.TimeInBars) > 0.001f;
+            _lastUpdateTime = Playback.Current.TimeInBars;
             
             _drawnInstance = drawnInstance;
             if (drawnInstance == null)

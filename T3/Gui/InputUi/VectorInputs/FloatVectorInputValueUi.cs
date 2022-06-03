@@ -4,6 +4,7 @@ using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
@@ -34,7 +35,7 @@ namespace T3.Gui.InputUi
         
         protected override InputEditStateFlags DrawAnimatedValue(string name, InputSlot<T> inputSlot, Animator animator)
         {
-            var time = EvaluationContext.GlobalTimeForKeyframes;
+            var time = Playback.Current.TimeInBars;
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
             if (curves.Length < FloatComponents.Length)
             {

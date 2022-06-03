@@ -22,9 +22,9 @@ namespace T3.Gui.Windows.TimeLine
     /// </summary>
     public class TimeLineCanvas : CurveEditCanvas
     {
-        public TimeLineCanvas(ref Playback playback)
+        public TimeLineCanvas()
         {
-            Playback = playback;
+            Playback = Playback.Current;
             DopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
             _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandlerForU, SnapHandlerForV);
             _timeSelectionRange = new TimeSelectionRange(this, SnapHandlerForU);

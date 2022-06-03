@@ -51,7 +51,7 @@ namespace t3.Gui.InputUi.SimpleInputUis
 
         protected override InputEditStateFlags DrawAnimatedValue(string name, InputSlot<Size2> inputSlot, Animator animator)
         {
-            double time = EvaluationContext.GlobalTimeForKeyframes;
+            double time = Playback.Current.TimeInBars;
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
 
             if (curves.Length < Components.Length)

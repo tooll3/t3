@@ -34,7 +34,7 @@ namespace T3.Operators.Types.Id_f8aed421_5e0e_4d1f_993c_1801153ebba8
             var decay = Decay.GetValue(context);
             var modulo = UseModulo.GetValue(context);
 
-            var t = context.TimeForEffects;
+            var t = context.LocalFxTime;
             if (Math.Abs(t - _lastEvalTime) < 0.001f) 
                 return;
 
@@ -53,9 +53,9 @@ namespace T3.Operators.Types.Id_f8aed421_5e0e_4d1f_993c_1801153ebba8
 
             if (peakDetected && isModuloPeak)
             {
-                _lastModuloPeakTime = EvaluationContext.GlobalTimeForEffects;
+                _lastModuloPeakTime = context.Playback.FxTimeInBars;
             }
-            var timeSinceModuloPeak = (float)(EvaluationContext.GlobalTimeForEffects - _lastModuloPeakTime);
+            var timeSinceModuloPeak = (float)(context.Playback.FxTimeInBars - _lastModuloPeakTime);
             var timeSincePeak = usingModulo
                                     ? timeSinceModuloPeak
                                     : results.TimeSincePeak;

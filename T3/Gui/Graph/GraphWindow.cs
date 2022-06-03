@@ -31,14 +31,7 @@ namespace T3.Gui.Graph
             Config.Visible = true;
             AllowMultipleInstances = true;
 
-            _playback = File.Exists(ProjectSettings.Config.SoundtrackFilepath)
-                            ? new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath)
-                            : new Playback();
 
-            _playback.Bpm = ProjectSettings.Config.SoundtrackBpm;
-            _playback.SoundtrackOffsetInSecs = ProjectSettings.Config.SoundtrackOffset;
-            if (_playback is StreamPlayback streamPlayback)
-                streamPlayback.SetMuteMode(UserSettings.Config.AudioMuted);
 
             // Legacy work-around
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
@@ -46,7 +39,7 @@ namespace T3.Gui.Graph
             var path = NodeOperations.BuildIdPathForInstance(shownOpInstance);
             GraphCanvas = new GraphCanvas(this, path);
 
-            _timeLineCanvas = new TimeLineCanvas(ref _playback);
+            _timeLineCanvas = new TimeLineCanvas();
 
             WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
             GraphWindowInstances.Add(this);
@@ -109,7 +102,7 @@ namespace T3.Gui.Graph
 
         protected override void UpdateBeforeDraw()
         {
-            _playback.Update(ImGui.GetIO().DeltaTime, UserSettings.Config.KeepBeatTimeRunningInPause);
+            //_playback.Update(ImGui.GetIO().DeltaTime, UserSettings.Config.KeepBeatTimeRunningInPause);
         }
 
         private static GraphWindow _currentWindow;
@@ -278,7 +271,7 @@ namespace T3.Gui.Graph
 
                 ImGui.SameLine();
 
-                TimeControls.DrawTimeControls(ref _playback, _timeLineCanvas);
+                TimeControls.DrawTimeControls(_timeLineCanvas);
                 if (_imageBackground.IsActive)
                 {
                     _imageBackground.DrawResolutionSelector();
@@ -398,7 +391,6 @@ namespace T3.Gui.Graph
         private readonly ImageBackground _imageBackground = new ImageBackground();
 
         public readonly GraphCanvas GraphCanvas;
-        private Playback _playback;
         private const int UseComputedHeight = -1;
         private int _customTimeLineHeight = UseComputedHeight;
         private bool UsingCustomTimelineHeight => _customTimeLineHeight > UseComputedHeight;

@@ -206,8 +206,8 @@ namespace T3
                 for (double timeInSecs = 0; timeInSecs < songDurationInSecs; timeInSecs += 1.0)
                 {
                     Log.Info($"Pre-evaluate at: {timeInSecs}s");
-                    EvaluationContext.GlobalTimeInSecs = timeInSecs;
-                    EvaluationContext.GlobalTimeForKeyframes = timeInSecs / 120.0 * 240.0;
+                    Playback.Current.TimeInSecs = timeInSecs;
+                    Playback.Current.TimeInBars = timeInSecs / 120.0 * 240.0;
 
                     DirtyFlag.IncrementGlobalTicks();
                     DirtyFlag.InvalidationRefFrame++;
@@ -269,7 +269,7 @@ namespace T3
                                      }
                                      // else
                                      // {
-                                     //     _playback = EvaluationContext.RunTimeInSecs;
+                                     //     _playback = Playback.RunTimeInSecs;
                                      // }
 
                                      DirtyFlag.IncrementGlobalTicks();

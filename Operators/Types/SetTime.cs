@@ -21,17 +21,17 @@ namespace T3.Operators.Types.Id_d3dbc1cf_0642_4e36_85eb_95bd5a2950b5
 
         private void Update(EvaluationContext context)
         {
-            var previousKeyframeTime = context.TimeForKeyframes;
-            var previousEffectTime = context.TimeForEffects;
+            var previousKeyframeTime = context.LocalTime;
+            var previousEffectTime = context.LocalFxTime;
             
             var newTime = NewTime.GetValue(context);
-            context.TimeForKeyframes = newTime;
-            context.TimeForEffects = newTime;
+            context.LocalTime = newTime;
+            context.LocalFxTime = newTime;
             
             // Execute subtree
             Result.Value = SubTree.GetValue(context);
-            context.TimeForKeyframes = previousKeyframeTime;
-            context.TimeForEffects = previousEffectTime;
+            context.LocalTime = previousKeyframeTime;
+            context.LocalFxTime = previousEffectTime;
         }
         
         [Input(Guid = "6220E7DC-7AED-48B8-B419-29393988BBBE")]

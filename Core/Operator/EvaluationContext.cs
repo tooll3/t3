@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Rendering;
@@ -22,11 +23,14 @@ namespace T3.Core.Operator
         {
             Reset();
         }
-
+        
         public void Reset()
         {
-            TimeForKeyframes = GlobalTimeForKeyframes;
-            TimeForEffects = GlobalTimeForEffects;
+            // TODO: this should be replaced with a solution that supports multiple playback sources 
+            Playback = Playback.Current;
+            
+            LocalTime = Playback.TimeInBars;
+            LocalFxTime = Playback.FxTimeInBars;
             PointLights.Clear();
             PbrContextSettings.SetDefaultToContext(this);
         }
@@ -56,38 +60,10 @@ namespace T3.Core.Operator
 
         private static ICamera _defaultCamera = new ViewCamera();
 
-        private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
-        
         
         #region timing
-        /**
-         * Some notes terminology:
-         *
-         * "Time" vs. "TimeInSecs" - Default measure for time (unless it has the "*InSecs" suffix) is a "bar" So at 120 BPM a unit of time is 2 seconds.    
-         * 
-         * "Normal" vs. "Global" - Times can be overridden for by operators (like SetCommandTime) and time clips. These should be used for most operators.
-         * The "Global" time is provided the Playback used in the output. The global time should be used for updating operators the have consistent and
-         * predictable "timing"  even in sub-graphs with overridden time. Examples for this are [Pulsate] or [Counter]. 
-         * 
-         * "*ForKeyframes" vs "*ForEffects"
-         *  - Time for effects keeps running if "continued playback" is activated. The effect time should be used for most Operators.
-         *  - TimeForKeyframes is used for all UI interactions.
-         * 
-         * RunTime is the time since application start.
-         * 
-         */
-        
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000.0;
-        
-        
-        
-        
-        public static double GlobalTimeForKeyframes { get; set; }
-        
+        public Playback Playback { get; private set; }
+
         /// <summary>
         /// The primary time used for user interactions and keyframe manipulation.
         /// This is where there time marker in the timeline is displayed.
@@ -95,29 +71,14 @@ namespace T3.Core.Operator
         /// While evaluating the graph it can be overridden for sub graphs by <see cref="SetCommandTime"/>.
         /// </summary>
         /// <remarks>Also see <see cref="EvaluationContext"/>.<see cref="GlobalTimeForEffects"/> and .<see cref="GlobalTimeInSecs"/></remarks>
-        public double TimeForKeyframes { get; set; }
+        public double LocalTime { get; set; }
         
         /// <summary>
         /// Although similar to KeyframeTime, this one keeps running in pause mode, if Keep Running is active.
         /// While evaluating the graph it can be overridden for sub graphs by <see cref="SetCommandTime"/>.
         /// </summary>
-        public double TimeForEffects { get; set; }
-
-        /// <summary>
-        /// If "keep running" option is enabled, this time is still running even if (audio) playback has been stopped.
-        /// This is used by most procedural time related operators (like pulsate).  
-        /// </summary>
-        public static double GlobalTimeInSecs { get; set; }
-
-        public static double BPM { get; set; }
+        public double LocalFxTime { get; set; }
         
-        /// <summary>
-        /// This time keeps running
-        /// </summary>
-        public static double GlobalTimeForEffects { get; set; }
-        
-        public static double LastFrameDuration { get; set; }
-
         #endregion
         
         public Size2 RequestedResolution { get; set; }

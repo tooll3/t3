@@ -1,5 +1,6 @@
 using System;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -21,12 +22,12 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
             var v = Value.GetValue(context);
             var damping = Damping.GetValue(context);
 
-            var t = context.TimeForEffects;
+            var t = context.LocalFxTime;
             if (Math.Abs(t - _lastEvalTime) < 0.001f)
                 return;
             _lastEvalTime = t;
 
-            var f = (float)(damping * EvaluationContext.LastFrameDuration).Clamp(0f,1f);
+            var f = (float)(damping * Playback.LastFrameDuration).Clamp(0f,1f);
             _dampedValue = MathUtils.Lerp(v,_dampedValue, f);
             Result.Value = _dampedValue;
         }

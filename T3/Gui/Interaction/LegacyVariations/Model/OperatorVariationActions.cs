@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Numerics;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
@@ -326,7 +327,7 @@ namespace T3.Gui.Interaction.LegacyVariations.Model
             if (@group?.BlendStartPreset == null)
                 return;
             
-            group.BlendTransitionProgress += (float)EvaluationContext.LastFrameDuration / group.BlendTransitionDuration;
+            group.BlendTransitionProgress += (float)Playback.LastFrameDuration / group.BlendTransitionDuration;
             if (group.BlendTransitionProgress >= 1)
             {
                 ApplyGroupPreset(group, group.BlendTargetPreset);

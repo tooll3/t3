@@ -21,8 +21,8 @@ namespace T3.Operators.Types.Id_2443b2fd_c397_4ea6_9588_b595f918cf01
         {
             var threshold = Threshold.GetValue(context);
 
-            var wasRewind = context.TimeForKeyframes < _lastTime - threshold;
-            _lastTime = context.TimeForKeyframes;
+            var wasRewind = context.LocalTime < _lastTime - threshold;
+            _lastTime = context.LocalTime;
             if (wasRewind)
             {
                 _triggeredLastFrame = true;

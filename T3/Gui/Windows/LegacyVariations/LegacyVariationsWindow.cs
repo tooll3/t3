@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -399,7 +400,7 @@ namespace T3.Gui.Windows.Variations
                                                     {
                                                         foreach (var d in BlendDurations)
                                                         {
-                                                            var seconds = d * 240 / EvaluationContext.BPM;
+                                                            var seconds = d * 240 / Playback.Current.Bpm;
                                                             var isCurrent = Math.Abs(group.BlendTransitionDuration - d) < 0.01f;
                                                             
                                                             var label = GetDurationLabel(d);

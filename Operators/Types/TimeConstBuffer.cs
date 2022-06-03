@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -23,13 +24,13 @@ namespace T3.Operators.Types.Id_de8bc97a_8ef0_4d4a_9ffa_88046a2daf40
 
         private void Update(EvaluationContext context)
         {
-            //Log.Debug("LastFrame duration:" + EvaluationContext.LastFrameDuration);
+            //Log.Debug("LastFrame duration:" + Playback.LastFrameDuration);
             var bufferContent = new TimeBufferLayout(
-                                                     (float)EvaluationContext.GlobalTimeForKeyframes, 
-                                                     (float)context.TimeForKeyframes, 
-                                                     (float)EvaluationContext.RunTimeInSecs,
-                                                     (float)EvaluationContext.GlobalTimeForEffects,
-                                                     (float)EvaluationContext.LastFrameDuration);
+                                                     (float)Playback.Current.TimeInBars, 
+                                                     (float)context.LocalTime, 
+                                                     (float)Playback.RunTimeInSecs,
+                                                     (float)context.Playback.FxTimeInBars,
+                                                     (float)Playback.LastFrameDuration);
             ResourceManager.Instance().SetupConstBuffer(bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName = nameof(TimeConstBuffer);
         }

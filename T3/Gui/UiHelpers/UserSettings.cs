@@ -31,7 +31,7 @@ namespace T3.Gui.UiHelpers
             public bool ShowThumbnails = true;
             public bool SmartGroupDragging = false;
             public int WindowLayoutIndex = 0;
-            public bool KeepBeatTimeRunningInPause = true;
+            public bool EnableIdleMotion = true;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = true;
             public float SnapStrength = 5;

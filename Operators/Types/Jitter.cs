@@ -37,7 +37,7 @@ namespace T3.Operators.Types.Id_3b0eb327_6ad8_424f_bca7_ccbfa2c9a986
                 jump = true;
             }
 
-            _beatTime = EvaluationContext.GlobalTimeForEffects;
+            _beatTime = context.Playback.FxTimeInBars;
 
             if (UseRate)
             {

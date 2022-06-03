@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -17,7 +18,7 @@ namespace T3.Operators.Types.Id_862de1a8_f630_4823_8860_7afa918bb1bc
 
         private void Update(EvaluationContext context)
         {
-            TimeInSeconds.Value = (float)EvaluationContext.RunTimeInSecs;
+            TimeInSeconds.Value = (float)Playback.RunTimeInSecs;
         }
     }
 }

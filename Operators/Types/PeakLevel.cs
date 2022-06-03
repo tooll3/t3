@@ -1,5 +1,6 @@
 using System;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -33,7 +34,7 @@ namespace T3.Operators.Types.Id_d3fb5baf_43f8_4983_a1d9_42f4005a3af0
 
         private void Update(EvaluationContext context)
         {
-            var t = EvaluationContext.GlobalTimeForEffects;
+            var t = context.Playback.FxTimeInBars;
 
             var wasEvaluatedThisFrame = Math.Abs(t - _lastEvalTime) < 0.001f;
             if (wasEvaluatedThisFrame)
@@ -46,13 +47,13 @@ namespace T3.Operators.Types.Id_d3fb5baf_43f8_4983_a1d9_42f4005a3af0
             var value = Value.GetValue(context);
             var increase = (value - _lastValue);//.Clamp(0, 10000);
             
-            var timeSinceLastPeak = EvaluationContext.RunTimeInSecs - _lastPeakTime;
+            var timeSinceLastPeak = Playback.RunTimeInSecs - _lastPeakTime;
             if (timeSinceLastPeak < 0)
                 _lastPeakTime = Double.NegativeInfinity;
 
             if (increase > Threshold.GetValue(context) && timeSinceLastPeak > MinTimeBetweenPeaks.GetValue(context))
             {
-                 _lastPeakTime = EvaluationContext.RunTimeInSecs;
+                 _lastPeakTime = Playback.RunTimeInSecs;
                  FoundPeak.Value = true;
             }
             else

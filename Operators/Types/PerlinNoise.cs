@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_436e93a8_03c0_4366_8d9a_2245e5bcaa6c
         {
             var value = OverrideTime.IsConnected
                             ? OverrideTime.GetValue(context)
-                            : (float)context.TimeForEffects;            
+                            : (float)context.LocalFxTime;            
             
             var seed = Seed.GetValue(context);
             var period = Frequency.GetValue(context);

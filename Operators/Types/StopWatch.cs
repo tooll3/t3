@@ -29,12 +29,12 @@ namespace T3.Operators.Types.Id_485af23d_543e_44a7_b29f_693ed9533ab5
 
             if (resetHit)
             {
-                LastDuration.Value = (float)(EvaluationContext.RunTimeInSecs - _startTime);
+                LastDuration.Value = (float)(Playback.RunTimeInSecs - _startTime);
                 //Log.Debug($"was hit after {LastDuration.Value:0.00s}");
-                _startTime = EvaluationContext.RunTimeInSecs;
+                _startTime = Playback.RunTimeInSecs;
             }
             
-            var timeInSecs = (float)(EvaluationContext.RunTimeInSecs - _startTime);
+            var timeInSecs = (float)(Playback.RunTimeInSecs - _startTime);
 
             Delta.Value = ConvertTime(timeInSecs);
             LastDuration.DirtyFlag.Clear();

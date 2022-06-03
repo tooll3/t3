@@ -58,7 +58,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             
             var rot = Matrix.RotationYawPitchRoll(
                                                   ComputeAngle(SpinAngleAndWobble,1) 
-                                                  + MathUtil.DegreesToRadians((float)(SpinRate.GetValue(context) * (context.TimeForEffects 
+                                                  + MathUtil.DegreesToRadians((float)(SpinRate.GetValue(context) * (context.LocalFxTime 
                                                                                                   + SpinOffset.GetValue(context)) * 360  
                                                                                       + MathUtils.PerlinNoise(0, 1, 6, seed) * 360 ) )
                                                                                       , 
@@ -115,7 +115,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
                 var angleAndWobble = angleAndWobbleInput.GetValue(context);
                 var wobble=  Math.Abs(angleAndWobble.Y) < 0.001f 
                                  ? 0 
-                                 : (MathUtils.PerlinNoise((float)context.TimeForEffects * wobbleSpeed, 
+                                 : (MathUtils.PerlinNoise((float)context.LocalFxTime * wobbleSpeed, 
                                                          1, 
                                                          wobbleComplexity, 
                                                          seed+ 123* seedIndex) 
