@@ -7,6 +7,42 @@ using T3.Core.Operator;
 
 namespace T3.Core.Animation
 {
+    public class TimeFormat
+    {
+        private static int GetBeatTimeBar(double timeInBars, int startCountFrom)
+        {
+            return (int)(timeInBars) + startCountFrom;   // NOTE:  We count bars from Zero because it matches the current time
+        }
+
+        private static int GetBeatTimeBeat(double timeInBars, int startCountFrom)
+        {
+            return (int)(timeInBars * 4) % 4 + startCountFrom;
+        }
+
+        private static int GetBeatTimeTick(double timeInBars, int startCountFrom)
+        {
+            return (int)(timeInBars * 16) % 4 + startCountFrom;
+        }
+
+        public static string FormatTimeInBars(double timeInBars, int startCountFrom)
+        {
+            return $"{GetBeatTimeBar(timeInBars, startCountFrom):0}.{GetBeatTimeBeat(timeInBars, startCountFrom):0}.{GetBeatTimeTick(timeInBars,startCountFrom):0}.";
+        }
+
+        private static double BarsToSeconds(double timeInBars, double bpm)
+        {
+            return timeInBars * 240 / bpm;
+        }
+
+        public enum TimeDisplayModes
+        {
+            Secs,
+            Bars,
+            F30,
+            F60,
+        }
+    }
+
     public class Playback : IDisposable
     {
         public static Playback Current { get; private set; }
@@ -33,26 +69,6 @@ namespace T3.Core.Animation
         
         public virtual double PlaybackSpeed { get; set; } = 0;
         public bool IsLooping = false;
-        
-        private static int GetBeatTimeBar(double timeInBars, int startCountFrom)
-        {
-            return (int)(timeInBars) + startCountFrom;   // NOTE:  We count bars from Zero because it matches the current time
-        }
-
-        private static int GetBeatTimeBeat(double timeInBars, int startCountFrom)
-        {
-            return (int)(timeInBars * 4) % 4 + startCountFrom;
-        }
-
-        private static int GetBeatTimeTick(double timeInBars, int startCountFrom)
-        {
-            return (int)(timeInBars * 16) % 4 + startCountFrom;
-        }
-
-        public static string FormatTimeInBars(double timeInBars, int startCountFrom)
-        {
-            return $"{GetBeatTimeBar(timeInBars, startCountFrom):0}.{GetBeatTimeBeat(timeInBars, startCountFrom):0}.{GetBeatTimeTick(timeInBars,startCountFrom):0}.";
-        }
 
         public virtual void Update(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning = false)
         {
@@ -65,7 +81,7 @@ namespace T3.Core.Animation
             }
 
             
-            // FIXME: With multiple graphs, this break frame duration  
+            // FIXME: With multiple graphs, this breaks frame duration  
             EvaluationContext.GlobalTimeForKeyframes = TimeInBars;
             var frameDurationInBars = BeatTime - EvaluationContext.GlobalTimeForEffects; 
             EvaluationContext.GlobalTimeForEffects = BeatTime;
@@ -75,13 +91,6 @@ namespace T3.Core.Animation
             Current = this;
         }
 
-        public enum TimeDisplayModes
-        {
-            Secs,
-            Bars,
-            F30,
-            F60,
-        }
 
         protected virtual void UpdateTime(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning)
         {
@@ -108,10 +117,7 @@ namespace T3.Core.Animation
         }
         
                 
-        private double BarsToSeconds(double timeInBars)
-        {
-            return timeInBars * 240 / Bpm;
-        } 
+
     }
 
     public class StreamPlayback : Playback
@@ -128,7 +134,7 @@ namespace T3.Core.Animation
         {
             Bass.Free();
             Bass.Init();
-            _soundStreamHandle = Bass.CreateStream(filepath);
+            _soundStreamHandle = Bass.CreateStream(filepath, 0,0, BassFlags.Prescan);
             Bass.ChannelGetAttribute(_soundStreamHandle, ChannelAttribute.Frequency, out _defaultPlaybackFrequency);
         }
 

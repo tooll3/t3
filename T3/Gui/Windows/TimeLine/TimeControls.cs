@@ -44,19 +44,19 @@ namespace T3.Gui.Windows.TimeLine
             string formattedTime = "";
             switch (UserSettings.Config.TimeDisplayMode)
             {
-                case Playback.TimeDisplayModes.Bars:
-                    formattedTime = Playback.FormatTimeInBars(playback.TimeInBars, UserSettings.Config.CountBarsFromZero ? 0 : 1);
+                case TimeFormat.TimeDisplayModes.Bars:
+                    formattedTime = TimeFormat.FormatTimeInBars(playback.TimeInBars, UserSettings.Config.CountBarsFromZero ? 0 : 1);
                     break;
 
-                case Playback.TimeDisplayModes.Secs:
+                case TimeFormat.TimeDisplayModes.Secs:
                     formattedTime = TimeSpan.FromSeconds(playback.TimeInSecs).ToString(@"hh\:mm\:ss\:ff");
                     break;
 
-                case Playback.TimeDisplayModes.F30:
+                case TimeFormat.TimeDisplayModes.F30:
                     var frames = playback.TimeInSecs * 30;
                     formattedTime = $"{frames:0}f ";
                     break;
-                case Playback.TimeDisplayModes.F60:
+                case TimeFormat.TimeDisplayModes.F60:
                     var frames60 = playback.TimeInSecs * 60;
                     formattedTime = $"{frames60:0}f ";
                     break;
@@ -66,7 +66,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 playback.PlaybackSpeed = 0;
                 playback.TimeInBars += delta;
-                if (UserSettings.Config.TimeDisplayMode == Playback.TimeDisplayModes.F30)
+                if (UserSettings.Config.TimeDisplayMode == TimeFormat.TimeDisplayModes.F30)
                 {
                     playback.TimeInSecs = Math.Floor(playback.TimeInSecs * 30) / 30;
                 }
@@ -78,7 +78,7 @@ namespace T3.Gui.Windows.TimeLine
             if (ImGui.Button(UserSettings.Config.TimeDisplayMode.ToString(), ControlSize))
             {
                 UserSettings.Config.TimeDisplayMode =
-                    (Playback.TimeDisplayModes)(((int)UserSettings.Config.TimeDisplayMode + 1) % Enum.GetNames(typeof(Playback.TimeDisplayModes)).Length);
+                    (TimeFormat.TimeDisplayModes)(((int)UserSettings.Config.TimeDisplayMode + 1) % Enum.GetNames(typeof(TimeFormat.TimeDisplayModes)).Length);
             }
 
             CustomComponents.TooltipForLastItem("Timeline format",
@@ -443,7 +443,7 @@ namespace T3.Gui.Windows.TimeLine
                         if (ImGui.Checkbox("Use BPM Rate", ref ProjectSettings.Config.UseBpmRate))
                         {
                             if (!ProjectSettings.Config.UseBpmRate)
-                                UserSettings.Config.TimeDisplayMode = Playback.TimeDisplayModes.Secs;
+                                UserSettings.Config.TimeDisplayMode = TimeFormat.TimeDisplayModes.Secs;
                         }
 
                         if (ProjectSettings.Config.UseBpmRate)

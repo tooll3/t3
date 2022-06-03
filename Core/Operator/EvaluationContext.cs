@@ -57,7 +57,33 @@ namespace T3.Core.Operator
         private static ICamera _defaultCamera = new ViewCamera();
 
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
+        
+        
+        #region timing
+        /**
+         * Some notes terminology:
+         *
+         * "Time" vs. "TimeInSecs" - Default measure for time (unless it has the "*InSecs" suffix) is a "bar" So at 120 BPM a unit of time is 2 seconds.    
+         * 
+         * "Normal" vs. "Global" - Times can be overridden for by operators (like SetCommandTime) and time clips. These should be used for most operators.
+         * The "Global" time is provided the Playback used in the output. The global time should be used for updating operators the have consistent and
+         * predictable "timing"  even in sub-graphs with overridden time. Examples for this are [Pulsate] or [Counter]. 
+         * 
+         * "*ForKeyframes" vs "*ForEffects"
+         *  - Time for effects keeps running if "continued playback" is activated. The effect time should be used for most Operators.
+         *  - TimeForKeyframes is used for all UI interactions.
+         * 
+         * RunTime is the time since application start.
+         * 
+         */
+        
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000.0;
+        
+        
         
         
         public static double GlobalTimeForKeyframes { get; set; }
@@ -73,6 +99,7 @@ namespace T3.Core.Operator
         
         /// <summary>
         /// Although similar to KeyframeTime, this one keeps running in pause mode, if Keep Running is active.
+        /// While evaluating the graph it can be overridden for sub graphs by <see cref="SetCommandTime"/>.
         /// </summary>
         public double TimeForEffects { get; set; }
 
@@ -91,6 +118,8 @@ namespace T3.Core.Operator
         
         public static double LastFrameDuration { get; set; }
 
+        #endregion
+        
         public Size2 RequestedResolution { get; set; }
 
         public Matrix CameraToClipSpace { get; set; } = Matrix.Identity;

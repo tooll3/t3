@@ -51,7 +51,7 @@ namespace T3.Gui.UiHelpers
             public bool CountBarsFromZero = true; 
 
             [JsonConverter(typeof(StringEnumConverter))]
-            public Playback.TimeDisplayModes TimeDisplayMode = Playback.TimeDisplayModes.Bars;
+            public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
             public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new List<GraphBookmarkNavigation.Bookmark>();
         }
