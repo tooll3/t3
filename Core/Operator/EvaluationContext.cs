@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
@@ -101,9 +100,6 @@ namespace T3.Core.Operator
         public System.Numerics.Vector4 BackgroundColor { get; set; } = new System.Numerics.Vector4(0.1f, 0.1f, 0.1f, 1.0f);
         
         public GizmoVisibility ShowGizmos { get; set; }
-
-
-        public Dictionary<Variator.VariationId, VariationSelector> VariationOverwrites { get; } = new Dictionary<Variator.VariationId, VariationSelector>();
 
         public Dictionary<string, float> FloatVariables { get; } = new Dictionary<string, float>();
         public StructuredList IteratedList { get; set; }
