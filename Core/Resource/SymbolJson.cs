@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Audio;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
@@ -44,8 +45,9 @@ namespace T3.Core
             WriteSymbolInputs(symbol.InputDefinitions);
             WriteSymbolChildren(symbol.Children);
             WriteConnections(symbol.Connections);
+            WriteSoundtracks(symbol.AudioClips);
             symbol.Animator.Write(Writer);
-
+            
             Writer.WriteEndObject();
         }
 
@@ -176,10 +178,24 @@ namespace T3.Core
 
             Writer.WriteEndArray();
         }
+        
+        private void WriteSoundtracks(List<AudioClip> audioClips)
+        {
+            Writer.WritePropertyName("Soundtracks");
+            Writer.WriteStartArray();
+            foreach (var audioClip in audioClips)
+            {
+                audioClip.ToJson(Writer);
+            }
+
+            Writer.WriteEndArray();
+        }        
+        
         #endregion
 
+        
         #region reading
-                private SymbolChild ReadSymbolChild(Model model, JToken symbolChildJson)
+        private SymbolChild ReadSymbolChild(Model model, JToken symbolChildJson)
         {
             var childId = Guid.Parse(symbolChildJson["Id"].Value<string>());
             var symbolId = Guid.Parse(symbolChildJson["SymbolId"].Value<string>());
@@ -372,6 +388,12 @@ namespace T3.Core
                 {
                     input.DefaultValue.SetValueFromJson(jsonDefaultValue);
                 }
+            }
+            
+            foreach (var c in ((JArray)o["AudioClips"]))
+            {
+                AudioClip clip = AudioClip.FromJson(c);
+                symbol.AudioClips.Add(clip);
             }
 
             return symbol;

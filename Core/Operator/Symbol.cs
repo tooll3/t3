@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Core.Audio;
 using T3.Core.Logging;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -26,20 +27,21 @@ namespace T3.Core.Operator
         public string SourcePath { get; set; }
         public string DeprecatedSourcePath { get; set; }
 
-        public readonly List<Instance> InstancesOfSymbol = new List<Instance>();
-        public readonly List<SymbolChild> Children = new List<SymbolChild>();
-        public readonly List<Connection> Connections = new List<Connection>();
+        public readonly List<Instance> InstancesOfSymbol = new();
+        public readonly List<SymbolChild> Children = new();
+        public readonly List<Connection> Connections = new();
 
         /// <summary>
         /// Inputs of this symbol. input values are the default values (exist only once per symbol)
         /// </summary>
-        public readonly List<InputDefinition> InputDefinitions = new List<InputDefinition>();
+        public readonly List<InputDefinition> InputDefinitions = new();
 
-        public readonly List<OutputDefinition> OutputDefinitions = new List<OutputDefinition>();
+        public readonly List<OutputDefinition> OutputDefinitions = new();
 
         public Type InstanceType { get; private set; }
 
         public Animator Animator { get; } = new Animator();
+        public List<AudioClip> AudioClips { get; private set; } = new();
 
         #region public API =======================================================================
 
