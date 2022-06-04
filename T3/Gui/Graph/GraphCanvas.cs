@@ -843,12 +843,12 @@ namespace T3.Gui.Graph
 
             using (var writer = new StringWriter())
             {
-                var json = new Json { Writer = new JsonTextWriter(writer) { Formatting = Formatting.Indented } };
+                var json = new SymbolJson { Writer = new JsonTextWriter(writer) { Formatting = Formatting.Indented } };
                 json.Writer.WriteStartArray();
 
                 json.WriteSymbol(containerOp);
 
-                var jsonUi = new UiJson { Writer = json.Writer };
+                var jsonUi = new SymbolUiJson { Writer = json.Writer };
                 jsonUi.WriteSymbolUi(newContainerUi);
 
                 json.Writer.WriteEndArray();
@@ -874,7 +874,7 @@ namespace T3.Gui.Graph
                 var text = Clipboard.GetText();
                 using (var reader = new StringReader(text))
                 {
-                    var json = new Json { Reader = new JsonTextReader(reader) };
+                    var json = new SymbolJson { Reader = new JsonTextReader(reader) };
                     if (!(JToken.ReadFrom(json.Reader) is JArray o))
                         return;
 
@@ -883,7 +883,7 @@ namespace T3.Gui.Graph
                     SymbolRegistry.Entries.Add(containerSymbol.Id, containerSymbol);
 
                     var symbolUiJson = o[1];
-                    var containerSymbolUi = UiJson.ReadSymbolUi(symbolUiJson);
+                    var containerSymbolUi = SymbolUiJson.ReadSymbolUi(symbolUiJson);
                     var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
                     SymbolUiRegistry.Entries.Add(containerSymbolUi.Symbol.Id, containerSymbolUi);
                     var cmd = new CopySymbolChildrenCommand(containerSymbolUi, 

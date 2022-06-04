@@ -90,7 +90,7 @@ namespace T3.Gui.Graph
                 }
 
                 // generate exported .t3 files
-                Json json = new Json();
+                var json = new SymbolJson();
                 string symbolExportDir = exportDir + Path.DirectorySeparatorChar + @"Operators\Types\";
                 if (Directory.Exists(symbolExportDir))
                     Directory.Delete(symbolExportDir, true);
