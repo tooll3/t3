@@ -8,6 +8,7 @@ using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Core.Audio;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
@@ -21,8 +22,7 @@ using T3.Gui.Interaction.Variations;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
-
-using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;   // ForwardBeatTaps
+using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d; // ForwardBeatTaps
 
 namespace T3.Gui
 {
@@ -32,21 +32,25 @@ namespace T3.Gui
         {
             var operatorsAssembly = Assembly.GetAssembly(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value));
             UiModel = new UiModel(operatorsAssembly);
-            
-            var tmp = new UserSettings(saveOnQuit:true);
-            var tmp2 = new ProjectSettings(saveOnQuit:true);
-            
+
+            var tmp = new UserSettings(saveOnQuit: true);
+            var tmp2 = new ProjectSettings(saveOnQuit: true);
+
             // Initialize
-            var playback = File.Exists(ProjectSettings.Config.SoundtrackFilepath)
-                            ? new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath)
-                            : new Playback();
+            // var playback = File.Exists(ProjectSettings.Config.SoundtrackFilepath)
+            //                 ? new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath)
+            //                 : new Playback();
 
-            playback.Bpm = ProjectSettings.Config.SoundtrackBpm;
-            playback.SoundtrackOffsetInSecs = ProjectSettings.Config.SoundtrackOffset;
-            if (playback is StreamPlayback streamPlayback)
-                streamPlayback.SetMuteMode(UserSettings.Config.AudioMuted);
+            var playback = new Playback
+                               {
+                                   //Bpm = ProjectSettings.Config.SoundtrackBpm,
+                                   //SoundtrackOffsetInSecs = ProjectSettings.Config.SoundtrackOffset,
+                               };
 
-            
+            // if (playback is StreamPlayback streamPlayback)
+            //     streamPlayback.SetMuteMode(UserSettings.Config.AudioMuted);
+            //
+
             WindowManager = new WindowManager();
             ExampleSymbolLinking.UpdateExampleLinks();
             VariationHandling.Init();
@@ -55,15 +59,18 @@ namespace T3.Gui
         public void Draw()
         {
             Playback.Current.Update(ImGui.GetIO().DeltaTime, UserSettings.Config.EnableIdleMotion);
-            if(ForwardBeatTaps.BeatTapTriggered)
-                BeatTiming.TriggerSyncTap();
+            UpdateMainSoundtrack();
+            AudioEngine.CompleteFrame(Playback.Current);
             
-            if(ForwardBeatTaps.ResyncTriggered)
+            if (ForwardBeatTaps.BeatTapTriggered)
+                BeatTiming.TriggerSyncTap();
+
+            if (ForwardBeatTaps.ResyncTriggered)
                 BeatTiming.TriggerResyncMeasure();
 
             _autoBackup.Enabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;
-            
+
             VariationHandling.Update();
             MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
             MouseWheelFieldHovered = false;
@@ -72,6 +79,8 @@ namespace T3.Gui
             SrvManager.FreeUnusedTextures();
             KeyboardBinding.InitFrame();
             WindowManager.Draw();
+            
+            
             BeatTiming.Update(ImGui.GetTime());
 
             SingleValueEdit.StartNextFrame();
@@ -80,7 +89,36 @@ namespace T3.Gui
             TriggerGlobalActionsFromKeyBindings();
             DrawAppMenu();
         }
-        
+
+        private static void UpdateMainSoundtrack()
+        {
+            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+            if (primaryGraphWindow == null)
+                return;
+
+            var composition = primaryGraphWindow.GraphCanvas.CompositionOp;
+            while (true)
+            {
+                var symbol = composition.Symbol;
+                var soundtrack = symbol.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
+                if (soundtrack != null)
+                {
+                    Playback.Current.Bpm = soundtrack.Bpm;
+                    AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
+
+                    return;
+                }
+
+                if (composition.Parent == null)
+                {
+                    Log.Debug("no soundtrack found");
+                    return;
+                }
+
+                composition = composition.Parent;
+            }
+        }
+
         private void TriggerGlobalActionsFromKeyBindings()
         {
             if (KeyboardBinding.Triggered(UserActions.Undo))
@@ -106,16 +144,16 @@ namespace T3.Gui
             {
                 if (ImGui.BeginMenu("File"))
                 {
-                    if (ImGui.MenuItem("Save",KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
+                    if (ImGui.MenuItem("Save", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
                     {
                         SaveInBackground(false);
                     }
-                    
+
                     if (ImGui.MenuItem("Save All", KeyboardBinding.ListKeyboardShortcuts(UserActions.SaveAll, false), false, !IsCurrentlySaving))
                     {
                         SaveInBackground(true);
                     }
-                    
+
                     if (ImGui.MenuItem("Quit", !IsCurrentlySaving))
                     {
                         Application.Exit();
@@ -197,7 +235,7 @@ namespace T3.Gui
                 Task.Run(SaveModified);
             }
         }
-        
+
         public static void SaveModified()
         {
             lock (_saveLocker)
@@ -208,7 +246,7 @@ namespace T3.Gui
                 Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
             }
         }
-        
+
         private static void SaveAll()
         {
             lock (_saveLocker)
@@ -219,13 +257,12 @@ namespace T3.Gui
                 Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
             }
         }
-        
 
         public static void AddHoveredId(Guid id)
         {
             _hoveredIdsForNextFrame.Add(id);
         }
-        
+
         public static void CenterHoveredId(Guid symbolChildId)
         {
             var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
@@ -264,9 +301,9 @@ namespace T3.Gui
         public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
         public const string FloatNumberFormat = "{0:F2}";
         public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
-        
+
         private static readonly AutoBackup.AutoBackup _autoBackup = new();
-        
+
         [Flags]
         public enum EditingFlags
         {
