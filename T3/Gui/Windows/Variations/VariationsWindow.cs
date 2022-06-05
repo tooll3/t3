@@ -35,7 +35,7 @@ namespace T3.Gui.Windows.Variations
                 _variationsToBeDeletedNextFrame.Clear();
             }
 
-            var compositionHasVariations = VariationHandling.ActivePoolForSnapshots.Variations.Count > 0;
+            var compositionHasVariations = VariationHandling.ActivePoolForSnapshots != null && VariationHandling.ActivePoolForSnapshots.Variations.Count > 0;
             var oneChildSelected = NodeSelection.Selection.Count == 1;
             var selectionChanged = NodeSelection.Selection.Count != _selectedNodeCount;
 

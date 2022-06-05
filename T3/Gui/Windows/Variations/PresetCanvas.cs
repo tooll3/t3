@@ -12,6 +12,9 @@ namespace T3.Gui.Windows.Variations
         public override void DrawToolbarFunctions()
         {
             var s = ImGui.GetFrameHeight();
+            if (VariationHandling.ActivePoolForPresets == null)
+                return;
+            
             if (CustomComponents.IconButton(Icon.Plus, "##addbutton", new Vector2(s, s)))
             {
                 CreateVariation();
