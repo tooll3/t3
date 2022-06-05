@@ -12,6 +12,7 @@ using Core.Audio;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
+using t3.Gui.Audio;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
@@ -58,8 +59,8 @@ namespace T3.Gui
 
         public void Draw()
         {
-            Playback.Current.Update(ImGui.GetIO().DeltaTime, UserSettings.Config.EnableIdleMotion);
-            UpdateMainSoundtrack();
+            Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
+            SoundtrackUtils.UpdateMainSoundtrack();
             AudioEngine.CompleteFrame(Playback.Current);
             
             if (ForwardBeatTaps.BeatTapTriggered)
@@ -88,35 +89,6 @@ namespace T3.Gui
             SwapHoveringBuffers();
             TriggerGlobalActionsFromKeyBindings();
             DrawAppMenu();
-        }
-
-        private static void UpdateMainSoundtrack()
-        {
-            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-            if (primaryGraphWindow == null)
-                return;
-
-            var composition = primaryGraphWindow.GraphCanvas.CompositionOp;
-            while (true)
-            {
-                var symbol = composition.Symbol;
-                var soundtrack = symbol.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
-                if (soundtrack != null)
-                {
-                    Playback.Current.Bpm = soundtrack.Bpm;
-                    AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
-
-                    return;
-                }
-
-                if (composition.Parent == null)
-                {
-                    Log.Debug("no soundtrack found");
-                    return;
-                }
-
-                composition = composition.Parent;
-            }
         }
 
         private void TriggerGlobalActionsFromKeyBindings()

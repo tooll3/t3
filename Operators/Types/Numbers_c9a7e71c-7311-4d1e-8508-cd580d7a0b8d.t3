@@ -681,6 +681,17 @@
       "TargetSlotId": "452fb0e1-34c1-4042-9a7c-30bf8dd4cb3c"
     }
   ],
+  "AudioClips": [
+    {
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "StartTime": 0.014000000432133675,
+      "EndTime": 0.0,
+      "Bpm": 80.0,
+      "DiscardAfterUse": true,
+      "IsSoundtrack": true,
+      "FilePath": "Resources\\proj-numbers\\soundtrack\\synthtoad-02.mp3"
+    }
+  ],
   "Animator": [
     {
       "InstanceId": "6a5bf36e-a236-461b-bd96-988da892cc7a",

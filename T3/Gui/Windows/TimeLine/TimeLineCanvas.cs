@@ -6,6 +6,7 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using t3.Gui.Audio;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction;
@@ -52,7 +53,11 @@ namespace T3.Gui.Windows.TimeLine
 
             void DrawCanvasContent()
             {
-                _timeLineImage.Draw(Drawlist, Playback);
+                if (SoundtrackUtils.TryFindingSoundtrack(compositionOp, out var soundtrack))
+                {
+                    _timeLineImage.Draw(Drawlist, soundtrack);
+                }
+                
                 ImGui.SetScrollY(0);
 
                 HandleDeferredActions();

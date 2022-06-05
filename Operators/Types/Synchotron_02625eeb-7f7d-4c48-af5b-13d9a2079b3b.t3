@@ -1226,6 +1226,17 @@
       "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
     }
   ],
+  "AudioClips": [
+    {
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "StartTime": 0.0,
+      "EndTime": 0.0,
+      "Bpm": 120.0,
+      "DiscardAfterUse": true,
+      "IsSoundtrack": true,
+      "FilePath": "Resources\\proj-synchotron\\soundtrack\\synthjam.mp3"
+    }
+  ],
   "Animator": [
     {
       "InstanceId": "3c55469d-8a05-4096-a40f-3292ffcca1ae",

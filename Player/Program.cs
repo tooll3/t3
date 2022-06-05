@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using CommandLine;
 using CommandLine.Text;
+using Core.Audio;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.IO;
@@ -186,23 +187,27 @@ namespace T3
             _evalContext = new EvaluationContext();
 
             //var soundTrackPath = @"Resources\proj-partial\soundtrack\partial.mp3";
-            var usingSoundtrack = File.Exists(ProjectSettings.Config.SoundtrackFilepath);
+            _soundtrack = demoSymbol.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
+            
+            _playback = new Playback();
+            
+            var usingSoundtrack = _soundtrack != null && File.Exists(_soundtrack.FilePath);
+          
             if (usingSoundtrack)
             {
-                _playback = new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath);
+                _playback.Bpm = _soundtrack.Bpm;
+                AudioEngine.UseAudioClip(_soundtrack, 0);
+                AudioEngine.CompleteFrame(_playback);
             }
             else
             {
-                _playback = new Playback();
-                _playback.PlaybackSpeed = 0.5f;
+                _playback.PlaybackSpeed = 0.5f; // Todo: Clarify, if this is a work around for default BPM mismatch 
             }
-
-            _playback.Bpm = ProjectSettings.Config.SoundtrackBpm;
 
             // sample some frames to preload all shaders and resources
             if (usingSoundtrack)
             {
-                var songDurationInSecs = _playback.GetSongDurationInSecs();
+                var songDurationInSecs = Playback.GetSongDurationInSecs();
                 for (double timeInSecs = 0; timeInSecs < songDurationInSecs; timeInSecs += 1.0)
                 {
                     Log.Info($"Pre-evaluate at: {timeInSecs}s");
@@ -245,21 +250,22 @@ namespace T3
             // Main loop
             RenderLoop.Run(form, () =>
                                  {
-                                     Int64 ticks = stopwatch.ElapsedTicks;
-                                     Int64 ticksDiff = ticks - lastElapsedTicks;
-                                     lastElapsedTicks = ticks;
+                                     // Int64 ticks = stopwatch.ElapsedTicks;
+                                     // Int64 ticksDiff = ticks - lastElapsedTicks;
+                                     // lastElapsedTicks = ticks;
                                      // Console.WriteLine($"delta: {((double)(ticksDiff) / Stopwatch.Frequency)}");
-                                     var secondsSinceLastFrame = (float)((double)(ticksDiff) / Stopwatch.Frequency);
-                                     _playback.Update(secondsSinceLastFrame);
+                                     //var secondsSinceLastFrame = (float)((double)(ticksDiff) / Stopwatch.Frequency);
+                                     _playback.Update();
 
-                                     if (_playback is StreamPlayback streamPlayback)
+                                     if (_soundtrack != null)
                                      {
-                                         if (streamPlayback.StreamPos >= streamPlayback.StreamLength)
+                                         AudioEngine.UseAudioClip(_soundtrack, _playback.TimeInSecs);
+                                         if (_playback.TimeInSecs >= _soundtrack.LengthInSeconds + _soundtrack.StartTime)
                                          {
                                              if (options.Loop)
                                              {
-                                                 _playback.TimeInBars = 0.0;
-                                                 _playback.PlaybackSpeed = 1.0; // restart the stream
+                                                 _playback.TimeInSecs = 0.0;
+                                                 //_playback.PlaybackSpeed = 1.0; // restart the stream
                                              }
                                              else
                                              {
@@ -356,6 +362,7 @@ namespace T3
         private static Instance _project;
         private static EvaluationContext _evalContext;
         private static Playback _playback;
+        private static AudioClip _soundtrack;
         public static uint FullScreenVertexShaderId { get; private set; }
         public static uint FullScreenPixelShaderId { get; private set; }
     }

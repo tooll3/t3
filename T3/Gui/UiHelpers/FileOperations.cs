@@ -59,9 +59,16 @@ namespace T3.Gui.UiHelpers
         public static bool DrawSoundFilePicker(FilePickerTypes type, ref string value)
         {
             ImGui.SetNextItemWidth(-70);
-            var modified = ImGui.InputText("##filepath", ref ProjectSettings.Config.SoundtrackFilepath, 255);
+            var tmp = value;
+            if (tmp == null)
+                tmp = string.Empty;
             
-            modified |= DrawFileSelector(type, ref value);
+            var modified = ImGui.InputText("##filepath", ref tmp, 255);
+            modified |= DrawFileSelector(type, ref tmp);
+            if (modified && tmp != null)
+            {
+                value = tmp;
+            }
             return modified;
         }
         

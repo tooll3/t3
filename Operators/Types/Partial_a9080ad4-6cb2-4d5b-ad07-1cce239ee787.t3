@@ -1067,6 +1067,17 @@
       "TargetSlotId": "c115fd60-86c5-425f-975b-0b5e92c0f42b"
     }
   ],
+  "AudioClips": [
+    {
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "StartTime": 0.0,
+      "EndTime": 0.0,
+      "Bpm": 120.0,
+      "DiscardAfterUse": true,
+      "IsSoundtrack": true,
+      "FilePath": "Resources\\proj-partial\\soundtrack\\partial.mp3"
+    }
+  ],
   "Animator": [
     {
       "InstanceId": "74ece705-fb7c-4072-9795-34bfedd97e0e",

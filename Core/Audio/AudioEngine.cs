@@ -74,10 +74,24 @@ namespace Core.Audio
             _updatedClipTimes.Clear();
         }
 
+        public static void SetMute(bool configAudioMuted)
+        {
+            throw new NotImplementedException();
+        }
+        
+        private static void UpdateFftBuffer(int soundStreamHandle)
+        {
+            const int get256FftValues = (int)DataFlags.FFT512;
+            Bass.ChannelGetData(soundStreamHandle, FftBuffer, get256FftValues);
+        }
+        
         private static double _lastPlaybackSpeed = 1;
         private static bool _bassInitialized;
         private static readonly Dictionary<Guid, AudioClipStream> _clipPlaybacks = new();
         private static readonly Dictionary<AudioClip, double> _updatedClipTimes = new();
+        
+        private const int FftSize = 256;
+        public static readonly float[] FftBuffer =  new float[FftSize];
     }
 
 
@@ -117,6 +131,9 @@ namespace Core.Audio
 
         public static AudioClipStream LoadClip(AudioClip clip)
         {
+            if (string.IsNullOrEmpty(clip.FilePath))
+                return null;
+            
             Log.Debug($"Loading audioClip {clip.FilePath} ...");
             if (!File.Exists(clip.FilePath))
             {
@@ -139,6 +156,8 @@ namespace Core.Audio
                                  DefaultPlaybackFrequency = defaultPlaybackFrequency,
                                  Duration = duration,
                              };
+
+            clip.LengthInSeconds = duration;
             return stream;
         }
         
@@ -177,10 +196,15 @@ namespace Core.Audio
         public string FilePath;
         public double StartTime;
         public double EndTime;
-        public double Bpm = 120;
+        public float Bpm = 120;
         public bool DiscardAfterUse = true;
         public bool IsSoundtrack = false;
         #endregion
+
+        /// <summary>
+        /// Is initialized after loading...
+        /// </summary>
+        public double LengthInSeconds;  
 
         
         #region serialization
@@ -198,7 +222,7 @@ namespace Core.Audio
                                        FilePath = jToken[nameof(FilePath)]?.Value<string>() ?? String.Empty,
                                        StartTime = jToken[nameof(StartTime)]?.Value<double>() ?? 0,
                                        EndTime = jToken[nameof(EndTime)]?.Value<double>() ?? 0,
-                                       Bpm = jToken[nameof(Bpm)]?.Value<double>() ?? 0,
+                                       Bpm = jToken[nameof(Bpm)]?.Value<float>() ?? 0,
                                        DiscardAfterUse = jToken[nameof(DiscardAfterUse)]?.Value<bool>() ?? true,
                                        IsSoundtrack = jToken[nameof(IsSoundtrack)]?.Value<bool>() ?? true,
                                    };

@@ -1,8 +1,4 @@
 {
-  "SoundtrackFilepath": "Resources\\proj-nevoke-fun\\soundtrack\\Plaster - Platforms - 07 Rearline.mp3",
-  "UseBpmRate": true,
-  "SoundtrackBpm": 125.0,
-  "SoundtrackOffset": 0.0,
   "MainOperatorName": "ClimateWatch",
   "SlideHack": 0.0
 }
