@@ -1,9 +1,8 @@
 using System;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Operators.Types.Id_ecbafbeb_c14b_4507_953f_80bc6676d077;
+using T3.Operators.Utils;
 
 namespace T3.Operators.Types.Id_f8aed421_5e0e_4d1f_993c_1801153ebba8
 {
@@ -43,8 +42,8 @@ namespace T3.Operators.Types.Id_f8aed421_5e0e_4d1f_993c_1801153ebba8
             //var a = _SetAudioAnalysis.AudioAnalysisResult;
 
             var results = band == FrequencyBands.Bass
-                              ? _SetAudioAnalysis.AudioAnalysisResult.Bass
-                              : _SetAudioAnalysis.AudioAnalysisResult.HiHats;
+                              ? AudioAnalysisResult.Bass
+                              : AudioAnalysisResult.HiHats;
 
             var peakDetected = results.PeakCount > _lastPeakCount;
             

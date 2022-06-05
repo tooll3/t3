@@ -2,6 +2,7 @@ using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Operators.Utils;
 
 namespace T3.Operators.Types.Id_ecbafbeb_c14b_4507_953f_80bc6676d077
 {
@@ -45,20 +46,6 @@ namespace T3.Operators.Types.Id_ecbafbeb_c14b_4507_953f_80bc6676d077
         
         [Input(Guid = "6D2973A9-0AFD-4131-B8B3-430ED9E63F72")]
         public readonly InputSlot<float> AccumulatedHiHat = new InputSlot<float>();
-
-
-        public static class AudioAnalysisResult
-        {
-            public static ResultsForFrequencyBand Bass;
-            public static ResultsForFrequencyBand HiHats;
-        }
-
-        public struct ResultsForFrequencyBand
-        {
-            public int PeakCount;
-            public float TimeSincePeak;
-            public double AccumulatedEnergy;
-        }
     }
 }
 

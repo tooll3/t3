@@ -51,7 +51,9 @@ namespace T3.Gui.Graph
                                                                               }).ToList();
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\GpuQuery.cs"));
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\BmFont.cs"));
-                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Types\LFO.cs"));
+                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
+                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\AudioAnalysisResult.cs"));
+                //operatorAssemblySources.Add(File.ReadAllText(@"Operators\Types\LFO.cs"));
                 var references = OperatorUpdating.CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
                 
                 // copy player and dependent assemblies to export dir

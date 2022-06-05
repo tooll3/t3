@@ -12,7 +12,6 @@
         public class ConfigData
         {
             public string MainOperatorName = "";
-            public double SlideHack = 0;
         }
     }
 }

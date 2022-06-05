@@ -1,8 +1,15 @@
-﻿namespace T3.Operators.Types.Id_ecbafbeb_c14b_4507_953f_80bc6676d077
+﻿namespace T3.Operators.Utils
 {
     public static class AudioAnalysisResult
     {
-        public static _SetAudioAnalysis.ResultsForFrequencyBand Bass;
-        public static _SetAudioAnalysis.ResultsForFrequencyBand HiHats;
+        public static ResultsForFrequencyBand Bass;
+        public static ResultsForFrequencyBand HiHats;
+
+        public struct ResultsForFrequencyBand
+        {
+            public int PeakCount;
+            public float TimeSincePeak;
+            public double AccumulatedEnergy;
+        }
     }
 }

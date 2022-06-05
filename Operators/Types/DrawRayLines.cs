@@ -41,7 +41,7 @@ namespace T3.Operators.Types.Id_7f69a5e5_28e5_44c1_b3e3_74b05faa0531
         [Input(Guid = "d8c585bc-8bab-412f-94bf-dc6d8d5643b3")]
         public readonly InputSlot<bool> EnableDepthWrite = new InputSlot<bool>();
 
-        [Input(Guid = "037a162b-2054-44b1-b536-b532ab0c14b7")]
+        [Input(Guid = "037a162b-2054-44b1-b536-b532ab0c14b7", MappedType = typeof(PickBlendMode.BlendModes))]
         public readonly InputSlot<int> BlendMod = new InputSlot<int>();
     }
 }

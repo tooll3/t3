@@ -137,12 +137,12 @@
         {
           "Id": "9618504d-bfbd-4d3d-b4d4-03a7064f0fea"/*ShadeSteps*/,
           "Type": "System.Single",
-          "Value": -0.00066666334
+          "Value": -0.029999971
         },
         {
           "Id": "d2e12b96-7be3-4b31-bcdd-c882543a6ca6"/*ShadeFolds*/,
           "Type": "System.Single",
-          "Value": -0.1
+          "Value": 0.65
         },
         {
           "Id": "8866edf5-9f58-4da5-abd1-b4e25607bedc"/*Resolution*/,
@@ -164,19 +164,19 @@
           "Id": "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1"/*Fill*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.96837944,
-            "Y": 0.59857094,
-            "Z": 0.0038275805,
-            "W": 0.47035575
+            "X": 0.0,
+            "Y": 0.72727275,
+            "Z": 1.0,
+            "W": 0.3110048
           }
         },
         {
           "Id": "de54f18b-6a1e-4610-8d6d-58897df6959b"/*Background*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 1.0,
-            "Y": 0.99999,
-            "Z": 0.99999,
+            "X": 0.0,
+            "Y": 0.6540036,
+            "Z": 1.0,
             "W": 0.0
           }
         },
@@ -495,18 +495,28 @@
           "Id": "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1"/*Fill*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.195785,
-            "Y": 0.8000303,
-            "Z": 0.9525692,
+            "X": 0.8190275,
+            "Y": 0.9550008,
+            "Z": 0.9893266,
             "W": 1.0
+          }
+        },
+        {
+          "Id": "de54f18b-6a1e-4610-8d6d-58897df6959b"/*Background*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.0
           }
         },
         {
           "Id": "8a908810-2482-4088-8b21-a7ee15531e64"/*Size*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.096666634,
-            "Y": -0.013333332
+            "X": 0.24,
+            "Y": 1.72
           }
         },
         {
@@ -517,7 +527,7 @@
         {
           "Id": "8846aa50-e4d0-433c-9e5b-013a93f17f79"/*Feather*/,
           "Type": "System.Single",
-          "Value": 1.7060001
+          "Value": 0.84
         },
         {
           "Id": "2d3a7e9a-9efe-486a-8c33-10a5a16dc17b"/*FeatherBias*/,
@@ -2066,14 +2076,24 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
+            "Time": 66.8854,
+            "Value": 0.6499999761581421,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.10728167328582083,
+            "OutTangentAngle": 3.0511537931290196
+          },
+          {
             "Time": 81.0,
             "Value": -0.6300000548362732,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Smooth",
             "OutEditMode": "Smooth",
-            "InTangentAngle": 6.283185307179586,
-            "OutTangentAngle": 3.141592653589793
+            "InTangentAngle": 6.147985778914299,
+            "OutTangentAngle": 3.0063931253245055
           },
           {
             "Time": 81.3043,
@@ -2152,8 +2172,18 @@
             "OutType": "Spline",
             "InEditMode": "Smooth",
             "OutEditMode": "Smooth",
-            "InTangentAngle": 0.0003887108258588956,
-            "OutTangentAngle": 3.141981364415652
+            "InTangentAngle": 6.283185307179586,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 66.8854,
+            "Value": -0.029999971389770508,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": -0.0017949151158420662,
+            "OutTangentAngle": 3.145207518189336
           },
           {
             "Time": 75.0,
@@ -2896,8 +2926,8 @@
         "PostCurve": "Constant",
         "Keys": [
           {
-            "Time": 67.0,
-            "Value": 1.996666669845581,
+            "Time": 63.3865,
+            "Value": -2.9891929626464844,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Smooth",
@@ -2906,18 +2936,18 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 75.0,
-            "Value": 1.399999976158142,
+            "Time": 71.3865,
+            "Value": -1.1303153038024902,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Smooth",
             "OutEditMode": "Smooth",
-            "InTangentAngle": -0.08450561325823447,
-            "OutTangentAngle": 3.0570870403315586
+            "InTangentAngle": 6.283185307179586,
+            "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 75.3818,
-            "Value": 1.2866666316986084,
+            "Time": 71.7683,
+            "Value": -1.243648648262024,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Smooth",
@@ -2927,17 +2957,17 @@
           },
           {
             "Time": 83.0,
-            "Value": 1.399999976158142,
+            "Value": -1.1303153038024902,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Smooth",
             "OutEditMode": "Smooth",
-            "InTangentAngle": 6.305496589039272,
-            "OutTangentAngle": 3.163903935449479
+            "InTangentAngle": 6.283185307179586,
+            "OutTangentAngle": 3.141592653589793
           },
           {
             "Time": 85.0,
-            "Value": 1.7599999904632568,
+            "Value": -3.2258596420288086,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Smooth",
@@ -4597,7 +4627,7 @@
           },
           {
             "Time": 11.2362,
-            "Value": 0.23399999737739563,
+            "Value": 0.31100478768348694,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Smooth",
