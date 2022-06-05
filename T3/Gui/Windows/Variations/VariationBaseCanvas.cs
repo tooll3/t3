@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DelaunayVoronoi;
 using ImGuiNET;
@@ -73,7 +74,7 @@ namespace T3.Gui.Windows.Variations
             HandleFenceSelection();
 
             // Blending...
-            IsBlendingActive = ImGui.IsWindowFocused() && ImGui.GetIO().KeyAlt;// && Selection.SelectedElements.Count is 2 or 3;
+            IsBlendingActive = (ImGui.IsWindowHovered() || ImGui.IsWindowFocused()) && ImGui.GetIO().KeyAlt;
 
             var mousePos = ImGui.GetMousePos();
             _blendPoints.Clear();
@@ -87,19 +88,41 @@ namespace T3.Gui.Windows.Variations
                     _blendPoints.Add(GetNodeCenterOnScreen(s));
                     _blendVariations.Add(s as Variation);
                 }
-                
-                if (Selection.SelectedElements.Count == 3)
+
+                if (Selection.SelectedElements.Count == 1)
+                {
+                    var posOnScreen = TransformPosition(_blendVariations[0].PosOnCanvas);
+                    var sizeOnScreen = TransformDirection(_blendVariations[0].Size);
+                    var a = (mousePos.X - posOnScreen.X) / sizeOnScreen.X;
+                    
+                    _blendWeights.Add(a);
+                    
+                }
+                else if(Selection.SelectedElements.Count == 2)
+                {
+                    if (_blendPoints[0] == _blendPoints[1])
+                    {
+                        _blendWeights.Add(0.5f);
+                        _blendWeights.Add(0.5f);
+                        
+                    }
+                    else
+                    {
+                        var v1 = _blendPoints[1] - _blendPoints[0];
+                        var v2 = mousePos - _blendPoints[0];
+                        var lengthV1 = v1.Length();
+                        
+                        var a = Vector2.Dot(v1 / lengthV1, v2 / lengthV1);
+                        _blendWeights.Add(1-a);
+                        _blendWeights.Add(a);
+                    }
+                }
+                else if (Selection.SelectedElements.Count == 3)
                 {
                     Barycentric(mousePos, _blendPoints[0], _blendPoints[1], _blendPoints[2], out var u, out var v, out var w);
                     _blendWeights.Add(u);
                     _blendWeights.Add(v);
                     _blendWeights.Add(w);
-                }
-                else if(Selection.SelectedElements.Count == 3)
-                {
-                    // TODO: Implement
-                    _blendWeights.Add(0.5f);
-                    _blendWeights.Add(0.5f);
                 }
                 else
                 {
@@ -158,6 +181,14 @@ namespace T3.Gui.Windows.Variations
                                     _blendPoints.Add(vertex.ToVec2());
                                 }
                             }
+
+                            if (_blendWeights.Count == 2)
+                            {
+                                var sum = _blendWeights[0] + _blendWeights[1];
+                                _blendWeights[0] /= sum;
+                                _blendWeights[1] /= sum;
+                            }
+                            
                             break;
                         }
                     }
@@ -178,22 +209,53 @@ namespace T3.Gui.Windows.Variations
             }
 
             // Draw blending overlay
-            if (IsBlendingActive && _blendPoints.Count == 3)
+            if (IsBlendingActive)
             {
-                drawList.AddTriangleFilled(_blendPoints[0], _blendPoints[1], _blendPoints[2], Color.Black.Fade(0.3f));
-                foreach (var p in _blendPoints)
+                if (_blendPoints.Count == 1)
                 {
-                    drawList.AddCircleFilled(p, 5, Color.Black.Fade(0.5f));
-                    drawList.AddLine(mousePos, p, Color.White, 2);
-                    drawList.AddCircleFilled(p, 3, Color.White);
+                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
+
+                    if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                    {
+                        PoolForBlendOperations.ApplyCurrentBlend();
+                    }
                 }
-
-                drawList.AddCircleFilled(mousePos, 5, Color.White);
-                PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
-
-                if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                else if (_blendPoints.Count == 2)
                 {
-                    PoolForBlendOperations.ApplyCurrentBlend();
+                    foreach (var p in _blendPoints)
+                    {
+                        drawList.AddCircleFilled(p, 5, Color.Black.Fade(0.5f));
+                        drawList.AddCircleFilled(p, 3, Color.White);
+                    }
+                    drawList.AddLine(_blendPoints[0], _blendPoints[1], Color.White, 2);
+                    var blendPosition = _blendPoints[0] * _blendWeights[0] + _blendPoints[1] * _blendWeights[1];
+                    
+                    drawList.AddCircleFilled(blendPosition, 5, Color.White);
+                    
+                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
+
+                    if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                    {
+                        PoolForBlendOperations.ApplyCurrentBlend();
+                    }
+                }
+                else if (_blendPoints.Count == 3)
+                {
+                    drawList.AddTriangleFilled(_blendPoints[0], _blendPoints[1], _blendPoints[2], Color.Black.Fade(0.3f));
+                    foreach (var p in _blendPoints)
+                    {
+                        drawList.AddCircleFilled(p, 5, Color.Black.Fade(0.5f));
+                        drawList.AddLine(mousePos, p, Color.White, 2);
+                        drawList.AddCircleFilled(p, 3, Color.White);
+                    }
+
+                    drawList.AddCircleFilled(mousePos, 5, Color.White);
+                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
+
+                    if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                    {
+                        PoolForBlendOperations.ApplyCurrentBlend();
+                    }
                 }
             }
 
