@@ -73,8 +73,8 @@
       "ActivationIndex": 3,
       "Title": "Gray Tonal",
       "PosOnCanvas": {
-        "X": -184.92625,
-        "Y": -24.711914
+        "X": -166.08554,
+        "Y": 276.28308
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -205,8 +205,8 @@
       "ActivationIndex": 7,
       "Title": "Underwater 1",
       "PosOnCanvas": {
-        "X": 467.07373,
-        "Y": 68.288086
+        "X": 622.15454,
+        "Y": 57.17913
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -304,8 +304,8 @@
       "ActivationIndex": 10,
       "Title": "Underwater 4",
       "PosOnCanvas": {
-        "X": 467.07373,
-        "Y": -24.711914
+        "X": 622.15454,
+        "Y": -35.820866
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -337,8 +337,8 @@
       "ActivationIndex": 11,
       "Title": "Original",
       "PosOnCanvas": {
-        "X": 304.07373,
-        "Y": -24.711914
+        "X": 459.15448,
+        "Y": -35.820866
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {

@@ -104,6 +104,24 @@
           }
         }
       }
+    },
+    {
+      "Id": "d1ea73a8-eac4-4987-8f04-3676d040f969",
+      "IsPreset": true,
+      "ActivationIndex": 6,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "57968725-0a45-44f9-a9a2-f74c10b728e8": 0.5,
+          "353ac2ee-aed3-4614-adf5-e1328768fd0b": 11.999999,
+          "4927a3fc-87ff-44e7-88c0-499e3efcca55": 0.42,
+          "4c9b9135-f27b-414e-bed7-f9e5640dc526": 0.0
+        }
+      }
     }
   ]
 }
