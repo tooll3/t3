@@ -11,12 +11,7 @@
         
         public class ConfigData
         {
-            public string SoundtrackFilepath = "";
-            public bool UseBpmRate = true;
-            public float SoundtrackBpm = 120;
-            public double SoundtrackOffset = 0;
             public string MainOperatorName = "";
-            public double SlideHack = 0;
         }
     }
 }

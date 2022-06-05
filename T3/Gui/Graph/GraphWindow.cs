@@ -95,6 +95,12 @@ namespace T3.Gui.Graph
             return GraphWindow.GetVisibleInstances().FirstOrDefault();
         }
 
+        public static Instance GetMainComposition()
+        {
+            var mainGraphWindow = GetPrimaryGraphWindow();
+            return mainGraphWindow?.GraphCanvas.CompositionOp;
+        }
+
         public override List<Window> GetInstances()
         {
             return GraphWindowInstances;

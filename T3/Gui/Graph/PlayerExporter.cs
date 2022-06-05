@@ -51,7 +51,9 @@ namespace T3.Gui.Graph
                                                                               }).ToList();
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\GpuQuery.cs"));
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\BmFont.cs"));
-                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Types\LFO.cs"));
+                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
+                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\AudioAnalysisResult.cs"));
+                //operatorAssemblySources.Add(File.ReadAllText(@"Operators\Types\LFO.cs"));
                 var references = OperatorUpdating.CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
                 
                 // copy player and dependent assemblies to export dir
@@ -110,7 +112,11 @@ namespace T3.Gui.Graph
                 Traverse(instance.Outputs.First(), exportInfo);
                 exportInfo.PrintInfo();
                 var resourcePaths = exportInfo.UniqueResourcePaths;
-                resourcePaths.Add(ProjectSettings.Config.SoundtrackFilepath);
+
+                var soundtrack = childUi.SymbolChild.Symbol.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
+                if(soundtrack != null)
+                    resourcePaths.Add(soundtrack.FilePath);
+                
                 resourcePaths.Add(@"projectSettings.json");
                 resourcePaths.Add(@"Resources\hash-functions.hlsl");
                 resourcePaths.Add(@"Resources\noise-functions.hlsl");

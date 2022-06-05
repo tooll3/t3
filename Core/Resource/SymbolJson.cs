@@ -47,7 +47,7 @@ namespace T3.Core
             WriteConnections(symbol.Connections);
             WriteSoundtracks(symbol.AudioClips);
             symbol.Animator.Write(Writer);
-            
+
             Writer.WriteEndObject();
         }
 
@@ -178,10 +178,13 @@ namespace T3.Core
 
             Writer.WriteEndArray();
         }
-        
+
         private void WriteSoundtracks(List<AudioClip> audioClips)
         {
-            Writer.WritePropertyName("Soundtracks");
+            if (audioClips == null || audioClips.Count == 0)
+                return;
+            
+            Writer.WritePropertyName("AudioClips");
             Writer.WriteStartArray();
             foreach (var audioClip in audioClips)
             {
@@ -189,11 +192,9 @@ namespace T3.Core
             }
 
             Writer.WriteEndArray();
-        }        
-        
+        }
         #endregion
 
-        
         #region reading
         private SymbolChild ReadSymbolChild(Model model, JToken symbolChildJson)
         {
@@ -210,7 +211,7 @@ namespace T3.Core
                 Log.Warning($"Failed to load symbol {symbolId}.");
                 return null;
             }
-            
+
             var symbolChild = new SymbolChild(symbol, childId, null);
 
             var nameToken = symbolChildJson["Name"];
@@ -238,7 +239,7 @@ namespace T3.Core
                 {
                     symbolChild.Outputs[outputId].DirtyFlagTrigger = (DirtyFlagTrigger)Enum.Parse(typeof(DirtyFlagTrigger), dirtyFlagJson.Value<string>());
                 }
-                
+
                 var isDisabledJson = outputJson["IsDisabled"];
                 if (isDisabledJson != null)
                 {
@@ -307,7 +308,7 @@ namespace T3.Core
 
             var missingSymbolChildIds = new HashSet<Guid>();
             var missingSymbolsIds = new HashSet<Guid>();
-            
+
             foreach (var childJson in ((JArray)o["Children"]))
             {
                 SymbolChild symbolChild = ReadSymbolChild(model, childJson);
@@ -317,10 +318,10 @@ namespace T3.Core
                     var symbolId = Guid.Parse((childJson["SymbolId"] ?? "").Value<string>() ?? string.Empty);
                     Log.Warning($"Skipping child of undefined type {symbolId} in {name}");
 
-                    if(childId != Guid.Empty)
+                    if (childId != Guid.Empty)
                         missingSymbolChildIds.Add(childId);
-                    
-                    if(symbolId != Guid.Empty)
+
+                    if (symbolId != Guid.Empty)
                         missingSymbolsIds.Add(symbolId);
                 }
                 else
@@ -338,8 +339,8 @@ namespace T3.Core
                     Log.Warning($"Skipping invalid connection in {name}");
                 }
                 else if (missingSymbolChildIds.Contains(connection.TargetParentOrChildId)
-                    || missingSymbolChildIds.Contains(connection.SourceParentOrChildId)
-                   )
+                         || missingSymbolChildIds.Contains(connection.SourceParentOrChildId)
+                    )
                 {
                     Log.Warning("Skipping connection to child of undefined type");
                 }
@@ -352,14 +353,15 @@ namespace T3.Core
             var orderedInputIds = (from jsonInput in (JArray)o["Inputs"]
                                    let idAndValue = ReadSymbolInputDefaults(jsonInput)
                                    select idAndValue.Item1).ToArray();
-            
+
             var inputDefaultValues = (from jsonInput in (JArray)o["Inputs"]
                                       let idAndValue = ReadSymbolInputDefaults(jsonInput)
                                       select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
             var animatorData = (JArray)o["Animator"];
 
             string namespaceId = id.ToString().ToLower().Replace('-', '_');
-            string instanceTypeName = "T3.Operators.Types.Id_" + namespaceId + "." + name + ", Operators, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
+            string instanceTypeName = "T3.Operators.Types.Id_" + namespaceId + "." + name +
+                                      ", Operators, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
             Type instanceType = Type.GetType(instanceTypeName);
             if (instanceType == null)
             {
@@ -389,17 +391,19 @@ namespace T3.Core
                     input.DefaultValue.SetValueFromJson(jsonDefaultValue);
                 }
             }
-            
-            foreach (var c in ((JArray)o["AudioClips"]))
+
+            var jAudioClipArray = (JArray)o[nameof(symbol.AudioClips)];
+            if (jAudioClipArray != null)
             {
-                AudioClip clip = AudioClip.FromJson(c);
-                symbol.AudioClips.Add(clip);
+                foreach (var c in jAudioClipArray)
+                {
+                    AudioClip clip = AudioClip.FromJson(c);
+                    symbol.AudioClips.Add(clip);
+                }
             }
 
             return symbol;
         }
         #endregion
-
-
     }
 }

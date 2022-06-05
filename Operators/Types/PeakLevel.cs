@@ -1,11 +1,8 @@
 using System;
-using T3.Core;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Operators.Types.Id_c513c58d_e45c_408d_a0b8_250c9af31545;
 
 namespace T3.Operators.Types.Id_d3fb5baf_43f8_4983_a1d9_42f4005a3af0
 {

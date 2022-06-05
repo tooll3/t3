@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Core.Audio;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
+using t3.Gui.Audio;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.Interaction.Timing;
@@ -27,8 +27,8 @@ namespace T3.Gui.Windows.TimeLine
     {
         internal static void DrawTimeControls(TimeLineCanvas timeLineCanvas)
         {
-            var playback = Playback.Current;    // TODO, this should be non-static eventually
-            
+            var playback = Playback.Current; // TODO, this should be non-static eventually
+
             // Settings
             if (CustomComponents.IconButton(Icon.Settings, "##timelineSettings", ControlSize))
             {
@@ -39,8 +39,8 @@ namespace T3.Gui.Windows.TimeLine
             CustomComponents.TooltipForLastItem("Timeline Settings",
                                                 "Switch between soundtrack and VJ modes. Control BPM and other inputs.");
 
-            ImGui.SameLine();            
-            
+            ImGui.SameLine();
+
             // Current Time
             var delta = 0.0;
             string formattedTime = "";
@@ -75,7 +75,7 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             ImGui.SameLine();
-            
+
             // Time Mode with context menu
             if (ImGui.Button(UserSettings.Config.TimeDisplayMode.ToString(), ControlSize))
             {
@@ -88,8 +88,6 @@ namespace T3.Gui.Windows.TimeLine
 
             DrawTimeSettingsContextMenu(ref playback);
             ImGui.SameLine();
-            
-
 
             // Continue Beat indicator
             {
@@ -133,11 +131,12 @@ namespace T3.Gui.Windows.TimeLine
 
                 var min = ImGui.GetItemRectMin();
                 var max = ImGui.GetItemRectMax();
-                var bar = (float) Math.Pow(1 - BeatTiming.BeatTime % 1,4);
+                var bar = (float)Math.Pow(1 - BeatTiming.BeatTime % 1, 4);
                 var height = 1;
-                
+
                 //var volume = BeatTiming.SyncPrecision;
-                ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - height * (max.Y - min.Y)), Color.Orange.Fade(bar));
+                ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - height * (max.Y - min.Y)),
+                                                        Color.Orange.Fade(bar));
 
                 ImGui.SameLine();
 
@@ -179,7 +178,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 // Jump to start
                 var isSelected = playback.TimeInBars != playback.LoopRange.Start;
-                if (CustomComponents.ToggleIconButton(Icon.JumpToRangeStart, 
+                if (CustomComponents.ToggleIconButton(Icon.JumpToRangeStart,
                                                       label: "##jumpToBeginning",
                                                       isSelected: ref isSelected,
                                                       ControlSize))
@@ -261,7 +260,7 @@ namespace T3.Gui.Windows.TimeLine
                     var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
                     playback.TimeInBars = rounded - frameDuration;
                 }
-                
+
                 // Step to previous frame
                 if (KeyboardBinding.Triggered(UserActions.PlaybackJumpBack))
                 {
@@ -336,12 +335,6 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.SameLine();
 
                 // // End
-                // if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", ControlSize))
-                // {
-                //     playback.TimeInBars = playback.LoopRange.End;
-                // }
-                //
-                // ImGui.SameLine();
                 // Loop
                 if (CustomComponents.ToggleIconButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize))
                 {
@@ -372,8 +365,7 @@ namespace T3.Gui.Windows.TimeLine
             if (CustomComponents.IconButton(UserSettings.Config.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn, "##audioToggle", ControlSize))
             {
                 UserSettings.Config.AudioMuted = !UserSettings.Config.AudioMuted;
-                if (playback is StreamPlayback streamPlayback)
-                    streamPlayback.SetMuteMode(UserSettings.Config.AudioMuted);
+                AudioEngine.SetMute(UserSettings.Config.AudioMuted);
             }
 
             ImGui.SameLine();
@@ -432,62 +424,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 if (ImGui.BeginTabItem("AudioFile"))
                 {
-                    ImGui.TextUnformatted("Soundtrack");
-                    var filepathModified =
-                        FileOperations.DrawSoundFilePicker(FileOperations.FilePickerTypes.File, ref ProjectSettings.Config.SoundtrackFilepath);
-
-                    var isInitialized = playback is StreamPlayback;
-                    if (isInitialized)
-                    {
-                        var bpm = (float)playback.Bpm;
-                        var soundtrackOffset = (float)playback.SoundtrackOffsetInSecs;
-
-                        if (ImGui.Checkbox("Use BPM Rate", ref ProjectSettings.Config.UseBpmRate))
-                        {
-                            if (!ProjectSettings.Config.UseBpmRate)
-                                UserSettings.Config.TimeDisplayMode = TimeFormat.TimeDisplayModes.Secs;
-                        }
-
-                        if (ProjectSettings.Config.UseBpmRate)
-                        {
-                            ImGui.DragFloat("BPM", ref bpm, 0.02f);
-                            playback.Bpm = bpm;
-                            ProjectSettings.Config.SoundtrackBpm = bpm;
-                            
-                            ImGui.DragFloat("Offset", ref soundtrackOffset, 0.01f);
-                            playback.SoundtrackOffsetInSecs = soundtrackOffset;
-                            ProjectSettings.Config.SoundtrackOffset = soundtrackOffset;
-
-                        }
-                        
-                        if (filepathModified)
-                        {
-                            UpdateImageAndBpmFromSoundtrackConfig(playback);
-                        }
-                    }
-
-                    var label = isInitialized ? "Update" : "Load";
-                    
-                    if (CustomComponents.DisablableButton(label, _computeSoundImageTask == null))
-                    {
-                        if (playback is StreamPlayback streamPlayback)
-                        {
-                            streamPlayback.LoadFile(ProjectSettings.Config.SoundtrackFilepath);
-                        }
-                        else
-                        {
-                            if (File.Exists(ProjectSettings.Config.SoundtrackFilepath))
-                            {
-                                playback = new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath);
-                                UpdateImageAndBpmFromSoundtrackConfig(playback);
-                            }
-                            else
-                            {
-                                Log.Warning($"Can't initialize soundtrack for missing file {ProjectSettings.Config.SoundtrackFilepath}");
-                            }
-                        }
-                    }
-
+                    DrawSoundtrackSettings(ref playback);
                     ImGui.EndTabItem();
                 }
 
@@ -502,7 +439,6 @@ namespace T3.Gui.Windows.TimeLine
                     {
                         if (ImGui.Button("Initialize"))
                         {
-
                             playback = new BeatTimingPlayback();
                         }
                     }
@@ -517,9 +453,6 @@ namespace T3.Gui.Windows.TimeLine
                     if (OscBeatTiming.Initialized)
                     {
                         ImGui.TextUnformatted($"Last received beat {OscBeatTiming.BeatCounter}");
-                        var v = ProjectSettings.Config.SlideHack;
-                        ImGui.InputDouble("BPM Scale factor", ref v );
-                        ProjectSettings.Config.SlideHack = v;
                     }
                     else
                     {
@@ -532,43 +465,6 @@ namespace T3.Gui.Windows.TimeLine
 
                     ImGui.EndTabItem();
                 }
-                
-                // if (ImGui.BeginTabItem("System Audio"))
-                // {
-                //     CustomComponents.HelpText("Uses Windows core audio input for BPM detection");
-                //     CustomComponents.HelpText("Tab the Sync button to set begin of measure and to improve BPM detection.");
-                //     var isInitialized = playback is BeatTimingPlayback && T3Ui.BeatTiming.UseSystemAudio;
-                //     if (isInitialized)
-                //     {
-                //         var currentDevice = BeatTiming.SystemAudioInput.LoopBackDevices[BeatTiming.SystemAudioInput.SelectedDeviceIndex];
-                //         if (ImGui.BeginCombo("Device selection", currentDevice.ToString()))
-                //         {
-                //             for (var index = 0; index < BeatTiming.SystemAudioInput.LoopBackDevices.Count; index++)
-                //             {
-                //                 var d = BeatTiming.SystemAudioInput.LoopBackDevices[index];
-                //                 if (ImGui.Selectable(d.ToString()))
-                //                 {
-                //                     BeatTiming.SystemAudioInput.SetDeviceIndex(index);
-                //                 }
-                //             }
-                //
-                //             ImGui.EndCombo();
-                //         }
-                //     }
-                //     else
-                //     {
-                //         if (ImGui.Button("Initialize"))
-                //         {
-                //             playback = new BeatTimingPlayback();
-                //             T3Ui.BeatTiming.UseSystemAudio = true;
-                //         }
-                //
-                //         CustomComponents.HelpText("This can take several seconds...");
-                //     }
-                //
-                //     ImGui.EndTabItem();
-                // }
-
                 ImGui.EndTabBar();
             }
 
@@ -576,59 +472,64 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.PopStyleVar(2);
         }
 
-        private static void UpdateImageAndBpmFromSoundtrackConfig(Playback playback)
+        private static void DrawSoundtrackSettings(ref Playback playback)
         {
-            float bpm;
-            var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
-            var result = matchBpmPattern.Match(ProjectSettings.Config.SoundtrackFilepath);
-            if (result.Success)
+            ImGui.TextUnformatted("Soundtrack");
+
+            var composition = GraphWindow.GetMainComposition();
+            if (composition == null)
             {
-                float.TryParse(result.Groups[1].Value, out bpm);
-                ProjectSettings.Config.SoundtrackBpm = bpm;
-                playback.Bpm = bpm;
+                ImGui.TextUnformatted("no composition active");
+                return;
             }
 
-            _computeSoundImageTask = new AsyncImageGenerator(ProjectSettings.Config.SoundtrackFilepath);
-            _computeSoundImageTask.Run();
+            if (!SoundtrackUtils.TryFindingSoundtrack(composition, out var soundtrack))
+            {
+                if (ImGui.Button("Add soundtrack to composition"))
+                {
+                    composition.Symbol.AudioClips.Add(new AudioClip
+                                                          {
+                                                              IsSoundtrack = true,
+                                                          });
+                }
+            }
+            else
+            {
+                var filepathModified =
+                    FileOperations.DrawSoundFilePicker(FileOperations.FilePickerTypes.File, ref soundtrack.FilePath);
+
+                if (ImGui.DragFloat("BPM", ref soundtrack.Bpm, 0.02f))
+                {
+                    playback.Bpm = soundtrack.Bpm;
+                }
+
+                var soundtrackStartTime = (float)soundtrack.StartTime;
+                if (ImGui.DragFloat("Offset", ref soundtrackStartTime, 0.01f))
+                {
+                    soundtrack.StartTime = soundtrackStartTime;
+                }
+
+                if (filepathModified)
+                {
+                    UpdateBpmFromSoundtrackConfig(soundtrack);
+                }
+            }
         }
 
-        private class AsyncImageGenerator
+        private static void UpdateBpmFromSoundtrackConfig(AudioClip audioClip)
         {
-            public AsyncImageGenerator(string filepath)
+            var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
+            var result = matchBpmPattern.Match(audioClip.FilePath);
+            if (!result.Success)
+                return;
+
+            if (float.TryParse(result.Groups[1].Value, out var bpm))
             {
-                if (FilePathsInProgress.Contains(filepath))
-                {
-                    Log.Debug($"Skipping {filepath} because its being processed right now.");
-                    return;
-                }
-
-                _generator = new SoundImageGenerator(filepath);
+                Log.Debug($"Using bpm-rate {bpm} from filename.");
+                audioClip.Bpm = bpm;
             }
-
-            public void Run()
-            {
-                FilePathsInProgress.Add(_generator.Filepath);
-                Task.Run(GenerateAsync);
-            }
-
-            private void GenerateAsync()
-            {
-                var imageFilePath = _generator.GenerateSoundSpectrumAndVolume();
-                _computeSoundImageTask = null;
-                if (imageFilePath == null)
-                {
-                    Log.Debug("could not create filepath");
-                }
-
-                TimeLineImage.LoadSoundImage();
-                FilePathsInProgress.Remove(_generator.Filepath);
-            }
-
-            private readonly SoundImageGenerator _generator;
-            private static readonly HashSet<string> FilePathsInProgress = new HashSet<string>();
         }
 
         public static readonly Vector2 ControlSize = new Vector2(45, 30);
-        private static AsyncImageGenerator _computeSoundImageTask;
     }
 }

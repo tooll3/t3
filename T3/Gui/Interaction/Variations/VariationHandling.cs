@@ -74,7 +74,11 @@ namespace T3.Gui.Interaction.Variations
                 ActivePoolForPresets = null;
                 
                 var activeCompositionInstance = primaryGraphWindow.GraphCanvas.CompositionOp;
+                if (activeCompositionInstance == null)
+                    return;
+                
                 ActiveInstanceForSnapshots = activeCompositionInstance;
+                
                 
                 // Prevent variations for library operators
                 if (activeCompositionInstance.Symbol.Namespace.StartsWith("lib."))

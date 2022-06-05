@@ -9,7 +9,7 @@ namespace T3.Gui.Interaction.Timing
     /// </summary>
     public class BeatTimingPlayback : Playback
     {
-        public override void Update(float timeSinceLastFrameInSecs, bool idleMotionEnabled = false)
+        public override void Update(bool idleMotionEnabled = false)
         {
             FxTimeInBars = BeatTiming.BeatTime;
             Bpm = BeatTiming.Bpm;

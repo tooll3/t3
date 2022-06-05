@@ -4,7 +4,6 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72;
 
 namespace T3.Operators.Types.Id_d3080dc9_98dc_43d5_be08_2ddfe971de98
 {
