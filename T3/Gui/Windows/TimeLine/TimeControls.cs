@@ -335,12 +335,6 @@ namespace T3.Gui.Windows.TimeLine
                 ImGui.SameLine();
 
                 // // End
-                // if (CustomComponents.IconButton(Icon.JumpToRangeEnd, "##lastKeyframe", ControlSize))
-                // {
-                //     playback.TimeInBars = playback.LoopRange.End;
-                // }
-                //
-                // ImGui.SameLine();
                 // Loop
                 if (CustomComponents.ToggleIconButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize))
                 {
@@ -459,9 +453,6 @@ namespace T3.Gui.Windows.TimeLine
                     if (OscBeatTiming.Initialized)
                     {
                         ImGui.TextUnformatted($"Last received beat {OscBeatTiming.BeatCounter}");
-                        var v = ProjectSettings.Config.SlideHack;
-                        ImGui.InputDouble("BPM Scale factor", ref v);
-                        ProjectSettings.Config.SlideHack = v;
                     }
                     else
                     {
@@ -474,43 +465,6 @@ namespace T3.Gui.Windows.TimeLine
 
                     ImGui.EndTabItem();
                 }
-
-                // if (ImGui.BeginTabItem("System Audio"))
-                // {
-                //     CustomComponents.HelpText("Uses Windows core audio input for BPM detection");
-                //     CustomComponents.HelpText("Tab the Sync button to set begin of measure and to improve BPM detection.");
-                //     var isInitialized = playback is BeatTimingPlayback && T3Ui.BeatTiming.UseSystemAudio;
-                //     if (isInitialized)
-                //     {
-                //         var currentDevice = BeatTiming.SystemAudioInput.LoopBackDevices[BeatTiming.SystemAudioInput.SelectedDeviceIndex];
-                //         if (ImGui.BeginCombo("Device selection", currentDevice.ToString()))
-                //         {
-                //             for (var index = 0; index < BeatTiming.SystemAudioInput.LoopBackDevices.Count; index++)
-                //             {
-                //                 var d = BeatTiming.SystemAudioInput.LoopBackDevices[index];
-                //                 if (ImGui.Selectable(d.ToString()))
-                //                 {
-                //                     BeatTiming.SystemAudioInput.SetDeviceIndex(index);
-                //                 }
-                //             }
-                //
-                //             ImGui.EndCombo();
-                //         }
-                //     }
-                //     else
-                //     {
-                //         if (ImGui.Button("Initialize"))
-                //         {
-                //             playback = new BeatTimingPlayback();
-                //             T3Ui.BeatTiming.UseSystemAudio = true;
-                //         }
-                //
-                //         CustomComponents.HelpText("This can take several seconds...");
-                //     }
-                //
-                //     ImGui.EndTabItem();
-                // }
-
                 ImGui.EndTabBar();
             }
 
@@ -560,28 +514,6 @@ namespace T3.Gui.Windows.TimeLine
                     UpdateBpmFromSoundtrackConfig(soundtrack);
                 }
             }
-
-            //var label = isInitialized ? "Update" : "Load";
-
-            // if (CustomComponents.DisablableButton(label, _computeSoundImageTask == null))
-            // {
-            //     if (playback is StreamPlayback streamPlayback)
-            //     {
-            //         streamPlayback.LoadFile(ProjectSettings.Config.SoundtrackFilepath);
-            //     }
-            //     else
-            //     {
-            //         if (File.Exists(ProjectSettings.Config.SoundtrackFilepath))
-            //         {
-            //             playback = new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath);
-            //             UpdateImageAndBpmFromSoundtrackConfig(playback);
-            //         }
-            //         else
-            //         {
-            //             Log.Warning($"Can't initialize soundtrack for missing file {ProjectSettings.Config.SoundtrackFilepath}");
-            //         }
-            //     }
-            // }
         }
 
         private static void UpdateBpmFromSoundtrackConfig(AudioClip audioClip)

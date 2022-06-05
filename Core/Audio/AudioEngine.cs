@@ -162,23 +162,47 @@ namespace Core.Audio
         }
         
         private const double AudioSyncingOffset = -2 / 60f;
-        
+        private const double AudioTriggerDelayOffset = 2 / 60f;
+        private const double ResyncThreshold = 1.5f / 60f;
+            
+        /// <summary>
+        /// We try to find a compromise between letting bass play the audio clip in the correct playback speed which
+        /// eventually will drift away from the Playback time. Of the delta between playback and audio-clip time exceeds
+        /// a threshold, we resync.
+        /// Frequent resync causes audio glitches.
+        /// Too large of a threshold can disrupt syncing.  
+        /// </summary>
         public void UpdateTime()
         {
             if (Playback.Current.PlaybackSpeed == 0)
                 return;
+
+            var isOutOfBounds = TargetTime < AudioClip.StartTime || TargetTime >= AudioClip.LengthInSeconds + AudioClip.StartTime;
+            var isPlaying = Bass.ChannelIsActive(StreamHandle) == PlaybackState.Playing;
+            
+            if (isOutOfBounds)
+            {
+                if(isPlaying)
+                    Bass.ChannelPause(StreamHandle);
                 
+                return;
+            }
+
+            if (!isPlaying)
+            {
+                Bass.ChannelPlay(StreamHandle);
+            }
+            
             var currentStreamPos = Bass.ChannelGetPosition(StreamHandle);
             var currentPos = Bass.ChannelBytes2Seconds(StreamHandle, currentStreamPos) - AudioSyncingOffset;
-
             var soundDelta = currentPos - TargetTime;
 
-            if (Math.Abs(soundDelta) <= 1.5f / 60f * Math.Abs(Playback.Current.PlaybackSpeed)) 
+            if (Math.Abs(soundDelta) <= ResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed)) 
                 return;
             
-            Log.Debug($"Sound delta {soundDelta:0.000}s for {AudioClip.FilePath}");
-            
-            var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, TargetTime + 2/60f * Playback.Current.PlaybackSpeed + AudioSyncingOffset);
+            // Resync
+            //Log.Debug($"Sound delta {soundDelta:0.000}s for {AudioClip.FilePath}");
+            var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, TargetTime + AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset);
             Bass.ChannelSetPosition(StreamHandle, newStreamPos);
 
         }

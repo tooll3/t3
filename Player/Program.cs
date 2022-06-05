@@ -182,14 +182,14 @@ namespace T3
             var symbols = SymbolRegistry.Entries;
             var demoSymbol = symbols.First(entry => entry.Value.Name == ProjectSettings.Config.MainOperatorName).Value;
 
+            _playback = new Playback();
+            
             // create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
 
             //var soundTrackPath = @"Resources\proj-partial\soundtrack\partial.mp3";
             _soundtrack = demoSymbol.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
-            
-            _playback = new Playback();
             
             var usingSoundtrack = _soundtrack != null && File.Exists(_soundtrack.FilePath);
           
@@ -232,6 +232,8 @@ namespace T3
             }
 
             // start playback           
+            _playback.Update();
+            _playback.TimeInBars = 0;
             _playback.PlaybackSpeed = 1.0;
 
             var stopwatch = new Stopwatch();
@@ -250,22 +252,18 @@ namespace T3
             // Main loop
             RenderLoop.Run(form, () =>
                                  {
-                                     // Int64 ticks = stopwatch.ElapsedTicks;
-                                     // Int64 ticksDiff = ticks - lastElapsedTicks;
-                                     // lastElapsedTicks = ticks;
-                                     // Console.WriteLine($"delta: {((double)(ticksDiff) / Stopwatch.Frequency)}");
-                                     //var secondsSinceLastFrame = (float)((double)(ticksDiff) / Stopwatch.Frequency);
                                      _playback.Update();
 
+                                     Log.Debug($" render at playback time {_playback.TimeInSecs:0.00}s");
                                      if (_soundtrack != null)
                                      {
                                          AudioEngine.UseAudioClip(_soundtrack, _playback.TimeInSecs);
+                                         AudioEngine.CompleteFrame(_playback);
                                          if (_playback.TimeInSecs >= _soundtrack.LengthInSeconds + _soundtrack.StartTime)
                                          {
                                              if (options.Loop)
                                              {
                                                  _playback.TimeInSecs = 0.0;
-                                                 //_playback.PlaybackSpeed = 1.0; // restart the stream
                                              }
                                              else
                                              {
@@ -273,10 +271,6 @@ namespace T3
                                              }
                                          }
                                      }
-                                     // else
-                                     // {
-                                     //     _playback = Playback.RunTimeInSecs;
-                                     // }
 
                                      DirtyFlag.IncrementGlobalTicks();
                                      DirtyFlag.InvalidationRefFrame++;
@@ -363,7 +357,7 @@ namespace T3
         private static EvaluationContext _evalContext;
         private static Playback _playback;
         private static AudioClip _soundtrack;
-        public static uint FullScreenVertexShaderId { get; private set; }
-        public static uint FullScreenPixelShaderId { get; private set; }
+        private static uint FullScreenVertexShaderId { get; set; }
+        private static uint FullScreenPixelShaderId { get; set; }
     }
 }
