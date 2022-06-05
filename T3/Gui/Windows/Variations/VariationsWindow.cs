@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
@@ -23,6 +24,7 @@ namespace T3.Gui.Windows.Variations
         }
 
         private ViewModes _viewMode = 0;
+        private int _selectedNodeCount = 0;
 
         private void DrawWindowContent()
         {
@@ -32,15 +34,25 @@ namespace T3.Gui.Windows.Variations
                 _poolWithVariationToBeDeleted.DeleteVariations(_variationsToBeDeletedNextFrame);
                 _variationsToBeDeletedNextFrame.Clear();
             }
-            
-            // Auto Select view or variation mode...
-            if (NodeSelection.Selection.Count == 0)
+
+            var compositionHasVariations = VariationHandling.ActivePoolForSnapshots.Variations.Count > 0;
+            var oneChildSelected = NodeSelection.Selection.Count == 1;
+            var selectionChanged = NodeSelection.Selection.Count != _selectedNodeCount;
+
+            if (selectionChanged)
             {
-                _viewMode = ViewModes.Snapshots;
-                // _viewMode = ViewModes.Presets;
+                _selectedNodeCount = NodeSelection.Selection.Count;
+                
+                if (oneChildSelected)
+                {
+                    _viewMode = ViewModes.Presets;
+                }
+                else if (compositionHasVariations && _selectedNodeCount == 0) 
+                {
+                    _viewMode = ViewModes.Snapshots;
+                }
             }
-            
-            
+
             var drawList = ImGui.GetWindowDrawList();
             var keepCursorPos = ImGui.GetCursorScreenPos();
 
