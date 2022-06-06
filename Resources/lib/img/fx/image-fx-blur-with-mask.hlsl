@@ -3,15 +3,14 @@ cbuffer ParamConstants : register(b0)
     float2 Direction;
     float Size;
     float NumberOfSamples;
-    float widthToHeight;
+    
+    float4 Color;
 
     float Offset;
-    float Glow2;
-
-    // float Angle;
-    // float AngleOffset;
-    // float Steps;
-    // float Fade;
+    float AddOriginal;
+    float ApplyMaskToAlpha;
+    float MaskContrast;
+    float MaskOffset;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -35,26 +34,20 @@ sampler samLinear : register(s0);
 
 static const int WEIGHT_COUNT = 10;
 static const float Gauss[WEIGHT_COUNT] = { 0.93, 0.86, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1 };
-
+static const float widthToHeight = 1;    // Aspect?
 
 float4 psMain(vsOutput input) : SV_TARGET
 {
-	// float2 curPos = input.texCoord;
-    // curPos += float2(CenterX, CenterY);
-	
-    // float4 c = InputTexture.Sample(texSampler, curPos);    
-    // c.ra=0.7;
-    // return c;
-
-    //return float4(NumberOfSamples,0,0,1);
-
     float4 mask = MaskTexture.Sample(samLinear, input.texCoord);
+    float maskValue = saturate( ((mask.r+mask.g+mask.b)/3 -0.5) * MaskContrast + 0.5 + MaskOffset);
+
     float2 dir = Direction;
-    dir *= 0.01*Size/NumberOfSamples * mask.r;
+    dir *= 0.01*Size/NumberOfSamples * maskValue;    
     dir.y *= widthToHeight;
 
     float2 pos = dir;
-    float4 c = InputTexture.Sample(samLinear, input.texCoord);
+    float4 orgColor = InputTexture.Sample(samLinear, input.texCoord);
+    float4 c = orgColor;
 
     float totalWeight = 1;
     for (int i = 0; i < NumberOfSamples; ++i)
@@ -67,11 +60,9 @@ float4 psMain(vsOutput input) : SV_TARGET
         totalWeight += 2*weight;
     }
 
-    //c.rgb = float3(Offset, Offset, Offset) + c.rgb/totalWeight*Glow;
-    //c.a = 1.0;
-    c = float4(Offset, Offset, Offset, Offset) + c/totalWeight*Glow2;
-    c.a = clamp(c.a, 0,1);
-    //c.ra=1;
+    //float4 factor = float4(Glow.xxx, 1) * Color;
+    c =  Color * c / totalWeight + float4(Offset.xxx,0) + orgColor* AddOriginal * maskValue;
+    c.a = clamp(c.a, 0,1) * lerp(1, (1-maskValue), ApplyMaskToAlpha);
     return clamp(c,0,1000);
 }
 

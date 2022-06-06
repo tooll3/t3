@@ -124,7 +124,7 @@
       }
     },
     {
-      "ChildId": "f9b307ee-221f-4a92-9954-855ec0a1d2c1"/*MaskedBloom*/,
+      "ChildId": "f9b307ee-221f-4a92-9954-855ec0a1d2c1"/*BlurWithMask*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

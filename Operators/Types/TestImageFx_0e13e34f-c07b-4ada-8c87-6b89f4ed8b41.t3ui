@@ -131,14 +131,25 @@
         "X": 787.0037,
         "Y": 467.65067
       }
+    },
+    {
+      "ChildId": "9adef827-09cc-4193-8e22-e999dcfcfeb6"/*ExecuteTextureUpdate*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 835.9145,
+        "Y": -440.55975
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "2d59fec4-af4e-4db2-bc11-3685f31e9de5"/*TextureOutput*/,
       "Position": {
-        "X": 1000.4979,
-        "Y": -21.058592
+        "X": 1245.9105,
+        "Y": -153.24353
       }
     }
   ]

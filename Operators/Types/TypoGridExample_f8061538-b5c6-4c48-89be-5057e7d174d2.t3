@@ -301,7 +301,7 @@
       "Outputs": []
     },
     {
-      "Id": "f9b307ee-221f-4a92-9954-855ec0a1d2c1"/*MaskedBloom*/,
+      "Id": "f9b307ee-221f-4a92-9954-855ec0a1d2c1"/*BlurWithMask*/,
       "SymbolId": "d40966c3-2369-40f2-8202-e5c8ab6d9cc0",
       "InputValues": [
         {
@@ -318,11 +318,6 @@
           "Id": "1bfb5c46-a1dd-41fe-aa6b-96e3d602bc82"/*Offset*/,
           "Type": "System.Single",
           "Value": -0.0033333336
-        },
-        {
-          "Id": "9e40abb3-ea45-4c14-a427-b5379ef56daf"/*Glow*/,
-          "Type": "System.Single",
-          "Value": 1.1433334
         }
       ],
       "Outputs": []
