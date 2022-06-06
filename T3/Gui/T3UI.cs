@@ -12,6 +12,7 @@ using Core.Audio;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Operator;
 using t3.Gui.Audio;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
@@ -36,25 +37,30 @@ namespace T3.Gui
 
             var tmp = new UserSettings(saveOnQuit: true);
             var tmp2 = new ProjectSettings(saveOnQuit: true);
-
-            // Initialize
-            // var playback = File.Exists(ProjectSettings.Config.SoundtrackFilepath)
-            //                 ? new StreamPlayback(ProjectSettings.Config.SoundtrackFilepath)
-            //                 : new Playback();
-
-            var playback = new Playback
-                               {
-                                   //Bpm = ProjectSettings.Config.SoundtrackBpm,
-                                   //SoundtrackOffsetInSecs = ProjectSettings.Config.SoundtrackOffset,
-                               };
-
-            // if (playback is StreamPlayback streamPlayback)
-            //     streamPlayback.SetMuteMode(UserSettings.Config.AudioMuted);
-            //
+            var playback = new Playback();
 
             WindowManager = new WindowManager();
             ExampleSymbolLinking.UpdateExampleLinks();
             VariationHandling.Init();
+        }
+
+        private static void CountSymbolUsage()
+        {
+            var counts = new Dictionary<Symbol, int>();
+            foreach (var s in SymbolRegistry.Entries.Values)
+            {
+                foreach (var child in s.Children)
+                {
+                    if (!counts.ContainsKey(child.Symbol))
+                        counts[child.Symbol] = 0;
+                    
+                    counts[child.Symbol]++;
+                }
+            }
+            foreach(var (s,c) in counts.OrderBy(c => counts[c.Key]).Reverse())
+            {
+                Log.Debug($"{s.Name} - {s.Namespace}  {c}");
+            }
         }
 
         public void Draw()
