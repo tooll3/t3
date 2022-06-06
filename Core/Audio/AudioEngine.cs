@@ -47,7 +47,8 @@ namespace Core.Audio
             List<Guid> obsoleteIds = new();
             var playbackSpeedChanged = Math.Abs(_lastPlaybackSpeed - playback.PlaybackSpeed) > 0.001f;
             _lastPlaybackSpeed = playback.PlaybackSpeed;
-            
+
+            var handledMainSoundtrack = false;
             foreach ( var (audioClipId,clipStream) in  _clipPlaybacks)
             {
                 clipStream.IsInUse = _updatedClipTimes.ContainsKey(clipStream.AudioClip);
@@ -59,9 +60,12 @@ namespace Core.Audio
                 {
                     if (playbackSpeedChanged)
                         clipStream.UpdatePlaybackSpeed(playback.PlaybackSpeed);
-                    
-                    // Todo: Update Muting
-                    
+
+                    if (!handledMainSoundtrack && clipStream.AudioClip.IsSoundtrack)
+                    {
+                        UpdateFftBuffer(clipStream.StreamHandle);
+                        handledMainSoundtrack = true;
+                    }
                     clipStream.UpdateTime();
                 }
             }
@@ -76,8 +80,14 @@ namespace Core.Audio
 
         public static void SetMute(bool configAudioMuted)
         {
-            throw new NotImplementedException();
+            if (configAudioMuted)
+            {
+                _originalVolumeBeforeMuting = Bass.Volume;
+            }
+            Bass.Volume = configAudioMuted ? 0 : _originalVolumeBeforeMuting;
         }
+
+        private static double _originalVolumeBeforeMuting;
         
         private static void UpdateFftBuffer(int soundStreamHandle)
         {
