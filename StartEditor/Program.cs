@@ -26,10 +26,11 @@ namespace StartEditor
                 operatorAssemblySources.Add(File.ReadAllText(sourceFile));
             }
 
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\GpuQuery.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\BmFont.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
             operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\AudioAnalysisResult.cs"));
+            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\BmFont.cs"));
+            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\GpuQuery.cs"));
+            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
+            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\MidiConnectionManager.cs"));
 
             Console.WriteLine("Compiling...");
             var references = CompileSymbolsFromSource(".", operatorAssemblySources.ToArray());
