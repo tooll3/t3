@@ -57,7 +57,7 @@ namespace StartEditor
             
             asm1.ModuleResolve += ModuleResolveEventHandler;
             
-            Assembly operatorsAssembly = Assembly.LoadFrom("Operators.dll");
+            Assembly operatorsAssembly = Assembly.LoadFrom("Operators_Sources.dll");
 
             var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
@@ -94,26 +94,35 @@ namespace StartEditor
                                                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                                                           .WithOptimizationLevel(OptimizationLevel.Release));
 
-            using (var dllStream = new FileStream(exportPath + Path.DirectorySeparatorChar + "Operators2.dll", FileMode.Create)) 
+            using (var dllStream = new FileStream("Operators_Build.dll", FileMode.Create)) 
             // using (var pdbStream = new FileStream(exportPath + Path.DirectorySeparatorChar + "Operators.pdb", FileMode.Create))
             using (var pdbStream = new MemoryStream())
             {
-                var emitResult = compilation.Emit(dllStream, pdbStream);
-                Log.Info($"compilation results of 'export':");
-
-                if (!emitResult.Success)
+                Console.WriteLine($" emitting compilation: {compilation}");
+                try
                 {
-                    foreach (var entry in emitResult.Diagnostics)
+                    var emitResult = compilation.Emit(dllStream);
+                    
+                    Console.WriteLine($"compilation results of 'export':" );
+
+                    if (!emitResult.Success)
                     {
-                        if (entry.WarningLevel == 0)
-                            Log.Error(entry.GetMessage());
-                        else
-                            Log.Warning(entry.GetMessage());
+                        foreach (var entry in emitResult.Diagnostics)
+                        {
+                            if (entry.WarningLevel == 0)
+                                Console.WriteLine( "ERROR:" + entry.GetMessage());
+                            else
+                                Console.WriteLine(entry.GetMessage());
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Compilation of 'export' successful.");
                     }
                 }
-                else
+                catch (Exception e)
                 {
-                    Log.Info($"Compilation of 'export' successful.");
+                    Console.WriteLine("emit Failed: " + e.Message);
                 }
             }
 
