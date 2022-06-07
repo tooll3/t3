@@ -1103,7 +1103,7 @@
       "Outputs": []
     },
     {
-      "Id": "343203db-4154-4f8f-8cc0-b464a64264bc"/*DidTimeRewind*/,
+      "Id": "343203db-4154-4f8f-8cc0-b464a64264bc"/*DidTimeChange*/,
       "SymbolId": "2443b2fd-c397-4ea6-9588-b595f918cf01",
       "InputValues": [
         {
@@ -1171,13 +1171,13 @@
       "Outputs": []
     },
     {
-      "Id": "37895563-070b-4ae9-a993-9c9823536e4b"/*OrAll*/,
+      "Id": "37895563-070b-4ae9-a993-9c9823536e4b"/*Any*/,
       "SymbolId": "1446e61e-7f68-4655-99c8-5be390f64851",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "268ede65-94f2-48af-be06-5e8000a8fba1"/*OrAll*/,
+      "Id": "268ede65-94f2-48af-be06-5e8000a8fba1"/*Any*/,
       "SymbolId": "1446e61e-7f68-4655-99c8-5be390f64851",
       "InputValues": [],
       "Outputs": []

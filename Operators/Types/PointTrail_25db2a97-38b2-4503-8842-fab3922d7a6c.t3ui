@@ -281,7 +281,7 @@
       }
     },
     {
-      "ChildId": "5f0bdce4-6134-4870-b65b-c570117003cd"/*DidTimeRewind*/,
+      "ChildId": "5f0bdce4-6134-4870-b65b-c570117003cd"/*DidTimeChange*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -292,7 +292,7 @@
       }
     },
     {
-      "ChildId": "0c8caa25-78dd-4af4-a3ad-6a64fb6f7b77"/*OrAll*/,
+      "ChildId": "0c8caa25-78dd-4af4-a3ad-6a64fb6f7b77"/*Any*/,
       "Size": {
         "X": 110.0,
         "Y": 75.0
