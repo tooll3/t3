@@ -8,8 +8,10 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using Core.Logging;
 using T3.App;
 using T3.Compilation;
 using T3.Core;
@@ -33,6 +35,28 @@ namespace T3
         [STAThread]
         private static void Main()
         {
+            Log.AddWriter(new ConsoleWriter());
+            Log.AddWriter(FileWriter.CreateDefault());
+                        
+            // From executing application.
+            Log.Debug($"From executing application: {Assembly.GetExecutingAssembly().GetName().Version}");
+            
+            
+            var absolutePath = Path.GetFullPath(Application.StartupPath + @"\Operators.dll");
+            Log.Debug($"From a '{absolutePath}' {Assembly.LoadFile(absolutePath).GetName().Version}");
+            Log.Debug($"fileVersion' {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion}");
+            Log.Debug($"productVersion' {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion}");
+ 
+            // From a physical file, provide full path to that file.
+            //string assemblyVersion = Assembly.LoadFile("Operators.dll").GetName().Version.ToString();
+ 
+            // From executing application, gives file version.
+            //string fileVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+ 
+            // From executing application, gives product version.
+            ///string productVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;            
+            
+            Console.WriteLine("Test");
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
 
             var startupStopWatch = new Stopwatch();

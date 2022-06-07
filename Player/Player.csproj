@@ -20,7 +20,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Core\Core.csproj" />
-      <ProjectReference Include="..\Operators\Operators.csproj" />
     </ItemGroup>
 
 </Project>

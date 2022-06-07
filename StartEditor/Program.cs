@@ -52,6 +52,10 @@ namespace StartEditor
 
         private static List<MetadataReference> CompileSymbolsFromSource(string exportPath, params string[] sources)
         {
+            Assembly asm1 = typeof(Program).Assembly;
+            
+            asm1.ModuleResolve += ModuleResolveEventHandler;
+            
             Assembly operatorsAssembly = Assembly.LoadFrom("Operators.dll");
 
             var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
@@ -61,18 +65,24 @@ namespace StartEditor
             referencedAssemblies.Add(MetadataReference.CreateFromFile(operatorsAssembly.Location));
             foreach (var asmName in referencedAssembliesNames)
             {
-                var asm = Assembly.Load(asmName);
-                if (asm != null)
+                try
                 {
+                    Console.WriteLine($"@@@ asm: {asmName}");
+                    var asm = Assembly.Load(asmName);
                     referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
-                }
+                    Console.WriteLine($"@@@ Location: {asm.Location}");
 
-                // In order to get dependencies of the used assemblies that are not part of T3 references itself
-                var subAsmNames = asm.GetReferencedAssemblies();
-                foreach (var subAsmName in subAsmNames)
+                    // In order to get dependencies of the used assemblies that are not part of T3 references itself
+                    var subAsmNames = asm.GetReferencedAssemblies();
+                    foreach (var subAsmName in subAsmNames)
+                    {
+                        var subAsm = Assembly.Load(subAsmName);
+                        referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
+                    }
+                }
+                catch (Exception e)
                 {
-                    var subAsm = Assembly.Load(subAsmName);
-                    referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
+                    Console.WriteLine($"Failed: {e} {e.Message} {e.InnerException?.Message}");
                 }
             }
 
@@ -107,6 +117,12 @@ namespace StartEditor
             }
 
             return referencedAssemblies;
+        }
+
+        private static Module ModuleResolveEventHandler(object sender, ResolveEventArgs e)
+        {
+            Console.WriteLine($"%%% CALLBACK {e.Name} {e.RequestingAssembly}");
+            return null;
         }
     }
 }
