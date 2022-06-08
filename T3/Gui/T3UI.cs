@@ -75,7 +75,7 @@ namespace T3.Gui
             if (ForwardBeatTaps.ResyncTriggered)
                 BeatTiming.TriggerResyncMeasure();
 
-            _autoBackup.Enabled = UserSettings.Config.EnableAutoBackup;
+            _autoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;
 
             VariationHandling.Update();
@@ -95,6 +95,7 @@ namespace T3.Gui
             SwapHoveringBuffers();
             TriggerGlobalActionsFromKeyBindings();
             DrawAppMenu();
+            _autoBackup.CheckForSave();
         }
 
         private void TriggerGlobalActionsFromKeyBindings()
