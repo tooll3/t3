@@ -33,9 +33,11 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         private StringBuilder _stringBuilder = new StringBuilder(100);
+        private List<VDefinition> _visibleKeyframes = new(1000);
         
         public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters, bool fitCurvesVertically = false)
         {
+            _visibleKeyframes.Clear();
             _compositionOp = compositionOp;
             AnimationParameters = animationParameters;
 
@@ -153,6 +155,7 @@ namespace T3.Gui.Windows.TimeLine
                             foreach (var keyframe in curve.GetVDefinitions().ToList())
                             {
                                 CurvePoint.Draw(keyframe, TimeLineCanvas, SelectedKeyframes.Contains(keyframe), this);
+                                _visibleKeyframes.Add(keyframe);
                             }
 
                             HandleCreateNewKeyframes(curve);
@@ -352,7 +355,7 @@ namespace T3.Gui.Windows.TimeLine
             var canvasArea = TimeLineCanvas.Current.InverseTransformRect(screenArea).MakePositive();
             var matchingItems = new List<VDefinition>();
 
-            foreach (var keyframe in GetAllKeyframes())
+            foreach (var keyframe in _visibleKeyframes)
             {
                 if (canvasArea.Contains(new Vector2((float)keyframe.U, (float)keyframe.Value)))
                 {
