@@ -286,15 +286,15 @@ namespace T3.Core.Operator
         internal void CreateUpdateActionsForExistingCurves(IEnumerable<Instance> childInstances)
         {
             // gather all inputs that correspond to stored ids
-            var relevantInputs = from curveEntry in _animatedInputCurves
+            var relevantInputs = (from curveEntry in OrderedAnimationCurves
                                  from childInstance in childInstances
                                  where curveEntry.Key.SymbolChildId == childInstance.SymbolChildId
                                  from inputSlot in childInstance.Inputs
                                  where curveEntry.Key.InputId == inputSlot.Id
-                                 group (inputSlot, curveEntry.Value) by (Id: childInstance.SymbolChildId, inputSlot.Id)
+                                 group (inputSlot, curveEntry.Value) by (Id: childInstance.SymbolChildId, inputSlot.Id, childInstance)
                                  into inputGroup
-                                 select inputGroup;
-
+                                 select inputGroup).ToArray();
+            
             foreach (var groupEntry in relevantInputs)
             {
                 var count = groupEntry.Count();
@@ -385,6 +385,18 @@ namespace T3.Core.Operator
                 {
                     Debug.Assert(false);
                 }
+            }
+        }
+
+        private IOrderedEnumerable<KeyValuePair<CurveId, Curve>> OrderedAnimationCurves
+        {
+            get
+            {
+                var orderedCurves = _animatedInputCurves
+                                   .OrderBy(valuePair => valuePair.Key.SymbolChildId)
+                                   .ThenBy(valuePair => valuePair.Key.InputId)
+                                   .ThenBy(valuePair => valuePair.Key.Index);
+                return orderedCurves;
             }
         }
 
