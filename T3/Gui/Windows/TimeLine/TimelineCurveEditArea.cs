@@ -314,12 +314,18 @@ namespace T3.Gui.Windows.TimeLine
                                   || (ImGui.GetIO().KeyCtrl);
             
             double u = allowHorizontal ? newDragPosition.X : vDef.U;
-            if(!ImGui.GetIO().KeyShift)
-                SnapHandlerU.CheckForSnapping(ref u, TimeLineCanvas.Scale.X);
+            if (allowHorizontal)
+            {
+                if(!ImGui.GetIO().KeyShift)
+                    SnapHandlerU.CheckForSnapping(ref u, TimeLineCanvas.Scale.X);
+            }
             
             double v = allowVertical ?  newDragPosition.Y : vDef.Value;
-            if(!ImGui.GetIO().KeyShift)
-                SnapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
+            if (allowVertical)
+            {
+                if(!ImGui.GetIO().KeyShift)
+                    SnapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
+            } 
             
             UpdateDragCommand(u - vDef.U, v - vDef.Value);
             
