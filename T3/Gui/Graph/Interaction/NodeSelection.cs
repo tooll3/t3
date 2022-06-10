@@ -56,6 +56,14 @@ namespace T3.Gui.Graph.Interaction
 
             Selection.Add(node);
         }
+        
+        public static void DeselectNode(ISelectableCanvasObject node)
+        {
+            _selectedComposition = null;
+            var index = Selection.IndexOf(node);
+            if(index != -1)
+                Selection.RemoveAt(index);
+        }
 
         /// <summary>
         /// Replaces current selection with symbol child

@@ -330,7 +330,11 @@ namespace T3.Gui.Graph
                                  where rect.Overlaps(boundsInCanvas)
                                  select child).ToList();
 
-            NodeSelection.Clear();
+            if (SelectionFence.SelectMode == SelectionFence.SelectModes.Replace)
+            {
+                NodeSelection.Clear();
+            } 
+
             foreach (var node in nodesToSelect)
             {
                 if (node is SymbolChildUi symbolChildUi)
@@ -341,17 +345,40 @@ namespace T3.Gui.Graph
                         Log.Warning("Can't find instance");
                     }
 
-                    NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
+                    if (SelectionFence.SelectMode == SelectionFence.SelectModes.Remove)
+                    {
+                        NodeSelection.DeselectNode(symbolChildUi, instance);
+                    }
+                    else
+                    {
+                        NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
+                    }
                 }
-                if (node is Annotation annotation)
+                else if (node is Annotation annotation)
                 {
-                    var rect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
-                    if (boundsInCanvas.Contains(rect))
-                        NodeSelection.AddSelection(node);
+                    var annotationRect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
+                    if (boundsInCanvas.Contains(annotationRect))
+                    {
+                        if (SelectionFence.SelectMode == SelectionFence.SelectModes.Remove)
+                        {
+                            NodeSelection.DeselectNode(annotation);
+                        }
+                        else
+                        {
+                            NodeSelection.AddSelection(annotation);
+                        }
+                    }
                 }
                 else
                 {
-                    NodeSelection.AddSelection(node);
+                    if (SelectionFence.SelectMode == SelectionFence.SelectModes.Remove)
+                    {
+                        NodeSelection.DeselectNode(node);
+                    }
+                    else
+                    {
+                        NodeSelection.AddSelection(node);
+                    }
                 }
             }
         }
