@@ -137,6 +137,7 @@ namespace T3.Gui.Windows.Variations
             _poolWithVariationToBeDeleted = pool;
             _variationsToBeDeletedNextFrame.AddRange(selectionSelection); // TODO: mixing Snapshots and variations in same list is dangerous
             pool.StopHover();
+            pool.SaveVariationsToFile();
         }
 
         private static readonly List<Variation> _variationsToBeDeletedNextFrame = new(20);
