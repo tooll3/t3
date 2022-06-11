@@ -17,6 +17,12 @@ namespace T3.Operators.Types.Id_927a77d5_7bf0_477b_b288_4bb48d4980cd
         [Input(Guid = "5c510853-f87d-4ebf-be0a-78d06d970be2")]
         public readonly InputSlot<float> FrameRate = new InputSlot<float>();
 
+        [Input(Guid = "25215a7e-1e38-4370-8845-cbf422a7eb92")]
+        public readonly InputSlot<bool> TriggerUpdate = new InputSlot<bool>();
+
+        [Input(Guid = "7c4fbfe3-2cf4-4e23-9b3e-961927f20935")]
+        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+
     }
 }
 

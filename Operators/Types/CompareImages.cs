@@ -9,12 +9,13 @@ using Unsplasharp.Models;
 
 namespace T3.Operators.Types.Id_0e13e34f_c07b_4ada_8c87_6b89f4ed8b41
 {
-    public class TestImageFx : Instance<TestImageFx>, ITransformable
+    public class CompareImages : Instance<CompareImages>
+,ITransformable
     {
         [Output(Guid = "2d59fec4-af4e-4db2-bc11-3685f31e9de5")]
         public readonly TransformCallbackSlot<Texture2D> TextureOutput = new TransformCallbackSlot<Texture2D>();
 
-        public TestImageFx()
+        public CompareImages()
         {
             TextureOutput.TransformableOp = this;
         }
