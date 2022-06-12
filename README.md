@@ -1,5 +1,10 @@
 # Tooll 3 - A realtime animation toolkit
 
+[![Discord](https://img.shields.io/discord/823853172619083816.svg?style=for-the-badge)](https://discord.gg/YmSyQdeH3S)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](https://github.com/alelievr/Mixture/blob/master/LICENSE)
+
+[![tooll-screenshot](https://user-images.githubusercontent.com/1732545/173256422-a4ef9894-d954-4bc3-8c24-000bfbe1c3ad.png)](https://www.youtube.com/watch?v=PrxhwOC9hLw "Tooll3 - A quick overview")
+
 
 ## Installation
 
@@ -49,6 +54,10 @@ Note: As of 2021-11-05 we no longer use submodules, so you don't have to care ab
    1. Open `t3.sln`
    2. In the Solution Explorer right click on **T3** to open the Properties panel. Under the section **Debug** change the **Working  directory** for all build modes to `..`. This is important, because the Resources folder needs to be on the same logical level as the starting directory. If this is not match you will experience errors like "t3.ico" not found.
    3. Start the project in Debug or Release mode
+
+## Get Help
+If you have questions or feedback, please join us on discord: https://discord.gg/YmSyQdeH3S
+
 
 
 
