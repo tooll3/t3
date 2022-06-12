@@ -21,6 +21,14 @@ namespace T3.Gui.Windows.Variations
             }
         }
 
+        public override string GetTitle()
+        {
+            if (VariationHandling.ActiveInstanceForPresets == null)
+                return "";
+            
+            return $"...for {VariationHandling.ActiveInstanceForPresets?.Symbol.Name}";
+        }
+
         protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForPresets;
         protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForPresets;
 

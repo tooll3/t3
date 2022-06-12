@@ -10,6 +10,7 @@ using T3.Gui.Interaction;
 using T3.Gui.Interaction.Variations.Model;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
+using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows.Exploration;
 using T3.Gui.Windows.Output;
@@ -22,6 +23,7 @@ namespace T3.Gui.Windows.Variations
     {
         public abstract Variation CreateVariation();
         public abstract void DrawToolbarFunctions();
+        public abstract string GetTitle();
 
         protected abstract Instance InstanceForBlendOperations { get; }
         protected abstract SymbolVariationPool PoolForBlendOperations { get; }
@@ -33,6 +35,43 @@ namespace T3.Gui.Windows.Variations
             if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                 DeleteSelectedElements();
 
+            RenderThumbnails();
+            UpdateCanvas();
+            HandleFenceSelection();
+
+            // Blending...
+            HandleBlendingInteraction();
+
+            _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
+
+            ImGui.PushFont(Fonts.FontLarge);
+            ImGui.SetCursorPos( new Vector2(10,35));
+            ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+            ImGui.TextUnformatted(GetTitle());
+            ImGui.PopStyleColor();
+            ImGui.PopFont();
+            
+            // Draw thumbnails...
+            var modified = false;
+            for (var index = 0; index < PoolForBlendOperations.Variations.Count; index++)
+            {
+                modified |= VariationThumbnail.Draw(this,
+                                                    PoolForBlendOperations.Variations[index],
+                                                    drawList,
+                                                    _thumbnailCanvasRendering.CanvasTextureSrv,
+                                                    GetUvRectForIndex(index));
+            }
+
+            DrawBlendingOverlay(drawList);
+
+            if (modified)
+                PoolForBlendOperations.SaveVariationsToFile();
+
+            DrawContextMenu();
+        }
+
+        private void RenderThumbnails()
+        {
             var viewNeedsRefresh = false;
 
             // Render variations to pinned output
@@ -69,148 +108,13 @@ namespace T3.Gui.Windows.Variations
                 RefreshView();
                 _instance = instance;
             }
+        }
 
-            UpdateCanvas();
-            HandleFenceSelection();
-
-            // Blending...
-            IsBlendingActive = (ImGui.IsWindowHovered() || ImGui.IsWindowFocused()) && ImGui.GetIO().KeyAlt;
-
-            var mousePos = ImGui.GetMousePos();
-            _blendPoints.Clear();
-            _blendWeights.Clear();
-            _blendVariations.Clear();
-            
+        private void DrawBlendingOverlay(ImDrawListPtr drawList)
+        {
             if (IsBlendingActive)
             {
-                foreach (var s in Selection.SelectedElements)
-                {
-                    _blendPoints.Add(GetNodeCenterOnScreen(s));
-                    _blendVariations.Add(s as Variation);
-                }
-
-                if (Selection.SelectedElements.Count == 1)
-                {
-                    var posOnScreen = TransformPosition(_blendVariations[0].PosOnCanvas);
-                    var sizeOnScreen = TransformDirection(_blendVariations[0].Size);
-                    var a = (mousePos.X - posOnScreen.X) / sizeOnScreen.X;
-                    
-                    _blendWeights.Add(a);
-                    
-                }
-                else if(Selection.SelectedElements.Count == 2)
-                {
-                    if (_blendPoints[0] == _blendPoints[1])
-                    {
-                        _blendWeights.Add(0.5f);
-                        _blendWeights.Add(0.5f);
-                        
-                    }
-                    else
-                    {
-                        var v1 = _blendPoints[1] - _blendPoints[0];
-                        var v2 = mousePos - _blendPoints[0];
-                        var lengthV1 = v1.Length();
-                        
-                        var a = Vector2.Dot(v1 / lengthV1, v2 / lengthV1);
-                        _blendWeights.Add(1-a);
-                        _blendWeights.Add(a);
-                    }
-                }
-                else if (Selection.SelectedElements.Count == 3)
-                {
-                    Barycentric(mousePos, _blendPoints[0], _blendPoints[1], _blendPoints[2], out var u, out var v, out var w);
-                    _blendWeights.Add(u);
-                    _blendWeights.Add(v);
-                    _blendWeights.Add(w);
-                }
-                else
-                {
-                    var points = new List<DelaunayVoronoi.Point>();
-
-                    Vector2 minPos = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
-                    Vector2 maxPos = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
-                    
-                    foreach (var v in PoolForBlendOperations.Variations)
-                    {
-                        var vec2 = GetNodeCenterOnScreen(v);
-                        minPos = Vector2.Min(vec2, minPos);
-                        maxPos = Vector2.Max(vec2, maxPos);
-                        points.Add(new Point(vec2.X, vec2.Y));
-                    }
-                    minPos -= Vector2.One * 100;
-                    maxPos += Vector2.One * 100;
-                    
-                    
-                    var triangulator = new DelaunayTriangulator();
-                    var borderPoints = triangulator.SetBorder(new Point(minPos.X, minPos.Y), new Point(maxPos.X, maxPos.Y));
-                    points.AddRange(borderPoints);
-                    
-                    var triangles = triangulator.BowyerWatson(points);
-                    
-                    foreach (var t in triangles)
-                    {
-                        var p0 = t.Vertices[0].ToVec2();
-                        var p1 = t.Vertices[1].ToVec2();
-                        var p2 = t.Vertices[2].ToVec2();
-                        Barycentric(mousePos, 
-                                    p0, 
-                                    p1, 
-                                    p2, 
-                                    out var u, 
-                                    out var v, 
-                                    out var w);
-
-                        var insideTriangle = u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1;
-                        if (insideTriangle)
-                        {
-                            _blendPoints.Clear();
-                            _blendWeights.Clear();
-                            _blendVariations.Clear();
-
-                            var weights = new[] { u, v, w };
-
-                            for (var vertexIndex = 0; vertexIndex < t.Vertices.Length; vertexIndex++)
-                            {
-                                var vertex = t.Vertices[vertexIndex];
-                                var variationIndex = points.IndexOf(vertex);
-                                if (variationIndex < PoolForBlendOperations.Variations.Count)
-                                {
-                                    _blendVariations.Add(PoolForBlendOperations.Variations[variationIndex]);
-                                    _blendWeights.Add(weights[vertexIndex]);
-                                    _blendPoints.Add(vertex.ToVec2());
-                                }
-                            }
-
-                            if (_blendWeights.Count == 2)
-                            {
-                                var sum = _blendWeights[0] + _blendWeights[1];
-                                _blendWeights[0] /= sum;
-                                _blendWeights[1] /= sum;
-                            }
-                            
-                            break;
-                        }
-                    }
-                }
-            }
-
-            _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
-
-            // Rendering thumbnails
-            var modified = false;
-            for (var index = 0; index < PoolForBlendOperations.Variations.Count; index++)
-            {
-                modified |= VariationThumbnail.Draw(this,
-                                                    PoolForBlendOperations.Variations[index],
-                                                    drawList,
-                                                    _thumbnailCanvasRendering.CanvasTextureSrv,
-                                                    GetUvRectForIndex(index));
-            }
-
-            // Draw blending overlay
-            if (IsBlendingActive)
-            {
+                var mousePos = ImGui.GetMousePos();
                 if (_blendPoints.Count == 1)
                 {
                     PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
@@ -227,11 +131,12 @@ namespace T3.Gui.Windows.Variations
                         drawList.AddCircleFilled(p, 5, Color.Black.Fade(0.5f));
                         drawList.AddCircleFilled(p, 3, Color.White);
                     }
+
                     drawList.AddLine(_blendPoints[0], _blendPoints[1], Color.White, 2);
                     var blendPosition = _blendPoints[0] * _blendWeights[0] + _blendPoints[1] * _blendWeights[1];
-                    
+
                     drawList.AddCircleFilled(blendPosition, 5, Color.White);
-                    
+
                     PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
 
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
@@ -258,11 +163,136 @@ namespace T3.Gui.Windows.Variations
                     }
                 }
             }
+        }
 
-            if (modified)
-                PoolForBlendOperations.SaveVariationsToFile();
+        private Vector2 HandleBlendingInteraction()
+        {
+            IsBlendingActive = (ImGui.IsWindowHovered() || ImGui.IsWindowFocused()) && ImGui.GetIO().KeyAlt;
 
-            DrawContextMenu();
+            var mousePos = ImGui.GetMousePos();
+            _blendPoints.Clear();
+            _blendWeights.Clear();
+            _blendVariations.Clear();
+
+            if (IsBlendingActive)
+            {
+                foreach (var s in Selection.SelectedElements)
+                {
+                    _blendPoints.Add(GetNodeCenterOnScreen(s));
+                    _blendVariations.Add(s as Variation);
+                }
+
+                if (Selection.SelectedElements.Count == 1)
+                {
+                    var posOnScreen = TransformPosition(_blendVariations[0].PosOnCanvas);
+                    var sizeOnScreen = TransformDirection(_blendVariations[0].Size);
+                    var a = (mousePos.X - posOnScreen.X) / sizeOnScreen.X;
+
+                    _blendWeights.Add(a);
+                }
+                else if (Selection.SelectedElements.Count == 2)
+                {
+                    if (_blendPoints[0] == _blendPoints[1])
+                    {
+                        _blendWeights.Add(0.5f);
+                        _blendWeights.Add(0.5f);
+                    }
+                    else
+                    {
+                        var v1 = _blendPoints[1] - _blendPoints[0];
+                        var v2 = mousePos - _blendPoints[0];
+                        var lengthV1 = v1.Length();
+
+                        var a = Vector2.Dot(v1 / lengthV1, v2 / lengthV1);
+                        _blendWeights.Add(1 - a);
+                        _blendWeights.Add(a);
+                    }
+                }
+                else if (Selection.SelectedElements.Count == 3)
+                {
+                    Barycentric(mousePos, _blendPoints[0], _blendPoints[1], _blendPoints[2], out var u, out var v, out var w);
+                    _blendWeights.Add(u);
+                    _blendWeights.Add(v);
+                    _blendWeights.Add(w);
+                }
+                else
+                {
+                    var points = new List<DelaunayVoronoi.Point>();
+
+                    Vector2 minPos = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
+                    Vector2 maxPos = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
+
+                    foreach (var v in PoolForBlendOperations.Variations)
+                    {
+                        var vec2 = GetNodeCenterOnScreen(v);
+                        minPos = Vector2.Min(vec2, minPos);
+                        maxPos = Vector2.Max(vec2, maxPos);
+                        points.Add(new Point(vec2.X, vec2.Y));
+                    }
+
+                    minPos -= Vector2.One * 100;
+                    maxPos += Vector2.One * 100;
+
+                    var triangulator = new DelaunayTriangulator();
+                    var borderPoints = triangulator.SetBorder(new Point(minPos.X, minPos.Y), new Point(maxPos.X, maxPos.Y));
+                    points.AddRange(borderPoints);
+
+                    var triangles = triangulator.BowyerWatson(points);
+
+                    foreach (var t in triangles)
+                    {
+                        var p0 = t.Vertices[0].ToVec2();
+                        var p1 = t.Vertices[1].ToVec2();
+                        var p2 = t.Vertices[2].ToVec2();
+                        Barycentric(mousePos,
+                                    p0,
+                                    p1,
+                                    p2,
+                                    out var u,
+                                    out var v,
+                                    out var w);
+
+                        var insideTriangle = u >= 0 && u <= 1 && v >= 0 && v <= 1 && w >= 0 && w <= 1;
+                        if (!insideTriangle)
+                            continue;
+                        
+                        _blendPoints.Clear();
+                        _blendWeights.Clear();
+                        _blendVariations.Clear();
+
+                        var weights = new[] { u, v, w };
+
+                        for (var vertexIndex = 0; vertexIndex < t.Vertices.Length; vertexIndex++)
+                        {
+                            var vertex = t.Vertices[vertexIndex];
+                            var variationIndex = points.IndexOf(vertex);
+                            if (variationIndex < PoolForBlendOperations.Variations.Count)
+                            {
+                                _blendVariations.Add(PoolForBlendOperations.Variations[variationIndex]);
+                                _blendWeights.Add(weights[vertexIndex]);
+                                _blendPoints.Add(vertex.ToVec2());
+                            }
+                        }
+
+                        if (_blendWeights.Count == 2)
+                        {
+                            var sum = _blendWeights[0] + _blendWeights[1];
+                            _blendWeights[0] /= sum;
+                            _blendWeights[1] /= sum;
+                        }
+                        else if (_blendWeights.Count == 1)
+                        {
+                            _blendWeights.Clear();
+                            _blendPoints.Clear();
+                            _blendVariations.Clear();
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            return mousePos;
         }
 
         public bool TryGetBlendWeight(Variation v, out float weight)

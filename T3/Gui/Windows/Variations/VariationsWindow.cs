@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
-using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
@@ -68,7 +67,8 @@ namespace T3.Gui.Windows.Variations
                 }
 
                 ImGui.SameLine();
-                
+                ImGui.Dummy(new Vector2(10,10));
+                ImGui.SameLine();
                 switch (_viewMode)
                 {
                     case ViewModes.Presets:

@@ -14,6 +14,8 @@ namespace T3.Gui.Windows.Variations
 {
     public class SnapshotCanvas : VariationBaseCanvas
     {
+
+
         protected override Instance InstanceForBlendOperations => VariationHandling.ActiveInstanceForSnapshots;
         protected override SymbolVariationPool PoolForBlendOperations => VariationHandling.ActivePoolForSnapshots;
 
@@ -79,6 +81,14 @@ namespace T3.Gui.Windows.Variations
                     }
                 }
             }
+        }
+        
+        public override string GetTitle()
+        {
+            if (VariationHandling.ActiveInstanceForSnapshots == null)
+                return "";
+            
+            return $"...for {VariationHandling.ActiveInstanceForSnapshots.Symbol.Name}";
         }
         
         protected override void DrawAdditionalContextMenuContent()
