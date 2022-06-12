@@ -38,7 +38,7 @@ namespace T3
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
 
-            _main.CreateRenderForm("T3", false);
+            _main.CreateRenderForm("T3 " + T3Ui.Version, false);
 
             // Create Device and SwapChain
             Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, _main.SwapChainDescription, out var device, out _main.SwapChain);

@@ -37,7 +37,7 @@ namespace T3.Gui.UiHelpers
             
             public bool FullScreen = true;
             
-            public bool ShowContentBehindGraph = true;
+            public bool ShowGraphOverContent = true;
 
             public bool SmartGroupDragging = false;
             public int WindowLayoutIndex = 0;

@@ -72,12 +72,12 @@ namespace T3.Gui.Windows
                     SaveLayout(i);
 
                 if (KeyboardBinding.Triggered(_loadLayoutActions[i]))
-                    LoadLayout(i);
+                    LoadAndApplyLayout(i);
             }
             
             if (KeyboardBinding.Triggered(UserActions.ToggleFullScreenGraph))
             {
-                UserSettings.Config.ShowContentBehindGraph = !UserSettings.Config.ShowContentBehindGraph;
+                UserSettings.Config.ShowGraphOverContent = !UserSettings.Config.ShowGraphOverContent;
                 ApplyGraphOverContentModeChange();
             }
             
@@ -104,13 +104,13 @@ namespace T3.Gui.Windows
 
             if (File.Exists(GetLayoutFilename(UserSettings.Config.WindowLayoutIndex)))
             {
-                LoadLayout(UserSettings.Config.WindowLayoutIndex);
+                LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);
             }
             
-            if (UserSettings.Config.ShowContentBehindGraph)
+            if (UserSettings.Config.ShowGraphOverContent)
             {
                 HideAllWindowBesidesMainGraph();
-                UpdateBackgroundGraphWindowPosition();
+                SetGraphWindowAsBackground();
             }
             
             _appWindowSize = ImGui.GetIO().DisplaySize;
@@ -144,7 +144,7 @@ namespace T3.Gui.Windows
                 {
                     if (ImGui.MenuItem("Layout " + (i + 1), "F" + (i + 1), false, enabled: DoesLayoutExists(i)))
                     {
-                        LoadLayout(i);
+                        LoadAndApplyLayout(i);
                     }
                 }
 
@@ -167,17 +167,16 @@ namespace T3.Gui.Windows
 
         public void ApplyGraphOverContentModeChange()
         {
-            if (UserSettings.Config.ShowContentBehindGraph)
+            if (UserSettings.Config.ShowGraphOverContent)
             {
                 HideAllWindowBesidesMainGraph();
-                UpdateBackgroundGraphWindowPosition();
+                SetGraphWindowAsBackground();
                 UserSettings.Config.FullScreen = true;
             }
             else
             {
-                UserSettings.Config.FullScreen = false;
-                LoadLayout(UserSettings.Config.WindowLayoutIndex);
-                ApplyLayout();
+                SetGraphWindowToNormal();
+                LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);
             }
         }
         
@@ -201,17 +200,24 @@ namespace T3.Gui.Windows
             }
         }
 
-        private void UpdateBackgroundGraphWindowPosition()
+        private void SetGraphWindowToNormal()
+        {
+            var graphWindow1 = GraphWindow.GetPrimaryGraphWindow();
+            if (graphWindow1 == null)
+                return;
+            graphWindow1.WindowFlags &= ~(ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize);
+            graphWindow1.ApplySizeAndPosition();            
+        }
+        
+        private void SetGraphWindowAsBackground()
         {
             var graphWindow1 = GraphWindow.GetPrimaryGraphWindow();
             if (graphWindow1 == null)
                 return;
             
-            var yPadding = UserSettings.Config.ShowContentBehindGraph ? 0 : MainMenuBarHeight;
+            var yPadding = UserSettings.Config.ShowGraphOverContent ? 0 : MainMenuBarHeight;
             var pos = GetRelativePositionFromPixel(new Vector2(0, yPadding));
             
-            // Workaround to scale prevent one pixel margin by imgui
-            //var onPixelOffset = GetRelativePositionFromPixel(new Vector2(1, 1));
             graphWindow1.Config.Position = pos;
             graphWindow1.Config.Size = new Vector2(1, 1 - pos.Y);
             
@@ -237,7 +243,7 @@ namespace T3.Gui.Windows
             UserSettings.Config.WindowLayoutIndex = index;
         }
 
-        private void LoadLayout(int index)
+        private void LoadAndApplyLayout(int index)
         {
             var filename = GetLayoutFilename(index);
             if (!File.Exists(filename))
@@ -256,8 +262,10 @@ namespace T3.Gui.Windows
                 return;
             }
 
+            UserSettings.Config.ShowGraphOverContent = false;
+            SetGraphWindowToNormal();
+            
             ApplyConfigurations(configurations);
-
             UserSettings.Config.WindowLayoutIndex = index;
         }
 
