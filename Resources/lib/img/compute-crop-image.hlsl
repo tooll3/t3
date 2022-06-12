@@ -22,14 +22,15 @@ void main(uint3 i : SV_DispatchThreadID)
     int width,height, numLevels;
     SourceImage.GetDimensions(0, width, height, numLevels);
 
-    int x = i.x - CropLeft;
-    int y = i.y - CropTop;
+    int x = i.x - int(CropLeft+0.4);
+    int y = i.y - int(CropTop+0.4);
 
-    bool outsize = x < 0 || x > width 
-                 || y < 0 || y > height;
+    bool outsize = x < 0 || x >= width 
+                 || y < 0 || y >= height;
                 
+    
     Result[i.xy] = outsize ? BackgroundColor 
-                           : SourceImage[int2(x,y)];
+                           : SourceImage[ int2(x,y)];
 
 }
 
