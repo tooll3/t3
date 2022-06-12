@@ -10,14 +10,14 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using t3.App;
+using T3.App;
 using T3.Compilation;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui;
-using t3.Gui.AutoBackup;
+using T3.Gui.AutoBackup;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
@@ -28,7 +28,7 @@ namespace T3
     {
         private static T3RenderForm _t3RenderForm;
         public static Device Device { get; private set; }
-        public static bool IsFullScreenRequested { get; set; } = false;
+        //public static bool IsFullScreenRequested { get; set; } = false;
 
         [STAThread]
         private static void Main()
@@ -38,7 +38,7 @@ namespace T3
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
 
-            _main.CreateRenderForm("T3", false);
+            _main.CreateRenderForm("T3 " + T3Ui.Version, false);
 
             // Create Device and SwapChain
             Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, _main.SwapChainDescription, out var device, out _main.SwapChain);
@@ -73,7 +73,14 @@ namespace T3
             ResourceManager resourceManager = ResourceManager.Instance();
             SharedResources.Initialize(resourceManager);
 
-            _t3ui = new T3Ui();
+            try
+            {
+                _t3ui = new T3Ui();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message + "\n" + e.StackTrace);
+            }
             
             // Setup file watching the operator source
             resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;
@@ -103,6 +110,12 @@ namespace T3
             // Main loop
             void RenderCallback()
             {
+                if (_main.Form.WindowState == FormWindowState.Minimized == true)
+                {
+                    Thread.Sleep(100);
+                    return;
+                }
+                
                 Int64 ticks = stopwatch.ElapsedTicks;
                 Int64 ticksDiff = ticks - lastElapsedTicks;
                 ImGui.GetIO().DeltaTime = (float)((double)(ticksDiff) / Stopwatch.Frequency);
@@ -199,15 +212,16 @@ namespace T3
             _deviceContext.Dispose();
             _main.SwapChain.Dispose();
             factory.Dispose();
+            Log.Debug("Shutdown complete");
         }
 
         private static void HandleFullscreenToggle()
         {
             var isBorderStyleFullScreen = _main.Form.FormBorderStyle == FormBorderStyle.None;
-            if (isBorderStyleFullScreen == IsFullScreenRequested)
+            if (isBorderStyleFullScreen == UserSettings.Config.FullScreen)
                 return;
 
-            if (IsFullScreenRequested)
+            if (UserSettings.Config.FullScreen)
             {
                 _main.Form.FormBorderStyle = FormBorderStyle.Sizable;
                 _main.Form.WindowState = FormWindowState.Normal;
@@ -224,7 +238,6 @@ namespace T3
                 formBounds.Width = formBounds.Width;
                 formBounds.Height = formBounds.Height;
                 _main.Form.Bounds = formBounds;
-
 
                 if (T3Ui.ShowSecondaryRenderWindow)
                 {

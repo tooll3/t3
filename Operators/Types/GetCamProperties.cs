@@ -1,23 +1,15 @@
 using System;
-using SharpDX;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Operators.Types.Id_a60adc26_d7c6_4615_af78_8d2d6da46b79;
+using T3.Operators.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e
 {
-
-    public interface ICameraPropertiesProvider
-    {
-        public Matrix CameraToClipSpace { get;  set; }
-        public Matrix WorldToCamera { get; set; }
-        public Matrix LastObjectToWorld { get; set; }
-    }
-    
     public class GetCamProperties : Instance<GetCamProperties>
     {
         [Output(Guid = "FB108D2D-04B0-427D-888D-79EB7EBF1E96", DirtyFlagTrigger = DirtyFlagTrigger.Always)]

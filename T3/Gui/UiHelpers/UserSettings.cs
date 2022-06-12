@@ -28,29 +28,39 @@ namespace T3.Gui.UiHelpers
             public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.Live;
 
             public bool AudioMuted;
+            
             public bool ShowThumbnails = true;
+            public bool ShowMainMenu = true;
+            public bool ShowTitleAndDescription = true;
+            public bool ShowToolbar = true;
+            public bool ShowTimeline = true;
+            
+            public bool FullScreen = true;
+            
+            public bool ShowGraphOverContent = true;
+
             public bool SmartGroupDragging = false;
             public int WindowLayoutIndex = 0;
-            public bool KeepBeatTimeRunningInPause = true;
+            public bool EnableIdleMotion = true;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = true;
             public float SnapStrength = 5;
             public bool UseJogDialControl = false;
             public float ScrollSmoothing = 0.06f;
             public float TooltipDelay = 1.2f;
-            public bool HideUiElementsInGraphWindow = false;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
             public float GizmoSize = 100;
             public bool AutoSaveAfterSymbolCreation = true;
             public bool EnableAutoBackup = true;
             public bool SaveOnlyModified = false;
             public bool SwapMainAnd2ndWindowsWhenFullscreen = true;
+            public bool PresetsResetToDefaultValues = true;
 
             public float TimeRasterDensity = 1f;
             public bool CountBarsFromZero = true; 
 
             [JsonConverter(typeof(StringEnumConverter))]
-            public Playback.TimeDisplayModes TimeDisplayMode = Playback.TimeDisplayModes.Bars;
+            public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
             public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new List<GraphBookmarkNavigation.Bookmark>();
         }

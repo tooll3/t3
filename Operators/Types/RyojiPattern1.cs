@@ -60,6 +60,9 @@ namespace T3.Operators.Types.Id_3ee3597d_dbf1_43a2_89d9_2f7b099112c7
 
         [Input(Guid = "dc471f4a-167c-4283-b4fc-55a2e453316e")]
         public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+
+        [Input(Guid = "9c7227b6-e13e-4895-bbd3-8b92463cdecf")]
+        public readonly InputSlot<bool> GenerateMipmaps = new InputSlot<bool>();
     }
 }
 

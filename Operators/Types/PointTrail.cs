@@ -22,6 +22,9 @@ namespace T3.Operators.Types.Id_25db2a97_38b2_4503_8842_fab3922d7a6c
 
         [Input(Guid = "63621a98-874b-4d1a-9724-f4fa70b8ccf1")]
         public readonly InputSlot<bool> Reset = new InputSlot<bool>();
+
+        [Input(Guid = "56eac471-ad48-41ec-b617-cbcb67646c97")]
+        public readonly InputSlot<float> AddSeperatorThreshold = new InputSlot<float>();
     }
 }
 

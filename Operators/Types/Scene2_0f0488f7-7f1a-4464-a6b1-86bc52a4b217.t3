@@ -1,7 +1,7 @@
 {
   "Name": "Scene2",
   "Id": "0f0488f7-7f1a-4464-a6b1-86bc52a4b217",
-  "Namespace": "project.partial.research",
+  "Namespace": "user.still.there.research",
   "Inputs": [],
   "Children": [
     {

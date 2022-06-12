@@ -3,7 +3,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
-using t3.Gui.Graph;
+using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;

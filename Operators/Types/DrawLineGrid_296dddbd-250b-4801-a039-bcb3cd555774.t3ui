@@ -8,6 +8,23 @@
         "X": -344.79285,
         "Y": 204.38275
       }
+    },
+    {
+      "InputId": "0480e529-b790-4c6f-a993-2efdbfda35e4"/*Color*/,
+      "Position": {
+        "X": -344.79285,
+        "Y": 249.38275
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "a4ea3140-3397-4989-98ee-3cf02d11f242"/*Size*/,
+      "Position": {
+        "X": -344.79285,
+        "Y": 294.38275
+      }
     }
   ],
   "SymbolChildUis": [
@@ -48,7 +65,7 @@
       "ChildId": "f40a2e1f-f213-4a21-bde3-5241103cb075"/*DrawLines*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 62.0
       },
       "Position": {
         "X": 111.79477,

@@ -84,7 +84,7 @@
         {
           "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
           "Type": "System.Single",
-          "Value": 0.03
+          "Value": 0.0108
         }
       ],
       "Outputs": []

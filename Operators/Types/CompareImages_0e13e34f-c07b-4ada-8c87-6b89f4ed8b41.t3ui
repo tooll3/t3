@@ -1,0 +1,156 @@
+{
+  "Id": "0e13e34f-c07b-4ada-8c87-6b89f4ed8b41"/*CompareImages*/,
+  "Description": "A simple helper to verify an image effect before and after. \nIt show",
+  "InputUis": [
+    {
+      "InputId": "78c3486a-3a82-4e61-81fd-3da904fd7aed"/*Texture2d2*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -1086.1727,
+        "Y": -73.2712
+      }
+    },
+    {
+      "InputId": "5537a990-0d27-4e91-912e-8f913a734722"/*Texture2d*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -1086.1727,
+        "Y": -28.271202
+      }
+    },
+    {
+      "InputId": "f46ed94a-7eb2-44d6-9cbb-f8eab586f7c5"/*Rotate*/,
+      "Position": {
+        "X": -704.83606,
+        "Y": 404.13895
+      }
+    },
+    {
+      "InputId": "beada8f0-cece-4526-aa29-3546bebd276a"/*Center*/,
+      "Position": {
+        "X": -704.83606,
+        "Y": 449.13895
+      }
+    },
+    {
+      "InputId": "99171ae6-fb07-4121-bf23-e97f30b33be5"/*IntensityRange*/,
+      "Position": {
+        "X": -704.83606,
+        "Y": 494.13895
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "cb1a1a5f-7f73-4ea7-a41b-05b940d6efdd"/*BlendWithMask*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 543.1086,
+        "Y": -184.26198
+      }
+    },
+    {
+      "ChildId": "d913c37f-f329-45d0-bc0a-2d608b2407ec"/*LinearGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 396.9453,
+        "Y": 233.0386
+      }
+    },
+    {
+      "ChildId": "6e8977c1-a074-43d3-bf04-03b0e652ea7d"/*ImageLevels*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 212.78096,
+        "Y": -218.79279
+      }
+    },
+    {
+      "ChildId": "5ace9239-b6e9-4af5-bc3d-ce792e60a42a"/*ImageLevels*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 211.52359,
+        "Y": 40.612865
+      }
+    },
+    {
+      "ChildId": "64bb700f-e972-417c-aacc-e7aea17960cb"/*Add*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 62.78096,
+        "Y": -218.79279
+      }
+    },
+    {
+      "ChildId": "79b457fa-dabc-4c87-9151-9a0f679d7b95"/*ScaleVector2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -253.51266,
+        "Y": 641.2245
+      }
+    },
+    {
+      "ChildId": "2a350f7f-e7f5-49c3-a958-fd23bd3d6f03"/*LinearGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 722.82794,
+        "Y": 148.27399
+      }
+    },
+    {
+      "ChildId": "fddecb5e-8ffb-4f99-95d9-07335a9aa4e7"/*WaveForm*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 787.0037,
+        "Y": 467.65067
+      }
+    },
+    {
+      "ChildId": "9adef827-09cc-4193-8e22-e999dcfcfeb6"/*ExecuteTextureUpdate*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 835.9145,
+        "Y": -440.55975
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "2d59fec4-af4e-4db2-bc11-3685f31e9de5"/*TextureOutput*/,
+      "Position": {
+        "X": 1245.9105,
+        "Y": -153.24353
+      }
+    }
+  ]
+}

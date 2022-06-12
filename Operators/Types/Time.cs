@@ -23,8 +23,8 @@ namespace T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72
 
         private void Update(EvaluationContext context)
         {
-            var contextTimeForKeyframes = (float)context.TimeForKeyframes;
-            var contextTimeForEffects = (float)context.TimeForEffects;
+            var contextTimeForKeyframes = (float)context.LocalTime;
+            var contextTimeForEffects = (float)context.LocalFxTime;
 
             float time = 0;
 
@@ -37,14 +37,14 @@ namespace T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72
                     time = contextTimeForKeyframes;
                     break;
                 case Modes.KeyframeTimeInSecs:
-                    time = contextTimeForKeyframes * 240 / (float)EvaluationContext.BPM;
+                    time = contextTimeForKeyframes * 240 / (float)context.Playback.Bpm;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
             
             TimeInBars.Value = time * SpeedFactor.GetValue(context);
-            TimeInSecs.Value = (float)EvaluationContext.GlobalTimeInSecs * SpeedFactor.GetValue(context);
+            TimeInSecs.Value = (float)context.Playback.TimeInSecs * SpeedFactor.GetValue(context);
         }
 
 

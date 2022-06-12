@@ -24,7 +24,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-partial\\particle\\slice-mesh.hlsl"
+          "Value": "Resources\\user\\still\\proj-there\\particle\\slice-mesh.hlsl"
         }
       ],
       "Outputs": []
@@ -98,7 +98,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-partial\\particle\\calc-mesh-cdf.hlsl"
+          "Value": "Resources\\user\\still\\proj-there\\particle\\calc-mesh-cdf.hlsl"
         }
       ],
       "Outputs": []

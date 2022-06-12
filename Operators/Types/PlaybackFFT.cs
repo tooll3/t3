@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Core.Audio;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -23,7 +24,7 @@ namespace T3.Operators.Types.Id_cda108a1_db4f_4a0a_ae4d_d50e9aade467
             if (!IsEnabled.GetValue(context))
                 return;
             
-            Result.Value = StreamPlayback.FftBuffer.ToList();
+            Result.Value = AudioEngine.FftBuffer.ToList();
         }
         
         [Input(Guid = "6888315D-EF77-4814-87E9-91528D600C72")]

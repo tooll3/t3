@@ -12,6 +12,7 @@
     },
     {
       "InputId": "5599a8ac-0686-4fa8-806c-52a44f910f11"/*Texture*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0

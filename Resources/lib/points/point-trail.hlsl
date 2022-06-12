@@ -4,18 +4,17 @@ cbuffer Params : register(b0)
 {
     float TrailLength;
     float CycleIndex;
-    float HasPointCountChanged;
+    float AddSeparatorThreshold;
 }
 
 StructuredBuffer<Point> SourcePoints : t0;         // input
-RWStructuredBuffer<Point> TrailPoints : u0;    // output
+RWStructuredBuffer<Point> TrailPoints : u0;        // output
 
 
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-    //uint pointCount = (uint)(PointCount + 0.5);
     uint pointCount, stride;
     SourcePoints.GetDimensions(pointCount, stride);
 
@@ -30,7 +29,13 @@ void main(uint3 i : SV_DispatchThreadID)
 
     TrailPoints[targetIndex] = SourcePoints[sourceIndex];
 
-    //float3 lastPos = TrailPoints[(targetIndex-1) % bufferLength ].position;
+    float3 lastPos = TrailPoints[(targetIndex-1) % bufferLength ].position;
+    float3 pos = SourcePoints[sourceIndex].position;
+    if(AddSeparatorThreshold > 0) {
+        if( length(lastPos - pos) > 0.5) 
+            TrailPoints[targetIndex].w = sqrt(-1);
+    }
+
     //TrailPoints[targetIndex].rotation = normalize(q_look_at(SourcePoints[sourceIndex].position, lastPos));
 
     //Point p = SourcePoints[i.x];
@@ -39,9 +44,9 @@ void main(uint3 i : SV_DispatchThreadID)
     // Flag follow position W as NaN line seperator
     TrailPoints[(targetIndex + 1) % bufferLength].w = sqrt(-1);
 
-    // Flag too small w as separator
-    if(TrailPoints[targetIndex].w < 0.001 ) 
-    {
-        TrailPoints[targetIndex].w = sqrt(-1);
-    }
+    // // Flag too small w as separator
+    // if(TrailPoints[targetIndex].w < 0.001 ) 
+    // {
+    //     TrailPoints[targetIndex].w = sqrt(-1);
+    // }
 }

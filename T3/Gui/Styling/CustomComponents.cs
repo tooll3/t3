@@ -267,7 +267,7 @@ namespace T3.Gui
 
         public static void FillWithStripes(ImDrawListPtr drawList, ImRect areaOnScreen, float patternWidth = 16)
         {
-            drawList.PushClipRect(areaOnScreen.Min, areaOnScreen.Max);
+            drawList.PushClipRect(areaOnScreen.Min, areaOnScreen.Max, true);
             var lineColor = new Color(0f, 0f, 0f, 0.2f);
             var stripeOffset = GraphCanvas.Current == null ? patternWidth : (patternWidth / 2 * GraphCanvas.Current.Scale.X);
             var lineWidth = stripeOffset / 2.7f;
@@ -439,6 +439,36 @@ namespace T3.Gui
         }
 
         private static double _hoverStartTime;
+
+        public static bool DrawSegmentedToggle(ref int currentIndex, List<string> options)
+        {
+            var changed = false;
+            for (var index = 0; index < options.Count; index++)
+            {
+                var isActive = currentIndex == index;
+                var option = options[index];
+
+                ImGui.SameLine(0);
+                ImGui.PushFont(isActive ? Fonts.FontBold : Fonts.FontNormal);
+                ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.White.Fade(0.1f).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, isActive ? Color.White : Color.White.Fade(0.5f).Rgba);
+
+                if (ImGui.Button(option))
+                {
+                    if (!isActive)
+                    {
+                        currentIndex = index;
+                        changed = true;
+                    }
+                }
+
+                ImGui.PopFont();
+                ImGui.PopStyleColor(3);
+            }
+
+            return changed;
+        }
     }
 
     public static class InputWithTypeAheadSearch

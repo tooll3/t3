@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -53,8 +54,8 @@ namespace T3.Operators.Types.Id_b0453fd5_e9c5_481a_aa6b_0040bd5c1318
             RestCarbon.UpdateAction = Update;
         }
 
-        private static double RunTime => EvaluationContext.RunTimeInSecs;
-
+        private static double RunTime => Playback.RunTimeInSecs;
+        
         private void Update(EvaluationContext context)
         {
             _renewPower = RenewPower.GetValue(context);

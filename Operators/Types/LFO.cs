@@ -1,6 +1,5 @@
 using System;
 using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -10,7 +9,7 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
     public class LFO : Instance<LFO>
     {
         [Output(Guid = "c47e8843-6e8d-4eaf-a554-874b3af9ee63", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
         public LFO()
         {
@@ -22,7 +21,7 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
             _phase = Phase.GetValue(context);
             _bias = Bias.GetValue(context);
             _shape = (Shapes)Shape.GetValue(context);
-            _ratio = Ratio.GetValue(context);
+            _ratio = Ratio.GetValue(context); 
             var f = (SpeedFactors)AllowSpeedFactor.GetValue(context);
             switch (f)
             {
@@ -48,7 +47,7 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
 
             var time = OverrideTime.IsConnected
                            ? OverrideTime.GetValue(context)
-                           : context.TimeForEffects;
+                           : context.LocalFxTime;
             
             var rate = Rate.GetValue(context);
 
@@ -107,6 +106,16 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
             ZigZag = 4,
         }
 
+        public enum SpeedFactors {
+            None,
+            FactorA,
+            FactorB,
+        }
+        
+        public const string SpeedFactorA = "SpeedFactorA";
+        public const string SpeedFactorB = "SpeedFactorB";
+        
+        
         [Input(Guid = "4C38C34C-D992-47F1-BCB5-9BD13FC6474B", MappedType = typeof(Shapes))]
         public readonly InputSlot<int> Shape = new InputSlot<int>();
 
@@ -134,13 +143,6 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
         [Input(Guid = "6ca8a8b2-f252-4687-805e-fb7a86a16567", MappedType = typeof(SpeedFactors))]
         public readonly InputSlot<int> AllowSpeedFactor = new InputSlot<int>();
 
-        public enum SpeedFactors {
-            None,
-            FactorA,
-            FactorB,
-        }
-        
-        public const string SpeedFactorA = "SpeedFactorA";
-        public const string SpeedFactorB = "SpeedFactorB";
+
     }
 }

@@ -1,7 +1,7 @@
 {
   "Name": "RevRibbons",
   "Id": "e7821087-ec80-4c1c-907a-e3506dd345b3",
-  "Namespace": "user.pixtur.revision2021",
+  "Namespace": "user.wake.revision2021",
   "Inputs": [],
   "Children": [
     {
@@ -994,6 +994,11 @@
       "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
       "InputValues": [
         {
+          "Id": "16231de9-2e85-4a9a-a2d1-99dfac18a0f6"/*PreSaturate*/,
+          "Type": "System.Single",
+          "Value": 1.46
+        },
+        {
           "Id": "4dc44a7b-fe7c-4807-aaaa-53fb553de017"/*Gain*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -1022,11 +1027,6 @@
             "Z": 0.5435963,
             "W": 0.45697838
           }
-        },
-        {
-          "Id": "16231de9-2e85-4a9a-a2d1-99dfac18a0f6"/*PreSaturate*/,
-          "Type": "System.Single",
-          "Value": 1.46
         }
       ],
       "Outputs": []
@@ -1123,7 +1123,7 @@
         {
           "Id": "24b7e7e1-fe0b-46be-807e-0afacd4800f9"/*Filepath*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\Revision2021-Wake\\texts\\demogroups.txt"
+          "Value": "Resources\\user\\wake\\Revision2021-Wake\\texts\\demogroups.txt"
         }
       ],
       "Outputs": []

@@ -84,6 +84,7 @@ namespace T3.Gui
         SaveBookmark8,
         SaveBookmark9,
         ToggleFullScreenGraph,
+        ToggleFocusMode,
         AddAnnotation,
     }
 
@@ -220,7 +221,7 @@ namespace T3.Gui
                       new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.ToggleDisabled, new KeyCombination(Key.D)) { NeedsWindowFocus = true },
                       new KeyboardBinding(UserActions.PinToOutputWindow, new KeyCombination(Key.P)) { NeedsWindowFocus = true },
-                      new KeyboardBinding(UserActions.DisplayImageAsBackground, new KeyCombination(Key.P, ctrl:true)) { NeedsWindowFocus = true },
+                      new KeyboardBinding(UserActions.DisplayImageAsBackground, new KeyCombination(Key.P, ctrl:true)) { NeedsWindowFocus = false },
                       new KeyboardBinding(UserActions.ClearBackgroundImage, new KeyCombination(Key.P, ctrl:true, shift: true)) { NeedsWindowFocus = true },
 
                       new KeyboardBinding(UserActions.LoadBookmark1, new KeyCombination(Key.D1, ctrl: true)),
@@ -269,6 +270,7 @@ namespace T3.Gui
 
                       new KeyboardBinding(UserActions.LayoutSelection, new KeyCombination(Key.G)),
                       new KeyboardBinding(UserActions.ToggleFullScreenGraph, new KeyCombination(Key.F11, ctrl: true)),
+                      new KeyboardBinding(UserActions.ToggleFocusMode, new KeyCombination(Key.Esc, shift: true)),
                       new KeyboardBinding(UserActions.AddAnnotation, new KeyCombination(Key.A)){ NeedsWindowFocus = true },
                   };
 

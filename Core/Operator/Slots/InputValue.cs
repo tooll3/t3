@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
-using T3.Core.Animation;
+using Core.Resource;
 using T3.Core.DataTypes;
 
 namespace T3.Core.Operator
@@ -16,6 +16,7 @@ namespace T3.Core.Operator
         public abstract bool IsEditableInputReferenceType { get; }
         public abstract void ToJson(JsonTextWriter writer);
         public abstract void SetValueFromJson(JToken json);
+        
     }
 
     public class InputValue<T> : InputValue
@@ -88,6 +89,18 @@ namespace T3.Core.Operator
             }
         }
 
+        public override string ToString()
+        {
+            if (ValueUtils.ToStringMethods.TryGetValue(ValueType, out var fn))
+            {
+                return fn(this);
+            }
+
+            return Value.ToString();
+        }
+        
         public T Value;
+
+
     }
 }

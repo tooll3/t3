@@ -14,35 +14,46 @@
         "X": -673.6466,
         "Y": -4.818144
       },
-      "Scale": 0.1
+      "Min": 0.0,
+      "Max": 3.0,
+      "Scale": 0.01
     },
     {
       "InputId": "353ac2ee-aed3-4614-adf5-e1328768fd0b"/*Samples*/,
       "Position": {
         "X": -673.6466,
         "Y": 40.181854
-      }
+      },
+      "Min": 1.0,
+      "Max": 64.0
     },
     {
       "InputId": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
       "Position": {
         "X": -673.6466,
         "Y": 85.181854
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Scale": 0.01
     },
     {
       "InputId": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,
       "Position": {
         "X": -673.6466,
         "Y": 130.18185
-      }
+      },
+      "Min": -1.0,
+      "Max": 1.0
     },
     {
       "InputId": "7f6dba80-bf4e-4e55-bd9a-ac1e2a077898"/*Color*/,
       "Position": {
         "X": -673.6466,
         "Y": 175.18185
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0
     }
   ],
   "SymbolChildUis": [

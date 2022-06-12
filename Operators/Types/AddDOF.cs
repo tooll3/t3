@@ -26,6 +26,9 @@ namespace T3.Operators.Types.Id_53d3eebd_4ead_4965_b26d_10a8bbd48182
         [Input(Guid = "1592e94b-a20d-463c-baec-5fb5dfa85532")]
         public readonly InputSlot<System.Numerics.Vector4> BackgroundColor = new InputSlot<System.Numerics.Vector4>();
 
+        [Input(Guid = "493c40f0-21e6-466b-afc2-eff570229c86")]
+        public readonly InputSlot<int> MaxSamples = new InputSlot<int>();
+
     }
 }
 

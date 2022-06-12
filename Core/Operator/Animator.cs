@@ -92,7 +92,7 @@ namespace T3.Core.Operator
             if (inputSlot is Slot<float> floatInputSlot)
             {
                 var newCurve = new Curve();
-                newCurve.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurve.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                               {
                                                                                   Value = floatInputSlot.Value,
                                                                                   InType = VDefinition.Interpolation.Spline,
@@ -100,13 +100,13 @@ namespace T3.Core.Operator
                                                                               });
                 _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
 
-                floatInputSlot.UpdateAction = context => { floatInputSlot.Value = (float)newCurve.GetSampledValue(context.TimeForKeyframes); };
+                floatInputSlot.UpdateAction = context => { floatInputSlot.Value = (float)newCurve.GetSampledValue(context.LocalTime); };
                 floatInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<Vector2> vector2InputSlot)
             {
                 var newCurveX = new Curve();
-                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurveX.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
                                                                                    Value = vector2InputSlot.Value.X,
                                                                                    InType = VDefinition.Interpolation.Spline,
@@ -115,7 +115,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
 
                 var newCurveY = new Curve();
-                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurveY.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
                                                                                    Value = vector2InputSlot.Value.Y,
                                                                                    InType = VDefinition.Interpolation.Spline,
@@ -125,15 +125,15 @@ namespace T3.Core.Operator
 
                 vector2InputSlot.UpdateAction = context =>
                                                 {
-                                                    vector2InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.TimeForKeyframes);
-                                                    vector2InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.TimeForKeyframes);
+                                                    vector2InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.LocalTime);
+                                                    vector2InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.LocalTime);
                                                 };
                 vector2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<Vector3> vector3InputSlot)
             {
                 var newCurveX = new Curve();
-                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurveX.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
                                                                                    Value = vector3InputSlot.Value.X,
                                                                                    InType = VDefinition.Interpolation.Spline,
@@ -142,7 +142,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
 
                 var newCurveY = new Curve();
-                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurveY.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
                                                                                    Value = vector3InputSlot.Value.Y,
                                                                                    InType = VDefinition.Interpolation.Spline,
@@ -151,7 +151,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
 
                 var newCurveZ = new Curve();
-                newCurveZ.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurveZ.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
                                                                                    Value = vector3InputSlot.Value.Z,
                                                                                    InType = VDefinition.Interpolation.Spline,
@@ -161,16 +161,16 @@ namespace T3.Core.Operator
 
                 vector3InputSlot.UpdateAction = context =>
                                                 {
-                                                    vector3InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.TimeForKeyframes);
-                                                    vector3InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.TimeForKeyframes);
-                                                    vector3InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.TimeForKeyframes);
+                                                    vector3InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.LocalTime);
+                                                    vector3InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.LocalTime);
+                                                    vector3InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.LocalTime);
                                                 };
                 vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<Vector4> vector4InputSlot)
             {
                 var newCurveX = new Curve();
-                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurveX.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
                                                                                    Value = vector4InputSlot.Value.X,
                                                                                    InType = VDefinition.Interpolation.Spline,
@@ -179,7 +179,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
 
                 var newCurveY = new Curve();
-                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurveY.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
                                                                                    Value = vector4InputSlot.Value.Y,
                                                                                    InType = VDefinition.Interpolation.Spline,
@@ -188,7 +188,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
 
                 var newCurveZ = new Curve();
-                newCurveZ.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurveZ.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
                                                                                    Value = vector4InputSlot.Value.Z,
                                                                                    InType = VDefinition.Interpolation.Spline,
@@ -197,7 +197,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 2), newCurveZ);
 
                 var newCurveW = new Curve();
-                newCurveW.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurveW.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
                                                                                    Value = vector4InputSlot.Value.W,
                                                                                    InType = VDefinition.Interpolation.Spline,
@@ -207,17 +207,17 @@ namespace T3.Core.Operator
 
                 vector4InputSlot.UpdateAction = context =>
                                                 {
-                                                    vector4InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.TimeForKeyframes);
-                                                    vector4InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.TimeForKeyframes);
-                                                    vector4InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.TimeForKeyframes);
-                                                    vector4InputSlot.Value.W = (float)newCurveW.GetSampledValue(context.TimeForKeyframes);
+                                                    vector4InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.LocalTime);
+                                                    vector4InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.LocalTime);
+                                                    vector4InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.LocalTime);
+                                                    vector4InputSlot.Value.W = (float)newCurveW.GetSampledValue(context.LocalTime);
                                                 };
                 vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<int> intInputSlot)
             {
                 var newCurve = new Curve();
-                newCurve.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurve.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                               {
                                                                                   Value = intInputSlot.Value,
                                                                                   InType = VDefinition.Interpolation.Constant,
@@ -227,13 +227,13 @@ namespace T3.Core.Operator
                                                                               });
                 _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
 
-                intInputSlot.UpdateAction = context => { intInputSlot.Value = (int)newCurve.GetSampledValue(context.TimeForKeyframes); };
+                intInputSlot.UpdateAction = context => { intInputSlot.Value = (int)newCurve.GetSampledValue(context.LocalTime); };
                 intInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<Size2> size2InputSlot)
             {
                 var newCurveX = new Curve();
-                newCurveX.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurveX.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
                                                                                    Value = size2InputSlot.Value.Width,
                                                                                    InType = VDefinition.Interpolation.Constant,
@@ -244,7 +244,7 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
 
                 var newCurveY = new Curve();
-                newCurveY.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurveY.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
                                                                                    Value = size2InputSlot.Value.Height,
                                                                                    InType = VDefinition.Interpolation.Constant,
@@ -256,15 +256,15 @@ namespace T3.Core.Operator
 
                 size2InputSlot.UpdateAction = context =>
                                                 {
-                                                    size2InputSlot.Value.Width = (int)newCurveX.GetSampledValue(context.TimeForKeyframes);
-                                                    size2InputSlot.Value.Height = (int)newCurveY.GetSampledValue(context.TimeForKeyframes);
+                                                    size2InputSlot.Value.Width = (int)newCurveX.GetSampledValue(context.LocalTime);
+                                                    size2InputSlot.Value.Height = (int)newCurveY.GetSampledValue(context.LocalTime);
                                                 };
                 size2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<bool> boolInputSlot)
             {
                 var newCurve = new Curve();
-                newCurve.AddOrUpdateV(EvaluationContext.GlobalTimeForKeyframes, new VDefinition()
+                newCurve.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                               {
                                                                                   Value = boolInputSlot.Value ? 1 :0,
                                                                                   InType = VDefinition.Interpolation.Constant,
@@ -274,7 +274,7 @@ namespace T3.Core.Operator
                                                                               });
                 _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
 
-                boolInputSlot.UpdateAction = context => { boolInputSlot.Value = newCurve.GetSampledValue(context.TimeForKeyframes) > 0.5f; };
+                boolInputSlot.UpdateAction = context => { boolInputSlot.Value = newCurve.GetSampledValue(context.LocalTime) > 0.5f; };
                 boolInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else
@@ -286,15 +286,15 @@ namespace T3.Core.Operator
         internal void CreateUpdateActionsForExistingCurves(IEnumerable<Instance> childInstances)
         {
             // gather all inputs that correspond to stored ids
-            var relevantInputs = from curveEntry in _animatedInputCurves
+            var relevantInputs = (from curveEntry in OrderedAnimationCurves
                                  from childInstance in childInstances
                                  where curveEntry.Key.SymbolChildId == childInstance.SymbolChildId
                                  from inputSlot in childInstance.Inputs
                                  where curveEntry.Key.InputId == inputSlot.Id
-                                 group (inputSlot, curveEntry.Value) by (Id: childInstance.SymbolChildId, inputSlot.Id)
+                                 group (inputSlot, curveEntry.Value) by (Id: childInstance.SymbolChildId, inputSlot.Id, childInstance)
                                  into inputGroup
-                                 select inputGroup;
-
+                                 select inputGroup).ToArray();
+            
             foreach (var groupEntry in relevantInputs)
             {
                 var count = groupEntry.Count();
@@ -303,17 +303,17 @@ namespace T3.Core.Operator
                     var (inputSlot, curve) = groupEntry.First();
                     if (inputSlot is Slot<float> typedInputSlot)
                     {
-                        typedInputSlot.UpdateAction = context => { typedInputSlot.Value = (float)curve.GetSampledValue(context.TimeForKeyframes); };
+                        typedInputSlot.UpdateAction = context => { typedInputSlot.Value = (float)curve.GetSampledValue(context.LocalTime); };
                         typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                     else if (inputSlot is Slot<int> intSlot)
                     {
-                        intSlot.UpdateAction = context => { intSlot.Value = (int)curve.GetSampledValue(context.TimeForKeyframes); };
+                        intSlot.UpdateAction = context => { intSlot.Value = (int)curve.GetSampledValue(context.LocalTime); };
                         intSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                     else if (inputSlot is Slot<bool> boolSlot)
                     {
-                        boolSlot.UpdateAction = context => { boolSlot.Value = curve.GetSampledValue(context.TimeForKeyframes) > 0.5f; };
+                        boolSlot.UpdateAction = context => { boolSlot.Value = curve.GetSampledValue(context.LocalTime) > 0.5f; };
                         boolSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                 }
@@ -325,8 +325,8 @@ namespace T3.Core.Operator
                     {
                         vector2InputSlot.UpdateAction = context =>
                                                         {
-                                                            vector2InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.TimeForKeyframes);
-                                                            vector2InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.TimeForKeyframes);
+                                                            vector2InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.LocalTime);
+                                                            vector2InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.LocalTime);
                                                         };
                         vector2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
@@ -334,8 +334,8 @@ namespace T3.Core.Operator
                     {
                         size2InputSlot.UpdateAction = context =>
                                                         {
-                                                            size2InputSlot.Value.Width = (int)entries[0].Value.GetSampledValue(context.TimeForKeyframes);
-                                                            size2InputSlot.Value.Height = (int)entries[1].Value.GetSampledValue(context.TimeForKeyframes);
+                                                            size2InputSlot.Value.Width = (int)entries[0].Value.GetSampledValue(context.LocalTime);
+                                                            size2InputSlot.Value.Height = (int)entries[1].Value.GetSampledValue(context.LocalTime);
                                                         };
                         size2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
@@ -348,9 +348,9 @@ namespace T3.Core.Operator
                     {
                         vector3InputSlot.UpdateAction = context =>
                                                         {
-                                                            vector3InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.TimeForKeyframes);
-                                                            vector3InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.TimeForKeyframes);
-                                                            vector3InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.TimeForKeyframes);
+                                                            vector3InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.LocalTime);
+                                                            vector3InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.LocalTime);
+                                                            vector3InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.LocalTime);
                                                         };
                         vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
@@ -358,9 +358,9 @@ namespace T3.Core.Operator
                     {
                         int3InputSlot.UpdateAction = context =>
                                                         {
-                                                            int3InputSlot.Value.X = (int)entries[0].Value.GetSampledValue(context.TimeForKeyframes);
-                                                            int3InputSlot.Value.Y = (int)entries[1].Value.GetSampledValue(context.TimeForKeyframes);
-                                                            int3InputSlot.Value.Z = (int)entries[2].Value.GetSampledValue(context.TimeForKeyframes);
+                                                            int3InputSlot.Value.X = (int)entries[0].Value.GetSampledValue(context.LocalTime);
+                                                            int3InputSlot.Value.Y = (int)entries[1].Value.GetSampledValue(context.LocalTime);
+                                                            int3InputSlot.Value.Z = (int)entries[2].Value.GetSampledValue(context.LocalTime);
                                                         };
                         int3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
@@ -373,10 +373,10 @@ namespace T3.Core.Operator
                     {
                         vector4InputSlot.UpdateAction = context =>
                                                         {
-                                                            vector4InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.TimeForKeyframes);
-                                                            vector4InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.TimeForKeyframes);
-                                                            vector4InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.TimeForKeyframes);
-                                                            vector4InputSlot.Value.W = (float)entries[3].Value.GetSampledValue(context.TimeForKeyframes);
+                                                            vector4InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.LocalTime);
+                                                            vector4InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.LocalTime);
+                                                            vector4InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.LocalTime);
+                                                            vector4InputSlot.Value.W = (float)entries[3].Value.GetSampledValue(context.LocalTime);
                                                         };
                         vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
@@ -385,6 +385,18 @@ namespace T3.Core.Operator
                 {
                     Debug.Assert(false);
                 }
+            }
+        }
+
+        private IOrderedEnumerable<KeyValuePair<CurveId, Curve>> OrderedAnimationCurves
+        {
+            get
+            {
+                var orderedCurves = _animatedInputCurves
+                                   .OrderBy(valuePair => valuePair.Key.SymbolChildId)
+                                   .ThenBy(valuePair => valuePair.Key.InputId)
+                                   .ThenBy(valuePair => valuePair.Key.Index);
+                return orderedCurves;
             }
         }
 
@@ -446,6 +458,43 @@ namespace T3.Core.Operator
                    select curve.Value;
         }
 
+        public IEnumerable<VDefinition> GetTimeKeys(Guid symbolChildId, Guid inputId, double time)
+        {
+            var curves = from curve in _animatedInputCurves
+                   where curve.Key.SymbolChildId == symbolChildId
+                   where curve.Key.InputId == inputId
+                   orderby curve.Key.Index
+                   select curve.Value;
+            
+            foreach (var curve in curves)
+            {
+                yield return curve.GetV(time);
+            }
+        }
+
+        public void SetTimeKeys(Guid symbolChildId, Guid inputId, double time, List<VDefinition> vDefinitions)
+        {
+            var curves = from curve in _animatedInputCurves
+                         where curve.Key.SymbolChildId == symbolChildId
+                         where curve.Key.InputId == inputId
+                         orderby curve.Key.Index
+                         select curve.Value;
+
+            var index = 0;
+            foreach (var curve in curves)
+            {
+                var vDef = vDefinitions[index++];
+                if (vDef == null)
+                {
+                    curve.RemoveKeyframeAt(time);
+                }
+                else
+                {
+                    curve.AddOrUpdateV(time, vDef);
+                }
+            }
+        }
+        
         public void Write(JsonTextWriter writer)
         {
             if (_animatedInputCurves.Count == 0)
@@ -454,18 +503,18 @@ namespace T3.Core.Operator
             writer.WritePropertyName("Animator");
             writer.WriteStartArray();
 
-            foreach (var entry in _animatedInputCurves)
+            foreach (var (key, curve) in _animatedInputCurves.ToList().OrderBy(valuePair => valuePair.Key.Index))
             {
                 writer.WriteStartObject();
 
-                writer.WriteValue("InstanceId", entry.Key.SymbolChildId);
-                writer.WriteValue("InputId", entry.Key.InputId);
-                if (entry.Key.Index != 0)
+                writer.WriteValue("InstanceId", key.SymbolChildId);
+                writer.WriteValue("InputId", key.InputId);
+                if (key.Index != 0)
                 {
-                    writer.WriteValue("Index", entry.Key.Index);
+                    writer.WriteValue("Index", key.Index);
                 }
 
-                entry.Value.Write(writer); // write curve itself
+                curve.Write(writer); // write curve itself
 
                 writer.WriteEndObject();
             }
@@ -473,8 +522,10 @@ namespace T3.Core.Operator
             writer.WriteEndArray();
         }
 
+        
         public void Read(JToken inputToken)
         {
+            var curves = new List< KeyValuePair<CurveId, Curve>>();
             foreach (JToken entry in inputToken)
             {
                 Guid instanceId = Guid.Parse(entry["InstanceId"].Value<string>());
@@ -483,21 +534,24 @@ namespace T3.Core.Operator
                 int index = indexToken?.Value<int>() ?? 0;
                 Curve curve = new Curve();
                 curve.Read(entry);
+                curves.Add( new KeyValuePair<CurveId, Curve>(new CurveId(instanceId, inputId, index), curve));
+            }
 
-                _animatedInputCurves.Add(new CurveId(instanceId, inputId, index), curve);
+            foreach (var (key, value) in curves.OrderBy(curveId => curveId.Key.Index))
+            {
+                _animatedInputCurves.Add(key, value);
             }
         }
-
-        private readonly Dictionary<CurveId, Curve> _animatedInputCurves = new Dictionary<CurveId, Curve>();
-
-
+        
+        private readonly Dictionary<CurveId, Curve> _animatedInputCurves = new();
+        
         public static void UpdateVector3InputValue(InputSlot<Vector3> inputSlot, Vector3 value)
         {
             var animator = inputSlot.Parent.Parent.Symbol.Animator;
             if (animator.IsInputSlotAnimated(inputSlot))
             {
                 var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-                double time = EvaluationContext.GlobalTimeForKeyframes;
+                double time = Playback.Current.TimeInBars;
                 SharpDX.Vector3 newValue = new SharpDX.Vector3(value.X, value.Y, value.Z);
                 for (int i = 0; i < 3; i++)
                 {
@@ -520,7 +574,7 @@ namespace T3.Core.Operator
             if (animator.IsInputSlotAnimated(inputSlot))
             {
                 var curve = animator.GetCurvesForInput(inputSlot).First();
-                double time = EvaluationContext.GlobalTimeForKeyframes;
+                double time = Playback.Current.TimeInBars;
                 var key = curve.GetV(time);
                 if (key == null)
                     key = new VDefinition() { U = time };

@@ -4,8 +4,16 @@
   "Namespace": "lib.io.audio",
   "Inputs": [
     {
-      "Id": "e8a10146-ef7f-459c-a1f8-eef621a2c522"/*DeviceIndex*/,
-      "DefaultValue": 0.0
+      "Id": "41cfdc83-dc6b-4cc3-b814-c60177ef013f"/*DeviceIndex*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "e278c4c8-4c3a-4f95-beec-ce8ead827724"/*Reset*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "bcd6c387-7fec-494f-b956-560728f05bff"/*Gain*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [],

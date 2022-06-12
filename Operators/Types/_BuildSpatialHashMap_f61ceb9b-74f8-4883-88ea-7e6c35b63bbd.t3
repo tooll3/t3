@@ -1,7 +1,7 @@
 {
   "Name": "_BuildSpatialHashMap",
   "Id": "f61ceb9b-74f8-4883-88ea-7e6c35b63bbd",
-  "Namespace": "user.pixtur.proj.pillowfight",
+  "Namespace": "user.pixtur.project.pillowfight",
   "Inputs": [
     {
       "Id": "4bae9eaa-42d8-4c1c-8776-3abebcce20e2"/*PointsA_*/,
@@ -33,7 +33,7 @@
         {
           "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
           "Type": "System.Int32",
-          "Value": 20
+          "Value": 2000
         }
       ],
       "Outputs": []
@@ -284,7 +284,7 @@
         {
           "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
           "Type": "System.Int32",
-          "Value": 4
+          "Value": 8
         }
       ],
       "Outputs": []

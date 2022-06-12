@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
@@ -37,17 +38,17 @@ namespace T3.Core
                 return new[] { v1 };
             }
             
-            if (v is System.Numerics.Vector2 v2)
+            if (v is Vector2 v2)
             {
                 return new[] { v2.X, v2.Y };
             }
             
-            if (v is System.Numerics.Vector3 v3)
+            if (v is Vector3 v3)
             {
                 return new[] { v3.X, v3.Y, v3.Z };
             }
 
-            if (v is System.Numerics.Vector4 v4)
+            if (v is Vector4 v4)
             {
                 return new[] { v4.X, v4.Y, v4.Z, v4.W };
             }
@@ -69,6 +70,22 @@ namespace T3.Core
                 hash = hash * 31 + b.GetHashCode();
                 return hash;
             }
+        }
+
+        public static bool DetectHit(bool newValue, ref bool lastValue)
+        {
+            var hasHit = false;
+            if (newValue != lastValue)
+            {
+                if (newValue)
+                {
+                    hasHit = true;
+                }
+
+                lastValue = newValue;
+            }
+
+            return hasHit;
         }
     }
 

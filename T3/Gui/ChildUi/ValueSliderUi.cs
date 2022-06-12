@@ -1,11 +1,7 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using ImGuiNET;
 using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Gui.InputUi;
-using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_d6384148_c654_48ce_9cf4_9adccf91283a;
 using UiHelpers;
 

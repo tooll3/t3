@@ -12,6 +12,7 @@ using T3.Core.Operator.Slots;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.InputUi;
+using T3.Gui.Interaction.TransformGizmos;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -245,7 +246,7 @@ namespace T3.Gui.Graph
                         && string.IsNullOrEmpty(T3Ui.OpenedPopUpName)
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0)
                     {
-                        SelectionManager.SetSelectionToChildUi(childUi, instance);
+                        NodeSelection.SetSelectionToChildUi(childUi, instance);
                         ImGui.OpenPopup("parameterContextPopup");
                     }
 
@@ -543,7 +544,7 @@ namespace T3.Gui.Graph
             }
         }
 
-        private static void AdjustGroupLayoutAfterResize(ISelectableNode childUi, Vector2 newNodeSize)
+        private static void AdjustGroupLayoutAfterResize(ISelectableCanvasObject childUi, Vector2 newNodeSize)
         {
             if (childUi.Size == newNodeSize)
                 return;
@@ -838,7 +839,7 @@ namespace T3.Gui.Graph
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
-            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.7f, 1.2f, UsableSlotThickness / 2, UsableSlotThickness);
+            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1.2f, (int)(UsableSlotThickness *0.5f), UsableSlotThickness);
 
             var opRect = _usableScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
@@ -1212,7 +1213,7 @@ namespace T3.Gui.Graph
 
         #region style variables
         public static Vector2 LabelPos = new Vector2(4, 2);
-        public static float UsableSlotThickness = 14;
+        public static float UsableSlotThickness = 10;
         public static float InputSlotThickness = 3;
         public static float InputSlotMargin = 1;
         public static float SlotGaps = 2;

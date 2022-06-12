@@ -7,10 +7,13 @@ using System.Text;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Gui.Commands;
+using t3.Gui.Commands.Animation;
 using T3.Gui.InputUi;
+using t3.Gui.InputUi.CombinedInputs;
 using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Interaction.WithCurves;
+using T3.Gui.Selection;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using UiHelpers;
@@ -30,9 +33,11 @@ namespace T3.Gui.Windows.TimeLine
         }
 
         private StringBuilder _stringBuilder = new StringBuilder(100);
+        private List<VDefinition> _visibleKeyframes = new(1000);
         
         public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters, bool fitCurvesVertically = false)
         {
+            _visibleKeyframes.Clear();
             _compositionOp = compositionOp;
             AnimationParameters = animationParameters;
 
@@ -150,6 +155,7 @@ namespace T3.Gui.Windows.TimeLine
                             foreach (var keyframe in curve.GetVDefinitions().ToList())
                             {
                                 CurvePoint.Draw(keyframe, TimeLineCanvas, SelectedKeyframes.Contains(keyframe), this);
+                                _visibleKeyframes.Add(keyframe);
                             }
 
                             HandleCreateNewKeyframes(curve);
@@ -311,12 +317,18 @@ namespace T3.Gui.Windows.TimeLine
                                   || (ImGui.GetIO().KeyCtrl);
             
             double u = allowHorizontal ? newDragPosition.X : vDef.U;
-            if(!ImGui.GetIO().KeyShift)
-                SnapHandlerU.CheckForSnapping(ref u, TimeLineCanvas.Scale.X);
+            if (allowHorizontal)
+            {
+                if(!ImGui.GetIO().KeyShift)
+                    SnapHandlerU.CheckForSnapping(ref u, TimeLineCanvas.Scale.X);
+            }
             
             double v = allowVertical ?  newDragPosition.Y : vDef.Value;
-            if(!ImGui.GetIO().KeyShift)
-                SnapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
+            if (allowVertical)
+            {
+                if(!ImGui.GetIO().KeyShift)
+                    SnapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
+            } 
             
             UpdateDragCommand(u - vDef.U, v - vDef.Value);
             
@@ -343,7 +355,7 @@ namespace T3.Gui.Windows.TimeLine
             var canvasArea = TimeLineCanvas.Current.InverseTransformRect(screenArea).MakePositive();
             var matchingItems = new List<VDefinition>();
 
-            foreach (var keyframe in GetAllKeyframes())
+            foreach (var keyframe in _visibleKeyframes)
             {
                 if (canvasArea.Contains(new Vector2((float)keyframe.U, (float)keyframe.Value)))
                 {

@@ -1,7 +1,7 @@
 {
   "Name": "BeatCounterTest",
   "Id": "08ad4c93-81ee-4c21-9bff-b5b03f7dd1f7",
-  "Namespace": "project.numbers.research",
+  "Namespace": "user.still.home.research",
   "Inputs": [],
   "Children": [
     {

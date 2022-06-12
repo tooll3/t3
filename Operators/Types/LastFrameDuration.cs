@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -18,7 +19,7 @@ namespace T3.Operators.Types.Id_5af2405c_35f4_46bf_90db_bb99b0c4a43e
 
         private void Update(EvaluationContext context)
         {
-            Duration.Value = (float)EvaluationContext.LastFrameDuration;
+            Duration.Value = (float)Playback.LastFrameDuration;
         }
     }
 }

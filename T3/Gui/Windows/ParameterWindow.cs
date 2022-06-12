@@ -1,16 +1,15 @@
-﻿using System;
-using ImGuiNET;
+﻿using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
-using T3.Gui.Graph;
+using t3.Gui.Commands.Graph;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
-using T3.Gui.Selection;
 using T3.Gui.Styling;
 
 namespace T3.Gui.Windows
@@ -24,12 +23,12 @@ namespace T3.Gui.Windows
             AllowMultipleInstances = true;
             Config.Visible = true;
 
-            ParameterWindowInstances.Add(this);
+            _parameterWindowInstances.Add(this);
         }
 
         public override List<Window> GetInstances()
         {
-            return ParameterWindowInstances;
+            return _parameterWindowInstances;
         }
 
         protected override void UpdateBeforeDraw()
@@ -39,7 +38,7 @@ namespace T3.Gui.Windows
         protected override void DrawAllInstances()
         {
             // Convert to array to allow closing of windowns
-            foreach (var w in ParameterWindowInstances.ToArray())
+            foreach (var w in _parameterWindowInstances.ToArray())
             {
                 w.DrawOneInstance();
             }
@@ -47,7 +46,7 @@ namespace T3.Gui.Windows
 
         protected override void Close()
         {
-            ParameterWindowInstances.Remove(this);
+            _parameterWindowInstances.Remove(this);
         }
 
         protected override void AddAnotherInstance()
@@ -67,13 +66,13 @@ namespace T3.Gui.Windows
                 ImGui.InputText("##imgui workaround", ref tmpBuffer, 1);
                 ImGui.SameLine();
             }
-            var instance = SelectionManager.GetFirstSelectedInstance();
+            var instance = NodeSelection.GetFirstSelectedInstance();
             if (instance != null)
             {
                 if (instance.Parent == null)
                     return;
 
-                EditDescriptionDialog.Draw(instance.Symbol);
+                _editDescriptionDialog.Draw(instance.Symbol);
                 
                 var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
                 var symbolChildUi = parentUi.ChildUis.Single(childUi => childUi.Id == instance.SymbolChildId);
@@ -105,7 +104,7 @@ namespace T3.Gui.Windows
                 }
                 
                 if (ImGui.Button("Edit description..."))
-                    EditDescriptionDialog.ShowNextFrame();                
+                    _editDescriptionDialog.ShowNextFrame();                
                 
                 SymbolBrowser.ListExampleOperators(symbolUi);
                 
@@ -116,10 +115,10 @@ namespace T3.Gui.Windows
                 return;
             }
 
-            if (!SelectionManager.IsAnythingSelected())
+            if (!NodeSelection.IsAnythingSelected())
                 return;
 
-            foreach (var input in SelectionManager.GetSelectedNodes<IInputUi>())
+            foreach (var input in NodeSelection.GetSelectedNodes<IInputUi>())
             {
                 ImGui.PushID(input.Id.GetHashCode());
                 ImGui.PushFont(Fonts.FontLarge);
@@ -149,27 +148,39 @@ namespace T3.Gui.Windows
 
                 if ((editState & InputEditStateFlags.Started) != InputEditStateFlags.Nothing)
                 {
-                    _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
+                    _inputSlotForActiveCommand = inputSlot;
+                    _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
                 }
-
+                
                 if ((editState & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
                 {
-                    if (_inputValueCommandInFlight == null || _inputValueCommandInFlight.NewValue.ValueType != inputSlot.Input.Value.ValueType)
-                        _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input);
-                    _inputValueCommandInFlight.NewValue.Assign(inputSlot.Input.Value);
+                    if (_inputValueCommandInFlight == null || _inputSlotForActiveCommand != inputSlot)
+                    {
+                         _inputValueCommandInFlight = new ChangeInputValueCommand(instance.Parent.Symbol, instance.SymbolChildId, inputSlot.Input, inputSlot.Input.Value);
+                         _inputSlotForActiveCommand = inputSlot;
+                    }
+                    _inputValueCommandInFlight.AssignNewValue(inputSlot.Input.Value);
+                    inputSlot.DirtyFlag.Invalidate();
                 }
-
+                
                 if ((editState & InputEditStateFlags.Finished) != InputEditStateFlags.Nothing)
                 {
-                    if (_inputValueCommandInFlight != null && _inputValueCommandInFlight.NewValue.ValueType == inputSlot.Input.Value.ValueType)
+                    if (_inputValueCommandInFlight != null && _inputSlotForActiveCommand == inputSlot)
+                    {
                         UndoRedoStack.Add(_inputValueCommandInFlight);
+                    }
+                    else
+                    {
+                        Log.Debug($"finished but wrong inputSlot {inputSlot.Input.Name}");
+                    }
+                    _inputValueCommandInFlight = null;
                 }
 
                 if (editState == InputEditStateFlags.ShowOptions)
                 {
-                    SelectionManager.SetSelection(inputUi);
+                    NodeSelection.SetSelection(inputUi);
                 }
-
+                
                 ImGui.PopID();
             }
         }
@@ -197,13 +208,10 @@ namespace T3.Gui.Windows
                 ImGui.SameLine();
                 ImGui.TextUnformatted(op.Symbol.Name);
                 ImGui.Dummy(Vector2.One * 5);
-                
             }
 
             // SymbolChild Name
             {
-                //ImGui.PushFont(Fonts.FontLarge);
-
                 ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 100);
 
                 var nameForEdit = symbolChildUi.SymbolChild.Name;
@@ -272,10 +280,11 @@ namespace T3.Gui.Windows
             return T3Ui.WindowManager.IsAnyInstanceVisible<ParameterWindow>();
         }
         
-        private static readonly EditSymbolDescriptionDialog EditDescriptionDialog = new EditSymbolDescriptionDialog();
-        private static readonly List<Window> ParameterWindowInstances = new List<Window>();
+        private static readonly EditSymbolDescriptionDialog _editDescriptionDialog = new EditSymbolDescriptionDialog();
+        private static readonly List<Window> _parameterWindowInstances = new List<Window>();
         private ChangeSymbolChildNameCommand _symbolChildNameCommand;
         private static ChangeInputValueCommand _inputValueCommandInFlight;
+        private static IInputSlot _inputSlotForActiveCommand;
         private static int _instanceCounter;
     }
 }

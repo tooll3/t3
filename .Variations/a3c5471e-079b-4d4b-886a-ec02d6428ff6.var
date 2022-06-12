@@ -1,0 +1,35 @@
+{
+  "Id": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
+  "Variations": [
+    {
+      "Id": "8dde3627-ca06-42d3-97df-072b51853a3e",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Both Sided",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "9c17fa15-35f1-49d4-802f-a3a796cad96a": 0
+        }
+      }
+    },
+    {
+      "Id": "b06ec618-93d5-4401-9627-7baf7ff224d0",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "9c17fa15-35f1-49d4-802f-a3a796cad96a": 1
+        }
+      }
+    }
+  ]
+}

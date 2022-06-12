@@ -1,7 +1,7 @@
 {
   "Name": "_PhysrumAgents2",
   "Id": "c0feef61-8cec-4418-8889-4001cbe1a957",
-  "Namespace": "project.partial.fx",
+  "Namespace": "user.still.there.fx",
   "Inputs": [
     {
       "Id": "bc0f0973-68c1-4f33-801d-9e9db29f7513"/*ShowAgents*/,
@@ -81,7 +81,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-partial\\physarumfx\\partial-physarum-fx-cs.hlsl"
+          "Value": "Resources\\user\\still\\proj-there\\physarumfx\\partial-physarum-fx-cs.hlsl"
         }
       ],
       "Outputs": []
@@ -377,7 +377,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ComputeShaderCourse\\03-MovingAgents1\\shaders\\ca-update-grid.hlsl"
+          "Value": "Resources\\user\\pixtur\\research\\ComputeShaderCourse\\03-MovingAgents1\\shaders\\ca-update-grid.hlsl"
         }
       ],
       "Outputs": []
@@ -392,6 +392,11 @@
       "Id": "7a38fbd2-1928-449a-a5cb-0a7269d4baf0"/*ColorGrade*/,
       "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
       "InputValues": [
+        {
+          "Id": "16231de9-2e85-4a9a-a2d1-99dfac18a0f6"/*PreSaturate*/,
+          "Type": "System.Single",
+          "Value": 0.99
+        },
         {
           "Id": "4dc44a7b-fe7c-4807-aaaa-53fb553de017"/*Gain*/,
           "Type": "System.Numerics.Vector4",
@@ -421,11 +426,6 @@
             "Z": 0.5038607,
             "W": 0.7764706
           }
-        },
-        {
-          "Id": "16231de9-2e85-4a9a-a2d1-99dfac18a0f6"/*PreSaturate*/,
-          "Type": "System.Single",
-          "Value": 0.99
         }
       ],
       "Outputs": []

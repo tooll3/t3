@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Rendering;
@@ -22,11 +22,14 @@ namespace T3.Core.Operator
         {
             Reset();
         }
-
+        
         public void Reset()
         {
-            TimeForKeyframes = GlobalTimeForKeyframes;
-            TimeForEffects = GlobalTimeForEffects;
+            // TODO: this should be replaced with a solution that supports multiple playback sources 
+            Playback = Playback.Current;
+            
+            LocalTime = Playback.TimeInBars;
+            LocalFxTime = Playback.FxTimeInBars;
             PointLights.Clear();
             PbrContextSettings.SetDefaultToContext(this);
         }
@@ -56,12 +59,10 @@ namespace T3.Core.Operator
 
         private static ICamera _defaultCamera = new ViewCamera();
 
-        private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
-        public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000.0;
         
-        
-        public static double GlobalTimeForKeyframes { get; set; }
-        
+        #region timing
+        public Playback Playback { get; private set; }
+
         /// <summary>
         /// The primary time used for user interactions and keyframe manipulation.
         /// This is where there time marker in the timeline is displayed.
@@ -69,28 +70,16 @@ namespace T3.Core.Operator
         /// While evaluating the graph it can be overridden for sub graphs by <see cref="SetCommandTime"/>.
         /// </summary>
         /// <remarks>Also see <see cref="EvaluationContext"/>.<see cref="GlobalTimeForEffects"/> and .<see cref="GlobalTimeInSecs"/></remarks>
-        public double TimeForKeyframes { get; set; }
+        public double LocalTime { get; set; }
         
         /// <summary>
         /// Although similar to KeyframeTime, this one keeps running in pause mode, if Keep Running is active.
+        /// While evaluating the graph it can be overridden for sub graphs by <see cref="SetCommandTime"/>.
         /// </summary>
-        public double TimeForEffects { get; set; }
-
-        /// <summary>
-        /// If "keep running" option is enabled, this time is still running even if (audio) playback has been stopped.
-        /// This is used by most procedural time related operators (like pulsate).  
-        /// </summary>
-        public static double GlobalTimeInSecs { get; set; }
-
-        public static double BPM { get; set; }
+        public double LocalFxTime { get; set; }
         
-        /// <summary>
-        /// This time keeps running
-        /// </summary>
-        public static double GlobalTimeForEffects { get; set; }
+        #endregion
         
-        public static double LastFrameDuration { get; set; }
-
         public Size2 RequestedResolution { get; set; }
 
         public Matrix CameraToClipSpace { get; set; } = Matrix.Identity;
@@ -112,12 +101,10 @@ namespace T3.Core.Operator
         
         public GizmoVisibility ShowGizmos { get; set; }
 
-
-        public Dictionary<Variator.VariationId, VariationSelector> VariationOverwrites { get; } = new Dictionary<Variator.VariationId, VariationSelector>();
-
         public Dictionary<string, float> FloatVariables { get; } = new Dictionary<string, float>();
         public StructuredList IteratedList { get; set; }
         public int IteratedListIndex { get; set; }
+        public bool BypassCameras { get; set; }
 
         public ParticleSystem ParticleSystem;
     }

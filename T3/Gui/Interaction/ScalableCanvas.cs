@@ -26,8 +26,10 @@ namespace T3.Gui.Interaction
 
             if (FillMode == FillModes.FillWindow)
             {
-                WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
-                WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
+                WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos()
+                                                              + ImGui.GetStyle().WindowBorderSize * Vector2.One;
+                WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin()
+                             - 2* ImGui.GetStyle().WindowBorderSize * Vector2.One;
             }
             else
             {
@@ -112,6 +114,13 @@ namespace T3.Gui.Interaction
             return vectorInCanvas * Scale;
         }
 
+        public Vector2 TransformDirectionFloored(Vector2 vectorInCanvas)
+        {
+            var s= vectorInCanvas * Scale;
+            return new Vector2((int)s.X, (int)s.Y);
+        }
+
+        
         /// <summary>
         /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
         /// </summary>
@@ -254,7 +263,7 @@ namespace T3.Gui.Interaction
             // where img has not been initialized yet.
             if (WindowSize == Vector2.Zero)
             {
-                WindowSize = new Vector2(800, 500);
+                WindowSize = new Vector2(200, 200);
             }
 
             float scale;
@@ -370,10 +379,9 @@ namespace T3.Gui.Interaction
                 Scroll = ScrollTarget;
         }
 
-        protected virtual void HandleInteraction(T3Ui.EditingFlags flags)
+        protected void HandleInteraction(T3Ui.EditingFlags flags)
         {
             var isDraggingConnection = (ConnectionMaker.TempConnections.Count > 0) && ImGui.IsWindowFocused();
-
             if (!ImGui.IsWindowHovered() && !isDraggingConnection)
                 return;
 
@@ -430,32 +438,26 @@ namespace T3.Gui.Interaction
 
             if (Math.Abs(zoomDelta - 1) < 0.001f)
                 return;
-
+            
+            var zoom = zoomDelta * Vector2.One;
             if (IsCurveCanvas)
             {
                 if (ImGui.GetIO().KeyAlt)
                 {
-                    ScaleTarget.X *= zoomDelta;
+                    zoom.X = 1;
                 }
                 else if (ImGui.GetIO().KeyShift)
                 {
-                    ScaleTarget.Y *= zoomDelta;
-                }
-                else
-                {
-                    ScaleTarget *= zoomDelta;
+                    zoom.Y = 1;
                 }
             }
-            else
-            {
-                ScaleTarget *= zoomDelta;
-            }
+
+            ScaleTarget *= zoom;
 
             if (Math.Abs(zoomDelta) > 0.1f)
                 UserZoomedCanvas = true;
-
-            //var shift = ScrollTarget * ScaleTarget + (focusCenter * ScaleTarget / parentZoom);
-            ScrollTarget = (focusCenterOnCanvas - cornerToFocus / zoomDelta);
+            
+            ScrollTarget = (focusCenterOnCanvas - cornerToFocus / zoom);
         }
 
         private void DrawCanvasDebugInfos()

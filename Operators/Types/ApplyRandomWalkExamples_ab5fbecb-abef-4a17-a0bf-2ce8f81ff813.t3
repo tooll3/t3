@@ -21,7 +21,7 @@
         {
           "Id": "a5f770ae-7f1d-4b45-93e9-d31ba7f62932"/*TurnAngle*/,
           "Type": "System.Single",
-          "Value": 60.0
+          "Value": 90.0
         },
         {
           "Id": "23a45ab7-7f40-4f6d-91ff-5ecaf9ffe221"/*StepRatio*/,
@@ -665,8 +665,8 @@
       "TargetSlotId": "0954b214-dd1f-40fd-bebe-29f74a8f5585"
     },
     {
-      "SourceParentOrChildId": "531a332f-828a-4cfb-a0b0-153a517e7e77",
-      "SourceSlotId": "d7605a96-adc6-4a2b-9ba4-33adef3b7f4c",
+      "SourceParentOrChildId": "3edcac5e-9cba-4e6b-95a4-a150e09bb4f9",
+      "SourceSlotId": "eb8c79d4-d147-419c-a606-4bbe7b71933f",
       "TargetParentOrChildId": "e195be83-dbea-4856-a276-5da852c55946",
       "TargetSlotId": "76263857-27ea-40f5-856f-983c6ddcbfe8"
     },

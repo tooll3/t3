@@ -37,7 +37,7 @@ namespace T3.Operators.Types.Id_23794a1f_372d_484b_ac31_9470d0e77819
                 jump = true;
             }
 
-            _beatTime = EvaluationContext.GlobalTimeForEffects;
+            _beatTime = context.Playback.FxTimeInBars;
             
             if(UseRate) {
                 var activationIndex = (int)(_beatTime * _rate);

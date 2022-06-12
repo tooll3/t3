@@ -282,12 +282,7 @@
           "Value": 2.95
         }
       ],
-      "Outputs": [
-        {
-          "Id": "56020950-21f1-4868-b753-07c5ad1d22e8"/*Pulse*/,
-          "DirtyFlagTrigger": "Animated"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "178e2946-48a9-42b4-afc8-27018c6ac487"/*FloatListLength*/,

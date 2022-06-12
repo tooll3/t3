@@ -1,7 +1,7 @@
 {
   "Name": "RandomTextBlock",
   "Id": "64d103ab-773e-456e-8d5a-9e5915b95dcd",
-  "Namespace": "project.numbers.research",
+  "Namespace": "user.still.home.research",
   "Inputs": [
     {
       "Id": "caad0c72-a5c1-46a6-b716-ecac986f3f70"/*Color*/,

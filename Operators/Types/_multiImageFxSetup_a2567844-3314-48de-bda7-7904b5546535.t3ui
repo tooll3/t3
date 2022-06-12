@@ -45,6 +45,30 @@
         "X": -313.40988,
         "Y": 554.9937
       }
+    },
+    {
+      "InputId": "fe1695b3-54db-4b53-8987-3216bcf59da9"/*ClearColor*/,
+      "Position": {
+        "X": -313.40988,
+        "Y": 599.9937
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "109d0526-615c-401e-bc78-f29fe730c836"/*BlendEnabled*/,
+      "Position": {
+        "X": -313.40988,
+        "Y": 644.9937
+      }
+    },
+    {
+      "InputId": "440e471b-9f67-435c-9e21-304cd57728aa"/*GenerateMips*/,
+      "Position": {
+        "X": -313.40988,
+        "Y": 689.9937
+      }
     }
   ],
   "SymbolChildUis": [
@@ -195,7 +219,7 @@
       "ChildId": "664bce67-cfdf-4be6-9855-dc7c45e90512"/*RenderTarget*/,
       "Size": {
         "X": 110.0,
-        "Y": 49.0
+        "Y": 62.0
       },
       "Position": {
         "X": 1063.0884,
@@ -277,6 +301,17 @@
       "Position": {
         "X": 505.20663,
         "Y": 145.78384
+      }
+    },
+    {
+      "ChildId": "f8d35b53-f7fe-4a07-9c56-88abbc4231b0"/*RenderTargetBlendDesc*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -17.041367,
+        "Y": 869.9406
       }
     }
   ],

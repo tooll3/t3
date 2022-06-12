@@ -825,7 +825,7 @@
       "Outputs": []
     },
     {
-      "Id": "359423c1-aa27-46e3-bcb4-2db39e14c839"/*LinearRamp*/,
+      "Id": "359423c1-aa27-46e3-bcb4-2db39e14c839"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {

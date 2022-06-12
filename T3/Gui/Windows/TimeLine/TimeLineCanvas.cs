@@ -6,6 +6,7 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using t3.Gui.Audio;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction;
@@ -22,9 +23,9 @@ namespace T3.Gui.Windows.TimeLine
     /// </summary>
     public class TimeLineCanvas : CurveEditCanvas
     {
-        public TimeLineCanvas(ref Playback playback)
+        public TimeLineCanvas()
         {
-            Playback = playback;
+            Playback = Playback.Current;
             DopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
             _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandlerForU, SnapHandlerForV);
             _timeSelectionRange = new TimeSelectionRange(this, SnapHandlerForU);
@@ -52,7 +53,11 @@ namespace T3.Gui.Windows.TimeLine
 
             void DrawCanvasContent()
             {
-                _timeLineImage.Draw(Drawlist, Playback);
+                if (SoundtrackUtils.TryFindingSoundtrack(compositionOp, out var soundtrack))
+                {
+                    _timeLineImage.Draw(Drawlist, soundtrack);
+                }
+                
                 ImGui.SetScrollY(0);
 
                 HandleDeferredActions();
@@ -297,7 +302,7 @@ namespace T3.Gui.Windows.TimeLine
         // TODO: this is horrible and should be refactored
         private List<AnimationParameter> GetAnimationParametersForSelectedNodes(Instance compositionOp)
         {
-            var selection = SelectionManager.GetSelectedNodes<ISelectableNode>();
+            var selection = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>();
             var symbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
             var animator = symbolUi.Symbol.Animator;
             

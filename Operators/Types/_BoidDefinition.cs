@@ -57,7 +57,7 @@ namespace T3.Operators.Types.Id_6b8db50a_383c_486c_8065_3aefe8c85576
             public float TestString;
         }
 
-        private readonly StructuredList<Boid> _boids = new StructuredList<Boid>(10);
+        private readonly StructuredList<Boid> _boids = new StructuredList<Boid>(1);
 
         [Input(Guid = "BB9A7B9E-05F2-4383-B8EB-C73F21125EA3")]
         public readonly InputSlot<float> CohesionRadius = new InputSlot<float>();

@@ -90,6 +90,83 @@
         "X": 450.0,
         "Y": 0.0
       }
+    },
+    {
+      "ChildId": "47b651e9-1768-40b9-a5f6-b8b341dab4b8"/*DrawRayLines*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 808.6278,
+        "Y": 116.565735
+      }
+    },
+    {
+      "ChildId": "68a6a5d3-9120-404a-b509-f97324af7e93"/*Blob*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 588.9861,
+        "Y": 184.32758
+      }
+    },
+    {
+      "ChildId": "95be4cd5-fcd2-4931-b347-f29971a3ebe2"/*CylinderMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 172.76782,
+        "Y": -193.39746
+      }
+    },
+    {
+      "ChildId": "1fd84667-5ea1-455a-bf80-286fd20cab9b"/*SplitMeshVertices*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 322.7678,
+        "Y": -193.39746
+      }
+    },
+    {
+      "ChildId": "98a016f6-8e7b-4650-9aa8-e43b0c6ee311"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 971.58887,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "a2209b80-c8b6-4ab5-be63-4bc92e105be3"/*DrawMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 622.7678,
+        "Y": -193.39746
+      }
+    },
+    {
+      "ChildId": "3950e9fd-bf56-4fa9-ad5c-7189e079041e"/*TransformMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 472.7678,
+        "Y": -193.39746
+      }
     }
   ],
   "OutputUis": [

@@ -29,7 +29,8 @@ namespace T3.Gui.ChildUi
 
             if (GradientEditor.Draw(gradient, drawList, innerRect))
             {
-                gradientSlider.Gradient.DirtyFlag.Invalidate();
+                gradientSlider.Color.DirtyFlag.Invalidate();
+                gradientSlider.OutGradient.DirtyFlag.Invalidate();
             }
 
             var x = gradientSlider.SamplePos.Value.Clamp(0, 1) * innerRect.GetWidth();
@@ -37,7 +38,7 @@ namespace T3.Gui.ChildUi
             var pMax = new Vector2(innerRect.Min.X + x + 2, innerRect.Max.Y);
             drawList.AddRectFilled(pMin, pMax, Color.Orange);
 
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
         }
     }
 }

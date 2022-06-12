@@ -69,7 +69,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ComputeShaderCourse\\04-ThreeSpeciesPhysarum\\shaders\\physarum-with-agents-cs.hlsl"
+          "Value": "Resources\\user\\pixtur\\research\\ComputeShaderCourse\\04-ThreeSpeciesPhysarum\\shaders\\physarum-with-agents-cs.hlsl"
         }
       ],
       "Outputs": []
@@ -471,7 +471,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ComputeShaderCourse\\03-MovingAgents1\\shaders\\ca-update-grid.hlsl"
+          "Value": "Resources\\user\\pixtur\\research\\ComputeShaderCourse\\03-MovingAgents1\\shaders\\ca-update-grid.hlsl"
         }
       ],
       "Outputs": []
@@ -486,6 +486,11 @@
       "Id": "610ba626-7b74-4270-bd4b-39866a790c83"/*ColorGrade*/,
       "SymbolId": "42d86738-d644-47c8-ab92-cc426d958e51",
       "InputValues": [
+        {
+          "Id": "16231de9-2e85-4a9a-a2d1-99dfac18a0f6"/*PreSaturate*/,
+          "Type": "System.Single",
+          "Value": 0.99
+        },
         {
           "Id": "4dc44a7b-fe7c-4807-aaaa-53fb553de017"/*Gain*/,
           "Type": "System.Numerics.Vector4",
@@ -515,11 +520,6 @@
             "Z": 0.5038607,
             "W": 0.7764706
           }
-        },
-        {
-          "Id": "16231de9-2e85-4a9a-a2d1-99dfac18a0f6"/*PreSaturate*/,
-          "Type": "System.Single",
-          "Value": 0.99
         }
       ],
       "Outputs": []

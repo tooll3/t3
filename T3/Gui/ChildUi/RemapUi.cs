@@ -99,7 +99,7 @@ namespace T3.Gui.ChildUi
                                       );
             drawList.PopClipRect();
 
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
         }
 
         private const float TriangleSize = 4;

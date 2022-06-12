@@ -1,7 +1,7 @@
 {
   "Name": "PartialCredits",
   "Id": "ec9d9b04-9f86-49f9-9463-f5ba04e4ee00",
-  "Namespace": "project.partial.scenes",
+  "Namespace": "user.still.there.scenes",
   "Inputs": [],
   "Children": [
     {

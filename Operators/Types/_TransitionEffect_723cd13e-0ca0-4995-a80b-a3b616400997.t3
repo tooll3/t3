@@ -1,7 +1,7 @@
 {
   "Name": "_TransitionEffect",
   "Id": "723cd13e-0ca0-4995-a80b-a3b616400997",
-  "Namespace": "project.numbers.effects",
+  "Namespace": "user.still.home.effects",
   "Inputs": [
     {
       "Id": "7e75adf0-200e-4f15-b333-88105e0994d8"/*ImageA*/,
@@ -124,7 +124,7 @@
       "Outputs": []
     },
     {
-      "Id": "4655acec-513d-420c-bae0-e82b3f75220b"/*LinearRamp*/,
+      "Id": "4655acec-513d-420c-bae0-e82b3f75220b"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {

@@ -217,6 +217,11 @@ namespace T3.Gui.Styling
                 new IconSource(Icon.KeyframeToggleOffNone, new Vector2(49 * 16, 16), new Vector2(23, 15)),
                 new IconSource(Icon.Checkmark,  51),
                 new IconSource(Icon.Settings,  52),
+                new IconSource(Icon.SlotColor,   new Vector2(53 * 16, 0), new Vector2(4, 16)),
+                new IconSource(Icon.SlotVector3,   new Vector2(53 * 16 + 4, 0), new Vector2(4, 16)),
+                new IconSource(Icon.SlotVector2,   new Vector2(53 * 16 + 8, 0), new Vector2(4, 16)),
+                new IconSource(Icon.SlotFloat,   new Vector2(53 * 16 + 12, 0), new Vector2(4, 16)),
+                new IconSource(Icon.Plus,  55),
             };
 
         public const string IconAtlasPath = @"Resources\t3\t3-icons.png";
@@ -275,6 +280,11 @@ namespace T3.Gui.Styling
         KeyframeToggleOffRight,
         KeyframeToggleOffNone,
         Checkmark,
-        Settings
+        Settings,
+        SlotColor,
+        SlotVector3,
+        SlotVector2,
+        SlotFloat,
+        Plus
     }
 }

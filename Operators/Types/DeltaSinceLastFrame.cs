@@ -19,9 +19,9 @@ namespace T3.Operators.Types.Id_919beb6b_4798_45fc_83bd_8203a9b26e8e
 
         private void Update(EvaluationContext context)
         {
-            if (Math.Abs(EvaluationContext.GlobalTimeForEffects - _lastEvalTime) < 0.0001)
+            if (Math.Abs(context.Playback.FxTimeInBars - _lastEvalTime) < 0.0001)
                 return;
-            _lastEvalTime = EvaluationContext.GlobalTimeForEffects;
+            _lastEvalTime = context.Playback.FxTimeInBars;
             
             var v = Value.GetValue(context);
             var delta = v - _lastValue;

@@ -33,14 +33,14 @@ namespace T3.Gui.InputUi.SingleControl
         }
         
 
-        protected override void DrawAnimatedValue(string name, InputSlot<bool> inputSlot, Animator animator)
+        protected override InputEditStateFlags DrawAnimatedValue(string name, InputSlot<bool> inputSlot, Animator animator)
         {
-            double time = EvaluationContext.GlobalTimeForKeyframes;
+            double time = Playback.Current.TimeInBars;
             var curves = animator.GetCurvesForInput(inputSlot).ToArray();
             if (curves.Length != 1)
             {
                 Log.Assert($"Animated bool requires a singe animation curve (got {curves.Length})");
-                return;
+                return InputEditStateFlags.Nothing;
             }
 
             var curve = curves[0];
@@ -58,16 +58,19 @@ namespace T3.Gui.InputUi.SingleControl
 
                 key.Value = value ? 1 :0;
                 curve.AddOrUpdateV(time, key);
+                return InputEditStateFlags.Modified;
             }
+
+            return InputEditStateFlags.Nothing;
         }        
         
-        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator) 
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time) 
         {
             if (inputValue is InputValue<bool> boolInputValue)
             {
                 bool value = boolInputValue.Value;
                 var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-                Curve.UpdateCurveValues(curves, EvaluationContext.GlobalTimeForKeyframes, new [] {value ? 1f :0f });   
+                Curve.UpdateCurveValues(curves, time, new [] {value ? 1f :0f });   
             }
         }        
     }

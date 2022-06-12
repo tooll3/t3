@@ -1,9 +1,7 @@
 ﻿using System.Numerics;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.Operator;
-using T3.Gui.InputUi;
-using T3.Gui.UiHelpers;
+using t3.Gui.InputUi.CombinedInputs;
 using T3.Operators.Types.Id_b724ea74_d5d7_4928_9cd1_7a7850e4e179;
 using UiHelpers;
 

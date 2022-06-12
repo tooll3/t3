@@ -272,7 +272,7 @@
       "Outputs": []
     },
     {
-      "Id": "c757926e-7498-463e-a889-f548bc2da0a8"/*TestImageFx*/,
+      "Id": "c757926e-7498-463e-a889-f548bc2da0a8"/*CompareImages*/,
       "SymbolId": "0e13e34f-c07b-4ada-8c87-6b89f4ed8b41",
       "InputValues": [
         {

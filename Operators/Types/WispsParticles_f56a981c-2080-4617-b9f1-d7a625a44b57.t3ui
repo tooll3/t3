@@ -181,7 +181,7 @@
       ]
     },
     {
-      "ChildId": "a15e4828-2450-4c8c-badb-b6f25dcee615"/*LinearRamp*/,
+      "ChildId": "a15e4828-2450-4c8c-badb-b6f25dcee615"/*LinearGradient*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -688,7 +688,7 @@
       }
     },
     {
-      "ChildId": "08c8000b-4030-4d29-8f29-f676301d6f3d"/*LinearRamp*/,
+      "ChildId": "08c8000b-4030-4d29-8f29-f676301d6f3d"/*LinearGradient*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

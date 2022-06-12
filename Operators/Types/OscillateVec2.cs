@@ -18,11 +18,11 @@ namespace T3.Operators.Types.Id_49796f63_27a8_4714_ba69_2073488ca833
 
         private void Update(EvaluationContext context)
         {
-            //var t = (float)EvaluationContext.GlobalTimeForEffects * SpeedFactor.GetValue(context);
+            //var t = (float)context.Playback.BeatTime * SpeedFactor.GetValue(context);
 
             var t = OverrideTime.IsConnected
                         ? OverrideTime.GetValue(context)
-                        : (float)context.TimeForEffects * SpeedFactor.GetValue(context);
+                        : (float)context.LocalFxTime * SpeedFactor.GetValue(context);
             
             //var value = Value.GetValue(context);
             var amplitude = Amplitude.GetValue(context);

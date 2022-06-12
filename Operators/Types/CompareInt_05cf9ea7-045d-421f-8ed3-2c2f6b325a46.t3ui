@@ -3,19 +3,17 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "e2d09267-1227-40ed-8c91-0d44f4e00ee5"/*Value*/,
+      "InputId": "3b6ca34b-4a64-458a-874f-a0aa094fc278"/*Value*/,
       "Position": {
-        "X": 36.0,
-        "Y": 334.0
-      },
-      "Min": -100.0,
-      "Max": 100.0
+        "X": -200.0,
+        "Y": 0.0
+      }
     },
     {
-      "InputId": "9814676e-07dc-40de-98a5-f69b94f58f89"/*TestValue*/,
+      "InputId": "a2e3a00e-10e4-4f52-b923-5e09cc0bfc08"/*TestValue*/,
       "Position": {
-        "X": 197.0,
-        "Y": 328.0
+        "X": -200.0,
+        "Y": 45.0
       }
     },
     {
@@ -26,10 +24,17 @@
       }
     },
     {
-      "InputId": "e4ccfad6-6894-4abe-a8f6-742af53b1a60"/*Precision*/,
+      "InputId": "bfa7d45a-0f98-4016-ae34-d5f653e821d6"/*ResultForTrue*/,
       "Position": {
         "X": 197.0,
         "Y": 418.0
+      }
+    },
+    {
+      "InputId": "158e2790-1244-4509-8911-b850ffcee29f"/*ResultForFalse*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 463.0
       }
     }
   ],
@@ -40,6 +45,13 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "b8d8d223-b914-4d00-b438-e286ca97707f"/*ResultValue*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
       }
     }
   ]

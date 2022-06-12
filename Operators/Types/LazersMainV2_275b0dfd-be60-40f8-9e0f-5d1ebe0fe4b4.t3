@@ -1,7 +1,7 @@
 {
   "Name": "LazersMainV2",
   "Id": "275b0dfd-be60-40f8-9e0f-5d1ebe0fe4b4",
-  "Namespace": "project.lazers",
+  "Namespace": "user.pixtur.project.lazers",
   "Inputs": [],
   "Children": [
     {

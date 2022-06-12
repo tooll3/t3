@@ -37,6 +37,9 @@ namespace T3.Operators.Types.Id_42cb88bc_beb8_4d89_ac99_44b77be5f03e
 
         [Input(Guid = "f5ec8952-01e0-42db-8c8d-29db44cc3151")]
         public readonly InputSlot<bool> UseWForSize = new InputSlot<bool>();
+
+        [Input(Guid = "a8590e4f-2edf-42c9-8bc2-e7b521f8cafc")]
+        public readonly InputSlot<float> AlphaCutOff = new InputSlot<float>();
     }
 }
 

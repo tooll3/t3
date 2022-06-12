@@ -1,5 +1,7 @@
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -9,11 +11,16 @@ namespace T3.Operators.Types.Id_7baaa83d_5c09_42a0_b7bc_35dbcfa5156d
     public class GetStringPart : Instance<GetStringPart>
     {
         [Output(Guid = "62368C06-7815-47BC-9B0D-3024A2907E01")]
-        public readonly Slot<string> Fragments = new Slot<string>();
+        public readonly Slot<string> Fragments = new();
+
+        [Output(Guid = "88888C06-7815-47BC-9B0D-3024A2907E01")]
+        public readonly Slot<int> TotalCount = new();
+
 
         public GetStringPart()
         {
             Fragments.UpdateAction = Update;
+            TotalCount.UpdateAction = Update;
         }
 
         private enum EntityTypes
@@ -45,7 +52,9 @@ namespace T3.Operators.Types.Id_7baaa83d_5c09_42a0_b7bc_35dbcfa5156d
                 switch (_splitInto)
                 {
                     case EntityTypes.Characters:
-                        _chunks = new Regex("(.)").Split(inputText);
+                        _chunks = Regex.Split(inputText, string.Empty);
+                        //_chunks = inputText.ToCharArray();
+                        //_chunks = new Regex("(.)").Split(inputText);
                         _delimiter = "";
                         break;
 
@@ -76,10 +85,11 @@ namespace T3.Operators.Types.Id_7baaa83d_5c09_42a0_b7bc_35dbcfa5156d
 
             var fragmentStart = FragmentStart.GetValue(context);
             var fragmentCount = FragmentCount.GetValue(context);
-            if (_splitInto == EntityTypes.Characters)
-                fragmentCount *= 2;
+            //if (_splitInto == EntityTypes.Characters)
+            //    fragmentCount *= 2;
 
             Fragments.Value = GetFragment(fragmentStart, fragmentCount);
+            TotalCount.Value = _chunks.Length;
         }
 
         private string GetFragment(int startFragment, int fragmentCount)

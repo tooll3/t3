@@ -13,14 +13,14 @@ namespace T3.Gui.Windows.TimeLine
     {
         public void Draw(Playback playback)
         {
-            if(UserSettings.Config.TimeDisplayMode != Playback.TimeDisplayModes.Bars)
+            if(UserSettings.Config.TimeDisplayMode != TimeFormat.TimeDisplayModes.Bars)
             {
                 switch (UserSettings.Config.TimeDisplayMode)
                 {
-                    case Playback.TimeDisplayModes.F30:
+                    case TimeFormat.TimeDisplayModes.F30:
                         _standardRaster.UnitsPerSecond = 30;
                         break;
-                    case Playback.TimeDisplayModes.F60:
+                    case TimeFormat.TimeDisplayModes.F60:
                         _standardRaster.UnitsPerSecond = 60;
                         break;
                 }
@@ -39,9 +39,9 @@ namespace T3.Gui.Windows.TimeLine
             {
                 switch (UserSettings.Config.TimeDisplayMode)
                 {
-                    case Playback.TimeDisplayModes.Bars:
+                    case TimeFormat.TimeDisplayModes.Bars:
                         return _beatRaster;
-                    case Playback.TimeDisplayModes.Secs:
+                    case TimeFormat.TimeDisplayModes.Secs:
                         return _siTimeRaster;
                     default:
                         return _standardRaster;

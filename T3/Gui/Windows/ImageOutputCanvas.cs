@@ -73,6 +73,9 @@ namespace T3.Gui.Windows
                 MouseInput.Set(relativePosition, ImGui.IsMouseDown(ImGuiMouseButton.Left));
             }
 
+            if (UserSettings.Config.ShowGraphOverContent)
+                return;
+            
             string format = "";
             if (srv == null)
             {
@@ -97,9 +100,9 @@ namespace T3.Gui.Windows
                         break;
                 }
             }
-            
-            
-            
+                
+                
+                
             ImGui.PushFont(Fonts.FontSmall);
             var zoom = Math.Abs(Scale.X) < 0.001f ? "" : $" ×{Scale.X:G2}";
             var description = $"{size.X}x{size.Y}  {format} {zoom}";

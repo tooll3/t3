@@ -4,6 +4,7 @@ using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
+using T3.Gui.Interaction.TransformGizmos;
 using T3.Gui.Selection;
 
 namespace T3.Gui.Graph.Interaction
@@ -204,7 +205,7 @@ namespace T3.Gui.Graph.Interaction
 
         private void ManipulateCameraByKeyboard()
         {
-            if (!ImGui.IsWindowHovered())
+            if (!ImGui.IsWindowHovered() || ImGui.GetIO().KeyCtrl)
                 return;
 
             var viewDirLength = _viewAxis.ViewDistance.Length();
@@ -280,6 +281,14 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
+        public void ResetCamera(ICamera cam)
+        {
+            cam.CameraPosition = new Vector3(0, 0, CameraSetup.DefaultCameraPositionZ);
+            cam.CameraTarget = Vector3.Zero;
+            cam.CameraRoll = 0;
+
+        }  
+
         private class CameraSetup
         {
             public Vector3 Position = new Vector3(0, 0, DefaultCameraPositionZ);
@@ -322,7 +331,7 @@ namespace T3.Gui.Graph.Interaction
                 Target = Vector3.Lerp(Target, intended.Target, f);
             }
 
-            private const float DefaultCameraPositionZ = 2.416f;
+            public const float DefaultCameraPositionZ = 2.416f;
         }
 
         private static ViewAxis _viewAxis = new ViewAxis();

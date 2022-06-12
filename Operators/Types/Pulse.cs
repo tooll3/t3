@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_5952d7b4_29ac_41fb_9324_287392d55048
 {
     public class Pulse : Instance<Pulse>
     {
-        [Output (Guid = "56020950-21f1-4868-b753-07c5ad1d22e8")]
+        [Output (Guid = "56020950-21f1-4868-b753-07c5ad1d22e8", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new Slot<float> ();
         
         public Pulse()
@@ -23,12 +23,12 @@ namespace T3.Operators.Types.Id_5952d7b4_29ac_41fb_9324_287392d55048
             {
                 if (bang)
                 {
-                    _lastTriggerTime = (float)context.TimeForEffects;
+                    _lastTriggerTime = (float)context.LocalFxTime;
                 }
                 _lastBang = bang;
             }
 
-            var timeSinceTrigger = (float)context.TimeForEffects - _lastTriggerTime;
+            var timeSinceTrigger = (float)context.LocalFxTime - _lastTriggerTime;
             if (timeSinceTrigger < 0)
                 timeSinceTrigger = 0;
             Result.Value = Math.Max(Amplitude.GetValue(context) - timeSinceTrigger * Decay.GetValue(context),0);

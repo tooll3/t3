@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Newtonsoft.Json;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -102,7 +103,7 @@ namespace T3.Operators.Types.Id_a9e77500_ccb5_45b9_9f17_0d9bf9b58fb5
             }
 
             //var index = (int)(Time.GetValue(context) * SampleResolutionPerSecond);
-            var index = (int)(EvaluationContext.GlobalTimeForKeyframes * SampleResolutionPerSecond);
+            var index = (int)(Playback.Current.TimeInBars * SampleResolutionPerSecond);
             // Log.Debug("INdex:" + index);
             var needToFindNewBoundaries = (index <= _beatStartIndex || index >= _beatEndIndex);
             needToFindNewBoundaries |= needsRescanBeats;

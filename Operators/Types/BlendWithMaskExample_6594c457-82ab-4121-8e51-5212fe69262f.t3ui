@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "1dce8460-0f31-4afb-9d7a-973c87ae931f"/*LinearRamp*/,
+      "ChildId": "1dce8460-0f31-4afb-9d7a-973c87ae931f"/*LinearGradient*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

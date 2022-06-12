@@ -1,7 +1,7 @@
 {
   "Name": "ClimateWatch",
   "Id": "2442724b-5db8-4d3f-a888-9473070e4173",
-  "Namespace": "project.climate-watch",
+  "Namespace": "user.pixtur.project.climatewatch",
   "Inputs": [],
   "Children": [
     {
@@ -277,7 +277,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\geometry\\earth-land-low-poly.obj"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth-land-low-poly.obj"
         },
         {
           "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
@@ -352,7 +352,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\images\\HourClassUi.png"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\images\\HourClassUi.png"
         }
       ],
       "Outputs": []
@@ -1082,25 +1082,25 @@
       "Outputs": []
     },
     {
-      "Id": "4b66cdb5-0c00-493c-8909-6c137c9c7ee2"/*OrAll*/,
+      "Id": "4b66cdb5-0c00-493c-8909-6c137c9c7ee2"/*Any*/,
       "SymbolId": "1446e61e-7f68-4655-99c8-5be390f64851",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "1e9c2adc-3c59-422f-bcf7-90ac60610105"/*OrAll*/,
+      "Id": "1e9c2adc-3c59-422f-bcf7-90ac60610105"/*Any*/,
       "SymbolId": "1446e61e-7f68-4655-99c8-5be390f64851",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "4c8dab8c-dcd7-48ce-8f79-582980839fc6"/*OrAll*/,
+      "Id": "4c8dab8c-dcd7-48ce-8f79-582980839fc6"/*Any*/,
       "SymbolId": "1446e61e-7f68-4655-99c8-5be390f64851",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "5c76b249-ac59-45e4-9e1e-cadc591619f9"/*OrAll*/,
+      "Id": "5c76b249-ac59-45e4-9e1e-cadc591619f9"/*Any*/,
       "SymbolId": "1446e61e-7f68-4655-99c8-5be390f64851",
       "InputValues": [],
       "Outputs": []
@@ -1181,7 +1181,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\images\\ClimateWatch-Layout.png"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\images\\ClimateWatch-Layout.png"
         }
       ],
       "Outputs": []
@@ -1341,7 +1341,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\images\\Skull.png"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\images\\Skull.png"
         }
       ],
       "Outputs": []
@@ -1440,7 +1440,7 @@
         {
           "Id": "56bc4d62-4938-4173-86d5-1f1bd3ea6a43"/*ImagePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\images\\icon\\source-gas.png"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\images\\icon\\source-gas.png"
         },
         {
           "Id": "a03886ac-21a6-4c3e-bedd-a3c1a60f17ab"/*Position*/,
@@ -1471,7 +1471,7 @@
         {
           "Id": "56bc4d62-4938-4173-86d5-1f1bd3ea6a43"/*ImagePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\images\\icon\\source-oil.png"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\images\\icon\\source-oil.png"
         },
         {
           "Id": "a03886ac-21a6-4c3e-bedd-a3c1a60f17ab"/*Position*/,
@@ -1497,7 +1497,7 @@
         {
           "Id": "56bc4d62-4938-4173-86d5-1f1bd3ea6a43"/*ImagePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\images\\icon\\source-coal-ignite.png"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\images\\icon\\source-coal-ignite.png"
         },
         {
           "Id": "a03886ac-21a6-4c3e-bedd-a3c1a60f17ab"/*Position*/,
@@ -1528,7 +1528,7 @@
         {
           "Id": "56bc4d62-4938-4173-86d5-1f1bd3ea6a43"/*ImagePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\images\\icon\\source-coal.png"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\images\\icon\\source-coal.png"
         },
         {
           "Id": "a03886ac-21a6-4c3e-bedd-a3c1a60f17ab"/*Position*/,
@@ -1836,7 +1836,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\geometry\\earth-water-low-poly.obj"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth-water-low-poly.obj"
         },
         {
           "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
@@ -2008,7 +2008,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\geometry\\earth-land-low-poly.obj"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth-land-low-poly.obj"
         }
       ],
       "Outputs": []
@@ -2109,7 +2109,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\geometry\\earth-water-low-poly.obj"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth-water-low-poly.obj"
         }
       ],
       "Outputs": []
@@ -2121,7 +2121,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\geometry\\skull_600f.obj"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\skull_600f.obj"
         },
         {
           "Id": "ffd22736-a600-4c97-a4a4-ad3526b8b35c"/*UseGPUCaching*/,
@@ -2143,7 +2143,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\geometry\\skull_AO.jpg"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\skull_AO.jpg"
         }
       ],
       "Outputs": []
@@ -2269,7 +2269,7 @@
         {
           "Id": "b6932cbd-e6b6-447b-b416-701326227864"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\geometry\\earth-land-low-poly.obj"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth-land-low-poly.obj"
         }
       ],
       "Outputs": []
@@ -2309,7 +2309,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\geometry\\earth_AO.jpg"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth_AO.jpg"
         }
       ],
       "Outputs": []
@@ -2321,7 +2321,7 @@
         {
           "Id": "b6932cbd-e6b6-447b-b416-701326227864"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\geometry\\earth-water-low-poly.obj"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\earth-water-low-poly.obj"
         }
       ],
       "Outputs": []
@@ -2546,7 +2546,7 @@
         {
           "Id": "b6932cbd-e6b6-447b-b416-701326227864"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\geometry\\skull_600f.obj"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\geometry\\skull_600f.obj"
         }
       ],
       "Outputs": []
@@ -3690,6 +3690,36 @@
     },
     {
       "InstanceId": "3e6eb0af-ef92-4297-86ab-c73c67c01d50",
+      "InputId": "712adb09-d249-4c91-86db-3fedf6b05971",
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 0.0,
+            "Value": 0.0,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Horizontal",
+            "OutEditMode": "Horizontal",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 1.0,
+            "Value": 27.000001907348633,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Horizontal",
+            "OutEditMode": "Horizontal",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.141592653589793
+          }
+        ]
+      }
+    },
+    {
+      "InstanceId": "3e6eb0af-ef92-4297-86ab-c73c67c01d50",
       "InputId": "b4a8c16d-5a0f-4867-ae03-92a675abe709",
       "Index": 1,
       "Curve": {
@@ -3721,67 +3751,6 @@
     },
     {
       "InstanceId": "3e6eb0af-ef92-4297-86ab-c73c67c01d50",
-      "InputId": "b4a8c16d-5a0f-4867-ae03-92a675abe709",
-      "Index": 2,
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 0.0,
-            "Value": -1.6699999570846558,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Horizontal",
-            "OutEditMode": "Horizontal",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 1.0,
-            "Value": -0.5299999713897705,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Horizontal",
-            "OutEditMode": "Horizontal",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
-      }
-    },
-    {
-      "InstanceId": "3e6eb0af-ef92-4297-86ab-c73c67c01d50",
-      "InputId": "712adb09-d249-4c91-86db-3fedf6b05971",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 0.0,
-            "Value": 0.0,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Horizontal",
-            "OutEditMode": "Horizontal",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 1.0,
-            "Value": 27.000001907348633,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Horizontal",
-            "OutEditMode": "Horizontal",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
-      }
-    },
-    {
-      "InstanceId": "3e6eb0af-ef92-4297-86ab-c73c67c01d50",
       "InputId": "712adb09-d249-4c91-86db-3fedf6b05971",
       "Index": 1,
       "Curve": {
@@ -3801,6 +3770,37 @@
           {
             "Time": 1.0,
             "Value": 0.0,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Horizontal",
+            "OutEditMode": "Horizontal",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.141592653589793
+          }
+        ]
+      }
+    },
+    {
+      "InstanceId": "3e6eb0af-ef92-4297-86ab-c73c67c01d50",
+      "InputId": "b4a8c16d-5a0f-4867-ae03-92a675abe709",
+      "Index": 2,
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 0.0,
+            "Value": -1.6699999570846558,
+            "InType": "Spline",
+            "OutType": "Spline",
+            "InEditMode": "Horizontal",
+            "OutEditMode": "Horizontal",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 1.0,
+            "Value": -0.5299999713897705,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Horizontal",

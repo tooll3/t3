@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
-using T3.Gui.Graph;
+using t3.Gui.Commands.Animation;
 using T3.Gui.InputUi;
 using T3.Gui.InputUi.SingleControl;
 using T3.Gui.Interaction;
@@ -128,7 +126,7 @@ namespace T3.Gui.Windows.TimeLine
                 }
 
                 var lastPos = ImGui.GetItemRectMin();
-                var iconColor = isPinned? Color.Orange : Color.Black;
+                var iconColor = isPinned? Color.Orange : Color.Gray;
                 iconColor = iconColor.Fade(ImGui.IsItemHovered() ? 1 : 0.8f);
                 
                 Icons.DrawIconAtScreenPosition(Icon.Pin, lastPos, _drawList, iconColor);
@@ -235,6 +233,8 @@ namespace T3.Gui.Windows.TimeLine
                 "R", "G", "B", "A"
             };
 
+        private static readonly List<Vector2> Positions = new List<Vector2>(100);  // Reuse list to avoid allocations
+        
         private void DrawCurveLines(TimeLineCanvas.AnimationParameter parameter, ImRect layerArea)
         {
             const float padding = 2;
@@ -246,8 +246,9 @@ namespace T3.Gui.Windows.TimeLine
                 if (points.Count == 0)
                     continue;
 
-                var positions = new List<Vector2>();
+                Positions.Clear();
 
+                // TODO: Scanning twice is expensive. We could scale the positions after initial scan 
                 var minValue = float.PositiveInfinity;
                 var maxValue = float.NegativeInfinity;
                 foreach (var (_, vDef) in points)
@@ -260,30 +261,60 @@ namespace T3.Gui.Windows.TimeLine
 
                 VDefinition lastVDef = null;
                 float lastValue = 0;
+                float lastUOnScreen = 0;
 
-                foreach (var (u, vDef) in points)
+                var pointCount = points.Count;
+                
+                for(var pointIndex = 0; pointIndex < pointCount; pointIndex++)
                 {
+                    var (u, vDef) = points[pointIndex];
+                    var uOnScreen = TimeLineCanvas.Current.TransformX((float)u) - 1;
                     if (lastVDef != null && lastVDef.OutEditMode == VDefinition.EditMode.Constant)
                     {
-                        positions.Add(new Vector2(
-                                                  TimeLineCanvas.Current.TransformX((float)u) - 1,
-                                                  lastValue));
+                        Positions.Add(new Vector2(
+                                                   uOnScreen,
+                                                   lastValue));
                     }
+                    else if ( (uOnScreen - lastUOnScreen) > 15 &&  lastVDef != null 
+                                            && (lastVDef.OutEditMode != VDefinition.EditMode.Linear || 
+                                                vDef.OutEditMode != VDefinition.EditMode.Linear))
+                    {
+                        const int curveSteps = 6;
+                        for (var stepIndex = 0; stepIndex < curveSteps; stepIndex++)
+                        {
+                            var blendU = MathUtils.Lerp(lastVDef.U, u, (float)(stepIndex + 1) / (curveSteps + 1));
+                            
+                            var value1 = (float)curve.GetSampledValue(blendU);
+                            var value = MathUtils.RemapAndClamp(value1, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
+                            
+                            Positions.Add(new Vector2(TimeLineCanvas.Current.TransformX((float)blendU),
+                                                       value));
+                            
+                        }
+                        
+                    } 
 
                     lastValue = MathUtils.RemapAndClamp((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);
-                    positions.Add(new Vector2(
+                    Positions.Add(new Vector2(
                                               TimeLineCanvas.Current.TransformX((float)u),
                                               lastValue));
 
                     lastVDef = vDef;
+                    lastUOnScreen = uOnScreen;
                 }
 
                 _drawList.AddPolyline(
-                                      ref positions.ToArray()[0],
-                                      positions.Count,
+                                      ref Positions.ToArray()[0],
+                                      Positions.Count,
                                       parameter.Curves.Count() > 1 ? CurveColors[curveIndex % 4] : GrayCurveColor,
                                       ImDrawFlags.None,
-                                      2);
+                                      0.5f);
+
+                // Debug visualization...
+                // foreach (var p in _positions)
+                // {
+                //     _drawList.AddCircle(p + new Vector2(0,+20), 2, Color.Green.Fade(0.5f));
+                // }
                 curveIndex++;
             }
         }
@@ -351,7 +382,7 @@ namespace T3.Gui.Windows.TimeLine
                 }
             }
 
-            var keyHash = (int)vDef.GetHashCode();
+            var keyHash = vDef.GetHashCode();
             ImGui.PushID(keyHash);
             {
                 var isSelected = SelectedKeyframes.Contains(vDef);

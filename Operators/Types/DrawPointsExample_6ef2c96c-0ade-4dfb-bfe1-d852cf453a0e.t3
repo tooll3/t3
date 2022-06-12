@@ -697,7 +697,7 @@
       "Outputs": []
     },
     {
-      "Id": "57ba7cfc-e640-4917-b18c-f1680d1b54ec"/*LinearRamp*/,
+      "Id": "57ba7cfc-e640-4917-b18c-f1680d1b54ec"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {
@@ -1903,11 +1903,6 @@
           "Id": "9aff8ca6-d2f5-4bb5-9c38-af798061596c"/*HihatThreshold*/,
           "Type": "System.Single",
           "Value": 0.78
-        },
-        {
-          "Id": "96c60e29-342c-4c20-8e72-5e205e03e305"/*DetectionSmoothing*/,
-          "Type": "System.Single",
-          "Value": 0.95
         }
       ],
       "Outputs": []
@@ -2243,11 +2238,6 @@
           "Id": "9aff8ca6-d2f5-4bb5-9c38-af798061596c"/*HihatThreshold*/,
           "Type": "System.Single",
           "Value": 1.15
-        },
-        {
-          "Id": "96c60e29-342c-4c20-8e72-5e205e03e305"/*DetectionSmoothing*/,
-          "Type": "System.Single",
-          "Value": 0.99
         }
       ],
       "Outputs": []

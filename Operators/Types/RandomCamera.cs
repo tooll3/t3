@@ -1,11 +1,10 @@
 using System;
 using SharpDX;
 using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e;
+using T3.Operators.Utils;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable SuggestVarOrType_SimpleTypes
@@ -19,6 +18,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 
         [Output(Guid = "451245E2-AC0B-435A-841E-7C9EDC804606")]
         public readonly Slot<Object> Reference = new Slot<Object>();        
+
         
         public RandomCamera()
         {
@@ -29,6 +29,9 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         private void Update(EvaluationContext context)
         {
             Reference.DirtyFlag.Clear();
+
+
+            
             LastObjectToWorld = context.ObjectToWorld;
             
             float fov = MathUtil.DegreesToRadians(Fov.GetValue(context));
@@ -54,8 +57,8 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             
             var rot = Matrix.RotationYawPitchRoll(
                                                   ComputeAngle(SpinAngleAndWobble,1) 
-                                                  + MathUtil.DegreesToRadians((float)(SpinRate.GetValue(context) 
-                                                                                      * (EvaluationContext.GlobalTimeForEffects + SpinOffset.GetValue(context)) * 360  
+                                                  + MathUtil.DegreesToRadians((float)(SpinRate.GetValue(context) * (context.LocalFxTime 
+                                                                                                  + SpinOffset.GetValue(context)) * 360  
                                                                                       + MathUtils.PerlinNoise(0, 1, 6, seed) * 360 ) )
                                                                                       , 
                                                   -ComputeAngle(OrbitAngleAndWobble, 2), 
@@ -82,12 +85,20 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             var roll = ComputeAngle(AimRollAngleAndWobble, 5);
             var rotateAroundViewDirection = Matrix.RotationAxis(adjustedViewDirection, roll);
             up = Vector3.TransformNormal(up, rotateAroundViewDirection);
-            
-            WorldToCamera = Matrix.LookAtRH(eye, target, up);
+            up.Normalize();
 
+            WorldToCamera = Matrix.LookAtRH(eye, target, up);
+                        
+            if (context.BypassCameras)
+            {
+                Command.GetValue(context);
+                return;
+            }
+            
             // Set properties and evaluate sub tree
             var prevCameraToClipSpace = context.CameraToClipSpace;
             var prevWorldToCamera = context.WorldToCamera;
+
             
             context.CameraToClipSpace = CameraToClipSpace;
             context.WorldToCamera = WorldToCamera;
@@ -103,8 +114,11 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
                 var angleAndWobble = angleAndWobbleInput.GetValue(context);
                 var wobble=  Math.Abs(angleAndWobble.Y) < 0.001f 
                                  ? 0 
-                                 : (MathUtils.PerlinNoise((float)context.TimeForEffects * wobbleSpeed, 
-                                                         1, wobbleComplexity, seed- 123* seedIndex) -0.5f) *2 * angleAndWobble.Y ;
+                                 : (MathUtils.PerlinNoise((float)context.LocalFxTime * wobbleSpeed, 
+                                                         1, 
+                                                         wobbleComplexity, 
+                                                         seed+ 123* seedIndex) 
+                                    -0.5f) *2 * angleAndWobble.Y ;
                 return MathUtil.DegreesToRadians(angleAndWobble.X + wobble);
             }
         }

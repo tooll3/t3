@@ -5,11 +5,11 @@
   "Inputs": [
     {
       "Id": "2d740120-1fe5-444f-80a0-2201c4a9bfcd"/*ComputeSteps*/,
-      "DefaultValue": 0
+      "DefaultValue": 1
     },
     {
       "Id": "60edbf47-c594-4079-89cb-abffc2a5baa0"/*AgentCount*/,
-      "DefaultValue": 100
+      "DefaultValue": 16380
     },
     {
       "Id": "df993647-f384-4371-8196-2f52ba9e2d5a"/*RestoreLayoutEnabled*/,
@@ -48,7 +48,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ComputeShaderCourse\\06-Boids\\simple-boids-cs.hlsl"
+          "Value": "Resources\\user\\pixtur\\research\\ComputeShaderCourse\\06-Boids\\simple-boids-cs.hlsl"
         }
       ],
       "Outputs": []
@@ -1078,7 +1078,7 @@
         {
           "Id": "1531e949-fe17-4718-9ac6-4dc3884c23fc"/*RedFactor*/,
           "Type": "System.Single",
-          "Value": 1.0
+          "Value": -1.3999999
         },
         {
           "Id": "022f5d7d-b9fc-4c4f-8b7e-84aaedbfdd29"/*RedOffset*/,
@@ -1109,8 +1109,8 @@
           "Id": "a82bc040-a398-41ed-93e1-74309d44a663"/*Center*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 0.0,
-            "Y": 0.0,
+            "X": 0.024408586,
+            "Y": -0.017434493,
             "Z": 0.0
           }
         },

@@ -155,6 +155,7 @@ namespace T3.Compilation
             {
                 var emitResult = compilation.Emit(dllStream, pdbStream);
                 Log.Info($"compilation results of 'export':");
+                
                 if (!emitResult.Success)
                 {
                     foreach (var entry in emitResult.Diagnostics)

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Core.Logging;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -59,7 +60,13 @@ namespace T3.Core
         public Model(Assembly operatorAssembly, bool enabledLogging)
         {
             if (enabledLogging)
+            {
                 Log.AddWriter(new ConsoleWriter());
+                
+                // Start Logging
+                
+                Log.AddWriter(FileWriter.CreateDefault());
+            }
 
             OperatorsAssembly = operatorAssembly;
 
@@ -491,8 +498,8 @@ namespace T3.Core
             using (var sr = new StreamReader(symbolFile))
             using (var jsonReader = new JsonTextReader(sr))
             {
-                Json json = new Json {Reader = jsonReader};
-                var symbol = json.ReadSymbol(this);
+                SymbolJson symbolJson = new SymbolJson {Reader = jsonReader};
+                var symbol = symbolJson.ReadSymbol(this);
                 if (symbol != null)
                 {
                     symbol.SourcePath = OperatorTypesFolder + symbol.Name + SourceExtension;
@@ -535,16 +542,16 @@ namespace T3.Core
                 }
             }
 
-            Json json = new Json();
+            SymbolJson symbolJson = new SymbolJson();
             // store all symbols in corresponding files
             foreach (var (_, symbol) in SymbolRegistry.Entries)
             {
                 using (var sw = new StreamWriter(OperatorTypesFolder + symbol.Name + "_" + symbol.Id + SymbolExtension))
                 using (var writer = new JsonTextWriter(sw))
                 {
-                    json.Writer = writer;
-                    json.Writer.Formatting = Formatting.Indented;
-                    json.WriteSymbol(symbol);
+                    symbolJson.Writer = writer;
+                    symbolJson.Writer.Formatting = Formatting.Indented;
+                    symbolJson.WriteSymbol(symbol);
                 }
 
                 if (!string.IsNullOrEmpty(symbol.PendingSource))
@@ -560,14 +567,14 @@ namespace T3.Core
         {
             RemoveObsoleteSymbolFiles(symbol);
 
-            Json json = new Json();
+            SymbolJson symbolJson = new SymbolJson();
 
             using (var sw = new StreamWriter(GetFilePathForSymbol(symbol)))
             using (var writer = new JsonTextWriter(sw))
             {
-                json.Writer = writer;
-                json.Writer.Formatting = Formatting.Indented;
-                json.WriteSymbol(symbol);
+                symbolJson.Writer = writer;
+                symbolJson.Writer.Formatting = Formatting.Indented;
+                symbolJson.WriteSymbol(symbol);
             }
 
             if (!string.IsNullOrEmpty(symbol.PendingSource))
@@ -688,6 +695,7 @@ namespace T3.Core
             var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, string.Empty);
             File.WriteAllText(projectFilePath, newContent);
         }
+        
         
         private static string SymbolExtension { get; } = ".t3";
         private static string SymbolUiExtension { get; } = ".t3ui";

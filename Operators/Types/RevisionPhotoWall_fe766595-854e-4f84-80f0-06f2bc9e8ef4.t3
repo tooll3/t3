@@ -1,7 +1,7 @@
 {
   "Name": "RevisionPhotoWall",
   "Id": "fe766595-854e-4f84-80f0-06f2bc9e8ef4",
-  "Namespace": "project.handclap",
+  "Namespace": "user.wake.handclap",
   "Inputs": [],
   "Children": [
     {

@@ -7,13 +7,7 @@
     {
       "Id": "7a2939e4-8c15-4c86-bf83-cc0555c4e3d3"/*AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
-      "InputValues": [
-        {
-          "Id": "96c60e29-342c-4c20-8e72-5e205e03e305"/*DetectionSmoothing*/,
-          "Type": "System.Single",
-          "Value": 0.912
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {

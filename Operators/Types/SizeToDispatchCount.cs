@@ -22,8 +22,8 @@ namespace T3.Operators.Types.Id_cc11774e_82dd_409f_97fb_5be3f2746f9d
             if (threadGroups.X == 0 || threadGroups.Y == 0)
                 return;
 
-            DispatchCount.Value = new Int3(size.Width / threadGroups.X, 
-                                           size.Height / threadGroups.Y, 1);
+            DispatchCount.Value = new Int3(size.Width / threadGroups.X + 1, 
+                                           size.Height / threadGroups.Y + 1, 1);
         }
 
         [Input(Guid = "714e7c0d-0137-4bc6-9e5b-93386b2efe13")]

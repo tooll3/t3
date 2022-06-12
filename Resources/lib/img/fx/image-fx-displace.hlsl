@@ -11,6 +11,7 @@ cbuffer ParamConstants : register(b0)
     float SampleRadius;
     float SampleSpread;
     float SampleOffset;
+    float2 DisplaceMapOffset;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -100,13 +101,13 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 d = 0;
     for(sampleIndex = 1; sampleIndex < dSamples; sampleIndex++)
     {
-        float4 cx1= DisplaceMap.Sample(texSampler, float2(uv.x + sx*sampleIndex, uv.y))*padding;
+        float4 cx1= DisplaceMap.Sample(texSampler, float2( uv.x + sx*sampleIndex, uv.y) + DisplaceMapOffset )*padding;
         float x1= (cx1.r + cx1.g + cx1.b) / 3;
-        float4 cx2= DisplaceMap.Sample(texSampler, float2(uv.x - sx*sampleIndex, uv.y))*padding; 
+        float4 cx2= DisplaceMap.Sample(texSampler, float2(uv.x - sx*sampleIndex, uv.y)  + DisplaceMapOffset )*padding; 
         float x2= (cx2.r + cx2.g + cx2.b) / 3;
-        float4 cy1= DisplaceMap.Sample(texSampler, float2(uv.x,       uv.y + sy*sampleIndex))*padding;
+        float4 cy1= DisplaceMap.Sample(texSampler, float2(uv.x,       uv.y + sy*sampleIndex)  + DisplaceMapOffset)*padding;
         float y1= (cy1.r + cy1.g + cy1.b) / 3;
-        float4 cy2= DisplaceMap.Sample(texSampler, float2(uv.x,       uv.y - sy*sampleIndex))*padding;    
+        float4 cy2= DisplaceMap.Sample(texSampler, float2(uv.x,       uv.y - sy*sampleIndex)  + DisplaceMapOffset)*padding;    
         float y2= (cy2.r + cy2.g + cy2.b) / 3;
         d += float2( (x1-x2) , (y1-y2));
 

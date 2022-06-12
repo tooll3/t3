@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using ImGuiNET;
-using t3.App;
+using T3.App;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.InputUi;
@@ -11,9 +11,9 @@ namespace T3.Gui.Interaction
 {
     public static class ColorEditPopup
     {
-        public static bool DrawPopup(ref Vector4 color, Vector4 previousColor)
+        public static InputEditStateFlags DrawPopup(ref Vector4 color, Vector4 previousColor)
         {
-            var edited = false;
+            var edited = InputEditStateFlags.Nothing;
             var cColor = new Color(color);
             const float saturationWarp = 1.5f; 
             ImGui.SetNextWindowSize(new Vector2(270, 290));
@@ -46,15 +46,13 @@ namespace T3.Gui.Interaction
                     drawList.AddCircle(windowPos + pPickedColorPos, 1, Color.White.Fade(0.5f));
                 }
                 
-                
                 drawList.AddCircle(windowPos + pickedColorPos, 5, Color.Black);
                 drawList.AddCircle(windowPos + pickedColorPos, 4, Color.White);
-                drawList.AddCircle(Vector2.Zero, 100, Color.Green);
                 ImGui.InvisibleButton("colorwheel", size);
                 if (ImGui.IsItemActive())
                 {
                     var localPosition = ImGui.GetMousePos() - windowPos - size / 2;
-                    edited = true;
+                    edited |= InputEditStateFlags.Modified;
 
                     hNormalized = (MathF.Atan2(localPosition.X, localPosition.Y) / (2 * MathF.PI) - 0.25f);
                     if (hNormalized < 0)
@@ -66,6 +64,16 @@ namespace T3.Gui.Interaction
                     linearSaturation = MathF.Pow(saturation, saturationWarp);
 
                     cColor = Color.FromHSV(hNormalized, linearSaturation, v, cColor.A);
+                }
+
+                if (ImGui.IsItemActivated())
+                {
+                    edited |= InputEditStateFlags.Started;
+                }
+
+                if (ImGui.IsItemDeactivated())
+                { 
+                    edited |= InputEditStateFlags.Finished;
                 }
 
 
@@ -106,7 +114,16 @@ namespace T3.Gui.Interaction
                         }
                         cColor.V = normalizedValue;
                         
-                        edited = true;
+                        edited |= InputEditStateFlags.Modified;
+                    }
+                    if (ImGui.IsItemActivated())
+                    {
+                        edited |= InputEditStateFlags.Started;
+                    }                    
+                    
+                    if(ImGui.IsItemDeactivated())
+                    {
+                        edited |= InputEditStateFlags.Finished;
                     }
                 }
                 
@@ -147,7 +164,15 @@ namespace T3.Gui.Interaction
                     if (ImGui.IsItemActive())
                     {
                         cColor.A = ((ImGui.GetMousePos() - pMin).X / barWidth).Clamp(0,1);
-                        edited = true;
+                        edited |= InputEditStateFlags.Modified;
+                    }
+                    if (ImGui.IsItemActivated())
+                    {
+                        edited |= InputEditStateFlags.Started;
+                    }
+                    if (ImGui.IsItemDeactivated())
+                    {
+                        edited |= InputEditStateFlags.Finished;
                     }
                 }                
 
@@ -170,7 +195,7 @@ namespace T3.Gui.Interaction
                         }
 
                         cColor.Hue = hueDegrees / 360;
-                        edited = true;
+                        edited |= InputEditStateFlags.Modified;
                     }
 
                     ImGui.PopID();
@@ -182,7 +207,7 @@ namespace T3.Gui.Interaction
                                              format: "{0:0.00}") is InputEditStateFlags.Modified)
                     {
                         cColor.Saturation = linearSaturation.Clamp(0, 1);
-                        edited = true;
+                        edited |= InputEditStateFlags.Modified;
                     }
                     ImGui.PopID();
 
@@ -191,7 +216,7 @@ namespace T3.Gui.Interaction
                     if (SingleValueEdit.Draw(ref v, inputSize, 0, 20, true, 0.020f, "{0:0.00}") is InputEditStateFlags.Modified)
                     {
                         cColor.V = v.Clamp(0, 10);
-                        edited = true;
+                        edited |= InputEditStateFlags.Modified;
                     }
                     ImGui.PopID();
 
@@ -204,7 +229,7 @@ namespace T3.Gui.Interaction
                     if (SingleValueEdit.Draw(ref a, inputSize, 0, 20, true, 0.020f, "{0:0.00}") is InputEditStateFlags.Modified)
                     {
                         cColor.A = a.Clamp(0, 1);
-                        edited = true;
+                        edited |= InputEditStateFlags.Modified;
                     }
                     ImGui.PopID();
                 }

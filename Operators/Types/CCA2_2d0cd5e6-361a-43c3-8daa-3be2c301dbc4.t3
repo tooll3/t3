@@ -64,7 +64,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ComputeShaderCourse\\02a-CyclicCellularAutomata\\shaders\\cca-cs.hlsl"
+          "Value": "Resources\\user\\pixtur\\research\\ComputeShaderCourse\\02a-CyclicCellularAutomata\\shaders\\cca-cs.hlsl"
         }
       ],
       "Outputs": []
@@ -425,7 +425,7 @@
       "Outputs": []
     },
     {
-      "Id": "104c1b87-8345-4a34-b10e-d50013216991"/*Loop*/,
+      "Id": "104c1b87-8345-4a34-b10e-d50013216991"/*__ObsoleteLoop*/,
       "SymbolId": "4a6fcc72-c703-4290-8e4a-2f90805cefa8",
       "InputValues": [
         {

@@ -453,7 +453,7 @@
       "Outputs": []
     },
     {
-      "Id": "2b69415c-0553-4ccf-aedd-936b20dc73b5"/*LinearRamp*/,
+      "Id": "2b69415c-0553-4ccf-aedd-936b20dc73b5"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {
@@ -616,7 +616,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ReactionDiffusion\\reaction-diffusion-cs.hlsl"
+          "Value": "Resources\\user\\pixtur\\research\\ReactionDiffusion\\reaction-diffusion-cs.hlsl"
         }
       ],
       "Outputs": []
@@ -761,7 +761,7 @@
       "Outputs": []
     },
     {
-      "Id": "bac111f9-aebc-4db6-90ef-0d5b9693bba4"/*Loop*/,
+      "Id": "bac111f9-aebc-4db6-90ef-0d5b9693bba4"/*__ObsoleteLoop*/,
       "SymbolId": "4a6fcc72-c703-4290-8e4a-2f90805cefa8",
       "InputValues": [
         {

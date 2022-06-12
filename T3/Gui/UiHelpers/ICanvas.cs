@@ -7,11 +7,11 @@ namespace T3.Gui.UiHelpers
 {
     public interface INodeCanvas:ICanvas
     {
-        IEnumerable<ISelectableNode> SelectableChildren { get; }
+        IEnumerable<ISelectableCanvasObject> SelectableChildren { get; }
     }
     
     /// <summary>
-    /// A zoomable canvas that can hold <see cref="ISelectableNode"/> elements.
+    /// A zoomable canvas that can hold <see cref="ISelectableCanvasObject"/> elements.
     /// </summary>
     public interface ICanvas
     {

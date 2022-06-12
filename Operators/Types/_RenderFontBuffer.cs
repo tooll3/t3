@@ -214,7 +214,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                                                          (charInfo.X + charInfo.Width) / textureWidth, // uRight 
                                                          (charInfo.Y + charInfo.Height) / textureHeight // vBottom                              
                                                         ),
-                                  BirthTime = (float)context.TimeForKeyframes,
+                                  BirthTime = (float)context.LocalTime,
                                   Speed = 0,
                                   Id = (uint)outputIndex,
                               };

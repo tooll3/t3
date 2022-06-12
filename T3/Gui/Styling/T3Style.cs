@@ -84,6 +84,8 @@ namespace T3.Gui
                 _colors[(int)ImGuiCol.ResizeGrip] = new Vector4(0.00f, 0.00f, 0.00f, 0.25f);
                 _colors[(int)ImGuiCol.WindowBg] = new Vector4(0.1f,0.1f,0.1f, 0.98f);
                 _colors[(int)ImGuiCol.ModalWindowDimBg] = new Vector4(0.1f,0.1f,0.1f, 0.1f);
+                _colors[(int)ImGuiCol.MenuBarBg] = new Vector4(0.0f,0.0f,0.0f, 1.0f);
+                
             }
 
             public void Apply(ImGuiStylePtr style)
@@ -118,6 +120,7 @@ namespace T3.Gui
             public float ChildRounding = 0;
             public float ScrollbarRounding = 2;
             public float FrameRounding = 0f;
+             
 
             public void Apply(ImGuiStylePtr style)
             {
@@ -131,6 +134,9 @@ namespace T3.Gui
                 style.ChildRounding = ChildRounding;
                 style.ScrollbarRounding = ScrollbarRounding;
                 style.FrameRounding = FrameRounding;
+                style.DisplayWindowPadding = Vector2.Zero;
+                style.DisplaySafeAreaPadding = Vector2.Zero;
+                style.ChildBorderSize = 0;
             }
 
             public void DrawUi()

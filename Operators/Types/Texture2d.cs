@@ -31,20 +31,24 @@ namespace T3.Operators.Types.Id_f52db9a4_fde9_49ca_9ef7_131825c34e65
                 return;
             }
 
+            var requestedMipLevels = MipLevels.GetValue(context);
+            var maxMapLevels = (int)Math.Log2(Math.Max(size.Width, size.Height));
+            var mipLevels = Math.Min(requestedMipLevels, maxMapLevels)+1;
+            
             var texDesc = new Texture2DDescription
-                          {
-                              Width = size.Width,
-                              Height = size.Height,
-                              MipLevels = MipLevels.GetValue(context),
-                              ArraySize = ArraySize.GetValue(context),
-                              Format = Format.GetValue(context),
-                              //SampleDescription = SampleDescription.GetValue(context),
-                              SampleDescription = new SampleDescription(1, 0),
-                              Usage = ResourceUsage.GetValue(context),
-                              BindFlags = BindFlags.GetValue(context),
-                              CpuAccessFlags = CpuAccessFlags.GetValue(context),
-                              OptionFlags = ResourceOptionFlags.GetValue(context)
-                          };
+                              {
+                                  Width = size.Width,
+                                  Height = size.Height,
+                                  MipLevels = mipLevels,
+                                  ArraySize = ArraySize.GetValue(context),
+                                  Format = Format.GetValue(context),
+                                  //SampleDescription = SampleDescription.GetValue(context),
+                                  SampleDescription = new SampleDescription(1, 0),
+                                  Usage = ResourceUsage.GetValue(context),
+                                  BindFlags = BindFlags.GetValue(context),
+                                  CpuAccessFlags = CpuAccessFlags.GetValue(context),
+                                  OptionFlags = ResourceOptionFlags.GetValue(context)
+                              };
 
             try
             {

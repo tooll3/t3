@@ -9,17 +9,17 @@ namespace T3.Gui.Interaction.Timing
     /// </summary>
     public class BeatTimingPlayback : Playback
     {
-        public override void Update(float timeSinceLastFrameInSecs, bool keepBeatTimeRunning = false)
+        public override void Update(bool idleMotionEnabled = false)
         {
-            BeatTime = BeatTiming.BeatTime;
+            FxTimeInBars = BeatTiming.BeatTime;
             Bpm = BeatTiming.Bpm;
-            TimeInBars = BeatTime;            
+            TimeInBars = FxTimeInBars;            
             
             // TODO: setting the context time here is kind of awkward
-            EvaluationContext.GlobalTimeForKeyframes = TimeInBars;
-            EvaluationContext.GlobalTimeForEffects = BeatTime;
-            EvaluationContext.BPM = Bpm;
-            EvaluationContext.GlobalTimeInSecs = TimeInSecs;
+            //GlobalTimeForKeyframes = TimeInBars;
+            // context.Playback.BeatTime = BeatTime;
+            // context.Playback.Bpm = Bpm;
+            // context.Playback.TimeInSecs = TimeInSecs;
         }
     }
 }

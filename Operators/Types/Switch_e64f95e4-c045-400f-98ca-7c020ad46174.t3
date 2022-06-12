@@ -10,6 +10,10 @@
     {
       "Id": "00fd2794-567a-4f9b-a900-c2ebf9760764"/*Index*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "e896b269-d17e-417f-be1f-2d6e9addae91"/*OptimizeInvalidation*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

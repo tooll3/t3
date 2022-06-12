@@ -1,62 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using T3.Core.Logging;
-using T3.Gui;
 
-namespace t3.Gui.AutoBackup
+namespace T3.Gui.AutoBackup
 {
-    public class AutoBackup : IDisposable
+    public class AutoBackup
     {
         public int SecondsBetweenSaves { get; set; }
 
-        public bool Enabled
-        {
-            get => _enabled;
-            set
-            {
-                if (value == _enabled)
-                    return;
+        public bool IsEnabled { get; set; }
 
-                _enabled = value;
-                if (_enabled)
-                    Start();
-                else
-                    DisposeCurrent();
-            }
-        }
 
         public AutoBackup()
         {
             SecondsBetweenSaves = 3 * 60;
-            Enabled = false;
+            IsEnabled = false;
         }
 
-        public void Dispose()
+        
+        /// <summary>
+        /// Should be call after all frame operators are completed
+        /// </summary>
+        public void CheckForSave()
         {
-            DisposeCurrent();
-        }
+            if (!IsEnabled ||  _isSaving || Stopwatch.ElapsedMilliseconds < SecondsBetweenSaves * 1000)
+                return;
+            
+            _isSaving = true;
+            Task.Run(CreateBackupCallback);
+            Stopwatch.Restart();
+        }  
+        
 
-        private void Start()
-        {
-            DisposeCurrent();
-            _autoEvent = new AutoResetEvent(false);
-            _timer = new Timer(CreateBackupCallback, _autoEvent, 0, SecondsBetweenSaves * 1000);
-        }
-
-        private void DisposeCurrent()
-        {
-            _autoEvent?.WaitOne();
-            _timer?.Dispose();
-            _autoEvent?.Dispose();
-        }
-
-        private static void CreateBackupCallback(Object stateInfo)
+        private static void CreateBackupCallback()
         {
             if (T3Ui.IsCurrentlySaving)
             {
@@ -65,8 +49,6 @@ namespace t3.Gui.AutoBackup
             }
             
             T3Ui.SaveModified();
-            var autoEvent = (AutoResetEvent)stateInfo;
-            autoEvent.Reset();
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
@@ -124,8 +106,7 @@ namespace t3.Gui.AutoBackup
             {
                 DeletePath(tempPath);
             }
-
-            autoEvent.Set();
+            _isSaving = false;
         }
 
         private static void CopyDirectory(string sourcePath, string destPath, string searchPattern)
@@ -362,10 +343,10 @@ namespace t3.Gui.AutoBackup
 
             return 0;
         }
+        
+        private static readonly Stopwatch Stopwatch = Stopwatch.StartNew();
+        private static bool _isSaving;
 
-        private bool _enabled;
-        private Timer _timer;
-        private AutoResetEvent _autoEvent;
         private const string ConfigDirectory = ".t3";
         private const string OperatorsDirectory = @"Operators\Types";
         private const string BackupDirectory = ".backup";

@@ -1,14 +1,15 @@
 using System;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_4a6fcc72_c703_4290_8e4a_2f90805cefa8
+namespace T3.Operators.Types.Id_3631c727_36a0_4f26_ae76_ee9c100efc33
 {
     public class Loop : Instance<Loop>
     {
-        [Output(Guid = "c4ed1524-4175-42ce-8590-10ec63318c16")]
+        [Output(Guid = "5685cbc4-fe19-4f0e-95a3-147d1fbbad15")]
         public readonly Slot<Command> Output = new Slot<Command>();
 
         public Loop()
@@ -18,11 +19,20 @@ namespace T3.Operators.Types.Id_4a6fcc72_c703_4290_8e4a_2f90805cefa8
 
         private void Update(EvaluationContext context)
         {
-            string variableName = VariableName.GetValue(context);
-            float end = Count.GetValue(context);
-            for (float i = 0f; i < end; i += 1.0f)
+            var variableName = VariableName.GetValue(context);
+            var normalizedVariableName = VariableName.GetValue(context) + "_normalized";
+            var end = Count.GetValue(context);
+            for (var i = 0; i < end; i ++)
             {
                 context.FloatVariables[variableName] = i;
+                if (end == 1)
+                {
+                    context.FloatVariables[normalizedVariableName] = 0;
+                }
+                else
+                {
+                    context.FloatVariables[normalizedVariableName] = i / ((float)(end - 1));
+                }
 
                 DirtyFlag.InvalidationRefFrame++;
                 Command.Invalidate();
@@ -30,17 +40,15 @@ namespace T3.Operators.Types.Id_4a6fcc72_c703_4290_8e4a_2f90805cefa8
             }
         }
         
-        [Input(Guid = "51d969ee-c373-4bfd-9290-b60070b8872c")]
-        public readonly InputSlot<Command> Command = new InputSlot<Command>();
+        [Input(Guid = "49552a0c-2060-4f03-ad39-388293bb6871")]
+        public readonly InputSlot<Command> Command = new();
 
-        [Input(Guid = "3d488da4-a984-4588-af58-146bf32cbc88")]
-        public readonly InputSlot<string> VariableName = new InputSlot<string>();
+        [Input(Guid = "F9AEBE04-DD82-459F-8175-7139C7B2E468")]
+        public readonly InputSlot<string> VariableName = new();
 
-        [Input(Guid = "CF64344B-0D61-4969-A600-6C7B4F9B43FE")]
-        public readonly InputSlot<float> Start = new InputSlot<float>();
 
-        [Input(Guid = "726914f5-6ab8-4910-b225-323258aa9879")]
-        public readonly InputSlot<float> Count = new InputSlot<float>();
+        [Input(Guid = "1F6E2ADB-CFF8-4DC4-9CB4-A26E3AD8B087")]
+        public readonly InputSlot<int> Count = new();
     }
 }
 

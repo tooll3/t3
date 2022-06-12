@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_8a6ab5ec_caa6_4baa_a9d1_2079af22685c
         {
             var t = OverrideTime.IsConnected
                         ? OverrideTime.GetValue(context)
-                        : (float)context.TimeForEffects * SpeedFactor.GetValue(context);
+                        : (float)context.LocalFxTime * SpeedFactor.GetValue(context);
 
             //var value = Value.GetValue(context);
             var amplitude = Amplitude.GetValue(context);

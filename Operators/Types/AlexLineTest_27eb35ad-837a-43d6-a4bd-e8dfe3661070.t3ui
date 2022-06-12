@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "edfd1185-4f1f-424b-ac7f-ca667d7190d1"/*Partial*/,
+      "ChildId": "edfd1185-4f1f-424b-ac7f-ca667d7190d1"/*Demo_There*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -488,7 +488,7 @@
       }
     },
     {
-      "ChildId": "c6710bb6-d1ec-4127-94b6-ce2c112da2b1"/*CombineMeshBuffers*/,
+      "ChildId": "c6710bb6-d1ec-4127-94b6-ce2c112da2b1"/*AssembleMeshBuffers*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

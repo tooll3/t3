@@ -6,9 +6,9 @@ namespace T3.Gui.Interaction
 {
     public static class VectorValueEdit
     {
-        public static InputEditStateFlags Draw(float[] components, float min, float max, float scale, bool clamp)
+        public static InputEditStateFlags Draw(float[] components, float min, float max, float scale, bool clamp, float rightPadding = 0)
         {
-            var width = ImGui.GetContentRegionAvail().X / components.Length;
+            var width = (ImGui.GetContentRegionAvail().X - rightPadding) / components.Length;
             var size = new Vector2(width, 0);
 
             var resultingEditState = InputEditStateFlags.Nothing;

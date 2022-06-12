@@ -129,7 +129,7 @@
         {
           "Id": "e0479d39-38bb-4802-9a97-3e8991797fc9"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-partial\\pointclouds\\point_cloud2.asc"
+          "Value": "Resources\\user\\still\\proj-there\\pointclouds\\point_cloud2.asc"
         }
       ],
       "Outputs": []

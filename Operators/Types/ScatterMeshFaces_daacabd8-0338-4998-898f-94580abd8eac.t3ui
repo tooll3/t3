@@ -226,7 +226,7 @@
       }
     },
     {
-      "ChildId": "c8c33bc5-d270-4546-8439-dd9451980821"/*CombineMeshBuffers*/,
+      "ChildId": "c8c33bc5-d270-4546-8439-dd9451980821"/*AssembleMeshBuffers*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

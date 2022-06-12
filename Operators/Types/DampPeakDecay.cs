@@ -1,10 +1,8 @@
 using System;
 using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Operators.Types.Id_c513c58d_e45c_408d_a0b8_250c9af31545;
 
 namespace T3.Operators.Types.Id_ef3a1411_e88c_43a8_83b4_931fdbf16c75
 {
@@ -20,7 +18,7 @@ namespace T3.Operators.Types.Id_ef3a1411_e88c_43a8_83b4_931fdbf16c75
 
         private void Update(EvaluationContext context)
         {
-            var runTime = EvaluationContext.GlobalTimeForEffects;
+            var runTime = context.Playback.FxTimeInBars;
             
             var wasEvaluatedThisFrame = Math.Abs(runTime - _lastEvalTime) < 0.001f;
             if (wasEvaluatedThisFrame)

@@ -19,6 +19,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Gui.ChildUi;
 using T3.Gui.InputUi;
+using t3.Gui.InputUi.SimpleInputUis;
 using T3.Gui.InputUi.SingleControl;
 using T3.Gui.OutputUi;
 
@@ -228,7 +229,7 @@ namespace T3.Gui
             // first load core data
             base.Load();
 
-            UiJson json = new UiJson();
+            SymbolUiJson json = new SymbolUiJson();
             var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}");
             foreach (var symbolUiFile in symbolUiFiles)
             {
@@ -274,7 +275,7 @@ namespace T3.Gui
             }
 
             // store all symbols in corresponding files
-            UiJson json = new UiJson();
+            SymbolUiJson json = new SymbolUiJson();
             var resourceManager = ResourceManager.Instance();
             foreach (var (_, symbolUi) in SymbolUiRegistry.Entries)
             {
@@ -314,7 +315,7 @@ namespace T3.Gui
             IsSaving = true;
             
             var resourceManager = ResourceManager.Instance();
-            UiJson json = new UiJson();
+            SymbolUiJson json = new SymbolUiJson();
             foreach (var symbolUi in modifiedSymbolUis)
             {
                 // First save core data and remove obsolete files

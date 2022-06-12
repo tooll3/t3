@@ -9,6 +9,8 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
+using t3.Gui.Commands.Animation;
+using t3.Gui.Commands.Graph;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction;
@@ -650,7 +652,7 @@ namespace T3.Gui.Windows.TimeLine
 
         /// <summary>
         /// Maps selection of <see cref="ITimeClip"/>s
-        /// to <see cref="SelectionManager"/> with <see cref="ISelectableNode"/>s.
+        /// to <see cref="NodeSelection"/> with <see cref="ISelectableCanvasObject"/>s.
         /// </summary>
         private static class ClipSelection
         {
@@ -672,7 +674,7 @@ namespace T3.Gui.Windows.TimeLine
                 }
 
                 _selectedClips.Clear();
-                foreach (var selectedGraphNode in SelectionManager.Selection)
+                foreach (var selectedGraphNode in NodeSelection.Selection)
                 {
                     if (_compositionTimeClips.TryGetValue(selectedGraphNode.Id, out var selectedTimeClip))
                     {
@@ -691,7 +693,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 foreach (var c in _selectedClips)
                 {
-                    SelectionManager.DeselectCompositionChild(_compositionOp, c.Id);
+                    NodeSelection.DeselectCompositionChild(_compositionOp, c.Id);
                 }
                 _selectedClips.Clear();
             }
@@ -700,15 +702,15 @@ namespace T3.Gui.Windows.TimeLine
             {
                 foreach (var c in _selectedClips)
                 {
-                    SelectionManager.DeselectCompositionChild(_compositionOp, c.Id);
+                    NodeSelection.DeselectCompositionChild(_compositionOp, c.Id);
                 }
-                SelectionManager.SelectCompositionChild(_compositionOp, timeClip.Id, replaceSelection:false);
+                NodeSelection.SelectCompositionChild(_compositionOp, timeClip.Id, replaceSelection:false);
                 _selectedClips.Add(timeClip);
             }
 
             public static void Deselect(ITimeClip timeClip)
             {
-                SelectionManager.DeselectCompositionChild(_compositionOp, timeClip.Id);
+                NodeSelection.DeselectCompositionChild(_compositionOp, timeClip.Id);
                 _selectedClips.Remove(timeClip);
             }
             
@@ -721,7 +723,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 foreach (var timeClip in matchingClips)
                 {
-                    SelectionManager.SelectCompositionChild(_compositionOp, timeClip.Id, replaceSelection:false);
+                    NodeSelection.SelectCompositionChild(_compositionOp, timeClip.Id, replaceSelection:false);
                     _selectedClips.Add(timeClip);
                 }
             }

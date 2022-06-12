@@ -1,7 +1,7 @@
 {
   "Name": "NearestNeighboughTest",
   "Id": "8228a543-f725-41d9-8629-f6d85f9e858e",
-  "Namespace": "user.pixtur.proj.pillowfight",
+  "Namespace": "user.pixtur.project.pillowfight",
   "Inputs": [
     {
       "Id": "8e35d7a7-433d-478f-b202-bd757f4d5d72"/*PointsA_*/,
@@ -253,7 +253,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\proj\\PillowFight\\cs\\flag-neighbour-points.hlsl"
+          "Value": "Resources\\user\\pixtur\\VJ\\PillowFight\\cs\\flag-neighbour-points.hlsl"
         },
         {
           "Id": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,

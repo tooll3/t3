@@ -2,7 +2,7 @@
 using System.IO;
 using T3.Core.Logging;
 
-namespace T3.Core.Logging
+namespace Core.Logging
 {
     /// <summary>
     /// Write Debug-Log messages to log files
@@ -11,7 +11,7 @@ namespace T3.Core.Logging
     {
         public LogEntry.EntryLevel Filter { get; set; }
 
-        public FileWriter(String filename)
+        public FileWriter(string filename)
         {
             _fileWriter = new StreamWriter(filename);
 #if DEBUG
@@ -35,5 +35,14 @@ namespace T3.Core.Logging
         }
 
         private readonly StreamWriter _fileWriter;
+
+        public static ILogWriter CreateDefault()
+        {
+            Directory.CreateDirectory(@"Log");
+            return new FileWriter($@"Log/{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.log")
+                       {
+                           Filter = LogEntry.EntryLevel.All
+                       };
+        }
     }
 }
