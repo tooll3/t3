@@ -7,8 +7,9 @@
 
 
 ## Installation
+A stand alone version is in development. Although it's working already it needs further clean up and testing.
 
-As of now there is no stand-alone version available. This means that you need an IDE like Visual Studio or Rider to build and run it. This is free and not as difficult as it might sound.
+This means that you need an IDE like Visual Studio or Rider to build and run it. This is free and not as difficult as it might sound.
 
 ### Dependencies
 
