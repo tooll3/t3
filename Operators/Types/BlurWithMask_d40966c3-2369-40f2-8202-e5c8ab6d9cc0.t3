@@ -9,7 +9,7 @@
     },
     {
       "Id": "25091e3d-36ef-4892-965c-b7d3c983da22"/*Samples*/,
-      "DefaultValue": 10.0
+      "DefaultValue": 16.0
     },
     {
       "Id": "0623d858-8986-4058-b209-28b0649f1441"/*Color*/,
@@ -93,6 +93,11 @@
           "Id": "109d0526-615c-401e-bc78-f29fe730c836"/*BlendEnabled*/,
           "Type": "System.Boolean",
           "Value": false
+        },
+        {
+          "Id": "440e471b-9f67-435c-9e21-304cd57728aa"/*GenerateMips*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": [
@@ -130,6 +135,11 @@
           "Id": "109d0526-615c-401e-bc78-f29fe730c836"/*BlendEnabled*/,
           "Type": "System.Boolean",
           "Value": false
+        },
+        {
+          "Id": "440e471b-9f67-435c-9e21-304cd57728aa"/*GenerateMips*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []

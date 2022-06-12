@@ -33,6 +33,9 @@ namespace T3.Operators.Types.Id_a2567844_3314_48de_bda7_7904b5546535
 
         [Input(Guid = "109d0526-615c-401e-bc78-f29fe730c836")]
         public readonly InputSlot<bool> BlendEnabled = new InputSlot<bool>();
+
+        [Input(Guid = "440e471b-9f67-435c-9e21-304cd57728aa")]
+        public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
     }
 }
 
