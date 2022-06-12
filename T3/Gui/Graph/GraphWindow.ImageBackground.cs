@@ -38,8 +38,9 @@ namespace T3.Gui.Graph
                 _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
                 _imageCanvas.PreventMouseInteraction = true;
                 _imageCanvas.Update();
-                
-                ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 0));
+
+                var windowContentRegionMin = ImGui.GetWindowContentRegionMin() + new Vector2(0, 0);
+                ImGui.SetCursorPos(windowContentRegionMin);
                 
                 var instanceForOutput = NodeOperations.GetInstanceFromIdPath(BackgroundNodePath);
 
@@ -61,9 +62,9 @@ namespace T3.Gui.Graph
 
             public GizmoVisibility ShowGizmos;
             
-            private readonly ImageOutputCanvas _imageCanvas = new ImageOutputCanvas();
+            private readonly ImageOutputCanvas _imageCanvas = new();
 
-            private readonly EvaluationContext _evaluationContext = new EvaluationContext();
+            private readonly EvaluationContext _evaluationContext = new();
             private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
         }
     }

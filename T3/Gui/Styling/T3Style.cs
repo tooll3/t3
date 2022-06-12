@@ -120,6 +120,7 @@ namespace T3.Gui
             public float ChildRounding = 0;
             public float ScrollbarRounding = 2;
             public float FrameRounding = 0f;
+             
 
             public void Apply(ImGuiStylePtr style)
             {
@@ -133,6 +134,9 @@ namespace T3.Gui
                 style.ChildRounding = ChildRounding;
                 style.ScrollbarRounding = ScrollbarRounding;
                 style.FrameRounding = FrameRounding;
+                style.DisplayWindowPadding = Vector2.Zero;
+                style.DisplaySafeAreaPadding = Vector2.Zero;
+                style.ChildBorderSize = 0;
             }
 
             public void DrawUi()

@@ -58,11 +58,28 @@ namespace T3.Gui.Windows
 
         public void DrawOneInstance()
         {
+            if (Config.Size == Vector2.Zero)
+            {
+                Config.Size = WindowConfig.DefaultSize;
+                ApplySizeAndPosition();
+            }
             UpdateBeforeDraw();
 
             if (!Config.Visible)
                 return;
 
+            if (!_wasVisibled)
+            {
+                ApplySizeAndPosition();
+                var size = WindowManager.GetPixelPositionFromRelative(Config.Size);
+                ImGui.SetNextWindowSize(size);
+                _wasVisibled = true;
+            }
+            
+            var hideFrameBorder = (WindowFlags & ImGuiWindowFlags.NoMove) != ImGuiWindowFlags.None;
+            if(hideFrameBorder)
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
+            
             if (ImGui.Begin(Config.Title, ref Config.Visible, WindowFlags))
             {
                 StoreWindowLayout();
@@ -89,6 +106,9 @@ namespace T3.Gui.Windows
             {
                 Close();
             }
+            
+            if(hideFrameBorder)
+                ImGui.PopStyleVar();
         }
 
         protected virtual void DrawAllInstances()
@@ -105,6 +125,9 @@ namespace T3.Gui.Windows
 
         private void StoreWindowLayout()
         {
+            if (WindowManager.IsWindowMinimized)
+                return;
+            
             Config.Position = WindowManager.GetRelativePositionFromPixel(ImGui.GetWindowPos());
             Config.Size = WindowManager.GetRelativePositionFromPixel(ImGui.GetWindowSize());
         }
@@ -113,8 +136,11 @@ namespace T3.Gui.Windows
         {
             public string Title;
             public bool Visible;
-            public Vector2 Position;
-            public Vector2 Size;
+            public Vector2 Position = DefaultPosition;
+            public Vector2 Size = DefaultSize;
+            
+            public static Vector2 DefaultSize = new Vector2(0.3f,0.2f);
+            public static Vector2 DefaultPosition = new Vector2(0.2f,0.2f);
         }
 
         public WindowConfig Config = new WindowConfig();
@@ -122,8 +148,13 @@ namespace T3.Gui.Windows
         public void ApplySizeAndPosition()
         {
             ImGui.SetWindowPos(Config.Title, WindowManager.GetPixelPositionFromRelative(Config.Position));
-            ImGui.SetWindowSize(Config.Title, WindowManager.GetPixelPositionFromRelative(Config.Size));
 
+            if (Config.Size == Vector2.Zero)
+                Config.Size = WindowConfig.DefaultSize;
+            
+            ImGui.SetWindowSize(Config.Title, WindowManager.GetPixelPositionFromRelative(Config.Size));
         }
+
+        private bool _wasVisibled;
     }
 }

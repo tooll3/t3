@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Core.Audio;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
@@ -63,6 +64,7 @@ namespace T3.Gui
             }
         }
 
+        //public static bool MaximalView = true;
         public void Draw()
         {
             Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
@@ -94,7 +96,13 @@ namespace T3.Gui
 
             SwapHoveringBuffers();
             TriggerGlobalActionsFromKeyBindings();
-            DrawAppMenu();
+            
+            if ( UserSettings.Config.ShowMainMenu || ImGui.GetMousePos().Y < 20)
+            {
+                
+                DrawAppMenu();
+            }
+            
             _autoBackup.CheckForSave();
         }
 
@@ -113,16 +121,23 @@ namespace T3.Gui
                 var saveAll = !UserSettings.Config.SaveOnlyModified;
                 SaveInBackground(saveAll);
             }
+            else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode))
+            {
+                ToggleFocusMode();
+            }
         }
-
+        
         private void DrawAppMenu()
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6));
+            
             if (ImGui.BeginMainMenuBar())
             {
                 if (ImGui.BeginMenu("File"))
                 {
+                    UserSettings.Config.ShowMainMenu = true;
+                    
                     if (ImGui.MenuItem("Save", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
                     {
                         SaveInBackground(false);
@@ -148,6 +163,7 @@ namespace T3.Gui
 
                 if (ImGui.BeginMenu("Edit"))
                 {
+                    UserSettings.Config.ShowMainMenu = true;
                     if (ImGui.MenuItem("Undo", "CTRL+Z", false, UndoRedoStack.CanUndo))
                     {
                         UndoRedoStack.Undo();
@@ -159,9 +175,6 @@ namespace T3.Gui
                     }
 
                     ImGui.Separator();
-                    //if (ImGui.MenuItem("Cut", "CTRL+X")) { }
-                    //if (ImGui.MenuItem("Copy", "CTRL+C")) { }
-                    //if (ImGui.MenuItem("Paste", "CTRL+V")) { }
 
                     if (ImGui.MenuItem("Fix File references", ""))
                     {
@@ -179,11 +192,34 @@ namespace T3.Gui
 
                 if (ImGui.BeginMenu("Add"))
                 {
+                    UserSettings.Config.ShowMainMenu = true;
                     SymbolTreeMenu.Draw();
                     ImGui.EndMenu();
                 }
+                if (ImGui.BeginMenu("Windows"))
+                {
+                    UserSettings.Config.ShowMainMenu = true;
+                    ImGui.MenuItem("FullScreen", "", ref UserSettings.Config.FullScreen);
+                    if (ImGui.MenuItem("Graph over Content Mode", "", ref UserSettings.Config.ShowContentBehindGraph))
+                    {
+                        WindowManager.ApplyGraphOverContentModeChange();
+                    }
+                    
+                    ImGui.Separator();
+                    ImGui.MenuItem("Show Main Menu", "", ref UserSettings.Config.ShowMainMenu);
+                    ImGui.MenuItem("Show Title", "", ref UserSettings.Config.ShowTitleAndDescription);
+                    ImGui.MenuItem("Show Timeline", "", ref UserSettings.Config.ShowTimeline);
+                    ImGui.MenuItem("Show Toolbar", "", ref UserSettings.Config.ShowToolbar);
+                    if(ImGui.MenuItem("Toggle Interface Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), false, !IsCurrentlySaving))
+                    {
+                        ToggleFocusMode();
+                    }
+                    
+                    ImGui.Separator();
+                    WindowManager.DrawWindowMenuContent();
+                    ImGui.EndMenu();
+                }
 
-                WindowManager.DrawWindowsMenu();
 
                 T3Metrics.DrawRenderPerformanceGraph();
                 _statusErrorLine.Draw();
@@ -194,6 +230,27 @@ namespace T3.Gui
             ImGui.PopStyleVar(2);
         }
 
+
+        private void ToggleFocusMode()
+        {
+                //T3Ui.MaximalView = !T3Ui.MaximalView;
+                if (UserSettings.Config.ShowToolbar)
+                {
+                    UserSettings.Config.ShowMainMenu = false;
+                    UserSettings.Config.ShowTitleAndDescription = false;
+                    UserSettings.Config.ShowToolbar = false;
+                    UserSettings.Config.ShowTimeline = false;
+                }
+                else
+                {
+                    UserSettings.Config.ShowMainMenu = true;
+                    UserSettings.Config.ShowTitleAndDescription = true;
+                    UserSettings.Config.ShowToolbar = true;
+                    UserSettings.Config.ShowTimeline = true;
+                }
+            
+        }
+        
         private static readonly object _saveLocker = new object();
         private static readonly Stopwatch _saveStopwatch = new Stopwatch();
 

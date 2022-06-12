@@ -28,7 +28,17 @@ namespace T3.Gui.UiHelpers
             public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.Live;
 
             public bool AudioMuted;
+            
             public bool ShowThumbnails = true;
+            public bool ShowMainMenu = true;
+            public bool ShowTitleAndDescription = true;
+            public bool ShowToolbar = true;
+            public bool ShowTimeline = true;
+            
+            public bool FullScreen = true;
+            
+            public bool ShowContentBehindGraph = true;
+
             public bool SmartGroupDragging = false;
             public int WindowLayoutIndex = 0;
             public bool EnableIdleMotion = true;
@@ -38,7 +48,6 @@ namespace T3.Gui.UiHelpers
             public bool UseJogDialControl = false;
             public float ScrollSmoothing = 0.06f;
             public float TooltipDelay = 1.2f;
-            public bool HideUiElementsInGraphWindow = false;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
             public float GizmoSize = 100;
             public bool AutoSaveAfterSymbolCreation = true;

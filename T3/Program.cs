@@ -28,7 +28,7 @@ namespace T3
     {
         private static T3RenderForm _t3RenderForm;
         public static Device Device { get; private set; }
-        public static bool IsFullScreenRequested { get; set; } = false;
+        //public static bool IsFullScreenRequested { get; set; } = false;
 
         [STAThread]
         private static void Main()
@@ -218,10 +218,10 @@ namespace T3
         private static void HandleFullscreenToggle()
         {
             var isBorderStyleFullScreen = _main.Form.FormBorderStyle == FormBorderStyle.None;
-            if (isBorderStyleFullScreen == IsFullScreenRequested)
+            if (isBorderStyleFullScreen == UserSettings.Config.FullScreen)
                 return;
 
-            if (IsFullScreenRequested)
+            if (UserSettings.Config.FullScreen)
             {
                 _main.Form.FormBorderStyle = FormBorderStyle.Sizable;
                 _main.Form.WindowState = FormWindowState.Normal;
@@ -238,7 +238,6 @@ namespace T3
                 formBounds.Width = formBounds.Width;
                 formBounds.Height = formBounds.Height;
                 _main.Form.Bounds = formBounds;
-
 
                 if (T3Ui.ShowSecondaryRenderWindow)
                 {

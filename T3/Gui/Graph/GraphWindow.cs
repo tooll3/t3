@@ -184,83 +184,96 @@ namespace T3.Gui.Graph
             ImGui.SetCursorPos(Vector2.Zero);
             THelpers.DebugContentRect("window");
             
-            if(!(_imageBackground.IsActive && TransformGizmoHandling.IsDragging))
+            if (_imageBackground.IsActive && TransformGizmoHandling.IsDragging)
+                return;
+            
+            var drawList = ImGui.GetWindowDrawList();
+            var contentHeight = (int)ImGui.GetWindowHeight();
+
+            if (UserSettings.Config.ShowTimeline)
             {
-                var drawList = ImGui.GetWindowDrawList();
-                var contentHeight = 0;
-
-                if (!UserSettings.Config.HideUiElementsInGraphWindow)
+                var currentTimelineHeight = UsingCustomTimelineHeight ? _customTimeLineHeight : ComputedTimelineHeight;
+                if (CustomComponents.SplitFromBottom(ref currentTimelineHeight))
                 {
-                    var currentTimelineHeight = UsingCustomTimelineHeight ? _customTimeLineHeight : ComputedTimelineHeight;
-                    if (CustomComponents.SplitFromBottom(ref currentTimelineHeight))
-                    {
-                        _customTimeLineHeight = (int)currentTimelineHeight;
-                    }
-
-                    contentHeight = (int)ImGui.GetWindowHeight() - (int)currentTimelineHeight -
-                                    4; // Hack that also depends on when a window-title is being rendered
+                    _customTimeLineHeight = (int)currentTimelineHeight;
                 }
 
-                ImGui.BeginChild("##graph", new Vector2(0, contentHeight), false,
-                                 ImGuiWindowFlags.NoScrollbar
-                                 | ImGuiWindowFlags.NoMove
-                                 | ImGuiWindowFlags.NoScrollWithMouse
-                                 | ImGuiWindowFlags.NoDecoration
-                                 | ImGuiWindowFlags.NoTitleBar
-                                 | ImGuiWindowFlags.ChildWindow);
+                contentHeight = (int)ImGui.GetWindowHeight() - (int)currentTimelineHeight -
+                                4; // Hack that also depends on when a window-title is being rendered
+            }
+
+            ImGui.BeginChild("##graph", new Vector2(0, contentHeight), false,
+                             ImGuiWindowFlags.NoScrollbar
+                             | ImGuiWindowFlags.NoMove
+                             | ImGuiWindowFlags.NoScrollWithMouse
+                             | ImGuiWindowFlags.NoDecoration
+                             | ImGuiWindowFlags.NoTitleBar
+                             | ImGuiWindowFlags.ChildWindow);
+            {
+                if (_focusOnNextFrame)
                 {
-                    if (_focusOnNextFrame)
-                    {
-                        ImGui.SetWindowFocus();
-                        _focusOnNextFrame = false;
-                    }
-                    ImGui.SetScrollX(0);
+                    ImGui.SetWindowFocus();
+                    _focusOnNextFrame = false;
+                }
+                ImGui.SetScrollX(0);
                     
-                    drawList.ChannelsSplit(2);
-                    drawList.ChannelsSetCurrent(1);
-                    {
-                        if (!UserSettings.Config.HideUiElementsInGraphWindow)
-                        {
-                            GraphCanvas.MakeCurrent();
-                            TitleAndBreadCrumbs.Draw(GraphCanvas.CompositionOp);
-                        }
-
-                        DrawControlsAtBottom();
-                    }
-
-                    drawList.ChannelsSetCurrent(0);
-                    {
-                        GraphCanvas.Draw(drawList, showGrid: !_imageBackground.IsActive);
-                    }
-                    drawList.ChannelsMerge();
-
-                    EditDescriptionDialog.Draw(GraphCanvas.CompositionOp.Symbol);
-                }
-                ImGui.EndChild();
-
-                if (!UserSettings.Config.HideUiElementsInGraphWindow)
+                drawList.ChannelsSplit(2);
+                drawList.ChannelsSetCurrent(1);
                 {
-                    var availableRestHeight = ImGui.GetContentRegionAvail().Y;
-                    if (availableRestHeight <= 3)
+                    if (UserSettings.Config.ShowTitleAndDescription)
                     {
-                        //Log.Warning($"skipping rending of timeline because layout is inconsistent: only {availableRestHeight}px left.");
+                        GraphCanvas.MakeCurrent();
+                        TitleAndBreadCrumbs.Draw(GraphCanvas.CompositionOp);
                     }
-                    else
+
+                    DrawControlsAtBottom();
+                }
+
+                drawList.ChannelsSetCurrent(0);
+                {
+                    GraphCanvas.Draw(drawList, showGrid: !_imageBackground.IsActive);
+                }
+                drawList.ChannelsMerge();
+
+                EditDescriptionDialog.Draw(GraphCanvas.CompositionOp.Symbol);
+            }
+            ImGui.EndChild();
+
+            if (UserSettings.Config.ShowTimeline)
+            {
+                var availableRestHeight = ImGui.GetContentRegionAvail().Y;
+                if (availableRestHeight <= 3)
+                {
+                    //Log.Warning($"skipping rending of timeline because layout is inconsistent: only {availableRestHeight}px left.");
+                }
+                else
+                {
+                    var p = ImGui.GetWindowPos();
+                    ImGui.GetWindowDrawList().AddRectFilled(p, p + Vector2.One*100, Color.Red);
+
+                    ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
+                    ImGui.PushStyleVar(ImGuiStyleVar.ChildBorderSize,0);
+                    
+                    ImGui.BeginChild("##timeline", Vector2.Zero, false,
+                                     ImGuiWindowFlags.NoScrollbar 
+                                     | ImGuiWindowFlags.NoMove 
+                                     | ImGuiWindowFlags.NoResize
+                                     | ImGuiWindowFlags.NoScrollWithMouse
+                                     | ImGuiWindowFlags.NoDecoration);
                     {
-                        ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
-                        ImGui.BeginChild("##timeline", Vector2.Zero, false,
-                                         ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
-                        {
-                            _timeLineCanvas.Draw(GraphCanvas.CompositionOp);
-                        }
-                        ImGui.EndChild();
+                        _timeLineCanvas.Draw(GraphCanvas.CompositionOp);
                     }
+                    ImGui.EndChild();
+                    ImGui.PopStyleVar(1);
                 }
             }
         }
 
         private void DrawControlsAtBottom()
         {
+            if (!UserSettings.Config.ShowToolbar)
+                return;
+            
             ImGui.SetCursorPos(
                                new Vector2(
                                            ImGui.GetWindowContentRegionMin().X,
@@ -272,7 +285,7 @@ namespace T3.Gui.Graph
                                                 "##TimelineToggle", TimeControls.ControlSize))
                 {
                     _customTimeLineHeight = UsingCustomTimelineHeight ? UseComputedHeight : 200;
-                    UserSettings.Config.HideUiElementsInGraphWindow = false;
+                    UserSettings.Config.ShowTimeline = true;
                 }
 
                 ImGui.SameLine();

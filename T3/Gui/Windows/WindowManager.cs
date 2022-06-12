@@ -67,6 +67,7 @@ namespace T3.Gui.Windows
 
             UpdateAppWindowSize();
 
+            // Process Keyboard shortcuts
             for (var i = 0; i < _saveLayoutActions.Length; i++)
             {
                 if (KeyboardBinding.Triggered(_saveLayoutActions[i]))
@@ -78,9 +79,11 @@ namespace T3.Gui.Windows
 
             if (KeyboardBinding.Triggered(UserActions.ToggleFullScreenGraph))
             {
-                _graphWindowRenderedAsBackground = !_graphWindowRenderedAsBackground;
-                ToggleFullScreenGraph();
+                UserSettings.Config.ShowContentBehindGraph = !UserSettings.Config.ShowContentBehindGraph;
+                ApplyGraphOverContentModeChange();
             }
+            
+            
 
             foreach (var windowType in _windows)
             {
@@ -104,139 +107,119 @@ namespace T3.Gui.Windows
             {
                 LoadLayout(UserSettings.Config.WindowLayoutIndex);
             }
-
+            
+            if (UserSettings.Config.ShowContentBehindGraph)
+            {
+                HideAllWindowBesidesMainGraph();
+                UpdateBackgroundGraphWindowPosition();
+            }
+            
             _appWindowSize = ImGui.GetIO().DisplaySize;
             _hasBeenInitialized = true;
         }
 
-        public void DrawWindowsMenu()
+        public void DrawWindowMenuContent()
         {
-            if (ImGui.BeginMenu("Windows"))
+            foreach (var window in _windows)
             {
-                if (ImGui.MenuItem("FullScreen", "", Program.IsFullScreenRequested))
-                    Program.IsFullScreenRequested = !Program.IsFullScreenRequested;
+                window.DrawMenuItemToggle();
+            }
 
-                if (ImGui.MenuItem("Graph Window as background", "", ref _graphWindowRenderedAsBackground))
+            if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
+                ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
+
+            ImGui.Separator();
+
+            if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
+                _demoWindowVisible = !_demoWindowVisible;
+
+            if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
+                _metricsWindowVisible = !_metricsWindowVisible;
+
+            if (ImGui.MenuItem("Save layout", ""))
+                SaveLayout(0);
+
+            if (ImGui.BeginMenu("Load layout"))
+            {
+                for (int i = 0; i < 10; i++)
                 {
-                    ToggleFullScreenGraph();
-                }
-
-                if (ImGui.MenuItem("Hide Title and Timeline", "", ref UserSettings.Config.HideUiElementsInGraphWindow))
-                {
-                    //UserSettings.Config.HideUiElementsInGraphWindow = !UserSettings.Config.HideUiElementsInGraphWindow;
-                }
-
-                ImGui.Separator();
-
-                foreach (var window in _windows)
-                {
-                    window.DrawMenuItemToggle();
-                }
-
-                if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
-                    ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
-
-                ImGui.Separator();
-
-                if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
-                    _demoWindowVisible = !_demoWindowVisible;
-
-                if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
-                    _metricsWindowVisible = !_metricsWindowVisible;
-
-                if (ImGui.MenuItem("Save layout", ""))
-                    SaveLayout(0);
-
-                if (ImGui.BeginMenu("Load layout"))
-                {
-                    for (int i = 0; i < 10; i++)
+                    if (ImGui.MenuItem("Layout " + (i + 1), "F" + (i + 1), false, enabled: DoesLayoutExists(i)))
                     {
-                        if (ImGui.MenuItem("Layout " + (i + 1), "F" + (i + 1), false, enabled: DoesLayoutExists(i)))
-                        {
-                            LoadLayout(i);
-                        }
+                        LoadLayout(i);
                     }
-
-                    ImGui.EndMenu();
                 }
 
-                if (ImGui.BeginMenu("Save layouts"))
-                {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        if (ImGui.MenuItem("Layout " + (i + 1), "Ctrl+F" + (i + 1)))
-                        {
-                            SaveLayout(i);
-                        }
-                    }
+                ImGui.EndMenu();
+            }
 
-                    ImGui.EndMenu();
+            if (ImGui.BeginMenu("Save layouts"))
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if (ImGui.MenuItem("Layout " + (i + 1), "Ctrl+F" + (i + 1)))
+                    {
+                        SaveLayout(i);
+                    }
                 }
 
                 ImGui.EndMenu();
             }
         }
 
-        private void ToggleFullScreenGraph()
+        public void ApplyGraphOverContentModeChange()
         {
-            if (_graphWindowRenderedAsBackground)
+            if (UserSettings.Config.ShowContentBehindGraph)
             {
-                var graphWindowIndex = 0;
-                foreach (var windowType in _windows)
-                {
-                    foreach (var w in windowType.GetInstances())
-                    {
-                        switch (w)
-                        {
-                            case GraphWindow graphWindow1 when graphWindowIndex == 0:
-                            {
-                                var pos = GetRelativePositionFromPixel(new Vector2(0, MainMenuBarHeight));
-                                graphWindow1.Config.Position = pos;
-                                graphWindow1.Config.Size = new Vector2(1, 1 - pos.Y);
-                                graphWindow1.WindowFlags |= ImGuiWindowFlags.NoDecoration;
-                                graphWindow1.ApplySizeAndPosition();
-                                graphWindowIndex++;
-                                break;
-                            }
-                            case GraphWindow graphWindow2:
-                                graphWindow2.Config.Visible = false;
-                                Log.Warning("Closing other graph window");
-                                break;
-                            case OutputWindow outputWindow:
-                                Log.Debug($"Closing {outputWindow.Config.Title}");
-                                w.Config.Visible = false;
-                                break;
-                            case ParameterWindow parameterWindow:
-                                Log.Debug($"Closing {parameterWindow.Config.Title}");
-                                w.Config.Visible = false;
-                                break;
-                        }
-                    }
-                }
-
-                Program.IsFullScreenRequested = true;
+                HideAllWindowBesidesMainGraph();
+                UpdateBackgroundGraphWindowPosition();
+                UserSettings.Config.FullScreen = true;
             }
             else
             {
-                foreach (var graphWindow in GetGraphWindows())
-                {
-                    graphWindow.WindowFlags &= ~ImGuiWindowFlags.NoDecoration;
-                }
-
-                Program.IsFullScreenRequested = false;
+                UserSettings.Config.FullScreen = false;
+                LoadLayout(UserSettings.Config.WindowLayoutIndex);
+                ApplyLayout();
             }
         }
-
-        private IEnumerable<GraphWindow> GetGraphWindows()
+        
+        private void HideAllWindowBesidesMainGraph()
         {
-            foreach (var w in _windows)
+            var graphWindowIsMain = true;
+            
+            foreach (var windowType in _windows)
             {
-                if (!(w is GraphWindow graphWindow))
-                    continue;
-
-                yield return graphWindow;
+                foreach (var w in windowType.GetInstances())
+                {
+                    if (w is GraphWindow && graphWindowIsMain)
+                    {
+                        graphWindowIsMain = false;
+                    }
+                    else
+                    {
+                        w.Config.Visible = false;
+                    }
+                }
             }
         }
+
+        private void UpdateBackgroundGraphWindowPosition()
+        {
+            var graphWindow1 = GraphWindow.GetPrimaryGraphWindow();
+            if (graphWindow1 == null)
+                return;
+            
+            var yPadding = UserSettings.Config.ShowContentBehindGraph ? 0 : MainMenuBarHeight;
+            var pos = GetRelativePositionFromPixel(new Vector2(0, yPadding));
+            
+            // Workaround to scale prevent one pixel margin by imgui
+            //var onPixelOffset = GetRelativePositionFromPixel(new Vector2(1, 1));
+            graphWindow1.Config.Position = pos;
+            graphWindow1.Config.Size = new Vector2(1, 1 - pos.Y);
+            
+            graphWindow1.WindowFlags |= ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize;
+            graphWindow1.ApplySizeAndPosition();
+        }
+        
 
         private void SaveLayout(int index)
         {
@@ -385,6 +368,9 @@ namespace T3.Gui.Windows
 
             var allWindowConfigs = GetAllWindows().Select(window => window.Config).ToList();
             _appWindowSize = newSize;
+            if (newSize == Vector2.Zero)
+                return;
+            
             ApplyConfigurations(allWindowConfigs);
         }
 
@@ -396,12 +382,12 @@ namespace T3.Gui.Windows
         private const string LayoutFileNameFormat = "layout{0}.json";
         private const string ConfigFolderName = ".t3";
         private const float MainMenuBarHeight = 25;
-        private bool _graphWindowRenderedAsBackground;
 
         private readonly List<Window> _windows;
         private bool _demoWindowVisible;
         private bool _metricsWindowVisible;
         public static bool ShowSecondaryRenderWindow { get; private set; }
+        public static bool IsWindowMinimized => _appWindowSize == Vector2.Zero;
 
         private bool _hasBeenInitialized;
     }

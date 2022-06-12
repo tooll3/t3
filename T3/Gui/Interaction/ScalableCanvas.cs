@@ -26,8 +26,10 @@ namespace T3.Gui.Interaction
 
             if (FillMode == FillModes.FillWindow)
             {
-                WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos() + new Vector2(1, 1);
-                WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin() - new Vector2(2, 2);
+                WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos()
+                                                              + ImGui.GetStyle().WindowBorderSize * Vector2.One;
+                WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin()
+                             - 2* ImGui.GetStyle().WindowBorderSize * Vector2.One;
             }
             else
             {
