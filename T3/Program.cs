@@ -110,6 +110,12 @@ namespace T3
             // Main loop
             void RenderCallback()
             {
+                if (_main.Form.WindowState == FormWindowState.Minimized == true)
+                {
+                    Thread.Sleep(100);
+                    return;
+                }
+                
                 Int64 ticks = stopwatch.ElapsedTicks;
                 Int64 ticksDiff = ticks - lastElapsedTicks;
                 ImGui.GetIO().DeltaTime = (float)((double)(ticksDiff) / Stopwatch.Frequency);
