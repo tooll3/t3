@@ -1994,7 +1994,7 @@
       "Outputs": []
     },
     {
-      "Id": "51b5a15c-8970-4d5d-b082-e4eebc682e04"/*TestImageFx*/,
+      "Id": "51b5a15c-8970-4d5d-b082-e4eebc682e04"/*CompareImages*/,
       "SymbolId": "0e13e34f-c07b-4ada-8c87-6b89f4ed8b41",
       "InputValues": [
         {

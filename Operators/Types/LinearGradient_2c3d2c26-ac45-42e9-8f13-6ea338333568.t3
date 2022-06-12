@@ -1,5 +1,5 @@
 {
-  "Name": "LinearRamp",
+  "Name": "LinearGradient",
   "Id": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
   "Namespace": "lib.img.generate",
   "Inputs": [
