@@ -64,9 +64,7 @@ namespace T3.Gui.Windows
             Initialize();
             if (!_hasBeenInitialized)
                 return;
-
-            UpdateAppWindowSize();
-
+            
             // Process Keyboard shortcuts
             for (var i = 0; i < _saveLayoutActions.Length; i++)
             {
@@ -76,13 +74,14 @@ namespace T3.Gui.Windows
                 if (KeyboardBinding.Triggered(_loadLayoutActions[i]))
                     LoadLayout(i);
             }
-
+            
             if (KeyboardBinding.Triggered(UserActions.ToggleFullScreenGraph))
             {
                 UserSettings.Config.ShowContentBehindGraph = !UserSettings.Config.ShowContentBehindGraph;
                 ApplyGraphOverContentModeChange();
             }
             
+            UpdateAppWindowSize();
             
 
             foreach (var windowType in _windows)

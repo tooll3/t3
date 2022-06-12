@@ -1,7 +1,6 @@
 ﻿using ImGuiNET;
 using System.Collections.Generic;
 using System.Numerics;
-using T3.Core.Operator;
 
 namespace T3.Gui.Windows
 {
@@ -15,7 +14,6 @@ namespace T3.Gui.Windows
         public ImGuiWindowFlags WindowFlags;
 
         protected bool PreventWindowDragging = true;
-        //public static List<Window> WindowInstances = new List<Window>();
 
         public abstract List<Window> GetInstances();
 
@@ -58,11 +56,6 @@ namespace T3.Gui.Windows
 
         public void DrawOneInstance()
         {
-            if (Config.Size == Vector2.Zero)
-            {
-                Config.Size = WindowConfig.DefaultSize;
-                ApplySizeAndPosition();
-            }
             UpdateBeforeDraw();
 
             if (!Config.Visible)
@@ -73,6 +66,9 @@ namespace T3.Gui.Windows
                 ApplySizeAndPosition();
                 var size = WindowManager.GetPixelPositionFromRelative(Config.Size);
                 ImGui.SetNextWindowSize(size);
+                
+                var pos = WindowManager.GetPixelPositionFromRelative(Config.Position);
+                ImGui.SetNextWindowPos(pos);
                 _wasVisibled = true;
             }
             
@@ -136,11 +132,11 @@ namespace T3.Gui.Windows
         {
             public string Title;
             public bool Visible;
-            public Vector2 Position = DefaultPosition;
+            public Vector2 Position = _defaultPosition;
             public Vector2 Size = DefaultSize;
-            
-            public static Vector2 DefaultSize = new Vector2(0.3f,0.2f);
-            public static Vector2 DefaultPosition = new Vector2(0.2f,0.2f);
+
+            public static readonly Vector2 DefaultSize = new Vector2(0.3f,0.2f);
+            private static readonly Vector2 _defaultPosition = new Vector2(0.2f,0.2f);
         }
 
         public WindowConfig Config = new WindowConfig();

@@ -162,7 +162,7 @@ namespace T3.Gui.Windows.Output
             }
             else
             {
-                Log.Error("Viewer camera undefined");
+                //Log.Error("Viewer camera undefined");
             }
             _evaluationContext.BackgroundColor = _backgroundColor;
 

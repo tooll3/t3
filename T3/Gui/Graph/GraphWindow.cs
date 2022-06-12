@@ -248,9 +248,6 @@ namespace T3.Gui.Graph
                 }
                 else
                 {
-                    var p = ImGui.GetWindowPos();
-                    ImGui.GetWindowDrawList().AddRectFilled(p, p + Vector2.One*100, Color.Red);
-
                     ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
                     ImGui.PushStyleVar(ImGuiStyleVar.ChildBorderSize,0);
                     
