@@ -1,7 +1,7 @@
 {
   "Name": "CloseYourEyes",
   "Id": "57307c8d-84fd-45f7-86f2-9ae08232f820",
-  "Namespace": "projects.closeYourEyes",
+  "Namespace": "user.pixtur.project.closeYourEyes",
   "Inputs": [],
   "Children": [
     {

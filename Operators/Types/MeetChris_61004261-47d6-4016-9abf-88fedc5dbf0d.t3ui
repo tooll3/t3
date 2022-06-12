@@ -301,17 +301,6 @@
       }
     },
     {
-      "ChildId": "0817b4ef-c41d-45e1-991c-20538942bf15"/*MultiAnimationEditBug*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 970.429,
-        "Y": -403.80334
-      }
-    },
-    {
       "ChildId": "666ee35d-026a-40d0-80ae-00a412ee787e"/*Text*/,
       "Size": {
         "X": 110.0,

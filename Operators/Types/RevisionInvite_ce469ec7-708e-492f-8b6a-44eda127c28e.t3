@@ -1,7 +1,7 @@
 {
   "Name": "RevisionInvite",
   "Id": "ce469ec7-708e-492f-8b6a-44eda127c28e",
-  "Namespace": "project.revision2021invite",
+  "Namespace": "user.still.drd5",
   "Inputs": [],
   "Children": [
     {
@@ -17,7 +17,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-revision2021\\mesh\\klaus__000008.obj"
+          "Value": "Resources\\user\\wake\\proj-revision2021\\klaus2\\klaus__000008.obj"
         },
         {
           "Id": "ffd22736-a600-4c97-a4a4-ad3526b8b35c"/*UseGPUCaching*/,
@@ -161,7 +161,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-revision2021\\meshObjects\\ground.obj"
+          "Value": "Resources\\user\\wake\\proj-revision2021\\meshObjects\\ground.obj"
         }
       ],
       "Outputs": []
@@ -191,7 +191,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-revision2021\\meshObjects\\mountain.obj"
+          "Value": "Resources\\user\\wake\\proj-revision2021\\meshObjects\\mountain.obj"
         }
       ],
       "Outputs": []
@@ -209,7 +209,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-revision2021\\meshObjects\\trees.obj"
+          "Value": "Resources\\user\\wake\\proj-revision2021\\meshObjects\\trees.obj"
         }
       ],
       "Outputs": []
@@ -227,7 +227,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-revision2021\\meshObjects\\hall.obj"
+          "Value": "Resources\\user\\wake\\proj-revision2021\\meshObjects\\hall.obj"
         }
       ],
       "Outputs": []
@@ -1086,7 +1086,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-revision2021\\meshObjects\\logo.obj"
+          "Value": "Resources\\user\\wake\\proj-revision2021\\meshObjects\\logo.obj"
         }
       ],
       "Outputs": []
@@ -1714,7 +1714,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-revision2021\\meshObjects\\ExampleSceneKart.obj"
+          "Value": "Resources\\user\\wake\\proj-revision2021\\meshObjects\\ExampleSceneKart.obj"
         }
       ],
       "Outputs": []
@@ -2652,7 +2652,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-revision2021\\image\\heart.png"
+          "Value": "Resources\\user\\wake\\proj-revision2021\\image\\heart.png"
         }
       ],
       "Outputs": []

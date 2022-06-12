@@ -1,7 +1,7 @@
 {
   "Name": "_BuildSpatialHashMap",
   "Id": "f61ceb9b-74f8-4883-88ea-7e6c35b63bbd",
-  "Namespace": "user.pixtur.proj.pillowfight",
+  "Namespace": "user.pixtur.project.pillowfight",
   "Inputs": [
     {
       "Id": "4bae9eaa-42d8-4c1c-8776-3abebcce20e2"/*PointsA_*/,

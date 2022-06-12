@@ -1,7 +1,7 @@
 {
   "Name": "_JumpingLight",
   "Id": "7d5e24dc-7f55-4156-8294-58e8a8bcce2b",
-  "Namespace": "user.pixtur.proj.mary",
+  "Namespace": "user.wake.mary",
   "Inputs": [
     {
       "Id": "e3d3bc7e-703a-468d-bca7-f1492540441a"/*Command*/,

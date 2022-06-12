@@ -1,7 +1,7 @@
 {
   "Name": "NearestNeighboughTest",
   "Id": "8228a543-f725-41d9-8629-f6d85f9e858e",
-  "Namespace": "user.pixtur.proj.pillowfight",
+  "Namespace": "user.pixtur.project.pillowfight",
   "Inputs": [
     {
       "Id": "8e35d7a7-433d-478f-b202-bd757f4d5d72"/*PointsA_*/,

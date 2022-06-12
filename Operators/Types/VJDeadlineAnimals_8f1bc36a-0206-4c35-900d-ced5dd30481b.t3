@@ -11,7 +11,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-vj-deadline2021\\mesh\\rooster.obj"
+          "Value": "Resources\\user\\wake\\proj-vj-deadline2021\\mesh\\rooster.obj"
         },
         {
           "Id": "ffd22736-a600-4c97-a4a4-ad3526b8b35c"/*UseGPUCaching*/,
@@ -39,7 +39,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-vj-deadline2021\\mesh\\lazer-eyes.obj"
+          "Value": "Resources\\user\\wake\\proj-vj-deadline2021\\mesh\\lazer-eyes.obj"
         },
         {
           "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,

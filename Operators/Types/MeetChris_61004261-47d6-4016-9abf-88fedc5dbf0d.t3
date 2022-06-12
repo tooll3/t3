@@ -662,12 +662,6 @@
       "Outputs": []
     },
     {
-      "Id": "0817b4ef-c41d-45e1-991c-20538942bf15"/*MultiAnimationEditBug*/,
-      "SymbolId": "f43d6acf-9563-450d-a660-bbf6baf35bf2",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "666ee35d-026a-40d0-80ae-00a412ee787e"/*Text*/,
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [

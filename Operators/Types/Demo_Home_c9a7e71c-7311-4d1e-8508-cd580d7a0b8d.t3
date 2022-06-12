@@ -1,7 +1,7 @@
 {
-  "Name": "Numbers",
+  "Name": "Demo_Home",
   "Id": "c9a7e71c-7311-4d1e-8508-cd580d7a0b8d",
-  "Namespace": "project.numbers",
+  "Namespace": "user.still.home",
   "Inputs": [],
   "Children": [
     {
@@ -689,7 +689,7 @@
       "Bpm": 80.0,
       "DiscardAfterUse": true,
       "IsSoundtrack": true,
-      "FilePath": "Resources\\proj-numbers\\soundtrack\\synthtoad-02.mp3"
+      "FilePath": "Resources\\user\\still\\proj-home\\soundtrack\\synthtoad-02.mp3"
     }
   ],
   "Animator": [

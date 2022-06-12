@@ -1,7 +1,7 @@
 {
-  "Name": "Partial",
+  "Name": "Demo_There",
   "Id": "a9080ad4-6cb2-4d5b-ad07-1cce239ee787",
-  "Namespace": "project.partial",
+  "Namespace": "user.still.there",
   "Inputs": [],
   "Children": [
     {
@@ -1075,7 +1075,7 @@
       "Bpm": 120.0,
       "DiscardAfterUse": true,
       "IsSoundtrack": true,
-      "FilePath": "Resources\\proj-partial\\soundtrack\\partial.mp3"
+      "FilePath": "Resources\\user\\still\\proj-there\\soundtrack\\partial.mp3"
     }
   ],
   "Animator": [

@@ -1,7 +1,7 @@
 {
   "Name": "IntoTheWhiteScene",
   "Id": "6231f780-c66f-452d-ba1c-4b5e21efc97d",
-  "Namespace": "project.partial.scenes",
+  "Namespace": "user.still.there.scenes",
   "Inputs": [],
   "Children": [
     {

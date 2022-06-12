@@ -1,7 +1,7 @@
 {
   "Name": "PartialPhysarum",
   "Id": "8adede33-fbdd-4ee9-b76e-cf2af28999c5",
-  "Namespace": "project.partial.research",
+  "Namespace": "user.still.there.research",
   "Inputs": [],
   "Children": [
     {

@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_c9a7e71c_7311_4d1e_8508_cd580d7a0b8d
 {
-    public class Numbers : Instance<Numbers>
+    public class Demo_Home : Instance<Demo_Home>
     {
         [Output(Guid = "80E2C6C3-1282-4075-B4E3-86BD67795F1C")]
         public readonly Slot<Texture2D> TextureOutput = new Slot<Texture2D>();

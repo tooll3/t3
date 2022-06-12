@@ -1,7 +1,7 @@
 {
   "Name": "_TransitionEffect",
   "Id": "723cd13e-0ca0-4995-a80b-a3b616400997",
-  "Namespace": "project.numbers.effects",
+  "Namespace": "user.still.home.effects",
   "Inputs": [
     {
       "Id": "7e75adf0-200e-4f15-b333-88105e0994d8"/*ImageA*/,

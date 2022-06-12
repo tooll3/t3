@@ -1,7 +1,7 @@
 {
   "Name": "ParticleTests",
   "Id": "4f33f57d-ddca-44ea-96d2-8897ff5da39b",
-  "Namespace": "project.partial.research",
+  "Namespace": "user.still.there.research",
   "Inputs": [],
   "Children": [
     {
@@ -407,7 +407,7 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-partial\\particle\\ps-particle-quad-shadowmap-tests.hlsl"
+          "Value": "Resources\\user\\still\\proj-there\\particle\\ps-particle-quad-shadowmap-tests.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
@@ -1630,7 +1630,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-partial\\particle\\bitonic-sort.hlsl"
+          "Value": "Resources\\user\\still\\proj-there\\particle\\bitonic-sort.hlsl"
         },
         {
           "Id": "c0701d0b-d37f-4570-9e9a-ec2e88b919d1"/*DebugName*/,

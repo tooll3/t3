@@ -1,7 +1,7 @@
 {
   "Name": "SynthStuff",
   "Id": "aad38e92-c790-4ae3-981a-3ec28a0d8b80",
-  "Namespace": "project.numbers.scenes",
+  "Namespace": "user.still.home.scenes",
   "Inputs": [],
   "Children": [
     {

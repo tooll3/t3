@@ -1,7 +1,7 @@
 {
   "Name": "CameraGizmo",
   "Id": "b601be85-fa85-4358-9541-7e97341bf6b3",
-  "Namespace": "project.partial.helpers",
+  "Namespace": "user.still.there.helpers",
   "Inputs": [],
   "Children": [
     {

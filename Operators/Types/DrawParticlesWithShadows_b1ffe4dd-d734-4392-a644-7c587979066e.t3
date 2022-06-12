@@ -1,7 +1,7 @@
 {
   "Name": "DrawParticlesWithShadows",
   "Id": "b1ffe4dd-d734-4392-a644-7c587979066e",
-  "Namespace": "project.partial.helpers",
+  "Namespace": "user.still.there.helpers",
   "Inputs": [
     {
       "Id": "11e59dd7-1197-433c-a0aa-cf2acad6d33a"/*ParticleSystem*/,
@@ -153,7 +153,7 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-partial\\particle\\ps-particle-quad.hlsl"
+          "Value": "Resources\\lib\\particles\\ps-particle-quad.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,

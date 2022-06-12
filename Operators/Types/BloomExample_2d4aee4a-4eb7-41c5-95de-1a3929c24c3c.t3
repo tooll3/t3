@@ -1,7 +1,7 @@
 {
   "Name": "BloomExample",
   "Id": "2d4aee4a-4eb7-41c5-95de-1a3929c24c3c",
-  "Namespace": "project.numbers.research",
+  "Namespace": "user.still.home.research",
   "Inputs": [],
   "Children": [
     {

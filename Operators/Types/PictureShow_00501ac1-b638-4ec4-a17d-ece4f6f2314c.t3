@@ -1,7 +1,7 @@
 {
   "Name": "PictureShow",
   "Id": "00501ac1-b638-4ec4-a17d-ece4f6f2314c",
-  "Namespace": "project.handclap.helpers",
+  "Namespace": "user.wake.handclap.helpers",
   "Inputs": [
     {
       "Id": "8c2393e5-5ca0-4420-ab64-efe34aa3683f"/*Float*/,

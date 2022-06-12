@@ -1,7 +1,7 @@
 {
   "Name": "ThereLetterBoxOverlay",
   "Id": "2d388f2b-3d07-4cbd-a86a-63c5cb83ed26",
-  "Namespace": "project.partial.research",
+  "Namespace": "user.still.there.research",
   "Inputs": [
     {
       "Id": "6af229bb-f515-400a-9de8-a6f64c618e7c"/*Float*/,

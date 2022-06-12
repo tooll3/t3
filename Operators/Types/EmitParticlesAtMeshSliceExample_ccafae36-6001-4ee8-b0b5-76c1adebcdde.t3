@@ -1,7 +1,7 @@
 {
   "Name": "EmitParticlesAtMeshSliceExample",
   "Id": "ccafae36-6001-4ee8-b0b5-76c1adebcdde",
-  "Namespace": "project.partial.research",
+  "Namespace": "user.still.there.research",
   "Inputs": [],
   "Children": [
     {
@@ -152,7 +152,7 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-partial\\particle\\ps-particle-quad.hlsl"
+          "Value": "Resources\\lib\\particles\\ps-particle-quad.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
@@ -673,7 +673,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-partial\\meshes\\particle-bridge-lightmap.jpg"
+          "Value": "Resources\\user\\still\\proj-there\\meshes\\particle-bridge-lightmap.jpg"
         }
       ],
       "Outputs": []

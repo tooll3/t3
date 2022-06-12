@@ -422,28 +422,6 @@
       }
     },
     {
-      "ChildId": "efbac534-8c3a-4ecb-9497-ebae3cfe93b5"/*Writer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 626.1361,
-        "Y": 471.54745
-      }
-    },
-    {
-      "ChildId": "f6cc438b-b72c-4f1a-8fe4-867e944a32ca"/*Writer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 647.33905,
-        "Y": 251.48776
-      }
-    },
-    {
       "ChildId": "12bd0928-5037-4fdb-b2c6-5ba009f85aff"/*Transform*/,
       "Size": {
         "X": 110.0,

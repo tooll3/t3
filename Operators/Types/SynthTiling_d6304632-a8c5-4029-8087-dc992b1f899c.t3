@@ -1,7 +1,7 @@
 {
   "Name": "SynthTiling",
   "Id": "d6304632-a8c5-4029-8087-dc992b1f899c",
-  "Namespace": "user.pixtur.revision2021",
+  "Namespace": "user.wake.revision2021",
   "Inputs": [],
   "Children": [
     {

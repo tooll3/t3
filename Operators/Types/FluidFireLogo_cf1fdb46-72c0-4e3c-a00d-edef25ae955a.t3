@@ -357,7 +357,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\T3-Logo\\t3-logo.svg"
+          "Value": "Resources\\user\\pixtur\\testcontent\\T3-Logo\\t3-logo.svg"
         },
         {
           "Id": "c6692e97-e7f8-4b3f-95bc-5f86c2b399a5"/*Scale*/,
@@ -401,7 +401,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\T3-Logo\\t3-logo.png"
+          "Value": "Resources\\user\\pixtur\\testcontent\\T3-Logo\\t3-logo.png"
         }
       ],
       "Outputs": []
@@ -706,7 +706,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\T3-Logo\\T3-Logo-with-claim.png"
+          "Value": "Resources\\user\\pixtur\\testcontent\\T3-Logo\\T3-Logo-with-claim.png"
         }
       ],
       "Outputs": []

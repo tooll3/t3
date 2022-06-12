@@ -1,7 +1,7 @@
 {
   "Name": "HandClapTest1",
   "Id": "8471969d-ed23-484f-9d85-db8c5e5bbb4c",
-  "Namespace": "project.handclap",
+  "Namespace": "user.wake.handclap",
   "Inputs": [],
   "Children": [
     {

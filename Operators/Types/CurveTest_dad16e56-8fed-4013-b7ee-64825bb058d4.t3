@@ -1,7 +1,7 @@
 {
   "Name": "CurveTest",
   "Id": "dad16e56-8fed-4013-b7ee-64825bb058d4",
-  "Namespace": "project.numbers",
+  "Namespace": "user.still.home",
   "Inputs": [
     {
       "Id": "d34e16a9-4346-4dcf-a1fb-11325925dcd7"/*CurveA*/,

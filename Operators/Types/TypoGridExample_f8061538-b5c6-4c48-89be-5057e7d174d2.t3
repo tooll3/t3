@@ -1,7 +1,7 @@
 {
   "Name": "TypoGridExample",
   "Id": "f8061538-b5c6-4c48-89be-5057e7d174d2",
-  "Namespace": "project.numbers.research",
+  "Namespace": "user.still.home.research",
   "Inputs": [],
   "Children": [
     {

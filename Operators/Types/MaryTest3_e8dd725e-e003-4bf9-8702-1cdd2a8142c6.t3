@@ -1,7 +1,7 @@
 {
   "Name": "MaryTest3",
   "Id": "e8dd725e-e003-4bf9-8702-1cdd2a8142c6",
-  "Namespace": "user.pixtur.proj",
+  "Namespace": "user.pixtur.project",
   "Inputs": [],
   "Children": [
     {
@@ -11,7 +11,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\Mary\\geometry\\mary-200k-smooth.obj"
+          "Value": "Resources\\user\\wake\\proj-mary\\geometry\\mary-200k-smooth.obj"
         },
         {
           "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
@@ -461,7 +461,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\Mary\\geometry\\mary_4k.obj"
+          "Value": "Resources\\user\\wake\\proj-mary\\geometry\\mary_4k.obj"
         },
         {
           "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,

@@ -1,7 +1,7 @@
 {
   "Name": "TextGridExample2",
   "Id": "3e404381-9246-4eb3-ba42-58b193e68ed8",
-  "Namespace": "project.numbers.research",
+  "Namespace": "user.still.home.research",
   "Inputs": [],
   "Children": [
     {

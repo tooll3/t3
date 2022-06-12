@@ -2050,7 +2050,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-nevoke-fun\\svg\\drd5.svg"
+          "Value": "Resources\\user\\still\\proj-drd5\\svg\\drd5.svg"
         }
       ],
       "Outputs": []
@@ -3363,7 +3363,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-nevoke-fun\\geometry\\triangleBeveled.obj"
+          "Value": "Resources\\user\\still\\proj-drd5\\geometry\\triangleBeveled.obj"
         },
         {
           "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
@@ -5376,7 +5376,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-nevoke-fun\\svg\\Frame 2.svg"
+          "Value": "Resources\\user\\still\\proj-drd5\\svg\\Frame 2.svg"
         },
         {
           "Id": "4dfce92e-9282-486f-a274-e59402696bbb"/*CenterToBounds*/,
@@ -5444,7 +5444,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-nevoke-fun\\svg\\Frame 3.svg"
+          "Value": "Resources\\user\\still\\proj-drd5\\svg\\Frame 3.svg"
         },
         {
           "Id": "4dfce92e-9282-486f-a274-e59402696bbb"/*CenterToBounds*/,
@@ -5466,7 +5466,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-nevoke-fun\\svg\\Frame 4.svg"
+          "Value": "Resources\\user\\still\\proj-drd5\\svg\\Frame 4.svg"
         },
         {
           "Id": "4dfce92e-9282-486f-a274-e59402696bbb"/*CenterToBounds*/,
@@ -5488,7 +5488,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-nevoke-fun\\svg\\Frame 5.svg"
+          "Value": "Resources\\user\\still\\proj-drd5\\svg\\Frame 5.svg"
         },
         {
           "Id": "4dfce92e-9282-486f-a274-e59402696bbb"/*CenterToBounds*/,
@@ -5510,7 +5510,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-nevoke-fun\\svg\\Frame 13.svg"
+          "Value": "Resources\\user\\still\\proj-drd5\\svg\\Frame 13.svg"
         },
         {
           "Id": "4dfce92e-9282-486f-a274-e59402696bbb"/*CenterToBounds*/,
@@ -5909,7 +5909,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-nevoke-fun\\geometry\\disc3-bothsided.obj"
+          "Value": "Resources\\user\\still\\proj-drd5\\geometry\\disc3-bothsided.obj"
         }
       ],
       "Outputs": []
@@ -6431,7 +6431,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-nevoke-fun\\svg\\deadline.svg"
+          "Value": "Resources\\user\\still\\proj-drd5\\svg\\deadline.svg"
         }
       ],
       "Outputs": []
@@ -6461,7 +6461,7 @@
         {
           "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-nevoke-fun\\svg\\oct2021.svg"
+          "Value": "Resources\\user\\still\\proj-drd5\\svg\\oct2021.svg"
         }
       ],
       "Outputs": []
