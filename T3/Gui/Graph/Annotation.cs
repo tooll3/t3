@@ -19,7 +19,7 @@ namespace T3.Gui.Graph
             return new Annotation
                        {
                            Id = Guid.NewGuid(),
-                           Title = this.Title,
+                           Title = this.Title = "Untitled Annotation",
                            Color = this.Color,
                            PosOnCanvas = this.PosOnCanvas,
                            Size = this.Size
