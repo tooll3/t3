@@ -1,8 +1,6 @@
 ﻿using SharpDX;
 using T3;
 using T3.Core;
-using T3.Core.Logging;
-using T3.Gui.Graph.Interaction;
 
 namespace t3.Gui.Interaction.Camera
 {
@@ -12,7 +10,7 @@ namespace t3.Gui.Interaction.Camera
         private static Vector3 _spaceMouseRotateVector;
         private static int _eventCount;
         
-        public static void ManipulateCamera(CameraInteraction.CameraSetup intendedSetup)
+        public static void ManipulateCamera(CameraSetup intendedSetup)
         {
             if (!_initialized)
             {
@@ -35,10 +33,10 @@ namespace t3.Gui.Interaction.Camera
             var direction = _spaceMouseTranslateVector;
             direction.Normalize();
 
-            if (translationVelocity <  CameraInteraction.MaxMoveVelocity)
+            if (translationVelocity <  CameraInteractionParameters.MaxMoveVelocity)
                 direction *= translationVelocity;
             else
-                direction *= CameraInteraction.MaxMoveVelocity;
+                direction *= CameraInteractionParameters.MaxMoveVelocity;
 
             var moveDir = direction.X * sideDir - direction.Y * viewDir - direction.Z * upDir;
 

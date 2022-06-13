@@ -689,7 +689,7 @@ namespace T3.Gui.Graph
 
             if (ImGui.BeginMenu("Add..."))
             {
-                if (ImGui.MenuItem("Add Node..."))
+                if (ImGui.MenuItem("Add Node...", "TAB", false,true))
                 {
                     SymbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null, false, null);
                 }
