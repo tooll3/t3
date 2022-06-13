@@ -193,6 +193,15 @@ namespace T3.Core
         public const float Pi2 = (float)Math.PI * 2;
         
         
+        public static Vector3 ToVector3(this Vector4 vec)
+        {
+            return new Vector3(vec.X/vec.W, vec.Y/vec.W, vec.Z/vec.W);
+        }
+        
+        public static SharpDX.Vector3 ToVector3(this SharpDX.Vector4 vec)
+        {
+            return new SharpDX.Vector3(vec.X/vec.W, vec.Y/vec.W, vec.Z/vec.W);
+        }
         
         public static SharpDX.Vector3 ToSharpDx(this Vector3 source)
         {
@@ -217,6 +226,11 @@ namespace T3.Core
         public static SharpDX.Vector4 ToSharpDxVector4(this Vector3 source, float w)
         {
             return new SharpDX.Vector4(source.X, source.Y, source.Z, w);
+        }
+
+        public static SharpDX.Vector3 ToSharpDxVector3(this Vector3 source)
+        {
+            return new SharpDX.Vector3(source.X, source.Y, source.Z);
         }
     }
 

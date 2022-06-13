@@ -4,6 +4,7 @@ using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator.Interfaces;
+using t3.Gui.Interaction.Camera;
 using T3.Gui.Interaction.TransformGizmos;
 using T3.Gui.Selection;
 
@@ -43,6 +44,8 @@ namespace T3.Gui.Graph.Interaction
                 ManipulateCameraByKeyboard();
             }
 
+            SpaceMouseInteraction.ManipulateCamera(_intendedSetup);
+            
             var updateRequired = ComputeSmoothMovement();
             if (!updateRequired)
                 return;
@@ -287,9 +290,9 @@ namespace T3.Gui.Graph.Interaction
             cam.CameraTarget = Vector3.Zero;
             cam.CameraRoll = 0;
 
-        }  
+        }
 
-        private class CameraSetup
+        public class CameraSetup
         {
             public Vector3 Position = new Vector3(0, 0, DefaultCameraPositionZ);
             public Vector3 Target;
@@ -355,7 +358,7 @@ namespace T3.Gui.Graph.Interaction
         private const float CameraDamping = 0.5f;
         private const float ZoomSpeed = 10f;
 
-        private const float MaxMoveVelocity = 1;
+        public const float MaxMoveVelocity = 1;
         private const float CameraAcceleration = 1;
     }
 }
