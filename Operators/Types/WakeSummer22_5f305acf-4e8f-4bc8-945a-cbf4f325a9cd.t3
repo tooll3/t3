@@ -1,0 +1,287 @@
+{
+  "Name": "WakeSummer22",
+  "Id": "5f305acf-4e8f-4bc8-945a-cbf4f325a9cd",
+  "Namespace": "user.wake.summer2022",
+  "Inputs": [],
+  "Children": [
+    {
+      "Id": "e2a03f3f-3132-485c-9652-a6f0a2e7101e"/*RenderTarget*/,
+      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "406cab98-c13d-41ec-9311-6632d56a4032"/*PartTwo*/,
+      "SymbolId": "32feb968-6196-43ea-be23-958c21e884bc",
+      "Name": "PartTwo",
+      "InputValues": [
+        {
+          "Id": "62a8185f-32c0-41d2-b8be-d8c1d7178c00"/*Part*/,
+          "Type": "System.String",
+          "Value": "Part 2"
+        },
+        {
+          "Id": "c6407736-80ed-4e13-948c-8d20b50000a7"/*Title*/,
+          "Type": "System.String",
+          "Value": "Good Bye"
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fc8b650a-0539-44e4-a110-3995fecc711d"/*PartTwo*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 160.0,
+                "End": 169.3521
+              },
+              "SourceRange": {
+                "Start": -3.0046082,
+                "End": 6.3474884
+              },
+              "LayerIndex": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "644afb77-f871-4078-8338-11ed3f553f78"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "7ab68bf2-3b31-4e80-8897-f12228d02f5d"/*PartOne*/,
+      "SymbolId": "32feb968-6196-43ea-be23-958c21e884bc",
+      "Name": "PartOne",
+      "InputValues": [
+        {
+          "Id": "62a8185f-32c0-41d2-b8be-d8c1d7178c00"/*Part*/,
+          "Type": "System.String",
+          "Value": "Part 1"
+        },
+        {
+          "Id": "c6407736-80ed-4e13-948c-8d20b50000a7"/*Title*/,
+          "Type": "System.String",
+          "Value": "Times"
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fc8b650a-0539-44e4-a110-3995fecc711d"/*PartOne*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 0.0,
+                "End": 8.874713
+              },
+              "SourceRange": {
+                "Start": 0.0,
+                "End": 8.874713
+              },
+              "LayerIndex": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "3d16d805-4ede-42d4-b8c9-c2d2562fc88c"/*PartTitle*/,
+      "SymbolId": "32feb968-6196-43ea-be23-958c21e884bc",
+      "InputValues": [
+        {
+          "Id": "62a8185f-32c0-41d2-b8be-d8c1d7178c00"/*Part*/,
+          "Type": "System.String",
+          "Value": "Part 3"
+        },
+        {
+          "Id": "c6407736-80ed-4e13-948c-8d20b50000a7"/*Title*/,
+          "Type": "System.String",
+          "Value": "Follow the light"
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fc8b650a-0539-44e4-a110-3995fecc711d"/*PartTitle*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 352.41525,
+                "End": 361.76736
+              },
+              "SourceRange": {
+                "Start": -3.0046082,
+                "End": 6.3474884
+              },
+              "LayerIndex": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "8dd95b28-1e83-4a48-8464-59ba0b82f455"/*PartTitle*/,
+      "SymbolId": "32feb968-6196-43ea-be23-958c21e884bc",
+      "InputValues": [
+        {
+          "Id": "62a8185f-32c0-41d2-b8be-d8c1d7178c00"/*Part*/,
+          "Type": "System.String",
+          "Value": "Part 4"
+        },
+        {
+          "Id": "c6407736-80ed-4e13-948c-8d20b50000a7"/*Title*/,
+          "Type": "System.String",
+          "Value": "Encounter"
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fc8b650a-0539-44e4-a110-3995fecc711d"/*PartTitle*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 471.14478,
+                "End": 480.4969
+              },
+              "SourceRange": {
+                "Start": -3.0046082,
+                "End": 6.3474884
+              },
+              "LayerIndex": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "c132a192-7e13-4a1a-bf3e-e58e102ed802"/*PartTitle*/,
+      "SymbolId": "32feb968-6196-43ea-be23-958c21e884bc",
+      "InputValues": [
+        {
+          "Id": "62a8185f-32c0-41d2-b8be-d8c1d7178c00"/*Part*/,
+          "Type": "System.String",
+          "Value": "Part 5"
+        },
+        {
+          "Id": "c6407736-80ed-4e13-948c-8d20b50000a7"/*Title*/,
+          "Type": "System.String",
+          "Value": "The natural cause of things"
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fc8b650a-0539-44e4-a110-3995fecc711d"/*PartTitle*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 681.0462,
+                "End": 690.3983
+              },
+              "SourceRange": {
+                "Start": -3.0046082,
+                "End": 6.3474884
+              },
+              "LayerIndex": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "cd4a29e5-725a-4b00-8e19-a643be4714ca"/*PartTitle*/,
+      "SymbolId": "32feb968-6196-43ea-be23-958c21e884bc",
+      "InputValues": [
+        {
+          "Id": "62a8185f-32c0-41d2-b8be-d8c1d7178c00"/*Part*/,
+          "Type": "System.String",
+          "Value": "Part 6"
+        },
+        {
+          "Id": "c6407736-80ed-4e13-948c-8d20b50000a7"/*Title*/,
+          "Type": "System.String",
+          "Value": "Everything Connected"
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fc8b650a-0539-44e4-a110-3995fecc711d"/*PartTitle*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 824.6554,
+                "End": 834.0075
+              },
+              "SourceRange": {
+                "Start": -3.0046082,
+                "End": 6.3474884
+              },
+              "LayerIndex": 1
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "e2a03f3f-3132-485c-9652-a6f0a2e7101e",
+      "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "f98b4ef9-a376-4115-8f6c-6705442d79c3"
+    },
+    {
+      "SourceParentOrChildId": "7ab68bf2-3b31-4e80-8897-f12228d02f5d",
+      "SourceSlotId": "fc8b650a-0539-44e4-a110-3995fecc711d",
+      "TargetParentOrChildId": "644afb77-f871-4078-8338-11ed3f553f78",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "406cab98-c13d-41ec-9311-6632d56a4032",
+      "SourceSlotId": "fc8b650a-0539-44e4-a110-3995fecc711d",
+      "TargetParentOrChildId": "644afb77-f871-4078-8338-11ed3f553f78",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "3d16d805-4ede-42d4-b8c9-c2d2562fc88c",
+      "SourceSlotId": "fc8b650a-0539-44e4-a110-3995fecc711d",
+      "TargetParentOrChildId": "644afb77-f871-4078-8338-11ed3f553f78",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "8dd95b28-1e83-4a48-8464-59ba0b82f455",
+      "SourceSlotId": "fc8b650a-0539-44e4-a110-3995fecc711d",
+      "TargetParentOrChildId": "644afb77-f871-4078-8338-11ed3f553f78",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "c132a192-7e13-4a1a-bf3e-e58e102ed802",
+      "SourceSlotId": "fc8b650a-0539-44e4-a110-3995fecc711d",
+      "TargetParentOrChildId": "644afb77-f871-4078-8338-11ed3f553f78",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "cd4a29e5-725a-4b00-8e19-a643be4714ca",
+      "SourceSlotId": "fc8b650a-0539-44e4-a110-3995fecc711d",
+      "TargetParentOrChildId": "644afb77-f871-4078-8338-11ed3f553f78",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    }
+  ],
+  "AudioClips": [
+    {
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "StartTime": 0.0,
+      "EndTime": 0.0,
+      "Bpm": 120.0,
+      "DiscardAfterUse": true,
+      "IsSoundtrack": true,
+      "FilePath": "Resources\\user\\wake\\proj-vj-summer-2022\\soundtrack\\June2022_Setlist-v02_30mins.mp3"
+    }
+  ]
+}

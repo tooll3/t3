@@ -1,0 +1,104 @@
+{
+  "Id": "5f305acf-4e8f-4bc8-945a-cbf4f325a9cd"/*WakeSummer22*/,
+  "Description": "A VJ-set in the making",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "e2a03f3f-3132-485c-9652-a6f0a2e7101e"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "406cab98-c13d-41ec-9311-6632d56a4032"/*PartTwo*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 341.35837,
+        "Y": 279.45764
+      }
+    },
+    {
+      "ChildId": "644afb77-f871-4078-8338-11ed3f553f78"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 114.0
+      },
+      "Position": {
+        "X": 491.35837,
+        "Y": 236.45764
+      }
+    },
+    {
+      "ChildId": "7ab68bf2-3b31-4e80-8897-f12228d02f5d"/*PartOne*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 341.35837,
+        "Y": 236.45764
+      }
+    },
+    {
+      "ChildId": "3d16d805-4ede-42d4-b8c9-c2d2562fc88c"/*PartTitle*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 341.35837,
+        "Y": 322.45764
+      }
+    },
+    {
+      "ChildId": "8dd95b28-1e83-4a48-8464-59ba0b82f455"/*PartTitle*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 341.35837,
+        "Y": 365.45764
+      }
+    },
+    {
+      "ChildId": "c132a192-7e13-4a1a-bf3e-e58e102ed802"/*PartTitle*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 341.35837,
+        "Y": 408.45764
+      }
+    },
+    {
+      "ChildId": "cd4a29e5-725a-4b00-8e19-a643be4714ca"/*PartTitle*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 341.35837,
+        "Y": 451.45764
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "f98b4ef9-a376-4115-8f6c-6705442d79c3"/*ColorBuffer*/,
+      "Position": {
+        "X": 410.0,
+        "Y": 18.0
+      }
+    }
+  ]
+}
