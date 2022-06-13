@@ -44,7 +44,8 @@ namespace t3.Gui.Interaction.Camera
                 ManipulateCameraByKeyboard();
             }
 
-            SpaceMouseInteraction.ManipulateCamera(_intendedSetup);
+            var frameTime = ImGui.GetTime();
+            SpaceMouseInteraction.ManipulateCamera(_intendedSetup, frameTime);
             
             var updateRequired = ComputeSmoothMovement();
             if (!updateRequired)

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using ImGuiNET;
-using SharpDX;
-using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Interfaces;
 using T3.Gui.Graph.Interaction;
+using t3.Gui.Interaction.Camera;
 using T3.Gui.OutputUi;
 using T3.Gui.Windows;
 using T3.Gui.Windows.Output;
@@ -33,6 +33,12 @@ namespace T3.Gui.Graph
                 if (BackgroundNodePath == null)
                     return;
 
+                var selectedInstance = NodeSelection.GetSelectedInstance();
+                if (selectedInstance is ICamera camera)
+                {
+                    _cameraInteraction.Update(camera, true);
+                }
+                
                 _evaluationContext.ShowGizmos = T3.Core.Operator.GizmoVisibility.Off;
                 _evaluationContext.Reset();
                 _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
@@ -66,6 +72,7 @@ namespace T3.Gui.Graph
 
             private readonly EvaluationContext _evaluationContext = new();
             private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
+            private readonly CameraInteraction _cameraInteraction = new();
         }
     }
 }

@@ -57,7 +57,11 @@ namespace T3.Gui.UiHelpers
             public bool PresetsResetToDefaultValues = true;
 
             public float TimeRasterDensity = 1f;
-            public bool CountBarsFromZero = true; 
+            public bool CountBarsFromZero = true;
+
+            public float SpaceMouseRotationSpeedFactor = 1f;
+            public float SpaceMouseMoveSpeedFactor = 1f;
+            public float SpaceMouseDamping = 0.5f;
 
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
