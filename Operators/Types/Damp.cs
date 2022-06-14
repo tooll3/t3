@@ -1,6 +1,7 @@
 using System;
 using T3.Core;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -25,10 +26,24 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
             var t = context.LocalFxTime;
             if (Math.Abs(t - _lastEvalTime) < 0.001f)
                 return;
+            
             _lastEvalTime = t;
+            const float FrameRate = 60;
 
-            var f = (float)(damping * Playback.LastFrameDuration).Clamp(0f,1f);
-            _dampedValue = MathUtils.Lerp(v,_dampedValue, f);
+            var framesPassed = (int)((Playback.LastFrameDuration * FrameRate) - 0.5f).Clamp(0,5) + 1 ;
+            
+            Log.Debug("Frame count: " + framesPassed);
+            for (int stepIndex = 0; stepIndex < framesPassed; stepIndex++)
+            {
+                _dampedValue = MathUtils.Lerp(v,_dampedValue, damping);
+            }
+
+            // Prevent NaN
+            if (!float.IsNormal(_dampedValue))
+            {
+                _dampedValue = 0;
+            }
+            
             Result.Value = _dampedValue;
         }
 
