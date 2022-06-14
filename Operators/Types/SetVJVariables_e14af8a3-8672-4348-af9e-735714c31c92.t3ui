@@ -1,6 +1,6 @@
 {
   "Id": "e14af8a3-8672-4348-af9e-735714c31c92"/*SetVJVariables*/,
-  "Description": "A small helper that sets LFO speed factor variables from MidiControllers into context.",
+  "Description": "A small helper that sets LFO speed factor variables from MidiControllers into context.\n\nThis setup is highly customized for WAKE performances and probably not applicable to your situation.\nBut it might be a good starting point for tweaking your own setups.\n",
   "InputUis": [
     {
       "InputId": "693345bd-0cd8-4dca-9416-42a9bdcbc293"/*Image*/,

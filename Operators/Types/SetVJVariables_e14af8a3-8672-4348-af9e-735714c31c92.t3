@@ -135,7 +135,12 @@
       "Id": "e9d0e6f2-05ff-402f-acb1-d2c249641799"/*ForwardBeatTaps*/,
       "SymbolId": "79db48d8-38d3-47ca-9c9b-85dde2fa660d",
       "InputValues": [],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "71d05d91-d18b-44b3-a469-392739fd6941"/*ForwardBeatTaps*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "4e7ff83d-fea7-4c55-ba7c-d5f992c0ba38"/*Beat Tapping*/,
@@ -168,13 +173,23 @@
           "Value": 87
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "01706780-d25b-4c30-a741-8b7b81e04d82"/*Beat Tapping*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "9ea76be6-91d8-4b55-9909-f1266acea5d8"/*HasValueIncreased*/,
       "SymbolId": "c513c58d-e45c-408d-a0b8-250c9af31545",
       "InputValues": [],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "598e38d5-2347-4b93-a7a4-a23190d95dcd"/*HasValueIncreased*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "196fdbc3-2a93-4c33-9c7c-04af058146ad"/*Sync Beat*/,
@@ -202,13 +217,23 @@
           "Value": 88
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "01706780-d25b-4c30-a741-8b7b81e04d82"/*Sync Beat*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "e209cd98-a57f-4b43-8508-039139cdb3d3"/*HasValueIncreased*/,
       "SymbolId": "c513c58d-e45c-408d-a0b8-250c9af31545",
       "InputValues": [],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "598e38d5-2347-4b93-a7a4-a23190d95dcd"/*HasValueIncreased*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "5de123d1-764d-4f5f-806f-aa027fc9f699"/*ExecuteTextureUpdate*/,
@@ -379,7 +404,7 @@
         {
           "Id": "b22e2055-ccfd-4379-a3ef-d9b21d347f3d"/*Index*/,
           "Type": "System.Int32",
-          "Value": 0
+          "Value": 1
         }
       ],
       "Outputs": []
@@ -418,7 +443,7 @@
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0,
-            "W": 0.25
+            "W": 0.56
           }
         }
       ],
