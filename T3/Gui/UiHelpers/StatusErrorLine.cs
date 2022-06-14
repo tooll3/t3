@@ -21,56 +21,62 @@ namespace T3.Gui.UiHelpers
 
         public void Draw()
         {
-            if (_logEntries.Count == 0)
+            lock (_logEntries)
             {
-                ImGui.TextUnformatted("Log empty");
-                return;
+                if (_logEntries.Count == 0)
+                {
+                    ImGui.TextUnformatted("Log empty");
+                    return;
+                }
+
+                var lastEntry = _logEntries[_logEntries.Count - 1];
+                var color = ConsoleLogWindow.GetColorForLogLevel(lastEntry.Level)
+                                            .Fade(MathUtils.RemapAndClamp((float)lastEntry.SecondsAgo, 0, 1.5f, 1, 0.4f));
+
+                ImGui.PushFont(Fonts.FontBold);
+
+                var logMessage = lastEntry.Message;
+                if (lastEntry.Level == LogEntry.EntryLevel.Error)
+                {
+                    logMessage = ExtractMeaningfulMessage(logMessage);
+                }
+
+                var width = ImGui.CalcTextSize(logMessage);
+                var availableSpace = ImGui.GetWindowContentRegionMax().X;
+                ImGui.SetCursorPosX(availableSpace - width.X);
+
+                ImGui.TextColored(color, logMessage);
+                if (ImGui.IsItemClicked())
+                {
+                    _logEntries.Clear();
+                }
             }
 
-            var lastEntry = _logEntries[_logEntries.Count - 1];
-            var color = ConsoleLogWindow.GetColorForLogLevel(lastEntry.Level)
-                                        .Fade(MathUtils.RemapAndClamp((float)lastEntry.SecondsAgo, 0, 1.5f, 1, 0.4f));
-
-            ImGui.PushFont(Fonts.FontBold);
-
-            var logMessage = lastEntry.Message;
-            if (lastEntry.Level == LogEntry.EntryLevel.Error)
-            {
-                logMessage = ExtractMeaningfulMessage(logMessage);
-            }
-
-            var width = ImGui.CalcTextSize(logMessage);
-            var availableSpace = ImGui.GetWindowContentRegionMax().X;
-            ImGui.SetCursorPosX(availableSpace - width.X);
-
-            ImGui.TextColored(color, logMessage);
-            if (ImGui.IsItemClicked())
-            {
-                _logEntries.Clear();
-            }
-            
             if (ImGui.IsItemHovered())
             {
-                
                 ImGui.BeginTooltip();
                 {
                     var lastEntryTime = double.PositiveInfinity;
-                    foreach (var entry in _logEntries)
+                    lock (_logEntries)
                     {
-                        var timeSinceLastEntry = entry.SecondsSinceStart - lastEntryTime;
-                        if(timeSinceLastEntry > 1)
-                            ImGui.Spacing();
+                        foreach (var entry in _logEntries)
+                        {
+                            var timeSinceLastEntry = entry.SecondsSinceStart - lastEntryTime;
+                            if (timeSinceLastEntry > 1)
+                                ImGui.Spacing();
 
-                        lastEntryTime = entry.SecondsSinceStart;
-                        var entryLevel = entry.Level;
-                        ImGui.SetCursorPosX(-2);
-                        ImGui.Value("", (float)entry.SecondsSinceStart);    // Print with ImGui to avoid allocation
-                        ImGui.SameLine(80);
-                        ImGui.TextColored(ConsoleLogWindow.GetColorForLogLevel(entryLevel), entry.Message);
+                            lastEntryTime = entry.SecondsSinceStart;
+                            var entryLevel = entry.Level;
+                            ImGui.SetCursorPosX(-2);
+                            ImGui.Value("", (float)entry.SecondsSinceStart); // Print with ImGui to avoid allocation
+                            ImGui.SameLine(80);
+                            ImGui.TextColored(ConsoleLogWindow.GetColorForLogLevel(entryLevel), entry.Message);
+                        }
                     }
                 }
                 ImGui.EndTooltip();
             }
+
             ImGui.PopFont();
         }
 
@@ -82,12 +88,15 @@ namespace T3.Gui.UiHelpers
 
         public void ProcessEntry(LogEntry entry)
         {
-            if (_logEntries.Count > 20)
+            lock (_logEntries)
             {
-                _logEntries.RemoveAt(0);
-            }
+                if (_logEntries.Count > 20)
+                {
+                    _logEntries.RemoveAt(0);
+                }
 
-            _logEntries.Add(entry);
+                _logEntries.Add(entry);
+            }
         }
 
         private string ExtractMeaningfulMessage(string message)
@@ -95,7 +104,7 @@ namespace T3.Gui.UiHelpers
             var shaderErrorMatch = _shaderErrorPattern.Match(message);
             if (!shaderErrorMatch.Success)
                 return message;
-            
+
             var shaderName = shaderErrorMatch.Groups[1].Value;
             var lineNumber = shaderErrorMatch.Groups[2].Value;
             var errorMessage = shaderErrorMatch.Groups[3].Value;
