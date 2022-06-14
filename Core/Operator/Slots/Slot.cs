@@ -97,8 +97,16 @@ namespace T3.Core.Operator.Slots
                 DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
                 DirtyFlag.Reference = DirtyFlag.Target - 1;
             }
-            if(sourceSlot!= null)
-                InputConnection.Insert(index, (Slot<T>)sourceSlot);
+
+            if (sourceSlot == null)
+                return;
+            
+            if (sourceSlot.ValueType != ValueType)
+            {
+                Log.Warning("Type match during connection");
+                return;
+            }
+            InputConnection.Insert(index, (Slot<T>)sourceSlot);
         }
 
         private Action<EvaluationContext> _actionBeforeAddingConnecting;
