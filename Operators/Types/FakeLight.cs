@@ -42,6 +42,9 @@ namespace T3.Operators.Types.Id_6820b166_1782_43b9_bc5c_6b4f63b16f86
 
         [Input(Guid = "3c615aa0-61b7-43c5-bea3-8d1110b4f5cd")]
         public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+
+        [Input(Guid = "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40")]
+        public readonly InputSlot<float> Amount = new InputSlot<float>();
     }
 }
 

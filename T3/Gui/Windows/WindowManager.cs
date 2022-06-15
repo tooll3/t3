@@ -81,6 +81,11 @@ namespace T3.Gui.Windows
                 ApplyGraphOverContentModeChange();
             }
             
+            if (KeyboardBinding.Triggered(UserActions.ToggleVariationsWindow))
+            {
+                ToggleWindowTypeVisibility<VariationsWindow>();
+            }
+            
             UpdateAppWindowSize();
             
 
@@ -386,6 +391,15 @@ namespace T3.Gui.Windows
             return GetAllWindows().OfType<T>().Any(w => w.Config.Visible);
         }
 
+        public void ToggleWindowTypeVisibility<T>() where T : Window
+        {
+            var instances = GetAllWindows().OfType<T>().ToList();
+            if (instances.Count != 1)
+                return;
+
+            instances[0].Config.Visible = !instances[0].Config.Visible;
+        }
+        
         private const string LayoutFileNameFormat = "layout{0}.json";
         private const string ConfigFolderName = ".t3";
         private const float MainMenuBarHeight = 25;

@@ -1,0 +1,93 @@
+{
+  "Id": "88af0668-6aae-419c-ace8-845c92135915"/*WS3_Processing*/,
+  "Description": "A simple setup with [AdvancedFeedback] and [FakeLight]",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "d2214730-53e1-46c9-a0ff-c28b21b7437b"/*AdvancedFeedback*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 300.0,
+        "Y": 144.59973
+      }
+    },
+    {
+      "ChildId": "d81a9dd6-e4b2-420e-b1df-71783b861999"/*ColorGrade*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 577.1323,
+        "Y": 149.31116
+      }
+    },
+    {
+      "ChildId": "708533f1-1824-4b14-abca-27125f25a12e"/*FakeLight*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 436.42725,
+        "Y": 145.12341
+      }
+    },
+    {
+      "ChildId": "69c0b5e5-2c30-4461-9459-7d1b3928f70b"/*Rings*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2.0545654,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "f4d93cf4-3adb-45bd-bb91-16f693e883c9"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 150.0,
+        "Y": 144.59973
+      }
+    },
+    {
+      "ChildId": "9bdd9646-c7bb-4f17-bd03-e961db88337a"/*Blob*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 144.59973
+      }
+    },
+    {
+      "ChildId": "5b7f8690-6e12-4dfc-9d19-c442cc541338"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 827.71765,
+        "Y": 100.04431
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "7946bb83-39be-4a04-97ec-ee510f81c770"/*Output*/,
+      "Position": {
+        "X": 1237.7177,
+        "Y": 97.06171
+      }
+    }
+  ]
+}
