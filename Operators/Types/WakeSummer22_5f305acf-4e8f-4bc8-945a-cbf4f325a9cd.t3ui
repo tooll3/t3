@@ -145,6 +145,116 @@
         "X": 180.10718,
         "Y": 687.1001
       }
+    },
+    {
+      "ChildId": "d9c19b31-16bd-4fd4-90b3-d7ce603c89b0"/*DulcimerMain*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 819.1135,
+        "Y": -366.36115
+      }
+    },
+    {
+      "ChildId": "d112f3a3-f752-45f3-8196-5bd5b5fa9797"/*SimulateBoidsExample*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 188.28745,
+        "Y": -824.55707
+      }
+    },
+    {
+      "ChildId": "5d100afd-e996-4c04-bd04-8a8d0b46b40b"/*ChannelMixer*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 969.1135,
+        "Y": -366.36115
+      }
+    },
+    {
+      "ChildId": "5edf9158-3d66-4d93-8d23-974deac4e58a"/*FluidFeedback*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1046.2365,
+        "Y": -875.1634
+      }
+    },
+    {
+      "ChildId": "67388b2f-5e08-4cbe-a3e6-2a467ec1b5d8"/*AdvancedFeedback*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1044.6282,
+        "Y": -734.5726
+      }
+    },
+    {
+      "ChildId": "24cbe1ac-8e92-4ab1-bb86-8939f97ec4be"/*Text*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 867.02374,
+        "Y": -726.6876
+      }
+    },
+    {
+      "ChildId": "9b4b43fd-c691-4aa3-a444-a3340d0ee7c3"/*ImageLevels*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1494.6282,
+        "Y": -758.57117
+      }
+    },
+    {
+      "ChildId": "45691a80-639f-4cf8-b8ce-128174f35f6b"/*DetectEdges*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 749.24347,
+        "Y": -860.25366
+      }
+    },
+    {
+      "ChildId": "dbf4d786-77a3-4072-99e4-fefaf6e1d245"/*ColorGrade*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1344.6282,
+        "Y": -734.5726
+      }
+    },
+    {
+      "ChildId": "ec787bc9-8a1b-4ee8-a29d-be539f01bdbb"/*FakeLight*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1194.6282,
+        "Y": -734.5726
+      }
     }
   ],
   "OutputUis": [

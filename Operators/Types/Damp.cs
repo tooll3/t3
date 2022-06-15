@@ -32,7 +32,6 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
 
             var framesPassed = (int)((Playback.LastFrameDuration * FrameRate) - 0.5f).Clamp(0,5) + 1 ;
             
-            Log.Debug("Frame count: " + framesPassed);
             for (int stepIndex = 0; stepIndex < framesPassed; stepIndex++)
             {
                 _dampedValue = MathUtils.Lerp(v,_dampedValue, damping);
