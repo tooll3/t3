@@ -79,6 +79,8 @@ namespace T3.Gui.Windows.Variations
             DrawContextMenu();
         }
 
+        private bool _rerenderManuallyRequested = false;
+        
         /// <summary>
         /// Updates keeps rendering thumbnails until all are processed.
         /// </summary>
@@ -86,6 +88,9 @@ namespace T3.Gui.Windows.Variations
         {
             pinnedOutputChanged = false;
 
+            if (!UserSettings.Config.VariationLiveThumbnails && !_rerenderManuallyRequested)
+                return;
+            
             // Render variations to pinned output
             if (OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) is not OutputWindow outputWindow)
                 return;
@@ -325,8 +330,7 @@ namespace T3.Gui.Windows.Variations
                                                                     var oneSelected = Selection.SelectedElements.Count == 1;
 
                                                                     if (ImGui.MenuItem("Delete selected",
-                                                                                       KeyboardBinding.ListKeyboardShortcuts(UserActions.DeleteSelection,
-                                                                                           false),
+                                                                                       "Del",   // We should use the correct assigned short cut, but "Del or Backspace" is too long for layout
                                                                                        false,
                                                                                        oneOrMoreSelected))
                                                                     {
@@ -344,12 +348,13 @@ namespace T3.Gui.Windows.Variations
                                                                     if (ImGui.MenuItem("Update thumbnails",
                                                                                        ""))
                                                                     {
+                                                                        _rerenderManuallyRequested = true;
                                                                         TriggerThumbnailUpdate();
                                                                     }
                                                                     
                                                                     ImGui.Separator();
                                                                     ImGui.MenuItem("Live Render Previews", "", ref UserSettings.Config.VariationLiveThumbnails, true);
-                                                                    ImGui.MenuItem("Preview on Hover", "", ref UserSettings.Config.VariationLiveThumbnails, true);
+                                                                    ImGui.MenuItem("Preview on Hover", "", ref UserSettings.Config.VariationHoverPreview, true);
                                                                     
                                                                     DrawAdditionalContextMenuContent();
                                                                 }, ref _contextMenuIsOpen);
@@ -462,12 +467,14 @@ namespace T3.Gui.Windows.Variations
             if (PoolForBlendOperations.Variations.Count == 0)
             {
                 _allThumbnailsRendered = true;
+                _rerenderManuallyRequested = false;
                 return;
             }
 
             if (_renderThumbnailIndex >= PoolForBlendOperations.Variations.Count)
             {
                 _allThumbnailsRendered = true;
+                _rerenderManuallyRequested = false;
                 return;
             }
 

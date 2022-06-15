@@ -109,7 +109,7 @@ namespace T3.Gui.Windows.Variations
             else
             {
                 // Handle hover
-                if (ImGui.IsItemVisible() && ImGui.IsItemHovered())
+                if (ImGui.IsItemVisible() && ImGui.IsItemHovered() && UserSettings.Config.VariationHoverPreview)
                 {
                     if (_hoveredVariation == null)
                     {

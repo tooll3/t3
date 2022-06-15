@@ -51,7 +51,9 @@ namespace T3.Gui.UiHelpers
             public float ScrollSmoothing = 0.06f;
             public float TooltipDelay = 1.2f;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
-            
+
+            public bool VariationLiveThumbnails = true;
+            public bool VariationHoverPreview = true;
             
             // Load Save
             public bool AutoSaveAfterSymbolCreation = true;
@@ -67,7 +69,7 @@ namespace T3.Gui.UiHelpers
             public bool CountBarsFromZero = true;
             public float TimeRasterDensity = 1f;
 
-            // Spacemout
+            // Space mouse
             public float SpaceMouseRotationSpeedFactor = 1f;
             public float SpaceMouseMoveSpeedFactor = 1f;
             public float SpaceMouseDamping = 0.5f;
