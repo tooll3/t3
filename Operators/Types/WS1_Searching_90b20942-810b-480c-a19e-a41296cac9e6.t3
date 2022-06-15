@@ -117,12 +117,12 @@
         {
           "Id": "7f66aa8d-fbdd-47d6-ba38-07e257e19401"/*SampleRadius*/,
           "Type": "System.Single",
-          "Value": 8.8
+          "Value": 3.6000001
         },
         {
           "Id": "d3197979-b418-4182-b1c9-f3126b175f8d"/*Strength*/,
           "Type": "System.Single",
-          "Value": 0.26
+          "Value": 3.4
         }
       ],
       "Outputs": []

@@ -128,11 +128,12 @@ float4 psMain(vsOutput input) : SV_TARGET
     float averageGray = (average.x + average.y + average.z)/3;
 
     // Detect Edges
+    const float increasedEdgeParmeterResolution = 100;
     float edgeDelta =  (           
                     abs(x1.r-c.r) + abs(x2.r-c.r) + abs(y1.r - c.r) +abs(y2.r - c.r) +
                     abs(x1.g-c.g) + abs(x2.g-c.g) + abs(y1.g - c.g) +abs(y2.g - c.g) +
                     abs(x1.b-c.b) + abs(x2.b-c.b) + abs(y1.b - c.b) +abs(y2.b - c.b)
-                ) * DetectEdges;
+                ) * DetectEdges / increasedEdgeParmeterResolution;
 
     // Limit value range    
     const float lowerRange = 0.1;

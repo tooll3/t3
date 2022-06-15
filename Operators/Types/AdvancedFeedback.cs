@@ -41,6 +41,24 @@ namespace T3.Operators.Types.Id_33424f7f_ea2d_4753_bbc3_8df00830c4b5
         [Input(Guid = "482fba6b-f92e-418c-a8f4-8da0f546c4a6")]
         public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();
 
+        [Input(Guid = "b454ebb9-6b27-46b1-962e-15e658c8f6a2")]
+        public readonly InputSlot<float> ShiftHue = new InputSlot<float>();
+
+        [Input(Guid = "aedb3315-5061-4b68-8925-761d4d8c78b4")]
+        public readonly InputSlot<float> ShiftSaturation = new InputSlot<float>();
+
+        [Input(Guid = "cbe45989-b239-491e-a2d8-83a42ab58b85")]
+        public readonly InputSlot<float> ShiftBrightness = new InputSlot<float>();
+
+        [Input(Guid = "640de6a7-14ce-4c72-b78e-aa72f642b765")]
+        public readonly InputSlot<float> AmplifyEdges = new InputSlot<float>();
+
+        [Input(Guid = "9d210666-6b60-4193-9bfd-8a50c8973238")]
+        public readonly InputSlot<float> LimitBrights = new InputSlot<float>();
+
+        [Input(Guid = "37f312f0-949c-4a43-af92-786761b03d3b")]
+        public readonly InputSlot<float> SampleRadius = new InputSlot<float>();
+
         [Input(Guid = "c3827e2e-2d15-475c-9b2f-03a861e97fc5")]
         public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
 

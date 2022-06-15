@@ -94,10 +94,52 @@
       "Scale": 0.001
     },
     {
-      "InputId": "c3827e2e-2d15-475c-9b2f-03a861e97fc5"/*IsEnabled*/,
+      "InputId": "b454ebb9-6b27-46b1-962e-15e658c8f6a2"/*ShiftHue*/,
+      "Position": {
+        "X": -486.94925,
+        "Y": 799.91724
+      }
+    },
+    {
+      "InputId": "aedb3315-5061-4b68-8925-761d4d8c78b4"/*ShiftSaturation*/,
+      "Position": {
+        "X": -486.94925,
+        "Y": 844.91724
+      }
+    },
+    {
+      "InputId": "cbe45989-b239-491e-a2d8-83a42ab58b85"/*ShiftBrightness*/,
       "Position": {
         "X": -488.08795,
-        "Y": 750.38855
+        "Y": 975.38855
+      }
+    },
+    {
+      "InputId": "640de6a7-14ce-4c72-b78e-aa72f642b765"/*AmplifyEdges*/,
+      "Position": {
+        "X": -488.08795,
+        "Y": 1020.38855
+      }
+    },
+    {
+      "InputId": "9d210666-6b60-4193-9bfd-8a50c8973238"/*LimitBrights*/,
+      "Position": {
+        "X": -488.08795,
+        "Y": 1065.3885
+      }
+    },
+    {
+      "InputId": "37f312f0-949c-4a43-af92-786761b03d3b"/*SampleRadius*/,
+      "Position": {
+        "X": -488.08795,
+        "Y": 1110.3885
+      }
+    },
+    {
+      "InputId": "c3827e2e-2d15-475c-9b2f-03a861e97fc5"/*IsEnabled*/,
+      "Position": {
+        "X": -489.22665,
+        "Y": 1169.2065
       }
     }
   ],
@@ -132,8 +174,8 @@
         "Y": 75.0
       },
       "Position": {
-        "X": 324.1076,
-        "Y": -260.45108
+        "X": 315.8648,
+        "Y": -85.95781
       }
     },
     {
@@ -327,7 +369,7 @@
       "ChildId": "4318ad5e-6f0f-45a2-b73e-52649ac045e9"/*_AdjustFeedbackImage*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 114.0
       },
       "Position": {
         "X": -178.63586,
@@ -339,8 +381,8 @@
     {
       "OutputId": "a977681b-2f7b-44de-a29e-3ba00e2260b0"/*ColorBuffer*/,
       "Position": {
-        "X": 1119.6362,
-        "Y": -210.50357
+        "X": 1240.7468,
+        "Y": -245.73804
       }
     }
   ]
