@@ -117,7 +117,7 @@ namespace T3.Gui.Windows.Variations
                 var mousePos = ImGui.GetMousePos();
                 if (_blendPoints.Count == 1)
                 {
-                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
+                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights);
 
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
@@ -137,7 +137,7 @@ namespace T3.Gui.Windows.Variations
 
                     drawList.AddCircleFilled(blendPosition, 5, Color.White);
 
-                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
+                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights);
 
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
@@ -155,7 +155,7 @@ namespace T3.Gui.Windows.Variations
                     }
 
                     drawList.AddCircleFilled(mousePos, 5, Color.White);
-                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
+                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights);
 
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
@@ -349,14 +349,14 @@ namespace T3.Gui.Windows.Variations
 
                                                                     DrawAdditionalContextMenuContent();
 
-                                                                    ImGui.Separator();
-                                                                    if (ImGui.MenuItem("Automatically reset to defaults",
-                                                                                       "",
-                                                                                       UserSettings.Config.PresetsResetToDefaultValues))
-                                                                    {
-                                                                        UserSettings.Config.PresetsResetToDefaultValues =
-                                                                            !UserSettings.Config.PresetsResetToDefaultValues;
-                                                                    }
+                                                                    // ImGui.Separator();
+                                                                    // if (ImGui.MenuItem("Automatically reset to defaults",
+                                                                    //                    "",
+                                                                    //                    UserSettings.Config.PresetsResetToDefaultValues))
+                                                                    // {
+                                                                    //     UserSettings.Config.PresetsResetToDefaultValues =
+                                                                    //         !UserSettings.Config.PresetsResetToDefaultValues;
+                                                                    // }
                                                                 }, ref _contextMenuIsOpen);
             }
         }
@@ -365,20 +365,20 @@ namespace T3.Gui.Windows.Variations
 
         public void StartHover(Variation variation)
         {
-            PoolForBlendOperations.BeginHover(_instance, variation, UserSettings.Config.PresetsResetToDefaultValues);
+            PoolForBlendOperations.BeginHover(_instance, variation);
         }
 
-        public void Apply(Variation variation, bool resetNonDefaults)
+        public void Apply(Variation variation)
         {
             PoolForBlendOperations.StopHover();
-            PoolForBlendOperations.Apply(_instance, variation, resetNonDefaults);
+            PoolForBlendOperations.Apply(_instance, variation);
         }
 
         public void StartBlendTo(Variation variation, float blend)
         {
             if (variation.IsPreset)
             {
-                PoolForBlendOperations.BeginBlendToPresent(_instance, variation, blend, UserSettings.Config.PresetsResetToDefaultValues);
+                PoolForBlendOperations.BeginBlendToPresent(_instance, variation, blend);
             }
         }
 
@@ -484,7 +484,7 @@ namespace T3.Gui.Windows.Variations
         private void RenderThumbnail(Variation variation, int atlasIndex, IOutputUi outputUi, Slot<Texture2D> textureSlot)
         {
             // Set variation values
-            PoolForBlendOperations.BeginHover(InstanceForBlendOperations, variation, UserSettings.Config.PresetsResetToDefaultValues);
+            PoolForBlendOperations.BeginHover(InstanceForBlendOperations, variation);
 
             // Render variation
             _thumbnailCanvasRendering.EvaluationContext.Reset();
