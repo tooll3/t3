@@ -209,7 +209,9 @@ namespace T3.Gui.Interaction.Variations.Model
 
         public void ApplyCurrentBlend()
         {
-            UndoRedoStack.Add(_activeBlendCommand);
+            if(_activeBlendCommand != null)
+                UndoRedoStack.Add(_activeBlendCommand);
+            
             _activeBlendCommand = null;
         }
 

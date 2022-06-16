@@ -217,6 +217,7 @@ namespace T3.Gui.Interaction.Variations
         public static void StopBlendingTowards()
         {
             _blendTowardsIndex = -1;
+            ActivePoolForSnapshots.ApplyCurrentBlend();
         }
         
         public static void UpdateBlendValues(int obj, float value)
