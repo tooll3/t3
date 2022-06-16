@@ -64,25 +64,7 @@ namespace T3.Gui.Windows.Output
             }
 
             // Update recently used cameras (this is expensive!)
-            _recentlyUsedCameras.Clear();
-            
-            _firstCamInGraph = null;
-            if (drawnInstance.Parent != null)
-            {
-                foreach (var child in drawnInstance.Parent.Children)
-                {
-                    if (child is not Camera cam2)
-                        continue;
-
-                    if (cam2.Outputs[0].DirtyFlag.FramesSinceLastUpdate > 1)
-                        continue;
-
-                    if (_firstCamInGraph == null)
-                        _firstCamInGraph = cam2;
-                    
-                    _recentlyUsedCameras.Add(cam2);
-                }
-            }
+            UpdateRecentCameras(drawnInstance);
 
             ICamera cameraForManipulation = null;
             CameraForRendering = null;
@@ -188,7 +170,43 @@ namespace T3.Gui.Windows.Output
                 _cameraInteraction.Update(cameraForManipulation, !PreventCameraInteraction);
             }
         }
-        
+
+        private void UpdateRecentCameras(Instance drawnInstance)
+        {
+            _recentlyUsedCameras.Clear();
+            _firstCamInGraph = null;
+            
+            var parentInstance = drawnInstance.Parent;
+            if (parentInstance != null)
+            {
+                var children = parentInstance.Children;
+                foreach (var child in children)
+                {
+                    if (child is not Camera cam2)
+                        continue;
+
+                    if (cam2.Outputs[0].DirtyFlag.FramesSinceLastUpdate > 1)
+                        continue;
+
+                    if (_firstCamInGraph == null)
+                        _firstCamInGraph = cam2;
+
+                    _recentlyUsedCameras.Add(cam2);
+                }
+            }
+
+            var selectedInstance = NodeSelection.GetSelectedInstance();
+            if (selectedInstance is Camera selectedCamera
+                && !_recentlyUsedCameras.Contains(selectedCamera))
+            {
+                if (_recentlyUsedCameras.Count == 0)
+                {
+                    _firstCamInGraph = selectedCamera;
+                }
+                _recentlyUsedCameras.Add(selectedCamera);
+            }
+        }
+
         const string SceneViewerFollowingLabel = "Viewer (Following)";
         const string SceneViewerModeLabel = "Viewer";
         const string CameraModeLabel = "Camera";
