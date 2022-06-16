@@ -7,7 +7,13 @@
     {
       "Id": "e2a03f3f-3132-485c-9652-a6f0a2e7101e"/*RenderTarget*/,
       "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "e882e0f0-03f9-46e6-ac7a-709e6fa66613"/*Multisampling*/,
+          "Type": "System.Int32",
+          "Value": 1
+        }
+      ],
       "Outputs": []
     },
     {
@@ -356,7 +362,7 @@
       "Outputs": []
     },
     {
-      "Id": "29a75c3e-d1df-4205-b564-cea177c4d10f"/*WS3_Processing*/,
+      "Id": "29a75c3e-d1df-4205-b564-cea177c4d10f"/*WS2_Feedback*/,
       "SymbolId": "88af0668-6aae-419c-ace8-845c92135915",
       "InputValues": [],
       "Outputs": []
@@ -546,7 +552,7 @@
         {
           "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
           "Type": "System.Int32",
-          "Value": 2
+          "Value": 3
         }
       ],
       "Outputs": []
@@ -558,7 +564,7 @@
         {
           "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
           "Type": "System.String",
-          "Value": "Searching\nOnwards\nJourney\nStep by Step\nWith every Beat\nEverything Connect"
+          "Value": "Searching\nOnwards\nJourney\nStep by Step\nTogether\nConnected"
         }
       ],
       "Outputs": []
@@ -957,6 +963,24 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "33023c3f-4b0a-4158-b671-b81b296a4831"/*RyojiPattern2*/,
+      "SymbolId": "cb28a67e-80cb-460a-8130-00e3cd85b7c2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "ef045d34-fdcb-45ad-b9a0-d6a5a5f450ec"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "523f05fd-724d-42bb-b7fd-d09603e64cae"/*WS4_Patterns*/,
+      "SymbolId": "416ebd7f-e8ef-46a0-8048-1f5dd424cec2",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -1061,6 +1085,12 @@
       "SourceSlotId": "9569f79b-2045-4b69-b87a-8b1cc09ef275",
       "TargetParentOrChildId": "5d100afd-e996-4c04-bd04-8a8d0b46b40b",
       "TargetSlotId": "28bb7ff9-190a-4624-9361-c4a530851bfd"
+    },
+    {
+      "SourceParentOrChildId": "ef045d34-fdcb-45ad-b9a0-d6a5a5f450ec",
+      "SourceSlotId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f",
+      "TargetParentOrChildId": "63e041cd-c898-4a0e-b959-3627c4dac348",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
       "SourceParentOrChildId": "7ab68bf2-3b31-4e80-8897-f12228d02f5d",
@@ -1195,12 +1225,6 @@
       "TargetSlotId": "988dd1b5-636d-4a78-9592-2c6601401cc1"
     },
     {
-      "SourceParentOrChildId": "63e041cd-c898-4a0e-b959-3627c4dac348",
-      "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
-      "TargetParentOrChildId": "c1d44b18-804a-472f-9742-82705fcbdd62",
-      "TargetSlotId": "988dd1b5-636d-4a78-9592-2c6601401cc1"
-    },
-    {
       "SourceParentOrChildId": "29a75c3e-d1df-4205-b564-cea177c4d10f",
       "SourceSlotId": "7946bb83-39be-4a04-97ec-ee510f81c770",
       "TargetParentOrChildId": "c1d44b18-804a-472f-9742-82705fcbdd62",
@@ -1208,6 +1232,12 @@
     },
     {
       "SourceParentOrChildId": "31093638-7984-4e31-a1ae-77878f34ef62",
+      "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
+      "TargetParentOrChildId": "c1d44b18-804a-472f-9742-82705fcbdd62",
+      "TargetSlotId": "988dd1b5-636d-4a78-9592-2c6601401cc1"
+    },
+    {
+      "SourceParentOrChildId": "63e041cd-c898-4a0e-b959-3627c4dac348",
       "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
       "TargetParentOrChildId": "c1d44b18-804a-472f-9742-82705fcbdd62",
       "TargetSlotId": "988dd1b5-636d-4a78-9592-2c6601401cc1"
@@ -1289,6 +1319,12 @@
       "SourceSlotId": "01706780-d25b-4c30-a741-8b7b81e04d82",
       "TargetParentOrChildId": "ea54dc76-4f3a-4695-b879-aa9b5c6b02b5",
       "TargetSlotId": "9871ad71-30b0-4454-9418-0916fd58afa8"
+    },
+    {
+      "SourceParentOrChildId": "523f05fd-724d-42bb-b7fd-d09603e64cae",
+      "SourceSlotId": "8a006310-bd6f-4de7-8a4a-fc2577ac636f",
+      "TargetParentOrChildId": "ef045d34-fdcb-45ad-b9a0-d6a5a5f450ec",
+      "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
     }
   ],
   "AudioClips": [
@@ -1299,7 +1335,7 @@
       "Bpm": 120.0,
       "DiscardAfterUse": true,
       "IsSoundtrack": true,
-      "FilePath": "Resources\\user\\wake\\proj-vj-summer-2022\\June2022_Setlist-v02_30mins.mp3"
+      "FilePath": "Resources\\user\\wake\\proj-vj-summer-2022\\soundtrack\\June2022_Setlist-v02_30mins.mp3"
     }
   ]
 }
