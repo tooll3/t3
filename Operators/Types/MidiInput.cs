@@ -14,42 +14,43 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 {
     public class MidiInput : Instance<MidiInput>, IDisposable, MidiInConnectionManager.IMidiConsumer
     {
+        #region outputs
         [Output(Guid = "01706780-D25B-4C30-A741-8B7B81E04D82", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Result = new Slot<float>();
-
+        public readonly Slot<float> Result = new();
+        
         [Output(Guid = "D7114289-4B1D-47E9-B5C1-DCDC8A371087", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<List<float>> Range = new Slot<List<float>>();
+        public readonly Slot<List<float>> Range = new();
+        #endregion
+        
 
         [Input(Guid = "AAD1E576-F144-423F-83B5-5694B1119C23")]
-        public readonly InputSlot<Vector2> OutputRange = new InputSlot<Vector2>();
+        public readonly InputSlot<Vector2> OutputRange = new();
 
         [Input(Guid = "4636D6CF-8233-4281-8840-5BA079B5F1A6")]
-        public readonly InputSlot<float> DefaultMidiValue = new InputSlot<float>();
-
-        [Input(Guid = "3B350FF2-004C-457B-983D-21D11A01D170")]
-        public readonly InputSlot<bool> AllowPresets = new InputSlot<bool>();
+        public readonly InputSlot<float> DefaultOutputValue = new();
+        
+        [Input(Guid = "CA3CE08D-6A19-4AD5-9435-08B050753311")]
+        public readonly InputSlot<float> Damping = new();
+        
 
         [Input(Guid = "7C681EE6-D071-4284-8585-1C3E03A089EA")]
-        public readonly InputSlot<bool> TeachTrigger = new InputSlot<bool>();
+        public readonly InputSlot<bool> TeachTrigger = new();
 
         [Input(Guid = "23C34F4C-4BA3-4834-8D51-3E3909751F84")]
-        public readonly InputSlot<string> Device = new InputSlot<string>();
+        public readonly InputSlot<string> Device = new();
 
         [Input(Guid = "9B0D32DE-C53C-4DF6-8B29-5E68A5A9C5F9")]
-        public readonly InputSlot<int> Channel = new InputSlot<int>();
+        public readonly InputSlot<int> Channel = new();
 
         [Input(Guid = "DF81B7B3-F39E-4E5D-8B97-F29DD576A76D")]
-        public readonly InputSlot<int> Control = new InputSlot<int>();
+        public readonly InputSlot<int> Control = new();
 
         [Input(Guid = "F650985F-00A7-452A-B3E4-69A8E9A78C3F")]
-        public readonly InputSlot<Size2> ControlRange = new InputSlot<Size2>();
+        public readonly InputSlot<Size2> ControlRange = new();
 
         [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
-        public readonly InputSlot<bool> PrintLogMessages = new InputSlot<bool>();
+        public readonly InputSlot<bool> PrintLogMessages = new();
 
-        [Input(Guid = "CA3CE08D-6A19-4AD5-9435-08B050753311")]
-        public readonly InputSlot<float> Damping = new InputSlot<float>();
-        
         public MidiInput()
         {
             Result.UpdateAction = Update;
@@ -70,7 +71,6 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             _trainedDeviceName = Device.GetValue(context);
             _trainedChannel = Channel.GetValue(context);
             _trainedControllerId = Control.GetValue(context);
-            _allowPresets = AllowPresets.GetValue(context);
 
             _controlRange = ControlRange.GetValue(context);
 
@@ -146,7 +146,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
             if (_isDefaultValue)
             {
-                Result.Value = DefaultMidiValue.GetValue(context);
+                Result.Value = DefaultOutputValue.GetValue(context);
                 return;
             }
 
@@ -155,7 +155,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                                           ? _currentControllerId
                                           : MathUtils.RemapAndClamp(_currentControllerValue, 0, 127, outRange.X, outRange.Y);
             
-            _dampedOutputValue = MathUtils.Lerp(_dampedOutputValue, currentValue, Damping.GetValue(context));
+            _dampedOutputValue = MathUtils.Lerp(currentValue,_dampedOutputValue,  Damping.GetValue(context));
             if (!float.IsNormal(_dampedOutputValue))
                 _dampedOutputValue = 0;
             
@@ -290,9 +290,6 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             }
         }
 
-        public float TargetMidiValue { get { return _currentControllerValue; } set { CurrentMidiValue = value; } }
-
-        private bool _allowPresets;
         #endregion
 
         private bool _printLogMessages;
@@ -302,7 +299,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
         private string _trainedDeviceName;
         private int _trainedChannel = -1;
         private int _trainedControllerId = -1;
-        private readonly List<MidiSignal> _lastMatchingSignals = new List<MidiSignal>(10);
+        private readonly List<MidiSignal> _lastMatchingSignals = new(10);
         private MidiInCapabilities _lastMessageDevice;
 
         private float _currentControllerValue;

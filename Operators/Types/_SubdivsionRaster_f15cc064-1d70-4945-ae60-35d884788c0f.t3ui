@@ -1,5 +1,6 @@
 {
-  "Id": "f15cc064-1d70-4945-ae60-35d884788c0f"/*SubdivsionRaster*/,
+  "Id": "f15cc064-1d70-4945-ae60-35d884788c0f"/*_SubdivsionRaster*/,
+  "Description": "An internal experiment to use [Raster] to overlay subdivision grid.",
   "InputUis": [
     {
       "InputId": "971d44e4-fc34-4dc2-9e94-e6cc202b1ef6"/*Int2*/,

@@ -121,7 +121,12 @@
       "SymbolId": "6820b166-1782-43b9-bc5c-6b4f63b16f86",
       "InputValues": [
         {
-          "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Impact*/,
+          "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
+          "Type": "System.Single",
+          "Value": 0.2
+        },
+        {
+          "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
           "Type": "System.Single",
           "Value": 1.2640126
         },
@@ -167,11 +172,6 @@
           "Id": "f93db0c6-c5ed-40da-9677-0c284618f5bb"/*SampleRadius*/,
           "Type": "System.Single",
           "Value": 6.3985815
-        },
-        {
-          "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
-          "Type": "System.Single",
-          "Value": 0.2
         }
       ],
       "Outputs": []

@@ -4,6 +4,10 @@
   "Namespace": "lib.img.fx",
   "Inputs": [
     {
+      "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
+      "DefaultValue": 1.0
+    },
+    {
       "Id": "00c53b57-7347-4ebc-97d7-1ab48483f09b"/*HeightMap*/,
       "DefaultValue": null
     },
@@ -12,7 +16,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Impact*/,
+      "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
       "DefaultValue": 2.0
     },
     {
@@ -62,10 +66,6 @@
         "Width": 0,
         "Height": 0
       }
-    },
-    {
-      "Id": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
-      "DefaultValue": 1.0
     }
   ],
   "Children": [

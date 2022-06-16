@@ -40,7 +40,7 @@
       "Name": "Midi SignalA",
       "InputValues": [
         {
-          "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultMidiValue*/,
+          "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
           "Type": "System.Single",
           "Value": 0.5
         },
@@ -92,7 +92,7 @@
       "Name": "Midi SignalB",
       "InputValues": [
         {
-          "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultMidiValue*/,
+          "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
           "Type": "System.Single",
           "Value": 0.5
         },
@@ -147,11 +147,6 @@
       "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
       "Name": "Beat Tapping",
       "InputValues": [
-        {
-          "Id": "3b350ff2-004c-457b-983d-21d11a01d170"/*AllowPresets*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
         {
           "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
           "Type": "System.Boolean",

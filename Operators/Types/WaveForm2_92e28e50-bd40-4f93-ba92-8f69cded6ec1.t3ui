@@ -1,6 +1,6 @@
 {
   "Id": "92e28e50-bd40-4f93-ba92-8f69cded6ec1"/*WaveForm2*/,
-  "Description": "",
+  "Description": "Visualizes the color and intensity distribution within an image by overlaying a Waveform and a Vectroscope.\n\nThese overlays can be incredibly valuable. YouTube provides countless Tutorials on how they can be applied to color correction and other use cases.",
   "InputUis": [
     {
       "InputId": "73afdd61-dd59-4018-a473-025272deab93"/*EffectTexture*/,
@@ -21,7 +21,10 @@
       "Position": {
         "X": -4236.861,
         "Y": -76.59829
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "381d9aa5-2685-4509-9640-1dcca64746fa"/*DimBackground*/,
@@ -38,7 +41,10 @@
       "Position": {
         "X": -4236.861,
         "Y": 13.401711
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "3a226812-98bf-4fe9-b435-f84b154a41e8"/*OverrideSize*/,
@@ -50,8 +56,8 @@
     {
       "InputId": "5ce4b7d6-ecaf-44d9-aa67-74892339cb06"/*EnlargeVectorScopeCenter*/,
       "Position": {
-        "X": -4398.3496,
-        "Y": 484.21338
+        "X": -4423.415,
+        "Y": 372.96057
       },
       "Min": 0.0,
       "Max": 1.0,
@@ -168,8 +174,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": -4066.4253,
-        "Y": 137.39365
+        "X": -3961.7144,
+        "Y": 144.33307
       }
     },
     {

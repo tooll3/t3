@@ -2,6 +2,13 @@
   "Id": "6820b166-1782-43b9-bc5c-6b4f63b16f86"/*FakeLight*/,
   "InputUis": [
     {
+      "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
+      "Position": {
+        "X": -975.6439,
+        "Y": 462.92966
+      }
+    },
+    {
       "InputId": "00c53b57-7347-4ebc-97d7-1ab48483f09b"/*HeightMap*/,
       "Relevancy": "Required",
       "Position": {
@@ -18,7 +25,7 @@
       }
     },
     {
-      "InputId": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Impact*/,
+      "InputId": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
       "Position": {
         "X": -406.7303,
         "Y": 301.7386
@@ -67,7 +74,11 @@
       "Position": {
         "X": -982.101,
         "Y": 862.13007
-      }
+      },
+      "Min": 0.0,
+      "Max": 5.0,
+      "Scale": 0.01,
+      "Clamp": true
     },
     {
       "InputId": "f93db0c6-c5ed-40da-9677-0c284618f5bb"/*SampleRadius*/,
@@ -81,13 +92,6 @@
       "Position": {
         "X": -979.275,
         "Y": 1252.9349
-      }
-    },
-    {
-      "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
-      "Position": {
-        "X": -975.6439,
-        "Y": 462.92966
       }
     }
   ],
