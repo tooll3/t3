@@ -2,37 +2,6 @@
   "Id": "33424f7f-ea2d-4753-bbc3-8df00830c4b5",
   "Variations": [
     {
-      "Id": "eeee260c-8211-4b89-aef7-24254394309a",
-      "IsPreset": true,
-      "ActivationIndex": 1,
-      "Title": "untitled",
-      "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "1d5207f0-132e-42e9-9b2b-171d092d6cac": 0.167,
-          "3ae3bc6a-5950-4f8b-b2c1-5247dfb9221c": 0.0,
-          "882acab3-7cb9-42e8-8f63-5382c83422c2": 4.3,
-          "95b99630-6d27-41d6-9e02-a3e905d023d7": 2.0,
-          "f1a53a46-fa5c-49af-9d53-0d68cfe1b33e": 3.4,
-          "d2b9ef03-1641-4949-86ff-b71dc1fb3ad0": 0.998,
-          "849540c3-7ffd-40a7-a78b-3d051256e5f1": 0.05,
-          "482fba6b-f92e-418c-a8f4-8da0f546c4a6": {
-            "X": 0.0,
-            "Y": 0.0
-          },
-          "b454ebb9-6b27-46b1-962e-15e658c8f6a2": 0.0,
-          "aedb3315-5061-4b68-8925-761d4d8c78b4": 0.0,
-          "cbe45989-b239-491e-a2d8-83a42ab58b85": 0.01,
-          "640de6a7-14ce-4c72-b78e-aa72f642b765": 15.1,
-          "9d210666-6b60-4193-9bfd-8a50c8973238": 0.9,
-          "c3827e2e-2d15-475c-9b2f-03a861e97fc5": true
-        }
-      }
-    },
-    {
       "Id": "a8a6bf9a-d67d-4841-8177-4051971c3095",
       "IsPreset": true,
       "ActivationIndex": 2,
@@ -882,8 +851,8 @@
       "ActivationIndex": 34,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": -202.0812,
+        "Y": -15.541336
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -898,6 +867,37 @@
           "cbe45989-b239-491e-a2d8-83a42ab58b85": -0.001,
           "640de6a7-14ce-4c72-b78e-aa72f642b765": 4.1,
           "37f312f0-949c-4a43-af92-786761b03d3b": 1.44,
+          "c3827e2e-2d15-475c-9b2f-03a861e97fc5": true
+        }
+      }
+    },
+    {
+      "Id": "b5aba1b7-4ce5-4e49-8b23-d86981e106f3",
+      "IsPreset": true,
+      "ActivationIndex": 35,
+      "Title": "WaterLines",
+      "PosOnCanvas": {
+        "X": -202.0812,
+        "Y": 840.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "1d5207f0-132e-42e9-9b2b-171d092d6cac": 0.167,
+          "3ae3bc6a-5950-4f8b-b2c1-5247dfb9221c": 0.0,
+          "882acab3-7cb9-42e8-8f63-5382c83422c2": 4.3,
+          "95b99630-6d27-41d6-9e02-a3e905d023d7": 2.0,
+          "f1a53a46-fa5c-49af-9d53-0d68cfe1b33e": 3.4,
+          "d2b9ef03-1641-4949-86ff-b71dc1fb3ad0": 1.0,
+          "849540c3-7ffd-40a7-a78b-3d051256e5f1": 0.05,
+          "482fba6b-f92e-418c-a8f4-8da0f546c4a6": {
+            "X": 0.0,
+            "Y": 0.0
+          },
+          "b454ebb9-6b27-46b1-962e-15e658c8f6a2": 0.0,
+          "aedb3315-5061-4b68-8925-761d4d8c78b4": 0.0,
+          "cbe45989-b239-491e-a2d8-83a42ab58b85": 0.01,
+          "640de6a7-14ce-4c72-b78e-aa72f642b765": 15.1,
+          "9d210666-6b60-4193-9bfd-8a50c8973238": 0.9,
           "c3827e2e-2d15-475c-9b2f-03a861e97fc5": true
         }
       }

@@ -15,14 +15,20 @@
       "Position": {
         "X": -1278.5073,
         "Y": 648.0472
-      }
+      },
+      "Min": 0.0,
+      "Max": 2.0,
+      "Clamp": true
     },
     {
       "InputId": "4e8d6ee1-b210-48fb-ac32-e093f877de25"/*HihatThreshold*/,
       "Position": {
         "X": -1278.5073,
         "Y": 693.0474
-      }
+      },
+      "Min": 0.0,
+      "Max": 2.0,
+      "Clamp": true
     },
     {
       "InputId": "51bb8ea2-3afd-41ff-a9e6-7ac5a3c3fc9a"/*AudioInGain*/,
@@ -200,7 +206,7 @@
       }
     },
     {
-      "ChildId": "a82c8c65-a407-4809-b34e-31a90c058f3f"/*_AnalyseAudioRange*/,
+      "ChildId": "a82c8c65-a407-4809-b34e-31a90c058f3f"/*_AnalyseBaseRange*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -211,7 +217,7 @@
       }
     },
     {
-      "ChildId": "71408c81-f50e-4f52-9ddc-a70a96aebf80"/*_AnalyseAudioRange*/,
+      "ChildId": "71408c81-f50e-4f52-9ddc-a70a96aebf80"/*_AnalyzeHihatRange*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -262,8 +268,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 190.19385,
-        "Y": 551.8898
+        "X": 146.4815,
+        "Y": 568.8696
       }
     },
     {
