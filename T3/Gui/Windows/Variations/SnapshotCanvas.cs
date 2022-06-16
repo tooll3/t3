@@ -99,7 +99,7 @@ namespace T3.Gui.Windows.Variations
             if (ImGui.MenuItem("Select affected Operators",
                                "",
                                false,
-                               oneSelected))
+                               oneOrMoreSelected))
             {
                 NodeSelection.Clear();
 

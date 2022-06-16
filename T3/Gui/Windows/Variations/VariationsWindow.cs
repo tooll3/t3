@@ -64,9 +64,12 @@ namespace T3.Gui.Windows.Variations
                                  ImGuiWindowFlags.NoScrollbar);
 
                 var viewModeIndex = (int)_viewMode;
+                
                 if (CustomComponents.DrawSegmentedToggle(ref viewModeIndex, _options))
                 {
                     _viewMode = (ViewModes)viewModeIndex;
+                    _presetCanvas.RefreshView();
+                    _snapshotCanvas.RefreshView();
                 }
 
                 ImGui.SameLine();

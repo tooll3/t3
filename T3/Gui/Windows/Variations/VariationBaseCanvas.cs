@@ -397,6 +397,8 @@ namespace T3.Gui.Windows.Variations
         protected void ResetView()
         {
             var pool = PoolForBlendOperations;
+            if (pool == null)
+                return;
 
             if (TryToGetBoundingBox(pool.Variations, 40, out var area))
             {
@@ -531,7 +533,7 @@ namespace T3.Gui.Windows.Variations
         #endregion
 
         #region layout and view
-        private void RefreshView()
+        public void RefreshView()
         {
             TriggerThumbnailUpdate();
             Selection.Clear();
