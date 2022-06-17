@@ -1,7 +1,15 @@
 {
   "Id": "90b20942-810b-480c-a19e-a41296cac9e6"/*WS1_Searching*/,
   "Description": "Intro part with some deplacement effects blended by snapshots.",
-  "InputUis": [],
+  "InputUis": [
+    {
+      "InputId": "e75b329f-26ae-4070-91bc-450c30d7453d"/*WrapMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
   "SymbolChildUis": [
     {
       "ChildId": "59f430a1-4ff1-43ae-b00a-f048db903567"/*Layer2d*/,
@@ -29,7 +37,7 @@
       "ChildId": "837560d2-8177-4367-8ebc-f8cabfff67b1"/*Displace*/,
       "Size": {
         "X": 110.0,
-        "Y": 49.0
+        "Y": 62.0
       },
       "Position": {
         "X": 927.112,

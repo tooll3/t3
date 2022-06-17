@@ -36,12 +36,12 @@
         {
           "Id": "f333dbce-cc54-43ba-99b0-065426820f36"/*RestoreLayout*/,
           "Type": "System.Single",
-          "Value": 0.003
+          "Value": 0.001
         },
         {
           "Id": "8ba49b49-8eee-461b-acd8-ba6bc21ba866"/*RestoreLayoutEnabled*/,
           "Type": "System.Boolean",
-          "Value": false
+          "Value": true
         },
         {
           "Id": "3b2e07ad-8218-4740-9e3e-17949ed5fca6"/*ShowAgents*/,
@@ -70,8 +70,8 @@
           "Id": "9c6960f3-ac8d-4ab7-a34e-e24a6217b092"/*DecayRatio*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.933,
-            "Y": 0.914,
+            "X": 0.975,
+            "Y": 0.998,
             "Z": 1.0,
             "W": 1.0
           }
@@ -95,8 +95,8 @@
           "Id": "8c4e188c-18ab-4f69-a60a-14a8e5a12f91"/*ComfortZones*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.5,
-            "Y": -0.89999974,
+            "X": 0.3,
+            "Y": 0.23,
             "Z": 0.0,
             "W": 0.0
           }
@@ -105,7 +105,7 @@
           "Id": "9a4d8846-6b46-4a4b-a8d3-97f3f9eaf8db"/*Emit*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.79,
+            "X": 1.56,
             "Y": 0.0,
             "Z": 0.0,
             "W": 1.0
@@ -114,37 +114,27 @@
         {
           "Id": "4dd19c0b-10c1-43fa-a3e2-970b4f9c6162"/*SideAngle*/,
           "Type": "System.Single",
-          "Value": 40.0
+          "Value": 49.0
         },
         {
           "Id": "11ba5bbc-4873-489f-85b7-35080f0988cf"/*SideRadius*/,
           "Type": "System.Single",
-          "Value": 12.2
+          "Value": 52.01
         },
         {
           "Id": "e95c5f4d-df12-42f6-a879-8e26540b03ac"/*FrontRadius*/,
           "Type": "System.Single",
-          "Value": 8.4
+          "Value": 28.1
         },
         {
           "Id": "6eb81dc2-88b5-4ba7-9f82-fe2389dc2926"/*BaseMovement*/,
           "Type": "System.Single",
-          "Value": 2.31
-        },
-        {
-          "Id": "e9fd2c91-7cee-481e-933b-a40a27da15dc"/*BaseRotation*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
-          "Id": "211fd6ee-26a9-4e15-85ba-4a22e865545d"/*MoveToComfort*/,
-          "Type": "System.Single",
-          "Value": -0.029999971
+          "Value": 1.61
         },
         {
           "Id": "8367cbad-6214-4167-855b-9f704bb46ac3"/*RotateToComfort*/,
           "Type": "System.Single",
-          "Value": 31.0
+          "Value": 108.0
         }
       ],
       "Outputs": []
@@ -407,8 +397,8 @@
           "Id": "8c4e188c-18ab-4f69-a60a-14a8e5a12f91"/*ComfortZones*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": -0.2999997,
-            "Y": 0.246,
+            "X": 0.41,
+            "Y": 0.95,
             "Z": 0.0,
             "W": 0.0
           }
@@ -417,8 +407,8 @@
           "Id": "9a4d8846-6b46-4a4b-a8d3-97f3f9eaf8db"/*Emit*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": -0.099999905,
-            "Y": 9.2,
+            "X": -29.4,
+            "Y": 1.0,
             "Z": 1.0,
             "W": 1.0
           }
@@ -426,22 +416,32 @@
         {
           "Id": "4dd19c0b-10c1-43fa-a3e2-970b4f9c6162"/*SideAngle*/,
           "Type": "System.Single",
-          "Value": 34.0
+          "Value": 78.0
         },
         {
           "Id": "11ba5bbc-4873-489f-85b7-35080f0988cf"/*SideRadius*/,
           "Type": "System.Single",
-          "Value": 10.9
+          "Value": 166.0
+        },
+        {
+          "Id": "e95c5f4d-df12-42f6-a879-8e26540b03ac"/*FrontRadius*/,
+          "Type": "System.Single",
+          "Value": 42.7
         },
         {
           "Id": "6eb81dc2-88b5-4ba7-9f82-fe2389dc2926"/*BaseMovement*/,
           "Type": "System.Single",
-          "Value": 2.8
+          "Value": 1.13
+        },
+        {
+          "Id": "211fd6ee-26a9-4e15-85ba-4a22e865545d"/*MoveToComfort*/,
+          "Type": "System.Single",
+          "Value": 0.7
         },
         {
           "Id": "8367cbad-6214-4167-855b-9f704bb46ac3"/*RotateToComfort*/,
           "Type": "System.Single",
-          "Value": 19.0
+          "Value": 33.0
         }
       ],
       "Outputs": []
@@ -515,25 +515,12 @@
         {
           "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
           "Type": "System.Single",
-          "Value": 1.5
+          "Value": 2.3
         },
         {
           "Id": "4aa128ab-d0a8-42d5-800f-6992959bd0cf"/*Shade*/,
           "Type": "System.Single",
-          "Value": 0.33
-        },
-        {
-          "Id": "7f0c127b-ee60-44c8-8490-2d3599cde4a2"/*Twist*/,
-          "Type": "System.Single",
-          "Value": 3.0
-        },
-        {
-          "Id": "03298545-a5d6-44d5-bb7c-4747172d2667"/*Direction*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.003,
-            "Y": 0.012
-          }
+          "Value": 0.43
         },
         {
           "Id": "d162a7e1-1906-45bc-a896-10ee2c2483fe"/*BlurRadius*/,
@@ -803,25 +790,25 @@
         {
           "Id": "16231de9-2e85-4a9a-a2d1-99dfac18a0f6"/*PreSaturate*/,
           "Type": "System.Single",
-          "Value": 0.53
+          "Value": 0.23
         },
         {
           "Id": "4dc44a7b-fe7c-4807-aaaa-53fb553de017"/*Gain*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.79468906,
-            "Y": 0.9159272,
-            "Z": 0.79730195,
-            "W": 0.96599996
+            "X": 0.76631004,
+            "Y": 0.90430623,
+            "Z": 0.76928407,
+            "W": 0.506
           }
         },
         {
           "Id": "be4dc864-a5f9-4356-91f9-58de8056a3a8"/*Gamma*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.5566944,
-            "Y": 0.75232667,
-            "Z": 0.7102861,
+            "X": 0.5751189,
+            "Y": 0.6315789,
+            "Z": 0.61178243,
             "W": 0.506
           }
         },
@@ -839,9 +826,9 @@
           "Id": "423eb712-f7e3-4402-b841-324a9fc91c54"/*VignetteColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.16999996,
-            "Y": 0.16999996,
-            "Z": 0.16999996,
+            "X": 0.28999996,
+            "Y": 0.28999996,
+            "Z": 0.28999996,
             "W": 1.0
           }
         }

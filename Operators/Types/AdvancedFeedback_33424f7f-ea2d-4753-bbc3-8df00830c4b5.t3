@@ -203,6 +203,11 @@
           "Id": "6978ceab-98a9-4258-9c67-db41173d2aae"/*SampleOffset*/,
           "Type": "System.Single",
           "Value": 3.18
+        },
+        {
+          "Id": "6e772174-813d-4baa-b6b5-27e197b547ac"/*WrapMode*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Wrap"
         }
       ],
       "Outputs": []
@@ -219,7 +224,7 @@
         {
           "Id": "3c8b43be-430f-4afe-8244-5282be49bfbc"/*Samples*/,
           "Type": "System.Single",
-          "Value": 50.0
+          "Value": 40.0
         }
       ],
       "Outputs": []
