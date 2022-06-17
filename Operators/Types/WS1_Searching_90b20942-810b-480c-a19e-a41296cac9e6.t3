@@ -93,9 +93,9 @@
       "SymbolId": "1b149f1f-529c-4418-ac9d-3871f24a9e38",
       "InputValues": [
         {
-          "Id": "0eff3a75-eafc-4a5e-8a2c-10577c12e776"/*DisplacementOffset*/,
+          "Id": "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f"/*Displacement*/,
           "Type": "System.Single",
-          "Value": 0.04
+          "Value": 1.1
         },
         {
           "Id": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
@@ -105,7 +105,7 @@
         {
           "Id": "c13b83ce-7dd2-4b4e-bf19-b994493b92a3"/*DisplaceMapSampling*/,
           "Type": "System.Single",
-          "Value": 4.7
+          "Value": 4.38
         },
         {
           "Id": "b9dd77ff-7e5a-4036-a1c9-24501f1d4d9d"/*SampleSpread*/,
@@ -127,12 +127,12 @@
         {
           "Id": "7f66aa8d-fbdd-47d6-ba38-07e257e19401"/*SampleRadius*/,
           "Type": "System.Single",
-          "Value": 3.6000001
+          "Value": 7.9
         },
         {
           "Id": "d3197979-b418-4182-b1c9-f3126b175f8d"/*Strength*/,
           "Type": "System.Single",
-          "Value": 3.4
+          "Value": 2.8
         }
       ],
       "Outputs": []
@@ -152,7 +152,7 @@
         {
           "Id": "59bde7a3-0952-46a8-8285-40f0a00488e6"/*Scale*/,
           "Type": "System.Single",
-          "Value": 11.13
+          "Value": 25.2
         },
         {
           "Id": "0e3d1c9f-d0aa-4765-a0ab-d8292a981368"/*Bias*/,
@@ -361,7 +361,7 @@
             "X": 0.0,
             "Y": 0.0,
             "Z": 0.0,
-            "W": 0.31
+            "W": 0.0
           }
         },
         {
