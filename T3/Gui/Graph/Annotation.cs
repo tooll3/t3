@@ -7,8 +7,8 @@ namespace T3.Gui.Graph
 {
     public class Annotation : ISelectableCanvasObject
     {
-        public string Title;
-        public Color Color;
+        public string Title = "Untitled Annotation";
+        public Color Color = Color.Gray;
         public Guid Id { get; set; }
         public Vector2 PosOnCanvas { get; set; }
         public Vector2 Size { get; set; }

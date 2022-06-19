@@ -7,6 +7,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui.Commands;
 using t3.Gui.Commands.Graph;
+using T3.Gui.Graph;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
@@ -57,8 +58,6 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
-            
-            
             // Insert invisible spill over input to catch accidental imgui focus attempts
             {
                 ImGui.SetNextItemWidth(2);
@@ -66,6 +65,7 @@ namespace T3.Gui.Windows
                 ImGui.InputText("##imgui workaround", ref tmpBuffer, 1);
                 ImGui.SameLine();
             }
+            
             var instance = NodeSelection.GetFirstSelectedInstance();
             if (instance != null)
             {
@@ -118,16 +118,31 @@ namespace T3.Gui.Windows
             if (!NodeSelection.IsAnythingSelected())
                 return;
 
+            // Draw parameter Settings
             foreach (var input in NodeSelection.GetSelectedNodes<IInputUi>())
             {
                 ImGui.PushID(input.Id.GetHashCode());
                 ImGui.PushFont(Fonts.FontLarge);
-                ImGui.TextUnformatted(input.InputDefinition.Name);
+                ImGui.TextUnformatted("Parameter settings for" + input.InputDefinition.Name);
                 ImGui.PopFont();
                 input.DrawSettings();
                 ImGui.Spacing();
                 ImGui.PopID();
             }
+            
+            // ImGui.Separator();
+            // Draw Annotation settings
+            foreach (var annotation in NodeSelection.GetSelectedNodes<Annotation>())
+            {
+                ImGui.PushID(annotation.Id.GetHashCode());
+                ImGui.PushFont(Fonts.FontLarge);
+                ImGui.TextUnformatted("Annotation settings" + annotation.Title);
+                ImGui.PopFont();
+
+                ImGui.ColorEdit4("color", ref annotation.Color.Rgba);
+                ImGui.PopID();
+            }
+            
         }
 
         

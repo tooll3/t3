@@ -743,16 +743,17 @@ namespace T3.Gui.Graph
             }
 
             var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-            var a = new Annotation()
+            var annotation = new Annotation()
                         {
                             Id = Guid.NewGuid(),
-                            Title = "null",
+                            Title = "Untitled Annotation",
                             Color = Color.Gray,
                             PosOnCanvas = area.Min,
                             Size = area.GetSize()
                         };
-            var command = new AddAnnotationCommand(symbolUi, a);
+            var command = new AddAnnotationCommand(symbolUi, annotation);
             UndoRedoStack.AddAndExecute(command);
+            AnnotationElement.StartRenaming(annotation);
         }
 
         private void PinSelectedToOutputWindow()
