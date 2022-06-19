@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Animation;
+using T3.Core.IO;
 using T3.Core.Logging;
 
 namespace Core.Audio
@@ -173,8 +174,7 @@ namespace Core.Audio
         
         private const double AudioSyncingOffset = -2 / 60f;
         private const double AudioTriggerDelayOffset = 2 / 60f;
-        private const double ResyncThreshold = 1.5f / 60f;
-            
+
         /// <summary>
         /// We try to find a compromise between letting bass play the audio clip in the correct playback speed which
         /// eventually will drift away from the Playback time. Of the delta between playback and audio-clip time exceeds
@@ -207,7 +207,8 @@ namespace Core.Audio
             var currentPos = Bass.ChannelBytes2Seconds(StreamHandle, currentStreamPos) - AudioSyncingOffset;
             var soundDelta = currentPos - TargetTime;
 
-            if (Math.Abs(soundDelta) <= ResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed)) 
+            
+            if (Math.Abs(soundDelta) <=  ProjectSettings.Config.AudioResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed)) 
                 return;
             
             // Resync

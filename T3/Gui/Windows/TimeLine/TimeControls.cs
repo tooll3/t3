@@ -86,7 +86,7 @@ namespace T3.Gui.Windows.TimeLine
             CustomComponents.TooltipForLastItem("Timeline format",
                                                 "Click to toggle through BPM, Frames and Normal time modes");
 
-            DrawTimeSettingsContextMenu(ref playback);
+            DrawPlaybackSettings(ref playback);
             ImGui.SameLine();
 
             // Continue Beat indicator
@@ -403,7 +403,7 @@ namespace T3.Gui.Windows.TimeLine
             ImGui.SameLine();
         }
 
-        private static void DrawTimeSettingsContextMenu(ref Playback playback)
+        private static void DrawPlaybackSettings(ref Playback playback)
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
@@ -498,17 +498,25 @@ namespace T3.Gui.Windows.TimeLine
                 var filepathModified =
                     FileOperations.DrawSoundFilePicker(FileOperations.FilePickerTypes.File, ref soundtrack.FilePath);
 
+                ImGui.SetNextItemWidth(150);
                 if (ImGui.DragFloat("BPM", ref soundtrack.Bpm, 0.02f))
                 {
                     playback.Bpm = soundtrack.Bpm;
                 }
 
                 var soundtrackStartTime = (float)soundtrack.StartTime;
+                ImGui.SetNextItemWidth(150);
                 if (ImGui.DragFloat("Offset", ref soundtrackStartTime, 0.01f))
                 {
                     soundtrack.StartTime = soundtrackStartTime;
                 }
-
+                
+                ImGui.SetNextItemWidth(150);
+                if (ImGui.DragFloat("Resync Threshold in Seconds", ref ProjectSettings.Config.AudioResyncThreshold, 0.001f, 0.01f, 1f))
+                {
+                    soundtrack.StartTime = soundtrackStartTime;
+                }
+                
                 if (filepathModified)
                 {
                     UpdateBpmFromSoundtrackConfig(soundtrack);
