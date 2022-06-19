@@ -55,7 +55,8 @@
       "Position": {
         "X": -4551.693,
         "Y": -656.1907
-      }
+      },
+      "Scale": 0.001
     },
     {
       "InputId": "ee393179-a8a6-4e62-979b-c906244ebb2e"/*EffectTexture*/,
@@ -69,6 +70,20 @@
       "Position": {
         "X": -4551.693,
         "Y": -566.1907
+      }
+    },
+    {
+      "InputId": "fccbc208-b0ca-4eae-851d-fc5982a55616"/*AngleLockSteps*/,
+      "Position": {
+        "X": -4551.693,
+        "Y": -521.1907
+      }
+    },
+    {
+      "InputId": "b3c90262-6b98-476b-a2a1-f8b3d00d9bb5"/*AngleLockFactor*/,
+      "Position": {
+        "X": -4551.693,
+        "Y": -476.19067
       }
     }
   ],

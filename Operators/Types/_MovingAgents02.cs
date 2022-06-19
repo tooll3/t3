@@ -40,6 +40,12 @@ namespace T3.Operators.Types.Id_4edc34ed_36f4_4f24_837f_4cc5696b2baa
         [Input(Guid = "ad6beaae-4d4b-4f3b-ad7b-7d6389789610")]
         public readonly InputSlot<SharpDX.Size2> BlockCount = new InputSlot<SharpDX.Size2>();
 
+        [Input(Guid = "fccbc208-b0ca-4eae-851d-fc5982a55616")]
+        public readonly InputSlot<float> AngleLockSteps = new InputSlot<float>();
+
+        [Input(Guid = "b3c90262-6b98-476b-a2a1-f8b3d00d9bb5")]
+        public readonly InputSlot<float> AngleLockFactor = new InputSlot<float>();
+
 
     }
 }
