@@ -17,6 +17,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui;
 using t3.Gui.Interaction.Camera;
+using t3.Gui.Interaction.StartupCheck;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
@@ -33,7 +34,9 @@ namespace T3
         private static void Main()
         {
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
-
+            
+            StartupValidation.CheckInstallation();
+            
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
 
