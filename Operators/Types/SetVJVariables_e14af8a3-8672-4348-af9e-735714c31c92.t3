@@ -32,12 +32,7 @@
           "Value": "SpeedFactorA"
         }
       ],
-      "Outputs": [
-        {
-          "Id": "9c0c1734-453e-4f88-b20a-47c7e34b7caa"/*SetSpeedFactorA*/,
-          "IsDisabled": true
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "b6fe4c79-da43-444a-94d9-c3ebed7e3354"/*Midi SignalA*/,
@@ -89,12 +84,7 @@
           "Value": "SpeedFactorB"
         }
       ],
-      "Outputs": [
-        {
-          "Id": "9c0c1734-453e-4f88-b20a-47c7e34b7caa"/*SetSpeedFactorB*/,
-          "IsDisabled": true
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "c80255ff-4885-4493-8750-df548447b4a2"/*Midi SignalB*/,

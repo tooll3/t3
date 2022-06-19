@@ -1,0 +1,195 @@
+{
+  "Id": "1ec749af-fe7d-4728-9855-d1fa3e879751"/*Help01_Interface*/,
+  "Description": "This interactive tutorial guides you through the user interface of Tooll3.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "3ca68ae8-02bd-432b-94a4-be80b6eb5d1a"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 5.4802475,
+        "Y": 4.8835144
+      }
+    },
+    {
+      "ChildId": "73ef00c1-942d-4464-9390-b9632fef8468"/*DetectEdges*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 160.0813,
+        "Y": -0.073516846
+      }
+    },
+    {
+      "ChildId": "e841cd12-d601-4bde-94f3-85e9dd02a60a"/*Blob*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 352.71014,
+        "Y": 164.74783
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "c301380c-8fe6-4e3d-af10-9cebd230b0e9"/*TextureOutput*/,
+      "Position": {
+        "X": 564.6011,
+        "Y": 18.0
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "125f20a8-465e-4758-b8c0-7601c7dc0112",
+      "Title": "This is an Operator.\nIf you select it, you see its output \nin the Output-View.",
+      "Position": {
+        "X": 0.97267914,
+        "Y": -115.01053
+      },
+      "Size": {
+        "X": 134.18053,
+        "Y": 159.90724
+      }
+    },
+    {
+      "Id": "d26f5d4f-5727-4d0f-989b-9fcb19c037e6",
+      "Title": "You can create a connection by\ndragging the output of [LoadImage] \nto the Image input of [DetectEdges].\nThen select [DetectEdges] to see the result.",
+      "Position": {
+        "X": 148.36206,
+        "Y": -115.46121
+      },
+      "Size": {
+        "X": 137.4108,
+        "Y": 160.7336
+      }
+    },
+    {
+      "Id": "df329cf7-1e0e-496a-b91e-592a30ccbbd5",
+      "Title": "Tutorial 1 ",
+      "Position": {
+        "X": -10.087128,
+        "Y": -284.35217
+      },
+      "Size": {
+        "X": 546.0181,
+        "Y": 134.01688
+      }
+    },
+    {
+      "Id": "ac1fcac6-637d-474b-8a07-98c92c18ab56",
+      "Title": "Welcome - You made it!\nDouble clicking an operator will enter it. This is how you got here.\n\nTry to double click on the background to get back to the [Dashboard].\n",
+      "Position": {
+        "X": 2.0605392,
+        "Y": -258.60645
+      },
+      "Size": {
+        "X": 300.70782,
+        "Y": 55.147877
+      }
+    },
+    {
+      "Id": "a3cc2028-be91-472c-985d-cb6c707383c1",
+      "Title": "Notice how the breadcumps in the top left corner also \nguide you the way home...",
+      "Position": {
+        "X": 0.97267914,
+        "Y": -200.95049
+      },
+      "Size": {
+        "X": 302.33978,
+        "Y": 35.02268
+      }
+    },
+    {
+      "Id": "1058504f-053c-4b01-833c-4c5d8d5ea64a",
+      "Title": "Creating new operators is easy:\n1. select [DetectEdges] and...\n2. press TAB on your keyboard.\n\n3. Type \"Color...\" and select [ColorGrade] by\n   pressing return.",
+      "Position": {
+        "X": 303.43536,
+        "Y": -115.62796
+      },
+      "Size": {
+        "X": 185.94003,
+        "Y": 161.75705
+      }
+    },
+    {
+      "Id": "474e3707-8497-44ea-890b-fc3f1f6b4448",
+      "Title": "1. Creating an connecting Operators",
+      "Position": {
+        "X": -10.44973,
+        "Y": -143.8385
+      },
+      "Size": {
+        "X": 542.5878,
+        "Y": 211.04684
+      }
+    },
+    {
+      "Id": "54456a70-93a3-4455-b1e1-a2731d03de39",
+      "Title": "Adjusting parameters with the Parameter Window",
+      "Position": {
+        "X": -9.452538,
+        "Y": 79.26111
+      },
+      "Size": {
+        "X": 539.9444,
+        "Y": 218.23438
+      }
+    },
+    {
+      "Id": "86ddce6c-2d27-451c-acde-7edffdb45820",
+      "Title": "1. Select the [Blob]...\n2. Notice how the parameter window shows the things you can do with it..\n",
+      "Position": {
+        "X": -0.84041214,
+        "Y": 99.11432
+      },
+      "Size": {
+        "X": 339.32666,
+        "Y": 28.132973
+      }
+    },
+    {
+      "Id": "f5ee65c5-76e7-4242-bdb2-6e6c8ab1cc2a",
+      "Title": "You can...\n\n1. Drag values with the jog dial.\n2. Click a value to type values like \"2.1\" or fomulas like \"1.4/3\"\n3. Hover over a value use mouse wheel. Try holding Shift (for finer) \n   or ALT (for faster) changes.\n\n",
+      "Position": {
+        "X": -0.38714218,
+        "Y": 130.38995
+      },
+      "Size": {
+        "X": 339.6917,
+        "Y": 77.729126
+      }
+    },
+    {
+      "Id": "f083606b-1507-4ed9-a5e1-d41787afec99",
+      "Title": "6. Click on a parameter name \"e.g. FillColor\" to reset it to its default.",
+      "Position": {
+        "X": -1.9282684,
+        "Y": 243.61679
+      },
+      "Size": {
+        "X": 340.95834,
+        "Y": 38.830128
+      }
+    },
+    {
+      "Id": "1f963cbf-7a9d-4ffd-b881-a193e3ee1ce3",
+      "Title": "4. Click on a color to open the color picker.\n5. Drag a color vertically to adjust transparency or brightness.",
+      "Position": {
+        "X": -0.84041595,
+        "Y": 210.98138
+      },
+      "Size": {
+        "X": 340.41452,
+        "Y": 24.688107
+      }
+    }
+  ]
+}

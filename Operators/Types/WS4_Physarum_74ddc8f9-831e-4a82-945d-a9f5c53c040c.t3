@@ -36,12 +36,12 @@
         {
           "Id": "f333dbce-cc54-43ba-99b0-065426820f36"/*RestoreLayout*/,
           "Type": "System.Single",
-          "Value": 0.003
+          "Value": 0.1
         },
         {
           "Id": "8ba49b49-8eee-461b-acd8-ba6bc21ba866"/*RestoreLayoutEnabled*/,
           "Type": "System.Boolean",
-          "Value": false
+          "Value": true
         },
         {
           "Id": "3b2e07ad-8218-4740-9e3e-17949ed5fca6"/*ShowAgents*/,
@@ -71,9 +71,9 @@
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.933,
-            "Y": 0.991,
-            "Z": 1.0,
-            "W": 1.0
+            "Y": 0.95,
+            "Z": 0.98,
+            "W": 0.96
           }
         },
         {
@@ -95,8 +95,8 @@
           "Id": "8c4e188c-18ab-4f69-a60a-14a8e5a12f91"/*ComfortZones*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.5,
-            "Y": -0.89999974,
+            "X": 0.05,
+            "Y": 0.23,
             "Z": 0.0,
             "W": 0.0
           }
@@ -105,7 +105,7 @@
           "Id": "9a4d8846-6b46-4a4b-a8d3-97f3f9eaf8db"/*Emit*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.79,
+            "X": 1.56,
             "Y": 0.0,
             "Z": 0.0,
             "W": 1.0
@@ -114,7 +114,7 @@
         {
           "Id": "4dd19c0b-10c1-43fa-a3e2-970b4f9c6162"/*SideAngle*/,
           "Type": "System.Single",
-          "Value": 40.0
+          "Value": 11.0
         },
         {
           "Id": "11ba5bbc-4873-489f-85b7-35080f0988cf"/*SideRadius*/,
@@ -124,12 +124,12 @@
         {
           "Id": "e95c5f4d-df12-42f6-a879-8e26540b03ac"/*FrontRadius*/,
           "Type": "System.Single",
-          "Value": 8.4
+          "Value": 11.8
         },
         {
           "Id": "6eb81dc2-88b5-4ba7-9f82-fe2389dc2926"/*BaseMovement*/,
           "Type": "System.Single",
-          "Value": 2.31
+          "Value": 0.79999995
         },
         {
           "Id": "e9fd2c91-7cee-481e-933b-a40a27da15dc"/*BaseRotation*/,
@@ -137,14 +137,9 @@
           "Value": 0.0
         },
         {
-          "Id": "211fd6ee-26a9-4e15-85ba-4a22e865545d"/*MoveToComfort*/,
-          "Type": "System.Single",
-          "Value": -0.029999971
-        },
-        {
           "Id": "8367cbad-6214-4167-855b-9f704bb46ac3"/*RotateToComfort*/,
           "Type": "System.Single",
-          "Value": 31.0
+          "Value": 28.0
         }
       ],
       "Outputs": []
@@ -417,8 +412,8 @@
           "Id": "9a4d8846-6b46-4a4b-a8d3-97f3f9eaf8db"/*Emit*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": -0.099999905,
-            "Y": 6.9,
+            "X": -15.0,
+            "Y": 4.03,
             "Z": 1.0,
             "W": 1.0
           }
@@ -426,7 +421,7 @@
         {
           "Id": "4dd19c0b-10c1-43fa-a3e2-970b4f9c6162"/*SideAngle*/,
           "Type": "System.Single",
-          "Value": 0.29999998
+          "Value": 16.0
         },
         {
           "Id": "11ba5bbc-4873-489f-85b7-35080f0988cf"/*SideRadius*/,

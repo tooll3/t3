@@ -11,7 +11,7 @@
         {
           "Id": "79c84135-5390-455b-bf60-53d4002d0606"/*Scale*/,
           "Type": "System.Single",
-          "Value": 1.8949685
+          "Value": 1.9448595
         },
         {
           "Id": "912cfd4d-5bef-4fdc-abfc-2f5bf8239875"/*Center*/,
@@ -25,14 +25,14 @@
           "Id": "0b6c67e6-338e-4bb3-bcee-5cc9e2045824"/*Offset*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.26257876,
+            "X": 0.36173213,
             "Y": 0.0
           }
         },
         {
           "Id": "a1b3ae23-cb29-4e3e-93b6-fd4f1efadbf1"/*Angle*/,
           "Type": "System.Single",
-          "Value": -49.24874
+          "Value": -46.77656
         },
         {
           "Id": "c355fa5c-c1f5-4e80-b1b1-d2d233dea3fc"/*Steps*/,
@@ -42,7 +42,7 @@
         {
           "Id": "9618504d-bfbd-4d3d-b4d4-03a7064f0fea"/*ShadeSteps*/,
           "Type": "System.Single",
-          "Value": 0.09
+          "Value": 0.0130888475
         },
         {
           "Id": "05d0a5b2-a7a6-45c5-969a-f00150558a30"/*Rotate*/,
@@ -52,7 +52,7 @@
         {
           "Id": "d2e12b96-7be3-4b31-bcdd-c882543a6ca6"/*ShadeFolds*/,
           "Type": "System.Single",
-          "Value": 0.4238021
+          "Value": 0.58383566
         },
         {
           "Id": "8866edf5-9f58-4da5-abd1-b4e25607bedc"/*Resolution*/,
@@ -70,6 +70,36 @@
       "SymbolId": "3ee3597d-dbf1-43a2-89d9-2f7b099112c7",
       "InputValues": [
         {
+          "Id": "7459b65d-a26c-41bf-bd72-2da6ef3aeb68"/*Background*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "3500901a-8783-4a6e-ad04-12a24021c11a"/*Foreground*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "974fa2c6-c29b-4878-a80c-959ad329cf81"/*Highlight*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        },
+        {
           "Id": "c4891643-ed6a-4af6-9a2f-02917cf26f24"/*Splits*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
@@ -81,7 +111,7 @@
           "Id": "bc97a9f4-0652-4f28-b13f-717e2449c001"/*SplitProbability*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.24,
+            "X": 0.24000001,
             "Y": 0.98
           }
         },
@@ -99,6 +129,14 @@
           "Value": {
             "X": 0.0,
             "Y": 0.52
+          }
+        },
+        {
+          "Id": "3127ae86-b5b3-468c-8e69-004da3db7908"/*Padding*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.02,
+            "Y": 0.023333333
           }
         },
         {
@@ -120,6 +158,19 @@
           "Id": "55db762f-64e0-425f-a5ac-01f3edce113e"/*HighlightProbability*/,
           "Type": "System.Single",
           "Value": 0.08
+        },
+        {
+          "Id": "dc471f4a-167c-4283-b4fc-55a2e453316e"/*Resolution*/,
+          "Type": "SharpDX.Size2",
+          "Value": {
+            "Width": 0,
+            "Height": 0
+          }
+        },
+        {
+          "Id": "9c7227b6-e13e-4895-bbd3-8b92463cdecf"/*GenerateMipmaps*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []
@@ -143,12 +194,12 @@
         {
           "Id": "f2baf278-adde-42de-afce-336b6c8d0387"/*RangeOutMin*/,
           "Type": "System.Single",
-          "Value": 2.7
+          "Value": 5.4
         },
         {
           "Id": "252276fb-8de1-42cc-ba41-07d6862015bd"/*RangeOutMax*/,
           "Type": "System.Single",
-          "Value": 0.301
+          "Value": 0.23000002
         }
       ],
       "Outputs": []
@@ -172,7 +223,7 @@
         {
           "Id": "edc5e4e1-b4fc-4f1a-a080-ddbe2ca18a55"/*GlowImpact*/,
           "Type": "System.Single",
-          "Value": 0.28
+          "Value": 0.27999997
         },
         {
           "Id": "41165195-b54b-46b2-a928-1347870e8af9"/*BlurAmount*/,
