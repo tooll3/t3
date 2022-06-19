@@ -94,29 +94,33 @@ namespace T3.Gui.Windows.Variations
         protected override void DrawAdditionalContextMenuContent()
         {
             var oneSelected = Selection.SelectedElements.Count == 1;
-            var oneOrMoreSelected = Selection.SelectedElements.Count > 1;
+            var oneOrMoreSelected = Selection.SelectedElements.Count > 0;
             
             if (ImGui.MenuItem("Select affected Operators",
                                "",
                                false,
-                               oneSelected))
+                               oneOrMoreSelected))
             {
-                if (Selection.SelectedElements[0] is not Variation selectedVariation)
-                    return;
-                
                 NodeSelection.Clear();
 
-                var parentSymbolUi = SymbolUiRegistry.Entries[InstanceForBlendOperations.Symbol.Id];
-                    
-                foreach (var symbolChildUi in parentSymbolUi.ChildUis)
+                foreach (var element in Selection.SelectedElements)
                 {
-                    if (selectedVariation.ParameterSetsForChildIds.ContainsKey(symbolChildUi.Id))
+                    if (element is not Variation selectedVariation)
+                        continue;
+                    
+                    var parentSymbolUi = SymbolUiRegistry.Entries[InstanceForBlendOperations.Symbol.Id];
+                        
+                    foreach (var symbolChildUi in parentSymbolUi.ChildUis)
                     {
+                        if (!selectedVariation.ParameterSetsForChildIds.ContainsKey(symbolChildUi.Id))
+                            continue;
+                        
                         var instance = InstanceForBlendOperations.Children.FirstOrDefault(c => c.SymbolChildId == symbolChildUi.Id);
                         if(instance != null)
                             NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
                     }
                 }
+                
                 FitViewToSelectionHandling.FitViewToSelection();
             }
             

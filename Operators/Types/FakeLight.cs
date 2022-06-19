@@ -10,6 +10,10 @@ namespace T3.Operators.Types.Id_6820b166_1782_43b9_bc5c_6b4f63b16f86
         [Output(Guid = "27e1e1b6-89e0-4dca-98e1-5989286f6331")]
         public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new Slot<SharpDX.Direct3D11.Texture2D>();
 
+        
+        [Input(Guid = "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40")]
+        public readonly InputSlot<float> Amount = new InputSlot<float>();
+        
         [Input(Guid = "00c53b57-7347-4ebc-97d7-1ab48483f09b")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> HeightMap = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
@@ -17,7 +21,7 @@ namespace T3.Operators.Types.Id_6820b166_1782_43b9_bc5c_6b4f63b16f86
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> LightMap = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc")]
-        public readonly InputSlot<float> Impact = new InputSlot<float>();
+        public readonly InputSlot<float> Specularity = new InputSlot<float>();
 
         [Input(Guid = "4aa128ab-d0a8-42d5-800f-6992959bd0cf")]
         public readonly InputSlot<float> Shade = new InputSlot<float>();
@@ -42,6 +46,7 @@ namespace T3.Operators.Types.Id_6820b166_1782_43b9_bc5c_6b4f63b16f86
 
         [Input(Guid = "3c615aa0-61b7-43c5-bea3-8d1110b4f5cd")]
         public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+
     }
 }
 

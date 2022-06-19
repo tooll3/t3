@@ -35,7 +35,16 @@ namespace T3.Gui.Windows.Variations
             if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                 DeleteSelectedElements();
 
-            RenderThumbnails();
+            UpdateThumbnailRendering(out var pinnedOutputChanged);
+            
+            // Get instance for variations
+            var instanceForBlending = InstanceForBlendOperations;
+            if (instanceForBlending != _instanceForBlending || pinnedOutputChanged)
+            {
+                _instanceForBlending = instanceForBlending;
+                RefreshView();
+            }
+            
             UpdateCanvas();
             HandleFenceSelection();
 
@@ -70,44 +79,40 @@ namespace T3.Gui.Windows.Variations
             DrawContextMenu();
         }
 
-        private void RenderThumbnails()
+        private bool _rerenderManuallyRequested = false;
+        
+        /// <summary>
+        /// Updates keeps rendering thumbnails until all are processed.
+        /// </summary>
+        private void UpdateThumbnailRendering(out bool pinnedOutputChanged)
         {
-            var viewNeedsRefresh = false;
+            pinnedOutputChanged = false;
 
+            if (!UserSettings.Config.VariationLiveThumbnails && !_rerenderManuallyRequested)
+                return;
+            
             // Render variations to pinned output
-            if (OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) is OutputWindow outputWindow)
+            if (OutputWindow.OutputWindowInstances.FirstOrDefault(window => window.Config.Visible) is not OutputWindow outputWindow)
+                return;
+            
+            var renderInstance = outputWindow.ShownInstance;
+            if (renderInstance is not { Outputs: { Count: > 0 } } || renderInstance.Outputs[0] is not Slot<Texture2D> textureSlot)
+                return;
+            
+            _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
+
+            if (renderInstance != _previousRenderInstance)
             {
-                var renderInstance = outputWindow.ShownInstance;
-                if (renderInstance is { Outputs: { Count: > 0 } }
-                    && renderInstance.Outputs[0] is Slot<Texture2D> textureSlot)
-                {
-                    _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
-
-                    if (renderInstance != _lastRenderInstance)
-                    {
-                        viewNeedsRefresh = true;
-                        _lastRenderInstance = renderInstance;
-                    }
-
-                    var symbolUi = SymbolUiRegistry.Entries[renderInstance.Symbol.Id];
-                    if (symbolUi.OutputUis.ContainsKey(textureSlot.Id))
-                    {
-                        var outputUi = symbolUi.OutputUis[textureSlot.Id];
-                        UpdateNextVariationThumbnail(outputUi, textureSlot);
-                    }
-                }
+                pinnedOutputChanged = true;
+                _previousRenderInstance = renderInstance;
             }
 
-            // Get instance for variations
-            var instance = InstanceForBlendOperations;
-            var instanceChanged = instance != _instance;
-            viewNeedsRefresh |= instanceChanged;
-
-            if (viewNeedsRefresh)
-            {
-                RefreshView();
-                _instance = instance;
-            }
+            var symbolUi = SymbolUiRegistry.Entries[renderInstance.Symbol.Id];
+            if (!symbolUi.OutputUis.ContainsKey(textureSlot.Id)) 
+                return;
+            
+            var outputUi = symbolUi.OutputUis[textureSlot.Id];
+            UpdateNextVariationThumbnail(outputUi, textureSlot);
         }
 
         private void DrawBlendingOverlay(ImDrawListPtr drawList)
@@ -117,7 +122,7 @@ namespace T3.Gui.Windows.Variations
                 var mousePos = ImGui.GetMousePos();
                 if (_blendPoints.Count == 1)
                 {
-                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
+                    PoolForBlendOperations.BeginWeightedBlend(_instanceForBlending, _blendVariations, _blendWeights);
 
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
@@ -137,7 +142,7 @@ namespace T3.Gui.Windows.Variations
 
                     drawList.AddCircleFilled(blendPosition, 5, Color.White);
 
-                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
+                    PoolForBlendOperations.BeginWeightedBlend(_instanceForBlending, _blendVariations, _blendWeights);
 
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
@@ -155,7 +160,7 @@ namespace T3.Gui.Windows.Variations
                     }
 
                     drawList.AddCircleFilled(mousePos, 5, Color.White);
-                    PoolForBlendOperations.BeginWeightedBlend(_instance, _blendVariations, _blendWeights, UserSettings.Config.PresetsResetToDefaultValues);
+                    PoolForBlendOperations.BeginWeightedBlend(_instanceForBlending, _blendVariations, _blendWeights);
 
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                     {
@@ -325,8 +330,7 @@ namespace T3.Gui.Windows.Variations
                                                                     var oneSelected = Selection.SelectedElements.Count == 1;
 
                                                                     if (ImGui.MenuItem("Delete selected",
-                                                                                       KeyboardBinding.ListKeyboardShortcuts(UserActions.DeleteSelection,
-                                                                                           false),
+                                                                                       "Del",   // We should use the correct assigned short cut, but "Del or Backspace" is too long for layout
                                                                                        false,
                                                                                        oneOrMoreSelected))
                                                                     {
@@ -344,19 +348,15 @@ namespace T3.Gui.Windows.Variations
                                                                     if (ImGui.MenuItem("Update thumbnails",
                                                                                        ""))
                                                                     {
+                                                                        _rerenderManuallyRequested = true;
                                                                         TriggerThumbnailUpdate();
                                                                     }
-
-                                                                    DrawAdditionalContextMenuContent();
-
+                                                                    
                                                                     ImGui.Separator();
-                                                                    if (ImGui.MenuItem("Automatically reset to defaults",
-                                                                                       "",
-                                                                                       UserSettings.Config.PresetsResetToDefaultValues))
-                                                                    {
-                                                                        UserSettings.Config.PresetsResetToDefaultValues =
-                                                                            !UserSettings.Config.PresetsResetToDefaultValues;
-                                                                    }
+                                                                    ImGui.MenuItem("Live Render Previews", "", ref UserSettings.Config.VariationLiveThumbnails, true);
+                                                                    ImGui.MenuItem("Preview on Hover", "", ref UserSettings.Config.VariationHoverPreview, true);
+                                                                    
+                                                                    DrawAdditionalContextMenuContent();
                                                                 }, ref _contextMenuIsOpen);
             }
         }
@@ -365,20 +365,20 @@ namespace T3.Gui.Windows.Variations
 
         public void StartHover(Variation variation)
         {
-            PoolForBlendOperations.BeginHover(_instance, variation, UserSettings.Config.PresetsResetToDefaultValues);
+            PoolForBlendOperations.BeginHover(_instanceForBlending, variation);
         }
 
-        public void Apply(Variation variation, bool resetNonDefaults)
+        public void Apply(Variation variation)
         {
             PoolForBlendOperations.StopHover();
-            PoolForBlendOperations.Apply(_instance, variation, resetNonDefaults);
+            PoolForBlendOperations.Apply(_instanceForBlending, variation);
         }
 
         public void StartBlendTo(Variation variation, float blend)
         {
             if (variation.IsPreset)
             {
-                PoolForBlendOperations.BeginBlendToPresent(_instance, variation, blend, UserSettings.Config.PresetsResetToDefaultValues);
+                PoolForBlendOperations.BeginBlendToPresent(_instanceForBlending, variation, blend);
             }
         }
 
@@ -390,13 +390,15 @@ namespace T3.Gui.Windows.Variations
         protected void TriggerThumbnailUpdate()
         {
             _thumbnailCanvasRendering.ClearTexture();
-            _updateIndex = 0;
-            _updateCompleted = false;
+            _renderThumbnailIndex = 0;
+            _allThumbnailsRendered = false;
         }
 
         protected void ResetView()
         {
             var pool = PoolForBlendOperations;
+            if (pool == null)
+                return;
 
             if (TryToGetBoundingBox(pool.Variations, 40, out var area))
             {
@@ -459,32 +461,34 @@ namespace T3.Gui.Windows.Variations
         #region thumbnail rendering
         private void UpdateNextVariationThumbnail(IOutputUi outputUi, Slot<Texture2D> textureSlot)
         {
-            if (_updateCompleted)
+            if (_allThumbnailsRendered)
                 return;
 
             _thumbnailCanvasRendering.InitializeCanvasTexture(VariationThumbnail.ThumbnailSize);
 
             if (PoolForBlendOperations.Variations.Count == 0)
             {
-                _updateCompleted = true;
+                _allThumbnailsRendered = true;
+                _rerenderManuallyRequested = false;
                 return;
             }
 
-            if (_updateIndex >= PoolForBlendOperations.Variations.Count)
+            if (_renderThumbnailIndex >= PoolForBlendOperations.Variations.Count)
             {
-                _updateCompleted = true;
+                _allThumbnailsRendered = true;
+                _rerenderManuallyRequested = false;
                 return;
             }
 
-            var variation = PoolForBlendOperations.Variations[_updateIndex];
-            RenderThumbnail(variation, _updateIndex, outputUi, textureSlot);
-            _updateIndex++;
+            var variation = PoolForBlendOperations.Variations[_renderThumbnailIndex];
+            RenderThumbnail(variation, _renderThumbnailIndex, outputUi, textureSlot);
+            _renderThumbnailIndex++;
         }
 
         private void RenderThumbnail(Variation variation, int atlasIndex, IOutputUi outputUi, Slot<Texture2D> textureSlot)
         {
             // Set variation values
-            PoolForBlendOperations.BeginHover(InstanceForBlendOperations, variation, UserSettings.Config.PresetsResetToDefaultValues);
+            PoolForBlendOperations.BeginHover(InstanceForBlendOperations, variation);
 
             // Render variation
             _thumbnailCanvasRendering.EvaluationContext.Reset();
@@ -529,7 +533,7 @@ namespace T3.Gui.Windows.Variations
         #endregion
 
         #region layout and view
-        private void RefreshView()
+        public void RefreshView()
         {
             TriggerThumbnailUpdate();
             Selection.Clear();
@@ -648,13 +652,14 @@ namespace T3.Gui.Windows.Variations
         private readonly List<Vector2> _blendPoints = new(3);
         private readonly List<Variation> _blendVariations = new(3);
 
-        private Instance _instance;
-        private int _updateIndex;
-        private bool _updateCompleted;
+        private Instance _instanceForBlending;
+        
+        private int _renderThumbnailIndex;
+        private bool _allThumbnailsRendered;
         private readonly ImageOutputCanvas _imageCanvas = new();
         private readonly ThumbnailCanvasRendering _thumbnailCanvasRendering = new();
         private SelectionFence.States _fenceState;
         internal readonly CanvasElementSelection Selection = new();
-        private Instance _lastRenderInstance;
+        private Instance _previousRenderInstance;
     }
 }

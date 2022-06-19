@@ -1,4 +1,4 @@
 {
   "MainOperatorName": "ClimateWatch",
-  "SlideHack": 0.0
+  "AudioResyncThreshold": 0.02
 }

@@ -141,7 +141,7 @@ namespace T3.Gui.Interaction.Variations
             
             if(SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
             {
-                ActivePoolForSnapshots.Apply(ActiveInstanceForSnapshots, existingVariation, UserSettings.Config.PresetsResetToDefaultValues);
+                ActivePoolForSnapshots.Apply(ActiveInstanceForSnapshots, existingVariation);
                 return;
             } 
             
@@ -191,7 +191,7 @@ namespace T3.Gui.Interaction.Variations
             if (SymbolVariationPool.TryGetSnapshot(index, out var variation))
             {
                 _blendTowardsIndex = index;
-                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, 0, UserSettings.Config.PresetsResetToDefaultValues);
+                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, 0);
             }
         }
 
@@ -210,13 +210,14 @@ namespace T3.Gui.Interaction.Variations
             
             if (SymbolVariationPool.TryGetSnapshot(_blendTowardsIndex, out var variation))
             {
-                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, value/127.0f, UserSettings.Config.PresetsResetToDefaultValues);
+                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, value/127.0f);
             }
         }
         
         public static void StopBlendingTowards()
         {
             _blendTowardsIndex = -1;
+            ActivePoolForSnapshots.ApplyCurrentBlend();
         }
         
         public static void UpdateBlendValues(int obj, float value)

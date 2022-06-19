@@ -12,6 +12,7 @@
         public class ConfigData
         {
             public string MainOperatorName = "";
+            public float AudioResyncThreshold = 1.65f / 60f;
         }
     }
 }

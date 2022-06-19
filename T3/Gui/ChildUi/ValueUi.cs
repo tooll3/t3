@@ -18,24 +18,27 @@ namespace T3.Gui.ChildUi
             var symbolChild = valueInstance.Parent.Symbol.Children.Single(c => c.Id == valueInstance.SymbolChildId);
             ImGui.PushClipRect(selectableScreenRect.Min, selectableScreenRect.Max, true);
             
+            ImGui.SetCursorScreenPos(selectableScreenRect.Min + new Vector2(10,0));
+            ImGui.BeginGroup();
+            
+            // Label if instance has title
+            if (!string.IsNullOrEmpty(symbolChild.Name))
+            {
+                ImGui.TextUnformatted(symbolChild.Name);
+            }
+            
             var h = selectableScreenRect.GetHeight();
-            var font = h > 50
+            var font = h > 40
                            ? Fonts.FontLarge
                            : (h > 25
                                   ? Fonts.FontNormal
                                   : Fonts.FontSmall);
 
             ImGui.PushFont(font);
-            ImGui.SetCursorScreenPos(selectableScreenRect.Min + new Vector2(10,0));
-            ImGui.BeginGroup();
-            if (!string.IsNullOrEmpty(symbolChild.Name))
-            {
-                ImGui.TextUnformatted(symbolChild.Name);
-            }
-
             ImGui.TextUnformatted($"{valueInstance.Float.Value:0.00}");
-            ImGui.EndGroup();
             ImGui.PopFont();
+            
+            ImGui.EndGroup();
             
             ImGui.PopClipRect();
             return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;

@@ -21,9 +21,6 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
-            T3Metrics.Draw();
-            ImGui.Separator();
-
             if (ImGui.TreeNode("User Interface"))
             {
                 ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
@@ -44,7 +41,16 @@ namespace T3.Gui.Windows
                  
                 ImGui.TreePop();
             }
+            
+            if (ImGui.TreeNode("Space Mouse"))
+            {
+                ImGui.DragFloat("Smoothing", ref UserSettings.Config.SpaceMouseDamping, 0.01f, 0.01f, 1f);
+                ImGui.DragFloat("Move Speed", ref UserSettings.Config.SpaceMouseMoveSpeedFactor, 0.01f, 0, 10f);
+                ImGui.DragFloat("Rotation Speed", ref UserSettings.Config.SpaceMouseRotationSpeedFactor, 0.01f, 0, 10f);
+                ImGui.TreePop();
+            }
 
+            
             if (ImGui.TreeNode("Additional settings"))
             {
                 //ImGui.Checkbox("Show Timeline", ref UserSettings.Config.ShowTimeline);
@@ -123,6 +129,9 @@ namespace T3.Gui.Windows
                 }                
                 ImGui.TreePop();
             }
+            
+            ImGui.Separator();
+            T3Metrics.Draw();
         }
 
         public override List<Window> GetInstances()

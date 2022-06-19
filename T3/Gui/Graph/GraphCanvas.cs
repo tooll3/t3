@@ -606,7 +606,7 @@ namespace T3.Gui.Graph
                 ImGui.EndMenu();
             }
 
-            if (ImGui.MenuItem("Export", oneOpSelected))
+            if (ImGui.MenuItem("Export as Executable", oneOpSelected))
             {
                 PlayerExporter.ExportInstance(this, selectedChildUis.Single());
             }
@@ -689,7 +689,7 @@ namespace T3.Gui.Graph
 
             if (ImGui.BeginMenu("Add..."))
             {
-                if (ImGui.MenuItem("Add Node..."))
+                if (ImGui.MenuItem("Add Node...", "TAB", false,true))
                 {
                     SymbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null, false, null);
                 }
@@ -743,16 +743,17 @@ namespace T3.Gui.Graph
             }
 
             var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-            var a = new Annotation()
+            var annotation = new Annotation()
                         {
                             Id = Guid.NewGuid(),
-                            Title = "null",
+                            Title = "Untitled Annotation",
                             Color = Color.Gray,
                             PosOnCanvas = area.Min,
                             Size = area.GetSize()
                         };
-            var command = new AddAnnotationCommand(symbolUi, a);
+            var command = new AddAnnotationCommand(symbolUi, annotation);
             UndoRedoStack.AddAndExecute(command);
+            AnnotationElement.StartRenaming(annotation);
         }
 
         private void PinSelectedToOutputWindow()

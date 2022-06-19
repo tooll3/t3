@@ -34,7 +34,7 @@
       },
       "Min": -5.0,
       "Max": 5.0,
-      "Scale": 0.1
+      "Scale": 0.001
     },
     {
       "InputId": "f6753ecc-a97e-4854-9f27-09bb9000858c"/*Saturation*/,

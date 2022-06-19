@@ -6,7 +6,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_f15cc064_1d70_4945_ae60_35d884788c0f
 {
-    public class SubdivsionRaster : Instance<SubdivsionRaster>
+    public class _SubdivsionRaster : Instance<_SubdivsionRaster>
     {
 
         [Output(Guid = "FBDF0455-001D-4226-B89F-9D2DBFFCA515")]

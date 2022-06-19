@@ -43,6 +43,9 @@ namespace T3.Operators.Types.Id_1b149f1f_529c_4418_ac9d_3871f24a9e38
         [Input(Guid = "1ff7d454-b8fb-470f-beee-ec7521db8a7f")]
         public readonly InputSlot<System.Numerics.Vector2> DisplaceMapOffset = new InputSlot<System.Numerics.Vector2>();
 
+        [Input(Guid = "6e772174-813d-4baa-b6b5-27e197b547ac")]
+        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
+
     }
 }
 

@@ -58,12 +58,18 @@ namespace T3.Gui.Windows.Variations
             drawList.ChannelsSplit(2);
             drawList.ChannelsSetCurrent(1);
             {
-                ImGui.BeginChild("header", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()));
+                ImGui.BeginChild("header", 
+                                 new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()), 
+                                 false, 
+                                 ImGuiWindowFlags.NoScrollbar);
 
                 var viewModeIndex = (int)_viewMode;
+                
                 if (CustomComponents.DrawSegmentedToggle(ref viewModeIndex, _options))
                 {
                     _viewMode = (ViewModes)viewModeIndex;
+                    _presetCanvas.RefreshView();
+                    _snapshotCanvas.RefreshView();
                 }
 
                 ImGui.SameLine();

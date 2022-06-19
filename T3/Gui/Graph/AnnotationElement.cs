@@ -22,13 +22,21 @@ namespace T3.Gui.Graph
     /// </summary>
     static class AnnotationElement
     {
+
+        public static void StartRenaming(Annotation annotation)
+        {
+            _requestedRenameId = annotation.Id;
+        }
+        
+        private static Guid _requestedRenameId = Guid.Empty;
+        
         internal static void Draw(Annotation annotation)
         {
             ImGui.PushID(annotation.Id.GetHashCode());
             {
                 _screenArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size));
                 var titleSize = annotation.Size;
-                titleSize.Y = MathF.Min(titleSize.Y, 20);
+                titleSize.Y = MathF.Min(titleSize.Y, 14);
 
                 // Keep height of title area at a minimum height when zooming out
                 var clickableArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + titleSize));
@@ -57,36 +65,45 @@ namespace T3.Gui.Graph
                 }
 
                 // Background
-                drawList.AddRectFilled(_screenArea.Min, _screenArea.Max, _backgroundColor);
+                const float backgroundAlpha = 0.1f;
+                const float headerHoverAlpha = 0.2f;
+                
+                drawList.AddRectFilled(_screenArea.Min, _screenArea.Max, annotation.Color.Fade(backgroundAlpha));
 
                 // Interaction
                 ImGui.SetCursorScreenPos(clickableArea.Min);
-                ImGui.InvisibleButton("node", clickableArea.GetSize());
+                ImGui.InvisibleButton("##annotationHeader", clickableArea.GetSize());
 
                 THelpers.DebugItemRect();
-                var hovered = ImGui.IsItemHovered();
-                if (hovered)
+                var isHeaderHovered = ImGui.IsItemHovered();
+                if (isHeaderHovered)
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                 }
-
+                
                 // Header
                 drawList.AddRectFilled(clickableArea.Min, clickableArea.Max,
-                                       hovered
-                                           ? _backgroundColorHover
-                                           : _backgroundColor);
+                                       annotation.Color.Fade(isHeaderHovered ? headerHoverAlpha : 0));
 
                 HandleDragging(annotation);
-                var shouldRename = ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left);
+                var shouldRename = (ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left)) || _requestedRenameId == annotation.Id;
                 Renaming.Draw(annotation, shouldRename);
-
-                if (annotation.IsSelected)
+                if (shouldRename)
                 {
-                    const float thickness = 1;
-                    drawList.AddRect(_screenArea.Min - Vector2.One * thickness,
-                                     _screenArea.Max + Vector2.One * thickness,
-                                     Color.White, 0f, 0, thickness);
+                    _requestedRenameId = Guid.Empty;
                 }
+
+                var borderColor = annotation.IsSelected
+                                      ? Color.White
+                                      : annotation.Color.Fade(isHeaderHovered ? headerHoverAlpha : backgroundAlpha);
+                
+                const float thickness = 1;
+                drawList.AddRect(_screenArea.Min - Vector2.One * thickness,
+                                 _screenArea.Max + Vector2.One * thickness,
+                                 borderColor, 
+                                 0f, 
+                                 0, 
+                                 thickness);
 
                 // Label
                 {
@@ -97,7 +114,7 @@ namespace T3.Gui.Graph
                     var labelPos = _screenArea.Min + new Vector2(4, 4);
 
                     drawList.AddText(labelPos,
-                                     ColorVariations.OperatorLabel.Apply(Color.White),
+                                     ColorVariations.OperatorLabel.Apply(annotation.Color),
                                      annotation.Title);
                     ImGui.PopFont();
                     drawList.PopClipRect();
@@ -251,7 +268,7 @@ namespace T3.Gui.Graph
                 var text = annotation.Title;
 
                 ImGui.SetNextItemWidth(150);
-                ImGui.InputTextMultiline("##renameAnnotation", ref text, 256, _screenArea.GetSize());
+                ImGui.InputTextMultiline("##renameAnnotation", ref text, 256, _screenArea.GetSize(), ImGuiInputTextFlags.AutoSelectAll);
                 if (!ImGui.IsItemDeactivated())
                     annotation.Title = text;
 
@@ -276,8 +293,5 @@ namespace T3.Gui.Graph
 
         private static bool _isVisible;
         private static ImRect _screenArea;
-
-        private static Color _backgroundColor = new Color(0, 0, 0, 0.2f);
-        private static Color _backgroundColorHover = new Color(0, 0, 0, 0.4f);
     }
 }

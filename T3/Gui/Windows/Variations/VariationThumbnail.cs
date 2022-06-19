@@ -109,7 +109,7 @@ namespace T3.Gui.Windows.Variations
             else
             {
                 // Handle hover
-                if (ImGui.IsItemVisible() && ImGui.IsItemHovered())
+                if (ImGui.IsItemVisible() && ImGui.IsItemHovered() && UserSettings.Config.VariationHoverPreview)
                 {
                     if (_hoveredVariation == null)
                     {
@@ -214,7 +214,7 @@ namespace T3.Gui.Windows.Variations
                     {
                         Selection.Clear();
                         _hoveredVariation = null;
-                        _canvas.Apply(variation, UserSettings.Config.PresetsResetToDefaultValues);
+                        _canvas.Apply(variation);
                     }
 
                     Selection.AddSelection(variation);
@@ -228,7 +228,7 @@ namespace T3.Gui.Windows.Variations
                     else
                     {
                         _hoveredVariation = null;
-                        _canvas.Apply(variation, true);
+                        _canvas.Apply(variation);
                     }
                 }
 

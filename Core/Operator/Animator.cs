@@ -283,7 +283,7 @@ namespace T3.Core.Operator
             }
         }
 
-        internal void CreateUpdateActionsForExistingCurves(IEnumerable<Instance> childInstances)
+        public void CreateUpdateActionsForExistingCurves(IEnumerable<Instance> childInstances)
         {
             // gather all inputs that correspond to stored ids
             var relevantInputs = (from curveEntry in OrderedAnimationCurves

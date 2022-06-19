@@ -1,5 +1,6 @@
 {
   "Id": "59a0458e-2f3a-4856-96cd-32936f783cc5"/*MidiInput*/,
+  "Description": "Provides input from connected Midi devices. As a default, the Midi range from 0 ... 127 is mapped to an output range from 0 .. 1 which can be adjusted with the parameters.\nFor smoothing the output damping is enabled by default. Reduce the damping parameter to improve latency.\n\nIf you want to react to a range for controls (I.e. to the range of keys on a keyboard), you can use the ControlRange parameter. If this is something else than [0, 0] we map its range to the OutputRange.\n(e.g. you could map two octaves of your keyboard to output values from 0 ... 1).",
   "InputUis": [
     {
       "InputId": "aad1e576-f144-423f-83b5-5694b1119c23"/*OutputRange*/,
@@ -9,18 +10,21 @@
       }
     },
     {
-      "InputId": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultMidiValue*/,
+      "InputId": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
       "Position": {
         "X": -200.0,
         "Y": 270.0
       }
     },
     {
-      "InputId": "3b350ff2-004c-457b-983d-21d11a01d170"/*AllowPresets*/,
+      "InputId": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
       "Position": {
         "X": -200.0,
-        "Y": 315.0
-      }
+        "Y": 405.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
@@ -63,13 +67,6 @@
       "Position": {
         "X": -200.0,
         "Y": 360.0
-      }
-    },
-    {
-      "InputId": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 405.0
       }
     }
   ],

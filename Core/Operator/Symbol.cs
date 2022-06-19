@@ -614,6 +614,14 @@ namespace T3.Core.Operator
             return newChild.Id;
         }
 
+        public void CreateUpdateActionsAnimatedChildren()
+        {
+            foreach (var symbolInstance in InstancesOfSymbol)
+            {
+                Animator.CreateUpdateActionsForExistingCurves(symbolInstance.Children);
+            }
+        }
+
         public void RemoveChild(Guid childId)
         {
             // first remove all connections to or from the child
