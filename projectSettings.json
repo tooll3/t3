@@ -1,3 +1,4 @@
 {
-  "MainOperatorName": "ClimateWatch"
+  "MainOperatorName": "ClimateWatch",
+  "AudioResyncThreshold": 0.02
 }
