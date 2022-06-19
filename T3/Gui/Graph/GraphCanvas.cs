@@ -606,7 +606,7 @@ namespace T3.Gui.Graph
                 ImGui.EndMenu();
             }
 
-            if (ImGui.MenuItem("Export", oneOpSelected))
+            if (ImGui.MenuItem("Export as Executable", oneOpSelected))
             {
                 PlayerExporter.ExportInstance(this, selectedChildUis.Single());
             }
