@@ -249,6 +249,18 @@ namespace T3.Core
         {
             return new SharpDX.Vector3(source.X, source.Y, source.Z);
         }
+
+        /// <summary>
+        /// Return true if a boolean changed from false to true
+        /// </summary>
+        public static bool WasTriggered(bool newState, ref bool current)
+        {
+            if (newState == current)
+                return false;
+
+            current = newState;
+            return newState;
+        }
     }
 
     public class EaseFunctions
