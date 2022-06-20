@@ -1,4 +1,5 @@
 using System;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -19,7 +20,16 @@ namespace T3.Operators.Types.Id_5202d3f6_c970_4006_933d_3c60d6c202dc
         {
             var v = Value.GetValue(context);
             var mod = ModuloValue.GetValue(context);
-            Result.Value = v - mod * (float)Math.Floor(v/mod);
+
+            if (mod != 0)
+            {
+                Result.Value = v - mod * (float)Math.Floor(v/mod);
+            }
+            else
+            {
+                Log.Debug("Modulo caused division by zero", SymbolChildId);
+                Result.Value = 0;
+            }
         }
         
         [Input(Guid = "8a401e5d-295d-4403-a3af-1d6b91ce3dba")]
