@@ -57,10 +57,9 @@ Note: As of 2021-11-05 we no longer use submodules, so you don't have to care ab
    3. Start the project in Debug or Release mode
 
 ## Get Help
-If you have questions or feedback, please join us on discord: https://discord.gg/YmSyQdeH3S
+To get started read the [documentation](https://github.com/still-scene/t3/wiki/user-interface) or watch [tutorial videos](https://www.youtube.com/watch?v=eH2E02U6P5Q&list=PLj-rnPROvbn3LigXGRSDvmLtgTwmNHcQs&index=4)
 
-
-
+If you have questions or feedback, please join us on discord: https://discord.gg/YmSyQdeH3S 
 
 
 
